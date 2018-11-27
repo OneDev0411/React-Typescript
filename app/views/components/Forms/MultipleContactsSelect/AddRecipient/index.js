@@ -197,27 +197,38 @@ class AddRecipient extends React.Component {
 
             {isOpen && (
               <SearchResults>
-                {this.state.filteredTags.length > 0 && <Title>Tags</Title>}
-                {this.state.filteredTags.map((tag, index) => (
-                  <ListRow
-                    key={tag.id || index}
-                    text={tag.text}
-                    type="tag"
-                    onClick={() => this.handleSelectNewListItem(tag, 'tag')}
-                  />
-                ))}
-                <SectionSeparator />
-                {this.state.filteredList.length > 0 && <Title>Lists</Title>}
-                {this.state.filteredList.map((list, index) => (
-                  <ListRow
-                    key={list.id || index}
-                    text={list.name}
-                    member_count={list.member_count}
-                    type="list"
-                    onClick={() => this.handleSelectNewListItem(list, 'list')}
-                  />
-                ))}
-                <SectionSeparator />
+                {this.state.filteredTags.length > 0 && (
+                  <React.Fragment>
+                    <Title>Tags</Title>
+                    {this.state.filteredTags.map((tag, index) => (
+                      <ListRow
+                        key={tag.id || index}
+                        text={tag.text}
+                        type="tag"
+                        onClick={() => this.handleSelectNewListItem(tag, 'tag')}
+                      />
+                    ))}
+                    <SectionSeparator />
+                  </React.Fragment>
+                )}
+
+                {this.state.filteredList.length > 0 && (
+                  <React.Fragment>
+                    <Title>Lists</Title>
+                    {this.state.filteredList.map((list, index) => (
+                      <ListRow
+                        key={list.id || index}
+                        text={list.name}
+                        member_count={list.member_count}
+                        type="list"
+                        onClick={() =>
+                          this.handleSelectNewListItem(list, 'list')
+                        }
+                      />
+                    ))}
+                    <SectionSeparator />
+                  </React.Fragment>
+                )}
                 {this.state.list.length > 0 && <Title>Contacts</Title>}
                 {this.state.list
                   .filter(item => !!item.summary.email)
