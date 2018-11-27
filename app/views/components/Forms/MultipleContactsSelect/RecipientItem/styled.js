@@ -53,7 +53,7 @@ export const EmailsList = styled.div`
   position: absolute;
   top: 40px;
   left: 0;
-  width: 100%;
+  min-width: 100%;
   max-height: 150px;
   overflow: auto;
   border-radius: 2px;
