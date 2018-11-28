@@ -439,6 +439,11 @@ export default (
         <IndexRoute component={AsyncRecents} />
       </Route>
 
+      <Route
+        path="/dashboard/notifications(/:type/:id)"
+        component={AsyncNotificationsPage}
+      />
+
       <Route path="/dashboard/marketing" component={AsyncMarketing}>
         <IndexRoute component={AsyncMarketingStore} />
         <Route component={AsyncMarketingTemplates} path=":medium(/:types)" />
