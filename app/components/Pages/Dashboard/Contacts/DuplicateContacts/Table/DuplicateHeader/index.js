@@ -54,7 +54,7 @@ class DuplicateHeader extends React.Component {
 
     return (
       <GridRow>
-        <Cell width="24px" verticalAlign="center">
+        <Cell width="24px" style={{ alignSelf: 'center' }}>
           {columns[0].subHeader(data)}
         </Cell>
         {columns
@@ -65,7 +65,6 @@ class DuplicateHeader extends React.Component {
             <Cell
               key={column.id || colIndex}
               width={`calc((100% - (24px + ${mergeColumnWidth})) / 4)`}
-              verticalAlign={column.verticalAlign}
             >
               {column.render({
                 rowData: header,
@@ -73,7 +72,7 @@ class DuplicateHeader extends React.Component {
               })}
             </Cell>
           ))}
-        <Cell width={mergeColumnWidth} verticalAlign="center">
+        <Cell width={mergeColumnWidth} style={{ alignSelf: 'center' }}>
           <ActionButton appearance="outline" onClick={this.onMergeClick}>
             Merge
           </ActionButton>
