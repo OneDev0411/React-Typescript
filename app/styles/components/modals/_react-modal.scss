@@ -39,6 +39,8 @@
     }
   }
 
+  
+  
   &.c-tour-sheets,
   &.c-preview-image-modal,
   &.c-full-screen-modal {
@@ -50,5 +52,9 @@
       transform: none;
       border-radius: 0;
     }
+  }
+  
+  &.c-preview-image-modal {
+    background: rgba(0, 0, 0, 0.6);
   }
 }
