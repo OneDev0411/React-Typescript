@@ -1,6 +1,7 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
 import { groupBy } from 'lodash'
+import Masonry from 'react-masonry-component'
 
 import { PreviewImageModal } from 'components/PreviewImageModal'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
@@ -72,7 +73,12 @@ export class List extends React.Component {
   )
 
   renderTemplates = templates => (
-    <Flex wrap>{templates.map(this.renderTemplate)}</Flex>
+    <Masonry
+      options={{ transitionDuration: 0 }}
+      style={{ margin: '0 -0.75rem' }}
+    >
+      {templates.map(this.renderTemplate)}
+    </Masonry>
   )
 
   renderAll = () => {
