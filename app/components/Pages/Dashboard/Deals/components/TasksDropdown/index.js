@@ -85,9 +85,13 @@ class DropDownTasks extends React.Component {
 
     if (filterValue !== null) {
       return filterValue
-    } else if (selectedTask) {
+    }
+
+    if (selectedTask) {
       return selectedTask.title.trim()
-    } else if (selectedTask === null && showStashOption) {
+    }
+
+    if (selectedTask === null && showStashOption) {
       return 'Upload directly to my Files'
     }
 
@@ -235,8 +239,7 @@ class DropDownTasks extends React.Component {
       showNotifyOption,
       showStashOption,
       stashOptionText,
-      disabled = false,
-      isBlock = false
+      disabled = false
     } = this.props
 
     return (
@@ -247,7 +250,7 @@ class DropDownTasks extends React.Component {
         onInputValueChange={this.onInputValueChange}
       >
         {({ getInputProps, isOpen }) => (
-          <div style={{ display: isBlock ? 'block' : 'inline-block' }}>
+          <div style={this.props.style}>
             <DropDownContainer>
               <SearchInput
                 disabled={disabled}

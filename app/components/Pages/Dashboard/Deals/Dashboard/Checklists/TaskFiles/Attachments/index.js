@@ -2,10 +2,11 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
 import { syncDeleteFile } from 'actions/deals'
-import FileLink from './FileLink'
 
 import { BasicDropdown } from 'components/BasicDropdown'
 import VerticalDotsIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
+
+import FileLink from './FileLink'
 
 import {
   FileContainer,
@@ -28,6 +29,7 @@ class Attachments extends React.Component {
   ]
 
   isPdf = file => file.mime === 'application/pdf'
+
   isImage = file => file.mime.includes('image/')
 
   getFileType = file => {
@@ -107,7 +109,6 @@ class Attachments extends React.Component {
                   buttonRenderer={props => <VerticalDotsIcon {...props} />}
                   items={this.menuItems}
                   onChange={item => item.onClick(file)}
-                  buttonText="..."
                 />
               </FileActions>
             </FileRow>
