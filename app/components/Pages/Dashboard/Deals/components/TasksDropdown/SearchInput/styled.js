@@ -8,6 +8,21 @@ export const SearchContainer = styled(ActionButton)`
     fill: ${primary};
   }
   line-height: normal;
+  height: auto;
+  min-height: 2.5rem;
+`
+
+export const TitleContainer = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+`
+
+export const SubTitle = styled.div`
+  color: gray;
+  text-align: left;
+  font-size: 0.875rem;
+  margin: 0.25rem 0;
 `
 
 export const Input = styled.input`

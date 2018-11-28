@@ -45,6 +45,10 @@ class Folder extends React.Component {
     return this.props.file.task && this.props.tasks[this.props.file.task.id]
   }
 
+  get ChecklistName() {
+    return this.Task ? this.props.checklists[this.Task.checklist].title : null
+  }
+
   render() {
     if (this.props.file.envelope) {
       return (
@@ -60,6 +64,7 @@ class Folder extends React.Component {
       <Fragment>
         <TasksDropDown
           showStashOption={this.Task !== null}
+          subTitle={this.ChecklistName}
           searchable
           showNotifyOption
           deal={this.props.deal}
@@ -77,7 +82,8 @@ class Folder extends React.Component {
 function mapStateToProps({ deals, user }) {
   return {
     user,
-    tasks: deals.tasks
+    tasks: deals.tasks,
+    checklists: deals.checklists
   }
 }
 

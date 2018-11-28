@@ -235,6 +235,7 @@ class DropDownTasks extends React.Component {
       tasks,
       searchable,
       selectedTask,
+      subTitle = null,
       placeholder = 'Folder',
       showNotifyOption,
       showStashOption,
@@ -260,6 +261,7 @@ class DropDownTasks extends React.Component {
                 searchable={searchable}
                 selectedTask={selectedTask}
                 placeholder={placeholder}
+                subTitle={subTitle}
                 value={this.getSearchValue()}
                 onClick={e => {
                   this.stopPropagation(e)
