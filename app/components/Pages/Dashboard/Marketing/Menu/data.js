@@ -1,13 +1,5 @@
 export const items = [
   {
-    title: 'Marketing Center',
-    url: '/'
-  },
-  {
-    title: 'All My designs'
-    // url: '/Customs'
-  },
-  {
     title: 'As Seen In',
     url: '/Social/AsSeenIn'
   },
