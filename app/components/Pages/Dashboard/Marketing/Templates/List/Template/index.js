@@ -21,12 +21,14 @@ export function Template(props) {
         <img src={`${src}png`} alt={template.name} />
       )}
       <Flex justifyBetween className="action-bar">
-        <Button size="small" appearance="outline" onClick={props.handlePreview}>
+        <Button
+          appearance="outline"
+          onClick={props.handlePreview}
+          style={{ backgroundColor: '#FFF' }}
+        >
           Preview
         </Button>
-        <Button size="small" onClick={props.handleCustomize}>
-          Customize
-        </Button>
+        <Button onClick={props.handleCustomize}>Customize</Button>
       </Flex>
     </Container>
   )

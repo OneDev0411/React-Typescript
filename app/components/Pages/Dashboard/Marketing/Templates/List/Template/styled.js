@@ -78,6 +78,6 @@ export const Container = styled.div`
     right: 0;
     visibility: hidden;
     padding: 1rem;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.7);
   }
 `
