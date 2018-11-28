@@ -7,11 +7,12 @@ import { Container } from './styled'
 
 export function Template(props) {
   const { template } = props
+  const isVideo = template.video
   const src = `${template.url}/thumbnail.`
 
   return (
     <Container isSideMenuOpen={props.isSideMenuOpen}>
-      {template.video ? (
+      {isVideo ? (
         // eslint-disable-next-line
         <video controls>
           <source src={`${src}webm`} type="video/webm" />
@@ -24,7 +25,10 @@ export function Template(props) {
         <Button
           appearance="outline"
           onClick={props.handlePreview}
-          style={{ backgroundColor: '#FFF' }}
+          style={{
+            backgroundColor: '#FFF',
+            visibility: isVideo ? 'hidden' : 'visible'
+          }}
         >
           Preview
         </Button>
