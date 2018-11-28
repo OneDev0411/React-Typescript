@@ -146,10 +146,8 @@ class FileManager extends React.Component {
   }
 
   deleteSingleFile = file => {
-    const { tasks } = this.props
-
     this.deleteFiles({
-      [file.id]: tasks[file.taskId]
+      [file.id]: file.task ? this.props.tasks[file.task.id] : null
     })
   }
 
@@ -158,7 +156,7 @@ class FileManager extends React.Component {
 
     this.Rows.forEach(row => {
       if (params.selectedRows.includes(row.id)) {
-        list[row.id] = row.task.id
+        list[row.id] = row.task ? this.props.tasks[row.task.id] : null
       }
     })
 
@@ -188,7 +186,10 @@ class FileManager extends React.Component {
     })
   }
 
-  getTrProps = () => ({
+  getTrProps = (rowIndex, { original: row }) => ({
+    style: {
+      opacity: this.state.isDeleting.includes(row.id) ? 0.2 : 1
+    },
     hoverStyle: `
       background-color: ${grey.A000};
       

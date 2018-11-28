@@ -12,7 +12,7 @@ export default function FileManagerPane({ deal }) {
       {/* <SideNav deal={deal} /> */}
 
       <MainContainer>
-        <Card style={{ padding: '2rem' }}>
+        <Card style={{ padding: '2rem', minHeight: '80vh' }}>
           <FileManager deal={deal} />
         </Card>
       </MainContainer>

@@ -14,7 +14,8 @@ export function getDealFiles(deal) {
 
   stashFiles.forEach(file => {
     files.push({
-      ...file
+      ...file,
+      task: null
     })
   })
 
