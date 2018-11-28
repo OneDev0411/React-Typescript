@@ -15,6 +15,8 @@ import { getTemplatePreviewImage } from 'components/InstantMarketing/helpers/get
 import ActionButton from 'components/Button/ActionButton'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
+import { convertRecipientsToEmails } from 'components/InstantMarketing/Flows/utils'
+
 import { addCRMLog } from '../../helpers/add-crm-log'
 import { getTemplateTypes } from '../../helpers/get-template-types'
 import { getCRMLogAssociations } from '../../helpers/get-crm-log-associations'
@@ -99,12 +101,11 @@ class SendMlsListingCard extends React.Component {
       isSendingEmail: true
     })
 
-    const emails = values.recipients.map(recipient => ({
-      to: recipient.email,
-      subject: values.subject,
-      html: this.state.htmlTemplate.result,
-      contact: recipient.contactId
-    }))
+    const emails = convertRecipientsToEmails(
+      values.recipients,
+      values.subject,
+      this.state.htmlTemplate.result
+    )
 
     try {
       await sendContactsEmail(emails)

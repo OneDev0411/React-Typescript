@@ -3,6 +3,8 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
 
+import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
+
 import { getContactTimeline } from '../../../../../models/contacts/get-contact-timeline'
 
 import {
@@ -10,6 +12,7 @@ import {
   isLoadedContactAttrDefs
 } from '../../../../../reducers/contacts/attributeDefs'
 
+import { getContactsTags } from '../../../../../store_actions/contacts/get-contacts-tags'
 import {
   getContact,
   deleteAttributes,
@@ -58,6 +61,10 @@ class ContactProfile extends React.Component {
     this.detectScreenSize()
     window.addEventListener('resize', this.detectScreenSize)
     this.initializeContact()
+
+    if (this.props.fetchTags) {
+      this.props.getContactsTags()
+    }
   }
 
   componentWillUnmount = () =>
@@ -297,6 +304,8 @@ class ContactProfile extends React.Component {
 
 const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
   const { list, contact: fetchContact, attributeDefs } = contacts
+  const tags = contacts.list
+  const fetchTags = !isFetchingTags(tags) && selectTags(tags).length === 0
 
   let contact = selectContact(list, contactId)
 
@@ -308,7 +317,8 @@ const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
     user,
     attributeDefs,
     contact,
-    fetchError: selectContactError(fetchContact)
+    fetchError: selectContactError(fetchContact),
+    fetchTags
   }
 }
 
@@ -318,7 +328,8 @@ export default connect(
     getContact,
     deleteAttributes,
     updateContactSelf,
-    upsertContactAttributes
+    upsertContactAttributes,
+    getContactsTags
   }
 )(ContactProfile)
 

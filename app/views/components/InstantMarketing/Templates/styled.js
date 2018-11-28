@@ -39,3 +39,8 @@ export const LoaderIndicator = styled(Loader)`
   width: 68px;
   height: 68px;
 `
+export const TemplateVideo = styled.video`
+  max-width: 100%;
+  max-height: 400px;
+  box-shadow: 0px 5px 10px #c3c3c3;
+`

@@ -9,7 +9,7 @@ import {
 import { RecipientContainer } from './styled'
 
 import AddRecipient from './AddRecipient'
-import RecipientItem from './RecipientItem'
+import { RecipientItem } from './RecipientItem'
 
 export const MultipleContactsSelect = ({
   input,
@@ -24,7 +24,8 @@ export const MultipleContactsSelect = ({
   <InputContainer>
     {hasLabel && (
       <InputLabel hasError={meta.submitFailed && meta.error}>
-        {labelText || placeholder}&nbsp;
+        {labelText || placeholder}
+        &nbsp;
         <InputRequired>{isRequired && '*'}</InputRequired>
       </InputLabel>
     )}

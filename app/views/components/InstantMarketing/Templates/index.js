@@ -6,7 +6,7 @@ import { loadTemplateHtml } from 'models/instant-marketing/load-template'
 import Image from 'components/ImageLoader'
 import Spinner from 'components/Spinner'
 
-import { Container, TemplateItem, LoaderIndicator } from './styled'
+import { Container, TemplateItem, TemplateVideo, LoaderIndicator } from './styled'
 
 export default class Templates extends React.Component {
   state = {
@@ -100,19 +100,30 @@ export default class Templates extends React.Component {
           >
             {this.isLoadingTemplate(template.id) && <LoaderIndicator />}
 
-            <Image
-              src={`${template.url}/thumbnail.png`}
-              title={template.name}
-              width="97%"
-              style={{
-                minHeight: '200px',
-                margin: '1.5%',
-                boxShadow: '0px 5px 10px #c3c3c3',
-                filter: this.isLoadingTemplate(template.id)
-                  ? 'blur(4px)'
-                  : 'none'
-              }}
-            />
+            {!template.video &&
+              <Image
+                src={`${template.url}/thumbnail.png`}
+                title={template.name}
+                width="97%"
+                style={{
+                  minHeight: '200px',
+                  margin: '1.5%',
+                  boxShadow: '0px 5px 10px #c3c3c3',
+                  filter: this.isLoadingTemplate(template.id)
+                    ? 'blur(4px)'
+                    : 'none'
+                }}
+                />
+            }
+
+            {template.video &&
+              <TemplateVideo
+                autoplay="true"
+                loop="true"
+                type="video/webm"
+                src={`${template.url}/thumbnail.webm`}
+              />
+            }
           </TemplateItem>
         ))}
       </Container>

@@ -13,6 +13,8 @@ import Compose from 'components/EmailCompose'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
+import { convertRecipientsToEmails } from 'components/InstantMarketing/Flows/utils'
+
 import SocialDrawer from '../../components/SocialDrawer'
 
 import { getTemplatePreviewImage } from '../../helpers/get-template-preview-image'
@@ -72,12 +74,11 @@ class SendDealPromotion extends React.Component {
       isSendingEmail: true
     })
 
-    const emails = values.recipients.map(recipient => ({
-      to: recipient.email,
-      subject: values.subject,
-      html: this.state.htmlTemplate.result,
-      contact: recipient.contactId
-    }))
+    const emails = convertRecipientsToEmails(
+      values.recipients,
+      values.subject,
+      this.state.htmlTemplate.result
+    )
 
     try {
       await sendContactsEmail(emails)
