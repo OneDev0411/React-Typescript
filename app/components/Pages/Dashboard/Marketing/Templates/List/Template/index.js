@@ -21,17 +21,20 @@ export function Template(props) {
       ) : (
         <img src={`${src}png`} alt={template.name} />
       )}
-      <Flex justifyBetween className="action-bar">
-        <Button
-          appearance="outline"
-          onClick={props.handlePreview}
-          style={{
-            backgroundColor: '#FFF',
-            visibility: isVideo ? 'hidden' : 'visible'
-          }}
-        >
-          Preview
-        </Button>
+      <Flex
+        className="action-bar"
+        justifyBetween={!isVideo}
+        justifyEnd={isVideo}
+      >
+        {!isVideo && (
+          <Button
+            appearance="outline"
+            onClick={props.handlePreview}
+            style={{ backgroundColor: '#FFF' }}
+          >
+            Preview
+          </Button>
+        )}
         <Button onClick={props.handleCustomize}>Customize</Button>
       </Flex>
     </Container>
