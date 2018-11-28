@@ -1,15 +1,16 @@
 import React from 'react'
-import Flex from 'styled-flex-component'
 import { groupBy } from 'lodash'
+import Flex from 'styled-flex-component'
 import Masonry from 'react-masonry-component'
 
 import { PreviewImageModal } from 'components/PreviewImageModal'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
+import { Loader } from '../../components/Loader'
 import { templateTypes } from '../data'
 import { Template } from './Template'
-import { Loader, Tab } from './styled'
+import { Tab } from './styled'
 
 export class List extends React.Component {
   state = {
