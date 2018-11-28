@@ -3,7 +3,7 @@ import Flex from 'styled-flex-component'
 
 import { H2 } from 'components/Typography/headings'
 
-import Icon from './Icon/Icon'
+import Icon from './Icon/ZeroHistoryIcon.js'
 
 export function ZeroState() {
   return (
