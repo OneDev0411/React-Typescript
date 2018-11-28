@@ -17,8 +17,7 @@ const Container = styled.div`
     bottom left;
 
   @media screen and (min-width: ${props => getMQWidth(75, props)}) {
-    height: 25rem;
-    width: 25rem;
+    width: 38%;
     margin-right: 1.5rem;
   }
 `
