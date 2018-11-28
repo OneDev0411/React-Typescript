@@ -15,6 +15,7 @@ import Notification from '../../components/table-columns/notification-badge'
 
 import { getPrimaryAgent } from '../../../utils/roles'
 import { Filters } from '../filters'
+import { statusSortMethod } from '../../components/table-columns/status/index'
 
 import AgentAvatars from '../../components/table-columns/AgentAvatars'
 
@@ -77,6 +78,12 @@ class Grid extends React.Component {
             caption="You have $count unread messages in this deal"
           />
         )
+      },
+      {
+        id: 'status',
+        header: 'Status',
+        accessor: deal => Deal.get.status(deal),
+        sortMethod: statusSortMethod
       }
     ]
   }
