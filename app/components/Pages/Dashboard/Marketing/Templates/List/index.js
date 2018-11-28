@@ -170,7 +170,7 @@ export class List extends React.Component {
             isOpen
             handleClose={this.closePreviewModal}
             title={selectedTemplate.name || ''}
-            imgSrc={`${selectedTemplate.url}/thumbnail.png`}
+            imgSrc={`${selectedTemplate.url}/preview.png`}
           />
         )}
         {this.renderFlow()}
