@@ -66,7 +66,8 @@ export const Container = styled.div`
     }
   }
 
-  > img {
+  > img,
+  > video {
     max-width: 100%;
   }
 

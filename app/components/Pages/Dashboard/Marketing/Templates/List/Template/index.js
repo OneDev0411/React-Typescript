@@ -6,12 +6,20 @@ import Button from 'components/Button/ActionButton'
 import { Container } from './styled'
 
 export function Template(props) {
+  const { template } = props
+  const src = `${template.url}/thumbnail.`
+
   return (
     <Container isSideMenuOpen={props.isSideMenuOpen}>
-      <img
-        src={`${props.template.url}/thumbnail.png`}
-        alt={props.template.template_type}
-      />
+      {template.video ? (
+        // eslint-disable-next-line
+        <video controls>
+          <source src={`${src}webm`} type="video/webm" />
+          <p>Sorry, your browser doesn't support embedded videos.</p>
+        </video>
+      ) : (
+        <img src={`${src}png`} alt={template.name} />
+      )}
       <Flex justifyBetween className="action-bar">
         <Button size="small" appearance="outline" onClick={props.handlePreview}>
           Preview
