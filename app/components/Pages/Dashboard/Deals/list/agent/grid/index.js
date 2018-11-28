@@ -64,7 +64,9 @@ class Grid extends React.Component {
         header: 'Agent',
         width: '100px',
         verticalAlign: 'center',
-        accessor: deal => <AgentAvatars agent={getPrimaryAgent(deal, roles)} />
+        render: ({ rowData: deal }) => (
+          <AgentAvatars agent={getPrimaryAgent(deal, roles)} />
+        )
       },
       {
         id: 'notification',
