@@ -6,19 +6,36 @@ import Button from 'components/Button/ActionButton'
 import { Container } from './styled'
 
 export function Template(props) {
+  const { template } = props
+  const isVideo = template.video
+  const src = `${template.url}/thumbnail.`
+
   return (
     <Container isSideMenuOpen={props.isSideMenuOpen}>
-      <img
-        src={`${props.template.url}/thumbnail.png`}
-        alt={props.template.template_type}
-      />
-      <Flex justifyBetween className="action-bar">
-        <Button size="small" appearance="outline" onClick={props.handlePreview}>
-          Preview
-        </Button>
-        <Button size="small" onClick={props.handleCustomize}>
-          Customize
-        </Button>
+      {isVideo ? (
+        // eslint-disable-next-line
+        <video controls>
+          <source src={`${src}webm`} type="video/webm" />
+          <p>Sorry, your browser doesn't support embedded videos.</p>
+        </video>
+      ) : (
+        <img src={`${src}png`} alt={template.name} />
+      )}
+      <Flex
+        className="action-bar"
+        justifyBetween={!isVideo}
+        justifyEnd={isVideo}
+      >
+        {!isVideo && (
+          <Button
+            appearance="outline"
+            onClick={props.handlePreview}
+            style={{ backgroundColor: '#FFF' }}
+          >
+            Preview
+          </Button>
+        )}
+        <Button onClick={props.handleCustomize}>Customize</Button>
       </Flex>
     </Container>
   )

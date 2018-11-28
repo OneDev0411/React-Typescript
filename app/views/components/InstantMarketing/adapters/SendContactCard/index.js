@@ -215,6 +215,7 @@ class SendContactCard extends React.Component {
           </ActionButton>
         ) : (
           <SearchContactDrawer
+            title="Select a Contact"
             isOpen={this.state.isSearchDrawerOpen}
             onSelect={this.handleSelectedContact}
             onClose={this.closeSearchDrawer}

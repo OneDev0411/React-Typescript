@@ -20,7 +20,7 @@ import { DealContainer, PageWrapper } from './styled'
 
 class DealDetails extends React.Component {
   state = {
-    activeTab: 'checklists',
+    activeTab: 'files',
     isFetchingChecklists: false
   }
 

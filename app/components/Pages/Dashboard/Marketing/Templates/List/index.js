@@ -1,14 +1,16 @@
 import React from 'react'
-import Flex from 'styled-flex-component'
 import { groupBy } from 'lodash'
+import Flex from 'styled-flex-component'
+import Masonry from 'react-masonry-component'
 
 import { PreviewImageModal } from 'components/PreviewImageModal'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
+import { Loader } from '../../components/Loader'
 import { templateTypes } from '../data'
 import { Template } from './Template'
-import { Loader, Tab } from './styled'
+import { Tab } from './styled'
 
 export class List extends React.Component {
   state = {
@@ -72,7 +74,12 @@ export class List extends React.Component {
   )
 
   renderTemplates = templates => (
-    <Flex wrap>{templates.map(this.renderTemplate)}</Flex>
+    <Masonry
+      options={{ transitionDuration: 0 }}
+      style={{ margin: '0 -0.75rem' }}
+    >
+      {templates.map(this.renderTemplate)}
+    </Masonry>
   )
 
   renderAll = () => {
@@ -164,7 +171,7 @@ export class List extends React.Component {
             isOpen
             handleClose={this.closePreviewModal}
             title={selectedTemplate.name || ''}
-            imgSrc={`${selectedTemplate.url}/thumbnail.png`}
+            imgSrc={`${selectedTemplate.url}/preview.png`}
           />
         )}
         {this.renderFlow()}

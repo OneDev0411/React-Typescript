@@ -13,8 +13,7 @@ export const Container = styled.div`
   margin-bottom: 1.5rem;
   border-radius: 3px;
   justify-content: center;
-  background-color: ${grey.A100};
-  border: 1px solid transparent;
+  border: 1px solid ${grey.A200};
 
   &:hover {
     border-color: ${grey.A300};
@@ -25,48 +24,25 @@ export const Container = styled.div`
   }
 
   @media screen and (min-width: ${props => getMQWidth(40, props)}em) {
-    width: calc(50% - 0.75rem);
-    margin-right: 1.5rem;
-
-    &:nth-of-type(2n) {
-      margin-right: 0;
-    }
+    width: calc(50% - 1.5rem);
+    margin-left: 0.75rem;
+    margin-right: 0.75rem;
   }
 
   @media screen and (min-width: ${props => getMQWidth(64, props)}em) {
-    width: calc(100% / 3 - 1rem);
-
-    &:nth-of-type(2n) {
-      margin-right: 1.5rem;
-    }
-    &:nth-of-type(3n) {
-      margin-right: 0;
-    }
+    width: calc(100% / 3 - 1.5rem);
   }
 
   @media screen and (min-width: ${props => getMQWidth(90, props)}em) {
-    width: calc(100% / 4 - 1.125rem);
-
-    &:nth-of-type(3n) {
-      margin-right: 1.5rem;
-    }
-    &:nth-of-type(4n) {
-      margin-right: 0;
-    }
+    width: calc(100% / 4 - 1.5rem);
   }
 
   @media screen and (min-width: ${props => getMQWidth(120, props)}em) {
-    width: calc(100% / 5 - 1.2rem);
-
-    &:nth-of-type(4n) {
-      margin-right: 1.5rem;
-    }
-    &:nth-of-type(5n) {
-      margin-right: 0;
-    }
+    width: calc(100% / 5 - 1.5rem);
   }
 
-  > img {
+  > img,
+  > video {
     max-width: 100%;
   }
 
@@ -77,6 +53,6 @@ export const Container = styled.div`
     right: 0;
     visibility: hidden;
     padding: 1rem;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.7);
   }
 `

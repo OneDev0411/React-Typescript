@@ -6,6 +6,7 @@ import { Trigger as MenuTrigger } from 'components/SlideMenu'
 import PageHeader from 'components/PageHeader'
 
 Header.propTypes = {
+  title: PropTypes.string.isRequired,
   showMenu: PropTypes.bool
 }
 
@@ -30,7 +31,7 @@ export function Header(props) {
           style={{ width: '1.5em', height: '1.5em', marginRight: '0.5em' }}
         />
         <Flex column>
-          <PageHeader.Heading>Marketing Center</PageHeader.Heading>
+          <PageHeader.Heading>{props.title}</PageHeader.Heading>
         </Flex>
       </Flex>
     </PageHeader>

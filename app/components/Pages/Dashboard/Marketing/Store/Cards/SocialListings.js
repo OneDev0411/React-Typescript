@@ -19,7 +19,7 @@ const Container = styled.div`
 
   @media screen and (min-width: ${props => getMQWidth(75, props)}) {
     height: 25rem;
-    width: calc(100% - 26.5rem);
+    width: calc(62% - 1.5rem);
     display: flex;
     align-items: center;
     justify-content: space-between;

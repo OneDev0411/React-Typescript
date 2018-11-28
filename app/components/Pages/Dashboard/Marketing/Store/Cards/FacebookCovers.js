@@ -18,7 +18,7 @@ const Container = styled.div`
   background-size: contain;
 
   @media screen and (min-width: ${props => getMQWidth(75, props)}) {
-    width: calc(100% - 26.5rem);
+    width: calc(62% - 1.5rem);
   }
 `
 
