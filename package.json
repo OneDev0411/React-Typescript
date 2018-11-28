@@ -153,7 +153,7 @@
     "react-lazy-load": "^3.0.13",
     "react-loadable": "^5.4.0",
     "react-masonry-component": "^6.2.1",
-    "react-modal": "^3.5.1",
+    "react-modal": "^3.6.1",
     "react-motion": "^0.5.2",
     "react-pull-to-refresh": "^1.1.2",
     "react-redux": "^5.0.6",
