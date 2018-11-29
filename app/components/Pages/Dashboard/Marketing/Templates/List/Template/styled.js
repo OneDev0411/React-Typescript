@@ -5,14 +5,35 @@ import { grey } from 'views/utils/colors'
 const getMQWidth = (base, props) =>
   props.isSideMenuOpen ? base + 10.2578125 : base
 
-export const Container = styled.div`
+export const Box = styled.div`
+  margin-bottom: 1.5rem;
+
+  @media (min-width: ${props => getMQWidth(40, props)}em) {
+    width: calc(50% - 1.5rem);
+    margin-left: 0.75rem;
+    margin-right: 0.75rem;
+  }
+
+  @media (min-width: ${props => getMQWidth(64, props)}em) {
+    width: calc(100% / 3 - 1.5rem);
+  }
+
+  @media (min-width: ${props => getMQWidth(90, props)}em) {
+    width: calc(100% / 4 - 1.5rem);
+  }
+
+  @media (min-width: ${props => getMQWidth(120, props)}em) {
+    width: calc(100% / 5 - 1.5rem);
+  }
+`
+
+export const ImageContainer = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  min-height: 22rem;
-  margin-bottom: 1.5rem;
-  border-radius: 3px;
   justify-content: center;
+  min-height: 20.8rem;
+  border-radius: 3px;
   border: 1px solid ${grey.A200};
 
   &:hover {
@@ -21,24 +42,6 @@ export const Container = styled.div`
     .action-bar {
       visibility: visible;
     }
-  }
-
-  @media screen and (min-width: ${props => getMQWidth(40, props)}em) {
-    width: calc(50% - 1.5rem);
-    margin-left: 0.75rem;
-    margin-right: 0.75rem;
-  }
-
-  @media screen and (min-width: ${props => getMQWidth(64, props)}em) {
-    width: calc(100% / 3 - 1.5rem);
-  }
-
-  @media screen and (min-width: ${props => getMQWidth(90, props)}em) {
-    width: calc(100% / 4 - 1.5rem);
-  }
-
-  @media screen and (min-width: ${props => getMQWidth(120, props)}em) {
-    width: calc(100% / 5 - 1.5rem);
   }
 
   > img,
@@ -53,6 +56,6 @@ export const Container = styled.div`
     right: 0;
     visibility: hidden;
     padding: 1rem;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.95);
   }
 `

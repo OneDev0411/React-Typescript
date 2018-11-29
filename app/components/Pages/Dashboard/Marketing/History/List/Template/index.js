@@ -1,14 +1,16 @@
 import React from 'react'
+import fecha from 'fecha'
 import Flex from 'styled-flex-component'
 
 import Button from 'components/Button/ActionButton'
 
-import { Box, ImageContainer } from './styled'
+import { Box, ImageContainer } from '../../../Templates/List/Template/styled'
 
 export function Template(props) {
-  const { template } = props
-  const isVideo = template.video
-  const src = `${template.url}/thumbnail.`
+  const {
+    template: { file }
+  } = props
+  const isVideo = file.mime.includes('video')
 
   return (
     <Box isSideMenuOpen={props.isSideMenuOpen}>
@@ -16,11 +18,11 @@ export function Template(props) {
         {isVideo ? (
           // eslint-disable-next-line
           <video controls>
-            <source src={`${src}webm`} type="video/webm" />
+            <source src={file.url} type={file.mime} />
             <p>Sorry, your browser doesn't support embedded videos.</p>
           </video>
         ) : (
-          <img src={`${src}png`} alt={template.name} />
+          <img src={file.url} alt={file.name} />
         )}
         <Flex
           className="action-bar"
@@ -39,6 +41,10 @@ export function Template(props) {
           <Button onClick={props.handleCustomize}>Customize</Button>
         </Flex>
       </ImageContainer>
+      <div style={{ marginTop: '0.5rem' }}>{`Created ${fecha.format(
+        new Date(file.created_at),
+        '[on] MMMM DD, YYYY [at] HH:mm A'
+      )}`}</div>
     </Box>
   )
 }

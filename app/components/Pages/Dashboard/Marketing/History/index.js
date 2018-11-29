@@ -6,6 +6,7 @@ import { getHistory } from 'models/instant-marketing/get-history'
 import { Header } from '../components/PageHeader'
 import { Loader } from '../components/Loader'
 
+import { List } from './List'
 import { ZeroState } from './ZeroState'
 
 export default class History extends React.Component {
@@ -49,7 +50,13 @@ export default class History extends React.Component {
       return <ZeroState />
     }
 
-    return null
+    return (
+      <List
+        isLoading={this.state.isLoading}
+        isSideMenuOpen={this.props.isSideMenuOpen}
+        templates={this.state.templates}
+      />
+    )
   }
 
   render() {
