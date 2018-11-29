@@ -32,15 +32,14 @@ export const statusSortMethod = ({ accessor }) => {
     'Incoming',
     'Coming Soon',
     'Active',
+    'Lease',
+    'Pending',
     'Active Option Contract',
     'Active Contingent',
     'Active Kick Out',
-    'Active Kickout', // TODO: Deprecated?
-    'Pending',
+    'Lease Contract',
     'Sold',
     'Leased',
-    'Lease', // TODO: Deprecated?
-    'Lease Contract', // TODO: Deprecated?
     'Expired',
     'Temp Off Market',
     'Cancelled',
