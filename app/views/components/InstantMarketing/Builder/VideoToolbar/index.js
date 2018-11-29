@@ -6,15 +6,33 @@ import IconButton from 'components/Button/IconButton'
 import { Container, Divider, FrameButton } from './styled'
 
 export class VideoToolbar extends React.Component {
-  state = {
-    activeFrame: 0
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      activeFrame: 0,
+      isLoaded: false
+    }
+
+    const view = this.props.editor.DomComponents.getWrapper().view.el
+      .ownerDocument.defaultView
+
+    view.document.addEventListener('load', this.handleLoadTemplate, true)
+  }
+
+  handleLoadTemplate = () => {
+    if (!this.Timeline || this.state.isLoaded) {
+      return false
+    }
+
+    this.setState({
+      isLoaded: true
+    })
+
+    this.seekTo(1)
   }
 
   get Timeline() {
-    if (!this.props.editor) {
-      return null
-    }
-
     return this.props.editor.DomComponents.getWrapper().view.el.ownerDocument
       .defaultView.Timeline
   }
@@ -36,10 +54,15 @@ export class VideoToolbar extends React.Component {
   }
 
   handlePlay = () => {
+    this.Timeline.reset()
     this.Timeline.play()
   }
 
   render() {
+    if (this.state.isLoaded === false) {
+      return false
+    }
+
     return (
       <Container ref={this.props.onRef}>
         <IconButton iconSize="large" isFit onClick={this.handlePlay}>

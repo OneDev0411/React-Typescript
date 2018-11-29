@@ -171,7 +171,8 @@ class Builder extends React.Component {
 
   handleSelectTemplate = templateItem => {
     this.setState({
-      template: templateItem
+      template: templateItem,
+      selectedTemplate: null
     })
 
     const template = {
@@ -199,6 +200,10 @@ class Builder extends React.Component {
 
   get IsVideoTemplate() {
     return this.state.template && this.state.template.video
+  }
+
+  get IsTemplateLoaded() {
+    return this.state.selectedTemplate && this.state.selectedTemplate.template
   }
 
   render() {
@@ -288,12 +293,13 @@ class Builder extends React.Component {
             ref={ref => (this.grapes = ref)}
             style={{ position: 'relative' }}
           >
-            {this.IsVideoTemplate && (
-              <VideoToolbar
-                onRef={ref => (this.videoToolbar = ref)}
-                editor={this.editor}
-              />
-            )}
+            {this.IsVideoTemplate &&
+              this.IsTemplateLoaded && (
+                <VideoToolbar
+                  onRef={ref => (this.videoToolbar = ref)}
+                  editor={this.editor}
+                />
+              )}
           </div>
         </BuilderContainer>
       </Container>
