@@ -89,8 +89,8 @@ export default class Templates extends React.Component {
               <TemplateVideo
                 autoplay="true"
                 loop="true"
-                type="video/webm"
-                src={`${template.url}/thumbnail.webm`}
+                type="video/mp4"
+                src={`${template.url}/thumbnail.mp4`}
               />
             ) : (
               <Image
