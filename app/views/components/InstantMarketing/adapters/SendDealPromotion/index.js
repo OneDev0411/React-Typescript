@@ -9,9 +9,7 @@ import Compose from 'components/EmailCompose'
 import ActionButton from 'components/Button/ActionButton'
 import InstantMarketing from 'components/InstantMarketing'
 
-import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
-
-
+import { convertRecipientsToEmails } from '../../helpers/convert-recipients-to-emails'
 import SocialDrawer from '../../components/SocialDrawer'
 import { getTemplatePreviewImage } from '../../helpers/get-template-preview-image'
 import { getTemplateTypes } from '../../helpers/get-template-types'

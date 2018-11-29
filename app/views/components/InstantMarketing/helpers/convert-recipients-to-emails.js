@@ -3,6 +3,7 @@ export function convertRecipientsToEmails(recipients, subject, html) {
     to: recipient.email,
     subject,
     html,
+    contact: recipient.contactId,
     [recipient.type]: recipient[`${recipient.type}Id`]
   }))
 }

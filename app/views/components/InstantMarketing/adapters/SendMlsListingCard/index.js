@@ -15,7 +15,7 @@ import { getTemplatePreviewImage } from 'components/InstantMarketing/helpers/get
 import ActionButton from 'components/Button/ActionButton'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
-import { convertRecipientsToEmails } from 'components/InstantMarketing/Flows/utils'
+import { convertRecipientsToEmails } from '../../helpers/convert-recipients-to-emails'
 
 import { getTemplateTypes } from '../../helpers/get-template-types'
 import SocialDrawer from '../../components/SocialDrawer'
