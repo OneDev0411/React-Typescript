@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-import Loader from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-
 export const Container = styled.div`
   min-height: 90vh;
   max-height: 90vh;
@@ -33,14 +31,11 @@ export const TemplateItem = styled.div`
   }
 `
 
-export const LoaderIndicator = styled(Loader)`
-  position: absolute;
-  z-index: 1;
-  width: 68px;
-  height: 68px;
-`
 export const TemplateVideo = styled.video`
   max-width: 100%;
   max-height: 400px;
+  box-shadow: 0px 5px 10px #c3c3c3;
+  min-height: 200px;
+  margin: 1.5%;
   box-shadow: 0px 5px 10px #c3c3c3;
 `

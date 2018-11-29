@@ -4,12 +4,16 @@ import grapesjs from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
 import '../../../../styles/components/modules/template-builder.scss'
 
+import _ from 'underscore'
+
 import './AssetManager'
 import juice from 'juice'
 
 import IconButton from 'components/Button/IconButton'
 import ActionButton from 'components/Button/ActionButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+
+import { VideoToolbar } from './VideoToolbar'
 
 import config from './config'
 
@@ -65,7 +69,7 @@ class Builder extends React.Component {
       plugins: ['asset-blocks']
     })
 
-    this.editor.on('load', this.setupGrapesJs.bind(this))
+    this.editor.on('load', this.setupGrapesJs)
   }
 
   setupGrapesJs = () => {
@@ -73,11 +77,10 @@ class Builder extends React.Component {
     this.disableResize()
     this.singleClickTextEditing()
     this.disableAssetManager()
-  }
 
-  get timeline() {
-    return this.editor.DomComponents.getWrapper().view.el.ownerDocument
-      .defaultView.Timeline
+    if (this.IsVideoTemplate) {
+      this.grapes.appendChild(this.videoToolbar)
+    }
   }
 
   disableAssetManager = () => {
@@ -190,41 +193,15 @@ class Builder extends React.Component {
     this.lockIn()
   }
 
-  onNext = () => {
-    this.keyframe++
-
-    const keyframe = this.timeline.keyframes[this.keyframe]
-
-    if (!keyframe) {
-      return
-    }
-
-    this.timeline.seekTo(keyframe.at)
-  }
-
-  onPrevious = () => {
-    if (this.keyframe === 0) {
-      return
-    }
-
-    this.keyframe--
-
-    const keyframe = this.timeline.keyframes[this.keyframe]
-
-    this.timeline.seekTo(keyframe.at)
-  }
-
-  onRestart = () => {
-    this.postMessage('restart')
-  }
-
   get ShowSocialButtons() {
     return this.props.mediums.includes('Social')
   }
 
-  render() {
-    const { template } = this.state
+  get IsVideoTemplate() {
+    return this.state.template && this.state.template.video
+  }
 
+  render() {
     return (
       <Container className="template-builder">
         <Header>
@@ -269,7 +246,7 @@ class Builder extends React.Component {
               </ActionButton>
             )}
 
-            {template && template.video && (
+            {/* {template && template.video && (
               <ActionButton
                 style={{ marginLeft: '0.5rem' }}
                 onClick={this.onPrevious}
@@ -280,7 +257,7 @@ class Builder extends React.Component {
 
             {template && template.video && (
               <ActionButton onClick={this.onNext.bind(this)}>Next</ActionButton>
-            )}
+            )} */}
 
             <Divider />
             <IconButton
@@ -306,7 +283,18 @@ class Builder extends React.Component {
             />
           </TemplatesContainer>
 
-          <div id="grapesjs-canvas" />
+          <div
+            id="grapesjs-canvas"
+            ref={ref => (this.grapes = ref)}
+            style={{ position: 'relative' }}
+          >
+            {this.IsVideoTemplate && (
+              <VideoToolbar
+                onRef={ref => (this.videoToolbar = ref)}
+                editor={this.editor}
+              />
+            )}
+          </div>
         </BuilderContainer>
       </Container>
     )
