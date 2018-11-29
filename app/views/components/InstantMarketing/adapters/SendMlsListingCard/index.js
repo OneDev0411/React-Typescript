@@ -20,7 +20,7 @@ import { convertRecipientsToEmails } from 'components/InstantMarketing/Flows/uti
 import { addCRMLog } from '../../helpers/add-crm-log'
 import { getTemplateTypes } from '../../helpers/get-template-types'
 import { getCRMLogAssociations } from '../../helpers/get-crm-log-associations'
-import { SocialModal } from '../../components/SocialModal'
+import SocialDrawer from '../../components/SocialDrawer'
 
 class SendMlsListingCard extends React.Component {
   state = {
@@ -29,7 +29,7 @@ class SendMlsListingCard extends React.Component {
     isInstantMarketingBuilderOpen: false,
     isComposeEmailOpen: false,
     isSendingEmail: false,
-    isSocialModalOpen: false,
+    isSocialDrawerOpen: false,
     htmlTemplate: '',
     templateScreenshot: null
   }
@@ -159,15 +159,6 @@ class SendMlsListingCard extends React.Component {
     )
 
   handleSaveMarketingCard = async template => {
-    if (template.medium === 'Social') {
-      this.setState({
-        htmlTemplate: template,
-        isSocialModalOpen: true
-      })
-
-      return
-    }
-
     this.generatePreviewImage(template)
 
     this.setState({
@@ -175,6 +166,14 @@ class SendMlsListingCard extends React.Component {
       isInstantMarketingBuilderOpen: true,
       htmlTemplate: template,
       templateScreenshot: null
+    })
+  }
+
+  handleSocialSharing = (template, socialName) => {
+    this.setState({
+      socialName,
+      htmlTemplate: template,
+      isSocialDrawerOpen: true
     })
   }
 
@@ -189,9 +188,9 @@ class SendMlsListingCard extends React.Component {
       isComposeEmailOpen: false
     })
 
-  closeSocialModal = () =>
+  closeSocialDrawer = () =>
     this.setState({
-      isSocialModalOpen: false
+      isSocialDrawerOpen: false
     })
 
   render() {
@@ -226,9 +225,11 @@ class SendMlsListingCard extends React.Component {
           isOpen={this.state.isInstantMarketingBuilderOpen}
           onClose={this.closeMarketing}
           handleSave={this.handleSaveMarketingCard}
+          handleSocialSharing={this.handleSocialSharing}
           templateData={{ listing, user }}
           templateTypes={getTemplateTypes(listing)}
           assets={listing && listing.gallery_image_urls}
+          mediums={this.props.mediums}
           defaultTemplate={this.props.selectedTemplate}
         />
 
@@ -241,10 +242,14 @@ class SendMlsListingCard extends React.Component {
           isSubmitting={this.state.isSendingEmail}
         />
 
-        {this.state.isSocialModalOpen && (
-          <SocialModal
+        {this.state.isSocialDrawerOpen && (
+          <SocialDrawer
+            socialName={this.state.socialName}
             template={this.state.htmlTemplate}
-            onClose={this.closeSocialModal}
+            templateInstanceData={{
+              deals: [this.props.deal.id]
+            }}
+            onClose={this.closeSocialDrawer}
           />
         )}
       </Fragment>

@@ -111,13 +111,18 @@ export class List extends React.Component {
   }
 
   renderFlow = () => {
+    const sharedProps = {
+      mediums: [this.props.medium],
+      selectedTemplate: this.state.selectedTemplate
+    }
+
     switch (this.state.activeFlow) {
       case 'Birthday':
         return (
           <ContactFlow
-            selectedTemplate={this.state.selectedTemplate}
             isTriggered={this.state.isContactFlowActive}
             handleTrigger={this.deActiveContactFlow}
+            {...sharedProps}
           />
         )
 
@@ -125,9 +130,9 @@ export class List extends React.Component {
         return (
           <ListingFlow
             hasExternalTrigger
-            selectedTemplate={this.state.selectedTemplate}
             isTriggered={this.state.isListingFlowActive}
             handleTrigger={this.deActiveListingFlow}
+            {...sharedProps}
           />
         )
     }
