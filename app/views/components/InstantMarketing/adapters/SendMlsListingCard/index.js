@@ -17,9 +17,7 @@ import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketin
 
 import { convertRecipientsToEmails } from 'components/InstantMarketing/Flows/utils'
 
-import { addCRMLog } from '../../helpers/add-crm-log'
 import { getTemplateTypes } from '../../helpers/get-template-types'
-import { getCRMLogAssociations } from '../../helpers/get-crm-log-associations'
 import SocialDrawer from '../../components/SocialDrawer'
 
 class SendMlsListingCard extends React.Component {
@@ -109,13 +107,6 @@ class SendMlsListingCard extends React.Component {
 
     try {
       await sendContactsEmail(emails)
-      addCRMLog(this.props.user.id, values.subject, [
-        ...getCRMLogAssociations(
-          'contact',
-          values.recipients.filter(r => r.contactId).map(r => r.contactId)
-        ),
-        ...getCRMLogAssociations('listing', [this.state.listing.id])
-      ])
 
       // reset form
       if (form) {

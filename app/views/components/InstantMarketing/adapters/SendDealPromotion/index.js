@@ -2,26 +2,19 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
-import InstantMarketing from 'components/InstantMarketing'
-
-import ActionButton from 'components/Button/ActionButton'
-
+import Listing from 'models/listings/listing'
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
-import Listing from 'models/listings/listing'
 import Compose from 'components/EmailCompose'
+import ActionButton from 'components/Button/ActionButton'
+import InstantMarketing from 'components/InstantMarketing'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
-import { convertRecipientsToEmails } from 'components/InstantMarketing/Flows/utils'
 
 import SocialDrawer from '../../components/SocialDrawer'
-
 import { getTemplatePreviewImage } from '../../helpers/get-template-preview-image'
-
-import { addCRMLog } from '../../helpers/add-crm-log'
 import { getTemplateTypes } from '../../helpers/get-template-types'
-import { getCRMLogAssociations } from '../../helpers/get-crm-log-associations'
 
 const initialState = {
   listing: null,
@@ -82,13 +75,6 @@ class SendDealPromotion extends React.Component {
 
     try {
       await sendContactsEmail(emails)
-      addCRMLog(this.props.user.id, values.subject, [
-        ...getCRMLogAssociations(
-          'contact',
-          values.recipients.filter(r => r.contactId).map(r => r.contactId)
-        ),
-        ...getCRMLogAssociations('listing', [this.state.listing.id])
-      ])
 
       this.props.notify({
         status: 'success',
