@@ -54,6 +54,7 @@ export class VideoToolbar extends React.Component {
   }
 
   handlePlay = () => {
+    this.seekTo(0)
     this.Timeline.reset()
     this.Timeline.play()
   }
