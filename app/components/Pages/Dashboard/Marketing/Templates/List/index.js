@@ -3,7 +3,8 @@ import { groupBy } from 'lodash'
 import Flex from 'styled-flex-component'
 import Masonry from 'react-masonry-component'
 
-import { PreviewImageModal } from 'components/PreviewImageModal'
+import { ImagePreviewModal } from 'components/ImagePreviewModal'
+
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
@@ -172,7 +173,7 @@ export class List extends React.Component {
         </Flex>
         {this.renderPanel(selectedType)}
         {state.isPreviewModalOpen && (
-          <PreviewImageModal
+          <ImagePreviewModal
             isOpen
             handleClose={this.closePreviewModal}
             imgSrc={`${selectedTemplate.url}/preview.png`}

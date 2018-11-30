@@ -5,18 +5,18 @@ import BareModal from '../BareModal'
 
 import { Header } from './Header'
 
-PreviewImageModal.propTypes = {
+ImagePreviewModal.propTypes = {
   imgSrc: PropTypes.string.isRequired,
   isOpen: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   title: PropTypes.string
 }
 
-PreviewImageModal.defaultProps = {
+ImagePreviewModal.defaultProps = {
   title: 'Preview'
 }
 
-export function PreviewImageModal(props) {
+export function ImagePreviewModal(props) {
   const { title, handleClose } = props
 
   return (

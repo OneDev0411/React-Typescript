@@ -2,7 +2,8 @@ import React from 'react'
 import Flex from 'styled-flex-component'
 import Masonry from 'react-masonry-component'
 
-import { PreviewImageModal } from 'components/PreviewImageModal'
+import { ImagePreviewModal } from 'components/ImagePreviewModal'
+
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
 import { Loader } from '../../components/Loader'
@@ -78,7 +79,7 @@ export class List extends React.Component {
         </div>
         {this.renderTemplates(templates)}
         {state.isPreviewModalOpen && (
-          <PreviewImageModal
+          <ImagePreviewModal
             isOpen
             handleClose={this.closePreviewModal}
             imgSrc={selectedTemplate.file.url}
