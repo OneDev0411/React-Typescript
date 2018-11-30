@@ -175,7 +175,6 @@ export class List extends React.Component {
           <PreviewImageModal
             isOpen
             handleClose={this.closePreviewModal}
-            title={selectedTemplate.name || ''}
             imgSrc={`${selectedTemplate.url}/preview.png`}
           />
         )}

@@ -9,7 +9,11 @@ PreviewImageModal.propTypes = {
   imgSrc: PropTypes.string.isRequired,
   isOpen: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string
+}
+
+PreviewImageModal.defaultProps = {
+  title: 'Preview'
 }
 
 export function PreviewImageModal(props) {
@@ -22,7 +26,7 @@ export function PreviewImageModal(props) {
       contentLabel={title}
       onRequestClose={handleClose}
     >
-      <Header handleClose={handleClose} title={`${title} Preview`} />
+      <Header handleClose={handleClose} title={title} />
       <div style={{ textAlign: 'center', padding: '9rem 0 3rem' }}>
         <img src={props.imgSrc} alt={title} style={{ maxWidth: '66%' }} />
       </div>
