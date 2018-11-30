@@ -27,8 +27,14 @@ export function ImagePreviewModal(props) {
       onRequestClose={handleClose}
     >
       <Header handleClose={handleClose} title={title} />
-      <div style={{ textAlign: 'center', padding: '9rem 0 3rem' }}>
-        <img src={props.imgSrc} alt={title} style={{ maxWidth: '66%' }} />
+      <div
+        style={{ height: '100vh', textAlign: 'center', padding: '8rem 0 3rem' }}
+      >
+        <img
+          src={props.imgSrc}
+          alt={title}
+          style={{ maxHeight: '100%', maxWidth: 'calc(100% - 3rem)' }}
+        />
       </div>
     </BareModal>
   )
