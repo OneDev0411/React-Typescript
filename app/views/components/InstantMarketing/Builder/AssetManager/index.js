@@ -22,7 +22,8 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
       const setters = {
         image: setSrc,
         cell: setBg,
-        text: setBg
+        text: setBg,
+        '': setBg
       }
 
       const type = target.get('type')
