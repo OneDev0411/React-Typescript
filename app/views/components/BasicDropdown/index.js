@@ -80,14 +80,13 @@ export class BasicDropdown extends React.Component {
                 style={{
                   minWidth: fullWidth ? '100%' : 'auto',
                   maxHeight: fullHeight ? 'auto' : maxHeight,
-                  overflowY: fullHeight ? 'initial' : 'scroll',
+                  overflowY: fullHeight ? 'auto' : 'scroll',
                   position: 'absolute',
                   left: pullTo !== 'right' ? 0 : 'auto',
                   right: pullTo === 'right' ? 0 : 'auto',
                   top: upsideDown ? 'auto' : 'calc(100% + 8px)',
                   bottom: upsideDown ? 'calc(100% + 0.5em)' : 'auto',
                   zIndex: 2,
-                  overflowY: 'auto',
                   ...menuStyle
                 }}
                 className="u-scrollbar--thinner--self"
