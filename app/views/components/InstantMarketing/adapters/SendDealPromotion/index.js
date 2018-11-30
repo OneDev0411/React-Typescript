@@ -5,7 +5,7 @@ import { addNotification as notify } from 'reapop'
 import Listing from 'models/listings/listing'
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
-import Compose from 'components/EmailCompose'
+import EmailCompose from 'components/EmailCompose'
 import ActionButton from 'components/Button/ActionButton'
 import InstantMarketing from 'components/InstantMarketing'
 
@@ -15,6 +15,7 @@ import { getTemplatePreviewImage } from '../../helpers/get-template-preview-imag
 import { getTemplateTypes } from '../../helpers/get-template-types'
 
 const initialState = {
+  owner: null,
   listing: null,
   socialName: null,
   isInstantMarketingBuilderOpen: false,
@@ -25,7 +26,10 @@ const initialState = {
 }
 
 class SendDealPromotion extends React.Component {
-  state = initialState
+  state = {
+    ...initialState,
+    owner: this.props.user
+  }
 
   componentDidMount() {
     this.getDealListing()
@@ -41,10 +45,11 @@ class SendDealPromotion extends React.Component {
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
 
-  handleSaveMarketingCard = template => {
+  handleSaveMarketingCard = (template, owner) => {
     this.generatePreviewImage(template)
 
     this.setState({
+      owner,
       isComposeEmailOpen: true,
       isInstantMarketingBuilderOpen: true,
       htmlTemplate: template,
@@ -143,14 +148,17 @@ class SendDealPromotion extends React.Component {
           assets={listing && listing.gallery_image_urls}
         />
 
-        <Compose
-          isOpen={this.state.isComposeEmailOpen}
-          onClose={this.toggleComposeEmail}
-          recipients={this.Recipients}
-          html={this.state.templateScreenshot}
-          onClickSend={this.handleSendEmails}
-          isSubmitting={this.state.isSendingEmail}
-        />
+        {this.state.isComposeEmailOpen && (
+          <EmailCompose
+            isOpen
+            from={this.state.owner}
+            onClose={this.toggleComposeEmail}
+            recipients={this.Recipients}
+            html={this.state.templateScreenshot}
+            onClickSend={this.handleSendEmails}
+            isSubmitting={this.state.isSendingEmail}
+          />
+        )}
 
         {this.state.isSocialDrawerOpen && (
           <SocialDrawer

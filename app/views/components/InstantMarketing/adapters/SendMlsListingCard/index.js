@@ -29,7 +29,8 @@ class SendMlsListingCard extends React.Component {
     isSendingEmail: false,
     isSocialDrawerOpen: false,
     htmlTemplate: '',
-    templateScreenshot: null
+    templateScreenshot: null,
+    owner: this.props.user
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -149,10 +150,11 @@ class SendMlsListingCard extends React.Component {
       this.props.handleTrigger
     )
 
-  handleSaveMarketingCard = async template => {
+  handleSaveMarketingCard = async (template, owner) => {
     this.generatePreviewImage(template)
 
     this.setState({
+      owner,
       isComposeEmailOpen: true,
       isInstantMarketingBuilderOpen: true,
       htmlTemplate: template,
@@ -224,14 +226,17 @@ class SendMlsListingCard extends React.Component {
           defaultTemplate={this.props.selectedTemplate}
         />
 
-        <EmailCompose
-          isOpen={this.state.isComposeEmailOpen}
-          onClose={this.toggleComposeEmail}
-          recipients={this.Recipients}
-          html={this.state.templateScreenshot}
-          onClickSend={this.handleSendEmails}
-          isSubmitting={this.state.isSendingEmail}
-        />
+        {this.state.isComposeEmailOpen && (
+          <EmailCompose
+            isOpen
+            from={this.state.owner}
+            onClose={this.toggleComposeEmail}
+            recipients={this.Recipients}
+            html={this.state.templateScreenshot}
+            onClickSend={this.handleSendEmails}
+            isSubmitting={this.state.isSendingEmail}
+          />
+        )}
 
         {this.state.isSocialDrawerOpen && (
           <SocialDrawer

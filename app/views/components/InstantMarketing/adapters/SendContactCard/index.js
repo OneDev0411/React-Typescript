@@ -9,7 +9,7 @@ import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
 import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 
-import Compose from 'components/EmailCompose'
+import EmailCompose from 'components/EmailCompose'
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
 
 import { getContact } from 'models/contacts/get-contact'
@@ -26,7 +26,8 @@ class SendContactCard extends React.Component {
     contact: this.props.contact,
     isInstantMarketingBuilderOpen: false,
     isComposeEmailOpen: false,
-    isSearchDrawerOpen: false
+    isSearchDrawerOpen: false,
+    owner: this.props.user
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -113,11 +114,12 @@ class SendContactCard extends React.Component {
       }
     )
 
-  handleSaveMarketingCard = async template => {
+  handleSaveMarketingCard = async (template, owner) => {
     this.toggleInstantMarketingBuilder()
     this.generatePreviewImage(template)
 
     this.setState({
+      owner,
       isComposeEmailOpen: true,
       isInstantMarketingBuilderOpen: true,
       htmlTemplate: template.result,
@@ -223,15 +225,18 @@ class SendContactCard extends React.Component {
           defaultTemplate={this.props.selectedTemplate}
         />
 
-        <Compose
-          isOpen={this.state.isComposeEmailOpen}
-          onClose={this.toggleComposeEmail}
-          recipients={this.Recipients}
-          html={this.state.templateScreenshot}
-          onClickSend={this.handleSendEmails}
-          isSubmitting={this.state.isSendingEmail}
-          disableAddNewRecipient
-        />
+        {this.state.isComposeEmailOpen && (
+          <EmailCompose
+            isOpen
+            from={this.state.owner}
+            onClose={this.toggleComposeEmail}
+            recipients={this.Recipients}
+            html={this.state.templateScreenshot}
+            onClickSend={this.handleSendEmails}
+            isSubmitting={this.state.isSendingEmail}
+            disableAddNewRecipient
+          />
+        )}
       </Fragment>
     )
   }

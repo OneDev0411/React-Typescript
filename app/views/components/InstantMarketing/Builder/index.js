@@ -12,6 +12,7 @@ import juice from 'juice'
 import IconButton from 'components/Button/IconButton'
 import ActionButton from 'components/Button/ActionButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 
 import { VideoToolbar } from './VideoToolbar'
 
@@ -35,7 +36,8 @@ class Builder extends React.Component {
 
     this.state = {
       template: null,
-      selectedTemplate: null
+      selectedTemplate: null,
+      owner: props.templateData.user
     }
 
     this.keyframe = 0
@@ -164,7 +166,8 @@ class Builder extends React.Component {
     }
   }
 
-  handleSave = () => this.props.onSave(this.getSavedTempldate())
+  handleSave = () =>
+    this.props.onSave(this.getSavedTempldate(), this.state.owner)
 
   handleSocialSharing = socialName =>
     this.props.onSocialSharing(this.getSavedTempldate(), socialName)
@@ -178,7 +181,8 @@ class Builder extends React.Component {
     const template = {
       ...templateItem,
       template: nunjucks.renderString(templateItem.template, {
-        ...this.props.templateData
+        ...this.props.templateData,
+        user: this.state.owner
       })
     }
 
@@ -206,6 +210,8 @@ class Builder extends React.Component {
     return this.state.selectedTemplate && this.state.selectedTemplate.template
   }
 
+  handleOwnerChange = ({ value: owner }) => this.setState({ owner })
+
   render() {
     return (
       <Container className="template-builder">
@@ -213,6 +219,13 @@ class Builder extends React.Component {
           <h1>{this.props.headerTitle}</h1>
 
           <Actions>
+            <TeamContactSelect
+              pullTo="right"
+              user={this.props.templateData.user}
+              owner={this.state.owner}
+              onChange={this.handleOwnerChange}
+              style={{ marginRight: '0.5rem' }}
+            />
             {this.ShowSocialButtons && this.state.selectedTemplate ? (
               <Fragment>
                 <ActionButton
@@ -293,13 +306,12 @@ class Builder extends React.Component {
             ref={ref => (this.grapes = ref)}
             style={{ position: 'relative' }}
           >
-            {this.IsVideoTemplate &&
-              this.IsTemplateLoaded && (
-                <VideoToolbar
-                  onRef={ref => (this.videoToolbar = ref)}
-                  editor={this.editor}
-                />
-              )}
+            {this.IsVideoTemplate && this.IsTemplateLoaded && (
+              <VideoToolbar
+                onRef={ref => (this.videoToolbar = ref)}
+                editor={this.editor}
+              />
+            )}
           </div>
         </BuilderContainer>
       </Container>

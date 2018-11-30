@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react'
-import { connect } from 'react-redux'
 import { Field } from 'react-final-form'
 
 import Loading from '../../../components/Partials/Loading'
@@ -8,7 +7,7 @@ import { FinalFormDrawer } from '../FinalFormDrawer'
 import { TextInput } from '../Forms/TextInput'
 import { MultipleContactsSelect } from '../Forms/MultipleContactsSelect'
 
-class EmailCompose extends React.Component {
+export default class EmailCompose extends React.Component {
   get InitialValues() {
     if (
       (this.formObject && !this.isRecipientsChanged()) ||
@@ -18,7 +17,7 @@ class EmailCompose extends React.Component {
     }
 
     this.formObject = {
-      from: `${this.props.user.display_name} <${this.props.user.email}>`,
+      from: `${this.props.from.display_name} <${this.props.from.email}>`,
       recipients: this.props.recipients || []
     }
 
@@ -91,9 +90,3 @@ class EmailCompose extends React.Component {
     )
   }
 }
-
-function mapStateToProps({ user }) {
-  return { user }
-}
-
-export default connect(mapStateToProps)(EmailCompose)
