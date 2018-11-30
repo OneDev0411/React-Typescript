@@ -89,7 +89,7 @@ class UserFilter extends React.Component {
 
   render() {
     if (this.Members.length <= 1) {
-      return false
+      return null
     }
 
     return (
@@ -103,10 +103,7 @@ class UserFilter extends React.Component {
         fullWidth
         items={this.MembersList}
         onChange={this.handleOnChange}
-        style={{
-          maxWidth: '20rem',
-          height: '100%'
-        }}
+        style={this.props.style}
       />
     )
   }
@@ -120,7 +117,11 @@ function mapStateToProps({ user }) {
 }
 
 const defaultProps = {
-  filter: []
+  filter: [],
+  style: {
+    maxWidth: '20rem',
+    height: '100%'
+  }
 }
 
 UserFilter.defaultProps = defaultProps
