@@ -25,6 +25,12 @@ class Grid extends React.Component {
 
     return [
       {
+        id: 'status',
+        header: 'Status',
+        accessor: deal => Deal.get.status(deal),
+        sortMethod: statusSortMethod
+      },
+      {
         id: 'address',
         header: 'Address',
         width: '50%',
@@ -78,12 +84,6 @@ class Grid extends React.Component {
             caption="You have $count unread messages in this deal"
           />
         )
-      },
-      {
-        id: 'status',
-        header: 'Status',
-        accessor: deal => Deal.get.status(deal),
-        sortMethod: statusSortMethod
       }
     ]
   }
@@ -126,6 +126,15 @@ class Grid extends React.Component {
     return {}
   }
 
+  getDefaultSort = (id, ascending) => {
+    const column = this.Columns.find(col => col.id === id)
+
+    return {
+      column,
+      ascending
+    }
+  }
+
   render() {
     const { isFetchingDeals } = this.props
     const columns = this.Columns
@@ -134,7 +143,9 @@ class Grid extends React.Component {
     return (
       <Table
         plugins={{
-          sortable: {}
+          sortable: {
+            defaultSort: this.getDefaultSort('status', true)
+          }
         }}
         isFetching={isFetchingDeals}
         columns={columns}
