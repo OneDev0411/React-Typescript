@@ -223,7 +223,7 @@ class Builder extends React.Component {
               pullTo="right"
               user={this.props.templateData.user}
               owner={this.state.owner}
-              onChange={this.handleOwnerChange}
+              onSelect={this.handleOwnerChange}
               style={{ marginRight: '0.5rem' }}
             />
             {this.ShowSocialButtons && this.state.selectedTemplate ? (
