@@ -69,8 +69,8 @@ export default class Templates extends React.Component {
 
   updateTemplate = template =>
     this.setState(state => ({
-      templates: state.templates.map(
-        item => (item.id === template.id ? template : item)
+      templates: state.templates.map(item =>
+        item.id === template.id ? template : item
       )
     }))
 
@@ -87,7 +87,7 @@ export default class Templates extends React.Component {
           >
             {template.video ? (
               <TemplateVideo
-                autoplay="true"
+                autoPlay="true"
                 loop="true"
                 type="video/mp4"
                 src={`${template.url}/thumbnail.mp4`}
