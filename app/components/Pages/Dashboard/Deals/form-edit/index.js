@@ -6,7 +6,7 @@ import { addNotification as notify } from 'reapop'
 import { saveSubmission, getDeal, getForms } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
-import { getFormSize } from 'models/Deal/form'
+import { getPdfSize } from 'models/Deal/form'
 
 import PageHeader from 'components/PageHeader'
 import ActionButton from 'components/Button/ActionButton'
