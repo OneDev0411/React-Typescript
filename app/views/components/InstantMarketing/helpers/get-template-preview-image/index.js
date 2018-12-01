@@ -1,4 +1,3 @@
-// import templateToImage from '../template-to-image'
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 
 export async function getTemplatePreviewImage(template, data) {
@@ -14,7 +13,9 @@ export async function getTemplatePreviewImage(template, data) {
       html: template.result
     })
 
-    return instance.file.url
+    return `<img src="${
+      instance.file.url
+    }" style="max-width: 98%; display: block; margin: 1rem auto"/>`
   } catch (e) {
     console.log(e)
 
