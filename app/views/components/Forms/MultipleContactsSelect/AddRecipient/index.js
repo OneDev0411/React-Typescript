@@ -188,7 +188,7 @@ class AddRecipient extends React.Component {
                   value: this.state.searchText,
                   onChange: this.handleSearchContact,
                   placeholder: 'Add new recipient',
-                  readonly: this.state.isLoading
+                  readOnly: this.state.isLoading
                 })}
               />
 

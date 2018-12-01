@@ -1,16 +1,16 @@
 import React from 'react'
 
-import {
-  CommissionContainer,
-  CommissionRadioContainer,
-  CommissionInputContainer
-} from './styled'
-
 import { InputLabel, InputRequired } from 'components/Forms/styled'
 
 import { TextInput } from 'components/Forms/TextInput'
 
 import { RadioGroup } from 'components/Forms/RadioGroupInput'
+
+import {
+  CommissionContainer,
+  CommissionRadioContainer,
+  CommissionInputContainer
+} from './styled'
 
 export const CommissionInput = ({
   input,
@@ -49,7 +49,7 @@ export const CommissionInput = ({
       hasLabel={false}
       highlightOnError
       Container={CommissionInputContainer}
-      autocomplete={false}
+      autoComplete="off"
       placeholder="Enter commission for this agent"
     />
   </CommissionContainer>

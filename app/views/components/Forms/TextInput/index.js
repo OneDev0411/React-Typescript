@@ -30,14 +30,14 @@ export const TextInput = ({
 
     <InputField
       {...input}
-      autocomplete={false}
+      autoComplete="Off"
       placeholder={placeholder}
       hasError={highlightOnError && meta.submitFailed && meta.error}
       {...rest}
     />
 
-    {showError &&
-      meta.error &&
-      meta.touched && <InputError>{meta.error}</InputError>}
+    {showError && meta.error && meta.touched && (
+      <InputError>{meta.error}</InputError>
+    )}
   </Container>
 )

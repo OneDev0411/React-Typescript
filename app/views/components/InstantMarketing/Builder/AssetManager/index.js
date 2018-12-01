@@ -78,8 +78,6 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
   })
 
   editor.on('component:selected', selected => {
-    const type = selected.get('type')
-
     const attributes = selected.get('attributes')
 
     if (!attributes || !attributes['rechat-assets']) {
