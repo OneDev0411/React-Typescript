@@ -129,7 +129,7 @@ class SendContactCard extends React.Component {
 
   generatePreviewImage = async template =>
     this.setState({
-      templateScreenshot: await getTemplatePreviewImage(template)
+      templateScreenshot: await getTemplatePreviewImage(template, {})
     })
 
   handleSendEmails = async values => {

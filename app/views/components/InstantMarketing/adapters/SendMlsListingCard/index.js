@@ -186,6 +186,12 @@ class SendMlsListingCard extends React.Component {
       isSocialDrawerOpen: false
     })
 
+  get TemplateInstanceData() {
+    return {
+      listing: this.state.listing
+    }
+  }
+
   render() {
     const { listing } = this.state
     const { user } = this.props
@@ -242,9 +248,7 @@ class SendMlsListingCard extends React.Component {
           <SocialDrawer
             socialName={this.state.socialName}
             template={this.state.htmlTemplate}
-            templateInstanceData={{
-              deals: this.props.deal ? [this.props.deal.id] : []
-            }}
+            templateInstanceData={this.TemplateInstanceData}
             onClose={this.closeSocialDrawer}
           />
         )}

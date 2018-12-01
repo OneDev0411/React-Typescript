@@ -9,6 +9,8 @@ import EmailCompose from 'components/EmailCompose'
 import ActionButton from 'components/Button/ActionButton'
 import InstantMarketing from 'components/InstantMarketing'
 
+import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
+
 import { convertRecipientsToEmails } from '../../helpers/convert-recipients-to-emails'
 import SocialDrawer from '../../components/SocialDrawer'
 import { getTemplatePreviewImage } from '../../helpers/get-template-preview-image'
@@ -91,10 +93,16 @@ class SendDealPromotion extends React.Component {
     }
   }
 
-  generatePreviewImage = async template =>
+  generatePreviewImage = async template => {
+    const templateScreenshot = await getTemplatePreviewImage(
+      template,
+      this.TemplateInstanceData
+    )
+
     this.setState({
-      templateScreenshot: await getTemplatePreviewImage(template)
+      templateScreenshot
     })
+  }
 
   closeSocialDrawer = () =>
     this.setState({
@@ -119,13 +127,19 @@ class SendDealPromotion extends React.Component {
     })
   }
 
+  get TemplateInstanceData() {
+    return {
+      deals: this.props.deal ? [this.props.deal.id] : []
+    }
+  }
+
   render() {
     const { listing } = this.state
     const { user } = this.props
 
-    // if (hasMarketingAccess(user) === false) {
-    //   return null
-    // }
+    if (hasMarketingAccess(user) === false) {
+      return null
+    }
 
     return (
       <Fragment>
@@ -164,9 +178,7 @@ class SendDealPromotion extends React.Component {
           <SocialDrawer
             socialName={this.state.socialName}
             template={this.state.htmlTemplate}
-            templateInstanceData={{
-              deals: [this.props.deal.id]
-            }}
+            templateInstanceData={this.TemplateInstanceData}
             onClose={this.closeSocialDrawer}
           />
         )}
