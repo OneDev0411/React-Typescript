@@ -158,11 +158,9 @@ class Builder extends React.Component {
         </body>
       </html>`
 
-    const result = juice(assembled)
-
     return {
       ...this.state.selectedTemplate,
-      result
+      result: juice(assembled)
     }
   }
 
@@ -172,31 +170,46 @@ class Builder extends React.Component {
   handleSocialSharing = socialName =>
     this.props.onSocialSharing(this.getSavedTempldate(), socialName)
 
-  handleSelectTemplate = templateItem => {
-    this.setState({
-      template: templateItem,
-      selectedTemplate: null
-    })
+  generateTemplate = (template, data) => nunjucks.renderString(template, data)
 
-    const template = {
-      ...templateItem,
-      template: nunjucks.renderString(templateItem.template, {
-        ...this.props.templateData,
-        user: this.state.owner
-      })
-    }
-
-    this.setState({
-      selectedTemplate: template
-    })
-
+  refreshEditor = template => {
     const components = this.editor.DomComponents
 
     components.clear()
     this.editor.setStyle('')
-    this.editor.setComponents(template.template)
+    this.editor.setComponents(template)
     this.lockIn()
   }
+
+  setTemplate = newState => {
+    this.setState(newState, () =>
+      this.refreshEditor(this.state.selectedTemplate.template)
+    )
+  }
+
+  handleSelectTemplate = templateItem =>
+    this.setTemplate(state => ({
+      template: templateItem,
+      selectedTemplate: {
+        ...templateItem,
+        template: this.generateTemplate(templateItem.template, {
+          ...this.props.templateData,
+          user: state.owner
+        })
+      }
+    }))
+
+  handleOwnerChange = ({ value: owner }) =>
+    this.setTemplate(state => ({
+      owner,
+      selectedTemplate: {
+        ...state.selectedTemplate,
+        template: this.generateTemplate(state.template.template, {
+          ...this.props.templateData,
+          user: owner
+        })
+      }
+    }))
 
   get ShowSocialButtons() {
     return this.props.mediums.includes('Social')
@@ -209,8 +222,6 @@ class Builder extends React.Component {
   get IsTemplateLoaded() {
     return this.state.selectedTemplate && this.state.selectedTemplate.template
   }
-
-  handleOwnerChange = ({ value: owner }) => this.setState({ owner })
 
   render() {
     return (
