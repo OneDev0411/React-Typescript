@@ -16,7 +16,7 @@ export function Template(props) {
         {isVideo ? (
           // eslint-disable-next-line
           <video controls>
-            <source src={`${src}webm`} type="video/webm" />
+            <source src={`${src}mp4`} type="video/mp4" />
             <p>Sorry, your browser doesn't support embedded videos.</p>
           </video>
         ) : (
