@@ -194,7 +194,7 @@ class SendMlsListingCard extends React.Component {
 
   render() {
     const { listing } = this.state
-    const { user } = this.props
+    const { user, selectedTemplate } = this.props
 
     if (hasMarketingAccess(user) === false) {
       return false
@@ -226,10 +226,14 @@ class SendMlsListingCard extends React.Component {
           handleSave={this.handleSaveMarketingCard}
           handleSocialSharing={this.handleSocialSharing}
           templateData={{ listing, user }}
-          templateTypes={getTemplateTypes(listing)}
+          templateTypes={
+            selectedTemplate
+              ? selectedTemplate.template_type
+              : getTemplateTypes(listing)
+          }
           assets={listing && listing.gallery_image_urls}
           mediums={this.props.mediums}
-          defaultTemplate={this.props.selectedTemplate}
+          defaultTemplate={selectedTemplate}
         />
 
         {this.state.isComposeEmailOpen && (
