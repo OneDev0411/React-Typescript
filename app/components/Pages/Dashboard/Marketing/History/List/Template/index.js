@@ -42,7 +42,7 @@ export function Template(props) {
         </Flex>
       </ImageContainer>
       <div style={{ marginTop: '0.5rem' }}>{`Created ${fecha.format(
-        new Date(file.created_at),
+        new Date(file.created_at * 1000),
         '[on] MMMM DD, YYYY [at] HH:mm A'
       )}`}</div>
     </Box>
