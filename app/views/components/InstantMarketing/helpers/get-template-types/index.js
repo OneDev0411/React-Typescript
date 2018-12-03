@@ -16,5 +16,11 @@ export function getTemplateTypes(listing) {
     return ['OpenHouse']
   }
 
-  return ['JustListed', 'PriceImprovement', 'AsSeenIn', 'ComingSoon']
+  return [
+    'JustListed',
+    'PriceImprovement',
+    'AsSeenIn',
+    'ComingSoon',
+    'Listings'
+  ]
 }
