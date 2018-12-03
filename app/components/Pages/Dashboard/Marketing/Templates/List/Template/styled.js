@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 
+import IconButton from 'components/Button/IconButton'
 import { grey } from 'views/utils/colors'
 
 const getMQWidth = (base, props) =>
@@ -58,4 +59,13 @@ export const ImageContainer = styled.div`
     padding: 1rem;
     background-color: rgba(255, 255, 255, 0.95);
   }
+`
+
+export const VideoController = styled(IconButton)`
+  width: 4rem;
+  height: 4rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `

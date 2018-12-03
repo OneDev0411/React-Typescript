@@ -7,7 +7,7 @@ import { ImagePreviewModal } from 'components/ImagePreviewModal'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
 import { Loader } from '../../components/Loader'
-import { Template } from './Template'
+import { Template } from '../../Templates/List/Template'
 
 export class List extends React.Component {
   state = {
@@ -81,8 +81,9 @@ export class List extends React.Component {
         {state.isPreviewModalOpen && (
           <ImagePreviewModal
             isOpen
+            title={selectedTemplate.file.name}
             handleClose={this.closePreviewModal}
-            imgSrc={selectedTemplate.file.url}
+            imgSrc={`${selectedTemplate.template.url}/preview.png`}
           />
         )}
         <ListingFlow

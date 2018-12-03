@@ -25,8 +25,6 @@ export default class History extends React.Component {
 
       const templates = await getHistory()
 
-      console.log(templates)
-
       this.setState({
         isLoading: false,
         templates
