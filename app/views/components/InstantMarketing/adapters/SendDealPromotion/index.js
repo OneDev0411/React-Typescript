@@ -144,7 +144,6 @@ class SendDealPromotion extends React.Component {
     return (
       <Fragment>
         <ActionButton
-          appearance="outline"
           style={this.props.buttonStyle}
           onClick={this.toggleInstantMarketingBuilder}
         >
