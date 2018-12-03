@@ -14,6 +14,10 @@ export const notifications = (state = { info: {}, data: [] }, action) => {
         isFetching: false
       }
     case actionTypes.RECEIVED_A_NOTIFICATION: {
+      if (!action.notification.room) {
+        // Only global notifications belong to the notification center
+        return state
+      }
       // Sometimes there is a duplicate socket
       if (
         !state.data.some(
