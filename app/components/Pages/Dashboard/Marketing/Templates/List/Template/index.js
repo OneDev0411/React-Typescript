@@ -119,7 +119,7 @@ export class Template extends React.Component {
         {template.showMeta && (
           <div style={{ marginTop: '0.5rem' }}>{`Created ${fecha.format(
             new Date(template.created_at),
-            '[on] MMMM DD, YYYY [at] HH:mm A'
+            '[on] MMMM DD, YYYY [at] hh:mm A'
           )}`}</div>
         )}
       </Box>
