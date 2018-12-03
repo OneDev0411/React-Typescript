@@ -11,23 +11,25 @@ export async function searchContacts(
   users
 ) {
   try {
-    const keywords = searchText
-      .trim()
-      .split(' ')
-      .map(i => `q[]=${encodeURIComponent(i)}`)
-      .join('&')
+    const payload = {}
 
-    const request = new Fetch()
-      .post(`/contacts/filter?${keywords}`)
-      .query(query)
+    const q = encodeURIComponent(searchText.trim())
 
-    if (Array.isArray(filter) && filter.length) {
-      request.send({ filter })
+    const request = new Fetch().post('/contacts/filter').query(query)
+
+    if (q.length > 0) {
+      payload.query = q
+    }
+
+    if (Array.isArray(filter) && filter.length > 0) {
+      payload.filter = filter
     }
 
     if (Array.isArray(users) && users.length) {
       request.query(`users[]=${users.join('&users[]=')}`)
     }
+
+    request.send(payload)
 
     const response = await request
 
