@@ -8,7 +8,7 @@ export default class Store extends React.Component {
     return (
       <div style={{ padding: '0 1.5rem' }}>
         <Header
-          title="Marketing Center"
+          title="All Designs"
           isSideMenuOpen={this.props.isSideMenuOpen}
           toggleSideMenu={this.props.toggleSideMenu}
         />

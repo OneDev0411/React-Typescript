@@ -63,7 +63,7 @@ export default class History extends React.Component {
     return (
       <div style={{ padding: '0 1.5rem' }}>
         <Header
-          title="All My Designs"
+          title="My Designs"
           isSideMenuOpen={this.props.isSideMenuOpen}
           toggleSideMenu={this.props.toggleSideMenu}
         />
