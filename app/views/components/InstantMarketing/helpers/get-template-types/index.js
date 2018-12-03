@@ -13,16 +13,17 @@ export function getTemplateTypes(listing) {
     'JustListed',
     'OpenHouse',
     'PriceImprovement',
-    'AsSeenIn'
+    'AsSeenIn',
+    'Listings'
   ]
 
-  if (listing.status === 'Sold') {
-    return ['JustSold']
-  }
+  // if (listing.status === 'Sold') {
+  //   return ['JustSold']
+  // }
 
-  if (listing.open_houses) {
-    return ['OpenHouse']
-  }
+  // if (listing.open_houses) {
+  //   return ['OpenHouse']
+  // }
 
-  return ['JustListed']
+  // return ['JustListed']
 }
