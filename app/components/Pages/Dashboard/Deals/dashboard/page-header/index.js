@@ -1,7 +1,7 @@
-import styled from 'styled-components'
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import styled from 'styled-components'
 
 import PageHeader from 'components/PageHeader'
 
@@ -64,7 +64,19 @@ const Header = ({ user, deal, showAttachments }) => (
         )}
 
       {deal.listing && (
-        <SendDealPromotionCard deal={deal}>Promote</SendDealPromotionCard>
+        <Fragment>
+          <SendDealPromotionCard
+            deal={deal}
+            mediums={['Email']}
+            style={{ margin: '0 0.5rem 0 0' }}
+          >
+            Promote
+          </SendDealPromotionCard>
+
+          <SendDealPromotionCard deal={deal} mediums={['Social']}>
+            Social
+          </SendDealPromotionCard>
+        </Fragment>
       )}
     </PageHeader.Menu>
   </PageHeader>
