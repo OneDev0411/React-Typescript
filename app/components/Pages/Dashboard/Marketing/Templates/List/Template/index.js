@@ -17,7 +17,8 @@ export class Template extends React.Component {
     if (props.template.type === 'template_instance') {
       this.template = {
         ...props.template.template,
-        showMeta: true
+        showMeta: true,
+        created_at: props.template.created_at
       }
     }
 
@@ -118,7 +119,7 @@ export class Template extends React.Component {
         </ImageContainer>
         {template.showMeta && (
           <div style={{ marginTop: '0.5rem' }}>{`Created ${fecha.format(
-            new Date(template.created_at),
+            new Date(template.created_at * 1000),
             '[on] MMMM DD, YYYY [at] hh:mm A'
           )}`}</div>
         )}
