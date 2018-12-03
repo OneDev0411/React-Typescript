@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
+import superagent from 'superagent'
+import fileSaver from 'file-saver'
 
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import { getActiveTeam } from '../../../../../../utils/user-teams'
@@ -10,27 +12,27 @@ const Button = ActionButton.withComponent('a')
 const Xlsx = styled(XlsxIcon)`
   margin-right: 0.5rem;
 `
+
 const ExportContacts = ({ exportIds, disabled, filters, user, users }) => {
   const activeTeam = getActiveTeam(user)
   const activeBrand = activeTeam.brand.id
-  let url = `/api/contacts/export/outlook/${activeBrand}/`
+  const url = `/api/contacts/export/outlook/${activeBrand}/`
+
+  const params = {}
 
   if (Array.isArray(exportIds) && exportIds.length > 0) {
-    url = `${url}?ids[]=${exportIds.join('&ids[]=')}`
+    params.ids = exportIds
   } else {
     const filtersExits = filters && typeof filters === 'object'
 
     if (filtersExits) {
-      url = `${url}?filters[]=${filters
-        .map(filter => encodeURIComponent(JSON.stringify(filter)))
-        .join('&filters[]=')}`
+      params.filters = filters.map(filter =>
+        encodeURIComponent(JSON.stringify(filter))
+      )
     }
 
     if (users && typeof users === 'object') {
-      url += filtersExits ? '&' : '?'
-      url = `${url}users[]=${users
-        .map(user => encodeURIComponent(user))
-        .join('&users[]=')}`
+      params.users = users.map(user => encodeURIComponent(user))
     }
   }
 
@@ -39,13 +41,19 @@ const ExportContacts = ({ exportIds, disabled, filters, user, users }) => {
       appearance="outline"
       disabled={disabled}
       size="small"
-      as="a"
-      href={url}
+      onClick={() => sendDownloadReuqest(url, params)}
     >
       <Xlsx />
       Export to Spreadsheet
     </Button>
   )
+}
+
+async function sendDownloadReuqest(url, params) {
+  const response = await superagent.post(url).send(params)
+  const blob = new Blob([response.text], { type: 'text/csv' })
+
+  fileSaver.saveAs(blob, response.headers['x-rechat-filename'])
 }
 
 function mapStateToProps({ user }) {
