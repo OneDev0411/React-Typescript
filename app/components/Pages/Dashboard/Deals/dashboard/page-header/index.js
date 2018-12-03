@@ -68,7 +68,7 @@ const Header = ({ user, deal, showAttachments }) => (
           <SendDealPromotionCard
             deal={deal}
             mediums={['Email']}
-            style={{ margin: '0 0.5rem 0 0' }}
+            buttonStyle={{ margin: '0 0.5rem 0 0' }}
           >
             Promote
           </SendDealPromotionCard>
