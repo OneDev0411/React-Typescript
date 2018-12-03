@@ -5,6 +5,7 @@
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
     "develop": "NODE_ENV=development nodemon ./bin/server --config ./nodemon.config.json --exec babel-node",
+    "debug": "ndb npm run develop",
     "developClient": "NODE_ENV=development notify=true babel-node ./bin/server webpack-dev-server --progress --hot --host=192.168.1.102",
     "build": "rimraf dist && NODE_ENV=production babel-node ./build",
     "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build",
@@ -232,6 +233,7 @@
     "jest": "^22.4.4",
     "jsdom": "^11.11.0",
     "moment-locales-webpack-plugin": "^1.0.7",
+    "ndb": "^1.0.41",
     "nightwatch": "^0.9.21",
     "nodemon": "^1.17.5",
     "prettier": "^1.14.3",
