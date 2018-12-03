@@ -22,7 +22,8 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
       const setters = {
         image: setSrc,
         cell: setBg,
-        text: setBg
+        text: setBg,
+        '': setBg
       }
 
       const type = target.get('type')
@@ -77,8 +78,6 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
   })
 
   editor.on('component:selected', selected => {
-    const type = selected.get('type')
-
     const attributes = selected.get('attributes')
 
     if (!attributes || !attributes['rechat-assets']) {

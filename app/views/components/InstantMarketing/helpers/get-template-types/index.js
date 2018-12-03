@@ -8,13 +8,22 @@ export function getTemplateTypes(listing) {
     return []
   }
 
-  if (listing.status === 'Sold') {
-    return ['JustSold']
-  }
+  return [
+    'JustSold',
+    'JustListed',
+    'OpenHouse',
+    'PriceImprovement',
+    'AsSeenIn',
+    'Listings'
+  ]
 
-  if (listing.open_houses) {
-    return ['OpenHouse']
-  }
+  // if (listing.status === 'Sold') {
+  //   return ['JustSold']
+  // }
 
-  return ['JustListed']
+  // if (listing.open_houses) {
+  //   return ['OpenHouse']
+  // }
+
+  // return ['JustListed']
 }

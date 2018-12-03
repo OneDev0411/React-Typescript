@@ -1,42 +1,53 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
 import grapesjs from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
 import '../../../../styles/components/modules/template-builder.scss'
 
-import nunjucks from 'nunjucks'
+import _ from 'underscore'
 
 import './AssetManager'
+import juice from 'juice'
+
+import IconButton from 'components/Button/IconButton'
+import ActionButton from 'components/Button/ActionButton'
+import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
+
+import { VideoToolbar } from './VideoToolbar'
+
 import config from './config'
 
-import {
-  currencyFilter,
-  areaMeterFilter,
-  phoneNumberFilter
-} from '../helpers/nunjucks-filters'
+import nunjucks from '../helpers/nunjucks'
 
 import {
   Container,
+  Actions,
   TemplatesContainer,
   BuilderContainer,
-  Header
+  Header,
+  Divider
 } from './styled'
 import Templates from '../Templates'
-
-import juice from 'juice'
-import ActionButton from 'components/Button/ActionButton'
-import { H1 } from '../../Typography/headings'
 
 class Builder extends React.Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      template: null,
+      selectedTemplate: null,
+      owner: props.templateData.user
+    }
+
+    this.keyframe = 0
 
     this.traits = {
       link: [
         {
           type: 'text',
           label: 'Link',
-          name: 'href',
+          name: 'href'
         }
       ]
     }
@@ -60,8 +71,7 @@ class Builder extends React.Component {
       plugins: ['asset-blocks']
     })
 
-    this.editor.on('load', this.setupGrapesJs.bind(this))
-    this.setupNunjucks()
+    this.editor.on('load', this.setupGrapesJs)
   }
 
   setupGrapesJs = () => {
@@ -69,14 +79,10 @@ class Builder extends React.Component {
     this.disableResize()
     this.singleClickTextEditing()
     this.disableAssetManager()
-  }
 
-  setupNunjucks = () => {
-    this.nunjucks = new nunjucks.Environment()
-
-    this.nunjucks.addFilter('currency', currencyFilter)
-    this.nunjucks.addFilter('area', areaMeterFilter)
-    this.nunjucks.addFilter('phone', phoneNumberFilter)
+    if (this.IsVideoTemplate) {
+      this.grapes.appendChild(this.videoToolbar)
+    }
   }
 
   disableAssetManager = () => {
@@ -137,7 +143,7 @@ class Builder extends React.Component {
     updateAll(this.editor.DomComponents.getWrapper())
   }
 
-  onSave = () => {
+  getSavedTempldate() {
     const css = this.editor.getCss()
     const html = this.editor.getHtml()
 
@@ -152,64 +158,172 @@ class Builder extends React.Component {
         </body>
       </html>`
 
-    const result = juice(assembled)
-
-    if (this.props.onSave) {
-      this.props.onSave({
-        ...this.selectedTemplate,
-        result
-      })
-
-      this.selectedTemplate = null
+    return {
+      ...this.state.selectedTemplate,
+      result: juice(assembled)
     }
   }
 
-  handleSelectTemplate = templateItem => {
-    const template = {
-      ...templateItem,
-      template: this.nunjucks.renderString(templateItem.template, {
-        ...this.props.templateData
-      })
-    }
+  handleSave = () =>
+    this.props.onSave(this.getSavedTempldate(), this.state.owner)
 
-    this.selectedTemplate = template
+  handleSocialSharing = socialName =>
+    this.props.onSocialSharing(this.getSavedTempldate(), socialName)
 
+  generateTemplate = (template, data) => nunjucks.renderString(template, data)
+
+  refreshEditor = template => {
     const components = this.editor.DomComponents
 
     components.clear()
     this.editor.setStyle('')
-    this.editor.setComponents(template.template)
+    this.editor.setComponents(template)
     this.lockIn()
+  }
+
+  setTemplate = newState => {
+    this.setState(newState, () =>
+      this.refreshEditor(this.state.selectedTemplate.template)
+    )
+  }
+
+  handleSelectTemplate = templateItem =>
+    this.setTemplate(state => ({
+      template: templateItem,
+      selectedTemplate: {
+        ...templateItem,
+        template: this.generateTemplate(templateItem.template, {
+          ...this.props.templateData,
+          user: state.owner
+        })
+      }
+    }))
+
+  handleOwnerChange = ({ value: owner }) =>
+    this.setTemplate(state => ({
+      owner,
+      selectedTemplate: {
+        ...state.selectedTemplate,
+        template: this.generateTemplate(state.template.template, {
+          ...this.props.templateData,
+          user: owner
+        })
+      }
+    }))
+
+  get ShowSocialButtons() {
+    return this.props.mediums.includes('Social')
+  }
+
+  get IsVideoTemplate() {
+    return this.state.template && this.state.template.video
+  }
+
+  get IsTemplateLoaded() {
+    return this.state.selectedTemplate && this.state.selectedTemplate.template
   }
 
   render() {
     return (
       <Container className="template-builder">
         <Header>
-          <H1>Marketing Center</H1>
+          <h1>{this.props.headerTitle}</h1>
 
-          <div>
-            <ActionButton appearance="outline" onClick={this.props.onClose}>
-              Cancel
-            </ActionButton>
+          <Actions>
+            <TeamContactSelect
+              pullTo="right"
+              user={this.props.templateData.user}
+              owner={this.state.owner}
+              onSelect={this.handleOwnerChange}
+              style={{ marginRight: '0.5rem' }}
+            />
+            {this.ShowSocialButtons && this.state.selectedTemplate ? (
+              <Fragment>
+                <ActionButton
+                  onClick={() => this.handleSocialSharing('Instagram')}
+                >
+                  <i
+                    className="fa fa-instagram"
+                    style={{
+                      fontSize: '1.5rem',
+                      marginRight: '0.5rem'
+                    }}
+                  />
+                  Post to Instagram
+                </ActionButton>
 
-            <ActionButton
-              style={{ marginLeft: '0.5rem' }}
-              onClick={this.onSave}
+                <ActionButton
+                  style={{ marginLeft: '0.5rem' }}
+                  onClick={() => this.handleSocialSharing('Facebook')}
+                >
+                  <i
+                    className="fa fa-facebook-square"
+                    style={{
+                      fontSize: '1.5rem',
+                      marginRight: '0.5rem'
+                    }}
+                  />
+                  Post to Facebook
+                </ActionButton>
+              </Fragment>
+            ) : (
+              <ActionButton
+                style={{ marginLeft: '0.5rem' }}
+                onClick={this.handleSave}
+              >
+                {this.props.saveButtonLabel}
+              </ActionButton>
+            )}
+
+            {/* {template && template.video && (
+              <ActionButton
+                style={{ marginLeft: '0.5rem' }}
+                onClick={this.onPrevious}
+              >
+                Previous
+              </ActionButton>
+            )}
+
+            {template && template.video && (
+              <ActionButton onClick={this.onNext.bind(this)}>Next</ActionButton>
+            )} */}
+
+            <Divider />
+            <IconButton
+              isFit
+              iconSize="large"
+              inverse
+              onClick={this.props.onClose}
             >
-              Send
-            </ActionButton>
-          </div>
+              <CloseIcon />
+            </IconButton>
+          </Actions>
         </Header>
 
         <BuilderContainer>
-          <TemplatesContainer>
+          <TemplatesContainer
+            isInvisible={this.props.showTemplatesColumn === false}
+          >
             <Templates
+              defaultTemplate={this.props.defaultTemplate}
+              mediums={this.props.mediums}
               onTemplateSelect={this.handleSelectTemplate}
               templateTypes={this.props.templateTypes}
             />
           </TemplatesContainer>
-          <div id="grapesjs-canvas" />
+
+          <div
+            id="grapesjs-canvas"
+            ref={ref => (this.grapes = ref)}
+            style={{ position: 'relative' }}
+          >
+            {this.IsVideoTemplate && this.IsTemplateLoaded && (
+              <VideoToolbar
+                onRef={ref => (this.videoToolbar = ref)}
+                editor={this.editor}
+              />
+            )}
+          </div>
         </BuilderContainer>
       </Container>
     )
