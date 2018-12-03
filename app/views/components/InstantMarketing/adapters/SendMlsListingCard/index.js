@@ -228,7 +228,7 @@ class SendMlsListingCard extends React.Component {
           templateData={{ listing, user }}
           templateTypes={
             selectedTemplate
-              ? selectedTemplate.template_type
+              ? [selectedTemplate.template_type]
               : getTemplateTypes(listing)
           }
           assets={listing && listing.gallery_image_urls}
