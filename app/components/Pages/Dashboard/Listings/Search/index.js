@@ -13,6 +13,8 @@ import { setMapProps } from '../../../../../store_actions/listings/map'
 import getListingsByValert from '../../../../../store_actions/listings/search/get-listings/by-valert'
 import { toggleFilterArea } from '../../../../../store_actions/listings/search/filters/toggle-filters-area'
 import { confirmation } from '../../../../../store_actions/confirmation'
+import { CreateTour } from '../../../../../views/components/tour/CreateTour'
+
 import Map from './components/Map'
 import { MapView } from '../components/MapView'
 import { bootstrapURLKeys, mapInitialState } from '../mapOptions'

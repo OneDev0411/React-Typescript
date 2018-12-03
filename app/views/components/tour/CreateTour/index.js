@@ -11,6 +11,7 @@ export class CreateTour extends React.Component {
   }
 
   handleOpen = () => this.setState({ isOpen: true })
+
   handleClose = () => this.setState({ isOpen: false })
 
   submitCallback = () => {
