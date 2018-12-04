@@ -1,9 +1,9 @@
 import React from 'react'
 
-import Loading from 'components/Spinner'
-import Table from 'components/Grid/Table'
-import Button from 'components/Button/ActionButton'
-import SendDealPromotionCard from 'components/InstantMarketing/adapters/SendDealPromotion'
+import Loading from '../../../../../../views/components/Spinner'
+import Table from '../../../../../../views/components/Grid/Table'
+import Button from '../../../../../../views/components/Button/ActionButton'
+import SendDealPromotionCard from '../../../../../../views/components/InstantMarketing/adapters/SendDealPromotion'
 
 import { Name } from './columns/Name'
 import { Company } from './columns/Company'

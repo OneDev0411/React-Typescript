@@ -106,7 +106,6 @@ class BasicTable extends React.Component {
                   <Cell
                     key={column.id || colIndex}
                     width={sizes[colIndex]}
-                    verticalAlign={column.verticalAlign}
                     {...getTdProps(colIndex, {
                       column,
                       rowIndex,

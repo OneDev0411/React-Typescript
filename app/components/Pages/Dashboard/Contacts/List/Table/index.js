@@ -1,8 +1,7 @@
 import React from 'react'
 
-import IconInfoOutline from 'components/SvgIcons/InfoOutline/IconInfoOutline'
-
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
+import IconInfoOutline from 'components/SvgIcons/InfoOutline/IconInfoOutline'
 
 import Table from '../../../../../../views/components/Grid/Table'
 

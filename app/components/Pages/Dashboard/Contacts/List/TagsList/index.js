@@ -41,12 +41,22 @@ class TagsList extends React.Component {
   }
 
   onSelectList = item => {
+    const { activeFilters } = this.props
     let nextFilters
 
     if (this.isSelected(item.text)) {
-      this.props.removeActiveFilter('contacts', item.id)
+      const filterId = Object.keys(activeFilters).find(id => {
+        const filter = activeFilters[id]
+
+        return (
+          filter.id === this.tagDefinitionId &&
+          filter.values.includes(item.text)
+        )
+      })
+
+      this.props.removeActiveFilter('contacts', filterId)
       nextFilters = _.filter(
-        this.props.activeFilters,
+        activeFilters,
         filter =>
           filter.id !== this.tagDefinitionId ||
           !filter.values.includes(item.text)
@@ -63,7 +73,7 @@ class TagsList extends React.Component {
 
       this.props.updateActiveFilter('contacts', item.id, filter)
       nextFilters = {
-        ...this.props.activeFilters,
+        ...activeFilters,
         [item.id]: filter
       }
     }
