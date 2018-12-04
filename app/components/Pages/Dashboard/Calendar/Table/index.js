@@ -9,7 +9,7 @@ import { primary } from 'views/utils/colors'
 import Grid from 'views/components/Grid/Table'
 import { grey } from 'views/utils/colors'
 
-import SendContactCard from 'components/InstantMarketing/Flows/SendContactCard'
+import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 
 import { goTo } from 'utils/go-to'
 

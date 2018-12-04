@@ -8,12 +8,14 @@ import IconNav from '../../SvgIcons/NavMenu/IconNav'
 const propTypes = {
   onClick: PropTypes.func.isRequired,
   tooltip: PropTypes.string,
-  style: PropTypes.shape()
+  style: PropTypes.shape(),
+  className: PropTypes.string
 }
 
 const defaultProps = {
   tooltip: null,
-  style: {}
+  style: {},
+  className: 'c-menu-trigger'
 }
 
 export const Trigger = props => {
@@ -28,6 +30,7 @@ export const Trigger = props => {
       <Button
         isFit
         onClick={props.onClick}
+        className={props.className}
         style={{ marginRight: '1em', ...props.style }}
       >
         <IconNav />

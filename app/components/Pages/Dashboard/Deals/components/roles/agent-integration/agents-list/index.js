@@ -47,12 +47,6 @@ class TeamAgents extends React.Component {
         teamAgents,
         isLoading: false
       })
-
-      // For primary agent if only one agent available automatically select them
-      // issue: web#1148
-      if (teamAgents && teamAgents.length === 1) {
-        return this.handleSelectAgent(teamAgents[0])
-      }
     } catch (e) {
       console.log(e)
       this.setState({ teamAgents: [], isLoading: false })

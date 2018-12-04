@@ -11,6 +11,8 @@
   }
 
   .gjs-pn-panel {
+    z-index: 1;
+    
     &.gjs-pn-views{
       display: none;
     }

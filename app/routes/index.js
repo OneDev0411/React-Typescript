@@ -191,6 +191,30 @@ const AsyncContactsDuplicateContacts = Load({
 })
 
 /* ==================================== */
+//  Marketing Center
+/* ==================================== */
+
+const AsyncMarketing = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Marketing' /* webpackChunkName: "marketing" */)
+})
+
+const AsyncMarketingStore = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Marketing/Store' /* webpackChunkName: "marketing_store" */)
+})
+
+const AsyncMarketingTemplates = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Marketing/Templates' /* webpackChunkName: "marketing_templates" */)
+})
+
+const AsyncMarketingHistory = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Marketing/History' /* webpackChunkName: "marketing_history" */)
+})
+
+/* ==================================== */
 //  Chatroom
 /* ==================================== */
 
@@ -445,6 +469,12 @@ export default (
         path="/dashboard/notifications(/:type/:id)"
         component={AsyncNotificationsPage}
       />
+
+      <Route path="/dashboard/marketing" component={AsyncMarketing}>
+        <IndexRoute component={AsyncMarketingStore} />
+        <Route component={AsyncMarketingHistory} path="history" />
+        <Route component={AsyncMarketingTemplates} path=":medium(/:types)" />
+      </Route>
 
       <Route path="dashboard/account" component={AsyncAccountLayout}>
         <IndexRoute component={AsyncProfile} />

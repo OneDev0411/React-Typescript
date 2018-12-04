@@ -14,6 +14,7 @@ export const Container = styled(Flex)`
 
   &:hover {
     cursor: pointer;
+    background-color: #f5f5f5;
   }
 `
 

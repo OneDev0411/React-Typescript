@@ -23,7 +23,7 @@ function getDocumentIcon(file) {
 
   if (isPdfDocument(file.mime) || file.envelope) {
     src = '/static/images/deals/pdf-icon.svg'
-  } else if (file.mime.includes('image/')) {
+  } else if (file.mime.includes('image/') || file.preview_url) {
     src = file.preview_url
   }
 
@@ -36,6 +36,7 @@ function isPdfDocument(mime) {
 
 export default class FilesListName extends React.Component {
   state = { showTooltip: false }
+
   componentDidMount() {
     if (this.fileName) {
       const fileNameDomNode = ReactDOM.findDOMNode(this.fileName)

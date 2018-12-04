@@ -1,15 +1,12 @@
 import React from 'react'
 
-import { getTemplates } from '../../../../models/instant-marketing/get-templates'
+import { getTemplates } from 'models/instant-marketing/get-templates'
+import { loadTemplateHtml } from 'models/instant-marketing/load-template'
 
-import {
-  Container,
-  TemplateItem,
-  TemplateImageContainer,
-  TemplateName,
-  TemplateImage
-} from './styled'
-import Loader from '../../../../components/Partials/Loading'
+import Image from 'components/ImageLoader'
+import Spinner from 'components/Spinner'
+
+import { Container, TemplateItem, TemplateVideo } from './styled'
 
 export default class Templates extends React.Component {
   state = {
@@ -19,20 +16,32 @@ export default class Templates extends React.Component {
   }
 
   componentDidMount() {
-    this.getTemplatesList(this.props.templateTypes)
+    this.getTemplatesList()
   }
 
-  getTemplatesList = async types => {
-    try {
-      const templates = await getTemplates(types)
+  getTemplatesList = async () => {
+    const { mediums, defaultTemplate, templateTypes: types } = this.props
 
-      this.setState({
-        templates,
-        selectedTemplate: templates.length > 0 ? templates[0].id : null
-      })
+    try {
+      let templates = await getTemplates(types, mediums)
 
       if (templates.length > 0) {
-        this.props.onTemplateSelect(templates[0])
+        // Reordering templates list and show the default tempalte
+        // as the first item of the list
+        if (defaultTemplate) {
+          templates = [
+            defaultTemplate,
+            ...templates.filter(t => t.id !== defaultTemplate.id)
+          ]
+        }
+
+        this.setState(
+          {
+            templates,
+            selectedTemplate: templates[0].id
+          },
+          () => this.handleSelectTemplate(templates[0])
+        )
       }
     } catch (e) {
       console.log(e)
@@ -43,18 +52,32 @@ export default class Templates extends React.Component {
     }
   }
 
-  handleSelectTemplate = template => {
+  handleSelectTemplate = async template => {
     this.setState({
       selectedTemplate: template.id
     })
 
+    if (!template.template) {
+      template.template = await loadTemplateHtml(`${template.url}/index.html`)
+
+      // append fetched html into template data
+      this.updateTemplate(template)
+    }
+
     this.props.onTemplateSelect(template)
   }
+
+  updateTemplate = template =>
+    this.setState(state => ({
+      templates: state.templates.map(item =>
+        item.id === template.id ? template : item
+      )
+    }))
 
   render() {
     return (
       <Container>
-        {this.state.isLoading && <Loader />}
+        {this.state.isLoading && <Spinner />}
 
         {this.state.templates.map(template => (
           <TemplateItem
@@ -62,11 +85,25 @@ export default class Templates extends React.Component {
             onClick={() => this.handleSelectTemplate(template)}
             isSelected={this.state.selectedTemplate === template.id}
           >
-            <TemplateImageContainer>
-              <TemplateImage src={template.url + '/thumbnail.png'} title={template.name} />
-            </TemplateImageContainer>
-
-            <TemplateName>{template.name}</TemplateName>
+            {template.video ? (
+              <TemplateVideo
+                autoPlay="true"
+                loop="true"
+                type="video/mp4"
+                src={`${template.url}/thumbnail.mp4`}
+              />
+            ) : (
+              <Image
+                src={`${template.url}/thumbnail.png`}
+                title={template.name}
+                width="97%"
+                style={{
+                  minHeight: '200px',
+                  margin: '1.5%',
+                  boxShadow: '0px 5px 10px #c3c3c3'
+                }}
+              />
+            )}
           </TemplateItem>
         ))}
       </Container>

@@ -65,7 +65,7 @@ export const Row = styled.div`
 `
 
 export const Cell = styled.div`
-  align-self: ${props => props.verticalAlign || 'flex-start'};
+  align-self: flex-start;
   text-align: left;
   padding: 0 0.5em;
 

@@ -1,13 +1,11 @@
 import { combineReducers } from 'redux'
+
 import * as actionTypes from '../../constants/contacts'
 
 const byId = (state = {}, action) => {
   switch (action.type) {
     case actionTypes.FETCH_CONTACTS_TAGS_SUCCESS:
-      return {
-        ...state,
-        ...action.response.entities.tags
-      }
+      return action.response.entities.tags
     default:
       return state
   }
@@ -16,7 +14,7 @@ const byId = (state = {}, action) => {
 const ids = (state = [], action) => {
   switch (action.type) {
     case actionTypes.FETCH_CONTACTS_TAGS_SUCCESS:
-      return [...state, ...action.response.result.tags]
+      return action.response.result.tags
     default:
       return state
   }

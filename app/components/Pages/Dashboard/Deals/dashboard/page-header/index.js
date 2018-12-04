@@ -1,13 +1,13 @@
-import styled from 'styled-components'
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import styled from 'styled-components'
 
 import PageHeader from 'components/PageHeader'
 
 import ActionButton from 'components/Button/ActionButton'
 import LinkButton from 'components/Button/LinkButton'
-import SendDealPromotionCard from 'components/InstantMarketing/Flows/SendDealPromotion'
+import SendDealPromotionCard from 'components/InstantMarketing/adapters/SendDealPromotion'
 
 import { showAttachments } from 'actions/deals'
 
@@ -52,18 +52,31 @@ const Header = ({ user, deal, showAttachments }) => (
         Get Signatures
       </Button>
 
-      {deal.listing && agentNetworkValidUsers.includes(user.email) && (
-        <LinkButton
-          appearance="outline"
-          to={`/dashboard/deals/${deal.id}/network`}
-          style={{ margin: '0 0.5rem 0 0' }}
-        >
-          Network
-        </LinkButton>
-      )}
+      {deal.listing &&
+        agentNetworkValidUsers.includes(user.email) && (
+          <LinkButton
+            appearance="outline"
+            to={`/dashboard/deals/${deal.id}/network`}
+            style={{ margin: '0 0.5rem 0 0' }}
+          >
+            Network
+          </LinkButton>
+        )}
 
       {deal.listing && (
-        <SendDealPromotionCard deal={deal}>Promote</SendDealPromotionCard>
+        <Fragment>
+          <SendDealPromotionCard
+            deal={deal}
+            mediums={['Email']}
+            buttonStyle={{ margin: '0 0.5rem 0 0' }}
+          >
+            Promote
+          </SendDealPromotionCard>
+
+          <SendDealPromotionCard deal={deal} mediums={['Social']}>
+            Social
+          </SendDealPromotionCard>
+        </Fragment>
       )}
     </PageHeader.Menu>
   </PageHeader>
