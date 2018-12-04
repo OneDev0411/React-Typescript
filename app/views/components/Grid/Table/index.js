@@ -64,7 +64,7 @@ class Grid extends React.Component {
    * calculate width of every cell
    */
   get RowsSize() {
-    const columns = this.Columns
+    const columns = this.Columns.filter(col => !!col.render)
 
     const flexibleCellsCount = columns.filter(col => !col.width).length
 

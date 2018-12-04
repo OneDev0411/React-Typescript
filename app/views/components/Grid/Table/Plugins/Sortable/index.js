@@ -14,8 +14,13 @@ export class SortablePlugin {
     }
     this.onRequestForceUpdate = onRequestForceUpdate
 
-    this.sortBy = null
-    this.isAscendingSort = true
+    if (this.options.defaultSort) {
+      this.sortBy = this.options.defaultSort.column
+      this.isAscendingSort = this.options.defaultSort.ascending
+    } else {
+      this.sortBy = null
+      this.isAscendingSort = true
+    }
   }
 
   sort = ({ columns, data, sortBy, isAscendingSort, resolveAccessor }) => {
