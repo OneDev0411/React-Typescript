@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
+import _ from 'underscore'
 
 import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
@@ -192,6 +193,13 @@ class SendMlsListingCard extends React.Component {
     }
   }
 
+  get UserDeals() {
+    return _.chain(this.props.deals)
+      .filter(deal => deal.listing !== null)
+      .sortBy(deal => (deal.deal_type === 'Selling' ? -1 : 1))
+      .value()
+  }
+
   render() {
     const { listing } = this.state
     const { user, selectedTemplate } = this.props
@@ -216,6 +224,8 @@ class SendMlsListingCard extends React.Component {
           isOpen={this.state.isListingsModalOpen}
           compact={false}
           title="Select a Listing"
+          searchPlaceholder="Choose a deal or enter MLS # or address"
+          initialList={this.UserDeals}
           onClose={this.closeListingModal}
           onSelectListing={this.onSelectListing}
         />
@@ -261,9 +271,10 @@ class SendMlsListingCard extends React.Component {
   }
 }
 
-function mapStateToProps({ contacts, user }) {
+function mapStateToProps({ contacts, deals, user }) {
   return {
     contacts: contacts.list,
+    deals: deals.list,
     attributeDefs: contacts.attributeDefs,
     user
   }
