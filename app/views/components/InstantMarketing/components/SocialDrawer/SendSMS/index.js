@@ -62,9 +62,8 @@ class SendSMS extends React.Component {
 
   get ShareText() {
     const name = this.props.user.display_name
-    const link = this.props.instance.file.url
 
-    return `${name} sent you this image! Tap on the link and press share on instagram or facebook ${link}`
+    return `${name} sent you this image! Tap on the link and press share on instagram or facebook`
   }
 
   render() {
