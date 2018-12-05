@@ -1,11 +1,14 @@
 export const items = [
   {
-    title: 'As Seen In',
-    url: '/Social/AsSeenIn'
+    title: 'Anniversary'
   },
   {
-    title: 'Birthday Emails',
-    url: '/Email/Birthday'
+    title: 'As Seen In',
+    url: '/AsSeenIn'
+  },
+  {
+    title: 'Birthday',
+    url: '/Birthday'
   },
   {
     title: 'Brochures'
@@ -14,30 +17,41 @@ export const items = [
     title: 'Business Cards'
   },
   {
-    title: 'Emails',
-    url: '/Email'
+    title: 'Coming Soon'
   },
   {
     title: 'Facebook Cover'
-    // url: '/FacebookCover'
   },
   {
     title: 'Holiday'
-    // url: '/Holiday'
   },
   {
     title: 'Instagram Stories'
-    // url: '/Instagram'
   },
   {
-    title: 'Postcards'
+    title: 'Just Listed',
+    url: '/JustListed'
   },
   {
-    title: 'Social Media',
-    url: '/Social'
+    title: 'Just Listed',
+    url: '/JustSold'
+  },
+  {
+    title: 'Multiple Listings',
+    url: '/Listings'
+  },
+  {
+    title: 'Open House',
+    url: '/OpenHouse'
+  },
+  {
+    title: 'Price Improvement',
+    url: '/PriceImprovement'
+  },
+  {
+    title: 'Thank You'
   },
   {
     title: 'Your Company'
-    // url: '/Company'
   }
 ]

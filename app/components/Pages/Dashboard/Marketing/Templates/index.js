@@ -1,16 +1,22 @@
 import React, { Component } from 'react'
 
-import { onlyUnique } from 'utils/helpers'
+import { onlyUnique, sortAlphabetically } from 'utils/helpers'
 import { getTemplates } from 'models/instant-marketing/get-templates'
 
-import { templateTypes } from './data'
 import { Header } from './Header'
 import { List } from './List'
+
+function getMediums(templates) {
+  return templates
+    .map(t => t.medium)
+    .filter(onlyUnique)
+    .sort(sortAlphabetically)
+}
 
 export default class Templates extends Component {
   state = {
     templates: [],
-    tabs: [],
+    tabs: ['Email'],
     isLoading: false
   }
 
@@ -19,7 +25,7 @@ export default class Templates extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.medium !== this.props.medium) {
+    if (prevProps.type !== this.props.type) {
       this.fetch()
     }
   }
@@ -28,30 +34,17 @@ export default class Templates extends Component {
     try {
       this.setState({ isLoading: true })
 
-      const templates = await getTemplates(undefined, this.props.medium)
+      const templates = await getTemplates(this.props.type, ['Email', 'Social'])
 
       this.setState({
         isLoading: false,
         templates,
-        tabs: this.getTypes(templates)
+        tabs: getMediums(templates)
       })
     } catch (error) {
       console.log(error)
       this.setState({ isLoading: false })
     }
-  }
-
-  getTypes = templates => {
-    const types = templates.map(t => t.template_type).filter(onlyUnique)
-
-    return [
-      { title: 'All', type: 'All' },
-      ...types.map(type => {
-        const title = templateTypes[type] ? templateTypes[type] : type
-
-        return { title, type }
-      })
-    ]
   }
 
   render() {
@@ -60,7 +53,7 @@ export default class Templates extends Component {
     return (
       <React.Fragment>
         <Header
-          medium={props.medium}
+          type={props.type}
           isSideMenuOpen={props.isSideMenuOpen}
           toggleSideMenu={props.toggleSideMenu}
         />
@@ -70,7 +63,7 @@ export default class Templates extends Component {
           medium={props.medium}
           tabs={state.tabs}
           templates={state.templates}
-          types={props.types}
+          type={props.type}
         />
       </React.Fragment>
     )

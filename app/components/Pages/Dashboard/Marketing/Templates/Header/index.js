@@ -6,12 +6,12 @@ import { headers } from './data'
 import { Container, Title } from './styled'
 
 export function Header(props) {
-  const data = headers[props.medium]
+  const data = headers[props.type]
 
   return (
     <Container
       brandColor={data.brandColor}
-      name={props.medium}
+      name={data.name}
       size={data.size}
       position={data.position}
       isSideMenuOpen={props.isSideMenuOpen}

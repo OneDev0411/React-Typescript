@@ -1,5 +1,4 @@
 import React from 'react'
-import { groupBy } from 'lodash'
 import Flex from 'styled-flex-component'
 import Masonry from 'react-masonry-component'
 
@@ -9,18 +8,21 @@ import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
 import { Loader } from '../../components/Loader'
-import { templateTypes } from '../data'
 import { Template } from './Template'
 import { Tab } from './styled'
 
 export class List extends React.Component {
   state = {
     activeFlow: '',
-    selectedTemplate: null,
     isPreviewModalOpen: false,
     isContactFlowActive: false,
-    isListingFlowActive: false
+    isListingFlowActive: false,
+    selectedTemplate: null,
+    selectedMedium: ''
   }
+
+  handleOnClickTab = e =>
+    this.setState({ selectedMedium: e.target.dataset.medium })
 
   closePreviewModal = () => {
     this.setState({ isPreviewModalOpen: false, selectedTemplate: null })
@@ -83,33 +85,10 @@ export class List extends React.Component {
     </Masonry>
   )
 
-  renderAll = () => {
-    const { templates } = this.props
-
-    const allTemplates = groupBy(templates, 'template_type')
-
-    return Object.keys(allTemplates).map(type => (
-      <div key={type} style={{ marginBottom: '0.5rem' }}>
-        <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
-          {templateTypes[type] || type}
-        </div>
-        {this.renderTemplates(allTemplates[type])}
-      </div>
-    ))
-  }
-
-  renderByType = selectedType =>
+  renderPanel = selectedMedium =>
     this.renderTemplates(
-      this.props.templates.filter(t => t.template_type === selectedType)
+      this.props.templates.filter(t => t.medium === selectedMedium)
     )
-
-  renderPanel = selectedType => {
-    if (selectedType === 'All') {
-      return this.renderAll()
-    }
-
-    return this.renderByType(selectedType)
-  }
 
   renderFlow = () => {
     const sharedProps = {
@@ -142,7 +121,7 @@ export class List extends React.Component {
   render() {
     const { props, state } = this
     const { selectedTemplate } = state
-    const selectedType = props.types || 'All'
+    const selectedMedium = state.selectedMedium || props.tabs[0]
 
     if (props.isLoading) {
       return (
@@ -159,19 +138,20 @@ export class List extends React.Component {
     return (
       <div style={{ padding: '0 1.5rem' }}>
         <Flex wrap style={{ marginBottom: '2rem' }}>
-          {props.tabs.map(({ title, type }, index) => (
+          {props.tabs.map((medium, index) => (
             <Tab
               inverse
               key={index}
-              data-type={type}
-              to={`/dashboard/marketing/${props.medium}/${type}`}
-              selected={selectedType === type}
+              appearance="link"
+              data-medium={medium}
+              onClick={this.handleOnClickTab}
+              selected={selectedMedium === medium}
             >
-              {title}
+              {medium}
             </Tab>
           ))}
         </Flex>
-        {this.renderPanel(selectedType)}
+        {this.renderPanel(selectedMedium)}
         {state.isPreviewModalOpen && (
           <ImagePreviewModal
             isOpen
