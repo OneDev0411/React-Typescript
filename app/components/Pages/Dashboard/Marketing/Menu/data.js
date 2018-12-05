@@ -33,7 +33,7 @@ export const items = [
     url: '/JustListed'
   },
   {
-    title: 'Just Listed',
+    title: 'Just Sold',
     url: '/JustSold'
   },
   {
