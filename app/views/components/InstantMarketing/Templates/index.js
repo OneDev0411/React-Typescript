@@ -3,10 +3,9 @@ import React from 'react'
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
 
-import Image from 'components/ImageLoader'
 import Spinner from 'components/Spinner'
 
-import { Container, TemplateItem, TemplateVideo } from './styled'
+import { Container, TemplateItem, Video, Image } from './styled'
 
 export default class Templates extends React.Component {
   state = {
@@ -69,8 +68,8 @@ export default class Templates extends React.Component {
 
   updateTemplate = template =>
     this.setState(state => ({
-      templates: state.templates.map(item =>
-        item.id === template.id ? template : item
+      templates: state.templates.map(
+        item => (item.id === template.id ? template : item)
       )
     }))
 
@@ -86,7 +85,7 @@ export default class Templates extends React.Component {
             isSelected={this.state.selectedTemplate === template.id}
           >
             {template.video ? (
-              <TemplateVideo
+              <Video
                 autoPlay="true"
                 loop="true"
                 type="video/mp4"
