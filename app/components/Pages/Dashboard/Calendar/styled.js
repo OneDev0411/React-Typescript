@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { borderColor } from 'views/utils/colors'
 
 export const MenuContainer = styled.div`
-  padding: 1em;
+  padding: 0 1em;
   position: relative;
   height: 100%;
   &:focus {

@@ -47,6 +47,8 @@ const PopOverImage = styled.img`
   height: 40px;
 `
 
+const MENU_WIDTH = '18.75rem'
+
 class CalendarContainer extends React.Component {
   constructor(props) {
     super(props)
@@ -287,7 +289,7 @@ class CalendarContainer extends React.Component {
           />
         )}
 
-        <Menu isOpen={isMenuOpen} width={302}>
+        <Menu isOpen={isMenuOpen} width={MENU_WIDTH}>
           <MenuContainer>
             <DatePicker
               selectedDate={selectedDate}
@@ -330,7 +332,7 @@ class CalendarContainer extends React.Component {
           </MenuContainer>
         </Menu>
 
-        <Content>
+        <Content menuWidth={MENU_WIDTH}>
           <PageHeader>
             <PageHeader.Title showBackButton={false}>
               <Trigger isExpended={isMenuOpen} onClick={this.toggleSideMenu} />
