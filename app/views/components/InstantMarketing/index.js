@@ -52,7 +52,7 @@ InstantMarketing.propTypes = {
 
 InstantMarketing.defaultProps = {
   headerTitle: 'Marketing Center',
-  saveButtonLabel: 'Send',
+  saveButtonLabel: 'Next',
   closeConfirmation: true,
   showTemplatesColumn: true,
   templateData: {},
