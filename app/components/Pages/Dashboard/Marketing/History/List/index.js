@@ -7,7 +7,7 @@ import { ImagePreviewModal } from 'components/ImagePreviewModal'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
 import { Loader } from '../../components/Loader'
-import { Template } from '../../Templates/List/Template'
+import { Template } from '../../components/Template'
 
 export class List extends React.Component {
   state = {

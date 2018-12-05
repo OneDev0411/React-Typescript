@@ -8,7 +8,7 @@ import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
 import { Loader } from '../../components/Loader'
-import { Template } from './Template'
+import { Template } from '../../components/Template'
 import { Tab } from './styled'
 
 export class List extends React.Component {

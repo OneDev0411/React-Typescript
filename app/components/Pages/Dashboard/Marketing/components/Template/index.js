@@ -40,6 +40,14 @@ export class Template extends React.Component {
       this.isVideo = true
       this.video = React.createRef()
       this.state = { isVideoPlaying: false, isMouseOverImage: false }
+    } else {
+      let thumbnail = `${this.template.url}/thumbnail.png`
+
+      if (props.template.file) {
+        thumbnail = props.template.file.preview_url
+      }
+
+      this.template.thumbnail = thumbnail
     }
   }
 
@@ -93,7 +101,7 @@ export class Template extends React.Component {
               <p>Sorry, your browser doesn't support embedded videos.</p>
             </video>
           ) : (
-            <img src={`${template.url}/thumbnail.png`} alt={template.name} />
+            <img src={template.thumbnail} alt={template.name} />
           )}
           <Flex
             className="action-bar"
