@@ -473,7 +473,7 @@ export default (
       <Route path="/dashboard/marketing" component={AsyncMarketing}>
         <IndexRoute component={AsyncMarketingStore} />
         <Route component={AsyncMarketingHistory} path="history" />
-        <Route component={AsyncMarketingTemplates} path=":type" />
+        <Route component={AsyncMarketingTemplates} path=":type(/:medium)" />
       </Route>
 
       <Route path="dashboard/account" component={AsyncAccountLayout}>

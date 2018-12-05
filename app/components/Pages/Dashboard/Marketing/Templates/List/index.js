@@ -1,4 +1,5 @@
 import React from 'react'
+import { browserHistory } from 'react-router'
 import Flex from 'styled-flex-component'
 import Masonry from 'react-masonry-component'
 
@@ -18,11 +19,18 @@ export class List extends React.Component {
     isContactFlowActive: false,
     isListingFlowActive: false,
     selectedTemplate: null,
-    selectedMedium: ''
+    selectedMedium: this.props.medium
   }
 
-  handleOnClickTab = e =>
-    this.setState({ selectedMedium: e.target.dataset.medium })
+  handleOnClickTab = e => {
+    const selectedMedium = e.target.dataset.medium
+
+    this.setState({ selectedMedium }, () =>
+      browserHistory.push(
+        `/dashboard/marketing/${this.props.type}/${selectedMedium}`
+      )
+    )
+  }
 
   closePreviewModal = () => {
     this.setState({ isPreviewModalOpen: false, selectedTemplate: null })
