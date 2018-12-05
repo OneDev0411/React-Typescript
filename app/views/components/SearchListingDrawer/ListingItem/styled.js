@@ -20,7 +20,7 @@ export const ListItemImage = styled.img`
 `
 
 export const ListItemAddress = styled.div`
-  padding-left: 0.5rem;
+  padding-left: 1rem;
 `
 
 export const ListItemStatus = styled.div`
@@ -41,7 +41,7 @@ export const AddressContainer = styled.div`
 `
 
 export const Address = styled.div`
-  font-size: 0.875rem;
+  font-size: 1rem;
 `
 
 export const IconContainer = styled(Flex)`

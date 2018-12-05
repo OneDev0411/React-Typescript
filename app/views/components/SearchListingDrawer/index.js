@@ -13,11 +13,9 @@ class SearchListingDrawer extends React.Component {
     isWorking: false
   }
 
-  handleSelectListing = async listing => {
-    const { onSelectListing, compact } = this.props
-
-    if (compact !== false) {
-      return onSelectListing(listing)
+  handleSelectListing = async item => {
+    if (this.props.compact !== false) {
+      return this.props.onSelectListing(item)
     }
 
     this.setState({
@@ -25,12 +23,12 @@ class SearchListingDrawer extends React.Component {
     })
 
     try {
-      const listingWithImages = await Listing.getListing(listing.id)
+      const id = item.type === 'deal' ? item.listing : item.id
+      const listingWithImages = await Listing.getListing(id)
 
-      onSelectListing(listingWithImages)
+      this.props.onSelectListing(listingWithImages)
     } catch (e) {
       console.log(e)
-      onSelectListing(listing)
     } finally {
       this.setState({
         isWorking: false
@@ -67,7 +65,7 @@ class SearchListingDrawer extends React.Component {
       <SearchDrawer
         showLoadingIndicator={this.state.isWorking}
         searchInputOptions={{
-          placeholder: 'Enter MLS # or address',
+          placeholder: this.props.searchPlaceholder,
           debounceTime: 500,
           minimumLength: 3
         }}
@@ -82,11 +80,13 @@ class SearchListingDrawer extends React.Component {
 
 SearchListingDrawer.propTypes = {
   compact: PropTypes.bool,
-  onSelectListing: PropTypes.func.isRequired
+  onSelectListing: PropTypes.func.isRequired,
+  searchPlaceholder: PropTypes.string
 }
 
 SearchListingDrawer.defaultProps = {
-  compact: true
+  compact: true,
+  searchPlaceholder: 'Enter MLS # or address'
 }
 
 export default SearchListingDrawer
