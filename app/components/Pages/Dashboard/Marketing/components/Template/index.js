@@ -97,7 +97,7 @@ export class Template extends React.Component {
           {isVideo ? (
             // eslint-disable-next-line
             <video ref={this.video}>
-              <source src={template.url} type={template.mime} />
+              <source src={`${template.url}#t=10`} type={template.mime} />
               <p>Sorry, your browser doesn't support embedded videos.</p>
             </video>
           ) : (
