@@ -1,34 +1,28 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 
-import Flex from 'styled-flex-component'
+import LinkIcon from 'views/components/SvgIcons/LinkIcon'
+import ImageFileIcon from 'views/components/SvgIcons/ImageFile/ImageFileIcon'
 
 import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
+import copy from 'utils/copy-text-to-clipboard'
 
-import IconDoubleCheck from 'components/SvgIcons/DoubleCheckMark/IconDoubleCheck'
 import Drawer from 'components/OverlayDrawer'
-import { getBrandAgents } from 'views/utils/brand-members'
-
-import { formatPhoneNumber } from 'utils/format'
 
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
-import { shareInstance } from 'models/instant-marketing/instance-share'
 
-import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
-import ActionButton from 'components/Button/ActionButton'
-import Avatar from 'components/Avatar'
+import { Button as DownloadButton } from './Section/styled'
 
-import ShareLink from './ShareLink'
-import { HelpIntro } from './Intro'
+import PreviewFile from './PreviewFile'
+import SendSMS from './SendSMS'
 
-import { SectionTitle, AgentItem, AgentInfo } from './styled'
+import { Section } from './Section'
 
 class SocialDrawer extends React.Component {
   state = {
-    instance: null,
-    sentList: [],
-    isSending: []
+    instance: this.props.instance || null
   }
 
   componentDidMount() {
@@ -36,6 +30,10 @@ class SocialDrawer extends React.Component {
   }
 
   init = async () => {
+    if (this.state.instance) {
+      return false
+    }
+
     try {
       const instance = await getTemplateInstances(this.props.template.id, {
         ...this.props.templateInstanceData,
@@ -50,119 +48,67 @@ class SocialDrawer extends React.Component {
     }
   }
 
-  get Agents() {
-    return this.props.agents || []
-  }
-
   get FileUrl() {
     return (
       this.state.instance &&
-      truncateTextFromMiddle(this.state.instance.file.url, 60)
+      truncateTextFromMiddle(this.state.instance.file.url, 40)
     )
   }
 
-  isSent = user => this.state.sentList.includes(user.id)
-
-  handleSend = async agent => {
-    this.setState(state => ({
-      isSending: [...state.isSending, agent.id]
-    }))
-
-    try {
-      await shareInstance(
-        this.state.instance.id,
-        [agent.phone_number],
-        this.ShareText
-      )
-
-      this.setState(state => ({
-        sentList: [...state.sentList, agent.id]
-      }))
-    } catch (e) {
-      console.log(e)
-    } finally {
-      this.setState(state => ({
-        isSending: state.isSending.filter(id => id !== agent.id)
-      }))
+  get FileName() {
+    if (!this.state.instance) {
+      return ''
     }
+
+    const { url } = this.state.instance.file
+
+    return truncateTextFromMiddle(url.substring(url.lastIndexOf('/') + 1), 40)
   }
 
-  get ShareText() {
-    const name = this.props.user.display_name
-    const link = this.state.instance.file.url
+  handleCopyUrl = () => {
+    copy(this.state.instance.file.url)
 
-    return `${name} sent you this image! Tap on the link and press share on instagram or facebook ${link}`
+    this.props.notify({
+      message: 'Link Copied',
+      status: 'success'
+    })
   }
-
-  isSendButtonDisabled = agent =>
-    this.state.instance === null ||
-    !agent.phone_number ||
-    this.state.isSending.includes(agent.id)
-
-  getSendButtonCaption = agent =>
-    this.state.isSending.includes(agent.id) ? 'Sending...' : 'Send'
 
   render() {
     return (
       <Drawer isOpen onClose={this.props.onClose} showFooter={false}>
-        <Drawer.Header title={`Share on ${this.props.socialName}`} />
+        <Drawer.Header title="How would you like to share?" />
         <Drawer.Body>
-          <HelpIntro />
+          <PreviewFile instance={this.state.instance} />
 
-          <ShareLink fileUrl={this.FileUrl} instance={this.state.instance} />
+          {this.state.instance && (
+            <Fragment>
+              <SendSMS instance={this.state.instance} user={this.props.user} />
 
-          <SectionTitle>Share link via SMS</SectionTitle>
-
-          {this.Agents.length === 0 && (
-            <div>
-              <Loading />
-            </div>
-          )}
-
-          {this.Agents.map(agent => (
-            <AgentItem key={agent.id}>
-              <Flex>
-                <Avatar
-                  title={agent.display_name}
-                  image={agent.profile_image_url}
-                />
-                <AgentInfo>
-                  <Flex
-                    style={{
-                      fontSize: '1rem',
-                      fontWeight: 500,
-                      lineHeight: 1.5
-                    }}
-                  >
-                    {agent.display_name}
-                  </Flex>
-                  <Flex style={{ fontSize: '0.875rem' }}>
-                    {formatPhoneNumber(agent.phone_number)}
-                  </Flex>
-                </AgentInfo>
-              </Flex>
-
-              <Flex>
-                {this.isSent(agent) ? (
-                  <Fragment>
-                    <IconDoubleCheck />
-                    &nbsp;
-                    <span style={{ fontWeight: 500, fontSize: '0.875rem' }}>
-                      Sent
-                    </span>
-                  </Fragment>
-                ) : (
-                  <ActionButton
-                    size="small"
-                    disabled={this.isSendButtonDisabled(agent)}
-                    onClick={() => this.handleSend(agent)}
-                  >
-                    {this.getSendButtonCaption(agent)}
-                  </ActionButton>
+              <Section
+                title="Download Image:"
+                description="Download image to your computer and share however you want."
+                button={() => (
+                  <a target="_blank" href={this.state.instance.file.url}>
+                    <DownloadButton>Download</DownloadButton>
+                  </a>
                 )}
-              </Flex>
-            </AgentItem>
-          ))}
+              >
+                <ImageFileIcon /> {this.FileName}
+              </Section>
+
+              <Section
+                title="Copy this URL to Share:"
+                buttonCaption="Copy"
+                buttonProps={{
+                  disabled: !this.state.instance
+                }}
+                onButtonClick={this.handleCopyUrl}
+              >
+                <LinkIcon /> {this.FileUrl}
+              </Section>
+            </Fragment>
+          )}
         </Drawer.Body>
       </Drawer>
     )
@@ -178,9 +124,11 @@ SocialDrawer.defaultProps = {}
 
 function mapStateToProps({ user }) {
   return {
-    user,
-    agents: getBrandAgents(user)
+    user
   }
 }
 
-export default connect(mapStateToProps)(SocialDrawer)
+export default connect(
+  mapStateToProps,
+  { notify }
+)(SocialDrawer)
