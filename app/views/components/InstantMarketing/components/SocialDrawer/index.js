@@ -69,7 +69,11 @@ class SocialDrawer extends React.Component {
     }))
 
     try {
-      await shareInstance(this.state.instance.id, [agent.phone_number])
+      await shareInstance(
+        this.state.instance.id,
+        [agent.phone_number],
+        this.ShareText
+      )
 
       this.setState(state => ({
         sentList: [...state.sentList, agent.id]
@@ -81,6 +85,13 @@ class SocialDrawer extends React.Component {
         isSending: state.isSending.filter(id => id !== agent.id)
       }))
     }
+  }
+
+  get ShareText() {
+    const name = this.props.user.display_name
+    const link = this.state.instance.file.url
+
+    return `${name} sent you this image! Tap on the link and press share on instagram or facebook ${link}`
   }
 
   isSendButtonDisabled = agent =>
@@ -167,6 +178,7 @@ SocialDrawer.defaultProps = {}
 
 function mapStateToProps({ user }) {
   return {
+    user,
     agents: getBrandAgents(user)
   }
 }
