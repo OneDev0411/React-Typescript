@@ -272,7 +272,7 @@ class ContactsList extends React.Component {
 
     return (
       <PageContainer isOpen={isSideMenuOpen}>
-        <SideMenu isOpen={isSideMenuOpen} width="12.1em">
+        <SideMenu isOpen={isSideMenuOpen}>
           <SavedSegments
             name="contacts"
             onChange={this.handleChangeSavedSegment}
