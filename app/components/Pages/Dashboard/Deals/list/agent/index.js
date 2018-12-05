@@ -65,7 +65,7 @@ class AgentTable extends React.Component {
           />
         </Menu>
 
-        <Content>
+        <Content isSideMenuOpen={isSideMenuOpen}>
           <Header
             title={params.filter || 'All'}
             showBackButton={false}

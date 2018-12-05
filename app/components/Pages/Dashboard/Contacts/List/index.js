@@ -281,7 +281,7 @@ class ContactsList extends React.Component {
           <TagsList onFilterChange={this.handleFilterChange} />
         </SideMenu>
 
-        <PageContent>
+        <PageContent isSideMenuOpen={isSideMenuOpen}>
           <Header
             title={activeSegment.name || 'All Contacts'}
             isSideMenuOpen={this.state.isSideMenuOpen}

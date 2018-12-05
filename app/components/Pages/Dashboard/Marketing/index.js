@@ -30,7 +30,7 @@ class Marketing extends Component {
           <Menu />
         </SideMenu>
 
-        <PageContent>
+        <PageContent isSideMenuOpen={isSideMenuOpen}>
           {React.Children.map(this.props.children, child =>
             React.cloneElement(child, {
               ...this.props.params,

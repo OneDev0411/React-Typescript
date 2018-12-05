@@ -332,7 +332,7 @@ class CalendarContainer extends React.Component {
           </MenuContainer>
         </Menu>
 
-        <Content menuWidth={MENU_WIDTH}>
+        <Content menuWidth={MENU_WIDTH} isSideMenuOpen={isMenuOpen}>
           <PageHeader>
             <PageHeader.Title showBackButton={false}>
               <Trigger isExpended={isMenuOpen} onClick={this.toggleSideMenu} />
