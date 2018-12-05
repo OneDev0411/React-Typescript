@@ -1,7 +1,8 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-  width: calc(100% - ${props => props.menuWidth});
+  width: ${props =>
+    !props.isSideMenuOpen ? '100%' : `calc(100% - ${props.menuWidth})`};
   max-height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
