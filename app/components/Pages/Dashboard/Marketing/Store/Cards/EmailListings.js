@@ -40,7 +40,7 @@ export default function EmailListings(props) {
         <Jumbo style={{ marginBottom: '1rem' }}>
           Promote listings with email
         </Jumbo>
-        <Button appearance="outline" to="/dashboard/marketing/Email">
+        <Button appearance="outline" to="/dashboard/marketing/JustListed/Email">
           Browse Designs
         </Button>
       </div>

@@ -35,7 +35,7 @@ export default function Instagram(props) {
     <Container isSideMenuOpen={props.isSideMenuOpen}>
       <Jumbo style={{ marginBottom: '1rem' }}>Birthday Emails</Jumbo>
       <div className="cta-wrapper">
-        <Button appearance="outline" to="/dashboard/marketing/Email/Birthday">
+        <Button appearance="outline" to="/dashboard/marketing/Birthday">
           Browse Designs
         </Button>
       </div>

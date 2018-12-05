@@ -45,7 +45,10 @@ export default function Video(props) {
         <p style={{ marginBottom: '1.5rem' }}>
           Showcase your listings with video on Instagram and Facebook.
         </p>
-        <Button appearance="primary" to="/dashboard/marketing/Social">
+        <Button
+          appearance="primary"
+          to="/dashboard/marketing/JustListed/Social"
+        >
           Browse Designs
         </Button>
       </div>

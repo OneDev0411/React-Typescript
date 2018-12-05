@@ -26,7 +26,7 @@ export default function FacebookCovers(props) {
   return (
     <Container isSideMenuOpen={props.isSideMenuOpen}>
       <Jumbo style={{ marginBottom: '1rem' }}>Facebook Covers</Jumbo>
-      <Button appearance="outline" to="/dashboard/marketing/Social">
+      <Button appearance="outline" to="/dashboard/marketing/JustSold/Social">
         Browse Designs
       </Button>
     </Container>

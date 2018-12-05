@@ -29,7 +29,7 @@ export default function Instagram(props) {
   return (
     <Container isSideMenuOpen={props.isSideMenuOpen}>
       <Jumbo style={{ marginBottom: '1rem' }}>Instagram Stories</Jumbo>
-      <Button appearance="outline" to="/dashboard/marketing/Social">
+      <Button appearance="outline" to="/dashboard/marketing/Listings">
         Browse Designs
       </Button>
     </Container>

@@ -26,7 +26,7 @@ export default function Company(props) {
   return (
     <Container isSideMenuOpen={props.isSideMenuOpen}>
       <Jumbo style={{ marginBottom: '1rem' }}>Your Company</Jumbo>
-      <Button appearance="outline" to="/dashboard/marketing/Social">
+      <Button appearance="outline" to="/dashboard/marketing/JustListed">
         Browse Designs
       </Button>
     </Container>
