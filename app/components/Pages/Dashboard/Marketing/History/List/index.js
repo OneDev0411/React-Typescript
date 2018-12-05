@@ -81,9 +81,9 @@ export class List extends React.Component {
         {state.isPreviewModalOpen && (
           <ImagePreviewModal
             isOpen
-            title={selectedTemplate.file.name}
+            title="Preview"
             handleClose={this.closePreviewModal}
-            imgSrc={`${selectedTemplate.template.url}/preview.png`}
+            imgSrc={selectedTemplate.file.preview_url}
           />
         )}
         <ListingFlow
