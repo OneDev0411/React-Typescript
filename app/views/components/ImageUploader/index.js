@@ -171,7 +171,7 @@ export class ImageUploader extends Component {
 
     return (
       <Fragment>
-        {notes}
+        {notes && notes()}
         {showRules && this.renderRules()}
       </Fragment>
     )
