@@ -16,8 +16,8 @@ export class Template extends React.Component {
 
     if (props.template.type === 'template_instance') {
       this.template = {
-        ...props.template.template,
         showMeta: true,
+        html: props.template.html,
         created_at: props.template.created_at
       }
     }
