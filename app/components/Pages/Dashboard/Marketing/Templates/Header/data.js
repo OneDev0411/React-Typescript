@@ -26,6 +26,7 @@ const getInstagram = title => ({
 export const headers = {
   AsSeenIn: getSocial('As Seen In'),
   Birthday: getEmail('Birthday'),
+  ComingSoon: getEmail('Coming Soon'),
   JustListed: getEmail('Just Listed'),
   JustSold: getSocial('Just Sold'),
   Listings: getInstagram('Multiple Listings'),

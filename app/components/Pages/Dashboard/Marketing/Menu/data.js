@@ -17,7 +17,8 @@ export const items = [
     title: 'Business Cards'
   },
   {
-    title: 'Coming Soon'
+    title: 'Coming Soon',
+    url: '/ComingSoon'
   },
   {
     title: 'Facebook Cover'
