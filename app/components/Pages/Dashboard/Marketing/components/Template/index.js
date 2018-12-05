@@ -14,14 +14,6 @@ export class Template extends React.Component {
 
     this.template = props.template
 
-    if (props.template.type === 'template_instance') {
-      this.template = {
-        showMeta: true,
-        html: props.template.html,
-        created_at: props.template.created_at
-      }
-    }
-
     if (this.template.video) {
       let mime = 'video/mp4'
       let url = `${props.template.url}/thumbnail.mp4`
@@ -125,7 +117,7 @@ export class Template extends React.Component {
             </VideoController>
           )}
         </ImageContainer>
-        {template.showMeta && (
+        {template.type === 'template_instance' && (
           <div style={{ marginTop: '0.5rem' }}>{`Created ${fecha.format(
             new Date(template.created_at * 1000),
             '[on] MMMM DD, YYYY [at] hh:mm A'
