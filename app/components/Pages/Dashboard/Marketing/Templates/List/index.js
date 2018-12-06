@@ -3,8 +3,8 @@ import { browserHistory } from 'react-router'
 import Flex from 'styled-flex-component'
 import Masonry from 'react-masonry-component'
 
+import Button from 'components/Button/ActionButton'
 import { ImagePreviewModal } from 'components/ImagePreviewModal'
-
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
@@ -74,6 +74,14 @@ export class List extends React.Component {
       }
     })
 
+  handlePreviewCustomize = () =>
+    this.setState(
+      {
+        isPreviewModalOpen: false
+      },
+      this.handleCustomize(this.state.selectedTemplate)
+    )
+
   renderTemplate = template => (
     <Template
       key={template.id}
@@ -122,6 +130,10 @@ export class List extends React.Component {
     }
   }
 
+  renderPreviewModalMenu = () => (
+    <Button onClick={this.handlePreviewCustomize}>Customize</Button>
+  )
+
   render() {
     const { props, state } = this
     const { selectedTemplate } = state
@@ -162,6 +174,7 @@ export class List extends React.Component {
             title={selectedTemplate.name}
             handleClose={this.closePreviewModal}
             imgSrc={`${selectedTemplate.url}/preview.png`}
+            menuRenderer={this.renderPreviewModalMenu}
           />
         )}
         {this.renderFlow()}
