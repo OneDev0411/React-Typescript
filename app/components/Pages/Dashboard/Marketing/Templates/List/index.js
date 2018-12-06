@@ -61,6 +61,10 @@ export class List extends React.Component {
       isListingFlowActive: false
     })
 
+  get Mediums() {
+    return this.state.selectedMedium || this.props.tabs[0]
+  }
+
   handleCustomize = template =>
     this.setState({ activeFlow: template.template_type }, () => {
       switch (template.template_type) {
@@ -104,7 +108,7 @@ export class List extends React.Component {
 
   renderFlow = () => {
     const sharedProps = {
-      mediums: [this.props.medium],
+      mediums: [this.Mediums],
       selectedTemplate: this.state.selectedTemplate
     }
 
@@ -137,7 +141,7 @@ export class List extends React.Component {
   render() {
     const { props, state } = this
     const { selectedTemplate } = state
-    const selectedMedium = state.selectedMedium || props.tabs[0]
+    const selectedMedium = this.Mediums
 
     if (props.isLoading) {
       return (
