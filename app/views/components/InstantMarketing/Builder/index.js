@@ -78,6 +78,7 @@ class Builder extends React.Component {
     this.disableResize()
     this.singleClickTextEditing()
     this.disableAssetManager()
+    this.makeTemplateCentered()
 
     if (this.IsVideoTemplate) {
       this.grapes.appendChild(this.videoToolbar)
@@ -96,6 +97,25 @@ class Builder extends React.Component {
 
       selected.view.enableEditing(selected.view.el)
     })
+  }
+
+  makeTemplateCentered = () => {
+    const iframe = this.editor.Canvas.getFrameEl()
+
+    console.log(iframe)
+
+    const style = document.createElement('style')
+    const css = 'body { margin: 1vh auto !important; }'
+
+    style.type = 'text/css'
+
+    if (style.styleSheet) {
+      style.styleSheet.cssText = css
+    } else {
+      style.appendChild(document.createTextNode(css))
+    }
+
+    iframe.contentDocument.head.appendChild(style)
   }
 
   disableResize = () => {
@@ -246,45 +266,47 @@ class Builder extends React.Component {
               buttonRenderer={this.renderAgentPickerButton}
             />
 
-            {this.state.selectedTemplate && this.ShowSocialButtons && (
-              <Fragment>
-                <ActionButton
-                  onClick={() => this.handleSocialSharing('Instagram')}
-                >
-                  <i
-                    className="fa fa-instagram"
-                    style={{
-                      fontSize: '1.5rem',
-                      marginRight: '0.5rem'
-                    }}
-                  />
-                  Post to Instagram
-                </ActionButton>
+            {this.state.selectedTemplate &&
+              this.ShowSocialButtons && (
+                <Fragment>
+                  <ActionButton
+                    onClick={() => this.handleSocialSharing('Instagram')}
+                  >
+                    <i
+                      className="fa fa-instagram"
+                      style={{
+                        fontSize: '1.5rem',
+                        marginRight: '0.5rem'
+                      }}
+                    />
+                    Post to Instagram
+                  </ActionButton>
 
+                  <ActionButton
+                    style={{ marginLeft: '0.5rem' }}
+                    onClick={() => this.handleSocialSharing('Facebook')}
+                  >
+                    <i
+                      className="fa fa-facebook-square"
+                      style={{
+                        fontSize: '1.5rem',
+                        marginRight: '0.5rem'
+                      }}
+                    />
+                    Post to Facebook
+                  </ActionButton>
+                </Fragment>
+              )}
+
+            {this.state.selectedTemplate &&
+              !this.ShowSocialButtons && (
                 <ActionButton
                   style={{ marginLeft: '0.5rem' }}
-                  onClick={() => this.handleSocialSharing('Facebook')}
+                  onClick={this.handleSave}
                 >
-                  <i
-                    className="fa fa-facebook-square"
-                    style={{
-                      fontSize: '1.5rem',
-                      marginRight: '0.5rem'
-                    }}
-                  />
-                  Post to Facebook
+                  {this.props.saveButtonLabel}
                 </ActionButton>
-              </Fragment>
-            )}
-
-            {this.state.selectedTemplate && !this.ShowSocialButtons && (
-              <ActionButton
-                style={{ marginLeft: '0.5rem' }}
-                onClick={this.handleSave}
-              >
-                {this.props.saveButtonLabel}
-              </ActionButton>
-            )}
+              )}
 
             <Divider />
             <IconButton
@@ -315,12 +337,13 @@ class Builder extends React.Component {
             ref={ref => (this.grapes = ref)}
             style={{ position: 'relative' }}
           >
-            {this.IsVideoTemplate && this.IsTemplateLoaded && (
-              <VideoToolbar
-                onRef={ref => (this.videoToolbar = ref)}
-                editor={this.editor}
-              />
-            )}
+            {this.IsVideoTemplate &&
+              this.IsTemplateLoaded && (
+                <VideoToolbar
+                  onRef={ref => (this.videoToolbar = ref)}
+                  editor={this.editor}
+                />
+              )}
           </div>
         </BuilderContainer>
       </Container>
