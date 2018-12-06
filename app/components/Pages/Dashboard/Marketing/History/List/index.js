@@ -2,8 +2,8 @@ import React from 'react'
 import Flex from 'styled-flex-component'
 import Masonry from 'react-masonry-component'
 
+import Button from 'components/Button/ActionButton'
 import { ImagePreviewModal } from 'components/ImagePreviewModal'
-
 import ShareInstance from 'components/InstantMarketing/adapters/ShareInstance'
 
 import { Loader } from '../../components/Loader'
@@ -32,7 +32,14 @@ export class List extends React.Component {
 
   deActiveFlow = () =>
     this.setState({
+      selectedTemplate: null,
       isShareFlowActive: false
+    })
+
+  handlePreviewShare = () =>
+    this.setState({
+      isPreviewModalOpen: false,
+      isShareFlowActive: true
     })
 
   renderTemplate = template => (
@@ -51,6 +58,10 @@ export class List extends React.Component {
         {this.props.templates.map(this.renderTemplate)}
       </Masonry>
     </ListContainer>
+  )
+
+  renderPreviewModalMenu = () => (
+    <Button onClick={this.handlePreviewShare}>Share</Button>
   )
 
   render() {
@@ -84,6 +95,7 @@ export class List extends React.Component {
             title="Preview"
             handleClose={this.closePreviewModal}
             imgSrc={selectedTemplate.file.preview_url}
+            menuRenderer={this.renderPreviewModalMenu}
           />
         )}
         <ShareInstance
