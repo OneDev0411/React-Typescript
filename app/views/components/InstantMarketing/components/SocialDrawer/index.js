@@ -116,8 +116,9 @@ class SocialDrawer extends React.Component {
 }
 
 SocialDrawer.propTypes = {
-  template: PropTypes.object.isRequired,
-  templateInstanceData: PropTypes.object.isRequired
+  instance: PropTypes.shape(),
+  template: PropTypes.shape().isRequired,
+  templateInstanceData: PropTypes.shape()
 }
 
 SocialDrawer.defaultProps = {}
