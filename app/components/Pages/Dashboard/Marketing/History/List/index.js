@@ -60,7 +60,11 @@ export class List extends React.Component {
   )
 
   renderPreviewModalMenu = () => (
-    <Button onClick={this.handlePreviewShare}>Share</Button>
+    <Button onClick={this.handlePreviewShare}>{`${
+      this.state.selectedTemplate.template.medium === 'Email'
+        ? 'Compose'
+        : 'Share'
+    }`}</Button>
   )
 
   render() {
