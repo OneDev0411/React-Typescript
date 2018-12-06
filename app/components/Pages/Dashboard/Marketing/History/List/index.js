@@ -18,7 +18,7 @@ export class List extends React.Component {
   }
 
   closePreviewModal = () => {
-    this.setState({ isPreviewModalOpen: false, selectedTemplate: null })
+    this.setState({ isPreviewModalOpen: false })
   }
 
   openPreviewModal = selectedTemplate =>
@@ -32,7 +32,6 @@ export class List extends React.Component {
 
   deActiveFlow = () =>
     this.setState({
-      selectedTemplate: null,
       isShareFlowActive: false
     })
 
@@ -61,7 +60,11 @@ export class List extends React.Component {
   )
 
   renderPreviewModalMenu = () => (
-    <Button onClick={this.handlePreviewShare}>Share</Button>
+    <Button onClick={this.handlePreviewShare}>{`${
+      this.state.selectedTemplate.template.medium === 'Email'
+        ? 'Compose'
+        : 'Share'
+    }`}</Button>
   )
 
   render() {

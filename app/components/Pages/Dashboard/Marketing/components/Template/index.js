@@ -14,6 +14,10 @@ export class Template extends React.Component {
 
     this.template = props.template
 
+    if (props.template.type === 'template_instance' && props.template) {
+      this.template.medium = props.template.template.medium
+    }
+
     if (this.template.video) {
       let mime = 'video/mp4'
       let url = `${props.template.url}/thumbnail.mp4`
@@ -80,6 +84,11 @@ export class Template extends React.Component {
   render() {
     const { props, isVideo, template } = this
     const isInstance = template.type === 'template_instance'
+    let editButtonText = 'Customize'
+
+    if (isInstance) {
+      editButtonText = template.medium === 'Email' ? 'Compose' : 'Share'
+    }
 
     return (
       <Box isSideMenuOpen={props.isSideMenuOpen}>
@@ -110,9 +119,7 @@ export class Template extends React.Component {
                 Preview
               </Button>
             )}
-            <Button onClick={props.handleCustomize}>
-              {isInstance ? 'Share' : 'Customize'}
-            </Button>
+            <Button onClick={props.handleCustomize}>{editButtonText}</Button>
           </Flex>
           {isVideo && (
             <VideoController isFit onClick={this.handleVideoPlayPause}>
