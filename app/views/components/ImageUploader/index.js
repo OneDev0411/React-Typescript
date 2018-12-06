@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 
-import Dropzone from 'react-dropzone'
 import AvatarEditor from 'react-avatar-editor'
+import Dropzone from 'react-dropzone'
 
 import BareModal from '../BareModal'
 import ActionButton from '../Button/ActionButton'
@@ -20,7 +20,7 @@ export class ImageUploader extends Component {
     width: 200,
     height: 200,
     border: 50,
-    radius: 100,
+    radius: 0,
     scale: 2,
     disableBoundaryChecks: false,
     outsideRGBAColor: [0, 0, 0, 0.2],
@@ -30,17 +30,17 @@ export class ImageUploader extends Component {
   }
 
   state = {
-    isOpen: false,
-    file: null,
-    scale: 2
+    isOpen: this.props.isOpen,
+    file: this.props.file,
+    scale: this.props.scale
   }
 
-  componentDidMount() {
-    this.setState({
-      isOpen: this.props.isOpen,
-      file: this.props.file,
-      scale: this.props.scale
-    })
+  reset = () => {
+    this.setState({ isOpen: true, file: null, scale: 2 })
+  }
+
+  dismissDialog() {
+    this.setState({ isOpen: false })
   }
 
   getFileFromDataURL = async (data, fileName, mimeType) => {
@@ -50,8 +50,23 @@ export class ImageUploader extends Component {
     return new File([bufferData], fileName, { type: mimeType })
   }
 
-  dismissDialog() {
-    this.setState({ isOpen: false })
+  getEditedImageFile = async () => {
+    const { file } = this.state
+
+    const imageDataURL = this.editor
+      .getImageScaledToCanvas()
+      .toDataURL(file.type)
+
+    return this.getFileFromDataURL(imageDataURL, file.name, file.type)
+  }
+
+  getOriginalAndEditedFiles = async () => {
+    const file = await this.getEditedImageFile()
+
+    return {
+      file,
+      originalFile: this.state.file
+    }
   }
 
   setEditorRef = editor => {
@@ -61,37 +76,19 @@ export class ImageUploader extends Component {
   }
 
   onSave = async () => {
-    const { saveHandler } = this.props
-    const { file } = this.state
+    const files = await this.getOriginalAndEditedFiles()
 
-    const imageDataURL = this.editor
-      .getImageScaledToCanvas()
-      .toDataURL(file.type)
-
-    const imageFile = await this.getFileFromDataURL(
-      imageDataURL,
-      file.name,
-      file.type
-    )
-
-    saveHandler({ file: imageFile, originalFile: file })
+    await this.props.saveHandler(files)
+    this.reset()
     this.dismissDialog()
   }
 
-  reset = () => {
-    this.setState({ isOpen: true, file: null, scale: 2 })
-  }
+  onClose = async () => {
+    const files = await this.getOriginalAndEditedFiles()
 
-  cancel = () => {
-    this.setState({ isOpen: false, file: null, scale: 2 })
-  }
-
-  onClose = () => {
-    const { closeHandler } = this.props
-    const { file } = this.state
-
-    closeHandler({ file: null, originalFile: file })
-    this.cancel()
+    await this.props.closeHandler(files)
+    this.reset()
+    this.dismissDialog()
   }
 
   onDrop = files => {
@@ -109,37 +106,26 @@ export class ImageUploader extends Component {
   }
 
   renderImageEditor() {
-    const { file, scale } = this.state
-    const {
-      scale: defaultScale,
-      outsideRGBAColor,
-      width,
-      height,
-      border,
-      radius,
-      disableBoundaryChecks
-    } = this.props
-
     return (
       <div style={{ textAlign: 'center' }}>
         <AvatarEditor
           ref={this.setEditorRef}
-          image={file}
-          width={width}
-          height={height}
-          border={border}
-          color={outsideRGBAColor}
-          scale={scale}
+          image={this.state.file}
+          width={this.props.width}
+          height={this.props.height}
+          border={this.props.border}
+          color={this.props.outsideRGBAColor}
+          scale={this.state.scale}
           rotate={0}
-          borderRadius={radius}
-          disableBoundaryChecks={disableBoundaryChecks}
+          borderRadius={this.props.radius}
+          disableBoundaryChecks={this.props.disableBoundaryChecks}
         />
         <input
           type="range"
           min="1"
           max="2"
           step="0.01"
-          defaultValue={defaultScale}
+          defaultValue={this.props.scale}
           onChange={this.onScaleChange}
           style={{
             width: '60%',
@@ -167,23 +153,19 @@ export class ImageUploader extends Component {
   }
 
   renderNotes() {
-    const { showRules, notes } = this.props
-
     return (
       <Fragment>
-        {notes && notes()}
-        {showRules && this.renderRules()}
+        {this.props.notes && this.props.notes()}
+        {this.props.showRules && this.renderRules()}
       </Fragment>
     )
   }
 
   renderDropZone() {
-    const { rules } = this.props
-
     return (
       <Fragment>
         <Dropzone
-          accept={rules.accept}
+          accept={this.props.rules.accept}
           multiple={false}
           onDrop={this.onDrop}
           style={{
@@ -223,14 +205,8 @@ export class ImageUploader extends Component {
   }
 
   renderDialog() {
-    const { file, isOpen } = this.state
-
     return (
-      <BareModal
-        isOpen={isOpen}
-        shouldCloseOnOverlayClick
-        onRequestClose={this.onClose}
-      >
+      <BareModal isOpen={this.state.isOpen} onRequestClose={this.onClose}>
         <div
           style={{
             width: '95%',
@@ -239,8 +215,8 @@ export class ImageUploader extends Component {
             paddingBottom: '10px'
           }}
         >
-          {file ? this.renderImageEditor() : this.renderUploader()}
-          {file && this.renderSaveAndRepick()}
+          {this.state.file ? this.renderImageEditor() : this.renderUploader()}
+          {this.state.file && this.renderSaveAndRepick()}
           <ActionButton onClick={this.onClose}>Cancel</ActionButton>
         </div>
       </BareModal>
@@ -248,9 +224,7 @@ export class ImageUploader extends Component {
   }
 
   render() {
-    const { isOpen } = this.state
-
-    if (isOpen) {
+    if (this.state.isOpen) {
       return this.renderDialog()
     }
 
