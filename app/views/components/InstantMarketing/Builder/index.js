@@ -102,8 +102,6 @@ class Builder extends React.Component {
   makeTemplateCentered = () => {
     const iframe = this.editor.Canvas.getFrameEl()
 
-    console.log(iframe)
-
     const style = document.createElement('style')
     const css = 'body { margin: 1vh auto !important; }'
 
