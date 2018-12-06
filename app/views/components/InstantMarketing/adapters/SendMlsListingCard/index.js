@@ -163,9 +163,8 @@ class SendMlsListingCard extends React.Component {
     })
   }
 
-  handleSocialSharing = (template, socialName) => {
+  handleSocialSharing = template => {
     this.setState({
-      socialName,
       htmlTemplate: template,
       isSocialDrawerOpen: true
     })
@@ -260,7 +259,6 @@ class SendMlsListingCard extends React.Component {
 
         {this.state.isSocialDrawerOpen && (
           <SocialDrawer
-            socialName={this.state.socialName}
             template={this.state.htmlTemplate}
             templateInstanceData={this.TemplateInstanceData}
             onClose={this.closeSocialDrawer}

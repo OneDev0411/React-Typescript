@@ -135,7 +135,8 @@ class SearchDrawer extends React.Component {
 
 SearchDrawer.defaultProps = {
   showLoadingIndicator: false,
-  searchInputOptions: {}
+  searchInputOptions: {},
+  initialList: []
 }
 
 SearchDrawer.propTypes = {
@@ -143,7 +144,8 @@ SearchDrawer.propTypes = {
   searchInputOptions: PropTypes.object,
   searchFunction: PropTypes.func.isRequired,
   ItemRow: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
-  onSelectItem: PropTypes.func.isRequired
+  onSelectItem: PropTypes.func.isRequired,
+  initialList: PropTypes.array
 }
 
 export default SearchDrawer
