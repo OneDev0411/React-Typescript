@@ -14,6 +14,10 @@ import {
   IconContainer
 } from '../styled'
 
+function dealSide(deal) {
+  return deal.deal_type === 'Selling' ? 'Seller' : 'Buyer'
+}
+
 export function DealItem({ item: deal, ...rest }) {
   const photo = Deal.get.field(deal, 'photo')
   const status = Deal.get.status(deal)
@@ -37,7 +41,7 @@ export function DealItem({ item: deal, ...rest }) {
           <Address style={{ fontWeight: '500' }}>{deal.title}</Address>
 
           <Address style={{ color: 'rgba(0, 0, 0, 0.5)', fontWeight: '400' }}>
-            {status} . {deal.deal_type} . {deal.property_type}
+            {status} . {dealSide(deal)} . {deal.property_type}
           </Address>
         </ListItemAddress>
       </AddressContainer>

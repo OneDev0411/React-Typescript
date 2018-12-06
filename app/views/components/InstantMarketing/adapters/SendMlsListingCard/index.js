@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
-import _ from 'underscore'
 
 import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
@@ -17,6 +16,8 @@ import ActionButton from 'components/Button/ActionButton'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
 import { convertRecipientsToEmails } from '../../helpers/convert-recipients-to-emails'
+
+import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-deals'
 
 import { getTemplateTypes } from '../../helpers/get-template-types'
 import SocialDrawer from '../../components/SocialDrawer'
@@ -192,13 +193,6 @@ class SendMlsListingCard extends React.Component {
     }
   }
 
-  get UserDeals() {
-    return _.chain(this.props.deals)
-      .filter(deal => deal.listing !== null)
-      .sortBy(deal => (deal.deal_type === 'Selling' ? -1 : 1))
-      .value()
-  }
-
   render() {
     const { listing } = this.state
     const { user, selectedTemplate } = this.props
@@ -224,7 +218,7 @@ class SendMlsListingCard extends React.Component {
           compact={false}
           title="Select a Listing"
           searchPlaceholder="Choose a deal or enter MLS # or address"
-          initialList={this.UserDeals}
+          initialList={getMlsDrawerInitialDeals(this.props.deals)}
           onClose={this.closeListingModal}
           onSelectListing={this.onSelectListing}
         />
