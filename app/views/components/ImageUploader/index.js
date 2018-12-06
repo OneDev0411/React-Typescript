@@ -6,6 +6,9 @@ import Dropzone from 'react-dropzone'
 import BareModal from '../BareModal'
 import ActionButton from '../Button/ActionButton'
 
+const RESET_STATE = { isOpen: true, file: null, scale: 2 }
+const DISMISS_STATE = { isOpen: false }
+
 export class ImageUploader extends Component {
   static defaultProps = {
     isOpen: false,
@@ -36,11 +39,15 @@ export class ImageUploader extends Component {
   }
 
   reset = () => {
-    this.setState({ isOpen: true, file: null, scale: 2 })
+    this.setState(RESET_STATE)
   }
 
   dismissDialog() {
-    this.setState({ isOpen: false })
+    this.setState(DISMISS_STATE)
+  }
+
+  resetAndDismiss() {
+    this.setState({ ...RESET_STATE, ...DISMISS_STATE })
   }
 
   getFileFromDataURL = async (data, fileName, mimeType) => {
@@ -79,16 +86,14 @@ export class ImageUploader extends Component {
     const files = await this.getOriginalAndEditedFiles()
 
     await this.props.saveHandler(files)
-    this.reset()
-    this.dismissDialog()
+    this.resetAndDismiss()
   }
 
   onClose = async () => {
     const files = await this.getOriginalAndEditedFiles()
 
     await this.props.closeHandler(files)
-    this.reset()
-    this.dismissDialog()
+    this.resetAndDismiss()
   }
 
   onDrop = files => {
