@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { getMQWidth } from './helpers'
 import Video from './Video'
+import Holiday from './Holiday'
 import SocialListings from './SocialListings'
 import EmailListings from './EmailListings'
 import Company from './Company'
@@ -22,8 +23,8 @@ const ResponsiveRow = styled.div`
 
 function Cards({ isSideMenuOpen }) {
   return (
-    <React.Fragment>
-      <Video isSideMenuOpen={isSideMenuOpen} />
+    <div style={{ marginTop: '1.5rem' }}>
+      <Holiday isSideMenuOpen={isSideMenuOpen} />
       <ResponsiveRow isSideMenuOpen={isSideMenuOpen}>
         <SocialListings isSideMenuOpen={isSideMenuOpen} />
         <EmailListings isSideMenuOpen={isSideMenuOpen} />
@@ -36,12 +37,13 @@ function Cards({ isSideMenuOpen }) {
         <FacebookCovers isSideMenuOpen={isSideMenuOpen} />
         <AsSeenIn isSideMenuOpen={isSideMenuOpen} />
       </ResponsiveRow>
+      <Video isSideMenuOpen={isSideMenuOpen} />
       <ResponsiveRow isSideMenuOpen={isSideMenuOpen}>
         <BusinessCards isSideMenuOpen={isSideMenuOpen} />
         <Birthday isSideMenuOpen={isSideMenuOpen} />
       </ResponsiveRow>
       <Brochures isSideMenuOpen={isSideMenuOpen} />
-    </React.Fragment>
+    </div>
   )
 }
 

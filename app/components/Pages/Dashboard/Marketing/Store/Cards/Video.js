@@ -51,7 +51,7 @@ const ContentWrapper = styled.div`
 export default function Video(props) {
   return (
     <Container isSideMenuOpen={props.isSideMenuOpen}>
-      <ContentWrapper>
+      <ContentWrapper isSideMenuOpen={props.isSideMenuOpen}>
         <Jumbo style={{ color: '#fff', marginBottom: '1rem' }}>
           Create Engaging Videos
         </Jumbo>
