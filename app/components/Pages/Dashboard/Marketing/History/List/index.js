@@ -4,7 +4,7 @@ import Masonry from 'react-masonry-component'
 
 import { ImagePreviewModal } from 'components/ImagePreviewModal'
 
-import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
+import ShareInstance from 'components/InstantMarketing/adapters/ShareInstance'
 
 import { Loader } from '../../components/Loader'
 import { Template } from '../../components/Template'
@@ -14,7 +14,7 @@ export class List extends React.Component {
   state = {
     selectedTemplate: null,
     isPreviewModalOpen: false,
-    isListingFlowActive: false
+    isShareFlowActive: false
   }
 
   closePreviewModal = () => {
@@ -27,12 +27,12 @@ export class List extends React.Component {
   activeListingFlow = selectedTemplate =>
     this.setState({
       selectedTemplate,
-      isListingFlowActive: true
+      isShareFlowActive: true
     })
 
-  deActiveListingFlow = () =>
+  deActiveFlow = () =>
     this.setState({
-      isListingFlowActive: false
+      isShareFlowActive: false
     })
 
   renderTemplate = template => (
@@ -86,12 +86,11 @@ export class List extends React.Component {
             imgSrc={selectedTemplate.file.preview_url}
           />
         )}
-        <ListingFlow
+        <ShareInstance
           hasExternalTrigger
-          isTriggered={this.state.isListingFlowActive}
-          handleTrigger={this.deActiveListingFlow}
-          mediums={['Social']}
-          selectedTemplate={selectedTemplate}
+          isTriggered={this.state.isShareFlowActive}
+          handleTrigger={this.deActiveFlow}
+          instance={selectedTemplate}
         />
       </React.Fragment>
     )

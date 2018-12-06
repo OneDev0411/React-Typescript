@@ -79,6 +79,7 @@ export class Template extends React.Component {
 
   render() {
     const { props, isVideo, template } = this
+    const isInstance = template.type === 'template_instance'
 
     return (
       <Box isSideMenuOpen={props.isSideMenuOpen}>
@@ -109,7 +110,9 @@ export class Template extends React.Component {
                 Preview
               </Button>
             )}
-            <Button onClick={props.handleCustomize}>Customize</Button>
+            <Button onClick={props.handleCustomize}>
+              {isInstance ? 'Share' : 'Customize'}
+            </Button>
           </Flex>
           {isVideo && (
             <VideoController isFit onClick={this.handleVideoPlayPause}>
@@ -117,7 +120,7 @@ export class Template extends React.Component {
             </VideoController>
           )}
         </ImageContainer>
-        {template.type === 'template_instance' && (
+        {isInstance && (
           <div style={{ marginTop: '0.5rem' }}>{`Created ${fecha.format(
             new Date(template.created_at * 1000),
             '[on] MMMM DD, YYYY [at] hh:mm A'
