@@ -2,14 +2,16 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { Jumbo } from 'components/Typography/headings'
-import Button from 'components/Button/LinkButton'
 
 import { getMQWidth } from './helpers'
+import ComingSoon from './components/ComingSoonBadge'
 
 const Container = styled.div`
   padding: 2rem;
   height: 25rem;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
   margin-bottom: 1.5rem;
   border-radius: 3px;
   background: #f2f2f2
@@ -26,9 +28,7 @@ export default function FacebookCovers(props) {
   return (
     <Container isSideMenuOpen={props.isSideMenuOpen}>
       <Jumbo style={{ marginBottom: '1rem' }}>Facebook Covers</Jumbo>
-      <Button appearance="outline" to="/dashboard/marketing/JustSold/Social">
-        Browse Designs
-      </Button>
+      <ComingSoon />
     </Container>
   )
 }
