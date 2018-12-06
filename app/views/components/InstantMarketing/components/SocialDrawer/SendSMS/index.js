@@ -35,13 +35,15 @@ class SendSMS extends React.Component {
   }
 
   handleSend = async () => {
-    const phone = parsePhoneNumber(this.state.phone)
+    const phone = parsePhoneNumber(this.state.phone, 'US')
 
     this.setState({
       isSending: true
     })
 
     try {
+      console.log(`Sending SMS to ${phone.number}`)
+
       await shareInstance(
         this.props.instance.id,
         [phone.number],
