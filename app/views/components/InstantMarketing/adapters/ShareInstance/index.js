@@ -3,12 +3,9 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
-import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
-import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
 import EmailCompose from 'components/EmailCompose'
 import ActionButton from 'components/Button/ActionButton'
-import { SearchContactDrawer } from 'components/SearchContactDrawer'
 
 import SocialDrawer from '../../components/SocialDrawer'
 import hasMarketingAccess from '../../helpers/has-marketing-access'
@@ -16,22 +13,16 @@ import { convertRecipientsToEmails } from '../../helpers/convert-recipients-to-e
 
 class ShareInstance extends React.Component {
   state = {
-    contacts: [],
-    isComposeEmailOpen: false,
-    isSearchContactDrawerOpen: false,
+    isComposeDrawerOpen: false,
     isSocialDrawerOpen: false
   }
 
   static getDerivedStateFromProps(props, state) {
     const medium = props.instance && props.instance.template.medium
 
-    if (
-      props.isTriggered &&
-      medium === 'Email' &&
-      !state.isSearchContactDrawerOpen
-    ) {
+    if (props.isTriggered && medium === 'Email' && !state.isComposeDrawerOpen) {
       return {
-        isSearchContactDrawerOpen: true
+        isComposeDrawerOpen: true
       }
     }
 
@@ -41,10 +32,10 @@ class ShareInstance extends React.Component {
       }
     }
 
-    // For Closing Search Contact Drawer after selecting a contact
-    if (!props.isTriggered && state.isSearchContactDrawerOpen) {
+    // For Closing Compose Drawer after selecting a contact
+    if (!props.isTriggered && state.isComposeDrawerOpen) {
       return {
-        isSearchContactDrawerOpen: false
+        isComposeDrawerOpen: false
       }
     }
 
@@ -59,49 +50,15 @@ class ShareInstance extends React.Component {
   }
 
   toggleComposeEmail = () =>
-    this.setState(state => ({
-      isComposeEmailOpen: !state.isComposeEmailOpen
-    }))
-
-  closeSearchDrawer = () =>
     this.setState(
-      { isSearchContactDrawerOpen: false },
+      state => ({
+        isComposeDrawerOpen: !state.isComposeDrawerOpen
+      }),
       this.props.handleTrigger
     )
 
   closeSocialDrawer = () =>
     this.setState({ isSocialDrawerOpen: false }, this.props.handleTrigger)
-
-  handleSelectedContact = contact =>
-    this.setState(
-      {
-        contacts: [contact],
-        isSearchContactDrawerOpen: false
-      },
-      () => {
-        this.props.handleTrigger()
-        this.toggleComposeEmail()
-      }
-    )
-
-  get Recipients() {
-    return this.state.contacts
-      .map(contact => {
-        const emails = getContactAttribute(
-          contact,
-          selectDefinitionByName(this.props.attributeDefs, 'email')
-        )
-
-        return {
-          contactId: contact.id,
-          name: contact.summary.display_name,
-          avatar: contact.summary.profile_image_url,
-          email: contact.summary.email,
-          emails: emails.map(email => email.text)
-        }
-      })
-      .filter(recipient => recipient !== null)
-  }
 
   handleSendEmails = async (values, form) => {
     this.setState({
@@ -130,19 +87,21 @@ class ShareInstance extends React.Component {
       console.log(e)
       // todo
     } finally {
-      this.setState({
-        isSendingEmail: false,
-        isComposeEmailOpen: false
-      })
+      this.setState(
+        {
+          isSendingEmail: false,
+          isComposeDrawerOpen: false
+        },
+        this.props.handleTrigger
+      )
     }
   }
 
   activeFlow = () => {
-    if (
-      this.props.instance &&
-      this.props.instance.template.medium === 'Email'
-    ) {
-      this.setState({ isSearchContactDrawerOpen: true })
+    const { instance } = this.props
+
+    if (instance && instance.template.medium === 'Email') {
+      this.setState({ isComposeDrawerOpen: true })
     } else {
       this.setState({ isSocialDrawerOpen: true })
     }
@@ -167,21 +126,11 @@ class ShareInstance extends React.Component {
           </ActionButton>
         )}
 
-        {state.isSearchContactDrawerOpen && (
-          <SearchContactDrawer
-            title="Select a Contact"
-            isOpen={state.isSearchContactDrawerOpen}
-            onSelect={this.handleSelectedContact}
-            onClose={this.closeSearchDrawer}
-          />
-        )}
-
-        {state.isComposeEmailOpen && (
+        {state.isComposeDrawerOpen && (
           <EmailCompose
             isOpen
             from={props.user}
             onClose={this.toggleComposeEmail}
-            recipients={this.Recipients}
             html={props.instance.html}
             onClickSend={this.handleSendEmails}
             isSubmitting={state.isSendingEmail}
