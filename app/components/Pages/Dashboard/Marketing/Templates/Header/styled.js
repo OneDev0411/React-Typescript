@@ -13,14 +13,18 @@ export const Container = styled.div`
   background-color: ${props => props.brandColor};
 
   @media screen and (min-width: ${props =>
-      props.isSideMenuOpen ? 75 + 10.2578125 : 75}em) {
+      props.isSideMenuOpen ? 75 + 11 : 75}em) {
     background-repeat: no-repeat;
     background-image: ${({ name }) =>
-      `url('${baseBackgroundImgUrl}/${name}/${name}.png')`};
+      `url('${baseBackgroundImgUrl}/${name}/${name}@3x.png')`};
     background-size: ${({ size: { width, height } }) =>
       `${width / 16}rem ${height / 16}rem`};
-    background-position: ${props =>
-      props.position || 'calc(100% - 2rem) bottom'};
+    background-position: calc(100% - 2rem) ${props => props.position || '75%'};
+  }
+
+  @media screen and (min-width: ${props =>
+      props.isSideMenuOpen ? 85 + 11 : 85}em) {
+    background-position: calc(100% - 7rem) ${props => props.position || '75%'};
   }
 
   .c-menu-trigger {
