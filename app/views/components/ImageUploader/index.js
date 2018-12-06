@@ -58,6 +58,10 @@ export class ImageUploader extends Component {
   }
 
   getEditedImageFile = async () => {
+    if (!this.editor) {
+      return null
+    }
+
     const { file } = this.state
 
     const imageDataURL = this.editor
