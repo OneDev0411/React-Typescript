@@ -21,7 +21,7 @@ export const headers = {
     description: 'Promote your listing before it even hits the market.'
   },
   Christmas: {
-    title: 'Chrismas',
+    title: 'Christmas',
     name: 'Holiday',
     brandColor: '#eccde9',
     size: { width: 429, height: 240 },
