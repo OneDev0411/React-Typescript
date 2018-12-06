@@ -198,7 +198,7 @@ class SendContactCard extends React.Component {
 
     return (
       <Fragment>
-        {this.props.contact ? (
+        {this.props.contact || this.props.contactId ? (
           <ActionButton
             appearance="outline"
             onClick={this.showMarketingBuilder}
