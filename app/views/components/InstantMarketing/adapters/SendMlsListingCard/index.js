@@ -217,7 +217,7 @@ class SendMlsListingCard extends React.Component {
           isOpen={this.state.isListingsModalOpen}
           compact={false}
           title="Select a Listing"
-          searchPlaceholder="Choose a deal or enter MLS # or address"
+          searchPlaceholder="Enter MLS# or an address"
           initialList={getMlsDrawerInitialDeals(this.props.deals)}
           onClose={this.closeListingModal}
           onSelectListing={this.onSelectListing}
