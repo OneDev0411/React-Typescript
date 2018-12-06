@@ -29,7 +29,7 @@ export const headers = {
   },
   JustSold: {
     title: 'Just Sold',
-    brandColor: '#A1A1A1',
+    brandColor: '#E0B49F',
     size: { width: 403, height: 215 },
     description: 'After all that hard work, we feel a Just Sold is in order.'
   },
