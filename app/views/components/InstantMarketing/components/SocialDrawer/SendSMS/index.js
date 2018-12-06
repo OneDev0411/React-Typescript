@@ -20,15 +20,16 @@ class SendSMS extends React.Component {
 
   handleChangePhone = e => {
     let isValidPhone = false
+    const phone = e.target.value
 
     try {
-      const phoneNumber = parsePhoneNumber(e.target.value)
+      const phoneNumber = parsePhoneNumber(phone, 'US')
 
       isValidPhone = phoneNumber.isValid()
     } catch (e) {}
 
     this.setState({
-      phone: e.target.value,
+      phone,
       isValidPhone
     })
   }
