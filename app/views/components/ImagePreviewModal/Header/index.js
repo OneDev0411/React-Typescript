@@ -9,10 +9,16 @@ import IconClose from '../../SvgIcons/Close/CloseIcon'
 Header.propTypes = {
   ...PageHeader.propTypes,
   handleClose: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  menuRenderer: PropTypes.func
 }
 
-Header.propTypes = PageHeader.defaultProps
+Header.propTypes = {
+  ...PageHeader.defaultProps,
+  menuRenderer() {
+    return null
+  }
+}
 
 export function Header(props) {
   const menuContent = props.menuRenderer()
