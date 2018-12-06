@@ -10,35 +10,48 @@ import EmailCompose from 'components/EmailCompose'
 import ActionButton from 'components/Button/ActionButton'
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
 
+import SocialDrawer from '../../components/SocialDrawer'
 import hasMarketingAccess from '../../helpers/has-marketing-access'
+import { convertRecipientsToEmails } from '../../helpers/convert-recipients-to-emails'
 
 class ShareInstance extends React.Component {
   state = {
-    isFetchingContact: false,
-    contact: this.props.contact,
+    contacts: [],
     isComposeEmailOpen: false,
-    isSearchDrawerOpen: false
+    isSearchContactDrawerOpen: false,
+    isSocialDrawerOpen: false
   }
 
   static getDerivedStateFromProps(props, state) {
-    // For Opening Search Drawer
-    if (props.isTriggered && !state.isSearchDrawerOpen) {
+    const medium = props.instance && props.instance.template.medium
+
+    if (
+      props.isTriggered &&
+      medium === 'Email' &&
+      !state.isSearchContactDrawerOpen
+    ) {
       return {
-        isSearchDrawerOpen: true
+        isSearchContactDrawerOpen: true
       }
     }
 
-    // For just closing search drawer through its close CTA
-    if (!props.isTriggered && state.isSearchDrawerOpen) {
+    if (props.isTriggered && medium === 'Social' && !state.isSocialDrawerOpen) {
       return {
-        isSearchDrawerOpen: false
+        isSocialDrawerOpen: true
       }
     }
 
-    // For Closing Search Drawer after selecting a contact
-    if (!props.isTriggered && state.isSearchDrawerOpen) {
+    // For Closing Search Contact Drawer after selecting a contact
+    if (!props.isTriggered && state.isSearchContactDrawerOpen) {
       return {
-        isSearchDrawerOpen: false
+        isSearchContactDrawerOpen: false
+      }
+    }
+
+    // For Closing Social Drawer
+    if (!props.isTriggered && state.isSocialDrawerOpen) {
+      return {
+        isSocialDrawerOpen: false
       }
     }
 
@@ -51,38 +64,63 @@ class ShareInstance extends React.Component {
     }))
 
   closeSearchDrawer = () =>
-    this.setState({ isSearchDrawerOpen: false }, this.props.handleTrigger)
+    this.setState(
+      { isSearchContactDrawerOpen: false },
+      this.props.handleTrigger
+    )
+
+  closeSocialDrawer = () =>
+    this.setState({ isSocialDrawerOpen: false }, this.props.handleTrigger)
 
   handleSelectedContact = contact =>
     this.setState(
       {
-        contact,
-        isSearchDrawerOpen: false,
-        isComposeEmailOpen: true
+        contacts: [contact],
+        isSearchContactDrawerOpen: false
       },
       () => {
         this.props.handleTrigger()
+        this.toggleComposeEmail()
       }
     )
 
-  handleSendEmails = async values => {
+  get Recipients() {
+    return this.state.contacts
+      .map(contact => {
+        const emails = getContactAttribute(
+          contact,
+          selectDefinitionByName(this.props.attributeDefs, 'email')
+        )
+
+        return {
+          contactId: contact.id,
+          name: contact.summary.display_name,
+          avatar: contact.summary.profile_image_url,
+          email: contact.summary.email,
+          emails: emails.map(email => email.text)
+        }
+      })
+      .filter(recipient => recipient !== null)
+  }
+
+  handleSendEmails = async (values, form) => {
     this.setState({
       isSendingEmail: true
     })
 
-    const recipient = values.recipients[0]
-
-    const emails = [
-      {
-        to: recipient.email,
-        subject: values.subject,
-        html: this.state.htmlTemplate,
-        contact: recipient.contactId
-      }
-    ]
+    const emails = convertRecipientsToEmails(
+      values.recipients,
+      values.subject,
+      this.props.instance.html
+    )
 
     try {
       await sendContactsEmail(emails)
+
+      // reset form
+      if (form) {
+        form.reset()
+      }
 
       this.props.notify({
         status: 'success',
@@ -99,28 +137,15 @@ class ShareInstance extends React.Component {
     }
   }
 
-  get Recipients() {
-    const { contact } = this.state
-
-    if (!contact) {
-      return []
+  activeFlow = () => {
+    if (
+      this.props.instance &&
+      this.props.instance.template.medium === 'Email'
+    ) {
+      this.setState({ isSearchContactDrawerOpen: true })
+    } else {
+      this.setState({ isSocialDrawerOpen: true })
     }
-
-    const emails = getContactAttribute(
-      contact,
-      selectDefinitionByName(this.props.attributeDefs, 'email')
-    )
-
-    return [
-      {
-        contactId: contact.id,
-        name: contact.summary.display_name,
-        avatar: contact.summary.profile_image_url,
-        email: contact.summary.email,
-        emails: emails.map(email => email.text),
-        readOnly: true
-      }
-    ]
   }
 
   render() {
@@ -132,19 +157,20 @@ class ShareInstance extends React.Component {
 
     return (
       <Fragment>
-        {props.contact ? (
+        {!props.hasExternalTrigger && (
           <ActionButton
             appearance="outline"
-            onClick={this.showMarketingBuilder}
-            disabled={state.isFetchingContact}
+            onClick={this.activeFlow}
             {...props.buttonStyle}
           >
             {props.children}
           </ActionButton>
-        ) : (
+        )}
+
+        {state.isSearchContactDrawerOpen && (
           <SearchContactDrawer
             title="Select a Contact"
-            isOpen={state.isSearchDrawerOpen}
+            isOpen={state.isSearchContactDrawerOpen}
             onSelect={this.handleSelectedContact}
             onClose={this.closeSearchDrawer}
           />
@@ -159,7 +185,13 @@ class ShareInstance extends React.Component {
             html={props.instance.html}
             onClickSend={this.handleSendEmails}
             isSubmitting={state.isSendingEmail}
-            disableAddNewRecipient
+          />
+        )}
+
+        {state.isSocialDrawerOpen && (
+          <SocialDrawer
+            instance={props.instance}
+            onClose={this.closeSocialDrawer}
           />
         )}
       </Fragment>
