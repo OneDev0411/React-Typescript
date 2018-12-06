@@ -10,7 +10,7 @@ import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard
 
 import { Loader } from '../../components/Loader'
 import { Template } from '../../components/Template'
-import { Tab } from './styled'
+import { Tab, ListContainer } from './styled'
 
 export class List extends React.Component {
   state = {
@@ -84,19 +84,15 @@ export class List extends React.Component {
     />
   )
 
-  renderTemplates = templates => (
-    <Masonry
-      options={{ transitionDuration: 0 }}
-      style={{ margin: '0 -0.75rem' }}
-    >
-      {templates.map(this.renderTemplate)}
-    </Masonry>
+  renderList = selectedMedium => (
+    <ListContainer isSideMenuOpen={this.props.isSideMenuOpen}>
+      <Masonry options={{ transitionDuration: 0 }}>
+        {this.props.templates
+          .filter(t => t.medium === selectedMedium)
+          .map(this.renderTemplate)}
+      </Masonry>
+    </ListContainer>
   )
-
-  renderPanel = selectedMedium =>
-    this.renderTemplates(
-      this.props.templates.filter(t => t.medium === selectedMedium)
-    )
 
   renderFlow = () => {
     const sharedProps = {
@@ -159,7 +155,7 @@ export class List extends React.Component {
             </Tab>
           ))}
         </Flex>
-        {this.renderPanel(selectedMedium)}
+        {this.renderList(selectedMedium)}
         {state.isPreviewModalOpen && (
           <ImagePreviewModal
             isOpen

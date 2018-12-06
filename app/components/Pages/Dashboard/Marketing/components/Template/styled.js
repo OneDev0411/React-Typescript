@@ -1,30 +1,31 @@
 import styled from 'styled-components'
 
 import IconButton from 'components/Button/IconButton'
-import { grey } from 'views/utils/colors'
 
-const getMQWidth = (base, props) =>
-  props.isSideMenuOpen ? base + 10.2578125 : base
+export const getMQWidth = (base, props) =>
+  props.isSideMenuOpen ? base + 11 : base
 
 export const Box = styled.div`
-  margin-bottom: 1.5rem;
+  margin-bottom: 3rem;
 
   @media (min-width: ${props => getMQWidth(40, props)}em) {
-    width: calc(50% - 1.5rem);
-    margin-left: 0.75rem;
-    margin-right: 0.75rem;
+    width: calc(50% - 3rem);
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
   }
 
   @media (min-width: ${props => getMQWidth(64, props)}em) {
-    width: calc(100% / 3 - 1.5rem);
+    width: calc(100% / 3 - 4rem);
+    margin: 0 2rem 4rem;
   }
 
   @media (min-width: ${props => getMQWidth(90, props)}em) {
-    width: calc(100% / 4 - 1.5rem);
+    width: calc(100% / 4 - 5rem);
+    margin: 0 2.5rem 5rem;
   }
 
   @media (min-width: ${props => getMQWidth(120, props)}em) {
-    width: calc(100% / 5 - 1.5rem);
+    width: calc(100% / 5 - 5rem);
   }
 `
 
@@ -35,10 +36,10 @@ export const ImageContainer = styled.div`
   justify-content: center;
   min-height: 20.8rem;
   border-radius: 3px;
-  border: 1px solid ${grey.A200};
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 
   &:hover {
-    border-color: ${grey.A300};
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
 
     .action-bar {
       visibility: visible;
@@ -47,7 +48,7 @@ export const ImageContainer = styled.div`
 
   > img,
   > video {
-    max-width: 100%;
+    width: 100%;
   }
 
   .action-bar {

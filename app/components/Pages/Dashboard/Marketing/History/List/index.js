@@ -8,6 +8,7 @@ import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard
 
 import { Loader } from '../../components/Loader'
 import { Template } from '../../components/Template'
+import { ListContainer } from '../../Templates/List/styled'
 
 export class List extends React.Component {
   state = {
@@ -44,13 +45,12 @@ export class List extends React.Component {
     />
   )
 
-  renderTemplates = templates => (
-    <Masonry
-      options={{ transitionDuration: 0 }}
-      style={{ margin: '0 -0.75rem' }}
-    >
-      {templates.map(this.renderTemplate)}
-    </Masonry>
+  renderList = () => (
+    <ListContainer isSideMenuOpen={this.props.isSideMenuOpen}>
+      <Masonry options={{ transitionDuration: 0 }}>
+        {this.props.templates.map(this.renderTemplate)}
+      </Masonry>
+    </ListContainer>
   )
 
   render() {
@@ -77,7 +77,7 @@ export class List extends React.Component {
         <div style={{ margin: '1.5rem 0 1rem', fontWeight: 500 }}>
           {`${listLength} Design${listLength > 1 ? 's' : ''}`}
         </div>
-        {this.renderTemplates(templates)}
+        {this.renderList(templates)}
         {state.isPreviewModalOpen && (
           <ImagePreviewModal
             isOpen
