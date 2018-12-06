@@ -9,11 +9,15 @@ ImagePreviewModal.propTypes = {
   imgSrc: PropTypes.string.isRequired,
   isOpen: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  title: PropTypes.string
+  title: PropTypes.string,
+  menuRenderer: PropTypes.func
 }
 
 ImagePreviewModal.defaultProps = {
-  title: 'Preview'
+  title: 'Preview',
+  menuRenderer() {
+    return null
+  }
 }
 
 export function ImagePreviewModal(props) {
@@ -26,7 +30,11 @@ export function ImagePreviewModal(props) {
       contentLabel={title}
       onRequestClose={handleClose}
     >
-      <Header handleClose={handleClose} title={title} />
+      <Header
+        handleClose={handleClose}
+        title={title}
+        menuRenderer={props.menuRenderer}
+      />
       <div
         style={{ height: '100vh', textAlign: 'center', padding: '8rem 0 3rem' }}
       >
