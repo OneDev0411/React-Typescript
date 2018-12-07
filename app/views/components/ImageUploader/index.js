@@ -1,12 +1,11 @@
 import React, { Component, Fragment } from 'react'
-
 import AvatarEditor from 'react-avatar-editor'
 import Dropzone from 'react-dropzone'
 
 import BareModal from '../BareModal'
 import ActionButton from '../Button/ActionButton'
 
-const RESET_STATE = { isOpen: true, file: null, scale: 2 }
+const RESET_STATE = { isOpen: true, file: null, scale: 1 }
 const DISMISS_STATE = { isOpen: false }
 
 export class ImageUploader extends Component {
@@ -17,6 +16,7 @@ export class ImageUploader extends Component {
       maxSize: Infinity,
       minSize: 0
     },
+    onlyModal: false,
     notes: null,
     showRules: true,
     file: null,
@@ -24,18 +24,46 @@ export class ImageUploader extends Component {
     height: 200,
     border: 50,
     radius: 0,
-    scale: 2,
+    scale: 1,
     disableBoundaryChecks: false,
     outsideRGBAColor: [0, 0, 0, 0.2],
 
     saveHandler() {},
-    closeHandler() {}
+    closeHandler() {},
+    stateChangEventEmitter: null
   }
 
   state = {
     isOpen: this.props.isOpen,
     file: this.props.file,
     scale: this.props.scale
+  }
+
+  componentDidMount() {
+    const { stateChangEventEmitter } = this.props
+
+    if (!stateChangEventEmitter) {
+      return
+    }
+
+    stateChangEventEmitter.on('change', newStateFn => {
+      this.setState(newStateFn())
+    })
+
+    stateChangEventEmitter.on('resetAndDissmiss', () => {
+      this.resetAndDismiss()
+    })
+  }
+
+  componentWillUnmount() {
+    const { stateChangEventEmitter } = this.props
+
+    if (!stateChangEventEmitter) {
+      return
+    }
+
+    stateChangEventEmitter.off('change')
+    stateChangEventEmitter.off('resetAndDissmiss')
   }
 
   reset = () => {
@@ -104,7 +132,8 @@ export class ImageUploader extends Component {
     const file = files[0]
 
     this.setState({
-      file
+      file,
+      isOpen: true
     })
   }
 
@@ -172,6 +201,33 @@ export class ImageUploader extends Component {
 
   renderDropZone() {
     return (
+      <Dropzone
+        accept={this.props.rules.accept}
+        multiple={false}
+        onDrop={this.onDrop}
+        style={{
+          width: '90%',
+          height: '80px',
+          paddingTop: '30px',
+          backgroundColor: 'transparent',
+          borderRadius: '3px',
+          margin: '8px 3% 8px 5%',
+          border: 'dashed 1px #b2b2b2',
+          fontSize: '14px',
+          textTransform: 'uppercase',
+          color: '#b2b2b2',
+          fontFamily: 'Barlow',
+          fontWeight: '600',
+          outline: 'none'
+        }}
+      >
+        Click or drop images here
+      </Dropzone>
+    )
+  }
+
+  renderModalDropZone() {
+    return (
       <Fragment>
         <Dropzone
           accept={this.props.rules.accept}
@@ -186,19 +242,15 @@ export class ImageUploader extends Component {
             borderColor: '#DDD',
             borderWidth: '1px 1px 0'
           }}
-          acceptStyle={{
-            borderColor: 'green',
-            backgroundColor: 'rgba(0, 255, 50, 0.3)'
-          }}
         />
       </Fragment>
     )
   }
 
-  renderUploader() {
+  renderUploaderModal() {
     return (
       <Fragment>
-        {this.renderDropZone()}
+        {this.renderModalDropZone()}
         {this.renderNotes()}
       </Fragment>
     )
@@ -224,7 +276,9 @@ export class ImageUploader extends Component {
             paddingBottom: '10px'
           }}
         >
-          {this.state.file ? this.renderImageEditor() : this.renderUploader()}
+          {this.state.file
+            ? this.renderImageEditor()
+            : this.renderUploaderModal()}
           {this.state.file && this.renderSaveAndRepick()}
           <ActionButton onClick={this.onClose}>Cancel</ActionButton>
         </div>
@@ -233,10 +287,11 @@ export class ImageUploader extends Component {
   }
 
   render() {
-    if (this.state.isOpen) {
-      return this.renderDialog()
-    }
-
-    return null
+    return (
+      <Fragment>
+        {this.props.onlyModal || this.renderDropZone()}
+        {this.state.isOpen && this.renderDialog()}
+      </Fragment>
+    )
   }
 }
