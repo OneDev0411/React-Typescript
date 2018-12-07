@@ -3,7 +3,6 @@ import pure from 'recompose/pure'
 import styled from 'styled-components'
 
 import { getMQWidth } from './helpers'
-import Video from './Video'
 import Holiday from './Holiday'
 import SocialListings from './SocialListings'
 import EmailListings from './EmailListings'
@@ -37,7 +36,6 @@ function Cards({ isSideMenuOpen }) {
         <FacebookCovers isSideMenuOpen={isSideMenuOpen} />
         <AsSeenIn isSideMenuOpen={isSideMenuOpen} />
       </ResponsiveRow>
-      <Video isSideMenuOpen={isSideMenuOpen} />
       <ResponsiveRow isSideMenuOpen={isSideMenuOpen}>
         <BusinessCards isSideMenuOpen={isSideMenuOpen} />
         <Birthday isSideMenuOpen={isSideMenuOpen} />
