@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import Dropzone from 'react-dropzone'
 
-const RESET_STATE = { files: [], uploading: false }
+const RESET_STATE = { uploading: false }
 
 export class Uploader extends Component {
   static defaultProps = {
@@ -10,11 +10,11 @@ export class Uploader extends Component {
     style: {},
 
     uploadHandler() {},
+    errorHandler() {},
     stateChangEventEmitter: null
   }
 
   state = {
-    files: [],
     uploading: false
   }
 
@@ -56,18 +56,20 @@ export class Uploader extends Component {
     return new File([bufferData], fileName, { type: mimeType })
   }
 
-  onSave = async () => {
-    await this.props.uploadHandler(this.state.files)
-    this.reset()
-  }
-
   onDrop = async files => {
-    this.setState({
-      files,
-      uploading: true
-    })
-    await this.props.uploadHandler(files)
-    this.reset()
+    try {
+      this.setState({
+        uploading: true
+      })
+      await this.props.uploadHandler(files)
+    } catch (err) {
+      await this.props.errorHandler({
+        error: err,
+        files
+      })
+    } finally {
+      this.reset()
+    }
   }
 
   renderUploading() {
