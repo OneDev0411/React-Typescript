@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import Button from 'components/Button/ActionButton'
+import Button from 'components/Button/LinkButton'
 import { primary } from 'views/utils/colors'
 
 import { getMQWidth } from '../../components/Template/styled'

@@ -1,5 +1,4 @@
 import React from 'react'
-import { browserHistory } from 'react-router'
 import Flex from 'styled-flex-component'
 import Masonry from 'react-masonry-component'
 
@@ -10,30 +9,19 @@ import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard
 
 import { Loader } from '../../components/Loader'
 import { Template } from '../../components/Template'
+import { mediumsCollection } from './mediums-collection'
 import { Tab, ListContainer } from './styled'
 
 export class List extends React.Component {
   state = {
-    activeFlow: '',
     isPreviewModalOpen: false,
     isContactFlowActive: false,
     isListingFlowActive: false,
-    selectedTemplate: null,
-    selectedMedium: this.props.medium
-  }
-
-  handleOnClickTab = e => {
-    const selectedMedium = e.target.dataset.medium
-
-    this.setState({ selectedMedium }, () =>
-      browserHistory.push(
-        `/dashboard/marketing/${this.props.type}/${selectedMedium}`
-      )
-    )
+    selectedTemplate: null
   }
 
   closePreviewModal = () => {
-    this.setState({ isPreviewModalOpen: false, selectedTemplate: null })
+    this.setState({ isPreviewModalOpen: false })
   }
 
   openPreviewModal = selectedTemplate =>
@@ -61,29 +49,24 @@ export class List extends React.Component {
       isListingFlowActive: false
     })
 
-  get Mediums() {
-    return this.state.selectedMedium || this.props.tabs[0]
+  handleCustomize = template => {
+    switch (template.template_type) {
+      case 'Birthday':
+        this.activeContactFlow(template)
+        break
+
+      default:
+        this.activeListingFlow(template)
+        break
+    }
   }
-
-  handleCustomize = template =>
-    this.setState({ activeFlow: template.template_type }, () => {
-      switch (template.template_type) {
-        case 'Birthday':
-          this.activeContactFlow(template)
-          break
-
-        default:
-          this.activeListingFlow(template)
-          break
-      }
-    })
 
   handlePreviewCustomize = () =>
     this.setState(
       {
         isPreviewModalOpen: false
       },
-      this.handleCustomize(this.state.selectedTemplate)
+      () => this.handleCustomize(this.state.selectedTemplate)
     )
 
   renderTemplate = template => (
@@ -107,28 +90,29 @@ export class List extends React.Component {
   )
 
   renderFlow = () => {
+    const { props, state } = this
     const sharedProps = {
-      mediums: [this.Mediums],
-      selectedTemplate: this.state.selectedTemplate
+      mediums: props.medium,
+      selectedTemplate: state.selectedTemplate
     }
 
-    switch (this.state.activeFlow) {
+    switch (props.type) {
       case 'Birthday':
         return (
           <ContactFlow
-            isTriggered={this.state.isContactFlowActive}
-            handleTrigger={this.deActiveContactFlow}
             {...sharedProps}
+            isTriggered={state.isContactFlowActive}
+            handleTrigger={this.deActiveContactFlow}
           />
         )
 
       default:
         return (
           <ListingFlow
-            hasExternalTrigger
-            isTriggered={this.state.isListingFlowActive}
-            handleTrigger={this.deActiveListingFlow}
             {...sharedProps}
+            hasExternalTrigger
+            isTriggered={state.isListingFlowActive}
+            handleTrigger={this.deActiveListingFlow}
           />
         )
     }
@@ -141,7 +125,7 @@ export class List extends React.Component {
   render() {
     const { props, state } = this
     const { selectedTemplate } = state
-    const selectedMedium = this.Mediums
+    const selectedMedium = props.medium
 
     if (props.isLoading) {
       return (
@@ -162,12 +146,10 @@ export class List extends React.Component {
             <Tab
               inverse
               key={index}
-              appearance="link"
-              data-medium={medium}
-              onClick={this.handleOnClickTab}
+              to={`/dashboard/marketing/${props.type}/${medium}`}
               selected={selectedMedium === medium}
             >
-              {medium}
+              {mediumsCollection[medium] || medium}
             </Tab>
           ))}
         </Flex>

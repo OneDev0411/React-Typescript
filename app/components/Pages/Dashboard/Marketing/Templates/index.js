@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 
 import { onlyUnique, sortAlphabetically } from 'utils/helpers'
 import { getTemplates } from 'models/instant-marketing/get-templates'
@@ -16,7 +17,7 @@ function getMediums(templates) {
 export default class Templates extends Component {
   state = {
     templates: [],
-    tabs: ['Email'],
+    tabs: [],
     isLoading: false
   }
 
@@ -34,13 +35,25 @@ export default class Templates extends Component {
     try {
       this.setState({ isLoading: true })
 
-      const templates = await getTemplates(this.props.type, ['Email', 'Social'])
+      const templates = await getTemplates(this.props.type, [
+        'Email',
+        'Social',
+        'FacebookCover'
+      ])
 
-      this.setState({
-        isLoading: false,
-        templates,
-        tabs: getMediums(templates)
-      })
+      const tabs = getMediums(templates)
+
+      this.setState(
+        {
+          isLoading: false,
+          templates,
+          tabs
+        },
+        () =>
+          browserHistory.push(
+            `/dashboard/marketing/${this.props.type}/${tabs[0]}`
+          )
+      )
     } catch (error) {
       console.log(error)
       this.setState({ isLoading: false })
@@ -60,7 +73,7 @@ export default class Templates extends Component {
         <List
           isLoading={state.isLoading}
           isSideMenuOpen={props.isSideMenuOpen}
-          medium={props.medium}
+          medium={props.medium || state.tabs[0]}
           tabs={state.tabs}
           templates={state.templates}
           type={props.type}
