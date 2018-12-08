@@ -4,8 +4,6 @@ import grapesjs from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
 import '../../../../styles/components/modules/template-builder.scss'
 
-import _ from 'underscore'
-
 import './AssetManager'
 import juice from 'juice'
 
@@ -65,7 +63,10 @@ class Builder extends React.Component {
         assets: this.props.assets
       },
       storageManager: {
-        autoload: 0
+        autoload: 0,
+        params: {
+          templateId: null
+        }
       },
       showDevices: false,
       plugins: ['asset-blocks']
@@ -172,18 +173,25 @@ class Builder extends React.Component {
 
   generateTemplate = (template, data) => nunjucks.renderString(template, data)
 
-  refreshEditor = template => {
+  setEditorTemplateId = id => {
+    this.editor.StorageManager.store({
+      templateId: id
+    })
+  }
+
+  refreshEditor = selectedTemplate => {
     const components = this.editor.DomComponents
 
     components.clear()
     this.editor.setStyle('')
-    this.editor.setComponents(template)
+    this.setEditorTemplateId(selectedTemplate.id)
+    this.editor.setComponents(selectedTemplate.template)
     this.lockIn()
   }
 
   setTemplate = newState => {
     this.setState(newState, () =>
-      this.refreshEditor(this.state.selectedTemplate.template)
+      this.refreshEditor(this.state.selectedTemplate)
     )
   }
 
