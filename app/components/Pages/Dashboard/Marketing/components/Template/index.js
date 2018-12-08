@@ -87,7 +87,7 @@ export class Template extends React.Component {
     let editButtonText = 'Customize'
 
     if (isInstance) {
-      editButtonText = template.medium === 'Email' ? 'Compose' : 'Share'
+      editButtonText = template.medium === 'Social' ? 'Share' : 'Compose'
     }
 
     return (
