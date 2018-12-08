@@ -29,41 +29,13 @@ export class ImageUploader extends Component {
     outsideRGBAColor: [0, 0, 0, 0.2],
 
     saveHandler() {},
-    closeHandler() {},
-    stateChangEventEmitter: null
+    closeHandler() {}
   }
 
   state = {
     isOpen: this.props.isOpen,
     file: this.props.file,
     scale: this.props.scale
-  }
-
-  componentDidMount() {
-    const { stateChangEventEmitter } = this.props
-
-    if (!stateChangEventEmitter) {
-      return
-    }
-
-    stateChangEventEmitter.on('change', newStateFn => {
-      this.setState(newStateFn())
-    })
-
-    stateChangEventEmitter.on('resetAndDissmiss', () => {
-      this.resetAndDismiss()
-    })
-  }
-
-  componentWillUnmount() {
-    const { stateChangEventEmitter } = this.props
-
-    if (!stateChangEventEmitter) {
-      return
-    }
-
-    stateChangEventEmitter.off('change')
-    stateChangEventEmitter.off('resetAndDissmiss')
   }
 
   reset = () => {
