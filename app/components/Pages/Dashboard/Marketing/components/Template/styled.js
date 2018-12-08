@@ -6,26 +6,23 @@ export const getMQWidth = (base, props) =>
   props.isSideMenuOpen ? base + 11 : base
 
 export const Box = styled.div`
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 
-  @media (min-width: ${props => getMQWidth(40, props)}em) {
-    width: calc(50% - 3rem);
-    margin-left: 1.5rem;
-    margin-right: 1.5rem;
-  }
-
-  @media (min-width: ${props => getMQWidth(64, props)}em) {
-    width: calc(100% / 3 - 4rem);
+  @media (min-width: ${props => getMQWidth(30, props)}em) {
+    width: calc(50% - 4rem);
     margin: 0 2rem 4rem;
   }
 
-  @media (min-width: ${props => getMQWidth(90, props)}em) {
-    width: calc(100% / 4 - 5rem);
-    margin: 0 2.5rem 5rem;
+  @media (min-width: ${props => getMQWidth(50, props)}em) {
+    width: calc(100% / 3 - 4rem);
   }
 
-  @media (min-width: ${props => getMQWidth(120, props)}em) {
-    width: calc(100% / 5 - 5rem);
+  @media (min-width: ${props => getMQWidth(75, props)}em) {
+    width: calc(25% - 4rem);
+  }
+
+  @media (min-width: ${props => getMQWidth(100, props)}em) {
+    width: calc(20% - 4rem);
   }
 `
 
