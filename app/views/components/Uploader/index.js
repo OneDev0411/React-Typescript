@@ -1,12 +1,18 @@
 import React, { Component, Fragment } from 'react'
 import Dropzone from 'react-dropzone'
 
-const RESET_STATE = { uploading: false }
+import Spinner from '../Spinner'
+
+const RESET_STATE = { uploading: false, disabled: false }
+const UPLOADING_STATE = { uploading: true, disabled: true }
 
 export class Uploader extends Component {
   static defaultProps = {
     accept: '*',
+    minSize: 0,
+    maxSize: Infinity,
     multiple: true,
+    disableClick: false,
     style: {},
 
     uploadHandler() {},
@@ -14,11 +20,8 @@ export class Uploader extends Component {
   }
 
   state = {
-    uploading: false
-  }
-
-  reset = () => {
-    this.setState(RESET_STATE)
+    uploading: false,
+    disabled: false
   }
 
   getFileFromDataURL = async (data, fileName, mimeType) => {
@@ -30,9 +33,7 @@ export class Uploader extends Component {
 
   onDrop = async files => {
     try {
-      this.setState({
-        uploading: true
-      })
+      this.setState(UPLOADING_STATE)
       await this.props.uploadHandler(files)
     } catch (err) {
       await this.props.errorHandler({
@@ -40,12 +41,12 @@ export class Uploader extends Component {
         files
       })
     } finally {
-      this.reset()
+      this.setState(RESET_STATE)
     }
   }
 
   renderUploading() {
-    return <Fragment>Uploading...</Fragment>
+    return <Spinner style={{ marginTop: '-8px' }} />
   }
 
   renderDropZoneInner() {
@@ -61,7 +62,11 @@ export class Uploader extends Component {
       <Dropzone
         accept={this.props.accept}
         multiple={this.props.multiple}
+        minSize={this.props.minSize}
+        maxSize={this.props.maxSize}
+        disableClick={this.props.disableClick}
         onDrop={this.onDrop}
+        disabled={this.state.disabled}
         style={{
           width: '90%',
           height: '80px',
