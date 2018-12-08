@@ -4,6 +4,7 @@ import Masonry from 'react-masonry-component'
 
 import Button from 'components/Button/ActionButton'
 import { ImagePreviewModal } from 'components/ImagePreviewModal'
+import GeneralFlow from 'components/InstantMarketing/adapters/General'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
@@ -16,6 +17,7 @@ export class List extends React.Component {
   state = {
     isPreviewModalOpen: false,
     isContactFlowActive: false,
+    isGeneralFlowActive: false,
     isListingFlowActive: false,
     selectedTemplate: null
   }
@@ -49,10 +51,25 @@ export class List extends React.Component {
       isListingFlowActive: false
     })
 
+  activeGeneralFlow = selectedTemplate =>
+    this.setState({
+      selectedTemplate,
+      isGeneralFlowActive: true
+    })
+
+  deActiveGeneralFlow = () =>
+    this.setState({
+      isGeneralFlowActive: false
+    })
+
   handleCustomize = template => {
-    switch (template.template_type) {
+    switch (this.props.types) {
       case 'Birthday':
         this.activeContactFlow(template)
+        break
+
+      case 'Christmas,NewYear':
+        this.activeGeneralFlow(template)
         break
 
       default:
@@ -103,6 +120,17 @@ export class List extends React.Component {
             {...sharedProps}
             isTriggered={state.isContactFlowActive}
             handleTrigger={this.deActiveContactFlow}
+          />
+        )
+
+      case 'Christmas,NewYear':
+        return (
+          <GeneralFlow
+            {...sharedProps}
+            hasExternalTrigger
+            types={props.types.split(',')}
+            isTriggered={state.isGeneralFlowActive}
+            handleTrigger={this.deActiveGeneralFlow}
           />
         )
 
