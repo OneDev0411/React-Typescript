@@ -36,10 +36,13 @@ export const ImageContainer = styled.div`
   justify-content: center;
   min-height: 20.8rem;
   border-radius: 3px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 15px -5px rgba(0, 0, 0, 0.5);
+  transform: translate3d(0, 0, 0);
+  transition: 0.3s;
 
   &:hover {
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 22px 43px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px);
 
     .action-bar {
       visibility: visible;

@@ -87,7 +87,7 @@ export class List extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <div style={{ padding: '0 1.5rem' }}>
         <div style={{ margin: '1.5rem 0 1rem', fontWeight: 500 }}>
           {`${listLength} Design${listLength > 1 ? 's' : ''}`}
         </div>
@@ -107,7 +107,7 @@ export class List extends React.Component {
           handleTrigger={this.deActiveFlow}
           instance={selectedTemplate}
         />
-      </React.Fragment>
+      </div>
     )
   }
 }
