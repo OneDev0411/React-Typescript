@@ -22,6 +22,7 @@ export const headers = {
   },
   'Christmas,NewYear': {
     title: 'Holidy',
+    name: 'Holiday',
     brandColor: '#eccde9',
     size: { width: 429, height: 240 },
     description:

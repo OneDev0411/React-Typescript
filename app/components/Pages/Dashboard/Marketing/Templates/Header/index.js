@@ -11,7 +11,7 @@ export function Header(props) {
   return (
     <Container
       brandColor={data.brandColor}
-      name={props.types}
+      name={data.name || props.types}
       size={data.size}
       position={data.position}
       isSideMenuOpen={props.isSideMenuOpen}
