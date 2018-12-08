@@ -42,7 +42,10 @@ export default function Instagram(props) {
         <p style={{ marginBottom: '1.5rem' }}>
           Choose the perfect design to compliment all your featured listings.
         </p>
-        <Button appearance="primary" to="/dashboard/marketing/NewYear">
+        <Button
+          appearance="primary"
+          to="/dashboard/marketing/Christmas,NewYear"
+        >
           Browse Designs
         </Button>
       </ContentWrapper>

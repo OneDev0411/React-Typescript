@@ -20,17 +20,13 @@ export const items = [
     title: 'Coming Soon',
     url: '/ComingSoon'
   },
-  {
-    title: 'Christmas',
-    url: '/Christmas'
-  },
   // {
   //   title: 'Facebook Cover'
   // },
-  // {
-  //   title: 'Holiday',
-  //   url: '/Christmas,NewYear'
-  // },
+  {
+    title: 'Holiday',
+    url: '/Christmas,NewYear'
+  },
   // {
   //   title: 'Instagram Stories'
   // },
@@ -41,10 +37,6 @@ export const items = [
   {
     title: 'Just Sold',
     url: '/JustSold'
-  },
-  {
-    title: 'New Year',
-    url: '/NewYear'
   },
   {
     title: 'Open House',

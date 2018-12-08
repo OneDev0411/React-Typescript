@@ -96,7 +96,7 @@ export class List extends React.Component {
       selectedTemplate: state.selectedTemplate
     }
 
-    switch (props.type) {
+    switch (props.types) {
       case 'Birthday':
         return (
           <ContactFlow
@@ -146,7 +146,7 @@ export class List extends React.Component {
             <Tab
               inverse
               key={index}
-              to={`/dashboard/marketing/${props.type}/${medium}`}
+              to={`/dashboard/marketing/${props.types}/${medium}`}
               selected={selectedMedium === medium}
             >
               {mediumsCollection[medium] || medium}

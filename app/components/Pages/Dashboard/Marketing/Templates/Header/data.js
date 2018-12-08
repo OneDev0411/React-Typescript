@@ -20,9 +20,8 @@ export const headers = {
     size: { width: 452, height: 230 },
     description: 'Promote your listing before it even hits the market.'
   },
-  Christmas: {
-    title: 'Christmas',
-    name: 'Holiday',
+  'Christmas,NewYear': {
+    title: 'Holidy',
     brandColor: '#eccde9',
     size: { width: 429, height: 240 },
     description:
@@ -46,14 +45,6 @@ export const headers = {
     size: { width: 403, height: 214 },
     description:
       'Choose the perfect design to compliment all your featured listings.'
-  },
-  NewYear: {
-    title: 'New Year',
-    name: 'Holiday',
-    brandColor: '#C3CDE6',
-    size: { width: 429, height: 240 },
-    description:
-      'Share well wishes & greetings with timely designs for every occasion.'
   },
   OpenHouse: {
     title: 'Open House',
