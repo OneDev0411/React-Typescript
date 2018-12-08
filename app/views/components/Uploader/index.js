@@ -10,39 +10,11 @@ export class Uploader extends Component {
     style: {},
 
     uploadHandler() {},
-    errorHandler() {},
-    stateChangEventEmitter: null
+    errorHandler() {}
   }
 
   state = {
     uploading: false
-  }
-
-  componentDidMount() {
-    const { stateChangEventEmitter } = this.props
-
-    if (!stateChangEventEmitter) {
-      return
-    }
-
-    stateChangEventEmitter.on('change', newStateFn => {
-      this.setState(newStateFn())
-    })
-
-    stateChangEventEmitter.on('reset', () => {
-      this.reset()
-    })
-  }
-
-  componentWillUnmount() {
-    const { stateChangEventEmitter } = this.props
-
-    if (!stateChangEventEmitter) {
-      return
-    }
-
-    stateChangEventEmitter.off('change')
-    stateChangEventEmitter.off('reset')
   }
 
   reset = () => {
