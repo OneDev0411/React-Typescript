@@ -61,9 +61,9 @@ export class List extends React.Component {
 
   renderPreviewModalMenu = () => (
     <Button onClick={this.handlePreviewShare}>{`${
-      this.state.selectedTemplate.template.medium === 'Social'
-        ? 'Share'
-        : 'Compose'
+      this.state.selectedTemplate.template.medium === 'Email'
+        ? 'Compose'
+        : 'Share'
     }`}</Button>
   )
 

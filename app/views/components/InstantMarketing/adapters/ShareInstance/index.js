@@ -20,17 +20,13 @@ class ShareInstance extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const medium = props.instance && props.instance.template.medium
 
-    if (
-      props.isTriggered &&
-      medium !== 'Social' &&
-      !state.isComposeDrawerOpen
-    ) {
+    if (props.isTriggered && medium === 'Email' && !state.isComposeDrawerOpen) {
       return {
         isComposeDrawerOpen: true
       }
     }
 
-    if (props.isTriggered && medium === 'Social' && !state.isSocialDrawerOpen) {
+    if (props.isTriggered && medium !== 'Email' && !state.isSocialDrawerOpen) {
       return {
         isSocialDrawerOpen: true
       }
@@ -104,10 +100,10 @@ class ShareInstance extends React.Component {
   activeFlow = () => {
     const { instance } = this.props
 
-    if (instance && instance.template.medium === 'Social') {
-      this.setState({ isSocialDrawerOpen: true })
-    } else {
+    if (instance && instance.template.medium === 'Email') {
       this.setState({ isComposeDrawerOpen: true })
+    } else {
+      this.setState({ isSocialDrawerOpen: true })
     }
   }
 
