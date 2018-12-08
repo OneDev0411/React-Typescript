@@ -1,14 +1,21 @@
-import EventEmitter from 'events'
-
 import grapesjs from 'grapesjs'
 import Backbone from 'backbone'
-import React from 'react'
+import React, { Fragment } from 'react'
 import ReactDOM from 'react-dom'
 
-import { ImageUploader } from 'components/ImageUploader'
+import { Uploader } from 'components/Uploader'
+
+import Fetch from '../../../../../services/fetch'
+
+const CUSTOM_ASSET_UPLOAD_PATH = '/templates/assets'
 
 export default grapesjs.plugins.add('asset-blocks', editor => {
   let target
+
+  const getStorageData = async key =>
+    new Promise(res => {
+      editor.StorageManager.load(key, data => res(data))
+    })
 
   const AssetView = Backbone.View.extend({
     events: {
@@ -50,48 +57,44 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
       return this
     }
   })
-  const ee = new EventEmitter()
   const AssetUploadButtonView = Backbone.View.extend({
     render() {
       ReactDOM.render(
-        <ImageUploader
-          closeHandler={console.log}
-          stateChangEventEmitter={ee}
-          width={300}
-          height={200}
-          scale={1}
-          saveHandler={data => {
-            console.log(data)
+        <Uploader
+          accept="image/*"
+          uploadHandler={async files => {
+            const { templateId } = await getStorageData('templateId')
 
-            const reader = new FileReader()
+            try {
+              const uploadResponses = await Promise.all(
+                files.map(file =>
+                  new Fetch()
+                    .upload(CUSTOM_ASSET_UPLOAD_PATH)
+                    .attach('attachment', file, file.name)
+                    .field('template', templateId)
+                )
+              )
 
-            reader.addEventListener(
-              'load',
-              () => {
-                const dataURL = reader.result
+              const uploadedAssets = uploadResponses.map(response => ({
+                previewUrl: response.body.data.file.preview_url,
+                url: response.body.data.file.url
+              }))
 
-                console.log(dataURL)
+              const uploadedAssetsCollection = uploadedAssets.map(
+                asset => asset.url
+              )
 
-                const setSrc = () => target.set('src', dataURL)
-
-                const setters = {
-                  image: setSrc
-                }
-
-                const type = target.get('type')
-
-                if (type !== 'image') {
-                  return
-                }
-
-                setters[type]()
-              },
-              false
-            )
-
-            reader.readAsDataURL(data.file)
+              view.collection.reset([
+                ...uploadedAssetsCollection,
+                ...view.collection.models
+              ])
+            } catch (e) {
+              console.error(e)
+            }
           }}
-        />,
+        >
+          <Fragment>Click or drop images here</Fragment>
+        </Uploader>,
         this.el
       )
 
@@ -102,10 +105,9 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
   const AssetsView = Backbone.View.extend({
     initialize({ coll }) {
       this.collection = coll
+      this.listenTo(this.collection, 'reset', this.reset)
     },
     reset() {
-      ee.emit('resetAndDismiss')
-
       this.$el.empty()
 
       const uploadButtonView = new AssetUploadButtonView()
