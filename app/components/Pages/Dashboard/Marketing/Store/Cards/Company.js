@@ -15,8 +15,9 @@ const Container = styled.div`
   margin-bottom: 1.5rem;
   border-radius: 3px;
   background: #d1e6d9
-    url('/static/images/marketing/store/cards/company/company.png') no-repeat
+    url('/static/images/marketing/store/cards/company/company@2x.png') no-repeat
     bottom left;
+  background-size: 25rem 25rem;
 
   @media screen and (min-width: ${props => getMQWidth(75, props)}) {
     width: 38%;

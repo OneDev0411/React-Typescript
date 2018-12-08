@@ -17,8 +17,9 @@ const Container = styled.div`
   text-align: center;
   border-radius: 3px;
   background: #ded1e1
-    url('/static/images/marketing/store/cards/instagram/instagram.png')
+    url('/static/images/marketing/store/cards/instagram/instagram@2x.png')
     no-repeat bottom right;
+  background-size: 33rem 25rem;
 
   @media screen and (min-width: ${props => getMQWidth(75, props)}) {
     width: calc(62% - 1.5rem);

@@ -43,7 +43,7 @@ export default function AsSeenIn(props) {
         </Button>
       </div>
       <img
-        src="/static/images/marketing/store/cards/as-seen-in/as-seen-in.png"
+        src="/static/images/marketing/store/cards/as-seen-in/as-seen-in@2x.png"
         alt="as seen in listings rechat"
       />
     </Container>

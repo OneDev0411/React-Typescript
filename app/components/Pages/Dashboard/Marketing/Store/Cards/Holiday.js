@@ -16,7 +16,7 @@ const Container = styled.div`
   text-align: center;
   border-radius: 3px;
   background: #efe9ea
-    url('/static/images/marketing/store/cards/holiday/holiday@3x.png') no-repeat;
+    url('/static/images/marketing/store/cards/holiday/holiday@2x.png') no-repeat;
   background-size: cover;
 `
 

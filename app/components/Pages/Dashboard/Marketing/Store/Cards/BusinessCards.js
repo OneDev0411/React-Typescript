@@ -20,7 +20,7 @@ const Container = styled.div`
   height: 25rem;
   margin-bottom: 1.5rem;
   border-radius: 3px;
-  background: url('/static/images/marketing/store/cards/buisness-cards/buisness-cards.jpg')
+  background: url('/static/images/marketing/store/cards/buisness-cards/buisness-cards@2x.jpg')
     no-repeat;
   background-size: cover;
 
