@@ -51,7 +51,10 @@ export default class Templates extends Component {
           templates,
           tabs
         },
-        () => browserHistory.push(`/dashboard/marketing/${types}/${tabs[0]}`)
+        () =>
+          browserHistory.push(
+            `/dashboard/marketing/${types}/${this.props.medium || tabs[0]}`
+          )
       )
     } catch (error) {
       console.log(error)
