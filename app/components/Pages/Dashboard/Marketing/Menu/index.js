@@ -29,6 +29,7 @@ export function Menu() {
             key={index}
             indexed={url === '/'}
             text={title}
+            selected={window.location.pathname.includes(url)}
             to={`/dashboard/marketing${url}`}
           />
         ) : (

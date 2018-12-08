@@ -12,6 +12,7 @@ const Item = styled(Link)`
   color: #000;
 
   &.is-active {
+    pointer-events: none;
     color: ${primary};
     font-weight: 500;
     text-decoration: none;
@@ -28,6 +29,7 @@ export function ActiveItem({ Icon, ...props }) {
       to={props.to}
       onlyActiveOnIndex={props.indexed}
       activeClassName="is-active"
+      className={props.selected ? 'is-active' : ''}
     >
       {Icon ? (
         <React.Fragment>
