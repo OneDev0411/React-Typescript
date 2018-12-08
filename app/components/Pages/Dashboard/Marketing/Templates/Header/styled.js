@@ -6,14 +6,15 @@ const baseBackgroundImgUrl = '/static/images/marketing/templates/headers'
 
 export const Container = styled.div`
   position: relative;
-  height: 18.75rem;
-  padding-top: 6.625rem;
-  padding-left: 5.5rem;
+  padding: 6.625rem 1.5rem 2.5rem;
   margin-bottom: 2rem;
   background-color: ${props => props.brandColor};
 
   @media screen and (min-width: ${props =>
       props.isSideMenuOpen ? 75 + 11 : 75}em) {
+    height: 18.75rem;
+    padding-bottom: 0;
+    padding-left: 5.5rem;
     background-repeat: no-repeat;
     background-image: ${({ name }) =>
       `url('${baseBackgroundImgUrl}/${name}/${name}@3x.png')`};
@@ -37,4 +38,13 @@ export const Container = styled.div`
 export const Title = styled(Jumbo)`
   max-width: 28rem;
   margin-bottom: 1rem;
+`
+
+export const SubTitle = styled.div`
+  font-size: 1.5rem;
+
+  @media screen and (min-width: ${props =>
+      props.isSideMenuOpen ? 75 + 11 : 75}em) {
+    max-width: 35rem;
+  }
 `
