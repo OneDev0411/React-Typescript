@@ -2,11 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { addNotification as notify } from 'reapop'
-
 import { parsePhoneNumber } from 'libphonenumber-js'
 
 import { formatPhoneNumber } from 'utils/format'
-
 import { shareInstance } from 'models/instant-marketing/instance-share'
 
 import { Section } from '../Section'
