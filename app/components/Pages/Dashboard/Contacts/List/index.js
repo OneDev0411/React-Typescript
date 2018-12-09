@@ -272,7 +272,7 @@ class ContactsList extends React.Component {
 
     return (
       <PageContainer isOpen={isSideMenuOpen}>
-        <SideMenu isOpen={isSideMenuOpen} width="12.1em">
+        <SideMenu isOpen={isSideMenuOpen}>
           <SavedSegments
             name="contacts"
             onChange={this.handleChangeSavedSegment}
@@ -281,7 +281,7 @@ class ContactsList extends React.Component {
           <TagsList onFilterChange={this.handleFilterChange} />
         </SideMenu>
 
-        <PageContent>
+        <PageContent isSideMenuOpen={isSideMenuOpen}>
           <Header
             title={activeSegment.name || 'All Contacts'}
             isSideMenuOpen={this.state.isSideMenuOpen}

@@ -67,13 +67,13 @@ const Header = ({ user, deal, showAttachments }) => (
         <Fragment>
           <SendDealPromotionCard
             deal={deal}
-            mediums={['Email']}
+            mediums="Email"
             buttonStyle={{ margin: '0 0.5rem 0 0' }}
           >
             Promote
           </SendDealPromotionCard>
 
-          <SendDealPromotionCard deal={deal} mediums={['Social']}>
+          <SendDealPromotionCard deal={deal} mediums="Social">
             Social
           </SendDealPromotionCard>
         </Fragment>

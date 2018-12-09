@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const Container = styled.div`
   min-height: 90vh;
@@ -8,6 +8,7 @@ export const Container = styled.div`
   width: 340px;
   padding: 2rem 0;
   background-color: #f1f1f1;
+  border: 1px solid #dadada;
 `
 
 export const TemplateItem = styled.div`
@@ -31,11 +32,19 @@ export const TemplateItem = styled.div`
   }
 `
 
-export const TemplateVideo = styled.video`
+const templateItemStyle = css`
   max-width: 100%;
   max-height: 400px;
   box-shadow: 0px 5px 10px #c3c3c3;
-  min-height: 200px;
   margin: 1.5%;
   box-shadow: 0px 5px 10px #c3c3c3;
+`
+
+export const Image = styled.img`
+  ${templateItemStyle};
+  max-height: initial;
+`
+
+export const Video = styled.video`
+  ${templateItemStyle};
 `

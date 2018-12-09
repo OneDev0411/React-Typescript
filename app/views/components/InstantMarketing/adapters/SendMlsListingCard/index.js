@@ -17,6 +17,8 @@ import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketin
 
 import { convertRecipientsToEmails } from '../../helpers/convert-recipients-to-emails'
 
+import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-deals'
+
 import { getTemplateTypes } from '../../helpers/get-template-types'
 import SocialDrawer from '../../components/SocialDrawer'
 
@@ -162,9 +164,8 @@ class SendMlsListingCard extends React.Component {
     })
   }
 
-  handleSocialSharing = (template, socialName) => {
+  handleSocialSharing = template => {
     this.setState({
-      socialName,
       htmlTemplate: template,
       isSocialDrawerOpen: true
     })
@@ -172,7 +173,10 @@ class SendMlsListingCard extends React.Component {
 
   generatePreviewImage = async template =>
     this.setState({
-      templateScreenshot: await getTemplatePreviewImage(template)
+      templateScreenshot: await getTemplatePreviewImage(
+        template,
+        this.TemplateInstanceData
+      )
     })
 
   closeMarketing = () =>
@@ -188,7 +192,7 @@ class SendMlsListingCard extends React.Component {
 
   get TemplateInstanceData() {
     return {
-      listing: this.state.listing
+      listings: [this.state.listing.id]
     }
   }
 
@@ -216,6 +220,8 @@ class SendMlsListingCard extends React.Component {
           isOpen={this.state.isListingsModalOpen}
           compact={false}
           title="Select a Listing"
+          searchPlaceholder="Enter MLS# or an address"
+          initialList={getMlsDrawerInitialDeals(this.props.deals)}
           onClose={this.closeListingModal}
           onSelectListing={this.onSelectListing}
         />
@@ -250,7 +256,6 @@ class SendMlsListingCard extends React.Component {
 
         {this.state.isSocialDrawerOpen && (
           <SocialDrawer
-            socialName={this.state.socialName}
             template={this.state.htmlTemplate}
             templateInstanceData={this.TemplateInstanceData}
             onClose={this.closeSocialDrawer}
@@ -261,9 +266,10 @@ class SendMlsListingCard extends React.Component {
   }
 }
 
-function mapStateToProps({ contacts, user }) {
+function mapStateToProps({ contacts, deals, user }) {
   return {
     contacts: contacts.list,
+    deals: deals.list,
     attributeDefs: contacts.attributeDefs,
     user
   }

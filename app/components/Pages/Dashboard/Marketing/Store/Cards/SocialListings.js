@@ -39,12 +39,15 @@ export default function SocialListings(props) {
         <Jumbo style={{ marginBottom: '1rem' }}>
           Post listings on social media
         </Jumbo>
-        <Button appearance="outline" to="/dashboard/marketing/Social">
+        <Button
+          appearance="outline"
+          to="/dashboard/marketing/JustListed/Social"
+        >
           Browse Designs
         </Button>
       </div>
       <img
-        src="/static/images/marketing/store/cards/social-listings/social-listings.png"
+        src="/static/images/marketing/store/cards/social-listings/social-listings@2x.png"
         alt="Post listings on social media"
       />
     </Container>

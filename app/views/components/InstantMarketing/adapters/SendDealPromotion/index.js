@@ -19,7 +19,6 @@ import { getTemplateTypes } from '../../helpers/get-template-types'
 const initialState = {
   owner: null,
   listing: null,
-  socialName: null,
   isInstantMarketingBuilderOpen: false,
   isComposeEmailOpen: false,
   isSocialDrawerOpen: false,
@@ -59,9 +58,8 @@ class SendDealPromotion extends React.Component {
     })
   }
 
-  handleSocialSharing = (template, socialName) => {
+  handleSocialSharing = template => {
     this.setState({
-      socialName,
       htmlTemplate: template,
       isSocialDrawerOpen: true
     })
@@ -176,7 +174,6 @@ class SendDealPromotion extends React.Component {
 
         {this.state.isSocialDrawerOpen && (
           <SocialDrawer
-            socialName={this.state.socialName}
             template={this.state.htmlTemplate}
             templateInstanceData={this.TemplateInstanceData}
             onClose={this.closeSocialDrawer}

@@ -2,15 +2,14 @@ import React from 'react'
 import Input from 'react-text-mask'
 import { PhoneNumberUtil } from 'google-libphonenumber'
 import _ from 'underscore'
+
 import InputErrorMessage from '../components/InputErrorMessage'
 
 function validate(props) {
-  const { value } = props
-
   const phoneUtil = PhoneNumberUtil.getInstance()
 
   try {
-    let phoneNumber = phoneUtil.parse(value, 'US')
+    let phoneNumber = phoneUtil.parse(props.value, 'US')
 
     return phoneUtil.isValidNumber(phoneNumber)
   } catch (error) {
@@ -19,7 +18,7 @@ function validate(props) {
 }
 
 export default props => {
-  const { value, ErrorMessageHandler } = props
+  const { value, showErrorMessage = true, ErrorMessageHandler } = props
   const isValid = validate(props)
   const filteredValue =
     value && value.startsWith('+') ? value.substr(value.length - 10) : value
@@ -35,13 +34,16 @@ export default props => {
       <Input
         placeholderChar=" "
         style={{
-          border: isValid ? '' : '1px solid #ec4b35'
+          border: isValid || !showErrorMessage ? '' : '1px solid #ec4b35'
         }}
         mask={[
+          '+',
+          '1',
+          '(',
           /[1-9]/,
           /\d/,
           /\d/,
-          '-',
+          ')',
           /\d/,
           /\d/,
           /\d/,
@@ -51,7 +53,7 @@ export default props => {
           /\d/,
           /\d/
         ]}
-        placeholder="###-###-####"
+        placeholder="+1(###)###-####"
         {..._.omit(props, 'ErrorMessageHandler', 'data-type')}
         value={filteredValue}
         onChange={e => {
@@ -59,20 +61,22 @@ export default props => {
           const originalValue = maskedValue
             ? maskedValue
                 .replace(/#/g, '')
+                .replace(/\(/g, '')
+                .replace(/\)/g, '')
                 .replace(/\s/g, '')
                 .replace(/\-/gi, '')
             : ''
 
           const data = {
             value: originalValue,
-            isValid: validate(originalValue)
+            isValid: validate({ value: originalValue })
           }
 
           props.onChange(e, data)
         }}
       />
 
-      {filteredValue && !isValid && ErrorMessageComponent}
+      {filteredValue && !isValid && showErrorMessage && ErrorMessageComponent}
     </div>
   )
 }

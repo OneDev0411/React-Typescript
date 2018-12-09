@@ -26,7 +26,7 @@ import {
 } from './styled'
 
 import ContactItem from '../../../SelectContactModal/components/ContactItem'
-import { ListRow } from './ListRow'
+import { ListItem } from './ListItem'
 
 const initialState = {
   isLoading: false,
@@ -132,6 +132,23 @@ class AddRecipient extends React.Component {
     this.search(value)
   }
 
+  handleInputBlur = () => {
+    const input = this.state.searchText
+
+    if (!this.isEmail(input)) {
+      return false
+    }
+
+    const contact = {
+      summary: {
+        display_name: input.split('@')[0],
+        email: input
+      }
+    }
+
+    this.handleSelectNewContact(contact)
+  }
+
   search = async value => {
     if (value.length === 0) {
       return this.setState(initialState)
@@ -187,6 +204,7 @@ class AddRecipient extends React.Component {
                 {...getInputProps({
                   value: this.state.searchText,
                   onChange: this.handleSearchContact,
+                  onBlur: this.handleInputBlur,
                   placeholder: 'Add new recipient',
                   readonly: this.state.isLoading
                 })}
@@ -201,7 +219,7 @@ class AddRecipient extends React.Component {
                   <React.Fragment>
                     <Title>Tags</Title>
                     {this.state.filteredTags.map((tag, index) => (
-                      <ListRow
+                      <ListItem
                         key={tag.id || index}
                         text={tag.text}
                         type="tag"
@@ -216,10 +234,10 @@ class AddRecipient extends React.Component {
                   <React.Fragment>
                     <Title>Lists</Title>
                     {this.state.filteredList.map((list, index) => (
-                      <ListRow
+                      <ListItem
                         key={list.id || index}
                         text={list.name}
-                        member_count={list.member_count}
+                        membersCount={list.member_count}
                         type="list"
                         onClick={() =>
                           this.handleSelectNewListItem(list, 'list')
@@ -229,7 +247,9 @@ class AddRecipient extends React.Component {
                     <SectionSeparator />
                   </React.Fragment>
                 )}
+
                 {this.state.list.length > 0 && <Title>Contacts</Title>}
+
                 {this.state.list
                   .filter(item => !!item.summary.email)
                   .map((item, index) => (

@@ -16,9 +16,11 @@ const Container = styled.div`
   text-align: center;
   border-radius: 3px;
   background: #ebeef1
-    url('/static/images/marketing/store/cards/birthday/birthday.png') no-repeat;
+    url('/static/images/marketing/store/cards/birthday/birthday@3x.png')
+    no-repeat;
   background-position-x: 2rem;
   background-position-y: 100%;
+  background-size: 31rem 21rem;
 
   @media screen and (min-width: ${props => getMQWidth(75, props)}) {
     width: calc(62% - 1.5rem);
@@ -35,7 +37,7 @@ export default function Instagram(props) {
     <Container isSideMenuOpen={props.isSideMenuOpen}>
       <Jumbo style={{ marginBottom: '1rem' }}>Birthday Emails</Jumbo>
       <div className="cta-wrapper">
-        <Button appearance="outline" to="/dashboard/marketing/Email/Birthday">
+        <Button appearance="outline" to="/dashboard/marketing/Birthday">
           Browse Designs
         </Button>
       </div>

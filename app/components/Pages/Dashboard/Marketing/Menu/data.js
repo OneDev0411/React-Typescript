@@ -1,43 +1,59 @@
 export const items = [
+  // {
+  //   title: 'Anniversary'
+  // },
   {
     title: 'As Seen In',
-    url: '/Social/AsSeenIn'
+    url: '/AsSeenIn'
   },
   {
-    title: 'Birthday Emails',
-    url: '/Email/Birthday'
+    title: 'Birthday',
+    url: '/Birthday'
   },
   {
-    title: 'Brochures'
+    title: 'Brand Campaigns',
+    url: '/Brand'
+  },
+  // {
+  //   title: 'Brochures'
+  // },
+  // {
+  //   title: 'Business Cards'
+  // },
+  {
+    title: 'Coming Soon',
+    url: '/ComingSoon'
+  },
+  // {
+  //   title: 'Facebook Cover'
+  // },
+  {
+    title: 'Holiday',
+    url: '/Christmas,NewYear'
+  },
+  // {
+  //   title: 'Instagram Stories'
+  // },
+  {
+    title: 'Just Listed',
+    url: '/JustListed'
   },
   {
-    title: 'Business Cards'
+    title: 'Just Sold',
+    url: '/JustSold'
   },
   {
-    title: 'Emails',
-    url: '/Email'
+    title: 'Open House',
+    url: '/OpenHouse'
   },
   {
-    title: 'Facebook Cover'
-    // url: '/FacebookCover'
-  },
-  {
-    title: 'Holiday'
-    // url: '/Holiday'
-  },
-  {
-    title: 'Instagram Stories'
-    // url: '/Instagram'
-  },
-  {
-    title: 'Postcards'
-  },
-  {
-    title: 'Social Media',
-    url: '/Social'
-  },
-  {
-    title: 'Your Company'
-    // url: '/Company'
+    title: 'Price Improvement',
+    url: '/PriceImprovement'
   }
+  // {
+  //   title: 'Thank You'
+  // },
+  // {
+  //   title: 'Your Company'
+  // }
 ]

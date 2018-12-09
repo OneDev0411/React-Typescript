@@ -15,6 +15,7 @@ import Notification from '../../components/table-columns/notification-badge'
 
 import { getPrimaryAgent } from '../../../utils/roles'
 import { Filters } from '../filters'
+import { statusSortMethod } from '../../components/table-columns/status/index'
 
 import AgentAvatars from '../../components/table-columns/AgentAvatars'
 
@@ -23,6 +24,12 @@ class Grid extends React.Component {
     const { roles } = this.props
 
     return [
+      {
+        id: 'status',
+        header: 'Status',
+        accessor: deal => Deal.get.status(deal),
+        sortMethod: statusSortMethod
+      },
       {
         id: 'address',
         header: 'Address',
@@ -119,6 +126,15 @@ class Grid extends React.Component {
     return {}
   }
 
+  getDefaultSort = (id, ascending) => {
+    const column = this.Columns.find(col => col.id === id)
+
+    return {
+      column,
+      ascending
+    }
+  }
+
   render() {
     const { isFetchingDeals } = this.props
     const columns = this.Columns
@@ -127,7 +143,9 @@ class Grid extends React.Component {
     return (
       <Table
         plugins={{
-          sortable: {}
+          sortable: {
+            defaultSort: this.getDefaultSort('status', true)
+          }
         }}
         isFetching={isFetchingDeals}
         columns={columns}

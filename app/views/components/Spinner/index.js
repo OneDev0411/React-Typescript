@@ -5,6 +5,7 @@ export default function Spinner(props) {
   return (
     <div
       className={`sk-circle ${props.size ? `sk-circle--${props.size}` : ''}`}
+      style={props.style}
     >
       <div className="sk-circle1 sk-child" />
       <div className="sk-circle2 sk-child" />

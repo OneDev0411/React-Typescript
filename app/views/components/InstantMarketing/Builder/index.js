@@ -1,16 +1,15 @@
 import React, { Fragment } from 'react'
-
 import grapesjs from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
 import '../../../../styles/components/modules/template-builder.scss'
-
-import _ from 'underscore'
 
 import './AssetManager'
 import juice from 'juice'
 
 import IconButton from 'components/Button/IconButton'
+import DropButton from 'components/Button/DropButton'
 import ActionButton from 'components/Button/ActionButton'
+// import { Icon as DropdownIcon } from 'components/Dropdown'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 
@@ -36,7 +35,7 @@ class Builder extends React.Component {
 
     this.state = {
       template: null,
-      selectedTemplate: null,
+      selectedTemplate: props.defaultTemplate,
       owner: props.templateData.user
     }
 
@@ -65,7 +64,10 @@ class Builder extends React.Component {
         assets: this.props.assets
       },
       storageManager: {
-        autoload: 0
+        autoload: 0,
+        params: {
+          templateId: null
+        }
       },
       showDevices: false,
       plugins: ['asset-blocks']
@@ -79,6 +81,7 @@ class Builder extends React.Component {
     this.disableResize()
     this.singleClickTextEditing()
     this.disableAssetManager()
+    this.makeTemplateCentered()
 
     if (this.IsVideoTemplate) {
       this.grapes.appendChild(this.videoToolbar)
@@ -97,6 +100,24 @@ class Builder extends React.Component {
 
       selected.view.enableEditing(selected.view.el)
     })
+  }
+
+  makeTemplateCentered = () => {
+    const iframe = this.editor.Canvas.getFrameEl()
+
+    const style = document.createElement('style')
+    const css =
+      'body { margin: 2vh auto !important; background-color: #f2f2f2 !important }'
+
+    style.type = 'text/css'
+
+    if (style.styleSheet) {
+      style.styleSheet.cssText = css
+    } else {
+      style.appendChild(document.createTextNode(css))
+    }
+
+    iframe.contentDocument.head.appendChild(style)
   }
 
   disableResize = () => {
@@ -172,18 +193,25 @@ class Builder extends React.Component {
 
   generateTemplate = (template, data) => nunjucks.renderString(template, data)
 
-  refreshEditor = template => {
+  setEditorTemplateId = id => {
+    this.editor.StorageManager.store({
+      templateId: id
+    })
+  }
+
+  refreshEditor = selectedTemplate => {
     const components = this.editor.DomComponents
 
     components.clear()
     this.editor.setStyle('')
-    this.editor.setComponents(template)
+    this.setEditorTemplateId(selectedTemplate.id)
+    this.editor.setComponents(selectedTemplate.template)
     this.lockIn()
   }
 
   setTemplate = newState => {
     this.setState(newState, () =>
-      this.refreshEditor(this.state.selectedTemplate.template)
+      this.refreshEditor(this.state.selectedTemplate)
     )
   }
 
@@ -211,10 +239,6 @@ class Builder extends React.Component {
       }
     }))
 
-  get ShowSocialButtons() {
-    return this.props.mediums.includes('Social')
-  }
-
   get IsVideoTemplate() {
     return this.state.template && this.state.template.video
   }
@@ -223,7 +247,16 @@ class Builder extends React.Component {
     return this.state.selectedTemplate && this.state.selectedTemplate.template
   }
 
+  renderAgentPickerButton = buttonProps => (
+    <DropButton
+      {...buttonProps}
+      text={`Sends as: ${buttonProps.selectedItem.label}`}
+    />
+  )
+
   render() {
+    const isSocialMedium = this.props.mediums !== 'Email'
+
     return (
       <Container className="template-builder">
         <Header>
@@ -231,62 +264,56 @@ class Builder extends React.Component {
 
           <Actions>
             <TeamContactSelect
+              fullHeight
               pullTo="right"
               user={this.props.templateData.user}
               owner={this.state.owner}
               onSelect={this.handleOwnerChange}
               style={{ marginRight: '0.5rem' }}
+              buttonRenderer={this.renderAgentPickerButton}
             />
-            {this.ShowSocialButtons && this.state.selectedTemplate ? (
-              <Fragment>
-                <ActionButton
-                  onClick={() => this.handleSocialSharing('Instagram')}
-                >
-                  <i
-                    className="fa fa-instagram"
-                    style={{
-                      fontSize: '1.5rem',
-                      marginRight: '0.5rem'
-                    }}
-                  />
-                  Post to Instagram
-                </ActionButton>
 
+            {this.state.selectedTemplate &&
+              isSocialMedium && (
+                <Fragment>
+                  <ActionButton
+                    onClick={() => this.handleSocialSharing('Instagram')}
+                  >
+                    <i
+                      className="fa fa-instagram"
+                      style={{
+                        fontSize: '1.5rem',
+                        marginRight: '0.5rem'
+                      }}
+                    />
+                    Post to Instagram
+                  </ActionButton>
+
+                  <ActionButton
+                    style={{ marginLeft: '0.5rem' }}
+                    onClick={() => this.handleSocialSharing('Facebook')}
+                  >
+                    <i
+                      className="fa fa-facebook-square"
+                      style={{
+                        fontSize: '1.5rem',
+                        marginRight: '0.5rem'
+                      }}
+                    />
+                    Post to Facebook
+                  </ActionButton>
+                </Fragment>
+              )}
+
+            {this.state.selectedTemplate &&
+              !isSocialMedium && (
                 <ActionButton
                   style={{ marginLeft: '0.5rem' }}
-                  onClick={() => this.handleSocialSharing('Facebook')}
+                  onClick={this.handleSave}
                 >
-                  <i
-                    className="fa fa-facebook-square"
-                    style={{
-                      fontSize: '1.5rem',
-                      marginRight: '0.5rem'
-                    }}
-                  />
-                  Post to Facebook
+                  {this.props.saveButtonLabel}
                 </ActionButton>
-              </Fragment>
-            ) : (
-              <ActionButton
-                style={{ marginLeft: '0.5rem' }}
-                onClick={this.handleSave}
-              >
-                {this.props.saveButtonLabel}
-              </ActionButton>
-            )}
-
-            {/* {template && template.video && (
-              <ActionButton
-                style={{ marginLeft: '0.5rem' }}
-                onClick={this.onPrevious}
-              >
-                Previous
-              </ActionButton>
-            )}
-
-            {template && template.video && (
-              <ActionButton onClick={this.onNext.bind(this)}>Next</ActionButton>
-            )} */}
+              )}
 
             <Divider />
             <IconButton
@@ -317,12 +344,13 @@ class Builder extends React.Component {
             ref={ref => (this.grapes = ref)}
             style={{ position: 'relative' }}
           >
-            {this.IsVideoTemplate && this.IsTemplateLoaded && (
-              <VideoToolbar
-                onRef={ref => (this.videoToolbar = ref)}
-                editor={this.editor}
-              />
-            )}
+            {this.IsVideoTemplate &&
+              this.IsTemplateLoaded && (
+                <VideoToolbar
+                  onRef={ref => (this.videoToolbar = ref)}
+                  editor={this.editor}
+                />
+              )}
           </div>
         </BuilderContainer>
       </Container>

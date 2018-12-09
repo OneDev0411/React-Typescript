@@ -45,19 +45,19 @@ InstantMarketing.propTypes = {
   showTemplatesColumn: PropTypes.bool,
   templateData: PropTypes.object,
   templateTypes: PropTypes.array,
-  mediums: PropTypes.array,
+  mediums: PropTypes.string,
   assets: PropTypes.array,
   defaultTemplate: PropTypes.any
 }
 
 InstantMarketing.defaultProps = {
   headerTitle: 'Marketing Center',
-  saveButtonLabel: 'Send',
+  saveButtonLabel: 'Next',
   closeConfirmation: true,
   showTemplatesColumn: true,
   templateData: {},
   templateTypes: [],
-  mediums: [],
+  mediums: '',
   assets: [],
   defaultTemplate: null
 }

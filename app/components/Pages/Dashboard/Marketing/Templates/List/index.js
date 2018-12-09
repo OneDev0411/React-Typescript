@@ -1,29 +1,29 @@
 import React from 'react'
-import { groupBy } from 'lodash'
 import Flex from 'styled-flex-component'
 import Masonry from 'react-masonry-component'
 
+import Button from 'components/Button/ActionButton'
 import { ImagePreviewModal } from 'components/ImagePreviewModal'
-
+import GeneralFlow from 'components/InstantMarketing/adapters/General'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
 import { Loader } from '../../components/Loader'
-import { templateTypes } from '../data'
-import { Template } from './Template'
-import { Tab } from './styled'
+import { Template } from '../../components/Template'
+import { mediumsCollection } from './mediums-collection'
+import { Tab, ListContainer } from './styled'
 
 export class List extends React.Component {
   state = {
-    activeFlow: '',
-    selectedTemplate: null,
     isPreviewModalOpen: false,
     isContactFlowActive: false,
-    isListingFlowActive: false
+    isGeneralFlowActive: false,
+    isListingFlowActive: false,
+    selectedTemplate: null
   }
 
   closePreviewModal = () => {
-    this.setState({ isPreviewModalOpen: false, selectedTemplate: null })
+    this.setState({ isPreviewModalOpen: false })
   }
 
   openPreviewModal = selectedTemplate =>
@@ -51,18 +51,44 @@ export class List extends React.Component {
       isListingFlowActive: false
     })
 
-  handleCustomize = template =>
-    this.setState({ activeFlow: template.template_type }, () => {
-      switch (template.template_type) {
-        case 'Birthday':
-          this.activeContactFlow(template)
-          break
-
-        default:
-          this.activeListingFlow(template)
-          break
-      }
+  activeGeneralFlow = selectedTemplate =>
+    this.setState({
+      selectedTemplate,
+      isGeneralFlowActive: true
     })
+
+  deActiveGeneralFlow = () =>
+    this.setState({
+      isGeneralFlowActive: false
+    })
+
+  handleCustomize = template => {
+    switch (this.props.types) {
+      case 'Birthday':
+        this.activeContactFlow(template)
+        break
+
+      case 'Brand':
+        this.activeGeneralFlow(template)
+        break
+
+      case 'Christmas,NewYear':
+        this.activeGeneralFlow(template)
+        break
+
+      default:
+        this.activeListingFlow(template)
+        break
+    }
+  }
+
+  handlePreviewCustomize = () =>
+    this.setState(
+      {
+        isPreviewModalOpen: false
+      },
+      () => this.handleCustomize(this.state.selectedTemplate)
+    )
 
   renderTemplate = template => (
     <Template
@@ -74,75 +100,68 @@ export class List extends React.Component {
     />
   )
 
-  renderTemplates = templates => (
-    <Masonry
-      options={{ transitionDuration: 0 }}
-      style={{ margin: '0 -0.75rem' }}
-    >
-      {templates.map(this.renderTemplate)}
-    </Masonry>
+  renderList = selectedMedium => (
+    <ListContainer isSideMenuOpen={this.props.isSideMenuOpen}>
+      <Masonry options={{ transitionDuration: 0 }}>
+        {this.props.templates
+          .filter(t => t.medium === selectedMedium)
+          .map(this.renderTemplate)}
+      </Masonry>
+    </ListContainer>
   )
 
-  renderAll = () => {
-    const { templates } = this.props
+  renderFlow = () => {
+    const { props, state } = this
+    const sharedProps = {
+      mediums: props.medium,
+      selectedTemplate: state.selectedTemplate
+    }
 
-    const allTemplates = groupBy(templates, 'template_type')
-
-    return Object.keys(allTemplates).map(type => (
-      <div key={type} style={{ marginBottom: '0.5rem' }}>
-        <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
-          {templateTypes[type] || type}
-        </div>
-        {this.renderTemplates(allTemplates[type])}
-      </div>
-    ))
-  }
-
-  renderByType = selectedType =>
-    this.renderTemplates(
-      this.props.templates.filter(t => t.template_type === selectedType)
+    const generalFLow = (
+      <GeneralFlow
+        {...sharedProps}
+        hasExternalTrigger
+        types={props.types.split(',')}
+        isTriggered={state.isGeneralFlowActive}
+        handleTrigger={this.deActiveGeneralFlow}
+      />
     )
 
-  renderPanel = selectedType => {
-    if (selectedType === 'All') {
-      return this.renderAll()
-    }
-
-    return this.renderByType(selectedType)
-  }
-
-  renderFlow = () => {
-    const sharedProps = {
-      mediums: [this.props.medium],
-      selectedTemplate: this.state.selectedTemplate
-    }
-
-    switch (this.state.activeFlow) {
+    switch (props.types) {
       case 'Birthday':
         return (
           <ContactFlow
-            isTriggered={this.state.isContactFlowActive}
-            handleTrigger={this.deActiveContactFlow}
             {...sharedProps}
+            isTriggered={state.isContactFlowActive}
+            handleTrigger={this.deActiveContactFlow}
           />
         )
+
+      case 'Brand':
+        return generalFLow
+      case 'Christmas,NewYear':
+        return generalFLow
 
       default:
         return (
           <ListingFlow
-            hasExternalTrigger
-            isTriggered={this.state.isListingFlowActive}
-            handleTrigger={this.deActiveListingFlow}
             {...sharedProps}
+            hasExternalTrigger
+            isTriggered={state.isListingFlowActive}
+            handleTrigger={this.deActiveListingFlow}
           />
         )
     }
   }
 
+  renderPreviewModalMenu = () => (
+    <Button onClick={this.handlePreviewCustomize}>Customize</Button>
+  )
+
   render() {
     const { props, state } = this
     const { selectedTemplate } = state
-    const selectedType = props.types || 'All'
+    const selectedMedium = props.medium
 
     if (props.isLoading) {
       return (
@@ -159,25 +178,24 @@ export class List extends React.Component {
     return (
       <div style={{ padding: '0 1.5rem' }}>
         <Flex wrap style={{ marginBottom: '2rem' }}>
-          {props.tabs.map(({ title, type }, index) => (
+          {props.tabs.map((medium, index) => (
             <Tab
               inverse
               key={index}
-              data-type={type}
-              to={`/dashboard/marketing/${props.medium}/${type}`}
-              selected={selectedType === type}
+              to={`/dashboard/marketing/${props.types}/${medium}`}
+              selected={selectedMedium === medium}
             >
-              {title}
+              {mediumsCollection[medium] || medium}
             </Tab>
           ))}
         </Flex>
-        {this.renderPanel(selectedType)}
+        {this.renderList(selectedMedium)}
         {state.isPreviewModalOpen && (
           <ImagePreviewModal
             isOpen
-            title={selectedTemplate.name}
             handleClose={this.closePreviewModal}
             imgSrc={`${selectedTemplate.url}/preview.png`}
+            menuRenderer={this.renderPreviewModalMenu}
           />
         )}
         {this.renderFlow()}

@@ -2,9 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { Jumbo } from 'components/Typography/headings'
-import Button from 'components/Button/LinkButton'
 
 import { getMQWidth } from './helpers'
+import ComingSoon from './components/ComingSoonBadge'
 
 const Container = styled.div`
   padding: 2rem;
@@ -35,22 +35,33 @@ const Container = styled.div`
   }
 `
 
+const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  @media screen and (min-width: ${props => getMQWidth(75, props)}) {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+`
+
 export default function Video(props) {
   return (
     <Container isSideMenuOpen={props.isSideMenuOpen}>
-      <div>
+      <ContentWrapper isSideMenuOpen={props.isSideMenuOpen}>
         <Jumbo style={{ color: '#fff', marginBottom: '1rem' }}>
           Create Engaging Videos
         </Jumbo>
         <p style={{ marginBottom: '1.5rem' }}>
           Showcase your listings with video on Instagram and Facebook.
         </p>
-        <Button appearance="primary" to="/dashboard/marketing/Social">
-          Browse Designs
-        </Button>
-      </div>
+        <ComingSoon />
+      </ContentWrapper>
       <img
-        src="/static/images/marketing/store/cards/video/video.png"
+        src="/static/images/marketing/store/cards/video/video@2x.png"
         alt="video"
       />
     </Container>

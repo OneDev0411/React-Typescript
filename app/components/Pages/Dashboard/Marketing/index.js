@@ -22,7 +22,6 @@ class Marketing extends Component {
 
   render() {
     const { isSideMenuOpen } = this.state
-    const { params } = this.props
 
     return (
       <PageContainer isOpen={isSideMenuOpen}>
@@ -31,10 +30,13 @@ class Marketing extends Component {
           <Menu />
         </SideMenu>
 
-        <PageContent>
+        <PageContent
+          isSideMenuOpen={isSideMenuOpen}
+          style={{ background: '#f2f2f2' }}
+        >
           {React.Children.map(this.props.children, child =>
             React.cloneElement(child, {
-              ...params,
+              ...this.props.params,
               isSideMenuOpen,
               toggleSideMenu: this.toggleSideMenu
             })

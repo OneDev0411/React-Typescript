@@ -1,9 +1,20 @@
-import styled from 'styled-components'
+import React from 'react'
+import PropTypes from 'prop-types'
 
-export const Content = styled.div`
-  width: 100%;
-  max-height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  box-shadow: -1px 0 2px 0 rgba(0, 0, 0, 0.04), -1px 0 20px 0 rgba(0, 0, 0, 0.1);
-`
+import { Container } from './styled'
+
+const propTypes = {
+  isSideMenuOpen: PropTypes.bool.isRequired,
+  menuWidth: PropTypes.string
+}
+
+const defaultProps = {
+  menuWidth: '11rem'
+}
+
+export const Content = props => (
+  <Container {...props}>{props.children}</Container>
+)
+
+Content.propTypes = propTypes
+Content.defaultProps = defaultProps

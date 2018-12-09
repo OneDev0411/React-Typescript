@@ -36,7 +36,7 @@ class SearchDrawer extends React.Component {
         list,
         error: list.length === 0 && {
           type: 'warning',
-          message: 'No Result Found'
+          message: 'No MLS Listing Found'
         }
       })
     } catch (e) {
@@ -65,6 +65,14 @@ class SearchDrawer extends React.Component {
     this.searchInputRef.clear()
 
     this.props.onSelectItem(item)
+  }
+
+  get List() {
+    const { list } = this.state
+
+    return this.state.isSearching || this.state.error || list.length > 0
+      ? list
+      : this.props.initialList
   }
 
   render() {
@@ -104,7 +112,7 @@ class SearchDrawer extends React.Component {
                   )}
 
                   {!showLoadingIndicator &&
-                    this.state.list.map((item, index) => (
+                    this.List.map((item, index) => (
                       <ItemRow
                         key={index}
                         item={item}
@@ -127,7 +135,8 @@ class SearchDrawer extends React.Component {
 
 SearchDrawer.defaultProps = {
   showLoadingIndicator: false,
-  searchInputOptions: {}
+  searchInputOptions: {},
+  initialList: []
 }
 
 SearchDrawer.propTypes = {
@@ -135,7 +144,8 @@ SearchDrawer.propTypes = {
   searchInputOptions: PropTypes.object,
   searchFunction: PropTypes.func.isRequired,
   ItemRow: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
-  onSelectItem: PropTypes.func.isRequired
+  onSelectItem: PropTypes.func.isRequired,
+  initialList: PropTypes.array
 }
 
 export default SearchDrawer

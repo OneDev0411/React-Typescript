@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { Divider } from '../../Divider'
 import PageHeader from '../../PageHeader'
 import Button from '../../Button/IconButton'
 import IconClose from '../../SvgIcons/Close/CloseIcon'
@@ -8,12 +9,20 @@ import IconClose from '../../SvgIcons/Close/CloseIcon'
 Header.propTypes = {
   ...PageHeader.propTypes,
   handleClose: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  menuRenderer: PropTypes.func
 }
 
-Header.propTypes = PageHeader.defaultProps
+Header.propTypes = {
+  ...PageHeader.defaultProps,
+  menuRenderer() {
+    return null
+  }
+}
 
 export function Header(props) {
+  const menuContent = props.menuRenderer()
+
   return (
     <PageHeader
       title={props.title}
@@ -32,7 +41,9 @@ export function Header(props) {
       }}
     >
       <PageHeader.Menu>
-        <Button isFit inverse iconSize="XLarge" onClick={props.handleClose}>
+        {menuContent}
+        {menuContent && <Divider width="1px" height="1.5rem" margin="0 1rem" />}
+        <Button isFit inverse iconSize="large" onClick={props.handleClose}>
           <IconClose />
         </Button>
       </PageHeader.Menu>

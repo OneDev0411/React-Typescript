@@ -65,7 +65,7 @@ class BackofficeTable extends React.Component {
           />
         </Menu>
 
-        <Content>
+        <Content isSideMenuOpen={isSideMenuOpen}>
           <Header
             title={params.filter}
             isSideMenuOpen={isSideMenuOpen}

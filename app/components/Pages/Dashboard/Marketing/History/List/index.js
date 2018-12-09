@@ -2,22 +2,23 @@ import React from 'react'
 import Flex from 'styled-flex-component'
 import Masonry from 'react-masonry-component'
 
+import Button from 'components/Button/ActionButton'
 import { ImagePreviewModal } from 'components/ImagePreviewModal'
-
-import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
+import ShareInstance from 'components/InstantMarketing/adapters/ShareInstance'
 
 import { Loader } from '../../components/Loader'
-import { Template } from '../../Templates/List/Template'
+import { Template } from '../../components/Template'
+import { ListContainer } from '../../Templates/List/styled'
 
 export class List extends React.Component {
   state = {
     selectedTemplate: null,
     isPreviewModalOpen: false,
-    isListingFlowActive: false
+    isShareFlowActive: false
   }
 
   closePreviewModal = () => {
-    this.setState({ isPreviewModalOpen: false, selectedTemplate: null })
+    this.setState({ isPreviewModalOpen: false })
   }
 
   openPreviewModal = selectedTemplate =>
@@ -26,12 +27,18 @@ export class List extends React.Component {
   activeListingFlow = selectedTemplate =>
     this.setState({
       selectedTemplate,
-      isListingFlowActive: true
+      isShareFlowActive: true
     })
 
-  deActiveListingFlow = () =>
+  deActiveFlow = () =>
     this.setState({
-      isListingFlowActive: false
+      isShareFlowActive: false
+    })
+
+  handlePreviewShare = () =>
+    this.setState({
+      isPreviewModalOpen: false,
+      isShareFlowActive: true
     })
 
   renderTemplate = template => (
@@ -44,13 +51,20 @@ export class List extends React.Component {
     />
   )
 
-  renderTemplates = templates => (
-    <Masonry
-      options={{ transitionDuration: 0 }}
-      style={{ margin: '0 -0.75rem' }}
-    >
-      {templates.map(this.renderTemplate)}
-    </Masonry>
+  renderList = () => (
+    <ListContainer isSideMenuOpen={this.props.isSideMenuOpen}>
+      <Masonry options={{ transitionDuration: 0 }}>
+        {this.props.templates.map(this.renderTemplate)}
+      </Masonry>
+    </ListContainer>
+  )
+
+  renderPreviewModalMenu = () => (
+    <Button onClick={this.handlePreviewShare}>{`${
+      this.state.selectedTemplate.template.medium === 'Email'
+        ? 'Compose'
+        : 'Share'
+    }`}</Button>
   )
 
   render() {
@@ -73,27 +87,26 @@ export class List extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <div style={{ padding: '0 1.5rem' }}>
         <div style={{ margin: '1.5rem 0 1rem', fontWeight: 500 }}>
           {`${listLength} Design${listLength > 1 ? 's' : ''}`}
         </div>
-        {this.renderTemplates(templates)}
+        {this.renderList(templates)}
         {state.isPreviewModalOpen && (
           <ImagePreviewModal
             isOpen
-            title={selectedTemplate.file.name}
             handleClose={this.closePreviewModal}
-            imgSrc={`${selectedTemplate.template.url}/preview.png`}
+            imgSrc={selectedTemplate.file.preview_url}
+            menuRenderer={this.renderPreviewModalMenu}
           />
         )}
-        <ListingFlow
+        <ShareInstance
           hasExternalTrigger
-          isTriggered={this.state.isListingFlowActive}
-          handleTrigger={this.deActiveListingFlow}
-          mediums={['Social']}
-          selectedTemplate={selectedTemplate}
+          isTriggered={this.state.isShareFlowActive}
+          handleTrigger={this.deActiveFlow}
+          instance={selectedTemplate}
         />
-      </React.Fragment>
+      </div>
     )
   }
 }
