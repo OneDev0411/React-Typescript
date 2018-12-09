@@ -40,7 +40,7 @@ export default function Instagram(props) {
       <ContentWrapper>
         <Jumbo style={{ marginBottom: '1rem' }}>’Tis the season</Jumbo>
         <p style={{ marginBottom: '1.5rem' }}>
-          Choose the perfect design to compliment all your featured listings.
+          Share well wishes & greetings with timely designs for every occasion
         </p>
         <Button
           appearance="primary"
