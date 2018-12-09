@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components'
 
+import { error } from 'views/utils/colors'
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -28,4 +30,9 @@ export const Image = styled.img`
 
 export const Video = styled.video`
   ${previewStyles};
+`
+
+export const Error = styled.div`
+  color: ${error};
+  font-weight: 500;
 `
