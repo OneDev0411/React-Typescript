@@ -22,7 +22,7 @@ export default class Templates extends React.Component {
     const { mediums, defaultTemplate, templateTypes: types } = this.props
 
     try {
-      let templates = await getTemplates(types, mediums)
+      let templates = await getTemplates(types, [mediums])
 
       if (templates.length > 0) {
         // Reordering templates list and show the default tempalte

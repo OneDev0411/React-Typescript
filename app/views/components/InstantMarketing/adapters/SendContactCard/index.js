@@ -220,6 +220,7 @@ class SendContactCard extends React.Component {
           isOpen={this.state.isInstantMarketingBuilderOpen}
           onClose={this.toggleInstantMarketingBuilder}
           handleSave={this.handleSaveMarketingCard}
+          mediums={this.props.mediums}
           templateData={{ user: this.props.user, contact: this.state.contact }}
           templateTypes={['Birthday']}
           defaultTemplate={this.props.selectedTemplate}
