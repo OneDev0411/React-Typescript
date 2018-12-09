@@ -8,6 +8,7 @@ export const Container = styled.div`
   width: 340px;
   padding: 2rem 0;
   background-color: #f1f1f1;
+  border: 1px solid #dadada;
 `
 
 export const TemplateItem = styled.div`

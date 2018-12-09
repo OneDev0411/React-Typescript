@@ -22,7 +22,8 @@ import { Section } from './Section'
 
 class SocialDrawer extends React.Component {
   state = {
-    instance: this.props.instance || null
+    instance: this.props.instance || null,
+    error: null
   }
 
   componentDidMount() {
@@ -44,6 +45,10 @@ class SocialDrawer extends React.Component {
         instance
       })
     } catch (e) {
+      this.setState({
+        error: 'Oops, Something went wrong. please try again.'
+      })
+
       console.log(e)
     }
   }
@@ -79,7 +84,10 @@ class SocialDrawer extends React.Component {
       <Drawer isOpen onClose={this.props.onClose} showFooter={false}>
         <Drawer.Header title="How would you like to share?" />
         <Drawer.Body>
-          <PreviewFile instance={this.state.instance} />
+          <PreviewFile
+            instance={this.state.instance}
+            error={this.state.error}
+          />
 
           {this.state.instance && (
             <Fragment>

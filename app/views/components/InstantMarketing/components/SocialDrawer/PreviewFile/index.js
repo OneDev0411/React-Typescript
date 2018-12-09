@@ -4,7 +4,7 @@ import { addNotification as notify } from 'reapop'
 
 import Spinner from 'components/Spinner'
 
-import { Container, Image, Video } from './styled'
+import { Container, Image, Video, Error } from './styled'
 
 function preview(instance) {
   if (instance.file.mime === 'image/png') {
@@ -25,12 +25,15 @@ function preview(instance) {
 function PreviewFile(props) {
   return (
     <Container>
-      {!props.instance && (
-        <Fragment>
-          <Spinner />
-          Looking good! We are prepping your design for you to share...
-        </Fragment>
-      )}
+      {props.error && <Error>{props.error}</Error>}
+
+      {!props.instance &&
+        !props.error && (
+          <Fragment>
+            <Spinner />
+            Looking good! We are prepping your design for you to share...
+          </Fragment>
+        )}
 
       {props.instance && preview(props.instance)}
     </Container>
