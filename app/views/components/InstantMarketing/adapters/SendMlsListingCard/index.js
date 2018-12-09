@@ -173,7 +173,10 @@ class SendMlsListingCard extends React.Component {
 
   generatePreviewImage = async template =>
     this.setState({
-      templateScreenshot: await getTemplatePreviewImage(template)
+      templateScreenshot: await getTemplatePreviewImage(
+        template,
+        this.TemplateInstanceData
+      )
     })
 
   closeMarketing = () =>
@@ -189,7 +192,7 @@ class SendMlsListingCard extends React.Component {
 
   get TemplateInstanceData() {
     return {
-      listing: this.state.listing
+      listings: [this.state.listing]
     }
   }
 

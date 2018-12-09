@@ -129,7 +129,10 @@ class SendContactCard extends React.Component {
 
   generatePreviewImage = async template =>
     this.setState({
-      templateScreenshot: await getTemplatePreviewImage(template, {})
+      templateScreenshot: await getTemplatePreviewImage(
+        template,
+        this.TemplateInstanceData
+      )
     })
 
   handleSendEmails = async values => {
@@ -164,6 +167,12 @@ class SendContactCard extends React.Component {
         isComposeEmailOpen: false,
         isInstantMarketingBuilderOpen: false
       })
+    }
+  }
+
+  get TemplateInstanceData() {
+    return {
+      contacts: this.Recipients.map(r => r.contactId)
     }
   }
 
