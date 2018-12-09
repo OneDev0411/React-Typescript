@@ -8,21 +8,21 @@ export const getMQWidth = (base, props) =>
 export const Box = styled.div`
   margin-bottom: 2rem;
 
-  @media (min-width: ${props => getMQWidth(30, props)}em) {
-    width: calc(50% - 4rem);
-    margin: 0 2rem 4rem;
+  @media (min-width: ${props => getMQWidth(43, props)}em) {
+    width: calc(50% - 3rem);
+    margin: 0 1.5rem 3rem;
   }
 
-  @media (min-width: ${props => getMQWidth(50, props)}em) {
-    width: calc(100% / 3 - 4rem);
+  @media (min-width: ${props => getMQWidth(64, props)}em) {
+    width: calc(100% / 3 - 3rem);
   }
 
-  @media (min-width: ${props => getMQWidth(75, props)}em) {
-    width: calc(25% - 4rem);
+  @media (min-width: ${props => getMQWidth(80, props)}em) {
+    width: calc(25% - 3rem);
   }
 
   @media (min-width: ${props => getMQWidth(100, props)}em) {
-    width: calc(20% - 4rem);
+    width: calc(20% - 3rem);
   }
 `
 

@@ -6,8 +6,8 @@ import { primary } from 'views/utils/colors'
 import { getMQWidth } from '../../components/Template/styled'
 
 export const ListContainer = styled.div`
-  @media (min-width: ${props => getMQWidth(30, props)}em) {
-    margin: 0 -2rem;
+  @media (min-width: ${props => getMQWidth(43, props)}em) {
+    margin: 0 -1.5rem;
   }
 `
 
