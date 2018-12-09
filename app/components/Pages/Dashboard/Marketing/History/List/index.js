@@ -95,7 +95,6 @@ export class List extends React.Component {
         {state.isPreviewModalOpen && (
           <ImagePreviewModal
             isOpen
-            title="Preview"
             handleClose={this.closePreviewModal}
             imgSrc={selectedTemplate.file.preview_url}
             menuRenderer={this.renderPreviewModalMenu}
