@@ -10,6 +10,10 @@ export const items = [
     title: 'Birthday',
     url: '/Birthday'
   },
+  {
+    title: 'Brand Campaigns',
+    url: '/Brand'
+  },
   // {
   //   title: 'Brochures'
   // },

@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import Button from 'components/Button/LinkButton'
 import { Jumbo } from 'components/Typography/headings'
 
 import { getMQWidth } from './helpers'
-import ComingSoon from './components/ComingSoonBadge'
 
 const Container = styled.div`
   height: 25rem;
@@ -25,11 +25,13 @@ const Container = styled.div`
   }
 `
 
-export default function Company(props) {
+export default function Brand(props) {
   return (
     <Container isSideMenuOpen={props.isSideMenuOpen}>
       <Jumbo style={{ marginBottom: '1rem' }}>Brand Campaigns</Jumbo>
-      <ComingSoon />
+      <Button appearance="outline" to="/dashboard/marketing/Brand">
+        Browse Designs
+      </Button>
     </Container>
   )
 }
