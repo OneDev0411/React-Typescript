@@ -6,7 +6,7 @@ import Cards from './Cards'
 export default class Store extends React.Component {
   render() {
     return (
-      <div style={{ padding: '0 1.5rem' }}>
+      <div style={{ padding: '0 1.5rem', background: '#fff' }}>
         <Header
           title="All Designs"
           isSideMenuOpen={this.props.isSideMenuOpen}

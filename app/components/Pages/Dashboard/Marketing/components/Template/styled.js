@@ -6,26 +6,23 @@ export const getMQWidth = (base, props) =>
   props.isSideMenuOpen ? base + 11 : base
 
 export const Box = styled.div`
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 
-  @media (min-width: ${props => getMQWidth(40, props)}em) {
+  @media (min-width: ${props => getMQWidth(43, props)}em) {
     width: calc(50% - 3rem);
-    margin-left: 1.5rem;
-    margin-right: 1.5rem;
+    margin: 0 1.5rem 3rem;
   }
 
   @media (min-width: ${props => getMQWidth(64, props)}em) {
-    width: calc(100% / 3 - 4rem);
-    margin: 0 2rem 4rem;
+    width: calc(100% / 3 - 3rem);
   }
 
-  @media (min-width: ${props => getMQWidth(90, props)}em) {
-    width: calc(100% / 4 - 5rem);
-    margin: 0 2.5rem 5rem;
+  @media (min-width: ${props => getMQWidth(80, props)}em) {
+    width: calc(25% - 3rem);
   }
 
-  @media (min-width: ${props => getMQWidth(120, props)}em) {
-    width: calc(100% / 5 - 5rem);
+  @media (min-width: ${props => getMQWidth(100, props)}em) {
+    width: calc(20% - 3rem);
   }
 `
 
@@ -34,12 +31,15 @@ export const ImageContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 20.8rem;
+  min-height: 15.8rem;
   border-radius: 3px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 15px -5px rgba(0, 0, 0, 0.5);
+  transform: translate3d(0, 0, 0);
+  transition: 0.3s;
 
   &:hover {
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 22px 43px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px);
 
     .action-bar {
       visibility: visible;

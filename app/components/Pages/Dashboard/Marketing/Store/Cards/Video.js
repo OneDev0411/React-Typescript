@@ -61,7 +61,7 @@ export default function Video(props) {
         <ComingSoon />
       </ContentWrapper>
       <img
-        src="/static/images/marketing/store/cards/video/video.png"
+        src="/static/images/marketing/store/cards/video/video@2x.png"
         alt="video"
       />
     </Container>

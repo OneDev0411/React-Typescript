@@ -16,8 +16,8 @@ function getMediums(templates) {
 
 export default class Templates extends Component {
   state = {
-    templates: [],
     tabs: [],
+    templates: [],
     isLoading: false
   }
 
@@ -26,19 +26,22 @@ export default class Templates extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.type !== this.props.type) {
+    if (prevProps.types !== this.props.types) {
       this.fetch()
     }
   }
 
   fetch = async () => {
+    const { types } = this.props
+
     try {
       this.setState({ isLoading: true })
 
-      const templates = await getTemplates(this.props.type, [
+      const templates = await getTemplates(types.split(','), [
         'Email',
         'Social',
-        'FacebookCover'
+        'FacebookCover',
+        'InstagramStory'
       ])
 
       const tabs = getMediums(templates)
@@ -51,7 +54,7 @@ export default class Templates extends Component {
         },
         () =>
           browserHistory.push(
-            `/dashboard/marketing/${this.props.type}/${tabs[0]}`
+            `/dashboard/marketing/${types}/${this.props.medium || tabs[0]}`
           )
       )
     } catch (error) {
@@ -66,7 +69,7 @@ export default class Templates extends Component {
     return (
       <React.Fragment>
         <Header
-          type={props.type}
+          types={props.types}
           isSideMenuOpen={props.isSideMenuOpen}
           toggleSideMenu={props.toggleSideMenu}
         />
@@ -76,7 +79,7 @@ export default class Templates extends Component {
           medium={props.medium || state.tabs[0]}
           tabs={state.tabs}
           templates={state.templates}
-          type={props.type}
+          types={props.types}
         />
       </React.Fragment>
     )

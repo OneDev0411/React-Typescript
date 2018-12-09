@@ -45,7 +45,7 @@ export default function EmailListings(props) {
         </Button>
       </div>
       <img
-        src="/static/images/marketing/store/cards/email-listings/email-listings.png"
+        src="/static/images/marketing/store/cards/email-listings/email-listings@2x.png"
         alt="Promote listings
         with email"
       />

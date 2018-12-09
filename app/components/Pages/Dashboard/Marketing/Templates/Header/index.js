@@ -3,15 +3,15 @@ import React from 'react'
 import { Trigger as MenuTrigger } from 'components/SlideMenu'
 
 import { headers } from './data'
-import { Container, Title } from './styled'
+import { Container, Title, SubTitle } from './styled'
 
 export function Header(props) {
-  const data = headers[props.type]
+  const data = headers[props.types]
 
   return (
     <Container
       brandColor={data.brandColor}
-      name={data.name || props.type}
+      name={data.name || props.types}
       size={data.size}
       position={data.position}
       isSideMenuOpen={props.isSideMenuOpen}
@@ -21,7 +21,9 @@ export function Header(props) {
         isExpended={props.isSideMenuOpen}
       />
       <Title>{data.title}</Title>
-      <div style={{ fontSize: '1.5rem' }}>{data.description}</div>
+      <SubTitle isSideMenuOpen={props.isSideMenuOpen}>
+        {data.description}
+      </SubTitle>
     </Container>
   )
 }

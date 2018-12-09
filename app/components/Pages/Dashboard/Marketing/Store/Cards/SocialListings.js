@@ -47,7 +47,7 @@ export default function SocialListings(props) {
         </Button>
       </div>
       <img
-        src="/static/images/marketing/store/cards/social-listings/social-listings.png"
+        src="/static/images/marketing/store/cards/social-listings/social-listings@2x.png"
         alt="Post listings on social media"
       />
     </Container>

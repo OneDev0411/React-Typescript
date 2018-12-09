@@ -26,7 +26,7 @@ class ShareInstance extends React.Component {
       }
     }
 
-    if (props.isTriggered && medium === 'Social' && !state.isSocialDrawerOpen) {
+    if (props.isTriggered && medium !== 'Email' && !state.isSocialDrawerOpen) {
       return {
         isSocialDrawerOpen: true
       }

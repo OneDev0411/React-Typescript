@@ -15,8 +15,9 @@ const Container = styled.div`
   margin-bottom: 1.5rem;
   border-radius: 3px;
   background: #d1e6d9
-    url('/static/images/marketing/store/cards/company/company.png') no-repeat
+    url('/static/images/marketing/store/cards/company/company@2x.png') no-repeat
     bottom left;
+  background-size: 25rem 25rem;
 
   @media screen and (min-width: ${props => getMQWidth(75, props)}) {
     width: 38%;
@@ -27,7 +28,7 @@ const Container = styled.div`
 export default function Company(props) {
   return (
     <Container isSideMenuOpen={props.isSideMenuOpen}>
-      <Jumbo style={{ marginBottom: '1rem' }}>Your Company</Jumbo>
+      <Jumbo style={{ marginBottom: '1rem' }}>Brand Campaigns</Jumbo>
       <ComingSoon />
     </Container>
   )

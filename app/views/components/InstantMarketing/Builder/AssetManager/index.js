@@ -1,8 +1,22 @@
 import grapesjs from 'grapesjs'
 import Backbone from 'backbone'
+import React, { Fragment } from 'react'
+import ReactDOM from 'react-dom'
+
+import { Uploader } from 'components/Uploader'
+
+import Fetch from '../../../../../services/fetch'
+
+const CUSTOM_ASSET_UPLOAD_PATH = '/templates/assets'
 
 export default grapesjs.plugins.add('asset-blocks', editor => {
   let target
+
+  const getStorageData = async key =>
+    new Promise(res => {
+      editor.StorageManager.load(key, data => res(data))
+    })
+
   const AssetView = Backbone.View.extend({
     events: {
       click: 'onClick'
@@ -43,13 +57,63 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
       return this
     }
   })
+  const AssetUploadButtonView = Backbone.View.extend({
+    render() {
+      ReactDOM.render(
+        <Uploader
+          accept="image/*"
+          uploadHandler={async files => {
+            const { templateId } = await getStorageData('templateId')
+
+            try {
+              const uploadResponses = await Promise.all(
+                files.map(file =>
+                  new Fetch()
+                    .upload(CUSTOM_ASSET_UPLOAD_PATH)
+                    .attach('attachment', file, file.name)
+                    .field('template', templateId)
+                )
+              )
+
+              const uploadedAssets = uploadResponses.map(response => ({
+                previewUrl: response.body.data.file.preview_url,
+                url: response.body.data.file.url
+              }))
+
+              const uploadedAssetsCollection = uploadedAssets.map(
+                asset => asset.url
+              )
+
+              view.collection.reset([
+                ...uploadedAssetsCollection,
+                ...view.collection.models
+              ])
+            } catch (e) {
+              console.error(e)
+            }
+          }}
+        >
+          <Fragment>Click or drop images here</Fragment>
+        </Uploader>,
+        this.el
+      )
+
+      return this
+    }
+  })
 
   const AssetsView = Backbone.View.extend({
     initialize({ coll }) {
       this.collection = coll
+      this.listenTo(this.collection, 'reset', this.reset)
     },
     reset() {
       this.$el.empty()
+
+      const uploadButtonView = new AssetUploadButtonView()
+
+      uploadButtonView.render()
+      uploadButtonView.$el.appendTo(this.el)
 
       for (let i = 0; i < this.collection.length; i++) {
         const asset = this.collection.at(i)
