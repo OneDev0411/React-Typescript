@@ -103,7 +103,8 @@ class Builder extends React.Component {
     const iframe = this.editor.Canvas.getFrameEl()
 
     const style = document.createElement('style')
-    const css = 'body { margin: 1vh auto !important; }'
+    const css =
+      'body { margin: 2vh auto !important; background-color: #f2f2f2 !important }'
 
     style.type = 'text/css'
 
