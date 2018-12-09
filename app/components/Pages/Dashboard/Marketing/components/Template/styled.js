@@ -31,7 +31,7 @@ export const ImageContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 20.8rem;
+  min-height: 15.8rem;
   border-radius: 3px;
   box-shadow: 0px 2px 15px -5px rgba(0, 0, 0, 0.5);
   transform: translate3d(0, 0, 0);
