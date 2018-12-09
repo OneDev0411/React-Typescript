@@ -68,6 +68,10 @@ export class List extends React.Component {
         this.activeContactFlow(template)
         break
 
+      case 'Brand':
+        this.activeGeneralFlow(template)
+        break
+
       case 'Christmas,NewYear':
         this.activeGeneralFlow(template)
         break
@@ -113,6 +117,16 @@ export class List extends React.Component {
       selectedTemplate: state.selectedTemplate
     }
 
+    const generalFLow = (
+      <GeneralFlow
+        {...sharedProps}
+        hasExternalTrigger
+        types={props.types.split(',')}
+        isTriggered={state.isGeneralFlowActive}
+        handleTrigger={this.deActiveGeneralFlow}
+      />
+    )
+
     switch (props.types) {
       case 'Birthday':
         return (
@@ -123,16 +137,10 @@ export class List extends React.Component {
           />
         )
 
+      case 'Brand':
+        return generalFLow
       case 'Christmas,NewYear':
-        return (
-          <GeneralFlow
-            {...sharedProps}
-            hasExternalTrigger
-            types={props.types.split(',')}
-            isTriggered={state.isGeneralFlowActive}
-            handleTrigger={this.deActiveGeneralFlow}
-          />
-        )
+        return generalFLow
 
       default:
         return (
@@ -185,7 +193,6 @@ export class List extends React.Component {
         {state.isPreviewModalOpen && (
           <ImagePreviewModal
             isOpen
-            title={selectedTemplate.name}
             handleClose={this.closePreviewModal}
             imgSrc={`${selectedTemplate.url}/preview.png`}
             menuRenderer={this.renderPreviewModalMenu}
