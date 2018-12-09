@@ -1,9 +1,10 @@
 import React from 'react'
 import Downshift from 'downshift'
 
-import UserAvatar from 'partials/UserAvatar'
+import UserAvatar from 'components/Avatar'
 
-import CloseIcon from '../../../SvgIcons/Close/CloseIcon'
+import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+
 import {
   Recipient,
   Title,
@@ -11,7 +12,7 @@ import {
   EmailItem,
   ArrowIcon,
   DeleteButton
-} from './styled'
+} from '../styled'
 
 export default class RecipientItem extends React.Component {
   state = {
@@ -54,11 +55,8 @@ export default class RecipientItem extends React.Component {
     return (
       <Recipient hasMultipleEmails={hasMultipleEmails}>
         <UserAvatar
-          color="#000000"
-          fgColor="#ffffff"
-          showStateIndicator={false}
-          name={recipient.name}
-          src={recipient.avatar}
+          title={recipient.name}
+          image={recipient.avatar}
           size={25}
           style={{
             marginRight: '10px'
