@@ -44,7 +44,8 @@ export const SubTitle = styled.div`
   font-size: 1.5rem;
 
   @media screen and (min-width: ${props =>
-      props.isSideMenuOpen ? 75 + 11 : 75}em) {
-    max-width: 35rem;
+      props.isSideMenuOpen ? 75 + 11 : 75}em) and (max-width: ${props =>
+      props.isSideMenuOpen ? 95 + 11 : 95}em) {
+    max-width: 33rem;
   }
 `
