@@ -6,7 +6,7 @@ import { getMQWidth } from './helpers'
 import Holiday from './Holiday'
 import SocialListings from './SocialListings'
 import EmailListings from './EmailListings'
-import Company from './Company'
+import Brand from './Brand'
 import Instagram from './Instagram'
 import FacebookCovers from './FacebookCovers'
 import AsSeenIn from './AsSeenIn'
@@ -29,7 +29,7 @@ function Cards({ isSideMenuOpen }) {
         <EmailListings isSideMenuOpen={isSideMenuOpen} />
       </ResponsiveRow>
       <ResponsiveRow isSideMenuOpen={isSideMenuOpen}>
-        <Company isSideMenuOpen={isSideMenuOpen} />
+        <Brand isSideMenuOpen={isSideMenuOpen} />
         <Instagram isSideMenuOpen={isSideMenuOpen} />
       </ResponsiveRow>
       <ResponsiveRow isSideMenuOpen={isSideMenuOpen}>

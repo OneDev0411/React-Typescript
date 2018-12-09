@@ -13,6 +13,12 @@ export const headers = {
     description:
       '“Wow! My agent remembered by birthday.” - Your astounded client.'
   },
+  Brand: {
+    title: 'Brand Campaigns',
+    brandColor: '#bfd6e8',
+    size: { width: 403, height: 214 },
+    description: 'Promote your brand.'
+  },
   ComingSoon: {
     title: 'Coming Soon',
     brandColor: '#CFE6D7',
