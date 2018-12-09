@@ -1,3 +1,4 @@
 export const mediumsCollection = {
-  FacebookCover: 'Facebook Cover'
+  FacebookCover: 'Facebook Covers',
+  InstagramStory: 'Instagram Stories'
 }
