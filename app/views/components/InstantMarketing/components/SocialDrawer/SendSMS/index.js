@@ -12,26 +12,31 @@ import { shareInstance } from 'models/instant-marketing/instance-share'
 import { Section } from '../Section'
 
 class SendSMS extends React.Component {
-  state = {
-    isSending: false,
-    isValidPhone: true,
-    phone: formatPhoneNumber(this.props.user.phone_number)
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      isSending: false,
+      isValidPhone: this.isValidPhone(this.props.user.phone_number),
+      phone: formatPhoneNumber(this.props.user.phone_number)
+    }
   }
 
   handleChangePhone = e => {
-    let isValidPhone = false
     const phone = e.target.value
-
-    try {
-      const phoneNumber = parsePhoneNumber(phone, 'US')
-
-      isValidPhone = phoneNumber.isValid()
-    } catch (e) {}
 
     this.setState({
       phone,
-      isValidPhone
+      isValidPhone: this.isValidPhone(phone)
     })
+  }
+
+  isValidPhone = phone => {
+    try {
+      return parsePhoneNumber(phone, 'US').isValid()
+    } catch (e) {
+      return false
+    }
   }
 
   handleSend = async () => {
@@ -79,6 +84,11 @@ class SendSMS extends React.Component {
         }}
         onButtonClick={this.handleSend}
         description="Send image to yourself and post to instagram and facebook directly from your phone."
+        styles={{
+          info: {
+            padding: 0
+          }
+        }}
       >
         <input value={this.state.phone} onChange={this.handleChangePhone} />
       </Section>

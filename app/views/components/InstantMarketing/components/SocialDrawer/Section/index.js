@@ -1,5 +1,7 @@
 import React from 'react'
 
+import PropTypes from 'prop-types'
+
 import {
   SectionContainer,
   Container,
@@ -11,11 +13,11 @@ import {
 
 export function Section(props) {
   return (
-    <SectionContainer>
+    <SectionContainer style={props.styles.mainContainer}>
       <Title>{props.title}</Title>
 
-      <Container>
-        <Info>{props.children}</Info>
+      <Container style={props.styles.container}>
+        <Info style={props.styles.info}>{props.children}</Info>
         {props.button ? (
           props.button()
         ) : (
@@ -24,7 +26,17 @@ export function Section(props) {
           </Button>
         )}
       </Container>
-      <Description>{props.description}</Description>
+      <Description style={props.styles.description}>
+        {props.description}
+      </Description>
     </SectionContainer>
   )
+}
+
+Section.propTypes = {
+  styles: PropTypes.object
+}
+
+Section.defaultProps = {
+  styles: {}
 }

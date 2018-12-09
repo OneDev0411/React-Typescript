@@ -40,13 +40,19 @@ export const Info = styled.div`
   display: flex;
   align-items: center;
   width: calc(100% - 115px);
+  height: 100%;
   padding: 0 1rem;
 
   input {
-    background: transparent;
+    background-color: transparent;
     border: none;
+    width: 100%;
+    height: 100%;
+    padding: 0 1rem;
+
     :focus {
       outline: none;
+      background-color: #fff;
     }
   }
 
