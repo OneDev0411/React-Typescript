@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import Button from 'components/Button/LinkButton'
 import { Jumbo } from 'components/Typography/headings'
 
 import { getMQWidth } from './helpers'
-import ComingSoon from './components/ComingSoonBadge'
 
 const Container = styled.div`
   padding: 2rem;
@@ -30,7 +30,12 @@ export default function Instagram(props) {
   return (
     <Container isSideMenuOpen={props.isSideMenuOpen}>
       <Jumbo style={{ marginBottom: '1rem' }}>Instagram Stories</Jumbo>
-      <ComingSoon />
+      <Button
+        appearance="outline"
+        to="/dashboard/marketing/JustListed/InstagramStory"
+      >
+        Browse Designs
+      </Button>
     </Container>
   )
 }

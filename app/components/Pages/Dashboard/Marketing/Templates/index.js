@@ -40,7 +40,8 @@ export default class Templates extends Component {
       const templates = await getTemplates(types.split(','), [
         'Email',
         'Social',
-        'FacebookCover'
+        'FacebookCover',
+        'InstagramStory'
       ])
 
       const tabs = getMediums(templates)
