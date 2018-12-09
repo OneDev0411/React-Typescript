@@ -28,7 +28,7 @@ const Container = styled.div`
 export default function Company(props) {
   return (
     <Container isSideMenuOpen={props.isSideMenuOpen}>
-      <Jumbo style={{ marginBottom: '1rem' }}>Your Company</Jumbo>
+      <Jumbo style={{ marginBottom: '1rem' }}>Brand Campaigns</Jumbo>
       <ComingSoon />
     </Container>
   )
