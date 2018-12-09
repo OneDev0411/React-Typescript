@@ -51,14 +51,14 @@ export const headers = {
     title: 'Open House',
     brandColor: '#bfd6e8',
     size: { width: 403, height: 214 },
-    description: 'Promote that new price with a new social post.'
+    description:
+      'Invite potential buyers with designs that compliment your listing.'
   },
   PriceImprovement: {
     title: 'Price Improvement',
     brandColor: '#d7e8e8',
     position: 'bottom',
     size: { width: 372, height: 233 },
-    description:
-      'Invite potential buyers with designs that compliment your listing.'
+    description: 'Promote that new price with a new social post.'
   }
 }
