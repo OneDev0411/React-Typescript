@@ -29,7 +29,7 @@ class SearchListingDrawer extends React.Component {
         })
       )
 
-      this.props.onSelectListing(listings)
+      this.props.onSelectListings(listings)
     } catch (e) {
       console.log(e)
     } finally {
