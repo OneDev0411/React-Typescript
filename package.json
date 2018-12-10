@@ -1,6 +1,12 @@
 {
   "name": "rechat",
+<<<<<<< HEAD
   "version": "40.3.5",
+||||||| merged common ancestors
+  "version": "40.3.0",
+=======
+  "version": "40.3.2",
+>>>>>>> 417284af9d7b8382f9fe0cbe3cf79e77698a24dc
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {

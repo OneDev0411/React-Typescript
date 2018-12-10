@@ -91,13 +91,7 @@ class SocialDrawer extends React.Component {
 
           {this.state.instance && (
             <Fragment>
-              <SendSMS
-                instance={this.state.instance}
-                user={{
-                  ...this.props.user,
-                  phone_number: null
-                }}
-              />
+              <SendSMS instance={this.state.instance} user={this.props.user} />
 
               <Section
                 title="Download Image:"

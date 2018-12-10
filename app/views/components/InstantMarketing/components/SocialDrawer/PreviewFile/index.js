@@ -31,7 +31,8 @@ function PreviewFile(props) {
         !props.error && (
           <Fragment>
             <Spinner />
-            Looking good! We are prepping your design for you to share...
+            Looking good! We are prepping your design to share, this could take
+            a minute…
           </Fragment>
         )}
 
