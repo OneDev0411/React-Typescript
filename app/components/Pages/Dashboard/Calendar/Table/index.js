@@ -70,6 +70,7 @@ export class Table extends React.Component {
     if (row.event_type === 'birthday') {
       return (
         <SendContactCard
+          mediums="Email"
           contactId={row.contact}
           buttonStyle={{
             size: 'small'

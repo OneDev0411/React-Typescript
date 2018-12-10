@@ -12,7 +12,9 @@ export function Menu(props) {
 
   return (
     <Flex alignCenter style={{ padding: '1.5em 0' }}>
-      <SendContactCard contact={contact}>Send a Card</SendContactCard>
+      <SendContactCard contact={contact} mediums="Email">
+        Send a Card
+      </SendContactCard>
       <Chat contact={contact} />
       <Divider />
       <CloseButton isFit iconSize="large" inverse />
