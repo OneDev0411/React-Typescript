@@ -188,8 +188,8 @@ class Builder extends React.Component {
   handleSave = () =>
     this.props.onSave(this.getSavedTempldate(), this.state.owner)
 
-  handleSocialSharing = socialName =>
-    this.props.onSocialSharing(this.getSavedTempldate(), socialName)
+  handleSocialSharing = () =>
+    this.props.onSocialSharing(this.getSavedTempldate())
 
   generateTemplate = (template, data) => nunjucks.renderString(template, data)
 
@@ -247,6 +247,10 @@ class Builder extends React.Component {
     return this.state.selectedTemplate && this.state.selectedTemplate.template
   }
 
+  get ShowEditListingsButton() {
+    return this.props.templateTypes.includes('Listings')
+  }
+
   renderAgentPickerButton = buttonProps => (
     <DropButton
       {...buttonProps}
@@ -273,36 +277,24 @@ class Builder extends React.Component {
               buttonRenderer={this.renderAgentPickerButton}
             />
 
+            {this.ShowEditListingsButton && (
+              <ActionButton
+                style={{ marginLeft: '0.5rem' }}
+                appearance="outline"
+                onClick={this.props.onShowEditListings}
+              >
+                Edit Listings ({this.props.templateData.listings.length})
+              </ActionButton>
+            )}
+
             {this.state.selectedTemplate &&
               isSocialMedium && (
-                <Fragment>
-                  <ActionButton
-                    onClick={() => this.handleSocialSharing('Instagram')}
-                  >
-                    <i
-                      className="fa fa-instagram"
-                      style={{
-                        fontSize: '1.5rem',
-                        marginRight: '0.5rem'
-                      }}
-                    />
-                    Post to Instagram
-                  </ActionButton>
-
-                  <ActionButton
-                    style={{ marginLeft: '0.5rem' }}
-                    onClick={() => this.handleSocialSharing('Facebook')}
-                  >
-                    <i
-                      className="fa fa-facebook-square"
-                      style={{
-                        fontSize: '1.5rem',
-                        marginRight: '0.5rem'
-                      }}
-                    />
-                    Post to Facebook
-                  </ActionButton>
-                </Fragment>
+                <ActionButton
+                  style={{ marginLeft: '0.5rem' }}
+                  onClick={this.handleSocialSharing}
+                >
+                  Next
+                </ActionButton>
               )}
 
             {this.state.selectedTemplate &&
@@ -311,7 +303,7 @@ class Builder extends React.Component {
                   style={{ marginLeft: '0.5rem' }}
                   onClick={this.handleSave}
                 >
-                  {this.props.saveButtonLabel}
+                  Next
                 </ActionButton>
               )}
 

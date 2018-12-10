@@ -26,6 +26,7 @@ class SendMlsListingCard extends React.Component {
   state = {
     listing: null,
     isListingsModalOpen: false,
+    showEditListings: false,
     isInstantMarketingBuilderOpen: false,
     isComposeEmailOpen: false,
     isSendingEmail: false,
@@ -135,7 +136,10 @@ class SendMlsListingCard extends React.Component {
   openListingModal = () => this.setState({ isListingsModalOpen: true })
 
   closeListingModal = () =>
-    this.setState({ isListingsModalOpen: false }, this.props.handleTrigger)
+    this.setState(
+      { isListingsModalOpen: false, showEditListings: false },
+      this.props.handleTrigger
+    )
 
   toggleComposeEmail = () =>
     this.setState(state => ({
@@ -196,13 +200,34 @@ class SendMlsListingCard extends React.Component {
     }
   }
 
+  get TemplateTypes() {
+    return this.props.selectedTemplate
+      ? [this.props.selectedTemplate.template_type]
+      : getTemplateTypes(this.state.listings)
+  }
+
+  get IsMultiListing() {
+    return (
+      this.props.selectedTemplate &&
+      this.props.selectedTemplate.template_type === 'Listings'
+    )
+  }
+
+  handleEditListings = () => {
+    this.setState({
+      showEditListings: true
+    })
+  }
+
   render() {
-    const { listing } = this.state
-    const { user, selectedTemplate } = this.props
+    const { listings } = this.state
+    const { user } = this.props
 
     if (hasMarketingAccess(user) === false) {
       return false
     }
+
+    console.log(this.state)
 
     return (
       <Fragment>
@@ -217,9 +242,9 @@ class SendMlsListingCard extends React.Component {
         )}
 
         <SearchListingDrawer
-          isOpen={this.state.isListingsModalOpen}
-          compact={false}
-          title="Select a Listing"
+          isOpen={this.state.isListingsModalOpen || this.state.showEditListings}
+          isEditMode={this.state.showEditListings}
+          title={this.IsMultiListing ? 'Select Listings' : 'Select a Listing'}
           searchPlaceholder="Enter MLS# or an address"
           initialList={getMlsDrawerInitialDeals(this.props.deals)}
           onClose={this.closeListingModal}
@@ -231,15 +256,12 @@ class SendMlsListingCard extends React.Component {
           onClose={this.closeMarketing}
           handleSave={this.handleSaveMarketingCard}
           handleSocialSharing={this.handleSocialSharing}
-          templateData={{ listing, user }}
-          templateTypes={
-            selectedTemplate
-              ? [selectedTemplate.template_type]
-              : getTemplateTypes(listing)
-          }
-          assets={listing && listing.gallery_image_urls}
+          templateData={{ listings, user }}
+          templateTypes={this.TemplateTypes}
+          assets={listings}
           mediums={this.props.mediums}
-          defaultTemplate={selectedTemplate}
+          defaultTemplate={this.props.selectedTemplate}
+          onShowEditListings={this.handleEditListings}
         />
 
         {this.state.isComposeEmailOpen && (
