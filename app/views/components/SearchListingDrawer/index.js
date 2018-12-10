@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import _ from 'underscore'
+
 import Deal from '../../../models/Deal'
 import Listing from '../../../models/listings/listing'
 import listingsHelper from '../../../utils/listing'
@@ -13,20 +15,21 @@ class SearchListingDrawer extends React.Component {
     isWorking: false
   }
 
-  handleSelectListing = async item => {
-    if (this.props.compact !== false) {
-      return this.props.onSelectListing(item)
-    }
-
+  handleSelectListings = async items => {
     this.setState({
       isWorking: true
     })
 
     try {
-      const id = item.type === 'deal' ? item.listing : item.id
-      const listingWithImages = await Listing.getListing(id)
+      const listings = await Promise.all(
+        _.map(items, item => {
+          const id = item.type === 'deal' ? item.listing : item.id
 
-      this.props.onSelectListing(listingWithImages)
+          return Listing.getListing(id)
+        })
+      )
+
+      this.props.onSelectListing(listings)
     } catch (e) {
       console.log(e)
     } finally {
@@ -72,7 +75,7 @@ class SearchListingDrawer extends React.Component {
         }}
         searchFunction={this.searchListing}
         ItemRow={ListingItem}
-        onSelectItem={this.handleSelectListing}
+        onSelectItems={this.handleSelectListings}
         {...this.props}
       />
     )

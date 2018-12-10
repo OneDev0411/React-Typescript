@@ -24,7 +24,7 @@ import SocialDrawer from '../../components/SocialDrawer'
 
 class SendMlsListingCard extends React.Component {
   state = {
-    listing: null,
+    listings: [],
     isListingsModalOpen: false,
     isInstantMarketingBuilderOpen: false,
     isComposeEmailOpen: false,
@@ -142,10 +142,10 @@ class SendMlsListingCard extends React.Component {
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
 
-  onSelectListing = async listing =>
+  onSelectListings = async listings =>
     this.setState(
       {
-        listing,
+        listings,
         isListingsModalOpen: false,
         isInstantMarketingBuilderOpen: true
       },
@@ -192,7 +192,7 @@ class SendMlsListingCard extends React.Component {
 
   get TemplateInstanceData() {
     return {
-      listings: [this.state.listing.id]
+      listings: [this.state.listings.map(listing => listing.id)]
     }
   }
 
@@ -201,7 +201,7 @@ class SendMlsListingCard extends React.Component {
   }
 
   render() {
-    const { listing } = this.state
+    const { listings } = this.state
     const { user, selectedTemplate } = this.props
 
     if (hasMarketingAccess(user) === false) {
@@ -224,12 +224,11 @@ class SendMlsListingCard extends React.Component {
 
         <SearchListingDrawer
           isOpen={this.state.isListingsModalOpen}
-          compact={false}
           title={this.IsMultiListing ? 'Select Listings' : 'Select a Listing'}
           searchPlaceholder="Enter MLS# or an address"
           initialList={getMlsDrawerInitialDeals(this.props.deals)}
           onClose={this.closeListingModal}
-          onSelectListing={this.onSelectListing}
+          onSelectListings={this.onSelectListings}
           multipleSelection={this.IsMultiListing}
         />
 
@@ -238,13 +237,13 @@ class SendMlsListingCard extends React.Component {
           onClose={this.closeMarketing}
           handleSave={this.handleSaveMarketingCard}
           handleSocialSharing={this.handleSocialSharing}
-          templateData={{ listing, user }}
+          templateData={{ listings, user }}
           templateTypes={
             selectedTemplate
               ? [selectedTemplate.template_type]
-              : getTemplateTypes(listing)
+              : getTemplateTypes(listings)
           }
-          assets={listing && listing.gallery_image_urls}
+          assets={listings}
           mediums={this.props.mediums}
           defaultTemplate={selectedTemplate}
         />

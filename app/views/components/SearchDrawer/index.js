@@ -2,7 +2,11 @@ import React from 'react'
 import Downshift from 'downshift'
 import PropTypes from 'prop-types'
 
+import _ from 'underscore'
+
 import { CheckBoxButton } from 'components/Button/CheckboxButton'
+
+import ActionButton from 'components/Button/ActionButton'
 
 import Drawer from '../OverlayDrawer'
 import Search from '../Grid/Search'
@@ -13,7 +17,7 @@ import { ResultsContainer } from './styled'
 
 const initialState = {
   isSearching: false,
-  selectedRows: [],
+  selectedRows: {},
   list: [],
   error: null
 }
@@ -73,16 +77,26 @@ class SearchDrawer extends React.Component {
     this.setState(initialState)
     this.searchInputRef.clear()
 
-    this.props.onSelectItem(item)
+    this.props.onSelectItems({
+      [item.id]: item
+    })
+  }
+
+  handleSelectMultipleListing = () => {
+    this.setState(initialState)
+    this.searchInputRef.clear()
+
+    console.log(this.state.selectedRows)
+    this.props.onSelectItems(this.state.selectedRows)
   }
 
   handleClickCheckbox = item => {
-    let nextState = []
+    let nextState = {}
 
-    if (this.state.selectedRows.includes(item.id)) {
-      nextState = this.state.selectedRows.filter(id => item.id !== id)
+    if (this.state.selectedRows[item.id]) {
+      nextState = _.omit(this.state.selectedRows, row => row.id === item.id)
     } else {
-      nextState = [...this.state.selectedRows, item.id]
+      nextState = { ...this.state.selectedRows, [item.id]: item }
     }
 
     this.setState({ selectedRows: nextState })
@@ -103,9 +117,8 @@ class SearchDrawer extends React.Component {
     return (
       <Drawer
         isOpen={this.props.isOpen}
-        showFooter={false}
-        onClose={this.handleClose}
         showFooter={this.props.multipleSelection}
+        onClose={this.handleClose}
       >
         <Drawer.Header title={this.props.title} />
         <Drawer.Body style={{ overflow: 'hidden' }}>
@@ -143,9 +156,7 @@ class SearchDrawer extends React.Component {
                           this.props.multipleSelection && (
                             <CheckBoxButton
                               style={{ marginRight: '1rem' }}
-                              isSelected={this.state.selectedRows.includes(
-                                item.id
-                              )}
+                              isSelected={this.state.selectedRows[item.id]}
                               onClick={() => this.handleClickCheckbox(item)}
                             />
                           )
@@ -162,7 +173,18 @@ class SearchDrawer extends React.Component {
           />
         </Drawer.Body>
 
-        <Drawer.Footer>-----</Drawer.Footer>
+        <Drawer.Footer
+          style={{
+            flexDirection: 'row-reverse'
+          }}
+        >
+          <ActionButton
+            disabled={_.size(this.state.selectedRows) === 0}
+            onClick={this.handleSelectMultipleListing}
+          >
+            Next ({_.size(this.state.selectedRows)} Listings Selected)
+          </ActionButton>
+        </Drawer.Footer>
       </Drawer>
     )
   }
