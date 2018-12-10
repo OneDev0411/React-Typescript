@@ -15,7 +15,7 @@ export const headers = {
   },
   Brand: {
     title: 'Brand Campaigns',
-    brandColor: '#bfd6e8',
+    brandColor: '#ded8d8',
     size: { width: 403, height: 214 },
     description: 'Promote the power of your unique brand to clients.'
   },
