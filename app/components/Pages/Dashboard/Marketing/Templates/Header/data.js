@@ -11,7 +11,7 @@ export const headers = {
     brandColor: '#e4bfe8',
     size: { width: 403, height: 214 },
     description:
-      '“Wow! My agent remembered by birthday.” - Your astounded client.'
+      '“Wow! My agent remembered my birthday.” - Your astounded client.'
   },
   Brand: {
     title: 'Brand Campaigns',
