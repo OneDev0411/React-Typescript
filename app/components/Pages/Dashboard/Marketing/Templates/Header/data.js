@@ -61,7 +61,7 @@ export const headers = {
       'Invite potential buyers with designs that compliment your listing.'
   },
   PriceImprovement: {
-    title: 'Price Improvement',
+    title: 'New Price',
     brandColor: '#d7e8e8',
     position: 'bottom',
     size: { width: 372, height: 233 },
