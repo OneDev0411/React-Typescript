@@ -15,11 +15,13 @@ import {
   IconContainer
 } from '../styled'
 
-export function MlsItem({ item, ...rest }) {
+export function MlsItem({ item, renderCheckBox, ...rest }) {
   const address = item.address_components
 
   return (
     <ListItem {...rest}>
+      {renderCheckBox && renderCheckBox(item)}
+
       <AddressContainer>
         {item.image ? (
           <ListItemImage alt="" src={item.image} />

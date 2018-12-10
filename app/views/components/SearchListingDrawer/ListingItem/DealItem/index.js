@@ -18,12 +18,14 @@ function dealSide(deal) {
   return deal.deal_type === 'Selling' ? 'Seller' : 'Buyer'
 }
 
-export function DealItem({ item: deal, ...rest }) {
+export function DealItem({ item: deal, renderCheckBox, ...rest }) {
   const photo = Deal.get.field(deal, 'photo')
   const status = Deal.get.status(deal)
 
   return (
     <ListItem {...rest}>
+      {renderCheckBox && renderCheckBox(deal)}
+
       <AddressContainer>
         {photo ? (
           <Avatar

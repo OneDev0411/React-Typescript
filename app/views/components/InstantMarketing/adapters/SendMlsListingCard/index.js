@@ -196,6 +196,10 @@ class SendMlsListingCard extends React.Component {
     }
   }
 
+  get IsMultiListing() {
+    return true
+  }
+
   render() {
     const { listing } = this.state
     const { user, selectedTemplate } = this.props
@@ -203,6 +207,8 @@ class SendMlsListingCard extends React.Component {
     if (hasMarketingAccess(user) === false) {
       return false
     }
+
+    console.log(this.props)
 
     return (
       <Fragment>
@@ -219,11 +225,12 @@ class SendMlsListingCard extends React.Component {
         <SearchListingDrawer
           isOpen={this.state.isListingsModalOpen}
           compact={false}
-          title="Select a Listing"
+          title={this.IsMultiListing ? 'Select Listings' : 'Select a Listing'}
           searchPlaceholder="Enter MLS# or an address"
           initialList={getMlsDrawerInitialDeals(this.props.deals)}
           onClose={this.closeListingModal}
           onSelectListing={this.onSelectListing}
+          multipleSelection={this.IsMultiListing}
         />
 
         <InstantMarketing

@@ -64,6 +64,7 @@ class SearchListingDrawer extends React.Component {
     return (
       <SearchDrawer
         showLoadingIndicator={this.state.isWorking}
+        multipleSelection={this.props.multipleSelection}
         searchInputOptions={{
           placeholder: this.props.searchPlaceholder,
           debounceTime: 500,

@@ -2,6 +2,8 @@ import React from 'react'
 import Downshift from 'downshift'
 import PropTypes from 'prop-types'
 
+import { CheckBoxButton } from 'components/Button/CheckboxButton'
+
 import Drawer from '../OverlayDrawer'
 import Search from '../Grid/Search'
 import Loading from '../../../components/Partials/Loading'
@@ -11,6 +13,7 @@ import { ResultsContainer } from './styled'
 
 const initialState = {
   isSearching: false,
+  selectedRows: [],
   list: [],
   error: null
 }
@@ -61,10 +64,28 @@ class SearchDrawer extends React.Component {
   }
 
   handleSelectItem = item => {
+    if (this.props.multipleSelection) {
+      this.handleClickCheckbox(item)
+
+      return
+    }
+
     this.setState(initialState)
     this.searchInputRef.clear()
 
     this.props.onSelectItem(item)
+  }
+
+  handleClickCheckbox = item => {
+    let nextState = []
+
+    if (this.state.selectedRows.includes(item.id)) {
+      nextState = this.state.selectedRows.filter(id => item.id !== id)
+    } else {
+      nextState = [...this.state.selectedRows, item.id]
+    }
+
+    this.setState({ selectedRows: nextState })
   }
 
   get List() {
@@ -84,6 +105,7 @@ class SearchDrawer extends React.Component {
         isOpen={this.props.isOpen}
         showFooter={false}
         onClose={this.handleClose}
+        showFooter={this.props.multipleSelection}
       >
         <Drawer.Header title={this.props.title} />
         <Drawer.Body style={{ overflow: 'hidden' }}>
@@ -117,6 +139,17 @@ class SearchDrawer extends React.Component {
                         key={index}
                         item={item}
                         isHighlighted={highlightedIndex === index}
+                        renderCheckBox={item =>
+                          this.props.multipleSelection && (
+                            <CheckBoxButton
+                              style={{ marginRight: '1rem' }}
+                              isSelected={this.state.selectedRows.includes(
+                                item.id
+                              )}
+                              onClick={() => this.handleClickCheckbox(item)}
+                            />
+                          )
+                        }
                         {...getItemProps({
                           item,
                           onClick: () => this.handleSelectItem(item)
@@ -128,6 +161,8 @@ class SearchDrawer extends React.Component {
             )}
           />
         </Drawer.Body>
+
+        <Drawer.Footer>-----</Drawer.Footer>
       </Drawer>
     )
   }
