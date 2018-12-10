@@ -47,7 +47,7 @@ export const items = [
     url: '/OpenHouse'
   },
   {
-    title: 'Price Improvement',
+    title: 'New Price',
     url: '/PriceImprovement'
   }
   // {
