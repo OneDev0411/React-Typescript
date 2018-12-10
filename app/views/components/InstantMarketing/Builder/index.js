@@ -249,11 +249,11 @@ class Builder extends React.Component {
 
   get IsSocialMedium() {
     if (this.state.selectedTemplate) {
-      return this.state.selectedTemplate.medium === 'Social'
+      return this.state.selectedTemplate.medium !== 'Email'
     }
 
     if (this.props.mediums) {
-      return this.props.mediums === 'Social'
+      return this.props.mediums !== 'Email'
     }
 
     return false
