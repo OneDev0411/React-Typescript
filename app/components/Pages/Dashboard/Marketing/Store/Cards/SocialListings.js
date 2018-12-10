@@ -35,7 +35,7 @@ const Container = styled.div`
 export default function SocialListings(props) {
   return (
     <Container isSideMenuOpen={props.isSideMenuOpen}>
-      <div style={{ marginBottom: '2.5rem' }}>
+      <div style={{ marginBottom: '1.5rem' }}>
         <Jumbo style={{ marginBottom: '1rem' }}>
           Post listings on social media
         </Jumbo>
