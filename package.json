@@ -151,6 +151,7 @@
     "react-images": "^0.5.11",
     "react-input-mask": "^1.1.0",
     "react-intercom": "^1.0.14",
+    "react-joyride": "^2.0.0-15",
     "react-lazy-load": "^3.0.13",
     "react-loadable": "^5.4.0",
     "react-masonry-component": "^6.2.1",
