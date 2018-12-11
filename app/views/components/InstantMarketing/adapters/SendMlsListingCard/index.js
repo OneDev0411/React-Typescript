@@ -24,7 +24,7 @@ import SocialDrawer from '../../components/SocialDrawer'
 
 class SendMlsListingCard extends React.Component {
   state = {
-    listing: null,
+    listings: [],
     isListingsModalOpen: false,
     showEditListings: false,
     isInstantMarketingBuilderOpen: false,
@@ -146,15 +146,20 @@ class SendMlsListingCard extends React.Component {
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
 
-  onSelectListing = async listing =>
+  handleSelectListings = listings =>
     this.setState(
       {
-        listing,
+        listings,
         isListingsModalOpen: false,
         isInstantMarketingBuilderOpen: true
       },
       this.props.handleTrigger
     )
+
+  handleListingsSortChange = listings =>
+    this.setState({
+      listings
+    })
 
   handleSaveMarketingCard = async (template, owner) => {
     this.generatePreviewImage(template)
@@ -196,7 +201,7 @@ class SendMlsListingCard extends React.Component {
 
   get TemplateInstanceData() {
     return {
-      listings: [this.state.listing.id]
+      listings: [this.state.listings.map(listing => listing.id)]
     }
   }
 
@@ -211,6 +216,18 @@ class SendMlsListingCard extends React.Component {
       this.props.selectedTemplate &&
       this.props.selectedTemplate.template_type === 'Listings'
     )
+  }
+
+  get InitialList() {
+    if (this.state.showEditListings) {
+      return this.state.listings.map(listing => ({
+        ...listing,
+        image: listing.cover_image_url,
+        address_components: listing.property.address
+      }))
+    }
+
+    return getMlsDrawerInitialDeals(this.props.deals)
   }
 
   handleEditListings = () => {
@@ -243,12 +260,14 @@ class SendMlsListingCard extends React.Component {
 
         <SearchListingDrawer
           isOpen={this.state.isListingsModalOpen || this.state.showEditListings}
-          isEditMode={this.state.showEditListings}
+          isSortable={this.state.showEditListings}
           title={this.IsMultiListing ? 'Select Listings' : 'Select a Listing'}
           searchPlaceholder="Enter MLS# or an address"
-          initialList={getMlsDrawerInitialDeals(this.props.deals)}
+          initialList={this.InitialList}
           onClose={this.closeListingModal}
-          onSelectListing={this.onSelectListing}
+          onSelectListings={this.handleSelectListings}
+          onSortChange={this.handleListingsSortChange}
+          multipleSelection={this.IsMultiListing}
         />
 
         <InstantMarketing

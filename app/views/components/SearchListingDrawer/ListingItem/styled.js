@@ -6,8 +6,7 @@ import { grey } from '../../../utils/colors'
 export const ListItem = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem 2px;
   cursor: pointer;
   background-color: ${props =>
     props.isHighlighted ? grey.A100 : 'transparent'};

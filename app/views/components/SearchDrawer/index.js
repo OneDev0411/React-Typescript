@@ -1,67 +1,29 @@
 import React from 'react'
-import Downshift from 'downshift'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
-
 import PropTypes from 'prop-types'
+import Downshift from 'downshift'
 
-import { CheckBoxButton } from 'components/Button/CheckboxButton'
+import _ from 'underscore'
+
+import ActionButton from 'components/Button/ActionButton'
 
 import Drawer from '../OverlayDrawer'
 import Search from '../Grid/Search'
 import Loading from '../../../components/Partials/Loading'
 import Alert from '../../../components/Pages/Dashboard/Partials/Alert'
 
+import { Body } from './Body'
+
 import { ResultsContainer } from './styled'
 
 const initialState = {
   isSearching: false,
+  selectedRows: {},
   list: [],
   error: null
 }
 
-const getItems = count =>
-  Array.from({ length: count }, (v, k) => k).map(k => ({
-    id: `item-${k}`,
-    content: `item ${k}`
-  }))
-
-// a little function to help us with reordering the result
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list)
-  const [removed] = result.splice(startIndex, 1)
-
-  result.splice(endIndex, 0, removed)
-
-  return result
-}
-
-const grid = 8
-
-const getItemStyle = (isDragging, draggableStyle) => ({
-  // some basic styles to make the items look a bit nicer
-  userSelect: 'none',
-  padding: grid * 2,
-  margin: `0 0 ${grid}px 0`,
-
-  // change background colour if dragging
-  background: isDragging ? 'lightgreen' : 'red',
-
-  // styles we need to apply on draggables
-  ...draggableStyle
-})
-
-const getListStyle = isDraggingOver => ({
-  background: isDraggingOver ? 'lightblue' : 'grey',
-  padding: grid,
-  width: 250
-})
-
 class SearchDrawer extends React.Component {
   state = initialState
-
-  onDragEnd(result) {
-    console.log(result)
-  }
 
   handleSearch = async value => {
     if (value.length === 0) {
@@ -106,10 +68,38 @@ class SearchDrawer extends React.Component {
   }
 
   handleSelectItem = item => {
+    if (this.props.multipleSelection) {
+      this.handleClickCheckbox(item)
+
+      return
+    }
+
     this.setState(initialState)
     this.searchInputRef.clear()
 
-    this.props.onSelectItem(item)
+    this.props.onSelectItems({
+      [item.id]: item
+    })
+  }
+
+  handleSelectMultipleListing = () => {
+    this.setState(initialState)
+    this.searchInputRef.clear()
+
+    console.log(this.state.selectedRows)
+    this.props.onSelectItems(this.state.selectedRows)
+  }
+
+  handleClickCheckbox = item => {
+    let nextState = {}
+
+    if (this.state.selectedRows[item.id]) {
+      nextState = _.omit(this.state.selectedRows, row => row.id === item.id)
+    } else {
+      nextState = { ...this.state.selectedRows, [item.id]: item }
+    }
+
+    this.setState({ selectedRows: nextState })
   }
 
   get List() {
@@ -122,12 +112,14 @@ class SearchDrawer extends React.Component {
 
   render() {
     const { isSearching, error } = this.state
-    const { showLoadingIndicator, ItemRow } = this.props
+    const { showLoadingIndicator } = this.props
+
+    console.log('>>>', this.List)
 
     return (
       <Drawer
         isOpen={this.props.isOpen}
-        showFooter={false}
+        showFooter={this.props.multipleSelection}
         onClose={this.handleClose}
       >
         <Drawer.Header title={this.props.title} />
@@ -157,37 +149,37 @@ class SearchDrawer extends React.Component {
                   )}
 
                   {!showLoadingIndicator && (
-                    <DragDropContext onDragEnd={this.onDragEnd}>
-                      {/* <Droppable droppableId="listings-droppable">
-                      </Droppable> */}
-
-                      {this.List.map((item, index) => (
-                        <ItemRow
-                          key={index}
-                          item={item}
-                          isHighlighted={highlightedIndex === index}
-                          renderCheckBox={item =>
-                            this.props.multipleSelection && (
-                              <CheckBoxButton
-                                style={{ marginRight: '1rem' }}
-                                isSelected={this.state.selectedRows[item.id]}
-                                onClick={() => this.handleClickCheckbox(item)}
-                              />
-                            )
-                          }
-                          {...getItemProps({
-                            item,
-                            onClick: () => this.handleSelectItem(item)
-                          })}
-                        />
-                      ))}
-                    </DragDropContext>
+                    <Body
+                      isSortable={this.props.isSortable}
+                      getItemProps={getItemProps}
+                      highlightedIndex={highlightedIndex}
+                      ItemRow={this.props.ItemRow}
+                      list={this.List}
+                      multipleSelection={this.props.multipleSelection}
+                      selectedRows={this.state.selectedRows}
+                      handleClickCheckbox={this.handleClickCheckbox}
+                      handleSelectItem={this.handleSelectItem}
+                      onSortChange={this.props.onSortChange}
+                    />
                   )}
                 </ResultsContainer>
               </div>
             )}
           />
         </Drawer.Body>
+
+        <Drawer.Footer
+          style={{
+            flexDirection: 'row-reverse'
+          }}
+        >
+          <ActionButton
+            disabled={_.size(this.state.selectedRows) === 0}
+            onClick={this.handleSelectMultipleListing}
+          >
+            Next ({_.size(this.state.selectedRows)} Listings Selected)
+          </ActionButton>
+        </Drawer.Footer>
       </Drawer>
     )
   }
@@ -196,16 +188,22 @@ class SearchDrawer extends React.Component {
 SearchDrawer.defaultProps = {
   showLoadingIndicator: false,
   searchInputOptions: {},
-  initialList: []
+  initialList: [],
+  isSortable: false,
+  multipleSelection: false,
+  onSortChange: () => null
 }
 
 SearchDrawer.propTypes = {
   showLoadingIndicator: PropTypes.bool,
+  isSortable: PropTypes.bool,
+  multipleSelection: PropTypes.bool,
   searchInputOptions: PropTypes.object,
   searchFunction: PropTypes.func.isRequired,
   ItemRow: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
   onSelectItem: PropTypes.func.isRequired,
-  initialList: PropTypes.array
+  initialList: PropTypes.array,
+  onSortChange: PropTypes.func
 }
 
 export default SearchDrawer

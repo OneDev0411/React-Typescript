@@ -23,6 +23,10 @@ class SearchListingDrawer extends React.Component {
     try {
       const listings = await Promise.all(
         _.map(items, item => {
+          if (item.gallery_image_urls) {
+            return item
+          }
+
           const id = item.type === 'deal' ? item.listing : item.id
 
           return Listing.getListing(id)
@@ -83,13 +87,11 @@ class SearchListingDrawer extends React.Component {
 }
 
 SearchListingDrawer.propTypes = {
-  compact: PropTypes.bool,
   onSelectListing: PropTypes.func.isRequired,
   searchPlaceholder: PropTypes.string
 }
 
 SearchListingDrawer.defaultProps = {
-  compact: true,
   searchPlaceholder: 'Enter MLS # or address'
 }
 
