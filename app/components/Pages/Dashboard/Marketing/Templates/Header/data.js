@@ -11,13 +11,13 @@ export const headers = {
     brandColor: '#e4bfe8',
     size: { width: 403, height: 214 },
     description:
-      '“Wow! My agent remembered by birthday.” - Your astounded client.'
+      '“Wow! My agent remembered my birthday.” - Your astounded client.'
   },
   Brand: {
     title: 'Brand Campaigns',
-    brandColor: '#bfd6e8',
+    brandColor: '#ded8d8',
     size: { width: 403, height: 214 },
-    description: 'Promote your brand.'
+    description: 'Promote the power of your unique brand to clients.'
   },
   ComingSoon: {
     title: 'Coming Soon',
@@ -61,7 +61,7 @@ export const headers = {
       'Invite potential buyers with designs that compliment your listing.'
   },
   PriceImprovement: {
-    title: 'Price Improvement',
+    title: 'New Price',
     brandColor: '#d7e8e8',
     position: 'bottom',
     size: { width: 372, height: 233 },

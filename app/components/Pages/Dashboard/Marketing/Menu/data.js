@@ -43,12 +43,16 @@ export const items = [
     url: '/JustSold'
   },
   {
-    title: 'Open House',
-    url: '/OpenHouse'
+    title: 'New Price',
+    url: '/PriceImprovement'
   },
   {
     title: 'Price Improvement',
     url: '/PriceImprovement'
+  },
+  {
+    title: 'Open House',
+    url: '/OpenHouse'
   },
   {
     title: 'Multi Listings',
