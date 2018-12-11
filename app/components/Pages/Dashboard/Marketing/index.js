@@ -1,12 +1,16 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
 
+import Onboarding from 'components/Onboarding'
+
 import {
   Container as PageContainer,
   Menu as SideMenu,
   Content as PageContent
 } from 'components/SlideMenu'
 import { ListTitle } from 'components/SlideMenu/Menu/styled'
+
+import { OnboardingSteps } from './helpers/onboarding'
 
 import { Menu } from './Menu'
 
@@ -26,7 +30,7 @@ class Marketing extends Component {
     return (
       <PageContainer isOpen={isSideMenuOpen}>
         <SideMenu isOpen={isSideMenuOpen}>
-          <ListTitle>Marketing</ListTitle>
+          <ListTitle className="onboarding--intro">Marketing</ListTitle>
           <Menu />
         </SideMenu>
 
@@ -42,6 +46,11 @@ class Marketing extends Component {
             })
           )}
         </PageContent>
+
+        <Onboarding
+          steps={OnboardingSteps}
+          onTimeDisplay="marketing-center-onboarding"
+        />
       </PageContainer>
     )
   }
