@@ -156,7 +156,7 @@ class SendMlsListingCard extends React.Component {
       this.props.handleTrigger
     )
 
-  handleListingsSortChange = listings =>
+  handleUpdateListings = listings =>
     this.setState({
       listings
     })
@@ -230,6 +230,36 @@ class SendMlsListingCard extends React.Component {
     return getMlsDrawerInitialDeals(this.props.deals)
   }
 
+  get SearchListingDrawerTitle() {
+    if (this.state.showEditListings) {
+      return 'Updating Listings'
+    }
+
+    return this.IsMultiListing ? 'Select Listings' : 'Select a Listing'
+  }
+
+  get Assets() {
+    let list = []
+
+    this.state.listings.forEach(listing => {
+      list = list.concat(listing.gallery_image_urls)
+    })
+
+    return list
+  }
+
+  get TemplateData() {
+    const data = { user: this.props.user }
+
+    if (this.IsMultiListing) {
+      data.listings = this.state.listings
+    } else {
+      data.listing = this.state.listings[0]
+    }
+
+    return data
+  }
+
   handleEditListings = () => {
     this.setState({
       showEditListings: true
@@ -237,14 +267,11 @@ class SendMlsListingCard extends React.Component {
   }
 
   render() {
-    const { listings } = this.state
     const { user } = this.props
 
     if (hasMarketingAccess(user) === false) {
       return false
     }
-
-    console.log(this.state)
 
     return (
       <Fragment>
@@ -260,13 +287,13 @@ class SendMlsListingCard extends React.Component {
 
         <SearchListingDrawer
           isOpen={this.state.isListingsModalOpen || this.state.showEditListings}
-          isSortable={this.state.showEditListings}
-          title={this.IsMultiListing ? 'Select Listings' : 'Select a Listing'}
+          isUpdatingList={this.state.showEditListings}
+          title={this.SearchListingDrawerTitle}
           searchPlaceholder="Enter MLS# or an address"
           initialList={this.InitialList}
           onClose={this.closeListingModal}
           onSelectListings={this.handleSelectListings}
-          onSortChange={this.handleListingsSortChange}
+          onUpdateList={this.handleUpdateListings}
           multipleSelection={this.IsMultiListing}
         />
 
@@ -275,9 +302,9 @@ class SendMlsListingCard extends React.Component {
           onClose={this.closeMarketing}
           handleSave={this.handleSaveMarketingCard}
           handleSocialSharing={this.handleSocialSharing}
-          templateData={{ listings, user }}
+          templateData={this.TemplateData}
           templateTypes={this.TemplateTypes}
-          assets={listings}
+          assets={this.Assets}
           mediums={this.props.mediums}
           defaultTemplate={this.props.selectedTemplate}
           onShowEditListings={this.handleEditListings}

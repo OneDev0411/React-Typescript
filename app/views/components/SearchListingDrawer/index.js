@@ -33,6 +33,12 @@ class SearchListingDrawer extends React.Component {
         })
       )
 
+      if (this.props.isUpdatingList) {
+        this.props.onUpdateList([].concat(listings, this.props.initialList))
+
+        return
+      }
+
       this.props.onSelectListings(listings)
     } catch (e) {
       console.log(e)

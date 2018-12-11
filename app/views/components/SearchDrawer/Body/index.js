@@ -16,7 +16,13 @@ export class Body extends React.Component {
       result.destination.index
     )
 
-    this.props.onSortChange(newList)
+    this.props.onUpdateList(newList, 'sort')
+  }
+
+  handleRemove = item => {
+    const newList = this.props.list.filter(row => row.id !== item.id)
+
+    this.props.onUpdateList(newList, 'remove')
   }
 
   reorder = (list, startIndex, endIndex) => {
@@ -41,7 +47,7 @@ export class Body extends React.Component {
   })
 
   get ShowCheckBox() {
-    return this.props.isSortable !== true && this.props.multipleSelection
+    return this.props.isUpdatingList !== true && this.props.multipleSelection
   }
 
   render() {
@@ -58,7 +64,7 @@ export class Body extends React.Component {
               {this.props.list.map((item, index) => (
                 <Draggable
                   key={item.id}
-                  isDragDisabled={this.props.isSortable !== true}
+                  isDragDisabled={this.props.isUpdatingList !== true}
                   draggableId={item.id}
                   index={index}
                 >
@@ -76,6 +82,8 @@ export class Body extends React.Component {
                         key={index}
                         item={item}
                         isHighlighted={this.props.highlightedIndex === index}
+                        isUpdatingList={this.props.isUpdatingList}
+                        onClickRemove={() => this.handleRemove(item)}
                         renderCheckBox={item =>
                           this.ShowCheckBox && (
                             <CheckBoxButton

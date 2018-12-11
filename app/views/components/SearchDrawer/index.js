@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Downshift from 'downshift'
 
@@ -68,7 +68,7 @@ class SearchDrawer extends React.Component {
   }
 
   handleSelectItem = item => {
-    if (this.props.multipleSelection) {
+    if (this.props.multipleSelection && this.props.isUpdatingList !== true) {
       this.handleClickCheckbox(item)
 
       return
@@ -86,7 +86,6 @@ class SearchDrawer extends React.Component {
     this.setState(initialState)
     this.searchInputRef.clear()
 
-    console.log(this.state.selectedRows)
     this.props.onSelectItems(this.state.selectedRows)
   }
 
@@ -110,16 +109,18 @@ class SearchDrawer extends React.Component {
       : this.props.initialList
   }
 
+  get ShowFooter() {
+    return this.props.multipleSelection && !this.props.isUpdatingList
+  }
+
   render() {
     const { isSearching, error } = this.state
     const { showLoadingIndicator } = this.props
 
-    console.log('>>>', this.List)
-
     return (
       <Drawer
         isOpen={this.props.isOpen}
-        showFooter={this.props.multipleSelection}
+        showFooter={this.ShowFooter}
         onClose={this.handleClose}
       >
         <Drawer.Header title={this.props.title} />
@@ -150,16 +151,21 @@ class SearchDrawer extends React.Component {
 
                   {!showLoadingIndicator && (
                     <Body
-                      isSortable={this.props.isSortable}
+                      isUpdatingList={
+                        this.props.isUpdatingList && !this.searchInputRef.value
+                      }
                       getItemProps={getItemProps}
                       highlightedIndex={highlightedIndex}
                       ItemRow={this.props.ItemRow}
                       list={this.List}
-                      multipleSelection={this.props.multipleSelection}
+                      multipleSelection={
+                        this.props.multipleSelection &&
+                        !this.props.isUpdatingList
+                      }
                       selectedRows={this.state.selectedRows}
                       handleClickCheckbox={this.handleClickCheckbox}
                       handleSelectItem={this.handleSelectItem}
-                      onSortChange={this.props.onSortChange}
+                      onUpdateList={this.props.onUpdateList}
                     />
                   )}
                 </ResultsContainer>
@@ -189,21 +195,21 @@ SearchDrawer.defaultProps = {
   showLoadingIndicator: false,
   searchInputOptions: {},
   initialList: [],
-  isSortable: false,
+  isUpdatingList: false,
   multipleSelection: false,
-  onSortChange: () => null
+  onUpdateList: () => null
 }
 
 SearchDrawer.propTypes = {
   showLoadingIndicator: PropTypes.bool,
-  isSortable: PropTypes.bool,
+  isUpdatingList: PropTypes.bool,
   multipleSelection: PropTypes.bool,
   searchInputOptions: PropTypes.object,
   searchFunction: PropTypes.func.isRequired,
   ItemRow: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
   onSelectItem: PropTypes.func.isRequired,
   initialList: PropTypes.array,
-  onSortChange: PropTypes.func
+  onUpdateList: PropTypes.func
 }
 
 export default SearchDrawer

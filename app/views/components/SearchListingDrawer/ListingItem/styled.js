@@ -10,6 +10,17 @@ export const ListItem = styled.div`
   cursor: pointer;
   background-color: ${props =>
     props.isHighlighted ? grey.A100 : 'transparent'};
+
+  .delete-icon {
+    width: 16px;
+    height: 16px;
+    fill: rgba(0, 0, 0, 0.2);
+    margin-left: 0.5rem;
+
+    :hover {
+      fill: #e60000;
+    }
+  }
 `
 
 export const ListItemImage = styled.img`
@@ -23,6 +34,8 @@ export const ListItemAddress = styled.div`
 `
 
 export const ListItemStatus = styled.div`
+  display: flex;
+  align-items: center;
   text-align: right;
 `
 
