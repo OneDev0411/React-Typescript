@@ -48,7 +48,8 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
       return
     }
 
-    const { ids, filters, users } = ctx.request.body
+    const { ids, filters, users, type } = ctx.request.body
+
     const { brand } = ctx.params
     let data = {}
     let usersString
@@ -65,8 +66,16 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
       usersString = users.join('&users[]=')
     }
 
+    let url
+
+    if (type === 'same') {
+      url = '/analytics/contact_joint_export/facts?format=csv'
+    } else if (type === 'separate') {
+      url = '/analytics/contact_export/facts?format=csv'
+    }
+
     const response = await ctx
-      .fetch(`/contacts/outlook.csv?users[]=${usersString}`, 'POST')
+      .fetch(`${url}&users[]=${usersString}`, 'POST')
       .set('Authorization', `Bearer ${user.access_token}`)
       .set({ 'X-RECHAT-BRAND': brand })
       .send(data)
