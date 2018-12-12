@@ -55,6 +55,7 @@ class ExportContacts extends React.Component {
     const blob = new Blob([response.text], { type: 'text/csv' })
 
     fileSaver.saveAs(blob, response.headers['x-rechat-filename'])
+    this.closeModal()
   }
 
   openModal = () => {

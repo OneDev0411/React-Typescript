@@ -24,13 +24,13 @@ function handleIds(ids) {
 function handleFilters(filters) {
   if (typeof filters === 'string') {
     return {
-      filters: [JSON.parse(decodeURIComponent(filters))]
+      filter: [JSON.parse(decodeURIComponent(filters))]
     }
   }
 
   if (Array.isArray(filters)) {
     return {
-      filters: filters.map(filter => JSON.parse(decodeURIComponent(filter)))
+      filter: filters.map(filter => JSON.parse(decodeURIComponent(filter)))
     }
   }
 
@@ -52,7 +52,7 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
 
     const { brand } = ctx.params
     let data = {}
-    let usersString
+    let usersString = ''
 
     if (ids) {
       data = handleIds(ids)
@@ -61,9 +61,9 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
     }
 
     if (typeof users === 'string') {
-      usersString = users
+      usersString = `&users[]=${users}`
     } else if (Array.isArray(users)) {
-      usersString = users.join('&users[]=')
+      usersString = `&users[]=${users.join('&users[]=')}`
     }
 
     let url
@@ -75,7 +75,7 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
     }
 
     const response = await ctx
-      .fetch(`${url}&users[]=${usersString}`, 'POST')
+      .fetch(`${url}${usersString}`, 'POST')
       .set('Authorization', `Bearer ${user.access_token}`)
       .set({ 'X-RECHAT-BRAND': brand })
       .send(data)
