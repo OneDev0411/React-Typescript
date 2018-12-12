@@ -13,6 +13,7 @@ function getMediums(templates) {
     .map(t => t.medium)
     .filter(onlyUnique)
     .sort(sortAlphabetically)
+    .reverse()
 }
 
 export default class Templates extends Component {
