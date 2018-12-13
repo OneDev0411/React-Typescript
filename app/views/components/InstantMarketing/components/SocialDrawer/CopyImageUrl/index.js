@@ -11,11 +11,11 @@ import copy from 'utils/copy-text-to-clipboard'
 import { Section } from '../components/Section'
 
 function getFileUrl(instance) {
-  return instance && truncateTextFromMiddle(instance.file.url, 40)
+  return instance && truncateTextFromMiddle(instance.branch, 50)
 }
 
 function handleCopyUrl(props) {
-  copy(props.instance.file.url)
+  copy(props.instance.branch)
 
   props.notify({
     message: 'Link Copied',
