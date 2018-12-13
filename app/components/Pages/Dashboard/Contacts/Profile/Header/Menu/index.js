@@ -3,9 +3,10 @@ import Flex from 'styled-flex-component'
 
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 
+import { CloseButton } from 'components/Button/CloseButton'
+
 import Chat from './ChatButton'
 import { Divider } from './Divider'
-import { CloseButton } from '../../../../../../../views/components/Button/CloseButton'
 
 export function Menu(props) {
   const { contact } = props

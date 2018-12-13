@@ -19,10 +19,10 @@ export default class Templates extends React.Component {
   }
 
   getTemplatesList = async () => {
-    const { mediums, defaultTemplate, templateTypes: types } = this.props
+    const { medium, defaultTemplate, templateTypes: types } = this.props
 
     try {
-      let templates = await getTemplates(types, [mediums])
+      let templates = await getTemplates(types, medium ? [medium] : [])
 
       if (templates.length > 0) {
         // Reordering templates list and show the default tempalte
@@ -68,8 +68,8 @@ export default class Templates extends React.Component {
 
   updateTemplate = template =>
     this.setState(state => ({
-      templates: state.templates.map(
-        item => (item.id === template.id ? template : item)
+      templates: state.templates.map(item =>
+        item.id === template.id ? template : item
       )
     }))
 

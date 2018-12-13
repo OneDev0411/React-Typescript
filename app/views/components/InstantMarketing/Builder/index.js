@@ -254,6 +254,18 @@ class Builder extends React.Component {
     )
   }
 
+  get IsSocialMedium() {
+    if (this.state.selectedTemplate) {
+      return this.state.selectedTemplate.medium !== 'Email'
+    }
+
+    if (this.props.mediums) {
+      return this.props.mediums !== 'Email'
+    }
+
+    return false
+  }
+
   renderAgentPickerButton = buttonProps => (
     <DropButton
       {...buttonProps}
@@ -262,7 +274,7 @@ class Builder extends React.Component {
   )
 
   render() {
-    const isSocialMedium = this.props.mediums !== 'Email'
+    const isSocialMedium = this.IsSocialMedium
 
     return (
       <Container className="template-builder">
@@ -350,7 +362,7 @@ class Builder extends React.Component {
           >
             <Templates
               defaultTemplate={this.props.defaultTemplate}
-              mediums={this.props.mediums}
+              medium={this.props.mediums}
               onTemplateSelect={this.handleSelectTemplate}
               templateTypes={this.props.templateTypes}
             />
