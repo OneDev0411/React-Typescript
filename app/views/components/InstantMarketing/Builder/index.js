@@ -188,8 +188,8 @@ class Builder extends React.Component {
   handleSave = () =>
     this.props.onSave(this.getSavedTempldate(), this.state.owner)
 
-  handleSocialSharing = () =>
-    this.props.onSocialSharing(this.getSavedTempldate())
+  handleSocialSharing = socialNetworkName =>
+    this.props.onSocialSharing(this.getSavedTempldate(), socialNetworkName)
 
   generateTemplate = (template, data) => nunjucks.renderString(template, data)
 
@@ -248,7 +248,10 @@ class Builder extends React.Component {
   }
 
   get ShowEditListingsButton() {
-    return this.props.templateTypes.includes('Listings')
+    return (
+      this.props.templateTypes.includes('Listings') &&
+      this.props.templateData.listings
+    )
   }
 
   renderAgentPickerButton = buttonProps => (
@@ -289,12 +292,34 @@ class Builder extends React.Component {
 
             {this.state.selectedTemplate &&
               isSocialMedium && (
-                <ActionButton
-                  style={{ marginLeft: '0.5rem' }}
-                  onClick={this.handleSocialSharing}
-                >
-                  Next
-                </ActionButton>
+                <Fragment>
+                  <ActionButton
+                    onClick={() => this.handleSocialSharing('Instagram')}
+                  >
+                    <i
+                      className="fa fa-instagram"
+                      style={{
+                        fontSize: '1.5rem',
+                        marginRight: '0.5rem'
+                      }}
+                    />
+                    Post to Instagram
+                  </ActionButton>
+
+                  <ActionButton
+                    style={{ marginLeft: '0.5rem' }}
+                    onClick={() => this.handleSocialSharing('Facebook')}
+                  >
+                    <i
+                      className="fa fa-facebook-square"
+                      style={{
+                        fontSize: '1.5rem',
+                        marginRight: '0.5rem'
+                      }}
+                    />
+                    Post to Facebook
+                  </ActionButton>
+                </Fragment>
               )}
 
             {this.state.selectedTemplate &&

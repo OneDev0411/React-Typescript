@@ -1,24 +1,15 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
-
-import LinkIcon from 'views/components/SvgIcons/LinkIcon'
-import ImageFileIcon from 'views/components/SvgIcons/ImageFile/ImageFileIcon'
-
-import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
-import copy from 'utils/copy-text-to-clipboard'
 
 import Drawer from 'components/OverlayDrawer'
 
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 
-import { Button as DownloadButton } from './Section/styled'
-
 import PreviewFile from './PreviewFile'
 import SendSMS from './SendSMS'
-
-import { Section } from './Section'
+import DownloadImage from './DownloadImage'
+import CopyImageUrl from './CopyImageUrl'
 
 class SocialDrawer extends React.Component {
   state = {
@@ -53,30 +44,12 @@ class SocialDrawer extends React.Component {
     }
   }
 
-  get FileUrl() {
-    return (
-      this.state.instance &&
-      truncateTextFromMiddle(this.state.instance.file.url, 40)
-    )
-  }
-
-  get FileName() {
-    if (!this.state.instance) {
-      return ''
+  get ShowOrder() {
+    if (this.props.socialNetworkName === 'Facebook') {
+      return [DownloadImage, SendSMS, CopyImageUrl]
     }
 
-    const { url } = this.state.instance.file
-
-    return truncateTextFromMiddle(url.substring(url.lastIndexOf('/') + 1), 40)
-  }
-
-  handleCopyUrl = () => {
-    copy(this.state.instance.file.url)
-
-    this.props.notify({
-      message: 'Link Copied',
-      status: 'success'
-    })
+    return [SendSMS, DownloadImage, CopyImageUrl]
   }
 
   render() {
@@ -91,30 +64,13 @@ class SocialDrawer extends React.Component {
 
           {this.state.instance && (
             <Fragment>
-              <SendSMS instance={this.state.instance} user={this.props.user} />
-
-              <Section
-                title="Download Image:"
-                description="Download image to your computer and share however you want."
-                button={() => (
-                  <a target="_blank" href={this.state.instance.file.url}>
-                    <DownloadButton>Download</DownloadButton>
-                  </a>
-                )}
-              >
-                <ImageFileIcon /> {this.FileName}
-              </Section>
-
-              <Section
-                title="Copy this URL to Share:"
-                buttonCaption="Copy"
-                buttonProps={{
-                  disabled: !this.state.instance
-                }}
-                onButtonClick={this.handleCopyUrl}
-              >
-                <LinkIcon /> {this.FileUrl}
-              </Section>
+              {this.ShowOrder.map((Component, index) => (
+                <Component
+                  key={index}
+                  instance={this.state.instance}
+                  user={this.props.user}
+                />
+              ))}
             </Fragment>
           )}
         </Drawer.Body>
@@ -137,7 +93,4 @@ function mapStateToProps({ user }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { notify }
-)(SocialDrawer)
+export default connect(mapStateToProps)(SocialDrawer)
