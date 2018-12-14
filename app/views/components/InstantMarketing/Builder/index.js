@@ -1,4 +1,6 @@
 import React, { Fragment } from 'react'
+import PropTypes from 'prop-types'
+
 import grapesjs from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
 import '../../../../styles/components/modules/template-builder.scss'
@@ -86,6 +88,10 @@ class Builder extends React.Component {
     if (this.IsVideoTemplate) {
       this.grapes.appendChild(this.videoToolbar)
     }
+
+    this.props.onBuilderLoad({
+      regenerateTemplate: this.regenerateTemplate
+    })
   }
 
   disableAssetManager = () => {
@@ -115,6 +121,12 @@ class Builder extends React.Component {
       style.styleSheet.cssText = css
     } else {
       style.appendChild(document.createTextNode(css))
+    }
+
+    if (!iframe.contentDocument) {
+      console.warn('iframe contentDocument is null')
+
+      return false
     }
 
     iframe.contentDocument.head.appendChild(style)
@@ -209,35 +221,28 @@ class Builder extends React.Component {
     this.lockIn()
   }
 
-  setTemplate = newState => {
-    this.setState(newState, () =>
-      this.refreshEditor(this.state.selectedTemplate)
+  handleSelectTemplate = templateItem => {
+    this.setState(
+      {
+        template: templateItem
+      },
+      () => {
+        this.regenerateTemplate({
+          user: this.state.owner
+        })
+      }
     )
   }
 
-  handleSelectTemplate = templateItem =>
-    this.setTemplate(state => ({
-      template: templateItem,
-      selectedTemplate: {
-        ...templateItem,
-        template: this.generateTemplate(templateItem.template, {
-          ...this.props.templateData,
-          user: state.owner
-        })
-      }
-    }))
+  handleOwnerChange = ({ value: owner }) => {
+    this.setState({
+      owner
+    })
 
-  handleOwnerChange = ({ value: owner }) =>
-    this.setTemplate(state => ({
-      owner,
-      selectedTemplate: {
-        ...state.selectedTemplate,
-        template: this.generateTemplate(state.template.template, {
-          ...this.props.templateData,
-          user: owner
-        })
-      }
-    }))
+    this.regenerateTemplate({
+      user: owner
+    })
+  }
 
   get IsVideoTemplate() {
     return this.state.template && this.state.template.video
@@ -273,6 +278,25 @@ class Builder extends React.Component {
     />
   )
 
+  regenerateTemplate = newData => {
+    console.log('[ + ] Regenerate template')
+
+    this.setState(
+      state => ({
+        selectedTemplate: {
+          ...state.selectedTemplate,
+          template: this.generateTemplate(state.template.template, {
+            ...this.props.templateData,
+            ...newData
+          })
+        }
+      }),
+      () => {
+        this.refreshEditor(this.state.selectedTemplate)
+      }
+    )
+  }
+
   render() {
     const isSocialMedium = this.IsSocialMedium
 
@@ -282,15 +306,16 @@ class Builder extends React.Component {
           <h1>{this.props.headerTitle}</h1>
 
           <Actions>
-            <TeamContactSelect
-              fullHeight
-              pullTo="right"
-              user={this.props.templateData.user}
-              owner={this.state.owner}
-              onSelect={this.handleOwnerChange}
-              style={{ marginRight: '0.5rem' }}
-              buttonRenderer={this.renderAgentPickerButton}
-            />
+            {this.state.selectedTemplate && (
+              <TeamContactSelect
+                fullHeight
+                pullTo="right"
+                user={this.props.templateData.user}
+                owner={this.state.owner}
+                onSelect={this.handleOwnerChange}
+                buttonRenderer={this.renderAgentPickerButton}
+              />
+            )}
 
             {this.ShowEditListingsButton && (
               <ActionButton
@@ -385,6 +410,14 @@ class Builder extends React.Component {
       </Container>
     )
   }
+}
+
+Builder.propTypes = {
+  onBuilderLoad: PropTypes.func
+}
+
+Builder.defaultProps = {
+  onBuilderLoad: () => null
 }
 
 export default Builder
