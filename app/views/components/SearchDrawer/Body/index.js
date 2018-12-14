@@ -52,6 +52,7 @@ export class Body extends React.Component {
 
   render() {
     const { ItemRow } = this.props
+    const isDraggable = this.props.isUpdatingList && this.props.list.length > 1
 
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
@@ -64,7 +65,7 @@ export class Body extends React.Component {
               {this.props.list.map((item, index) => (
                 <Draggable
                   key={item.id}
-                  isDragDisabled={this.props.isUpdatingList !== true}
+                  isDragDisabled={!isDraggable}
                   draggableId={item.id}
                   index={index}
                 >
@@ -79,10 +80,12 @@ export class Body extends React.Component {
                       )}
                     >
                       <ItemRow
-                        key={index}
+                        key={item.id}
                         item={item}
                         isHighlighted={this.props.highlightedIndex === index}
                         isUpdatingList={this.props.isUpdatingList}
+                        isDraggable={isDraggable}
+                        totalItems={this.props.list.length}
                         onClickRemove={() => this.handleRemove(item)}
                         renderCheckBox={item =>
                           this.ShowCheckBox && (

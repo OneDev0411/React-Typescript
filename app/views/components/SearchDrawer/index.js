@@ -68,6 +68,10 @@ class SearchDrawer extends React.Component {
   }
 
   handleSelectItem = item => {
+    if (this.IsUpdatingList) {
+      return false
+    }
+
     if (this.props.multipleSelection && this.props.isUpdatingList !== true) {
       this.handleClickCheckbox(item)
 
@@ -113,6 +117,10 @@ class SearchDrawer extends React.Component {
     return this.props.multipleSelection && !this.props.isUpdatingList
   }
 
+  get IsUpdatingList() {
+    return this.props.isUpdatingList && !this.searchInputRef.value
+  }
+
   render() {
     const { isSearching, error } = this.state
     const { showLoadingIndicator } = this.props
@@ -151,9 +159,7 @@ class SearchDrawer extends React.Component {
 
                   {!showLoadingIndicator && (
                     <Body
-                      isUpdatingList={
-                        this.props.isUpdatingList && !this.searchInputRef.value
-                      }
+                      isUpdatingList={this.IsUpdatingList}
                       getItemProps={getItemProps}
                       highlightedIndex={highlightedIndex}
                       ItemRow={this.props.ItemRow}

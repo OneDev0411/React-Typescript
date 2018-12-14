@@ -18,14 +18,14 @@ import {
   IconContainer
 } from '../styled'
 
-export function MlsItem({ item, renderCheckBox, isUpdatingList, ...rest }) {
+export function MlsItem({ item, renderCheckBox, isUpdatingList, ...props }) {
   const address = item.address_components
 
   return (
-    <ListItem {...rest}>
+    <ListItem {...props}>
       {renderCheckBox && renderCheckBox(item)}
 
-      {isUpdatingList && <IconDrag style={{ marginRight: '0.5rem' }} />}
+      {props.isDraggable && <IconDrag style={{ marginRight: '0.5rem' }} />}
 
       <Flex style={{ width: '100%' }} justifyBetween alignCenter>
         <AddressContainer>
@@ -59,9 +59,13 @@ export function MlsItem({ item, renderCheckBox, isUpdatingList, ...rest }) {
             {item.status}
           </Status>
 
-          {isUpdatingList && (
-            <IconDelete className="delete-icon" onClick={rest.onClickRemove} />
-          )}
+          {isUpdatingList &&
+            props.totalItems > 1 && (
+              <IconDelete
+                className="delete-icon"
+                onClick={props.onClickRemove}
+              />
+            )}
         </ListItemStatus>
       </Flex>
     </ListItem>

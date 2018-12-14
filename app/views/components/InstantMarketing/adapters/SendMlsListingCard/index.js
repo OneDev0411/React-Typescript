@@ -72,6 +72,10 @@ class SendMlsListingCard extends React.Component {
     return state
   }
 
+  handleLoadInstantMarketing = ({ regenerateTemplate }) => {
+    this.regenerateTemplate = regenerateTemplate
+  }
+
   get Recipients() {
     return this.props.selectedRows
       ? this.props.selectedRows
@@ -157,10 +161,13 @@ class SendMlsListingCard extends React.Component {
       this.props.handleTrigger
     )
 
-  handleUpdateListings = listings =>
+  handleUpdateListings = listings => {
     this.setState({
       listings
     })
+
+    this.regenerateTemplate({ listings })
+  }
 
   handleSaveMarketingCard = async (template, owner) => {
     this.generatePreviewImage(template)
@@ -300,6 +307,7 @@ class SendMlsListingCard extends React.Component {
         />
 
         <InstantMarketing
+          onBuilderLoad={this.handleLoadInstantMarketing}
           isOpen={this.state.isInstantMarketingBuilderOpen}
           onClose={this.closeMarketing}
           handleSave={this.handleSaveMarketingCard}
