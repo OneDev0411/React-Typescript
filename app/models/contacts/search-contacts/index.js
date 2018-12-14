@@ -13,7 +13,7 @@ export async function searchContacts(
   try {
     const payload = {}
 
-    const q = encodeURIComponent(searchText.trim())
+    const q = searchText.trim().replace(/[~`!#$%^&*(){}=<>?,:;'"\]\[\/\\]/g, '')
 
     const request = new Fetch().post('/contacts/filter').query(query)
 
