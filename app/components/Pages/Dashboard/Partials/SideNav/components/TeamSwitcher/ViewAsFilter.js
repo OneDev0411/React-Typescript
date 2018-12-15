@@ -18,8 +18,8 @@ class ViewAsFilter extends React.Component {
   state = {
     viewAsList:
       this.props.team.settings &&
-      Array.isArray(this.props.team.settings.view_as)
-        ? this.props.team.settings.view_as
+      Array.isArray(this.props.team.settings.user_filter)
+        ? this.props.team.settings.user_filter
         : []
   }
 
