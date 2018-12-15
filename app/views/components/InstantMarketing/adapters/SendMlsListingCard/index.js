@@ -248,13 +248,18 @@ class SendMlsListingCard extends React.Component {
   }
 
   get Assets() {
-    let list = []
+    const assets = []
 
     this.state.listings.forEach(listing => {
-      list = list.concat(listing.gallery_image_urls)
+      listing.gallery_image_urls.forEach(image => {
+        assets.push({
+          listing: listing.id,
+          image
+        })
+      })
     })
 
-    return list
+    return assets
   }
 
   get TemplateData() {

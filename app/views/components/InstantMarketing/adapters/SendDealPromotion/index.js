@@ -133,6 +133,19 @@ class SendDealPromotion extends React.Component {
     }
   }
 
+  get Assets() {
+    const { listing } = this.state
+
+    if (!listing) {
+      return []
+    }
+
+    return listing.gallery_image_urls.map(url => ({
+      image: url,
+      listing: listing.id
+    }))
+  }
+
   render() {
     const { listing } = this.state
     const { user } = this.props
@@ -159,7 +172,7 @@ class SendDealPromotion extends React.Component {
           templateData={{ listing, user }}
           mediums={this.props.mediums}
           templateTypes={getTemplateTypes(listing)}
-          assets={listing && listing.gallery_image_urls}
+          assets={this.Assets}
         />
 
         {this.state.isComposeEmailOpen && (
