@@ -7,7 +7,7 @@ import getUserTeams from '../../user/teams'
 export function setBrandViewAsFilter(user, value) {
   return async dispatch => {
     try {
-      await putUserSetting('view_as', value)
+      await putUserSetting('user_filter', value)
 
       batchActions([
         dispatch({
