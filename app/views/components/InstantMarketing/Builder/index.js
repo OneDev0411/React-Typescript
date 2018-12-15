@@ -314,6 +314,9 @@ class Builder extends React.Component {
                 owner={this.state.owner}
                 onSelect={this.handleOwnerChange}
                 buttonRenderer={this.renderAgentPickerButton}
+                style={{
+                  marginRight: '0.5rem'
+                }}
               />
             )}
 
