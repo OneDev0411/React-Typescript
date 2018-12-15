@@ -32,6 +32,10 @@ export const items = [
     url: '/Listings'
   },
   {
+    title: 'New Agent',
+    url: '/NewAgent'
+  },
+  {
     title: 'New Price',
     url: '/PriceImprovement'
   },
