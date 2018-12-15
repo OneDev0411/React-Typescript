@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import _ from 'underscore'
 import { browserHistory } from 'react-router'
 
 import { onlyUnique, sortAlphabetically } from 'utils/helpers'
@@ -12,6 +13,7 @@ function getMediums(templates) {
     .map(t => t.medium)
     .filter(onlyUnique)
     .sort(sortAlphabetically)
+    .reverse()
 }
 
 export default class Templates extends Component {
@@ -31,7 +33,7 @@ export default class Templates extends Component {
     }
   }
 
-  fetch = async () => {
+  fetch = _.debounce(async () => {
     const { types } = this.props
 
     try {
@@ -61,7 +63,7 @@ export default class Templates extends Component {
       console.log(error)
       this.setState({ isLoading: false })
     }
-  }
+  }, 500)
 
   render() {
     const { state, props } = this

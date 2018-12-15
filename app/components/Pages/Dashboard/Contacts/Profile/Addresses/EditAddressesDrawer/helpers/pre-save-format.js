@@ -3,7 +3,7 @@ export function preSaveFormat(values) {
 
   values.addresses.forEach(address => {
     Object.values(address).forEach(field => {
-      if (!field.attribute) {
+      if (!field || !field.attribute) {
         return
       }
 

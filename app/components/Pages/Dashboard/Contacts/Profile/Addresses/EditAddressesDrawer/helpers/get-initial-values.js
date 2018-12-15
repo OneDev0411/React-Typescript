@@ -1,4 +1,5 @@
 import { getEmptyAddress } from './get-empty-address'
+import { getNewAddressIndex } from './get-address-index'
 
 export function getInitialValues(addresses, addressAttributeDefs) {
   const initialValues = {
@@ -14,8 +15,16 @@ export function getInitialValues(addresses, addressAttributeDefs) {
   let addressesValues = []
 
   addresses.forEach(address => {
-    const { index, label } = address
-    const values = { addressIndex: index }
+    let { index, label } = address
+
+    index =
+      index == null
+        ? getNewAddressIndex(addresses, { value: addresses })
+        : index
+
+    const values = {
+      addressIndex: index
+    }
 
     if (address.is_primary) {
       initialValues.is_primary = Number(index)
