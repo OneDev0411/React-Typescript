@@ -176,7 +176,7 @@ class Builder extends React.Component {
     updateAll(this.editor.DomComponents.getWrapper())
   }
 
-  getSavedTempldate() {
+  getSavedTemplate() {
     const css = this.editor.getCss()
     const html = this.editor.getHtml()
 
@@ -198,10 +198,10 @@ class Builder extends React.Component {
   }
 
   handleSave = () =>
-    this.props.onSave(this.getSavedTempldate(), this.state.owner)
+    this.props.onSave(this.getSavedTemplate(), this.state.owner)
 
   handleSocialSharing = socialNetworkName =>
-    this.props.onSocialSharing(this.getSavedTempldate(), socialNetworkName)
+    this.props.onSocialSharing(this.getSavedTemplate(), socialNetworkName)
 
   generateTemplate = (template, data) => nunjucks.renderString(template, data)
 
@@ -224,7 +224,7 @@ class Builder extends React.Component {
   handleSelectTemplate = templateItem => {
     this.setState(
       {
-        template: templateItem
+        selectedTemplate: templateItem
       },
       () => {
         this.regenerateTemplate({
@@ -245,7 +245,7 @@ class Builder extends React.Component {
   }
 
   get IsVideoTemplate() {
-    return this.state.template && this.state.template.video
+    return this.state.selectedTemplate && this.state.selectedTemplate.video
   }
 
   get IsTemplateLoaded() {
@@ -285,7 +285,7 @@ class Builder extends React.Component {
       state => ({
         selectedTemplate: {
           ...state.selectedTemplate,
-          template: this.generateTemplate(state.template.template, {
+          template: this.generateTemplate(state.selectedTemplate.template, {
             ...this.props.templateData,
             ...newData
           })
