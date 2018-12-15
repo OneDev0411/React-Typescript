@@ -140,9 +140,8 @@ class SendDealPromotion extends React.Component {
       return []
     }
 
-    return listing.gallery_image_urls.map(url => ({
-      image: url,
-      listing: listing.id
+    return listing.gallery_image_urls.map(image => ({
+      image
     }))
   }
 
