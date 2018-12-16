@@ -10,7 +10,7 @@ import {
 import { grey, borderColor } from '../../../../../../../views/utils/colors'
 
 import { getBrandMembers } from '../../../../../../../store_actions/user/get-brand-members'
-import { setBrandViewAsFilter } from '../../../../../../../store_actions/brand/set-brand-view-as-filter'
+import { setViewAsFilter } from '../../../../../../../store_actions/user/set-view-as-filter'
 
 import { CheckBoxButton } from '../../../../../../../views/components/Button/CheckboxButton'
 
@@ -63,9 +63,7 @@ class ViewAsFilter extends React.Component {
   }
 
   setViewAsSetting = _.debounce(() => {
-    this.props.dispatch(
-      setBrandViewAsFilter(this.props.user, this.state.viewAsList)
-    )
+    this.props.dispatch(setViewAsFilter(this.props.user, this.state.viewAsList))
   }, 500)
 
   render() {
