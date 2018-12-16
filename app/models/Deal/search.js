@@ -42,7 +42,7 @@ export async function searchDeals(user, query) {
       }
     }
 
-    if (query && query === 'string') {
+    if (query && typeof query === 'string') {
       payload.query = query.trim()
     }
 
