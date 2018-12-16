@@ -1,6 +1,5 @@
 import React from 'react'
 import { IndexRoute, Route } from 'react-router'
-import { batchActions } from 'redux-batched-actions'
 
 // Containers
 import AppLayout from '../components/App'
@@ -8,8 +7,6 @@ import AppLayout from '../components/App'
 import Landing from '../components/Pages/Landing'
 import Load from '../loader'
 import store from '../stores'
-// actions
-import { getContexts, getDeals } from '../store_actions/deals'
 import UserIsNotAuthenticated from './userIsNotAuthenticated'
 
 const AsyncAuthenticationLayout = Load({
@@ -102,19 +99,7 @@ const AsyncListingSinglePage = Load({
 
 const AsyncDealsLayout = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */),
-  fetchData: async (dispatch, params) => {
-    const { user } = params
-
-    if (!user) {
-      return Promise.resolve()
-    }
-
-    return batchActions([
-      await dispatch(getContexts(user)),
-      await dispatch(getDeals(user))
-    ])
-  }
+    import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */)
 })
 
 const AsyncDealCreate = Load({
