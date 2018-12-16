@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
 import {
+  isBackOffice,
   getActiveTeamId,
   getActiveTeam
 } from '../../../../../../../utils/user-teams'
@@ -70,7 +71,7 @@ class ViewAsFilter extends React.Component {
     const { viewAsList } = this.state
     const { isActive, brandMembers } = this.props
 
-    if (!isActive || brandMembers.length < 2) {
+    if (isBackOffice(this.props.user) || !isActive || brandMembers.length < 2) {
       return null
     }
 

@@ -35,11 +35,8 @@ export async function searchDeals(user, query) {
 
     let url = '/deals/filter'
 
-    let payload = {
-      brand: getActiveTeamId(user),
-      role: {
-        user: viewAs(user)
-      }
+    const payload = {
+      brand: getActiveTeamId(user)
     }
 
     if (query && typeof query === 'string') {
@@ -48,6 +45,10 @@ export async function searchDeals(user, query) {
 
     if (isBackOffice) {
       url += '?associations[]=deal.created_by&associations[]=deal.brand'
+    } else {
+      payload.role = {
+        user: viewAs(user)
+      }
     }
 
     const response = await new Fetch().post(url).send(payload)

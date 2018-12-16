@@ -65,7 +65,10 @@ export function setActiveTeam(id) {
 export function viewAs(user) {
   const activeTeam = getActiveTeam(user)
 
-  if (idx(activeTeam, team => team.settings.user_filter[0])) {
+  if (
+    !isBackOffice(user) &&
+    idx(activeTeam, team => team.settings.user_filter[0])
+  ) {
     return activeTeam.settings.user_filter
   }
 

@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { searchDeals, getDeals } from '../../../../../../store_actions/deals'
-import { viewAsEveryoneOnTeam } from '../../../../../../utils/user-teams'
 
 import Search from '../../../../../../views/components/Grid/Search'
 import { Menu, Content } from '../../../../../../views/components/SlideMenu'
@@ -44,7 +43,7 @@ class BackofficeTable extends React.Component {
     // set persistent search input
     persistentSearchInput = value
 
-    if (value.length === 0 && viewAsEveryoneOnTeam(user)) {
+    if (value.length === 0) {
       return dispatch(getDeals(user))
     }
 
