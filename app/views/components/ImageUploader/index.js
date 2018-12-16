@@ -7,7 +7,7 @@ import 'rc-slider/assets/index.css'
 import ActionButton from '../Button/ActionButton'
 import { Modal, ModalHeader, ModalFooter } from '../Modal'
 
-const RESET_STATE = { isOpen: true, file: null, scale: 1 }
+const RESET_STATE = { isOpen: true, file: null, scale: 1, rotate: 0 }
 const DISMISS_STATE = { isOpen: false }
 
 export class ImageUploader extends Component {
@@ -48,11 +48,11 @@ export class ImageUploader extends Component {
     this.setState(RESET_STATE)
   }
 
-  dismissDialog() {
+  dismissDialog = () => {
     this.setState(DISMISS_STATE)
   }
 
-  resetAndDismiss() {
+  resetAndDismiss = () => {
     this.setState({ ...RESET_STATE, ...DISMISS_STATE })
   }
 
@@ -69,6 +69,10 @@ export class ImageUploader extends Component {
     }
 
     const { file } = this.state
+
+    if (!file) {
+      return null
+    }
 
     const imageDataURL = this.editor
       .getImageScaledToCanvas()
@@ -128,8 +132,7 @@ export class ImageUploader extends Component {
     const file = files[0]
 
     this.setState({
-      file,
-      isOpen: true
+      file
     })
   }
 
