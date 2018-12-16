@@ -1,6 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { searchDeals, getDeals } from '../../../../../../store_actions/deals'
+import { viewAsEveryoneOnTeam } from '../../../../../../utils/user-teams'
+
 import { Menu, Content } from '../../../../../../views/components/SlideMenu'
 import Search from '../../../../../../views/components/Grid/Search'
 
@@ -13,7 +16,6 @@ import {
 import Header from '../components/page-header'
 import Grid from './grid'
 import AgentFilters from './filters'
-import { searchDeals, getDeals } from '../../../../../../store_actions/deals'
 
 let persistentSearchInput = ''
 
@@ -29,7 +31,7 @@ class AgentTable extends React.Component {
     }))
 
   handleSearch = value => {
-    const { user, isFetchingDeals, getDeals, searchDeals } = this.props
+    const { user, isFetchingDeals, dispatch } = this.props
 
     if (isFetchingDeals) {
       return false
@@ -42,11 +44,11 @@ class AgentTable extends React.Component {
     // set persistent search input
     persistentSearchInput = value
 
-    if (value.length === 0) {
-      return getDeals(user)
+    if (value.length === 0 && viewAsEveryoneOnTeam(user)) {
+      dispatch(getDeals(user))
     }
 
-    searchDeals(user, value)
+    dispatch(searchDeals(user, value))
   }
 
   render() {
@@ -100,7 +102,4 @@ function mapStateToProps({ user, deals }) {
   return { user, isFetchingDeals: deals.properties.isFetchingDeals }
 }
 
-export default connect(
-  mapStateToProps,
-  { searchDeals, getDeals }
-)(AgentTable)
+export default connect(mapStateToProps)(AgentTable)

@@ -4,58 +4,52 @@ import { browserHistory } from 'react-router'
 
 import {
   getDeals,
+  searchDeals,
   getContexts,
   getForms
 } from '../../../../store_actions/deals'
-import { TrainingModeBanner } from '../Partials/TrainingModeBanner'
-import { isTrainingAccount, hasUserAccess } from '../../../../utils/user-teams'
+import {
+  hasUserAccess,
+  viewAsEveryoneOnTeam
+} from '../../../../utils/user-teams'
 
 class DealsContainer extends React.Component {
   componentDidMount() {
     const { props } = this
+    const { dispatch, user } = props
+    const isBackOffice = hasUserAccess(user, 'BackOffice')
 
-    if (
-      hasUserAccess(props.user, 'Deals') === false &&
-      hasUserAccess(props.user, 'BackOffice') === false
-    ) {
+    if (!hasUserAccess(user, 'Deals') && !isBackOffice) {
       browserHistory.push('/dashboard/mls')
     }
 
     if (!props.deals && !props.isFetchingDeals) {
-      props.getDeals(props.user)
+      if (isBackOffice || viewAsEveryoneOnTeam(user)) {
+        dispatch(getDeals(user))
+      } else {
+        dispatch(searchDeals(user))
+      }
     }
 
     if (!props.contexts) {
-      props.getContexts()
+      dispatch(getContexts())
     }
 
     if (!props.forms) {
-      props.getForms()
+      dispatch(getForms())
     }
   }
 
   render() {
-    const { contexts, user } = this.props
-
-    return (
-      <div className="deals">
-        {contexts &&
-          isTrainingAccount(user) && <TrainingModeBanner user={user} />}
-
-        {this.props.children}
-      </div>
-    )
+    return <div className="deals">{this.props.children}</div>
   }
 }
 
-export default connect(
-  ({ deals, user }) => ({
-    error: deals.properties.error,
-    deals: deals.list,
-    contexts: deals.contexts,
-    forms: deals.forms,
-    isFetchingDeals: deals.properties.isFetchingDeals,
-    user
-  }),
-  { getDeals, getContexts, getForms }
-)(DealsContainer)
+export default connect(({ deals, user }) => ({
+  error: deals.properties.error,
+  deals: deals.list,
+  contexts: deals.contexts,
+  forms: deals.forms,
+  isFetchingDeals: deals.properties.isFetchingDeals,
+  user
+}))(DealsContainer)
