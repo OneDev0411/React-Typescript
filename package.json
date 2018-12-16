@@ -128,6 +128,7 @@
     "postcss-reporter": "^5.0.0",
     "promise-polyfill": "^7.1.2",
     "prop-types": "^15.6.2",
+    "rc-slider": "^8.6.4",
     "react": "^16.4.1",
     "react-addons-shallow-compare": "^15.6.2",
     "react-avatar": "github:allanhortle/react-avatar",
