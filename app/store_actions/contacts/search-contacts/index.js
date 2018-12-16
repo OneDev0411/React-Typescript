@@ -21,6 +21,10 @@ export function searchContacts(
     }
 
     try {
+      dispatch({
+        type: actionTypes.SEARCH_CONTACTS_REQUEST
+      })
+
       const response = await search(
         searchInputValue,
         filter,

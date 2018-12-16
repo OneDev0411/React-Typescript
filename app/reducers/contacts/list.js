@@ -2,6 +2,10 @@ import { combineReducers } from 'redux'
 import _ from 'underscore'
 
 import * as actionTypes from '../../constants/contacts'
+import {
+  CHANGE_VIEW_AS_FILTER_REQUEST,
+  CHANGE_VIEW_AS_FILTER_FAILURE
+} from '../../constants/user'
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -94,6 +98,8 @@ const isFetching = (state = false, action) => {
     case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_REQUEST:
     case actionTypes.POST_NEW_ATTRIBUTES_REQUEST:
     case actionTypes.PATCH_CONTACT_REQUEST:
+    case actionTypes.DELETE_CONTACTS_REQUEST:
+    case CHANGE_VIEW_AS_FILTER_REQUEST:
       return true
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.FETCH_CONTACTS_FAILURE:
@@ -107,6 +113,9 @@ const isFetching = (state = false, action) => {
     case actionTypes.POST_NEW_ATTRIBUTES_FAILURE:
     case actionTypes.PATCH_CONTACT_SUCCESS:
     case actionTypes.PATCH_CONTACT_FAILURE:
+    case actionTypes.DELETE_CONTACTS_SUCCESS:
+    case actionTypes.DELETE_CONTACTS_FAILURE:
+    case CHANGE_VIEW_AS_FILTER_FAILURE:
       return false
     default:
       return state
