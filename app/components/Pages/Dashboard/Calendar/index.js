@@ -136,7 +136,9 @@ class CalendarContainer extends React.Component {
     selectedDate,
     viewAsUsers = this.props.viewAsUsers
   ) => {
-    const [newStartRange, newEndRange] = createDateRange(selectedDate)
+    const [newStartRange, newEndRange] = createDateRange(selectedDate, {
+      range: 6
+    })
 
     this.setLoadingPosition(LOADING_POSITIONS.Middle)
 
