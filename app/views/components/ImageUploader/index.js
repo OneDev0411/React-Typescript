@@ -77,6 +77,12 @@ export class ImageUploader extends Component {
     return this.getFileFromDataURL(imageDataURL, file.name, file.type)
   }
 
+  setEditorRef = editor => {
+    if (editor) {
+      this.editor = editor
+    }
+  }
+
   getOriginalAndEditedFiles = async () => {
     const file = await this.getEditedImageFile()
 
@@ -86,29 +92,35 @@ export class ImageUploader extends Component {
     }
   }
 
-  setEditorRef = editor => {
-    if (editor) {
-      this.editor = editor
+  getCroppedArea() {
+    if (!this.editor) {
+      return null
+    }
+
+    return this.editor.getCroppingRect()
+  }
+
+  async getHandlersData() {
+    const files = await this.getOriginalAndEditedFiles()
+    const croppedArea = this.getCroppedArea()
+
+    return {
+      files,
+      croppedArea
     }
   }
 
   onSave = async () => {
-    console.log('EDITOR')
-    console.log(this.editor)
+    const data = await this.getHandlersData()
 
-    console.log('RECT')
-    console.log(this.editor.getCroppingRect())
-
-    const files = await this.getOriginalAndEditedFiles()
-
-    await this.props.saveHandler(files)
+    await this.props.saveHandler(data)
     this.resetAndDismiss()
   }
 
   onClose = async () => {
-    const files = await this.getOriginalAndEditedFiles()
+    const data = await this.getHandlersData()
 
-    await this.props.closeHandler(files)
+    await this.props.closeHandler(data)
     this.resetAndDismiss()
   }
 
