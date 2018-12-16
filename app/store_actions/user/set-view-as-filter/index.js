@@ -13,7 +13,8 @@ export function setViewAsFilter(user, value) {
   return async dispatch => {
     try {
       dispatch({
-        type: CHANGE_VIEW_AS_FILTER_REQUEST
+        type: CHANGE_VIEW_AS_FILTER_REQUEST,
+        status: true
       })
 
       await putUserSetting('user_filter', value)

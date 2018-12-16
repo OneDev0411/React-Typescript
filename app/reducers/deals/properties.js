@@ -1,4 +1,5 @@
 import * as actionTypes from '../../constants/deals'
+import { CHANGE_VIEW_AS_FILTER_REQUEST } from '../../constants/user'
 
 const initialState = {
   error: null,
@@ -29,6 +30,7 @@ export default (state = initialState, action) => {
         selectedTask: action.task
       }
 
+    case CHANGE_VIEW_AS_FILTER_REQUEST:
     case actionTypes.SET_FETCHING_STATUS:
       return {
         ...state,
