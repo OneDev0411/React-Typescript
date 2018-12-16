@@ -1,32 +1,37 @@
 import React, { Component, Fragment } from 'react'
 import AvatarEditor from 'react-avatar-editor'
 import Dropzone from 'react-dropzone'
+import Slider from 'rc-slider/lib/Slider'
+import 'rc-slider/assets/index.css'
 
-import BareModal from '../BareModal'
 import ActionButton from '../Button/ActionButton'
+import { Modal, ModalHeader, ModalFooter } from '../Modal'
 
 const RESET_STATE = { isOpen: true, file: null, scale: 1 }
 const DISMISS_STATE = { isOpen: false }
 
 export class ImageUploader extends Component {
   static defaultProps = {
-    isOpen: false,
+    isOpen: true,
     rules: {
       accept: 'image/*',
       maxSize: Infinity,
       minSize: 0
     },
-    onlyModal: false,
+    disableRotate: false,
+    disableScale: false,
+    disableChangeButton: false,
     notes: null,
-    showRules: true,
+    showRules: false,
     file: null,
-    width: 200,
-    height: 200,
+    width: 382,
+    height: 382,
     border: 50,
     radius: 0,
     scale: 1,
+    rotate: 0,
     disableBoundaryChecks: false,
-    outsideRGBAColor: [0, 0, 0, 0.2],
+    outsideRGBAColor: [102, 102, 102, 0.9],
 
     saveHandler() {},
     closeHandler() {}
@@ -35,7 +40,8 @@ export class ImageUploader extends Component {
   state = {
     isOpen: this.props.isOpen,
     file: this.props.file,
-    scale: this.props.scale
+    scale: this.props.scale,
+    rotate: this.props.rotate
   }
 
   reset = () => {
@@ -87,6 +93,12 @@ export class ImageUploader extends Component {
   }
 
   onSave = async () => {
+    console.log('EDITOR')
+    console.log(this.editor)
+
+    console.log('RECT')
+    console.log(this.editor.getCroppingRect())
+
     const files = await this.getOriginalAndEditedFiles()
 
     await this.props.saveHandler(files)
@@ -109,15 +121,47 @@ export class ImageUploader extends Component {
     })
   }
 
-  onScaleChange = event => {
+  onScaleChange = scale => {
     this.setState({
-      scale: Number(event.target.value)
+      scale
     })
+  }
+
+  onRotateClick = () => {
+    const prevState = this.state.rotate
+    const rotate = prevState === 270 ? 0 : prevState + 90
+
+    this.setState({
+      rotate
+    })
+  }
+
+  getRadius() {
+    const rawRadius = this.props.radius.toString()
+
+    if (rawRadius.endsWith('%')) {
+      const radiusPercent = rawRadius.substr(0, rawRadius.length - 1)
+
+      return (radiusPercent * this.props.width) / 100
+    }
+
+    return this.props.radius
   }
 
   renderImageEditor() {
     return (
-      <div style={{ textAlign: 'center' }}>
+      <div
+        style={{
+          textAlign: 'center',
+          width: '100%',
+          height: '484px',
+          backgroundColor: 'rgba(0, 0, 0, 0.6)',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
         <AvatarEditor
           ref={this.setEditorRef}
           image={this.state.file}
@@ -126,22 +170,9 @@ export class ImageUploader extends Component {
           border={this.props.border}
           color={this.props.outsideRGBAColor}
           scale={this.state.scale}
-          rotate={0}
-          borderRadius={this.props.radius}
+          rotate={this.state.rotate}
+          borderRadius={this.getRadius()}
           disableBoundaryChecks={this.props.disableBoundaryChecks}
-        />
-        <input
-          type="range"
-          min="1"
-          max="2"
-          step="0.01"
-          defaultValue={this.props.scale}
-          onChange={this.onScaleChange}
-          style={{
-            width: '60%',
-            margin: '20px auto',
-            padding: '10px 0'
-          }}
         />
       </div>
     )
@@ -171,33 +202,6 @@ export class ImageUploader extends Component {
     )
   }
 
-  renderDropZone() {
-    return (
-      <Dropzone
-        accept={this.props.rules.accept}
-        multiple={false}
-        onDrop={this.onDrop}
-        style={{
-          width: '90%',
-          height: '80px',
-          paddingTop: '30px',
-          backgroundColor: 'transparent',
-          borderRadius: '3px',
-          margin: '8px 3% 8px 5%',
-          border: 'dashed 1px #b2b2b2',
-          fontSize: '14px',
-          textTransform: 'uppercase',
-          color: '#b2b2b2',
-          fontFamily: 'Barlow',
-          fontWeight: '600',
-          outline: 'none'
-        }}
-      >
-        Click or drop images here
-      </Dropzone>
-    )
-  }
-
   renderModalDropZone() {
     return (
       <Fragment>
@@ -206,15 +210,76 @@ export class ImageUploader extends Component {
           multiple={false}
           onDrop={this.onDrop}
           style={{
-            height: '80%',
             width: '100%',
-            backgroundColor: 'rgba(225, 225, 225, 0.2)',
-            borderRadius: '10px',
-            borderStyle: 'solid',
-            borderColor: '#DDD',
-            borderWidth: '1px 1px 0'
+            height: '100%',
+            backgroundColor: 'f2f2f2'
           }}
-        />
+        >
+          {({ getRootProps, getInputProps, open }) => (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
+                height: '484px'
+              }}
+            >
+              <h3
+                style={{
+                  fontFamily: 'Barlow',
+                  fontSize: '20px',
+                  fontWeight: 'normal',
+                  margin: '0'
+                }}
+              >
+                Drop your photo to upload
+              </h3>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  width: '250px',
+                  padding: '5px'
+                }}
+              >
+                <hr style={{ width: '100px' }} />
+                <span
+                  style={{
+                    opacity: '0.5',
+                    fontFamily: 'Barlow',
+                    fontWeight: 'normal',
+                    width: '20px'
+                  }}
+                >
+                  OR
+                </span>
+                <hr style={{ width: '100px' }} />
+              </div>
+              <span
+                style={{
+                  width: '182px',
+                  height: '40px',
+                  lineHeight: '40px',
+                  fontFamily: 'Barlow',
+                  fontSize: '16px',
+                  fontWeight: '500',
+                  fontStyle: 'normal',
+                  fontStretch: 'normal',
+                  letterSpacing: '0.1px',
+                  textAlign: 'center',
+                  color: '#ffffff',
+                  backgroundColor: '#004ce6',
+                  borderRadius: '5px'
+                }}
+              >
+                Choose from files
+              </span>
+            </div>
+          )}
+        </Dropzone>
       </Fragment>
     )
   }
@@ -228,42 +293,143 @@ export class ImageUploader extends Component {
     )
   }
 
-  renderSaveAndRepick() {
+  renderScaleRange() {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+          width: '260px'
+        }}
+      >
+        <img
+          src="/static/icons/image-icon.svg"
+          alt="-"
+          style={{ width: '14px', height: '14px' }}
+        />
+        <Slider
+          min={1}
+          max={2}
+          step={0.01}
+          defaultValue={this.props.scale}
+          onChange={this.onScaleChange}
+          style={{
+            width: '190px',
+            margin: '0',
+            padding: '10px 0'
+          }}
+          trackStyle={{
+            backgroundColor: '#004ce6'
+          }}
+          handleStyle={{
+            borderColor: '#004ce6'
+          }}
+        />
+        <img
+          src="/static/icons/image-icon.svg"
+          alt="+"
+          style={{ width: '24px', height: '24px' }}
+        />
+      </div>
+    )
+  }
+
+  renderRotateButton() {
+    return (
+      <div>
+        <button
+          title="rotate"
+          type="button"
+          style={{ background: 'none', border: 'none', outline: 'none' }}
+          onClick={this.onRotateClick}
+        >
+          <img
+            src="/static/icons/rotate-icon.svg"
+            alt="+"
+            style={{ width: '24px', height: '24px' }}
+          />
+        </button>
+      </div>
+    )
+  }
+
+  renderActionButtons() {
     return (
       <Fragment>
-        <ActionButton onClick={async () => this.onSave()}>Save</ActionButton>
-        <ActionButton onClick={this.reset}>Repick</ActionButton>
+        {this.props.disableChangeButton || (
+          <ActionButton
+            style={{ marginRight: '10px', width: '120px', paddingLeft: '11px' }}
+            appearance="outline"
+            onClick={this.reset}
+          >
+            Change Photo
+          </ActionButton>
+        )}
+        <ActionButton
+          style={{ width: '120px', paddingLeft: '22px' }}
+          onClick={async () => this.onSave()}
+        >
+          Save Photo
+        </ActionButton>
+      </Fragment>
+    )
+  }
+
+  renderFooter() {
+    return (
+      <Fragment>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: '320px'
+          }}
+        >
+          {this.props.disableScale || this.renderScaleRange()}
+          {this.props.disableRotate || this.renderRotateButton()}
+        </div>
+        <div>{this.renderActionButtons()}</div>
       </Fragment>
     )
   }
 
   renderDialog() {
+    const modalTitle = this.state.file ? 'Edit Photo' : 'Upload Photo'
+    const hasImage = !!this.state.file
+
     return (
-      <BareModal isOpen={this.state.isOpen} onRequestClose={this.onClose}>
+      <Modal
+        isOpen={this.state.isOpen}
+        onRequestClose={this.onClose}
+        style={{
+          content: {
+            width: '900px',
+            height: '600px',
+            maxWidth: '95%',
+            maxHeight: '95%'
+          }
+        }}
+      >
+        <ModalHeader title={modalTitle} closeHandler={this.onClose} />
         <div
           style={{
-            width: '95%',
-            height: '95%',
-            margin: 'auto',
-            paddingBottom: '10px'
+            width: '100%',
+            height: '100%',
+            display: 'flex'
           }}
         >
-          {this.state.file
-            ? this.renderImageEditor()
-            : this.renderUploaderModal()}
-          {this.state.file && this.renderSaveAndRepick()}
-          <ActionButton onClick={this.onClose}>Cancel</ActionButton>
+          {hasImage ? this.renderImageEditor() : this.renderUploaderModal()}
         </div>
-      </BareModal>
+        <ModalFooter>{hasImage && this.renderFooter()}</ModalFooter>
+      </Modal>
     )
   }
 
   render() {
-    return (
-      <Fragment>
-        {this.props.onlyModal || this.renderDropZone()}
-        {this.state.isOpen && this.renderDialog()}
-      </Fragment>
-    )
+    return <Fragment>{this.renderDialog()}</Fragment>
   }
 }
