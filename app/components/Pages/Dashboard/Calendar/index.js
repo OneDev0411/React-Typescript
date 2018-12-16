@@ -74,6 +74,13 @@ class CalendarContainer extends React.Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (
+      nextProps.list.length === 0 &&
+      this.state.loadingPosition !== LOADING_POSITIONS.Middle
+    ) {
+      this.setLoadingPosition(LOADING_POSITIONS.Middle)
+    }
+
+    if (
       nextProps.viewAsUsers.length !== this.props.viewAsUsers.length ||
       !_.isEqual(nextProps.viewAsUsers, this.props.viewAsUsers)
     ) {
@@ -179,7 +186,6 @@ class CalendarContainer extends React.Component {
   }
 
   handleViewAsChange = viewAsUsers => {
-    this.setLoadingPosition(LOADING_POSITIONS.Middle)
     this.restartCalendar(this.selectedDate, viewAsUsers)
   }
 
@@ -366,6 +372,7 @@ class CalendarContainer extends React.Component {
 function mapStateToProps({ user, calendar }) {
   return {
     user,
+    list: calendar.list,
     isFetching: calendar.isFetching,
     selectedDate: moment(calendar.selectedDate)
       .utcOffset(0)

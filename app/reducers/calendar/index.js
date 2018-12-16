@@ -2,6 +2,10 @@ import moment from 'moment'
 import _ from 'underscore'
 
 import * as types from '../../constants/calendar'
+import {
+  CHANGE_VIEW_AS_FILTER_REQUEST,
+  CHANGE_VIEW_AS_FILTER_FAILURE
+} from '../../constants/user'
 
 const initialState = {
   isFetching: false,
@@ -84,7 +88,19 @@ export default (state = initialState, action) => {
     case types.CALENDAR__RESET:
       return {
         ...initialState,
-        brandMembers: state.brandMembers
+        isFetching: true
+      }
+
+    case CHANGE_VIEW_AS_FILTER_REQUEST:
+      return {
+        ...initialState,
+        isFetching: true
+      }
+
+    case CHANGE_VIEW_AS_FILTER_FAILURE:
+      return {
+        ...state,
+        isFetching: false
       }
 
     default:
