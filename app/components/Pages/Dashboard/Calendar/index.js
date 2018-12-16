@@ -29,10 +29,11 @@ import {
 import PageHeader from '../../../../views/components/PageHeader'
 import DatePicker from '../../../../views/components/DatePicker'
 import { EventDrawer } from '../../../../views/components/EventDrawer'
-import CalendarTable from './Table'
-import { MenuContainer } from './styled'
 import ActionButton from '../../../../views/components/Button/ActionButton'
 import { viewAs, getActiveTeamACL } from '../../../../utils/user-teams'
+
+import CalendarTable from './Table'
+import { MenuContainer, TableContainer } from './styled'
 
 const LOADING_POSITIONS = {
   Top: 0,
@@ -56,6 +57,7 @@ class CalendarContainer extends React.Component {
       selectedTaskId: null,
       loadingPosition: LOADING_POSITIONS.Middle
     }
+    this.myRef = React.createRef()
   }
 
   componentDidMount() {
@@ -351,20 +353,18 @@ class CalendarContainer extends React.Component {
               </ActionButton>
             </PageHeader.Menu>
           </PageHeader>
-          <div style={{ position: 'relative' }}>
-            <div ref={ref => (this.calendarTableContainer = ref)}>
-              <CalendarTable
-                positions={LOADING_POSITIONS}
-                selectedDate={selectedDate}
-                isFetching={isFetching}
-                loadingPosition={loadingPosition}
-                onScrollTop={this.loadPreviousItems}
-                onScrollBottom={this.loadNextItems}
-                onSelectTask={this.onClickTask}
-                onRef={this.onTableRef}
-              />
-            </div>
-          </div>
+          <TableContainer>
+            <CalendarTable
+              positions={LOADING_POSITIONS}
+              selectedDate={selectedDate}
+              isFetching={isFetching}
+              loadingPosition={loadingPosition}
+              onScrollTop={this.loadPreviousItems}
+              onScrollBottom={this.loadNextItems}
+              onSelectTask={this.onClickTask}
+              onRef={this.onTableRef}
+            />
+          </TableContainer>
         </Content>
       </Container>
     )
