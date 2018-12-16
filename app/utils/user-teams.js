@@ -1,4 +1,5 @@
 import cookie from 'js-cookie'
+import idx from 'idx'
 
 const ACTIVE_TEAM_COOKIE = 'rechat-active-team'
 
@@ -50,6 +51,31 @@ export function isBackOffice(user) {
   return hasUserAccess(user, 'BackOffice')
 }
 
+function getActiveTeamFromCookieOrUser(user) {
+  return cookie.get(ACTIVE_TEAM_COOKIE) || user.activeTeam || user.brand
+}
+
+export function setActiveTeam(id) {
+  cookie.set(ACTIVE_TEAM_COOKIE, id, {
+    path: '/',
+    expires: 360
+  })
+}
+
+export function viewAs(user) {
+  const activeTeam = getActiveTeam(user)
+
+  if (idx(activeTeam, team => team.settings.user_filter[0])) {
+    return activeTeam.settings.user_filter
+  }
+
+  return [user.id]
+}
+
+export function viewAsEveryoneOnTeam(user) {
+  return getActiveTeam(user).member_count === viewAs(user).length
+}
+
 export function isTrainingAccount(user) {
 
   // Hide training banner
@@ -72,15 +98,4 @@ export function isTrainingAccount(user) {
   } while (brand)
 
   return false
-}
-
-function getActiveTeamFromCookieOrUser(user) {
-  return cookie.get(ACTIVE_TEAM_COOKIE) || user.activeTeam || user.brand
-}
-
-export function setActiveTeam(id) {
-  cookie.set(ACTIVE_TEAM_COOKIE, id, {
-    path: '/',
-    expires: 360
-  })
 }
