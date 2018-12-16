@@ -81,8 +81,7 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
               }))
 
               const uploadedAssetsCollection = uploadedAssets.map(asset => ({
-                image: asset.url,
-                listing: null
+                image: asset.url
               }))
 
               view.collection.reset([
