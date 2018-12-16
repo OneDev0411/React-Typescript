@@ -73,7 +73,8 @@ export function viewAs(user) {
 }
 
 export function viewAsEveryoneOnTeam(user) {
-  return getActiveTeam(user).member_count === viewAs(user).length
+  const viewAsUsers = viewAs(user)
+  return getActiveTeam(user).brand.member_count === viewAsUsers.length
 }
 
 export function isTrainingAccount(user) {
