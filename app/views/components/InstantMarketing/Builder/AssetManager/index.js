@@ -121,7 +121,9 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
           const selectedListing =
             target && target.attributes.attributes['rechat-listing']
 
-          return !imgListing || selectedListing === imgListing
+          return (
+            !imgListing || !selectedListing || imgListing === selectedListing
+          )
         })
         .forEach(asset => {
           const view = new AssetView({ model: asset })
