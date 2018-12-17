@@ -11,6 +11,10 @@ export function getContacts(start = 0, limit = 50) {
     }
 
     try {
+      dispatch({
+        type: actionTypes.FETCH_CONTACTS_REQUEST
+      })
+
       const response = await fetchContacts(start, limit)
 
       dispatch({

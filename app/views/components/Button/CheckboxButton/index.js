@@ -2,8 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { func } from 'prop-types'
 
-import { blue, grey } from 'views/utils/colors'
-import Checkmark from 'components/SvgIcons/Checkmark/IconCheckmark'
+import { blue, grey } from '../../../utils/colors'
+import Checkmark from '../../SvgIcons/Checkmark/IconCheckmark'
 
 const CheckBox = styled.span`
   width: 16px;

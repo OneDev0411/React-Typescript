@@ -3,14 +3,17 @@ import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
 import {
-  getActiveTeamId,
-  setActiveTeam
-} from '../../../../../../utils/user-teams'
-import flattenBrand from '../../../../../../utils/flatten-brand'
-import Avatar from '../../../../../Partials/UserAvatar'
-import CheckmarkIcon from '../../../../../../views/components/SvgIcons/Checkmark/IconCheckmark'
-import ActionButton from '../../../../../../views/components/Button/ActionButton'
-import { primary } from '../../../../../../views/utils/colors'
+  setActiveTeam,
+  getActiveTeamId
+} from '../../../../../../../utils/user-teams'
+import flattenBrand from '../../../../../../../utils/flatten-brand'
+import CheckmarkIcon from '../../../../../../../views/components/SvgIcons/Checkmark/IconCheckmark'
+import ActionButton from '../../../../../../../views/components/Button/ActionButton'
+import { primary } from '../../../../../../../views/utils/colors'
+
+import Avatar from '../../../../../../Partials/UserAvatar'
+
+import ViewAsFilter from './ViewAsFilter'
 
 const TeamName = styled.div`
   overflow: hidden;
@@ -37,12 +40,9 @@ const Button = styled(ActionButton)`
   }
 `
 
-export default class extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      savingTeam: false
-    }
+export default class TeamSwitcher extends React.Component {
+  state = {
+    savingTeam: false
   }
 
   getAvatar(brand) {
@@ -102,14 +102,19 @@ export default class extends React.Component {
                   <TeamName>{team.brand.name}</TeamName>
                 </Flex>
                 <Flex alignCenter>
-                  {!savingTeam &&
-                    isActiveTeam && <CheckmarkIcon style={{ fill: primary }} />}
+                  {!savingTeam && isActiveTeam && (
+                    <CheckmarkIcon style={{ fill: primary }} />
+                  )}
 
                   {savingTeam === team.brand.id && (
                     <i className="fa fa-spinner fa-spin" />
                   )}
                 </Flex>
               </Button>
+              <ViewAsFilter
+                team={team}
+                isActive={isActiveTeam && !savingTeam}
+              />
             </li>,
             <li
               key={`sp_${team.brand.id}`}

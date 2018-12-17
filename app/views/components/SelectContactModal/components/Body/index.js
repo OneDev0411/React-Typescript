@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Downshift from 'downshift'
 import _ from 'underscore'
 
 import SearchInput from '../SearchInput'
 import ContactItem from '../ContactItem'
+import { viewAs } from '../../../../../utils/user-teams'
 import Loading from '../../../../../components/Partials/Loading'
-import { getContacts } from '../../../../../models/contacts/get-contacts'
 import { searchContacts } from '../../../../../models/contacts/search-contacts'
 import { normalizeContactAttribute } from '../../../../../store_actions/contacts/helpers/normalize-contacts'
 import Alert from '../../../../../components/Pages/Dashboard/Partials/Alert'
@@ -26,47 +27,24 @@ const defaultProps = {
 
 class Body extends Component {
   state = {
-    isLoading: false,
+    isLoading: true,
     list: []
   }
 
   componentDidMount() {
-    this.initializingList()
-  }
-
-  initializingList = () => {
-    if (this.props.defaultSearchFilter) {
-      this.search(this.props.defaultSearchFilter)
-    } else {
-      this.fetchInitialList()
-    }
-  }
-
-  fetchInitialList = async () => {
-    try {
-      this.setState({ isLoading: true })
-
-      const response = await getContacts(0, 15)
-
-      this.setState({
-        isLoading: false,
-        list: normalizeContactAttribute(response)
-      })
-    } catch (error) {
-      console.log(error)
-      this.setState({ isLoading: false })
-    }
+    this.search(this.props.defaultSearchFilter)
   }
 
   search = _.debounce(async value => {
-    if (!value) {
-      return this.fetchInitialList()
-    }
-
     try {
       this.setState({ isLoading: true })
 
-      const response = await searchContacts(value)
+      const response = await searchContacts(
+        value,
+        undefined,
+        undefined,
+        this.props.viewAsUsers
+      )
 
       this.setState({
         isLoading: false,
@@ -144,16 +122,15 @@ class Body extends Component {
                   ))
                 )}
 
-                {!isLoading &&
-                  list.length === 0 && (
-                    <Alert
-                      type="warning"
-                      style={{
-                        margin: isDrawer ? '0 1.5rem' : '0 1rem'
-                      }}
-                      message="No Result"
-                    />
-                  )}
+                {!isLoading && list.length === 0 && (
+                  <Alert
+                    type="warning"
+                    style={{
+                      margin: isDrawer ? '0 1.5rem' : '0 1rem'
+                    }}
+                    message="No Result"
+                  />
+                )}
               </List>
             </ListContainer>
           </div>
@@ -166,4 +143,4 @@ class Body extends Component {
 Body.propTypes = propTypes
 Body.defaultProps = defaultProps
 
-export default Body
+export default connect(({ user }) => ({ viewAsUsers: viewAs(user) }))(Body)
