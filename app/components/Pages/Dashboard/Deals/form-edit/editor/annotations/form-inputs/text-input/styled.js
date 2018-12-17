@@ -7,7 +7,7 @@ position: absolute;
   width: ${props => Math.floor(props.rect[2] - props.rect[0])}px;
   height: ${props => Math.floor(props.rect[3] - props.rect[1])}px;
 
-  font-size: ${props => props.fontSize || 16}px;
+  font-size: ${props => props.fontSize || props.appearance.size || 16}px;
   font-family: ${props => props.appearance.font};
   color: ${props => props.appearance.color};
   font-weight: ${props => (props.appearance.bold ? 'bold' : 'normal')}
