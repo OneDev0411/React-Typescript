@@ -30,7 +30,7 @@ export default compose(
   ),
   withHandlers({
     handleOnChange: ({ dispatch, setAvatar, setUploading }) => async data => {
-      const file = data.target ? data.targer.files[0] : data.files.file
+      const file = data.target ? data.target.files[0] : data.files.file
 
       // Create a new FileReader instance
       // https://developer.mozilla.org/en/docs/Web/API/FileReader
