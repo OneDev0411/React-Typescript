@@ -1,5 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import _ from 'underscore'
+
+import { searchDeals, getDeals } from '../../../../../../store_actions/deals'
+import {
+  viewAsEveryoneOnTeam,
+  viewAs
+} from '../../../../../../utils/user-teams'
 
 import { Menu, Content } from '../../../../../../views/components/SlideMenu'
 import Search from '../../../../../../views/components/Grid/Search'
@@ -13,7 +20,6 @@ import {
 import Header from '../components/page-header'
 import Grid from './grid'
 import AgentFilters from './filters'
-import { searchDeals, getDeals } from '../../../../../../store_actions/deals'
 
 let persistentSearchInput = ''
 
@@ -23,31 +29,47 @@ class AgentTable extends React.Component {
     searchCriteria: persistentSearchInput
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.viewAsUsers.length !== this.props.viewAsUsers.length ||
+      !_.isEqual(nextProps.viewAsUsers, this.props.viewAsUsers)
+    ) {
+      this.fetch(nextProps.user, this.state.searchCriteria)
+    }
+  }
+
   toggleSideMenu = () =>
     this.setState(state => ({
       isSideMenuOpen: !state.isSideMenuOpen
     }))
 
-  handleSearch = value => {
-    const { user, isFetchingDeals, getDeals, searchDeals } = this.props
+  fetch = (user, searchCriteria) => {
+    const { dispatch } = this.props
 
-    if (isFetchingDeals) {
+    if (searchCriteria.length === 0 && viewAsEveryoneOnTeam(user)) {
+      dispatch(getDeals(user))
+    } else {
+      dispatch(searchDeals(user, searchCriteria))
+    }
+  }
+
+  handleSearch = _.debounce(value => {
+    if (this.props.isFetchingDeals) {
       return false
     }
 
-    this.setState({
-      searchCriteria: value
-    })
+    this.setState(
+      {
+        searchCriteria: value
+      },
+      () => {
+        // set persistent search input
+        persistentSearchInput = value
 
-    // set persistent search input
-    persistentSearchInput = value
-
-    if (value.length === 0) {
-      return getDeals(user)
-    }
-
-    searchDeals(user, value)
-  }
+        this.fetch(this.props.user, value)
+      }
+    )
+  }, 300)
 
   render() {
     const { isSideMenuOpen } = this.state
@@ -97,10 +119,11 @@ class AgentTable extends React.Component {
 }
 
 function mapStateToProps({ user, deals }) {
-  return { user, isFetchingDeals: deals.properties.isFetchingDeals }
+  return {
+    user,
+    isFetchingDeals: deals.properties.isFetchingDeals,
+    viewAsUsers: viewAs(user)
+  }
 }
 
-export default connect(
-  mapStateToProps,
-  { searchDeals, getDeals }
-)(AgentTable)
+export default connect(mapStateToProps)(AgentTable)

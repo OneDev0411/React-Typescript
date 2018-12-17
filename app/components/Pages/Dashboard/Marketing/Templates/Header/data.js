@@ -53,6 +53,13 @@ export const headers = {
     description:
       'Choose the perfect design to compliment all your featured listings.'
   },
+  NewAgent: {
+    title: 'New Agent',
+    name: 'Brand',
+    brandColor: '#ded8d8',
+    size: { width: 403, height: 214 },
+    description: 'Promote the power of your unique brand to clients.'
+  },
   OpenHouse: {
     title: 'Open House',
     brandColor: '#bfd6e8',
