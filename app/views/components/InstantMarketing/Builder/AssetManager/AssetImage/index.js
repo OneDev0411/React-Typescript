@@ -17,7 +17,7 @@ export class AssetImage extends React.Component {
       const style = Object.assign({}, this.props.target.get('style'))
 
       style['background-position'] = '0 0'
-      style['background-size'] = 'auto'
+      style['background-size'] = 'cover'
 
       if (options.backgroundPosition) {
         style['background-position'] = options.backgroundPosition

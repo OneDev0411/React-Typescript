@@ -57,7 +57,8 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
               }))
 
               const uploadedAssetsCollection = uploadedAssets.map(asset => ({
-                image: asset.url
+                image: asset.url,
+                userFile: true
               }))
 
               view.collection.reset([
@@ -95,24 +96,30 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
         return false
       }
 
-      this.collection
-        .filter(asset => {
-          const imgListing = asset.attributes.listing
+      let collection = []
 
-          if (target.attributes.attributes['rechat-assets'] === 'avatar') {
-            return !imgListing
-          }
+      const type = target.attributes.attributes['rechat-assets']
 
-          const selectedTarget = target.attributes.attributes['rechat-listing']
+      if (type === 'listing-image') {
+        collection = this.collection.filter(asset => {
+          const listing = target.attributes.attributes['rechat-listing']
 
-          return !imgListing || !selectedTarget || imgListing === selectedTarget
+          return !listing || asset.attributes.listing === listing
         })
-        .forEach(asset => {
-          const view = new AssetView({ model: asset })
+      }
 
-          view.render()
-          view.$el.appendTo(this.el)
-        })
+      if (type === 'avatar') {
+        collection = this.collection.filter(
+          asset => asset.attributes.userFile || asset.attributes.avatar
+        )
+      }
+
+      collection.forEach(asset => {
+        const view = new AssetView({ model: asset })
+
+        view.render()
+        view.$el.appendTo(this.el)
+      })
     },
     render: () => this
   })
