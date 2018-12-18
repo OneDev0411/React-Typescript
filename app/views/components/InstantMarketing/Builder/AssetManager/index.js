@@ -104,6 +104,10 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
         collection = this.collection.filter(asset => {
           const listing = target.attributes.attributes['rechat-listing']
 
+          if (asset.attributes.avatar) {
+            return false
+          }
+
           return !listing || asset.attributes.listing === listing
         })
       }
