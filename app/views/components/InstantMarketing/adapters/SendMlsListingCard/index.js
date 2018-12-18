@@ -115,7 +115,7 @@ class SendMlsListingCard extends React.Component {
     )
 
     try {
-      await sendContactsEmail(emails)
+      await sendContactsEmail(emails, this.state.owner.id)
 
       // reset form
       if (form) {

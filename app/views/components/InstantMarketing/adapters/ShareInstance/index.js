@@ -72,7 +72,7 @@ class ShareInstance extends React.Component {
     )
 
     try {
-      await sendContactsEmail(emails)
+      await sendContactsEmail(emails, this.props.user.id)
 
       // reset form
       if (form) {
