@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import { primary } from 'views/utils/colors'
+
 export const Image = styled.img`
   margin: 8px 3% 8px 5%;
   border-radius: 2px;
@@ -19,7 +21,7 @@ export const CropButton = styled.div`
   border-radius: 3px;
 
   :hover {
-    color: blue;
+    color: ${primary};
   }
 `
 
