@@ -37,20 +37,17 @@ class ViewAsFilter extends React.Component {
   }
 
   handleViewAs = async e => {
-    const me = this.props.user.id
     const viewAs = e.currentTarget.dataset.viewAs
     const { brandMembers } = this.props
 
     this.setState(({ viewAsList }) => {
       if (viewAs === 'All') {
         viewAsList =
-          viewAsList.length === brandMembers.length
-            ? [me]
-            : this.props.brandMembers.map(m => m.id)
+          viewAsList.length !== brandMembers.length
+            ? this.props.brandMembers.map(m => m.id)
+            : []
       } else if (viewAsList.indexOf(viewAs) > -1) {
-        const filteredList = viewAsList.filter(f => f !== viewAs)
-
-        viewAsList = filteredList.length === 0 ? [me] : filteredList
+        viewAsList = viewAsList.filter(f => f !== viewAs)
       } else {
         viewAsList = [...viewAsList, viewAs]
       }
@@ -113,11 +110,6 @@ class ViewAsFilter extends React.Component {
             <Flex alignCenter key={index} style={rowStyle}>
               <CheckBoxButton
                 square
-                isDisabled={
-                  isYou &&
-                  viewAsList.length === 1 &&
-                  viewAsList[0] === member.id
-                }
                 isSelected={viewAsList.indexOf(member.id) > -1}
                 data-view-as={member.id}
                 onClick={this.handleViewAs}
