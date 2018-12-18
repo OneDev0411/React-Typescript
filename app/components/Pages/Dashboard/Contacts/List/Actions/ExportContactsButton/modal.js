@@ -1,8 +1,8 @@
 import React from 'react'
 
-import ActionButton from '../../../../../../../views/components/Button/ActionButton'
-import RadioButton from '../../../../../../../views/components/RadioButton'
-import BareModal from '../../../../../../../views/components/BareModal'
+import ActionButton from 'components/Button/ActionButton'
+import RadioButton from 'components/RadioButton'
+import BareModal from 'components/BareModal'
 
 const SAME_ROW_DOWNLOAD_TYPE = 'same'
 const SEPARATE_ROW_DOWNLOAD_TYPE = 'separate'

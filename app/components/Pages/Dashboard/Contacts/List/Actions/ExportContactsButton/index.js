@@ -3,7 +3,7 @@ import fileSaver from 'file-saver'
 import superagent from 'superagent'
 import { connect } from 'react-redux'
 
-import { getActiveTeam } from '../../../../../../../utils/user-teams'
+import { getActiveTeam } from 'utils/user-teams'
 
 import OpenModalButton from './button'
 import Modal from './modal'
