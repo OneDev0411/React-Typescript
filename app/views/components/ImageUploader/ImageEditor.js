@@ -18,8 +18,9 @@ export default function ImageEditor({
       style={{
         textAlign: 'center',
         width: '100%',
-        height: '484px',
+        height: '100%',
         backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
