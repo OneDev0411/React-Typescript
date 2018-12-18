@@ -1,4 +1,5 @@
 import React from 'react'
+import agent from 'superagent'
 
 import ImageFileIcon from 'components/SvgIcons/ImageFile/ImageFileIcon'
 
@@ -17,15 +18,25 @@ function getFileName(instance) {
   return truncateTextFromMiddle(url.substring(url.lastIndexOf('/') + 1), 40)
 }
 
+function download(instance) {
+  agent
+    .get(instance.file.url)
+    .withCredentials()
+    .responseType('blob')
+    .then(res => {
+      console.log(res)
+    })
+}
+
 export default function DownloadImage(props) {
   return (
     <Section
       title="Download Image:"
       description="Download image to your computer and share however you want."
       button={() => (
-        <a target="_blank" href={props.instance.file.url}>
-          <DownloadButton>Download</DownloadButton>
-        </a>
+        <DownloadButton onClick={() => download(props.instance)}>
+          Download
+        </DownloadButton>
       )}
     >
       <ImageFileIcon /> {getFileName(props.instance)}
