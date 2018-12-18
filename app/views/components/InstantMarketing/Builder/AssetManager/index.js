@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom'
 
 import { Uploader } from 'components/Uploader'
 
+import { AssetImage } from './AssetImage'
+
 import Fetch from '../../../../../services/fetch'
 
 const CUSTOM_ASSET_UPLOAD_PATH = '/templates/assets'
@@ -18,39 +20,13 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
     })
 
   const AssetView = Backbone.View.extend({
-    events: {
-      click: 'onClick'
-    },
-    onClick() {
-      const url = this.model.get('image')
-
-      const setSrc = () => target.set('src', url)
-      const setBg = () => {
-        const style = Object.assign({}, target.get('style'))
-
-        style['background-image'] = `url(${url})`
-        target.set('style', style)
-      }
-
-      const setters = {
-        image: setSrc,
-        cell: setBg,
-        text: setBg,
-        '': setBg
-      }
-
-      const type = target.get('type')
-
-      setters[type]()
-    },
     initialize({ model }) {
       this.model = model
     },
     render() {
-      this.$el.html(
-        `<img src="${this.model.get(
-          'image'
-        )}" style="margin: 8px 3% 8px 5%; border-radius: 2px; width: 90%; cursor: pointer;"/>`
+      ReactDOM.render(
+        <AssetImage model={this.model} target={target} />,
+        this.el
       )
 
       return this
@@ -115,15 +91,21 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
       uploadButtonView.render()
       uploadButtonView.$el.appendTo(this.el)
 
+      if (!target) {
+        return false
+      }
+
       this.collection
         .filter(asset => {
           const imgListing = asset.attributes.listing
-          const selectedListing =
-            target && target.attributes.attributes['rechat-listing']
 
-          return (
-            !imgListing || !selectedListing || imgListing === selectedListing
-          )
+          if (target.attributes.attributes['rechat-assets'] === 'avatar') {
+            return !imgListing
+          }
+
+          const selectedTarget = target.attributes.attributes['rechat-listing']
+
+          return !imgListing || !selectedTarget || imgListing === selectedTarget
         })
         .forEach(asset => {
           const view = new AssetView({ model: asset })

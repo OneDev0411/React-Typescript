@@ -20,7 +20,7 @@ export class ImageUploader extends Component {
     },
     disableRotate: false,
     disableScale: false,
-    disableChangeButton: false,
+    disableChangeImage: false,
     notes: null,
     showRules: false,
     file: null,
@@ -105,11 +105,11 @@ export class ImageUploader extends Component {
   }
 
   async getHandlersData() {
-    const files = await this.getOriginalAndEditedFiles()
+    // const files = await this.getOriginalAndEditedFiles()
     const croppedArea = this.getCroppedArea()
 
     return {
-      files,
+      // files,
       croppedArea
     }
   }
@@ -378,7 +378,7 @@ export class ImageUploader extends Component {
   renderActionButtons() {
     return (
       <Fragment>
-        {this.props.disableChangeButton || (
+        {this.props.disableChangeImage || (
           <ActionButton
             style={{ marginRight: '10px', width: '120px', paddingLeft: '11px' }}
             appearance="outline"
