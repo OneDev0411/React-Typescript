@@ -73,6 +73,25 @@ export function viewAsEveryoneOnTeam(user) {
   return getActiveTeam(user).brand.member_count === viewAsUsers.length
 }
 
+export function allMembersOfTeam(team) {
+  const members =
+    team && team.brand.roles
+      ? team.brand.roles.reduce(
+          (members, role) =>
+            role.members ? members.concat(role.members) : members,
+          []
+        )
+      : []
+
+  const indexedMembers = {}
+
+  members.forEach(m => {
+    indexedMembers[m.id] = m
+  })
+
+  return Object.values(indexedMembers)
+}
+
 export function isTrainingAccount(user) {
 
   // Hide training banner

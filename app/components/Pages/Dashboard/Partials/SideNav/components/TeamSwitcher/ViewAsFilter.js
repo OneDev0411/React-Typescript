@@ -6,7 +6,8 @@ import Flex from 'styled-flex-component'
 import {
   isBackOffice,
   getActiveTeamId,
-  getActiveTeam
+  getActiveTeam,
+  allMembersOfTeam
 } from '../../../../../../../utils/user-teams'
 import { grey, borderColor } from '../../../../../../../views/utils/colors'
 
@@ -136,25 +137,9 @@ class ViewAsFilter extends React.Component {
 }
 
 function mapStateToProps({ user }) {
-  const activeTeam = getActiveTeam(user)
-  const brandMembers =
-    activeTeam && activeTeam.brand.roles
-      ? activeTeam.brand.roles.reduce(
-          (members, role) =>
-            role.members ? members.concat(role.members) : members,
-          []
-        )
-      : []
-
-  const indexedMembers = {}
-
-  brandMembers.forEach(m => {
-    indexedMembers[m.id] = m
-  })
-
   return {
     user,
-    brandMembers: Object.values(indexedMembers)
+    brandMembers: allMembersOfTeam(getActiveTeam(user))
   }
 }
 
