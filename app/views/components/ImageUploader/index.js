@@ -1,11 +1,7 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Slider from 'rc-slider/lib/Slider'
-import 'rc-slider/assets/index.css'
 
-import ActionButton from '../Button/ActionButton'
 import { Modal, ModalHeader, ModalFooter } from '../Modal'
-
 import ImageEditor from './ImageEditor'
 import UploaderModal from './UploaderModal'
 import Footer from './Footer'
@@ -18,10 +14,10 @@ export class ImageUploader extends Component {
     super(props)
 
     this.state = {
-      isOpen: this.props.isOpen,
-      file: this.props.file,
-      scale: this.props.scale,
-      rotate: this.props.rotate
+      isOpen: props.isOpen,
+      file: props.file,
+      scale: props.scale,
+      rotate: props.rotate
     }
 
     this.editor = React.createRef()
