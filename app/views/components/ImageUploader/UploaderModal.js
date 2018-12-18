@@ -19,7 +19,10 @@ export default function UploaderModal({
       style={{
         width: '100%',
         height: '100%',
-        backgroundColor: 'f2f2f2'
+        backgroundColor: '#f2f2f2'
+      }}
+      activeStyle={{
+        boxShadow: '0 0 4px 1px inset rgb(0, 76, 230)'
       }}
     >
       <div
