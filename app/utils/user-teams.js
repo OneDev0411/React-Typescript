@@ -1,7 +1,9 @@
 import cookie from 'js-cookie'
 import idx from 'idx'
 
-const ACTIVE_TEAM_COOKIE = 'rechat-active-team'
+function getActiveTeamFromCookieOrUser(user) {
+  return user.active_brand || user.brand || cookie.get('rechat-active-team')
+}
 
 export function getActiveTeam(user = {}) {
   const { teams } = user
@@ -22,6 +24,10 @@ export function getActiveTeam(user = {}) {
 }
 
 export function getActiveTeamId(user) {
+  if (user.active_brand) {
+    return user.active_brand
+  }
+  
   const activeTeam = getActiveTeam(user)
 
   if (!activeTeam) {
@@ -51,33 +57,40 @@ export function isBackOffice(user) {
   return hasUserAccess(user, 'BackOffice')
 }
 
-function getActiveTeamFromCookieOrUser(user) {
-  return cookie.get(ACTIVE_TEAM_COOKIE) || user.activeTeam || user.brand
-}
+export function viewAs(user, activeTeam = getActiveTeam(user)) {
+  if (idx(activeTeam, t => t.acl.includes('BackOffice'))) {
+    return [user.id]
+  }
 
-export function setActiveTeam(id) {
-  cookie.set(ACTIVE_TEAM_COOKIE, id, {
-    path: '/',
-    expires: 360
-  })
-}
-
-export function viewAs(user) {
-  const activeTeam = getActiveTeam(user)
-
-  if (
-    !isBackOffice(user) &&
-    idx(activeTeam, team => team.settings.user_filter[0])
-  ) {
+  if (idx(activeTeam, team => team.settings.user_filter[0])) {
     return activeTeam.settings.user_filter
   }
 
-  return [user.id]
+  return allMembersOfTeam(activeTeam).map(m => m.id)
 }
 
 export function viewAsEveryoneOnTeam(user) {
   const viewAsUsers = viewAs(user)
   return getActiveTeam(user).brand.member_count === viewAsUsers.length
+}
+
+export function allMembersOfTeam(team) {
+  const members =
+    team && team.brand.roles
+      ? team.brand.roles.reduce(
+          (members, role) =>
+            role.members ? members.concat(role.members) : members,
+          []
+        )
+      : []
+
+  const indexedMembers = {}
+
+  members.forEach(m => {
+    indexedMembers[m.id] = m
+  })
+
+  return Object.values(indexedMembers)
 }
 
 export function isTrainingAccount(user) {

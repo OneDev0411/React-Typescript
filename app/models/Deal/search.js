@@ -29,7 +29,11 @@ export async function getById(id) {
 /**
  * search deals
  */
-export async function searchDeals(user, query) {
+export async function searchDeals(
+  user,
+  query,
+  order = ['deals.updated_at', 'DESC']
+) {
   try {
     const isBackOffice = getActiveTeamACL(user).includes('BackOffice')
 
@@ -46,6 +50,7 @@ export async function searchDeals(user, query) {
     if (isBackOffice) {
       url += '?associations[]=deal.created_by&associations[]=deal.brand'
     } else {
+      payload.$order = order
       payload.role = {
         user: viewAs(user)
       }
