@@ -1,7 +1,9 @@
 import cookie from 'js-cookie'
 import idx from 'idx'
 
-const ACTIVE_TEAM_COOKIE = 'rechat-active-team'
+function getActiveTeamFromCookieOrUser(user) {
+  return user.active_brand || user.brand || cookie.get('rechat-active-team')
+}
 
 export function getActiveTeam(user = {}) {
   const { teams } = user
@@ -22,6 +24,10 @@ export function getActiveTeam(user = {}) {
 }
 
 export function getActiveTeamId(user) {
+  if (user.active_brand) {
+    return user.active_brand
+  }
+  
   const activeTeam = getActiveTeam(user)
 
   if (!activeTeam) {
@@ -51,20 +57,7 @@ export function isBackOffice(user) {
   return hasUserAccess(user, 'BackOffice')
 }
 
-function getActiveTeamFromCookieOrUser(user) {
-  return cookie.get(ACTIVE_TEAM_COOKIE) || user.activeTeam || user.brand
-}
-
-export function setActiveTeam(id) {
-  cookie.set(ACTIVE_TEAM_COOKIE, id, {
-    path: '/',
-    expires: 360
-  })
-}
-
-export function viewAs(user) {
-  const activeTeam = getActiveTeam(user)
-
+export function viewAs(user, activeTeam = getActiveTeam(user)) {
   if (
     !isBackOffice(user) &&
     idx(activeTeam, team => team.settings.user_filter[0])

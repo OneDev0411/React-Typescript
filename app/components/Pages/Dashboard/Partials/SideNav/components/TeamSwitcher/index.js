@@ -2,10 +2,8 @@ import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
-import {
-  setActiveTeam,
-  getActiveTeamId
-} from '../../../../../../../utils/user-teams'
+import { viewAs, getActiveTeamId } from '../../../../../../../utils/user-teams'
+import { putUserSetting } from '../../../../../../../models/user/put-user-setting'
 import flattenBrand from '../../../../../../../utils/flatten-brand'
 import CheckmarkIcon from '../../../../../../../views/components/SvgIcons/Checkmark/IconCheckmark'
 import ActionButton from '../../../../../../../views/components/Button/ActionButton'
@@ -60,7 +58,7 @@ export default class TeamSwitcher extends React.Component {
     )
   }
 
-  changeTeam(e, team) {
+  changeTeam = (e, team) => {
     e.preventDefault()
 
     const { user } = this.props
@@ -70,9 +68,10 @@ export default class TeamSwitcher extends React.Component {
       return false
     }
 
-    this.setState({ savingTeam: team.brand.id })
-    setActiveTeam(team.brand.id)
-    window.location.reload(true)
+    this.setState({ savingTeam: team.brand.id }, () => {
+      putUserSetting('user_filter', viewAs(user, team), team.brand.id)
+      window.location.reload(true)
+    })
   }
 
   render() {
