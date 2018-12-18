@@ -68,8 +68,8 @@ export default class TeamSwitcher extends React.Component {
       return false
     }
 
-    this.setState({ savingTeam: team.brand.id }, () => {
-      putUserSetting('user_filter', viewAs(user, team), team.brand.id)
+    this.setState({ savingTeam: team.brand.id }, async () => {
+      await putUserSetting('user_filter', viewAs(user, team), team.brand.id)
       window.location.reload(true)
     })
   }
