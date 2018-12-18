@@ -78,7 +78,9 @@ export class ImageUploader extends Component {
   }
 
   async getHandlersData() {
-    const files = await this.getOriginalAndEditedFiles()
+    const files = this.props.croppedAreaOnly
+      ? null
+      : await this.getOriginalAndEditedFiles()
     const croppedArea = this.croppedArea
 
     return {
@@ -226,6 +228,8 @@ ImageUploader.defaultProps = {
   disableBoundaryChecks: false,
   outsideRGBAColor: [102, 102, 102, 0.9],
 
+  croppedAreaOnly: false,
+
   saveHandler() {},
   closeHandler() {}
 }
@@ -251,6 +255,8 @@ ImageUploader.propTypes = {
   rotate: PropTypes.number,
   disableBoundaryChecks: PropTypes.bool,
   outsideRGBAColor: PropTypes.arrayOf(PropTypes.number),
+
+  croppedAreaOnly: PropTypes.bool, // TEMPORARY; Will be removed after fixing CORS
 
   saveHandler: PropTypes.func,
   closeHandler: PropTypes.func
