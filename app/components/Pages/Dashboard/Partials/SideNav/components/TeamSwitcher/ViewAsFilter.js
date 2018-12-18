@@ -39,28 +39,26 @@ class ViewAsFilter extends React.Component {
   }
 
   handleViewAs = async e => {
+    const me = this.props.user.id
     const viewAs = e.currentTarget.dataset.viewAs
     const { brandMembers } = this.props
 
-    if (viewAs === 'All') {
-      this.setState(
-        state => ({
-          viewAsList:
-            state.viewAsList.length === brandMembers.length
-              ? [this.props.user.id]
-              : this.props.brandMembers.map(m => m.id)
-        }),
-        this.setViewAsSetting
-      )
-    } else {
-      this.setState(state => {
-        if (state.viewAsList.indexOf(viewAs) > -1) {
-          return { viewAsList: state.viewAsList.filter(f => f !== viewAs) }
-        }
+    this.setState(({ viewAsList }) => {
+      if (viewAs === 'All') {
+        viewAsList =
+          viewAsList.length === brandMembers.length
+            ? [me]
+            : this.props.brandMembers.map(m => m.id)
+      } else if (viewAsList.indexOf(viewAs) > -1) {
+        const filteredList = viewAsList.filter(f => f !== viewAs)
 
-        return { viewAsList: [...state.viewAsList, viewAs] }
-      }, this.setViewAsSetting)
-    }
+        viewAsList = filteredList.length === 0 ? [me] : filteredList
+      } else {
+        viewAsList = [...viewAsList, viewAs]
+      }
+
+      return { viewAsList }
+    }, this.setViewAsSetting)
   }
 
   setViewAsSetting = _.debounce(() => {
