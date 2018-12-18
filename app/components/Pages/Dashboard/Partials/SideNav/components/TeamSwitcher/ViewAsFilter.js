@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
 import {
+  viewAs,
   isBackOffice,
   getActiveTeamId,
   getActiveTeam,
@@ -18,11 +19,7 @@ import { CheckBoxButton } from '../../../../../../../views/components/Button/Che
 
 class ViewAsFilter extends React.Component {
   state = {
-    viewAsList:
-      this.props.team.settings &&
-      Array.isArray(this.props.team.settings.user_filter)
-        ? this.props.team.settings.user_filter
-        : []
+    viewAsList: viewAs(this.props.user)
   }
 
   componentDidMount() {
@@ -69,15 +66,16 @@ class ViewAsFilter extends React.Component {
   render() {
     const { viewAsList } = this.state
     const { isActive, brandMembers } = this.props
+    const rowStyle = { height: '2.5rem', padding: '0 1rem' }
 
-    if (isBackOffice(this.props.user) || !isActive || brandMembers.length < 2) {
+    if (isBackOffice(this.props.user) || !isActive) {
       return null
     }
 
     return (
       <div
         style={{
-          maxHeight: '15rem',
+          maxHeight: '15.1rem',
           overflowY: 'auto',
           background: grey.A000,
           borderTop: `1px solid ${borderColor}`
@@ -85,34 +83,34 @@ class ViewAsFilter extends React.Component {
         className="u-scrollbar--thinner--self"
       >
         <div style={{ padding: '0.5rem 1rem 0' }}>View as</div>
-        <Flex alignCenter style={{ height: '2.5rem', padding: '0 1rem' }}>
-          <CheckBoxButton
-            square
-            isSelected={viewAsList.length === brandMembers.length}
-            data-view-as="All"
-            onClick={this.handleViewAs}
-            style={{ marginRight: '0.5rem' }}
-          />
-          Everyone on team
-        </Flex>
-        <div
-          style={{
-            height: '1px',
-            margin: '0.25rem auto',
-            padding: '0 1rem',
-            width: 'calc(100% - 2rem)',
-            backgroundColor: grey.A250
-          }}
-        />
+        {brandMembers.length > 1 && (
+          <React.Fragment>
+            <Flex alignCenter style={rowStyle}>
+              <CheckBoxButton
+                square
+                isSelected={viewAsList.length === brandMembers.length}
+                data-view-as="All"
+                onClick={this.handleViewAs}
+                style={{ marginRight: '0.5rem' }}
+              />
+              Everyone on team
+            </Flex>
+            <div
+              style={{
+                height: '1px',
+                margin: '0.25rem auto',
+                padding: '0 1rem',
+                width: 'calc(100% - 2rem)',
+                backgroundColor: grey.A250
+              }}
+            />
+          </React.Fragment>
+        )}
         {brandMembers.map((member, index) => {
           const isYou = member.id === this.props.user.id
 
           return (
-            <Flex
-              alignCenter
-              key={index}
-              style={{ height: '2.5rem', padding: '0 1rem' }}
-            >
+            <Flex alignCenter key={index} style={rowStyle}>
               <CheckBoxButton
                 square
                 isDisabled={
