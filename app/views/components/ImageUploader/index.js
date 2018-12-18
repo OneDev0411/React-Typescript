@@ -149,8 +149,9 @@ export class ImageUploader extends Component {
         style={{
           content: {
             width: '900px',
-            height: '95%',
-            maxWidth: '95%'
+            height: this.props.height > 400 ? '95%' : '600px',
+            maxWidth: '95%',
+            maxHeight: '95%'
           }
         }}
       >

@@ -29,7 +29,7 @@ export default function UploaderModal({
           justifyContent: 'center',
           alignItems: 'center',
           textAlign: 'center',
-          paddingTop: '20%'
+          paddingTop: '18.5%'
         }}
       >
         <img
