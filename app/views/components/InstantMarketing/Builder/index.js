@@ -36,7 +36,7 @@ class Builder extends React.Component {
     super(props)
 
     this.state = {
-      template: null,
+      originalTemplate: null,
       selectedTemplate: props.defaultTemplate,
       owner: props.templateData.user
     }
@@ -224,6 +224,7 @@ class Builder extends React.Component {
   handleSelectTemplate = templateItem => {
     this.setState(
       {
+        originalTemplate: templateItem,
         selectedTemplate: templateItem
       },
       () => {
@@ -285,7 +286,7 @@ class Builder extends React.Component {
       state => ({
         selectedTemplate: {
           ...state.selectedTemplate,
-          template: this.generateTemplate(state.selectedTemplate.template, {
+          template: this.generateTemplate(state.originalTemplate.template, {
             ...this.props.templateData,
             ...newData
           })
