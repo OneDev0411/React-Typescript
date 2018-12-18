@@ -96,7 +96,9 @@ export class AssetImage extends React.Component {
 
         {this.state.isCropperOpen && (
           <ImageUploader
-            disableChangeImage
+            disableChangePhoto
+            croppedAreaOnly
+            disableRotate
             file={image}
             width={this.Target.width}
             height={this.Target.height}
