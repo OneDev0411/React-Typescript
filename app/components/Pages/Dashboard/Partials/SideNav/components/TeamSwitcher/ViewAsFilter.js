@@ -148,9 +148,15 @@ function mapStateToProps({ user }) {
         )
       : []
 
+  const indexedMembers = {}
+
+  brandMembers.forEach(m => {
+    indexedMembers[m.id] = m
+  })
+
   return {
     user,
-    brandMembers
+    brandMembers: Object.values(indexedMembers)
   }
 }
 
