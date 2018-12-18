@@ -193,7 +193,7 @@ export class ImageUploader extends Component {
               scale={this.props.scale}
               disableRotate={this.props.disableRotate}
               disableScale={this.props.disableScale}
-              disableChangeButton={this.props.disableChangeButton}
+              disableChangePhoto={this.props.disableChangePhoto}
               onScaleChange={this.onScaleChange}
               onRotateClick={this.onRotateClick}
               onChange={this.reset}
@@ -215,7 +215,7 @@ ImageUploader.defaultProps = {
   },
   disableRotate: false,
   disableScale: false,
-  disableChangeButton: false,
+  disableChangePhoto: false,
   notes: null,
   showRules: false,
   file: null,
@@ -243,7 +243,7 @@ ImageUploader.propTypes = {
   }),
   disableRotate: PropTypes.bool,
   disableScale: PropTypes.bool,
-  disableChangeButton: PropTypes.bool,
+  disableChangePhoto: PropTypes.bool,
   notes: PropTypes.element,
   showRules: PropTypes.bool,
   file: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(File)]),

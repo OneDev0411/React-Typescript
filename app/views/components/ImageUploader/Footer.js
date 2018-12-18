@@ -8,7 +8,7 @@ export default function Footer({
   scale,
   disableRotate,
   disableScale,
-  disableChangeButton,
+  disableChangePhoto,
   onScaleChange,
   onRotateClick,
   onChange,
@@ -83,7 +83,7 @@ export default function Footer({
         )}
       </div>
       <div>
-        {disableChangeButton || (
+        {disableChangePhoto || (
           <ActionButton
             style={{ marginRight: '10px', width: '120px', paddingLeft: '11px' }}
             appearance="outline"
