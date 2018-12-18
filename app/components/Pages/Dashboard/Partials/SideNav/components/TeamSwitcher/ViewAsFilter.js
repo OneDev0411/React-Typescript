@@ -76,7 +76,7 @@ class ViewAsFilter extends React.Component {
     return (
       <div
         style={{
-          maxHeight: '12rem',
+          maxHeight: '15rem',
           overflowY: 'auto',
           background: grey.A000,
           borderTop: `1px solid ${borderColor}`
