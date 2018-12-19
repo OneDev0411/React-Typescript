@@ -78,8 +78,8 @@ export default class TeamSwitcher extends React.Component {
     const { user } = this.props
     const { savingTeam } = this.state
 
-    if (!user.teams || user.teams.length <= 1) {
-      return false
+    if (!user.teams || user.teams.length < 2 || !user.teams[0].brand.roles) {
+      return null
     }
 
     return (
