@@ -29,7 +29,11 @@ export async function getById(id) {
 /**
  * search deals
  */
-export async function searchDeals(user, query) {
+export async function searchDeals(
+  user,
+  query,
+  order = ['deals.updated_at', 'DESC']
+) {
   try {
     const isBackOffice = getActiveTeamACL(user).includes('BackOffice')
 
@@ -46,9 +50,15 @@ export async function searchDeals(user, query) {
     if (isBackOffice) {
       url += '?associations[]=deal.created_by&associations[]=deal.brand'
     } else {
-      payload.role = {
-        user: viewAs(user)
+      const users = viewAs(user)
+
+      if (users.length > 0) {
+        payload.role = {
+          user: users
+        }
       }
+
+      payload.$order = order
     }
 
     const response = await new Fetch().post(url).send(payload)

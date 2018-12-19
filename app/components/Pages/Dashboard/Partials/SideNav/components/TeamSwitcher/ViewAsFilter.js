@@ -4,9 +4,11 @@ import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
 import {
+  viewAs,
   isBackOffice,
   getActiveTeamId,
-  getActiveTeam
+  getActiveTeam,
+  allMembersOfTeam
 } from '../../../../../../../utils/user-teams'
 import { grey, borderColor } from '../../../../../../../views/utils/colors'
 
@@ -17,11 +19,7 @@ import { CheckBoxButton } from '../../../../../../../views/components/Button/Che
 
 class ViewAsFilter extends React.Component {
   state = {
-    viewAsList:
-      this.props.team.settings &&
-      Array.isArray(this.props.team.settings.user_filter)
-        ? this.props.team.settings.user_filter
-        : []
+    viewAsList: viewAs(this.props.user)
   }
 
   componentDidMount() {
@@ -42,25 +40,20 @@ class ViewAsFilter extends React.Component {
     const viewAs = e.currentTarget.dataset.viewAs
     const { brandMembers } = this.props
 
-    if (viewAs === 'All') {
-      this.setState(
-        state => ({
-          viewAsList:
-            state.viewAsList.length === brandMembers.length
-              ? [this.props.user.id]
-              : this.props.brandMembers.map(m => m.id)
-        }),
-        this.setViewAsSetting
-      )
-    } else {
-      this.setState(state => {
-        if (state.viewAsList.indexOf(viewAs) > -1) {
-          return { viewAsList: state.viewAsList.filter(f => f !== viewAs) }
-        }
+    this.setState(({ viewAsList }) => {
+      if (viewAs === 'All') {
+        viewAsList =
+          viewAsList.length !== brandMembers.length
+            ? this.props.brandMembers.map(m => m.id)
+            : []
+      } else if (viewAsList.indexOf(viewAs) > -1) {
+        viewAsList = viewAsList.filter(f => f !== viewAs)
+      } else {
+        viewAsList = [...viewAsList, viewAs]
+      }
 
-        return { viewAsList: [...state.viewAsList, viewAs] }
-      }, this.setViewAsSetting)
-    }
+      return { viewAsList }
+    }, this.setViewAsSetting)
   }
 
   setViewAsSetting = _.debounce(() => {
@@ -70,15 +63,16 @@ class ViewAsFilter extends React.Component {
   render() {
     const { viewAsList } = this.state
     const { isActive, brandMembers } = this.props
+    const rowStyle = { height: '2.5rem', padding: '0 1rem' }
 
-    if (isBackOffice(this.props.user) || !isActive || brandMembers.length < 2) {
+    if (isBackOffice(this.props.user) || !isActive) {
       return null
     }
 
     return (
       <div
         style={{
-          maxHeight: '12rem',
+          maxHeight: '15.1rem',
           overflowY: 'auto',
           background: grey.A000,
           borderTop: `1px solid ${borderColor}`
@@ -86,41 +80,36 @@ class ViewAsFilter extends React.Component {
         className="u-scrollbar--thinner--self"
       >
         <div style={{ padding: '0.5rem 1rem 0' }}>View as</div>
-        <Flex alignCenter style={{ height: '2.5rem', padding: '0 1rem' }}>
-          <CheckBoxButton
-            square
-            isSelected={viewAsList.length === brandMembers.length}
-            data-view-as="All"
-            onClick={this.handleViewAs}
-            style={{ marginRight: '0.5rem' }}
-          />
-          Everyone on team
-        </Flex>
-        <div
-          style={{
-            height: '1px',
-            margin: '0.25rem auto',
-            padding: '0 1rem',
-            width: 'calc(100% - 2rem)',
-            backgroundColor: grey.A250
-          }}
-        />
+        {brandMembers.length > 1 && (
+          <React.Fragment>
+            <Flex alignCenter style={rowStyle}>
+              <CheckBoxButton
+                square
+                isSelected={viewAsList.length === brandMembers.length}
+                data-view-as="All"
+                onClick={this.handleViewAs}
+                style={{ marginRight: '0.5rem' }}
+              />
+              Everyone on team
+            </Flex>
+            <div
+              style={{
+                height: '1px',
+                margin: '0.25rem auto',
+                padding: '0 1rem',
+                width: 'calc(100% - 2rem)',
+                backgroundColor: grey.A250
+              }}
+            />
+          </React.Fragment>
+        )}
         {brandMembers.map((member, index) => {
           const isYou = member.id === this.props.user.id
 
           return (
-            <Flex
-              alignCenter
-              key={index}
-              style={{ height: '2.5rem', padding: '0 1rem' }}
-            >
+            <Flex alignCenter key={index} style={rowStyle}>
               <CheckBoxButton
                 square
-                isDisabled={
-                  isYou &&
-                  viewAsList.length === 1 &&
-                  viewAsList[0] === member.id
-                }
                 isSelected={viewAsList.indexOf(member.id) > -1}
                 data-view-as={member.id}
                 onClick={this.handleViewAs}
@@ -138,19 +127,9 @@ class ViewAsFilter extends React.Component {
 }
 
 function mapStateToProps({ user }) {
-  const activeTeam = getActiveTeam(user)
-  const brandMembers =
-    activeTeam && activeTeam.brand.roles
-      ? activeTeam.brand.roles.reduce(
-          (members, role) =>
-            role.members ? members.concat(role.members) : members,
-          []
-        )
-      : []
-
   return {
     user,
-    brandMembers
+    brandMembers: allMembersOfTeam(getActiveTeam(user))
   }
 }
 

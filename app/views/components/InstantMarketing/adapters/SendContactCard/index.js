@@ -152,7 +152,7 @@ class SendContactCard extends React.Component {
     ]
 
     try {
-      await sendContactsEmail(emails)
+      await sendContactsEmail(emails, this.state.owner.id)
 
       this.props.notify({
         status: 'success',

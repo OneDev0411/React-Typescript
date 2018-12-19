@@ -286,6 +286,7 @@ class Builder extends React.Component {
   renderAgentPickerButton = buttonProps => (
     <DropButton
       {...buttonProps}
+      iconSize="large"
       text={`Sends as: ${buttonProps.selectedItem.label}`}
     />
   )
@@ -342,47 +343,45 @@ class Builder extends React.Component {
               </ActionButton>
             )}
 
-            {this.state.selectedTemplate &&
-              isSocialMedium && (
-                <Fragment>
-                  <ActionButton
-                    onClick={() => this.handleSocialSharing('Instagram')}
-                  >
-                    <i
-                      className="fa fa-instagram"
-                      style={{
-                        fontSize: '1.5rem',
-                        marginRight: '0.5rem'
-                      }}
-                    />
-                    Post to Instagram
-                  </ActionButton>
+            {this.state.selectedTemplate && isSocialMedium && (
+              <Fragment>
+                <ActionButton
+                  onClick={() => this.handleSocialSharing('Instagram')}
+                >
+                  <i
+                    className="fa fa-instagram"
+                    style={{
+                      fontSize: '1.5rem',
+                      marginRight: '0.5rem'
+                    }}
+                  />
+                  Post to Instagram
+                </ActionButton>
 
-                  <ActionButton
-                    style={{ marginLeft: '0.5rem' }}
-                    onClick={() => this.handleSocialSharing('Facebook')}
-                  >
-                    <i
-                      className="fa fa-facebook-square"
-                      style={{
-                        fontSize: '1.5rem',
-                        marginRight: '0.5rem'
-                      }}
-                    />
-                    Post to Facebook
-                  </ActionButton>
-                </Fragment>
-              )}
-
-            {this.state.selectedTemplate &&
-              !isSocialMedium && (
                 <ActionButton
                   style={{ marginLeft: '0.5rem' }}
-                  onClick={this.handleSave}
+                  onClick={() => this.handleSocialSharing('Facebook')}
                 >
-                  Next
+                  <i
+                    className="fa fa-facebook-square"
+                    style={{
+                      fontSize: '1.5rem',
+                      marginRight: '0.5rem'
+                    }}
+                  />
+                  Post to Facebook
                 </ActionButton>
-              )}
+              </Fragment>
+            )}
+
+            {this.state.selectedTemplate && !isSocialMedium && (
+              <ActionButton
+                style={{ marginLeft: '0.5rem' }}
+                onClick={this.handleSave}
+              >
+                Next
+              </ActionButton>
+            )}
 
             <Divider />
             <IconButton
@@ -413,13 +412,12 @@ class Builder extends React.Component {
             ref={ref => (this.grapes = ref)}
             style={{ position: 'relative' }}
           >
-            {this.IsVideoTemplate &&
-              this.IsTemplateLoaded && (
-                <VideoToolbar
-                  onRef={ref => (this.videoToolbar = ref)}
-                  editor={this.editor}
-                />
-              )}
+            {this.IsVideoTemplate && this.IsTemplateLoaded && (
+              <VideoToolbar
+                onRef={ref => (this.videoToolbar = ref)}
+                editor={this.editor}
+              />
+            )}
           </div>
         </BuilderContainer>
       </Container>
