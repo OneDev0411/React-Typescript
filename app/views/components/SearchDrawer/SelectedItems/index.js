@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'underscore'
 
 import { ListContainer, ListTitle } from '../styled'
-import { Body } from '../Body'
+import { Body } from '../components/Body'
 
 export function SelectedItems(props) {
   if (props.isLoading || _.size(props.selectedItems) === 0) {

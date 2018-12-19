@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Downshift from 'downshift'
-import ClickOutside from 'react-click-outside'
 
 import _ from 'underscore'
 
@@ -10,12 +9,12 @@ import ActionButton from 'components/Button/ActionButton'
 import Drawer from '../OverlayDrawer'
 import Search from '../Grid/Search'
 import Loading from '../../../components/Partials/Loading'
-import Alert from '../../../components/Pages/Dashboard/Partials/Alert'
 
-import { Body } from './Body'
 import { SelectedItems } from './SelectedItems'
+import { SearchResultList } from './SearchResult'
 
-import { ListContainer, ListTitle } from './styled'
+import { ListsContainer } from './styled'
+import { DefaultItems } from './DefaultItems'
 
 const initialState = {
   isSearching: false,
@@ -116,8 +115,6 @@ class SearchDrawer extends React.Component {
   }
 
   handleUpdateList = list => {
-    list.map(item => console.log(item))
-
     this.setState({
       selectedItems: list
     })
@@ -142,7 +139,7 @@ class SearchDrawer extends React.Component {
   }
 
   render() {
-    const { isSearching, error } = this.state
+    const { isSearching } = this.state
     const { showLoadingIndicator } = this.props
 
     const listsSharedProps = {
@@ -157,7 +154,7 @@ class SearchDrawer extends React.Component {
         onClose={this.handleClose}
       >
         <Drawer.Header title={this.props.title} />
-        <Drawer.Body style={{ overflow: 'hidden' }}>
+        <Drawer.Body style={{ overflow: 'auto' }}>
           <Downshift
             render={({ getItemProps }) => (
               <div style={{ position: 'relative' }}>
@@ -174,29 +171,15 @@ class SearchDrawer extends React.Component {
 
                 {(isSearching || showLoadingIndicator) && <Loading />}
 
-                {!showLoadingIndicator &&
-                  this.SearchResults.length > 0 && (
-                    <ClickOutside onClickOutside={this.handleClickOutside}>
-                      <ListContainer asDropDown>
-                        {error && (
-                          <Alert
-                            type={
-                              error.type === 'error' ? error.type : 'warning'
-                            }
-                            message={error.message}
-                          />
-                        )}
-
-                        <Body
-                          isDropDown
-                          getItemProps={getItemProps}
-                          list={this.SearchResults}
-                          handleSelectItem={this.handleSelectItem}
-                          {...listsSharedProps}
-                        />
-                      </ListContainer>
-                    </ClickOutside>
-                  )}
+                <SearchResultList
+                  isLoading={this.props.showLoadingIndicator}
+                  searchResults={this.SearchResults}
+                  error={this.state.error}
+                  getItemProps={getItemProps}
+                  handleSelectItem={this.handleSelectItem}
+                  handleClickOutside={this.handleClickOutside}
+                  listsSharedProps={listsSharedProps}
+                />
 
                 <SelectedItems
                   isLoading={this.props.showLoadingIndicator}
@@ -207,23 +190,14 @@ class SearchDrawer extends React.Component {
                   listsSharedProps={listsSharedProps}
                 />
 
-                {this.DefaultList.length > 0 && (
-                  <ListContainer
-                    style={{
-                      marginTop: '1rem'
-                    }}
-                  >
-                    <ListTitle>{this.props.defaultListTitle}</ListTitle>
-
-                    <Body
-                      showAddButton
-                      getItemProps={getItemProps}
-                      list={this.DefaultList}
-                      handleSelectItem={this.handleSelectItem}
-                      {...listsSharedProps}
-                    />
-                  </ListContainer>
-                )}
+                <DefaultItems
+                  isLoading={this.props.showLoadingIndicator}
+                  defaultListTitle={this.props.defaultListTitle}
+                  defaultItems={this.DefaultList}
+                  getItemProps={getItemProps}
+                  handleSelectItem={this.handleSelectItem}
+                  listsSharedProps={listsSharedProps}
+                />
               </div>
             )}
           />
