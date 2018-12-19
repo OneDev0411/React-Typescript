@@ -227,7 +227,7 @@ class SendMlsListingCard extends React.Component {
     )
   }
 
-  get InitialList() {
+  get DefaultList() {
     if (this.state.showEditListings) {
       return this.state.listings.map(listing => ({
         ...listing,
@@ -304,7 +304,7 @@ class SendMlsListingCard extends React.Component {
           isUpdatingList={this.state.showEditListings}
           title={this.SearchListingDrawerTitle}
           searchPlaceholder="Enter MLS# or an address"
-          initialList={this.InitialList}
+          defaultList={this.DefaultList}
           onClose={this.closeListingModal}
           onSelectListings={this.handleSelectListings}
           onUpdateList={this.handleUpdateListings}
