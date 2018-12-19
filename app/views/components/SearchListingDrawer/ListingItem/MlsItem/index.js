@@ -18,7 +18,7 @@ import {
   IconContainer
 } from '../styled'
 
-export function MlsItem({ item, isUpdatingList, ...props }) {
+export function MlsItem({ item, ...props }) {
   const address = item.address_components
 
   return (
@@ -57,13 +57,9 @@ export function MlsItem({ item, isUpdatingList, ...props }) {
             {item.status}
           </Status>
 
-          {isUpdatingList &&
-            props.totalItems > 1 && (
-              <IconDelete
-                className="delete-icon"
-                onClick={props.onClickRemove}
-              />
-            )}
+          {props.removable && (
+            <IconDelete className="delete-icon" onClick={props.onClickRemove} />
+          )}
         </ListItemStatus>
       </Flex>
     </ListItem>
