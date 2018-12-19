@@ -2,8 +2,6 @@ import React from 'react'
 
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 
-import { CheckBoxButton } from 'components/Button/CheckboxButton'
-
 export class Body extends React.Component {
   onDragEnd = result => {
     if (!result.destination) {
@@ -46,10 +44,6 @@ export class Body extends React.Component {
     ...draggableStyle
   })
 
-  get ShowCheckBox() {
-    return this.props.isUpdatingList !== true && this.props.multipleSelection
-  }
-
   render() {
     const { ItemRow } = this.props
     const isDraggable = this.props.isUpdatingList && this.props.list.length > 1
@@ -87,17 +81,6 @@ export class Body extends React.Component {
                         isDraggable={isDraggable}
                         totalItems={this.props.list.length}
                         onClickRemove={() => this.handleRemove(item)}
-                        renderCheckBox={item =>
-                          this.ShowCheckBox && (
-                            <CheckBoxButton
-                              style={{ marginRight: '1rem' }}
-                              isSelected={this.props.selectedRows[item.id]}
-                              onClick={() =>
-                                this.props.handleClickCheckbox(item)
-                              }
-                            />
-                          )
-                        }
                         {...this.props.getItemProps({
                           item,
                           onClick: () => this.props.handleSelectItem(item)
