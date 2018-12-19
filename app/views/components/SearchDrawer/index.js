@@ -1,6 +1,7 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import Downshift from 'downshift'
+import ClickOutside from 'react-click-outside'
 
 import _ from 'underscore'
 
@@ -12,13 +13,14 @@ import Loading from '../../../components/Partials/Loading'
 import Alert from '../../../components/Pages/Dashboard/Partials/Alert'
 
 import { Body } from './Body'
+import { SelectedItems } from './SelectedItems'
 
-import { ResultsContainer } from './styled'
+import { ListContainer, ListTitle } from './styled'
 
 const initialState = {
   isSearching: false,
-  selectedRows: {},
-  list: [],
+  selectedItems: {},
+  searchResults: [],
   error: null
 }
 
@@ -27,21 +29,24 @@ class SearchDrawer extends React.Component {
 
   handleSearch = async value => {
     if (value.length === 0) {
-      return this.setState(initialState)
+      return this.setState(state => ({
+        initialState,
+        selectedItems: state.selectedItems
+      }))
     }
 
     try {
       this.setState({
         isSearching: true,
         error: null,
-        list: []
+        searchResults: []
       })
 
-      const list = await this.props.searchFunction(value)
+      const searchResults = await this.props.searchFunction(value)
 
       this.setState({
-        list,
-        error: list.length === 0 && {
+        searchResults,
+        error: searchResults.length === 0 && {
           type: 'warning',
           message: 'No MLS Listing Found'
         }
@@ -68,14 +73,8 @@ class SearchDrawer extends React.Component {
   }
 
   handleSelectItem = item => {
-    if (this.IsUpdatingList) {
-      return false
-    }
-
-    if (this.props.multipleSelection && this.props.isUpdatingList !== true) {
-      this.handleClickCheckbox(item)
-
-      return
+    if (this.props.multipleSelection) {
+      return this.handleAddNewItem(item)
     }
 
     this.setState(initialState)
@@ -90,40 +89,66 @@ class SearchDrawer extends React.Component {
     this.setState(initialState)
     this.searchInputRef.clear()
 
-    this.props.onSelectItems(this.state.selectedRows)
+    this.props.onSelectItems(this.state.selectedItems)
   }
 
-  handleClickCheckbox = item => {
-    let nextState = {}
-
-    if (this.state.selectedRows[item.id]) {
-      nextState = _.omit(this.state.selectedRows, row => row.id === item.id)
-    } else {
-      nextState = { ...this.state.selectedRows, [item.id]: item }
+  handleClickOutside = () => {
+    if (!this.props.multipleSelection) {
+      return false
     }
 
-    this.setState({ selectedRows: nextState })
+    this.setState({
+      searchResults: []
+    })
+
+    this.searchInputRef.clear()
   }
 
-  get List() {
-    const { list } = this.state
+  handleAddNewItem = async item => {
+    const normalized = await this.props.normalizeSelectedItem(item)
 
-    return this.state.isSearching || this.state.error || list.length > 0
-      ? list
-      : this.props.initialList
+    this.setState(state => ({
+      selectedItems: { ...state.selectedItems, [normalized.id]: normalized },
+      searchResults: []
+    }))
+
+    this.searchInputRef.clear()
+  }
+
+  handleUpdateList = list => {
+    list.map(item => console.log(item))
+
+    this.setState({
+      selectedItems: list
+    })
   }
 
   get ShowFooter() {
-    return this.props.multipleSelection && !this.props.isUpdatingList
+    return this.props.multipleSelection
   }
 
-  get IsUpdatingList() {
-    return this.props.isUpdatingList && !this.searchInputRef.value
+  get DefaultList() {
+    return this.props.defaultList.filter(item => {
+      const id = item.type === 'deal' ? item.listing : item.id
+
+      return !this.state.selectedItems[id]
+    })
+  }
+
+  get SearchResults() {
+    return this.state.searchResults.filter(
+      item => !this.state.selectedItems[item.id]
+    )
   }
 
   render() {
     const { isSearching, error } = this.state
     const { showLoadingIndicator } = this.props
+
+    const listsSharedProps = {
+      ItemRow: this.props.ItemRow,
+      multipleSelection: this.props.multipleSelection
+    }
 
     return (
       <Drawer
@@ -134,8 +159,8 @@ class SearchDrawer extends React.Component {
         <Drawer.Header title={this.props.title} />
         <Drawer.Body style={{ overflow: 'hidden' }}>
           <Downshift
-            render={({ getItemProps, highlightedIndex }) => (
-              <div>
+            render={({ getItemProps }) => (
+              <div style={{ position: 'relative' }}>
                 <Search
                   {...this.props.searchInputOptions}
                   onChange={this.handleSearch}
@@ -149,32 +174,56 @@ class SearchDrawer extends React.Component {
 
                 {(isSearching || showLoadingIndicator) && <Loading />}
 
-                <ResultsContainer>
-                  {error && (
-                    <Alert
-                      type={error.type === 'error' ? error.type : 'warning'}
-                      message={error.message}
-                    />
+                {!showLoadingIndicator &&
+                  this.SearchResults.length > 0 && (
+                    <ClickOutside onClickOutside={this.handleClickOutside}>
+                      <ListContainer asDropDown>
+                        {error && (
+                          <Alert
+                            type={
+                              error.type === 'error' ? error.type : 'warning'
+                            }
+                            message={error.message}
+                          />
+                        )}
+
+                        <Body
+                          isDropDown
+                          getItemProps={getItemProps}
+                          list={this.SearchResults}
+                          handleSelectItem={this.handleSelectItem}
+                          {...listsSharedProps}
+                        />
+                      </ListContainer>
+                    </ClickOutside>
                   )}
 
-                  {!showLoadingIndicator && (
+                <SelectedItems
+                  isLoading={this.props.showLoadingIndicator}
+                  selectedItems={this.state.selectedItems}
+                  hasDefaultList={this.DefaultList.length > 0}
+                  getItemProps={getItemProps}
+                  onUpdateList={this.handleUpdateList}
+                  listsSharedProps={listsSharedProps}
+                />
+
+                {this.DefaultList.length > 0 && (
+                  <ListContainer
+                    style={{
+                      marginTop: '1rem'
+                    }}
+                  >
+                    <ListTitle>{this.props.defaultListTitle}</ListTitle>
+
                     <Body
-                      isUpdatingList={this.IsUpdatingList}
+                      showAddButton
                       getItemProps={getItemProps}
-                      highlightedIndex={highlightedIndex}
-                      ItemRow={this.props.ItemRow}
-                      list={this.List}
-                      multipleSelection={
-                        this.props.multipleSelection &&
-                        !this.props.isUpdatingList
-                      }
-                      selectedRows={this.state.selectedRows}
-                      handleClickCheckbox={this.handleClickCheckbox}
+                      list={this.DefaultList}
                       handleSelectItem={this.handleSelectItem}
-                      onUpdateList={this.props.onUpdateList}
+                      {...listsSharedProps}
                     />
-                  )}
-                </ResultsContainer>
+                  </ListContainer>
+                )}
               </div>
             )}
           />
@@ -186,10 +235,10 @@ class SearchDrawer extends React.Component {
           }}
         >
           <ActionButton
-            disabled={_.size(this.state.selectedRows) === 0}
+            disabled={_.size(this.state.selectedItems) === 0}
             onClick={this.handleSelectMultipleListing}
           >
-            Next ({_.size(this.state.selectedRows)} Listings Selected)
+            Next ({_.size(this.state.selectedItems)} Listings Selected)
           </ActionButton>
         </Drawer.Footer>
       </Drawer>
@@ -200,21 +249,21 @@ class SearchDrawer extends React.Component {
 SearchDrawer.defaultProps = {
   showLoadingIndicator: false,
   searchInputOptions: {},
-  initialList: [],
-  isUpdatingList: false,
+  defaultList: [],
+  defaultListTitle: 'Add from list',
   multipleSelection: false,
   onUpdateList: () => null
 }
 
 SearchDrawer.propTypes = {
   showLoadingIndicator: PropTypes.bool,
-  isUpdatingList: PropTypes.bool,
   multipleSelection: PropTypes.bool,
   searchInputOptions: PropTypes.object,
   searchFunction: PropTypes.func.isRequired,
   ItemRow: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
   onSelectItem: PropTypes.func.isRequired,
-  initialList: PropTypes.array,
+  defaultList: PropTypes.array,
+  defaultListTitle: PropTypes.string,
   onUpdateList: PropTypes.func
 }
 
