@@ -26,7 +26,6 @@ class SendMlsListingCard extends React.Component {
   state = {
     listings: [],
     isListingsModalOpen: false,
-    showEditListings: false,
     isInstantMarketingBuilderOpen: false,
     isComposeEmailOpen: false,
     isSendingEmail: false,
@@ -141,10 +140,7 @@ class SendMlsListingCard extends React.Component {
   openListingModal = () => this.setState({ isListingsModalOpen: true })
 
   closeListingModal = () =>
-    this.setState(
-      { isListingsModalOpen: false, showEditListings: false },
-      this.props.handleTrigger
-    )
+    this.setState({ isListingsModalOpen: false }, this.props.handleTrigger)
 
   toggleComposeEmail = () =>
     this.setState(state => ({
@@ -228,23 +224,7 @@ class SendMlsListingCard extends React.Component {
   }
 
   get DefaultList() {
-    if (this.state.showEditListings) {
-      return this.state.listings.map(listing => ({
-        ...listing,
-        image: listing.cover_image_url,
-        address_components: listing.property.address
-      }))
-    }
-
     return getMlsDrawerInitialDeals(this.props.deals)
-  }
-
-  get SearchListingDrawerTitle() {
-    if (this.state.showEditListings) {
-      return 'Updating Listings'
-    }
-
-    return this.IsMultiListing ? 'Select Listings' : 'Select a Listing'
   }
 
   get Assets() {
@@ -274,12 +254,6 @@ class SendMlsListingCard extends React.Component {
     return data
   }
 
-  handleEditListings = () => {
-    this.setState({
-      showEditListings: true
-    })
-  }
-
   render() {
     const { user } = this.props
 
@@ -300,11 +274,11 @@ class SendMlsListingCard extends React.Component {
         )}
 
         <SearchListingDrawer
-          isOpen={this.state.isListingsModalOpen || this.state.showEditListings}
-          isUpdatingList={this.state.showEditListings}
-          title={this.SearchListingDrawerTitle}
+          isOpen={this.state.isListingsModalOpen}
+          title={this.IsMultiListing ? 'Select Listings' : 'Select a Listing'}
           searchPlaceholder="Enter MLS# or an address"
           defaultList={this.DefaultList}
+          defaultListTitle="Add from your deals"
           onClose={this.closeListingModal}
           onSelectListings={this.handleSelectListings}
           onUpdateList={this.handleUpdateListings}
@@ -322,7 +296,7 @@ class SendMlsListingCard extends React.Component {
           assets={this.Assets}
           mediums={this.props.mediums}
           defaultTemplate={this.props.selectedTemplate}
-          onShowEditListings={this.handleEditListings}
+          onShowEditListings={this.openListingModal}
         />
 
         {this.state.isComposeEmailOpen && (
