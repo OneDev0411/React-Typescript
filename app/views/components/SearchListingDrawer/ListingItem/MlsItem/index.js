@@ -18,13 +18,11 @@ import {
   IconContainer
 } from '../styled'
 
-export function MlsItem({ item, renderCheckBox, isUpdatingList, ...props }) {
+export function MlsItem({ item, isUpdatingList, ...props }) {
   const address = item.address_components
 
   return (
-    <ListItem {...props}>
-      {renderCheckBox && renderCheckBox(item)}
-
+    <ListItem {...props} className="c-search-listings__mls-item">
       {props.isDraggable && <IconDrag style={{ marginRight: '0.5rem' }} />}
 
       <Flex style={{ width: '100%' }} justifyBetween alignCenter>
