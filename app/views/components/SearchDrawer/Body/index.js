@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 
@@ -40,13 +40,37 @@ export class Body extends React.Component {
   getItemStyle = (isDragging, draggableStyle) => ({
     userSelect: 'none',
     background: isDragging ? '#fff' : 'transparent',
-    boxShadow: isDragging ? '0 0 10px 0 rgba(0, 0, 0, 0.2);' : 'none',
+    boxShadow: isDragging ? '0 0 10px 0 rgba(0, 0, 0, 0.2)' : 'none',
     ...draggableStyle
   })
 
   render() {
-    const { ItemRow } = this.props
-    const isDraggable = this.props.isUpdatingList && this.props.list.length > 1
+    const { ItemRow, handleSelectItem } = this.props
+
+    const sharedProps = {
+      removable: this.props.removable,
+      isDraggable: this.props.isDraggable,
+      showAddButton: this.props.showAddButton
+    }
+
+    if (!this.props.isDraggable) {
+      return (
+        <Fragment>
+          {this.props.list.map(item => (
+            <ItemRow
+              key={item.id}
+              item={item}
+              onClickRemove={() => this.handleRemove(item)}
+              {...this.props.getItemProps({
+                item,
+                onClick: () => handleSelectItem && handleSelectItem(item)
+              })}
+              {...sharedProps}
+            />
+          ))}
+        </Fragment>
+      )
+    }
 
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
@@ -57,12 +81,7 @@ export class Body extends React.Component {
               style={this.getListStyle(droppableSnapshot.isDraggingOver)}
             >
               {this.props.list.map((item, index) => (
-                <Draggable
-                  key={item.id}
-                  isDragDisabled={!isDraggable}
-                  draggableId={item.id}
-                  index={index}
-                >
+                <Draggable key={item.id} draggableId={item.id} index={index}>
                   {(draggableProvided, draggableSnapshot) => (
                     <div
                       ref={draggableProvided.innerRef}
@@ -76,15 +95,13 @@ export class Body extends React.Component {
                       <ItemRow
                         key={item.id}
                         item={item}
-                        isHighlighted={this.props.highlightedIndex === index}
-                        isUpdatingList={this.props.isUpdatingList}
-                        isDraggable={isDraggable}
-                        totalItems={this.props.list.length}
                         onClickRemove={() => this.handleRemove(item)}
                         {...this.props.getItemProps({
                           item,
-                          onClick: () => this.props.handleSelectItem(item)
+                          onClick: () =>
+                            handleSelectItem && handleSelectItem(item)
                         })}
+                        {...sharedProps}
                       />
                     </div>
                   )}
