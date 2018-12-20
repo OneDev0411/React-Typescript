@@ -2,6 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 
+import Spinner from 'components/Spinner'
+
 import {
   getDeals,
   searchDeals,
@@ -15,6 +17,10 @@ import {
 
 class DealsContainer extends React.Component {
   componentDidMount() {
+    this.init()
+  }
+
+  init = async () => {
     const { props } = this
     const { dispatch, user } = props
     const isBackOffice = hasUserAccess(user, 'BackOffice')
@@ -41,6 +47,10 @@ class DealsContainer extends React.Component {
   }
 
   render() {
+    if (!this.props.deals) {
+      return <Spinner />
+    }
+
     return <div className="deals">{this.props.children}</div>
   }
 }
