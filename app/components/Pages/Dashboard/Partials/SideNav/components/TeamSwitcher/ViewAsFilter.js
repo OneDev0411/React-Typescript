@@ -6,51 +6,45 @@ import Flex from 'styled-flex-component'
 import {
   viewAs,
   isBackOffice,
-  getActiveTeamId,
   getActiveTeam,
   allMembersOfTeam
 } from '../../../../../../../utils/user-teams'
 import { grey, borderColor } from '../../../../../../../views/utils/colors'
 
-import { getBrandMembers } from '../../../../../../../store_actions/user/get-brand-members'
 import { setViewAsFilter } from '../../../../../../../store_actions/user/set-view-as-filter'
 
 import { CheckBoxButton } from '../../../../../../../views/components/Button/CheckboxButton'
 
 class ViewAsFilter extends React.Component {
-  state = {
-    viewAsList: viewAs(this.props.user)
-  }
+  constructor(props) {
+    super(props)
 
-  componentDidMount() {
-    this.init()
-  }
+    let viewAsList = viewAs(props.user)
 
-  init = () => {
-    if (this.props.brandMembers.length > 0) {
-      return
+    if (
+      viewAsList.length === 0 ||
+      viewAsList.length === props.brandMembers.length
+    ) {
+      viewAsList = props.brandMembers.map(m => m.id)
     }
 
-    const brandId = getActiveTeamId(this.props.user)
-
-    this.props.dispatch(getBrandMembers(brandId))
+    this.state = {
+      viewAsList
+    }
   }
 
   handleViewAs = async e => {
-    const me = this.props.user.id
     const viewAs = e.currentTarget.dataset.viewAs
     const { brandMembers } = this.props
 
     this.setState(({ viewAsList }) => {
       if (viewAs === 'All') {
         viewAsList =
-          viewAsList.length === brandMembers.length
-            ? [me]
-            : this.props.brandMembers.map(m => m.id)
+          viewAsList.length !== brandMembers.length
+            ? this.props.brandMembers.map(m => m.id)
+            : []
       } else if (viewAsList.indexOf(viewAs) > -1) {
-        const filteredList = viewAsList.filter(f => f !== viewAs)
-
-        viewAsList = filteredList.length === 0 ? [me] : filteredList
+        viewAsList = viewAsList.filter(f => f !== viewAs)
       } else {
         viewAsList = [...viewAsList, viewAs]
       }
@@ -88,8 +82,8 @@ class ViewAsFilter extends React.Component {
             <Flex alignCenter style={rowStyle}>
               <CheckBoxButton
                 square
-                isSelected={viewAsList.length === brandMembers.length}
                 data-view-as="All"
+                isSelected={viewAsList.length === brandMembers.length}
                 onClick={this.handleViewAs}
                 style={{ marginRight: '0.5rem' }}
               />
@@ -106,29 +100,20 @@ class ViewAsFilter extends React.Component {
             />
           </React.Fragment>
         )}
-        {brandMembers.map((member, index) => {
-          const isYou = member.id === this.props.user.id
-
-          return (
-            <Flex alignCenter key={index} style={rowStyle}>
-              <CheckBoxButton
-                square
-                isDisabled={
-                  isYou &&
-                  viewAsList.length === 1 &&
-                  viewAsList[0] === member.id
-                }
-                isSelected={viewAsList.indexOf(member.id) > -1}
-                data-view-as={member.id}
-                onClick={this.handleViewAs}
-                style={{ marginRight: '0.5rem' }}
-              />
-              {`${member.first_name} ${member.last_name}${
-                isYou ? ' (you)' : ''
-              }`}
-            </Flex>
-          )
-        })}
+        {brandMembers.map((member, index) => (
+          <Flex alignCenter key={index} style={rowStyle}>
+            <CheckBoxButton
+              square
+              data-view-as={member.id}
+              isSelected={viewAsList.indexOf(member.id) > -1}
+              onClick={this.handleViewAs}
+              style={{ marginRight: '0.5rem' }}
+            />
+            {`${member.first_name} ${member.last_name}${
+              member.id === this.props.user.id ? ' (you)' : ''
+            }`}
+          </Flex>
+        ))}
       </div>
     )
   }

@@ -50,10 +50,15 @@ export async function searchDeals(
     if (isBackOffice) {
       url += '?associations[]=deal.created_by&associations[]=deal.brand'
     } else {
-      payload.$order = order
-      payload.role = {
-        user: viewAs(user)
+      const users = viewAs(user)
+
+      if (users.length > 0) {
+        payload.role = {
+          user: users
+        }
       }
+
+      payload.$order = order
     }
 
     const response = await new Fetch().post(url).send(payload)

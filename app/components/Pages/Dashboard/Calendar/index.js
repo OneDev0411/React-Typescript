@@ -30,7 +30,12 @@ import PageHeader from '../../../../views/components/PageHeader'
 import DatePicker from '../../../../views/components/DatePicker'
 import { EventDrawer } from '../../../../views/components/EventDrawer'
 import ActionButton from '../../../../views/components/Button/ActionButton'
-import { viewAs, getActiveTeamACL } from '../../../../utils/user-teams'
+import {
+  viewAs,
+  getActiveTeamACL,
+  allMembersOfTeam,
+  getActiveTeam
+} from '../../../../utils/user-teams'
 
 import CalendarTable from './Table'
 import { MenuContainer, TableContainer } from './styled'
@@ -86,12 +91,21 @@ class CalendarContainer extends React.Component {
       nextProps.viewAsUsers.length !== this.props.viewAsUsers.length ||
       !_.isEqual(nextProps.viewAsUsers, this.props.viewAsUsers)
     ) {
-      this.handleViewAsChange(nextProps.viewAsUsers)
+      this.restartCalendar(this.selectedDate, nextProps.viewAsUsers)
     }
   }
 
-  getCalendar = async (startRange, endRange, viewAsUsers) =>
-    this.props.getCalendar(startRange, endRange, viewAsUsers)
+  getCalendar = async (
+    startRange,
+    endRange,
+    viewAsUsers = this.props.viewAsUsers
+  ) => {
+    this.props.getCalendar(
+      startRange,
+      endRange,
+      viewAsUsers.length === this.props.brandMembers.length ? [] : viewAsUsers
+    )
+  }
 
   /**
    * close/open side menu
@@ -134,10 +148,7 @@ class CalendarContainer extends React.Component {
       loadingPosition: position
     })
 
-  restartCalendar = async (
-    selectedDate,
-    viewAsUsers = this.props.viewAsUsers
-  ) => {
+  restartCalendar = async (selectedDate, viewAsUsers) => {
     const [newStartRange, newEndRange] = createDateRange(selectedDate, {
       range: 6
     })
@@ -187,10 +198,6 @@ class CalendarContainer extends React.Component {
       setDate(selectedDate),
       await this.getCalendar(newStartRange, newEndRange)
     ])
-  }
-
-  handleViewAsChange = viewAsUsers => {
-    this.restartCalendar(this.selectedDate, viewAsUsers)
   }
 
   onClickTask = selectedTaskId =>
@@ -382,7 +389,8 @@ function mapStateToProps({ user, calendar }) {
     calendarDays: calendar.byDay,
     viewAsUsers: viewAs(user),
     startRange: getStartRange(calendar),
-    endRange: getEndRange(calendar)
+    endRange: getEndRange(calendar),
+    brandMembers: allMembersOfTeam(getActiveTeam(user))
   }
 }
 

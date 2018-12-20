@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
+import idx from 'idx'
 
 import { viewAs, getActiveTeamId } from '../../../../../../../utils/user-teams'
 import { putUserSetting } from '../../../../../../../models/user/put-user-setting'
@@ -78,8 +79,8 @@ export default class TeamSwitcher extends React.Component {
     const { user } = this.props
     const { savingTeam } = this.state
 
-    if (!user.teams || user.teams.length <= 1) {
-      return false
+    if (!idx(user, u => u.teams[0].brand.roles)) {
+      return null
     }
 
     return (

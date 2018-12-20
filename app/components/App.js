@@ -84,10 +84,10 @@ class App extends Component {
     let { user } = this.props
 
     if (user) {
-      if (!user.teams) {
+      if (!user.teams || !user.teams[0].brand.roles) {
         user = {
           ...user,
-          teams: await dispatch(getTeams())
+          teams: await dispatch(getTeams(user, true))
         }
       }
 

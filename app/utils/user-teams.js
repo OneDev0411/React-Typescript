@@ -58,20 +58,17 @@ export function isBackOffice(user) {
 }
 
 export function viewAs(user, activeTeam = getActiveTeam(user)) {
-  if (idx(activeTeam, t => t.acl.includes('BackOffice'))) {
-    return [user.id]
-  }
-
-  if (idx(activeTeam, team => team.settings.user_filter[0])) {
+  if (!idx(activeTeam, t => t.acl.includes('BackOffice')) && idx(activeTeam, team => team.settings.user_filter[0])) {
     return activeTeam.settings.user_filter
   }
-
-  return allMembersOfTeam(activeTeam).map(m => m.id)
+  
+  return []
 }
 
 export function viewAsEveryoneOnTeam(user) {
-  const viewAsUsers = viewAs(user)
-  return getActiveTeam(user).brand.member_count === viewAsUsers.length
+  const users = viewAs(user)
+  return users.length === 0 ||
+    allMembersOfTeam(getActiveTeam(user)).length === users.length
 }
 
 export function allMembersOfTeam(team) {
