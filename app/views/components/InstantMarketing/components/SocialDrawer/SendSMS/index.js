@@ -7,7 +7,7 @@ import { parsePhoneNumber } from 'libphonenumber-js'
 import { formatPhoneNumber } from 'utils/format'
 import { shareInstance } from 'models/instant-marketing/instance-share'
 
-import { Section } from '../Section'
+import { Section } from '../components/Section'
 
 class SendSMS extends React.Component {
   constructor(props) {

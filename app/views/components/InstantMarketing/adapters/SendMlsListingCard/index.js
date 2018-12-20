@@ -24,14 +24,16 @@ import SocialDrawer from '../../components/SocialDrawer'
 
 class SendMlsListingCard extends React.Component {
   state = {
-    listing: null,
+    listings: [],
     isListingsModalOpen: false,
+    showEditListings: false,
     isInstantMarketingBuilderOpen: false,
     isComposeEmailOpen: false,
     isSendingEmail: false,
     isSocialDrawerOpen: false,
     htmlTemplate: '',
     templateScreenshot: null,
+    socialNetworkName: '',
     owner: this.props.user
   }
 
@@ -68,6 +70,10 @@ class SendMlsListingCard extends React.Component {
     }
 
     return state
+  }
+
+  handleLoadInstantMarketing = ({ regenerateTemplate }) => {
+    this.regenerateTemplate = regenerateTemplate
   }
 
   get Recipients() {
@@ -109,7 +115,7 @@ class SendMlsListingCard extends React.Component {
     )
 
     try {
-      await sendContactsEmail(emails)
+      await sendContactsEmail(emails, this.state.owner.id)
 
       // reset form
       if (form) {
@@ -135,22 +141,33 @@ class SendMlsListingCard extends React.Component {
   openListingModal = () => this.setState({ isListingsModalOpen: true })
 
   closeListingModal = () =>
-    this.setState({ isListingsModalOpen: false }, this.props.handleTrigger)
+    this.setState(
+      { isListingsModalOpen: false, showEditListings: false },
+      this.props.handleTrigger
+    )
 
   toggleComposeEmail = () =>
     this.setState(state => ({
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
 
-  onSelectListing = async listing =>
+  handleSelectListings = listings =>
     this.setState(
       {
-        listing,
+        listings,
         isListingsModalOpen: false,
         isInstantMarketingBuilderOpen: true
       },
       this.props.handleTrigger
     )
+
+  handleUpdateListings = listings => {
+    this.setState({
+      listings
+    })
+
+    this.regenerateTemplate({ listings })
+  }
 
   handleSaveMarketingCard = async (template, owner) => {
     this.generatePreviewImage(template)
@@ -164,10 +181,11 @@ class SendMlsListingCard extends React.Component {
     })
   }
 
-  handleSocialSharing = template => {
+  handleSocialSharing = (template, socialNetworkName) => {
     this.setState({
       htmlTemplate: template,
-      isSocialDrawerOpen: true
+      isSocialDrawerOpen: true,
+      socialNetworkName
     })
   }
 
@@ -192,13 +210,78 @@ class SendMlsListingCard extends React.Component {
 
   get TemplateInstanceData() {
     return {
-      listings: [this.state.listing.id]
+      listings: [this.state.listings.map(listing => listing.id)]
     }
   }
 
+  get TemplateTypes() {
+    return this.props.selectedTemplate
+      ? [this.props.selectedTemplate.template_type]
+      : getTemplateTypes(this.state.listings)
+  }
+
+  get IsMultiListing() {
+    return (
+      this.props.selectedTemplate &&
+      this.props.selectedTemplate.template_type === 'Listings'
+    )
+  }
+
+  get InitialList() {
+    if (this.state.showEditListings) {
+      return this.state.listings.map(listing => ({
+        ...listing,
+        image: listing.cover_image_url,
+        address_components: listing.property.address
+      }))
+    }
+
+    return getMlsDrawerInitialDeals(this.props.deals)
+  }
+
+  get SearchListingDrawerTitle() {
+    if (this.state.showEditListings) {
+      return 'Updating Listings'
+    }
+
+    return this.IsMultiListing ? 'Select Listings' : 'Select a Listing'
+  }
+
+  get Assets() {
+    const assets = []
+
+    this.state.listings.forEach(listing => {
+      listing.gallery_image_urls.forEach(image => {
+        assets.push({
+          listing: listing.id,
+          image
+        })
+      })
+    })
+
+    return assets
+  }
+
+  get TemplateData() {
+    const data = { user: this.props.user }
+
+    if (this.IsMultiListing) {
+      data.listings = this.state.listings
+    } else {
+      data.listing = this.state.listings[0]
+    }
+
+    return data
+  }
+
+  handleEditListings = () => {
+    this.setState({
+      showEditListings: true
+    })
+  }
+
   render() {
-    const { listing } = this.state
-    const { user, selectedTemplate } = this.props
+    const { user } = this.props
 
     if (hasMarketingAccess(user) === false) {
       return false
@@ -217,29 +300,29 @@ class SendMlsListingCard extends React.Component {
         )}
 
         <SearchListingDrawer
-          isOpen={this.state.isListingsModalOpen}
-          compact={false}
-          title="Select a Listing"
+          isOpen={this.state.isListingsModalOpen || this.state.showEditListings}
+          isUpdatingList={this.state.showEditListings}
+          title={this.SearchListingDrawerTitle}
           searchPlaceholder="Enter MLS# or an address"
-          initialList={getMlsDrawerInitialDeals(this.props.deals)}
+          initialList={this.InitialList}
           onClose={this.closeListingModal}
-          onSelectListing={this.onSelectListing}
+          onSelectListings={this.handleSelectListings}
+          onUpdateList={this.handleUpdateListings}
+          multipleSelection={this.IsMultiListing}
         />
 
         <InstantMarketing
+          onBuilderLoad={this.handleLoadInstantMarketing}
           isOpen={this.state.isInstantMarketingBuilderOpen}
           onClose={this.closeMarketing}
           handleSave={this.handleSaveMarketingCard}
           handleSocialSharing={this.handleSocialSharing}
-          templateData={{ listing, user }}
-          templateTypes={
-            selectedTemplate
-              ? [selectedTemplate.template_type]
-              : getTemplateTypes(listing)
-          }
-          assets={listing && listing.gallery_image_urls}
+          templateData={this.TemplateData}
+          templateTypes={this.TemplateTypes}
+          assets={this.Assets}
           mediums={this.props.mediums}
-          defaultTemplate={selectedTemplate}
+          defaultTemplate={this.props.selectedTemplate}
+          onShowEditListings={this.handleEditListings}
         />
 
         {this.state.isComposeEmailOpen && (
@@ -258,6 +341,7 @@ class SendMlsListingCard extends React.Component {
           <SocialDrawer
             template={this.state.htmlTemplate}
             templateInstanceData={this.TemplateInstanceData}
+            socialNetworkName={this.state.socialNetworkName}
             onClose={this.closeSocialDrawer}
           />
         )}

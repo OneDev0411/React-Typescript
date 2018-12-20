@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import _ from 'underscore'
+
 import Deal from '../../../models/Deal'
 import Listing from '../../../models/listings/listing'
 import listingsHelper from '../../../utils/listing'
@@ -13,20 +15,31 @@ class SearchListingDrawer extends React.Component {
     isWorking: false
   }
 
-  handleSelectListing = async item => {
-    if (this.props.compact !== false) {
-      return this.props.onSelectListing(item)
-    }
-
+  handleSelectListings = async items => {
     this.setState({
       isWorking: true
     })
 
     try {
-      const id = item.type === 'deal' ? item.listing : item.id
-      const listingWithImages = await Listing.getListing(id)
+      const listings = await Promise.all(
+        _.map(items, item => {
+          if (item.gallery_image_urls) {
+            return item
+          }
 
-      this.props.onSelectListing(listingWithImages)
+          const id = item.type === 'deal' ? item.listing : item.id
+
+          return Listing.getListing(id)
+        })
+      )
+
+      if (this.props.isUpdatingList) {
+        this.props.onUpdateList([].concat(listings, this.props.initialList))
+
+        return
+      }
+
+      this.props.onSelectListings(listings)
     } catch (e) {
       console.log(e)
     } finally {
@@ -64,6 +77,7 @@ class SearchListingDrawer extends React.Component {
     return (
       <SearchDrawer
         showLoadingIndicator={this.state.isWorking}
+        multipleSelection={this.props.multipleSelection}
         searchInputOptions={{
           placeholder: this.props.searchPlaceholder,
           debounceTime: 500,
@@ -71,7 +85,7 @@ class SearchListingDrawer extends React.Component {
         }}
         searchFunction={this.searchListing}
         ItemRow={ListingItem}
-        onSelectItem={this.handleSelectListing}
+        onSelectItems={this.handleSelectListings}
         {...this.props}
       />
     )
@@ -79,13 +93,11 @@ class SearchListingDrawer extends React.Component {
 }
 
 SearchListingDrawer.propTypes = {
-  compact: PropTypes.bool,
   onSelectListing: PropTypes.func.isRequired,
   searchPlaceholder: PropTypes.string
 }
 
 SearchListingDrawer.defaultProps = {
-  compact: true,
   searchPlaceholder: 'Enter MLS # or address'
 }
 

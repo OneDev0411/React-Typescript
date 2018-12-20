@@ -1,4 +1,6 @@
 import React, { Fragment } from 'react'
+import PropTypes from 'prop-types'
+
 import grapesjs from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
 import '../../../../styles/components/modules/template-builder.scss'
@@ -34,7 +36,7 @@ class Builder extends React.Component {
     super(props)
 
     this.state = {
-      template: null,
+      originalTemplate: null,
       selectedTemplate: props.defaultTemplate,
       owner: props.templateData.user
     }
@@ -86,6 +88,10 @@ class Builder extends React.Component {
     if (this.IsVideoTemplate) {
       this.grapes.appendChild(this.videoToolbar)
     }
+
+    this.props.onBuilderLoad({
+      regenerateTemplate: this.regenerateTemplate
+    })
   }
 
   disableAssetManager = () => {
@@ -115,6 +121,12 @@ class Builder extends React.Component {
       style.styleSheet.cssText = css
     } else {
       style.appendChild(document.createTextNode(css))
+    }
+
+    if (!iframe.contentDocument) {
+      console.warn('iframe contentDocument is null')
+
+      return false
     }
 
     iframe.contentDocument.head.appendChild(style)
@@ -164,7 +176,7 @@ class Builder extends React.Component {
     updateAll(this.editor.DomComponents.getWrapper())
   }
 
-  getSavedTempldate() {
+  getSavedTemplate() {
     const css = this.editor.getCss()
     const html = this.editor.getHtml()
 
@@ -186,10 +198,10 @@ class Builder extends React.Component {
   }
 
   handleSave = () =>
-    this.props.onSave(this.getSavedTempldate(), this.state.owner)
+    this.props.onSave(this.getSavedTemplate(), this.state.owner)
 
-  handleSocialSharing = socialName =>
-    this.props.onSocialSharing(this.getSavedTempldate(), socialName)
+  handleSocialSharing = socialNetworkName =>
+    this.props.onSocialSharing(this.getSavedTemplate(), socialNetworkName)
 
   generateTemplate = (template, data) => nunjucks.renderString(template, data)
 
@@ -209,42 +221,43 @@ class Builder extends React.Component {
     this.lockIn()
   }
 
-  setTemplate = newState => {
-    this.setState(newState, () =>
-      this.refreshEditor(this.state.selectedTemplate)
+  handleSelectTemplate = templateItem => {
+    this.setState(
+      {
+        originalTemplate: templateItem,
+        selectedTemplate: templateItem
+      },
+      () => {
+        this.regenerateTemplate({
+          user: this.state.owner
+        })
+      }
     )
   }
 
-  handleSelectTemplate = templateItem =>
-    this.setTemplate(state => ({
-      template: templateItem,
-      selectedTemplate: {
-        ...templateItem,
-        template: this.generateTemplate(templateItem.template, {
-          ...this.props.templateData,
-          user: state.owner
-        })
-      }
-    }))
+  handleOwnerChange = ({ value: owner }) => {
+    this.setState({
+      owner
+    })
 
-  handleOwnerChange = ({ value: owner }) =>
-    this.setTemplate(state => ({
-      owner,
-      selectedTemplate: {
-        ...state.selectedTemplate,
-        template: this.generateTemplate(state.template.template, {
-          ...this.props.templateData,
-          user: owner
-        })
-      }
-    }))
+    this.regenerateTemplate({
+      user: owner
+    })
+  }
 
   get IsVideoTemplate() {
-    return this.state.template && this.state.template.video
+    return this.state.selectedTemplate && this.state.selectedTemplate.video
   }
 
   get IsTemplateLoaded() {
     return this.state.selectedTemplate && this.state.selectedTemplate.template
+  }
+
+  get ShowEditListingsButton() {
+    return (
+      this.props.templateTypes.includes('Listings') &&
+      this.props.templateData.listings
+    )
   }
 
   get IsSocialMedium() {
@@ -262,9 +275,29 @@ class Builder extends React.Component {
   renderAgentPickerButton = buttonProps => (
     <DropButton
       {...buttonProps}
+      iconSize="large"
       text={`Sends as: ${buttonProps.selectedItem.label}`}
     />
   )
+
+  regenerateTemplate = newData => {
+    console.log('[ + ] Regenerate template')
+
+    this.setState(
+      state => ({
+        selectedTemplate: {
+          ...state.selectedTemplate,
+          template: this.generateTemplate(state.originalTemplate.template, {
+            ...this.props.templateData,
+            ...newData
+          })
+        }
+      }),
+      () => {
+        this.refreshEditor(this.state.selectedTemplate)
+      }
+    )
+  }
 
   render() {
     const isSocialMedium = this.IsSocialMedium
@@ -275,57 +308,69 @@ class Builder extends React.Component {
           <h1>{this.props.headerTitle}</h1>
 
           <Actions>
-            <TeamContactSelect
-              fullHeight
-              pullTo="right"
-              user={this.props.templateData.user}
-              owner={this.state.owner}
-              onSelect={this.handleOwnerChange}
-              style={{ marginRight: '0.5rem' }}
-              buttonRenderer={this.renderAgentPickerButton}
-            />
+            {this.state.selectedTemplate && (
+              <TeamContactSelect
+                fullHeight
+                pullTo="right"
+                user={this.props.templateData.user}
+                owner={this.state.owner}
+                onSelect={this.handleOwnerChange}
+                buttonRenderer={this.renderAgentPickerButton}
+                style={{
+                  marginRight: '0.5rem'
+                }}
+              />
+            )}
 
-            {this.state.selectedTemplate &&
-              isSocialMedium && (
-                <Fragment>
-                  <ActionButton
-                    onClick={() => this.handleSocialSharing('Instagram')}
-                  >
-                    <i
-                      className="fa fa-instagram"
-                      style={{
-                        fontSize: '1.5rem',
-                        marginRight: '0.5rem'
-                      }}
-                    />
-                    Post to Instagram
-                  </ActionButton>
+            {this.ShowEditListingsButton && (
+              <ActionButton
+                style={{ marginLeft: '0.5rem' }}
+                appearance="outline"
+                onClick={this.props.onShowEditListings}
+              >
+                Edit Listings ({this.props.templateData.listings.length})
+              </ActionButton>
+            )}
 
-                  <ActionButton
-                    style={{ marginLeft: '0.5rem' }}
-                    onClick={() => this.handleSocialSharing('Facebook')}
-                  >
-                    <i
-                      className="fa fa-facebook-square"
-                      style={{
-                        fontSize: '1.5rem',
-                        marginRight: '0.5rem'
-                      }}
-                    />
-                    Post to Facebook
-                  </ActionButton>
-                </Fragment>
-              )}
+            {this.state.selectedTemplate && isSocialMedium && (
+              <Fragment>
+                <ActionButton
+                  onClick={() => this.handleSocialSharing('Instagram')}
+                >
+                  <i
+                    className="fa fa-instagram"
+                    style={{
+                      fontSize: '1.5rem',
+                      marginRight: '0.5rem'
+                    }}
+                  />
+                  Post to Instagram
+                </ActionButton>
 
-            {this.state.selectedTemplate &&
-              !isSocialMedium && (
                 <ActionButton
                   style={{ marginLeft: '0.5rem' }}
-                  onClick={this.handleSave}
+                  onClick={() => this.handleSocialSharing('Facebook')}
                 >
-                  {this.props.saveButtonLabel}
+                  <i
+                    className="fa fa-facebook-square"
+                    style={{
+                      fontSize: '1.5rem',
+                      marginRight: '0.5rem'
+                    }}
+                  />
+                  Post to Facebook
                 </ActionButton>
-              )}
+              </Fragment>
+            )}
+
+            {this.state.selectedTemplate && !isSocialMedium && (
+              <ActionButton
+                style={{ marginLeft: '0.5rem' }}
+                onClick={this.handleSave}
+              >
+                Next
+              </ActionButton>
+            )}
 
             <Divider />
             <IconButton
@@ -356,18 +401,25 @@ class Builder extends React.Component {
             ref={ref => (this.grapes = ref)}
             style={{ position: 'relative' }}
           >
-            {this.IsVideoTemplate &&
-              this.IsTemplateLoaded && (
-                <VideoToolbar
-                  onRef={ref => (this.videoToolbar = ref)}
-                  editor={this.editor}
-                />
-              )}
+            {this.IsVideoTemplate && this.IsTemplateLoaded && (
+              <VideoToolbar
+                onRef={ref => (this.videoToolbar = ref)}
+                editor={this.editor}
+              />
+            )}
           </div>
         </BuilderContainer>
       </Container>
     )
   }
+}
+
+Builder.propTypes = {
+  onBuilderLoad: PropTypes.func
+}
+
+Builder.defaultProps = {
+  onBuilderLoad: () => null
 }
 
 export default Builder

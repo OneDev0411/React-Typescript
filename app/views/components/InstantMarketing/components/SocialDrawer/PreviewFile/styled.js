@@ -12,6 +12,8 @@ export const Container = styled.div`
   color: #7f7f7f;
   font-size: 1rem;
   margin: 1.5rem 0;
+  padding: 0 1.5rem;
+  text-align: center;
 
   .sk-circle {
     margin: 1.5rem 0 !important;

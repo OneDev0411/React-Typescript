@@ -1,8 +1,11 @@
 import React from 'react'
+import Flex from 'styled-flex-component'
 
 import listingsHelper from 'utils/listing'
 
+import IconDrag from 'components/SvgIcons/Drag/IconDrag'
 import IconHome from 'components/SvgIcons/NewHome/IconHome'
+import IconDelete from 'components/SvgIcons/Close/CloseIcon'
 
 import {
   ListItem,
@@ -15,42 +18,56 @@ import {
   IconContainer
 } from '../styled'
 
-export function MlsItem({ item, ...rest }) {
+export function MlsItem({ item, renderCheckBox, isUpdatingList, ...props }) {
   const address = item.address_components
 
   return (
-    <ListItem {...rest}>
-      <AddressContainer>
-        {item.image ? (
-          <ListItemImage alt="" src={item.image} />
-        ) : (
-          <IconContainer center>
-            <IconHome />
-          </IconContainer>
-        )}
-        <ListItemAddress>
-          <Address style={{ fontWeight: '500' }}>
-            {address.street_number} {address.street_name}{' '}
-            {address.street_suffix}
-            {address.unit_number ? ` Unit ${address.unit_number}` : ''}
-          </Address>
+    <ListItem {...props}>
+      {renderCheckBox && renderCheckBox(item)}
 
-          <Address style={{ color: '#a0a0a0' }}>
-            {address.city}, {address.state}, {address.postal_code}, $
-            {item.price}
-          </Address>
-        </ListItemAddress>
-      </AddressContainer>
+      {props.isDraggable && <IconDrag style={{ marginRight: '0.5rem' }} />}
 
-      <ListItemStatus>
-        <Status
-          style={{
-            backgroundColor: listingsHelper.getStatusColorClass(item.status)
-          }}
-        >
-          {item.status}
-        </Status>
-      </ListItemStatus>
+      <Flex style={{ width: '100%' }} justifyBetween alignCenter>
+        <AddressContainer>
+          {item.image ? (
+            <ListItemImage alt="" src={item.image} />
+          ) : (
+            <IconContainer center>
+              <IconHome />
+            </IconContainer>
+          )}
+          <ListItemAddress>
+            <Address style={{ fontWeight: '500' }}>
+              {address.street_number} {address.street_name}{' '}
+              {address.street_suffix}
+              {address.unit_number ? ` Unit ${address.unit_number}` : ''}
+            </Address>
+
+            <Address style={{ color: '#a0a0a0' }}>
+              {address.city}, {address.state}, {address.postal_code}, $
+              {item.price}
+            </Address>
+          </ListItemAddress>
+        </AddressContainer>
+
+        <ListItemStatus>
+          <Status
+            style={{
+              backgroundColor: listingsHelper.getStatusColorClass(item.status)
+            }}
+          >
+            {item.status}
+          </Status>
+
+          {isUpdatingList &&
+            props.totalItems > 1 && (
+              <IconDelete
+                className="delete-icon"
+                onClick={props.onClickRemove}
+              />
+            )}
+        </ListItemStatus>
+      </Flex>
     </ListItem>
   )
 }

@@ -4,11 +4,14 @@ import { grey, primary } from '../../../../../views/utils/colors'
 import ALink from '../../../../../views/components/ALink'
 
 export const GridContainer = styled.div`
-  height: calc(
-    100vh - ${props => (props.isFilterHidden ? '7.5625rem' : '12.125rem')}
-  );
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   padding: 0 1em 0 1.5em;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
 `
 
 export const TableHeader = styled.div`
