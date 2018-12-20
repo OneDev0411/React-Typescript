@@ -100,7 +100,7 @@ class App extends Component {
       this.initialRooms()
 
       // load deals
-      if (this.hasDealsAccess && !deals) {
+      if (this.hasDealsAccess && !deals && !this.props.isFetchingDeals) {
         if (isBackOffice || viewAsEveryoneOnTeam(user)) {
           dispatch(getDeals(user))
         } else {
@@ -364,9 +364,8 @@ class App extends Component {
 
     return (
       <div className="u-scrollbar">
-        {user && !user.email_confirmed && (
-          <VerificationBanner email={user.email} />
-        )}
+        {user &&
+          !user.email_confirmed && <VerificationBanner email={user.email} />}
 
         {user && <SideNav data={data} location={location} />}
 
@@ -387,6 +386,7 @@ function mapStateToProps(state) {
     contactsAttributeDefs: state.contacts.attributeDefs,
     data: state.data,
     deals: state.deals.list,
+    isFetchingDeals: state.deals.properties.isFetchingDeals,
     favoritesListings: selectListings(state.favorites.listings),
     rooms: state.chatroom.rooms,
     user: state.user
