@@ -5,7 +5,11 @@ import { ListContainer, ListTitle } from '../styled'
 import { Body } from '../components/Body'
 
 export function SelectedItems(props) {
-  if (props.isLoading || _.size(props.selectedItems) === 0) {
+  if (
+    !props.multipleSelection ||
+    props.isLoading ||
+    _.size(props.selectedItems) === 0
+  ) {
     return false
   }
 
@@ -23,7 +27,7 @@ export function SelectedItems(props) {
         getItemProps={props.getItemProps}
         list={Object.values(props.selectedItems)}
         onUpdateList={props.onUpdateList}
-        {...props.listsSharedProps}
+        ItemRow={props.ItemRow}
       />
     </ListContainer>
   )

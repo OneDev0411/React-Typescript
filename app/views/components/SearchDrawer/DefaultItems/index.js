@@ -4,7 +4,11 @@ import { ListContainer, ListTitle } from '../styled'
 import { Body } from '../components/Body'
 
 export function DefaultItems(props) {
-  if (props.isLoading || props.defaultItems.length === 0) {
+  if (
+    (!props.multipleSelection && props.searchResults.length > 0) ||
+    props.isLoading ||
+    props.defaultItems.length === 0
+  ) {
     return false
   }
 
@@ -21,7 +25,7 @@ export function DefaultItems(props) {
         getItemProps={props.getItemProps}
         list={props.defaultItems}
         handleSelectItem={props.handleSelectItem}
-        {...props.listsSharedProps}
+        ItemRow={props.ItemRow}
       />
     </ListContainer>
   )

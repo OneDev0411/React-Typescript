@@ -13,7 +13,7 @@ export function SearchResultList(props) {
 
   return (
     <ClickOutside onClickOutside={props.handleClickOutside}>
-      <ListContainer asDropDown>
+      <ListContainer asDropDown={props.multipleSelection}>
         {props.error && (
           <Alert
             type={props.error.type === 'error' ? props.error.type : 'warning'}
@@ -22,11 +22,10 @@ export function SearchResultList(props) {
         )}
 
         <Body
-          isDropDown
           getItemProps={props.getItemProps}
           list={props.searchResults}
           handleSelectItem={props.handleSelectItem}
-          {...props.listsSharedProps}
+          ItemRow={props.ItemRow}
         />
       </ListContainer>
     </ClickOutside>

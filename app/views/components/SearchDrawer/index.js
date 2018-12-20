@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Downshift from 'downshift'
 
@@ -13,25 +13,23 @@ import Loading from '../../../components/Partials/Loading'
 import { SelectedItems } from './SelectedItems'
 import { SearchResultList } from './SearchResult'
 
-import { ListsContainer } from './styled'
 import { DefaultItems } from './DefaultItems'
 
 const initialState = {
   isSearching: false,
-  selectedItems: {},
   searchResults: [],
   error: null
 }
 
 class SearchDrawer extends React.Component {
-  state = initialState
+  state = {
+    ...initialState,
+    selectedItems: {}
+  }
 
   handleSearch = async value => {
     if (value.length === 0) {
-      return this.setState(state => ({
-        initialState,
-        selectedItems: state.selectedItems
-      }))
+      return this.setState(initialState)
     }
 
     try {
@@ -84,7 +82,7 @@ class SearchDrawer extends React.Component {
     })
   }
 
-  handleSelectMultipleListing = () => {
+  handleSelectMultipleItems = () => {
     this.setState(initialState)
     this.searchInputRef.clear()
 
@@ -103,8 +101,8 @@ class SearchDrawer extends React.Component {
     this.searchInputRef.clear()
   }
 
-  handleAddNewItem = async item => {
-    const normalized = await this.props.normalizeSelectedItem(item)
+  handleAddNewItem = item => {
+    const normalized = this.props.normalizeSelectedItem(item)
 
     this.setState(state => ({
       selectedItems: { ...state.selectedItems, [normalized.id]: normalized },
@@ -116,7 +114,7 @@ class SearchDrawer extends React.Component {
 
   handleUpdateList = list => {
     this.setState({
-      selectedItems: list
+      selectedItems: _.indexBy(list, 'id')
     })
   }
 
@@ -126,9 +124,9 @@ class SearchDrawer extends React.Component {
 
   get DefaultList() {
     return this.props.defaultList.filter(item => {
-      const id = item.type === 'deal' ? item.listing : item.id
+      const normalized = this.props.normalizeSelectedItem(item)
 
-      return !this.state.selectedItems[id]
+      return !this.state.selectedItems[normalized.id]
     })
   }
 
@@ -141,11 +139,6 @@ class SearchDrawer extends React.Component {
   render() {
     const { isSearching } = this.state
     const { showLoadingIndicator } = this.props
-
-    const listsSharedProps = {
-      ItemRow: this.props.ItemRow,
-      multipleSelection: this.props.multipleSelection
-    }
 
     return (
       <Drawer
@@ -178,7 +171,8 @@ class SearchDrawer extends React.Component {
                   getItemProps={getItemProps}
                   handleSelectItem={this.handleSelectItem}
                   handleClickOutside={this.handleClickOutside}
-                  listsSharedProps={listsSharedProps}
+                  ItemRow={this.props.ItemRow}
+                  multipleSelection={this.props.multipleSelection}
                 />
 
                 <SelectedItems
@@ -187,16 +181,19 @@ class SearchDrawer extends React.Component {
                   hasDefaultList={this.DefaultList.length > 0}
                   getItemProps={getItemProps}
                   onUpdateList={this.handleUpdateList}
-                  listsSharedProps={listsSharedProps}
+                  ItemRow={this.props.ItemRow}
+                  multipleSelection={this.props.multipleSelection}
                 />
 
                 <DefaultItems
                   isLoading={this.props.showLoadingIndicator}
+                  searchResults={this.SearchResults}
                   defaultListTitle={this.props.defaultListTitle}
                   defaultItems={this.DefaultList}
                   getItemProps={getItemProps}
                   handleSelectItem={this.handleSelectItem}
-                  listsSharedProps={listsSharedProps}
+                  ItemRow={this.props.ItemRow}
+                  multipleSelection={this.props.multipleSelection}
                 />
               </div>
             )}
@@ -208,12 +205,19 @@ class SearchDrawer extends React.Component {
             flexDirection: 'row-reverse'
           }}
         >
-          <ActionButton
-            disabled={_.size(this.state.selectedItems) === 0}
-            onClick={this.handleSelectMultipleListing}
-          >
-            Next ({_.size(this.state.selectedItems)} Listings Selected)
-          </ActionButton>
+          {this.props.renderAction ? (
+            this.props.renderAction({
+              selectedItems: this.state.selectedItems,
+              onClick: this.handleSelectMultipleItems
+            })
+          ) : (
+            <ActionButton
+              disabled={_.size(this.state.selectedItems) === 0}
+              onClick={this.handleSelectMultipleItems}
+            >
+              {_.size(this.state.selectedItems)} Items Selected
+            </ActionButton>
+          )}
         </Drawer.Footer>
       </Drawer>
     )
@@ -225,8 +229,7 @@ SearchDrawer.defaultProps = {
   searchInputOptions: {},
   defaultList: [],
   defaultListTitle: 'Add from list',
-  multipleSelection: false,
-  onUpdateList: () => null
+  multipleSelection: false
 }
 
 SearchDrawer.propTypes = {
@@ -235,10 +238,8 @@ SearchDrawer.propTypes = {
   searchInputOptions: PropTypes.object,
   searchFunction: PropTypes.func.isRequired,
   ItemRow: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
-  onSelectItem: PropTypes.func.isRequired,
   defaultList: PropTypes.array,
-  defaultListTitle: PropTypes.string,
-  onUpdateList: PropTypes.func
+  defaultListTitle: PropTypes.string
 }
 
 export default SearchDrawer
