@@ -43,10 +43,10 @@ class SearchListingDrawer extends React.Component {
     }
   }
 
-  normalizeSelectedItem = async item => ({
-      ...item,
-      id: item.type === 'deal' ? item.listing : item.id
-    })
+  normalizeSelectedItem = item => ({
+    ...item,
+    id: item.type === 'deal' ? item.listing : item.id
+  })
 
   searchListing = async value => {
     const response = await Deal.searchListings(value)
@@ -93,9 +93,7 @@ class SearchListingDrawer extends React.Component {
 }
 
 SearchListingDrawer.propTypes = {
-  searchPlaceholder: PropTypes.string,
-  searchFunction: PropTypes.func.isRequired,
-  normalizeSelectedItem: PropTypes.func.isRequired
+  searchPlaceholder: PropTypes.string
 }
 
 SearchListingDrawer.defaultProps = {
