@@ -42,7 +42,7 @@ class DealDetails extends React.Component {
         this.setState({ isFetchingChecklists: true })
 
         // fetch deal by id
-        await this.props.getDeal(deal.id)
+        await this.props.getDeal(this.props.params.id)
 
         this.setState({ isFetchingChecklists: false })
       }
