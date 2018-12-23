@@ -16,6 +16,7 @@ import NoSearchResults from '../../../../../Partials/no-search-results'
 import MergeContacts from '../Actions/MergeContacts'
 import ExportContacts from '../Actions/ExportContactsButton'
 import TagContacts from '../Actions/TagContacts'
+import CreateEvent from '../Actions/CreateEvent'
 
 import TagsOverlay from '../../components/TagsOverlay'
 
@@ -121,6 +122,10 @@ class ContactsList extends React.Component {
           }
         />
       )
+    },
+    {
+      display: ({ selectedRows }) => selectedRows.length > 0,
+      render: ({ selectedRows }) => <CreateEvent selectedRows={selectedRows} />
     },
     {
       display: ({ selectedRows }) => selectedRows.length >= 2,
