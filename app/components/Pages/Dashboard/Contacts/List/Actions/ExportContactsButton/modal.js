@@ -3,6 +3,7 @@ import React from 'react'
 import ActionButton from 'components/Button/ActionButton'
 import RadioButton from 'components/RadioButton'
 import BareModal from 'components/BareModal'
+import { grey } from 'views/utils/colors'
 
 const SAME_ROW_DOWNLOAD_TYPE = 'same'
 const SEPARATE_ROW_DOWNLOAD_TYPE = 'separate'
@@ -36,7 +37,7 @@ export default function Modal({
         >
           <div
             style={{
-              backgroundColor: '#f5f5f5',
+              backgroundColor: grey.A150,
               width: '50%',
               float: 'left',
               display: 'flex',
@@ -51,7 +52,7 @@ export default function Modal({
                   <li
                     key={item}
                     style={{
-                      backgroundColor: '#e0e0e0',
+                      backgroundColor: grey.A250,
                       display: 'inline-block',
                       width: '48%',
                       margin: '1%',
@@ -70,7 +71,7 @@ export default function Modal({
                   <li
                     key={item}
                     style={{
-                      backgroundColor: '#e0e0e0',
+                      backgroundColor: grey.A250,
                       display: 'block',
                       height: '2.375rem',
                       padding: '0.4375rem 0.5rem',
