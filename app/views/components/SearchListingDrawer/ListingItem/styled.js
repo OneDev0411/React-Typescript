@@ -6,11 +6,33 @@ import { grey } from '../../../utils/colors'
 export const ListItem = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem 2px;
   cursor: pointer;
   background-color: ${props =>
     props.isHighlighted ? grey.A100 : 'transparent'};
+
+  .delete-icon {
+    width: 16px;
+    height: 16px;
+    fill: rgba(0, 0, 0, 0.2);
+    margin-left: 0.5rem;
+
+    :hover {
+      fill: #e60000;
+    }
+  }
+
+  button.add-item {
+    opacity: 0;
+  }
+
+  :hover button.add-item {
+    opacity: 1;
+  }
+
+  :hover {
+    background-color: ${grey.A100};
+  }
 `
 
 export const ListItemImage = styled.img`
@@ -20,10 +42,12 @@ export const ListItemImage = styled.img`
 `
 
 export const ListItemAddress = styled.div`
-  padding-left: 0.5rem;
+  padding-left: 1rem;
 `
 
 export const ListItemStatus = styled.div`
+  display: flex;
+  align-items: center;
   text-align: right;
 `
 
@@ -41,7 +65,7 @@ export const AddressContainer = styled.div`
 `
 
 export const Address = styled.div`
-  font-size: 0.875rem;
+  font-size: 1rem;
 `
 
 export const IconContainer = styled(Flex)`

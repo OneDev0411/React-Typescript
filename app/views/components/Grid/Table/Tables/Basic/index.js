@@ -102,24 +102,27 @@ class BasicTable extends React.Component {
               })}
             >
               {columns &&
-                columns.map((column, colIndex) => (
-                  <Cell
-                    key={column.id || colIndex}
-                    width={sizes[colIndex]}
-                    {...getTdProps(colIndex, {
-                      column,
-                      rowIndex,
-                      rowData: row
-                    })}
-                  >
-                    {this.getCell({
-                      column,
-                      row,
-                      rowIndex,
-                      total: data.length
-                    })}
-                  </Cell>
-                ))}
+                columns
+                  .filter(column => !!column.render)
+                  .map((column, colIndex) => (
+                    <Cell
+                      key={column.id || colIndex}
+                      width={sizes[colIndex]}
+                      verticalAlign={column.verticalAlign}
+                      {...getTdProps(colIndex, {
+                        column,
+                        rowIndex,
+                        rowData: row
+                      })}
+                    >
+                      {this.getCell({
+                        column,
+                        row,
+                        rowIndex,
+                        total: data.length
+                      })}
+                    </Cell>
+                  ))}
             </Row>
           ))}
 

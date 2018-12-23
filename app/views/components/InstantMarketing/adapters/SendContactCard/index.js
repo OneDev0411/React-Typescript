@@ -129,7 +129,10 @@ class SendContactCard extends React.Component {
 
   generatePreviewImage = async template =>
     this.setState({
-      templateScreenshot: await getTemplatePreviewImage(template, {})
+      templateScreenshot: await getTemplatePreviewImage(
+        template,
+        this.TemplateInstanceData
+      )
     })
 
   handleSendEmails = async values => {
@@ -149,7 +152,7 @@ class SendContactCard extends React.Component {
     ]
 
     try {
-      await sendContactsEmail(emails)
+      await sendContactsEmail(emails, this.state.owner.id)
 
       this.props.notify({
         status: 'success',
@@ -164,6 +167,12 @@ class SendContactCard extends React.Component {
         isComposeEmailOpen: false,
         isInstantMarketingBuilderOpen: false
       })
+    }
+  }
+
+  get TemplateInstanceData() {
+    return {
+      contacts: this.Recipients.map(r => r.contactId)
     }
   }
 
@@ -198,7 +207,7 @@ class SendContactCard extends React.Component {
 
     return (
       <Fragment>
-        {this.props.contact ? (
+        {this.props.contact || this.props.contactId ? (
           <ActionButton
             appearance="outline"
             onClick={this.showMarketingBuilder}
@@ -220,6 +229,7 @@ class SendContactCard extends React.Component {
           isOpen={this.state.isInstantMarketingBuilderOpen}
           onClose={this.toggleInstantMarketingBuilder}
           handleSave={this.handleSaveMarketingCard}
+          mediums={this.props.mediums}
           templateData={{ user: this.props.user, contact: this.state.contact }}
           templateTypes={['Birthday']}
           defaultTemplate={this.props.selectedTemplate}

@@ -34,12 +34,14 @@ class Grid extends React.Component {
       {
         id: 'agent-name',
         header: 'Agent Name',
-        accessor: deal => getPrimaryAgentName(deal, roles)
+        accessor: deal => getPrimaryAgentName(deal, roles),
+        render: ({ rowData: deal }) => getPrimaryAgentName(deal, roles)
       },
       {
         id: 'office',
         header: 'Office',
-        accessor: deal => this.getOffice(deal)
+        accessor: deal => this.getOffice(deal),
+        render: ({ rowData: deal }) => this.getOffice(deal)
       },
       {
         id: 'critical-dates',

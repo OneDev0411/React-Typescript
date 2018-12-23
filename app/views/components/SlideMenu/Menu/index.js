@@ -5,11 +5,11 @@ import { Container } from './styled'
 const propTypes = {
   children: PropTypes.node,
   isOpen: PropTypes.bool.isRequired,
-  width: PropTypes.any
+  width: PropTypes.string
 }
 
 const defaultProps = {
-  width: '11em'
+  width: '11rem'
 }
 
 export const Menu = Container

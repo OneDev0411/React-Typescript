@@ -35,16 +35,19 @@ const Container = styled.div`
 export default function SocialListings(props) {
   return (
     <Container isSideMenuOpen={props.isSideMenuOpen}>
-      <div style={{ marginBottom: '2.5rem' }}>
+      <div style={{ marginBottom: '1.5rem' }}>
         <Jumbo style={{ marginBottom: '1rem' }}>
           Post listings on social media
         </Jumbo>
-        <Button appearance="outline" to="/dashboard/marketing/Social">
+        <Button
+          appearance="outline"
+          to="/dashboard/marketing/JustListed/Social"
+        >
           Browse Designs
         </Button>
       </div>
       <img
-        src="/static/images/marketing/store/cards/social-listings/social-listings.png"
+        src="/static/images/marketing/store/cards/social-listings/social-listings@2x.png"
         alt="Post listings on social media"
       />
     </Container>

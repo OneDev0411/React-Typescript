@@ -1,9 +1,7 @@
 import styled from 'styled-components'
 
-import { borderColor } from 'views/utils/colors'
-
 export const MenuContainer = styled.div`
-  padding: 1em;
+  padding: 0 1em;
   position: relative;
   height: 100%;
   &:focus {
@@ -11,8 +9,8 @@ export const MenuContainer = styled.div`
   }
 `
 
-export const FilterContainer = styled.div`
-  margin: 0 1.5em 0.5em 1.5em;
-  padding-bottom: 1.5em;
-  border-bottom: 1px solid ${borderColor};
+export const TableContainer = styled.div`
+  height: calc(100% - 7.0625rem);
+  position: relative;
+  overflow: auto;
 `

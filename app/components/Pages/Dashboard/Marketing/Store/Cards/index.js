@@ -3,10 +3,10 @@ import pure from 'recompose/pure'
 import styled from 'styled-components'
 
 import { getMQWidth } from './helpers'
-import Video from './Video'
+import Holiday from './Holiday'
 import SocialListings from './SocialListings'
 import EmailListings from './EmailListings'
-import Company from './Company'
+import Brand from './Brand'
 import Instagram from './Instagram'
 import FacebookCovers from './FacebookCovers'
 import AsSeenIn from './AsSeenIn'
@@ -22,14 +22,14 @@ const ResponsiveRow = styled.div`
 
 function Cards({ isSideMenuOpen }) {
   return (
-    <React.Fragment>
-      <Video isSideMenuOpen={isSideMenuOpen} />
+    <div style={{ marginTop: '1.5rem' }}>
+      <Holiday isSideMenuOpen={isSideMenuOpen} />
       <ResponsiveRow isSideMenuOpen={isSideMenuOpen}>
         <SocialListings isSideMenuOpen={isSideMenuOpen} />
         <EmailListings isSideMenuOpen={isSideMenuOpen} />
       </ResponsiveRow>
       <ResponsiveRow isSideMenuOpen={isSideMenuOpen}>
-        <Company isSideMenuOpen={isSideMenuOpen} />
+        <Brand isSideMenuOpen={isSideMenuOpen} />
         <Instagram isSideMenuOpen={isSideMenuOpen} />
       </ResponsiveRow>
       <ResponsiveRow isSideMenuOpen={isSideMenuOpen}>
@@ -41,7 +41,7 @@ function Cards({ isSideMenuOpen }) {
         <Birthday isSideMenuOpen={isSideMenuOpen} />
       </ResponsiveRow>
       <Brochures isSideMenuOpen={isSideMenuOpen} />
-    </React.Fragment>
+    </div>
   )
 }
 

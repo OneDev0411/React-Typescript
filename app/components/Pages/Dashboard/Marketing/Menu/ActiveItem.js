@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
 import styled from 'styled-components'
+import cn from 'classnames'
 
 import { primary } from 'views/utils/colors'
 import { ListItemName } from 'components/SlideMenu/Menu/styled'
@@ -12,6 +13,7 @@ const Item = styled(Link)`
   color: #000;
 
   &.is-active {
+    pointer-events: none;
     color: ${primary};
     font-weight: 500;
     text-decoration: none;
@@ -28,6 +30,7 @@ export function ActiveItem({ Icon, ...props }) {
       to={props.to}
       onlyActiveOnIndex={props.indexed}
       activeClassName="is-active"
+      className={cn(props.className, { 'is-active': props.selected })}
     >
       {Icon ? (
         <React.Fragment>

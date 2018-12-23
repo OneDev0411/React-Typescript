@@ -1,8 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import Search from 'components/Grid/Search'
-import { Menu, Content } from 'components/SlideMenu'
+import { searchDeals, getDeals } from '../../../../../../store_actions/deals'
+
+import Search from '../../../../../../views/components/Grid/Search'
+import { Menu, Content } from '../../../../../../views/components/SlideMenu'
 
 import {
   PageContainer,
@@ -13,7 +15,6 @@ import {
 import Header from '../components/PageHeader'
 import Grid from './Grid'
 import BackofficeFilters from './Filters'
-import { searchDeals, getDeals } from 'actions/deals'
 
 let persistentSearchInput = ''
 
@@ -29,7 +30,7 @@ class BackofficeTable extends React.Component {
     }))
 
   handleSearch = value => {
-    const { user, isFetchingDeals, getDeals, searchDeals } = this.props
+    const { user, isFetchingDeals, dispatch } = this.props
 
     if (isFetchingDeals) {
       return false
@@ -43,10 +44,10 @@ class BackofficeTable extends React.Component {
     persistentSearchInput = value
 
     if (value.length === 0) {
-      return getDeals(user)
+      return dispatch(getDeals(user))
     }
 
-    searchDeals(user, value)
+    dispatch(searchDeals(user, value))
   }
 
   render() {
@@ -65,7 +66,7 @@ class BackofficeTable extends React.Component {
           />
         </Menu>
 
-        <Content>
+        <Content isSideMenuOpen={isSideMenuOpen}>
           <Header
             title={params.filter}
             isSideMenuOpen={isSideMenuOpen}
@@ -103,7 +104,4 @@ function mapStateToProps({ user, deals }) {
   return { user, isFetchingDeals: deals.properties.isFetchingDeals }
 }
 
-export default connect(
-  mapStateToProps,
-  { searchDeals, getDeals }
-)(BackofficeTable)
+export default connect(mapStateToProps)(BackofficeTable)

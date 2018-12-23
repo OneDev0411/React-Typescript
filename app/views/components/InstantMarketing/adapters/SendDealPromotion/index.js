@@ -19,12 +19,12 @@ import { getTemplateTypes } from '../../helpers/get-template-types'
 const initialState = {
   owner: null,
   listing: null,
-  socialName: null,
   isInstantMarketingBuilderOpen: false,
   isComposeEmailOpen: false,
   isSocialDrawerOpen: false,
   htmlTemplate: '',
-  templateScreenshot: null
+  templateScreenshot: null,
+  socialNetworkName: ''
 }
 
 class SendDealPromotion extends React.Component {
@@ -59,11 +59,11 @@ class SendDealPromotion extends React.Component {
     })
   }
 
-  handleSocialSharing = (template, socialName) => {
+  handleSocialSharing = (template, socialNetworkName) => {
     this.setState({
-      socialName,
       htmlTemplate: template,
-      isSocialDrawerOpen: true
+      isSocialDrawerOpen: true,
+      socialNetworkName
     })
   }
 
@@ -79,7 +79,7 @@ class SendDealPromotion extends React.Component {
     )
 
     try {
-      await sendContactsEmail(emails)
+      await sendContactsEmail(emails, this.state.owner.id)
 
       this.props.notify({
         status: 'success',
@@ -133,6 +133,18 @@ class SendDealPromotion extends React.Component {
     }
   }
 
+  get Assets() {
+    const { listing } = this.state
+
+    if (!listing) {
+      return []
+    }
+
+    return listing.gallery_image_urls.map(image => ({
+      image
+    }))
+  }
+
   render() {
     const { listing } = this.state
     const { user } = this.props
@@ -158,7 +170,7 @@ class SendDealPromotion extends React.Component {
           templateData={{ listing, user }}
           mediums={this.props.mediums}
           templateTypes={getTemplateTypes(listing)}
-          assets={listing && listing.gallery_image_urls}
+          assets={this.Assets}
         />
 
         {this.state.isComposeEmailOpen && (
@@ -175,9 +187,9 @@ class SendDealPromotion extends React.Component {
 
         {this.state.isSocialDrawerOpen && (
           <SocialDrawer
-            socialName={this.state.socialName}
             template={this.state.htmlTemplate}
             templateInstanceData={this.TemplateInstanceData}
+            socialNetworkName={this.state.socialNetworkName}
             onClose={this.closeSocialDrawer}
           />
         )}

@@ -1,16 +1,25 @@
 import React, { Component } from 'react'
+import _ from 'underscore'
+import { browserHistory } from 'react-router'
 
-import { onlyUnique } from 'utils/helpers'
+import { onlyUnique, sortAlphabetically } from 'utils/helpers'
 import { getTemplates } from 'models/instant-marketing/get-templates'
 
-import { templateTypes } from './data'
 import { Header } from './Header'
 import { List } from './List'
 
+function getMediums(templates) {
+  return templates
+    .map(t => t.medium)
+    .filter(onlyUnique)
+    .sort(sortAlphabetically)
+    .reverse()
+}
+
 export default class Templates extends Component {
   state = {
-    templates: [],
     tabs: [],
+    templates: [],
     isLoading: false
   }
 
@@ -19,40 +28,42 @@ export default class Templates extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.medium !== this.props.medium) {
+    if (prevProps.types !== this.props.types) {
       this.fetch()
     }
   }
 
-  fetch = async () => {
+  fetch = _.debounce(async () => {
+    const { types } = this.props
+
     try {
       this.setState({ isLoading: true })
 
-      const templates = await getTemplates(undefined, this.props.medium)
+      const templates = await getTemplates(types.split(','), [
+        'Email',
+        'Social',
+        'FacebookCover',
+        'InstagramStory'
+      ])
 
-      this.setState({
-        isLoading: false,
-        templates,
-        tabs: this.getTypes(templates)
-      })
+      const tabs = getMediums(templates)
+
+      this.setState(
+        {
+          isLoading: false,
+          templates,
+          tabs
+        },
+        () =>
+          browserHistory.push(
+            `/dashboard/marketing/${types}/${this.props.medium || tabs[0]}`
+          )
+      )
     } catch (error) {
       console.log(error)
       this.setState({ isLoading: false })
     }
-  }
-
-  getTypes = templates => {
-    const types = templates.map(t => t.template_type).filter(onlyUnique)
-
-    return [
-      { title: 'All', type: 'All' },
-      ...types.map(type => {
-        const title = templateTypes[type] ? templateTypes[type] : type
-
-        return { title, type }
-      })
-    ]
-  }
+  }, 500)
 
   render() {
     const { state, props } = this
@@ -60,14 +71,14 @@ export default class Templates extends Component {
     return (
       <React.Fragment>
         <Header
-          medium={props.medium}
+          types={props.types}
           isSideMenuOpen={props.isSideMenuOpen}
           toggleSideMenu={props.toggleSideMenu}
         />
         <List
           isLoading={state.isLoading}
           isSideMenuOpen={props.isSideMenuOpen}
-          medium={props.medium}
+          medium={props.medium || state.tabs[0]}
           tabs={state.tabs}
           templates={state.templates}
           types={props.types}

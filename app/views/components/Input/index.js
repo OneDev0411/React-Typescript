@@ -1,4 +1,5 @@
 import React from 'react'
+
 import CurrencyInput from './CurrencyInput'
 import EmailInput from './EmailInput'
 import NumberInput from './NumericInput'

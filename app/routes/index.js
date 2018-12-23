@@ -1,6 +1,5 @@
 import React from 'react'
 import { IndexRoute, Route } from 'react-router'
-import { batchActions } from 'redux-batched-actions'
 
 // Containers
 import AppLayout from '../components/App'
@@ -8,7 +7,6 @@ import AppLayout from '../components/App'
 import Landing from '../components/Pages/Landing'
 import Load from '../loader'
 import store from '../stores'
-// actions
 import UserIsNotAuthenticated from './userIsNotAuthenticated'
 
 const AsyncAuthenticationLayout = Load({
@@ -452,7 +450,7 @@ export default (
       <Route path="/dashboard/marketing" component={AsyncMarketing}>
         <IndexRoute component={AsyncMarketingStore} />
         <Route component={AsyncMarketingHistory} path="history" />
-        <Route component={AsyncMarketingTemplates} path=":medium(/:types)" />
+        <Route component={AsyncMarketingTemplates} path=":types(/:medium)" />
       </Route>
 
       <Route path="dashboard/account" component={AsyncAccountLayout}>

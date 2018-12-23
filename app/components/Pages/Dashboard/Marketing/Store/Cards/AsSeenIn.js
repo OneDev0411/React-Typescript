@@ -38,12 +38,12 @@ export default function AsSeenIn(props) {
     <Container isSideMenuOpen={props.isSideMenuOpen}>
       <div style={{ marginBottom: '1rem' }}>
         <Jumbo style={{ marginBottom: '1rem' }}>As Seen In</Jumbo>
-        <Button appearance="outline" to="/dashboard/marketing/Social/AsSeenIn">
+        <Button appearance="outline" to="/dashboard/marketing/AsSeenIn">
           Browse Designs
         </Button>
       </div>
       <img
-        src="/static/images/marketing/store/cards/as-seen-in/as-seen-in.png"
+        src="/static/images/marketing/store/cards/as-seen-in/as-seen-in@2x.png"
         alt="as seen in listings rechat"
       />
     </Container>

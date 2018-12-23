@@ -15,26 +15,32 @@ export function Menu() {
           text="All Designs"
           Icon={IconAllDesigns}
           to="/dashboard/marketing"
+          className="onboarding--all-designs"
         />
         <ActiveItem
           text="My Designs"
           Icon={IconMyDesigns}
           to="/dashboard/marketing/history"
+          className="onboarding--my-designs"
         />
       </div>
 
-      {items.map(({ title, url }, index) =>
-        url ? (
-          <ActiveItem
-            key={index}
-            indexed={url === '/'}
-            text={title}
-            to={`/dashboard/marketing${url}`}
-          />
-        ) : (
-          <ComingSoonItem text={title} key={index} />
-        )
-      )}
+      <div className="onboarding--menus">
+        {items.map(
+          ({ title, url }, index) =>
+            url ? (
+              <ActiveItem
+                key={index}
+                indexed={url === '/'}
+                text={title}
+                selected={window.location.pathname.includes(url)}
+                to={`/dashboard/marketing${url}`}
+              />
+            ) : (
+              <ComingSoonItem text={title} key={index} />
+            )
+        )}
+      </div>
     </React.Fragment>
   )
 }

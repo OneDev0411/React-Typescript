@@ -7,11 +7,13 @@ import PageHeader from 'components/PageHeader'
 
 Header.propTypes = {
   title: PropTypes.string.isRequired,
-  showMenu: PropTypes.bool
+  showMenu: PropTypes.bool,
+  style: PropTypes.shape()
 }
 
 Header.defaultProps = {
-  showMenu: true
+  showMenu: true,
+  style: {}
 }
 
 export function Header(props) {
@@ -21,7 +23,8 @@ export function Header(props) {
         margin: 0,
         width: '100%',
         minHeight: '6rem',
-        borderBottom: '1px solid #d4d4d4'
+        borderBottom: '1px solid #d4d4d4',
+        ...props.style
       }}
     >
       <Flex alignCenter>

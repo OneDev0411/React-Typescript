@@ -40,24 +40,22 @@ class InstantMarketing extends React.Component {
 
 InstantMarketing.propTypes = {
   headerTitle: PropTypes.string,
-  saveButtonLabel: PropTypes.string,
   closeConfirmation: PropTypes.bool,
   showTemplatesColumn: PropTypes.bool,
   templateData: PropTypes.object,
   templateTypes: PropTypes.array,
-  mediums: PropTypes.array,
+  mediums: PropTypes.string,
   assets: PropTypes.array,
   defaultTemplate: PropTypes.any
 }
 
 InstantMarketing.defaultProps = {
   headerTitle: 'Marketing Center',
-  saveButtonLabel: 'Send',
   closeConfirmation: true,
   showTemplatesColumn: true,
   templateData: {},
   templateTypes: [],
-  mediums: [],
+  mediums: '',
   assets: [],
   defaultTemplate: null
 }

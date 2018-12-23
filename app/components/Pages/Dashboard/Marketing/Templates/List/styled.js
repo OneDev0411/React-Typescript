@@ -1,9 +1,17 @@
 import styled, { css } from 'styled-components'
 
-import LinkButton from 'components/Button/LinkButton'
+import Button from 'components/Button/LinkButton'
 import { primary } from 'views/utils/colors'
 
-export const Tab = styled(LinkButton)`
+import { getMQWidth } from '../../components/Template/styled'
+
+export const ListContainer = styled.div`
+  @media (min-width: ${props => getMQWidth(43, props)}em) {
+    margin: 0 -1.5rem;
+  }
+`
+
+export const Tab = styled(Button)`
   margin-right: 3rem;
   font-weight: 600;
   padding: 0;

@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import _ from 'underscore'
+
 import Deal from '../../../models/Deal'
 import Listing from '../../../models/listings/listing'
 import listingsHelper from '../../../utils/listing'
@@ -13,30 +15,38 @@ class SearchListingDrawer extends React.Component {
     isWorking: false
   }
 
-  handleSelectListing = async listing => {
-    const { onSelectListing, compact } = this.props
-
-    if (compact !== false) {
-      return onSelectListing(listing)
-    }
-
+  handleSelectListings = async items => {
     this.setState({
       isWorking: true
     })
 
     try {
-      const listingWithImages = await Listing.getListing(listing.id)
+      const listings = await Promise.all(
+        _.map(items, item => {
+          if (item.gallery_image_urls) {
+            return item
+          }
 
-      onSelectListing(listingWithImages)
+          const id = item.type === 'deal' ? item.listing : item.id
+
+          return Listing.getListing(id)
+        })
+      )
+
+      this.props.onSelectListings(listings)
     } catch (e) {
       console.log(e)
-      onSelectListing(listing)
     } finally {
       this.setState({
         isWorking: false
       })
     }
   }
+
+  normalizeSelectedItem = item => ({
+    ...item,
+    id: item.type === 'deal' ? item.listing : item.id
+  })
 
   searchListing = async value => {
     const response = await Deal.searchListings(value)
@@ -67,14 +77,16 @@ class SearchListingDrawer extends React.Component {
       <SearchDrawer
         title={this.props.title}
         showLoadingIndicator={this.state.isWorking}
+        multipleSelection={this.props.multipleSelection}
         searchInputOptions={{
-          placeholder: 'Enter MLS # or address',
+          placeholder: this.props.searchPlaceholder,
           debounceTime: 500,
           minimumLength: 3
         }}
-        searchFunction={this.searchListing}
         ItemRow={ListingItem}
-        onSelectItem={this.handleSelectListing}
+        normalizeSelectedItem={this.normalizeSelectedItem}
+        searchFunction={this.searchListing}
+        onSelectItems={this.handleSelectListings}
         {...this.props}
       />
     )
@@ -82,14 +94,11 @@ class SearchListingDrawer extends React.Component {
 }
 
 SearchListingDrawer.propTypes = {
-  compact: PropTypes.bool,
-  title: PropTypes.string,
-  onSelectListing: PropTypes.func.isRequired
+  searchPlaceholder: PropTypes.string
 }
 
 SearchListingDrawer.defaultProps = {
-  compact: true,
-  title: ''
+  searchPlaceholder: 'Enter MLS # or address'
 }
 
 export default SearchListingDrawer
