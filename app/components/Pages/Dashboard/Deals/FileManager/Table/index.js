@@ -104,7 +104,7 @@ class FileManager extends React.Component {
   }
 
   getFileLink = file => {
-    const taskId = file.taskId || 'stash'
+    const taskId = file.task ? file.task.id : 'stash'
     const type = file.envelope ? 'envelope' : 'attachment'
     const id = file.envelope ? file.envelope.id : file.id
 
