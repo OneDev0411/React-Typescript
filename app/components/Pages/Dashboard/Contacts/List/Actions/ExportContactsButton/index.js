@@ -3,7 +3,7 @@ import fileSaver from 'file-saver'
 import superagent from 'superagent'
 import { connect } from 'react-redux'
 
-import { getActiveTeam } from 'utils/user-teams'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import OpenModalButton from './button'
 import Modal from './modal'
@@ -27,8 +27,7 @@ class ExportContacts extends React.Component {
 
   sendDownloadReuqest = async () => {
     const { exportIds, filters, user, users } = this.props
-    const activeTeam = getActiveTeam(user)
-    const activeBrand = activeTeam.brand.id
+    const activeBrand = getActiveTeamId(user)
     const url = `/api/contacts/export/outlook/${activeBrand}/`
 
     const params = {
