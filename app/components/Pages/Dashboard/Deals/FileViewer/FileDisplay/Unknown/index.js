@@ -20,11 +20,15 @@ const FileName = styled.p`
   margin-bottom: 2rem;
 `
 
+function getFileExt(file) {
+  return file.name && file.name.split('.').pop()
+}
+
 export function Unknown(props) {
   return (
     <Container>
       <Title>
-        Can not preview <strong>.{props.file.name.split('.').pop()}</strong>
+        Can not preview <strong>.{getFileExt(props.file)}</strong>
         &nbsp; files
       </Title>
 
