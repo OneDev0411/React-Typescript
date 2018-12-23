@@ -19,7 +19,7 @@ export default function Modal({
     <BareModal isOpen={isOpen} onRequestClose={onClose}>
       <div
         style={{
-          padding: '6px 20px',
+          padding: '0.375rem 1.25rem',
           textAlign: 'center',
           userSelect: 'none'
         }}
@@ -29,9 +29,9 @@ export default function Modal({
         </h2>
         <div
           style={{
-            marginTop: '20px',
-            fontSize: '14px',
-            height: '120px'
+            marginTop: '1.25rem',
+            fontSize: '0.875rem',
+            height: '7.5rem'
           }}
         >
           <div
@@ -55,8 +55,8 @@ export default function Modal({
                       display: 'inline-block',
                       width: '48%',
                       margin: '1%',
-                      height: '38px',
-                      padding: '7px 8px'
+                      height: '2.375rem',
+                      padding: '0.4375rem 0.5rem'
                     }}
                   >
                     {item}
@@ -72,8 +72,8 @@ export default function Modal({
                     style={{
                       backgroundColor: '#e0e0e0',
                       display: 'block',
-                      height: '38px',
-                      padding: '7px 8px',
+                      height: '2.375rem',
+                      padding: '0.4375rem 0.5rem',
                       margin: '1% 0'
                     }}
                   >
@@ -88,7 +88,7 @@ export default function Modal({
               float: 'right',
               width: '45%',
               textAlign: 'left',
-              marginTop: '15px'
+              marginTop: '0.9375rem'
             }}
           >
             <RadioButton
@@ -111,13 +111,13 @@ export default function Modal({
             flexDirection: 'row',
             justifyContent: 'space-around',
             width: '48%',
-            margin: '53px auto'
+            margin: '3.3125rem auto'
           }}
         >
           <ActionButton
             style={{
-              width: '100px',
-              padding: '0 26px'
+              width: '6.25rem',
+              padding: '0 1.625rem'
             }}
             appearance="outline"
             onClick={onClose}
@@ -126,8 +126,8 @@ export default function Modal({
           </ActionButton>
           <ActionButton
             style={{
-              width: '140px',
-              padding: '0 46px'
+              width: '8.75rem',
+              padding: '0 2.875rem'
             }}
             onClick={onExportClick}
           >
