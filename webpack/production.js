@@ -79,9 +79,10 @@ webpackConfig.plugins.push(
     s3UploadOptions: {
       Bucket: process.env['ASSETS_BUCKET']
     },
-//     cdnizerOptions: {
-//       defaultCDNBase: 'http://asdf.ca'
-//     }
+    cdnizerOptions: {
+      defaultCDNBase: process.env['ASSETS_BASEURL'],
+      basePath: 'dist'
+    }
   })
 )
 
