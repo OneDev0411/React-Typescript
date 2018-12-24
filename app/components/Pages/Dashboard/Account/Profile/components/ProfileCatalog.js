@@ -7,6 +7,7 @@ import withHandlers from 'recompose/withHandlers'
 
 import editUser from 'actions/user/edit'
 import uploadAvatar from 'actions/user/upload-avatar'
+import { confirmation } from 'actions/confirmation'
 
 import Button from 'components/Button/ActionButton'
 import IconButton from 'components/Button/IconButton'
@@ -40,7 +41,13 @@ class ProfileCatalog extends Component {
   }
 
   onDelete = async () => {
-    await this.props.handleOnDelete()
+    this.props.confirmation({
+      show: true,
+      confirmLabel: 'Delete',
+      message: 'Delete Profile Picture',
+      onConfirm: async () => this.props.handleOnDelete(),
+      description: 'Are you sure you want to delete your profile picture?'
+    })
   }
 
   onAvatarSet = async data => {
@@ -155,5 +162,11 @@ export default compose(
         console.log(error)
       }
     }
-  })
+  }),
+  connect(
+    null,
+    {
+      confirmation
+    }
+  )
 )(ProfileCatalog)
