@@ -4,6 +4,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import Visualizer from 'webpack-visualizer-plugin'
 import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
+import S3Plugin from 'webpack-s3-plugin'
 
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
@@ -67,6 +68,20 @@ webpackConfig.plugins.push(
     test: /\.js$|\.css$|\.html$/,
     threshold: 10240,
     minRatio: 0.8
+  }),
+  new S3Plugin({
+    exclude: /.*\.html$/,
+    s3Options: {
+  //     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  //     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  //     region: 'us-west-1'
+    },
+    s3UploadOptions: {
+      Bucket: process.env['ASSETS-BUCKET']
+    },
+//     cdnizerOptions: {
+//       defaultCDNBase: 'http://asdf.ca'
+//     }
   })
 )
 
