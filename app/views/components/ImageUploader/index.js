@@ -84,7 +84,7 @@ export class ImageUploader extends Component {
     const croppedArea = this.croppedArea
 
     return {
-      files,
+      // files,
       croppedArea
     }
   }

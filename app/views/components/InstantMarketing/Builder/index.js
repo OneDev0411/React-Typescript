@@ -1,4 +1,6 @@
 import React, { Fragment } from 'react'
+import { connect } from 'react-redux'
+
 import PropTypes from 'prop-types'
 
 import grapesjs from 'grapesjs'
@@ -63,7 +65,7 @@ class Builder extends React.Component {
       container: '#grapesjs-canvas',
       components: null,
       assetManager: {
-        assets: this.props.assets
+        assets: [...this.props.assets, ...this.UserAssets]
       },
       storageManager: {
         autoload: 0,
@@ -273,6 +275,15 @@ class Builder extends React.Component {
     return false
   }
 
+  get UserAssets() {
+    return ['profile_image_url', 'cover_image_url']
+      .filter(attr => this.props.user[attr])
+      .map(attr => ({
+        image: this.props.user[attr],
+        avatar: true
+      }))
+  }
+
   renderAgentPickerButton = buttonProps => (
     <DropButton
       {...buttonProps}
@@ -426,4 +437,10 @@ Builder.defaultProps = {
   onBuilderLoad: () => null
 }
 
-export default Builder
+function mapStateToProps({ user }) {
+  return {
+    user
+  }
+}
+
+export default connect(mapStateToProps)(Builder)
