@@ -8,8 +8,9 @@ export const Container = styled(Flex)`
   height: ${props => `${props.size / 16}em}`};
   width: ${props => `${props.size / 16}em}`};
   color: #fff;
+  cursor: defaut;
   border-radius: ${props => `${props.borderRadius}%`};
-  background-color: #000;
+  background-color: ${props => props.backgroundColor || '#000'};
 `
 
 export const Image = styled.img`
@@ -20,6 +21,11 @@ export const Image = styled.img`
   &[alt] {
     font-size: 0;
   }
+`
+
+export const Initials = styled.div`
+  font-size: 2.25em;
+  color: #fff;
 `
 
 export const Status = styled.div`
