@@ -2,10 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
-import Message from '../../../../../Chatroom/Util/message'
 import { changeTaskStatus, changeNeedsAttention } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 import { blue } from 'views/utils/colors'
+
+import Message from '../../../../../Chatroom/Util/message'
 
 import CommentActions from '../CommentActions'
 
