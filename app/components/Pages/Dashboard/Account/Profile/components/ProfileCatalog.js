@@ -13,6 +13,7 @@ import Button from 'components/Button/ActionButton'
 import IconButton from 'components/Button/IconButton'
 import DeleteIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 import { ImageUploader } from 'components/ImageUploader'
+import Tooltip from 'components/tooltip'
 
 import Avatar from './Avatar'
 
@@ -88,23 +89,24 @@ class ProfileCatalog extends Component {
 
           <ProfileImageActions>
             {this.props.user.profile_image_url && (
-              <IconButton
-                disabled={this.props.isUploading}
-                title="Remove Profile Picture"
-                appearance="outline"
-                style={{
-                  width: '3rem',
-                  marginRight: '1rem',
-                  padding: 0
-                }}
-                onClick={this.onDelete}
-              >
-                <DeleteIcon
+              <Tooltip caption="Delete Profile Picture">
+                <IconButton
+                  disabled={this.props.isUploading}
+                  appearance="outline"
                   style={{
-                    margin: 'auto'
+                    width: '3rem',
+                    marginRight: '1rem',
+                    padding: 0
                   }}
-                />
-              </IconButton>
+                  onClick={this.onDelete}
+                >
+                  <DeleteIcon
+                    style={{
+                      margin: 'auto'
+                    }}
+                  />
+                </IconButton>
+              </Tooltip>
             )}
             <Button
               disabled={this.props.isUploading}
