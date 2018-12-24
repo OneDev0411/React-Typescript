@@ -1,4 +1,9 @@
 .c-profile-catalog {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
   .c-form-card {
     margin-bottom: 3em;
   }
