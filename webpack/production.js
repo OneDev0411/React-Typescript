@@ -56,7 +56,7 @@ webpackConfig.plugins.push(
   new HtmlWebpackPlugin({
     template: appConfig.compile.template,
     hash: false,
-    filename: 'app.html',
+    filename: 'app/index.html',
     inject: 'body',
     minify: {
       collapseWhitespace: false
