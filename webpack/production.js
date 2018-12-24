@@ -71,6 +71,7 @@ webpackConfig.plugins.push(
   }),
   new S3Plugin({
     exclude: /.*\.html$/,
+    basePath: 'dist',
     s3Options: {
   //     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   //     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -81,7 +82,6 @@ webpackConfig.plugins.push(
     },
     cdnizerOptions: {
       defaultCDNBase: process.env['ASSETS_BASEURL'],
-      basePath: 'dist'
     }
   })
 )
