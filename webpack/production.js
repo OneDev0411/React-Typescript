@@ -77,7 +77,7 @@ webpackConfig.plugins.push(
   //     region: 'us-west-1'
     },
     s3UploadOptions: {
-      Bucket: process.env['ASSETS-BUCKET']
+      Bucket: process.env['ASSETS_BUCKET']
     },
 //     cdnizerOptions: {
 //       defaultCDNBase: 'http://asdf.ca'
