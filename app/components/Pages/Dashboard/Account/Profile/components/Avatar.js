@@ -10,7 +10,6 @@ const Avatar = props => (
     image={props.user.profile_image_url}
     initials={getUserInitials(props.user)}
     backgroundColor={borderColor}
-    showStatus
   />
 )
 
