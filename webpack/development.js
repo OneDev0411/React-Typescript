@@ -1,9 +1,9 @@
 import webpack from 'webpack'
-
-import appConfig from '../config/webpack'
 import WebpackNotifierPlugin from 'webpack-notifier'
 import Webpackbar from 'webpackbar'
-import HardSourceWebpackPlugin from 'hard-source-webpack-plugin'
+
+import appConfig from '../config/webpack'
+
 import webpackConfig from './base'
 
 const postcss = function postcss() {
@@ -27,8 +27,7 @@ webpackConfig.entry = [
 
 webpackConfig.plugins.push(
   new webpack.HotModuleReplacementPlugin(),
-  new Webpackbar(),
-  new HardSourceWebpackPlugin()
+  new Webpackbar()
 )
 
 if (process.env.notify) {
