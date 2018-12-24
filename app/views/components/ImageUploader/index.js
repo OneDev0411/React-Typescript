@@ -1,52 +1,37 @@
-import React, { Component, Fragment } from 'react'
-import AvatarEditor from 'react-avatar-editor'
-import Dropzone from 'react-dropzone'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
-import BareModal from '../BareModal'
-import ActionButton from '../Button/ActionButton'
+import { Modal, ModalHeader, ModalFooter } from '../Modal'
+import ImageEditor from './ImageEditor'
+import UploaderModal from './UploaderModal'
+import Footer from './Footer'
 
-const RESET_STATE = { isOpen: true, file: null, scale: 1 }
+const RESET_STATE = { isOpen: true, file: null, scale: 1, rotate: 0 }
 const DISMISS_STATE = { isOpen: false }
 
 export class ImageUploader extends Component {
-  static defaultProps = {
-    isOpen: false,
-    rules: {
-      accept: 'image/*',
-      maxSize: Infinity,
-      minSize: 0
-    },
-    onlyModal: false,
-    notes: null,
-    showRules: true,
-    file: null,
-    width: 200,
-    height: 200,
-    border: 50,
-    radius: 0,
-    scale: 1,
-    disableBoundaryChecks: false,
-    outsideRGBAColor: [0, 0, 0, 0.2],
+  constructor(props) {
+    super(props)
 
-    saveHandler() {},
-    closeHandler() {}
-  }
+    this.state = {
+      isOpen: props.isOpen,
+      file: props.file,
+      scale: props.scale,
+      rotate: props.rotate
+    }
 
-  state = {
-    isOpen: this.props.isOpen,
-    file: this.props.file,
-    scale: this.props.scale
+    this.editor = React.createRef()
   }
 
   reset = () => {
     this.setState(RESET_STATE)
   }
 
-  dismissDialog() {
+  dismissDialog = () => {
     this.setState(DISMISS_STATE)
   }
 
-  resetAndDismiss() {
+  resetAndDismiss = () => {
     this.setState({ ...RESET_STATE, ...DISMISS_STATE })
   }
 
@@ -64,7 +49,11 @@ export class ImageUploader extends Component {
 
     const { file } = this.state
 
-    const imageDataURL = this.editor
+    if (!file) {
+      return null
+    }
+
+    const imageDataURL = this.editor.current
       .getImageScaledToCanvas()
       .toDataURL(file.type)
 
@@ -80,23 +69,37 @@ export class ImageUploader extends Component {
     }
   }
 
-  setEditorRef = editor => {
-    if (editor) {
-      this.editor = editor
+  get croppedArea() {
+    if (!this.editor.current) {
+      return null
+    }
+
+    return this.editor.current.getCroppingRect()
+  }
+
+  async getHandlersData() {
+    const files = this.props.croppedAreaOnly
+      ? null
+      : await this.getOriginalAndEditedFiles()
+    const croppedArea = this.croppedArea
+
+    return {
+      files,
+      croppedArea
     }
   }
 
   onSave = async () => {
-    const files = await this.getOriginalAndEditedFiles()
+    const data = await this.getHandlersData()
 
-    await this.props.saveHandler(files)
+    await this.props.saveHandler(data)
     this.resetAndDismiss()
   }
 
   onClose = async () => {
-    const files = await this.getOriginalAndEditedFiles()
+    const data = await this.getHandlersData()
 
-    await this.props.closeHandler(files)
+    await this.props.closeHandler(data)
     this.resetAndDismiss()
   }
 
@@ -104,166 +107,157 @@ export class ImageUploader extends Component {
     const file = files[0]
 
     this.setState({
-      file,
-      isOpen: true
+      file
     })
   }
 
-  onScaleChange = event => {
+  onScaleChange = scale => {
     this.setState({
-      scale: Number(event.target.value)
+      scale
     })
   }
 
-  renderImageEditor() {
-    return (
-      <div style={{ textAlign: 'center' }}>
-        <AvatarEditor
-          ref={this.setEditorRef}
-          image={this.state.file}
-          width={this.props.width}
-          height={this.props.height}
-          border={this.props.border}
-          color={this.props.outsideRGBAColor}
-          scale={this.state.scale}
-          rotate={0}
-          borderRadius={this.props.radius}
-          disableBoundaryChecks={this.props.disableBoundaryChecks}
-        />
-        <input
-          type="range"
-          min="1"
-          max="2"
-          step="0.01"
-          defaultValue={this.props.scale}
-          onChange={this.onScaleChange}
-          style={{
-            width: '60%',
-            margin: '20px auto',
-            padding: '10px 0'
-          }}
-        />
-      </div>
-    )
+  onRotateClick = () => {
+    const prevState = this.state.rotate
+    const rotate = prevState === 270 ? 0 : prevState + 90
+
+    this.setState({
+      rotate
+    })
   }
 
-  renderRules() {
-    const { rules } = this.props
+  get radius() {
+    const rawRadius = this.props.radius.toString()
 
-    return (
-      <ul style={{ padding: '10px 8px' }}>
-        <li>- accepted formats: {rules.accept}</li>
-        <li>
-          {rules.minSize > 0 && `- Minimum file size: ${rules.minSize} bytes`}
-        </li>
-        {rules.maxSize < Infinity &&
-          `- Maximum file size: ${rules.maxSize} bytes`}
-      </ul>
-    )
-  }
+    if (rawRadius.endsWith('%')) {
+      const radiusPercent = rawRadius.substr(0, rawRadius.length - 1)
 
-  renderNotes() {
-    return (
-      <Fragment>
-        {this.props.notes && this.props.notes()}
-        {this.props.showRules && this.renderRules()}
-      </Fragment>
-    )
-  }
+      return (radiusPercent * this.props.width) / 100
+    }
 
-  renderDropZone() {
-    return (
-      <Dropzone
-        accept={this.props.rules.accept}
-        multiple={false}
-        onDrop={this.onDrop}
-        style={{
-          width: '90%',
-          height: '80px',
-          paddingTop: '30px',
-          backgroundColor: 'transparent',
-          borderRadius: '3px',
-          margin: '8px 3% 8px 5%',
-          border: 'dashed 1px #b2b2b2',
-          fontSize: '14px',
-          textTransform: 'uppercase',
-          color: '#b2b2b2',
-          fontFamily: 'Barlow',
-          fontWeight: '600',
-          outline: 'none'
-        }}
-      >
-        Click or drop images here
-      </Dropzone>
-    )
-  }
-
-  renderModalDropZone() {
-    return (
-      <Fragment>
-        <Dropzone
-          accept={this.props.rules.accept}
-          multiple={false}
-          onDrop={this.onDrop}
-          style={{
-            height: '80%',
-            width: '100%',
-            backgroundColor: 'rgba(225, 225, 225, 0.2)',
-            borderRadius: '10px',
-            borderStyle: 'solid',
-            borderColor: '#DDD',
-            borderWidth: '1px 1px 0'
-          }}
-        />
-      </Fragment>
-    )
-  }
-
-  renderUploaderModal() {
-    return (
-      <Fragment>
-        {this.renderModalDropZone()}
-        {this.renderNotes()}
-      </Fragment>
-    )
-  }
-
-  renderSaveAndRepick() {
-    return (
-      <Fragment>
-        <ActionButton onClick={async () => this.onSave()}>Save</ActionButton>
-        <ActionButton onClick={this.reset}>Repick</ActionButton>
-      </Fragment>
-    )
-  }
-
-  renderDialog() {
-    return (
-      <BareModal isOpen={this.state.isOpen} onRequestClose={this.onClose}>
-        <div
-          style={{
-            width: '95%',
-            height: '95%',
-            margin: 'auto',
-            paddingBottom: '10px'
-          }}
-        >
-          {this.state.file
-            ? this.renderImageEditor()
-            : this.renderUploaderModal()}
-          {this.state.file && this.renderSaveAndRepick()}
-          <ActionButton onClick={this.onClose}>Cancel</ActionButton>
-        </div>
-      </BareModal>
-    )
+    return this.props.radius
   }
 
   render() {
+    const modalTitle = this.state.file ? 'Edit Photo' : 'Upload Photo'
+    const hasImage = !!this.state.file
+
     return (
-      <Fragment>
-        {this.props.onlyModal || this.renderDropZone()}
-        {this.state.isOpen && this.renderDialog()}
-      </Fragment>
+      <Modal
+        isOpen={this.state.isOpen}
+        onRequestClose={this.onClose}
+        style={{
+          content: {
+            width: '900px',
+            height: this.props.height > 400 ? '95%' : '600px',
+            maxWidth: '95%',
+            maxHeight: '95%'
+          }
+        }}
+      >
+        <ModalHeader title={modalTitle} closeHandler={this.onClose} />
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex'
+          }}
+        >
+          {hasImage ? (
+            <ImageEditor
+              editorRef={this.editor}
+              image={this.state.file}
+              width={this.props.width}
+              height={this.props.height}
+              border={this.props.border}
+              color={this.props.outsideRGBAColor}
+              scale={this.state.scale}
+              rotate={this.state.rotate}
+              borderRadius={this.radius}
+              disableBoundaryChecks={this.props.disableBoundaryChecks}
+            />
+          ) : (
+            <UploaderModal
+              accept={this.props.rules.accept}
+              onDrop={this.onDrop}
+              minSize={this.props.rules.minSize}
+              maxSize={this.props.rules.maxSize}
+              notes={this.props.notes}
+              showRules={this.props.showRules}
+            />
+          )}
+        </div>
+        <ModalFooter>
+          {hasImage && (
+            <Footer
+              scale={this.props.scale}
+              disableRotate={this.props.disableRotate}
+              disableScale={this.props.disableScale}
+              disableChangePhoto={this.props.disableChangePhoto}
+              onScaleChange={this.onScaleChange}
+              onRotateClick={this.onRotateClick}
+              onChange={this.reset}
+              onSave={this.onSave}
+            />
+          )}
+        </ModalFooter>
+      </Modal>
     )
   }
+}
+
+ImageUploader.defaultProps = {
+  isOpen: true,
+  rules: {
+    accept: 'image/*',
+    maxSize: Infinity,
+    minSize: 0
+  },
+  disableRotate: false,
+  disableScale: false,
+  disableChangePhoto: false,
+  notes: null,
+  showRules: false,
+  file: null,
+  width: 382,
+  height: 382,
+  border: 50,
+  radius: 0,
+  scale: 1,
+  rotate: 0,
+  disableBoundaryChecks: false,
+  outsideRGBAColor: [102, 102, 102, 0.9],
+
+  croppedAreaOnly: false,
+
+  saveHandler() {},
+  closeHandler() {}
+}
+
+ImageUploader.propTypes = {
+  isOpen: PropTypes.bool,
+  rules: PropTypes.shape({
+    accept: PropTypes.string,
+    maxSize: PropTypes.number,
+    minSize: PropTypes.number
+  }),
+  disableRotate: PropTypes.bool,
+  disableScale: PropTypes.bool,
+  disableChangePhoto: PropTypes.bool,
+  notes: PropTypes.element,
+  showRules: PropTypes.bool,
+  file: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(File)]),
+  width: PropTypes.number,
+  height: PropTypes.number,
+  border: PropTypes.number,
+  radius: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  scale: PropTypes.number,
+  rotate: PropTypes.number,
+  disableBoundaryChecks: PropTypes.bool,
+  outsideRGBAColor: PropTypes.arrayOf(PropTypes.number),
+
+  croppedAreaOnly: PropTypes.bool, // TEMPORARY; Will be removed after fixing CORS
+
+  saveHandler: PropTypes.func,
+  closeHandler: PropTypes.func
 }

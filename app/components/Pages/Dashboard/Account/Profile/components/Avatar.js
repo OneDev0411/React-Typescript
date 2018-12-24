@@ -29,8 +29,8 @@ export default compose(
     props => props.user.profile_image_url || null
   ),
   withHandlers({
-    handleOnChange: ({ dispatch, setAvatar, setUploading }) => async event => {
-      const file = event.target.files[0]
+    handleOnChange: ({ dispatch, setAvatar, setUploading }) => async data => {
+      const file = data.target ? data.target.files[0] : data.files.file
 
       // Create a new FileReader instance
       // https://developer.mozilla.org/en/docs/Web/API/FileReader
