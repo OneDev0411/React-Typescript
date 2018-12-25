@@ -7,10 +7,12 @@ import { getActiveTeamId } from 'utils/user-teams'
 
 import OpenModalButton from './button'
 import Modal from './modal'
+import { SAME_ROW_DOWNLOAD_TYPE } from './constants'
 
 class ExportContacts extends React.Component {
   state = {
-    isModalOpen: false
+    isModalOpen: false,
+    downloadType: SAME_ROW_DOWNLOAD_TYPE
   }
 
   openModal = () => {
