@@ -3,4 +3,4 @@ import '../../../../../styles/components/modules/template-builder.scss'
 import Grapesjs from 'grapesjs'
 import Backbone from 'backbone'
 
-export default () => {Grapesjs, Backbone}
+export {Grapesjs, Backbone}

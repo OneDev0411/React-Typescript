@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
-import './AssetManager'
 import juice from 'juice'
 
 import IconButton from 'components/Button/IconButton'
@@ -54,6 +53,7 @@ class Builder extends React.Component {
 
   async componentDidMount() {
     const { Grapesjs } = await loadGrapes()
+    import('./AssetManager')
 
     this.editor = Grapesjs.init({
       ...config,

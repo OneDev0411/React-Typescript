@@ -5,6 +5,8 @@ import { Uploader } from 'components/Uploader'
 
 import Fetch from '../../../../../services/fetch'
 
+import loadGrapes from '../../helpers/load-grapes'
+
 const CUSTOM_ASSET_UPLOAD_PATH = '/templates/assets'
 
 const run = async () => {
