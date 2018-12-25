@@ -53,10 +53,9 @@ class Builder extends React.Component {
   }
 
   async componentDidMount() {
-    const grapesjs = await loadGrapes()
+    const { Grapesjs } = await loadGrapes()
 
-
-    this.editor = grapesjs.init({
+    this.editor = Grapesjs.init({
       ...config,
       avoidInlineStyle: false,
       keepUnusedStyles: true,

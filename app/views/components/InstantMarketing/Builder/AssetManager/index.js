@@ -8,10 +8,9 @@ import Fetch from '../../../../../services/fetch'
 const CUSTOM_ASSET_UPLOAD_PATH = '/templates/assets'
 
 const run = async () => {
-  const grapesjs = await loadGrapes()
-  const Backbone = await import('backbone' /* webpackChunkName: "backbone" */)
+  const { Grapesjs, Backbone } = await loadGrapes()
 
-  grapesjs.plugins.add('asset-blocks', editor => {
+  Grapesjs.plugins.add('asset-blocks', editor => {
     let target
 
     const getStorageData = async key =>
