@@ -5,8 +5,8 @@ import RadioButton from 'components/RadioButton'
 import BareModal from 'components/BareModal'
 import { grey } from 'views/utils/colors'
 
-const SAME_ROW_DOWNLOAD_TYPE = 'same'
-const SEPARATE_ROW_DOWNLOAD_TYPE = 'separate'
+import { SAME_ROW_DOWNLOAD_TYPE, SEPARATE_ROW_DOWNLOAD_TYPE } from './constants'
+
 const EXAMPLE_CONTACT_TYPES = ['Primary Contact', 'Partner Contact']
 
 export default function Modal({
