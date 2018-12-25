@@ -1,11 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import RoleAgentIntegration from '../AgentIntegration'
-import { ROLE_NAMES, roleName } from '../../../utils/roles'
 import Deal from 'models/Deal'
 import { BasicDropdown } from 'components/BasicDropdown'
 import AddIcon from 'components/SvgIcons/Add/AddIcon'
+
+import { ROLE_NAMES, roleName } from '../../../utils/roles'
+
+import RoleAgentIntegration from '../AgentIntegration'
 
 import { Container } from './styled'
 
