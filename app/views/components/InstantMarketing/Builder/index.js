@@ -35,7 +35,8 @@ class Builder extends React.Component {
     this.state = {
       originalTemplate: null,
       selectedTemplate: props.defaultTemplate,
-      owner: props.templateData.user
+      owner: props.templateData.user,
+      isLoading: true
     }
 
     this.keyframe = 0
@@ -53,7 +54,11 @@ class Builder extends React.Component {
 
   async componentDidMount() {
     const { Grapesjs } = await loadGrapes()
-    import('./AssetManager')
+    await import('./AssetManager')
+
+    this.setState({
+      isLoading: false
+    })
 
     this.editor = Grapesjs.init({
       ...config,
@@ -301,6 +306,11 @@ class Builder extends React.Component {
   }
 
   render() {
+    const { isLoading } = this.state
+
+    if (isLoading)
+      return null
+
     const isSocialMedium = this.IsSocialMedium
 
     return (
