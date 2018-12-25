@@ -65,12 +65,12 @@ webpackConfig.plugins.push(
     }
   }),
   new CompressionPlugin({
-    asset: '[path].gz[query]',
+    asset: '[path]',
     algorithm: 'gzip',
-    test: /\.js$|\.css$|\.html$/,
+    test: /\.js$/,
   }),
   new ChangeExtensionPlugin({
-    extensions: ['js', 'css']
+    extensions: ['js']
   }),
   new S3Plugin({
     exclude: /.*\.html$/,
