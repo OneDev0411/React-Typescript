@@ -1,10 +1,6 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
-import grapesjs from 'grapesjs'
-import 'grapesjs/dist/css/grapes.min.css'
-import '../../../../styles/components/modules/template-builder.scss'
-
 import './AssetManager'
 import juice from 'juice'
 
@@ -20,6 +16,8 @@ import { VideoToolbar } from './VideoToolbar'
 import config from './config'
 
 import nunjucks from '../helpers/nunjucks'
+
+import loadGrapes from '../helpers/load-grapes'
 
 import {
   Container,
@@ -54,7 +52,10 @@ class Builder extends React.Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    const grapesjs = await loadGrapes()
+
+
     this.editor = grapesjs.init({
       ...config,
       avoidInlineStyle: false,
