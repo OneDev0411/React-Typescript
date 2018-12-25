@@ -4,7 +4,9 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import Visualizer from 'webpack-visualizer-plugin'
 import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
+import ChangeExtensionPlugin from 'change-extension-plugin'
 import S3Plugin from 'webpack-s3-plugin'
+
 
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
@@ -66,8 +68,9 @@ webpackConfig.plugins.push(
     asset: '[path].gz[query]',
     algorithm: 'gzip',
     test: /\.js$|\.css$|\.html$/,
-    threshold: 10240,
-    minRatio: 0.8
+  }),
+  new ChangeExtensionPlugin({
+    extensions: ['js', 'css']
   }),
   new S3Plugin({
     exclude: /.*\.html$/,
