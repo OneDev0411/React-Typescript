@@ -81,7 +81,21 @@ webpackConfig.plugins.push(
   //     region: 'us-west-1'
     },
     s3UploadOptions: {
-      Bucket: process.env['ASSETS_BUCKET']
+      Bucket: process.env['ASSETS_BUCKET'],
+      ContentEncoding(fileName) {
+        if (/\.gz/.test(fileName))
+          return 'gzip'
+      },
+
+      ContentType(fileName) {
+        if (/\.js/.test(fileName))
+          return 'application/javascript'
+
+        if (/\.css/.test(fileName))
+          return 'text/css'
+
+        return 'text/plain'
+      }
     },
     cdnizerOptions: {
       defaultCDNBase: process.env['ASSETS_BASEURL'],
