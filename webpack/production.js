@@ -6,10 +6,12 @@ import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
 import ChangeExtensionPlugin from 'change-extension-plugin'
 import S3Plugin from 'webpack-s3-plugin'
-
+import moment from 'moment'
 
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
+
+const Expires = moment().utc().add('1', 'month').format('ddd, D MMM YYYY H:mm:ss [GMT]')
 
 function postcss() {
   return [
@@ -82,7 +84,7 @@ webpackConfig.plugins.push(
     },
     s3UploadOptions: {
       Bucket: process.env['ASSETS_BUCKET'],
-      CacheControl: 'immutable',
+      Expires,
       ContentEncoding(fileName) {
         if (/\.gz/.test(fileName))
           return 'gzip'
