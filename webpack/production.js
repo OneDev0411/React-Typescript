@@ -82,6 +82,7 @@ webpackConfig.plugins.push(
     },
     s3UploadOptions: {
       Bucket: process.env['ASSETS_BUCKET'],
+      CacheControl: 'immutable',
       ContentEncoding(fileName) {
         if (/\.gz/.test(fileName))
           return 'gzip'
