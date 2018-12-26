@@ -4,6 +4,9 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import Visualizer from 'webpack-visualizer-plugin'
 import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
+import ChangeExtensionPlugin from 'change-extension-plugin'
+import S3Plugin from 'webpack-s3-plugin'
+
 
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
@@ -55,7 +58,7 @@ webpackConfig.plugins.push(
   new HtmlWebpackPlugin({
     template: appConfig.compile.template,
     hash: false,
-    filename: 'app.html',
+    filename: 'app/index.html',
     inject: 'body',
     minify: {
       collapseWhitespace: false
@@ -64,9 +67,39 @@ webpackConfig.plugins.push(
   new CompressionPlugin({
     asset: '[path].gz[query]',
     algorithm: 'gzip',
-    test: /\.js$|\.css$|\.html$/,
-    threshold: 10240,
-    minRatio: 0.8
+    test: /\.js$|\.css$/,
+  }),
+  new ChangeExtensionPlugin({
+    extensions: ['js']
+  }),
+  new S3Plugin({
+    exclude: /.*\.html$/,
+    basePath: 'dist',
+    s3Options: {
+  //     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  //     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  //     region: 'us-west-1'
+    },
+    s3UploadOptions: {
+      Bucket: process.env['ASSETS_BUCKET'],
+      ContentEncoding(fileName) {
+        if (/\.gz/.test(fileName))
+          return 'gzip'
+      },
+
+      ContentType(fileName) {
+        if (/\.js/.test(fileName))
+          return 'application/javascript'
+
+        if (/\.css/.test(fileName))
+          return 'text/css'
+
+        return 'text/plain'
+      }
+    },
+    cdnizerOptions: {
+      defaultCDNBase: process.env['ASSETS_BASEURL'],
+    }
   })
 )
 

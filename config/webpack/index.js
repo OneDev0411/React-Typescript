@@ -42,7 +42,11 @@ const config = {
       GOOGLE_API_KEY: JSON.stringify(process.env.GOOGLE_API_KEY),
       ITUNES_URL: JSON.stringify(process.env.ITUNES_URL),
       RECHAT_FORMS_URL: JSON.stringify(process.env.RECHAT_FORMS_URL),
-      RECHAT_STORE_URL: JSON.stringify(process.env.RECHAT_STORE_URL)
+      RECHAT_STORE_URL: JSON.stringify(process.env.RECHAT_STORE_URL),
+      AWS_ACCESS_KEY: JSON.stringify(process.env.AWS_ACCESS_KEY),
+      AWS_SECRET_ACCESS_KEY: JSON.stringify(process.env.AWS_SECRET_ACCESS_KEY),
+      ASSETS_BUCKET: JSON.stringify(process.env.ASSETS_BUCKET),
+      ASSETS_BASEURL: JSON.stringify(process.env.ASSETS_BASEURL),
     },
     __DEV__: __DEV__,
     NODE_ENV: env,

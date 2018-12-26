@@ -50,6 +50,7 @@
     "body-parser": "^1.18.3",
     "bowser": "^2.0.0-alpha.4",
     "branch-sdk": "^2.37.0",
+    "change-extension-plugin": "^1.1.2",
     "chromath": "^0.0.7",
     "classnames": "^2.2.6",
     "clipboard": "^1.6.1",
@@ -207,6 +208,7 @@
     "validator": "^9.2.0",
     "webpack": "^3.12.0",
     "webpack-bundle-analyzer": "^2.13.1",
+    "webpack-s3-plugin": "github:emilsedgh/s3-plugin-webpack#480ace9f",
     "webpack-visualizer-plugin": "^0.1.11",
     "whatwg-fetch": "^2.0.4",
     "xss": "^0.3.8"

@@ -1,11 +1,6 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
-import grapesjs from 'grapesjs'
-import 'grapesjs/dist/css/grapes.min.css'
-import '../../../../styles/components/modules/template-builder.scss'
-
-import './AssetManager'
 import juice from 'juice'
 
 import IconButton from 'components/Button/IconButton'
@@ -20,6 +15,8 @@ import { VideoToolbar } from './VideoToolbar'
 import config from './config'
 
 import nunjucks from '../helpers/nunjucks'
+
+import loadGrapes from '../helpers/load-grapes'
 
 import {
   Container,
@@ -38,7 +35,8 @@ class Builder extends React.Component {
     this.state = {
       originalTemplate: null,
       selectedTemplate: props.defaultTemplate,
-      owner: props.templateData.user
+      owner: props.templateData.user,
+      isLoading: true
     }
 
     this.keyframe = 0
@@ -54,8 +52,15 @@ class Builder extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.editor = grapesjs.init({
+  async componentDidMount() {
+    const { Grapesjs } = await loadGrapes()
+    await import('./AssetManager')
+
+    this.setState({
+      isLoading: false
+    })
+
+    this.editor = Grapesjs.init({
       ...config,
       avoidInlineStyle: false,
       keepUnusedStyles: true,
@@ -301,6 +306,11 @@ class Builder extends React.Component {
   }
 
   render() {
+    const { isLoading } = this.state
+
+    if (isLoading)
+      return null
+
     const isSocialMedium = this.IsSocialMedium
 
     return (
