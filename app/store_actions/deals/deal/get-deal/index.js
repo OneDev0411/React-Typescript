@@ -9,6 +9,8 @@ export function getDeal(deal_id) {
       const deal = await Deal.getById(deal_id)
 
       dispatch(updateDeal(deal))
+
+      return deal
     } catch (e) {
       dispatch(
         notify({
