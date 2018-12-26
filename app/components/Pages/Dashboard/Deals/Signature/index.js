@@ -59,10 +59,7 @@ class Signature extends React.Component {
       // reset recipients
       this.setState({ isSending: false, isFormOpen: false, formData: null })
 
-      window.open(
-        Deal.getEnvelopeEditLink(envelope.id, this.props.user.access_token),
-        '_blank'
-      )
+      this.openDocusign(envelope)
     } catch (e) {
       console.log(e)
 
@@ -74,6 +71,19 @@ class Signature extends React.Component {
         formData: isDocusignError ? values : null
       })
     }
+  }
+
+  openDocusign = envelope => {
+    const url = Deal.getEnvelopeEditLink(
+      envelope.id,
+      this.props.user.access_token
+    )
+
+    const link = document.createElement('a')
+
+    link.href = url
+    link.target = '_blank'
+    link.click()
   }
 
   render() {
