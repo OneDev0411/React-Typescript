@@ -26,7 +26,7 @@ class MlsConnect extends React.Component {
       isDrawerOpen: !state.isDrawerOpen
     }))
 
-  handleSelectListing = async listing => {
+  handleSelectListing = async listings => {
     const { deal } = this.props
 
     this.setState({
@@ -35,7 +35,7 @@ class MlsConnect extends React.Component {
     })
 
     try {
-      await this.props.updateListing(deal.id, listing.id)
+      await this.props.updateListing(deal.id, listings[0].id)
     } catch (e) {
       console.log(e)
     }
@@ -83,7 +83,7 @@ class MlsConnect extends React.Component {
           title="Connect Deal to MLS"
           isOpen={this.state.isDrawerOpen}
           onClose={this.toggleDrawer}
-          onSelectListing={this.handleSelectListing}
+          onSelectListings={this.handleSelectListing}
         />
       </Fragment>
     )
