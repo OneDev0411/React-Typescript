@@ -4,7 +4,6 @@ import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 
 import { createEnvelope } from 'actions/deals'
-import { confirmation } from 'actions/confirmation'
 
 import Deal from 'models/Deal'
 
@@ -60,12 +59,10 @@ class Signature extends React.Component {
       // reset recipients
       this.setState({ isSending: false, isFormOpen: false, formData: null })
 
-      this.props.confirmation({
-        description: 'Review and send this envelope?',
-        confirmLabel: 'Yes',
-        cancelLabel: 'No, Save Draft',
-        onConfirm: () => this.openEditWindow(envelope.id)
-      })
+      window.open(
+        Deal.getEnvelopeEditLink(envelope.id, this.props.user.access_token),
+        '_blank'
+      )
     } catch (e) {
       console.log(e)
 
@@ -77,13 +74,6 @@ class Signature extends React.Component {
         formData: isDocusignError ? values : null
       })
     }
-  }
-
-  openEditWindow = envelope_id => {
-    window.open(
-      Deal.getEnvelopeEditLink(envelope_id, this.props.user.access_token),
-      '_blank'
-    )
   }
 
   render() {
@@ -129,7 +119,6 @@ export default connect(
   mapStateToProps,
   {
     createEnvelope,
-    notify,
-    confirmation
+    notify
   }
 )(Signature)
