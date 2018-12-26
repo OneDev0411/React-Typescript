@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import IconKeyboardArrowUp from 'components/SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
-import Spinner from 'components/Spinner'
+import Loader from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 import {
   SearchContainer,
@@ -20,7 +20,7 @@ function getIcon(isMenuOpen, isSaving) {
   }
 
   if (isSaving) {
-    Icon = <Spinner />
+    Icon = <Loader style={{ width: '3rem', height: 'auto' }} />
   }
 
   return Icon
@@ -42,6 +42,7 @@ export const SearchInput = ({
   <SearchContainer
     isBlock
     appearance="outline"
+    type="button"
     onClick={onClick}
     disabled={disabled}
   >

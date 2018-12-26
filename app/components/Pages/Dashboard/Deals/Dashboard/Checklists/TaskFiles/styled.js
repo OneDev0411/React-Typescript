@@ -19,9 +19,7 @@ export const FileContainer = styled.div`
   width: 100%;
 
   :hover {
-    color: #003bdf;
     background-color: #f7f7f7;
-    cursor: pointer;
   }
 
   ${props =>

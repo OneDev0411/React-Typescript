@@ -1,15 +1,19 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
 import UserAvatar from 'components/Avatar'
 import { deleteRole } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
-import { roleName, getLegalFullName } from '../../utils/roles'
-import RoleCrmIntegration from './CrmIntegration'
 
 import IconButton from 'components/Button/IconButton'
+
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+
+import { roleName, getLegalFullName } from '../../utils/roles'
+import { getAvatarTitle } from '../../utils/get-avatar-title'
+import RoleCrmIntegration from './CrmIntegration'
 
 import AddRole from './AddRole'
 
@@ -31,14 +35,6 @@ class Roles extends React.Component {
     isRoleFormOpen: false
   }
 
-  getAvatarTitle = role => {
-    const { user, legal_first_name, legal_last_name, company_title } = role
-    const fullName =
-      `${legal_first_name} ${legal_last_name}`.trim() || company_title
-
-    return fullName || (user && user.display_name)
-  }
-
   canRemoveRole = role => {
     const { deal_type } = this.props.deal
 
@@ -50,10 +46,6 @@ class Roles extends React.Component {
     }
 
     return true
-  }
-
-  canAddRole = role => {
-    // todo
   }
 
   onRequestRemoveRole = (e, user) => {
@@ -172,7 +164,7 @@ class Roles extends React.Component {
                   <UserAvatar
                     size={40}
                     color="#000000"
-                    title={this.getAvatarTitle(role)}
+                    title={getAvatarTitle(role)}
                     image={user ? user.profile_image_url : null}
                   />
                 </RoleAvatar>
@@ -217,14 +209,24 @@ class Roles extends React.Component {
           />
         )}
 
-        <AddRole
-          deal={deal}
-          allowedRoles={this.AllowedRoles}
-          onCreateRole={this.props.onCreateRole}
-        />
+        {this.props.disableAddRole !== true && (
+          <AddRole
+            deal={deal}
+            allowedRoles={this.AllowedRoles}
+            onCreateRole={this.props.onCreateRole}
+          />
+        )}
       </RolesContainer>
     )
   }
+}
+
+Roles.propsTypes = {
+  disableAddRole: PropTypes.bool
+}
+
+Roles.defaultProps = {
+  disableAddRole: false
 }
 
 export default connect(

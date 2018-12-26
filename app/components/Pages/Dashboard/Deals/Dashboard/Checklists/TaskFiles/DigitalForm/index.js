@@ -2,6 +2,8 @@ import React, { Fragment } from 'react'
 
 import LinkButton from 'components/Button/LinkButton'
 
+import GetSignature from '../../../../Signature'
+
 import {
   FileContainer,
   FileRow,
@@ -62,6 +64,18 @@ export default function DigitalForm({ deal, task, isBackOffice }) {
           >
             Edit
           </LinkButton>
+
+          {task.submission && (
+            <GetSignature
+              deal={deal}
+              defaultAttachments={[
+                {
+                  type: 'form',
+                  task
+                }
+              ]}
+            />
+          )}
         </FileActions>
       </FileRow>
     </FileContainer>

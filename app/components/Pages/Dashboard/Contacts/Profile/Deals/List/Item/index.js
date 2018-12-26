@@ -67,7 +67,6 @@ class Item extends React.Component {
   }
 
   compareTwoPhoneNumber = async (phone1, phone2) => {
-    console.log('>', phone1, phone2)
     if (phone1 === phone2) {
       return true
     }

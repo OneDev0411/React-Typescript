@@ -103,3 +103,21 @@ export default (state = null, action) => {
 }
 
 export const selectTaskById = (state, id) => (state && id ? state[id] : null)
+
+export const selectDealTasks = (deal, checklists, state) => {
+  const list = []
+
+  if (!deal.checklists) {
+    return list
+  }
+
+  deal.checklists.forEach(checklistId => {
+    const checklist = checklists[checklistId]
+
+    if (checklist.tasks && !checklist.is_terminated) {
+      checklist.tasks.forEach(taskId => list.push(state[taskId]))
+    }
+  })
+
+  return list
+}

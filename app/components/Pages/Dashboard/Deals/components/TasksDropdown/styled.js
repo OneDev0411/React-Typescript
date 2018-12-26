@@ -21,6 +21,12 @@ export const DropDownMenu = styled.div`
   max-height: 250px;
   border: 1px solid #eee;
   min-width: 375px;
+
+  ${props =>
+    props.pullRight &&
+    `
+    right: 0;
+  `};
 `
 
 export const ChecklistTitle = styled.div`

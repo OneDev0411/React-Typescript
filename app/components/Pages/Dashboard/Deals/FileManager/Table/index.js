@@ -207,7 +207,7 @@ class FileManager extends React.Component {
     if (column.id !== 'name') {
       return {
         style: {
-          'align-self': 'center'
+          alignSelf: 'center'
         }
       }
     }
