@@ -3,11 +3,15 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { browserHistory } from 'react-router'
 
+import { getDeal } from 'actions/deals'
+
 import { selectDealById } from 'reducers/deals/list'
 import { selectTaskById } from 'reducers/deals/tasks'
 
 import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
 import { isBackOffice } from 'utils/user-teams'
+
+import Spinner from 'components/Spinner'
 
 import { getFileById } from '../utils/files/get-file-by-id'
 import { getTaskForm } from '../utils/get-task-form'
@@ -23,8 +27,28 @@ import { LayoutContainer, PageContainer } from './styled'
 
 class FileViewer extends React.Component {
   state = {
+    deal: this.props.deal,
     isFactsheetOpen: true,
     isCommentsOpen: false
+  }
+
+  componentDidMount() {
+    this.init()
+  }
+
+  init = async () => {
+    if (this.state.deal) {
+      return false
+    }
+
+    try {
+      // fetch deal by id
+      const deal = await this.props.getDeal(this.props.params.id)
+
+      this.setState({ deal })
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   toggleShowFactsheet = () =>
@@ -68,7 +92,7 @@ class FileViewer extends React.Component {
 
   get AttachmentFile() {
     const file = getFileById(this.props.params.entityId, {
-      deal: this.props.deal,
+      deal: this.state.deal,
       tasks: this.props.tasks,
       taskId: this.props.params.taskId
     })
@@ -137,7 +161,7 @@ class FileViewer extends React.Component {
   }
 
   get DigitalForm() {
-    return getTaskForm(this.props.deal, this.props.task)
+    return getTaskForm(this.state.deal, this.props.task)
   }
 
   get EntityType() {
@@ -145,9 +169,13 @@ class FileViewer extends React.Component {
   }
 
   handleBackButton = () =>
-    browserHistory.push(`/dashboard/deals/${this.props.deal.id}`)
+    browserHistory.push(`/dashboard/deals/${this.state.deal.id}`)
 
   render() {
+    if (!this.state.deal) {
+      return <Spinner />
+    }
+
     const file = this.getFile()
     const isEnvelopeView = this.EntityType === 'envelope'
 
@@ -168,7 +196,7 @@ class FileViewer extends React.Component {
           {!isEnvelopeView && (
             <FactsheetSideMenu
               isFactsheetOpen={this.state.isFactsheetOpen}
-              deal={this.props.deal}
+              deal={this.state.deal}
               isBackOffice={this.props.isBackOffice}
             />
           )}
@@ -177,7 +205,7 @@ class FileViewer extends React.Component {
 
           {isEnvelopeView && (
             <EnvelopeSideMenu
-              deal={this.props.deal}
+              deal={this.state.deal}
               file={file}
               envelope={this.Envelope}
             />
@@ -185,7 +213,7 @@ class FileViewer extends React.Component {
         </PageContainer>
 
         <TaskView
-          deal={this.props.deal}
+          deal={this.state.deal}
           task={this.props.task}
           isOpen={this.state.isCommentsOpen}
           isBackOffice={this.props.isBackOffice}
@@ -208,5 +236,5 @@ function mapStateToProps({ deals, user }, props) {
 
 export default connect(
   mapStateToProps,
-  { notify }
+  { notify, getDeal }
 )(FileViewer)
