@@ -11,7 +11,7 @@ import moment from 'moment'
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
 
-const Expires = moment().utc().add('1', 'month').format('ddd, D MMM YYYY H:mm:ss [GMT]')
+const Expires = moment().utc().add('1', 'month').toDate()
 
 function postcss() {
   return [
