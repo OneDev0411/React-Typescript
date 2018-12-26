@@ -7,8 +7,15 @@ import CompressionPlugin from 'compression-webpack-plugin'
 import ChangeExtensionPlugin from 'change-extension-plugin'
 import S3Plugin from 'webpack-s3-plugin'
 
+import moment from 'moment'
+
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
+
+const Expires = moment()
+  .utc()
+  .add('1', 'month')
+  .toDate()
 
 function postcss() {
   return [
@@ -81,6 +88,7 @@ webpackConfig.plugins.push(
     },
     s3UploadOptions: {
       Bucket: process.env.ASSETS_BUCKET,
+      Expires,
       ContentEncoding(fileName) {
         if (/\.gz/.test(fileName)) {
           return 'gzip'

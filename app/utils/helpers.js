@@ -36,9 +36,9 @@ export function getNameInitials(name) {
     .substring(0, 3)
 }
 
-async function getPhoneNumberUtil() {
+export async function getPhoneNumberUtil() {
   const {
-    PhoneNumberUtil
+    PhoneNumberUtil,
   } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
 
   return PhoneNumberUtil.getInstance()
@@ -189,12 +189,23 @@ export async function isValidPhoneNumber(phone_number) {
 
   if (
     phone_number.trim() &&
-    phoneUtil.isValidNumber(phoneUtil.parse(phone_number))
+    phoneUtil.isValidNumber(phoneUtil.parse(phone_number, 'US'))
   ) {
     return true
   }
 
   return false
+}
+
+export async function formatPhoneNumber(input) {
+  const phoneUtil = await getPhoneNumberUtil()
+  const parsed = phoneUtil.parse(input, 'US')
+
+  const {
+    PhoneNumberFormat
+  } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
+
+  return phoneUtil.format(parsed, PhoneNumberFormat.NATIONAL)
 }
 
 export function imageExists(url) {

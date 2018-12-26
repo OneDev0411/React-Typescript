@@ -14,6 +14,8 @@ import { selectDefinitionByName } from '../../../../../../../../reducers/contact
 
 import { Container, Price, Status, Address, Role } from './styled'
 
+import { formatPhoneNumber } from '../../../../../../../../utils/helpers'
+
 function getPhoto(deal) {
   return Deal.getField(deal, 'photo') || '/static/images/deals/home.png'
 }
@@ -69,21 +71,12 @@ class Item extends React.Component {
       return true
     }
 
-    const {
-      PhoneNumberUtil
-    } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
-    const phoneUtil = PhoneNumberUtil.getInstance()
+    const phoneNumber1 = await formatPhoneNumber(phone1)
+    const phoneNumber2 = await formatPhoneNumber(phone2)
 
-    try {
-      let phoneNumber1 = phoneUtil.parse(phone1, 'US')
-      let phoneNumber2 = phoneUtil.parse(phone2, 'US')
-
-      return (
-        phoneNumber1.getNationalNumber() === phoneNumber2.getNationalNumber()
-      )
-    } catch (error) {
-      return false
-    }
+    return (
+      phoneNumber1 === phoneNumber2
+    )
   }
 
   render() {
