@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { addNotification as notify } from 'reapop'
-import { parsePhoneNumber } from 'libphonenumber-js'
+import { isValidPhoneNumber } from 'utils/helpers'
 
 import { formatPhoneNumber } from 'utils/format'
 import { shareInstance } from 'models/instant-marketing/instance-share'
@@ -15,41 +15,43 @@ class SendSMS extends React.Component {
 
     this.state = {
       isSending: false,
-      isValidPhone: this.isValidPhone(this.props.user.phone_number),
+      isValidPhone: null,
       phone: formatPhoneNumber(this.props.user.phone_number)
     }
   }
 
-  handleChangePhone = e => {
+  handleChangePhone = async e => {
     const phone = e.target.value
+
+    const isValidPhone = await isValidPhoneNumber(phone)
 
     this.setState({
       phone,
-      isValidPhone: this.isValidPhone(phone)
+      isValidPhone
     })
   }
 
-  isValidPhone = phone => {
-    try {
-      return parsePhoneNumber(phone, 'US').isValid()
-    } catch (e) {
-      return false
-    }
+  componentDidMount = async props => {
+    const { user } = this.props
+
+    const isValidPhone = await isValidPhoneNumber(user.phone_number)
+
+    this.setState({isValidPhone})
   }
 
   handleSend = async () => {
-    const phone = parsePhoneNumber(this.state.phone, 'US')
+    const { phone } = this.state
 
     this.setState({
       isSending: true
     })
 
     try {
-      console.log(`Sending SMS to ${phone.number}`)
+      console.log(`Sending SMS to ${phone}`)
 
       await shareInstance(
         this.props.instance.id,
-        [phone.number],
+        [phone],
         this.ShareText
       )
 
