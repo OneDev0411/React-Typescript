@@ -19,7 +19,7 @@ import { DropDownContainer, DropDownMenu } from './styled'
 class DropDownTasks extends React.Component {
   state = {
     isMenuOpen: false,
-    isCreatingNewTask: false,
+    isSaving: false,
     filterValue: null,
     showCreateTaskForm: false,
     shouldNotifyOffice: true
@@ -49,17 +49,26 @@ class DropDownTasks extends React.Component {
   /**
    * @param {UUID} id - the selected task id
    */
-  onSelectTask = id => {
+  onSelectTask = async id => {
     const { tasks, onSelectTask } = this.props
     const { shouldNotifyOffice } = this.state
     const task = id && tasks[id]
 
-    onSelectTask(id, shouldNotifyOffice)
+    if (this.state.isSaving) {
+      return false
+    }
 
     // close menu
     this.toggleMenuState()
 
     this.setState({
+      isSaving: true
+    })
+
+    await onSelectTask(id, shouldNotifyOffice)
+
+    this.setState({
+      isSaving: false,
       filterValue: task ? task.title : null,
       shouldNotifyOffice: true
     })
@@ -113,18 +122,18 @@ class DropDownTasks extends React.Component {
    * handle when notify office changes
    */
   onChangeNotifyOffice = () =>
-    this.setState({
-      shouldNotifyOffice: !this.state.shouldNotifyOffice
-    })
+    this.setState(state => ({
+      shouldNotifyOffice: !state.shouldNotifyOffice
+    }))
 
   /**
    * open/closes the dropdown
    */
   toggleMenuState = () =>
-    this.setState({
-      isMenuOpen: !this.state.isMenuOpen,
+    this.setState(state => ({
+      isMenuOpen: !state.isMenuOpen,
       filterValue: null
-    })
+    }))
 
   /**
    * creates a new task for given checklist
@@ -136,7 +145,7 @@ class DropDownTasks extends React.Component {
     const { deal, notify, createFormTask, onSelectTask } = this.props
 
     this.setState({
-      isCreatingNewTask: true
+      isSaving: true
     })
 
     // create task
@@ -145,7 +154,7 @@ class DropDownTasks extends React.Component {
 
       this.setState({
         showCreateTaskForm: false,
-        isCreatingNewTask: false,
+        isSaving: false,
         isMenuOpen: false
       })
 
@@ -161,7 +170,7 @@ class DropDownTasks extends React.Component {
       })
     } catch (e) {
       this.setState({
-        isCreatingNewTask: false
+        isSaving: false
       })
 
       notify({
@@ -210,7 +219,7 @@ class DropDownTasks extends React.Component {
       onSelectTask(task.id)
     } catch (e) {
       this.setState({
-        isCreatingNewTask: false
+        isSaving: false
       })
 
       notify({
@@ -223,7 +232,7 @@ class DropDownTasks extends React.Component {
   render() {
     const {
       isMenuOpen,
-      isCreatingNewTask,
+      isSaving,
       showCreateTaskForm,
       filterValue,
       shouldNotifyOffice
@@ -256,7 +265,7 @@ class DropDownTasks extends React.Component {
               <SearchInput
                 disabled={disabled}
                 getInputProps={getInputProps}
-                isSaving={isCreatingNewTask}
+                isSaving={isSaving}
                 isMenuOpen={isMenuOpen}
                 searchable={searchable}
                 selectedTask={selectedTask}
@@ -271,7 +280,7 @@ class DropDownTasks extends React.Component {
               />
 
               {isOpen && (
-                <DropDownMenu>
+                <DropDownMenu pullRight={this.props.pullRight}>
                   {showStashOption && (
                     <ChecklistStash
                       onSelect={e => {
@@ -318,7 +327,7 @@ class DropDownTasks extends React.Component {
 
                           {showCreateTaskForm === chId ? (
                             <CreateTaskForm
-                              isSaving={isCreatingNewTask}
+                              isSaving={isSaving}
                               showNotifyOption={showNotifyOption}
                               checklist={checklists[chId]}
                               onCancel={this.onCancelNewTask}
