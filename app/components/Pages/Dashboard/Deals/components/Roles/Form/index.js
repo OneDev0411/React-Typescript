@@ -8,6 +8,8 @@ import { ROLE_NAMES } from '../../../utils/roles'
 
 import { TYPE_PERSON, TYPE_COMPANY } from './FormComponents/TypeInput'
 
+import { isValidPhoneNumber } from '../../../../../../../utils/helpers'
+
 export class RoleFormModal extends React.Component {
   getInitialValues = () => {
     if (!this.props.isOpen) {
@@ -311,16 +313,7 @@ export class RoleFormModal extends React.Component {
       return true
     }
 
-    const {
-      PhoneNumberUtil
-    } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
-    const phoneUtil = PhoneNumberUtil.getInstance()
-
-    try {
-      return phoneUtil.isValidNumber(phoneUtil.parse(phoneNumber, 'US'))
-    } catch (e) {
-      return false
-    }
+    return await isValidPhoneNumber(phoneNumber)
   }
 
   /**
