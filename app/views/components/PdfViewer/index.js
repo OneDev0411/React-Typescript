@@ -219,7 +219,7 @@ export class PdfViewer extends React.Component {
     }
 
     return (
-      <Container innerRef={ref => (this.pdfContainer = ref)}>
+      <Container ref={ref => (this.pdfContainer = ref)}>
         {Array.apply(null, { length: this.state.document.numPages }).map(
           (v, i) => (
             <Page

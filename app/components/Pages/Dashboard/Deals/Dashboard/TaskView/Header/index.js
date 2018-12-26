@@ -96,7 +96,7 @@ class Header extends React.Component {
           {this.state.showEditName && (
             <Input
               autoFocus
-              innerRef={ref => (this.nameInput = ref)}
+              ref={ref => (this.nameInput = ref)}
               defaultValue={this.props.task.title}
               onBlur={this.handleSaveName}
               onKeyPress={this.onInputKeyPress}

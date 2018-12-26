@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Spinner from 'components/Spinner'
+
 import { Container, PageNumber } from './styled'
 
 export class Page extends React.Component {
@@ -91,7 +92,7 @@ export class Page extends React.Component {
   render() {
     return (
       <Container
-        innerRef={ref => (this.pageContainer = ref)}
+        ref={ref => (this.pageContainer = ref)}
         id={`page-${this.props.pageNumber}`}
         isLoading={this.state.isLoading}
         data-page={this.props.pageNumber}
