@@ -66,6 +66,7 @@ class Folder extends React.Component {
           showStashOption={this.Task !== null}
           subTitle={this.ChecklistName}
           searchable
+          pullRight
           showNotifyOption
           deal={this.props.deal}
           onSelectTask={(taskId, notifyOffice) =>
