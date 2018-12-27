@@ -7,6 +7,8 @@ import InstantMarketing from 'components/InstantMarketing'
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
 import { getTemplates } from 'models/instant-marketing'
+import { loadTemplateHtml } from 'models/instant-marketing/load-template'
+
 import {
   getTask,
   updateTask,
@@ -34,8 +36,6 @@ import { AssociationsList, ReminderField } from '../../final-form-fields'
 import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
 import { Section } from '../../tour/TourDrawer/components/Section'
-
-
 
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
@@ -139,7 +139,11 @@ export class OpenHouseDrawer extends React.Component {
       const list = await getTemplates(['CrmOpenHouse'])
       const templateItem = list[0]
 
-      const template = nunjucks.renderString(templateItem.template, {
+      const templateHtml = await loadTemplateHtml(
+        `${templateItem.url}/index.html`
+      )
+
+      const template = nunjucks.renderString(templateHtml, {
         user: this.props.user,
         listing: this.state.listing
       })
@@ -371,14 +375,16 @@ export class OpenHouseDrawer extends React.Component {
                           Preview
                         </ActionButton>
 
-                        <ActionButton
-                          type="button"
-                          disabled={isDisabled}
-                          onClick={this.handleSubmit}
-                          style={{ marginLeft: '0.5em' }}
-                        >
-                          {isDisabled ? 'Saving...' : 'Save'}
-                        </ActionButton>
+                        {this.state.template && (
+                          <ActionButton
+                            type="button"
+                            disabled={isDisabled}
+                            onClick={this.handleSubmit}
+                            style={{ marginLeft: '0.5em' }}
+                          >
+                            {isDisabled ? 'Saving...' : 'Save'}
+                          </ActionButton>
+                        )}
                       </Flex>
                     </Footer>
                   </div>

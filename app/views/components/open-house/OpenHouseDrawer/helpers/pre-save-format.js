@@ -24,6 +24,7 @@ export async function preSaveFormat(values, originalValues, deal, template) {
     title,
     due_date: dueDateTimestamp / 1000,
     task_type,
+    metadata: { template },
     assignees: assignees.map(a => a.id),
     status:
       dueDateTimestamp <= new Date().getTime() ? 'DONE' : status || 'PENDING'
