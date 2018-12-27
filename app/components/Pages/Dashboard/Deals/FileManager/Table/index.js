@@ -11,14 +11,11 @@ import { confirmation } from 'actions/confirmation'
 import { getDealFiles } from 'models/Deal/helpers/get-deal-files'
 import { getDealEnvelopeFiles } from 'models/Deal/helpers/get-deal-envelope-files'
 
-import {
-  // getDeal,
-  // displaySplitter,
-  syncDeleteFile
-} from 'actions/deals'
+import { syncDeleteFile } from 'actions/deals'
 
 import { SearchFiles } from '../Search'
 import UploadManager from '../../UploadManager'
+import PdfSplitter from '../../PdfSplitter'
 
 import { FileName } from './columns/Name'
 import Folder from './columns/Folder'
@@ -27,7 +24,8 @@ import OptionsMenu from './columns/OptionsMenu'
 class FileManager extends React.Component {
   state = {
     filter: '',
-    isDeleting: []
+    isDeleting: [],
+    selectedDocuments: null
   }
 
   actions = [
@@ -113,18 +111,12 @@ class FileManager extends React.Component {
 
   handleChangeSearchCriteria = filter => this.setState({ filter })
 
-  splitSingleFile = file => {
-    const files = [
-      {
-        id: file.id,
-        file: { url: file.url },
-        properties: { name: file.name }
-      }
-    ]
+  handleClosePdfSplitter = () => this.setState({ selectedDocuments: null })
 
-    // todo
-    // this.props.displaySplitter(files)
-  }
+  splitSingleFile = file =>
+    this.setState({
+      selectedDocuments: [file]
+    })
 
   splitMultipleFiles = (e, params) => {
     const files = _.chain(this.Rows)
@@ -262,6 +254,13 @@ class FileManager extends React.Component {
             getTrProps={this.getTrProps}
           />
         </UploadManager>
+
+        {this.state.selectedDocuments && (
+          <PdfSplitter
+            files={this.state.selectedDocuments}
+            onClose={this.handleClosePdfSplitter}
+          />
+        )}
       </Fragment>
     )
   }
