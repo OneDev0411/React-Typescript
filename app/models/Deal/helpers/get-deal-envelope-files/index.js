@@ -3,7 +3,7 @@ import store from '../../../../stores'
 import { getDealFiles } from '../get-deal-files'
 
 function getFile(deal, doc, envelope) {
-  const files = getDealFiles(deal, doc)
+  const files = getDealFiles(deal)
 
   const { deals } = store.getState()
   const { checklists, tasks } = deals
@@ -57,5 +57,10 @@ export function getDealEnvelopeFiles(deal) {
     })
   })
 
-  return files
+  /* there is a critical bug that breaks some envelopes when user 
+  * tries to move documents of the envelope into the stash or another 
+  * task. this "filter" temporary fiexs the bug until Emil find a 
+  * workaround for that
+  */
+  return files.filter(file => !!file)
 }
