@@ -30,6 +30,7 @@ export default class OptionsMenu extends React.Component {
     return (
       <BasicDropdown
         pullTo="right"
+        fullHeight
         upsideDown={this.props.totalRows - this.props.rowId === 0}
         style={{ textAlign: 'right' }}
         buttonRenderer={props => <VerticalDotsIcon {...props} />}
