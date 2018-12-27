@@ -75,7 +75,7 @@ class Compose extends React.Component {
     let contacts = []
 
     if (this.hasContactsPermission) {
-      await this.searchInContacts(this.criteria.toLowerCase())
+      contacts = await this.searchInContacts(this.criteria.toLowerCase())
     }
 
     this.createListView(rooms, contacts)
@@ -112,7 +112,9 @@ class Compose extends React.Component {
       .filter(entry => {
         if (!existingUserIds[entry.id]) {
           return true
-        } else if (!filtered) {
+        }
+
+        if (!filtered) {
           filtered = true
         }
       })
@@ -192,14 +194,18 @@ class Compose extends React.Component {
     let result = []
     const { attributeDefs } = this.props
 
+    q = q.toLowerCase()
+
     const response = await searchContacts(this.criteria.toLowerCase())
     const contacts = normalizeContactAttribute(response)
 
     contacts.forEach(contact => {
+      const { display_name } = contact
       const avatar = getContactAvatar(
         contact,
         selectDefinitionByName(attributeDefs, 'profile_image_url').id
       )
+      const profile_image_url = (avatar && avatar.text) || ''
       // search in contact's users
       const users = getContactUsers(contact)
         .filter(user => user.display_name.toLowerCase().includes(q))
@@ -214,15 +220,15 @@ class Compose extends React.Component {
           .map(email =>
             this.createListItem('email', {
               id: email.id,
+              display_name,
               email: email.text,
-              display_name: contact.summary.display_name,
-              profile_image_url: (avatar && avatar.text) || ''
+              profile_image_url
             })
           )
       }
 
       // search in contact's phone
-      const phoneAttDef = selectDefinitionByName(attributeDefs, 'email')
+      const phoneAttDef = selectDefinitionByName(attributeDefs, 'phone_number')
 
       if (phoneAttDef) {
         phones = getContactAttribute(contact, phoneAttDef)
@@ -230,11 +236,37 @@ class Compose extends React.Component {
           .map(phone =>
             this.createListItem('phone_number', {
               id: phone.id,
+              display_name,
               phone_number: phone.text,
-              display_name: contact.summary.display_name,
-              profile_image_url: (avatar && avatar.text) || ''
+              profile_image_url
             })
           )
+      }
+
+      if (
+        emails.length === 0 &&
+        phones.length === 0 &&
+        contact.display_name.toLowerCase().includes(q)
+      ) {
+        if (contact.summary.email) {
+          emails.push(
+            this.createListItem('email', {
+              id: contact.id,
+              display_name,
+              email: contact.summary.email,
+              profile_image_url
+            })
+          )
+        } else if (contact.summary.phone_number) {
+          phones.push(
+            this.createListItem('phone_number', {
+              id: contact.id,
+              display_name,
+              phone_number: contact.summary.phone_number,
+              profile_image_url
+            })
+          )
+        }
       }
 
       result = result.concat(users, emails, phones)
