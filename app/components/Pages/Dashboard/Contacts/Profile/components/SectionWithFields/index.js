@@ -111,13 +111,16 @@ class SectionWithFields extends React.Component {
   }
 
   getSectionFields = () => {
-    const { isPartner } = this.props
+    const { section, isPartner } = this.props
     const orderedFields = orderFields(
       [...this.props.fields, ...this.getEmptyFields()],
       this.props.fieldsOrder
     )
 
-    if (orderedFields.every(f => !f[f.attribute_def.data_type])) {
+    if (
+      section !== 'Dates' &&
+      orderedFields.every(f => !f[f.attribute_def.data_type])
+    ) {
       return null
     }
 
@@ -126,7 +129,7 @@ class SectionWithFields extends React.Component {
       .map((field, index) => {
         const { attribute_def } = field
         let value = field[attribute_def.data_type]
-        let key = `${this.props.section}_field_${index}`
+        let key = `${section}_field_${index}`
 
         if (isPartner) {
           key = `partner_${key}`
