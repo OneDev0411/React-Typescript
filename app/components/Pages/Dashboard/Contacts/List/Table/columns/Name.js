@@ -103,26 +103,27 @@ const ContactsListName = ({ contact, attributeDefs }) => {
         >
           {name}
         </Link>
-        {contact.partner_name && (
-          <Tooltip caption="Spouse/Partner">
-            <Flex alignCenter>
-              <PartnerIcon
-                style={{ width: '1rem', height: '1rem', fill: grey.A550 }}
-              />
-              <span
-                style={{
-                  ...ellipsis,
-                  width: 'calc(100% - 1.24rem)',
-                  marginLeft: '0.25rem',
-                  color: grey.A550
-                }}
-                className="hover-color--black"
-              >
-                {contact.partner_name}
-              </span>
-            </Flex>
-          </Tooltip>
-        )}
+        {typeof contact.partner_name === 'string' &&
+          contact.partner_name.trim().length > 0 && (
+            <Tooltip caption="Spouse/Partner">
+              <Flex alignCenter>
+                <PartnerIcon
+                  style={{ width: '1rem', height: '1rem', fill: grey.A550 }}
+                />
+                <span
+                  style={{
+                    ...ellipsis,
+                    width: 'calc(100% - 1.24rem)',
+                    marginLeft: '0.25rem',
+                    color: grey.A550
+                  }}
+                  className="hover-color--black"
+                >
+                  {contact.partner_name}
+                </span>
+              </Flex>
+            </Tooltip>
+          )}
       </Flex>
     </Flex>
   )
