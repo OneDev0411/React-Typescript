@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import { primary } from 'views/utils/colors'
+
 export const PageNumber = styled.div`
   font-size: 0.875rem;
   margin-top: 0.5rem;
@@ -23,12 +25,17 @@ export const Container = styled.div`
     `};
   }
 
-  .sk-circle {
-    margin: 0 !important;
-    padding: 0 !important;
+  svg {
     position: absolute;
-    left: 50%;
-    top: 50%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+
+    top: 45%;
+    transform: translateY(-50%);
+
+    fill: ${primary};
     z-index: 1;
   }
 

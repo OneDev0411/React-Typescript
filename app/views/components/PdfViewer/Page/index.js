@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Spinner from 'components/Spinner'
+import Spinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 import { Container, PageNumber } from './styled'
 
@@ -27,9 +27,9 @@ export class Page extends React.Component {
   }
 
   getScale(isVisible) {
-    const scale = window.devicePixelRatio * 1.5
+    const quality = this.props.quailtyScale || window.devicePixelRatio * 1.5
 
-    return isVisible ? scale : 0.2
+    return isVisible ? quality : 0.01
   }
 
   renderPage = async (isVisible = false) => {
@@ -92,8 +92,9 @@ export class Page extends React.Component {
   render() {
     return (
       <Container
-        ref={ref => (this.pageContainer = ref)}
         id={`page-${this.props.pageNumber}`}
+        ref={ref => (this.pageContainer = ref)}
+        style={this.props.pageStyle}
         isLoading={this.state.isLoading}
         data-page={this.props.pageNumber}
       >
