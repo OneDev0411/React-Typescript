@@ -23,7 +23,8 @@ import {
   CheckboxField,
   AssigneesField,
   AssociationsList,
-  ReminderField
+  ReminderField,
+  WhenFieldChanges
 } from '../final-form-fields'
 
 import Tooltip from '../tooltip'
@@ -234,7 +235,9 @@ export class EventDrawer extends Component {
               render={formProps => {
                 const { values } = formProps
 
-                // console.log(values)
+                const isDone = values.status === 'DONE'
+                const isPastDate =
+                  new Date(values.dueDate).getTime() < new Date().getTime() - 1
 
                 return (
                   <React.Fragment>
@@ -242,6 +245,21 @@ export class EventDrawer extends Component {
                       onSubmit={formProps.handleSubmit}
                       id="event-drawer-form"
                     >
+                      {!this.isNew && (
+                        <WhenFieldChanges
+                          set="status"
+                          watch="dueDate"
+                          setter={onChange => {
+                            if (isPastDate) {
+                              if (!isDone) {
+                                onChange('DONE')
+                              }
+                            } else if (isDone) {
+                              onChange('PENDING')
+                            }
+                          }}
+                        />
+                      )}
                       <Flex style={{ marginBottom: '1rem' }}>
                         {this.isNew ? (
                           <Title fullWidth />
@@ -271,9 +289,8 @@ export class EventDrawer extends Component {
                           name="dueDate"
                           selectedDate={values.dueDate}
                         />
-                        {values.status !== 'DONE' && (
-                          <ReminderField dueDate={values.dueDate} />
-                        )}
+
+                        <ReminderField dueDate={values.dueDate} />
                       </FieldContainer>
 
                       <AssigneesField name="assignees" owner={user} />
