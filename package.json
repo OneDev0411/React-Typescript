@@ -149,6 +149,7 @@
     "react-facebook": "^6.0.15",
     "react-final-form": "^4.0.2",
     "react-final-form-arrays": "^2.0.1",
+    "react-final-form-listeners": "^1.0.1",
     "react-ga": "^2.5.3",
     "react-hot-loader": "^4.3.11",
     "react-images": "^0.5.11",
