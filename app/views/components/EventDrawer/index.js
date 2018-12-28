@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
+import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
+
 import {
   getTask,
   updateTask,
@@ -26,7 +28,6 @@ import {
   ReminderField,
   WhenFieldChanges
 } from '../final-form-fields'
-
 import Tooltip from '../tooltip'
 import { AddAssociationButton } from '../AddAssociationButton'
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
@@ -260,6 +261,26 @@ export class EventDrawer extends Component {
                           }}
                         />
                       )}
+                      <WhenFieldChanges
+                        set="reminder"
+                        watch="dueDate"
+                        setter={onChange => {
+                          const items = REMINDER_DROPDOWN_OPTIONS.filter(
+                            ({ value }) =>
+                              value == null ||
+                              value <=
+                                new Date(values.dueDate).getTime() -
+                                  new Date().getTime()
+                          )
+
+                          // 15 Minutes Before
+                          if (items.some(item => item.value === '900000')) {
+                            onChange(REMINDER_DROPDOWN_OPTIONS[3])
+                          } else {
+                            onChange(items[items.length - 1])
+                          }
+                        }}
+                      />
                       <Flex style={{ marginBottom: '1rem' }}>
                         {this.isNew ? (
                           <Title fullWidth />
