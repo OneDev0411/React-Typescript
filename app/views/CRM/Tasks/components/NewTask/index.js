@@ -98,6 +98,10 @@ export default class Task extends Component {
                               new Date().getTime()
                       )
 
+                      if (items.length === 0) {
+                        return
+                      }
+
                       // 15 Minutes Before
                       if (items.some(item => item.value === '900000')) {
                         onChange(REMINDER_DROPDOWN_OPTIONS[3])
