@@ -50,6 +50,18 @@ export class Menu extends React.Component {
       return null
     }
 
+    if (items.length === 1) {
+      return (
+        <TextIconButton
+          appearance="outline"
+          iconLeft={EditIcon}
+          onClick={this.props.onEdit || this.props.onAdd}
+          size="small"
+          text="Update"
+        />
+      )
+    }
+
     return (
       <BasicDropdown
         items={items}
