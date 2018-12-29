@@ -93,6 +93,7 @@ class ContactsList extends React.Component {
         this.order,
         viewAsUsers
       )
+      this.props.getContactsTags(viewAsUsers)
     }
   }
 
