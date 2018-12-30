@@ -1,10 +1,15 @@
-import Socket from '..'
 import store from '../../../stores'
-
-import { getActiveTeamACL, getActiveTeamId } from '../../../utils/user-teams'
-
-import { getDeal } from '../../../store_actions/deals'
+import Deal from '../../../models/Deal'
 import * as actionTypes from '../../../constants/deals'
+import { updateDeal } from '../../../store_actions/deals'
+import {
+  getActiveTeamACL,
+  getActiveTeamId,
+  viewAs,
+  viewAsEveryoneOnTeam
+} from '../../../utils/user-teams'
+
+import Socket from '../index'
 
 export default class DealSocket extends Socket {
   constructor(user) {
@@ -41,6 +46,17 @@ export default class DealSocket extends Socket {
     }
   }
 
+  shouldUpdateDeal(deal) {
+    if (viewAsEveryoneOnTeam(this.user)) {
+      return true
+    }
+
+    const usersFilter = viewAs(this.user)
+    const dealUsers = deal.roles.map(r => r.user.id)
+
+    return usersFilter.some(user => dealUsers.includes(user))
+  }
+
   /**
    * on receive new deal change
    * action: ['Updated, 'Created', 'Deleted']
@@ -72,24 +88,36 @@ export default class DealSocket extends Socket {
    * on update deal
    */
   async onUpdateDeal(dealId) {
-    store.dispatch(getDeal(dealId))
+    const deal = await Deal.getById(dealId)
+
+    if (this.shouldUpdateDeal(deal)) {
+      store.dispatch(updateDeal(deal))
+    }
   }
 
   /**
    * on create deal
    */
-  onCreateDeal(dealId) {
-    store.dispatch(getDeal(dealId))
+  async onCreateDeal(dealId) {
+    const deal = await Deal.getById(dealId)
+
+    if (this.shouldUpdateDeal(deal)) {
+      store.dispatch(updateDeal(deal))
+    }
   }
 
   /**
    * on delete/archive deal
    */
-  onArchiveDeal(dealId) {
-    store.dispatch({
-      type: actionTypes.ARCHIVE_DEAL,
-      deal_id: dealId
-    })
+  async onArchiveDeal(dealId) {
+    const deal = await Deal.getById(dealId)
+
+    if (this.shouldUpdateDeal(deal)) {
+      store.dispatch({
+        type: actionTypes.ARCHIVE_DEAL,
+        deal_id: dealId
+      })
+    }
   }
 
   /**
