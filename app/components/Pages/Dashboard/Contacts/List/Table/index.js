@@ -125,7 +125,12 @@ class ContactsList extends React.Component {
     },
     {
       display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows }) => <CreateEvent selectedRows={selectedRows} />
+      render: ({ selectedRows, resetSelectedRows }) => (
+        <CreateEvent
+          resetSelectedRows={resetSelectedRows}
+          selectedRows={selectedRows}
+        />
+      )
     },
     {
       display: ({ selectedRows }) => selectedRows.length >= 2,

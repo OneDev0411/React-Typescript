@@ -6,6 +6,7 @@ import { normalizeAssociations } from 'views/utils/association-normalizers'
 import ActionButton from 'components/Button/ActionButton'
 import { EventDrawer } from 'components/EventDrawer'
 import { selectContact } from 'reducers/contacts/list'
+import { getContacts } from 'store_actions/contacts'
 
 class CreateEvent extends Component {
   state = {
@@ -22,6 +23,12 @@ class CreateEvent extends Component {
     this.setState({
       showDrawer: false
     })
+  }
+
+  onEventSubmit = () => {
+    this.props.resetSelectedRows()
+    this.props.getContacts()
+    this.closeDrawer()
   }
 
   render() {
@@ -42,7 +49,7 @@ class CreateEvent extends Component {
             user={user}
             defaultAssociation={associations}
             onClose={this.closeDrawer}
-            submitCallback={this.closeDrawer}
+            submitCallback={this.onEventSubmit}
           />
         )}
       </Fragment>
@@ -63,4 +70,7 @@ function mapStateToProps({ user, contacts }, props) {
   }
 }
 
-export default connect(mapStateToProps)(CreateEvent)
+export default connect(
+  mapStateToProps,
+  { getContacts }
+)(CreateEvent)
