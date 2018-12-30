@@ -1,39 +1,20 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import fileSaver from 'file-saver'
 import superagent from 'superagent'
 import { connect } from 'react-redux'
 
 import { getActiveTeamId } from 'utils/user-teams'
 
-import OpenModalButton from './button'
-import Modal from './modal'
-import { SAME_ROW_DOWNLOAD_TYPE } from './constants'
+import ExportButton from './button'
 
 class ExportContacts extends React.Component {
-  state = {
-    isModalOpen: false,
-    downloadType: SAME_ROW_DOWNLOAD_TYPE
-  }
-
-  openModal = () => {
-    this.setState({ isModalOpen: true })
-  }
-
-  closeModal = () => {
-    this.setState({ isModalOpen: false })
-  }
-
-  handleExportTypeChange = exportType => {
-    this.setState({ downloadType: exportType })
-  }
-
-  sendDownloadReuqest = async () => {
+  sendDownloadReuqest = async exportType => {
     const { exportIds, filters, user, users } = this.props
     const activeBrand = getActiveTeamId(user)
     const url = `/api/contacts/export/outlook/${activeBrand}/`
 
     const params = {
-      type: this.state.downloadType
+      type: exportType
     }
 
     if (Array.isArray(exportIds) && exportIds.length > 0) {
@@ -56,24 +37,14 @@ class ExportContacts extends React.Component {
     const blob = new Blob([response.text], { type: 'text/csv' })
 
     fileSaver.saveAs(blob, response.headers['x-rechat-filename'])
-    this.closeModal()
   }
 
   render() {
     return (
-      <Fragment>
-        <OpenModalButton
-          disabled={this.props.disabled}
-          onClick={this.openModal}
-        />
-        <Modal
-          isOpen={this.state.isModalOpen}
-          onClose={this.closeModal}
-          downloadType={this.state.downloadType}
-          onExportTypeChange={this.handleExportTypeChange}
-          onExportClick={this.sendDownloadReuqest}
-        />
-      </Fragment>
+      <ExportButton
+        disabled={this.props.disabled}
+        onExportClick={this.sendDownloadReuqest}
+      />
     )
   }
 }
