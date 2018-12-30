@@ -5,6 +5,7 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import { Field, reduxForm } from 'redux-form'
 
+import Catalog from './ProfileCatalog'
 import FormCard from './FormCard'
 import SimpleField from './SimpleField'
 import PhoneNumberField from './PhoneNumberField'
@@ -14,6 +15,7 @@ import editUser from '../../../../../../store_actions/user/edit'
 import Button from '../../../../../../views/components/Button/ActionButton'
 
 let PersonalInfoForm = ({
+  user,
   invalid,
   pristine,
   submitError,
@@ -30,6 +32,7 @@ let PersonalInfoForm = ({
         className="c-account__form clearfix"
         onSubmit={handleSubmit(onSubmitHandler)}
       >
+        <Catalog user={user} />
         <Field
           name="first_name"
           type="text"
@@ -137,6 +140,7 @@ export default compose(
 
       return {
         brand,
+        user,
         initialValues: {
           email,
           last_name,

@@ -1,10 +1,8 @@
 import webpack from 'webpack'
+import Webpackbar from 'webpackbar'
+import WebpackNotifierPlugin from 'webpack-notifier'
 
 import appConfig from '../config/webpack'
-
-import WebpackNotifierPlugin from 'webpack-notifier'
-import Webpackbar from 'webpackbar'
-
 import webpackConfig from './base'
 
 const postcss = function postcss() {
