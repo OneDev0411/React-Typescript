@@ -21,7 +21,6 @@ function getFileName(instance) {
 function download(instance) {
   agent
     .get(instance.file.url)
-    .withCredentials()
     .responseType('blob')
     .then(res => {
       console.log(res)
