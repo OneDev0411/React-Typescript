@@ -121,7 +121,7 @@ class Form extends React.Component {
         this.saveAttempts += 1
         await this.sleep(3000 * this.saveAttempts)
 
-        return this.save()
+        return this.splitPDF()
       }
 
       this.props.notify({
