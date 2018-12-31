@@ -1,5 +1,6 @@
 import agent from 'superagent'
 import { addNotification as notify } from 'reapop'
+
 import store from '../../stores'
 
 /**

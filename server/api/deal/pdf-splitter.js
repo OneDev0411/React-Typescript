@@ -1,13 +1,18 @@
+import { PassThrough } from 'stream'
+
 import Koa from 'koa'
-import config from '../../../config/private'
+
 import Promise from 'bluebird'
+
 import memoryStream from 'memory-streams'
 import agent from 'superagent'
 import request from 'requestretry'
 import bodyParser from 'koa-bodyparser'
 import _ from 'underscore'
 import scissors from 'scissors'
-import { PassThrough } from 'stream'
+
+import config from '../../../config/private'
+
 import FakeStream from '../../util/fake-stream'
 
 const promisifiedRequest = Promise.promisifyAll(request)
@@ -78,7 +83,7 @@ router.post('/deals/pdf-splitter', bodyParser(), async ctx => {
 
     const splits = _.map(downloadedFiles, file => {
       const selectedPages = _.chain(pages)
-        .filter(doc => `${doc.documentId}.pdf` === file.filename)
+        .filter(doc => `${doc.docId}.pdf` === file.filename)
         .pluck('pageNumber')
         .value()
 
