@@ -92,6 +92,8 @@ class PdfSplitter extends React.Component {
     }
   }
 
+  sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
   render() {
     return (
       <Container>
