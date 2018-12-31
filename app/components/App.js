@@ -366,9 +366,8 @@ class App extends Component {
 
     return (
       <div className="u-scrollbar">
-        {user && !user.email_confirmed && (
-          <VerificationBanner email={user.email} />
-        )}
+        {user &&
+          !user.email_confirmed && <VerificationBanner email={user.email} />}
 
         {user && <SideNav data={data} location={location} />}
 
