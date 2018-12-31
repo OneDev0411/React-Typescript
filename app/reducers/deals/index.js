@@ -7,7 +7,6 @@ import roles from './roles'
 import envelopes from './envelopes'
 import checklists from './checklists'
 import forms from './forms'
-import esign from './esign'
 import upload from './upload'
 import splitter from './pdf-splitter'
 import contexts from './contexts'
@@ -20,7 +19,6 @@ export default combineReducers({
   roles,
   envelopes,
   forms,
-  esign,
   contexts,
   upload,
   splitter
