@@ -1,23 +1,14 @@
 import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
 
+import { setSelectedTask, resetUploadFiles } from 'actions/deals'
+
 import store from '../../../../../../stores'
-import {
-  closeEsignWizard,
-  setSelectedTask,
-  resetSplitter,
-  resetUploadFiles
-} from 'actions/deals'
 
 export default function(dealId) {
   const { dispatch } = store
 
-  batchActions([
-    dispatch(closeEsignWizard()),
-    dispatch(setSelectedTask(null)),
-    dispatch(resetUploadFiles()),
-    dispatch(resetSplitter())
-  ])
+  batchActions([dispatch(setSelectedTask(null)), dispatch(resetUploadFiles())])
 
   browserHistory.push(`/dashboard/deals/${dealId}`)
 }
