@@ -4,23 +4,26 @@ import { connect } from 'react-redux'
 import cn from 'classnames'
 import _ from 'underscore'
 import { addNotification as notify } from 'reapop'
+
 import {
   uploadTaskFile,
   uploadStashFile,
   resetUploadFiles,
   setUploadAttributes,
-  displaySplitter,
-  changeNeedsAttention,
-  resetSplitter
+  changeNeedsAttention
 } from 'actions/deals'
-import TasksDropDown from '../../components/TasksDropdown'
+
 import ToolTip from 'components/tooltip'
 import Checkbox from 'components/CheckmarkButton'
-import FileName from './file-name'
 
 import Deal from 'models/Deal'
-import UploadProgress from './upload-progress'
+
 import ActionButton from 'components/Button/ActionButton'
+
+import UploadProgress from './upload-progress'
+
+import TasksDropDown from '../../components/TasksDropdown'
+import FileName from './file-name'
 
 const STATUS_UPLOADING = 'uploading'
 const STATUS_UPLOADED = 'uploaded'
@@ -32,7 +35,6 @@ class UploadModal extends React.Component {
 
   closeModal() {
     this.props.resetUploadFiles()
-    this.props.resetSplitter()
   }
 
   getModalStyle(filesCount) {
@@ -67,7 +69,9 @@ class UploadModal extends React.Component {
     if (file.properties.taskId) {
       // is not undefined
       return tasks[file.properties.taskId]
-    } else if (selectedTask) {
+    }
+
+    if (selectedTask) {
       return selectedTask
     }
 
@@ -202,18 +206,6 @@ class UploadModal extends React.Component {
     )
   }
 
-  showSplitter = () => {
-    const { displaySplitter } = this.props
-
-    const files = this.getPdfFiles().map(item => ({
-      id: item.id,
-      file: item.fileObject,
-      properties: { name: item.fileObject.name, ...item.properties }
-    }))
-
-    displaySplitter(files)
-  }
-
   getFileUniqueId(fileObject) {
     return (
       fileObject.name.replace(/[^a-z0-9]/gi, '_').toLowerCase() +
@@ -266,46 +258,45 @@ class UploadModal extends React.Component {
               return (
                 <div key={id}>
                   <div className="upload-row">
-                    {!isUploading &&
-                      !isUploaded && (
-                        <Fragment>
-                          <div className="file-name">
-                            <FileName
-                              file={file}
-                              canEditName={file.properties.editNameEnabled}
-                            />
-                          </div>
+                    {!isUploading && !isUploaded && (
+                      <Fragment>
+                        <div className="file-name">
+                          <FileName
+                            file={file}
+                            canEditName={file.properties.editNameEnabled}
+                          />
+                        </div>
 
-                          <div className="file-task">
-                            <TasksDropDown
-                              searchable
-                              showStashOption
-                              deal={deal}
-                              onSelectTask={taskId =>
-                                this.onSelectTask(file, taskId)
-                              }
-                              selectedTask={selectedTask}
-                              shouldDropUp={
-                                filesCount > 4 && fileCounter + 2 >= filesCount
-                              }
-                            />
-                          </div>
+                        <div className="file-task">
+                          <TasksDropDown
+                            searchable
+                            showStashOption
+                            deal={deal}
+                            onSelectTask={taskId =>
+                              this.onSelectTask(file, taskId)
+                            }
+                            selectedTask={selectedTask}
+                            shouldDropUp={
+                              filesCount > 4 && fileCounter + 2 >= filesCount
+                            }
+                          />
+                        </div>
 
-                          <div className="file-cta">
-                            <ActionButton
-                              className={cn({
-                                uploaded: isUploaded
-                              })}
-                              disabled={
-                                isUploading || _.isUndefined(selectedTask)
-                              }
-                              onClick={() => this.upload(file, selectedTask)}
-                            >
-                              {this.getButtonCaption(file)}
-                            </ActionButton>
-                          </div>
-                        </Fragment>
-                      )}
+                        <div className="file-cta">
+                          <ActionButton
+                            className={cn({
+                              uploaded: isUploaded
+                            })}
+                            disabled={
+                              isUploading || _.isUndefined(selectedTask)
+                            }
+                            onClick={() => this.upload(file, selectedTask)}
+                          >
+                            {this.getButtonCaption(file)}
+                          </ActionButton>
+                        </div>
+                      </Fragment>
+                    )}
 
                     {(isUploading || isUploaded) && (
                       <UploadProgress
@@ -319,16 +310,14 @@ class UploadModal extends React.Component {
                     )}
                   </div>
                   <div className="notify-admin">
-                    {!isBackupContract &&
-                      !isUploading &&
-                      !isUploaded && (
-                        <Checkbox
-                          square
-                          selected={file.properties.notifyOffice || false}
-                          title="Notify Office"
-                          onClick={() => this.onClickNotifyAdmin(file)}
-                        />
-                      )}
+                    {!isBackupContract && !isUploading && !isUploaded && (
+                      <Checkbox
+                        square
+                        selected={file.properties.notifyOffice || false}
+                        title="Notify Office"
+                        onClick={() => this.onClickNotifyAdmin(file)}
+                      />
+                    )}
 
                     {isUploaded &&
                       file.properties.notifyOffice &&
@@ -346,13 +335,6 @@ class UploadModal extends React.Component {
           <ToolTip caption="Create new documents and save them to tasks">
             <div className="help">?</div>
           </ToolTip>
-
-          <ActionButton
-            disabled={pdfsList.length === 0}
-            onClick={this.showSplitter}
-          >
-            Split PDFs
-          </ActionButton>
         </Modal.Footer>
       </Modal>
     )
@@ -377,8 +359,6 @@ export default connect(
     uploadTaskFile,
     uploadStashFile,
     resetUploadFiles,
-    resetSplitter,
-    displaySplitter,
     setUploadAttributes,
     changeNeedsAttention
   }
