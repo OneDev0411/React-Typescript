@@ -48,7 +48,9 @@ const Avatar = ({
       {imageSrc ? (
         <Image alt="rechat avatar" src={imageSrc} />
       ) : (
-        <Initials>{initials || getNameInitials(title)}</Initials>
+        <Initials size={props.size}>
+          {initials || getNameInitials(title)}
+        </Initials>
       )}
       {props.showStatus && (
         <Status
