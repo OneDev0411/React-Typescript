@@ -11,7 +11,9 @@ export class Page extends React.Component {
   }
 
   componentDidMount() {
-    this.props.observer.observe(this.pageContainer)
+    if (this.props.observer) {
+      this.props.observer.observe(this.pageContainer)
+    }
 
     this.renderPage(this.props.isVisible)
   }
@@ -66,6 +68,10 @@ export class Page extends React.Component {
       })
   }
 
+  handleCanvasRef = ref => {
+    this.canvas = ref
+  }
+
   get ZoomSize() {
     const base = 85
     const calculated = base + this.props.zoomScale * 10
@@ -73,7 +79,7 @@ export class Page extends React.Component {
     return `${calculated}%`
   }
 
-  get PageStyle() {
+  get CanvasStyle() {
     const { rotation } = this.props
 
     const style = {
@@ -86,7 +92,10 @@ export class Page extends React.Component {
       style.height = '80vh'
     }
 
-    return style
+    return {
+      ...style,
+      ...this.props.canvasStyle
+    }
   }
 
   render() {
@@ -97,17 +106,26 @@ export class Page extends React.Component {
         style={this.props.pageStyle}
         isLoading={this.state.isLoading}
         data-page={this.props.pageNumber}
+        data-pdf={this.props.pdfId}
       >
         {this.state.isLoading && <Spinner />}
 
         <canvas
           id="page-canvas"
-          ref={ref => (this.canvas = ref)}
-          style={this.PageStyle}
+          ref={this.handleCanvasRef}
+          style={this.CanvasStyle}
         />
-        <PageNumber>
-          {this.props.pageNumber} / {this.props.totalPages}
-        </PageNumber>
+
+        {this.props.footerRenderer ? (
+          this.props.footerRenderer({
+            pageNumber: this.props.pageNumber,
+            pagesCount: this.props.totalPages
+          })
+        ) : (
+          <PageNumber>
+            {this.props.pageNumber} / {this.props.totalPages}
+          </PageNumber>
+        )}
       </Container>
     )
   }
