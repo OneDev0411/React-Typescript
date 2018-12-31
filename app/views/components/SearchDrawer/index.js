@@ -1,22 +1,31 @@
-import React from 'react'
-import Downshift from 'downshift'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import Downshift from 'downshift'
+
+import _ from 'underscore'
+
+import ActionButton from 'components/Button/ActionButton'
 
 import Drawer from '../OverlayDrawer'
 import Search from '../Grid/Search'
 import Loading from '../../../components/Partials/Loading'
-import Alert from '../../../components/Pages/Dashboard/Partials/Alert'
 
-import { ResultsContainer } from './styled'
+import { SelectedItems } from './SelectedItems'
+import { SearchResultList } from './SearchResult'
+
+import { DefaultItems } from './DefaultItems'
 
 const initialState = {
   isSearching: false,
-  list: [],
+  searchResults: [],
   error: null
 }
 
 class SearchDrawer extends React.Component {
-  state = initialState
+  state = {
+    ...initialState,
+    selectedItems: {}
+  }
 
   handleSearch = async value => {
     if (value.length === 0) {
@@ -27,14 +36,14 @@ class SearchDrawer extends React.Component {
       this.setState({
         isSearching: true,
         error: null,
-        list: []
+        searchResults: []
       })
 
-      const list = await this.props.searchFunction(value)
+      const searchResults = await this.props.searchFunction(value)
 
       this.setState({
-        list,
-        error: list.length === 0 && {
+        searchResults,
+        error: searchResults.length === 0 && {
           type: 'warning',
           message: 'No MLS Listing Found'
         }
@@ -61,35 +70,87 @@ class SearchDrawer extends React.Component {
   }
 
   handleSelectItem = item => {
+    if (this.props.multipleSelection) {
+      return this.handleAddNewItem(item)
+    }
+
     this.setState(initialState)
     this.searchInputRef.clear()
 
-    this.props.onSelectItem(item)
+    this.props.onSelectItems({
+      [item.id]: item
+    })
   }
 
-  get List() {
-    const { list } = this.state
+  handleSelectMultipleItems = () => {
+    this.setState(initialState)
+    this.searchInputRef.clear()
 
-    return this.state.isSearching || this.state.error || list.length > 0
-      ? list
-      : this.props.initialList
+    this.props.onSelectItems(this.state.selectedItems)
+  }
+
+  handleClickOutside = () => {
+    if (!this.props.multipleSelection) {
+      return false
+    }
+
+    this.setState({
+      searchResults: []
+    })
+
+    this.searchInputRef.clear()
+  }
+
+  handleAddNewItem = item => {
+    const normalized = this.props.normalizeSelectedItem(item)
+
+    this.setState(state => ({
+      selectedItems: { ...state.selectedItems, [normalized.id]: normalized },
+      searchResults: []
+    }))
+
+    this.searchInputRef.clear()
+  }
+
+  handleUpdateList = list => {
+    this.setState({
+      selectedItems: _.indexBy(list, 'id')
+    })
+  }
+
+  get ShowFooter() {
+    return this.props.multipleSelection
+  }
+
+  get DefaultList() {
+    return this.props.defaultList.filter(item => {
+      const normalized = this.props.normalizeSelectedItem(item)
+
+      return !this.state.selectedItems[normalized.id]
+    })
+  }
+
+  get SearchResults() {
+    return this.state.searchResults.filter(
+      item => !this.state.selectedItems[item.id]
+    )
   }
 
   render() {
-    const { isSearching, error } = this.state
-    const { showLoadingIndicator, ItemRow } = this.props
+    const { isSearching } = this.state
+    const { showLoadingIndicator } = this.props
 
     return (
       <Drawer
         isOpen={this.props.isOpen}
-        showFooter={false}
+        showFooter={this.ShowFooter}
         onClose={this.handleClose}
       >
         <Drawer.Header title={this.props.title} />
-        <Drawer.Body style={{ overflow: 'hidden' }}>
+        <Drawer.Body style={{ overflow: 'auto' }}>
           <Downshift
-            render={({ getItemProps, highlightedIndex }) => (
-              <div>
+            render={({ getItemProps }) => (
+              <div style={{ position: 'relative' }}>
                 <Search
                   {...this.props.searchInputOptions}
                   onChange={this.handleSearch}
@@ -103,31 +164,61 @@ class SearchDrawer extends React.Component {
 
                 {(isSearching || showLoadingIndicator) && <Loading />}
 
-                <ResultsContainer>
-                  {error && (
-                    <Alert
-                      type={error.type === 'error' ? error.type : 'warning'}
-                      message={error.message}
-                    />
-                  )}
+                <SearchResultList
+                  isLoading={this.props.showLoadingIndicator}
+                  searchResults={this.SearchResults}
+                  error={this.state.error}
+                  getItemProps={getItemProps}
+                  handleSelectItem={this.handleSelectItem}
+                  handleClickOutside={this.handleClickOutside}
+                  ItemRow={this.props.ItemRow}
+                  multipleSelection={this.props.multipleSelection}
+                />
 
-                  {!showLoadingIndicator &&
-                    this.List.map((item, index) => (
-                      <ItemRow
-                        key={index}
-                        item={item}
-                        isHighlighted={highlightedIndex === index}
-                        {...getItemProps({
-                          item,
-                          onClick: () => this.handleSelectItem(item)
-                        })}
-                      />
-                    ))}
-                </ResultsContainer>
+                <SelectedItems
+                  isLoading={this.props.showLoadingIndicator}
+                  selectedItems={this.state.selectedItems}
+                  hasDefaultList={this.DefaultList.length > 0}
+                  getItemProps={getItemProps}
+                  onUpdateList={this.handleUpdateList}
+                  ItemRow={this.props.ItemRow}
+                  multipleSelection={this.props.multipleSelection}
+                />
+
+                <DefaultItems
+                  isLoading={this.props.showLoadingIndicator}
+                  searchResults={this.SearchResults}
+                  defaultListTitle={this.props.defaultListTitle}
+                  defaultItems={this.DefaultList}
+                  getItemProps={getItemProps}
+                  handleSelectItem={this.handleSelectItem}
+                  ItemRow={this.props.ItemRow}
+                  multipleSelection={this.props.multipleSelection}
+                />
               </div>
             )}
           />
         </Drawer.Body>
+
+        <Drawer.Footer
+          style={{
+            flexDirection: 'row-reverse'
+          }}
+        >
+          {this.props.renderAction ? (
+            this.props.renderAction({
+              selectedItems: this.state.selectedItems,
+              onClick: this.handleSelectMultipleItems
+            })
+          ) : (
+            <ActionButton
+              disabled={_.size(this.state.selectedItems) === 0}
+              onClick={this.handleSelectMultipleItems}
+            >
+              {_.size(this.state.selectedItems)} Items Selected
+            </ActionButton>
+          )}
+        </Drawer.Footer>
       </Drawer>
     )
   }
@@ -136,16 +227,19 @@ class SearchDrawer extends React.Component {
 SearchDrawer.defaultProps = {
   showLoadingIndicator: false,
   searchInputOptions: {},
-  initialList: []
+  defaultList: [],
+  defaultListTitle: 'Add from list',
+  multipleSelection: false
 }
 
 SearchDrawer.propTypes = {
   showLoadingIndicator: PropTypes.bool,
+  multipleSelection: PropTypes.bool,
   searchInputOptions: PropTypes.object,
   searchFunction: PropTypes.func.isRequired,
   ItemRow: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
-  onSelectItem: PropTypes.func.isRequired,
-  initialList: PropTypes.array
+  defaultList: PropTypes.array,
+  defaultListTitle: PropTypes.string
 }
 
 export default SearchDrawer

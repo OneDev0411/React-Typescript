@@ -22,10 +22,13 @@ import DuplicateContacts from '../components/DuplicateContacts'
 import Table from './Table'
 import { NoDuplicateContacts } from './NoDuplicateContacts'
 
+const FUCKING_SEGMENT_NAME = 'duplicate contacts'
+
 class ContactsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      activeSegment: FUCKING_SEGMENT_NAME,
       isSideMenuOpen: true,
       isFetchingContacts: true,
       duplicateContacts: []
@@ -33,15 +36,15 @@ class ContactsList extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.filterSegments.activeSegmentId !== 'duplicate contacts') {
-      this.props.changeActiveFilterSegment('contacts', 'duplicate contacts')
+    if (this.props.filterSegments.activeSegmentId !== FUCKING_SEGMENT_NAME) {
+      this.props.changeActiveFilterSegment('contacts', FUCKING_SEGMENT_NAME)
     }
 
     this.fetchContacts()
   }
 
   componentWillUnmount() {
-    if (this.props.filterSegments.activeSegmentId === 'duplicate contacts') {
+    if (this.state.activeSegment === FUCKING_SEGMENT_NAME) {
       this.props.changeActiveFilterSegment('contacts', 'default')
     }
   }
@@ -74,8 +77,8 @@ class ContactsList extends React.Component {
       let newDuplicateContacts
 
       if (response.data.id) {
-        newDuplicateContacts = this.state.duplicateContacts.map(
-          item => (item.id === refId ? response.data : item)
+        newDuplicateContacts = this.state.duplicateContacts.map(item =>
+          item.id === refId ? response.data : item
         )
       } else {
         newDuplicateContacts = this.state.duplicateContacts.filter(
@@ -91,9 +94,11 @@ class ContactsList extends React.Component {
     this.setIsFetching(false)
   }
 
-  handleChangeSavedSegment = async segment => {
-    this.props.changeActiveFilterSegment('contacts', segment.id)
-    browserHistory.push('/dashboard/contacts')
+  handleChangeSavedSegment = async activeSegment => {
+    this.setState({ activeSegment }, () => {
+      this.props.changeActiveFilterSegment('contacts', activeSegment.id)
+      browserHistory.push('/dashboard/contacts')
+    })
   }
 
   toggleSideMenu = () =>

@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom'
 
 import { Uploader } from 'components/Uploader'
 
+import { AssetImage } from './AssetImage'
+
 import Fetch from '../../../../../services/fetch'
 
 const CUSTOM_ASSET_UPLOAD_PATH = '/templates/assets'
@@ -18,45 +20,19 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
     })
 
   const AssetView = Backbone.View.extend({
-    events: {
-      click: 'onClick'
-    },
-    onClick() {
-      const url = this.model.get('src')
-
-      const setSrc = () => target.set('src', url)
-      const setBg = () => {
-        const old = target.get('style')
-        const style = { ...old }
-
-        style['background-image'] = `url(${url})`
-        target.set('style', style)
-      }
-
-      const setters = {
-        image: setSrc,
-        cell: setBg,
-        text: setBg,
-        '': setBg
-      }
-
-      const type = target.get('type')
-
-      setters[type]()
-    },
     initialize({ model }) {
       this.model = model
     },
     render() {
-      this.$el.html(
-        `<img src="${this.model.get(
-          'src'
-        )}" style="margin: 8px 3% 8px 5%; border-radius: 2px; width: 90%; cursor: pointer;"/>`
+      ReactDOM.render(
+        <AssetImage model={this.model} target={target} />,
+        this.el
       )
 
       return this
     }
   })
+
   const AssetUploadButtonView = Backbone.View.extend({
     render() {
       ReactDOM.render(
@@ -80,9 +56,10 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
                 url: response.body.data.file.url
               }))
 
-              const uploadedAssetsCollection = uploadedAssets.map(
-                asset => asset.url
-              )
+              const uploadedAssetsCollection = uploadedAssets.map(asset => ({
+                image: asset.url,
+                userFile: true
+              }))
 
               view.collection.reset([
                 ...uploadedAssetsCollection,
@@ -115,13 +92,38 @@ export default grapesjs.plugins.add('asset-blocks', editor => {
       uploadButtonView.render()
       uploadButtonView.$el.appendTo(this.el)
 
-      for (let i = 0; i < this.collection.length; i++) {
-        const asset = this.collection.at(i)
+      if (!target) {
+        return false
+      }
+
+      let collection = []
+
+      const type = target.attributes.attributes['rechat-assets']
+
+      if (type === 'listing-image') {
+        collection = this.collection.filter(asset => {
+          const listing = target.attributes.attributes['rechat-listing']
+
+          if (asset.attributes.avatar) {
+            return false
+          }
+
+          return !listing || asset.attributes.listing === listing
+        })
+      }
+
+      if (type === 'avatar') {
+        collection = this.collection.filter(
+          asset => asset.attributes.userFile || asset.attributes.avatar
+        )
+      }
+
+      collection.forEach(asset => {
         const view = new AssetView({ model: asset })
 
         view.render()
         view.$el.appendTo(this.el)
-      }
+      })
     },
     render: () => this
   })

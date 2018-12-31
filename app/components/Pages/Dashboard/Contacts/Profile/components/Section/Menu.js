@@ -1,11 +1,11 @@
-import styled from "styled-components"
+import styled from 'styled-components'
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import IconButton from '../../../../../../../views/components/Button/IconButton'
+import TextIconButton from '../../../../../../../views/components/Button/TextIconButton'
 import Button from '../../../../../../../views/components/Button/ActionButton'
+import EditIcon from '../../../../../../../views/components/SvgIcons/Edit/EditIcon'
 import { primary, grey } from '../../../../../../../views/utils/colors'
-import MenuIcon from '../../../../../../../views/components/SvgIcons/MoreVert/IconMoreVert'
 import { BasicDropdown } from '../../../../../../../views/components/BasicDropdown'
 
 const Item = styled(Button)`
@@ -50,14 +50,30 @@ export class Menu extends React.Component {
       return null
     }
 
+    if (items.length === 1) {
+      return (
+        <TextIconButton
+          appearance="outline"
+          iconLeft={EditIcon}
+          onClick={this.props.onEdit || this.props.onAdd}
+          size="small"
+          text="Update"
+        />
+      )
+    }
+
     return (
       <BasicDropdown
         items={items}
         pullTo="right"
         buttonRenderer={props => (
-          <IconButton isFit iconSize="large" inverse {...props}>
-            <MenuIcon style={{ fill: grey.A550 }} className="menu__icon" />
-          </IconButton>
+          <TextIconButton
+            text="Update"
+            appearance="outline"
+            size="small"
+            iconLeft={EditIcon}
+            {...props}
+          />
         )}
         onChange={item => item.onClick()}
         itemRenderer={({ item, ...rest }) => (

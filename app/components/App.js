@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import ReactGA from 'react-ga'
+import bowser from 'bowser'
+
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
 
@@ -20,10 +23,10 @@ import { getRooms } from '../store_actions/chatroom'
 
 // get user roles
 import getTeams from '../store_actions/user/teams'
-import { hasUserAccess } from '../utils/user-teams'
+import { hasUserAccess, viewAsEveryoneOnTeam } from '../utils/user-teams'
 
 // deals featch on launch
-import { getDeals } from '../store_actions/deals'
+import { getDeals, searchDeals } from '../store_actions/deals'
 
 const InstantChat = Load({
   loader: () => import('./Pages/Dashboard/Chatroom/InstantChat')
@@ -39,14 +42,13 @@ import getFavorites from '../store_actions/listings/favorites/get-favorites'
 
 import AppStore from '../stores/AppStore'
 import Brand from '../controllers/Brand'
-import ReactGA from 'react-ga'
+
 import config from '../../config/public'
 
 import Intercom from './Pages/Dashboard/Partials/Intercom'
 import { inactiveIntercom, activeIntercom } from '../store_actions/intercom'
 import { getAllNotifications } from '../store_actions/notifications'
 
-import bowser from 'bowser'
 import { confirmation } from '../store_actions/confirmation'
 
 class App extends Component {
@@ -82,23 +84,28 @@ class App extends Component {
     let { user } = this.props
 
     if (user) {
-      if (!user.teams) {
+      if (!user.teams || !user.teams[0].brand.roles) {
         user = {
           ...user,
-          teams: await dispatch(getTeams())
+          teams: await dispatch(getTeams(user, true))
         }
       }
 
+      const isBackOffice = hasUserAccess(user, 'BackOffice')
+
       this.hasCrmAccess = hasUserAccess(user, 'CRM')
-      this.hasDealsAccess =
-        hasUserAccess(user, 'Deals') || hasUserAccess(user, 'BackOffice')
+      this.hasDealsAccess = hasUserAccess(user, 'Deals') || isBackOffice
 
       // load rooms
       this.initialRooms()
 
       // load deals
-      if (this.hasDealsAccess && !deals) {
-        dispatch(getDeals(user))
+      if (this.hasDealsAccess && !deals && !this.props.isFetchingDeals) {
+        if (isBackOffice || viewAsEveryoneOnTeam(user)) {
+          dispatch(getDeals(user))
+        } else {
+          dispatch(searchDeals(user))
+        }
       }
 
       // load contacts
@@ -285,7 +292,8 @@ class App extends Component {
       const isValidBrowser = browser.satisfies({
         // declare browsers per OS
         windows: {
-          'Internet Explorer': '>10'
+          'Internet Explorer': '>10',
+          'Microsoft Edge': '<12'
         },
         macos: {
           safari: '>10.1.2'
@@ -305,6 +313,7 @@ class App extends Component {
               'https://www.microsoft.com/en-us/download/internet-explorer.aspx'
             break
           case 'Chrome':
+          case 'Microsoft Edge':
             downloadLink = 'https://www.google.com/chrome/'
             break
           case 'Firefox':
@@ -341,6 +350,7 @@ class App extends Component {
       }
     }
   }
+
   render() {
     const { data, user, rooms, location } = this.props
 
@@ -356,8 +366,9 @@ class App extends Component {
 
     return (
       <div className="u-scrollbar">
-        {user &&
-          !user.email_confirmed && <VerificationBanner email={user.email} />}
+        {user && !user.email_confirmed && (
+          <VerificationBanner email={user.email} />
+        )}
 
         {user && <SideNav data={data} location={location} />}
 
@@ -378,6 +389,7 @@ function mapStateToProps(state) {
     contactsAttributeDefs: state.contacts.attributeDefs,
     data: state.data,
     deals: state.deals.list,
+    isFetchingDeals: state.deals.properties.isFetchingDeals,
     favoritesListings: selectListings(state.favorites.listings),
     rooms: state.chatroom.rooms,
     user: state.user

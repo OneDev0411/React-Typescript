@@ -1,5 +1,9 @@
 import Fetch from '../../services/fetch'
-import { getActiveTeamId, getActiveTeamACL } from '../../utils/user-teams'
+import {
+  getActiveTeamId,
+  getActiveTeamACL,
+  viewAs
+} from '../../utils/user-teams'
 
 /**
  * get deal by id
@@ -25,20 +29,39 @@ export async function getById(id) {
 /**
  * search deals
  */
-export async function searchDeals(user, value) {
+export async function searchDeals(
+  user,
+  query,
+  order = ['deals.updated_at', 'DESC']
+) {
   try {
     const isBackOffice = getActiveTeamACL(user).includes('BackOffice')
 
     let url = '/deals/filter'
 
-    if (isBackOffice) {
-      url += '?associations[]=deal.created_by&associations[]=deal.brand'
+    const payload = {
+      brand: getActiveTeamId(user)
     }
 
-    const response = await new Fetch().post(url).send({
-      query: value,
-      brand: getActiveTeamId(user)
-    })
+    if (query && typeof query === 'string') {
+      payload.query = query.trim()
+    }
+
+    if (isBackOffice) {
+      url += '?associations[]=deal.created_by&associations[]=deal.brand'
+    } else {
+      const users = viewAs(user)
+
+      if (users.length > 0) {
+        payload.role = {
+          user: users
+        }
+      }
+
+      payload.$order = order
+    }
+
+    const response = await new Fetch().post(url).send(payload)
 
     return response.body.data
   } catch (e) {

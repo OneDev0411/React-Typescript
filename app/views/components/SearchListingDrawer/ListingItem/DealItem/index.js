@@ -4,7 +4,11 @@ import Avatar from 'components/Avatar'
 import Deal from 'models/Deal'
 import { getStatusColor } from 'utils/listing'
 
+import IconDrag from 'components/SvgIcons/Drag/IconDrag'
 import IconHome from 'components/SvgIcons/NewHome/IconHome'
+import IconDelete from 'components/SvgIcons/Close/CloseIcon'
+
+import ActionButton from 'components/Button/ActionButton'
 
 import {
   ListItem,
@@ -18,13 +22,20 @@ function dealSide(deal) {
   return deal.deal_type === 'Selling' ? 'Seller' : 'Buyer'
 }
 
-export function DealItem({ item: deal, ...rest }) {
+export function DealItem({ item: deal, showAddButton, ...props }) {
   const photo = Deal.get.field(deal, 'photo')
   const status = Deal.get.status(deal)
 
   return (
-    <ListItem {...rest}>
+    <ListItem
+      {...props}
+      style={{
+        justifyContent: 'space-between'
+      }}
+    >
       <AddressContainer>
+        {props.isDraggable && <IconDrag style={{ marginRight: '0.5rem' }} />}
+
         {photo ? (
           <Avatar
             alt=""
@@ -45,6 +56,16 @@ export function DealItem({ item: deal, ...rest }) {
           </Address>
         </ListItemAddress>
       </AddressContainer>
+
+      {showAddButton && (
+        <ActionButton size="small" className="add-item">
+          Add
+        </ActionButton>
+      )}
+
+      {props.removable && (
+        <IconDelete className="delete-icon" onClick={props.onClickRemove} />
+      )}
     </ListItem>
   )
 }

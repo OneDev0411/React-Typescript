@@ -56,7 +56,7 @@ export function formatPreSave(previousFields, nextFields) {
         newValue = value
       }
     } else if (typeof value === 'string') {
-      newValue = value
+      newValue = value.trim()
     } else {
       newValue = value.value
     }

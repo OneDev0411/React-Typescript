@@ -1,7 +1,4 @@
 export const items = [
-  // {
-  //   title: 'Anniversary'
-  // },
   {
     title: 'As Seen In',
     url: '/AsSeenIn'
@@ -14,26 +11,14 @@ export const items = [
     title: 'Brand Campaigns',
     url: '/Brand'
   },
-  // {
-  //   title: 'Brochures'
-  // },
-  // {
-  //   title: 'Business Cards'
-  // },
   {
     title: 'Coming Soon',
     url: '/ComingSoon'
   },
-  // {
-  //   title: 'Facebook Cover'
-  // },
   {
     title: 'Holiday',
     url: '/Christmas,NewYear'
   },
-  // {
-  //   title: 'Instagram Stories'
-  // },
   {
     title: 'Just Listed',
     url: '/JustListed'
@@ -41,6 +26,14 @@ export const items = [
   {
     title: 'Just Sold',
     url: '/JustSold'
+  },
+  // {
+  //   title: 'Multi Listings',
+  //   url: '/Listings'
+  // },
+  {
+    title: 'New Agent',
+    url: '/NewAgent'
   },
   {
     title: 'New Price',
@@ -50,10 +43,4 @@ export const items = [
     title: 'Open House',
     url: '/OpenHouse'
   }
-  // {
-  //   title: 'Thank You'
-  // },
-  // {
-  //   title: 'Your Company'
-  // }
 ]

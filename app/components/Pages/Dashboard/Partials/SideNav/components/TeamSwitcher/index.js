@@ -1,16 +1,18 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
+import idx from 'idx'
 
-import {
-  getActiveTeamId,
-  setActiveTeam
-} from '../../../../../../utils/user-teams'
-import flattenBrand from '../../../../../../utils/flatten-brand'
-import Avatar from '../../../../../Partials/UserAvatar'
-import CheckmarkIcon from '../../../../../../views/components/SvgIcons/Checkmark/IconCheckmark'
-import ActionButton from '../../../../../../views/components/Button/ActionButton'
-import { primary } from '../../../../../../views/utils/colors'
+import { viewAs, getActiveTeamId } from '../../../../../../../utils/user-teams'
+import { putUserSetting } from '../../../../../../../models/user/put-user-setting'
+import flattenBrand from '../../../../../../../utils/flatten-brand'
+import CheckmarkIcon from '../../../../../../../views/components/SvgIcons/Checkmark/IconCheckmark'
+import ActionButton from '../../../../../../../views/components/Button/ActionButton'
+import { primary } from '../../../../../../../views/utils/colors'
+
+import Avatar from '../../../../../../Partials/UserAvatar'
+
+import ViewAsFilter from './ViewAsFilter'
 
 const TeamName = styled.div`
   overflow: hidden;
@@ -37,12 +39,9 @@ const Button = styled(ActionButton)`
   }
 `
 
-export default class extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      savingTeam: false
-    }
+export default class TeamSwitcher extends React.Component {
+  state = {
+    savingTeam: false
   }
 
   getAvatar(brand) {
@@ -60,7 +59,7 @@ export default class extends React.Component {
     )
   }
 
-  changeTeam(e, team) {
+  changeTeam = (e, team) => {
     e.preventDefault()
 
     const { user } = this.props
@@ -70,17 +69,18 @@ export default class extends React.Component {
       return false
     }
 
-    this.setState({ savingTeam: team.brand.id })
-    setActiveTeam(team.brand.id)
-    window.location.reload(true)
+    this.setState({ savingTeam: team.brand.id }, async () => {
+      await putUserSetting('user_filter', viewAs(user, team), team.brand.id)
+      window.location.reload(true)
+    })
   }
 
   render() {
     const { user } = this.props
     const { savingTeam } = this.state
 
-    if (!user.teams || user.teams.length <= 1) {
-      return false
+    if (!idx(user, u => u.teams[0].brand.roles)) {
+      return null
     }
 
     return (
@@ -102,14 +102,19 @@ export default class extends React.Component {
                   <TeamName>{team.brand.name}</TeamName>
                 </Flex>
                 <Flex alignCenter>
-                  {!savingTeam &&
-                    isActiveTeam && <CheckmarkIcon style={{ fill: primary }} />}
+                  {!savingTeam && isActiveTeam && (
+                    <CheckmarkIcon style={{ fill: primary }} />
+                  )}
 
                   {savingTeam === team.brand.id && (
                     <i className="fa fa-spinner fa-spin" />
                   )}
                 </Flex>
               </Button>
+              <ViewAsFilter
+                team={team}
+                isActive={isActiveTeam && !savingTeam}
+              />
             </li>,
             <li
               key={`sp_${team.brand.id}`}

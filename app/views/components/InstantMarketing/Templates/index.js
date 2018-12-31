@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'underscore'
 
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
@@ -25,6 +26,11 @@ export default class Templates extends React.Component {
       let templates = await getTemplates(types, medium ? [medium] : [])
 
       if (templates.length > 0) {
+        // sort template based on their types
+        templates = _.sortBy(templates, template =>
+          types.indexOf(template.template_type)
+        )
+
         // Reordering templates list and show the default tempalte
         // as the first item of the list
         if (defaultTemplate) {
@@ -68,8 +74,8 @@ export default class Templates extends React.Component {
 
   updateTemplate = template =>
     this.setState(state => ({
-      templates: state.templates.map(item =>
-        item.id === template.id ? template : item
+      templates: state.templates.map(
+        item => (item.id === template.id ? template : item)
       )
     }))
 
