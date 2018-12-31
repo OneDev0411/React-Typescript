@@ -1,8 +1,9 @@
 import React from 'react'
 import _ from 'underscore'
-import { roleName } from '../../../../../utils/roles'
 
 import { SelectInput } from 'components/Forms/SelectInput'
+
+import { roleName } from '../../../../../utils/roles'
 
 export const RolesDropDown = ({
   input,

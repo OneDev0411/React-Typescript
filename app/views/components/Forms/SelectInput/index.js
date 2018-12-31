@@ -7,7 +7,6 @@ import {
   InputRequired,
   InputError
 } from '../styled'
-import { BasicDropdown } from 'components/BasicDropdown'
 
 function handleChange(data, input, onChange) {
   if (onChange) {
@@ -15,10 +14,6 @@ function handleChange(data, input, onChange) {
   }
 
   input.onChange(data ? data.value : null)
-}
-
-function itemToString(item) {
-  return item.label
 }
 
 export const SelectInput = ({
@@ -39,21 +34,9 @@ export const SelectInput = ({
     <InputLabel hasError={meta.submitFailed && meta.error}>
       {placeholder} <InputRequired>{isRequired && '*'}</InputRequired>
     </InputLabel>
-    {/* <BasicDropdown
-      // buttonSize={this.props.buttonSize}
-      fullWidth
-      items={options}
-      itemToString={itemToString}
-      onChange={data => handleChange(data, input, onChange)}
-      // buttonIcon={<InputRequired>{isRequired && '*'}</InputRequired>}
-      buttonText="Add a Contact"
-      // style={this.props.style}
-      defaultSelectedItem={simpleItems[0]}
-    /> */}
+
     <Select
       menuIsOpen
-      // openMenuOnFocus
-      // autoFocus
       closeMenuOnSelect={false}
       className={className}
       searchable={searchable}
