@@ -46,9 +46,8 @@ class ChecklistFolder extends React.Component {
     let sortedTasks = tasks
 
     if (this.props.isBackOffice && tasks) {
-      sortedTasks = _.sortBy(
-        tasks,
-        id => (this.props.tasks[id].attention_requested ? 0 : 1)
+      sortedTasks = _.sortBy(tasks, id =>
+        this.props.tasks[id].attention_requested ? 0 : 1
       )
     }
 
