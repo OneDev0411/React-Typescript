@@ -1,12 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import {
+  setSelectedTask,
+  setExpandTask,
+  updateDealNotifications
+} from 'actions/deals'
+
 import TaskStatus from './Status'
 import TaskNotifications from './Notification'
 
 import TaskFiles from '../TaskFiles'
-
-import { setSelectedTask, updateDealNotifications } from 'actions/deals'
 
 import {
   Container,
@@ -19,13 +23,18 @@ import {
 
 class Task extends React.Component {
   state = {
-    isTaskExpanded: false
+    isTaskExpanded: this.props.task.is_expanded === true
   }
 
-  toggleTaskOpen = () =>
-    this.setState(state => ({
-      isTaskExpanded: !state.isTaskExpanded
-    }))
+  toggleTaskOpen = () => {
+    const isTaskExpanded = !this.state.isTaskExpanded
+
+    this.setState({
+      isTaskExpanded
+    })
+
+    this.props.setExpandTask(this.props.task.id, isTaskExpanded)
+  }
 
   handleSelectTask = () => {
     const { task } = this.props
@@ -71,5 +80,5 @@ class Task extends React.Component {
 
 export default connect(
   null,
-  { setSelectedTask, updateDealNotifications }
+  { setSelectedTask, setExpandTask, updateDealNotifications }
 )(Task)
