@@ -1,12 +1,13 @@
 import React from 'react'
+
+import ToolTip from 'components/tooltip'
+
 import { Container, NavBar, NavItem, TabContent } from './styled'
 
 import ChecklistsPane from './Panes/Checklist'
 import FileManagerPane from './Panes/FileManager'
 import EventsPane from './Panes/Events'
 import MarketingPane from './Panes/Marketing'
-
-import ToolTip from 'components/tooltip'
 
 export default class Tabs extends React.Component {
   tabs = [
