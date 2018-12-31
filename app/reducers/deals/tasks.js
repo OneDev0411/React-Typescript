@@ -38,6 +38,15 @@ export default (state = null, action) => {
         ...action.tasks
       }
 
+    case actionTypes.SET_EXPAND_TASK:
+      return {
+        ...state,
+        [action.taskId]: {
+          ...state[action.taskId],
+          is_expanded: action.isExpanded
+        }
+      }
+
     case actionTypes.UPDATE_SUBMISSION:
       return {
         ...state,
