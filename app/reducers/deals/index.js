@@ -8,7 +8,6 @@ import envelopes from './envelopes'
 import checklists from './checklists'
 import forms from './forms'
 import upload from './upload'
-import splitter from './pdf-splitter'
 import contexts from './contexts'
 
 export default combineReducers({
@@ -20,6 +19,5 @@ export default combineReducers({
   envelopes,
   forms,
   contexts,
-  upload,
-  splitter
+  upload
 })
