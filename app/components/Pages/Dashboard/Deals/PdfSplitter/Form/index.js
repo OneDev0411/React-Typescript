@@ -54,6 +54,8 @@ class Form extends React.Component {
     return _.size(validationErrors) === 0
   }
 
+  sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
   handleSave = async (closeSplitter = false) => {
     if (!this.validateForm()) {
       return false
