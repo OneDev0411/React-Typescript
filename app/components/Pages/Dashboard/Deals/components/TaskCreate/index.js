@@ -16,19 +16,33 @@ import IconAdd from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 import CreateCustomTask from './CustomTask'
 import { ListItem } from './styled'
 
-export class TaskCreate extends React.Component {
-  state = {
-    isSaving: false,
-    showCustomTaskDrawer: false,
-    searchFilter: ''
-  }
+const initialState = {
+  isSaving: false,
+  showCustomTaskDrawer: false,
+  searchFilter: ''
+}
+
+class TaskCreate extends React.Component {
+  state = initialState
 
   handleChangeSearchFilter = searchFilter => this.setState({ searchFilter })
+
   handleClearSearch = () => this.setState({ searchFilter: '' })
+
   toggleCustomTaskDrawer = () =>
     this.setState(state => ({
       showCustomTaskDrawer: !state.showCustomTaskDrawer
     }))
+
+  handleClose = () => {
+    this.setState(initialState)
+
+    if (this.searchInput) {
+      this.searchInput.clear()
+    }
+
+    this.props.onClose()
+  }
 
   createTask = async form => {
     this.setState({
@@ -61,7 +75,7 @@ export class TaskCreate extends React.Component {
           isOpen={
             this.props.isOpen && this.state.showCustomTaskDrawer === false
           }
-          onClose={this.props.onClose}
+          onClose={this.handleClose}
         >
           <OverlayDrawer.Header title="Add New Task" />
           <OverlayDrawer.Body>
@@ -77,6 +91,7 @@ export class TaskCreate extends React.Component {
                     minimumLength={1}
                     onChange={this.handleChangeSearchFilter}
                     onClearSearch={this.handleClearSearch}
+                    inputRef={ref => (this.searchInput = ref)}
                     style={{ margin: '1rem 0' }}
                   />
                 )}

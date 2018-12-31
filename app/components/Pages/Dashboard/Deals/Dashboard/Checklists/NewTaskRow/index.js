@@ -1,7 +1,8 @@
 import React from 'react'
 
-import TaskCreate from '../../../components/TaskCreate'
 import IconAdd from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
+
+import TaskCreate from '../../../components/TaskCreate'
 
 import { Button, Container, Title } from './styled'
 
