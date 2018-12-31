@@ -17,11 +17,21 @@ import Tooltip from 'components/tooltip'
 
 import Avatar from './Avatar'
 
+const Container = styled.div`
+  @media (min-width: 50em) {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+`
 const ProfileImageActions = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  width: 50%;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+
+  @media (min-width: 50em) {
+    margin-top: 0;
+  }
 `
 
 class ProfileCatalog extends Component {
@@ -71,20 +81,20 @@ class ProfileCatalog extends Component {
 
   getImageUploadButtonText() {
     if (this.props.isUploading) {
-      return 'Uploading Profile Picture'
+      return 'Uploading'
     }
 
     if (this.props.user.profile_image_url) {
-      return 'Update Profile Picture'
+      return 'Update'
     }
 
-    return 'Upload Profile Picture'
+    return 'Upload'
   }
 
   render() {
     return (
-      <div>
-        <div className="c-profile-catalog">
+      <React.Fragment>
+        <Container>
           <Avatar user={this.props.user} />
 
           <ProfileImageActions>
@@ -93,18 +103,10 @@ class ProfileCatalog extends Component {
                 <IconButton
                   disabled={this.props.isUploading}
                   appearance="outline"
-                  style={{
-                    width: '3rem',
-                    marginRight: '1rem',
-                    padding: 0
-                  }}
+                  style={{ marginRight: '1rem', marginBottom: '1rem' }}
                   onClick={this.onDelete}
                 >
-                  <DeleteIcon
-                    style={{
-                      margin: 'auto'
-                    }}
-                  />
+                  <DeleteIcon />
                 </IconButton>
               </Tooltip>
             )}
@@ -113,13 +115,13 @@ class ProfileCatalog extends Component {
               appearance="outline"
               onClick={this.openModal}
             >
-              {this.getImageUploadButtonText()}
+              {`${this.getImageUploadButtonText()} Profile Picture`}
             </Button>
             {this.state.isOpen && this.renderUploader()}
           </ProfileImageActions>
-        </div>
+        </Container>
         <hr />
-      </div>
+      </React.Fragment>
     )
   }
 }
