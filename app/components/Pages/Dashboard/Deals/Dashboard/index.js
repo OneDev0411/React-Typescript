@@ -14,13 +14,12 @@ import TabSections from './Tabs'
 import TaskView from './TaskView'
 
 import UploadPrompt from '../UploadManager/prompt'
-import UploadManager from '../UploadManager'
 
 import { DealContainer, PageWrapper } from './styled'
 
 class DealDetails extends React.Component {
   state = {
-    activeTab: 'checklists',
+    activeTab: 'files',
     isFetchingChecklists: false
   }
 
@@ -81,25 +80,23 @@ class DealDetails extends React.Component {
     return (
       <DealContainer disableScroll={this.props.selectedTask !== null}>
         <PageWrapper>
-          <UploadManager deal={deal} disableClick>
-            <PageHeader deal={deal} isBackOffice={this.props.isBackOffice} />
+          <PageHeader deal={deal} isBackOffice={this.props.isBackOffice} />
 
-            <TabSections
-              deal={deal}
-              user={this.props.user}
-              activeTab={this.state.activeTab}
-              onChangeTab={this.handleChangeActiveTab}
-              isBackOffice={this.props.isBackOffice}
-              isFetchingChecklists={this.state.isFetchingChecklists}
-            />
+          <TabSections
+            deal={deal}
+            user={this.props.user}
+            activeTab={this.state.activeTab}
+            onChangeTab={this.handleChangeActiveTab}
+            isBackOffice={this.props.isBackOffice}
+            isFetchingChecklists={this.state.isFetchingChecklists}
+          />
 
-            <TaskView
-              deal={deal}
-              task={this.props.selectedTask}
-              isOpen={this.props.selectedTask !== null}
-              isBackOffice={this.props.isBackOffice}
-            />
-          </UploadManager>
+          <TaskView
+            deal={deal}
+            task={this.props.selectedTask}
+            isOpen={this.props.selectedTask !== null}
+            isBackOffice={this.props.isBackOffice}
+          />
         </PageWrapper>
 
         <UploadPrompt deal={deal} />
