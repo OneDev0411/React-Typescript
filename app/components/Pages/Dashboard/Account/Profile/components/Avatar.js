@@ -7,6 +7,7 @@ import AvatarImage from 'components/Avatar'
 const Avatar = props => (
   <AvatarImage
     {...props}
+    size={props.size}
     image={props.user.profile_image_url}
     initials={getUserInitials(props.user)}
     backgroundColor={borderColor}
