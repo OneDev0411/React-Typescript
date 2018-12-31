@@ -1,8 +1,6 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
-import _ from 'underscore'
-
 import Table from 'views/components/Grid/Table'
 import { grey, primary } from 'views/utils/colors'
 
@@ -13,8 +11,9 @@ import { getDealEnvelopeFiles } from 'models/Deal/helpers/get-deal-envelope-file
 
 import { syncDeleteFile } from 'actions/deals'
 
-import { SearchFiles } from '../Search'
 import UploadManager from '../../UploadManager'
+
+import { SearchFiles } from '../Search'
 import PdfSplitter from '../../PdfSplitter'
 
 import { FileName } from './columns/Name'
@@ -119,22 +118,14 @@ class FileManager extends React.Component {
     })
 
   splitMultipleFiles = (e, params) => {
-    const files = _.chain(this.Rows)
-      .filter(
-        file =>
-          params.selectedRows.includes(file.id) && this.isPdfDocument(file.mime)
-      )
-      .map(file => ({
-        id: file.id,
-        file: { url: file.url },
-        properties: { name: file.name }
-      }))
-      .value()
+    const files = this.Rows.filter(
+      file =>
+        params.selectedRows.includes(file.id) && this.isPdfDocument(file.mime)
+    )
 
-    // todo:
-    // if (files.length > 0) {
-    //   this.props.displaySplitter(files)
-    // }
+    this.setState({
+      selectedDocuments: files
+    })
   }
 
   deleteSingleFile = file => {
@@ -231,7 +222,7 @@ class FileManager extends React.Component {
       <Fragment>
         <SearchFiles onSearch={this.handleChangeSearchCriteria} />
 
-        <UploadManager disableClick deal={this.props.deal}>
+        <UploadManager deal={this.props.deal} disableClick>
           <Table
             plugins={{
               sortable: {},
@@ -258,6 +249,7 @@ class FileManager extends React.Component {
         {this.state.selectedDocuments && (
           <PdfSplitter
             files={this.state.selectedDocuments}
+            deal={this.props.deal}
             onClose={this.handleClosePdfSplitter}
           />
         )}
