@@ -17,16 +17,21 @@ class AddRoleForm extends React.Component {
     selectedRole: null
   }
 
-  closeDrawer = () =>
+  closeDrawer = () => {
     this.setState({
       isFormOpen: false,
       selectedRole: null
     })
 
+    if (this.props.onCloseDrawer) {
+      this.props.onCloseDrawer()
+    }
+  }
+
   handleSelectRole = item =>
     this.setState({
       isFormOpen: true,
-      selectedRole: item.value
+      selectedRole: item ? item.value : null
     })
 
   get AllowedRoles() {
@@ -72,8 +77,6 @@ class AddRoleForm extends React.Component {
   itemToString = item => item.label
 
   render() {
-    const { deal } = this.props
-    const { isFormOpen, selectedRole } = this.state
     const roleItems = this.RoleItems
 
     if (roleItems.length === 0) {
@@ -82,25 +85,32 @@ class AddRoleForm extends React.Component {
 
     return (
       <Container>
-        <BasicDropdown
-          fullWidth
-          buttonSize={this.props.buttonSize}
-          items={roleItems}
-          itemToString={this.itemToString}
-          onChange={this.handleSelectRole}
-          buttonIcon={AddIcon}
-          buttonText="Add a new contact"
-          disabled={roleItems.length === 0}
-        />
+        {this.props.actionRenderer ? (
+          this.props.actionRenderer({
+            disabled: roleItems.length === 0,
+            onClick: this.handleSelectRole
+          })
+        ) : (
+          <BasicDropdown
+            fullWidth
+            buttonSize={this.props.buttonSize}
+            items={roleItems}
+            itemToString={this.itemToString}
+            onChange={this.handleSelectRole}
+            buttonIcon={AddIcon}
+            buttonText="Add a new contact"
+            disabled={roleItems.length === 0}
+          />
+        )}
 
-        {isFormOpen && (
+        {this.state.isFormOpen && (
           <RoleAgentIntegration
-            deal={deal}
+            deal={this.props.deal}
             onUpsertRole={this.props.onCreateRole}
             allowedRoles={this.AllowedRoles}
             isDoubleEnded={this.isDoubleEnded}
             isPrimaryAgent={['BuyerAgent', 'SellerAgent'].includes(
-              selectedRole
+              this.state.selectedRole
             )}
             modalTitle="Add to Deal"
             onHide={this.closeDrawer}
