@@ -156,7 +156,7 @@ class Roles extends React.Component {
     return this.props.allowedRoles
   }
 
-  ShowDeleteButton() {
+  get ShowDeleteButton() {
     return !this.state.deletingRoleId && this.props.allowDeleteRole
   }
 
@@ -225,11 +225,13 @@ class Roles extends React.Component {
             )
           })}
 
-        {this.props.disableAddRole !== true && (
+        {this.props.disableAddRole === false && (
           <AddRole
+            actionRenderer={this.props.addRoleActionRenderer}
             deal={this.props.deal}
             allowedRoles={this.AllowedRoles}
             onCreateRole={this.props.onCreateRole}
+            onCloseDrawer={this.props.onCloseAddRoleDrawer}
           />
         )}
 
@@ -259,11 +261,16 @@ class Roles extends React.Component {
 }
 
 Roles.propsTypes = {
-  disableAddRole: PropTypes.bool
+  disableAddRole: PropTypes.bool,
+  allowDeleteRole: PropTypes.bool,
+  addRoleActionRenderer: PropTypes.func,
+  onCloseAddRoleDrawer: PropTypes.func
 }
 
 Roles.defaultProps = {
-  disableAddRole: false
+  disableAddRole: false,
+  allowDeleteRole: true,
+  onCloseAddRoleDrawer: () => null
 }
 
 export default connect(
