@@ -6,6 +6,8 @@ import { syncDeleteFile } from 'actions/deals'
 import { BasicDropdown } from 'components/BasicDropdown'
 import VerticalDotsIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
 
+import GetSignature from '../../../../Signature'
+
 import FileLink from './FileLink'
 
 import {
@@ -72,7 +74,8 @@ class Attachments extends React.Component {
       name: file.name,
       type: this.getFileType(file),
       preview_url: file.preview_url,
-      src: file.url
+      url: file.url,
+      created_at: file.created_at
     }))
   }
 
@@ -92,7 +95,7 @@ class Attachments extends React.Component {
                 <FileLink
                   isBackOffice={this.props.isBackOffice}
                   fileType={file.type}
-                  externalUrl={file.src}
+                  externalUrl={file.url}
                   internalUrl={`/dashboard/deals/${deal.id}/view/${
                     task.id
                   }/attachment/${file.id}`}
@@ -103,6 +106,18 @@ class Attachments extends React.Component {
               </FileTitle>
 
               <FileActions>
+                {file.type === 'pdf' && (
+                  <GetSignature
+                    deal={deal}
+                    defaultAttachments={[
+                      {
+                        task: this.props.task,
+                        file
+                      }
+                    ]}
+                  />
+                )}
+
                 <BasicDropdown
                   pullTo="right"
                   style={{ marginRight: '-0.2rem' }}

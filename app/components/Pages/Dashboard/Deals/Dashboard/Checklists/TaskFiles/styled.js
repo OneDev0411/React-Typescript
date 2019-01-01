@@ -35,6 +35,8 @@ export const FileTitle = styled.div`
 `
 
 export const FileActions = styled.div`
+  display: flex;
+
   svg {
     fill: rgba(0, 0, 0, 0.2);
   }
