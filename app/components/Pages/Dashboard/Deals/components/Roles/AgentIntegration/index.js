@@ -42,12 +42,12 @@ class RoleAgentIntegration extends React.Component {
   }
 
   onSelectContactUser = contact =>
-    this.setState({
+    this.setState(state => ({
       ...initialState,
       showRoleDrawer: true,
-      selectedAgent: this.state.selectedAgent,
+      selectedAgent: state.selectedAgent,
       role: convertContactToRole(contact, this.props.attributeDefs)
-    })
+    }))
 
   onUpsertRole = role => {
     const { selectedAgent } = this.state
@@ -150,14 +150,11 @@ class RoleAgentIntegration extends React.Component {
   }
 
   render() {
-    const { role, selectedAgent } = this.state
-    const { deal, modalTitle } = this.props
-
     return (
       <Fragment>
         {this.state.showAgentModal && (
           <AgentModal
-            title={modalTitle}
+            title={this.props.modalTitle}
             isPrimaryAgent={this.IsPrimaryAgent}
             onClose={this.onClose}
             onSelectAgent={this.onSelectAgent}
@@ -165,11 +162,11 @@ class RoleAgentIntegration extends React.Component {
         )}
 
         <RoleCrmIntegration
-          deal={deal}
+          deal={this.props.deal}
           isOpen={this.state.showRoleDrawer}
-          role={role}
+          role={this.state.role}
           dealSide={this.props.dealSide}
-          modalTitle={modalTitle}
+          modalTitle={this.props.modalTitle}
           allowedRoles={this.props.allowedRoles}
           isCommissionRequired={this.props.isCommissionRequired}
           onHide={this.onClose}
@@ -177,10 +174,12 @@ class RoleAgentIntegration extends React.Component {
         />
 
         <ContactModal
-          title={modalTitle}
+          title={this.props.modalTitle}
           isOpen={this.state.showContactModal}
           handleOnClose={this.onClose}
-          handleAddManually={selectedAgent ? null : this.showRoleDrawer}
+          handleAddManually={
+            this.state.selectedAgent ? null : this.state.roleDrawer
+          }
           handleSelectedItem={this.onSelectContactUser}
         />
       </Fragment>
