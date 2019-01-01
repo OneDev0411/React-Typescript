@@ -150,7 +150,8 @@ export default class SignatureComposeDrawer extends React.Component {
                 labelText="Message"
                 placeholder="Write your Message..."
                 name="message"
-                maxRows={8}
+                minRows={6}
+                maxRows={1000}
                 component={TextArea}
               />
 
