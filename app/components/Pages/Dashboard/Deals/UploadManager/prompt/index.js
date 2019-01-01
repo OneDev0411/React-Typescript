@@ -228,18 +228,16 @@ class UploadModal extends React.Component {
   }
 
   render() {
-    const { deal, splitter, upload } = this.props
-    const filesCount = _.size(upload.files)
+    const { deal, upload } = this.props
 
-    // get list of pdfs aren't uploaded yet
-    const pdfsList = this.getPdfFiles()
+    const filesCount = _.size(upload.files)
 
     let fileCounter = 0
 
     return (
       <Modal
         dialogClassName="modal-deal-upload-files"
-        show={filesCount > 0 && _.size(splitter.files) === 0}
+        show={filesCount > 0}
         onHide={() => this.closeModal()}
         backdrop="static"
       >
@@ -347,8 +345,7 @@ function mapStateToProps({ deals, user }) {
     checklists: deals.checklists,
     selectedTask: deals.properties.selectedTask,
     tasks: deals.tasks,
-    upload: deals.upload,
-    splitter: deals.splitter
+    upload: deals.upload
   }
 }
 
