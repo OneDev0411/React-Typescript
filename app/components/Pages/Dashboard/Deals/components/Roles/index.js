@@ -94,6 +94,8 @@ class Roles extends React.Component {
 
   onSelectRole = role => {
     if (!role.email && this.props.isEmailRequired) {
+      this.props.onTriggerRequiredEmail()
+
       return this.props.confirmation({
         message: `${role.legal_first_name} has no email!`,
         description: `Add ${role.legal_first_name}'s email to continue.`,
@@ -109,9 +111,7 @@ class Roles extends React.Component {
     this.setSelectedRole(role)
   }
 
-  closeRoleForm = () => {
-    this.setState({ isRoleFormOpen: false, user: null })
-  }
+  closeRoleForm = () => this.setState({ isRoleFormOpen: false, user: null })
 
   setSelectedRole = user =>
     this.setState({
@@ -168,8 +168,9 @@ class Roles extends React.Component {
         {(this.props.deal.roles || [])
           .filter(
             roleId =>
-              !this.props.allowedRoles ||
-              this.props.allowedRoles.includes(this.props.roles[roleId].role)
+              this.props.filter(this.props.roles[roleId]) &&
+              (!this.props.allowedRoles ||
+                this.props.allowedRoles.includes(this.props.roles[roleId].role))
           )
           .map(roleId => {
             const role = this.props.roles[roleId]
@@ -263,14 +264,18 @@ class Roles extends React.Component {
 Roles.propsTypes = {
   disableAddRole: PropTypes.bool,
   allowDeleteRole: PropTypes.bool,
+  filter: PropTypes.func,
   addRoleActionRenderer: PropTypes.func,
-  onCloseAddRoleDrawer: PropTypes.func
+  onCloseAddRoleDrawer: PropTypes.func,
+  onTriggerRequiredEmail: PropTypes.func
 }
 
 Roles.defaultProps = {
   disableAddRole: false,
   allowDeleteRole: true,
-  onCloseAddRoleDrawer: () => null
+  filter: () => true,
+  onCloseAddRoleDrawer: () => null,
+  onTriggerRequiredEmail: () => null
 }
 
 export default connect(
