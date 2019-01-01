@@ -26,6 +26,13 @@ export const Header = styled.div`
   margin: 0.5rem 0;
 `
 
+export const ItemContainer = styled.div`
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 0 0 #f5f5f5;
+  margin-bottom: 0.5rem;
+`
+
 export const RoleTitle = styled(Title)`
   font-weight: 500;
 `
@@ -62,16 +69,5 @@ export const RecipientTypeCell = styled.div`
 
 export const DeleteCell = styled.div`
   width: 5%;
-  opacity: 0;
-`
-
-export const ItemContainer = styled.div`
-  display: flex;
-  align-items: center;
-  box-shadow: 0 1px 0 0 #f5f5f5;
-  margin-bottom: 0.5rem;
-
-  :hover ${DeleteCell} {
-    opacity: 1;
-  }
+  text-align: right;
 `

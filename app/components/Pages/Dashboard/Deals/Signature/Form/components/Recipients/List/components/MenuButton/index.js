@@ -22,8 +22,8 @@ export function MenuButton(props) {
       <IconDrop
         style={{
           fill: primary,
-          marginLeft: '0.875rem',
-          transform: `rotate(${props.isOpen} ? '90deg' : '0')`
+          marginTop: '5px',
+          transform: `rotate(${props.isOpen} ? '180deg' : '0')`
         }}
       />
     </ActionButton>

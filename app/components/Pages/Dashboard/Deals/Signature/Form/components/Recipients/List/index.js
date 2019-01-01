@@ -156,7 +156,6 @@ export class RecipientsList extends React.Component {
               >
                 <IconClose
                   style={{
-                    fill: red.A100,
                     width: '1.5rem',
                     cursor: 'pointer'
                   }}

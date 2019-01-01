@@ -82,7 +82,11 @@ export class Recipients extends React.Component {
           onRemoveRecipient={this.handleRemoveRecipient}
         />
 
-        <AddRecipient deal={props.deal} onAddRecipient={this.onAddRecipient} />
+        <AddRecipient
+          deal={props.deal}
+          onAddRecipient={this.onAddRecipient}
+          selectedRoles={props.input.value}
+        />
 
         {props.meta.error && props.meta.touched && (
           <InputError>{props.meta.error}</InputError>

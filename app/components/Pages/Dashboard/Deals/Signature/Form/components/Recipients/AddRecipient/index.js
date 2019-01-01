@@ -37,12 +37,14 @@ export class AddRecipient extends React.Component {
   }
 
   handleCreateNewRole = props => {
+    this.handleLockOuterClick()
+    props.onClick()
+  }
+
+  handleLockOuterClick = () =>
     this.setState({
       isOuterClickLocked: true
     })
-
-    props.onClick()
-  }
 
   handleUnlockOuterClick = () =>
     this.setState({
@@ -75,7 +77,7 @@ export class AddRecipient extends React.Component {
                 }}
               >
                 <IconAdd style={{ fill: primary, marginRight: '1rem' }} />
-                <span style={{ fontWeight: 500 }}>Add next Recipient</span>
+                <span style={{ fontWeight: 500 }}>Add Next Recipient</span>
               </ActionButton>
 
               {isOpen && (
@@ -86,8 +88,10 @@ export class AddRecipient extends React.Component {
                     isEmailRequired
                     allowDeleteRole={false}
                     onSelect={this.handleAddRecipient}
+                    onTriggerRequiredEmail={this.handleLockOuterClick}
                     onCloseAddRoleDrawer={this.handleUnlockOuterClick}
                     onCreateRole={this.handleUnlockOuterClick}
+                    filter={role => !this.props.selectedRoles[role.id]}
                     addRoleActionRenderer={props => (
                       <LinkButton
                         onClick={() => this.handleCreateNewRole(props)}

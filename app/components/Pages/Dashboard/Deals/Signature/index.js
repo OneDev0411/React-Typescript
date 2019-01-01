@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 
+import { confirmation } from 'actions/confirmation'
 import { createEnvelope } from 'actions/deals'
 
 import Deal from 'models/Deal'
@@ -59,7 +60,12 @@ class Signature extends React.Component {
       // reset recipients
       this.setState({ isSending: false, isFormOpen: false, formData: null })
 
-      this.openDocusign(envelope)
+      this.props.confirmation({
+        description: 'Envelope is ready to review and send',
+        confirmLabel: 'Open Envelope',
+        hideCancelButton: true,
+        onConfirm: () => this.openDocusign(envelope)
+      })
     } catch (e) {
       console.log(e)
 
@@ -129,6 +135,7 @@ export default connect(
   mapStateToProps,
   {
     createEnvelope,
+    confirmation,
     notify
   }
 )(Signature)

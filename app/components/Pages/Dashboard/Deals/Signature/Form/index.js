@@ -102,24 +102,21 @@ export default class SignatureComposeDrawer extends React.Component {
                 width: '100%'
               }}
             >
-              <IconButton
-                isFit
-                iconSize="large"
-                inverse
-                type="button"
-                onClick={this.toggleOpenAttachments}
-              >
-                <Tooltip caption="Select Attachments">
-                  <IconFolder />
-                </Tooltip>
-              </IconButton>
+              <Tooltip caption="Select Attachments">
+                <IconFolder
+                  style={{ width: '2rem', cursor: 'pointer' }}
+                  onClick={this.toggleOpenAttachments}
+                />
+              </Tooltip>
 
               <ActionButton
                 type="submit"
                 disabled={this.props.isSubmitting}
                 onClick={props.handleSubmit}
               >
-                {this.props.isSubmitting ? 'Sending...' : 'Send'}
+                {this.props.isSubmitting
+                  ? 'Please Wait...'
+                  : 'View In Docusign'}
               </ActionButton>
             </div>
           )}
@@ -135,6 +132,9 @@ export default class SignatureComposeDrawer extends React.Component {
               <Field
                 placeholder="From"
                 name="from"
+                style={{
+                  fontWeight: '500'
+                }}
                 readOnly
                 component={TextInput}
               />
@@ -149,8 +149,11 @@ export default class SignatureComposeDrawer extends React.Component {
               <Field
                 labelText="Message"
                 placeholder="Write your Message..."
+                containerStyle={{
+                  borderBottom: 'none'
+                }}
                 name="message"
-                minRows={6}
+                minRows={8}
                 maxRows={1000}
                 component={TextArea}
               />
