@@ -182,7 +182,6 @@ class Address extends React.Component {
       street_suffix || '',
       unit_number ? `, Unit ${unit_number},` : '',
       city ? `, ${city}` : '',
-      county ? `, ${county}` : '',
       state ? `, ${state}` : '',
       postal_code ? `, ${postal_code}` : ''
     ]
