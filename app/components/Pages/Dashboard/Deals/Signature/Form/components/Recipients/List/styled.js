@@ -55,6 +55,8 @@ export const RoleCell = styled.div`
 `
 
 export const RecipientTypeCell = styled.div`
+  display: flex;
+  justify-content: flex-end;
   width: 25%;
 `
 

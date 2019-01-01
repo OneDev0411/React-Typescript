@@ -104,13 +104,15 @@ export class RecipientsList extends React.Component {
             </OrderCell>
 
             <RoleCell>
-              <Role>
+              <Role style={{ justifyContent: 'flex-start' }}>
                 <RoleAvatar style={{ width: 'auto' }}>
                   <UserAvatar
                     size={32}
                     color="#000"
                     title={getAvatarTitle(role)}
-                    image={role ? role.user.profile_image_url : null}
+                    image={
+                      role && role.user ? role.user.profile_image_url : null
+                    }
                   />
                 </RoleAvatar>
 
