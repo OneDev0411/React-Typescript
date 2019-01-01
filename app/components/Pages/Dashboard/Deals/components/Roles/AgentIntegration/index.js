@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
 import ContactModal from 'components/SelectContactModal'
+
 import { convertContactToRole, AGENT_ROLES } from '../../../utils/roles'
 
 import RoleCrmIntegration from '../CrmIntegration'
@@ -156,9 +157,9 @@ class RoleAgentIntegration extends React.Component {
       <Fragment>
         {this.state.showAgentModal && (
           <AgentModal
-            modalTitle={modalTitle}
+            title={modalTitle}
             isPrimaryAgent={this.IsPrimaryAgent}
-            onHide={this.onClose}
+            onClose={this.onClose}
             onSelectAgent={this.onSelectAgent}
           />
         )}
