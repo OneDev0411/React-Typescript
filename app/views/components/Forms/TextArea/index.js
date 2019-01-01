@@ -11,11 +11,12 @@ import { InputField } from './styled'
 
 export class TextArea extends React.Component {
   state = {
-    rows: 2,
     height: this.props.minHeight
   }
 
-  onHeightChangeHandler = height => this.setState({ height: height + 5 })
+  onHeightChangeHandler = height => {
+    this.setState({ height: height + 5 })
+  }
 
   render() {
     const { meta, Container = InputContainer } = this.props
@@ -36,7 +37,7 @@ export class TextArea extends React.Component {
           hasError={
             this.props.highlightOnError && meta.submitFailed && meta.error
           }
-          rows={this.state.rows}
+          minRows={this.props.minRows}
           maxRows={this.props.maxRows}
           style={{
             width: '100%',
@@ -46,9 +47,9 @@ export class TextArea extends React.Component {
           {...this.props.rest}
         />
 
-        {this.props.showError &&
-          meta.error &&
-          meta.touched && <InputError>{meta.error}</InputError>}
+        {this.props.showError && meta.error && meta.touched && (
+          <InputError>{meta.error}</InputError>
+        )}
       </Container>
     )
   }
@@ -56,6 +57,7 @@ export class TextArea extends React.Component {
 
 TextArea.propTypes = {
   minHeight: PropTypes.number,
+  minRows: PropTypes.number,
   maxRows: PropTypes.number,
   hasLabel: PropTypes.bool,
   showError: PropTypes.bool,
@@ -65,6 +67,7 @@ TextArea.propTypes = {
 TextArea.defaultProps = {
   minHeight: 40,
   maxRows: 1000,
+  minRows: 2,
   hasLabel: true,
   showError: true,
   highlightOnError: false
