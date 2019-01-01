@@ -1,7 +1,9 @@
 import React from 'react'
 import { Field } from 'react-final-form'
 import _ from 'underscore'
+
 import { TextInput } from 'components/Forms/TextInput'
+
 import { CommissionInput } from '../FormComponents/CommissionInput'
 import { TitleDropDown } from '../FormComponents/TitleDropdown'
 import { RolesDropDown } from '../FormComponents/RolesDropdown'
