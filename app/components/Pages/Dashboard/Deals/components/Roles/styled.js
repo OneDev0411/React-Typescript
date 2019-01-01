@@ -1,7 +1,8 @@
 import styled from 'styled-components'
-import { SectionTitle } from '../../Dashboard/Factsheet/styled'
 
 import { primary } from 'views/utils/colors'
+
+import { SectionTitle } from '../../Dashboard/Factsheet/styled'
 
 export const RolesContainer = styled.div``
 
@@ -11,8 +12,15 @@ export const RolesTitle = styled(SectionTitle)`
 `
 
 export const RoleActions = styled.div`
-  width: 5%;
   opacity: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  button {
+    height: 1.6rem;
+    line-height: 1.6rem;
+  }
 `
 
 export const RoleAvatar = styled.div`
@@ -23,7 +31,6 @@ export const RoleAvatar = styled.div`
 export const RoleInfo = styled.div`
   text-align: left;
   padding-left: 0.625rem;
-  width: calc(100% - (5% + 50px));
 `
 
 export const RoleTitle = styled.div`
@@ -41,6 +48,7 @@ export const RoleType = styled.div`
 export const RoleItem = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   border-radius: 3px;
   margin-bottom: 1rem;
   padding: 0 1.5rem;

@@ -3,13 +3,19 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
+import Flex from 'styled-flex-component'
+
 import UserAvatar from 'components/Avatar'
-import { deleteRole } from 'actions/deals'
+import { deleteRole, createRoles } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
 import IconButton from 'components/Button/IconButton'
 
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+
+import ActionButton from 'components/Button/ActionButton'
+
+import TeamAgents from './AgentIntegration/AgentsList'
 
 import { roleName, getLegalFullName } from '../../utils/roles'
 import { getAvatarTitle } from '../../utils/get-avatar-title'
@@ -32,50 +38,35 @@ class Roles extends React.Component {
   state = {
     user: null,
     deletingRoleId: null,
-    isRoleFormOpen: false
+    isRoleFormOpen: false,
+    isReplaceAgentDrawerOpen: false
   }
 
-  canRemoveRole = role => {
+  isPrimaryAgent = role => {
     const { deal_type } = this.props.deal
 
     if (
       (deal_type === 'Buying' && role === 'BuyerAgent') ||
       (deal_type === 'Selling' && role === 'SellerAgent')
     ) {
-      return false
+      return true
     }
 
-    return true
+    return false
   }
 
-  onRequestRemoveRole = (e, user) => {
-    e.stopPropagation()
-
-    const { confirmation } = this.props
-
-    if (this.canRemoveRole(user.role) === false) {
-      return confirmation({
-        message: 'You cannot delete the primary agent for the deal',
-        hideCancelButton: true,
-        confirmLabel: 'Okay',
-        onConfirm: () => null
-      })
-    }
-
-    confirmation({
-      message: `Remove <b>${user.legal_first_name} ${
-        user.legal_last_name
+  handleRemoveRole = role => {
+    this.props.confirmation({
+      message: `Remove <b>${role.legal_first_name} ${
+        role.legal_last_name
       }</b>?`,
       confirmLabel: 'Yes, remove contact',
-      onConfirm: () => this.removeRole(user)
+      onConfirm: () => this.removeRole(role)
     })
   }
 
   removeRole = async role => {
-    const { deleteRole, notify, deal } = this.props
-    const { deletingRoleId } = this.state
-
-    if (deletingRoleId) {
+    if (this.state.deletingRoleId) {
       return false
     }
 
@@ -84,18 +75,13 @@ class Roles extends React.Component {
     })
 
     try {
-      await deleteRole(deal.id, role.id)
+      await this.props.deleteRole(this.props.deal.id, role.id)
 
       if (this.props.onDeleteRole) {
         this.props.onDeleteRole(role)
       }
-
-      notify({
-        message: 'The contact removed from this deal.',
-        status: 'success'
-      })
     } catch (e) {
-      notify({
+      this.props.notify({
         message: 'Can not remove the contact from this deal, please try again',
         status: 'error'
       })
@@ -107,10 +93,8 @@ class Roles extends React.Component {
   }
 
   onSelectRole = role => {
-    const { confirmation, isEmailRequired, onSelect } = this.props
-
-    if (!role.email && isEmailRequired) {
-      return confirmation({
+    if (!role.email && this.props.isEmailRequired) {
+      return this.props.confirmation({
         message: `${role.legal_first_name} has no email!`,
         description: `Add ${role.legal_first_name}'s email to continue.`,
         confirmLabel: 'Add Email',
@@ -118,17 +102,53 @@ class Roles extends React.Component {
       })
     }
 
-    if (typeof onSelect === 'function') {
-      return onSelect(role)
+    if (typeof this.props.onSelect === 'function') {
+      return this.props.onSelect(role)
     }
 
     this.setSelectedRole(role)
   }
 
-  setSelectedRole = user => {
+  closeRoleForm = () => {
+    this.setState({ isRoleFormOpen: false, user: null })
+  }
+
+  setSelectedRole = user =>
     this.setState({
       user,
       isRoleFormOpen: true
+    })
+
+  toggleOpenReplaceAgentDrawer = user =>
+    this.setState(state => ({
+      user: state.user ? null : user,
+      isReplaceAgentDrawerOpen: !state.isReplaceAgentDrawerOpen
+    }))
+
+  handleReplaceAgent = async user => {
+    const { office, work_phone } = user.agent || {}
+    const currentRole = this.state.user
+
+    const role = {
+      user: user.id,
+      email: user.email,
+      legal_last_name: user.last_name,
+      legal_first_name: user.first_name,
+      phone_number: user.phone_number || work_phone,
+      company: office ? office.name : '',
+      role: currentRole.role,
+      commission_dollar: currentRole.commission_dollar,
+      commission_percentage: currentRole.commission_percentage
+    }
+
+    await this.removeRole(this.state.user)
+    await this.props.createRoles(this.props.deal.id, [role])
+
+    this.toggleOpenReplaceAgentDrawer()
+
+    this.props.notify({
+      message: 'Primary Agent replaced',
+      status: 'success'
     })
   }
 
@@ -136,84 +156,101 @@ class Roles extends React.Component {
     return this.props.allowedRoles
   }
 
-  closeRoleForm = () => this.setState({ isRoleFormOpen: false, user: null })
+  ShowDeleteButton() {
+    return !this.state.deletingRoleId && this.props.allowDeleteRole
+  }
 
   render() {
-    const { deal, roles, allowedRoles, allowDeleteRole } = this.props
-    const { user, deletingRoleId, isRoleFormOpen } = this.state
-
     return (
       <RolesContainer style={this.props.containerStyle}>
         {this.props.showTitle !== false && <RolesTitle>Contacts</RolesTitle>}
 
-        {(deal.roles || [])
+        {(this.props.deal.roles || [])
           .filter(
-            roleId => !allowedRoles || allowedRoles.includes(roles[roleId].role)
+            roleId =>
+              !this.props.allowedRoles ||
+              this.props.allowedRoles.includes(this.props.roles[roleId].role)
           )
           .map(roleId => {
-            const role = roles[roleId]
-            const { id, user } = role
+            const role = this.props.roles[roleId]
+            const isPrimaryAgent = this.isPrimaryAgent(role.role)
 
             return (
-              <RoleItem
-                key={id}
-                className="item"
-                onClick={() => this.onSelectRole(role)}
-              >
-                <RoleAvatar>
-                  <UserAvatar
-                    size={40}
-                    color="#000000"
-                    title={getAvatarTitle(role)}
-                    image={user ? user.profile_image_url : null}
-                  />
-                </RoleAvatar>
+              <RoleItem key={role.id} className="item">
+                <Flex alignCenter>
+                  <RoleAvatar>
+                    <UserAvatar
+                      size={40}
+                      color="#000000"
+                      title={getAvatarTitle(role)}
+                      image={role.user ? role.user.profile_image_url : null}
+                    />
+                  </RoleAvatar>
 
-                <RoleInfo>
-                  <RoleTitle>{getLegalFullName(role)}</RoleTitle>
-                  <RoleType>{roleName(role.role)}</RoleType>
-                </RoleInfo>
+                  <RoleInfo onClick={() => this.onSelectRole(role)}>
+                    <RoleTitle>{getLegalFullName(role)}</RoleTitle>
+                    <RoleType>{roleName(role.role)}</RoleType>
+                  </RoleInfo>
+                </Flex>
 
-                {allowDeleteRole && (
-                  <RoleActions>
-                    {deletingRoleId &&
-                      id === deletingRoleId && (
-                        <i className="fa fa-spinner fa-spin" />
-                      )}
+                <RoleActions>
+                  {role.id === this.state.deletingRoleId && (
+                    <i className="fa fa-spinner fa-spin" />
+                  )}
 
-                    {!deletingRoleId && (
-                      <IconButton
-                        appearance="icon"
-                        inverse
-                        onClick={e => this.onRequestRemoveRole(e, role)}
-                        className="delete-button"
-                      >
-                        <CloseIcon />
-                      </IconButton>
-                    )}
-                  </RoleActions>
-                )}
+                  {this.ShowDeleteButton && !isPrimaryAgent && (
+                    <IconButton
+                      appearance="icon"
+                      inverse
+                      onClick={() => this.handleRemoveRole(role)}
+                      style={{ padding: 0, marginLeft: '0.5rem' }}
+                      className="delete-button"
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  )}
+
+                  {this.ShowDeleteButton && isPrimaryAgent && (
+                    <ActionButton
+                      appearance="outline"
+                      size="small"
+                      style={{ marginLeft: '0.5rem' }}
+                      onClick={() => this.toggleOpenReplaceAgentDrawer(role)}
+                    >
+                      Replace
+                    </ActionButton>
+                  )}
+                </RoleActions>
               </RoleItem>
             )
           })}
 
-        {isRoleFormOpen && (
+        {this.props.disableAddRole !== true && (
+          <AddRole
+            deal={this.props.deal}
+            allowedRoles={this.AllowedRoles}
+            onCreateRole={this.props.onCreateRole}
+          />
+        )}
+
+        {this.state.isRoleFormOpen && (
           <RoleCrmIntegration
             isOpen
-            deal={deal}
-            role={user}
+            deal={this.props.deal}
+            role={this.state.user}
             modalTitle="Update Contact"
-            allowedRoles={allowedRoles}
+            allowedRoles={this.props.allowedRoles}
             onUpsertRole={this.props.onUpsertRole}
             onHide={this.closeRoleForm}
           />
         )}
 
-        {this.props.disableAddRole !== true && (
-          <AddRole
-            deal={deal}
-            allowedRoles={this.AllowedRoles}
-            onCreateRole={this.props.onCreateRole}
+        {this.state.isReplaceAgentDrawerOpen && (
+          <TeamAgents
+            isPrimaryAgent
+            title="Select New Primary Agent"
+            onSelectAgent={this.handleReplaceAgent}
+            onClose={this.toggleOpenReplaceAgentDrawer}
           />
         )}
       </RolesContainer>
@@ -236,6 +273,7 @@ export default connect(
   {
     notify,
     deleteRole,
+    createRoles,
     confirmation
   }
 )(Roles)
