@@ -17,7 +17,7 @@ const propTypes = {
 const defaultProps = {
   isOpen: false,
   showFooter: true,
-  closeOnBackdropClick: true
+  closeOnBackdropClick: false
 }
 
 const OverlayDrawer = ({

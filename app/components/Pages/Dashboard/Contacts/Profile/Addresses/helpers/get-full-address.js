@@ -8,16 +8,20 @@ export function getFullAddress(fields) {
     idxName[field.attribute_def.name] = value == null ? '' : value
   })
 
-  const street = `${idxName.street_number} ${idxName.street_prefix} ${
-    idxName.street_name
-  } ${idxName.street_suffix}`
+  const street = [
+    idxName.street_number,
+    idxName.street_prefix,
+    idxName.street_name,
+    idxName.street_suffix
+  ]
+    .filter(i => i)
+    .join(' ')
 
   const unit = idxName.unit_number ? `Unit ${idxName.unit_number}` : ''
 
-  const others = `${idxName.city} ${idxName.state} ${idxName.postal_code}`
+  const others = [idxName.city, idxName.state, idxName.postal_code]
+    .filter(i => i)
+    .join(' ')
 
-  return [street, unit, others]
-    .map(item => item.replace('  ', '').trim())
-    .filter(item => item)
-    .join(', ')
+  return [street, unit, others].filter(item => item).join(', ')
 }

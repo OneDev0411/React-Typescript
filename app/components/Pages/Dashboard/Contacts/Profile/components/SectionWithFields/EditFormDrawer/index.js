@@ -72,7 +72,9 @@ const getAllFields = (attributes, mutators) => {
           validate={validate}
         />
       )
-    } else if (
+    }
+
+    if (
       !allFields.some(
         c => c.props.attribute.attribute_def.id === attribute_def.id
       )

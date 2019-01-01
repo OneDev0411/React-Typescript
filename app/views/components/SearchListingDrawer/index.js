@@ -33,12 +33,6 @@ class SearchListingDrawer extends React.Component {
         })
       )
 
-      if (this.props.isUpdatingList) {
-        this.props.onUpdateList([].concat(listings, this.props.initialList))
-
-        return
-      }
-
       this.props.onSelectListings(listings)
     } catch (e) {
       console.log(e)
@@ -48,6 +42,11 @@ class SearchListingDrawer extends React.Component {
       })
     }
   }
+
+  normalizeSelectedItem = item => ({
+    ...item,
+    id: item.type === 'deal' ? item.listing : item.id
+  })
 
   searchListing = async value => {
     const response = await Deal.searchListings(value)
@@ -83,8 +82,9 @@ class SearchListingDrawer extends React.Component {
           debounceTime: 500,
           minimumLength: 3
         }}
-        searchFunction={this.searchListing}
         ItemRow={ListingItem}
+        normalizeSelectedItem={this.normalizeSelectedItem}
+        searchFunction={this.searchListing}
         onSelectItems={this.handleSelectListings}
         {...this.props}
       />
@@ -93,7 +93,6 @@ class SearchListingDrawer extends React.Component {
 }
 
 SearchListingDrawer.propTypes = {
-  onSelectListing: PropTypes.func.isRequired,
   searchPlaceholder: PropTypes.string
 }
 

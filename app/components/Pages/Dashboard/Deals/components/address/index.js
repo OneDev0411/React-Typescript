@@ -255,7 +255,6 @@ class Address extends React.Component {
         title="Address"
         isOpen={this.props.show}
         onClose={this.props.onClose}
-        closeDrawerOnBackdropClick={this.props.closeOnBackdropClick}
         reinitializeAfterSubmit={false}
         onSubmit={this.onSubmit}
         validate={this.validate}

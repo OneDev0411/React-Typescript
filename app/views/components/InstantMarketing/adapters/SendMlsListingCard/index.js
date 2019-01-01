@@ -2,6 +2,8 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
+import _ from 'underscore'
+
 import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
@@ -26,7 +28,7 @@ class SendMlsListingCard extends React.Component {
   state = {
     listings: [],
     isListingsModalOpen: false,
-    showEditListings: false,
+    isEditingListings: false,
     isInstantMarketingBuilderOpen: false,
     isComposeEmailOpen: false,
     isSendingEmail: false,
@@ -142,7 +144,7 @@ class SendMlsListingCard extends React.Component {
 
   closeListingModal = () =>
     this.setState(
-      { isListingsModalOpen: false, showEditListings: false },
+      { isListingsModalOpen: false, isEditingListings: false },
       this.props.handleTrigger
     )
 
@@ -151,22 +153,20 @@ class SendMlsListingCard extends React.Component {
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
 
-  handleSelectListings = listings =>
+  handleSelectListings = listings => {
     this.setState(
       {
         listings,
         isListingsModalOpen: false,
+        isEditingListings: false,
         isInstantMarketingBuilderOpen: true
       },
       this.props.handleTrigger
     )
 
-  handleUpdateListings = listings => {
-    this.setState({
-      listings
-    })
-
-    this.regenerateTemplate({ listings })
+    if (typeof this.regenerateTemplate === 'function') {
+      this.regenerateTemplate({ listings })
+    }
   }
 
   handleSaveMarketingCard = async (template, owner) => {
@@ -208,6 +208,11 @@ class SendMlsListingCard extends React.Component {
       isSocialDrawerOpen: false
     })
 
+  handleEditListings = () =>
+    this.setState({
+      isEditingListings: true
+    })
+
   get TemplateInstanceData() {
     return {
       listings: [this.state.listings.map(listing => listing.id)]
@@ -227,24 +232,8 @@ class SendMlsListingCard extends React.Component {
     )
   }
 
-  get InitialList() {
-    if (this.state.showEditListings) {
-      return this.state.listings.map(listing => ({
-        ...listing,
-        image: listing.cover_image_url,
-        address_components: listing.property.address
-      }))
-    }
-
+  get DefaultList() {
     return getMlsDrawerInitialDeals(this.props.deals)
-  }
-
-  get SearchListingDrawerTitle() {
-    if (this.state.showEditListings) {
-      return 'Updating Listings'
-    }
-
-    return this.IsMultiListing ? 'Select Listings' : 'Select a Listing'
   }
 
   get Assets() {
@@ -274,12 +263,6 @@ class SendMlsListingCard extends React.Component {
     return data
   }
 
-  handleEditListings = () => {
-    this.setState({
-      showEditListings: true
-    })
-  }
-
   render() {
     const { user } = this.props
 
@@ -300,15 +283,27 @@ class SendMlsListingCard extends React.Component {
         )}
 
         <SearchListingDrawer
-          isOpen={this.state.isListingsModalOpen || this.state.showEditListings}
-          isUpdatingList={this.state.showEditListings}
-          title={this.SearchListingDrawerTitle}
+          isOpen={
+            this.state.isListingsModalOpen || this.state.isEditingListings
+          }
+          title={this.IsMultiListing ? 'Select Listings' : 'Select a Listing'}
           searchPlaceholder="Enter MLS# or an address"
-          initialList={this.InitialList}
+          defaultList={this.DefaultList}
+          defaultListTitle="Add from your deals"
           onClose={this.closeListingModal}
           onSelectListings={this.handleSelectListings}
-          onUpdateList={this.handleUpdateListings}
           multipleSelection={this.IsMultiListing}
+          renderAction={props => (
+            <ActionButton onClick={props.onClick}>
+              {this.state.isEditingListings ? (
+                'Apply Changes'
+              ) : (
+                <Fragment>
+                  Next ({_.size(props.selectedItems)} Listings Selected)
+                </Fragment>
+              )}
+            </ActionButton>
+          )}
         />
 
         <InstantMarketing

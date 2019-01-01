@@ -21,6 +21,18 @@ export const ListItem = styled.div`
       fill: #e60000;
     }
   }
+
+  button.add-item {
+    opacity: 0;
+  }
+
+  :hover button.add-item {
+    opacity: 1;
+  }
+
+  :hover {
+    background-color: ${grey.A100};
+  }
 `
 
 export const ListItemImage = styled.img`

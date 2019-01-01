@@ -1,4 +1,6 @@
 import React, { Fragment } from 'react'
+import { connect } from 'react-redux'
+
 import PropTypes from 'prop-types'
 
 import grapesjs from 'grapesjs'
@@ -63,7 +65,7 @@ class Builder extends React.Component {
       container: '#grapesjs-canvas',
       components: null,
       assetManager: {
-        assets: this.props.assets
+        assets: [...this.props.assets, ...this.UserAssets]
       },
       storageManager: {
         autoload: 0,
@@ -255,6 +257,7 @@ class Builder extends React.Component {
 
   get ShowEditListingsButton() {
     return (
+      this.state.originalTemplate &&
       this.props.templateTypes.includes('Listings') &&
       this.props.templateData.listings
     )
@@ -270,6 +273,15 @@ class Builder extends React.Component {
     }
 
     return false
+  }
+
+  get UserAssets() {
+    return ['profile_image_url', 'cover_image_url']
+      .filter(attr => this.props.user[attr])
+      .map(attr => ({
+        image: this.props.user[attr],
+        avatar: true
+      }))
   }
 
   renderAgentPickerButton = buttonProps => (
@@ -332,45 +344,47 @@ class Builder extends React.Component {
               </ActionButton>
             )}
 
-            {this.state.selectedTemplate && isSocialMedium && (
-              <Fragment>
-                <ActionButton
-                  onClick={() => this.handleSocialSharing('Instagram')}
-                >
-                  <i
-                    className="fa fa-instagram"
-                    style={{
-                      fontSize: '1.5rem',
-                      marginRight: '0.5rem'
-                    }}
-                  />
-                  Post to Instagram
-                </ActionButton>
+            {this.state.selectedTemplate &&
+              isSocialMedium && (
+                <Fragment>
+                  <ActionButton
+                    onClick={() => this.handleSocialSharing('Instagram')}
+                  >
+                    <i
+                      className="fa fa-instagram"
+                      style={{
+                        fontSize: '1.5rem',
+                        marginRight: '0.5rem'
+                      }}
+                    />
+                    Post to Instagram
+                  </ActionButton>
 
+                  <ActionButton
+                    style={{ marginLeft: '0.5rem' }}
+                    onClick={() => this.handleSocialSharing('Facebook')}
+                  >
+                    <i
+                      className="fa fa-facebook-square"
+                      style={{
+                        fontSize: '1.5rem',
+                        marginRight: '0.5rem'
+                      }}
+                    />
+                    Post to Facebook
+                  </ActionButton>
+                </Fragment>
+              )}
+
+            {this.state.selectedTemplate &&
+              !isSocialMedium && (
                 <ActionButton
                   style={{ marginLeft: '0.5rem' }}
-                  onClick={() => this.handleSocialSharing('Facebook')}
+                  onClick={this.handleSave}
                 >
-                  <i
-                    className="fa fa-facebook-square"
-                    style={{
-                      fontSize: '1.5rem',
-                      marginRight: '0.5rem'
-                    }}
-                  />
-                  Post to Facebook
+                  Next
                 </ActionButton>
-              </Fragment>
-            )}
-
-            {this.state.selectedTemplate && !isSocialMedium && (
-              <ActionButton
-                style={{ marginLeft: '0.5rem' }}
-                onClick={this.handleSave}
-              >
-                Next
-              </ActionButton>
-            )}
+              )}
 
             <Divider />
             <IconButton
@@ -401,12 +415,13 @@ class Builder extends React.Component {
             ref={ref => (this.grapes = ref)}
             style={{ position: 'relative' }}
           >
-            {this.IsVideoTemplate && this.IsTemplateLoaded && (
-              <VideoToolbar
-                onRef={ref => (this.videoToolbar = ref)}
-                editor={this.editor}
-              />
-            )}
+            {this.IsVideoTemplate &&
+              this.IsTemplateLoaded && (
+                <VideoToolbar
+                  onRef={ref => (this.videoToolbar = ref)}
+                  editor={this.editor}
+                />
+              )}
           </div>
         </BuilderContainer>
       </Container>
@@ -422,4 +437,10 @@ Builder.defaultProps = {
   onBuilderLoad: () => null
 }
 
-export default Builder
+function mapStateToProps({ user }) {
+  return {
+    user
+  }
+}
+
+export default connect(mapStateToProps)(Builder)

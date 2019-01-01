@@ -26,7 +26,7 @@ export class FinalFormDrawer extends React.Component {
     showFooter: true,
     submitButtonLabel: 'Save',
     submittingButtonLabel: 'Saving ...',
-    closeDrawerOnBackdropClick: true,
+    closeDrawerOnBackdropClick: false,
     validate: () => ({})
   }
 

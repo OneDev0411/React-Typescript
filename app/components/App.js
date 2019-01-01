@@ -292,7 +292,8 @@ class App extends Component {
       const isValidBrowser = browser.satisfies({
         // declare browsers per OS
         windows: {
-          'Internet Explorer': '>10'
+          'Internet Explorer': '>10',
+          'Microsoft Edge': '<12'
         },
         macos: {
           safari: '>10.1.2'
@@ -312,6 +313,7 @@ class App extends Component {
               'https://www.microsoft.com/en-us/download/internet-explorer.aspx'
             break
           case 'Chrome':
+          case 'Microsoft Edge':
             downloadLink = 'https://www.google.com/chrome/'
             break
           case 'Firefox':

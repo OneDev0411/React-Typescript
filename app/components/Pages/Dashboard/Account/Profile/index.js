@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
-import Catalog from './components/ProfileCatalog'
 import CoverImage from './components/CoverImage'
 import PersonalInfo from './components/PersonalInfo'
 import Timezone from './components/Timezone'
@@ -16,7 +15,6 @@ const Profile = ({ user, brand }) => (
       </PageHeader.Title>
     </PageHeader>
     <Fragment>
-      <Catalog user={user} />
       <PersonalInfo />
       <ChangePassword />
       <Timezone brand={brand} timezone={user.timezone} />

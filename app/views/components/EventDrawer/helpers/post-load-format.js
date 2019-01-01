@@ -6,7 +6,7 @@ import { getAssociations } from './get-associations'
  * Format form data for api model
  * @param {object} task The Task entity
  * @param {object} owner logged in user
- * @param {object} defaultAssociation The default association
+ * @param {object} defaultAssociation The default association(s)
  * @returns {Promise} a formated Task
  */
 export async function postLoadFormat(task, owner, defaultAssociation) {
@@ -15,10 +15,20 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
     value: null
   }
 
+  const associations = []
+
+  if (defaultAssociation) {
+    if (Array.isArray(defaultAssociation)) {
+      associations.push(...defaultAssociation)
+    } else {
+      associations.push(defaultAssociation)
+    }
+  }
+
   if (!task) {
     return {
       assignees: [owner],
-      associations: defaultAssociation ? [defaultAssociation] : [],
+      associations,
       dueDate: new Date(),
       reminder,
       task_type: { title: 'Call', value: 'Call' }

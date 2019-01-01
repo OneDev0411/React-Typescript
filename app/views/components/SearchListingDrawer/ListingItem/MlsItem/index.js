@@ -18,13 +18,11 @@ import {
   IconContainer
 } from '../styled'
 
-export function MlsItem({ item, renderCheckBox, isUpdatingList, ...props }) {
+export function MlsItem({ item, ...props }) {
   const address = item.address_components
 
   return (
-    <ListItem {...props}>
-      {renderCheckBox && renderCheckBox(item)}
-
+    <ListItem {...props} className="c-search-listings__mls-item">
       {props.isDraggable && <IconDrag style={{ marginRight: '0.5rem' }} />}
 
       <Flex style={{ width: '100%' }} justifyBetween alignCenter>
@@ -59,13 +57,9 @@ export function MlsItem({ item, renderCheckBox, isUpdatingList, ...props }) {
             {item.status}
           </Status>
 
-          {isUpdatingList &&
-            props.totalItems > 1 && (
-              <IconDelete
-                className="delete-icon"
-                onClick={props.onClickRemove}
-              />
-            )}
+          {props.removable && (
+            <IconDelete className="delete-icon" onClick={props.onClickRemove} />
+          )}
         </ListItemStatus>
       </Flex>
     </ListItem>
