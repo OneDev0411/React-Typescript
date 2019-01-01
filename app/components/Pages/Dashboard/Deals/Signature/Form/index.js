@@ -19,7 +19,7 @@ import Attachments from './components/Attachments'
 
 export default class SignatureComposeDrawer extends React.Component {
   state = {
-    isAttachmentsOpen: false
+    isAttachmentsOpen: true
   }
 
   formObject = null

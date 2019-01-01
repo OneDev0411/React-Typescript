@@ -44,6 +44,16 @@ export class AttachmentsSelect extends React.Component {
       <Drawer isOpen onClose={props.onClose}>
         <Drawer.Header title="Select Documents" />
         <Drawer.Body>
+          {props.tasks &&
+            props.tasks.map(task => (
+              <Document
+                key={task.id}
+                task={task}
+                onToggleItem={this.toggleSelectRow}
+                selectedItems={this.state.selectedItems}
+              />
+            ))}
+
           {props.deal.files &&
             props.deal.files
               .filter(file => file.mime === 'application/pdf')
@@ -55,21 +65,11 @@ export class AttachmentsSelect extends React.Component {
                   stashFile={file}
                 />
               ))}
-
-          {props.tasks &&
-            props.tasks.map(task => (
-              <Document
-                key={task.id}
-                task={task}
-                onToggleItem={this.toggleSelectRow}
-                selectedItems={this.state.selectedItems}
-              />
-            ))}
         </Drawer.Body>
 
         <Drawer.Footer style={{ flexDirection: 'row-reverse' }}>
           <ActionButton type="button" onClick={this.handleApply}>
-            Apply Selected Documents
+            Next
           </ActionButton>
         </Drawer.Footer>
       </Drawer>
