@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
+import _ from 'underscore'
 
 import { syncDeleteFile } from 'actions/deals'
 
@@ -69,14 +70,17 @@ class Attachments extends React.Component {
   }
 
   get Files() {
-    return this.props.attachments.map(file => ({
-      id: file.id,
-      name: file.name,
-      type: this.getFileType(file),
-      preview_url: file.preview_url,
-      url: file.url,
-      created_at: file.created_at
-    }))
+    return _.chain(this.props.attachments)
+      .sortBy(file => file.updated_at * -1)
+      .map(file => ({
+        id: file.id,
+        name: file.name,
+        type: this.getFileType(file),
+        preview_url: file.preview_url,
+        url: file.url,
+        created_at: file.created_at
+      }))
+      .value()
   }
 
   render() {
