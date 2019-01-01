@@ -142,9 +142,12 @@ class ContactProfile extends React.Component {
     )
 
   deleteEvent = id =>
-    this.setState(state => ({
-      timeline: this.filterTimelineById(state, id)
-    }))
+    this.setState(
+      state => ({
+        timeline: this.filterTimelineById(state, id)
+      }),
+      this.updateContact
+    )
 
   handleAddNote = async text => {
     await this.props.upsertContactAttributes(this.props.contact.id, [
