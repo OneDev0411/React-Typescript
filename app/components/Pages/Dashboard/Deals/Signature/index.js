@@ -61,8 +61,8 @@ class Signature extends React.Component {
       this.setState({ isSending: false, isFormOpen: false, formData: null })
 
       this.props.confirmation({
-        description: 'Envelope is ready to review and send',
-        confirmLabel: 'Open Envelope',
+        description: 'Your envelope is ready',
+        confirmLabel: 'Review in Docusign',
         hideCancelButton: true,
         onConfirm: () => this.openDocusign(envelope)
       })
