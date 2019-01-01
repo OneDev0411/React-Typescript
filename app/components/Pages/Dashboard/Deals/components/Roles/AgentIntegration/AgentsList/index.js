@@ -1,17 +1,21 @@
-import React, { Fragment } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Modal } from 'react-bootstrap'
 
-import UserAvatar from '../../../../../../../Partials/UserAvatar'
-import { roleName } from '../../../../utils/roles'
+import Flex from 'styled-flex-component'
 
 import { searchContacts } from 'models/contacts/search-contacts'
 import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
 
 import { getActiveTeam } from 'utils/user-teams'
 
+import Drawer from 'components/OverlayDrawer'
 import { getAgents } from 'models/Deal/agent'
 import Loading from 'components/Spinner'
+
+import Avatar from 'components/Avatar'
+
+import { roleName } from '../../../../utils/roles'
 
 import {
   RoleItem,
@@ -21,9 +25,7 @@ import {
   RoleType
 } from '../../styled'
 
-import { Container, SearchInput, SearchOverlay, EmptyState } from './styled'
-
-import './modalStyle.scss'
+import { Container, SearchInput, EmptyState } from './styled'
 
 class TeamAgents extends React.Component {
   state = {
@@ -54,10 +56,9 @@ class TeamAgents extends React.Component {
   }
 
   get Brand() {
-    const { user, isPrimaryAgent } = this.props
-    const team = getActiveTeam(user)
+    const team = getActiveTeam(this.props.user)
 
-    if (isPrimaryAgent) {
+    if (this.props.isPrimaryAgent) {
       return team.brand.id
     }
 
@@ -85,98 +86,119 @@ class TeamAgents extends React.Component {
       )
     } catch (e) {}
 
+    await this.props.onSelectAgent(user, contacts)
+
     this.setState({
       isSearchingContacts: false
     })
+  }
 
-    this.props.onSelectAgent(user, contacts)
+  handleChangeSearchFilter = e =>
+    this.setState({
+      searchFilter: e.target.value
+    })
+
+  get ShowEmptyState() {
+    return (
+      this.TeamAgents.length === 0 &&
+      !this.state.isLoading &&
+      !this.state.isSearchingContacts
+    )
+  }
+
+  get ShowLoading() {
+    return this.state.isSearchingContacts || this.state.isLoading
+  }
+
+  get TeamAgents() {
+    return this.state.teamAgents || []
   }
 
   render() {
-    const { onHide } = this.props
-    const {
-      searchFilter,
-      teamAgents,
-      isLoading,
-      isSearchingContacts
-    } = this.state
+    const { state, props } = this
 
     return (
-      <Modal
-        show
-        dialogClassName="modal-deal-team-agents"
-        backdrop="static"
-        onHide={onHide}
-      >
-        <Modal.Header closeButton>{this.props.modalTitle}</Modal.Header>
+      <Drawer isOpen onClose={props.onClose}>
+        <Drawer.Header title={props.title || 'Team Agents'} />
 
-        <Modal.Body className="u-scrollbar--thinner">
+        <Drawer.Body>
           <Container>
-            {(isSearchingContacts || isLoading) && (
-              <SearchOverlay>
-                <Loading />
-              </SearchOverlay>
+            {this.ShowEmptyState && (
+              <EmptyState>
+                We cannot find any Primary Agent in your brand
+              </EmptyState>
             )}
 
-            {!isLoading &&
-              !isSearchingContacts &&
-              (!teamAgents || teamAgents.length === 0) && (
-                <EmptyState>
-                  We cannot find any Primary Agent in your brand
-                </EmptyState>
-              )}
-
-            {teamAgents && (
-              <Fragment>
-                {teamAgents.length > 5 && (
-                  <SearchInput
-                    type="text"
-                    placeholder="Search Agent..."
-                    value={searchFilter}
-                    onChange={e =>
-                      this.setState({
-                        searchFilter: e.target.value
-                      })
-                    }
-                  />
-                )}
-
-                {teamAgents
-                  .filter(
-                    user =>
-                      user.display_name &&
-                      user.display_name
-                        .toLowerCase()
-                        .includes(searchFilter.toLowerCase())
-                  )
-                  .map(user => (
-                    <RoleItem
-                      key={user.id}
-                      onClick={() => this.handleSelectAgent(user)}
-                    >
-                      <RoleAvatar>
-                        <UserAvatar
-                          name={user.display_name}
-                          image={user.profile_image_url}
-                          size={32}
-                          color="#000000"
-                          showStateIndicator={false}
-                        />
-                      </RoleAvatar>
-
-                      <RoleInfo>
-                        <RoleTitle>{user.display_name}</RoleTitle>
-                        <RoleType>{roleName(user.role || '')}</RoleType>
-                      </RoleInfo>
-                    </RoleItem>
-                  ))}
-              </Fragment>
+            {this.ShowLoading === false && this.TeamAgents.length >= 6 && (
+              <SearchInput
+                type="text"
+                placeholder="Search Agent..."
+                value={state.searchFilter}
+                onChange={this.handleChangeSearchFilter}
+              />
             )}
+
+            {this.ShowLoading && <Loading />}
+
+            {this.ShowLoading === false &&
+              this.TeamAgents.filter(
+                user =>
+                  this.props.filter(user) &&
+                  user.display_name &&
+                  user.display_name
+                    .toLowerCase()
+                    .includes(state.searchFilter.toLowerCase())
+              ).map(user => (
+                <Flex key={user.id}>
+                  <RoleItem
+                    onClick={() => this.handleSelectAgent(user)}
+                    style={{
+                      width: '100%',
+                      justifyContent: 'flex-start',
+                      height: '3.5rem',
+                      marginBottom: 0,
+                      padding: 0
+                    }}
+                  >
+                    <RoleAvatar>
+                      <Avatar
+                        title={user.display_name}
+                        image={user.profile_image_url}
+                        size={40}
+                      />
+                    </RoleAvatar>
+
+                    <RoleInfo>
+                      <RoleTitle
+                        style={{
+                          fontSize: '1rem',
+                          fontWeight: 500
+                        }}
+                      >
+                        {user.display_name}
+                      </RoleTitle>
+                      <RoleType>{roleName(user.role || '')}</RoleType>
+                    </RoleInfo>
+                  </RoleItem>
+                </Flex>
+              ))}
           </Container>
-        </Modal.Body>
-      </Modal>
+        </Drawer.Body>
+      </Drawer>
     )
   }
+}
+
+TeamAgents.propTypes = {
+  filter: PropTypes.func,
+  onSelectAgent: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  isPrimaryAgent: PropTypes.bool
+}
+
+TeamAgents.defaultProps = {
+  filter: () => true,
+  isPrimaryAgent: false
 }
 
 export default connect(({ user }) => ({ user }))(TeamAgents)
