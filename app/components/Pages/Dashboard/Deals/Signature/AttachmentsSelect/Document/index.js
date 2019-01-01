@@ -49,22 +49,6 @@ class DocumentRow extends React.Component {
     return (
       <Container>
         {task &&
-          task.submission && (
-            <DocumentItem onClick={this.toggleSelectSubmission}>
-              <CheckBoxButton
-                onClick={this.toggleSelectSubmission}
-                isSelected={this.props.selectedItems[`task_${task.id}`]}
-              />
-              <NameSection>
-                <Title>
-                  <TextMiddleTruncate text={task.title} maxLength={60} />
-                </Title>
-                <DateTime>{this.getFormattedDate(task)}</DateTime>
-              </NameSection>
-            </DocumentItem>
-          )}
-
-        {task &&
           task.room.attachments &&
           task.room.attachments
             .filter(file => file.mime === 'application/pdf')
@@ -83,26 +67,40 @@ class DocumentRow extends React.Component {
               </DocumentItem>
             ))}
 
-        {!task &&
-          stashFile && (
-            <DocumentItem spaceBetween>
-              <NameSection>
-                <Title>
-                  <TextMiddleTruncate text={stashFile.name} maxLength={60} />
-                </Title>
-                <DateTime>{this.getFormattedDate(stashFile)}</DateTime>
-              </NameSection>
+        {task && task.submission && (
+          <DocumentItem onClick={this.toggleSelectSubmission}>
+            <CheckBoxButton
+              onClick={this.toggleSelectSubmission}
+              isSelected={this.props.selectedItems[`task_${task.id}`]}
+            />
+            <NameSection>
+              <Title>
+                <TextMiddleTruncate text={task.title} maxLength={60} />
+              </Title>
+              <DateTime>{this.getFormattedDate(task)}</DateTime>
+            </NameSection>
+          </DocumentItem>
+        )}
 
-              <TasksDropDown
-                showStashOption={false}
-                searchable
-                pullRight
-                showNotifyOption
-                deal={this.props.deal}
-                onSelectTask={this.onSelectTask}
-              />
-            </DocumentItem>
-          )}
+        {!task && stashFile && (
+          <DocumentItem spaceBetween>
+            <NameSection>
+              <Title>
+                <TextMiddleTruncate text={stashFile.name} maxLength={60} />
+              </Title>
+              <DateTime>{this.getFormattedDate(stashFile)}</DateTime>
+            </NameSection>
+
+            <TasksDropDown
+              showStashOption={false}
+              searchable
+              pullRight
+              showNotifyOption
+              deal={this.props.deal}
+              onSelectTask={this.onSelectTask}
+            />
+          </DocumentItem>
+        )}
       </Container>
     )
   }
