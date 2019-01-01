@@ -22,7 +22,7 @@ export class TextArea extends React.Component {
     const { meta, Container = InputContainer } = this.props
 
     return (
-      <Container>
+      <Container style={this.props.containerStyle}>
         {this.props.hasLabel && (
           <InputLabel hasError={meta.submitFailed && meta.error}>
             {this.props.labelText || this.props.placeholder}

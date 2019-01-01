@@ -37,8 +37,8 @@ export const TextInput = ({
       {...rest}
     />
 
-    {showError &&
-      meta.error &&
-      meta.touched && <InputError>{meta.error}</InputError>}
+    {showError && meta.error && meta.touched && (
+      <InputError>{meta.error}</InputError>
+    )}
   </Container>
 )
