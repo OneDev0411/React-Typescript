@@ -4,9 +4,11 @@ import Dropzone from 'react-dropzone'
 import cn from 'classnames'
 
 import Deal from 'models/Deal'
-import ChatMessage from '../../Chatroom/Util/message'
+
 import { setUploadFiles } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
+
+import ChatMessage from '../../Chatroom/Util/message'
 
 class UploadDocument extends React.Component {
   state = {
