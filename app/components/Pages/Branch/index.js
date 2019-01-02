@@ -214,9 +214,7 @@ const branch = ({
 
     if (action) {
       if (action === 'ShareTemplateInstance') {
-        browserHistory.push(
-          `/share?url=${encodeURIComponent(branchData.$desktop_url)}`
-        )
+        browserHistory.push({ pathname: '/share', state: branchData })
       } else if (receiving_user) {
         getUser(receiving_user)
           .then(receivingUser => {
