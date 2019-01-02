@@ -1,10 +1,26 @@
 import Koa from 'koa'
+import cheerio from 'cheerio'
+
+import config from '../../../../../config/public'
+import getUserProfile from '../../../../../app/models/user/get-self'
+
+import storage from './storage'
+import { getRegisterationScript } from './inject'
+import { offlineSubmitHandler, onlineSubmitHandler } from './handlers'
+import { LOCAL_STORAGE_REGISTERATION_KEY } from './constants'
 
 const router = require('koa-router')()
 const app = new Koa()
+const API_URL = config.api_url
 
 router.get('/openhouse/:id/:brand/register', async ctx => {
   const { user } = ctx.session
+
+  if (!user) {
+    console.log('REDIRECT TO LOGIN')
+  }
+
+  const { id: agentUserId } = await getUserProfile(user.access_token)
 
   if (!user) {
     ctx.status = 401
@@ -13,13 +29,15 @@ router.get('/openhouse/:id/:brand/register', async ctx => {
     return false
   }
 
+  const brandId = ctx.params.brand
+
   let openHouse
 
   try {
     const response = await ctx
       .fetch(`/crm/tasks/${ctx.params.id}`, 'GET')
       .set('Authorization', `Bearer ${user.access_token}`)
-      .set('X-RECHAT-BRAND', ctx.params.brand)
+      .set('X-RECHAT-BRAND', brandId)
 
     openHouse = response.body.data
   } catch (e) {
@@ -32,9 +50,41 @@ router.get('/openhouse/:id/:brand/register', async ctx => {
   }
 
   // get template
-  const { template } = openHouse.metadata
+  const template = openHouse.metadata.template.split('readonly').join('')
 
-  ctx.body = template
+  const $ = cheerio.load(template)
+
+  const openHouseId = openHouse.id
+  const openHouseTitle = openHouse.title
+  const agentAccessToken = user.access_token
+
+  $('body').append(
+    '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" />'
+  )
+
+  $('body').append(
+    '<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js" />'
+  )
+
+  $('head').append(
+    '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />'
+  )
+  $('body').append(
+    getRegisterationScript({
+      API_URL,
+      LOCAL_STORAGE_REGISTERATION_KEY,
+      openHouseId,
+      openHouseTitle,
+      agentAccessToken,
+      agentUserId,
+      brandId,
+      onlineSubmitHandler,
+      offlineSubmitHandler,
+      storage
+    })
+  )
+
+  ctx.body = $.html()
 })
 
 module.exports = app.use(router.routes())

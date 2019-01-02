@@ -28,6 +28,9 @@ import { hasUserAccess, viewAsEveryoneOnTeam } from '../utils/user-teams'
 // deals featch on launch
 import { getDeals, searchDeals } from '../store_actions/deals'
 
+// sync offline stored data
+import syncOpenHouseData from './helpers/sync-open-house-offline-registers'
+
 const InstantChat = Load({
   loader: () => import('./Pages/Dashboard/Chatroom/InstantChat')
 })
@@ -146,6 +149,8 @@ class App extends Component {
     this.initialGoogleAnalytics(data)
 
     dispatch(this.checkBrowser())
+
+    dispatch(syncOpenHouseData(this.props.user.access_token))
   }
 
   getBrand() {
@@ -368,8 +373,9 @@ class App extends Component {
 
     return (
       <div className="u-scrollbar">
-        {user &&
-          !user.email_confirmed && <VerificationBanner email={user.email} />}
+        {user && !user.email_confirmed && (
+          <VerificationBanner email={user.email} />
+        )}
 
         {user && <SideNav data={data} location={location} />}
 
