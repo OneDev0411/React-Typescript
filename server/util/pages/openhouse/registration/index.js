@@ -17,20 +17,14 @@ router.get('/openhouse/:id/:brand/register', async ctx => {
   const { user } = ctx.session
 
   if (!user) {
-    console.log('REDIRECT TO LOGIN')
-  }
-
-  const { id: agentUserId } = await getUserProfile(user.access_token)
-
-  if (!user) {
-    ctx.status = 401
-    ctx.body = 'Unauthorized Access Error'
+    ctx.redirect('/signin')
+    // ctx.redirect(`/signin?redirectTo=${ctx.url}`) // TODO: fix 404
 
     return false
   }
 
+  const { id: agentUserId } = await getUserProfile(user.access_token)
   const brandId = ctx.params.brand
-
   let openHouse
 
   try {
