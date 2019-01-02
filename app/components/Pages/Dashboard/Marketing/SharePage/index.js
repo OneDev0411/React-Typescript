@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { withRouter } from 'react-router'
 import Flex from 'styled-flex-component'
 
-import { grey, borderColor, primary } from '../../../../../views/utils/colors'
+import { borderColor, primary } from '../../../../../views/utils/colors'
 import Button from '../../../../../views/components/Button/ActionButton'
 
 const Input = styled.input`
@@ -31,7 +31,7 @@ class Share extends React.Component {
       .share({
         title: 'A message from Rechat!',
         text: this.state.text,
-        url: this.props.location.query.url
+        url: this.props.location.state.file.url
       })
       .then(() => console.log('Successful share'))
       .catch(error => console.log('Error sharing', error))
@@ -40,39 +40,48 @@ class Share extends React.Component {
   render() {
     return (
       <div style={{ maxWidth: '480px', margin: '0 auto', padding: '1.5rem' }}>
-        <div style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
+        <div style={{ marginBottom: '1.5rem' }}>
           <a href="/">
             <img
               alt="brand"
-              width="48"
-              height="48"
+              style={{
+                minHeight: '2.5rem',
+                maxHeight: '2.5rem'
+              }}
               src="/static/images/appicon.png"
             />
           </a>
         </div>
         <div
           style={{
-            minHeight: '50vh',
             width: '100%',
-            marginBottom: '1.5rem',
-            backgroundColor: grey.A150,
-            backgroundImage: `url('${this.props.location.query.url}')`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat'
+            minHeight: '30vh',
+            marginBottom: '1.5rem'
           }}
-        />
-        <Flex column center>
-          <div style={{ width: '100%' }}>
-            {/* eslint-disable-next-line */}
-            <label htmlFor="text" style={{ cursor: 'pointer' }}>
-              Text
-            </label>
-            <Input id="text" type="text" onChange={this.onChangeText} />
-          </div>
-          <Button size="large" onClick={this.shareHandler}>
-            Share
-          </Button>
-        </Flex>
+        >
+          <img
+            style={{
+              maxWidth: '100%',
+              maxHeight: '100%'
+            }}
+            alt="preview"
+            src={this.props.location.state.file.url}
+          />
+        </div>
+        {window.navigator.share && (
+          <Flex column center>
+            <div style={{ width: '100%' }}>
+              {/* eslint-disable-next-line */}
+            <label htmlFor="text" style={{ cursor: 'pointer', marginBottom: 0 }}>
+                Text
+              </label>
+              <Input id="text" type="text" onChange={this.onChangeText} />
+            </div>
+            <Button size="large" onClick={this.shareHandler}>
+              Share
+            </Button>
+          </Flex>
+        )}
       </div>
     )
   }
