@@ -57,10 +57,10 @@ export function getDealEnvelopeFiles(deal) {
     })
   })
 
-  /* there is a critical bug that breaks some envelopes when user 
-  * tries to move documents of the envelope into the stash or another 
-  * task. this "filter" temporary fiexs the bug until Emil find a 
-  * workaround for that
-  */
+  /* there is a critical bug that breaks some envelopes when user
+   * tries to move documents of the envelope into the stash or another
+   * task. this "filter" temporary fiexs the bug until Emil find a
+   * workaround for that
+   */
   return files.filter(file => !!file)
 }

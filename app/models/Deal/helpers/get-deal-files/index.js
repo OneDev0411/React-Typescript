@@ -1,4 +1,4 @@
-import store from '../../../../stores'
+import store from 'stores'
 
 export function getDealFiles(deal) {
   const { deals } = store.getState()

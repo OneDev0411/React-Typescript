@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 import Downshift from 'downshift'
 import _ from 'underscore'
 
+import { searchDeals } from 'models/Deal/deal'
+
 import { Item } from './Item'
 import SearchInput from './SearchInput'
 import Loading from '../../../Spinner'
-import { searchDeals } from '../../../../../models/Deal/search'
 import {
   ListContainer,
   List
@@ -99,44 +100,42 @@ class Body extends Component {
             </div>
             <ListContainer isDrawer={isDrawer}>
               {isSearching && <Loading />}
-              {!isSearching &&
-                this.state.error && (
-                  <Alert
-                    type="warning"
+              {!isSearching && this.state.error && (
+                <Alert
+                  type="warning"
+                  style={{
+                    margin: isDrawer ? '0 1.5rem' : '0 1rem'
+                  }}
+                >
+                  <div
                     style={{
-                      margin: isDrawer ? '0 1.5rem' : '0 1rem'
+                      fontWeight: 500,
+                      marginBottom: '1rem',
+                      fontSize: '1.125rem'
                     }}
                   >
-                    <div
-                      style={{
-                        fontWeight: 500,
-                        marginBottom: '1rem',
-                        fontSize: '1.125rem'
-                      }}
-                    >
-                      Please type in at least 4 characters to see results
-                    </div>
-                    <div>
-                      So many deals, so little time. Search by address, MLS # or
-                      agent name to narrow your results.
-                    </div>
-                  </Alert>
-                )}
-              {!isSearching &&
-                items.length > 0 && (
-                  <List className="u-scrollbar--thinner" isDrawer={isDrawer}>
-                    {items.map((item, index) => (
-                      <Item
-                        item={item}
-                        isDrawer={isDrawer}
-                        key={item.id || `downshift_search_result_item_${index}`}
-                        {...getItemProps({ item })}
-                        onClickHandler={this.props.handleSelectedItem}
-                        isHighlighted={highlightedIndex === index}
-                      />
-                    ))}
-                  </List>
-                )}
+                    Please type in at least 4 characters to see results
+                  </div>
+                  <div>
+                    So many deals, so little time. Search by address, MLS # or
+                    agent name to narrow your results.
+                  </div>
+                </Alert>
+              )}
+              {!isSearching && items.length > 0 && (
+                <List className="u-scrollbar--thinner" isDrawer={isDrawer}>
+                  {items.map((item, index) => (
+                    <Item
+                      item={item}
+                      isDrawer={isDrawer}
+                      key={item.id || `downshift_search_result_item_${index}`}
+                      {...getItemProps({ item })}
+                      onClickHandler={this.props.handleSelectedItem}
+                      isHighlighted={highlightedIndex === index}
+                    />
+                  ))}
+                </List>
+              )}
             </ListContainer>
           </div>
         )}

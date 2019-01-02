@@ -2,16 +2,20 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 
-import config from '../../../../../../config/public'
-import { loadJS } from '../../../../../utils/load-js'
-import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
+import { getAddress } from 'models/Deal/helpers/context'
+
 import getPlace from 'models/listings/search/get-place'
-import { getAddress } from 'models/Deal/context-helper'
+
+import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 import { byValert } from 'models/listings/search/get-listings'
 import { selectDealById } from 'reducers/deals/list'
 import getListing from 'models/listings/listing/get-listing'
 
 import Header from 'components/PageHeader'
+
+import { loadJS } from '../../../../../utils/load-js'
+
+import config from '../../../../../../config/public'
 
 import { Grid } from './Grid'
 import { normalizeList } from './helpers/normalize-list'

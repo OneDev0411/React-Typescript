@@ -1,39 +1,45 @@
-import contextHelper from './context-helper'
-import context from './context'
-import uploadHelper from './upload-helper'
-import deal from './deal'
-import search from './search'
-import envelope from './envelope'
-import role from './role'
-import place from './place'
-import form from './form'
-import task from './task'
-import pdfSplitter from './pdf-splitter'
-import file from './file'
-import agent from './agent'
-import submission from './submission'
-import checklist from './checklist'
-import listing from './listing'
-import offer from './offer'
-import ejectDraft from './eject-draft'
+import * as agent from './agent'
+import * as checklist from './checklist'
+import * as context from './context'
+import * as deal from './deal'
+import * as envelope from './envelope'
+import * as file from './file'
+import * as form from './form'
+import * as listing from './listing'
+import * as notification from './notification'
+import * as role from './role'
+import * as splitter from './splitter'
+import * as submission from './submission'
+import * as task from './task'
+
+import * as contextHelpers from './helpers/context'
+import * as uploadHelpers from './helpers/upload'
 
 export default {
-  get: contextHelper,
-  upload: uploadHelper,
-  ...deal,
-  ...search,
-  ...envelope,
-  ...role,
-  ...place,
-  ...form,
-  ...task,
-  ...pdfSplitter,
-  ...context,
-  ...file,
+  get: {
+    side: contextHelpers.getSide,
+    formattedPrice: contextHelpers.getFormattedPrice,
+    clientNames: contextHelpers.getClientNames,
+    status: contextHelpers.getStatus,
+    address: contextHelpers.getAddress,
+    field: contextHelpers.getField,
+    context: contextHelpers.getContext,
+    discrepency: contextHelpers.getContextDiscrepency
+  },
+  upload: {
+    ...uploadHelpers
+  },
   ...agent,
-  ...submission,
   ...checklist,
+  ...context,
+  ...deal,
+  ...envelope,
+  ...file,
+  ...form,
   ...listing,
-  ...offer,
-  ...ejectDraft
+  ...notification,
+  ...role,
+  ...splitter,
+  ...submission,
+  ...task
 }
