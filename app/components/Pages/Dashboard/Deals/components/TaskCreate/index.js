@@ -60,7 +60,7 @@ class TaskCreate extends React.Component {
       // make this task active
       this.props.setSelectedTask(task)
 
-      this.setState({ isSaving: false }, this.props.onClose)
+      this.setState({ isSaving: false }, this.handleClose())
 
       return task
     } catch (error) {
