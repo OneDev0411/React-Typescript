@@ -7,19 +7,29 @@ import { getAssociations } from '../../../../../../../../views/components/EventD
 import { AssociationItem } from '../../../../../../../../views/components/AssocationItem'
 
 const propTypes = {
-  defaultAssociationId: PropTypes.string,
+  defaultAssociation: PropTypes.shape().isRequired,
   setAssociations: PropTypes.func,
   task: PropTypes.shape().isRequired
 }
 
 const defaultProps = {
-  defaultAssociationId: '',
   setAssociations: () => {}
 }
 
 export class Associations extends React.Component {
-  state = {
-    associations: []
+  constructor(props) {
+    super(props)
+
+    const { defaultAssociation } = this.props
+    const { id: defaultAssociationId } = defaultAssociation[
+      defaultAssociation.association_type
+    ]
+
+    this.defaultAssociationId = defaultAssociationId
+
+    this.state = {
+      associations: []
+    }
   }
 
   componentDidMount() {
@@ -36,13 +46,11 @@ export class Associations extends React.Component {
     const nextTaskAssociations = this.getTaskAssociationsIds(nextTask)
     const currentTaskAssociations = this.getTaskAssociationsIds(currentTask)
 
-    if (currentTask.length === nextTask.length) {
-      const { defaultAssociationId } = this.props
-
+    if (currentTaskAssociations.length === nextTaskAssociations.length) {
       if (
-        currentTask.length === 1 &&
-        currentTask[0] === defaultAssociationId &&
-        nextTask[0] === defaultAssociationId
+        currentTaskAssociations.length === 1 &&
+        nextTaskAssociations[0] === this.defaultAssociationId &&
+        currentTaskAssociations[0] === this.defaultAssociationId
       ) {
         return false
       }
@@ -88,13 +96,20 @@ export class Associations extends React.Component {
   }
 
   render() {
-    if (this.state.associations.length === 0) {
+    const { associations } = this.state
+
+    if (
+      associations.length === 0 ||
+      (associations.length === 1 &&
+        associations[0][associations[0].association_type].id ===
+          this.defaultAssociationId)
+    ) {
       return null
     }
 
     return (
-      <Flex wrap>
-        {this.state.associations.map((association, index) => (
+      <Flex wrap style={{ marginTop: '2em' }}>
+        {associations.map((association, index) => (
           <AssociationItem
             association={association}
             key={`association_${index}`}

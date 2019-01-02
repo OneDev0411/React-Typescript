@@ -37,18 +37,18 @@ class List extends React.Component {
       return true
     }
 
-    const { id: defaultAssociationId } = association[association_type]
-    const { id: associationId } = defaultAssociation[association_type]
+    const { id: associationId } = association[association_type]
+    const { id: defaultAssociationId } = defaultAssociation[association_type]
 
     if (
       defaultAssociationId &&
       associationId &&
       defaultAssociationId === associationId
     ) {
-      return true
+      return false
     }
 
-    return false
+    return true
   }
 
   render() {

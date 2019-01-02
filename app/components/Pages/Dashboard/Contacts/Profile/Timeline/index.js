@@ -23,9 +23,11 @@ export class Timeline extends React.Component {
   }
 
   onClickNote = selectedNote => this.setState({ selectedNote })
+
   closeEditNoteDrawer = () => this.setState({ selectedNote: null })
 
   closeEventDrawer = () => this.setState({ selectedEvent: null })
+
   onClickEvent = selectedEvent => this.setState({ selectedEvent })
 
   handleEditEvent = updatedEvent => {
@@ -40,7 +42,7 @@ export class Timeline extends React.Component {
 
   renderCRMTaskItem(key, task) {
     const _props = {
-      defaultAssociationId: this.props.defaultAssociationId,
+      defaultAssociation: this.props.defaultAssociation,
       editCallback: this.props.editEventHandler,
       key,
       onClick: this.onClickEvent,
@@ -96,7 +98,7 @@ export class Timeline extends React.Component {
     }
 
     const _props = {
-      defaultAssociationId: this.props.defaultAssociationId,
+      defaultAssociation: this.props.defaultAssociation,
       deleteCallback: this.handleDeleteEvent,
       isOpen: true,
       onClose: this.closeEventDrawer,
@@ -242,10 +244,8 @@ export class Timeline extends React.Component {
               <Container id={id} key={`past_events_${id}`}>
                 {this.renderItems({
                   title: month.title,
-                  items: _.sortBy(
-                    month.items,
-                    item =>
-                      item.due_date != null ? !item.due_date : !item.created_at
+                  items: _.sortBy(month.items, item =>
+                    item.due_date != null ? !item.due_date : !item.created_at
                   )
                 })}
               </Container>

@@ -321,6 +321,7 @@ export class EventDrawer extends Component {
                       <AssociationsList
                         name="associations"
                         associations={values.associations}
+                        defaultAssociation={defaultAssociation}
                         handleDelete={this.handleDeleteAssociation}
                       />
 

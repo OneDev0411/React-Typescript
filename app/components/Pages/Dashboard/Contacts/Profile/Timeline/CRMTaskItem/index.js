@@ -53,5 +53,3 @@ export class CRMTaskItem extends React.Component {
     )
   }
 }
-
-// todo: feching contact for updating last_touch after updated a task.

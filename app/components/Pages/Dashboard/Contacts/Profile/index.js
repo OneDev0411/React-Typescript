@@ -297,7 +297,7 @@ class ContactProfile extends React.Component {
               </Tab.Container>
               <Timeline
                 contact={contact}
-                defaultAssociationId={contact.id}
+                defaultAssociation={defaultAssociation}
                 deleteEventHandler={this.deleteEvent}
                 deleteNoteHandler={this.deleteNote}
                 editEventHandler={this.editEvent}
