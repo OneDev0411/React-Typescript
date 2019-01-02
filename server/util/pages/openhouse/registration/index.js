@@ -17,8 +17,7 @@ router.get('/openhouse/:id/:brand/register', async ctx => {
   const { user } = ctx.session
 
   if (!user) {
-    ctx.redirect('/signin')
-    // ctx.redirect(`/signin?redirectTo=${ctx.url}`) // TODO: fix 404
+    ctx.redirect(`/signin?redirectTo=${ctx.request.href}`)
 
     return false
   }
