@@ -1,8 +1,8 @@
 import moment from 'moment'
 import _ from 'underscore'
 
-import store from '../stores'
-import Deal from './Deal'
+import store from '../../../../stores'
+import { getField, getFormattedPrice } from '../context'
 
 /**
  * returns list of all contexts
@@ -54,7 +54,9 @@ export function getChecklists() {
 export function getDealTypeFlag(deal_type) {
   if (deal_type === 'Selling') {
     return 1
-  } else if (deal_type === 'Buying') {
+  }
+
+  if (deal_type === 'Buying') {
     return 2
   }
 
@@ -253,7 +255,7 @@ export function getValue(deal, field) {
   const defaultContext =
     isAddressField(field.name) && deal.listing ? deal.mls_context : null
 
-  const contextValue = Deal.get.field(deal, field.name, defaultContext)
+  const contextValue = getField(deal, field.name, defaultContext)
 
   const dataObject = {
     value: contextValue,
@@ -261,7 +263,7 @@ export function getValue(deal, field) {
   }
 
   if (isCurrency(field)) {
-    dataObject.value = Deal.get.formattedPrice(contextValue)
+    dataObject.value = getFormattedPrice(contextValue)
   }
 
   return dataObject
@@ -277,8 +279,10 @@ export function getValueByContext(name, context) {
 
   if (contextInfo.data_type === 'Date') {
     return moment.unix(context.value).format('MMM DD, YYYY')
-  } else if (isCurrency({ name })) {
-    return Deal.get.formattedPrice(context.value)
+  }
+
+  if (isCurrency({ name })) {
+    return getFormattedPrice(context.value)
   }
 
   return context.value
@@ -288,7 +292,7 @@ export function getValueByContext(name, context) {
  * returns date value of context
  */
 export function getDateValue(deal, field) {
-  const date = Deal.get.field(deal, field.name)
+  const date = getField(deal, field.name)
 
   return {
     value: date ? parseDate(date).format(getDateFormatString()) : ''
@@ -428,7 +432,7 @@ function getFormattedValue(value) {
   }
 
   if (this.format === 'Currency') {
-    return Deal.get.formattedPrice(parseFloat(value), 'currency', 0)
+    return getFormattedPrice(parseFloat(value), 'currency', 0)
   }
 
   return value

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Popover, OverlayTrigger } from 'react-bootstrap'
 
-import DealContext from 'models/DealContext'
+import DealContext from 'models/Deal/helpers/dynamic-context'
 
 import FactsheetSection from '../../../../Dashboard/Factsheet'
 import { getNextDate, getNextDateValue } from '../../../../utils/critical-dates'

@@ -6,7 +6,7 @@ import _ from 'underscore'
 import moment from 'moment'
 
 import Deal from '../../../../../models/Deal'
-import DealContext from '../../../../../models/DealContext'
+import DealContext from '../../../../../models/Deal/helpers/dynamic-context'
 
 import { FullPageHeader } from '../../../../../views/components/FullPageHeader'
 import DealType from './deal-type'

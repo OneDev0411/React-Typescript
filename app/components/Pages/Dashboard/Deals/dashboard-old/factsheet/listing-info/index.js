@@ -1,5 +1,5 @@
 import React from 'react'
-import Context from '../../../../../../../models/DealContext'
+import Context from '../../../../../../../models/Deal/helpers/dynamic-context'
 import Render from '../renderer'
 
 export default ({ deal }) => {

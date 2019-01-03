@@ -2,7 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import Modal from '../../../../../../views/components/BasicModal'
 import Deal from '../../../../../../models/Deal'
-import DealContext from '../../../../../../models/DealContext'
+import DealContext from '../../../../../../models/Deal/helpers/dynamic-context'
 import ContextHistory from '../../../../../../models/Deal/context-history-helper'
 
 function getContextLabel(name) {

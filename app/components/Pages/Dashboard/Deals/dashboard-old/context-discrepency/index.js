@@ -4,7 +4,7 @@ import cn from 'classnames'
 import History from './modal'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import Deal from '../../../../../../models/Deal'
-import DealContext from '../../../../../../models/DealContext'
+import DealContext from '../../../../../../models/Deal/helpers/dynamic-context'
 import ContextHistory from '../../../../../../models/Deal/context-history-helper'
 
 class ContextDiscrepency extends React.Component {

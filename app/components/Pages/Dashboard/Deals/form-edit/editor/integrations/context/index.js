@@ -6,7 +6,7 @@ import ClickOutside from 'react-click-outside'
 import { updateContext } from '../../../../../../../../store_actions/deals'
 
 import Deal from '../../../../../../../../models/Deal'
-import DealContext from '../../../../../../../../models/DealContext'
+import DealContext from '../../../../../../../../models/Deal/helpers/dynamic-context'
 
 import ActionButton from 'components/Button/ActionButton'
 import CancelButton from 'components/Button/CancelButton'

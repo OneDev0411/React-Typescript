@@ -5,7 +5,7 @@ import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 
 import Deal from '../../../../../models/Deal'
-import DealContext from '../../../../../models/DealContext'
+import DealContext from '../../../../../models/Deal/helpers/dynamic-context'
 
 import { FullPageHeader } from '../../../../../views/components/FullPageHeader'
 import OfferType from './offer-type'

@@ -2,7 +2,7 @@ import React from 'react'
 import moment from 'moment'
 
 import DatePicker from '../../../../../../../../../views/components/DatePicker'
-import DealContext from '../../../../../../../../../models/DealContext'
+import DealContext from '../../../../../../../../../models/Deal/helpers/dynamic-context'
 
 function onDateChange(props, value) {
   const formattedValue = moment(value).format(DealContext.getDateFormatString())

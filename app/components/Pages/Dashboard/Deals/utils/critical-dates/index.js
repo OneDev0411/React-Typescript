@@ -1,5 +1,5 @@
 import Deal from 'models/Deal'
-import Context from 'models/DealContext'
+import Context from 'models/Deal/helpers/dynamic-context'
 
 export function getNextDateField(deal) {
   const closingDate = Deal.get.field(deal, 'closing_date')

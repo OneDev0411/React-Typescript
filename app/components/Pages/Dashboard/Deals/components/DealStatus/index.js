@@ -16,7 +16,7 @@ import {
 } from 'actions/deals'
 
 import Deal from 'models/Deal'
-import DealContext from 'models/DealContext'
+import DealContext from 'models/Deal/helpers/dynamic-context'
 
 import { DropDownButton, StatusBullet, StatusOption } from './styled'
 

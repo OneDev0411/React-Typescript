@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import Deal from 'models/Deal'
-import DealContext from 'models/DealContext'
+import DealContext from 'models/Deal/helpers/dynamic-context'
 import ToolTip from 'components/tooltip'
 
 import { updateContext, approveContext } from 'actions/deals'

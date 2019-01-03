@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'underscore'
 
 import ContextAnnotation from '../context-annotation'
-import DealContext from '../../../../../../../../../models/DealContext'
+import DealContext from '../../../../../../../../../models/Deal/helpers/dynamic-context'
 
 function getContextType(context) {
   if (context && DealContext.isAddressField(context.name)) {

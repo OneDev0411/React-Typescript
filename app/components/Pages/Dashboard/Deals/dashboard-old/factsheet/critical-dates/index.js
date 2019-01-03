@@ -1,6 +1,6 @@
 import React from 'react'
 import Deal from '../../../../../../../models/Deal'
-import Context from '../../../../../../../models/DealContext'
+import Context from '../../../../../../../models/Deal/helpers/dynamic-context'
 import Render from '../renderer'
 
 /**
