@@ -147,11 +147,3 @@ export function offlineSubmitHandler(data) {
   console.log('ON OFFLINE SUBMIT', data)
   storage.append(data.id, data)
 }
-
-export function onlineHandler(data) {
-  console.log('ON ONLINE', data)
-}
-
-export function offlineHandler(data) {
-  console.log('ON OFFLINE', data)
-}
