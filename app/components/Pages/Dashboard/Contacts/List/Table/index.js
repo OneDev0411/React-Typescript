@@ -58,7 +58,11 @@ class ContactsList extends React.Component {
             caption="This shows the last time you were in touch with a contact. Save events to keep it updated."
           >
             <IconInfoOutline
-              style={{ marginLeft: '0.5rem', width: '20px', height: '20px' }}
+              style={{
+                marginLeft: '0.5rem',
+                width: '1.25rem',
+                height: '1.25rem'
+              }}
             />
           </Tooltip>
         </React.Fragment>
