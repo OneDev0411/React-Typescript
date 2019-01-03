@@ -11,13 +11,15 @@ export default function Actions(props) {
         Edit
       </ActionButton>
 
-      <DeleteButton
-        iconSize="large"
-        isFit
-        onClick={() => props.onClickRemoveContext(props.field)}
-      >
-        <CloseIcon />
-      </DeleteButton>
+      {!props.field.mandatory && (
+        <DeleteButton
+          iconSize="large"
+          isFit
+          onClick={() => props.onClickRemoveContext(props.field)}
+        >
+          <CloseIcon />
+        </DeleteButton>
+      )}
     </ItemActions>
   )
 }

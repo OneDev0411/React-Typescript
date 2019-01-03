@@ -107,6 +107,7 @@ export function getItems(deal_type, property_type, hasActiveOffer = false) {
     property_type,
     hasActiveOffer
   )
+
   const optionalFields = getOptionalItems(
     deal_type,
     property_type,
