@@ -89,22 +89,13 @@ export function getPropertyTypeFlag(property_type) {
  * return list of section
  */
 export function getFactsheetSection(deal, name) {
-  const criteria = ctx => ctx.section === name
-  const hasActiveOffer = getHasActiveOffer(deal)
-
-  if (hasActiveOffer === null) {
-    return []
-  }
-
-  return query(deal, criteria).filter(ctx =>
-    filterByFlags(
-      ctx,
-      deal.deal_type,
-      deal.property_type,
-      hasActiveOffer,
-      'show_on_fact_sheet'
-    )
+  const items = getItems(
+    deal.deal_type,
+    deal.property_type,
+    getHasActiveOffer(deal)
   )
+
+  return items.filter(item => item.section === name)
 }
 
 /**
@@ -206,24 +197,17 @@ export function filterByFlags(
   hasActiveOffer,
   filterBy
 ) {
-  const flag = context[filterBy]
-  const dealTypeFlag = getDealTypeFlag(deal_type)
-  const propertyTypeFlag = getPropertyTypeFlag(property_type)
-  const isSellingDeal = deal_type === 'Selling'
+  const definition = context[filterBy]
 
-  if ((flag & dealTypeFlag) !== dealTypeFlag) {
+  if (definition.length === 0) {
     return false
   }
 
-  if ((flag & propertyTypeFlag) !== propertyTypeFlag) {
-    return false
-  }
-
-  if (isSellingDeal && !hasActiveOffer && (flag & 131072) === 131072) {
-    return false
-  }
-
-  return true
+  return (
+    definition.includes(deal_type) &&
+    definition.includes(property_type) &&
+    (hasActiveOffer || !definition.includes('Active Offer'))
+  )
 }
 
 /**
