@@ -55,9 +55,15 @@ class ContactsList extends React.Component {
           Last Touch
           <Tooltip
             placement="bottom"
-            caption="This column shows the most recent event that has been marked as completed."
+            caption="This shows the last time you were in touch with a contact. Save events to keep it updated."
           >
-            <IconInfoOutline style={{ marginLeft: '0.5rem' }} />
+            <IconInfoOutline
+              style={{
+                marginLeft: '0.5rem',
+                width: '1.25rem',
+                height: '1.25rem'
+              }}
+            />
           </Tooltip>
         </React.Fragment>
       ),
