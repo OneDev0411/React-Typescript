@@ -38,7 +38,7 @@ class DealsContainer extends React.Component {
     }
 
     if (!props.contexts) {
-      dispatch(getContexts())
+      dispatch(getContexts(user))
     }
 
     if (!props.forms) {

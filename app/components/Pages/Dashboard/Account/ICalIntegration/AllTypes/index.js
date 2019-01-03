@@ -2,11 +2,11 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
+import { getContexts } from 'actions/deals'
 import { SectionTitle } from '../styled'
 import RadioButton from '../../../../../../views/components/RadioButton'
 import CategoryType from '../CategoryTypes'
 import { CategoryTypesContainer } from './styled'
-import { getContexts } from '../../../../../../store_actions/deals'
 
 const radioButtonStyle = { display: 'block', marginTop: '2rem' }
 
@@ -31,7 +31,7 @@ const taskTypes = getItems(defaultTaskTypes)
 class ICalAllTypes extends React.Component {
   componentDidMount() {
     if (!this.props.contexts) {
-      this.props.getContexts()
+      this.props.getContexts(this.props.user)
     }
   }
 
@@ -112,8 +112,9 @@ class ICalAllTypes extends React.Component {
   }
 }
 
-function mapToProps({ deals, contacts }) {
+function mapToProps({ deals, contacts, user }) {
   return {
+    user,
     contexts: deals.contexts,
     contactsAttributesDefs: contacts.attributeDefs.byId
   }

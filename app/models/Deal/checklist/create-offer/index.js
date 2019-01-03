@@ -12,7 +12,7 @@ export async function createOffer(
 ) {
   try {
     const response = await new Fetch()
-      .post(`/deals/${deal_id}/checklists/offer`)
+      .post(`/deals/${deal_id}/checklists`)
       .send({
         checklist: {
           title: `Offer (${name})`,

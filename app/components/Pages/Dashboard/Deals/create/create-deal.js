@@ -263,9 +263,9 @@ class CreateDeal extends React.Component {
    */
   onRemoveRole = (id, type) =>
     this.setState(
-      {
-        [type]: _.omit(this.state[type], role => role.id === id)
-      },
+      state => ({
+        [type]: _.omit(state[type], role => role.id === id)
+      }),
       () => this.validateForm()
     )
 
@@ -382,12 +382,12 @@ class CreateDeal extends React.Component {
     const { deal } = this.props
 
     this.props.confirmation({
-      message: deal ? "Don't want to go live?" : 'Cancel deal creation?',
+      message: deal ? 'Dont want to go live?' : 'Cancel deal creation?',
       description: deal
         ? 'By canceling you will lose your deal updates'
         : 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: 'No, don\'t cancel',
+      cancelLabel: 'No, dont cancel',
       onConfirm: () =>
         browserHistory.push(`/dashboard/deals/${deal ? deal.id : ''}`)
     })
@@ -461,15 +461,12 @@ class CreateDeal extends React.Component {
    * handles change deal property type
    */
   changePropertyType = dealPropertyType =>
-    this.setState({
+    this.setState(state => ({
       dealPropertyType,
       dealStatus: '',
-      contexts: this.getDefaultContextValues(
-        this.state.dealSide,
-        dealPropertyType
-      ),
+      contexts: this.getDefaultContextValues(state.dealSide, dealPropertyType),
       escrowOfficers: {}
-    })
+    }))
 
   /**
    * handles deal status change
@@ -482,12 +479,12 @@ class CreateDeal extends React.Component {
    */
   changeContext = (field, value) =>
     this.setState(
-      {
+      state => ({
         contexts: {
-          ...this.state.contexts,
+          ...state.contexts,
           [field]: value
         }
-      },
+      }),
       () => this.validateForm()
     )
 
@@ -510,9 +507,9 @@ class CreateDeal extends React.Component {
    */
   updateOrCreateDeal = () => {
     this.setState(
-      {
-        isDraft: this.props.deal ? true : this.state.isDraft
-      },
+      state => ({
+        isDraft: this.props.deal ? true : state.isDraft
+      }),
       this.upsertDeal
     )
   }
@@ -972,14 +969,13 @@ class CreateDeal extends React.Component {
         </div>
 
         <div className="actions">
-          {!saving &&
-            submitError && (
-              <Alert
-                code={500}
-                type="error"
-                style={{ float: 'left', marginBottom: '2rem' }}
-              />
-            )}
+          {!saving && submitError && (
+            <Alert
+              code={500}
+              type="error"
+              style={{ float: 'left', marginBottom: '2rem' }}
+            />
+          )}
 
           <ActionButton
             style={{ marginRight: '10px' }}
@@ -996,13 +992,11 @@ class CreateDeal extends React.Component {
           )}
 
           <div className="error-summary">
-            {this.isFormSubmitted &&
-              validationErrors.length > 0 && (
-                <span>
-                  {validationErrors.length} required fields remaining to
-                  complete.
-                </span>
-              )}
+            {this.isFormSubmitted && validationErrors.length > 0 && (
+              <span>
+                {validationErrors.length} required fields remaining to complete.
+              </span>
+            )}
           </div>
         </div>
       </div>
