@@ -3,7 +3,6 @@ import pure from 'recompose/pure'
 import styled from 'styled-components'
 
 import { getMQWidth } from './helpers'
-import Holiday from './Holiday'
 import SocialListings from './SocialListings'
 import EmailListings from './EmailListings'
 import Brand from './Brand'
@@ -23,7 +22,6 @@ const ResponsiveRow = styled.div`
 function Cards({ isSideMenuOpen }) {
   return (
     <div style={{ marginTop: '1.5rem' }}>
-      <Holiday isSideMenuOpen={isSideMenuOpen} />
       <ResponsiveRow isSideMenuOpen={isSideMenuOpen}>
         <SocialListings isSideMenuOpen={isSideMenuOpen} />
         <EmailListings isSideMenuOpen={isSideMenuOpen} />
