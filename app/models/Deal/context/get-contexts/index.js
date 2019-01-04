@@ -1,13 +1,9 @@
 import Fetch from '../../../../services/fetch'
 
-import { getActiveTeamId } from '../../../../utils/user-teams'
-
 /**
  * get contexts info
  */
-export async function getContexts(user) {
-  const brandId = getActiveTeamId(user)
-
+export async function getContexts(brandId) {
   try {
     const response = await new Fetch().get(`/brands/${brandId}/contexts`)
 

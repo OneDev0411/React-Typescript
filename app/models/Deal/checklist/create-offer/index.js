@@ -1,4 +1,4 @@
-import Fetch from '../../../../services/fetch'
+import { createChecklist } from '../create-checklist'
 
 /**
  * create a new offer
@@ -11,21 +11,19 @@ export async function createOffer(
   property_type
 ) {
   try {
-    const response = await new Fetch()
-      .post(`/deals/${deal_id}/checklists`)
-      .send({
-        checklist: {
-          title: `Offer (${name})`,
-          is_deactivated: is_backup,
-          order
-        },
-        conditions: {
-          deal_type: 'Buying',
-          property_type
-        }
-      })
+    const data = {
+      checklist: {
+        title: `Offer (${name})`,
+        is_deactivated: is_backup,
+        order
+      },
+      conditions: {
+        deal_type: 'Buying',
+        property_type
+      }
+    }
 
-    return response.body.data
+    return await createChecklist(deal_id, data)
   } catch (e) {
     throw e
   }
