@@ -418,7 +418,11 @@ export function getChecklist(deal, fieldKey) {
 
   const condition = isRequired ? field.required : field.optional
 
-  if (condition.includes('Active Offer') && getHasActiveOffer(deal)) {
+  if (
+    deal.deal_type === 'Selling' &&
+    condition.includes('Active Offer') &&
+    getHasActiveOffer(deal)
+  ) {
     const checklists = getChecklists()
 
     return deal.checklists.find(id => checklists[id].is_active_offer)
