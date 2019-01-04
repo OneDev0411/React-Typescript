@@ -1,6 +1,13 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
+
+import InstantMarketing from 'components/InstantMarketing'
+
+import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
+
+import { getTemplates } from 'models/instant-marketing'
+import { loadTemplateHtml } from 'models/instant-marketing/load-template'
 
 import {
   getTask,
@@ -79,7 +86,9 @@ export class OpenHouseDrawer extends React.Component {
 
     this.state = {
       isDisabled: false,
+      isTemplateBuilderOpen: false,
       listing: null,
+      template: '',
       openHouse: props.openHouse
     }
 
@@ -97,7 +106,10 @@ export class OpenHouseDrawer extends React.Component {
       try {
         const openHouse = await getTask(this.props.openHouseId, QUERY)
 
-        this.setState({ openHouse })
+        // get template if exists
+        const template = openHouse.metadata ? openHouse.metadata.template : null
+
+        this.setState({ openHouse, template })
 
         return openHouse
       } catch (error) {
@@ -117,8 +129,36 @@ export class OpenHouseDrawer extends React.Component {
       }
     }
 
+    this.loadRegistrationTemplate()
+
     return null
   }
+
+  loadRegistrationTemplate = async () => {
+    try {
+      const list = await getTemplates(['CrmOpenHouse'])
+      const templateItem = list[0]
+
+      const templateHtml = await loadTemplateHtml(
+        `${templateItem.url}/index.html`
+      )
+
+      const template = nunjucks.renderString(templateHtml, {
+        user: this.props.user,
+        listing: this.state.listing
+      })
+
+      this.setState({ template })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  handleSaveTemplate = ({ template }) =>
+    this.setState({
+      template,
+      isTemplateBuilderOpen: false
+    })
 
   save = async openHouse => {
     try {
@@ -204,129 +244,172 @@ export class OpenHouseDrawer extends React.Component {
       .dispatchEvent(new Event('submit', { cancelable: true }))
   }
 
+  toggleTemplateBuilder = () =>
+    this.setState(state => ({
+      isTemplateBuilderOpen: !state.isTemplateBuilderOpen
+    }))
+
   render() {
     const { user } = this.props
     const { isDisabled } = this.state
 
     return (
-      <Drawer
-        isOpen={this.props.isOpen}
-        onClose={this.props.onClose}
-        showFooter={false}
-      >
-        <Drawer.Header title={`${this.isNew ? 'New' : 'Edit'} Open House`} />
-        <Drawer.Body>
-          <LoadSaveReinitializeForm
-            initialValues={this.props.initialValues}
-            load={this.load}
-            postLoadFormat={openHouse =>
-              postLoadFormat(openHouse, user, this.state.listing)
-            }
-            preSaveFormat={(values, originalValues) =>
-              preSaveFormat(values, originalValues, this.props.deal)
-            }
-            save={this.save}
-            validate={validate}
-            render={formProps => {
-              const { values } = formProps
+      <Fragment>
+        <Drawer
+          isOpen={this.props.isOpen && !this.state.isTemplateBuilderOpen}
+          onClose={this.props.onClose}
+          showFooter={false}
+        >
+          <Drawer.Header title={`${this.isNew ? 'New' : 'Edit'} Open House`} />
+          <Drawer.Body>
+            <LoadSaveReinitializeForm
+              initialValues={this.props.initialValues}
+              load={this.load}
+              postLoadFormat={openHouse =>
+                postLoadFormat(openHouse, user, this.state.listing)
+              }
+              preSaveFormat={(values, originalValues) =>
+                preSaveFormat(
+                  values,
+                  originalValues,
+                  this.props.deal,
+                  this.state.template
+                )
+              }
+              save={this.save}
+              validate={validate}
+              render={formProps => {
+                const { values } = formProps
 
-              // console.log(values)
-
-              return (
-                <div>
-                  <FormContainer
-                    id="open-house-drawer-form"
-                    onSubmit={formProps.handleSubmit}
-                  >
-                    <Title
-                      fullWidth
-                      placeholder="Untitled Open House"
-                      style={{ marginBottom: '1.5rem' }}
-                    />
-                    <Description placeholder="Enter any general notes for your clients" />
-
-                    <Section label="Event Date">
-                      <FieldContainer alignCenter justifyBetween>
-                        <DateTimeField
-                          name="dueDate"
-                          selectedDate={values.dueDate}
-                        />
-                        {values.status !== 'DONE' && (
-                          <ReminderField dueDate={values.dueDate} />
-                        )}
-                      </FieldContainer>
-                    </Section>
-
-                    <Section label="Event Location">
-                      <Location
-                        location={values.location}
-                        handleDelete={this.handleDeleteAssociation}
+                return (
+                  <div>
+                    <FormContainer
+                      id="open-house-drawer-form"
+                      onSubmit={formProps.handleSubmit}
+                    >
+                      <Title
+                        fullWidth
+                        placeholder="Untitled Open House"
+                        style={{ marginBottom: '1.5rem' }}
                       />
-                    </Section>
+                      <Description placeholder="Enter any general notes for your clients" />
 
-                    {!isSoloActiveTeam(user) && (
-                      <Section label="Agents">
-                        <AssigneesField
-                          buttonText="Assign"
-                          name="assignees"
-                          owner={user}
+                      <Section label="Event Date">
+                        <FieldContainer alignCenter justifyBetween>
+                          <DateTimeField
+                            name="dueDate"
+                            selectedDate={values.dueDate}
+                          />
+                          {values.status !== 'DONE' && (
+                            <ReminderField dueDate={values.dueDate} />
+                          )}
+                        </FieldContainer>
+                      </Section>
+
+                      <Section label="Event Location">
+                        <Location
+                          location={values.location}
+                          handleDelete={this.handleDeleteAssociation}
                         />
                       </Section>
-                    )}
 
-                    <Section label="Registrants">
-                      <AssociationsList
-                        name="registrants"
-                        associations={values.registrants}
-                        handleDelete={this.handleDeleteAssociation}
-                      />
-                    </Section>
-
-                    <ItemChangelog item={values} style={{ marginTop: '2em' }} />
-                  </FormContainer>
-                  <Footer justifyBetween>
-                    <Flex alignCenter>
-                      {!this.isNew && (
-                        <React.Fragment>
-                          <Tooltip placement="top" caption="Delete">
-                            <IconButton
-                              isFit
-                              inverse
-                              type="button"
-                              disabled={isDisabled}
-                              onClick={this.delete}
-                            >
-                              <IconDelete />
-                            </IconButton>
-                          </Tooltip>
-                          <Divider margin="0 1rem" width="1px" height="2rem" />
-                        </React.Fragment>
+                      {!isSoloActiveTeam(user) && (
+                        <Section label="Agents">
+                          <AssigneesField
+                            buttonText="Assign"
+                            name="assignees"
+                            owner={user}
+                          />
+                        </Section>
                       )}
-                      <AddAssociationButton
-                        associations={values.registrants}
-                        disabled={isDisabled}
-                        type="contact"
-                        name="registrants"
-                        caption="Attach Contact"
+
+                      <Section label="Registrants">
+                        <AssociationsList
+                          name="registrants"
+                          associations={values.registrants}
+                          handleDelete={this.handleDeleteAssociation}
+                        />
+                      </Section>
+
+                      <ItemChangelog
+                        item={values}
+                        style={{ marginTop: '2em' }}
                       />
-                    </Flex>
-                    <Flex alignCenter>
-                      <ActionButton
-                        type="button"
-                        disabled={isDisabled}
-                        onClick={this.handleSubmit}
-                        style={{ marginLeft: '0.5em' }}
-                      >
-                        {isDisabled ? 'Saving...' : 'Save'}
-                      </ActionButton>
-                    </Flex>
-                  </Footer>
-                </div>
-              )
-            }}
-          />
-        </Drawer.Body>
-      </Drawer>
+                    </FormContainer>
+                    <Footer justifyBetween>
+                      <Flex alignCenter>
+                        {!this.isNew && (
+                          <React.Fragment>
+                            <Tooltip placement="top" caption="Delete">
+                              <IconButton
+                                isFit
+                                inverse
+                                type="button"
+                                disabled={isDisabled}
+                                onClick={this.delete}
+                              >
+                                <IconDelete />
+                              </IconButton>
+                            </Tooltip>
+                            <Divider
+                              margin="0 1rem"
+                              width="1px"
+                              height="2rem"
+                            />
+                          </React.Fragment>
+                        )}
+                        <AddAssociationButton
+                          associations={values.registrants}
+                          disabled={isDisabled}
+                          type="contact"
+                          name="registrants"
+                          caption="Attach Contact"
+                        />
+                      </Flex>
+                      <Flex alignCenter>
+                        <ActionButton
+                          type="button"
+                          appearance="outline"
+                          onClick={this.toggleTemplateBuilder}
+                        >
+                          Preview
+                        </ActionButton>
+
+                        {this.state.template && (
+                          <ActionButton
+                            type="button"
+                            disabled={isDisabled}
+                            onClick={this.handleSubmit}
+                            style={{ marginLeft: '0.5em' }}
+                          >
+                            {isDisabled ? 'Saving...' : 'Save'}
+                          </ActionButton>
+                        )}
+                      </Flex>
+                    </Footer>
+                  </div>
+                )
+              }}
+            />
+          </Drawer.Body>
+        </Drawer>
+
+        <InstantMarketing
+          headerTitle="Registration Template"
+          closeConfirmation={false}
+          showTemplatesColumn={false}
+          saveButtonLabel="Save"
+          isOpen={this.state.isTemplateBuilderOpen}
+          onClose={this.toggleTemplateBuilder}
+          handleSave={this.handleSaveTemplate}
+          assets={this.state.listing && this.state.listing.gallery_image_urls}
+          templateData={{
+            user: this.props.user,
+            listing: this.state.listing
+          }}
+          templateTypes={['CrmOpenHouse']}
+        />
+      </Fragment>
     )
   }
 }

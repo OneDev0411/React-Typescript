@@ -3,7 +3,7 @@
  * @param {object} values The form values
  * @returns {object} a formated object
  */
-export async function preSaveFormat(values, originalValues, deal) {
+export async function preSaveFormat(values, originalValues, deal, template) {
   const {
     assignees,
     description,
@@ -24,6 +24,7 @@ export async function preSaveFormat(values, originalValues, deal) {
     title,
     due_date: dueDateTimestamp / 1000,
     task_type,
+    metadata: { template },
     assignees: assignees.map(a => a.id),
     status:
       dueDateTimestamp <= new Date().getTime() ? 'DONE' : status || 'PENDING'

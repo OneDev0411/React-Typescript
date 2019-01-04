@@ -6,7 +6,7 @@ import OverlayDrawer from 'components/OverlayDrawer'
 import { Divider } from './styled'
 import ManualEntry from './manual-entry'
 
-import Roles from '../../../../components/roles'
+import Roles from '../../../../components/Roles'
 import {
   getRolesText,
   getRoleText,

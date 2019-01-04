@@ -9,6 +9,7 @@ export const Content = styled.div`
   background-color: #fff;
   transition: 0.2s ease-in all;
   z-index: 1001;
+  border-radius: 3px 0 0 3px;
 
   ${props =>
     props.isOpen &&

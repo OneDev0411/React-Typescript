@@ -1,7 +1,7 @@
 import {
   getField as getDealfield,
   getAddress as getDealAddress
-} from '../../../models/Deal/context-helper'
+} from '../../../models/Deal/helpers/context'
 import { getListingAddress } from '../../../utils/listing'
 
 /**

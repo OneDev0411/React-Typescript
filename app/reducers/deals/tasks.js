@@ -38,6 +38,15 @@ export default (state = null, action) => {
         ...action.tasks
       }
 
+    case actionTypes.SET_EXPAND_TASK:
+      return {
+        ...state,
+        [action.taskId]: {
+          ...state[action.taskId],
+          is_expanded: action.isExpanded
+        }
+      }
+
     case actionTypes.UPDATE_SUBMISSION:
       return {
         ...state,
@@ -100,4 +109,24 @@ export default (state = null, action) => {
     default:
       return state
   }
+}
+
+export const selectTaskById = (state, id) => (state && id ? state[id] : null)
+
+export const selectDealTasks = (deal, checklists, state) => {
+  const list = []
+
+  if (!deal.checklists) {
+    return list
+  }
+
+  deal.checklists.forEach(checklistId => {
+    const checklist = checklists[checklistId]
+
+    if (checklist.tasks && !checklist.is_terminated) {
+      checklist.tasks.forEach(taskId => list.push(state[taskId]))
+    }
+  })
+
+  return list
 }

@@ -47,3 +47,8 @@ export default (state = null, action) => {
       return state
   }
 }
+
+export const getChecklists = (deal, state) =>
+  deal.checklists.map(id => state[id])
+
+export const getChecklistById = (state, id) => state && state[id]

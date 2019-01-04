@@ -3,13 +3,14 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import ClickOutside from 'react-click-outside'
 
-import { updateContext } from '../../../../../../../../store_actions/deals'
-
-import Deal from '../../../../../../../../models/Deal'
-import DealContext from '../../../../../../../../models/DealContext'
-
 import ActionButton from 'components/Button/ActionButton'
+
 import CancelButton from 'components/Button/CancelButton'
+
+import { upsertContexts } from 'actions/deals'
+
+import Deal from 'models/Deal'
+import DealContext from 'models/Deal/helpers/dynamic-context'
 
 import { Container, ActionsContainer } from './styled'
 
@@ -62,13 +63,6 @@ class Context extends React.Component {
     const { contextName, annotations } = this.props.data
     const contextValue = this.state.value === '' ? null : this.state.value
 
-    const context = {
-      [contextName]: {
-        value: contextValue,
-        approved: false
-      }
-    }
-
     this.setState({
       isSaving: true
     })
@@ -79,8 +73,20 @@ class Context extends React.Component {
       true
     )
 
+    const context = [
+      {
+        checklist: DealContext.getChecklist(this.props.deal, contextName),
+        definition: DealContext.getDefinitionId(
+          this.props.deal.brand.id,
+          contextName
+        ),
+        value: contextValue,
+        approved: false
+      }
+    ]
+
     try {
-      this.props.updateContext(this.props.deal.id, context)
+      this.props.upsertContexts(this.props.deal.id, context)
     } catch (e) {
       console.log(e)
     }
@@ -152,7 +158,10 @@ class Context extends React.Component {
       onContextChange: this.onContextChange,
       saveDefaultValue: this.saveDefaultValue,
       value: this.state.value,
-      context: DealContext.searchContext(data.contextName),
+      context: DealContext.searchContext(
+        this.props.deal.brand.id,
+        data.contextName
+      ),
       defaultValue
     }
 
@@ -203,5 +212,5 @@ Context.defaultProps = {
 
 export default connect(
   null,
-  { updateContext }
+  { upsertContexts }
 )(Context)

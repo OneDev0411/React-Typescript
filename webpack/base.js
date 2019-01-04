@@ -30,7 +30,8 @@ export default {
       partials: resolvePath('../app/components/Partials'),
       services: resolvePath('../app/services'),
       utils: resolvePath('../app/utils'),
-      views: resolvePath('../app/views')
+      views: resolvePath('../app/views'),
+      config: resolvePath('../config/public')
     }
   },
   plugins: [new webpack.DefinePlugin(config.globals)],

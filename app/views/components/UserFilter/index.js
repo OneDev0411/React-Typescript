@@ -2,24 +2,16 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
+import { getBrandAgents } from 'views/utils/brand-members'
+
 import MultiSelectDropdown from '../MultiSelectDropdown'
-import { getBrandMembers } from '../../../store_actions/user/get-brand-members'
-import { getActiveTeamId, getActiveTeam } from '../../../utils/user-teams'
 
 class UserFilter extends React.Component {
   componentDidMount() {
     this.init()
   }
 
-  init = () => {
-    if (this.Members.length > 0) {
-      return false
-    }
-
-    const brandId = getActiveTeamId(this.props.user)
-
-    this.props.getBrandMembers(brandId)
-  }
+  init = () => {}
 
   get MembersList() {
     const selectedItems = this.SelectedItems
@@ -52,7 +44,7 @@ class UserFilter extends React.Component {
   }
 
   get Members() {
-    return this.props.brandMembers
+    return this.props.brandMembers || []
   }
 
   get DropdownTitle() {
@@ -97,7 +89,7 @@ class UserFilter extends React.Component {
 
   render() {
     if (this.Members.length <= 1) {
-      return false
+      return null
     }
 
     return (
@@ -111,41 +103,27 @@ class UserFilter extends React.Component {
         fullWidth
         items={this.MembersList}
         onChange={this.handleOnChange}
-        style={{
-          maxWidth: '20rem',
-          height: '100%'
-        }}
+        style={this.props.style}
       />
     )
   }
 }
 
 function mapStateToProps({ user }) {
-  const activeTeam = getActiveTeam(user)
-  const brandMembers =
-    activeTeam && activeTeam.brand.roles
-      ? activeTeam.brand.roles.reduce(
-          (members, role) =>
-            role.members ? members.concat(role.members) : members,
-          []
-        )
-      : []
-
   return {
     user,
-    brandMembers
+    brandMembers: getBrandAgents(user)
   }
 }
 
 const defaultProps = {
-  filter: []
+  filter: [],
+  style: {
+    maxWidth: '20rem',
+    height: '100%'
+  }
 }
 
 UserFilter.defaultProps = defaultProps
 
-export default connect(
-  mapStateToProps,
-  {
-    getBrandMembers
-  }
-)(UserFilter)
+export default connect(mapStateToProps)(UserFilter)

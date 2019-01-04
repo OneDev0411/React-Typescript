@@ -34,6 +34,15 @@ export function moveTaskFile(user, dealId, task, file, notifyOffice) {
         fileData = response.body.data
       }
 
+      /*
+      * remove file from it's current place (task or stash based on given task)
+      */
+      await dispatch(
+        asyncDeleteFile(dealId, {
+          [file.id]: file.task ? { id: file.task.id } : null
+        })
+      )
+
       if (task) {
         dispatch({
           type: actionTypes.ADD_TASK_FILE,
@@ -47,15 +56,6 @@ export function moveTaskFile(user, dealId, task, file, notifyOffice) {
           file: fileData
         })
       }
-
-      /*
-      * remove file from it's current place (task or stash based on given task)
-      */
-      await dispatch(
-        asyncDeleteFile(dealId, {
-          [file.id]: file.taskId ? { id: file.taskId } : null
-        })
-      )
 
       if (notifyOffice && task) {
         dispatch(changeNeedsAttention(dealId, task.id, true))

@@ -4,12 +4,9 @@ import { batchActions } from 'redux-batched-actions'
 import { browserHistory } from 'react-router'
 import moment from 'moment'
 import _ from 'underscore'
-import styled from 'styled-components'
-import Flex from 'styled-flex-component'
 
-import PopOver from 'components/Popover'
+import { getStartRange, getEndRange } from 'reducers/calendar'
 
-import { getStartRange, getEndRange } from '../../../../reducers/calendar'
 import {
   getCalendar,
   setDate,
@@ -37,6 +34,7 @@ import {
   getActiveTeam
 } from '../../../../utils/user-teams'
 
+import Export from './Export'
 import CalendarTable from './Table'
 import { MenuContainer, TableContainer } from './styled'
 
@@ -45,11 +43,6 @@ const LOADING_POSITIONS = {
   Bottom: 1,
   Middle: 2
 }
-
-const PopOverImage = styled.img`
-  width: 40px;
-  height: 40px;
-`
 
 const MENU_WIDTH = '18.75rem'
 
@@ -312,38 +305,7 @@ class CalendarContainer extends React.Component {
               // modifiers={this.SelectedRange}
             />
 
-            <PopOver
-              containerStyle={{
-                position: 'absolute',
-                bottom: '0',
-                left: '50%',
-                transform: 'translateX(-50%)'
-              }}
-              popoverStyles={{ width: '250px', textAlign: 'center' }}
-              caption={
-                <div>
-                  <div>
-                    Take your Rechat calendar events with you. Export them to
-                    other calendars like Outlook, Google, iCal and more
-                  </div>
-                  <Flex style={{ marginTop: '1rem' }} justifyAround>
-                    <PopOverImage src="/static/images/Calendar/outlook.png" />
-                    <PopOverImage src="/static/images/Calendar/gcal.png" />
-                    <PopOverImage src="/static/images/Calendar/ical.png" />
-                  </Flex>
-                </div>
-              }
-            >
-              <ActionButton
-                noBorder
-                appearance="outline"
-                onClick={() => {
-                  browserHistory.push('/dashboard/account/exportCalendar')
-                }}
-              >
-                Calendar Export
-              </ActionButton>
-            </PopOver>
+            <Export />
           </MenuContainer>
         </Menu>
 

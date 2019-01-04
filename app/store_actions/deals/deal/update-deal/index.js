@@ -24,5 +24,7 @@ export function updateDeal(deal) {
         deal: deals[deal.id]
       })
     ])
+
+    return deals[deal.id]
   }
 }

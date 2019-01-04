@@ -202,9 +202,7 @@
 %popup-message-attachment {
   .list {
     .item {
-      img {
-        max-width: 170px;
-      }
+      min-width: 100%;
     }
   }
 }

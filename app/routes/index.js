@@ -114,22 +114,17 @@ const AsyncDealCreateOffer = Load({
 
 const AsyncDealsList = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/list' /* webpackChunkName: "deal_l" */)
+    import('../components/Pages/Dashboard/Deals/List' /* webpackChunkName: "deal_l" */)
 })
 
 const AsyncDealDashboard = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/dashboard' /* webpackChunkName: "deal_d" */)
+    import('../components/Pages/Dashboard/Deals/Dashboard' /* webpackChunkName: "deal_d" */)
 })
 
-const AsyncDealFileManager = Load({
+const AsyncDealFileViewer = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/file-manager' /* webpackChunkName: "deal_fm" */)
-})
-
-const AsyncDealFormViewer = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Deals/form-viewer' /* webpackChunkName: "deal_fv" */)
+    import('../components/Pages/Dashboard/Deals/FileViewer' /* webpackChunkName: "deal_fv" */)
 })
 
 const AsyncDealFormEdit = Load({
@@ -139,7 +134,7 @@ const AsyncDealFormEdit = Load({
 
 const AsyncAgentNetwork = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/agent-network' /* webpackChunkName: "agent-network" */)
+    import('../components/Pages/Dashboard/Deals/AgentNetwork' /* webpackChunkName: "agent-network" */)
 })
 
 /* ==================================== */
@@ -431,10 +426,7 @@ export default (
           component={AsyncDealCreate}
         />
         <Route path="/dashboard/deals/:id" component={AsyncDealDashboard} />
-        <Route
-          path="/dashboard/deals/:id/files"
-          component={AsyncDealFileManager}
-        />
+
         <Route
           path="/dashboard/deals/:id/form-edit/:taskId"
           component={AsyncDealFormEdit}
@@ -444,8 +436,8 @@ export default (
           component={AsyncDealCreateOffer}
         />
         <Route
-          path="/dashboard/deals/:dealId/form-viewer/:taskId(/:type/:objectId)"
-          component={AsyncDealFormViewer}
+          path="/dashboard/deals/:id/view/:taskId(/:entityType/:entityId)"
+          component={AsyncDealFileViewer}
         />
         <Route
           path="/dashboard/deals/:id/network"

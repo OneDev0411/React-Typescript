@@ -10,6 +10,7 @@ import Suggestions from './suggestions'
 import { selectDefinitionByName } from '../../../reducers/contacts/attributeDefs'
 import { searchContacts } from '../../../models/contacts/search-contacts'
 import { normalizeContactAttribute } from '../../../store_actions/contacts/helpers/normalize-contacts'
+import { isValidPhoneNumber, formatPhoneNumber } from '../../../utils/helpers'
 import {
   getContactUsers,
   getContactAvatar,
@@ -139,26 +140,14 @@ class Compose extends React.Component {
       }
     }
 
-    const {
-      PhoneNumberUtil,
-      PhoneNumberFormat
-    } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
-    const phoneUtil = PhoneNumberUtil.getInstance()
+    const isPhoneNumber = await isValidPhoneNumber(id)
 
-    try {
-      let phoneNumber = phoneUtil.parse(id, 'US')
-      let isNumberValid = phoneUtil.isValidNumber(phoneNumber)
+    if (isPhoneNumber) {
+      const phone_number = await formatPhoneNumber(id)
 
-      if (isNumberValid) {
-        return {
-          [id]: this.createListItem('phone_number', {
-            id,
-            phone_number: phoneUtil.format(phoneNumber, PhoneNumberFormat.E164)
-          })
-        }
+      return {
+        [id]: this.createListItem('phone_number', { id, phone_number })
       }
-    } catch (e) {
-      return null
     }
   }
 

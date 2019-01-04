@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'underscore'
 
 import ContextAnnotation from '../context-annotation'
-import DealContext from '../../../../../../../../../models/DealContext'
+import DealContext from '../../../../../../../../../models/Deal/helpers/dynamic-context'
 
 function getContextType(context) {
   if (context && DealContext.isAddressField(context.name)) {
@@ -51,10 +51,13 @@ export default function FormContexts(props) {
     <div>
       {_.map(grouped, (groups, name) => {
         // get context
-        const context = DealContext.searchContext(name)
+        const context = DealContext.searchContext(props.deal.brand.id, name)
 
         // find context object by its name
-        const contextObject = DealContext.searchContext(name)
+        const contextObject = DealContext.searchContext(
+          props.deal.brand.id,
+          name
+        )
 
         // get context value
         const contextValue = contextObject

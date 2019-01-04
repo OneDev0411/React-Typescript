@@ -100,7 +100,11 @@ class App extends Component {
       this.initialRooms()
 
       // load deals
-      if (this.hasDealsAccess && !deals && !this.props.isFetchingDeals) {
+      if (
+        this.hasDealsAccess &&
+        Object.keys(deals).length === 0 &&
+        !this.props.isFetchingDeals
+      ) {
         if (isBackOffice || viewAsEveryoneOnTeam(user)) {
           dispatch(getDeals(user))
         } else {

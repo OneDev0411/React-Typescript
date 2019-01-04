@@ -18,7 +18,8 @@ export class FinalFormDrawer extends React.Component {
     showFooter: PropTypes.bool,
     closeDrawerOnBackdropClick: PropTypes.bool,
     validate: PropTypes.func,
-    formId: PropTypes.string.isRequired
+    formId: PropTypes.string.isRequired,
+    footerRenderer: PropTypes.func
   }
 
   static defaultProps = {
@@ -89,15 +90,23 @@ export class FinalFormDrawer extends React.Component {
                 </Drawer.Body>
 
                 <Drawer.Footer rowReverse>
-                  <ActionButton
-                    type="submit"
-                    disabled={submitting || formProps.validating}
-                    onClick={this.handleSubmit}
-                  >
-                    {submitting
-                      ? this.props.submittingButtonLabel
-                      : this.props.submitButtonLabel}
-                  </ActionButton>
+                  {this.props.footerRenderer ? (
+                    this.props.footerRenderer({
+                      formProps,
+                      submitting,
+                      handleSubmit: this.handleSubmit
+                    })
+                  ) : (
+                    <ActionButton
+                      type="submit"
+                      disabled={submitting || formProps.validating}
+                      onClick={this.handleSubmit}
+                    >
+                      {submitting
+                        ? this.props.submittingButtonLabel
+                        : this.props.submitButtonLabel}
+                    </ActionButton>
+                  )}
                 </Drawer.Footer>
               </Drawer>
             </form>

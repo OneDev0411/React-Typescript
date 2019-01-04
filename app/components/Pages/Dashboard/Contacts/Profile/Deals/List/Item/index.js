@@ -4,33 +4,39 @@ import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 import _ from 'underscore'
 
-import * as Deal from '../../../../../../../../models/Deal/context-helper'
-import { roleName } from '../../../../../Deals/utils/roles'
+import { getContactUsers, getContactAttribute } from 'models/contacts/helpers'
+import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
+import { formatPhoneNumber } from 'utils/helpers'
+
 import {
-  getContactUsers,
-  getContactAttribute
-} from '../../../../../../../../models/contacts/helpers'
-import { selectDefinitionByName } from '../../../../../../../../reducers/contacts/attributeDefs'
+  getField,
+  getFormattedPrice,
+  getStatus,
+  getAddress
+} from 'models/Deal/helpers/context'
+
+import { roleName } from '../../../../../Deals/utils/roles'
 
 import { Container, Price, Status, Address, Role } from './styled'
 
 function getPhoto(deal) {
-  return Deal.getField(deal, 'photo') || '/static/images/deals/home.png'
+  return getField(deal, 'photo') || '/static/images/deals/home.png'
 }
 
 function getPrice(deal) {
   const price =
-    Deal.getField(deal, 'sales_price') ||
-    Deal.getField(deal, 'list_price') ||
-    Deal.getField(deal, 'lease_price')
+    getField(deal, 'sales_price') ||
+    getField(deal, 'list_price') ||
+    getField(deal, 'lease_price')
 
-  return Deal.getFormattedPrice(price) || '$0'
+  return getFormattedPrice(price) || '$0'
 }
 
 class Item extends React.Component {
   state = {
     roles: []
   }
+
   componentDidMount() {
     this.searchRoles()
   }
@@ -45,6 +51,7 @@ class Item extends React.Component {
     const contactEmails = getContactAttribute(contact, emailAttDef)
     const contactPhones = getContactAttribute(contact, phoneAttDef)
 
+    // todo: refactor
     for (let index = 0; index < roles.length; index++) {
       if (
         (roles[index].user &&
@@ -69,30 +76,19 @@ class Item extends React.Component {
       return true
     }
 
-    const {
-      PhoneNumberUtil
-    } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
-    const phoneUtil = PhoneNumberUtil.getInstance()
+    const phoneNumber1 = await formatPhoneNumber(phone1)
+    const phoneNumber2 = await formatPhoneNumber(phone2)
 
-    try {
-      let phoneNumber1 = phoneUtil.parse(phone1, 'US')
-      let phoneNumber2 = phoneUtil.parse(phone2, 'US')
-
-      return (
-        phoneNumber1.getNationalNumber() === phoneNumber2.getNationalNumber()
-      )
-    } catch (error) {
-      return false
-    }
+    return phoneNumber1 === phoneNumber2
   }
 
   render() {
     const { item } = this.props
     const { roles } = this.state
 
-    const status = Deal.getStatus(item) || 'Unknown'
+    const status = getStatus(item) || 'Unknown'
     const clientTitle = ''
-    const address = Deal.getAddress(item)
+    const address = getAddress(item)
 
     const contactRoleName = roles.map(role => roleName(role.role)).join(', ')
 

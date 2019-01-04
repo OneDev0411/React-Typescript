@@ -249,27 +249,86 @@ $left-w: 44px;
 }
 
 %message-item-attachment {
+  margin-top: 10px;
+
   .list {
-    margin-top: 10px;
-    .item {
-      display: inline-block;
-      margin: 0 10px 10px 0;
-      border-radius: 5px;
-      min-height: 140px;
-      img {
-        min-width: 140px;
-        max-width: 240px;
-        min-height: 20px;
-        max-height: 140px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: 0.5s all ease-in;
-        border: 1px solid #eee;
-        &:hover {
-          opacity: 0.8;
-        }
+    a {
+      color: #000;
+      &:hover {
+        text-decoration: none;
       }
     }
+
+    .item {
+      display: inline-flex;
+      align-items: center;
+      min-width: 60%;
+      height: 3.5rem;
+      border-radius: 3px;
+      background-color: #f1f1f1;
+      padding: 0 1rem;
+      cursor: pointer;
+
+      img {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 100%;
+        margin-right: 0.5rem;
+      }
+
+      .file-attach-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        background-color: #000;
+        border-radius: 100%;
+        margin-right: 0.5rem;
+
+        svg {
+          fill: #fff;
+          width: 1rem;
+        }
+      }
+
+      .file-title {
+        font-size: 0.875rem;
+        font-weight: 500;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .file-date {
+        font-size: 0.875rem;
+        color: #7f7f7f;
+      }
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+
+    // .item {
+    //   display: inline-block;
+    //   margin: 0 10px 10px 0;
+    //   border-radius: 5px;
+    //   min-height: 140px;
+    //   img {
+    //     min-width: 140px;
+    //     max-width: 240px;
+    //     min-height: 20px;
+    //     max-height: 140px;
+    //     border-radius: 5px;
+    //     cursor: pointer;
+    //     transition: 0.5s all ease-in;
+    //     border: 1px solid #eee;
+    //     &:hover {
+    //       opacity: 0.8;
+    //     }
+    //   }
+    // }
   }
 }
 

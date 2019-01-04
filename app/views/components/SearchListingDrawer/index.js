@@ -75,6 +75,7 @@ class SearchListingDrawer extends React.Component {
   render() {
     return (
       <SearchDrawer
+        title={this.props.title}
         showLoadingIndicator={this.state.isWorking}
         multipleSelection={this.props.multipleSelection}
         searchInputOptions={{

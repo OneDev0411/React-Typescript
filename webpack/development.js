@@ -1,6 +1,8 @@
 import webpack from 'webpack'
-import Webpackbar from 'webpackbar'
+
 import WebpackNotifierPlugin from 'webpack-notifier'
+
+import Webpackbar from 'webpackbar'
 
 import appConfig from '../config/webpack'
 import webpackConfig from './base'
