@@ -421,6 +421,7 @@ class CreateOffer extends React.Component {
       deal_status: () => dealStatus.length > 0,
       contexts: () =>
         DealContext.validateList(
+          deal.brand.id,
           contexts,
           'Buying',
           deal.property_type,
