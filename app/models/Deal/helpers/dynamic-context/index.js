@@ -85,11 +85,7 @@ export function getItems(
     hasActiveOffer
   )
 
-  const sortTable = _.pluck(getList(brand_id), 'key')
-
-  return _.sortBy([].concat(requiredFields, optionalFields), field =>
-    sortTable.indexOf(field.key)
-  )
+  return _.sortBy([].concat(requiredFields, optionalFields), 'order')
 }
 
 /**
