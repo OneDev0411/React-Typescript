@@ -8,15 +8,16 @@ import { Icon as ArrowIcon } from 'components/Dropdown'
 
 import { getStatusColorClass } from 'utils/listing'
 
-import Message from '../../../Chatroom/Util/message'
 import {
-  updateContext,
+  upsertContexts,
   createGenericTask,
   changeNeedsAttention
 } from 'actions/deals'
 
 import Deal from 'models/Deal'
 import DealContext from 'models/Deal/helpers/dynamic-context'
+
+import Message from '../../../Chatroom/Util/message'
 
 import { DropDownButton, StatusBullet, StatusOption } from './styled'
 
@@ -105,12 +106,20 @@ class DealStatus extends React.Component {
     this.setState({ isSaving: true })
 
     if (this.props.isBackOffice) {
-      await this.props.updateContext(this.props.deal.id, {
-        listing_status: {
+      await this.props.upsertContexts(this.props.deal.id, [
+        {
+          definition: DealContext.getDefinitionId(
+            this.props.deal.brand.id,
+            'listing_status'
+          ),
+          checklist: DealContext.getChecklist(
+            this.props.deal,
+            'listing_status'
+          ),
           value: status,
           approved: true
         }
-      })
+      ])
     } else {
       await this.notifyAdmin(status)
     }
@@ -230,7 +239,7 @@ export default connect(
   }),
   {
     notify,
-    updateContext,
+    upsertContexts,
     createGenericTask,
     changeNeedsAttention
   }
