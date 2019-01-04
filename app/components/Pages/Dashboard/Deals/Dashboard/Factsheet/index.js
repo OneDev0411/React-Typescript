@@ -6,7 +6,7 @@ import Deal from 'models/Deal'
 import DealContext from 'models/Deal/helpers/dynamic-context'
 import ToolTip from 'components/tooltip'
 
-import { updateContext, approveContext } from 'actions/deals'
+import { upsertContexts, approveContext } from 'actions/deals'
 
 import {
   Container,
@@ -29,7 +29,7 @@ class Factsheet extends React.Component {
 
   handleStartEditContext = field => {
     this.setState({
-      activeContext: field.name
+      activeContext: field.key
     })
   }
 
@@ -53,26 +53,30 @@ class Factsheet extends React.Component {
       return false
     }
 
-    this.updateContext(field, value)
+    this.saveContext(field, value)
   }
 
   handleRemoveContext = field => {
-    this.updateContext(field, null)
+    this.saveContext(field, null)
   }
 
-  updateContext = async (field, value) => {
+  saveContext = async (field, value) => {
     this.setState({
-      activeContext: field.name,
+      activeContext: field.key,
       isSavingContext: true
     })
 
     try {
-      await this.props.updateContext(this.props.deal.id, {
-        [field.name]: {
-          value,
-          approved: this.props.isBackOffice ? true : !field.needs_approval
+      const context = [
+        {
+          definition: field.id,
+          checklist: DealContext.getChecklist(this.props.deal, field.key),
+          approved: this.props.isBackOffice ? true : !field.needs_approval,
+          value
         }
-      })
+      ]
+
+      await this.props.upsertContexts(this.props.deal.id, context)
     } catch (e) {
       console.log(e)
     }
@@ -104,7 +108,7 @@ class Factsheet extends React.Component {
   }
 
   isContextApproved = field => {
-    const context = Deal.get.context(this.props.deal, field.name)
+    const context = Deal.get.context(this.props.deal, field.key)
 
     return (context && context.approved_at !== null) || field.approved
   }
@@ -134,12 +138,12 @@ class Factsheet extends React.Component {
               const value = this.getFieldValue(valueObject)
               const isApproved = this.isContextApproved(field)
               const isDateContext = field.data_type === 'Date'
-              const isActiveContext = activeContext === field.name
+              const isActiveContext = activeContext === field.key
 
               // if is saving active context, then show a loader
               if (isActiveContext && this.state.isSavingContext) {
                 return (
-                  <Item key={field.name} showBorder isSaving>
+                  <Item key={field.key} showBorder isSaving>
                     Saving Field ...
                   </Item>
                 )
@@ -148,7 +152,7 @@ class Factsheet extends React.Component {
               // if is editing active context, then show editing mode
               if (isActiveContext) {
                 return (
-                  <Item key={field.name} showBorder isDateContext>
+                  <Item key={field.key} showBorder isDateContext>
                     {isDateContext && <ItemLabel>{field.label}</ItemLabel>}
 
                     <Editable
@@ -164,7 +168,7 @@ class Factsheet extends React.Component {
 
               return (
                 <ToolTip
-                  key={field.name}
+                  key={field.key}
                   caption={
                     isApproved || isBackOffice
                       ? null
@@ -195,5 +199,5 @@ class Factsheet extends React.Component {
 
 export default connect(
   null,
-  { updateContext, approveContext }
+  { upsertContexts, approveContext }
 )(Factsheet)
