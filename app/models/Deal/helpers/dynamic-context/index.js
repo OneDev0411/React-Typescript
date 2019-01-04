@@ -361,24 +361,6 @@ export function validateList(
   return _.every(dealContexts, ctx => ctx.validate(ctx, list[ctx.key]))
 }
 
-/**
- * get valid contexts
- */
-export function getValidItems(
-  brand_id,
-  list,
-  deal_type,
-  property_type,
-  has_active_offer = false
-) {
-  const dealContexts = _.indexBy(
-    getItems(brand_id, deal_type, property_type, has_active_offer),
-    'key'
-  )
-
-  return _.pick(list, (value, name) => validate(dealContexts[name], value))
-}
-
 export function isAddressField(name) {
   return [
     'street_dir_prefix',
@@ -465,6 +447,5 @@ export default {
   validate,
   validateDate,
   validateList,
-  getValidItems,
   isAddressField
 }
