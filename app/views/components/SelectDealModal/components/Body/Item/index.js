@@ -6,6 +6,7 @@ import Flex from 'styled-flex-component'
 import {
   getField,
   getStatus,
+  getSide,
   getAddress,
   getFormattedPrice
 } from 'models/Deal/helpers/context'
