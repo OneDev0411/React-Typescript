@@ -20,8 +20,9 @@ function FactsheetsSideNav(props) {
         showDivider={props.showCriticalDatesDivider}
         display={props.showCriticalDates}
         deal={deal}
+        isFetchingContexts={props.isFetchingContexts}
         isBackOffice={isBackOffice}
-        section="CriticalDates"
+        section="Dates"
         title="Critical Dates"
       />
 
@@ -36,6 +37,7 @@ function FactsheetsSideNav(props) {
         showDivider
         display={props.showCDAInformation}
         deal={deal}
+        isFetchingContexts={props.isFetchingContexts}
         isBackOffice={isBackOffice}
         section="CDA"
         title="CDA Information"
@@ -44,6 +46,7 @@ function FactsheetsSideNav(props) {
       <FactsheetSection
         display={props.showListingInformation}
         deal={deal}
+        isFetchingContexts={props.isFetchingContexts}
         isBackOffice={isBackOffice}
         section="Listing"
         title="Listing Information"

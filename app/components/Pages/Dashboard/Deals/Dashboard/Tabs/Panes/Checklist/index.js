@@ -15,7 +15,11 @@ export default function ChecklistPane(props) {
     <UploadManager deal={props.deal} preventDropOnDocument={false} disableClick>
       <Flex>
         <FactsheetContainer>
-          <FactsheetsNav deal={props.deal} isBackOffice={props.isBackOffice} />
+          <FactsheetsNav
+            deal={props.deal}
+            isBackOffice={props.isBackOffice}
+            isFetchingContexts={props.isFetchingContexts}
+          />
         </FactsheetContainer>
 
         <MainContainer>
