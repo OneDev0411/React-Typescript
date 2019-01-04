@@ -85,7 +85,7 @@ export function getItems(
     hasActiveOffer
   )
 
-  const sortTable = _.pluck(getList(brand_id), 'name')
+  const sortTable = _.pluck(getList(brand_id), 'key')
 
   return _.sortBy([].concat(requiredFields, optionalFields), field =>
     sortTable.indexOf(field.key)
@@ -373,7 +373,7 @@ export function getValidItems(
 ) {
   const dealContexts = _.indexBy(
     getItems(brand_id, deal_type, property_type, has_active_offer),
-    'name'
+    'key'
   )
 
   return _.pick(list, (value, name) => validate(dealContexts[name], value))
