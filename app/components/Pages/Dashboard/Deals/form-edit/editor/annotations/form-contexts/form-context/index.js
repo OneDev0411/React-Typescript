@@ -51,10 +51,13 @@ export default function FormContexts(props) {
     <div>
       {_.map(grouped, (groups, name) => {
         // get context
-        const context = DealContext.searchContext(name)
+        const context = DealContext.searchContext(props.deal.brand.id, name)
 
         // find context object by its name
-        const contextObject = DealContext.searchContext(name)
+        const contextObject = DealContext.searchContext(
+          props.deal.brand.id,
+          name
+        )
 
         // get context value
         const contextValue = contextObject
