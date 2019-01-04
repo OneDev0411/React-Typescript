@@ -2,11 +2,14 @@ import React, { Fragment } from 'react'
 import moment from 'moment'
 import cn from 'classnames'
 import _ from 'underscore'
+
+import { H2 } from 'components/Typography/headings'
+
+import ActionButton from 'components/Button/ActionButton'
+
 import DatePicker from '../components/DatePicker'
 import Input from '../../../../../views/components/Input'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
-import { H2 } from 'components/Typography/headings'
-import ActionButton from 'components/Button/ActionButton'
 
 const ContextValue = ({ name, date, onRemove, onEdit }) => (
   <div className="selected-field">
@@ -48,7 +51,7 @@ export default class extends React.Component {
   }
 
   getContextValue(field) {
-    const value = this.props.contexts[field.name]
+    const value = this.props.contexts[field.key]
 
     return !_.isUndefined(value) ? value : ''
   }
@@ -78,7 +81,7 @@ export default class extends React.Component {
         )}
 
         {_.map(fields, field => (
-          <div key={field.name}>
+          <div key={field.key}>
             {field.data_type !== 'Date' && (
               <div className="entity-item string new">
                 <div className="add-item text-input">
@@ -87,27 +90,28 @@ export default class extends React.Component {
                       className={cn('text', {
                         hasError:
                           hasError &&
-                          !field.validate(field, contexts[field.name])
+                          !field.validate(field, contexts[field.key])
                       })}
                     >
                       {field.label}{' '}
-                      {areContextsRequired &&
-                        field.mandatory && <span className="required">*</span>}
+                      {areContextsRequired && field.mandatory && (
+                        <span className="required">*</span>
+                      )}
                     </span>
                   </div>
                   <Input
                     data-type={field.format || field.data_type}
-                    name={field.name}
+                    name={field.key}
                     {...field.properties}
                     className={cn({
                       invalid:
-                        contexts[field.name] &&
-                        !field.validate(field, contexts[field.name])
+                        contexts[field.key] &&
+                        !field.validate(field, contexts[field.key])
                     })}
                     value={this.getContextValue(field)}
                     onChange={(e, data = {}) =>
                       this.onChangeStringContext(
-                        field.name,
+                        field.key,
                         !_.isUndefined(data.value) ? data.value : e.target.value
                       )
                     }
@@ -118,17 +122,17 @@ export default class extends React.Component {
 
             {field.data_type === 'Date' && (
               <Fragment>
-                {contexts[field.name] ? (
+                {contexts[field.key] ? (
                   <ContextValue
                     name={field.label}
-                    date={contexts[field.name]}
-                    onRemove={() => onChangeContext(field.name, null)}
-                    onEdit={() => this.setSelectedField(field.name)}
+                    date={contexts[field.key]}
+                    onRemove={() => onChangeContext(field.key, null)}
+                    onEdit={() => this.setSelectedField(field.key)}
                   />
                 ) : (
                   <div
                     className="entity-item date new"
-                    onClick={() => this.setSelectedField(field.name)}
+                    onClick={() => this.setSelectedField(field.key)}
                   >
                     <ActionButton appearance="link" className="add-item">
                       <span className="icon">+</span>
@@ -138,16 +142,15 @@ export default class extends React.Component {
                         })}
                       >
                         {field.label}{' '}
-                        {areContextsRequired &&
-                          field.mandatory && (
-                            <span className="required">*</span>
-                          )}
+                        {areContextsRequired && field.mandatory && (
+                          <span className="required">*</span>
+                        )}
                       </span>
                     </ActionButton>
                   </div>
                 )}
                 <DatePicker
-                  show={selectedField === field.name}
+                  show={selectedField === field.key}
                   saveText={
                     contexts[selectedField] ? 'Update Date' : 'Add Date'
                   }
