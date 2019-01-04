@@ -3,7 +3,13 @@ import { connect } from 'react-redux'
 import { Field } from 'react-final-form'
 import _ from 'underscore'
 
-import { TextInput } from '../../../../../../views/components/Forms/TextInput'
+import Deal from 'models/Deal'
+import DealContext from 'models/Deal/helpers/dynamic-context'
+
+import { upsertContexts } from 'actions/deals'
+
+import { TextInput } from 'components/Forms/TextInput'
+
 import { SelectInput } from '../../../../../../views/components/Forms/SelectInput'
 
 import { FinalFormDrawer } from '../../../../../../views/components/FinalFormDrawer'
@@ -15,8 +21,6 @@ import {
   STREET_PREFIX,
   STATES
 } from '../../utils/address'
-import Deal from '../../../../../../models/Deal'
-import { updateContext } from '../../../../../../store_actions/deals'
 
 const defaultState = 'Texas'
 
@@ -228,16 +232,21 @@ class Address extends React.Component {
       isSavingAddress: true
     })
 
-    const context = {}
+    const contexts = []
 
     _.each(address_components, (value, name) => {
-      context[name] = {
+      contexts.push({
+        definition: DealContext.getDefinitionId(this.props.deal.brand.id, name),
+        checklist: DealContext.getChecklist(this.props.deal, name),
         value: address_components[name],
         approved: true // none of address contexts, don't need admin approval
-      }
+      })
     })
 
-    const newDeal = await this.props.updateContext(this.props.deal.id, context)
+    const newDeal = await this.props.upsertContexts(
+      this.props.deal.id,
+      contexts
+    )
 
     this.setState({
       isSavingAddress: false
@@ -357,5 +366,5 @@ class Address extends React.Component {
 
 export default connect(
   null,
-  { updateContext }
+  { upsertContexts }
 )(Address)
