@@ -3,10 +3,15 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import { getContexts } from 'actions/deals'
-import { SectionTitle } from '../styled'
-import RadioButton from '../../../../../../views/components/RadioButton'
+
+import { getActiveTeamId } from 'utils/user-teams'
+
+import RadioButton from 'components/RadioButton'
+
 import CategoryType from '../CategoryTypes'
+
 import { CategoryTypesContainer } from './styled'
+import { SectionTitle } from '../styled'
 
 const radioButtonStyle = { display: 'block', marginTop: '2rem' }
 
@@ -31,7 +36,7 @@ const taskTypes = getItems(defaultTaskTypes)
 class ICalAllTypes extends React.Component {
   componentDidMount() {
     if (!this.props.contexts) {
-      this.props.getContexts(this.props.user)
+      this.props.getContexts(getActiveTeamId(this.props.user))
     }
   }
 
