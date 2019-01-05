@@ -54,14 +54,15 @@ export function getRegisterationScript({
           }
 
           if (navigator.onLine) {
-            (${onlineSubmitHandler})(data);
+            (${onlineSubmitHandler})(data).then(() => {
+              form.reset();
+              toastr.success('The contact info has been successfully registered!');
+            }).catch(err => {
+              console.log(err);
+            });
           } else {
             (${offlineSubmitHandler})(data);
           }
-
-          form.reset();
-          toastr.success('The contact info has been successfully registered!')
-
         });
       })();
     </script>
