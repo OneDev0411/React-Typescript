@@ -83,6 +83,8 @@ export function getItems(
     deal_type,
     property_type,
     hasActiveOffer
+  ).filter(
+    field => requiredFields.some(({ key }) => field.key === key) === false
   )
 
   return _.sortBy([].concat(requiredFields, optionalFields), 'order')
@@ -164,10 +166,10 @@ export function filterByStatus(
   context,
   deal_type,
   property_type,
-  hasActiveOffer,
-  filterBy
+  has_active_offer,
+  filter_by
 ) {
-  const definition = context[filterBy]
+  const definition = context[filter_by]
 
   if (definition.length === 0) {
     return false
@@ -176,7 +178,7 @@ export function filterByStatus(
   return (
     definition.includes(deal_type) &&
     definition.includes(property_type) &&
-    (hasActiveOffer || !definition.includes('Active Offer'))
+    (has_active_offer || !definition.includes('Active Offer'))
   )
 }
 
