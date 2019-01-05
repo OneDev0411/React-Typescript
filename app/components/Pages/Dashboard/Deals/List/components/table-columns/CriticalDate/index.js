@@ -10,7 +10,7 @@ export const getCriticalDateNextValue = deal => getNextDateValue(deal)
 
 export default function CriticalDate(props) {
   const { deal, rowId, rowsCount } = props
-  const table = DealContext.getFactsheetSection(deal, 'CriticalDates')
+  const table = DealContext.getFactsheetSection(deal, 'Dates')
 
   if (table.length === 0) {
     return <span />
