@@ -29,8 +29,6 @@ const Status = ({ deal }) => {
 
 export const statusSortMethod = ({ accessor }) => {
   const list = [
-    'Incoming',
-    'Coming Soon',
     'Active',
     'Lease',
     'Pending',
@@ -44,7 +42,7 @@ export const statusSortMethod = ({ accessor }) => {
     'Temp Off Market',
     'Cancelled',
     'Withdrawn',
-    'Archived'
+    'Contract Terminated'
   ]
 
   const order = list.indexOf(accessor)
