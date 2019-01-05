@@ -12,6 +12,8 @@ export const getContactOriginalSourceTitle = source => {
       return 'Imported from outlook'
     case 'CSV':
       return 'Imported from CSV'
+    case 'Open House':
+      return 'Created from an open house registration'
     default:
       return 'Unknown'
   }
