@@ -38,8 +38,9 @@ class DealDetails extends React.Component {
     }
 
     try {
-      this.getDeal()
-      this.fetchContexts()
+      const deal = await this.getDeal()
+
+      this.fetchContexts(deal)
     } catch (e) {
       console.log(e)
       console.error('Could not fetch deal or contexts')
@@ -54,13 +55,15 @@ class DealDetails extends React.Component {
     this.setState({ isFetchingDeal: true })
 
     // fetch deal by id
-    await this.props.getDeal(this.props.deal.id)
+    const deal = await this.props.getDeal(this.props.params.id)
 
     this.setState({ isFetchingDeal: false })
+
+    return deal
   }
 
-  fetchContexts = async () => {
-    const brandId = this.props.deal.brand.id
+  fetchContexts = async deal => {
+    const brandId = deal.brand.id
 
     if (this.props.contexts[brandId]) {
       return false
