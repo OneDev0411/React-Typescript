@@ -32,7 +32,7 @@ class DealsContainer extends React.Component {
       dispatch(getContexts(brandId))
     }
 
-    if (Object.keys(props.deals).length === 0 && !props.isFetchingDeals) {
+    if (_.size(props.deals) === 0 && !props.isFetchingDeals) {
       if (isBackOffice || viewAsEveryoneOnTeam(user)) {
         dispatch(getDeals(user))
       } else {
