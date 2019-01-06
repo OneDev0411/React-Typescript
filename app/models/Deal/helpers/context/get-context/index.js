@@ -1,3 +1,5 @@
+import { searchContext } from '../../dynamic-context'
+
 /**
  * a helper that extracts a field from context or proposed values
  */
@@ -6,6 +8,7 @@ export function getContext(deal, field, forcedContext = null) {
     return null
   }
 
+  const definition = searchContext(deal.brand.id, field)
   const contexts = ['mls_context', 'deal_context']
   const values = {}
 
@@ -20,7 +23,10 @@ export function getContext(deal, field, forcedContext = null) {
   const { mls_context, deal_context } = values
 
   // mls context has priority over deal context, when there is no deal context
-  if (mls_context && !deal_context) {
+  if (
+    (mls_context && definition.preffered_source === 'MLS') ||
+    (mls_context && !deal_context)
+  ) {
     return mls_context
   }
 
