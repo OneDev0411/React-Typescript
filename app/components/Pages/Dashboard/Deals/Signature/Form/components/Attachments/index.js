@@ -25,11 +25,7 @@ class Attachments extends React.Component {
   }
 
   handleChangeSelectedDocuments = documents => {
-    this.props.input.onChange({
-      ...this.props.input.value,
-      ...documents
-    })
-
+    this.props.input.onChange(documents)
     this.props.onCloseAttachmentsDrawer()
   }
 
@@ -63,10 +59,9 @@ class Attachments extends React.Component {
             </Item>
           ))}
 
-          {this.props.meta.error &&
-            this.props.meta.touched && (
-              <InputError>{this.props.meta.error}</InputError>
-            )}
+          {this.props.meta.error && this.props.meta.touched && (
+            <InputError>{this.props.meta.error}</InputError>
+          )}
         </Container>
 
         {this.props.isAttachmentsOpen && (
