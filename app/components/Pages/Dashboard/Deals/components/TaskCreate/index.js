@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import { getChecklistById } from 'reducers/deals/checklists'
-import { createFormTask, setSelectedTask } from 'actions/deals'
+import { createFormTask } from 'actions/deals'
 
 import OverlayDrawer from 'components/OverlayDrawer'
 import Search from 'components/Grid/Search'
@@ -57,10 +57,7 @@ class TaskCreate extends React.Component {
         this.props.checklist.id
       )
 
-      // make this task active
-      this.props.setSelectedTask(task)
-
-      this.setState({ isSaving: false }, this.handleClose())
+      this.setState({ isSaving: false }, this.handleClose)
 
       return task
     } catch (error) {
@@ -149,5 +146,5 @@ function mapStateToProps({ deals }, ownProps) {
 
 export default connect(
   mapStateToProps,
-  { createFormTask, setSelectedTask }
+  { createFormTask }
 )(TaskCreate)
