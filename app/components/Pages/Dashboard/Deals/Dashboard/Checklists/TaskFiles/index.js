@@ -17,7 +17,7 @@ class TaskFiles extends React.Component {
   }
 
   render() {
-    const { deal, task, isBackOffice } = this.props
+    const { props } = this
 
     return (
       <Container isOpen={this.props.isOpen}>
@@ -25,17 +25,17 @@ class TaskFiles extends React.Component {
           item.type === 'task' ? (
             <DigitalForm
               key={key}
-              deal={deal}
               task={item}
-              isBackOffice={isBackOffice}
+              deal={props.deal}
+              isBackOffice={props.isBackOffice}
             />
           ) : (
             <FileAttachment
               key={key}
-              deal={deal}
-              task={task}
-              isBackOffice={isBackOffice}
+              deal={props.deal}
+              task={props.task}
               file={item}
+              isBackOffice={props.isBackOffice}
             />
           )
         )}
