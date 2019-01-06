@@ -73,7 +73,7 @@ export function onlineSubmitHandler(data) {
               },
               {
                 text: 'Open House',
-                attribute_def: attrDefData.source_type
+                attribute_def: attrDefData.tag
               },
               {
                 text: contact.first_name,
