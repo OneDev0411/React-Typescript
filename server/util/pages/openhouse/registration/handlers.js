@@ -68,7 +68,7 @@ export function onlineSubmitHandler(data) {
             user: data.agentUserId,
             attributes: [
               {
-                text: 'Open House',
+                text: 'OpenHouse',
                 attribute_def: attrDefData.source_type
               },
               {
