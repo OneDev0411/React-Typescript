@@ -295,17 +295,13 @@ export function getContactDiff(form = {}, attributeDefs) {
  */
 export function getPrimaryAgent(deal, roles) {
   const roleType = deal.deal_type === 'Buying' ? 'BuyerAgent' : 'SellerAgent'
+  let agentId
 
   if (deal.roles) {
-    const primaryRole = _.find(
-      deal.roles,
-      roleId => roles[roleId].role === roleType
-    )
-
-    if (primaryRole) {
-      return roles[primaryRole]
-    }
+    agentId = _.find(deal.roles, roleId => roles[roleId].role === roleType)
   }
+
+  return agentId ? roles[agentId] : null
 }
 /**
  *
@@ -313,10 +309,10 @@ export function getPrimaryAgent(deal, roles) {
  * @param {Object} roles - objects of roles
  */
 export function getPrimaryAgentName(deal, roles) {
-  const primaryRole = getPrimaryAgent(deal, roles)
+  const agent = getPrimaryAgent(deal, roles)
 
-  if (primaryRole) {
-    return `${primaryRole.legal_first_name} ${primaryRole.legal_last_name}`
+  if (agent) {
+    return getLegalFullName(agent)
   }
 
   return ''
