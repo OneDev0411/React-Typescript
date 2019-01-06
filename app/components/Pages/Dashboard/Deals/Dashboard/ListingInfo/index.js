@@ -4,13 +4,13 @@ import Flex from 'styled-flex-component'
 import { H1 } from 'components/Typography/headings'
 import IconLink from 'components/SvgIcons/LinkOpen/IconLink'
 
+import Deal from 'models/Deal'
+
 import { ListingImage } from './Image'
 import MlsConnect from './MlsConnect'
 
 import { Divider } from '../styled'
 import { MLSLink } from './styled'
-
-import Deal from 'models/Deal'
 
 function getTitle(deal) {
   return Deal.get.field(deal, 'street_address') || deal.title
