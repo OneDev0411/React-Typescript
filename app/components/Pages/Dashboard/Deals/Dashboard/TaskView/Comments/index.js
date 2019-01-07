@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import Comments from '../../../../Chatroom/Messages/light'
 import TaskRoom from 'services/notification/chat'
 import { addNewRoom } from 'actions/chatroom/room'
+
+import Comments from '../../../../Chatroom/Messages/light'
 
 import MessageInput from './MessageInput'
 
