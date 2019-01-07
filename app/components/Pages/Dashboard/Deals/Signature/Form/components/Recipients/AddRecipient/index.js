@@ -88,6 +88,7 @@ export class AddRecipient extends React.Component {
                     isEmailRequired
                     allowDeleteRole={false}
                     onSelect={this.handleAddRecipient}
+                    onUpsertRole={this.handleAddRecipient}
                     onTriggerRequiredEmail={this.handleLockOuterClick}
                     onCloseAddRoleDrawer={this.handleUnlockOuterClick}
                     onCreateRole={this.handleUnlockOuterClick}
