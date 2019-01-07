@@ -11,7 +11,7 @@ export const Container = styled.div`
   background-color: #f2f2f2;
   z-index: 1004;
   overflow: auto;
-  padding: 2.5rem 2rem;
+  padding: 0 2rem;
   box-shadow: -1px 0 2px 0 rgba(0, 0, 0, 0.04), -1px 0 20px 0 rgba(0, 0, 0, 0.1);
 `
 
@@ -30,4 +30,11 @@ export const PageNumber = styled.div`
   border-radius: 3px;
   border: 1px solid #b3b3b3;
   margin-right: 0.5rem;
+`
+
+export const Header = styled.div`
+  position: sticky;
+  background-color: #fff;
+  top: 0;
+  z-index: 1;
 `

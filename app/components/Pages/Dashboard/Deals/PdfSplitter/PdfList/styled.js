@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const FileInfo = styled.div`
-  margin: 1rem 2rem;
+  padding: 1rem 2rem;
 `
 
 export const PagesContainer = styled.div`
