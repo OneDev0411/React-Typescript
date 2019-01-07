@@ -41,8 +41,7 @@ export class DealsListWidget extends React.Component {
           'contact.deals',
           'contact.summary',
           'contact.users',
-          'contact_attribute.attribute_def',
-          'deal.brand'
+          'contact_attribute.attribute_def'
         ]
       })
 
