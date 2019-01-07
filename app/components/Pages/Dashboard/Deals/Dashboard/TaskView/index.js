@@ -3,12 +3,12 @@ import { connect } from 'react-redux'
 
 import Drawer from 'components/OverlayDrawer'
 
+import { setSelectedTask } from 'actions/deals'
+
 import Header from './Header'
 import Comments from './Comments'
 import DeleteTask from './DeleteTask'
 import DraftBanner from './DraftBanner'
-
-import { setSelectedTask } from 'actions/deals'
 
 function TaskView(props) {
   const { task } = props
@@ -47,6 +47,7 @@ function TaskView(props) {
           task={task}
           isBackOffice={props.isBackOffice}
         />
+
         <DeleteTask
           deal={props.deal}
           task={task}

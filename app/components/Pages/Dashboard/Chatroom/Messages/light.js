@@ -82,7 +82,13 @@ class Messages extends React.Component {
         )}
 
         {messages && _.size(messages.list) === 0 && (
-          <div className="no-messages">There are no messages.</div>
+          <React.Fragment>
+            {this.props.emptyStateRenderer ? (
+              this.props.emptyStateRenderer()
+            ) : (
+              <div className="no-messages">There are no messages.</div>
+            )}
+          </React.Fragment>
         )}
 
         <div className="messages-list">

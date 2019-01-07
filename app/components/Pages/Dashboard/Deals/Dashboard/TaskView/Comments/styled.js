@@ -60,13 +60,27 @@ export const Container = styled.div`
     }
 
     .messages-list .message-subitem {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       border-radius: 3px;
       background-color: #fcfcfc;
       border: 1px solid #cccccc;
       padding: 0 0.5rem 0 2.6rem;
+      min-height: 2.5rem;
+
+      .content {
+        display: flex;
+        align-items: center;
+        width: auto !important;
+        line-height: 1 !important;
+        display: block !important;
+      }
 
       .date {
-        width: auto;
+        padding-top: 0;
+        vertical-align: initial;
+        width: auto !important;
       }
     }
 
