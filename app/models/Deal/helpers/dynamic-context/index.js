@@ -178,7 +178,7 @@ export function filterByStatus(
   return (
     definition.includes(deal_type) &&
     definition.includes(property_type) &&
-    (has_active_offer || !definition.includes('Active Offer'))
+    (deal_type === 'Buying' || has_active_offer || !definition.includes('Active Offer'))
   )
 }
 
