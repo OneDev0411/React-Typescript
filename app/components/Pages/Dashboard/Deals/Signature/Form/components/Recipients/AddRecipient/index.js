@@ -77,7 +77,7 @@ export class AddRecipient extends React.Component {
                 }}
               >
                 <IconAdd style={{ fill: primary, marginRight: '1rem' }} />
-                <span style={{ fontWeight: 500 }}>Add Next Recipient</span>
+                <span style={{ fontWeight: 500 }}>Add Contact</span>
               </ActionButton>
 
               {isOpen && (
