@@ -62,7 +62,7 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
 
     if (typeof users === 'string') {
       usersString = `&users[]=${users}`
-    } else if (Array.isArray(users)) {
+    } else if (Array.isArray(users) && users.length > 0) {
       usersString = `&users[]=${users.join('&users[]=')}`
     }
 
