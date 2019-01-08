@@ -52,6 +52,12 @@ export function getChecklists() {
  * return list of section
  */
 export function getFactsheetSection(deal, name) {
+  if (!deal.brand) {
+    console.warn('deal brand is null in getFactsheetSection')
+
+    return []
+  }
+
   const items = getItems(
     deal.brand.id,
     deal.deal_type,
@@ -178,7 +184,9 @@ export function filterByStatus(
   return (
     definition.includes(deal_type) &&
     definition.includes(property_type) &&
-    (deal_type === 'Buying' || has_active_offer || !definition.includes('Active Offer'))
+    (deal_type === 'Buying' ||
+      has_active_offer ||
+      !definition.includes('Active Offer'))
   )
 }
 
