@@ -56,7 +56,12 @@ class Comment extends React.Component {
           emptyStateRenderer={() => <EmptyState />}
         />
 
-        <MessageInput deal={this.props.deal} task={task} autoFocus />
+        <MessageInput
+          deal={this.props.deal}
+          task={task}
+          isBackOffice={this.props.isBackOffice}
+          autoFocus
+        />
       </Container>
     )
   }
