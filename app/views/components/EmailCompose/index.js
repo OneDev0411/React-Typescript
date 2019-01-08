@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react'
-import { connect } from 'react-redux'
 import { Field } from 'react-final-form'
 
 import Loading from '../../../components/Partials/Loading'
@@ -8,9 +7,7 @@ import { FinalFormDrawer } from '../FinalFormDrawer'
 import { TextInput } from '../Forms/TextInput'
 import { MultipleContactsSelect } from '../Forms/MultipleContactsSelect'
 
-import { EmailBody } from './styled'
-
-class EmailCompose extends React.Component {
+export default class EmailCompose extends React.Component {
   get InitialValues() {
     if (
       (this.formObject && !this.isRecipientsChanged()) ||
@@ -20,7 +17,7 @@ class EmailCompose extends React.Component {
     }
 
     this.formObject = {
-      from: `${this.props.user.display_name} <${this.props.user.email}>`,
+      from: `${this.props.from.display_name} <${this.props.from.email}>`,
       recipients: this.props.recipients || []
     }
 
@@ -49,6 +46,7 @@ class EmailCompose extends React.Component {
   render() {
     return (
       <FinalFormDrawer
+        formId="email-compose-form"
         isOpen={this.props.isOpen}
         initialValues={this.InitialValues}
         onClose={this.props.onClose}
@@ -56,15 +54,13 @@ class EmailCompose extends React.Component {
         validate={this.validate}
         submitting={this.props.isSubmitting}
         closeDrawerOnBackdropClick={false}
-        showCancel={false}
-        showReset={false}
         submitButtonLabel="Send"
         submittingButtonLabel="Sending ..."
         title="New Email"
         render={() => (
           <Fragment>
             <Field
-              placeholder="To"
+              placeholder="Bcc"
               name="recipients"
               disableAddNewRecipient={this.props.disableAddNewRecipient}
               component={MultipleContactsSelect}
@@ -79,7 +75,7 @@ class EmailCompose extends React.Component {
 
             <Field placeholder="Subject" name="subject" component={TextInput} />
 
-            <EmailBody>
+            <div>
               {this.props.html === null && <Loading />}
 
               <div
@@ -87,16 +83,10 @@ class EmailCompose extends React.Component {
                   __html: this.props.html
                 }}
               />
-            </EmailBody>
+            </div>
           </Fragment>
         )}
       />
     )
   }
 }
-
-function mapStateToProps({ user }) {
-  return { user }
-}
-
-export default connect(mapStateToProps)(EmailCompose)

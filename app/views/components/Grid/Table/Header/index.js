@@ -15,21 +15,23 @@ const TableHeader = ({
   <Header {...getHeaderProps()}>
     <HeaderRow {...getHeaderRowProps()}>
       {columns &&
-        columns.map((column, index) => (
-          <HeaderCell key={column.id || index} width={sizes[index]}>
-            {typeof column.header === 'function'
-              ? column.header(column, index)
-              : column.header}
+        columns
+          .filter(column => !!column.render)
+          .map((column, index) => (
+            <HeaderCell key={column.id || index} width={sizes[index]}>
+              {typeof column.header === 'function'
+                ? column.header(column, index)
+                : column.header}
 
-            {sortablePlugin && (
-              <SortIndicator
-                column={column}
-                sortBy={sortablePlugin.sortBy}
-                isAscending={sortablePlugin.isAscendingSort}
-              />
-            )}
-          </HeaderCell>
-        ))}
+              {sortablePlugin && (
+                <SortIndicator
+                  column={column}
+                  sortBy={sortablePlugin.sortBy}
+                  isAscending={sortablePlugin.isAscendingSort}
+                />
+              )}
+            </HeaderCell>
+          ))}
     </HeaderRow>
   </Header>
 )

@@ -1,7 +1,8 @@
 import { get as getAttribute } from 'underscore.get'
+import { getLegalFullName } from '../../../utils/roles'
 
-function normalizeRoleName(deal, roleName) {
-  return roleName.split(',').map(name => {
+export function normalizeRoleNames(deal, roleNames) {
+  return roleNames.split(',').map(name => {
     if (name !== 'PrimaryAgent') {
       return name
     }
@@ -18,7 +19,15 @@ function normalizeRoleName(deal, roleName) {
   })
 }
 
-export function getRolesText(roles, deal, roleName, annotationContext) {
+function getAttributeValue(role, attribute, defaultValue) {
+  if (attribute === 'legal_full_name') {
+    return getLegalFullName(role)
+  }
+
+  return getAttribute(role, attribute, defaultValue)
+}
+
+export function getRolesText(roles, deal, roleNames, annotationContext) {
   if (!Array.isArray(deal.roles)) {
     return ''
   }
@@ -27,12 +36,12 @@ export function getRolesText(roles, deal, roleName, annotationContext) {
 
   return deal.roles
     .map(id => roles[id])
-    .filter(role => normalizeRoleName(deal, roleName).includes(role.role))
-    .map(role => getAttribute(role, attribute, ''))
+    .filter(role => normalizeRoleNames(deal, roleNames).includes(role.role))
+    .map(role => getAttributeValue(role, attribute, ''))
     .join(', ')
 }
 
-export function getRoleText(roles, deal, roleName, annotationContext) {
+export function getRoleText(roles, deal, roleNames, annotationContext) {
   if (!Array.isArray(deal.roles)) {
     return ''
   }
@@ -41,7 +50,7 @@ export function getRoleText(roles, deal, roleName, annotationContext) {
 
   const list = deal.roles
     .map(id => roles[id])
-    .filter(role => normalizeRoleName(deal, roleName).includes(role.role))
+    .filter(role => normalizeRoleNames(deal, roleNames).includes(role.role))
 
-  return list.length > 0 ? getAttribute(list[number], attribute) : ''
+  return list.length > 0 ? getAttributeValue(list[number], attribute) : ''
 }

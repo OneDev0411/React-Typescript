@@ -1,0 +1,29 @@
+.c-tour-sheets__page {
+  position: relative;
+  width: 38.25rem; // 612px
+  min-height: 49.5rem; // 792px
+  max-height: 49.5rem; // 792px
+  margin: 0 auto 3rem;
+  padding: 1rem;
+  page-break-before: always;
+  background-color:#fff;
+  box-shadow: 0 0 30px #d4d4d4;
+  
+  @media print {
+    padding: 0;
+    border: none;
+    box-shadow: none;
+  }
+}
+
+.u-print-bg {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.c-tour-sheets__brand-line {
+  @extend .u-print-bg;
+  width: 3.5rem;
+  height: 0.24rem;
+  background-color: #000;
+}

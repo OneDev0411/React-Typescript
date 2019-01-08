@@ -1,4 +1,4 @@
-import { formatNumber } from 'libphonenumber-js'
+import { formatPhoneNumber } from 'utils/format'
 
 export function currencyFilter(price) {
   return new Intl.NumberFormat('en-US', {
@@ -21,5 +21,5 @@ export function phoneNumberFilter(phone) {
     return ''
   }
 
-  return formatNumber(phone, 'National')
+  return formatPhoneNumber(phone)
 }

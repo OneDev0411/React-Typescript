@@ -1,13 +1,11 @@
 import React from 'react'
 
+import ToolTip from 'components/tooltip'
+
 import {
   calculateWordWrap,
   getAnnotationsValues
 } from '../../../../utils/word-wrap'
-
-import { getValue } from '../../../../utils/types'
-
-import ToolTip from './tooltip'
 
 import { Container } from './styled'
 
@@ -17,35 +15,31 @@ export default class Context extends React.Component {
   }
 
   setDefaultValues = () => {
-    if (this.props.value) {
-      const values = getAnnotationsValues(
-        this.props.annotations,
-        this.props.value,
-        {
-          maxFontSize: this.props.maxFontSize
-        }
-      )
-
-      this.props.onSetValues(values)
-
-      return
+    if (!this.props.value) {
+      return false
     }
 
-    const values = {}
-
-    this.props.annotations.forEach(annotation => {
-      values[annotation.fieldName] = getValue(annotation)
-    })
+    const values = getAnnotationsValues(
+      this.props.annotations,
+      this.props.value,
+      {
+        maxFontSize: this.props.maxFontSize
+      }
+    )
 
     this.props.onSetValues(values)
   }
 
-  get HasMlsLock() {
-    if (this.props.isAddressField && this.props.isDealConnectedToMls) {
-      return true
+  onRef = ref => {
+    this.container = ref
+  }
+
+  handleClick = () => {
+    if (this.props.isReadOnly) {
+      return false
     }
 
-    return false
+    this.props.onClick(this.container.getBoundingClientRect())
   }
 
   render() {
@@ -57,13 +51,17 @@ export default class Context extends React.Component {
       }
     )
 
-    const hasMlsLock = this.HasMlsLock
-    const isReadOnly = this.props.isReadOnly || hasMlsLock
-
     return (
       <div>
         {rects.map((rect, index) => (
-          <ToolTip key={index} hasMlsLock={hasMlsLock}>
+          <ToolTip
+            key={index}
+            captionIsHTML
+            isCustom={false}
+            caption={this.props.tooltip}
+            placement="bottom"
+            multiline
+          >
             <Container
               id={this.props.annotations[index].fieldName}
               fontName={appearance.font}
@@ -71,12 +69,9 @@ export default class Context extends React.Component {
               bold={appearance.bold}
               color={appearance.color}
               rect={rect}
-              innerRef={ref => (this.container = ref)}
-              readOnly={isReadOnly}
-              onClick={() =>
-                !isReadOnly &&
-                this.props.onClick(this.container.getBoundingClientRect())
-              }
+              ref={this.onRef}
+              readOnly={this.props.isReadOnly}
+              onClick={this.handleClick}
             >
               {values[index]}
             </Container>

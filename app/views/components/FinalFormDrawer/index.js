@@ -6,123 +6,113 @@ import arrayMutators from 'final-form-arrays'
 import Drawer from '../OverlayDrawer'
 import ActionButton from '../Button/ActionButton'
 
-FinalFormDrawer.propTypes = {
-  initialValues: PropTypes.shape(),
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  submitButtonLabel: PropTypes.string,
-  submittingButtonLabel: PropTypes.string,
-  showFooter: PropTypes.bool,
-  closeDrawerOnBackdropClick: PropTypes.bool,
-  reinitializeAfterSubmit: PropTypes.bool,
-  showReset: PropTypes.bool,
-  showCancel: PropTypes.bool,
-  validate: PropTypes.func
-}
+export class FinalFormDrawer extends React.Component {
+  static propTypes = {
+    initialValues: PropTypes.shape(),
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    title: PropTypes.string.isRequired,
+    submitButtonLabel: PropTypes.string,
+    submittingButtonLabel: PropTypes.string,
+    showFooter: PropTypes.bool,
+    closeDrawerOnBackdropClick: PropTypes.bool,
+    validate: PropTypes.func,
+    formId: PropTypes.string.isRequired,
+    footerRenderer: PropTypes.func
+  }
 
-FinalFormDrawer.defaultProps = {
-  initialValues: {},
-  showReset: true,
-  showCancel: true,
-  showFooter: true,
-  submitButtonLabel: 'Save',
-  submittingButtonLabel: 'Saving ...',
-  closeDrawerOnBackdropClick: true,
-  reinitializeAfterSubmit: true,
-  validate: () => ({})
-}
+  static defaultProps = {
+    initialValues: {},
+    showFooter: true,
+    submitButtonLabel: 'Save',
+    submittingButtonLabel: 'Saving ...',
+    closeDrawerOnBackdropClick: false,
+    validate: () => ({})
+  }
 
-export function FinalFormDrawer(props) {
-  return (
-    <Form
-      validate={props.validate}
-      onSubmit={async (values, form) => {
-        form.initialize(values)
-        await props.onSubmit(values)
+  handleOnClose = (e, formProps) => {
+    const { form, submitting } = formProps
 
-        if (props.reinitializeAfterSubmit) {
-          form.initialize(props.initialValues)
-        }
-      }}
-      mutators={{ ...arrayMutators }}
-      initialValues={props.initialValues}
-      render={formProps => {
-        const {
-          form,
-          pristine,
-          validating,
-          handleSubmit,
-          submitting
-        } = formProps
+    if (submitting) {
+      return
+    }
 
-        const handleOnClose = () => {
-          if (submitting) {
-            return
-          }
+    if (formProps.dirty) {
+      form.initialize(this.props.initialValues)
+    }
 
-          if (formProps.dirty) {
-            form.initialize(props.initialValues)
-          }
+    this.props.onClose()
+  }
 
-          props.onClose()
-        }
+  handleSubmit = () => {
+    let event
 
-        return (
-          <Drawer
-            isOpen={props.isOpen}
-            onClose={handleOnClose}
-            showFooter={props.showFooter}
-            closeOnBackdropClick={props.closeDrawerOnBackdropClick}
-          >
-            <Drawer.Header title={props.title} />
-            <Drawer.Body>
-              {(typeof props.render === 'function' &&
-                props.render(formProps)) ||
-                props.children}
-            </Drawer.Body>
+    if (typeof Event === 'function') {
+      event = new Event('submit', { cancelable: true })
+    } else {
+      event = document.createEvent('Event')
 
-            <Drawer.Footer>
-              <div style={{ textAlign: 'left' }}>
-                {props.showCancel && (
-                  <ActionButton
-                    appearance="outline"
-                    disabled={submitting}
-                    inverse
-                    onClick={props.onClose}
-                    type="button"
-                  >
-                    Cancel
-                  </ActionButton>
-                )}
-              </div>
-              <div style={{ textAlign: 'right' }}>
-                {props.showReset && (
-                  <ActionButton
-                    type="button"
-                    inverse
-                    onClick={() => form.reset(props.initialValues)}
-                    style={{ marginRight: '1em' }}
-                    disabled={submitting || pristine}
-                  >
-                    Reset
-                  </ActionButton>
-                )}
-                <ActionButton
-                  type="button"
-                  disabled={submitting || validating}
-                  onClick={() => handleSubmit(props.onSubmit)}
-                >
-                  {submitting
-                    ? props.submittingButtonLabel
-                    : props.submitButtonLabel}
-                </ActionButton>
-              </div>
-            </Drawer.Footer>
-          </Drawer>
-        )
-      }}
-    />
-  )
+      event.initEvent('submit', true, true)
+    }
+
+    document.getElementById(this.props.formId).dispatchEvent(event)
+  }
+
+  onSubmit = async (values, form) => {
+    await this.props.onSubmit(values, form)
+    form.initialize(this.props.initialValues)
+  }
+
+  render() {
+    return (
+      <Form
+        validate={this.props.validate}
+        onSubmit={this.onSubmit}
+        mutators={{ ...arrayMutators }}
+        initialValues={this.props.initialValues}
+        render={formProps => {
+          const { submitting } = formProps
+
+          return (
+            <form id={this.props.formId} onSubmit={formProps.handleSubmit}>
+              <Drawer
+                isOpen={this.props.isOpen}
+                onClose={e => this.handleOnClose(e, formProps)}
+                showFooter={this.props.showFooter}
+                closeOnBackdropClick={this.props.closeDrawerOnBackdropClick}
+              >
+                <Drawer.Header title={this.props.title} />
+                <Drawer.Body>
+                  {typeof this.props.render === 'function'
+                    ? this.props.render(formProps)
+                    : this.props.children}
+                </Drawer.Body>
+
+                <Drawer.Footer rowReverse>
+                  {this.props.footerRenderer ? (
+                    this.props.footerRenderer({
+                      formProps,
+                      submitting,
+                      handleSubmit: this.handleSubmit
+                    })
+                  ) : (
+                    <ActionButton
+                      type="submit"
+                      disabled={submitting || formProps.validating}
+                      onClick={this.handleSubmit}
+                    >
+                      {submitting
+                        ? this.props.submittingButtonLabel
+                        : this.props.submitButtonLabel}
+                    </ActionButton>
+                  )}
+                </Drawer.Footer>
+              </Drawer>
+            </form>
+          )
+        }}
+      />
+    )
+  }
 }

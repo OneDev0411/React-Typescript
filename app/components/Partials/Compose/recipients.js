@@ -74,7 +74,7 @@ export default class extends React.Component {
               name={recp.display_name}
               image={recp.image}
               size={22}
-              color="#D4D4D4"
+              color="#000000"
             />
 
             <div className="display-name">{recp.display_name}</div>

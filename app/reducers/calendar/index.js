@@ -2,6 +2,10 @@ import moment from 'moment'
 import _ from 'underscore'
 
 import * as types from '../../constants/calendar'
+import {
+  CHANGE_VIEW_AS_FILTER_REQUEST,
+  CHANGE_VIEW_AS_FILTER_FAILURE
+} from '../../constants/user'
 
 const initialState = {
   isFetching: false,
@@ -10,8 +14,7 @@ const initialState = {
     .toDate(),
   byDay: {},
   list: [],
-  brandMembers: [],
-  filter: []
+  brandMembers: []
 }
 
 function ksort(object) {
@@ -82,23 +85,22 @@ export default (state = initialState, action) => {
         selectedDate: action.selectedDate
       }
 
-    case types.CALENDAR__SET_BRAND_MEMBERS:
-      return {
-        ...state,
-        brandMembers: action.brandMembers
-      }
-
-    case types.CALENDAR__SET_FILTER:
-      return {
-        ...state,
-        filter: action.filter
-      }
-
     case types.CALENDAR__RESET:
       return {
         ...initialState,
-        brandMembers: state.brandMembers,
-        filter: state.filter
+        isFetching: true
+      }
+
+    case CHANGE_VIEW_AS_FILTER_REQUEST:
+      return {
+        ...initialState,
+        isFetching: true
+      }
+
+    case CHANGE_VIEW_AS_FILTER_FAILURE:
+      return {
+        ...state,
+        isFetching: false
       }
 
     default:

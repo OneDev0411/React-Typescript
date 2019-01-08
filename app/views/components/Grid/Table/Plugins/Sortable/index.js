@@ -14,8 +14,13 @@ export class SortablePlugin {
     }
     this.onRequestForceUpdate = onRequestForceUpdate
 
-    this.sortBy = null
-    this.isAscendingSort = true
+    if (this.options.defaultSort) {
+      this.sortBy = this.options.defaultSort.column
+      this.isAscendingSort = this.options.defaultSort.ascending
+    } else {
+      this.sortBy = null
+      this.isAscendingSort = true
+    }
   }
 
   sort = ({ columns, data, sortBy, isAscendingSort, resolveAccessor }) => {
@@ -88,16 +93,19 @@ export class SortablePlugin {
         return false
       }
 
+      const lowText = col.sortType === 'number' ? 'Lo' : 'A'
+      const highText = col.sortType === 'number' ? 'Hi' : 'Z'
+
       list.push(
         {
           column: col,
-          label: `${col.header} A-Z`,
+          label: `${col.header} (${lowText}-${highText})`,
           value: col.id,
           ascending: true
         },
         {
           column: col,
-          label: `${col.header} Z-A`,
+          label: `${col.header} (${highText}-${lowText})`,
           value: `-${col.id}`,
           ascending: false
         }
@@ -111,8 +119,7 @@ export class SortablePlugin {
     <BasicDropdown
       maxHeight={400}
       noBorder
-      buttonSize="small"
-      buttonStyle={{ fontWeight: 500 }}
+      buttonStyle={{ fontWeight: 500, paddingRight: 0 }}
       defaultSelectedItem={this.options.defaultIndex}
       disabled={isFetching}
       items={this.getSortableColumns(columns)}

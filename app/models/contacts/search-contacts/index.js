@@ -2,29 +2,34 @@ import Fetch from '../../../services/fetch'
 import { defaultQuery } from '../helpers/default-query'
 
 export async function searchContacts(
-  searchText,
+  searchText = '',
   filter,
   query = {
     ...defaultQuery,
     order: '-created_at'
-  }
+  },
+  users
 ) {
   try {
+    const payload = {}
+
+    const q = searchText.trim().replace(/[~`!#$%^&*(){}=<>?,:;'"\]\[\/\\]/g, '')
+
     const request = new Fetch().post('/contacts/filter').query(query)
 
-    if (searchText) {
-      const keywords = searchText
-        .trim()
-        .split(' ')
-        .map(i => `q[]=${encodeURIComponent(i)}`)
-        .join('&')
-
-      request.query(keywords)
+    if (q.length > 0) {
+      payload.query = q
     }
 
-    if (Array.isArray(filter) && filter.length) {
-      request.send({ filter })
+    if (Array.isArray(filter) && filter.length > 0) {
+      payload.filter = filter
     }
+
+    if (Array.isArray(users) && users.length) {
+      request.query(`users[]=${users.join('&users[]=')}`)
+    }
+
+    request.send(payload)
 
     const response = await request
 

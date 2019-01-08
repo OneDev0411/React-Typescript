@@ -42,7 +42,7 @@ const InstantTrigger = ({ rooms, toggleChatbar }) => {
             style={{
               position: 'absolute',
               top: '4px',
-              left: 'calc(100% - 12px)'
+              left: '50%'
             }}
           >
             {counter > 99 ? '99+' : counter}

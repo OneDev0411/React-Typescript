@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+
 import WentWrong from '../UserMessages/WentWrong'
 
 const Alert = ({ children, code, message, style, supportHandler, type }) => {

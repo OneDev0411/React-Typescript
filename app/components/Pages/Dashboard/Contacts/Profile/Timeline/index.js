@@ -4,10 +4,15 @@ import _ from 'underscore'
 import Loading from '../../../../../Partials/Loading'
 import { EditNoteDrawer } from '../../../../../../views/components/EditNoteDrawer'
 import { EventDrawer } from '../../../../../../views/components/EventDrawer'
+import { TourDrawer } from '../../../../../../views/components/tour/TourDrawer'
+import { OpenHouseDrawer } from '../../../../../../views/components/open-house/OpenHouseDrawer'
+import { setTime } from '../../../../../../utils/set-time'
 
 import { Card } from '../styled'
 import { NoteItem } from './NoteItem'
-import { CRMTaskItem } from './TaskItem'
+import { TourItem } from './TourItem'
+import { EventItem } from './EventItem'
+import { OpenHouseItem } from './OpenHouseItem'
 import { EmptyState } from './EmptyState'
 import { Container, Title } from './styled'
 
@@ -18,9 +23,11 @@ export class Timeline extends React.Component {
   }
 
   onClickNote = selectedNote => this.setState({ selectedNote })
+
   closeEditNoteDrawer = () => this.setState({ selectedNote: null })
 
   closeEventDrawer = () => this.setState({ selectedEvent: null })
+
   onClickEvent = selectedEvent => this.setState({ selectedEvent })
 
   handleEditEvent = updatedEvent => {
@@ -33,6 +40,25 @@ export class Timeline extends React.Component {
     this.props.deleteEventHandler(deletedEvent.id)
   }
 
+  renderCRMTaskItem(key, task) {
+    const _props = {
+      defaultAssociation: this.props.defaultAssociation,
+      editCallback: this.props.editEventHandler,
+      key,
+      onClick: this.onClickEvent,
+      task
+    }
+
+    switch (task.task_type) {
+      case 'Tour':
+        return <TourItem {..._props} />
+      case 'Open House':
+        return <OpenHouseItem {..._props} />
+      default:
+        return <EventItem {..._props} />
+    }
+  }
+
   renderItems = month => (
     <React.Fragment>
       <Title>
@@ -43,15 +69,7 @@ export class Timeline extends React.Component {
           const key = `timeline_item_${activity.id}`
 
           if (activity.type === 'crm_task') {
-            return (
-              <CRMTaskItem
-                contact={this.props.contact}
-                key={key}
-                task={activity}
-                onClick={this.onClickEvent}
-                editCallback={this.props.editEventHandler}
-              />
-            )
+            return this.renderCRMTaskItem(key, activity)
           }
 
           if (
@@ -72,6 +90,34 @@ export class Timeline extends React.Component {
     </React.Fragment>
   )
 
+  renderCRMTaskItemsDrawer() {
+    const { selectedEvent } = this.state
+
+    if (!selectedEvent) {
+      return null
+    }
+
+    const _props = {
+      defaultAssociation: this.props.defaultAssociation,
+      deleteCallback: this.handleDeleteEvent,
+      isOpen: true,
+      onClose: this.closeEventDrawer,
+      submitCallback: this.handleEditEvent,
+      user: this.props.user
+    }
+
+    const { id } = selectedEvent
+
+    switch (selectedEvent.task_type) {
+      case 'Tour':
+        return <TourDrawer {..._props} tourId={id} />
+      case 'Open House':
+        return <OpenHouseDrawer {..._props} openHouseId={id} />
+      default:
+        return <EventDrawer {..._props} eventId={id} />
+    }
+  }
+
   render() {
     if (this.props.isFetching) {
       return <Loading />
@@ -81,6 +127,7 @@ export class Timeline extends React.Component {
       return <EmptyState />
     }
 
+    const todayEvents = []
     const upcomingEvents = []
     const pastEventsIndexedInMonths = {}
 
@@ -122,13 +169,23 @@ export class Timeline extends React.Component {
       if (due_date) {
         due_date *= 1000
 
+        if (isToday(due_date)) {
+          return todayEvents.push(item)
+        }
+
         if (due_date > new Date().getTime()) {
           return upcomingEvents.push(item)
         }
 
         date = new Date(due_date)
       } else {
-        date = new Date(item.created_at * 1000)
+        const createdAt = item.created_at * 1000
+
+        if (isToday(createdAt)) {
+          return todayEvents.push(item)
+        }
+
+        date = new Date(createdAt)
       }
 
       const monthAndYear = getDateMonthAndYear(date)
@@ -160,11 +217,20 @@ export class Timeline extends React.Component {
 
     return (
       <div>
+        {todayEvents.length > 0 && (
+          <Container id="today_events" key="today_events">
+            {this.renderItems({
+              title: 'Today Events',
+              items: todayEvents.sort((a, b) => a.due_date < b.due_date)
+            })}
+          </Container>
+        )}
+
         {upcomingEvents.length > 0 && (
           <Container id="upcoming_events" key="upcoming_events">
             {this.renderItems({
               title: 'Upcoming Events',
-              items: upcomingEvents.sort((a, b) => a.due_date > b.due_date)
+              items: upcomingEvents.sort((a, b) => a.due_date < b.due_date)
             })}
           </Container>
         )}
@@ -178,10 +244,8 @@ export class Timeline extends React.Component {
               <Container id={id} key={`past_events_${id}`}>
                 {this.renderItems({
                   title: month.title,
-                  items: _.sortBy(
-                    month.items,
-                    item =>
-                      item.due_date != null ? !item.due_date : !item.created_at
+                  items: _.sortBy(month.items, item =>
+                    item.due_date != null ? !item.due_date : !item.created_at
                   )
                 })}
               </Container>
@@ -198,17 +262,14 @@ export class Timeline extends React.Component {
           />
         )}
 
-        {this.state.selectedEvent && (
-          <EventDrawer
-            isOpen
-            user={this.props.user}
-            onClose={this.closeEventDrawer}
-            eventId={this.state.selectedEvent.id}
-            submitCallback={this.handleEditEvent}
-            deleteCallback={this.handleDeleteEvent}
-          />
-        )}
+        {this.renderCRMTaskItemsDrawer()}
       </div>
     )
   }
 }
+
+function isToday(date) {
+  return setTime(new Date(date)).getTime() === setTime(new Date()).getTime()
+}
+
+// todo: bug - sorting of past events when a event is edited.

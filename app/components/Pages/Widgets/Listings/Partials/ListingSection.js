@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
-import ListingCard from './ListingCard'
+
 import S from 'shorti'
 
-import { Button } from 'react-bootstrap'
+import ActionButton from 'views/components/Button/ActionButton'
+import { primary } from 'views/utils/colors'
+
+import ListingCard from './ListingCard'
 import Loading from '../../../../Partials/Loading'
 import Brand from '../../../../../controllers/Brand'
 import getListing from '../../../../../store_actions/widgets/listings/get-listings'
@@ -141,7 +144,7 @@ class Section extends Component {
     let showLoadMore
     const { data, user, brand } = this.props
 
-    const brandColor = Brand.color('primary', '#2196f3', brand)
+    const brandColor = Brand.color('primary', primary, brand)
     const defaultAvatar = Brand.asset('default_avatar', '', brand)
 
     if (this.props.listingsInfo.total > this.props.listings.length) {
@@ -191,19 +194,16 @@ class Section extends Component {
 
         {showLoadMore && (
           <div style={S('text-center')}>
-            <Button
+            <ActionButton
               onClick={this.triggerNextPage.bind(this, 'active')}
               style={{
-                backgroundColor: `#${brandColor}`,
-                borderColor: `#${brandColor}`,
+                backgroundColor: brandColor,
                 paddingLeft: '3em',
-                paddingRight: '3em',
-                fontSize: '1.2em'
+                paddingRight: '3em'
               }}
-              bsStyle="primary"
             >
               Load More
-            </Button>
+            </ActionButton>
           </div>
         )}
       </div>

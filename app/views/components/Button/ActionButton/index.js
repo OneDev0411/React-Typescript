@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components'
 import { isOutline } from '../helpers'
 import { ButtonAppearances } from '../styles/ButtonAppearances'
 
-const propTypes = {
+export const propTypes = {
   /**
    * The appearance of the button.  {primary, outline, icon, link}
    */
@@ -42,7 +42,7 @@ const propTypes = {
   brandColor: PropTypes.string
 }
 
-const defaultProps = {
+export const defaultProps = {
   appearance: 'primary',
   disabled: false,
   isActive: false,
@@ -56,28 +56,28 @@ const getStylesDependedSize = props => {
   switch (props.size) {
     case 'small':
       return {
-        height: '32px',
-        fontSize: '14px',
-        lineHeight: isOutline(props) ? '30px' : '32px'
+        height: '2.2857142857142856em',
+        fontSize: '0.875rem',
+        lineHeight: isOutline(props) ? 2.142857142857143 : 2.2857142857142856
       }
 
     case 'large':
       return {
-        height: '48px',
-        fontSize: '18px',
-        lineHeight: isOutline(props) ? '46px' : '48px'
+        height: '2.6666666666666665em',
+        fontSize: '1.125rem',
+        lineHeight: isOutline(props) ? 2.5555555555555554 : 2.6666666666666665
       }
 
     default:
       return {
-        height: '40px',
-        fontSize: '16px',
-        lineHeight: isOutline(props) ? '38px' : '40px'
+        height: '2.5em',
+        fontSize: '1rem',
+        lineHeight: isOutline(props) ? 2.375 : 2.5
       }
   }
 }
 
-const getAppearance = props => {
+export const getAppearance = props => {
   let appearance = props.appearance
 
   return css`

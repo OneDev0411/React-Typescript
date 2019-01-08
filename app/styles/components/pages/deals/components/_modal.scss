@@ -3,10 +3,18 @@
   line-height: 30px;
   vertical-align: middle;
   border-radius: 6px 6px 0 0;
-  background-color: #f8fafb;
+  background-color: #FFFFFF;
   font-size: 17px;
   font-weight: 600;
+  color: #000000;
+
   .close {
     margin-top: 3px;
+    opacity: 1;
+
+    :hover {
+      color: #003bdf;
+      opacity: 1;
+    }
   }
 }

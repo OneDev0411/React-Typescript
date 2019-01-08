@@ -64,7 +64,7 @@ class Grid extends React.Component {
    * calculate width of every cell
    */
   get RowsSize() {
-    const columns = this.Columns
+    const columns = this.Columns.filter(col => !!col.render)
 
     const flexibleCellsCount = columns.filter(col => !col.width).length
 
@@ -98,21 +98,6 @@ class Grid extends React.Component {
     const { multiple, onTableRef } = this.props
     const sizes = this.RowsSize
 
-    if (multiple) {
-      return (
-        <div>
-          <MultipleTable
-            {...this.props}
-            columns={this.Columns}
-            sizes={sizes}
-            onTableRef={onTableRef}
-            selectablePlugin={this.selectablePlugin}
-            sortablePlugin={this.sortablePlugin}
-          />
-        </div>
-      )
-    }
-
     return (
       <div>
         <ToolbarContainer>
@@ -122,9 +107,10 @@ class Grid extends React.Component {
             style={this.props.summary.style}
             totalRowsCount={this.props.summary.total || this.props.data.length}
             selectedRowsCount={
-              this.selectablePlugin
+              this.props.summary.selectedRowsCount ||
+              (this.selectablePlugin
                 ? this.selectablePlugin.SelectedRows.length
-                : 0
+                : 0)
             }
           />
 
@@ -141,13 +127,24 @@ class Grid extends React.Component {
           </SortableContainer>
         </ToolbarContainer>
 
-        <BasicTable
-          {...this.props}
-          columns={this.Columns}
-          sizes={sizes}
-          selectablePlugin={this.selectablePlugin}
-          sortablePlugin={this.sortablePlugin}
-        />
+        {multiple ? (
+          <MultipleTable
+            {...this.props}
+            columns={this.Columns}
+            sizes={sizes}
+            onTableRef={onTableRef}
+            selectablePlugin={this.selectablePlugin}
+            sortablePlugin={this.sortablePlugin}
+          />
+        ) : (
+          <BasicTable
+            {...this.props}
+            columns={this.Columns}
+            sizes={sizes}
+            selectablePlugin={this.selectablePlugin}
+            sortablePlugin={this.sortablePlugin}
+          />
+        )}
       </div>
     )
   }

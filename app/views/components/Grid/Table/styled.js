@@ -1,7 +1,8 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-import { borderColor } from '../../../utils/colors'
+import { borderColor, grey, primary } from '../../../utils/colors'
 
+const importantBlack = '#000 !important'
 const border = `1px solid ${borderColor}`
 
 export const ToolbarContainer = styled.div`
@@ -25,30 +26,46 @@ export const Row = styled.div`
   display: flex;
   justify-items: center;
   min-height: 4em;
-  padding: 1em 0;
+  padding: 0.5em;
   border-top: ${border};
 
   ${props =>
-    props.hoverStyle &&
-    `
-    :hover {
-      ${props.hoverStyle}
-    }
-  `};
+    css`
+      :hover {
+        ${props.hoverStyle
+          ? props.hoverStyle
+          : css`
+              background-color: ${grey.A000};
+
+              a,
+              .primaryHover {
+                color: ${primary};
+              }
+              .hover-color--black {
+                color: ${importantBlack};
+                fill: ${importantBlack};
+
+                svg {
+                  fill: ${importantBlack};
+                }
+              }
+            `};
+      }
+    `};
 
   ${props =>
     props.multiple &&
-    `
-    :first-child {
-      border-top: none !important;
-    }
-  `};
+    css`
+      :first-child {
+        border-top: none !important;
+      }
+    `};
 
   ${props => props.css};
 `
 
 export const Cell = styled.div`
-  align-self: ${props => props.verticalAlign || 'flex-start'};
+  align-self: flex-start;
   text-align: left;
   padding: 0 0.5em;
 
@@ -62,17 +79,17 @@ export const Cell = styled.div`
 
   ${props =>
     props.width &&
-    `
-    width: ${props.width}
-  `};
+    css`
+      width: ${props.width};
+    `};
 
   ${props =>
     props.hoverStyle &&
-    `
-    :hover {
-      ${props.hoverStyle}
-    }
-  `};
+    css`
+      :hover {
+        ${props.hoverStyle};
+      }
+    `};
 
   ${props => props.css};
 `

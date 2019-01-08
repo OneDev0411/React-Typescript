@@ -16,11 +16,6 @@ class Listings extends Component {
     isSideMenuOpen: true
   }
 
-  componentDidMount() {
-    // for overwrite css styles (google suggestion)
-    document.body.setAttribute('data-page', 'mls')
-  }
-
   toggleSideMenu = () =>
     this.setState(state => ({
       isSideMenuOpen: !state.isSideMenuOpen
@@ -44,7 +39,7 @@ class Listings extends Component {
           </SideMenu>
         )}
 
-        <PageContent style={{ padding: 0 }}>
+        <PageContent isSideMenuOpen={isSideMenuOpen} style={{ padding: 0 }}>
           {user
             ? React.Children.map(this.props.children, child =>
                 React.cloneElement(child, {

@@ -2,11 +2,16 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
-import { SectionTitle } from '../styled'
-import RadioButton from '../../../../../../views/components/RadioButton'
+import { getContexts } from 'actions/deals'
+
+import { getActiveTeamId } from 'utils/user-teams'
+
+import RadioButton from 'components/RadioButton'
+
 import CategoryType from '../CategoryTypes'
+
 import { CategoryTypesContainer } from './styled'
-import { getContexts } from '../../../../../../store_actions/deals'
+import { SectionTitle } from '../styled'
 
 const radioButtonStyle = { display: 'block', marginTop: '2rem' }
 
@@ -31,22 +36,26 @@ const taskTypes = getItems(defaultTaskTypes)
 class ICalAllTypes extends React.Component {
   componentDidMount() {
     if (!this.props.contexts) {
-      this.props.getContexts()
+      this.props.getContexts(getActiveTeamId(this.props.user))
     }
   }
 
   render() {
-    const { onChangeSelectedTypes, onChangeSelectAllTypes } = this.props
+    const {
+      onChangeSelectedTypes,
+      onChangeSelectAllTypes,
+      onSelectOneCategoriesTypes
+    } = this.props
     const filteredContexts =
       this.props.contexts &&
       this.props.contexts.filter(context => context.data_type === 'Date')
 
     const filteredContactsAttributesDefs =
       this.props.contactsAttributesDefs &&
-      _.filter(
-        this.props.contactsAttributesDefs,
-        def => def.data_type === 'date' && def.show
-      )
+      _.chain(this.props.contactsAttributesDefs)
+        .filter(def => def.data_type === 'date' && def.show)
+        .map(type => ({ ...type, name: type.name || type.label }))
+        .value()
     const allTypes = taskTypes
       .map(type => type.name)
       .concat(
@@ -63,7 +72,7 @@ class ICalAllTypes extends React.Component {
     return (
       <Fragment>
         <SectionTitle>
-          What event types would you like to export to your iCal?
+          What event types would you like to export to your calendar?
         </SectionTitle>
         <RadioButton
           selected={selectedTypes.length === allTypes.length}
@@ -82,6 +91,7 @@ class ICalAllTypes extends React.Component {
             types={taskTypes}
             selectedTypes={selectedTypes}
             onChangeSelectedTypes={onChangeSelectedTypes}
+            onSelectOneCategoriesTypes={onSelectOneCategoriesTypes}
           />
           {filteredContexts && (
             <CategoryType
@@ -89,6 +99,7 @@ class ICalAllTypes extends React.Component {
               types={filteredContexts}
               selectedTypes={selectedTypes}
               onChangeSelectedTypes={onChangeSelectedTypes}
+              onSelectOneCategoriesTypes={onSelectOneCategoriesTypes}
             />
           )}
           {filteredContactsAttributesDefs && (
@@ -97,6 +108,7 @@ class ICalAllTypes extends React.Component {
               types={filteredContactsAttributesDefs}
               selectedTypes={selectedTypes}
               onChangeSelectedTypes={onChangeSelectedTypes}
+              onSelectOneCategoriesTypes={onSelectOneCategoriesTypes}
             />
           )}
         </CategoryTypesContainer>
@@ -105,8 +117,9 @@ class ICalAllTypes extends React.Component {
   }
 }
 
-function mapToProps({ deals, contacts }) {
+function mapToProps({ deals, contacts, user }) {
   return {
+    user,
     contexts: deals.contexts,
     contactsAttributesDefs: contacts.attributeDefs.byId
   }

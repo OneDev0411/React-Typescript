@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import { borderColor } from 'views/utils/colors'
+
 export const Container = styled.div`
   position: fixed;
   display: block;
@@ -14,6 +16,12 @@ export const TemplatesContainer = styled.div`
   width: 340px;
   border-right: 1px solid #d4d4d4;
   background-color: #f2f2f2;
+
+  ${props =>
+    props.isInvisible &&
+    `
+    display: none;
+  `};
 `
 
 export const BuilderContainer = styled.div`
@@ -38,4 +46,17 @@ export const Header = styled.div`
     font-weight: bold;
     margin: 0 !important;
   }
+`
+
+export const Actions = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+export const Divider = styled.div`
+  display: inline-block;
+  width: 1px;
+  height: 1.5rem;
+  margin: 0 1em;
+  background-color: ${borderColor};
 `

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
+import uniqBy from 'lodash/uniqBy'
 
 import { getUserTitle } from '../../../../models/user/helpers'
 import { isSoloActiveTeam } from '../../../../utils/user-teams'
@@ -16,7 +17,14 @@ import { getMembers } from '../helpers'
 const propTypes = {
   onSelect: PropTypes.func.isRequired,
   owner: PropTypes.shape().isRequired,
-  user: PropTypes.shape().isRequired
+  user: PropTypes.shape().isRequired,
+  buttonRenderer: PropTypes.func
+}
+
+const defaultProps = {
+  buttonRenderer() {
+    return null
+  }
 }
 
 export class TeamContactSelect extends React.Component {
@@ -44,7 +52,10 @@ export class TeamContactSelect extends React.Component {
       const members = await getMembers(this.props.user)
 
       if (Array.isArray(members)) {
-        this.setState({ isFetching: false, members })
+        this.setState({
+          isFetching: false,
+          members: members ? uniqBy(members, 'id') : []
+        })
       } else {
         this.setState({ isFetching: false })
       }
@@ -71,6 +82,12 @@ export class TeamContactSelect extends React.Component {
         isFetching={this.state.isFetching}
         defaultSelectedItem={{ label: getUserTitle(owner), value: owner }}
         buttonRenderer={buttonProps => {
+          const renderedButton = this.props.buttonRenderer(buttonProps)
+
+          if (renderedButton) {
+            return renderedButton
+          }
+
           const title = buttonProps.selectedItem.label
 
           return (
@@ -119,3 +136,4 @@ export class TeamContactSelect extends React.Component {
 }
 
 TeamContactSelect.propTypes = propTypes
+TeamContactSelect.defaultProps = defaultProps

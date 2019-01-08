@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import ReactGA from 'react-ga'
+import bowser from 'bowser'
+
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
 
@@ -20,9 +23,10 @@ import { getRooms } from '../store_actions/chatroom'
 
 // get user roles
 import getTeams from '../store_actions/user/teams'
+import { hasUserAccess, viewAsEveryoneOnTeam } from '../utils/user-teams'
 
 // deals featch on launch
-import { getDeals } from '../store_actions/deals'
+import { getDeals, searchDeals } from '../store_actions/deals'
 
 const InstantChat = Load({
   loader: () => import('./Pages/Dashboard/Chatroom/InstantChat')
@@ -38,29 +42,23 @@ import getFavorites from '../store_actions/listings/favorites/get-favorites'
 
 import AppStore from '../stores/AppStore'
 import Brand from '../controllers/Brand'
-import ReactGA from 'react-ga'
+
 import config from '../../config/public'
 
 import Intercom from './Pages/Dashboard/Partials/Intercom'
 import { inactiveIntercom, activeIntercom } from '../store_actions/intercom'
 import { getAllNotifications } from '../store_actions/notifications'
 
-import bowser from 'bowser'
 import { confirmation } from '../store_actions/confirmation'
 
 class App extends Component {
   componentWillMount() {
-    const { user, dispatch } = this.props
-
     // check branding
     this.getBrand()
 
-    // init sockets
-    this.initializeSockets(user)
-
     if (typeof window !== 'undefined') {
       window.Intercom &&
-        window.Intercom('onShow', () => dispatch(activeIntercom()))
+        window.Intercom('onShow', () => this.props.dispatch(activeIntercom()))
 
       import('offline-js')
 
@@ -68,6 +66,9 @@ class App extends Component {
         import('simplebar')
       }
     }
+
+    // start chat socket
+    new ChatSocket(this.props.user)
   }
 
   componentDidMount() {
@@ -83,25 +84,44 @@ class App extends Component {
     let { user } = this.props
 
     if (user) {
-      if (!user.teams) {
+      if (!user.teams || !user.teams[0].brand.roles) {
         user = {
           ...user,
-          teams: await dispatch(getTeams())
+          teams: await dispatch(getTeams(user, true))
         }
       }
+
+      const isBackOffice = hasUserAccess(user, 'BackOffice')
+
+      this.hasCrmAccess = hasUserAccess(user, 'CRM')
+      this.hasDealsAccess = hasUserAccess(user, 'Deals') || isBackOffice
 
       // load rooms
       this.initialRooms()
 
       // load deals
-      if (!deals) {
-        dispatch(getDeals(user))
+      if (
+        this.hasDealsAccess &&
+        Object.keys(deals).length === 0 &&
+        !this.props.isFetchingDeals
+      ) {
+        if (isBackOffice || viewAsEveryoneOnTeam(user)) {
+          dispatch(getDeals(user))
+        } else {
+          dispatch(searchDeals(user))
+        }
       }
 
       // load contacts
-      if (!isLoadedContactAttrDefs(this.props.contactsAttributeDefs)) {
+      if (
+        (this.hasCrmAccess || this.hasDealsAccess) &&
+        !isLoadedContactAttrDefs(this.props.contactsAttributeDefs)
+      ) {
         dispatch(getAttributeDefs())
       }
+
+      // init sockets
+      this.initializeSockets(user)
 
       // load notifications
       dispatch(getAllNotifications())
@@ -128,41 +148,20 @@ class App extends Component {
     dispatch(this.checkBrowser())
   }
 
-  static async fetchData(dispatch, params) {
-    const { user } = params
-
-    if (!user) {
-      return Promise.resolve()
-    }
-
-    return dispatch(getRooms(user))
-  }
-
   getBrand() {
     this.props.dispatch(getBrand())
   }
 
   initializeSockets(user) {
-    this.initializeChatSocket(user)
-    this.initializeDealSocket(user)
-    this.initializeContactSocket(user)
-    this.initializeNotificationsSocket(user)
-  }
-
-  initializeContactSocket(user) {
-    new ContactSocket(user)
-  }
-
-  initializeChatSocket(user) {
-    new ChatSocket(user)
-  }
-
-  initializeDealSocket(user) {
-    new DealSocket(user)
-  }
-
-  initializeNotificationsSocket(user) {
     new NotificationSocket(user)
+
+    if (this.hasCrmAccess) {
+      new ContactSocket(user)
+    }
+
+    if (this.hasDealsAccess) {
+      new DealSocket(user)
+    }
   }
 
   async initialRooms() {
@@ -297,7 +296,8 @@ class App extends Component {
       const isValidBrowser = browser.satisfies({
         // declare browsers per OS
         windows: {
-          'Internet Explorer': '>10'
+          'Internet Explorer': '>10',
+          'Microsoft Edge': '<12'
         },
         macos: {
           safari: '>10.1.2'
@@ -308,7 +308,7 @@ class App extends Component {
         firefox: '>60'
       })
 
-      if (!isValidBrowser) {
+      if (isValidBrowser === false) {
         let downloadLink
 
         switch (browserInfo.name) {
@@ -317,6 +317,7 @@ class App extends Component {
               'https://www.microsoft.com/en-us/download/internet-explorer.aspx'
             break
           case 'Chrome':
+          case 'Microsoft Edge':
             downloadLink = 'https://www.google.com/chrome/'
             break
           case 'Firefox':
@@ -353,6 +354,7 @@ class App extends Component {
       }
     }
   }
+
   render() {
     const { data, user, rooms, location } = this.props
 
@@ -368,8 +370,9 @@ class App extends Component {
 
     return (
       <div className="u-scrollbar">
-        {user &&
-          !user.email_confirmed && <VerificationBanner email={user.email} />}
+        {user && !user.email_confirmed && (
+          <VerificationBanner email={user.email} />
+        )}
 
         {user && <SideNav data={data} location={location} />}
 
@@ -390,6 +393,7 @@ function mapStateToProps(state) {
     contactsAttributeDefs: state.contacts.attributeDefs,
     data: state.data,
     deals: state.deals.list,
+    isFetchingDeals: state.deals.properties.isFetchingDeals,
     favoritesListings: selectListings(state.favorites.listings),
     rooms: state.chatroom.rooms,
     user: state.user

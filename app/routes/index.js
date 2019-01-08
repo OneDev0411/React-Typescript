@@ -1,14 +1,12 @@
 import React from 'react'
 import { IndexRoute, Route } from 'react-router'
-import { batchActions } from 'redux-batched-actions'
+
 // Containers
 import AppLayout from '../components/App'
 // Pages
 import Landing from '../components/Pages/Landing'
 import Load from '../loader'
 import store from '../stores'
-// actions
-import { getContexts, getDeals } from '../store_actions/deals'
 import UserIsNotAuthenticated from './userIsNotAuthenticated'
 
 const AsyncAuthenticationLayout = Load({
@@ -85,6 +83,11 @@ const AsyncListingsFavorites = Load({
     import('../components/Pages/Dashboard/Listings/Favorites' /* webpackChunkName: "fav" */)
 })
 
+const AsyncTours = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Listings/Tours' /* webpackChunkName: "fav" */)
+})
+
 const AsyncListingSinglePage = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Listings/Listing' /* webpackChunkName: "list_single" */)
@@ -96,19 +99,7 @@ const AsyncListingSinglePage = Load({
 
 const AsyncDealsLayout = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */),
-  fetchData: async (dispatch, params) => {
-    const { user } = params
-
-    if (!user) {
-      return Promise.resolve()
-    }
-
-    return batchActions([
-      await dispatch(getContexts(user)),
-      await dispatch(getDeals(user))
-    ])
-  }
+    import('../components/Pages/Dashboard/Deals' /* webpackChunkName: "deal_i" */)
 })
 
 const AsyncDealCreate = Load({
@@ -123,22 +114,17 @@ const AsyncDealCreateOffer = Load({
 
 const AsyncDealsList = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/list' /* webpackChunkName: "deal_l" */)
+    import('../components/Pages/Dashboard/Deals/List' /* webpackChunkName: "deal_l" */)
 })
 
 const AsyncDealDashboard = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/dashboard' /* webpackChunkName: "deal_d" */)
+    import('../components/Pages/Dashboard/Deals/Dashboard' /* webpackChunkName: "deal_d" */)
 })
 
-const AsyncDealFileManager = Load({
+const AsyncDealFileViewer = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/file-manager' /* webpackChunkName: "deal_fm" */)
-})
-
-const AsyncDealFormViewer = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Deals/form-viewer' /* webpackChunkName: "deal_fv" */)
+    import('../components/Pages/Dashboard/Deals/FileViewer' /* webpackChunkName: "deal_fv" */)
 })
 
 const AsyncDealFormEdit = Load({
@@ -148,7 +134,7 @@ const AsyncDealFormEdit = Load({
 
 const AsyncAgentNetwork = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/agent-network' /* webpackChunkName: "agent-network" */)
+    import('../components/Pages/Dashboard/Deals/AgentNetwork' /* webpackChunkName: "agent-network" */)
 })
 
 /* ==================================== */
@@ -169,11 +155,6 @@ const AsyncContacts = Load({
     import('../components/Pages/Dashboard/Contacts' /* webpackChunkName: "contact" */)
 })
 
-const AsyncNewContact = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Contacts/NewContact' /* webpackChunkName: "contact" */)
-})
-
 const AsyncContactProfile = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Contacts/Profile' /* webpackChunkName: "contact_p" */)
@@ -184,18 +165,33 @@ const AsyncContactsImportCsv = Load({
     import('../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */)
 })
 
-/* ==================================== */
-//  CRM Tasks
-/* ==================================== */
-
-const AsyncCrmTasksList = Load({
+const AsyncContactsDuplicateContacts = Load({
   loader: () =>
-    import('../views/CRM/Tasks' /* webpackChunkName: "crm_tasks_list" */)
+    import('../components/Pages/Dashboard/Contacts/DuplicateContacts' /* webpackChunkName: "duplicate-contacts" */)
 })
 
-const AsyncCrmTask = Load({
+/* ==================================== */
+//  Marketing Center
+/* ==================================== */
+
+const AsyncMarketing = Load({
   loader: () =>
-    import('../views/CRM/Tasks/TaskPage' /* webpackChunkName: "crm_task_page" */)
+    import('../components/Pages/Dashboard/Marketing' /* webpackChunkName: "marketing" */)
+})
+
+const AsyncMarketingStore = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Marketing/Store' /* webpackChunkName: "marketing_store" */)
+})
+
+const AsyncMarketingTemplates = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Marketing/Templates' /* webpackChunkName: "marketing_templates" */)
+})
+
+const AsyncMarketingHistory = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Marketing/History' /* webpackChunkName: "marketing_history" */)
 })
 
 /* ==================================== */
@@ -232,7 +228,7 @@ const AsyncDealTemplates = Load({
     import('../components/Pages/Dashboard/Account/DealTemplates' /* webpackChunkName: "deal_templates" */)
 })
 
-const AsyncICALIntegration = Load({
+const ExportCalendar = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Account/ICalIntegration' /* webpackChunkName: "deal_templates" */)
 })
@@ -273,6 +269,11 @@ const AsyncSearchWidget = Load({
 /* ==================================== */
 //  Other Pages
 /* ==================================== */
+
+const AsyncShare = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Marketing/SharePage' /* webpackChunkName: "mc_share_page" */)
+})
 
 const AsyncBrands = Load({
   loader: () =>
@@ -348,6 +349,7 @@ export default (
     <Route path="/" component={AsyncAuthenticationLayout}>
       <IndexRoute component={Landing} />
       <Route path="/branch" component={AsyncBranch} />
+      <Route path="/share" component={AsyncShare} />
 
       <Route
         path="register"
@@ -389,29 +391,28 @@ export default (
 
     <Route path="/" component={AppLayout} onEnter={authenticate}>
       <Route path="/branch" component={AsyncBranch} />
+      <Route path="/share" component={AsyncShare} />
 
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />
 
+        <Route path="tours" component={AsyncTours} />
         <Route path="following" component={AsyncListingsFavorites} />
         <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
       </Route>
 
       <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
 
+      <Route component={AsyncContacts} path="/dashboard/contacts" />
       <Route
-        component={AsyncContacts}
-        path="/dashboard/contacts(/page/:page)"
+        path="/dashboard/contacts/duplicate-contacts"
+        component={AsyncContactsDuplicateContacts}
       />
-      <Route path="/dashboard/contacts/new" component={AsyncNewContact} />
       <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       <Route
         path="/dashboard/contacts/import/csv"
         component={AsyncContactsImportCsv}
       />
-
-      <Route path="/crm/tasks" component={AsyncCrmTasksList} />
-      <Route path="/crm/tasks/:id" component={AsyncCrmTask} />
 
       <Route path="/dashboard/calendar" component={AsyncCalendar} />
 
@@ -425,10 +426,7 @@ export default (
           component={AsyncDealCreate}
         />
         <Route path="/dashboard/deals/:id" component={AsyncDealDashboard} />
-        <Route
-          path="/dashboard/deals/:id/files"
-          component={AsyncDealFileManager}
-        />
+
         <Route
           path="/dashboard/deals/:id/form-edit/:taskId"
           component={AsyncDealFormEdit}
@@ -438,8 +436,8 @@ export default (
           component={AsyncDealCreateOffer}
         />
         <Route
-          path="/dashboard/deals/:dealId/form-viewer/:taskId(/:type/:objectId)"
-          component={AsyncDealFormViewer}
+          path="/dashboard/deals/:id/view/:taskId(/:entityType/:entityId)"
+          component={AsyncDealFileViewer}
         />
         <Route
           path="/dashboard/deals/:id/network"
@@ -452,9 +450,15 @@ export default (
       </Route>
 
       <Route
-        path="/dashboard/notifications"
+        path="/dashboard/notifications(/:type/:id)"
         component={AsyncNotificationsPage}
       />
+
+      <Route path="/dashboard/marketing" component={AsyncMarketing}>
+        <IndexRoute component={AsyncMarketingStore} />
+        <Route component={AsyncMarketingHistory} path="history" />
+        <Route component={AsyncMarketingTemplates} path=":types(/:medium)" />
+      </Route>
 
       <Route path="dashboard/account" component={AsyncAccountLayout}>
         <IndexRoute component={AsyncProfile} />
@@ -462,7 +466,7 @@ export default (
 
         <Route path="deal/templates" component={AsyncDealTemplates} />
         <Route path="deal/templates/:id" component={AsyncEditDealTemplate} />
-        <Route path="deal/icalintegration" component={AsyncICALIntegration} />
+        <Route path="exportCalendar" component={ExportCalendar} />
       </Route>
 
       <Route path="/dashboard/brands">

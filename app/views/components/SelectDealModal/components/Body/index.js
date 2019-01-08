@@ -3,14 +3,16 @@ import PropTypes from 'prop-types'
 import Downshift from 'downshift'
 import _ from 'underscore'
 
+import { searchDeals } from 'models/Deal/deal'
+
 import { Item } from './Item'
 import SearchInput from './SearchInput'
-import Loading from '../../../../../components/Partials/Loading'
-import { searchDeals } from '../../../../../models/Deal/search'
+import Loading from '../../../Spinner'
 import {
   ListContainer,
   List
-} from '../../../SelectContactModal/components/Body'
+} from '../../../SelectContactModal/components/Body/styled'
+import Alert from '../../../../../components/Pages/Dashboard/Partials/Alert'
 
 const propTypes = {
   deals: PropTypes.arrayOf(PropTypes.shape),
@@ -79,8 +81,13 @@ class Body extends Component {
         defaultInputValue={defaultInputValue}
         onSelect={this.props.handleSelectedItem}
         render={({ getInputProps, getItemProps, highlightedIndex }) => (
-          <div style={{ paddingTop: '1rem' }}>
-            <div style={{ padding: isDrawer ? '0' : '0 1rem' }}>
+          <div
+            style={{
+              paddingTop: isDrawer ? '1.5rem' : '1rem',
+              margin: isDrawer ? '0 -1.5rem' : 0
+            }}
+          >
+            <div style={{ padding: isDrawer ? '0 1.5rem' : '0 1rem' }}>
               <SearchInput
                 style={{ marginBottom: '1em' }}
                 inputProps={{
@@ -93,35 +100,42 @@ class Body extends Component {
             </div>
             <ListContainer isDrawer={isDrawer}>
               {isSearching && <Loading />}
-              {!isSearching &&
-                this.state.error && (
+              {!isSearching && this.state.error && (
+                <Alert
+                  type="warning"
+                  style={{
+                    margin: isDrawer ? '0 1.5rem' : '0 1rem'
+                  }}
+                >
                   <div
                     style={{
-                      marginTop: '1em',
-                      textAlign: 'center'
+                      fontWeight: 500,
+                      marginBottom: '1rem',
+                      fontSize: '1.125rem'
                     }}
                   >
-                    <h3>Please type in at least 4 characters to see results</h3>
-                    <p>
-                      So many deals, so little time. Search by address, MLS # or
-                      agent name to narrow your results.
-                    </p>
+                    Please type in at least 4 characters to see results
                   </div>
-                )}
-              {!isSearching &&
-                items.length > 0 && (
-                  <List className="u-scrollbar--thinner" isDrawer={isDrawer}>
-                    {items.map((item, index) => (
-                      <Item
-                        item={item}
-                        key={item.id || `downshift_search_result_item_${index}`}
-                        {...getItemProps({ item })}
-                        onClickHandler={this.props.handleSelectedItem}
-                        isHighlighted={highlightedIndex === index}
-                      />
-                    ))}
-                  </List>
-                )}
+                  <div>
+                    So many deals, so little time. Search by address, MLS # or
+                    agent name to narrow your results.
+                  </div>
+                </Alert>
+              )}
+              {!isSearching && items.length > 0 && (
+                <List className="u-scrollbar--thinner" isDrawer={isDrawer}>
+                  {items.map((item, index) => (
+                    <Item
+                      item={item}
+                      isDrawer={isDrawer}
+                      key={item.id || `downshift_search_result_item_${index}`}
+                      {...getItemProps({ item })}
+                      onClickHandler={this.props.handleSelectedItem}
+                      isHighlighted={highlightedIndex === index}
+                    />
+                  ))}
+                </List>
+              )}
             </ListContainer>
           </div>
         )}

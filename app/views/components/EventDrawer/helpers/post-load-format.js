@@ -1,25 +1,34 @@
+import { getReminderItem } from 'views/utils/reminder'
+
 import { getAssociations } from './get-associations'
-import { getReminderLabel } from './get-reminder-label'
 
 /**
  * Format form data for api model
  * @param {object} task The Task entity
  * @param {object} owner logged in user
- * @param {object} defaultAssociation The default association
+ * @param {object} defaultAssociation The default association(s)
  * @returns {Promise} a formated Task
  */
 export async function postLoadFormat(task, owner, defaultAssociation) {
-  const REMINDER_DEFAULT_LABEL = '15 Minutes Before'
-
   let reminder = {
-    title: REMINDER_DEFAULT_LABEL,
-    value: REMINDER_DEFAULT_LABEL
+    title: 'None',
+    value: null
+  }
+
+  const associations = []
+
+  if (defaultAssociation) {
+    if (Array.isArray(defaultAssociation)) {
+      associations.push(...defaultAssociation)
+    } else {
+      associations.push(defaultAssociation)
+    }
   }
 
   if (!task) {
     return {
       assignees: [owner],
-      associations: defaultAssociation ? [defaultAssociation] : [],
+      associations,
       dueDate: new Date(),
       reminder,
       task_type: { title: 'Call', value: 'Call' }
@@ -29,28 +38,12 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
   const { reminders, due_date } = task
   const dueDate = due_date * 1000
 
-  if (
-    Array.isArray(reminders) &&
-    reminders.length > 0 &&
-    reminders[reminders.length - 1].timestamp
-  ) {
+  if (Array.isArray(reminders) && reminders.length > 0) {
     const { timestamp } = reminders[reminders.length - 1]
 
-    const title = getReminderLabel(dueDate, timestamp * 1000)
-
-    reminder = { title, value: title }
-  }
-
-  if (
-    Array.isArray(reminders) &&
-    reminders.length > 0 &&
-    reminders[reminders.length - 1].timestamp
-  ) {
-    const { timestamp } = reminders[reminders.length - 1]
-
-    const title = getReminderLabel(dueDate, timestamp * 1000)
-
-    reminder = { title, value: title }
+    if (timestamp && timestamp * 1000 > new Date().getTime()) {
+      reminder = getReminderItem(dueDate, timestamp * 1000)
+    }
   }
 
   if (task.assignees == null) {

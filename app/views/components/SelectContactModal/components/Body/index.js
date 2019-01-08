@@ -1,51 +1,18 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
 import Downshift from 'downshift'
 import _ from 'underscore'
 
 import SearchInput from '../SearchInput'
 import ContactItem from '../ContactItem'
+import { viewAs } from '../../../../../utils/user-teams'
 import Loading from '../../../../../components/Partials/Loading'
-import { getContacts } from '../../../../../models/contacts/get-contacts'
 import { searchContacts } from '../../../../../models/contacts/search-contacts'
 import { normalizeContactAttribute } from '../../../../../store_actions/contacts/helpers/normalize-contacts'
+import Alert from '../../../../../components/Pages/Dashboard/Partials/Alert'
 
-export const ListContainer = styled.div`
-  position: relative;
-  height: calc(100vh - ${props => (props.isDrawer ? 135 : 172)}px);
-  padding: ${props => (props.isDrawer ? 0 : '1em 0')};
-  overflow-x: hidden;
-  overflow-y: scroll;
-
-  ${props =>
-    !props.isDrawer
-      ? css`
-          @media screen and (min-width: 48em) {
-            height: 240px;
-          }
-        `
-      : ''};
-`
-
-export const List = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding-bottom: ${props => (props.isDrawer ? '1em' : 0)};
-`
-
-const Alert = styled.div`
-  color: #f6a623;
-  background: rgba(245, 166, 35, 0.05);
-  border: 1px solid rgba(245, 166, 35, 0.2);
-  padding: 1rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  border-radius: 4px;
-  margin: 10px 16px;
-`
+import { ListContainer, List } from './styled'
 
 const propTypes = {
   defaultSearchFilter: PropTypes.string,
@@ -60,47 +27,24 @@ const defaultProps = {
 
 class Body extends Component {
   state = {
-    isLoading: false,
+    isLoading: true,
     list: []
   }
 
   componentDidMount() {
-    this.initializingList()
-  }
-
-  initializingList = () => {
-    if (this.props.defaultSearchFilter) {
-      this.search(this.props.defaultSearchFilter)
-    } else {
-      this.fetchInitialList()
-    }
-  }
-
-  fetchInitialList = async () => {
-    try {
-      this.setState({ isLoading: true })
-
-      const response = await getContacts(0, 15)
-
-      this.setState({
-        isLoading: false,
-        list: normalizeContactAttribute(response)
-      })
-    } catch (error) {
-      console.log(error)
-      this.setState({ isLoading: false })
-    }
+    this.search(this.props.defaultSearchFilter)
   }
 
   search = _.debounce(async value => {
-    if (!value) {
-      return this.fetchInitialList()
-    }
-
     try {
       this.setState({ isLoading: true })
 
-      const response = await searchContacts(value)
+      const response = await searchContacts(
+        value,
+        undefined,
+        undefined,
+        this.props.viewAsUsers
+      )
 
       this.setState({
         isLoading: false,
@@ -138,11 +82,20 @@ class Body extends Component {
         itemToString={this.handleItemToString}
         defaultInputValue={defaultInputValue}
         render={({ getInputProps, getItemProps, highlightedIndex }) => (
-          <div style={{ paddingTop: '1em' }} className="u-scrollbar--thinner">
+          <div
+            style={{
+              paddingTop: isDrawer ? '1.5rem' : '1rem',
+              margin: isDrawer ? '0 -1.5rem' : 0
+            }}
+          >
             {!this.props.isSearchDisabled && (
-              <div style={{ padding: isDrawer ? '0' : '0 1em' }}>
+              <div
+                style={{
+                  marginBottom: isDrawer ? '1.5rem' : '1rem',
+                  padding: isDrawer ? '0 1.5rem' : '0 1rem'
+                }}
+              >
                 <SearchInput
-                  style={{ marginBottom: '1em' }}
                   inputProps={{
                     ...getInputProps({
                       onChange: this.handleOnChange,
@@ -153,13 +106,14 @@ class Body extends Component {
               </div>
             )}
             <ListContainer isDrawer={isDrawer}>
-              <List isDrawer={isDrawer}>
+              <List isDrawer={isDrawer} className="u-scrollbar--thinner">
                 {isLoading ? (
                   <Loading />
                 ) : (
                   list.map((item, index) => (
                     <ContactItem
                       item={item}
+                      isDrawer={isDrawer}
                       key={item.id || `downshift_search_result_item_${index}`}
                       {...getItemProps({ item })}
                       onClickHandler={this.props.handleSelectedItem}
@@ -168,7 +122,15 @@ class Body extends Component {
                   ))
                 )}
 
-                {!isLoading && list.length === 0 && <Alert> No Results</Alert>}
+                {!isLoading && list.length === 0 && (
+                  <Alert
+                    type="warning"
+                    style={{
+                      margin: isDrawer ? '0 1.5rem' : '0 1rem'
+                    }}
+                    message="No Result"
+                  />
+                )}
               </List>
             </ListContainer>
           </div>
@@ -181,4 +143,4 @@ class Body extends Component {
 Body.propTypes = propTypes
 Body.defaultProps = defaultProps
 
-export default Body
+export default connect(({ user }) => ({ viewAsUsers: viewAs(user) }))(Body)

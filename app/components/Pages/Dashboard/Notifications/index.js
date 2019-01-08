@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { browserHistory, withRouter } from 'react-router'
 import S from 'shorti'
-import { getTimeAgo } from '../../../../utils/helpers'
-import { browserHistory } from 'react-router'
-import Header from './Header'
+import timeago from 'timeago.js'
+
 import {
   selectNotifications,
   selectNotificationIsFetching
@@ -12,14 +12,40 @@ import {
   deleteNewNotifications,
   markNotificationAsSeen
 } from '../../../../store_actions/notifications'
+import { EventDrawer } from '../../../../views/components/EventDrawer'
+
+import Header from './Header'
 
 class Notifications extends Component {
+  constructor(props) {
+    super(props)
+
+    const { params } = props
+
+    this.state = {
+      selectedEvent: (params.type && params.type === 'crm' && params.id) || null
+    }
+  }
+
   componentDidMount() {
     const { deleteNewNotifications } = this.props
 
     deleteNewNotifications()
   }
-  handleNotifClick(notification) {
+
+  openCRMTaskDrawer = selectedEvent => {
+    this.setState(
+      { selectedEvent },
+      browserHistory.push(`/dashboard/notifications/crm/${selectedEvent}`)
+    )
+  }
+  closeCRMTaskDrawer = () => {
+    this.setState({ selectedEvent: null }, () =>
+      browserHistory.push('/dashboard/notifications')
+    )
+  }
+
+  handleNotifClick = notification => {
     const { markNotificationAsSeen } = this.props
 
     markNotificationAsSeen(notification.id)
@@ -48,14 +74,15 @@ class Notifications extends Component {
       case 'CrmTaskIsDueCrmTask':
       case 'ReminderIsDueCrmTask':
       case 'UserAssignedCrmTask':
-      case 'UserEditerCrmTask':
-        browserHistory.push(`/crm/tasks/${notification.object}`)
+      case 'UserEditedCrmTask':
+        this.openCRMTaskDrawer(notification.object)
         break
 
       default:
         break
     }
   }
+
   notificationIcon(notification) {
     const type = notification.notification_type
     const subject = notification.subjects[0]
@@ -78,12 +105,20 @@ class Notifications extends Component {
                 `${
                   subject.profile_image_url
                     ? `bg-url(${subject.profile_image_url})`
-                    : 'bg-ccc'
+                    : 'bg-000'
                 } ${common_image_style}`
               )}
             >
               {!subject.profile_image_url && (
-                <div style={S('color-fff text-center font-10 mt-10')}>
+                <div
+                  style={{
+                    color: '#ffffff',
+                    fontSize: '10px',
+                    marginTop: '10px',
+                    textAlign: 'center',
+                    fontWeight: '700'
+                  }}
+                >
                   No <br />image
                 </div>
               )}
@@ -143,12 +178,20 @@ class Notifications extends Component {
                 `${
                   subject.cover_image_url
                     ? `bg-url(${subject.cover_image_url})`
-                    : 'bg-ccc'
+                    : 'bg-000'
                 } ${common_image_style}`
               )}
             >
               {!subject.cover_image_url && (
-                <div style={S('color-fff text-center font-10 mt-10')}>
+                <div
+                  style={{
+                    color: '#ffffff',
+                    fontSize: '10px',
+                    marginTop: '10px',
+                    textAlign: 'center',
+                    fontWeight: '700'
+                  }}
+                >
                   No <br />image
                 </div>
               )}
@@ -164,12 +207,20 @@ class Notifications extends Component {
                 `${
                   subject.cover_image_url
                     ? `bg-url(${subject.cover_image_url})`
-                    : 'bg-ccc'
+                    : 'bg-000'
                 } ${common_image_style}`
               )}
             >
               {!subject.cover_image_url && (
-                <div style={S('color-fff text-center font-10 mt-10')}>
+                <div
+                  style={{
+                    color: '#ffffff',
+                    fontSize: '10px',
+                    marginTop: '10px',
+                    textAlign: 'center',
+                    fontWeight: '700'
+                  }}
+                >
                   No <br />image
                 </div>
               )}
@@ -185,12 +236,20 @@ class Notifications extends Component {
                 `${
                   subject.cover_image_url
                     ? `bg-url(${subject.cover_image_url})`
-                    : 'bg-ccc'
+                    : 'bg-000'
                 } ${common_image_style}`
               )}
             >
               {!subject.cover_image_url && (
-                <div style={S('color-fff text-center font-10 mt-10')}>
+                <div
+                  style={{
+                    color: '#ffffff',
+                    fontSize: '10px',
+                    marginTop: '10px',
+                    textAlign: 'center',
+                    fontWeight: '700'
+                  }}
+                >
                   No <br />image
                 </div>
               )}
@@ -237,6 +296,7 @@ class Notifications extends Component {
 
     return icon
   }
+
   getNotifications() {
     const { notifications, isFetching } = this.props
 
@@ -269,7 +329,7 @@ class Notifications extends Component {
             <div style={{ position: 'relative', marginLeft: '4rem' }}>
               <div style={S('color-263445')}>{notification.message}</div>
               <div style={S('color-c6c6c6')}>
-                {getTimeAgo(notification.created_at)}
+                {timeago().format(notification.created_at * 1000)}
               </div>
             </div>
           </div>
@@ -287,32 +347,34 @@ class Notifications extends Component {
     return (
       <div
         style={{
-          boxShadow:
-            '-1px 0 2px 0 rgba(0,0,0,0.04), -1px 0 20px 0 rgba(0,0,0,0.1)'
+          height: '100vh',
+          overflowY: 'scroll'
         }}
       >
         <Header />
-        <div style={{ position: 'relative' }}>
-          <div
-            style={{
-              position: 'absolute',
-              left: 0,
-              top: 0,
-              width: '100%'
-            }}
-          >
-            {this.getNotifications()}
-          </div>
-        </div>
+        {this.getNotifications()}
+        {this.state.selectedEvent && (
+          <EventDrawer
+            eventId={this.state.selectedEvent}
+            isOpen
+            onClose={this.closeCRMTaskDrawer}
+            submitCallback={this.closeCRMTaskDrawer}
+            deleteCallback={this.closeCRMTaskDrawer}
+            user={this.props.user}
+          />
+        )}
       </div>
     )
   }
 }
 
-export default connect(
-  ({ globalNotifications }) => ({
-    notifications: selectNotifications(globalNotifications),
-    isFetching: selectNotificationIsFetching(globalNotifications)
-  }),
-  { deleteNewNotifications, markNotificationAsSeen }
-)(Notifications)
+export default withRouter(
+  connect(
+    ({ user, globalNotifications }) => ({
+      user,
+      notifications: selectNotifications(globalNotifications),
+      isFetching: selectNotificationIsFetching(globalNotifications)
+    }),
+    { deleteNewNotifications, markNotificationAsSeen }
+  )(Notifications)
+)

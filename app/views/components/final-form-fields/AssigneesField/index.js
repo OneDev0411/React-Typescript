@@ -23,14 +23,24 @@ class DummyAssignees extends React.Component {
   }
 
   render() {
+    const {
+      meta: { error, touched }
+    } = this.props
+
     return (
-      <Assignees
-        owner={this.props.owner}
-        assignees={this.props.input.value}
-        teamMembers={this.props.teamMembers}
-        onChangeHandler={this.onChangeHandler}
-        onRemoveHandler={this.onRemoveHandler}
-      />
+      <div>
+        <Assignees
+          owner={this.props.owner}
+          buttonText={this.props.buttonText}
+          assignees={this.props.input.value}
+          teamMembers={this.props.teamMembers}
+          onChangeHandler={this.onChangeHandler}
+          onRemoveHandler={this.onRemoveHandler}
+        />
+        {error && touched && (
+          <div style={{ color: 'red', marginTop: '0.5rem' }}>{error}</div>
+        )}
+      </div>
     )
   }
 }

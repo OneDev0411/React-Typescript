@@ -1,20 +1,44 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import OverlayDrawer from '../../../../../../../../views/components/OverlayDrawer'
+import OverlayDrawer from 'components/OverlayDrawer'
 
-import Roles from '../../../../components/roles'
-import { getRolesText, getRoleText } from '../../../utils/get-roles-text'
+import { Divider } from './styled'
+import ManualEntry from './manual-entry'
+
+import Roles from '../../../../components/Roles'
+import {
+  getRolesText,
+  getRoleText,
+  normalizeRoleNames
+} from '../../../utils/get-roles-text'
+import { getRoleTooltip } from '../../../utils/get-role-tooltip'
 import { getAnnotationsValues } from '../../../utils/word-wrap'
 
 class RolesDrawer extends React.Component {
-  onClose = () => {
-    if (!this.props.selectedAnnotation) {
-      return false
-    }
+  handleClose = () => this.props.onClose()
 
+  handleSaveManualValue = value => {
+    const { selectedAnnotation } = this.props
+    const { annotations } = selectedAnnotation.data
+
+    const values = getAnnotationsValues(annotations, value, {
+      maxFontSize: 20
+    })
+
+    this.props.onSetValues(values, true)
+    this.props.onClose()
+  }
+
+  get AllowedRoles() {
+    const roles = this.props.selectedAnnotation.data.roleName
+
+    return normalizeRoleNames(this.props.deal, roles)
+  }
+
+  get ListValue() {
     const { data } = this.props.selectedAnnotation
-    const { roleName, annotations, annotationContext, contextType } = data
+    const { roleName, annotationContext, contextType } = data
 
     let text = ''
 
@@ -25,9 +49,7 @@ class RolesDrawer extends React.Component {
         roleName,
         annotationContext
       )
-    }
-
-    if (contextType === 'Role') {
+    } else if (contextType === 'Role') {
       text = getRoleText(
         this.props.dealsRoles,
         this.props.deal,
@@ -36,38 +58,56 @@ class RolesDrawer extends React.Component {
       )
     }
 
-    const values = getAnnotationsValues(annotations, text, {
+    return text ? text.trim() : ''
+  }
+
+  get DrawerTitle() {
+    const { selectedAnnotation } = this.props
+
+    if (!selectedAnnotation) {
+      return false
+    }
+
+    const { data } = selectedAnnotation
+
+    return getRoleTooltip(data.annotationContext, data.contextType === 'Roles')
+  }
+
+  onChangeRoles = () => {
+    const { data } = this.props.selectedAnnotation
+
+    const values = getAnnotationsValues(data.annotations, this.ListValue, {
       maxFontSize: 20
     })
 
-    this.props.onSetValues(values)
+    this.props.onSetValues(values, true)
     this.props.onClose()
-  }
-
-  get AllowedRoles() {
-    if (!this.props.isOpen) {
-      return null
-    }
-
-    return this.props.selectedAnnotation.data.roleName.split(',')
   }
 
   render() {
     return (
-      <OverlayDrawer
-        isOpen={this.props.isOpen}
-        onClose={this.onClose}
-        showFooter={false}
-        closeOnBackdropClick={false}
-      >
-        <OverlayDrawer.Header title="Contacts" />
+      <OverlayDrawer isOpen showFooter={false} onClose={this.handleClose}>
+        <OverlayDrawer.Header title={this.DrawerTitle} />
         <OverlayDrawer.Body>
           <Roles
+            containerStyle={{
+              paddingTop: '1rem'
+            }}
             showTitle={false}
             deal={this.props.deal}
-            containerStyle={{ padding: '1rem' }}
             allowedRoles={this.AllowedRoles}
+            onUpsertRole={this.onChangeRoles}
+            onCreateRole={this.onChangeRoles}
+            onDeleteRole={this.onChangeRoles}
             allowDeleteRole
+          />
+
+          <Divider />
+
+          <ManualEntry
+            selectedAnnotation={this.props.selectedAnnotation}
+            formValues={this.props.formValues}
+            onSave={this.handleSaveManualValue}
           />
         </OverlayDrawer.Body>
       </OverlayDrawer>

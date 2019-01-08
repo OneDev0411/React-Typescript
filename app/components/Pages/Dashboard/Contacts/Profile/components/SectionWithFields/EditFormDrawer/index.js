@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { FinalFormDrawer } from '../../../../../../../../views/components/FinalFormDrawer'
+import { FinalFormDrawer } from 'components/FinalFormDrawer'
 
 import { Select } from './fields/Select'
 import { TextField } from './fields/TextField'
+import { DateField } from './fields/DateField'
 import { MultiField } from './fields/MultiField'
 
 import { getPlaceholder, getValidator } from './helpers'
@@ -27,8 +28,7 @@ export function EditForm({ fields, ...props }) {
   return (
     <FinalFormDrawer
       {...props}
-      showReset={false}
-      showCancel={false}
+      formId={`edit-${fields[0].attribute_def.section.toLowerCase()}-form`}
       render={({ form }) => getAllFields(fields, form.mutators)}
     />
   )
@@ -44,11 +44,22 @@ const getAllFields = (attributes, mutators) => {
       return
     }
 
-    const key = `${attribute_def.section}_modal_field_${index}`
+    const key = `${attribute_def.section}_drawer_field_${index}`
     const placeholder = getPlaceholder(attribute)
     const validate = getValidator(attribute)
 
     if (attribute_def.singular) {
+      if (attribute_def.data_type === 'date') {
+        return allFields.push(
+          <DateField
+            key={key}
+            name={attribute_def.id}
+            attribute={attribute}
+            yearIsOptional
+          />
+        )
+      }
+
       if (attribute_def.enum_values) {
         return allFields.push(<Select key={key} attribute={attribute} />)
       }
@@ -61,7 +72,9 @@ const getAllFields = (attributes, mutators) => {
           validate={validate}
         />
       )
-    } else if (
+    }
+
+    if (
       !allFields.some(
         c => c.props.attribute.attribute_def.id === attribute_def.id
       )

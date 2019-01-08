@@ -1,34 +1,68 @@
-import React from 'react'
+import React, { Fragment } from 'react'
+import { connect } from 'react-redux'
 
-import grapesjs from 'grapesjs'
-import 'grapesjs/dist/css/grapes.min.css'
-import '../../../../styles/components/modules/template-builder.scss'
+import PropTypes from 'prop-types'
 
-import nunjucks from 'nunjucks'
+import juice from 'juice'
 
-import './AssetManager'
+import IconButton from 'components/Button/IconButton'
+import DropButton from 'components/Button/DropButton'
+import ActionButton from 'components/Button/ActionButton'
+// import { Icon as DropdownIcon } from 'components/Dropdown'
+import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
+
+import { VideoToolbar } from './VideoToolbar'
+
 import config from './config'
 
-import {
-  currencyFilter,
-  areaMeterFilter,
-  phoneNumberFilter
-} from '../helpers/nunjucks-filters'
+import nunjucks from '../helpers/nunjucks'
+
+import loadGrapes from '../helpers/load-grapes'
 
 import {
   Container,
+  Actions,
   TemplatesContainer,
   BuilderContainer,
-  Header
+  Header,
+  Divider
 } from './styled'
 import Templates from '../Templates'
 
-import juice from 'juice'
-import ActionButton from 'components/Button/ActionButton'
-
 class Builder extends React.Component {
-  componentDidMount() {
-    this.editor = grapesjs.init({
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      originalTemplate: null,
+      selectedTemplate: props.defaultTemplate,
+      owner: props.templateData.user,
+      isLoading: true
+    }
+
+    this.keyframe = 0
+
+    this.traits = {
+      link: [
+        {
+          type: 'text',
+          label: 'Link',
+          name: 'href'
+        }
+      ]
+    }
+  }
+
+  async componentDidMount() {
+    const { Grapesjs } = await loadGrapes()
+    await import('./AssetManager')
+
+    this.setState({
+      isLoading: false
+    })
+
+    this.editor = Grapesjs.init({
       ...config,
       avoidInlineStyle: false,
       keepUnusedStyles: true,
@@ -36,17 +70,19 @@ class Builder extends React.Component {
       container: '#grapesjs-canvas',
       components: null,
       assetManager: {
-        assets: this.props.assets
+        assets: [...this.props.assets, ...this.UserAssets]
       },
       storageManager: {
-        autoload: 0
+        autoload: 0,
+        params: {
+          templateId: null
+        }
       },
       showDevices: false,
       plugins: ['asset-blocks']
     })
 
-    this.editor.on('load', this.setupGrapesJs.bind(this))
-    this.setupNunjucks()
+    this.editor.on('load', this.setupGrapesJs)
   }
 
   setupGrapesJs = () => {
@@ -54,14 +90,15 @@ class Builder extends React.Component {
     this.disableResize()
     this.singleClickTextEditing()
     this.disableAssetManager()
-  }
+    this.makeTemplateCentered()
 
-  setupNunjucks = () => {
-    this.nunjucks = new nunjucks.Environment()
+    if (this.IsVideoTemplate) {
+      this.grapes.appendChild(this.videoToolbar)
+    }
 
-    this.nunjucks.addFilter('currency', currencyFilter)
-    this.nunjucks.addFilter('area', areaMeterFilter)
-    this.nunjucks.addFilter('phone', phoneNumberFilter)
+    this.props.onBuilderLoad({
+      regenerateTemplate: this.regenerateTemplate
+    })
   }
 
   disableAssetManager = () => {
@@ -76,6 +113,30 @@ class Builder extends React.Component {
 
       selected.view.enableEditing(selected.view.el)
     })
+  }
+
+  makeTemplateCentered = () => {
+    const iframe = this.editor.Canvas.getFrameEl()
+
+    const style = document.createElement('style')
+    const css =
+      'body { margin: 2vh auto !important; background-color: #f2f2f2 !important }'
+
+    style.type = 'text/css'
+
+    if (style.styleSheet) {
+      style.styleSheet.cssText = css
+    } else {
+      style.appendChild(document.createTextNode(css))
+    }
+
+    if (!iframe.contentDocument) {
+      console.warn('iframe contentDocument is null')
+
+      return false
+    }
+
+    iframe.contentDocument.head.appendChild(style)
   }
 
   disableResize = () => {
@@ -112,7 +173,8 @@ class Builder extends React.Component {
 
       model.set({
         draggable: false,
-        droppable: false
+        droppable: false,
+        traits: this.traits[model.get('type')] || []
       })
 
       model.get('components').each(model => updateAll(model))
@@ -121,7 +183,7 @@ class Builder extends React.Component {
     updateAll(this.editor.DomComponents.getWrapper())
   }
 
-  onSave = () => {
+  getSavedTemplate() {
     const css = this.editor.getCss()
     const html = this.editor.getHtml()
 
@@ -136,68 +198,259 @@ class Builder extends React.Component {
         </body>
       </html>`
 
-    const result = juice(assembled)
-
-    if (this.props.onSave) {
-      this.props.onSave({
-        ...this.selectedTemplate,
-        result
-      })
-
-      this.selectedTemplate = null
+    return {
+      ...this.state.selectedTemplate,
+      result: juice(assembled)
     }
   }
 
-  handleSelectTemplate = templateItem => {
-    const template = {
-      ...templateItem,
-      template: this.nunjucks.renderString(templateItem.template, {
-        ...this.props.templateData
-      })
-    }
+  handleSave = () =>
+    this.props.onSave(this.getSavedTemplate(), this.state.owner)
 
-    this.selectedTemplate = template
+  handleSocialSharing = socialNetworkName =>
+    this.props.onSocialSharing(this.getSavedTemplate(), socialNetworkName)
 
+  generateTemplate = (template, data) => nunjucks.renderString(template, data)
+
+  setEditorTemplateId = id => {
+    this.editor.StorageManager.store({
+      templateId: id
+    })
+  }
+
+  refreshEditor = selectedTemplate => {
     const components = this.editor.DomComponents
 
     components.clear()
     this.editor.setStyle('')
-    this.editor.setComponents(template.template)
+    this.setEditorTemplateId(selectedTemplate.id)
+    this.editor.setComponents(selectedTemplate.template)
     this.lockIn()
   }
 
+  handleSelectTemplate = templateItem => {
+    this.setState(
+      {
+        originalTemplate: templateItem,
+        selectedTemplate: templateItem
+      },
+      () => {
+        this.regenerateTemplate({
+          user: this.state.owner
+        })
+      }
+    )
+  }
+
+  handleOwnerChange = ({ value: owner }) => {
+    this.setState({
+      owner
+    })
+
+    this.regenerateTemplate({
+      user: owner
+    })
+  }
+
+  get IsVideoTemplate() {
+    return this.state.selectedTemplate && this.state.selectedTemplate.video
+  }
+
+  get IsTemplateLoaded() {
+    return this.state.selectedTemplate && this.state.selectedTemplate.template
+  }
+
+  get ShowEditListingsButton() {
+    return (
+      this.state.originalTemplate &&
+      this.props.templateTypes.includes('Listings') &&
+      this.props.templateData.listings
+    )
+  }
+
+  get IsSocialMedium() {
+    if (this.state.selectedTemplate) {
+      return this.state.selectedTemplate.medium !== 'Email'
+    }
+
+    if (this.props.mediums) {
+      return this.props.mediums !== 'Email'
+    }
+
+    return false
+  }
+
+  get UserAssets() {
+    return ['profile_image_url', 'cover_image_url']
+      .filter(attr => this.props.user[attr])
+      .map(attr => ({
+        image: this.props.user[attr],
+        avatar: true
+      }))
+  }
+
+  renderAgentPickerButton = buttonProps => (
+    <DropButton
+      {...buttonProps}
+      iconSize="large"
+      text={`Sends as: ${buttonProps.selectedItem.label}`}
+    />
+  )
+
+  regenerateTemplate = newData => {
+    console.log('[ + ] Regenerate template')
+
+    this.setState(
+      state => ({
+        selectedTemplate: {
+          ...state.selectedTemplate,
+          template: this.generateTemplate(state.originalTemplate.template, {
+            ...this.props.templateData,
+            ...newData
+          })
+        }
+      }),
+      () => {
+        this.refreshEditor(this.state.selectedTemplate)
+      }
+    )
+  }
+
   render() {
+    const { isLoading } = this.state
+
+    if (isLoading)
+      return null
+
+    const isSocialMedium = this.IsSocialMedium
+
     return (
       <Container className="template-builder">
         <Header>
-          <h1>Marketing Center</h1>
+          <h1>{this.props.headerTitle}</h1>
 
-          <div>
-            <ActionButton appearance="outline" onClick={this.props.onClose}>
-              Cancel
-            </ActionButton>
+          <Actions>
+            {this.state.selectedTemplate && (
+              <TeamContactSelect
+                fullHeight
+                pullTo="right"
+                user={this.props.templateData.user}
+                owner={this.state.owner}
+                onSelect={this.handleOwnerChange}
+                buttonRenderer={this.renderAgentPickerButton}
+                style={{
+                  marginRight: '0.5rem'
+                }}
+              />
+            )}
 
-            <ActionButton
-              style={{ marginLeft: '0.5rem' }}
-              onClick={this.onSave}
+            {this.ShowEditListingsButton && (
+              <ActionButton
+                style={{ marginLeft: '0.5rem' }}
+                appearance="outline"
+                onClick={this.props.onShowEditListings}
+              >
+                Edit Listings ({this.props.templateData.listings.length})
+              </ActionButton>
+            )}
+
+            {this.state.selectedTemplate &&
+              isSocialMedium && (
+                <Fragment>
+                  <ActionButton
+                    onClick={() => this.handleSocialSharing('Instagram')}
+                  >
+                    <i
+                      className="fa fa-instagram"
+                      style={{
+                        fontSize: '1.5rem',
+                        marginRight: '0.5rem'
+                      }}
+                    />
+                    Post to Instagram
+                  </ActionButton>
+
+                  <ActionButton
+                    style={{ marginLeft: '0.5rem' }}
+                    onClick={() => this.handleSocialSharing('Facebook')}
+                  >
+                    <i
+                      className="fa fa-facebook-square"
+                      style={{
+                        fontSize: '1.5rem',
+                        marginRight: '0.5rem'
+                      }}
+                    />
+                    Post to Facebook
+                  </ActionButton>
+                </Fragment>
+              )}
+
+            {this.state.selectedTemplate &&
+              !isSocialMedium && (
+                <ActionButton
+                  style={{ marginLeft: '0.5rem' }}
+                  onClick={this.handleSave}
+                >
+                  Next
+                </ActionButton>
+              )}
+
+            <Divider />
+            <IconButton
+              isFit
+              iconSize="large"
+              inverse
+              onClick={this.props.onClose}
             >
-              Send
-            </ActionButton>
-          </div>
+              <CloseIcon />
+            </IconButton>
+          </Actions>
         </Header>
 
         <BuilderContainer>
-          <TemplatesContainer>
+          <TemplatesContainer
+            isInvisible={this.props.showTemplatesColumn === false}
+          >
             <Templates
+              defaultTemplate={this.props.defaultTemplate}
+              medium={this.props.mediums}
               onTemplateSelect={this.handleSelectTemplate}
               templateTypes={this.props.templateTypes}
             />
           </TemplatesContainer>
-          <div id="grapesjs-canvas" />
+
+          <div
+            id="grapesjs-canvas"
+            ref={ref => (this.grapes = ref)}
+            style={{ position: 'relative' }}
+          >
+            {this.IsVideoTemplate &&
+              this.IsTemplateLoaded && (
+                <VideoToolbar
+                  onRef={ref => (this.videoToolbar = ref)}
+                  editor={this.editor}
+                />
+              )}
+          </div>
         </BuilderContainer>
       </Container>
     )
   }
 }
 
-export default Builder
+Builder.propTypes = {
+  onBuilderLoad: PropTypes.func
+}
+
+Builder.defaultProps = {
+  onBuilderLoad: () => null
+}
+
+function mapStateToProps({ user }) {
+  return {
+    user
+  }
+}
+
+export default connect(mapStateToProps)(Builder)

@@ -4,7 +4,7 @@
   display: flex;
   overflow: hidden;
   background-color: #f0f4f7;
-  max-height: calc(100vh - 56px);
+  max-height: calc(100vh - 113px);
 
   &.show-comments .pdf-toolbar {
     right: 316px !important;
@@ -154,7 +154,7 @@
     .cta {
       width: 60%;
       text-align: right;
-      
+
     }
   }
 

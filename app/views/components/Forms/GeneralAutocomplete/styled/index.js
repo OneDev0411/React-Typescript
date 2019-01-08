@@ -16,7 +16,7 @@ export const Input = styled.input`
   }
 `
 
-export const ArrowDownIcon = ArrowDropDown.extend`
+export const ArrowDownIcon = styled(ArrowDropDown)`
   width: 28px;
   height: 28px;
   fill: #8da2b5;

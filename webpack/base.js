@@ -7,7 +7,7 @@ function resolvePath(dirPath) {
 }
 
 export default {
-  devtool: 'inline-source-map',
+  devtool: 'eval-source-map',
   entry: {},
   output: {
     path: config.compile.output,
@@ -30,7 +30,8 @@ export default {
       partials: resolvePath('../app/components/Partials'),
       services: resolvePath('../app/services'),
       utils: resolvePath('../app/utils'),
-      views: resolvePath('../app/views')
+      views: resolvePath('../app/views'),
+      config: resolvePath('../config/public')
     }
   },
   plugins: [new webpack.DefinePlugin(config.globals)],

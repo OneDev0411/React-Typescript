@@ -1,72 +1,111 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import _ from 'underscore'
 
-import { confirmation } from '../../../../../store_actions/confirmation'
+import { confirmation } from 'actions/confirmation'
+import { getContactsTags } from 'actions/contacts/get-contacts-tags'
+import { getContacts, searchContacts, deleteContacts } from 'actions/contacts'
+import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-text-filter'
+
+import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
+import {
+  selectContacts,
+  selectContactsInfo,
+  selectContactsListFetching
+} from 'reducers/contacts/list'
+
+import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 
 import {
   Container as PageContainer,
   Menu as SideMenu,
   Content as PageContent
-} from '../../../../../views/components/SlideMenu'
+} from 'components/SlideMenu'
+import SavedSegments from 'components/Grid/SavedSegments/List'
+import { resetGridSelectedItems } from 'components/Grid/Table/Plugins/Selectable'
 
-import SavedSegments from '../../../../../views/components/Grid/SavedSegments/List'
-
-import ContactFilters from './Filters'
-import { Header } from './Header'
-import { SearchContacts } from './Search'
 import Table from './Table'
-
-import { resetGridSelectedItems } from '../../../../../views/components/Grid/Table/Plugins/Selectable'
-
-import {
-  selectContacts,
-  selectContactsInfo
-} from '../../../../../reducers/contacts/list'
-
-import {
-  getContacts,
-  searchContacts,
-  deleteContacts
-} from '../../../../../store_actions/contacts'
+import { SearchContacts } from './Search'
+import { Header } from './Header'
+import DuplicateContacts from '../components/DuplicateContacts'
+import ContactFilters from './Filters'
+import TagsList from './TagsList'
 
 class ContactsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       isSideMenuOpen: true,
-      isFetchingContacts: false,
       isFetchingMoreContacts: false,
       isRowsUpdating: false,
       filter: this.props.filter,
-      selectedRows: [],
-      searchInputValue: this.props.searchInputValue,
+      searchInputValue: this.props.list.textFilter,
       activeSegment: {}
     }
     this.order = this.props.listInfo.order
   }
 
   componentDidMount() {
-    if (this.props.listInfo.count === 0) {
-      this.fetchContacts()
+    if (
+      !['default', 'duplicate contacts'].includes(
+        this.props.filterSegments.activeSegmentId
+      )
+    ) {
+      this.handleChangeSavedSegment(
+        this.props.filterSegments.list[
+          this.props.filterSegments.activeSegmentId
+        ]
+      )
+    } else {
+      this.fetchList()
+    }
+
+    if (this.props.fetchTags) {
+      this.props.getContactsTags()
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (
       nextProps.filterSegments.activeSegmentId !==
         this.props.filterSegments.activeSegmentId &&
-      nextProps.filterSegments.activeSegmentId !== this.state.activeSegment.id
+      nextProps.filterSegments.activeSegmentId !==
+        this.state.activeSegment.id &&
+      nextProps.filterSegments.list[nextProps.filterSegments.activeSegmentId]
     ) {
       this.handleChangeSavedSegment(
         nextProps.filterSegments.list[nextProps.filterSegments.activeSegmentId]
       )
     }
+
+    if (
+      nextProps.viewAsUsers.length !== this.props.viewAsUsers.length ||
+      !_.isEqual(nextProps.viewAsUsers, this.props.viewAsUsers)
+    ) {
+      const viewAsUsers = viewAsEveryoneOnTeam(nextProps.user)
+        ? []
+        : nextProps.viewAsUsers
+
+      this.handleFilterChange(
+        this.state.filter,
+        this.state.searchInputValue,
+        0,
+        this.order,
+        viewAsUsers
+      )
+      this.props.getContactsTags(viewAsUsers)
+    }
   }
 
-  fetchContacts = async (start = 0) => {
-    const { filter, searchInputValue } = this.state
+  componentWillUnmount() {
+    this.props.setContactsListTextFilter(this.state.searchInputValue)
+  }
 
-    this.setState({ isFetchingContacts: true })
+  hasSearchState = () =>
+    this.state.filter || this.state.searchInputValue || this.order
+
+  fetchList = async (start = 0) => {
+    const { filter, searchInputValue } = this.state
 
     if (start === 0) {
       this.resetSelectedRows()
@@ -74,35 +113,45 @@ class ContactsList extends React.Component {
 
     try {
       if (this.hasSearchState()) {
-        await this.handleFilterChange(
-          filter,
-          searchInputValue,
-          start,
-          this.order
-        )
+        await this.handleFilterChange(filter, searchInputValue, start)
       } else {
         await this.props.getContacts(start)
       }
     } catch (e) {
-      // todo
+      console.log('fetch contacts error: ', e)
     }
-
-    this.setState({ isFetchingContacts: false })
   }
 
   handleChangeSavedSegment = segment => {
+    const users =
+      segment && segment.args && segment.args.users
+        ? segment.args.users
+        : [this.props.user.id]
+
     this.setState(
       {
         activeSegment: segment
       },
       () => {
-        this.handleFilterChange(segment.filters, this.state.searchInputValue)
+        this.handleFilterChange(
+          segment.filters,
+          this.state.searchInputValue,
+          0,
+          this.order,
+          users
+        )
       }
     )
   }
 
-  handleFilterChange = async (filter, searchInputValue, start = 0, order) => {
-    this.setState({ isFetchingContacts: true, filter })
+  handleFilterChange = async (
+    filter,
+    searchInputValue,
+    start = 0,
+    order = this.order,
+    viewAsUsers = this.props.viewAsUsers
+  ) => {
+    this.setState({ filter })
 
     if (start === 0) {
       this.resetSelectedRows()
@@ -114,13 +163,12 @@ class ContactsList extends React.Component {
         start,
         undefined,
         searchInputValue,
-        order
+        order,
+        viewAsUsers
       )
     } catch (e) {
-      // todo
+      console.log('fetch search error: ', e)
     }
-
-    this.setState({ isFetchingContacts: false })
   }
 
   handleSearch = value => {
@@ -131,13 +179,11 @@ class ContactsList extends React.Component {
 
   handleChangeOrder = ({ value: order }) => {
     this.order = order
-    this.handleFilterChange(
-      this.state.filter,
-      this.state.searchInputValue,
-      0,
-      order
-    )
+    this.handleFilterChange(this.state.filter, this.state.searchInputValue)
   }
+
+  handleChangeContactsAttributes = () =>
+    this.handleFilterChange(this.state.filter, this.state.searchInputValue)
 
   toggleSideMenu = () =>
     this.setState(state => ({
@@ -157,26 +203,17 @@ class ContactsList extends React.Component {
     this.setState({ isFetchingMoreContacts: true })
 
     if (this.hasSearchState()) {
-      await this.fetchContacts(startFrom)
+      await this.fetchList(startFrom)
     } else {
       await this.handleFilterChange(
         this.state.filter,
         this.state.searchInputValue,
-        startFrom,
-        this.order
+        startFrom
       )
     }
 
     this.setState({ isFetchingMoreContacts: false })
   }
-
-  onChangeSelectedRows = selectedRows =>
-    this.setState({
-      selectedRows
-    })
-
-  hasSearchState = () =>
-    this.state.filter || this.state.searchInputValue || this.order
 
   handleOnDelete = (e, { selectedRows }) => {
     const selectedRowsLength = selectedRows.length
@@ -197,12 +234,10 @@ class ContactsList extends React.Component {
   handleDeleteContact = async ids => {
     try {
       this.rowsUpdating(true)
-      this.setState({ isFetchingContacts: true })
 
       await this.props.deleteContacts(ids)
 
       this.rowsUpdating(false)
-      this.setState({ isFetchingContacts: false })
       this.resetSelectedRows()
     } catch (error) {
       console.log(error)
@@ -213,14 +248,11 @@ class ContactsList extends React.Component {
 
   resetSelectedRows = () => {
     resetGridSelectedItems('contacts')
-    this.setState({
-      selectedRows: []
-    })
   }
 
   render() {
     const { isSideMenuOpen, activeSegment } = this.state
-    const { user, list } = this.props
+    const { user, list, viewAsUsers, isFetchingContacts } = this.props
     const contacts = selectContacts(list)
 
     return (
@@ -230,35 +262,39 @@ class ContactsList extends React.Component {
             name="contacts"
             onChange={this.handleChangeSavedSegment}
           />
+          <DuplicateContacts />
+          <TagsList onFilterChange={this.handleFilterChange} />
         </SideMenu>
 
-        <PageContent>
+        <PageContent isSideMenuOpen={isSideMenuOpen}>
           <Header
             title={activeSegment.name || 'All Contacts'}
             isSideMenuOpen={this.state.isSideMenuOpen}
             user={user}
             onMenuTriggerChange={this.toggleSideMenu}
           />
-
-          <ContactFilters onFilterChange={this.handleFilterChange} />
-
+          <ContactFilters
+            onFilterChange={this.handleFilterChange}
+            users={viewAsUsers}
+          />
           <SearchContacts
             onSearch={this.handleSearch}
-            isSearching={this.state.isFetchingContacts}
+            isSearching={isFetchingContacts}
           />
           <Table
             handleChangeOrder={this.handleChangeOrder}
+            handleChangeContactsAttributes={this.handleChangeContactsAttributes}
             data={contacts}
             listInfo={this.props.listInfo}
-            isFetching={this.state.isFetchingContacts}
+            isFetching={isFetchingContacts}
             isFetchingMore={this.state.isFetchingMoreContacts}
             isRowsUpdating={this.state.isRowsUpdating}
             onRequestLoadMore={this.handleLoadMore}
             rowsUpdating={this.rowsUpdating}
-            resetSelectedRows={this.resetSelectedRows}
             onChangeSelectedRows={this.onChangeSelectedRows}
             onRequestDelete={this.handleOnDelete}
             filters={this.state.filter}
+            users={viewAsUsers}
           />
         </PageContent>
       </PageContainer>
@@ -268,17 +304,29 @@ class ContactsList extends React.Component {
 
 function mapStateToUser({ user, contacts }) {
   const listInfo = selectContactsInfo(contacts.list)
+  const tags = contacts.list
+  const fetchTags = !isFetchingTags(tags) && selectTags(tags).length === 0
 
   return {
+    fetchTags,
+    filter: listInfo.filter || [],
+    filterSegments: contacts.filterSegments,
+    isFetchingContacts: selectContactsListFetching(contacts.list),
+    list: contacts.list,
     listInfo,
     user,
-    filter: listInfo.filter || [],
-    list: contacts.list,
-    filterSegments: contacts.filterSegments
+    viewAsUsers: viewAs(user)
   }
 }
 
 export default connect(
   mapStateToUser,
-  { getContacts, searchContacts, deleteContacts, confirmation }
+  {
+    getContacts,
+    searchContacts,
+    deleteContacts,
+    confirmation,
+    setContactsListTextFilter,
+    getContactsTags
+  }
 )(ContactsList)

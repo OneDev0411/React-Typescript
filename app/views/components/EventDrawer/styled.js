@@ -3,19 +3,19 @@ import Flex from 'styled-flex-component'
 
 import LinkButton from '../../components/Button/LinkButton'
 import ArrowDropDown from '../../components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
-import { grey, primary } from '../../utils/colors'
+import { grey, primary, borderColor } from '../../utils/colors'
 
 export const FormContainer = styled.form`
   width: 100%;
-  padding: 1.5em 0;
+  padding: 1.5em 0 6rem;
 `
-export const FieldContainer = Flex.extend`
-  height: 40px;
+export const FieldContainer = styled(Flex)`
+  height: 2.5rem;
   border-radius: 3px;
   background-color: ${grey.A150};
 `
 
-export const DropButton = LinkButton.extend`
+export const DropButton = styled(LinkButton)`
   font-weight: 500;
   justify-content: space-between;
   background-color: ${grey.A150};
@@ -28,8 +28,19 @@ export const DropButton = LinkButton.extend`
   }
 `
 
-export const IconDrop = ArrowDropDown.extend`
+export const IconDrop = styled(ArrowDropDown)`
   position: relative;
   margin-left: 1em;
   transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};
+`
+
+export const Footer = styled(Flex)`
+  position: absolute;
+  bottom: 0;
+  left: 1.5rem;
+  right: 0;
+  width: calc(100% - 3rem);
+  height: 4.5rem;
+  background-color: #fff;
+  border-top: 1px solid ${borderColor};
 `

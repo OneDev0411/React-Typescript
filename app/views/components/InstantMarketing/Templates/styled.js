@@ -1,21 +1,29 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const Container = styled.div`
   min-height: 90vh;
   max-height: 90vh;
-  padding: 24px;
   overflow: auto;
   background: white;
+  width: 340px;
+  padding: 2rem 0;
+  background-color: #f1f1f1;
+  border: 1px solid #dadada;
 `
 
 export const TemplateItem = styled.div`
-  background: #f3f3f3;
-  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
   border: 1px solid white;
   border-radius: 5px;
+  margin: auto;
   margin-bottom: 20px;
-  box-shadow: 0px 5px 14px #c3c3c3;
   cursor: pointer;
+  width: 292px;
+  text-align: center;
 
   border: 4px solid ${props => (props.isSelected ? '#003bdf' : 'transparent')};
 
@@ -24,23 +32,19 @@ export const TemplateItem = styled.div`
   }
 `
 
-export const TemplateImageContainer = styled.div`
-  display: block;
-  height: 85%;
-  margin: auto;
-  padding-top: 20px;
-  text-align: center;
-`
-
-export const TemplateImage = styled.img`
-  height: 90%;
+const templateItemStyle = css`
+  max-width: 100%;
+  max-height: 400px;
+  box-shadow: 0px 5px 10px #c3c3c3;
+  margin: 1.5%;
   box-shadow: 0px 5px 10px #c3c3c3;
 `
 
-export const TemplateName = styled.div`
-  background: white;
-  font-size: 18px;
-  font-weight: bold;
-  padding: 20px 5px 5px 5px;
-  height: 15%;
+export const Image = styled.img`
+  ${templateItemStyle};
+  max-height: initial;
+`
+
+export const Video = styled.video`
+  ${templateItemStyle};
 `

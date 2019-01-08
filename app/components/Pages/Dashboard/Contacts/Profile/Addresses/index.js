@@ -19,6 +19,7 @@ class Addresses extends React.Component {
   }
 
   openEditDrawer = () => this.setState({ isOpenEditDrawer: true })
+
   closeEditDrawer = () => this.setState({ isOpenEditDrawer: false })
 
   getSectionContent = addresses => {
@@ -74,8 +75,7 @@ class Addresses extends React.Component {
     const { addresses } = this.props
 
     const hasAddresses =
-      addresses.length > 0 &&
-      addresses[0].fields.some(field => field[field.attribute_def.data_type])
+      addresses.length > 0 && addresses[0].fields.some(field => field.id)
 
     return (
       <Section
@@ -87,7 +87,6 @@ class Addresses extends React.Component {
         ) : (
           <div
             style={{
-              textAlign: 'center',
               marginTop: hasAddresses ? 0 : '0.5em'
             }}
           >
@@ -101,13 +100,15 @@ class Addresses extends React.Component {
           </div>
         )}
 
-        <EditDrawer
-          addresses={this.props.addresses}
-          addressAttributeDefs={this.props.addressAttributeDefs}
-          contact={this.props.contact}
-          isOpen={this.state.isOpenEditDrawer}
-          onClose={this.closeEditDrawer}
-        />
+        {this.state.isOpenEditDrawer && (
+          <EditDrawer
+            isOpen
+            addresses={this.props.addresses}
+            addressAttributeDefs={this.props.addressAttributeDefs}
+            contact={this.props.contact}
+            onClose={this.closeEditDrawer}
+          />
+        )}
       </Section>
     )
   }

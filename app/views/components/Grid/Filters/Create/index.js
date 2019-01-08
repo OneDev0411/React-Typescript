@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import Downshift from 'downshift'
 import Flex from 'styled-flex-component'
@@ -8,13 +9,13 @@ import Button from '../../../Button/ActionButton'
 import { blue } from '../../../../utils/colors'
 import Icon from '../../../SvgIcons/Add/AddIcon'
 
-const IconAdd = Icon.extend`
+const IconAdd = styled(Icon)`
   fill: ${blue.A100};
   width: 1em;
   height: 1em;
 `
 
-const AddItem = Button.extend`
+const AddItem = styled(Button)`
   padding: 0;
   margin-right: 1em;
 
@@ -70,7 +71,7 @@ export class AddFilter extends React.Component {
                 <MissingValueToolTip enabled={hasMissingValue}>
                   <Flex alignCenter>
                     <IconAdd />
-                    <span>Add Filter</span>
+                    <span style={{ fontWight: 500 }}>Add Filter</span>
                   </Flex>
                 </MissingValueToolTip>
               </AddItem>

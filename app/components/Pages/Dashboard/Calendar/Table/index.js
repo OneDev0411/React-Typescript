@@ -1,22 +1,22 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
-
 import ScrollDetector from 'react-scroll-detector'
 import moment from 'moment'
 import _ from 'underscore'
 
-import { goTo } from '../../../../../utils/go-to'
-import Grid from '../../../../../views/components/Grid/Table'
+import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
+
+import { primary } from 'views/utils/colors'
+import Grid from 'views/components/Grid/Table'
+import { grey } from 'views/utils/colors'
+
+import { goTo } from 'utils/go-to'
+
 import { GridContainer, TableHeader, Label, Indicator, Title } from './styled'
 import EmptyState from './EmptyState'
 import Fetching from './Fetching'
-
 import EventIcon from './EventIcon'
-import { primary } from 'views/utils/colors'
-
-import SendContactCard from 'components/InstantMarketing/Flows/SendContactCard'
-import { grey } from '../../../../../views/utils/colors'
 
 export class Table extends React.Component {
   constructor(props) {
@@ -133,11 +133,7 @@ export class Table extends React.Component {
 
   getGridHeaderProps = () => ({
     style: {
-      position: 'sticky',
-      top: '0',
-      zIndex: 5,
-      backgroundColor: '#fff',
-      padding: '5px 0'
+      display: 'none'
     }
   })
 
@@ -150,11 +146,8 @@ export class Table extends React.Component {
   getGridTrProps = (rowIndex, { original: row }) => {
     const props = {}
 
-    if (row.object_type === 'crm_task') {
-      props.style =
-        row.status === 'DONE'
-          ? { textDecoration: 'line-through', opacity: 0.5 }
-          : {}
+    if (row.object_type === 'crm_task' && row.status === 'DONE') {
+      props.style = { opacity: 0.5 }
     }
 
     return {
@@ -251,7 +244,6 @@ export class Table extends React.Component {
 function mapStateToProps({ calendar }) {
   return {
     selectedDate: new Date(calendar.selectedDate),
-    isFilterHidden: calendar.brandMembers.length <= 1,
     calendar: calendar.list,
     calendarDays: calendar.byDay
   }

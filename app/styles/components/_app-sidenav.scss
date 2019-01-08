@@ -54,6 +54,9 @@ $item-height: 56px;
 
 .c-app-sidenav__item__title,
 .c-app-sidenav__item__title--button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
   position: relative;
   color: #000;
   font-size: 16px;
@@ -63,8 +66,8 @@ $item-height: 56px;
   &:hover,
   &:active,
   .c-app-sidenav__item.is-active & {
-      svg {
-        fill: $brand-primary;
+    svg {
+      fill: $brand-primary;
     }
   }
 
@@ -110,7 +113,7 @@ $item-height: 56px;
   align-items: center;
   height: $header-height;
   border-bottom: 1px solid #d4d4d4;
-  
+
   > .c-app-sidenav__item__title--button {
     &:hover,
     &:focus,

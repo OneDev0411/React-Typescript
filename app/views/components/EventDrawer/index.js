@@ -1,14 +1,15 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-// import { Field } from 'react-final-form'
+
+import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 
 import {
   getTask,
   updateTask,
   createTask,
   deleteTask,
-  createTaskAssociation,
+  // createTaskAssociation,
   deleteTaskAssociation
 } from '../../../models/tasks'
 
@@ -18,26 +19,29 @@ import IconButton from '../Button/IconButton'
 import ActionButton from '../Button/ActionButton'
 import { ItemChangelog } from '../TeamContact/ItemChangelog'
 import IconDelete from '../SvgIcons/DeleteOutline/IconDeleteOutline'
+import Alert from '../../../components/Pages/Dashboard/Partials/Alert'
 import {
   DateTimeField,
   CheckboxField,
-  AssigneesField
+  AssigneesField,
+  AssociationsList,
+  ReminderField,
+  WhenFieldChanges
 } from '../final-form-fields'
-
 import Tooltip from '../tooltip'
+import { AddAssociationButton } from '../AddAssociationButton'
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
 
+import { validate } from './helpers/validate'
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
 import { Title } from './components/Title'
 import { Description } from './components/Description'
-import { Reminder } from './components/Reminder'
 import { EventType } from './components/EventType'
-import { Associations } from './components/Associations'
-import { FormContainer, FieldContainer } from './styled'
+import { FormContainer, FieldContainer, Footer } from './styled'
 
-const QUERY = {
+export const QUERY = {
   associations: ['reminders', 'assignees', 'created_by', 'updated_by'].map(
     a => `crm_task.${a}`
   )
@@ -76,7 +80,9 @@ export class EventDrawer extends Component {
     super(props)
 
     this.state = {
-      isDisabled: false
+      error: null,
+      isDisabled: false,
+      event: props.event
     }
 
     this.isNew =
@@ -95,12 +101,12 @@ export class EventDrawer extends Component {
 
         const event = await getTask(this.props.eventId, QUERY)
 
-        this.setState({ isDisabled: false })
+        this.setState({ isDisabled: false, event })
 
         return event
       } catch (error) {
         console.log(error)
-        this.setState({ isDisabled: false })
+        this.setState({ isDisabled: false, error })
       }
     }
 
@@ -121,7 +127,7 @@ export class EventDrawer extends Component {
         newEvent = await createTask(event, QUERY)
       }
 
-      this.setState({ isDisabled: false })
+      this.setState({ isDisabled: false, event: newEvent })
       await this.props.submitCallback(newEvent, action)
     } catch (error) {
       console.log(error)
@@ -133,48 +139,49 @@ export class EventDrawer extends Component {
   delete = async () => {
     try {
       this.setState({ isDisabled: true })
-      await deleteTask(this.props.event.id)
+      await deleteTask(this.state.event.id)
       this.setState({ isDisabled: false }, () =>
-        this.props.deleteCallback(this.props.event)
+        this.props.deleteCallback(this.state.event)
       )
     } catch (error) {
       console.log(error)
-      this.setState({ isDisabled: false })
-      throw error
+      this.setState({ isDisabled: false, error })
     }
   }
 
-  handleCreateAssociation = async association => {
-    const crm_task =
-      this.props.eventId || (this.props.event && this.props.event.id)
+  // handleCreateAssociation = async association => {
+  //   const crm_task =
+  //     this.props.eventId || (this.props.event && this.props.event.id)
 
-    if (crm_task) {
+  //   if (crm_task) {
+  //     try {
+  //       const newAssociation = {
+  //         ...association,
+  //         crm_task
+  //       }
+
+  //       return await createTaskAssociation(crm_task, newAssociation)
+  //     } catch (error) {
+  //       console.log(error)
+  //       throw error
+  //     }
+  //   }
+
+  //   return Promise.resolve()
+  // }
+
+  handleDeleteAssociation = async association => {
+    if (association.id) {
       try {
-        const newAssociation = {
-          ...association,
-          crm_task
-        }
-        const response = await createTaskAssociation(crm_task, newAssociation)
+        const response = await deleteTaskAssociation(
+          association.crm_task,
+          association.id
+        )
 
         return response
       } catch (error) {
         console.log(error)
-        throw error
-      }
-    }
-
-    return Promise.resolve()
-  }
-
-  handleDeleteAssociation = async (associationId, eventId) => {
-    if (eventId && associationId) {
-      try {
-        const response = await deleteTaskAssociation(eventId, associationId)
-
-        return response
-      } catch (error) {
-        console.log(error)
-        throw error
+        this.setState({ error })
       }
     }
 
@@ -182,109 +189,218 @@ export class EventDrawer extends Component {
   }
 
   handleSubmit = () => {
-    document
-      .getElementById('event-drawer-form')
-      .dispatchEvent(new Event('submit', { cancelable: true }))
+    let event
+
+    if (typeof Event === 'function') {
+      event = new Event('submit', { cancelable: true })
+    } else {
+      event = document.createEvent('Event')
+
+      event.initEvent('submit', true, true)
+    }
+
+    document.getElementById('event-drawer-form').dispatchEvent(event)
   }
 
   render() {
-    const { isDisabled } = this.state
+    let crm_task
+    const { isDisabled, event, error } = this.state
     const { defaultAssociation, user } = this.props
 
+    if (event) {
+      crm_task = event.id
+    }
+
     return (
-      <Drawer isOpen={this.props.isOpen} onClose={this.props.onClose}>
+      <Drawer
+        isOpen={this.props.isOpen}
+        onClose={this.props.onClose}
+        showFooter={false}
+      >
         <Drawer.Header title={`${this.isNew ? 'Add' : 'Edit'} Event`} />
         <Drawer.Body>
-          <LoadSaveReinitializeForm
-            initialValues={this.props.initialValues}
-            load={this.load}
-            postLoadFormat={event =>
-              postLoadFormat(event, user, defaultAssociation)
-            }
-            preSaveFormat={(values, originalValues) =>
-              preSaveFormat(values, originalValues, user)
-            }
-            save={this.save}
-            render={formProps => {
-              const { values } = formProps
+          {error && error.status === 404 ? (
+            <Alert message={error.response.body.message} type="error" />
+          ) : (
+            <LoadSaveReinitializeForm
+              initialValues={this.props.initialValues}
+              load={this.load}
+              postLoadFormat={event =>
+                postLoadFormat(event, user, defaultAssociation)
+              }
+              preSaveFormat={(values, originalValues) =>
+                preSaveFormat(values, originalValues, user)
+              }
+              save={this.save}
+              validate={validate}
+              render={formProps => {
+                const { values } = formProps
 
-              // console.log(values)
+                const isDone = values.status === 'DONE'
+                const isPastDate =
+                  new Date(values.dueDate).getTime() < new Date().getTime() - 1
 
-              return (
-                <FormContainer
-                  onSubmit={formProps.handleSubmit}
-                  id="event-drawer-form"
-                >
-                  <Flex alignCenter style={{ marginBottom: '1.25em' }}>
-                    {this.isNew ? (
-                      <Title fullWidth />
-                    ) : (
-                      <Fragment>
-                        <CheckboxField
-                          name="status"
-                          id="event-drawer__status-field"
+                return (
+                  <React.Fragment>
+                    <FormContainer
+                      onSubmit={formProps.handleSubmit}
+                      id="event-drawer-form"
+                    >
+                      {!this.isNew && (
+                        <WhenFieldChanges
+                          set="status"
+                          watch="dueDate"
+                          setter={onChange => {
+                            if (isPastDate) {
+                              if (!isDone) {
+                                onChange('DONE')
+                              }
+                            } else if (isDone) {
+                              onChange('PENDING')
+                            }
+                          }}
                         />
-                        <Title />
-                      </Fragment>
-                    )}
-                  </Flex>
-                  <Description />
-                  <EventType />
-                  <FieldContainer
-                    alignCenter
-                    justifyBetween
-                    style={{ marginBottom: '2em' }}
-                  >
-                    <DateTimeField
-                      name="dueDate"
-                      selectedDate={values.dueDate}
-                    />
-                    <Reminder dueDate={values.dueDate} />
-                  </FieldContainer>
+                      )}
+                      <WhenFieldChanges
+                        set="reminder"
+                        watch="dueDate"
+                        setter={onChange => {
+                          const items = REMINDER_DROPDOWN_OPTIONS.filter(
+                            ({ value }) =>
+                              value == null ||
+                              value <=
+                                new Date(values.dueDate).getTime() -
+                                  new Date().getTime()
+                          )
 
-                  <AssigneesField name="assignees" owner={user} />
+                          // 15 Minutes Before
+                          if (items.some(item => item.value === '900000')) {
+                            onChange(REMINDER_DROPDOWN_OPTIONS[3])
+                          } else {
+                            onChange(items[items.length - 1])
+                          }
+                        }}
+                      />
+                      <Flex style={{ marginBottom: '1rem' }}>
+                        {this.isNew ? (
+                          <Title fullWidth />
+                        ) : (
+                          <Fragment>
+                            <Flex alignCenter style={{ height: '2.25rem' }}>
+                              <CheckboxField
+                                name="status"
+                                id="event-drawer__status-field"
+                              />
+                            </Flex>
+                            <Title />
+                          </Fragment>
+                        )}
+                      </Flex>
+                      <Description
+                        style={{ padding: this.isNew ? 0 : '0 0 0 2.5rem' }}
+                        placeholder="Add a description about this event"
+                      />
+                      <EventType />
+                      <FieldContainer
+                        alignCenter
+                        justifyBetween
+                        style={{ marginBottom: '2em' }}
+                      >
+                        <DateTimeField
+                          name="dueDate"
+                          selectedDate={values.dueDate}
+                        />
 
-                  <Divider margin="2em 0" />
+                        <ReminderField dueDate={values.dueDate} />
+                      </FieldContainer>
 
-                  <Associations
-                    associations={values.associations}
-                    defaultAssociation={defaultAssociation}
-                    handleCreate={this.handleCreateAssociation}
-                    handleDelete={this.handleDeleteAssociation}
-                  />
+                      <AssigneesField name="assignees" owner={user} />
 
-                  <ItemChangelog item={values} style={{ marginTop: '2em' }} />
-                </FormContainer>
-              )
-            }}
-          />
-        </Drawer.Body>
-        <Drawer.Footer
-          style={{
-            flexDirection: this.isNew ? 'row-reverse' : 'initial'
-          }}
-        >
-          {!this.isNew && (
-            <Tooltip placement="top" caption="Delete">
-              <IconButton
-                isFit
-                inverse
-                type="button"
-                disabled={isDisabled}
-                onClick={this.delete}
-              >
-                <IconDelete />
-              </IconButton>
-            </Tooltip>
+                      <Divider margin="2em 0" />
+
+                      <AssociationsList
+                        name="associations"
+                        associations={values.associations}
+                        defaultAssociation={defaultAssociation}
+                        handleDelete={this.handleDeleteAssociation}
+                      />
+
+                      <ItemChangelog
+                        item={values}
+                        style={{ marginTop: '2em' }}
+                      />
+                    </FormContainer>
+                    <Footer justifyBetween alignCenter>
+                      <Flex alignCenter>
+                        {!this.isNew && (
+                          <React.Fragment>
+                            <Tooltip placement="top" caption="Delete">
+                              <IconButton
+                                isFit
+                                inverse
+                                type="button"
+                                disabled={isDisabled}
+                                onClick={this.delete}
+                                style={{
+                                  width: '1.375rem',
+                                  height: '1.375rem'
+                                }}
+                              >
+                                <IconDelete
+                                  style={{
+                                    width: '100%',
+                                    height: '100%'
+                                  }}
+                                />
+                              </IconButton>
+                            </Tooltip>
+                            <Divider
+                              margin="0 1rem"
+                              width="1px"
+                              height="2rem"
+                            />
+                          </React.Fragment>
+                        )}
+                        <AddAssociationButton
+                          associations={values.associations}
+                          crm_task={crm_task}
+                          disabled={isDisabled}
+                          type="contact"
+                          name="associations"
+                          caption="Attach Client"
+                        />
+                        <AddAssociationButton
+                          associations={values.associations}
+                          crm_task={crm_task}
+                          disabled={isDisabled}
+                          type="listing"
+                          name="associations"
+                          caption="Attach Property"
+                        />
+                        <AddAssociationButton
+                          associations={values.associations}
+                          crm_task={crm_task}
+                          disabled={isDisabled}
+                          type="deal"
+                          name="associations"
+                          caption="Attach Deal"
+                        />
+                      </Flex>
+                      <ActionButton
+                        type="button"
+                        disabled={isDisabled}
+                        onClick={this.handleSubmit}
+                        style={{ marginLeft: '0.5em' }}
+                      >
+                        {isDisabled ? 'Saving...' : 'Save'}
+                      </ActionButton>
+                    </Footer>
+                  </React.Fragment>
+                )
+              }}
+            />
           )}
-          <ActionButton
-            type="button"
-            disabled={isDisabled}
-            onClick={this.handleSubmit}
-          >
-            {isDisabled ? 'Saving...' : 'Save'}
-          </ActionButton>
-        </Drawer.Footer>
+        </Drawer.Body>
       </Drawer>
     )
   }

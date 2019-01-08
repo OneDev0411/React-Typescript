@@ -1,7 +1,12 @@
 import React from 'react'
+import moment from 'moment'
+
 import Lightbox from 'react-images'
 
-import PdfModal from '../../../../../Partials/Pdf/Modal'
+import IconAttachment from 'components/SvgIcons/Attachment/IconAttacment'
+import { PdfViewerModal } from 'components/PdfViewer/Modal'
+
+import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
 
 export default ({ comment, attachments, openFilesInNewTab }) => (
   <div className="attachment">
@@ -35,8 +40,10 @@ class ImageAttachments extends React.Component {
       .filter(file => file.mime.includes('image/'))
       .map(file => ({
         id: file.id,
+        src: file.url,
+        name: truncateTextFromMiddle(file.name),
         preview_url: file.preview_url,
-        src: file.url
+        date: moment.unix(file.updated_at).format('MMM DD, YYYY')
       }))
 
     return (
@@ -57,17 +64,22 @@ class ImageAttachments extends React.Component {
         />
 
         {images.map((file, key) => (
-          <div key={`FILE_${file.id}`} className="item">
-            <img
-              onClick={() => {
-                this.setState({
-                  currentImage: key,
-                  showLightbox: true
-                })
-              }}
-              src={file.preview_url}
-              alt=""
-            />
+          <div
+            key={`FILE_${file.id}`}
+            className="item"
+            onClick={() => {
+              this.setState({
+                currentImage: key,
+                showLightbox: true
+              })
+            }}
+          >
+            <img src={file.preview_url} alt="" />
+
+            <div>
+              <div className="file-title">{file.name}</div>
+              <div className="file-date">{file.date}</div>
+            </div>
           </div>
         ))}
       </div>
@@ -92,19 +104,27 @@ class PdfAttachments extends React.Component {
       .filter(file => file.mime === 'application/pdf')
       .map(file => ({
         id: file.id,
-        preview_url: file.preview_url,
-        src: file.url
+        src: file.url,
+        name: truncateTextFromMiddle(file.name),
+        date: moment.unix(file.updated_at).format('MMM DD, YYYY')
       }))
 
     if (openFilesInNewTab) {
       return (
         <div className="inline">
           {pdfs.map((file, key) => (
-            <div key={`PDF_FILE_${file.id}`} className="item">
-              <a href={file.src} target="_blank">
-                <img src={file.preview_url} />
-              </a>
-            </div>
+            <a href={file.src} key={`PDF_FILE_${file.id}`} target="_blank">
+              <div className="item">
+                <div className="file-attach-icon">
+                  <IconAttachment />
+                </div>
+
+                <div>
+                  <div className="file-title">{file.name}</div>
+                  <div className="file-date">{file.date}</div>
+                </div>
+              </div>
+            </a>
           ))}
         </div>
       )
@@ -112,14 +132,11 @@ class PdfAttachments extends React.Component {
 
     return (
       <div className="inline">
-        <PdfModal
-          file={{
-            type: 'pdf',
-            name: selectedFile.name,
-            src: selectedFile.src
-          }}
-          isActive={showViewer}
-          onCloseHandler={() => this.setState({ showViewer: false })}
+        <PdfViewerModal
+          title={truncateTextFromMiddle(selectedFile.name)}
+          url={selectedFile.src}
+          isOpen={showViewer}
+          onClose={() => this.setState({ showViewer: false })}
         />
 
         {pdfs.map((file, key) => (
@@ -133,7 +150,14 @@ class PdfAttachments extends React.Component {
               })
             }}
           >
-            <img src={file.preview_url} />
+            <div className="file-attach-icon">
+              <IconAttachment />
+            </div>
+
+            <div>
+              <div className="file-title">{file.name}</div>
+              <div className="file-date">{file.date}</div>
+            </div>
           </div>
         ))}
       </div>
@@ -151,18 +175,26 @@ const UnknownAttachments = ({ attachments }) => {
     )
     .map(file => ({
       id: file.id,
-      preview_url: file.preview_url,
-      url: file.url
+      url: file.url,
+      name: truncateTextFromMiddle(file.name),
+      date: moment.unix(file.updated_at).format('MMM DD, YYYY')
     }))
 
   return (
     <div className="inline">
       {files.map((file, key) => (
-        <div key={`UNKNOWN_FILE_${file.id}`} className="item">
-          <a href={file.url} target="_blank">
-            <img src={file.preview_url} alt="" />
-          </a>
-        </div>
+        <a href={file.url} key={`UNKNOWN_FILE_${file.id}`} target="_blank">
+          <div className="item">
+            <div className="file-attach-icon">
+              <IconAttachment />
+            </div>
+
+            <div>
+              <div className="file-title">{file.name}</div>
+              <div className="file-date">{file.date}</div>
+            </div>
+          </div>
+        </a>
       ))}
     </div>
   )

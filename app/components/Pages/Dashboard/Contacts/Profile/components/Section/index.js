@@ -7,16 +7,17 @@ import { Menu } from './Menu'
 import { Header, Title } from './styled'
 
 const Container = styled.div`
-  padding: 1.5em;
+  padding: 1.5rem;
 
   &:not(:last-of-type) {
-    margin-bottom: 1.5em;
+    padding-bottom: 0;
 
     :after {
+      margin-top: 1.5em;
       display: block;
       content: '';
       height: 1px;
-      width: 52px;
+      width: 3.25rem;
       background-color: ${borderColor};
     }
   }

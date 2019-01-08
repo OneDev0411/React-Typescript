@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import ActionButton from '../../../../Button/ActionButton'
 
 const ActionItem = styled.div`
@@ -42,13 +43,16 @@ export class ActionablePlugin {
       return false
     }
 
+    if (this.selectablePlugin) {
+      params.resetSelectedRows = this.selectablePlugin.resetSelectedItems
+    }
+
     switch (type) {
       case 'button':
         return (
           <ActionItem key={key}>
             <ActionButton
               appearance="outline"
-              size="small"
               {...otherProps}
               onClick={e => onClick && onClick(e, params)}
             >

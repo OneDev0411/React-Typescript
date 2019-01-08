@@ -19,7 +19,7 @@ export const TextInput = styled.input`
   width: 100%;
   height: 45px;
   border: none;
-  font-size: 16px;
+  font-size: 1rem;
   padding: 0 5px;
   font-family: Barlow, sans-serif;
   background-color: transparent;
@@ -53,7 +53,7 @@ export const TextInput = styled.input`
   }
 `
 
-export const IconSearch = IconSearchBase.extend`
+export const IconSearch = styled(IconSearchBase)`
   path {
     fill: ${grey.A900} !important;
   }
@@ -63,9 +63,9 @@ export const IconSearch = IconSearchBase.extend`
 `
 export const Icon = styled.div`
   color: ${grey.A900};
-  padding-top: ${props => (props.isSearching ? '0' : '9px')};
+  padding-top: ${props => (props.isSearching ? '0' : '4px')};
 `
 
-export const IconButton = IconButtonFlex.extend`
+export const IconButton = styled(IconButtonFlex)`
   display: block;
 `

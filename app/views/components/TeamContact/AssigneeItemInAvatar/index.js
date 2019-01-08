@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
@@ -8,17 +9,18 @@ import Tooltip from '../../tooltip'
 import IconButton from '../../Button/IconButton'
 import CloseIcon from '../../SvgIcons/Close/CloseIcon'
 
-const Icon = CloseIcon.extend`
+const Icon = styled(CloseIcon)`
   position: absolute;
   top: 50%;
   left: 50%;
+  z-index: 2;
   transform: translate(-50%, -50%);
 
   opacity: 0;
   visibility: hidden;
 `
 
-const Button = IconButton.extend`
+const Button = styled(IconButton)`
   width: 2em;
   height: 2em;
   position: relative;
@@ -34,6 +36,7 @@ const Button = IconButton.extend`
       height: 100%;
       border-radius: 100%;
       background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1;
     }
 
     > ${Icon} {

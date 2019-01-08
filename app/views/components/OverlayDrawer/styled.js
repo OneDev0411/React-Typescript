@@ -1,9 +1,5 @@
 import styled from 'styled-components'
 
-function getWidth(base = 60, scale = 0) {
-  return base - scale * 15
-}
-
 export const Content = styled.div`
   position: fixed;
   top: 0;
@@ -13,7 +9,7 @@ export const Content = styled.div`
   background-color: #fff;
   transition: 0.2s ease-in all;
   z-index: 1001;
-  padding: 58px 1.5rem 0;
+  border-radius: 3px 0 0 3px;
 
   ${props =>
     props.isOpen &&
@@ -23,18 +19,8 @@ export const Content = styled.div`
   `};
 
   @media (min-width: 48em) {
-    width: ${props => getWidth(props.width)}%;
-    right: -${props => (props.isOpen ? 0 : getWidth(props.width))}%;
-  }
-
-  @media (min-width: 75em) {
-    width: ${props => getWidth(props.width, 1)}%;
-    right: -${props => (props.isOpen ? 0 : getWidth(props.width, 1))}%;
-  }
-
-  @media (min-width: 100em) {
-    width: ${props => getWidth(props.width, 2)}%;
-    right: -${props => (props.isOpen ? 0 : getWidth(props.width, 2))}%;
+    width: 37rem;
+    right: ${props => (props.isOpen ? 0 : '-37rem')};
   }
 `
 

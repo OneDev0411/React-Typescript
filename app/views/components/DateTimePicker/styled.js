@@ -1,9 +1,10 @@
+import styled from "styled-components"
 // import styled from 'styled-components'
 
 import Card from '../Card'
 import { grey, primary } from '../../utils/colors'
 
-export const PickerContainer = Card.extend`
+export const PickerContainer = styled(Card)`
   position: absolute;
   left: 0;
   top: 3px;
@@ -68,6 +69,10 @@ export const PickerContainer = Card.extend`
 
   .DayPicker-Day {
     padding: 0.25em 0.5em;
+  }
+
+  .DayPicker .DayPicker-Day--outside:hover {
+    background-color: transparent !important;
   }
 
   .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {

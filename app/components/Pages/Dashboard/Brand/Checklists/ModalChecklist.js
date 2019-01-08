@@ -1,6 +1,7 @@
 import React from 'react'
-import cn from 'classnames'
+import Flex from 'styled-flex-component'
 import { Modal, Button, DropdownButton, MenuItem } from 'react-bootstrap'
+import { CheckBoxButtonWithoutState } from '../../../../../views/components/Button/CheckboxButton/CheckboxWithoutState'
 
 class Wrapper extends React.Component {
   constructor(props) {
@@ -117,7 +118,9 @@ const ModalNewChecklist = ({
 
   return (
     <div style={{ display: inline ? 'inline' : 'block' }}>
-      <TriggerButton clickHandler={() => onChangeComposeModal(!showComposeModal)} />
+      <TriggerButton
+        clickHandler={() => onChangeComposeModal(!showComposeModal)}
+      />
 
       <Modal
         show={showComposeModal}
@@ -181,40 +184,43 @@ const ModalNewChecklist = ({
               onChange={event => changeTitleOrder(event.target.value)}
             />
           </div>
-          <div>
-            <div className="title">Checklist can be terminated?</div>
-            <Button
-              className={cn('checkBoxIcon', { active: isTerminatable })}
+          <div className="title">Checklist can be terminated?</div>
+          <Flex alignCenter>
+            <CheckBoxButtonWithoutState
+              square
+              isSelected={isTerminatable}
               onClick={() => changeIsTerminatable(!isTerminatable)}
-            >
-              <i className="fa fa-check" aria-hidden="true" />
-            </Button>
+              style={{ marginRight: '0.5rem' }}
+            />
             <span className="checkBoxText">Yes</span>
-            <Button
-              className={cn('checkBoxIcon', { active: !isTerminatable })}
+            <CheckBoxButtonWithoutState
+              square
+              isSelected={!isTerminatable}
               onClick={() => changeIsTerminatable(!isTerminatable)}
-            >
-              <i className="fa fa-check" aria-hidden="true" />
-            </Button>
+              style={{ marginRight: '0.5rem' }}
+            />
+
             <span className="checkBoxText">No</span>
-          </div>
-          <div>
-            <div className="title">Checklist can be deactivated?</div>
-            <Button
-              className={cn('checkBoxIcon', { active: isDeactivatable })}
+          </Flex>
+          <div className="title">Checklist can be deactivated?</div>
+          <Flex alignCenter>
+            <CheckBoxButtonWithoutState
+              square
+              isSelected={isDeactivatable}
               onClick={() => changeIsDeactivatable(!isDeactivatable)}
-            >
-              <i className="fa fa-check" aria-hidden="true" />
-            </Button>
+              style={{ marginRight: '0.5rem' }}
+            />
+
             <span className="checkBoxText">Yes</span>
-            <Button
-              className={cn('checkBoxIcon', { active: !isDeactivatable })}
+            <CheckBoxButtonWithoutState
+              square
+              isSelected={!isDeactivatable}
               onClick={() => changeIsDeactivatable(!isDeactivatable)}
-            >
-              <i className="fa fa-check" aria-hidden="true" />
-            </Button>
+              style={{ marginRight: '0.5rem' }}
+            />
+
             <span className="checkBoxText">No</span>
-          </div>
+          </Flex>
         </Modal.Body>
 
         {!showOnly && (

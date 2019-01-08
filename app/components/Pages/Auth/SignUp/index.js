@@ -37,8 +37,6 @@ const getErrorMessage = (errorCode, email) => {
 
 const Signup = ({
   brand,
-  invalid,
-  pristine,
   submitError,
   isSubmitting,
   handleSubmit,
@@ -46,8 +44,8 @@ const Signup = ({
   onSubmitHandler,
   submitSuccessfully
 }) => {
-  const isDisabled = isSubmitting || invalid || pristine
-  const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
+  const isDisabled = isSubmitting
+  const { siteLogo, siteTitle } = getBrandInfo(brand)
 
   return (
     <div className="signin-page-wrapper">

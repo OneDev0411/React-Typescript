@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import { Field } from 'react-final-form'
 import Flex from 'styled-flex-component'
@@ -8,7 +9,7 @@ import { eventTypesIcons } from '../../../../utils/event-types-icons'
 import ArrowDropDown from '../../../../components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import { grey, primary } from '../../../../utils/colors'
 
-export const Button = LinkButton.extend`
+export const Button = styled(LinkButton)`
   min-width: 160px;
   font-weight: 500;
   justify-content: space-between;
@@ -22,7 +23,7 @@ export const Button = LinkButton.extend`
   }
 `
 
-export const IconArrow = ArrowDropDown.extend`
+export const IconArrow = styled(ArrowDropDown)`
   position: relative;
   margin-left: 1em;
   transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};
@@ -71,7 +72,7 @@ export function EventType() {
           fullHeight
           style={{ marginBottom: '1em' }}
           buttonRenderer={({ icon: Icon, iconColor, ...props }) => (
-            <Button {...props}>
+            <Button {...props} isActive={props.isOpen} inverse>
               <Flex alignCenter>
                 {Icon && (
                   <Icon

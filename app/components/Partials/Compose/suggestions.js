@@ -76,7 +76,7 @@ export default ({
                 name={recp.display_name}
                 image={recp.image}
                 size={36}
-                color="#D4D4D4"
+                color="#000000"
               />
             </Col>
 

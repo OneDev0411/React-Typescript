@@ -1,94 +1,165 @@
-import grapesjs from 'grapesjs'
-import Backbone from 'backbone'
+import React, { Fragment } from 'react'
+import ReactDOM from 'react-dom'
 
-export default grapesjs.plugins.add('asset-blocks', editor => {
-  let target
-  const AssetView = Backbone.View.extend({
-    events: {
-      click: 'onClick'
-    },
-    onClick() {
-      const url = this.model.get('src')
+import { Uploader } from 'components/Uploader'
 
-      const setSrc = () => target.set('src', url)
-      const setBg = () => {
-        const old = target.get('style')
-        const style = { ...old }
+import { AssetImage } from './AssetImage'
 
-        style['background-image'] = `url(${url})`
-        target.set('style', style)
+import Fetch from '../../../../../services/fetch'
+
+import loadGrapes from '../../helpers/load-grapes'
+
+const CUSTOM_ASSET_UPLOAD_PATH = '/templates/assets'
+
+const run = async () => {
+  const { Grapesjs, Backbone } = await loadGrapes()
+
+  Grapesjs.plugins.add('asset-blocks', editor => {
+    let target
+
+    const getStorageData = async key =>
+      new Promise(res => {
+        editor.StorageManager.load(key, data => res(data))
+      })
+
+    const AssetView = Backbone.View.extend({
+      initialize({ model }) {
+        this.model = model
+      },
+      render() {
+        ReactDOM.render(
+          <AssetImage model={this.model} target={target} />,
+          this.el
+        )
+
+        return this
+      }
+    })
+
+    const AssetUploadButtonView = Backbone.View.extend({
+      render() {
+        ReactDOM.render(
+          <Uploader
+            accept="image/*"
+            uploadHandler={async files => {
+              const { templateId } = await getStorageData('templateId')
+
+              try {
+                const uploadResponses = await Promise.all(
+                  files.map(file =>
+                    new Fetch()
+                      .upload(CUSTOM_ASSET_UPLOAD_PATH)
+                      .attach('attachment', file, file.name)
+                      .field('template', templateId)
+                  )
+                )
+
+                const uploadedAssets = uploadResponses.map(response => ({
+                  previewUrl: response.body.data.file.preview_url,
+                  url: response.body.data.file.url
+                }))
+
+                const uploadedAssetsCollection = uploadedAssets.map(asset => ({
+                  image: asset.url,
+                  userFile: true
+                }))
+
+                view.collection.reset([
+                  ...uploadedAssetsCollection,
+                  ...view.collection.models
+                ])
+              } catch (e) {
+                console.error(e)
+              }
+            }}
+          >
+            <Fragment>Click or drop images here</Fragment>
+          </Uploader>,
+          this.el
+        )
+
+        return this
+      }
+    })
+
+    const AssetsView = Backbone.View.extend({
+      initialize({ coll }) {
+        this.collection = coll
+        this.listenTo(this.collection, 'reset', this.reset)
+      },
+      reset() {
+        this.$el.empty()
+
+        const uploadButtonView = new AssetUploadButtonView()
+
+        uploadButtonView.render()
+        uploadButtonView.$el.appendTo(this.el)
+
+        if (!target) {
+          return false
+        }
+
+        let collection = []
+
+        const type = target.attributes.attributes['rechat-assets']
+
+        if (type === 'listing-image') {
+          collection = this.collection.filter(asset => {
+            const listing = target.attributes.attributes['rechat-listing']
+
+            if (asset.attributes.avatar) {
+              return false
+            }
+
+            return !listing || asset.attributes.listing === listing
+          })
+        }
+
+        if (type === 'avatar') {
+          collection = this.collection.filter(
+            asset => asset.attributes.userFile || asset.attributes.avatar
+          )
+        }
+
+        collection.forEach(asset => {
+          const view = new AssetView({ model: asset })
+
+          view.render()
+          view.$el.appendTo(this.el)
+        })
+      },
+      render: () => this
+    })
+
+    const view = new AssetsView({
+      coll: editor.AssetManager.getAll()
+    })
+
+    view.render()
+    view.$el.hide()
+
+    const pn = editor.Panels
+    const id = 'views-container'
+    const panels = pn.getPanel(id) || pn.addPanel({ id })
+
+    editor.on('load', () => {
+      panels.set('appendContent', view.$el).trigger('change:appendContent')
+    })
+
+    editor.on('component:selected', selected => {
+      const attributes = selected.get('attributes')
+
+      if (!attributes || !attributes['rechat-assets']) {
+        view.$el.hide()
+
+        return false
       }
 
-      const setters = {
-        image: setSrc,
-        cell: setBg,
-        text: setBg
-      }
-
-      const type = target.get('type')
-
-      setters[type]()
-    },
-    initialize({ model }) {
-      this.model = model
-    },
-    render() {
-      this.$el.html(
-        `<img src="${this.model.get(
-          'src'
-        )}" style="margin: 8px 3% 8px 5%; border-radius: 2px; width: 90%; cursor: pointer;"/>`
-      )
-
-      return this
-    }
+      target = selected
+      view.reset()
+      view.$el.show()
+    })
   })
+}
 
-  const AssetsView = Backbone.View.extend({
-    initialize({ coll }) {
-      this.collection = coll
-    },
-    reset() {
-      this.$el.empty()
-
-      for (let i = 0; i < this.collection.length; i++) {
-        const asset = this.collection.at(i)
-        const view = new AssetView({ model: asset })
-
-        view.render()
-        view.$el.appendTo(this.el)
-      }
-    },
-    render: () => this
-  })
-
-  const view = new AssetsView({
-    coll: editor.AssetManager.getAll()
-  })
-
-  view.render()
-  view.$el.hide()
-
-  const pn = editor.Panels
-  const id = 'views-container'
-  const panels = pn.getPanel(id) || pn.addPanel({ id })
-
-  editor.on('load', () => {
-    panels.set('appendContent', view.$el).trigger('change:appendContent')
-  })
-
-  editor.on('component:selected', selected => {
-    const type = selected.get('type')
-
-    const attributes = selected.get('attributes')
-
-    if (!attributes || !attributes['rechat-assets']) {
-      view.$el.hide()
-
-      return false
-    }
-
-    target = selected
-    view.reset()
-    view.$el.show()
-  })
-})
+run()

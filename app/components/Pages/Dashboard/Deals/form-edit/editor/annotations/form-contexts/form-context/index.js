@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'underscore'
 
 import ContextAnnotation from '../context-annotation'
-import DealContext from '../../../../../../../../../models/DealContext'
+import DealContext from '../../../../../../../../../models/Deal/helpers/dynamic-context'
 
 function getContextType(context) {
   if (context && DealContext.isAddressField(context.name)) {
@@ -24,6 +24,22 @@ function getFormValue(values, annotations) {
   return valueList.join(' ')
 }
 
+function getTooltip(isAddressField, isDealConnectedToMls) {
+  if (isAddressField && isDealConnectedToMls) {
+    return (
+      <React.Fragment>
+        <img src="/static/images/deals/lock.svg" alt="locked" />
+        <div>
+          Listing information can only be changed on MLS. Once changed, the
+          update will be reflected here.
+        </div>
+      </React.Fragment>
+    )
+  }
+
+  return null
+}
+
 export default function FormContexts(props) {
   const grouped = {}
 
@@ -35,12 +51,18 @@ export default function FormContexts(props) {
     <div>
       {_.map(grouped, (groups, name) => {
         // get context
-        const context = DealContext.searchContext(name)
+        const context = DealContext.searchContext(props.deal.brand.id, name)
 
-        const contextValue = DealContext.getValue(
-          props.deal,
-          DealContext.searchContext(name)
-        ).value
+        // find context object by its name
+        const contextObject = DealContext.searchContext(
+          props.deal.brand.id,
+          name
+        )
+
+        // get context value
+        const contextValue = contextObject
+          ? DealContext.getValue(props.deal, contextObject).value
+          : ''
 
         return _.map(groups, (group, id) => {
           const annotations = group.map(i => i.annotation)
@@ -54,6 +76,10 @@ export default function FormContexts(props) {
 
           const contextType = getContextType(context)
           const formValue = getFormValue(props.formValues, annotations)
+          const isDealConnectedToMls = props.deal.listing !== null
+          const isAddressField = contextType === 'Address'
+
+          const value = formValue || (disableAutopopulate ? null : contextValue)
 
           const value = formValue || (disableAutopopulate ? null : contextValue)
 
@@ -65,8 +91,8 @@ export default function FormContexts(props) {
               maxFontSize={20}
               annotations={annotations}
               onSetValues={props.onSetValues}
-              isDealConnectedToMls={props.deal.listing !== null}
-              isAddressField={contextType === 'Address'}
+              tooltip={getTooltip(isAddressField, isDealConnectedToMls)}
+              isReadOnly={isAddressField && isDealConnectedToMls}
               onClick={bounds => {
                 props.onClick('Context', {
                   contextName: context.name,

@@ -2,8 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { func } from 'prop-types'
 
-import { blue, grey } from 'views/utils/colors'
-import Checkmark from 'components/SvgIcons/Checkmark/IconCheckmark'
+import { blue, grey } from '../../../utils/colors'
+import Checkmark from '../../SvgIcons/Checkmark/IconCheckmark'
 
 const CheckBox = styled.span`
   width: 16px;
@@ -11,15 +11,18 @@ const CheckBox = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: ${props => (props.isDisabled ? 'not-allowed' : 'pointer')};
   border-radius: 3px;
   background-color: ${props => (props.isSelected ? blue.A100 : '#fff')};
   border: solid 1px ${props => (props.isSelected ? blue.A100 : '#000')};
+  flex-shrink: 0;
+
   svg {
     path {
       fill: #ffffff;
     }
   }
+
   :hover {
     background-color: ${props => (props.isSelected ? blue.A200 : grey.A200)};
     border-color: ${props => (props.isSelected ? blue.A200 : '#000')};
@@ -49,6 +52,10 @@ export class CheckBoxButton extends React.Component {
   handleClick = e => {
     e.stopPropagation()
 
+    if (this.props.isDisabled) {
+      return false
+    }
+
     this.setState(state => ({
       isSelected: !state.isSelected
     }))
@@ -57,13 +64,16 @@ export class CheckBoxButton extends React.Component {
   }
 
   render() {
+    const { isSelected } = this.state
+
     return (
       <CheckBox
         {...this.props}
         onClick={this.handleClick}
-        isSelected={this.state.isSelected}
+        isSelected={isSelected}
+        isDisabled={this.props.isDisabled}
       >
-        {this.state.isSelected && <Checkmark />}
+        {isSelected && <Checkmark />}
       </CheckBox>
     )
   }

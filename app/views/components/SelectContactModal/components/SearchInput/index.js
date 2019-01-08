@@ -1,15 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { grey, primary } from '../../../../utils/colors'
+import { grey, primary, borderColor } from '../../../../utils/colors'
 import IconSearchBase from '../../../SvgIcons/Search/IconSearch'
 
 const Container = styled.div`
-  border-radius: 4px;
-  background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : '#f9f9f9')};
-  border: solid 1px ${({ isFocused }) => (isFocused ? primary : '#d4d4d4')};
+  border-radius: 3px;
+  background-color: ${({ isFocused }) => (isFocused ? '#fff' : grey.A175)};
+  border: solid 1px ${({ isFocused }) => (isFocused ? primary : borderColor)};
   :hover {
-    background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : grey.A100)};
+    background-color: ${({ isFocused }) => (isFocused ? '#fff' : grey.A100)};
   }
 `
 
@@ -18,7 +18,7 @@ const Input = styled.input`
   height: 42px;
   padding: 0 1em 0 2.5em;
   border-radius: 3px;
-  border: solid 1px #d4d4d4;
+  border: none;
   caret-color: ${primary};
   background-color: transparent;
 
@@ -37,7 +37,7 @@ const Input = styled.input`
   }
 `
 
-const IconSearch = IconSearchBase.extend`
+const IconSearch = styled(IconSearchBase)`
   path {
     fill: ${grey.A900} !important;
   }
@@ -66,13 +66,12 @@ class SearchInput extends React.Component {
       >
         <Input {...inputProps} onBlur={this.onBlur} onFocus={this.onFocus} />
         <IconSearch
-          size={24}
           style={{
             position: 'absolute',
             top: '13px',
             left: '13px',
-            width: '24px',
-            height: '24px'
+            width: '1em',
+            height: '1em'
           }}
         />
       </Container>

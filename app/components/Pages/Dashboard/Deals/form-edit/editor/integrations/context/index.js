@@ -3,13 +3,14 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import ClickOutside from 'react-click-outside'
 
-import { updateContext } from '../../../../../../../../store_actions/deals'
-
-import Deal from '../../../../../../../../models/Deal'
-import DealContext from '../../../../../../../../models/DealContext'
-
 import ActionButton from 'components/Button/ActionButton'
+
 import CancelButton from 'components/Button/CancelButton'
+
+import { upsertContexts } from 'actions/deals'
+
+import Deal from 'models/Deal'
+import DealContext from 'models/Deal/helpers/dynamic-context'
 
 import { Container, ActionsContainer } from './styled'
 
@@ -19,8 +20,27 @@ import DateContext from './date-context'
 class Context extends React.Component {
   state = {
     isSaving: false,
-    value: null,
-    formattedValue: null
+    value: this.getDefaultValue(true),
+    formattedValue: this.getDefaultValue()
+  }
+
+  getDefaultValue(rawValue = false) {
+    const { context } = this.props.data
+
+    if (this.IsDateContext) {
+      return ''
+    }
+
+    let value = this.props.data.annotations.reduce(
+      (acc, ann) => `${acc}${this.props.formValues[ann.fieldName] || ''}`,
+      ''
+    )
+
+    if (rawValue && context && context.format === 'Currency') {
+      value = Number(value.replace(/[^0-9.-]+/g, ''))
+    }
+
+    return value
   }
 
   onContextChange = (value, formattedValue) => {
@@ -41,29 +61,35 @@ class Context extends React.Component {
 
   handleSave = async () => {
     const { contextName, annotations } = this.props.data
-
-    const context = {
-      [contextName]: {
-        value: this.state.value,
-        approved: false
-      }
-    }
+    const contextValue = this.state.value === '' ? null : this.state.value
 
     this.setState({
       isSaving: true
     })
-
-    try {
-      await this.props.updateContext(this.props.deal.id, context)
-    } catch (e) {
-      console.log(e)
-    }
 
     this.props.onValueUpdate(
       annotations[0].fieldName,
       this.state.formattedValue || '',
       true
     )
+
+    const context = [
+      {
+        checklist: DealContext.getChecklist(this.props.deal, contextName),
+        definition: DealContext.getDefinitionId(
+          this.props.deal.brand.id,
+          contextName
+        ),
+        value: contextValue,
+        approved: false
+      }
+    ]
+
+    try {
+      this.props.upsertContexts(this.props.deal.id, context)
+    } catch (e) {
+      console.log(e)
+    }
 
     this.setState({
       isSaving: false,
@@ -74,10 +100,10 @@ class Context extends React.Component {
     this.props.onClose()
   }
 
-  getValue() {
-    const { value } = this.props
-
-    return value !== null ? value : ''
+  get IsDateContext() {
+    return (
+      this.props.data.context && this.props.data.context.data_type === 'Date'
+    )
   }
 
   onKeyPress(e) {
@@ -123,12 +149,7 @@ class Context extends React.Component {
   render() {
     const { data } = this.props
 
-    if (!data || !this.props.isOpen) {
-      return false
-    }
-
     const defaultValue = Deal.get.field(this.props.deal, data.contextName)
-    const isDateContext = data.context && data.context.data_type === 'Date'
     const position = this.Position
 
     const sharedProps = {
@@ -137,14 +158,17 @@ class Context extends React.Component {
       onContextChange: this.onContextChange,
       saveDefaultValue: this.saveDefaultValue,
       value: this.state.value,
-      context: DealContext.searchContext(data.contextName),
+      context: DealContext.searchContext(
+        this.props.deal.brand.id,
+        data.contextName
+      ),
       defaultValue
     }
 
     return (
       <ClickOutside onClickOutside={this.onClose}>
-        <Container position={position} isDateContext={isDateContext}>
-          {isDateContext ? (
+        <Container position={position} isDateContext={this.IsDateContext}>
+          {this.IsDateContext ? (
             <DateContext {...sharedProps} />
           ) : (
             <StringContext {...sharedProps} />
@@ -188,5 +212,5 @@ Context.defaultProps = {
 
 export default connect(
   null,
-  { updateContext }
+  { upsertContexts }
 )(Context)

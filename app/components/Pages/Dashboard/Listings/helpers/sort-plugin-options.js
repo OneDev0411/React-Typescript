@@ -1,17 +1,17 @@
 export const sortOptions = {
-  defaultIndex: { label: 'Price A-Z', value: 'price' },
+  defaultIndex: { label: 'Price (Low-High)', value: '-price' },
   columns: [
-    { label: 'Price A-Z', value: 'price' },
-    { label: 'Price Z-A', value: '-price' },
-    { label: 'Bedrooms A-Z', value: 'beds' },
-    { label: 'Bedrooms Z-A', value: '-beds' },
-    { label: 'Bathrooms A-Z', value: 'baths' },
-    { label: 'Bathrooms Z-A', value: '-baths' },
-    { label: 'Sqft A-Z', value: 'sqft' },
-    { label: 'Sqft Z-A', value: '-sqft' },
-    { label: 'Lot Size Area A-Z', value: 'lotSizeArea' },
-    { label: 'Lot Size Area Z-A', value: '-lotSizeArea' },
-    { label: 'Year Built A-Z', value: 'builtYear' },
-    { label: 'Year Built Z-A', value: '-builtYear' }
+    { label: 'Price (High-Low)', value: 'price' },
+    { label: 'Price (Low-High)', value: '-price' },
+    { label: 'Bedrooms (High-Low)', value: 'beds' },
+    { label: 'Bedrooms (Low-High)', value: '-beds' },
+    { label: 'Bathrooms (High-Low)', value: 'baths' },
+    { label: 'Bathrooms (Low-High)', value: '-baths' },
+    { label: 'Sqft (High-Low)', value: 'sqft' },
+    { label: 'Sqft (Low-High)', value: '-sqft' },
+    { label: 'Lot Size Area (High-Low)', value: 'lotSizeArea' },
+    { label: 'Lot Size Area (Low-High)', value: '-lotSizeArea' },
+    { label: 'Year Built (High-Low)', value: 'builtYear' },
+    { label: 'Year Built (Low-High)', value: '-builtYear' }
   ]
 }

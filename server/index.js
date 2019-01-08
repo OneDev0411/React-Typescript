@@ -73,6 +73,7 @@ app.use(
     {
       key: 'rechat-webapp:session',
       maxAge: 60 * 86400 * 1000, // 60 days
+      gzip: true,
       overwrite: true,
       httpOnly: true,
       signed: true

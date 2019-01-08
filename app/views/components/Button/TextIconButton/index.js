@@ -1,3 +1,4 @@
+import styled from 'styled-components'
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
@@ -59,26 +60,26 @@ class TextIconButton extends PureComponent {
     let IconRight = () => null
 
     if (iconLeft) {
-      IconLeft = iconLeft.extend`
+      IconLeft = styled(iconLeft)`
         margin-right: ${text ? '0.5em' : 0};
         transform: rotate(${iconAims[iconLeftAim]});
       `
     }
 
     if (iconRight) {
-      IconRight = iconRight.extend`
+      IconRight = styled(iconRight)`
         margin-left: ${text ? '0.5em' : 0};
         transform: rotate(${iconAims[iconRightAim]});
       `
     }
 
-    const ExtendedButton = Button.extend`
+    const ExtendedButton = styled(Button)`
       justify-content: ${props =>
         props.isBlock ? 'space-between' : 'initial'};
 
       svg {
-        width: ${props => getIconSize(props.size)};
-        height: ${props => getIconSize(props.size)};
+        width: ${props => getIconSize(props.iconSize || props.size)};
+        height: ${props => getIconSize(props.iconSize || props.size)};
       }
 
       ${props => getIconStatesStyle(props)};

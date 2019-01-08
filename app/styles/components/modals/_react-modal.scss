@@ -39,6 +39,10 @@
     }
   }
 
+  
+  
+  &.c-tour-sheets,
+  &.c-preview-image-modal,
   &.c-full-screen-modal {
     @media screen and (min-width: 48em) {
       width: 100%;
@@ -48,5 +52,9 @@
       transform: none;
       border-radius: 0;
     }
+  }
+  
+  &.c-preview-image-modal {
+    background: rgba(0, 0, 0, 0.6);
   }
 }

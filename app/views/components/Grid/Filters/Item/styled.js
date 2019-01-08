@@ -15,13 +15,13 @@ function getItemColor(props) {
   return '#000'
 }
 
-export const RemoveButton = IconButton.extend`
+export const RemoveButton = styled(IconButton)`
   visibility: hidden;
   margin-left: 0.5em;
   padding: 0;
 `
 
-export const Container = Flex.extend`
+export const Container = styled(Flex)`
   position: relative;
   height: 40px;
   margin-right: 0.5em;
@@ -57,7 +57,7 @@ export const ItemTitle = styled.div`
   white-space: nowrap;
 `
 
-export const Menu = Card.extend`
+export const Menu = styled(Card)`
   position: absolute;
   top: 48px;
   left: 0;
@@ -70,7 +70,7 @@ export const Content = styled.div`
   min-height: 150px;
   cursor: auto;
 `
-export const DoneButton = Button.extend`
+export const DoneButton = styled(Button)`
   display: block;
   width: 100%;
   text-align: center;

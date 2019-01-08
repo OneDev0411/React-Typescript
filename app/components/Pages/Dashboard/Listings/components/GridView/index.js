@@ -10,36 +10,41 @@ export class GridView extends React.Component {
   columns = [
     {
       header: 'Address',
-      id: 'adress',
+      id: 'address',
       width: '30%',
       render: ({ rowData: listing }) => <Address listing={listing} />
     },
     {
       header: 'Price',
       id: 'price',
+      sortType: 'number',
       accessor: listing => listing.price,
       render: ({ rowData: listing }) => `$${listing.price.toLocaleString()}`
     },
     {
       header: 'Beds',
       id: 'beds',
+      sortType: 'number',
       accessor: listing => listing.beds,
       render: ({ rowData: listing }) => listing.beds
     },
     {
       header: 'Baths',
       id: 'baths',
+      sortType: 'number',
       accessor: listing => listing.baths,
       render: ({ rowData: listing }) => listing.baths
     },
     {
       header: 'sqft',
       id: 'sqft',
+      sortType: 'number',
       accessor: listing => listing.sqft,
       render: ({ rowData: listing }) => listing.sqft.toLocaleString()
     },
     {
       header: '$/Sqft',
+      sortType: 'number',
       id: 'pricePerSquareFoot',
       accessor: listing => listing.pricePerSquareFoot,
       render: ({ rowData: listing }) =>
@@ -48,12 +53,14 @@ export class GridView extends React.Component {
     {
       header: 'Built Year',
       id: 'year',
+      sortType: 'number',
       accessor: listing => listing.builtYear,
       render: ({ rowData: listing }) => listing.builtYear
     },
     {
       header: 'Zip Code',
       id: 'zipcode',
+      sortType: 'number',
       accessor: listing => listing.zipCode,
       render: ({ rowData: listing }) => listing.zipCode
     }
@@ -71,9 +78,9 @@ export class GridView extends React.Component {
           LoadingState={LoadingComponent}
           listInfo={this.props.listings.info}
           summary={{ entityName: 'Listings', style: { color: '#000' } }}
-          getTdProps={() => ({ style: { lineHeight: 1 } })}
           plugins={{
-            sortable: {}
+            sortable: {},
+            ...this.props.plugins
           }}
         />
       </div>

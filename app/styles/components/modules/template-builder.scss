@@ -11,6 +11,8 @@
   }
 
   .gjs-pn-panel {
+    z-index: 1;
+    
     &.gjs-pn-views{
       display: none;
     }
@@ -35,6 +37,37 @@
       color: black;
       font-size: 16px;
       font-weight: 500;
+    }
+  }
+
+  .gjs-trt-trait {
+    display: block;
+
+    .gjs-label {
+      display: block;
+      margin-bottom: 10px;
+      color: black;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .gjs-field {
+      display: flex;
+      align-items: center;
+      background: #f6f6f6;
+      height: 48px;
+      border: 1px solid #d4d4d4;
+      border-radius: 3px;
+      color: black;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 10px;
+      padding-left: 10px;
+      width: 100%;
+
+      .gjs-input-holder {
+        width: 100%;
+      }
     }
   }
 

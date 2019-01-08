@@ -23,7 +23,7 @@ export default class ManualAddress extends React.Component {
   /**
    *
    */
-  onClose = () => this.props.onHide()
+  onClose = () => this.props.onClose()
 
   /**
    *
@@ -224,7 +224,7 @@ export default class ManualAddress extends React.Component {
             <Fragment>
               <Modal.Body
                 className="u-scrollbar--thinner"
-                style={{ padding: 0 }}
+                style={{ padding: '0 2%' }}
               >
                 <Field
                   name="street_dir_prefix"

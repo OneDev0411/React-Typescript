@@ -4,11 +4,18 @@ import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 
-import Deal from '../../../../../models/Deal'
-import DealContext from '../../../../../models/DealContext'
+import Deal from 'models/Deal'
+import DealContext from 'models/Deal/helpers/dynamic-context'
 
-import PageHeader from './page-header'
-import OfferType from './offer-type'
+import { FullPageHeader } from 'components/FullPageHeader'
+
+// import OfferType from './offer-type'
+import { confirmation } from 'actions/confirmation'
+
+import ActionButton from 'components/Button/ActionButton'
+
+import { createRoles, createOffer, upsertContexts } from 'actions/deals'
+
 import EnderType from './deal-ender-type'
 import DealClients from './deal-clients'
 import BuyerName from './offer-buyer-name'
@@ -18,14 +25,8 @@ import EscrowOfficers from './escrow-officer'
 import DealReferrals from './deal-referrals'
 import Contexts from './contexts'
 import IntercomTrigger from '../../Partials/IntercomTrigger'
-import {
-  createRoles,
-  createOffer,
-  updateContext
-} from '../../../../../store_actions/deals'
+
 import { getLegalFullName } from '../utils/roles'
-import { confirmation } from '../../../../../store_actions/confirmation'
-import ActionButton from '../../../../../views/components/Button/ActionButton'
 
 class CreateOffer extends React.Component {
   constructor(props) {
@@ -38,7 +39,8 @@ class CreateOffer extends React.Component {
       saving: false,
       buyerName: '',
       dealStatus: '',
-      offerType: dealHasPrimaryOffer ? 'backup' : '',
+      // offerType: dealHasPrimaryOffer ? 'backup' : '',
+      offerType: 'primary',
       enderType: -1,
       contexts: this.initializeContexts(),
       agents: {},
@@ -60,7 +62,7 @@ class CreateOffer extends React.Component {
     }
   }
 
-  initializeContexts() {
+  initializeContexts = () => {
     const { deal } = this.props
 
     return {
@@ -68,7 +70,7 @@ class CreateOffer extends React.Component {
     }
   }
 
-  initializeRoles(list) {
+  initializeRoles = list => {
     const { roles } = this.props
     const newState = {}
 
@@ -113,64 +115,65 @@ class CreateOffer extends React.Component {
     this.setState(newState)
   }
 
-  onUpsertRole(form, type) {
+  onUpsertRole = (form, type) => {
     this.setState(
-      {
+      state => ({
         [type]: {
-          ...this.state[type],
+          ...state[type],
           [form.id || form.user.id]: form
         }
-      },
+      }),
       () => this.validateForm()
     )
   }
 
-  onRemoveRole(id, type) {
+  onRemoveRole = (id, type) => {
     this.setState(
-      {
-        [type]: _.omit(this.state[type], role => role.id === id)
-      },
+      state => ({
+        [type]: _.omit(state[type], role => role.id === id)
+      }),
       () => this.validateForm()
     )
   }
 
-  onChangeBuyerName(buyerName) {
+  onChangeBuyerName = buyerName => {
     this.setState({ buyerName }, () => this.validateForm())
   }
 
-  changeContext(field, value) {
+  changeContext = (field, value) => {
     this.setState(
-      {
+      state => ({
         contexts: {
-          ...this.state.contexts,
+          ...state.contexts,
           [field]: value
         }
-      },
+      }),
       () => this.validateForm()
     )
   }
 
-  openDeal(id) {
+  openDeal = id => {
     browserHistory.push(`/dashboard/deals/${id}`)
   }
 
-  changeOfferType(offerType) {
-    this.isFormSubmitted = false
-    this.setState({ offerType, validationErrors: [] })
-  }
+  // changeOfferType(offerType) {
+  //   console.log(offerType)
+  //   this.isFormSubmitted = false
+  //   this.setState({ offerType, validationErrors: [] })
+  // }
 
-  changeEnderType(enderType) {
+  changeEnderType = enderType => {
     this.setState({ enderType }, () => this.validateForm())
   }
 
   /**
    * handles deal status change
    */
-  changeDealStatus(status) {
+  changeDealStatus = status => {
     this.setState({ dealStatus: status }, () => this.validateForm())
   }
 
-  validateForm() {
+  validateForm = () => {
     const validationErrors = []
 
     _.each(this.Validators, (validate, name) => {
@@ -186,7 +189,7 @@ class CreateOffer extends React.Component {
     return validationErrors.length === 0
   }
 
-  getAllRoles() {
+  getAllRoles = () => {
     const { enderType, clients, agents, escrowOfficers, referrals } = this.state
     const roles = []
 
@@ -201,7 +204,7 @@ class CreateOffer extends React.Component {
     return roles.filter(role => role.isEditable !== false)
   }
 
-  getBuyerNames() {
+  getBuyerNames = () => {
     const { clients } = this.state
 
     return _.chain(clients)
@@ -211,14 +214,14 @@ class CreateOffer extends React.Component {
       .value()
   }
 
-  async createOffer() {
+  createOffer = async () => {
     this.isFormSubmitted = true
 
     if (!this.validateForm(true)) {
       return false
     }
 
-    const { deal, notify, createOffer, createRoles } = this.props
+    const { deal } = this.props
     const { enderType, dealStatus, contexts } = this.state
     const isBackupOffer = this.isBackupOffer()
     const isPrimaryOffer = this.isPrimaryOffer()
@@ -233,7 +236,7 @@ class CreateOffer extends React.Component {
     this.setState({ saving: true })
 
     try {
-      await createOffer(
+      const checklist = await this.props.createOffer(
         deal.id,
         buyerName,
         order,
@@ -242,17 +245,22 @@ class CreateOffer extends React.Component {
       )
 
       if (isPrimaryOffer) {
-        await createRoles(deal.id, this.getAllRoles())
+        const roles = this.getAllRoles().map(role => ({
+          ...role,
+          checklist: checklist.id
+        }))
+
+        await this.props.createRoles(deal.id, roles)
 
         // create/update contexts
-        await this.saveContexts({
+        await this.saveContexts(checklist, {
           ...contexts,
           listing_status: dealStatus,
           ender_type: enderType
         })
       }
 
-      notify({
+      this.props.notify({
         title: 'Offer created',
         message: `The offer(${buyerName}) has been created`,
         status: 'success',
@@ -262,7 +270,7 @@ class CreateOffer extends React.Component {
 
       return this.backToDeal()
     } catch (e) {
-      notify({
+      this.props.notify({
         title: 'Could not create offer',
         message: e.response && e.response.body ? e.response.body.message : null,
         status: 'error',
@@ -273,28 +281,28 @@ class CreateOffer extends React.Component {
     this.setState({ saving: false })
   }
 
-  async saveContexts(contexts) {
-    const { deal, updateContext } = this.props
+  saveContexts = async (checklist, contexts) => {
+    const list = []
 
-    const contextsObject = {}
-
-    _.each(contexts, (value, name) => {
+    _.each(contexts, (value, key) => {
       if (_.isUndefined(value) || value === null || value.length === 0) {
         return false
       }
 
-      const field = Deal.get.context(deal, name)
+      const field = Deal.get.context(this.props.deal, key)
 
-      contextsObject[name] = {
+      list.push({
         value,
+        definition: DealContext.getDefinitionId(this.props.deal.brand.id, key),
+        checklist: checklist.id,
         approved: field ? field.needs_approval : false
-      }
+      })
     })
 
-    return updateContext(deal.id, contextsObject)
+    return this.props.upsertContexts(this.props.deal.id, list)
   }
 
-  getMaxOrder() {
+  getMaxOrder = () => {
     let max = 0
 
     const { deal, checklists } = this.props
@@ -314,24 +322,25 @@ class CreateOffer extends React.Component {
     return max
   }
 
-  isBackupOffer() {
-    return this.state.offerType === 'backup'
-  }
+  isBackupOffer = () => this.state.offerType === 'backup'
 
-  isPrimaryOffer() {
-    return this.state.offerType === 'primary'
-  }
+  isPrimaryOffer = () => this.state.offerType === 'primary'
 
-  isLeaseDeal() {
+  isLeaseDeal = () => {
     const { deal } = this.props
 
     return deal.property_type.includes('Lease')
   }
 
-  getDealContexts() {
+  getDealContexts = () => {
     const { deal } = this.props
 
-    return DealContext.getItems('Buying', deal.property_type, true)
+    return DealContext.getItems(
+      this.props.deal.brand.id,
+      'Buying',
+      deal.property_type,
+      true
+    )
   }
 
   backToDeal = () => {
@@ -347,7 +356,7 @@ class CreateOffer extends React.Component {
       message: 'Cancel offer creation?',
       description: 'By canceling you will lose your work.',
       confirmLabel: 'Yes, cancel',
-      cancelLabel: 'No, don\'t cancel',
+      cancelLabel: 'No, dont cancel',
       onConfirm: this.backToDeal
     })
   }
@@ -355,7 +364,7 @@ class CreateOffer extends React.Component {
   /**
    * check an specific field has error or not
    */
-  hasError(field) {
+  hasError = field => {
     const { validationErrors } = this.state
 
     return this.isFormSubmitted && validationErrors.includes(field)
@@ -412,6 +421,7 @@ class CreateOffer extends React.Component {
       deal_status: () => dealStatus.length > 0,
       contexts: () =>
         DealContext.validateList(
+          deal.brand.id,
           contexts,
           'Buying',
           deal.property_type,
@@ -433,7 +443,7 @@ class CreateOffer extends React.Component {
       agents,
       clients,
       buyerName,
-      dealHasPrimaryOffer,
+      // dealHasPrimaryOffer,
       validationErrors
     } = this.state
     const { deal } = this.props
@@ -442,21 +452,25 @@ class CreateOffer extends React.Component {
     const isDoubleEndedAgent = enderType === 'AgentDoubleEnder'
     const requiredFields = this.RequiredFields
 
+    if (this.state.dealHasPrimaryOffer) {
+      return false
+    }
+
     return (
       <div className="deal-create-offer">
-        <PageHeader
+        <FullPageHeader
           title="Add New Offer"
-          handleOnClose={this.cancelCreateOffer}
+          handleClose={this.cancelCreateOffer}
         />
 
         <div className="form">
-          <OfferType
+          {/* <OfferType
             hasError={this.hasError('offer_type')}
             dealHasPrimaryOffer={dealHasPrimaryOffer}
             offerType={offerType}
             deal={deal}
             onChangeOfferType={offer => this.changeOfferType(offer)}
-          />
+          /> */}
 
           {this.isBackupOffer() && (
             <BuyerName
@@ -546,31 +560,30 @@ class CreateOffer extends React.Component {
         </div>
 
         <div className="actions">
-          {!saving &&
-            submitError && (
-              <div
-                className="c-alert c-alert--error"
-                style={{
-                  float: 'left',
-                  marginBottom: '2rem'
-                }}
-              >
-                <span>
-                  Sorry, something went wrong while adding an offer. Please try
-                  again.
-                </span>
-                <IntercomTrigger
-                  render={({ activeIntercom, intercomIsActive }) => (
-                    <button
-                      onClick={!intercomIsActive ? activeIntercom : () => false}
-                      className="btn btn-primary c-button--link"
-                    >
-                      Support
-                    </button>
-                  )}
-                />
-              </div>
-            )}
+          {!saving && submitError && (
+            <div
+              className="c-alert c-alert--error"
+              style={{
+                float: 'left',
+                marginBottom: '2rem'
+              }}
+            >
+              <span>
+                Sorry, something went wrong while adding an offer. Please try
+                again.
+              </span>
+              <IntercomTrigger
+                render={({ activeIntercom, intercomIsActive }) => (
+                  <button
+                    onClick={!intercomIsActive ? activeIntercom : () => false}
+                    className="btn btn-primary c-button--link"
+                  >
+                    Support
+                  </button>
+                )}
+              />
+            </div>
+          )}
 
           <ActionButton
             // className={cn('create-offer-button', {
@@ -583,13 +596,11 @@ class CreateOffer extends React.Component {
           </ActionButton>
 
           <div className="error-summary">
-            {this.isFormSubmitted &&
-              validationErrors.length > 0 && (
-                <span>
-                  {validationErrors.length} required fields remaining to
-                  complete.
-                </span>
-              )}
+            {this.isFormSubmitted && validationErrors.length > 0 && (
+              <span>
+                {validationErrors.length} required fields remaining to complete.
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -610,7 +621,7 @@ export default connect(
   {
     createOffer,
     createRoles,
-    updateContext,
+    upsertContexts,
     notify,
     confirmation
   }

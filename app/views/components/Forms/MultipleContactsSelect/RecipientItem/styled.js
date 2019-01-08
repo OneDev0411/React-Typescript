@@ -1,7 +1,10 @@
 import styled from 'styled-components'
+
+import Flex from 'styled-flex-component'
+
 import IconButton from '../../../Button/IconButton'
 
-export const DeleteButton = IconButton.extend`
+export const DeleteButton = styled(IconButton)`
   margin-left: 6px;
   opacity: 0;
 `
@@ -50,7 +53,7 @@ export const EmailsList = styled.div`
   position: absolute;
   top: 40px;
   left: 0;
-  width: 100%;
+  min-width: 100%;
   max-height: 150px;
   overflow: auto;
   border-radius: 2px;
@@ -62,4 +65,17 @@ export const EmailsList = styled.div`
 export const ArrowIcon = styled.i`
   margin-left: 10px;
   font-weight: bold;
+`
+
+export const IconContainer = styled(Flex)`
+  width: 25px;
+  height: 25px;
+  background-color: #000;
+  border-radius: 50%;
+  margin-right: 10px;
+  > svg {
+    height: 1rem;
+    width: 1rem;
+    fill: #ffffff;
+  }
 `

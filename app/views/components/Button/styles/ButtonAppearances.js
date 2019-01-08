@@ -33,7 +33,7 @@ export const buttonBaseStyle = css`
 
   &[disabled] {
     color: ${grey.A900};
-    cursor: not-allowed;
+    cursor: initial;
 
     svg {
       fill: ${grey.A900};
@@ -47,6 +47,7 @@ export const ButtonAppearances = {
   primary: css`
     ${buttonBaseStyle};
     color: #fff;
+    font-weight: 500;
     background-color: ${props => props.brandColor || primary};
 
     &[disabled] {
@@ -64,6 +65,7 @@ export const ButtonAppearances = {
   `,
   outline: css`
     ${buttonBaseStyle};
+    font-weight: 500;
     border-style: solid;
     border-color: ${props => (props.isOpen ? primary : '#000')};
     border-width: ${props => (props.noBorder ? 0 : '1px')};
@@ -117,7 +119,10 @@ export const ButtonAppearances = {
     }
 
     svg {
-      fill: ${props => (props.inverse ? '#000' : props.brandColor || primary)};
+      fill: ${props =>
+        !props.inverse || props.isActive
+          ? props.brandColor || primary
+          : '#000'};
     }
   `,
   icon: css`

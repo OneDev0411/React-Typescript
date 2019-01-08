@@ -1,15 +1,17 @@
 import Koa from 'koa'
 import agent from 'superagent'
+import bodyParser from 'koa-bodyparser'
+
 import config from '../../../../config/public'
 
 const router = require('koa-router')()
 
 const app = new Koa()
 
-router.get('/pdf/get-size/:id', async ctx => {
+router.post('/pdf/get-size', bodyParser(), async ctx => {
   try {
     const { user } = ctx.session
-    const { id } = ctx.params
+    const { form, pdfUrl } = ctx.request.body
 
     if (!user) {
       ctx.status = 401
@@ -19,7 +21,7 @@ router.get('/pdf/get-size/:id', async ctx => {
     }
 
     let totalSize = 0
-    const url = `${config.forms.url}/${id}.pdf`
+    const url = pdfUrl || `${config.forms.url}/${form}.pdf`
 
     try {
       const response = await agent.head(url)

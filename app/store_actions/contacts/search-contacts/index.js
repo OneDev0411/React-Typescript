@@ -3,15 +3,17 @@ import { searchContacts as search } from '../../../models/contacts/search-contac
 import { defaultQuery } from '../../../models/contacts/helpers'
 
 import { normalizeContacts } from '../helpers/normalize-contacts'
+import { selectContacts } from '../../../reducers/contacts/list'
 
 export function searchContacts(
   filter,
   start = 0,
   limit = 50,
   searchInputValue,
-  order = '-created_at'
+  order = '-created_at',
+  users
 ) {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     if (start === 0) {
       dispatch({
         type: actionTypes.CLEAR_CONTACTS_LIST
@@ -19,12 +21,29 @@ export function searchContacts(
     }
 
     try {
-      const response = await search(searchInputValue, filter, {
-        ...defaultQuery,
-        start,
-        limit,
-        order
+      dispatch({
+        type: actionTypes.SEARCH_CONTACTS_REQUEST
       })
+
+      const response = await search(
+        searchInputValue,
+        filter,
+        {
+          ...defaultQuery,
+          start,
+          limit,
+          order
+        },
+        users
+      )
+
+      const contactsLength = selectContacts(getState().contacts.list).length
+
+      if (contactsLength && start === 0) {
+        dispatch({
+          type: actionTypes.CLEAR_CONTACTS_LIST
+        })
+      }
 
       dispatch({
         response: {
@@ -32,6 +51,7 @@ export function searchContacts(
             ...response.info,
             searchInputValue,
             order,
+            users,
             filter,
             type: 'filter'
           },

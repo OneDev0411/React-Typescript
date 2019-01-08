@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
 import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
@@ -6,8 +7,16 @@ import PageHeader from '../../../../../../views/components/PageHeader'
 
 import { ViewSwitcher } from '../../components/ViewSwitcher'
 
+Header.propTypes = {
+  showMenu: PropTypes.bool
+}
+
+Header.defaultProps = {
+  showMenu: true
+}
+
 export function Header(props) {
-  const { subtitle } = props
+  const { subtitle, RightComponent } = props
 
   return (
     <PageHeader
@@ -37,12 +46,15 @@ export function Header(props) {
         </Flex>
       </Flex>
 
-      <PageHeader.Menu>
-        <ViewSwitcher
-          activeView={props.activeView}
-          onChange={props.onChangeView}
-        />
-      </PageHeader.Menu>
+      {props.showMenu && (
+        <PageHeader.Menu>
+          {RightComponent && <RightComponent />}
+          <ViewSwitcher
+            activeView={props.activeView}
+            onChange={props.onChangeView}
+          />
+        </PageHeader.Menu>
+      )}
     </PageHeader>
   )
 }

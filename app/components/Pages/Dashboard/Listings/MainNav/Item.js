@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 import { Link } from 'react-router'
 
 import { primary } from '../../../../../views/utils/colors'
@@ -6,14 +7,10 @@ import {
   ListItem,
   ListItemName
 } from '../../../../../views/components/SlideMenu/Menu/styled'
+import Tooltip from '../../../../../views/components/tooltip'
 
-const Item = ListItem.extend`
-  justify-content: initial;
-
-  > svg {
-    width: 1.5em;
-    height: 1.5em;
-  }
+const Item = styled(ListItem)`
+  justify-content: flex-start;
 
   .mls-nav-item--active > & {
     color: ${primary};
@@ -27,15 +24,17 @@ const Item = ListItem.extend`
 
 export function NavItem({ Icon, ...props }) {
   return (
-    <Link
-      to={props.to}
-      onlyActiveOnIndex={props.indexed}
-      activeClassName="mls-nav-item--active"
-    >
-      <Item>
-        <Icon style={{ marginRight: '0.5em' }} />
-        <ListItemName>{props.text}</ListItemName>
-      </Item>
-    </Link>
+    <Tooltip caption={props.caption} placement="right">
+      <Link
+        to={props.to}
+        onlyActiveOnIndex={props.indexed}
+        activeClassName="mls-nav-item--active"
+      >
+        <Item>
+          <Icon style={{ marginRight: props.marginRight || '0.875rem' }} />
+          <ListItemName>{props.text}</ListItemName>
+        </Item>
+      </Link>
+    </Tooltip>
   )
 }

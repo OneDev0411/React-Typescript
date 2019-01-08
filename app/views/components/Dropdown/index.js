@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import React from 'react'
 import Downshift from 'downshift'
 import matchSorter from 'match-sorter'
@@ -7,22 +8,17 @@ import { Item } from './Item'
 import { SearchInput } from './SearchInput'
 import ArrowDropDown from '../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import ActionButton from '../Button/ActionButton'
-import { grey } from '../../utils/colors'
 
-export const Button = ActionButton.extend`
+export const Button = styled(ActionButton)`
   position: relative;
   width: ${props => (props.fullWidth ? '100%' : 'auto')};
   display: flex;
   align-items: center;
   justify-content: ${props => (props.fullWidth ? 'space-between' : 'initial')};
   font-weight: normal;
-
-  &:focus {
-    background-color: ${grey.A100};
-  }
 `
 
-export const Icon = ArrowDropDown.extend`
+export const Icon = styled(ArrowDropDown)`
   fill: #000;
   transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};
 `
@@ -42,7 +38,8 @@ export const Dropdown = ({
   defaultSelectedItem,
   buttonRenderer,
   pullRight = false,
-  noBorder = true
+  noBorder = true,
+  buttonStyle = {}
 }) => (
   <Downshift
     {...input}
@@ -97,6 +94,7 @@ export const Dropdown = ({
               noBorder={noBorder}
               {...getButtonProps({
                 fullWidth,
+                style: buttonStyle,
                 id: buttonId,
                 name: input.name
               })}
@@ -172,7 +170,7 @@ export const Dropdown = ({
                   }
 
                   return itemRenderer ? (
-                    itemRenderer(props)
+                    itemRenderer(props, item)
                   ) : (
                     <Item {...props} key={item.value}>
                       {item.icon && <item.icon />}

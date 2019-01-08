@@ -14,6 +14,7 @@ import { Col, Button } from 'react-bootstrap'
 
 import { renderFeatures } from './ListingDesktopView'
 
+import { formatPhoneNumber } from '../../../../../../utils/format'
 import { friendlyDate, numberWithCommas } from '../../../../../../utils/helpers'
 import config from '../../../../../../../config/public'
 import Brand from '../../../../../../controllers/Brand'
@@ -68,14 +69,20 @@ const ListingMobileView = ({
   let brand_agent_area
 
   let listing_images = (
-    <div style={S('bg-eff1f2 w-100p h-300 font-22 text-center pt-125 color-929292')}>
+    <div
+      style={S(
+        'bg-eff1f2 w-100p h-300 font-22 text-center pt-125 color-929292'
+      )}
+    >
       No image
     </div>
   )
 
   let main_content = isFetching && <Loading />
 
-  main_content = !isFetching && errorMessage && <FetchError message={errorMessage} />
+  main_content = !isFetching && errorMessage && (
+    <FetchError message={errorMessage} />
+  )
 
   if (listing && listing.property) {
     property = listing.property
@@ -157,7 +164,9 @@ const ListingMobileView = ({
         className="pull-left"
         style={S('bg-ebeef1 relative t-7 br-100 pt-11 h-35 pl-36 pr-15 mr-15')}
       >
-        <span style={S(`mr-5 font-46 l-10 t-17n absolute color-${status_color}`)}>
+        <span
+          style={S(`mr-5 font-46 l-10 t-17n absolute color-${status_color}`)}
+        >
           &#8226;
         </span>
         <span style={S('font-14 relative t-3n')}>
@@ -229,7 +238,9 @@ const ListingMobileView = ({
 
       if (brand_agent.phone_number) {
         phone_area = (
-          <div style={S('font-15 mb-5')}>M: {brand_agent.phone_number}</div>
+          <div style={S('font-15 mb-5')}>
+            M: {formatPhoneNumber(brand_agent.phone_number)}
+          </div>
         )
       }
 
@@ -288,22 +299,24 @@ const ListingMobileView = ({
               {listing.list_agent_full_name}, Seller Agent
             </span>
           </div>
-          <div style={S('font-15 mb-5')}>{listing.list_agent_direct_work_phone}</div>
+          <div style={S('font-15 mb-5')}>
+            {listing.list_agent_direct_work_phone}
+          </div>
           <div style={S('font-15 mb-5')}>{listing.list_office_name}</div>
           {showing_instructions}
           <div style={email_style}>
             <a
               href={`mailto:${
                 listing.list_agent_email
-              }?subject=Your listing on Rechat.com&body=I saw your listing (${
-                listing_title
-              }) on Rechat.com and I'm interested in getting more information.`}
+              }?subject=Your listing on Rechat.com&body=I saw your listing (${listing_title}) on Rechat.com and I'm interested in getting more information.`}
               style={S('color-748090')}
             >
               {listing.list_agent_email}
             </a>
           </div>
-          <div style={S('border-bottom-2-solid-e4e4e4 w-40 center-block mb-5')} />
+          <div
+            style={S('border-bottom-2-solid-e4e4e4 w-40 center-block mb-5')}
+          />
         </div>
       )
     }
@@ -332,11 +345,11 @@ const ListingMobileView = ({
           <div style={S('relative w-100p pull-left')}>
             <Map
               zoom={12}
-              key={'map'}
+              key="map"
               style={S('w-100p h-300')}
-              bootstrapURLKeys={bootstrap_url_keys}
               center={{ lat: latitude, lng: longitude }}
               options={{ scrollwheel: false, draggable: false }}
+              bootstrapURLKeys={{ key: bootstrap_url_keys.key }}
             >
               <ListingMapMarker
                 lat={latitude}
@@ -361,7 +374,9 @@ const ListingMobileView = ({
 
     if (listing.close_price && user && user.user_type === 'Client') {
       asking_price_area = (
-        <span style={S('font-14 relative color-ccc fw-400')}>(Asking price)</span>
+        <span style={S('font-14 relative color-ccc fw-400')}>
+          (Asking price)
+        </span>
       )
     }
 
@@ -422,7 +437,9 @@ const ListingMobileView = ({
           <div>
             <Col xs={12}>
               <div style={S('fw-600 font-18 mb-10')}>Description</div>
-              <div style={S('color-4a4a4a font-18 mb-20 pr-30')}>{description}</div>
+              <div style={S('color-4a4a4a font-18 mb-20 pr-30')}>
+                {description}
+              </div>
             </Col>
             <div className="clearfix" />
           </div>
@@ -444,7 +461,10 @@ const ListingMobileView = ({
                     'HOA Frequency',
                     listing.association_fee_frequency
                   )}
-                  {renderFeatures('HOA Includes', listing.association_fee_includes)}
+                  {renderFeatures(
+                    'HOA Includes',
+                    listing.association_fee_includes
+                  )}
                 </div>
               </div>
               <div style={S('pr-20 mb-20')}>
@@ -456,14 +476,19 @@ const ListingMobileView = ({
                 {renderFeatures('Stories', property.number_of_stories)}
                 {renderFeatures('MLS#', listing.mls_number)}
                 {renderFeatures('Possession', listing.possession)}
-                {renderFeatures('Days On Market', listing_util.getDOM(listing.dom))}
+                {renderFeatures(
+                  'Days On Market',
+                  listing_util.getDOM(listing.dom)
+                )}
                 {renderFeatures(
                   'Current Days On Market',
                   listing_util.getDOM(listing.cdom)
                 )}
               </div>
               <div style={S('pr-20')}>
-                <div style={S('fw-600 font-18 mb-10')}>Amenities & Utilities</div>
+                <div style={S('fw-600 font-18 mb-10')}>
+                  Amenities & Utilities
+                </div>
                 {renderFeatures('Pool', property.pool_yn)}
                 {renderFeatures('Pool Features', property.pool_features)}
                 {renderFeatures('Handicap Amenities', property.handicap_yn)}
@@ -484,13 +509,22 @@ const ListingMobileView = ({
                   'Garage Spaces',
                   property.parking_spaces_covered_total
                 )}
-                {renderFeatures('Interior Features', property.interior_features)}
+                {renderFeatures(
+                  'Interior Features',
+                  property.interior_features
+                )}
                 {renderFeatures('Alarm/Security', property.security_features)}
                 {renderFeatures('Flooring', property.flooring)}
               </div>
               <div style={S('pr-20 mb-20')}>
-                {renderFeatures('Exterior Features', property.exterior_features)}
-                {renderFeatures('Construction', property.construction_materials)}
+                {renderFeatures(
+                  'Exterior Features',
+                  property.exterior_features
+                )}
+                {renderFeatures(
+                  'Construction',
+                  property.construction_materials
+                )}
                 {renderFeatures('Foundation', property.foundation_details)}
                 {renderFeatures('Roof', property.roof)}
               </div>
@@ -520,7 +554,9 @@ const ListingMobileView = ({
     )
   }
 
-  const viewer_wrap_style = S('absolute h-100p bg-fff t-0 l-0 z-1000 ml-0 w-100p')
+  const viewer_wrap_style = S(
+    'absolute h-100p bg-fff t-0 l-0 z-1000 ml-0 w-100p'
+  )
   const nav_bar_style = S('mb-0 p-0 h-65 pt-7 w-100p')
 
   // let join_area
@@ -543,7 +579,9 @@ const ListingMobileView = ({
   let left_area = (
     <div style={S('h-65 w-200')}>
       <a
-        href={Brand.asset('site_logo_wide') ? `http://${window.location.host}` : '/'}
+        href={
+          Brand.asset('site_logo_wide') ? `http://${window.location.host}` : '/'
+        }
         style={{
           ...S('font-28 pt-15 pl-15'),
           display: 'block',
@@ -553,7 +591,11 @@ const ListingMobileView = ({
         className="tk-calluna-sans text-primary"
       >
         {Brand.asset('site_logo_wide') ? (
-          <img alt="brand" style={S('w-100p')} src={Brand.asset('site_logo_wide')} />
+          <img
+            alt="brand"
+            style={S('w-100p')}
+            src={Brand.asset('site_logo_wide')}
+          />
         ) : (
           'Rechat'
         )}
@@ -651,7 +693,11 @@ const ListingMobileView = ({
     let phone_area
 
     if (brand_agent.phone_number) {
-      phone_area = <div style={S('font-15 mb-5')}>M: {brand_agent.phone_number}</div>
+      phone_area = (
+        <div style={S('font-15 mb-5')}>
+          M: {formatPhoneNumber(brand_agent.phone_number)}
+        </div>
+      )
     }
 
     brand_agent_area = (

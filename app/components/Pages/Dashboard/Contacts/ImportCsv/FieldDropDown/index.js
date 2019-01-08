@@ -9,6 +9,8 @@ import DropDown from '../components/DropDown'
 
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
+import { fieldsOrder as partnerFieldsName } from '../../Profile/Partner'
+
 class FieldDropDown extends React.Component {
   /**
    * returns last address index in the map object
@@ -84,6 +86,17 @@ class FieldDropDown extends React.Component {
     })
   }
 
+  getPartnerOptions = () =>
+    partnerFieldsName.map(name => {
+      const definition = selectDefinitionByName(this.props.attributes, name)
+
+      return {
+        is_partner: true,
+        label: `Spouse/Partner - ${definition.label}`,
+        value: `${definition.id}:partner`
+      }
+    })
+
   /**
    * create field options based on indexing system
    * @param {Object} attributes - all attributes definitions
@@ -97,12 +110,7 @@ class FieldDropDown extends React.Component {
       newOptions = this.createNewAddressOptions(attributes, lastAddressIndex)
     }
 
-    const options = {
-      ...attributes.byId,
-      ...newOptions
-    }
-
-    return _.chain(options)
+    const primaryContactOptions = _.chain({ ...attributes.byId, ...newOptions })
       .filter(attr => attr.editable || attr.show)
       .map(({ id, label, index = 0 }) => ({
         disabled: this.isOptionDisabled(attributes, mappedFields, id, index),
@@ -110,20 +118,25 @@ class FieldDropDown extends React.Component {
         label: index > 0 ? `${label} ${index}` : label
       }))
       .value()
+
+    return [...primaryContactOptions, ...this.getPartnerOptions()]
   }
 
   /**
    *
    */
   getSelectedField = options => {
-    const { selectedField, selectedFieldIndex } = this.props
+    const {
+      selectedField: { index, definitionId, is_partner }
+    } = this.props
+
     const value =
-      selectedField || selectedFieldIndex
-        ? `${selectedField}:${selectedFieldIndex}`
+      definitionId || index
+        ? `${definitionId}:${is_partner ? 'partner' : index}`
         : ''
 
     const field =
-      selectedField &&
+      definitionId &&
       _.find(options, {
         value
       })
@@ -155,6 +168,7 @@ class FieldDropDown extends React.Component {
           onChange={this.onFieldChange}
           callToActions={
             <ActionButton
+              size="small"
               data-field={this.props.fieldName}
               onClick={this.props.toggleOpenDrawer}
             >

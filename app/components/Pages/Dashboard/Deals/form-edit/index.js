@@ -1,21 +1,23 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
+import { browserHistory, withRouter } from 'react-router'
 import { addNotification as notify } from 'reapop'
 
 import { saveSubmission, getDeal, getForms } from 'actions/deals'
+import { confirmation } from 'actions/confirmation'
 
-import { getFormSize } from 'models/Deal/form'
-import { LoadingDealContainer } from './styled'
+import { getPdfSize } from 'models/Deal/form'
 
 import PageHeader from 'components/PageHeader'
 import ActionButton from 'components/Button/ActionButton'
 import Spinner from 'components/Spinner'
 import ProgressBar from 'components/ProgressBar'
 
+import importPdfJs from 'utils/import-pdf-js'
+
 import PDFEdit from './editor'
 
-import importPdfJs from 'utils/import-pdf-js'
+import { LoadingDealContainer } from './styled'
 import config from '../../../../../../config/public'
 
 class EditDigitalForm extends React.Component {
@@ -24,20 +26,42 @@ class EditDigitalForm extends React.Component {
     isSaving: false,
     pdfDocument: null,
     pdfUrl: '',
-    downloadPercents: 1
+    downloadPercents: 1,
+    promptOnQuit: false
   }
 
   componentDidMount() {
     this.initialize()
+
+    this.unregisterLeaveHook = this.props.router.setRouteLeaveHook(
+      this.props.route,
+      this.routerWillLeave
+    )
+  }
+
+  componentWillUnmount() {
+    this.unregisterLeaveHook()
   }
 
   values = {}
 
+  routerWillLeave = () => {
+    if (this.state.promptOnQuit === false) {
+      return true
+    }
+
+    return 'Your work is not saved! Are you sure you want to leave?'
+  }
+
   initialize = async () => {
     const { deal } = this.props
 
-    if (deal && !deal.checklists) {
-      await this.props.getDeal(deal.id)
+    try {
+      if (!deal || !deal.checklists) {
+        await this.props.getDeal(this.props.params.id)
+      }
+    } catch (e) {
+      return browserHistory.push('/dashboard/deals')
     }
 
     if (!this.state.pdfDocument) {
@@ -68,7 +92,7 @@ class EditDigitalForm extends React.Component {
       : `${config.forms.url}/${form.id}.pdf`
 
     // get form size in bytes, because pdfjs sucks
-    const formSize = await getFormSize(form.id)
+    const formSize = await getPdfSize({ form: form.id })
 
     if (!formSize) {
       this.setState({
@@ -109,12 +133,16 @@ class EditDigitalForm extends React.Component {
   }
 
   changeFormValue = (name, value, forceUpdate = false) => {
-    const newValues = {
+    this.values = {
       ...this.values,
       [name]: value
     }
 
-    this.values = newValues
+    if (!this.state.promptOnQuit) {
+      this.setState({
+        promptOnQuit: true
+      })
+    }
 
     if (forceUpdate) {
       this.forceUpdate()
@@ -122,15 +150,13 @@ class EditDigitalForm extends React.Component {
   }
 
   setFormValues = (values, forceUpdate = false) => {
-    const newValues = {
+    this.values = {
       ...this.values,
       ...values
     }
 
-    this.values = newValues
-
     if (forceUpdate) {
-      return this.forceUpdate()
+      this.forceUpdate()
     }
   }
 
@@ -138,7 +164,7 @@ class EditDigitalForm extends React.Component {
     const { task, notify } = this.props
     // const { notifyOffice } = this.state
 
-    this.setState({ isSaving: true })
+    this.setState({ isSaving: true, promptOnQuit: false })
 
     // save form
     try {
@@ -174,6 +200,8 @@ class EditDigitalForm extends React.Component {
     this.setState({ isSaving: false })
   }
 
+  handleSelectContext = () => this.setState({ promptOnQuit: true })
+
   getHeaderTitle = title =>
     title && title.length > 30 ? `${title.substring(0, 30)}...` : title
 
@@ -208,9 +236,10 @@ class EditDigitalForm extends React.Component {
 
     return (
       <Fragment>
-        <PageHeader backButton>
-          <PageHeader.Title title={this.getHeaderTitle(task.title)} />
-
+        <PageHeader
+          title={this.getHeaderTitle(task.title)}
+          onClickBackButton={this.closeForm}
+        >
           <PageHeader.Menu>
             <ActionButton
               disabled={!isFormLoaded || isSaving}
@@ -228,6 +257,7 @@ class EditDigitalForm extends React.Component {
           values={this.values}
           onValueUpdate={this.changeFormValue}
           onSetValues={this.setFormValues}
+          onSelectContext={this.handleSelectContext}
         />
       </Fragment>
     )
@@ -246,7 +276,9 @@ function mapStateToProps({ deals, user }, props) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { saveSubmission, getDeal, getForms, notify }
-)(EditDigitalForm)
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { saveSubmission, getDeal, getForms, notify, confirmation }
+  )(EditDigitalForm)
+)

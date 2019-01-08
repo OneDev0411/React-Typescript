@@ -10,11 +10,13 @@ import Suggestions from './suggestions'
 import { selectDefinitionByName } from '../../../reducers/contacts/attributeDefs'
 import { searchContacts } from '../../../models/contacts/search-contacts'
 import { normalizeContactAttribute } from '../../../store_actions/contacts/helpers/normalize-contacts'
+import { isValidPhoneNumber, formatPhoneNumber } from '../../../utils/helpers'
 import {
   getContactUsers,
   getContactAvatar,
   getContactAttribute
 } from '../../../models/contacts/helpers'
+import { getActiveTeamACL } from '../../../utils/user-teams'
 
 class Compose extends React.Component {
   constructor(props) {
@@ -34,6 +36,10 @@ class Compose extends React.Component {
   componentDidMount() {
     // if component reopen, clear recipient
     this.onChangeRecipients()
+
+    const acl = getActiveTeamACL(this.props.user)
+
+    this.hasContactsPermission = acl.includes('CRM')
   }
 
   /**
@@ -67,7 +73,11 @@ class Compose extends React.Component {
       rooms = await this.searchInRooms(this.criteria)
     }
 
-    const contacts = await this.searchInContacts(this.criteria.toLowerCase())
+    let contacts = []
+
+    if (this.hasContactsPermission) {
+      contacts = await this.searchInContacts(this.criteria.toLowerCase())
+    }
 
     this.createListView(rooms, contacts)
 
@@ -103,7 +113,9 @@ class Compose extends React.Component {
       .filter(entry => {
         if (!existingUserIds[entry.id]) {
           return true
-        } else if (!filtered) {
+        }
+
+        if (!filtered) {
           filtered = true
         }
       })
@@ -128,26 +140,14 @@ class Compose extends React.Component {
       }
     }
 
-    const {
-      PhoneNumberUtil,
-      PhoneNumberFormat
-    } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
-    const phoneUtil = PhoneNumberUtil.getInstance()
+    const isPhoneNumber = await isValidPhoneNumber(id)
 
-    try {
-      let phoneNumber = phoneUtil.parse(id, 'US')
-      let isNumberValid = phoneUtil.isValidNumber(phoneNumber)
+    if (isPhoneNumber) {
+      const phone_number = await formatPhoneNumber(id)
 
-      if (isNumberValid) {
-        return {
-          [id]: this.createListItem('phone_number', {
-            id,
-            phone_number: phoneUtil.format(phoneNumber, PhoneNumberFormat.E164)
-          })
-        }
+      return {
+        [id]: this.createListItem('phone_number', { id, phone_number })
       }
-    } catch (e) {
-      return null
     }
   }
 
@@ -183,14 +183,18 @@ class Compose extends React.Component {
     let result = []
     const { attributeDefs } = this.props
 
+    q = q.toLowerCase()
+
     const response = await searchContacts(this.criteria.toLowerCase())
     const contacts = normalizeContactAttribute(response)
 
     contacts.forEach(contact => {
+      const { display_name } = contact
       const avatar = getContactAvatar(
         contact,
         selectDefinitionByName(attributeDefs, 'profile_image_url').id
       )
+      const profile_image_url = (avatar && avatar.text) || ''
       // search in contact's users
       const users = getContactUsers(contact)
         .filter(user => user.display_name.toLowerCase().includes(q))
@@ -205,15 +209,15 @@ class Compose extends React.Component {
           .map(email =>
             this.createListItem('email', {
               id: email.id,
+              display_name,
               email: email.text,
-              display_name: contact.summary.display_name,
-              profile_image_url: (avatar && avatar.text) || ''
+              profile_image_url
             })
           )
       }
 
       // search in contact's phone
-      const phoneAttDef = selectDefinitionByName(attributeDefs, 'email')
+      const phoneAttDef = selectDefinitionByName(attributeDefs, 'phone_number')
 
       if (phoneAttDef) {
         phones = getContactAttribute(contact, phoneAttDef)
@@ -221,11 +225,37 @@ class Compose extends React.Component {
           .map(phone =>
             this.createListItem('phone_number', {
               id: phone.id,
+              display_name,
               phone_number: phone.text,
-              display_name: contact.summary.display_name,
-              profile_image_url: (avatar && avatar.text) || ''
+              profile_image_url
             })
           )
+      }
+
+      if (
+        emails.length === 0 &&
+        phones.length === 0 &&
+        contact.display_name.toLowerCase().includes(q)
+      ) {
+        if (contact.summary.email) {
+          emails.push(
+            this.createListItem('email', {
+              id: contact.id,
+              display_name,
+              email: contact.summary.email,
+              profile_image_url
+            })
+          )
+        } else if (contact.summary.phone_number) {
+          phones.push(
+            this.createListItem('phone_number', {
+              id: contact.id,
+              display_name,
+              phone_number: contact.summary.phone_number,
+              profile_image_url
+            })
+          )
+        }
       }
 
       result = result.concat(users, emails, phones)
@@ -380,11 +410,12 @@ Compose.defaultProps = {
   roomUsers: []
 }
 
-function mapStateToProps({ contacts }) {
+function mapStateToProps({ contacts, user }) {
   const { attributeDefs } = contacts
 
   return {
-    attributeDefs
+    attributeDefs,
+    user
   }
 }
 

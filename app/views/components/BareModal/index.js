@@ -1,13 +1,9 @@
 import React from 'react'
 import ReactModal from 'react-modal'
 
-export default class BareModal extends React.Component {
-  componentDidMount() {
-    if (document) {
-      ReactModal.setAppElement('#app')
-    }
-  }
+ReactModal.setAppElement('#app')
 
+export default class BareModal extends React.Component {
   render() {
     return (
       <ReactModal

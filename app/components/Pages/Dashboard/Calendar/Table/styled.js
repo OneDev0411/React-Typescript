@@ -4,28 +4,33 @@ import { grey, primary } from '../../../../../views/utils/colors'
 import ALink from '../../../../../views/components/ALink'
 
 export const GridContainer = styled.div`
-  height: calc(100vh - ${props => (props.isFilterHidden ? '88px' : '146px')});
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   padding: 0 1em 0 1.5em;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
 `
 
 export const TableHeader = styled.div`
   display: flex;
   align-items: center;
-  height: 32px;
+  height: 2em;
   border-radius: 3px;
   background-color: ${grey.A100};
   padding: 0 1em;
   color: ${primary};
   font-weight: 600;
   position: sticky;
-  top: 0.5em;
+  top: 0;
   font-weight: ${props => (props.isSelectedDay ? 600 : 400)};
   background-color: ${props => (props.isSelectedDay ? '#000000' : grey.A100)};
   color: ${props => (props.isSelectedDay ? '#ffffff' : '#000')};
 `
 
-export const Title = ALink.extend`
+export const Title = styled(ALink)`
   font-size: 1.25rem;
   font-weight: 500;
   cursor: pointer;

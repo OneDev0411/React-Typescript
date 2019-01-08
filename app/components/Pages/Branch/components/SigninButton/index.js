@@ -1,6 +1,7 @@
-import Button from '../../../../../views/components/Button/LinkButton'
+import styled from "styled-components"
+import Button from '../../../../../views/components/Button/AButton'
 
-export const SigninButton = Button.extend`
+export const SigninButton = styled(Button)`
   margin-left: 1rem;
   &:hover {
     color: #fff;

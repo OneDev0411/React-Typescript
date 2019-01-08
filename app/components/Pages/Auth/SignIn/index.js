@@ -7,13 +7,13 @@ import withHandlers from 'recompose/withHandlers'
 
 import Brand from '../../../../controllers/Brand'
 import submitSigninForm from '../../../../store_actions/auth/signin'
-import { grey } from '../../../../views/utils/colors'
+import { grey, primary } from '../../../../views/utils/colors'
 import Button from '../../../../views/components/Button/ActionButton'
-import SimpleField from '../../../Pages/Dashboard/Account/Profile/components/SimpleField'
+import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'
 
 export const getBrandInfo = brand => {
   let siteTitle = 'Rechat'
-  let siteLogo = '/static/images/logo-200w.png'
+  let siteLogo = '/static/images/appicon.png'
 
   if (brand) {
     siteLogo = Brand.asset('site_logo', null, brand)
@@ -60,17 +60,9 @@ export const renderField = ({
   )
 }
 
-const SigninForm = ({
-  brand,
-  invalid,
-  pristine,
-  isLogging,
-  submitError,
-  handleSubmit,
-  onSubmitHandler
-}) => {
-  const isDisabled = isLogging || invalid || pristine
-  const { siteLogo, siteTitle } = getBrandInfo(brand)
+const SigninForm = props => {
+  const { isLogging } = props
+  const { siteLogo, siteTitle } = getBrandInfo(props.brand)
 
   return (
     <div className="signin-page-wrapper">
@@ -89,7 +81,7 @@ const SigninForm = ({
           <p className="c-auth__subtitle">Hi, welcome back!</p>
         </header>
         <main className="c-auth__main">
-          <form onSubmit={handleSubmit(onSubmitHandler)}>
+          <form onSubmit={props.handleSubmit(props.onSubmitHandler)}>
             <Field
               name="username"
               type="email"
@@ -106,7 +98,7 @@ const SigninForm = ({
             <div className="c-forgot u-align-right">
               <Link to="/password/forgot">Forgot your password?</Link>
             </div>
-            {submitError && (
+            {(props.submitFailed || props.submitError) && (
               <div className="c-auth__submit-error-alert">
                 The email or password is incorrect. Please try again.
               </div>
@@ -114,14 +106,16 @@ const SigninForm = ({
             <Button
               type="submit"
               isBlock
-              disabled={isDisabled}
+              disabled={isLogging}
               style={{ marginBottom: '2em' }}
+              brandColor={Brand.color('primary', primary)}
             >
               {isLogging ? 'Signing in...' : 'Sign in'}
             </Button>
           </form>
           <p style={{ textAlign: 'center', color: grey.A600 }}>
-            <small>Don't have an account?</small>&nbsp;&nbsp;
+            <small>Don't have an account?</small>
+            &nbsp;&nbsp;
             <Link to="/signup">Sign up</Link>
           </p>
         </main>

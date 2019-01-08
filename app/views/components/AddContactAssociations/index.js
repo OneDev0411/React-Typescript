@@ -9,29 +9,36 @@ import { normalizeContact } from '../../utils/association-normalizers'
 
 export class AddContactAssociation extends React.Component {
   static propTypes = {
+    title: PropTypes.string,
     handleAdd: PropTypes.func.isRequired,
     buttonRenderer: PropTypes.func.isRequired
+  }
+
+  static defaultProps = {
+    title: 'Attach Contact'
   }
 
   add = (contact, callback) =>
     this.props.handleAdd(normalizeContact(contact), callback)
 
   render() {
-    const title = 'Attach Contact'
+    const { title } = this.props
 
     return (
       <AddAssociation
         render={({ isActive, handleClose, handleOpen }) => (
           <div>
-            <Tooltip placement="bottom" caption={title}>
+            <Tooltip id={`tooltip_${title}`} caption={title}>
               {this.props.buttonRenderer(handleOpen)}
             </Tooltip>
-            <SearchContactDrawer
-              title={title}
-              isOpen={isActive}
-              onClose={handleClose}
-              onSelect={contact => this.add(contact, handleClose)}
-            />
+            {isActive && (
+              <SearchContactDrawer
+                isOpen
+                title={title}
+                onClose={handleClose}
+                onSelect={contact => this.add(contact, handleClose)}
+              />
+            )}
           </div>
         )}
       />

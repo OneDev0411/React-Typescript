@@ -1,4 +1,5 @@
 import _ from 'underscore'
+
 import * as actionTypes from '../../constants/deals'
 
 export default (state = null, action) => {
@@ -35,6 +36,15 @@ export default (state = null, action) => {
       return {
         ...state,
         ...action.tasks
+      }
+
+    case actionTypes.SET_EXPAND_TASK:
+      return {
+        ...state,
+        [action.taskId]: {
+          ...state[action.taskId],
+          is_expanded: action.isExpanded
+        }
       }
 
     case actionTypes.UPDATE_SUBMISSION:
@@ -89,7 +99,7 @@ export default (state = null, action) => {
           ...state[action.task_id],
           room: {
             ...state[action.task_id].room,
-            attachments: state[action.task_id].room.attachments.filter(
+            attachments: (state[action.task_id].room.attachments || []).filter(
               file => file.id !== action.file_id
             )
           }
@@ -99,4 +109,24 @@ export default (state = null, action) => {
     default:
       return state
   }
+}
+
+export const selectTaskById = (state, id) => (state && id ? state[id] : null)
+
+export const selectDealTasks = (deal, checklists, state) => {
+  const list = []
+
+  if (!deal.checklists) {
+    return list
+  }
+
+  deal.checklists.forEach(checklistId => {
+    const checklist = checklists[checklistId]
+
+    if (checklist.tasks && !checklist.is_terminated) {
+      checklist.tasks.forEach(taskId => list.push(state[taskId]))
+    }
+  })
+
+  return list
 }

@@ -1,23 +1,26 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import { batchActions } from 'redux-batched-actions'
 
 import { loadJS } from '../../../../../utils/load-js'
+import { getBounds } from '../../../../../utils/map'
 import getPlace from '../../../../../models/listings/search/get-place'
-import { getMapBoundsInCircle } from '../../../../../utils/get-coordinates-points/index.js'
+import { getMapBoundsInCircle } from '../../../../../utils/get-coordinates-points'
 import { selectListings } from '../../../../../reducers/listings'
 import searchActions from '../../../../../store_actions/listings/search'
+import { setMapProps } from '../../../../../store_actions/listings/map'
 import getListingsByValert from '../../../../../store_actions/listings/search/get-listings/by-valert'
 import { toggleFilterArea } from '../../../../../store_actions/listings/search/filters/toggle-filters-area'
 import { confirmation } from '../../../../../store_actions/confirmation'
+import { CreateTour } from '../../../../../views/components/tour/CreateTour'
 
 import Map from './components/Map'
 import { MapView } from '../components/MapView'
-import { bootstrapURLKeys } from '../mapOptions'
+import { bootstrapURLKeys, mapInitialState } from '../mapOptions'
 import { GridView } from '../components/GridView'
 import { GalleryView } from '../components/GalleryView'
 import CreateAlertModal from '../components/modals/CreateAlertModal'
-
 import { Header } from './Header'
 
 class Search extends React.Component {
@@ -51,6 +54,8 @@ class Search extends React.Component {
           bootstrapURLKeys.key
         }&libraries=${bootstrapURLKeys.libraries}&callback=initialize`
       )
+    } else {
+      this.initialize()
     }
   }
 
@@ -71,16 +76,32 @@ class Search extends React.Component {
   initMap = () => this.setState({ mapWithQueryIsInitialized: true })
 
   fetchDallasListings = async () => {
-    const { dispatch } = this.props
+    const { dispatch, filterOptions } = this.props
 
-    dispatch(searchActions.setSearchInput('Dallas TX, USA'))
-
-    await dispatch(
+    dispatch(
       getListingsByValert({
-        ...this.props.queryOptions,
-        limit: 50
+        ...filterOptions,
+        limit: 200
       })
     )
+
+    const bounds = new window.google.maps.LatLngBounds()
+
+    filterOptions.points.forEach(({ latitude: lat, longitude: lng }) =>
+      bounds.extend({ lat, lng })
+    )
+
+    batchActions([
+      dispatch(searchActions.setSearchInput('Dallas TX, USA')),
+      dispatch(searchActions.setSearchLocation(mapInitialState.center)),
+      dispatch(
+        setMapProps('search', {
+          bounds: getBounds(bounds),
+          center: mapInitialState.center,
+          zoom: 16
+        })
+      )
+    ])
   }
 
   _findPlace = async address => {
@@ -105,23 +126,33 @@ class Search extends React.Component {
         return this.initMap()
       }
 
-      const location = await getPlace(address)
+      const place = await getPlace(address, false)
 
-      if (location) {
-        await dispatch(
-          getListingsByValert({
-            ...this.props.queryOptions,
-            limit: 50,
-            points: getMapBoundsInCircle(location.center, 1)
+      const zoom = 16
+      let center = place.geometry.location
+      const { points, bounds } = getMapBoundsInCircle(
+        center,
+        1.61803398875 / 2,
+        true
+      )
+
+      batchActions([
+        dispatch(
+          searchActions.getListings.byValert({
+            ...this.props.filterOptions,
+            limit: 200,
+            points
           })
+        ),
+        dispatch(searchActions.setSearchLocation(center)),
+        dispatch(
+          setMapProps('search', { center, zoom, bounds: getBounds(bounds) })
         )
-      }
+      ])
     } catch (error) {
       console.log(error)
-
-      if (isMapView) {
-        this.initMap()
-      }
+    } finally {
+      this.initMap()
     }
   }
 
@@ -137,7 +168,7 @@ class Search extends React.Component {
 
   handleSaveSearch = () => {
     if (this.props.listings.info.total < 400) {
-      return () => this.setState({ shareModalIsActive: true })
+      return this.setState({ shareModalIsActive: true })
     }
 
     this.props.dispatch(
@@ -155,8 +186,7 @@ class Search extends React.Component {
     const _props = {
       user: this.props.user,
       listings: this.props.listings,
-      isFetching: this.props.isFetching,
-      isWidget: this.props.isWidget
+      isFetching: this.props.isFetching
     }
 
     switch (this.state.activeView) {
@@ -165,8 +195,11 @@ class Search extends React.Component {
           <MapView
             {..._props}
             tabName="search"
+            mapCenter={this.props.mapCenter}
             Map={
-              this.state.mapWithQueryIsInitialized ? <Map {..._props} /> : null
+              this.state.mapWithQueryIsInitialized ? (
+                <Map {..._props} isWidget={this.props.isWidget} />
+              ) : null
             }
           />
         )
@@ -175,7 +208,36 @@ class Search extends React.Component {
         return <GalleryView {..._props} />
 
       default:
-        return <GridView {..._props} />
+        return (
+          <GridView
+            {..._props}
+            plugins={{
+              actionable: {
+                actions: [
+                  {
+                    display: ({ selectedRows }) => selectedRows.length > 0,
+                    render: ({ selectedRows }) => {
+                      const listings = this.props.listings.data.filter(l =>
+                        selectedRows.some(id => id === l.id)
+                      )
+
+                      return (
+                        <CreateTour
+                          listings={listings}
+                          user={this.props.user}
+                        />
+                      )
+                    }
+                  }
+                ]
+              },
+              selectable: {
+                persistent: true,
+                storageKey: 'listings'
+              }
+            }}
+          />
+        )
     }
   }
 
@@ -188,6 +250,7 @@ class Search extends React.Component {
       <React.Fragment>
         <Header
           user={user}
+          isWidget={this.props.isWidget}
           isFetching={this.props.isFetching}
           filtersIsOpen={this.props.filtersIsOpen}
           activeView={this.state.activeView}
@@ -216,9 +279,10 @@ const mapStateToProps = ({ user, search }) => {
   return {
     user,
     isLoggedIn: user || false,
-    queryOptions: search.options,
+    filterOptions: search.options,
     isFetching: listings.isFetching,
     filtersIsOpen: search.filters.isOpen,
+    mapCenter: search.map.props.center,
     listings: {
       data: selectListings(listings),
       info: listings.info

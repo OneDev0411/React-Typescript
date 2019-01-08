@@ -55,6 +55,7 @@ class Search extends React.Component {
   }
 
   onBlur = () => this.setState({ isFocused: false })
+
   onFocus = () => this.setState({ isFocused: true })
 
   render() {
@@ -83,16 +84,15 @@ class Search extends React.Component {
           onChange={this.handleChange}
           onBlur={this.onBlur}
           onFocus={this.onFocus}
-          innerRef={this.onRef}
+          ref={this.onRef}
           readOnly={disableOnSearch && isSearching}
         />
 
-        {showClearSearch &&
-          this.state.searchValue.length > 0 && (
-            <IconButton onClick={this.handleClearSearch}>
-              <IconClose />
-            </IconButton>
-          )}
+        {showClearSearch && this.state.searchValue.length > 0 && (
+          <IconButton onClick={this.handleClearSearch}>
+            <IconClose />
+          </IconButton>
+        )}
       </Container>
     )
   }

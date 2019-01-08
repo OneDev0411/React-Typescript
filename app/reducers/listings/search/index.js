@@ -5,6 +5,7 @@ import type from './searchType'
 import filters from './filters'
 import options from './options'
 import input from './searchInput'
+import { location } from './search-location'
 import listings from '../index.js'
 import { createNamedWrapperReducer } from '../../../utils/redux-utils'
 
@@ -13,6 +14,7 @@ const search = combineReducers({
   input,
   filters,
   options,
+  location,
   map: createNamedWrapperReducer(map, 'search'),
   panels: createNamedWrapperReducer(panels, 'search'),
   listings: createNamedWrapperReducer(listings, 'search')

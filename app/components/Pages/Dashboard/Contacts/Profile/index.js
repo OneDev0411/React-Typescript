@@ -1,12 +1,12 @@
 import React from 'react'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
+import _ from 'underscore'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
 
-import {
-  getContactAddresses,
-  updateContactQuery
-} from '../../../../../models/contacts/helpers'
+import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
+import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
+
 import { getContactTimeline } from '../../../../../models/contacts/get-contact-timeline'
 
 import {
@@ -14,6 +14,7 @@ import {
   isLoadedContactAttrDefs
 } from '../../../../../reducers/contacts/attributeDefs'
 
+import { getContactsTags } from '../../../../../store_actions/contacts/get-contacts-tags'
 import {
   getContact,
   deleteAttributes,
@@ -31,6 +32,7 @@ import { Container } from '../components/Container'
 import { Dates } from './Dates'
 import { DealsListWidget } from './Deals'
 import { Details } from './Details'
+import { Partner } from './Partner'
 import Tags from './Tags'
 import { ContactInfo } from './ContactInfo'
 import Addresses from './Addresses'
@@ -61,6 +63,23 @@ class ContactProfile extends React.Component {
     this.detectScreenSize()
     window.addEventListener('resize', this.detectScreenSize)
     this.initializeContact()
+
+    if (this.props.fetchTags) {
+      this.props.getContactsTags()
+    }
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.viewAsUsers.length !== this.props.viewAsUsers.length ||
+      !_.isEqual(nextProps.viewAsUsers, this.props.viewAsUsers)
+    ) {
+      const viewAsUsers = viewAsEveryoneOnTeam(nextProps.user)
+        ? []
+        : nextProps.viewAsUsers
+
+      this.props.getContactsTags(viewAsUsers)
+    }
   }
 
   componentWillUnmount = () =>
@@ -84,6 +103,10 @@ class ContactProfile extends React.Component {
     this.fetchTimeline()
   }
 
+  updateContact() {
+    this.props.getContact(this.props.params.id)
+  }
+
   fetchTimeline = async () => {
     try {
       const timeline = await getContactTimeline(this.props.params.id)
@@ -95,26 +118,36 @@ class ContactProfile extends React.Component {
     }
   }
 
-  addEvent = event =>
-    this.setState(state => ({
-      timeline: [event, ...state.timeline]
-    }))
+  addEvent = crm_event => {
+    this.setState(
+      state => ({
+        timeline: [crm_event, ...state.timeline]
+      }),
+      this.updateContact
+    )
+  }
 
   filterTimelineById = (state, id) =>
     state.timeline.filter(item => item.id !== id)
 
   editEvent = updatedEvent =>
-    this.setState(state => ({
-      timeline: [
-        ...this.filterTimelineById(state, updatedEvent.id),
-        updatedEvent
-      ]
-    }))
+    this.setState(
+      state => ({
+        timeline: [
+          ...this.filterTimelineById(state, updatedEvent.id),
+          updatedEvent
+        ]
+      }),
+      this.updateContact
+    )
 
   deleteEvent = id =>
-    this.setState(state => ({
-      timeline: this.filterTimelineById(state, id)
-    }))
+    this.setState(
+      state => ({
+        timeline: this.filterTimelineById(state, id)
+      }),
+      this.updateContact
+    )
 
   handleAddNote = async text => {
     await this.props.upsertContactAttributes(this.props.contact.id, [
@@ -168,7 +201,6 @@ class ContactProfile extends React.Component {
       )
     }
 
-    const hasAddress = getContactAddresses(contact)
     const defaultAssociation = {
       association_type: 'contact',
       contact: normalizeContact(contact)
@@ -190,15 +222,19 @@ class ContactProfile extends React.Component {
                 <Tags contact={contact} />
               </Card>
               <Card>
+                {!this.state.isDesktopScreen && <Dates contact={contact} />}
+
                 <ContactInfo contact={contact} />
 
-                {hasAddress.length > 0 && <Addresses contact={contact} />}
+                <Addresses contact={contact} />
 
                 <Details contact={contact} />
 
-                {hasAddress.length === 0 && <Addresses contact={contact} />}
+                <Partner contact={contact} />
 
-                {!this.state.isDesktopScreen && thirdColumnSections}
+                {!this.state.isDesktopScreen && (
+                  <DealsListWidget contactId={contact.id} />
+                )}
 
                 <Owner
                   onSelect={this.onChangeOwner}
@@ -260,14 +296,15 @@ class ContactProfile extends React.Component {
                 </div>
               </Tab.Container>
               <Timeline
-                user={user}
                 contact={contact}
-                items={this.state.timeline}
-                isFetching={this.state.isFetchingTimeline}
-                editNoteHandler={this.editNote}
+                defaultAssociation={defaultAssociation}
+                deleteEventHandler={this.deleteEvent}
                 deleteNoteHandler={this.deleteNote}
                 editEventHandler={this.editEvent}
-                deleteEventHandler={this.deleteEvent}
+                editNoteHandler={this.editNote}
+                isFetching={this.state.isFetchingTimeline}
+                items={this.state.timeline}
+                user={user}
               />
             </SecondColumn>
 
@@ -285,6 +322,8 @@ class ContactProfile extends React.Component {
 
 const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
   const { list, contact: fetchContact, attributeDefs } = contacts
+  const tags = contacts.list
+  const fetchTags = !isFetchingTags(tags) && selectTags(tags).length === 0
 
   let contact = selectContact(list, contactId)
 
@@ -296,7 +335,9 @@ const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
     user,
     attributeDefs,
     contact,
-    fetchError: selectContactError(fetchContact)
+    fetchError: selectContactError(fetchContact),
+    fetchTags,
+    viewAsUsers: viewAs(user)
   }
 }
 
@@ -306,7 +347,8 @@ export default connect(
     getContact,
     deleteAttributes,
     updateContactSelf,
-    upsertContactAttributes
+    upsertContactAttributes,
+    getContactsTags
   }
 )(ContactProfile)
 

@@ -3,8 +3,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import withState from 'recompose/withState'
 import compose from 'recompose/compose'
-import { Button } from 'react-bootstrap'
 import S from 'shorti'
+
+import ActionButton from 'views/components/Button/ActionButton'
+
+import { primary } from 'views/utils/colors'
+
 import Brand from '../../controllers/Brand'
 import config from '../../../config/public'
 
@@ -129,38 +133,30 @@ const Mobile = ({ iFrameSrc, data, setIFrameSrc, location }) => {
               Our mobile web version is temporarily unavailable. Please use your
               desktop browser to access Rechat.com or use the mobile iOS App.
             </p>
-            <Button
-              style={S(
-                `color-fff border-1-solid-${Brand.color(
-                  'primary',
-                  '3388ff'
-                )} bg-${Brand.color('primary', '3388ff')}`
-              )}
-              bsSize="large"
+            <ActionButton
+              style={{
+                backgroundColor: Brand.color('primary', primary)
+              }}
               onClick={() => {
                 document.location = 'rechat://'
                 loadAppByUri(config.itunes_url)
               }}
             >
               Open in my Rechat App
-            </Button>
+            </ActionButton>
             <p style={{ fontSize: '18px', padding: '2rem' }}>
               If you don't have the app, you can get it from appStore:
             </p>
-            <Button
-              style={S(
-                `color-fff border-1-solid-${Brand.color(
-                  'primary',
-                  '3388ff'
-                )} bg-${Brand.color('secondary', 'a1bde4')}`
-              )}
-              bsSize="large"
+            <ActionButton
+              style={{
+                backgroundColor: Brand.color('primary', primary)
+              }}
               onClick={() => {
                 document.location = config.itunes_url
               }}
             >
               Install the App
-            </Button>
+            </ActionButton>
           </div>
         ) : (
           <div style={{ fontSize: '18px', padding: '2rem' }}>
@@ -172,7 +168,8 @@ const Mobile = ({ iFrameSrc, data, setIFrameSrc, location }) => {
       <div style={S('text-center color-fff absolute w-100p b-30 z-11')}>
         Powered by{' '}
         <span className="din" style={S('fw-600')}>
-          Rechat<sup>TM</sup>
+          Rechat
+          <sup>TM</sup>
         </span>
       </div>
     </div>

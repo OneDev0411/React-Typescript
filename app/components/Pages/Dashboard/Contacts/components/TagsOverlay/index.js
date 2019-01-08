@@ -1,33 +1,32 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import _ from 'underscore'
 import unionBy from 'lodash/unionBy'
+import intersectionBy from 'lodash/intersectionBy'
+
 import OverlayDrawer from '../../../../../../views/components/OverlayDrawer'
-import DrawerHeader from './DrawerHeader'
 import Info from './Info'
 import CustomTag from './CustomTag'
 import DrawerFooter from './DrawerFooter'
 import { SubHeaderContainer } from './styled'
 import Tags from './Tags'
 import {
-  upsertAttributesToContacts,
-  deleteAttributesFromContacts,
   addAttributes,
   deleteAttributes,
-  getContacts,
-  getContactsTags
+  deleteAttributesFromContacts,
+  getContactsTags,
+  upsertAttributesToContacts
 } from '../../../../../../store_actions/contacts'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 import {
-  getContactAttribute,
-  getAttributeFromSummary
+  getAttributeFromSummary,
+  getContactAttribute
 } from '../../../../../../models/contacts/helpers'
 import {
   selectContact,
-  // selectCurrentPage,
   selectContactsInfo
 } from '../../../../../../reducers/contacts/list'
-import intersectionBy from 'lodash/intersectionBy'
 import { selectTags } from '../../../../../../reducers/contacts/tags'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 
@@ -62,12 +61,6 @@ class TagsOverlay extends React.Component {
     }
   }
 
-  componentDidMount() {
-    if (this.props.existingTags.length === 0) {
-      this.props.getContactsTags()
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
     const newTags = this.getCommonTags(
       nextProps.selectedContactsIds,
@@ -94,16 +87,19 @@ class TagsOverlay extends React.Component {
     return !nextSate.isSubmitting || !this.state.isSubmitting
   }
 
-  onTagSelectionChange = (tagIndex, isSelected) => {
-    let tags = [...this.state.tags]
-    const newTag = {
-      ...tags[tagIndex],
-      isSelected
-    }
+  onTagSelectionChange = (tagIndex, isSelected) =>
+    this.setState(({ tags: prevTags }) => ({
+      tags: prevTags.map(
+        (tag, index) =>
+          index === tagIndex
+            ? {
+                ...prevTags[tagIndex],
+                isSelected
+              }
+            : prevTags[index]
+      )
+    }))
 
-    tags[tagIndex] = newTag
-    this.setState({ tags })
-  }
   newTagChange = newTagValue => this.setState({ newTagValue })
 
   onUpsert = event => {
@@ -239,10 +235,9 @@ class TagsOverlay extends React.Component {
       }
     }
 
-    if (selectedContactsIds.length >= 50) {
-      await this.props.getContacts()
-      this.props.resetSelectedRows()
-    }
+    this.props.handleChangeContactsAttributes &&
+      (await this.props.handleChangeContactsAttributes())
+    this.props.resetSelectedRows && this.props.resetSelectedRows()
 
     await getContactsTags()
     this.setState({ isSubmitting: false })
@@ -254,7 +249,7 @@ class TagsOverlay extends React.Component {
   getCommonTags = (selectedContactsIds, ContactListStore, existingTags) => {
     if (
       selectedContactsIds.length === 0 ||
-      selectContactsInfo(ContactListStore).count === 0
+      selectContactsInfo(ContactListStore).total === 0
     ) {
       return []
     }
@@ -288,11 +283,9 @@ class TagsOverlay extends React.Component {
         existingTags
       )
 
-    const sortedTags = this.sortTags(
+    return this.sortTags(
       unionBy(filteredTags, defaultsWithExisting, attribute_def.data_type)
     )
-
-    return sortedTags
   }
 
   sortTags(tags) {
@@ -388,6 +381,10 @@ function mapStateToProps(state) {
   }
 }
 
+TagsOverlay.propTypes = {
+  selectedContactsIds: PropTypes.array
+}
+
 export default connect(
   mapStateToProps,
   {
@@ -396,7 +393,6 @@ export default connect(
     addAttributes,
     deleteAttributes,
     getContactsTags,
-    getContacts,
     confirmation
   }
 )(TagsOverlay)

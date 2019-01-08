@@ -25,7 +25,7 @@ export default class StringContext extends React.Component {
     const value =
       _.isUndefined(data.value) === false ? data.value : e.target.value
 
-    this.props.onContextChange(value, data.maskedValue)
+    this.props.onContextChange(value, data.maskedValue || value)
   }
 
   render() {

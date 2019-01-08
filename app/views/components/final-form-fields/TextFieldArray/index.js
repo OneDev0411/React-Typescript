@@ -50,8 +50,8 @@ export function TextFieldArray(props) {
             >
               {index + 1 === fields.length ? (
                 <IconButton
-                  isFit
                   iconSize="large"
+                  isFit
                   onClick={() => fields.push('')}
                   type="button"
                 >
@@ -59,10 +59,10 @@ export function TextFieldArray(props) {
                 </IconButton>
               ) : (
                 <IconButton
-                  isFit
                   iconSize="large"
-                  type="button"
+                  isFit
                   onClick={() => fields.remove(index)}
+                  type="button"
                 >
                   <RemoveIcon />
                 </IconButton>

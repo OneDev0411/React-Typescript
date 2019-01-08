@@ -1,3 +1,24 @@
+export function sortAlphabetically(a, b) {
+  if (a < b) {
+    return -1
+  }
+
+  if (a > b) {
+    return 1
+  }
+
+  // a must be equal to b
+  return 0
+}
+
+export function joinItemsWithString(items = [], string = ', ') { 
+  return items.filter(i => typeof i === 'string').join(string)
+}
+
+export function onlyUnique(value, index, self) { 
+  return self.indexOf(value) === index;
+}
+
 export function uppercaseFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
@@ -9,13 +30,15 @@ export function getNameInitials(name) {
 
   return name
     .split(' ')
-    .map(word => word.charAt(0).toUpperCase())
+    .map(word => /^[A-Za-z\s]+$/.test(word) ? word.charAt(0).toUpperCase() : '')
     .join('')
+    .trim()
+    .substring(0, 3)
 }
 
-async function getPhoneNumberUtil() {
+export async function getPhoneNumberUtil() {
   const {
-    PhoneNumberUtil
+    PhoneNumberUtil,
   } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
 
   return PhoneNumberUtil.getInstance()
@@ -166,12 +189,23 @@ export async function isValidPhoneNumber(phone_number) {
 
   if (
     phone_number.trim() &&
-    phoneUtil.isValidNumber(phoneUtil.parse(phone_number))
+    phoneUtil.isValidNumber(phoneUtil.parse(phone_number, 'US'))
   ) {
     return true
   }
 
   return false
+}
+
+export async function formatPhoneNumber(input) {
+  const phoneUtil = await getPhoneNumberUtil()
+  const parsed = phoneUtil.parse(input, 'US')
+
+  const {
+    PhoneNumberFormat
+  } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
+
+  return phoneUtil.format(parsed, PhoneNumberFormat.NATIONAL)
 }
 
 export function imageExists(url) {
@@ -281,4 +315,8 @@ export function round(number, precision) {
 
 export function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+export function getIndexLabel(index) {
+  return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')[index]
 }

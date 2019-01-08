@@ -1,62 +1,64 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
+import _ from 'underscore'
 
+import Spinner from 'components/Spinner'
+
+import { getDeals, searchDeals, getContexts, getForms } from 'actions/deals'
 import {
-  getDeals,
-  getContexts,
-  getForms
-} from '../../../../store_actions/deals'
-import { TrainingModeBanner } from '../Partials/TrainingModeBanner'
-import { isTrainingAccount } from '../../../../utils/user-teams'
+  getActiveTeamId,
+  hasUserAccess,
+  viewAsEveryoneOnTeam
+} from 'utils/user-teams'
 
 class DealsContainer extends React.Component {
   componentDidMount() {
-    const {
-      getDeals,
-      getContexts,
-      getForms,
-      contexts,
-      forms,
-      deals,
-      isFetchingDeals,
-      user
-    } = this.props
+    this.init()
+  }
 
-    if (!deals && !isFetchingDeals) {
-      getDeals(user)
+  init = async () => {
+    const { props } = this
+    const { dispatch, user } = props
+    const brandId = getActiveTeamId(user)
+
+    const isBackOffice = hasUserAccess(user, 'BackOffice')
+
+    if (!hasUserAccess(user, 'Deals') && !isBackOffice) {
+      browserHistory.push('/dashboard/mls')
     }
 
-    if (!contexts) {
-      getContexts()
+    if (!props.contexts[brandId]) {
+      dispatch(getContexts(brandId))
     }
 
-    if (!forms) {
-      getForms()
+    if (_.size(props.deals) === 0 && !props.isFetchingDeals) {
+      if (isBackOffice || viewAsEveryoneOnTeam(user)) {
+        dispatch(getDeals(user))
+      } else {
+        dispatch(searchDeals(user))
+      }
+    }
+
+    if (!props.forms) {
+      dispatch(getForms())
     }
   }
 
   render() {
-    const { contexts, user } = this.props
+    if (_.size(this.props.deals) === 0) {
+      return <Spinner />
+    }
 
-    return (
-      <div className="deals">
-        {contexts &&
-          isTrainingAccount(user) && <TrainingModeBanner user={user} />}
-
-        {this.props.children}
-      </div>
-    )
+    return this.props.children
   }
 }
 
-export default connect(
-  ({ deals, user }) => ({
-    error: deals.properties.error,
-    deals: deals.list,
-    contexts: deals.contexts,
-    forms: deals.forms,
-    isFetchingDeals: deals.properties.isFetchingDeals,
-    user
-  }),
-  { getDeals, getContexts, getForms }
-)(DealsContainer)
+export default connect(({ deals, user }) => ({
+  error: deals.properties.error,
+  deals: deals.list,
+  contexts: deals.contexts,
+  forms: deals.forms,
+  isFetchingDeals: deals.properties.isFetchingDeals,
+  user
+}))(DealsContainer)

@@ -3,19 +3,24 @@ import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 import { Field } from 'react-final-form'
 
-import { createTask } from '../../../../../models/tasks/create-task'
+import { createTask } from 'models/tasks/create-task'
+import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 
-import { EventDrawer } from '../../../../components/EventDrawer'
-import ActionButton from '../../../../components/Button/ActionButton'
-import { DateTimeField } from '../../../../components/final-form-fields/DateTimeField'
+import { EventDrawer } from 'components/EventDrawer'
+import ActionButton from 'components/Button/ActionButton'
+import {
+  DateTimeField,
+  ReminderField,
+  WhenFieldChanges
+} from 'components/final-form-fields'
 
-import LoadSaveReinitializeForm from '../../../../utils/LoadSaveReinitializeForm'
+import { QUERY } from 'components/EventDrawer/index.js'
+import LoadSaveReinitializeForm from 'views/utils/LoadSaveReinitializeForm'
 
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
 import { Title } from './components/Title'
-import { Reminder } from './components/Reminder'
 import { TaskType } from './components/TaskType'
 import { AssociationsButtons } from './components/AssociationsButtons'
 import { AssociationsList } from './components/AssociationsList'
@@ -37,8 +42,7 @@ export default class Task extends Component {
 
   save = async task => {
     try {
-      const query = 'associations[]=crm_task.reminders'
-      const newTask = await createTask(task, query)
+      const newTask = await createTask(task, QUERY)
 
       return this.props.submitCallback(newTask)
     } catch (error) {
@@ -47,9 +51,11 @@ export default class Task extends Component {
   }
 
   onClickMoreOptions = formValues => this.setState({ formValues })
-  handleDrawerClose = formProps => {
+
+  handleDrawerClose = (formProps, newEvent) => {
     if (formProps && !formProps.preventDefault) {
       formProps.form.reset()
+      this.props.submitCallback(newEvent)
     }
 
     this.setState({ formValues: null })
@@ -80,6 +86,30 @@ export default class Task extends Component {
             return (
               <React.Fragment>
                 <FormContainer onSubmit={props.handleSubmit}>
+                  <WhenFieldChanges
+                    set="reminder"
+                    watch="dueDate"
+                    setter={onChange => {
+                      const items = REMINDER_DROPDOWN_OPTIONS.filter(
+                        ({ value }) =>
+                          value == null ||
+                          value <=
+                            new Date(values.dueDate).getTime() -
+                              new Date().getTime()
+                      )
+
+                      if (items.length === 0) {
+                        return
+                      }
+
+                      // 15 Minutes Before
+                      if (items.some(item => item.value === '900000')) {
+                        onChange(REMINDER_DROPDOWN_OPTIONS[3])
+                      } else {
+                        onChange(items[items.length - 1])
+                      }
+                    }}
+                  />
                   <Title />
                   {isActive && (
                     <React.Fragment>
@@ -101,7 +131,7 @@ export default class Task extends Component {
                             name="dueDate"
                             selectedDate={values.dueDate}
                           />
-                          <Reminder dueDate={values.dueDate} />
+                          <ReminderField dueDate={values.dueDate} />
                         </FieldContainer>
                       </Flex>
                       <AssociationsList
@@ -149,7 +179,9 @@ export default class Task extends Component {
                     user={this.props.user}
                     initialValues={this.state.formValues}
                     onClose={this.handleDrawerClose}
-                    submitCallback={() => this.handleDrawerClose(props)}
+                    submitCallback={newEvent =>
+                      this.handleDrawerClose(props, newEvent)
+                    }
                   />
                 )}
               </React.Fragment>

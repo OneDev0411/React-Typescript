@@ -1,6 +1,11 @@
 import { combineReducers } from 'redux'
 import _ from 'underscore'
+
 import * as actionTypes from '../../constants/contacts'
+import {
+  CHANGE_VIEW_AS_FILTER_REQUEST,
+  CHANGE_VIEW_AS_FILTER_FAILURE
+} from '../../constants/user'
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -93,6 +98,8 @@ const isFetching = (state = false, action) => {
     case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_REQUEST:
     case actionTypes.POST_NEW_ATTRIBUTES_REQUEST:
     case actionTypes.PATCH_CONTACT_REQUEST:
+    case actionTypes.DELETE_CONTACTS_REQUEST:
+    case CHANGE_VIEW_AS_FILTER_REQUEST:
       return true
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.FETCH_CONTACTS_FAILURE:
@@ -106,6 +113,9 @@ const isFetching = (state = false, action) => {
     case actionTypes.POST_NEW_ATTRIBUTES_FAILURE:
     case actionTypes.PATCH_CONTACT_SUCCESS:
     case actionTypes.PATCH_CONTACT_FAILURE:
+    case actionTypes.DELETE_CONTACTS_SUCCESS:
+    case actionTypes.DELETE_CONTACTS_FAILURE:
+    case CHANGE_VIEW_AS_FILTER_FAILURE:
       return false
     default:
       return state
@@ -131,13 +141,10 @@ const error = (state = null, action) => {
   }
 }
 
-const filters = (state = { text: '' }, action) => {
+const textFilter = (state = '', action) => {
   switch (action.type) {
-    case actionTypes.SET_CONTACT_FILTERS:
-      return {
-        ...state,
-        ...action.filters
-      }
+    case actionTypes.SET_CONTACTS_LIST_TEXT_FILTER:
+      return action.text
     default:
       return state
   }
@@ -148,7 +155,7 @@ const contactsList = combineReducers({
   byId,
   info,
   error,
-  filters,
+  textFilter,
   isFetching
 })
 
@@ -163,19 +170,3 @@ export const selectContactsInfo = state => state.info
 export const selectContactsListFetching = state => state.isFetching
 
 export const getContactsListError = state => state.error
-
-export const selectContactFilters = state => state.filters
-
-// export const selectPage = (state, page) => state.pagination.pages[page]
-
-// export const selectPageContacts = (state, page) => {
-//   if (state.pagination.pages[page]) {
-//     return state.pagination.pages[page].ids.map(id => state.byId[id])
-//   }
-
-//   return []
-// }
-
-// export const selectPages = state => state.pagination.pages
-
-// export const selectCurrentPage = state => state.pagination.currentPage

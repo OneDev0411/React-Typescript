@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import pure from 'recompose/pure'
 
-import { getNameInitials } from '../../..//utils/helpers'
-import { Container, Image, Status } from './styled'
+import { getNameInitials } from '../../../utils/helpers'
+import { Container, Image, Status, Initials } from './styled'
 
 const propTypes = {
   statusColor: PropTypes.string,
@@ -19,7 +19,7 @@ const propTypes = {
 const defaultProps = {
   size: 40,
   image: '',
-  title: '*',
+  title: '',
   placeHolderImage: '',
   borderRadius: 100,
   isOnline: false,
@@ -27,21 +27,30 @@ const defaultProps = {
   statusColor: '#35b863'
 }
 
-const Avatar = ({ image, placeHolderImage, title, isOnline, ...props }) => {
-  const imageUrl = image || placeHolderImage
+const Avatar = ({
+  image,
+  placeHolderImage,
+  initials,
+  title,
+  isOnline,
+  ...props
+}) => {
+  let imageSrc = ''
 
-  const hasImage =
-    imageUrl &&
-    /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(
-      imageUrl
-    )
+  if (image != null && image.length > 1) {
+    imageSrc = image
+  } else if (placeHolderImage && !title) {
+    imageSrc = placeHolderImage
+  }
 
   return (
-    <Container center hasImage={hasImage} {...props}>
-      {hasImage ? (
-        <Image alt="rechat avatar" src={imageUrl} />
+    <Container center {...props}>
+      {imageSrc ? (
+        <Image alt="rechat avatar" src={imageSrc} />
       ) : (
-        getNameInitials(title)
+        <Initials size={props.size}>
+          {initials || getNameInitials(title)}
+        </Initials>
       )}
       {props.showStatus && (
         <Status

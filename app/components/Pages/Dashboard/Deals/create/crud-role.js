@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import RoleAgentIntegration from '../components/roles/agent-integration'
+import RoleAgentIntegration from '../components/Roles/AgentIntegration'
 import RoleItem from './role-item'
 import ActionButton from 'components/Button/ActionButton'
 
