@@ -13,7 +13,14 @@ class TaskFiles extends React.Component {
 
     const attachments = task.room.attachments || []
 
-    return _.sortBy(attachments.concat(task), item => item.updated_at * -1)
+    return _.sortBy(attachments.concat(task), item => {
+      const time =
+        item.type === 'task' && item.submission
+          ? item.submission.updated_at
+          : item.updated_at
+
+      return time * -1
+    })
   }
 
   render() {
