@@ -67,8 +67,6 @@ class Messages extends React.Component {
     // get messages of current room
     const messages = roomId ? this.props.messages[roomId] : null
 
-    console.log(messages)
-
     return (
       <div className="messages">
         <SocketStatus />
