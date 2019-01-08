@@ -94,26 +94,24 @@ class CommentInput extends React.Component {
   }
 
   render() {
-    const { comment, rows, height, isSaving } = this.state
-    const { task, autoFocus, onFocus, onBlur } = this.props
-    const hasComment = comment.length > 0
+    const hasComment = this.state.comment.length > 0
 
     return (
       <Container>
         <Textarea
-          autoFocus={autoFocus}
+          autoFocus={this.props.autoFocus}
           dir="auto"
           placeholder="Write a comment ..."
-          rows={rows}
+          rows={this.state.rows}
           maxRows={3}
           style={{
             width: '100%',
-            height: `${height}px`,
+            height: `${this.state.height}px`,
             border: hasComment ? `1px solid ${blue.A200}` : ''
           }}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          value={comment}
+          onFocus={this.props.onFocus}
+          onBlur={this.props.onBlur}
+          value={this.state.comment}
           onChange={e => this.setState({ comment: e.target.value })}
           onHeightChange={height => this.onHeightChangeHandler(height)}
         />
@@ -123,8 +121,9 @@ class CommentInput extends React.Component {
         <Actions>
           <CommentActions
             hasComment={hasComment}
-            isSaving={isSaving}
-            task={task}
+            isSaving={this.state.isSaving}
+            task={this.props.task}
+            isBackOffice={this.props.isBackOffice}
             onSendComment={(notify, status) => this.sendComment(notify, status)}
           />
         </Actions>
