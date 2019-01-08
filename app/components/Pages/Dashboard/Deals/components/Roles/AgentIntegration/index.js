@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
-import ContactModal from 'components/SelectContactModal'
+import { SearchContactDrawer } from 'components/SearchContactDrawer'
 
 import { convertContactToRole, AGENT_ROLES } from '../../../utils/roles'
 
@@ -173,14 +173,14 @@ class RoleAgentIntegration extends React.Component {
           onUpsertRole={this.onUpsertRole}
         />
 
-        <ContactModal
+        <SearchContactDrawer
           title={this.props.modalTitle}
           isOpen={this.state.showContactModal}
-          handleOnClose={this.onClose}
-          handleAddManually={
-            this.state.selectedAgent ? null : this.state.roleDrawer
+          onClose={this.onClose}
+          onAddNewContact={
+            this.state.selectedAgent ? null : this.showRoleDrawer
           }
-          handleSelectedItem={this.onSelectContactUser}
+          onSelect={this.onSelectContactUser}
         />
       </Fragment>
     )
