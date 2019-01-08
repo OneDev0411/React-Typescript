@@ -452,6 +452,10 @@ class CreateOffer extends React.Component {
     const isDoubleEndedAgent = enderType === 'AgentDoubleEnder'
     const requiredFields = this.RequiredFields
 
+    if (this.state.dealHasPrimaryOffer) {
+      return false
+    }
+
     return (
       <div className="deal-create-offer">
         <FullPageHeader
