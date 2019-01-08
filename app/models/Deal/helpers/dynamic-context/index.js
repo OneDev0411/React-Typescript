@@ -25,8 +25,6 @@ export function searchContext(brand_id, key) {
   const context = _.find(getList(brand_id), { key })
 
   if (!context) {
-    console.warn(`Could not find context: ${context}`)
-
     return null
   }
 
