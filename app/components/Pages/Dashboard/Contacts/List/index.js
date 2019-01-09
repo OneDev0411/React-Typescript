@@ -174,14 +174,9 @@ class ContactsList extends React.Component {
       this.resetSelectedRows()
     }
 
-    console.log('handleFilterChange REAL', {
-      data,
-      conditionOperator
-    })
-
     try {
       await this.props.searchContacts(
-        filter,
+        data,
         start,
         undefined,
         searchInputValue,
