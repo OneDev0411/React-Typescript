@@ -22,15 +22,10 @@ export class ConditionOperators extends Component {
   }
 
   handleConditionChange = selectedItem => {
-    this.setState(
-      {
-        selectedItem
-      },
-      () => {
-        this.props.onConditionChange &&
-          this.props.onConditionChange(this.state.selectedItem)
-      }
-    )
+    this.setState({
+      selectedItem
+    })
+    this.props.onConditionChange(selectedItem)
   }
 
   render() {
