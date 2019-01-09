@@ -102,11 +102,7 @@ export function onlineSubmitHandler(data) {
 
       return fetch(createContactApiUrl, {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${data.agentAccessToken}`,
-          'X-RECHAT-BRAND': data.data.brandId,
-          'Content-Type': 'application/json'
-        },
+        headers: requestHeaders,
         body: JSON.stringify(createContactRequestBody)
       }).then(createContactResponse => createContactResponse.json())
     })
