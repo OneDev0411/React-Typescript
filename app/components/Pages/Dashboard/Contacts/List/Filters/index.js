@@ -86,7 +86,7 @@ class ContactFilters extends React.PureComponent {
         createSegmentFromFilters={this.normalizeFilters}
         onChange={this.props.onFilterChange}
         onConditionChange={this.props.onConditionChange}
-        enableConditionOperators={this.props.enableConditionOperators}
+        disableConditionOperators={this.props.disableConditionOperators}
       >
         <SaveSegment />
       </Filters>

@@ -89,6 +89,12 @@ class Filters extends React.Component {
    *
    */
   onFilterChange = (id, values, operator) => {
+    console.log('onFilterChange', {
+      id,
+      values,
+      operator
+    })
+
     const current = this.props.activeFilters[id]
     const isCompleted = this.isFilterCompleted({ values, operator })
 
@@ -133,18 +139,23 @@ class Filters extends React.Component {
    *
    */
   onChangeFilters = filters => {
+    console.log('onChangeFilters', filters)
+
     const completedFilters = _.filter(
       filters,
       item => item.isIncomplete === false
     )
 
-    this.props.onChange(
-      this.props.createSegmentFromFilters(completedFilters).filters
-    )
+    console.log('completedFilters', completedFilters)
+
+    this.props.onChange({
+      data: this.props.createSegmentFromFilters(completedFilters).filters
+    })
   }
 
-  onChangeCondition = condition => {
-    this.props.onConditionChange(condition)
+  onConditionChange = conditionOperator => {
+    console.log('onConditionChange', conditionOperator)
+    this.props.onChange({ conditionOperator })
   }
 
   render() {
@@ -152,23 +163,29 @@ class Filters extends React.Component {
     const { config } = rest
     const { activeFilters } = this.props
 
+    console.log('activeFilters', activeFilters)
+
     return (
       <Container>
-        {this.props.enableConditionOperators && (
-          <ConditionOperators onConditionChange={this.onChangeCondition} />
+        {this.props.disableConditionOperators || (
+          <ConditionOperators onChange={this.onConditionChange} />
         )}
-        {_.map(activeFilters, (filter, id) => (
-          <FilterItem
-            key={id}
-            {...filter}
-            filterConfig={this.findFilterById(filter.id)}
-            onToggleFilterActive={() => this.toggleFilterActive(id)}
-            onRemove={() => this.removeFilter(id)}
-            onFilterChange={(values, operator) =>
-              this.onFilterChange(id, values, operator)
-            }
-          />
-        ))}
+        {_.map(activeFilters, (filter, id) => {
+          console.log('FILTER AND ID', filter, id)
+
+          return (
+            <FilterItem
+              key={id}
+              {...filter}
+              filterConfig={this.findFilterById(filter.id)}
+              onToggleFilterActive={() => this.toggleFilterActive(id)}
+              onRemove={() => this.removeFilter(id)}
+              onFilterChange={(values, operator) =>
+                this.onFilterChange(id, values, operator)
+              }
+            />
+          )
+        })}
 
         <AddFilter
           hasMissingValue={this.hasMissingValue()}

@@ -21,11 +21,11 @@ export class ConditionOperators extends Component {
     selectedItem: CONDITIONS[0]
   }
 
-  handleConditionChange = selectedItem => {
+  handleChange = selectedItem => {
     this.setState({
       selectedItem
     })
-    this.props.onConditionChange(selectedItem)
+    this.props.onChange(selectedItem)
   }
 
   render() {
@@ -33,7 +33,7 @@ export class ConditionOperators extends Component {
       <BasicDropdown
         noBorder
         items={CONDITIONS}
-        onChange={this.handleConditionChange}
+        onChange={this.handleChange}
         menuStyle={{ width: '100%', overflow: 'hidden' }}
         itemToString={item => item.title}
         defaultSelectedItem={this.state.selectedItem}
