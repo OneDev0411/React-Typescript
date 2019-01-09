@@ -1,10 +1,15 @@
-import Socket from '..'
 import store from '../../../stores'
-
-import { getActiveTeamACL, getActiveTeamId } from '../../../utils/user-teams'
-
-import { getDeal } from '../../../store_actions/deals'
+import Deal from '../../../models/Deal'
 import * as actionTypes from '../../../constants/deals'
+import { updateDeal } from '../../../store_actions/deals'
+import {
+  getActiveTeamACL,
+  getActiveTeamId,
+  viewAs,
+  viewAsEveryoneOnTeam
+} from '../../../utils/user-teams'
+
+import Socket from '../index'
 
 export default class DealSocket extends Socket {
   constructor(user) {
@@ -41,6 +46,17 @@ export default class DealSocket extends Socket {
     }
   }
 
+  shouldUpsertDeal(deal) {
+    if (viewAsEveryoneOnTeam(this.user)) {
+      return true
+    }
+
+    const usersFilter = viewAs(this.user)
+    const dealUsers = deal.roles.map(r => r.user.id)
+
+    return usersFilter.some(user => dealUsers.includes(user))
+  }
+
   /**
    * on receive new deal change
    * action: ['Updated, 'Created', 'Deleted']
@@ -58,11 +74,11 @@ export default class DealSocket extends Socket {
 
     switch (action) {
       case 'Updated':
-        return this.onUpdateDeal(dealId)
+        return this.onUpsertDeal(dealId)
       case 'Created':
-        return this.onCreateDeal(dealId)
-      case 'Deleted':
-        return this.onArchiveDeal(dealId)
+        return this.onUpsertDeal(dealId)
+      // case 'Deleted':
+      //   return this.onArchiveDeal(dealId)
       default:
         return false
     }
@@ -71,26 +87,27 @@ export default class DealSocket extends Socket {
   /**
    * on update deal
    */
-  async onUpdateDeal(dealId) {
-    store.dispatch(getDeal(dealId))
-  }
+  async onUpsertDeal(dealId) {
+    const deal = await Deal.getById(dealId)
 
-  /**
-   * on create deal
-   */
-  onCreateDeal(dealId) {
-    store.dispatch(getDeal(dealId))
+    if (this.shouldUpsertDeal(deal)) {
+      store.dispatch(updateDeal(deal))
+    }
   }
 
   /**
    * on delete/archive deal
    */
-  onArchiveDeal(dealId) {
-    store.dispatch({
-      type: actionTypes.ARCHIVE_DEAL,
-      deal_id: dealId
-    })
-  }
+  // async onArchiveDeal(dealId) {
+  //   const deal = await Deal.getById(dealId)
+
+  //   if (this.shouldUpdateDeal(deal)) {
+  //     store.dispatch({
+  //       type: actionTypes.ARCHIVE_DEAL,
+  //       deal_id: dealId
+  //     })
+  //   }
+  // }
 
   /**
    * on socket connect
