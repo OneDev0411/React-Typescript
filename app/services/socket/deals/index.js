@@ -46,7 +46,7 @@ export default class DealSocket extends Socket {
     }
   }
 
-  shouldUpdateDeal(deal) {
+  shouldUpsertDeal(deal) {
     if (viewAsEveryoneOnTeam(this.user)) {
       return true
     }
@@ -74,11 +74,11 @@ export default class DealSocket extends Socket {
 
     switch (action) {
       case 'Updated':
-        return this.onUpdateDeal(dealId)
+        return this.onUpsertDeal(dealId)
       case 'Created':
-        return this.onCreateDeal(dealId)
-      case 'Deleted':
-        return this.onArchiveDeal(dealId)
+        return this.onUpsertDeal(dealId)
+      // case 'Deleted':
+      //   return this.onArchiveDeal(dealId)
       default:
         return false
     }
@@ -87,21 +87,10 @@ export default class DealSocket extends Socket {
   /**
    * on update deal
    */
-  async onUpdateDeal(dealId) {
+  async onUpsertDeal(dealId) {
     const deal = await Deal.getById(dealId)
 
-    if (this.shouldUpdateDeal(deal)) {
-      store.dispatch(updateDeal(deal))
-    }
-  }
-
-  /**
-   * on create deal
-   */
-  async onCreateDeal(dealId) {
-    const deal = await Deal.getById(dealId)
-
-    if (this.shouldUpdateDeal(deal)) {
+    if (this.shouldUpsertDeal(deal)) {
       store.dispatch(updateDeal(deal))
     }
   }
@@ -109,16 +98,16 @@ export default class DealSocket extends Socket {
   /**
    * on delete/archive deal
    */
-  async onArchiveDeal(dealId) {
-    const deal = await Deal.getById(dealId)
+  // async onArchiveDeal(dealId) {
+  //   const deal = await Deal.getById(dealId)
 
-    if (this.shouldUpdateDeal(deal)) {
-      store.dispatch({
-        type: actionTypes.ARCHIVE_DEAL,
-        deal_id: dealId
-      })
-    }
-  }
+  //   if (this.shouldUpdateDeal(deal)) {
+  //     store.dispatch({
+  //       type: actionTypes.ARCHIVE_DEAL,
+  //       deal_id: dealId
+  //     })
+  //   }
+  // }
 
   /**
    * on socket connect
