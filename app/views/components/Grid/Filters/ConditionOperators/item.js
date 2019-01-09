@@ -8,13 +8,17 @@ const ItemWrapper = styled.div`
   width: 100%;
   padding: 0.6rem 1rem;
   cursor: pointer;
+
+  &:hover {
+    background-color: ${primary};
+  }
 `
 
 const ItemTitle = styled.div`
   font-size: 0.9rem;
 
   ${ItemWrapper}:hover & {
-    color: ${primary};
+    color: #fff;
   }
 `
 

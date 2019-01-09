@@ -34,7 +34,7 @@ export class ConditionOperators extends Component {
         noBorder
         items={CONDITIONS}
         onChange={this.handleConditionChange}
-        menuStyle={{ width: '100%' }}
+        menuStyle={{ width: '100%', overflow: 'hidden' }}
         itemToString={item => item.title}
         defaultSelectedItem={this.state.selectedItem}
         buttonText={this.state.selectedItem.title}
