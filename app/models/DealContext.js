@@ -358,7 +358,7 @@ export function getFieldProperties(name) {
   return (
     {
       year_built: {
-        max: 2018,
+        max: 9999,
         placeholder: 'YYYY',
         mask: [/[1-2]/, /\d/, /\d/, /\d/]
       }
