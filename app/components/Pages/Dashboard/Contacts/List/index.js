@@ -87,13 +87,15 @@ class ContactsList extends React.Component {
         ? []
         : nextProps.viewAsUsers
 
-      this.handleFilterChange(
-        this.state.filter,
-        this.state.searchInputValue,
-        0,
-        this.order,
-        viewAsUsers
-      )
+      this.handleFilterChange({
+        data: {
+          filter: this.state.filter,
+          searchInputValue: this.state.searchInputValue,
+          start: 0,
+          order: this.order,
+          viewAsUsers
+        }
+      })
       this.props.getContactsTags(viewAsUsers)
     }
   }
@@ -114,7 +116,13 @@ class ContactsList extends React.Component {
 
     try {
       if (this.hasSearchState()) {
-        await this.handleFilterChange(filter, searchInputValue, start)
+        await this.handleFilterChange({
+          data: {
+            filter,
+            searchInputValue,
+            start
+          }
+        })
       } else {
         await this.props.getContacts(start)
       }
@@ -134,29 +142,42 @@ class ContactsList extends React.Component {
         activeSegment: segment
       },
       () => {
-        this.handleFilterChange(
-          segment.filters,
-          this.state.searchInputValue,
-          0,
-          this.order,
-          users
-        )
+        this.handleFilterChange({
+          data: {
+            filter: segment.filters,
+            searchInputValue: this.state.searchInputValue,
+            start: 0,
+            order: this.order,
+            viewAsUsers: users
+          }
+        })
       }
     )
   }
 
-  handleFilterChange = async (
-    filter,
-    searchInputValue,
-    start = 0,
-    order = this.order,
-    viewAsUsers = this.props.viewAsUsers
-  ) => {
+  handleFilterChange = async ({
+    data = {},
+    conditionOperator = this.state.conditionOperator
+  }) => {
+    const {
+      filter = this.state.filter,
+      searchInputValue = this.state.searchInputValue,
+      start = 0,
+      order = this.order,
+      viewAsUsers = this.props.viewAsUsers
+    } = data
+
     this.setState({ filter })
+    this.setState({ conditionOperator })
 
     if (start === 0) {
       this.resetSelectedRows()
     }
+
+    console.log('handleFilterChange REAL', {
+      data,
+      conditionOperator
+    })
 
     try {
       await this.props.searchContacts(
@@ -166,35 +187,41 @@ class ContactsList extends React.Component {
         searchInputValue,
         order,
         viewAsUsers,
-        this.state.conditionOperator
+        conditionOperator
       )
     } catch (e) {
       console.log('fetch search error: ', e)
     }
   }
 
-  handleConditionChange = ({ value }) => {
-    this.setState(
-      { conditionOperator: value },
-      () =>
-        this.state.filter.length &&
-        this.handleFilterChange(this.state.filter, this.state.searchInputValue)
-    )
-  }
-
   handleSearch = value => {
     console.log(`[ Search ] ${value}`)
     this.setState({ searchInputValue: value })
-    this.handleFilterChange(this.state.filter, value)
+    this.handleFilterChange({
+      data: {
+        filter: this.state.filter,
+        searchInputValie: value
+      }
+    })
   }
 
   handleChangeOrder = ({ value: order }) => {
     this.order = order
-    this.handleFilterChange(this.state.filter, this.state.searchInputValue)
+    this.handleFilterChange({
+      data: {
+        filter: this.state.filter,
+        searchInputValue: this.state.searchInputValue
+      }
+    })
   }
 
   handleChangeContactsAttributes = () =>
-    this.handleFilterChange(this.state.filter, this.state.searchInputValue)
+    this.handleFilterChange({
+      data: {
+        filter: this.state.filter,
+        searchInputValue: this.state.searchInputValue
+      }
+    })
 
   toggleSideMenu = () =>
     this.setState(state => ({
@@ -216,11 +243,13 @@ class ContactsList extends React.Component {
     if (this.hasSearchState()) {
       await this.fetchList(startFrom)
     } else {
-      await this.handleFilterChange(
-        this.state.filter,
-        this.state.searchInputValue,
-        startFrom
-      )
+      await this.handleFilterChange({
+        data: {
+          filter: this.state.filter,
+          searchInputValue: this.state.searchInputValue,
+          start: startFrom
+        }
+      })
     }
 
     this.setState({ isFetchingMoreContacts: false })
@@ -274,7 +303,11 @@ class ContactsList extends React.Component {
             onChange={this.handleChangeSavedSegment}
           />
           <DuplicateContacts />
-          <TagsList onFilterChange={this.handleFilterChange} />
+          <TagsList
+            onFilterChange={filter =>
+              this.handleFilterChange({ data: { filter } })
+            }
+          />
         </SideMenu>
 
         <PageContent isSideMenuOpen={isSideMenuOpen}>
@@ -286,8 +319,7 @@ class ContactsList extends React.Component {
           />
           <ContactFilters
             onFilterChange={this.handleFilterChange}
-            onConditionChange={this.handleConditionChange}
-            enableConditionOperators
+            // onConditionChange={this.handleConditionChange}
             users={viewAsUsers}
           />
           <SearchContacts

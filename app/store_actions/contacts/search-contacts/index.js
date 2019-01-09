@@ -14,6 +14,16 @@ export function searchContacts(
   users,
   conditionOperator = 'and'
 ) {
+  console.log('SEARCH CONTACTS', {
+    filter,
+    start,
+    limit,
+    searchInputValue,
+    order,
+    users,
+    conditionOperator
+  })
+
   return async (dispatch, getState) => {
     if (start === 0) {
       dispatch({
