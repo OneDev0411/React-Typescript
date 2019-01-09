@@ -40,7 +40,8 @@ class ContactsList extends React.Component {
       isRowsUpdating: false,
       filter: this.props.filter,
       searchInputValue: this.props.list.textFilter,
-      activeSegment: {}
+      activeSegment: {},
+      conditionOperator: this.props.conditionOperator || 'and'
     }
     this.order = this.props.listInfo.order
   }
@@ -164,11 +165,21 @@ class ContactsList extends React.Component {
         undefined,
         searchInputValue,
         order,
-        viewAsUsers
+        viewAsUsers,
+        this.state.conditionOperator
       )
     } catch (e) {
       console.log('fetch search error: ', e)
     }
+  }
+
+  handleConditionChange = ({ value }) => {
+    this.setState(
+      { conditionOperator: value },
+      () =>
+        this.state.filter.length &&
+        this.handleFilterChange(this.state.filter, this.state.searchInputValue)
+    )
   }
 
   handleSearch = value => {
@@ -275,6 +286,8 @@ class ContactsList extends React.Component {
           />
           <ContactFilters
             onFilterChange={this.handleFilterChange}
+            onConditionChange={this.handleConditionChange}
+            enableConditionOperators
             users={viewAsUsers}
           />
           <SearchContacts
