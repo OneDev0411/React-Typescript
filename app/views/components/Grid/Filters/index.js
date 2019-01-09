@@ -16,6 +16,7 @@ import {
   updateActiveFilter
 } from 'actions/filter-segments/active-filters'
 
+import { ConditionOperators } from './ConditionOperators'
 import { AddFilter } from './Create'
 import { FilterItem } from './Item'
 
@@ -142,6 +143,10 @@ class Filters extends React.Component {
     )
   }
 
+  onChangeCondition = condition => {
+    this.props.onConditionChange(condition)
+  }
+
   render() {
     const { children, ...rest } = this.props
     const { config } = rest
@@ -149,6 +154,9 @@ class Filters extends React.Component {
 
     return (
       <Container>
+        {this.props.enableConditionOperators && (
+          <ConditionOperators onConditionChange={this.onChangeCondition} />
+        )}
         {_.map(activeFilters, (filter, id) => (
           <FilterItem
             key={id}
