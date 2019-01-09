@@ -3,14 +3,6 @@ import styled from 'styled-components'
 
 import { primary } from 'views/utils/colors'
 
-export default function({ title, description, ...rest }) {
-  return (
-    <ItemWrapper {...rest}>
-      <ItemTitle>{title}</ItemTitle>
-    </ItemWrapper>
-  )
-}
-
 const ItemWrapper = styled.div`
   font-family: Barlow;
   width: 100%;
@@ -25,3 +17,11 @@ const ItemTitle = styled.div`
     color: ${primary};
   }
 `
+
+export default function({ title, description, ...rest }) {
+  return (
+    <ItemWrapper {...rest}>
+      <ItemTitle>{title}</ItemTitle>
+    </ItemWrapper>
+  )
+}
