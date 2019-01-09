@@ -218,6 +218,10 @@ export class RoleFormModal extends React.Component {
       )
     }
 
+    if (this.props.isEmailRequired) {
+      list.push('email')
+    }
+
     return _.uniq(list)
   }
 
