@@ -11,7 +11,6 @@ import InstantMarketing from 'components/InstantMarketing'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
-import { convertRecipientsToEmails } from '../../helpers/convert-recipients-to-emails'
 import SocialDrawer from '../../components/SocialDrawer'
 import { getTemplatePreviewImage } from '../../helpers/get-template-preview-image'
 import { getTemplateTypes } from '../../helpers/get-template-types'
@@ -72,18 +71,21 @@ class SendDealPromotion extends React.Component {
       isSendingEmail: true
     })
 
-    const emails = convertRecipientsToEmails(
-      values.recipients,
-      values.subject,
-      this.state.htmlTemplate.result
-    )
+    const email = {
+      from: values.fromId,
+      to: values.recipients,
+      subject: values.subject,
+      html: this.state.htmlTemplate.result
+    }
 
     try {
-      await sendContactsEmail(emails, this.state.owner.id)
+      await sendContactsEmail(email, this.state.owner.id)
 
       this.props.notify({
         status: 'success',
-        message: `${emails.length} emails has been sent to your contacts`
+        message: `${
+          values.recipients.length
+        } emails has been sent to your contacts`
       })
     } catch (e) {
       console.log(e)

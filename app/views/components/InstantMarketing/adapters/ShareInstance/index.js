@@ -9,7 +9,6 @@ import ActionButton from 'components/Button/ActionButton'
 
 import SocialDrawer from '../../components/SocialDrawer'
 import hasMarketingAccess from '../../helpers/has-marketing-access'
-import { convertRecipientsToEmails } from '../../helpers/convert-recipients-to-emails'
 
 class ShareInstance extends React.Component {
   state = {
@@ -65,14 +64,15 @@ class ShareInstance extends React.Component {
       isSendingEmail: true
     })
 
-    const emails = convertRecipientsToEmails(
-      values.recipients,
-      values.subject,
-      this.props.instance.html
-    )
+    const email = {
+      from: values.fromId,
+      to: values.recipients,
+      subject: values.subject,
+      html: this.props.instance.html
+    }
 
     try {
-      await sendContactsEmail(emails, this.props.user.id)
+      await sendContactsEmail(email, this.props.user.id)
 
       // reset form
       if (form) {
@@ -81,7 +81,9 @@ class ShareInstance extends React.Component {
 
       this.props.notify({
         status: 'success',
-        message: `${emails.length} emails has been sent to your contacts`
+        message: `${
+          values.recipients.length
+        } emails has been sent to your contacts`
       })
     } catch (e) {
       console.log(e)
