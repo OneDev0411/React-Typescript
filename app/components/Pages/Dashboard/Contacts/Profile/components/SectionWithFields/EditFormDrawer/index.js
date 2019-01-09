@@ -40,10 +40,6 @@ const getAllFields = (attributes, mutators) => {
   attributes.forEach((attribute, index) => {
     const { attribute_def } = attribute
 
-    if (!attribute_def.show) {
-      return
-    }
-
     const key = `${attribute_def.section}_drawer_field_${index}`
     const placeholder = getPlaceholder(attribute)
     const validate = getValidator(attribute)

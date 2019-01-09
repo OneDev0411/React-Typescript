@@ -46,7 +46,7 @@ class DealsContainer extends React.Component {
   }
 
   render() {
-    if (_.size(this.props.deals) === 0) {
+    if (this.props.isFetchingDeals) {
       return <Spinner />
     }
 

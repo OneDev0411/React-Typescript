@@ -73,10 +73,7 @@ class CreateDeal extends React.Component {
   initializeDeal = async () => {
     const { deal } = this.props
 
-    const enderType =
-      typeof deal.deal_context.ender_type !== 'undefined'
-        ? Deal.get.field(deal, 'ender_type')
-        : -1
+    const enderType = Deal.get.field(deal, 'ender_type') || -1
 
     const dealAddress = this.generateAddressFromDeal(deal)
 
