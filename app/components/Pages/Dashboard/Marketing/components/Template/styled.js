@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import IconButton from 'components/Button/IconButton'
 
@@ -6,11 +6,11 @@ export const getMQWidth = (base, props) =>
   props.isSideMenuOpen ? base + 11 : base
 
 export const Box = styled.div`
-  margin-bottom: 2rem;
+  margin-bottom: ${props => (props.isInstance ? '4rem' : '2rem')};
 
   @media (min-width: ${props => getMQWidth(43, props)}em) {
     width: calc(50% - 3rem);
-    margin: 0 1.5rem 3rem;
+    margin: 0 1.5rem ${props => (props.isInstance ? '4rem' : '3rem')};
   }
 
   @media (min-width: ${props => getMQWidth(64, props)}em) {
@@ -24,6 +24,20 @@ export const Box = styled.div`
   @media (min-width: ${props => getMQWidth(100, props)}em) {
     width: calc(20% - 3rem);
   }
+
+  ${props =>
+    props.isInstance &&
+    css`
+      & > .c-template__meta {
+        margin-top: 0.5rem;
+        display: none;
+        color: #7f7f7f;
+      }
+
+      &:hover > .c-template__meta {
+        display: block;
+      }
+    `}
 `
 
 export const ImageContainer = styled.div`
