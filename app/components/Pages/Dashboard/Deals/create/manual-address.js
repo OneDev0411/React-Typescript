@@ -4,10 +4,12 @@ import _ from 'underscore'
 
 import { Modal } from 'react-bootstrap'
 
-import { TextInput } from '../../../../../views/components/Forms/TextInput'
-import { SelectInput } from '../../../../../views/components/Forms/SelectInput'
+import { getField } from 'models/Deal/helpers/context'
 
-import ActionButton from '../../../../../views/components/Button/ActionButton'
+import { TextInput } from 'components/Forms/TextInput'
+import { SelectInput } from 'components/Forms/SelectInput'
+
+import ActionButton from 'components/Button/ActionButton'
 
 import {
   stateToAbbreviated,
@@ -15,7 +17,6 @@ import {
   STREET_PREFIX,
   STATES
 } from '../utils/address'
-import Deal from '../../../../../models/Deal'
 
 const defaultState = 'Texas'
 
@@ -145,11 +146,7 @@ export default class ManualAddress extends React.Component {
       return defaultValue
     }
 
-    if (deal.listing) {
-      return deal.mls_context[field] || defaultValue
-    }
-
-    return Deal.get.field(deal, field) || defaultValue
+    return getField(deal, field) || defaultValue
   }
 
   /**

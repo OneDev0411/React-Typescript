@@ -173,7 +173,7 @@ export function filterByStatus(
   has_active_offer,
   filter_by
 ) {
-  const definition = context[filter_by]
+  const definition = context[filter_by] || []
 
   if (definition.length === 0) {
     return false
@@ -213,11 +213,7 @@ export function getValue(deal, field) {
     }
   }
 
-  // get field
-  const defaultContext =
-    isAddressField(field.key) && deal.listing ? deal.mls_context : null
-
-  const contextValue = getField(deal, field.key, defaultContext)
+  const contextValue = getField(deal, field.key)
 
   const dataObject = {
     value: contextValue,
