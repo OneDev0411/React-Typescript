@@ -5,9 +5,7 @@ import { getClientNames } from '../get-client-names'
  * a helper that extracts address from deal
  */
 export function getAddress(deal, roles) {
-  const address = deal.listing
-    ? deal.mls_context.full_address
-    : getField(deal, 'full_address')
+  const address = getField(deal, 'full_address')
 
   if (!address || address.length === 0) {
     return getClientNames(deal, roles)
