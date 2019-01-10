@@ -80,7 +80,7 @@ export default class Socket {
       Socket.authenticated = true
 
       this.getUserWithTeams(user).then(userWithTeams =>
-        Socket.registerBrand(userWithTeams)
+        this.registerBrand(userWithTeams)
       )
 
       // update app store
@@ -91,7 +91,7 @@ export default class Socket {
   /**
    * authenticate user brand
    */
-  static registerBrand(user) {
+  registerBrand = user => {
     console.log('[Deal Socket] Registering Brand')
 
     const acl = getActiveTeamACL(user)
