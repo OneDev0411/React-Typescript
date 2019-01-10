@@ -51,17 +51,13 @@ router.get('/openhouse/:id/:brand/register', async ctx => {
   const openHouseTitle = openHouse.title
   const agentAccessToken = user.access_token
 
-  $('body').append(
-    '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" />'
-  )
-
-  $('body').append(
-    '<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js" />'
-  )
-
   $('head').append(
-    '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />'
+    '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css" />'
   )
+  $('body').append(
+    '<script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js" />'
+  )
+
   $('body').append(
     getRegisterationScript({
       API_URL,

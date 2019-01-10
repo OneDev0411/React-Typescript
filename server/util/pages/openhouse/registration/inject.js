@@ -56,7 +56,13 @@ export function getRegisterationScript({
           if (navigator.onLine) {
             (${onlineSubmitHandler})(data).then(() => {
               form.reset();
-              toastr.success('The contact info has been successfully registered!');
+              new Noty({
+                theme: 'light',
+                timeout: 3000,
+                progressBar: false,
+                type: 'success',
+                text: 'The contact info has been successfully registered!',
+              }).show();
             }).catch(err => {
               console.log(err);
             });
