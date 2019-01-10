@@ -35,17 +35,17 @@ export default class ListItem extends React.Component {
   }
 
   render() {
-    const { recipient } = this.props
+    const { props } = this
 
     return (
       <Recipient>
-        {this.renderIcon(recipient.type)}
+        {this.renderIcon(props.recipient.data_type)}
 
         <div>
-          <Title>{recipient.name}</Title>
+          <Title>{props.recipient.name || props.recipient.text}</Title>
         </div>
 
-        {recipient.readOnly !== true && (
+        {props.recipient.readOnly !== true && (
           <DeleteButton size="16px" onClick={this.omitRecipient}>
             <CloseIcon />
           </DeleteButton>

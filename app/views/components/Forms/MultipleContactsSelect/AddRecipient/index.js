@@ -10,12 +10,12 @@ import { getSegments, isListFetched } from 'reducers/filter-segments'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { getSavedSegments } from 'actions/filter-segments/get-saved-segment'
 
-import { searchContacts } from '../../../../../models/contacts/search-contacts'
-import { getContactAttribute } from '../../../../../models/contacts/helpers/get-contact-attribute'
+import { searchContacts } from 'models/contacts/search-contacts'
+import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 
-import { normalizeContactAttribute } from '../../../../../store_actions/contacts/helpers/normalize-contacts'
+import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
 
-import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
+import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
 import {
   SearchInput,
@@ -46,13 +46,11 @@ class AddRecipient extends React.Component {
   }
 
   componentDidMount() {
-    const fetchTags = !this.props.tagsIsFetching
-
-    if (fetchTags) {
+    if (!this.props.isLoadingTags) {
       this.props.getContactsTags()
     }
 
-    if (this.props.isSegmentsList === false) {
+    if (!this.props.isListFetched) {
       this.props.getSavedSegments('contacts')
     }
   }
@@ -82,7 +80,7 @@ class AddRecipient extends React.Component {
         avatar: contact.summary.profile_image_url,
         email: contact.summary.email,
         emails: emails.map(email => email.text),
-        type: 'contact'
+        data_type: 'contact'
       }
 
       this.props.input.onChange([...this.props.input.value, newRecipient])
@@ -93,7 +91,7 @@ class AddRecipient extends React.Component {
         name: contact.summary.display_name,
         email: contact.summary.email,
         emails: [],
-        type: 'contact'
+        data_type: 'email'
       }
 
       this.props.input.onChange([...this.props.input.value, newRecipient])
@@ -103,20 +101,17 @@ class AddRecipient extends React.Component {
   }
 
   handleSelectNewListItem = (item, type) => {
-    let newRecipient
-
     const isItemExists = this.props.input.value.some(
-      recipient => recipient.name === item.text
+      recipient => recipient.data_type === type && item.id === recipient.id
     )
 
-    if (!isItemExists) {
-      newRecipient = {
-        [`${type}Id`]: type === 'tag' ? item.text : item.id,
-        name: type === 'tag' ? item.text : item.name,
-        type
+    if (isItemExists === false) {
+      const contact = {
+        ...item,
+        data_type: type
       }
 
-      this.props.input.onChange([...this.props.input.value, newRecipient])
+      this.props.input.onChange([...this.props.input.value, contact])
     }
 
     this.setState(initialState)
@@ -170,13 +165,13 @@ class AddRecipient extends React.Component {
         })
       }
 
-      const regEx = new RegExp(value, 'i')
-
-      const filteredTags = this.props.existingTags.filter(({ text }) =>
-        text.match(regEx)
+      const filteredTags = this.props.tags.filter(
+        ({ text }) => text.toLowerCase() === value.toLowerCase()
       )
+
       const filteredList = this.props.segmentsList.filter(
-        ({ name, id }) => name.match(regEx) && id !== 'default'
+        ({ name, id }) =>
+          name.toLowerCase() === value.toLowerCase() && id !== 'default'
       )
 
       this.setState({
@@ -272,15 +267,15 @@ class AddRecipient extends React.Component {
 }
 
 function mapStateToProps({ contacts }) {
-  const existingTags = selectTags(contacts.tags)
-  const tagsIsFetching = isFetchingTags(contacts.tags)
+  const tags = selectTags(contacts.tags)
+  const isLoadingTags = isFetchingTags(contacts.tags)
   const segmentsList = getSegments(contacts.filterSegments, 'contacts')
 
   return {
     contacts: contacts.list,
     attributeDefs: contacts.attributeDefs,
-    existingTags,
-    tagsIsFetching,
+    tags,
+    isLoadingTags,
     segmentsList,
     isSegmentsList: isListFetched(contacts.filterSegments)
   }
