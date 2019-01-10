@@ -7,8 +7,6 @@ export function getField(deal, field) {
   const context = getContext(deal, field)
 
   if (!context) {
-    console.warn(field)
-
     return null
   }
 
