@@ -1,9 +1,6 @@
-import { updateDeal } from 'actions/deals'
-
-import Deal from 'models/Deal'
-
-import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
-
+import { updateDeal } from '../../../store_actions/deals'
+import Deal from '../../../models/Deal'
+import { viewAs, viewAsEveryoneOnTeam } from '../../../utils/user-teams'
 import store from '../../../stores'
 
 import Socket from '../index'

@@ -1,13 +1,9 @@
 import io from 'socket.io-client'
 
-import { changeSocketStatus } from 'actions/socket'
-
-import getTeams from 'models/user/get-teams'
-
-import { getActiveTeamACL, getActiveTeamId } from 'utils/user-teams'
-
+import { changeSocketStatus } from '../../store_actions/socket'
+import getTeams from '../../models/user/get-teams'
+import { getActiveTeamACL, getActiveTeamId } from '../../utils/user-teams'
 import config from '../../../config/public'
-
 import store from '../../stores'
 
 // create socket
