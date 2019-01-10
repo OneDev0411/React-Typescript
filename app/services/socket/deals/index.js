@@ -1,13 +1,10 @@
+import { updateDeal } from 'actions/deals'
+
+import Deal from 'models/Deal'
+
+import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
+
 import store from '../../../stores'
-import Deal from '../../../models/Deal'
-import * as actionTypes from '../../../constants/deals'
-import { updateDeal } from '../../../store_actions/deals'
-import {
-  getActiveTeamACL,
-  getActiveTeamId,
-  viewAs,
-  viewAsEveryoneOnTeam
-} from '../../../utils/user-teams'
 
 import Socket from '../index'
 
@@ -15,35 +12,8 @@ export default class DealSocket extends Socket {
   constructor(user) {
     super(user)
 
-    // bind chatroom socket events
-    this.bindEvents()
-  }
-
-  async bindEvents() {
-    const { socket } = window
-
-    // event listeners
-    Socket.events.on('UserAuthenticated', this.onUserAuthenticated.bind(this))
-
     // bind socket events
-    socket.on('Deal', this.onDealChange.bind(this))
-  }
-
-  /**
-   * authenticate user brand
-   */
-  static registerBrand(user) {
-    console.log('[Deal Socket] Registering Brand')
-
-    const acl = getActiveTeamACL(user)
-
-    if (acl.includes('Deals') || acl.includes('BackOffice')) {
-      const id = getActiveTeamId(user)
-
-      window.socket.emit('Brand.Register', id, err => {
-        console.log('[Deal Socket]', 'Brand Registered - ', id, err)
-      })
-    }
+    window.socket.on('Deal', this.onDealChange.bind(this))
   }
 
   shouldUpsertDeal(deal) {
@@ -108,12 +78,4 @@ export default class DealSocket extends Socket {
   //     })
   //   }
   // }
-
-  /**
-   * on socket connect
-   */
-  onUserAuthenticated(user) {
-    // register brand
-    DealSocket.registerBrand(user)
-  }
 }
