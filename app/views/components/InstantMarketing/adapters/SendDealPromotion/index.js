@@ -180,7 +180,7 @@ class SendDealPromotion extends React.Component {
             isOpen
             from={this.state.owner}
             onClose={this.toggleComposeEmail}
-            recipients={this.Recipients}
+            recipients={this.props.recipients}
             html={this.state.templateScreenshot}
             onClickSend={this.handleSendEmails}
             isSubmitting={this.state.isSendingEmail}

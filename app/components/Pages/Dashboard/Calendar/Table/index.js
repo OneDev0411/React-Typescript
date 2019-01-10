@@ -124,7 +124,8 @@ export class Table extends React.Component {
         break
 
       case 'crm_task':
-        onClick = () => this.props.onSelectTask(row.crm_task)
+        onClick = () =>
+          this.props.onSelectTask({ id: row.crm_task, type: row.event_type })
         break
     }
 
@@ -190,6 +191,8 @@ export class Table extends React.Component {
     const data = this.Data
     const columns = this.Columns
 
+    console.log(data)
+
     return (
       <ScrollDetector
         onScrollTop={onScrollTop}
@@ -204,7 +207,6 @@ export class Table extends React.Component {
             }
             absolute={false}
           />
-
           <Fetching
             absolute
             show={isFetching && loadingPosition === positions.Middle}
@@ -226,7 +228,6 @@ export class Table extends React.Component {
             )}
             multiple
           />
-
           <Fetching
             show={
               isFetching &&
