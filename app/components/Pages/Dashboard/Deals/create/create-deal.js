@@ -277,8 +277,9 @@ class CreateDeal extends React.Component {
   /**
    * handles create an mls or manual address
    */
-  onCreateAddress = component =>
-    this.setState({ dealAddress: component }, () => this.validateForm())
+  onCreateAddress = address => {
+    this.setState({ dealAddress: address }, () => this.validateForm())
+  }
 
   /**
    * validate form
@@ -662,7 +663,7 @@ class CreateDeal extends React.Component {
       deal_type: this.state.dealSide
     }
 
-    if (this.state.dealAddress && !this.state.dealAddress.id) {
+    if (this.state.dealAddress && this.state.dealAddress.id) {
       dealObject.listing = this.state.dealAddress.id
     }
 
@@ -991,9 +992,7 @@ class CreateDeal extends React.Component {
                   dealAddress={dealAddress}
                   defaultDealAddress={this.state.defaultDealAddress}
                   dealSide={dealSide}
-                  onCreateAddress={(component, type) =>
-                    this.onCreateAddress(component, type)
-                  }
+                  onCreateAddress={this.onCreateAddress}
                   onRemoveAddress={() => this.setState({ dealAddress: null })}
                 />
 
