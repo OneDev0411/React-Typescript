@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
+import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
+
 import {
   getTask,
   updateTask,
@@ -23,9 +25,9 @@ import {
   CheckboxField,
   AssigneesField,
   AssociationsList,
-  ReminderField
+  ReminderField,
+  WhenFieldChanges
 } from '../final-form-fields'
-
 import Tooltip from '../tooltip'
 import { AddAssociationButton } from '../AddAssociationButton'
 import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
@@ -234,7 +236,9 @@ export class EventDrawer extends Component {
               render={formProps => {
                 const { values } = formProps
 
-                // console.log(values)
+                const isDone = values.status === 'DONE'
+                const isPastDate =
+                  new Date(values.dueDate).getTime() < new Date().getTime() - 1
 
                 return (
                   <React.Fragment>
@@ -242,6 +246,41 @@ export class EventDrawer extends Component {
                       onSubmit={formProps.handleSubmit}
                       id="event-drawer-form"
                     >
+                      {!this.isNew && (
+                        <WhenFieldChanges
+                          set="status"
+                          watch="dueDate"
+                          setter={onChange => {
+                            if (isPastDate) {
+                              if (!isDone) {
+                                onChange('DONE')
+                              }
+                            } else if (isDone) {
+                              onChange('PENDING')
+                            }
+                          }}
+                        />
+                      )}
+                      <WhenFieldChanges
+                        set="reminder"
+                        watch="dueDate"
+                        setter={onChange => {
+                          const items = REMINDER_DROPDOWN_OPTIONS.filter(
+                            ({ value }) =>
+                              value == null ||
+                              value <=
+                                new Date(values.dueDate).getTime() -
+                                  new Date().getTime()
+                          )
+
+                          // 15 Minutes Before
+                          if (items.some(item => item.value === '900000')) {
+                            onChange(REMINDER_DROPDOWN_OPTIONS[3])
+                          } else {
+                            onChange(items[items.length - 1])
+                          }
+                        }}
+                      />
                       <Flex style={{ marginBottom: '1rem' }}>
                         {this.isNew ? (
                           <Title fullWidth />
@@ -271,9 +310,8 @@ export class EventDrawer extends Component {
                           name="dueDate"
                           selectedDate={values.dueDate}
                         />
-                        {values.status !== 'DONE' && (
-                          <ReminderField dueDate={values.dueDate} />
-                        )}
+
+                        <ReminderField dueDate={values.dueDate} />
                       </FieldContainer>
 
                       <AssigneesField name="assignees" owner={user} />
@@ -283,6 +321,7 @@ export class EventDrawer extends Component {
                       <AssociationsList
                         name="associations"
                         associations={values.associations}
+                        defaultAssociation={defaultAssociation}
                         handleDelete={this.handleDeleteAssociation}
                       />
 

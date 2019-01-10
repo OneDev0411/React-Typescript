@@ -8,11 +8,8 @@ export function GeneralInfo(props) {
   const { task } = props
   const { description } = task
 
-  const hasAssociation =
-    task.contacts.length + task.deals.length + task.listings.length > 1
-
   return (
-    <Flex style={{ marginBottom: hasAssociation ? '2em' : 0 }}>
+    <Flex>
       <Status
         disabled={props.disabled}
         checked={task.status === 'DONE'}

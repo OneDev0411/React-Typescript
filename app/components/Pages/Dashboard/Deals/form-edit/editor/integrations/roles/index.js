@@ -86,12 +86,7 @@ class RolesDrawer extends React.Component {
 
   render() {
     return (
-      <OverlayDrawer
-        isOpen
-        showFooter={false}
-        onClose={this.handleClose}
-        closeOnBackdropClick={false}
-      >
+      <OverlayDrawer isOpen showFooter={false} onClose={this.handleClose}>
         <OverlayDrawer.Header title={this.DrawerTitle} />
         <OverlayDrawer.Body>
           <Roles

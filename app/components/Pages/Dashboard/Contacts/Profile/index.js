@@ -1,8 +1,10 @@
 import React from 'react'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
+import _ from 'underscore'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
 
+import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 
 import { getContactTimeline } from '../../../../../models/contacts/get-contact-timeline'
@@ -67,6 +69,19 @@ class ContactProfile extends React.Component {
     }
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.viewAsUsers.length !== this.props.viewAsUsers.length ||
+      !_.isEqual(nextProps.viewAsUsers, this.props.viewAsUsers)
+    ) {
+      const viewAsUsers = viewAsEveryoneOnTeam(nextProps.user)
+        ? []
+        : nextProps.viewAsUsers
+
+      this.props.getContactsTags(viewAsUsers)
+    }
+  }
+
   componentWillUnmount = () =>
     window.removeEventListener('resize', this.detectScreenSize)
 
@@ -127,9 +142,12 @@ class ContactProfile extends React.Component {
     )
 
   deleteEvent = id =>
-    this.setState(state => ({
-      timeline: this.filterTimelineById(state, id)
-    }))
+    this.setState(
+      state => ({
+        timeline: this.filterTimelineById(state, id)
+      }),
+      this.updateContact
+    )
 
   handleAddNote = async text => {
     await this.props.upsertContactAttributes(this.props.contact.id, [
@@ -279,7 +297,7 @@ class ContactProfile extends React.Component {
               </Tab.Container>
               <Timeline
                 contact={contact}
-                defaultAssociationId={contact.id}
+                defaultAssociation={defaultAssociation}
                 deleteEventHandler={this.deleteEvent}
                 deleteNoteHandler={this.deleteNote}
                 editEventHandler={this.editEvent}
@@ -318,7 +336,8 @@ const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
     attributeDefs,
     contact,
     fetchError: selectContactError(fetchContact),
-    fetchTags
+    fetchTags,
+    viewAsUsers: viewAs(user)
   }
 }
 

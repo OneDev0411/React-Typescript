@@ -45,15 +45,13 @@ class PdfSplitter extends React.Component {
     })
   }
 
-  handleSelectMultiplePages = list => {
-    console.log('++', list)
+  handleSelectMultiplePages = list =>
     this.setState(state => ({
       selectedPages: {
         ...state.selectedPages,
         ...list
       }
     }))
-  }
 
   handleLoadDocument = async (id, document) => {
     await this.setStateSync({
@@ -97,7 +95,7 @@ class PdfSplitter extends React.Component {
       <Container>
         <Header onClose={this.props.onClose} />
 
-        <Flex justifyBetween>
+        <Flex justifyBetween style={{ marginBottom: '2.5rem' }}>
           <PdfList
             style={{ width: '54%' }}
             files={this.props.files}

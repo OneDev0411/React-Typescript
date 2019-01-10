@@ -1,9 +1,10 @@
 import styled from 'styled-components'
+
 import IconButton from 'components/Button/IconButton'
 
 function getBorderColor(props, isHovered = false) {
   if (!props.isActive && isHovered === false) {
-    return '#c9d7df'
+    return '#000'
   }
 
   switch (props.button) {
@@ -18,7 +19,7 @@ function getBorderColor(props, isHovered = false) {
 
 function getBackgroundColor(props, isHovered = false) {
   if (!props.isActive && isHovered === false) {
-    return '#fff'
+    return '#000'
   }
 
   switch (props.button) {
@@ -34,11 +35,16 @@ function getBackgroundColor(props, isHovered = false) {
 export const StatusButton = styled(IconButton)`
   border: solid 1px #c9d7df;
 
+  width: 2rem;
+  height: 2rem;
+  border-radius: 100%;
   border-color: ${props => getBorderColor(props)};
-  background-color: ${props => getBackgroundColor(props)};
+  padding: 0;
+  line-height: initial;
+  justify-content: center;
 
   svg {
-    fill: ${props => (props.isActive ? '#fff' : '#c9d7df')};
+    fill: ${props => (props.isActive ? getBackgroundColor(props) : '#000')};
   }
 
   :hover {

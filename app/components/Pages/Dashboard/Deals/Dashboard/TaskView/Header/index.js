@@ -103,12 +103,11 @@ class Header extends React.Component {
             />
           )}
 
-          {this.state.showEditName === false &&
-            !this.state.isSavingName && (
-              <Title onDoubleClick={this.toggleEditName}>
-                {this.props.task.title}
-              </Title>
-            )}
+          {this.state.showEditName === false && !this.state.isSavingName && (
+            <Title onDoubleClick={this.toggleEditName}>
+              {this.props.task.title}
+            </Title>
+          )}
 
           {this.state.isSavingName && <Spinner />}
         </TitleContainer>

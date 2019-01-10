@@ -18,6 +18,7 @@ export async function searchDeals(
     const isBackOffice = getActiveTeamACL(user).includes('BackOffice')
 
     let url = '/deals/filter'
+    let associations = ''
 
     const payload = {
       brand: getActiveTeamId(user)
@@ -28,8 +29,11 @@ export async function searchDeals(
     }
 
     if (isBackOffice) {
-      url += '?associations[]=deal.created_by&associations[]=deal.brand'
+      associations = 'associations[]=deal.brand&'
+      associations += 'associations[]=deal.created_by'
     } else {
+      associations = 'associations[]=deal.brand'
+
       const users = viewAs(user)
 
       if (users.length > 0) {
@@ -41,7 +45,9 @@ export async function searchDeals(
       payload.$order = order
     }
 
-    const response = await new Fetch().post(url).send(payload)
+    const response = await new Fetch()
+      .post(`${url}?${associations}`)
+      .send(payload)
 
     return response.body.data
   } catch (e) {

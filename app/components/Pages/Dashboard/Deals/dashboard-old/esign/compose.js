@@ -39,7 +39,11 @@ class SendSignatures extends React.Component {
    * add new recipinet
    */
   addRecipients(recipient, order) {
-    this.props.addEsignRecipient({ role: recipient.id, order })
+    this.props.addEsignRecipient({
+      role: recipient.id,
+      order,
+      envelope_recipient_type: 'Signer'
+    })
 
     if (this.state.failure === ERROR_MESSAGES.recipinets) {
       this.setState({

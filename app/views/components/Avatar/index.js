@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import pure from 'recompose/pure'
 
 import { getNameInitials } from '../../../utils/helpers'
-import { Container, Image, Status } from './styled'
+import { Container, Image, Status, Initials } from './styled'
 
 const propTypes = {
   statusColor: PropTypes.string,
@@ -27,7 +27,14 @@ const defaultProps = {
   statusColor: '#35b863'
 }
 
-const Avatar = ({ image, placeHolderImage, title, isOnline, ...props }) => {
+const Avatar = ({
+  image,
+  placeHolderImage,
+  initials,
+  title,
+  isOnline,
+  ...props
+}) => {
   let imageSrc = ''
 
   if (image != null && image.length > 1) {
@@ -41,7 +48,9 @@ const Avatar = ({ image, placeHolderImage, title, isOnline, ...props }) => {
       {imageSrc ? (
         <Image alt="rechat avatar" src={imageSrc} />
       ) : (
-        getNameInitials(title)
+        <Initials size={props.size}>
+          {initials || getNameInitials(title)}
+        </Initials>
       )}
       {props.showStatus && (
         <Status

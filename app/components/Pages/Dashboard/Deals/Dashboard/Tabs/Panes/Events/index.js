@@ -1,11 +1,10 @@
 import React, { Fragment } from 'react'
 
+import NewTask from 'views/CRM/Tasks/components/NewTask'
 import { searchEvents } from 'models/tasks/search-events'
 import { normalizeDeal } from 'views/utils/association-normalizers'
 
-import NewTask from 'views/CRM/Tasks/components/NewTask'
 import { Timeline } from '../../../../../Contacts/Profile/Timeline'
-
 import FactsheetsNav from '../../../FactsheetsNav'
 import { FactsheetContainer, MainContainer, Card } from '../../styled'
 
@@ -19,11 +18,9 @@ export default class EventsPane extends React.Component {
     this.fetchTimeline()
   }
 
-  get defaultAssociation() {
-    return {
-      association_type: 'deal',
-      deal: normalizeDeal(this.props.deal)
-    }
+  defaultAssociation = {
+    association_type: 'deal',
+    deal: normalizeDeal(this.props.deal)
   }
 
   fetchTimeline = async () => {
@@ -85,7 +82,7 @@ export default class EventsPane extends React.Component {
           </Card>
 
           <Timeline
-            defaultAssociationId={this.props.deal.id}
+            defaultAssociation={this.defaultAssociation}
             deleteEventHandler={this.deleteEvent}
             editEventHandler={this.editEvent}
             isFetching={this.state.isFetching}

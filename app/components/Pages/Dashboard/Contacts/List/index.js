@@ -46,7 +46,11 @@ class ContactsList extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.filterSegments.activeSegmentId !== 'default') {
+    if (
+      !['default', 'duplicate contacts'].includes(
+        this.props.filterSegments.activeSegmentId
+      )
+    ) {
       this.handleChangeSavedSegment(
         this.props.filterSegments.list[
           this.props.filterSegments.activeSegmentId
@@ -89,6 +93,7 @@ class ContactsList extends React.Component {
         this.order,
         viewAsUsers
       )
+      this.props.getContactsTags(viewAsUsers)
     }
   }
 

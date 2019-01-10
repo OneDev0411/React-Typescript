@@ -25,9 +25,9 @@ export class CRMTaskItem extends React.Component {
         newTask.reminders = []
       }
 
-      this.props.editCallback(newTask)
-
       await updateTask(newTask)
+
+      this.props.editCallback(newTask)
 
       this.setState({ disabled: false })
     } catch (error) {
@@ -53,5 +53,3 @@ export class CRMTaskItem extends React.Component {
     )
   }
 }
-
-// todo: feching contact for updating last_touch after updated a task.

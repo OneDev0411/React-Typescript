@@ -25,7 +25,7 @@ function collect(connect, monitor) {
 
 class SelectedItems extends React.Component {
   getListStyle = (isDraggingOver, canDrop) => ({
-    border: canDrop ? '1px dashed gold' : 'none',
+    border: canDrop ? '1px dashed #003bdf' : 'none',
     background: isDraggingOver ? '#eee' : '#fff',
     filter: isDraggingOver ? 'blur(2px)' : 'none',
     minHeight: '100vh'

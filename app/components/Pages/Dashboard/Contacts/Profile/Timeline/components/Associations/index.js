@@ -1,32 +1,89 @@
 import React from 'react'
+import _ from 'underscore'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
-import { getAssociations } from '../../../../../../../../views/components/EventDrawer/helpers/get-associations'
-import { AssociationItem } from '../../../../../../../../views/components/AssocationItem'
+import Button from 'components/Button/ActionButton'
+import { AssociationItem } from 'components/AssocationItem'
+import { getAssociations } from 'components/EventDrawer/helpers/get-associations'
+
+import { AssociationsDrawer } from '../AssociationsDrawer'
 
 const propTypes = {
-  // id of default association
-  defaultAssociationId: PropTypes.string,
+  defaultAssociation: PropTypes.shape().isRequired,
   setAssociations: PropTypes.func,
   task: PropTypes.shape().isRequired
 }
 
 const defaultProps = {
-  defaultAssociationId: '',
   setAssociations: () => {}
 }
 
 export class Associations extends React.Component {
-  state = {
-    associations: []
+  constructor(props) {
+    super(props)
+
+    const { defaultAssociation } = this.props
+    const { id: defaultAssociationId } = defaultAssociation[
+      defaultAssociation.association_type
+    ]
+
+    this.defaultAssociationId = defaultAssociationId
+
+    this.state = {
+      associations: [],
+      isOpenMoreDrawer: false
+    }
   }
 
   componentDidMount() {
     this.fetchAssociations()
   }
 
+  componentDidUpdate(prevProps) {
+    if (!this.isAssociationsGotChange(this.props.task, prevProps.task)) {
+      this.fetchAssociations()
+    }
+  }
+
+  isAssociationsGotChange = (nextTask, currentTask) => {
+    const nextTaskAssociations = this.getTaskAssociationsIds(nextTask)
+    const currentTaskAssociations = this.getTaskAssociationsIds(currentTask)
+
+    if (currentTaskAssociations.length === nextTaskAssociations.length) {
+      if (
+        currentTaskAssociations.length === 1 &&
+        nextTaskAssociations[0] === this.defaultAssociationId &&
+        currentTaskAssociations[0] === this.defaultAssociationId
+      ) {
+        return false
+      }
+
+      return _.isEqual(nextTaskAssociations, currentTaskAssociations)
+    }
+
+    return true
+  }
+
+  getTaskAssociationsIds = task => {
+    const types = ['deals', 'contacts', 'listings']
+    let associations = []
+
+    types.forEach(type => {
+      associations = [...associations, ...task[type]]
+    })
+
+    return associations
+  }
+
   fetchAssociations = async () => {
+    if (
+      this.state.associations.length > 0 &&
+      this.getTaskAssociationsIds(this.props.task).length === 0
+    ) {
+      return this.setState({ associations: [] })
+    }
+
     try {
       const associations = await getAssociations(this.props.task)
 
@@ -42,16 +99,44 @@ export class Associations extends React.Component {
     }
   }
 
+  openMoreDrawer = () => this.setState({ isOpenMoreDrawer: true })
+
+  closeMoreDrawer = () => this.setState({ isOpenMoreDrawer: false })
+
   render() {
+    const { associations } = this.state
+    const associationsLength = associations.length
+
+    if (
+      associationsLength === 0 ||
+      (associationsLength === 1 &&
+        associations[0][associations[0].association_type].id ===
+          this.defaultAssociationId)
+    ) {
+      return null
+    }
+
     return (
-      <Flex wrap>
-        {this.state.associations.map((association, index) => (
+      <Flex wrap style={{ marginTop: '2em' }}>
+        {associations.slice(0, 6).map((association, index) => (
           <AssociationItem
             association={association}
             key={`association_${index}`}
             isRemovable={false}
           />
         ))}
+        {associationsLength > 6 && (
+          <Button size="large" appearance="link" onClick={this.openMoreDrawer}>
+            View All Associations
+          </Button>
+        )}
+        {this.state.isOpenMoreDrawer && (
+          <AssociationsDrawer
+            associations={associations}
+            isOpen
+            onClose={this.closeMoreDrawer}
+          />
+        )}
       </Flex>
     )
   }

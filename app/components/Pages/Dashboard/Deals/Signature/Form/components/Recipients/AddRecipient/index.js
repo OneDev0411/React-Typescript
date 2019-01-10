@@ -77,7 +77,7 @@ export class AddRecipient extends React.Component {
                 }}
               >
                 <IconAdd style={{ fill: primary, marginRight: '1rem' }} />
-                <span style={{ fontWeight: 500 }}>Add Next Recipient</span>
+                <span style={{ fontWeight: 500 }}>Add New Recipient</span>
               </ActionButton>
 
               {isOpen && (
@@ -88,9 +88,10 @@ export class AddRecipient extends React.Component {
                     isEmailRequired
                     allowDeleteRole={false}
                     onSelect={this.handleAddRecipient}
+                    onUpsertRole={this.handleAddRecipient}
+                    onCreateRole={this.handleAddRecipient}
                     onTriggerRequiredEmail={this.handleLockOuterClick}
                     onCloseAddRoleDrawer={this.handleUnlockOuterClick}
-                    onCreateRole={this.handleUnlockOuterClick}
                     filter={role => !this.props.selectedRoles[role.id]}
                     addRoleActionRenderer={props => (
                       <LinkButton
@@ -100,7 +101,7 @@ export class AddRecipient extends React.Component {
                         }}
                       >
                         <span style={{ marginRight: '0.5rem' }}>+</span>
-                        Add New Email
+                        Add Contact
                       </LinkButton>
                     )}
                   />

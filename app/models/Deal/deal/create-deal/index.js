@@ -8,7 +8,7 @@ import { getActiveTeamId } from '../../../../utils/user-teams'
 export async function create(user, data) {
   try {
     const response = await new Fetch()
-      .post('/deals?associations[]=deal.checklists')
+      .post('/deals?associations[]=deal.checklists&associations[]=deal.brand')
       .set('X-RECHAT-BRAND', getActiveTeamId(user))
       .send(data)
 

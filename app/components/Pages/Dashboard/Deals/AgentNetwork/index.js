@@ -12,6 +12,7 @@ import { selectDealById } from 'reducers/deals/list'
 import getListing from 'models/listings/listing/get-listing'
 
 import Header from 'components/PageHeader'
+import { resetGridSelectedItems } from 'components/Grid/Table/Plugins/Selectable'
 
 import { loadJS } from '../../../../../utils/load-js'
 
@@ -145,7 +146,10 @@ class AgentNetwork extends React.Component {
     }
   }
 
-  onClose = () => browserHistory.push(`/dashboard/deals/${this.props.deal.id}`)
+  onClose = () => {
+    browserHistory.push(`/dashboard/deals/${this.props.deal.id}`)
+    resetGridSelectedItems('agent_network')
+  }
 
   render() {
     return (

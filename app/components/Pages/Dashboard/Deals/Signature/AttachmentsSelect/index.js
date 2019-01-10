@@ -68,7 +68,11 @@ export class AttachmentsSelect extends React.Component {
         </Drawer.Body>
 
         <Drawer.Footer style={{ flexDirection: 'row-reverse' }}>
-          <ActionButton type="button" onClick={this.handleApply}>
+          <ActionButton
+            disabled={_.size(this.state.selectedItems) === 0}
+            type="button"
+            onClick={this.handleApply}
+          >
             Next
           </ActionButton>
         </Drawer.Footer>

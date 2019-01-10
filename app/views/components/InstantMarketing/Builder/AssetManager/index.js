@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom'
 
 import { Uploader } from 'components/Uploader'
 
+import { AssetImage } from './AssetImage'
+
 import Fetch from '../../../../../services/fetch'
 
 import loadGrapes from '../../helpers/load-grapes'
@@ -21,39 +23,13 @@ const run = async () => {
       })
 
     const AssetView = Backbone.View.extend({
-      events: {
-        click: 'onClick'
-      },
-      onClick() {
-        const url = this.model.get('image')
-
-        const setSrc = () => target.set('src', url)
-        const setBg = () => {
-          const style = Object.assign({}, target.get('style'))
-
-          style['background-image'] = `url(${url})`
-          target.set('style', style)
-        }
-
-        const setters = {
-          image: setSrc,
-          cell: setBg,
-          text: setBg,
-          '': setBg
-        }
-
-        const type = target.get('type')
-
-        setters[type]()
-      },
       initialize({ model }) {
         this.model = model
       },
       render() {
-        this.$el.html(
-          `<img src="${this.model.get(
-            'image'
-          )}" style="margin: 8px 3% 8px 5%; border-radius: 2px; width: 90%; cursor: pointer;"/>`
+        ReactDOM.render(
+          <AssetImage model={this.model} target={target} />,
+          this.el
         )
 
         return this
@@ -84,7 +60,8 @@ const run = async () => {
                 }))
 
                 const uploadedAssetsCollection = uploadedAssets.map(asset => ({
-                  image: asset.url
+                  image: asset.url,
+                  userFile: true
                 }))
 
                 view.collection.reset([
@@ -118,22 +95,38 @@ const run = async () => {
         uploadButtonView.render()
         uploadButtonView.$el.appendTo(this.el)
 
-        this.collection
-          .filter(asset => {
-            const imgListing = asset.attributes.listing
-            const selectedListing =
-              target && target.attributes.attributes['rechat-listing']
+        if (!target) {
+          return false
+        }
 
-            return (
-              !imgListing || !selectedListing || imgListing === selectedListing
-            )
-          })
-          .forEach(asset => {
-            const view = new AssetView({ model: asset })
+        let collection = []
 
-            view.render()
-            view.$el.appendTo(this.el)
+        const type = target.attributes.attributes['rechat-assets']
+
+        if (type === 'listing-image') {
+          collection = this.collection.filter(asset => {
+            const listing = target.attributes.attributes['rechat-listing']
+
+            if (asset.attributes.avatar) {
+              return false
+            }
+
+            return !listing || asset.attributes.listing === listing
           })
+        }
+
+        if (type === 'avatar') {
+          collection = this.collection.filter(
+            asset => asset.attributes.userFile || asset.attributes.avatar
+          )
+        }
+
+        collection.forEach(asset => {
+          const view = new AssetView({ model: asset })
+
+          view.render()
+          view.$el.appendTo(this.el)
+        })
       },
       render: () => this
     })
@@ -167,7 +160,6 @@ const run = async () => {
       view.$el.show()
     })
   })
-
 }
 
 run()

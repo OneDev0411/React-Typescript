@@ -59,10 +59,12 @@ class Item extends React.Component {
         (roles[index].email &&
           _.find(contactEmails, ({ id }) => id === roles[index].email)) ||
         (roles[index].phone_number &&
-          (await this.compareTwoPhoneNumber(
-            contactPhones,
-            roles[index].phone_number
-          )))
+          contactPhones.some(async phoneNumber =>
+            this.compareTwoPhoneNumber(
+              phoneNumber.text,
+              roles[index].phone_number
+            )
+          ))
       ) {
         matchedRoles.push(roles[index])
       }

@@ -270,6 +270,11 @@ const AsyncSearchWidget = Load({
 //  Other Pages
 /* ==================================== */
 
+const AsyncShare = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Marketing/SharePage' /* webpackChunkName: "mc_share_page" */)
+})
+
 const AsyncBrands = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Brand/index' /* webpackChunkName: "brand_settings" */)
@@ -344,6 +349,7 @@ export default (
     <Route path="/" component={AsyncAuthenticationLayout}>
       <IndexRoute component={Landing} />
       <Route path="/branch" component={AsyncBranch} />
+      <Route path="/share" component={AsyncShare} />
 
       <Route
         path="register"
@@ -385,6 +391,7 @@ export default (
 
     <Route path="/" component={AppLayout} onEnter={authenticate}>
       <Route path="/branch" component={AsyncBranch} />
+      <Route path="/share" component={AsyncShare} />
 
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />

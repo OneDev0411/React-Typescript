@@ -6,22 +6,17 @@ import ToolTip from 'components/tooltip'
 import { Label } from './styled'
 
 export default function TaskStatus(props) {
-  const { task, noTip, isBackoffice, isDraftDeal } = props
-
-  if (!task) {
+  if (!props.task) {
     return false
   }
 
-  const { review } = task
   let status = null
   let tooltip = null
 
-  if (review) {
-    status = review.status
+  if (props.task.review) {
+    status = props.task.review.status
 
-    const { created_at } = review
-
-    const reviewTime = moment.unix(created_at)
+    const reviewTime = moment.unix(props.task.review.created_at)
 
     tooltip = 'Status: '
     tooltip += reviewTime.isValid()
@@ -29,12 +24,19 @@ export default function TaskStatus(props) {
       : `${status}`
   }
 
-  if (isBackoffice && (status === 'Submitted' || task.attention_requested)) {
+  if (
+    props.isBackOffice &&
+    (status === 'Submitted' || props.task.attention_requested)
+  ) {
     status = 'NEEDS ATTENTION'
   }
 
-  if (!isBackoffice && status !== 'Submitted' && task.attention_requested) {
-    status = isDraftDeal ? 'Pending' : 'Notified'
+  if (
+    !props.isBackOffice &&
+    status !== 'Submitted' &&
+    props.task.attention_requested
+  ) {
+    status = props.isDraftDeal ? 'Pending' : 'Notified'
   }
 
   if (!status) {
@@ -42,7 +44,7 @@ export default function TaskStatus(props) {
   }
 
   return (
-    <ToolTip caption={noTip !== true && tooltip} placement="bottom">
+    <ToolTip caption={props.noTip !== true && tooltip} placement="bottom">
       <Label className={status}>{status}</Label>
     </ToolTip>
   )

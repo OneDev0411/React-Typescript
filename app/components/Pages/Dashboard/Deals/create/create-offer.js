@@ -421,6 +421,7 @@ class CreateOffer extends React.Component {
       deal_status: () => dealStatus.length > 0,
       contexts: () =>
         DealContext.validateList(
+          deal.brand.id,
           contexts,
           'Buying',
           deal.property_type,
@@ -450,6 +451,10 @@ class CreateOffer extends React.Component {
     const dealContexts = this.getDealContexts()
     const isDoubleEndedAgent = enderType === 'AgentDoubleEnder'
     const requiredFields = this.RequiredFields
+
+    if (this.state.dealHasPrimaryOffer) {
+      return false
+    }
 
     return (
       <div className="deal-create-offer">

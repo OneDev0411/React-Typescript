@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import idx from 'idx'
 import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import Flex from 'styled-flex-component'
@@ -82,7 +83,7 @@ export class MultiField extends React.Component {
     if (attribute_def.data_type === 'date') {
       return this.props.mutators.push(attribute_def.id, {
         attribute: newAttribute,
-        label: SELECT_INITIAL_STATE,
+        label: attribute_def.labels ? SELECT_INITIAL_STATE : '',
         day: { title: 'Day', value: null },
         month: { title: 'Month', value: null },
         year: null
@@ -107,7 +108,7 @@ export class MultiField extends React.Component {
   }
 
   render() {
-    const { attribute_def, is_primary } = this.props.attribute
+    const { attribute_def } = this.props.attribute
     const defaultOptions = attribute_def.labels
       ? attribute_def.labels.map(label => ({
           title: label,
@@ -132,15 +133,24 @@ export class MultiField extends React.Component {
               >
                 <Flex alignCenter>
                   <Title htmlFor={field}>{attribute_def.label}</Title>
-                  {is_primary && <PrimaryStar />}
+                  {idx(
+                    fields,
+                    fields => fields.value[index].attribute.is_primary
+                  ) && <PrimaryStar />}
                 </Flex>
-                {defaultOptions && (
+                {defaultOptions ? (
                   <Field
                     component={Dropdown}
                     style={{ marginLeft: '-1rem' }}
                     fullWidth
                     items={defaultOptions}
                     itemToString={({ title }) => title}
+                    name={`${field}.label`}
+                  />
+                ) : (
+                  <Field
+                    component={TextField}
+                    id={field}
                     name={`${field}.label`}
                   />
                 )}

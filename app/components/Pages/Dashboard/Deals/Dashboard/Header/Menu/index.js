@@ -16,7 +16,7 @@ export function Menu(props) {
     <Flex style={{ padding: '1.5em 0' }}>
       {deal.is_draft === true && <RemoveDraft deal={deal} />}
 
-      {deal.deal_type === 'Selling' && (
+      {deal.deal_type === 'Selling' && !deal.has_active_offer && (
         <LinkButton
           style={{ marginLeft: '0.5rem' }}
           to={`/dashboard/deals/${deal.id}/create-offer`}

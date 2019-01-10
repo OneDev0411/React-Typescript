@@ -102,7 +102,7 @@ export default class SignatureComposeDrawer extends React.Component {
                 width: '100%'
               }}
             >
-              <Tooltip caption="Select Attachments">
+              <Tooltip caption="Select Documents">
                 <IconFolder
                   style={{ width: '2rem', cursor: 'pointer' }}
                   onClick={this.toggleOpenAttachments}

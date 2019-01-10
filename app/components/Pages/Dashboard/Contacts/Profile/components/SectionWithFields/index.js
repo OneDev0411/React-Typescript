@@ -49,8 +49,7 @@ class SectionWithFields extends React.Component {
   closeNewAttributeDrawer = () =>
     this.setState({ isOpenNewAttributeDrawer: false })
 
-  filterEditableFields = field =>
-    field.attribute_def.show && field.attribute_def.editable
+  filterEditableFields = field => field.attribute_def.editable
 
   handleOnSubmit = async values => {
     try {
@@ -111,22 +110,29 @@ class SectionWithFields extends React.Component {
   }
 
   getSectionFields = () => {
-    const { isPartner } = this.props
+    const { section, isPartner } = this.props
     const orderedFields = orderFields(
       [...this.props.fields, ...this.getEmptyFields()],
       this.props.fieldsOrder
     )
 
-    if (orderedFields.every(f => !f[f.attribute_def.data_type])) {
+    if (
+      section !== 'Dates' &&
+      orderedFields.every(f => !f[f.attribute_def.data_type])
+    ) {
       return null
     }
 
     const fields = orderedFields
-      .filter(field => field.attribute_def.show)
+      .filter(
+        f =>
+          f.attribute_def.editable &&
+          (f[f.attribute_def.data_type] || f.attribute_def.show)
+      )
       .map((field, index) => {
         const { attribute_def } = field
         let value = field[attribute_def.data_type]
-        let key = `${this.props.section}_field_${index}`
+        let key = `${section}_field_${index}`
 
         if (isPartner) {
           key = `partner_${key}`

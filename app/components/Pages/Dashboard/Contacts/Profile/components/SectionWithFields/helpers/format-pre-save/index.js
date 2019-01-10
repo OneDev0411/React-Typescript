@@ -56,7 +56,7 @@ export function formatPreSave(previousFields, nextFields) {
         newValue = value
       }
     } else if (typeof value === 'string') {
-      newValue = value
+      newValue = value.trim()
     } else {
       newValue = value.value
     }
@@ -65,18 +65,24 @@ export function formatPreSave(previousFields, nextFields) {
       newValue = undefined
     }
 
+    if (label && label.value) {
+      label = label.value
+    } else if (typeof label === 'string') {
+      label = label.trim()
+    }
+
     if (attribute.id) {
       // when label is changed
       if (
         value &&
         label &&
         attribute_def.has_label &&
-        label.value !== previousLabel
+        label !== previousLabel
       ) {
         upsertedAttributeList.push({
           id: attribute.id,
           [type]: value,
-          label: label && label.value
+          label
         })
       } else if (attribute_def.enum_values && newValue) {
         if (newValue === selectInitialValue) {
@@ -95,16 +101,23 @@ export function formatPreSave(previousFields, nextFields) {
       }
     } else if (newValue && newValue !== selectInitialValue) {
       if (attribute_def.has_label) {
-        upsertedAttributeList.push({
-          attribute_def,
-          [type]: newValue,
-          label:
-            label && label.value
-              ? label.value === selectInitialValue
+        if (attribute_def.labels) {
+          upsertedAttributeList.push({
+            attribute_def,
+            [type]: newValue,
+            label: label
+              ? label === selectInitialValue
                 ? attribute_def.labels[0]
-                : label.value
+                : label
               : attribute_def.labels[0]
-        })
+          })
+        } else if (label) {
+          upsertedAttributeList.push({
+            attribute_def,
+            [type]: newValue,
+            label
+          })
+        }
       } else {
         upsertedAttributeList.push({
           attribute_def,

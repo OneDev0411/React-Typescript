@@ -7,26 +7,22 @@ import _ from 'underscore'
 
 import { getStartRange, getEndRange } from 'reducers/calendar'
 
-import {
-  getCalendar,
-  setDate,
-  resetCalendar
-} from '../../../../store_actions/calendar'
+import { getCalendar, setDate, resetCalendar } from 'actions/calendar'
+
 import {
   createDateRange,
   createPastRange,
   createFutureRange
-} from '../../../../models/Calendar/helpers/create-date-range'
-import {
-  Container,
-  Menu,
-  Trigger,
-  Content
-} from '../../../../views/components/SlideMenu'
-import PageHeader from '../../../../views/components/PageHeader'
-import DatePicker from '../../../../views/components/DatePicker'
-import { EventDrawer } from '../../../../views/components/EventDrawer'
-import ActionButton from '../../../../views/components/Button/ActionButton'
+} from 'models/Calendar/helpers/create-date-range'
+
+import PageHeader from 'components/PageHeader'
+import DatePicker from 'components/DatePicker'
+import ActionButton from 'components/Button/ActionButton'
+import { TourDrawer } from 'components/tour/TourDrawer'
+import { EventDrawer } from 'components/EventDrawer'
+import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
+import { Container, Menu, Trigger, Content } from 'components/SlideMenu'
+
 import {
   viewAs,
   getActiveTeamACL,
@@ -51,8 +47,8 @@ class CalendarContainer extends React.Component {
     super(props)
     this.state = {
       isMenuOpen: true,
-      showCreateTaskMenu: false,
-      selectedTaskId: null,
+      isOpenEventDrawer: false,
+      selectedEvent: null,
       loadingPosition: LOADING_POSITIONS.Middle
     }
     this.myRef = React.createRef()
@@ -111,15 +107,15 @@ class CalendarContainer extends React.Component {
   /**
    * open create task menu
    */
-  openEventDrawer = () => this.setState({ showCreateTaskMenu: true })
+  openEventDrawer = () => this.setState({ isOpenEventDrawer: true })
 
   /**
    * close create task menu
    */
   closeEventDrawer = () =>
     this.setState({
-      showCreateTaskMenu: false,
-      selectedTaskId: null
+      isOpenEventDrawer: false,
+      selectedEvent: null
     })
 
   /**
@@ -193,8 +189,8 @@ class CalendarContainer extends React.Component {
     ])
   }
 
-  onClickTask = selectedTaskId =>
-    this.setState(() => ({ selectedTaskId }), this.openEventDrawer)
+  onClickTask = selectedEvent =>
+    this.setState(() => ({ selectedEvent }), this.openEventDrawer)
 
   handleEventChange = async (task, action) => {
     const { startRange, endRange } = this.props
@@ -280,22 +276,45 @@ class CalendarContainer extends React.Component {
     }
   }
 
+  renderCRMEventDrawer = () => {
+    const { selectedEvent, isOpenEventDrawer } = this.state
+
+    if (!isOpenEventDrawer) {
+      return null
+    }
+
+    const _props = {
+      deleteCallback: this.handleEventChange,
+      isOpen: true,
+      onClose: this.closeEventDrawer,
+      submitCallback: this.handleEventChange,
+      user: this.props.user
+    }
+
+    // New Event
+    if (!selectedEvent) {
+      return <EventDrawer {..._props} />
+    }
+
+    const { id } = selectedEvent
+
+    switch (selectedEvent.type) {
+      case 'Tour':
+        return <TourDrawer {..._props} tourId={id} />
+      case 'Open House':
+        return <OpenHouseDrawer {..._props} openHouseId={id} />
+      default:
+        return <EventDrawer {..._props} eventId={id} />
+    }
+  }
+
   render() {
-    const { isMenuOpen, loadingPosition, selectedTaskId } = this.state
+    const { isMenuOpen, loadingPosition } = this.state
     const { selectedDate, isFetching } = this.props
 
     return (
       <Container isOpen={isMenuOpen}>
-        {this.state.showCreateTaskMenu && (
-          <EventDrawer
-            isOpen
-            user={this.props.user}
-            eventId={selectedTaskId}
-            onClose={this.closeEventDrawer}
-            submitCallback={this.handleEventChange}
-            deleteCallback={this.handleEventChange}
-          />
-        )}
+        {this.renderCRMEventDrawer()}
 
         <Menu isOpen={isMenuOpen} width={MENU_WIDTH}>
           <MenuContainer>

@@ -8,7 +8,7 @@ import { H1 } from 'views/components/Typography/headings'
 
 export function Header(props) {
   return (
-    <Flex justifyBetween alignCenter style={{ marginBottom: '2rem' }}>
+    <Flex justifyBetween alignCenter style={{ margin: '2.5rem 0 2rem 0' }}>
       <H1>Split PDF</H1>
       <IconButton isFit iconSize="large" inverse onClick={props.onClose}>
         <IconClose />

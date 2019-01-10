@@ -34,8 +34,8 @@ export class AddListingAssociation extends React.Component {
               isOpen={isActive}
               title={title}
               onClose={handleClose}
-              onSelectListing={listing =>
-                this.onSelectHandler(listing, handleClose)
+              onSelectListings={listings =>
+                this.onSelectHandler(listings[0], handleClose)
               }
             />
           </div>
