@@ -6,7 +6,7 @@ const storage = require('./storage').default
 const API_URL = config.api_url
 
 export function onlineSubmitHandler(data) {
-  const filterContactsApiUrl = `${API_URL}/contacts/filter?limit=1`
+  const filterContactsApiUrl = `${API_URL}/contacts/filter?limit=1&filter_type=or`
   const attributeDefinitionsApiUrl = `${API_URL}/contacts/attribute_defs`
   const createContactApiUrl = `${API_URL}/contacts?activity=true&relax=false&get=true`
   const associateContactApiUrl = `${API_URL}/crm/tasks/${data.id}/associations`
@@ -17,12 +17,15 @@ export function onlineSubmitHandler(data) {
     'Content-Type': 'application/json'
   }
 
-  function filterContactsByEmail(email) {
+  function filterContacts(email, phoneNumber) {
     return fetch(filterContactsApiUrl, {
       method: 'POST',
       headers: requestHeaders,
       body: JSON.stringify({
-        filter: [{ attribute_type: 'email', value: email }]
+        filter: [
+          { attribute_type: 'email', value: email },
+          { attribute_type: 'phone_number', value: phoneNumber }
+        ]
       })
     }).then(response => response.json())
   }
@@ -110,7 +113,10 @@ export function onlineSubmitHandler(data) {
 
   return new Promise((resolve, reject) => {
     try {
-      filterContactsByEmail(data.data.registration.email).then(filterBody => {
+      filterContacts(
+        data.data.registration.email,
+        data.data.registration.phone_number
+      ).then(filterBody => {
         const contactExists = filterBody.data.length > 0
 
         if (contactExists) {
