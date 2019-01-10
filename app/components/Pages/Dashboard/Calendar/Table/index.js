@@ -191,8 +191,6 @@ export class Table extends React.Component {
     const data = this.Data
     const columns = this.Columns
 
-    console.log(data)
-
     return (
       <ScrollDetector
         onScrollTop={onScrollTop}
