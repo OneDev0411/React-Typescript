@@ -1,9 +1,14 @@
 import io from 'socket.io-client'
-import { EventEmitter } from 'events'
+
+import config from 'config'
+
+import { changeSocketStatus } from 'actions/socket'
+
+import getTeams from 'models/user/get-teams'
+
+import { getActiveTeamACL, getActiveTeamId } from 'utils/user-teams'
+
 import store from '../../stores'
-import { changeSocketStatus } from '../../store_actions/socket'
-import getTeams from '../../models/user/get-teams'
-import config from '../../../config/public'
 
 // create socket
 const socket = io(config.socket.server, {
@@ -30,9 +35,6 @@ export default class Socket {
 
     // bind socket to window
     window.socket = socket
-
-    // create emitter instance
-    Socket.events = new EventEmitter()
 
     // create authentication
     if (Socket.authenticated === false) {
@@ -78,12 +80,29 @@ export default class Socket {
       Socket.authenticated = true
 
       this.getUserWithTeams(user).then(userWithTeams =>
-        Socket.events.emit('UserAuthenticated', userWithTeams)
+        Socket.registerBrand(userWithTeams)
       )
 
       // update app store
       store.dispatch(changeSocketStatus('connected'))
     })
+  }
+
+  /**
+   * authenticate user brand
+   */
+  static registerBrand(user) {
+    console.log('[Deal Socket] Registering Brand')
+
+    const acl = getActiveTeamACL(user)
+
+    if (acl.includes('Deals') || acl.includes('BackOffice')) {
+      const id = getActiveTeamId(user)
+
+      window.socket.emit('Brand.Register', id, err => {
+        console.log('[Deal Socket]', 'Brand Registered - ', id, err)
+      })
+    }
   }
 
   /**
