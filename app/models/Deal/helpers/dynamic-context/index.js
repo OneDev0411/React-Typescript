@@ -307,13 +307,11 @@ export function validate(ctx, value) {
 }
 
 function validateYearBuilt(ctx, value) {
-  const { max } = ctx.properties
-
   if (value === undefined || value === null) {
     return !ctx.mandatory
   }
 
-  return parseFloat(value) <= max
+  return parseFloat(value) >= 1000 && parseFloat(value) <= 9999
 }
 
 export function getFieldProperties(key) {
