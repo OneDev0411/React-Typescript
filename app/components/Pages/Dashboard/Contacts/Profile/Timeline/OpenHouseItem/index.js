@@ -50,7 +50,7 @@ export class OpenHouseItem extends React.Component {
               task={task}
             />
             {listing && (
-              <Flex style={{ marginBottom: '0.5rem' }}>
+              <Flex style={{ marginTop: '2rem' }}>
                 <MapContainer hasCoverImage={listingCoverImage}>
                   <SingleMarkerMap
                     id={`OH_${task.id.replace(/-/gi, '_')}_map`}
