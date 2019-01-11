@@ -99,7 +99,7 @@ export class ListingInfo extends React.Component {
 
             <Flex alignCenter>
               {address}
-              <Divider small />
+              {address.length > 0 && <Divider small />}
 
               {getSide(props.deal)}
               <Divider small />
