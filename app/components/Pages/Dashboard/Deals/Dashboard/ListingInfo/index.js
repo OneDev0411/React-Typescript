@@ -8,6 +8,8 @@ import Deal from 'models/Deal'
 
 import Tooltip from 'components/tooltip'
 
+import { getSide } from 'models/Deal/helpers/context'
+
 import { ListingImage } from './Image'
 import MlsConnect from './MlsConnect'
 
@@ -97,7 +99,13 @@ export class ListingInfo extends React.Component {
 
             <Flex alignCenter>
               {address}
-              {address.length > 0 && <Divider />}
+              <Divider small />
+
+              {getSide(props.deal)}
+              <Divider small />
+
+              {props.deal.property_type}
+              <Divider small />
 
               <MlsConnect deal={props.deal} />
             </Flex>
