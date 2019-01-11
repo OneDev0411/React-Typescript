@@ -41,7 +41,7 @@ class AgentConfirm extends React.Component {
           style={{ marginBottom: '1.5em', marginTop: '1.5rem' }}
         >
           <PageHeader.Title showBackButton={false}>
-            <PageHeader.Heading>Upgrade Account1</PageHeader.Heading>
+            <PageHeader.Heading>Upgrade Account</PageHeader.Heading>
           </PageHeader.Title>
         </PageHeader>
 
