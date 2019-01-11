@@ -3,8 +3,11 @@ import _ from 'underscore'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
-import { getAssociations } from '../../../../../../../../views/components/EventDrawer/helpers/get-associations'
-import { AssociationItem } from '../../../../../../../../views/components/AssocationItem'
+import Button from 'components/Button/ActionButton'
+import { AssociationItem } from 'components/AssocationItem'
+import { getAssociations } from 'components/EventDrawer/helpers/get-associations'
+
+import { AssociationsDrawer } from '../AssociationsDrawer'
 
 const propTypes = {
   defaultAssociation: PropTypes.shape().isRequired,
@@ -28,7 +31,8 @@ export class Associations extends React.Component {
     this.defaultAssociationId = defaultAssociationId
 
     this.state = {
-      associations: []
+      associations: [],
+      isOpenMoreDrawer: false
     }
   }
 
@@ -95,12 +99,17 @@ export class Associations extends React.Component {
     }
   }
 
+  openMoreDrawer = () => this.setState({ isOpenMoreDrawer: true })
+
+  closeMoreDrawer = () => this.setState({ isOpenMoreDrawer: false })
+
   render() {
     const { associations } = this.state
+    const associationsLength = associations.length
 
     if (
-      associations.length === 0 ||
-      (associations.length === 1 &&
+      associationsLength === 0 ||
+      (associationsLength === 1 &&
         associations[0][associations[0].association_type].id ===
           this.defaultAssociationId)
     ) {
@@ -109,13 +118,25 @@ export class Associations extends React.Component {
 
     return (
       <Flex wrap style={{ marginTop: '2em' }}>
-        {associations.map((association, index) => (
+        {associations.slice(0, 6).map((association, index) => (
           <AssociationItem
             association={association}
             key={`association_${index}`}
             isRemovable={false}
           />
         ))}
+        {associationsLength > 6 && (
+          <Button size="large" appearance="link" onClick={this.openMoreDrawer}>
+            View All Associations
+          </Button>
+        )}
+        {this.state.isOpenMoreDrawer && (
+          <AssociationsDrawer
+            associations={associations}
+            isOpen
+            onClose={this.closeMoreDrawer}
+          />
+        )}
       </Flex>
     )
   }
