@@ -11,7 +11,7 @@ import loadGrapes from '../../helpers/load-grapes'
 
 const CUSTOM_ASSET_UPLOAD_PATH = '/templates/assets'
 
-const run = async () => {
+const addPlugin = async () => {
   const { Grapesjs, Backbone } = await loadGrapes()
 
   Grapesjs.plugins.add('asset-blocks', editor => {
@@ -162,4 +162,4 @@ const run = async () => {
   })
 }
 
-run()
+export { addPlugin }

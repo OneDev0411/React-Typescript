@@ -36,8 +36,10 @@ class MlsConnect extends React.Component {
       isSaving: true
     })
 
+    const listingId = Array.isArray(listings) ? listings[0].id : null
+
     try {
-      await this.props.updateListing(deal.id, listings[0].id)
+      await this.props.updateListing(deal.id, listingId)
     } catch (e) {
       console.log(e)
     }
