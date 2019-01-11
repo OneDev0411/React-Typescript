@@ -170,7 +170,7 @@ export class OpenHouseDrawer extends React.Component {
       const template = nunjucks.renderString(openHouse.metadata.template, {
         user: this.props.user,
         listing: this.state.listing,
-        open_house: openHouse
+        crmopenhouse: openHouse
       })
 
       openHouse.metadata.template = template
