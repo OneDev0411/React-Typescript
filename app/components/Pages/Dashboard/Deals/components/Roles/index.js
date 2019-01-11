@@ -182,7 +182,7 @@ class Roles extends React.Component {
                   <RoleAvatar>
                     <UserAvatar
                       size={40}
-                      color="#000000"
+                      color="#000"
                       title={getAvatarTitle(role)}
                       image={role.user ? role.user.profile_image_url : null}
                     />
@@ -243,6 +243,7 @@ class Roles extends React.Component {
             deal={this.props.deal}
             role={this.state.user}
             modalTitle="Update Contact"
+            isEmailRequired={this.props.isEmailRequired}
             allowedRoles={this.props.allowedRoles}
             onUpsertRole={this.props.onUpsertRole}
             onHide={this.closeRoleForm}
