@@ -20,10 +20,21 @@ export class ListingInfo extends React.Component {
     isAddressDrawerOpen: false
   }
 
-  toggleAddressDrawer = () =>
-    this.setState(state => ({
-      isAddressDrawerOpen: !state.isAddressDrawerOpen
-    }))
+  handleCloseAddressDrawer = () => {
+    this.setState({
+      isAddressDrawerOpen: false
+    })
+  }
+
+  handleOpenAddressDrawer = () => {
+    if (this.props.deal.listing) {
+      return false
+    }
+
+    this.setState({
+      isAddressDrawerOpen: true
+    })
+  }
 
   getTitle = deal => Deal.get.field(deal, 'street_address') || deal.title
 
@@ -68,7 +79,7 @@ export class ListingInfo extends React.Component {
                 multiline
               >
                 <TitleContainer
-                  onClick={this.toggleAddressDrawer}
+                  onClick={this.handleOpenAddressDrawer}
                   editable={!props.deal.listing}
                 >
                   <H1 style={{ lineHeight: 1.5 }}>
@@ -96,7 +107,7 @@ export class ListingInfo extends React.Component {
         <Address
           deal={props.deal}
           show={state.isAddressDrawerOpen}
-          onClose={this.toggleAddressDrawer}
+          onClose={this.handleCloseAddressDrawer}
         />
       </React.Fragment>
     )
