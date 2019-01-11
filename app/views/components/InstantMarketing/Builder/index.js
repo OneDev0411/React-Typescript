@@ -56,6 +56,7 @@ class Builder extends React.Component {
 
   async componentDidMount() {
     const { Grapesjs } = await loadGrapes()
+
     await import('./AssetManager')
 
     this.setState({
@@ -269,6 +270,10 @@ class Builder extends React.Component {
   }
 
   get IsSocialMedium() {
+    if (this.props.templateTypes.includes('CrmOpenHouse')) {
+      return false
+    }
+
     if (this.state.selectedTemplate) {
       return this.state.selectedTemplate.medium !== 'Email'
     }
@@ -319,8 +324,9 @@ class Builder extends React.Component {
   render() {
     const { isLoading } = this.state
 
-    if (isLoading)
+    if (isLoading) {
       return null
+    }
 
     const isSocialMedium = this.IsSocialMedium
 
@@ -354,47 +360,45 @@ class Builder extends React.Component {
               </ActionButton>
             )}
 
-            {this.state.selectedTemplate &&
-              isSocialMedium && (
-                <Fragment>
-                  <ActionButton
-                    onClick={() => this.handleSocialSharing('Instagram')}
-                  >
-                    <i
-                      className="fa fa-instagram"
-                      style={{
-                        fontSize: '1.5rem',
-                        marginRight: '0.5rem'
-                      }}
-                    />
-                    Post to Instagram
-                  </ActionButton>
+            {this.state.selectedTemplate && isSocialMedium && (
+              <Fragment>
+                <ActionButton
+                  onClick={() => this.handleSocialSharing('Instagram')}
+                >
+                  <i
+                    className="fa fa-instagram"
+                    style={{
+                      fontSize: '1.5rem',
+                      marginRight: '0.5rem'
+                    }}
+                  />
+                  Post to Instagram
+                </ActionButton>
 
-                  <ActionButton
-                    style={{ marginLeft: '0.5rem' }}
-                    onClick={() => this.handleSocialSharing('Facebook')}
-                  >
-                    <i
-                      className="fa fa-facebook-square"
-                      style={{
-                        fontSize: '1.5rem',
-                        marginRight: '0.5rem'
-                      }}
-                    />
-                    Post to Facebook
-                  </ActionButton>
-                </Fragment>
-              )}
-
-            {this.state.selectedTemplate &&
-              !isSocialMedium && (
                 <ActionButton
                   style={{ marginLeft: '0.5rem' }}
-                  onClick={this.handleSave}
+                  onClick={() => this.handleSocialSharing('Facebook')}
                 >
-                  Next
+                  <i
+                    className="fa fa-facebook-square"
+                    style={{
+                      fontSize: '1.5rem',
+                      marginRight: '0.5rem'
+                    }}
+                  />
+                  Post to Facebook
                 </ActionButton>
-              )}
+              </Fragment>
+            )}
+
+            {this.state.selectedTemplate && !isSocialMedium && (
+              <ActionButton
+                style={{ marginLeft: '0.5rem' }}
+                onClick={this.handleSave}
+              >
+                Next
+              </ActionButton>
+            )}
 
             <Divider />
             <IconButton
@@ -425,13 +429,12 @@ class Builder extends React.Component {
             ref={ref => (this.grapes = ref)}
             style={{ position: 'relative' }}
           >
-            {this.IsVideoTemplate &&
-              this.IsTemplateLoaded && (
-                <VideoToolbar
-                  onRef={ref => (this.videoToolbar = ref)}
-                  editor={this.editor}
-                />
-              )}
+            {this.IsVideoTemplate && this.IsTemplateLoaded && (
+              <VideoToolbar
+                onRef={ref => (this.videoToolbar = ref)}
+                editor={this.editor}
+              />
+            )}
           </div>
         </BuilderContainer>
       </Container>
