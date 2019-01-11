@@ -56,7 +56,9 @@ class Builder extends React.Component {
 
   async componentDidMount() {
     const { Grapesjs } = await loadGrapes()
-    await import('./AssetManager')
+    const { addPlugin } = await import('./AssetManager')
+
+    await addPlugin()
 
     this.setState({
       isLoading: false
