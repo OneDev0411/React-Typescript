@@ -1,3 +1,5 @@
+import fecha from 'fecha'
+
 import { formatPhoneNumber } from 'utils/format'
 
 export function currencyFilter(price) {
@@ -22,4 +24,10 @@ export function phoneNumberFilter(phone) {
   }
 
   return formatPhoneNumber(phone)
+}
+
+export function humanizeTimestamp(epoch) {
+  const date = new Date(epoch * 1000)
+
+  return fecha.format(date, 'dddd, MMMM D, YYYY @ hh:mm A')
 }
