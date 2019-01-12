@@ -21,7 +21,7 @@ export default class DraftBanner extends React.Component {
     return (
       <Container>
         <span>
-          Your masseges saved and once your deal goes live, admin can read it
+          Your messages saved and once your deal goes live, admin can read it
         </span>
 
         <CloseIcon

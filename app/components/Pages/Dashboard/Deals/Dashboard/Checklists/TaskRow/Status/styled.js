@@ -3,9 +3,9 @@ import styled from 'styled-components'
 export const Label = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   color: #fff;
   min-width: 3rem;
-  height: 1.3rem;
   border-radius: 2px;
   background: transparent;
   padding: 0 0.6rem;

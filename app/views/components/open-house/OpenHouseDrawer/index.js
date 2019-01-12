@@ -2,6 +2,8 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
+import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
+
 import InstantMarketing from 'components/InstantMarketing'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
@@ -27,6 +29,7 @@ import ActionButton from '../../Button/ActionButton'
 import { ItemChangelog } from '../../TeamContact/ItemChangelog'
 import IconDelete from '../../SvgIcons/DeleteOutline/IconDeleteOutline'
 import { Title } from '../../EventDrawer/components/Title'
+import { UpdateReminder } from '../../EventDrawer/components/UpdateReminder'
 import { Description } from '../../EventDrawer/components/Description'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
 import { validate } from '../../EventDrawer/helpers/validate'
@@ -301,6 +304,12 @@ export class OpenHouseDrawer extends React.Component {
                         style={{ marginBottom: '1.5rem' }}
                       />
                       <Description placeholder="Enter any general notes for your clients" />
+
+                      <UpdateReminder
+                        dueDate={values.dueDate}
+                        // 1 hour before
+                        defaultOption={REMINDER_DROPDOWN_OPTIONS[5]}
+                      />
 
                       <Section label="Event Date">
                         <FieldContainer alignCenter justifyBetween>

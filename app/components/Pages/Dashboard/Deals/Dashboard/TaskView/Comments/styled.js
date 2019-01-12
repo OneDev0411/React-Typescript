@@ -17,6 +17,10 @@ export const Container = styled.div`
       width: 100%;
     }
 
+    .messages-list .message-item {
+      margin: 0 0.5rem 0 0 !important;
+    }
+
     .delivery-report {
       display: none;
     }
@@ -35,7 +39,7 @@ export const Container = styled.div`
       :after,
       :before {
         bottom: 100%;
-        left: 3%;
+        left: 2.5%;
         border: solid transparent;
         content: ' ';
         height: 0;
@@ -92,7 +96,6 @@ export const Container = styled.div`
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1rem;
       color: #808080;
       font-size: 0.875rem;
       margin: 0.5rem 0;

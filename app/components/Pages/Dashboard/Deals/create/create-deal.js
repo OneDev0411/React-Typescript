@@ -694,6 +694,7 @@ class CreateDeal extends React.Component {
     _.each(contexts, (value, key) => {
       if (
         _.isUndefined(value) ||
+        value === null ||
         (typeof value === 'string' && value.length === 0)
       ) {
         return false
