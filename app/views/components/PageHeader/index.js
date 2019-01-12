@@ -24,6 +24,7 @@ const propTypes = {
   showBackButton: PropTypes.bool,
   isFlat: PropTypes.bool,
   title: PropTypes.string,
+  maxTitleLength: PropTypes.number,
   subtitle: PropTypes.string,
   style: PropTypes.shape(),
   className: PropTypes.string
@@ -35,6 +36,7 @@ const defaultProps = {
   isFlat: false,
   style: {},
   title: '',
+  maxTitleLength: 1000,
   subtitle: '',
   className: ''
 }
@@ -61,6 +63,7 @@ function PageHeader(props) {
           onClickCloseButton={props.onClickCloseButton}
           backUrl={backUrl}
           title={title}
+          maxTitleLength={props.maxTitleLength}
           subtitle={props.subtitle}
         />
       )}
