@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
+import Flex from 'styled-flex-component'
 
 import Spinner from 'components/Spinner'
 
@@ -45,9 +46,15 @@ class DealsContainer extends React.Component {
     }
   }
 
+  isLoading = () => this.props.isFetchingDeals && this.props.params.id
+
   render() {
-    if (this.props.isFetchingDeals) {
-      return <Spinner />
+    if (this.isLoading()) {
+      return (
+        <Flex justifyCenter alignCenter style={{ height: '100vh' }}>
+          <Spinner />
+        </Flex>
+      )
     }
 
     return this.props.children
