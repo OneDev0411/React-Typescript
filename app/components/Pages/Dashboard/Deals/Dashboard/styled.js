@@ -8,6 +8,12 @@ export const Divider = styled.div`
   height: 1.5rem;
   margin: 0 1em;
   background-color: ${borderColor};
+
+  ${props =>
+    props.small &&
+    `
+    height: 1rem;
+  `}
 `
 
 export const PageWrapper = styled.div`

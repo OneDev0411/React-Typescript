@@ -4,6 +4,8 @@ import ActionButton from 'components/Button/ActionButton'
 import IconButton from 'components/Button/IconButton'
 import BackIcon from 'components/SvgIcons/KeyboardArrowLeft/IconKeyboardArrowLeft'
 
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+
 import { Container, Actions, Title } from './styled'
 
 export function Menu(props) {
@@ -19,7 +21,11 @@ export function Menu(props) {
           <BackIcon />
         </IconButton>
 
-        {props.title}
+        <TextMiddleTruncate
+          text={props.title}
+          maxLength={50}
+          tooltipPlacement="bottom"
+        />
       </Title>
 
       <Actions>
@@ -29,13 +35,15 @@ export function Menu(props) {
           </ActionButton>
         )}
 
-        <ActionButton
-          appearance="outline"
-          style={{ marginLeft: '1rem' }}
-          onClick={props.onToggleComments}
-        >
-          {props.isCommentsOpen ? 'Hide' : 'Show'} Comments
-        </ActionButton>
+        {props.task && (
+          <ActionButton
+            appearance="outline"
+            style={{ marginLeft: '1rem' }}
+            onClick={props.onToggleComments}
+          >
+            {props.isCommentsOpen ? 'Hide' : 'Show'} Comments
+          </ActionButton>
+        )}
       </Actions>
     </Container>
   )

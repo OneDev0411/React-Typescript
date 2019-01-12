@@ -11,6 +11,8 @@ export function updateRole(deal_id, role) {
         deal_id,
         role: updatedRole
       })
+
+      return updatedRole
     } catch (e) {
       throw e
     }

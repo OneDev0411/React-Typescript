@@ -171,6 +171,8 @@ class FileViewer extends React.Component {
   handleBackButton = () =>
     browserHistory.push(`/dashboard/deals/${this.state.deal.id}`)
 
+  normalizeName = name => decodeURIComponent(name).replace(/[_-]/g, ' ')
+
   render() {
     if (!this.state.deal) {
       return <Spinner />
@@ -182,7 +184,7 @@ class FileViewer extends React.Component {
     return (
       <LayoutContainer>
         <Menu
-          title={truncateTextFromMiddle(file.name, 40)}
+          title={this.normalizeName(file.name)}
           task={this.props.task}
           showFactsheetButton={!isEnvelopeView}
           isFactsheetOpen={this.state.isFactsheetOpen}

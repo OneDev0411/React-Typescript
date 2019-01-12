@@ -307,13 +307,11 @@ export function validate(ctx, value) {
 }
 
 function validateYearBuilt(ctx, value) {
-  const { max } = ctx.properties
-
   if (value === undefined || value === null) {
     return !ctx.mandatory
   }
 
-  return parseFloat(value) <= max
+  return parseFloat(value) >= 1000 && parseFloat(value) <= 9999
 }
 
 export function getFieldProperties(key) {
@@ -398,18 +396,26 @@ export function getChecklist(deal, fieldKey) {
   )
 
   const condition = isRequired ? field.required : field.optional
+  const checklists = getChecklists()
 
   if (
     deal.deal_type === 'Selling' &&
     condition.includes('Active Offer') &&
     getHasActiveOffer(deal)
   ) {
-    const checklists = getChecklists()
-
-    return deal.checklists.find(id => checklists[id].is_active_offer)
+    return deal.checklists.find(
+      id =>
+        checklists[id].is_active_offer &&
+        checklists[id].is_deactivated === false &&
+        checklists[id].is_terminated === false
+    )
   }
 
-  return deal.checklists[0]
+  return deal.checklists.find(
+    id =>
+      checklists[id].is_deactivated === false &&
+      checklists[id].is_terminated === false
+  )
 }
 
 function getFormattedValue(value) {

@@ -26,7 +26,7 @@ class Attachments extends React.Component {
 
   handleChangeSelectedDocuments = documents => {
     this.props.input.onChange(documents)
-    this.props.onCloseAttachmentsDrawer()
+    this.props.onChangeSelectedDocuments()
   }
 
   render() {

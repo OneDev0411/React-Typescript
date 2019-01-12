@@ -26,7 +26,7 @@ class CommentInput extends React.Component {
    * post comment,
    * also change attention_requested flag and change status of task if requests by BO
    */
-  async sendComment(attention_requested = null, task_status = null) {
+  sendComment = async (attention_requested = null, task_status = null) => {
     const {
       deal,
       task,
@@ -124,7 +124,7 @@ class CommentInput extends React.Component {
             isSaving={this.state.isSaving}
             task={this.props.task}
             isBackOffice={this.props.isBackOffice}
-            onSendComment={(notify, status) => this.sendComment(notify, status)}
+            onSendComment={this.sendComment}
           />
         </Actions>
       </Container>
