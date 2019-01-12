@@ -61,7 +61,7 @@ export const RoleFormContainer = ({
         <Field
           parse={value => value || ''}
           name="legal_first_name"
-          placeholder="Legal First Name"
+          labelText="Legal First Name"
           isRequired={isFirstNameRequired}
           component={TextInput}
         />
@@ -71,7 +71,7 @@ export const RoleFormContainer = ({
         <Field
           parse={value => value || ''}
           name="legal_middle_name"
-          placeholder="Legal Middle Name"
+          labelText="Legal Middle Name"
           isRequired={false}
           component={TextInput}
         />
@@ -81,7 +81,7 @@ export const RoleFormContainer = ({
         <Field
           parse={value => value || ''}
           name="legal_last_name"
-          placeholder="Legal Last Name"
+          labelText="Legal Last Name"
           isRequired={isLastNameRequired}
           component={TextInput}
         />
@@ -89,7 +89,7 @@ export const RoleFormContainer = ({
 
       <Field
         name="company_title"
-        placeholder="Company/Trust"
+        labelText="Company/Trust"
         parse={value => value || ''}
         component={AutoCompleteInput}
         defaultSelectedItem={form && form.email}
@@ -103,7 +103,7 @@ export const RoleFormContainer = ({
 
       <Field
         name="email"
-        placeholder="Email"
+        labelText="Email"
         parse={value => value || ''}
         component={AutoCompleteInput}
         defaultSelectedItem={form && form.email}
@@ -117,7 +117,7 @@ export const RoleFormContainer = ({
 
       <Field
         name="phone_number"
-        placeholder="Phone"
+        labelText="Phone"
         parse={value => value || ''}
         component={AutoCompleteInput}
         defaultSelectedItem={form && form.phone_number}

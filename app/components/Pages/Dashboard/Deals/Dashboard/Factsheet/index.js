@@ -156,6 +156,7 @@ class Factsheet extends React.Component {
                     {isDateContext && <ItemLabel>{field.label}</ItemLabel>}
 
                     <Editable
+                      deal={this.props.deal}
                       field={field}
                       isDateContext={isDateContext}
                       defaultValue={value}

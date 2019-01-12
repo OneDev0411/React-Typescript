@@ -11,6 +11,8 @@ export function createRoles(deal_id, roles) {
         deal_id,
         roles: createdRoles
       })
+
+      return createdRoles
     } catch (e) {
       throw e
     }

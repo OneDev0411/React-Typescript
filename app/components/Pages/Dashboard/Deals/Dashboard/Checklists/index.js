@@ -7,7 +7,6 @@ import ActionButton from 'components/Button/ActionButton'
 
 import { Container } from './styled'
 import ChecklistFolder from './ChecklistFolder'
-import DraftBanner from './DraftBanner'
 
 class ChecklistTab extends React.Component {
   state = {
@@ -107,12 +106,6 @@ class ChecklistTab extends React.Component {
 
     return (
       <Container>
-        <DraftBanner
-          deal={this.props.deal}
-          checklists={this.props.checklists}
-          tasks={this.props.tasks}
-        />
-
         {checklists.map(checklist => (
           <ChecklistFolder
             key={checklist.id}

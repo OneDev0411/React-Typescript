@@ -171,7 +171,7 @@ class FileViewer extends React.Component {
   handleBackButton = () =>
     browserHistory.push(`/dashboard/deals/${this.state.deal.id}`)
 
-  normalizeName = name => name.replace(/[_-]/g, ' ')
+  normalizeName = name => decodeURIComponent(name).replace(/[_-]/g, ' ')
 
   render() {
     if (!this.state.deal) {

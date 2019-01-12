@@ -282,14 +282,14 @@ class Address extends React.Component {
 
             <Field
               name="street_number"
-              placeholder="Street #"
+              labelText="Street #"
               isRequired={false}
               component={TextInput}
             />
 
             <Field
               name="street_name"
-              placeholder="Street Name"
+              labelText="Street Name"
               isRequired
               component={TextInput}
             />
@@ -308,14 +308,14 @@ class Address extends React.Component {
 
             <Field
               name="unit_number"
-              placeholder="Apartment/Unit Number"
+              labelText="Apartment/Unit Number"
               isRequired={false}
               component={TextInput}
             />
 
             <Field
               name="city"
-              placeholder="City"
+              labelText="City"
               isRequired
               component={TextInput}
             />
@@ -348,7 +348,7 @@ class Address extends React.Component {
 
             <Field
               name="postal_code"
-              placeholder="Zipcode"
+              labelText="Zipcode"
               isRequired
               component={TextInput}
             />

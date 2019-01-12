@@ -35,13 +35,15 @@ export function Menu(props) {
           </ActionButton>
         )}
 
-        <ActionButton
-          appearance="outline"
-          style={{ marginLeft: '1rem' }}
-          onClick={props.onToggleComments}
-        >
-          {props.isCommentsOpen ? 'Hide' : 'Show'} Comments
-        </ActionButton>
+        {props.task && (
+          <ActionButton
+            appearance="outline"
+            style={{ marginLeft: '1rem' }}
+            onClick={props.onToggleComments}
+          >
+            {props.isCommentsOpen ? 'Hide' : 'Show'} Comments
+          </ActionButton>
+        )}
       </Actions>
     </Container>
   )

@@ -19,13 +19,13 @@ export default class DealAddress extends React.Component {
     showMlsSearch: false
   }
 
-  toggleManualAddressModal() {
+  toggleManualAddressDrawer = () => {
     this.setState(state => ({
       showManualAddress: !state.showManualAddress
     }))
   }
 
-  toggleMlsModal = () => {
+  toggleMlsDrawer = () => {
     this.setState(state => ({
       showMlsSearch: !state.showMlsSearch
     }))
@@ -78,11 +78,12 @@ export default class DealAddress extends React.Component {
           title="Address"
           searchPlaceholder="Enter MLS# or an address"
           onSelectListings={this.handleSelectListing}
+          onClose={this.toggleMlsDrawer}
         />
 
         <Address
           show={this.state.showManualAddress}
-          onClose={this.toggleManualAddressModal}
+          onClose={this.toggleManualAddressDrawer}
           onCreateAddress={this.onCreateAddress}
         />
 
@@ -109,7 +110,7 @@ export default class DealAddress extends React.Component {
             {dealSide === BUYING && (
               <div
                 className="entity-item address new"
-                onClick={() => this.toggleMlsModal()}
+                onClick={() => this.toggleMlsDrawer()}
               >
                 <ActionButton appearance="link" className="add-item">
                   <span className="icon">+</span>
@@ -120,7 +121,7 @@ export default class DealAddress extends React.Component {
 
             <div
               className="entity-item address new"
-              onClick={() => this.toggleManualAddressModal()}
+              onClick={() => this.toggleManualAddressDrawer()}
             >
               <ActionButton appearance="link" className="add-item">
                 <span className="icon">+</span>

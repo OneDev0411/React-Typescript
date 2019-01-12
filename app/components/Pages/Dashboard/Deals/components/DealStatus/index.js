@@ -53,7 +53,7 @@ class DealStatus extends React.Component {
             'Cancelled',
             'Contract Terminated'
           ]
-        : ['Active', 'Leased', 'Lease Contract', 'Contract Terminated']
+        : ['Leased', 'Lease Contract']
     }
 
     return isBackOffice
@@ -71,12 +71,10 @@ class DealStatus extends React.Component {
           'Contract Terminated'
         ]
       : [
-          'Active',
           'Pending',
           'Active Option Contract',
           'Active Contingent',
-          'Active Kick Out',
-          'Contract Terminated'
+          'Active Kick Out'
         ]
   }
 
