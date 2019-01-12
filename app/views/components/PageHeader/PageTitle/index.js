@@ -5,6 +5,8 @@ import Flex from 'styled-flex-component'
 
 import IconButton from '../../Button/IconButton'
 
+import { TextMiddleTruncate } from '../../TextMiddleTruncate'
+
 import BackIcon from '../../SvgIcons/KeyboardArrowLeft/IconKeyboardArrowLeft'
 import CloseIcon from '../../SvgIcons/Close/CloseIcon'
 
@@ -84,7 +86,15 @@ export function PageTitle(props) {
           </IconButton>
         )}
         <Flex column>
-          {title && <H1>{title}</H1>}
+          {title && (
+            <H1>
+              <TextMiddleTruncate
+                text={title}
+                maxLength={props.maxTitleLength}
+                tooltipPlacement="bottom"
+              />
+            </H1>
+          )}
           {subtitle && <Subtitle>{subtitle}</Subtitle>}
         </Flex>
       </Flex>
