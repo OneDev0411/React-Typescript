@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "42.0.7",
+  "version": "42.1.7",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {

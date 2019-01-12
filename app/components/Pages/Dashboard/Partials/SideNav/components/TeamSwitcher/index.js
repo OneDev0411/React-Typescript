@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import Flex from 'styled-flex-component'
 import idx from 'idx'
 
+import { selectTeamIsFetching } from '../../../../../../../reducers/user'
 import { viewAs, getActiveTeamId } from '../../../../../../../utils/user-teams'
 import { putUserSetting } from '../../../../../../../models/user/put-user-setting'
 import flattenBrand from '../../../../../../../utils/flatten-brand'
@@ -85,20 +86,23 @@ export default class TeamSwitcher extends React.Component {
   }
 
   render() {
-    return (
-      <Fragment>
-        <li className="separator">Team Switcher</li>
-        {idx(this.props.user, u => u.teams[0].brand.roles) ? (
-          this.props.user.teams.map(this.renderTeam)
-        ) : (
-          <Fragment>
-            <Flex center>
-              <Loading style={{ fill: primary }} />
-            </Flex>
-            <li role="separator" className="divider" />
-          </Fragment>
-        )}
-      </Fragment>
-    )
+    const { user } = this.props
+
+    if (selectTeamIsFetching(user)) {
+      return (
+        <Fragment>
+          <Flex center>
+            <Loading style={{ fill: primary }} />
+          </Flex>
+          <li role="separator" className="divider" />
+        </Fragment>
+      )
+    }
+
+    if (idx(user, u => u.teams[0].brand.roles)) {
+      return user.teams.map(this.renderTeam)
+    }
+
+    return null
   }
 }
