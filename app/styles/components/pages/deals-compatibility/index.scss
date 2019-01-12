@@ -1,0 +1,64 @@
+.white--popover {
+  background-color: #fff;
+  border: none;
+  min-width: 280px;;
+  max-width: inherit;
+  box-shadow: -1px 0 10px 0 rgba(0, 0, 0, 0.1), 0 0 10px 0 rgba(0, 0, 0, 0.1);
+
+  &.top {
+    .arrow{
+      border-top-color:#fff;
+      &:after{
+        border-top-color: #fff !important;
+      }
+    }
+  }
+
+  .arrow{
+    border-bottom-color: #fff !important;
+    &:after{
+      border-bottom-color: #fff !important;
+    }
+  }
+  &.push-left {
+    margin-left: -5px;
+  }
+
+  .popover-content {
+    padding: 1rem;
+  }
+
+  &.no-padding .popover-content{
+    padding: 0;
+  }
+
+  .roles {
+    .item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 1rem;
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .info {
+        padding-left: 0.5rem;
+        .role-name-container {
+          display: flex;
+          flex-direction: row;
+          white-space: nowrap;
+          .role {
+            padding-left: 4px;
+          }
+        }
+        .email {
+          display: block;
+          color: darken($color: #fff, $amount: 30%);
+          margin-top: -1px;
+        }
+      }
+    }
+  }
+
+}
