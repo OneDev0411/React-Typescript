@@ -140,11 +140,11 @@ $item-height: 56px;
     background-color: #fff;
     border: 1px solid $gray;
 
-    > li.divider {
+    li.divider {
       margin: 0;
     }
 
-    > li.separator {
+    li.separator {
       &:first-child {
         border-radius: 5px 5px 0 0;
       }
@@ -159,7 +159,7 @@ $item-height: 56px;
       color: #000;
     }
 
-    > li > a {
+    li > a {
       color: #000;
       padding: 0 0 0 1em;
       margin: 0;
