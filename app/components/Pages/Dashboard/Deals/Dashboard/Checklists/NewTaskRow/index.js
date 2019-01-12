@@ -21,7 +21,7 @@ class NewTaskRow extends React.Component {
       <Container>
         <Button style={{ padding: 0 }} onClick={this.toggleCreateTaskDrawer}>
           <IconAdd />
-          <Title>Add Checkist Item</Title>
+          <Title>Add Checklist Item</Title>
         </Button>
 
         <TaskCreate
