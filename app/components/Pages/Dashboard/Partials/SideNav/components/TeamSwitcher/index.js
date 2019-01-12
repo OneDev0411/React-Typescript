@@ -88,7 +88,10 @@ export default class TeamSwitcher extends React.Component {
     }
 
     return (
-      <Fragment>
+      <div
+        style={{ maxHeight: '22rem', overflowY: 'auto' }}
+        className="u-scrollbar--thinner--self"
+      >
         <li className="separator">Team Switcher</li>
         {user.teams.map(team => {
           const isActiveTeam = team.brand.id === getActiveTeamId(user)
@@ -122,7 +125,7 @@ export default class TeamSwitcher extends React.Component {
             </Team>
           ]
         })}
-      </Fragment>
+      </div>
     )
   }
 }
