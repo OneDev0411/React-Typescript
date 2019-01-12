@@ -372,7 +372,7 @@ export class OpenHouseDrawer extends React.Component {
                           appearance="outline"
                           onClick={this.toggleTemplateBuilder}
                         >
-                          Preview
+                          Edit Registration Page
                         </ActionButton>
 
                         {this.state.template && (
