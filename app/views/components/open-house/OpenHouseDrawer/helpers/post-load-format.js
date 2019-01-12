@@ -14,7 +14,7 @@ import { addressTitle } from '../../../../../utils/listing'
 export async function postLoadFormat(task, owner, listing) {
   let reminder = {
     title: 'None',
-    value: null
+    value: -1
   }
 
   let location = {
