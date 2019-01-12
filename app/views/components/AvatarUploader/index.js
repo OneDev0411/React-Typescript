@@ -25,8 +25,7 @@ export class AvatarUploader extends Component {
     }),
     status: PropTypes.string,
     isUploading: PropTypes.bool.isRequired,
-    handleOnChange: PropTypes.func.isRequired,
-    handleOnDelete: PropTypes.func
+    handleOnChange: PropTypes.func.isRequired
   }
 
   static defaultProps = {

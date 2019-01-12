@@ -51,9 +51,7 @@ export default compose(
       setAvatar,
       setUploading,
       upsertContactAttributes
-    }) => async event => {
-      const file = event.target.files[0]
-
+    }) => async ({ files: { file } }) => {
       // Create a new FileReader instance
       // https://developer.mozilla.org/en/docs/Web/API/FileReader
       let reader = new FileReader()
