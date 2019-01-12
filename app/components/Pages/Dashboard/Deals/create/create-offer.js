@@ -285,7 +285,11 @@ class CreateOffer extends React.Component {
     const list = []
 
     _.each(contexts, (value, key) => {
-      if (_.isUndefined(value) || value === null || value.length === 0) {
+      if (
+        _.isUndefined(value) ||
+        value === null ||
+        (typeof value === 'string' && value.length === 0)
+      ) {
         return false
       }
 
