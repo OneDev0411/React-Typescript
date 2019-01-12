@@ -202,9 +202,6 @@ class EditDigitalForm extends React.Component {
 
   handleSelectContext = () => this.setState({ promptOnQuit: true })
 
-  getHeaderTitle = title =>
-    title && title.length > 30 ? `${title.substring(0, 30)}...` : title
-
   closeForm = () =>
     browserHistory.push(`/dashboard/deals/${this.props.task.deal}`)
 
@@ -237,7 +234,8 @@ class EditDigitalForm extends React.Component {
     return (
       <Fragment>
         <PageHeader
-          title={this.getHeaderTitle(task.title)}
+          maxTitleLength={50}
+          title={task.title}
           onClickBackButton={this.closeForm}
         >
           <PageHeader.Menu>
