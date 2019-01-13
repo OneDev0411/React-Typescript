@@ -52,10 +52,13 @@ export class SortablePlugin {
     }
 
     if (!accessor) {
-      return -Infinity
+      return typeof accessor === 'string' ? '' : -Infinity
     }
 
-    return accessor.toString().toLowerCase()
+    return accessor
+      .toString()
+      .trim()
+      .toLowerCase()
   }
 
   changeSort = (cell, isAscending) => {
