@@ -15,7 +15,7 @@ import CriticalDate, {
 } from '../../components/table-columns/CriticalDate'
 import Notification from '../../components/table-columns/NotificationBadge'
 
-import { getPrimaryAgent } from '../../../utils/roles'
+import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
 import { Filters } from '../Filters'
 import { statusSortMethod } from '../../components/table-columns/Status'
 
@@ -69,6 +69,7 @@ class Grid extends React.Component {
         id: 'agent-name',
         header: 'Agent',
         width: '100px',
+        accessor: deal => getPrimaryAgentName(deal, roles),
         render: ({ rowData: deal }) => (
           <AgentAvatars agent={getPrimaryAgent(deal, roles)} />
         )
