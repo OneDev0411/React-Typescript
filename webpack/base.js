@@ -37,7 +37,7 @@ export default {
       config: resolvePath('../config/public')
     }
   },
-  plugins: [new webpack.DefinePlugin(config.globals)],
+  plugins: [],
   externals: {
     fs: '{}'
   },

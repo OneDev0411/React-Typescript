@@ -7,6 +7,10 @@ import Webpackbar from 'webpackbar'
 import appConfig from '../config/webpack'
 import webpackConfig from './base'
 
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
+
+webpackConfig.mode = 'development'
+
 const postcss = function postcss() {
   return [
     require('postcss-cssnext')({
@@ -27,6 +31,10 @@ webpackConfig.entry = [
 ]
 
 webpackConfig.plugins.push(
+  new BundleAnalyzerPlugin({
+    analyzerMode: 'static',
+    openAnalyzer: false
+  }),
   new webpack.HotModuleReplacementPlugin(),
   new Webpackbar()
 )

@@ -1,7 +1,6 @@
 import webpack from 'webpack'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
-import Visualizer from 'webpack-visualizer-plugin'
 import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
 import ChangeExtensionPlugin from 'change-extension-plugin'
@@ -12,6 +11,8 @@ import moment from 'moment'
 
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
+
+webpackConfig.mode = 'production'
 
 const Expires = moment()
   .utc()
@@ -41,21 +42,6 @@ webpackConfig.entry = {
 
 webpackConfig.plugins.push(
   new webpack.optimize.AggressiveMergingPlugin(),
-  new Visualizer({
-    filename: './statistics.html'
-  }),
-  new webpack.optimize.CommonsChunkPlugin({
-    name: 'vendor',
-    filename: appConfig.compile.jsVendorBundle
-  }),
-  new UglifyJSPlugin({
-    sourceMap: true,
-    parallel: true,
-    cache: true,
-    uglifyOptions: {
-      output: { comments: false }
-    }
-  }),
   // reduce moment bundle size by removing unnecessary locales
   new MomentLocalesPlugin(),
   new ExtractTextPlugin({
