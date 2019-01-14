@@ -11,6 +11,11 @@ function resolvePath(dirPath) {
 export default {
   devtool: 'eval-source-map',
   entry: {},
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+  },
   output: {
     path: config.compile.output,
     filename: config.compile.jsBundle,

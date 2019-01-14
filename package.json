@@ -44,7 +44,6 @@
     "bluebird": "^3.5.3",
     "bowser": "^2.0.0-alpha.4",
     "branch-sdk": "^2.48.0",
-    "change-extension-plugin": "^1.1.2",
     "chromath": "^0.0.7",
     "classnames": "^2.2.6",
     "clipboard": "^1.6.1",

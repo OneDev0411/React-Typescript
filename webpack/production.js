@@ -3,7 +3,6 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
-import ChangeExtensionPlugin from 'change-extension-plugin'
 import S3Plugin from 'webpack-s3-plugin'
 import UglifyJSPlugin from 'uglifyjs-webpack-plugin'
 
@@ -59,10 +58,8 @@ webpackConfig.plugins.push(
   }),
   new CompressionPlugin({
     algorithm: 'gzip',
-    test: /\.js$|\.css$/
-  }),
-  new ChangeExtensionPlugin({
-    extensions: ['js']
+    test: /\.js$|\.css$/,
+    filename: "[path]"
   }),
   new S3Plugin({
     exclude: /.*\.html$/,
