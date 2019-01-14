@@ -8,7 +8,7 @@ import IconButton from 'components/Button/IconButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import EditIcon from 'components/SvgIcons/Edit/EditIcon'
 
-import TaskStatus from '../../Checklists/TaskRow/Status'
+import TaskStatus from '../../Folders/Checklist/TaskRow/Status'
 
 import { Input, Toolbar, TitleContainer, Title } from './styled'
 

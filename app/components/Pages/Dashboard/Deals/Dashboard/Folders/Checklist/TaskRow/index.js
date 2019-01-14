@@ -13,13 +13,13 @@ import TaskNotifications from './Notification'
 import TaskFiles from '../TaskFiles'
 
 import {
-  Container,
+  RowContainer,
   Row,
-  LeftColumn,
-  RightColumn,
-  Title,
-  ArrowIcon
-} from './styled'
+  RowLeftColumn,
+  RowRightColumn,
+  RowTitle,
+  RowArrowIcon
+} from '../../styled'
 
 class Task extends React.Component {
   state = {
@@ -50,21 +50,21 @@ class Task extends React.Component {
     const { task } = this.props
 
     return (
-      <Container>
+      <RowContainer>
         <Row>
-          <LeftColumn onClick={this.toggleTaskOpen}>
-            <ArrowIcon isOpen={this.state.isTaskExpanded} />
-            <Title>{task.title}</Title>
-          </LeftColumn>
+          <RowLeftColumn onClick={this.toggleTaskOpen}>
+            <RowArrowIcon isOpen={this.state.isTaskExpanded} />
+            <RowTitle>{task.title}</RowTitle>
+          </RowLeftColumn>
 
-          <RightColumn>
+          <RowRightColumn>
             <TaskStatus
               task={task}
               isBackOffice={this.props.isBackOffice}
               isDraftDeal={this.props.deal.is_draft}
             />
             <TaskNotifications task={task} onClick={this.handleSelectTask} />
-          </RightColumn>
+          </RowRightColumn>
         </Row>
 
         <TaskFiles
@@ -73,7 +73,7 @@ class Task extends React.Component {
           deal={this.props.deal}
           isBackOffice={this.props.isBackOffice}
         />
-      </Container>
+      </RowContainer>
     )
   }
 }

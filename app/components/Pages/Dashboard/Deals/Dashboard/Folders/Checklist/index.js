@@ -7,16 +7,16 @@ import { ChecklistLabels } from './Labels'
 import MessageAdmin from './MessageAdmin'
 import Menu from './Menu'
 
-import TaskRow from '../TaskRow'
-import NewTaskRow from '../NewTaskRow'
+import TaskRow from './TaskRow'
+import NewTaskRow from './NewTaskRow'
 
 import {
-  Container,
+  FolderContainer,
   Header,
   HeaderTitle,
-  TasksContainer,
+  ItemsContainer,
   ArrowIcon
-} from './styled'
+} from '../styled'
 
 class ChecklistFolder extends React.Component {
   state = {
@@ -61,7 +61,7 @@ class ChecklistFolder extends React.Component {
     const { checklist } = this.props
 
     return (
-      <Container>
+      <FolderContainer>
         <Header>
           <Flex
             alignCenter
@@ -83,7 +83,7 @@ class ChecklistFolder extends React.Component {
           </Flex>
         </Header>
 
-        <TasksContainer isOpen={this.state.isFolderExpanded}>
+        <ItemsContainer isOpen={this.state.isFolderExpanded}>
           {this.Tasks.map(task => (
             <TaskRow
               key={task.id}
@@ -94,8 +94,8 @@ class ChecklistFolder extends React.Component {
           ))}
 
           <NewTaskRow deal={this.props.deal} checklist={checklist} />
-        </TasksContainer>
-      </Container>
+        </ItemsContainer>
+      </FolderContainer>
     )
   }
 }
