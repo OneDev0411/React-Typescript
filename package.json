@@ -27,7 +27,7 @@
     "storybook:publish": "npm run storybook:build && surge -p .tmp/stories -d rechat-stories.surge.sh"
   },
   "engines": {
-    "node": "9.2.0"
+        "node": "10.x"
   },
   "dependencies": {
     "autoprefixer": "^7.2.3",
