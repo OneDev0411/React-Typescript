@@ -4,7 +4,7 @@ import {
   currencyFilter,
   areaMeterFilter,
   phoneNumberFilter,
-  humanizeTimestamp
+  formatDate
 } from '../nunjucks-filters'
 
 const env = new nunjucks.Environment()
@@ -12,6 +12,6 @@ const env = new nunjucks.Environment()
 env.addFilter('currency', currencyFilter)
 env.addFilter('area', areaMeterFilter)
 env.addFilter('phone', phoneNumberFilter)
-env.addFilter('humanizetimestamp', humanizeTimestamp)
+env.addFilter('formatdate', formatDate)
 
 export default env

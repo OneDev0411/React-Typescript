@@ -146,9 +146,20 @@ export class OpenHouseDrawer extends React.Component {
         `${templateItem.url}/index.html`
       )
 
+      const crmopenhouse = {
+        title: this.state.listing.property.address.full_address,
+        due_date: new Date()
+      }
+
+      if (!this.isNew) {
+        crmopenhouse.title = this.props.openHouse.title
+        crmopenhouse.due_date = this.props.openHouse.dueDate
+      }
+
       const template = nunjucks.renderString(templateHtml, {
         user: this.props.user,
-        listing: this.state.listing
+        listing: this.state.listing,
+        crmopenhouse
       })
 
       this.setState({ template })
@@ -292,6 +303,8 @@ export class OpenHouseDrawer extends React.Component {
               render={formProps => {
                 const { values } = formProps
 
+                console.log('VALUES', values)
+
                 return (
                   <div>
                     <FormContainer
@@ -404,28 +417,34 @@ export class OpenHouseDrawer extends React.Component {
                         )}
                       </Flex>
                     </Footer>
+                    <InstantMarketing
+                      headerTitle="Registration Template"
+                      closeConfirmation={false}
+                      showTemplatesColumn={false}
+                      saveButtonLabel="Save"
+                      isOpen={this.state.isTemplateBuilderOpen}
+                      onClose={this.toggleTemplateBuilder}
+                      handleSave={this.handleSaveTemplate}
+                      assets={
+                        this.state.listing &&
+                        this.state.listing.gallery_image_urls
+                      }
+                      templateData={{
+                        user: this.props.user,
+                        listing: this.state.listing,
+                        crmopenhouse: {
+                          title: values.title,
+                          due_date: values.dueDate
+                        }
+                      }}
+                      templateTypes={['CrmOpenHouse']}
+                    />
                   </div>
                 )
               }}
             />
           </Drawer.Body>
         </Drawer>
-
-        <InstantMarketing
-          headerTitle="Registration Template"
-          closeConfirmation={false}
-          showTemplatesColumn={false}
-          saveButtonLabel="Save"
-          isOpen={this.state.isTemplateBuilderOpen}
-          onClose={this.toggleTemplateBuilder}
-          handleSave={this.handleSaveTemplate}
-          assets={this.state.listing && this.state.listing.gallery_image_urls}
-          templateData={{
-            user: this.props.user,
-            listing: this.state.listing
-          }}
-          templateTypes={['CrmOpenHouse']}
-        />
       </Fragment>
     )
   }

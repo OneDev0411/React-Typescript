@@ -1,4 +1,4 @@
-import fecha from 'fecha'
+import moment from 'moment'
 
 import { formatPhoneNumber } from 'utils/format'
 
@@ -26,8 +26,8 @@ export function phoneNumberFilter(phone) {
   return formatPhoneNumber(phone)
 }
 
-export function humanizeTimestamp(epoch) {
-  const date = new Date(epoch * 1000)
+export function formatDate(date, kwargs = {}) {
+  const { format = 'dddd, MMMM D, YYYY @ hh:mm A' } = kwargs
 
-  return fecha.format(date, 'dddd, MMMM D, YYYY @ hh:mm A')
+  return moment(date).format(format)
 }
