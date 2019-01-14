@@ -4,14 +4,71 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
 import S3Plugin from 'webpack-s3-plugin'
-import UglifyJSPlugin from 'uglifyjs-webpack-plugin'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import fs from 'fs'
+import Cdnizer from 'cdnizer'
 
 import moment from 'moment'
 
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
 
+import path from 'path'
+
 webpackConfig.mode = 'production'
+
+class CdnizerPlugin {
+  constructor() {
+    this.cdnizer = null
+  }
+
+  apply = compiler => {
+    compiler.hooks.afterEmit.tapAsync('Cdnizer', this.work)
+  }
+
+  work = async (compilation, callback) => {
+    const { assets } = compilation
+    const files = Object.keys(assets)
+                  .map(file => {
+                    return {
+                      file: `{/,}*${file}*`
+                    }
+                  })
+
+    this.cdnizer = Cdnizer({
+      defaultCDNBase: process.env.ASSETS_BASEURL,
+      files
+    })
+
+//     HtmlWebpackPlugin.getHooks(compilation).afterEmit.tap('Cdnizer', this.html)
+
+    const regexp = /\.(html|css)$/
+
+    const toBeCdnized = Object.values(assets)
+                        .filter(asset => regexp.test(asset.existsAt))
+                        .map(a => a.existsAt)
+
+    const promises = toBeCdnized.map(path => this.cdnize(path))
+
+    await Promise.all(promises)
+
+
+    callback()
+  }
+
+  html = (data, callback) => {
+    console.log('Got HTML', data)
+    const cdnized = this.cdnizer(data)
+    callback(null, cdnized)
+  }
+
+  cdnize = async path => {
+    const text = await fs.promises.readFile(path, 'UTF-8')
+    const cdnized = this.cdnizer(text)
+    await fs.promises.writeFile(path, cdnized)
+    console.log('Saved', path)
+  }
+}
 
 const Expires = moment()
   .utc()
@@ -40,12 +97,11 @@ webpackConfig.entry = {
 }
 
 webpackConfig.plugins.push(
-  new webpack.optimize.AggressiveMergingPlugin(),
+//   new webpack.optimize.AggressiveMergingPlugin(),
   // reduce moment bundle size by removing unnecessary locales
-  new MomentLocalesPlugin(),
-  new ExtractTextPlugin({
-    filename: appConfig.compile.cssBundle,
-    allChunks: true
+//   new MomentLocalesPlugin(),
+  new MiniCssExtractPlugin({
+    filename: "[path]"
   }),
   new HtmlWebpackPlugin({
     template: appConfig.compile.template,
@@ -56,11 +112,15 @@ webpackConfig.plugins.push(
       collapseWhitespace: false
     }
   }),
+
+  new CdnizerPlugin(),
+
   new CompressionPlugin({
     algorithm: 'gzip',
     test: /\.js$|\.css$/,
     filename: "[path]"
   }),
+
   new S3Plugin({
     exclude: /.*\.html$/,
     basePath: 'dist',
@@ -72,11 +132,11 @@ webpackConfig.plugins.push(
     s3UploadOptions: {
       Bucket: process.env.ASSETS_BUCKET,
       Expires,
-      ContentEncoding(fileName) {
-        if (/\.js|.css/.test(fileName)) {
-          return 'gzip'
-        }
-      },
+//       ContentEncoding(fileName) {
+//         if (/\.js|.css/.test(fileName)) {
+//           return 'gzip'
+//         }
+//       },
 
       ContentType(fileName) {
         if (/\.js/.test(fileName)) {
@@ -90,50 +150,18 @@ webpackConfig.plugins.push(
         return 'text/plain'
       }
     },
-    cdnizerOptions: {
-      defaultCDNBase: process.env.ASSETS_BASEURL
-    }
+  noCdnizer: true
   })
 )
 
-webpackConfig.module.rules.push(
-  {
-    test: /\.css/,
-    use: ExtractTextPlugin.extract({
-      fallback: 'style-loader',
-      use: [
-        {
-          loader: 'css-loader',
-          options: { minimize: true }
-        },
-        {
-          loader: 'postcss-loader',
-          options: {
-            plugins: postcss
-          }
-        }
-      ]
-    })
-  },
-  {
-    test: /\.scss/,
-    use: ExtractTextPlugin.extract({
-      fallback: 'style-loader',
-      use: [
-        {
-          loader: 'css-loader',
-          options: { minimize: true }
-        },
-        {
-          loader: 'postcss-loader',
-          options: {
-            plugins: postcss
-          }
-        },
-        { loader: 'sass-loader' }
-      ]
-    })
-  }
-)
+webpackConfig.module.rules.push({
+  test: /\.(sa|sc|c)ss$/,
+  use: [
+    MiniCssExtractPlugin.loader,
+    'css-loader',
+//     'postcss-loader',
+    'sass-loader',
+  ],
+})
 
 export default webpackConfig

@@ -19,7 +19,7 @@ async function run() {
         .magenta
     )
   } catch (e) {
-    console.log(e.red)
+    console.log(e)
 
     return
   }
