@@ -18,10 +18,10 @@ import {
 import PageHeader from 'components/PageHeader'
 import DatePicker from 'components/DatePicker'
 import ActionButton from 'components/Button/ActionButton'
-import { TourDrawer } from 'components/tour/TourDrawer'
-import { EventDrawer } from 'components/EventDrawer'
-import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
+
 import { Container, Menu, Trigger, Content } from 'components/SlideMenu'
+
+import { CrmEvents } from './CrmEvents'
 
 import {
   viewAs,
@@ -43,29 +43,21 @@ const LOADING_POSITIONS = {
 const MENU_WIDTH = '18.75rem'
 
 class CalendarContainer extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      isMenuOpen: true,
-      isOpenEventDrawer: false,
-      selectedEvent: null,
-      loadingPosition: LOADING_POSITIONS.Middle
-    }
-    this.myRef = React.createRef()
+  state = {
+    isMenuOpen: true,
+    isOpenEventDrawer: false,
+    selectedEvent: null,
+    loadingPosition: LOADING_POSITIONS.Middle
   }
 
   componentDidMount() {
-    const { selectedDate } = this.props
-
     const acl = getActiveTeamACL(this.props.user)
 
-    const hasContactsPermission = acl.includes('CRM')
-
-    if (!hasContactsPermission) {
+    if (!acl.includes('CRM')) {
       browserHistory.push('/dashboard/mls')
     }
 
-    this.restartCalendar(selectedDate)
+    this.restartCalendar(this.props.selectedDate)
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -215,20 +207,22 @@ class CalendarContainer extends React.Component {
     }
   }
 
-  scrollIntoView = (date, options = {}) => {
+  scrollIntoView = (date, options = {}, attempts = 0) => {
     const refId = moment(date).format('YYYY-MM-DD')
 
-    this.isObserverEnabled = false
+    if (!this.refs[refId] && attempts < 6) {
+      setTimeout(() => {
+        this.scrollIntoView(date, options, attempts + 1)
+      }, 500)
+
+      return false
+    }
 
     this.refs[refId] &&
       this.refs[refId].scrollIntoView({
         behavior: options.behavior || 'instant',
         block: 'start'
       })
-
-    setTimeout(() => {
-      this.isObserverEnabled = true
-    }, 500)
   }
 
   loadPreviousItems = async () => {
@@ -276,46 +270,12 @@ class CalendarContainer extends React.Component {
     }
   }
 
-  renderCRMEventDrawer = () => {
-    const { selectedEvent, isOpenEventDrawer } = this.state
-
-    if (!isOpenEventDrawer) {
-      return null
-    }
-
-    const _props = {
-      deleteCallback: this.handleEventChange,
-      isOpen: true,
-      onClose: this.closeEventDrawer,
-      submitCallback: this.handleEventChange,
-      user: this.props.user
-    }
-
-    // New Event
-    if (!selectedEvent) {
-      return <EventDrawer {..._props} />
-    }
-
-    const { id } = selectedEvent
-
-    switch (selectedEvent.type) {
-      case 'Tour':
-        return <TourDrawer {..._props} tourId={id} />
-      case 'Open House':
-        return <OpenHouseDrawer {..._props} openHouseId={id} />
-      default:
-        return <EventDrawer {..._props} eventId={id} />
-    }
-  }
-
   render() {
     const { isMenuOpen, loadingPosition } = this.state
     const { selectedDate, isFetching } = this.props
 
     return (
       <Container isOpen={isMenuOpen}>
-        {this.renderCRMEventDrawer()}
-
         <Menu isOpen={isMenuOpen} width={MENU_WIDTH}>
           <MenuContainer>
             <DatePicker
@@ -354,6 +314,14 @@ class CalendarContainer extends React.Component {
             />
           </TableContainer>
         </Content>
+
+        <CrmEvents
+          isOpenEventDrawer={this.state.isOpenEventDrawer}
+          selectedEvent={this.state.selectedEvent}
+          user={this.props.user}
+          onEventChange={this.handleEventChange}
+          onCloseEventDrawer={this.closeEventDrawer}
+        />
       </Container>
     )
   }
