@@ -1,51 +1,51 @@
-import * as constants from './constants'
+import { LOCAL_STORAGE_REGISTERATION_KEY } from './constants'
 
-const LOCAL_STORAGE_REGISTERATION_KEY =
-  constants.LOCAL_STORAGE_REGISTERATION_KEY
-
-const storage = {
-  getAll() {
-    return (
-      JSON.parse(localStorage.getItem(LOCAL_STORAGE_REGISTERATION_KEY)) || {}
-    )
-  },
-
-  setAll(value) {
-    localStorage.setItem(LOCAL_STORAGE_REGISTERATION_KEY, JSON.stringify(value))
-  },
-
-  get(id) {
-    const data = this.getAll()
-
-    return data[id] || []
-  },
-
-  set(id, value) {
-    const data = this.getAll()
-
-    data[id] = value
-
-    localStorage.setItem(LOCAL_STORAGE_REGISTERATION_KEY, JSON.stringify(data))
-  },
-
-  remove(id) {
-    const data = this.getAll()
-
-    delete data[id]
-
-    this.setAll(data)
-  },
-
-  append(id, value) {
-    const data = this.get(id)
-
-    if (!Array.isArray(data)) {
-      throw new TypeError(`No array type saved in ${id} key`)
-    }
-
-    data.push(value)
-    this.set(id, data)
-  }
+function getAll() {
+  return JSON.parse(localStorage.getItem(LOCAL_STORAGE_REGISTERATION_KEY)) || {}
 }
 
-export default storage
+function setAll(value) {
+  localStorage.setItem(LOCAL_STORAGE_REGISTERATION_KEY, JSON.stringify(value))
+}
+
+function get(id) {
+  const data = getAll()
+
+  return data[id] || []
+}
+
+function set(id, value) {
+  const data = getAll()
+
+  data[id] = value
+
+  localStorage.setItem(LOCAL_STORAGE_REGISTERATION_KEY, JSON.stringify(data))
+}
+
+function remove(id) {
+  const data = getAll()
+
+  delete data[id]
+
+  setAll(data)
+}
+
+function append(id, value) {
+  const data = get(id)
+
+  if (!Array.isArray(data)) {
+    throw new TypeError(`No array type saved in ${id} key`)
+  }
+
+  data.push(value)
+  set(id, data)
+}
+
+export default {
+  getAll,
+  setAll,
+  get,
+  remove,
+  set,
+  append
+}
