@@ -53,7 +53,6 @@ webpackConfig.optimization = {
       uglifyOptions: {
         output: {
           comments: false,
-          mangle: false
         }
       }
     })
