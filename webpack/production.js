@@ -27,7 +27,14 @@ class CdnizerPlugin {
     compiler.hooks.afterCompile.tapAsync('Cdnizer', this.work)
   }
 
+  html = async (data, callback) => {
+    data.html = this.cdnizer(data.html)
+    callback(null, data)
+  }
+
   work = async (compilation, callback) => {
+    HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync('Cdnizer', this.html)
+
     const { assets } = compilation
     this.assets = assets
 
@@ -47,8 +54,6 @@ class CdnizerPlugin {
 
     const toBeCdnized = Object.keys(assets)
                         .filter(name => regexp.test(name))
-
-    console.log(toBeCdnized)
 
     const promises = toBeCdnized.map(this.cdnize)
 
