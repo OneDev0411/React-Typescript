@@ -134,6 +134,7 @@ export class Grid extends React.Component {
           deal={this.props.deal}
           recipients={this.getRecipients(props.selectedRows)}
           selectedRows={props.selectedRows}
+          mediums="Email"
         >
           Promote Listing
         </SendDealPromotionCard>
