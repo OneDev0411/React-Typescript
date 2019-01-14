@@ -263,6 +263,19 @@ export class OpenHouseDrawer extends React.Component {
       isTemplateBuilderOpen: !state.isTemplateBuilderOpen
     }))
 
+  getTemplateAssets() {
+    const assets = []
+
+    this.state.listing.gallery_image_urls.forEach(image => {
+      assets.push({
+        listing: this.state.listing.id,
+        image
+      })
+    })
+
+    return assets
+  }
+
   render() {
     const { user } = this.props
     const { isDisabled } = this.state
@@ -415,10 +428,7 @@ export class OpenHouseDrawer extends React.Component {
                       isOpen={this.state.isTemplateBuilderOpen}
                       onClose={this.toggleTemplateBuilder}
                       handleSave={this.handleSaveTemplate}
-                      assets={
-                        this.state.listing &&
-                        this.state.listing.gallery_image_urls
-                      }
+                      assets={this.getTemplateAssets()}
                       templateData={{
                         user: this.props.user,
                         listing: this.state.listing,
