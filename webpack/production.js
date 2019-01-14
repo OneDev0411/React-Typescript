@@ -150,7 +150,7 @@ webpackConfig.plugins.push(
         return 'text/plain'
       }
     },
-  noCdnizer: true
+    noCdnizer: true
   })
 )
 
