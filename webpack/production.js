@@ -6,7 +6,7 @@ import CompressionPlugin from 'compression-webpack-plugin'
 import S3Plugin from 'webpack-s3-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
-
+import UglifyJsPlugin from 'uglifyjs-webpack-plugin'
 
 import moment from 'moment'
 
@@ -43,6 +43,21 @@ webpackConfig.performance = {
 webpackConfig.entry = {
   app: ['babel-polyfill', appConfig.compile.entry],
   vendor: appConfig.compile.vendors
+}
+
+webpackConfig.optimization = {
+  minimizer: [
+    new UglifyJsPlugin({
+      parallel: true,
+      cache: true,
+      uglifyOptions: {
+        output: {
+          comments: false,
+          mangle: false
+        }
+      }
+    })
+  ]
 }
 
 webpackConfig.plugins.push(
