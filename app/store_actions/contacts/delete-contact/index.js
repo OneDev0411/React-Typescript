@@ -5,6 +5,7 @@ import {
 } from '../../../reducers/contacts/list'
 import { getContacts, searchContacts } from '../index.js'
 import { deleteContacts as removeContacts } from '../../../models/contacts/delete-contact'
+import { viewAs } from '../../../utils/user-teams'
 
 export function deleteContacts(contactIds) {
   return async (dispatch, getState) => {
@@ -49,7 +50,9 @@ export async function afterDeleteContactsFetch(dispatch, getState, contactIds) {
           listInfo.filter,
           startPoint,
           limitFetchContact,
-          listInfo.searchText
+          listInfo.searchText,
+          undefined,
+          viewAs(getState().user)
         )
       )
     }

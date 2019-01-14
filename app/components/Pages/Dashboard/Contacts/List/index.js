@@ -215,14 +215,15 @@ class ContactsList extends React.Component {
     this.setState({ isFetchingMoreContacts: false })
   }
 
-  handleOnDelete = (e, { selectedRows }) => {
+  handleOnDelete = (e, { selectedRows, resetSelectedRows }) => {
     const selectedRowsLength = selectedRows.length
 
     this.props.confirmation({
       show: true,
       confirmLabel: 'Delete',
       message: `Delete ${selectedRowsLength > 1 ? 'contacts' : 'contact'}`,
-      onConfirm: () => this.handleDeleteContact(selectedRows),
+      onConfirm: () =>
+        this.handleDeleteContact(selectedRows, resetSelectedRows),
       description: `Are you sure you want to delete ${
         selectedRowsLength > 1
           ? `these ${selectedRowsLength} contacts`
@@ -231,14 +232,14 @@ class ContactsList extends React.Component {
     })
   }
 
-  handleDeleteContact = async ids => {
+  handleDeleteContact = async (ids, resetRowsHandler) => {
     try {
       this.rowsUpdating(true)
 
       await this.props.deleteContacts(ids)
 
       this.rowsUpdating(false)
-      this.resetSelectedRows()
+      resetRowsHandler()
     } catch (error) {
       console.log(error)
     }
@@ -247,6 +248,7 @@ class ContactsList extends React.Component {
   rowsUpdating = isRowsUpdating => this.setState({ isRowsUpdating })
 
   resetSelectedRows = () => {
+    console.log('reset rows')
     resetGridSelectedItems('contacts')
   }
 
