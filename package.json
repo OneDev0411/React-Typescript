@@ -104,6 +104,7 @@
     "normalizr": "^3.2.4",
     "nunjucks": "^3.1.6",
     "offline-js": "^0.7.19",
+        "optimize-css-assets-webpack-plugin": "^5.0.1",
     "papaparse": "^4.6.2",
     "parse-address": "^1.1.0",
     "pdfjs-dist": "github:rechat/pdfjs-dist",

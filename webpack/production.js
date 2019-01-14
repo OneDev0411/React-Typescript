@@ -5,6 +5,8 @@ import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
 import S3Plugin from 'webpack-s3-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
+
 
 import moment from 'moment'
 
@@ -44,12 +46,12 @@ webpackConfig.entry = {
 }
 
 webpackConfig.plugins.push(
-//   new webpack.optimize.AggressiveMergingPlugin(),
-  // reduce moment bundle size by removing unnecessary locales
-//   new MomentLocalesPlugin(),
+  new webpack.optimize.AggressiveMergingPlugin(),
+  new MomentLocalesPlugin(),
   new MiniCssExtractPlugin({
-    filename: "[name].[hash].css"
+    filename: '[name].[hash].css'
   }),
+  new OptimizeCSSAssetsPlugin(),
   new HtmlWebpackPlugin({
     template: appConfig.compile.template,
     hash: false,
@@ -63,7 +65,7 @@ webpackConfig.plugins.push(
   new CompressionPlugin({
     algorithm: 'gzip',
     test: /\.js$|\.css$/,
-    filename: "[path]"
+    filename: '[path]'
   }),
 
   new S3Plugin({
@@ -77,6 +79,7 @@ webpackConfig.plugins.push(
     s3UploadOptions: {
       Bucket: process.env.ASSETS_BUCKET,
       Expires,
+      Vary: 'Accept-Encoding',
       ContentEncoding(fileName) {
         if (/\.js|.css/.test(fileName)) {
           return 'gzip'
