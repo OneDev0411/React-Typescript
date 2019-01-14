@@ -2,10 +2,9 @@ import React from 'react'
 import Flex from 'styled-flex-component'
 
 import fecha from 'fecha'
+
 import LinkButton from 'components/Button/LinkButton'
-
 import Spinner from 'components/Spinner'
-
 import { BasicDropdown } from 'components/BasicDropdown'
 import VerticalDotsIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
 import LinkIcon from 'components/SvgIcons/LinkIcon'
@@ -59,7 +58,7 @@ export default class EventsList extends React.Component {
                   Open House:&nbsp;
                   {fecha.format(
                     new Date(event.due_date * 1000),
-                    'dddd, MMMM YYYY, HH:mm a'
+                    'dddd, MMMM D, YYYY hh:mm A'
                   )}
                 </EventInfoTitle>
                 <EventInfoDescription>{event.description}</EventInfoDescription>
