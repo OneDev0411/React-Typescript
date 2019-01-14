@@ -193,6 +193,7 @@
     "validator": "^9.2.0",
         "webpack": "^4.28.4",
     "webpack-bundle-analyzer": "^2.13.1",
+        "uglifyjs-webpack-plugin": "^2.1.1",
         "webpack-s3-plugin": "^1.0.3"
   },
   "devDependencies": {
@@ -224,7 +225,6 @@
     "redux-mock-store": "^1.5.3",
     "selenium-standalone": "^6.15.4",
     "surge": "^0.20.1",
-        "uglifyjs-webpack-plugin": "^2.1.1",
         "webpack-cli": "^3.2.1",
         "webpack-dev-middleware": "^3.5.0",
         "webpack-dev-server": "^3.1.14",
