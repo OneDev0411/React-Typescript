@@ -101,7 +101,7 @@ webpackConfig.plugins.push(
   // reduce moment bundle size by removing unnecessary locales
 //   new MomentLocalesPlugin(),
   new MiniCssExtractPlugin({
-    filename: "[path]"
+    filename: "[name].[hash].css"
   }),
   new HtmlWebpackPlugin({
     template: appConfig.compile.template,
