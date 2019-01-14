@@ -7,6 +7,7 @@ import S3Plugin from 'webpack-s3-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import fs from 'fs'
 import Cdnizer from 'cdnizer'
+import RawSource from 'webpack-sources/lib/RawSource'
 
 import moment from 'moment'
 
@@ -15,7 +16,7 @@ import appConfig from '../config/webpack'
 
 import path from 'path'
 
-webpackConfig.mode = 'production'
+webpackConfig.mode = 'development'
 
 class CdnizerPlugin {
   constructor() {
@@ -23,11 +24,13 @@ class CdnizerPlugin {
   }
 
   apply = compiler => {
-    compiler.hooks.afterEmit.tapAsync('Cdnizer', this.work)
+    compiler.hooks.afterCompile.tapAsync('Cdnizer', this.work)
   }
 
   work = async (compilation, callback) => {
     const { assets } = compilation
+    this.assets = assets
+
     const files = Object.keys(assets)
                   .map(file => {
                     return {
@@ -40,33 +43,26 @@ class CdnizerPlugin {
       files
     })
 
-//     HtmlWebpackPlugin.getHooks(compilation).afterEmit.tap('Cdnizer', this.html)
-
     const regexp = /\.(html|css)$/
 
-    const toBeCdnized = Object.values(assets)
-                        .filter(asset => regexp.test(asset.existsAt))
-                        .map(a => a.existsAt)
+    const toBeCdnized = Object.keys(assets)
+                        .filter(name => regexp.test(name))
 
-    const promises = toBeCdnized.map(path => this.cdnize(path))
+    console.log(toBeCdnized)
+
+    const promises = toBeCdnized.map(this.cdnize)
 
     await Promise.all(promises)
-
 
     callback()
   }
 
-  html = (data, callback) => {
-    console.log('Got HTML', data)
-    const cdnized = this.cdnizer(data)
-    callback(null, cdnized)
-  }
+  cdnize = async key => {
+    const asset = this.assets[key]
 
-  cdnize = async path => {
-    const text = await fs.promises.readFile(path, 'UTF-8')
-    const cdnized = this.cdnizer(text)
-    await fs.promises.writeFile(path, cdnized)
-    console.log('Saved', path)
+    const cdnized = this.cdnizer(asset.source())
+
+    this.assets[key] = new RawSource(cdnized)
   }
 }
 
