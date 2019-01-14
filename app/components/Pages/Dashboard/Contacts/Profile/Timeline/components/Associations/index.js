@@ -41,7 +41,7 @@ export class Associations extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!this.isAssociationsGotChange(this.props.task, prevProps.task)) {
+    if (this.isAssociationsGotChange(this.props.task, prevProps.task)) {
       this.fetchAssociations()
     }
   }
@@ -50,19 +50,19 @@ export class Associations extends React.Component {
     const nextTaskAssociations = this.getTaskAssociationsIds(nextTask)
     const currentTaskAssociations = this.getTaskAssociationsIds(currentTask)
 
-    if (currentTaskAssociations.length === nextTaskAssociations.length) {
-      if (
-        currentTaskAssociations.length === 1 &&
-        nextTaskAssociations[0] === this.defaultAssociationId &&
-        currentTaskAssociations[0] === this.defaultAssociationId
-      ) {
-        return false
-      }
-
-      return _.isEqual(nextTaskAssociations, currentTaskAssociations)
+    if (currentTaskAssociations.length !== nextTaskAssociations.length) {
+      return true
     }
 
-    return true
+    if (
+      currentTaskAssociations.length === 1 &&
+      nextTaskAssociations[0] === this.defaultAssociationId &&
+      currentTaskAssociations[0] === this.defaultAssociationId
+    ) {
+      return false
+    }
+
+    return !_.isEqual(nextTaskAssociations, currentTaskAssociations)
   }
 
   getTaskAssociationsIds = task => {
