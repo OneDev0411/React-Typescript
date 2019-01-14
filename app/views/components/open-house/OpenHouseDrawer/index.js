@@ -168,7 +168,7 @@ export class OpenHouseDrawer extends React.Component {
     }
   }
 
-  handleSaveTemplate = ({ template }) =>
+  handleSaveTemplate = ({ result: template }) =>
     this.setState({
       template,
       isTemplateBuilderOpen: false
@@ -180,14 +180,6 @@ export class OpenHouseDrawer extends React.Component {
       let action = 'created'
 
       this.setState({ isDisabled: true })
-
-      const template = nunjucks.renderString(openHouse.metadata.template, {
-        user: this.props.user,
-        listing: this.state.listing,
-        crmopenhouse: openHouse
-      })
-
-      openHouse.metadata.template = template
 
       if (openHouse.id) {
         newTour = await updateTask(openHouse, QUERY)
@@ -302,8 +294,6 @@ export class OpenHouseDrawer extends React.Component {
               validate={validate}
               render={formProps => {
                 const { values } = formProps
-
-                console.log('VALUES', values)
 
                 return (
                   <div>
