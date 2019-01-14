@@ -42,7 +42,7 @@ export default {
       config: resolvePath('../config/public')
     }
   },
-  plugins: [],
+  plugins: [new webpack.DefinePlugin(config.globals)],
   externals: {
     fs: '{}'
   },
