@@ -15,7 +15,7 @@ import appConfig from '../config/webpack'
 
 import path from 'path'
 
-webpackConfig.mode = 'production'
+webpackConfig.mode = 'development'
 
 const Expires = moment()
   .utc()
@@ -107,7 +107,12 @@ webpackConfig.module.rules.push({
   use: [
     MiniCssExtractPlugin.loader,
     'css-loader',
-//     'postcss-loader',
+    {
+      loader: 'postcss-loader',
+      options: {
+        plugins: postcss
+      }
+    },
     'sass-loader',
   ],
 })
