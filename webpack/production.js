@@ -16,7 +16,7 @@ import appConfig from '../config/webpack'
 
 import path from 'path'
 
-webpackConfig.mode = 'development'
+webpackConfig.mode = 'production'
 
 class CdnizerPlugin {
   constructor() {
