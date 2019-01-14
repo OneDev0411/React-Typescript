@@ -73,7 +73,7 @@ webpackConfig.plugins.push(
       Bucket: process.env.ASSETS_BUCKET,
       Expires,
       ContentEncoding(fileName) {
-        if (/\.gz/.test(fileName)) {
+        if (/\.js|.css/.test(fileName)) {
           return 'gzip'
         }
       },
