@@ -34,7 +34,7 @@ function append(id, value) {
   const data = get(id)
 
   if (!Array.isArray(data)) {
-    throw new TypeError(`No array type saved in ${id} key`)
+    throw new Error(`No array type saved in ${id} key`)
   }
 
   data.push(value)
