@@ -147,6 +147,14 @@ class SendDealPromotion extends React.Component {
     }))
   }
 
+  getTypes = () => {
+    if (Array.isArray(this.props.types)) {
+      return this.props.types
+    }
+
+    return getTemplateTypes(this.state.listing)
+  }
+
   render() {
     const { listing } = this.state
     const { user } = this.props
@@ -171,7 +179,7 @@ class SendDealPromotion extends React.Component {
           handleSocialSharing={this.handleSocialSharing}
           templateData={{ listing, user }}
           mediums={this.props.mediums}
-          templateTypes={getTemplateTypes(listing)}
+          templateTypes={this.getTypes()}
           assets={this.Assets}
         />
 
