@@ -266,6 +266,10 @@ export class OpenHouseDrawer extends React.Component {
   getTemplateAssets() {
     const assets = []
 
+    if (!this.state.listing) {
+      return []
+    }
+
     this.state.listing.gallery_image_urls.forEach(image => {
       assets.push({
         listing: this.state.listing.id,
