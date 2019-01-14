@@ -68,7 +68,8 @@ class ContactFilters extends React.PureComponent {
           'SharesRoom',
           'ExplicitlyCreated',
           'External/Outlook',
-          'CSV'
+          'CSV',
+          'OpenHouse'
         ],
         tooltip: 'Source type'
       }

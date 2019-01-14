@@ -170,6 +170,14 @@ export class OpenHouseDrawer extends React.Component {
 
       this.setState({ isDisabled: true })
 
+      const template = nunjucks.renderString(openHouse.metadata.template, {
+        user: this.props.user,
+        listing: this.state.listing,
+        crmopenhouse: openHouse
+      })
+
+      openHouse.metadata.template = template
+
       if (openHouse.id) {
         newTour = await updateTask(openHouse, QUERY)
         action = 'updated'

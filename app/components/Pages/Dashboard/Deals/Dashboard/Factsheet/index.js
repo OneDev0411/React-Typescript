@@ -2,11 +2,15 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
+import Flex from 'styled-flex-component'
+
 import Deal from 'models/Deal'
 import DealContext from 'models/Deal/helpers/dynamic-context'
 import ToolTip from 'components/tooltip'
 
 import { upsertContexts, approveContext } from 'actions/deals'
+
+import LinkButton from 'components/Button/LinkButton'
 
 import {
   Container,
@@ -60,6 +64,29 @@ class Factsheet extends React.Component {
     this.saveContext(field, null)
   }
 
+  handleApproveField = async field => {
+    if (!this.props.isBackOffice) {
+      return false
+    }
+
+    // set state
+    this.setState({
+      activeContext: field.key,
+      isSavingContext: true
+    })
+
+    const context = Deal.get.context(this.props.deal, field.key)
+
+    try {
+      await this.props.approveContext(this.props.deal.id, context.id)
+    } catch (e) {
+      console.log(e)
+    }
+
+    // set state
+    this.setState({ activeContext: null, isSavingContext: false })
+  }
+
   saveContext = async (field, value) => {
     this.setState({
       activeContext: field.key,
@@ -82,7 +109,7 @@ class Factsheet extends React.Component {
     }
 
     this.setState({
-      activeContext: false,
+      activeContext: null,
       isSavingContext: false
     })
   }
@@ -110,18 +137,27 @@ class Factsheet extends React.Component {
   isContextApproved = field => {
     const context = Deal.get.context(this.props.deal, field.key)
 
+    if (!context || context.source === 'MLS') {
+      return true
+    }
+
     return (context && context.approved_at !== null) || field.approved
   }
 
+  showApproveButton = field =>
+    this.props.isBackOffice && !this.isContextApproved(field)
+
   render() {
-    const { deal, isBackOffice, display } = this.props
     const { activeContext } = this.state
 
-    if (!display) {
+    if (!this.props.display) {
       return false
     }
 
-    const table = DealContext.getFactsheetSection(deal, this.props.section)
+    const table = DealContext.getFactsheetSection(
+      this.props.deal,
+      this.props.section
+    )
 
     if (table.length === 0) {
       return false
@@ -134,7 +170,7 @@ class Factsheet extends React.Component {
 
           <ItemsContainer>
             {table.map(field => {
-              const valueObject = DealContext.getValue(deal, field)
+              const valueObject = DealContext.getValue(this.props.deal, field)
               const value = this.getFieldValue(valueObject)
               const isApproved = this.isContextApproved(field)
               const isDateContext = field.data_type === 'Date'
@@ -171,21 +207,40 @@ class Factsheet extends React.Component {
                 <ToolTip
                   key={field.key}
                   caption={
-                    isApproved || isBackOffice
+                    isApproved || this.props.isBackOffice
                       ? null
                       : 'Pending Office Approval'
                   }
                 >
-                  <Item>
-                    <ItemLabel>{field.label}</ItemLabel>
-                    <ItemValue>{field.getFormattedValue(value)}</ItemValue>
+                  <Fragment>
+                    <Item>
+                      <ItemLabel>{field.label}</ItemLabel>
+                      <ItemValue>{field.getFormattedValue(value)}</ItemValue>
 
-                    <Actions
-                      field={field}
-                      onClickEditContext={this.handleStartEditContext}
-                      onClickRemoveContext={this.handleRemoveContext}
-                    />
-                  </Item>
+                      <Actions
+                        field={field}
+                        onClickEditContext={this.handleStartEditContext}
+                        onClickRemoveContext={this.handleRemoveContext}
+                      />
+                    </Item>
+
+                    {this.showApproveButton(field) && (
+                      <Flex
+                        justifyEnd
+                        style={{
+                          paddingRight: '1.5rem',
+                          marginBottom: '1rem'
+                        }}
+                      >
+                        <LinkButton
+                          style={{ padding: 0, height: '1rem' }}
+                          onClick={() => this.handleApproveField(field)}
+                        >
+                          Approve
+                        </LinkButton>
+                      </Flex>
+                    )}
+                  </Fragment>
                 </ToolTip>
               )
             })}
