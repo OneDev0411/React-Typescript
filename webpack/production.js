@@ -33,7 +33,7 @@ class CdnizerPlugin {
   }
 
   work = async (compilation, callback) => {
-    HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync('Cdnizer', this.html)
+//     HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync('Cdnizer', this.html)
 
     const { assets } = compilation
     this.assets = assets
@@ -86,6 +86,8 @@ function postcss() {
 
 webpackConfig.devtool = 'source-map'
 
+webpackConfig.output.publicPath = process.env.ASSETS_BASEURL
+
 webpackConfig.performance = {
   hints: 'warning',
   maxAssetSize: 200 * 1024,
@@ -114,7 +116,7 @@ webpackConfig.plugins.push(
     }
   }),
 
-  new CdnizerPlugin(),
+//   new CdnizerPlugin(),
 
   new CompressionPlugin({
     algorithm: 'gzip',
