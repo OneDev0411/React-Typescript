@@ -58,7 +58,6 @@ webpackConfig.plugins.push(
     }
   }),
   new CompressionPlugin({
-    asset: '[path].gz[query]',
     algorithm: 'gzip',
     test: /\.js$|\.css$/
   }),
