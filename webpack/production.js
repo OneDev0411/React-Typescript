@@ -45,6 +45,7 @@ webpackConfig.entry = {
   vendor: appConfig.compile.vendors
 }
 
+webpackConfig.optimization.minimize = true
 
 webpackConfig.optimization.minimizer = [
   new TerserPlugin({
@@ -78,6 +79,7 @@ webpackConfig.plugins.push(
   }),
 
   new S3Plugin({
+    progress: false, // Messes the terminal up
     exclude: /.*\.html$/,
     basePath: 'dist',
     s3Options: {
