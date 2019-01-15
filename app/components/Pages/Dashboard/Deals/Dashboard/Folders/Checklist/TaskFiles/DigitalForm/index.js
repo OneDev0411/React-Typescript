@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 
 import LinkButton from 'components/Button/LinkButton'
 
-import GetSignature from '../../../../Signature'
+import GetSignature from '../../../../../Signature'
 
 import {
   FileContainer,

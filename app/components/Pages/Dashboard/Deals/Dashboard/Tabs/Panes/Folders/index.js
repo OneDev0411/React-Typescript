@@ -4,13 +4,13 @@ import Flex from 'styled-flex-component'
 
 import Spinner from 'components/Spinner'
 
-import Checklists from '../../../Checklists'
+import Folders from '../../../Folders'
 import FactsheetsNav from '../../../FactsheetsNav'
 import UploadManager from '../../../../UploadManager'
 
 import { FactsheetContainer, MainContainer } from '../../styled'
 
-export default function ChecklistPane(props) {
+export default function FoldersPane(props) {
   return (
     <UploadManager deal={props.deal} preventDropOnDocument={false} disableClick>
       <Flex>
@@ -26,7 +26,7 @@ export default function ChecklistPane(props) {
           {props.isFetchingChecklists ? (
             <Spinner />
           ) : (
-            <Checklists deal={props.deal} isBackOffice={props.isBackOffice} />
+            <Folders deal={props.deal} isBackOffice={props.isBackOffice} />
           )}
         </MainContainer>
       </Flex>

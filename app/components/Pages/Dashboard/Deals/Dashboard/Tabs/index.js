@@ -4,8 +4,7 @@ import ToolTip from 'components/tooltip'
 
 import { Container, NavBar, NavItem, TabContent } from './styled'
 
-import ChecklistsPane from './Panes/Checklist'
-import FileManagerPane from './Panes/FileManager'
+import FoldersPane from './Panes/Folders'
 import EventsPane from './Panes/Events'
 import MarketingPane from './Panes/Marketing'
 
@@ -15,13 +14,7 @@ export default class Tabs extends React.Component {
       id: 'checklists',
       label: 'Checklists',
       isDisabled: () => false,
-      render: props => <ChecklistsPane {...props} />
-    },
-    {
-      id: 'files',
-      label: 'Files',
-      isDisabled: () => false,
-      render: props => <FileManagerPane {...props} />
+      render: props => <FoldersPane {...props} />
     },
     {
       id: 'events',

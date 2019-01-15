@@ -6,7 +6,7 @@ import { syncDeleteFile } from 'actions/deals'
 import { BasicDropdown } from 'components/BasicDropdown'
 import VerticalDotsIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
 
-import GetSignature from '../../../../Signature'
+import GetSignature from '../../../../../Signature'
 
 import FileLink from './FileLink'
 

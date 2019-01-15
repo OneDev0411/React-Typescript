@@ -6,9 +6,12 @@ import Flex from 'styled-flex-component'
 import ActionButton from 'components/Button/ActionButton'
 
 import { Container } from './styled'
-import ChecklistFolder from './ChecklistFolder'
+import ChecklistFolder from './Checklist'
 
-class ChecklistTab extends React.Component {
+import UploadFolder from './Uploads'
+import UploadPlaceholder from './Uploads/UploadPlaceholder'
+
+class FoldersTab extends React.Component {
   state = {
     showTerminatedChecklists: false,
     showDeactivatedChecklists: false
@@ -106,7 +109,10 @@ class ChecklistTab extends React.Component {
 
     return (
       <Container>
+        <UploadPlaceholder deal={this.props.deal} />
+
         {checklists.map(checklist => (
+          /* render checklists */
           <ChecklistFolder
             key={checklist.id}
             checklist={checklist}
@@ -114,6 +120,11 @@ class ChecklistTab extends React.Component {
             isBackOffice={this.props.isBackOffice}
           />
         ))}
+
+        <UploadFolder
+          deal={this.props.deal}
+          isBackOffice={this.props.isBackOffice}
+        />
 
         <Flex>
           {terminatedChecklistsCount > 0 && (
@@ -145,4 +156,4 @@ class ChecklistTab extends React.Component {
 export default connect(({ deals }) => ({
   checklists: deals.checklists,
   tasks: deals.tasks
-}))(ChecklistTab)
+}))(FoldersTab)
