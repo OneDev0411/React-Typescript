@@ -139,7 +139,7 @@ class Filters extends React.Component {
     )
 
     this.props.onChange({
-      filter: {
+      filters: {
         filter: this.props.createSegmentFromFilters(completedFilters).filters
       }
     })
