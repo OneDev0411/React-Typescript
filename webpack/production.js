@@ -6,7 +6,7 @@ import CompressionPlugin from 'compression-webpack-plugin'
 import S3Plugin from 'webpack-s3-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
-import UglifyJsPlugin from 'uglifyjs-webpack-plugin'
+import TerserPlugin from 'terser-webpack-plugin'
 
 import moment from 'moment'
 
@@ -45,19 +45,11 @@ webpackConfig.entry = {
   vendor: appConfig.compile.vendors
 }
 
-webpackConfig.optimization = {
-  minimizer: [
-    new UglifyJsPlugin({
-      parallel: true,
-      cache: true,
-      uglifyOptions: {
-        output: {
-          comments: false,
-        }
-      }
-    })
-  ]
-}
+webpackConfig.optimization.minimizer = new TerserPlugin({
+  cache: true,
+  parallel: true,
+  sourceMap: true
+})
 
 webpackConfig.plugins.push(
   new webpack.optimize.AggressiveMergingPlugin(),
