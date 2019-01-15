@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { primary } from 'views/utils/colors'
 
 const ItemWrapper = styled.div`
-  font-family: Barlow;
   width: 100%;
   padding: 0.6rem 1rem;
   cursor: pointer;
