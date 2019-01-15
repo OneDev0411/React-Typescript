@@ -176,7 +176,7 @@ class ContactsList extends React.Component {
 
     try {
       await this.props.searchContacts(
-        data,
+        filter,
         start,
         undefined,
         searchInputValue,
