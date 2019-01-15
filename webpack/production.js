@@ -32,6 +32,7 @@ function postcss() {
 
 webpackConfig.devtool = 'source-map'
 
+webpackConfig.output.pathinfo = false
 webpackConfig.output.publicPath = process.env.ASSETS_BASEURL
 
 webpackConfig.performance = {
