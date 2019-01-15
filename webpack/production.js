@@ -54,8 +54,6 @@ webpackConfig.optimization.minimizer = [
   })
 ]
 
-console.log(webpackConfig.optimization)
-
 webpackConfig.plugins.push(
   new webpack.optimize.AggressiveMergingPlugin(),
   new MomentLocalesPlugin(),
