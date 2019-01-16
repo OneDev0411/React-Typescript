@@ -127,12 +127,11 @@ class ContactsList extends React.Component {
       display: ({ selectedRows }) => selectedRows.length > 0,
       render: ({ selectedRows, resetSelectedRows }) => (
         <CreateEvent
-          resetSelectedRows={resetSelectedRows}
           selectedRows={selectedRows}
-          filters={this.props.filters}
-          searchInputValue={this.props.searchInputValue}
-          order={this.props.order}
-          users={this.props.users}
+          submitCallback={async () => {
+            resetSelectedRows()
+            await this.props.bulkEventCreationCallback()
+          }}
         />
       )
     },

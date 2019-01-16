@@ -284,6 +284,17 @@ class ContactsList extends React.Component {
     resetGridSelectedItems('contacts')
   }
 
+  reloadContacts = async () => {
+    await this.props.searchContacts(
+      this.state.filter,
+      0,
+      undefined,
+      this.state.searchInputValue,
+      this.order,
+      this.props.viewAsUsers
+    )
+  }
+
   render() {
     const { isSideMenuOpen, activeSegment } = this.state
     const { user, list, viewAsUsers, isFetchingContacts } = this.props
@@ -324,6 +335,7 @@ class ContactsList extends React.Component {
             isSearching={isFetchingContacts}
           />
           <Table
+            bulkEventCreationCallback={this.reloadContacts}
             handleChangeOrder={this.handleChangeOrder}
             handleChangeContactsAttributes={this.handleChangeContactsAttributes}
             data={contacts}
@@ -336,8 +348,6 @@ class ContactsList extends React.Component {
             onChangeSelectedRows={this.onChangeSelectedRows}
             onRequestDelete={this.handleOnDelete}
             filters={this.state.filter}
-            searchInputValue={this.state.searchInputValue}
-            order={this.order}
             users={viewAsUsers}
           />
         </PageContent>
