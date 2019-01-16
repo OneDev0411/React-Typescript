@@ -153,7 +153,8 @@ class Filters extends React.Component {
     }
 
     this.props.onChange({
-      filters: this.props.activeFilters,
+      filters: this.props.createSegmentFromFilters(this.props.activeFilters)
+        .filters,
       conditionOperator
     })
   }
