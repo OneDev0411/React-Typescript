@@ -26,8 +26,8 @@ class CreateEvent extends Component {
   }
 
   onEventSubmit = async () => {
-    await this.props.submitCallback()
     this.closeDrawer()
+    await this.props.submitCallback()
   }
 
   render() {
