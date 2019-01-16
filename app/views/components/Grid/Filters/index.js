@@ -13,7 +13,8 @@ import {
   createActiveFilters,
   removeActiveFilter,
   toggleActiveFilter,
-  updateActiveFilter
+  updateActiveFilter,
+  changeConditionOperator
 } from 'actions/filter-segments/active-filters'
 
 import { ConditionOperators } from './ConditionOperators'
@@ -37,7 +38,7 @@ class Filters extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.shouldReCreateFilters(nextProps)
   }
 
@@ -132,21 +133,29 @@ class Filters extends React.Component {
   /**
    *
    */
-  onChangeFilters = filters => {
+  onChangeFilters = filterItems => {
     const completedFilters = _.filter(
-      filters,
+      filterItems,
       item => item.isIncomplete === false
     )
 
     this.props.onChange({
-      filters: {
-        filter: this.props.createSegmentFromFilters(completedFilters).filters
-      }
+      filters: this.props.createSegmentFromFilters(completedFilters).filters,
+      conditionOperator: this.props.conditionOperator
     })
   }
 
   onConditionChange = ({ value: conditionOperator }) => {
-    this.props.onChange({ conditionOperator })
+    this.props.changeConditionOperator(this.props.name, conditionOperator)
+
+    if (_.size(this.props.activeFilters) === 0) {
+      return false
+    }
+
+    this.props.onChange({
+      filters: this.props.activeFilters,
+      conditionOperator
+    })
   }
 
   render() {
@@ -157,8 +166,12 @@ class Filters extends React.Component {
     return (
       <Container>
         {this.props.disableConditionOperators || (
-          <ConditionOperators onChange={this.onConditionChange} />
+          <ConditionOperators
+            selectedItem={this.props.conditionOperator}
+            onChange={this.onConditionChange}
+          />
         )}
+
         {_.map(activeFilters, (filter, id) => (
           <FilterItem
             key={id}
@@ -190,13 +203,16 @@ class Filters extends React.Component {
 }
 
 function mapStateToProps(state, { name, plugins }) {
-  let states = {}
+  let states = {
+    name,
+    conditionOperator: state[name].filterSegments.conditionOperator,
+    activeFilters: selectActiveFilters(state[name].filterSegments)
+  }
 
   if (plugins.includes('segments')) {
     states = {
-      segment: selectActiveSavedSegment(state[name].filterSegments, name),
-      activeFilters: selectActiveFilters(state[name].filterSegments),
-      name
+      ...states,
+      segment: selectActiveSavedSegment(state[name].filterSegments, name)
     }
   }
 
@@ -210,6 +226,7 @@ export default connect(
     createActiveFilters,
     removeActiveFilter,
     toggleActiveFilter,
-    updateActiveFilter
+    updateActiveFilter,
+    changeConditionOperator
   }
 )(Filters)
