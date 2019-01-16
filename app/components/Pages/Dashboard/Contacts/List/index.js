@@ -41,7 +41,7 @@ class ContactsList extends React.Component {
       filter: this.props.filter,
       searchInputValue: this.props.list.textFilter,
       activeSegment: {},
-      conditionOperator: this.props.conditionOperator || 'and'
+      conditionOperator: 'and'
     }
     this.order = this.props.listInfo.order
   }
@@ -167,8 +167,7 @@ class ContactsList extends React.Component {
       viewAsUsers = this.props.viewAsUsers
     } = filters
 
-    this.setState({ filter })
-    this.setState({ conditionOperator })
+    this.setState({ filter, conditionOperator })
 
     if (start === 0) {
       this.resetSelectedRows()
