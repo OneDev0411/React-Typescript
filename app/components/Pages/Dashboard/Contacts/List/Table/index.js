@@ -130,6 +130,9 @@ class ContactsList extends React.Component {
           resetSelectedRows={resetSelectedRows}
           selectedRows={selectedRows}
           filters={this.props.filters}
+          searchInputValue={this.props.searchInputValue}
+          order={this.props.order}
+          users={this.props.users}
         />
       )
     },
