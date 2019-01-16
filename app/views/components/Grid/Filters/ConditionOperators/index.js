@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 import { BasicDropdown } from 'components/BasicDropdown'
 import { grey } from 'views/utils/colors'
 
 import Item from './item'
 
-const CONDITIONS = [
+const MENU_OPTIONS = [
   {
     title: 'Match all filters',
     value: 'and'
@@ -16,39 +16,28 @@ const CONDITIONS = [
   }
 ]
 
-export class ConditionOperators extends Component {
-  state = {
-    selectedItem: CONDITIONS[0]
-  }
-
-  handleChange = selectedItem => {
-    this.setState({
-      selectedItem
-    })
-    this.props.onChange(selectedItem)
-  }
-
-  render() {
-    return (
-      <BasicDropdown
-        noBorder
-        items={CONDITIONS}
-        onChange={this.handleChange}
-        menuStyle={{ width: '100%', overflow: 'hidden' }}
-        itemToString={item => item.title}
-        defaultSelectedItem={this.state.selectedItem}
-        buttonText={this.state.selectedItem.title}
-        style={{
-          marginRight: '0.5rem',
-          width: '10.7rem'
-        }}
-        buttonStyle={{
-          backgroundColor: `${grey.A150}`
-        }}
-        itemRenderer={({ item, ...rest }) => (
-          <Item title={item.title} {...rest} />
-        )}
-      />
-    )
-  }
+export function ConditionOperators(props) {
+  return (
+    <BasicDropdown
+      noBorder
+      items={MENU_OPTIONS}
+      onChange={selectedItem => props.onChange(selectedItem)}
+      menuStyle={{ width: '100%', overflow: 'hidden' }}
+      itemToString={item => item.title}
+      defaultSelectedItem={MENU_OPTIONS[0]}
+      buttonText={
+        MENU_OPTIONS.find(item => item.value === props.selectedItem).title
+      }
+      style={{
+        marginRight: '0.5rem',
+        width: '10.7rem'
+      }}
+      buttonStyle={{
+        backgroundColor: `${grey.A150}`
+      }}
+      itemRenderer={({ item, ...rest }) => (
+        <Item title={item.title} {...rest} />
+      )}
+    />
+  )
 }
