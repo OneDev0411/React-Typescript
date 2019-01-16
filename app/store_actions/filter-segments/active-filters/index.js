@@ -45,3 +45,12 @@ export function removeActiveFilter(nameId, filterId) {
     id: nameId
   }
 }
+
+export function changeConditionOperator(nameId, conditionOperator) {
+  return {
+    type: actionTypes.CHANGE_CONDITION_OPERATOR,
+    namespace: 'filter-segments',
+    id: nameId,
+    conditionOperator
+  }
+}
