@@ -141,6 +141,7 @@ class ContactsList extends React.Component {
         <CreateEvent
           resetSelectedRows={resetSelectedRows}
           selectedRows={selectedRows}
+          filters={this.props.filters}
         />
       )
     },

@@ -2,11 +2,11 @@ import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 
 import { normalizeAssociations } from 'views/utils/association-normalizers'
+import { searchContacts } from 'actions/contacts'
 
 import ActionButton from 'components/Button/ActionButton'
 import { EventDrawer } from 'components/EventDrawer'
 import { selectContact } from 'reducers/contacts/list'
-import { getContacts } from 'store_actions/contacts'
 
 class CreateEvent extends Component {
   state = {
@@ -27,7 +27,7 @@ class CreateEvent extends Component {
 
   onEventSubmit = () => {
     this.props.resetSelectedRows()
-    this.props.getContacts()
+    this.props.searchContacts(this.props.filters)
     this.closeDrawer()
   }
 
@@ -72,5 +72,7 @@ function mapStateToProps({ user, contacts }, props) {
 
 export default connect(
   mapStateToProps,
-  { getContacts }
+  {
+    searchContacts
+  }
 )(CreateEvent)
