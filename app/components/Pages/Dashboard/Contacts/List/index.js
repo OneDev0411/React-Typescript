@@ -296,6 +296,8 @@ class ContactsList extends React.Component {
             onChangeSelectedRows={this.onChangeSelectedRows}
             onRequestDelete={this.handleOnDelete}
             filters={this.state.filter}
+            searchInputValue={this.state.searchInputValue}
+            order={this.order}
             users={viewAsUsers}
           />
         </PageContent>

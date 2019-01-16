@@ -25,9 +25,16 @@ class CreateEvent extends Component {
     })
   }
 
-  onEventSubmit = () => {
+  onEventSubmit = async () => {
     this.props.resetSelectedRows()
-    this.props.searchContacts(this.props.filters)
+    await this.props.searchContacts(
+      this.props.filters,
+      0,
+      undefined,
+      this.props.searchInputValue,
+      this.props.order,
+      this.props.users
+    )
     this.closeDrawer()
   }
 
