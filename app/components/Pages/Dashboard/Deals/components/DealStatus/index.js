@@ -27,14 +27,13 @@ class DealStatus extends React.Component {
   }
 
   get CanChangeStatus() {
-    if (
-      this.props.isBackOffice ||
-      DealContext.getHasActiveOffer(this.props.deal)
-    ) {
-      return true
+    if (this.props.deal.is_draft) {
+      return false
     }
 
-    return false
+    return (
+      this.props.isBackOffice || DealContext.getHasActiveOffer(this.props.deal)
+    )
   }
 
   get StatusList() {
