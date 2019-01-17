@@ -9,15 +9,7 @@ export default function(compiler, publicPath) {
     inline: true,
     noInfo: false,
     lazy: false,
-    stats: {
-      assets: true,
-      colors: true,
-      version: true,
-      hash: false,
-      timings: true,
-      chunks: true,
-      chunkModules: false
-    }
+    stats: false
   })
 
   return async function dev(ctx, next) {

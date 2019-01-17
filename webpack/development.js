@@ -39,9 +39,7 @@ webpackConfig.plugins.push(
   new Webpackbar()
 )
 
-if (process.env.notify) {
-  webpackConfig.plugins.push(new WebpackNotifierPlugin({ alwaysNotify: true }))
-}
+webpackConfig.plugins.push(new WebpackNotifierPlugin({ alwaysNotify: true }))
 
 webpackConfig.module.rules.push(
   {

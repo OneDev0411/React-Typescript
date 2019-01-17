@@ -27,9 +27,7 @@ const { entry, output, publicPath } = appConfig.compile
 // app uses proxy
 app.proxy = true
 
-if (!__DEV__) {
   app.use(sslify())
-}
 
 // handle application errors
 app.use(async (ctx, next) => {

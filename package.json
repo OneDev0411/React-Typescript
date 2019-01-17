@@ -6,7 +6,6 @@
     "scripts": {
         "develop": "NODE_ENV=development nodemon ./bin/server --config ./nodemon.config.json --exec babel-node",
         "debug": "ndb npm run develop",
-        "developClient": "NODE_ENV=development notify=true babel-node ./bin/server webpack-dev-server --progress --hot --host=192.168.1.102",
         "build": "rimraf dist && NODE_ENV=production babel-node ./build",
         "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build",
         "serve": "NODE_ENV=production forever node_modules/babel-cli/bin/babel-node.js ./bin/server",
@@ -14,17 +13,7 @@
         "lint": "npm run lint:app && npm run lint:server",
         "lint:app": "eslint ./app",
         "lint:server": "eslint ./server",
-        "test": "npm run test:app",
-        "test:app": "jest -u --setupTestFrameworkScriptFile ./setupTests.js",
-        "test:coverage": "npm run test:app -- --coverage",
-        "test:watch": "npm test -- --watch",
-        "test:e2e": "nightwatch",
-        "e2e-setup": "selenium-standalone install",
-        "heroku-postbuild": "npm run build",
-        "postinstall": "node ./npm-postinstall.js",
-        "storybook": "start-storybook -p 6006 -c stories",
-        "storybook:build": "build-storybook -c stories -o .tmp/stories",
-        "storybook:publish": "npm run storybook:build && surge -p .tmp/stories -d rechat-stories.surge.sh"
+        "heroku-postbuild": "npm run build"
     },
     "engines": {
         "node": "10.x"
@@ -137,8 +126,7 @@
         "react-final-form-arrays": "^2.0.1",
         "react-final-form-listeners": "^1.0.1",
         "react-ga": "^2.5.3",
-        "react-helmet": "^5.2.0",
-        "react-hot-loader": "^4.3.11",
+        "react-hot-loader": "^4.6.3",
         "react-images": "^0.5.11",
         "react-input-mask": "^1.1.0",
         "react-intercom": "^1.0.15",
@@ -198,9 +186,7 @@
         "webpack-s3-plugin": "^1.0.3"
     },
     "devDependencies": {
-        "@storybook/react": "^3.4.10",
         "babel-eslint": "^8.2.5",
-        "babel-jest": "^22.4.4",
         "babel-plugin-add-module-exports": "^0.2.1",
         "babel-preset-stage-2": "^6.24.1",
         "case-sensitive-paths-webpack-plugin": "^2.1.2",
@@ -216,19 +202,14 @@
         "eslint-plugin-jsx-a11y": "^6.1.2",
         "eslint-plugin-prettier": "^3.0.1",
         "eslint-plugin-react": "^7.12.3",
-        "jest": "^22.4.4",
-        "jsdom": "^11.11.0",
         "ndb": "^1.0.41",
-        "nightwatch": "^0.9.21",
         "nodemon": "^1.18.9",
         "prettier": "^1.15.3",
         "react-test-renderer": "^16.7.0",
         "redux-mock-store": "^1.5.3",
-        "selenium-standalone": "^6.15.4",
         "surge": "^0.20.1",
         "webpack-cli": "^3.2.1",
         "webpack-dev-middleware": "^3.6.1",
-        "webpack-dev-server": "^3.2.1",
         "webpack-hot-middleware": "^2.24.3",
         "webpack-notifier": "^1.7.0",
         "webpackbar": "^3.1.5"
