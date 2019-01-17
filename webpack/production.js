@@ -91,7 +91,6 @@ webpackConfig.plugins.push(
     s3UploadOptions: {
       Bucket: process.env.ASSETS_BUCKET,
       Expires,
-      Vary: 'Accept-Encoding',
       ContentEncoding(fileName) {
         if (/\.js|.css/.test(fileName)) {
           return 'gzip'
