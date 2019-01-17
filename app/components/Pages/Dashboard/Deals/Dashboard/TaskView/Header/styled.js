@@ -33,7 +33,15 @@ export const TitleContainer = styled.div`
 `
 
 export const Title = styled.p`
-  /* width: 80%; */
+  display: flex;
+  align-items: center;
   font-size: 1.25rem;
-  font-weight: 900;
+  font-weight: bold;
+  padding: 0.5rem 2px;
+  border: 1px dashed #fff;
+
+  :hover {
+    cursor: pointer;
+    border: 1px dashed ${primary};
+  }
 `

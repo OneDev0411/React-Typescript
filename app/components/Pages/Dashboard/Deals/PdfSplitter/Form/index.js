@@ -161,7 +161,7 @@ class Form extends React.Component {
             showStashOption={false}
             searchable
             pullRight
-            showNotifyOption
+            showNotifyOption={false}
             deal={this.props.deal}
             selectedTask={this.state.task}
             onSelectTask={this.handleSelectTask}
@@ -170,41 +170,39 @@ class Form extends React.Component {
           <ErrorMessage>{this.state.validationErrors.title}</ErrorMessage>
 
           <Flex
-            justifyBetween
             alignCenter
+            justifyEnd
             style={{
               marginTop: '1rem'
             }}
           >
-            <Flex alignCenter justifyBetween>
+            <Flex alignCenter justifyBetween style={{ marginRight: '1rem' }}>
               <CheckBoxButton
                 square
-                selected={this.state.notifyOffice}
+                isSelected={this.state.notifyOffice}
                 title="Notify Office"
                 onClick={this.toggleNotifyOffice}
               />
               &nbsp;Notify Office
             </Flex>
 
-            <div>
-              <ActionButton
-                appearance="outline"
-                size="small"
-                onClick={() => this.handleSave(true)}
-                disabled={isDisabled}
-              >
-                Save and quit
-              </ActionButton>
+            <ActionButton
+              appearance="outline"
+              size="small"
+              onClick={() => this.handleSave(true)}
+              disabled={isDisabled}
+            >
+              Save and quit
+            </ActionButton>
 
-              <ActionButton
-                size="small"
-                disabled={isDisabled}
-                onClick={() => this.handleSave(false)}
-                style={{ marginLeft: '0.5rem' }}
-              >
-                Save and create another
-              </ActionButton>
-            </div>
+            <ActionButton
+              size="small"
+              disabled={isDisabled}
+              onClick={() => this.handleSave(false)}
+              style={{ marginLeft: '0.5rem' }}
+            >
+              Save and create another
+            </ActionButton>
           </Flex>
         </Container>
       </React.Fragment>

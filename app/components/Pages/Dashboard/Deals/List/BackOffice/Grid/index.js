@@ -4,9 +4,12 @@ import { connect } from 'react-redux'
 import merge from 'merge'
 import moment from 'moment'
 
-import Deal from '../../../../../../../models/Deal'
+import Flex from 'styled-flex-component'
 
-import Table from '../../../../../../../views/components/Grid/Table'
+import Deal from 'models/Deal'
+
+import Table from 'components/Grid/Table'
+
 import EmptyState from './EmptyState'
 import LoadingState from '../../components/LoadingState'
 
@@ -119,6 +122,18 @@ class Grid extends React.Component {
     return ''
   }
 
+  getTdProps = (index, { column }) => {
+    if (column.id === 'notification') {
+      return {
+        style: {
+          alignSelf: 'center'
+        }
+      }
+    }
+
+    return {}
+  }
+
   flattenBrand = brand => {
     if (!brand) {
       return null
@@ -152,6 +167,7 @@ class Grid extends React.Component {
         plugins={{
           sortable: {}
         }}
+        getTdProps={this.getTdProps}
         isFetching={isFetchingDeals}
         columns={columns}
         data={data}

@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 
-import cn from 'classnames'
+import Flex from 'styled-flex-component'
+
 import ToolTip from 'views/components/tooltip/index'
 
 import ActionButton from 'components/Button/ActionButton'
@@ -21,7 +22,7 @@ export default function BackOffice(props) {
   const isNotReviewed = !isDeclined && !isApproved && !attention_requested
 
   return (
-    <div>
+    <Flex alignCenter justifyBetween>
       {!isSaving ? (
         <Fragment>
           <ToolTip caption={isDeclined ? 'Declined' : 'Decline'}>
@@ -65,12 +66,11 @@ export default function BackOffice(props) {
       )}
 
       <ActionButton
-        appearance="outline"
         disabled={isSaving || !hasComment}
         onClick={() => onSendComment(false)}
       >
         Comment
       </ActionButton>
-    </div>
+    </Flex>
   )
 }

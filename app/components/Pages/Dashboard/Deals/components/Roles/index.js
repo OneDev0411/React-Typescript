@@ -182,7 +182,7 @@ class Roles extends React.Component {
                   <RoleAvatar>
                     <UserAvatar
                       size={40}
-                      color="#000000"
+                      color="#000"
                       title={getAvatarTitle(role)}
                       image={role.user ? role.user.profile_image_url : null}
                     />
@@ -228,6 +228,7 @@ class Roles extends React.Component {
 
         {this.props.disableAddRole === false && (
           <AddRole
+            isEmailRequired={this.props.isEmailRequired}
             actionRenderer={this.props.addRoleActionRenderer}
             deal={this.props.deal}
             allowedRoles={this.AllowedRoles}
@@ -242,6 +243,7 @@ class Roles extends React.Component {
             deal={this.props.deal}
             role={this.state.user}
             modalTitle="Update Contact"
+            isEmailRequired={this.props.isEmailRequired}
             allowedRoles={this.props.allowedRoles}
             onUpsertRole={this.props.onUpsertRole}
             onHide={this.closeRoleForm}
@@ -264,6 +266,7 @@ class Roles extends React.Component {
 Roles.propsTypes = {
   disableAddRole: PropTypes.bool,
   allowDeleteRole: PropTypes.bool,
+  isEmailRequired: PropTypes.bool,
   filter: PropTypes.func,
   addRoleActionRenderer: PropTypes.func,
   onCloseAddRoleDrawer: PropTypes.func,
@@ -273,6 +276,7 @@ Roles.propsTypes = {
 Roles.defaultProps = {
   disableAddRole: false,
   allowDeleteRole: true,
+  isEmailRequired: false,
   filter: () => true,
   onCloseAddRoleDrawer: () => null,
   onTriggerRequiredEmail: () => null

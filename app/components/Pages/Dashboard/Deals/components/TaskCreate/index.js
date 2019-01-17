@@ -99,9 +99,9 @@ class TaskCreate extends React.Component {
                       .toLowerCase()
                       .includes(this.state.searchFilter.toLowerCase())
                   )
-                  .map(form => (
+                  .map((form, index) => (
                     <ListItem
-                      key={form.id}
+                      key={`${form.id}_${index}`}
                       onClick={() => this.createTask(form)}
                       onDoubleClick={() => null}
                     >

@@ -2,8 +2,10 @@ import React from 'react'
 
 import PopOver from 'components/Popover'
 
-import UserAvatar from '../../../../../../../Partials/UserAvatar'
 import Deal from 'models/Deal'
+
+import Avatar from 'components/Avatar'
+
 import { roleName, getLegalFullName } from '../../../../utils/roles'
 
 const Side = ({ deal, roles, rowId, rowsCount }) => {
@@ -34,13 +36,10 @@ const Side = ({ deal, roles, rowId, rowsCount }) => {
             return (
               <div key={`ROLE_${role.id}`} className="item">
                 <div className="avatar">
-                  <UserAvatar
-                    name={`${role.legal_first_name} ${role.legal_last_name}`}
+                  <Avatar
+                    title={`${role.legal_first_name} ${role.legal_last_name}`}
                     image={role.user ? role.user.profile_image_url : null}
                     size={40}
-                    fgColor="#ffffff"
-                    color="#000000"
-                    showStateIndicator={false}
                   />
                 </div>
                 <div className="info">

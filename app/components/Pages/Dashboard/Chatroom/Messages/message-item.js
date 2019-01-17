@@ -1,4 +1,5 @@
 import React from 'react'
+
 import messageUtil from '../Util/message'
 import LeadMessage from './message-kinds/lead'
 import SubMessage from './message-kinds/sub'

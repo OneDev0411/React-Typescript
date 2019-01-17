@@ -9,6 +9,8 @@ import DeleteIcon from 'components/SvgIcons/Delete/IconDelete'
 import { updateListing } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
+import { getField } from 'models/Deal/helpers/context'
+
 import { Loading, MlsNumber, EditMls } from './styled'
 
 class MlsConnect extends React.Component {
@@ -34,8 +36,10 @@ class MlsConnect extends React.Component {
       isSaving: true
     })
 
+    const listingId = Array.isArray(listings) ? listings[0].id : null
+
     try {
-      await this.props.updateListing(deal.id, listings[0].id)
+      await this.props.updateListing(deal.id, listingId)
     } catch (e) {
       console.log(e)
     }
@@ -69,7 +73,7 @@ class MlsConnect extends React.Component {
       <Fragment>
         {deal.listing ? (
           <MlsNumber>
-            MLS# {deal.mls_context.mls_number}
+            MLS# {getField(deal, 'mls_number')}
             <EditMls onClick={this.toggleDrawer}>Edit</EditMls>
             <DeleteIcon onClick={this.removeMlsConnection} />
           </MlsNumber>

@@ -75,6 +75,14 @@ class UploadDocument extends React.Component {
     this.dropzone.open()
   }
 
+  handleRef = ref => {
+    this.dropzone = ref
+
+    if (this.props.onRef) {
+      this.props.onRef(ref)
+    }
+  }
+
   render() {
     const { dropzoneActive } = this.state
     const { children, hasAttachments } = this.props
@@ -82,7 +90,7 @@ class UploadDocument extends React.Component {
     return (
       <Dropzone
         disableClick={this.props.disableClick}
-        ref={node => (this.dropzone = node)}
+        ref={this.handleRef}
         onDrop={(files, rejectedFiles) => this.onDrop(files, rejectedFiles)}
         onDragEnter={() => this.setState({ dropzoneActive: true })}
         onDragLeave={() => this.setState({ dropzoneActive: false })}

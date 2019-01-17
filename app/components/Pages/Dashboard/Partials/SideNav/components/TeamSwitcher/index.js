@@ -8,7 +8,7 @@ import { putUserSetting } from '../../../../../../../models/user/put-user-settin
 import flattenBrand from '../../../../../../../utils/flatten-brand'
 import CheckmarkIcon from '../../../../../../../views/components/SvgIcons/Checkmark/IconCheckmark'
 import ActionButton from '../../../../../../../views/components/Button/ActionButton'
-import { primary } from '../../../../../../../views/utils/colors'
+import { primary, borderColor } from '../../../../../../../views/utils/colors'
 
 import Avatar from '../../../../../../Partials/UserAvatar'
 
@@ -37,6 +37,10 @@ const Button = styled(ActionButton)`
       fill: #fff !important;
     }
   }
+`
+
+const Team = styled.li`
+  border-bottom: 1px solid ${borderColor};
 `
 
 export default class TeamSwitcher extends React.Component {
@@ -84,13 +88,16 @@ export default class TeamSwitcher extends React.Component {
     }
 
     return (
-      <Fragment>
+      <div
+        style={{ maxHeight: '22rem', overflowY: 'auto' }}
+        className="u-scrollbar--thinner--self"
+      >
         <li className="separator">Team Switcher</li>
         {user.teams.map(team => {
           const isActiveTeam = team.brand.id === getActiveTeamId(user)
 
           return [
-            <li key={team.brand.id}>
+            <Team key={team.brand.id}>
               <Button
                 isSelected={isActiveTeam}
                 appearance="link"
@@ -115,15 +122,10 @@ export default class TeamSwitcher extends React.Component {
                 team={team}
                 isActive={isActiveTeam && !savingTeam}
               />
-            </li>,
-            <li
-              key={`sp_${team.brand.id}`}
-              role="separator"
-              className="divider"
-            />
+            </Team>
           ]
         })}
-      </Fragment>
+      </div>
     )
   }
 }

@@ -1,10 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { searchDeals, getDeals } from '../../../../../../store_actions/deals'
+import { Menu, Content } from 'components/SlideMenu'
 
-import Search from '../../../../../../views/components/Grid/Search'
-import { Menu, Content } from '../../../../../../views/components/SlideMenu'
+import { searchDeals, getDeals } from 'actions/deals'
+
+import Search from 'components/Grid/Search'
 
 import {
   PageContainer,
@@ -30,9 +31,7 @@ class BackofficeTable extends React.Component {
     }))
 
   handleSearch = value => {
-    const { user, isFetchingDeals, dispatch } = this.props
-
-    if (isFetchingDeals) {
+    if (this.props.isFetchingDeals) {
       return false
     }
 
@@ -44,10 +43,10 @@ class BackofficeTable extends React.Component {
     persistentSearchInput = value
 
     if (value.length === 0) {
-      return dispatch(getDeals(user))
+      return this.props.getDeals(this.props.user)
     }
 
-    dispatch(searchDeals(user, value))
+    this.props.searchDeals(this.props.user, value)
   }
 
   render() {
@@ -104,4 +103,7 @@ function mapStateToProps({ user, deals }) {
   return { user, isFetchingDeals: deals.properties.isFetchingDeals }
 }
 
-export default connect(mapStateToProps)(BackofficeTable)
+export default connect(
+  mapStateToProps,
+  { searchDeals, getDeals }
+)(BackofficeTable)

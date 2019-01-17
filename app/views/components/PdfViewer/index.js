@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import _ from 'underscore'
+require('intersection-observer')
 
 import ProgressBar from 'components/ProgressBar'
 

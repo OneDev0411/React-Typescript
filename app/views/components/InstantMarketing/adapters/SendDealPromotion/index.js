@@ -11,7 +11,6 @@ import InstantMarketing from 'components/InstantMarketing'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
-import { convertRecipientsToEmails } from '../../helpers/convert-recipients-to-emails'
 import SocialDrawer from '../../components/SocialDrawer'
 import { getTemplatePreviewImage } from '../../helpers/get-template-preview-image'
 import { getTemplateTypes } from '../../helpers/get-template-types'
@@ -72,18 +71,21 @@ class SendDealPromotion extends React.Component {
       isSendingEmail: true
     })
 
-    const emails = convertRecipientsToEmails(
-      values.recipients,
-      values.subject,
-      this.state.htmlTemplate.result
-    )
+    const email = {
+      from: values.fromId,
+      to: values.recipients,
+      subject: values.subject,
+      html: this.state.htmlTemplate.result
+    }
 
     try {
-      await sendContactsEmail(emails, this.state.owner.id)
+      await sendContactsEmail(email, this.state.owner.id)
 
       this.props.notify({
         status: 'success',
-        message: `${emails.length} emails has been sent to your contacts`
+        message: `${
+          values.recipients.length
+        } emails has been sent to your contacts`
       })
     } catch (e) {
       console.log(e)
@@ -145,6 +147,14 @@ class SendDealPromotion extends React.Component {
     }))
   }
 
+  getTypes = () => {
+    if (Array.isArray(this.props.types)) {
+      return this.props.types
+    }
+
+    return getTemplateTypes(this.state.listing)
+  }
+
   render() {
     const { listing } = this.state
     const { user } = this.props
@@ -169,7 +179,7 @@ class SendDealPromotion extends React.Component {
           handleSocialSharing={this.handleSocialSharing}
           templateData={{ listing, user }}
           mediums={this.props.mediums}
-          templateTypes={getTemplateTypes(listing)}
+          templateTypes={this.getTypes()}
           assets={this.Assets}
         />
 
@@ -178,7 +188,7 @@ class SendDealPromotion extends React.Component {
             isOpen
             from={this.state.owner}
             onClose={this.toggleComposeEmail}
-            recipients={this.Recipients}
+            recipients={this.props.recipients}
             html={this.state.templateScreenshot}
             onClickSend={this.handleSendEmails}
             isSubmitting={this.state.isSendingEmail}

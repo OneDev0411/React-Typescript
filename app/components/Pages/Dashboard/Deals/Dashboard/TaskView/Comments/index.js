@@ -1,10 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import Comments from '../../../../Chatroom/Messages/light'
 import TaskRoom from 'services/notification/chat'
 import { addNewRoom } from 'actions/chatroom/room'
 
+import Comments from '../../../../Chatroom/Messages/light'
+
+import { EmptyState } from './EmptyState'
 import MessageInput from './MessageInput'
 
 import { Container } from './styled'
@@ -51,9 +53,15 @@ class Comment extends React.Component {
           roomId={task.room.id}
           deliveryReportPlacement="bottom"
           openFilesInNewTab={!this.props.isBackOffice}
+          emptyStateRenderer={() => <EmptyState />}
         />
 
-        <MessageInput deal={this.props.deal} task={task} autoFocus />
+        <MessageInput
+          deal={this.props.deal}
+          task={task}
+          isBackOffice={this.props.isBackOffice}
+          autoFocus
+        />
       </Container>
     )
   }

@@ -93,7 +93,7 @@ export default function FormContexts(props) {
               isReadOnly={isAddressField && isDealConnectedToMls}
               onClick={bounds => {
                 props.onClick('Context', {
-                  contextName: context.name,
+                  contextName: context.key,
                   type: contextType,
                   context,
                   annotations,

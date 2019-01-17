@@ -1,6 +1,5 @@
 /* eslint-disable object-shorthand */
 const path = require('path')
-const packages = require('../../package.json').dependencies
 
 const env = process.env.NODE_ENV || 'development'
 const __DEV__ = env === 'development'
@@ -46,7 +45,7 @@ const config = {
       AWS_ACCESS_KEY: JSON.stringify(process.env.AWS_ACCESS_KEY),
       AWS_SECRET_ACCESS_KEY: JSON.stringify(process.env.AWS_SECRET_ACCESS_KEY),
       ASSETS_BUCKET: JSON.stringify(process.env.ASSETS_BUCKET),
-      ASSETS_BASEURL: JSON.stringify(process.env.ASSETS_BASEURL),
+      ASSETS_BASEURL: JSON.stringify(process.env.ASSETS_BASEURL)
     },
     __DEV__: __DEV__,
     NODE_ENV: env,

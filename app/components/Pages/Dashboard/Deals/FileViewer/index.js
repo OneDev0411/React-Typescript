@@ -8,7 +8,6 @@ import { getDeal } from 'actions/deals'
 import { selectDealById } from 'reducers/deals/list'
 import { selectTaskById } from 'reducers/deals/tasks'
 
-import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
 import { isBackOffice } from 'utils/user-teams'
 
 import Spinner from 'components/Spinner'
@@ -28,7 +27,7 @@ import { LayoutContainer, PageContainer } from './styled'
 class FileViewer extends React.Component {
   state = {
     deal: this.props.deal,
-    isFactsheetOpen: true,
+    isFactsheetOpen: false,
     isCommentsOpen: false
   }
 
@@ -102,6 +101,7 @@ class FileViewer extends React.Component {
     }
 
     return {
+      id: file.id,
       type: this.getFileType(file),
       name: file.name,
       url: file.url
@@ -171,6 +171,8 @@ class FileViewer extends React.Component {
   handleBackButton = () =>
     browserHistory.push(`/dashboard/deals/${this.state.deal.id}`)
 
+  normalizeName = name => decodeURIComponent(name).replace(/[_-]/g, ' ')
+
   render() {
     if (!this.state.deal) {
       return <Spinner />
@@ -182,8 +184,10 @@ class FileViewer extends React.Component {
     return (
       <LayoutContainer>
         <Menu
-          title={truncateTextFromMiddle(file.name, 40)}
+          title={this.normalizeName(file.name)}
+          file={file}
           task={this.props.task}
+          deal={this.state.deal}
           showFactsheetButton={!isEnvelopeView}
           isFactsheetOpen={this.state.isFactsheetOpen}
           isCommentsOpen={this.state.isCommentsOpen}

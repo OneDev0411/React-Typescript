@@ -7,12 +7,14 @@ export function getNextDateField(deal) {
 
   if (closingDate) {
     return {
-      name: 'closing_date',
+      key: 'closing_date',
       value: Context.parseDate(closingDate)
     }
-  } else if (expirationDate) {
+  }
+
+  if (expirationDate) {
     return {
-      name: 'expiration_date',
+      key: 'expiration_date',
       value: Context.parseDate(expirationDate)
     }
   }
@@ -27,8 +29,8 @@ export function getNextDate(deal) {
     return false
   }
 
-  const field = Context.getFactsheetSection(deal, 'CriticalDates').find(
-    item => item.name === date.name
+  const field = Context.getFactsheetSection(deal, 'Dates').find(
+    item => item.key === date.key
   )
 
   return field && `${field.short_label}. ${date.value.format('MMM DD, YYYY')}`

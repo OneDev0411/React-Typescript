@@ -8,7 +8,7 @@ import RadioButton from 'components/RadioButton'
 
 export class PageSelector extends React.Component {
   state = {
-    selectAll: true,
+    selectAll: false,
     inputText: ''
   }
 

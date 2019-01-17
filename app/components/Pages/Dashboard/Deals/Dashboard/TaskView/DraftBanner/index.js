@@ -20,14 +20,8 @@ export default class DraftBanner extends React.Component {
 
     return (
       <Container>
-        <InfoIcon
-          style={{
-            marginRight: '0.75rem'
-          }}
-        />
-
         <span>
-          Your masseges saved and once your deal goes live, admin can read it
+          Your messages saved and once your deal goes live, admin can read it
         </span>
 
         <CloseIcon

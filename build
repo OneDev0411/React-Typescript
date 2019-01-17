@@ -1,27 +1,26 @@
 #!/usr/bin/env node
+import path from 'path'
+
 import fs from 'fs-extra'
 import webpack from 'webpack'
-import path from 'path'
 import colors from 'colors'
-import _ from 'underscore'
+
 import config from './webpack.config.babel'
 import appConfig from './config/webpack'
 
 async function run() {
-  let chunks = []
   console.log('[ + ] Start compiling')
 
   try {
     const stats = await compile()
+
     console.log(
       `[ + ] Webpack compile is complete in ${stats.time / 1000} seconds`
         .magenta
     )
-
-    // output chunks
-    chunks = stats.chunks
   } catch (e) {
-    console.log(e.red.underline)
+    console.log(e.red)
+
     return
   }
 
@@ -64,13 +63,12 @@ function compile() {
       if (jsonStats.errors.length > 0) {
         console.log('[ * ] Webpack compiler encountered errors.'.red)
         console.log(colors.red(jsonStats.errors.join('\n')))
+
         return reject(new Error('Webpack compiler encountered errors'))
       }
 
       if (jsonStats.warnings.length > 0) {
-        console.log(
-          '[ ! ] Webpack compiler encountered warnings.'.yellow.underline
-        )
+        console.log('[ ! ] Webpack compiler encountered warnings.'.yellow)
         console.log(colors.yellow(jsonStats.warnings.join('\n')))
       }
 

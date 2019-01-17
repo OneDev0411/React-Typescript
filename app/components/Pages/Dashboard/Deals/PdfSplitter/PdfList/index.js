@@ -19,7 +19,7 @@ import DraggablePage from '../components/DraggablePage'
 import { PageSelector } from './PageSelector'
 
 import { PagesContainer, FileInfo, Title, PagesCount, Divider } from './styled'
-import { SectionCard, PageNumber } from '../styled'
+import { SectionCard, PageNumber, Header } from '../styled'
 
 class PdfList extends React.Component {
   state = {
@@ -89,23 +89,25 @@ class PdfList extends React.Component {
     return (
       <SectionCard style={this.props.style}>
         {_.map(this.props.documents, (doc, id) => (
-          <div key={id}>
-            <FileInfo>
-              <Title>
-                <TextMiddleTruncate text={this.getFileById(id).name} />
-              </Title>
-              <PagesCount> - {doc.numPages} Pages</PagesCount>
-            </FileInfo>
+          <React.Fragment key={id}>
+            <Header>
+              <FileInfo>
+                <Title>
+                  <TextMiddleTruncate text={this.getFileById(id).name} />
+                </Title>
+                <PagesCount> - {doc.numPages} Pages</PagesCount>
+              </FileInfo>
 
-            <Divider />
+              <Divider />
 
-            <PageSelector
-              pagesCount={doc.numPages}
-              documentId={id}
-              onChange={this.props.onSelectMultiplePages}
-            />
+              <PageSelector
+                pagesCount={doc.numPages}
+                documentId={id}
+                onChange={this.props.onSelectMultiplePages}
+              />
 
-            <Divider />
+              <Divider />
+            </Header>
 
             <PagesContainer>
               {Array.apply(null, { length: doc.numPages }).map((v, i) => (
@@ -149,7 +151,7 @@ class PdfList extends React.Component {
                 />
               ))}
             </PagesContainer>
-          </div>
+          </React.Fragment>
         ))}
 
         {_.size(this.props.documents) === 0 && (

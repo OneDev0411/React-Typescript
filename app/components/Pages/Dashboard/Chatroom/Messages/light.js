@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
+
 import { getMessages } from '../../../../../store_actions/chatroom'
 import MessageItem from './message-item'
 import SocketStatus from '../SocketStatus'
@@ -70,19 +71,23 @@ class Messages extends React.Component {
       <div className="messages">
         <SocketStatus />
 
-        {roomId &&
-          !messages && (
-            <img
-              className="loading"
-              src="/static/images/loading-states/messages.svg"
-              alt=""
-            />
-          )}
+        {roomId && !messages && (
+          <img
+            className="loading"
+            src="/static/images/loading-states/messages.svg"
+            alt=""
+          />
+        )}
 
-        {messages &&
-          _.size(messages.list) === 0 && (
-            <div className="no-messages">There are no messages.</div>
-          )}
+        {messages && _.size(messages.list) === 0 && (
+          <React.Fragment>
+            {this.props.emptyStateRenderer ? (
+              this.props.emptyStateRenderer()
+            ) : (
+              <div className="no-messages">There are no messages.</div>
+            )}
+          </React.Fragment>
+        )}
 
         <div className="messages-list">
           {messages &&

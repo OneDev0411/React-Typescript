@@ -1,4 +1,5 @@
 import React from 'react'
+
 import DateSplitter from '../components/date-splitter'
 import UserAvatar from '../../../../../Partials/UserAvatar'
 import Message from '../message-types'
@@ -44,9 +45,9 @@ export default props => {
               placement={deliveryReportPlacement}
             />
           </div>
-
-          <Message {...props} />
         </div>
+
+        <Message {...props} />
       </div>
     </div>
   )

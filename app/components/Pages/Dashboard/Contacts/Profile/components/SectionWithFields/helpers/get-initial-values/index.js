@@ -76,6 +76,11 @@ export function getInitialValues(attributes) {
                 }
             : SELECT_FIELD_DEFAULT_VALUE
         }
+      } else if (attribute_def.has_label) {
+        newField = {
+          ...newField,
+          label: attribute.label || ''
+        }
       }
 
       return newField

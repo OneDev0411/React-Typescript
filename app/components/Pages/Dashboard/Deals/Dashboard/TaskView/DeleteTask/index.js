@@ -4,14 +4,16 @@ import { connect } from 'react-redux'
 import IconButton from 'components/Button/IconButton'
 import IconDelete from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 
-import Message from '../../../../Chatroom/Util/message'
-
 import {
   setSelectedTask,
   deleteTask,
   changeNeedsAttention
 } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
+
+import Tooltip from 'components/tooltip'
+
+import Message from '../../../../Chatroom/Util/message'
 
 class DeleteTask extends React.Component {
   notifyOffice = async comment => {
@@ -59,15 +61,17 @@ class DeleteTask extends React.Component {
 
   render() {
     return (
-      <IconButton
-        style={{ position: 'absolute', bottom: '1rem' }}
-        isFit
-        inverse
-        type="button"
-        onClick={this.requestDeleteTask}
-      >
-        <IconDelete />
-      </IconButton>
+      <Tooltip caption="Delete Task">
+        <IconButton
+          style={{ position: 'absolute', bottom: '1.65rem' }}
+          isFit
+          inverse
+          type="button"
+          onClick={this.requestDeleteTask}
+        >
+          <IconDelete />
+        </IconButton>
+      </Tooltip>
     )
   }
 }

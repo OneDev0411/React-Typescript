@@ -12,7 +12,7 @@ import { getAssociations } from './get-associations'
 export async function postLoadFormat(task, owner, defaultAssociation) {
   let reminder = {
     title: 'None',
-    value: null
+    value: -1
   }
 
   const associations = []

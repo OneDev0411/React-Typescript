@@ -15,18 +15,16 @@ export function getList(brand_id) {
 }
 
 /**
- * search context by name
+ * search context by key
  */
-export function searchContext(brand_id, name) {
-  if (!name) {
+export function searchContext(brand_id, key) {
+  if (!key) {
     return false
   }
 
-  const context = _.find(getList(brand_id), { name })
+  const context = _.find(getList(brand_id), { key })
 
   if (!context) {
-    console.warn(`Could not find context: ${context}`)
-
     return null
   }
 
@@ -52,6 +50,12 @@ export function getChecklists() {
  * return list of section
  */
 export function getFactsheetSection(deal, name) {
+  if (!deal.brand) {
+    console.warn('deal brand is null in getFactsheetSection')
+
+    return []
+  }
+
   const items = getItems(
     deal.brand.id,
     deal.deal_type,
@@ -169,7 +173,7 @@ export function filterByStatus(
   has_active_offer,
   filter_by
 ) {
-  const definition = context[filter_by]
+  const definition = context[filter_by] || []
 
   if (definition.length === 0) {
     return false
@@ -178,7 +182,9 @@ export function filterByStatus(
   return (
     definition.includes(deal_type) &&
     definition.includes(property_type) &&
-    (has_active_offer || !definition.includes('Active Offer'))
+    (deal_type === 'Buying' ||
+      has_active_offer ||
+      !definition.includes('Active Offer'))
   )
 }
 
@@ -207,11 +213,7 @@ export function getValue(deal, field) {
     }
   }
 
-  // get field
-  const defaultContext =
-    isAddressField(field.key) && deal.listing ? deal.mls_context : null
-
-  const contextValue = getField(deal, field.key, defaultContext)
+  const contextValue = getField(deal, field.key)
 
   const dataObject = {
     value: contextValue,
@@ -227,17 +229,17 @@ export function getValue(deal, field) {
 
 /**
  * returns value of a origin
- * name is field name
+ * key is field key
  * origin is context origin (mls or deal)
  */
-export function getValueByContext(brand_id, name, context) {
-  const contextInfo = getList(brand_id).find(ctx => ctx.key === name)
+export function getValueByContext(brand_id, key, context) {
+  const contextInfo = getList(brand_id).find(ctx => ctx.key === key)
 
   if (contextInfo.data_type === 'Date') {
     return moment.unix(context.value).format('MMM DD, YYYY')
   }
 
-  if (isCurrency({ name })) {
+  if (isCurrency({ key })) {
     return getFormattedPrice(context.value)
   }
 
@@ -266,11 +268,11 @@ export function getDateFormatString() {
 /**
  * get validation function based on given field
  */
-function getValidationFunction(name) {
+function getValidationFunction(key) {
   return (
     {
       year_built: validateYearBuilt
-    }[name] || validate
+    }[key] || validate
   )
 }
 
@@ -305,24 +307,21 @@ export function validate(ctx, value) {
 }
 
 function validateYearBuilt(ctx, value) {
-  const { max } = ctx.properties
-
   if (value === undefined || value === null) {
     return !ctx.mandatory
   }
 
-  return parseFloat(value) <= max
+  return parseFloat(value) >= 1000 && parseFloat(value) <= 9999
 }
 
-export function getFieldProperties(name) {
+export function getFieldProperties(key) {
   return (
     {
       year_built: {
-        max: 2018,
         placeholder: 'YYYY',
         mask: [/[1-2]/, /\d/, /\d/, /\d/]
       }
-    }[name] || {}
+    }[key] || {}
   )
 }
 
@@ -359,7 +358,7 @@ export function validateList(
   return _.every(dealContexts, ctx => ctx.validate(ctx, list[ctx.key]))
 }
 
-export function isAddressField(name) {
+export function isAddressField(key) {
   return [
     'street_dir_prefix',
     'street_suffix',
@@ -373,7 +372,7 @@ export function isAddressField(name) {
     'postal_code',
     'full_address',
     'street_address'
-  ].includes(name)
+  ].includes(key)
 }
 
 export function getDefinitionId(brand_id, key) {
@@ -397,18 +396,26 @@ export function getChecklist(deal, fieldKey) {
   )
 
   const condition = isRequired ? field.required : field.optional
+  const checklists = getChecklists()
 
   if (
     deal.deal_type === 'Selling' &&
     condition.includes('Active Offer') &&
     getHasActiveOffer(deal)
   ) {
-    const checklists = getChecklists()
-
-    return deal.checklists.find(id => checklists[id].is_active_offer)
+    return deal.checklists.find(
+      id =>
+        checklists[id].is_active_offer &&
+        checklists[id].is_deactivated === false &&
+        checklists[id].is_terminated === false
+    )
   }
 
-  return deal.checklists[0]
+  return deal.checklists.find(
+    id =>
+      checklists[id].is_deactivated === false &&
+      checklists[id].is_terminated === false
+  )
 }
 
 function getFormattedValue(value) {

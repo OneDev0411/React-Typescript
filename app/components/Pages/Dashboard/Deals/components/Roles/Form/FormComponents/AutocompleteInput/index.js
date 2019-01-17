@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import Downshift from 'downshift'
 import matchSorter from 'match-sorter'
+
 import { TextInput } from 'components/Forms/TextInput'
+
 import {
   AutoCompleteInputContainer,
   AutoCompleteInputOptions,
@@ -33,6 +35,7 @@ export class AutoCompleteInput extends Component {
       input,
       meta,
       placeholder,
+      labelText,
       isRequired,
       items,
       defaultSelectedItem
@@ -61,30 +64,30 @@ export class AutoCompleteInput extends Component {
                 meta={meta}
                 isRequired={isRequired}
                 placeholder={placeholder}
+                labelText={labelText}
                 {...getInputProps({
                   ...input
                 })}
               />
 
-              {isOpen &&
-                items && (
-                  <AutoCompleteInputOptions>
-                    {(inputValue ? matchSorter(items, inputValue) : items).map(
-                      (item, index) => (
-                        <AutoCompleteInputItem
-                          key={item}
-                          {...getItemProps({
-                            item,
-                            isSelected: selectedItem === item,
-                            isActive: highlightedIndex === index
-                          })}
-                        >
-                          {item}
-                        </AutoCompleteInputItem>
-                      )
-                    )}
-                  </AutoCompleteInputOptions>
-                )}
+              {isOpen && items && (
+                <AutoCompleteInputOptions>
+                  {(inputValue ? matchSorter(items, inputValue) : items).map(
+                    (item, index) => (
+                      <AutoCompleteInputItem
+                        key={item}
+                        {...getItemProps({
+                          item,
+                          isSelected: selectedItem === item,
+                          isActive: highlightedIndex === index
+                        })}
+                      >
+                        {item}
+                      </AutoCompleteInputItem>
+                    )
+                  )}
+                </AutoCompleteInputOptions>
+              )}
             </AutoCompleteInputContainer>
           </div>
         )}

@@ -140,23 +140,21 @@ class SendContactCard extends React.Component {
       isSendingEmail: true
     })
 
-    const recipient = values.recipients[0]
-
-    const emails = [
-      {
-        to: recipient.email,
-        subject: values.subject,
-        html: this.state.htmlTemplate,
-        contact: recipient.contactId
-      }
-    ]
+    const email = {
+      from: values.fromId,
+      to: values.recipients,
+      subject: values.subject,
+      html: this.state.htmlTemplate
+    }
 
     try {
-      await sendContactsEmail(emails, this.state.owner.id)
+      await sendContactsEmail(email, this.state.owner.id)
 
       this.props.notify({
         status: 'success',
-        message: `${emails.length} emails has been sent to your contacts`
+        message: `${
+          values.recipients.length
+        } emails has been sent to your contacts`
       })
     } catch (e) {
       console.log(e)

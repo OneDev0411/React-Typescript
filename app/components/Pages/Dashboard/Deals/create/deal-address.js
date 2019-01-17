@@ -1,10 +1,15 @@
 import React from 'react'
 import cn from 'classnames'
-import ManualAddress from './manual-address'
-import MlsSearch from '../../../../../views/components/SearchListing'
-import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
+
 import { H2 } from 'components/Typography/headings'
+
 import ActionButton from 'components/Button/ActionButton'
+
+import SearchListings from 'components/SearchListingDrawer'
+
+import Address from '../components/Address'
+
+import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
 
 const BUYING = 'Buying'
 
@@ -14,19 +19,19 @@ export default class DealAddress extends React.Component {
     showMlsSearch: false
   }
 
-  toggleManualAddressModal() {
-    this.setState({
-      showManualAddress: !this.state.showManualAddress
-    })
+  toggleManualAddressDrawer = () => {
+    this.setState(state => ({
+      showManualAddress: !state.showManualAddress
+    }))
   }
 
-  toggleMlsModal() {
-    this.setState({
-      showMlsSearch: !this.state.showMlsSearch
-    })
+  toggleMlsDrawer = () => {
+    this.setState(state => ({
+      showMlsSearch: !state.showMlsSearch
+    }))
   }
 
-  onCreateAddress(address) {
+  onCreateAddress = address => {
     this.setState({
       showManualAddress: false,
       showMlsSearch: false
@@ -35,12 +40,17 @@ export default class DealAddress extends React.Component {
     this.props.onCreateAddress(address, 'address')
   }
 
-  getListingImage(address) {
-    return address.image || '/static/images/deals/home.svg'
+  handleSelectListing = listings => {
+    this.onCreateAddress({
+      id: listings[0].id,
+      image: listings[0].cover_image_url,
+      address_components: listings[0].property.address
+    })
   }
 
+  getListingImage = address => address.image || '/static/images/deals/home.svg'
+
   render() {
-    const { showManualAddress, showMlsSearch } = this.state
     const {
       isRequired,
       hasError,
@@ -63,17 +73,18 @@ export default class DealAddress extends React.Component {
           {hasError && <RequiredIcon />}
         </H2>
 
-        <ManualAddress
-          show={showManualAddress}
-          onClose={() => this.toggleManualAddressModal()}
-          onCreateAddress={address => this.onCreateAddress(address)}
+        <SearchListings
+          isOpen={this.state.showMlsSearch}
+          title="Address"
+          searchPlaceholder="Enter MLS# or an address"
+          onSelectListings={this.handleSelectListing}
+          onClose={this.toggleMlsDrawer}
         />
 
-        <MlsSearch
-          modalTitle="Address"
-          show={showMlsSearch}
-          onHide={() => this.toggleMlsModal()}
-          onSelectListing={mls => this.onCreateAddress(mls)}
+        <Address
+          show={this.state.showManualAddress}
+          onClose={this.toggleManualAddressDrawer}
+          onCreateAddress={this.onCreateAddress}
         />
 
         {dealAddress ? (
@@ -99,7 +110,7 @@ export default class DealAddress extends React.Component {
             {dealSide === BUYING && (
               <div
                 className="entity-item address new"
-                onClick={() => this.toggleMlsModal()}
+                onClick={() => this.toggleMlsDrawer()}
               >
                 <ActionButton appearance="link" className="add-item">
                   <span className="icon">+</span>
@@ -110,7 +121,7 @@ export default class DealAddress extends React.Component {
 
             <div
               className="entity-item address new"
-              onClick={() => this.toggleManualAddressModal()}
+              onClick={() => this.toggleManualAddressDrawer()}
             >
               <ActionButton appearance="link" className="add-item">
                 <span className="icon">+</span>

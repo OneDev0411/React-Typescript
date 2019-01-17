@@ -7,26 +7,22 @@ import _ from 'underscore'
 
 import { getStartRange, getEndRange } from 'reducers/calendar'
 
-import {
-  getCalendar,
-  setDate,
-  resetCalendar
-} from '../../../../store_actions/calendar'
+import { getCalendar, setDate, resetCalendar } from 'actions/calendar'
+
 import {
   createDateRange,
   createPastRange,
   createFutureRange
-} from '../../../../models/Calendar/helpers/create-date-range'
-import {
-  Container,
-  Menu,
-  Trigger,
-  Content
-} from '../../../../views/components/SlideMenu'
-import PageHeader from '../../../../views/components/PageHeader'
-import DatePicker from '../../../../views/components/DatePicker'
-import { EventDrawer } from '../../../../views/components/EventDrawer'
-import ActionButton from '../../../../views/components/Button/ActionButton'
+} from 'models/Calendar/helpers/create-date-range'
+
+import PageHeader from 'components/PageHeader'
+import DatePicker from 'components/DatePicker'
+import ActionButton from 'components/Button/ActionButton'
+
+import { Container, Menu, Trigger, Content } from 'components/SlideMenu'
+
+import { CrmEvents } from './CrmEvents'
+
 import {
   viewAs,
   getActiveTeamACL,
@@ -47,29 +43,21 @@ const LOADING_POSITIONS = {
 const MENU_WIDTH = '18.75rem'
 
 class CalendarContainer extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      isMenuOpen: true,
-      showCreateTaskMenu: false,
-      selectedTaskId: null,
-      loadingPosition: LOADING_POSITIONS.Middle
-    }
-    this.myRef = React.createRef()
+  state = {
+    isMenuOpen: true,
+    isOpenEventDrawer: false,
+    selectedEvent: null,
+    loadingPosition: LOADING_POSITIONS.Middle
   }
 
   componentDidMount() {
-    const { selectedDate } = this.props
-
     const acl = getActiveTeamACL(this.props.user)
 
-    const hasContactsPermission = acl.includes('CRM')
-
-    if (!hasContactsPermission) {
+    if (!acl.includes('CRM')) {
       browserHistory.push('/dashboard/mls')
     }
 
-    this.restartCalendar(selectedDate)
+    this.restartCalendar(this.props.selectedDate)
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -111,15 +99,15 @@ class CalendarContainer extends React.Component {
   /**
    * open create task menu
    */
-  openEventDrawer = () => this.setState({ showCreateTaskMenu: true })
+  openEventDrawer = () => this.setState({ isOpenEventDrawer: true })
 
   /**
    * close create task menu
    */
   closeEventDrawer = () =>
     this.setState({
-      showCreateTaskMenu: false,
-      selectedTaskId: null
+      isOpenEventDrawer: false,
+      selectedEvent: null
     })
 
   /**
@@ -193,8 +181,8 @@ class CalendarContainer extends React.Component {
     ])
   }
 
-  onClickTask = selectedTaskId =>
-    this.setState(() => ({ selectedTaskId }), this.openEventDrawer)
+  onClickTask = selectedEvent =>
+    this.setState(() => ({ selectedEvent }), this.openEventDrawer)
 
   handleEventChange = async (task, action) => {
     const { startRange, endRange } = this.props
@@ -219,20 +207,22 @@ class CalendarContainer extends React.Component {
     }
   }
 
-  scrollIntoView = (date, options = {}) => {
+  scrollIntoView = (date, options = {}, attempts = 0) => {
     const refId = moment(date).format('YYYY-MM-DD')
 
-    this.isObserverEnabled = false
+    if (!this.refs[refId] && attempts < 6) {
+      setTimeout(() => {
+        this.scrollIntoView(date, options, attempts + 1)
+      }, 500)
+
+      return false
+    }
 
     this.refs[refId] &&
       this.refs[refId].scrollIntoView({
         behavior: options.behavior || 'instant',
         block: 'start'
       })
-
-    setTimeout(() => {
-      this.isObserverEnabled = true
-    }, 500)
   }
 
   loadPreviousItems = async () => {
@@ -281,22 +271,11 @@ class CalendarContainer extends React.Component {
   }
 
   render() {
-    const { isMenuOpen, loadingPosition, selectedTaskId } = this.state
+    const { isMenuOpen, loadingPosition } = this.state
     const { selectedDate, isFetching } = this.props
 
     return (
       <Container isOpen={isMenuOpen}>
-        {this.state.showCreateTaskMenu && (
-          <EventDrawer
-            isOpen
-            user={this.props.user}
-            eventId={selectedTaskId}
-            onClose={this.closeEventDrawer}
-            submitCallback={this.handleEventChange}
-            deleteCallback={this.handleEventChange}
-          />
-        )}
-
         <Menu isOpen={isMenuOpen} width={MENU_WIDTH}>
           <MenuContainer>
             <DatePicker
@@ -335,6 +314,14 @@ class CalendarContainer extends React.Component {
             />
           </TableContainer>
         </Content>
+
+        <CrmEvents
+          isOpenEventDrawer={this.state.isOpenEventDrawer}
+          selectedEvent={this.state.selectedEvent}
+          user={this.props.user}
+          onEventChange={this.handleEventChange}
+          onCloseEventDrawer={this.closeEventDrawer}
+        />
       </Container>
     )
   }

@@ -20,7 +20,7 @@ export default function SocialMarketing(props) {
           Beautiful social collaterals for your listing.
         </Description>
 
-        <SendDealPromotion deal={props.deal} mediums={['Social']}>
+        <SendDealPromotion deal={props.deal} mediums="Social">
           Explore
         </SendDealPromotion>
       </LeftColumn>

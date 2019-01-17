@@ -38,8 +38,8 @@ export const MultipleContactsSelect = ({
       {!disableAddNewRecipient && <AddRecipient input={input} />}
     </RecipientContainer>
 
-    {showError &&
-      meta.error &&
-      meta.touched && <InputError>{meta.error}</InputError>}
+    {showError && meta.error && meta.touched && (
+      <InputError>{meta.error}</InputError>
+    )}
   </InputContainer>
 )

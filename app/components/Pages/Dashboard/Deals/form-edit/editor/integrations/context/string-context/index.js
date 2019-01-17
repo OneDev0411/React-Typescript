@@ -9,13 +9,13 @@ export const InputContainer = styled.div`
 `
 
 export default class StringContext extends React.Component {
-  getValue() {
+  getValue = () => {
     const { value } = this.props
 
     return value !== null ? value : ''
   }
 
-  onKeyPress(e) {
+  onKeyPress = e => {
     if (e.which === 13 || e.keyCode === 13) {
       this.props.handleSave()
     }

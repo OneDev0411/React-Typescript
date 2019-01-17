@@ -114,17 +114,17 @@
     .message-item {
       margin: 10px 10px 0px 10px !important;
 
-      .content {
-        .attachment {
-          @extend %popup-message-attachment;
-        }
-        .recommendation {
-          @extend %popup-message-recommendation;
-        }
-        .alert {
-          @extend %popup-message-alert;
-        }
+
+      .attachment {
+        @extend %popup-message-attachment;
       }
+      .recommendation {
+        @extend %popup-message-recommendation;
+      }
+      .alert {
+        @extend %popup-message-alert;
+      }
+
     }
 
     .message-subitem {
