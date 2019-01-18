@@ -10,14 +10,23 @@ import { Container, Title, Details, RemoveButton } from './styled'
 export class AssociationItem extends Component {
   static propTypes = {
     association: PropTypes.shape().isRequired,
+    handleRemove: PropTypes.func,
     isRemovable: PropTypes.bool,
-    handleRemove: PropTypes.func
+    isReadOnly: PropTypes.bool,
+    style: PropTypes.shape()
+  }
+
+  static defaultProps = {
+    style: {},
+    isRemovable: true,
+    isReadOnly: false,
+    handleRemove() {}
   }
 
   onRemove = () => this.props.handleRemove(this.props.association)
 
   render() {
-    const { association, isRemovable } = this.props
+    const { association, isReadOnly } = this.props
 
     if (!association.association_type) {
       return null
@@ -26,14 +35,14 @@ export class AssociationItem extends Component {
     const record = association[association.association_type]
 
     return (
-      <Container>
+      <Container style={this.props.style} isReadOnly={isReadOnly}>
         <Avatar {...record.avatar} />
         <div style={{ marginLeft: '0.5em' }}>
           <Title>{record.title}</Title>
           <Details>{record.details}</Details>
         </div>
-        <ShadowLink href={record.url} target="_blank" />
-        {isRemovable && (
+        {!isReadOnly && <ShadowLink href={record.url} target="_blank" />}
+        {this.props.isRemovable && (
           <RemoveButton isFit inverse type="button" onClick={this.onRemove}>
             <CloseIcon />
           </RemoveButton>

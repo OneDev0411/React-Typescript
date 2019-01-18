@@ -139,8 +139,11 @@ class ContactsList extends React.Component {
       display: ({ selectedRows }) => selectedRows.length > 0,
       render: ({ selectedRows, resetSelectedRows }) => (
         <CreateEvent
-          resetSelectedRows={resetSelectedRows}
           selectedRows={selectedRows}
+          submitCallback={async () => {
+            resetSelectedRows()
+            await this.props.bulkEventCreationCallback()
+          }}
         />
       )
     },

@@ -6,6 +6,7 @@ import { AssociationItem } from 'components/AssocationItem'
 
 AssociationsDrawer.propTypes = {
   ...Drawer.propTypes,
+  defaultAssociationId: PropTypes.string.isRequired,
   associations: PropTypes.arrayOf(PropTypes.shape()).isRequired
 }
 
@@ -21,6 +22,10 @@ export function AssociationsDrawer(props) {
             association={association}
             key={`association_${index}`}
             isRemovable={false}
+            isReadOnly={
+              props.defaultAssociationId ===
+              association[association.association_type].id
+            }
           />
         ))}
       </Drawer.Body>

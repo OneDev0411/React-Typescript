@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { grey } from '../../utils/colors'
 import Button from '../Button/IconButton'
@@ -17,15 +17,20 @@ export const Container = styled.div`
   padding: 0.5em;
   border-radius: 3px;
   background-color: ${grey.A100};
+  opacity: ${props => (props.isReadOnly ? 0.5 : 1)};
 
-  &:hover {
-    cursor: pointer;
-    background-color: ${grey.A250};
+  ${props =>
+    !props.isReadOnly &&
+    css`
+      &:hover {
+        cursor: pointer;
+        background-color: ${grey.A250};
 
-    ${RemoveButton} {
-      visibility: visible;
-    }
-  }
+        ${RemoveButton} {
+          visibility: visible;
+        }
+      }
+    `}
 `
 
 export const Title = styled.div`

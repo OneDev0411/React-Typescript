@@ -16,7 +16,6 @@ import {
   updateTask,
   createTask,
   deleteTask,
-  createTaskAssociation,
   deleteTaskAssociation
 } from '../../../../models/tasks'
 import getListing from '../../../../models/listings/listing/get-listing'
@@ -211,29 +210,6 @@ export class OpenHouseDrawer extends React.Component {
     }
   }
 
-  handleCreateAssociation = async association => {
-    const crm_task =
-      this.props.openHouseId ||
-      (this.props.openHouse && this.props.openHouse.id)
-
-    if (crm_task) {
-      try {
-        const newAssociation = {
-          ...association,
-          crm_task
-        }
-        const response = await createTaskAssociation(crm_task, newAssociation)
-
-        return response
-      } catch (error) {
-        console.log(error)
-        throw error
-      }
-    }
-
-    return Promise.resolve()
-  }
-
   handleDeleteAssociation = async association => {
     if (association.id) {
       try {
@@ -282,7 +258,7 @@ export class OpenHouseDrawer extends React.Component {
 
   render() {
     const { user } = this.props
-    const { isDisabled } = this.state
+    const { isDisabled, openHouse } = this.state
 
     return (
       <Fragment>
@@ -353,7 +329,7 @@ export class OpenHouseDrawer extends React.Component {
                       {!isSoloActiveTeam(user) && (
                         <Section label="Agents">
                           <AssigneesField
-                            buttonText="Assign"
+                            buttonText="Assignee"
                             name="assignees"
                             owner={user}
                           />
@@ -397,6 +373,7 @@ export class OpenHouseDrawer extends React.Component {
                         )}
                         <AddAssociationButton
                           associations={values.registrants}
+                          crm_task={openHouse ? openHouse.id : ''}
                           disabled={isDisabled}
                           type="contact"
                           name="registrants"
@@ -424,25 +401,28 @@ export class OpenHouseDrawer extends React.Component {
                         )}
                       </Flex>
                     </Footer>
-                    <InstantMarketing
-                      headerTitle="Registration Template"
-                      closeConfirmation={false}
-                      showTemplatesColumn={false}
-                      saveButtonLabel="Save"
-                      isOpen={this.state.isTemplateBuilderOpen}
-                      onClose={this.toggleTemplateBuilder}
-                      handleSave={this.handleSaveTemplate}
-                      assets={this.getTemplateAssets()}
-                      templateData={{
-                        user: this.props.user,
-                        listing: this.state.listing,
-                        crmopenhouse: {
-                          title: values.title,
-                          due_date: values.dueDate
-                        }
-                      }}
-                      templateTypes={['CrmOpenHouse']}
-                    />
+
+                    {this.state.isTemplateBuilderOpen && (
+                      <InstantMarketing
+                        isOpen
+                        headerTitle="Registration Template"
+                        closeConfirmation={false}
+                        showTemplatesColumn={false}
+                        saveButtonLabel="Save"
+                        onClose={this.toggleTemplateBuilder}
+                        handleSave={this.handleSaveTemplate}
+                        assets={this.getTemplateAssets()}
+                        templateData={{
+                          user: this.props.user,
+                          listing: this.state.listing,
+                          crmopenhouse: {
+                            title: values.title,
+                            due_date: values.dueDate
+                          }
+                        }}
+                        templateTypes={['CrmOpenHouse']}
+                      />
+                    )}
                   </div>
                 )
               }}
