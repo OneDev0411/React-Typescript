@@ -6,6 +6,7 @@ import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArr
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
+  margin-bottom: 11rem;
 `
 
 /* folder */
@@ -77,6 +78,7 @@ export const RowLeftColumn = styled.div`
 
 export const RowRightColumn = styled.div`
   display: flex;
+  align-items: center;
 `
 
 export const RowTitle = styled(H4)`
