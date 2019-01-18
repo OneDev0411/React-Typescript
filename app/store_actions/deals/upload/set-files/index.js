@@ -1,7 +1,7 @@
 import * as actionTypes from '../../../../constants/deals'
 import uuid from '../../../../utils/uuid'
 
-export function setUploadFiles(files) {
+export function setUploadFiles(files, taskId) {
   const indexedFiles = {}
 
   files.forEach(file => {
@@ -11,7 +11,8 @@ export function setUploadFiles(files) {
       id: uniqId,
       fileObject: file,
       properties: {
-        notifyOffice: true
+        notifyOffice: true,
+        taskId
       }
     }
   })
