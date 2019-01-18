@@ -258,7 +258,7 @@ export class OpenHouseDrawer extends React.Component {
 
   render() {
     const { user } = this.props
-    const { isDisabled } = this.state
+    const { isDisabled, openHouse } = this.state
 
     return (
       <Fragment>
@@ -373,6 +373,7 @@ export class OpenHouseDrawer extends React.Component {
                         )}
                         <AddAssociationButton
                           associations={values.registrants}
+                          crm_task={openHouse ? openHouse.id : ''}
                           disabled={isDisabled}
                           type="contact"
                           name="registrants"
