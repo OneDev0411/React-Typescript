@@ -1,13 +1,15 @@
 import styled from 'styled-components'
+
 import Badge from 'components/Badge'
 
 export const Container = styled.div`
   position: relative;
-  margin-left: 1rem;
+  margin-right: 1rem;
+  padding-top: 5px;
   cursor: pointer;
 
   svg path {
-    fill: ${props => (props.hasNotification ? '#17181a' : '#f5f5f5')};
+    fill: #17181a;
   }
 `
 
