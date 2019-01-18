@@ -133,6 +133,7 @@ export class Associations extends React.Component {
         {this.state.isOpenMoreDrawer && (
           <AssociationsDrawer
             associations={associations}
+            defaultAssociationId={this.defaultAssociationId}
             isOpen
             onClose={this.closeMoreDrawer}
           />
