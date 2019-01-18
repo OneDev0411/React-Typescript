@@ -8,22 +8,21 @@ import Deal from 'models/Deal'
 import { setUploadFiles } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
-import ChatMessage from '../../Chatroom/Util/message'
-
 class UploadDocument extends React.Component {
   state = {
     dropzoneActive: false
   }
 
-  async onDrop(files, rejectedFiles) {
-    const { onDrop, setUploadFiles, activeChecklist, confirmation } = this.props
-
+  onDrop = async (files, rejectedFiles) => {
     this.setState({
       dropzoneActive: false
     })
 
-    if (activeChecklist && activeChecklist.is_terminated) {
-      return confirmation({
+    if (
+      this.props.activeChecklist &&
+      this.props.activeChecklist.is_terminated
+    ) {
+      return this.props.confirmation({
         message: 'Folder Is Terminated',
         description: 'You cannot upload file in terminated folders',
         onConfirm: () => null,
@@ -37,7 +36,7 @@ class UploadDocument extends React.Component {
         .getAcceptedDocuments()
         .replace(/,/gi, ', ')
 
-      return confirmation({
+      return this.props.confirmation({
         message: 'Cannot Upload this File',
         description: `Some file formats are not supported. You can upload: ${acceptedFiles}`,
         onConfirm: () => null,
@@ -46,32 +45,19 @@ class UploadDocument extends React.Component {
       })
     }
 
-    if (onDrop) {
-      return onDrop(files)
+    if (this.props.onDrop) {
+      return this.props.onDrop(files)
     }
 
-    setUploadFiles(files)
-  }
+    this.props.setUploadFiles(files, this.props.task.id)
 
-  /**
-   * send message to chatroom
-   */
-  postMessage(roomId, fileId) {
-    const { user } = this.props
-
-    const message = {
-      attachments: [fileId],
-      author: user.id,
-      room: roomId
-    }
-
-    ChatMessage.postMessage(roomId, message)
+    // this.props.setUploadAttributes(file.id, { taskId })
   }
 
   /**
    * open file dialog
    */
-  openDialog() {
+  openDialog = () => {
     this.dropzone.open()
   }
 
@@ -84,9 +70,6 @@ class UploadDocument extends React.Component {
   }
 
   render() {
-    const { dropzoneActive } = this.state
-    const { children, hasAttachments } = this.props
-
     return (
       <Dropzone
         disableClick={this.props.disableClick}
@@ -98,7 +81,7 @@ class UploadDocument extends React.Component {
         accept={Deal.upload.getAcceptedDocuments()}
         style={{ width: '100%' }}
       >
-        {dropzoneActive && (
+        {this.state.dropzoneActive && (
           <div className="upload-placeholder">
             <div className="upload-area">
               <img src="/static/images/deals/dnd.png" alt="" />
@@ -111,9 +94,11 @@ class UploadDocument extends React.Component {
           </div>
         )}
 
-        {children || (
+        {this.props.children || (
           <div
-            className={cn('file-upload', { 'has-attachments': hasAttachments })}
+            className={cn('file-upload', {
+              'has-attachments': this.props.hasAttachments
+            })}
           >
             <div className="item">
               <div className="image">
@@ -139,10 +124,12 @@ class UploadDocument extends React.Component {
 function mapStateToProps({ user, deals }) {
   const { checklists, selectedTask } = deals
 
+  const activeChecklist =
+    selectedTask && checklists ? checklists[selectedTask.checklist] : null
+
   return {
     user,
-    activeChecklist:
-      selectedTask && checklists ? checklists[selectedTask.checklist] : null
+    activeChecklist
   }
 }
 
