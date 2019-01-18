@@ -10,8 +10,15 @@ import { Container, Title, Details, RemoveButton } from './styled'
 export class AssociationItem extends Component {
   static propTypes = {
     association: PropTypes.shape().isRequired,
+    handleRemove: PropTypes.func,
     isRemovable: PropTypes.bool,
-    handleRemove: PropTypes.func
+    style: PropTypes.shape()
+  }
+
+  static defaultProps = {
+    style: {},
+    isRemovable: true,
+    handleRemove() {}
   }
 
   onRemove = () => this.props.handleRemove(this.props.association)
@@ -26,7 +33,7 @@ export class AssociationItem extends Component {
     const record = association[association.association_type]
 
     return (
-      <Container>
+      <Container style={this.props.style}>
         <Avatar {...record.avatar} />
         <div style={{ marginLeft: '0.5em' }}>
           <Title>{record.title}</Title>
