@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
@@ -22,10 +23,13 @@ class Signature extends React.Component {
     formData: null
   }
 
-  toggleOpenForm = () =>
+  toggleOpenForm = () => {
     this.setState(state => ({
       isFormOpen: !state.isFormOpen
     }))
+
+    this.props.onClose()
+  }
 
   handleSubmit = async values => {
     const formData = this.state.formData || values
@@ -87,38 +91,41 @@ class Signature extends React.Component {
   }
 
   render() {
+    if (!this.props.isOpen) {
+      return false
+    }
+
     return (
       <Fragment>
-        <ActionButton
-          appearance="outline"
-          size="small"
-          style={{ marginLeft: '0.5rem' }}
-          onClick={this.toggleOpenForm}
-        >
-          E-Sign
-        </ActionButton>
-        {this.state.isFormOpen && (
-          <Fragment>
-            <SignatureComposeDrawer
-              isOpen={!this.state.showDocusignBanner}
-              isSubmitting={this.state.isSending}
-              user={this.props.user}
-              deal={this.props.deal}
-              onSubmit={this.handleSubmit}
-              attachments={this.props.defaultAttachments}
-              onClose={this.toggleOpenForm}
-            />
+        <SignatureComposeDrawer
+          isOpen={!this.state.showDocusignBanner}
+          isSubmitting={this.state.isSending}
+          user={this.props.user}
+          deal={this.props.deal}
+          onSubmit={this.handleSubmit}
+          attachments={this.props.defaultAttachments}
+          onClose={this.toggleOpenForm}
+        />
 
-            <Docusign
-              isOpen={this.state.showDocusignBanner}
-              user={this.props.user}
-              onAuthorize={this.handleSubmit}
-            />
-          </Fragment>
-        )}
+        <Docusign
+          isOpen={this.state.showDocusignBanner}
+          user={this.props.user}
+          onAuthorize={this.handleSubmit}
+        />
       </Fragment>
     )
   }
+}
+
+Signature.propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
+  deal: PropTypes.object.isRequired,
+  defaultAttachments: PropTypes.array.isRequired
+}
+
+Signature.defaultProps = {
+  isOpen: false
 }
 
 function mapStateToProps({ user }) {
