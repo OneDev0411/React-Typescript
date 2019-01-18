@@ -329,7 +329,7 @@ export class OpenHouseDrawer extends React.Component {
                       {!isSoloActiveTeam(user) && (
                         <Section label="Agents">
                           <AssigneesField
-                            buttonText="Assign"
+                            buttonText="Assignee"
                             name="assignees"
                             owner={user}
                           />
