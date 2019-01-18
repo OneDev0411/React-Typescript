@@ -17,7 +17,7 @@ export function getTemplateTypes(listing) {
   }
 
   if (listing.open_houses) {
-    return ['OpenHouse']
+    return ['OpenHouse', 'JustListed', 'PriceImprovement']
   }
 
   return ['JustListed', 'PriceImprovement', 'AsSeenIn', 'ComingSoon']
