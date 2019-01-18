@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import IconComment from 'components/SvgIcons/Comment/IconComment'
+
 import { Container, BadgeCounter } from './styled'
 
 function Notification(props) {

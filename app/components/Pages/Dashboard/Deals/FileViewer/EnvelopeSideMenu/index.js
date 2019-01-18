@@ -11,6 +11,7 @@ import { voidEnvelope } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
 import Deal from 'models/Deal'
+
 import { getLegalFullName } from '../../utils/roles'
 
 import { SideMenu } from '../styled'
