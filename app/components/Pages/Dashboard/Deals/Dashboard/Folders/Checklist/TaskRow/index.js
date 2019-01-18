@@ -10,6 +10,7 @@ import {
 import TaskStatus from './Status'
 import TaskNotifications from './Notification'
 
+import ActionsButton from '../../../../components/ActionsButton'
 import TaskFiles from '../TaskFiles'
 
 import {
@@ -58,12 +59,14 @@ class Task extends React.Component {
           </RowLeftColumn>
 
           <RowRightColumn>
-            <TaskStatus
+            {/* <TaskStatus
               task={task}
               isBackOffice={this.props.isBackOffice}
               isDraftDeal={this.props.deal.is_draft}
-            />
+            /> */}
             <TaskNotifications task={task} onClick={this.handleSelectTask} />
+
+            <ActionsButton type="task" deal={this.props.deal} task={task} />
           </RowRightColumn>
         </Row>
 
