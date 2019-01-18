@@ -126,8 +126,8 @@ class SectionWithFields extends React.Component {
     const fields = orderedFields
       .filter(
         f =>
-          f.attribute_def.editable &&
-          (f[f.attribute_def.data_type] || f.attribute_def.show)
+          f.attribute_def.show ||
+          (f.attribute_def.editable && f[f.attribute_def.data_type])
       )
       .map((field, index) => {
         const { attribute_def } = field
