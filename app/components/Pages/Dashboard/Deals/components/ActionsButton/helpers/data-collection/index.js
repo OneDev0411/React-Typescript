@@ -313,7 +313,7 @@ export const tasksConditions = normalizeConditions([
     conditions: ({ task_type, file_uploaded, form_saved, envelope_status }) =>
       task_type === taskTypes.GENERIC &&
       file_uploaded === false &&
-      form_saved === null &&
+      form_saved === false &&
       envelope_status === envelopeStates.NONE,
     actions: {
       [UPLOAD_BUTTON]: {
@@ -326,7 +326,7 @@ export const tasksConditions = normalizeConditions([
     conditions: ({ task_type, file_uploaded, form_saved, envelope_status }) =>
       task_type === taskTypes.GENERIC &&
       file_uploaded === true &&
-      form_saved === null &&
+      form_saved === false &&
       envelope_status === envelopeStates.NONE,
     actions: {
       [DOCUSIGN_BUTTON]: {
@@ -342,7 +342,7 @@ export const tasksConditions = normalizeConditions([
     conditions: ({ task_type, file_uploaded, form_saved, envelope_status }) =>
       task_type === taskTypes.FORM &&
       file_uploaded === false &&
-      form_saved === null &&
+      form_saved === false &&
       envelope_status === envelopeStates.NONE,
     actions: {
       [EDIT_BUTTON]: {
