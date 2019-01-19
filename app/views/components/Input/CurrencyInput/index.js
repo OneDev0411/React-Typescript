@@ -31,9 +31,14 @@ export default props => {
       value={value}
       onChange={e => {
         const maskedValue = e.target.value
-        const originalValue = maskedValue
+        let originalValue = maskedValue
           ? parseFloat(maskedValue.replace('$', '').replace(/\,/gi, ''))
           : ''
+
+        // control result of original value
+        if (isNaN(originalValue) || typeof originalValue === 'undefined') {
+          originalValue = ''
+        }
 
         const data = {
           value: originalValue,
