@@ -16,6 +16,6 @@ export const Container = styled.div`
 export const BadgeCounter = styled(Badge)`
   position: absolute;
   font-size: 0.75rem;
-  top: -0.5rem;
+  top: -0.2rem;
   right: -0.6rem;
 `
