@@ -69,8 +69,8 @@ class ActionsButton extends React.Component {
   getActions = () => {
     let conditions = {}
 
-    if (this.props.type === 'attachment') {
-      conditions = this.generateAttachmentConditions()
+    if (this.props.type === 'document') {
+      conditions = this.generateDocumentsConditions()
     }
 
     if (this.props.type === 'task') {
@@ -80,10 +80,26 @@ class ActionsButton extends React.Component {
     return selectActions(this.props.type, conditions)
   }
 
-  generateAttachmentConditions = () => {
-    console.log('++++')
+  generateDocumentsConditions = () => {
+    let documentType
+    const envelopes = this.getDocumentEnvelopes(this.props.document)
 
-    return {}
+    const isTask = this.props.document.type === 'task'
+    const isFile = this.props.document.type === 'file'
+
+    if (isTask) {
+      documentType = 'Form'
+    } else {
+      documentType =
+        this.props.document.mime === 'application/pdf' ? 'Pdf' : 'Generic'
+    }
+
+    return {
+      document_type: documentType,
+      file_uploaded: isFile,
+      form_saved: isTask && this.props.document.submission !== null,
+      envelope_status: this.getLastEnvelopeStatus(envelopes)
+    }
   }
 
   generateTaskConditions = () => {
@@ -121,6 +137,16 @@ class ActionsButton extends React.Component {
     return envelopes
   }
 
+  getDocumentEnvelopes = document => {
+    const envelopes = Object.values(this.props.envelopes)
+      .filter(envelope =>
+        envelope.documents.some(doc => doc.file === document.id)
+      )
+      .sort((a, b) => b.created_at - a.created_at)
+
+    return envelopes
+  }
+
   getLastEnvelopeStatus = envelopes => {
     if (envelopes.length === 0) {
       return 'None'
@@ -137,6 +163,19 @@ class ActionsButton extends React.Component {
 
   getSecondaryActions = actions =>
     _.filter(actions, properties => properties.primary !== true)
+
+  getDefaultAttachments = () => {
+    if (this.props.type === 'task') {
+      return [
+        {
+          type: 'form',
+          task: this.props.task
+        }
+      ]
+    }
+
+    return []
+  }
 
   notifyOffice = async comment => {
     if (comment) {
@@ -327,12 +366,7 @@ class ActionsButton extends React.Component {
           isOpen={this.state.isSignatureFormOpen}
           deal={this.props.deal}
           onClose={this.handleDeselectAction}
-          defaultAttachments={[
-            {
-              type: 'form',
-              task: this.props.task
-            }
-          ]}
+          defaultAttachments={this.getDefaultAttachments()}
         />
       </React.Fragment>
     )
