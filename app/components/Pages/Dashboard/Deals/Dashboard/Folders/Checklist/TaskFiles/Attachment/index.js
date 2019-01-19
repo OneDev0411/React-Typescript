@@ -92,6 +92,7 @@ class Attachments extends React.Component {
               <ActionsButton
                 type="document"
                 deal={this.props.deal}
+                task={this.props.task}
                 document={props.file}
               />
             </FileActions>

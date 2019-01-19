@@ -34,6 +34,7 @@ export function DigitalForm(props) {
           <ActionsButton
             type="document"
             deal={props.deal}
+            task={props.task}
             document={props.task}
           />
         </FileActions>
