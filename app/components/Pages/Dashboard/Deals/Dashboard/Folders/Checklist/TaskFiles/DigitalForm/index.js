@@ -2,6 +2,8 @@ import React, { Fragment } from 'react'
 
 import LinkButton from 'components/Button/LinkButton'
 
+import ActionsButton from '../../../../../components/ActionsButton'
+
 import GetSignature from '../../../../../Signature'
 
 import {
@@ -13,8 +15,8 @@ import {
   FileLink
 } from '../styled'
 
-export default function DigitalForm({ deal, task, isBackOffice }) {
-  if (!task || !task.form) {
+export function DigitalForm(props) {
+  if (!props.task || !props.task.form) {
     return false
   }
 
@@ -25,57 +27,15 @@ export default function DigitalForm({ deal, task, isBackOffice }) {
           <FileLink
             size="small"
             className="file-link"
-            to={`/dashboard/deals/${deal.id}/form-edit/${task.id}`}
+            to={`/dashboard/deals/${props.deal.id}/form-edit/${props.task.id}`}
           >
             <DigitalFormIcon />
-            {task.title}
+            {props.task.title}
           </FileLink>
         </FileTitle>
 
         <FileActions>
-          {task.submission && (
-            <Fragment>
-              {isBackOffice ? (
-                <LinkButton
-                  appearance="outline"
-                  size="small"
-                  to={`/dashboard/deals/${deal.id}/view/${task.id}`}
-                >
-                  View
-                </LinkButton>
-              ) : (
-                <LinkButton
-                  appearance="outline"
-                  size="small"
-                  href={task.submission.file.url}
-                  target="_blank"
-                >
-                  View
-                </LinkButton>
-              )}
-            </Fragment>
-          )}
-
-          <LinkButton
-            appearance="outline"
-            size="small"
-            to={`/dashboard/deals/${deal.id}/form-edit/${task.id}`}
-            style={{ marginLeft: '0.5rem' }}
-          >
-            Edit
-          </LinkButton>
-
-          {task.submission && (
-            <GetSignature
-              deal={deal}
-              defaultAttachments={[
-                {
-                  type: 'form',
-                  task
-                }
-              ]}
-            />
-          )}
+          <ActionsButton type="task" deal={props.deal} task={props.task} />
         </FileActions>
       </FileRow>
     </FileContainer>

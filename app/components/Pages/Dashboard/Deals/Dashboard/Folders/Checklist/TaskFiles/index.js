@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
-import DigitalForm from './DigitalForm'
+import { DigitalForm } from './DigitalForm'
 import FileAttachment from './Attachment'
 
 import { Container } from './styled'
