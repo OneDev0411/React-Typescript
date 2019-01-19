@@ -5,6 +5,7 @@ import * as types from '../../constants/filter-segments'
 const initialState = {
   list: null,
   isFetching: false,
+  conditionOperator: 'and',
   activeSegmentId: 'default',
   fetchError: null,
   activeFilters: {}
@@ -59,6 +60,7 @@ const filterSegments = (state, action) => {
         ...state,
         list: _.omit(state.list, item => item.id === action.segmentId)
       }
+
     case types.CREATE_ACTIVE_FILTERS: {
       let activeFilters = {}
       let filterCounter = 0
@@ -72,6 +74,7 @@ const filterSegments = (state, action) => {
         activeFilters
       }
     }
+
     case types.ADD_ACTIVE_FILTER:
       return {
         ...state,
@@ -83,6 +86,7 @@ const filterSegments = (state, action) => {
           }
         }
       }
+
     case types.TOGGLE_FILTER_ACTIVE: {
       const filter = state.activeFilters[action.filterId]
 
@@ -97,6 +101,7 @@ const filterSegments = (state, action) => {
         }
       }
     }
+
     case types.UPDATE_ACTIVE_FILTER: {
       const filter = state.activeFilters[action.filterId]
 
@@ -108,6 +113,7 @@ const filterSegments = (state, action) => {
         }
       }
     }
+
     case types.REMOVE_ACTIVE_FILTER:
       return {
         ...state,
@@ -115,6 +121,12 @@ const filterSegments = (state, action) => {
           state.activeFilters,
           (filter, id) => id === action.filterId
         )
+      }
+
+    case types.CHANGE_CONDITION_OPERATOR:
+      return {
+        ...state,
+        conditionOperator: action.conditionOperator
       }
 
     default:
