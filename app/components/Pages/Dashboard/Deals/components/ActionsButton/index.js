@@ -15,6 +15,7 @@ import Deal from 'models/Deal'
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 import { selectActions } from './helpers/select-actions'
+import { getEsignAttachments } from './helpers/get-esign-attachments'
 
 import Message from '../../../Chatroom/Util/message'
 import GetSignature from '../../Signature'
@@ -163,19 +164,6 @@ class ActionsButton extends React.Component {
 
   getSecondaryActions = actions =>
     _.filter(actions, properties => properties.primary !== true)
-
-  getDefaultAttachments = () => {
-    if (this.props.type === 'task') {
-      return [
-        {
-          type: 'form',
-          task: this.props.task
-        }
-      ]
-    }
-
-    return []
-  }
 
   notifyOffice = async comment => {
     if (comment) {
@@ -366,7 +354,11 @@ class ActionsButton extends React.Component {
           isOpen={this.state.isSignatureFormOpen}
           deal={this.props.deal}
           onClose={this.handleDeselectAction}
-          defaultAttachments={this.getDefaultAttachments()}
+          defaultAttachments={getEsignAttachments({
+            type: this.props.type,
+            task: this.props.task,
+            document: this.props.document
+          })}
         />
       </React.Fragment>
     )
