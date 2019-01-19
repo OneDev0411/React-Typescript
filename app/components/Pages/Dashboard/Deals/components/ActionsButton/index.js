@@ -29,9 +29,32 @@ import {
 } from './styled'
 
 class ActionsButton extends React.Component {
-  state = {
-    isMenuOpen: false,
-    isSignatureFormOpen: false
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      isMenuOpen: false,
+      isSignatureFormOpen: false
+    }
+
+    this.actions = {
+      upload: this.handleUpload,
+      view: this.handleView,
+      'get-signature': this.handleGetSignature,
+      'edit-form': this.handleEditForm,
+      'notify-office': this.handleNotifyOffice,
+      'resend-envelope': this.handleResendEnvelope,
+      'void-envelope': this.handleVoidEnvelope
+    }
+  }
+
+  handleSelectAction = e => {
+    const { type } = e.target.dataset
+
+    this.handleCloseMenu()
+
+    console.log('>>>>', type, this.actions)
+    this.actions[type] && this.actions[type]()
   }
 
   handleCloseMenu = () => this.setState({ isMenuOpen: false })
@@ -101,7 +124,7 @@ class ActionsButton extends React.Component {
 
   getLastEnvelopeStatus = envelopes => {
     if (envelopes.length === 0) {
-      return null
+      return 'None'
     }
 
     const status = envelopes[0].status
@@ -115,60 +138,6 @@ class ActionsButton extends React.Component {
 
   getSecondaryActions = actions =>
     _.filter(actions, properties => properties.primary !== true)
-
-  handleSelectAction = e => {
-    const { type } = e.target.dataset
-
-    this.handleCloseMenu()
-
-    if (type === 'get-signature') {
-      this.setState({
-        isSignatureFormOpen: true
-      })
-
-      return
-    }
-
-    if (type === 'edit-form') {
-      return browserHistory.push(
-        `/dashboard/deals/${this.props.deal.id}/form-edit/${this.props.task.id}`
-      )
-    }
-
-    if (type === 'notify-office') {
-      return this.props.confirmation({
-        message: 'Notify Office?',
-        confirmLabel: 'Notify Office',
-        needsUserEntry: true,
-        inputDefaultValue: '',
-        onConfirm: this.notifyOffice
-      })
-    }
-
-    if (type === 'upload') {
-      return this.dropzone.open()
-    }
-
-    if (type === 'view') {
-      return this.handleView()
-    }
-
-    if (type === 'resend-envelope') {
-      return this.props.confirmation({
-        message: 'Resend Envelope?',
-        confirmLabel: 'Resend',
-        onConfirm: this.resendEnvelope
-      })
-    }
-
-    if (type === 'void-envelope') {
-      return this.props.confirmation({
-        message: 'Void Envelope?',
-        confirmLabel: 'Resend',
-        onConfirm: this.voidEnvelope
-      })
-    }
-  }
 
   notifyOffice = async comment => {
     if (comment) {
@@ -190,10 +159,6 @@ class ActionsButton extends React.Component {
       title: 'Admin notification is sent.',
       status: 'success'
     })
-  }
-
-  handleDropzoneRef = ref => {
-    this.dropzone = ref
   }
 
   resendEnvelope = async () => {
@@ -227,6 +192,66 @@ class ActionsButton extends React.Component {
     }
   }
 
+  /**
+   *
+   */
+  handleUpload = () => this.dropzone.open()
+
+  /**
+   *
+   */
+  handleVoidEnvelope = () => {
+    this.props.confirmation({
+      message: 'Void Envelope?',
+      confirmLabel: 'Resend',
+      onConfirm: this.voidEnvelope
+    })
+  }
+
+  /**
+   *
+   */
+  handleNotifyOffice = () => {
+    this.props.confirmation({
+      message: 'Notify Office?',
+      confirmLabel: 'Notify Office',
+      needsUserEntry: true,
+      inputDefaultValue: '',
+      onConfirm: this.notifyOffice
+    })
+  }
+
+  /**
+   *
+   */
+  handleResendEnvelope = () => {
+    this.props.confirmation({
+      message: 'Resend Envelope?',
+      confirmLabel: 'Resend',
+      onConfirm: this.resendEnvelope
+    })
+  }
+
+  /**
+   *
+   */
+  handleEditForm = () =>
+    browserHistory.push(
+      `/dashboard/deals/${this.props.deal.id}/form-edit/${this.props.task.id}`
+    )
+
+  /**
+   *
+   */
+  handleGetSignature = () => {
+    this.setState({
+      isSignatureFormOpen: true
+    })
+  }
+
+  /**
+   *
+   */
   handleView = () => {
     if (this.props.type === 'task' && !this.props.isBackOffice) {
       window.open(this.props.task.submission.file.url, '_blank')
@@ -292,7 +317,7 @@ class ActionsButton extends React.Component {
         </Downshift>
 
         <UploadManager
-          onRef={this.handleDropzoneRef}
+          onRef={ref => (this.dropzone = ref)}
           task={this.props.task}
           disableClick
         >
