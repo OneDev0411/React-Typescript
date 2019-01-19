@@ -27,6 +27,7 @@ const DOCUSIGN_BUTTON = 'docusign'
 const VOID_BUTTON = 'void'
 const RESEND_BUTTON = 'resend'
 const EMAIL_BUTTON = 'email'
+const MOVE_BUTTON = 'move'
 const VIEW_BUTTON = 'view'
 const NOTIFY_ADMIN_BUTTON = 'notify-button'
 const PRINT_BUTTON = 'print'
@@ -34,6 +35,7 @@ const UPLOAD_BUTTON = 'upload'
 const RENAME_BUTTON = 'rename'
 const DELETE_BUTTON = 'delete'
 const DOWNLOAD_BUTTON = 'download'
+const REVIEW_ENVELOPE_BUTTON = 'review-envelope'
 
 function normalizeConditions(conditions) {
   return conditions.map(item => ({
@@ -94,6 +96,14 @@ const actionsDefaultProperties = {
   [DOWNLOAD_BUTTON]: {
     label: 'Download',
     type: 'download'
+  },
+  [MOVE_BUTTON]: {
+    label: 'Move',
+    type: 'move'
+  },
+  [REVIEW_ENVELOPE_BUTTON]: {
+    label: 'Review in Docusign',
+    type: 'review-envelope'
   }
 }
 
@@ -329,13 +339,12 @@ export const tasksConditions = normalizeConditions([
       form_saved === false &&
       envelope_status === envelopeStates.NONE,
     actions: {
-      [DOCUSIGN_BUTTON]: {
+      [UPLOAD_BUTTON]: {
         primary: true
       },
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
-      [UPLOAD_BUTTON]: {}
+      [PRINT_BUTTON]: {}
     }
   },
   {
