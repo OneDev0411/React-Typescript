@@ -8,6 +8,7 @@ import _ from 'underscore'
 
 import { changeNeedsAttention, voidEnvelope } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
+import { isBackOffice } from 'utils/user-teams'
 
 import Deal from 'models/Deal'
 
@@ -148,6 +149,10 @@ class ActionsButton extends React.Component {
       return this.dropzone.open()
     }
 
+    if (type === 'view') {
+      return this.handleView()
+    }
+
     if (type === 'resend-envelope') {
       return this.props.confirmation({
         message: 'Resend Envelope?',
@@ -220,6 +225,18 @@ class ActionsButton extends React.Component {
         status: 'error'
       })
     }
+  }
+
+  handleView = () => {
+    if (this.props.type === 'task' && !this.props.isBackOffice) {
+      window.open(this.props.task.submission.file.url, '_blank')
+
+      return
+    }
+
+    browserHistory.push(
+      `/dashboard/deals/${this.props.deal.id}/view/${this.props.task.id}`
+    )
   }
 
   render() {
@@ -301,7 +318,8 @@ class ActionsButton extends React.Component {
 function mapStateToProps({ deals, user }) {
   return {
     user,
-    envelopes: deals.envelopes
+    envelopes: deals.envelopes,
+    isBackOffice: isBackOffice(user)
   }
 }
 
