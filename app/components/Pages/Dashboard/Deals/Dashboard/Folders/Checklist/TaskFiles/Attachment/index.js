@@ -88,14 +88,13 @@ class Attachments extends React.Component {
               </FileLink>
             </FileTitle>
 
-            <FileActions>
-              <ActionsButton
-                type="document"
-                deal={this.props.deal}
-                task={this.props.task}
-                document={props.file}
-              />
-            </FileActions>
+            <ActionsButton
+              type="document"
+              deal={this.props.deal}
+              task={this.props.task}
+              document={props.file}
+            />
+
             {/* <FileActions>
               {file.type === 'pdf' && (
                 <GetSignature

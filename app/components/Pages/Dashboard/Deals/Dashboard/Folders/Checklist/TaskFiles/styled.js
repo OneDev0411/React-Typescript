@@ -34,14 +34,6 @@ export const FileTitle = styled.div`
   font-weight: 500;
 `
 
-export const FileActions = styled.div`
-  display: flex;
-
-  svg {
-    fill: rgba(0, 0, 0, 0.2);
-  }
-`
-
 export const DigitalFormIcon = styled(DigitalFileIcon)`
   fill: #000 !important;
   margin-right: 0.5rem;
@@ -76,9 +68,5 @@ export const FileRow = styled.div`
 
   :hover a.file-link {
     color: #003bdf !important;
-  }
-
-  :hover ${FileActions} svg {
-    fill: #17181a;
   }
 `

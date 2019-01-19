@@ -30,14 +30,12 @@ export function DigitalForm(props) {
           </FileLink>
         </FileTitle>
 
-        <FileActions>
-          <ActionsButton
-            type="document"
-            deal={props.deal}
-            task={props.task}
-            document={props.task}
-          />
-        </FileActions>
+        <ActionsButton
+          type="document"
+          deal={props.deal}
+          task={props.task}
+          document={props.task}
+        />
       </FileRow>
     </FileContainer>
   )
