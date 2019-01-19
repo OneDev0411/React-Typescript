@@ -1,10 +1,6 @@
-import React, { Fragment } from 'react'
-
-import LinkButton from 'components/Button/LinkButton'
+import React from 'react'
 
 import ActionsButton from '../../../../../components/ActionsButton'
-
-import GetSignature from '../../../../../Signature'
 
 import {
   FileContainer,
@@ -35,7 +31,11 @@ export function DigitalForm(props) {
         </FileTitle>
 
         <FileActions>
-          <ActionsButton type="task" deal={props.deal} task={props.task} />
+          <ActionsButton
+            type="document"
+            deal={props.deal}
+            document={props.task}
+          />
         </FileActions>
       </FileRow>
     </FileContainer>

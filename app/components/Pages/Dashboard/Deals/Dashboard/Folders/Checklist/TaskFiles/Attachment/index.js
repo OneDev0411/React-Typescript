@@ -6,6 +6,8 @@ import { syncDeleteFile } from 'actions/deals'
 import { BasicDropdown } from 'components/BasicDropdown'
 import VerticalDotsIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
 
+import ActionsButton from '../../../../../components/ActionsButton'
+
 import GetSignature from '../../../../../Signature'
 
 import FileLink from './FileLink'
@@ -23,12 +25,12 @@ class Attachments extends React.Component {
     isDeleting: false
   }
 
-  menuItems = [
-    {
-      label: 'Delete',
-      onClick: file => this.deleteFile(file)
-    }
-  ]
+  // menuItems = [
+  //   {
+  //     label: 'Delete',
+  //     onClick: file => this.deleteFile(file)
+  //   }
+  // ]
 
   getFileType = file => {
     if (file.mime === 'application/pdf') {
@@ -42,50 +44,58 @@ class Attachments extends React.Component {
     return 'unknown'
   }
 
-  deleteFile = async file => {
-    const { deal, syncDeleteFile } = this.props
+  // deleteFile = async file => {
+  //   const { deal, syncDeleteFile } = this.props
 
-    if (this.state.isDeleting) {
-      return false
-    }
+  //   if (this.state.isDeleting) {
+  //     return false
+  //   }
 
-    this.setState({
-      isDeleting: true
-    })
+  //   this.setState({
+  //     isDeleting: true
+  //   })
 
-    try {
-      await syncDeleteFile(deal.id, {
-        [file.id]: this.props.task
-      })
-    } catch (e) {}
+  //   try {
+  //     await syncDeleteFile(deal.id, {
+  //       [file.id]: this.props.task
+  //     })
+  //   } catch (e) {}
 
-    this.setState({
-      isDeleting: false
-    })
-  }
+  //   this.setState({
+  //     isDeleting: false
+  //   })
+  // }
 
   render() {
-    const { deal, task, file } = this.props
+    // const { deal, task, file } = this.props
+    const { props, state } = this
 
     return (
       <Fragment>
-        <FileContainer key={file.id} isBlur={this.state.isDeleting}>
+        <FileContainer key={props.file.id} isBlur={state.isDeleting}>
           <FileRow>
             <FileTitle>
               <FileLink
-                isBackOffice={this.props.isBackOffice}
-                fileType={this.getFileType(file)}
-                externalUrl={file.url}
-                internalUrl={`/dashboard/deals/${deal.id}/view/${
-                  task.id
-                }/attachment/${file.id}`}
+                isBackOffice={props.isBackOffice}
+                fileType={this.getFileType(props.file)}
+                externalUrl={props.file.url}
+                internalUrl={`/dashboard/deals/${props.deal.id}/view/${
+                  props.task.id
+                }/attachment/${props.file.id}`}
               >
                 <FileIcon />
-                {file.name}
+                {props.file.name}
               </FileLink>
             </FileTitle>
 
             <FileActions>
+              <ActionsButton
+                type="document"
+                deal={this.props.deal}
+                document={props.file}
+              />
+            </FileActions>
+            {/* <FileActions>
               {file.type === 'pdf' && (
                 <GetSignature
                   deal={deal}
@@ -105,7 +115,7 @@ class Attachments extends React.Component {
                 items={this.menuItems}
                 onChange={item => item.onClick(file)}
               />
-            </FileActions>
+            </FileActions> */}
           </FileRow>
         </FileContainer>
       </Fragment>
