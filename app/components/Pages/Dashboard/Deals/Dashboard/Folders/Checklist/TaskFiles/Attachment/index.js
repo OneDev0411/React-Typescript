@@ -3,34 +3,16 @@ import { connect } from 'react-redux'
 
 import { syncDeleteFile } from 'actions/deals'
 
-import { BasicDropdown } from 'components/BasicDropdown'
-import VerticalDotsIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
-
 import ActionsButton from '../../../../../components/ActionsButton'
-
-import GetSignature from '../../../../../Signature'
 
 import FileLink from './FileLink'
 
-import {
-  FileContainer,
-  FileRow,
-  FileTitle,
-  FileActions,
-  FileIcon
-} from '../styled'
+import { FileContainer, FileRow, FileTitle, FileIcon } from '../styled'
 
 class Attachments extends React.Component {
   state = {
     isDeleting: false
   }
-
-  // menuItems = [
-  //   {
-  //     label: 'Delete',
-  //     onClick: file => this.deleteFile(file)
-  //   }
-  // ]
 
   getFileType = file => {
     if (file.mime === 'application/pdf') {
@@ -67,7 +49,6 @@ class Attachments extends React.Component {
   // }
 
   render() {
-    // const { deal, task, file } = this.props
     const { props, state } = this
 
     return (
@@ -88,34 +69,14 @@ class Attachments extends React.Component {
               </FileLink>
             </FileTitle>
 
-            <ActionsButton
-              type="document"
-              deal={this.props.deal}
-              task={this.props.task}
-              document={props.file}
-            />
-
-            {/* <FileActions>
-              {file.type === 'pdf' && (
-                <GetSignature
-                  deal={deal}
-                  defaultAttachments={[
-                    {
-                      task: this.props.task,
-                      file
-                    }
-                  ]}
-                />
-              )}
-
-              <BasicDropdown
-                pullTo="right"
-                style={{ marginRight: '-0.2rem' }}
-                buttonRenderer={props => <VerticalDotsIcon {...props} />}
-                items={this.menuItems}
-                onChange={item => item.onClick(file)}
+            <div>
+              <ActionsButton
+                type="document"
+                deal={this.props.deal}
+                task={this.props.task}
+                document={props.file}
               />
-            </FileActions> */}
+            </div>
           </FileRow>
         </FileContainer>
       </Fragment>
