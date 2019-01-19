@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
@@ -364,6 +365,15 @@ class ActionsButton extends React.Component {
     )
   }
 }
+
+ActionsButton.propTypes = {
+  type: PropTypes.oneOf(['task', 'document']).isRequired,
+  deal: PropTypes.object.isRequired,
+  task: PropTypes.object.isRequired,
+  document: PropTypes.object
+}
+
+ActionsButton.defaultProps = {}
 
 function mapStateToProps({ deals, user }) {
   return {
