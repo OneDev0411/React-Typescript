@@ -6,7 +6,6 @@ import {
   FileContainer,
   FileRow,
   FileTitle,
-  FileActions,
   DigitalFormIcon,
   FileLink
 } from '../styled'
@@ -30,12 +29,14 @@ export function DigitalForm(props) {
           </FileLink>
         </FileTitle>
 
-        <ActionsButton
-          type="document"
-          deal={props.deal}
-          task={props.task}
-          document={props.task}
-        />
+        <div>
+          <ActionsButton
+            type="document"
+            deal={props.deal}
+            task={props.task}
+            document={props.task}
+          />
+        </div>
       </FileRow>
     </FileContainer>
   )
