@@ -64,12 +64,6 @@ export const Row = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-
-  :hover {
-    svg.deal--task-comments path {
-      fill: #17181a;
-    }
-  }
 `
 
 export const RowLeftColumn = styled.div`
