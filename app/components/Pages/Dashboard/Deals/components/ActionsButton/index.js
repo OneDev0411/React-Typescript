@@ -53,7 +53,6 @@ class ActionsButton extends React.Component {
 
     this.handleCloseMenu()
 
-    console.log('>>>>', type, this.actions)
     this.actions[type] && this.actions[type]()
   }
 
