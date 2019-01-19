@@ -78,10 +78,14 @@ export const RowRightColumn = styled.div`
 export const RowTitle = styled(H4)`
   font-weight: 600px;
 
-  :hover {
-    cursor: pointer;
-    color: #003bdf;
-  }
+  ${props =>
+    props.hoverable &&
+    `
+    :hover {
+      cursor: pointer;
+      color: #003bdf;
+    }
+  `}
 `
 
 export const RowArrowIcon = styled(ArrowDownIcon)`
@@ -91,6 +95,7 @@ export const RowArrowIcon = styled(ArrowDownIcon)`
   cursor: pointer;
   fill: #000 !important;
   transition: all ease-in 0.1s;
+  opacity: ${props => (props.display ? 1 : 0)}
 
   transform: ${({ isOpen }) => (isOpen ? 'inherit' : 'rotateZ(-90deg)')};
 `

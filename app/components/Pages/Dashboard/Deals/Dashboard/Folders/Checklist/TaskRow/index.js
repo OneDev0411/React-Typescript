@@ -47,15 +47,28 @@ class Task extends React.Component {
     this.props.setSelectedTask(task)
   }
 
+  isRowExpandable = () => {
+    const { attachments } = this.props.task.room
+
+    return (
+      this.props.task.form ||
+      (Array.isArray(attachments) && attachments.length > 0)
+    )
+  }
+
   render() {
     const { task } = this.props
+    const isRowExpandable = this.isRowExpandable()
 
     return (
       <RowContainer>
         <Row>
           <RowLeftColumn onClick={this.toggleTaskOpen}>
-            <RowArrowIcon isOpen={this.state.isTaskExpanded} />
-            <RowTitle>{task.title}</RowTitle>
+            <RowArrowIcon
+              isOpen={this.state.isTaskExpanded}
+              display={isRowExpandable}
+            />
+            <RowTitle hoverable={isRowExpandable}>{task.title}</RowTitle>
           </RowLeftColumn>
 
           <RowRightColumn>
