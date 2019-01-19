@@ -1,4 +1,4 @@
-import { attachmentsConditions, tasksConditions } from '../data-collection'
+import { documentsConditions, tasksConditions } from '../data-collection'
 
 export function selectActions(type, data) {
   let list = []
@@ -7,8 +7,8 @@ export function selectActions(type, data) {
     list = tasksConditions
   }
 
-  if (type === 'attachment') {
-    list = attachmentsConditions
+  if (type === 'document') {
+    list = documentsConditions
   }
 
   const item = list.find(collection => collection.conditions(data) === true)

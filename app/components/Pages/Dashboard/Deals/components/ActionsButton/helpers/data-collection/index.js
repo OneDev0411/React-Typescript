@@ -10,8 +10,8 @@ const taskTypes = {
 }
 
 const documentTypes = {
-  FORM: 'form',
-  PDF: 'pdf'
+  FORM: 'Form',
+  PDF: 'Pdf'
 }
 
 const envelopeStates = {
@@ -32,6 +32,8 @@ const NOTIFY_ADMIN_BUTTON = 'notify-button'
 const PRINT_BUTTON = 'print'
 const UPLOAD_BUTTON = 'upload'
 const RENAME_BUTTON = 'rename'
+const DELETE_BUTTON = 'delete'
+const DOWNLOAD_BUTTON = 'download'
 
 function normalizeConditions(conditions) {
   return conditions.map(item => ({
@@ -84,10 +86,18 @@ const actionsDefaultProperties = {
   [VIEW_BUTTON]: {
     label: 'View',
     type: 'view'
+  },
+  [DELETE_BUTTON]: {
+    label: 'Delete',
+    type: 'delete'
+  },
+  [DOWNLOAD_BUTTON]: {
+    label: 'Download',
+    type: 'download'
   }
 }
 
-export const attachmentsConditions = normalizeConditions([
+export const documentsConditions = normalizeConditions([
   {
     conditions: ({
       document_type,
@@ -96,9 +106,9 @@ export const attachmentsConditions = normalizeConditions([
       envelope_status
     }) =>
       document_type === documentTypes.FORM &&
-      file_uploaded === null &&
+      file_uploaded === false &&
       form_saved === false &&
-      envelope_status === null,
+      envelope_status === envelopeStates.NONE,
 
     actions: {
       [EDIT_BUTTON]: {
@@ -117,7 +127,7 @@ export const attachmentsConditions = normalizeConditions([
       envelope_status
     }) =>
       document_type === documentTypes.FORM &&
-      file_uploaded === null &&
+      file_uploaded === false &&
       form_saved === true &&
       envelope_status === envelopeStates.NONE,
 
@@ -138,7 +148,7 @@ export const attachmentsConditions = normalizeConditions([
       envelope_status
     }) =>
       document_type === documentTypes.FORM &&
-      file_uploaded === null &&
+      file_uploaded === false &&
       form_saved === true &&
       envelope_status === envelopeStates.DELIVERED,
 
@@ -165,7 +175,7 @@ export const attachmentsConditions = normalizeConditions([
       envelope_status
     }) =>
       document_type === documentTypes.FORM &&
-      file_uploaded === null &&
+      file_uploaded === false &&
       form_saved === true &&
       [envelopeStates.DECLINED, envelopeStates.VOIDED].includes(
         envelope_status
@@ -189,12 +199,15 @@ export const attachmentsConditions = normalizeConditions([
       envelope_status
     }) =>
       document_type === documentTypes.FORM &&
-      file_uploaded === null &&
+      file_uploaded === false &&
       form_saved === true &&
       envelope_status === envelopeStates.COMPLETED,
 
     actions: {
-      [EMAIL_BUTTON]: {
+      // [EMAIL_BUTTON]: {
+      //   primary: true
+      // },
+      [DOWNLOAD_BUTTON]: {
         primary: true
       },
       [EDIT_BUTTON]: {},
@@ -212,12 +225,13 @@ export const attachmentsConditions = normalizeConditions([
     }) =>
       document_type === documentTypes.PDF &&
       file_uploaded === true &&
-      form_saved === null &&
+      form_saved === false &&
       envelope_status === envelopeStates.NONE,
     actions: {
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
+      [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [PRINT_BUTTON]: {},
       [RENAME_BUTTON]: {}
@@ -232,7 +246,7 @@ export const attachmentsConditions = normalizeConditions([
     }) =>
       document_type === documentTypes.PDF &&
       file_uploaded === true &&
-      form_saved === null &&
+      form_saved === false &&
       envelope_status === envelopeStates.DELIVERED,
     actions: {
       [RESEND_BUTTON]: {
@@ -256,7 +270,7 @@ export const attachmentsConditions = normalizeConditions([
     }) =>
       document_type === documentTypes.PDF &&
       file_uploaded === true &&
-      form_saved === null &&
+      form_saved === false &&
       [envelopeStates.DECLINED, envelopeStates.VOIDED].includes(
         envelope_status
       ),
@@ -277,10 +291,13 @@ export const attachmentsConditions = normalizeConditions([
     }) =>
       document_type === documentTypes.PDF &&
       file_uploaded === true &&
-      form_saved === null &&
+      form_saved === false &&
       envelope_status === envelopeStates.COMPLETED,
     actions: {
-      [EMAIL_BUTTON]: {
+      // [EMAIL_BUTTON]: {
+      //   primary: true
+      // },
+      [DOWNLOAD_BUTTON]: {
         primary: true
       },
       [DOCUSIGN_BUTTON]: {},
@@ -297,7 +314,7 @@ export const tasksConditions = normalizeConditions([
       task_type === taskTypes.GENERIC &&
       file_uploaded === false &&
       form_saved === null &&
-      envelope_status === null,
+      envelope_status === envelopeStates.NONE,
     actions: {
       [UPLOAD_BUTTON]: {
         primary: true
@@ -310,7 +327,7 @@ export const tasksConditions = normalizeConditions([
       task_type === taskTypes.GENERIC &&
       file_uploaded === true &&
       form_saved === null &&
-      envelope_status === null,
+      envelope_status === envelopeStates.NONE,
     actions: {
       [DOCUSIGN_BUTTON]: {
         primary: true
@@ -326,7 +343,7 @@ export const tasksConditions = normalizeConditions([
       task_type === taskTypes.FORM &&
       file_uploaded === false &&
       form_saved === null &&
-      envelope_status === null,
+      envelope_status === envelopeStates.NONE,
     actions: {
       [EDIT_BUTTON]: {
         primary: true
@@ -424,7 +441,7 @@ export const tasksConditions = normalizeConditions([
       task_type === taskTypes.FORM &&
       file_uploaded === true &&
       form_saved === false &&
-      envelope_status === null,
+      envelope_status === envelopeStates.NONE,
     actions: {
       [EDIT_BUTTON]: {
         primary: true
@@ -582,13 +599,13 @@ export const tasksConditions = normalizeConditions([
       form_saved === true &&
       envelope_status === envelopeStates.COMPLETED,
     actions: {
-      [RESEND_BUTTON]: {
+      [DOWNLOAD_BUTTON]: {
         primary: true
       },
-      [VIEW_BUTTON]: {},
       // [EMAIL_BUTTON]: {
       //   primary: true
       // },
+      [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       // [RESEND_BUTTON]: {},
