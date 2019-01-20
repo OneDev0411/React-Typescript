@@ -4,11 +4,11 @@ import { Link } from 'react-router'
 import fecha from 'fecha'
 import Flex from 'styled-flex-component'
 
-import { getDealFiles } from 'models/Deal/helpers/get-deal-files'
-
 import Avatar from 'components/Avatar'
 
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+
+import ActionsButton from '../../../../components/ActionsButton'
 
 import { RowContainer, Row, RowLeftColumn, RowRightColumn } from '../../styled'
 
@@ -38,7 +38,7 @@ class Files extends React.Component {
   }
 
   render() {
-    const files = getDealFiles(this.props.deal).sort(
+    const files = (this.props.deal.files || []).sort(
       (a, b) => b.created_at - a.created_at
     )
 
@@ -71,7 +71,7 @@ class Files extends React.Component {
                 </Flex>
               </RowLeftColumn>
 
-              <RowRightColumn>(Actions placeholder)</RowRightColumn>
+              <RowRightColumn>--</RowRightColumn>
             </Row>
           </RowContainer>
         ))}
