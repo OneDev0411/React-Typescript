@@ -42,6 +42,7 @@ class ActionsButton extends React.Component {
     this.actions = {
       upload: this.handleUpload,
       view: this.handleView,
+      download: this.handleDownload,
       'get-signature': this.handleGetSignature,
       'edit-form': this.handleEditForm,
       'notify-office': this.handleNotifyOffice,
@@ -154,10 +155,7 @@ class ActionsButton extends React.Component {
       return 'None'
     }
 
-    const status = envelopes[0].status
-    const states = ['Delivered', 'Declined', 'Voided', 'Completed']
-
-    return states.includes(status) ? status : 'None'
+    return envelopes[0].status
   }
 
   getPrimaryAction = actions =>
@@ -274,6 +272,20 @@ class ActionsButton extends React.Component {
     this.setState({
       isSignatureFormOpen: true
     })
+  }
+
+  /**
+   *
+   */
+  handleDownload = () => {
+    const isFile =
+      this.props.type === 'document' && this.props.document.type === 'file'
+
+    const url = isFile
+      ? this.props.document.url
+      : this.props.task.submission.file.url
+
+    window.open(url, '_blank')
   }
 
   /**
