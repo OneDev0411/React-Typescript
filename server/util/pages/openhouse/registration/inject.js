@@ -13,6 +13,15 @@ export function getRegisterationScript({
   return `
     <script>
       (() => {
+        function enableForm(formElement) {
+          const elements = Array.from(formElement.elements);
+          elements.forEach(item => item.removeAttribute('disabled'));
+        }
+        function disableForm(formElement) {
+          const elements = Array.from(formElement.elements);
+          elements.forEach(item => item.disabled = true);
+        }
+
         const API_URL = '${API_URL}';
         const LOCAL_STORAGE_REGISTERATION_KEY = '${LOCAL_STORAGE_REGISTERATION_KEY}';
         const storage = {
@@ -26,9 +35,10 @@ export function getRegisterationScript({
         };
         const brandId = '${brandId}';
 
-        const form = document.querySelector('form');        
+        const form = document.querySelector('form');
         form.addEventListener('submit', e => {
           e.preventDefault();
+          disableForm(form);
 
           const first_name = document.querySelector('#firstname').value;
           const last_name = document.querySelector('#lastname').value;
@@ -55,6 +65,7 @@ export function getRegisterationScript({
 
           if (navigator.onLine) {
             (${onlineSubmitHandler})(data).then(() => {
+              enableForm(form);
               form.reset();
               new Noty({
                 theme: 'light',
@@ -64,10 +75,20 @@ export function getRegisterationScript({
                 text: 'The contact info has been successfully registered!',
               }).show();
             }).catch(err => {
+              enableForm(form);
               console.log(err);
             });
           } else {
             (${offlineSubmitHandler})(data);
+            enableForm(form);
+            form.reset();
+            new Noty({
+              theme: 'light',
+              timeout: 3000,
+              progressBar: false,
+              type: 'success',
+              text: 'The contact info has been successfully registered!',
+            }).show();
           }
         });
       })();
