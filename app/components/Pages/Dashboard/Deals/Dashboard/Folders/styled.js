@@ -68,6 +68,13 @@ export const Row = styled.div`
 
 export const RowLeftColumn = styled.div`
   display: flex;
+  flex-direction: column;
+`
+
+export const TaskInfo = styled.div`
+  display: flex;
+  margin-top: 1rem;
+  padding-left: 2rem;
 `
 
 export const RowRightColumn = styled.div`
@@ -86,6 +93,17 @@ export const RowTitle = styled(H4)`
       color: #003bdf;
     }
   `}
+`
+
+export const LastActivity = styled.div`
+  display: flex;
+  margin-left: 0.5rem;
+  color: #999;
+  font-size: 0.875rem;
+`
+
+export const ActivitySeparator = styled.div`
+  margin: 0 0.5rem;
 `
 
 export const RowArrowIcon = styled(ArrowDownIcon)`
