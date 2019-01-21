@@ -71,7 +71,14 @@ class Files extends React.Component {
                 </Flex>
               </RowLeftColumn>
 
-              <RowRightColumn>--</RowRightColumn>
+              <RowRightColumn>
+                <ActionsButton
+                  type="document"
+                  deal={this.props.deal}
+                  task={null}
+                  document={file}
+                />
+              </RowRightColumn>
             </Row>
           </RowContainer>
         ))}
