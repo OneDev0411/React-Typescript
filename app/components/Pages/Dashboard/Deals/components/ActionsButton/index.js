@@ -7,13 +7,19 @@ import Downshift from 'downshift'
 
 import _ from 'underscore'
 
-import { changeNeedsAttention, voidEnvelope } from 'actions/deals'
+import {
+  changeNeedsAttention,
+  voidEnvelope,
+  asyncDeleteFile
+} from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 import { isBackOffice } from 'utils/user-teams'
 
 import Deal from 'models/Deal'
 
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+
+import Tooltip from 'components/tooltip'
 
 import { selectActions } from './helpers/select-actions'
 import { getEsignAttachments } from './helpers/get-esign-attachments'
@@ -43,16 +49,23 @@ class ActionsButton extends React.Component {
       upload: this.handleUpload,
       view: this.handleView,
       download: this.handleDownload,
+      delete: this.handleDelete,
       'get-signature': this.handleGetSignature,
       'edit-form': this.handleEditForm,
       'notify-office': this.handleNotifyOffice,
       'resend-envelope': this.handleResendEnvelope,
       'void-envelope': this.handleVoidEnvelope
     }
+
+    this.handleSelectAction = this.handleSelectAction.bind(this)
   }
 
-  handleSelectAction = e => {
-    const { type } = e.target.dataset
+  handleSelectAction = button => {
+    const { type, disabled } = button
+
+    if (disabled === true) {
+      return false
+    }
 
     this.handleCloseMenu()
 
@@ -98,6 +111,7 @@ class ActionsButton extends React.Component {
     }
 
     return {
+      has_task: this.props.task !== null,
       document_type: documentType,
       file_uploaded: isFile,
       form_saved: isTask && this.props.document.submission !== null,
@@ -117,7 +131,9 @@ class ActionsButton extends React.Component {
   }
 
   hasTaskAttachments = task =>
-    Array.isArray(task.room.attachments) && task.room.attachments.length > 0
+    Array.isArray(task.room.attachments) &&
+    task.room.attachments.filter(file => file.mime === 'application/pdf')
+      .length > 0
 
   getTaskEnvelopes = task => {
     const envelopes = Object.values(this.props.envelopes)
@@ -303,6 +319,32 @@ class ActionsButton extends React.Component {
     )
   }
 
+  /**
+   *
+   */
+  handleDelete = () => {
+    this.props.confirmation({
+      message: 'Are you sure you want delete this file?',
+      confirmLabel: 'Yes, Delete',
+      onConfirm: this.deleteFile
+    })
+  }
+
+  deleteFile = async () => {
+    try {
+      await asyncDeleteFile(this.props.deal.id, {
+        [this.props.document.id]: this.props.task
+      })
+
+      this.props.notify({
+        title: 'File deleted',
+        status: 'success'
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   render() {
     const actionButtons = this.getActions()
     const primaryAction = this.getPrimaryAction(actionButtons)
@@ -321,8 +363,7 @@ class ActionsButton extends React.Component {
             <div style={{ position: 'relative' }}>
               <Container>
                 <PrimaryAction
-                  onClick={this.handleSelectAction}
-                  data-type={primaryAction.type}
+                  onClick={() => this.handleSelectAction(primaryAction)}
                 >
                   {primaryAction.label}
                 </PrimaryAction>
@@ -342,10 +383,19 @@ class ActionsButton extends React.Component {
                     (button, index) => (
                       <MenuItem
                         key={index}
-                        data-type={button.type}
-                        onClick={this.handleSelectAction}
+                        disabled={button.disabled === true}
+                        onClick={() => this.handleSelectAction(button)}
                       >
-                        {button.label}
+                        <Tooltip
+                          placement="left"
+                          caption={
+                            button.disabled && button.tooltip
+                              ? button.tooltip
+                              : null
+                          }
+                        >
+                          <span>{button.label}</span>
+                        </Tooltip>
                       </MenuItem>
                     )
                   )}
@@ -385,7 +435,9 @@ ActionsButton.propTypes = {
   document: PropTypes.object
 }
 
-ActionsButton.defaultProps = {}
+ActionsButton.defaultProps = {
+  document: null
+}
 
 function mapStateToProps({ deals, user }) {
   return {
@@ -399,6 +451,7 @@ export default connect(
   mapStateToProps,
   {
     changeNeedsAttention,
+    asyncDeleteFile,
     voidEnvelope,
     confirmation,
     notify
