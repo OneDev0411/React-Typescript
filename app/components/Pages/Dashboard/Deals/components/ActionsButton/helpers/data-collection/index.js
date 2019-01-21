@@ -16,7 +16,8 @@ const documentTypes = {
 
 const envelopeStates = {
   NONE: 'None',
-  DELIVERED: 'Delivered',
+  CREATED: 'Created',
+  DELIVERED: ['Delivered', 'Sent'],
   DECLINED: 'Declined',
   VOIDED: 'Voided',
   COMPLETED: 'Completed'
@@ -51,7 +52,9 @@ function normalizeConditions(conditions) {
 const actionsDefaultProperties = {
   [EDIT_BUTTON]: {
     label: 'Edit',
-    type: 'edit-form'
+    type: 'edit-form',
+    tooltip:
+      'You cannot edit while you have sent this out for signature. You can either void or wait for the signature to get completed.'
   },
   [DOCUSIGN_BUTTON]: {
     label: 'Docusign',
@@ -110,11 +113,13 @@ const actionsDefaultProperties = {
 export const documentsConditions = normalizeConditions([
   {
     conditions: ({
+      has_task,
       document_type,
       file_uploaded,
       form_saved,
       envelope_status
     }) =>
+      has_task === true &&
       document_type === documentTypes.FORM &&
       file_uploaded === false &&
       form_saved === false &&
@@ -124,115 +129,147 @@ export const documentsConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
-      [DOCUSIGN_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {
+        disabled: true
+      },
       [EMAIL_BUTTON]: {},
-      [PRINT_BUTTON]: {}
+      [PRINT_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
     conditions: ({
+      has_task,
       document_type,
       file_uploaded,
       form_saved,
       envelope_status
     }) =>
+      has_task === true &&
       document_type === documentTypes.FORM &&
       file_uploaded === false &&
       form_saved === true &&
       envelope_status === envelopeStates.NONE,
-
     actions: {
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
       [EDIT_BUTTON]: {},
       [EMAIL_BUTTON]: {},
-      [PRINT_BUTTON]: {}
+      [PRINT_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
     conditions: ({
+      has_task,
       document_type,
       file_uploaded,
       form_saved,
       envelope_status
     }) =>
+      has_task === true &&
       document_type === documentTypes.FORM &&
       file_uploaded === false &&
       form_saved === true &&
-      envelope_status === envelopeStates.DELIVERED,
-
+      envelope_status === envelopeStates.CREATED,
+    actions: {
+      [REVIEW_ENVELOPE_BUTTON]: {
+        primary: true
+      },
+      [VOID_BUTTON]: {},
+      [NOTIFY_ADMIN_BUTTON]: {},
+      [PRINT_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
+    }
+  },
+  {
+    conditions: ({
+      has_task,
+      document_type,
+      file_uploaded,
+      form_saved,
+      envelope_status
+    }) =>
+      has_task === true &&
+      document_type === documentTypes.FORM &&
+      file_uploaded === false &&
+      form_saved === true &&
+      envelopeStates.DELIVERED.includes(envelope_status),
     actions: {
       [RESEND_BUTTON]: {
         primary: true
       },
       [DOCUSIGN_BUTTON]: {
-        enabled: false
+        disabled: true
       },
       [EDIT_BUTTON]: {
-        enabled: false
+        disabled: true
       },
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
-      [PRINT_BUTTON]: {}
+      [PRINT_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
     conditions: ({
+      has_task,
       document_type,
       file_uploaded,
       form_saved,
       envelope_status
     }) =>
+      has_task === true &&
       document_type === documentTypes.FORM &&
       file_uploaded === false &&
       form_saved === true &&
       [envelopeStates.DECLINED, envelopeStates.VOIDED].includes(
         envelope_status
       ),
-
     actions: {
       [EDIT_BUTTON]: {
         primary: true
       },
       [DOCUSIGN_BUTTON]: {},
-      [RESEND_BUTTON]: {},
       [EMAIL_BUTTON]: {},
-      [PRINT_BUTTON]: {}
+      [PRINT_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
     conditions: ({
+      has_task,
       document_type,
       file_uploaded,
       form_saved,
       envelope_status
     }) =>
+      has_task === true &&
       document_type === documentTypes.FORM &&
       file_uploaded === false &&
       form_saved === true &&
       envelope_status === envelopeStates.COMPLETED,
 
     actions: {
-      // [EMAIL_BUTTON]: {
-      //   primary: true
-      // },
       [DOWNLOAD_BUTTON]: {
         primary: true
       },
+      [EMAIL_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [RESEND_BUTTON]: {},
       [PRINT_BUTTON]: {}
     }
   },
   {
     conditions: ({
+      has_task,
       document_type,
       file_uploaded,
       form_saved,
       envelope_status
     }) =>
+      has_task === true &&
       document_type === documentTypes.PDF &&
       file_uploaded === true &&
       form_saved === false &&
@@ -244,40 +281,73 @@ export const documentsConditions = normalizeConditions([
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [PRINT_BUTTON]: {},
-      [RENAME_BUTTON]: {}
+      [RENAME_BUTTON]: {},
+      [DELETE_BUTTON]: {},
+      [MOVE_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
     conditions: ({
+      has_task,
       document_type,
       file_uploaded,
       form_saved,
       envelope_status
     }) =>
+      has_task === true &&
       document_type === documentTypes.PDF &&
       file_uploaded === true &&
       form_saved === false &&
-      envelope_status === envelopeStates.DELIVERED,
+      envelope_status === envelopeStates.CREATED,
+    actions: {
+      [DOCUSIGN_BUTTON]: {
+        primary: true
+      },
+      [VOID_BUTTON]: {},
+      [EMAIL_BUTTON]: {},
+      [NOTIFY_ADMIN_BUTTON]: {},
+      [PRINT_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
+    }
+  },
+  {
+    conditions: ({
+      has_task,
+      document_type,
+      file_uploaded,
+      form_saved,
+      envelope_status
+    }) =>
+      has_task === true &&
+      document_type === documentTypes.PDF &&
+      file_uploaded === true &&
+      form_saved === false &&
+      envelopeStates.DELIVERED.includes(envelope_status),
     actions: {
       [RESEND_BUTTON]: {
         primary: true
       },
       [DOCUSIGN_BUTTON]: {
-        enabled: false
+        disabled: true
       },
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [PRINT_BUTTON]: {},
-      [RENAME_BUTTON]: {}
+      [RENAME_BUTTON]: {},
+      [DELETE_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
     conditions: ({
+      has_task,
       document_type,
       file_uploaded,
       form_saved,
       envelope_status
     }) =>
+      has_task === true &&
       document_type === documentTypes.PDF &&
       file_uploaded === true &&
       form_saved === false &&
@@ -285,35 +355,63 @@ export const documentsConditions = normalizeConditions([
         envelope_status
       ),
     actions: {
-      [DOCUSIGN_BUTTON]: {},
-      [RESEND_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {
+        primary: true
+      },
       [EMAIL_BUTTON]: {},
       [PRINT_BUTTON]: {},
-      [RENAME_BUTTON]: {}
+      [RENAME_BUTTON]: {},
+      [DELETE_BUTTON]: {},
+      [MOVE_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
     conditions: ({
+      has_task,
       document_type,
       file_uploaded,
       form_saved,
       envelope_status
     }) =>
+      has_task === true &&
       document_type === documentTypes.PDF &&
       file_uploaded === true &&
       form_saved === false &&
       envelope_status === envelopeStates.COMPLETED,
     actions: {
-      // [EMAIL_BUTTON]: {
-      //   primary: true
-      // },
       [DOWNLOAD_BUTTON]: {
         primary: true
       },
       [DOCUSIGN_BUTTON]: {},
-      [RESEND_BUTTON]: {},
+      [EMAIL_BUTTON]: {},
       [PRINT_BUTTON]: {},
-      [RENAME_BUTTON]: {}
+      [RENAME_BUTTON]: {},
+      [DELETE_BUTTON]: {}
+    }
+  },
+  {
+    conditions: ({
+      has_task,
+      document_type,
+      file_uploaded,
+      form_saved,
+      envelope_status
+    }) =>
+      has_task === false &&
+      document_type === documentTypes.PDF &&
+      file_uploaded === true &&
+      form_saved === false &&
+      envelope_status === envelopeStates.NONE,
+    actions: {
+      [MOVE_BUTTON]: {
+        primary: true
+      },
+      [DOWNLOAD_BUTTON]: {},
+      [DELETE_BUTTON]: {},
+      [RENAME_BUTTON]: {},
+      [PRINT_BUTTON]: {},
+      [EMAIL_BUTTON]: {}
     }
   }
 ])
@@ -344,7 +442,8 @@ export const tasksConditions = normalizeConditions([
       },
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {}
+      [PRINT_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
@@ -358,10 +457,10 @@ export const tasksConditions = normalizeConditions([
         primary: true
       },
       [EMAIL_BUTTON]: {},
-      [DOCUSIGN_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
       [PRINT_BUTTON]: {},
-      [UPLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
@@ -379,7 +478,8 @@ export const tasksConditions = normalizeConditions([
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
       [PRINT_BUTTON]: {},
-      [UPLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
@@ -387,22 +487,41 @@ export const tasksConditions = normalizeConditions([
       task_type === taskTypes.FORM &&
       file_uploaded === false &&
       form_saved === true &&
-      envelope_status === envelopeStates.DELIVERED,
+      envelope_status === envelopeStates.CREATED,
+    actions: {
+      [REVIEW_ENVELOPE_BUTTON]: {
+        primary: true
+      },
+      [VOID_BUTTON]: {},
+      [EMAIL_BUTTON]: {},
+      [NOTIFY_ADMIN_BUTTON]: {},
+      [PRINT_BUTTON]: {},
+      [UPLOAD_BUTTON]: {},
+      [VIEW_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
+    }
+  },
+  {
+    conditions: ({ task_type, file_uploaded, form_saved, envelope_status }) =>
+      task_type === taskTypes.FORM &&
+      file_uploaded === false &&
+      form_saved === true &&
+      envelopeStates.DELIVERED.includes(envelope_status),
     actions: {
       [RESEND_BUTTON]: {
         primary: true
       },
       [EDIT_BUTTON]: {
-        enabled: false,
-        tooltip:
-          'You cannot edit while you have sent this out for signature. You can either void or wait for the signature to get completed.'
+        disabled: true
       },
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
+      [NOTIFY_ADMIN_BUTTON]: {},
       [PRINT_BUTTON]: {},
-      [UPLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
@@ -419,11 +538,11 @@ export const tasksConditions = normalizeConditions([
       },
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [RESEND_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
       [PRINT_BUTTON]: {},
-      [UPLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
@@ -438,7 +557,6 @@ export const tasksConditions = normalizeConditions([
       },
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [RESEND_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
       [PRINT_BUTTON]: {},
@@ -452,11 +570,12 @@ export const tasksConditions = normalizeConditions([
       form_saved === false &&
       envelope_status === envelopeStates.NONE,
     actions: {
-      [EDIT_BUTTON]: {
+      [DOWNLOAD_BUTTON]: {
         primary: true
       },
-      [EMAIL_BUTTON]: {},
+      [EDIT_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
+      [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
       [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
@@ -476,7 +595,8 @@ export const tasksConditions = normalizeConditions([
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
       [PRINT_BUTTON]: {},
-      [UPLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
@@ -484,21 +604,39 @@ export const tasksConditions = normalizeConditions([
       task_type === taskTypes.FORM &&
       file_uploaded === true &&
       form_saved === false &&
-      envelope_status === envelopeStates.DELIVERED,
+      envelope_status === envelopeStates.CREATED,
+    actions: {
+      [REVIEW_ENVELOPE_BUTTON]: {
+        primary: true
+      },
+      [DOCUSIGN_BUTTON]: {},
+      [EMAIL_BUTTON]: {},
+      [NOTIFY_ADMIN_BUTTON]: {},
+      [PRINT_BUTTON]: {},
+      [UPLOAD_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
+    }
+  },
+  {
+    conditions: ({ task_type, file_uploaded, form_saved, envelope_status }) =>
+      task_type === taskTypes.FORM &&
+      file_uploaded === true &&
+      form_saved === false &&
+      envelopeStates.DELIVERED.includes(envelope_status),
     actions: {
       [RESEND_BUTTON]: {
         primary: true
       },
       [EDIT_BUTTON]: {
-        enabled: false,
-        tooltip:
-          'You cannot edit while you have sent this out for signature. You can either void or wait for the signature to get completed.'
+        disabled: true
       },
       [DOCUSIGN_BUTTON]: {},
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
+      [NOTIFY_ADMIN_BUTTON]: {},
       [PRINT_BUTTON]: {},
-      [UPLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
@@ -514,11 +652,11 @@ export const tasksConditions = normalizeConditions([
         primary: true
       },
       [DOCUSIGN_BUTTON]: {},
-      [RESEND_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
       [PRINT_BUTTON]: {},
-      [UPLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
@@ -528,15 +666,16 @@ export const tasksConditions = normalizeConditions([
       form_saved === false &&
       envelope_status === envelopeStates.COMPLETED,
     actions: {
-      [EDIT_BUTTON]: {
+      [DOWNLOAD_BUTTON]: {
         primary: true
       },
+      [EDIT_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [RESEND_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
       [PRINT_BUTTON]: {},
-      [UPLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
@@ -554,7 +693,8 @@ export const tasksConditions = normalizeConditions([
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
       [PRINT_BUTTON]: {},
-      [UPLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
@@ -562,14 +702,32 @@ export const tasksConditions = normalizeConditions([
       task_type === taskTypes.FORM &&
       file_uploaded === true &&
       form_saved === true &&
-      envelope_status === envelopeStates.DELIVERED,
-
+      envelope_status === envelopeStates.CREATED,
+    actions: {
+      [REVIEW_ENVELOPE_BUTTON]: {
+        primary: true
+      },
+      [VIEW_BUTTON]: {},
+      [VOID_BUTTON]: {},
+      [EMAIL_BUTTON]: {},
+      [NOTIFY_ADMIN_BUTTON]: {},
+      [PRINT_BUTTON]: {},
+      [UPLOAD_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
+    }
+  },
+  {
+    conditions: ({ task_type, file_uploaded, form_saved, envelope_status }) =>
+      task_type === taskTypes.FORM &&
+      file_uploaded === true &&
+      form_saved === true &&
+      envelopeStates.DELIVERED.includes(envelope_status),
     actions: {
       [RESEND_BUTTON]: {
         primary: true
       },
       [EDIT_BUTTON]: {
-        enabled: false
+        disabled: true
       },
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
@@ -577,7 +735,8 @@ export const tasksConditions = normalizeConditions([
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
       [PRINT_BUTTON]: {},
-      [UPLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
@@ -594,11 +753,11 @@ export const tasksConditions = normalizeConditions([
       },
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [RESEND_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
       [PRINT_BUTTON]: {},
-      [UPLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
     }
   },
   {
@@ -611,13 +770,10 @@ export const tasksConditions = normalizeConditions([
       [DOWNLOAD_BUTTON]: {
         primary: true
       },
-      // [EMAIL_BUTTON]: {
-      //   primary: true
-      // },
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      // [RESEND_BUTTON]: {},
+      [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
       [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
