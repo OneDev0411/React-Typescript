@@ -36,7 +36,7 @@ class FileViewer extends React.Component {
   }
 
   init = async () => {
-    if (this.state.deal) {
+    if (this.state.deal && this.state.deal.checklists) {
       return false
     }
 
@@ -116,7 +116,6 @@ class FileViewer extends React.Component {
 
   get EnvelopeFile() {
     const envelope = this.Envelope
-    const { task } = this.props
 
     if (!this.props.task || !envelope.documents) {
       return null
@@ -125,16 +124,16 @@ class FileViewer extends React.Component {
     // get document index
     let document = null
 
-    if (task.submission) {
+    if (this.props.task.submission) {
       document = envelope.documents.find(
-        doc => doc.submission === task.submission.id
+        doc => doc.submission === this.props.task.submission.id
       )
     }
 
     // if couldn't find the file, try to find that in attachments
     if (!document) {
       document = envelope.documents.find(doc =>
-        task.room.attachments.find(file => file.id === doc.file)
+        this.props.task.room.attachments.find(file => file.id === doc.file)
       )
     }
 
@@ -161,6 +160,8 @@ class FileViewer extends React.Component {
   }
 
   get DigitalForm() {
+    console.log('>>>>>', this.props.task)
+
     return getTaskForm(this.state.deal, this.props.task)
   }
 
@@ -174,7 +175,7 @@ class FileViewer extends React.Component {
   normalizeName = name => decodeURIComponent(name).replace(/[_-]/g, ' ')
 
   render() {
-    if (!this.state.deal) {
+    if (!this.state.deal || !this.props.task) {
       return <Spinner />
     }
 
