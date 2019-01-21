@@ -1,5 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import Flex from 'styled-flex-component'
+import moment from 'moment'
 
 import {
   setSelectedTask,
@@ -7,19 +9,27 @@ import {
   updateDealNotifications
 } from 'actions/deals'
 
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+import Tooltip from 'components/tooltip'
+
 import TaskStatus from './Status'
 import TaskNotifications from './Notification'
 
 import ActionsButton from '../../../../components/ActionsButton'
 import TaskFiles from '../TaskFiles'
 
+import EnvelopeView from './Envelope'
+
 import {
   RowContainer,
   Row,
   RowLeftColumn,
   RowRightColumn,
+  TaskInfo,
+  LastActivity,
   RowTitle,
-  RowArrowIcon
+  RowArrowIcon,
+  ActivitySeparator
 } from '../../styled'
 
 class Task extends React.Component {
@@ -56,27 +66,62 @@ class Task extends React.Component {
     )
   }
 
+  normalizeActivityComment = comment => comment.replace(/\./gi, '')
+
   render() {
     const { task } = this.props
     const isRowExpandable = this.isRowExpandable()
+    const latestActivity = this.props.task.room.latest_activity
 
     return (
       <RowContainer>
         <Row>
-          <RowLeftColumn onClick={this.toggleTaskOpen}>
-            <RowArrowIcon
-              isOpen={this.state.isTaskExpanded}
-              display={isRowExpandable}
-            />
-            <RowTitle hoverable={isRowExpandable}>{task.title}</RowTitle>
+          <RowLeftColumn>
+            <Flex onClick={this.toggleTaskOpen}>
+              <RowArrowIcon
+                isOpen={this.state.isTaskExpanded}
+                display={isRowExpandable}
+              />
+              <RowTitle hoverable={isRowExpandable}>{task.title}</RowTitle>
+            </Flex>
+
+            <TaskInfo>
+              <TaskStatus
+                task={task}
+                isBackOffice={this.props.isBackOffice}
+                isDraftDeal={this.props.deal.is_draft}
+              />
+
+              {latestActivity && latestActivity.comment && (
+                <LastActivity>
+                  <TextMiddleTruncate
+                    text={this.normalizeActivityComment(latestActivity.comment)}
+                    maxLength={35}
+                    tooltipPlacement="bottom"
+                  />
+
+                  <ActivitySeparator>.</ActivitySeparator>
+
+                  <Tooltip
+                    placement="bottom"
+                    caption={moment
+                      .unix(latestActivity.created_at)
+                      .format('MMM DD, YYYY, hh:mm A')}
+                  >
+                    <span>
+                      {moment.unix(latestActivity.created_at).fromNow()}
+                    </span>
+                  </Tooltip>
+
+                  <ActivitySeparator>.</ActivitySeparator>
+
+                  <EnvelopeView deal={this.props.deal} task={this.props.task} />
+                </LastActivity>
+              )}
+            </TaskInfo>
           </RowLeftColumn>
 
           <RowRightColumn>
-            {/* <TaskStatus
-              task={task}
-              isBackOffice={this.props.isBackOffice}
-              isDraftDeal={this.props.deal.is_draft}
-            /> */}
             <TaskNotifications task={task} onClick={this.handleSelectTask} />
 
             <ActionsButton type="task" deal={this.props.deal} task={task} />
