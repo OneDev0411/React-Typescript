@@ -49,9 +49,7 @@ class UploadDocument extends React.Component {
       return this.props.onDrop(files)
     }
 
-    this.props.setUploadFiles(files, this.props.task.id)
-
-    // this.props.setUploadAttributes(file.id, { taskId })
+    this.props.setUploadFiles(files, this.props.task && this.props.task.id)
   }
 
   /**
