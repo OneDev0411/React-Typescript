@@ -12,6 +12,8 @@ import LinkButton from 'components/Button/LinkButton'
 import ActionButton from 'components/Button/ActionButton'
 import Avatar from 'components/Avatar'
 
+import Tooltip from 'components/tooltip'
+
 import { getLegalFullName } from '../../utils/roles'
 
 import {
@@ -92,6 +94,7 @@ class Envelope extends React.Component {
     const isDraft = envelope.status === 'Created'
     const isSent = envelope.status === 'Sent'
     const isVoided = envelope.status === 'Voided'
+    const isVoidable = ['Sent', 'Delivered'].includes(envelope.status)
 
     return (
       <div style={this.props.containerStyle}>
@@ -126,10 +129,19 @@ class Envelope extends React.Component {
             <ActionButton
               size="small"
               appearance="outline"
-              disabled={isVoided || this.state.isVoiding}
+              disabled={!isVoidable || isVoided || this.state.isVoiding}
               onClick={this.requestVoidEnvelope}
             >
-              {isVoided ? 'Voided' : 'Void'}
+              <Tooltip
+                caption={
+                  isVoidable
+                    ? null
+                    : 'You are not allowed to void this docusign'
+                }
+                placement="left"
+              >
+                <span>{isVoided ? 'Voided' : 'Void'}</span>
+              </Tooltip>
             </ActionButton>
           </div>
         </Header>
