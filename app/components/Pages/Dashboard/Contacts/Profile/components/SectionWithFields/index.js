@@ -49,8 +49,7 @@ class SectionWithFields extends React.Component {
   closeNewAttributeDrawer = () =>
     this.setState({ isOpenNewAttributeDrawer: false })
 
-  filterEditableFields = field =>
-    field.attribute_def.show && field.attribute_def.editable
+  filterEditableFields = field => field.attribute_def.editable
 
   handleOnSubmit = async values => {
     try {
@@ -125,7 +124,11 @@ class SectionWithFields extends React.Component {
     }
 
     const fields = orderedFields
-      .filter(field => field.attribute_def.show)
+      .filter(
+        f =>
+          f.attribute_def.show ||
+          (f.attribute_def.editable && f[f.attribute_def.data_type])
+      )
       .map((field, index) => {
         const { attribute_def } = field
         let value = field[attribute_def.data_type]

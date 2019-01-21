@@ -41,7 +41,7 @@ export default function Instagram(props) {
     <Container isSideMenuOpen={props.isSideMenuOpen}>
       <ContentWrapper>
         <Jumbo style={{ marginBottom: '0.5rem', color }}>
-          Extradordinary begins at home.
+          Extraordinary begins at home.
         </Jumbo>
         <p
           style={{

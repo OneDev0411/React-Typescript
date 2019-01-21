@@ -15,7 +15,7 @@ export async function postLoadFormat(task, owner, listings) {
   let locations = []
   let reminder = {
     title: 'None',
-    value: null
+    value: -1
   }
 
   if (listings && listings.length > 0) {

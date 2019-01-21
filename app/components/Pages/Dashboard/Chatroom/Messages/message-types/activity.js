@@ -10,11 +10,11 @@ export default ({ message }) => (
       <span
         style={{
           display: 'block',
-          width: '2rem',
-          height: '2rem',
+          width: '1.8rem',
+          height: '1.8rem',
           border: '1px solid #ccc',
           borderRadius: '100%',
-          marginRight: '1rem'
+          marginRight: '0.9rem'
         }}
       >
         <IconNotification style={{ fill: '#808080 ' }} />

@@ -18,11 +18,9 @@ export default class EventsPane extends React.Component {
     this.fetchTimeline()
   }
 
-  get defaultAssociation() {
-    return {
-      association_type: 'deal',
-      deal: normalizeDeal(this.props.deal)
-    }
+  defaultAssociation = {
+    association_type: 'deal',
+    deal: normalizeDeal(this.props.deal)
   }
 
   fetchTimeline = async () => {

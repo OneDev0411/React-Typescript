@@ -1,4 +1,4 @@
-const NONE_OPTION = { title: 'None', value: 0 }
+const NONE_OPTION = { title: 'None', value: -1 }
 
 const REMINDER_ITEMS = {
   0: 'At the time of event',

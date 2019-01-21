@@ -80,7 +80,7 @@ export function getLegalFullName(userRole) {
     name = [company_title]
   }
 
-  return name.join(' ')
+  return name.join(' ').trim()
 }
 
 /**

@@ -26,13 +26,11 @@ export function Menu(props) {
         </LinkButton>
       )}
 
-      {deal.is_draft === false && (
-        <DealStatus
-          deal={deal}
-          isBackOffice={props.isBackOffice}
-          style={{ marginLeft: '0.5rem' }}
-        />
-      )}
+      <DealStatus
+        deal={deal}
+        isBackOffice={props.isBackOffice}
+        style={{ marginLeft: '0.5rem' }}
+      />
 
       <Flex style={{ paddingTop: '0.5rem' }}>
         <Divider />

@@ -33,7 +33,10 @@ class List extends React.Component {
 
     const { association_type } = defaultAssociation
 
-    if (!association_type) {
+    if (
+      !association_type ||
+      association_type !== association.association_type
+    ) {
       return true
     }
 

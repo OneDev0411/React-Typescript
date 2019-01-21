@@ -25,8 +25,6 @@ export function searchContext(brand_id, key) {
   const context = _.find(getList(brand_id), { key })
 
   if (!context) {
-    console.warn(`Could not find context: ${context}`)
-
     return null
   }
 
@@ -175,7 +173,7 @@ export function filterByStatus(
   has_active_offer,
   filter_by
 ) {
-  const definition = context[filter_by]
+  const definition = context[filter_by] || []
 
   if (definition.length === 0) {
     return false
@@ -215,11 +213,7 @@ export function getValue(deal, field) {
     }
   }
 
-  // get field
-  const defaultContext =
-    isAddressField(field.key) && deal.listing ? deal.mls_context : null
-
-  const contextValue = getField(deal, field.key, defaultContext)
+  const contextValue = getField(deal, field.key)
 
   const dataObject = {
     value: contextValue,
@@ -313,20 +307,17 @@ export function validate(ctx, value) {
 }
 
 function validateYearBuilt(ctx, value) {
-  const { max } = ctx.properties
-
   if (value === undefined || value === null) {
     return !ctx.mandatory
   }
 
-  return parseFloat(value) <= max
+  return parseFloat(value) >= 1000 && parseFloat(value) <= 9999
 }
 
 export function getFieldProperties(key) {
   return (
     {
       year_built: {
-        max: 2018,
         placeholder: 'YYYY',
         mask: [/[1-2]/, /\d/, /\d/, /\d/]
       }
@@ -405,18 +396,26 @@ export function getChecklist(deal, fieldKey) {
   )
 
   const condition = isRequired ? field.required : field.optional
+  const checklists = getChecklists()
 
   if (
     deal.deal_type === 'Selling' &&
     condition.includes('Active Offer') &&
     getHasActiveOffer(deal)
   ) {
-    const checklists = getChecklists()
-
-    return deal.checklists.find(id => checklists[id].is_active_offer)
+    return deal.checklists.find(
+      id =>
+        checklists[id].is_active_offer &&
+        checklists[id].is_deactivated === false &&
+        checklists[id].is_terminated === false
+    )
   }
 
-  return deal.checklists[0]
+  return deal.checklists.find(
+    id =>
+      checklists[id].is_deactivated === false &&
+      checklists[id].is_terminated === false
+  )
 }
 
 function getFormattedValue(value) {

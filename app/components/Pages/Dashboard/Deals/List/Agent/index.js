@@ -6,11 +6,8 @@ import { Menu, Content } from 'components/SlideMenu'
 
 import Search from 'components/Grid/Search'
 
-import { searchDeals, getDeals } from '../../../../../../store_actions/deals'
-import {
-  viewAsEveryoneOnTeam,
-  viewAs
-} from '../../../../../../utils/user-teams'
+import { searchDeals, getDeals } from 'actions/deals'
+import { viewAsEveryoneOnTeam, viewAs } from 'utils/user-teams'
 
 import {
   PageContainer,
@@ -45,12 +42,10 @@ class AgentTable extends React.Component {
     }))
 
   fetch = (user, searchCriteria) => {
-    const { dispatch } = this.props
-
     if (searchCriteria.length === 0 && viewAsEveryoneOnTeam(user)) {
-      dispatch(getDeals(user))
+      this.props.getDeals(user)
     } else {
-      dispatch(searchDeals(user, searchCriteria))
+      this.props.searchDeals(user, searchCriteria)
     }
   }
 
@@ -127,4 +122,7 @@ function mapStateToProps({ user, deals }) {
   }
 }
 
-export default connect(mapStateToProps)(AgentTable)
+export default connect(
+  mapStateToProps,
+  { getDeals, searchDeals }
+)(AgentTable)

@@ -2,9 +2,10 @@ import React from 'react'
 import ClickOutside from 'react-click-outside'
 import _ from 'underscore'
 
-import DatePicker from '../../../components/DatePicker'
-
 import Input from 'components/Input'
+import { getField } from 'models/Deal/helpers/context'
+
+import DatePicker from '../../../components/DatePicker'
 
 import { Editable as Container, ActionButton } from '../styled'
 
@@ -20,7 +21,18 @@ export default class Editable extends React.Component {
   }
 
   onChangeDate = date => this.props.onSave(this.props.field, date)
+
   onClickSave = () => this.props.onSave(this.props.field, this.state.value)
+
+  get InitialCriticalDate() {
+    const timestamp = getField(this.props.deal, this.props.field.key)
+
+    if (!timestamp) {
+      return new Date()
+    }
+
+    return new Date(timestamp * 1000)
+  }
 
   render() {
     const { field } = this.props
@@ -34,7 +46,7 @@ export default class Editable extends React.Component {
             left: 'inherit'
           }}
           saveText="Save Date"
-          initialDate={new Date()}
+          initialDate={this.InitialCriticalDate}
           onClose={this.props.onCancel}
           onSelectDate={this.onChangeDate}
         />

@@ -80,6 +80,14 @@ export default class SignatureComposeDrawer extends React.Component {
       isAttachmentsOpen: !state.isAttachmentsOpen
     }))
 
+  handleCloseAttachments = () => {
+    this.setState({
+      isAttachmentsOpen: false
+    })
+
+    this.props.onClose()
+  }
+
   render() {
     return (
       <Fragment>
@@ -162,7 +170,8 @@ export default class SignatureComposeDrawer extends React.Component {
                 name="attachments"
                 deal={this.props.deal}
                 isAttachmentsOpen={this.state.isAttachmentsOpen}
-                onCloseAttachmentsDrawer={this.toggleOpenAttachments}
+                onCloseAttachmentsDrawer={this.handleCloseAttachments}
+                onChangeSelectedDocuments={this.toggleOpenAttachments}
                 component={Attachments}
               />
             </Fragment>

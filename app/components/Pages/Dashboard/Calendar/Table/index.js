@@ -58,7 +58,7 @@ export class Table extends React.Component {
     return table
   }
 
-  time(rowData) {
+  eventTime = rowData => {
     if (rowData.object_type !== 'crm_task') {
       return 'All day'
     }
@@ -89,13 +89,15 @@ export class Table extends React.Component {
         render: ({ rowData }) => (
           <Flex style={{ padding: '4px 1rem' }}>
             <EventIcon event={rowData} />
+
             <div>
               <Title onClick={this.onTitleClick(rowData)}>
                 {rowData.title}
               </Title>
+
               <Flex>
-                {this.time(rowData)}
-                <Indicator>|</Indicator>
+                {this.eventTime(rowData)}
+                <Indicator> | </Indicator>
                 <Label>{rowData.type_label}</Label>
               </Flex>
             </div>
@@ -124,7 +126,8 @@ export class Table extends React.Component {
         break
 
       case 'crm_task':
-        onClick = () => this.props.onSelectTask(row.crm_task)
+        onClick = () =>
+          this.props.onSelectTask({ id: row.crm_task, type: row.event_type })
         break
     }
 
@@ -204,7 +207,6 @@ export class Table extends React.Component {
             }
             absolute={false}
           />
-
           <Fetching
             absolute
             show={isFetching && loadingPosition === positions.Middle}

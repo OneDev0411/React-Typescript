@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import ReactGA from 'react-ga'
-import bowser from 'bowser'
 
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
@@ -28,6 +27,9 @@ import { hasUserAccess, viewAsEveryoneOnTeam } from '../utils/user-teams'
 // deals featch on launch
 import { getDeals, searchDeals } from '../store_actions/deals'
 
+// sync offline stored data
+import syncOpenHouseData from './helpers/sync-open-house-offline-registers'
+
 const InstantChat = Load({
   loader: () => import('./Pages/Dashboard/Chatroom/InstantChat')
 })
@@ -49,7 +51,7 @@ import Intercom from './Pages/Dashboard/Partials/Intercom'
 import { inactiveIntercom, activeIntercom } from '../store_actions/intercom'
 import { getAllNotifications } from '../store_actions/notifications'
 
-import { confirmation } from '../store_actions/confirmation'
+import { checkBrowser } from './helpers/check-browser'
 
 class App extends Component {
   componentWillMount() {
@@ -145,7 +147,9 @@ class App extends Component {
     // google analytics
     this.initialGoogleAnalytics(data)
 
-    dispatch(this.checkBrowser())
+    dispatch(checkBrowser())
+
+    dispatch(syncOpenHouseData(this.props.user.access_token))
   }
 
   getBrand() {
@@ -286,73 +290,6 @@ class App extends Component {
         }
       }
     )
-  }
-
-  checkBrowser() {
-    return async dispatch => {
-      const browser = bowser.getParser(window.navigator.userAgent)
-      const browserInfo = browser.getBrowser()
-
-      const isValidBrowser = browser.satisfies({
-        // declare browsers per OS
-        windows: {
-          'Internet Explorer': '>10',
-          'Microsoft Edge': '<12'
-        },
-        macos: {
-          safari: '>10.1.2'
-        },
-
-        // or in general
-        chrome: '>65',
-        firefox: '>60'
-      })
-
-      if (isValidBrowser === false) {
-        let downloadLink
-
-        switch (browserInfo.name) {
-          case 'Internet Explorer':
-            downloadLink =
-              'https://www.microsoft.com/en-us/download/internet-explorer.aspx'
-            break
-          case 'Chrome':
-          case 'Microsoft Edge':
-            downloadLink = 'https://www.google.com/chrome/'
-            break
-          case 'Firefox':
-            downloadLink = 'https://www.mozilla.org/en-US/firefox/new/'
-            break
-          default:
-            break
-        }
-
-        dispatch(
-          confirmation({
-            message: `Your web browser (${browserInfo.name} ${
-              browserInfo.version.split('.')[0]
-            }) is out of date.`,
-            description: (
-              <p>
-                We recommend updating your browser to
-                <a
-                  href="https://www.google.com/chrome/"
-                  target="_blank"
-                  style={{ margin: 'auto 4px' }}
-                >
-                  Chrome
-                </a>
-                for more security, speed and the best experience on Rechat.
-              </p>
-            ),
-            confirmLabel: 'Update Browser',
-            cancelLabel: 'No, thanks',
-            hideConfirmButton: !downloadLink,
-            onConfirm: () => window.open(downloadLink, '_blank')
-          })
-        )
-      }
-    }
   }
 
   render() {

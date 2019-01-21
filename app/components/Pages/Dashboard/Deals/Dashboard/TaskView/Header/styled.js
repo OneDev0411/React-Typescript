@@ -36,7 +36,7 @@ export const Title = styled.p`
   display: flex;
   align-items: center;
   font-size: 1.25rem;
-  font-weight: 900;
+  font-weight: bold;
   padding: 0.5rem 2px;
   border: 1px dashed #fff;
 

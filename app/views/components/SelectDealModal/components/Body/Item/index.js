@@ -43,7 +43,7 @@ export function Item(props) {
       <div style={{ paddingLeft: '1em' }}>
         <Flex alignCenter>
           <Details>{getPrice(item) || '$0'}</Details>
-          <Status status={status}>{status || 'Unknown'}</Status>
+          <Status status={status}>{status || 'Draft'}</Status>
         </Flex>
         <Flex alignCenter style={{ color: '#7f7f7f' }}>
           <Details style={{ marginRight: '0.5em' }}>{getSide(item)}</Details>

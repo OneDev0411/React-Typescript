@@ -6,6 +6,7 @@ import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
 import ChangeExtensionPlugin from 'change-extension-plugin'
 import S3Plugin from 'webpack-s3-plugin'
+import UglifyJSPlugin from 'uglifyjs-webpack-plugin'
 
 import moment from 'moment'
 
@@ -47,7 +48,7 @@ webpackConfig.plugins.push(
     name: 'vendor',
     filename: appConfig.compile.jsVendorBundle
   }),
-  new webpack.optimize.UglifyJsPlugin({
+  new UglifyJSPlugin({
     sourceMap: true,
     parallel: true,
     cache: true,

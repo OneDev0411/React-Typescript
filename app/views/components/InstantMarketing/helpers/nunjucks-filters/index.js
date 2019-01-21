@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 import { formatPhoneNumber } from 'utils/format'
 
 export function currencyFilter(price) {
@@ -22,4 +24,10 @@ export function phoneNumberFilter(phone) {
   }
 
   return formatPhoneNumber(phone)
+}
+
+export function formatDate(date, kwargs = {}) {
+  const { format = 'dddd, MMMM D, YYYY @ hh:mm A' } = kwargs
+
+  return moment(date).format(format)
 }

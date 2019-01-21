@@ -2,6 +2,8 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
+import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
+
 import InstantMarketing from 'components/InstantMarketing'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
@@ -14,7 +16,6 @@ import {
   updateTask,
   createTask,
   deleteTask,
-  createTaskAssociation,
   deleteTaskAssociation
 } from '../../../../models/tasks'
 import getListing from '../../../../models/listings/listing/get-listing'
@@ -27,6 +28,7 @@ import ActionButton from '../../Button/ActionButton'
 import { ItemChangelog } from '../../TeamContact/ItemChangelog'
 import IconDelete from '../../SvgIcons/DeleteOutline/IconDeleteOutline'
 import { Title } from '../../EventDrawer/components/Title'
+import { UpdateReminder } from '../../EventDrawer/components/UpdateReminder'
 import { Description } from '../../EventDrawer/components/Description'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
 import { validate } from '../../EventDrawer/helpers/validate'
@@ -143,9 +145,20 @@ export class OpenHouseDrawer extends React.Component {
         `${templateItem.url}/index.html`
       )
 
+      const crmopenhouse = {
+        title: this.state.listing.property.address.full_address,
+        due_date: new Date()
+      }
+
+      if (!this.isNew) {
+        crmopenhouse.title = this.props.openHouse.title
+        crmopenhouse.due_date = this.props.openHouse.dueDate
+      }
+
       const template = nunjucks.renderString(templateHtml, {
         user: this.props.user,
-        listing: this.state.listing
+        listing: this.state.listing,
+        crmopenhouse
       })
 
       this.setState({ template })
@@ -154,7 +167,7 @@ export class OpenHouseDrawer extends React.Component {
     }
   }
 
-  handleSaveTemplate = ({ template }) =>
+  handleSaveTemplate = ({ result: template }) =>
     this.setState({
       template,
       isTemplateBuilderOpen: false
@@ -197,29 +210,6 @@ export class OpenHouseDrawer extends React.Component {
     }
   }
 
-  handleCreateAssociation = async association => {
-    const crm_task =
-      this.props.openHouseId ||
-      (this.props.openHouse && this.props.openHouse.id)
-
-    if (crm_task) {
-      try {
-        const newAssociation = {
-          ...association,
-          crm_task
-        }
-        const response = await createTaskAssociation(crm_task, newAssociation)
-
-        return response
-      } catch (error) {
-        console.log(error)
-        throw error
-      }
-    }
-
-    return Promise.resolve()
-  }
-
   handleDeleteAssociation = async association => {
     if (association.id) {
       try {
@@ -249,9 +239,26 @@ export class OpenHouseDrawer extends React.Component {
       isTemplateBuilderOpen: !state.isTemplateBuilderOpen
     }))
 
+  getTemplateAssets() {
+    const assets = []
+
+    if (!this.state.listing) {
+      return []
+    }
+
+    this.state.listing.gallery_image_urls.forEach(image => {
+      assets.push({
+        listing: this.state.listing.id,
+        image
+      })
+    })
+
+    return assets
+  }
+
   render() {
     const { user } = this.props
-    const { isDisabled } = this.state
+    const { isDisabled, openHouse } = this.state
 
     return (
       <Fragment>
@@ -294,6 +301,12 @@ export class OpenHouseDrawer extends React.Component {
                       />
                       <Description placeholder="Enter any general notes for your clients" />
 
+                      <UpdateReminder
+                        dueDate={values.dueDate}
+                        // 1 hour before
+                        defaultOption={REMINDER_DROPDOWN_OPTIONS[5]}
+                      />
+
                       <Section label="Event Date">
                         <FieldContainer alignCenter justifyBetween>
                           <DateTimeField
@@ -316,7 +329,7 @@ export class OpenHouseDrawer extends React.Component {
                       {!isSoloActiveTeam(user) && (
                         <Section label="Agents">
                           <AssigneesField
-                            buttonText="Assign"
+                            buttonText="Assignee"
                             name="assignees"
                             owner={user}
                           />
@@ -360,6 +373,7 @@ export class OpenHouseDrawer extends React.Component {
                         )}
                         <AddAssociationButton
                           associations={values.registrants}
+                          crm_task={openHouse ? openHouse.id : ''}
                           disabled={isDisabled}
                           type="contact"
                           name="registrants"
@@ -372,7 +386,7 @@ export class OpenHouseDrawer extends React.Component {
                           appearance="outline"
                           onClick={this.toggleTemplateBuilder}
                         >
-                          Preview
+                          Edit Registration Page
                         </ActionButton>
 
                         {this.state.template && (
@@ -387,28 +401,34 @@ export class OpenHouseDrawer extends React.Component {
                         )}
                       </Flex>
                     </Footer>
+
+                    {this.state.isTemplateBuilderOpen && (
+                      <InstantMarketing
+                        isOpen
+                        headerTitle="Registration Template"
+                        closeConfirmation={false}
+                        showTemplatesColumn={false}
+                        saveButtonLabel="Save"
+                        onClose={this.toggleTemplateBuilder}
+                        handleSave={this.handleSaveTemplate}
+                        assets={this.getTemplateAssets()}
+                        templateData={{
+                          user: this.props.user,
+                          listing: this.state.listing,
+                          crmopenhouse: {
+                            title: values.title,
+                            due_date: values.dueDate
+                          }
+                        }}
+                        templateTypes={['CrmOpenHouse']}
+                      />
+                    )}
                   </div>
                 )
               }}
             />
           </Drawer.Body>
         </Drawer>
-
-        <InstantMarketing
-          headerTitle="Registration Template"
-          closeConfirmation={false}
-          showTemplatesColumn={false}
-          saveButtonLabel="Save"
-          isOpen={this.state.isTemplateBuilderOpen}
-          onClose={this.toggleTemplateBuilder}
-          handleSave={this.handleSaveTemplate}
-          assets={this.state.listing && this.state.listing.gallery_image_urls}
-          templateData={{
-            user: this.props.user,
-            listing: this.state.listing
-          }}
-          templateTypes={['CrmOpenHouse']}
-        />
       </Fragment>
     )
   }

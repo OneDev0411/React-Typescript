@@ -11,7 +11,8 @@ export function searchContacts(
   limit = 50,
   searchInputValue,
   order = '-created_at',
-  users
+  users,
+  conditionOperator = 'and'
 ) {
   return async (dispatch, getState) => {
     if (start === 0) {
@@ -32,7 +33,8 @@ export function searchContacts(
           ...defaultQuery,
           start,
           limit,
-          order
+          order,
+          filter_type: conditionOperator
         },
         users
       )

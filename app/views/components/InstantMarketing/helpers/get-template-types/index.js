@@ -8,19 +8,17 @@ export function getTemplateTypes(listing) {
     return []
   }
 
+  if (Array.isArray(listing)) {
+    return ['Listings']
+  }
+
   if (listing.status === 'Sold') {
     return ['JustSold']
   }
 
   if (listing.open_houses) {
-    return ['OpenHouse']
+    return ['OpenHouse', 'JustListed', 'PriceImprovement']
   }
 
-  return [
-    'JustListed',
-    'PriceImprovement',
-    'AsSeenIn',
-    'ComingSoon',
-    'Listings'
-  ]
+  return ['JustListed', 'PriceImprovement', 'AsSeenIn', 'ComingSoon']
 }

@@ -27,14 +27,13 @@ class DealStatus extends React.Component {
   }
 
   get CanChangeStatus() {
-    if (
-      this.props.isBackOffice ||
-      DealContext.getHasActiveOffer(this.props.deal)
-    ) {
-      return true
+    if (this.props.deal.is_draft) {
+      return false
     }
 
-    return false
+    return (
+      this.props.isBackOffice || DealContext.getHasActiveOffer(this.props.deal)
+    )
   }
 
   get StatusList() {
@@ -53,7 +52,7 @@ class DealStatus extends React.Component {
             'Cancelled',
             'Contract Terminated'
           ]
-        : ['Active', 'Leased', 'Lease Contract', 'Contract Terminated']
+        : ['Leased', 'Lease Contract']
     }
 
     return isBackOffice
@@ -71,12 +70,10 @@ class DealStatus extends React.Component {
           'Contract Terminated'
         ]
       : [
-          'Active',
           'Pending',
           'Active Option Contract',
           'Active Contingent',
-          'Active Kick Out',
-          'Contract Terminated'
+          'Active Kick Out'
         ]
   }
 

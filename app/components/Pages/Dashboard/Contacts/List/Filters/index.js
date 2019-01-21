@@ -68,6 +68,7 @@ class ContactFilters extends React.PureComponent {
           'SharesRoom',
           'ExplicitlyCreated',
           'External/Outlook',
+          'OpenHouse',
           'CSV'
         ],
         tooltip: 'Source type'
@@ -84,6 +85,7 @@ class ContactFilters extends React.PureComponent {
         createFiltersFromSegment={this.normalizeSegment}
         createSegmentFromFilters={this.normalizeFilters}
         onChange={this.props.onFilterChange}
+        disableConditionOperators={this.props.disableConditionOperators}
       >
         <SaveSegment />
       </Filters>

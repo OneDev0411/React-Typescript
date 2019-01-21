@@ -66,7 +66,6 @@ export default function BackOffice(props) {
       )}
 
       <ActionButton
-        appearance="outline"
         disabled={isSaving || !hasComment}
         onClick={() => onSendComment(false)}
       >

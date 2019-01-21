@@ -83,7 +83,7 @@ export class MultiField extends React.Component {
     if (attribute_def.data_type === 'date') {
       return this.props.mutators.push(attribute_def.id, {
         attribute: newAttribute,
-        label: SELECT_INITIAL_STATE,
+        label: attribute_def.labels ? SELECT_INITIAL_STATE : '',
         day: { title: 'Day', value: null },
         month: { title: 'Month', value: null },
         year: null
@@ -138,13 +138,19 @@ export class MultiField extends React.Component {
                     fields => fields.value[index].attribute.is_primary
                   ) && <PrimaryStar />}
                 </Flex>
-                {defaultOptions && (
+                {defaultOptions ? (
                   <Field
                     component={Dropdown}
                     style={{ marginLeft: '-1rem' }}
                     fullWidth
                     items={defaultOptions}
                     itemToString={({ title }) => title}
+                    name={`${field}.label`}
+                  />
+                ) : (
+                  <Field
+                    component={TextField}
+                    id={field}
                     name={`${field}.label`}
                   />
                 )}

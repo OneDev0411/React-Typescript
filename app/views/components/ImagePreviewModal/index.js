@@ -37,10 +37,15 @@ export function ImagePreviewModal(props) {
       />
       <div
         style={{ height: '100vh', textAlign: 'center', padding: '8rem 0 3rem' }}
+        onClick={event => {
+          if (event.target.tagName === 'DIV') {
+            handleClose()
+          }
+        }}
       >
         <img
-          src={props.imgSrc}
           alt={title}
+          src={props.imgSrc}
           style={{ maxHeight: '100%', maxWidth: 'calc(100% - 3rem)' }}
         />
       </div>

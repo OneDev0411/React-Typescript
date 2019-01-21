@@ -34,14 +34,16 @@ import TagsList from './TagsList'
 class ContactsList extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = {
       isSideMenuOpen: true,
       isFetchingMoreContacts: false,
       isRowsUpdating: false,
-      filter: this.props.filter,
+      filters: this.props.filters,
       searchInputValue: this.props.list.textFilter,
       activeSegment: {}
     }
+
     this.order = this.props.listInfo.order
   }
 
@@ -86,13 +88,14 @@ class ContactsList extends React.Component {
         ? []
         : nextProps.viewAsUsers
 
-      this.handleFilterChange(
-        this.state.filter,
-        this.state.searchInputValue,
-        0,
-        this.order,
+      this.handleFilterChange({
+        filters: this.state.filter,
+        searchInputValue: this.state.searchInputValue,
+        start: 0,
+        order: this.order,
         viewAsUsers
-      )
+      })
+
       this.props.getContactsTags(viewAsUsers)
     }
   }
@@ -105,15 +108,17 @@ class ContactsList extends React.Component {
     this.state.filter || this.state.searchInputValue || this.order
 
   fetchList = async (start = 0) => {
-    const { filter, searchInputValue } = this.state
-
     if (start === 0) {
       this.resetSelectedRows()
     }
 
     try {
       if (this.hasSearchState()) {
-        await this.handleFilterChange(filter, searchInputValue, start)
+        await this.handleFilterChange({
+          filters: this.state.filters,
+          searchInputValue: this.state.searchInputValue,
+          start
+        })
       } else {
         await this.props.getContacts(start)
       }
@@ -133,25 +138,33 @@ class ContactsList extends React.Component {
         activeSegment: segment
       },
       () => {
-        this.handleFilterChange(
-          segment.filters,
-          this.state.searchInputValue,
-          0,
-          this.order,
-          users
-        )
+        this.handleFilterChange({
+          filters: segment.filters,
+          searchInputValue: this.state.searchInputValue,
+          start: 0,
+          order: this.order,
+          viewAsUsers: users
+        })
       }
     )
   }
 
-  handleFilterChange = async (
-    filter,
-    searchInputValue,
-    start = 0,
-    order = this.order,
-    viewAsUsers = this.props.viewAsUsers
-  ) => {
-    this.setState({ filter })
+  handleFilterChange = async newFilters => {
+    const {
+      filters = this.state.filter,
+      searchInputValue = this.state.searchInputValue,
+      start = 0,
+      order = this.order,
+      viewAsUsers = this.props.viewAsUsers,
+      conditionOperator = this.props.conditionOperator
+    } = newFilters
+
+    this.setState(state => ({
+      filters: {
+        ...state.filters,
+        ...newFilters
+      }
+    }))
 
     if (start === 0) {
       this.resetSelectedRows()
@@ -159,12 +172,13 @@ class ContactsList extends React.Component {
 
     try {
       await this.props.searchContacts(
-        filter,
+        filters,
         start,
         undefined,
         searchInputValue,
         order,
-        viewAsUsers
+        viewAsUsers,
+        conditionOperator
       )
     } catch (e) {
       console.log('fetch search error: ', e)
@@ -174,16 +188,25 @@ class ContactsList extends React.Component {
   handleSearch = value => {
     console.log(`[ Search ] ${value}`)
     this.setState({ searchInputValue: value })
-    this.handleFilterChange(this.state.filter, value)
+    this.handleFilterChange({
+      filters: this.state.filter,
+      searchInputValie: value
+    })
   }
 
   handleChangeOrder = ({ value: order }) => {
     this.order = order
-    this.handleFilterChange(this.state.filter, this.state.searchInputValue)
+    this.handleFilterChange({
+      filters: this.state.filter,
+      searchInputValue: this.state.searchInputValue
+    })
   }
 
   handleChangeContactsAttributes = () =>
-    this.handleFilterChange(this.state.filter, this.state.searchInputValue)
+    this.handleFilterChange({
+      filters: this.state.filter,
+      searchInputValue: this.state.searchInputValue
+    })
 
   toggleSideMenu = () =>
     this.setState(state => ({
@@ -205,24 +228,25 @@ class ContactsList extends React.Component {
     if (this.hasSearchState()) {
       await this.fetchList(startFrom)
     } else {
-      await this.handleFilterChange(
-        this.state.filter,
-        this.state.searchInputValue,
-        startFrom
-      )
+      await this.handleFilterChange({
+        filters: this.state.filter,
+        searchInputValue: this.state.searchInputValue,
+        start: startFrom
+      })
     }
 
     this.setState({ isFetchingMoreContacts: false })
   }
 
-  handleOnDelete = (e, { selectedRows }) => {
+  handleOnDelete = (e, { selectedRows, resetSelectedRows }) => {
     const selectedRowsLength = selectedRows.length
 
     this.props.confirmation({
       show: true,
       confirmLabel: 'Delete',
       message: `Delete ${selectedRowsLength > 1 ? 'contacts' : 'contact'}`,
-      onConfirm: () => this.handleDeleteContact(selectedRows),
+      onConfirm: () =>
+        this.handleDeleteContact(selectedRows, resetSelectedRows),
       description: `Are you sure you want to delete ${
         selectedRowsLength > 1
           ? `these ${selectedRowsLength} contacts`
@@ -231,14 +255,14 @@ class ContactsList extends React.Component {
     })
   }
 
-  handleDeleteContact = async ids => {
+  handleDeleteContact = async (ids, resetRowsHandler) => {
     try {
       this.rowsUpdating(true)
 
       await this.props.deleteContacts(ids)
 
       this.rowsUpdating(false)
-      this.resetSelectedRows()
+      resetRowsHandler()
     } catch (error) {
       console.log(error)
     }
@@ -247,7 +271,19 @@ class ContactsList extends React.Component {
   rowsUpdating = isRowsUpdating => this.setState({ isRowsUpdating })
 
   resetSelectedRows = () => {
+    console.log('reset rows')
     resetGridSelectedItems('contacts')
+  }
+
+  reloadContacts = async () => {
+    await this.props.searchContacts(
+      this.state.filter,
+      0,
+      undefined,
+      this.state.searchInputValue,
+      this.order,
+      this.props.viewAsUsers
+    )
   }
 
   render() {
@@ -282,6 +318,7 @@ class ContactsList extends React.Component {
             isSearching={isFetchingContacts}
           />
           <Table
+            bulkEventCreationCallback={this.reloadContacts}
             handleChangeOrder={this.handleChangeOrder}
             handleChangeContactsAttributes={this.handleChangeContactsAttributes}
             data={contacts}
@@ -309,8 +346,9 @@ function mapStateToUser({ user, contacts }) {
 
   return {
     fetchTags,
-    filter: listInfo.filter || [],
+    filters: listInfo.filter || [],
     filterSegments: contacts.filterSegments,
+    conditionOperator: contacts.filterSegments.conditionOperator,
     isFetchingContacts: selectContactsListFetching(contacts.list),
     list: contacts.list,
     listInfo,

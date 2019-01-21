@@ -106,13 +106,14 @@ class AddRoleForm extends React.Component {
         {this.state.isFormOpen && (
           <RoleAgentIntegration
             deal={this.props.deal}
-            onUpsertRole={this.props.onCreateRole}
             allowedRoles={this.AllowedRoles}
+            isEmailRequired={this.props.isEmailRequired}
             isDoubleEnded={this.isDoubleEnded}
             isPrimaryAgent={['BuyerAgent', 'SellerAgent'].includes(
               this.state.selectedRole
             )}
             modalTitle="Add to Deal"
+            onUpsertRole={this.props.onCreateRole}
             onHide={this.closeDrawer}
           />
         )}

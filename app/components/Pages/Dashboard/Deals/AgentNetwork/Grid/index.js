@@ -1,9 +1,9 @@
 import React from 'react'
 
-import Loading from '../../../../../../views/components/Spinner'
-import Table from '../../../../../../views/components/Grid/Table'
-import Button from '../../../../../../views/components/Button/ActionButton'
-import SendDealPromotionCard from '../../../../../../views/components/InstantMarketing/adapters/SendDealPromotion'
+import Loading from 'components/Spinner'
+import Table from 'components/Grid/Table'
+import Button from 'components/Button/ActionButton'
+import SendDealPromotionCard from 'components/InstantMarketing/adapters/SendDealPromotion'
 
 import { Name } from './columns/Name'
 import { Company } from './columns/Company'
@@ -41,10 +41,12 @@ export class Grid extends React.Component {
       return []
     }
 
-    return data.filter(agent => selectedRows.includes(agent.id)).map(agent => ({
-      name: agent.name,
-      email: agent.email
-    }))
+    return data
+      .filter(agent => selectedRows.includes(agent.id))
+      .map(agent => ({
+        name: agent.name,
+        email: agent.email
+      }))
   }
 
   columns = [
@@ -132,6 +134,7 @@ export class Grid extends React.Component {
           deal={this.props.deal}
           recipients={this.getRecipients(props.selectedRows)}
           selectedRows={props.selectedRows}
+          mediums="Email"
         >
           Promote Listing
         </SendDealPromotionCard>
@@ -155,7 +158,7 @@ export class Grid extends React.Component {
             sortable: {},
             selectable: {
               persistent: true,
-              storageKey: 'agents'
+              storageKey: 'agent_network'
             },
             actionable: {
               actions: this.actions
