@@ -296,15 +296,17 @@ class ActionsButton extends React.Component {
    *
    */
   handleDownload = () => {
-    // const isFile =
-    //   this.props.type === 'document' && this.props.document.type === 'file'
+    const links = getFileUrl({
+      type: this.props.type,
+      deal: this.props.deal,
+      task: this.props.task,
+      document: this.props.document,
+      isBackOffice: this.props.isBackOffice
+    })
 
-    // const url = isFile
-    //   ? this.props.document.url
-    //   : this.props.task.submission.file.url
-
-    // window.open(url, '_blank')
-    alert('')
+    if (links.length === 1) {
+      window.open(links[0].url, '_blank')
+    }
   }
 
   /**
@@ -316,11 +318,11 @@ class ActionsButton extends React.Component {
       deal: this.props.deal,
       task: this.props.task,
       document: this.props.document,
-      isBackOffice: true // this.props.isBackOffice
+      isBackOffice: this.props.isBackOffice
     })
 
     if (links.length === 1) {
-      if (this.props.isBackOffice === false) {
+      if (this.props.isBackOffice) {
         browserHistory.push(links[0].url)
       } else {
         window.open(links[0].url, '_blank')
