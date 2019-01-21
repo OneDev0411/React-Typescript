@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-import AttachmentIcon from 'components/SvgIcons/Attachment/IconAttacment'
-import DigitalFileIcon from 'components/SvgIcons/File/IconFile'
 import LinkButton from 'components/Button/LinkButton'
 
 export const Container = styled.div`
@@ -34,18 +32,6 @@ export const FileTitle = styled.div`
   font-weight: 500;
 `
 
-export const DigitalFormIcon = styled(DigitalFileIcon)`
-  fill: #000 !important;
-  margin-right: 0.5rem;
-  width: 1.2rem;
-`
-
-export const FileIcon = styled(AttachmentIcon)`
-  fill: #000 !important;
-  margin-right: 0.5rem;
-  width: 1rem;
-`
-
 export const FileLink = styled(LinkButton)`
   color: #000;
   font-size: 0.875rem;
@@ -60,11 +46,7 @@ export const FileRow = styled.div`
   justify-content: space-between;
 
   border-bottom: solid 1px #e6e6e6;
-  padding: 1rem;
-  padding-right: 0;
-
-  margin-left: 4rem;
-  margin-right: 1rem;
+  padding: 1rem 1rem 1rem 3rem;
 
   :hover a.file-link {
     color: #003bdf !important;
