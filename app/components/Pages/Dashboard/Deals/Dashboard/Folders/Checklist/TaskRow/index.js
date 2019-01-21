@@ -48,13 +48,11 @@ class Task extends React.Component {
   }
 
   handleSelectTask = () => {
-    const { task } = this.props
-
-    if (task.room.new_notifications > 0) {
-      this.props.updateDealNotifications(this.props.deal, task.room)
+    if (this.props.task.room.new_notifications > 0) {
+      this.props.updateDealNotifications(this.props.deal, this.props.task.room)
     }
 
-    this.props.setSelectedTask(task)
+    this.props.setSelectedTask(this.props.task)
   }
 
   isRowExpandable = () => {
@@ -69,7 +67,6 @@ class Task extends React.Component {
   normalizeActivityComment = comment => comment.replace(/\./gi, '')
 
   render() {
-    const { task } = this.props
     const isRowExpandable = this.isRowExpandable()
     const latestActivity = this.props.task.room.latest_activity
 
@@ -82,12 +79,14 @@ class Task extends React.Component {
                 isOpen={this.state.isTaskExpanded}
                 display={isRowExpandable}
               />
-              <RowTitle hoverable={isRowExpandable}>{task.title}</RowTitle>
+              <RowTitle hoverable={isRowExpandable}>
+                {this.props.task.title}
+              </RowTitle>
             </Flex>
 
             <TaskInfo>
               <TaskStatus
-                task={task}
+                task={this.props.task}
                 isBackOffice={this.props.isBackOffice}
                 isDraftDeal={this.props.deal.is_draft}
               />
@@ -122,15 +121,22 @@ class Task extends React.Component {
           </RowLeftColumn>
 
           <RowRightColumn>
-            <TaskNotifications task={task} onClick={this.handleSelectTask} />
+            <TaskNotifications
+              task={this.props.task}
+              onClick={this.handleSelectTask}
+            />
 
-            <ActionsButton type="task" deal={this.props.deal} task={task} />
+            <ActionsButton
+              type="task"
+              deal={this.props.deal}
+              task={this.props.task}
+            />
           </RowRightColumn>
         </Row>
 
         <TaskFiles
           isOpen={this.state.isTaskExpanded}
-          task={task}
+          task={this.props.task}
           deal={this.props.deal}
           isBackOffice={this.props.isBackOffice}
         />
