@@ -19,7 +19,7 @@ import TaskView from '../Dashboard/TaskView'
 
 import { Menu } from './Menu'
 import { FactsheetSideMenu } from './FactsheetSideMenu'
-import EnvelopeSideMenu from './EnvelopeSideMenu'
+import { EnvelopeSideMenu } from './EnvelopeSideMenu'
 import { FileDisplay } from './FileDisplay'
 
 import { LayoutContainer, PageContainer } from './styled'
