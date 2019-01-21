@@ -4,7 +4,7 @@ export function preSaveFormat(values, attributeDefs) {
   const attributes = []
   const selectFields = ['title']
   const multipleFields = ['email', 'phone_number']
-  const textFields = ['first_name', 'middle_name', 'last_name']
+  const textFields = ['first_name', 'middle_name', 'last_name', 'source']
 
   const sourceTypeDef = selectDefinitionByName(attributeDefs, 'source_type')
 

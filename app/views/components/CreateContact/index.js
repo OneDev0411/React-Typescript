@@ -10,6 +10,7 @@ export class CreateContact extends React.Component {
   }
 
   handleOpen = () => this.setState({ isOpen: true })
+
   handleClose = () => this.setState({ isOpen: false })
 
   render() {
