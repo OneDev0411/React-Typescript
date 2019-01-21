@@ -1,17 +1,57 @@
+function getTaskAttachments(task) {
+  const attachments = []
+
+  if (task.submission) {
+    attachments.push({
+      type: 'form',
+      task
+    })
+  }
+
+  if (Array.isArray(task.room.attachments)) {
+    task.room.attachments
+      .filter(file => file.mime === 'application/pdf')
+      .forEach(file => {
+        attachments.push({
+          task,
+          file
+        })
+      })
+  }
+
+  return attachments
+}
+
+function getDocumentAttachment(task, document) {
+  if (document.type === 'task' && document.submission) {
+    return [
+      {
+        type: 'form',
+        task: document
+      }
+    ]
+  }
+
+  if (document.type === 'file' && document.mime === 'application/pdf') {
+    return [
+      {
+        task,
+        file: document
+      }
+    ]
+  }
+
+  return []
+}
+
 export function getEsignAttachments({ type, task, document }) {
-  const attachment = {
-    task
+  if (type === 'task') {
+    return getTaskAttachments(task)
   }
 
-  // is task (or digital form document)
-  if (type === 'task' || (type === 'document' && document.type === 'task')) {
-    attachment.type = 'form'
+  if (type === 'document') {
+    return getDocumentAttachment(task, document)
   }
 
-  // is attachment
-  if (type === 'document' && document.type === 'file') {
-    attachment.file = document
-  }
-
-  return [attachment]
+  return []
 }
