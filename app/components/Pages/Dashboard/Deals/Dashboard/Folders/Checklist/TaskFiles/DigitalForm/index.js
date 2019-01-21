@@ -2,13 +2,7 @@ import React from 'react'
 
 import ActionsButton from '../../../../../components/ActionsButton'
 
-import {
-  FileContainer,
-  FileRow,
-  FileTitle,
-  DigitalFormIcon,
-  FileLink
-} from '../styled'
+import { FileContainer, FileRow, FileTitle, FileLink } from '../styled'
 
 export function DigitalForm(props) {
   if (!props.task || !props.task.form) {
@@ -24,7 +18,6 @@ export function DigitalForm(props) {
             className="file-link"
             to={`/dashboard/deals/${props.deal.id}/form-edit/${props.task.id}`}
           >
-            <DigitalFormIcon />
             {props.task.title}
           </FileLink>
         </FileTitle>

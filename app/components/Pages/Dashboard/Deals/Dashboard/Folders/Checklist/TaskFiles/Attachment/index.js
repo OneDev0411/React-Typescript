@@ -7,7 +7,7 @@ import ActionsButton from '../../../../../components/ActionsButton'
 
 import FileLink from './FileLink'
 
-import { FileContainer, FileRow, FileTitle, FileIcon } from '../styled'
+import { FileContainer, FileRow, FileTitle } from '../styled'
 
 class Attachments extends React.Component {
   state = {
@@ -26,28 +26,6 @@ class Attachments extends React.Component {
     return 'unknown'
   }
 
-  // deleteFile = async file => {
-  //   const { deal, syncDeleteFile } = this.props
-
-  //   if (this.state.isDeleting) {
-  //     return false
-  //   }
-
-  //   this.setState({
-  //     isDeleting: true
-  //   })
-
-  //   try {
-  //     await syncDeleteFile(deal.id, {
-  //       [file.id]: this.props.task
-  //     })
-  //   } catch (e) {}
-
-  //   this.setState({
-  //     isDeleting: false
-  //   })
-  // }
-
   render() {
     const { props, state } = this
 
@@ -64,7 +42,6 @@ class Attachments extends React.Component {
                   props.task.id
                 }/attachment/${props.file.id}`}
               >
-                <FileIcon />
                 {props.file.name}
               </FileLink>
             </FileTitle>

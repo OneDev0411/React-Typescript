@@ -9,7 +9,7 @@ export function getTemplateTypes(listing) {
   }
 
   if (Array.isArray(listing)) {
-    return ['listings']
+    return ['Listings']
   }
 
   if (listing.status === 'Sold') {
