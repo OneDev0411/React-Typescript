@@ -8,8 +8,9 @@ export const Label = styled.div`
   min-width: 3rem;
   border-radius: 2px;
   background: transparent;
-  padding: 0 0.6rem;
-  font-size: 0.75rem;
+  padding: 0 0.75rem;
+  font-size: 0.825rem;
+  max-height: 1.5rem;
 
   &.Incomplete {
     display: none;
