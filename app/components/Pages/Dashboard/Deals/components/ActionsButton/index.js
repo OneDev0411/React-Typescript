@@ -25,6 +25,8 @@ import { selectActions } from './helpers/select-actions'
 import { getEsignAttachments } from './helpers/get-esign-attachments'
 import { getFileUrl } from './helpers/get-file-url'
 
+import { getTaskEnvelopes } from '../../utils/get-task-envelopes'
+
 import Message from '../../../Chatroom/Util/message'
 import GetSignature from '../../Signature'
 import UploadManager from '../../UploadManager'
@@ -92,7 +94,6 @@ class ActionsButton extends React.Component {
 
     if (this.props.type === 'task') {
       conditions = this.generateTaskConditions()
-      // console.log(this.props.task.title, conditions)
     }
 
     return selectActions(this.props.type, conditions)
@@ -122,7 +123,7 @@ class ActionsButton extends React.Component {
   }
 
   generateTaskConditions = () => {
-    const envelopes = this.getTaskEnvelopes(this.props.task)
+    const envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
 
     return {
       task_type: this.props.task.task_type,
@@ -136,27 +137,6 @@ class ActionsButton extends React.Component {
     Array.isArray(task.room.attachments) &&
     task.room.attachments.filter(file => file.mime === 'application/pdf')
       .length > 0
-
-  getTaskEnvelopes = task => {
-    const envelopes = Object.values(this.props.envelopes)
-      .filter(envelope =>
-        envelope.documents.some(document => {
-          if (task.submission && task.submission.id === document.submission) {
-            return true
-          }
-
-          return (
-            Array.isArray(task.room.attachments) &&
-            task.room.attachments.some(
-              attachment => document.file === attachment.id
-            )
-          )
-        })
-      )
-      .sort((a, b) => b.created_at - a.created_at)
-
-    return envelopes
-  }
 
   getDocumentEnvelopes = document => {
     const envelopes = Object.values(this.props.envelopes)
@@ -205,7 +185,7 @@ class ActionsButton extends React.Component {
   }
 
   resendEnvelope = async () => {
-    const envelopes = this.getTaskEnvelopes(this.props.task)
+    const envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
 
     await Deal.resendEnvelope(envelopes[0].id)
 
@@ -216,7 +196,7 @@ class ActionsButton extends React.Component {
   }
 
   voidEnvelope = async () => {
-    const envelopes = this.getTaskEnvelopes(this.props.task)
+    const envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
 
     try {
       await this.props.voidEnvelope(this.props.deal.id, envelopes[0].id)
