@@ -23,6 +23,7 @@ import Tooltip from 'components/tooltip'
 
 import { selectActions } from './helpers/select-actions'
 import { getEsignAttachments } from './helpers/get-esign-attachments'
+import { getFileUrl } from './helpers/get-file-url'
 
 import Message from '../../../Chatroom/Util/message'
 import GetSignature from '../../Signature'
@@ -91,6 +92,7 @@ class ActionsButton extends React.Component {
 
     if (this.props.type === 'task') {
       conditions = this.generateTaskConditions()
+      // console.log(this.props.task.title, conditions)
     }
 
     return selectActions(this.props.type, conditions)
@@ -294,29 +296,36 @@ class ActionsButton extends React.Component {
    *
    */
   handleDownload = () => {
-    const isFile =
-      this.props.type === 'document' && this.props.document.type === 'file'
+    // const isFile =
+    //   this.props.type === 'document' && this.props.document.type === 'file'
 
-    const url = isFile
-      ? this.props.document.url
-      : this.props.task.submission.file.url
+    // const url = isFile
+    //   ? this.props.document.url
+    //   : this.props.task.submission.file.url
 
-    window.open(url, '_blank')
+    // window.open(url, '_blank')
+    alert('')
   }
 
   /**
    *
    */
   handleView = () => {
-    if (this.props.type === 'task' && !this.props.isBackOffice) {
-      window.open(this.props.task.submission.file.url, '_blank')
+    const links = getFileUrl({
+      type: this.props.type,
+      deal: this.props.deal,
+      task: this.props.task,
+      document: this.props.document,
+      isBackOffice: true // this.props.isBackOffice
+    })
 
-      return
+    if (links.length === 1) {
+      if (this.props.isBackOffice === false) {
+        browserHistory.push(links[0].url)
+      } else {
+        window.open(links[0].url, '_blank')
+      }
     }
-
-    browserHistory.push(
-      `/dashboard/deals/${this.props.deal.id}/view/${this.props.task.id}`
-    )
   }
 
   /**
