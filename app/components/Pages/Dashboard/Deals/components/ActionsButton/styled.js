@@ -66,9 +66,14 @@ export const MenuContainer = styled.div`
 export const MenuItem = styled.div`
   font-weight: 500;
   margin: 1rem 0;
-  cursor: pointer;
+  color: ${props => (props.disabled ? 'gray' : '#000')};
 
-  :hover {
-    color: ${primary};
-  }
+  ${props =>
+    props.disabled === false &&
+    `
+    :hover {
+      cursor: pointer;
+      color: ${primary};
+    }
+  `}
 `
