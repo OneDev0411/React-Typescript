@@ -7,10 +7,9 @@ export const PrimaryAction = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 1rem;
-  padding: 0 1.5rem;
   font-weight: 500;
   height: 100%;
-  min-width: 7rem;
+  width: 10rem;
 
   :hover {
     color: ${primary};
