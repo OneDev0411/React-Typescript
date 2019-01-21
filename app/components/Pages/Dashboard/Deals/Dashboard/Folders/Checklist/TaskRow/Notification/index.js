@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import Tooltip from 'components/tooltip'
 import IconComment from 'components/SvgIcons/Comment/IconComment'
 
 import { Container, BadgeCounter } from './styled'
@@ -11,13 +12,18 @@ function Notification(props) {
   const { new_notifications } = room
 
   return (
-    <Container hasNotification={new_notifications > 0} onClick={props.onClick}>
-      <IconComment className="deal--task-comments" />
+    <Tooltip caption="View Activity">
+      <Container
+        hasNotification={new_notifications > 0}
+        onClick={props.onClick}
+      >
+        <IconComment className="deal--task-comments" />
 
-      {new_notifications > 0 && (
-        <BadgeCounter>{new_notifications}</BadgeCounter>
-      )}
-    </Container>
+        {new_notifications > 0 && (
+          <BadgeCounter>{new_notifications}</BadgeCounter>
+        )}
+      </Container>
+    </Tooltip>
   )
 }
 
