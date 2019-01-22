@@ -45,15 +45,21 @@ class Filters extends React.Component {
   shouldReCreateFilters = ({ segment: nextSegment }) => {
     const { segment } = this.props
 
-    if (segment && nextSegment && segment.id !== nextSegment.id) {
+    if (
+      (!segment && nextSegment) ||
+      (segment && nextSegment && segment.id !== nextSegment.id)
+    ) {
       return this.createFiltersFromSegment(nextSegment)
     }
   }
 
   createFiltersFromSegment = segment => {
-    const activeFilters = this.props.createFiltersFromSegment(segment.filters)
+    const filters =
+      _.size(this.props.activeFilters) > 0
+        ? Object.values(this.props.activeFilters)
+        : this.props.createFiltersFromSegment(segment.filters)
 
-    this.props.createActiveFilters(this.props.name, activeFilters)
+    this.props.createActiveFilters(this.props.name, filters)
   }
 
   /**
@@ -148,7 +154,7 @@ class Filters extends React.Component {
   onConditionChange = ({ value: conditionOperator }) => {
     this.props.changeConditionOperator(this.props.name, conditionOperator)
 
-    if (_.size(this.props.activeFilters) === 0) {
+    if (_.size(this.props.activeFilters) <= 1) {
       return false
     }
 
