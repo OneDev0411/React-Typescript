@@ -10,8 +10,6 @@ import { createEnvelope } from 'actions/deals'
 import Deal from 'models/Deal'
 import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
 
-import ActionButton from 'components/Button/ActionButton'
-
 import SignatureComposeDrawer from './Form'
 import { Docusign } from './Docusign'
 
