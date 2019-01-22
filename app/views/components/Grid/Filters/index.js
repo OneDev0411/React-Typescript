@@ -45,7 +45,10 @@ class Filters extends React.Component {
   shouldReCreateFilters = ({ segment: nextSegment }) => {
     const { segment } = this.props
 
-    if (segment && nextSegment && segment.id !== nextSegment.id) {
+    if (
+      (!segment && nextSegment) ||
+      (segment && nextSegment && segment.id !== nextSegment.id)
+    ) {
       return this.createFiltersFromSegment(nextSegment)
     }
   }
