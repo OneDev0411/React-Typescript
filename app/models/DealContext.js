@@ -54,7 +54,9 @@ export function getChecklists() {
 export function getDealTypeFlag(deal_type) {
   if (deal_type === 'Selling') {
     return 1
-  } else if (deal_type === 'Buying') {
+  }
+
+  if (deal_type === 'Buying') {
     return 2
   }
 
@@ -277,7 +279,9 @@ export function getValueByContext(name, context) {
 
   if (contextInfo.data_type === 'Date') {
     return moment.unix(context.value).format('MMM DD, YYYY')
-  } else if (isCurrency({ name })) {
+  }
+
+  if (isCurrency({ name })) {
     return Deal.get.formattedPrice(context.value)
   }
 
