@@ -25,6 +25,10 @@ class DealsContainer extends React.Component {
     const { dispatch, user } = props
     const isBackOffice = hasUserAccess(user, 'BackOffice')
 
+    if (!user.teams || user.teams.length === 0) {
+      return false
+    }
+
     if (!hasUserAccess(user, 'Deals') && !isBackOffice) {
       browserHistory.push('/dashboard/mls')
     }
