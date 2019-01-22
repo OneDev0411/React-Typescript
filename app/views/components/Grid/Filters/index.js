@@ -148,7 +148,7 @@ class Filters extends React.Component {
   onConditionChange = ({ value: conditionOperator }) => {
     this.props.changeConditionOperator(this.props.name, conditionOperator)
 
-    if (_.size(this.props.activeFilters) === 0) {
+    if (_.size(this.props.activeFilters) <= 1) {
       return false
     }
 
