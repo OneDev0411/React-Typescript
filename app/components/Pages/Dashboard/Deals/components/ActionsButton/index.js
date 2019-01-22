@@ -229,7 +229,7 @@ class ActionsButton extends React.Component {
   handleVoidEnvelope = () => {
     this.props.confirmation({
       message: 'Void Envelope?',
-      confirmLabel: 'Resend',
+      confirmLabel: 'Yes, Void',
       onConfirm: this.voidEnvelope
     })
   }
