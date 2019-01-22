@@ -21,6 +21,8 @@ import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArr
 
 import Tooltip from 'components/tooltip'
 
+import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
+
 import { selectActions } from './helpers/select-actions'
 import { getEsignAttachments } from './helpers/get-esign-attachments'
 import { getFileUrl } from './helpers/get-file-url'
@@ -53,6 +55,7 @@ class ActionsButton extends React.Component {
       view: this.handleView,
       download: this.handleDownload,
       delete: this.handleDelete,
+      'review-envelope': this.handleReviewEnvelope,
       'get-signature': this.handleGetSignature,
       'edit-form': this.handleEditForm,
       'notify-office': this.handleNotifyOffice,
@@ -319,6 +322,32 @@ class ActionsButton extends React.Component {
       confirmLabel: 'Yes, Delete',
       onConfirm: this.deleteFile
     })
+  }
+
+  /**
+   *
+   */
+  handleReviewEnvelope = () => {
+    let envelopes = []
+
+    if (this.props.type === 'task') {
+      envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
+    }
+
+    if (this.props.type === 'document') {
+      envelopes = this.getDocumentEnvelopes(this.props.document)
+    }
+
+    if (envelopes.length === 0) {
+      return false
+    }
+
+    const link = getEnvelopeEditLink(
+      envelopes[0].id,
+      this.props.user.access_token
+    )
+
+    window.open(link, '_blank')
   }
 
   deleteFile = async () => {
