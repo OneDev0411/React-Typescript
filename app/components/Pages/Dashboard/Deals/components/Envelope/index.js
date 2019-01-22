@@ -6,6 +6,7 @@ import moment from 'moment'
 import { voidEnvelope } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
+import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
 import Deal from 'models/Deal'
 
 import LinkButton from 'components/Button/LinkButton'
@@ -116,7 +117,7 @@ class Envelope extends React.Component {
               <LinkButton
                 appearance="primary"
                 size="small"
-                href={Deal.getEnvelopeEditLink(
+                href={getEnvelopeEditLink(
                   envelope.id,
                   this.props.user.access_token
                 )}
