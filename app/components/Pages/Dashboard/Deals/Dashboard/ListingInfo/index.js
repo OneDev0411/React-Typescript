@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import Flex from 'styled-flex-component'
 
+import { Link } from 'react-router'
 import { H1 } from 'components/Typography/headings'
-import IconLink from 'components/SvgIcons/LinkOpen/IconLink'
 
 import Deal from 'models/Deal'
 
@@ -14,7 +14,7 @@ import { ListingImage } from './Image'
 import MlsConnect from './MlsConnect'
 
 import { Divider } from '../styled'
-import { MLSLink, TitleContainer } from './styled'
+import { TitleContainer } from './styled'
 import Address from '../../components/Address'
 
 export class ListingInfo extends React.Component {
@@ -89,12 +89,6 @@ export class ListingInfo extends React.Component {
                   </H1>
                 </TitleContainer>
               </Tooltip>
-
-              {props.deal.listing && (
-                <MLSLink to={`/dashboard/mls/${props.deal.listing}`}>
-                  <IconLink />
-                </MLSLink>
-              )}
             </Flex>
 
             <Flex alignCenter>
@@ -108,6 +102,15 @@ export class ListingInfo extends React.Component {
               <Divider small />
 
               <MlsConnect deal={props.deal} />
+
+              {props.deal.listing && (
+                <Fragment>
+                  <Divider small />
+                  <Link to={`/dashboard/mls/${props.deal.listing}`}>
+                    View MLS Listing
+                  </Link>
+                </Fragment>
+              )}
             </Flex>
           </Flex>
         </Flex>
