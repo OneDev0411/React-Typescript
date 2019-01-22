@@ -46,12 +46,10 @@ class SegmentsList extends React.Component {
   }
 
   onSelectList = item => {
-    const { changeActiveFilterSegment, onChange, name } = this.props
+    this.props.changeActiveFilterSegment(this.props.name, item.id)
 
-    changeActiveFilterSegment(name, item.id)
-
-    if (onChange) {
-      onChange(item)
+    if (this.props.onChange) {
+      this.props.onChange(item)
     }
   }
 
