@@ -51,13 +51,10 @@ class Filters extends React.Component {
   }
 
   createFiltersFromSegment = segment => {
-    let filters = []
-
-    filters = this.props.createFiltersFromSegment(segment.filters)
-
-    if (filters.length === 0 && _.size(this.props.activeFilters) > 0) {
-      filters = Object.values(this.props.activeFilters)
-    }
+    const filters =
+      _.size(this.props.activeFilters) > 0
+        ? Object.values(this.props.activeFilters)
+        : this.props.createFiltersFromSegment(segment.filters)
 
     this.props.createActiveFilters(this.props.name, filters)
   }
