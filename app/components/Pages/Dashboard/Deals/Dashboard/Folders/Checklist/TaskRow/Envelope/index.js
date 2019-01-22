@@ -20,7 +20,12 @@ class EnvelopeView extends React.Component {
     }))
 
   geEnvelope = () => {
-    const envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
+    const envelopes = getTaskEnvelopes(
+      this.props.envelopes,
+      this.props.task
+    ).filter(
+      envelope => ['Voided', 'Declined'].includes(envelope.status) === false
+    )
 
     if (envelopes.length === 0) {
       return null
