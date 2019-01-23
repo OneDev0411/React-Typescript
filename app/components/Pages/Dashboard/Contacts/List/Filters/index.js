@@ -29,8 +29,12 @@ class ContactFilters extends React.PureComponent {
     }
   })
 
-  normalizeSegment = filters =>
-    filters.map(filter => ({
+  normalizeSegment = (filters, activeFilters) => {
+    if (_.size(activeFilters) > 0) {
+      return Object.values(activeFilters)
+    }
+
+    return filters.map(filter => ({
       id: filter.attribute_def,
       isActive: false,
       isIncomplete: false,
@@ -40,6 +44,7 @@ class ContactFilters extends React.PureComponent {
         invert: filter.invert
       }
     }))
+  }
 
   get Config() {
     const { tags, attributeDefs } = this.props

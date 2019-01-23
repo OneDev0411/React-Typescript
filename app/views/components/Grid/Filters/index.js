@@ -35,7 +35,7 @@ class Filters extends React.Component {
     const { segment } = this.props
 
     if (segment) {
-      this.createFiltersFromSegment(segment)
+      this.createFiltersFromSegment(segment, this.props.activeFilters)
     }
   }
 
@@ -43,16 +43,22 @@ class Filters extends React.Component {
     this.shouldReCreateFilters(nextProps)
   }
 
-  shouldReCreateFilters = ({ segment: nextSegment }) => {
+  shouldReCreateFilters = ({ segment: nextSegment, activeFilters }) => {
     const { segment } = this.props
 
-    if (segment && nextSegment && segment.id !== nextSegment.id) {
-      return this.createFiltersFromSegment(nextSegment)
+    if (
+      (!segment && nextSegment) ||
+      (segment && nextSegment && segment.id !== nextSegment.id)
+    ) {
+      return this.createFiltersFromSegment(nextSegment, activeFilters)
     }
   }
 
-  createFiltersFromSegment = async segment => {
-    const activeFilters = this.props.createFiltersFromSegment(segment.filters)
+  createFiltersFromSegment = async (segment, activeFilters) => {
+    const filters = this.props.createFiltersFromSegment(
+      segment.filters,
+      activeFilters
+    )
 
     let conditionOperator = 'and'
 
@@ -62,7 +68,7 @@ class Filters extends React.Component {
 
     await this.props.createActiveFiltersWithConditionOperator(
       this.props.name,
-      activeFilters,
+      filters,
       conditionOperator
     )
   }
@@ -159,7 +165,7 @@ class Filters extends React.Component {
   onConditionChange = ({ value: conditionOperator }) => {
     this.props.changeConditionOperator(this.props.name, conditionOperator)
 
-    if (_.size(this.props.activeFilters) === 0) {
+    if (_.size(this.props.activeFilters) <= 1) {
       return false
     }
 

@@ -6,7 +6,7 @@ export const Divider = styled.div`
   display: inline-flex;
   width: 1px;
   height: 1.5rem;
-  margin: 0 1em;
+  margin: 0 0.825em;
   background-color: ${borderColor};
 
   ${props =>

@@ -89,7 +89,7 @@ class ContactsList extends React.Component {
         : nextProps.viewAsUsers
 
       this.handleFilterChange({
-        filters: this.state.filter,
+        filters: this.state.filters,
         searchInputValue: this.state.searchInputValue,
         start: 0,
         order: this.order,
@@ -160,7 +160,7 @@ class ContactsList extends React.Component {
 
   handleFilterChange = async newFilters => {
     const {
-      filters = this.state.filter,
+      filters = this.state.filters,
       searchInputValue = this.state.searchInputValue,
       start = 0,
       order = this.order,
@@ -168,12 +168,7 @@ class ContactsList extends React.Component {
       conditionOperator = this.props.conditionOperator
     } = newFilters
 
-    this.setState(state => ({
-      filters: {
-        ...state.filters,
-        ...newFilters
-      }
-    }))
+    this.setState({ filters })
 
     if (start === 0) {
       this.resetSelectedRows()
@@ -198,7 +193,7 @@ class ContactsList extends React.Component {
     console.log(`[ Search ] ${value}`)
     this.setState({ searchInputValue: value })
     this.handleFilterChange({
-      filters: this.state.filter,
+      filters: this.state.filters,
       searchInputValie: value
     })
   }
@@ -206,16 +201,17 @@ class ContactsList extends React.Component {
   handleChangeOrder = ({ value: order }) => {
     this.order = order
     this.handleFilterChange({
-      filters: this.state.filter,
+      filters: this.state.filters,
       searchInputValue: this.state.searchInputValue
     })
   }
 
-  handleChangeContactsAttributes = () =>
+  handleChangeContactsAttributes = () => {
     this.handleFilterChange({
-      filters: this.state.filter,
+      filters: this.state.filters,
       searchInputValue: this.state.searchInputValue
     })
+  }
 
   toggleSideMenu = () =>
     this.setState(state => ({
@@ -238,7 +234,7 @@ class ContactsList extends React.Component {
       await this.fetchList(startFrom)
     } else {
       await this.handleFilterChange({
-        filters: this.state.filter,
+        filters: this.state.filters,
         searchInputValue: this.state.searchInputValue,
         start: startFrom
       })
@@ -286,7 +282,7 @@ class ContactsList extends React.Component {
 
   reloadContacts = async () => {
     await this.props.searchContacts(
-      this.state.filter,
+      this.state.filters,
       0,
       undefined,
       this.state.searchInputValue,
