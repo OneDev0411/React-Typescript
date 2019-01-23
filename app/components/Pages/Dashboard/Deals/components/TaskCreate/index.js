@@ -74,7 +74,7 @@ class TaskCreate extends React.Component {
           }
           onClose={this.handleClose}
         >
-          <OverlayDrawer.Header title="Add New Task" />
+          <OverlayDrawer.Header title="Add a folder" />
           <OverlayDrawer.Body>
             {this.state.isSaving && <Spinner />}
 
