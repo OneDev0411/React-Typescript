@@ -23,10 +23,10 @@ class RoleAgentIntegration extends React.Component {
   }
 
   get InitialState() {
-    if (this.props.user) {
+    if (this.props.role) {
       return {
         showRoleDrawer: true,
-        role: this.props.user
+        role: this.props.role
       }
     }
 
@@ -132,9 +132,22 @@ class RoleAgentIntegration extends React.Component {
     }
 
     if (relatedContacts.length > 0) {
+      let role = convertContactToRole(
+        relatedContacts[0],
+        this.props.attributeDefs
+      )
+
+      if (user.id === this.props.user.id) {
+        role = {
+          ...role,
+          legal_first_name: user.first_name || role.legal_first_name,
+          legal_last_name: user.last_name || role.legal_last_name
+        }
+      }
+
       newState = {
         showRoleDrawer: true,
-        role: convertContactToRole(relatedContacts[0], this.props.attributeDefs)
+        role
       }
     }
 
@@ -188,8 +201,9 @@ class RoleAgentIntegration extends React.Component {
   }
 }
 
-function mapStateToProps({ contacts }) {
+function mapStateToProps({ contacts, user }) {
   return {
+    user,
     attributeDefs: contacts.attributeDefs
   }
 }

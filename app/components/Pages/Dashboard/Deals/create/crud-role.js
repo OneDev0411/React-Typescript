@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react'
 
+import ActionButton from 'components/Button/ActionButton'
+
 import RoleAgentIntegration from '../components/Roles/AgentIntegration'
 import RoleItem from './role-item'
-import ActionButton from 'components/Button/ActionButton'
 
 class CrudRole extends React.Component {
   state = {
@@ -35,7 +36,7 @@ class CrudRole extends React.Component {
             <ActionButton
               appearance="link"
               onClick={this.showModal}
-              className=" add-item"
+              className="add-item"
             >
               <span className="icon test">+</span>
               <span className="text">{ctaTitle}</span>
@@ -45,7 +46,7 @@ class CrudRole extends React.Component {
 
         {this.state.isModalOpen && (
           <RoleAgentIntegration
-            user={user}
+            role={user}
             onHide={this.closeModal}
             onUpsertRole={onUpsertUser}
             {...rest}
