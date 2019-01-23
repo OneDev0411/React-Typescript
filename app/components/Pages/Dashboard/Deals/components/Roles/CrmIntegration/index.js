@@ -69,11 +69,10 @@ class RoleFormWrapper extends React.Component {
         }
       }
 
-      if (!isNewRecord && this.props.deal) {
-        const updatedRole = await this.props.updateRole(
-          this.props.deal.id,
-          form
-        )
+      if (!isNewRecord) {
+        const updatedRole = this.props.deal
+          ? await this.props.updateRole(this.props.deal.id, form)
+          : form
 
         console.log('[ Role Updated ] ', updatedRole)
         this.props.onUpsertRole(updatedRole)
