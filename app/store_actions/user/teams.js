@@ -33,3 +33,5 @@ export default function getUserTeams(user = {}, fetchMembers) {
     }
   }
 }
+
+// todo: refactoring teams.forEach
