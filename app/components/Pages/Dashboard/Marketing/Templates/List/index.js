@@ -13,7 +13,7 @@ import { Template } from '../../components/Template'
 import { mediumsCollection } from './mediums-collection'
 import { Tab, ListContainer } from './styled'
 
-const GENERAL_FLOW_TYPES = ['Brand', 'Christmas,NewYear', 'NewAgent']
+const GENERAL_FLOW_TYPES = ['Brand', 'Christmas,NewYear,Valentines,StPatrick', 'NewAgent']
 
 export class List extends React.Component {
   state = {

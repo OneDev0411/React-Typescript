@@ -28,7 +28,7 @@ export const headers = {
     size: { width: 452, height: 230 },
     description: 'Promote your listing before it even hits the market.'
   },
-  'Christmas,NewYear': {
+  'Christmas,NewYear,Valentines,StPatrick': {
     title: 'Holiday',
     name: 'Holiday',
     brandColor: '#eccde9',
