@@ -54,3 +54,15 @@ export function changeConditionOperator(nameId, conditionOperator) {
     conditionOperator
   }
 }
+
+export function createActiveFiltersWithConditionOperator(
+  nameId,
+  filters,
+  conditionOperator
+) {
+  return async dispatch =>
+    Promise.all([
+      dispatch(changeConditionOperator(nameId, conditionOperator)),
+      dispatch(createActiveFilters(nameId, filters))
+    ])
+}
