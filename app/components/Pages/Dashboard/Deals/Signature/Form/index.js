@@ -124,7 +124,7 @@ export default class SignatureComposeDrawer extends React.Component {
               >
                 {this.props.isSubmitting
                   ? 'Please Wait...'
-                  : 'View In Docusign'}
+                  : 'Next: View in Docusign'}
               </ActionButton>
             </div>
           )}
