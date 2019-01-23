@@ -15,7 +15,6 @@ const user = (state = null, action) => {
     case actionTypes.FETCH_USER_TEAMS_REQUEST:
       return {
         ...state,
-        teams: [],
         is_fetching_teams: true
       }
 
