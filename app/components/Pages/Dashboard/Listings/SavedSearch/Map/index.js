@@ -40,8 +40,6 @@ const map = ({
   mapProps: { zoom, center }
 }) => (
   <Map
-    drawingLibrary
-    geometryLibrary
     zoom={zoom}
     style={style}
     center={center}
@@ -50,8 +48,8 @@ const map = ({
     defaultZoom={defaultZoom}
     defaultCenter={defaultCenter}
     yesIWantToUseGoogleMapApiInternals
+    bootstrapURLKeys={bootstrapURLKeys}
     onGoogleApiLoaded={onGoogleApiLoaded}
-    bootstrapURLKeys={{ key: bootstrapURLKeys.key }}
   >
     {markers.map(({ points, lat, lng }) => {
       const { id } = points[0]

@@ -79,7 +79,7 @@
     "forever": "^0.15.3",
     "fs-extra": "^5.0.0",
     "google-libphonenumber": "^3.1.8",
-    "google-map-react": "^1.1.0",
+    "google-map-react": "^1.1.2",
     "google-maps": "^3.3.0",
     "grapesjs": "^0.14.33",
     "history": "^4.7.2",
