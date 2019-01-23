@@ -11,9 +11,9 @@ const getTeams = async (user = {}, fetchMembers = false) => {
     }
 
     if (fetchMembers) {
-      fetchTeams
-        .query({ 'associations[]': ['brand.roles'] })
-        .query({ 'associations[]': ['brand_role.members'] })
+      fetchTeams.query({
+        'associations[]': ['brand.roles', 'brand_role.members']
+      })
     }
 
     const response = await fetchTeams
