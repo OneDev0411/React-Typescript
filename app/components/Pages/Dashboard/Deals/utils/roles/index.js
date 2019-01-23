@@ -311,9 +311,19 @@ export function getPrimaryAgent(deal, roles) {
 export function getPrimaryAgentName(deal, roles) {
   const agent = getPrimaryAgent(deal, roles)
 
-  if (agent) {
-    return getLegalFullName(agent)
+  if (!agent) {
+    return ''
   }
 
-  return ''
+  let name = []
+
+  if (agent.legal_first_name || agent.legal_last_name) {
+    name = agent.legal_full_name
+      ? [agent.legal_full_name]
+      : [agent.legal_first_name, agent.legal_last_name]
+  } else {
+    name = [agent.company_title]
+  }
+
+  return name.join(' ').trim()
 }
