@@ -93,7 +93,9 @@ class ContactsList extends React.Component {
         searchInputValue: this.state.searchInputValue,
         start: 0,
         order: this.order,
-        viewAsUsers
+        viewAsUsers,
+        conditionOperator:
+          nextProps.conditionOperator || this.props.conditionOperator
       })
 
       this.props.getContactsTags(viewAsUsers)
@@ -138,12 +140,19 @@ class ContactsList extends React.Component {
         activeSegment: segment
       },
       () => {
+        let conditionOperator = this.props.conditionOperator
+
+        if (segment.args && segment.args.filter_type) {
+          conditionOperator = segment.args.filter_type
+        }
+
         this.handleFilterChange({
           filters: segment.filters,
           searchInputValue: this.state.searchInputValue,
           start: 0,
           order: this.order,
-          viewAsUsers: users
+          viewAsUsers: users,
+          conditionOperator
         })
       }
     )

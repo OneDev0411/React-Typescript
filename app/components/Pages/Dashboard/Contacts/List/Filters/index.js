@@ -23,7 +23,10 @@ class ContactFilters extends React.PureComponent {
    */
   normalizeFilters = filters => ({
     filters: normalizeFilters(filters),
-    args: { users: this.props.users }
+    args: {
+      users: this.props.users,
+      filter_type: this.props.conditionOperator
+    }
   })
 
   normalizeSegment = (filters, activeFilters) => {
@@ -103,6 +106,7 @@ function mapStateToProps({ contacts }) {
 
   return {
     tags: selectTags(tags),
+    conditionOperator: contacts.filterSegments.conditionOperator,
     attributeDefs
   }
 }

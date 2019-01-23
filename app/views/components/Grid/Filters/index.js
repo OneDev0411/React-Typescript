@@ -14,7 +14,8 @@ import {
   removeActiveFilter,
   toggleActiveFilter,
   updateActiveFilter,
-  changeConditionOperator
+  changeConditionOperator,
+  createActiveFiltersWithConditionOperator
 } from 'actions/filter-segments/active-filters'
 
 import { ConditionOperators } from './ConditionOperators'
@@ -53,13 +54,23 @@ class Filters extends React.Component {
     }
   }
 
-  createFiltersFromSegment = (segment, activeFilters) => {
+  createFiltersFromSegment = async (segment, activeFilters) => {
     const filters = this.props.createFiltersFromSegment(
       segment.filters,
       activeFilters
     )
 
-    this.props.createActiveFilters(this.props.name, filters)
+    let conditionOperator = 'and'
+
+    if (segment.args && segment.args.filter_type) {
+      conditionOperator = segment.args.filter_type
+    }
+
+    await this.props.createActiveFiltersWithConditionOperator(
+      this.props.name,
+      filters,
+      conditionOperator
+    )
   }
 
   /**
@@ -234,6 +245,7 @@ export default connect(
     removeActiveFilter,
     toggleActiveFilter,
     updateActiveFilter,
-    changeConditionOperator
+    changeConditionOperator,
+    createActiveFiltersWithConditionOperator
   }
 )(Filters)
