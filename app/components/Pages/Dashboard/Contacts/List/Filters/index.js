@@ -106,6 +106,7 @@ function mapStateToProps({ contacts }) {
 
   return {
     tags: selectTags(tags),
+    conditionOperator: contacts.filterSegments.conditionOperator,
     attributeDefs
   }
 }
