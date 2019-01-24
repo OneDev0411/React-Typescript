@@ -3,7 +3,6 @@ import { Field } from 'react-final-form'
 import _ from 'underscore'
 
 import ActionButton from 'components/Button/ActionButton'
-import IconButton from 'components/Button/IconButton'
 import IconFolder from 'components/SvgIcons/Folder/IconFolder'
 
 import { FinalFormDrawer } from 'components/FinalFormDrawer'
@@ -23,6 +22,8 @@ export default class SignatureComposeDrawer extends React.Component {
   }
 
   formObject = null
+
+  shouldQuitOnCloseAttachments = true
 
   get InitialValues() {
     if (this.formObject || this.props.isSubmitting) {
@@ -75,17 +76,27 @@ export default class SignatureComposeDrawer extends React.Component {
     return list
   }
 
-  toggleOpenAttachments = () =>
-    this.setState(state => ({
-      isAttachmentsOpen: !state.isAttachmentsOpen
-    }))
+  handleSelectAttachments = () =>
+    this.setState({
+      isAttachmentsOpen: false
+    })
+
+  handleOpenAttachments = () => {
+    this.setState({
+      isAttachmentsOpen: true
+    })
+
+    this.shouldQuitOnCloseAttachments = false
+  }
 
   handleCloseAttachments = () => {
     this.setState({
       isAttachmentsOpen: false
     })
 
-    this.props.onClose()
+    if (this.shouldQuitOnCloseAttachments) {
+      this.props.onClose()
+    }
   }
 
   render() {
@@ -113,7 +124,7 @@ export default class SignatureComposeDrawer extends React.Component {
               <Tooltip caption="Select Documents">
                 <IconFolder
                   style={{ width: '2rem', cursor: 'pointer' }}
-                  onClick={this.toggleOpenAttachments}
+                  onClick={this.handleOpenAttachments}
                 />
               </Tooltip>
 
@@ -171,7 +182,7 @@ export default class SignatureComposeDrawer extends React.Component {
                 deal={this.props.deal}
                 isAttachmentsOpen={this.state.isAttachmentsOpen}
                 onCloseAttachmentsDrawer={this.handleCloseAttachments}
-                onChangeSelectedDocuments={this.toggleOpenAttachments}
+                onChangeSelectedDocuments={this.handleSelectAttachments}
                 component={Attachments}
               />
             </Fragment>
