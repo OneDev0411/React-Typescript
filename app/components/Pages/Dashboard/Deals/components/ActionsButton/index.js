@@ -129,7 +129,10 @@ class ActionsButton extends React.Component {
     const envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
 
     return {
-      task_type: this.props.task.task_type,
+      task_type:
+        this.props.task.task_type === 'Form' && this.props.task.form
+          ? 'Form'
+          : 'Generic',
       file_uploaded: this.hasTaskAttachments(this.props.task),
       form_saved: this.props.task.submission !== null,
       envelope_status: this.getLastEnvelopeStatus(envelopes)
