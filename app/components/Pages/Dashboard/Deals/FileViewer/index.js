@@ -160,13 +160,23 @@ class FileViewer extends React.Component {
   }
 
   get DigitalForm() {
-    console.log('>>>>>', this.props.task)
-
     return getTaskForm(this.state.deal, this.props.task)
   }
 
   get EntityType() {
     return this.props.params.entityType || 'digital-form'
+  }
+
+  get ShowLoader() {
+    if (!this.state.deal) {
+      return true
+    }
+
+    if (!this.props.task && this.props.params.taskId !== 'stash') {
+      return true
+    }
+
+    return false
   }
 
   handleBackButton = () =>
@@ -175,7 +185,7 @@ class FileViewer extends React.Component {
   normalizeName = name => decodeURIComponent(name).replace(/[_-]/g, ' ')
 
   render() {
-    if (!this.state.deal || !this.props.task) {
+    if (this.ShowLoader) {
       return <Spinner />
     }
 
