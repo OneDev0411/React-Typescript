@@ -4,6 +4,7 @@ import notificationTheme from 'reapop-theme-wybo'
 import { Router, browserHistory } from 'react-router'
 import { Provider } from 'react-redux'
 import { syncHistoryWithStore } from 'react-router-redux'
+
 import ConfirmationModal from './components/Partials/Confirmation'
 
 // Routes config

@@ -48,7 +48,12 @@ const appReducer = combineReducers({
   favorites,
 
   /* third party reducers */
-  notifications: notificationsReducer(),
+  notifications: notificationsReducer({
+    position: 'br',
+    dismissible: true,
+    dismissAfter: 4000,
+    closeButton: true
+  }),
   form: reduxFormReducer,
   routing: routerReducer
 })
