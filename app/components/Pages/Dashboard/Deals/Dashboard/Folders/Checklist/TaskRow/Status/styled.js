@@ -4,11 +4,11 @@ export const Label = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   color: #fff;
-  min-width: 3rem;
   border-radius: 2px;
   background: transparent;
-  padding: 0 0.75rem;
+  padding: 0 0.5rem;
   font-size: 0.825rem;
   max-height: 1.5rem;
 
