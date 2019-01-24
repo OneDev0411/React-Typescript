@@ -79,7 +79,9 @@ class TagsList extends React.Component {
       }
     }
 
-    this.props.onFilterChange(normalizeFilters(nextFilters))
+    this.props.onFilterChange({
+      filters: normalizeFilters(nextFilters)
+    })
   }
 
   isSelected = text =>

@@ -45,3 +45,24 @@ export function removeActiveFilter(nameId, filterId) {
     id: nameId
   }
 }
+
+export function changeConditionOperator(nameId, conditionOperator) {
+  return {
+    type: actionTypes.CHANGE_CONDITION_OPERATOR,
+    namespace: 'filter-segments',
+    id: nameId,
+    conditionOperator
+  }
+}
+
+export function createActiveFiltersWithConditionOperator(
+  nameId,
+  filters,
+  conditionOperator
+) {
+  return async dispatch =>
+    Promise.all([
+      dispatch(changeConditionOperator(nameId, conditionOperator)),
+      dispatch(createActiveFilters(nameId, filters))
+    ])
+}

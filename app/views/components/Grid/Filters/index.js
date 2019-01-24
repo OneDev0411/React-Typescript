@@ -13,9 +13,12 @@ import {
   createActiveFilters,
   removeActiveFilter,
   toggleActiveFilter,
-  updateActiveFilter
+  updateActiveFilter,
+  changeConditionOperator,
+  createActiveFiltersWithConditionOperator
 } from 'actions/filter-segments/active-filters'
 
+import { ConditionOperators } from './ConditionOperators'
 import { AddFilter } from './Create'
 import { FilterItem } from './Item'
 
@@ -32,26 +35,42 @@ class Filters extends React.Component {
     const { segment } = this.props
 
     if (segment) {
-      this.createFiltersFromSegment(segment)
+      this.createFiltersFromSegment(segment, this.props.activeFilters)
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.shouldReCreateFilters(nextProps)
   }
 
-  shouldReCreateFilters = ({ segment: nextSegment }) => {
+  shouldReCreateFilters = ({ segment: nextSegment, activeFilters }) => {
     const { segment } = this.props
 
-    if (segment && nextSegment && segment.id !== nextSegment.id) {
-      return this.createFiltersFromSegment(nextSegment)
+    if (
+      (!segment && nextSegment) ||
+      (segment && nextSegment && segment.id !== nextSegment.id)
+    ) {
+      return this.createFiltersFromSegment(nextSegment, activeFilters)
     }
   }
 
-  createFiltersFromSegment = segment => {
-    const activeFilters = this.props.createFiltersFromSegment(segment.filters)
+  createFiltersFromSegment = async (segment, activeFilters) => {
+    const filters = this.props.createFiltersFromSegment(
+      segment.filters,
+      activeFilters
+    )
 
-    this.props.createActiveFilters(this.props.name, activeFilters)
+    let conditionOperator = 'and'
+
+    if (segment.args && segment.args.filter_type) {
+      conditionOperator = segment.args.filter_type
+    }
+
+    await this.props.createActiveFiltersWithConditionOperator(
+      this.props.name,
+      filters,
+      conditionOperator
+    )
   }
 
   /**
@@ -131,15 +150,30 @@ class Filters extends React.Component {
   /**
    *
    */
-  onChangeFilters = filters => {
+  onChangeFilters = filterItems => {
     const completedFilters = _.filter(
-      filters,
+      filterItems,
       item => item.isIncomplete === false
     )
 
-    this.props.onChange(
-      this.props.createSegmentFromFilters(completedFilters).filters
-    )
+    this.props.onChange({
+      filters: this.props.createSegmentFromFilters(completedFilters).filters,
+      conditionOperator: this.props.conditionOperator
+    })
+  }
+
+  onConditionChange = ({ value: conditionOperator }) => {
+    this.props.changeConditionOperator(this.props.name, conditionOperator)
+
+    if (_.size(this.props.activeFilters) <= 1) {
+      return false
+    }
+
+    this.props.onChange({
+      filters: this.props.createSegmentFromFilters(this.props.activeFilters)
+        .filters,
+      conditionOperator
+    })
   }
 
   render() {
@@ -149,6 +183,13 @@ class Filters extends React.Component {
 
     return (
       <Container>
+        {this.props.disableConditionOperators || (
+          <ConditionOperators
+            selectedItem={this.props.conditionOperator}
+            onChange={this.onConditionChange}
+          />
+        )}
+
         {_.map(activeFilters, (filter, id) => (
           <FilterItem
             key={id}
@@ -180,13 +221,16 @@ class Filters extends React.Component {
 }
 
 function mapStateToProps(state, { name, plugins }) {
-  let states = {}
+  let states = {
+    name,
+    conditionOperator: state[name].filterSegments.conditionOperator,
+    activeFilters: selectActiveFilters(state[name].filterSegments)
+  }
 
   if (plugins.includes('segments')) {
     states = {
-      segment: selectActiveSavedSegment(state[name].filterSegments, name),
-      activeFilters: selectActiveFilters(state[name].filterSegments),
-      name
+      ...states,
+      segment: selectActiveSavedSegment(state[name].filterSegments, name)
     }
   }
 
@@ -200,6 +244,8 @@ export default connect(
     createActiveFilters,
     removeActiveFilter,
     toggleActiveFilter,
-    updateActiveFilter
+    updateActiveFilter,
+    changeConditionOperator,
+    createActiveFiltersWithConditionOperator
   }
 )(Filters)

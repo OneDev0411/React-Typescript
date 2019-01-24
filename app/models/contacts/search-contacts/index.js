@@ -6,7 +6,8 @@ export async function searchContacts(
   filter,
   query = {
     ...defaultQuery,
-    order: '-created_at'
+    order: '-created_at',
+    filter_type: 'and'
   },
   users
 ) {
