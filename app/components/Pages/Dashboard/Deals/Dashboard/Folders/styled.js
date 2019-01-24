@@ -50,7 +50,7 @@ export const ArrowIcon = styled(ArrowDownIcon)`
   cursor: pointer;
   fill: #000 !important;
   transition: all ease-in 0.2s;
-  transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'initial')};
+  transform: ${({ isOpen }) => (isOpen ? 'inherit' : 'rotateZ(-90deg)')};
 `
 
 /* item rows */
@@ -75,6 +75,10 @@ export const TaskInfo = styled.div`
   display: flex;
   margin-top: 1rem;
   padding-left: 2rem;
+`
+
+export const RowArrowIcon = styled(ArrowIcon)`
+  opacity: ${props => (props.display ? 1 : 0)};
 `
 
 export const RowRightColumn = styled.div`
@@ -104,16 +108,4 @@ export const LastActivity = styled.div`
 
 export const ActivitySeparator = styled.div`
   margin: 0 0.5rem;
-`
-
-export const RowArrowIcon = styled(ArrowDownIcon)`
-  width: 1.5em;
-  height: 1.5em;
-  margin-right: 0.5rem;
-  cursor: pointer;
-  fill: #000 !important;
-  transition: all ease-in 0.1s;
-  opacity: ${props => (props.display ? 1 : 0)}
-
-  transform: ${({ isOpen }) => (isOpen ? 'inherit' : 'rotateZ(-90deg)')};
 `
