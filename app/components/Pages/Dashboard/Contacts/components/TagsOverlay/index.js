@@ -36,10 +36,7 @@ const defaultTags = [
   'Past Client',
   'Seller',
   'Agent',
-  'First Home',
-  'Lawyer',
   'Contractor',
-  'Painter',
   'Closing Officer',
   'Buyer'
 ]
@@ -89,14 +86,13 @@ class TagsOverlay extends React.Component {
 
   onTagSelectionChange = (tagIndex, isSelected) =>
     this.setState(({ tags: prevTags }) => ({
-      tags: prevTags.map(
-        (tag, index) =>
-          index === tagIndex
-            ? {
-                ...prevTags[tagIndex],
-                isSelected
-              }
-            : prevTags[index]
+      tags: prevTags.map((tag, index) =>
+        index === tagIndex
+          ? {
+              ...prevTags[tagIndex],
+              isSelected
+            }
+          : prevTags[index]
       )
     }))
 
@@ -142,7 +138,7 @@ class TagsOverlay extends React.Component {
     if (/\S/.test(newTagValue)) {
       return this.props.confirmation({
         description:
-          'We noticed you have un-added tag. Please select the \'Add\' link before saving',
+          "We noticed you have un-added tag. Please select the 'Add' link before saving",
         hideCancelButton: true,
         confirmLabel: 'Ok'
       })
