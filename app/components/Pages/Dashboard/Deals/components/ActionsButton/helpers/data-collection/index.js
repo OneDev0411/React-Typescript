@@ -11,7 +11,8 @@ const taskTypes = {
 
 const documentTypes = {
   FORM: 'Form',
-  PDF: 'Pdf'
+  PDF: 'Pdf',
+  GENERIC: 'Generic'
 }
 
 const envelopeStates = {
@@ -37,6 +38,7 @@ const RENAME_BUTTON = 'rename'
 const DELETE_BUTTON = 'delete'
 const DOWNLOAD_BUTTON = 'download'
 const REVIEW_ENVELOPE_BUTTON = 'review-envelope'
+const SPLIT_PDF_BUTTON = 'split-pdf'
 
 function normalizeConditions(conditions) {
   return conditions.map(item => ({
@@ -107,6 +109,10 @@ const actionsDefaultProperties = {
   [REVIEW_ENVELOPE_BUTTON]: {
     label: 'Review in Docusign',
     type: 'review-envelope'
+  },
+  [SPLIT_PDF_BUTTON]: {
+    label: 'Split PDF',
+    type: 'split-pdf'
   }
 }
 
@@ -284,6 +290,7 @@ export const documentsConditions = normalizeConditions([
       },
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
+      [SPLIT_PDF_BUTTON]: {},
       [PRINT_BUTTON]: {},
       [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {},
@@ -370,6 +377,7 @@ export const documentsConditions = normalizeConditions([
       [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {},
       [MOVE_BUTTON]: {},
+      [SPLIT_PDF_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
   },
@@ -399,9 +407,52 @@ export const documentsConditions = normalizeConditions([
     }
   },
   {
+    conditions: ({
+      has_task,
+      document_type,
+      file_uploaded,
+      form_saved,
+      envelope_status
+    }) =>
+      has_task === true &&
+      document_type === documentTypes.GENERIC &&
+      file_uploaded === true &&
+      form_saved === false &&
+      envelope_status === envelopeStates.NONE,
+    actions: {
+      [DOWNLOAD_BUTTON]: {
+        primary: true
+      },
+      [VIEW_BUTTON]: {},
+      [PRINT_BUTTON]: {},
+      [RENAME_BUTTON]: {},
+      [DELETE_BUTTON]: {},
+      [MOVE_BUTTON]: {}
+    }
+  },
+  {
     conditions: ({ has_task, document_type, file_uploaded, form_saved }) =>
       has_task === false &&
       document_type === documentTypes.PDF &&
+      file_uploaded === true &&
+      form_saved === false,
+    actions: {
+      [MOVE_BUTTON]: {
+        primary: true
+      },
+      [DOWNLOAD_BUTTON]: {},
+      [VIEW_BUTTON]: {},
+      [SPLIT_PDF_BUTTON]: {},
+      [DELETE_BUTTON]: {},
+      [RENAME_BUTTON]: {},
+      [PRINT_BUTTON]: {},
+      [EMAIL_BUTTON]: {}
+    }
+  },
+  {
+    conditions: ({ has_task, document_type, file_uploaded, form_saved }) =>
+      has_task === false &&
+      document_type === documentTypes.GENERIC &&
       file_uploaded === true &&
       form_saved === false,
     actions: {
@@ -445,7 +496,8 @@ export const tasksConditions = normalizeConditions([
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {}
+      [PRINT_BUTTON]: {},
+      [SPLIT_PDF_BUTTON]: {}
     }
   },
   {
