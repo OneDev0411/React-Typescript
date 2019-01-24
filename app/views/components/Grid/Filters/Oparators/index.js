@@ -45,13 +45,14 @@ export class FilterOperators extends React.Component {
 
   onOperatorChange = operator => {
     const { selectedOperator } = this.state
+    const { values = [] } = this.props
 
     if (selectedOperator && selectedOperator.name === operator.name) {
       return false
     }
 
     this.setState({ selectedOperator: operator })
-    this.props.onFilterChange([], operator)
+    this.props.onFilterChange(values, operator)
   }
 
   onFilterChange = filters =>
