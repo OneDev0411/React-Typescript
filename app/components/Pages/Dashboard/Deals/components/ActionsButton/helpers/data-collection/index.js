@@ -399,18 +399,11 @@ export const documentsConditions = normalizeConditions([
     }
   },
   {
-    conditions: ({
-      has_task,
-      document_type,
-      file_uploaded,
-      form_saved,
-      envelope_status
-    }) =>
+    conditions: ({ has_task, document_type, file_uploaded, form_saved }) =>
       has_task === false &&
       document_type === documentTypes.PDF &&
       file_uploaded === true &&
-      form_saved === false &&
-      envelope_status === envelopeStates.NONE,
+      form_saved === false,
     actions: {
       [MOVE_BUTTON]: {
         primary: true

@@ -92,22 +92,22 @@ class ActionsButton extends React.Component {
     let conditions = {}
 
     if (this.props.type === 'document') {
-      conditions = this.generateDocumentsConditions()
+      conditions = this.createDocumentsConditions()
     }
 
     if (this.props.type === 'task') {
-      conditions = this.generateTaskConditions()
+      conditions = this.createTaskConditions()
     }
 
     return selectActions(this.props.type, conditions)
   }
 
-  generateDocumentsConditions = () => {
+  createDocumentsConditions = () => {
     let documentType
-    const envelopes = this.getDocumentEnvelopes(this.props.document)
 
     const isTask = this.props.document.type === 'task'
     const isFile = this.props.document.type === 'file'
+    const envelopes = this.getDocumentEnvelopes(this.props.document)
 
     if (isTask) {
       documentType = 'Form'
@@ -125,7 +125,7 @@ class ActionsButton extends React.Component {
     }
   }
 
-  generateTaskConditions = () => {
+  createTaskConditions = () => {
     const envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
 
     return {
@@ -144,15 +144,12 @@ class ActionsButton extends React.Component {
     task.room.attachments.filter(file => file.mime === 'application/pdf')
       .length > 0
 
-  getDocumentEnvelopes = document => {
-    const envelopes = Object.values(this.props.envelopes)
+  getDocumentEnvelopes = document =>
+    Object.values(this.props.envelopes)
       .filter(envelope =>
         envelope.documents.some(doc => doc.file === document.id)
       )
       .sort((a, b) => b.created_at - a.created_at)
-
-    return envelopes
-  }
 
   getLastEnvelopeStatus = envelopes => {
     if (envelopes.length === 0) {
