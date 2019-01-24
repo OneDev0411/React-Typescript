@@ -3,28 +3,22 @@ import styled from 'styled-components'
 
 import { primary } from 'views/utils/colors'
 
-const ItemWrapper = styled.div`
+const Container = styled.div`
   width: 100%;
   padding: 0.6rem 1rem;
+  font-weight: normal;
   cursor: pointer;
 
   &:hover {
-    background-color: ${primary};
-  }
-`
-
-const ItemTitle = styled.div`
-  font-size: 0.9rem;
-
-  ${ItemWrapper}:hover & {
-    color: #fff;
+    color: ${primary};
+    font-weight: 500;
   }
 `
 
 export default function({ title, description, ...rest }) {
   return (
-    <ItemWrapper {...rest}>
-      <ItemTitle>{title}</ItemTitle>
-    </ItemWrapper>
+    <Container {...rest}>
+      <div>{title}</div>
+    </Container>
   )
 }
