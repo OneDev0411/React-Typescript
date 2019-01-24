@@ -31,6 +31,7 @@ import { getTaskEnvelopes } from '../../utils/get-task-envelopes'
 
 import Message from '../../../Chatroom/Util/message'
 import GetSignature from '../../Signature'
+import PdfSplitter from '../../PdfSplitter'
 import UploadManager from '../../UploadManager'
 
 import {
@@ -47,7 +48,8 @@ class ActionsButton extends React.Component {
 
     this.state = {
       isMenuOpen: false,
-      isSignatureFormOpen: false
+      isSignatureFormOpen: false,
+      isPdfSplitterOpen: false
     }
 
     this.actions = {
@@ -55,6 +57,7 @@ class ActionsButton extends React.Component {
       view: this.handleView,
       download: this.handleDownload,
       delete: this.handleDelete,
+      'split-pdf': this.handleToggleSplitPdf,
       'review-envelope': this.handleReviewEnvelope,
       'get-signature': this.handleGetSignature,
       'edit-form': this.handleEditForm,
@@ -324,6 +327,11 @@ class ActionsButton extends React.Component {
     })
   }
 
+  handleToggleSplitPdf = () =>
+    this.setState(state => ({
+      isPdfSplitterOpen: !state.isPdfSplitterOpen
+    }))
+
   /**
    *
    */
@@ -443,6 +451,19 @@ class ActionsButton extends React.Component {
             document: this.props.document
           })}
         />
+
+        {this.state.isPdfSplitterOpen && (
+          <PdfSplitter
+            files={getFileUrl({
+              type: this.props.type,
+              deal: this.props.deal,
+              task: this.props.task,
+              document: this.props.document
+            })}
+            deal={this.props.deal}
+            onClose={this.handleToggleSplitPdf}
+          />
+        )}
       </React.Fragment>
     )
   }
