@@ -37,7 +37,8 @@ function TaskView(props) {
 
       <Drawer.Body
         style={{
-          paddingTop: headerHeight
+          paddingTop: headerHeight,
+          paddingRight: '1rem'
         }}
       >
         <DraftBanner isDraftDeal={props.deal.is_draft} />
