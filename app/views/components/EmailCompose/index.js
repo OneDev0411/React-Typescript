@@ -68,6 +68,12 @@ export default class EmailCompose extends React.Component {
         }
       }
 
+      if (recipient.data_type === 'tag') {
+        return {
+          tag: recipient.text
+        }
+      }
+
       return {
         [recipient.data_type]: recipient.id
       }
