@@ -12,9 +12,9 @@ import {
   deleteNewNotifications,
   markNotificationAsSeen
 } from '../../../../store_actions/notifications'
-import { EventDrawer } from '../../../../views/components/EventDrawer'
 
 import Header from './Header'
+import { CrmEvents } from './CrmEvents'
 
 class Notifications extends Component {
   constructor(props) {
@@ -36,9 +36,10 @@ class Notifications extends Component {
   openCRMTaskDrawer = selectedEvent => {
     this.setState(
       { selectedEvent },
-      browserHistory.push(`/dashboard/notifications/crm/${selectedEvent}`)
+      browserHistory.push(`/dashboard/notifications/crm/${selectedEvent.id}`)
     )
   }
+
   closeCRMTaskDrawer = () => {
     this.setState({ selectedEvent: null }, () =>
       browserHistory.push('/dashboard/notifications')
@@ -75,7 +76,7 @@ class Notifications extends Component {
       case 'ReminderIsDueCrmTask':
       case 'UserAssignedCrmTask':
       case 'UserEditedCrmTask':
-        this.openCRMTaskDrawer(notification.object)
+        this.openCRMTaskDrawer(notification.objects[0])
         break
 
       default:
@@ -119,7 +120,8 @@ class Notifications extends Component {
                     fontWeight: '700'
                   }}
                 >
-                  No <br />image
+                  No <br />
+                  image
                 </div>
               )}
             </div>
@@ -192,7 +194,8 @@ class Notifications extends Component {
                     fontWeight: '700'
                   }}
                 >
-                  No <br />image
+                  No <br />
+                  image
                 </div>
               )}
             </div>
@@ -221,7 +224,8 @@ class Notifications extends Component {
                     fontWeight: '700'
                   }}
                 >
-                  No <br />image
+                  No <br />
+                  image
                 </div>
               )}
             </div>
@@ -250,7 +254,8 @@ class Notifications extends Component {
                     fontWeight: '700'
                   }}
                 >
-                  No <br />image
+                  No <br />
+                  image
                 </div>
               )}
             </div>
@@ -343,6 +348,7 @@ class Notifications extends Component {
 
     return <div style={S('text-center mt-40')}>Loading...</div>
   }
+
   render() {
     return (
       <div
@@ -354,12 +360,12 @@ class Notifications extends Component {
         <Header />
         {this.getNotifications()}
         {this.state.selectedEvent && (
-          <EventDrawer
-            eventId={this.state.selectedEvent}
+          <CrmEvents
             isOpen
-            onClose={this.closeCRMTaskDrawer}
-            submitCallback={this.closeCRMTaskDrawer}
             deleteCallback={this.closeCRMTaskDrawer}
+            onClose={this.closeCRMTaskDrawer}
+            selectedEvent={this.state.selectedEvent}
+            submitCallback={this.closeCRMTaskDrawer}
             user={this.props.user}
           />
         )}
