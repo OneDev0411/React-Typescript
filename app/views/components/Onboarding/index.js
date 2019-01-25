@@ -22,7 +22,7 @@ export default class Onboarding extends React.Component {
       ...step,
       disableBeacon: true,
       tooltipComponent: props => (
-        <Container style={step.tooltipStyle}>
+        <Container {...props.tooltipProps} style={step.tooltipStyle}>
           <Section>
             <Title>{step.title}</Title>
             {step.text}
