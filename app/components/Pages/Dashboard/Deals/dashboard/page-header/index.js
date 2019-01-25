@@ -16,7 +16,7 @@ import DealEmail from '../deal-email'
 const agentNetworkValidUsers = [
   'shayan.hamidi@gmail.com',
   'snhasani+a@gmail.com',
-  'emil+agent@rechat.com'
+  'bpitchford@briggsfreeman.com'
 ]
 
 const Button = styled(ActionButton)`
@@ -52,16 +52,15 @@ const Header = ({ user, deal, showAttachments }) => (
         Get Signatures
       </Button>
 
-      {deal.listing &&
-        agentNetworkValidUsers.includes(user.email) && (
-          <LinkButton
-            appearance="outline"
-            to={`/dashboard/deals/${deal.id}/network`}
-            style={{ margin: '0 0.5rem 0 0' }}
-          >
-            Network
-          </LinkButton>
-        )}
+      {deal.listing && agentNetworkValidUsers.includes(user.email) && (
+        <LinkButton
+          appearance="outline"
+          to={`/dashboard/deals/${deal.id}/network`}
+          style={{ margin: '0 0.5rem 0 0' }}
+        >
+          Network
+        </LinkButton>
+      )}
 
       {deal.listing && (
         <Fragment>
