@@ -44,13 +44,13 @@ export default class EmailCompose extends React.Component {
     return errors
   }
 
-  handleSubmit = values => {
+  handleSubmit = async values => {
     const form = {
       ...values,
       recipients: this.normalizeRecipients(values.recipients)
     }
 
-    this.props.onClickSend(form)
+    await this.props.onClickSend(form)
   }
 
   normalizeRecipients = recipients =>
