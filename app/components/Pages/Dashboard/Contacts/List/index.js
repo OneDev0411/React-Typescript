@@ -287,7 +287,8 @@ class ContactsList extends React.Component {
       undefined,
       this.state.searchInputValue,
       this.order,
-      this.props.viewAsUsers
+      this.props.viewAsUsers,
+      this.props.conditionOperator
     )
   }
 
