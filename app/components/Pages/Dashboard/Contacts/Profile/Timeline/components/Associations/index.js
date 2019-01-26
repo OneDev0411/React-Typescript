@@ -123,6 +123,10 @@ export class Associations extends React.Component {
             association={association}
             key={`association_${index}`}
             isRemovable={false}
+            isReadOnly={
+              this.defaultAssociationId ===
+              association[association.association_type].id
+            }
           />
         ))}
         {associationsLength > 6 && (
