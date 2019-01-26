@@ -60,7 +60,12 @@ export class FinalFormDrawer extends React.Component {
   }
 
   onSubmit = async (values, form) => {
-    await this.props.onSubmit(values, form)
+    const result = await this.props.onSubmit(values, form)
+
+    if (result && result['FINAL_FORM/form-error']) {
+      return result
+    }
+
     form.initialize(this.props.initialValues)
   }
 
