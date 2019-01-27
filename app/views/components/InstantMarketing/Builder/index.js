@@ -122,7 +122,7 @@ class Builder extends React.Component {
 
     const style = document.createElement('style')
     const css =
-      'body { margin: 0 auto !important; background-color: #f2f2f2 !important }'
+      'body { margin: 0 auto !important; background-color: #ffffff !important }'
 
     style.type = 'text/css'
 
