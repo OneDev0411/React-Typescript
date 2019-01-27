@@ -1,5 +1,7 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
+import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 
 import fecha from 'fecha'
 
@@ -10,6 +12,7 @@ import VerticalDotsIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
 import LinkIcon from 'components/SvgIcons/LinkIcon'
 
 import { getActiveTeamId } from 'utils/user-teams'
+import copy from 'utils/copy-text-to-clipboard'
 import config from 'config'
 
 import {
@@ -22,7 +25,7 @@ import {
   EventMenu
 } from './styled.js'
 
-export default class EventsList extends React.Component {
+class EventsList extends React.Component {
   menuItems = [
     {
       label: 'Edit',
@@ -66,7 +69,16 @@ export default class EventsList extends React.Component {
 
               <RegistrationLink>
                 <LinkText>
-                  <a href={link} target="_blabk">
+                  <a
+                    onClick={e => {
+                      e.preventDefault()
+                      copy(link)
+                      this.props.notify({
+                        message: 'Link Copied',
+                        status: 'success'
+                      })
+                    }}
+                  >
                     {link}
                   </a>
                   <LinkIcon />
@@ -97,3 +109,8 @@ export default class EventsList extends React.Component {
     )
   }
 }
+
+export default connect(
+  null,
+  { notify }
+)(EventsList)
