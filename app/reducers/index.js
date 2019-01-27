@@ -52,7 +52,8 @@ const appReducer = combineReducers({
     position: 'br',
     dismissible: true,
     dismissAfter: 4000,
-    closeButton: true
+    closeButton: true,
+    allowHTML: true
   }),
   form: reduxFormReducer,
   routing: routerReducer
