@@ -12,11 +12,7 @@ export async function deleteAttributesFromContacts(ids) {
   }
 
   try {
-    const response = await new Fetch()
-      .delete('/contacts/attributes')
-      .send({ ids })
-
-    return response.body
+    return new Fetch().delete('/contacts/attributes').send({ ids })
   } catch (error) {
     throw error
   }
