@@ -73,12 +73,7 @@ export function formatPreSave(previousFields, nextFields) {
 
     if (attribute.id) {
       // when label is changed
-      if (
-        value &&
-        label &&
-        attribute_def.has_label &&
-        label !== previousLabel
-      ) {
+      if (value && attribute_def.has_label && label !== previousLabel) {
         upsertedAttributeList.push({
           id: attribute.id,
           [type]: value,
@@ -111,11 +106,11 @@ export function formatPreSave(previousFields, nextFields) {
                 : label
               : attribute_def.labels[0]
           })
-        } else if (label) {
+        } else {
           upsertedAttributeList.push({
             attribute_def,
             [type]: newValue,
-            label
+            label: label == null ? '' : label
           })
         }
       } else {

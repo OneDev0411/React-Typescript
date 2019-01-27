@@ -12,6 +12,7 @@ export function submitValidate(values) {
     isEmptyTextField('first_name') &&
     isEmptyTextField('middle_name') &&
     isEmptyTextField('last_name') &&
+    isEmptyTextField('source') &&
     isEmptyFieldArray(values.email) &&
     isEmptyFieldArray(values.phone_number)
   ) {
