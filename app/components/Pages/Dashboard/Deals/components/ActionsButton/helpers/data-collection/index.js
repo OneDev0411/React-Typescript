@@ -104,7 +104,7 @@ const actionsDefaultProperties = {
   },
   [MOVE_BUTTON]: {
     label: 'Move',
-    type: 'move'
+    type: 'move-file'
   },
   [REVIEW_ENVELOPE_BUTTON]: {
     label: 'Review in Docusign',

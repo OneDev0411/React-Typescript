@@ -32,6 +32,7 @@ import { getTaskEnvelopes } from '../../utils/get-task-envelopes'
 import Message from '../../../Chatroom/Util/message'
 import GetSignature from '../../Signature'
 import PdfSplitter from '../../PdfSplitter'
+import TasksDrawer from '../TasksDrawer'
 import UploadManager from '../../UploadManager'
 
 import {
@@ -49,7 +50,8 @@ class ActionsButton extends React.Component {
     this.state = {
       isMenuOpen: false,
       isSignatureFormOpen: false,
-      isPdfSplitterOpen: false
+      isPdfSplitterOpen: false,
+      isTasksDrawerOpen: false
     }
 
     this.actions = {
@@ -57,6 +59,7 @@ class ActionsButton extends React.Component {
       view: this.handleView,
       download: this.handleDownload,
       delete: this.handleDelete,
+      'move-file': this.toggleMoveFile,
       'split-pdf': this.handleToggleSplitPdf,
       'review-envelope': this.handleReviewEnvelope,
       'get-signature': this.handleGetSignature,
@@ -358,6 +361,11 @@ class ActionsButton extends React.Component {
     window.open(link, '_blank')
   }
 
+  toggleMoveFile = () =>
+    this.setState(state => ({
+      isTasksDrawerOpen: !state.isTasksDrawerOpen
+    }))
+
   deleteFile = async () => {
     try {
       await asyncDeleteFile(this.props.deal.id, {
@@ -462,6 +470,16 @@ class ActionsButton extends React.Component {
             })}
             deal={this.props.deal}
             onClose={this.handleToggleSplitPdf}
+          />
+        )}
+
+        {this.state.isTasksDrawerOpen && (
+          <TasksDrawer
+            isOpen
+            deal={this.props.deal}
+            file={this.props.document}
+            onClose={this.toggleMoveFile}
+            title="Move to Checklist"
           />
         )}
       </React.Fragment>
