@@ -493,6 +493,7 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
+      [UPLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
