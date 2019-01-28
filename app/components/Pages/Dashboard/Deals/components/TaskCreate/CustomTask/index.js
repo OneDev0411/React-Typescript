@@ -45,7 +45,7 @@ class CustomTask extends React.Component {
 
     const task = await this.handleCreateTask()
 
-    this.props.setUploadFiles(files, task)
+    this.props.setUploadFiles(files, task.id)
   }
 
   render() {
