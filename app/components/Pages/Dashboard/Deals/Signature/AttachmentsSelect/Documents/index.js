@@ -8,6 +8,7 @@ import Flex from 'styled-flex-component'
 
 import { CheckBoxButton } from 'components/Button/CheckboxButton'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+import Search from 'components/Grid/Search'
 
 import { selectDealTasks } from 'reducers/deals/tasks'
 import { getChecklistById } from 'reducers/deals/checklists'
@@ -34,6 +35,7 @@ import {
 
 class DocumentRow extends React.Component {
   state = {
+    searchFilter: '',
     selectedStashFile: null
   }
 
@@ -53,6 +55,11 @@ class DocumentRow extends React.Component {
     })
   }
 
+  handleSearch = searchFilter =>
+    this.setState({
+      searchFilter
+    })
+
   handleMoveComplete = (task, file) => {
     const item = normalizeAttachment({
       type: 'file',
@@ -70,8 +77,6 @@ class DocumentRow extends React.Component {
     const element = document.getElementById(item.id)
 
     if (element) {
-      element.classList.add('blink')
-
       element.scrollIntoView({
         behavior: 'smooth'
       })
@@ -150,28 +155,26 @@ class DocumentRow extends React.Component {
       .filter(item => this.isInitialAttachment(item) === false)
       .sort((a, b) => b.date - a.date)
 
-    return Object.values(this.props.initialAttachments).concat(
-      sortedList,
-      stashFiles
-    )
+    return Object.values(this.props.initialAttachments)
+      .concat(sortedList, stashFiles)
+      .filter(document =>
+        document.title
+          .toLowerCase()
+          .includes(this.state.searchFilter.toLowerCase())
+      )
   }
 
   render() {
     return (
       <Container>
-        {this.state.selectedStashFile && (
-          <TasksDrawer
-            isOpen
-            drawerOptions={{
-              showBackdrop: false
-            }}
-            deal={this.props.deal}
-            file={this.state.selectedStashFile}
-            onClose={this.handleCloseMoveFileDrawer}
-            onMoveComplete={this.handleMoveComplete}
-            title="Move to Checklist"
-          />
-        )}
+        <Search
+          style={{ margin: '1rem 0' }}
+          disableOnSearch={false}
+          showLoadingOnSearch
+          placeholder="Search"
+          onChange={this.handleSearch}
+          onClearSearch={this.handleSearch}
+        />
 
         {this.getDocuments().map((document, index) => {
           const checklist = getChecklistById(
@@ -228,6 +231,20 @@ class DocumentRow extends React.Component {
             </DocumentItem>
           )
         })}
+
+        {this.state.selectedStashFile && (
+          <TasksDrawer
+            isOpen
+            drawerOptions={{
+              showBackdrop: false
+            }}
+            deal={this.props.deal}
+            file={this.state.selectedStashFile}
+            onClose={this.handleCloseMoveFileDrawer}
+            onMoveComplete={this.handleMoveComplete}
+            title="Move to Checklist"
+          />
+        )}
       </Container>
     )
   }
