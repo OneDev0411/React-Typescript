@@ -66,6 +66,7 @@ class Attachments extends React.Component {
 
         {this.props.isAttachmentsOpen && (
           <AttachmentsSelectDrawer
+            initialAttachments={this.props.initialAttachments}
             defaultSelectedItems={this.props.input.value}
             deal={this.props.deal}
             onChangeSelectedDocuments={this.handleChangeSelectedDocuments}
