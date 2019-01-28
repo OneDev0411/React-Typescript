@@ -32,7 +32,6 @@ const EMAIL_BUTTON = 'email'
 const MOVE_BUTTON = 'move'
 const VIEW_BUTTON = 'view'
 const NOTIFY_ADMIN_BUTTON = 'notify-button'
-const PRINT_BUTTON = 'print'
 const UPLOAD_BUTTON = 'upload'
 const RENAME_BUTTON = 'rename'
 const DELETE_BUTTON = 'delete'
@@ -77,10 +76,6 @@ const actionsDefaultProperties = {
   [NOTIFY_ADMIN_BUTTON]: {
     label: 'Notify Office',
     type: 'notify-office'
-  },
-  [PRINT_BUTTON]: {
-    label: 'Print',
-    type: 'print'
   },
   [UPLOAD_BUTTON]: {
     label: 'Upload',
@@ -138,8 +133,7 @@ export const documentsConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         disabled: true
       },
-      [EMAIL_BUTTON]: {},
-      [PRINT_BUTTON]: {}
+      [EMAIL_BUTTON]: {}
     }
   },
   {
@@ -162,7 +156,6 @@ export const documentsConditions = normalizeConditions([
       [EDIT_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
   },
@@ -185,7 +178,6 @@ export const documentsConditions = normalizeConditions([
       },
       [VOID_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -216,7 +208,6 @@ export const documentsConditions = normalizeConditions([
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
   },
@@ -242,7 +233,6 @@ export const documentsConditions = normalizeConditions([
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
   },
@@ -267,8 +257,7 @@ export const documentsConditions = normalizeConditions([
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [EDIT_BUTTON]: {},
-      [DOCUSIGN_BUTTON]: {},
-      [PRINT_BUTTON]: {}
+      [DOCUSIGN_BUTTON]: {}
     }
   },
   {
@@ -291,7 +280,6 @@ export const documentsConditions = normalizeConditions([
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {},
       [MOVE_BUTTON]: {},
@@ -319,7 +307,6 @@ export const documentsConditions = normalizeConditions([
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
   },
@@ -346,7 +333,6 @@ export const documentsConditions = normalizeConditions([
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
@@ -373,7 +359,6 @@ export const documentsConditions = normalizeConditions([
       },
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {},
       [MOVE_BUTTON]: {},
@@ -401,7 +386,6 @@ export const documentsConditions = normalizeConditions([
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {}
     }
@@ -424,7 +408,6 @@ export const documentsConditions = normalizeConditions([
         primary: true
       },
       [VIEW_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {},
       [MOVE_BUTTON]: {}
@@ -445,7 +428,6 @@ export const documentsConditions = normalizeConditions([
       [SPLIT_PDF_BUTTON]: {},
       [DELETE_BUTTON]: {},
       [RENAME_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [EMAIL_BUTTON]: {}
     }
   },
@@ -463,7 +445,6 @@ export const documentsConditions = normalizeConditions([
       [VIEW_BUTTON]: {},
       [DELETE_BUTTON]: {},
       [RENAME_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [EMAIL_BUTTON]: {}
     }
   }
@@ -497,7 +478,80 @@ export const tasksConditions = normalizeConditions([
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
+      [SPLIT_PDF_BUTTON]: {}
+    }
+  },
+  {
+    conditions: ({ task_type, file_uploaded, form_saved, envelope_status }) =>
+      task_type === taskTypes.GENERIC &&
+      file_uploaded === true &&
+      form_saved === false &&
+      envelope_status === envelopeStates.CREATED,
+    actions: {
+      [REVIEW_ENVELOPE_BUTTON]: {
+        primary: true
+      },
+      [DOCUSIGN_BUTTON]: {},
+      [EMAIL_BUTTON]: {},
+      [NOTIFY_ADMIN_BUTTON]: {},
+      [VIEW_BUTTON]: {},
+      [UPLOAD_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
+    }
+  },
+  {
+    conditions: ({ task_type, file_uploaded, form_saved, envelope_status }) =>
+      task_type === taskTypes.GENERIC &&
+      file_uploaded === true &&
+      form_saved === false &&
+      envelopeStates.DELIVERED.includes(envelope_status),
+    actions: {
+      [RESEND_BUTTON]: {
+        primary: true
+      },
+      [DOCUSIGN_BUTTON]: {},
+      [VOID_BUTTON]: {},
+      [EMAIL_BUTTON]: {},
+      [NOTIFY_ADMIN_BUTTON]: {},
+      [VIEW_BUTTON]: {},
+      [UPLOAD_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {}
+    }
+  },
+  {
+    conditions: ({ task_type, file_uploaded, form_saved, envelope_status }) =>
+      task_type === taskTypes.GENERIC &&
+      file_uploaded === true &&
+      form_saved === false &&
+      [envelopeStates.DECLINED, envelopeStates.VOIDED].includes(
+        envelope_status
+      ),
+    actions: {
+      [DOCUSIGN_BUTTON]: {
+        primary: true
+      },
+      [EMAIL_BUTTON]: {},
+      [NOTIFY_ADMIN_BUTTON]: {},
+      [VIEW_BUTTON]: {},
+      [UPLOAD_BUTTON]: {},
+      [DOWNLOAD_BUTTON]: {},
+      [SPLIT_PDF_BUTTON]: {}
+    }
+  },
+  {
+    conditions: ({ task_type, file_uploaded, form_saved, envelope_status }) =>
+      task_type === taskTypes.GENERIC &&
+      file_uploaded === true &&
+      form_saved === false &&
+      envelope_status === envelopeStates.COMPLETED,
+    actions: {
+      [DOWNLOAD_BUTTON]: {
+        primary: true
+      },
+      [DOCUSIGN_BUTTON]: {},
+      [NOTIFY_ADMIN_BUTTON]: {},
+      [VIEW_BUTTON]: {},
+      [UPLOAD_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {}
     }
   },
@@ -514,7 +568,6 @@ export const tasksConditions = normalizeConditions([
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -532,7 +585,6 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -550,7 +602,6 @@ export const tasksConditions = normalizeConditions([
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
@@ -574,7 +625,6 @@ export const tasksConditions = normalizeConditions([
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -595,7 +645,6 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -614,7 +663,6 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -632,7 +680,6 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -650,7 +697,6 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -668,7 +714,6 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -690,7 +735,6 @@ export const tasksConditions = normalizeConditions([
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -710,7 +754,6 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -728,7 +771,6 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -746,7 +788,6 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -765,7 +806,6 @@ export const tasksConditions = normalizeConditions([
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -788,7 +828,6 @@ export const tasksConditions = normalizeConditions([
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -809,7 +848,6 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -829,7 +867,6 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
-      [PRINT_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   }
