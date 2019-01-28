@@ -9,7 +9,7 @@ export const Container = styled.div`
   font-size: 1rem;
   padding: 0.5rem;
   color: #fff;
-  margin-top: 0.5rem;
+  margin: 0.5rem 0 1rem 0;
 
   svg {
     width: 1rem;

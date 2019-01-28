@@ -60,7 +60,7 @@ class Filters extends React.Component {
       activeFilters
     )
 
-    let conditionOperator = 'and'
+    let conditionOperator = this.props.conditionOperator || 'and'
 
     if (segment.args && segment.args.filter_type) {
       conditionOperator = segment.args.filter_type

@@ -91,7 +91,7 @@ const actionsDefaultProperties = {
     type: 'rename'
   },
   [VIEW_BUTTON]: {
-    label: 'View',
+    label: 'View/Print',
     type: 'view'
   },
   [DELETE_BUTTON]: {
@@ -104,7 +104,7 @@ const actionsDefaultProperties = {
   },
   [MOVE_BUTTON]: {
     label: 'Move',
-    type: 'move'
+    type: 'move-file'
   },
   [REVIEW_ENVELOPE_BUTTON]: {
     label: 'Review in Docusign',
@@ -490,9 +490,10 @@ export const tasksConditions = normalizeConditions([
       form_saved === false &&
       envelope_status === envelopeStates.NONE,
     actions: {
-      [UPLOAD_BUTTON]: {
+      [DOCUSIGN_BUTTON]: {
         primary: true
       },
+      [UPLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},

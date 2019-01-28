@@ -30,11 +30,15 @@ export default class SignatureComposeDrawer extends React.Component {
       return this.formObject
     }
 
+    this.initialAttachments = this.normalizePreSelectedAttachments(
+      this.props.attachments
+    )
+
     this.formObject = {
       subject: '',
       recipients: {},
       from: `${this.props.user.display_name} <${this.props.user.email}>`,
-      attachments: this.normalizePreSelectedAttachments(this.props.attachments)
+      attachments: this.initialAttachments
     }
 
     return this.formObject
@@ -70,7 +74,10 @@ export default class SignatureComposeDrawer extends React.Component {
     attachments.forEach(attachment => {
       const item = normalizeAttachment(attachment)
 
-      list[item.id] = item
+      list[item.id] = {
+        ...item,
+        is_preselected: true
+      }
     })
 
     return list
@@ -180,6 +187,7 @@ export default class SignatureComposeDrawer extends React.Component {
               <Field
                 name="attachments"
                 deal={this.props.deal}
+                initialAttachments={this.initialAttachments}
                 isAttachmentsOpen={this.state.isAttachmentsOpen}
                 onCloseAttachmentsDrawer={this.handleCloseAttachments}
                 onChangeSelectedDocuments={this.handleSelectAttachments}

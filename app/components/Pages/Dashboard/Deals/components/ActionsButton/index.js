@@ -30,8 +30,12 @@ import { getFileUrl } from './helpers/get-file-url'
 import { getTaskEnvelopes } from '../../utils/get-task-envelopes'
 
 import Message from '../../../Chatroom/Util/message'
+
+import { SelectItemDrawer } from './components/SelectItemDrawer'
+
 import GetSignature from '../../Signature'
 import PdfSplitter from '../../PdfSplitter'
+import TasksDrawer from '../TasksDrawer'
 import UploadManager from '../../UploadManager'
 
 import {
@@ -49,7 +53,9 @@ class ActionsButton extends React.Component {
     this.state = {
       isMenuOpen: false,
       isSignatureFormOpen: false,
-      isPdfSplitterOpen: false
+      isPdfSplitterOpen: false,
+      isTasksDrawerOpen: false,
+      multipleItemsSelection: null
     }
 
     this.actions = {
@@ -57,6 +63,7 @@ class ActionsButton extends React.Component {
       view: this.handleView,
       download: this.handleDownload,
       delete: this.handleDelete,
+      'move-file': this.toggleMoveFile,
       'split-pdf': this.handleToggleSplitPdf,
       'review-envelope': this.handleReviewEnvelope,
       'get-signature': this.handleGetSignature,
@@ -89,6 +96,11 @@ class ActionsButton extends React.Component {
   handleDeselectAction = () =>
     this.setState({
       isSignatureFormOpen: false
+    })
+
+  handleCloseMultipleItemsSelectionDrawer = () =>
+    this.setState({
+      multipleItemsSelection: null
     })
 
   getActions = () => {
@@ -160,6 +172,17 @@ class ActionsButton extends React.Component {
     }
 
     return envelopes[0].status
+  }
+
+  getSplitterFiles = () => {
+    const files = getFileUrl({
+      type: this.props.type,
+      deal: this.props.deal,
+      task: this.props.task,
+      document: this.props.document
+    })
+
+    return files.filter(file => file.mime === 'application/pdf')
   }
 
   getPrimaryAction = actions =>
@@ -292,7 +315,18 @@ class ActionsButton extends React.Component {
 
     if (links.length === 1) {
       window.open(links[0].url, '_blank')
+
+      return
     }
+
+    this.setState({
+      multipleItemsSelection: {
+        items: links,
+        title: 'Select a file to download',
+        actionTitle: 'Download',
+        onSelect: item => window.open(item.url, '_blank')
+      }
+    })
   }
 
   /**
@@ -308,12 +342,19 @@ class ActionsButton extends React.Component {
     })
 
     if (links.length === 1) {
-      if (this.props.isBackOffice) {
-        browserHistory.push(links[0].url)
-      } else {
-        window.open(links[0].url, '_blank')
-      }
+      window.open(links[0].url, '_blank')
+
+      return
     }
+
+    this.setState({
+      multipleItemsSelection: {
+        items: links,
+        title: 'Select a file to view/print',
+        actionTitle: 'View/Print',
+        onSelect: item => window.open(item.url, '_blank')
+      }
+    })
   }
 
   /**
@@ -357,6 +398,11 @@ class ActionsButton extends React.Component {
 
     window.open(link, '_blank')
   }
+
+  toggleMoveFile = () =>
+    this.setState(state => ({
+      isTasksDrawerOpen: !state.isTasksDrawerOpen
+    }))
 
   deleteFile = async () => {
     try {
@@ -454,14 +500,27 @@ class ActionsButton extends React.Component {
 
         {this.state.isPdfSplitterOpen && (
           <PdfSplitter
-            files={getFileUrl({
-              type: this.props.type,
-              deal: this.props.deal,
-              task: this.props.task,
-              document: this.props.document
-            })}
+            files={this.getSplitterFiles()}
             deal={this.props.deal}
             onClose={this.handleToggleSplitPdf}
+          />
+        )}
+
+        {this.state.isTasksDrawerOpen && (
+          <TasksDrawer
+            isOpen
+            deal={this.props.deal}
+            file={this.props.document}
+            onClose={this.toggleMoveFile}
+            title="Move to Checklist"
+          />
+        )}
+
+        {this.state.multipleItemsSelection && (
+          <SelectItemDrawer
+            isOpen
+            {...this.state.multipleItemsSelection}
+            onClose={this.handleCloseMultipleItemsSelectionDrawer}
           />
         )}
       </React.Fragment>

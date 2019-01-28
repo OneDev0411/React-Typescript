@@ -2,7 +2,6 @@ import React from 'react'
 import _ from 'underscore'
 
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
-import InfoIcon from 'components/SvgIcons/InfoOutline/IconInfoOutline'
 
 import { Container } from './styled'
 
@@ -21,7 +20,8 @@ export default class DraftBanner extends React.Component {
     return (
       <Container>
         <span>
-          Your messages saved and once your deal goes live, admin can read it
+          Your message has been saved. Once your deal goes live, admin can read
+          it.
         </span>
 
         <CloseIcon

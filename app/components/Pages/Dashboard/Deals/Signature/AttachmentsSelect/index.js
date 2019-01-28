@@ -1,33 +1,30 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import Drawer from 'components/OverlayDrawer'
 
-import { selectDealTasks } from 'reducers/deals/tasks'
-
 import ActionButton from 'components/Button/ActionButton'
 
-import { normalizeAttachment } from '../helpers/normalize-attachment'
+import Documents from './Documents'
 
-import Document from './Document'
-
-export class AttachmentsSelect extends React.Component {
+export default class AttachmentsSelect extends React.Component {
   state = {
     selectedItems: this.props.defaultSelectedItems || {}
   }
 
   toggleSelectRow = document => {
+    if (!document.checklist) {
+      return false
+    }
+
     let newState = {}
 
-    const item = normalizeAttachment(document)
-
-    if (this.state.selectedItems[item.id]) {
-      newState = _.omit(this.state.selectedItems, row => row.id === item.id)
+    if (this.state.selectedItems[document.id]) {
+      newState = _.omit(this.state.selectedItems, row => row.id === document.id)
     } else {
       newState = {
         ...this.state.selectedItems,
-        [item.id]: item
+        [document.id]: document
       }
     }
 
@@ -37,6 +34,8 @@ export class AttachmentsSelect extends React.Component {
   handleApply = () =>
     this.props.onChangeSelectedDocuments(this.state.selectedItems)
 
+  getTaskById = id => this.props.tasks.find(task => task.id === id)
+
   render() {
     const { props } = this
 
@@ -44,27 +43,12 @@ export class AttachmentsSelect extends React.Component {
       <Drawer isOpen onClose={props.onClose}>
         <Drawer.Header title="Select Documents" />
         <Drawer.Body>
-          {props.tasks &&
-            props.tasks.map(task => (
-              <Document
-                key={task.id}
-                task={task}
-                onToggleItem={this.toggleSelectRow}
-                selectedItems={this.state.selectedItems}
-              />
-            ))}
-
-          {props.deal.files &&
-            props.deal.files
-              .filter(file => file.mime === 'application/pdf')
-              .map(file => (
-                <Document
-                  key={file.id}
-                  deal={props.deal}
-                  task={null}
-                  stashFile={file}
-                />
-              ))}
+          <Documents
+            deal={this.props.deal}
+            initialAttachments={this.props.initialAttachments}
+            selectedItems={this.state.selectedItems}
+            onToggleItem={this.toggleSelectRow}
+          />
         </Drawer.Body>
 
         <Drawer.Footer style={{ flexDirection: 'row-reverse' }}>
@@ -80,11 +64,3 @@ export class AttachmentsSelect extends React.Component {
     )
   }
 }
-
-function mapStateToProps({ deals }, props) {
-  return {
-    tasks: selectDealTasks(props.deal, deals.checklists, deals.tasks)
-  }
-}
-
-export default connect(mapStateToProps)(AttachmentsSelect)
