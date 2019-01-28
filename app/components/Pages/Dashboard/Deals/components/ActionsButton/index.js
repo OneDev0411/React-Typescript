@@ -103,7 +103,6 @@ class ActionsButton extends React.Component {
 
     if (this.props.type === 'task') {
       conditions = this.createTaskConditions()
-      // console.log(this.props.task.title, conditions)
     }
 
     return selectActions(this.props.type, conditions)
