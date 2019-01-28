@@ -52,8 +52,6 @@ class Checklist extends React.Component {
               type="task"
               id={task.id}
               title={task.title}
-              selectedItem={this.props.selectedItem}
-              notifyOffice={this.props.notifyOffice}
               checklist={this.props.checklist}
               onToggleNotifyOffice={this.props.onToggleNotifyOffice}
               onSelectItem={this.props.onSelectItem}
@@ -74,8 +72,6 @@ class Checklist extends React.Component {
               type="form"
               id={form.id}
               title={form.name}
-              selectedItem={this.props.selectedItem}
-              notifyOffice={this.props.notifyOffice}
               checklist={this.props.checklist}
               onToggleNotifyOffice={this.props.onToggleNotifyOffice}
               onSelectItem={this.props.onSelectItem}
