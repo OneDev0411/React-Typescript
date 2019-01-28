@@ -27,9 +27,13 @@ import {
 
 class EventsList extends React.Component {
   menuItems = [
+    // {
+    //   label: 'Edit',
+    //   onClick: event => this.onEditEvent(event)
+    // },
     {
-      label: 'Edit',
-      onClick: event => this.onEditEvent(event)
+      label: 'Delete',
+      onClick: event => this.onDeleteEvent(event)
     }
   ]
 
@@ -39,6 +43,8 @@ class EventsList extends React.Component {
     `${config.app.url}/openhouse/${event.id}/${this.activeBrand}/register`
 
   onEditEvent = event => this.props.onEditEvent(event)
+
+  onDeleteEvent = event => this.props.onDeleteEvent(event)
 
   render() {
     if (this.props.isFetching) {
@@ -55,10 +61,9 @@ class EventsList extends React.Component {
               <Flex
                 column
                 style={{ width: '50%' }}
-                onClick={() => this.onEditEvent(event)}
+                // onClick={() => this.onEditEvent(event)}
               >
                 <EventInfoTitle>
-                  Open House:&nbsp;
                   {fecha.format(
                     new Date(event.due_date * 1000),
                     'dddd, MMMM D, YYYY hh:mm A'
@@ -96,10 +101,11 @@ class EventsList extends React.Component {
 
               <EventMenu>
                 <BasicDropdown
+                  fullHeight
                   pullTo="right"
                   buttonRenderer={props => <VerticalDotsIcon {...props} />}
                   items={this.menuItems}
-                  onChange={item => item.onClick(event)}
+                  onSelect={item => item.onClick(event)}
                 />
               </EventMenu>
             </EventItem>
