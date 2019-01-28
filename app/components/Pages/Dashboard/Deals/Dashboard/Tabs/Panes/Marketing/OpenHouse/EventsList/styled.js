@@ -61,13 +61,14 @@ export const EventItem = styled.div`
 
   :hover {
     background-color: #f7f7f7;
-    cursor: pointer;
+    /* cursor: pointer; */
   }
 
+  /*
   :hover ${EventInfoTitle} {
     color: ${primary};
     text-decoration: underline;
-  }
+  }*/
 
   :hover ${RegistrationLink} {
     display: flex;

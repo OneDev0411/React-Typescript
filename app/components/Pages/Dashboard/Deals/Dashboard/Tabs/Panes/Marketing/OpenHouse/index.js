@@ -58,6 +58,12 @@ class OpenHouse extends React.Component {
     )
 
     this.setState({ events, selectedEvent: null })
+
+    this.props.notify({
+      title: 'Open house updated',
+      message: `The open house ${updatedEvent.title} has been updated`,
+      status: 'success'
+    })
   }
 
   onCreateEvent = event => {
