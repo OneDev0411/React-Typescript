@@ -12,10 +12,11 @@ function Notification(props) {
   const { new_notifications } = room
 
   return (
-    <Tooltip caption="View Activity">
+    <Tooltip caption={props.tooltip}>
       <Container
         hasNotification={new_notifications > 0}
-        onClick={props.onClick}
+        onClick={() => props.onClick(task)}
+        style={props.style}
       >
         <IconComment className="deal--task-comments" />
 
