@@ -27,10 +27,10 @@ import {
 
 class EventsList extends React.Component {
   menuItems = [
-    // {
-    //   label: 'Edit',
-    //   onClick: event => this.onEditEvent(event)
-    // },
+    {
+      label: 'Edit',
+      onClick: event => this.onEditEvent(event)
+    },
     {
       label: 'Delete',
       onClick: event => this.onDeleteEvent(event)
@@ -61,7 +61,7 @@ class EventsList extends React.Component {
               <Flex
                 column
                 style={{ width: '50%' }}
-                // onClick={() => this.onEditEvent(event)}
+                onClick={() => this.onEditEvent(event)}
               >
                 <EventInfoTitle>
                   {fecha.format(
