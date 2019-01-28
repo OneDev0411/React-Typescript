@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import { primary } from 'views/utils/colors'
+import { merriweatherFamilyStyle } from 'components/Typography/styles'
 
 export const Toolbar = styled.div`
   display: flex;
@@ -33,6 +34,7 @@ export const TitleContainer = styled.div`
 `
 
 export const Title = styled.div`
+  ${merriweatherFamilyStyle};
   display: flex;
   align-items: center;
   font-size: 1.25rem;
