@@ -58,7 +58,7 @@ class Checklist extends React.Component {
             />
           ))}
 
-        {this.props.checklist.allowed_forms
+        {(this.props.checklist.allowed_forms || [])
           .filter(form => {
             const isFormExists = this.props.tasks.find(
               task => task.form === form.id

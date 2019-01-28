@@ -114,7 +114,7 @@ export default (state = null, action) => {
 export const selectTaskById = (state, id) => (state && id ? state[id] : null)
 
 export const selectChecklistTasks = (checklist, state) =>
-  checklist.tasks.map(id => state[id])
+  Array.isArray(checklist.tasks) ? checklist.tasks.map(id => state[id]) : []
 
 export const selectDealTasks = (deal, checklists, state) => {
   const list = []
