@@ -204,7 +204,7 @@ class ContactProfile extends React.Component {
     this.setState({ isUpdatingOwner: true })
 
     try {
-      const contact = updateContactSelf(this.state.contact.id, {
+      const contact = await updateContactSelf(this.state.contact.id, {
         user: item.value.id
       })
 
