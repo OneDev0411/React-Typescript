@@ -16,9 +16,9 @@ export function moveTaskFile(user, dealId, task, file, notifyOffice) {
       let fileData
 
       /*
-      * if task is defined, file should create inside the given task
-      * if task isn't defined, file should create on deal stash
-      */
+       * if task is defined, file should create inside the given task
+       * if task isn't defined, file should create on deal stash
+       */
       if (task) {
         response = await Deal.createTaskFile(task.id, { file: file.id })
         fileData = response.body.data
@@ -35,8 +35,8 @@ export function moveTaskFile(user, dealId, task, file, notifyOffice) {
       }
 
       /*
-      * remove file from it's current place (task or stash based on given task)
-      */
+       * remove file from it's current place (task or stash based on given task)
+       */
       await dispatch(
         asyncDeleteFile(dealId, {
           [file.id]: file.task ? { id: file.task.id } : null
