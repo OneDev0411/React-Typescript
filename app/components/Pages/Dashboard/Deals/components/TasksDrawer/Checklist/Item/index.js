@@ -4,36 +4,44 @@ import { NotifyOffice } from '../../NotifyOffice'
 
 import { Container, Title, NotifyOfficeContainer } from './styled'
 
-export function Item(props) {
-  const isSelected =
-    props.selectedItem.type === props.type && props.selectedItem.id === props.id
+export class Item extends React.Component {
+  state = {
+    notifyOffice: true
+  }
 
-  const notifyOffice = isSelected ? props.notifyOffice : false
+  handleToggleNotifyOffice = () =>
+    this.setState(state => ({
+      notifyOffice: !state.notifyOffice
+    }))
 
-  return (
-    <Container key={props.id}>
-      <Title
-        isSelected={isSelected}
-        onClick={() =>
-          props.onSelectItem({
-            type: props.type,
-            id: props.id,
-            checklistId: props.checklist.id
-          })
-        }
-      >
-        {props.title}
-      </Title>
+  render() {
+    const { props } = this
 
-      <NotifyOfficeContainer display={isSelected}>
-        <NotifyOffice
-          type={props.type}
-          id={props.id}
-          isSelected={notifyOffice}
-          checklist={props.checklist}
-          onChange={props.onToggleNotifyOffice}
-        />
-      </NotifyOfficeContainer>
-    </Container>
-  )
+    return (
+      <Container key={props.id}>
+        <Title
+          onClick={() =>
+            props.onSelectItem({
+              type: props.type,
+              id: props.id,
+              checklistId: props.checklist.id,
+              notifyOffice: this.state.notifyOffice
+            })
+          }
+        >
+          {props.title}
+        </Title>
+
+        <NotifyOfficeContainer>
+          <NotifyOffice
+            type={props.type}
+            id={props.id}
+            isSelected={this.state.notifyOffice}
+            checklist={props.checklist}
+            onChange={this.handleToggleNotifyOffice}
+          />
+        </NotifyOfficeContainer>
+      </Container>
+    )
+  }
 }

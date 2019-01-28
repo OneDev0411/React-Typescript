@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { primary } from 'views/utils/colors'
 
 export const NotifyOfficeContainer = styled.div`
-  opacity: ${props => (props.display ? 1 : 0)};
+  opacity: 0;
 `
 
 export const Container = styled.div`
@@ -12,10 +12,10 @@ export const Container = styled.div`
   justify-content: space-between;
   border-bottom: 1px solid #d4d4d4;
   padding: 0.875rem 0;
-  
-  /* :hover ${NotifyOfficeContainer} {
+
+  :hover ${NotifyOfficeContainer} {
     opacity: 1;
-  } */
+  }
 `
 
 export const Title = styled.div`
@@ -25,13 +25,6 @@ export const Title = styled.div`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-
-  ${props =>
-    props.isSelected &&
-    `
-    font-weight: 500;
-    color: ${primary};
-  `}
 
   :hover {
     color: ${primary};

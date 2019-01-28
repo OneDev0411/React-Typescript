@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { Fragment } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
+
+import Flex from 'styled-flex-component'
 
 import OverlayDrawer from 'components/OverlayDrawer'
 import { getChecklists } from 'reducers/deals/checklists'
@@ -11,20 +14,18 @@ import {
   moveTaskFile
 } from 'actions/deals'
 
-import Search from 'components/Grid/Search'
-
-import ActionButton from 'components/Button/ActionButton'
-
 import { selectTaskById } from 'reducers/deals/tasks'
 import { selectFormById } from 'reducers/deals/forms'
+
+import Search from 'components/Grid/Search'
+import Spinner from 'components/Spinner'
+import { H4 } from 'components/Typography/headings'
 
 import Checklist from './Checklist'
 
 const initialState = {
   isSaving: false,
-  searchFilter: '',
-  selectedItem: {},
-  notifyOffice: false
+  searchFilter: ''
 }
 
 class TasksDrawer extends React.Component {
@@ -34,35 +35,6 @@ class TasksDrawer extends React.Component {
     this.setState({
       searchFilter
     })
-
-  handleSelectItem = ({ type, id, checklistId }) => {
-    this.setState({
-      selectedItem: { type, id, checklistId }
-    })
-  }
-
-  handleToggleNotifyOffice = ({ type, id, checklistId }) => {
-    if (
-      this.state.selectedItem.type === type &&
-      this.state.selectedItem.id === id
-    ) {
-      this.setState(state => ({
-        notifyOffice: !state.notifyOffice
-      }))
-
-      return
-    }
-
-    this.handleSelectItem({
-      type,
-      id,
-      checklistId
-    })
-
-    this.setState({
-      notifyOffice: true
-    })
-  }
 
   notifyOffice = (deal, task) => {
     this.props.changeNeedsAttention(deal.id, task.id, true).then(() =>
@@ -86,31 +58,20 @@ class TasksDrawer extends React.Component {
         this.notifyOffice(this.props.deal, task)
       }
 
-      this.handleSelectItem({
+      this.handleMoveFile({
         type: 'task',
         id: task.id,
-        checklistId
-      })
-
-      this.props.notify({
-        message: `Task "${title}" created.`,
-        status: 'success'
+        checklistId,
+        notifyOffice
       })
     } catch (e) {
       this.setState({
         isSaving: false
       })
-
-      this.props.notify({
-        message: 'Could not create the task. try again.',
-        status: 'error'
-      })
     }
   }
 
-  handleMoveFile = async () => {
-    const { selectedItem } = this.state
-
+  handleMoveFile = async selectedItem => {
     this.setState({
       isSaving: true
     })
@@ -136,7 +97,7 @@ class TasksDrawer extends React.Component {
         this.props.deal.id,
         task,
         this.props.file,
-        this.state.notifyOffice
+        selectedItem.notifyOffice
       )
 
       this.props.onMoveComplete(task, newFile)
@@ -162,48 +123,58 @@ class TasksDrawer extends React.Component {
         {...this.props.drawerOptions}
         isOpen={this.props.isOpen}
         onClose={this.handleClose}
+        showFooter={false}
       >
         <OverlayDrawer.Header title={this.props.title} />
         <OverlayDrawer.Body>
-          <Search
-            style={{ margin: '1rem 0' }}
-            disableOnSearch={false}
-            showLoadingOnSearch
-            placeholder="Search"
-            onChange={this.handleSearch}
-            onClearSearch={this.handleSearch}
-          />
-
-          {this.props.checklists
-            .filter(checklist => !checklist.is_terminated)
-            .map(checklist => (
-              <Checklist
-                key={checklist.id}
-                checklist={checklist}
-                filter={this.state.searchFilter}
-                selectedItem={this.state.selectedItem}
-                notifyOffice={this.state.notifyOffice}
-                onSelectItem={this.handleSelectItem}
-                handleCreateNewTask={this.handleCreateNewTask}
-                onToggleNotifyOffice={this.handleToggleNotifyOffice}
+          {this.state.isSaving === false ? (
+            <Fragment>
+              <Search
+                style={{ margin: '1rem 0' }}
+                disableOnSearch={false}
+                showLoadingOnSearch
+                placeholder="Search"
+                onChange={this.handleSearch}
+                onClearSearch={this.handleSearch}
               />
-            ))}
-        </OverlayDrawer.Body>
 
-        <OverlayDrawer.Footer style={{ justifyContent: 'flex-end' }}>
-          <ActionButton
-            disabled={
-              this.state.isSaving ||
-              Object.keys(this.state.selectedItem).length === 0
-            }
-            onClick={this.handleMoveFile}
-          >
-            {this.state.isSaving ? 'Moving...' : 'Move File'}
-          </ActionButton>
-        </OverlayDrawer.Footer>
+              {this.props.checklists
+                .filter(checklist => !checklist.is_terminated)
+                .map(checklist => (
+                  <Checklist
+                    key={checklist.id}
+                    checklist={checklist}
+                    filter={this.state.searchFilter}
+                    onSelectItem={this.handleMoveFile}
+                    handleCreateNewTask={this.handleCreateNewTask}
+                  />
+                ))}
+            </Fragment>
+          ) : (
+            <Flex justifyCenter alignCenter column style={{ height: '80vh' }}>
+              <Spinner />
+              <H4>Moving file, please wait...</H4>
+            </Flex>
+          )}
+        </OverlayDrawer.Body>
       </OverlayDrawer>
     )
   }
+}
+
+TasksDrawer.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
+  deal: PropTypes.object.isRequired,
+  file: PropTypes.object.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onMoveComplete: PropTypes.func,
+  drawerOptions: PropTypes.object
+}
+
+TasksDrawer.defaultProps = {
+  onMoveComplete: () => null,
+  drawerOptions: {}
 }
 
 function mapStateToProps({ deals, user }, props) {
