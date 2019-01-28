@@ -27,6 +27,7 @@ class MessageAdmin extends React.Component {
       <Notification
         task={task}
         tooltip="Message Admin"
+        tooltipPlacement="left"
         style={{ marginRight: 0 }}
         onClick={this.props.setSelectedTask}
       />

@@ -5,7 +5,6 @@ import Badge from 'components/Badge'
 export const Container = styled.div`
   position: relative;
   margin-right: 1rem;
-  padding-top: 5px;
   cursor: pointer;
 
   svg path {
