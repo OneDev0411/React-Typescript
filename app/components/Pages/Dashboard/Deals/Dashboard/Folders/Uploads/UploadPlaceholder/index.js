@@ -33,7 +33,7 @@ export class UploadPlaceholder extends React.Component {
       >
         <Container>
           Drag & drop,
-          <ItemLink onClick={this.handleSelectFile}>Upload</ItemLink>
+          <ItemLink onClick={this.handleSelectFile}>upload</ItemLink>
           or email files to
           <ItemLink onClick={this.handleCopyEmail}>
             {this.props.deal.email}
