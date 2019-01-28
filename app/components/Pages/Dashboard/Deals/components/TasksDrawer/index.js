@@ -20,13 +20,15 @@ import { selectFormById } from 'reducers/deals/forms'
 
 import Checklist from './Checklist'
 
+const initialState = {
+  isSaving: false,
+  searchFilter: '',
+  selectedItem: {},
+  notifyOffice: false
+}
+
 class TasksDrawer extends React.Component {
-  state = {
-    isSaving: false,
-    searchFilter: '',
-    selectedItem: {},
-    notifyOffice: false
-  }
+  state = initialState
 
   handleSearch = searchFilter =>
     this.setState({
@@ -129,13 +131,15 @@ class TasksDrawer extends React.Component {
         )
       }
 
-      await this.props.moveTaskFile(
+      const newFile = await this.props.moveTaskFile(
         this.props.user,
         this.props.deal.id,
         task,
         this.props.file,
         this.state.notifyOffice
       )
+
+      this.props.onMoveComplete(task, newFile)
     } catch (e) {
       console.log(e)
     }
@@ -144,12 +148,21 @@ class TasksDrawer extends React.Component {
       isSaving: false
     })
 
+    this.handleClose()
+  }
+
+  handleClose = () => {
+    this.setState(initialState)
     this.props.onClose()
   }
 
   render() {
     return (
-      <OverlayDrawer isOpen={this.props.isOpen} onClose={this.props.onClose}>
+      <OverlayDrawer
+        {...this.props.drawerOptions}
+        isOpen={this.props.isOpen}
+        onClose={this.handleClose}
+      >
         <OverlayDrawer.Header title={this.props.title} />
         <OverlayDrawer.Body>
           <Search
