@@ -8,8 +8,9 @@ import Notification from '../Notification'
 
 class MessageAdmin extends React.Component {
   getGeneralTaskId() {
-    const taskId = _.find(this.props.checklist.tasks, id =>
-      this.props.tasks[id].title.includes('General Comments')
+    const taskId = _.find(
+      this.props.checklist.tasks,
+      id => this.props.tasks[id].task_type === 'GeneralComments'
     )
 
     return taskId ? this.props.tasks[taskId] : null
