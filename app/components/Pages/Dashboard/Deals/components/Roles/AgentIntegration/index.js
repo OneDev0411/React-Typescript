@@ -2,6 +2,8 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
+import TextIconButton from 'components/Button/TextIconButton'
+import AddIcon from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 
 import { convertContactToRole, AGENT_ROLES } from '../../../utils/roles'
 
@@ -162,6 +164,22 @@ class RoleAgentIntegration extends React.Component {
     this.props.onHide()
   }
 
+  _renderSearchContactDrawerHeaderMenu = () => {
+    if (this.state.selectedAgent) {
+      return null
+    }
+
+    return (
+      <TextIconButton
+        onClick={this.showRoleDrawer}
+        text="Add New Contact"
+        appearance="outline"
+        iconLeft={AddIcon}
+        iconSize="large"
+      />
+    )
+  }
+
   render() {
     return (
       <Fragment>
@@ -191,10 +209,8 @@ class RoleAgentIntegration extends React.Component {
           title={this.props.modalTitle}
           isOpen={this.state.showContactModal}
           onClose={this.onClose}
-          onAddNewContact={
-            this.state.selectedAgent ? null : this.showRoleDrawer
-          }
           onSelect={this.onSelectContactUser}
+          renderHeaderMenu={this._renderSearchContactDrawerHeaderMenu}
         />
       </Fragment>
     )
