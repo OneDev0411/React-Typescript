@@ -260,7 +260,7 @@ class ContactProfile extends React.Component {
 
                 <ContactInfo {..._props} />
 
-                <Addresses contact={contact} />
+                <Addresses {..._props} />
 
                 <Details {..._props} />
 

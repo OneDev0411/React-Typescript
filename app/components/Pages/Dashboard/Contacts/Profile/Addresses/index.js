@@ -107,6 +107,7 @@ class Addresses extends React.Component {
             addressAttributeDefs={this.props.addressAttributeDefs}
             contact={this.props.contact}
             onClose={this.closeEditDrawer}
+            submitCallback={this.props.submitCallback}
           />
         )}
       </Section>
