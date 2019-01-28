@@ -91,7 +91,7 @@ const actionsDefaultProperties = {
     type: 'rename'
   },
   [VIEW_BUTTON]: {
-    label: 'View',
+    label: 'View/Print',
     type: 'view'
   },
   [DELETE_BUTTON]: {
@@ -490,7 +490,7 @@ export const tasksConditions = normalizeConditions([
       form_saved === false &&
       envelope_status === envelopeStates.NONE,
     actions: {
-      [UPLOAD_BUTTON]: {
+      [DOCUSIGN_BUTTON]: {
         primary: true
       },
       [VIEW_BUTTON]: {},
