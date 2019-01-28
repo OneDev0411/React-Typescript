@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+
 import { primary } from 'views/utils/colors'
 
 export const Container = styled.div`
@@ -45,6 +46,7 @@ export const LinkText = styled.div`
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    cursor: pointer;
   }
 `
 
@@ -59,13 +61,14 @@ export const EventItem = styled.div`
 
   :hover {
     background-color: #f7f7f7;
-    cursor: pointer;
+    /* cursor: pointer; */
   }
 
+  /*
   :hover ${EventInfoTitle} {
     color: ${primary};
     text-decoration: underline;
-  }
+  }*/
 
   :hover ${RegistrationLink} {
     display: flex;
