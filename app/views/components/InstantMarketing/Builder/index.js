@@ -109,11 +109,11 @@ class Builder extends React.Component {
 
   singleClickTextEditing = () => {
     this.editor.on('component:selected', selected => {
-      if (!selected.view.enableEditing) {
+      if (!selected.view.onActive) {
         return
       }
 
-      selected.view.enableEditing(selected.view.el)
+      selected.view.onActive(selected.view.el)
     })
   }
 
