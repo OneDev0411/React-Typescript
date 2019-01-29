@@ -233,11 +233,7 @@ class EditDigitalForm extends React.Component {
 
     return (
       <Fragment>
-        <PageHeader
-          maxTitleLength={50}
-          title={task.title}
-          onClickBackButton={this.closeForm}
-        >
+        <PageHeader maxTitleLength={50} title={task.title}>
           <PageHeader.Menu>
             <ActionButton
               disabled={!isFormLoaded || isSaving}
