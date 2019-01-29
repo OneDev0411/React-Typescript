@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import _ from 'underscore'
 
 import { getChecklistById } from 'reducers/deals/checklists'
 import { createFormTask } from 'actions/deals'
@@ -63,7 +62,7 @@ class TaskCreate extends React.Component {
     }
   }
 
-  _renderHeaderMenu = () => (
+  renderDrawerHeaderMenu = () => (
     <TextIconButton
       onClick={this.toggleCustomTaskDrawer}
       text="Add New Item"
@@ -86,14 +85,14 @@ class TaskCreate extends React.Component {
         >
           <OverlayDrawer.Header
             title="Add a folder"
-            renderMenu={this._renderHeaderMenu}
+            renderMenu={this.renderDrawerHeaderMenu}
           />
           <OverlayDrawer.Body>
             {this.state.isSaving && <Spinner />}
 
             {this.state.isSaving === false && (
               <Fragment>
-                {_.size(this.props.forms) > 5 && (
+                {Object.values(this.props.forms).length > 5 && (
                   <Search
                     disableOnSearch={false}
                     placeholder="Type in to search ..."
@@ -106,7 +105,7 @@ class TaskCreate extends React.Component {
                   />
                 )}
 
-                {_.chain(this.props.forms)
+                {Object.values(this.props.forms)
                   .filter(form =>
                     form.name
                       .toLowerCase()
@@ -120,8 +119,7 @@ class TaskCreate extends React.Component {
                     >
                       {form.name}
                     </ListItem>
-                  ))
-                  .value()}
+                  ))}
               </Fragment>
             )}
           </OverlayDrawer.Body>
