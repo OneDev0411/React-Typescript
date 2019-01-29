@@ -82,7 +82,7 @@
     "google-libphonenumber": "^3.2.1",
     "google-map-react": "^1.1.2",
     "google-maps": "^3.3.0",
-    "grapesjs": "^0.14.50",
+    "grapesjs": "^0.14.52",
     "history": "^3.3.0",
     "hogan.js": "^3.0.2",
     "html-webpack-plugin": "^2.30.1",
