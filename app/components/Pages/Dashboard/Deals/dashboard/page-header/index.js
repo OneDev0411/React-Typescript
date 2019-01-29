@@ -5,6 +5,8 @@ import styled from 'styled-components'
 
 import PageHeader from 'components/PageHeader'
 
+import { confirmation } from 'actions/confirmation'
+
 import ActionButton from 'components/Button/ActionButton'
 import LinkButton from 'components/Button/LinkButton'
 import SendDealPromotionCard from 'components/InstantMarketing/adapters/SendDealPromotion'
@@ -23,15 +25,24 @@ const Button = styled(ActionButton)`
   margin-left: 0.5em;
 `
 
-const Header = ({ user, deal, showAttachments }) => (
+const Header = ({ user, deal, showAttachments, confirmation }) => (
   <PageHeader title="Deals" backUrl="/dashboard/deals">
     <PageHeader.Menu>
       <DealEmail dealEmail={deal.email} />
       {deal.deal_type === 'Selling' && (
         <Button
-          onClick={() =>
+          onClick={() => {
+            if (deal.has_active_offer) {
+              return confirmation({
+                description:
+                  'Primary offers accepted. Backup Offers may be uploaded after the Primary terminates.',
+                hideCancelButton: true,
+                confirmLabel: 'Ok'
+              })
+            }
+
             browserHistory.push(`/dashboard/deals/${deal.id}/create-offer`)
-          }
+          }}
         >
           Add New Offer
         </Button>
@@ -83,5 +94,5 @@ const Header = ({ user, deal, showAttachments }) => (
 
 export default connect(
   state => ({ user: state.user }),
-  { showAttachments }
+  { showAttachments, confirmation }
 )(Header)
