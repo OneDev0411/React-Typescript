@@ -202,8 +202,10 @@ class EditDigitalForm extends React.Component {
 
   handleSelectContext = () => this.setState({ promptOnQuit: true })
 
-  closeForm = () =>
-    browserHistory.push(`/dashboard/deals/${this.props.task.deal}`)
+  closeForm = () => {
+    browserHistory.goBack()
+    // browserHistory.push(`/dashboard/deals/${this.props.task.deal}`)
+  }
 
   render() {
     const { isFormLoaded, isSaving, pdfDocument } = this.state
