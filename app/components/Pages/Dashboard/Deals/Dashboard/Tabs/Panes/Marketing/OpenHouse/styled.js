@@ -6,4 +6,5 @@ export const OpenHouseContainer = styled(Container)`
   flex-direction: column;
   padding: 0;
   margin-bottom: 1.5rem;
+  overflow: visible;
 `
