@@ -1,5 +1,7 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
+import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 
 import fecha from 'fecha'
 
@@ -10,6 +12,7 @@ import VerticalDotsIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
 import LinkIcon from 'components/SvgIcons/LinkIcon'
 
 import { getActiveTeamId } from 'utils/user-teams'
+import copy from 'utils/copy-text-to-clipboard'
 import config from 'config'
 
 import {
@@ -22,11 +25,15 @@ import {
   EventMenu
 } from './styled.js'
 
-export default class EventsList extends React.Component {
+class EventsList extends React.Component {
   menuItems = [
     {
       label: 'Edit',
       onClick: event => this.onEditEvent(event)
+    },
+    {
+      label: 'Delete',
+      onClick: event => this.onDeleteEvent(event)
     }
   ]
 
@@ -36,6 +43,8 @@ export default class EventsList extends React.Component {
     `${config.app.url}/openhouse/${event.id}/${this.activeBrand}/register`
 
   onEditEvent = event => this.props.onEditEvent(event)
+
+  onDeleteEvent = event => this.props.onDeleteEvent(event)
 
   render() {
     if (this.props.isFetching) {
@@ -55,7 +64,6 @@ export default class EventsList extends React.Component {
                 onClick={() => this.onEditEvent(event)}
               >
                 <EventInfoTitle>
-                  Open House:&nbsp;
                   {fecha.format(
                     new Date(event.due_date * 1000),
                     'dddd, MMMM D, YYYY hh:mm A'
@@ -66,7 +74,16 @@ export default class EventsList extends React.Component {
 
               <RegistrationLink>
                 <LinkText>
-                  <a href={link} target="_blabk">
+                  <a
+                    onClick={e => {
+                      e.preventDefault()
+                      copy(link)
+                      this.props.notify({
+                        message: 'Link Copied',
+                        status: 'success'
+                      })
+                    }}
+                  >
                     {link}
                   </a>
                   <LinkIcon />
@@ -84,10 +101,11 @@ export default class EventsList extends React.Component {
 
               <EventMenu>
                 <BasicDropdown
+                  fullHeight
                   pullTo="right"
                   buttonRenderer={props => <VerticalDotsIcon {...props} />}
                   items={this.menuItems}
-                  onChange={item => item.onClick(event)}
+                  onSelect={item => item.onClick(event)}
                 />
               </EventMenu>
             </EventItem>
@@ -97,3 +115,8 @@ export default class EventsList extends React.Component {
     )
   }
 }
+
+export default connect(
+  null,
+  { notify }
+)(EventsList)

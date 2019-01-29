@@ -91,6 +91,7 @@ export class OpenHouseDrawer extends React.Component {
       isTemplateBuilderOpen: false,
       listing: null,
       template: '',
+      rawTemplate: '',
       openHouse: props.openHouse
     }
 
@@ -99,7 +100,30 @@ export class OpenHouseDrawer extends React.Component {
       Object(this.props.initialValues).length > 0
   }
 
+  init = async () => {
+    const list = await getTemplates(['CrmOpenHouse'])
+    const templateItem = list[0]
+
+    const rawTemplate = await loadTemplateHtml(`${templateItem.url}/index.html`)
+
+    this.setState({ rawTemplate })
+  }
+
   load = async () => {
+    await this.init()
+
+    const { deal } = this.props
+
+    if (deal && deal.listing) {
+      try {
+        const listing = await getListing(deal.listing)
+
+        this.setState({ listing })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
     if (this.props.openHouse) {
       return this.props.openHouse
     }
@@ -119,32 +143,21 @@ export class OpenHouseDrawer extends React.Component {
       }
     }
 
-    const { deal } = this.props
-
-    if (deal && deal.listing) {
-      try {
-        const listing = await getListing(deal.listing)
-
-        this.setState({ listing })
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
     this.loadRegistrationTemplate()
 
     return null
   }
 
+  renderTemplate(rawTemplate, openHouse) {
+    return nunjucks.renderString(rawTemplate, {
+      user: this.props.user,
+      listing: this.state.listing,
+      crmopenhouse: openHouse
+    })
+  }
+
   loadRegistrationTemplate = async () => {
     try {
-      const list = await getTemplates(['CrmOpenHouse'])
-      const templateItem = list[0]
-
-      const templateHtml = await loadTemplateHtml(
-        `${templateItem.url}/index.html`
-      )
-
       const crmopenhouse = {
         title: this.state.listing.property.address.full_address,
         due_date: new Date()
@@ -152,14 +165,10 @@ export class OpenHouseDrawer extends React.Component {
 
       if (!this.isNew) {
         crmopenhouse.title = this.props.openHouse.title
-        crmopenhouse.due_date = this.props.openHouse.dueDate
+        crmopenhouse.due_date = new Date(this.props.openHouse.dueDate * 1000)
       }
 
-      const template = nunjucks.renderString(templateHtml, {
-        user: this.props.user,
-        listing: this.state.listing,
-        crmopenhouse
-      })
+      const template = this.renderTemplate(this.state.rawTemplate, crmopenhouse)
 
       this.setState({ template })
     } catch (error) {
@@ -170,6 +179,7 @@ export class OpenHouseDrawer extends React.Component {
   handleSaveTemplate = ({ result: template }) =>
     this.setState({
       template,
+      rawTemplate: '',
       isTemplateBuilderOpen: false
     })
 
@@ -179,6 +189,16 @@ export class OpenHouseDrawer extends React.Component {
       let action = 'created'
 
       this.setState({ isDisabled: true })
+
+      if (this.state.rawTemplate) {
+        const template = this.renderTemplate(this.state.rawTemplate, {
+          ...openHouse,
+          due_date: new Date(openHouse.due_date * 1000)
+        })
+
+        openHouse.metadata.template = template
+        this.setState({ template })
+      }
 
       if (openHouse.id) {
         newTour = await updateTask(openHouse, QUERY)
@@ -386,10 +406,12 @@ export class OpenHouseDrawer extends React.Component {
                           appearance="outline"
                           onClick={this.toggleTemplateBuilder}
                         >
-                          Edit Registration Page
+                          {this.state.openHouse
+                            ? 'Redesign Registration Page'
+                            : 'Edit Registration Page'}
                         </ActionButton>
 
-                        {this.state.template && (
+                        {(this.state.template || this.state.rawTemplate) && (
                           <ActionButton
                             type="button"
                             disabled={isDisabled}
@@ -405,7 +427,7 @@ export class OpenHouseDrawer extends React.Component {
                     {this.state.isTemplateBuilderOpen && (
                       <InstantMarketing
                         isOpen
-                        headerTitle="Registration Template"
+                        headerTitle="Edit Registration Page"
                         closeConfirmation={false}
                         showTemplatesColumn={false}
                         saveButtonLabel="Save"
