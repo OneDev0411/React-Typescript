@@ -104,7 +104,7 @@ class DealDetails extends React.Component {
     }
 
     return (
-      <DealContainer disableScroll={props.selectedTask !== null}>
+      <DealContainer>
         <PageWrapper>
           <PageHeader deal={props.deal} isBackOffice={props.isBackOffice} />
 

@@ -86,6 +86,8 @@ class Signature extends React.Component {
     const url = getEnvelopeEditLink(envelope.id, this.props.user.access_token)
 
     window.open(url, '_blank')
+
+    this.toggleOpenForm()
   }
 
   render() {

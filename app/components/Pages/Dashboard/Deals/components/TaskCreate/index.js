@@ -1,17 +1,14 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import _ from 'underscore'
 
 import { getChecklistById } from 'reducers/deals/checklists'
 import { createFormTask } from 'actions/deals'
 
-import OverlayDrawer from 'components/OverlayDrawer'
-import Search from 'components/Grid/Search'
-import ActionButton from 'components/Button/ActionButton'
-
 import Spinner from 'components/Spinner'
-
-import IconAdd from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
+import Search from 'components/Grid/Search'
+import OverlayDrawer from 'components/OverlayDrawer'
+import TextIconButton from 'components/Button/TextIconButton'
+import AddIcon from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 
 import CreateCustomTask from './CustomTask'
 import { ListItem } from './styled'
@@ -65,6 +62,17 @@ class TaskCreate extends React.Component {
     }
   }
 
+  renderDrawerHeaderMenu = () => (
+    <TextIconButton
+      onClick={this.toggleCustomTaskDrawer}
+      text="Add New Item"
+      appearance="outline"
+      iconLeft={AddIcon}
+      iconSize="large"
+      disabled={this.state.isSaving}
+    />
+  )
+
   render() {
     return (
       <Fragment>
@@ -73,14 +81,18 @@ class TaskCreate extends React.Component {
             this.props.isOpen && this.state.showCustomTaskDrawer === false
           }
           onClose={this.handleClose}
+          showFooter={false}
         >
-          <OverlayDrawer.Header title="Add a folder" />
+          <OverlayDrawer.Header
+            title="Add a folder"
+            renderMenu={this.renderDrawerHeaderMenu}
+          />
           <OverlayDrawer.Body>
             {this.state.isSaving && <Spinner />}
 
             {this.state.isSaving === false && (
               <Fragment>
-                {_.size(this.props.forms) > 5 && (
+                {Object.values(this.props.forms).length > 5 && (
                   <Search
                     disableOnSearch={false}
                     placeholder="Type in to search ..."
@@ -93,7 +105,7 @@ class TaskCreate extends React.Component {
                   />
                 )}
 
-                {_.chain(this.props.forms)
+                {Object.values(this.props.forms)
                   .filter(form =>
                     form.name
                       .toLowerCase()
@@ -107,23 +119,10 @@ class TaskCreate extends React.Component {
                     >
                       {form.name}
                     </ListItem>
-                  ))
-                  .value()}
+                  ))}
               </Fragment>
             )}
           </OverlayDrawer.Body>
-
-          <OverlayDrawer.Footer style={{ flexDirection: 'row-reverse' }}>
-            <ActionButton
-              disabled={this.state.isSaving}
-              onClick={this.toggleCustomTaskDrawer}
-            >
-              <IconAdd
-                style={{ fill: '#fff', width: '1rem', marginRight: '0.5rem' }}
-              />
-              &nbsp;Add New Item
-            </ActionButton>
-          </OverlayDrawer.Footer>
         </OverlayDrawer>
 
         <CreateCustomTask

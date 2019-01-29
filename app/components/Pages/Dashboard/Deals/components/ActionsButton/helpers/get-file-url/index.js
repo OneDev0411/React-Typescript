@@ -1,33 +1,35 @@
+function normalizeFile(file) {
+  return {
+    id: file.id,
+    name: file.name,
+    mime: file.mime,
+    url: file.url,
+    date: file.created_at
+  }
+}
+
 function getDocumentsUrl({ deal, task, document, isBackOffice }) {
   if (document.type === 'task' && document.submission) {
     return isBackOffice
       ? [
           {
-            id: task.submission.file.id,
-            name: task.submission.file.name,
+            ...normalizeFile(task.submission.file),
             url: `/dashboard/deals/${deal.id}/view/${task.id}`
           }
         ]
-      : [
-          {
-            id: task.submission.file.id,
-            name: task.submission.file.name,
-            url: task.submission.file.url
-          }
-        ]
+      : [normalizeFile(task.submission.file)]
   }
 
   return isBackOffice
     ? [
         {
-          id: document.id,
-          name: document.name,
+          ...normalizeFile(document, true),
           url: `/dashboard/deals/${deal.id}/view/${task.id}/attachment/${
             document.id
           }`
         }
       ]
-    : [{ id: document.id, name: document.name, url: document.url }]
+    : [normalizeFile(document, true)]
 }
 
 function getTaskDocumentsUrl({ deal, task, isBackOffice }) {
@@ -35,18 +37,11 @@ function getTaskDocumentsUrl({ deal, task, isBackOffice }) {
     return isBackOffice
       ? [
           {
-            id: task.submission.file.id,
-            name: task.submission.file.name,
+            ...normalizeFile(task.submission.file),
             url: `/dashboard/deals/${deal.id}/view/${task.id}`
           }
         ]
-      : [
-          {
-            id: task.submission.file.id,
-            name: task.submission.file.name,
-            url: task.submission.file.url
-          }
-        ]
+      : [normalizeFile(task.submission.file)]
   }
 
   const attachments = task.room.attachments.sort(
@@ -54,22 +49,13 @@ function getTaskDocumentsUrl({ deal, task, isBackOffice }) {
   )
 
   return isBackOffice
-    ? [
-        {
-          id: attachments[0].id,
-          name: attachments[0].name,
-          url: `/dashboard/deals/${deal.id}/view/${task.id}/attachment/${
-            attachments[0].id
-          }`
-        }
-      ]
-    : [
-        {
-          id: attachments[0].id,
-          name: attachments[0].name,
-          url: attachments[0].url
-        }
-      ]
+    ? attachments.map(attachment => ({
+        ...normalizeFile(attachment),
+        url: `/dashboard/deals/${deal.id}/view/${task.id}/attachment/${
+          attachment.id
+        }`
+      }))
+    : attachments.map(normalizeFile)
 }
 
 export function getFileUrl({

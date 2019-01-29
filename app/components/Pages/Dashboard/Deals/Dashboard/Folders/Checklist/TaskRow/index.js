@@ -13,7 +13,7 @@ import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import Tooltip from 'components/tooltip'
 
 import TaskStatus from './Status'
-import TaskNotifications from './Notification'
+import TaskNotifications from '../Notification'
 
 import ActionsButton from '../../../../components/ActionsButton'
 import TaskFiles from '../TaskFiles'
@@ -123,6 +123,7 @@ class Task extends React.Component {
           <RowRightColumn>
             <TaskNotifications
               task={this.props.task}
+              tooltip="View Activity"
               onClick={this.handleSelectTask}
             />
 

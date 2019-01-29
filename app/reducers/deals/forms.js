@@ -9,3 +9,5 @@ export default (state = null, action) => {
       return state
   }
 }
+
+export const selectFormById = (state, id) => (state && id ? state[id] : null)
