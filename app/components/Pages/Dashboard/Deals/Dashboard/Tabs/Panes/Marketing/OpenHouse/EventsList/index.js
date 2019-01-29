@@ -61,7 +61,7 @@ class EventsList extends React.Component {
               <Flex
                 column
                 style={{ width: '50%' }}
-                // onClick={() => this.onEditEvent(event)}
+                onClick={() => this.onEditEvent(event)}
               >
                 <EventInfoTitle>
                   {fecha.format(
