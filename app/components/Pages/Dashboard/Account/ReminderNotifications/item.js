@@ -1,9 +1,12 @@
-import React, { Fragment, Component } from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
 
 import { BasicDropdown } from 'components/BasicDropdown'
-import { CheckBoxButton } from 'views/components/Button/CheckboxButton'
-import IconBell from 'views/components/SvgIcons/Bell/IconBell'
+import { CheckBoxButton } from 'components/Button/CheckboxButton'
+
+import IconBell from 'components/SvgIcons/Bell/IconBell'
+
+import { DropButton, IconDrop } from './styled'
 
 const Container = styled.div`
   margin-bottom: 1.5rem;
@@ -25,7 +28,8 @@ export default class Item extends Component {
     value: this.props.options[0].value
   }
 
-  handleChange() {
+  handleChange = () => {
+    console.log(this.state)
     this.props.onChange(this.state)
   }
 
@@ -35,13 +39,16 @@ export default class Item extends Component {
         ...prevState,
         checked: !prevState.checked
       }),
-      () => this.handleChange()
+      this.handleChange
     )
   }
 
-  dropdownChangeHandler = value => {
-    console.log(value)
+  dropdownChangeHandler = ({ value }) => {
+    this.setState({ value }, this.handleChange)
   }
+
+  findOptionByValue = (options, value) =>
+    options.find(item => item.value === value)
 
   render() {
     const { label, name, type, value, options, onChange } = this.props
@@ -54,18 +61,30 @@ export default class Item extends Component {
             isSelected={this.state.checked}
             square
           />
-          <span>{label}</span>
+          &nbsp;&nbsp;<span>{label}</span>
         </CheckBoxContainer>
         <BasicDropdown
-          // noBorder
-          buttonSize="small"
+          fullHeight
           items={options}
-          defaultSelectedItem={options[0]}
+          defaultSelectedItem={
+            this.findOptionByValue(options, value) || options[0]
+          }
           buttonIcon={IconBell}
           onChange={this.dropdownChangeHandler}
-          buttonText={
-            (options.find(item => item.value === value) || options[0]).label
-          }
+          buttonRenderer={props => (
+            <DropButton
+              {...props}
+              inverse
+              style={{ paddingLeft: 0, width: '11rem' }}
+            >
+              <IconBell />
+              {this.findOptionByValue(options, this.state.value).label}
+              <IconDrop
+                isOpen={props.isOpen}
+                style={{ margin: '0.25rem 0 0 0.25rem' }}
+              />
+            </DropButton>
+          )}
         />
       </Container>
     )
