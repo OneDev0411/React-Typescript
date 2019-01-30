@@ -73,6 +73,8 @@ class TaskCreate extends React.Component {
     />
   )
 
+  getForms = () => this.props.forms || {}
+
   render() {
     return (
       <Fragment>
@@ -92,7 +94,7 @@ class TaskCreate extends React.Component {
 
             {this.state.isSaving === false && (
               <Fragment>
-                {Object.values(this.props.forms).length > 5 && (
+                {Object.values(this.getForms()).length > 5 && (
                   <Search
                     disableOnSearch={false}
                     placeholder="Type in to search ..."
@@ -105,21 +107,22 @@ class TaskCreate extends React.Component {
                   />
                 )}
 
-                {Object.values(this.props.forms)
-                  .filter(form =>
-                    form.name
-                      .toLowerCase()
-                      .includes(this.state.searchFilter.toLowerCase())
-                  )
-                  .map((form, index) => (
-                    <ListItem
-                      key={`${form.id}_${index}`}
-                      onClick={() => this.createTask(form)}
-                      onDoubleClick={() => null}
-                    >
-                      {form.name}
-                    </ListItem>
-                  ))}
+                {this.props.forms &&
+                  Object.values(this.getForms())
+                    .filter(form =>
+                      form.name
+                        .toLowerCase()
+                        .includes(this.state.searchFilter.toLowerCase())
+                    )
+                    .map((form, index) => (
+                      <ListItem
+                        key={`${form.id}_${index}`}
+                        onClick={() => this.createTask(form)}
+                        onDoubleClick={() => null}
+                      >
+                        {form.name}
+                      </ListItem>
+                    ))}
               </Fragment>
             )}
           </OverlayDrawer.Body>
