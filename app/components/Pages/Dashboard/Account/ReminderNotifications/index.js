@@ -17,8 +17,32 @@ const DROPDOWN_OPTIONS = [
     value: 86400
   },
   {
-    label: '1 Week Before',
+    label: '2 days before',
+    value: 172800
+  },
+  {
+    label: '3 days before',
+    value: 259200
+  },
+  {
+    label: '4 days before',
+    value: 345600
+  },
+  {
+    label: '5 days before',
+    value: 432000
+  },
+  {
+    label: '6 days before',
+    value: 518400
+  },
+  {
+    label: '1 week before',
     value: 604800
+  },
+  {
+    label: '2 weeks before',
+    value: 1209600
   }
 ]
 
@@ -100,7 +124,7 @@ class ReminderNotifications extends Component {
 
   render() {
     return (
-      <Flex alignCenter>
+      <Flex>
         {this.state.columns.map((col, index) => (
           <Column
             key={index}
