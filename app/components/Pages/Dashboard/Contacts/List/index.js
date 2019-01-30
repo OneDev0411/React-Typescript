@@ -130,11 +130,6 @@ class ContactsList extends React.Component {
   }
 
   handleChangeSavedSegment = segment => {
-    const users =
-      segment && segment.args && segment.args.users
-        ? segment.args.users
-        : [this.props.user.id]
-
     this.setState(
       {
         activeSegment: segment
@@ -151,7 +146,7 @@ class ContactsList extends React.Component {
           searchInputValue: this.state.searchInputValue,
           start: 0,
           order: this.order,
-          viewAsUsers: users,
+          viewAsUsers: this.props.viewAsUsers,
           conditionOperator
         })
       }
