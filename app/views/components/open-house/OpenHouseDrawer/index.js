@@ -273,6 +273,10 @@ class OpenHouseDrawerInternal extends React.Component {
   }
 
   handleEditTemplateClick = () => {
+    if (this.isNew) {
+      return this.toggleTemplateBuilder()
+    }
+
     this.props.confirmation({
       message:
         'Redisigning registration form will delete your previous design.',
