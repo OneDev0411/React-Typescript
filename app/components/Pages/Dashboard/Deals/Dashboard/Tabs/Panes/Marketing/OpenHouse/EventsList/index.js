@@ -63,13 +63,13 @@ class EventsList extends React.Component {
                 style={{ width: '50%' }}
                 onClick={() => this.onEditEvent(event)}
               >
-                <EventInfoTitle>
+                <EventInfoTitle>{event.title}</EventInfoTitle>
+                <EventInfoDescription>
                   {fecha.format(
                     new Date(event.due_date * 1000),
                     'dddd, MMMM D, YYYY hh:mm A'
                   )}
-                </EventInfoTitle>
-                <EventInfoDescription>{event.description}</EventInfoDescription>
+                </EventInfoDescription>
               </Flex>
 
               <RegistrationLink>
