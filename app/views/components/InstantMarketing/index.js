@@ -40,6 +40,7 @@ class InstantMarketing extends React.Component {
 
 InstantMarketing.propTypes = {
   headerTitle: PropTypes.string,
+  disableInline: PropTypes.bool,
   closeConfirmation: PropTypes.bool,
   showTemplatesColumn: PropTypes.bool,
   templateData: PropTypes.object,
