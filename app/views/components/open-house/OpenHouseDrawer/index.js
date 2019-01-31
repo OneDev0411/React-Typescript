@@ -1,15 +1,18 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
 import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 
 import InstantMarketing from 'components/InstantMarketing'
+import { confirmation } from 'store_actions/confirmation'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
 import { getTemplates } from 'models/instant-marketing'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
+import { formatDate } from 'components/InstantMarketing/helpers/nunjucks-filters'
 
 import {
   getTask,
@@ -82,7 +85,7 @@ const defaultProps = {
  * after opening until we can reinitialize it.
  *
  */
-export class OpenHouseDrawer extends React.Component {
+class OpenHouseDrawerInternal extends React.Component {
   constructor(props) {
     super(props)
 
@@ -100,17 +103,17 @@ export class OpenHouseDrawer extends React.Component {
       Object(this.props.initialValues).length > 0
   }
 
-  init = async () => {
-    const list = await getTemplates(['CrmOpenHouse'])
-    const templateItem = list[0]
-
-    const rawTemplate = await loadTemplateHtml(`${templateItem.url}/index.html`)
-
-    this.setState({ rawTemplate })
-  }
-
   load = async () => {
-    await this.init()
+    if (this.isNew) {
+      const list = await getTemplates(['CrmOpenHouse'])
+      const templateItem = list[0]
+
+      const rawTemplate = await loadTemplateHtml(
+        `${templateItem.url}/index.html`
+      )
+
+      this.setState({ rawTemplate })
+    }
 
     const { deal } = this.props
 
@@ -176,12 +179,15 @@ export class OpenHouseDrawer extends React.Component {
     }
   }
 
-  handleSaveTemplate = ({ result: template }) =>
+  handleSaveTemplate = data => {
+    const { result: template } = data
+
     this.setState({
       template,
       rawTemplate: '',
       isTemplateBuilderOpen: false
     })
+  }
 
   save = async openHouse => {
     try {
@@ -199,6 +205,18 @@ export class OpenHouseDrawer extends React.Component {
         openHouse.metadata.template = template
         this.setState({ template })
       }
+
+      openHouse.metadata.template = openHouse.metadata.template.replace(
+        new RegExp(/\<h1(\sstyle=\"(.+)\")?.+\<\/h1\>/),
+        `<h1 $1>${openHouse.title}</h1>`
+      )
+
+      openHouse.metadata.template = openHouse.metadata.template.replace(
+        new RegExp(/\<p(.*)class=\"greytext\sgreytext-date\"(.*)\>(.+)\<\/p>/),
+        `<p $1 class="greytext greytext-date" $2>${formatDate(
+          new Date(openHouse.due_date * 1000)
+        )}</p>`
+      )
 
       if (openHouse.id) {
         newTour = await updateTask(openHouse, QUERY)
@@ -252,6 +270,15 @@ export class OpenHouseDrawer extends React.Component {
     document
       .getElementById('open-house-drawer-form')
       .dispatchEvent(new Event('submit', { cancelable: true }))
+  }
+
+  handleEditTemplateClick = () => {
+    this.props.confirmation({
+      message:
+        'Redisigning registration form will delete your previous design.',
+      confirmLabel: 'Okay, Continue',
+      onConfirm: this.toggleTemplateBuilder
+    })
   }
 
   toggleTemplateBuilder = () =>
@@ -404,7 +431,7 @@ export class OpenHouseDrawer extends React.Component {
                         <ActionButton
                           type="button"
                           appearance="outline"
-                          onClick={this.toggleTemplateBuilder}
+                          onClick={this.handleEditTemplateClick}
                         >
                           {this.state.openHouse
                             ? 'Redesign Registration Page'
@@ -428,6 +455,7 @@ export class OpenHouseDrawer extends React.Component {
                       <InstantMarketing
                         isOpen
                         headerTitle="Edit Registration Page"
+                        disableInline
                         closeConfirmation={false}
                         showTemplatesColumn={false}
                         saveButtonLabel="Save"
@@ -456,5 +484,12 @@ export class OpenHouseDrawer extends React.Component {
   }
 }
 
-OpenHouseDrawer.propTypes = propTypes
-OpenHouseDrawer.defaultProps = defaultProps
+OpenHouseDrawerInternal.propTypes = propTypes
+OpenHouseDrawerInternal.defaultProps = defaultProps
+
+export const OpenHouseDrawer = connect(
+  null,
+  {
+    confirmation
+  }
+)(OpenHouseDrawerInternal)

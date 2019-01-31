@@ -51,6 +51,7 @@ InstantMarketing.propTypes = {
 
 InstantMarketing.defaultProps = {
   headerTitle: 'Marketing Center',
+  disableInline: false,
   closeConfirmation: true,
   showTemplatesColumn: true,
   templateData: {},

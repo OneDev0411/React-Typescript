@@ -200,9 +200,11 @@ class Builder extends React.Component {
         </body>
       </html>`
 
+    const result = this.props.disableInline ? assembled : juice(assembled)
+
     return {
       ...this.state.selectedTemplate,
-      result: juice(assembled)
+      result
     }
   }
 
