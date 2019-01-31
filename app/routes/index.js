@@ -425,7 +425,10 @@ export default (
           path="/dashboard/deals/create(/:id)"
           component={AsyncDealCreate}
         />
-        <Route path="/dashboard/deals/:id" component={AsyncDealDashboard} />
+        <Route
+          path="/dashboard/deals/:id(/:tab)"
+          component={AsyncDealDashboard}
+        />
 
         <Route
           path="/dashboard/deals/:id/form-edit/:taskId"

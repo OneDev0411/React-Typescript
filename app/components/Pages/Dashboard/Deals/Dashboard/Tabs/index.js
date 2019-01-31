@@ -58,6 +58,10 @@ export default class Tabs extends React.Component {
                 <NavItem
                   isActive={tab.id === activeTab.id}
                   isDisabled={isTabDisabled}
+                  to={
+                    !isTabDisabled &&
+                    `/dashboard/deals/${this.props.deal.id}/${tab.id}`
+                  }
                   onClick={() => !isTabDisabled && this.props.onChangeTab(tab)}
                 >
                   {tab.label}

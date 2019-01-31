@@ -19,7 +19,7 @@ import { DealContainer, PageWrapper } from './styled'
 
 class DealDetails extends React.Component {
   state = {
-    activeTab: 'checklists',
+    activeTab: this.props.params.tab || 'checklists',
     isFetchingDeal: false,
     isFetchingContexts: false
   }
@@ -77,10 +77,11 @@ class DealDetails extends React.Component {
     this.setState({ isFetchingContexts: false })
   }
 
-  handleChangeActiveTab = tab =>
+  handleChangeActiveTab = tab => {
     this.setState({
       activeTab: tab.id
     })
+  }
 
   handleNotifications(deal) {
     if (!deal || !Array.isArray(deal.new_notifications)) {
