@@ -147,7 +147,7 @@ class AgentNetwork extends React.Component {
   }
 
   onClose = () => {
-    browserHistory.push(`/dashboard/deals/${this.props.deal.id}`)
+    browserHistory.push(`/dashboard/deals/${this.props.deal.id}/marketing`)
     resetGridSelectedItems('agent_network')
   }
 

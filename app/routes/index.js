@@ -443,7 +443,7 @@ export default (
           component={AsyncDealFileViewer}
         />
         <Route
-          path="/dashboard/deals/:id/network"
+          path="/dashboard/deals/:id/marketing/network"
           component={AsyncAgentNetwork}
         />
       </Route>
