@@ -81,8 +81,6 @@ export default function FormContexts(props) {
 
           const value = formValue || (disableAutopopulate ? null : contextValue)
 
-          const value = formValue || (disableAutopopulate ? null : contextValue)
-
           return (
             <ContextAnnotation
               key={`${name}-${id}`}
