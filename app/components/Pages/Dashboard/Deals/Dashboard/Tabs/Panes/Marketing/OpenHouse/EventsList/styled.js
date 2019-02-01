@@ -65,7 +65,7 @@ export const EventItem = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  height: 5rem;
+  height: 5.5rem;
   padding: 0 0.25rem;
   box-shadow: 0 1px 0 0 #d4d4d4;
 
