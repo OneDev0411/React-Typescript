@@ -90,11 +90,11 @@ export function allMembersOfTeam(team) {
   return Object.values(indexedMembers)
 }
 
-export function getBrandByType(user) {
+export function getBrandByType(user, type) {
   let { brand } = getActiveTeam(user)
 
   do {
-    if (brand.brand_type === 'Brokerage') {
+    if (brand.brand_type === type) {
       return brand.id
     }
 
