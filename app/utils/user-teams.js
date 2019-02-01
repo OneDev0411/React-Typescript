@@ -90,6 +90,18 @@ export function allMembersOfTeam(team) {
   return Object.values(indexedMembers)
 }
 
+export function getBrandByType(user) {
+  let { brand } = getActiveTeam(user)
+
+  do {
+    if (brand.brand_type === 'Brokerage') {
+      return brand.id
+    }
+
+    brand = brand.parent
+  } while (brand)
+}
+
 export function isTrainingAccount(user) {
 
   // Hide training banner
