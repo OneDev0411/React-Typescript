@@ -6,6 +6,7 @@ import { addNotification as notify } from 'reapop'
 import fecha from 'fecha'
 
 import LinkButton from 'components/Button/LinkButton'
+
 import Spinner from 'components/Spinner'
 import { BasicDropdown } from 'components/BasicDropdown'
 import VerticalDotsIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
@@ -19,9 +20,11 @@ import {
   Container,
   EventItem,
   EventInfoTitle,
+  EventInfoTime,
   EventInfoDescription,
   RegistrationLink,
   LinkText,
+  AppendButton,
   EventMenu
 } from './styled.js'
 
@@ -64,17 +67,21 @@ class EventsList extends React.Component {
                 onClick={() => this.onEditEvent(event)}
               >
                 <EventInfoTitle>{event.title}</EventInfoTitle>
-                <EventInfoDescription>
+                <EventInfoTime>
                   {fecha.format(
                     new Date(event.due_date * 1000),
                     'dddd, MMMM D, YYYY hh:mm A'
                   )}
-                </EventInfoDescription>
+                </EventInfoTime>
+                <EventInfoDescription>{event.description}</EventInfoDescription>
               </Flex>
 
               <RegistrationLink>
                 <LinkText>
-                  <a
+                  <a href={link} target="_blank">
+                    {link}
+                  </a>
+                  <AppendButton
                     onClick={e => {
                       e.preventDefault()
                       copy(link)
@@ -84,9 +91,8 @@ class EventsList extends React.Component {
                       })
                     }}
                   >
-                    {link}
-                  </a>
-                  <LinkIcon />
+                    Copy URL
+                  </AppendButton>
                 </LinkText>
 
                 <LinkButton
@@ -95,7 +101,7 @@ class EventsList extends React.Component {
                   to={link}
                   style={{ margin: 0 }}
                 >
-                  Registration Page
+                  View Page
                 </LinkButton>
               </RegistrationLink>
 
