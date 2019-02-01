@@ -1,26 +1,47 @@
+function normalizeFile(file) {
+  return {
+    id: file.id,
+    name: file.name,
+    mime: file.mime,
+    url: file.url,
+    date: file.created_at
+  }
+}
+
 function getDocumentsUrl({ deal, task, document, isBackOffice }) {
   if (document.type === 'task' && document.submission) {
     return isBackOffice
-      ? [{ url: `/dashboard/deals/${deal.id}/view/${document.id}` }]
-      : [{ url: document.submission.file.url }]
+      ? [
+          {
+            ...normalizeFile(task.submission.file),
+            url: `/dashboard/deals/${deal.id}/view/${task.id}`
+          }
+        ]
+      : [normalizeFile(task.submission.file)]
   }
 
   return isBackOffice
     ? [
         {
+          ...normalizeFile(document, true),
           url: `/dashboard/deals/${deal.id}/view/${task.id}/attachment/${
             document.id
           }`
         }
       ]
-    : [{ url: document.url }]
+    : [normalizeFile(document, true)]
 }
 
 function getTaskDocumentsUrl({ deal, task, isBackOffice }) {
   if (task.submission) {
     return isBackOffice
-      ? [{ url: `/dashboard/deals/${deal.id}/view/${task.id}` }]
-      : [{ url: task.submission.file.url }]
+      ? [
+          {
+            ...normalizeFile(task.submission.file),
+            url: `/dashboard/deals/${deal.id}/view/${task.id}`
+          }
+        ]
+      : [normalizeFile(task.submission.file)]
   }
 
   const attachments = task.room.attachments.sort(
@@ -28,17 +49,22 @@ function getTaskDocumentsUrl({ deal, task, isBackOffice }) {
   )
 
   return isBackOffice
-    ? [
-        {
-          url: `/dashboard/deals/${deal.id}/view/${task.id}/attachment/${
-            attachments[0].id
-          }`
-        }
-      ]
-    : [{ url: attachments[0].url }]
+    ? attachments.map(attachment => ({
+        ...normalizeFile(attachment),
+        url: `/dashboard/deals/${deal.id}/view/${task.id}/attachment/${
+          attachment.id
+        }`
+      }))
+    : attachments.map(normalizeFile)
 }
 
-export function getFileUrl({ type, deal, task, document, isBackOffice }) {
+export function getFileUrl({
+  type,
+  deal,
+  task,
+  document,
+  isBackOffice = false
+}) {
   if (type === 'task') {
     return getTaskDocumentsUrl({ deal, task, document, isBackOffice })
   }

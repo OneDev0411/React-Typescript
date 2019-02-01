@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import { primary } from 'views/utils/colors'
+import { merriweatherFamilyStyle } from 'components/Typography/styles'
 
 export const Toolbar = styled.div`
   display: flex;
@@ -23,7 +24,7 @@ export const TitleContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   width: 100%;
-  margin-top: 0.625rem;
+  margin-top: 1rem;
 
   .sk-circle {
     margin: 0 !important;
@@ -32,12 +33,13 @@ export const TitleContainer = styled.div`
   }
 `
 
-export const Title = styled.p`
+export const Title = styled.div`
+  ${merriweatherFamilyStyle};
   display: flex;
   align-items: center;
   font-size: 1.25rem;
   font-weight: bold;
-  padding: 0.5rem 2px;
+  padding: 0.825rem 2px;
   border: 1px dashed #fff;
 
   :hover {

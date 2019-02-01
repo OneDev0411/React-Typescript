@@ -21,12 +21,21 @@ import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArr
 
 import Tooltip from 'components/tooltip'
 
+import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
+
 import { selectActions } from './helpers/select-actions'
 import { getEsignAttachments } from './helpers/get-esign-attachments'
 import { getFileUrl } from './helpers/get-file-url'
 
+import { getTaskEnvelopes } from '../../utils/get-task-envelopes'
+
 import Message from '../../../Chatroom/Util/message'
+
+import { SelectItemDrawer } from './components/SelectItemDrawer'
+
 import GetSignature from '../../Signature'
+import PdfSplitter from '../../PdfSplitter'
+import TasksDrawer from '../TasksDrawer'
 import UploadManager from '../../UploadManager'
 
 import {
@@ -43,7 +52,10 @@ class ActionsButton extends React.Component {
 
     this.state = {
       isMenuOpen: false,
-      isSignatureFormOpen: false
+      isSignatureFormOpen: false,
+      isPdfSplitterOpen: false,
+      isTasksDrawerOpen: false,
+      multipleItemsSelection: null
     }
 
     this.actions = {
@@ -51,6 +63,9 @@ class ActionsButton extends React.Component {
       view: this.handleView,
       download: this.handleDownload,
       delete: this.handleDelete,
+      'move-file': this.toggleMoveFile,
+      'split-pdf': this.handleToggleSplitPdf,
+      'review-envelope': this.handleReviewEnvelope,
       'get-signature': this.handleGetSignature,
       'edit-form': this.handleEditForm,
       'notify-office': this.handleNotifyOffice,
@@ -83,27 +98,31 @@ class ActionsButton extends React.Component {
       isSignatureFormOpen: false
     })
 
+  handleCloseMultipleItemsSelectionDrawer = () =>
+    this.setState({
+      multipleItemsSelection: null
+    })
+
   getActions = () => {
     let conditions = {}
 
     if (this.props.type === 'document') {
-      conditions = this.generateDocumentsConditions()
+      conditions = this.createDocumentsConditions()
     }
 
     if (this.props.type === 'task') {
-      conditions = this.generateTaskConditions()
-      // console.log(this.props.task.title, conditions)
+      conditions = this.createTaskConditions()
     }
 
     return selectActions(this.props.type, conditions)
   }
 
-  generateDocumentsConditions = () => {
+  createDocumentsConditions = () => {
     let documentType
-    const envelopes = this.getDocumentEnvelopes(this.props.document)
 
     const isTask = this.props.document.type === 'task'
     const isFile = this.props.document.type === 'file'
+    const envelopes = this.getDocumentEnvelopes(this.props.document)
 
     if (isTask) {
       documentType = 'Form'
@@ -121,11 +140,14 @@ class ActionsButton extends React.Component {
     }
   }
 
-  generateTaskConditions = () => {
-    const envelopes = this.getTaskEnvelopes(this.props.task)
+  createTaskConditions = () => {
+    const envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
 
     return {
-      task_type: this.props.task.task_type,
+      task_type:
+        this.props.task.task_type === 'Form' && this.props.task.form
+          ? 'Form'
+          : 'Generic',
       file_uploaded: this.hasTaskAttachments(this.props.task),
       form_saved: this.props.task.submission !== null,
       envelope_status: this.getLastEnvelopeStatus(envelopes)
@@ -137,36 +159,12 @@ class ActionsButton extends React.Component {
     task.room.attachments.filter(file => file.mime === 'application/pdf')
       .length > 0
 
-  getTaskEnvelopes = task => {
-    const envelopes = Object.values(this.props.envelopes)
-      .filter(envelope =>
-        envelope.documents.some(document => {
-          if (task.submission && task.submission.id === document.submission) {
-            return true
-          }
-
-          return (
-            Array.isArray(task.room.attachments) &&
-            task.room.attachments.some(
-              attachment => document.file === attachment.id
-            )
-          )
-        })
-      )
-      .sort((a, b) => b.created_at - a.created_at)
-
-    return envelopes
-  }
-
-  getDocumentEnvelopes = document => {
-    const envelopes = Object.values(this.props.envelopes)
+  getDocumentEnvelopes = document =>
+    Object.values(this.props.envelopes)
       .filter(envelope =>
         envelope.documents.some(doc => doc.file === document.id)
       )
       .sort((a, b) => b.created_at - a.created_at)
-
-    return envelopes
-  }
 
   getLastEnvelopeStatus = envelopes => {
     if (envelopes.length === 0) {
@@ -174,6 +172,17 @@ class ActionsButton extends React.Component {
     }
 
     return envelopes[0].status
+  }
+
+  getSplitterFiles = () => {
+    const files = getFileUrl({
+      type: this.props.type,
+      deal: this.props.deal,
+      task: this.props.task,
+      document: this.props.document
+    })
+
+    return files.filter(file => file.mime === 'application/pdf')
   }
 
   getPrimaryAction = actions =>
@@ -205,7 +214,7 @@ class ActionsButton extends React.Component {
   }
 
   resendEnvelope = async () => {
-    const envelopes = this.getTaskEnvelopes(this.props.task)
+    const envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
 
     await Deal.resendEnvelope(envelopes[0].id)
 
@@ -216,7 +225,7 @@ class ActionsButton extends React.Component {
   }
 
   voidEnvelope = async () => {
-    const envelopes = this.getTaskEnvelopes(this.props.task)
+    const envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
 
     try {
       await this.props.voidEnvelope(this.props.deal.id, envelopes[0].id)
@@ -246,7 +255,7 @@ class ActionsButton extends React.Component {
   handleVoidEnvelope = () => {
     this.props.confirmation({
       message: 'Void Envelope?',
-      confirmLabel: 'Resend',
+      confirmLabel: 'Yes, Void',
       onConfirm: this.voidEnvelope
     })
   }
@@ -306,7 +315,18 @@ class ActionsButton extends React.Component {
 
     if (links.length === 1) {
       window.open(links[0].url, '_blank')
+
+      return
     }
+
+    this.setState({
+      multipleItemsSelection: {
+        items: links,
+        title: 'Select a file to download',
+        actionTitle: 'Download',
+        onSelect: item => window.open(item.url, '_blank')
+      }
+    })
   }
 
   /**
@@ -322,12 +342,19 @@ class ActionsButton extends React.Component {
     })
 
     if (links.length === 1) {
-      if (this.props.isBackOffice) {
-        browserHistory.push(links[0].url)
-      } else {
-        window.open(links[0].url, '_blank')
-      }
+      window.open(links[0].url, '_blank')
+
+      return
     }
+
+    this.setState({
+      multipleItemsSelection: {
+        items: links,
+        title: 'Select a file to view/print',
+        actionTitle: 'View/Print',
+        onSelect: item => window.open(item.url, '_blank')
+      }
+    })
   }
 
   /**
@@ -340,6 +367,42 @@ class ActionsButton extends React.Component {
       onConfirm: this.deleteFile
     })
   }
+
+  handleToggleSplitPdf = () =>
+    this.setState(state => ({
+      isPdfSplitterOpen: !state.isPdfSplitterOpen
+    }))
+
+  /**
+   *
+   */
+  handleReviewEnvelope = () => {
+    let envelopes = []
+
+    if (this.props.type === 'task') {
+      envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
+    }
+
+    if (this.props.type === 'document') {
+      envelopes = this.getDocumentEnvelopes(this.props.document)
+    }
+
+    if (envelopes.length === 0) {
+      return false
+    }
+
+    const link = getEnvelopeEditLink(
+      envelopes[0].id,
+      this.props.user.access_token
+    )
+
+    window.open(link, '_blank')
+  }
+
+  toggleMoveFile = () =>
+    this.setState(state => ({
+      isTasksDrawerOpen: !state.isTasksDrawerOpen
+    }))
 
   deleteFile = async () => {
     try {
@@ -434,6 +497,32 @@ class ActionsButton extends React.Component {
             document: this.props.document
           })}
         />
+
+        {this.state.isPdfSplitterOpen && (
+          <PdfSplitter
+            files={this.getSplitterFiles()}
+            deal={this.props.deal}
+            onClose={this.handleToggleSplitPdf}
+          />
+        )}
+
+        {this.state.isTasksDrawerOpen && (
+          <TasksDrawer
+            isOpen
+            deal={this.props.deal}
+            file={this.props.document}
+            onClose={this.toggleMoveFile}
+            title="Move to Checklist"
+          />
+        )}
+
+        {this.state.multipleItemsSelection && (
+          <SelectItemDrawer
+            isOpen
+            {...this.state.multipleItemsSelection}
+            onClose={this.handleCloseMultipleItemsSelectionDrawer}
+          />
+        )}
       </React.Fragment>
     )
   }

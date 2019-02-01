@@ -23,7 +23,8 @@ const filterSegments = (state, action) => {
     case types.CHANGE_ACTIVE_FILTER_SEGMENT:
       return {
         ...state,
-        activeSegmentId: action.segmentId
+        activeSegmentId: action.segmentId,
+        activeFilters: {}
       }
 
     case types.FETCH_FILTER_SEGMENTS:

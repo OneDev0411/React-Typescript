@@ -43,7 +43,7 @@ router.get('/openhouse/:id/:brand/register', async ctx => {
   }
 
   // get template
-  const template = openHouse.metadata.template.split('readonly').join('')
+  const template = openHouse.metadata.template.split('disabled').join('')
 
   const $ = cheerio.load(template)
 

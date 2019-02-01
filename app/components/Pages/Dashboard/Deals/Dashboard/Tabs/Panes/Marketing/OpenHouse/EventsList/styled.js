@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+
 import { primary } from 'views/utils/colors'
 
 export const Container = styled.div`
@@ -45,6 +46,7 @@ export const LinkText = styled.div`
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    cursor: pointer;
   }
 `
 

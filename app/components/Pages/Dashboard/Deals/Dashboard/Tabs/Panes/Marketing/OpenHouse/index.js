@@ -1,11 +1,14 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
+import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 
+import { confirmation } from 'actions/confirmation'
 import ActionButton from 'components/Button/ActionButton'
 
 import { CreateOpenHouse } from 'components/open-house/CreateOpenHouse'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
-import { getTasks } from 'models/tasks/get-tasks'
+import { getTasks, deleteTask } from 'models/tasks'
 
 import { Title, Description, LeftColumn, RightColumn, Image } from '../styled'
 
@@ -13,7 +16,7 @@ import EventsList from './EventsList'
 
 import { OpenHouseContainer } from './styled.js'
 
-export default class OpenHouse extends React.Component {
+class OpenHouse extends React.Component {
   state = {
     isFetching: false,
     events: [],
@@ -50,11 +53,17 @@ export default class OpenHouse extends React.Component {
     })
 
   onUpdateEvent = updatedEvent => {
-    const events = this.state.events.map(
-      event => (event.id === updatedEvent.id ? updatedEvent : event)
+    const events = this.state.events.map(event =>
+      event.id === updatedEvent.id ? updatedEvent : event
     )
 
     this.setState({ events, selectedEvent: null })
+
+    this.props.notify({
+      title: 'Open house updated',
+      message: `The open house ${updatedEvent.title} has been updated`,
+      status: 'success'
+    })
   }
 
   onCreateEvent = event => {
@@ -62,6 +71,25 @@ export default class OpenHouse extends React.Component {
 
     this.setState({
       events
+    })
+
+    this.props.notify({
+      title: 'Open house created',
+      message: `The open house ${event.title} has been created`,
+      status: 'success'
+    })
+  }
+
+  handleDeleteEvent = async event => {
+    this.props.confirmation({
+      show: true,
+      confirmLabel: 'Delete',
+      message: 'Delete open house event',
+      onConfirm: async () => {
+        await deleteTask(event.id)
+        this.onDeleteEvent(event)
+      },
+      description: 'Are you sure you want to delete open house event?'
     })
   }
 
@@ -71,6 +99,11 @@ export default class OpenHouse extends React.Component {
     )
 
     this.setState({ events, selectedEvent: null })
+
+    this.props.notify({
+      title: 'Open house deleted',
+      status: 'success'
+    })
   }
 
   render() {
@@ -103,6 +136,7 @@ export default class OpenHouse extends React.Component {
           isFetching={this.state.isFetching}
           user={this.props.user}
           onEditEvent={this.handleEditEvent}
+          onDeleteEvent={this.handleDeleteEvent}
         />
 
         {this.state.selectedEvent && (
@@ -120,3 +154,11 @@ export default class OpenHouse extends React.Component {
     )
   }
 }
+
+export default connect(
+  null,
+  {
+    confirmation,
+    notify
+  }
+)(OpenHouse)

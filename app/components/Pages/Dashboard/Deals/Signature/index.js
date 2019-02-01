@@ -10,8 +10,6 @@ import { createEnvelope } from 'actions/deals'
 import Deal from 'models/Deal'
 import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
 
-import ActionButton from 'components/Button/ActionButton'
-
 import SignatureComposeDrawer from './Form'
 import { Docusign } from './Docusign'
 
@@ -88,6 +86,8 @@ class Signature extends React.Component {
     const url = getEnvelopeEditLink(envelope.id, this.props.user.access_token)
 
     window.open(url, '_blank')
+
+    this.toggleOpenForm()
   }
 
   render() {

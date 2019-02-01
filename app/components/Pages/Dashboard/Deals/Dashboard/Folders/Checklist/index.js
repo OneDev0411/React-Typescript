@@ -3,7 +3,10 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 import Flex from 'styled-flex-component'
 
+import { selectChecklistTasks } from 'reducers/deals/tasks'
+
 import { ChecklistLabels } from './Labels'
+
 import MessageAdmin from './MessageAdmin'
 import Menu from './Menu'
 
@@ -36,30 +39,23 @@ class ChecklistFolder extends React.Component {
    * inside the checklist table
    */
   get Tasks() {
-    return this.SortedTasks.filter(this.canShowTask).map(
-      id => this.props.tasks[id]
-    )
+    return this.SortedTasks.filter(task => task.task_type !== 'GeneralComments')
   }
 
   get SortedTasks() {
-    const { tasks } = this.props.checklist
-    let sortedTasks = tasks
-
-    if (this.props.isBackOffice && tasks) {
-      sortedTasks = _.sortBy(tasks, id =>
-        this.props.tasks[id].attention_requested ? 0 : 1
+    if (this.props.isBackOffice) {
+      return _.sortBy(this.props.tasks, task =>
+        task.attention_requested ? 0 : 1
       )
     }
 
-    return sortedTasks
+    return _.sortBy(
+      this.props.tasks,
+      task => new Date(task.updated_at).getTime() * -1
+    )
   }
 
-  canShowTask = id =>
-    this.props.tasks[id].title.includes('General Comments') === false
-
   render() {
-    const { checklist } = this.props
-
     return (
       <FolderContainer>
         <Header>
@@ -69,15 +65,18 @@ class ChecklistFolder extends React.Component {
             onClick={this.toggleFolderOpen}
           >
             <ArrowIcon isOpen={this.state.isFolderExpanded} />
-            <HeaderTitle>{checklist.title}</HeaderTitle>
-            <ChecklistLabels checklist={checklist} />
+            <HeaderTitle>{this.props.checklist.title}</HeaderTitle>
+            <ChecklistLabels checklist={this.props.checklist} />
           </Flex>
 
           <Flex alignCenter>
-            <MessageAdmin checklist={checklist} tasks={this.props.tasks} />
+            <MessageAdmin
+              checklist={this.props.checklist}
+              tasks={this.props.tasks}
+            />
             <Menu
               deal={this.props.deal}
-              checklist={checklist}
+              checklist={this.props.checklist}
               isBackOffice={this.props.isBackOffice}
             />
           </Flex>
@@ -93,13 +92,13 @@ class ChecklistFolder extends React.Component {
             />
           ))}
 
-          <NewTaskRow deal={this.props.deal} checklist={checklist} />
+          <NewTaskRow deal={this.props.deal} checklist={this.props.checklist} />
         </ItemsContainer>
       </FolderContainer>
     )
   }
 }
 
-export default connect(({ deals }) => ({
-  tasks: deals.tasks
+export default connect(({ deals }, props) => ({
+  tasks: selectChecklistTasks(props.checklist, deals.tasks)
 }))(ChecklistFolder)

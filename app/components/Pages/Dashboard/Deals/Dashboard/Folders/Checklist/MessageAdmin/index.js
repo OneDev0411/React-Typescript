@@ -2,34 +2,46 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
-import ActionButton from 'components/Button/ActionButton'
 import { setSelectedTask } from 'actions/deals'
 
+import Notification from '../Notification'
+
 class MessageAdmin extends React.Component {
-  openGeneralTask = () =>
-    this.props.setSelectedTask(this.props.tasks[this.GeneralTaskId])
-
-  get Caption() {
-    // todo: when there are some unread messages, we should show different message, that its ui isn't ready yet
-    return 'Message Admin'
-  }
-
-  get GeneralTaskId() {
-    return _.find(this.props.checklist.tasks, id =>
-      this.props.tasks[id].title.includes('General Comments')
+  getGeneralTaskId() {
+    const taskId = _.find(
+      this.props.checklist.tasks,
+      id => this.props.tasks[id].task_type === 'GeneralComments'
     )
+
+    return taskId ? this.props.tasks[taskId] : null
   }
 
   render() {
+    const task = this.getGeneralTaskId()
+
+    if (!task) {
+      return false
+    }
+
     return (
-      <ActionButton size="small" onClick={this.openGeneralTask}>
-        {this.Caption}
-      </ActionButton>
+      <Notification
+        task={task}
+        tooltip="Message Admin"
+        tooltipPlacement="left"
+        style={{ marginRight: 0 }}
+        onClick={this.props.setSelectedTask}
+      />
     )
   }
 }
 
+function mapStateToProps({ deals }) {
+  return {
+    tasks: deals.tasks
+  }
+}
+
 export default connect(
-  null,
+  mapStateToProps,
   { setSelectedTask }
 )(MessageAdmin)

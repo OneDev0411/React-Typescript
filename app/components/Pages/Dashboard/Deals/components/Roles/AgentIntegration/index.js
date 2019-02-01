@@ -2,6 +2,8 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
+import TextIconButton from 'components/Button/TextIconButton'
+import AddIcon from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 
 import { convertContactToRole, AGENT_ROLES } from '../../../utils/roles'
 
@@ -23,10 +25,10 @@ class RoleAgentIntegration extends React.Component {
   }
 
   get InitialState() {
-    if (this.props.user) {
+    if (this.props.role) {
       return {
         showRoleDrawer: true,
-        role: this.props.user
+        role: this.props.role
       }
     }
 
@@ -132,9 +134,22 @@ class RoleAgentIntegration extends React.Component {
     }
 
     if (relatedContacts.length > 0) {
+      let role = convertContactToRole(
+        relatedContacts[0],
+        this.props.attributeDefs
+      )
+
+      if (user.id === this.props.user.id) {
+        role = {
+          ...role,
+          legal_first_name: user.first_name || role.legal_first_name,
+          legal_last_name: user.last_name || role.legal_last_name
+        }
+      }
+
       newState = {
         showRoleDrawer: true,
-        role: convertContactToRole(relatedContacts[0], this.props.attributeDefs)
+        role
       }
     }
 
@@ -147,6 +162,22 @@ class RoleAgentIntegration extends React.Component {
 
   onClose = () => {
     this.props.onHide()
+  }
+
+  _renderSearchContactDrawerHeaderMenu = () => {
+    if (this.state.selectedAgent) {
+      return null
+    }
+
+    return (
+      <TextIconButton
+        onClick={this.showRoleDrawer}
+        text="Add New Contact"
+        appearance="outline"
+        iconLeft={AddIcon}
+        iconSize="large"
+      />
+    )
   }
 
   render() {
@@ -178,18 +209,17 @@ class RoleAgentIntegration extends React.Component {
           title={this.props.modalTitle}
           isOpen={this.state.showContactModal}
           onClose={this.onClose}
-          onAddNewContact={
-            this.state.selectedAgent ? null : this.showRoleDrawer
-          }
           onSelect={this.onSelectContactUser}
+          renderHeaderMenu={this._renderSearchContactDrawerHeaderMenu}
         />
       </Fragment>
     )
   }
 }
 
-function mapStateToProps({ contacts }) {
+function mapStateToProps({ contacts, user }) {
   return {
+    user,
     attributeDefs: contacts.attributeDefs
   }
 }

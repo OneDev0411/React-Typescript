@@ -14,7 +14,8 @@ import {
   removeActiveFilter,
   toggleActiveFilter,
   updateActiveFilter,
-  changeConditionOperator
+  changeConditionOperator,
+  createActiveFiltersWithConditionOperator
 } from 'actions/filter-segments/active-filters'
 
 import { ConditionOperators } from './ConditionOperators'
@@ -34,7 +35,7 @@ class Filters extends React.Component {
     const { segment } = this.props
 
     if (segment) {
-      this.createFiltersFromSegment(segment)
+      this.createFiltersFromSegment(segment, this.props.activeFilters)
     }
   }
 
@@ -42,18 +43,34 @@ class Filters extends React.Component {
     this.shouldReCreateFilters(nextProps)
   }
 
-  shouldReCreateFilters = ({ segment: nextSegment }) => {
+  shouldReCreateFilters = ({ segment: nextSegment, activeFilters }) => {
     const { segment } = this.props
 
-    if (segment && nextSegment && segment.id !== nextSegment.id) {
-      return this.createFiltersFromSegment(nextSegment)
+    if (
+      (!segment && nextSegment) ||
+      (segment && nextSegment && segment.id !== nextSegment.id)
+    ) {
+      return this.createFiltersFromSegment(nextSegment, activeFilters)
     }
   }
 
-  createFiltersFromSegment = segment => {
-    const activeFilters = this.props.createFiltersFromSegment(segment.filters)
+  createFiltersFromSegment = async (segment, activeFilters) => {
+    const filters = this.props.createFiltersFromSegment(
+      segment.filters,
+      activeFilters
+    )
 
-    this.props.createActiveFilters(this.props.name, activeFilters)
+    let conditionOperator = this.props.conditionOperator || 'and'
+
+    if (segment.args && segment.args.filter_type) {
+      conditionOperator = segment.args.filter_type
+    }
+
+    await this.props.createActiveFiltersWithConditionOperator(
+      this.props.name,
+      filters,
+      conditionOperator
+    )
   }
 
   /**
@@ -148,7 +165,7 @@ class Filters extends React.Component {
   onConditionChange = ({ value: conditionOperator }) => {
     this.props.changeConditionOperator(this.props.name, conditionOperator)
 
-    if (_.size(this.props.activeFilters) === 0) {
+    if (_.size(this.props.activeFilters) <= 1) {
       return false
     }
 
@@ -228,6 +245,7 @@ export default connect(
     removeActiveFilter,
     toggleActiveFilter,
     updateActiveFilter,
-    changeConditionOperator
+    changeConditionOperator,
+    createActiveFiltersWithConditionOperator
   }
 )(Filters)

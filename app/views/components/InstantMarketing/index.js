@@ -40,6 +40,7 @@ class InstantMarketing extends React.Component {
 
 InstantMarketing.propTypes = {
   headerTitle: PropTypes.string,
+  disableInline: PropTypes.bool,
   closeConfirmation: PropTypes.bool,
   showTemplatesColumn: PropTypes.bool,
   templateData: PropTypes.object,
@@ -51,6 +52,7 @@ InstantMarketing.propTypes = {
 
 InstantMarketing.defaultProps = {
   headerTitle: 'Marketing Center',
+  disableInline: false,
   closeConfirmation: true,
   showTemplatesColumn: true,
   templateData: {},

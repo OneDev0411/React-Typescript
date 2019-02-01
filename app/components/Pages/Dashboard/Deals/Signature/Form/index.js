@@ -3,7 +3,6 @@ import { Field } from 'react-final-form'
 import _ from 'underscore'
 
 import ActionButton from 'components/Button/ActionButton'
-import IconButton from 'components/Button/IconButton'
 import IconFolder from 'components/SvgIcons/Folder/IconFolder'
 
 import { FinalFormDrawer } from 'components/FinalFormDrawer'
@@ -24,16 +23,22 @@ export default class SignatureComposeDrawer extends React.Component {
 
   formObject = null
 
+  shouldQuitOnCloseAttachments = true
+
   get InitialValues() {
     if (this.formObject || this.props.isSubmitting) {
       return this.formObject
     }
 
+    this.initialAttachments = this.normalizePreSelectedAttachments(
+      this.props.attachments
+    )
+
     this.formObject = {
       subject: '',
       recipients: {},
       from: `${this.props.user.display_name} <${this.props.user.email}>`,
-      attachments: this.normalizePreSelectedAttachments(this.props.attachments)
+      attachments: this.initialAttachments
     }
 
     return this.formObject
@@ -69,23 +74,36 @@ export default class SignatureComposeDrawer extends React.Component {
     attachments.forEach(attachment => {
       const item = normalizeAttachment(attachment)
 
-      list[item.id] = item
+      list[item.id] = {
+        ...item,
+        is_preselected: true
+      }
     })
 
     return list
   }
 
-  toggleOpenAttachments = () =>
-    this.setState(state => ({
-      isAttachmentsOpen: !state.isAttachmentsOpen
-    }))
+  handleSelectAttachments = () =>
+    this.setState({
+      isAttachmentsOpen: false
+    })
+
+  handleOpenAttachments = () => {
+    this.setState({
+      isAttachmentsOpen: true
+    })
+
+    this.shouldQuitOnCloseAttachments = false
+  }
 
   handleCloseAttachments = () => {
     this.setState({
       isAttachmentsOpen: false
     })
 
-    this.props.onClose()
+    if (this.shouldQuitOnCloseAttachments) {
+      this.props.onClose()
+    }
   }
 
   render() {
@@ -113,7 +131,7 @@ export default class SignatureComposeDrawer extends React.Component {
               <Tooltip caption="Select Documents">
                 <IconFolder
                   style={{ width: '2rem', cursor: 'pointer' }}
-                  onClick={this.toggleOpenAttachments}
+                  onClick={this.handleOpenAttachments}
                 />
               </Tooltip>
 
@@ -124,7 +142,7 @@ export default class SignatureComposeDrawer extends React.Component {
               >
                 {this.props.isSubmitting
                   ? 'Please Wait...'
-                  : 'View In Docusign'}
+                  : 'Next: View in Docusign'}
               </ActionButton>
             </div>
           )}
@@ -169,9 +187,10 @@ export default class SignatureComposeDrawer extends React.Component {
               <Field
                 name="attachments"
                 deal={this.props.deal}
+                initialAttachments={this.initialAttachments}
                 isAttachmentsOpen={this.state.isAttachmentsOpen}
                 onCloseAttachmentsDrawer={this.handleCloseAttachments}
-                onChangeSelectedDocuments={this.toggleOpenAttachments}
+                onChangeSelectedDocuments={this.handleSelectAttachments}
                 component={Attachments}
               />
             </Fragment>

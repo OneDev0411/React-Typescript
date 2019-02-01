@@ -118,9 +118,11 @@ class ICalAllTypes extends React.Component {
 }
 
 function mapToProps({ deals, contacts, user }) {
+  const brandId = getActiveTeamId(user)
+
   return {
     user,
-    contexts: deals.contexts,
+    contexts: deals.contexts[brandId],
     contactsAttributesDefs: contacts.attributeDefs.byId
   }
 }

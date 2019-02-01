@@ -19,7 +19,7 @@ import TaskView from '../Dashboard/TaskView'
 
 import { Menu } from './Menu'
 import { FactsheetSideMenu } from './FactsheetSideMenu'
-import EnvelopeSideMenu from './EnvelopeSideMenu'
+import { EnvelopeSideMenu } from './EnvelopeSideMenu'
 import { FileDisplay } from './FileDisplay'
 
 import { LayoutContainer, PageContainer } from './styled'
@@ -36,7 +36,7 @@ class FileViewer extends React.Component {
   }
 
   init = async () => {
-    if (this.state.deal) {
+    if (this.state.deal && this.state.deal.checklists) {
       return false
     }
 
@@ -116,7 +116,6 @@ class FileViewer extends React.Component {
 
   get EnvelopeFile() {
     const envelope = this.Envelope
-    const { task } = this.props
 
     if (!this.props.task || !envelope.documents) {
       return null
@@ -125,16 +124,16 @@ class FileViewer extends React.Component {
     // get document index
     let document = null
 
-    if (task.submission) {
+    if (this.props.task.submission) {
       document = envelope.documents.find(
-        doc => doc.submission === task.submission.id
+        doc => doc.submission === this.props.task.submission.id
       )
     }
 
     // if couldn't find the file, try to find that in attachments
     if (!document) {
       document = envelope.documents.find(doc =>
-        task.room.attachments.find(file => file.id === doc.file)
+        this.props.task.room.attachments.find(file => file.id === doc.file)
       )
     }
 
@@ -168,13 +167,27 @@ class FileViewer extends React.Component {
     return this.props.params.entityType || 'digital-form'
   }
 
-  handleBackButton = () =>
-    browserHistory.push(`/dashboard/deals/${this.state.deal.id}`)
+  get ShowLoader() {
+    if (!this.state.deal) {
+      return true
+    }
+
+    if (!this.props.task && this.props.params.taskId !== 'stash') {
+      return true
+    }
+
+    return false
+  }
+
+  handleBackButton = () => {
+    browserHistory.goBack()
+    // browserHistory.push(`/dashboard/deals/${this.state.deal.id}`)
+  }
 
   normalizeName = name => decodeURIComponent(name).replace(/[_-]/g, ' ')
 
   render() {
-    if (!this.state.deal) {
+    if (this.ShowLoader) {
       return <Spinner />
     }
 

@@ -18,7 +18,7 @@ export const Container = styled.div`
     }
 
     .messages-list .message-item {
-      margin: 0 0.5rem 0 0 !important;
+      margin: 0 !important;
     }
 
     .delivery-report {
@@ -72,6 +72,8 @@ export const Container = styled.div`
       border: 1px solid #cccccc;
       padding: 0 0.5rem 0 2.6rem;
       min-height: 2.5rem;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
 
       .content {
         display: flex;

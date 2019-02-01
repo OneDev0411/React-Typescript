@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
+import moment from 'moment'
 
 import Deal from 'models/Deal'
 import DealContext from 'models/Deal/helpers/dynamic-context'
@@ -63,11 +64,28 @@ class CreateOffer extends React.Component {
   }
 
   initializeContexts = () => {
+    const contexts = {}
     const { deal } = this.props
 
-    return {
-      year_built: Deal.get.field(deal, 'year_built')
-    }
+    const dealContexts = DealContext.getItems(
+      deal.brand.id,
+      deal.deal_type,
+      deal.property_type
+    )
+
+    const indexedContexts = _.indexBy(dealContexts, 'key')
+
+    _.each(indexedContexts, context => {
+      let value = Deal.get.field(deal, context.key)
+
+      if (value !== null && context.data_type === 'Date') {
+        value = moment.utc(value * 1000).format()
+      }
+
+      contexts[context.key] = value !== null ? value : ''
+    })
+
+    return contexts
   }
 
   initializeRoles = list => {
@@ -579,6 +597,7 @@ class CreateOffer extends React.Component {
               <IntercomTrigger
                 render={({ activeIntercom, intercomIsActive }) => (
                   <button
+                    type="button"
                     onClick={!intercomIsActive ? activeIntercom : () => false}
                     className="btn btn-primary c-button--link"
                   >

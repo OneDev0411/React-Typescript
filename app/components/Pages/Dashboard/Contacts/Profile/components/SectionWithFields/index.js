@@ -143,7 +143,7 @@ class SectionWithFields extends React.Component {
             return field.label
           }
 
-          if (value && attribute_def.has_label) {
+          if (value && attribute_def.has_label && attribute_def.labels) {
             return attribute_def.labels[0]
           }
 

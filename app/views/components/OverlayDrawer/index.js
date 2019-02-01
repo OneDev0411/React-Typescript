@@ -11,12 +11,14 @@ const propTypes = {
   width: PropTypes.number,
   isOpen: PropTypes.bool,
   showFooter: PropTypes.bool,
+  showBackdrop: PropTypes.bool,
   closeOnBackdropClick: PropTypes.bool
 }
 
 const defaultProps = {
   isOpen: false,
   showFooter: true,
+  showBackdrop: true,
   closeOnBackdropClick: false
 }
 
@@ -24,6 +26,7 @@ const OverlayDrawer = ({
   children,
   isOpen,
   width,
+  showBackdrop,
   closeOnBackdropClick,
   ...rest
 }) => (
@@ -32,10 +35,12 @@ const OverlayDrawer = ({
       {React.Children.map(children, child => React.cloneElement(child, rest))}
     </Content>
 
-    <Backdrop
-      show={isOpen}
-      onClick={() => closeOnBackdropClick && rest.onClose()}
-    />
+    {showBackdrop && (
+      <Backdrop
+        show={isOpen}
+        onClick={() => closeOnBackdropClick && rest.onClose()}
+      />
+    )}
   </div>
 )
 

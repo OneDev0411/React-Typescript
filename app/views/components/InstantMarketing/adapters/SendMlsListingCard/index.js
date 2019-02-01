@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
@@ -21,6 +22,14 @@ import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-d
 
 import { getTemplateTypes } from '../../helpers/get-template-types'
 import SocialDrawer from '../../components/SocialDrawer'
+
+const propTypes = {
+  isMultiListing: PropTypes.bool
+}
+
+const defaultProps = {
+  isMultiListing: false
+}
 
 class SendMlsListingCard extends React.Component {
   state = {
@@ -228,8 +237,9 @@ class SendMlsListingCard extends React.Component {
 
   get IsMultiListing() {
     return (
-      this.props.selectedTemplate &&
-      this.props.selectedTemplate.template_type === 'Listings'
+      this.props.isMultiListing ||
+      (this.props.selectedTemplate &&
+        this.props.selectedTemplate.template_type === 'Listings')
     )
   }
 
@@ -345,6 +355,9 @@ class SendMlsListingCard extends React.Component {
     )
   }
 }
+
+SendMlsListingCard.propTypes = propTypes
+SendMlsListingCard.defaultProps = defaultProps
 
 function mapStateToProps({ contacts, deals, user }) {
   return {

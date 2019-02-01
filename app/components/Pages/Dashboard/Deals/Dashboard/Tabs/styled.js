@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Link } from 'react-router'
 
 import AbstractCard from 'components/Card'
 import { borderColor } from 'views/utils/colors'
@@ -39,7 +40,7 @@ export const NavBar = styled.div`
   margin: 1.5rem 0;
 `
 
-export const NavItem = styled.div`
+export const NavItem = styled(Link)`
   margin: 0 4.25rem;
   font-size: 1.25rem;
   padding: 0.6rem 0;
@@ -47,6 +48,11 @@ export const NavItem = styled.div`
   color: #7f7f7f;
   cursor: ${props => (props.isDisabled ? 'not-allowed' : 'pointer')};
   border-bottom: 2px solid transparent;
+
+  :hover,
+  :focus {
+    text-decoration: none;
+  }
 
   ${props =>
     props.isActive &&

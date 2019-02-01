@@ -187,14 +187,15 @@ export function getDaysFromMiliseconds(miliseconds) {
 export async function isValidPhoneNumber(phone_number) {
   const phoneUtil = await getPhoneNumberUtil()
 
-  if (
-    phone_number.trim() &&
-    phoneUtil.isValidNumber(phoneUtil.parse(phone_number, 'US'))
-  ) {
-    return true
+  if (!phone_number.trim()) {
+    return false
   }
 
-  return false
+  try {
+    return phoneUtil.isValidNumber(phoneUtil.parse(phone_number, 'US'))
+  } catch(e) {
+    return false
+  }
 }
 
 export async function formatPhoneNumber(input) {

@@ -44,13 +44,13 @@ export default class EmailCompose extends React.Component {
     return errors
   }
 
-  handleSubmit = values => {
+  handleSubmit = async values => {
     const form = {
       ...values,
       recipients: this.normalizeRecipients(values.recipients)
     }
 
-    this.props.onClickSend(form)
+    await this.props.onClickSend(form)
   }
 
   normalizeRecipients = recipients =>
@@ -65,6 +65,12 @@ export default class EmailCompose extends React.Component {
       if (recipient.data_type === 'email') {
         return {
           email: recipient.email
+        }
+      }
+
+      if (recipient.data_type === 'tag') {
+        return {
+          tag: recipient.text
         }
       }
 
