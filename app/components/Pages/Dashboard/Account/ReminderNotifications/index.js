@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
@@ -7,6 +7,7 @@ import { getContexts } from 'actions/deals'
 import { getAttributeDefs } from 'store_actions/contacts'
 import { getActiveTeamId } from 'utils/user-teams'
 import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
+import PageHeader from 'components/PageHeader'
 
 import Column from './column'
 
@@ -102,38 +103,80 @@ class ReminderNotifications extends Component {
   async getSettings() {
     const response = await new Fetch().get(API_URL)
 
-    return response.body.data
+    return response.body.data.map(({ object_type, event_type, reminder }) => ({
+      object_type,
+      event_type,
+      reminder
+    }))
   }
 
   async setSettings(settings) {
-    return new Fetch().put(API_URL).send(settings)
+    return new Fetch().put(API_URL).send({ settings })
   }
 
-  changeHandler = change => {
+  filterSetting = (currentSetting, setting) =>
+    !(
+      currentSetting.object_type === setting.object_type &&
+      currentSetting.event_type === setting.event_type
+    )
+
+  removeSetting = setting => {
     this.setState(
       prevState => ({
         ...prevState,
-        settings: {
-          ...prevState.settings,
-          change
-        }
+        settings: prevState.settings.filter(item =>
+          this.filterSetting(item, setting)
+        )
       }),
-      () => this.setSettings(this.state.settings)
+      async () => this.setSettings(this.state.settings)
     )
+  }
+
+  addSetting = setting => {
+    this.setState(
+      prevState => ({
+        ...prevState,
+        settings: [
+          ...prevState.settings.filter(item =>
+            this.filterSetting(item, setting)
+          ),
+          setting
+        ]
+      }),
+      async () => this.setSettings(this.state.settings)
+    )
+  }
+
+  changeHandler = ({ type, setting }) => {
+    if (type === 'add') {
+      this.addSetting(setting)
+
+      return
+    }
+
+    this.removeSetting(setting)
   }
 
   render() {
     return (
-      <Flex>
-        {this.state.columns.map((col, index) => (
-          <Column
-            key={index}
-            {...col}
-            options={DROPDOWN_OPTIONS}
-            onChange={this.changeHandler}
-          />
-        ))}
-      </Flex>
+      <Fragment>
+        <PageHeader style={{ marginBottom: '1.5em', marginTop: '1.5rem' }}>
+          <PageHeader.Title showBackButton={false}>
+            <PageHeader.Heading>Reminder Notifications</PageHeader.Heading>
+          </PageHeader.Title>
+        </PageHeader>
+        <Flex>
+          {this.state.columns.map((col, index) => (
+            <Column
+              key={index}
+              {...col}
+              settings={this.state.settings}
+              options={DROPDOWN_OPTIONS}
+              onChange={this.changeHandler}
+            />
+          ))}
+        </Flex>
+      </Fragment>
     )
   }
 }
