@@ -207,8 +207,8 @@ class OpenHouseDrawerInternal extends React.Component {
       }
 
       openHouse.metadata.template = openHouse.metadata.template.replace(
-        new RegExp(/\<h1(\sstyle=\"(.+)\")?.+\<\/h1\>/),
-        `<h1 $1>${openHouse.title}</h1>`
+        new RegExp(/\<h1\sstyle=\"(.+)\".+\<\/h1\>/),
+        `<h1 style="$1">${openHouse.title}</h1>`
       )
 
       openHouse.metadata.template = openHouse.metadata.template.replace(
@@ -459,7 +459,6 @@ class OpenHouseDrawerInternal extends React.Component {
                       <InstantMarketing
                         isOpen
                         headerTitle="Edit Registration Page"
-                        disableInline
                         closeConfirmation={false}
                         showTemplatesColumn={false}
                         saveButtonLabel="Save"
