@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 import Flex from 'styled-flex-component'
 
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+
 import { selectChecklistTasks } from 'reducers/deals/tasks'
 
 import { ChecklistLabels } from './Labels'
@@ -66,7 +68,12 @@ class ChecklistFolder extends React.Component {
             onClick={this.toggleFolderOpen}
           >
             <ArrowIcon isOpen={this.state.isFolderExpanded} />
-            <HeaderTitle>{this.props.checklist.title}</HeaderTitle>
+            <HeaderTitle>
+              <TextMiddleTruncate
+                text={this.props.checklist.title}
+                maxLength={100}
+              />
+            </HeaderTitle>
             <ChecklistLabels checklist={this.props.checklist} />
           </Flex>
 
