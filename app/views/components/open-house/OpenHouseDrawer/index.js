@@ -207,8 +207,8 @@ class OpenHouseDrawerInternal extends React.Component {
       }
 
       openHouse.metadata.template = openHouse.metadata.template.replace(
-        new RegExp(/\<h1(\sstyle=\"(.+)\")?.+\<\/h1\>/),
-        `<h1 $1>${openHouse.title}</h1>`
+        new RegExp(/\<h1\sstyle=\"(.+)\".+\<\/h1\>/),
+        `<h1 style="$1">${openHouse.title}</h1>`
       )
 
       openHouse.metadata.template = openHouse.metadata.template.replace(
