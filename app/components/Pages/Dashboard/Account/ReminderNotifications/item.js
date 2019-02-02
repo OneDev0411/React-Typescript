@@ -1,36 +1,26 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
 
 import { BasicDropdown } from 'components/BasicDropdown'
 import { CheckBoxButton } from 'components/Button/CheckboxButton'
 
 import IconBell from 'components/SvgIcons/Bell/IconBell'
 
-import { DropButton, IconDrop } from './styled'
-
-const Container = styled.div`
-  margin-bottom: 1.5rem;
-`
-
-const CheckBoxContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  &:last-child {
-    margin-left: 0.2rem;
-  }
-`
+import { Container, CheckBoxContainer, DropButton, IconDrop } from './styled'
 
 export default class Item extends Component {
   state = {
-    checked: !!this.props.value,
-    value: this.props.options[0].value
+    checked: !!this.props.value
   }
 
-  handleChange = () => {
-    console.log(this.state)
-    this.props.onChange(this.state)
+  handleChange = value => {
+    this.props.onChange({
+      type: this.state.checked ? 'add' : 'remove',
+      setting: {
+        object_type: this.props.type,
+        event_type: this.props.name,
+        reminder: value
+      }
+    })
   }
 
   checkboxChangeHandler = () => {
@@ -39,38 +29,47 @@ export default class Item extends Component {
         ...prevState,
         checked: !prevState.checked
       }),
-      this.handleChange
+      () => {
+        const value = this.props.value || this.props.options[0].value
+
+        this.handleChange(value)
+      }
     )
   }
 
   dropdownChangeHandler = ({ value }) => {
-    this.setState({ value }, this.handleChange)
+    this.handleChange(value)
   }
 
   findOptionByValue = (options, value) =>
     options.find(item => item.value === value)
 
   render() {
-    const { label, name, type, value, options, onChange } = this.props
+    const { label, value, options } = this.props
+    const { checked } = this.state
+    const selectedItem = this.findOptionByValue(options, value) || options[0]
 
     return (
       <Container>
         <CheckBoxContainer onClick={this.checkboxChangeHandler}>
           <CheckBoxButton
             onClick={this.checkboxChangeHandler}
-            isSelected={this.state.checked}
+            isSelected={checked}
             square
           />
           &nbsp;&nbsp;<span>{label}</span>
         </CheckBoxContainer>
+
         <BasicDropdown
+          disabled={!checked}
           fullHeight
           items={options}
-          defaultSelectedItem={
-            this.findOptionByValue(options, value) || options[0]
-          }
+          selectedItem={selectedItem}
           buttonIcon={IconBell}
-          onChange={this.dropdownChangeHandler}
+          onSelect={this.dropdownChangeHandler}
+          menuStyle={{
+            width: '11rem'
+          }}
           buttonRenderer={props => (
             <DropButton
               {...props}
@@ -78,8 +77,9 @@ export default class Item extends Component {
               style={{ paddingLeft: 0, width: '11rem' }}
             >
               <IconBell />
-              {this.findOptionByValue(options, this.state.value).label}
+              {selectedItem.label}
               <IconDrop
+                disabled={!checked}
                 isOpen={props.isOpen}
                 style={{ margin: '0.25rem 0 0 0.25rem' }}
               />
