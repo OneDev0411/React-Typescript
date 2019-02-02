@@ -43,16 +43,17 @@ class ChecklistFolder extends React.Component {
   }
 
   get SortedTasks() {
-    if (this.props.isBackOffice) {
-      return _.sortBy(this.props.tasks, task =>
-        task.attention_requested ? 0 : 1
-      )
-    }
+    return this.props.tasks
+    // if (this.props.isBackOffice) {
+    //   return _.sortBy(this.props.tasks, task =>
+    //     task.attention_requested ? 0 : 1
+    //   )
+    // }
 
-    return _.sortBy(
-      this.props.tasks,
-      task => new Date(task.updated_at).getTime() * -1
-    )
+    // return _.sortBy(
+    //   this.props.tasks,
+    //   task => new Date(task.updated_at).getTime() * -1
+    // )
   }
 
   render() {
