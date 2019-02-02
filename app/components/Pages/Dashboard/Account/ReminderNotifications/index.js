@@ -12,6 +12,10 @@ import PageHeader from 'components/PageHeader'
 import Column from './column'
 
 const API_URL = '/calendar/settings/notifications'
+
+const DEAL_DATE_OBJECT_TYPE = 'deal_context'
+const CONTACT_DATE_OBJECT_TYPE = 'contact_attribute'
+
 const DROPDOWN_OPTIONS = [
   {
     label: '1 Day Before',
@@ -56,16 +60,57 @@ class ReminderNotifications extends Component {
   async componentDidMount() {
     const settings = await this.getSettings()
 
+    const dealsColumnData = await this.getDealsColumnData()
+    const contactsColumnData = await this.getContactsColumnData()
+
     const columns = [
       {
         title: 'Deals Critical Dates',
-        items: await this.getDealsColumnData()
+        type: DEAL_DATE_OBJECT_TYPE,
+        items: dealsColumnData
       },
       {
         title: 'Contact Dates',
-        items: this.getContactsColumnData()
+        type: CONTACT_DATE_OBJECT_TYPE,
+        items: contactsColumnData
       }
     ]
+
+    const dealsRemidnersSettings = settings.filter(
+      setting => setting.object_type === DEAL_DATE_OBJECT_TYPE
+    )
+
+    const contactsRemidnersSettings = settings.filter(
+      setting => setting.object_type === CONTACT_DATE_OBJECT_TYPE
+    )
+
+    const shouldSelectAllDealRemidners =
+      dealsColumnData.length - 1 === dealsRemidnersSettings.length &&
+      dealsRemidnersSettings.every(
+        setting => setting.reminder === dealsRemidnersSettings[0].reminder
+      )
+
+    const shouldSelectAllContactRemidners =
+      contactsColumnData.length - 1 === contactsRemidnersSettings.length &&
+      contactsRemidnersSettings.every(
+        setting => setting.reminder === contactsRemidnersSettings[0].reminder
+      )
+
+    if (shouldSelectAllDealRemidners) {
+      settings.push({
+        object_type: DEAL_DATE_OBJECT_TYPE,
+        event_type: null,
+        reminder: dealsRemidnersSettings[0].reminder
+      })
+    }
+
+    if (shouldSelectAllContactRemidners) {
+      settings.push({
+        object_type: CONTACT_DATE_OBJECT_TYPE,
+        event_type: null,
+        reminder: contactsRemidnersSettings[0].reminder
+      })
+    }
 
     this.setState({ columns, settings })
   }
@@ -83,21 +128,41 @@ class ReminderNotifications extends Component {
         )
       : []
 
-    return dealsContexts.map(ctx => ({
+    const data = dealsContexts.map(ctx => ({
       label: ctx.label,
       name: ctx.key,
-      type: 'deal_context'
+      type: DEAL_DATE_OBJECT_TYPE
     }))
+
+    return [
+      {
+        label: 'All',
+        type: DEAL_DATE_OBJECT_TYPE,
+        name: null
+      },
+      ...data
+    ]
   }
 
   getContactsColumnData() {
     const { contactsAttributeDefs } = this.props
 
-    return selectDefsBySection(contactsAttributeDefs, 'Dates').map(def => ({
-      label: def.label,
-      name: def.name || def.label,
-      type: 'contact_attribute'
-    }))
+    const data = selectDefsBySection(contactsAttributeDefs, 'Dates').map(
+      def => ({
+        label: def.label,
+        name: def.name || def.label,
+        type: CONTACT_DATE_OBJECT_TYPE
+      })
+    )
+
+    return [
+      {
+        label: 'All',
+        type: CONTACT_DATE_OBJECT_TYPE,
+        name: null
+      },
+      ...data
+    ]
   }
 
   async getSettings() {
@@ -111,7 +176,9 @@ class ReminderNotifications extends Component {
   }
 
   async setSettings(settings) {
-    return new Fetch().put(API_URL).send({ settings })
+    return new Fetch()
+      .put(API_URL)
+      .send({ settings: settings.filter(setting => !!setting.event_type) })
   }
 
   filterSetting = (currentSetting, setting) =>
@@ -121,6 +188,20 @@ class ReminderNotifications extends Component {
     )
 
   removeSetting = setting => {
+    if (!setting.event_type) {
+      this.setState(
+        prevState => ({
+          ...prevState,
+          settings: prevState.settings.filter(
+            item => item.object_type !== setting.object_type
+          )
+        }),
+        async () => this.setSettings(this.state.settings)
+      )
+
+      return
+    }
+
     this.setState(
       prevState => ({
         ...prevState,
@@ -133,6 +214,35 @@ class ReminderNotifications extends Component {
   }
 
   addSetting = setting => {
+    if (!setting.event_type) {
+      this.setState(
+        prevState => {
+          const selectedColumn = prevState.columns.find(col =>
+            col.items.some(item => item.type === setting.object_type)
+          )
+
+          const newSettings = selectedColumn.items.map(item => ({
+            object_type: item.type,
+            event_type: item.name,
+            reminder: setting.reminder
+          }))
+
+          return {
+            ...prevState,
+            settings: [
+              ...prevState.settings.filter(
+                item => item.object_type !== setting.object_type
+              ),
+              ...newSettings
+            ]
+          }
+        },
+        async () => this.setSettings(this.state.settings)
+      )
+
+      return
+    }
+
     this.setState(
       prevState => ({
         ...prevState,

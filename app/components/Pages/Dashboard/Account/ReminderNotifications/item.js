@@ -12,6 +12,18 @@ export default class Item extends Component {
     checked: !!this.props.value
   }
 
+  componentDidUpdate(_prevProps, prevState) {
+    const checked = !!this.props.value
+
+    if (checked !== prevState.checked) {
+      this.handleComponentUpdate()
+    }
+  }
+
+  handleComponentUpdate() {
+    this.setState({ checked: !!this.props.value })
+  }
+
   handleChange = value => {
     this.props.onChange({
       type: this.state.checked ? 'add' : 'remove',
