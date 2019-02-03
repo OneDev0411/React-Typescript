@@ -46,7 +46,8 @@ class EnvelopeView extends React.Component {
     const envelope = this.geEnvelope()
 
     if (!envelope) {
-      return 'Not sent for signature'
+      // return <Container disabled>Not sent for signature</Container>
+      return false
     }
 
     return (
