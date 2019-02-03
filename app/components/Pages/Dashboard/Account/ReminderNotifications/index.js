@@ -9,6 +9,8 @@ import { getActiveTeamId } from 'utils/user-teams'
 import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 import PageHeader from 'components/PageHeader'
 
+import Loading from '../../../../Partials/Loading'
+
 import Column from './column'
 
 const API_URL = '/calendar/settings/notifications'
@@ -54,7 +56,8 @@ const DROPDOWN_OPTIONS = [
 class ReminderNotifications extends Component {
   state = {
     columns: [],
-    settings: []
+    settings: [],
+    loading: true
   }
 
   async componentDidMount() {
@@ -112,7 +115,7 @@ class ReminderNotifications extends Component {
       })
     }
 
-    this.setState({ columns, settings })
+    this.setState({ columns, settings, loading: false })
   }
 
   async getDealsColumnData() {
@@ -276,15 +279,20 @@ class ReminderNotifications extends Component {
           </PageHeader.Title>
         </PageHeader>
         <Flex>
-          {this.state.columns.map((col, index) => (
-            <Column
-              key={index}
-              {...col}
-              settings={this.state.settings}
-              options={DROPDOWN_OPTIONS}
-              onChange={this.changeHandler}
-            />
-          ))}
+          {this.state.loading ? (
+            <Loading />
+          ) : (
+            this.state.columns.map((col, index) => (
+              <Column
+                key={index}
+                {...col}
+                settings={this.state.settings}
+                options={DROPDOWN_OPTIONS}
+                onChange={this.changeHandler}
+              />
+            ))
+          )}
+          }
         </Flex>
       </Fragment>
     )
