@@ -7,6 +7,9 @@ import { primary } from 'views/utils/colors'
 
 import { Container as ActionsButton } from '../../components/ActionsButton/styled'
 
+import { Container as Notification } from './Checklist/Notification/styled'
+import { LastActivity } from './Checklist/TaskRow/Activity/styled'
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -68,11 +71,31 @@ export const RowContainer = styled.div`
         opacity: 1;
         border: 1px solid #d4d4d4;
       }
+
+      ${LastActivity} {
+        color: #000;
+      }
+      
+      ${Notification} {
+        svg > path {
+          fill: #000;
+        }
+      }
   `}
 
   :hover ${ActionsButton} {
     opacity: 1;
     border: 1px solid #d4d4d4;
+  }
+
+  :hover ${LastActivity} {
+    color: #000;
+  }
+
+  :hover ${Notification} {
+    svg > path {
+      fill: #000;
+    }
   }
 `
 
@@ -91,6 +114,7 @@ export const RowLeftColumn = styled.div`
 
 export const TaskInfo = styled.div`
   display: flex;
+  align-items: center;
   margin-top: 1rem;
   padding-left: 2rem;
 `
@@ -117,17 +141,13 @@ export const RowTitle = styled(H4)`
   `}
 `
 
-export const LastActivity = styled.div`
+export const Activities = styled.div`
   display: flex;
   align-items: center;
-  color: #000;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #d1d1d1;
 
-  :hover {
-    color: ${primary};
-    text-decoration: underline;
-    cursor: pointer;
+  :hover ${Notification} {
+    svg > path {
+      fill: ${primary};
+    }
   }
 `

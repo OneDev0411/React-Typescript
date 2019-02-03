@@ -1,14 +1,16 @@
 import styled from 'styled-components'
 
-import { red } from 'views/utils/colors'
+import { red, primary } from 'views/utils/colors'
 
 export const Container = styled.div`
   position: relative;
   margin-right: 0.25rem;
   cursor: pointer;
 
-  svg {
-    fill: #d1d1d1;
+  :hover {
+    svg > path {
+      fill: ${primary};
+    }
   }
 `
 
