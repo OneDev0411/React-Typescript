@@ -26,7 +26,7 @@ export const Label = styled.div`
   }
 
   &.Pending,
-  &.Attention,
+  &.ATTENTION,
   &.Submitted,
   &.Notified {
     background-color: #f6a623;

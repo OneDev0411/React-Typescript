@@ -12,7 +12,6 @@ import { Label } from './styled'
 function getIcon(status) {
   switch (status) {
     case 'Pending':
-    case 'Attention':
     case 'Submitted':
     case 'Notified':
       return <PendingIcon />
