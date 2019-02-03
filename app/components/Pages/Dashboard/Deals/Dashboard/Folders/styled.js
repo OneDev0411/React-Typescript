@@ -34,7 +34,6 @@ export const Header = styled.div`
 `
 
 export const HeaderTitle = styled(H4)`
-  font-weight: 600;
   margin-right: 0.5rem;
 `
 
@@ -101,35 +100,26 @@ export const RowContainer = styled.div`
 
 export const Row = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
   align-items: center;
   padding: 1rem;
-`
-
-export const RowLeftColumn = styled.div`
-  display: flex;
-  flex-direction: column;
 `
 
 export const TaskInfo = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   padding-left: 2rem;
 `
 
 export const RowArrowIcon = styled(ArrowIcon)`
   opacity: ${props => (props.display ? 1 : 0)};
-`
-
-export const RowRightColumn = styled.div`
-  display: flex;
-  align-items: center;
+  align-self: flex-start;
+  margin-top: 1px;
 `
 
 export const RowTitle = styled(H4)`
   font-weight: 600px;
+  margin-bottom: 0.75rem;
 
   ${props =>
     props.hoverable &&
@@ -150,4 +140,19 @@ export const Activities = styled.div`
       fill: ${primary};
     }
   }
+`
+
+export const LabelItem = styled.div`
+  display: inline-flex;
+  align-items: center;
+  color: #4d4d4d;
+  border-radius: 12px;
+  background-color: #e6e6e6;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 5rem;
+  border-radius: 0.75rem;
+  margin-right: 0.5rem;
+  max-height: 1.5rem;
 `

@@ -14,14 +14,12 @@ import ActionsButton from '../../../../components/ActionsButton'
 import TaskFiles from '../TaskFiles'
 
 import TaskNotifications from '../Notification'
-import EnvelopeView from './Envelope'
+import EnvelopeView from '../Envelope'
 import { Activity } from './Activity'
 
 import {
   RowContainer,
   Row,
-  RowLeftColumn,
-  RowRightColumn,
   TaskInfo,
   RowTitle,
   Activities,
@@ -66,25 +64,40 @@ class Task extends React.Component {
     return (
       <RowContainer isTaskExpanded={this.state.isTaskExpanded}>
         <Row>
-          <RowLeftColumn>
-            <Flex onClick={this.toggleTaskOpen}>
-              <RowArrowIcon
-                isOpen={this.state.isTaskExpanded}
-                display={isRowExpandable}
-              />
-              <RowTitle hoverable={isRowExpandable}>
+          <RowArrowIcon
+            isOpen={this.state.isTaskExpanded}
+            display={isRowExpandable}
+            onClick={this.toggleTaskOpen}
+          />
+
+          <Flex column style={{ flex: 1 }}>
+            <Flex alignCenter justifyBetween>
+              <RowTitle
+                hoverable={isRowExpandable}
+                onClick={this.toggleTaskOpen}
+              >
                 {this.props.task.title}
               </RowTitle>
+
+              <ActionsButton
+                type="task"
+                deal={this.props.deal}
+                task={this.props.task}
+              />
             </Flex>
 
-            <TaskInfo>
+            <Flex alignCenter>
               <TaskStatus
                 task={this.props.task}
                 isBackOffice={this.props.isBackOffice}
                 isDraftDeal={this.props.deal.is_draft}
               />
 
-              <EnvelopeView deal={this.props.deal} task={this.props.task} />
+              <EnvelopeView
+                type="task"
+                deal={this.props.deal}
+                task={this.props.task}
+              />
 
               <Activities>
                 <TaskNotifications
@@ -100,16 +113,8 @@ class Task extends React.Component {
                   onSelectTask={this.handleSelectTask}
                 />
               </Activities>
-            </TaskInfo>
-          </RowLeftColumn>
-
-          <RowRightColumn>
-            <ActionsButton
-              type="task"
-              deal={this.props.deal}
-              task={this.props.task}
-            />
-          </RowRightColumn>
+            </Flex>
+          </Flex>
         </Row>
 
         <TaskFiles
