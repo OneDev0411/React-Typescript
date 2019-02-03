@@ -6,10 +6,13 @@ export const Label = styled.div`
   justify-content: center;
   flex-shrink: 0;
   color: #fff;
-  border-radius: 2px;
+  border-radius: 0.75rem;
   background: transparent;
-  padding: 0 0.5rem;
-  font-size: 0.825rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 5rem;
+  margin-right: 0.5rem;
   max-height: 1.5rem;
 
   &.Incomplete {

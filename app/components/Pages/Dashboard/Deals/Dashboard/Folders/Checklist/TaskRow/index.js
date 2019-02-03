@@ -28,8 +28,7 @@ import {
   TaskInfo,
   LastActivity,
   RowTitle,
-  RowArrowIcon,
-  ActivitySeparator
+  RowArrowIcon
 } from '../../styled'
 
 class Task extends React.Component {
@@ -71,7 +70,7 @@ class Task extends React.Component {
     const latestActivity = this.props.task.room.latest_activity
 
     return (
-      <RowContainer>
+      <RowContainer isTaskExpanded={this.state.isTaskExpanded}>
         <Row>
           <RowLeftColumn>
             <Flex onClick={this.toggleTaskOpen}>
@@ -91,16 +90,23 @@ class Task extends React.Component {
                 isDraftDeal={this.props.deal.is_draft}
               />
 
+              <EnvelopeView deal={this.props.deal} task={this.props.task} />
+
+              <TaskNotifications
+                task={this.props.task}
+                tooltip="View Activity"
+                tooltipPlacement="bottom"
+                onClick={this.handleSelectTask}
+              />
+
+              {!latestActivity && (
+                <LastActivity onClick={this.handleSelectTask}>
+                  No Activity
+                </LastActivity>
+              )}
+
               {latestActivity && latestActivity.comment && (
-                <LastActivity>
-                  <TextMiddleTruncate
-                    text={this.normalizeActivityComment(latestActivity.comment)}
-                    maxLength={35}
-                    tooltipPlacement="bottom"
-                  />
-
-                  <ActivitySeparator>.</ActivitySeparator>
-
+                <LastActivity onClick={this.handleSelectTask}>
                   <Tooltip
                     placement="bottom"
                     caption={moment
@@ -108,25 +114,21 @@ class Task extends React.Component {
                       .format('MMM DD, YYYY, hh:mm A')}
                   >
                     <span>
-                      {moment.unix(latestActivity.created_at).fromNow()}
+                      {moment.unix(latestActivity.created_at).fromNow()},&nbsp;
                     </span>
                   </Tooltip>
 
-                  <ActivitySeparator>.</ActivitySeparator>
-
-                  <EnvelopeView deal={this.props.deal} task={this.props.task} />
+                  <TextMiddleTruncate
+                    text={this.normalizeActivityComment(latestActivity.comment)}
+                    maxLength={60}
+                    tooltipPlacement="bottom"
+                  />
                 </LastActivity>
               )}
             </TaskInfo>
           </RowLeftColumn>
 
           <RowRightColumn>
-            <TaskNotifications
-              task={this.props.task}
-              tooltip="View Activity"
-              onClick={this.handleSelectTask}
-            />
-
             <ActionsButton
               type="task"
               deal={this.props.deal}
