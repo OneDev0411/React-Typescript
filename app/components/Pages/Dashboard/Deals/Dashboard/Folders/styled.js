@@ -3,6 +3,10 @@ import styled from 'styled-components'
 import { H4 } from 'components/Typography/headings'
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
+import { primary } from 'views/utils/colors'
+
+import { Container as ActionsButton } from '../../components/ActionsButton/styled'
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -56,6 +60,20 @@ export const ArrowIcon = styled(ArrowDownIcon)`
 /* item rows */
 export const RowContainer = styled.div`
   border-bottom: solid 1px #f2f2f2;
+
+  ${props =>
+    props.isTaskExpanded &&
+    `
+      ${ActionsButton} {
+        opacity: 1;
+        border: 1px solid #d4d4d4;
+      }
+  `}
+
+  :hover ${ActionsButton} {
+    opacity: 1;
+    border: 1px solid #d4d4d4;
+  }
 `
 
 export const Row = styled.div`
@@ -101,11 +119,15 @@ export const RowTitle = styled(H4)`
 
 export const LastActivity = styled.div`
   display: flex;
-  margin-left: 0.5rem;
-  color: #999;
+  align-items: center;
+  color: #000;
   font-size: 0.875rem;
-`
+  font-weight: 500;
+  color: #d1d1d1;
 
-export const ActivitySeparator = styled.div`
-  margin: 0 0.5rem;
+  :hover {
+    color: ${primary};
+    text-decoration: underline;
+    cursor: pointer;
+  }
 `
