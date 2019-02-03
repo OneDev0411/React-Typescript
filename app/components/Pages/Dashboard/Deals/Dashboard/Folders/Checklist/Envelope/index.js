@@ -3,9 +3,10 @@ import { connect } from 'react-redux'
 
 import OverlayDrawer from 'components/OverlayDrawer'
 
-import { getTaskEnvelopes } from '../../../../../utils/get-task-envelopes'
+import { getTaskEnvelopes } from '../../../../utils/get-task-envelopes'
+import { getDocumentEnvelopes } from '../../../../utils/get-document-envelopes'
 
-import Envelope from '../../../../../components/Envelope'
+import Envelope from '../../../../components/Envelope'
 
 import { Container } from './styled'
 
@@ -20,10 +21,20 @@ class EnvelopeView extends React.Component {
     }))
 
   geEnvelope = () => {
-    const envelopes = getTaskEnvelopes(
-      this.props.envelopes,
-      this.props.task
-    ).filter(
+    let envelopes = []
+
+    if (this.props.type === 'task' && this.props.task) {
+      envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
+    }
+
+    if (this.props.type === 'document' && this.props.document) {
+      envelopes = getDocumentEnvelopes(
+        this.props.envelopes,
+        this.props.document
+      )
+    }
+
+    envelopes = envelopes.filter(
       envelope => ['Voided', 'Declined'].includes(envelope.status) === false
     )
 
