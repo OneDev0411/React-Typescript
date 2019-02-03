@@ -109,6 +109,7 @@ class EventsList extends React.Component {
                 <BasicDropdown
                   fullHeight
                   pullTo="right"
+                  selectedItem={null}
                   buttonRenderer={props => <VerticalDotsIcon {...props} />}
                   items={this.menuItems}
                   onSelect={item => item.onClick(event)}
