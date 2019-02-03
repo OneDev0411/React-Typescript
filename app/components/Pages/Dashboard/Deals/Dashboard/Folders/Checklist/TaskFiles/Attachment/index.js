@@ -1,8 +1,11 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
+
+import Flex from 'styled-flex-component'
 
 import { syncDeleteFile } from 'actions/deals'
 
+import EnvelopeView from '../../Envelope'
 import ActionsButton from '../../../../../components/ActionsButton'
 
 import FileLink from './FileLink'
@@ -30,9 +33,9 @@ class Attachments extends React.Component {
     const { props, state } = this
 
     return (
-      <Fragment>
-        <FileContainer key={props.file.id} isBlur={state.isDeleting}>
-          <FileRow>
+      <FileContainer key={props.file.id} isBlur={state.isDeleting}>
+        <FileRow>
+          <Flex alignCenter justifyBetween>
             <FileTitle>
               <FileLink
                 isBackOffice={props.isBackOffice}
@@ -46,17 +49,23 @@ class Attachments extends React.Component {
               </FileLink>
             </FileTitle>
 
-            <div>
-              <ActionsButton
-                type="document"
-                deal={this.props.deal}
-                task={this.props.task}
-                document={props.file}
-              />
-            </div>
-          </FileRow>
-        </FileContainer>
-      </Fragment>
+            <ActionsButton
+              type="document"
+              deal={this.props.deal}
+              task={this.props.task}
+              document={props.file}
+            />
+          </Flex>
+
+          <Flex alignCenter>
+            <EnvelopeView
+              type="document"
+              deal={props.deal}
+              document={props.file}
+            />
+          </Flex>
+        </FileRow>
+      </FileContainer>
     )
   }
 }
