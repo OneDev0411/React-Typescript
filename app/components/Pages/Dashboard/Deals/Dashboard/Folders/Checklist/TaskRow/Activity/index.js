@@ -7,8 +7,6 @@ import Tooltip from 'components/tooltip'
 
 import { LastActivity } from './styled'
 
-const normalizeActivityComment = comment => comment.replace(/\./gi, '')
-
 export function Activity(props) {
   return (
     <div onClick={props.onSelectTask}>
@@ -29,7 +27,7 @@ export function Activity(props) {
           </Tooltip>
 
           <TextMiddleTruncate
-            text={normalizeActivityComment(props.latestActivity.comment)}
+            text={props.latestActivity.comment}
             maxLength={60}
             tooltipPlacement="bottom"
           />
