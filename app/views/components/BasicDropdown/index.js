@@ -23,6 +23,7 @@ export class BasicDropdown extends React.Component {
       fullHeight = false,
       itemRenderer,
       defaultSelectedItem,
+      selectedItem,
       menuStyle = {},
       isBlock = true,
       noBorder = false,
@@ -46,6 +47,7 @@ export class BasicDropdown extends React.Component {
         }}
         itemToString={() => (buttonText ? () => '' : itemToString)}
         defaultSelectedItem={defaultSelectedItem}
+        selectedItem={selectedItem}
         render={downshift => (
           <div style={{ position: 'relative', ...style }}>
             {buttonRenderer ? (
