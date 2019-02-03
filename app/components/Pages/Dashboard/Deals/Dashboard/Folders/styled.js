@@ -30,7 +30,7 @@ export const Header = styled.div`
   justify-content: space-between;
   height: 3.5rem;
   background-color: #d4d4d4;
-  padding: 0 1rem;
+  padding: 0 calc(1rem + 3px);
 `
 
 export const HeaderTitle = styled(H4)`
@@ -62,10 +62,19 @@ export const ArrowIcon = styled(ArrowDownIcon)`
 /* item rows */
 export const RowContainer = styled.div`
   border-bottom: solid 1px #f2f2f2;
+  border-left: 3px solid transparent;
 
   ${props =>
     props.isTaskExpanded &&
     `
+      :nth-child(even) {
+        border-left: 3px solid #000;
+      }
+
+      :nth-child(odd) {
+        border-left: 3px solid ${primary};
+      }
+
       ${ActionsButton} {
         opacity: 1;
         border: 1px solid #d4d4d4;
