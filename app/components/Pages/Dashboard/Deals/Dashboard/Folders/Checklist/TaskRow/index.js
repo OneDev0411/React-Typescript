@@ -32,6 +32,10 @@ class Task extends React.Component {
   }
 
   toggleTaskOpen = () => {
+    if (this.isRowExpandable() === false) {
+      return false
+    }
+
     const isTaskExpanded = !this.state.isTaskExpanded
 
     this.setState({
