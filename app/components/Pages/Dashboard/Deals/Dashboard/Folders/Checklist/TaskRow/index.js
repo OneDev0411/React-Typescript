@@ -103,7 +103,7 @@ class Task extends React.Component {
                 task={this.props.task}
               />
 
-              <Activities>
+              <Activities onClick={this.handleSelectTask}>
                 <TaskNotifications
                   task={this.props.task}
                   tooltip="View Activity"
@@ -114,7 +114,6 @@ class Task extends React.Component {
                 <Activity
                   task={this.props.task}
                   latestActivity={this.props.task.room.latest_activity}
-                  onSelectTask={this.handleSelectTask}
                 />
               </Activities>
             </Flex>

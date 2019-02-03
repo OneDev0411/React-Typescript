@@ -9,7 +9,7 @@ import { LastActivity } from './styled'
 
 export function Activity(props) {
   return (
-    <div onClick={props.onSelectTask}>
+    <div>
       {!props.latestActivity && <LastActivity>No Activity</LastActivity>}
 
       {props.latestActivity && props.latestActivity.comment && (
