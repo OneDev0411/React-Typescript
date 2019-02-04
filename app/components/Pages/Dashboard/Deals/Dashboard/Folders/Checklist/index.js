@@ -79,6 +79,7 @@ class ChecklistFolder extends React.Component {
 
           <Flex alignCenter>
             <MessageAdmin
+              deal={this.props.deal}
               checklist={this.props.checklist}
               tasks={this.props.tasks}
             />

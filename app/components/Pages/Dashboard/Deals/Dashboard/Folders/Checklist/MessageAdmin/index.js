@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
-import { setSelectedTask } from 'actions/deals'
+import { setSelectedTask, updateDealNotifications } from 'actions/deals'
 
 import ActionButton from 'components/Button/ActionButton'
 
@@ -16,6 +16,14 @@ class MessageAdmin extends React.Component {
     )
 
     return taskId ? this.props.tasks[taskId] : null
+  }
+
+  handleSelectTask = (task, room) => {
+    this.props.setSelectedTask(task)
+
+    if (room.new_notifications > 0) {
+      this.props.updateDealNotifications(this.props.deal, room)
+    }
   }
 
   render() {
@@ -35,7 +43,7 @@ class MessageAdmin extends React.Component {
       <Container>
         <ActionButton
           size="small"
-          onClick={() => this.props.setSelectedTask(task)}
+          onClick={() => this.handleSelectTask(task, room)}
         >
           Messsage Admin
         </ActionButton>
@@ -57,5 +65,5 @@ function mapStateToProps({ chatroom, deals }) {
 
 export default connect(
   mapStateToProps,
-  { setSelectedTask }
+  { setSelectedTask, updateDealNotifications }
 )(MessageAdmin)
