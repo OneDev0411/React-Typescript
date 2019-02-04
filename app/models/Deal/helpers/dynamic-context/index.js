@@ -307,7 +307,7 @@ export function validate(ctx, value) {
 }
 
 function validateYearBuilt(ctx, value) {
-  if (value === undefined || value === null) {
+  if (!value) {
     return !ctx.mandatory
   }
 
