@@ -339,9 +339,9 @@ class ActionsButton extends React.Component {
     })
 
     if (links.length === 1) {
-      window.open(links[0].url, '_blank')
-
-      return
+      return this.props.isBackOffice
+        ? browserHistory.push(links[0].url)
+        : window.open(links[0].url, '_blank')
     }
 
     this.setState({
@@ -349,7 +349,10 @@ class ActionsButton extends React.Component {
         items: links,
         title: 'Select a file to view/print',
         actionTitle: 'View/Print',
-        onSelect: item => window.open(item.url, '_blank')
+        onSelect: item =>
+          this.props.isBackOffice
+            ? browserHistory.push(item.url)
+            : window.open(item.url, '_blank')
       }
     })
   }
