@@ -57,6 +57,7 @@ export const ArrowIcon = styled(ArrowDownIcon)`
   fill: #000 !important;
   transition: all ease-in 0.2s;
   transform: ${({ isOpen }) => (isOpen ? 'inherit' : 'rotateZ(-90deg)')};
+  opacity: ${props => (props.display === false ? 0 : 1)};
 `
 
 /* item rows */
@@ -121,7 +122,6 @@ export const TaskInfo = styled.div`
 `
 
 export const RowArrowIcon = styled(ArrowIcon)`
-  opacity: ${props => (props.display ? 1 : 0)};
   align-self: flex-start;
   margin-top: 1px;
 `

@@ -30,10 +30,15 @@ class Uploads extends React.Component {
     isFolderExpanded: true
   }
 
-  toggleFolderOpen = () =>
+  toggleFolderOpen = () => {
+    if (this.hasStashFiles() === false) {
+      return false
+    }
+
     this.setState(state => ({
       isFolderExpanded: !state.isFolderExpanded
     }))
+  }
 
   handleCopyEmail = () => {
     copy(this.props.deal.email)
@@ -44,6 +49,9 @@ class Uploads extends React.Component {
     })
   }
 
+  hasStashFiles = () =>
+    Array.isArray(this.props.deal.files) && this.props.deal.files.length > 0
+
   render() {
     return (
       <FolderContainer>
@@ -53,7 +61,10 @@ class Uploads extends React.Component {
             style={{ cursor: 'pointer' }}
             onClick={this.toggleFolderOpen}
           >
-            <ArrowIcon isOpen={this.state.isFolderExpanded} />
+            <ArrowIcon
+              isOpen={this.state.isFolderExpanded}
+              display={this.hasStashFiles()}
+            />
             <HeaderTitle>Uploaded Files</HeaderTitle>
           </Flex>
 
