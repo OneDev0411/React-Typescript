@@ -4,7 +4,9 @@ import _ from 'underscore'
 
 import { setSelectedTask } from 'actions/deals'
 
-import Notification from '../Notification'
+import ActionButton from 'components/Button/ActionButton'
+
+import { Container, BadgeCounter } from './styled'
 
 class MessageAdmin extends React.Component {
   getGeneralTaskId() {
@@ -23,20 +25,32 @@ class MessageAdmin extends React.Component {
       return false
     }
 
+    const room = this.props.rooms[task.room.id]
+      ? this.props.rooms[task.room.id]
+      : task.room
+
+    const { new_notifications } = room
+
     return (
-      <Notification
-        task={task}
-        tooltip="Message Admin"
-        tooltipPlacement="left"
-        style={{ marginRight: 0 }}
-        onClick={this.props.setSelectedTask}
-      />
+      <Container>
+        <ActionButton
+          size="small"
+          onClick={() => this.props.setSelectedTask(task)}
+        >
+          Messsage Admin
+        </ActionButton>
+
+        {new_notifications > 0 && (
+          <BadgeCounter>{new_notifications}</BadgeCounter>
+        )}
+      </Container>
     )
   }
 }
 
-function mapStateToProps({ deals }) {
+function mapStateToProps({ chatroom, deals }) {
   return {
+    rooms: chatroom.rooms || {},
     tasks: deals.tasks
   }
 }
