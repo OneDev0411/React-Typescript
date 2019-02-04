@@ -565,7 +565,6 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
-      [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
