@@ -108,7 +108,7 @@ class Header extends React.Component {
             <Title onDoubleClick={this.toggleEditName}>
               <TextMiddleTruncate
                 text={this.props.task.title}
-                maxLength={60}
+                maxLength={50}
                 tooltipPlacement="bottom"
               />
             </Title>

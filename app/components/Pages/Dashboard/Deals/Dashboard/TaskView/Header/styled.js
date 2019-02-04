@@ -37,8 +37,8 @@ export const Title = styled.div`
   ${merriweatherFamilyStyle};
   display: flex;
   align-items: center;
-  font-size: 1.25rem;
-  font-weight: bold;
+  font-size: 1.2rem;
+  font-weight: 500;
   padding: 0.825rem 2px;
   border: 1px dashed #fff;
 
