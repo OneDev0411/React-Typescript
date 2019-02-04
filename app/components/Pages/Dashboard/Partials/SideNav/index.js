@@ -108,11 +108,6 @@ class appSideNav extends React.Component {
                 </li>
               </React.Fragment>
             )}
-            {user.user_type === 'Admin' && (
-              <li>
-                <Link to="/dashboard/forms">Forms</Link>
-              </li>
-            )}
             <li role="separator" className="divider" />
             <li>
               <a
