@@ -17,7 +17,7 @@ const Container = styled.div`
 
 const PageContainer = styled.div`
   position: relative;
-  margin-bottom: 20px;
+  padding-bottom: 20px;
 `
 
 class PDFPreview extends React.Component {
