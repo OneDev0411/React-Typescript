@@ -44,9 +44,9 @@ function getTaskDocumentsUrl({ deal, task, isBackOffice }) {
       : [normalizeFile(task.submission.file)]
   }
 
-  const attachments = task.room.attachments.sort(
-    (a, b) => b.created_at - a.created_at
-  )
+  const attachments = Array.isArray(task.room.attachments)
+    ? task.room.attachments.sort((a, b) => b.created_at - a.created_at)
+    : []
 
   return isBackOffice
     ? attachments.map(attachment => ({

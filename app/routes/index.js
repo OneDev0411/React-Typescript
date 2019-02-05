@@ -426,11 +426,6 @@ export default (
           component={AsyncDealCreate}
         />
         <Route
-          path="/dashboard/deals/:id(/:tab)"
-          component={AsyncDealDashboard}
-        />
-
-        <Route
           path="/dashboard/deals/:id/form-edit/:taskId"
           component={AsyncDealFormEdit}
         />
@@ -443,8 +438,12 @@ export default (
           component={AsyncDealFileViewer}
         />
         <Route
-          path="/dashboard/deals/:id/network"
+          path="/dashboard/deals/:id/marketing/network"
           component={AsyncAgentNetwork}
+        />
+        <Route
+          path="/dashboard/deals/:id(/:tab)"
+          component={AsyncDealDashboard}
         />
       </Route>
 

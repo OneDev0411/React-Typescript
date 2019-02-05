@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import LinkButton from 'components/Button/LinkButton'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import Spinner from 'components/Spinner'
-import DeleteIcon from 'components/SvgIcons/Delete/IconDelete'
+import DeleteIcon from 'components/SvgIcons/RemoveCircleOutline/IconRemoveCircleOutline'
 
 import { updateListing } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'

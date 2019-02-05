@@ -13,3 +13,7 @@ export const LoadingDealContainer = styled.div`
     margin: 0 auto 20px auto !important;
   }
 `
+
+export const Container = styled.div`
+  background-color: #f5f5f5;
+`

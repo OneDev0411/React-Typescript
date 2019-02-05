@@ -15,9 +15,10 @@ export const Container = styled.div`
 
 export const FileContainer = styled.div`
   width: 100%;
+  background-color: #f7f7f7;
 
   :hover {
-    background-color: #f7f7f7;
+    background-color: #f2f2f2;
   }
 
   ${props =>
@@ -28,13 +29,13 @@ export const FileContainer = styled.div`
 `
 
 export const FileTitle = styled.div`
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 500;
 `
 
 export const FileLink = styled(LinkButton)`
   color: #000;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 500;
   padding: 0;
   margin: 0;
@@ -42,11 +43,11 @@ export const FileLink = styled(LinkButton)`
 
 export const FileRow = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
 
   border-bottom: solid 1px #e6e6e6;
-  padding: 1rem 1rem 1rem 3rem;
+  padding: 0.825rem 1rem;
+  padding-left: 3rem;
 
   :hover a.file-link {
     color: #003bdf !important;

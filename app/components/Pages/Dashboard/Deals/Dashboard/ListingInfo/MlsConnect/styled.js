@@ -24,6 +24,7 @@ export const MlsNumber = styled.div`
   border: 1px dashed transparent;
   border-radius: 3px;
   padding: 0.25rem 0.5rem;
+  color: ${primary};
 
   svg {
     display: none;

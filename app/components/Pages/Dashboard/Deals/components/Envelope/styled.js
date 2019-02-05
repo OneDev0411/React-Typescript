@@ -33,12 +33,14 @@ export const WhoSignedHeader = styled.div`
 
 export const WhoSignedRow = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
   padding: 0.5rem;
 `
 
-export const RoleName = styled.div``
+export const RoleName = styled.div`
+  font-size: 1rem;
+  font-weight: 500;
+  margin-left: 0.5rem;
+`
 
 export const SignDate = styled.div`
   font-size: 0.875rem;

@@ -28,6 +28,7 @@ import { getEsignAttachments } from './helpers/get-esign-attachments'
 import { getFileUrl } from './helpers/get-file-url'
 
 import { getTaskEnvelopes } from '../../utils/get-task-envelopes'
+import { getDocumentEnvelopes } from '../../utils/get-document-envelopes'
 
 import Message from '../../../Chatroom/Util/message'
 
@@ -122,7 +123,10 @@ class ActionsButton extends React.Component {
 
     const isTask = this.props.document.type === 'task'
     const isFile = this.props.document.type === 'file'
-    const envelopes = this.getDocumentEnvelopes(this.props.document)
+    const envelopes = getDocumentEnvelopes(
+      this.props.envelopes,
+      this.props.document
+    )
 
     if (isTask) {
       documentType = 'Form'
@@ -158,13 +162,6 @@ class ActionsButton extends React.Component {
     Array.isArray(task.room.attachments) &&
     task.room.attachments.filter(file => file.mime === 'application/pdf')
       .length > 0
-
-  getDocumentEnvelopes = document =>
-    Object.values(this.props.envelopes)
-      .filter(envelope =>
-        envelope.documents.some(doc => doc.file === document.id)
-      )
-      .sort((a, b) => b.created_at - a.created_at)
 
   getLastEnvelopeStatus = envelopes => {
     if (envelopes.length === 0) {
@@ -342,9 +339,9 @@ class ActionsButton extends React.Component {
     })
 
     if (links.length === 1) {
-      window.open(links[0].url, '_blank')
-
-      return
+      return this.props.isBackOffice
+        ? browserHistory.push(links[0].url)
+        : window.open(links[0].url, '_blank')
     }
 
     this.setState({
@@ -352,7 +349,10 @@ class ActionsButton extends React.Component {
         items: links,
         title: 'Select a file to view/print',
         actionTitle: 'View/Print',
-        onSelect: item => window.open(item.url, '_blank')
+        onSelect: item =>
+          this.props.isBackOffice
+            ? browserHistory.push(item.url)
+            : window.open(item.url, '_blank')
       }
     })
   }
@@ -384,7 +384,10 @@ class ActionsButton extends React.Component {
     }
 
     if (this.props.type === 'document') {
-      envelopes = this.getDocumentEnvelopes(this.props.document)
+      envelopes = getDocumentEnvelopes(
+        this.props.envelopes,
+        this.props.document
+      )
     }
 
     if (envelopes.length === 0) {
@@ -428,7 +431,7 @@ class ActionsButton extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <div>
         <Downshift
           isOpen={this.state.isMenuOpen}
           onOuterClick={this.handleCloseMenu}
@@ -523,7 +526,7 @@ class ActionsButton extends React.Component {
             onClose={this.handleCloseMultipleItemsSelectionDrawer}
           />
         )}
-      </React.Fragment>
+      </div>
     )
   }
 }

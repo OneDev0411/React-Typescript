@@ -14,37 +14,46 @@ export const PrimaryAction = styled.div`
   :hover {
     color: ${primary};
   }
+
+  :active {
+    background-color: #bfbfbf;
+  }
 `
 
 export const MenuButton = styled.div`
   display: flex;
   align-items: center;
-  border-left: 1px solid #000;
+  border-left: 1px solid #ccc;
   padding: 0 0.625rem;
   background-color: #f2f2f2;
   border-radius: 0 3px 3px 0;
 
-  :hover {
+  :hover,
+  :focus {
+    background-color: #d9d9d9;
+
     svg {
       transition: 0.1s ease-in transform;
       fill: ${primary};
     }
+  }
+
+  :active {
+    background-color: #bfbfbf;
   }
 `
 
 export const Container = styled.div`
   display: flex;
   height: 2.3rem;
+  opacity: 0.3;
   border-radius: 3px;
-  border: 1px solid #000;
+  background-color: #e6e6e6;
+  border: 1px solid #e6e6e6;
   cursor: pointer;
 
   :hover {
     border-color: ${primary};
-  }
-
-  :hover ${MenuButton} {
-    border-left-color: ${primary};
   }
 `
 
@@ -56,23 +65,24 @@ export const MenuContainer = styled.div`
   background-color: #fff;
   overflow: auto;
   border-radius: 3px;
-  padding: 0 1rem;
   z-index: 1;
   box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.15),
     0 8px 10px 0 rgba(0, 0, 0, 0.16);
 `
 
 export const MenuItem = styled.div`
+  font-size: 1rem;
   font-weight: 500;
-  margin: 1rem 0;
   color: ${props => (props.disabled ? 'gray' : '#000')};
+  padding: 0.5rem 1rem;
 
   ${props =>
     props.disabled === false &&
     `
     :hover {
       cursor: pointer;
-      color: ${primary};
+      background-color: ${primary};
+      color: #fff;
     }
   `}
 `

@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import Tooltip from 'components/tooltip'
-import IconComment from 'components/SvgIcons/Comment/IconComment'
+import IconComment from 'components/SvgIcons/DealComment/IconComment'
 
 import IconButton from 'components/Button/IconButton'
 
@@ -18,13 +18,12 @@ function Notification(props) {
       caption={props.tooltip}
       placement={props.tooltipPlacement || 'top'}
     >
-      <Container hasNotification={new_notifications > 0} style={props.style}>
-        <IconButton
-          isFit
-          iconSize="large"
-          style={{ padding: 0 }}
-          onClick={() => props.onClick(task)}
-        >
+      <Container
+        hasNotification={new_notifications > 0}
+        style={props.style}
+        onClick={() => props.onClick(task)}
+      >
+        <IconButton isFit iconSize="large" style={{ padding: 0 }}>
           <IconComment className="deal--task-comments" />
         </IconButton>
 
