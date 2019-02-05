@@ -7,6 +7,7 @@ import Spinner from 'components/Spinner'
 import IconButton from 'components/Button/IconButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import EditIcon from 'components/SvgIcons/Edit/EditIcon'
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import TaskStatus from '../../Folders/Checklist/TaskRow/Status'
 
@@ -105,7 +106,11 @@ class Header extends React.Component {
 
           {this.state.showEditName === false && !this.state.isSavingName && (
             <Title onDoubleClick={this.toggleEditName}>
-              {this.props.task.title}
+              <TextMiddleTruncate
+                text={this.props.task.title}
+                maxLength={50}
+                tooltipPlacement="bottom"
+              />
             </Title>
           )}
 

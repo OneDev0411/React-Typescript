@@ -109,11 +109,11 @@ class Builder extends React.Component {
 
   singleClickTextEditing = () => {
     this.editor.on('component:selected', selected => {
-      if (!selected.view.enableEditing) {
+      if (!selected.view.onActive) {
         return
       }
 
-      selected.view.enableEditing(selected.view.el)
+      selected.view.onActive(selected.view.el)
     })
   }
 
@@ -122,7 +122,7 @@ class Builder extends React.Component {
 
     const style = document.createElement('style')
     const css =
-      'body { margin: 2vh auto !important; background-color: #f2f2f2 !important }'
+      'body { margin: 0 auto !important; background-color: #ffffff !important }'
 
     style.type = 'text/css'
 
@@ -200,9 +200,11 @@ class Builder extends React.Component {
         </body>
       </html>`
 
+    const result = juice(assembled)
+
     return {
       ...this.state.selectedTemplate,
-      result: juice(assembled)
+      result
     }
   }
 

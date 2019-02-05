@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import _ from 'underscore'
 import Flex from 'styled-flex-component'
 
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+
 import { selectChecklistTasks } from 'reducers/deals/tasks'
 
 import { ChecklistLabels } from './Labels'
@@ -43,16 +45,17 @@ class ChecklistFolder extends React.Component {
   }
 
   get SortedTasks() {
-    if (this.props.isBackOffice) {
-      return _.sortBy(this.props.tasks, task =>
-        task.attention_requested ? 0 : 1
-      )
-    }
+    return this.props.tasks
+    // if (this.props.isBackOffice) {
+    //   return _.sortBy(this.props.tasks, task =>
+    //     task.attention_requested ? 0 : 1
+    //   )
+    // }
 
-    return _.sortBy(
-      this.props.tasks,
-      task => new Date(task.updated_at).getTime() * -1
-    )
+    // return _.sortBy(
+    //   this.props.tasks,
+    //   task => new Date(task.updated_at).getTime() * -1
+    // )
   }
 
   render() {
@@ -65,12 +68,18 @@ class ChecklistFolder extends React.Component {
             onClick={this.toggleFolderOpen}
           >
             <ArrowIcon isOpen={this.state.isFolderExpanded} />
-            <HeaderTitle>{this.props.checklist.title}</HeaderTitle>
+            <HeaderTitle>
+              <TextMiddleTruncate
+                text={this.props.checklist.title}
+                maxLength={100}
+              />
+            </HeaderTitle>
             <ChecklistLabels checklist={this.props.checklist} />
           </Flex>
 
           <Flex alignCenter>
             <MessageAdmin
+              deal={this.props.deal}
               checklist={this.props.checklist}
               tasks={this.props.tasks}
             />

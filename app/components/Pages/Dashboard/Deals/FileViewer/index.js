@@ -179,8 +179,10 @@ class FileViewer extends React.Component {
     return false
   }
 
-  handleBackButton = () =>
-    browserHistory.push(`/dashboard/deals/${this.state.deal.id}`)
+  handleBackButton = () => {
+    browserHistory.goBack()
+    // browserHistory.push(`/dashboard/deals/${this.state.deal.id}`)
+  }
 
   normalizeName = name => decodeURIComponent(name).replace(/[_-]/g, ' ')
 

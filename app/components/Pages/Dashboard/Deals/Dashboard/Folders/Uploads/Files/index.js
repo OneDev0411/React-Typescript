@@ -1,16 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
-import fecha from 'fecha'
 import Flex from 'styled-flex-component'
+import moment from 'moment'
+
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+import Tooltip from 'components/tooltip'
 
 import Avatar from 'components/Avatar'
 
-import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
-
 import ActionsButton from '../../../../components/ActionsButton'
 
-import { RowContainer, Row, RowLeftColumn, RowRightColumn } from '../../styled'
+import { RowContainer, Row } from '../../styled'
 
 import { FileName, FileDate } from './styled'
 
@@ -47,38 +48,45 @@ class Files extends React.Component {
         {files.map(file => (
           <RowContainer key={file.id}>
             <Row>
-              <RowLeftColumn>
-                <Flex alignCenter>
-                  <Avatar
-                    size={32}
-                    image={this.getFilePreview(file)}
-                    title={this.getFileExtension(file)}
+              <Flex onClick={this.toggleTaskOpen} column style={{ flex: 1 }}>
+                <Flex alignCenter justifyBetween>
+                  <Flex alignCenter>
+                    <Avatar
+                      size={32}
+                      image={this.getFilePreview(file)}
+                      title={this.getFileExtension(file)}
+                    />
+
+                    <div style={{ marginLeft: '1rem' }}>
+                      <FileName>
+                        <Link to={this.getFileLink(file)}>
+                          <TextMiddleTruncate text={file.name} maxLength={80} />
+                        </Link>
+                      </FileName>
+
+                      <FileDate>
+                        <Tooltip
+                          placement="bottom"
+                          caption={moment
+                            .unix(file.created_at)
+                            .format('MMM DD, YYYY, hh:mm A')}
+                        >
+                          <span>
+                            Uploaded {moment.unix(file.created_at).fromNow()}
+                          </span>
+                        </Tooltip>
+                      </FileDate>
+                    </div>
+                  </Flex>
+
+                  <ActionsButton
+                    type="document"
+                    deal={this.props.deal}
+                    task={null}
+                    document={file}
                   />
-                  <div style={{ marginLeft: '1rem' }}>
-                    <FileName>
-                      <Link to={this.getFileLink(file)}>
-                        <TextMiddleTruncate text={file.name} maxLength={80} />
-                      </Link>
-                    </FileName>
-
-                    <FileDate>
-                      {fecha.format(
-                        new Date(file.created_at * 1000),
-                        'YYYY/MM/DD hh:mm A'
-                      )}
-                    </FileDate>
-                  </div>
                 </Flex>
-              </RowLeftColumn>
-
-              <RowRightColumn>
-                <ActionsButton
-                  type="document"
-                  deal={this.props.deal}
-                  task={null}
-                  document={file}
-                />
-              </RowRightColumn>
+              </Flex>
             </Row>
           </RowContainer>
         ))}

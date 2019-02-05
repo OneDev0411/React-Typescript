@@ -318,9 +318,7 @@ export function getPrimaryAgentName(deal, roles) {
   let name = []
 
   if (agent.legal_first_name || agent.legal_last_name) {
-    name = agent.legal_full_name
-      ? [agent.legal_full_name]
-      : [agent.legal_first_name, agent.legal_last_name]
+    name = [agent.legal_first_name, agent.legal_last_name]
   } else {
     name = [agent.company_title]
   }

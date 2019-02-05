@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 import { addNotification as notify } from 'reapop'
@@ -8,16 +8,15 @@ import { confirmation } from 'actions/confirmation'
 
 import { getPdfSize } from 'models/Deal/form'
 
-import PageHeader from 'components/PageHeader'
-import ActionButton from 'components/Button/ActionButton'
 import Spinner from 'components/Spinner'
 import ProgressBar from 'components/ProgressBar'
 
 import importPdfJs from 'utils/import-pdf-js'
 
 import PDFEdit from './editor'
+import { Header } from './header'
 
-import { LoadingDealContainer } from './styled'
+import { Container, LoadingDealContainer } from './styled'
 import config from '../../../../../../config/public'
 
 class EditDigitalForm extends React.Component {
@@ -202,8 +201,10 @@ class EditDigitalForm extends React.Component {
 
   handleSelectContext = () => this.setState({ promptOnQuit: true })
 
-  closeForm = () =>
-    browserHistory.push(`/dashboard/deals/${this.props.task.deal}`)
+  closeForm = () => {
+    browserHistory.goBack()
+    // browserHistory.push(`/dashboard/deals/${this.props.task.deal}`)
+  }
 
   render() {
     const { isFormLoaded, isSaving, pdfDocument } = this.state
@@ -232,21 +233,13 @@ class EditDigitalForm extends React.Component {
     }
 
     return (
-      <Fragment>
-        <PageHeader
-          maxTitleLength={50}
-          title={task.title}
-          onClickBackButton={this.closeForm}
-        >
-          <PageHeader.Menu>
-            <ActionButton
-              disabled={!isFormLoaded || isSaving}
-              onClick={this.handleSave}
-            >
-              {isSaving ? 'Saving...' : 'Save'}
-            </ActionButton>
-          </PageHeader.Menu>
-        </PageHeader>
+      <Container>
+        <Header
+          task={task}
+          isSaving={isSaving}
+          isFormLoaded={isFormLoaded}
+          onSave={this.handleSave}
+        />
 
         <PDFEdit
           document={pdfDocument}
@@ -257,7 +250,7 @@ class EditDigitalForm extends React.Component {
           onSetValues={this.setFormValues}
           onSelectContext={this.handleSelectContext}
         />
-      </Fragment>
+      </Container>
     )
   }
 }

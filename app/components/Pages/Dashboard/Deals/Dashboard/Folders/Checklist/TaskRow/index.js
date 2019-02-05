@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
-import moment from 'moment'
 
 import {
   setSelectedTask,
@@ -9,27 +8,22 @@ import {
   updateDealNotifications
 } from 'actions/deals'
 
-import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
-import Tooltip from 'components/tooltip'
-
 import TaskStatus from './Status'
-import TaskNotifications from '../Notification'
 
 import ActionsButton from '../../../../components/ActionsButton'
 import TaskFiles from '../TaskFiles'
 
-import EnvelopeView from './Envelope'
+import TaskNotifications from '../Notification'
+import EnvelopeView from '../Envelope'
+import { Activity } from './Activity'
 
 import {
   RowContainer,
   Row,
-  RowLeftColumn,
-  RowRightColumn,
   TaskInfo,
-  LastActivity,
   RowTitle,
-  RowArrowIcon,
-  ActivitySeparator
+  Activities,
+  RowArrowIcon
 } from '../../styled'
 
 class Task extends React.Component {
@@ -38,6 +32,10 @@ class Task extends React.Component {
   }
 
   toggleTaskOpen = () => {
+    if (this.isRowExpandable() === false) {
+      return false
+    }
+
     const isTaskExpanded = !this.state.isTaskExpanded
 
     this.setState({
@@ -64,75 +62,62 @@ class Task extends React.Component {
     )
   }
 
-  normalizeActivityComment = comment => comment.replace(/\./gi, '')
-
   render() {
     const isRowExpandable = this.isRowExpandable()
-    const latestActivity = this.props.task.room.latest_activity
 
     return (
-      <RowContainer>
+      <RowContainer isTaskExpanded={this.state.isTaskExpanded}>
         <Row>
-          <RowLeftColumn>
-            <Flex onClick={this.toggleTaskOpen}>
-              <RowArrowIcon
-                isOpen={this.state.isTaskExpanded}
-                display={isRowExpandable}
-              />
-              <RowTitle hoverable={isRowExpandable}>
+          <RowArrowIcon
+            isOpen={this.state.isTaskExpanded}
+            display={isRowExpandable}
+            onClick={this.toggleTaskOpen}
+          />
+
+          <Flex column style={{ flex: 1 }}>
+            <Flex alignCenter justifyBetween>
+              <RowTitle
+                hoverable={isRowExpandable}
+                onClick={this.toggleTaskOpen}
+              >
                 {this.props.task.title}
               </RowTitle>
+
+              <ActionsButton
+                type="task"
+                deal={this.props.deal}
+                task={this.props.task}
+              />
             </Flex>
 
-            <TaskInfo>
+            <Flex alignCenter>
               <TaskStatus
                 task={this.props.task}
                 isBackOffice={this.props.isBackOffice}
                 isDraftDeal={this.props.deal.is_draft}
               />
 
-              {latestActivity && latestActivity.comment && (
-                <LastActivity>
-                  <TextMiddleTruncate
-                    text={this.normalizeActivityComment(latestActivity.comment)}
-                    maxLength={35}
-                    tooltipPlacement="bottom"
-                  />
+              <EnvelopeView
+                type="task"
+                deal={this.props.deal}
+                task={this.props.task}
+              />
 
-                  <ActivitySeparator>.</ActivitySeparator>
+              <Activities onClick={this.handleSelectTask}>
+                <TaskNotifications
+                  task={this.props.task}
+                  tooltip="View Activity"
+                  tooltipPlacement="bottom"
+                  style={{ marginTop: '-3px' }}
+                />
 
-                  <Tooltip
-                    placement="bottom"
-                    caption={moment
-                      .unix(latestActivity.created_at)
-                      .format('MMM DD, YYYY, hh:mm A')}
-                  >
-                    <span>
-                      {moment.unix(latestActivity.created_at).fromNow()}
-                    </span>
-                  </Tooltip>
-
-                  <ActivitySeparator>.</ActivitySeparator>
-
-                  <EnvelopeView deal={this.props.deal} task={this.props.task} />
-                </LastActivity>
-              )}
-            </TaskInfo>
-          </RowLeftColumn>
-
-          <RowRightColumn>
-            <TaskNotifications
-              task={this.props.task}
-              tooltip="View Activity"
-              onClick={this.handleSelectTask}
-            />
-
-            <ActionsButton
-              type="task"
-              deal={this.props.deal}
-              task={this.props.task}
-            />
-          </RowRightColumn>
+                <Activity
+                  task={this.props.task}
+                  latestActivity={this.props.task.room.latest_activity}
+                />
+              </Activities>
+            </Flex>
+          </Flex>
         </Row>
 
         <TaskFiles
