@@ -135,7 +135,7 @@ class ContactsList extends React.Component {
         activeSegment: segment
       },
       () => {
-        let conditionOperator = this.props.conditionOperator
+        let conditionOperator = 'and'
 
         if (segment.args && segment.args.filter_type) {
           conditionOperator = segment.args.filter_type

@@ -24,7 +24,10 @@ export function ConditionOperators(props) {
       onChange={selectedItem => props.onChange(selectedItem)}
       menuStyle={{ width: '100%', overflow: 'hidden' }}
       itemToString={item => item.title}
-      defaultSelectedItem={MENU_OPTIONS[0]}
+      selectedItem={
+        MENU_OPTIONS.find(item => item.value === props.selectedItem) ||
+        MENU_OPTIONS[0]
+      }
       buttonText={
         MENU_OPTIONS.find(item => item.value === props.selectedItem).title
       }

@@ -25,9 +25,9 @@ export default {
 
     sectors: [
       {
-        name: 'Color',
+        name: 'Text',
         open: true,
-//         buildProps: ['background-color', 'color']
+        buildProps: ['color', 'font-size']
       }
     ],
 
