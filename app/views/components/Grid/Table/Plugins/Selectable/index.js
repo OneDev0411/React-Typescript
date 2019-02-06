@@ -1,8 +1,12 @@
 import React, { Fragment } from 'react'
 import _ from 'underscore'
 
+import PopOver from 'components/Popover'
+
 import { CheckBoxButton } from '../../../../Button/CheckboxButton'
 import { CheckBoxButtonWithoutState } from '../../../../Button/CheckboxButton/CheckboxWithoutState'
+
+import { SelectEntireText } from './styled'
 
 const SESSION_KEY_PREFIX = 'Rechat--Grid--Selectable--'
 
@@ -17,7 +21,9 @@ export class SelectablePlugin {
       {
         persistent: false,
         allowSelectAll: true,
-        unselectableRow: []
+        unselectableRow: [],
+        allowSelectEntireList: true,
+        entityName: ''
       },
       options
     )
@@ -49,6 +55,10 @@ export class SelectablePlugin {
   setData(data = []) {
     // set new data
     this.data = data
+  }
+
+  setTotalCount(count = 0) {
+    this.totalCount = count
   }
 
   /**
@@ -100,6 +110,11 @@ export class SelectablePlugin {
    * checks whether all rows are selected or not
    */
   isAllRowsSelected = () => this.StorageObject.selectAllRows === true
+
+  /**
+   * checks whether all rows are selected or not
+   */
+  isEntireRowsSelected = () => this.StorageObject.selectEntireRows === true
 
   /**
    * checks whether all rows of subTable selected or not
@@ -229,25 +244,54 @@ export class SelectablePlugin {
     this.options.onChange(this.SelectedRows)
   }
 
+  renderColumnHeader = () => {
+    if (!this.options.allowSelectAll) {
+      return null
+    }
+
+    if (this.isAllRowsSelected() && this.options.allowSelectEntireList) {
+      return (
+        <Fragment>
+          <PopOver
+            show
+            popoverStyles={{ textAlign: 'center' }}
+            containerStyle={{ display: 'inline-block' }}
+            caption={
+              <SelectEntireText
+                onClick={() =>
+                  this.toggleSelectAllRows() && console.log('SELECT ALL TOTAL')
+                }
+              >
+                Select All {this.totalCount} {this.options.entityName}
+              </SelectEntireText>
+            }
+          >
+            <CheckBoxButtonWithoutState
+              someRowsSelected={false}
+              onClick={this.toggleSelectAllRows}
+              isSelected={this.isAllRowsSelected() || this.someRowsSelected()}
+            />
+          </PopOver>
+        </Fragment>
+      )
+    }
+
+    return (
+      <CheckBoxButtonWithoutState
+        someRowsSelected={!this.isAllRowsSelected() && this.someRowsSelected()}
+        onClick={this.toggleSelectAllRows}
+        isSelected={this.isAllRowsSelected() || this.someRowsSelected()}
+      />
+    )
+  }
+
   registerColumn = columns => {
     const column = {
       id: 'plugin--selectable',
       width: '24px',
       sortable: false,
       verticalAlign: 'center',
-      header: () => (
-        <Fragment>
-          {this.options.allowSelectAll !== false && (
-            <CheckBoxButtonWithoutState
-              someRowsSelected={
-                !this.isAllRowsSelected() && this.someRowsSelected()
-              }
-              onClick={this.toggleSelectAllRows}
-              isSelected={this.isAllRowsSelected() || this.someRowsSelected()}
-            />
-          )}
-        </Fragment>
-      ),
+      header: () => this.renderColumnHeader(),
       subHeader: subData => (
         <CheckBoxButtonWithoutState
           onClick={() => this.toggleSelectAllSubTableRows(subData)}

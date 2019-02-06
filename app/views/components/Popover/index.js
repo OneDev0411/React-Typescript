@@ -3,7 +3,7 @@ import { Overlay, Popover } from 'react-bootstrap'
 
 class PopOver extends React.Component {
   state = {
-    show: false
+    show: this.props.show
   }
 
   onMouseEnter = () => this.setState({ show: true })

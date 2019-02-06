@@ -189,7 +189,8 @@ class ContactsList extends React.Component {
           plugins={{
             selectable: {
               persistent: true,
-              storageKey: 'contacts'
+              storageKey: 'contacts',
+              entityName: 'Contacts'
             },
             loadable: {
               accuracy: 300, // px
