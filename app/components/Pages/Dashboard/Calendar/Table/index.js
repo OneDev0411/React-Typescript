@@ -14,6 +14,7 @@ import { grey } from 'views/utils/colors'
 import { goTo } from 'utils/go-to'
 
 import { getSelectedDate } from 'reducers/calendar'
+import { setDate } from 'actions/calendar'
 
 import { GridContainer, TableHeader, Label, Indicator, Title } from './styled'
 import EmptyState from './EmptyState'
@@ -21,6 +22,12 @@ import Fetching from './Fetching'
 import EventIcon from './EventIcon'
 
 export class Table extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.onHoverDate = _.debounce(this.onHoverDate, 300)
+  }
+
   getDayHeader = date => moment(date).format('dddd, MMM DD, YYYY')
 
   isSelectedDay = date =>
@@ -130,6 +137,10 @@ export class Table extends React.Component {
     return onClick
   }
 
+  onHoverDate = value => {
+    this.props.setDate(new Date(value))
+  }
+
   getGridHeaderProps = () => ({
     style: {
       display: 'none'
@@ -140,6 +151,10 @@ export class Table extends React.Component {
     style: {
       marginBottom: 0
     }
+  })
+
+  getSubTableProps = group => ({
+    onMouseMove: () => this.onHoverDate(group.date)
   })
 
   getGridTrProps = (rowIndex, { original: row }) => {
@@ -213,6 +228,7 @@ export class Table extends React.Component {
             data={data}
             EmptyState={EmptyState}
             onTableRef={onRef}
+            getSubTableProps={this.getSubTableProps}
             getTrProps={this.getGridTrProps}
             getTdProps={this.getGridTdProps}
             getHeaderProps={this.getGridHeaderProps}
@@ -247,4 +263,7 @@ function mapStateToProps({ calendar }) {
   }
 }
 
-export default connect(mapStateToProps)(Table)
+export default connect(
+  mapStateToProps,
+  { setDate }
+)(Table)
