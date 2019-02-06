@@ -13,18 +13,14 @@ import { grey } from 'views/utils/colors'
 
 import { goTo } from 'utils/go-to'
 
+import { getSelectedDate } from 'reducers/calendar'
+
 import { GridContainer, TableHeader, Label, Indicator, Title } from './styled'
 import EmptyState from './EmptyState'
 import Fetching from './Fetching'
 import EventIcon from './EventIcon'
 
 export class Table extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.getGridTrProps = this.getGridTrProps.bind(this)
-  }
-
   getDayHeader = date => moment(date).format('dddd, MMM DD, YYYY')
 
   isSelectedDay = date =>
@@ -245,7 +241,7 @@ export class Table extends React.Component {
 
 function mapStateToProps({ calendar }) {
   return {
-    selectedDate: new Date(calendar.selectedDate),
+    selectedDate: getSelectedDate(calendar),
     calendar: calendar.list,
     calendarDays: calendar.byDay
   }

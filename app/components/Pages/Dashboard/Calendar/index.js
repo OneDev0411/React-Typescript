@@ -5,7 +5,7 @@ import { browserHistory } from 'react-router'
 import moment from 'moment'
 import _ from 'underscore'
 
-import { getStartRange, getEndRange } from 'reducers/calendar'
+import { getStartRange, getEndRange, getSelectedDate } from 'reducers/calendar'
 
 import { getCalendar, setDate, resetCalendar } from 'actions/calendar'
 
@@ -332,9 +332,7 @@ function mapStateToProps({ user, calendar }) {
     user,
     list: calendar.list,
     isFetching: calendar.isFetching,
-    selectedDate: moment(calendar.selectedDate)
-      .utcOffset(0)
-      .toDate(),
+    selectedDate: getSelectedDate(calendar),
     calendarDays: calendar.byDay,
     viewAsUsers: viewAs(user),
     startRange: getStartRange(calendar),
