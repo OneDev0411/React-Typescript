@@ -9,8 +9,16 @@ import ActionButton from 'components/Button/ActionButton'
 import IconDelete from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 import LoadSaveReinitializeForm from 'views/utils/LoadSaveReinitializeForm'
 
-import { postLoadFormat } from './post-load-format'
+import { postLoadFormat } from './helpers/post-load-format'
+import {
+  PREFIX_ITEMS,
+  SUFFIX_ITEMS,
+  STATES_ITEMS
+} from './helpers/dropdown-fields-items'
+
 import { Container, Body, Footer } from './styled'
+import { TextField } from './fields/TextField'
+import { AutocompleteField } from './fields/AutocompleteField'
 
 const propTypes = {
   style: PropTypes.shape(),
@@ -31,15 +39,9 @@ const defaultProps = {
 }
 
 export class InlineAddressForm extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      error: null,
-      isDisabled: false
-    }
-
-    this.isNew = Object(this.props.initialValues).length > 0
+  state = {
+    error: null,
+    isDisabled: false
   }
 
   load = async () => {
@@ -90,7 +92,7 @@ export class InlineAddressForm extends React.Component {
   }
 
   render() {
-    const { isDisabled, error } = this.state
+    const { isDisabled } = this.state
 
     return (
       <LoadSaveReinitializeForm
@@ -99,55 +101,70 @@ export class InlineAddressForm extends React.Component {
         validate={this.props.validate}
         postLoadFormat={postLoadFormat}
         preSaveFormat={this.props.preSaveFormat}
-        render={formProps => {
-          const { values } = formProps
-
-          console.log(values, error)
-
-          return (
-            <Container style={this.props.style}>
-              <form onSubmit={formProps.handleSubmit}>
-                <Body>{this.props.address}</Body>
-                <Footer justifyBetween>
-                  <Flex alignCenter>
-                    {this.props.showDeleteButton && (
-                      <Tooltip placement="top" caption="Delete">
-                        <IconButton
-                          isFit
-                          inverse
-                          type="button"
-                          disabled={isDisabled}
-                          onClick={this.delete}
-                        >
-                          <IconDelete />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                  </Flex>
-                  <Flex alignCenter>
-                    <ActionButton
-                      type="button"
-                      size="small"
-                      appearance="link"
-                      disabled={isDisabled}
-                      onClick={this.props.handleCancel}
-                    >
-                      Cancel
-                    </ActionButton>
-                    <ActionButton
-                      type="submit"
-                      size="small"
-                      disabled={isDisabled}
-                      style={{ marginLeft: '0.5em' }}
-                    >
-                      {isDisabled ? 'Saving...' : 'Save'}
-                    </ActionButton>
-                  </Flex>
-                </Footer>
-              </form>
-            </Container>
-          )
-        }}
+        render={formProps => (
+          <Container style={this.props.style}>
+            <form onSubmit={formProps.handleSubmit}>
+              <Body>
+                <TextField name="street_number" label="Street Number" />
+                <AutocompleteField
+                  name="prefix"
+                  label="Dir"
+                  items={PREFIX_ITEMS}
+                />
+                <TextField name="street_name" label="Street Name" />
+                <AutocompleteField
+                  name="suffix"
+                  label="Suffix"
+                  items={SUFFIX_ITEMS}
+                />
+                <TextField name="unit" label="Unit" />
+                <TextField name="city" label="City" />
+                <AutocompleteField
+                  name="state"
+                  label="State"
+                  items={STATES_ITEMS}
+                />
+                <TextField name="zip_code" label="Zip Code" />
+              </Body>
+              <Footer justifyBetween>
+                <Flex alignCenter>
+                  {this.props.showDeleteButton && (
+                    <Tooltip placement="top" caption="Delete">
+                      <IconButton
+                        isFit
+                        inverse
+                        type="button"
+                        disabled={isDisabled}
+                        onClick={this.delete}
+                      >
+                        <IconDelete />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </Flex>
+                <Flex alignCenter>
+                  <ActionButton
+                    type="button"
+                    size="small"
+                    appearance="link"
+                    disabled={isDisabled}
+                    onClick={this.props.handleCancel}
+                  >
+                    Cancel
+                  </ActionButton>
+                  <ActionButton
+                    type="submit"
+                    size="small"
+                    disabled={isDisabled}
+                    style={{ marginLeft: '0.5em' }}
+                  >
+                    {isDisabled ? 'Saving...' : 'Save'}
+                  </ActionButton>
+                </Flex>
+              </Footer>
+            </form>
+          </Container>
+        )}
       />
     )
   }

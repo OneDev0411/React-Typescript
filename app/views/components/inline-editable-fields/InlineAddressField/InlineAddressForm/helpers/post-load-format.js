@@ -2,7 +2,7 @@ export function postLoadFormat(parsedAddress) {
   if (!parsedAddress || Object.keys(parsedAddress).length === 0) {
     return {
       street_number: '',
-      dir: '',
+      prefix: '',
       street_name: '',
       suffix: '',
       unit: '',
@@ -14,7 +14,7 @@ export function postLoadFormat(parsedAddress) {
 
   const {
     number: street_number,
-    prefix: dir,
+    prefix,
     street: street_name,
     suffix,
     sec_unit_num: unit,
@@ -25,7 +25,7 @@ export function postLoadFormat(parsedAddress) {
 
   return {
     street_number,
-    dir,
+    prefix,
     street_name,
     suffix,
     unit,
