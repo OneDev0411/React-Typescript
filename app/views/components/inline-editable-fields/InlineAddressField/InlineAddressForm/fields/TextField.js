@@ -2,9 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
 
-import { Label, Input } from './styled'
+import { Container, Label, Input } from './styled'
 
 TextField.propTypes = {
+  width: PropTypes.number,
   style: PropTypes.shape(),
   validate: PropTypes.func,
   name: PropTypes.string.isRequired,
@@ -13,6 +14,7 @@ TextField.propTypes = {
 
 TextField.defaultProps = {
   style: {},
+  width: 25,
   validate() {}
 }
 
@@ -24,16 +26,16 @@ export function TextField(props) {
       name={props.name}
       validate={props.validate}
       render={({ input }) => (
-        <div style={props.style}>
+        <Container width={props.width} style={props.style}>
           <Label htmlFor={id}>{props.label}</Label>
           <Input
             {...input}
             id={id}
-            placeholder={props.placeholder}
             type="text"
             autoComplete="off"
+            placeholder={props.placeholder}
           />
-        </div>
+        </Container>
       )}
     />
   )

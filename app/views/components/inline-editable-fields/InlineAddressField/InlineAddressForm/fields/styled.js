@@ -1,8 +1,20 @@
 import styled from 'styled-components'
 
+import Card from 'components/Card'
 import ActionButton from 'components/Button/ActionButton'
 
 import { borderColor, primary, grey } from 'views/utils/colors'
+
+export const Container = styled.div`
+  @media screen and (min-width: 48em) {
+    margin-right: 1.5rem;
+    width: ${({ width }) => (width ? `${width}%` : '20%')};
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+`
 
 export const Label = styled.label`
   display: block;
@@ -35,6 +47,9 @@ export const Input = styled.input`
 export const SelectButton = styled(ActionButton)`
   width: 100%;
   padding: 0;
+  height: auto;
+  line-height: 1;
+  padding: 0 0 0.5rem;
   justify-content: space-between;
   border-bottom: 1px solid ${borderColor};
   color: ${({ isOpen }) => (isOpen ? primary : '#000')};
@@ -49,4 +64,14 @@ export const SelectButton = styled(ActionButton)`
       fill: ${primary};
     }
   }
+`
+
+export const List = styled(Card)`
+  width: 100%;
+  position: absolute;
+  top: calc(100% - 1rem);
+  left: 0;
+  z-index: 1;
+  overflow-y: auto;
+  max-height: 10rem;
 `

@@ -16,7 +16,7 @@ import {
   STATES_ITEMS
 } from './helpers/dropdown-fields-items'
 
-import { Container, Body, Footer } from './styled'
+import { Container, Body, Row, Footer } from './styled'
 import { Select } from './fields/Select'
 import { TextField } from './fields/TextField'
 import { AutocompleteField } from './fields/AutocompleteField'
@@ -106,24 +106,43 @@ export class InlineAddressForm extends React.Component {
           <Container style={this.props.style}>
             <form onSubmit={formProps.handleSubmit}>
               <Body>
-                <TextField name="street_number" label="Street Number" />
-                <Select name="prefix" label="Dir" items={PREFIX_ITEMS} />
-                <TextField name="street_name" label="Street Name" />
-                <AutocompleteField
-                  name="suffix"
-                  label="Suffix"
-                  items={SUFFIX_ITEMS}
-                />
-                <TextField name="unit" label="Unit" />
-                <TextField name="city" label="City" />
-                <AutocompleteField
-                  name="state"
-                  label="State"
-                  items={STATES_ITEMS}
-                />
-                <TextField name="zip_code" label="Zip Code" />
+                <Row>
+                  <TextField
+                    name="street_number"
+                    label="Street Number"
+                    width={20}
+                  />
+                  <Select
+                    name="prefix"
+                    label="Dir"
+                    items={PREFIX_ITEMS}
+                    width={15}
+                  />
+                  <TextField
+                    name="street_name"
+                    label="Street Name"
+                    width={45}
+                  />
+                  <AutocompleteField
+                    name="suffix"
+                    label="Suffix"
+                    items={SUFFIX_ITEMS}
+                    width={20}
+                  />
+                </Row>
+                <Row>
+                  <TextField name="unit" label="Unit" width={20} />
+                  <TextField name="city" label="City" width={40} />
+                  <AutocompleteField
+                    name="state"
+                    label="State"
+                    items={STATES_ITEMS}
+                    width={20}
+                  />
+                  <TextField name="zip_code" label="Zip Code" width={20} />
+                </Row>
               </Body>
-              <Footer justifyBetween>
+              <Footer>
                 <Flex alignCenter>
                   {this.props.showDeleteButton && (
                     <Tooltip placement="top" caption="Delete">
@@ -139,7 +158,7 @@ export class InlineAddressForm extends React.Component {
                     </Tooltip>
                   )}
                 </Flex>
-                <Flex alignCenter>
+                <Flex>
                   <ActionButton
                     type="button"
                     size="small"

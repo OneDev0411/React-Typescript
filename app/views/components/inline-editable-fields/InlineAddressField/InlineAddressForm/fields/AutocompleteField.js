@@ -6,10 +6,10 @@ import { Field } from 'react-final-form'
 
 import { Item } from 'components/Dropdown/Item'
 
-import { Container } from '../styled'
-import { Label, Input } from './styled'
+import { Container, List, Label, Input } from './styled'
 
 const propTypes = {
+  width: PropTypes.number,
   style: PropTypes.shape(),
   validate: PropTypes.func,
   name: PropTypes.string.isRequired,
@@ -23,6 +23,7 @@ const propTypes = {
 }
 
 const defaultProps = {
+  width: 20,
   style: {},
   validate() {}
 }
@@ -37,7 +38,7 @@ class AutocompleteFieldComponent extends React.Component {
     const id = `${this.props.name}_text-field`
 
     return (
-      <div style={this.props.style}>
+      <Container width={this.props.width} style={this.props.style}>
         <Label htmlFor={id}>{this.props.label}</Label>
 
         <Downshift
@@ -68,13 +69,7 @@ class AutocompleteFieldComponent extends React.Component {
                 />
 
                 {isOpen && !!filteredItems.length && (
-                  <Container
-                    style={{
-                      overflowY: 'auto',
-                      maxHeight: '10rem',
-                      top: 'calc(100% - 1rem)'
-                    }}
-                  >
+                  <List>
                     {filteredItems.map(({ title, value }, index) => (
                       <Item
                         key={index}
@@ -87,13 +82,13 @@ class AutocompleteFieldComponent extends React.Component {
                         {title}
                       </Item>
                     ))}
-                  </Container>
+                  </List>
                 )}
               </div>
             )
           }}
         />
-      </div>
+      </Container>
     )
   }
 }

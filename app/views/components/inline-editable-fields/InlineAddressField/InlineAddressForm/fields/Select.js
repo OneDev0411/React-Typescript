@@ -6,9 +6,10 @@ import { Dropdown } from 'components/Dropdown'
 import { Item } from 'components/Dropdown/Item'
 import ArrowDropDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
-import { Label, SelectButton } from './styled'
+import { Container, Label, SelectButton } from './styled'
 
 Select.propTypes = {
+  width: PropTypes.number,
   hasEmptyItem: PropTypes.bool,
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
@@ -21,6 +22,7 @@ Select.propTypes = {
 }
 
 Select.defaultProps = {
+  width: 20,
   hasEmptyItem: true
 }
 
@@ -35,7 +37,7 @@ export function Select(props) {
     <Field
       name={props.name}
       render={({ input }) => (
-        <React.Fragment>
+        <Container width={props.width}>
           <Label>{props.label}</Label>
           <Dropdown
             noBorder
@@ -59,7 +61,7 @@ export function Select(props) {
             )}
             itemRenderer={(props, item) => <Item {...props}>{item.title}</Item>}
           />
-        </React.Fragment>
+        </Container>
       )}
     />
   )
