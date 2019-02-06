@@ -8,14 +8,10 @@ Suggestions.propTypes = {
   searchText: PropTypes.string.isRequired,
   items: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   onClickDefaultItem: PropTypes.func.isRequired,
-  onConClickSuggestionItemlick: PropTypes.func.isRequired
+  onClickSuggestionItem: PropTypes.func.isRequired
 }
 
 export function Suggestions({ items, ...props }) {
-  if (!Array.isArray(items) || items.length === 0) {
-    return null
-  }
-
   return (
     <ListContainer>
       <DefaultItem onClick={props.onClickDefaultItem}>
@@ -23,13 +19,14 @@ export function Suggestions({ items, ...props }) {
         <span className="search-text">{props.searchText}</span>
         {'"'}
       </DefaultItem>
-      {items.map((item, index) => (
-        <SuggestionItem
-          key={index}
-          item={item}
-          onClick={() => props.onClickSuggestionItem(item)}
-        />
-      ))}
+      {items.length > 0 &&
+        items.map((item, index) => (
+          <SuggestionItem
+            key={index}
+            item={item}
+            onClick={() => props.onClickSuggestionItem(item)}
+          />
+        ))}
     </ListContainer>
   )
 }

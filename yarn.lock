@@ -10770,9 +10770,9 @@ parent-module@^1.0.0:
   dependencies:
     callsites "^3.0.0"
 
-parse-address@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/parse-address/-/parse-address-0.0.6.tgz#24e045190a79cb207cc73b7d9d91193b5abd0334"
+parse-address@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/parse-address/-/parse-address-1.1.0.tgz#f6a1deb860737652048d0fe542c78234519c180f"
   dependencies:
     xregexp "^3.1.1"
 

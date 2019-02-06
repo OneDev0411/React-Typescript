@@ -7,21 +7,28 @@ import { loadJS } from '../../../../utils/load-js'
 import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/Listings/mapOptions'
 
 import { Suggestions } from './Suggestions'
+import { InlineAddressForm } from './InlineAddressForm'
 
 const propTypes = {
   renderSearchField: PropTypes.func.isRequired,
   searchText: PropTypes.string,
-  style: PropTypes.shape()
+  style: PropTypes.shape(),
+  handleDelete: PropTypes.func,
+  showDeleteButton: PropTypes.bool,
+  handleSubmit: PropTypes.func.isRequired,
+  preSaveFormat: PropTypes.func.isRequired
 }
 
 const defaultTypes = {
   searchText: '',
-  style: {}
+  style: {},
+  handleDelete() {},
+  showDeleteButton: false
 }
 
 export class InlineAddressField extends React.Component {
   state = {
-    input: '',
+    address: '',
     isShowSuggestion: false,
     // eslint-disable-next-line
     isDrity: false,
@@ -30,8 +37,8 @@ export class InlineAddressField extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (!state.input && !state.isDrity && props.searchText !== state.input) {
-      return { input: props.searchText, isDrity: true }
+    if (!state.address && !state.isDrity && props.address !== state.address) {
+      return { address: props.address, isDrity: true }
     }
 
     return null
@@ -116,13 +123,13 @@ export class InlineAddressField extends React.Component {
       () => {
         if (input.length === 0) {
           return {
-            input,
+            address: input,
             isShowForm: false,
             isShowSuggestion: false
           }
         }
 
-        return { input, isDrity: true }
+        return { address: input, isDrity: true }
       },
       () => this.search(input)
     )
@@ -130,18 +137,18 @@ export class InlineAddressField extends React.Component {
 
   onClickSuggestionItem = item => {
     this.setState({
-      input: item.description,
+      address: item.description,
       isShowSuggestion: false,
       isShowForm: true
     })
   }
 
   handleInputFocus = () => {
-    if (this.state.input && !this.state.isOpen) {
+    if (this.state.address && !this.state.isShowSuggestion) {
       if (this.state.places.length > 0) {
         this.setState({ isShowSuggestion: true })
       } else {
-        this.search(this.state.input)
+        this.search(this.state.address)
       }
     }
   }
@@ -151,10 +158,14 @@ export class InlineAddressField extends React.Component {
 
   onClickOutside = () => this.setState({ isShowSuggestion: false })
 
+  handleFormCancel = () => this.setState({ isShowForm: false })
+
   render() {
     if (!this.state.isGoogleApiReady) {
       return null
     }
+
+    const { address } = this.state
 
     return (
       <ClickOutside onClickOutside={this.onClickOutside}>
@@ -163,17 +174,27 @@ export class InlineAddressField extends React.Component {
             isLoading: this.state.isLoading,
             onChange: this.handleChangeInput,
             onFocus: this.handleInputFocus,
-            value: this.state.input
+            value: address
           })}
           {this.state.isShowSuggestion && (
             <Suggestions
               items={this.state.places}
-              searchText={this.state.input}
+              searchText={address}
               onClickDefaultItem={this.onClickDefaultItem}
               onClickSuggestionItem={this.onClickSuggestionItem}
             />
           )}
-          {this.state.isShowForm && this.state.input}
+
+          {this.state.isShowForm && (
+            <InlineAddressForm
+              address={address}
+              handleCancel={this.handleFormCancel}
+              handleDelete={this.props.handleDelete}
+              handleSubmit={this.props.handleSubmit}
+              preSaveFormat={this.props.preSaveFormat}
+              showDeleteButton={this.props.showDeleteButton}
+            />
+          )}
         </div>
       </ClickOutside>
     )
