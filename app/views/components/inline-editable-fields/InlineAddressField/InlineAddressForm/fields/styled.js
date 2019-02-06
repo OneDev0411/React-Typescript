@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import IconButton from 'components/Button/IconButton'
+import ActionButton from 'components/Button/ActionButton'
 
 import { borderColor, primary, grey } from 'views/utils/colors'
 
@@ -24,7 +24,7 @@ export const Input = styled.input`
 
   &:focus {
     outline: none;
-    border-bottom-color: ${primary};
+    border-bottom-color: #000;
   }
 
   &::placeholder {
@@ -32,15 +32,21 @@ export const Input = styled.input`
   }
 `
 
-export const Button = styled(IconButton)`
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 1.5rem;
-  height: 1.5rem;
-  transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};
+export const SelectButton = styled(ActionButton)`
+  width: 100%;
+  padding: 0;
+  justify-content: space-between;
+  border-bottom: 1px solid ${borderColor};
+  color: ${({ isOpen }) => (isOpen ? primary : '#000')};
 
-  > svg {
-    fill: ${({ isOpen }) => (isOpen ? primary : '#000')};
+  &:focus {
+    outline: none;
+    border-bottom-color: #000;
+  }
+
+  :hover {
+    > svg {
+      fill: ${primary};
+    }
   }
 `

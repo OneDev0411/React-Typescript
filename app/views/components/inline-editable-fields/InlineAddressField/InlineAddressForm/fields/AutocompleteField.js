@@ -3,13 +3,11 @@ import PropTypes from 'prop-types'
 import Downshift from 'downshift'
 import matchSorter from 'match-sorter'
 import { Field } from 'react-final-form'
-import Flex from 'styled-flex-component'
 
 import { Item } from 'components/Dropdown/Item'
-import IconDropDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 import { Container } from '../styled'
-import { Label, Input, Button } from './styled'
+import { Label, Input } from './styled'
 
 const propTypes = {
   style: PropTypes.shape(),
@@ -18,7 +16,7 @@ const propTypes = {
   label: PropTypes.string.isRequired,
   items: PropTypes.arrayOf(
     PropTypes.shape({
-      label: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired
     }).isRequired
   ).isRequired
@@ -50,35 +48,24 @@ class AutocompleteFieldComponent extends React.Component {
           render={({
             getItemProps,
             highlightedIndex,
-            getButtonProps,
             getInputProps,
             inputValue,
             isOpen,
             selectedItem
           }) => {
             const filteredItems = matchSorter(items, inputValue, {
-              keys: ['label'],
+              keys: ['title', 'value'],
               maxRanking: matchSorter.rankings.STARTS_WITH
             })
 
             return (
               <div style={{ position: 'relative' }}>
-                <Flex>
-                  <Input
-                    {...getInputProps({
-                      name: input.name,
-                      autoComplete: 'off'
-                    })}
-                  />
-                  <Button
-                    isFit
-                    isOpen={isOpen}
-                    iconSize="large"
-                    {...getButtonProps()}
-                  >
-                    <IconDropDown />
-                  </Button>
-                </Flex>
+                <Input
+                  {...getInputProps({
+                    name: input.name,
+                    autoComplete: 'off'
+                  })}
+                />
 
                 {isOpen && !!filteredItems.length && (
                   <Container
@@ -88,7 +75,7 @@ class AutocompleteFieldComponent extends React.Component {
                       top: 'calc(100% - 1rem)'
                     }}
                   >
-                    {filteredItems.map(({ label, value }, index) => (
+                    {filteredItems.map(({ title, value }, index) => (
                       <Item
                         key={index}
                         {...getItemProps({
@@ -97,7 +84,7 @@ class AutocompleteFieldComponent extends React.Component {
                           isActive: highlightedIndex === index
                         })}
                       >
-                        {label}
+                        {title}
                       </Item>
                     ))}
                   </Container>

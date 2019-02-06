@@ -17,6 +17,7 @@ import {
 } from './helpers/dropdown-fields-items'
 
 import { Container, Body, Footer } from './styled'
+import { Select } from './fields/Select'
 import { TextField } from './fields/TextField'
 import { AutocompleteField } from './fields/AutocompleteField'
 
@@ -106,11 +107,7 @@ export class InlineAddressForm extends React.Component {
             <form onSubmit={formProps.handleSubmit}>
               <Body>
                 <TextField name="street_number" label="Street Number" />
-                <AutocompleteField
-                  name="prefix"
-                  label="Dir"
-                  items={PREFIX_ITEMS}
-                />
+                <Select name="prefix" label="Dir" items={PREFIX_ITEMS} />
                 <TextField name="street_name" label="Street Name" />
                 <AutocompleteField
                   name="suffix"

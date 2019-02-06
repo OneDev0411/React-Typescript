@@ -4,8 +4,11 @@ export function normalizeDropdownItems(items) {
   }
 
   if (Array.isArray(items)) {
-    return items.map(item => ({ label: item, value: item }))
+    return items.map(value => ({ title: value, value }))
   }
 
-  return Object.keys(items).map(item => ({ label: items[item], value: item }))
+  return Object.keys(items).map(value => ({
+    title: items[value],
+    value
+  }))
 }

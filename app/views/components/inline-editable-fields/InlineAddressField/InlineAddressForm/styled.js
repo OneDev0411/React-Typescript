@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
-import { primary, grey, borderColor } from '../../../../utils/colors'
-import Card from '../../../Card'
+import Card from 'components/Card'
+import { grey } from 'views/utils/colors'
 
 export const Container = styled(Card)`
   position: absolute;
