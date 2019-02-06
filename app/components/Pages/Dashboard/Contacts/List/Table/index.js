@@ -116,17 +116,20 @@ class ContactsList extends React.Component {
       )
     },
     {
-      display: ({ selectedRows }) => selectedRows.length > 0,
       render: ({ selectedRows }) => (
-        <SendMlsListingCard selectedRows={selectedRows} isMultiListing>
+        <SendMlsListingCard
+          disabled={selectedRows.length === 0}
+          selectedRows={selectedRows}
+          isMultiListing
+        >
           Marketing
         </SendMlsListingCard>
       )
     },
     {
-      display: ({ selectedRows }) => selectedRows.length > 0,
       render: ({ selectedRows, resetSelectedRows }) => (
         <TagContacts
+          disabled={selectedRows.length === 0}
           selectedRows={selectedRows}
           resetSelectedRows={resetSelectedRows}
           handleChangeContactsAttributes={
@@ -136,9 +139,9 @@ class ContactsList extends React.Component {
       )
     },
     {
-      display: ({ selectedRows }) => selectedRows.length > 0,
       render: ({ selectedRows, resetSelectedRows }) => (
         <CreateEvent
+          disabled={selectedRows.length === 0}
           selectedRows={selectedRows}
           submitCallback={async () => {
             resetSelectedRows()
@@ -148,9 +151,9 @@ class ContactsList extends React.Component {
       )
     },
     {
-      display: ({ selectedRows }) => selectedRows.length >= 2,
       render: ({ selectedRows, resetSelectedRows }) => (
         <MergeContacts
+          disabled={selectedRows.length < 2}
           selectedRows={selectedRows}
           rowsUpdating={this.props.rowsUpdating}
           resetSelectedRows={resetSelectedRows}
@@ -158,9 +161,9 @@ class ContactsList extends React.Component {
       )
     },
     {
-      display: ({ selectedRows }) => selectedRows.length > 0,
       render: rowData => (
         <IconButton
+          disabled={rowData.selectedRows.length === 0}
           size="small"
           appearance="outline"
           onClick={e => this.props.onRequestDelete(e, rowData)}
