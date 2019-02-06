@@ -10,17 +10,13 @@ import { upsertContexts } from 'actions/deals'
 
 import { TextInput } from 'components/Forms/TextInput'
 
+import { COUNTIES, STREET_SUFFIX, STREET_PREFIX, STATES } from 'utils/address'
+
 import { SelectInput } from '../../../../../../views/components/Forms/SelectInput'
 
 import { FinalFormDrawer } from '../../../../../../views/components/FinalFormDrawer'
 
-import {
-  stateToAbbreviated,
-  COUNTIES,
-  STREET_SUFFIX,
-  STREET_PREFIX,
-  STATES
-} from '../../utils/address'
+import { stateToAbbreviated } from '../../utils/address'
 
 const defaultState = 'Texas'
 
