@@ -100,11 +100,11 @@ class Templates extends React.Component {
                 autoPlay="true"
                 loop="true"
                 type="video/mp4"
-                src={`${template.url}/${this.brokerageBrand}/thumbnail.mp4`}
+                src={`${template.url}/${this.brokerageBrand.id}/thumbnail.mp4`}
               />
             ) : (
               <Image
-                src={`${template.url}/${this.brokerageBrand}/thumbnail.png`}
+                src={`${template.url}/${this.brokerageBrand.id}/thumbnail.png`}
                 title={template.name}
                 width="97%"
                 style={{

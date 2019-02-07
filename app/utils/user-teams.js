@@ -95,7 +95,7 @@ export function getBrandByType(user, type) {
 
   do {
     if (brand.brand_type === type) {
-      return brand.id
+      return brand
     }
 
     brand = brand.parent

@@ -42,7 +42,7 @@ class TemplateItem extends React.Component {
       this.video = React.createRef()
       this.state = { isVideoPlaying: false, isMouseOverImage: false }
     } else {
-      let thumbnail = `${this.template.url}/${brokerageBrand}/thumbnail.png`
+      let thumbnail = `${this.template.url}/${brokerageBrand.id}/thumbnail.png`
 
       if (props.template.file) {
         thumbnail = props.template.file.preview_url
