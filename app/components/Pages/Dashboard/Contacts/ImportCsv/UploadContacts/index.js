@@ -193,7 +193,7 @@ class UploadContacts extends React.Component {
         {isImporting && (
           <div>
             <Loading />
-            Uploading {rowsCount} contacts. It may takes a few seconds.
+            Uploading {rowsCount} contacts. It may take a few seconds.
           </div>
         )}
 

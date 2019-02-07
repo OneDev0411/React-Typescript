@@ -95,7 +95,7 @@ class Grid extends React.Component {
   }
 
   render() {
-    const { multiple, onTableRef } = this.props
+    const { multiple } = this.props
     const sizes = this.RowsSize
 
     return (
@@ -132,7 +132,8 @@ class Grid extends React.Component {
             {...this.props}
             columns={this.Columns}
             sizes={sizes}
-            onTableRef={onTableRef}
+            onTableRef={this.props.onTableRef}
+            getSubTableProps={this.props.getSubTableProps}
             selectablePlugin={this.selectablePlugin}
             sortablePlugin={this.sortablePlugin}
           />
@@ -161,6 +162,8 @@ Grid.propTypes = {
   getBodyProps: PropTypes.func,
   onScrollBottom: PropTypes.func,
   onScrollTop: PropTypes.func,
+  onTableRef: PropTypes.func,
+  getSubTableProps: PropTypes.func,
   columns: PropTypes.array.isRequired,
   data: PropTypes.array,
   summary: PropTypes.object
@@ -175,6 +178,8 @@ Grid.defaultProps = {
   getTdProps: () => {},
   onScrollBottom: () => {},
   onScrollTop: () => {},
+  onTableRef: () => {},
+  getSubTableProps: () => {},
   plugins: {},
   data: [],
   summary: {}

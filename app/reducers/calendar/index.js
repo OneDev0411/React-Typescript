@@ -9,46 +9,10 @@ import {
 
 const initialState = {
   isFetching: false,
-  selectedDate: moment()
-    .utcOffset(0)
-    .toDate(),
+  selectedDate: null,
   byDay: {},
   list: [],
   brandMembers: []
-}
-
-function ksort(object) {
-  return Object.entries(object)
-    .sort()
-    .reduce((o, [k, v]) => ((o[k] = v), o), {})
-}
-
-export const getStartRange = ({ byDay: days }) => {
-  if (_.size(days) === 0) {
-    return 0
-  }
-
-  const start = _.first(_.keys(days))
-
-  return ~~moment(start)
-    .utcOffset(0)
-    .add(1, 'day')
-    .startOf('day')
-    .format('X')
-}
-
-export const getEndRange = ({ byDay: days }) => {
-  if (_.size(days) === 0) {
-    return 0
-  }
-
-  const end = _.last(_.keys(days))
-
-  return ~~moment(end)
-    .utcOffset(0)
-    .add(1, 'day')
-    .startOf('day')
-    .format('X')
 }
 
 export default (state = initialState, action) => {
@@ -107,3 +71,42 @@ export default (state = initialState, action) => {
       return state
   }
 }
+
+function ksort(object) {
+  return Object.entries(object)
+    .sort()
+    .reduce((o, [k, v]) => ((o[k] = v), o), {})
+}
+
+export const getStartRange = ({ byDay: days }) => {
+  if (_.size(days) === 0) {
+    return 0
+  }
+
+  const start = _.first(_.keys(days))
+
+  return ~~moment(start)
+    .utcOffset(0)
+    .add(1, 'day')
+    .startOf('day')
+    .format('X')
+}
+
+export const getEndRange = ({ byDay: days }) => {
+  if (_.size(days) === 0) {
+    return 0
+  }
+
+  const end = _.last(_.keys(days))
+
+  return ~~moment(end)
+    .utcOffset(0)
+    .add(1, 'day')
+    .startOf('day')
+    .format('X')
+}
+
+export const getSelectedDate = state =>
+  moment(state.selectedDate || new Date())
+    .utcOffset(0)
+    .toDate()

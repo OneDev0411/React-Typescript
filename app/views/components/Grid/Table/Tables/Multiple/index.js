@@ -29,10 +29,17 @@ const MultipleTable = ({ data, LoadingState, isFetching, ...rest }) => (
   </Fragment>
 )
 
-const TableGroup = ({ group, onTableRef, SubComponent, ...rest }) => (
+const TableGroup = ({
+  group,
+  onTableRef,
+  getSubTableProps,
+  SubComponent,
+  ...rest
+}) => (
   <div
     data-refid={group.refId}
     ref={ref => onTableRef && onTableRef(group.refId, ref)}
+    {...getSubTableProps(group)}
   >
     {SubComponent && <SubComponent {...group} {...rest} />}
     <BasicTable data={group.data} {...rest} showTableHeader={false} multiple />
