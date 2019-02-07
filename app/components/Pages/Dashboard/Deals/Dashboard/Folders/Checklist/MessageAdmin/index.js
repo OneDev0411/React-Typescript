@@ -2,6 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
+import PendingIcon from 'components/SvgIcons/DealTaskPending/IconPending'
+
 import { setSelectedTask, updateDealNotifications } from 'actions/deals'
 
 import ActionButton from 'components/Button/ActionButton'
@@ -48,8 +50,22 @@ class MessageAdmin extends React.Component {
           General Comments
         </ActionButton>
 
-        {new_notifications > 0 && (
-          <BadgeCounter>{new_notifications}</BadgeCounter>
+        {(new_notifications > 0 || task.attention_requested) && (
+          <BadgeCounter
+            isRectangle={new_notifications > 0 && task.attention_requested}
+          >
+            {task.attention_requested && <PendingIcon />}
+
+            {new_notifications > 0 && (
+              <span
+                style={{
+                  marginLeft: '0.5rem'
+                }}
+              >
+                {new_notifications}
+              </span>
+            )}
+          </BadgeCounter>
         )}
       </Container>
     )
