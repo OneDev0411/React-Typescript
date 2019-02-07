@@ -45,7 +45,7 @@ class MessageAdmin extends React.Component {
           size="small"
           onClick={() => this.handleSelectTask(task, room)}
         >
-          Messsage Admin
+          General Comments
         </ActionButton>
 
         {new_notifications > 0 && (
