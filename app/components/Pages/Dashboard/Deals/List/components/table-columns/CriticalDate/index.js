@@ -15,7 +15,7 @@ export default function CriticalDate(props) {
   const table = DealContext.getFactsheetSection(deal, 'Dates')
 
   if (table.length === 0) {
-    return <span />
+    return 'No closing date'
   }
 
   // get next critical date
