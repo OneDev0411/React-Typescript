@@ -9,6 +9,7 @@ export const LastActivity = styled.div`
   font-size: 0.875rem;
   font-weight: 500;
   color: #d1d1d1;
+  display: none;
 
   :hover {
     color: ${primary} !important;

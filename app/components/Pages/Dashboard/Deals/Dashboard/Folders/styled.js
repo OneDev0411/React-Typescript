@@ -82,6 +82,7 @@ export const RowContainer = styled.div`
       }
 
       ${LastActivity} {
+        display: block;
         color: #000;
       }
       
@@ -98,6 +99,7 @@ export const RowContainer = styled.div`
   }
 
   :hover ${LastActivity} {
+    display: block;
     color: #000;
   }
 
