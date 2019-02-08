@@ -24,20 +24,21 @@ const envelopeStates = {
   COMPLETED: 'Completed'
 }
 
-const EDIT_BUTTON = 'edit'
-const DOCUSIGN_BUTTON = 'docusign'
-const VOID_BUTTON = 'void'
-const RESEND_BUTTON = 'resend'
-const EMAIL_BUTTON = 'email'
-const MOVE_BUTTON = 'move'
-const VIEW_BUTTON = 'view'
-const NOTIFY_ADMIN_BUTTON = 'notify-button'
-const UPLOAD_BUTTON = 'upload'
-const RENAME_BUTTON = 'rename'
-const DELETE_BUTTON = 'delete'
-const DOWNLOAD_BUTTON = 'download'
-const REVIEW_ENVELOPE_BUTTON = 'review-envelope'
-const SPLIT_PDF_BUTTON = 'split-pdf'
+const EDIT_BUTTON = 0
+const MESSAGE_ADMIN = 1
+const DOCUSIGN_BUTTON = 2
+const VOID_BUTTON = 3
+const RESEND_BUTTON = 4
+const EMAIL_BUTTON = 5
+const MOVE_BUTTON = 6
+const VIEW_BUTTON = 7
+const NOTIFY_ADMIN_BUTTON = 8
+const UPLOAD_BUTTON = 9
+const RENAME_BUTTON = 10
+const DELETE_BUTTON = 11
+const DOWNLOAD_BUTTON = 12
+const REVIEW_ENVELOPE_BUTTON = 13
+const SPLIT_PDF_BUTTON = 14
 
 function normalizeConditions(conditions) {
   return conditions.map(item => ({
@@ -56,6 +57,10 @@ const actionsDefaultProperties = {
     type: 'edit-form',
     tooltip:
       'You cannot edit while you have sent this out for signature. You can either void or wait for the signature to get completed.'
+  },
+  [MESSAGE_ADMIN]: {
+    label: 'Message Admin',
+    type: 'comments'
   },
   [DOCUSIGN_BUTTON]: {
     label: 'Docusign',
@@ -133,6 +138,7 @@ export const documentsConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         disabled: true
       },
+      [MESSAGE_ADMIN]: {},
       [EMAIL_BUTTON]: {}
     }
   },
@@ -153,6 +159,7 @@ export const documentsConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [EDIT_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -176,6 +183,7 @@ export const documentsConditions = normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VOID_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
       [VIEW_BUTTON]: {},
@@ -205,6 +213,7 @@ export const documentsConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         disabled: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -230,6 +239,7 @@ export const documentsConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -254,6 +264,7 @@ export const documentsConditions = normalizeConditions([
       [DOWNLOAD_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [EDIT_BUTTON]: {},
@@ -277,6 +288,7 @@ export const documentsConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
@@ -303,6 +315,7 @@ export const documentsConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -330,6 +343,7 @@ export const documentsConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         disabled: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -357,6 +371,7 @@ export const documentsConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [RENAME_BUTTON]: {},
@@ -383,6 +398,7 @@ export const documentsConditions = normalizeConditions([
       [DOWNLOAD_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -407,6 +423,7 @@ export const documentsConditions = normalizeConditions([
       [DOWNLOAD_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {},
@@ -423,6 +440,7 @@ export const documentsConditions = normalizeConditions([
       [MOVE_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [DOWNLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
@@ -441,6 +459,7 @@ export const documentsConditions = normalizeConditions([
       [MOVE_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [DOWNLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DELETE_BUTTON]: {},
@@ -461,6 +480,7 @@ export const tasksConditions = normalizeConditions([
       [UPLOAD_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [NOTIFY_ADMIN_BUTTON]: {}
     }
   },
@@ -474,6 +494,7 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [UPLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -491,6 +512,7 @@ export const tasksConditions = normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
@@ -509,6 +531,7 @@ export const tasksConditions = normalizeConditions([
       [RESEND_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [DOCUSIGN_BUTTON]: {},
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -530,6 +553,7 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
       [VIEW_BUTTON]: {},
@@ -548,6 +572,7 @@ export const tasksConditions = normalizeConditions([
       [DOWNLOAD_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [DOCUSIGN_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
       [VIEW_BUTTON]: {},
@@ -565,6 +590,7 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
@@ -580,6 +606,7 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -598,6 +625,7 @@ export const tasksConditions = normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
@@ -619,6 +647,7 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         disabled: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [VOID_BUTTON]: {},
@@ -640,6 +669,7 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -658,6 +688,7 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -675,6 +706,7 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -692,6 +724,7 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -709,6 +742,7 @@ export const tasksConditions = normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -729,6 +763,7 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         disabled: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [VOID_BUTTON]: {},
@@ -749,6 +784,7 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -766,6 +802,7 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -783,6 +820,7 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -801,6 +839,7 @@ export const tasksConditions = normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -822,6 +861,7 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         disabled: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [VOID_BUTTON]: {},
@@ -843,6 +883,7 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -861,6 +902,7 @@ export const tasksConditions = normalizeConditions([
       [DOWNLOAD_BUTTON]: {
         primary: true
       },
+      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},

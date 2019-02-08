@@ -9,6 +9,7 @@ import _ from 'underscore'
 
 import {
   changeNeedsAttention,
+  setSelectedTask,
   voidEnvelope,
   asyncDeleteFile
 } from 'actions/deals'
@@ -64,6 +65,7 @@ class ActionsButton extends React.Component {
       view: this.handleView,
       download: this.handleDownload,
       delete: this.handleDelete,
+      comments: this.handleShowComments,
       'move-file': this.toggleMoveFile,
       'split-pdf': this.handleToggleSplitPdf,
       'review-envelope': this.handleReviewEnvelope,
@@ -268,6 +270,13 @@ class ActionsButton extends React.Component {
       inputDefaultValue: '',
       onConfirm: this.notifyOffice
     })
+  }
+
+  /**
+   *
+   */
+  handleShowComments = () => {
+    this.props.setSelectedTask(this.props.task)
   }
 
   /**
@@ -555,6 +564,7 @@ export default connect(
   {
     changeNeedsAttention,
     asyncDeleteFile,
+    setSelectedTask,
     voidEnvelope,
     confirmation,
     notify
