@@ -56,10 +56,7 @@ class Task extends React.Component {
   isRowExpandable = () => {
     const { attachments } = this.props.task.room
 
-    return (
-      this.props.task.form ||
-      (Array.isArray(attachments) && attachments.length > 0)
-    )
+    return Array.isArray(attachments) && attachments.length > 0
   }
 
   render() {
