@@ -82,6 +82,7 @@ class ChecklistFolder extends React.Component {
               deal={this.props.deal}
               checklist={this.props.checklist}
               tasks={this.props.tasks}
+              checklistName={this.props.checklist.title}
             />
             <Menu
               deal={this.props.deal}

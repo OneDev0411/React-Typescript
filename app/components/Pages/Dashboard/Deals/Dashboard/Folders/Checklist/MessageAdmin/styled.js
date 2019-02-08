@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import { red } from 'views/utils/colors'
+
 export const Container = styled.div`
   position: relative;
 `
@@ -9,7 +11,7 @@ export const BadgeCounter = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f6a623;
+  background: ${red.A100};
   top: -12px;
   right: -6px;
   font-size: 13px;
