@@ -11,7 +11,7 @@ export const BadgeCounter = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${red.A100};
+  background: ${red.A200};
   top: -12px;
   right: -6px;
   font-size: 13px;
