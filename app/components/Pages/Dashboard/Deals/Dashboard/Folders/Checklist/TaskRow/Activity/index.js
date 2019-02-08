@@ -10,8 +10,6 @@ import { LastActivity } from './styled'
 export function Activity(props) {
   return (
     <div>
-      {!props.latestActivity && <LastActivity>No Activity</LastActivity>}
-
       {props.latestActivity && props.latestActivity.comment && (
         <LastActivity>
           <Tooltip
