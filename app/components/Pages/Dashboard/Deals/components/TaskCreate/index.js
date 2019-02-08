@@ -65,7 +65,7 @@ class TaskCreate extends React.Component {
   renderDrawerHeaderMenu = () => (
     <TextIconButton
       onClick={this.toggleCustomTaskDrawer}
-      text="Add New Item"
+      text="Create New Folder"
       appearance="outline"
       iconLeft={AddIcon}
       iconSize="large"
