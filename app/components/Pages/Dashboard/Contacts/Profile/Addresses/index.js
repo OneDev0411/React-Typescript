@@ -1,129 +1,83 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { getContactAddresses } from '../../../../../../models/contacts/helpers/get-contact-addresses'
+import { getContactAddresses } from 'models/contacts/helpers/get-contact-addresses'
 
-import { selectDefsBySection } from '../../../../../../reducers/contacts/attributeDefs'
+import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 
-import ActionButton from '../../../../../../views/components/Button/ActionButton'
-import Tooltip from '../../../../../../views/components/tooltip'
-import StarIcon from '../../../../../../views/components/SvgIcons/Star/StarIcon'
-
-import EditDrawer from './EditAddressesDrawer'
+import { AddressField } from './AddressField'
 import { Section } from '../components/Section'
-import { getAddresses, getFullAddress } from './helpers'
+import { getAddresses, generateEmptyAddress } from './helpers/get-addresses'
 
 class Addresses extends React.Component {
-  state = {
-    isOpenEditDrawer: false
+  constructor(props) {
+    super(props)
+
+    const addressAttributeDefs = selectDefsBySection(
+      props.attributeDefs,
+      'Addresses'
+    )
+
+    const addresses = getContactAddresses(props.contact)
+
+    this.state = {
+      addresses: [
+        ...getAddresses(addresses, addressAttributeDefs),
+        generateEmptyAddress(addressAttributeDefs, addresses.length)
+      ]
+    }
+
+    this.addressAttributeDefs = addressAttributeDefs
   }
 
-  openEditDrawer = () => this.setState({ isOpenEditDrawer: true })
+  addNewAddress = event => {
+    if (event && event.stopPropagation) {
+      event.stopPropagation()
+    }
 
-  closeEditDrawer = () => this.setState({ isOpenEditDrawer: false })
-
-  getSectionContent = addresses => {
-    let addressesItems = []
-
-    addresses.forEach(address => {
-      if (!address.fields.some(field => field[field.attribute_def.data_type])) {
-        return
-      }
-
-      const item = [
-        <dt
-          key={`address_${address.index}_label`}
-          style={{
-            color: '#7f7f7f',
-            fontWeight: '300',
-            marginBottom: '0.25em',
-            display: 'flex',
-            alignItems: 'center'
-          }}
-        >
-          {address.label}
-          {address.is_primary && (
-            <Tooltip caption="Primary">
-              <StarIcon
-                style={{
-                  fill: '#f5a623',
-                  width: '16px',
-                  height: '16px',
-                  marginLeft: '5px'
-                }}
-              />
-            </Tooltip>
-          )}
-        </dt>,
-        <dd
-          key={`address_${address.index}_value`}
-          style={{
-            marginBottom: '1em'
-          }}
-        >
-          {getFullAddress(address.fields)}
-        </dd>
+    this.setState(state => ({
+      addresses: [
+        ...state.addresses,
+        generateEmptyAddress(this.addressAttributeDefs, state.addresses.length)
       ]
+    }))
+  }
 
-      addressesItems.push(item)
-    })
+  handleDelete = () => {
+    console.log('delete from father')
+  }
 
-    return <dl>{addressesItems}</dl>
+  handleSubmit = async values => {
+    console.log('submit from father', values)
+
+    return null
+  }
+
+  preSaveFormat = (values, originalValues) => {
+    console.log('preSaveFormat from father ', values, originalValues)
+
+    return values
   }
 
   render() {
-    const { addresses } = this.props
-
-    const hasAddresses =
-      addresses.length > 0 && addresses[0].fields.some(field => field.id)
-
     return (
-      <Section
-        onEdit={hasAddresses ? this.openEditDrawer : undefined}
-        title="Addresses"
-      >
-        {hasAddresses ? (
-          this.getSectionContent(addresses)
-        ) : (
-          <div
-            style={{
-              marginTop: hasAddresses ? 0 : '0.5em'
-            }}
-          >
-            <ActionButton
-              appearance="outline"
-              onClick={this.openEditDrawer}
-              size="small"
-            >
-              Add Address
-            </ActionButton>
-          </div>
-        )}
-
-        {this.state.isOpenEditDrawer && (
-          <EditDrawer
-            isOpen
-            addresses={this.props.addresses}
-            addressAttributeDefs={this.props.addressAttributeDefs}
-            contact={this.props.contact}
-            onClose={this.closeEditDrawer}
-            submitCallback={this.props.submitCallback}
+      <Section title="Addresses" isNew>
+        {this.state.addresses.map((field, index) => (
+          <AddressField
+            key={index}
+            field={field}
+            handleAddNew={this.addNewAddress}
           />
-        )}
+        ))}
       </Section>
     )
   }
 }
 
-function mapStateToProps(state, props) {
-  const addressAttributeDefs = selectDefsBySection(
-    state.contacts.attributeDefs,
-    'Addresses'
-  )
-  const addressesFields = getContactAddresses(props.contact)
-  const addresses = getAddresses(addressesFields, addressAttributeDefs)
-
-  return { addresses, addressAttributeDefs }
+function mapStateToProps(state) {
+  return {
+    attributeDefs: state.contacts.attributeDefs
+  }
 }
 
 export default connect(mapStateToProps)(Addresses)
