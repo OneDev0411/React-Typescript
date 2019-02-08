@@ -16,8 +16,6 @@ export class AddressField extends React.Component {
   render() {
     const { field } = this.props
 
-    console.log('state', this.state)
-
     const _props = {
       field,
       toggleMode: this.toggleMode

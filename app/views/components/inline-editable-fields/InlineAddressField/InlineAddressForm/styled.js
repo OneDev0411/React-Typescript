@@ -8,7 +8,7 @@ export const Container = styled(Card)`
   position: absolute;
   top: calc(100% + 0.5rem);
   left: 0;
-  z-index: 1;
+  z-index: 2;
 
   @media screen and (min-width: 48em) {
     width: 36rem;

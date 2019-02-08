@@ -71,7 +71,7 @@ export const List = styled(Card)`
   position: absolute;
   top: calc(100% - 1rem);
   left: 0;
-  z-index: 1;
+  z-index: 3;
   overflow-y: auto;
   max-height: 10rem;
 `
