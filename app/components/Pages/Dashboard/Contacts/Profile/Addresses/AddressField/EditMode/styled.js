@@ -20,7 +20,7 @@ export const DropdownButton = styled(LinkButton)`
   color: ${({ isOpen }) => (isOpen ? primary : grey.A900)};
 
   > svg {
-    fill: ${grey.A900};
+    fill: ${({ isOpen }) => (isOpen ? primary : grey.A900)};
   }
 `
 
