@@ -140,7 +140,6 @@ export const documentsConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         disabled: true
       },
-      [MESSAGE_ADMIN]: {},
       [EMAIL_BUTTON]: {}
     }
   },
@@ -161,7 +160,6 @@ export const documentsConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
       [EDIT_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -185,7 +183,6 @@ export const documentsConditions = normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
       [VOID_BUTTON]: {},
       [NOTIFY_ADMIN_BUTTON]: {},
       [VIEW_BUTTON]: {},
@@ -215,7 +212,6 @@ export const documentsConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         disabled: true
       },
-      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -241,7 +237,6 @@ export const documentsConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -266,7 +261,6 @@ export const documentsConditions = normalizeConditions([
       [DOWNLOAD_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [EDIT_BUTTON]: {},
@@ -290,7 +284,6 @@ export const documentsConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
@@ -317,7 +310,6 @@ export const documentsConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -345,7 +337,6 @@ export const documentsConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         disabled: true
       },
-      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -373,7 +364,6 @@ export const documentsConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       // [RENAME_BUTTON]: {},
@@ -400,7 +390,6 @@ export const documentsConditions = normalizeConditions([
       [DOWNLOAD_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
@@ -425,7 +414,6 @@ export const documentsConditions = normalizeConditions([
       [DOWNLOAD_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
       [VIEW_BUTTON]: {},
       // [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {},
@@ -442,7 +430,6 @@ export const documentsConditions = normalizeConditions([
       [MOVE_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
       [DOWNLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
@@ -461,7 +448,6 @@ export const documentsConditions = normalizeConditions([
       [MOVE_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
       [DOWNLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DELETE_BUTTON]: {},
