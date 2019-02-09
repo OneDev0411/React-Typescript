@@ -4,12 +4,12 @@ import _ from 'underscore'
 
 import styled from 'styled-components'
 
-import PDFPage from './pdf-page'
-import Annotations from './annotations'
+import PDFPage from './PdfPage'
+import Annotations from './Annotations'
 
-import RolesManager from './integrations/roles'
-import AddressForm from './integrations/address'
-import ContextForm from './integrations/context'
+import RolesManager from './integrations/Roles'
+import AddressForm from './integrations/Address'
+import ContextForm from './integrations/Context'
 
 const Container = styled.div`
   /* text-align: center; */

@@ -14,8 +14,8 @@ import DealContext from 'models/Deal/helpers/dynamic-context'
 
 import { Container, ActionsContainer } from './styled'
 
-import StringContext from './string-context'
-import DateContext from './date-context'
+import StringContext from './StringContext'
+import DateContext from './DateContext'
 
 class Context extends React.Component {
   state = {

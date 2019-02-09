@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import OverlayDrawer from 'components/OverlayDrawer'
 
 import { Divider } from './styled'
-import ManualEntry from './manual-entry'
+import ManualEntry from './ManualEntry'
 
 import Roles from '../../../../components/Roles'
 import {

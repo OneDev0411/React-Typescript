@@ -1,8 +1,8 @@
 import React from 'react'
 import moment from 'moment'
 
-import DatePicker from '../../../../../../../../../views/components/DatePicker'
-import DealContext from '../../../../../../../../../models/Deal/helpers/dynamic-context'
+import DatePicker from 'components/DatePicker'
+import DealContext from 'models/Deal/helpers/dynamic-context'
 
 function onDateChange(props, value) {
   const formattedValue = moment(value).format(DealContext.getDateFormatString())
@@ -13,7 +13,9 @@ function onDateChange(props, value) {
 function getSelectedDate(props) {
   if (props.value) {
     return props.value
-  } else if (props.defaultValue) {
+  }
+
+  if (props.defaultValue) {
     return new Date(props.defaultValue * 1000)
   }
 

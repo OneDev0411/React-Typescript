@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react'
 
-import CheckboxAnnotation from './checkbox'
-import RadioAnnotation from './radio'
-import TextInputAnnotation from './text-input'
+import CheckboxAnnotation from './Checkbox'
+import RadioAnnotation from './Radio'
+import TextInputAnnotation from './TextInput'
 
 import { getType, Types } from '../../../utils/types'
 

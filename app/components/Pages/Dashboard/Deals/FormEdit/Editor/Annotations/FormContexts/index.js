@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react'
 
-import FormRole from './form-role'
-import FormRoles from './form-roles'
-import FormContext from './form-context'
+import FormRole from './FormRole'
+import FormRoles from './FormRoles'
+import FormContext from './FormContext'
 
 export default function FormContexts(props) {
   const sharedProps = {

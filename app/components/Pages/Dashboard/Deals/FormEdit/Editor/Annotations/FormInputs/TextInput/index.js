@@ -1,4 +1,5 @@
 import React from 'react'
+
 import parseAppearanceString from '../../../../utils/appearance'
 
 import { TextArea, TextInput } from './styled'

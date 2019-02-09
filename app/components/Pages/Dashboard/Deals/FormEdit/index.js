@@ -13,8 +13,8 @@ import ProgressBar from 'components/ProgressBar'
 
 import importPdfJs from 'utils/import-pdf-js'
 
-import PDFEdit from './editor'
-import { Header } from './header'
+import PDFEdit from './Editor'
+import { Header } from './Header'
 
 import { Container, LoadingDealContainer } from './styled'
 import config from '../../../../../../config/public'

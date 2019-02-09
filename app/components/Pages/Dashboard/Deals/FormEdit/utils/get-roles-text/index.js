@@ -1,4 +1,5 @@
 import { get as getAttribute } from 'underscore.get'
+
 import { getLegalFullName } from '../../../utils/roles'
 
 export function normalizeRoleNames(deal, roleNames) {

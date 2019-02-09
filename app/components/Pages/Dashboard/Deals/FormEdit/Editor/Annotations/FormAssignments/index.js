@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
 
-import InitialsAssignment from './initials'
-import SignatureAssignment from './signature'
-import DateAssignment from './date'
-import TextboxAssignment from './textbox'
-import CheckboxAssignment from './checkbox'
+import InitialsAssignment from './Initials'
+import SignatureAssignment from './Signature'
+import DateAssignment from './Date'
+import TextboxAssignment from './TextBox'
+import CheckboxAssignment from './Checkbox'
 
 const Assignment = styled.div`
   position: absolute;

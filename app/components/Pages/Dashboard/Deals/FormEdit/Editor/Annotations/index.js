@@ -7,9 +7,9 @@ import uuid from 'utils/uuid'
 
 import { getValue } from '../../utils/types'
 
-import FormInputs from './form-inputs'
-import FormContexts from './form-contexts'
-// import FormAssignments from './form-assignments'
+import FormInputs from './FormInputs'
+import FormContexts from './FormContexts'
+// import FormAssignments from './FormAssignments'
 
 const AnnotationsContainer = styled.div`
   position: absolute;
@@ -29,7 +29,9 @@ export default class Annotations extends React.Component {
   }
 
   inputs = []
+
   contexts = []
+
   roles = {
     all: [],
     single: []

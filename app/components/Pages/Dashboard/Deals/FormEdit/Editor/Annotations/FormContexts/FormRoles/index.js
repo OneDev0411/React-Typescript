@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
-import ContextAnnotation from '../context-annotation'
+import ContextAnnotation from '../ContextAnnotation'
 import { getRolesText } from '../../../../utils/get-roles-text'
 import { getRoleTooltip } from '../../../../utils/get-role-tooltip'
 

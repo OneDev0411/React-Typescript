@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'underscore'
 
-import ContextAnnotation from '../context-annotation'
+import ContextAnnotation from '../ContextAnnotation'
 import DealContext from '../../../../../../../../../models/Deal/helpers/dynamic-context'
 
 function getContextType(context) {
