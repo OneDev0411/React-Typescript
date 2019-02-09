@@ -20,12 +20,23 @@ export function normalizeRoleNames(deal, roleNames) {
   })
 }
 
-function getAttributeValue(role, attribute, defaultValue) {
-  if (attribute === 'legal_full_name') {
-    return getLegalFullName(role)
-  }
+function getAttributeValue(role, context, defaultValue) {
+  const attributes = context.attributes || [context.attribute]
 
-  return getAttribute(role, attribute, defaultValue)
+  let value = ''
+
+  attributes.some(attribute => {
+    if (attribute === 'legal_full_name') {
+      value = getLegalFullName(role)
+    } else {
+      value = getAttribute(role, attribute, defaultValue)
+    }
+
+    // this will detect null, empty strings, false, undefined, but zero
+    return !(!value && value !== 0)
+  })
+
+  return value
 }
 
 export function getRolesText(roles, deal, roleNames, annotationContext) {
@@ -33,12 +44,10 @@ export function getRolesText(roles, deal, roleNames, annotationContext) {
     return ''
   }
 
-  const { attribute } = annotationContext
-
   return deal.roles
     .map(id => roles[id])
     .filter(role => normalizeRoleNames(deal, roleNames).includes(role.role))
-    .map(role => getAttributeValue(role, attribute, ''))
+    .map(role => getAttributeValue(role, annotationContext, ''))
     .join(', ')
 }
 
@@ -47,11 +56,13 @@ export function getRoleText(roles, deal, roleNames, annotationContext) {
     return ''
   }
 
-  const { attribute, number } = annotationContext
+  const { number } = annotationContext
 
   const list = deal.roles
     .map(id => roles[id])
     .filter(role => normalizeRoleNames(deal, roleNames).includes(role.role))
 
-  return list.length > 0 ? getAttributeValue(list[number], attribute) : ''
+  return list.length > 0
+    ? getAttributeValue(list[number], annotationContext)
+    : ''
 }

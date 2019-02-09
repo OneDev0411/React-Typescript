@@ -18,16 +18,20 @@ function capitalize(text) {
 }
 
 function normalizeAttribute(context) {
-  const { attribute } = context
+  const attributes = context.attributes || [context.attribute]
 
-  const text = attribute.split('.').map(fraction =>
-    fraction
-      .split('_')
-      .map(capitalize)
-      .join(' ')
-  )
+  const list = attributes.map(attribute => {
+    const text = attribute.split('.').map(fraction =>
+      fraction
+        .split('_')
+        .map(capitalize)
+        .join(' ')
+    )
 
-  return text.slice(-2).join(' ')
+    return text.slice(-2).join(' ')
+  })
+
+  return list.length > 1 ? `(${list.join(' Or ')})` : list[0]
 }
 
 function normalizeRoles(context, multiRoles) {
