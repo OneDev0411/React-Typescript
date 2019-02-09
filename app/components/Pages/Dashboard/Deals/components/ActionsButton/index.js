@@ -72,6 +72,7 @@ class ActionsButton extends React.Component {
       'get-signature': this.handleGetSignature,
       'edit-form': this.handleEditForm,
       'notify-office': this.handleNotifyOffice,
+      'cancel-notify-office': this.handleCancelNotifyOffice,
       'resend-envelope': this.handleResendEnvelope,
       'void-envelope': this.handleVoidEnvelope
     }
@@ -80,13 +81,19 @@ class ActionsButton extends React.Component {
   }
 
   handleSelectAction = button => {
-    const { type, disabled } = button
-
-    if (disabled === true) {
+    if (button.disabled === true) {
       return false
     }
 
     this.handleCloseMenu()
+
+    let type = button.type
+
+    if (typeof type === 'function') {
+      type = button.type({
+        task: this.props.task
+      })
+    }
 
     this.actions[type] && this.actions[type]()
   }
@@ -275,6 +282,17 @@ class ActionsButton extends React.Component {
   /**
    *
    */
+  handleCancelNotifyOffice = () => {
+    this.props.changeNeedsAttention(
+      this.props.deal.id,
+      this.props.task.id,
+      false
+    )
+  }
+
+  /**
+   *
+   */
   handleShowComments = () => {
     this.props.setSelectedTask(this.props.task)
   }
@@ -431,6 +449,14 @@ class ActionsButton extends React.Component {
     }
   }
 
+  getButtonLabel = button => {
+    if (typeof button.label === 'function') {
+      return button.label({ task: this.props.task })
+    }
+
+    return button.label
+  }
+
   render() {
     const actionButtons = this.getActions()
     const primaryAction = this.getPrimaryAction(actionButtons)
@@ -451,7 +477,7 @@ class ActionsButton extends React.Component {
                 <PrimaryAction
                   onClick={() => this.handleSelectAction(primaryAction)}
                 >
-                  {primaryAction.label}
+                  {this.getButtonLabel(primaryAction)}
                 </PrimaryAction>
 
                 <MenuButton onClick={this.handleToggleMenu}>
@@ -480,7 +506,7 @@ class ActionsButton extends React.Component {
                               : null
                           }
                         >
-                          <span>{button.label}</span>
+                          <span>{this.getButtonLabel(button)}</span>
                         </Tooltip>
                       </MenuItem>
                     )
