@@ -16,8 +16,8 @@ export function selectActions(type, data) {
   return (
     item &&
     item.actions.filter(
-      // temporary hide not-implemented actions
-      button => ['email', 'rename', 'print'].includes(button.id) === false
+      // temporary hide email and rename actions
+      button => ['5', '10'].includes(button.id) === false
     )
   )
 }

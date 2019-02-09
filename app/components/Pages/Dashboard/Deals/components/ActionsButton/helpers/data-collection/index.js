@@ -287,7 +287,7 @@ export const documentsConditions = normalizeConditions([
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
-      // [RENAME_BUTTON]: {},
+      [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {},
       [MOVE_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
@@ -340,7 +340,7 @@ export const documentsConditions = normalizeConditions([
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
       [EMAIL_BUTTON]: {},
-      // [RENAME_BUTTON]: {},
+      [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -366,7 +366,7 @@ export const documentsConditions = normalizeConditions([
       },
       [VIEW_BUTTON]: {},
       [EMAIL_BUTTON]: {},
-      // [RENAME_BUTTON]: {},
+      [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {},
       [MOVE_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
@@ -393,7 +393,7 @@ export const documentsConditions = normalizeConditions([
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [EMAIL_BUTTON]: {},
-      // [RENAME_BUTTON]: {},
+      [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {}
     }
   },
@@ -415,7 +415,7 @@ export const documentsConditions = normalizeConditions([
         primary: true
       },
       [VIEW_BUTTON]: {},
-      // [RENAME_BUTTON]: {},
+      [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {},
       [MOVE_BUTTON]: {}
     }
@@ -434,7 +434,7 @@ export const documentsConditions = normalizeConditions([
       [VIEW_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
       [DELETE_BUTTON]: {},
-      // [RENAME_BUTTON]: {},
+      [RENAME_BUTTON]: {},
       [EMAIL_BUTTON]: {}
     }
   },
@@ -451,7 +451,7 @@ export const documentsConditions = normalizeConditions([
       [DOWNLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DELETE_BUTTON]: {},
-      // [RENAME_BUTTON]: {},
+      [RENAME_BUTTON]: {},
       [EMAIL_BUTTON]: {}
     }
   }
