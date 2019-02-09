@@ -61,6 +61,7 @@ class Attachments extends React.Component {
             <EnvelopeView
               type="document"
               deal={props.deal}
+              task={this.props.task}
               document={props.file}
             />
           </Flex>
