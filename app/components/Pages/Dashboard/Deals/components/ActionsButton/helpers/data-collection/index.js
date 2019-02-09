@@ -79,8 +79,10 @@ const actionsDefaultProperties = {
     type: 'send-email'
   },
   [NOTIFY_ADMIN_BUTTON]: {
-    label: 'Notify Office',
-    type: 'notify-office'
+    label: ({ task }) =>
+      task.attention_requested ? 'Cancel Notify' : 'Notify Office',
+    type: ({ task }) =>
+      task.attention_requested ? 'cancel-notify-office' : 'notify-office'
   },
   [UPLOAD_BUTTON]: {
     label: 'Upload',
