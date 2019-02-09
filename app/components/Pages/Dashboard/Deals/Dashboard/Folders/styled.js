@@ -116,13 +116,6 @@ export const Row = styled.div`
   padding: 1rem;
 `
 
-export const TaskInfo = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 0.75rem;
-  padding-left: 2rem;
-`
-
 export const RowArrowIcon = styled(ArrowIcon)`
   align-self: flex-start;
   margin-top: 1px;

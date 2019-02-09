@@ -20,7 +20,6 @@ import { Activity } from './Activity'
 import {
   RowContainer,
   Row,
-  TaskInfo,
   RowTitle,
   Activities,
   RowArrowIcon
