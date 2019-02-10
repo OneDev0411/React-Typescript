@@ -22,7 +22,7 @@ export const Card = styled(AbstractCard)`
 
 export const FactsheetContainer = styled.div`
   overflow: hidden;
-  min-width: 21rem;
+  width: 21rem;
 `
 
 export const MainContainer = styled.div`
