@@ -5,6 +5,8 @@ import Flex from 'styled-flex-component'
 
 import { syncDeleteFile } from 'actions/deals'
 
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+
 import EnvelopeView from '../../Envelope'
 import ActionsButton from '../../../../../components/ActionsButton'
 
@@ -45,7 +47,7 @@ class Attachments extends React.Component {
                   props.task.id
                 }/attachment/${props.file.id}`}
               >
-                {props.file.name}
+                <TextMiddleTruncate text={props.file.name} maxLength={75} />
               </FileLink>
             </FileTitle>
 
