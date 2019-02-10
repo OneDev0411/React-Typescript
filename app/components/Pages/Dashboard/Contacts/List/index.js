@@ -331,7 +331,8 @@ class ContactsList extends React.Component {
             rowsUpdating={this.rowsUpdating}
             onChangeSelectedRows={this.onChangeSelectedRows}
             onRequestDelete={this.handleOnDelete}
-            filters={this.state.filter}
+            filters={this.state.filters}
+            conditionOperator={this.props.conditionOperator}
             users={viewAsUsers}
           />
         </PageContent>
