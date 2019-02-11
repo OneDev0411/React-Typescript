@@ -7,18 +7,20 @@ import Body from '../SelectContactModal/components/Body'
 const propTypes = {
   ...Drawer.propTypes,
   defaultSearchFilter: PropTypes.string,
-  onSelect: PropTypes.func.isRequired
+  onSelect: PropTypes.func.isRequired,
+  renderHeaderMenu: PropTypes.func
 }
 
 const defaultProps = {
   ...Drawer.defaultProps,
-  defaultSearchFilter: ''
+  defaultSearchFilter: '',
+  renderHeaderMenu() {}
 }
 
 export function SearchContactDrawer(props) {
   return (
     <Drawer isOpen={props.isOpen} onClose={props.onClose} showFooter={false}>
-      <Drawer.Header title={props.title} />
+      <Drawer.Header title={props.title} renderMenu={props.renderHeaderMenu} />
       <Drawer.Body>
         <Body
           isDrawer

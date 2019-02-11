@@ -30,13 +30,15 @@ export function getNameInitials(name) {
 
   return name
     .split(' ')
-    .map(word => word.charAt(0).toUpperCase())
+    .map(word => /^[A-Za-z\s]+$/.test(word) ? word.charAt(0).toUpperCase() : '')
     .join('')
+    .trim()
+    .substring(0, 3)
 }
 
-async function getPhoneNumberUtil() {
+export async function getPhoneNumberUtil() {
   const {
-    PhoneNumberUtil
+    PhoneNumberUtil,
   } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
 
   return PhoneNumberUtil.getInstance()
@@ -185,14 +187,26 @@ export function getDaysFromMiliseconds(miliseconds) {
 export async function isValidPhoneNumber(phone_number) {
   const phoneUtil = await getPhoneNumberUtil()
 
-  if (
-    phone_number.trim() &&
-    phoneUtil.isValidNumber(phoneUtil.parse(phone_number))
-  ) {
-    return true
+  if (!phone_number.trim()) {
+    return false
   }
 
-  return false
+  try {
+    return phoneUtil.isValidNumber(phoneUtil.parse(phone_number, 'US'))
+  } catch(e) {
+    return false
+  }
+}
+
+export async function formatPhoneNumber(input) {
+  const phoneUtil = await getPhoneNumberUtil()
+  const parsed = phoneUtil.parse(input, 'US')
+
+  const {
+    PhoneNumberFormat
+  } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
+
+  return phoneUtil.format(parsed, PhoneNumberFormat.NATIONAL)
 }
 
 export function imageExists(url) {

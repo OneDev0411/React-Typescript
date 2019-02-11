@@ -1,4 +1,6 @@
-import { formatNumber } from 'libphonenumber-js'
+import moment from 'moment'
+
+import { formatPhoneNumber } from 'utils/format'
 
 export function currencyFilter(price) {
   return new Intl.NumberFormat('en-US', {
@@ -21,5 +23,11 @@ export function phoneNumberFilter(phone) {
     return ''
   }
 
-  return formatNumber(phone, 'National')
+  return formatPhoneNumber(phone)
+}
+
+export function formatDate(date, kwargs = {}) {
+  const { format = 'dddd, MMMM D, YYYY @ hh:mm A' } = kwargs
+
+  return moment(date).format(format)
 }

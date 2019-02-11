@@ -1,19 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import _ from 'underscore'
+import Flex from 'styled-flex-component'
 
 import Spinner from 'components/Spinner'
 
+import { getDeals, searchDeals, getContexts, getForms } from 'actions/deals'
 import {
-  getDeals,
-  searchDeals,
-  getContexts,
-  getForms
-} from '../../../../store_actions/deals'
-import {
+  getActiveTeamId,
   hasUserAccess,
   viewAsEveryoneOnTeam
-} from '../../../../utils/user-teams'
+} from 'utils/user-teams'
 
 class DealsContainer extends React.Component {
   componentDidMount() {
@@ -23,13 +21,19 @@ class DealsContainer extends React.Component {
   init = async () => {
     const { props } = this
     const { dispatch, user } = props
+    const brandId = getActiveTeamId(user)
+
     const isBackOffice = hasUserAccess(user, 'BackOffice')
 
     if (!hasUserAccess(user, 'Deals') && !isBackOffice) {
       browserHistory.push('/dashboard/mls')
     }
 
-    if (!props.deals && !props.isFetchingDeals) {
+    if (!props.contexts[brandId]) {
+      dispatch(getContexts(brandId))
+    }
+
+    if (_.size(props.deals) === 0 && !props.isFetchingDeals) {
       if (isBackOffice || viewAsEveryoneOnTeam(user)) {
         dispatch(getDeals(user))
       } else {
@@ -37,21 +41,23 @@ class DealsContainer extends React.Component {
       }
     }
 
-    if (!props.contexts) {
-      dispatch(getContexts())
-    }
-
     if (!props.forms) {
       dispatch(getForms())
     }
   }
 
+  isLoading = () => this.props.isFetchingDeals && this.props.params.id
+
   render() {
-    if (!this.props.deals) {
-      return <Spinner />
+    if (this.isLoading()) {
+      return (
+        <Flex justifyCenter alignCenter style={{ height: '100vh' }}>
+          <Spinner />
+        </Flex>
+      )
     }
 
-    return <div className="deals">{this.props.children}</div>
+    return this.props.children
   }
 }
 

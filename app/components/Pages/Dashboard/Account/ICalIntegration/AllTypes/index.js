@@ -2,11 +2,16 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
-import { SectionTitle } from '../styled'
-import RadioButton from '../../../../../../views/components/RadioButton'
+import { getContexts } from 'actions/deals'
+
+import { getActiveTeamId } from 'utils/user-teams'
+
+import RadioButton from 'components/RadioButton'
+
 import CategoryType from '../CategoryTypes'
+
 import { CategoryTypesContainer } from './styled'
-import { getContexts } from '../../../../../../store_actions/deals'
+import { SectionTitle } from '../styled'
 
 const radioButtonStyle = { display: 'block', marginTop: '2rem' }
 
@@ -31,7 +36,7 @@ const taskTypes = getItems(defaultTaskTypes)
 class ICalAllTypes extends React.Component {
   componentDidMount() {
     if (!this.props.contexts) {
-      this.props.getContexts()
+      this.props.getContexts(getActiveTeamId(this.props.user))
     }
   }
 
@@ -112,9 +117,12 @@ class ICalAllTypes extends React.Component {
   }
 }
 
-function mapToProps({ deals, contacts }) {
+function mapToProps({ deals, contacts, user }) {
+  const brandId = getActiveTeamId(user)
+
   return {
-    contexts: deals.contexts,
+    user,
+    contexts: deals.contexts[brandId],
     contactsAttributesDefs: contacts.attributeDefs.byId
   }
 }

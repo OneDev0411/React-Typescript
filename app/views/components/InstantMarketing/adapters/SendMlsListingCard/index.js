@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
@@ -17,12 +18,18 @@ import { getTemplatePreviewImage } from 'components/InstantMarketing/helpers/get
 import ActionButton from 'components/Button/ActionButton'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
-import { convertRecipientsToEmails } from '../../helpers/convert-recipients-to-emails'
-
 import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-deals'
 
 import { getTemplateTypes } from '../../helpers/get-template-types'
 import SocialDrawer from '../../components/SocialDrawer'
+
+const propTypes = {
+  isMultiListing: PropTypes.bool
+}
+
+const defaultProps = {
+  isMultiListing: false
+}
 
 class SendMlsListingCard extends React.Component {
   state = {
@@ -110,14 +117,15 @@ class SendMlsListingCard extends React.Component {
       isSendingEmail: true
     })
 
-    const emails = convertRecipientsToEmails(
-      values.recipients,
-      values.subject,
-      this.state.htmlTemplate.result
-    )
+    const email = {
+      from: values.fromId,
+      to: values.recipients,
+      subject: values.subject,
+      html: this.state.htmlTemplate.result
+    }
 
     try {
-      await sendContactsEmail(emails, this.state.owner.id)
+      await sendContactsEmail(email, this.state.owner.id)
 
       // reset form
       if (form) {
@@ -126,7 +134,9 @@ class SendMlsListingCard extends React.Component {
 
       this.props.notify({
         status: 'success',
-        message: `${emails.length} emails has been sent to your contacts`
+        message: `${
+          values.recipients.length
+        } emails has been sent to your contacts`
       })
     } catch (e) {
       console.log(e)
@@ -227,8 +237,9 @@ class SendMlsListingCard extends React.Component {
 
   get IsMultiListing() {
     return (
-      this.props.selectedTemplate &&
-      this.props.selectedTemplate.template_type === 'Listings'
+      this.props.isMultiListing ||
+      (this.props.selectedTemplate &&
+        this.props.selectedTemplate.template_type === 'Listings')
     )
   }
 
@@ -344,6 +355,9 @@ class SendMlsListingCard extends React.Component {
     )
   }
 }
+
+SendMlsListingCard.propTypes = propTypes
+SendMlsListingCard.defaultProps = defaultProps
 
 function mapStateToProps({ contacts, deals, user }) {
   return {

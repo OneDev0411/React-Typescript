@@ -10,6 +10,8 @@ export function getBrandMembers(brandId) {
         type: actionTypes.SET_USER_BRAND_MEMBERS,
         brand
       })
+
+      return brand
     } catch (e) {
       console.log(e)
       throw e

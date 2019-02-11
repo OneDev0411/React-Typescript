@@ -23,7 +23,8 @@ export async function updateTask(task, query = {}) {
       'task_type',
       'reminders',
       'assignees',
-      'description'
+      'description',
+      'metadata'
     ]
 
     task = _.omit(_.pick(task, fields), value => value == null)

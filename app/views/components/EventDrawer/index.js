@@ -2,8 +2,6 @@ import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
-import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
-
 import {
   getTask,
   updateTask,
@@ -37,6 +35,7 @@ import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
 import { Title } from './components/Title'
+import { UpdateReminder } from './components/UpdateReminder'
 import { Description } from './components/Description'
 import { EventType } from './components/EventType'
 import { FormContainer, FieldContainer, Footer } from './styled'
@@ -261,26 +260,7 @@ export class EventDrawer extends Component {
                           }}
                         />
                       )}
-                      <WhenFieldChanges
-                        set="reminder"
-                        watch="dueDate"
-                        setter={onChange => {
-                          const items = REMINDER_DROPDOWN_OPTIONS.filter(
-                            ({ value }) =>
-                              value == null ||
-                              value <=
-                                new Date(values.dueDate).getTime() -
-                                  new Date().getTime()
-                          )
-
-                          // 15 Minutes Before
-                          if (items.some(item => item.value === '900000')) {
-                            onChange(REMINDER_DROPDOWN_OPTIONS[3])
-                          } else {
-                            onChange(items[items.length - 1])
-                          }
-                        }}
-                      />
+                      <UpdateReminder dueDate={values.dueDate} />
                       <Flex style={{ marginBottom: '1rem' }}>
                         {this.isNew ? (
                           <Title fullWidth />
@@ -321,6 +301,7 @@ export class EventDrawer extends Component {
                       <AssociationsList
                         name="associations"
                         associations={values.associations}
+                        defaultAssociation={defaultAssociation}
                         handleDelete={this.handleDeleteAssociation}
                       />
 

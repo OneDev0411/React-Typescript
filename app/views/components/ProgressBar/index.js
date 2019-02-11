@@ -44,7 +44,7 @@ const Bar = styled.div`
 
 function ProgressBar(props) {
   return (
-    <Container>
+    <Container style={props.style}>
       <Bar percents={props.percents} indeterminate={props.indeterminate} />
     </Container>
   )
@@ -52,11 +52,15 @@ function ProgressBar(props) {
 
 ProgressBar.propTypes = {
   percents: PropTypes.number.isRequired,
-  indeterminate: PropTypes.bool
+  indeterminate: PropTypes.bool,
+  circular: PropTypes.bool,
+  style: PropTypes.object
 }
 
 ProgressBar.defaultProps = {
-  indeterminate: false
+  indeterminate: false,
+  circular: false,
+  style: {}
 }
 
 export default ProgressBar

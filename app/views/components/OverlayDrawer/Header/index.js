@@ -1,17 +1,35 @@
 import React from 'react'
+import Flex from 'styled-flex-component'
 
 import { Title, Container } from './styled'
 import IconButton from '../../Button/IconButton'
 import CloseIcon from '../../SvgIcons/Close/CloseIcon'
 
-const Header = ({ title, children, onClose }) => (
-  <Container>
-    {title && <Title>{title}</Title>}
-    {children}
-    <IconButton type="button" isFit iconSize="large" inverse onClick={onClose}>
-      <CloseIcon />
-    </IconButton>
-  </Container>
-)
+const Header = ({ title, renderMenu, onClose, style, render }) => {
+  if (render && typeof render === 'function') {
+    return <Container style={style}>{render()}</Container>
+  }
+
+  const hasMenu = renderMenu && typeof renderMenu === 'function'
+
+  return (
+    <Container style={style}>
+      <Flex alignCenter>{title && <Title>{title}</Title>}</Flex>
+      <Flex alignCenter>
+        {hasMenu && renderMenu()}
+        <IconButton
+          type="button"
+          isFit
+          iconSize="large"
+          inverse
+          onClick={onClose}
+          style={{ marginLeft: hasMenu ? '1rem' : 0 }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </Flex>
+    </Container>
+  )
+}
 
 export default Header

@@ -3,7 +3,7 @@
  * @param {object} values The form values
  * @returns {object} a formated object
  */
-export async function preSaveFormat(values, originalValues, deal) {
+export async function preSaveFormat(values, originalValues, deal, template) {
   const {
     assignees,
     description,
@@ -24,6 +24,7 @@ export async function preSaveFormat(values, originalValues, deal) {
     title,
     due_date: dueDateTimestamp / 1000,
     task_type,
+    metadata: { template },
     assignees: assignees.map(a => a.id),
     status:
       dueDateTimestamp <= new Date().getTime() ? 'DONE' : status || 'PENDING'
@@ -35,7 +36,7 @@ export async function preSaveFormat(values, originalValues, deal) {
 
   if (task.status === 'DONE') {
     task.reminders = []
-  } else if (reminder.value != null) {
+  } else if (reminder.value >= 0) {
     task.reminders = [
       {
         is_relative: true,
@@ -44,7 +45,7 @@ export async function preSaveFormat(values, originalValues, deal) {
     ]
   } else if (
     (originalValues && originalValues.reminders == null) ||
-    (originalValues && originalValues.reminders && reminder.value == null)
+    (originalValues && originalValues.reminders && reminder.value == -1)
   ) {
     task.reminders = []
   }

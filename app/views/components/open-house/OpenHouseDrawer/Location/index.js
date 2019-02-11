@@ -18,7 +18,11 @@ class LocationComponent extends React.Component {
             showDirection={false}
           />
         </div>
-        <AssociationItem association={location} isRemovable={false} />
+        <AssociationItem
+          association={location}
+          isRemovable={false}
+          style={{ display: 'inline-flex' }}
+        />
       </div>
     )
   }

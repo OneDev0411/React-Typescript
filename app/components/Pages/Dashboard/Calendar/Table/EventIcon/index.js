@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { eventTypesIcons } from '../../../../../../views/utils/event-types-icons'
 import { importantDatesIcons } from '../../../../../../views/utils/important-dates-icons'
 
@@ -15,7 +16,9 @@ const getIcon = Icon => (
 const getImportantDateIcon = label => {
   if (importantDatesIcons[label]) {
     return importantDatesIcons[label]
-  } else if (label === 'Spouse birthday') {
+  }
+
+  if (label === 'Spouse birthday') {
     return importantDatesIcons.Birthday
   }
 
@@ -25,7 +28,9 @@ const getImportantDateIcon = label => {
 const getCrmTaskIcon = type => {
   if (eventTypesIcons[type]) {
     return eventTypesIcons[type]
-  } else if (type === 'Message') {
+  }
+
+  if (type === 'Message') {
     return eventTypesIcons.Mail
   }
 

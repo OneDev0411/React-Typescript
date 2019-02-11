@@ -8,7 +8,8 @@ import { OpenHouseDrawer } from '../OpenHouseDrawer'
 const propTypes = {
   deal: PropTypes.shape().isRequired,
   style: PropTypes.shape(),
-  user: PropTypes.shape().isRequired
+  user: PropTypes.shape().isRequired,
+  children: PropTypes.object
 }
 
 const defaultProps = {
@@ -23,16 +24,30 @@ export class CreateOpenHouse extends React.Component {
   handleOpen = () => this.setState({ isOpen: true })
   handleClose = () => this.setState({ isOpen: false })
 
+  handleSubmitCallback = event => {
+    if (this.props.submitCallback) {
+      this.props.submitCallback(event)
+    }
+
+    this.handleClose()
+  }
+
   render() {
     return (
       <Fragment>
-        <ActionButton
-          appearance="outline"
-          onClick={this.handleOpen}
-          style={this.props.style}
-        >
-          Create OH Event
-        </ActionButton>
+        {this.props.children ? (
+          React.cloneElement(this.props.children, {
+            onClick: this.handleOpen
+          })
+        ) : (
+          <ActionButton
+            appearance="outline"
+            onClick={this.handleOpen}
+            style={this.props.style}
+          >
+            Create OH Event
+          </ActionButton>
+        )}
 
         {this.state.isOpen && (
           <OpenHouseDrawer
@@ -40,7 +55,7 @@ export class CreateOpenHouse extends React.Component {
             user={this.props.user}
             deal={this.props.deal}
             onClose={this.handleClose}
-            submitCallback={this.handleClose}
+            submitCallback={this.handleSubmitCallback}
           />
         )}
       </Fragment>

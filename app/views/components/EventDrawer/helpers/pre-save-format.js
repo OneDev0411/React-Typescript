@@ -34,7 +34,7 @@ export async function preSaveFormat(values, originalValues) {
 
   if (task.status === 'DONE') {
     task.reminders = []
-  } else if (reminder.value != null) {
+  } else if (reminder.value >= 0) {
     task.reminders = [
       {
         is_relative: true,
@@ -43,7 +43,7 @@ export async function preSaveFormat(values, originalValues) {
     ]
   } else if (
     (originalValues && originalValues.reminders == null) ||
-    (originalValues && originalValues.reminders && reminder.value == null)
+    (originalValues && originalValues.reminders && reminder.value == -1)
   ) {
     task.reminders = []
   }

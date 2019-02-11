@@ -11,8 +11,8 @@ export const InputContainer = styled.div`
 
 export const InputLabel = styled.label`
   font-weight: 400;
-  font-size: 13px;
-  color: ${props => (props.hasError ? 'red' : '#000000')};
+  font-size: 1rem;
+  color: ${props => (props.hasError ? 'red' : '#7f7f7f')};
   font-weight: ${props => (props.hasError ? '500' : 'normal')};
 `
 

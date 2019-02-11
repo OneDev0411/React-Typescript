@@ -48,7 +48,7 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
       return
     }
 
-    const { ids, filters, users, type } = ctx.request.body
+    const { ids, filters, users, type, filter_type = 'and' } = ctx.request.body
 
     const { brand } = ctx.params
     let data = {}
@@ -69,9 +69,9 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
     let url
 
     if (type === 'same') {
-      url = '/analytics/contact_joint_export/facts?format=csv'
+      url = `/analytics/contact_joint_export/facts?filter_type=${filter_type}&format=csv`
     } else if (type === 'separate') {
-      url = '/analytics/contact_export/facts?format=csv'
+      url = `/analytics/contact_export/facts?filter_type=${filter_type}&format=csv`
     }
 
     const response = await ctx

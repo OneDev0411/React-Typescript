@@ -8,23 +8,16 @@ import { getMQWidth } from './helpers'
 
 const Container = styled.div`
   padding: 2rem;
+  height: 25rem;
   display: flex;
   justify-content: center;
   flex-direction: column;
-  align-items: center;
   margin-bottom: 1.5rem;
   text-align: center;
   border-radius: 3px;
-  background: url('/static/images/marketing/store/cards/brand-campaign/brand_campaign_bg@3x.jpg')
+  background: url('/static/images/marketing/store/cards/brand-campaign/brand-campaign@2x.png')
     no-repeat;
   background-size: cover;
-
-  @media screen and (min-width: ${props => getMQWidth(85, props)}) {
-    height: 25rem;
-    padding-right: 5rem;
-    flex-direction: row;
-    justify-content: space-between;
-  }
 `
 
 const ContentWrapper = styled.div`
@@ -32,11 +25,9 @@ const ContentWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 2rem;
 
-  @media screen and (min-width: ${props => getMQWidth(85, props)}) {
+  @media screen and (min-width: ${props => getMQWidth(75, props)}) {
     padding-left: 3rem;
-    margin-bottom: 0;
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
@@ -48,7 +39,7 @@ export default function Instagram(props) {
 
   return (
     <Container isSideMenuOpen={props.isSideMenuOpen}>
-      <ContentWrapper isSideMenuOpen={props.isSideMenuOpen}>
+      <ContentWrapper>
         <Jumbo style={{ marginBottom: '0.5rem', color }}>
           Extraordinary begins at home.
         </Jumbo>
@@ -65,11 +56,6 @@ export default function Instagram(props) {
           Browse Designs
         </Button>
       </ContentWrapper>
-      <img
-        alt="fg"
-        style={{ width: '21.25rem' }}
-        src="/static/images/marketing/store/cards/brand-campaign/brand_campaign_fg.png"
-      />
     </Container>
   )
 }

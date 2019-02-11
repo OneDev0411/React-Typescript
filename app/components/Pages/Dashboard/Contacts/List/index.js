@@ -135,7 +135,7 @@ class ContactsList extends React.Component {
         activeSegment: segment
       },
       () => {
-        let { conditionOperator, viewAsUsers } = this.props
+        let conditionOperator = 'and'
 
         if (segment.args && segment.args.filter_type) {
           conditionOperator = segment.args.filter_type
@@ -146,7 +146,7 @@ class ContactsList extends React.Component {
           searchInputValue: this.state.searchInputValue,
           start: 0,
           order: this.order,
-          viewAsUsers,
+          viewAsUsers: this.props.viewAsUsers,
           conditionOperator
         })
       }
@@ -189,7 +189,7 @@ class ContactsList extends React.Component {
     this.setState({ searchInputValue: value })
     this.handleFilterChange({
       filters: this.state.filters,
-      searchInputValie: value
+      searchInputValue: value
     })
   }
 
@@ -238,14 +238,15 @@ class ContactsList extends React.Component {
     this.setState({ isFetchingMoreContacts: false })
   }
 
-  handleOnDelete = (e, { selectedRows }) => {
+  handleOnDelete = (e, { selectedRows, resetSelectedRows }) => {
     const selectedRowsLength = selectedRows.length
 
     this.props.confirmation({
       show: true,
       confirmLabel: 'Delete',
       message: `Delete ${selectedRowsLength > 1 ? 'contacts' : 'contact'}`,
-      onConfirm: () => this.handleDeleteContact(selectedRows),
+      onConfirm: () =>
+        this.handleDeleteContact(selectedRows, resetSelectedRows),
       description: `Are you sure you want to delete ${
         selectedRowsLength > 1
           ? `these ${selectedRowsLength} contacts`
@@ -254,14 +255,14 @@ class ContactsList extends React.Component {
     })
   }
 
-  handleDeleteContact = async ids => {
+  handleDeleteContact = async (ids, resetRowsHandler) => {
     try {
       this.rowsUpdating(true)
 
       await this.props.deleteContacts(ids)
 
       this.rowsUpdating(false)
-      this.resetSelectedRows()
+      resetRowsHandler()
     } catch (error) {
       console.log(error)
     }
@@ -270,6 +271,7 @@ class ContactsList extends React.Component {
   rowsUpdating = isRowsUpdating => this.setState({ isRowsUpdating })
 
   resetSelectedRows = () => {
+    console.log('reset rows')
     resetGridSelectedItems('contacts')
   }
 
@@ -280,7 +282,8 @@ class ContactsList extends React.Component {
       undefined,
       this.state.searchInputValue,
       this.order,
-      this.props.viewAsUsers
+      this.props.viewAsUsers,
+      this.props.conditionOperator
     )
   }
 
@@ -328,7 +331,8 @@ class ContactsList extends React.Component {
             rowsUpdating={this.rowsUpdating}
             onChangeSelectedRows={this.onChangeSelectedRows}
             onRequestDelete={this.handleOnDelete}
-            filters={this.state.filter}
+            filters={this.state.filters}
+            conditionOperator={this.props.conditionOperator}
             users={viewAsUsers}
           />
         </PageContent>

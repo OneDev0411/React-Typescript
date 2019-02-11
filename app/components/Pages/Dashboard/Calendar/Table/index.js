@@ -5,13 +5,16 @@ import ScrollDetector from 'react-scroll-detector'
 import moment from 'moment'
 import _ from 'underscore'
 
+import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
+
 import { primary } from 'views/utils/colors'
 import Grid from 'views/components/Grid/Table'
 import { grey } from 'views/utils/colors'
 
-import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
-
 import { goTo } from 'utils/go-to'
+
+import { getSelectedDate } from 'reducers/calendar'
+import { setDate } from 'actions/calendar'
 
 import { GridContainer, TableHeader, Label, Indicator, Title } from './styled'
 import EmptyState from './EmptyState'
@@ -22,7 +25,7 @@ export class Table extends React.Component {
   constructor(props) {
     super(props)
 
-    this.getGridTrProps = this.getGridTrProps.bind(this)
+    this.onHoverDate = _.debounce(this.onHoverDate, 300)
   }
 
   getDayHeader = date => moment(date).format('dddd, MMM DD, YYYY')
@@ -58,7 +61,7 @@ export class Table extends React.Component {
     return table
   }
 
-  time(rowData) {
+  eventTime = rowData => {
     if (rowData.object_type !== 'crm_task') {
       return 'All day'
     }
@@ -89,13 +92,15 @@ export class Table extends React.Component {
         render: ({ rowData }) => (
           <Flex style={{ padding: '4px 1rem' }}>
             <EventIcon event={rowData} />
+
             <div>
               <Title onClick={this.onTitleClick(rowData)}>
                 {rowData.title}
               </Title>
+
               <Flex>
-                {this.time(rowData)}
-                <Indicator>|</Indicator>
+                {this.eventTime(rowData)}
+                <Indicator> | </Indicator>
                 <Label>{rowData.type_label}</Label>
               </Flex>
             </div>
@@ -124,11 +129,16 @@ export class Table extends React.Component {
         break
 
       case 'crm_task':
-        onClick = () => this.props.onSelectTask(row.crm_task)
+        onClick = () =>
+          this.props.onSelectTask({ id: row.crm_task, type: row.event_type })
         break
     }
 
     return onClick
+  }
+
+  onHoverDate = value => {
+    this.props.setDate(new Date(value))
   }
 
   getGridHeaderProps = () => ({
@@ -141,6 +151,10 @@ export class Table extends React.Component {
     style: {
       marginBottom: 0
     }
+  })
+
+  getSubTableProps = group => ({
+    onMouseMove: () => this.onHoverDate(group.date)
   })
 
   getGridTrProps = (rowIndex, { original: row }) => {
@@ -204,7 +218,6 @@ export class Table extends React.Component {
             }
             absolute={false}
           />
-
           <Fetching
             absolute
             show={isFetching && loadingPosition === positions.Middle}
@@ -215,6 +228,7 @@ export class Table extends React.Component {
             data={data}
             EmptyState={EmptyState}
             onTableRef={onRef}
+            getSubTableProps={this.getSubTableProps}
             getTrProps={this.getGridTrProps}
             getTdProps={this.getGridTdProps}
             getHeaderProps={this.getGridHeaderProps}
@@ -243,10 +257,13 @@ export class Table extends React.Component {
 
 function mapStateToProps({ calendar }) {
   return {
-    selectedDate: new Date(calendar.selectedDate),
+    selectedDate: getSelectedDate(calendar),
     calendar: calendar.list,
     calendarDays: calendar.byDay
   }
 }
 
-export default connect(mapStateToProps)(Table)
+export default connect(
+  mapStateToProps,
+  { setDate }
+)(Table)

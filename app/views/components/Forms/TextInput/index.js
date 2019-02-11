@@ -23,21 +23,22 @@ export const TextInput = ({
   <Container>
     {hasLabel && (
       <InputLabel hasError={meta.submitFailed && meta.error}>
-        {labelText || placeholder}&nbsp;
+        {labelText || placeholder}
+        &nbsp;
         <InputRequired>{isRequired && '*'}</InputRequired>
       </InputLabel>
     )}
 
     <InputField
       {...input}
-      autocomplete={false}
+      autoComplete="Off"
       placeholder={placeholder}
       hasError={highlightOnError && meta.submitFailed && meta.error}
       {...rest}
     />
 
-    {showError &&
-      meta.error &&
-      meta.touched && <InputError>{meta.error}</InputError>}
+    {showError && meta.error && meta.touched && (
+      <InputError>{meta.error}</InputError>
+    )}
   </Container>
 )

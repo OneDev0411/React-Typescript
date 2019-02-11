@@ -1,31 +1,32 @@
 import React from 'react'
+import _ from 'underscore'
 import { connect } from 'react-redux'
 
-import { uppercaseFirstLetter } from '../../../../../utils/helpers'
+import { uppercaseFirstLetter } from 'utils/helpers'
 
 import {
   getSavedSegments,
   deleteFilterSegment,
   changeActiveFilterSegment
-} from '../../../../../store_actions/filter-segments'
+} from 'actions/filter-segments'
+import { confirmation } from 'actions/confirmation'
 
 import {
   isListFetched,
   selectActiveSavedSegment,
   getSegments,
   getDefaultList
-} from '../../../../../reducers/filter-segments'
+} from 'reducers/filter-segments'
 
-import { confirmation } from '../../../../../store_actions/confirmation'
-import IconClose from '../../../../../views/components/SvgIcons/Close/CloseIcon'
+import ToolTip from 'components/tooltip'
+import IconClose from 'components/SvgIcons/Close/CloseIcon'
+import LoadingIcon from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import {
   ListTitle,
   ListItem,
   ListItemName,
   DeleteButton
-} from '../../../../../views/components/SlideMenu/Menu/styled'
-
-import ToolTip from 'components/tooltip'
+} from 'components/SlideMenu/Menu/styled'
 
 class SegmentsList extends React.Component {
   state = {
@@ -126,7 +127,7 @@ class SegmentsList extends React.Component {
 
         {isFetching && (
           <ListItem>
-            <i className="fa fa-spin fa-spinner" />
+            <LoadingIcon />
           </ListItem>
         )}
       </div>

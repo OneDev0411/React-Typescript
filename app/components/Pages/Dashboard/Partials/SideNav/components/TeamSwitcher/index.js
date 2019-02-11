@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 import idx from 'idx'
 
@@ -8,12 +9,17 @@ import { putUserSetting } from '../../../../../../../models/user/put-user-settin
 import flattenBrand from '../../../../../../../utils/flatten-brand'
 import CheckmarkIcon from '../../../../../../../views/components/SvgIcons/Checkmark/IconCheckmark'
 import Loading from '../../../../../../../views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
-import { primary } from '../../../../../../../views/utils/colors'
+
+import { primary, borderColor } from '../../../../../../../views/utils/colors'
 
 import Avatar from '../../../../../../Partials/UserAvatar'
 
 import ViewAsFilter from './ViewAsFilter'
 import { TeamName, Button } from './styled'
+
+const Team = styled.li`
+  border-bottom: 1px solid ${borderColor};
+`
 
 export default class TeamSwitcher extends React.Component {
   state = {

@@ -1,7 +1,8 @@
 import _ from 'underscore'
+
 import * as actionTypes from '../../constants/deals'
 
-export default (state = null, action) => {
+export default (state = {}, action) => {
   switch (action.type) {
     case actionTypes.NO_DEAL:
     case actionTypes.CLEAR_DEALS:
@@ -121,4 +122,4 @@ export default (state = null, action) => {
 }
 
 export const selectDeals = state => (state == null ? [] : Object.values(state))
-export const selectDeal = (state, id) => (state == null ? null : state[id])
+export const selectDealById = (state, id) => (state ? state[id] : null)

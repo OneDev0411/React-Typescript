@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
+
 import { getMessages } from '../../../../../store_actions/chatroom'
 import Toolbar from '../Rooms/toolbar'
 import MessageItem from './message-item'
@@ -287,14 +288,13 @@ class Messages extends React.Component {
 
         {roomId && showToolbar && <Toolbar roomId={roomId} />}
 
-        {roomId &&
-          !messages && (
-            <img
-              alt="loading"
-              className="loading"
-              src="/static/images/loading-states/messages.svg"
-            />
-          )}
+        {roomId && !messages && (
+          <img
+            alt="loading"
+            className="loading"
+            src="/static/images/loading-states/messages.svg"
+          />
+        )}
 
         <UploadHandler
           disabled={disableUpload}
@@ -334,18 +334,17 @@ class Messages extends React.Component {
 
         <UserTyping roomId={roomId} />
 
-        {roomId &&
-          showComposeMessage && (
-            <ComposeMessage
-              user={user}
-              roomId={roomId}
-              isInstantChat={isInstantChat}
-              onHeightChange={height =>
-                this.setState({ composeMessageHeight: height })
-              }
-              onComposeMessage={() => this.scrollEnd()}
-            />
-          )}
+        {roomId && showComposeMessage && (
+          <ComposeMessage
+            user={user}
+            roomId={roomId}
+            isInstantChat={isInstantChat}
+            onHeightChange={height =>
+              this.setState({ composeMessageHeight: height })
+            }
+            onComposeMessage={() => this.scrollEnd()}
+          />
+        )}
       </div>
     )
   }

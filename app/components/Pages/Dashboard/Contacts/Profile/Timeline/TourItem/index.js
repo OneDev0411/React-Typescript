@@ -52,7 +52,7 @@ export class TourItem extends React.Component {
               </div>
             )}
             <Associations
-              defaultAssociationId={this.props.defaultAssociationId}
+              defaultAssociation={this.props.defaultAssociation}
               setAssociations={this.setAssociations}
               task={task}
             />

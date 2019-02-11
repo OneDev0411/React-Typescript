@@ -11,23 +11,26 @@ import { selectDefinitionByName } from '../../../../reducers/contacts/attributeD
 import { FinalFormDrawer } from '../../FinalFormDrawer'
 import { TextField, Select } from '../../final-form-fields'
 
+import { Owner } from './Owner'
 import { Emails } from './Emails'
 import { Phones } from './Phones'
 import { preSaveFormat, submitValidate, getDefaultOptions } from './helpers'
 
 const propTypes = {
   section: PropTypes.string,
-  submitCallback: PropTypes.func
+  submitCallback: PropTypes.func,
+  user: PropTypes.shape().isRequired
 }
 const defaultProps = {
   section: '',
-  submitCallback: () => {}
+  submitCallback() {}
 }
 
 const INITIAL_VALUES = {
   first_name: '',
   last_name: '',
   middle_name: '',
+  source: '',
   email: [{ label: { title: 'Personal', value: 'Personal' } }],
   phone_number: [{ label: { title: 'Mobile', value: 'Mobile' } }],
   title: { title: '-Select-', value: '-Select-' }
@@ -50,7 +53,7 @@ class NewContactDrawer extends React.Component {
       }
 
       const response = await this.props.dispatch(
-        createContacts([{ attributes, user: this.props.user.id }], query)
+        createContacts([{ attributes, user: values.owner.id }], query)
       )
 
       const contact = response.data[0]
@@ -80,7 +83,10 @@ class NewContactDrawer extends React.Component {
     return (
       <FinalFormDrawer
         formId="create-contact-form"
-        initialValues={INITIAL_VALUES}
+        initialValues={{
+          ...INITIAL_VALUES,
+          owner: this.props.user
+        }}
         isOpen={this.props.isOpen}
         onClose={this.props.onClose}
         onSubmit={this.onSubmit}
@@ -99,6 +105,7 @@ class NewContactDrawer extends React.Component {
             <TextField name="first_name" label="First Name" />
             <TextField name="middle_name" label="Middle Name" />
             <TextField name="last_name" label="Last Name" />
+            <TextField name="source" label="Source" />
             <Emails
               labels={this.getDefaultValues('email', 'labels')}
               mutators={form.mutators}
@@ -107,6 +114,7 @@ class NewContactDrawer extends React.Component {
               labels={this.getDefaultValues('phone_number', 'labels')}
               mutators={form.mutators}
             />
+            <Owner name="owner" user={this.props.user} />
             {submitError && (
               <Alert
                 type="error"

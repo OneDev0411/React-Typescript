@@ -114,32 +114,27 @@ const AsyncDealCreateOffer = Load({
 
 const AsyncDealsList = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/list' /* webpackChunkName: "deal_l" */)
+    import('../components/Pages/Dashboard/Deals/List' /* webpackChunkName: "deal_l" */)
 })
 
 const AsyncDealDashboard = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/dashboard' /* webpackChunkName: "deal_d" */)
+    import('../components/Pages/Dashboard/Deals/Dashboard' /* webpackChunkName: "deal_d" */)
 })
 
-const AsyncDealFileManager = Load({
+const AsyncDealFileViewer = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/file-manager' /* webpackChunkName: "deal_fm" */)
-})
-
-const AsyncDealFormViewer = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Deals/form-viewer' /* webpackChunkName: "deal_fv" */)
+    import('../components/Pages/Dashboard/Deals/FileViewer' /* webpackChunkName: "deal_fv" */)
 })
 
 const AsyncDealFormEdit = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/form-edit' /* webpackChunkName: "deal_fe" */)
+    import('../components/Pages/Dashboard/Deals/FormEdit' /* webpackChunkName: "deal_fe" */)
 })
 
 const AsyncAgentNetwork = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/agent-network' /* webpackChunkName: "agent-network" */)
+    import('../components/Pages/Dashboard/Deals/AgentNetwork' /* webpackChunkName: "agent-network" */)
 })
 
 /* ==================================== */
@@ -275,6 +270,11 @@ const AsyncSearchWidget = Load({
 //  Other Pages
 /* ==================================== */
 
+const AsyncShare = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Marketing/SharePage' /* webpackChunkName: "mc_share_page" */)
+})
+
 const AsyncBrands = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Brand/index' /* webpackChunkName: "brand_settings" */)
@@ -349,6 +349,7 @@ export default (
     <Route path="/" component={AsyncAuthenticationLayout}>
       <IndexRoute component={Landing} />
       <Route path="/branch" component={AsyncBranch} />
+      <Route path="/share" component={AsyncShare} />
 
       <Route
         path="register"
@@ -390,6 +391,7 @@ export default (
 
     <Route path="/" component={AppLayout} onEnter={authenticate}>
       <Route path="/branch" component={AsyncBranch} />
+      <Route path="/share" component={AsyncShare} />
 
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />
@@ -423,11 +425,6 @@ export default (
           path="/dashboard/deals/create(/:id)"
           component={AsyncDealCreate}
         />
-        <Route path="/dashboard/deals/:id" component={AsyncDealDashboard} />
-        <Route
-          path="/dashboard/deals/:id/files"
-          component={AsyncDealFileManager}
-        />
         <Route
           path="/dashboard/deals/:id/form-edit/:taskId"
           component={AsyncDealFormEdit}
@@ -437,12 +434,16 @@ export default (
           component={AsyncDealCreateOffer}
         />
         <Route
-          path="/dashboard/deals/:dealId/form-viewer/:taskId(/:type/:objectId)"
-          component={AsyncDealFormViewer}
+          path="/dashboard/deals/:id/view/:taskId(/:entityType/:entityId)"
+          component={AsyncDealFileViewer}
         />
         <Route
-          path="/dashboard/deals/:id/network"
+          path="/dashboard/deals/:id/marketing/network"
           component={AsyncAgentNetwork}
+        />
+        <Route
+          path="/dashboard/deals/:id(/:tab)"
+          component={AsyncDealDashboard}
         />
       </Route>
 

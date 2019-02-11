@@ -1,0 +1,17 @@
+export const EDIT_BUTTON = 0
+export const SHOW_COMMENTS_BUTTON = 1
+export const DOCUSIGN_BUTTON = 2
+export const VOID_BUTTON = 3
+export const RESEND_BUTTON = 4
+export const EMAIL_BUTTON = 5
+export const MOVE_BUTTON = 6
+export const VIEW_BUTTON = 7
+export const TASK_NOTIFICATION_BUTTON = 8
+export const UPLOAD_BUTTON = 9
+export const RENAME_BUTTON = 10
+export const DELETE_FILE_BUTTON = 11
+export const DOWNLOAD_BUTTON = 12
+export const REVIEW_ENVELOPE_BUTTON = 13
+export const SPLIT_PDF_BUTTON = 14
+export const APPROVE_TASK_BUTTON = 15
+export const DECLINE_TASK_BUTTON = 16

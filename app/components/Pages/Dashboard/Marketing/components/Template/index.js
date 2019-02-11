@@ -91,7 +91,7 @@ export class Template extends React.Component {
     }
 
     return (
-      <Box isSideMenuOpen={props.isSideMenuOpen}>
+      <Box isSideMenuOpen={props.isSideMenuOpen} isInstance={isInstance}>
         <ImageContainer
           onMouseEnter={this.handleMouseOver}
           onMouseLeave={this.handleMouseOver}
@@ -128,7 +128,7 @@ export class Template extends React.Component {
           )}
         </ImageContainer>
         {isInstance && (
-          <div style={{ marginTop: '0.5rem' }}>{`Created ${fecha.format(
+          <div className="c-template__meta">{`Created ${fecha.format(
             new Date(template.created_at * 1000),
             '[on] MMMM DD, YYYY [at] hh:mm A'
           )}`}</div>

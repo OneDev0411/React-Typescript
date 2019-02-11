@@ -1,6 +1,5 @@
 /* eslint-disable object-shorthand */
 const path = require('path')
-const packages = require('../../package.json').dependencies
 
 const env = process.env.NODE_ENV || 'development'
 const __DEV__ = env === 'development'
@@ -29,7 +28,6 @@ const config = {
   },
   globals: {
     'process.env': {
-      PDFJS_VERSION: JSON.stringify(packages['pdfjs-dist'].substring(1)),
       NODE_ENV: JSON.stringify(env),
       APP_URL: JSON.stringify(process.env.APP_URL),
       RECHAT_API_URL: JSON.stringify(process.env.RECHAT_API_URL),
@@ -43,7 +41,11 @@ const config = {
       GOOGLE_API_KEY: JSON.stringify(process.env.GOOGLE_API_KEY),
       ITUNES_URL: JSON.stringify(process.env.ITUNES_URL),
       RECHAT_FORMS_URL: JSON.stringify(process.env.RECHAT_FORMS_URL),
-      RECHAT_STORE_URL: JSON.stringify(process.env.RECHAT_STORE_URL)
+      RECHAT_STORE_URL: JSON.stringify(process.env.RECHAT_STORE_URL),
+      AWS_ACCESS_KEY: JSON.stringify(process.env.AWS_ACCESS_KEY),
+      AWS_SECRET_ACCESS_KEY: JSON.stringify(process.env.AWS_SECRET_ACCESS_KEY),
+      ASSETS_BUCKET: JSON.stringify(process.env.ASSETS_BUCKET),
+      ASSETS_BASEURL: JSON.stringify(process.env.ASSETS_BASEURL)
     },
     __DEV__: __DEV__,
     NODE_ENV: env,

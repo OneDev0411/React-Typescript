@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import IconInfoOutline from 'components/SvgIcons/InfoOutline/IconInfoOutline'
@@ -26,6 +27,17 @@ import { Contact } from './columns/Contact'
 import IconButton from '../../../../../../views/components/Button/IconButton'
 import IconDeleteOutline from '../../../../../../views/components/SvgIcons/DeleteOutline/IconDeleteOutline'
 import Tooltip from '../../../../../../views/components/tooltip'
+
+const IconLastTouch = styled(IconInfoOutline)`
+  margin-left: 0.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: 0.2s ease-in all;
+
+  &:hover {
+    opacity: 0.5;
+  }
+`
 
 class ContactsList extends React.Component {
   state = { selectedTagContact: [] }
@@ -55,9 +67,9 @@ class ContactsList extends React.Component {
           Last Touch
           <Tooltip
             placement="bottom"
-            caption="This column shows the most recent event that has been marked as completed."
+            caption="This shows the last time you were in touch with a contact. Save events to keep it updated."
           >
-            <IconInfoOutline style={{ marginLeft: '0.5rem' }} />
+            <IconLastTouch />
           </Tooltip>
         </React.Fragment>
       ),
@@ -97,6 +109,7 @@ class ContactsList extends React.Component {
       render: ({ selectedRows }) => (
         <ExportContacts
           filters={this.props.filters}
+          conditionOperator={this.props.conditionOperator}
           users={this.props.users}
           exportIds={selectedRows}
           disabled={this.props.isFetching}
@@ -106,7 +119,7 @@ class ContactsList extends React.Component {
     {
       display: ({ selectedRows }) => selectedRows.length > 0,
       render: ({ selectedRows }) => (
-        <SendMlsListingCard selectedRows={selectedRows}>
+        <SendMlsListingCard selectedRows={selectedRows} isMultiListing>
           Marketing
         </SendMlsListingCard>
       )

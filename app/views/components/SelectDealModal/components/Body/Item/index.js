@@ -3,8 +3,15 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
+import {
+  getField,
+  getStatus,
+  getSide,
+  getAddress,
+  getFormattedPrice
+} from 'models/Deal/helpers/context'
+
 import { getStatusColor } from '../../../../../../utils/listing'
-import * as Deal from '../../../../../../models/Deal/context-helper'
 
 import Avatar from '../../../../Avatar'
 import { Container } from '../../../../SelectContactModal/components/ContactItem'
@@ -28,7 +35,7 @@ Item.propTypes = {
 
 export function Item(props) {
   const { item, onClickHandler } = props
-  const status = Deal.getStatus(item)
+  const status = getStatus(item)
 
   return (
     <Container {...props} onClick={() => onClickHandler(item)}>
@@ -36,13 +43,11 @@ export function Item(props) {
       <div style={{ paddingLeft: '1em' }}>
         <Flex alignCenter>
           <Details>{getPrice(item) || '$0'}</Details>
-          <Status status={status}>{status || 'Unknown'}</Status>
+          <Status status={status}>{status || 'Draft'}</Status>
         </Flex>
         <Flex alignCenter style={{ color: '#7f7f7f' }}>
-          <Details style={{ marginRight: '0.5em' }}>
-            {Deal.getSide(item)}
-          </Details>
-          <span>{Deal.getAddress(item)}</span>
+          <Details style={{ marginRight: '0.5em' }}>{getSide(item)}</Details>
+          <span>{getAddress(item)}</span>
         </Flex>
       </div>
     </Container>
@@ -52,16 +57,16 @@ export function Item(props) {
 function getAvatarProps(deal) {
   return {
     size: 40,
-    image: Deal.getField(deal, 'photo'),
+    image: getField(deal, 'photo'),
     placeHolderImage: '/static/icons/associated-deals-place-holder.svg'
   }
 }
 
 function getPrice(deal) {
   const price =
-    Deal.getField(deal, 'sales_price') ||
-    Deal.getField(deal, 'list_price') ||
-    Deal.getField(deal, 'lease_price')
+    getField(deal, 'sales_price') ||
+    getField(deal, 'list_price') ||
+    getField(deal, 'lease_price')
 
-  return Deal.getFormattedPrice(price)
+  return getFormattedPrice(price)
 }

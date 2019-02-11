@@ -213,7 +213,9 @@ const branch = ({
     const { receiving_user, action } = branchData
 
     if (action) {
-      if (receiving_user) {
+      if (action === 'ShareTemplateInstance') {
+        browserHistory.push({ pathname: '/share', state: branchData })
+      } else if (receiving_user) {
         getUser(receiving_user)
           .then(receivingUser => {
             const {
