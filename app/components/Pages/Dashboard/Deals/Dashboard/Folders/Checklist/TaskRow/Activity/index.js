@@ -20,7 +20,11 @@ export function Activity(props) {
           .unix(props.latestActivity.created_at)
           .format('MMM DD, YYYY, hh:mm A')}
       >
-        <span>
+        <span
+          style={{
+            textTransform: 'capitalize'
+          }}
+        >
           {moment.unix(props.latestActivity.created_at).fromNow()}
           ,&nbsp;
         </span>
