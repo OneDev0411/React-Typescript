@@ -189,7 +189,7 @@ class ContactsList extends React.Component {
     this.setState({ searchInputValue: value })
     this.handleFilterChange({
       filters: this.state.filters,
-      searchInputValie: value
+      searchInputValue: value
     })
   }
 
