@@ -92,12 +92,27 @@ export class SelectablePlugin {
     return JSON.parse(this.StorageEngine) || {}
   }
 
+  get SelectedCount() {
+    if (this.isEntireRowsSelected()) {
+      return this.totalCount - this.ExcludedRows.length
+    }
+
+    return this.SelectedRows.length
+  }
+
   /**
    * returns whether a row is selected or not
    * @param { UUID } id - the row id
    */
   isRowSelected = id =>
     this.StorageObject.selectedRows && this.StorageObject.selectedRows[id]
+
+  /**
+   * returns whether a row is excluded from entire items selection or not
+   * @param { UUID } id - the row id
+   */
+  isRowExcluded = id =>
+    this.StorageObject.excludedRows && this.StorageObject.excludedRows[id]
 
   /**
    * returns true when some rows is selected
@@ -107,12 +122,19 @@ export class SelectablePlugin {
     Object.keys(this.StorageObject.selectedRows).length > 0
 
   /**
+   * returns true when some rows are excluded from enitre items selection
+   */
+  someRowsExcluded = () =>
+    this.StorageObject.excludedRows &&
+    Object.keys(this.StorageObject.excludedRows).length > 0
+
+  /**
    * checks whether all rows are selected or not
    */
   isAllRowsSelected = () => this.StorageObject.selectAllRows === true
 
   /**
-   * checks whether all rows are selected or not
+   * checks whether entier rows are selected or not
    */
   isEntireRowsSelected = () => this.StorageObject.selectEntireRows === true
 
@@ -145,6 +167,13 @@ export class SelectablePlugin {
   }
 
   /**
+   * returns all excluded rows when selected entire items
+   */
+  get ExcludedRows() {
+    return Object.keys(this.StorageObject.excludedRows || {})
+  }
+
+  /**
    * returns storage engine
    */
   get StorageEngine() {
@@ -156,6 +185,37 @@ export class SelectablePlugin {
    */
   set StorageEngine(data) {
     window.gridSelectableStorage[this.StorageKey] = data
+  }
+
+  toggleSelectOrExcludeRow = id => {
+    if (this.isEntireRowsSelected()) {
+      return this.toggleExcludeRow(id)
+    }
+
+    this.toggleSelectRow(id)
+  }
+
+  toggleExcludeRow = id => {
+    if (!id) {
+      console.error(
+        '[ Grid -> Selectable ] Unique Id for this row is not provided'
+      )
+
+      return false
+    }
+
+    const { excludedRows = {}, selectEntireRows = false } = this.StorageObject
+
+    if (excludedRows[id]) {
+      delete excludedRows[id]
+    } else {
+      excludedRows[id] = true
+    }
+
+    this.StorageObject = { excludedRows, selectEntireRows }
+
+    this.onChange()
+    this.onRequestForceUpdate()
   }
 
   /**
@@ -188,6 +248,16 @@ export class SelectablePlugin {
     this.onRequestForceUpdate()
   }
 
+  toggleSelectAllOrEntire = () => {
+    if (this.isEntireRowsSelected()) {
+      console.log('toggleSelectEntireRows')
+
+      return this.toggleSelectEntireRows()
+    }
+
+    this.toggleSelectAllRows()
+  }
+
   /**
    * toggles selecting all rows
    */
@@ -204,6 +274,22 @@ export class SelectablePlugin {
     this.StorageObject = {
       selectAllRows: !selectAllRows,
       selectedRows
+    }
+
+    this.onChange()
+  }
+
+  /**
+   * toggles selecting entire rows
+   */
+  toggleSelectEntireRows = () => {
+    const { selectEntireRows = false } = this.StorageObject
+
+    this.StorageObject = {
+      selectEntireRows: !selectEntireRows,
+      selectAllRows: false,
+      excludedRows: {},
+      selectedRows: {}
     }
 
     this.onChange()
@@ -244,12 +330,43 @@ export class SelectablePlugin {
     this.options.onChange(this.SelectedRows)
   }
 
+  isRowChecked = id => {
+    console.log()
+
+    if (this.isEntireRowsSelected()) {
+      return !this.isRowExcluded(id)
+    }
+
+    return this.isRowSelected(id)
+  }
+
+  shouldShowSelectEnitre() {
+    return (
+      this.options.allowSelectEntireList &&
+      this.isAllRowsSelected() &&
+      this.totalCount > this.data.length
+    )
+  }
+
+  someItemSelected = () => {
+    if (this.isEntireRowsSelected()) {
+      return this.someRowsExcluded()
+    }
+
+    return !this.isAllRowsSelected() && this.someRowsSelected()
+  }
+
+  allItemsSelected = () =>
+    this.isEntireRowsSelected() ||
+    this.isAllRowsSelected() ||
+    this.someRowsSelected()
+
   renderColumnHeader = () => {
     if (!this.options.allowSelectAll) {
       return null
     }
 
-    if (this.isAllRowsSelected() && this.options.allowSelectEntireList) {
+    if (this.shouldShowSelectEnitre()) {
       return (
         <Fragment>
           <PopOver
@@ -257,19 +374,15 @@ export class SelectablePlugin {
             popoverStyles={{ textAlign: 'center' }}
             containerStyle={{ display: 'inline-block' }}
             caption={
-              <SelectEntireText
-                onClick={() =>
-                  this.toggleSelectAllRows() && console.log('SELECT ALL TOTAL')
-                }
-              >
+              <SelectEntireText onClick={() => this.toggleSelectEntireRows()}>
                 Select All {this.totalCount} {this.options.entityName}
               </SelectEntireText>
             }
           >
             <CheckBoxButtonWithoutState
-              someRowsSelected={false}
-              onClick={this.toggleSelectAllRows}
-              isSelected={this.isAllRowsSelected() || this.someRowsSelected()}
+              someRowsSelected={this.someItemSelected()}
+              onClick={this.toggleSelectAllOrEntire}
+              isSelected={this.allItemsSelected()}
             />
           </PopOver>
         </Fragment>
@@ -278,9 +391,9 @@ export class SelectablePlugin {
 
     return (
       <CheckBoxButtonWithoutState
-        someRowsSelected={!this.isAllRowsSelected() && this.someRowsSelected()}
-        onClick={this.toggleSelectAllRows}
-        isSelected={this.isAllRowsSelected() || this.someRowsSelected()}
+        someRowsSelected={this.someItemSelected()}
+        onClick={this.toggleSelectAllOrEntire}
+        isSelected={this.allItemsSelected()}
       />
     )
   }
@@ -309,8 +422,8 @@ export class SelectablePlugin {
         <Fragment>
           {this.options.unselectableRow.includes(row.id) === false && (
             <CheckBoxButton
-              onClick={() => this.toggleSelectRow(row.id)}
-              isSelected={this.isRowSelected(row.id)}
+              onClick={() => this.toggleSelectOrExcludeRow(row.id)}
+              isSelected={this.isRowChecked(row.id)}
             />
           )}
         </Fragment>

@@ -120,9 +120,7 @@ class Grid extends React.Component {
             totalRowsCount={this.props.summary.total || this.props.data.length}
             selectedRowsCount={
               this.props.summary.selectedRowsCount ||
-              (this.selectablePlugin
-                ? this.selectablePlugin.SelectedRows.length
-                : 0)
+              (this.selectablePlugin ? this.selectablePlugin.SelectedCount : 0)
             }
           />
 
