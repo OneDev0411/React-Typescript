@@ -12,6 +12,7 @@ import {
   changeTaskStatus,
   setSelectedTask,
   voidEnvelope,
+  deleteTask,
   asyncDeleteFile
 } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
@@ -65,8 +66,9 @@ class ActionsButton extends React.Component {
       upload: this.handleUpload,
       view: this.handleView,
       download: this.handleDownload,
-      delete: this.handleDelete,
       comments: this.handleShowComments,
+      'delete-task': this.handleDeleteTask,
+      'delete-file': this.handleDeleteFile,
       'move-file': this.toggleMoveFile,
       'split-pdf': this.handleToggleSplitPdf,
       'review-envelope': this.handleReviewEnvelope,
@@ -149,7 +151,7 @@ class ActionsButton extends React.Component {
     }
 
     return {
-      has_task: this.props.task !== null,
+      has_task: this.props.task !== null, // is stash file or not
       document_type: documentType,
       file_uploaded: isFile,
       form_saved: isTask && this.props.document.submission !== null,
@@ -396,6 +398,8 @@ class ActionsButton extends React.Component {
       isBackOffice: this.props.isBackOffice
     })
 
+    console.log('>>>>>', this.props)
+
     if (links.length === 1) {
       return this.props.isBackOffice
         ? browserHistory.push(links[0].url)
@@ -418,7 +422,32 @@ class ActionsButton extends React.Component {
   /**
    *
    */
-  handleDelete = () => {
+  handleDeleteTask = () => {
+    if (this.props.task.is_deletable === false && !this.props.isBackOffice) {
+      return this.props.confirmation({
+        message: 'Delete a required folder?',
+        description: 'Only your back office can delete this folder.',
+        confirmLabel: 'Notify Office',
+        needsUserEntry: true,
+        inputDefaultValue: 'Please remove from my folder.',
+        onConfirm: this.notifyOffice
+      })
+    }
+
+    this.props.confirmation({
+      message: 'Delete this folder?',
+      description: 'You cannot undo this action',
+      confirmLabel: 'Delete',
+      confirmButtonColor: 'danger',
+      onConfirm: () =>
+        this.props.deleteTask(this.props.task.checklist, this.props.task.id)
+    })
+  }
+
+  /**
+   *
+   */
+  handleDeleteFile = () => {
     this.props.confirmation({
       message: 'Are you sure you want delete this file?',
       confirmLabel: 'Yes, Delete',
@@ -628,6 +657,7 @@ export default connect(
     asyncDeleteFile,
     setSelectedTask,
     voidEnvelope,
+    deleteTask,
     confirmation,
     notify
   }

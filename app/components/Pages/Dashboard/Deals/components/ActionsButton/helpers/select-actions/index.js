@@ -3,7 +3,10 @@ import {
   tasksConditions as agentTasksConditions
 } from '../../data/tables/agent'
 
-import { tasksConditions as backofficeTasksConditions } from '../../data/tables/backoffice'
+import {
+  tasksConditions as backofficeTasksConditions,
+  documentsConditions as backofficeDocumentsConditions
+} from '../../data/tables/backoffice'
 
 export function selectActions(type, conditions, isBackOffice) {
   let list = []
@@ -13,7 +16,9 @@ export function selectActions(type, conditions, isBackOffice) {
   }
 
   if (type === 'document') {
-    list = isBackOffice ? [] : agentDocumentsConditions
+    list = isBackOffice
+      ? backofficeDocumentsConditions
+      : agentDocumentsConditions
   }
 
   const item = list.find(
