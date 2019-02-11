@@ -1,4 +1,20 @@
-import _ from 'underscore'
+import { normalizeConditions } from '../../normalize-conditions'
+
+import {
+  EDIT_BUTTON,
+  SHOW_COMMENTS_BUTTON,
+  DOCUSIGN_BUTTON,
+  VOID_BUTTON,
+  RESEND_BUTTON,
+  MOVE_BUTTON,
+  VIEW_BUTTON,
+  TASK_NOTIFICATION_BUTTON,
+  UPLOAD_BUTTON,
+  DELETE_BUTTON,
+  DOWNLOAD_BUTTON,
+  REVIEW_ENVELOPE_BUTTON,
+  SPLIT_PDF_BUTTON
+} from '../../action-buttons'
 
 /**
  * https://docs.google.com/spreadsheets/d/1XhJQK5Fq8V4dJLx98CAchOwwZci0yWoTFBSWV1deGY0
@@ -24,100 +40,6 @@ const envelopeStates = {
   COMPLETED: 'Completed'
 }
 
-const EDIT_BUTTON = 0
-const MESSAGE_ADMIN = 1
-const DOCUSIGN_BUTTON = 2
-const VOID_BUTTON = 3
-const RESEND_BUTTON = 4
-const EMAIL_BUTTON = 5
-const MOVE_BUTTON = 6
-const VIEW_BUTTON = 7
-const NOTIFY_ADMIN_BUTTON = 8
-const UPLOAD_BUTTON = 9
-const RENAME_BUTTON = 10
-const DELETE_BUTTON = 11
-const DOWNLOAD_BUTTON = 12
-const REVIEW_ENVELOPE_BUTTON = 13
-const SPLIT_PDF_BUTTON = 14
-
-function normalizeConditions(conditions) {
-  return conditions.map(item => ({
-    ...item,
-    actions: _.map(item.actions, (properties, id) => ({
-      id,
-      ...properties,
-      ...actionsDefaultProperties[id]
-    }))
-  }))
-}
-
-const actionsDefaultProperties = {
-  [EDIT_BUTTON]: {
-    label: 'Edit',
-    type: 'edit-form',
-    tooltip:
-      'You cannot edit while you have sent this out for signature. You can either void or wait for the signature to get completed.'
-  },
-  [MESSAGE_ADMIN]: {
-    label: 'Message Admin',
-    type: 'comments'
-  },
-  [DOCUSIGN_BUTTON]: {
-    label: 'Docusign',
-    type: 'get-signature'
-  },
-  [VOID_BUTTON]: {
-    label: 'Void',
-    type: 'void-envelope'
-  },
-  [RESEND_BUTTON]: {
-    label: 'Resend',
-    type: 'resend-envelope'
-  },
-  [EMAIL_BUTTON]: {
-    label: 'Email',
-    type: 'send-email'
-  },
-  [NOTIFY_ADMIN_BUTTON]: {
-    label: ({ task }) =>
-      task.attention_requested ? 'Cancel Notify' : 'Notify Office',
-    type: ({ task }) =>
-      task.attention_requested ? 'cancel-notify-office' : 'notify-office'
-  },
-  [UPLOAD_BUTTON]: {
-    label: 'Upload',
-    type: 'upload'
-  },
-  [RENAME_BUTTON]: {
-    label: 'Rename',
-    type: 'rename'
-  },
-  [VIEW_BUTTON]: {
-    label: 'View/Print',
-    type: 'view'
-  },
-  [DELETE_BUTTON]: {
-    label: 'Delete',
-    type: 'delete'
-  },
-  [DOWNLOAD_BUTTON]: {
-    label: 'Download',
-    type: 'download'
-  },
-  [MOVE_BUTTON]: {
-    label: 'Move',
-    type: 'move-file'
-  },
-  [REVIEW_ENVELOPE_BUTTON]: {
-    label: 'Review in Docusign',
-    type: 'review-envelope'
-  },
-  [SPLIT_PDF_BUTTON]: {
-    label: 'Split PDF',
-    type: 'split-pdf'
-  }
-}
-
 export const documentsConditions = normalizeConditions([
   {
     conditions: ({
@@ -139,8 +61,8 @@ export const documentsConditions = normalizeConditions([
       },
       [DOCUSIGN_BUTTON]: {
         disabled: true
-      },
-      [EMAIL_BUTTON]: {}
+      }
+      // [EMAIL_BUTTON]: {}
     }
   },
   {
@@ -162,7 +84,7 @@ export const documentsConditions = normalizeConditions([
       },
       [EDIT_BUTTON]: {},
       [VIEW_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
   },
@@ -184,7 +106,7 @@ export const documentsConditions = normalizeConditions([
         primary: true
       },
       [VOID_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -214,7 +136,7 @@ export const documentsConditions = normalizeConditions([
       },
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
   },
@@ -239,7 +161,7 @@ export const documentsConditions = normalizeConditions([
       },
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
   },
@@ -262,7 +184,7 @@ export const documentsConditions = normalizeConditions([
         primary: true
       },
       [VIEW_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {}
     }
@@ -285,9 +207,9 @@ export const documentsConditions = normalizeConditions([
         primary: true
       },
       [VIEW_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
-      [RENAME_BUTTON]: {},
+      // [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {},
       [MOVE_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
@@ -312,8 +234,8 @@ export const documentsConditions = normalizeConditions([
       },
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
   },
@@ -339,8 +261,8 @@ export const documentsConditions = normalizeConditions([
       },
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [RENAME_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      // [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -365,8 +287,8 @@ export const documentsConditions = normalizeConditions([
         primary: true
       },
       [VIEW_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [RENAME_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      // [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {},
       [MOVE_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
@@ -392,8 +314,8 @@ export const documentsConditions = normalizeConditions([
       },
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [RENAME_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      // [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {}
     }
   },
@@ -415,7 +337,7 @@ export const documentsConditions = normalizeConditions([
         primary: true
       },
       [VIEW_BUTTON]: {},
-      [RENAME_BUTTON]: {},
+      // [RENAME_BUTTON]: {},
       [DELETE_BUTTON]: {},
       [MOVE_BUTTON]: {}
     }
@@ -433,9 +355,9 @@ export const documentsConditions = normalizeConditions([
       [DOWNLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
-      [DELETE_BUTTON]: {},
-      [RENAME_BUTTON]: {},
-      [EMAIL_BUTTON]: {}
+      [DELETE_BUTTON]: {}
+      // [RENAME_BUTTON]: {},
+      // [EMAIL_BUTTON]: {}
     }
   },
   {
@@ -450,9 +372,9 @@ export const documentsConditions = normalizeConditions([
       },
       [DOWNLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {},
-      [DELETE_BUTTON]: {},
-      [RENAME_BUTTON]: {},
-      [EMAIL_BUTTON]: {}
+      [DELETE_BUTTON]: {}
+      // [RENAME_BUTTON]: {},
+      // [EMAIL_BUTTON]: {}
     }
   }
 ])
@@ -468,8 +390,8 @@ export const tasksConditions = normalizeConditions([
       [UPLOAD_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
-      [NOTIFY_ADMIN_BUTTON]: {}
+      [SHOW_COMMENTS_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {}
     }
   },
   {
@@ -482,11 +404,11 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {}
     }
   },
@@ -500,10 +422,10 @@ export const tasksConditions = normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
@@ -519,11 +441,11 @@ export const tasksConditions = normalizeConditions([
       [RESEND_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [VOID_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
@@ -541,9 +463,9 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {},
@@ -560,9 +482,9 @@ export const tasksConditions = normalizeConditions([
       [DOWNLOAD_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {}
@@ -578,9 +500,9 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -594,11 +516,11 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -613,10 +535,10 @@ export const tasksConditions = normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [VOID_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
@@ -635,12 +557,12 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         disabled: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [VOID_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -657,11 +579,11 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -676,11 +598,11 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -694,11 +616,11 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -712,11 +634,11 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -730,11 +652,11 @@ export const tasksConditions = normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -751,12 +673,12 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         disabled: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [VOID_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -772,11 +694,11 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -790,11 +712,11 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -808,11 +730,11 @@ export const tasksConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -827,11 +749,11 @@ export const tasksConditions = normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -849,12 +771,12 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         disabled: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [VOID_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -871,11 +793,11 @@ export const tasksConditions = normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -890,12 +812,12 @@ export const tasksConditions = normalizeConditions([
       [DOWNLOAD_BUTTON]: {
         primary: true
       },
-      [MESSAGE_ADMIN]: {},
+      [SHOW_COMMENTS_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
-      [NOTIFY_ADMIN_BUTTON]: {},
+      // [EMAIL_BUTTON]: {},
+      [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   }

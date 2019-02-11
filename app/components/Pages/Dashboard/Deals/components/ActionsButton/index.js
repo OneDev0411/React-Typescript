@@ -9,6 +9,7 @@ import _ from 'underscore'
 
 import {
   changeNeedsAttention,
+  changeTaskStatus,
   setSelectedTask,
   voidEnvelope,
   asyncDeleteFile
@@ -71,8 +72,10 @@ class ActionsButton extends React.Component {
       'review-envelope': this.handleReviewEnvelope,
       'get-signature': this.handleGetSignature,
       'edit-form': this.handleEditForm,
-      'notify-office': this.handleNotifyOffice,
-      'cancel-notify-office': this.handleCancelNotifyOffice,
+      'notify-task': this.handleNotifyOffice,
+      'approve-task': this.handleApproveTask,
+      'decline-task': this.handleDeclineTask,
+      'remove-task-notification': this.handleRemoveTaskNotification,
       'resend-envelope': this.handleResendEnvelope,
       'void-envelope': this.handleVoidEnvelope
     }
@@ -91,7 +94,8 @@ class ActionsButton extends React.Component {
 
     if (typeof type === 'function') {
       type = button.type({
-        task: this.props.task
+        task: this.props.task,
+        isBackOffice: this.props.isBackOffice
       })
     }
 
@@ -124,7 +128,7 @@ class ActionsButton extends React.Component {
       conditions = this.createTaskConditions()
     }
 
-    return selectActions(this.props.type, conditions)
+    return selectActions(this.props.type, conditions, this.props.isBackOffice)
   }
 
   createDocumentsConditions = () => {
@@ -161,6 +165,7 @@ class ActionsButton extends React.Component {
         this.props.task.task_type === 'Form' && this.props.task.form
           ? 'Form'
           : 'Generic',
+      is_task_notified: this.props.task.attention_requested === true,
       file_uploaded: this.hasTaskAttachments(this.props.task),
       form_saved: this.props.task.submission !== null,
       envelope_status: this.getLastEnvelopeStatus(envelopes)
@@ -282,7 +287,33 @@ class ActionsButton extends React.Component {
   /**
    *
    */
-  handleCancelNotifyOffice = () => {
+  handleApproveTask = async () => {
+    await this.props.changeTaskStatus(this.props.task.id, 'Approved')
+
+    this.props.changeNeedsAttention(
+      this.props.deal.id,
+      this.props.task.id,
+      false
+    )
+  }
+
+  /**
+   *
+   */
+  handleDeclineTask = async () => {
+    await this.props.changeTaskStatus(this.props.task.id, 'Declined')
+
+    this.props.changeNeedsAttention(
+      this.props.deal.id,
+      this.props.task.id,
+      false
+    )
+  }
+
+  /**
+   *
+   */
+  handleRemoveTaskNotification = () => {
     this.props.changeNeedsAttention(
       this.props.deal.id,
       this.props.task.id,
@@ -451,7 +482,10 @@ class ActionsButton extends React.Component {
 
   getButtonLabel = button => {
     if (typeof button.label === 'function') {
-      return button.label({ task: this.props.task })
+      return button.label({
+        task: this.props.task,
+        isBackOffice: this.props.isBackOffice
+      })
     }
 
     return button.label
@@ -460,6 +494,7 @@ class ActionsButton extends React.Component {
   render() {
     const actionButtons = this.getActions()
     const primaryAction = this.getPrimaryAction(actionButtons)
+    const secondaryActions = this.getSecondaryActions(actionButtons)
 
     if (!primaryAction) {
       return false
@@ -480,37 +515,37 @@ class ActionsButton extends React.Component {
                   {this.getButtonLabel(primaryAction)}
                 </PrimaryAction>
 
-                <MenuButton onClick={this.handleToggleMenu}>
-                  <ArrowDownIcon
-                    style={{
-                      transform: isOpen ? 'rotateX(180deg)' : 'initial'
-                    }}
-                  />
-                </MenuButton>
+                {secondaryActions.length > 0 && (
+                  <MenuButton onClick={this.handleToggleMenu}>
+                    <ArrowDownIcon
+                      style={{
+                        transform: isOpen ? 'rotateX(180deg)' : 'initial'
+                      }}
+                    />
+                  </MenuButton>
+                )}
               </Container>
 
               {isOpen && (
                 <MenuContainer>
-                  {this.getSecondaryActions(actionButtons).map(
-                    (button, index) => (
-                      <MenuItem
-                        key={index}
-                        disabled={button.disabled === true}
-                        onClick={() => this.handleSelectAction(button)}
+                  {secondaryActions.map((button, index) => (
+                    <MenuItem
+                      key={index}
+                      disabled={button.disabled === true}
+                      onClick={() => this.handleSelectAction(button)}
+                    >
+                      <Tooltip
+                        placement="left"
+                        caption={
+                          button.disabled && button.tooltip
+                            ? button.tooltip
+                            : null
+                        }
                       >
-                        <Tooltip
-                          placement="left"
-                          caption={
-                            button.disabled && button.tooltip
-                              ? button.tooltip
-                              : null
-                          }
-                        >
-                          <span>{this.getButtonLabel(button)}</span>
-                        </Tooltip>
-                      </MenuItem>
-                    )
-                  )}
+                        <span>{this.getButtonLabel(button)}</span>
+                      </Tooltip>
+                    </MenuItem>
+                  ))}
                 </MenuContainer>
               )}
             </div>
@@ -589,6 +624,7 @@ export default connect(
   mapStateToProps,
   {
     changeNeedsAttention,
+    changeTaskStatus,
     asyncDeleteFile,
     setSelectedTask,
     voidEnvelope,
