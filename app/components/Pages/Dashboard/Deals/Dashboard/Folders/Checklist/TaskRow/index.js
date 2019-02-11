@@ -17,13 +17,7 @@ import TaskNotifications from '../Notification'
 import EnvelopeView from '../Envelope'
 import { Activity } from './Activity'
 
-import {
-  RowContainer,
-  Row,
-  RowTitle,
-  Activities,
-  RowArrowIcon
-} from '../../styled'
+import { RowContainer, Row, RowTitle, RowArrowIcon } from '../../styled'
 
 class Task extends React.Component {
   state = {
@@ -79,11 +73,21 @@ class Task extends React.Component {
                 {this.props.task.title}
               </RowTitle>
 
-              <ActionsButton
-                type="task"
-                deal={this.props.deal}
-                task={this.props.task}
-              />
+              <Flex alignCenter>
+                <TaskNotifications
+                  onClick={this.handleSelectTask}
+                  task={this.props.task}
+                  tooltip="View Activity"
+                  tooltipPlacement="bottom"
+                  style={{ margin: '-3px 0.625rem 0 0' }}
+                />
+
+                <ActionsButton
+                  type="task"
+                  deal={this.props.deal}
+                  task={this.props.task}
+                />
+              </Flex>
             </Flex>
 
             <Flex alignCenter>
@@ -99,19 +103,11 @@ class Task extends React.Component {
                 task={this.props.task}
               />
 
-              <Activities onClick={this.handleSelectTask}>
-                <TaskNotifications
-                  task={this.props.task}
-                  tooltip="View Activity"
-                  tooltipPlacement="bottom"
-                  style={{ marginTop: '-3px' }}
-                />
-
-                <Activity
-                  task={this.props.task}
-                  latestActivity={this.props.task.room.latest_activity}
-                />
-              </Activities>
+              <Activity
+                onClick={this.handleSelectTask}
+                task={this.props.task}
+                latestActivity={this.props.task.room.latest_activity}
+              />
             </Flex>
           </Flex>
         </Row>

@@ -22,7 +22,7 @@ function Notification(props) {
         style={props.style}
         onClick={() => props.onClick(task)}
       >
-        <IconButton isFit iconSize="large" style={{ padding: 0 }}>
+        <IconButton isFit iconSize="XLarge" style={{ padding: 0 }}>
           <IconComment className="deal--task-comments" />
         </IconButton>
 

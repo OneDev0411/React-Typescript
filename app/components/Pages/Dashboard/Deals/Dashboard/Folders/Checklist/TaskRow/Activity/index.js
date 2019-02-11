@@ -13,7 +13,7 @@ export function Activity(props) {
   }
 
   return (
-    <LastActivity>
+    <LastActivity onClick={props.onClick}>
       <Tooltip
         placement="bottom"
         caption={moment

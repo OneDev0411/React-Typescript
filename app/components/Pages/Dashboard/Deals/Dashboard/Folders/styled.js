@@ -135,17 +135,6 @@ export const RowTitle = styled(H4)`
   `}
 `
 
-export const Activities = styled.div`
-  display: flex;
-  align-items: center;
-
-  :hover ${Notification} {
-    svg > path {
-      fill: ${primary};
-    }
-  }
-`
-
 export const LabelItem = styled.div`
   display: inline-flex;
   align-items: center;
