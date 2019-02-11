@@ -10,7 +10,7 @@ import {
   VIEW_BUTTON,
   TASK_NOTIFICATION_BUTTON,
   UPLOAD_BUTTON,
-  DELETE_BUTTON,
+  DELETE_FILE_BUTTON,
   DOWNLOAD_BUTTON,
   REVIEW_ENVELOPE_BUTTON,
   SPLIT_PDF_BUTTON
@@ -210,7 +210,7 @@ export const documentsConditions = normalizeConditions([
       // [EMAIL_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
       // [RENAME_BUTTON]: {},
-      [DELETE_BUTTON]: {},
+      [DELETE_FILE_BUTTON]: {},
       [MOVE_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
@@ -263,7 +263,7 @@ export const documentsConditions = normalizeConditions([
       [VOID_BUTTON]: {},
       // [EMAIL_BUTTON]: {},
       // [RENAME_BUTTON]: {},
-      [DELETE_BUTTON]: {},
+      [DELETE_FILE_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
     }
   },
@@ -289,7 +289,7 @@ export const documentsConditions = normalizeConditions([
       [VIEW_BUTTON]: {},
       // [EMAIL_BUTTON]: {},
       // [RENAME_BUTTON]: {},
-      [DELETE_BUTTON]: {},
+      [DELETE_FILE_BUTTON]: {},
       [MOVE_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
       [DOWNLOAD_BUTTON]: {}
@@ -316,7 +316,7 @@ export const documentsConditions = normalizeConditions([
       [DOCUSIGN_BUTTON]: {},
       // [EMAIL_BUTTON]: {},
       // [RENAME_BUTTON]: {},
-      [DELETE_BUTTON]: {}
+      [DELETE_FILE_BUTTON]: {}
     }
   },
   {
@@ -338,7 +338,7 @@ export const documentsConditions = normalizeConditions([
       },
       [VIEW_BUTTON]: {},
       // [RENAME_BUTTON]: {},
-      [DELETE_BUTTON]: {},
+      [DELETE_FILE_BUTTON]: {},
       [MOVE_BUTTON]: {}
     }
   },
@@ -355,7 +355,7 @@ export const documentsConditions = normalizeConditions([
       [DOWNLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
-      [DELETE_BUTTON]: {}
+      [DELETE_FILE_BUTTON]: {}
       // [RENAME_BUTTON]: {},
       // [EMAIL_BUTTON]: {}
     }
@@ -372,7 +372,7 @@ export const documentsConditions = normalizeConditions([
       },
       [DOWNLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {},
-      [DELETE_BUTTON]: {}
+      [DELETE_FILE_BUTTON]: {}
       // [RENAME_BUTTON]: {},
       // [EMAIL_BUTTON]: {}
     }

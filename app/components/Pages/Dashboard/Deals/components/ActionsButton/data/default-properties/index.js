@@ -10,7 +10,7 @@ import {
   TASK_NOTIFICATION_BUTTON,
   UPLOAD_BUTTON,
   RENAME_BUTTON,
-  DELETE_BUTTON,
+  DELETE_FILE_BUTTON,
   DOWNLOAD_BUTTON,
   REVIEW_ENVELOPE_BUTTON,
   SPLIT_PDF_BUTTON,
@@ -58,7 +58,7 @@ export const actionsDefaultProperties = {
     label: 'View/Print',
     type: 'view'
   },
-  [DELETE_BUTTON]: {
+  [DELETE_FILE_BUTTON]: {
     label: 'Delete',
     type: 'delete'
   },
