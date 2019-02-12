@@ -128,7 +128,7 @@ class ActionsButton extends React.Component {
       conditions = this.createTaskConditions()
     }
 
-    return selectActions(this.props.type, conditions, this.props.isBackOffice)
+    return selectActions(this.props.type, conditions)
   }
 
   createDocumentsConditions = () => {
@@ -165,6 +165,7 @@ class ActionsButton extends React.Component {
         this.props.task.task_type === 'Form' && this.props.task.form
           ? 'Form'
           : 'Generic',
+      is_backoffice: this.props.isBackOffice,
       is_task_notified: this.props.task.attention_requested === true,
       file_uploaded: this.hasTaskAttachments(this.props.task),
       form_saved: this.props.task.submission !== null,
