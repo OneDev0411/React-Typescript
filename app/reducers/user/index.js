@@ -1,47 +1,51 @@
 import { SIGNIN_SUCCESS } from '../../constants/auth/signin'
-import {
-  UPDATE_USER,
-  SET_USER_TEAMS,
-  EDIT_USER_SUCCESS,
-  UPLOAD_AVATAR_SUCCESS,
-  SET_USER_BRAND_MEMBERS,
-  UPGRADE_TO_AGENT_SUCCESS,
-  UPLOAD_COVER_IMAGE_SUCCESS
-} from '../../constants/user'
+import * as actionTypes from '../../constants/user'
 
 const user = (state = null, action) => {
   switch (action.type) {
     case SIGNIN_SUCCESS:
       return action.user
-    case SET_USER_TEAMS:
+    case actionTypes.FETCH_USER_TEAMS_SUCCESS:
       return {
         ...state,
-        teams: action.teams
+        teams: action.teams,
+        is_fetching_teams: false
       }
 
-    case SET_USER_BRAND_MEMBERS:
+    case actionTypes.FETCH_USER_TEAMS_REQUEST:
+      return {
+        ...state,
+        is_fetching_teams: true
+      }
+
+    case actionTypes.FETCH_USER_TEAMS_FAILURE:
+      return {
+        ...state,
+        is_fetching_teams: false
+      }
+
+    case actionTypes.SET_USER_BRAND_MEMBERS:
       const teamIndex = state.teams.findIndex(
         team => team.brand.id === action.brand.id
       )
 
       return {
         ...state,
-        teams: state.teams.map(
-          (team, index) =>
-            index !== teamIndex
-              ? team
-              : {
-                  ...state.teams[teamIndex],
-                  brand: action.brand
-                }
+        teams: state.teams.map((team, index) =>
+          index !== teamIndex
+            ? team
+            : {
+                ...state.teams[teamIndex],
+                brand: action.brand
+              }
         )
       }
 
-    case UPDATE_USER:
-    case EDIT_USER_SUCCESS:
-    case UPLOAD_AVATAR_SUCCESS:
-    case UPGRADE_TO_AGENT_SUCCESS:
-    case UPLOAD_COVER_IMAGE_SUCCESS:
+    case actionTypes.UPDATE_USER:
+    case actionTypes.EDIT_USER_SUCCESS:
+    case actionTypes.UPLOAD_AVATAR_SUCCESS:
+    case actionTypes.UPGRADE_TO_AGENT_SUCCESS:
+    case actionTypes.UPLOAD_COVER_IMAGE_SUCCESS:
       return {
         ...state,
         ...action.user
@@ -52,3 +56,5 @@ const user = (state = null, action) => {
 }
 
 export default user
+
+export const selectTeamIsFetching = state => state.is_fetching_teams

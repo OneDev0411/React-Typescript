@@ -7,7 +7,6 @@ import { setSelectedTask } from 'actions/deals'
 
 import Header from './Header'
 import Comments from './Comments'
-import DeleteTask from './DeleteTask'
 import DraftBanner from './DraftBanner'
 
 function TaskView(props) {
@@ -44,12 +43,6 @@ function TaskView(props) {
         <DraftBanner isDraftDeal={props.deal.is_draft} />
 
         <Comments
-          deal={props.deal}
-          task={task}
-          isBackOffice={props.isBackOffice}
-        />
-
-        <DeleteTask
           deal={props.deal}
           task={task}
           isBackOffice={props.isBackOffice}

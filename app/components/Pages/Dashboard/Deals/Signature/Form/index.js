@@ -35,7 +35,7 @@ export default class SignatureComposeDrawer extends React.Component {
     )
 
     this.formObject = {
-      subject: '',
+      subject: 'Please DocuSign',
       recipients: {},
       from: `${this.props.user.display_name} <${this.props.user.email}>`,
       attachments: this.initialAttachments

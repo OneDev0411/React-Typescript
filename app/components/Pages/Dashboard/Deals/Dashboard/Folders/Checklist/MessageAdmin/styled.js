@@ -11,8 +11,8 @@ export const BadgeCounter = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${red.A100};
-  top: -6px;
+  background: ${red.A200};
+  top: -12px;
   right: -6px;
   font-size: 13px;
   color: #fff;
@@ -20,4 +20,17 @@ export const BadgeCounter = styled.div`
   padding: 0 3px;
   min-width: 1.3rem;
   min-height: 1.3rem;
+
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  ${props =>
+    props.isRectangle &&
+    `
+  
+    border-radius: 3px;
+    padding: 0 5px;
+  `}
 `

@@ -9,7 +9,10 @@ import _ from 'underscore'
 
 import {
   changeNeedsAttention,
+  changeTaskStatus,
+  setSelectedTask,
   voidEnvelope,
+  deleteTask,
   asyncDeleteFile
 } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
@@ -63,13 +66,18 @@ class ActionsButton extends React.Component {
       upload: this.handleUpload,
       view: this.handleView,
       download: this.handleDownload,
-      delete: this.handleDelete,
+      comments: this.handleShowComments,
+      'delete-task': this.handleDeleteTask,
+      'delete-file': this.handleDeleteFile,
       'move-file': this.toggleMoveFile,
       'split-pdf': this.handleToggleSplitPdf,
       'review-envelope': this.handleReviewEnvelope,
       'get-signature': this.handleGetSignature,
       'edit-form': this.handleEditForm,
-      'notify-office': this.handleNotifyOffice,
+      'notify-task': this.handleNotifyOffice,
+      'approve-task': this.handleApproveTask,
+      'decline-task': this.handleDeclineTask,
+      'remove-task-notification': this.handleRemoveTaskNotification,
       'resend-envelope': this.handleResendEnvelope,
       'void-envelope': this.handleVoidEnvelope
     }
@@ -78,13 +86,20 @@ class ActionsButton extends React.Component {
   }
 
   handleSelectAction = button => {
-    const { type, disabled } = button
-
-    if (disabled === true) {
+    if (button.disabled === true) {
       return false
     }
 
     this.handleCloseMenu()
+
+    let type = button.type
+
+    if (typeof type === 'function') {
+      type = button.type({
+        task: this.props.task,
+        isBackOffice: this.props.isBackOffice
+      })
+    }
 
     this.actions[type] && this.actions[type]()
   }
@@ -136,7 +151,7 @@ class ActionsButton extends React.Component {
     }
 
     return {
-      has_task: this.props.task !== null,
+      has_task: this.props.task !== null, // is stash file or not
       document_type: documentType,
       file_uploaded: isFile,
       form_saved: isTask && this.props.document.submission !== null,
@@ -152,6 +167,8 @@ class ActionsButton extends React.Component {
         this.props.task.task_type === 'Form' && this.props.task.form
           ? 'Form'
           : 'Generic',
+      is_backoffice: this.props.isBackOffice,
+      is_task_notified: this.props.task.attention_requested === true,
       file_uploaded: this.hasTaskAttachments(this.props.task),
       form_saved: this.props.task.submission !== null,
       envelope_status: this.getLastEnvelopeStatus(envelopes)
@@ -273,6 +290,50 @@ class ActionsButton extends React.Component {
   /**
    *
    */
+  handleApproveTask = async () => {
+    await this.props.changeTaskStatus(this.props.task.id, 'Approved')
+
+    this.props.changeNeedsAttention(
+      this.props.deal.id,
+      this.props.task.id,
+      false
+    )
+  }
+
+  /**
+   *
+   */
+  handleDeclineTask = async () => {
+    await this.props.changeTaskStatus(this.props.task.id, 'Declined')
+
+    this.props.changeNeedsAttention(
+      this.props.deal.id,
+      this.props.task.id,
+      false
+    )
+  }
+
+  /**
+   *
+   */
+  handleRemoveTaskNotification = () => {
+    this.props.changeNeedsAttention(
+      this.props.deal.id,
+      this.props.task.id,
+      false
+    )
+  }
+
+  /**
+   *
+   */
+  handleShowComments = () => {
+    this.props.setSelectedTask(this.props.task)
+  }
+
+  /**
+   *
+   */
   handleResendEnvelope = () => {
     this.props.confirmation({
       message: 'Resend Envelope?',
@@ -338,6 +399,8 @@ class ActionsButton extends React.Component {
       isBackOffice: this.props.isBackOffice
     })
 
+    console.log('>>>>>', this.props)
+
     if (links.length === 1) {
       return this.props.isBackOffice
         ? browserHistory.push(links[0].url)
@@ -360,7 +423,32 @@ class ActionsButton extends React.Component {
   /**
    *
    */
-  handleDelete = () => {
+  handleDeleteTask = () => {
+    if (this.props.task.is_deletable === false && !this.props.isBackOffice) {
+      return this.props.confirmation({
+        message: 'Delete a required folder?',
+        description: 'Only your back office can delete this folder.',
+        confirmLabel: 'Notify Office',
+        needsUserEntry: true,
+        inputDefaultValue: 'Please remove from my folder.',
+        onConfirm: this.notifyOffice
+      })
+    }
+
+    this.props.confirmation({
+      message: 'Delete this folder?',
+      description: 'You cannot undo this action',
+      confirmLabel: 'Delete',
+      confirmButtonColor: 'danger',
+      onConfirm: () =>
+        this.props.deleteTask(this.props.task.checklist, this.props.task.id)
+    })
+  }
+
+  /**
+   *
+   */
+  handleDeleteFile = () => {
     this.props.confirmation({
       message: 'Are you sure you want delete this file?',
       confirmLabel: 'Yes, Delete',
@@ -422,9 +510,21 @@ class ActionsButton extends React.Component {
     }
   }
 
+  getButtonLabel = button => {
+    if (typeof button.label === 'function') {
+      return button.label({
+        task: this.props.task,
+        isBackOffice: this.props.isBackOffice
+      })
+    }
+
+    return button.label
+  }
+
   render() {
     const actionButtons = this.getActions()
     const primaryAction = this.getPrimaryAction(actionButtons)
+    const secondaryActions = this.getSecondaryActions(actionButtons)
 
     if (!primaryAction) {
       return false
@@ -442,40 +542,40 @@ class ActionsButton extends React.Component {
                 <PrimaryAction
                   onClick={() => this.handleSelectAction(primaryAction)}
                 >
-                  {primaryAction.label}
+                  {this.getButtonLabel(primaryAction)}
                 </PrimaryAction>
 
-                <MenuButton onClick={this.handleToggleMenu}>
-                  <ArrowDownIcon
-                    style={{
-                      transform: isOpen ? 'rotateX(180deg)' : 'initial'
-                    }}
-                  />
-                </MenuButton>
+                {secondaryActions.length > 0 && (
+                  <MenuButton onClick={this.handleToggleMenu}>
+                    <ArrowDownIcon
+                      style={{
+                        transform: isOpen ? 'rotateX(180deg)' : 'initial'
+                      }}
+                    />
+                  </MenuButton>
+                )}
               </Container>
 
               {isOpen && (
                 <MenuContainer>
-                  {this.getSecondaryActions(actionButtons).map(
-                    (button, index) => (
-                      <MenuItem
-                        key={index}
-                        disabled={button.disabled === true}
-                        onClick={() => this.handleSelectAction(button)}
+                  {secondaryActions.map((button, index) => (
+                    <MenuItem
+                      key={index}
+                      disabled={button.disabled === true}
+                      onClick={() => this.handleSelectAction(button)}
+                    >
+                      <Tooltip
+                        placement="left"
+                        caption={
+                          button.disabled && button.tooltip
+                            ? button.tooltip
+                            : null
+                        }
                       >
-                        <Tooltip
-                          placement="left"
-                          caption={
-                            button.disabled && button.tooltip
-                              ? button.tooltip
-                              : null
-                          }
-                        >
-                          <span>{button.label}</span>
-                        </Tooltip>
-                      </MenuItem>
-                    )
-                  )}
+                        <span>{this.getButtonLabel(button)}</span>
+                      </Tooltip>
+                    </MenuItem>
+                  ))}
                 </MenuContainer>
               )}
             </div>
@@ -554,8 +654,11 @@ export default connect(
   mapStateToProps,
   {
     changeNeedsAttention,
+    changeTaskStatus,
     asyncDeleteFile,
+    setSelectedTask,
     voidEnvelope,
+    deleteTask,
     confirmation,
     notify
   }

@@ -12,7 +12,6 @@ import FacebookCovers from './FacebookCovers'
 import AsSeenIn from './AsSeenIn'
 import BusinessCards from './BusinessCards'
 import Birthday from './Birthday'
-import Brochures from './Brochures'
 
 const ResponsiveRow = styled.div`
   @media screen and (min-width: ${props => getMQWidth(75, props)}) {
@@ -40,7 +39,6 @@ function Cards({ isSideMenuOpen }) {
         <BusinessCards isSideMenuOpen={isSideMenuOpen} />
         <Birthday isSideMenuOpen={isSideMenuOpen} />
       </ResponsiveRow>
-      <Brochures isSideMenuOpen={isSideMenuOpen} />
     </div>
   )
 }

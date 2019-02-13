@@ -40,7 +40,7 @@ export function getNextDateValue(deal) {
   const date = getNextDateField(deal)
 
   if (!date) {
-    return ''
+    return 0
   }
 
   return date.value.format('x')

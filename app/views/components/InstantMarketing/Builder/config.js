@@ -27,7 +27,7 @@ export default {
       {
         name: 'Text',
         open: true,
-        buildProps: ['color', 'font-size']
+//         buildProps: ['color', 'font-size']
       }
     ],
 

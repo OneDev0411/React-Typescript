@@ -14,6 +14,7 @@ const Xlsx = styled(XlsxIcon)`
 export default function ExportButton({ disabled, onExportClick }) {
   return (
     <BasicDropdown
+      selectedItem={null}
       buttonSize="small"
       items={DOWNLOAD_TYPES_DROPDOWN_ITEMS}
       buttonIcon={Xlsx}

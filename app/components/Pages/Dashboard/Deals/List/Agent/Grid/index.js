@@ -52,7 +52,6 @@ class Grid extends React.Component {
         render: ({ rowData: deal }) =>
           Deal.get.formattedPrice(this.getPriceValue(deal), 'currency', 0)
       },
-
       {
         id: 'critical-dates',
         header: 'Critical Dates',
