@@ -235,7 +235,7 @@ const ExportCalendar = Load({
 
 const ReminderNotifications = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Account/ReminderNotifications' /* webpackChunkName: "deal_templates" */)
+    import('../components/Pages/Dashboard/Account/ReminderNotifications' /* webpackChunkName: "reminder_notifications" */)
 })
 
 const AsyncEditDealTemplate = Load({
@@ -474,7 +474,10 @@ export default (
         <Route path="deal/templates" component={AsyncDealTemplates} />
         <Route path="deal/templates/:id" component={AsyncEditDealTemplate} />
         <Route path="exportCalendar" component={ExportCalendar} />
-        <Route path="reminderNotifications" component={ReminderNotifications} />
+        <Route
+          path="reminder-notifications"
+          component={ReminderNotifications}
+        />
       </Route>
 
       <Route path="/dashboard/brands">
