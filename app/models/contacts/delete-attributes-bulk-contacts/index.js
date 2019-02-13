@@ -8,7 +8,7 @@ import Fetch from '../../../services/fetch'
 
 export async function deleteAttributesFromContacts(ids) {
   if (!Array.isArray(ids)) {
-    throw new Error('Contact ids required.')
+    throw new Error('Attribute ids required.')
   }
 
   try {

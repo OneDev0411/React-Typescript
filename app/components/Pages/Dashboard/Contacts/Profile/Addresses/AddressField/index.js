@@ -23,7 +23,13 @@ export class AddressField extends React.Component {
     }
 
     if (this.state.isEditMode) {
-      return <EditMode {..._props} handleSubmit={this.props.handleSubmit} />
+      return (
+        <EditMode
+          {..._props}
+          handleSubmit={this.props.handleSubmit}
+          handleDelete={this.props.handleDelete}
+        />
+      )
     }
 
     return <ViewMode {..._props} handleAddNew={this.props.handleAddNew} />

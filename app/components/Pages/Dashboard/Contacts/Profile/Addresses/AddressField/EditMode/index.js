@@ -50,8 +50,21 @@ export class EditMode extends React.Component {
   onChangePrimary = () =>
     this.setState(state => ({ is_primary: !state.is_primary }))
 
-  handleDelete = () => {
-    console.log('delete from father')
+  handleDelete = async () => {
+    this.setState({ isDisabled: true })
+
+    const attributeIds = this.props.address.attributes
+      .filter(attribute => attribute.id)
+      .map(attribute => attribute.id)
+
+    try {
+      await this.props.handleDelete(this.props.address.index, attributeIds)
+
+      this.props.toggleMode()
+    } catch (error) {
+      console.error(error)
+      this.setState({ isDisabled: false })
+    }
   }
 
   handleSubmit = async values => {
@@ -80,7 +93,6 @@ export class EditMode extends React.Component {
       } catch (error) {
         console.error(error)
         this.setState({ isDisabled: false })
-      } finally {
       }
     }
   }
@@ -122,7 +134,7 @@ export class EditMode extends React.Component {
           renderSearchField={props => <Input {...props} type="text" />}
         />
         <ActionBar>
-          <IconButton isFit disabled={isDisabled}>
+          <IconButton isFit disabled={isDisabled} onClick={this.handleDelete}>
             <DeleteIcon />
           </IconButton>
           <Flex inline alignCenter>

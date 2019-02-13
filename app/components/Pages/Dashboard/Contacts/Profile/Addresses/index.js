@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import { getContactAddresses } from 'models/contacts/helpers/get-contact-addresses'
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
+import { deleteAttributesFromContacts } from 'models/contacts/delete-attributes-bulk-contacts'
 
 import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 
@@ -44,8 +45,35 @@ class Addresses extends React.Component {
     }))
   }
 
-  handleDelete = () => {
-    console.log('delete from father')
+  handleDelete = async (addressIndex, ids) => {
+    const removeAddressFromState = () =>
+      this.setState(state => {
+        const addresses = state.addresses.filter(
+          address => address.index !== addressIndex
+        )
+
+        if (addresses.length > 0) {
+          return { addresses }
+        }
+
+        return {
+          addresses: [
+            generateEmptyAddress(this.addressAttributeDefs, addresses.length)
+          ]
+        }
+      })
+
+    if (ids.length === 0) {
+      return removeAddressFromState()
+    }
+
+    try {
+      await deleteAttributesFromContacts(ids)
+
+      return removeAddressFromState()
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   handleSubmit = async attributes => {
@@ -81,6 +109,7 @@ class Addresses extends React.Component {
           <AddressField
             key={index}
             address={address}
+            handleDelete={this.handleDelete}
             handleSubmit={this.handleSubmit}
             handleAddNew={this.addNewAddress}
           />
