@@ -9,20 +9,21 @@ export class AddressField extends React.Component {
   }
 
   toggleMode = event => {
-    event.stopPropagation()
+    if (event && event.stopPropagation) {
+      event.stopPropagation()
+    }
+
     this.setState(state => ({ isEditMode: !state.isEditMode }))
   }
 
   render() {
-    const { field } = this.props
-
     const _props = {
-      field,
+      address: this.props.address,
       toggleMode: this.toggleMode
     }
 
     if (this.state.isEditMode) {
-      return <EditMode {..._props} />
+      return <EditMode {..._props} handleSubmit={this.props.handleSubmit} />
     }
 
     return <ViewMode {..._props} handleAddNew={this.props.handleAddNew} />

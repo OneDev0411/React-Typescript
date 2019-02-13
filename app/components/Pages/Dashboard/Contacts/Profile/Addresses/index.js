@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { getContactAddresses } from 'models/contacts/helpers/get-contact-addresses'
+import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 
 import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 
@@ -47,25 +48,40 @@ class Addresses extends React.Component {
     console.log('delete from father')
   }
 
-  handleSubmit = async values => {
-    console.log('submit from father', values)
+  handleSubmit = async attributes => {
+    try {
+      const updatedContact = await upsertContactAttributes(
+        this.props.contact.id,
+        attributes,
+        {
+          associations: [
+            'contact.sub_contacts',
+            'contact_attribute.attribute_def'
+          ]
+        }
+      )
 
-    return null
-  }
+      const addresses = getContactAddresses(updatedContact)
 
-  preSaveFormat = (values, originalValues) => {
-    console.log('preSaveFormat from father ', values, originalValues)
-
-    return values
+      this.setState({
+        addresses: [
+          ...getAddresses(addresses, this.addressAttributeDefs),
+          generateEmptyAddress(this.addressAttributeDefs, addresses.length)
+        ]
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   render() {
     return (
       <Section title="Addresses" isNew>
-        {this.state.addresses.map((field, index) => (
+        {this.state.addresses.map((address, index) => (
           <AddressField
             key={index}
-            field={field}
+            address={address}
+            handleSubmit={this.handleSubmit}
             handleAddNew={this.addNewAddress}
           />
         ))}

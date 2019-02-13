@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import debounce from 'lodash/debounce'
 import ClickOutside from 'react-click-outside'
+import idx from 'idx'
 
 import { loadJS } from '../../../../utils/load-js'
 import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/Listings/mapOptions'
@@ -11,16 +12,17 @@ import { InlineAddressForm } from './InlineAddressForm'
 
 const propTypes = {
   renderSearchField: PropTypes.func.isRequired,
-  searchText: PropTypes.string,
+  address: PropTypes.string,
   style: PropTypes.shape(),
   handleDelete: PropTypes.func,
   showDeleteButton: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
-  preSaveFormat: PropTypes.func.isRequired
+  preSaveFormat: PropTypes.func.isRequired,
+  postLoadFormat: PropTypes.func.isRequired
 }
 
 const defaultTypes = {
-  searchText: '',
+  address: '',
   style: {},
   handleDelete() {},
   showDeleteButton: false
@@ -47,7 +49,7 @@ export class InlineAddressField extends React.Component {
   componentDidMount() {
     window.initInlineAddressField = this.initialize
 
-    if (!window.google) {
+    if (!idx(window, w => w.google.maps.places)) {
       loadJS(
         `https://maps.googleapis.com/maps/api/js?key=${
           bootstrapURLKeys.key
@@ -192,6 +194,7 @@ export class InlineAddressField extends React.Component {
               handleDelete={this.props.handleDelete}
               handleSubmit={this.props.handleSubmit}
               preSaveFormat={this.props.preSaveFormat}
+              postLoadFormat={this.props.postLoadFormat}
               showDeleteButton={this.props.showDeleteButton}
             />
           )}

@@ -28,20 +28,23 @@ const normalizeAttributesToFields = (
   return fields
 }
 
-const normalizeAddress = fields => {
+const normalizeAddress = attributes => {
   const {
+    id,
     label,
     index,
     is_primary,
     attribute_def: { labels }
-  } = fields[0]
+  } = attributes[0]
 
   return {
+    id,
     index,
     label,
     labels,
     is_primary,
-    full_address: getFullAddress(fields)
+    attributes,
+    full_address: getFullAddress(attributes)
   }
 }
 

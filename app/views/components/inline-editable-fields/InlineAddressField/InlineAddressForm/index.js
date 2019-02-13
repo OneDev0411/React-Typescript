@@ -9,7 +9,6 @@ import ActionButton from 'components/Button/ActionButton'
 import IconDelete from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 import LoadSaveReinitializeForm from 'views/utils/LoadSaveReinitializeForm'
 
-import { postLoadFormat } from './helpers/post-load-format'
 import {
   PREFIX_ITEMS,
   SUFFIX_ITEMS,
@@ -100,7 +99,7 @@ export class InlineAddressForm extends React.Component {
         load={this.load}
         save={this.save}
         validate={this.props.validate}
-        postLoadFormat={postLoadFormat}
+        postLoadFormat={this.props.postLoadFormat}
         preSaveFormat={this.props.preSaveFormat}
         render={formProps => (
           <Container style={this.props.style}>
@@ -113,7 +112,7 @@ export class InlineAddressForm extends React.Component {
                     width={20}
                   />
                   <Select
-                    name="prefix"
+                    name="street_prefix"
                     label="Dir"
                     items={PREFIX_ITEMS}
                     width={15}
@@ -124,14 +123,14 @@ export class InlineAddressForm extends React.Component {
                     width={45}
                   />
                   <AutocompleteField
-                    name="suffix"
+                    name="street_suffix"
                     label="Suffix"
                     items={SUFFIX_ITEMS}
                     width={20}
                   />
                 </Row>
                 <Row>
-                  <TextField name="unit" label="Unit" width={20} />
+                  <TextField name="unit_number" label="Unit" width={20} />
                   <TextField name="city" label="City" width={40} />
                   <AutocompleteField
                     name="state"
@@ -139,7 +138,7 @@ export class InlineAddressForm extends React.Component {
                     items={STATES_ITEMS}
                     width={20}
                   />
-                  <TextField name="zip_code" label="Zip Code" width={20} />
+                  <TextField name="postal_code" label="Zip Code" width={20} />
                 </Row>
               </Body>
               <Footer>

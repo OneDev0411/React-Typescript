@@ -13,18 +13,18 @@ import {
   EditButton
 } from './styled'
 
-export function ViewMode({ field, toggleMode, handleAddNew }) {
+export function ViewMode({ address, toggleMode, handleAddNew }) {
   return (
     <Container onClick={toggleMode}>
       <Label>
-        {field.label || 'Home'}
-        {field.is_primary && (
+        {address.label || 'Home'}
+        {address.is_primary && (
           <Tooltip caption="Primary">
             <Star />
           </Tooltip>
         )}
       </Label>
-      <Address>{field.full_address || '-'}</Address>
+      <Address>{address.full_address || '-'}</Address>
       <ActionBar className="action-bar">
         <IconButton isFit onClick={handleAddNew}>
           <AddIcon />

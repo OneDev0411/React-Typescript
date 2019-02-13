@@ -8,6 +8,8 @@ import ActionButton from 'components/Button/ActionButton'
 import DeleteIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
 
+import { postLoadFormat, preSaveFormat, getUpsertAttributes } from './helpers'
+
 import {
   Input,
   ActionBar,
@@ -18,23 +20,28 @@ import {
 
 const DEFAULT_LABEL = { label: 'Select', value: '' }
 
+function destructuringAddress(address) {
+  const { label, full_address, is_primary } = address
+
+  return {
+    is_primary,
+    address: full_address,
+    label: label ? { label, value: label } : DEFAULT_LABEL
+  }
+}
+
 export class EditMode extends React.Component {
   constructor(props) {
     super(props)
 
-    const {
-      field: { label, full_address, is_primary }
-    } = props
-
     this.state = {
-      is_primary,
-      address: full_address,
-      label: label ? { label, value: label } : DEFAULT_LABEL
+      isDisabled: false,
+      ...destructuringAddress(props.address)
     }
 
     this.labels = [
       DEFAULT_LABEL,
-      ...props.field.labels.map(label => ({ label, value: label }))
+      ...props.address.labels.map(label => ({ label, value: label }))
     ]
   }
 
@@ -48,18 +55,41 @@ export class EditMode extends React.Component {
   }
 
   handleSubmit = async values => {
-    console.log('submit from father', values)
+    const {
+      is_primary,
+      label: { value: label }
+    } = this.state
 
-    return null
+    const upsertList = getUpsertAttributes(
+      {
+        label,
+        values,
+        is_primary
+      },
+      destructuringAddress(this.props.address),
+      this.props.address.attributes
+    )
+
+    if (upsertList.length > 0) {
+      this.setState({ isDisabled: true })
+
+      try {
+        await this.props.handleSubmit(upsertList)
+
+        this.props.toggleMode()
+      } catch (error) {
+        console.error(error)
+        this.setState({ isDisabled: false })
+      } finally {
+      }
+    }
   }
 
-  preSaveFormat = (values, originalValues) => {
-    console.log('preSaveFormat from father ', values, originalValues)
-
-    return values
-  }
+  onSubmit = () => this.handleSubmit({})
 
   render() {
+    const { isDisabled } = this.state
+
     return (
       <Container>
         <Flex alignCenter style={{ marginBottom: '0.25em' }}>
@@ -85,24 +115,32 @@ export class EditMode extends React.Component {
         </Flex>
         <InlineAddressField
           address={this.state.address}
+          preSaveFormat={preSaveFormat}
+          postLoadFormat={postLoadFormat}
           handleSubmit={this.handleSubmit}
-          preSaveFormat={this.preSaveFormat}
           handleCancel={this.props.toggleMode}
           renderSearchField={props => <Input {...props} type="text" />}
         />
         <ActionBar>
-          <IconButton isFit>
+          <IconButton isFit disabled={isDisabled}>
             <DeleteIcon />
           </IconButton>
           <Flex inline alignCenter>
             <ActionButton
-              appearance="link"
               size="small"
+              appearance="link"
+              disabled={isDisabled}
               onClick={this.props.toggleMode}
             >
               Cancel
             </ActionButton>
-            <ActionButton size="small">Save</ActionButton>
+            <ActionButton
+              size="small"
+              disabled={isDisabled}
+              onClick={this.onSubmit}
+            >
+              {isDisabled ? 'Saving...' : 'Save'}
+            </ActionButton>
           </Flex>
         </ActionBar>
       </Container>
