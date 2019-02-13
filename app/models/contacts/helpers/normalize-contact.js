@@ -1,7 +1,4 @@
 import _ from 'underscore'
-import { normalize } from 'normalizr'
-
-import { contactsSchema } from '../../../models/contacts/schema'
 
 export function normalizeContact(contact) {
   const subContacts = contact.sub_contacts.map(subContact => {
@@ -26,18 +23,4 @@ export function normalizeContact(contact) {
     ...contact,
     sub_contacts: subContacts
   }
-}
-
-export function normalizeContactAttribute({ data }) {
-  const contacts = Array.isArray(data) ? data : [data]
-
-  return contacts.map(normalizeContact)
-}
-
-export function normalizeContacts(response) {
-  const contacts = {
-    contacts: normalizeContactAttribute(response)
-  }
-
-  return normalize(contacts, contactsSchema)
 }
