@@ -185,5 +185,6 @@ dist
 .tmp
 .idea/
 .package-lock.json
+*.lock
 
 tests/E2E/log
