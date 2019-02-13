@@ -5,13 +5,14 @@ import PageHeader from 'components/PageHeader'
 
 import Loading from '../../../../Partials/Loading'
 import Row from './row'
-import { Container, Description } from './styled'
+import { Container, Description, CreateTagInput } from './styled'
 
 const API_URL = '/contacts/tags'
 
 export default class ManageTags extends Component {
   state = {
     tags: [],
+    createTagInputValue: '',
     loading: true
   }
 
@@ -48,6 +49,12 @@ export default class ManageTags extends Component {
     console.log('onTagChange', tag)
   }
 
+  handleCreateTagInputChange = e => {
+    this.setState({
+      createTagInputValue: e.target.value
+    })
+  }
+
   render() {
     return (
       <Fragment>
@@ -65,10 +72,16 @@ export default class ManageTags extends Component {
                 Start typing tags. Hit return to complete. Hit backspace/delete
                 to remove.
               </Description>
+              <CreateTagInput
+                value={this.state.createTagInputValue}
+                placeholder="Add a tag..."
+                onChange={this.handleCreateTagInputChange}
+              />
               {Object.keys(this.state.tags).map((title, rowIndex) => (
                 <Row
                   key={rowIndex}
                   title={title}
+                  onChange={this.onTagChange}
                   items={this.state.tags[title].items}
                 />
               ))}
