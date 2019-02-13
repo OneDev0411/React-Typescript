@@ -99,6 +99,9 @@ export class EditMode extends React.Component {
 
   onSubmit = () => this.handleSubmit({})
 
+  postLoadFormat = (values, originalValues) =>
+    postLoadFormat(values, originalValues, this.props.address)
+
   render() {
     const { isDisabled } = this.state
 
@@ -128,8 +131,8 @@ export class EditMode extends React.Component {
         <InlineAddressField
           address={this.state.address}
           preSaveFormat={preSaveFormat}
-          postLoadFormat={postLoadFormat}
           handleSubmit={this.handleSubmit}
+          postLoadFormat={this.postLoadFormat}
           handleCancel={this.props.toggleMode}
           renderSearchField={props => <Input {...props} type="text" />}
         />

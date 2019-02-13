@@ -7,8 +7,10 @@ function normalizer(values) {
   }
 }
 
-export function preSaveFormat(values, originalValues) {
+export function preSaveFormat(values, originalValues, address) {
   values = normalizer(values)
+
+  originalValues = address && address.id ? originalValues : {}
 
   const formatedOriginalValues = normalizer(postLoadFormat(originalValues))
 
