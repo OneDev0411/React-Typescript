@@ -273,7 +273,7 @@ class ReminderNotifications extends Component {
   }
 
   shouldRenderForcePushButton() {
-    return process.env.NODE_ENV !== 'production'
+    return true
   }
 
   async forcePushNotifications() {
