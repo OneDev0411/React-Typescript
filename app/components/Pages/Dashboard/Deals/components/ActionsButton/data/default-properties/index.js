@@ -11,6 +11,7 @@ import {
   UPLOAD_BUTTON,
   RENAME_BUTTON,
   DELETE_FILE_BUTTON,
+  DELETE_TASK_BUTTON,
   DOWNLOAD_BUTTON,
   REVIEW_ENVELOPE_BUTTON,
   SPLIT_PDF_BUTTON,
@@ -60,7 +61,11 @@ export const actionsDefaultProperties = {
   },
   [DELETE_FILE_BUTTON]: {
     label: 'Delete',
-    type: 'delete'
+    type: 'delete-file'
+  },
+  [DELETE_TASK_BUTTON]: {
+    label: 'Delete',
+    type: 'delete-task'
   },
   [DOWNLOAD_BUTTON]: {
     label: 'Download',
@@ -80,11 +85,15 @@ export const actionsDefaultProperties = {
   },
   [APPROVE_TASK_BUTTON]: {
     label: 'Approve',
-    type: 'approve-task'
+    type: 'approve-task',
+    condition: ({ is_backoffice, is_task_notified }) =>
+      is_backoffice && is_task_notified
   },
   [DECLINE_TASK_BUTTON]: {
     label: 'Decline',
-    type: 'decline-task'
+    type: 'decline-task',
+    condition: ({ is_backoffice, is_task_notified }) =>
+      is_backoffice && is_task_notified
   },
   [TASK_NOTIFICATION_BUTTON]: {
     label: ({ task, isBackOffice }) => {
@@ -95,6 +104,13 @@ export const actionsDefaultProperties = {
       return task.attention_requested ? 'Cancel Notify' : 'Notify Office'
     },
     type: ({ task }) =>
-      task.attention_requested ? 'remove-task-notification' : 'notify-task'
+      task.attention_requested ? 'remove-task-notification' : 'notify-task',
+    condition: ({ is_backoffice, is_task_notified }) => {
+      if (is_backoffice && !is_task_notified) {
+        return false
+      }
+
+      return true
+    }
   }
 }

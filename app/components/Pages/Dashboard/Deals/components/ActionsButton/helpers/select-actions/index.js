@@ -1,24 +1,26 @@
-import {
-  documentsConditions as agentDocumentsConditions,
-  tasksConditions as agentTasksConditions
-} from '../../data/tables/agent'
+import documentsConditions from '../../data/table/documents'
+import tasksConditions from '../../data/table/tasks'
 
-import { tasksConditions as backofficeTasksConditions } from '../../data/tables/backoffice'
-
-export function selectActions(type, conditions, isBackOffice) {
+export function selectActions(type, conditions) {
   let list = []
 
   if (type === 'task') {
-    list = isBackOffice ? backofficeTasksConditions : agentTasksConditions
+    list = tasksConditions
   }
 
   if (type === 'document') {
-    list = isBackOffice ? [] : agentDocumentsConditions
+    list = documentsConditions
   }
 
   const item = list.find(
     collection => collection.conditions(conditions) === true
   )
 
-  return item && item.actions
+  if (!item) {
+    return null
+  }
+
+  return item.actions.filter(action =>
+    typeof action.condition === 'function' ? action.condition(conditions) : true
+  )
 }
