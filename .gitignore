@@ -184,5 +184,6 @@ desktop/builds
 dist
 .tmp
 .idea/
+.package-lock.json
 
 tests/E2E/log
