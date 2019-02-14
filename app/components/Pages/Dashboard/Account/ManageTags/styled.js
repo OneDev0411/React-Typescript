@@ -25,6 +25,8 @@ export const RowTitle = styled.h6`
   color: ${grey.A900};
   font-size: 1rem;
   line-height: 1.5rem;
+  margin: auto 0;
+  width: 1.3125rem;
 `
 
 export const CreateTagInputContainer = styled.div`
@@ -72,6 +74,7 @@ export const CreateTagInput = styled.input`
 `
 
 export const TextInputSuffix = styled.button`
+  outline: none;
   border: none;
   background: transparent;
   font-size: 1rem;

@@ -68,12 +68,12 @@ class ManageTags extends Component {
     const tag = this.state.createTagInputValue
 
     await this.createTag(tag)
-    notify({
+    this.props.notify({
       status: 'success',
       message: 'Tag added.'
     })
-    await this.reloadTags()
     this.setState({ createTagInputValue: '' })
+    await this.reloadTags()
   }
 
   handleCreateTagInputChange = value => {
@@ -101,7 +101,7 @@ class ManageTags extends Component {
               </Description>
               <IconTextInput
                 placeholder="Add a tag..."
-                defaultValue={this.state.createTagInputValue}
+                value={this.state.createTagInputValue}
                 onChange={this.handleCreateTagInputChange}
                 style={{ marginBottom: '1rem' }}
                 prefixElementRenderer={() => (
@@ -118,14 +118,16 @@ class ManageTags extends Component {
                   </TextInputSuffix>
                 )}
               />
-              {Object.keys(this.state.tags).map((title, rowIndex) => (
-                <Row
-                  key={rowIndex}
-                  title={title}
-                  onChange={this.onTagChange}
-                  items={this.state.tags[title].items}
-                />
-              ))}
+              {Object.keys(this.state.tags)
+                .sort()
+                .map((title, rowIndex) => (
+                  <Row
+                    key={rowIndex}
+                    title={title}
+                    onChange={this.onTagChange}
+                    items={this.state.tags[title].items}
+                  />
+                ))}
             </Fragment>
           )}
         </Container>
