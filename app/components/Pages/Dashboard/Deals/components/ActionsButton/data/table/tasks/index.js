@@ -9,10 +9,10 @@ import {
   RESEND_BUTTON,
   VIEW_BUTTON,
   TASK_NOTIFICATION_BUTTON,
-  DOWNLOAD_BUTTON,
   REVIEW_ENVELOPE_BUTTON,
   SPLIT_PDF_BUTTON,
   UPLOAD_BUTTON,
+  DELETE_TASK_BUTTON,
   SHOW_COMMENTS_BUTTON,
   APPROVE_TASK_BUTTON,
   DECLINE_TASK_BUTTON
@@ -35,6 +35,13 @@ function evaluateCondition(data, conditions) {
   )
 }
 
+const sharedActions = {
+  [APPROVE_TASK_BUTTON]: {},
+  [DECLINE_TASK_BUTTON]: {},
+  [SHOW_COMMENTS_BUTTON]: {},
+  [DELETE_TASK_BUTTON]: {}
+}
+
 export default normalizeConditions([
   {
     conditions: data =>
@@ -48,10 +55,7 @@ export default normalizeConditions([
       [UPLOAD_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
-      [TASK_NOTIFICATION_BUTTON]: {}
+      ...sharedActions
     }
   },
   {
@@ -66,9 +70,7 @@ export default normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
+      ...sharedActions,
       [UPLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
@@ -87,14 +89,11 @@ export default normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
+      ...sharedActions,
       [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {},
-      [UPLOAD_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {}
     }
   },
   {
@@ -109,15 +108,12 @@ export default normalizeConditions([
       [RESEND_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
+      ...sharedActions,
       [DOCUSIGN_BUTTON]: {},
       [VOID_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {},
-      [UPLOAD_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {}
     }
   },
   {
@@ -132,13 +128,10 @@ export default normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
+      ...sharedActions,
       [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {}
     }
   },
@@ -151,15 +144,12 @@ export default normalizeConditions([
         envelope_status: ENVELOPE_COMPLETED
       }),
     actions: {
-      [DOWNLOAD_BUTTON]: {
+      [VIEW_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
+      ...sharedActions,
       [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
-      [VIEW_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {}
     }
@@ -176,10 +166,7 @@ export default normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
-      [TASK_NOTIFICATION_BUTTON]: {},
+      ...sharedActions,
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -195,14 +182,11 @@ export default normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
+      ...sharedActions,
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
-      [UPLOAD_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {}
     }
   },
   {
@@ -217,14 +201,11 @@ export default normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
+      ...sharedActions,
       [VOID_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
-      [VIEW_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {}
+      [VIEW_BUTTON]: {}
     }
   },
   {
@@ -242,15 +223,12 @@ export default normalizeConditions([
       [EDIT_BUTTON]: {
         disabled: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
+      ...sharedActions,
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [VOID_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
-      [UPLOAD_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {}
     }
   },
   {
@@ -265,14 +243,11 @@ export default normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
+      ...sharedActions,
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
-      [UPLOAD_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {}
     }
   },
   {
@@ -284,34 +259,11 @@ export default normalizeConditions([
         envelope_status: ENVELOPE_COMPLETED
       }),
     actions: {
-      [EDIT_BUTTON]: {
+      [VIEW_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
-      [VIEW_BUTTON]: {},
-      [DOCUSIGN_BUTTON]: {},
-      [TASK_NOTIFICATION_BUTTON]: {},
-      [UPLOAD_BUTTON]: {}
-    }
-  },
-  {
-    conditions: data =>
-      evaluateCondition(data, {
-        task_type: TASK_FORM,
-        file_uploaded: true,
-        form_saved: false,
-        envelope_status: ENVELOPE_NONE
-      }),
-    actions: {
-      [EDIT_BUTTON]: {
-        primary: true
-      },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
-      [VIEW_BUTTON]: {},
+      ...sharedActions,
+      [EDIT_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
@@ -329,9 +281,7 @@ export default normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
+      ...sharedActions,
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
@@ -350,9 +300,7 @@ export default normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
+      ...sharedActions,
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
@@ -374,9 +322,7 @@ export default normalizeConditions([
       [EDIT_BUTTON]: {
         disabled: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
+      ...sharedActions,
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [VOID_BUTTON]: {},
@@ -396,9 +342,7 @@ export default normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
+      ...sharedActions,
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
@@ -414,15 +358,13 @@ export default normalizeConditions([
         envelope_status: ENVELOPE_COMPLETED
       }),
     actions: {
-      [EDIT_BUTTON]: {
+      [TASK_NOTIFICATION_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
+      ...sharedActions,
       [VIEW_BUTTON]: {},
+      [EDIT_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -438,14 +380,11 @@ export default normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
+      ...sharedActions,
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
-      [UPLOAD_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {}
     }
   },
   {
@@ -460,14 +399,11 @@ export default normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
+      ...sharedActions,
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
-      [UPLOAD_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {}
     }
   },
   {
@@ -485,15 +421,12 @@ export default normalizeConditions([
       [EDIT_BUTTON]: {
         disabled: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
+      ...sharedActions,
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [VOID_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
-      [UPLOAD_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {}
     }
   },
   {
@@ -508,14 +441,11 @@ export default normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
+      ...sharedActions,
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
-      [UPLOAD_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {}
+      [UPLOAD_BUTTON]: {}
     }
   },
   {
@@ -527,13 +457,10 @@ export default normalizeConditions([
         envelope_status: ENVELOPE_COMPLETED
       }),
     actions: {
-      [DOWNLOAD_BUTTON]: {
+      [VIEW_BUTTON]: {
         primary: true
       },
-      [APPROVE_TASK_BUTTON]: {},
-      [DECLINE_TASK_BUTTON]: {},
-      [SHOW_COMMENTS_BUTTON]: {},
-      [VIEW_BUTTON]: {},
+      ...sharedActions,
       [EDIT_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},

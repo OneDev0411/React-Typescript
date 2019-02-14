@@ -8,12 +8,14 @@ import { getAttributeDefs } from 'store_actions/contacts'
 import { getActiveTeamId } from 'utils/user-teams'
 import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 import PageHeader from 'components/PageHeader'
+import ActionButton from 'components/Button/ActionButton'
 
 import Loading from '../../../../Partials/Loading'
 
 import Column from './column'
 
 const API_URL = '/calendar/settings/notifications'
+const FORCE_PUSH_API_URL = `${API_URL}/force`
 
 const DEAL_DATE_OBJECT_TYPE = 'deal_context'
 const CONTACT_DATE_OBJECT_TYPE = 'contact_attribute'
@@ -270,29 +272,47 @@ class ReminderNotifications extends Component {
     this.removeSetting(setting)
   }
 
+  shouldRenderForcePushButton() {
+    return true
+  }
+
+  async forcePushNotifications() {
+    return new Fetch().post(FORCE_PUSH_API_URL)
+  }
+
   render() {
     return (
       <Fragment>
         <PageHeader style={{ marginBottom: '1.5em', marginTop: '1.5rem' }}>
           <PageHeader.Title showBackButton={false}>
             <PageHeader.Heading>Reminder Notifications</PageHeader.Heading>
+            {this.shouldRenderForcePushButton() && (
+              <ActionButton
+                appearance="outline"
+                style={{ marginLeft: '2rem' }}
+                onClick={() => this.forcePushNotifications()}
+              >
+                Force Push Notifications
+              </ActionButton>
+            )}
           </PageHeader.Title>
         </PageHeader>
         <Flex>
           {this.state.loading ? (
             <Loading />
           ) : (
-            this.state.columns.map((col, index) => (
-              <Column
-                key={index}
-                {...col}
-                settings={this.state.settings}
-                options={DROPDOWN_OPTIONS}
-                onChange={this.changeHandler}
-              />
-            ))
+            <Fragment>
+              {this.state.columns.map((col, index) => (
+                <Column
+                  key={index}
+                  {...col}
+                  settings={this.state.settings}
+                  options={DROPDOWN_OPTIONS}
+                  onChange={this.changeHandler}
+                />
+              ))}
+            </Fragment>
           )}
-          }
         </Flex>
       </Fragment>
     )

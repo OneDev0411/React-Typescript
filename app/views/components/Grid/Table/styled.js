@@ -10,6 +10,15 @@ export const ToolbarContainer = styled.div`
   align-items: center;
   justify-content: flex-start;
   margin-bottom: 1.5em;
+
+  ${props =>
+    props.isToolbarSticky &&
+    `
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 1;
+  `}
 `
 
 export const ActionsBar = styled.div`

@@ -26,7 +26,7 @@ export const ProfileTabs = ({ user }) => (
     <Tab
       indexed
       text="Reminder Notifications"
-      to="/dashboard/account/reminderNotifications"
+      to="/dashboard/account/reminder-notifications"
     />
   </ul>
 )

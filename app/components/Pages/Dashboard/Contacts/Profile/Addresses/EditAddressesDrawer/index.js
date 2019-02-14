@@ -5,12 +5,10 @@ import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import { addNotification as notify } from 'reapop'
 
-import { grey, brandBackground } from '../../../../../../../views/utils/colors'
+import { upsertContactAttributes } from '../../../../../../../models/contacts/helpers/upsert-contact-attributes'
 
+import { grey, brandBackground } from '../../../../../../../views/utils/colors'
 import AddButton from '../../../../../../../views/components/Button/ActionButton'
-// import DeleteButton from '../../../../../../../views/components/Button/IconButton'
-// import DeleteIcon from '../../../../../../../views/components/SvgIcons/Delete/IconDelete'
-import { upsertContactAttributes } from '../../../../../../../store_actions/contacts/upsert-contact-attributes'
 import { FinalFormDrawer } from '../../../../../../../views/components/FinalFormDrawer'
 import {
   TextField,
@@ -40,10 +38,12 @@ class EditAddressesForm extends React.Component {
         return
       }
 
-      await this.props.dispatch(
-        upsertContactAttributes(this.props.contact.id, attributes)
+      const newContact = await upsertContactAttributes(
+        this.props.contact.id,
+        attributes
       )
 
+      this.props.submitCallback(newContact)
       this.props.onClose()
       this.props.dispatch(
         notify({
@@ -131,18 +131,6 @@ class EditAddressesForm extends React.Component {
                             Set as primary address
                           </span>
                         </label>
-                        {/* <DeleteButton
-                            color="#778a9f"
-                            hoverColor="#263d50"
-                            onClick={() => fields.remove(index)}
-                            style={{
-                              position: 'absolute',
-                              top: '1.4rem',
-                              right: '1.4rem'
-                            }}
-                          >
-                            <DeleteIcon />
-                          </DeleteButton> */}
                       </div>
                     )}
                     <div>
