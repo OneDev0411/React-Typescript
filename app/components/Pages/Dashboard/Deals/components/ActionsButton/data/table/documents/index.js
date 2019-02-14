@@ -33,10 +33,6 @@ function evaluateCondition(data, conditions) {
   )
 }
 
-const sharedActions = {
-  [DELETE_FILE_BUTTON]: {}
-}
-
 export default normalizeConditions([
   {
     conditions: data =>
@@ -53,8 +49,7 @@ export default normalizeConditions([
       },
       [DOCUSIGN_BUTTON]: {
         disabled: true
-      },
-      ...sharedActions
+      }
     }
   },
   {
@@ -71,8 +66,7 @@ export default normalizeConditions([
         primary: true
       },
       [EDIT_BUTTON]: {},
-      [VIEW_BUTTON]: {},
-      ...sharedActions
+      [VIEW_BUTTON]: {}
     }
   },
   {
@@ -164,7 +158,7 @@ export default normalizeConditions([
       [VIEW_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
       [MOVE_BUTTON]: {},
-      ...sharedActions
+      [DELETE_FILE_BUTTON]: {}
     }
   },
   {
@@ -182,7 +176,8 @@ export default normalizeConditions([
       },
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
-      [TASK_NOTIFICATION_BUTTON]: {}
+      [TASK_NOTIFICATION_BUTTON]: {},
+      [DELETE_FILE_BUTTON]: {}
     }
   },
   {
@@ -203,7 +198,7 @@ export default normalizeConditions([
       },
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
-      ...sharedActions
+      [DELETE_FILE_BUTTON]: {}
     }
   },
   {
@@ -222,7 +217,7 @@ export default normalizeConditions([
       [VIEW_BUTTON]: {},
       [MOVE_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
-      ...sharedActions
+      [DELETE_FILE_BUTTON]: {}
     }
   },
   {
@@ -239,7 +234,7 @@ export default normalizeConditions([
         primary: true
       },
       [DOCUSIGN_BUTTON]: {},
-      ...sharedActions
+      [DELETE_FILE_BUTTON]: {}
     }
   },
   {
@@ -256,7 +251,7 @@ export default normalizeConditions([
         primary: true
       },
       [MOVE_BUTTON]: {},
-      ...sharedActions
+      [DELETE_FILE_BUTTON]: {}
     }
   },
   {
@@ -273,7 +268,7 @@ export default normalizeConditions([
       },
       [VIEW_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
-      ...sharedActions
+      [DELETE_FILE_BUTTON]: {}
     }
   },
   {
@@ -289,7 +284,7 @@ export default normalizeConditions([
         primary: true
       },
       [VIEW_BUTTON]: {},
-      ...sharedActions
+      [DELETE_FILE_BUTTON]: {}
     }
   }
 ])

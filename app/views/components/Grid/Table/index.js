@@ -100,7 +100,7 @@ class Grid extends React.Component {
 
     return (
       <div>
-        <ToolbarContainer>
+        <ToolbarContainer isToolbarSticky={this.props.isToolbarSticky}>
           <TableSummary
             Component={this.props.summary.render}
             entityName={this.props.summary.entityName}
@@ -156,6 +156,7 @@ Grid.propTypes = {
   plugins: PropTypes.object,
   isFetching: PropTypes.bool,
   isFetchingMore: PropTypes.bool,
+  isToolbarSticky: PropTypes.bool,
   showTableHeader: PropTypes.bool,
   getTrProps: PropTypes.func,
   getTdProps: PropTypes.func,
@@ -173,6 +174,7 @@ Grid.defaultProps = {
   isFetching: false,
   isFetchingMore: false,
   showTableHeader: true,
+  isToolbarSticky: true,
   getBodyProps: () => {},
   getTrProps: () => {},
   getTdProps: () => {},
