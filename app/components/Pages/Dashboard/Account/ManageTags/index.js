@@ -1,15 +1,24 @@
 import React, { Component, Fragment } from 'react'
+import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 
 import Fetch from 'services/fetch'
 import PageHeader from 'components/PageHeader'
+import IconTextInput from 'components/Input/IconTextInput'
+import TagIcon from 'components/SvgIcons/Tag/TagIcon'
 
 import Loading from '../../../../Partials/Loading'
 import Row from './row'
-import { Container, Description, CreateTagInput } from './styled'
+import {
+  Container,
+  Description,
+  TextInputPrefix,
+  TextInputSuffix
+} from './styled'
 
 const API_URL = '/contacts/tags'
 
-export default class ManageTags extends Component {
+class ManageTags extends Component {
   state = {
     tags: [],
     createTagInputValue: '',
@@ -17,9 +26,13 @@ export default class ManageTags extends Component {
   }
 
   async componentDidMount() {
-    const tags = await this.getTags()
+    await this.reloadTags()
+  }
 
-    console.log('TAGS', tags)
+  reloadTags = async () => {
+    this.setState({ loading: true })
+
+    const tags = await this.getTags()
 
     this.setState({ tags, loading: false })
   }
@@ -45,20 +58,34 @@ export default class ManageTags extends Component {
     return tags
   }
 
+  createTag = async tag => new Fetch().post(API_URL).send({ tag })
+
   onTagChange = tag => {
     console.log('onTagChange', tag)
   }
 
-  handleCreateTagInputChange = e => {
+  onAddClick = async () => {
+    const tag = this.state.createTagInputValue
+
+    await this.createTag(tag)
+    notify({
+      status: 'success',
+      message: 'Tag added.'
+    })
+    await this.reloadTags()
+    this.setState({ createTagInputValue: '' })
+  }
+
+  handleCreateTagInputChange = value => {
     this.setState({
-      createTagInputValue: e.target.value
+      createTagInputValue: value
     })
   }
 
   render() {
     return (
       <Fragment>
-        <PageHeader style={{ marginBottom: '1.5em', marginTop: '1.5rem' }}>
+        <PageHeader style={{ marginBottom: '1rem', marginTop: '1.5rem' }}>
           <PageHeader.Title showBackButton={false}>
             <PageHeader.Heading>Manage Tags</PageHeader.Heading>
           </PageHeader.Title>
@@ -72,10 +99,24 @@ export default class ManageTags extends Component {
                 Start typing tags. Hit return to complete. Hit backspace/delete
                 to remove.
               </Description>
-              <CreateTagInput
-                value={this.state.createTagInputValue}
+              <IconTextInput
                 placeholder="Add a tag..."
+                defaultValue={this.state.createTagInputValue}
                 onChange={this.handleCreateTagInputChange}
+                style={{ marginBottom: '1rem' }}
+                prefixElementRenderer={() => (
+                  <TextInputPrefix>
+                    <TagIcon />
+                  </TextInputPrefix>
+                )}
+                suffixElementRenderer={() => (
+                  <TextInputSuffix
+                    disabled={!this.state.createTagInputValue}
+                    onClick={this.onAddClick}
+                  >
+                    Add
+                  </TextInputSuffix>
+                )}
               />
               {Object.keys(this.state.tags).map((title, rowIndex) => (
                 <Row
@@ -92,3 +133,8 @@ export default class ManageTags extends Component {
     )
   }
 }
+
+export default connect(
+  null,
+  { notify }
+)(ManageTags)

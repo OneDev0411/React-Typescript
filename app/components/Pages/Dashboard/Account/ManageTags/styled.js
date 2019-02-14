@@ -70,3 +70,18 @@ export const CreateTagInput = styled.input`
     background-color: #ffffff;
   }
 `
+
+export const TextInputSuffix = styled.button`
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  padding: 0 1rem;
+  margin: auto;
+  color: ${({ disabled }) => (disabled ? grey.A900 : primary)};
+`
+
+export const TextInputPrefix = styled.div`
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: 0.75rem;
+`
