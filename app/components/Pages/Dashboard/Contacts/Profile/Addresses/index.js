@@ -1,128 +1,128 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { getContactAddresses } from '../../../../../../models/contacts/helpers/get-contact-addresses'
+import { getContactAddresses } from 'models/contacts/helpers/get-contact-addresses'
+import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
+import { deleteAttributesFromContacts } from 'models/contacts/delete-attributes-bulk-contacts'
 
-import { selectDefsBySection } from '../../../../../../reducers/contacts/attributeDefs'
+import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 
-import ActionButton from '../../../../../../views/components/Button/ActionButton'
-import Tooltip from '../../../../../../views/components/tooltip'
-import StarIcon from '../../../../../../views/components/SvgIcons/Star/StarIcon'
-
-import EditDrawer from './EditAddressesDrawer'
+import { AddressField } from './AddressField'
 import { Section } from '../components/Section'
-import { getAddresses, getFullAddress } from './helpers'
+import { getAddresses, generateEmptyAddress } from './helpers/get-addresses'
 
 class Addresses extends React.Component {
-  state = {
-    isOpenEditDrawer: false
+  constructor(props) {
+    super(props)
+
+    const addressAttributeDefs = selectDefsBySection(
+      props.attributeDefs,
+      'Addresses'
+    )
+
+    const addresses = getContactAddresses(props.contact)
+
+    this.state = {
+      addresses: [
+        ...getAddresses(addresses, addressAttributeDefs),
+        generateEmptyAddress(addressAttributeDefs, addresses.length)
+      ]
+    }
+
+    this.addressAttributeDefs = addressAttributeDefs
   }
 
-  openEditDrawer = () => this.setState({ isOpenEditDrawer: true })
+  addNewAddress = event => {
+    if (event && event.stopPropagation) {
+      event.stopPropagation()
+    }
 
-  closeEditDrawer = () => this.setState({ isOpenEditDrawer: false })
-
-  getSectionContent = addresses => {
-    let addressesItems = []
-
-    addresses.forEach(address => {
-      if (!address.fields.some(field => field[field.attribute_def.data_type])) {
-        return
-      }
-
-      const item = [
-        <dt
-          key={`address_${address.index}_label`}
-          style={{
-            color: '#7f7f7f',
-            fontWeight: '300',
-            marginBottom: '0.25em',
-            display: 'flex',
-            alignItems: 'center'
-          }}
-        >
-          {address.label}
-          {address.is_primary && (
-            <Tooltip caption="Primary">
-              <StarIcon
-                style={{
-                  fill: '#f5a623',
-                  width: '16px',
-                  height: '16px',
-                  marginLeft: '5px'
-                }}
-              />
-            </Tooltip>
-          )}
-        </dt>,
-        <dd
-          key={`address_${address.index}_value`}
-          style={{
-            marginBottom: '1em'
-          }}
-        >
-          {getFullAddress(address.fields)}
-        </dd>
+    this.setState(state => ({
+      addresses: [
+        ...state.addresses,
+        generateEmptyAddress(this.addressAttributeDefs, state.addresses.length)
       ]
+    }))
+  }
 
-      addressesItems.push(item)
-    })
+  handleDelete = async (addressIndex, ids) => {
+    const removeAddressFromState = () =>
+      this.setState(state => {
+        const addresses = state.addresses.filter(
+          address => address.index !== addressIndex
+        )
 
-    return <dl>{addressesItems}</dl>
+        if (addresses.length > 0) {
+          return { addresses }
+        }
+
+        return {
+          addresses: [
+            generateEmptyAddress(this.addressAttributeDefs, addresses.length)
+          ]
+        }
+      })
+
+    if (ids.length === 0) {
+      return removeAddressFromState()
+    }
+
+    try {
+      await deleteAttributesFromContacts(ids)
+
+      return removeAddressFromState()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  handleSubmit = async attributes => {
+    try {
+      const updatedContact = await upsertContactAttributes(
+        this.props.contact.id,
+        attributes,
+        {
+          associations: [
+            'contact.sub_contacts',
+            'contact_attribute.attribute_def'
+          ]
+        }
+      )
+
+      const addresses = getContactAddresses(updatedContact)
+
+      this.setState({
+        addresses: [
+          ...getAddresses(addresses, this.addressAttributeDefs),
+          generateEmptyAddress(this.addressAttributeDefs, addresses.length)
+        ]
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   render() {
-    const { addresses } = this.props
-
-    const hasAddresses =
-      addresses.length > 0 && addresses[0].fields.some(field => field.id)
-
     return (
-      <Section
-        onEdit={hasAddresses ? this.openEditDrawer : undefined}
-        title="Addresses"
-      >
-        {hasAddresses ? (
-          this.getSectionContent(addresses)
-        ) : (
-          <div
-            style={{
-              marginTop: hasAddresses ? 0 : '0.5em'
-            }}
-          >
-            <ActionButton
-              appearance="outline"
-              onClick={this.openEditDrawer}
-              size="small"
-            >
-              Add Address
-            </ActionButton>
-          </div>
-        )}
-
-        {this.state.isOpenEditDrawer && (
-          <EditDrawer
-            isOpen
-            addresses={this.props.addresses}
-            addressAttributeDefs={this.props.addressAttributeDefs}
-            contact={this.props.contact}
-            onClose={this.closeEditDrawer}
+      <Section title="Addresses" isNew>
+        {this.state.addresses.map((address, index) => (
+          <AddressField
+            key={index}
+            address={address}
+            handleDelete={this.handleDelete}
+            handleSubmit={this.handleSubmit}
+            handleAddNew={this.addNewAddress}
           />
-        )}
+        ))}
       </Section>
     )
   }
 }
 
-function mapStateToProps(state, props) {
-  const addressAttributeDefs = selectDefsBySection(
-    state.contacts.attributeDefs,
-    'Addresses'
-  )
-  const addressesFields = getContactAddresses(props.contact)
-  const addresses = getAddresses(addressesFields, addressAttributeDefs)
-
-  return { addresses, addressAttributeDefs }
+function mapStateToProps(state) {
+  return {
+    attributeDefs: state.contacts.attributeDefs
+  }
 }
 
 export default connect(mapStateToProps)(Addresses)

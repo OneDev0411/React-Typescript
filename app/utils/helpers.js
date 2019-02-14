@@ -321,3 +321,5 @@ export function isNumeric(n) {
 export function getIndexLabel(index) {
   return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')[index]
 }
+
+export function noop() {}

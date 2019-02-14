@@ -8,15 +8,11 @@ import Fetch from '../../../services/fetch'
 
 export async function deleteAttributesFromContacts(ids) {
   if (!Array.isArray(ids)) {
-    throw new Error('Contact ids required.')
+    throw new Error('Attribute ids required.')
   }
 
   try {
-    const response = await new Fetch()
-      .delete('/contacts/attributes')
-      .send({ ids })
-
-    return response.body
+    return new Fetch().delete('/contacts/attributes').send({ ids })
   } catch (error) {
     throw error
   }

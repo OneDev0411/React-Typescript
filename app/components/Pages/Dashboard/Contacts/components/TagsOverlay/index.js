@@ -243,17 +243,17 @@ class TagsOverlay extends React.Component {
 
   // get common tags between selected contacts & default tags
   getCommonTags = (selectedContactsIds, ContactListStore, existingTags) => {
-    if (
-      selectedContactsIds.length === 0 ||
-      selectContactsInfo(ContactListStore).total === 0
-    ) {
+    if (selectedContactsIds.length === 0) {
       return []
     }
 
     const { attributeDefs } = this.props
     const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
     const contactsTags = selectedContactsIds.map(contactId => {
-      const contact = selectContact(ContactListStore, contactId)
+      const contact =
+        this.props.contact && this.props.contact.id === contactId
+          ? this.props.contact
+          : selectContact(ContactListStore, contactId)
 
       if (contact) {
         return getContactAttribute(contact, attribute_def)
