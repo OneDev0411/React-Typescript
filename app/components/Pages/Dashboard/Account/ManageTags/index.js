@@ -20,7 +20,7 @@ const API_URL = '/contacts/tags'
 
 class ManageTags extends Component {
   state = {
-    tags: [],
+    tags: {},
     createTagInputValue: '',
     loading: true
   }
@@ -48,6 +48,7 @@ class ManageTags extends Component {
       if (!tags[title]) {
         tags[title] = {
           title,
+          highlight: false,
           items: []
         }
       }
@@ -59,6 +60,21 @@ class ManageTags extends Component {
   }
 
   createTag = async tag => new Fetch().post(API_URL).send({ tag })
+
+  highlightTagRow = tag => {
+    const title = tag[0].toUpperCase()
+
+    this.setState(prevState => ({
+      ...prevState,
+      tags: {
+        ...prevState.tags,
+        [title]: {
+          ...prevState.tags[title],
+          highlight: true
+        }
+      }
+    }))
+  }
 
   onTagChange = tag => {
     console.log('onTagChange', tag)
@@ -74,6 +90,7 @@ class ManageTags extends Component {
     })
     this.setState({ createTagInputValue: '' })
     await this.reloadTags()
+    this.highlightTagRow(tag)
   }
 
   handleCreateTagInputChange = value => {
@@ -102,8 +119,8 @@ class ManageTags extends Component {
               <IconTextInput
                 placeholder="Add a tag..."
                 value={this.state.createTagInputValue}
+                style={{ margin: '1rem 1.5rem' }}
                 onChange={this.handleCreateTagInputChange}
-                style={{ marginBottom: '1rem' }}
                 prefixElementRenderer={() => (
                   <TextInputPrefix>
                     <TagIcon />
@@ -124,8 +141,9 @@ class ManageTags extends Component {
                   <Row
                     key={rowIndex}
                     title={title}
-                    onChange={this.onTagChange}
                     items={this.state.tags[title].items}
+                    highlight={this.state.tags[title].highlight}
+                    onChange={this.onTagChange}
                   />
                 ))}
             </Fragment>
