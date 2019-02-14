@@ -9,10 +9,9 @@ class IconTextInput extends React.Component {
   constructor(props) {
     super(props)
 
-    const { onChange, debounceTime, defaultValue } = props
+    const { onChange, debounceTime } = props
 
     this.state = {
-      value: defaultValue || '',
       isFocused: false
     }
 
@@ -24,24 +23,9 @@ class IconTextInput extends React.Component {
     const { value } = e.target
     const { minimumLength } = this.props
 
-    this.setState({
-      value
-    })
-
     if (value.length === 0 || value.length >= minimumLength) {
       this.onChangeHandler(value)
     }
-  }
-
-  onRef = ref => {
-    if (!ref || !this.props.inputRef) {
-      return false
-    }
-
-    // add a functionality to be able clear input outside of the form
-    ref.clear = () => this.setState({ value: '' })
-
-    this.props.inputRef(ref)
   }
 
   onBlur = () => this.setState({ isFocused: false })
@@ -50,6 +34,7 @@ class IconTextInput extends React.Component {
 
   render() {
     const {
+      value,
       placeholder,
       style,
       prefixElementRenderer,
@@ -60,12 +45,11 @@ class IconTextInput extends React.Component {
       <Container style={style} isFocused={this.state.isFocused}>
         {prefixElementRenderer()}
         <TextInput
-          value={this.state.value}
+          value={value}
           placeholder={placeholder}
           onChange={this.handleChange}
           onBlur={this.onBlur}
           onFocus={this.onFocus}
-          ref={this.onRef}
         />
         {suffixElementRenderer()}
       </Container>
@@ -74,7 +58,7 @@ class IconTextInput extends React.Component {
 }
 
 IconTextInput.propTypes = {
-  defaultValue: PropTypes.string,
+  value: PropTypes.string,
   placeholder: PropTypes.string,
   debounceTime: PropTypes.number,
   minimumLength: PropTypes.number,
@@ -84,7 +68,7 @@ IconTextInput.propTypes = {
 }
 
 IconTextInput.defaultProps = {
-  defaultValue: '',
+  value: '',
   placeholder: '',
   debounceTime: 0,
   minimumLength: 0,
