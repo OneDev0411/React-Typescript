@@ -3,10 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
-import {
-  upsertContactAttributes,
-  deleteAttributes
-} from '../../../../../../../store_actions/contacts'
+import { upsertContactAttributes } from '../../../../../../../models/contacts/helpers/upsert-contact-attributes'
+import { deleteContactAttributes } from '../../../../../../../models/contacts/helpers/delete-contact-attributes'
 import { selectDefsBySection } from '../../../../../../../reducers/contacts/attributeDefs'
 import { getContactAttributesBySection } from '../../../../../../../models/contacts/helpers'
 import ActionButton from '../../../../../../../views/components/Button/ActionButton'
@@ -25,12 +23,14 @@ import {
 
 const propTypes = {
   addNewFieldButtonText: PropTypes.string,
-  showAddNewCustomAttributeButton: PropTypes.bool
+  showAddNewCustomAttributeButton: PropTypes.bool,
+  submitCallback: PropTypes.func
 }
 
 const defaultProps = {
   addNewFieldButtonText: '',
-  showAddNewCustomAttributeButton: true
+  showAddNewCustomAttributeButton: true,
+  submitCallback() {}
 }
 
 class SectionWithFields extends React.Component {
@@ -52,28 +52,44 @@ class SectionWithFields extends React.Component {
   filterEditableFields = field => field.attribute_def.editable
 
   handleOnSubmit = async values => {
+    const { contact } = this.props
+    let newContact = contact
+
     try {
       const { upsertedAttributeList, deletedAttributesList } = formatPreSave(
         this.props.fields.filter(this.filterEditableFields),
         values
       )
 
+      const requests = []
+
       if (upsertedAttributeList.length > 0) {
-        await this.props.upsertContactAttributes(
-          this.props.contact.id,
-          upsertedAttributeList.map(a =>
-            this.props.isPartner ? { ...a, is_partner: true } : a
+        requests.push(
+          upsertContactAttributes(
+            contact.id,
+            upsertedAttributeList.map(a =>
+              this.props.isPartner ? { ...a, is_partner: true } : a
+            )
           )
         )
       }
 
       if (deletedAttributesList.length > 0) {
-        await this.props.deleteAttributes(
-          this.props.contact.id,
-          deletedAttributesList
+        requests.push(
+          deleteContactAttributes(contact.id, deletedAttributesList)
         )
       }
 
+      const response = await Promise.all(requests)
+
+      response.forEach(updatedContact => {
+        newContact = {
+          ...newContact,
+          ...updatedContact
+        }
+      })
+
+      this.props.submitCallback(newContact)
       this.closeEditAttributeDrawer()
       this.props.notify({
         status: 'success',
@@ -290,5 +306,5 @@ function mapStateToProps(state, props) {
 
 export default connect(
   mapStateToProps,
-  { upsertContactAttributes, deleteAttributes, notify }
+  { notify }
 )(SectionWithFields)

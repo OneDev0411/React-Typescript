@@ -11,7 +11,6 @@ import {
   VIEW_BUTTON,
   TASK_NOTIFICATION_BUTTON,
   DELETE_FILE_BUTTON,
-  DOWNLOAD_BUTTON,
   REVIEW_ENVELOPE_BUTTON,
   SPLIT_PDF_BUTTON
 } from '../../action-buttons'
@@ -67,8 +66,7 @@ export default normalizeConditions([
         primary: true
       },
       [EDIT_BUTTON]: {},
-      [VIEW_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {}
+      [VIEW_BUTTON]: {}
     }
   },
   {
@@ -86,8 +84,7 @@ export default normalizeConditions([
       },
       [VOID_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
-      [VIEW_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {}
+      [VIEW_BUTTON]: {}
     }
   },
   {
@@ -103,15 +100,12 @@ export default normalizeConditions([
       [RESEND_BUTTON]: {
         primary: true
       },
-      [DOCUSIGN_BUTTON]: {
-        disabled: true
-      },
       [EDIT_BUTTON]: {
         disabled: true
       },
+      [DOCUSIGN_BUTTON]: {},
       [VIEW_BUTTON]: {},
-      [VOID_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {}
+      [VOID_BUTTON]: {}
     }
   },
   {
@@ -128,8 +122,7 @@ export default normalizeConditions([
         primary: true
       },
       [VIEW_BUTTON]: {},
-      [DOCUSIGN_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {}
+      [DOCUSIGN_BUTTON]: {}
     }
   },
   {
@@ -142,10 +135,9 @@ export default normalizeConditions([
         envelope_status: ENVELOPE_COMPLETED
       }),
     actions: {
-      [DOWNLOAD_BUTTON]: {
+      [VIEW_BUTTON]: {
         primary: true
       },
-      [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {}
     }
@@ -165,9 +157,8 @@ export default normalizeConditions([
       },
       [VIEW_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
-      [DELETE_FILE_BUTTON]: {},
       [MOVE_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {}
+      [DELETE_FILE_BUTTON]: {}
     }
   },
   {
@@ -180,13 +171,13 @@ export default normalizeConditions([
         envelope_status: ENVELOPE_CREATED
       }),
     actions: {
-      [DOCUSIGN_BUTTON]: {
+      [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {}
+      [DELETE_FILE_BUTTON]: {}
     }
   },
   {
@@ -207,8 +198,7 @@ export default normalizeConditions([
       },
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
-      [DELETE_FILE_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {}
+      [DELETE_FILE_BUTTON]: {}
     }
   },
   {
@@ -225,10 +215,9 @@ export default normalizeConditions([
         primary: true
       },
       [VIEW_BUTTON]: {},
-      [DELETE_FILE_BUTTON]: {},
       [MOVE_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
-      [DOWNLOAD_BUTTON]: {}
+      [DELETE_FILE_BUTTON]: {}
     }
   },
   {
@@ -241,10 +230,9 @@ export default normalizeConditions([
         envelope_status: ENVELOPE_COMPLETED
       }),
     actions: {
-      [DOWNLOAD_BUTTON]: {
+      [VIEW_BUTTON]: {
         primary: true
       },
-      [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
     }
@@ -259,12 +247,11 @@ export default normalizeConditions([
         envelope_status: ENVELOPE_NONE
       }),
     actions: {
-      [DOWNLOAD_BUTTON]: {
+      [VIEW_BUTTON]: {
         primary: true
       },
-      [VIEW_BUTTON]: {},
-      [DELETE_FILE_BUTTON]: {},
-      [MOVE_BUTTON]: {}
+      [MOVE_BUTTON]: {},
+      [DELETE_FILE_BUTTON]: {}
     }
   },
   {
@@ -279,7 +266,6 @@ export default normalizeConditions([
       [MOVE_BUTTON]: {
         primary: true
       },
-      [DOWNLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
@@ -297,7 +283,6 @@ export default normalizeConditions([
       [MOVE_BUTTON]: {
         primary: true
       },
-      [DOWNLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
     }

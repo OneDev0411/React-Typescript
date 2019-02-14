@@ -12,6 +12,7 @@ export function Dates(props) {
       fieldsOrder={fieldsOrder}
       section="Dates"
       title="Touch Dates"
+      submitCallback={props.submitCallback}
     />
   )
 }

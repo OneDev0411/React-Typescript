@@ -15,6 +15,7 @@ class Tags extends React.Component {
   }
 
   openOverLay = () => this.setState({ overlayIsOpen: true })
+
   closeOverlay = () => this.setState({ overlayIsOpen: false })
 
   render() {
@@ -37,6 +38,7 @@ class Tags extends React.Component {
         )}
 
         <TagsOverlay
+          contact={this.props.contact}
           closeOverlay={this.closeOverlay}
           isOpen={this.state.overlayIsOpen}
           selectedContactsIds={[this.props.contact.id]}
