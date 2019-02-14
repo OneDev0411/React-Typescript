@@ -3,7 +3,7 @@ export function normalizeParsedAddress(parsedAddress) {
     number: street_number,
     prefix: street_prefix,
     street: street_name,
-    suffix: street_suffix,
+    type: street_suffix,
     sec_unit_num: unit_number,
     city,
     state,

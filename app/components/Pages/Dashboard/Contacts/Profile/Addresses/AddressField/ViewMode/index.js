@@ -1,23 +1,20 @@
 import React from 'react'
 
 import Tooltip from 'components/tooltip'
-import IconButton from 'components/Button/IconButton'
-import AddIcon from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 
-import {
-  Container,
-  Label,
-  Star,
-  Address,
-  ActionBar,
-  EditButton
-} from './styled'
+import { Label, Star, Address } from './styled'
 
-export function ViewMode({ address, toggleMode, handleAddNew }) {
+export function ViewMode({ address }) {
+  let label = address.label
+
+  if (!address.label) {
+    label = address.id ? '-' : 'Home'
+  }
+
   return (
-    <Container onClick={toggleMode}>
+    <React.Fragment>
       <Label>
-        {address.label || 'Home'}
+        {label}
         {address.is_primary && (
           <Tooltip caption="Primary">
             <Star />
@@ -25,14 +22,6 @@ export function ViewMode({ address, toggleMode, handleAddNew }) {
         )}
       </Label>
       <Address>{address.full_address || '-'}</Address>
-      <ActionBar className="action-bar">
-        <IconButton isFit onClick={handleAddNew}>
-          <AddIcon />
-        </IconButton>
-        <EditButton appearance="link" onClick={toggleMode}>
-          Edit
-        </EditButton>
-      </ActionBar>
-    </Container>
+    </React.Fragment>
   )
 }

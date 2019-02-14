@@ -48,13 +48,13 @@ const normalizeAddress = attributes => {
   }
 }
 
-export const generateEmptyAddress = (addressAttributeDefs, nextIndex) =>
+export const generateEmptyAddress = (addressAttributeDefs, addresses) =>
   normalizeAddress(
     normalizeAttributesToFields(
       addressAttributeDefs,
       undefined,
       undefined,
-      nextIndex
+      generateNextIndex(addresses)
     )
   )
 
@@ -79,3 +79,6 @@ export function getAddresses(addressesFields, addressAttributeDefs) {
 
   return addresses
 }
+
+export const generateNextIndex = addresses =>
+  Math.max(...addresses.map(a => a.index)) + 1

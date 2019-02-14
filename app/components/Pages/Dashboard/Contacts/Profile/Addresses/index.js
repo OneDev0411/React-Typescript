@@ -9,7 +9,7 @@ import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 
 import { AddressField } from './AddressField'
 import { Section } from '../components/Section'
-import { getAddresses, generateEmptyAddress } from './helpers/get-addresses'
+import { generateEmptyAddress, getAddresses } from './helpers/get-addresses'
 
 class Addresses extends React.Component {
   constructor(props) {
@@ -25,7 +25,7 @@ class Addresses extends React.Component {
     this.state = {
       addresses: [
         ...getAddresses(addresses, addressAttributeDefs),
-        generateEmptyAddress(addressAttributeDefs, addresses.length)
+        generateEmptyAddress(addressAttributeDefs, addresses)
       ]
     }
 
@@ -40,7 +40,7 @@ class Addresses extends React.Component {
     this.setState(state => ({
       addresses: [
         ...state.addresses,
-        generateEmptyAddress(this.addressAttributeDefs, state.addresses.length)
+        generateEmptyAddress(this.addressAttributeDefs, state.addresses)
       ]
     }))
   }
@@ -58,7 +58,7 @@ class Addresses extends React.Component {
 
         return {
           addresses: [
-            generateEmptyAddress(this.addressAttributeDefs, addresses.length)
+            generateEmptyAddress(this.addressAttributeDefs, addresses)
           ]
         }
       })
@@ -94,7 +94,7 @@ class Addresses extends React.Component {
       this.setState({
         addresses: [
           ...getAddresses(addresses, this.addressAttributeDefs),
-          generateEmptyAddress(this.addressAttributeDefs, addresses.length)
+          generateEmptyAddress(this.addressAttributeDefs, addresses)
         ]
       })
     } catch (error) {
