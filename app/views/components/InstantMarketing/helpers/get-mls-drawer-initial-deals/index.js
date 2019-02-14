@@ -9,6 +9,7 @@ import _ from 'underscore'
 /** */
 export function getMlsDrawerInitialDeals(deals) {
   return _.chain(deals)
+    .filter(deal => deal.listing !== null)
     .sortBy(deal => (deal.deal_type === 'Selling' ? 1 : 2))
     .value()
 }
