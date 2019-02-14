@@ -119,7 +119,7 @@ class ContactsList extends React.Component {
     {
       display: ({ selectedRows }) => selectedRows.length > 0,
       render: ({ selectedRows }) => (
-        <SendMlsListingCard selectedRows={selectedRows} isMultiListing>
+        <SendMlsListingCard selectedRows={selectedRows}>
           Marketing
         </SendMlsListingCard>
       )
