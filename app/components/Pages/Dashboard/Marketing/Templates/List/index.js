@@ -13,6 +13,8 @@ import { Template } from '../../components/Template'
 import { mediumsCollection } from './mediums-collection'
 import { Tab, ListContainer } from './styled'
 
+const GENERAL_FLOW_TYPES = ['Brand', 'Christmas,NewYear,Valentines,StPatrick', 'NewAgent']
+
 export class List extends React.Component {
   state = {
     isPreviewModalOpen: false,
@@ -63,22 +65,14 @@ export class List extends React.Component {
     })
 
   handleCustomize = template => {
-    switch (this.props.types) {
-      case 'Birthday':
-        this.activeContactFlow(template)
-        break
+    const { types } = this.props
 
-      case 'Brand':
-        this.activeGeneralFlow(template)
-        break
-
-      case 'Christmas,NewYear':
-        this.activeGeneralFlow(template)
-        break
-
-      default:
-        this.activeListingFlow(template)
-        break
+    if (types === 'Birthday') {
+      this.activeContactFlow(template)
+    } else if (GENERAL_FLOW_TYPES.includes(types)) {
+      this.activeGeneralFlow(template)
+    } else {
+      this.activeListingFlow(template)
     }
   }
 
@@ -117,41 +111,36 @@ export class List extends React.Component {
       selectedTemplate: state.selectedTemplate
     }
 
-    const generalFLow = (
-      <GeneralFlow
+    if (props.types === 'Birthday') {
+      return (
+        <ContactFlow
+          {...sharedProps}
+          isTriggered={state.isContactFlowActive}
+          handleTrigger={this.deActiveContactFlow}
+        />
+      )
+    }
+
+    if (GENERAL_FLOW_TYPES.includes(props.types)) {
+      return (
+        <GeneralFlow
+          {...sharedProps}
+          hasExternalTrigger
+          types={props.types.split(',')}
+          isTriggered={state.isGeneralFlowActive}
+          handleTrigger={this.deActiveGeneralFlow}
+        />
+      )
+    }
+
+    return (
+      <ListingFlow
         {...sharedProps}
         hasExternalTrigger
-        types={props.types.split(',')}
-        isTriggered={state.isGeneralFlowActive}
-        handleTrigger={this.deActiveGeneralFlow}
+        isTriggered={state.isListingFlowActive}
+        handleTrigger={this.deActiveListingFlow}
       />
     )
-
-    switch (props.types) {
-      case 'Birthday':
-        return (
-          <ContactFlow
-            {...sharedProps}
-            isTriggered={state.isContactFlowActive}
-            handleTrigger={this.deActiveContactFlow}
-          />
-        )
-
-      case 'Brand':
-        return generalFLow
-      case 'Christmas,NewYear':
-        return generalFLow
-
-      default:
-        return (
-          <ListingFlow
-            {...sharedProps}
-            hasExternalTrigger
-            isTriggered={state.isListingFlowActive}
-            handleTrigger={this.deActiveListingFlow}
-          />
-        )
-    }
   }
 
   renderPreviewModalMenu = () => (

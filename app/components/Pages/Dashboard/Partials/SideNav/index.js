@@ -71,6 +71,7 @@ class appSideNav extends React.Component {
     const { user, activePath, appNotifications } = this.props
     const acl = getActiveTeamACL(user)
 
+    const hasAdminPermission = acl.includes('Admin')
     const hasDealsPermission = acl.includes('Deals')
     const hasBackOfficePermission = acl.includes('BackOffice')
     const hasContactsPermission = acl.includes('CRM')
@@ -99,18 +100,13 @@ class appSideNav extends React.Component {
 
             <MenuItem href="/dashboard/account">Settings</MenuItem>
 
-            {hasBackOfficePermission && (
+            {hasAdminPermission && (
               <React.Fragment>
                 <li role="separator" className="divider" />
                 <li>
                   <Link to="/dashboard/brands">Brands</Link>
                 </li>
               </React.Fragment>
-            )}
-            {user.user_type === 'Admin' && (
-              <li>
-                <Link to="/dashboard/forms">Forms</Link>
-              </li>
             )}
             <li role="separator" className="divider" />
             <li>

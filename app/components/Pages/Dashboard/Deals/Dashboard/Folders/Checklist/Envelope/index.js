@@ -1,25 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-
-import OverlayDrawer from 'components/OverlayDrawer'
+import { Link } from 'react-router'
 
 import { getTaskEnvelopes } from '../../../../utils/get-task-envelopes'
 import { getDocumentEnvelopes } from '../../../../utils/get-document-envelopes'
 
-import Envelope from '../../../../components/Envelope'
-
 import { Container } from './styled'
 
 class EnvelopeView extends React.Component {
-  state = {
-    isDrawerOpen: false
-  }
-
-  handleToggleDrawer = () =>
-    this.setState(state => ({
-      isDrawerOpen: !state.isDrawerOpen
-    }))
-
   geEnvelope = () => {
     let envelopes = []
 
@@ -53,35 +41,22 @@ class EnvelopeView extends React.Component {
     return `${signedCount} of ${envelope.recipients.length} signed`
   }
 
+  getLink = id =>
+    `/dashboard/deals/${this.props.deal.id}/view/${
+      this.props.task.id
+    }/envelope/${id}`
+
   render() {
     const envelope = this.geEnvelope()
 
     if (!envelope) {
-      // return <Container disabled>Not sent for signature</Container>
       return false
     }
 
     return (
-      <React.Fragment>
-        <Container onClick={this.handleToggleDrawer}>
-          {this.getTitle(envelope)}
-        </Container>
-
-        <OverlayDrawer
-          isOpen={this.state.isDrawerOpen}
-          onClose={this.handleToggleDrawer}
-        >
-          <OverlayDrawer.Header title={envelope.title} />
-
-          <OverlayDrawer.Body>
-            <Envelope
-              deal={this.props.deal}
-              envelope={envelope}
-              containerStyle={{ marginTop: '0.5rem' }}
-            />
-          </OverlayDrawer.Body>
-        </OverlayDrawer>
-      </React.Fragment>
+      <Container>
+        <Link to={this.getLink(envelope.id)}>{this.getTitle(envelope)}</Link>
+      </Container>
     )
   }
 }

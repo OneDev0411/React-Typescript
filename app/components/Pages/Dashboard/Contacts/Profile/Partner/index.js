@@ -20,6 +20,7 @@ export function Partner(props) {
       isPartner
       section={['Contact Info', 'Details', 'Dates']}
       title="Spouse/Partner"
+      submitCallback={props.submitCallback}
     />
   )
 }

@@ -501,7 +501,7 @@ const ListingDesktopView = ({
             scrollwheel: false,
             disableDefaultUI: true
           }}
-          bootstrapURLKeys={{ key: bootstrap_url_keys.key }}
+          bootstrapURLKeys={bootstrap_url_keys}
         >
           <ListingMapMarker
             style={S('pointer mt-10')}

@@ -113,7 +113,7 @@ class DropDownTasks extends React.Component {
    */
   onInputValueChange = value => {
     this.setState({
-      filterValue: value.trim(),
+      filterValue: value,
       isMenuOpen: true
     })
   }
@@ -229,6 +229,16 @@ class DropDownTasks extends React.Component {
     }
   }
 
+  handleClickSearchInput = e => {
+    this.stopPropagation(e)
+
+    if (e.screenX == 0 && e.screenY == 0) {
+      return false
+    }
+
+    this.toggleMenuState()
+  }
+
   render() {
     const {
       isMenuOpen,
@@ -272,10 +282,7 @@ class DropDownTasks extends React.Component {
                 placeholder={placeholder}
                 subTitle={subTitle}
                 value={this.getSearchValue()}
-                onClick={e => {
-                  this.stopPropagation(e)
-                  this.toggleMenuState()
-                }}
+                onClick={this.handleClickSearchInput}
                 onFocus={this.stopPropagation}
               />
 

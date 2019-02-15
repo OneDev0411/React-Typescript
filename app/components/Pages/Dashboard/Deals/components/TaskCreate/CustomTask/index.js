@@ -52,7 +52,7 @@ class CustomTask extends React.Component {
     return (
       <Fragment>
         <OverlayDrawer isOpen={this.props.isOpen} onClose={this.props.onClose}>
-          <OverlayDrawer.Header title="Create New Task" />
+          <OverlayDrawer.Header title="Create New Folder" />
           <OverlayDrawer.Body>
             <Label>Title</Label>
             <Input
@@ -78,7 +78,7 @@ class CustomTask extends React.Component {
               disabled={this.state.taskName.length === 0}
               onClick={this.selectFiles}
             >
-              Create Task & Upload
+              Create Folder & Upload
             </ActionButton>
 
             <ActionButton
@@ -86,7 +86,7 @@ class CustomTask extends React.Component {
               disabled={this.state.taskName.length === 0}
               onClick={this.handleCreateTask}
             >
-              Create Task
+              Create Folder
             </ActionButton>
           </OverlayDrawer.Footer>
         </OverlayDrawer>

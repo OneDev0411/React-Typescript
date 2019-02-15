@@ -5,7 +5,7 @@ import * as actionTypes from '../../constants/contacts'
 const byId = (state = {}, action) => {
   switch (action.type) {
     case actionTypes.FETCH_CONTACTS_TAGS_SUCCESS:
-      return action.response.entities.tags
+      return action.response.entities.tags || state
     default:
       return state
   }

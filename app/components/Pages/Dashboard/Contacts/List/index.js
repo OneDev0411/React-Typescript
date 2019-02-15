@@ -135,7 +135,7 @@ class ContactsList extends React.Component {
         activeSegment: segment
       },
       () => {
-        let conditionOperator = this.props.conditionOperator
+        let conditionOperator = 'and'
 
         if (segment.args && segment.args.filter_type) {
           conditionOperator = segment.args.filter_type
@@ -189,7 +189,7 @@ class ContactsList extends React.Component {
     this.setState({ searchInputValue: value })
     this.handleFilterChange({
       filters: this.state.filters,
-      searchInputValie: value
+      searchInputValue: value
     })
   }
 
@@ -331,7 +331,8 @@ class ContactsList extends React.Component {
             rowsUpdating={this.rowsUpdating}
             onChangeSelectedRows={this.onChangeSelectedRows}
             onRequestDelete={this.handleOnDelete}
-            filters={this.state.filter}
+            filters={this.state.filters}
+            conditionOperator={this.props.conditionOperator}
             users={viewAsUsers}
           />
         </PageContent>
@@ -354,7 +355,7 @@ function mapStateToUser({ user, contacts }) {
     list: contacts.list,
     listInfo,
     user,
-    viewAsUsers: viewAs(user)
+    viewAsUsers: viewAsEveryoneOnTeam(user) ? [] : viewAs(user)
   }
 }
 
