@@ -22,7 +22,7 @@ const CONTACT_DATE_OBJECT_TYPE = 'contact_attribute'
 
 const DROPDOWN_OPTIONS = [
   {
-    label: '1 Day Before',
+    label: '1 day before',
     value: 86400
   },
   {
