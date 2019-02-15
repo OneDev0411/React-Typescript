@@ -1,36 +1,57 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+
+import Button from 'components/Button/ActionButton'
+
 import IntercomTrigger from '../../IntercomTrigger'
 
-const WentWrong = ({ onClickSupport = () => {} }) => (
-  <span>
-    {
-      "You have encountered an unknown system issue. We're working on it. In the meantime, connect with our"
-    }
-    <IntercomTrigger
-      key="MLS_SEARCH_MODAL__INERCOM_TRIGGER"
-      render={({ activeIntercom, intercomIsActive }) => (
-        <button
-          onClick={
-            intercomIsActive
-              ? () => false
-              : () => {
-                  onClickSupport()
-                  activeIntercom()
-                }
-          }
-          className="c-button--shadow--link"
-        >
-          Support team
-        </button>
-      )}
-    />
-    {'.'}
-  </span>
-)
+class WentWrong extends React.Component {
+  static propTypes = {
+    onClickSupport: PropTypes.func
+  }
 
-WentWrong.propTypes = {
-  onClickSupport: PropTypes.func
+  static defaultProps = {
+    onClickSupport() {}
+  }
+
+  render() {
+    const { onClickSupport } = this.props
+
+    return (
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        {
+          'You have encountered an unknown system issue. We\'re working on it. In the meantime, connect with our'
+        }
+        <IntercomTrigger
+          key="MLS_SEARCH_MODAL__INERCOM_TRIGGER"
+          render={({ activeIntercom, intercomIsActive }) => (
+            <Button
+              size="large"
+              appearance="link"
+              onClick={
+                intercomIsActive
+                  ? () => false
+                  : () => {
+                      onClickSupport()
+                      activeIntercom()
+                    }
+              }
+              style={{
+                fontSize: 'inherit',
+                fontWeight: 600,
+                height: 'auto',
+                lineHeight: 1,
+                padding: ' 0 0 0 0.5rem'
+              }}
+            >
+              Support team
+            </Button>
+          )}
+        />
+        {'.'}
+      </div>
+    )
+  }
 }
 
 export default WentWrong
