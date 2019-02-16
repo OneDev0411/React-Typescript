@@ -19,6 +19,12 @@ class IconTextInput extends React.Component {
       debounceTime > 0 ? _.debounce(onChange, debounceTime) : onChange
   }
 
+  handleKeyPress = event => {
+    if (event.key === 'Enter') {
+      this.props.onEnterKeyPress()
+    }
+  }
+
   handleChange = e => {
     const { value } = e.target
     const { minimumLength } = this.props
@@ -50,6 +56,7 @@ class IconTextInput extends React.Component {
           onChange={this.handleChange}
           onBlur={this.onBlur}
           onFocus={this.onFocus}
+          onKeyPress={this.handleKeyPress}
         />
         {suffixElementRenderer()}
       </Container>
@@ -64,7 +71,8 @@ IconTextInput.propTypes = {
   minimumLength: PropTypes.number,
   prefixElementRenderer: PropTypes.func,
   suffixElementRenderer: PropTypes.func,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  onEnterKeyPress: PropTypes.func
 }
 
 IconTextInput.defaultProps = {
@@ -73,7 +81,8 @@ IconTextInput.defaultProps = {
   debounceTime: 0,
   minimumLength: 0,
   prefixElementRenderer: () => null,
-  suffixElementRenderer: () => null
+  suffixElementRenderer: () => null,
+  onEnterKeyPress: () => null
 }
 
 export default IconTextInput
