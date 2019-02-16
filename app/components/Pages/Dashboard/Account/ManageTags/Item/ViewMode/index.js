@@ -6,7 +6,7 @@ import DeleteIcon from 'components/SvgIcons/Delete/IconDelete'
 
 import { Container, Title } from './styled'
 
-export default function ViewMode({ tag, onDelete, onClick }) {
+export default function ViewMode({ tag, onDelete }) {
   return (
     <Container>
       <Title>{tag.text}</Title>

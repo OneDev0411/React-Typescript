@@ -28,7 +28,7 @@ export const RowContainer = styled.div`
     `}
 
   > div {
-    margin: 0 0.25rem;
+    margin: 0;
     display: flex;
     align-items: center;
   }
