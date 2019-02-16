@@ -12,23 +12,27 @@ export class InlineEditableField extends React.Component {
     handleDelete: PropTypes.func,
     handleAddNew: PropTypes.func,
     isDisabled: PropTypes.bool,
+    label: PropTypes.string,
     renderViewMode: PropTypes.func,
     renderEditMode: PropTypes.func.isRequired,
     showAdd: PropTypes.bool,
     showEdit: PropTypes.bool,
     showDelete: PropTypes.bool,
-    toggleModeCallback: PropTypes.func
+    toggleModeCallback: PropTypes.func,
+    value: PropTypes.string
   }
 
   static defaultProps = {
     handleDelete: noop,
     handleAddNew: noop,
     isDisabled: false,
+    label: 'Label',
     renderViewMode: noop,
     showAdd: false,
     showDelete: true,
     showEdit: true,
-    toggleModeCallback: noop
+    toggleModeCallback: noop,
+    value: ''
   }
 
   state = {
@@ -67,18 +71,22 @@ export class InlineEditableField extends React.Component {
 
   get viewModeProps() {
     const {
+      label,
       showAdd,
       showEdit,
       handleAddNew,
-      renderViewMode: renderBody
+      renderViewMode: renderBody,
+      value
     } = this.props
 
     return {
+      label,
       showAdd,
       showEdit,
       handleAddNew,
       renderBody,
-      toggleMode: this.toggleMode
+      toggleMode: this.toggleMode,
+      value
     }
   }
 
