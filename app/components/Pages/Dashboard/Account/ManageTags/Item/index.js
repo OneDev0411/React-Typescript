@@ -42,6 +42,7 @@ export default class Item extends Component {
         renderViewMode={this.renderViewMode}
         showEdit={false}
         showDelete={false}
+        cancleOnOutsideClick
         toggleModeCallback={this.resetState}
       />
     )
