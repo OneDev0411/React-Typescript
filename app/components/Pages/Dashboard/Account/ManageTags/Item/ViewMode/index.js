@@ -1,27 +1,31 @@
 import React from 'react'
 
 import Tooltip from 'components/tooltip'
+import IconButton from 'components/Button/IconButton'
+import DeleteIcon from 'components/SvgIcons/Delete/IconDelete'
 
-import { Label, Star, Address } from './styled'
+import { Container, Title } from './styled'
 
-export function ViewMode({ address }) {
-  let label = address.label
-
-  if (!address.label) {
-    label = address.id ? '-' : 'Home'
-  }
-
+export default function ViewMode({ tag, onDelete, onClick }) {
   return (
-    <React.Fragment>
-      <Label>
-        {label}
-        {address.is_primary && (
-          <Tooltip caption="Primary">
-            <Star />
-          </Tooltip>
-        )}
-      </Label>
-      <Address>{address.full_address || '-'}</Address>
-    </React.Fragment>
+    <Container>
+      <Title>{tag.text}</Title>
+      <Tooltip caption="Delete tag">
+        <IconButton
+          isFit
+          inverse
+          appearance="icon"
+          onClick={event => {
+            if (event && event.stopPropagation) {
+              event.stopPropagation()
+            }
+
+            onDelete(tag)
+          }}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
+    </Container>
   )
 }

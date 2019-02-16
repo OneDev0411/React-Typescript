@@ -1,22 +1,24 @@
 import styled from 'styled-components'
 
+import BaseDeleteIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 import { grey } from 'views/utils/colors'
-import StarIcon from 'components/SvgIcons/Star/StarIcon'
 
-export const Label = styled.div`
+export const Container = styled.div`
   display: flex;
   align-items: center;
-  color: ${grey.A900};
-  margin-bottom: 0.25em;
+  justify-content: space-between;
+  min-width: 5.625rem;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  border-radius: 3px;
+  padding: 0.5rem 1rem;
+  height: 2rem;
+  background-color: ${grey.A100};
 `
 
-export const Star = styled(StarIcon)`
-  width: 1rem;
-  height: 1rem;
-  fill: #f5a623;
-  margin-left: 0.5rem;
-`
+export const DeleteIcon = styled(BaseDeleteIcon)``
 
-export const Address = styled.div`
-  min-height: 1.5rem;
+export const Title = styled.span`
+  margin-right: 0.5rem;
 `

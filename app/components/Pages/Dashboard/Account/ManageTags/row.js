@@ -5,17 +5,13 @@ import { Divider } from 'components/Divider'
 import { RowContainer, RowTitle } from './styled'
 import Item from './Item'
 
-export default function({ title, items, highlight, onChange }) {
+export default function({ title, items, highlight, onChange, onDelete }) {
   return (
     <Fragment>
       <RowContainer highlight={highlight}>
         <RowTitle>{title}</RowTitle>
         {items.map((tag, index) => (
-          // <IconButton onClick={() => onChange(tag)} key={index}>
-          //   {tag.text}
-          //   <DeleteIcon />
-          // </IconButton>
-          <Item onChange={onChange} key={index} tag={tag} />
+          <Item onChange={onChange} onDelete={onDelete} key={index} tag={tag} />
         ))}
       </RowContainer>
       <Divider margin="0 auto" width="calc(100% - 3rem)" />

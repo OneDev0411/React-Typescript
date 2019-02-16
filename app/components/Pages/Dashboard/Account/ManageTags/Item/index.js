@@ -1,46 +1,48 @@
 import React, { Component } from 'react'
 
-import IconButton from 'components/Button/IconButton'
-import DeleteIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 
+import ViewMode from './ViewMode'
+import EditMode from './EditMode'
+
 export default class Item extends Component {
-  handleSave = data => console.log(data)
-
-  handleDelete = data => console.log(data)
-
-  handleAddNew = data => console.log(data)
-
-  renderEditMode = props => {
-    console.log('renderEditoMode')
-    console.log(props)
-
-    return <span>This is edit mode</span>
+  state = {
+    text: this.props.tag.text
   }
 
-  renderViewMode = () => {
-    console.log('renderViewMode')
-    console.log(this.props)
+  resetState = () => this.setState({ text: this.props.tag.text })
 
-    return (
-      <IconButton>
-        {this.props.tag.text}
-        <DeleteIcon />
-      </IconButton>
-    )
+  onChange = text => this.setState({ text })
+
+  handleSave = () => {
+    this.props.onChange({
+      oldText: this.props.tag.text,
+      newText: this.state.text
+    })
   }
+
+  handleDelete = tag => {
+    this.props.onDelete(tag)
+  }
+
+  renderEditMode = props => (
+    <EditMode value={this.state.text} onChange={this.onChange} {...props} />
+  )
+
+  renderViewMode = () => (
+    <ViewMode onDelete={this.handleDelete} tag={this.props.tag} />
+  )
 
   render() {
     return (
       <InlineEditableField
         handleSave={this.handleSave}
         handleDelete={this.handleDelete}
-        handleAddNew={this.handleAddNew}
-        isDisabled={false}
         renderEditMode={this.renderEditMode}
         renderViewMode={this.renderViewMode}
-        showDelete
-        // toggleModeCallback={this.setMode}
+        showEdit={false}
+        showDelete={false}
+        toggleModeCallback={this.resetState}
       />
     )
   }

@@ -5,6 +5,7 @@ import { grey, primary } from 'views/utils/colors'
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
 `
 
 export const Description = styled.h2`
@@ -18,11 +19,19 @@ export const RowContainer = styled.div`
   display: flex;
   flex-direction: row;
   padding: 0.5rem 0;
+  height: 4rem;
+  transition: background-color 1s ease-in;
   ${({ highlight }) =>
     highlight &&
     css`
       background-color: ${grey.A150};
     `}
+
+  > div {
+    margin: 0 0.25rem;
+    display: flex;
+    align-items: center;
+  }
 `
 
 export const RowTitle = styled.h6`
