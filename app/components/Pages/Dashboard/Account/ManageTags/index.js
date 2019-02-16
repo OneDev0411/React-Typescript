@@ -47,19 +47,31 @@ class ManageTags extends Component {
 
     const tags = {}
 
-    response.data.forEach(tag => {
-      const title = tag.text[0].toUpperCase()
-
-      if (!tags[title]) {
-        tags[title] = {
-          title,
-          highlight: false,
-          items: []
+    response.data
+      .sort((a, b) => {
+        if (a.text < b.text) {
+          return -1
         }
-      }
 
-      tags[title].items.push(tag)
-    })
+        if (a.text > b.text) {
+          return 1
+        }
+
+        return 0
+      })
+      .forEach(tag => {
+        const title = tag.text[0].toUpperCase()
+
+        if (!tags[title]) {
+          tags[title] = {
+            title,
+            highlight: false,
+            items: []
+          }
+        }
+
+        tags[title].items.push(tag)
+      })
 
     return tags
   }
