@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import ClickOutside from 'react-click-outside'
 
 import { noop } from 'utils/helpers'
 
@@ -17,6 +18,7 @@ export class InlineEditableField extends React.Component {
     showAdd: PropTypes.bool,
     showEdit: PropTypes.bool,
     showDelete: PropTypes.bool,
+    cancleOnOutsideClick: PropTypes.bool,
     toggleModeCallback: PropTypes.func
   }
 
@@ -28,6 +30,7 @@ export class InlineEditableField extends React.Component {
     showAdd: false,
     showDelete: true,
     showEdit: true,
+    cancleOnOutsideClick: false,
     toggleModeCallback: noop
   }
 
@@ -84,7 +87,13 @@ export class InlineEditableField extends React.Component {
 
   render() {
     if (this.state.isEditMode) {
-      return <EditMode {...this.editModeProps} />
+      return this.props.cancleOnOutsideClick ? (
+        <ClickOutside onClickOutside={this.toggleMode}>
+          <EditMode {...this.editModeProps} />
+        </ClickOutside>
+      ) : (
+        <EditMode {...this.editModeProps} />
+      )
     }
 
     return <ViewMode {...this.viewModeProps} />
