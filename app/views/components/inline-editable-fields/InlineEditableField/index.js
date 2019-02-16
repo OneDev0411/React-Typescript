@@ -15,6 +15,7 @@ export class InlineEditableField extends React.Component {
     renderViewMode: PropTypes.func,
     renderEditMode: PropTypes.func.isRequired,
     showAdd: PropTypes.bool,
+    showEdit: PropTypes.bool,
     showDelete: PropTypes.bool,
     toggleModeCallback: PropTypes.func
   }
@@ -26,6 +27,7 @@ export class InlineEditableField extends React.Component {
     renderViewMode: noop,
     showAdd: false,
     showDelete: true,
+    showEdit: true,
     toggleModeCallback: noop
   }
 
@@ -64,10 +66,16 @@ export class InlineEditableField extends React.Component {
   }
 
   get viewModeProps() {
-    const { showAdd, handleAddNew, renderViewMode: renderBody } = this.props
+    const {
+      showAdd,
+      showEdit,
+      handleAddNew,
+      renderViewMode: renderBody
+    } = this.props
 
     return {
       showAdd,
+      showEdit,
       handleAddNew,
       renderBody,
       toggleMode: this.toggleMode
