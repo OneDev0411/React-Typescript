@@ -8,6 +8,8 @@ import ProgressBar from 'components/ProgressBar'
 import importPdfJs from 'utils/import-pdf-js'
 import { getPdfSize } from 'models/Deal/form'
 
+import WentWrong from '../../../components/Pages/Dashboard/Partials/UserMessages/WentWrong/index.js'
+
 import { Container, LoadingDealContainer } from './styled'
 import { Page } from './Page'
 import { Toolbar } from './Toolbar'
@@ -206,6 +208,14 @@ export class PdfViewer extends React.Component {
   }
 
   render() {
+    if (this.state.isFailed) {
+      return (
+        <LoadingDealContainer>
+          <WentWrong />
+        </LoadingDealContainer>
+      )
+    }
+
     if (!this.state.document || this.state.isLoading) {
       return (
         <LoadingDealContainer>
