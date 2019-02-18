@@ -46,7 +46,7 @@ export default class FontSizePicker extends Component {
         <ItemTitle>{this.props.title}</ItemTitle>
         <BasicDropdown
           fullHeight
-          menuStyle={{ width: '100%' }}
+          menuStyle={{ width: '100%', fontSize: '1rem' }}
           style={{ width: '100%' }}
           selectedItem={this.findSelectedItemByValue(this.state.value)}
           items={OPTIONS}
