@@ -35,6 +35,15 @@ class EnvelopeView extends React.Component {
 
         return 0
       })
+      .sort((a, b) => {
+        if (a.created_at < b.created_at)
+          return 1
+
+        if (a.created_at > b.created_at)
+          return -1
+
+        return 0
+      })
 
     if (envelopes.length === 0) {
       return null
