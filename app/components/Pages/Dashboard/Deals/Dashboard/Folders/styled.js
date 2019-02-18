@@ -82,6 +82,7 @@ export const RowContainer = styled.div`
       }
 
       ${LastActivity} {
+        opacity: 1;
         color: #000;
       }
       
@@ -98,6 +99,7 @@ export const RowContainer = styled.div`
   }
 
   :hover ${LastActivity} {
+    opacity: 1;
     color: #000;
   }
 
@@ -112,13 +114,6 @@ export const Row = styled.div`
   display: flex;
   align-items: center;
   padding: 1rem;
-`
-
-export const TaskInfo = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 0.75rem;
-  padding-left: 2rem;
 `
 
 export const RowArrowIcon = styled(ArrowIcon)`
@@ -138,17 +133,6 @@ export const RowTitle = styled(H4)`
       color: #003bdf;
     }
   `}
-`
-
-export const Activities = styled.div`
-  display: flex;
-  align-items: center;
-
-  :hover ${Notification} {
-    svg > path {
-      fill: ${primary};
-    }
-  }
 `
 
 export const LabelItem = styled.div`

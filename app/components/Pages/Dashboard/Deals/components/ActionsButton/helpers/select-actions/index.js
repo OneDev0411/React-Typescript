@@ -1,6 +1,7 @@
-import { documentsConditions, tasksConditions } from '../data-collection'
+import documentsConditions from '../../data/table/documents'
+import tasksConditions from '../../data/table/tasks'
 
-export function selectActions(type, data) {
+export function selectActions(type, conditions) {
   let list = []
 
   if (type === 'task') {
@@ -11,13 +12,15 @@ export function selectActions(type, data) {
     list = documentsConditions
   }
 
-  const item = list.find(collection => collection.conditions(data) === true)
+  const item = list.find(
+    collection => collection.conditions(conditions) === true
+  )
 
-  return (
-    item &&
-    item.actions.filter(
-      // temporary hide not-implemented actions
-      button => ['email', 'rename', 'print'].includes(button.id) === false
-    )
+  if (!item) {
+    return null
+  }
+
+  return item.actions.filter(action =>
+    typeof action.condition === 'function' ? action.condition(conditions) : true
   )
 }

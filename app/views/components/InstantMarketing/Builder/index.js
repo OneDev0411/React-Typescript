@@ -20,6 +20,27 @@ import nunjucks from '../helpers/nunjucks'
 
 import loadGrapes from '../helpers/load-grapes'
 
+const STYLE_MANAGER_TEXT_TAGS = [
+  'div',
+  'section',
+  'table',
+  'tr',
+  'td',
+  'ol',
+  'ul',
+  'li',
+  'p',
+  'span',
+  'a',
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'h6',
+  'address'
+]
+
 import {
   Container,
   Actions,
@@ -56,9 +77,10 @@ class Builder extends React.Component {
 
   async componentDidMount() {
     const { Grapesjs } = await loadGrapes()
-    const { addPlugin } = await import('./AssetManager')
+    const { load: loadAssetManagerPlugin } = await import('./AssetManager')
+    const { load: loadStyleManagerPlugin } = await import('./StyleManager')
 
-    await addPlugin()
+    await Promise.all([loadAssetManagerPlugin(), loadStyleManagerPlugin()])
 
     this.setState({
       isLoading: false
@@ -81,7 +103,23 @@ class Builder extends React.Component {
         }
       },
       showDevices: false,
-      plugins: ['asset-blocks']
+      plugins: ['asset-blocks', 'style-manager'],
+      pluginsOpts: {
+        'style-manager': {
+          fontSizePicker: {
+            conditions: {
+              allowedTags: STYLE_MANAGER_TEXT_TAGS,
+              forbiddenStyles: ['background-image']
+            }
+          },
+          colorPicker: {
+            conditions: {
+              allowedTags: STYLE_MANAGER_TEXT_TAGS,
+              forbiddenStyles: ['background-image']
+            }
+          }
+        }
+      }
     })
 
     this.editor.on('load', this.setupGrapesJs)

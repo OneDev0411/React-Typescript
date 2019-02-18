@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import Flex from 'styled-flex-component'
 
 import { Link } from 'react-router'
+
 import { H1 } from 'components/Typography/headings'
 
 import Deal from 'models/Deal'
@@ -52,6 +53,21 @@ export class ListingInfo extends React.Component {
     return `${city}, ${state} ${zipcode}`
   }
 
+  getSideName = deal => {
+    const enderType = Deal.get.field(deal, 'ender_type')
+    const dealType = deal.deal_type === 'Buying' ? 'Buying' : 'Listing'
+
+    if (enderType === 'AgentDoubleEnder') {
+      return 'Both'
+    }
+
+    if (enderType === 'OfficeDoubleEnder') {
+      return `${dealType} (Office DE)`
+    }
+
+    return dealType
+  }
+
   render() {
     const { props, state } = this
     const address = this.getAddress(props.deal)
@@ -95,7 +111,7 @@ export class ListingInfo extends React.Component {
               {address}
               {address.length > 0 && <Divider small />}
 
-              {getSide(props.deal)}
+              <span>Side: {this.getSideName(props.deal)}</span>
               <Divider small />
 
               {props.deal.property_type}

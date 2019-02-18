@@ -77,8 +77,23 @@ class App extends Component {
     this.initializeApp()
   }
 
+  componentDidCatch(error, info) {
+    if (window.Raven) {
+      window.Raven.captureException(error)
+      window.Raven.captureMessage('Something happened', {
+        ...info
+      })
+    }
+  }
+
   componentWillUnmount() {
     this.props.dispatch(inactiveIntercom())
+  }
+
+  static getDerivedStateFromError(error) {
+    console.error(error)
+
+    return { hasError: true }
   }
 
   async initializeApp() {

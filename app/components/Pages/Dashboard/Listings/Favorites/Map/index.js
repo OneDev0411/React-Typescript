@@ -37,8 +37,8 @@ const map = ({
       defaultZoom={defaultZoom}
       defaultCenter={defaultCenter}
       yesIWantToUseGoogleMapApiInternals
+      bootstrapURLKeys={bootstrapURLKeys}
       onGoogleApiLoaded={onGoogleApiLoaded}
-      bootstrapURLKeys={{ key: bootstrapURLKeys.key }}
     >
       {markers.map(marker => {
         const { id, lat, lng } = marker

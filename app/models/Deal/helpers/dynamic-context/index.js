@@ -293,6 +293,7 @@ export function validate(ctx, value) {
     case 'Number':
     case 'Numeric':
       return _.isUndefined(value) ||
+        value === null ||
         (typeof value === 'string' && value.length === 0)
         ? !ctx.mandatory
         : !Number.isNaN(parseFloat(value)) && /^\d*\.?\d*$/.test(value)

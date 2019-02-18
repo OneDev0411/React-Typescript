@@ -129,7 +129,7 @@ const AsyncDealFileViewer = Load({
 
 const AsyncDealFormEdit = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Deals/form-edit' /* webpackChunkName: "deal_fe" */)
+    import('../components/Pages/Dashboard/Deals/FormEdit' /* webpackChunkName: "deal_fe" */)
 })
 
 const AsyncAgentNetwork = Load({

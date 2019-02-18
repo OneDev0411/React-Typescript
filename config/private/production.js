@@ -31,5 +31,8 @@ export default {
   },
   sentry: {
     api_url: process.env.SENTRY_API_URL
+  },
+  fb: {
+    app_id: process.env.FB_APP_ID
   }
 }

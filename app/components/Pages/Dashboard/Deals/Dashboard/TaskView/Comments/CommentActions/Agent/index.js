@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
+
 import ToolTip from 'components/tooltip'
 import { confirmation } from 'actions/confirmation'
 import ActionButton from 'components/Button/ActionButton'
@@ -32,13 +33,17 @@ class Agent extends React.Component {
     })
 
   render() {
+    const isSendDisabled =
+      this.props.task.task_type === 'GeneralComments' &&
+      this.props.hasComment === false
+
     return (
       <Fragment>
         <ToolTip
           caption={this.props.hasComment ? null : 'Notify office to Review'}
         >
           <ActionButton
-            disabled={this.props.isSaving}
+            disabled={this.props.isSaving || isSendDisabled}
             onClick={this.sendComment}
           >
             {this.props.isSaving ? 'Saving...' : 'Notify Office'}

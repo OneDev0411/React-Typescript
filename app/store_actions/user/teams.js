@@ -1,21 +1,37 @@
-import * as actionsType from '../../constants/user'
+import {
+  FETCH_USER_TEAMS_REQUEST,
+  FETCH_USER_TEAMS_SUCCESS,
+  FETCH_USER_TEAMS_FAILURE
+} from '../../constants/user'
 import getTeams from '../../models/user/get-teams'
 
 export default function getUserTeams(user = {}, fetchMembers) {
   return async dispatch => {
-    const teams = await getTeams(user, fetchMembers)
-
-    fetchMembers &&
-      teams.forEach(({ brand }) => {
-        brand.roles = brand.roles || []
-        brand.roles.forEach(role => (role.members = role.members || []))
-      })
-
     dispatch({
-      type: actionsType.SET_USER_TEAMS,
-      teams
+      type: FETCH_USER_TEAMS_REQUEST
     })
 
-    return teams
+    try {
+      const teams = await getTeams(user, fetchMembers)
+
+      fetchMembers &&
+        teams.forEach(({ brand }) => {
+          brand.roles = brand.roles || []
+          brand.roles.forEach(role => (role.members = role.members || []))
+        })
+
+      dispatch({
+        type: FETCH_USER_TEAMS_SUCCESS,
+        teams
+      })
+
+      return teams
+    } catch (error) {
+      dispatch({
+        type: FETCH_USER_TEAMS_FAILURE
+      })
+    }
   }
 }
+
+// todo: refactoring teams.forEach

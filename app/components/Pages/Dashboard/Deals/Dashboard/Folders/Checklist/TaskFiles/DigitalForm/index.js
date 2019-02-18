@@ -4,8 +4,6 @@ import Flex from 'styled-flex-component'
 
 import ActionsButton from '../../../../../components/ActionsButton'
 
-import EnvelopeView from '../../Envelope'
-
 import { LabelItem } from '../../../styled'
 import { FileContainer, FileRow, FileTitle, FileLink } from '../styled'
 
@@ -40,11 +38,6 @@ export function DigitalForm(props) {
 
         <Flex alignCenter>
           <LabelItem>Base Form</LabelItem>
-          <EnvelopeView
-            type="document"
-            deal={props.deal}
-            document={props.task}
-          />
         </Flex>
       </FileRow>
     </FileContainer>

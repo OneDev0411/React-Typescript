@@ -109,6 +109,7 @@ class ContactsList extends React.Component {
       render: ({ selectedRows }) => (
         <ExportContacts
           filters={this.props.filters}
+          conditionOperator={this.props.conditionOperator}
           users={this.props.users}
           exportIds={selectedRows}
           disabled={this.props.isFetching}
@@ -120,7 +121,6 @@ class ContactsList extends React.Component {
         <SendMlsListingCard
           disabled={selectedRows.length === 0}
           selectedRows={selectedRows}
-          isMultiListing
         >
           Marketing
         </SendMlsListingCard>

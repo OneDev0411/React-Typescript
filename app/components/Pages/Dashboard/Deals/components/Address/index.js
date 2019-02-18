@@ -10,17 +10,13 @@ import { upsertContexts } from 'actions/deals'
 
 import { TextInput } from 'components/Forms/TextInput'
 
+import { COUNTIES, STREET_SUFFIX, STREET_PREFIX, STATES } from 'utils/address'
+
 import { SelectInput } from '../../../../../../views/components/Forms/SelectInput'
 
 import { FinalFormDrawer } from '../../../../../../views/components/FinalFormDrawer'
 
-import {
-  stateToAbbreviated,
-  COUNTIES,
-  STREET_SUFFIX,
-  STREET_PREFIX,
-  STATES
-} from '../../utils/address'
+import { stateToAbbreviated } from '../../utils/address'
 
 const defaultState = 'Texas'
 
@@ -182,7 +178,6 @@ class Address extends React.Component {
       street_suffix || '',
       unit_number ? `, Unit ${unit_number},` : '',
       city ? `, ${city}` : '',
-      county ? `, ${county}` : '',
       state ? `, ${state}` : '',
       postal_code ? `, ${postal_code}` : ''
     ]

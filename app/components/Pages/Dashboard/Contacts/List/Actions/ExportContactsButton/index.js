@@ -9,12 +9,19 @@ import ExportButton from './button'
 
 class ExportContacts extends React.Component {
   sendDownloadReuqest = async exportType => {
-    const { exportIds, filters, user, users } = this.props
+    const {
+      exportIds,
+      filters,
+      user,
+      users,
+      conditionOperator: filter_type
+    } = this.props
     const activeBrand = getActiveTeamId(user)
     const url = `/api/contacts/export/outlook/${activeBrand}/`
 
     const params = {
-      type: exportType
+      type: exportType,
+      filter_type
     }
 
     if (Array.isArray(exportIds) && exportIds.length > 0) {
