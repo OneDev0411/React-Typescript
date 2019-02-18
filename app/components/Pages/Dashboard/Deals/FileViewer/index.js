@@ -201,7 +201,7 @@ class FileViewer extends React.Component {
           file={file}
           task={this.props.task}
           deal={this.state.deal}
-          showFactsheetButton={!isEnvelopeView}
+          isEnvelopeView={isEnvelopeView}
           isFactsheetOpen={this.state.isFactsheetOpen}
           isCommentsOpen={this.state.isCommentsOpen}
           onToggleFactsheet={this.toggleShowFactsheet}
@@ -210,13 +210,11 @@ class FileViewer extends React.Component {
         />
 
         <PageContainer>
-          {!isEnvelopeView && (
-            <FactsheetSideMenu
-              isFactsheetOpen={this.state.isFactsheetOpen}
-              deal={this.state.deal}
-              isBackOffice={this.props.isBackOffice}
-            />
-          )}
+          <FactsheetSideMenu
+            isFactsheetOpen={this.state.isFactsheetOpen}
+            deal={this.state.deal}
+            isBackOffice={this.props.isBackOffice}
+          />
 
           <FileDisplay file={file} />
 
