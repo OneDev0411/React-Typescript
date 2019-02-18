@@ -1,13 +1,22 @@
 import React from 'react'
-import { BlockPicker } from 'react-color'
+import styled from 'styled-components'
+import { SketchPicker } from 'react-color'
 
 import { ItemTitle, ItemContainer } from '../styled'
 
+const ColorPickerContainer = styled(ItemContainer)`
+  > div {
+    width: 100% !important;
+    box-shadow: none !important;
+    padding: 0 24px !important;
+  }
+`
+
 export default function ColorPicker({ title = 'Font Color', color, onChange }) {
   return (
-    <ItemContainer>
+    <ColorPickerContainer>
       <ItemTitle>{title}</ItemTitle>
-      <BlockPicker triangle="hide" color={color} onChangeComplete={onChange} />
-    </ItemContainer>
+      <SketchPicker disableAlpha color={color} onChangeComplete={onChange} />
+    </ColorPickerContainer>
   )
 }
