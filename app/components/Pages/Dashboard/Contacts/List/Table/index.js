@@ -39,6 +39,12 @@ const IconLastTouch = styled(IconInfoOutline)`
   }
 `
 
+const DisabledActionContainer = styled.div`
+  > button {
+    pointer-events: none;
+  }
+`
+
 class ContactsList extends React.Component {
   state = { selectedTagContact: [] }
 
@@ -104,6 +110,15 @@ class ContactsList extends React.Component {
     }
   ]
 
+  getTooltipedAction = (action, caption, disabled) =>
+    disabled ? (
+      <Tooltip caption={caption}>
+        <DisabledActionContainer>{action}</DisabledActionContainer>
+      </Tooltip>
+    ) : (
+      action
+    )
+
   actions = [
     {
       render: ({ selectedRows }) => (
@@ -117,60 +132,87 @@ class ContactsList extends React.Component {
       )
     },
     {
-      render: ({ selectedRows }) => (
-        <SendMlsListingCard
-          disabled={selectedRows.length === 0}
-          selectedRows={selectedRows}
-        >
-          Marketing
-        </SendMlsListingCard>
-      )
+      render: ({ selectedRows }) => {
+        const disabled = selectedRows.length === 0
+
+        return this.getTooltipedAction(
+          <SendMlsListingCard disabled={disabled} selectedRows={selectedRows}>
+            Marketing
+          </SendMlsListingCard>,
+          'You need to have at least one contact selected before marketing.',
+          disabled
+        )
+      }
     },
     {
-      render: ({ selectedRows, resetSelectedRows }) => (
-        <TagContacts
-          disabled={selectedRows.length === 0}
-          selectedRows={selectedRows}
-          resetSelectedRows={resetSelectedRows}
-          handleChangeContactsAttributes={
-            this.props.handleChangeContactsAttributes
-          }
-        />
-      )
+      render: ({ selectedRows, resetSelectedRows }) => {
+        const disabled = selectedRows.length === 0
+
+        return this.getTooltipedAction(
+          <TagContacts
+            disabled={disabled}
+            selectedRows={selectedRows}
+            resetSelectedRows={resetSelectedRows}
+            handleChangeContactsAttributes={
+              this.props.handleChangeContactsAttributes
+            }
+          />,
+          'You need to have at least one contact selected before tagging contacts.',
+          disabled
+        )
+      }
     },
     {
-      render: ({ selectedRows, resetSelectedRows }) => (
-        <CreateEvent
-          disabled={selectedRows.length === 0}
-          selectedRows={selectedRows}
-          submitCallback={async () => {
-            resetSelectedRows()
-            await this.props.bulkEventCreationCallback()
-          }}
-        />
-      )
+      render: ({ selectedRows, resetSelectedRows }) => {
+        const disabled = selectedRows.length === 0
+
+        return this.getTooltipedAction(
+          <CreateEvent
+            disabled={disabled}
+            selectedRows={selectedRows}
+            submitCallback={async () => {
+              resetSelectedRows()
+              await this.props.bulkEventCreationCallback()
+            }}
+          />,
+          'You need to have at least one contact selected before creating events.',
+          disabled
+        )
+      }
     },
     {
-      render: ({ selectedRows, resetSelectedRows }) => (
-        <MergeContacts
-          disabled={selectedRows.length < 2}
-          selectedRows={selectedRows}
-          rowsUpdating={this.props.rowsUpdating}
-          resetSelectedRows={resetSelectedRows}
-        />
-      )
+      render: ({ selectedRows, resetSelectedRows }) => {
+        const disabled = selectedRows.length < 2
+
+        return this.getTooltipedAction(
+          <MergeContacts
+            disabled={disabled}
+            selectedRows={selectedRows}
+            rowsUpdating={this.props.rowsUpdating}
+            resetSelectedRows={resetSelectedRows}
+          />,
+          'You need to have at least two contact selected before merge.',
+          disabled
+        )
+      }
     },
     {
-      render: rowData => (
-        <IconButton
-          disabled={rowData.selectedRows.length === 0}
-          size="small"
-          appearance="outline"
-          onClick={e => this.props.onRequestDelete(e, rowData)}
-        >
-          <IconDeleteOutline size={24} />
-        </IconButton>
-      )
+      render: rowData => {
+        const disabled = rowData.selectedRows.length === 0
+
+        return this.getTooltipedAction(
+          <IconButton
+            disabled={disabled}
+            size="small"
+            appearance="outline"
+            onClick={e => this.props.onRequestDelete(e, rowData)}
+          >
+            <IconDeleteOutline size={24} />
+          </IconButton>,
+          'You need to have at least one contact selected before delete.',
+          disabled
+        )
+      }
     }
   ]
 
