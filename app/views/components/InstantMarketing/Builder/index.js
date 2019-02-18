@@ -108,13 +108,13 @@ class Builder extends React.Component {
           fontSizePicker: {
             conditions: {
               allowedTags: STYLE_MANAGER_TEXT_TAGS,
-              forbiddenTagsWithStyle: ['background-image']
+              forbiddenStyles: ['background-image']
             }
           },
           colorPicker: {
             conditions: {
               allowedTags: STYLE_MANAGER_TEXT_TAGS,
-              forbiddenTagsWithStyle: ['background-image']
+              forbiddenStyles: ['background-image']
             }
           }
         }

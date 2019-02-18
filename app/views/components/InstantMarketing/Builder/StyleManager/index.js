@@ -25,11 +25,16 @@ export const load = async () => {
         return false
       }
 
-      const hasForbiddenStyle = conditions.forbiddenTagsWithStyle.some(
-        forbiddenStyle => !element.style[forbiddenStyle]
+      const elementStyles = getComputedStyle(element)
+      const hasForbiddenStyle = conditions.forbiddenStyles.some(
+        forbiddenStyle => !!elementStyles[forbiddenStyle]
       )
 
-      return hasForbiddenStyle
+      if (hasForbiddenStyle) {
+        return false
+      }
+
+      return true
     }
 
     editor.on('load', () => {
@@ -87,9 +92,7 @@ export const load = async () => {
       if (!colorPickerOptions.disabled) {
         ReactDOM.unmountComponentAtNode(colorPickerContainer)
 
-        if (
-          isElementAllowed(selectedElement, fontSizePickerOptions.conditions)
-        ) {
+        if (isElementAllowed(selectedElement, colorPickerOptions.conditions)) {
           ReactDOM.render(
             <ColorPicker
               color={selectedElement.style.color}
