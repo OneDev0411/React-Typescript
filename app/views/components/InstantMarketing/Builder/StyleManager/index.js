@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom'
 import ReactDOMServer from 'react-dom/server'
 
 import { Container } from './styled'
-import ColorPicker from './ColorPicker'
 import FontSizePicker from './FontSizePicker'
+import FontWeightPicker from './FontWeightPicker'
+import ColorPicker from './ColorPicker'
 import loadGrapes from '../../helpers/load-grapes'
 
 export const load = async () => {
@@ -12,12 +13,14 @@ export const load = async () => {
 
   Grapesjs.plugins.add('style-manager', (editor, options) => {
     let styleManagerContainer
-    let colorPickerContainer
     let fontSizePickerContainer
+    let fontWeightPickerContainer
+    let colorPickerContainer
 
     const {
-      colorPicker: colorPickerOptions = {},
-      fontSizePicker: fontSizePickerOptions = {}
+      fontSizePicker: fontSizePickerOptions = {},
+      fontWeightPicker: fontWeightPickerOptions = {},
+      colorPicker: colorPickerOptions = {}
     } = options
 
     const isElementAllowed = (target, conditions) => {
@@ -70,6 +73,12 @@ export const load = async () => {
         styleManagerContainer.appendChild(fontSizePickerContainer)
       }
 
+      if (!fontWeightPickerOptions.disabled) {
+        fontWeightPickerContainer = document.createElement('div')
+        fontWeightPickerContainer.id = 'mc-editor-font-weight-picker'
+        styleManagerContainer.appendChild(fontWeightPickerContainer)
+      }
+
       if (!colorPickerOptions.disabled) {
         colorPickerContainer = document.createElement('div')
         colorPickerContainer.id = 'mc-editor-color-picker'
@@ -94,6 +103,22 @@ export const load = async () => {
               }}
             />,
             fontSizePickerContainer
+          )
+        }
+      }
+
+      if (!fontWeightPickerOptions.disabled) {
+        ReactDOM.unmountComponentAtNode(fontWeightPickerContainer)
+
+        if (isElementAllowed(selected, fontWeightPickerOptions.conditions)) {
+          ReactDOM.render(
+            <FontWeightPicker
+              value={getStyle(selected)['font-weight']}
+              onChange={fontWeight => {
+                setStyle(selected, 'font-weight', fontWeight)
+              }}
+            />,
+            fontWeightPickerContainer
           )
         }
       }

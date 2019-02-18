@@ -112,6 +112,12 @@ class Builder extends React.Component {
               forbiddenStyles: ['background-image']
             }
           },
+          fontWeightPicker: {
+            conditions: {
+              allowedTags: STYLE_MANAGER_TEXT_TAGS,
+              forbiddenStyles: ['background-image']
+            }
+          },
           colorPicker: {
             conditions: {
               allowedTags: STYLE_MANAGER_TEXT_TAGS,
