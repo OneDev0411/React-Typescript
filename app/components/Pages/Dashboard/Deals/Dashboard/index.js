@@ -34,6 +34,8 @@ class DealDetails extends React.Component {
     const { props } = this
 
     if (props.deal && props.deal.checklists) {
+      this.fetchContexts(props.deal)
+
       return false
     }
 
