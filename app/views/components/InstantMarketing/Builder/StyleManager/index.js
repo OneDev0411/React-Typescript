@@ -20,14 +20,16 @@ export const load = async () => {
       fontSizePicker: fontSizePickerOptions = {}
     } = options
 
-    const isElementAllowed = (element, conditions) => {
-      if (!conditions.allowedTags.includes(element.tagName.toLowerCase())) {
+    const isElementAllowed = (target, conditions) => {
+      if (!conditions.allowedTags.includes(target.attributes.tagName)) {
         return false
       }
 
-      const elementStyles = getComputedStyle(element)
+      const elementStyles = getComputedStyle(target.view.el)
       const hasForbiddenStyle = conditions.forbiddenStyles.some(
-        forbiddenStyle => !!elementStyles[forbiddenStyle]
+        forbiddenStyle =>
+          elementStyles[forbiddenStyle] !== '' &&
+          elementStyles[forbiddenStyle] !== 'none'
       )
 
       if (hasForbiddenStyle) {
@@ -35,6 +37,15 @@ export const load = async () => {
       }
 
       return true
+    }
+
+    const getStyle = target => Object.assign({}, target.get('style'))
+
+    const setStyle = (target, prop, value) => {
+      const selectedTargetStyles = getStyle(target)
+
+      selectedTargetStyles[prop] = value
+      target.set('style', selectedTargetStyles)
     }
 
     editor.on('load', () => {
@@ -49,7 +60,7 @@ export const load = async () => {
         )
       )
 
-      styleManagerContainer = panels.view.$el[0].querySelector(
+      styleManagerContainer = panels.view.el.querySelector(
         '#mc-editor-style-manager'
       )
 
@@ -71,18 +82,16 @@ export const load = async () => {
         return
       }
 
-      const selectedElement = selected.view.$el[0]
-
       if (!fontSizePickerOptions.disabled) {
         ReactDOM.unmountComponentAtNode(fontSizePickerContainer)
 
-        if (
-          isElementAllowed(selectedElement, fontSizePickerOptions.conditions)
-        ) {
+        if (isElementAllowed(selected, fontSizePickerOptions.conditions)) {
           ReactDOM.render(
             <FontSizePicker
-              value={selectedElement.style.fontSize}
-              onChange={size => (selectedElement.style.fontSize = size)}
+              value={getStyle(selected)['font-size']}
+              onChange={fontSize => {
+                setStyle(selected, 'font-size', fontSize)
+              }}
             />,
             fontSizePickerContainer
           )
@@ -92,11 +101,13 @@ export const load = async () => {
       if (!colorPickerOptions.disabled) {
         ReactDOM.unmountComponentAtNode(colorPickerContainer)
 
-        if (isElementAllowed(selectedElement, colorPickerOptions.conditions)) {
+        if (isElementAllowed(selected, colorPickerOptions.conditions)) {
           ReactDOM.render(
             <ColorPicker
-              color={selectedElement.style.color}
-              onChange={color => (selectedElement.style.color = color.hex)}
+              color={getStyle(selected).color}
+              onChange={color => {
+                setStyle(selected, 'color', color.hex)
+              }}
             />,
             colorPickerContainer
           )
