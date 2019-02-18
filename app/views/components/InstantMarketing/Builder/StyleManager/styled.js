@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-  padding: 1rem;
+  padding: 0 1rem;
   font-family: Barlow;
   > div:not(:empty) {
     margin-bottom: 2rem;
