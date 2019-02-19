@@ -13,25 +13,29 @@ export class InlineEditableField extends React.Component {
     handleDelete: PropTypes.func,
     handleAddNew: PropTypes.func,
     isDisabled: PropTypes.bool,
+    label: PropTypes.string,
     renderViewMode: PropTypes.func,
     renderEditMode: PropTypes.func.isRequired,
     showAdd: PropTypes.bool,
     showEdit: PropTypes.bool,
     showDelete: PropTypes.bool,
-    cancleOnOutsideClick: PropTypes.bool,
-    toggleModeCallback: PropTypes.func
+    cancelOnOutsideClick: PropTypes.bool,
+    toggleModeCallback: PropTypes.func,
+    value: PropTypes.string
   }
 
   static defaultProps = {
     handleDelete: noop,
     handleAddNew: noop,
     isDisabled: false,
+    label: 'Label',
     renderViewMode: noop,
     showAdd: false,
     showDelete: true,
     showEdit: true,
-    cancleOnOutsideClick: false,
-    toggleModeCallback: noop
+    cancelOnOutsideClick: false,
+    toggleModeCallback: noop,
+    value: ''
   }
 
   state = {
@@ -70,24 +74,28 @@ export class InlineEditableField extends React.Component {
 
   get viewModeProps() {
     const {
+      label,
       showAdd,
       showEdit,
       handleAddNew,
-      renderViewMode: renderBody
+      renderViewMode: renderBody,
+      value
     } = this.props
 
     return {
+      label,
       showAdd,
       showEdit,
       handleAddNew,
       renderBody,
-      toggleMode: this.toggleMode
+      toggleMode: this.toggleMode,
+      value
     }
   }
 
   render() {
     if (this.state.isEditMode) {
-      return this.props.cancleOnOutsideClick ? (
+      return this.props.cancelOnOutsideClick ? (
         <ClickOutside onClickOutside={this.toggleMode}>
           <EditMode {...this.editModeProps} />
         </ClickOutside>

@@ -38,14 +38,12 @@ export class Menu extends React.Component {
 
           <Flex alignCenter>
             <Actions>
-              {props.showFactsheetButton && (
-                <ActionButton
-                  appearance="outline"
-                  onClick={props.onToggleFactsheet}
-                >
-                  {props.isFactsheetOpen ? 'Hide' : 'Show'} Factsheet
-                </ActionButton>
-              )}
+              <ActionButton
+                appearance="outline"
+                onClick={props.onToggleFactsheet}
+              >
+                {props.isFactsheetOpen ? 'Hide' : 'Show'} Factsheet
+              </ActionButton>
 
               {props.task && (
                 <ActionButton
@@ -57,7 +55,7 @@ export class Menu extends React.Component {
                 </ActionButton>
               )}
 
-              {props.file.type === 'pdf' && (
+              {props.file.type === 'pdf' && !props.isEnvelopeView && (
                 <ActionButton
                   style={{ marginLeft: '1rem' }}
                   onClick={this.toggleOpenPdfSplitter}
@@ -82,7 +80,7 @@ export class Menu extends React.Component {
 
         {this.state.isPdfSplitterOpen && (
           <PdfSplitter
-            files={[this.props.file]}
+            files={[props.file]}
             deal={props.deal}
             onClose={this.toggleOpenPdfSplitter}
           />

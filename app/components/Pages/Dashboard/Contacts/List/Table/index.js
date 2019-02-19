@@ -1,17 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { getAttributeFromSummary } from 'models/contacts/helpers'
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import IconInfoOutline from 'components/SvgIcons/InfoOutline/IconInfoOutline'
 
-import Table from '../../../../../../views/components/Grid/Table'
+import Tooltip from 'components/tooltip'
+import Table from 'components/Grid/Table'
+import IconButton from 'components/Button/IconButton'
+import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 
-import Menu from './columns/Menu'
-import TagsString from './columns/Tags'
-import Name from './columns/Name'
-import { LastTouchedCell } from './columns/LastTouched'
-
-import { LoadingComponent } from './components/LoadingComponent'
+import TagsOverlay from '../../components/TagsOverlay'
 import NoSearchResults from '../../../../../Partials/no-search-results'
 
 import MergeContacts from '../Actions/MergeContacts'
@@ -19,14 +18,14 @@ import ExportContacts from '../Actions/ExportContactsButton'
 import TagContacts from '../Actions/TagContacts'
 import CreateEvent from '../Actions/CreateEvent'
 
-import TagsOverlay from '../../components/TagsOverlay'
+import { ActionWrapper } from './components/ActionWrapper'
+import { LoadingComponent } from './components/LoadingComponent'
 
-import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
-
+import Menu from './columns/Menu'
+import Name from './columns/Name'
+import TagsString from './columns/Tags'
 import { Contact } from './columns/Contact'
-import IconButton from '../../../../../../views/components/Button/IconButton'
-import IconDeleteOutline from '../../../../../../views/components/SvgIcons/DeleteOutline/IconDeleteOutline'
-import Tooltip from '../../../../../../views/components/tooltip'
+import { LastTouchedCell } from './columns/LastTouched'
 
 const IconLastTouch = styled(IconInfoOutline)`
   margin-left: 0.5rem;
@@ -117,58 +116,91 @@ class ContactsList extends React.Component {
       )
     },
     {
-      display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows }) => (
-        <SendMlsListingCard selectedRows={selectedRows} isMultiListing>
-          Marketing
-        </SendMlsListingCard>
-      )
+      render: ({ selectedRows }) => {
+        const disabled = selectedRows.length === 0
+
+        return (
+          <ActionWrapper action="marketing" disabled={disabled}>
+            <SendMlsListingCard disabled={disabled} selectedRows={selectedRows}>
+              Marketing
+            </SendMlsListingCard>
+          </ActionWrapper>
+        )
+      }
     },
     {
-      display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows, resetSelectedRows }) => (
-        <TagContacts
-          selectedRows={selectedRows}
-          resetSelectedRows={resetSelectedRows}
-          handleChangeContactsAttributes={
-            this.props.handleChangeContactsAttributes
-          }
-        />
-      )
+      render: ({ selectedRows, resetSelectedRows }) => {
+        const disabled = selectedRows.length === 0
+
+        return (
+          <ActionWrapper action="tagging" disabled={disabled}>
+            <TagContacts
+              disabled={disabled}
+              selectedRows={selectedRows}
+              resetSelectedRows={resetSelectedRows}
+              handleChangeContactsAttributes={
+                this.props.handleChangeContactsAttributes
+              }
+            />
+          </ActionWrapper>
+        )
+      }
     },
     {
-      display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows, resetSelectedRows }) => (
-        <CreateEvent
-          selectedRows={selectedRows}
-          submitCallback={async () => {
-            resetSelectedRows()
-            await this.props.bulkEventCreationCallback()
-          }}
-        />
-      )
+      render: ({ selectedRows, resetSelectedRows }) => {
+        const disabled = selectedRows.length === 0
+
+        return (
+          <ActionWrapper action="creating an event" disabled={disabled}>
+            <CreateEvent
+              disabled={disabled}
+              selectedRows={selectedRows}
+              submitCallback={async () => {
+                resetSelectedRows()
+                await this.props.bulkEventCreationCallback()
+              }}
+            />
+          </ActionWrapper>
+        )
+      }
     },
     {
-      display: ({ selectedRows }) => selectedRows.length >= 2,
-      render: ({ selectedRows, resetSelectedRows }) => (
-        <MergeContacts
-          selectedRows={selectedRows}
-          rowsUpdating={this.props.rowsUpdating}
-          resetSelectedRows={resetSelectedRows}
-        />
-      )
+      render: ({ selectedRows, resetSelectedRows }) => {
+        const disabled = selectedRows.length < 2
+
+        return (
+          <ActionWrapper
+            action="creating an event"
+            atLeast="two"
+            disabled={disabled}
+          >
+            <MergeContacts
+              disabled={disabled}
+              selectedRows={selectedRows}
+              rowsUpdating={this.props.rowsUpdating}
+              resetSelectedRows={resetSelectedRows}
+            />
+          </ActionWrapper>
+        )
+      }
     },
     {
-      display: ({ selectedRows }) => selectedRows.length > 0,
-      render: rowData => (
-        <IconButton
-          size="small"
-          appearance="outline"
-          onClick={e => this.props.onRequestDelete(e, rowData)}
-        >
-          <IconDeleteOutline size={24} />
-        </IconButton>
-      )
+      render: rowData => {
+        const disabled = rowData.selectedRows.length === 0
+
+        return (
+          <ActionWrapper action="delete" disabled={disabled}>
+            <IconButton
+              disabled={disabled}
+              size="small"
+              appearance="outline"
+              onClick={e => this.props.onRequestDelete(e, rowData)}
+            >
+              <IconDeleteOutline size={24} />
+            </IconButton>
+          </ActionWrapper>
+        )
+      }
     }
   ]
 

@@ -1,4 +1,5 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+
 import {
   Container,
   Menu,
@@ -25,9 +26,9 @@ export const SideMenu = styled(Menu)`
 
   ${props =>
     props.isOpen === false &&
-    `
-    margin: 0;
-  `};
+    css`
+      margin: 0;
+    `};
 `
 
 export const PageContent = styled(Content)`

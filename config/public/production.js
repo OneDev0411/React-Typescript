@@ -32,5 +32,8 @@ export default {
   itunes_url: process.env.ITUNES_URL,
   google: {
     api_key: process.env.GOOGLE_API_KEY
+  },
+  fb: {
+    app_id: process.env.FB_APP_ID
   }
 }

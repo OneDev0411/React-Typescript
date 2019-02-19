@@ -28,13 +28,14 @@ class SelectedItems extends React.Component {
     border: canDrop ? '1px dashed #003bdf' : 'none',
     background: isDraggingOver ? '#eee' : '#fff',
     filter: isDraggingOver ? 'blur(2px)' : 'none',
-    minHeight: '100vh'
+    minHeight: '95%'
   })
 
   render() {
     const DropTarget = (
       <div style={this.getListStyle(this.props.isOver, this.props.canDrop)}>
         {_.size(this.props.selectedPages) === 0 && <EmptyState />}
+
         {_.map(this.props.selectedPages, (item, key) => (
           <Page
             key={key}

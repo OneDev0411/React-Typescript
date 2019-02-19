@@ -22,9 +22,20 @@ class EnvelopeView extends React.Component {
       )
     }
 
-    envelopes = envelopes.filter(
-      envelope => ['Voided', 'Declined'].includes(envelope.status) === false
-    )
+    envelopes = envelopes
+      .filter(
+        envelope => ['Voided', 'Declined'].includes(envelope.status) === false
+      )
+      .sort((a, b) => {
+        if (a.status === 'Completed')
+          return -1
+
+        if (b.status === 'Completed')
+          return 1
+
+        return 0
+      })
+      .sort((a, b) => b.created_at - a.created_at)
 
     if (envelopes.length === 0) {
       return null
