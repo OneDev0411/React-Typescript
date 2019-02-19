@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import { mergeContact } from '../../../../../../store_actions/contacts'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 import IconButton from '../../../../../../views/components/Button/IconButton'
@@ -23,10 +24,16 @@ class MergeContacts extends React.Component {
       }
     })
   }
+
   render() {
     return (
       <Tooltip placement="bottom" caption="Merge">
-        <IconButton size="small" appearance="outline" onClick={this.onClick}>
+        <IconButton
+          disabled={this.props.disabled}
+          size="small"
+          appearance="outline"
+          onClick={this.onClick}
+        >
           <IconMerge />
         </IconButton>
       </Tooltip>

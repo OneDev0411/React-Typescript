@@ -22,12 +22,13 @@ export default class TagContacts extends React.Component {
   closeOverlay = () => this.setState({ overlayIsOpen: false })
 
   render() {
-    const { selectedRows } = this.props
+    const { selectedRows, disabled } = this.props
     const { overlayIsOpen } = this.state
 
     return (
       <Fragment>
         <ActionButton
+          disabled={disabled}
           appearance="outline"
           size="small"
           onClick={this.openOverLay}

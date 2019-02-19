@@ -31,11 +31,12 @@ class CreateEvent extends Component {
   }
 
   render() {
-    const { user, associations } = this.props
+    const { user, associations, disabled } = this.props
 
     return (
       <Fragment>
         <ActionButton
+          disabled={disabled}
           appearance="outline"
           size="small"
           onClick={this.openDrawer}
