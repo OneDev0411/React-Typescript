@@ -19,6 +19,14 @@ class UploadDocument extends React.Component {
     })
 
     if (
+      Array.isArray(rejectedFiles) &&
+      rejectedFiles.length === 1 &&
+      rejectedFiles[0] instanceof DataTransferItem
+    ) {
+      return false
+    }
+
+    if (
       this.props.activeChecklist &&
       this.props.activeChecklist.is_terminated
     ) {
