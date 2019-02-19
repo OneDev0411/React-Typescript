@@ -1,17 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { getAttributeFromSummary } from 'models/contacts/helpers'
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import IconInfoOutline from 'components/SvgIcons/InfoOutline/IconInfoOutline'
 
-import Table from '../../../../../../views/components/Grid/Table'
+import Tooltip from 'components/tooltip'
+import Table from 'components/Grid/Table'
+import IconButton from 'components/Button/IconButton'
+import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 
-import Menu from './columns/Menu'
-import TagsString from './columns/Tags'
-import Name from './columns/Name'
-import { LastTouchedCell } from './columns/LastTouched'
-
-import { LoadingComponent } from './components/LoadingComponent'
+import TagsOverlay from '../../components/TagsOverlay'
 import NoSearchResults from '../../../../../Partials/no-search-results'
 
 import MergeContacts from '../Actions/MergeContacts'
@@ -19,14 +18,14 @@ import ExportContacts from '../Actions/ExportContactsButton'
 import TagContacts from '../Actions/TagContacts'
 import CreateEvent from '../Actions/CreateEvent'
 
-import TagsOverlay from '../../components/TagsOverlay'
+import { ActionWrapper } from './components/ActionWrapper'
+import { LoadingComponent } from './components/LoadingComponent'
 
-import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
-
+import Menu from './columns/Menu'
+import Name from './columns/Name'
+import TagsString from './columns/Tags'
 import { Contact } from './columns/Contact'
-import IconButton from '../../../../../../views/components/Button/IconButton'
-import IconDeleteOutline from '../../../../../../views/components/SvgIcons/DeleteOutline/IconDeleteOutline'
-import Tooltip from '../../../../../../views/components/tooltip'
+import { LastTouchedCell } from './columns/LastTouched'
 
 const IconLastTouch = styled(IconInfoOutline)`
   margin-left: 0.5rem;
@@ -36,12 +35,6 @@ const IconLastTouch = styled(IconInfoOutline)`
 
   &:hover {
     opacity: 0.5;
-  }
-`
-
-const DisabledActionContainer = styled.div`
-  > button {
-    pointer-events: none;
   }
 `
 
@@ -110,15 +103,6 @@ class ContactsList extends React.Component {
     }
   ]
 
-  getTooltipedAction = (action, caption, disabled) =>
-    disabled ? (
-      <Tooltip caption={caption}>
-        <DisabledActionContainer>{action}</DisabledActionContainer>
-      </Tooltip>
-    ) : (
-      action
-    )
-
   actions = [
     {
       render: ({ selectedRows }) => (
@@ -135,12 +119,12 @@ class ContactsList extends React.Component {
       render: ({ selectedRows }) => {
         const disabled = selectedRows.length === 0
 
-        return this.getTooltipedAction(
-          <SendMlsListingCard disabled={disabled} selectedRows={selectedRows}>
-            Marketing
-          </SendMlsListingCard>,
-          'You need to have at least one contact selected before marketing.',
-          disabled
+        return (
+          <ActionWrapper action="marketing" disabled={disabled}>
+            <SendMlsListingCard disabled={disabled} selectedRows={selectedRows}>
+              Marketing
+            </SendMlsListingCard>
+          </ActionWrapper>
         )
       }
     },
@@ -148,17 +132,17 @@ class ContactsList extends React.Component {
       render: ({ selectedRows, resetSelectedRows }) => {
         const disabled = selectedRows.length === 0
 
-        return this.getTooltipedAction(
-          <TagContacts
-            disabled={disabled}
-            selectedRows={selectedRows}
-            resetSelectedRows={resetSelectedRows}
-            handleChangeContactsAttributes={
-              this.props.handleChangeContactsAttributes
-            }
-          />,
-          'You need to have at least one contact selected before tagging contacts.',
-          disabled
+        return (
+          <ActionWrapper action="tagging" disabled={disabled}>
+            <TagContacts
+              disabled={disabled}
+              selectedRows={selectedRows}
+              resetSelectedRows={resetSelectedRows}
+              handleChangeContactsAttributes={
+                this.props.handleChangeContactsAttributes
+              }
+            />
+          </ActionWrapper>
         )
       }
     },
@@ -166,17 +150,17 @@ class ContactsList extends React.Component {
       render: ({ selectedRows, resetSelectedRows }) => {
         const disabled = selectedRows.length === 0
 
-        return this.getTooltipedAction(
-          <CreateEvent
-            disabled={disabled}
-            selectedRows={selectedRows}
-            submitCallback={async () => {
-              resetSelectedRows()
-              await this.props.bulkEventCreationCallback()
-            }}
-          />,
-          'You need to have at least one contact selected before creating events.',
-          disabled
+        return (
+          <ActionWrapper action="creating an event" disabled={disabled}>
+            <CreateEvent
+              disabled={disabled}
+              selectedRows={selectedRows}
+              submitCallback={async () => {
+                resetSelectedRows()
+                await this.props.bulkEventCreationCallback()
+              }}
+            />
+          </ActionWrapper>
         )
       }
     },
@@ -184,15 +168,19 @@ class ContactsList extends React.Component {
       render: ({ selectedRows, resetSelectedRows }) => {
         const disabled = selectedRows.length < 2
 
-        return this.getTooltipedAction(
-          <MergeContacts
+        return (
+          <ActionWrapper
+            action="creating an event"
+            atLeast="two"
             disabled={disabled}
-            selectedRows={selectedRows}
-            rowsUpdating={this.props.rowsUpdating}
-            resetSelectedRows={resetSelectedRows}
-          />,
-          'You need to have at least two contact selected before merge.',
-          disabled
+          >
+            <MergeContacts
+              disabled={disabled}
+              selectedRows={selectedRows}
+              rowsUpdating={this.props.rowsUpdating}
+              resetSelectedRows={resetSelectedRows}
+            />
+          </ActionWrapper>
         )
       }
     },
@@ -200,17 +188,17 @@ class ContactsList extends React.Component {
       render: rowData => {
         const disabled = rowData.selectedRows.length === 0
 
-        return this.getTooltipedAction(
-          <IconButton
-            disabled={disabled}
-            size="small"
-            appearance="outline"
-            onClick={e => this.props.onRequestDelete(e, rowData)}
-          >
-            <IconDeleteOutline size={24} />
-          </IconButton>,
-          'You need to have at least one contact selected before delete.',
-          disabled
+        return (
+          <ActionWrapper action="delete" disabled={disabled}>
+            <IconButton
+              disabled={disabled}
+              size="small"
+              appearance="outline"
+              onClick={e => this.props.onRequestDelete(e, rowData)}
+            >
+              <IconDeleteOutline size={24} />
+            </IconButton>
+          </ActionWrapper>
         )
       }
     }
