@@ -13,7 +13,7 @@ const initialState = {
 
 export const getDefaultList = (name = '') => ({
   id: 'default',
-  editable: false,
+  is_editable: false,
   name: `All ${name.charAt(0).toUpperCase()}${name.slice(1)}`,
   filters: []
 })
