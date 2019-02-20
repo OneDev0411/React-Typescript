@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 
-import ViewMode from './ViewMode'
-import EditMode from './EditMode'
+import { ViewMode } from './ViewMode'
+import { EditMode } from './EditMode'
 
 export default class Item extends Component {
   state = {
