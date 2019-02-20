@@ -90,7 +90,7 @@ class ManageTags extends Component {
     await updateContactsTags(oldText, newText)
     this.props.notify({
       status: 'success',
-      message: 'Tag updated.'
+      message: `"${newText}" updated.`
     })
     await this.reloadTags()
   }
@@ -101,7 +101,7 @@ class ManageTags extends Component {
     await this.createTag(tag)
     this.props.notify({
       status: 'success',
-      message: 'Tag added.'
+      message: `"${tag}" added.`
     })
     this.setState({ createTagInputValue: '' })
     await this.reloadTags()
@@ -123,7 +123,7 @@ class ManageTags extends Component {
         await deleteContactsTags(text)
         this.props.notify({
           status: 'success',
-          message: 'Tag deleted.'
+          message: `"${text}" deleted.`
         })
         await this.reloadTags()
       }
