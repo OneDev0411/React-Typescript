@@ -113,7 +113,7 @@ export class AddressField extends React.Component {
     }
   }
 
-  onSubmit = (values, toggleMode) => this.handleSubmit(values, toggleMode)
+  onSubmit = toggleMode => this.handleSubmit({}, toggleMode)
 
   postLoadFormat = (values, originalValues) =>
     postLoadFormat(values, originalValues, this.props.address)
