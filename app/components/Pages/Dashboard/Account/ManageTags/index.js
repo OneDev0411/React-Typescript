@@ -13,7 +13,7 @@ import IconTextInput from 'components/Input/IconTextInput'
 import TagIcon from 'components/SvgIcons/Tag/TagIcon'
 
 import Loading from '../../../../Partials/Loading'
-import Row from './row'
+import Row from './Row'
 import {
   Container,
   Description,
