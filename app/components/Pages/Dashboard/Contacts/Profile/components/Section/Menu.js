@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import TextIconButton from '../../../../../../../views/components/Button/TextIconButton'
 import Button from '../../../../../../../views/components/Button/ActionButton'
 import EditIcon from '../../../../../../../views/components/SvgIcons/Edit/EditIcon'
-import { primary, grey } from '../../../../../../../views/utils/colors'
+import { primary } from '../../../../../../../views/utils/colors'
 import { BasicDropdown } from '../../../../../../../views/components/BasicDropdown'
 
 const Item = styled(Button)`
