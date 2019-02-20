@@ -24,7 +24,7 @@ export class EditMode extends React.Component {
     showDelete: false
   }
 
-  onSave = () => this.props.handleSave({}, this.props.toggleMode)
+  onSave = () => this.props.handleSave(this.props.toggleMode)
 
   onDelete = () => this.props.handleDelete(this.props.toggleMode)
 
