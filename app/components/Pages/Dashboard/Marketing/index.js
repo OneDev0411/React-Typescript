@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
+import Cookie from 'js-cookie'
 
 import Onboarding from 'components/Onboarding'
+
+import IconButton from 'components/Button/IconButton'
+import IconInfo from 'components/SvgIcons/InfoOutline/IconInfoOutline'
 
 import {
   Container as PageContainer,
@@ -16,7 +20,8 @@ import { Menu } from './Menu'
 
 class Marketing extends Component {
   state = {
-    isSideMenuOpen: true
+    isSideMenuOpen: true,
+    isShowingIntro: false
   }
 
   toggleSideMenu = () =>
@@ -24,13 +29,28 @@ class Marketing extends Component {
       isSideMenuOpen: !state.isSideMenuOpen
     }))
 
+  handleShowIntro = () =>
+    this.setState({
+      isShowingIntro: true
+    })
+
+  handleFinishIntro = () =>
+    this.setState({
+      isShowingIntro: false
+    })
+
   render() {
     const { isSideMenuOpen } = this.state
 
     return (
       <PageContainer isOpen={isSideMenuOpen}>
         <SideMenu isOpen={isSideMenuOpen}>
-          <ListTitle className="onboarding--intro">Marketing</ListTitle>
+          <ListTitle className="onboarding--intro">
+            Marketing
+            <IconButton isFit iconSize="large" onClick={this.handleShowIntro}>
+              <IconInfo />
+            </IconButton>
+          </ListTitle>
           <Menu />
         </SideMenu>
 
@@ -48,8 +68,10 @@ class Marketing extends Component {
         </PageContent>
 
         <Onboarding
+          display={this.state.isShowingIntro}
           steps={OnboardingSteps}
-          onTimeDisplay="marketing-center-onboarding"
+          cookie="marketing-center-onboarding"
+          onFinishIntro={this.handleFinishIntro}
         />
       </PageContainer>
     )
