@@ -176,7 +176,6 @@ class ReminderNotifications extends Component {
 
     this.setState(
       prevState => ({
-        ...prevState,
         settings: prevState.settings.filter(item =>
           this.filterSetting(item, setting)
         )
@@ -200,7 +199,6 @@ class ReminderNotifications extends Component {
           }))
 
           return {
-            ...prevState,
             settings: [
               ...prevState.settings.filter(
                 item => item.object_type !== setting.object_type
@@ -217,7 +215,6 @@ class ReminderNotifications extends Component {
 
     this.setState(
       prevState => ({
-        ...prevState,
         settings: [
           ...prevState.settings.filter(item =>
             this.filterSetting(item, setting)
@@ -250,7 +247,7 @@ class ReminderNotifications extends Component {
   render() {
     return (
       <Fragment>
-        <PageHeader style={{ marginBottom: '1.5em', marginTop: '1.5rem' }}>
+        <PageHeader style={{ marginBottom: '1.5rem', marginTop: '1.5rem' }}>
           <PageHeader.Title showBackButton={false}>
             <PageHeader.Heading>Reminder Notifications</PageHeader.Heading>
             {this.shouldRenderForcePushButton() && (
