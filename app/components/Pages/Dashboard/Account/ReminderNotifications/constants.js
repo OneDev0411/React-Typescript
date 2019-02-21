@@ -38,3 +38,5 @@ export const DROPDOWN_OPTIONS = [
     value: 1209600
   }
 ]
+
+export const SHOULD_RENDER_FORCEPUSH_BUTTON = true

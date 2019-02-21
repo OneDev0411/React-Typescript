@@ -19,7 +19,8 @@ import {
   CONTACT_DATE_OBJECT_TYPE,
   DEAL_DATE_OBJECT_TYPE,
   DROPDOWN_OPTIONS,
-  FORCE_PUSH_API_URL
+  FORCE_PUSH_API_URL,
+  SHOULD_RENDER_FORCEPUSH_BUTTON
 } from './constants'
 
 class ReminderNotifications extends Component {
@@ -236,10 +237,6 @@ class ReminderNotifications extends Component {
     this.removeSetting(setting)
   }
 
-  shouldRenderForcePushButton() {
-    return true
-  }
-
   async forcePushNotifications() {
     return new Fetch().post(FORCE_PUSH_API_URL)
   }
@@ -250,7 +247,7 @@ class ReminderNotifications extends Component {
         <PageHeader style={{ marginBottom: '1.5rem', marginTop: '1.5rem' }}>
           <PageHeader.Title showBackButton={false}>
             <PageHeader.Heading>Reminder Notifications</PageHeader.Heading>
-            {this.shouldRenderForcePushButton() && (
+            {SHOULD_RENDER_FORCEPUSH_BUTTON && (
               <ActionButton
                 appearance="outline"
                 style={{ marginLeft: '2rem' }}
