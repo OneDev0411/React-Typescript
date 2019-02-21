@@ -15,6 +15,7 @@ import { orderFields } from './helpers'
 
 import { TextField } from './fields/TextField'
 import { SelectField } from './fields/SelectField'
+import { DateField } from './fields/DateField'
 
 const propTypes = {
   showCustomAttributeMenu: PropTypes.bool
@@ -148,16 +149,9 @@ class SectionWithFields extends React.Component {
       }
 
       if (attribute_def.singular) {
-        // if (attribute_def.data_type === 'date') {
-        //   return allFields.push(
-        //     <DateField
-        //       key={key}
-        //       name={attribute_def.id}
-        //       attribute={attribute}
-        //       yearIsOptional
-        //     />
-        //   )
-        // }
+        if (attribute_def.data_type === 'date') {
+          return allFields.push(<DateField {..._props} />)
+        }
 
         if (attribute_def.enum_values) {
           return allFields.push(<SelectField {..._props} />)
