@@ -4,7 +4,10 @@ import { createSegment } from '../../../models/filter-segments/create-segment'
 export function createFilterSegment(nameId, segment) {
   return async dispatch => {
     try {
-      const { data: id } = await createSegment(nameId, segment)
+      const {
+        data: { id }
+      } = await createSegment(nameId, segment)
+
       const list = {
         id,
         ...segment

@@ -1,4 +1,5 @@
 import React from 'react'
+
 import Tab from './Tab'
 
 export const ProfileTabs = ({ user }) => (
@@ -20,6 +21,12 @@ export const ProfileTabs = ({ user }) => (
       indexed
       text="Calendar Export"
       to="/dashboard/account/exportCalendar"
+    />
+    <Tab indexed text="Manage Tags" to="/dashboard/account/manage-tags" />
+    <Tab
+      indexed
+      text="Reminder Notifications"
+      to="/dashboard/account/reminder-notifications"
     />
   </ul>
 )

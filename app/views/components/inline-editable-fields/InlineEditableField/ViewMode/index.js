@@ -15,6 +15,7 @@ ViewMode.propTypes = {
   renderBody: PropTypes.func,
   showAdd: PropTypes.bool,
   showEdit: PropTypes.bool,
+  style: PropTypes.shape(),
   toggleMode: PropTypes.func.isRequired,
   value: PropTypes.string
 }
@@ -26,6 +27,7 @@ ViewMode.defaultProps = {
   renderBody: noop,
   showAdd: false,
   showEdit: true,
+  style: {},
   value: '-'
 }
 
@@ -33,7 +35,7 @@ export function ViewMode(props) {
   const { label, value, toggleMode, renderBody } = props
 
   return (
-    <Container onClick={toggleMode}>
+    <Container onClick={toggleMode} style={props.style}>
       {renderBody() == null ? (
         <React.Fragment>
           <Label>{label}</Label>
