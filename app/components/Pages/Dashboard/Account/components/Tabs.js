@@ -23,5 +23,10 @@ export const ProfileTabs = ({ user }) => (
       to="/dashboard/account/exportCalendar"
     />
     <Tab indexed text="Manage Tags" to="/dashboard/account/manage-tags" />
+    <Tab
+      indexed
+      text="Reminder Notifications"
+      to="/dashboard/account/reminder-notifications"
+    />
   </ul>
 )
