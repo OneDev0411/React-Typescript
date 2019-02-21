@@ -13,6 +13,9 @@ export const Container = styled.div`
 `
 
 export const ListTitle = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 21px;
   margin-bottom: 1.5rem;
   font-weight: 500;
