@@ -14,6 +14,7 @@ import { Section } from '../Section'
 import { orderFields } from './helpers'
 
 import { TextField } from './fields/TextField'
+import { SelectField } from './fields/SelectField'
 
 const propTypes = {
   showCustomAttributeMenu: PropTypes.bool
@@ -37,6 +38,10 @@ class SectionWithFields extends React.Component {
   filterEditableFields = field => field.attribute_def.editable
 
   upsert = async attribute => {
+    if (attribute == null) {
+      return
+    }
+
     const { contact } = this.props
 
     if (this.props.isPartner) {
@@ -135,6 +140,13 @@ class SectionWithFields extends React.Component {
       // const placeholder = getPlaceholder(attribute)
       // const validate = getValidator(attribute)
 
+      const _props = {
+        key,
+        attribute,
+        handleSave: this.upsert,
+        handleDelete: this.delete
+      }
+
       if (attribute_def.singular) {
         // if (attribute_def.data_type === 'date') {
         //   return allFields.push(
@@ -147,20 +159,11 @@ class SectionWithFields extends React.Component {
         //   )
         // }
 
-        // if (attribute_def.enum_values) {
-        //   return allFields.push(<Select key={key} attribute={attribute} />)
-        // }
+        if (attribute_def.enum_values) {
+          return allFields.push(<SelectField {..._props} />)
+        }
 
-        allFields.push(
-          <TextField
-            attribute={attribute}
-            key={key}
-            handleSave={this.upsert}
-            handleDelete={this.delete}
-            // placeholder={placeholder}
-            // validate={validate}
-          />
-        )
+        return allFields.push(<TextField {..._props} />)
       }
 
       // if (
