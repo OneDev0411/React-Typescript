@@ -233,9 +233,9 @@ const ExportCalendar = Load({
     import('../components/Pages/Dashboard/Account/ICalIntegration' /* webpackChunkName: "deal_templates" */)
 })
 
-const ManageTags = Load({
+const ReminderNotifications = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Account/ManageTags' /* webpackChunkName: "manage_tags" */)
+    import('../components/Pages/Dashboard/Account/ReminderNotifications' /* webpackChunkName: "reminder_notifications" */)
 })
 
 const AsyncEditDealTemplate = Load({
@@ -474,7 +474,10 @@ export default (
         <Route path="deal/templates" component={AsyncDealTemplates} />
         <Route path="deal/templates/:id" component={AsyncEditDealTemplate} />
         <Route path="exportCalendar" component={ExportCalendar} />
-        <Route path="manage-tags" component={ManageTags} />
+        <Route
+          path="reminder-notifications"
+          component={ReminderNotifications}
+        />
       </Route>
 
       <Route path="/dashboard/brands">

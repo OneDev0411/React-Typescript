@@ -15,15 +15,13 @@ export class EditMode extends React.Component {
     isDisabled: PropTypes.bool,
     render: PropTypes.func.isRequired,
     showDelete: PropTypes.bool,
-    style: PropTypes.shape(),
     toggleMode: PropTypes.func.isRequired
   }
 
   static defaultProps = {
     isDisabled: false,
     handleDelete: noop,
-    showDelete: false,
-    style: {}
+    showDelete: false
   }
 
   onSave = () => this.props.handleSave(this.props.toggleMode)
@@ -34,7 +32,7 @@ export class EditMode extends React.Component {
     const { isDisabled, showDelete } = this.props
 
     return (
-      <Container style={this.props.style}>
+      <Container>
         {this.props.render(this.props)}
         <ActionBar showDelete={showDelete}>
           {showDelete && (
