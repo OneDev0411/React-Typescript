@@ -24,7 +24,6 @@ class ContactFilters extends React.PureComponent {
   normalizeFilters = filters => ({
     filters: normalizeFilters(filters),
     args: {
-      users: this.props.users,
       filter_type: this.props.conditionOperator
     }
   })

@@ -95,11 +95,6 @@ class SegmentsList extends React.Component {
 
         {list.map((item, index) => {
           const id = item.id
-          let editable = true
-
-          if (item.editable != null) {
-            editable = item.editable
-          }
 
           return (
             <ToolTip key={index} caption={item.name} placement="right">
@@ -112,7 +107,7 @@ class SegmentsList extends React.Component {
                 >
                   {uppercaseFirstLetter(item.name)}
                 </ListItemName>
-                {editable && (
+                {item.is_editable && (
                   <DeleteButton
                     onClick={() => this.onRequestDelete(item)}
                     isFit
