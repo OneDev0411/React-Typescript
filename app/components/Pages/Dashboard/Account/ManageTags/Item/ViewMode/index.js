@@ -6,26 +6,25 @@ import DeleteIcon from 'components/SvgIcons/Delete/IconDelete'
 
 import { Container, Title } from './styled'
 
-export default function ViewMode({ tag, onDelete }) {
-  return (
-    <Container>
-      <Title>{tag.text}</Title>
-      <Tooltip caption="Delete tag">
-        <IconButton
-          isFit
-          inverse
-          appearance="icon"
-          onClick={event => {
-            if (event && event.stopPropagation) {
-              event.stopPropagation()
-            }
+export class ViewMode extends React.Component {
+  onClick = event => {
+    if (event && event.stopPropagation) {
+      event.stopPropagation()
+    }
 
-            onDelete(tag)
-          }}
-        >
-          <DeleteIcon />
-        </IconButton>
-      </Tooltip>
-    </Container>
-  )
+    this.props.onDelete(this.props.tag)
+  }
+
+  render() {
+    return (
+      <Container>
+        <Title>{this.props.tag.text}</Title>
+        <Tooltip caption="Delete tag">
+          <IconButton isFit inverse appearance="icon" onClick={this.onClick}>
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      </Container>
+    )
+  }
 }

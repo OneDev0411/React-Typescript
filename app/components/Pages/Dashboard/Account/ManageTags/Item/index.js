@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 
-import ViewMode from './ViewMode'
-import EditMode from './EditMode'
+import { ViewMode } from './ViewMode'
+import { EditMode } from './EditMode'
 
 export default class Item extends Component {
   state = {
@@ -14,14 +14,14 @@ export default class Item extends Component {
 
   onChange = text => this.setState({ text })
 
-  handleSave = () => {
+  save = () => {
     this.props.onChange({
       oldText: this.props.tag.text,
       newText: this.state.text
     })
   }
 
-  handleDelete = tag => {
+  delete = tag => {
     this.props.onDelete(tag)
   }
 
@@ -30,19 +30,19 @@ export default class Item extends Component {
   )
 
   renderViewMode = () => (
-    <ViewMode onDelete={this.handleDelete} tag={this.props.tag} />
+    <ViewMode onDelete={this.delete} tag={this.props.tag} />
   )
 
   render() {
     return (
       <InlineEditableField
-        handleSave={this.handleSave}
-        handleDelete={this.handleDelete}
+        cancelOnOutsideClick
+        handleSave={this.save}
+        handleDelete={this.delete}
         renderEditMode={this.renderEditMode}
         renderViewMode={this.renderViewMode}
         showEdit={false}
         showDelete={false}
-        cancelOnOutsideClick
         toggleModeCallback={this.resetState}
       />
     )

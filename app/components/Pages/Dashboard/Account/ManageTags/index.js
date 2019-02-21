@@ -9,17 +9,11 @@ import { updateContactsTags } from 'models/contacts/update-contacts-tags'
 import { deleteContactsTags } from 'models/contacts/delete-contacts-tags'
 
 import PageHeader from 'components/PageHeader'
-import IconTextInput from 'components/Input/IconTextInput'
-import TagIcon from 'components/SvgIcons/Tag/TagIcon'
 
 import Loading from '../../../../Partials/Loading'
-import Row from './row'
-import {
-  Container,
-  Description,
-  TextInputPrefix,
-  TextInputSuffix
-} from './styled'
+import Row from './Row'
+import { Input } from './Input'
+import { Container, Description } from './styled'
 
 const HIGHLIGHT_SECONDS = 4
 
@@ -96,7 +90,7 @@ class ManageTags extends Component {
     await updateContactsTags(oldText, newText)
     this.props.notify({
       status: 'success',
-      message: 'Tag updated.'
+      message: `"${newText}" updated.`
     })
     await this.reloadTags()
   }
@@ -107,7 +101,7 @@ class ManageTags extends Component {
     await this.createTag(tag)
     this.props.notify({
       status: 'success',
-      message: 'Tag added.'
+      message: `"${tag}" added.`
     })
     this.setState({ createTagInputValue: '' })
     await this.reloadTags()
@@ -129,7 +123,7 @@ class ManageTags extends Component {
         await deleteContactsTags(text)
         this.props.notify({
           status: 'success',
-          message: 'Tag deleted.'
+          message: `"${text}" deleted.`
         })
         await this.reloadTags()
       }
@@ -158,25 +152,10 @@ class ManageTags extends Component {
               <Description>
                 Start typing tags and hit Return to add.
               </Description>
-              <IconTextInput
-                placeholder="Add a tag..."
-                value={this.state.createTagInputValue}
-                style={{ margin: '1rem 1.5rem' }}
+              <Input
                 onChange={this.handleCreateTagInputChange}
-                onEnterKeyPress={this.handleAdd}
-                prefixElementRenderer={() => (
-                  <TextInputPrefix>
-                    <TagIcon />
-                  </TextInputPrefix>
-                )}
-                suffixElementRenderer={() => (
-                  <TextInputSuffix
-                    disabled={!this.state.createTagInputValue}
-                    onClick={this.handleAdd}
-                  >
-                    Add
-                  </TextInputSuffix>
-                )}
+                onSubmit={this.handleAdd}
+                value={this.state.createTagInputValue}
               />
               {Object.keys(this.state.tags)
                 .sort()

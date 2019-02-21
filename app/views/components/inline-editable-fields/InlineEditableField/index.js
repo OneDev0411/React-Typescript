@@ -9,6 +9,7 @@ import { EditMode } from './EditMode'
 
 export class InlineEditableField extends React.Component {
   static propTypes = {
+    cancelOnOutsideClick: PropTypes.bool,
     handleSave: PropTypes.func.isRequired,
     handleDelete: PropTypes.func,
     handleAddNew: PropTypes.func,
@@ -19,12 +20,13 @@ export class InlineEditableField extends React.Component {
     showAdd: PropTypes.bool,
     showEdit: PropTypes.bool,
     showDelete: PropTypes.bool,
-    cancelOnOutsideClick: PropTypes.bool,
+    style: PropTypes.shape(),
     toggleModeCallback: PropTypes.func,
     value: PropTypes.string
   }
 
   static defaultProps = {
+    cancelOnOutsideClick: false,
     handleDelete: noop,
     handleAddNew: noop,
     isDisabled: false,
@@ -33,7 +35,7 @@ export class InlineEditableField extends React.Component {
     showAdd: false,
     showDelete: true,
     showEdit: true,
-    cancelOnOutsideClick: false,
+    style: {},
     toggleModeCallback: noop,
     value: ''
   }
@@ -55,10 +57,11 @@ export class InlineEditableField extends React.Component {
 
   get editModeProps() {
     const {
-      showDelete,
       handleDelete,
       handleSave,
       isDisabled,
+      showDelete,
+      style,
       renderEditMode: render
     } = this.props
 
@@ -67,6 +70,7 @@ export class InlineEditableField extends React.Component {
       handleSave,
       isDisabled,
       showDelete,
+      style,
       render,
       toggleMode: this.toggleMode
     }
@@ -74,20 +78,22 @@ export class InlineEditableField extends React.Component {
 
   get viewModeProps() {
     const {
+      handleAddNew,
       label,
       showAdd,
       showEdit,
-      handleAddNew,
+      style,
       renderViewMode: renderBody,
       value
     } = this.props
 
     return {
       label,
-      showAdd,
-      showEdit,
       handleAddNew,
       renderBody,
+      showAdd,
+      showEdit,
+      style,
       toggleMode: this.toggleMode,
       value
     }
