@@ -19,7 +19,7 @@ export const RowContainer = styled.div`
   display: flex;
   flex-direction: row;
   padding: 0.5rem 0;
-  height: 4rem;
+  flex-wrap: wrap;
   transition: background-color 1s ease-in;
   ${({ highlight }) =>
     highlight &&
@@ -28,7 +28,7 @@ export const RowContainer = styled.div`
     `}
 
   > div {
-    margin: 0;
+    padding: 0;
     display: flex;
     align-items: center;
   }

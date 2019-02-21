@@ -44,6 +44,7 @@ export default class Item extends Component {
         showEdit={false}
         showDelete={false}
         toggleModeCallback={this.resetState}
+        style={{ margin: '0.5rem 0.3rem' }}
       />
     )
   }
