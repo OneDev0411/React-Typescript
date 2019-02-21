@@ -14,46 +14,13 @@ import Loading from '../../../../Partials/Loading'
 
 import Column from './column'
 
-const API_URL = '/calendar/settings/notifications'
-const FORCE_PUSH_API_URL = `${API_URL}/force`
-
-const DEAL_DATE_OBJECT_TYPE = 'deal_context'
-const CONTACT_DATE_OBJECT_TYPE = 'contact_attribute'
-
-const DROPDOWN_OPTIONS = [
-  {
-    label: '1 day before',
-    value: 86400
-  },
-  {
-    label: '2 days before',
-    value: 172800
-  },
-  {
-    label: '3 days before',
-    value: 259200
-  },
-  {
-    label: '4 days before',
-    value: 345600
-  },
-  {
-    label: '5 days before',
-    value: 432000
-  },
-  {
-    label: '6 days before',
-    value: 518400
-  },
-  {
-    label: '1 week before',
-    value: 604800
-  },
-  {
-    label: '2 weeks before',
-    value: 1209600
-  }
-]
+import {
+  API_URL,
+  CONTACT_DATE_OBJECT_TYPE,
+  DEAL_DATE_OBJECT_TYPE,
+  DROPDOWN_OPTIONS,
+  FORCE_PUSH_API_URL
+} from './constants'
 
 class ReminderNotifications extends Component {
   state = {
