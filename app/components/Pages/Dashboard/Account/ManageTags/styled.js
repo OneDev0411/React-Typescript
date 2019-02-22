@@ -21,11 +21,6 @@ export const RowContainer = styled.div`
   padding: 0.5rem 0;
   flex-wrap: wrap;
   transition: background-color 1s ease-in;
-  ${({ highlight }) =>
-    highlight &&
-    css`
-      background-color: ${grey.A150};
-    `}
 
   > div {
     padding: 0;

@@ -9,7 +9,7 @@ import { getActiveTeamId } from 'utils/user-teams'
 import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 import PageHeader from 'components/PageHeader'
 import ActionButton from 'components/Button/ActionButton'
-import { hasUserAccess } from 'utils/user-teams'
+import { hasUserAccessToDeals, hasUserAccessToCrm } from 'utils/user-teams'
 
 import Loading from '../../../../Partials/Loading'
 
@@ -36,7 +36,7 @@ class ReminderNotifications extends Component {
 
     const columns = []
 
-    if (this.hasDealsAccess() || this.isBackOffice()) {
+    if (this.hasDealsAccess()) {
       const dealsColumnData = await this.getDealsColumnData()
 
       columns.push({
@@ -64,7 +64,7 @@ class ReminderNotifications extends Component {
       }
     }
 
-    if (this.hasCrmAccess) {
+    if (this.hasCrmAccess()) {
       const contactsColumnData = await this.getContactsColumnData()
 
       columns.push({
@@ -95,11 +95,9 @@ class ReminderNotifications extends Component {
     this.setState({ columns, settings, loading: false })
   }
 
-  isBackOffice = () => hasUserAccess(this.props.user, 'BackOffice')
+  hasCrmAccess = () => hasUserAccessToCrm(this.props.user)
 
-  hasCrmAccess = () => hasUserAccess(this.props.user, 'CRM')
-
-  hasDealsAccess = () => hasUserAccess(this.props.user, 'Deals')
+  hasDealsAccess = () => hasUserAccessToDeals(this.props.user)
 
   async getDealsColumnData() {
     const brandId = getActiveTeamId(this.props.user)
