@@ -14,11 +14,15 @@ export default class Item extends Component {
 
   onChange = text => this.setState({ text })
 
-  save = () => {
-    this.props.onChange({
+  save = async toggleMode => {
+    const done = await this.props.onChange({
       oldText: this.props.tag.text,
       newText: this.state.text
     })
+
+    if (done) {
+      toggleMode()
+    }
   }
 
   delete = tag => {
