@@ -86,7 +86,13 @@ class ManageTags extends Component {
     }))
   }
 
-  handleChange = async ({ oldText, newText }) => {
+  handleChange = async ({ oldText, newText: rawNewText }) => {
+    const newText = rawNewText.trim()
+
+    if (!newText) {
+      return
+    }
+
     await updateContactsTags(oldText, newText)
     this.props.notify({
       status: 'success',
@@ -96,7 +102,11 @@ class ManageTags extends Component {
   }
 
   handleAdd = async () => {
-    const tag = this.state.createTagInputValue
+    const tag = this.state.createTagInputValue.trim()
+
+    if (!tag) {
+      return
+    }
 
     await this.createTag(tag)
     this.props.notify({

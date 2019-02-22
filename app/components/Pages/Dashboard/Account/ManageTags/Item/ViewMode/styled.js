@@ -13,7 +13,6 @@ export const Container = styled.div`
   line-height: 1.5;
   border-radius: 3px;
   padding: 0.5rem 1rem;
-  height: 2rem;
   background-color: ${grey.A100};
 `
 

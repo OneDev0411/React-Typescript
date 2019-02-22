@@ -169,11 +169,7 @@ class ContactsList extends React.Component {
         const disabled = selectedRows.length < 2
 
         return (
-          <ActionWrapper
-            action="creating an event"
-            atLeast="two"
-            disabled={disabled}
-          >
+          <ActionWrapper action="merging" atLeast="two" disabled={disabled}>
             <MergeContacts
               disabled={disabled}
               selectedRows={selectedRows}
