@@ -96,7 +96,11 @@ class ManageTags extends Component {
   }
 
   handleAdd = async () => {
-    const tag = this.state.createTagInputValue
+    const tag = this.state.createTagInputValue.trim()
+
+    if (!tag) {
+      return
+    }
 
     await this.createTag(tag)
     this.props.notify({
