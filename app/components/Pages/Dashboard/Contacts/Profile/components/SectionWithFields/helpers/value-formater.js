@@ -1,6 +1,6 @@
 import { formatPhoneNumber } from 'utils/format'
 
-export function getFormater({ attribute_def }) {
+export function valueFormater({ attribute_def }) {
   if (attribute_def.data_type === 'date') {
     const addZero = n => (n >= 10 ? n : `0${n}`)
 

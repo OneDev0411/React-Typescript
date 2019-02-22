@@ -3,19 +3,14 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
-import { getContactAttributesBySection } from 'models/contacts/helpers'
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
 
-import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
-
-import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
 import { Section } from '../Section'
-import { orderFields } from './helpers'
+import { MasterField } from '../ContactAttributeInlineEditableField'
+import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
 
-import { TextField } from './fields/TextField'
-import { SelectField } from './fields/SelectField'
-import { DateField } from './fields/DateField'
+import { orderFields, normalizeAttributes } from './helpers'
 
 const propTypes = {
   showCustomAttributeMenu: PropTypes.bool
@@ -26,9 +21,33 @@ const defaultProps = {
 }
 
 class SectionWithFields extends React.Component {
-  state = {
-    isOpenCustomAttributeDrawer: false
+  constructor(props) {
+    super(props)
+
+    const { attributes, sectionAttributesDef } = normalizeAttributes(props)
+
+    this.sectionAttributesDef = sectionAttributesDef
+
+    this.state = {
+      attributes,
+      isOpenCustomAttributeDrawer: false
+    }
   }
+
+  // static getDerivedStateFromProps(props, state) {
+  //   if (props.contact.updated_at > state.updated_at) {
+  //     const { attributes } = normalizeAttributes(props)
+
+  //     attributes.forEach(a => console.log(a.attribute_def.label, a.label, a))
+
+  //     return {
+  //       attributes,
+  //       updated_at: props.contact.updated_at
+  //     }
+  //   }
+
+  //   return null
+  // }
 
   openCustomAttributeDrawer = () =>
     this.setState({ isOpenCustomAttributeDrawer: true })
@@ -78,28 +97,48 @@ class SectionWithFields extends React.Component {
         associations: ['contact.updated_by']
       })
 
-      this.props.submitCallback({
-        ...contact,
-        ...updatedContent
-      })
+      this.setState(
+        state => ({
+          attributes: state.attributes.filter(a => {
+            if (attribute.id) {
+              return a.id !== attribute.id
+            }
 
-      this.props.notify({
-        status: 'success',
-        dismissAfter: 4000,
-        message: `${attribute.attribute_def.label ||
-          attribute.attribute_def.name} deleted.`
-      })
+            return (
+              a.attribute_def.section !== attribute.attribute_def.section ||
+              a.order !== attribute.order
+            )
+          })
+        }),
+        () => {
+          this.props.submitCallback({
+            ...contact,
+            ...updatedContent
+          })
+
+          this.props.notify({
+            status: 'success',
+            dismissAfter: 4000,
+            message: `${attribute.attribute_def.label ||
+              attribute.attribute_def.name} deleted.`
+          })
+        }
+      )
     } catch (error) {
       console.log(error)
     }
   }
 
+  addEmptyField = () => {
+    console.log('add empty')
+  }
+
   get emptyAttributes() {
-    return this.props.sectionAttributesDef
+    return this.sectionAttributesDef
       .filter(
         attribute_def =>
-          !this.props.fields.some(
-            field => field.attribute_def.id === attribute_def.id
+          !this.state.attributes.some(
+            attribute => attribute.attribute_def.id === attribute_def.id
           )
       )
       .map(attribute_def => ({
@@ -112,74 +151,23 @@ class SectionWithFields extends React.Component {
 
   get attributes() {
     const { section } = this.props
-    const orderedFields = orderFields(
-      [...this.props.fields, ...this.emptyAttributes],
+    const orderedAttributes = orderFields(
+      [...this.state.attributes, ...this.emptyAttributes],
       this.props.fieldsOrder
     )
 
     if (
       section !== 'Dates' &&
-      orderedFields.every(f => !f[f.attribute_def.data_type])
+      orderedAttributes.every(a => !a[a.attribute_def.data_type])
     ) {
       return []
     }
 
-    return orderedFields.filter(
-      f =>
-        f.attribute_def.show ||
-        (f.attribute_def.editable && f[f.attribute_def.data_type])
+    return orderedAttributes.filter(
+      a =>
+        a.attribute_def.show ||
+        (a.attribute_def.editable && a[a.attribute_def.data_type])
     )
-  }
-
-  renderFields = () => {
-    let allFields = []
-
-    this.attributes.forEach((attribute, index) => {
-      const { attribute_def } = attribute
-
-      const key = `${attribute_def.section}_field_${index}`
-      // const placeholder = getPlaceholder(attribute)
-      // const validate = getValidator(attribute)
-
-      const _props = {
-        key,
-        attribute,
-        handleSave: this.upsert,
-        handleDelete: this.delete
-      }
-
-      if (attribute_def.singular) {
-        if (attribute_def.data_type === 'date') {
-          return allFields.push(<DateField {..._props} />)
-        }
-
-        if (attribute_def.enum_values) {
-          return allFields.push(<SelectField {..._props} />)
-        }
-
-        return allFields.push(<TextField {..._props} />)
-      }
-
-      // if (
-      //   !allFields.some(
-      //     c => c.props.attribute.attribute_def.id === attribute_def.id
-      //   )
-      // ) {
-      //   allFields.push(
-      //     <MultiField
-      //       attribute={attribute}
-      //       key={`${key}_${index}`}
-      //       mutators={mutators}
-      //       placeholder={placeholder}
-      //       validate={validate}
-      //     />
-      //   )
-      // }
-    })
-
-    // console.log('render allFields', allFields)
-
-    return allFields
   }
 
   render() {
@@ -194,7 +182,15 @@ class SectionWithFields extends React.Component {
         }
         title={sectionTitle}
       >
-        {this.renderFields()}
+        {this.attributes.map((attribute, index) => (
+          <MasterField
+            attribute={attribute}
+            handleSave={this.upsert}
+            handleDelete={this.delete}
+            handleAddNew={this.addEmptyField}
+            key={`${attribute.attribute_def.section}_field_${index}`}
+          />
+        ))}
 
         <CustomAttributeDrawer
           isOpen={this.state.isOpenCustomAttributeDrawer}
@@ -209,41 +205,9 @@ class SectionWithFields extends React.Component {
 SectionWithFields.propTypes = propTypes
 SectionWithFields.defaultProps = defaultProps
 
-function mapStateToProps(state, props) {
-  let fields = []
-  let sectionAttributesDef = []
-  const { contact, section } = props
-  const { attributeDefs } = state.contacts
-
-  const isParnter = f => (props.isPartner ? f.is_partner : !f.is_partner)
-
-  if (Array.isArray(section)) {
-    section.forEach(s => {
-      fields = [
-        ...fields,
-        ...getContactAttributesBySection(contact, s).filter(isParnter)
-      ]
-      sectionAttributesDef = [
-        ...sectionAttributesDef,
-        ...selectDefsBySection(attributeDefs, s)
-      ]
-    })
-  } else {
-    fields = getContactAttributesBySection(contact, section).filter(isParnter)
-    sectionAttributesDef = selectDefsBySection(attributeDefs, section)
-  }
-
-  if (Array.isArray(props.validFields)) {
-    const isValid = a => a.name && props.validFields.some(vf => vf === a.name)
-
-    fields = fields.filter(f => isValid(f.attribute_def))
-    sectionAttributesDef = sectionAttributesDef.filter(isValid)
-  }
-
+function mapStateToProps(state) {
   return {
-    attributeDefs,
-    fields,
-    sectionAttributesDef
+    attributeDefs: state.contacts.attributeDefs
   }
 }
 
