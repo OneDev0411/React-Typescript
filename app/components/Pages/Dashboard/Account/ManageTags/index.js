@@ -42,33 +42,32 @@ class ManageTags extends Component {
     return response.data.map(({ text }) => ({ text, highlight: false }))
   }
 
+  sortTags = tags => {
+    const sorted = tags.sort((rawA, rawB) => {
+      const a = rawA.text.toLowerCase()
+      const b = rawB.text.toLowerCase()
+
+      return a.localeCompare(b)
+    })
+
+    return sorted
+  }
+
   getTagRows = rawTags => {
     const rows = {}
 
-    rawTags
-      .sort((a, b) => {
-        if (a.text < b.text) {
-          return -1
+    rawTags.forEach(tag => {
+      const title = (tag.text[0] || '#').toUpperCase()
+
+      if (!rows[title]) {
+        rows[title] = {
+          title,
+          items: []
         }
+      }
 
-        if (a.text > b.text) {
-          return 1
-        }
-
-        return 0
-      })
-      .forEach(tag => {
-        const title = (tag.text[0] || '#').toUpperCase()
-
-        if (!rows[title]) {
-          rows[title] = {
-            title,
-            items: []
-          }
-        }
-
-        rows[title].items.push(tag)
-      })
+      rows[title].items.push(tag)
+    })
 
     return rows
   }
@@ -86,8 +85,6 @@ class ManageTags extends Component {
       }))
     }, delay)
   }
-
-  createTag = async tag => createContactsTags(tag)
 
   handleChange = async ({ oldText, newText: rawNewText }) => {
     const text = rawNewText.trim()
@@ -120,16 +117,27 @@ class ManageTags extends Component {
       return
     }
 
-    await this.createTag(text)
-    this.props.notify({
-      status: 'success',
-      message: `"${text}" added.`
-    })
-    this.setState(prevState => ({
-      createTagInputValue: '',
-      rawTags: [...prevState.rawTags, { text, highlight: true }]
-    }))
-    this.highlightTag({ text }, false, HIGHLIGHT_SECONDS * 1000)
+    try {
+      await createContactsTags(text)
+      this.props.notify({
+        status: 'success',
+        message: `"${text}" added.`
+      })
+      this.setState(prevState => ({
+        createTagInputValue: '',
+        rawTags: [...prevState.rawTags, { text, highlight: true }]
+      }))
+      this.highlightTag({ text }, false, HIGHLIGHT_SECONDS * 1000)
+    } catch (e) {
+      if (e.status && e.status === 409) {
+        this.props.notify({
+          status: 'info',
+          message: `"${text}" already exists.`
+        })
+        this.highlightTag({ text })
+        this.highlightTag({ text }, false, HIGHLIGHT_SECONDS * 1000)
+      }
+    }
   }
 
   handleDelete = async ({ text }) => {
@@ -187,7 +195,7 @@ class ManageTags extends Component {
                   <Row
                     key={rowIndex}
                     title={title}
-                    items={rows[title].items}
+                    items={this.sortTags(rows[title].items)}
                     onChange={this.handleChange}
                     onDelete={this.handleDelete}
                   />
