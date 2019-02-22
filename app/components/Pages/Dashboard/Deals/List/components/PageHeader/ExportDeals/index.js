@@ -1,9 +1,10 @@
 import React from 'react'
 import moment from 'moment'
-import { getActiveTeamId } from '../../../../../../../../utils/user-teams'
 
 import XlsxIcon from 'views/components/SvgIcons/Xlsx/XlsxIcon'
 import { BasicDropdown } from 'views/components/BasicDropdown'
+
+import { getActiveTeamId } from '../../../../../../../../utils/user-teams'
 
 import { DropdownItem, DropdownItemSub } from './styled'
 
@@ -45,7 +46,8 @@ class ExportDeals extends React.Component {
             full_address: 'Address',
             seller_agent: 'Agent',
             list_price: 'List Price',
-            branch_title: 'Office'
+            branch_title: 'Office',
+            sellers: 'Sellers'
           },
           order: 'list_date',
           title: 'New Listings',
@@ -87,7 +89,8 @@ class ExportDeals extends React.Component {
             branch_title: 'Office',
             sales_price: 'Sales Price',
             closing_date: 'Closing Date',
-            seller_agent: 'Seller Agent'
+            seller_agent: 'Seller Agent',
+            buyers: 'Buyers'
           },
           order: 'contract_date',
           title: 'New Offers',
@@ -96,6 +99,7 @@ class ExportDeals extends React.Component {
       )}`
     }
   ]
+
   render() {
     return (
       <BasicDropdown
