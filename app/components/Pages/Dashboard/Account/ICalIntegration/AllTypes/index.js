@@ -48,7 +48,9 @@ class ICalAllTypes extends React.Component {
     } = this.props
     const filteredContexts =
       this.props.contexts &&
-      this.props.contexts.filter(context => context.data_type === 'Date')
+      this.props.contexts
+        .filter(context => context.data_type === 'Date')
+        .map(context => ({ ...context, name: context.key }))
 
     const filteredContactsAttributesDefs =
       this.props.contactsAttributesDefs &&
