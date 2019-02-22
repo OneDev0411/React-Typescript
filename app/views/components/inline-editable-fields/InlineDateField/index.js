@@ -6,8 +6,7 @@ import { addZero } from 'utils/date-times/add-zero'
 
 import { InlineEditableField } from '../InlineEditableField'
 import { EditMode } from './EditMode'
-import { getDateValues } from './helpers/get-date-values'
-import { parseDateValues } from './helpers/parse-date-values'
+import { getDateValues, parseDateValues } from './helpers'
 
 const INITIAL_STATE = {
   disabled: false,
