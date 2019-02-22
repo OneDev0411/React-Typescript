@@ -9,7 +9,7 @@ import { getActiveTeamId } from 'utils/user-teams'
 import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 import PageHeader from 'components/PageHeader'
 import ActionButton from 'components/Button/ActionButton'
-import { hasUserAccess } from 'utils/user-teams'
+import { hasUserAccessToDeals, hasUserAccessToCrm } from 'utils/user-teams'
 
 import Loading from '../../../../Partials/Loading'
 
@@ -95,9 +95,9 @@ class ReminderNotifications extends Component {
     this.setState({ columns, settings, loading: false })
   }
 
-  hasCrmAccess = () => hasUserAccess(this.props.user, 'CRM')
+  hasCrmAccess = () => hasUserAccessToCrm(this.props.user)
 
-  hasDealsAccess = () => hasUserAccess(this.props.user, 'Deals')
+  hasDealsAccess = () => hasUserAccessToDeals(this.props.user)
 
   async getDealsColumnData() {
     const brandId = getActiveTeamId(this.props.user)

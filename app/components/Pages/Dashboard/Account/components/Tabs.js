@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { hasUserAccess } from 'utils/user-teams'
+import { hasUserAccessToDeals, hasUserAccessToCrm } from 'utils/user-teams'
 
 import Tab from './Tab'
 
@@ -24,10 +24,10 @@ export const ProfileTabs = ({ user }) => (
       text="Calendar Export"
       to="/dashboard/account/exportCalendar"
     />
-    {hasUserAccess(user, 'CRM') && (
+    {hasUserAccessToCrm(user) && (
       <Tab indexed text="Manage Tags" to="/dashboard/account/manage-tags" />
     )}
-    {(hasUserAccess(user, 'CRM') || hasUserAccess(user, 'Deals')) && (
+    {(hasUserAccessToCrm(user) || hasUserAccessToDeals(user)) && (
       <Tab
         indexed
         text="Reminder Notifications"
