@@ -17,7 +17,7 @@ export class ViewMode extends React.Component {
 
   render() {
     return (
-      <Container>
+      <Container highlight={this.props.tag.highlight}>
         <Title>{this.props.tag.text}</Title>
         <Tooltip caption="Delete tag">
           <IconButton isFit inverse appearance="icon" onClick={this.onClick}>

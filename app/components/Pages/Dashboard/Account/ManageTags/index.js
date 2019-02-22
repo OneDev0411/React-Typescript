@@ -19,7 +19,7 @@ const HIGHLIGHT_SECONDS = 4
 
 class ManageTags extends Component {
   state = {
-    tags: {},
+    rawTags: [],
     createTagInputValue: '',
     loading: true
   }
@@ -31,17 +31,21 @@ class ManageTags extends Component {
   reloadTags = async () => {
     this.setState({ loading: true })
 
-    const tags = await this.getTags()
+    const rawTags = await this.getTags()
 
-    this.setState({ tags, loading: false })
+    this.setState({ rawTags, loading: false })
   }
 
   getTags = async () => {
     const response = await getContactsTags()
 
-    const tags = {}
+    return response.data.map(({ text }) => ({ text, highlight: false }))
+  }
 
-    response.data
+  getTagRows = rawTags => {
+    const rows = {}
+
+    rawTags
       .sort((a, b) => {
         if (a.text < b.text) {
           return -1
@@ -54,72 +58,78 @@ class ManageTags extends Component {
         return 0
       })
       .forEach(tag => {
-        const title = tag.text[0].toUpperCase()
+        const title = (tag.text[0] || '#').toUpperCase()
 
-        if (!tags[title]) {
-          tags[title] = {
+        if (!rows[title]) {
+          rows[title] = {
             title,
-            highlight: false,
             items: []
           }
         }
 
-        tags[title].items.push(tag)
+        rows[title].items.push(tag)
       })
 
-    return tags
+    return rows
+  }
+
+  highlightTag = (tag, highlight = true, delay = 0) => {
+    setTimeout(() => {
+      this.setState(prevState => ({
+        rawTags: [
+          ...prevState.rawTags.filter(item => item.text !== tag.text),
+          {
+            ...tag,
+            highlight
+          }
+        ]
+      }))
+    }, delay)
   }
 
   createTag = async tag => createContactsTags(tag)
 
-  setTagRowHighlight = (tag, highlight = true) => {
-    const title = tag[0].toUpperCase()
-
-    this.setState(prevState => ({
-      tags: {
-        ...prevState.tags,
-        [title]: {
-          ...prevState.tags[title],
-          highlight
-        }
-      }
-    }))
-  }
-
   handleChange = async ({ oldText, newText: rawNewText }) => {
-    const newText = rawNewText.trim()
+    const text = rawNewText.trim()
 
-    if (!newText) {
+    if (!text) {
       return
     }
 
-    await updateContactsTags(oldText, newText)
+    await updateContactsTags(oldText, text)
     this.props.notify({
       status: 'success',
-      message: `"${newText}" updated.`
+      message: `"${text}" updated.`
     })
-    await this.reloadTags()
+    this.setState(prevState => ({
+      rawTags: [
+        ...prevState.rawTags.filter(item => item.text !== oldText),
+        {
+          text,
+          highlight: true
+        }
+      ]
+    }))
+    this.highlightTag({ text }, false, HIGHLIGHT_SECONDS * 1000)
   }
 
   handleAdd = async () => {
-    const tag = this.state.createTagInputValue.trim()
+    const text = this.state.createTagInputValue.trim()
 
-    if (!tag) {
+    if (!text) {
       return
     }
 
-    await this.createTag(tag)
+    await this.createTag(text)
     this.props.notify({
       status: 'success',
-      message: `"${tag}" added.`
+      message: `"${text}" added.`
     })
-    this.setState({ createTagInputValue: '' })
-    await this.reloadTags()
-    this.setTagRowHighlight(tag)
-    setTimeout(
-      () => this.setTagRowHighlight(tag, false),
-      HIGHLIGHT_SECONDS * 1000
-    )
+    this.setState(prevState => ({
+      createTagInputValue: '',
+      rawTags: [...prevState.rawTags, { text, highlight: true }]
+    }))
+    this.highlightTag({ text }, false, HIGHLIGHT_SECONDS * 1000)
   }
 
   handleDelete = async ({ text }) => {
@@ -135,7 +145,9 @@ class ManageTags extends Component {
           status: 'success',
           message: `"${text}" deleted.`
         })
-        await this.reloadTags()
+        this.setState(prevState => ({
+          rawTags: [...prevState.rawTags.filter(item => item.text !== text)]
+        }))
       }
     })
   }
@@ -147,6 +159,8 @@ class ManageTags extends Component {
   }
 
   render() {
+    const rows = this.getTagRows(this.state.rawTags)
+
     return (
       <Fragment>
         <PageHeader style={{ marginBottom: '1rem', marginTop: '1.5rem' }}>
@@ -167,14 +181,13 @@ class ManageTags extends Component {
                 onSubmit={this.handleAdd}
                 value={this.state.createTagInputValue}
               />
-              {Object.keys(this.state.tags)
+              {Object.keys(rows)
                 .sort()
                 .map((title, rowIndex) => (
                   <Row
                     key={rowIndex}
                     title={title}
-                    items={this.state.tags[title].items}
-                    highlight={this.state.tags[title].highlight}
+                    items={rows[title].items}
                     onChange={this.handleChange}
                     onDelete={this.handleDelete}
                   />

@@ -5,10 +5,10 @@ import { Divider } from 'components/Divider'
 import { RowContainer, RowTitle } from './styled'
 import Item from './Item'
 
-export default function({ title, items, highlight, onChange, onDelete }) {
+export default function({ title, items, onChange, onDelete }) {
   return (
     <Fragment>
-      <RowContainer highlight={highlight}>
+      <RowContainer>
         <RowTitle>{title}</RowTitle>
         {items.map((tag, index) => (
           <Item onChange={onChange} onDelete={onDelete} key={index} tag={tag} />
