@@ -36,7 +36,7 @@ class ReminderNotifications extends Component {
 
     const columns = []
 
-    if (this.hasDealsAccess() || this.isBackOffice()) {
+    if (this.hasDealsAccess()) {
       const dealsColumnData = await this.getDealsColumnData()
 
       columns.push({
@@ -64,7 +64,7 @@ class ReminderNotifications extends Component {
       }
     }
 
-    if (this.hasCrmAccess) {
+    if (this.hasCrmAccess()) {
       const contactsColumnData = await this.getContactsColumnData()
 
       columns.push({
@@ -94,8 +94,6 @@ class ReminderNotifications extends Component {
 
     this.setState({ columns, settings, loading: false })
   }
-
-  isBackOffice = () => hasUserAccess(this.props.user, 'BackOffice')
 
   hasCrmAccess = () => hasUserAccess(this.props.user, 'CRM')
 
