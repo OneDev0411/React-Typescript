@@ -9,6 +9,7 @@ import { getActiveTeamId } from 'utils/user-teams'
 import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 import PageHeader from 'components/PageHeader'
 import ActionButton from 'components/Button/ActionButton'
+import { hasUserAccess } from 'utils/user-teams'
 
 import Loading from '../../../../Partials/Loading'
 
@@ -33,60 +34,72 @@ class ReminderNotifications extends Component {
   async componentDidMount() {
     const settings = await this.getSettings()
 
-    const dealsColumnData = await this.getDealsColumnData()
-    const contactsColumnData = await this.getContactsColumnData()
+    const columns = []
 
-    const columns = [
-      {
+    if (this.hasDealsAccess() || this.isBackOffice()) {
+      const dealsColumnData = await this.getDealsColumnData()
+
+      columns.push({
         title: 'Deals Critical Dates',
         type: DEAL_DATE_OBJECT_TYPE,
         items: dealsColumnData
-      },
-      {
+      })
+
+      const dealsRemidnersSettings = settings.filter(
+        setting => setting.object_type === DEAL_DATE_OBJECT_TYPE
+      )
+
+      const shouldSelectAllDealRemidners =
+        dealsColumnData.length - 1 === dealsRemidnersSettings.length &&
+        dealsRemidnersSettings.every(
+          setting => setting.reminder === dealsRemidnersSettings[0].reminder
+        )
+
+      if (shouldSelectAllDealRemidners) {
+        settings.push({
+          object_type: DEAL_DATE_OBJECT_TYPE,
+          event_type: null,
+          reminder: dealsRemidnersSettings[0].reminder
+        })
+      }
+    }
+
+    if (this.hasCrmAccess) {
+      const contactsColumnData = await this.getContactsColumnData()
+
+      columns.push({
         title: 'Contact Dates',
         type: CONTACT_DATE_OBJECT_TYPE,
         items: contactsColumnData
+      })
+
+      const contactsRemidnersSettings = settings.filter(
+        setting => setting.object_type === CONTACT_DATE_OBJECT_TYPE
+      )
+
+      const shouldSelectAllContactRemidners =
+        contactsColumnData.length - 1 === contactsRemidnersSettings.length &&
+        contactsRemidnersSettings.every(
+          setting => setting.reminder === contactsRemidnersSettings[0].reminder
+        )
+
+      if (shouldSelectAllContactRemidners) {
+        settings.push({
+          object_type: CONTACT_DATE_OBJECT_TYPE,
+          event_type: null,
+          reminder: contactsRemidnersSettings[0].reminder
+        })
       }
-    ]
-
-    const dealsRemidnersSettings = settings.filter(
-      setting => setting.object_type === DEAL_DATE_OBJECT_TYPE
-    )
-
-    const contactsRemidnersSettings = settings.filter(
-      setting => setting.object_type === CONTACT_DATE_OBJECT_TYPE
-    )
-
-    const shouldSelectAllDealRemidners =
-      dealsColumnData.length - 1 === dealsRemidnersSettings.length &&
-      dealsRemidnersSettings.every(
-        setting => setting.reminder === dealsRemidnersSettings[0].reminder
-      )
-
-    const shouldSelectAllContactRemidners =
-      contactsColumnData.length - 1 === contactsRemidnersSettings.length &&
-      contactsRemidnersSettings.every(
-        setting => setting.reminder === contactsRemidnersSettings[0].reminder
-      )
-
-    if (shouldSelectAllDealRemidners) {
-      settings.push({
-        object_type: DEAL_DATE_OBJECT_TYPE,
-        event_type: null,
-        reminder: dealsRemidnersSettings[0].reminder
-      })
-    }
-
-    if (shouldSelectAllContactRemidners) {
-      settings.push({
-        object_type: CONTACT_DATE_OBJECT_TYPE,
-        event_type: null,
-        reminder: contactsRemidnersSettings[0].reminder
-      })
     }
 
     this.setState({ columns, settings, loading: false })
   }
+
+  isBackOffice = () => hasUserAccess(this.props.user, 'BackOffice')
+
+  hasCrmAccess = () => hasUserAccess(this.props.user, 'CRM')
+
+  hasDealsAccess = () => hasUserAccess(this.props.user, 'Deals')
 
   async getDealsColumnData() {
     const brandId = getActiveTeamId(this.props.user)
