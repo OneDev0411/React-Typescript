@@ -86,7 +86,13 @@ class ManageTags extends Component {
     }))
   }
 
-  handleChange = async ({ oldText, newText }) => {
+  handleChange = async ({ oldText, newText: rawNewText }) => {
+    const newText = rawNewText.trim()
+
+    if (!newText) {
+      return
+    }
+
     await updateContactsTags(oldText, newText)
     this.props.notify({
       status: 'success',
