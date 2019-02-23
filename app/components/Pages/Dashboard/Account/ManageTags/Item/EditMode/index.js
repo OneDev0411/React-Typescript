@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
-import { Container, Input } from './styled'
+import { Container, Input, InputPlaceholder } from './styled'
+import { LoadingIcon } from '../styled'
 
 export class EditMode extends Component {
   onChange = e => {
@@ -8,9 +9,13 @@ export class EditMode extends Component {
   }
 
   render() {
+    const { value, loading } = this.props
+
     return (
       <Container>
-        <Input value={this.props.value} onChange={this.onChange} />
+        {loading && <LoadingIcon />}
+        <Input disabled={loading} value={value} onChange={this.onChange} />
+        <InputPlaceholder>{value}</InputPlaceholder>
       </Container>
     )
   }

@@ -7,7 +7,8 @@ import { EditMode } from './EditMode'
 
 export default class Item extends Component {
   state = {
-    text: this.props.tag.text
+    text: this.props.tag.text,
+    loading: false
   }
 
   resetState = () => this.setState({ text: this.props.tag.text })
@@ -15,26 +16,43 @@ export default class Item extends Component {
   onChange = text => this.setState({ text })
 
   save = async toggleMode => {
+    this.setState({ loading: true })
+
     const done = await this.props.onChange({
       oldText: this.props.tag.text,
       newText: this.state.text
     })
+
+    this.setState({ loading: false })
 
     if (done) {
       toggleMode()
     }
   }
 
-  delete = tag => {
-    this.props.onDelete(tag)
+  delete = async tag => {
+    this.setState({ loading: true })
+
+    await this.props.onDelete(tag)
+
+    this.setState({ loading: false })
   }
 
   renderEditMode = props => (
-    <EditMode value={this.state.text} onChange={this.onChange} {...props} />
+    <EditMode
+      value={this.state.text}
+      onChange={this.onChange}
+      loading={this.state.loading}
+      {...props}
+    />
   )
 
   renderViewMode = () => (
-    <ViewMode onDelete={this.delete} tag={this.props.tag} />
+    <ViewMode
+      onDelete={this.delete}
+      tag={this.props.tag}
+      loading={this.state.loading}
+    />
   )
 
   render() {
