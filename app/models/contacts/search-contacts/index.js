@@ -23,7 +23,14 @@ export async function searchContacts(
     }
 
     if (Array.isArray(filter) && filter.length > 0) {
-      payload.filter = filter
+      payload.filter = filter.map(
+        ({ attribute_def, invert, operator, value }) => ({
+          attribute_def,
+          invert,
+          operator,
+          value
+        })
+      )
     }
 
     if (Array.isArray(users) && users.length) {

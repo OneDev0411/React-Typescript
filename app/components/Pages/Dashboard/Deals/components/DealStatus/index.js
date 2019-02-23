@@ -31,12 +31,16 @@ class DealStatus extends React.Component {
       return false
     }
 
+    if (this.getStatusList().includes(this.CurrentStatus) === false) {
+      return false
+    }
+
     return (
       this.props.isBackOffice || DealContext.getHasActiveOffer(this.props.deal)
     )
   }
 
-  get StatusList() {
+  getStatusList() {
     const { deal, isBackOffice } = this.props
     const isLeaseDeal = deal.property_type.includes('Lease')
 
@@ -78,7 +82,7 @@ class DealStatus extends React.Component {
   }
 
   get StatusOptions() {
-    return this.StatusList.map(statusName => ({
+    return this.getStatusList().map(statusName => ({
       label: statusName,
       value: statusName
     }))

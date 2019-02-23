@@ -1,12 +1,14 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
+import idx from 'idx'
 
 import InstantMarketing from 'components/InstantMarketing'
 import ActionButton from 'components/Button/ActionButton'
 
-import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
+import { confirmation } from 'actions/confirmation'
 
+import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 
 import EmailCompose from 'components/EmailCompose'
@@ -24,7 +26,7 @@ class SendContactCard extends React.Component {
   state = {
     isFetchingContact: false,
     contact: this.props.contact,
-    isInstantMarketingBuilderOpen: false,
+    isBuilderOpen: false,
     isComposeEmailOpen: false,
     isSearchDrawerOpen: false,
     owner: this.props.user
@@ -35,7 +37,7 @@ class SendContactCard extends React.Component {
     if (
       props.isTriggered &&
       !state.isSearchDrawerOpen &&
-      !state.isInstantMarketingBuilderOpen
+      !state.isBuilderOpen
     ) {
       return {
         isSearchDrawerOpen: true
@@ -50,11 +52,7 @@ class SendContactCard extends React.Component {
     }
 
     // For Closing Search Drawer after selecting a contact
-    if (
-      !props.isTriggered &&
-      state.isSearchDrawerOpen &&
-      state.isInstantMarketingBuilderOpen
-    ) {
+    if (!props.isTriggered && state.isSearchDrawerOpen && state.isBuilderOpen) {
       return {
         isSearchDrawerOpen: false
       }
@@ -63,11 +61,9 @@ class SendContactCard extends React.Component {
     return state
   }
 
-  showMarketingBuilder = async () => {
+  showBuilder = async () => {
     if (this.state.contact) {
-      this.toggleInstantMarketingBuilder()
-
-      return false
+      return this.openBuilder()
     }
 
     this.setState({
@@ -77,11 +73,13 @@ class SendContactCard extends React.Component {
     try {
       const response = await getContact(this.props.contactId)
 
-      this.setState({
-        contact: response.data,
-        isFetchingContact: false,
-        isInstantMarketingBuilderOpen: true
-      })
+      this.setState(
+        {
+          contact: response.data,
+          isFetchingContact: false
+        },
+        this.openBuilder
+      )
     } catch (e) {
       this.setState({
         isFetchingContact: false
@@ -89,10 +87,26 @@ class SendContactCard extends React.Component {
     }
   }
 
-  toggleInstantMarketingBuilder = () =>
-    this.setState(state => ({
-      isInstantMarketingBuilderOpen: !state.isInstantMarketingBuilderOpen
-    }))
+  openBuilder = () => {
+    if (this.contactHasEmail() === false) {
+      return this.props.confirmation({
+        description:
+          'You should provide an email address for this contact to be able send a card',
+        hideCancelButton: true,
+        confirmLabel: 'Okay'
+      })
+    }
+
+    this.setState({
+      isBuilderOpen: true
+    })
+  }
+
+  closeBuilder = () => {
+    this.setState({
+      isBuilderOpen: false
+    })
+  }
 
   toggleComposeEmail = () =>
     this.setState(state => ({
@@ -110,18 +124,18 @@ class SendContactCard extends React.Component {
       },
       () => {
         this.props.handleTrigger()
-        this.toggleInstantMarketingBuilder()
+        this.closeBuilder()
       }
     )
 
   handleSaveMarketingCard = async (template, owner) => {
-    this.toggleInstantMarketingBuilder()
+    this.closeBuilder()
     this.generatePreviewImage(template)
 
     this.setState({
       owner,
       isComposeEmailOpen: true,
-      isInstantMarketingBuilderOpen: true,
+      isBuilderOpen: true,
       htmlTemplate: template.result,
       templateScreenshot: null
     })
@@ -163,7 +177,7 @@ class SendContactCard extends React.Component {
       this.setState({
         isSendingEmail: false,
         isComposeEmailOpen: false,
-        isInstantMarketingBuilderOpen: false
+        isBuilderOpen: false
       })
     }
   }
@@ -198,6 +212,8 @@ class SendContactCard extends React.Component {
     ]
   }
 
+  contactHasEmail = () => idx(this.state.contact, c => c.summary.email) !== null
+
   render() {
     if (hasMarketingAccess(this.props.user) === false) {
       return null
@@ -208,7 +224,7 @@ class SendContactCard extends React.Component {
         {this.props.contact || this.props.contactId ? (
           <ActionButton
             appearance="outline"
-            onClick={this.showMarketingBuilder}
+            onClick={this.showBuilder}
             disabled={this.state.isFetchingContact}
             {...this.props.buttonStyle}
           >
@@ -224,8 +240,8 @@ class SendContactCard extends React.Component {
         )}
 
         <InstantMarketing
-          isOpen={this.state.isInstantMarketingBuilderOpen}
-          onClose={this.toggleInstantMarketingBuilder}
+          isOpen={this.state.isBuilderOpen}
+          onClose={this.closeBuilder}
           handleSave={this.handleSaveMarketingCard}
           mediums={this.props.mediums}
           templateData={{ user: this.props.user, contact: this.state.contact }}
@@ -259,5 +275,5 @@ function mapStateToProps({ user, contacts }) {
 
 export default connect(
   mapStateToProps,
-  { notify }
+  { notify, confirmation }
 )(SendContactCard)

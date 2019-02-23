@@ -17,6 +17,7 @@ export class FinalFormDrawer extends React.Component {
     submittingButtonLabel: PropTypes.string,
     showFooter: PropTypes.bool,
     closeDrawerOnBackdropClick: PropTypes.bool,
+    disableSubmitByEnter: PropTypes.bool,
     validate: PropTypes.func,
     formId: PropTypes.string.isRequired,
     footerRenderer: PropTypes.func
@@ -25,6 +26,7 @@ export class FinalFormDrawer extends React.Component {
   static defaultProps = {
     initialValues: {},
     showFooter: true,
+    disableSubmitByEnter: false,
     submitButtonLabel: 'Save',
     submittingButtonLabel: 'Saving ...',
     closeDrawerOnBackdropClick: false,
@@ -69,6 +71,16 @@ export class FinalFormDrawer extends React.Component {
     form.initialize(this.props.initialValues)
   }
 
+  handleKeyPress = e => {
+    if (e.which == 13 && this.props.disableSubmitByEnter) {
+      e.preventDefault()
+
+      return false
+    }
+
+    return true
+  }
+
   render() {
     return (
       <Form
@@ -80,7 +92,11 @@ export class FinalFormDrawer extends React.Component {
           const { submitting } = formProps
 
           return (
-            <form id={this.props.formId} onSubmit={formProps.handleSubmit}>
+            <form
+              id={this.props.formId}
+              onSubmit={formProps.handleSubmit}
+              onKeyPress={this.handleKeyPress}
+            >
               <Drawer
                 isOpen={this.props.isOpen}
                 onClose={e => this.handleOnClose(e, formProps)}
