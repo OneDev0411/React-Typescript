@@ -13,10 +13,6 @@ export class ViewMode extends React.Component {
       event.stopPropagation()
     }
 
-    if (this.props.loading) {
-      return
-    }
-
     this.props.onDelete(this.props.tag)
   }
 
