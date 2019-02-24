@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { hasUserAccessToDeals, hasUserAccessToCrm } from 'utils/user-teams'
+
 import Tab from './Tab'
 
 export const ProfileTabs = ({ user }) => (
@@ -22,11 +24,15 @@ export const ProfileTabs = ({ user }) => (
       text="Calendar Export"
       to="/dashboard/account/exportCalendar"
     />
-    <Tab indexed text="Manage Tags" to="/dashboard/account/manage-tags" />
-    <Tab
-      indexed
-      text="Reminder Notifications"
-      to="/dashboard/account/reminder-notifications"
-    />
+    {hasUserAccessToCrm(user) && (
+      <Tab indexed text="Manage Tags" to="/dashboard/account/manage-tags" />
+    )}
+    {(hasUserAccessToCrm(user) || hasUserAccessToDeals(user)) && (
+      <Tab
+        indexed
+        text="Reminder Notifications"
+        to="/dashboard/account/reminder-notifications"
+      />
+    )}
   </ul>
 )

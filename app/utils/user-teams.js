@@ -53,6 +53,14 @@ export function hasUserAccess(user, action) {
   return getActiveTeamACL(user).includes(action)
 }
 
+export function hasUserAccessToDeals(user) {
+  return hasUserAccess(user, 'Deals') || isBackOffice(user)
+}
+
+export function hasUserAccessToCrm(user) {
+  return hasUserAccess(user, 'CRM')
+}
+
 export function isBackOffice(user) {
   return hasUserAccess(user, 'BackOffice')
 }
