@@ -7,9 +7,7 @@ import styled from 'styled-components'
 import PDFPage from './PdfPage'
 import Annotations from './Annotations'
 
-import RolesManager from './integrations/Roles'
-import AddressForm from './integrations/Address'
-import ContextForm from './integrations/Context'
+import { ContextInlineEdit } from './ContextInlineEdit'
 
 const Container = styled.div`
   /* text-align: center; */
@@ -53,67 +51,8 @@ class PDFPreview extends React.Component {
     }
   }
 
-  get IsRolesManagerOpen() {
-    return (
-      this.state.selectedAnnotation &&
-      this.state.selectedAnnotation.type === 'Role'
-    )
-  }
-
-  get IsAddressFormOpen() {
-    return (
-      this.state.selectedAnnotation &&
-      this.state.selectedAnnotation.type === 'Context' &&
-      this.state.selectedAnnotation.data.type === 'Address'
-    )
-  }
-
-  get IsContextFormOpen() {
-    return (
-      this.state.selectedAnnotation &&
-      this.state.selectedAnnotation.type === 'Context' &&
-      this.state.selectedAnnotation.data.type === 'Singular'
-    )
-  }
-
-  // getRoleColor = assignment => {
-  //   const { deal, roles } = this.props
-
-  //   const colors = [
-  //     '#ffe084',
-  //     '#d2dfec',
-  //     '#f9caaf',
-  //     '#b1d6cf',
-  //     '#d0bbdb',
-  //     '#c1e5ec'
-  //   ]
-
-  //   const matchedRoles = deal.roles
-  //     .map(role => roles[role])
-  //     .filter(role => assignment.role.includes(role.role))
-
-  //   if (!matchedRoles || matchedRoles.length === 0) {
-  //     return false
-  //   }
-
-  //   const role = matchedRoles[assignment.number]
-
-  //   if (!role) {
-  //     return false
-  //   }
-
-  //   if (this.roleColors[role.id]) {
-  //     return this.roleColors[role.id]
-  //   }
-
-  //   this.roleColors[role.id] = colors[_.size(this.roleColors)]
-
-  //   return this.roleColors[role.id]
-  // }
-
   render() {
     const { document } = this.props
-    const { selectedAnnotation } = this.state
 
     if (!document) {
       return false
@@ -125,7 +64,6 @@ class PDFPreview extends React.Component {
           (value, index) => (
             <PageContainer key={index}>
               <Annotations
-                // getRoleColor={this.getRoleColor}
                 deal={this.props.deal}
                 roles={this.props.roles}
                 document={document}
@@ -149,35 +87,7 @@ class PDFPreview extends React.Component {
           )
         )}
 
-        {this.IsRolesManagerOpen && (
-          <RolesManager
-            selectedAnnotation={selectedAnnotation}
-            formValues={this.props.values}
-            deal={this.props.deal}
-            onClose={this.deselectActiveAnnotation}
-            onSetValues={this.props.onSetValues}
-          />
-        )}
-
-        <AddressForm
-          selectedAnnotation={selectedAnnotation}
-          isOpen={this.IsAddressFormOpen}
-          contextsAnnotations={this.contextsAnnotations}
-          data={selectedAnnotation && selectedAnnotation.data}
-          onClose={this.deselectActiveAnnotation}
-          onSetValues={this.props.onSetValues}
-          deal={this.props.deal}
-        />
-
-        {this.IsContextFormOpen && (
-          <ContextForm
-            formValues={this.props.values}
-            data={selectedAnnotation && selectedAnnotation.data}
-            deal={this.props.deal}
-            onValueUpdate={this.props.onValueUpdate}
-            onClose={this.deselectActiveAnnotation}
-          />
-        )}
+        <ContextInlineEdit item={this.state.selectedAnnotation} />
       </Container>
     )
   }

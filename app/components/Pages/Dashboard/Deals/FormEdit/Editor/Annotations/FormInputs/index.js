@@ -6,7 +6,7 @@ import TextInputAnnotation from './TextInput'
 
 import { getType, Types } from '../../../utils/types'
 
-export default class FormInputs extends React.Component {
+export class FormInputs extends React.Component {
   createInput = (info, index) => {
     const { values } = this.props
 

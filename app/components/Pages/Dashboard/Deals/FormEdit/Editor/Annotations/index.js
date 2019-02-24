@@ -1,23 +1,13 @@
 import React from 'react'
 import _ from 'underscore'
-import styled from 'styled-components'
 
 import importPdfJs from 'utils/import-pdf-js'
 import uuid from 'utils/uuid'
 
 import { getValue } from '../../utils/types'
 
-import FormInputs from './FormInputs'
-import FormContexts from './FormContexts'
-// import FormAssignments from './FormAssignments'
-
-const AnnotationsContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-`
+import { FormInputs } from './FormInputs'
+import { FormContexts } from './FormContexts'
 
 export default class Annotations extends React.Component {
   state = {
@@ -25,7 +15,7 @@ export default class Annotations extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(() => this.init(), 0)
+    setTimeout(() => this.init(), 10)
   }
 
   inputs = []
@@ -72,8 +62,6 @@ export default class Annotations extends React.Component {
     const contexts = _.filter(info, { type: 'Context' })
 
     this.inputs = _.filter(info, { type: 'Input' })
-    // this.assignments = _.filter(info, { type: 'Assignment' })
-
     this.contexts = _.groupBy(contexts, 'context')
 
     this.roles.all = _.chain(info)
@@ -147,7 +135,15 @@ export default class Annotations extends React.Component {
     }
 
     return (
-      <AnnotationsContainer>
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0
+        }}
+      >
         <FormInputs
           inputs={this.inputs}
           values={this.props.values}
@@ -164,13 +160,7 @@ export default class Annotations extends React.Component {
           onSetValues={this.props.onSetValues}
           onClick={this.props.onClick}
         />
-
-        {/* <FormAssignments
-          getRoleColor={this.props.getRoleColor}
-          deal={this.props.deal}
-          assignments={this.assignments}
-        /> */}
-      </AnnotationsContainer>
+      </div>
     )
   }
 }

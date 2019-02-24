@@ -2,9 +2,9 @@ import React, { Fragment } from 'react'
 
 import FormRole from './FormRole'
 import FormRoles from './FormRoles'
-import FormContext from './FormContext'
+import { FormContext } from './FormContext'
 
-export default function FormContexts(props) {
+export function FormContexts(props) {
   const sharedProps = {
     formValues: props.values,
     deal: props.deal,

@@ -1,109 +1,126 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import _ from 'underscore'
 
+import DealContext from 'models/Deal/helpers/dynamic-context'
+
+import { getAnnotationsValues } from '../../../../utils/word-wrap'
+
 import ContextAnnotation from '../ContextAnnotation'
-import DealContext from '../../../../../../../../../models/Deal/helpers/dynamic-context'
 
-function getContextType(context) {
-  if (context && DealContext.isAddressField(context.name)) {
-    return 'Address'
+export class FormContext extends React.Component {
+  componentDidMount() {
+    this.initialize()
   }
 
-  return 'Singular'
-}
+  contexts = []
 
-function getFormValue(values, annotations) {
-  const valueList = annotations
-    .map(ann => values[ann.fieldName])
-    .filter(Boolean)
+  initialize = () => {
+    const { props } = this
 
-  if (valueList.length === 0) {
-    return undefined
+    const grouped = {}
+    const contexts = []
+    let defaultValues = {}
+
+    _.each(props.contexts, (data, context_name) => {
+      grouped[context_name] = _.groupBy(props.contexts[context_name], 'group')
+    })
+
+    _.each(grouped, (groups, name) => {
+      const context = DealContext.searchContext(props.deal.brand.id, name)
+
+      const contextValue = context
+        ? DealContext.getValue(props.deal, context).value
+        : ''
+
+      _.each(groups, (group, id) => {
+        const annotations = group.map(item => item.annotation)
+        const contextType = this.getContextType(context)
+        const formValue = this.getFormValue(props.formValues, annotations)
+
+        const value =
+          formValue || (group[0].disableAutopopulate ? null : contextValue)
+
+        contexts.push({
+          id,
+          name,
+          value,
+          annotations,
+          context,
+          isAddressField: contextType === 'Address',
+          isDealConnectedToMls: props.deal.listing !== null
+        })
+
+        if (value) {
+          defaultValues = {
+            ...defaultValues,
+            ...getAnnotationsValues(annotations, value, {
+              maxFontSize: this.props.maxFontSize
+            })
+          }
+        }
+      })
+    })
+
+    this.props.onSetValues(defaultValues)
+    this.contexts = contexts
   }
 
-  return valueList.join(' ')
-}
+  getContextType = context => {
+    if (context && DealContext.isAddressField(context.name)) {
+      return 'Address'
+    }
 
-function getTooltip(isAddressField, isDealConnectedToMls) {
-  if (isAddressField && isDealConnectedToMls) {
+    return 'Singular'
+  }
+
+  getFormValue = (values, annotations) => {
+    const valueList = annotations
+      .map(ann => values[ann.fieldName])
+      .filter(Boolean)
+
+    if (valueList.length === 0) {
+      return undefined
+    }
+
+    return valueList.join(' ')
+  }
+
+  getTooltip = context => {
+    if (context.isAddressField && context.isDealConnectedToMls) {
+      return (
+        <React.Fragment>
+          <img src="/static/images/deals/lock.svg" alt="locked" />
+          <div>
+            Listing information can only be changed on MLS. Once changed, the
+            update will be reflected here.
+          </div>
+        </React.Fragment>
+      )
+    }
+
+    return null
+  }
+
+  render() {
     return (
-      <React.Fragment>
-        <img src="/static/images/deals/lock.svg" alt="locked" />
-        <div>
-          Listing information can only be changed on MLS. Once changed, the
-          update will be reflected here.
-        </div>
-      </React.Fragment>
+      <Fragment>
+        {this.contexts.map(context => (
+          <ContextAnnotation
+            key={`${context.name}-${context.id}`}
+            maxFontSize={20}
+            value={context.value}
+            annotations={context.annotations}
+            tooltip={this.getTooltip(context)}
+            isReadOnly={context.isAddressField && context.isDealConnectedToMls}
+            onClick={bounds =>
+              this.props.onClick('Context', {
+                bounds,
+                ...context
+              })
+            }
+          />
+        ))}
+      </Fragment>
     )
   }
-
-  return null
-}
-
-export default function FormContexts(props) {
-  const grouped = {}
-
-  _.each(props.contexts, (data, context_name) => {
-    grouped[context_name] = _.groupBy(props.contexts[context_name], 'group')
-  })
-
-  return (
-    <div>
-      {_.map(grouped, (groups, name) => {
-        // get context
-        const context = DealContext.searchContext(props.deal.brand.id, name)
-
-        // find context object by its name
-        const contextObject = DealContext.searchContext(
-          props.deal.brand.id,
-          name
-        )
-
-        // get context value
-        const contextValue = contextObject
-          ? DealContext.getValue(props.deal, contextObject).value
-          : ''
-
-        return _.map(groups, (group, id) => {
-          const annotations = group.map(i => i.annotation)
-          const info = group[0]
-          const { disableAutopopulate } = info
-
-          const annotationContext = {
-            type: 'Context',
-            context
-          }
-
-          const contextType = getContextType(context)
-          const formValue = getFormValue(props.formValues, annotations)
-          const isDealConnectedToMls = props.deal.listing !== null
-          const isAddressField = contextType === 'Address'
-
-          const value = formValue || (disableAutopopulate ? null : contextValue)
-
-          return (
-            <ContextAnnotation
-              key={`${name}-${id}`}
-              annotationContext={annotationContext}
-              value={value}
-              maxFontSize={20}
-              annotations={annotations}
-              onSetValues={props.onSetValues}
-              tooltip={getTooltip(isAddressField, isDealConnectedToMls)}
-              isReadOnly={isAddressField && isDealConnectedToMls}
-              onClick={bounds => {
-                props.onClick('Context', {
-                  contextName: context.key,
-                  type: contextType,
-                  context,
-                  annotations,
-                  bounds
-                })
-              }}
-            />
-          )
-        })
-      })}
-    </div>
-  )
 }

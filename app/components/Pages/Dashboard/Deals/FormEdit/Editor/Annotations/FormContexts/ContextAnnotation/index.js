@@ -2,36 +2,14 @@ import React from 'react'
 
 import ToolTip from 'components/tooltip'
 
-import {
-  calculateWordWrap,
-  getAnnotationsValues
-} from '../../../../utils/word-wrap'
+import { calculateWordWrap } from '../../../../utils/word-wrap'
 
 import { Container } from './styled'
 
 export default class Context extends React.Component {
-  componentDidMount() {
-    this.setDefaultValues()
-  }
-
-  setDefaultValues = () => {
-    if (!this.props.value) {
-      return false
-    }
-
-    const values = getAnnotationsValues(
-      this.props.annotations,
-      this.props.value,
-      {
-        maxFontSize: this.props.maxFontSize
-      }
-    )
-
-    this.props.onSetValues(values)
-  }
-
-  onRef = ref => {
-    this.container = ref
+  constructor(props) {
+    super(props)
+    this.container = React.createRef()
   }
 
   handleClick = () => {
@@ -39,20 +17,20 @@ export default class Context extends React.Component {
       return false
     }
 
-    this.props.onClick(this.container.getBoundingClientRect())
+    this.props.onClick(this.container.current.getBoundingClientRect())
+  }
+
+  get Calculate() {
+    return calculateWordWrap(this.props.annotations, this.props.value, {
+      maxFontSize: this.props.maxFontSize
+    })
   }
 
   render() {
-    const { appearance, rects, values, fontSize } = calculateWordWrap(
-      this.props.annotations,
-      this.props.value,
-      {
-        maxFontSize: this.props.maxFontSize
-      }
-    )
+    const { appearance, rects, values, fontSize } = this.Calculate
 
     return (
-      <div>
+      <React.Fragment>
         {rects.map((rect, index) => (
           <ToolTip
             key={index}
@@ -69,7 +47,7 @@ export default class Context extends React.Component {
               bold={appearance.bold}
               color={appearance.color}
               rect={rect}
-              ref={this.onRef}
+              ref={this.container}
               readOnly={this.props.isReadOnly}
               onClick={this.handleClick}
             >
@@ -77,7 +55,7 @@ export default class Context extends React.Component {
             </Container>
           </ToolTip>
         ))}
-      </div>
+      </React.Fragment>
     )
   }
 }

@@ -36,6 +36,7 @@ export class EditMode extends React.Component {
             Primary
           </Checkbox>
         </Flex>
+
         <InlineAddressField
           address={props.address}
           handleCancel={props.toggleMode}
