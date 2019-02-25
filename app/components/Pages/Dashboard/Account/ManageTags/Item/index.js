@@ -26,6 +26,10 @@ export default class Item extends Component {
     })
 
   save = async () => {
+    if (this.state.loading) {
+      return
+    }
+
     if (this.state.text === this.props.tag.text) {
       return this.setState({ isEditing: false })
     }
