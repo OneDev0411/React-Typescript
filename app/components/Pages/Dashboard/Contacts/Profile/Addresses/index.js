@@ -7,7 +7,7 @@ import { deleteAttributesFromContacts } from 'models/contacts/delete-attributes-
 
 import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 
-import { AddressField } from './AddressField'
+import AddressField from './AddressField'
 import { Section } from '../components/Section'
 import { generateEmptyAddress, getAddresses } from './helpers/get-addresses'
 
@@ -32,6 +32,14 @@ class Addresses extends React.Component {
     this.addressAttributeDefs = addressAttributeDefs
   }
 
+  toggleAddressActiveMode = ({ index }) =>
+    this.setState(state => ({
+      addresses: state.addresses.map(a => ({
+        ...a,
+        isActive: a.index === index ? !a.isActive : a.isActive
+      }))
+    }))
+
   addNewAddress = event => {
     if (event && event.stopPropagation) {
       event.stopPropagation()
@@ -40,7 +48,7 @@ class Addresses extends React.Component {
     this.setState(state => ({
       addresses: [
         ...state.addresses,
-        generateEmptyAddress(this.addressAttributeDefs, state.addresses)
+        generateEmptyAddress(this.addressAttributeDefs, state.addresses, true)
       ]
     }))
   }
@@ -83,6 +91,7 @@ class Addresses extends React.Component {
         attributes,
         {
           associations: [
+            'contact.updated_by',
             'contact.sub_contacts',
             'contact_attribute.attribute_def'
           ]
@@ -92,10 +101,7 @@ class Addresses extends React.Component {
       const addresses = getContactAddresses(updatedContact)
 
       this.setState({
-        addresses: [
-          ...getAddresses(addresses, this.addressAttributeDefs),
-          generateEmptyAddress(this.addressAttributeDefs, addresses)
-        ]
+        addresses: getAddresses(addresses, this.addressAttributeDefs)
       })
     } catch (error) {
       console.error(error)
@@ -112,6 +118,7 @@ class Addresses extends React.Component {
             handleDelete={this.handleDelete}
             handleSubmit={this.handleSubmit}
             handleAddNew={this.addNewAddress}
+            toggleMode={this.toggleAddressActiveMode}
           />
         ))}
       </Section>

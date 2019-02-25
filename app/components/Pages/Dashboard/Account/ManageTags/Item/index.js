@@ -7,26 +7,45 @@ import { EditMode } from './EditMode'
 
 export default class Item extends Component {
   state = {
-    text: this.props.tag.text,
-    loading: false
+    isEditing: false,
+    loading: false,
+    text: this.props.tag.text
   }
 
-  resetState = () => this.setState({ text: this.props.tag.text })
+  toggleEditing = () =>
+    this.setState(state => ({
+      isEditing: !state.isEditing
+    }))
 
   onChange = text => this.setState({ text })
 
-  save = async toggleMode => {
-    this.setState({ loading: true })
-
-    const done = await this.props.onChange({
-      oldText: this.props.tag.text,
-      newText: this.state.text
+  cancel = () =>
+    this.setState({
+      isEditing: false,
+      text: this.props.tag.text
     })
 
-    this.setState({ loading: false })
+  save = async () => {
+    if (this.state.text === this.props.tag.text) {
+      return this.setState({ isEditing: false })
+    }
 
-    if (done) {
-      toggleMode()
+    try {
+      this.setState({ loading: true })
+
+      const done = await this.props.onChange({
+        oldText: this.props.tag.text,
+        newText: this.state.text
+      })
+
+      this.setState({ loading: false })
+
+      if (done) {
+        this.setState({ loading: false, isEditing: false })
+      }
+    } catch (error) {
+      console.log(error)
+      this.setState({ loading: false })
     }
   }
 
@@ -59,14 +78,17 @@ export default class Item extends Component {
     return (
       <InlineEditableField
         cancelOnOutsideClick
+        handleCancel={this.cancel}
         handleSave={this.save}
         handleDelete={this.delete}
+        isDisabled={this.state.loading}
+        isEditing={this.state.isEditing}
         renderEditMode={this.renderEditMode}
         renderViewMode={this.renderViewMode}
         showEdit={false}
         showDelete={false}
-        toggleModeCallback={this.resetState}
         style={{ margin: '0.5rem 0.3rem' }}
+        toggleMode={this.toggleEditing}
       />
     )
   }
