@@ -26,7 +26,6 @@ function destructuringAddress(address) {
 }
 
 const getInitialState = (address = {}) => ({
-  isEditMode: false,
   isDisabled: false,
   ...destructuringAddress(address)
 })
@@ -47,8 +46,8 @@ export class AddressField extends React.Component {
     const { address } = props
 
     if (
-      !state.isEditMode &&
       !state.isDisabled &&
+      !props.address.isActive &&
       (address.label !== state.label.value ||
         address.full_address !== state.address ||
         address.is_primary !== state.is_primary)
@@ -59,14 +58,14 @@ export class AddressField extends React.Component {
     return null
   }
 
-  setMode = isEditMode => this.setState({ isEditMode })
+  toggleMode = () => this.props.toggleMode(this.props.address)
 
   onChangeLabel = label => this.setState({ label })
 
   onChangePrimary = () =>
     this.setState(state => ({ is_primary: !state.is_primary }))
 
-  handleDelete = async toggleMode => {
+  handleDelete = async () => {
     this.setState({ isDisabled: true })
 
     const attributeIds = this.props.address.attributes
@@ -76,14 +75,14 @@ export class AddressField extends React.Component {
     try {
       await this.props.handleDelete(this.props.address.index, attributeIds)
 
-      this.setState({ isDisabled: false }, toggleMode)
+      this.setState({ isDisabled: false }, this.toggle)
     } catch (error) {
       console.error(error)
-      this.setState({ isDisabled: false })
+      this.setState({ isDisabled: false }, this.toggle)
     }
   }
 
-  handleSubmit = async (values, toggleMode) => {
+  handleSubmit = async (values = {}) => {
     const {
       is_primary,
       label: { value: label }
@@ -105,15 +104,15 @@ export class AddressField extends React.Component {
       try {
         await this.props.handleSubmit(upsertList)
 
-        this.setState({ isDisabled: false }, toggleMode)
+        this.setState({ isDisabled: false }, this.toggle)
       } catch (error) {
         console.error(error)
-        this.setState({ isDisabled: false })
+        this.setState({ isDisabled: false }, this.toggle)
       }
     }
   }
 
-  onSubmit = toggleMode => this.handleSubmit({}, toggleMode)
+  onSubmit = () => this.handleSubmit()
 
   postLoadFormat = (values, originalValues) =>
     postLoadFormat(values, originalValues, this.props.address)
@@ -140,11 +139,12 @@ export class AddressField extends React.Component {
         handleDelete={this.handleDelete}
         handleAddNew={this.props.handleAddNew}
         isDisabled={this.state.isDisabled}
+        isEditing={this.props.address.isActive}
         renderEditMode={this.renderEditMode}
         renderViewMode={this.renderViewMode}
         showAdd
         showDelete
-        toggleModeCallback={this.setMode}
+        toggleMode={this.toggleMode}
       />
     )
   }
