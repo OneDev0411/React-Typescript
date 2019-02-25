@@ -24,22 +24,21 @@ class ManageTags extends Component {
     loading: true
   }
 
-  async componentDidMount() {
-    await this.reloadTags()
+  componentDidMount() {
+    this.fetch()
   }
 
-  reloadTags = async () => {
-    this.setState({ loading: true })
+  fetch = async () => {
+    try {
+      const response = await await getContactsTags()
 
-    const rawTags = await this.getTags()
-
-    this.setState({ rawTags, loading: false })
-  }
-
-  getTags = async () => {
-    const response = await getContactsTags()
-
-    return response.data.map(({ text }) => ({ text, highlight: false }))
+      this.setState({
+        loading: false,
+        rawTags: response.data.map(({ text }) => ({ text, highlight: false }))
+      })
+    } catch (error) {
+      this.setState({ loading: false })
+    }
   }
 
   sortTags = tags => {
