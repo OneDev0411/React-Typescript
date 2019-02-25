@@ -132,7 +132,7 @@ class ManageTags extends Component {
   handleAdd = async () => {
     const text = this.state.createTagInputValue.trim()
 
-    if (!text) {
+    if (!text || this.state.isSaving) {
       return
     }
 
