@@ -42,7 +42,9 @@ export class EditMode extends React.Component {
           handleSubmit={this.onSubmit}
           preSaveFormat={props.preSaveFormat}
           postLoadFormat={props.postLoadFormat}
-          renderSearchField={props => <Input {...props} type="text" />}
+          renderSearchField={props => (
+            <Input {...props} type="text" autoFocus />
+          )}
         />
       </React.Fragment>
     )
