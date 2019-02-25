@@ -8,7 +8,7 @@ export function ViewMode({ address }) {
   let label = address.label
 
   if (!address.label) {
-    label = address.id ? '-' : 'Home'
+    label = address.id ? '' : 'Home'
   }
 
   return (
@@ -16,8 +16,8 @@ export function ViewMode({ address }) {
       <Label>
         {label}
         {address.is_primary && (
-          <Tooltip caption="Primary">
-            <Star />
+          <Tooltip caption="Primary Address">
+            <Star style={{ marginLeft: label ? '0.5rem' : 0 }} />
           </Tooltip>
         )}
       </Label>

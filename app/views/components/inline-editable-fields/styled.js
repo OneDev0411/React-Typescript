@@ -25,7 +25,6 @@ export const Star = styled(StarIcon)`
   width: 1rem;
   height: 1rem;
   fill: #f5a623;
-  margin-left: 0.5rem;
 `
 
 export const Value = styled.div`

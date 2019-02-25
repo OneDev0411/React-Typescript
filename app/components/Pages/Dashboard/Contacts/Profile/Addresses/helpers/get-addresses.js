@@ -28,7 +28,7 @@ const normalizeAttributesToFields = (
   return fields
 }
 
-const normalizeAddress = attributes => {
+const normalizeAddress = (attributes, isActive = false) => {
   const {
     id,
     label,
@@ -40,6 +40,7 @@ const normalizeAddress = attributes => {
   return {
     id,
     index,
+    isActive,
     label,
     labels,
     is_primary,
@@ -48,14 +49,19 @@ const normalizeAddress = attributes => {
   }
 }
 
-export const generateEmptyAddress = (addressAttributeDefs, addresses) =>
+export const generateEmptyAddress = (
+  addressAttributeDefs,
+  addresses,
+  isActive
+) =>
   normalizeAddress(
     normalizeAttributesToFields(
       addressAttributeDefs,
       undefined,
       undefined,
       generateNextIndex(addresses)
-    )
+    ),
+    isActive
   )
 
 export function getAddresses(addressesFields, addressAttributeDefs) {

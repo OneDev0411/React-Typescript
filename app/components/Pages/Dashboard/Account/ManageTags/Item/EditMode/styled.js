@@ -29,6 +29,12 @@ export const Input = styled.input`
   background: transparent;
 `
 
+export const InputPlaceholder = styled.div`
+  visibility: hidden;
+  height: 0;
+  padding: 0 0.9rem;
+`
+
 export const CancleButton = styled(ActionButton)`
   border: none;
   color: ${primary};

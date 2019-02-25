@@ -5,9 +5,10 @@ import IconButton from 'components/Button/IconButton'
 import DeleteIcon from 'components/SvgIcons/Delete/IconDelete'
 
 import { Container, Title } from './styled'
+import { LoadingIcon } from '../styled'
 
 export class ViewMode extends React.Component {
-  onClick = event => {
+  onDeleteClick = event => {
     if (event && event.stopPropagation) {
       event.stopPropagation()
     }
@@ -16,14 +17,27 @@ export class ViewMode extends React.Component {
   }
 
   render() {
+    const { tag, loading } = this.props
+
     return (
-      <Container highlight={this.props.tag.highlight}>
-        <Title>{this.props.tag.text}</Title>
-        <Tooltip caption="Delete tag">
-          <IconButton isFit inverse appearance="icon" onClick={this.onClick}>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+      <Container highlight={tag.highlight}>
+        <Title>{tag.text}</Title>
+        {loading ? (
+          <div>
+            <LoadingIcon />
+          </div>
+        ) : (
+          <Tooltip caption="Delete tag">
+            <IconButton
+              isFit
+              inverse
+              appearance="icon"
+              onClick={this.onDeleteClick}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        )}
       </Container>
     )
   }

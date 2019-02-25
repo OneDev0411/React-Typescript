@@ -10,7 +10,12 @@ import { Company } from './columns/Company'
 import { ContactInfo } from './columns/ContactInfo'
 import { ListingsListViewDrawer } from './ListingsListViewDrawer'
 
-const buttonStyle = { padding: 0, height: 'auto', lineHeight: 1 }
+const buttonStyle = {
+  padding: '0.25rem 0 1rem',
+  height: 'auto',
+  lineHeight: 1,
+  width: '100%'
+}
 
 export class Grid extends React.Component {
   state = {

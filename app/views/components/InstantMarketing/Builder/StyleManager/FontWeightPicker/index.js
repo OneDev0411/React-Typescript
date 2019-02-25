@@ -4,18 +4,27 @@ import { BasicDropdown } from 'components/BasicDropdown'
 
 import { ItemTitle, ItemContainer } from '../styled'
 
+// regular, medium, semibold, bold, extra-bold
 const OPTIONS = [
   {
-    label: 'Light',
-    value: 'lighter'
+    label: 'Regular',
+    value: '100'
   },
   {
-    label: 'Normal',
-    value: 'normal'
+    label: 'Medium',
+    value: '300'
+  },
+  {
+    label: 'Semi bold',
+    value: '500'
   },
   {
     label: 'Bold',
-    value: 'bold'
+    value: '700'
+  },
+  {
+    label: 'Extra Bold',
+    value: '900'
   }
 ]
 

@@ -24,22 +24,21 @@ class ManageTags extends Component {
     loading: true
   }
 
-  async componentDidMount() {
-    await this.reloadTags()
+  componentDidMount() {
+    this.fetch()
   }
 
-  reloadTags = async () => {
-    this.setState({ loading: true })
+  fetch = async () => {
+    try {
+      const response = await await getContactsTags()
 
-    const rawTags = await this.getTags()
-
-    this.setState({ rawTags, loading: false })
-  }
-
-  getTags = async () => {
-    const response = await getContactsTags()
-
-    return response.data.map(({ text }) => ({ text, highlight: false }))
+      this.setState({
+        loading: false,
+        rawTags: response.data.map(({ text }) => ({ text, highlight: false }))
+      })
+    } catch (error) {
+      this.setState({ loading: false })
+    }
   }
 
   sortTags = tags => {
@@ -154,25 +153,32 @@ class ManageTags extends Component {
     }
   }
 
-  handleDelete = async ({ text }) => {
-    this.props.confirmation({
-      show: true,
-      confirmLabel: 'Yes, I am sure',
-      message: 'Delete tag from Rechat?',
-      description:
-        'Deleting a tag will remove it from the system and remove it from any contacts with this tag.',
-      onConfirm: async () => {
-        await deleteContactsTags(text)
-        this.props.notify({
-          status: 'success',
-          message: `"${text}" deleted.`
-        })
-        this.setState(prevState => ({
-          rawTags: [...prevState.rawTags.filter(item => item.text !== text)]
-        }))
-      }
+  handleDelete = async ({ text }) =>
+    new Promise(resolve => {
+      this.props.confirmation({
+        show: true,
+        confirmLabel: 'Yes, I am sure',
+        message: 'Delete tag from Rechat?',
+        description:
+          'Deleting a tag will remove it from the system and remove it from any contacts with this tag.',
+        onConfirm: async () => {
+          await deleteContactsTags(text)
+          this.props.notify({
+            status: 'success',
+            message: `"${text}" deleted.`
+          })
+          this.setState(
+            prevState => ({
+              rawTags: [...prevState.rawTags.filter(item => item.text !== text)]
+            }),
+            resolve
+          )
+        },
+        onCancel: () => {
+          resolve()
+        }
+      })
     })
-  }
 
   handleCreateTagInputChange = value => {
     this.setState({
@@ -196,7 +202,7 @@ class ManageTags extends Component {
           ) : (
             <Fragment>
               <Description>
-                Start typing tags and hit Return to add.
+                Start typing tags and hit Return/Enter to add.
               </Description>
               <Input
                 onChange={this.handleCreateTagInputChange}
