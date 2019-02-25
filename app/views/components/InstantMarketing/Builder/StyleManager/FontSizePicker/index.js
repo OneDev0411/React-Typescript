@@ -4,7 +4,11 @@ import { BasicDropdown } from 'components/BasicDropdown'
 
 import { ItemTitle, ItemContainer } from '../styled'
 
-const generateFontSizes = (step = 2, max = 100) => {
+const MAX_VALUE = 100
+const STEP = 2
+const DEFAULT_SELECTED_INDEX = 3
+
+const generateFontSizes = (step = STEP, max = MAX_VALUE) => {
   const result = []
 
   for (let i = 2; i <= max; i += step) {
@@ -25,11 +29,12 @@ export default class FontSizePicker extends Component {
   }
 
   state = {
-    value: this.props.value || OPTIONS[2].value
+    value: this.props.value || OPTIONS[DEFAULT_SELECTED_INDEX].value
   }
 
   findSelectedItemByValue = value =>
-    OPTIONS.find(item => item.value === value) || OPTIONS[2]
+    OPTIONS.find(item => item.value === value) ||
+    OPTIONS[DEFAULT_SELECTED_INDEX]
 
   handleChange = ({ value }) => {
     this.setState({ value })
