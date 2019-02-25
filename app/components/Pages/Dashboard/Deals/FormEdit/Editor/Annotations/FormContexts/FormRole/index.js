@@ -8,6 +8,48 @@ import { getRoleText } from '../../../../utils/get-roles-text'
 import { getRoleTooltip } from '../../../../utils/get-role-tooltip'
 
 class FormRole extends React.PureComponent {
+  componentDidMount() {
+    this.initialize()
+  }
+
+  roles = []
+
+  initialize = () => {
+    _.each(this.props.roles, (list, roleName) => {
+      const info = this.props.roles[roleName]
+      const groups = _.groupBy(
+        info,
+        item => `${item.role.sort().join('_')}-${item.attribute}-${item.group}`
+      )
+
+      _.each(groups, (group, groupIndex) => {
+        const annotationContext = groups[groupIndex][0]
+        const annotations = groups[groupIndex].map(info => info.annotation)
+
+        const formValue = this.props.formValues[
+          annotationContext.annotation.fieldName
+        ]
+
+        const text =
+          formValue ||
+          getRoleText(
+            this.props.dealsRoles,
+            this.props.deal,
+            roleName,
+            annotationContext
+          )
+
+        this.roles.push({
+          contextType: 'Role',
+          groupIndex,
+          roleName,
+          annotations,
+          annotationContext
+        })
+      })
+    })
+  }
+
   render() {
     if (!this.props.roles) {
       return false
@@ -15,53 +57,25 @@ class FormRole extends React.PureComponent {
 
     return (
       <Fragment>
-        {_.map(this.props.roles, (list, roleName) => {
-          const info = this.props.roles[roleName]
-          const groups = _.groupBy(
-            info,
-            item =>
-              `${item.role.sort().join('_')}-${item.attribute}-${item.group}`
-          )
-
-          return _.map(groups, (group, groupIndex) => {
-            const annotationContext = groups[groupIndex][0]
-            const formValue = this.props.formValues[
-              annotationContext.annotation.fieldName
-            ]
-
-            const text =
-              formValue ||
-              getRoleText(
-                this.props.dealsRoles,
-                this.props.deal,
-                roleName,
-                annotationContext
-              )
-            const annotations = groups[groupIndex].map(info => info.annotation)
-
-            return (
-              <ContextAnnotation
-                key={`${roleName}-${groupIndex}`}
-                annotationContext={annotationContext}
-                annotations={annotations}
-                value={text}
-                maxFontSize={20}
-                isReadOnly={annotationContext.readonly === true}
-                tooltip={getRoleTooltip(annotationContext)}
-                onClick={() =>
-                  annotationContext.readonly !== true &&
-                  this.props.onClick('Role', {
-                    contextType: 'Role',
-                    annotations,
-                    annotationContext,
-                    roleName
-                  })
-                }
-                onSetValues={this.props.onSetValues}
-              />
-            )
-          })
-        })}
+        {this.roles.map(item => (
+          <ContextAnnotation
+            key={`${item.roleName}-${item.groupIndex}`}
+            annotationContext={item.annotationContext}
+            annotations={item.annotations}
+            value={item.text}
+            maxFontSize={20}
+            isReadOnly={item.annotationContext.readonly === true}
+            tooltip={getRoleTooltip(item.annotationContext)}
+            onClick={bounds =>
+              item.annotationContext.readonly !== true &&
+              this.props.onClick('Role', {
+                bounds,
+                ...item
+              })
+            }
+            onSetValues={this.props.onSetValues}
+          />
+        ))}
       </Fragment>
     )
   }
