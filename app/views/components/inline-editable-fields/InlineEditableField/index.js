@@ -105,7 +105,7 @@ export class InlineEditableField extends React.Component {
   render() {
     if (this.props.isEditing) {
       return this.props.cancelOnOutsideClick ? (
-        <ClickOutside onClickOutside={this.toggleMode}>
+        <ClickOutside onClickOutside={this.handleCancel}>
           <EditMode {...this.editModeProps} />
         </ClickOutside>
       ) : (
