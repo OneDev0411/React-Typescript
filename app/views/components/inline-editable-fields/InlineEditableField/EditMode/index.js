@@ -10,13 +10,13 @@ import { ActionBar, Container } from './styled'
 
 export class EditMode extends React.Component {
   static propTypes = {
+    handleCancel: PropTypes.func.isRequired,
     handleDelete: PropTypes.func,
     handleSave: PropTypes.func.isRequired,
     isDisabled: PropTypes.bool,
     render: PropTypes.func.isRequired,
     showDelete: PropTypes.bool,
-    style: PropTypes.shape(),
-    toggleMode: PropTypes.func.isRequired
+    style: PropTypes.shape()
   }
 
   static defaultProps = {
@@ -52,7 +52,7 @@ export class EditMode extends React.Component {
               size="small"
               appearance="link"
               disabled={isDisabled}
-              onClick={this.props.toggleMode}
+              onClick={this.props.handleCancel}
             >
               Cancel
             </ActionButton>

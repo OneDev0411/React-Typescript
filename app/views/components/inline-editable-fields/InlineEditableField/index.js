@@ -10,8 +10,9 @@ import { EditMode } from './EditMode'
 export class InlineEditableField extends React.Component {
   static propTypes = {
     cancelOnOutsideClick: PropTypes.bool,
-    handleSave: PropTypes.func.isRequired,
+    handleCancel: PropTypes.any,
     handleDelete: PropTypes.func,
+    handleSave: PropTypes.func.isRequired,
     handleAddNew: PropTypes.func,
     isDisabled: PropTypes.bool,
     isEditing: PropTypes.bool.isRequired,
@@ -28,6 +29,7 @@ export class InlineEditableField extends React.Component {
 
   static defaultProps = {
     cancelOnOutsideClick: false,
+    handleCancel: null,
     handleDelete: noop,
     handleAddNew: noop,
     isDisabled: false,
@@ -48,6 +50,14 @@ export class InlineEditableField extends React.Component {
     this.props.toggleMode()
   }
 
+  handleCancel = () => {
+    if (typeof this.props.handleCancel === 'function') {
+      this.props.handleCancel()
+    } else {
+      this.props.toggleMode()
+    }
+  }
+
   get editModeProps() {
     const {
       handleDelete,
@@ -59,13 +69,13 @@ export class InlineEditableField extends React.Component {
     } = this.props
 
     return {
+      handleCancel: this.handleCancel,
       handleDelete,
       handleSave,
       isDisabled,
       showDelete,
       style,
-      render,
-      toggleMode: this.toggleMode
+      render
     }
   }
 
