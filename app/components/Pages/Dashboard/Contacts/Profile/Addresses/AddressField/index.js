@@ -19,7 +19,7 @@ function destructuringAddress(address) {
   }
 
   return {
-    address: full_address || '-',
+    address: full_address || '',
     is_primary,
     label
   }
