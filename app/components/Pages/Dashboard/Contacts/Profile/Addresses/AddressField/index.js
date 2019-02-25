@@ -1,5 +1,7 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
+import { confirmation } from 'actions/confirmation'
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 
 import { EditMode } from './EditMode'
@@ -25,12 +27,25 @@ function destructuringAddress(address) {
   }
 }
 
-const getInitialState = (address = {}) => ({
-  isDisabled: false,
-  ...destructuringAddress(address)
-})
+function getInitialState(address = {}) {
+  return {
+    isDisabled: false,
+    ...destructuringAddress(address)
+  }
+}
 
-export class AddressField extends React.Component {
+function diffAddressStateWithProp(props, state) {
+  console.log(props, state)
+
+  return (
+    props.address.full_address !== state.address ||
+    props.address.is_primary !== state.is_primary ||
+    (props.address.label && props.address.label !== state.label.value) ||
+    (!props.address.label && state.label.value && state.address)
+  )
+}
+
+class AddressField extends React.Component {
   constructor(props) {
     super(props)
 
@@ -48,9 +63,7 @@ export class AddressField extends React.Component {
     if (
       !state.isDisabled &&
       !props.address.isActive &&
-      (address.label !== state.label.value ||
-        address.full_address !== state.address ||
-        address.is_primary !== state.is_primary)
+      diffAddressStateWithProp(props, state)
     ) {
       return getInitialState(address)
     }
@@ -60,12 +73,27 @@ export class AddressField extends React.Component {
 
   toggleMode = () => this.props.toggleMode(this.props.address)
 
-  onChangeLabel = label => this.setState({ label })
+  cancel = () => {
+    if (this.state.isDisabled) {
+      return
+    }
 
-  onChangePrimary = () =>
-    this.setState(state => ({ is_primary: !state.is_primary }))
+    if (diffAddressStateWithProp(this.props, this.state)) {
+      this.props.dispatch(
+        confirmation({
+          show: true,
+          confirmLabel: 'Yes, I do',
+          message: 'Heads up!',
+          description: 'You have made changes, do you want to discard them?',
+          onConfirm: this.toggleMode
+        })
+      )
+    } else {
+      this.toggleMode()
+    }
+  }
 
-  handleDelete = async () => {
+  delete = async () => {
     this.setState({ isDisabled: true })
 
     const attributeIds = this.props.address.attributes
@@ -79,6 +107,42 @@ export class AddressField extends React.Component {
     } catch (error) {
       console.error(error)
       this.setState({ isDisabled: false }, this.toggle)
+    }
+  }
+
+  onChangeLabel = label => this.setState({ label })
+
+  onChangePrimary = () =>
+    this.setState(state => ({ is_primary: !state.is_primary }))
+
+  handleDelete = () => {
+    const options = {
+      show: true,
+      confirmLabel: 'Yes, I do',
+      message: 'Delete Address',
+      description:
+        'You have made changes, are you sure about deleting this address?',
+      onConfirm: this.delete
+    }
+
+    if (diffAddressStateWithProp(this.props, this.state)) {
+      this.props.dispatch(
+        confirmation({
+          ...options,
+          description:
+            'You have made changes, are you sure about the deleting this address?'
+        })
+      )
+    } else if (this.props.address.full_address) {
+      this.props.dispatch(
+        confirmation({
+          ...options,
+          description:
+            'Are you sure about deleting this address, you will lose it forever?'
+        })
+      )
+    } else {
+      this.delete()
     }
   }
 
@@ -135,6 +199,8 @@ export class AddressField extends React.Component {
   render() {
     return (
       <InlineEditableField
+        cancelOnOutsideClick
+        handleCancel={this.cancel}
         handleSave={this.onSubmit}
         handleDelete={this.handleDelete}
         handleAddNew={this.props.handleAddNew}
@@ -149,3 +215,5 @@ export class AddressField extends React.Component {
     )
   }
 }
+
+export default connect()(AddressField)

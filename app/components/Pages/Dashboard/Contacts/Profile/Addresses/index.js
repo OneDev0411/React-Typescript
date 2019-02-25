@@ -7,7 +7,7 @@ import { deleteAttributesFromContacts } from 'models/contacts/delete-attributes-
 
 import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 
-import { AddressField } from './AddressField'
+import AddressField from './AddressField'
 import { Section } from '../components/Section'
 import { generateEmptyAddress, getAddresses } from './helpers/get-addresses'
 
