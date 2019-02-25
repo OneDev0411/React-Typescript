@@ -26,10 +26,6 @@ export class EditMode extends React.Component {
     style: {}
   }
 
-  onSave = () => this.props.handleSave(this.props.toggleMode)
-
-  onDelete = () => this.props.handleDelete(this.props.toggleMode)
-
   render() {
     const { isDisabled, showDelete } = this.props
 
@@ -38,7 +34,11 @@ export class EditMode extends React.Component {
         {this.props.render(this.props)}
         <ActionBar showDelete={showDelete}>
           {showDelete && (
-            <IconButton isFit disabled={isDisabled} onClick={this.onDelete}>
+            <IconButton
+              isFit
+              disabled={isDisabled}
+              onClick={this.props.handleDelete}
+            >
               <DeleteIcon />
             </IconButton>
           )}
@@ -59,7 +59,7 @@ export class EditMode extends React.Component {
             <ActionButton
               size="small"
               disabled={isDisabled}
-              onClick={this.onSave}
+              onClick={this.props.handleSave}
             >
               {isDisabled ? 'Saving...' : 'Save'}
             </ActionButton>
