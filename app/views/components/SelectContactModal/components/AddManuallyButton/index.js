@@ -9,7 +9,7 @@ const propTypes = {
 
 function AddManuallyButton({ onClick }) {
   return (
-    <Button size="small" type="button" onClick={onClick}>
+    <Button size="small" onClick={onClick}>
       Add New Contact
     </Button>
   )
