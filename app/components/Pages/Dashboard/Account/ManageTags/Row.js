@@ -11,11 +11,11 @@ export default function({ title, items, onChange, onDelete }) {
       <RowContainer>
         <RowTitle>{title}</RowTitle>
         <ItemsContainer>
-          {items.map((tag, index) => (
+          {items.map(tag => (
             <Item
               onChange={onChange}
               onDelete={onDelete}
-              key={index}
+              key={tag.text}
               tag={tag}
             />
           ))}
