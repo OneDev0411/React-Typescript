@@ -5,11 +5,12 @@ export function createFilterSegment(nameId, segment) {
   return async dispatch => {
     try {
       const {
-        data: { id }
+        data: { id, is_editable }
       } = await createSegment(nameId, segment)
 
       const list = {
         id,
+        is_editable,
         ...segment
       }
 
