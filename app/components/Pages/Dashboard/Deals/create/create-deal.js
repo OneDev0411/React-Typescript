@@ -925,7 +925,7 @@ class CreateDeal extends React.Component {
                     <EnderType
                       isRequired={false}
                       enderType={enderType}
-                      showAgentDoubleEnder={false}
+                      showAgentDoubleEnder
                       onChangeEnderType={this.changeEnderType}
                     />
 

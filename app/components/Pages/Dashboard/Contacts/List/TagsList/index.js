@@ -90,7 +90,8 @@ class TagsList extends React.Component {
       filter =>
         filter.id === this.tagDefinitionId &&
         filter.values &&
-        filter.values.includes(text)
+        filter.values.includes(text) &&
+        !filter.operator.invert
     )
 
   render() {

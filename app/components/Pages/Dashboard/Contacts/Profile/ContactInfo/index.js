@@ -17,6 +17,7 @@ export function ContactInfo(props) {
       contact={props.contact}
       fieldsOrder={fieldsOrder}
       section="Contact Info"
+      submitCallback={props.submitCallback}
     />
   )
 }

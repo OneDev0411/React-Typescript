@@ -275,7 +275,7 @@ class SendMlsListingCard extends React.Component {
   }
 
   render() {
-    const { user } = this.props
+    const { user, disabled } = this.props
 
     if (hasMarketingAccess(user) === false) {
       return false
@@ -285,6 +285,7 @@ class SendMlsListingCard extends React.Component {
       <Fragment>
         {!this.props.hasExternalTrigger && (
           <ActionButton
+            disabled={disabled}
             appearance="outline"
             onClick={this.openListingModal}
             size="small"

@@ -83,6 +83,7 @@ export default class EmailCompose extends React.Component {
     return (
       <FinalFormDrawer
         formId="email-compose-form"
+        disableSubmitByEnter
         isOpen={this.props.isOpen}
         initialValues={this.InitialValues}
         onClose={this.props.onClose}

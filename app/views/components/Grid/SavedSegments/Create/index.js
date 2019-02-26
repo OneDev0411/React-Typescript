@@ -51,9 +51,7 @@ class SaveSegment extends React.Component {
     const { selectedOption, newFilterName } = this.state
     const { segment, filters } = this.props
 
-    const list = {
-      is_pinned: false
-    }
+    const list = {}
 
     if (selectedOption === CURRENT_SEGMENT) {
       list.id = segment.id
