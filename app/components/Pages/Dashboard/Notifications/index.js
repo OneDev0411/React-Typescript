@@ -71,6 +71,12 @@ class Notifications extends Component {
       case 'OpenHouseAvailableListing':
         browserHistory.push(`/dashboard/mls/${notification.objects[0].id}`)
         break
+      case 'ContactAttributeIsDueContact':
+        browserHistory.push(`/dashboard/contacts/${notification.objects[0].id}`)
+        break
+      case 'DealContextIsDueDeal':
+        browserHistory.push(`/dashboard/deals/${notification.objects[0].id}`)
+        break
 
       case 'CrmTaskIsDueCrmTask':
       case 'ReminderIsDueCrmTask':
