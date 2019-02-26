@@ -1,9 +1,10 @@
 import React from 'react'
-import ToolTip from '../tooltip'
+import Flex from 'styled-flex-component'
 import styled, { css } from 'styled-components'
+
+import ToolTip from '../tooltip'
 import IconSelectedRadio from '../SvgIcons/Radio/SelectedRadio/IconSelectedRadio'
 import IconUnSelectedRadio from '../SvgIcons/Radio/UnSelectedRadio/IconUnSelectedRadio'
-import Flex from 'styled-flex-component'
 
 const LabelContainer = styled.div`
   margin-left: 0.5rem;
@@ -25,7 +26,7 @@ export default ({
   title,
   tooltip = null,
   disabled = false,
-  onClick = () => null,
+  onClick = () => {},
   style = {},
   caption = ''
 }) => (
@@ -36,7 +37,7 @@ export default ({
         <LabelContainer>
           <RadioLabel disabled={disabled}>{title}</RadioLabel>
 
-          <Caption>{caption}</Caption>
+          {caption && <Caption>{caption}</Caption>}
         </LabelContainer>
       </Flex>
     </ToolTip>
