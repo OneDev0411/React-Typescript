@@ -1,4 +1,5 @@
 import React from 'react'
+import ClickOutside from 'react-click-outside'
 
 import { Container } from './styled'
 
@@ -13,21 +14,26 @@ export class ContextInlineEdit extends React.Component {
     // get bounds
     const { bounds } = this.props.item.data
 
+    console.log(bounds)
+
     const position = {
       left: bounds.left + window.scrollX,
-      top: bounds.top + window.scrollY
+      top: bounds.top + window.scrollY,
+      width: Math.max(200, bounds.right - bounds.left)
     }
 
     this.position = position
 
-    return this.position
+    return position
   }
 
   render() {
-    if (!this.props.item) {
-      return false
-    }
+    console.log(this.props)
 
-    return <Container position={this.Position}>+++</Container>
+    return (
+      <ClickOutside onClickOutside={this.props.onDismiss}>
+        <Container position={this.Position}>+++</Container>
+      </ClickOutside>
+    )
   }
 }

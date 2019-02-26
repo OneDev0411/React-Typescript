@@ -87,7 +87,12 @@ class PDFPreview extends React.Component {
           )
         )}
 
-        <ContextInlineEdit item={this.state.selectedAnnotation} />
+        {this.state.selectedAnnotation && (
+          <ContextInlineEdit
+            item={this.state.selectedAnnotation}
+            onDismiss={this.deselectActiveAnnotation}
+          />
+        )}
       </Container>
     )
   }
