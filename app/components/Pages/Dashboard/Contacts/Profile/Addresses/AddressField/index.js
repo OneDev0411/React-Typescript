@@ -35,8 +35,6 @@ function getInitialState(address = {}) {
 }
 
 function diffAddressStateWithProp(props, state) {
-  console.log(props, state)
-
   return (
     props.address.full_address !== state.address ||
     props.address.is_primary !== state.is_primary ||
