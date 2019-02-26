@@ -89,7 +89,7 @@ class SendContactCard extends React.Component {
 
   openBuilder = () => {
     // todo: removing c.summary
-    if (idx(this.state, state => state.contact.summary.email)) {
+    if (idx(this.state, state => state.contact.summary.email) === null) {
       return this.props.confirmation({
         description:
           'You should provide an email address for this contact to be able send a card',
