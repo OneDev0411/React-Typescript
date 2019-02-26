@@ -13,7 +13,10 @@ export class Input extends React.Component {
   )
 
   renderSuffixElement = () => (
-    <TextInputSuffix disabled={!this.props.value} onClick={this.props.onSubmit}>
+    <TextInputSuffix
+      disabled={this.props.isDisabled}
+      onClick={this.props.onSubmit}
+    >
       Add
     </TextInputSuffix>
   )

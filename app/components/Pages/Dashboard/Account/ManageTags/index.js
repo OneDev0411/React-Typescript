@@ -21,7 +21,8 @@ class ManageTags extends Component {
   state = {
     rawTags: [],
     createTagInputValue: '',
-    loading: true
+    loading: true,
+    isSaving: false
   }
 
   componentDidMount() {
@@ -131,11 +132,12 @@ class ManageTags extends Component {
   handleAdd = async () => {
     const text = this.state.createTagInputValue.trim()
 
-    if (!text) {
+    if (!text || this.state.isSaving) {
       return
     }
 
     try {
+      this.setState({ isSaving: true })
       await createContactsTags(text)
       this.props.notify({
         status: 'success',
@@ -150,6 +152,8 @@ class ManageTags extends Component {
       if (e.status && e.status === 409) {
         this.handleDuplicateTagCreate(text)
       }
+    } finally {
+      this.setState({ isSaving: false })
     }
   }
 
@@ -208,6 +212,9 @@ class ManageTags extends Component {
                 onChange={this.handleCreateTagInputChange}
                 onSubmit={this.handleAdd}
                 value={this.state.createTagInputValue}
+                isDisabled={
+                  this.state.isSaving || !this.state.createTagInputValue
+                }
               />
               {Object.keys(rows)
                 .sort()

@@ -37,6 +37,14 @@ const getActionRedirectURL = params => {
     return `/dashboard/notifications/crm/${crm_task}`
   }
 
+  if (action === 'RedirectToContact') {
+    return `/dashboard/contacts/${params.contact}`
+  }
+
+  if (action === 'RedirectToDeal') {
+    return `/dashboard/deals/${params.deal}`
+  }
+
   return '/dashboard/mls/'
 }
 
