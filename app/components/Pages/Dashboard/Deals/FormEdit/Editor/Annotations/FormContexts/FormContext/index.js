@@ -8,11 +8,13 @@ import { getAnnotationsValues } from '../../../../utils/word-wrap'
 import ContextAnnotation from '../ContextAnnotation'
 
 export class FormContext extends React.Component {
+  state = {
+    contexts: []
+  }
+
   componentDidMount() {
     this.initialize()
   }
-
-  contexts = []
 
   initialize = () => {
     const { props } = this
@@ -62,7 +64,9 @@ export class FormContext extends React.Component {
     })
 
     this.props.onSetValues(defaultValues)
-    this.contexts = contexts
+    this.setState({
+      contexts
+    })
   }
 
   getContextType = context => {
@@ -104,7 +108,7 @@ export class FormContext extends React.Component {
   render() {
     return (
       <Fragment>
-        {this.contexts.map(context => (
+        {this.state.contexts.map(context => (
           <ContextAnnotation
             key={`${context.name}-${context.id}`}
             maxFontSize={20}

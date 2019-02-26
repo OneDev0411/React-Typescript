@@ -7,13 +7,17 @@ import { getRolesText } from '../../../../utils/get-roles-text'
 import { getRoleTooltip } from '../../../../utils/get-role-tooltip'
 
 class FormRoles extends React.PureComponent {
+  state = {
+    roles: []
+  }
+
   componentDidMount() {
     this.initialize()
   }
 
-  roles = []
-
   initialize = () => {
+    const roles = []
+
     _.each(this.props.roles, (list, roleName) => {
       const info = this.props.roles[roleName]
       const groups = _.groupBy(
@@ -37,7 +41,7 @@ class FormRoles extends React.PureComponent {
             annotationContext
           )
 
-        this.roles.push({
+        roles.push({
           contextType: 'Roles',
           groupIndex,
           roleName,
@@ -47,12 +51,16 @@ class FormRoles extends React.PureComponent {
         })
       })
     })
+
+    this.setState({
+      roles
+    })
   }
 
   render() {
     return (
       <Fragment>
-        {this.roles.map(item => (
+        {this.state.roles.map(item => (
           <ContextAnnotation
             key={`${item.roleName}-${item.groupIndex}`}
             annotationContext={item.annotationContext}
