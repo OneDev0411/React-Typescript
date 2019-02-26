@@ -4,6 +4,7 @@ import _ from 'underscore'
 
 import Modal from '../../../BasicModal'
 import Button from '../../../Button/ActionButton'
+import RadioButton from '../../../RadioButton'
 import { ItemRow, ItemTitle, TextInput } from './styled'
 
 import {
@@ -145,11 +146,7 @@ class SaveSegment extends React.Component {
               <ItemRow
                 onClick={() => this.changeSelectedOption(CURRENT_SEGMENT)}
               >
-                <input
-                  type="radio"
-                  checked={selectedOption === CURRENT_SEGMENT}
-                  onChange={() => null}
-                />
+                <RadioButton selected={selectedOption === CURRENT_SEGMENT} />
                 <ItemTitle>
                   Save changes to the list <b>‘{segment.name}’</b>
                 </ItemTitle>
@@ -157,11 +154,7 @@ class SaveSegment extends React.Component {
             )}
 
             <ItemRow onClick={() => this.changeSelectedOption(NEW_SEGMENT)}>
-              <input
-                type="radio"
-                checked={selectedOption === NEW_SEGMENT}
-                onChange={() => null}
-              />
+              <RadioButton selected={selectedOption === NEW_SEGMENT} />
               <ItemTitle>Create new list</ItemTitle>
               <TextInput
                 type="text"
