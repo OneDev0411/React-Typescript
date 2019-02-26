@@ -27,16 +27,19 @@ class ExportContacts extends React.Component {
     if (Array.isArray(exportIds) && exportIds.length > 0) {
       params.ids = exportIds
     } else {
-      const filtersExits = filters && typeof filters === 'object'
-
-      if (filtersExits) {
-        params.filters = filters.map(filter =>
-          encodeURIComponent(JSON.stringify(filter))
+      if (Array.isArray(filters) && filters.length > 0) {
+        params.filters = filters.map(
+          ({ attribute_def, invert, operator, value }) => ({
+            attribute_def,
+            invert,
+            operator,
+            value
+          })
         )
       }
 
-      if (users && typeof users === 'object') {
-        params.users = users.map(user => encodeURIComponent(user))
+      if (Array.isArray(users) && users.length > 0) {
+        params.users = users
       }
     }
 
