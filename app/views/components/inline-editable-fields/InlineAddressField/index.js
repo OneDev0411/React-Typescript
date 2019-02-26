@@ -146,7 +146,11 @@ export class InlineAddressField extends React.Component {
   }
 
   handleInputFocus = () => {
-    if (this.state.address && !this.state.isShowSuggestion) {
+    if (
+      this.state.address &&
+      !this.state.isShowSuggestion &&
+      this.state.address !== this.props.address
+    ) {
       if (this.state.places.length > 0) {
         this.setState({ isShowSuggestion: true })
       } else {

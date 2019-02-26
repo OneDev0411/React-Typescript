@@ -10,13 +10,13 @@ import { ActionBar, Container } from './styled'
 
 export class EditMode extends React.Component {
   static propTypes = {
+    handleCancel: PropTypes.func.isRequired,
     handleDelete: PropTypes.func,
     handleSave: PropTypes.func.isRequired,
     isDisabled: PropTypes.bool,
     render: PropTypes.func.isRequired,
     showDelete: PropTypes.bool,
-    style: PropTypes.shape(),
-    toggleMode: PropTypes.func.isRequired
+    style: PropTypes.shape()
   }
 
   static defaultProps = {
@@ -26,10 +26,6 @@ export class EditMode extends React.Component {
     style: {}
   }
 
-  onSave = () => this.props.handleSave(this.props.toggleMode)
-
-  onDelete = () => this.props.handleDelete(this.props.toggleMode)
-
   render() {
     const { isDisabled, showDelete } = this.props
 
@@ -38,7 +34,11 @@ export class EditMode extends React.Component {
         {this.props.render(this.props)}
         <ActionBar showDelete={showDelete}>
           {showDelete && (
-            <IconButton isFit disabled={isDisabled} onClick={this.onDelete}>
+            <IconButton
+              isFit
+              disabled={isDisabled}
+              onClick={this.props.handleDelete}
+            >
               <DeleteIcon />
             </IconButton>
           )}
@@ -52,14 +52,14 @@ export class EditMode extends React.Component {
               size="small"
               appearance="link"
               disabled={isDisabled}
-              onClick={this.props.toggleMode}
+              onClick={this.props.handleCancel}
             >
               Cancel
             </ActionButton>
             <ActionButton
               size="small"
               disabled={isDisabled}
-              onClick={this.onSave}
+              onClick={this.props.handleSave}
             >
               {isDisabled ? 'Saving...' : 'Save'}
             </ActionButton>

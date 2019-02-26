@@ -42,7 +42,7 @@ export const load = async () => {
       return true
     }
 
-    const getStyle = target => Object.assign({}, target.get('style'))
+    const getStyle = target => getComputedStyle(target.view.el)
 
     const setStyle = (target, prop, value) => {
       const selectedTargetStyles = getStyle(target)
@@ -97,7 +97,7 @@ export const load = async () => {
         if (isElementAllowed(selected, fontSizePickerOptions.conditions)) {
           ReactDOM.render(
             <FontSizePicker
-              value={getStyle(selected)['font-size']}
+              value={getStyle(selected).fontSize}
               onChange={fontSize => {
                 setStyle(selected, 'font-size', fontSize)
               }}
@@ -113,7 +113,7 @@ export const load = async () => {
         if (isElementAllowed(selected, fontWeightPickerOptions.conditions)) {
           ReactDOM.render(
             <FontWeightPicker
-              value={getStyle(selected)['font-weight']}
+              value={getStyle(selected).fontWeight}
               onChange={fontWeight => {
                 setStyle(selected, 'font-weight', fontWeight)
               }}

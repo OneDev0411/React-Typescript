@@ -10,10 +10,12 @@ import { EditMode } from './EditMode'
 export class InlineEditableField extends React.Component {
   static propTypes = {
     cancelOnOutsideClick: PropTypes.bool,
-    handleSave: PropTypes.func.isRequired,
+    handleCancel: PropTypes.any,
     handleDelete: PropTypes.func,
+    handleSave: PropTypes.func.isRequired,
     handleAddNew: PropTypes.func,
     isDisabled: PropTypes.bool,
+    isEditing: PropTypes.bool.isRequired,
     label: PropTypes.string,
     renderViewMode: PropTypes.func,
     renderEditMode: PropTypes.func.isRequired,
@@ -21,12 +23,13 @@ export class InlineEditableField extends React.Component {
     showEdit: PropTypes.bool,
     showDelete: PropTypes.bool,
     style: PropTypes.shape(),
-    toggleModeCallback: PropTypes.func,
+    toggleMode: PropTypes.func.isRequired,
     value: PropTypes.string
   }
 
   static defaultProps = {
     cancelOnOutsideClick: false,
+    handleCancel: null,
     handleDelete: noop,
     handleAddNew: noop,
     isDisabled: false,
@@ -36,12 +39,7 @@ export class InlineEditableField extends React.Component {
     showDelete: true,
     showEdit: true,
     style: {},
-    toggleModeCallback: noop,
     value: ''
-  }
-
-  state = {
-    isEditMode: false
   }
 
   toggleMode = event => {
@@ -49,10 +47,15 @@ export class InlineEditableField extends React.Component {
       event.stopPropagation()
     }
 
-    this.setState(
-      state => ({ isEditMode: !state.isEditMode }),
-      () => this.props.toggleModeCallback(this.state.isEditMode)
-    )
+    this.props.toggleMode()
+  }
+
+  handleCancel = () => {
+    if (typeof this.props.handleCancel === 'function') {
+      this.props.handleCancel()
+    } else {
+      this.props.toggleMode()
+    }
   }
 
   get editModeProps() {
@@ -66,13 +69,13 @@ export class InlineEditableField extends React.Component {
     } = this.props
 
     return {
+      handleCancel: this.handleCancel,
       handleDelete,
       handleSave,
       isDisabled,
       showDelete,
       style,
-      render,
-      toggleMode: this.toggleMode
+      render
     }
   }
 
@@ -100,9 +103,9 @@ export class InlineEditableField extends React.Component {
   }
 
   render() {
-    if (this.state.isEditMode) {
+    if (this.props.isEditing) {
       return this.props.cancelOnOutsideClick ? (
-        <ClickOutside onClickOutside={this.toggleMode}>
+        <ClickOutside onClickOutside={this.handleCancel}>
           <EditMode {...this.editModeProps} />
         </ClickOutside>
       ) : (
