@@ -22,15 +22,9 @@ function handleIds(ids) {
 }
 
 function handleFilters(filters) {
-  if (typeof filters === 'string') {
-    return {
-      filter: [JSON.parse(decodeURIComponent(filters))]
-    }
-  }
-
   if (Array.isArray(filters)) {
     return {
-      filter: filters.map(filter => JSON.parse(decodeURIComponent(filter)))
+      filter: filters
     }
   }
 
