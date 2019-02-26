@@ -1,6 +1,8 @@
 import React from 'react'
 import ClickOutside from 'react-click-outside'
 
+import RolesEdit from './Role'
+
 import { Container } from './styled'
 
 export class ContextInlineEdit extends React.Component {
@@ -13,13 +15,23 @@ export class ContextInlineEdit extends React.Component {
 
     // get bounds
     const { bounds } = this.props.item.data
+    const ww = Math.max(
+      document.documentElement.clientWidth,
+      window.innerWidth || 0
+    )
 
-    console.log(bounds)
+    const width = 400
+
+    const left =
+      bounds.left + window.scrollX + width < ww
+        ? bounds.left + window.scrollX
+        : bounds.right - width
+    const top = bounds.top + window.scrollY
 
     const position = {
-      left: bounds.left + window.scrollX,
-      top: bounds.top + window.scrollY,
-      width: Math.max(200, bounds.right - bounds.left)
+      left,
+      top,
+      width
     }
 
     this.position = position
@@ -27,12 +39,27 @@ export class ContextInlineEdit extends React.Component {
     return position
   }
 
+  get Editor() {
+    const { type } = this.props.item
+
+    const sharedProps = {
+      ...this.props.item.data,
+      deal: this.props.deal
+    }
+
+    if (type === 'Role') {
+      return <RolesEdit {...sharedProps} />
+    }
+
+    return null
+  }
+
   render() {
     console.log(this.props)
 
     return (
       <ClickOutside onClickOutside={this.props.onDismiss}>
-        <Container position={this.Position}>+++</Container>
+        <Container position={this.Position}>{this.Editor}</Container>
       </ClickOutside>
     )
   }

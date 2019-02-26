@@ -1,4 +1,5 @@
 import _ from 'underscore'
+
 import * as actionTypes from '../../constants/deals'
 
 export default (state = null, action) => {
@@ -35,3 +36,6 @@ export default (state = null, action) => {
       return state
   }
 }
+
+export const selectDealRoles = (state, deal) =>
+  Array.isArray(deal.roles) ? deal.roles.map(id => state[id]) : []

@@ -8,6 +8,8 @@ export const Container = styled.div`
   min-height: 80px;
   background-color: #fff;
   box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.4);
-  border-radius: 5px;
+  border-radius: 3px;
   padding: 10px;
+  box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.15),
+    0 8px 10px 0 rgba(0, 0, 0, 0.16);
 `

@@ -13,11 +13,13 @@ import ProgressBar from 'components/ProgressBar'
 
 import importPdfJs from 'utils/import-pdf-js'
 
+import { selectDealById } from 'reducers/deals/list';
 import PDFEdit from './Editor'
 import { Header } from './Header'
 
 import { Container, LoadingDealContainer } from './styled'
 import config from '../../../../../../config/public'
+import { selectTaskById } from 'reducers/deals/tasks'
 
 class EditDigitalForm extends React.Component {
   state = {
@@ -244,7 +246,6 @@ class EditDigitalForm extends React.Component {
         <PDFEdit
           document={pdfDocument}
           deal={this.props.deal}
-          roles={this.props.roles}
           values={this.values}
           onValueUpdate={this.changeFormValue}
           onSetValues={this.setFormValues}
@@ -256,13 +257,10 @@ class EditDigitalForm extends React.Component {
 }
 
 function mapStateToProps({ deals, user }, props) {
-  const { list, tasks } = deals
-  const { id, taskId } = props.params
-
   return {
     user,
-    task: tasks && tasks[taskId],
-    deal: list && list[id],
+    task: selectTaskById(deals.tasks, props.params.taskId),
+    deal: selectDealById(deals.list, props.params.id),
     forms: deals.forms
   }
 }

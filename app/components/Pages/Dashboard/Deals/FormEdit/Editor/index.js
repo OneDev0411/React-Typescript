@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
+
 import _ from 'underscore'
 
 import styled from 'styled-components'
@@ -18,7 +18,7 @@ const PageContainer = styled.div`
   padding-bottom: 20px;
 `
 
-class PDFPreview extends React.Component {
+export default class PDFPreview extends React.Component {
   state = {
     selectedAnnotation: null
   }
@@ -65,7 +65,6 @@ class PDFPreview extends React.Component {
             <PageContainer key={index}>
               <Annotations
                 deal={this.props.deal}
-                roles={this.props.roles}
                 document={document}
                 page={index + 1}
                 scale={this.scale}
@@ -89,6 +88,7 @@ class PDFPreview extends React.Component {
 
         {this.state.selectedAnnotation && (
           <ContextInlineEdit
+            deal={this.props.deal}
             item={this.state.selectedAnnotation}
             onDismiss={this.deselectActiveAnnotation}
           />
@@ -97,11 +97,3 @@ class PDFPreview extends React.Component {
     )
   }
 }
-
-function mapStateToProps({ deals }) {
-  return {
-    roles: deals.roles
-  }
-}
-
-export default connect(mapStateToProps)(PDFPreview)
