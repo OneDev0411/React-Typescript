@@ -88,7 +88,8 @@ class SendContactCard extends React.Component {
   }
 
   openBuilder = () => {
-    if (this.contactHasEmail() === false) {
+    // todo: removing c.summary
+    if (idx(this.state, state => state.contact.summary.email)) {
       return this.props.confirmation({
         description:
           'You should provide an email address for this contact to be able send a card',
@@ -124,7 +125,7 @@ class SendContactCard extends React.Component {
       },
       () => {
         this.props.handleTrigger()
-        this.closeBuilder()
+        this.openBuilder()
       }
     )
 
@@ -211,8 +212,6 @@ class SendContactCard extends React.Component {
       }
     ]
   }
-
-  contactHasEmail = () => idx(this.state.contact, c => c.summary.email) !== null
 
   render() {
     if (hasMarketingAccess(this.props.user) === false) {
