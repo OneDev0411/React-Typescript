@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { Portal } from '../Portal'
 import Body from './Body'
 import Header from './Header'
 import Footer from './Footer'
@@ -30,18 +31,20 @@ const OverlayDrawer = ({
   closeOnBackdropClick,
   ...rest
 }) => (
-  <div style={{ position: 'relative' }}>
-    <Content width={width} isOpen={isOpen}>
-      {React.Children.map(children, child => React.cloneElement(child, rest))}
-    </Content>
+  <Portal root="overlay-drawer">
+    <div style={{ position: 'relative' }}>
+      <Content width={width} isOpen={isOpen}>
+        {React.Children.map(children, child => React.cloneElement(child, rest))}
+      </Content>
 
-    {showBackdrop && (
-      <Backdrop
-        show={isOpen}
-        onClick={() => closeOnBackdropClick && rest.onClose()}
-      />
-    )}
-  </div>
+      {showBackdrop && (
+        <Backdrop
+          show={isOpen}
+          onClick={() => closeOnBackdropClick && rest.onClose()}
+        />
+      )}
+    </div>
+  </Portal>
 )
 
 OverlayDrawer.propTypes = propTypes
