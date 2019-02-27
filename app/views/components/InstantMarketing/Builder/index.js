@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 
 import juice from 'juice'
 
+import { Portal } from 'components/Portal'
 import IconButton from 'components/Button/IconButton'
 import DropButton from 'components/Button/DropButton'
 import ActionButton from 'components/Button/ActionButton'
@@ -378,113 +379,115 @@ class Builder extends React.Component {
     const isSocialMedium = this.IsSocialMedium
 
     return (
-      <Container className="template-builder">
-        <Header>
-          <h1>{this.props.headerTitle}</h1>
+      <Portal root="marketing-center">
+        <Container className="template-builder">
+          <Header>
+            <h1>{this.props.headerTitle}</h1>
 
-          <Actions>
-            {this.state.selectedTemplate && (
-              <TeamContactSelect
-                fullHeight
-                pullTo="right"
-                user={this.props.templateData.user}
-                owner={this.state.owner}
-                onSelect={this.handleOwnerChange}
-                buttonRenderer={this.renderAgentPickerButton}
-                style={{
-                  marginRight: '0.5rem'
-                }}
-              />
-            )}
+            <Actions>
+              {this.state.selectedTemplate && (
+                <TeamContactSelect
+                  fullHeight
+                  pullTo="right"
+                  user={this.props.templateData.user}
+                  owner={this.state.owner}
+                  onSelect={this.handleOwnerChange}
+                  buttonRenderer={this.renderAgentPickerButton}
+                  style={{
+                    marginRight: '0.5rem'
+                  }}
+                />
+              )}
 
-            {this.ShowEditListingsButton && (
-              <ActionButton
-                style={{ marginLeft: '0.5rem' }}
-                appearance="outline"
-                onClick={this.props.onShowEditListings}
-              >
-                Edit Listings ({this.props.templateData.listings.length})
-              </ActionButton>
-            )}
-
-            {this.state.selectedTemplate && isSocialMedium && (
-              <Fragment>
-                <ActionButton
-                  onClick={() => this.handleSocialSharing('Instagram')}
-                >
-                  <i
-                    className="fa fa-instagram"
-                    style={{
-                      fontSize: '1.5rem',
-                      marginRight: '0.5rem'
-                    }}
-                  />
-                  Post to Instagram
-                </ActionButton>
-
+              {this.ShowEditListingsButton && (
                 <ActionButton
                   style={{ marginLeft: '0.5rem' }}
-                  onClick={() => this.handleSocialSharing('Facebook')}
+                  appearance="outline"
+                  onClick={this.props.onShowEditListings}
                 >
-                  <i
-                    className="fa fa-facebook-square"
-                    style={{
-                      fontSize: '1.5rem',
-                      marginRight: '0.5rem'
-                    }}
-                  />
-                  Post to Facebook
+                  Edit Listings ({this.props.templateData.listings.length})
                 </ActionButton>
-              </Fragment>
-            )}
+              )}
 
-            {this.state.selectedTemplate && !isSocialMedium && (
-              <ActionButton
-                style={{ marginLeft: '0.5rem' }}
-                onClick={this.handleSave}
+              {this.state.selectedTemplate && isSocialMedium && (
+                <Fragment>
+                  <ActionButton
+                    onClick={() => this.handleSocialSharing('Instagram')}
+                  >
+                    <i
+                      className="fa fa-instagram"
+                      style={{
+                        fontSize: '1.5rem',
+                        marginRight: '0.5rem'
+                      }}
+                    />
+                    Post to Instagram
+                  </ActionButton>
+
+                  <ActionButton
+                    style={{ marginLeft: '0.5rem' }}
+                    onClick={() => this.handleSocialSharing('Facebook')}
+                  >
+                    <i
+                      className="fa fa-facebook-square"
+                      style={{
+                        fontSize: '1.5rem',
+                        marginRight: '0.5rem'
+                      }}
+                    />
+                    Post to Facebook
+                  </ActionButton>
+                </Fragment>
+              )}
+
+              {this.state.selectedTemplate && !isSocialMedium && (
+                <ActionButton
+                  style={{ marginLeft: '0.5rem' }}
+                  onClick={this.handleSave}
+                >
+                  Next
+                </ActionButton>
+              )}
+
+              <Divider />
+              <IconButton
+                isFit
+                iconSize="large"
+                inverse
+                onClick={this.props.onClose}
               >
-                Next
-              </ActionButton>
-            )}
+                <CloseIcon />
+              </IconButton>
+            </Actions>
+          </Header>
 
-            <Divider />
-            <IconButton
-              isFit
-              iconSize="large"
-              inverse
-              onClick={this.props.onClose}
+          <BuilderContainer>
+            <TemplatesContainer
+              isInvisible={this.props.showTemplatesColumn === false}
             >
-              <CloseIcon />
-            </IconButton>
-          </Actions>
-        </Header>
-
-        <BuilderContainer>
-          <TemplatesContainer
-            isInvisible={this.props.showTemplatesColumn === false}
-          >
-            <Templates
-              defaultTemplate={this.props.defaultTemplate}
-              medium={this.props.mediums}
-              onTemplateSelect={this.handleSelectTemplate}
-              templateTypes={this.props.templateTypes}
-            />
-          </TemplatesContainer>
-
-          <div
-            id="grapesjs-canvas"
-            ref={ref => (this.grapes = ref)}
-            style={{ position: 'relative' }}
-          >
-            {this.IsVideoTemplate && this.IsTemplateLoaded && (
-              <VideoToolbar
-                onRef={ref => (this.videoToolbar = ref)}
-                editor={this.editor}
+              <Templates
+                defaultTemplate={this.props.defaultTemplate}
+                medium={this.props.mediums}
+                onTemplateSelect={this.handleSelectTemplate}
+                templateTypes={this.props.templateTypes}
               />
-            )}
-          </div>
-        </BuilderContainer>
-      </Container>
+            </TemplatesContainer>
+
+            <div
+              id="grapesjs-canvas"
+              ref={ref => (this.grapes = ref)}
+              style={{ position: 'relative' }}
+            >
+              {this.IsVideoTemplate && this.IsTemplateLoaded && (
+                <VideoToolbar
+                  onRef={ref => (this.videoToolbar = ref)}
+                  editor={this.editor}
+                />
+              )}
+            </div>
+          </BuilderContainer>
+        </Container>
+      </Portal>
     )
   }
 }
