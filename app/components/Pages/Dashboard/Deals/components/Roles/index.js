@@ -15,6 +15,8 @@ import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
 import ActionButton from 'components/Button/ActionButton'
 
+import { selectDealRoles } from 'reducers/deals/roles'
+
 import TeamAgents from './AgentIntegration/AgentsList'
 
 import { roleName, getLegalFullName } from '../../utils/roles'
@@ -167,13 +169,12 @@ class Roles extends React.Component {
 
         {(this.props.deal.roles || [])
           .filter(
-            roleId =>
-              this.props.filter(this.props.roles[roleId]) &&
+            role =>
+              this.props.filter(role) &&
               (!this.props.allowedRoles ||
-                this.props.allowedRoles.includes(this.props.roles[roleId].role))
+                this.props.allowedRoles.includes(role.role))
           )
-          .map(roleId => {
-            const role = this.props.roles[roleId]
+          .map(role => {
             const isPrimaryAgent = this.isPrimaryAgent(role.role)
 
             return (
@@ -282,10 +283,14 @@ Roles.defaultProps = {
   onTriggerRequiredEmail: () => null
 }
 
+function mapStateToProps({ deals }, props) {
+  return {
+    roles: selectDealRoles(deals.roles, props.deal)
+  }
+}
+
 export default connect(
-  ({ deals }) => ({
-    roles: deals.roles
-  }),
+  mapStateToProps,
   {
     notify,
     deleteRole,

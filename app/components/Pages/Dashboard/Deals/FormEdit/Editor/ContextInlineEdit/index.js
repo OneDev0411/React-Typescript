@@ -20,7 +20,7 @@ export class ContextInlineEdit extends React.Component {
       window.innerWidth || 0
     )
 
-    const width = 400
+    const width = 500
 
     const left =
       bounds.left + window.scrollX + width < ww
