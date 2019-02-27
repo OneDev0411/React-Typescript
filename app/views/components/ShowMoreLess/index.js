@@ -38,6 +38,18 @@ export class ShowMoreLess extends Component {
     </ShowMoreLessText>
   )
 
+  renderAllChildren() {
+    return (
+      <Flex
+        column={this.props.column}
+        row={this.props.row}
+        style={this.props.style}
+      >
+        {this.props.children}
+      </Flex>
+    )
+  }
+
   renderOpenState() {
     return (
       <Flex
@@ -67,6 +79,12 @@ export class ShowMoreLess extends Component {
   }
 
   render() {
+    const childrenCount = React.Children.count(this.props.children)
+
+    if (childrenCount <= this.props.count) {
+      return this.renderAllChildren()
+    }
+
     if (this.state.isOpen) {
       return this.renderOpenState()
     }
