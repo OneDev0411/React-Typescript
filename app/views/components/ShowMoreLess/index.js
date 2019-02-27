@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Flex from 'styled-flex-component'
 
-import { ShowMoreLessText } from './styled'
+import { ShowMoreLessText, ArrowDown, ArrowUp } from './styled'
 
 export class ShowMoreLess extends Component {
   static defaultProps = {
@@ -27,12 +27,14 @@ export class ShowMoreLess extends Component {
   renderShowMore = () => (
     <ShowMoreLessText onClick={this.toggleState}>
       {this.props.moreText}
+      <ArrowDown />
     </ShowMoreLessText>
   )
 
   renderShowLess = () => (
     <ShowMoreLessText onClick={this.toggleState}>
       {this.props.lessText}
+      <ArrowUp />
     </ShowMoreLessText>
   )
 
