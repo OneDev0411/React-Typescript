@@ -21,6 +21,7 @@ import {
   ListItem,
   ListItemName
 } from 'components/Grid/SavedSegments/List/styled'
+import { ShowMoreLess } from 'components/ShowMoreLess'
 
 import { normalizeFilters } from '../utils'
 
@@ -99,24 +100,30 @@ class TagsList extends React.Component {
       <div style={{ marginTop: '2rem' }}>
         <ListTitle>Tags</ListTitle>
 
-        {existingTags.map((item, index) => {
-          const isSelected = this.isSelected(item.text)
+        <ShowMoreLess
+          moreText="More tags"
+          lessText="Less tags"
+          style={{ marginBottom: '2rem' }}
+        >
+          {existingTags.map((item, index) => {
+            const isSelected = this.isSelected(item.text)
 
-          return (
-            <ToolTip key={index} caption={item.text} placement="right">
-              <CustomListItem
-                isSelected={isSelected}
-                onClick={() => this.onSelectList(item)}
-              >
-                <CheckBoxButton
+            return (
+              <ToolTip key={index} caption={item.text} placement="right">
+                <CustomListItem
                   isSelected={isSelected}
                   onClick={() => this.onSelectList(item)}
-                />
-                <CustomListItemName>{item.text}</CustomListItemName>
-              </CustomListItem>
-            </ToolTip>
-          )
-        })}
+                >
+                  <CheckBoxButton
+                    isSelected={isSelected}
+                    onClick={() => this.onSelectList(item)}
+                  />
+                  <CustomListItemName>{item.text}</CustomListItemName>
+                </CustomListItem>
+              </ToolTip>
+            )
+          })}
+        </ShowMoreLess>
 
         {isFetching && (
           <ListItem>
