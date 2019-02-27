@@ -164,7 +164,7 @@ class RoleAgentIntegration extends React.Component {
     this.props.onHide()
   }
 
-  _renderSearchContactDrawerHeaderMenu = () => {
+  renderSearchContactDrawerHeaderMenu = () => {
     if (this.state.selectedAgent) {
       return null
     }
@@ -173,6 +173,7 @@ class RoleAgentIntegration extends React.Component {
       <TextIconButton
         onClick={this.showRoleDrawer}
         text="Add New Contact"
+        type="button"
         appearance="outline"
         iconLeft={AddIcon}
         iconSize="large"
@@ -210,7 +211,7 @@ class RoleAgentIntegration extends React.Component {
           isOpen={this.state.showContactModal}
           onClose={this.onClose}
           onSelect={this.onSelectContactUser}
-          renderHeaderMenu={this._renderSearchContactDrawerHeaderMenu}
+          renderHeaderMenu={this.renderSearchContactDrawerHeaderMenu}
         />
       </Fragment>
     )
