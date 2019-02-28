@@ -31,7 +31,7 @@ class TaskFiles extends React.Component {
     }
 
     return (
-      <Container isOpen={this.props.isOpen}>
+      <Container>
         {this.Files.map((item, key) =>
           item.type === 'task' ? (
             <DigitalForm
