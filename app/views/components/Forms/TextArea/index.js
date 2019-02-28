@@ -15,6 +15,10 @@ export class TextArea extends React.Component {
   }
 
   onHeightChangeHandler = height => {
+    if (isNaN(height)) {
+      return false
+    }
+
     this.setState({ height: height + 5 })
   }
 
