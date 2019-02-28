@@ -2,6 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
+import { selectDealEnvelopes } from 'reducers/deals/envelopes'
+
 import { getTaskEnvelopes } from '../../../../utils/get-task-envelopes'
 import { getDocumentEnvelopes } from '../../../../utils/get-document-envelopes'
 
@@ -63,9 +65,9 @@ class EnvelopeView extends React.Component {
   }
 }
 
-function mapStateToProps({ deals }) {
+function mapStateToProps({ deals }, props) {
   return {
-    envelopes: deals.envelopes
+    envelopes: selectDealEnvelopes(props.deal, deals.envelopes)
   }
 }
 

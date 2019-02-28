@@ -1,5 +1,5 @@
 export function getDocumentEnvelopes(envelopes, document) {
-  return Object.values(envelopes)
+  return envelopes
     .filter(envelope =>
       envelope.documents.some(doc => {
         if (
