@@ -239,7 +239,7 @@ class MlsAutocompleteSearch extends Component {
             .map(s =>
               item.structured_formatting.main_text.substr(s.offset, s.length)
             )
-            .join('')}
+            .join(' ')}
         </span>
         {item.structured_formatting.main_text.substr(
           item.matched_substrings[item.matched_substrings.length - 1].offset +
@@ -332,12 +332,11 @@ class MlsAutocompleteSearch extends Component {
           }}
         />
 
-        {!this.state.isLoading &&
-          this.state.input && (
-            <ClearButton isFit inverse iconSize="large" onClick={this.onClear}>
-              <IconClose />
-            </ClearButton>
-          )}
+        {!this.state.isLoading && this.state.input && (
+          <ClearButton isFit inverse iconSize="large" onClick={this.onClear}>
+            <IconClose />
+          </ClearButton>
+        )}
 
         {this.state.isLoading && (
           <LoadingContainer>
