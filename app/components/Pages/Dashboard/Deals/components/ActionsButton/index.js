@@ -27,6 +27,7 @@ import Tooltip from 'components/tooltip'
 import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
 
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
+
 import { selectActions } from './helpers/select-actions'
 import { getEsignAttachments } from './helpers/get-esign-attachments'
 import { getFileUrl } from './helpers/get-file-url'
@@ -369,6 +370,7 @@ class ActionsButton extends React.Component {
       deal: this.props.deal,
       task: this.props.task,
       document: this.props.document,
+      envelopes: this.props.envelopes,
       isBackOffice: this.props.isBackOffice
     })
 
@@ -397,13 +399,12 @@ class ActionsButton extends React.Component {
       deal: this.props.deal,
       task: this.props.task,
       document: this.props.document,
+      envelopes: this.props.envelopes,
       isBackOffice: this.props.isBackOffice
     })
 
-    console.log('>>>>>', this.props)
-
     if (links.length === 1) {
-      return this.props.isBackOffice
+      return this.props.isBackOffice || links[0].blankTarget === false
         ? browserHistory.push(links[0].url)
         : window.open(links[0].url, '_blank')
     }
