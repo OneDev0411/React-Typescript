@@ -32,5 +32,3 @@ export function formatDate(date, kwargs = {}) {
 
   return moment(date).format(format)
 }
-
-export const assetFilter = (brand, name) => _.get(brand.assets.marketing, name)
