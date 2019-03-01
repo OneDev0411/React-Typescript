@@ -56,12 +56,24 @@ class Task extends React.Component {
     return Array.isArray(attachments) && attachments.length > 0
   }
 
-  isRowClickable = () => this.getRowsCount() > 0
+  isRowClickable = () => {
+    const rowsCount = this.getRowsCount()
 
-  getRowsCount() {
+    return rowsCount > 0 || this.hasDigitalForm
+  }
+
+  get hasDigitalForm() {
+    return this.props.task.form !== null
+  }
+
+  getAttachments = () => {
     const { attachments } = this.props.task.room
 
-    const attachmentsCount = Array.isArray(attachments) ? attachments.length : 0
+    return Array.isArray(attachments) ? attachments : []
+  }
+
+  getRowsCount = () => {
+    const attachmentsCount = this.getAttachments().length
 
     return this.props.task.submission ? attachmentsCount + 1 : attachmentsCount
   }
@@ -73,9 +85,17 @@ class Task extends React.Component {
   handleClickTask = () => {
     const rowsCount = this.getRowsCount()
 
+    // If only a base form in there, when user taps on task open up the form as if they pressed Edit ... also wheen the forms is editeed and saved you show the PDF saved version but you should still show the base form when user presses on the name of task ... but once user has an envelope then you show the envelope.
     // If task is empty, i.e no form and no uploaded file: clicking task name does nothing (it's not clickable)
-    if (rowsCount === 0) {
-      return false
+    if (rowsCount === 0 && !this.IsFormTask) {
+      return (
+        this.hasDigitalForm &&
+        browserHistory.push(
+          `/dashboard/deals/${this.props.deal.id}/form-edit/${
+            this.props.task.id
+          }`
+        )
+      )
     }
 
     // If there are many files in the task such as: a form and an uploaded file, or multiple uploaded files ... tapping on task name should expand and open up thee task to show the multiple files under it for user to then select the file they are interested in
