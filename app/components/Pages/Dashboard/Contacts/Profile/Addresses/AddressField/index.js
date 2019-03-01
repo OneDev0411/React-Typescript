@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import addressParser from 'parse-address'
 
 import { confirmation } from 'actions/confirmation'
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
@@ -113,6 +114,8 @@ class AddressField extends React.Component {
   onChangePrimary = () =>
     this.setState(state => ({ is_primary: !state.is_primary }))
 
+  onChangeInput = address => this.setState({ address })
+
   handleDelete = () => {
     const options = {
       show: true,
@@ -144,11 +147,18 @@ class AddressField extends React.Component {
     }
   }
 
-  handleSubmit = async (values = {}) => {
+  handleSubmit = async values => {
     const {
+      address,
       is_primary,
       label: { value: label }
     } = this.state
+
+    if (!values || address !== this.props.address.full_address) {
+      values = this.preSaveFormat(
+        postLoadFormat(addressParser.parseLocation(this.state.address))
+      )
+    }
 
     const upsertList = getUpsertAttributes(
       {
@@ -172,12 +182,18 @@ class AddressField extends React.Component {
         this.setState({ isDisabled: false }, this.toggle)
       }
     }
+
+    return null
   }
 
   onSubmit = () => this.handleSubmit()
 
-  postLoadFormat = (values, originalValues) =>
-    postLoadFormat(values, originalValues, this.props.address)
+  preSaveFormat = values =>
+    preSaveFormat(
+      values,
+      addressParser.parseLocation(this.props.address.full_address),
+      this.props.address
+    )
 
   renderEditMode = props => (
     <EditMode
@@ -185,10 +201,11 @@ class AddressField extends React.Component {
       {...this.state}
       handleSubmit={this.handleSubmit}
       labels={this.labels}
-      preSaveFormat={preSaveFormat}
-      postLoadFormat={this.postLoadFormat}
+      preSaveFormat={this.preSaveFormat}
+      postLoadFormat={postLoadFormat}
       onChangeLabel={this.onChangeLabel}
       onChangePrimary={this.onChangePrimary}
+      onChangeInput={this.onChangeInput}
     />
   )
 
