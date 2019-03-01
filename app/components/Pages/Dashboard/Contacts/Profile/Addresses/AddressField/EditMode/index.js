@@ -38,7 +38,10 @@ export function EditMode(props) {
         handleSubmit={props.handleSubmit}
         preSaveFormat={props.preSaveFormat}
         postLoadFormat={props.postLoadFormat}
-        renderSearchField={props => <Input {...props} type="text" autoFocus />}
+        handleInputChange={props.onChangeInput}
+        renderSearchField={inputProps => (
+          <Input {...inputProps} type="text" autoFocus />
+        )}
       />
     </React.Fragment>
   )
