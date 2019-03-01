@@ -98,6 +98,18 @@ export function allMembersOfTeam(team) {
   return Object.values(indexedMembers)
 }
 
+export function getBrandByType(user, type) {
+  let { brand } = getActiveTeam(user)
+
+  do {
+    if (brand.brand_type === type) {
+      return brand
+    }
+
+    brand = brand.parent
+  } while (brand)
+}
+
 export function isTrainingAccount(user) {
 
   // Hide training banner

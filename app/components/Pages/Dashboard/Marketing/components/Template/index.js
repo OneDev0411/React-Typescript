@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import fecha from 'fecha'
 import Flex from 'styled-flex-component'
 
@@ -6,13 +7,17 @@ import Button from 'components/Button/ActionButton'
 import IconPlay from 'components/SvgIcons/PlayCircle/IconPlayCircle'
 import IconPause from 'components/SvgIcons/PauseCircle/IconPauseCircle'
 
+import { getBrandByType } from 'utils/user-teams'
+
 import { Box, ImageContainer, VideoController } from './styled'
 
-export class Template extends React.Component {
+class TemplateItem extends React.Component {
   constructor(props) {
     super(props)
 
     this.template = props.template
+
+    const brokerageBrand = getBrandByType(props.user, 'Brokerage')
 
     if (props.template.type === 'template_instance' && props.template) {
       this.template.medium = props.template.template.medium
@@ -37,7 +42,7 @@ export class Template extends React.Component {
       this.video = React.createRef()
       this.state = { isVideoPlaying: false, isMouseOverImage: false }
     } else {
-      let thumbnail = `${this.template.url}/thumbnail.png`
+      let thumbnail = `${this.template.url}/${brokerageBrand.id}/thumbnail.png`
 
       if (props.template.file) {
         thumbnail = props.template.file.preview_url
@@ -137,3 +142,11 @@ export class Template extends React.Component {
     )
   }
 }
+
+function mapStateToProps({ user }) {
+  return {
+    user
+  }
+}
+
+export const Template = connect(mapStateToProps)(TemplateItem)

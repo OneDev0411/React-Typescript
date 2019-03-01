@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import { getTemplates } from 'models/instant-marketing/get-templates'
@@ -6,9 +7,11 @@ import { loadTemplateHtml } from 'models/instant-marketing/load-template'
 
 import Spinner from 'components/Spinner'
 
+import { getBrandByType } from 'utils/user-teams'
+
 import { Container, TemplateItem, Video, Image } from './styled'
 
-export default class Templates extends React.Component {
+class Templates extends React.Component {
   state = {
     isLoading: true,
     selectedTemplate: null,
@@ -18,6 +21,8 @@ export default class Templates extends React.Component {
   componentDidMount() {
     this.getTemplatesList()
   }
+
+  brokerageBrand = getBrandByType(this.props.user, 'Brokerage')
 
   getTemplatesList = async () => {
     const { medium, defaultTemplate, templateTypes: types } = this.props
@@ -74,8 +79,8 @@ export default class Templates extends React.Component {
 
   updateTemplate = template =>
     this.setState(state => ({
-      templates: state.templates.map(
-        item => (item.id === template.id ? template : item)
+      templates: state.templates.map(item =>
+        item.id === template.id ? template : item
       )
     }))
 
@@ -95,11 +100,11 @@ export default class Templates extends React.Component {
                 autoPlay="true"
                 loop="true"
                 type="video/mp4"
-                src={`${template.url}/thumbnail.mp4`}
+                src={`${template.url}/${this.brokerageBrand.id}/thumbnail.mp4`}
               />
             ) : (
               <Image
-                src={`${template.url}/thumbnail.png`}
+                src={`${template.url}/${this.brokerageBrand.id}/thumbnail.png`}
                 title={template.name}
                 width="97%"
                 style={{
@@ -115,3 +120,11 @@ export default class Templates extends React.Component {
     )
   }
 }
+
+function mapStateToProps({ user }) {
+  return {
+    user
+  }
+}
+
+export default connect(mapStateToProps)(Templates)
