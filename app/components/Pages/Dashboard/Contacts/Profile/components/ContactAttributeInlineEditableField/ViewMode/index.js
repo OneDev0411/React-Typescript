@@ -11,7 +11,7 @@ export function ViewMode(props) {
         {props.title}
         {props.is_primary && (
           <Tooltip caption="Primary">
-            <Star />
+            <Star style={{ marginLeft: props.title ? '0.5rem' : 0 }} />
           </Tooltip>
         )}
       </Label>
