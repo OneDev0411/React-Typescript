@@ -23,6 +23,6 @@ export class TextField extends React.Component {
     )
 
   render() {
-    return <Input value={this.state.value} onChange={this.onChange} />
+    return <Input value={this.state.value} onChange={this.onChange} autoFocus />
   }
 }
