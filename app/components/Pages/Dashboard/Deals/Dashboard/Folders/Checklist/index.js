@@ -6,6 +6,8 @@ import Flex from 'styled-flex-component'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import { selectChecklistTasks } from 'reducers/deals/tasks'
+import { isChecklistExpanded } from 'reducers/deals/checklists'
+import { setExpandChecklist } from 'actions/deals'
 
 import { ChecklistLabels } from './Labels'
 
@@ -23,92 +25,67 @@ import {
   ArrowIcon
 } from '../styled'
 
-class ChecklistFolder extends React.Component {
-  state = {
-    isFolderExpanded: true
+function ChecklistFolder(props) {
+  const toggleFolderOpen = () => {
+    props.setExpandChecklist(props.checklist.id, !props.isFolderExpanded)
   }
 
-  toggleFolderOpen = () =>
-    this.setState(state => ({
-      isFolderExpanded: !state.isFolderExpanded
-    }))
+  return (
+    <FolderContainer>
+      <Header>
+        <Flex
+          alignCenter
+          style={{ cursor: 'pointer' }}
+          onClick={toggleFolderOpen}
+        >
+          <ArrowIcon isOpen={props.isFolderExpanded} />
+          <HeaderTitle>
+            <TextMiddleTruncate text={props.checklist.title} maxLength={100} />
+          </HeaderTitle>
+          <ChecklistLabels checklist={props.checklist} />
+        </Flex>
 
-  /**
-   * returns sorted tasks of current checklist.
-   * and GeneralComments task is ommitted
-   * Every Checklist *has one* GeneralComments task
-   * We hide this task from tasks table and show that as a "Message Admin" cta
-   * inside the checklist table
-   */
-  get Tasks() {
-    return this.SortedTasks.filter(task => task.task_type !== 'GeneralComments')
-  }
+        <Flex alignCenter>
+          <MessageAdmin
+            deal={props.deal}
+            checklist={props.checklist}
+            tasks={props.tasks}
+            checklistName={props.checklist.title}
+          />
+          <Menu
+            deal={props.deal}
+            checklist={props.checklist}
+            isBackOffice={props.isBackOffice}
+          />
+        </Flex>
+      </Header>
 
-  get SortedTasks() {
-    return this.props.tasks
-    // if (this.props.isBackOffice) {
-    //   return _.sortBy(this.props.tasks, task =>
-    //     task.attention_requested ? 0 : 1
-    //   )
-    // }
-
-    // return _.sortBy(
-    //   this.props.tasks,
-    //   task => new Date(task.updated_at).getTime() * -1
-    // )
-  }
-
-  render() {
-    return (
-      <FolderContainer>
-        <Header>
-          <Flex
-            alignCenter
-            style={{ cursor: 'pointer' }}
-            onClick={this.toggleFolderOpen}
-          >
-            <ArrowIcon isOpen={this.state.isFolderExpanded} />
-            <HeaderTitle>
-              <TextMiddleTruncate
-                text={this.props.checklist.title}
-                maxLength={100}
-              />
-            </HeaderTitle>
-            <ChecklistLabels checklist={this.props.checklist} />
-          </Flex>
-
-          <Flex alignCenter>
-            <MessageAdmin
-              deal={this.props.deal}
-              checklist={this.props.checklist}
-              tasks={this.props.tasks}
-              checklistName={this.props.checklist.title}
-            />
-            <Menu
-              deal={this.props.deal}
-              checklist={this.props.checklist}
-              isBackOffice={this.props.isBackOffice}
-            />
-          </Flex>
-        </Header>
-
-        <ItemsContainer isOpen={this.state.isFolderExpanded}>
-          {this.Tasks.map(task => (
+      <ItemsContainer isOpen={props.isFolderExpanded}>
+        {props.tasks
+          .filter(task => task.task_type !== 'GeneralComments')
+          .map(task => (
             <TaskRow
               key={task.id}
               task={task}
-              deal={this.props.deal}
-              isBackOffice={this.props.isBackOffice}
+              deal={props.deal}
+              isBackOffice={props.isBackOffice}
             />
           ))}
 
-          <NewTaskRow deal={this.props.deal} checklist={this.props.checklist} />
-        </ItemsContainer>
-      </FolderContainer>
-    )
+        <NewTaskRow deal={props.deal} checklist={props.checklist} />
+      </ItemsContainer>
+    </FolderContainer>
+  )
+}
+
+function mapStateToProps({ deals }, props) {
+  return {
+    isFolderExpanded: isChecklistExpanded(deals.checklists, props.checklist.id),
+    tasks: selectChecklistTasks(props.checklist, deals.tasks)
   }
 }
 
-export default connect(({ deals }, props) => ({
-  tasks: selectChecklistTasks(props.checklist, deals.tasks)
-}))(ChecklistFolder)
+export default connect(
+  mapStateToProps,
+  { setExpandChecklist }
+)(ChecklistFolder)
