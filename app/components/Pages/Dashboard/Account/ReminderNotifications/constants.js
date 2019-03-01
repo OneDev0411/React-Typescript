@@ -6,6 +6,10 @@ export const CONTACT_DATE_OBJECT_TYPE = 'contact_attribute'
 
 export const DROPDOWN_OPTIONS = [
   {
+    label: 'Day of',
+    value: 0
+  },
+  {
     label: '1 day before',
     value: 86400
   },
