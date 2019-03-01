@@ -7,7 +7,7 @@ import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-
 import { deleteAttribute } from 'models/contacts/delete-attribute'
 
 import { Section } from '../Section'
-import { MasterField } from '../ContactAttributeInlineEditableField'
+import MasterField from '../ContactAttributeInlineEditableField'
 import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
 
 import { orderFields, normalizeAttributes } from './helpers'

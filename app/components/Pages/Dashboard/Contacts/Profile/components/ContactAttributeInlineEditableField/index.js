@@ -1,5 +1,7 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
+import { confirmation } from 'actions/confirmation'
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 
 import { formatValue, getTitle, getValue } from './helpers'
@@ -10,7 +12,7 @@ import { ViewMode } from './ViewMode'
 function getStateFromAttribute(attribute) {
   if (attribute) {
     return {
-      label: attribute.label,
+      label: attribute.label || '',
       is_primary: attribute.is_primary,
       value: getValue(attribute) || ''
     }
@@ -25,12 +27,22 @@ function getStateFromAttribute(attribute) {
 
 const getInitialState = attribute => ({
   isDrity: false,
-  isEditMode: false,
+  isEditing: false,
   disabled: false,
   ...getStateFromAttribute(attribute)
 })
 
-export class MasterField extends React.Component {
+function diffAttributeStateWithProp(attribute, state) {
+  const { label, value, is_primary } = getStateFromAttribute(attribute)
+
+  return (
+    is_primary !== state.is_primary ||
+    label !== state.label ||
+    value !== state.value
+  )
+}
+
+class MasterField extends React.Component {
   constructor(props) {
     super(props)
 
@@ -55,7 +67,16 @@ export class MasterField extends React.Component {
     return getTitle(this.props.attribute.attribute_def, this.state.label)
   }
 
-  setMode = isEditMode => this.setState({ isEditMode })
+  get isDrity() {
+    return (
+      this.state.isDrity &&
+      diffAttributeStateWithProp(this.props.attribute, this.state)
+    )
+  }
+
+  setInitialState = () => this.setState(getInitialState(this.props.attribute))
+
+  toggleMode = () => this.setState(state => ({ isEditing: !state.isEditing }))
 
   onChangeLabel = label => this.setState({ label, isDrity: true })
 
@@ -64,8 +85,28 @@ export class MasterField extends React.Component {
   onChangePrimary = () =>
     this.setState(state => ({ is_primary: !state.is_primary, isDrity: true }))
 
-  save = toggleMode => {
-    if (!this.state.isDrity) {
+  cancel = () => {
+    if (this.state.disabled) {
+      return
+    }
+
+    if (this.isDrity) {
+      this.props.dispatch(
+        confirmation({
+          show: true,
+          confirmLabel: 'Yes, I do',
+          message: 'Heads up!',
+          description: 'You have made changes, do you want to discard them?',
+          onConfirm: this.setInitialState
+        })
+      )
+    } else {
+      this.setInitialState()
+    }
+  }
+
+  save = () => {
+    if (!this.isDrity) {
       return
     }
 
@@ -82,7 +123,7 @@ export class MasterField extends React.Component {
         [this.type]: value
       })
 
-      this.setState({ disabled: false, isDrity: false }, toggleMode)
+      this.setState({ disabled: false, isDrity: false, isEditing: false })
     } catch (error) {
       console.error(error)
       this.setState({ disabled: false })
@@ -134,16 +175,19 @@ export class MasterField extends React.Component {
 
     return (
       <InlineEditableField
+        cancelOnOutsideClick
+        handleCancel={this.cancel}
         handleAddNew={this.props.handleAddNew}
         handleDelete={this.delete}
         handleSave={this.save}
         isDisabled={this.state.disabled}
+        isEditing={this.state.isEditing}
         label={this.state.label}
         renderEditMode={this.renderEditMode}
         renderViewMode={this.renderViewMode}
         showAdd={this.showAdd}
         showDelete
-        toggleModeCallback={this.setMode}
+        toggleMode={this.toggleMode}
         value={this.state.value}
       />
     )
