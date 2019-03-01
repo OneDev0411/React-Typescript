@@ -21,7 +21,7 @@ import { VideoToolbar } from './VideoToolbar'
 import config from './config'
 
 import nunjucks from '../helpers/nunjucks'
-import { getAsset } from '../helpers/nunjucks-functions'
+import { getAsset as getBrandAsset } from '../helpers/nunjucks-functions'
 
 import loadGrapes from '../helpers/load-grapes'
 
@@ -267,13 +267,14 @@ class Builder extends React.Component {
     const { brand } = getActiveTeam(this.props.user)
 
     const palette = getBrandStyles(brand)
+    const getAsset = getBrandAsset.bind(null, brand)
 
     console.log(palette)
 
     return nunjucks.renderString(template, {
       ...data,
       palette,
-      getAsset: getAsset.bind(null, brand)
+      getAsset
     })
   }
 
