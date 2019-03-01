@@ -1,4 +1,5 @@
 import moment from 'moment'
+import _ from 'lodash'
 
 import { formatPhoneNumber } from 'utils/format'
 
@@ -31,3 +32,5 @@ export function formatDate(date, kwargs = {}) {
 
   return moment(date).format(format)
 }
+
+export const assetFilter = (brand, name) => _.get(brand.assets.marketing, name)

@@ -13,6 +13,9 @@ import ActionButton from 'components/Button/ActionButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 
+import { getActiveTeam } from 'utils/user-teams'
+import { getBrandStyles } from 'utils/marketing-center/templates'
+
 import { VideoToolbar } from './VideoToolbar'
 
 import config from './config'
@@ -259,7 +262,22 @@ class Builder extends React.Component {
   handleSocialSharing = socialNetworkName =>
     this.props.onSocialSharing(this.getSavedTemplate(), socialNetworkName)
 
-  generateTemplate = (template, data) => nunjucks.renderString(template, data)
+  generateBrandedTemplate = (template, data) => {
+    const { brand } = getActiveTeam(this.props.user)
+
+    console.log('brand', brand)
+
+    const palette = getBrandStyles(brand)
+
+    console.log(palette)
+
+    return nunjucks.renderString(template, {
+      ...data,
+      palette
+    })
+  }
+
+  // generateTemplate = (template, data) => nunjucks.renderString(template, data)
 
   setEditorTemplateId = id => {
     this.editor.StorageManager.store({
@@ -357,10 +375,13 @@ class Builder extends React.Component {
       state => ({
         selectedTemplate: {
           ...state.selectedTemplate,
-          template: this.generateTemplate(state.originalTemplate.template, {
-            ...this.props.templateData,
-            ...newData
-          })
+          template: this.generateBrandedTemplate(
+            state.originalTemplate.template,
+            {
+              ...this.props.templateData,
+              ...newData
+            }
+          )
         }
       }),
       () => {
