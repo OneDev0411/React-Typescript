@@ -415,7 +415,7 @@ class ActionsButton extends React.Component {
         title: 'Select a file to view/print',
         actionTitle: 'View/Print',
         onSelect: item =>
-          this.props.isBackOffice
+          this.props.isBackOffice || item.blankTarget === false
             ? browserHistory.push(item.url)
             : window.open(item.url, '_blank')
       }

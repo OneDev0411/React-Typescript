@@ -42,6 +42,7 @@ function getSubmissionUrl(data) {
   if (submissionEnvelopes.length > 0) {
     return [
       {
+        ...normalizeFile(data.task.submission.file),
         url: `${url}/envelope/${submissionEnvelopes[0].id}`,
         blankTarget: false
       }
@@ -66,18 +67,21 @@ function getDocumentUrl(data) {
   const baseUrl = `/dashboard/deals/${data.deal.id}/view/${data.task.id}`
 
   if (documentEnvelopes.length > 0) {
+    const item = documentEnvelopes[0]
+
     return {
-      url: `${baseUrl}/envelope/${documentEnvelopes[0].id}`,
+      ...normalizeFile(data.document),
+      url: `${baseUrl}/envelope/${item.id}`,
       blankTarget: false
     }
   }
 
   return data.isBackOffice
     ? {
-        ...normalizeFile(data.document, true),
+        ...normalizeFile(data.document),
         url: `${baseUrl}/attachment/${data.document.id}`
       }
-    : normalizeFile(data.document, true)
+    : normalizeFile(data.document)
 }
 
 /**
