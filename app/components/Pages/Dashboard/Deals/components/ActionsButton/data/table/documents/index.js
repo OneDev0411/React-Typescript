@@ -263,11 +263,11 @@ export default normalizeConditions([
         form_saved: false
       }),
     actions: {
-      [MOVE_BUTTON]: {
+      [SPLIT_PDF_BUTTON]: {
         primary: true
       },
       [VIEW_BUTTON]: {},
-      [SPLIT_PDF_BUTTON]: {},
+      [MOVE_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
     }
   },

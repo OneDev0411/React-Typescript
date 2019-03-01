@@ -9,7 +9,6 @@ import { Container } from './styled'
 import ChecklistFolder from './Checklist'
 
 import UploadFolder from './Uploads'
-import UploadPlaceholder from './Uploads/UploadPlaceholder'
 
 class FoldersTab extends React.Component {
   state = {
@@ -109,8 +108,6 @@ class FoldersTab extends React.Component {
 
     return (
       <Container>
-        <UploadPlaceholder deal={this.props.deal} />
-
         {checklists.map(checklist => (
           /* render checklists */
           <ChecklistFolder

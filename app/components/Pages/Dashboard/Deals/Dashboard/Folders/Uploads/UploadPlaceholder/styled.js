@@ -10,7 +10,7 @@ export const Container = styled.div`
   border-radius: 3px;
   background-color: #ededed;
   border: 1px dashed #b2b2b2;
-  margin-bottom: 1.5rem;
+  margin: 1rem;
   padding: 0 1rem;
 `
 

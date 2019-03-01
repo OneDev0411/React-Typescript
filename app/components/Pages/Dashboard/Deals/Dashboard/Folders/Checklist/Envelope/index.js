@@ -2,6 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
+import { selectDealEnvelopes } from 'reducers/deals/envelopes'
+
 import { getTaskEnvelopes } from '../../../../utils/get-task-envelopes'
 import { getDocumentEnvelopes } from '../../../../utils/get-document-envelopes'
 
@@ -26,15 +28,6 @@ class EnvelopeView extends React.Component {
       .filter(
         envelope => ['Voided', 'Declined'].includes(envelope.status) === false
       )
-      .sort((a, b) => {
-        if (a.status === 'Completed')
-          return -1
-
-        if (b.status === 'Completed')
-          return 1
-
-        return 0
-      })
       .sort((a, b) => b.created_at - a.created_at)
 
     if (envelopes.length === 0) {
@@ -72,9 +65,9 @@ class EnvelopeView extends React.Component {
   }
 }
 
-function mapStateToProps({ deals }) {
+function mapStateToProps({ deals }, props) {
   return {
-    envelopes: deals.envelopes
+    envelopes: selectDealEnvelopes(props.deal, deals.envelopes)
   }
 }
 

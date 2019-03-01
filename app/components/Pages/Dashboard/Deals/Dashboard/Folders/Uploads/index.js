@@ -8,14 +8,10 @@ import copy from 'utils/copy-text-to-clipboard'
 
 import ActionButton from 'components/Button/ActionButton'
 
-import IconEmail from 'components/SvgIcons/DealEmail/IconEmail'
-
-import Tooltip from 'components/tooltip'
-
+import UploadPlaceholder from './UploadPlaceholder'
 import UploadManager from '../../../UploadManager'
-import Files from './Files'
 
-import { EmailButton } from './styled'
+import Files from './Files'
 
 import {
   FolderContainer,
@@ -65,33 +61,19 @@ class Uploads extends React.Component {
               isOpen={this.state.isFolderExpanded}
               display={this.hasStashFiles()}
             />
-            <HeaderTitle>Uploaded Files</HeaderTitle>
+            <HeaderTitle>Unorganized Files</HeaderTitle>
           </Flex>
 
-          <Flex alignCenter>
+          <Flex>
             <UploadManager deal={this.props.deal}>
               <ActionButton size="small" as="span">
-                Upload Files
+                Upload
               </ActionButton>
             </UploadManager>
-
-            <EmailButton
-              appearance="outline"
-              size="small"
-              style={{ marginLeft: '0.5rem' }}
-              onClick={this.handleCopyEmail}
-            >
-              <Tooltip caption={this.props.deal.email}>
-                <Flex alignCenter>
-                  <IconEmail
-                    style={{ height: '1rem', marginRight: '0.25rem' }}
-                  />
-                  Copy Email Address
-                </Flex>
-              </Tooltip>
-            </EmailButton>
           </Flex>
         </Header>
+
+        <UploadPlaceholder deal={this.props.deal} />
 
         <ItemsContainer isOpen={this.state.isFolderExpanded}>
           <Files deal={this.props.deal} />

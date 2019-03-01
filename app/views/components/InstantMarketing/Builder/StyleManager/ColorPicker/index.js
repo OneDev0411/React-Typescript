@@ -10,8 +10,8 @@ export default function ColorPicker({ title = 'Font Color', color, onChange }) {
     <ColorPickerContainer>
       <ItemTitle>{title}</ItemTitle>
       <CirclePicker
-        circleSize={32}
-        circleSpacing={16}
+        circleSize={38}
+        circleSpacing={24}
         color={color}
         onChangeComplete={onChange}
       />

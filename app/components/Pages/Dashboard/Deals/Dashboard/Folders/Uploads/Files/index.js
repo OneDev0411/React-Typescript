@@ -53,8 +53,15 @@ class Files extends React.Component {
                   <Flex alignCenter>
                     <Avatar
                       size={32}
+                      borderRadius={0}
                       image={this.getFilePreview(file)}
                       title={this.getFileExtension(file)}
+                      style={{
+                        width: '2.2rem',
+                        minHeight: '2.5rem',
+                        border: '1px solid #eee',
+                        borderRadius: '3px'
+                      }}
                     />
 
                     <div style={{ marginLeft: '1rem' }}>

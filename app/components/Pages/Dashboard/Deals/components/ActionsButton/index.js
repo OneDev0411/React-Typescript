@@ -26,6 +26,7 @@ import Tooltip from 'components/tooltip'
 
 import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
 
+import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 import { selectActions } from './helpers/select-actions'
 import { getEsignAttachments } from './helpers/get-esign-attachments'
 import { getFileUrl } from './helpers/get-file-url'
@@ -642,10 +643,10 @@ ActionsButton.defaultProps = {
   document: null
 }
 
-function mapStateToProps({ deals, user }) {
+function mapStateToProps({ deals, user }, props) {
   return {
     user,
-    envelopes: deals.envelopes,
+    envelopes: selectDealEnvelopes(props.deal, deals.envelopes),
     isBackOffice: isBackOffice(user)
   }
 }
