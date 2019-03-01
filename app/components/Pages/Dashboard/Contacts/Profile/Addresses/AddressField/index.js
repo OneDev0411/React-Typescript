@@ -154,10 +154,14 @@ class AddressField extends React.Component {
       label: { value: label }
     } = this.state
 
-    if (!values || address !== this.props.address.full_address) {
-      values = this.preSaveFormat(
-        postLoadFormat(addressParser.parseLocation(this.state.address))
-      )
+    if (values == null) {
+      if (address !== this.props.address.full_address) {
+        values = this.preSaveFormat(
+          postLoadFormat(addressParser.parseLocation(this.state.address))
+        )
+      } else {
+        values = {}
+      }
     }
 
     const upsertList = getUpsertAttributes(
