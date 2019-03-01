@@ -42,5 +42,6 @@ const BRAND_STYLES_TEMPLATE = `<style>
 
 export function getBrandStyles(brand) {
   const brandData = flattenBrand(brand)
+  console.log('BRAND DATA', brandData)
   return nunjucks.renderString(BRAND_STYLES_TEMPLATE, { brand: brandData })
 }
