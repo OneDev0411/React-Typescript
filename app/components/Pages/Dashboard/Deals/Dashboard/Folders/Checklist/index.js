@@ -25,7 +25,7 @@ import {
   ArrowIcon
 } from '../styled'
 
-function ChecklistFolder(props) {
+const ChecklistFolder = React.memo(props => {
   const toggleFolderOpen = () => {
     props.setExpandChecklist(props.checklist.id, !props.isFolderExpanded)
   }
@@ -76,7 +76,7 @@ function ChecklistFolder(props) {
       </ItemsContainer>
     </FolderContainer>
   )
-}
+})
 
 function mapStateToProps({ deals }, props) {
   return {
