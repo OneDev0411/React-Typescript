@@ -12,7 +12,8 @@ class ModalBrand extends React.Component {
       office_title: props.brand && props.brand.messages && props.brand.messages.office_title,
       site_title: props.brand && props.brand.messages && props.brand.messages.site_title,
       pickerVisible: false,
-      primaryColor: props.brand && props.brand.palette && props.brand.palette.primary
+      primaryColor: props.brand && props.brand.palette && props.brand.palette.primary,
+      brandType: props.brand ? props.brand.brand_type : 'Personal'
     }
     this.onChangeComposeModal = this.onChangeComposeModal.bind(this)
     this.handleChange = this.handleChange.bind(this)
@@ -59,7 +60,8 @@ class ModalBrand extends React.Component {
       office_title,
       site_title,
       pickerVisible,
-      primaryColor
+      primaryColor,
+      brandType
     } = this.state
     const {
       onButtonClick,
@@ -107,6 +109,48 @@ class ModalBrand extends React.Component {
               value={office_title}
               onChange={this.handleChange}
             />
+          </div>
+          <div className="title">Type</div>
+          <div className="input-container">
+            <select
+              name="brand_type"
+              onChange={this.handleChange}
+            >
+              <option
+                value="Brokerage"
+                selected={brandType === 'Brokerage'}
+              >
+                Brokerage
+              </option>
+
+              <option
+                value="Office"
+                selected={brandType === 'Office'}
+              >
+                Office
+              </option>
+
+              <option
+                value="Team"
+                selected={brandType === 'Team'}
+              >
+                Team
+              </option>
+
+              <option
+                value="Personal"
+                selected={brandType === 'Personal'}
+              >
+                Personal
+              </option>
+
+              <option
+                value="Other"
+                selected={brandType === 'Other'}
+              >
+                Other
+              </option>
+            </select>
           </div>
           <div className="title">Site Title</div>
           <div className="input-container">
@@ -156,6 +200,7 @@ class ModalBrand extends React.Component {
               let brand = {
                 name: title,
                 palette: { primary: primaryColor },
+                brand_type: brandType,
                 messages: {
                   office_title,
                   site_title
