@@ -5,30 +5,31 @@ import _ from 'underscore'
 import unionBy from 'lodash/unionBy'
 import intersectionBy from 'lodash/intersectionBy'
 
-import OverlayDrawer from '../../../../../../views/components/OverlayDrawer'
-import Info from './Info'
-import CustomTag from './CustomTag'
-import DrawerFooter from './DrawerFooter'
-import { SubHeaderContainer } from './styled'
-import Tags from './Tags'
+import OverlayDrawer from 'views/components/OverlayDrawer'
+
 import {
-  addAttributes,
+  getAttributeFromSummary,
+  getContactAttribute
+} from 'models/contacts/helpers'
+
+import {
+  updateContact,
   deleteAttributes,
   deleteAttributesFromContacts,
   getContactsTags,
   upsertAttributesToContacts
-} from '../../../../../../store_actions/contacts'
-import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
-import {
-  getAttributeFromSummary,
-  getContactAttribute
-} from '../../../../../../models/contacts/helpers'
-import {
-  selectContact,
-  selectContactsInfo
-} from '../../../../../../reducers/contacts/list'
-import { selectTags } from '../../../../../../reducers/contacts/tags'
-import { confirmation } from '../../../../../../store_actions/confirmation'
+} from 'actions/contacts'
+import { confirmation } from 'actions/confirmation'
+
+import { selectTags } from 'reducers/contacts/tags'
+import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
+import { selectContact, selectContactsInfo } from 'reducers/contacts/list'
+
+import Tags from './Tags'
+import Info from './Info'
+import CustomTag from './CustomTag'
+import DrawerFooter from './DrawerFooter'
+import { SubHeaderContainer } from './styled'
 
 const defaultTags = [
   'Warm List',
@@ -138,7 +139,7 @@ class TagsOverlay extends React.Component {
     if (/\S/.test(newTagValue)) {
       return this.props.confirmation({
         description:
-          "We noticed you have un-added tag. Please select the 'Add' link before saving",
+          'We noticed you have un-added tag. Please select the \'Add\' link before saving',
         hideCancelButton: true,
         confirmLabel: 'Ok'
       })
@@ -152,7 +153,6 @@ class TagsOverlay extends React.Component {
     const {
       upsertAttributesToContacts,
       deleteAttributesFromContacts,
-      addAttributes,
       deleteAttributes,
       getContactsTags,
       selectedContactsIds,
@@ -170,7 +170,7 @@ class TagsOverlay extends React.Component {
       }))
 
       if (selectedContactsIds.length === 1) {
-        await addAttributes(selectedContactsIds[0], attributes)
+        await this.props.updateContact(selectedContactsIds[0], attributes)
       } else {
         const updatedContacts = []
 
@@ -386,9 +386,9 @@ export default connect(
   {
     upsertAttributesToContacts,
     deleteAttributesFromContacts,
-    addAttributes,
     deleteAttributes,
     getContactsTags,
-    confirmation
+    confirmation,
+    updateContact
   }
 )(TagsOverlay)
