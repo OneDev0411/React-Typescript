@@ -16,6 +16,7 @@ export class InlineEditableField extends React.Component {
     handleAddNew: PropTypes.func,
     isDisabled: PropTypes.bool,
     isEditing: PropTypes.bool.isRequired,
+    isEditModeStatic: PropTypes.bool,
     label: PropTypes.string,
     renderViewMode: PropTypes.func,
     renderEditMode: PropTypes.func.isRequired,
@@ -33,6 +34,7 @@ export class InlineEditableField extends React.Component {
     handleDelete: noop,
     handleAddNew: noop,
     isDisabled: false,
+    isEditModeStatic: false,
     label: 'Label',
     renderViewMode: noop,
     showAdd: false,
@@ -63,6 +65,7 @@ export class InlineEditableField extends React.Component {
       handleDelete,
       handleSave,
       isDisabled,
+      isEditModeStatic,
       showDelete,
       style,
       renderEditMode: render
@@ -73,6 +76,7 @@ export class InlineEditableField extends React.Component {
       handleDelete,
       handleSave,
       isDisabled,
+      isStatic: isEditModeStatic,
       showDelete,
       style,
       render

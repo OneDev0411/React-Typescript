@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import LinkButton from 'components/Button/LinkButton'
 import StarIcon from 'components/SvgIcons/Star/StarIcon'
@@ -10,8 +10,8 @@ export const Container = styled.div`
   margin: 0 1em 1em;
   padding: 0.5em;
   background: ${grey.A150};
-  border-radius: 3px 3px 0 0;
   border: 1px dashed ${primary};
+  border-radius: ${props => (props.isStatic ? '3px' : '3px 3px 0 0')};
 `
 
 export const Label = styled.div`
@@ -35,6 +35,7 @@ export const DropdownButton = styled(LinkButton)`
   padding: 0;
   height: auto;
   line-height: 1.5;
+  margin-bottom: 0.5em;
   color: ${({ isOpen }) => (isOpen ? primary : grey.A900)};
 
   > svg {
@@ -50,27 +51,37 @@ export const DropdownArrowIcon = styled(ArrowIcon)`
 
 export const Input = styled.input`
   width: 100%;
-  padding: 0;
+  padding: 0.25em 0.5em;
   border: none;
   background: transparent;
+  background: #fff;
 
   &:focus {
     outline: none;
+    border-radius: 3px;
+    border: 1px solid ${primary};
   }
 `
 
 export const ActionBar = styled.div`
-  position: absolute;
-  top: calc(100% + 1px);
-  left: 0;
-  width: 100%;
-  height: 3em;
-  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 0.5em;
-  background: ${grey.A100};
-  border-radius: 0 0 3px 3px;
-  border: 1px solid ${borderColor};
+  ${props =>
+    props.isStatic
+      ? css`
+          margin-top: 1rem;
+        `
+      : css`
+          position: absolute;
+          top: calc(100% + 1px);
+          left: 0;
+          height: 3em;
+          width: 100%;
+          z-index: 1;
+          padding: 0 0.5em;
+          border-radius: 0 0 3px 3px;
+          background: ${grey.A100};
+          border: 1px solid ${borderColor};
+        `}
 `
