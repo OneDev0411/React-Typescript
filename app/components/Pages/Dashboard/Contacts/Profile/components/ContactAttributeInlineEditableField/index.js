@@ -209,6 +209,7 @@ class MasterField extends React.Component {
         handleSave={this.save}
         isDisabled={this.state.disabled}
         isEditing={this.state.isEditing}
+        isEditModeStatic
         label={this.state.label}
         renderEditMode={this.renderEditMode}
         renderViewMode={this.renderViewMode}
