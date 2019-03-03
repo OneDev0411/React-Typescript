@@ -176,7 +176,6 @@ class SectionWithFields extends React.Component {
 
     return (
       <Section
-        isNew
         onAdd={
           this.props.showCustomAttributeMenu && this.openCustomAttributeDrawer
         }

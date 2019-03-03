@@ -7,6 +7,10 @@ import { H3 } from 'components/Typography/headings'
 export const Container = styled.div`
   padding: 1.5rem 0;
 
+  &:not(:first-of-type) {
+    padding-top: 0.5rem;
+  }
+
   &:not(:last-of-type):after {
     margin-top: 1.5em;
     margin-left: 1.5em;

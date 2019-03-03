@@ -7,12 +7,14 @@ import { Container, Header, Title } from './styled'
 Section.propTypes = {
   onAdd: PropTypes.func,
   onEdit: PropTypes.func,
-  title: PropTypes.string,
-  isNew: PropTypes.bool
+  showMenu: PropTypes.bool,
+  style: PropTypes.shape(),
+  title: PropTypes.string
 }
 
 Section.defaultProps = {
-  isNew: false
+  showMenu: false,
+  style: {}
 }
 
 export function Section(props) {
@@ -20,11 +22,9 @@ export function Section(props) {
     <Container>
       <Header alignCenter justifyBetween>
         <Title>{props.title}</Title>
-        <Menu {...props} />
+        {props.showMenu && <Menu {...props} />}
       </Header>
-      <div style={{ padding: props.isNew ? 0 : '0 1.5rem' }}>
-        {props.children}
-      </div>
+      <div style={props.style}>{props.children}</div>
     </Container>
   )
 }
