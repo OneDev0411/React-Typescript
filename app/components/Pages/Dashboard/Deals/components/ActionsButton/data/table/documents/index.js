@@ -82,7 +82,6 @@ export default normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
-      [VOID_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {}
     }
@@ -175,7 +174,6 @@ export default normalizeConditions([
         primary: true
       },
       [VIEW_BUTTON]: {},
-      [VOID_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
     }

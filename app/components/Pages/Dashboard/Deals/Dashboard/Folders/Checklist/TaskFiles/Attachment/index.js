@@ -19,18 +19,6 @@ class Attachments extends React.Component {
     isDeleting: false
   }
 
-  getFileType = file => {
-    if (file.mime === 'application/pdf') {
-      return 'pdf'
-    }
-
-    if (file.mime.includes('image/')) {
-      return 'image'
-    }
-
-    return 'unknown'
-  }
-
   render() {
     const { props, state } = this
 
@@ -40,12 +28,10 @@ class Attachments extends React.Component {
           <Flex alignCenter justifyBetween>
             <FileTitle>
               <FileLink
+                file={props.file}
+                deal={props.deal}
+                taskId={props.task.id}
                 isBackOffice={props.isBackOffice}
-                fileType={this.getFileType(props.file)}
-                externalUrl={props.file.url}
-                internalUrl={`/dashboard/deals/${props.deal.id}/view/${
-                  props.task.id
-                }/attachment/${props.file.id}`}
               >
                 <TextMiddleTruncate text={props.file.name} maxLength={75} />
               </FileLink>
