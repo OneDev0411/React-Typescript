@@ -1,11 +1,44 @@
 import styled, { css } from 'styled-components'
 
 import LinkButton from 'components/Button/LinkButton'
+import ActionButton from 'components/Button/ActionButton'
 import StarIcon from 'components/SvgIcons/Star/StarIcon'
 import ArrowIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import { primary, grey, borderColor } from 'views/utils/colors'
 
-export const Container = styled.div`
+export const ViewModeContainer = styled.div`
+  position: relative;
+  margin: 0 1em 1em;
+  padding: 0.5em;
+  border-radius: 3px;
+  border: 1px dashed transparent;
+
+  &:hover {
+    cursor: pointer;
+    background: ${grey.A150};
+    border-color: ${primary};
+
+    > .action-bar {
+      visibility: visible;
+    }
+  }
+`
+
+export const ViewModeActionBar = styled.div`
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  visibility: hidden;
+  display: inline-flex;
+`
+
+export const EditButton = styled(ActionButton)`
+  padding: 0;
+  height: auto;
+  line-height: 1;
+`
+
+export const EditModeContainer = styled.div`
   position: relative;
   margin: 0 1em 1em;
   padding: 0.5em;
@@ -63,7 +96,7 @@ export const Input = styled.input`
   }
 `
 
-export const ActionBar = styled.div`
+export const EditModeActionBar = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
