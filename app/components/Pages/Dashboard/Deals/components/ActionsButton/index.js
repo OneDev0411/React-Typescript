@@ -195,7 +195,8 @@ class ActionsButton extends React.Component {
       type: this.props.type,
       deal: this.props.deal,
       task: this.props.task,
-      document: this.props.document
+      document: this.props.document,
+      envelopes: this.props.envelopes
     })
 
     return files.filter(file => file.mime === 'application/pdf')
