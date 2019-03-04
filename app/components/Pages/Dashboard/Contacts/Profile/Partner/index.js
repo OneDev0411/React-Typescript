@@ -13,13 +13,13 @@ export const fieldsOrder = [
 export function Partner(props) {
   return (
     <SectionWithFields
-      addNewFieldButtonText="Add Spouse/Partner"
       contact={props.contact}
       fieldsOrder={fieldsOrder}
       validFields={fieldsOrder}
       isPartner
       section={['Contact Info', 'Details', 'Dates']}
       title="Spouse/Partner"
+      showCustomAttributeMenu={false}
       submitCallback={props.submitCallback}
     />
   )
