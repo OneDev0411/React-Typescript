@@ -91,6 +91,7 @@ class OpenHouseDrawerInternal extends React.Component {
 
     this.state = {
       isDisabled: false,
+      isSaving: false,
       isTemplateBuilderOpen: false,
       listing: null,
       template: '',
@@ -194,7 +195,7 @@ class OpenHouseDrawerInternal extends React.Component {
       let newTour
       let action = 'created'
 
-      this.setState({ isDisabled: true })
+      this.setState({ isDisabled: true, isSaving: true })
 
       if (this.state.rawTemplate) {
         const template = this.renderTemplate(this.state.rawTemplate, {
@@ -225,11 +226,11 @@ class OpenHouseDrawerInternal extends React.Component {
         newTour = await createTask(openHouse, QUERY)
       }
 
-      this.setState({ isDisabled: false, openHouse: newTour })
+      this.setState({ isDisabled: false, isSaving: false, openHouse: newTour })
       await this.props.submitCallback(newTour, action)
     } catch (error) {
       console.log(error)
-      this.setState({ isDisabled: false })
+      this.setState({ isDisabled: false, isSaving: false })
       throw error
     }
   }
@@ -449,7 +450,7 @@ class OpenHouseDrawerInternal extends React.Component {
                             onClick={this.handleSubmit}
                             style={{ marginLeft: '0.5em' }}
                           >
-                            {isDisabled ? 'Saving...' : 'Save'}
+                            {this.state.isSaving ? 'Saving...' : 'Save'}
                           </ActionButton>
                         )}
                       </Flex>

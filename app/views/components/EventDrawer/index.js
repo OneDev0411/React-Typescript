@@ -81,6 +81,7 @@ export class EventDrawer extends Component {
     this.state = {
       error: null,
       isDisabled: false,
+      isSaving: false,
       event: props.event
     }
 
@@ -117,7 +118,7 @@ export class EventDrawer extends Component {
       let newEvent
       let action = 'created'
 
-      this.setState({ isDisabled: true })
+      this.setState({ isDisabled: true, isSaving: true })
 
       if (event.id) {
         newEvent = await updateTask(event, QUERY)
@@ -126,11 +127,11 @@ export class EventDrawer extends Component {
         newEvent = await createTask(event, QUERY)
       }
 
-      this.setState({ isDisabled: false, event: newEvent })
+      this.setState({ isDisabled: false, isSaving: false, event: newEvent })
       await this.props.submitCallback(newEvent, action)
     } catch (error) {
       console.log(error)
-      this.setState({ isDisabled: false })
+      this.setState({ isDisabled: false, isSaving: false })
       throw error
     }
   }
@@ -372,7 +373,7 @@ export class EventDrawer extends Component {
                         onClick={this.handleSubmit}
                         style={{ marginLeft: '0.5em' }}
                       >
-                        {isDisabled ? 'Saving...' : 'Save'}
+                        {this.state.isSaving ? 'Saving...' : 'Save'}
                       </ActionButton>
                     </Footer>
                   </React.Fragment>

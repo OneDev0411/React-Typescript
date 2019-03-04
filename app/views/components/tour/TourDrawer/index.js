@@ -80,6 +80,7 @@ export class TourDrawer extends React.Component {
 
     this.state = {
       isDisabled: false,
+      isSaving: false,
       tour: props.tour
     }
 
@@ -116,7 +117,7 @@ export class TourDrawer extends React.Component {
       let newTour
       let action = 'created'
 
-      this.setState({ isDisabled: true })
+      this.setState({ isDisabled: true, isSaving: true })
 
       if (tour.id) {
         newTour = await updateTask(tour, QUERY)
@@ -125,11 +126,11 @@ export class TourDrawer extends React.Component {
         newTour = await createTask(tour, QUERY)
       }
 
-      this.setState({ isDisabled: false, tour: newTour })
+      this.setState({ isDisabled: false, isSaving: false, tour: newTour })
       await this.props.submitCallback(newTour, action)
     } catch (error) {
       console.log(error)
-      this.setState({ isDisabled: false })
+      this.setState({ isDisabled: false, isSaving: false })
       throw error
     }
   }
@@ -332,7 +333,7 @@ export class TourDrawer extends React.Component {
                         onClick={this.handleSubmit}
                         style={{ marginLeft: '0.5em' }}
                       >
-                        {isDisabled ? 'Saving...' : 'Save'}
+                        {this.state.isSaving ? 'Saving...' : 'Save'}
                       </ActionButton>
                     </Flex>
                   </Footer>
