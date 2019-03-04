@@ -25,7 +25,6 @@ class Tags extends React.Component {
       <Section
         onEdit={hasTags ? this.openOverLay : undefined}
         title="Tags"
-        showMenu
         style={{ padding: '0 1.5rem' }}
       >
         {hasTags ? (
