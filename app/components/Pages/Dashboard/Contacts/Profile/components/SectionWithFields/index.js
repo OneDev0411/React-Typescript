@@ -150,18 +150,10 @@ class SectionWithFields extends React.Component {
   }
 
   get attributes() {
-    const { section } = this.props
     const orderedAttributes = orderFields(
       [...this.state.attributes, ...this.emptyAttributes],
       this.props.fieldsOrder
     )
-
-    if (
-      section !== 'Dates' &&
-      orderedAttributes.every(a => !a[a.attribute_def.data_type])
-    ) {
-      return []
-    }
 
     return orderedAttributes.filter(
       a =>
