@@ -194,7 +194,7 @@ class MasterField extends React.Component {
   render() {
     if (!this.props.attribute.attribute_def.editable) {
       return (
-        <div style={{ margin: '0 1em 1em', padding: '0.5em' }}>
+        <div style={{ margin: '0 -0.5em 1em', padding: '0.5em' }}>
           {this.renderViewMode()}
         </div>
       )
@@ -215,6 +215,7 @@ class MasterField extends React.Component {
         renderViewMode={this.renderViewMode}
         showAdd={this.showAdd}
         showDelete
+        style={{ margin: '0 -0.5em 1em' }}
         toggleMode={this.toggleMode}
         value={this.state.value}
       />

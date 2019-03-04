@@ -8,7 +8,6 @@ import { primary, grey, borderColor } from 'views/utils/colors'
 
 export const ViewModeContainer = styled.div`
   position: relative;
-  margin: 0 1em 1em;
   padding: 0.5em;
   border-radius: 3px;
   border: 1px dashed transparent;
@@ -40,7 +39,6 @@ export const EditButton = styled(ActionButton)`
 
 export const EditModeContainer = styled.div`
   position: relative;
-  margin: 0 1em 1em;
   padding: 0.5em;
   background: ${grey.A150};
   border: 1px dashed ${primary};

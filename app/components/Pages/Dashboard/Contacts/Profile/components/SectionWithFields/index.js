@@ -6,6 +6,9 @@ import { addNotification as notify } from 'reapop'
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
 
+import Button from 'components/Button/ActionButton'
+import { ShowMoreLess } from 'components/ShowMoreLess'
+
 import { Section } from '../Section'
 import MasterField from '../ContactAttributeInlineEditableField'
 import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
@@ -167,21 +170,29 @@ class SectionWithFields extends React.Component {
     const sectionTitle = this.props.title || section
 
     return (
-      <Section
-        onAdd={
-          this.props.showCustomAttributeMenu && this.openCustomAttributeDrawer
-        }
-        title={sectionTitle}
-      >
-        {this.attributes.map((attribute, index) => (
-          <MasterField
-            attribute={attribute}
-            handleSave={this.upsert}
-            handleDelete={this.delete}
-            handleAddNew={this.addEmptyField}
-            key={`${attribute.attribute_def.section}_field_${index}`}
-          />
-        ))}
+      <Section title={sectionTitle}>
+        <ShowMoreLess count={4} style={{ padding: '0 1.5rem' }}>
+          {this.attributes.map((attribute, index) => (
+            <MasterField
+              attribute={attribute}
+              handleSave={this.upsert}
+              handleDelete={this.delete}
+              handleAddNew={this.addEmptyField}
+              key={`${attribute.attribute_def.section}_field_${index}`}
+            />
+          ))}
+
+          {this.props.showCustomAttributeMenu && (
+            <Button
+              appearance="link"
+              onClick={this.openCustomAttributeDrawer}
+              size="large"
+              style={{ margin: '0 -1em 1em' }}
+            >
+              {`+ Add a custom ${sectionTitle.toLowerCase()}`}
+            </Button>
+          )}
+        </ShowMoreLess>
 
         <CustomAttributeDrawer
           isOpen={this.state.isOpenCustomAttributeDrawer}
