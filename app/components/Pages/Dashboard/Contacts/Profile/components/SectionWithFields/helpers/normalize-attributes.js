@@ -35,7 +35,7 @@ export function normalizeAttributes(props) {
 
   return {
     attributeDefs,
-    attributes,
+    attributes: attributes.map(a => ({ ...a, isActive: false })),
     sectionAttributesDef
   }
 }

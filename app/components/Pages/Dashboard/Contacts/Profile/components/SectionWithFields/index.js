@@ -1,4 +1,5 @@
 import React from 'react'
+import cuid from 'cuid'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
@@ -23,6 +24,32 @@ const defaultProps = {
   showCustomAttributeMenu: true
 }
 
+function getEmptyAttributes(attributes, sectionAttributesDef, is_partner) {
+  return sectionAttributesDef
+    .filter(
+      attribute_def =>
+        !attributes.some(
+          attribute => attribute.attribute_def.id === attribute_def.id
+        )
+    )
+    .map(attribute_def => ({
+      attribute_def,
+      id: undefined,
+      cuid: cuid(),
+      is_partner,
+      isActive: false,
+      [attribute_def.data_type]: ''
+    }))
+}
+
+function orderAttributes(attributes, fieldsOrder) {
+  return orderFields(attributes, fieldsOrder).filter(
+    a =>
+      a.attribute_def.show ||
+      (a.attribute_def.editable && a[a.attribute_def.data_type])
+  )
+}
+
 class SectionWithFields extends React.Component {
   constructor(props) {
     super(props)
@@ -31,8 +58,15 @@ class SectionWithFields extends React.Component {
 
     this.sectionAttributesDef = sectionAttributesDef
 
+    const allAttributes = [
+      ...attributes,
+      ...getEmptyAttributes(attributes, sectionAttributesDef, props.isPartner)
+    ]
+
+    const orderedAttributes = orderAttributes(allAttributes, props.fieldsOrder)
+
     this.state = {
-      attributes,
+      orderedAttributes,
       isOpenCustomAttributeDrawer: false
     }
   }
@@ -58,7 +92,12 @@ class SectionWithFields extends React.Component {
   closeNewAttributeDrawer = () =>
     this.setState({ isOpenCustomAttributeDrawer: false })
 
-  filterEditableFields = field => field.attribute_def.editable
+  toggleMode = ({ order }) =>
+    this.setState(state => ({
+      orderedAttributes: state.orderedAttributes.map(a =>
+        a.order === order ? { ...a, isActive: !a.isActive } : a
+      )
+    }))
 
   upsert = async attribute => {
     if (attribute == null) {
@@ -132,37 +171,30 @@ class SectionWithFields extends React.Component {
     }
   }
 
-  addEmptyField = () => {
-    console.log('add empty')
-  }
+  addEmptyField = attribute => {
+    const { attribute_def, order, is_partner } = attribute
 
-  get emptyAttributes() {
-    return this.sectionAttributesDef
-      .filter(
-        attribute_def =>
-          !this.state.attributes.some(
-            attribute => attribute.attribute_def.id === attribute_def.id
-          )
-      )
-      .map(attribute_def => ({
-        attribute_def,
-        id: undefined,
-        is_partner: this.props.isPartner,
-        [attribute_def.data_type]: ''
-      }))
-  }
+    const field = {
+      attribute_def,
+      id: undefined,
+      cuid: cuid(),
+      is_partner,
+      label: '',
+      isActive: true,
+      is_primary: false,
+      [this.type]: '',
+      order: order + 1
+    }
 
-  get attributes() {
-    const orderedAttributes = orderFields(
-      [...this.state.attributes, ...this.emptyAttributes],
-      this.props.fieldsOrder
-    )
+    this.setState(state => {
+      const shallowCopy = state.orderedAttributes.slice()
 
-    return orderedAttributes.filter(
-      a =>
-        a.attribute_def.show ||
-        (a.attribute_def.editable && a[a.attribute_def.data_type])
-    )
+      shallowCopy.splice(order + 1, 0, field)
+
+      return {
+        orderedAttributes: shallowCopy.map((a, order) => ({ ...a, order }))
+      }
+    })
   }
 
   render() {
@@ -172,13 +204,15 @@ class SectionWithFields extends React.Component {
     return (
       <Section title={sectionTitle}>
         <ShowMoreLess count={4} style={{ padding: '0 1.5rem' }}>
-          {this.attributes.map((attribute, index) => (
+          {this.state.orderedAttributes.map(attribute => (
             <MasterField
               attribute={attribute}
-              handleSave={this.upsert}
+              handleAddNewInstance={this.addEmptyField}
               handleDelete={this.delete}
-              handleAddNew={this.addEmptyField}
-              key={`${attribute.attribute_def.section}_field_${index}`}
+              handleSave={this.upsert}
+              handleToggleMode={this.toggleMode}
+              isActive={attribute.isActive}
+              key={attribute.id || attribute.cuid}
             />
           ))}
 

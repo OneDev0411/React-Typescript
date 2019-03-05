@@ -20,6 +20,7 @@ export function Title(props) {
       </Label>
       {!attribute.attribute_def.singular && (
         <Checkbox
+          id={attribute.id || attribute.cuid}
           checked={attribute.is_primary || false}
           onChange={props.onChangePrimary}
         >

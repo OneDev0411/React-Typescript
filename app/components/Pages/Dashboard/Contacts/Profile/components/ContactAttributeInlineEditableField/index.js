@@ -27,7 +27,6 @@ function getStateFromAttribute(attribute) {
 
 const getInitialState = attribute => ({
   isDrity: false,
-  isEditing: false,
   disabled: false,
   ...getStateFromAttribute(attribute)
 })
@@ -74,9 +73,12 @@ class MasterField extends React.Component {
     )
   }
 
-  setInitialState = () => this.setState(getInitialState(this.props.attribute))
+  toggleMode = () => this.props.handleToggleMode(this.props.attribute)
 
-  toggleMode = () => this.setState(state => ({ isEditing: !state.isEditing }))
+  setInitialState = () => {
+    this.toggleMode()
+    this.setState(getInitialState(this.props.attribute))
+  }
 
   onChangeLabel = label => this.setState({ label, isDrity: true })
 
@@ -123,7 +125,7 @@ class MasterField extends React.Component {
         [this.type]: value
       })
 
-      this.setState({ disabled: false, isDrity: false, isEditing: false })
+      this.setState({ disabled: false, isDrity: false }, this.toggleMode)
     } catch (error) {
       console.error(error)
       this.setState({ disabled: false })
@@ -169,6 +171,10 @@ class MasterField extends React.Component {
     }
   }
 
+  addInstance = () => {
+    this.props.handleAddNewInstance(this.props.attribute)
+  }
+
   renderEditMode = props => (
     <EditMode
       {...props}
@@ -204,11 +210,11 @@ class MasterField extends React.Component {
       <InlineEditableField
         cancelOnOutsideClick
         handleCancel={this.cancel}
-        handleAddNew={this.props.handleAddNew}
+        handleAddNew={this.addInstance}
         handleDelete={this.handleDelete}
         handleSave={this.save}
         isDisabled={this.state.disabled}
-        isEditing={this.state.isEditing}
+        isEditing={this.props.isActive}
         isEditModeStatic
         label={this.state.label}
         renderEditMode={this.renderEditMode}
