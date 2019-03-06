@@ -113,13 +113,13 @@ class MasterField extends React.Component {
     }
 
     const { is_primary, label, value } = this.state
-    const { id, attribute_def } = this.props.attribute
+    const { id, cuid, attribute_def } = this.props.attribute
 
     try {
       this.setState({ disabled: true })
-      this.props.handleSave({
-        attribute_def,
+      this.props.handleSave(attribute_def, {
         id,
+        cuid,
         is_primary,
         label,
         [this.type]: value

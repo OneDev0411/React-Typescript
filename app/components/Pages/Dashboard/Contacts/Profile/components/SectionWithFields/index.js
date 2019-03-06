@@ -4,7 +4,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
-import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
+import { addAttributes } from 'models/contacts/add-attributes'
+import { updateAttribute } from 'models/contacts/update-attribute'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
 
 import Button from 'components/Button/ActionButton'
@@ -77,21 +78,6 @@ class SectionWithFields extends React.Component {
     }
   }
 
-  // static getDerivedStateFromProps(props, state) {
-  //   if (props.contact.updated_at > state.updated_at) {
-  //     const { attributes } = normalizeAttributes(props)
-
-  //     attributes.forEach(a => console.log(a.attribute_def.label, a.label, a))
-
-  //     return {
-  //       attributes,
-  //       updated_at: props.contact.updated_at
-  //     }
-  //   }
-
-  //   return null
-  // }
-
   openCustomAttributeDrawer = () =>
     this.setState({ isOpenCustomAttributeDrawer: true })
 
@@ -105,52 +91,66 @@ class SectionWithFields extends React.Component {
       )
     }))
 
-  upsert = async attribute => {
-    if (attribute == null) {
-      return
-    }
-
-    const { contact } = this.props
-
-    if (this.props.isPartner) {
-      attribute = { ...attribute, is_partner: true }
-    }
-
+  insert = async (cuid, data, attribute_def) => {
     try {
-      const updatedContent = await upsertContactAttributes(contact.id, [
-        attribute
+      const response = await addAttributes(this.props.contact.id, [
+        { ...data, attribute_def: attribute_def.id }
       ])
 
-      this.props.submitCallback({
-        ...contact,
-        ...updatedContent
-      })
+      const newAttribute = response.data[0]
 
       this.props.notify({
         status: 'success',
         dismissAfter: 4000,
-        message: `${attribute.attribute_def.label ||
-          attribute.attribute_def.name} updated.`
+        message: `${attribute_def.label || attribute_def.name} added.`
+      })
+
+      this.setState(state => ({
+        orderedAttributes: state.orderedAttributes.map(a =>
+          a.cuid !== cuid
+            ? a
+            : {
+                ...newAttribute,
+                attribute_def,
+                order: a.order,
+                cuid
+              }
+        )
+      }))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  update = async (id, data, attribute_def) => {
+    try {
+      await updateAttribute(this.props.contact.id, id, data)
+
+      this.props.notify({
+        status: 'success',
+        dismissAfter: 4000,
+        message: `${attribute_def.label || attribute_def.name} updated.`
       })
     } catch (error) {
       console.log(error)
     }
   }
 
-  delete = async attribute => {
-    const { contact } = this.props
+  save = (attribute_def, { id, cuid, ...data }) => {
+    if (id == null && cuid == null) {
+      return
+    }
 
-    try {
-      const updatedContent = await deleteAttribute(contact.id, attribute.id, {
-        associations: ['contact.updated_by']
-      })
+    if (this.props.isPartner) {
+      data = { ...data, is_partner: true }
+    }
 
-      this.setState(
-        state => ({
-          attributes: state.attributes.filter(a => {
-            if (attribute.id) {
-              return a.id !== attribute.id
-            }
+    if (id) {
+      this.update(id, data, attribute_def)
+    } else {
+      this.insert(cuid, data, attribute_def)
+    }
+  }
 
   isOnlyNonSingularInstance = (state, attribute) => {
     const { attribute_def } = attribute
@@ -267,10 +267,10 @@ class SectionWithFields extends React.Component {
               attribute={attribute}
               handleAddNewInstance={this.addShadowAttribute}
               handleDelete={this.deleteHandler}
-              handleSave={this.upsert}
+              handleSave={this.save}
               handleToggleMode={this.toggleMode}
               isActive={attribute.isActive}
-              key={attribute.id || attribute.cuid}
+              key={attribute.cuid || attribute.id}
             />
           ))}
 
