@@ -4,7 +4,13 @@ import { connect } from 'react-redux'
 import { confirmation } from 'actions/confirmation'
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 
-import { formatValue, getTitle, getValue } from './helpers'
+import {
+  formatValue,
+  getTitle,
+  getValue,
+  parseValue,
+  validation
+} from './helpers'
 
 import { EditMode } from './EditMode'
 import { ViewMode } from './ViewMode'
@@ -26,8 +32,9 @@ function getStateFromAttribute(attribute) {
 }
 
 const getInitialState = attribute => ({
-  isDrity: false,
+  error: '',
   disabled: false,
+  isDrity: false,
   ...getStateFromAttribute(attribute)
 })
 
@@ -107,7 +114,7 @@ class MasterField extends React.Component {
     }
   }
 
-  save = () => {
+  save = async () => {
     if (!this.isDrity) {
       return
     }
@@ -115,20 +122,26 @@ class MasterField extends React.Component {
     const { is_primary, label, value } = this.state
     const { id, cuid, attribute_def } = this.props.attribute
 
+    const error = await validation(attribute_def, value)
+
+    if (error) {
+      return this.setState({ error })
+    }
+
     try {
-      this.setState({ disabled: true })
+      this.setState({ disabled: true, error: '' })
       this.props.handleSave(attribute_def, {
         id,
         cuid,
         is_primary,
         label,
-        [this.type]: value
+        [this.type]: parseValue(value, attribute_def)
       })
 
       this.setState({ disabled: false, isDrity: false }, this.toggleMode)
     } catch (error) {
       console.error(error)
-      this.setState({ disabled: false })
+      this.setState({ disabled: false, error: error.message })
     }
   }
 
@@ -208,6 +221,7 @@ class MasterField extends React.Component {
 
     return (
       <InlineEditableField
+        error={this.state.error}
         cancelOnOutsideClick
         handleCancel={this.cancel}
         handleAddNew={this.addInstance}
