@@ -22,14 +22,7 @@ export class DateField extends React.Component {
     value: 0
   }
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      showYear: false,
-      ...getDateValues(props.value)
-    }
-  }
+  state = getDateValues(this.props.value)
 
   onChange = () => this.props.onChange(parseDateValues(this.state))
 
@@ -39,16 +32,14 @@ export class DateField extends React.Component {
 
   onChangeYear = year => this.setState({ year }, this.onChange)
 
-  toggleYearOption = showYear => this.setState({ showYear })
-
   render() {
     return (
       <Field
         {...this.state}
+        showYear
         onChangeDay={this.onChangeDay}
         onChangeYear={this.onChangeYear}
         onChangeMonth={this.onChangeMonth}
-        toggleYearOption={this.toggleYearOption}
         dropdownButtonRenderer={buttonProps => (
           <DropdownButton {...buttonProps} isActive={buttonProps.isOpen}>
             {buttonProps.selectedItem.label}
