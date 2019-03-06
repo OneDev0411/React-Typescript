@@ -3,8 +3,9 @@ import PropTypes from 'prop-types'
 
 import { noop } from 'utils/helpers'
 
-import { Title } from './Title'
+import { Error } from './Error'
 import { Label } from './Label'
+import { Title } from './Title'
 import { Value } from './Value'
 
 EditMode.propTypes = {
@@ -29,6 +30,7 @@ export function EditMode(props) {
         <Label attribute={attribute} onChange={props.onChangeLabel} />
       )}
       <Value attribute={attribute} onChange={props.onChangeValue} />
+      {props.error && <Error>{props.error}</Error>}
     </React.Fragment>
   )
 }
