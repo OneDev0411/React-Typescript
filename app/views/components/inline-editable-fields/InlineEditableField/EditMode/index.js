@@ -10,6 +10,7 @@ import { EditModeActionBar, EditModeContainer } from '../../styled'
 
 export class EditMode extends React.Component {
   static propTypes = {
+    error: PropTypes.string,
     handleCancel: PropTypes.func.isRequired,
     handleDelete: PropTypes.func,
     handleSave: PropTypes.func.isRequired,
@@ -21,6 +22,7 @@ export class EditMode extends React.Component {
   }
 
   static defaultProps = {
+    error: '',
     isDisabled: false,
     handleDelete: noop,
     showDelete: false,
@@ -33,6 +35,7 @@ export class EditMode extends React.Component {
 
     return (
       <EditModeContainer
+        hasError={!!this.props.error}
         style={this.props.style}
         isStatic={this.props.isStatic}
         className={this.props.isStatic ? 'is-static' : ''}

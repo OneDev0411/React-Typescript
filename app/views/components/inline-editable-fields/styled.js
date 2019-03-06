@@ -40,9 +40,10 @@ export const EditButton = styled(ActionButton)`
 export const EditModeContainer = styled.div`
   position: relative;
   padding: 0.5em;
-  background: ${grey.A150};
-  border: 1px dashed ${primary};
+  border: 1px dashed ${props => (props.hasError ? 'red' : primary)};
   border-radius: ${props => (props.isStatic ? '3px' : '3px 3px 0 0')};
+  background: ${props =>
+    props.hasError ? 'rgba(208, 2, 27, 0.05)' : grey.A150};
 `
 
 export const Label = styled.div`
@@ -60,6 +61,7 @@ export const Star = styled(StarIcon)`
 
 export const Value = styled.div`
   min-height: 1.5rem;
+  word-break: break-word;
 `
 
 export const DropdownButton = styled(LinkButton)`
