@@ -116,7 +116,7 @@ class MasterField extends React.Component {
 
   save = async () => {
     if (!this.isDrity) {
-      return
+      return this.setState({ error: '' })
     }
 
     const { is_primary, label, value } = this.state
