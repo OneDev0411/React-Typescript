@@ -23,6 +23,9 @@
       "dashboard/*": [
         "app/components/Dashboard/*"
       ],
+      "hooks/*": [
+        "app/hooks/*"
+      ],
       "Models/*": [
         "app/models/*"
       ],
