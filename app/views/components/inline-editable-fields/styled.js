@@ -97,7 +97,8 @@ export const Input = styled.input`
 export const EditModeActionBar = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: ${props =>
+    props.showDelete ? 'space-between' : 'flex-end'};
   ${props =>
     props.isStatic
       ? css`
