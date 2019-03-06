@@ -255,36 +255,52 @@ class SectionWithFields extends React.Component {
     })
   }
 
+  renderFields = sectionTitle => {
+    let items = this.state.orderedAttributes.map(attribute => (
+      <MasterField
+        attribute={attribute}
+        handleAddNewInstance={this.addShadowAttribute}
+        handleDelete={this.deleteHandler}
+        handleSave={this.save}
+        handleToggleMode={this.toggleMode}
+        isActive={attribute.isActive}
+        key={attribute.cuid || attribute.id}
+      />
+    ))
+
+    if (this.props.showCustomAttributeMenu) {
+      items.push(
+        <Button
+          key={cuid()}
+          appearance="link"
+          onClick={this.openCustomAttributeDrawer}
+          size="large"
+          style={{ margin: '0 -1em 1em' }}
+        >
+          {`+ Add a custom ${sectionTitle.toLowerCase()}`}
+        </Button>
+      )
+    }
+
+    return items
+  }
+
   render() {
     const { section } = this.props
     const sectionTitle = this.props.title || section
+    const sectionContainerStyle = { padding: '0 1.5rem' }
 
     return (
       <Section title={sectionTitle}>
-        <ShowMoreLess count={4} style={{ padding: '0 1.5rem' }}>
-          {this.state.orderedAttributes.map(attribute => (
-            <MasterField
-              attribute={attribute}
-              handleAddNewInstance={this.addShadowAttribute}
-              handleDelete={this.deleteHandler}
-              handleSave={this.save}
-              handleToggleMode={this.toggleMode}
-              isActive={attribute.isActive}
-              key={attribute.cuid || attribute.id}
-            />
-          ))}
-
-          {this.props.showCustomAttributeMenu && (
-            <Button
-              appearance="link"
-              onClick={this.openCustomAttributeDrawer}
-              size="large"
-              style={{ margin: '0 -1em 1em' }}
-            >
-              {`+ Add a custom ${sectionTitle.toLowerCase()}`}
-            </Button>
-          )}
-        </ShowMoreLess>
+        {this.state.orderedAttributes.length > 5 ? (
+          <ShowMoreLess count={4} style={sectionContainerStyle}>
+            {this.renderFields(sectionTitle)}
+          </ShowMoreLess>
+        ) : (
+          <div style={sectionContainerStyle}>
+            {this.renderFields(sectionTitle)}
+          </div>
+        )}
 
         {this.state.isOpenCustomAttributeDrawer && (
           <CustomAttributeDrawer
