@@ -24,6 +24,17 @@ const defaultProps = {
   showCustomAttributeMenu: true
 }
 
+function generateEmptyAttribute(attribute_def, is_partner, order) {
+  return {
+    attribute_def,
+    cuid: cuid(),
+    is_partner,
+    isActive: false,
+    order,
+    [attribute_def.data_type]: ''
+  }
+}
+
 function getEmptyAttributes(attributes, sectionAttributesDef, is_partner) {
   return sectionAttributesDef
     .filter(
@@ -32,14 +43,9 @@ function getEmptyAttributes(attributes, sectionAttributesDef, is_partner) {
           attribute => attribute.attribute_def.id === attribute_def.id
         )
     )
-    .map(attribute_def => ({
-      attribute_def,
-      id: undefined,
-      cuid: cuid(),
-      is_partner,
-      isActive: false,
-      [attribute_def.data_type]: ''
-    }))
+    .map((attribute_def, order) =>
+      generateEmptyAttribute(attribute_def, is_partner, order)
+    )
 }
 
 function orderAttributes(attributes, fieldsOrder) {
@@ -146,44 +152,96 @@ class SectionWithFields extends React.Component {
               return a.id !== attribute.id
             }
 
-            return (
-              a.attribute_def.section !== attribute.attribute_def.section ||
-              a.order !== attribute.order
-            )
-          })
-        }),
-        () => {
-          this.props.submitCallback({
-            ...contact,
-            ...updatedContent
-          })
+  isOnlyNonSingularInstance = (state, attribute) => {
+    const { attribute_def } = attribute
 
-          this.props.notify({
-            status: 'success',
-            dismissAfter: 4000,
-            message: `${attribute.attribute_def.label ||
-              attribute.attribute_def.name} deleted.`
-          })
+    return (
+      !attribute_def.singular &&
+      state.orderedAttributes.filter(
+        a => a.attribute_def.id === attribute_def.id
+      ).length > 1
+    )
+  }
+
+  deleteFromState = (state, attribute) => {
+    const { isPrimary } = this.props
+    const isShadowField = !!attribute.id
+
+    if (this.isOnlyNonSingularInstance(state, attribute)) {
+      return {
+        orderedAttributes: state.orderedAttributes.filter(a =>
+          isShadowField ? a.id !== attribute.id : a.cuid !== attribute.cuid
+        )
+      }
+    }
+
+    return {
+      orderedAttributes: state.orderedAttributes.map(a => {
+        const emptyAttribute = generateEmptyAttribute(
+          attribute.attribute_def,
+          isPrimary,
+          a.order
+        )
+
+        if (isShadowField) {
+          return a.id === attribute.id ? emptyAttribute : a
         }
-      )
-    } catch (error) {
-      console.log(error)
+
+        return a.cuid === attribute.cuid ? emptyAttribute : a
+      })
     }
   }
 
-  addEmptyField = attribute => {
+  deleteFromApi = async attribute => {
+    let backupList
+
+    this.setState(state => {
+      backupList = state.orderedAttributes
+
+      return this.deleteFromState(state, attribute)
+    })
+
+    try {
+      const { contact } = this.props
+      const updatedContent = await deleteAttribute(contact.id, attribute.id, {
+        associations: ['contact.updated_by']
+      })
+
+      this.props.notify({
+        status: 'success',
+        dismissAfter: 4000,
+        message: `${attribute.attribute_def.label ||
+          attribute.attribute_def.name} deleted.`
+      })
+
+      this.props.submitCallback({
+        ...contact,
+        ...updatedContent
+      })
+    } catch (error) {
+      console.log(error)
+      this.setState({ orderedAttributes: backupList })
+    }
+  }
+
+  deleteHandler = attribute => {
+    if (attribute.id) {
+      return this.deleteFromApi(attribute)
+    }
+
+    this.setState(state => this.deleteFromState(state, attribute))
+  }
+
+  addShadowAttribute = attribute => {
     const { attribute_def, order, is_partner } = attribute
 
     const field = {
       attribute_def,
-      id: undefined,
       cuid: cuid(),
       is_partner,
-      label: '',
       isActive: true,
-      is_primary: false,
-      [this.type]: '',
-      order: order + 1
+      order: order + 1,
+      [attribute_def.data_type]: ''
     }
 
     this.setState(state => {
@@ -207,8 +265,8 @@ class SectionWithFields extends React.Component {
           {this.state.orderedAttributes.map(attribute => (
             <MasterField
               attribute={attribute}
-              handleAddNewInstance={this.addEmptyField}
-              handleDelete={this.delete}
+              handleAddNewInstance={this.addShadowAttribute}
+              handleDelete={this.deleteHandler}
               handleSave={this.upsert}
               handleToggleMode={this.toggleMode}
               isActive={attribute.isActive}
