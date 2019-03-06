@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
 import { days, months } from 'utils/date-times'
@@ -17,6 +18,24 @@ const monthsItems = months.map((month, index) => ({
 }))
 
 export class DateField extends React.Component {
+  static propTypes = {
+    day: PropTypes.shape().isRequired,
+    month: PropTypes.shape().isRequired,
+    year: PropTypes.any,
+    onChangeDay: PropTypes.func.isRequired,
+    onChangeMonth: PropTypes.func.isRequired,
+    onChangeYear: PropTypes.func,
+    showYear: PropTypes.bool,
+    toggleYearOption: PropTypes.func
+  }
+
+  static defaultProps = {
+    showYear: false,
+    onChangeYear() {},
+    toggleYearOption() {},
+    year: ''
+  }
+
   onChangeYear = e => this.props.onChangeYear(e.target.value)
 
   render() {
