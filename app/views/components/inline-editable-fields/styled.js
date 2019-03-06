@@ -69,10 +69,10 @@ export const DropdownButton = styled(LinkButton)`
   height: auto;
   line-height: 1.5;
   margin-bottom: 0.5em;
-  color: ${({ isOpen }) => (isOpen ? primary : grey.A900)};
+  color: ${({ isOpen }) => (isOpen ? primary : '#000')};
 
   > svg {
-    fill: ${({ isOpen }) => (isOpen ? primary : grey.A900)};
+    fill: ${({ isOpen }) => (isOpen ? primary : '#000')};
   }
 `
 
