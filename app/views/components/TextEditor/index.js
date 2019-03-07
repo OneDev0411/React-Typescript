@@ -35,7 +35,6 @@ export function TextEditor(props) {
   const {
     ItalicButton,
     BoldButton,
-    MonospaceButton,
     UnderlineButton,
     BlockquoteButton,
     OLButton,
@@ -67,7 +66,6 @@ export function TextEditor(props) {
           <BoldButton />
           <ItalicButton />
           <UnderlineButton />
-          <MonospaceButton />
         </ToolbarRow>
       </Toolbar>
 
