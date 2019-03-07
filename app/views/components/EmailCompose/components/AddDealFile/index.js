@@ -47,7 +47,10 @@ export class AddDealFile extends React.Component {
   }
 
   handleChangeSelectedDealFile = files => {
-    this.closeDealFilesDrawer()
+    this.setState({
+      deal: this.props.deal || null,
+      isDealFilesOpen: false
+    })
 
     const documents = {}
 

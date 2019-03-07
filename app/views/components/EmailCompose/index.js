@@ -64,7 +64,13 @@ export default class EmailCompose extends React.Component {
       recipients: this.normalizeRecipients(values.recipients)
     }
 
-    await this.props.onClickSend(form)
+    return this.props.onClickSend
+      ? this.props.onClickSend(form)
+      : this.handleSendEmail(form)
+  }
+
+  handleSendEmail = form => {
+    console.log('>>>>>>', form)
   }
 
   normalizeRecipients = recipients =>
@@ -172,7 +178,7 @@ EmailCompose.propTypes = {
   hasStaticBody: PropTypes.bool,
   body: PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
-  onClickSend: PropTypes.func.isRequired,
+  onClickSend: PropTypes.func,
   onClose: PropTypes.func.isRequired
 }
 
@@ -180,6 +186,7 @@ EmailCompose.defaultProps = {
   recipients: [],
   defaultAttachments: [],
   body: '',
+  onClickSend: null,
   isSubmitting: false,
   hasStaticBody: false
 }
