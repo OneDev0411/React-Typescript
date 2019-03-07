@@ -253,11 +253,13 @@ class SectionWithFields extends React.Component {
           />
         )}
 
-        <CustomAttributeDrawer
-          isOpen={this.state.isOpenNewAttributeDrawer}
-          onClose={this.closeNewAttributeDrawer}
-          section={Array.isArray(section) ? undefined : section}
-        />
+        {this.state.isOpenNewAttributeDrawer && (
+          <CustomAttributeDrawer
+            isOpen
+            onClose={this.closeNewAttributeDrawer}
+            section={Array.isArray(section) ? undefined : section}
+          />
+        )}
       </Section>
     )
   }

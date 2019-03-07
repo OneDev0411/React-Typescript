@@ -2,6 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
+import { defaultTags } from 'utils/default-tags'
+
 import { selectTags } from '../../../../../../reducers/contacts/tags'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 
@@ -15,7 +17,7 @@ class ContactFilters extends React.PureComponent {
       return []
     }
 
-    return _.uniq(_.pluck(tags, 'text'))
+    return _.uniq([...defaultTags, ..._.pluck(tags, 'text')]).sort()
   }
 
   /**

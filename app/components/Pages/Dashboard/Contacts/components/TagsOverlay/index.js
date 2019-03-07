@@ -5,6 +5,8 @@ import _ from 'underscore'
 import unionBy from 'lodash/unionBy'
 import intersectionBy from 'lodash/intersectionBy'
 
+import { defaultTags } from 'utils/default-tags'
+
 import OverlayDrawer from '../../../../../../views/components/OverlayDrawer'
 import Info from './Info'
 import CustomTag from './CustomTag'
@@ -29,17 +31,6 @@ import {
 } from '../../../../../../reducers/contacts/list'
 import { selectTags } from '../../../../../../reducers/contacts/tags'
 import { confirmation } from '../../../../../../store_actions/confirmation'
-
-const defaultTags = [
-  'Warm List',
-  'Hot List',
-  'Past Client',
-  'Seller',
-  'Agent',
-  'Contractor',
-  'Closing Officer',
-  'Buyer'
-]
 
 class TagsOverlay extends React.Component {
   constructor(props) {
@@ -138,7 +129,7 @@ class TagsOverlay extends React.Component {
     if (/\S/.test(newTagValue)) {
       return this.props.confirmation({
         description:
-          "We noticed you have un-added tag. Please select the 'Add' link before saving",
+          'We noticed you have un-added tag. Please select the \'Add\' link before saving',
         hideCancelButton: true,
         confirmLabel: 'Ok'
       })
