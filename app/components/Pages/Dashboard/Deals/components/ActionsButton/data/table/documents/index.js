@@ -12,7 +12,8 @@ import {
   TASK_NOTIFICATION_BUTTON,
   DELETE_FILE_BUTTON,
   REVIEW_ENVELOPE_BUTTON,
-  SPLIT_PDF_BUTTON
+  SPLIT_PDF_BUTTON,
+  EMAIL_BUTTON
 } from '../../action-buttons'
 
 import {
@@ -65,6 +66,7 @@ export default normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
+      [EMAIL_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [VIEW_BUTTON]: {}
     }
@@ -82,6 +84,7 @@ export default normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
+      [EMAIL_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {}
     }
@@ -102,6 +105,7 @@ export default normalizeConditions([
       [EDIT_BUTTON]: {
         disabled: true
       },
+      [EMAIL_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {}
@@ -120,6 +124,7 @@ export default normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
+      [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {}
     }
@@ -137,6 +142,7 @@ export default normalizeConditions([
       [VIEW_BUTTON]: {
         primary: true
       },
+      [EMAIL_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {}
     }
@@ -154,6 +160,7 @@ export default normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
+      [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
       [MOVE_BUTTON]: {},
@@ -173,6 +180,7 @@ export default normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
+      [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
@@ -194,6 +202,7 @@ export default normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         disabled: true
       },
+      [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
@@ -212,6 +221,7 @@ export default normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
+      [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [MOVE_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
@@ -231,6 +241,7 @@ export default normalizeConditions([
       [VIEW_BUTTON]: {
         primary: true
       },
+      [EMAIL_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
     }
