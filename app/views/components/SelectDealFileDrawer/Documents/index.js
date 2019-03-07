@@ -16,12 +16,10 @@ import { getChecklistById } from 'reducers/deals/checklists'
 import { moveTaskFile } from 'actions/deals'
 
 import Tooltip from 'components/tooltip'
-
 import LinkButton from 'components/Button/LinkButton'
+import TasksDrawer from 'components/SelectDealTasksDrawer'
 
-import TasksDrawer from '../../../components/TasksDrawer'
-
-import { normalizeAttachment } from '../../helpers/normalize-attachment'
+import { normalizeAttachment } from '../helpers/normalize-attachment'
 
 import {
   Container,
@@ -108,6 +106,17 @@ class DocumentRow extends React.Component {
 
   getFormattedDate = date => fecha.format(new Date(date), 'MMM DD YYYY, h:mm A')
 
+  getStashFiles = () =>
+    (this.props.deal.files || [])
+      .filter(file => file.mime === 'application/pdf')
+      .map(file =>
+        normalizeAttachment({
+          type: 'file',
+          task: null,
+          file
+        })
+      )
+
   getDocuments = () => {
     const attachments = []
     const submissions = []
@@ -140,15 +149,7 @@ class DocumentRow extends React.Component {
     })
 
     // get stash files
-    const stashFiles = (this.props.deal.files || [])
-      .filter(file => file.mime === 'application/pdf')
-      .map(file =>
-        normalizeAttachment({
-          type: 'file',
-          task: null,
-          file
-        })
-      )
+    const stashFiles = this.props.showStashFiles ? this.getStashFiles() : []
 
     const sortedList = []
       .concat(attachments, submissions)
