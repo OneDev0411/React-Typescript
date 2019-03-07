@@ -251,13 +251,14 @@ class SendContactCard extends React.Component {
         {this.state.isComposeEmailOpen && (
           <EmailCompose
             isOpen
-            from={this.state.owner}
-            onClose={this.toggleComposeEmail}
-            recipients={this.Recipients}
-            html={this.state.templateScreenshot}
-            onClickSend={this.handleSendEmails}
-            isSubmitting={this.state.isSendingEmail}
+            hasStaticBody
             disableAddNewRecipient
+            isSubmitting={this.state.isSendingEmail}
+            from={this.state.owner}
+            recipients={this.Recipients}
+            body={this.state.templateScreenshot}
+            onClose={this.toggleComposeEmail}
+            onClickSend={this.handleSendEmails}
           />
         )}
       </Fragment>
