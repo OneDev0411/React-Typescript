@@ -155,7 +155,9 @@ class UploadModal extends React.Component {
     }
 
     // open checklist if is close
-    this.props.setExpandChecklist(task.checklist, true)
+    if (task) {
+      this.props.setExpandChecklist(task.checklist, true)
+    }
   }
 
   getFileName({ fileObject, properties }) {
