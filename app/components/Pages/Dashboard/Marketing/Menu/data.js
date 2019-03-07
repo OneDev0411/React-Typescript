@@ -17,7 +17,7 @@ export const items = [
   },
   {
     title: 'Holiday',
-    url: '/Christmas,NewYear,Valentines,StPatrick,Easter'
+    url: '/Christmas,NewYear,Valentines,StPatrick,Easter,OtherHoliday'
   },
   {
     title: 'Just Listed',
