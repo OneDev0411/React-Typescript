@@ -33,7 +33,7 @@ export function normalizeFile(task, file) {
     file_id: file.id,
     title: file.name,
     url: file.url,
-    date: normalizeDate(file.created_at)
+    date: normalizeDate(file.created_at || file.date)
   }
 }
 
