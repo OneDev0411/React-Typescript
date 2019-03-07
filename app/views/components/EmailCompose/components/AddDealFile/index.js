@@ -31,11 +31,11 @@ export class AddDealFile extends React.Component {
       isDealsListOpen: false
     })
 
-  closeDealFilesDrawer = (backToDealsList = true) =>
+  closeDealFilesDrawer = () =>
     this.setState({
       deal: this.props.deal || null,
       isDealFilesOpen: false,
-      isDealsListOpen: backToDealsList
+      isDealsListOpen: !this.props.deal
     })
 
   handleSelectDeal = deal => {
@@ -47,12 +47,16 @@ export class AddDealFile extends React.Component {
   }
 
   handleChangeSelectedDealFile = files => {
-    this.closeDealFilesDrawer(false)
+    this.closeDealFilesDrawer()
 
-    const documents = _.map(files, file => ({
-      ...file,
-      attachmentType: 'deal-file'
-    }))
+    const documents = {}
+
+    Object.values(files).forEach(file => {
+      documents[file.id] = {
+        ...file,
+        attachmentType: 'deal-file'
+      }
+    })
 
     this.props.input.onChange({
       ...this.props.input.value,
@@ -61,7 +65,7 @@ export class AddDealFile extends React.Component {
   }
 
   get InitialAttachments() {
-    return _.map(
+    return _.filter(
       this.props.initialAttachments,
       item => item.attachmentType === 'deal-file'
     )

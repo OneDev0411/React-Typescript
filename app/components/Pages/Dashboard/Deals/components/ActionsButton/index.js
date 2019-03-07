@@ -218,6 +218,7 @@ class ActionsButton extends React.Component {
       envelopes: this.props.envelopes
     }).map(file => ({
       type: 'document',
+      attachmentType: 'deal-file',
       file,
       task: this.props.task
     }))
