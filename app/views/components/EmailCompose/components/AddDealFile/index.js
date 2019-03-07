@@ -87,8 +87,11 @@ export class AddDealFile extends React.Component {
 
         {this.state.isDealFilesOpen && (
           <SelectDealFileDrawer
+            isOpen
             title={`Select files from “${this.state.deal.title}”`}
-            showBackdrop={false}
+            drawerOptions={{
+              showBackdrop: false
+            }}
             showStashFiles={false}
             initialAttachments={this.InitialAttachments}
             defaultSelectedItems={this.props.input.value}
