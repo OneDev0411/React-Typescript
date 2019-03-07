@@ -42,6 +42,7 @@ export function normalizeSubmissionForm(task) {
     type: 'form',
     id: `task_${task.id}`,
     task_id: task.id,
+    file_id: task.submission.file.id,
     checklist: task.checklist,
     revision: task.submission.last_revision,
     title: `${task.title}.pdf`,

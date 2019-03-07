@@ -1,10 +1,17 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+
+import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
+
 import { Field } from 'react-final-form'
+import _ from 'underscore'
 
 import { TextEditor } from 'components/TextEditor'
 
 import { normalizeAttachments } from 'components/SelectDealFileDrawer/helpers/normalize-attachment'
+
+import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
 import Loading from '../../../components/Partials/Loading'
 
@@ -15,12 +22,13 @@ import { AttachmentsList } from './fields/Attachments'
 
 import { Footer } from './Footer'
 
-export default class EmailCompose extends React.Component {
+class EmailCompose extends React.Component {
+  state = {
+    isSendingEmail: false
+  }
+
   get InitialValues() {
-    if (
-      (this.formObject && !this.isRecipientsChanged()) ||
-      this.props.isSubmitting
-    ) {
+    if ((this.formObject && !this.isRecipientsChanged()) || this.IsSubmitting) {
       return this.formObject
     }
 
@@ -37,6 +45,10 @@ export default class EmailCompose extends React.Component {
     }
 
     return this.formObject
+  }
+
+  get IsSubmitting() {
+    return this.props.isSubmitting || this.state.isSendingEmail
   }
 
   isRecipientsChanged = () =>
@@ -69,8 +81,35 @@ export default class EmailCompose extends React.Component {
       : this.handleSendEmail(form)
   }
 
-  handleSendEmail = form => {
-    console.log('>>>>>>', form)
+  handleSendEmail = async form => {
+    const email = {
+      from: form.fromId,
+      to: form.recipients,
+      subject: form.subject,
+      html: form.body,
+      attachments: _.map(form.attachments, item => item.file_id)
+    }
+
+    try {
+      this.setState({
+        isSendingEmail: true
+      })
+
+      await sendContactsEmail(email)
+
+      this.props.notify({
+        status: 'success',
+        message: 'The email has been sent'
+      })
+    } catch (e) {
+      console.log(e)
+    } finally {
+      this.setState({
+        isSendingEmail: false
+      })
+
+      this.props.onClose()
+    }
   }
 
   normalizeRecipients = recipients =>
@@ -109,7 +148,7 @@ export default class EmailCompose extends React.Component {
         onClose={this.props.onClose}
         onSubmit={this.handleSubmit}
         validate={this.validate}
-        submitting={this.props.isSubmitting}
+        submitting={this.IsSubmitting}
         closeDrawerOnBackdropClick={false}
         submitButtonLabel="Send"
         submittingButtonLabel="Sending ..."
@@ -118,7 +157,7 @@ export default class EmailCompose extends React.Component {
           <Footer
             {...data}
             initialAttachments={this.initialAttachments}
-            isSubmitting={this.props.isSubmitting}
+            isSubmitting={this.IsSubmitting}
             deal={this.props.deal}
           />
         )}
@@ -190,3 +229,8 @@ EmailCompose.defaultProps = {
   isSubmitting: false,
   hasStaticBody: false
 }
+
+export default connect(
+  null,
+  { notify }
+)(EmailCompose)
