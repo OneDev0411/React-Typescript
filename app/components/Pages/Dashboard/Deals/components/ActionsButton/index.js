@@ -23,6 +23,7 @@ import Deal from 'models/Deal'
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 import Tooltip from 'components/tooltip'
+import TasksDrawer from 'components/SelectDealTasksDrawer'
 
 import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
 
@@ -41,7 +42,6 @@ import { SelectItemDrawer } from './components/SelectItemDrawer'
 
 import GetSignature from '../../Signature'
 import PdfSplitter from '../../PdfSplitter'
-import TasksDrawer from '../TasksDrawer'
 import UploadManager from '../../UploadManager'
 
 import {
