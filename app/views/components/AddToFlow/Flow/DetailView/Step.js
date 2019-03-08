@@ -49,7 +49,7 @@ export class Step extends React.Component {
           )}
           <div>{step.title}</div>
         </Flex>
-        <div>{ms(step.due_in)}</div>
+        <div>{ms(step.due_in * 1000)}</div>
       </StepContainer>
     )
   }
