@@ -25,8 +25,8 @@ export const Label = styled.label`
 
   &:before {
     content: '';
-    width: ${props => props.size}px;
-    height: ${props => props.size}px;
+    width: ${props => props.size / 16}rem;
+    height: ${props => props.size / 16}rem;
     margin-right: 0.5em;
     border-radius: 3px;
     background-color: ${props => (props.checked ? primary : '#fff')};
@@ -39,10 +39,10 @@ export const Label = styled.label`
 `
 
 export const CheckMark = styled(IconCheck)`
+  width: ${props => props.size / 16}rem;
+  height: ${props => props.size / 16}rem;
   position: absolute;
   left: 0;
-  top: 0.25em;
-  width: ${props => props.size}px;
-  height: ${props => props.size}px;
+  top: 0;
   fill: #fff;
 `
