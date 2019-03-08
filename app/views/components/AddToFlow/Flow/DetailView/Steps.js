@@ -5,14 +5,12 @@ import { Step } from './Step'
 import { StepsContainer } from './styled'
 
 Steps.propTypes = {
-  activeSteps: PropTypes.arrayOf().isRequired,
-  steps: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-  onChange: PropTypes.func.isRequired
+  activeSteps: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onChange: PropTypes.func.isRequired,
+  steps: PropTypes.arrayOf(PropTypes.shape()).isRequired
 }
 
 export function Steps(props) {
-  console.log(props)
-
   return (
     <StepsContainer>
       {props.steps.map((step, index) => (

@@ -9,15 +9,12 @@ import { MetaData } from './MetaData'
 import { DefaultView } from './DefaultView'
 import { Container } from './styled'
 
-function getInitialState(activeSteps = []) {
+function getInitialState(flow) {
   return {
-    id: '',
+    id: flow.id,
     isAdding: false,
-    activeSteps
+    activeSteps: flow.steps.map(s => s.id)
   }
-}
-function getStepsId(steps) {
-  return steps.map(s => s.id)
 }
 
 export class DetailView extends React.Component {
@@ -26,33 +23,29 @@ export class DetailView extends React.Component {
       description: PropTypes.string,
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      steps: PropTypes.arrayOf().isRequired
+      steps: PropTypes.arrayOf(PropTypes.shape()).isRequired
     }),
-    onClose: PropTypes.func.isRequired
+    handleClose: PropTypes.func.isRequired
   }
 
   static defaultProps = {
     flow: { id: '', name: '', steps: [] }
   }
 
-  state = getInitialState(getStepsId(this.props.flow.steps))
+  state = getInitialState(this.props.flow)
 
   static getDerivedStateFromProps(props, state) {
     if (props.flow.id !== state.id) {
-      return getInitialState(getStepsId(props.flow.steps))
+      return getInitialState(props.flow)
     }
 
     return null
   }
 
-  onCancel = this.props.handleClose
-
   onChangeStep = (id, index) => {
-    console.log(id, index)
-
     this.setState(({ activeSteps }) => {
       // shallowCopy
-      const activeStepsCopy = activeSteps.slice()
+      let activeStepsCopy = activeSteps.slice()
 
       // it is a remove action
       if (index === -1) {
@@ -64,6 +57,12 @@ export class DetailView extends React.Component {
 
       return { activeSteps: activeStepsCopy }
     })
+  }
+
+  onCancel = this.props.handleClose
+
+  onAdd = () => {
+    console.log('add')
   }
 
   render() {
@@ -87,7 +86,7 @@ export class DetailView extends React.Component {
         <Footer
           isAdding={this.state.isAdding}
           disabled={this.state.isAdding}
-          onAdd={this.props.onAdd}
+          onAdd={this.onAdd}
           onCancel={this.onCancel}
         />
       </Container>

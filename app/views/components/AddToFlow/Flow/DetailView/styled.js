@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
-// import { grey } from 'views/utils/colors'
+import { grey } from 'views/utils/colors'
 
 export const Container = styled(Flex)`
   width: 50%;
@@ -13,8 +13,9 @@ export const StepsContainer = styled.div`
   width: 100%;
   overflow-y: 'auto';
   padding: 0.5em 1em;
+  margin-bottom: 1em;
   border: solid 1px #e6e6e6;
-  background-color: #f7f7f7;
+  background-color: ${grey.A125};
 `
 
 export const StepContainer = styled(Flex)`

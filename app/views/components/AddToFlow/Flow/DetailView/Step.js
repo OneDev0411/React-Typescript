@@ -20,8 +20,6 @@ export class Step extends React.Component {
   onChange = () => {
     const index = this.props.selected ? -1 : this.props.index
 
-    console.log(this.props.selected)
-
     this.props.onChange(this.props.step.id, index)
   }
 
