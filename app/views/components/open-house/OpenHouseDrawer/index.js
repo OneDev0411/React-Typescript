@@ -279,7 +279,7 @@ class OpenHouseDrawerInternal extends React.Component {
 
     this.props.confirmation({
       message:
-        'Redisigning registration form will delete your previous design.',
+        'Redesigning registration page will delete your previous design.',
       confirmLabel: 'Okay, Continue',
       onConfirm: this.toggleTemplateBuilder
     })
@@ -438,8 +438,8 @@ class OpenHouseDrawerInternal extends React.Component {
                           onClick={this.handleEditTemplateClick}
                         >
                           {this.state.openHouse
-                            ? 'Redesign Registration Page'
-                            : 'Edit Registration Page'}
+                            ? 'Redesign Guest Registration Page'
+                            : 'Edit Guest Registration Page'}
                         </ActionButton>
 
                         {(this.state.template || this.state.rawTemplate) && (
