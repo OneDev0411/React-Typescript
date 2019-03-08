@@ -5,7 +5,7 @@ import ClickOutSide from 'react-click-outside'
 import Icon from 'components/SvgIcons/Thunderbolt/ThunderboltIcon'
 import Button from 'components/Button/TextIconButton'
 
-import { Flow } from './Flow'
+import Flow from './Flow'
 
 export class AddToFlow extends React.Component {
   static propTypes = {

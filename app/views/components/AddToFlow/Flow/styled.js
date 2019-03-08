@@ -14,12 +14,6 @@ export const Container = styled(Card)`
   z-index: 2;
 `
 
-export const ListView = styled.div`
-  width: 50%;
-  overflow-y: auto;
-  background: #f7f7f7;
-`
-
 export const Name = styled.div`
   font-weight: 600;
   margin-bottom: 0.5em;

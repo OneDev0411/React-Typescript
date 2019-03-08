@@ -1,12 +1,16 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import { mockData } from './data'
-import { FlowItem } from './FlowItem'
-import { DetailView } from './DetailView'
-import { Container, ListView } from './styled'
+import { getBrandFlows } from 'models/brand/get-brand-flows'
 
-export class Flow extends React.Component {
+import { getActiveTeamId } from 'utils/user-teams'
+
+import { Container } from './styled'
+import { ListView } from './ListView'
+import { DetailView } from './DetailView'
+
+class Flow extends React.Component {
   static propTypes = {
     alignFrom: PropTypes.string.isRequired,
     associations: PropTypes.shape().isRequired,
@@ -19,7 +23,9 @@ export class Flow extends React.Component {
   }
 
   state = {
+    error: '',
     flows: {},
+    isFetching: true,
     selectedFlowId: ''
   }
 
@@ -27,16 +33,26 @@ export class Flow extends React.Component {
     this.fetch()
   }
 
-  fetch = () => {
+  fetch = async () => {
     const flows = {}
 
-    mockData.forEach(f => {
-      flows[f.id] = f
-    })
+    try {
+      const data = await getBrandFlows(getActiveTeamId(this.props.user))
 
-    this.setState({
-      flows
-    })
+      data.forEach(f => {
+        flows[f.id] = f
+      })
+
+      this.setState({
+        flows,
+        isFetching: false
+      })
+    } catch (error) {
+      this.setState({
+        error: error.message,
+        isFetching: false
+      })
+    }
   }
 
   onSelectFlow = event => {
@@ -47,10 +63,6 @@ export class Flow extends React.Component {
     this.setState({ selectedFlowId })
   }
 
-  onAdd = flow => {
-    console.log(flow)
-  }
-
   onClose = () => {
     this.props.handleClose()
   }
@@ -58,16 +70,13 @@ export class Flow extends React.Component {
   render() {
     return (
       <Container depth={3} alignRight={this.props.alignFrom === 'right'}>
-        <ListView className="u-scrollbar--thinner--self">
-          {Object.values(this.state.flows).map(flow => (
-            <FlowItem
-              item={flow}
-              key={flow.id}
-              onSelect={this.onSelectFlow}
-              selected={this.state.selectedFlowId === flow.id}
-            />
-          ))}
-        </ListView>
+        <ListView
+          error={this.state.error}
+          flows={this.state.flows}
+          isFetching={this.state.isFetching}
+          onSelect={this.onSelectFlow}
+          selectedFlowId={this.state.selectedFlowId}
+        />
         <DetailView
           flow={this.state.flows[this.state.selectedFlowId]}
           handleClose={this.onClose}
@@ -76,3 +85,5 @@ export class Flow extends React.Component {
     )
   }
 }
+
+export default connect(state => ({ user: state.user }))(Flow)
