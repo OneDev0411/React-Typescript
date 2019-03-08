@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Label, Input, CheckMark } from './styled'
+import { Label, Input, CheckMarkBox, CheckMark } from './styled'
 
 Checkbox.propTypes = {
   size: PropTypes.number,
@@ -9,27 +9,33 @@ Checkbox.propTypes = {
   id: PropTypes.string.isRequired,
   checked: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
-  margin: PropTypes.string
+  checkboxStyle: PropTypes.shape(),
+  containerStyle: PropTypes.shape()
 }
 
 Checkbox.defaultProps = {
   inputProps: {},
-  margin: '0 1em 0 0',
-  size: 16
+  size: 16,
+  checkboxStyle: { marginRight: '0.5em' },
+  containerStyle: {}
 }
 
 export function Checkbox(props) {
   const { id, size, checked } = props
 
   return (
-    <Label htmlFor={id} size={size} checked={checked} margin={props.margin}>
+    <Label htmlFor={id} style={props.containerStyle}>
       <Input
         id={id}
         type="checkbox"
         {...props.inputProps}
         onChange={props.onChange}
       />
-      {checked && <CheckMark size={size} />}
+
+      <CheckMarkBox size={size} checked={checked} style={props.checkboxStyle}>
+        {checked && <CheckMark />}
+      </CheckMarkBox>
+
       {props.children}
     </Label>
   )
