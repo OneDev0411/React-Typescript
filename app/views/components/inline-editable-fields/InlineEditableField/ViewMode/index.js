@@ -6,7 +6,13 @@ import { noop } from 'utils/helpers'
 import IconButton from 'components/Button/IconButton'
 import AddIcon from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 
-import { Container, Label, Value, ActionBar, EditButton } from './styled'
+import {
+  EditButton,
+  Label,
+  Value,
+  ViewModeContainer,
+  ViewModeActionBar
+} from '../../styled'
 
 ViewMode.propTypes = {
   handleAddNew: PropTypes.func,
@@ -35,7 +41,7 @@ export function ViewMode(props) {
   const { label, value, toggleMode, renderBody } = props
 
   return (
-    <Container onClick={toggleMode} style={props.style}>
+    <ViewModeContainer onClick={toggleMode} style={props.style}>
       {renderBody() == null ? (
         <React.Fragment>
           <Label>{label}</Label>
@@ -44,7 +50,7 @@ export function ViewMode(props) {
       ) : (
         renderBody({ label, value, toggleMode })
       )}
-      <ActionBar className="action-bar">
+      <ViewModeActionBar className="action-bar">
         {props.renderMenu()}
         {props.showAdd && (
           <IconButton
@@ -60,7 +66,7 @@ export function ViewMode(props) {
             Edit
           </EditButton>
         )}
-      </ActionBar>
-    </Container>
+      </ViewModeActionBar>
+    </ViewModeContainer>
   )
 }

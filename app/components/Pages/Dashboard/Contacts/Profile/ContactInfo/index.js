@@ -6,6 +6,10 @@ const fieldsOrder = [
   'email',
   'phone_number',
   'source',
+  'facebook',
+  'instagram',
+  'linkedin',
+  'social',
   'website',
   'source_type'
 ]
