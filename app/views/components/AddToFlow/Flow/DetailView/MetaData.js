@@ -23,7 +23,7 @@ export function MetaData({ steps }) {
   const automation = 23
 
   return (
-    <div style={{ display: 'inline-block' }}>
+    <div style={{ display: 'inline-block', marginBottom: '1em' }}>
       <Item>
         {steps.length}&nbsp;<span>steps</span>&nbsp;&nbsp;.&nbsp;&nbsp;
       </Item>

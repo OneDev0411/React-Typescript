@@ -70,8 +70,7 @@ export class Flow extends React.Component {
         </ListView>
         <DetailView
           flow={this.state.flows[this.state.selectedFlowId]}
-          onCancel={this.onClose}
-          onAdd={this.onAdd}
+          handleClose={this.onClose}
         />
       </Container>
     )
