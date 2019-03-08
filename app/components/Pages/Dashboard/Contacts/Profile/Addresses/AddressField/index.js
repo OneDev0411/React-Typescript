@@ -225,10 +225,12 @@ class AddressField extends React.Component {
         handleAddNew={this.props.handleAddNew}
         isDisabled={this.state.isDisabled}
         isEditing={this.props.address.isActive}
+        isEditModeStatic
         renderEditMode={this.renderEditMode}
         renderViewMode={this.renderViewMode}
         showAdd
         showDelete
+        style={{ margin: '0 1em 1em' }}
         toggleMode={this.toggleMode}
       />
     )

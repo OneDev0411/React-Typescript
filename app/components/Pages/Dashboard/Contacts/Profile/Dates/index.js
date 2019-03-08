@@ -2,7 +2,13 @@ import React from 'react'
 
 import SectionWithFields from '../components/SectionWithFields'
 
-const fieldsOrder = ['birthday', 'important_date']
+const fieldsOrder = [
+  'birthday',
+  'child_birthday',
+  'wedding_anniversary',
+  'home_anniversary',
+  'work_anniversary'
+]
 
 export function Dates(props) {
   return (
