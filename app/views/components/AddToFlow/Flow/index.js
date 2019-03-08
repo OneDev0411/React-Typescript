@@ -78,6 +78,7 @@ class Flow extends React.Component {
           selectedFlowId={this.state.selectedFlowId}
         />
         <DetailView
+          associations={this.props.associations}
           flow={this.state.flows[this.state.selectedFlowId]}
           handleClose={this.onClose}
         />

@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { addToFlow } from 'models/flows/add-to-flow'
+
 import { Name } from '../styled'
 
 import { Steps } from './Steps'
@@ -21,6 +23,7 @@ function getInitialState(flow) {
 
 export class DetailView extends React.Component {
   static propTypes = {
+    associations: PropTypes.shape().isRequired,
     flow: PropTypes.shape({
       description: PropTypes.string,
       id: PropTypes.string.isRequired,
@@ -65,8 +68,21 @@ export class DetailView extends React.Component {
 
   onCancel = this.props.handleClose
 
-  onAdd = () => {
-    console.log(this.state.starts_at)
+  onAdd = async () => {
+    try {
+      this.setState({ isAdding: true })
+
+      await addToFlow({
+        origin: this.props.flow.id,
+        steps: this.state.activeSteps,
+        starts_at: this.state.starts_at,
+        ...this.props.associations
+      })
+
+      this.setState({ isAdding: false }, this.onCancel)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   render() {
