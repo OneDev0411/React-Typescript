@@ -19,19 +19,21 @@ const Item = styled.span`
 `
 
 export function MetaData({ steps }) {
-  const days = 3
-  const automation = 23
+  const totalSteps = steps.length
+  const automatedSteps = steps.filter(s => s.is_automated).length
+  const due_in = steps.reduce((acc, cur) => acc.due_in + cur.due_in)
+  const automationPercent = automatedSteps > 0 ? totalSteps / automatedSteps : 0
 
   return (
     <div style={{ display: 'inline-block', marginBottom: '1em' }}>
       <Item>
-        {steps.length}&nbsp;<span>steps</span>&nbsp;&nbsp;.&nbsp;&nbsp;
+        {totalSteps}&nbsp;<span>steps</span>&nbsp;&nbsp;.&nbsp;&nbsp;
       </Item>
       <Item>
-        {days}&nbsp;<span>days</span>&nbsp;&nbsp;.&nbsp;&nbsp;
+        {due_in / (24 * 3600)}&nbsp;<span>days</span>&nbsp;&nbsp;.&nbsp;&nbsp;
       </Item>
       <Item>
-        {automation}%&nbsp;<span>automation</span>
+        {automationPercent}%&nbsp;<span>automation</span>
       </Item>
     </div>
   )
