@@ -8,19 +8,21 @@ Checkbox.propTypes = {
   inputProps: PropTypes.shape(),
   id: PropTypes.string.isRequired,
   checked: PropTypes.bool.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  margin: PropTypes.string
 }
 
 Checkbox.defaultProps = {
-  size: 16,
-  inputProps: {}
+  inputProps: {},
+  margin: '0 1em 0 0',
+  size: 16
 }
 
 export function Checkbox(props) {
   const { id, size, checked } = props
 
   return (
-    <Label htmlFor={id} size={size} checked={checked}>
+    <Label htmlFor={id} size={size} checked={checked} margin={props.margin}>
       <Input
         id={id}
         type="checkbox"

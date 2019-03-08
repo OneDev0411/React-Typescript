@@ -19,7 +19,7 @@ export const Label = styled.label`
   position: relative;
   display: inline-flex;
   align-items: center;
-  margin: 0 1em 0 0;
+  margin: ${props => props.margin};
   font-weight: normal;
   cursor: pointer;
 
