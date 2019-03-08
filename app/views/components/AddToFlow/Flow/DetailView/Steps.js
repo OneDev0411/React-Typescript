@@ -12,7 +12,7 @@ Steps.propTypes = {
 
 export function Steps(props) {
   return (
-    <StepsContainer>
+    <StepsContainer className="u-scrollbar--thinner--self">
       {props.steps.map((step, index) => (
         <Step
           index={index}

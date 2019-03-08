@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { Name } from '../styled'
 
 import { Steps } from './Steps'
+import { StartAt } from './StartAt'
 import { Footer } from './Footer'
 import { MetaData } from './MetaData'
 import { DefaultView } from './DefaultView'
@@ -11,9 +12,10 @@ import { Container } from './styled'
 
 function getInitialState(flow) {
   return {
+    activeSteps: flow.steps.map(s => s.id),
     id: flow.id,
     isAdding: false,
-    activeSteps: flow.steps.map(s => s.id)
+    starts_at: new Date().getTime() / 1000
   }
 }
 
@@ -59,10 +61,12 @@ export class DetailView extends React.Component {
     })
   }
 
+  onChangeStartAt = starts_at => this.setState({ starts_at })
+
   onCancel = this.props.handleClose
 
   onAdd = () => {
-    console.log('add')
+    console.log(this.state.starts_at)
   }
 
   render() {
@@ -82,6 +86,7 @@ export class DetailView extends React.Component {
             onChange={this.onChangeStep}
             steps={flow.steps}
           />
+          <StartAt onChange={this.onChangeStartAt} />
         </div>
         <Footer
           isAdding={this.state.isAdding}
