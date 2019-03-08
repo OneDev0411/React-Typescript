@@ -2,7 +2,7 @@ import React from 'react'
 
 import Tooltip from 'components/tooltip'
 
-import { Label, Star, Address } from './styled'
+import { Label, Star, Value } from 'components/inline-editable-fields/styled'
 
 export function ViewMode({ address }) {
   let label = address.label
@@ -21,7 +21,7 @@ export function ViewMode({ address }) {
           </Tooltip>
         )}
       </Label>
-      <Address>{address.full_address || '-'}</Address>
+      <Value>{address.full_address || '-'}</Value>
     </React.Fragment>
   )
 }

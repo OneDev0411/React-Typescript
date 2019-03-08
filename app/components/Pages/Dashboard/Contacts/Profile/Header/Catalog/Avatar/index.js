@@ -4,19 +4,17 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
-import { AvatarUploader as Uploader } from '../../../../../../../../views/components/AvatarUploader'
-import uploadAttachments from '../../../../../../../../models/contacts/upload-attachments'
-import { selectDefinitionByName } from '../../../../../../../../reducers/contacts/attributeDefs'
-import {
-  deleteAttributes,
-  upsertContactAttributes
-} from '../../../../../../../../store_actions/contacts'
+import { AvatarUploader as Uploader } from 'views/components/AvatarUploader'
+import uploadAttachments from 'models/contacts/upload-attachments'
+import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
+import { updateContact } from 'models/contacts/update-contact'
+import { deleteAttribute } from 'models/contacts/delete-attribute'
 import {
   getContactAvatar,
   getContactNameInitials,
   getContactOnlineStatus,
   getAttributeFromSummary
-} from '../../../../../../../../models/contacts/helpers'
+} from 'models/contacts/helpers'
 
 const AvatarUploader = props => (
   <Uploader
@@ -36,10 +34,7 @@ function mapStateToProps(state, props) {
 }
 
 export default compose(
-  connect(
-    mapStateToProps,
-    { upsertContactAttributes, deleteAttributes }
-  ),
+  connect(mapStateToProps),
   withState('isUploading', 'setUploading', false),
   withState('avatar', 'setAvatar', ({ contact }) =>
     getAttributeFromSummary(contact, 'profile_image_url')
@@ -49,8 +44,7 @@ export default compose(
       attributeDefs,
       contact,
       setAvatar,
-      setUploading,
-      upsertContactAttributes
+      setUploading
     }) => async data => {
       const file = data.target ? data.target.files[0] : data.files.file
 
@@ -93,13 +87,13 @@ export default compose(
               {
                 text,
                 index: 1,
-                attribute_def,
+                attribute_def: attribute_def.id,
                 is_primary: true
               }
             ]
           }
 
-          await upsertContactAttributes(contact.id, attribute)
+          await updateContact(contact.id, attribute)
         } catch (error) {
           setAvatar(null)
           throw error
@@ -110,12 +104,7 @@ export default compose(
 
       reader.readAsDataURL(file)
     },
-    handleOnDelete: ({
-      attributeDefs,
-      contact,
-      deleteAttributes,
-      setAvatar
-    }) => async () => {
+    handleOnDelete: ({ attributeDefs, contact, setAvatar }) => async () => {
       try {
         const attribute_def = selectDefinitionByName(
           attributeDefs,
@@ -131,7 +120,7 @@ export default compose(
         const avatar = getContactAvatar(contact, attribute_def.id)
 
         if (avatar && avatar.id) {
-          await deleteAttributes(contact.id, [avatar.id])
+          await deleteAttribute(contact.id, avatar.id)
         }
 
         setAvatar(null)
