@@ -1,5 +1,7 @@
 import path from 'path'
+
 import webpack from 'webpack'
+
 import config from '../config/webpack'
 
 function resolvePath(dirPath) {
@@ -24,6 +26,7 @@ export default {
       components: resolvePath('../app/views/components'),
       constants: resolvePath('../app/constants'),
       dashboard: resolvePath('../app/components/Dashboard'),
+      hooks: resolvePath('../app/hooks'),
       models: resolvePath('../app/models'),
       reducers: resolvePath('../app/reducers'),
       routes: resolvePath('../app/routes'),

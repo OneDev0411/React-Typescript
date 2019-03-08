@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import TextIconButton from '../../Button/TextIconButton'
+import TextIconButton from '../TextIconButton'
 import IconDrop from '../../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 const propTypes = {

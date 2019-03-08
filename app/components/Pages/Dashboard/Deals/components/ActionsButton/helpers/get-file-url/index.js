@@ -63,8 +63,10 @@ function getSubmissionUrl(data) {
  *
  */
 function getDocumentUrl(data) {
+  const taskId = data.task ? data.task.id : 'draft'
+  const baseUrl = `/dashboard/deals/${data.deal.id}/view/${taskId}`
+
   const documentEnvelopes = getDocumentEnvelopes(data.envelopes, data.document)
-  const baseUrl = `/dashboard/deals/${data.deal.id}/view/${data.task.id}`
 
   if (documentEnvelopes.length > 0) {
     const item = documentEnvelopes[0]
