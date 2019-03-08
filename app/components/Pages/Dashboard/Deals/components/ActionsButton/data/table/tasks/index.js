@@ -421,7 +421,7 @@ export default normalizeConditions([
       evaluateCondition(data, {
         task_type: TASK_FORM,
         file_uploaded: true,
-        form_saved: false,
+        form_saved: true,
         envelope_status: ENVELOPE_DELIVERED
       }),
     actions: {
