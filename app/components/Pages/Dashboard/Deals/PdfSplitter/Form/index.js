@@ -5,7 +5,7 @@ import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import Flex from 'styled-flex-component'
 
-import { splitPDF } from 'models/Deal/splitter'
+import { splitPDF, getSplitJobStatus } from 'models/Deal/splitter'
 import { createTaskMessage } from 'models/Deal/task'
 
 import { changeNeedsAttention, addTaskFile } from 'actions/deals'
@@ -14,8 +14,6 @@ import { CheckBoxButton } from 'components/Button/CheckboxButton'
 import ActionButton from 'components/Button/ActionButton'
 
 import Spinner from 'components/Spinner'
-
-import { getSplitJobStatus } from 'Models/Deal/splitter/get-split-job-status'
 
 import TasksDropDown from '../../components/TasksDropdown'
 
