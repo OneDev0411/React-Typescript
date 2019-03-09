@@ -118,18 +118,12 @@ class Form extends React.Component {
       isSaving: false
     })
 
-    if (job.state === 'failed') {
+    if (job.state !== 'completed') {
       return this.props.notify({
         title: `Job ${jobId} failed`,
         message: 'Could not finish split process. please try again.',
         status: 'error'
       })
-    }
-
-    if (job.state !== 'completed') {
-      console.log(job)
-
-      return false
     }
 
     // add files to attachments list
