@@ -5,16 +5,10 @@ import config from 'config'
 /**
  * split files
  */
-export async function splitPDF(user, title, task_id, files, pages) {
+export async function getSplitJobStatus(user, jobId) {
   try {
     const response = await agent
-      .post(`${config.splitter.url}/split`)
-      .send({
-        pages,
-        files,
-        title,
-        task_id
-      })
+      .get(`${config.splitter.url}/job-status/${jobId}`)
       .set({
         api_url: config.api_url,
         access_token: user.access_token
