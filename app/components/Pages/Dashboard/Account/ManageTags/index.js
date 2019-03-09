@@ -112,12 +112,10 @@ class ManageTags extends Component {
         rawTags: [
           ...prevState.rawTags.filter(item => item.text !== oldText),
           {
-            text,
-            highlight: true
+            text
           }
         ]
       }))
-      this.highlightTag({ text }, false, HIGHLIGHT_SECONDS * 1000)
     } catch (e) {
       if (e.status && e.status === 409) {
         this.handleDuplicateTagCreate(text)

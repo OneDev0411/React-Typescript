@@ -6,9 +6,11 @@ import { RowContainer, ItemsContainer, RowTitle } from './styled'
 import Item from './Item'
 
 export default function({ title, items, onChange, onDelete }) {
+  const highlight = items.some(item => item.highlight)
+
   return (
     <Fragment>
-      <RowContainer>
+      <RowContainer highlight={highlight}>
         <RowTitle>{title}</RowTitle>
         <ItemsContainer>
           {items.map(tag => (
