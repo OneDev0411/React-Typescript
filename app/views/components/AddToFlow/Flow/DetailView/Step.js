@@ -25,6 +25,7 @@ export class Step extends React.Component {
 
   render() {
     const { step } = this.props
+    const days = Math.ceil(step.due_in / (24 * 3600))
     const Icon = idx(eventTypesIcons, icons => icons[step.event.task_type].icon)
 
     return (
@@ -49,7 +50,7 @@ export class Step extends React.Component {
           )}
           <div>{step.title}</div>
         </Flex>
-        <div>{ms(step.due_in * 1000)}</div>
+        <div>{`${days} day${days === 1 ? '' : 's'}`}</div>
       </StepContainer>
     )
   }
