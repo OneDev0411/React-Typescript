@@ -459,7 +459,7 @@ class OpenHouseDrawerInternal extends React.Component {
                     {this.state.isTemplateBuilderOpen && (
                       <InstantMarketing
                         isOpen
-                        headerTitle="Edit Registration Page"
+                        headerTitle="Edit Guest Registration Page"
                         closeConfirmation={false}
                         showTemplatesColumn={false}
                         saveButtonLabel="Save"
