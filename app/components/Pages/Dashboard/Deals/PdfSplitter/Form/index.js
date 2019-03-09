@@ -55,14 +55,13 @@ class Form extends React.Component {
 
   sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-  handleSave = async (closeSplitter = false) => {
+  handleSave = async (exitOnFinish = false) => {
     if (!this.validateForm()) {
       return false
     }
 
+    this.exitOnFinish = exitOnFinish
     await this.splitPDF()
-
-    this.props.onSave(closeSplitter)
   }
 
   splitPDF = async () => {
@@ -148,10 +147,11 @@ class Form extends React.Component {
 
     // set status
     this.setState({
-      isSaving: false,
       notifyOffice: true,
       task: null
     })
+
+    this.props.onSave(this.exitOnFinish)
   }
 
   render() {
