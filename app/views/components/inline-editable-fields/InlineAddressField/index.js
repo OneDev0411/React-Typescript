@@ -143,10 +143,32 @@ export class InlineAddressField extends React.Component {
   }
 
   onClickSuggestionItem = item => {
-    this.setState({
+    let newState = {
       address: item.description,
       isShowSuggestion: false,
       isShowForm: true
+    }
+
+    const request = {
+      placeId: item.place_id,
+      fields: ['name', 'formatted_address', 'place_id', 'geometry']
+    }
+
+    const service = new window.google.maps.places.PlacesService(
+      document.createElement('div')
+    )
+
+    service.getDetails(request, (place, status) => {
+      console.log(status, place)
+
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        newState = {
+          ...newState,
+          address: place.formatted_address
+        }
+      }
+
+      this.setState(newState)
     })
   }
 
