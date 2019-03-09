@@ -12,18 +12,19 @@ import { DetailView } from './DetailView'
 
 class Flow extends React.Component {
   static propTypes = {
+    addError: PropTypes.string,
     alignFrom: PropTypes.string.isRequired,
-    associations: PropTypes.shape().isRequired,
-    callback: PropTypes.func,
+    isAdding: PropTypes.bool.isRequired,
+    handleAdd: PropTypes.func.isRequired,
     handleClose: PropTypes.func.isRequired
   }
 
   static defaultProps = {
-    callback() {}
+    addError: ''
   }
 
   state = {
-    error: '',
+    fetchError: '',
     flows: {},
     isFetching: true,
     selectedFlowId: ''
@@ -49,7 +50,7 @@ class Flow extends React.Component {
       })
     } catch (error) {
       this.setState({
-        error: error.message,
+        fetchError: error.message,
         isFetching: false
       })
     }
@@ -63,24 +64,22 @@ class Flow extends React.Component {
     this.setState({ selectedFlowId })
   }
 
-  onClose = () => {
-    this.props.handleClose()
-  }
-
   render() {
     return (
       <Container depth={3} alignRight={this.props.alignFrom === 'right'}>
         <ListView
-          error={this.state.error}
+          error={this.state.fetchError}
           flows={this.state.flows}
           isFetching={this.state.isFetching}
           onSelect={this.onSelectFlow}
           selectedFlowId={this.state.selectedFlowId}
         />
         <DetailView
-          associations={this.props.associations}
+          error={this.props.addError}
           flow={this.state.flows[this.state.selectedFlowId]}
-          handleClose={this.onClose}
+          handleAdd={this.props.handleAdd}
+          handleClose={this.props.handleClose}
+          isAdding={this.props.isAdding}
         />
       </Container>
     )

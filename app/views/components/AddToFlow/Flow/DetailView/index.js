@@ -1,8 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { addToFlow } from 'models/flows/add-to-flow'
-
 import { Name } from '../styled'
 
 import { Steps } from './Steps'
@@ -16,21 +14,21 @@ function getInitialState(flow) {
   return {
     activeSteps: flow.steps.map(s => s.id),
     id: flow.id,
-    isAdding: false,
     starts_at: new Date().getTime() / 1000
   }
 }
 
 export class DetailView extends React.Component {
   static propTypes = {
-    associations: PropTypes.shape().isRequired,
     flow: PropTypes.shape({
       description: PropTypes.string,
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       steps: PropTypes.arrayOf(PropTypes.shape()).isRequired
     }),
-    handleClose: PropTypes.func.isRequired
+    handleAdd: PropTypes.func.isRequired,
+    handleClose: PropTypes.func.isRequired,
+    isAdding: PropTypes.bool.isRequired
   }
 
   static defaultProps = {
@@ -66,27 +64,15 @@ export class DetailView extends React.Component {
 
   onChangeStartAt = starts_at => this.setState({ starts_at })
 
-  onCancel = this.props.handleClose
-
-  onAdd = async () => {
-    try {
-      this.setState({ isAdding: true })
-
-      await addToFlow({
-        origin: this.props.flow.id,
-        steps: this.state.activeSteps,
-        starts_at: this.state.starts_at,
-        ...this.props.associations
-      })
-
-      this.setState({ isAdding: false }, this.onCancel)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  onAdd = () =>
+    this.props.handleAdd({
+      origin: this.props.flow.id,
+      steps: this.state.activeSteps,
+      starts_at: this.state.starts_at
+    })
 
   render() {
-    const { flow } = this.props
+    const { flow, isAdding } = this.props
 
     if (!flow.id) {
       return <DefaultView />
@@ -105,10 +91,10 @@ export class DetailView extends React.Component {
           <StartAt onChange={this.onChangeStartAt} />
         </div>
         <Footer
-          isAdding={this.state.isAdding}
-          disabled={this.state.isAdding}
+          disabled={isAdding}
+          isAdding={isAdding}
           onAdd={this.onAdd}
-          onCancel={this.onCancel}
+          onCancel={this.props.handleClose}
         />
       </Container>
     )

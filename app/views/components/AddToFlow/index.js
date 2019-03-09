@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ClickOutSide from 'react-click-outside'
 
+import { addToFlow } from 'models/flows/add-to-flow'
+
 import Icon from 'components/SvgIcons/Thunderbolt/ThunderboltIcon'
 import Button from 'components/Button/TextIconButton'
 
@@ -11,8 +13,8 @@ export class AddToFlow extends React.Component {
   static propTypes = {
     alignFrom: PropTypes.string,
     associations: PropTypes.shape({
-      contacts: PropTypes.arrayOf([PropTypes.string.isRequired]),
-      deals: PropTypes.arrayOf([PropTypes.string.isRequired])
+      contacts: PropTypes.arrayOf(PropTypes.string.isRequired),
+      deals: PropTypes.arrayOf(PropTypes.string.isRequired)
     }).isRequired,
     callback: PropTypes.func,
     style: PropTypes.shape()
@@ -24,11 +26,38 @@ export class AddToFlow extends React.Component {
     style: {}
   }
 
-  state = { isOpen: false }
+  state = {
+    addError: '',
+    isAdding: false,
+    isOpen: false
+  }
 
   open = () => this.setState({ isOpen: true })
 
-  close = () => this.setState({ isOpen: false })
+  close = () => {
+    if (!this.state.isAdding) {
+      this.setState({ isOpen: false })
+    }
+  }
+
+  add = async data => {
+    if (this.state.isAdding) {
+      return
+    }
+
+    try {
+      this.setState({ isAdding: true })
+
+      await addToFlow({
+        ...data,
+        ...this.props.associations
+      })
+
+      this.setState({ isAdding: false, isOpen: false }, this.props.callback)
+    } catch (error) {
+      this.setState({ addError: error.message })
+    }
+  }
 
   render() {
     return (
@@ -43,9 +72,10 @@ export class AddToFlow extends React.Component {
 
           {this.state.isOpen && (
             <Flow
+              addError={this.state.addError}
               alignFrom="right"
-              associations={this.props.associations}
-              callback={this.props.callback}
+              isAdding={this.state.isAdding}
+              handleAdd={this.add}
               handleClose={this.close}
             />
           )}
