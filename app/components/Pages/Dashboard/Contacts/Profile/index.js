@@ -248,7 +248,7 @@ class ContactProfile extends React.Component {
     return (
       <PageWrapper>
         <PageContainer>
-          <Header contact={contact} />
+          <Header contact={contact} addToFlowCallback={this.fetchTimeline} />
 
           <ColumnsContainer>
             <SideColumnWrapper>
