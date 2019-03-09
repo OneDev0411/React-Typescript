@@ -1,6 +1,6 @@
 import agent from 'superagent'
 
-import config from 'config'
+import config from '../../../../../config/public'
 
 /**
  * split files
