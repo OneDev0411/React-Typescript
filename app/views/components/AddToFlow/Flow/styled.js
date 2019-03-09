@@ -11,7 +11,7 @@ export const Container = styled(Card)`
   right: ${props => (props.alignRight ? 0 : 'auto')};
   display: flex;
   justify-content: stretch;
-  z-index: 2;
+  z-index: 101;
 `
 
 export const Name = styled.div`
