@@ -251,6 +251,7 @@ export class List extends React.Component {
             handleClose={this.closePreviewModal}
             handleKeyDown={this.handleKeyDown}
             imgSrc={`${selectedTemplate.url}/preview.png`}
+            imgSrcTiny={`${selectedTemplate.url}/thumbnail.png`}
             menuRenderer={this.renderPreviewModalMenu}
           />
         )}
