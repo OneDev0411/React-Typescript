@@ -19,17 +19,22 @@ export class ImagePreviewModal extends Component {
     title: 'Preview',
     menuRenderer() {
       return null
-    },
-    handleKeyDown() {
-      return null
     }
   }
 
   componentDidMount() {
+    if (!this.props.handleKeyDown) {
+      return
+    }
+
     document.addEventListener('keydown', this.props.handleKeyDown)
   }
 
   componentWillUnmount() {
+    if (!this.props.handleKeyDown) {
+      return
+    }
+
     document.removeEventListener('keydown', this.props.handleKeyDown)
   }
 
