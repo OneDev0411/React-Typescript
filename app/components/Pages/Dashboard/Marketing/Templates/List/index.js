@@ -74,7 +74,7 @@ export class List extends React.Component {
   getTemplateIndex = template =>
     this.getSelectedMediumTemplates().findIndex(t => t.id === template.id)
 
-  handleKeyDown = e => {
+  selectPreviousTemplate = () => {
     const { selectedTemplate } = this.state
 
     if (!selectedTemplate) {
@@ -86,23 +86,46 @@ export class List extends React.Component {
 
     let nextIndex = selectedTemplateIndex
 
-    if (e.key === 'ArrowLeft') {
-      nextIndex =
-        selectedTemplateIndex === 0
-          ? templates.length - 1
-          : selectedTemplateIndex - 1
-    }
-
-    if (e.key === 'ArrowRight') {
-      nextIndex =
-        selectedTemplateIndex === templates.length - 1
-          ? 0
-          : selectedTemplateIndex + 1
-    }
+    nextIndex =
+      selectedTemplateIndex === 0
+        ? templates.length - 1
+        : selectedTemplateIndex - 1
 
     this.setState({
       selectedTemplate: templates[nextIndex]
     })
+  }
+
+  selectNextTemplate = () => {
+    const { selectedTemplate } = this.state
+
+    if (!selectedTemplate) {
+      return
+    }
+
+    const templates = this.getSelectedMediumTemplates()
+    const selectedTemplateIndex = this.getTemplateIndex(selectedTemplate)
+
+    let nextIndex = selectedTemplateIndex
+
+    nextIndex =
+      selectedTemplateIndex === templates.length - 1
+        ? 0
+        : selectedTemplateIndex + 1
+
+    this.setState({
+      selectedTemplate: templates[nextIndex]
+    })
+  }
+
+  handleKeyDown = e => {
+    if (e.key === 'ArrowLeft') {
+      this.selectPreviousTemplate()
+    }
+
+    if (e.key === 'ArrowRight') {
+      this.selectNextTemplate()
+    }
   }
 
   handleCustomize = template => {
@@ -221,6 +244,10 @@ export class List extends React.Component {
         {state.isPreviewModalOpen && (
           <ImagePreviewModal
             isOpen
+            showPreviousButton
+            onPreviousButtonClick={this.selectPreviousTemplate}
+            showNextButton
+            onNextButtonClick={this.selectNextTemplate}
             handleClose={this.closePreviewModal}
             handleKeyDown={this.handleKeyDown}
             imgSrc={`${selectedTemplate.url}/preview.png`}
