@@ -37,3 +37,10 @@ export const PreviousIcon = styled(NextIcon)`
   margin: 0 0.2rem 0 0;
   transform: rotate(90deg);
 `
+
+export const Image = styled.img`
+  height: 100%;
+  width: auto;
+  max-height: 100%;
+  max-width: calc(100% - 3rem);
+`
