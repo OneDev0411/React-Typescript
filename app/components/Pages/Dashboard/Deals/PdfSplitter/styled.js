@@ -18,6 +18,8 @@ export const Container = styled.div`
 export const SectionCard = styled(Card)`
   padding: 0.5rem;
   min-height: 80vh;
+  display: flex;
+  flex-direction: column;
 `
 
 export const PageNumber = styled.div`

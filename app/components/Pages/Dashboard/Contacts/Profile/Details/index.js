@@ -9,7 +9,8 @@ const fieldsOrder = [
   'last_name',
   'nickname',
   'job_title',
-  'company'
+  'company',
+  'marketing_name'
 ]
 
 export function Details(props) {

@@ -15,7 +15,7 @@ import { Tab, ListContainer } from './styled'
 
 const GENERAL_FLOW_TYPES = [
   'Brand',
-  'Christmas,NewYear,Valentines,StPatrick',
+  'Christmas,NewYear,Valentines,StPatrick,Easter,OtherHoliday',
   'NewAgent'
 ]
 

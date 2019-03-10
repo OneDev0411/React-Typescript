@@ -37,10 +37,25 @@ const INITIAL_VALUES = {
 }
 
 class NewContactDrawer extends React.Component {
+  state = {
+    hasSubmitError: false
+  }
+
+  onClose = () => {
+    this.setState({ hasSubmitError: false })
+    this.props.onClose()
+  }
+
   onSubmit = async values => {
+    if (this.state.hasSubmitError) {
+      this.setState({ hasSubmitError: false })
+    }
+
     const submitError = submitValidate(values)
 
     if (submitError != null) {
+      this.setState({ hasSubmitError: true })
+
       return submitError
     }
 
@@ -88,7 +103,7 @@ class NewContactDrawer extends React.Component {
           owner: this.props.user
         }}
         isOpen={this.props.isOpen}
-        onClose={this.props.onClose}
+        onClose={this.onClose}
         onSubmit={this.onSubmit}
         title="New Contact"
         mutators={{
@@ -115,7 +130,7 @@ class NewContactDrawer extends React.Component {
               mutators={form.mutators}
             />
             <Owner name="owner" user={this.props.user} />
-            {submitError && (
+            {this.state.hasSubmitError && submitError && (
               <Alert
                 type="error"
                 style={{ textAlign: 'left', marginBottom: '2em' }}

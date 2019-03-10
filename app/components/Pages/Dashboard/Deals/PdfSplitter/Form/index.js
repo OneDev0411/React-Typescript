@@ -5,7 +5,8 @@ import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import Flex from 'styled-flex-component'
 
-import Deal from 'models/Deal'
+import { splitPDF, getSplitJobStatus } from 'models/Deal/splitter'
+import { createTaskMessage } from 'models/Deal/task'
 
 import { changeNeedsAttention, addTaskFile } from 'actions/deals'
 
@@ -32,8 +33,6 @@ class Form extends React.Component {
     validationErrors: {}
   }
 
-  saveAttempts = 0
-
   handleSelectTask = id =>
     this.setState({ task: this.props.tasks[id] }, () => this.validateForm())
 
@@ -56,21 +55,16 @@ class Form extends React.Component {
 
   sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-  handleSave = async (closeSplitter = false) => {
+  handleSave = async (exitOnFinish = false) => {
     if (!this.validateForm()) {
       return false
     }
 
+    this.exitOnFinish = exitOnFinish
     await this.splitPDF()
-
-    this.props.onSave(closeSplitter)
   }
 
   splitPDF = async () => {
-    console.log(`Start Splitting, Attempt ${this.saveAttempts + 1}`)
-
-    let fileCreated = false
-
     this.setState({
       isSaving: true
     })
@@ -81,49 +75,21 @@ class Form extends React.Component {
     }))
 
     try {
-      const { file } = await Deal.splitPDF(
+      const pages = _.map(this.props.selectedPages, page => ({
+        document: page.docId,
+        number: page.pageNumber
+      }))
+
+      const { jobId } = await splitPDF(
+        this.props.user,
         this.state.task.title,
         this.state.task.id,
-        this.state.task.room.id,
         files,
-        this.props.selectedPages
+        pages
       )
 
-      // add files to attachments list
-      this.props.addTaskFile(this.state.task.id, file)
-
-      if (this.state.notifyOffice) {
-        this.props.changeNeedsAttention(
-          this.state.task.deal,
-          this.state.task.id,
-          true
-        )
-      }
-
-      // set create as true
-      fileCreated = true
-
-      this.props.notify({
-        message: `The PDF, "${this.state.task.title}" created and uploaded`,
-        status: 'success'
-      })
-
-      // set status
-      this.setState({
-        isSaving: false,
-        notifyOffice: true,
-        task: null
-      })
+      setTimeout(() => this.checkJob(jobId), 5000)
     } catch (e) {
-      if (this.saveAttempts < 5) {
-        console.log('Failed: ', e.message)
-
-        this.saveAttempts += 1
-        await this.sleep(3000 * this.saveAttempts)
-
-        return this.splitPDF()
-      }
-
       this.props.notify({
         title: 'Could not create the split pdf file. please try again.',
         message: e.message,
@@ -134,10 +100,58 @@ class Form extends React.Component {
         isSaving: false
       })
     }
+  }
 
-    this.saveAttempts = 0
+  checkJob = async jobId => {
+    console.log(`[ + ] Checking job ${jobId}`)
 
-    return fileCreated
+    const job = await getSplitJobStatus(this.props.user, jobId)
+
+    if (job.state === 'active') {
+      return setTimeout(() => this.checkJob(jobId), 5000)
+    }
+
+    this.setState({
+      isSaving: false
+    })
+
+    if (job.state !== 'completed') {
+      return this.props.notify({
+        title: `Job ${jobId} failed`,
+        message: 'Could not finish split process. please try again.',
+        status: 'error'
+      })
+    }
+
+    // add files to attachments list
+    this.props.addTaskFile(this.state.task.id, job.result)
+
+    createTaskMessage(this.state.task.id, {
+      author: this.props.user.id,
+      room: this.state.task.room.id,
+      attachments: [job.result.id]
+    })
+
+    if (this.state.notifyOffice) {
+      this.props.changeNeedsAttention(
+        this.state.task.deal,
+        this.state.task.id,
+        true
+      )
+    }
+
+    this.props.notify({
+      message: `The PDF, "${this.state.task.title}" created and uploaded`,
+      status: 'success'
+    })
+
+    // set status
+    this.setState({
+      notifyOffice: true,
+      task: null
+    })
+
+    this.props.onSave(this.exitOnFinish)
   }
 
   render() {

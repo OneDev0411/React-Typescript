@@ -108,14 +108,14 @@ class FileViewer extends React.Component {
     }
   }
 
-  get Envelope() {
+  getEnvelope() {
     return this.EntityType === 'envelope'
       ? this.props.envelopes[this.props.params.entityId]
       : null
   }
 
   get EnvelopeFile() {
-    const envelope = this.Envelope
+    const envelope = this.getEnvelope()
 
     if (!this.props.task || !envelope.documents) {
       return null
@@ -222,7 +222,7 @@ class FileViewer extends React.Component {
             <EnvelopeSideMenu
               deal={this.state.deal}
               file={file}
-              envelope={this.Envelope}
+              envelope={this.getEnvelope()}
             />
           )}
         </PageContainer>

@@ -15,7 +15,10 @@ const DisabledActionContainer = styled.div`
 
 export function ActionWrapper(props) {
   return props.disabled ? (
-    <Tooltip caption={getCaption(props.action, props.atLeast)}>
+    <Tooltip
+      placement="bottom"
+      caption={getCaption(props.action, props.atLeast)}
+    >
       <DisabledActionContainer>{props.children}</DisabledActionContainer>
     </Tooltip>
   ) : (
