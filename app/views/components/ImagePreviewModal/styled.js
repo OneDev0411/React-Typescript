@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { grey } from 'views/utils/colors'
 import Arrow from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
@@ -43,4 +43,10 @@ export const Image = styled.img`
   width: auto;
   max-height: 100%;
   max-width: calc(100% - 3rem);
+
+  ${({ blur }) =>
+    blur &&
+    css`
+      filter: blur(2px);
+    `}
 `

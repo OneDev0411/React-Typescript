@@ -89,7 +89,7 @@ export class ImagePreviewModal extends Component {
               src={this.props.imgSrc}
               placeholder={this.props.imgSrcTiny}
             >
-              {src => <Image alt={title} src={src} />}
+              {(src, loading) => <Image blur={loading} alt={title} src={src} />}
             </ProgressiveImage>
           ) : (
             <Image alt={title} src={this.props.imgSrc} />
