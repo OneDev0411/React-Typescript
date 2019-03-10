@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
+
 import PropTypes from 'prop-types'
+
+import Tooltip from 'components/tooltip'
 
 import BareModal from '../BareModal'
 
 import { Header } from './Header'
+import { Container, IconContainer, NextIcon, PreviousIcon } from './styled'
 
 export class ImagePreviewModal extends Component {
   static propTypes = {
@@ -11,6 +15,10 @@ export class ImagePreviewModal extends Component {
     isOpen: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
     handleKeyDown: PropTypes.func,
+    showNextButton: PropTypes.bool,
+    showPreviousButton: PropTypes.bool,
+    onNextButtonClick: PropTypes.func,
+    onPreviousButtonClick: PropTypes.func,
     title: PropTypes.string,
     menuRenderer: PropTypes.func
   }
@@ -19,7 +27,9 @@ export class ImagePreviewModal extends Component {
     title: 'Preview',
     menuRenderer() {
       return null
-    }
+    },
+    onNextButtonClick() {},
+    onPreviousButtonClick() {}
   }
 
   componentDidMount() {
@@ -53,24 +63,33 @@ export class ImagePreviewModal extends Component {
           title={title}
           menuRenderer={this.props.menuRenderer}
         />
-        <div
-          style={{
-            height: '100vh',
-            textAlign: 'center',
-            padding: '8rem 0 3rem'
-          }}
+        <Container
           onClick={event => {
             if (event.target.tagName === 'DIV') {
               handleClose()
             }
           }}
         >
+          {this.props.showPreviousButton && (
+            <IconContainer onClick={this.props.onPreviousButtonClick}>
+              <Tooltip caption="Previous">
+                <PreviousIcon />
+              </Tooltip>
+            </IconContainer>
+          )}
           <img
             alt={title}
             src={this.props.imgSrc}
             style={{ maxHeight: '100%', maxWidth: 'calc(100% - 3rem)' }}
           />
-        </div>
+          {this.props.showNextButton && (
+            <IconContainer onClick={this.props.onNextButtonClick}>
+              <Tooltip caption="Next">
+                <NextIcon />
+              </Tooltip>
+            </IconContainer>
+          )}
+        </Container>
       </BareModal>
     )
   }
