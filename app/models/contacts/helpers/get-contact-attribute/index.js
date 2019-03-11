@@ -1,4 +1,4 @@
-export function getContactAttribute(contact, attributeDef) {
+export function getContactAttribute(contact, attributeDef, filter) {
   if (!contact) {
     throw new Error('Contact object is required!')
   }
@@ -10,9 +10,13 @@ export function getContactAttribute(contact, attributeDef) {
   let result = []
 
   if (attributeDef.singular) {
-    const attributes = contact.sub_contacts[0].attributes[attributeDef.id]
+    let attributes = contact.sub_contacts[0].attributes[attributeDef.id]
 
     if (!isEmpty(attributes)) {
+      if (typeof filter === 'function') {
+        attributes = attributes.filter(filter)
+      }
+
       const sortedByUpdatedAt = attributes.sort(
         (a, b) => a.updated_at < b.updated_at
       )
@@ -21,9 +25,13 @@ export function getContactAttribute(contact, attributeDef) {
     }
   } else {
     contact.sub_contacts.forEach(subContact => {
-      const attributes = subContact.attributes[attributeDef.id]
+      let attributes = subContact.attributes[attributeDef.id]
 
       if (!isEmpty(attributes)) {
+        if (typeof filter === 'function') {
+          attributes = attributes.filter(filter)
+        }
+
         result = [...result, ...attributes]
       }
     })

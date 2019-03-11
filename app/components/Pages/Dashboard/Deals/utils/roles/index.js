@@ -155,7 +155,11 @@ function getContactAttributeObject(contact, attributeDefs, attributeName) {
     return null
   }
 
-  return getContactAttribute(contact, definition)
+  return getContactAttribute(
+    contact,
+    definition,
+    attribute => attribute.is_partner !== true
+  )
 }
 
 /**
