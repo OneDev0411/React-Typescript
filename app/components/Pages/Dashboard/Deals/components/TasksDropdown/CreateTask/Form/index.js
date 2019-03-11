@@ -27,7 +27,7 @@ export class CreateTaskForm extends React.Component {
   onKeyPress = e => {
     const { value } = e.target
 
-    if (value.length === 0) {
+    if (value.trim().length === 0) {
       return false
     }
 
