@@ -73,6 +73,12 @@ class AddressField extends React.Component {
   toggleMode = () => this.props.toggleMode(this.props.address)
 
   cancel = () => {
+    if (!this.state.isDisabled) {
+      this.toggleMode()
+    }
+  }
+
+  handleOutsideClick = () => {
     if (this.state.isDisabled) {
       return
     }
@@ -219,10 +225,11 @@ class AddressField extends React.Component {
     return (
       <InlineEditableField
         cancelOnOutsideClick
-        handleCancel={this.cancel}
-        handleSave={this.onSubmit}
-        handleDelete={this.handleDelete}
         handleAddNew={this.props.handleAddNew}
+        handleCancel={this.cancel}
+        handleDelete={this.handleDelete}
+        handleOutsideClick={this.handleOutsideClick}
+        handleSave={this.onSubmit}
         isDisabled={this.state.isDisabled}
         isEditing={this.props.address.isActive}
         isEditModeStatic
