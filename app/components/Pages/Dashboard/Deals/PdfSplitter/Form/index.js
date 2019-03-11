@@ -105,10 +105,16 @@ class Form extends React.Component {
   checkJob = async jobId => {
     console.log(`[ + ] Checking job ${jobId}`)
 
-    const job = await getSplitJobStatus(this.props.user, jobId)
+    let job = {}
 
-    if (job.state === 'active') {
-      return setTimeout(() => this.checkJob(jobId), 5000)
+    try {
+      job = await getSplitJobStatus(this.props.user, jobId)
+    } catch (e) {
+      console.log(e)
+    }
+
+    if (!job.state || job.state === 'active') {
+      return setTimeout(() => this.checkJob(jobId), 4000)
     }
 
     this.setState({
