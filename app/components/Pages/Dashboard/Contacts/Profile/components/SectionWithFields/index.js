@@ -8,8 +8,9 @@ import { addAttributes } from 'models/contacts/add-attributes'
 import { updateAttribute } from 'models/contacts/update-attribute'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
 
-import Button from 'components/Button/ActionButton'
+import AddIcon from 'components/SvgIcons/Add/AddIcon'
 import { ShowMoreLess } from 'components/ShowMoreLess'
+import TextIconButton from 'components/Button/TextIconButton'
 
 import { Section } from '../Section'
 import MasterField from '../ContactAttributeInlineEditableField'
@@ -270,15 +271,13 @@ class SectionWithFields extends React.Component {
 
     if (this.props.showCustomAttributeMenu) {
       items.push(
-        <Button
+        <TextIconButton
           key={cuid()}
-          appearance="link"
+          iconLeft={AddIcon}
           onClick={this.openCustomAttributeDrawer}
-          size="large"
-          style={{ margin: '0 -1em 1em' }}
-        >
-          {`+ Add a custom ${sectionTitle.toLowerCase()}`}
-        </Button>
+          style={{ marginBottom: '1em' }}
+          text={`Add a custom ${sectionTitle.toLowerCase()}`}
+        />
       )
     }
 
@@ -288,7 +287,7 @@ class SectionWithFields extends React.Component {
   render() {
     const { section } = this.props
     const sectionTitle = this.props.title || section
-    const sectionContainerStyle = { padding: '0 1.5rem' }
+    const sectionContainerStyle = { padding: '0 1.5rem', display: 'block' }
 
     return (
       <Section title={sectionTitle}>
