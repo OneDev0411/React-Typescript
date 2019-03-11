@@ -95,6 +95,12 @@ class MasterField extends React.Component {
     this.setState(state => ({ is_primary: !state.is_primary, isDrity: true }))
 
   cancel = () => {
+    if (!this.state.disabled) {
+      this.setInitialState()
+    }
+  }
+
+  handleOutsideClick = () => {
     if (this.state.disabled) {
       return
     }
@@ -223,9 +229,10 @@ class MasterField extends React.Component {
       <InlineEditableField
         error={this.state.error}
         cancelOnOutsideClick
-        handleCancel={this.cancel}
         handleAddNew={this.addInstance}
+        handleCancel={this.cancel}
         handleDelete={this.handleDelete}
+        handleOutsideClick={this.handleOutsideClick}
         handleSave={this.save}
         isDisabled={this.state.disabled}
         isEditing={this.props.isActive}
