@@ -6,13 +6,13 @@ const storage = require('./storage').default
 const API_URL = config.api_url
 
 export function onlineSubmitHandler(data) {
-  const filterContactsApiUrl = API_URL + '/contacts/filter?limit=1&filter_type=or' // eslint-disable-line
-  const attributeDefinitionsApiUrl = API_URL + '/contacts/attribute_defs' // eslint-disable-line
-  const createContactApiUrl = API_URL + '/contacts?activity=true&relax=false&get=true' // eslint-disable-line
-  const associateContactApiUrl = API_URL + '/crm/tasks/${data.id}/associations' // eslint-disable-line
+  const filterContactsApiUrl = `${API_URL}/contacts/filter?limit=1&filter_type=or`
+  const attributeDefinitionsApiUrl = `${API_URL}/contacts/attribute_defs`
+  const createContactApiUrl = `${API_URL}/contacts?activity=true&relax=false&get=true`
+  const associateContactApiUrl = `${API_URL}/crm/tasks/\${data.id}/associations`
 
   const requestHeaders = {
-    Authorization: 'Bearer ' + data.agentAccessToken, // eslint-disable-line
+    Authorization: `Bearer ${data.agentAccessToken}`,
     'X-RECHAT-BRAND': data.data.brandId,
     'Content-Type': 'application/json'
   }
