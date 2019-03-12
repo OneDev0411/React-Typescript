@@ -46,13 +46,16 @@ export class EditMode extends React.Component {
           isStatic={this.props.isStatic}
         >
           {showDelete && (
-            <IconButton
-              isFit
-              disabled={isDisabled}
-              onClick={this.props.handleDelete}
-            >
-              <DeleteIcon />
-            </IconButton>
+            <Tooltip caption="Delete">
+              <IconButton
+                isFit
+                inverse
+                disabled={isDisabled}
+                onClick={this.props.handleDelete}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
           )}
           <div
             style={{
