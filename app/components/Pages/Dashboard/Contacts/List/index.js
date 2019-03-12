@@ -27,7 +27,7 @@ import { resetGridSelectedItems } from 'components/Grid/Table/Plugins/Selectable
 import Table from './Table'
 import { SearchContacts } from './Search'
 import { Header } from './Header'
-import DuplicateContacts from '../components/DuplicateContacts'
+// import DuplicateContacts from '../components/DuplicateContacts'
 import ContactFilters from './Filters'
 import TagsList from './TagsList'
 
@@ -299,7 +299,7 @@ class ContactsList extends React.Component {
             name="contacts"
             onChange={this.handleChangeSavedSegment}
           />
-          <DuplicateContacts />
+          {/* <DuplicateContacts /> */}
           <TagsList onFilterChange={this.handleFilterChange} />
         </SideMenu>
 
