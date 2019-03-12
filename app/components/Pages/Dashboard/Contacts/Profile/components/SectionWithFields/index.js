@@ -128,13 +128,29 @@ class SectionWithFields extends React.Component {
 
   update = async (id, data, attribute_def) => {
     try {
-      await updateAttribute(this.props.contact.id, id, data)
+      const updatedAttribute = await updateAttribute(
+        this.props.contact.id,
+        id,
+        data
+      )
 
       this.props.notify({
         status: 'success',
         dismissAfter: 4000,
         message: `${attribute_def.label || attribute_def.name} updated.`
       })
+
+      this.setState(state => ({
+        orderedAttributes: state.orderedAttributes.map(a =>
+          a.id !== id
+            ? a
+            : {
+                ...updatedAttribute,
+                attribute_def,
+                order: a.order
+              }
+        )
+      }))
     } catch (error) {
       console.log(error)
     }
