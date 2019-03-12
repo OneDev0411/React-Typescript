@@ -4,23 +4,23 @@ const LOCAL_STORAGE_REGISTERATION_KEY =
   constants.LOCAL_STORAGE_REGISTERATION_KEY
 
 const storage = {
-  getAll() {
+  getAll: function getAll() {
     return (
       JSON.parse(localStorage.getItem(LOCAL_STORAGE_REGISTERATION_KEY)) || {}
     )
   },
 
-  setAll(value) {
+  setAll: function setAll(value) {
     localStorage.setItem(LOCAL_STORAGE_REGISTERATION_KEY, JSON.stringify(value))
   },
 
-  get(id) {
+  get: function get(id) {
     const data = this.getAll()
 
     return data[id] || []
   },
 
-  set(id, value) {
+  set: function set(id, value) {
     const data = this.getAll()
 
     data[id] = value
@@ -28,7 +28,7 @@ const storage = {
     localStorage.setItem(LOCAL_STORAGE_REGISTERATION_KEY, JSON.stringify(data))
   },
 
-  remove(id) {
+  remove: function remove(id) {
     const data = this.getAll()
 
     delete data[id]
@@ -36,7 +36,7 @@ const storage = {
     this.setAll(data)
   },
 
-  append(id, value) {
+  append: function append(id, value) {
     const data = this.get(id)
 
     if (!Array.isArray(data)) {
