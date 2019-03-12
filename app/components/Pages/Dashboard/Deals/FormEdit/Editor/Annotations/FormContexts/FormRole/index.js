@@ -30,13 +30,14 @@ class FormRole extends React.PureComponent {
             ]
 
             const text =
-              formValue ||
-              getRoleText(
-                this.props.dealsRoles,
-                this.props.deal,
-                roleName,
-                annotationContext
-              )
+              typeof formValue === 'string'
+                ? formValue
+                : getRoleText(
+                    this.props.dealsRoles,
+                    this.props.deal,
+                    roleName,
+                    annotationContext
+                  )
             const annotations = groups[groupIndex].map(info => info.annotation)
 
             return (

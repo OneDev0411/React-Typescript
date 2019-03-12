@@ -203,7 +203,6 @@ class EditDigitalForm extends React.Component {
 
   closeForm = () => {
     browserHistory.goBack()
-    // browserHistory.push(`/dashboard/deals/${this.props.task.deal}`)
   }
 
   render() {

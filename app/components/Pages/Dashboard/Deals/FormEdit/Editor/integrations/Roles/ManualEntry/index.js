@@ -25,7 +25,9 @@ export default class ManualEntry extends React.Component {
       showManualInput: !state.showManualInput
     }))
 
-  handleSave = () => this.props.onSave(this.state.manualValue)
+  handleSave = () => {
+    this.props.onSave(this.state.manualValue)
+  }
 
   handleChangeManualValue = e => this.setState({ manualValue: e.target.value })
 
@@ -38,12 +40,7 @@ export default class ManualEntry extends React.Component {
             value={this.state.manualValue}
             onChange={this.handleChangeManualValue}
           />
-          <ActionButton
-            disabled={this.state.manualValue.length === 0}
-            onClick={this.handleSave}
-          >
-            Save
-          </ActionButton>
+          <ActionButton onClick={this.handleSave}>Save</ActionButton>
         </Flex>
       )
     }
