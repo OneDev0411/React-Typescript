@@ -256,6 +256,19 @@ class SectionWithFields extends React.Component {
     })
   }
 
+  AddCustomAttributeCallback = attribute_def => {
+    this.setState(({ orderedAttributes }) => {
+      const order = Math.max(...orderedAttributes.map(a => a.order)) + 1
+
+      return {
+        orderedAttributes: [
+          ...orderedAttributes,
+          generateEmptyAttribute(attribute_def, this.props.isPartner, order)
+        ]
+      }
+    })
+  }
+
   renderFields = () => {
     const { addCustomAttributeButtonText } = this.props
     let items = this.state.orderedAttributes.map(attribute => (
@@ -305,6 +318,7 @@ class SectionWithFields extends React.Component {
             isOpen
             onClose={this.closeNewAttributeDrawer}
             section={Array.isArray(section) ? undefined : section}
+            submitCallback={this.AddCustomAttributeCallback}
           />
         )}
       </Section>
