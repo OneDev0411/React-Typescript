@@ -18,6 +18,8 @@ import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
 
 import { orderFields, normalizeAttributes } from './helpers'
 
+const SHOW_MORE_LESS_LIMIT = 5
+
 const propTypes = {
   addCustomAttributeButtonText: PropTypes.string
 }
@@ -74,8 +76,9 @@ class SectionWithFields extends React.Component {
     const orderedAttributes = orderAttributes(allAttributes, props.fieldsOrder)
 
     this.state = {
+      isOpenCustomAttributeDrawer: false,
       orderedAttributes,
-      isOpenCustomAttributeDrawer: false
+      showMoreLessCount: 5
     }
   }
 
@@ -235,24 +238,34 @@ class SectionWithFields extends React.Component {
 
   addShadowAttribute = attribute => {
     const { attribute_def, order, is_partner } = attribute
+    const newOrder = order + 1
 
     const field = {
       attribute_def,
       cuid: cuid(),
       is_partner,
       isActive: true,
-      order: order + 1,
+      order: newOrder,
       [attribute_def.data_type]: ''
     }
 
     this.setState(state => {
       const shallowCopy = state.orderedAttributes.slice()
 
-      shallowCopy.splice(order + 1, 0, field)
+      shallowCopy.splice(newOrder, 0, field)
 
-      return {
+      const newState = {
         orderedAttributes: shallowCopy.map((a, order) => ({ ...a, order }))
       }
+
+      if (
+        shallowCopy.length > SHOW_MORE_LESS_LIMIT &&
+        newOrder >= SHOW_MORE_LESS_LIMIT
+      ) {
+        newState.showMoreLessCount = state.showMoreLessCount + 1
+      }
+
+      return newState
     })
   }
 
@@ -305,8 +318,11 @@ class SectionWithFields extends React.Component {
 
     return (
       <Section title={sectionTitle}>
-        {this.state.orderedAttributes.length > 5 ? (
-          <ShowMoreLess count={4} style={sectionContainerStyle}>
+        {this.state.orderedAttributes.length > SHOW_MORE_LESS_LIMIT ? (
+          <ShowMoreLess
+            count={this.state.showMoreLessCount}
+            style={sectionContainerStyle}
+          >
             {this.renderFields()}
           </ShowMoreLess>
         ) : (
