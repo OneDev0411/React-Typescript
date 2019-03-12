@@ -17,7 +17,8 @@ export class CreateTaskForm extends React.Component {
     super(props)
 
     this.state = {
-      notifyOffice: !props.checklist.is_deactivated
+      notifyOffice:
+        !props.checklist.is_deactivated && this.props.showNotifyOption === true
     }
   }
 
@@ -40,12 +41,17 @@ export class CreateTaskForm extends React.Component {
     }
   }
 
-  handleSave = () =>
+  handleSave = () => {
+    if (this.input.value.trim().length === 0) {
+      return false
+    }
+
     this.props.onFinish(
       this.props.checklist.id,
       this.input.value,
       this.state.notifyOffice
     )
+  }
 
   render() {
     const { notifyOffice } = this.state
