@@ -125,7 +125,6 @@ class PDFPreview extends React.Component {
           (value, index) => (
             <PageContainer key={index}>
               <Annotations
-                // getRoleColor={this.getRoleColor}
                 deal={this.props.deal}
                 roles={this.props.roles}
                 document={document}
