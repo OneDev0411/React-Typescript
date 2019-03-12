@@ -25,9 +25,9 @@ export const Forms = ({
           form.name.toLowerCase().includes((filterValue || '').toLowerCase())
         )
       })
-      .map(form => (
+      .map((form, index) => (
         <ChecklistItem
-          key={form.id}
+          key={index}
           id={form.id}
           checklist={checklist}
           title={form.name}
