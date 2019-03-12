@@ -19,11 +19,11 @@ import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
 import { orderFields, normalizeAttributes } from './helpers'
 
 const propTypes = {
-  showCustomAttributeMenu: PropTypes.bool
+  addCustomAttributeButtonText: PropTypes.string
 }
 
 const defaultProps = {
-  showCustomAttributeMenu: true
+  addCustomAttributeButtonText: ''
 }
 
 function generateEmptyAttribute(attribute_def, is_partner, order) {
@@ -256,7 +256,8 @@ class SectionWithFields extends React.Component {
     })
   }
 
-  renderFields = sectionTitle => {
+  renderFields = () => {
+    const { addCustomAttributeButtonText } = this.props
     let items = this.state.orderedAttributes.map(attribute => (
       <MasterField
         attribute={attribute}
@@ -269,14 +270,14 @@ class SectionWithFields extends React.Component {
       />
     ))
 
-    if (this.props.showCustomAttributeMenu) {
+    if (addCustomAttributeButtonText) {
       items.push(
         <TextIconButton
           key={cuid()}
           iconLeft={AddIcon}
           onClick={this.openCustomAttributeDrawer}
           style={{ marginBottom: '1em' }}
-          text={`Add a custom ${sectionTitle.toLowerCase()}`}
+          text={`Add a custom ${addCustomAttributeButtonText}`}
         />
       )
     }
@@ -293,12 +294,10 @@ class SectionWithFields extends React.Component {
       <Section title={sectionTitle}>
         {this.state.orderedAttributes.length > 5 ? (
           <ShowMoreLess count={4} style={sectionContainerStyle}>
-            {this.renderFields(sectionTitle)}
+            {this.renderFields()}
           </ShowMoreLess>
         ) : (
-          <div style={sectionContainerStyle}>
-            {this.renderFields(sectionTitle)}
-          </div>
+          <div style={sectionContainerStyle}>{this.renderFields()}</div>
         )}
 
         {this.state.isOpenCustomAttributeDrawer && (

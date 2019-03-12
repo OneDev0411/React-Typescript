@@ -19,7 +19,6 @@ export function Partner(props) {
       isPartner
       section={['Contact Info', 'Details', 'Dates']}
       title="Spouse/Partner"
-      showCustomAttributeMenu={false}
       submitCallback={props.submitCallback}
     />
   )
