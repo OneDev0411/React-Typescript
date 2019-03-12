@@ -50,10 +50,6 @@ class DropDownTasks extends React.Component {
    * @param {UUID} id - the selected task id
    */
   onSelectTask = async id => {
-    const { tasks, onSelectTask } = this.props
-    const { shouldNotifyOffice } = this.state
-    const task = id && tasks[id]
-
     if (this.state.isSaving) {
       return false
     }
@@ -65,11 +61,10 @@ class DropDownTasks extends React.Component {
       isSaving: true
     })
 
-    await onSelectTask(id, shouldNotifyOffice)
+    await this.props.onSelectTask(id, this.state.shouldNotifyOffice)
 
     this.setState({
       isSaving: false,
-      filterValue: task ? task.title : null,
       shouldNotifyOffice: true
     })
   }
