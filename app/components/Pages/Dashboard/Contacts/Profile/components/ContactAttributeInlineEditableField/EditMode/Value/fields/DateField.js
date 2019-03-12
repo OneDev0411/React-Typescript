@@ -41,7 +41,11 @@ export class DateField extends React.Component {
         onChangeYear={this.onChangeYear}
         onChangeMonth={this.onChangeMonth}
         dropdownButtonRenderer={buttonProps => (
-          <DropdownButton {...buttonProps} isActive={buttonProps.isOpen}>
+          <DropdownButton
+            {...buttonProps}
+            isActive={buttonProps.isOpen}
+            style={{ marginBottom: 0 }}
+          >
             {buttonProps.selectedItem.label}
             <DropdownArrowIcon isOpen={buttonProps.isOpen} />
           </DropdownButton>
