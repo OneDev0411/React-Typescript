@@ -73,6 +73,8 @@ export class InlineEditableField extends React.Component {
   handleOutsideClick = () => {
     if (typeof this.props.handleOutsideClick === 'function') {
       this.props.handleOutsideClick()
+    } else if (typeof this.props.handleCancel === 'function') {
+      this.props.handleCancel()
     } else {
       this.props.toggleMode()
     }

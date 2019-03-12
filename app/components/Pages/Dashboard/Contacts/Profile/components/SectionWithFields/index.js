@@ -18,12 +18,14 @@ import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
 
 import { orderFields, normalizeAttributes } from './helpers'
 
+const SHOW_MORE_LESS_LIMIT = 5
+
 const propTypes = {
-  showCustomAttributeMenu: PropTypes.bool
+  addCustomAttributeButtonText: PropTypes.string
 }
 
 const defaultProps = {
-  showCustomAttributeMenu: true
+  addCustomAttributeButtonText: ''
 }
 
 function generateEmptyAttribute(attribute_def, is_partner, order) {
@@ -74,8 +76,9 @@ class SectionWithFields extends React.Component {
     const orderedAttributes = orderAttributes(allAttributes, props.fieldsOrder)
 
     this.state = {
+      isOpenCustomAttributeDrawer: false,
       orderedAttributes,
-      isOpenCustomAttributeDrawer: false
+      showMoreLessCount: 5
     }
   }
 
@@ -235,28 +238,52 @@ class SectionWithFields extends React.Component {
 
   addShadowAttribute = attribute => {
     const { attribute_def, order, is_partner } = attribute
+    const newOrder = order + 1
 
     const field = {
       attribute_def,
       cuid: cuid(),
       is_partner,
       isActive: true,
-      order: order + 1,
+      order: newOrder,
       [attribute_def.data_type]: ''
     }
 
     this.setState(state => {
       const shallowCopy = state.orderedAttributes.slice()
 
-      shallowCopy.splice(order + 1, 0, field)
+      shallowCopy.splice(newOrder, 0, field)
+
+      const newState = {
+        orderedAttributes: shallowCopy.map((a, order) => ({ ...a, order }))
+      }
+
+      if (
+        shallowCopy.length > SHOW_MORE_LESS_LIMIT &&
+        newOrder >= SHOW_MORE_LESS_LIMIT
+      ) {
+        newState.showMoreLessCount = state.showMoreLessCount + 1
+      }
+
+      return newState
+    })
+  }
+
+  AddCustomAttributeCallback = attribute_def => {
+    this.setState(({ orderedAttributes }) => {
+      const order = Math.max(...orderedAttributes.map(a => a.order)) + 1
 
       return {
-        orderedAttributes: shallowCopy.map((a, order) => ({ ...a, order }))
+        orderedAttributes: [
+          ...orderedAttributes,
+          generateEmptyAttribute(attribute_def, this.props.isPartner, order)
+        ]
       }
     })
   }
 
-  renderFields = sectionTitle => {
+  renderFields = () => {
+    const { addCustomAttributeButtonText } = this.props
     let items = this.state.orderedAttributes.map(attribute => (
       <MasterField
         attribute={attribute}
@@ -269,14 +296,14 @@ class SectionWithFields extends React.Component {
       />
     ))
 
-    if (this.props.showCustomAttributeMenu) {
+    if (addCustomAttributeButtonText) {
       items.push(
         <TextIconButton
           key={cuid()}
           iconLeft={AddIcon}
           onClick={this.openCustomAttributeDrawer}
           style={{ marginBottom: '1em' }}
-          text={`Add a custom ${sectionTitle.toLowerCase()}`}
+          text={`Add a custom ${addCustomAttributeButtonText}`}
         />
       )
     }
@@ -291,14 +318,15 @@ class SectionWithFields extends React.Component {
 
     return (
       <Section title={sectionTitle}>
-        {this.state.orderedAttributes.length > 5 ? (
-          <ShowMoreLess count={4} style={sectionContainerStyle}>
-            {this.renderFields(sectionTitle)}
+        {this.state.orderedAttributes.length > SHOW_MORE_LESS_LIMIT ? (
+          <ShowMoreLess
+            count={this.state.showMoreLessCount}
+            style={sectionContainerStyle}
+          >
+            {this.renderFields()}
           </ShowMoreLess>
         ) : (
-          <div style={sectionContainerStyle}>
-            {this.renderFields(sectionTitle)}
-          </div>
+          <div style={sectionContainerStyle}>{this.renderFields()}</div>
         )}
 
         {this.state.isOpenCustomAttributeDrawer && (
@@ -306,6 +334,7 @@ class SectionWithFields extends React.Component {
             isOpen
             onClose={this.closeNewAttributeDrawer}
             section={Array.isArray(section) ? undefined : section}
+            submitCallback={this.AddCustomAttributeCallback}
           />
         )}
       </Section>

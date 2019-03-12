@@ -13,7 +13,7 @@ const fieldsOrder = [
 export function Dates(props) {
   return (
     <SectionWithFields
-      addNewFieldButtonText="Add Touch Dates"
+      addCustomAttributeButtonText="touch date"
       contact={props.contact}
       fieldsOrder={fieldsOrder}
       section="Dates"

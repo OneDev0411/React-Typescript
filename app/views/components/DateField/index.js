@@ -40,6 +40,7 @@ export class DateField extends React.Component {
 
   render() {
     const { props } = this
+    const display = 'flex'
 
     return (
       <Flex>
@@ -47,13 +48,14 @@ export class DateField extends React.Component {
           items={monthsItems}
           onChange={props.onChangeMonth}
           selectedItem={props.month}
+          style={{ display }}
           buttonRenderer={props.dropdownButtonRenderer}
         />
         <BasicDropdown
           items={daysItems}
           selectedItem={props.day}
           onChange={props.onChangeDay}
-          style={{ margin: '0 0.5rem 0' }}
+          style={{ display, margin: '0 0.5rem 0' }}
           buttonRenderer={props.dropdownButtonRenderer}
         />
         {props.showYear ? (
