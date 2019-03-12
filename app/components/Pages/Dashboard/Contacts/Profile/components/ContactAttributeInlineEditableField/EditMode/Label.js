@@ -55,7 +55,7 @@ export class Label extends React.Component {
       this.props.onChange(this.state.inputValue)
     )
 
-  render() {
+  renderField() {
     if (this.labels) {
       return (
         <BasicDropdown
@@ -80,5 +80,9 @@ export class Label extends React.Component {
         value={this.state.inputValue}
       />
     )
+  }
+
+  render() {
+    return <div style={{ marginBottom: '0.5em' }}>{this.renderField()}</div>
   }
 }
