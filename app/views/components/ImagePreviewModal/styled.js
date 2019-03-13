@@ -34,6 +34,7 @@ export const Image = styled.img`
   width: auto;
   max-height: 100%;
   max-width: calc(100% - 3rem);
+  user-select: none;
 
   ${({ blur }) =>
     blur &&
