@@ -20,11 +20,13 @@ function getDocumentsUrl({ deal, task, document, isBackOffice }) {
       : [normalizeFile(task.submission.file)]
   }
 
+  const taskId = task ? task.id : 'stash'
+
   return isBackOffice
     ? [
         {
           ...normalizeFile(document, true),
-          url: `/dashboard/deals/${deal.id}/view/${task.id}/attachment/${
+          url: `/dashboard/deals/${deal.id}/view/${taskId}/attachment/${
             document.id
           }`
         }
