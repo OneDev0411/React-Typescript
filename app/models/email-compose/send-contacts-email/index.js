@@ -3,7 +3,7 @@ import Fetch from '../../../services/fetch'
 export async function sendContactsEmail(email) {
   try {
     const data = {
-      email,
+      ...email,
       due_at: email.due_at || new Date()
     }
 
