@@ -18,7 +18,7 @@ export const Container = styled.div`
   ${({ highlight }) =>
     highlight &&
     css`
-      box-shadow: 0 0 0 2px ${primary} inset;
+      box-shadow: 0 0 0 1px ${primary} inset;
     `}
 
   > div {
