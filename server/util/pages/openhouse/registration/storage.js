@@ -40,7 +40,7 @@ const storage = {
     const data = this.get(id)
 
     if (!Array.isArray(data)) {
-      throw new TypeError('No array type saved in "' + id + '" key') // eslint-disable-line
+      throw new TypeError(`No array type saved in "${id}" key`)
     }
 
     data.push(value)
