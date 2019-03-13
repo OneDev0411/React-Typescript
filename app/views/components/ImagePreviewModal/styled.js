@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 
-import { grey } from 'views/utils/colors'
-import Arrow from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import ArrowLeftIcon from 'components/SvgIcons/ArrowLeft/ArrowLeftIcon'
+import ArrowRightIcon from 'components/SvgIcons/ArrowRight/ArrowRightIcon'
 
 export const Container = styled.div`
   display: flex;
@@ -21,22 +21,13 @@ export const IconContainer = styled.div`
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
-  background-color: ${grey.A600};
+  background-color: rgba(0, 0, 0, 0.8);
   cursor: pointer;
 `
 
-export const NextIcon = styled(Arrow)`
-  margin: 0 0 0 0.2rem;
-  fill: #ffffff;
-  transform: rotate(270deg);
-  width: 2rem;
-  height: 2rem;
-`
+export const NextIcon = ArrowRightIcon
 
-export const PreviousIcon = styled(NextIcon)`
-  margin: 0 0.2rem 0 0;
-  transform: rotate(90deg);
-`
+export const PreviousIcon = ArrowLeftIcon
 
 export const Image = styled.img`
   height: 100%;
