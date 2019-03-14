@@ -17,7 +17,12 @@ export function Menu(props) {
 
       <Chat contact={contact} />
       <Divider />
-      <CloseButton isFit iconSize="large" inverse />
+      <CloseButton
+        isFit
+        iconSize="large"
+        inverse
+        backUrl="dashboard/contacts"
+      />
     </Flex>
   )
 }
