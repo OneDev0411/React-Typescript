@@ -44,7 +44,8 @@ function getSubmissionUrl(data) {
     return [
       {
         ...normalizeFile(data.task.submission.file),
-        url: getEnvelopeFileUrl(submissionEnvelopes[0], data.task)
+        url: getEnvelopeFileUrl(submissionEnvelopes[0], data.task),
+        openInNewTab: true
       }
     ]
   }
@@ -71,7 +72,8 @@ function getDocumentUrl(data) {
   if (documentEnvelopes.length > 0) {
     return {
       ...normalizeFile(data.document),
-      url: getEnvelopeFileUrl(documentEnvelopes[0], data.task)
+      url: getEnvelopeFileUrl(documentEnvelopes[0], data.task),
+      openInNewTab: true
     }
   }
 
