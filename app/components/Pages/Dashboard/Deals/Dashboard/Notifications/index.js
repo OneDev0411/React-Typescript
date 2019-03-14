@@ -15,20 +15,17 @@ class Notifications extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      notifications: this.getUnreadNotifications(props.deal),
-      isOpen: this.hasNotifications(props.deal)
-    }
+    const unreadNotifications = this.getUnreadNotifications(props.deal)
 
-    this.acknowledgeNotifications()
+    this.state = {
+      notifications: unreadNotifications,
+      isOpen: unreadNotifications.length > 0
+    }
   }
 
-  acknowledgeNotifications = () => {
+  componentDidMount() {
     this.props.clearDealNotifications(this.props.deal)
   }
-
-  hasNotifications = deal =>
-    Array.isArray(deal.new_notifications) && deal.new_notifications.length > 0
 
   getUnreadNotifications = deal =>
     Array.isArray(deal.new_notifications)
@@ -37,13 +34,10 @@ class Notifications extends React.Component {
         )
       : []
 
-  handleClose = () => {
+  handleClose = () =>
     this.setState({
       isOpen: false
     })
-
-    this.acknowledgeNotifications()
-  }
 
   render() {
     if (this.state.isOpen === false) {
