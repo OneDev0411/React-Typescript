@@ -9,38 +9,12 @@ import { Portal } from 'components/Portal'
 import IconButton from 'components/Button/IconButton'
 import DropButton from 'components/Button/DropButton'
 import ActionButton from 'components/Button/ActionButton'
-// import { Icon as DropdownIcon } from 'components/Dropdown'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 
 import { VideoToolbar } from './VideoToolbar'
 
-import config from './config'
-
 import nunjucks from '../helpers/nunjucks'
-
-import loadGrapes from '../helpers/load-grapes'
-
-const STYLE_MANAGER_TEXT_TAGS = [
-  'div',
-  'section',
-  'table',
-  'tr',
-  'td',
-  'ol',
-  'ul',
-  'li',
-  'p',
-  'span',
-  'a',
-  'h1',
-  'h2',
-  'h3',
-  'h4',
-  'h5',
-  'h6',
-  'address'
-]
 
 import {
   Container,
@@ -51,6 +25,7 @@ import {
   Divider
 } from './styled'
 import Templates from '../Templates'
+import { createGrapesInstance } from './utils/create-grapes-instance'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -77,57 +52,12 @@ class Builder extends React.Component {
   }
 
   async componentDidMount() {
-    const { Grapesjs } = await loadGrapes()
-    const { load: loadAssetManagerPlugin } = await import('./AssetManager')
-    const { load: loadStyleManagerPlugin } = await import('./StyleManager')
-
-    await Promise.all([loadAssetManagerPlugin(), loadStyleManagerPlugin()])
-
     this.setState({
       isLoading: false
     })
 
-    this.editor = Grapesjs.init({
-      ...config,
-      avoidInlineStyle: false,
-      keepUnusedStyles: true,
-      forceClass: false,
-      container: '#grapesjs-canvas',
-      components: null,
-      assetManager: {
-        assets: [...this.props.assets, ...this.UserAssets]
-      },
-      storageManager: {
-        autoload: 0,
-        params: {
-          templateId: null
-        }
-      },
-      showDevices: false,
-      plugins: ['asset-blocks', 'style-manager'],
-      pluginsOpts: {
-        'style-manager': {
-          fontSizePicker: {
-            conditions: {
-              allowedTags: STYLE_MANAGER_TEXT_TAGS,
-              forbiddenStyles: ['background-image']
-            }
-          },
-          fontWeightPicker: {
-            conditions: {
-              allowedTags: STYLE_MANAGER_TEXT_TAGS,
-              forbiddenStyles: ['background-image']
-            }
-          },
-          colorPicker: {
-            disabled: true,
-            conditions: {
-              allowedTags: STYLE_MANAGER_TEXT_TAGS,
-              forbiddenStyles: ['background-image']
-            }
-          }
-        }
-      }
+    this.editor = await createGrapesInstance({
+      assets: [...this.props.assets, ...this.UserAssets]
     })
 
     this.editor.on('load', this.setupGrapesJs)
