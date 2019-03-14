@@ -129,6 +129,8 @@ class FileViewer extends React.Component {
         title: 'File not found',
         status: 'error'
       })
+
+      return false
     }
 
     return {
