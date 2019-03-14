@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
-import { connect } from 'react-redux'
-
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import juice from 'juice'
 
@@ -12,9 +11,18 @@ import ActionButton from 'components/Button/ActionButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 
-import { VideoToolbar } from './VideoToolbar'
+import { getActiveTeam } from 'utils/user-teams'
 
 import nunjucks from '../helpers/nunjucks'
+import {
+  getAsset as getBrandAsset,
+  getListingUrl
+} from '../helpers/nunjucks-functions'
+
+import { createGrapesInstance } from './utils/create-grapes-instance'
+
+import Templates from '../Templates'
+import { VideoToolbar } from './VideoToolbar'
 
 import {
   Container,
@@ -24,8 +32,6 @@ import {
   Header,
   Divider
 } from './styled'
-import Templates from '../Templates'
-import { createGrapesInstance } from './utils/create-grapes-instance'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -190,7 +196,15 @@ class Builder extends React.Component {
   handleSocialSharing = socialNetworkName =>
     this.props.onSocialSharing(this.getSavedTemplate(), socialNetworkName)
 
-  generateTemplate = (template, data) => nunjucks.renderString(template, data)
+  generateBrandedTemplate = (template, data) => {
+    const { brand } = getActiveTeam(this.props.user)
+
+    return nunjucks.renderString(template, {
+      ...data,
+      getAsset: getBrandAsset.bind(null, brand),
+      getListingUrl: getListingUrl.bind(null, brand)
+    })
+  }
 
   setEditorTemplateId = id => {
     this.editor.StorageManager.store({
@@ -288,10 +302,13 @@ class Builder extends React.Component {
       state => ({
         selectedTemplate: {
           ...state.selectedTemplate,
-          template: this.generateTemplate(state.originalTemplate.template, {
-            ...this.props.templateData,
-            ...newData
-          })
+          template: this.generateBrandedTemplate(
+            state.originalTemplate.template,
+            {
+              ...this.props.templateData,
+              ...newData
+            }
+          )
         }
       }),
       () => {
