@@ -13,6 +13,10 @@ const validators = {
 }
 
 export function validation(attribute_def, value) {
+  if (!attribute_def.singular && !value) {
+    return 'Invalid input! Enter a value.'
+  }
+
   if (attribute_def.data_type === 'date') {
     return validators.date(value)
   }

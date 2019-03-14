@@ -121,12 +121,12 @@ class MasterField extends React.Component {
   }
 
   save = async () => {
-    if (!this.isDrity) {
-      return this.setState({ error: '' })
-    }
-
     const { is_primary, label, value } = this.state
     const { id, cuid, attribute_def } = this.props.attribute
+
+    if (!this.isDrity) {
+      return this.setState({ error: id ? 'Update value!' : 'Input something!' })
+    }
 
     const error = await validation(attribute_def, value)
 
