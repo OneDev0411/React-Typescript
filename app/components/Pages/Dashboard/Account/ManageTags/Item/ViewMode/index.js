@@ -2,7 +2,7 @@ import React from 'react'
 
 import Tooltip from 'components/tooltip'
 import IconButton from 'components/Button/IconButton'
-import DeleteIcon from 'components/SvgIcons/Delete/IconDelete'
+import DeleteIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 
 import { Container, Title } from './styled'
 import { LoadingIcon } from '../styled'
