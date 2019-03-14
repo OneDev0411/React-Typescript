@@ -1,56 +1,83 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
-import _ from 'underscore'
 
-import { deleteNotifications } from 'models/Deal/notification'
+import { nl2br } from 'utils/nl2br'
 
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import IconButton from 'components/Button/IconButton'
 
+import { clearDealNotifications } from 'actions/deals'
+
 import { Container, Title, Text } from './styled'
 
-function hasNotifications(deal) {
-  return (
-    Array.isArray(deal.new_notifications) && deal.new_notifications.length > 0
-  )
-}
+class Notifications extends React.Component {
+  constructor(props) {
+    super(props)
 
-export function Notifications(props) {
-  const [isOpen, closeNotificaions] = useState(hasNotifications(props.deal))
-
-  const handleClose = () => {
-    closeNotificaions(false)
-
-    const notifications = props.deal.new_notifications.filter(
-      notification => !notification.room
-    )
-
-    if (notifications.length > 0) {
-      deleteNotifications(_.pluck(notifications, 'id'))
+    this.state = {
+      notifications: this.getUnreadNotifications(props.deal),
+      isOpen: this.hasNotifications(props.deal)
     }
+
+    this.acknowledgeNotifications()
   }
 
-  if (isOpen === false) {
-    return false
+  acknowledgeNotifications = () => {
+    this.props.clearDealNotifications(this.props.deal)
   }
 
-  return (
-    <Container>
-      <Flex justifyBetween alignCenter style={{ marginBottom: '0.5rem' }}>
-        <Title>Notifications since your last visit</Title>
+  hasNotifications = deal =>
+    Array.isArray(deal.new_notifications) && deal.new_notifications.length > 0
 
-        <IconButton size="medium" isFit onClick={handleClose}>
-          <CloseIcon
-            style={{
-              fill: '#000'
+  getUnreadNotifications = deal =>
+    Array.isArray(deal.new_notifications)
+      ? deal.new_notifications.filter(
+          notification => notification.room === null
+        )
+      : []
+
+  handleClose = () => {
+    this.setState({
+      isOpen: false
+    })
+
+    this.acknowledgeNotifications()
+  }
+
+  render() {
+    if (this.state.isOpen === false) {
+      return false
+    }
+
+    return (
+      <Container>
+        <Flex justifyBetween alignCenter style={{ marginBottom: '0.5rem' }}>
+          <Title>Notifications since your last visit</Title>
+
+          <IconButton size="medium" isFit onClick={this.handleClose}>
+            <CloseIcon
+              style={{
+                fill: '#000'
+              }}
+            />
+          </IconButton>
+        </Flex>
+
+        {this.state.notifications.map(notification => (
+          <Text
+            key={notification.id}
+            dangerouslySetInnerHTML={{
+              __html: nl2br(notification.message)
             }}
           />
-        </IconButton>
-      </Flex>
-
-      {props.deal.new_notifications.map(notification => (
-        <Text key={notification.id}>{notification.message}</Text>
-      ))}
-    </Container>
-  )
+        ))}
+      </Container>
+    )
+  }
 }
+
+export default connect(
+  null,
+  { clearDealNotifications }
+)(Notifications)

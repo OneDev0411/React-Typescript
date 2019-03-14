@@ -14,6 +14,15 @@ export default (state = {}, action) => {
     case actionTypes.ARCHIVE_DEAL:
       return _.omit(state, deal => deal.id === action.deal_id)
 
+    case actionTypes.CLEAR_DEAL_NOTIFICATIONS:
+      return {
+        ...state,
+        [action.deal_id]: {
+          ...state[action.deal_id],
+          new_notifications: null
+        }
+      }
+
     case actionTypes.EJECT_DRAFT_MODE:
       return {
         ...state,
