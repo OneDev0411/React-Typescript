@@ -217,20 +217,20 @@ export class Timeline extends React.Component {
 
     return (
       <div>
-        {todayEvents.length > 0 && (
-          <Container id="today_events" key="today_events">
-            {this.renderItems({
-              title: 'Today Events',
-              items: todayEvents.sort((a, b) => a.due_date < b.due_date)
-            })}
-          </Container>
-        )}
-
         {upcomingEvents.length > 0 && (
           <Container id="upcoming_events" key="upcoming_events">
             {this.renderItems({
               title: 'Upcoming Events',
               items: upcomingEvents.sort((a, b) => a.due_date < b.due_date)
+            })}
+          </Container>
+        )}
+
+        {todayEvents.length > 0 && (
+          <Container id="today_events" key="today_events">
+            {this.renderItems({
+              title: 'Today Events',
+              items: todayEvents.sort((a, b) => a.due_date < b.due_date)
             })}
           </Container>
         )}
