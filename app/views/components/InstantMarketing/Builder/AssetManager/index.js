@@ -7,7 +7,7 @@ import { AssetImage } from './AssetImage'
 
 import Fetch from '../../../../../services/fetch'
 
-import loadGrapes from '../../helpers/load-grapes'
+import loadGrapes from '../utils/load-grapes-lib'
 
 const CUSTOM_ASSET_UPLOAD_PATH = '/templates/assets'
 

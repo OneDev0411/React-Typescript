@@ -6,7 +6,7 @@ import { Container } from './styled'
 import FontSizePicker from './FontSizePicker'
 import FontWeightPicker from './FontWeightPicker'
 import ColorPicker from './ColorPicker'
-import loadGrapes from '../../helpers/load-grapes'
+import loadGrapes from '../utils/load-grapes-lib'
 
 export const load = async () => {
   const { Grapesjs } = await loadGrapes()

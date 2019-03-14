@@ -26,8 +26,8 @@ export default {
     sectors: [
       {
         name: 'Text',
-        open: true,
-//         buildProps: ['color', 'font-size']
+        open: true
+        //         buildProps: ['color', 'font-size']
       }
     ],
 
@@ -42,8 +42,7 @@ export default {
       {
         id: 'commands',
         buttons: [{}]
-      },
-
+      }
     ]
   }
 }
