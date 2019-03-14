@@ -140,6 +140,8 @@ class ActionsButton extends React.Component {
 
     const isTask = this.props.document.type === 'task'
     const isFile = this.props.document.type === 'file'
+
+    // get all envelopes of the document
     const envelopes = getDocumentEnvelopes(
       this.props.envelopes,
       this.props.document
@@ -157,7 +159,10 @@ class ActionsButton extends React.Component {
       document_type: documentType,
       file_uploaded: isFile,
       form_saved: isTask && this.props.document.submission !== null,
-      envelope_status: this.getLastEnvelopeStatus(envelopes)
+      envelope_status: this.getLastEnvelopeStatus(envelopes),
+      task_active_envelopes: this.getActiveEnvelopes(
+        getTaskEnvelopes(this.props.envelopes, this.props.task)
+      )
     }
   }
 
@@ -173,7 +178,8 @@ class ActionsButton extends React.Component {
       is_task_notified: this.props.task.attention_requested === true,
       file_uploaded: this.hasTaskAttachments(this.props.task),
       form_saved: this.props.task.submission !== null,
-      envelope_status: this.getLastEnvelopeStatus(envelopes)
+      envelope_status: this.getLastEnvelopeStatus(envelopes),
+      task_active_envelopes: this.getActiveEnvelopes(envelopes)
     }
   }
 
@@ -189,6 +195,11 @@ class ActionsButton extends React.Component {
 
     return envelopes[0].status
   }
+
+  getActiveEnvelopes = envelopes =>
+    envelopes.filter(
+      envelope => ['Voided', 'Declined'].includes(envelope.status) === false
+    )
 
   getSplitterFiles = () => {
     const files = getFileUrl({
@@ -543,6 +554,7 @@ class ActionsButton extends React.Component {
             <div style={{ position: 'relative' }}>
               <Container>
                 <PrimaryAction
+                  hasSecondaryActions={secondaryActions.length > 0}
                   onClick={() => this.handleSelectAction(primaryAction)}
                 >
                   {this.getButtonLabel(primaryAction)}
