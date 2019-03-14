@@ -176,7 +176,8 @@ export class PdfViewer extends React.Component {
           document
         })
       })
-      .catch(() => {
+      .catch(e => {
+        console.log(e)
         this.setState({ isLoading: false, isFailed: true })
       })
   }
