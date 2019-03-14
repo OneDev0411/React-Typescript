@@ -80,7 +80,7 @@ class Search extends React.Component {
     dispatch(
       getListingsByValert({
         ...filterOptions,
-        limit: 200
+        limit: 500
       })
     )
 
@@ -139,7 +139,7 @@ class Search extends React.Component {
         dispatch(
           searchActions.getListings.byValert({
             ...this.props.filterOptions,
-            limit: 200,
+            limit: 500,
             points
           })
         ),

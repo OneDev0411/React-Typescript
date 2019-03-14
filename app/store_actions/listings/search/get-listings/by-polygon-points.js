@@ -14,7 +14,7 @@ const getListingsByPolygonPoints = (points = []) => (dispatch, getState) => {
 
   const options = {
     ...getState().search.options,
-    limit: 200,
+    limit: 500,
     points,
     postal_codes: null,
     ...allLocationBasedFilterOptions

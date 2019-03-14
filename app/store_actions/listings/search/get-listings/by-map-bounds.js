@@ -4,7 +4,7 @@ import { getFetchingStatus } from '../../../../reducers/listings'
 import { SEARCH_BY_MAP_BOUNDS } from '../../../../constants/listings/search'
 import { generatePointsFromBounds } from '../../../../utils/map'
 
-const QUERY_LIMIT = 200
+const QUERY_LIMIT = 500
 
 const getListingsByMapBounds = bounds => (dispatch, getState) => {
   const { listings, map, type, panels, options } = getState().search
