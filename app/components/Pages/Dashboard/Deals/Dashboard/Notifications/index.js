@@ -21,11 +21,9 @@ class Notifications extends React.Component {
       notifications: unreadNotifications,
       isOpen: unreadNotifications.length > 0
     }
-
-    this.acknowledgeNotifications()
   }
 
-  acknowledgeNotifications = () => {
+  componentDidMount() {
     this.props.clearDealNotifications(this.props.deal)
   }
 
