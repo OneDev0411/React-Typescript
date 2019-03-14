@@ -8,7 +8,7 @@ import ProgressBar from 'components/ProgressBar'
 import importPdfJs from 'utils/import-pdf-js'
 import { getPdfSize } from 'models/Deal/form'
 
-import WentWrong from '../../../components/Pages/Dashboard/Partials/UserMessages/WentWrong/index.js'
+import WentWrong from '../../../components/Pages/Dashboard/Partials/UserMessages/WentWrong'
 
 import { Container, LoadingDealContainer } from './styled'
 import { Page } from './Page'
