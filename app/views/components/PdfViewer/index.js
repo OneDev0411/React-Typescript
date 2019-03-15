@@ -15,15 +15,21 @@ import { Page } from './Page'
 import { Toolbar } from './Toolbar'
 
 export class PdfViewer extends React.Component {
-  state = {
-    isLoading: false,
-    visiblePages: [1, 2],
-    isFailed: false,
-    document: null,
-    downloadPercents: 1,
-    rotation: 0,
-    zoomScale: 0,
-    isFitWindow: false
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      isLoading: false,
+      visiblePages: [1, 2],
+      isFailed: false,
+      document: null,
+      downloadPercents: 1,
+      rotation: 0,
+      zoomScale: 0,
+      isFitWindow: false
+    }
+
+    document.addEventListener('keydown', this.handleKeyboardShortcuts)
   }
 
   componentDidMount() {
@@ -173,8 +179,6 @@ export class PdfViewer extends React.Component {
           downloadPercents: 100,
           document
         })
-
-        document.addEventListener('keydown', this.handleKeyboardShortcuts)
       })
       .catch(e => {
         console.log(e)
@@ -183,6 +187,10 @@ export class PdfViewer extends React.Component {
   }
 
   handleKeyboardShortcuts = event => {
+    if (!this.state.document) {
+      return false
+    }
+
     const keyCode = event.keyCode || event.which
 
     switch (keyCode) {
