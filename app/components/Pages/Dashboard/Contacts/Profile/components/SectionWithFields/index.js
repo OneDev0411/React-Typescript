@@ -4,9 +4,12 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
+import { getContact } from 'models/contacts/get-contact'
 import { addAttributes } from 'models/contacts/add-attributes'
 import { updateAttribute } from 'models/contacts/update-attribute'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
+
+import { normalizeContact } from 'actions/contacts/helpers/normalize-contacts'
 
 import AddIcon from 'components/SvgIcons/Add/AddIcon'
 import { ShowMoreLess } from 'components/ShowMoreLess'
@@ -16,7 +19,11 @@ import { Section } from '../Section'
 import MasterField from '../ContactAttributeInlineEditableField'
 import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
 
-import { orderFields, normalizeAttributes } from './helpers'
+import {
+  fieldsNeedUpdateContact,
+  orderFields,
+  normalizeAttributes
+} from './helpers'
 
 const SHOW_MORE_LESS_LIMIT = 5
 
@@ -100,6 +107,25 @@ class SectionWithFields extends React.Component {
       )
     }))
 
+  updateContact = async attribute_def => {
+    if (
+      this.props.isPartner ||
+      !fieldsNeedUpdateContact.includes(attribute_def.name)
+    ) {
+      return
+    }
+
+    const { contact } = this.props
+
+    try {
+      const response = await getContact(contact.id)
+
+      this.props.submitCallback(normalizeContact(response.data))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   insert = async (cuid, data, attribute_def) => {
     const orderedAttributesCopy = this.orderedAttributesCopy
 
@@ -144,6 +170,8 @@ class SectionWithFields extends React.Component {
               }
         )
       }))
+
+      this.updateContact(attribute_def)
     } catch (error) {
       this.setState({
         orderedAttributes: orderedAttributesCopy
@@ -198,6 +226,8 @@ class SectionWithFields extends React.Component {
             )
           }
       )
+
+      this.updateContact(attribute_def)
     } catch (error) {
       this.setState({
         orderedAttributes: orderedAttributesCopy
@@ -275,9 +305,7 @@ class SectionWithFields extends React.Component {
 
     try {
       const { contact } = this.props
-      const updatedContent = await deleteAttribute(contact.id, attribute.id, {
-        associations: ['contact.updated_by']
-      })
+      const response = await deleteAttribute(contact.id, attribute.id)
 
       this.props.notify({
         status: 'success',
@@ -286,10 +314,7 @@ class SectionWithFields extends React.Component {
           attribute.attribute_def.name} deleted.`
       })
 
-      this.props.submitCallback({
-        ...contact,
-        ...updatedContent
-      })
+      this.props.submitCallback(normalizeContact(response.data))
     } catch (error) {
       console.log(error)
       this.setState({ orderedAttributes: backupList })
