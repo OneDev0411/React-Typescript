@@ -19,6 +19,7 @@ import {
   getListingUrl
 } from '../helpers/nunjucks-functions'
 
+import { loadGrapesjs } from './utils/load-grapes'
 import { createGrapesInstance } from './utils/create-grapes-instance'
 
 import Templates from '../Templates'
@@ -58,11 +59,18 @@ class Builder extends React.Component {
   }
 
   async componentDidMount() {
+    const { Grapesjs } = await loadGrapesjs()
+
+    const { load: loadAssetManagerPlugin } = await import('./AssetManager')
+    const { load: loadStyleManagerPlugin } = await import('./StyleManager')
+
+    await Promise.all([loadAssetManagerPlugin(), loadStyleManagerPlugin()])
+
     this.setState({
       isLoading: false
     })
 
-    this.editor = await createGrapesInstance({
+    this.editor = createGrapesInstance(Grapesjs, {
       assets: [...this.props.assets, ...this.UserAssets]
     })
 
@@ -75,6 +83,8 @@ class Builder extends React.Component {
     this.singleClickTextEditing()
     this.disableAssetManager()
     this.makeTemplateCentered()
+
+    console.log('>>>ON LOAD')
 
     if (this.IsVideoTemplate) {
       this.grapes.appendChild(this.videoToolbar)

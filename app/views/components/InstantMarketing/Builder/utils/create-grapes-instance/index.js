@@ -1,5 +1,3 @@
-import loadGrapes from '../load-grapes-lib'
-
 import config from './config'
 
 const STYLE_MANAGER_TEXT_TAGS = [
@@ -23,14 +21,7 @@ const STYLE_MANAGER_TEXT_TAGS = [
   'address'
 ]
 
-export async function createGrapesInstance({ assets }) {
-  const { Grapesjs } = await loadGrapes()
-
-  const { load: loadAssetManagerPlugin } = await import('../../AssetManager')
-  const { load: loadStyleManagerPlugin } = await import('../../StyleManager')
-
-  await Promise.all([loadAssetManagerPlugin(), loadStyleManagerPlugin()])
-
+export function createGrapesInstance(Grapesjs, { assets }) {
   return Grapesjs.init({
     ...config,
     avoidInlineStyle: false,

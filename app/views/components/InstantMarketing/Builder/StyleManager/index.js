@@ -6,10 +6,10 @@ import { Container } from './styled'
 import FontSizePicker from './FontSizePicker'
 import FontWeightPicker from './FontWeightPicker'
 import ColorPicker from './ColorPicker'
-import loadGrapes from '../utils/load-grapes-lib'
+import { loadGrapesjs } from '../utils/load-grapes'
 
 export const load = async () => {
-  const { Grapesjs } = await loadGrapes()
+  const { Grapesjs } = await loadGrapesjs()
 
   Grapesjs.plugins.add('style-manager', (editor, options) => {
     let styleManagerContainer
