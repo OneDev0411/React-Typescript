@@ -4,6 +4,7 @@ import { batchActions } from 'redux-batched-actions'
 import { browserHistory } from 'react-router'
 import moment from 'moment'
 import _ from 'underscore'
+import { Helmet } from 'react-helmet'
 
 import { getStartRange, getEndRange, getSelectedDate } from 'reducers/calendar'
 
@@ -275,54 +276,62 @@ class CalendarContainer extends React.Component {
     const { selectedDate, isFetching } = this.props
 
     return (
-      <Container isOpen={isMenuOpen}>
-        <Menu isOpen={isMenuOpen} width={MENU_WIDTH}>
-          <MenuContainer>
-            <DatePicker
-              selectedDate={selectedDate}
-              onChange={this.handleDateChange}
-              // modifiers={this.SelectedRange}
-            />
+      <React.Fragment>
+        <Helmet>
+          <title>Calendar | Rechat</title>
+        </Helmet>
+        <Container isOpen={isMenuOpen}>
+          <Menu isOpen={isMenuOpen} width={MENU_WIDTH}>
+            <MenuContainer>
+              <DatePicker
+                selectedDate={selectedDate}
+                onChange={this.handleDateChange}
+                // modifiers={this.SelectedRange}
+              />
 
-            <Export />
-          </MenuContainer>
-        </Menu>
+              <Export />
+            </MenuContainer>
+          </Menu>
 
-        <Content menuWidth={MENU_WIDTH} isSideMenuOpen={isMenuOpen}>
-          <PageHeader>
-            <PageHeader.Title showBackButton={false}>
-              <Trigger isExpended={isMenuOpen} onClick={this.toggleSideMenu} />
-              <PageHeader.Heading>Calendar</PageHeader.Heading>
-            </PageHeader.Title>
+          <Content menuWidth={MENU_WIDTH} isSideMenuOpen={isMenuOpen}>
+            <PageHeader>
+              <PageHeader.Title showBackButton={false}>
+                <Trigger
+                  isExpended={isMenuOpen}
+                  onClick={this.toggleSideMenu}
+                />
+                <PageHeader.Heading>Calendar</PageHeader.Heading>
+              </PageHeader.Title>
 
-            <PageHeader.Menu>
-              <ActionButton onClick={this.openEventDrawer}>
-                Add Event
-              </ActionButton>
-            </PageHeader.Menu>
-          </PageHeader>
-          <TableContainer>
-            <CalendarTable
-              positions={LOADING_POSITIONS}
-              selectedDate={selectedDate}
-              isFetching={isFetching}
-              loadingPosition={loadingPosition}
-              onScrollTop={this.loadPreviousItems}
-              onScrollBottom={this.loadNextItems}
-              onSelectTask={this.onClickTask}
-              onRef={this.onTableRef}
-            />
-          </TableContainer>
-        </Content>
+              <PageHeader.Menu>
+                <ActionButton onClick={this.openEventDrawer}>
+                  Add Event
+                </ActionButton>
+              </PageHeader.Menu>
+            </PageHeader>
+            <TableContainer>
+              <CalendarTable
+                positions={LOADING_POSITIONS}
+                selectedDate={selectedDate}
+                isFetching={isFetching}
+                loadingPosition={loadingPosition}
+                onScrollTop={this.loadPreviousItems}
+                onScrollBottom={this.loadNextItems}
+                onSelectTask={this.onClickTask}
+                onRef={this.onTableRef}
+              />
+            </TableContainer>
+          </Content>
 
-        <CrmEvents
-          isOpenEventDrawer={this.state.isOpenEventDrawer}
-          selectedEvent={this.state.selectedEvent}
-          user={this.props.user}
-          onEventChange={this.handleEventChange}
-          onCloseEventDrawer={this.closeEventDrawer}
-        />
-      </Container>
+          <CrmEvents
+            isOpenEventDrawer={this.state.isOpenEventDrawer}
+            selectedEvent={this.state.selectedEvent}
+            user={this.props.user}
+            onEventChange={this.handleEventChange}
+            onCloseEventDrawer={this.closeEventDrawer}
+          />
+        </Container>
+      </React.Fragment>
     )
   }
 }

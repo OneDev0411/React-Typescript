@@ -1,11 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Helmet } from 'react-helmet'
 
 import ListingMobileView from './components/ListingMobileView'
 import ListingDesktopView from './components/ListingDesktopView'
 import logUserActivity from '../../../../../models/user/post-new-activity'
 import getListing from '../../../../../models/listings/listing/get-listing'
 import changeListingFollowStatuses from '../../../../../models/listings/listing/change-listing-follow-status'
+import listing_util from '../../../../../utils/listing'
 
 class Listing extends React.Component {
   state = {
@@ -70,8 +72,16 @@ class Listing extends React.Component {
       this.setState({ isFetching: false, errorMessage })
     }
   }
+
   render() {
     const { listing, isFetching, errorMessage } = this.state
+    let pageTitle =
+      listing && listing.property
+        ? `${listing_util.addressTitle(listing.property.address)} | `
+        : ''
+
+    pageTitle = `${pageTitle}Properties | Rechat`
+
     let content = (
       <ListingDesktopView
         {...this.props}
@@ -93,7 +103,14 @@ class Listing extends React.Component {
       )
     }
 
-    return content
+    return (
+      <React.Fragment>
+        <Helmet>
+          <title> {pageTitle} </title>
+        </Helmet>
+        {content}
+      </React.Fragment>
+    )
   }
 }
 
