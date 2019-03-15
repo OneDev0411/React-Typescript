@@ -89,7 +89,7 @@ export class DealsListWidget extends React.Component {
 
   render() {
     return (
-      <Section title="Deals">
+      <Section title="Deals" style={{ padding: '0 1.5rem' }}>
         {/* <Section title="Deals" onEdit={this.handleOnOpen}> */}
         {this.state.isLoading ? (
           <Loading style={{ margin: '4em auto' }} />

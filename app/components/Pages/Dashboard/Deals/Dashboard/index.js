@@ -1,8 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import _ from 'underscore'
-
-import { deleteNotifications } from 'models/Deal/notification'
 
 import { isBackOffice } from 'utils/user-teams'
 import { getDeal, getContexts } from 'actions/deals'
@@ -25,8 +22,6 @@ class DealDetails extends React.Component {
   }
 
   componentDidMount() {
-    this.handleNotifications(this.props.deal)
-
     this.initializeDeal()
   }
 
@@ -83,20 +78,6 @@ class DealDetails extends React.Component {
     this.setState({
       activeTab: tab.id
     })
-  }
-
-  handleNotifications(deal) {
-    if (!deal || !Array.isArray(deal.new_notifications)) {
-      return false
-    }
-
-    const notifications = deal.new_notifications.filter(
-      notification => !notification.room
-    )
-
-    if (notifications.length > 0) {
-      deleteNotifications(_.pluck(notifications, 'id'))
-    }
   }
 
   render() {

@@ -6,14 +6,15 @@ import { addNotification as notify } from 'reapop'
 import Flex from 'styled-flex-component'
 
 import OverlayDrawer from 'components/OverlayDrawer'
-import { getChecklists } from 'reducers/deals/checklists'
 
 import {
   createFormTask,
   changeNeedsAttention,
+  setExpandChecklist,
   moveTaskFile
 } from 'actions/deals'
 
+import { getChecklists } from 'reducers/deals/checklists'
 import { selectTaskById } from 'reducers/deals/tasks'
 import { selectFormById } from 'reducers/deals/forms'
 
@@ -99,6 +100,9 @@ class TasksDrawer extends React.Component {
         this.props.file,
         selectedItem.notifyOffice
       )
+
+      // expand checklist if is close
+      this.props.setExpandChecklist(task.checklist, true)
 
       this.props.onMoveComplete(task, newFile)
     } catch (e) {
@@ -188,5 +192,11 @@ function mapStateToProps({ deals, user }, props) {
 
 export default connect(
   mapStateToProps,
-  { createFormTask, changeNeedsAttention, moveTaskFile, notify }
+  {
+    createFormTask,
+    changeNeedsAttention,
+    moveTaskFile,
+    setExpandChecklist,
+    notify
+  }
 )(TasksDrawer)

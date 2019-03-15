@@ -5,12 +5,6 @@ import LinkButton from 'components/Button/LinkButton'
 export const Container = styled.div`
   justify-content: space-between;
   align-items: center;
-
-  ${props =>
-    props.isOpen === false &&
-    `
-    display: none;
-  `};
 `
 
 export const FileContainer = styled.div`

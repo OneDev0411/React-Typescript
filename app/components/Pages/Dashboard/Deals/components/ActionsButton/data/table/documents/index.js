@@ -62,11 +62,11 @@ export default normalizeConditions([
         envelope_status: ENVELOPE_NONE
       }),
     actions: {
-      [DOCUSIGN_BUTTON]: {
+      [VIEW_BUTTON]: {
         primary: true
       },
-      [EDIT_BUTTON]: {},
-      [VIEW_BUTTON]: {}
+      [DOCUSIGN_BUTTON]: {},
+      [EDIT_BUTTON]: {}
     }
   },
   {
@@ -82,7 +82,6 @@ export default normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
-      [VOID_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {}
     }
@@ -103,7 +102,6 @@ export default normalizeConditions([
       [EDIT_BUTTON]: {
         disabled: true
       },
-      [DOCUSIGN_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {}
     }
@@ -138,8 +136,7 @@ export default normalizeConditions([
       [VIEW_BUTTON]: {
         primary: true
       },
-      [EDIT_BUTTON]: {},
-      [DOCUSIGN_BUTTON]: {}
+      [EDIT_BUTTON]: {}
     }
   },
   {
@@ -152,10 +149,10 @@ export default normalizeConditions([
         envelope_status: ENVELOPE_NONE
       }),
     actions: {
-      [DOCUSIGN_BUTTON]: {
+      [VIEW_BUTTON]: {
         primary: true
       },
-      [VIEW_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
       [MOVE_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
@@ -175,7 +172,6 @@ export default normalizeConditions([
         primary: true
       },
       [VIEW_BUTTON]: {},
-      [VOID_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
     }
@@ -193,9 +189,6 @@ export default normalizeConditions([
       [RESEND_BUTTON]: {
         primary: true
       },
-      [DOCUSIGN_BUTTON]: {
-        disabled: true
-      },
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
@@ -211,10 +204,10 @@ export default normalizeConditions([
         envelope_status: [].concat(ENVELOPE_DECLINED, ENVELOPE_VOIDED)
       }),
     actions: {
-      [DOCUSIGN_BUTTON]: {
+      [VIEW_BUTTON]: {
         primary: true
       },
-      [VIEW_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [MOVE_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
@@ -233,7 +226,6 @@ export default normalizeConditions([
       [VIEW_BUTTON]: {
         primary: true
       },
-      [DOCUSIGN_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
     }
   },
@@ -263,11 +255,11 @@ export default normalizeConditions([
         form_saved: false
       }),
     actions: {
-      [MOVE_BUTTON]: {
+      [SPLIT_PDF_BUTTON]: {
         primary: true
       },
       [VIEW_BUTTON]: {},
-      [SPLIT_PDF_BUTTON]: {},
+      [MOVE_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
     }
   },

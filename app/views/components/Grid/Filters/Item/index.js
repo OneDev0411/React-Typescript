@@ -2,9 +2,9 @@ import React from 'react'
 import Downshift from 'downshift'
 import _ from 'underscore'
 
-import { ListFilter } from '../Types/List'
-
 import IconRemove from 'components/SvgIcons/Close/CloseIcon'
+
+import { ListFilter } from '../Types/List'
 
 import {
   Container,
@@ -70,7 +70,11 @@ export const FilterItem = props => {
             {isOpen && (
               <Menu depth={3}>
                 <Content>{getComponent(filterConfig, props)}</Content>
-                <DoneButton appearance="link" onClick={onToggleFilterActive}>
+                <DoneButton
+                  disabled={!values || values.length === 0}
+                  appearance="link"
+                  onClick={onToggleFilterActive}
+                >
                   Done
                 </DoneButton>
               </Menu>

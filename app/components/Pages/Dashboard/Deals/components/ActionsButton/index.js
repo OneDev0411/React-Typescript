@@ -26,6 +26,8 @@ import Tooltip from 'components/tooltip'
 
 import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
 
+import { selectDealEnvelopes } from 'reducers/deals/envelopes'
+
 import { selectActions } from './helpers/select-actions'
 import { getEsignAttachments } from './helpers/get-esign-attachments'
 import { getFileUrl } from './helpers/get-file-url'
@@ -138,6 +140,8 @@ class ActionsButton extends React.Component {
 
     const isTask = this.props.document.type === 'task'
     const isFile = this.props.document.type === 'file'
+
+    // get all envelopes of the document
     const envelopes = getDocumentEnvelopes(
       this.props.envelopes,
       this.props.document
@@ -155,7 +159,10 @@ class ActionsButton extends React.Component {
       document_type: documentType,
       file_uploaded: isFile,
       form_saved: isTask && this.props.document.submission !== null,
-      envelope_status: this.getLastEnvelopeStatus(envelopes)
+      envelope_status: this.getLastEnvelopeStatus(envelopes),
+      task_active_envelopes: this.getActiveEnvelopes(
+        getTaskEnvelopes(this.props.envelopes, this.props.task)
+      )
     }
   }
 
@@ -171,7 +178,8 @@ class ActionsButton extends React.Component {
       is_task_notified: this.props.task.attention_requested === true,
       file_uploaded: this.hasTaskAttachments(this.props.task),
       form_saved: this.props.task.submission !== null,
-      envelope_status: this.getLastEnvelopeStatus(envelopes)
+      envelope_status: this.getLastEnvelopeStatus(envelopes),
+      task_active_envelopes: this.getActiveEnvelopes(envelopes)
     }
   }
 
@@ -188,12 +196,18 @@ class ActionsButton extends React.Component {
     return envelopes[0].status
   }
 
+  getActiveEnvelopes = envelopes =>
+    envelopes.filter(
+      envelope => ['Voided', 'Declined'].includes(envelope.status) === false
+    )
+
   getSplitterFiles = () => {
     const files = getFileUrl({
       type: this.props.type,
       deal: this.props.deal,
       task: this.props.task,
-      document: this.props.document
+      document: this.props.document,
+      envelopes: this.props.envelopes
     })
 
     return files.filter(file => file.mime === 'application/pdf')
@@ -368,6 +382,7 @@ class ActionsButton extends React.Component {
       deal: this.props.deal,
       task: this.props.task,
       document: this.props.document,
+      envelopes: this.props.envelopes,
       isBackOffice: this.props.isBackOffice
     })
 
@@ -396,13 +411,12 @@ class ActionsButton extends React.Component {
       deal: this.props.deal,
       task: this.props.task,
       document: this.props.document,
+      envelopes: this.props.envelopes,
       isBackOffice: this.props.isBackOffice
     })
 
-    console.log('>>>>>', this.props)
-
     if (links.length === 1) {
-      return this.props.isBackOffice
+      return this.props.isBackOffice && links[0].openInNewTab !== true
         ? browserHistory.push(links[0].url)
         : window.open(links[0].url, '_blank')
     }
@@ -413,7 +427,7 @@ class ActionsButton extends React.Component {
         title: 'Select a file to view/print',
         actionTitle: 'View/Print',
         onSelect: item =>
-          this.props.isBackOffice
+          this.props.isBackOffice && item.openInNewTab !== true
             ? browserHistory.push(item.url)
             : window.open(item.url, '_blank')
       }
@@ -540,6 +554,7 @@ class ActionsButton extends React.Component {
             <div style={{ position: 'relative' }}>
               <Container>
                 <PrimaryAction
+                  hasSecondaryActions={secondaryActions.length > 0}
                   onClick={() => this.handleSelectAction(primaryAction)}
                 >
                   {this.getButtonLabel(primaryAction)}
@@ -642,10 +657,10 @@ ActionsButton.defaultProps = {
   document: null
 }
 
-function mapStateToProps({ deals, user }) {
+function mapStateToProps({ deals, user }, props) {
   return {
     user,
-    envelopes: deals.envelopes,
+    envelopes: selectDealEnvelopes(props.deal, deals.envelopes),
     isBackOffice: isBackOffice(user)
   }
 }

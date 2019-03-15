@@ -4,8 +4,6 @@ import { connect } from 'react-redux'
 import merge from 'merge'
 import moment from 'moment'
 
-import Flex from 'styled-flex-component'
-
 import Deal from 'models/Deal'
 
 import Table from 'components/Grid/Table'
@@ -14,9 +12,6 @@ import EmptyState from './EmptyState'
 import LoadingState from '../../components/LoadingState'
 
 import Address from '../../components/table-columns/Address'
-import CriticalDate, {
-  getCriticalDateNextValue
-} from '../../components/table-columns/CriticalDate'
 import Notifications from '../../components/table-columns/NotificationBadge'
 
 import { getPrimaryAgentName } from '../../../utils/roles'
@@ -45,18 +40,6 @@ class Grid extends React.Component {
         header: 'Office',
         accessor: deal => this.getOffice(deal),
         render: ({ rowData: deal }) => this.getOffice(deal)
-      },
-      {
-        id: 'critical-dates',
-        header: 'Critical Dates',
-        accessor: deal => getCriticalDateNextValue(deal),
-        render: ({ rowData: deal, totalRows, rowIndex }) => (
-          <CriticalDate
-            deal={deal}
-            rowId={rowIndex + 1}
-            rowsCount={totalRows}
-          />
-        )
       },
       {
         id: 'submitted-at',

@@ -8,22 +8,10 @@ import { ItemTitle, ItemContainer } from '../styled'
 const OPTIONS = [
   {
     label: 'Regular',
-    value: '100'
-  },
-  {
-    label: 'Medium',
     value: '300'
   },
   {
-    label: 'Semi bold',
-    value: '500'
-  },
-  {
     label: 'Bold',
-    value: '700'
-  },
-  {
-    label: 'Extra Bold',
     value: '900'
   }
 ]
@@ -34,11 +22,11 @@ export default class FontSizePicker extends Component {
   }
 
   state = {
-    value: this.props.value || OPTIONS[1].value
+    value: this.props.value || OPTIONS[0].value
   }
 
   findSelectedItemByValue = value =>
-    OPTIONS.find(item => item.value === value) || OPTIONS[1]
+    OPTIONS.find(item => item.value === value) || OPTIONS[0]
 
   handleChange = ({ value }) => {
     this.setState({ value })

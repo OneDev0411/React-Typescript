@@ -161,6 +161,7 @@
     "react-masonry-component": "^6.2.1",
     "react-modal": "^3.8.1",
     "react-motion": "^0.5.2",
+    "react-progressive-image": "^0.6.0",
     "react-pull-to-refresh": "^1.1.2",
     "react-redux": "^5.1.1",
     "react-resize-detector": "^0.6.0",

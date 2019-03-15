@@ -9,6 +9,7 @@ export class BasicDropdown extends React.Component {
   render() {
     const {
       buttonIcon,
+      buttonIconSize = 'large',
       buttonSize,
       buttonStyle = {},
       buttonText,
@@ -65,6 +66,7 @@ export class BasicDropdown extends React.Component {
                 {...downshift.getButtonProps({
                   disabled,
                   iconLeft: buttonIcon,
+                  iconSize: buttonIconSize,
                   isBlock,
                   isOpen: downshift.isOpen,
                   size: buttonSize,

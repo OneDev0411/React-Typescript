@@ -1,5 +1,7 @@
-import Fetch from '../../../services/fetch'
 import { normalize } from 'normalizr'
+
+import Fetch from '../../../services/fetch'
+
 import * as schema from '../schema'
 
 export const searchListings = async (text, query, hasNeedNormalized = true) => {
@@ -10,7 +12,7 @@ export const searchListings = async (text, query, hasNeedNormalized = true) => {
   try {
     const response = await new Fetch()
       .get('/listings/search')
-      .query({ q: window.encodeURIComponent(text) })
+      .query({ q: text })
       .query(query)
 
     if (!hasNeedNormalized) {

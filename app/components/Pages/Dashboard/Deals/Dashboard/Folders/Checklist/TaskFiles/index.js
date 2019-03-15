@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
-import { DigitalForm } from './DigitalForm'
+import DigitalForm from './DigitalForm'
 import FileAttachment from './Attachment'
 
 import { Container } from './styled'
@@ -26,8 +26,12 @@ class TaskFiles extends React.Component {
   render() {
     const { props } = this
 
+    if (!this.props.isOpen) {
+      return false
+    }
+
     return (
-      <Container isOpen={this.props.isOpen}>
+      <Container>
         {this.Files.map((item, key) =>
           item.type === 'task' ? (
             <DigitalForm

@@ -13,7 +13,6 @@ export const fieldsOrder = [
 export function Partner(props) {
   return (
     <SectionWithFields
-      addNewFieldButtonText="Add Spouse/Partner"
       contact={props.contact}
       fieldsOrder={fieldsOrder}
       validFields={fieldsOrder}

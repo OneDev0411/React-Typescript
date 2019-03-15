@@ -33,7 +33,9 @@ export const actionsDefaultProperties = {
   },
   [DOCUSIGN_BUTTON]: {
     label: 'Docusign',
-    type: 'get-signature'
+    type: 'get-signature',
+    condition: ({ task_active_envelopes = [] }) =>
+      task_active_envelopes.length === 0
   },
   [VOID_BUTTON]: {
     label: 'Void',

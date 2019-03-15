@@ -6,7 +6,11 @@ export const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  padding: 2rem 0;
+  position: sticky;
+  top: 0;
+  background-color: #f2f2f2;
+  z-index: 1;
 `
 
 export const Title = styled.div`

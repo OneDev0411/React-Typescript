@@ -173,7 +173,7 @@ class MlsAutocompleteSearch extends Component {
 
       const [places, listings] = await Promise.all([
         this.autocompleteAddress(input),
-        searchListings(input, null, false)
+        searchListings(input, { limit: 5 }, false)
       ])
 
       this.setState({

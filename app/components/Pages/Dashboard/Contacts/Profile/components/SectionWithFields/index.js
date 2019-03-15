@@ -1,263 +1,356 @@
 import React from 'react'
+import cuid from 'cuid'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
-import { upsertContactAttributes } from '../../../../../../../models/contacts/helpers/upsert-contact-attributes'
-import { deleteContactAttributes } from '../../../../../../../models/contacts/helpers/delete-contact-attributes'
-import { selectDefsBySection } from '../../../../../../../reducers/contacts/attributeDefs'
-import { getContactAttributesBySection } from '../../../../../../../models/contacts/helpers'
-import ActionButton from '../../../../../../../views/components/Button/ActionButton'
-import { getContactOriginalSourceTitle } from '../../../../../../../utils/get-contact-original-source-title'
+import { addAttributes } from 'models/contacts/add-attributes'
+import { updateAttribute } from 'models/contacts/update-attribute'
+import { deleteAttribute } from 'models/contacts/delete-attribute'
 
-import { EditForm } from './EditFormDrawer'
-import { PrimaryStar } from '../../../components/PrimaryStar'
-import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
+import AddIcon from 'components/SvgIcons/Add/AddIcon'
+import { ShowMoreLess } from 'components/ShowMoreLess'
+import TextIconButton from 'components/Button/TextIconButton'
+
 import { Section } from '../Section'
-import {
-  orderFields,
-  formatPreSave,
-  getFormater,
-  getInitialValues
-} from './helpers'
+import MasterField from '../ContactAttributeInlineEditableField'
+import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
+
+import { orderFields, normalizeAttributes } from './helpers'
+
+const SHOW_MORE_LESS_LIMIT = 5
 
 const propTypes = {
-  addNewFieldButtonText: PropTypes.string,
-  showAddNewCustomAttributeButton: PropTypes.bool,
-  submitCallback: PropTypes.func
+  addCustomAttributeButtonText: PropTypes.string
 }
 
 const defaultProps = {
-  addNewFieldButtonText: '',
-  showAddNewCustomAttributeButton: true,
-  submitCallback() {}
+  addCustomAttributeButtonText: ''
+}
+
+function generateEmptyAttribute(attribute_def, is_partner, order) {
+  return {
+    attribute_def,
+    cuid: cuid(),
+    is_partner,
+    isActive: false,
+    order,
+    [attribute_def.data_type]: ''
+  }
+}
+
+function getEmptyAttributes(attributes, sectionAttributesDef, is_partner) {
+  return sectionAttributesDef
+    .filter(
+      attribute_def =>
+        !attributes.some(
+          attribute => attribute.attribute_def.id === attribute_def.id
+        )
+    )
+    .map((attribute_def, order) =>
+      generateEmptyAttribute(attribute_def, is_partner, order)
+    )
+}
+
+function orderAttributes(attributes, fieldsOrder) {
+  return orderFields(attributes, fieldsOrder).filter(
+    a =>
+      a.attribute_def.show ||
+      (a.attribute_def.editable && a[a.attribute_def.data_type])
+  )
 }
 
 class SectionWithFields extends React.Component {
-  state = {
-    isOpenEditDrawer: false,
-    isOpenNewAttributeDrawer: false
+  constructor(props) {
+    super(props)
+
+    const { attributes, sectionAttributesDef } = normalizeAttributes(props)
+
+    this.sectionAttributesDef = sectionAttributesDef
+
+    const allAttributes = [
+      ...attributes,
+      ...getEmptyAttributes(attributes, sectionAttributesDef, props.isPartner)
+    ]
+
+    const orderedAttributes = orderAttributes(allAttributes, props.fieldsOrder)
+
+    this.state = {
+      isOpenCustomAttributeDrawer: false,
+      orderedAttributes,
+      showMoreLessCount: 5
+    }
   }
 
-  openEditAttributeDrawer = () => this.setState({ isOpenEditDrawer: true })
-
-  closeEditAttributeDrawer = () => this.setState({ isOpenEditDrawer: false })
-
-  openNewAttributeDrawer = () =>
-    this.setState({ isOpenNewAttributeDrawer: true })
+  openCustomAttributeDrawer = () =>
+    this.setState({ isOpenCustomAttributeDrawer: true })
 
   closeNewAttributeDrawer = () =>
-    this.setState({ isOpenNewAttributeDrawer: false })
+    this.setState({ isOpenCustomAttributeDrawer: false })
 
-  filterEditableFields = field => field.attribute_def.editable
-
-  handleOnSubmit = async values => {
-    const { contact } = this.props
-    let newContact = contact
-
-    try {
-      const { upsertedAttributeList, deletedAttributesList } = formatPreSave(
-        this.props.fields.filter(this.filterEditableFields),
-        values
+  toggleMode = ({ order }) =>
+    this.setState(state => ({
+      orderedAttributes: state.orderedAttributes.map(a =>
+        a.order === order ? { ...a, isActive: !a.isActive } : a
       )
+    }))
 
-      const requests = []
+  insert = async (cuid, data, attribute_def) => {
+    try {
+      const response = await addAttributes(this.props.contact.id, [
+        { ...data, attribute_def: attribute_def.id }
+      ])
 
-      if (upsertedAttributeList.length > 0) {
-        requests.push(
-          upsertContactAttributes(
-            contact.id,
-            upsertedAttributeList.map(a =>
-              this.props.isPartner ? { ...a, is_partner: true } : a
-            )
-          )
-        )
-      }
+      const newAttribute = response.data[0]
 
-      if (deletedAttributesList.length > 0) {
-        requests.push(
-          deleteContactAttributes(contact.id, deletedAttributesList)
-        )
-      }
-
-      const response = await Promise.all(requests)
-
-      response.forEach(updatedContact => {
-        newContact = {
-          ...newContact,
-          ...updatedContact
-        }
-      })
-
-      this.props.submitCallback(newContact)
-      this.closeEditAttributeDrawer()
       this.props.notify({
         status: 'success',
         dismissAfter: 4000,
-        message: `${this.props.title || this.props.section} updated.`
+        message: `${attribute_def.label || attribute_def.name} added.`
       })
+
+      this.setState(state => ({
+        orderedAttributes: state.orderedAttributes.map(a =>
+          a.cuid !== cuid
+            ? a
+            : {
+                ...newAttribute,
+                attribute_def,
+                order: a.order,
+                cuid
+              }
+        )
+      }))
     } catch (error) {
       console.log(error)
     }
   }
 
-  getEmptyFields = () =>
-    this.props.sectionAttributesDef
-      .filter(
-        attribute_def =>
-          !this.props.fields.some(
-            field => field.attribute_def.id === attribute_def.id
-          )
+  update = async (id, data, attribute_def) => {
+    try {
+      const updatedAttribute = await updateAttribute(
+        this.props.contact.id,
+        id,
+        data
       )
-      .map(attribute_def => ({
-        attribute_def,
-        id: undefined,
-        is_partner: this.props.isPartner,
-        [attribute_def.data_type]: ''
-      }))
 
-  getModalFields = () => {
-    const orderedFields = orderFields(
-      [...this.props.fields, ...this.getEmptyFields()],
-      this.props.fieldsOrder
-    )
-
-    return orderedFields.filter(this.filterEditableFields)
-  }
-
-  getSectionFields = () => {
-    const { section, isPartner } = this.props
-    const orderedFields = orderFields(
-      [...this.props.fields, ...this.getEmptyFields()],
-      this.props.fieldsOrder
-    )
-
-    if (
-      section !== 'Dates' &&
-      orderedFields.every(f => !f[f.attribute_def.data_type])
-    ) {
-      return null
-    }
-
-    const fields = orderedFields
-      .filter(
-        f =>
-          f.attribute_def.show ||
-          (f.attribute_def.editable && f[f.attribute_def.data_type])
-      )
-      .map((field, index) => {
-        const { attribute_def } = field
-        let value = field[attribute_def.data_type]
-        let key = `${section}_field_${index}`
-
-        if (isPartner) {
-          key = `partner_${key}`
-        }
-
-        const getTitle = () => {
-          if (field.label) {
-            return field.label
-          }
-
-          if (value && attribute_def.has_label && attribute_def.labels) {
-            return attribute_def.labels[0]
-          }
-
-          return attribute_def.label
-        }
-
-        if (attribute_def.name === 'source_type') {
-          value = getContactOriginalSourceTitle(value)
-        }
-
-        return [
-          <dt
-            key={`${key}_title`}
-            style={{
-              color: '#7f7f7f',
-              fontWeight: '300'
-            }}
-          >
-            {getTitle()}
-          </dt>,
-          <dd
-            key={`${key}_value`}
-            style={{
-              marginBottom: '1em',
-              display: 'flex',
-              alignItems: 'center',
-              wordBreak: 'break-word'
-            }}
-          >
-            {value ? getFormater(field)(value) : '-'}
-            {value && field.is_primary && (
-              <PrimaryStar style={{ marginLeft: '0.5em' }} />
-            )}
-          </dd>
-        ]
+      this.props.notify({
+        status: 'success',
+        dismissAfter: 4000,
+        message: `${attribute_def.label || attribute_def.name} updated.`
       })
 
-    if (fields.length > 0) {
-      return <dl style={{ marginBottom: '1em' }}>{fields}</dl>
+      this.setState(state => ({
+        orderedAttributes: state.orderedAttributes.map(a =>
+          a.id !== id
+            ? a
+            : {
+                ...updatedAttribute,
+                attribute_def,
+                order: a.order
+              }
+        )
+      }))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  save = (attribute_def, { id, cuid, ...data }) => {
+    if (id == null && cuid == null) {
+      return
     }
 
-    return null
+    if (this.props.isPartner) {
+      data = { ...data, is_partner: true }
+    }
+
+    if (id) {
+      this.update(id, data, attribute_def)
+    } else {
+      this.insert(cuid, data, attribute_def)
+    }
+  }
+
+  isOnlyNonSingularInstance = (state, attribute) => {
+    const { attribute_def } = attribute
+
+    return (
+      !attribute_def.singular &&
+      state.orderedAttributes.filter(
+        a => a.attribute_def.id === attribute_def.id
+      ).length > 1
+    )
+  }
+
+  deleteFromState = (state, attribute) => {
+    const { isPrimary } = this.props
+    const isShadowField = !!attribute.id
+
+    if (this.isOnlyNonSingularInstance(state, attribute)) {
+      return {
+        orderedAttributes: state.orderedAttributes.filter(a =>
+          isShadowField ? a.id !== attribute.id : a.cuid !== attribute.cuid
+        )
+      }
+    }
+
+    return {
+      orderedAttributes: state.orderedAttributes.map(a => {
+        const emptyAttribute = generateEmptyAttribute(
+          attribute.attribute_def,
+          isPrimary,
+          a.order
+        )
+
+        if (isShadowField) {
+          return a.id === attribute.id ? emptyAttribute : a
+        }
+
+        return a.cuid === attribute.cuid ? emptyAttribute : a
+      })
+    }
+  }
+
+  deleteFromApi = async attribute => {
+    let backupList
+
+    this.setState(state => {
+      backupList = state.orderedAttributes
+
+      return this.deleteFromState(state, attribute)
+    })
+
+    try {
+      const { contact } = this.props
+      const updatedContent = await deleteAttribute(contact.id, attribute.id, {
+        associations: ['contact.updated_by']
+      })
+
+      this.props.notify({
+        status: 'success',
+        dismissAfter: 4000,
+        message: `${attribute.attribute_def.label ||
+          attribute.attribute_def.name} deleted.`
+      })
+
+      this.props.submitCallback({
+        ...contact,
+        ...updatedContent
+      })
+    } catch (error) {
+      console.log(error)
+      this.setState({ orderedAttributes: backupList })
+    }
+  }
+
+  deleteHandler = attribute => {
+    if (attribute.id) {
+      return this.deleteFromApi(attribute)
+    }
+
+    this.setState(state => this.deleteFromState(state, attribute))
+  }
+
+  addShadowAttribute = attribute => {
+    const { attribute_def, order, is_partner } = attribute
+    const newOrder = order + 1
+
+    const field = {
+      attribute_def,
+      cuid: cuid(),
+      is_partner,
+      isActive: true,
+      order: newOrder,
+      [attribute_def.data_type]: ''
+    }
+
+    this.setState(state => {
+      const shallowCopy = state.orderedAttributes.slice()
+
+      shallowCopy.splice(newOrder, 0, field)
+
+      const newState = {
+        orderedAttributes: shallowCopy.map((a, order) => ({ ...a, order }))
+      }
+
+      if (
+        shallowCopy.length > SHOW_MORE_LESS_LIMIT &&
+        newOrder >= SHOW_MORE_LESS_LIMIT
+      ) {
+        newState.showMoreLessCount = state.showMoreLessCount + 1
+      }
+
+      return newState
+    })
+  }
+
+  AddCustomAttributeCallback = attribute_def => {
+    this.setState(({ orderedAttributes }) => {
+      const order = Math.max(...orderedAttributes.map(a => a.order)) + 1
+
+      return {
+        orderedAttributes: [
+          ...orderedAttributes,
+          generateEmptyAttribute(attribute_def, this.props.isPartner, order)
+        ]
+      }
+    })
+  }
+
+  renderFields = () => {
+    const { addCustomAttributeButtonText } = this.props
+    let items = this.state.orderedAttributes.map(attribute => (
+      <MasterField
+        attribute={attribute}
+        handleAddNewInstance={this.addShadowAttribute}
+        handleDelete={this.deleteHandler}
+        handleSave={this.save}
+        handleToggleMode={this.toggleMode}
+        isActive={attribute.isActive}
+        key={attribute.cuid || attribute.id}
+      />
+    ))
+
+    if (addCustomAttributeButtonText) {
+      items.push(
+        <TextIconButton
+          key={cuid()}
+          iconLeft={AddIcon}
+          onClick={this.openCustomAttributeDrawer}
+          style={{ marginBottom: '1em' }}
+          text={`Add a custom ${addCustomAttributeButtonText}`}
+        />
+      )
+    }
+
+    return items
   }
 
   render() {
-    const {
-      section,
-      isPartner,
-      addNewFieldButtonText,
-      showAddNewCustomAttributeButton
-    } = this.props
-    const modalFields = this.getModalFields()
-    const sectionFields = this.getSectionFields()
+    const { section } = this.props
     const sectionTitle = this.props.title || section
+    const sectionContainerStyle = { padding: '0 1.5rem', display: 'block' }
 
     return (
-      <Section
-        onAdd={!isPartner && this.openNewAttributeDrawer}
-        onEdit={sectionFields ? this.openEditAttributeDrawer : undefined}
-        title={sectionTitle}
-      >
-        {sectionFields}
-        {(addNewFieldButtonText || showAddNewCustomAttributeButton) && (
-          <div
-            style={{
-              marginTop: sectionFields ? 0 : '0.5em'
-            }}
+      <Section title={sectionTitle}>
+        {this.state.orderedAttributes.length > SHOW_MORE_LESS_LIMIT ? (
+          <ShowMoreLess
+            count={this.state.showMoreLessCount}
+            style={sectionContainerStyle}
           >
-            {addNewFieldButtonText && !sectionFields && (
-              <ActionButton
-                size="small"
-                appearance="outline"
-                onClick={this.openEditAttributeDrawer}
-                style={{ marginRight: '1em' }}
-              >
-                {addNewFieldButtonText}
-              </ActionButton>
-            )}
-          </div>
+            {this.renderFields()}
+          </ShowMoreLess>
+        ) : (
+          <div style={sectionContainerStyle}>{this.renderFields()}</div>
         )}
 
-        {this.state.isOpenEditDrawer && (
-          <EditForm
-            fields={modalFields}
-            initialValues={getInitialValues(modalFields)}
-            isOpen
-            isPartner={isPartner}
-            onClose={this.closeEditAttributeDrawer}
-            title={`Edit ${sectionTitle}`}
-            onSubmit={this.handleOnSubmit}
-          />
-        )}
-
-        {this.state.isOpenNewAttributeDrawer && (
+        {this.state.isOpenCustomAttributeDrawer && (
           <CustomAttributeDrawer
             isOpen
             onClose={this.closeNewAttributeDrawer}
             section={Array.isArray(section) ? undefined : section}
+            submitCallback={this.AddCustomAttributeCallback}
           />
         )}
       </Section>
@@ -268,41 +361,9 @@ class SectionWithFields extends React.Component {
 SectionWithFields.propTypes = propTypes
 SectionWithFields.defaultProps = defaultProps
 
-function mapStateToProps(state, props) {
-  let fields = []
-  let sectionAttributesDef = []
-  const { contact, section } = props
-  const { attributeDefs } = state.contacts
-
-  const isParnter = f => (props.isPartner ? f.is_partner : !f.is_partner)
-
-  if (Array.isArray(section)) {
-    section.forEach(s => {
-      fields = [
-        ...fields,
-        ...getContactAttributesBySection(contact, s).filter(isParnter)
-      ]
-      sectionAttributesDef = [
-        ...sectionAttributesDef,
-        ...selectDefsBySection(attributeDefs, s)
-      ]
-    })
-  } else {
-    fields = getContactAttributesBySection(contact, section).filter(isParnter)
-    sectionAttributesDef = selectDefsBySection(attributeDefs, section)
-  }
-
-  if (Array.isArray(props.validFields)) {
-    const isValid = a => a.name && props.validFields.some(vf => vf === a.name)
-
-    fields = fields.filter(f => isValid(f.attribute_def))
-    sectionAttributesDef = sectionAttributesDef.filter(isValid)
-  }
-
+function mapStateToProps(state) {
   return {
-    attributeDefs,
-    fields,
-    sectionAttributesDef
+    attributeDefs: state.contacts.attributeDefs
   }
 }
 

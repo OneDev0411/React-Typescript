@@ -10,7 +10,8 @@ import {
   uploadStashFile,
   resetUploadFiles,
   setUploadAttributes,
-  changeNeedsAttention
+  changeNeedsAttention,
+  setExpandChecklist
 } from 'actions/deals'
 
 import ToolTip from 'components/tooltip'
@@ -151,6 +152,11 @@ class UploadModal extends React.Component {
       setUploadAttributes(id, { status: STATUS_UPLOADED })
     } catch (e) {
       /* nothing */
+    }
+
+    // open checklist if is close
+    if (task) {
+      this.props.setExpandChecklist(task.checklist, true)
     }
   }
 
@@ -357,6 +363,7 @@ export default connect(
     uploadStashFile,
     resetUploadFiles,
     setUploadAttributes,
+    setExpandChecklist,
     changeNeedsAttention
   }
 )(UploadModal)

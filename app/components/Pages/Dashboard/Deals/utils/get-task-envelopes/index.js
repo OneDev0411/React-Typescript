@@ -1,5 +1,9 @@
 export function getTaskEnvelopes(envelopes, task) {
-  return Object.values(envelopes)
+  if (!task) {
+    return []
+  }
+
+  return envelopes
     .filter(envelope =>
       envelope.documents.some(document => {
         if (task.submission && task.submission.id === document.submission) {

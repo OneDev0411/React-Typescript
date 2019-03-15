@@ -36,6 +36,7 @@ export const CheckBoxContainer = styled.div`
   flex-direction: row;
   align-items: center;
   padding-bottom: 0.5rem;
+  width: fit-content;
   cursor: pointer;
 
   &:last-child {
