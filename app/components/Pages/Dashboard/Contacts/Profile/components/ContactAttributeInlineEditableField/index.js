@@ -9,6 +9,7 @@ import {
   getTitle,
   getValue,
   parseValue,
+  getPlaceholder,
   validation
 } from './helpers'
 
@@ -92,6 +93,10 @@ class MasterField extends React.Component {
 
   get title() {
     return getTitle(this.attribute_def, this.state.label)
+  }
+
+  get placeholder() {
+    return getPlaceholder(this.attribute_def)
   }
 
   get isDrity() {
@@ -234,6 +239,7 @@ class MasterField extends React.Component {
         ...this.state,
         [this.type]: this.state.value
       }}
+      placeholder={this.placeholder}
       onChangeLabel={this.onChangeLabel}
       onChangeValue={this.onChangeValue}
       onChangePrimary={this.onChangePrimary}
