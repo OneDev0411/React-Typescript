@@ -3,6 +3,7 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
+import { Helmet } from 'react-helmet'
 
 import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
@@ -245,8 +246,17 @@ class ContactProfile extends React.Component {
       submitCallback: this.setContact
     }
 
+    let pageTitle = contact.summary.display_name || ''
+
+    pageTitle = pageTitle
+      ? `${pageTitle} | Contacts | Rechat`
+      : 'Contact | Rechat'
+
     return (
       <PageWrapper>
+        <Helmet>
+          <title> {pageTitle} </title>
+        </Helmet>
         <PageContainer>
           <Header contact={contact} />
 
