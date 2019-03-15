@@ -131,7 +131,6 @@ class SectionWithFields extends React.Component {
 
     try {
       if (data.is_primary) {
-        console.log('insert primary')
         this.setState(({ orderedAttributes }) => ({
           orderedAttributes: orderedAttributes.map(attribute =>
             attribute.cuid !== cuid &&
@@ -185,7 +184,6 @@ class SectionWithFields extends React.Component {
 
     try {
       if (data.is_primary) {
-        console.log('update primary')
         this.setState(({ orderedAttributes }) => ({
           orderedAttributes: orderedAttributes.map(attribute =>
             attribute.id !== id &&
