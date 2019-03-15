@@ -4,6 +4,7 @@ import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import moment from 'moment'
+import { Helmet } from 'react-helmet'
 
 import Deal from 'models/Deal'
 import DealContext from 'models/Deal/helpers/dynamic-context'
@@ -480,6 +481,9 @@ class CreateOffer extends React.Component {
 
     return (
       <div className="deal-create-offer">
+        <Helmet>
+          <title>Add Offer | Deals | Rechat</title>
+        </Helmet>
         <FullPageHeader
           title="Add New Offer"
           handleClose={this.cancelCreateOffer}
