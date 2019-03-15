@@ -9,18 +9,14 @@ import Deal from 'models/Deal'
 
 import Tooltip from 'components/tooltip'
 
-import { getSide } from 'models/Deal/helpers/context'
-
 import { ListingImage } from './Image'
 import MlsConnect from './MlsConnect'
+import Address from '../../components/Address'
+
+import { getDealTitle } from '../../utils/get-deal-title'
 
 import { Divider } from '../styled'
 import { TitleContainer } from './styled'
-import Address from '../../components/Address'
-
-export function getTitle(deal) {
-  return Deal.get.field(deal, 'street_address') || deal.title
-}
 
 export class ListingInfo extends React.Component {
   state = {
@@ -102,7 +98,9 @@ export class ListingInfo extends React.Component {
                   onClick={this.handleOpenAddressDrawer}
                   editable={!props.deal.listing}
                 >
-                  <H1 style={{ lineHeight: 1.5 }}>{getTitle(props.deal)}</H1>
+                  <H1 style={{ lineHeight: 1.5 }}>
+                    {getDealTitle(props.deal)}
+                  </H1>
                 </TitleContainer>
               </Tooltip>
             </Flex>

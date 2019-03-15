@@ -7,10 +7,11 @@ import { getDeal, getContexts } from 'actions/deals'
 import { selectDealById } from 'reducers/deals/list'
 import { selectTaskById } from 'reducers/deals/tasks'
 
+import { getDealTitle } from '../utils/get-deal-title'
+
 import { PageHeader } from './Header'
 import TabSections from './Tabs'
 import TaskView from './TaskView'
-import { getTitle } from './ListingInfo'
 
 import UploadPrompt from '../UploadManager/prompt'
 
@@ -82,6 +83,14 @@ class DealDetails extends React.Component {
     })
   }
 
+  get PageTitle() {
+    const pageTitle = getDealTitle(this.props.deal)
+
+    return pageTitle
+      ? `${pageTitle} | Deals | Rechat`
+      : 'Show Deal | Deals | Rechat'
+  }
+
   render() {
     const { props, state } = this
 
@@ -89,16 +98,10 @@ class DealDetails extends React.Component {
       return false
     }
 
-    let pageTitle = getTitle(props.deal)
-
-    pageTitle = pageTitle
-      ? `${pageTitle} | Deals | Rechat`
-      : 'Show Deal | Deals | Rechat'
-
     return (
       <DealContainer>
         <Helmet>
-          <title>{pageTitle}</title>
+          <title>{this.PageTitle}</title>
         </Helmet>
 
         <PageWrapper>
