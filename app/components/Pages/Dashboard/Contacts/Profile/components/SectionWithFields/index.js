@@ -172,7 +172,7 @@ class SectionWithFields extends React.Component {
     }
   }
 
-  isOnlyNonSingularInstance = (state, attribute) => {
+  isNotOnlyNonSingularInstanceOf = (attribute, state) => {
     const { attribute_def } = attribute
 
     return (
@@ -185,13 +185,15 @@ class SectionWithFields extends React.Component {
 
   deleteFromState = (state, attribute) => {
     const { isPrimary } = this.props
-    const isShadowField = !!attribute.id
+    const isShadowField = !attribute.id
 
-    if (this.isOnlyNonSingularInstance(state, attribute)) {
+    if (this.isNotOnlyNonSingularInstanceOf(attribute, state)) {
       return {
-        orderedAttributes: state.orderedAttributes.filter(a =>
-          isShadowField ? a.id !== attribute.id : a.cuid !== attribute.cuid
-        )
+        orderedAttributes: state.orderedAttributes
+          .filter(a =>
+            isShadowField ? a.cuid !== attribute.cuid : a.id !== attribute.id
+          )
+          .map((a, order) => ({ ...a, order }))
       }
     }
 
@@ -204,10 +206,10 @@ class SectionWithFields extends React.Component {
         )
 
         if (isShadowField) {
-          return a.id === attribute.id ? emptyAttribute : a
+          return a.cuid === attribute.cuid ? emptyAttribute : a
         }
 
-        return a.cuid === attribute.cuid ? emptyAttribute : a
+        return a.id === attribute.id ? emptyAttribute : a
       })
     }
   }
