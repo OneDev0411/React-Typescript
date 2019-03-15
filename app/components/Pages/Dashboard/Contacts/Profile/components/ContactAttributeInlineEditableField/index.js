@@ -60,11 +60,12 @@ class MasterField extends React.Component {
   constructor(props) {
     super(props)
 
-    const { attribute } = props
+    const { attribute_def } = props.attribute
 
-    this.showAdd = !attribute.attribute_def.singular
-    this.type = attribute.attribute_def.data_type
-    this.state = getInitialState(attribute)
+    this.attribute_def = attribute_def
+    this.showAdd = !attribute_def.singular
+    this.type = attribute_def.data_type
+    this.state = getInitialState(props.attribute)
   }
 
   static getDerivedStateFromProps({ attribute, isActive }, state) {
@@ -90,7 +91,7 @@ class MasterField extends React.Component {
   }
 
   get title() {
-    return getTitle(this.props.attribute.attribute_def, this.state.label)
+    return getTitle(this.attribute_def, this.state.label)
   }
 
   get isDrity() {
@@ -148,13 +149,13 @@ class MasterField extends React.Component {
 
   save = async () => {
     const { is_primary, label, value } = this.state
-    const { id, cuid, attribute_def } = this.props.attribute
+    const { id, cuid } = this.props.attribute
 
     if (!this.isDrity) {
       return this.setState({ error: id ? 'Update value!' : 'Input something!' })
     }
 
-    const error = await validation(attribute_def, value)
+    const error = await validation(this.attribute_def, value)
 
     if (error) {
       return this.setState({ error })
@@ -167,14 +168,14 @@ class MasterField extends React.Component {
         cuid,
         id,
         label,
-        [this.type]: parseValue(value, attribute_def)
+        [this.type]: parseValue(value, this.attribute_def)
       }
 
       if (is_primary !== this.props.attribute.is_primary) {
         data.is_primary = is_primary
       }
 
-      this.props.handleSave(attribute_def, data)
+      this.props.handleSave(this.attribute_def, data)
 
       this.setState({ disabled: false, isDrity: false }, this.toggleMode)
     } catch (error) {
@@ -192,8 +193,7 @@ class MasterField extends React.Component {
   }
 
   handleDelete = () => {
-    const { attribute } = this.props
-    const title = attribute.attribute_def.label
+    const title = this.attribute_def.label
 
     const options = {
       show: true,
@@ -210,7 +210,7 @@ class MasterField extends React.Component {
           description: `You have made changes, are you sure about the deleting "${title}" field?`
         })
       )
-    } else if (attribute[attribute.attribute_def.data_type]) {
+    } else if (this.props.attribute[this.attribute_def.data_type]) {
       this.props.dispatch(
         confirmation({
           ...options,
@@ -244,12 +244,12 @@ class MasterField extends React.Component {
     <ViewMode
       is_primary={this.state.is_primary}
       title={this.title}
-      value={formatValue(this.props.attribute.attribute_def, this.state.value)}
+      value={formatValue(this.attribute_def, this.state.value)}
     />
   )
 
   render() {
-    if (!this.props.attribute.attribute_def.editable) {
+    if (!this.attribute_def.editable) {
       return (
         <div style={{ margin: '0 -0.5em 1em', padding: '0.5em' }}>
           {this.renderViewMode()}
