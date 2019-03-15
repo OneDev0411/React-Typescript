@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Helmet } from 'react-helmet'
 
 import compose from 'recompose/compose'
 
@@ -36,6 +37,9 @@ class AgentConfirm extends React.Component {
 
     return (
       <div>
+        <Helmet>
+          <title>Upgrade Account | Rechat</title>
+        </Helmet>
         <PageHeader
           isFlat
           style={{ marginBottom: '1.5em', marginTop: '1.5rem' }}

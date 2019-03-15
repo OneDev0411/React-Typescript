@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
+import { Helmet } from 'react-helmet'
 
 import Fetch from 'services/fetch'
 import { getContexts } from 'actions/deals'
@@ -255,6 +256,9 @@ class ReminderNotifications extends Component {
   render() {
     return (
       <Fragment>
+        <Helmet>
+          <title>Reminder Notifications | Rechat</title>
+        </Helmet>
         <PageHeader style={{ marginBottom: '1.5rem', marginTop: '1.5rem' }}>
           <PageHeader.Title showBackButton={false}>
             <PageHeader.Heading>Reminder Notifications</PageHeader.Heading>

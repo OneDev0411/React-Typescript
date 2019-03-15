@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
+import { Helmet } from 'react-helmet'
 
 import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'models/contacts/get-contacts-tags'
@@ -193,6 +194,9 @@ class ManageTags extends Component {
 
     return (
       <Fragment>
+        <Helmet>
+          <title>Manage Tags | Rechat</title>
+        </Helmet>
         <PageHeader style={{ marginBottom: '1rem', marginTop: '1.5rem' }}>
           <PageHeader.Title showBackButton={false}>
             <PageHeader.Heading>Manage Tags</PageHeader.Heading>
