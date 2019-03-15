@@ -10,14 +10,18 @@ import { Value } from './Value'
 
 EditMode.propTypes = {
   attribute: PropTypes.shape().isRequired,
+  handleEnterKey: PropTypes.func,
   onChangeLabel: PropTypes.func,
   onChangePrimary: PropTypes.func,
-  onChangeValue: PropTypes.func.isRequired
+  onChangeValue: PropTypes.func.isRequired,
+  placeholder: PropTypes.string
 }
 
 EditMode.defaultProps = {
+  handleEnterKey: noop,
   onChangeLabel: noop,
-  onChangePrimary: noop
+  onChangePrimary: noop,
+  placeholder: ''
 }
 
 export function EditMode(props) {
@@ -27,9 +31,18 @@ export function EditMode(props) {
     <React.Fragment>
       <Title attribute={attribute} onChangePrimary={props.onChangePrimary} />
       {attribute.attribute_def.has_label && (
-        <Label attribute={attribute} onChange={props.onChangeLabel} />
+        <Label
+          attribute={attribute}
+          onChange={props.onChangeLabel}
+          placeholder={props.placeholder}
+        />
       )}
-      <Value attribute={attribute} onChange={props.onChangeValue} />
+      <Value
+        attribute={attribute}
+        onChange={props.onChangeValue}
+        placeholder={props.placeholder}
+        handleEnterKey={props.handleEnterKey}
+      />
       {props.error && <Error>{props.error}</Error>}
     </React.Fragment>
   )

@@ -12,5 +12,9 @@ export function parseValue(value, attribute_def) {
     return 0
   }
 
+  if (typeof value === 'string') {
+    return value.trim()
+  }
+
   return value
 }

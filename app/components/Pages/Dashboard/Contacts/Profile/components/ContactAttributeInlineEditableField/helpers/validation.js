@@ -13,6 +13,10 @@ const validators = {
 }
 
 export function validation(attribute_def, value) {
+  if (typeof value === 'string') {
+    value = value.trim()
+  }
+
   if (!attribute_def.singular && !value) {
     return 'Invalid input! Enter a value.'
   }
