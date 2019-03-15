@@ -231,6 +231,12 @@ class MasterField extends React.Component {
     this.props.handleAddNewInstance(this.props.attribute)
   }
 
+  handleEnterKey = event => {
+    if (event.keyCode === 13) {
+      this.save()
+    }
+  }
+
   renderEditMode = props => (
     <EditMode
       {...props}
@@ -239,10 +245,11 @@ class MasterField extends React.Component {
         ...this.state,
         [this.type]: this.state.value
       }}
-      placeholder={this.placeholder}
+      handleEnterKey={this.handleEnterKey}
       onChangeLabel={this.onChangeLabel}
       onChangeValue={this.onChangeValue}
       onChangePrimary={this.onChangePrimary}
+      placeholder={this.placeholder}
     />
   )
 
