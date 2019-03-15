@@ -4,6 +4,18 @@ export function normalizeAttachment({ type, task, file }) {
     : normalizeFile(task, file)
 }
 
+export function normalizeAttachments(attachments) {
+  const list = {}
+
+  attachments.forEach(attachment => {
+    const item = normalizeAttachment(attachment)
+
+    list[item.id] = item
+  })
+
+  return list
+}
+
 function normalizeDate(date) {
   if (typeof date === 'number') {
     return new Date(date * 1000)
@@ -21,7 +33,7 @@ export function normalizeFile(task, file) {
     file_id: file.id,
     title: file.name,
     url: file.url,
-    date: normalizeDate(file.created_at)
+    date: normalizeDate(file.created_at || file.date)
   }
 }
 
@@ -30,6 +42,7 @@ export function normalizeSubmissionForm(task) {
     type: 'form',
     id: `task_${task.id}`,
     task_id: task.id,
+    file_id: task.submission.file.id,
     checklist: task.checklist,
     revision: task.submission.last_revision,
     title: `${task.title}.pdf`,

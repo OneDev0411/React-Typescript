@@ -1,15 +1,43 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+
 import _ from 'underscore'
 
-import Drawer from 'components/OverlayDrawer'
+import { getDeal } from 'actions/deals'
 
+import Drawer from 'components/OverlayDrawer'
 import ActionButton from 'components/Button/ActionButton'
+import Loading from 'components/Spinner'
 
 import Documents from './Documents'
 
-export default class AttachmentsSelect extends React.Component {
+class SelectDealFileDrawer extends React.Component {
   state = {
+    deal: this.props.deal,
+    isLoadingDeal: false,
     selectedItems: this.props.defaultSelectedItems || {}
+  }
+
+  componentDidMount() {
+    this.init()
+  }
+
+  init = async () => {
+    if (this.props.deal.checklists) {
+      return false
+    }
+
+    this.setState({
+      isLoadingDeal: true
+    })
+
+    const deal = await this.props.getDeal(this.props.deal.id)
+
+    this.setState({
+      isLoadingDeal: false,
+      deal
+    })
   }
 
   toggleSelectRow = document => {
@@ -40,15 +68,22 @@ export default class AttachmentsSelect extends React.Component {
     const { props } = this
 
     return (
-      <Drawer isOpen onClose={props.onClose}>
-        <Drawer.Header title="Select Documents" />
+      <Drawer
+        isOpen={props.isOpen}
+        onClose={props.onClose}
+        {...props.drawerOptions}
+      >
+        <Drawer.Header title={props.title} />
         <Drawer.Body>
           <Documents
-            deal={this.props.deal}
+            deal={this.state.deal}
+            showStashFiles={this.props.showStashFiles}
             initialAttachments={this.props.initialAttachments}
             selectedItems={this.state.selectedItems}
             onToggleItem={this.toggleSelectRow}
           />
+
+          {this.state.isLoadingDeal && <Loading />}
         </Drawer.Body>
 
         <Drawer.Footer style={{ flexDirection: 'row-reverse' }}>
@@ -64,3 +99,22 @@ export default class AttachmentsSelect extends React.Component {
     )
   }
 }
+
+SelectDealFileDrawer.propTypes = {
+  isOpen: PropTypes.bool,
+  title: PropTypes.string,
+  showStashFiles: PropTypes.bool,
+  drawerOptions: PropTypes.object
+}
+
+SelectDealFileDrawer.defaultProps = {
+  isOpen: false,
+  title: 'Select Documents',
+  showStashFiles: true,
+  drawerOptions: {}
+}
+
+export default connect(
+  null,
+  { getDeal }
+)(SelectDealFileDrawer)

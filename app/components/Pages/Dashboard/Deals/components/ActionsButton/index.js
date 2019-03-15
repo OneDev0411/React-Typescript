@@ -23,6 +23,8 @@ import Deal from 'models/Deal'
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 import Tooltip from 'components/tooltip'
+import TasksDrawer from 'components/SelectDealTasksDrawer'
+import EmailCompose from 'components/EmailCompose'
 
 import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
 
@@ -41,7 +43,6 @@ import { SelectItemDrawer } from './components/SelectItemDrawer'
 
 import GetSignature from '../../Signature'
 import PdfSplitter from '../../PdfSplitter'
-import TasksDrawer from '../TasksDrawer'
 import UploadManager from '../../UploadManager'
 
 import {
@@ -61,6 +62,7 @@ class ActionsButton extends React.Component {
       isSignatureFormOpen: false,
       isPdfSplitterOpen: false,
       isTasksDrawerOpen: false,
+      isComposeEmailOpen: false,
       multipleItemsSelection: null
     }
 
@@ -69,6 +71,7 @@ class ActionsButton extends React.Component {
       view: this.handleView,
       download: this.handleDownload,
       comments: this.handleShowComments,
+      'send-email': this.handleToggleComposeEmail,
       'delete-task': this.handleDeleteTask,
       'delete-file': this.handleDeleteFile,
       'move-file': this.toggleMoveFile,
@@ -213,6 +216,25 @@ class ActionsButton extends React.Component {
     return files.filter(file => file.mime === 'application/pdf')
   }
 
+  getEmailComposeFiles = () => {
+    if (this.props.type === 'task') {
+      return []
+    }
+
+    return getFileUrl({
+      type: this.props.type,
+      deal: this.props.deal,
+      task: this.props.task,
+      document: this.props.document,
+      envelopes: this.props.envelopes
+    }).map(file => ({
+      type: 'document',
+      attachmentType: 'deal-file',
+      file,
+      task: this.props.task
+    }))
+  }
+
   getPrimaryAction = actions =>
     _.find(actions, properties => properties.primary === true)
 
@@ -344,6 +366,14 @@ class ActionsButton extends React.Component {
   handleShowComments = () => {
     this.props.setSelectedTask(this.props.task)
   }
+
+  /**
+   *
+   */
+  handleToggleComposeEmail = () =>
+    this.setState(state => ({
+      isComposeEmailOpen: !state.isComposeEmailOpen
+    }))
 
   /**
    *
@@ -631,6 +661,16 @@ class ActionsButton extends React.Component {
             file={this.props.document}
             onClose={this.toggleMoveFile}
             title="Move to Checklist"
+          />
+        )}
+
+        {this.state.isComposeEmailOpen && (
+          <EmailCompose
+            isOpen
+            defaultAttachments={this.getEmailComposeFiles()}
+            from={this.props.user}
+            deal={this.props.deal}
+            onClose={this.handleToggleComposeEmail}
           />
         )}
 
