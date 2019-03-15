@@ -101,6 +101,7 @@ class SendMlsListingCard extends React.Component {
             )
 
             return {
+              data_type: 'contact',
               contactId: contact.id,
               name: contact.summary.display_name,
               avatar: contact.summary.profile_image_url,
