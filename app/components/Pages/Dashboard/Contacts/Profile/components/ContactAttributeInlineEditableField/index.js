@@ -15,19 +15,27 @@ import {
 import { EditMode } from './EditMode'
 import { ViewMode } from './ViewMode'
 
+function getCurrentTimestamp() {
+  return new Date().getTime()
+}
+
 function getStateFromAttribute(attribute) {
+  const updated_at = getCurrentTimestamp()
+
   if (attribute) {
     return {
-      label: attribute.label || '',
       is_primary: attribute.is_primary,
+      label: attribute.label || '',
+      updated_at: attribute.updated_at || updated_at,
       value: getValue(attribute) || ''
     }
   }
 
   return {
+    is_primary: false,
     label: '',
-    value: '',
-    is_primary: false
+    updated_at,
+    value: ''
   }
 }
 
@@ -59,6 +67,18 @@ class MasterField extends React.Component {
     this.state = getInitialState(attribute)
   }
 
+  static getDerivedStateFromProps({ attribute, isActive }, state) {
+    if (
+      !isActive &&
+      attribute.updated_at &&
+      attribute.updated_at > state.updated_at
+    ) {
+      return getInitialState(attribute)
+    }
+
+    return null
+  }
+
   get attributePropsFromState() {
     const { is_primary, label } = this.state
 
@@ -87,12 +107,18 @@ class MasterField extends React.Component {
     this.setState(getInitialState(this.props.attribute))
   }
 
-  onChangeLabel = label => this.setState({ label, isDrity: true })
+  onChangeLabel = label =>
+    this.setState({ label, isDrity: true, updated_at: getCurrentTimestamp() })
 
-  onChangeValue = value => this.setState({ value, isDrity: true })
+  onChangeValue = value =>
+    this.setState({ value, isDrity: true, updated_at: getCurrentTimestamp() })
 
   onChangePrimary = () =>
-    this.setState(state => ({ is_primary: !state.is_primary, isDrity: true }))
+    this.setState(state => ({
+      is_primary: !state.is_primary,
+      isDrity: true,
+      updated_at: getCurrentTimestamp()
+    }))
 
   cancel = () => {
     if (!this.state.disabled) {
@@ -136,13 +162,19 @@ class MasterField extends React.Component {
 
     try {
       this.setState({ disabled: true, error: '' })
-      this.props.handleSave(attribute_def, {
-        id,
+
+      const data = {
         cuid,
-        is_primary,
+        id,
         label,
         [this.type]: parseValue(value, attribute_def)
-      })
+      }
+
+      if (is_primary !== this.props.attribute.is_primary) {
+        data.is_primary = is_primary
+      }
+
+      this.props.handleSave(attribute_def, data)
 
       this.setState({ disabled: false, isDrity: false }, this.toggleMode)
     } catch (error) {

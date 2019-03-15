@@ -82,6 +82,11 @@ class SectionWithFields extends React.Component {
     }
   }
 
+  get orderedAttributesCopy() {
+    // a shalowCopy
+    return this.state.orderedAttributes.slice()
+  }
+
   openCustomAttributeDrawer = () =>
     this.setState({ isOpenCustomAttributeDrawer: true })
 
@@ -96,7 +101,25 @@ class SectionWithFields extends React.Component {
     }))
 
   insert = async (cuid, data, attribute_def) => {
+    const orderedAttributesCopy = this.orderedAttributesCopy
+
     try {
+      if (data.is_primary) {
+        console.log('insert primary')
+        this.setState(({ orderedAttributes }) => ({
+          orderedAttributes: orderedAttributes.map(attribute =>
+            attribute.cuid !== cuid &&
+            attribute.attribute_def.id === attribute_def.id
+              ? {
+                  ...attribute,
+                  is_primary: false,
+                  updated_at: new Date().getTime()
+                }
+              : attribute
+          )
+        }))
+      }
+
       const response = await addAttributes(this.props.contact.id, [
         { ...data, attribute_def: attribute_def.id }
       ])
@@ -122,12 +145,33 @@ class SectionWithFields extends React.Component {
         )
       }))
     } catch (error) {
+      this.setState({
+        orderedAttributes: orderedAttributesCopy
+      })
       console.log(error)
     }
   }
 
   update = async (id, data, attribute_def) => {
+    const orderedAttributesCopy = this.orderedAttributesCopy
+
     try {
+      if (data.is_primary) {
+        console.log('update primary')
+        this.setState(({ orderedAttributes }) => ({
+          orderedAttributes: orderedAttributes.map(attribute =>
+            attribute.id !== id &&
+            attribute.attribute_def.id === attribute_def.id
+              ? {
+                  ...attribute,
+                  is_primary: false,
+                  updated_at: new Date().getTime()
+                }
+              : attribute
+          )
+        }))
+      }
+
       const updatedAttribute = await updateAttribute(
         this.props.contact.id,
         id,
@@ -140,18 +184,24 @@ class SectionWithFields extends React.Component {
         message: `${attribute_def.label || attribute_def.name} updated.`
       })
 
-      this.setState(state => ({
-        orderedAttributes: state.orderedAttributes.map(a =>
-          a.id !== id
-            ? a
-            : {
-                ...updatedAttribute,
-                attribute_def,
-                order: a.order
-              }
-        )
-      }))
+      this.setState(
+        state =>
+          console.log('update state') || {
+            orderedAttributes: state.orderedAttributes.map(a =>
+              a.id !== id
+                ? a
+                : {
+                    ...updatedAttribute,
+                    attribute_def,
+                    order: a.order
+                  }
+            )
+          }
+      )
     } catch (error) {
+      this.setState({
+        orderedAttributes: orderedAttributesCopy
+      })
       console.log(error)
     }
   }
