@@ -18,7 +18,7 @@ export class PdfViewer extends React.Component {
   state = {
     isLoading: false,
     visiblePages: [1, 2],
-    isFailed: true,
+    isFailed: false,
     document: null,
     downloadPercents: 1,
     rotation: 0,
@@ -135,7 +135,7 @@ export class PdfViewer extends React.Component {
       return false
     }
 
-    this.setState({ isLoading: true, isFailed: false })
+    this.setState({ isLoading: true })
 
     const PDFJS = await importPdfJs()
 
@@ -164,8 +164,6 @@ export class PdfViewer extends React.Component {
       this.setState({
         downloadPercents: (progress.loaded / progress.total) * 100
       })
-
-      document.addEventListener('keydown', this.handleKeyboardShortcuts)
     }
 
     pdfDocument
@@ -175,6 +173,8 @@ export class PdfViewer extends React.Component {
           downloadPercents: 100,
           document
         })
+
+        document.addEventListener('keydown', this.handleKeyboardShortcuts)
       })
       .catch(e => {
         console.log(e)
