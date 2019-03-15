@@ -18,6 +18,10 @@ import { Divider } from '../styled'
 import { TitleContainer } from './styled'
 import Address from '../../components/Address'
 
+export function getTitle(deal) {
+  return Deal.get.field(deal, 'street_address') || deal.title
+}
+
 export class ListingInfo extends React.Component {
   state = {
     isAddressDrawerOpen: false
@@ -38,8 +42,6 @@ export class ListingInfo extends React.Component {
       isAddressDrawerOpen: true
     })
   }
-
-  getTitle = deal => Deal.get.field(deal, 'street_address') || deal.title
 
   getAddress = deal => {
     const city = Deal.get.field(deal, 'city') || ''
@@ -100,9 +102,7 @@ export class ListingInfo extends React.Component {
                   onClick={this.handleOpenAddressDrawer}
                   editable={!props.deal.listing}
                 >
-                  <H1 style={{ lineHeight: 1.5 }}>
-                    {this.getTitle(props.deal)}
-                  </H1>
+                  <H1 style={{ lineHeight: 1.5 }}>{getTitle(props.deal)}</H1>
                 </TitleContainer>
               </Tooltip>
             </Flex>

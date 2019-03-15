@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 import S from 'shorti'
 import timeago from 'timeago.js'
+import { Helmet } from 'react-helmet'
 
 import {
   selectNotifications,
@@ -363,6 +364,9 @@ class Notifications extends Component {
           overflowY: 'scroll'
         }}
       >
+        <Helmet>
+          <title>Notifications | Rechat</title>
+        </Helmet>
         <Header />
         {this.getNotifications()}
         {this.state.selectedEvent && (

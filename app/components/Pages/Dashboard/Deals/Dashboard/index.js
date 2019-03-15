@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Helmet } from 'react-helmet'
 
 import { isBackOffice } from 'utils/user-teams'
 import { getDeal, getContexts } from 'actions/deals'
@@ -9,6 +10,7 @@ import { selectTaskById } from 'reducers/deals/tasks'
 import { PageHeader } from './Header'
 import TabSections from './Tabs'
 import TaskView from './TaskView'
+import { getTitle } from './ListingInfo'
 
 import UploadPrompt from '../UploadManager/prompt'
 
@@ -87,8 +89,18 @@ class DealDetails extends React.Component {
       return false
     }
 
+    let pageTitle = getTitle(props.deal)
+
+    pageTitle = pageTitle
+      ? `${pageTitle} | Deals | Rechat`
+      : 'Show Deal | Deals | Rechat'
+
     return (
       <DealContainer>
+        <Helmet>
+          <title>{pageTitle}</title>
+        </Helmet>
+
         <PageWrapper>
           <PageHeader deal={props.deal} isBackOffice={props.isBackOffice} />
 
