@@ -84,8 +84,6 @@ class Builder extends React.Component {
     this.disableAssetManager()
     this.makeTemplateCentered()
 
-    console.log('>>>ON LOAD')
-
     if (this.IsVideoTemplate) {
       this.grapes.appendChild(this.videoToolbar)
     }
