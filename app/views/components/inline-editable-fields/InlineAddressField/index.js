@@ -159,8 +159,6 @@ export class InlineAddressField extends React.Component {
     )
 
     service.getDetails(request, (place, status) => {
-      console.log(status, place)
-
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         newState = {
           ...newState,
