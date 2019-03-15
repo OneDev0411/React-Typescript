@@ -1,5 +1,6 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
+import { Helmet } from 'react-helmet'
 
 import { getHistory } from 'models/instant-marketing/get-history'
 
@@ -62,6 +63,9 @@ export default class History extends React.Component {
   render() {
     return (
       <React.Fragment>
+        <Helmet>
+          <title>My Designs| Marketing | Rechat</title>
+        </Helmet>
         <Header
           title="My Designs"
           style={{ padding: '0 1.5rem' }}

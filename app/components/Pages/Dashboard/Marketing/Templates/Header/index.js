@@ -6,7 +6,7 @@ import { headers } from './data'
 import { Container, Title, SubTitle } from './styled'
 
 export function Header(props) {
-  const data = headers[props.types]
+  const data = props.selectedTemplate
 
   return (
     <Container

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import _ from 'underscore'
+import { Helmet } from 'react-helmet'
 import { browserHistory } from 'react-router'
 
 import { onlyUnique, sortAlphabetically } from 'utils/helpers'
@@ -7,6 +8,7 @@ import { getTemplates } from 'models/instant-marketing/get-templates'
 
 import { Header } from './Header'
 import { List } from './List'
+import { headers } from './Header/data'
 
 function getMediums(templates) {
   return templates
@@ -67,11 +69,16 @@ export default class Templates extends Component {
 
   render() {
     const { state, props } = this
+    const selectedTemplate = headers[props.types]
 
     return (
       <React.Fragment>
+        <Helmet>
+          <title>Template: {selectedTemplate.title} | Marketing | Rechat</title>
+        </Helmet>
+
         <Header
-          types={props.types}
+          selectedTemplate={selectedTemplate}
           isSideMenuOpen={props.isSideMenuOpen}
           toggleSideMenu={props.toggleSideMenu}
         />
