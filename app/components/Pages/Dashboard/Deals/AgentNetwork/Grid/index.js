@@ -171,7 +171,7 @@ export class Grid extends React.Component {
             loadable: {
               accuracy: 300, // px
               debounceTime: 300, // ms
-              onTrigger: this.props.onRequestLoadMore
+              onScrollBottom: this.props.onRequestLoadMore
             }
           }}
         />

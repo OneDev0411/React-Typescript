@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 import _ from 'underscore'
 
 import { confirmation } from 'actions/confirmation'
@@ -59,7 +60,8 @@ class ContactsList extends React.Component {
         ]
       )
     } else {
-      this.fetchList()
+      console.log('BH', browserHistory.getCurrentLocation())
+      this.fetchList(browserHistory.getCurrentLocation().query.s || 0)
     }
 
     if (this.props.fetchTags) {
@@ -160,7 +162,8 @@ class ContactsList extends React.Component {
       start = 0,
       order = this.order,
       viewAsUsers = this.props.viewAsUsers,
-      conditionOperator = this.props.conditionOperator
+      conditionOperator = this.props.conditionOperator,
+      prependResult = false
     } = newFilters
 
     this.setState({ filters })
@@ -177,7 +180,8 @@ class ContactsList extends React.Component {
         searchInputValue,
         order,
         viewAsUsers,
-        conditionOperator
+        conditionOperator,
+        prependResult
       )
     } catch (e) {
       console.log('fetch search error: ', e)
@@ -215,23 +219,69 @@ class ContactsList extends React.Component {
 
   handleLoadMore = async () => {
     const { total } = this.props.listInfo
-    const startFrom = this.props.list.ids.length
+    const totalLoadedCount = this.props.list.ids.length
+    const startFrom =
+      parseInt(browserHistory.getCurrentLocation().query.s, 10) || 0
 
-    if (this.state.isFetchingMoreContacts || startFrom === total) {
+    if (this.state.isFetchingMoreContacts || totalLoadedCount === total) {
       return false
     }
 
-    console.log(`[ Loading More ] Start: ${startFrom}`)
+    const start = startFrom + 50
+
+    console.log(`[ Loading More ] Start: ${start}`)
+
+    browserHistory.replace(
+      `${browserHistory.getCurrentLocation().pathname}?s=${start}`
+    )
 
     this.setState({ isFetchingMoreContacts: true })
 
     if (this.hasSearchState()) {
-      await this.fetchList(startFrom)
+      await this.fetchList(start)
     } else {
       await this.handleFilterChange({
         filters: this.state.filters,
         searchInputValue: this.state.searchInputValue,
-        start: startFrom
+        start
+      })
+    }
+
+    this.setState({ isFetchingMoreContacts: false })
+  }
+
+  handleLoadMoreBefore = async () => {
+    const { total } = this.props.listInfo
+    const totalLoadedCount = this.props.list.ids.length
+    const startFrom =
+      parseInt(browserHistory.getCurrentLocation().query.s, 10) || 0
+
+    if (
+      this.state.isFetchingMoreContacts ||
+      totalLoadedCount === total ||
+      startFrom < 50
+    ) {
+      return false
+    }
+
+    const start = Math.max(startFrom - totalLoadedCount, 0)
+
+    console.log(`[ Loading More Before ] Start: ${start}`)
+
+    browserHistory.replace(
+      `${browserHistory.getCurrentLocation().pathname}?s=${start}`
+    )
+
+    this.setState({ isFetchingMoreContacts: true })
+
+    if (this.hasSearchState()) {
+      await this.fetchList(start)
+    } else {
+      await this.handleFilterChange({
+        filters: this.state.filters,
+        searchInputValue: this.state.searchInputValue,
+        start,
+        prependResult: true
       })
     }
 
@@ -328,6 +378,7 @@ class ContactsList extends React.Component {
             isFetchingMore={this.state.isFetchingMoreContacts}
             isRowsUpdating={this.state.isRowsUpdating}
             onRequestLoadMore={this.handleLoadMore}
+            onRequestLoadMoreBefore={this.handleLoadMoreBefore}
             rowsUpdating={this.rowsUpdating}
             onChangeSelectedRows={this.onChangeSelectedRows}
             onRequestDelete={this.handleOnDelete}

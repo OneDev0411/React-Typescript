@@ -12,7 +12,8 @@ export function searchContacts(
   searchInputValue,
   order = '-created_at',
   users,
-  conditionOperator = 'and'
+  conditionOperator = 'and',
+  prependResult = false
 ) {
   return async (dispatch, getState) => {
     if (start === 0) {
@@ -39,13 +40,27 @@ export function searchContacts(
         users
       )
 
-      const contactsLength = selectContacts(getState().contacts.list).length
+      const contacts = selectContacts(getState().contacts.list)
+      const contactsLength = contacts.length
 
       if (contactsLength && start === 0) {
         dispatch({
           type: actionTypes.CLEAR_CONTACTS_LIST
         })
       }
+
+      if (prependResult) {
+        dispatch({
+          type: actionTypes.CLEAR_CONTACTS_LIST
+        })
+      }
+
+      const itemsToPrepend = prependResult ? contacts : {}
+
+      const normalizedContacts = normalizeContacts(response).entities.contacts
+
+      console.log('itemsToPrepend', itemsToPrepend)
+      console.log('normalizedContacts', normalizedContacts)
 
       dispatch({
         response: {
@@ -57,7 +72,11 @@ export function searchContacts(
             filter,
             type: 'filter'
           },
-          ...normalizeContacts(response)
+
+          result: {
+            contacts: { ...normalizedContacts, ...itemsToPrepend }
+          }
+          // contacts: [...itemsToPrepend, ...normalizedContacts]
         },
         type: actionTypes.SEARCH_CONTACTS_SUCCESS
       })
