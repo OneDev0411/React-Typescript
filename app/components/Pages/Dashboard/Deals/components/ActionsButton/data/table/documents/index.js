@@ -86,6 +86,7 @@ export default normalizeConditions([
       },
       [EMAIL_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
+      [VOID_BUTTON]: {},
       [VIEW_BUTTON]: {}
     }
   },
@@ -180,6 +181,7 @@ export default normalizeConditions([
       },
       [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
+      [VOID_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
     }

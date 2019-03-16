@@ -93,6 +93,7 @@ export default normalizeConditions([
       },
       ...sharedActions,
       [EMAIL_BUTTON]: {},
+      [VOID_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
@@ -206,6 +207,7 @@ export default normalizeConditions([
       },
       ...sharedActions,
       [TASK_NOTIFICATION_BUTTON]: {},
+      [VOID_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {}
     }
@@ -305,6 +307,7 @@ export default normalizeConditions([
       ...sharedActions,
       [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
+      [VOID_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
@@ -406,6 +409,7 @@ export default normalizeConditions([
       ...sharedActions,
       [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
+      [VOID_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
