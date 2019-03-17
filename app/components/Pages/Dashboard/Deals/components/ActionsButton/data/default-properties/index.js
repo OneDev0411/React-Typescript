@@ -21,7 +21,7 @@ import {
 
 export const actionsDefaultProperties = {
   [EDIT_BUTTON]: {
-    label: 'Edit',
+    label: 'Edit Form',
     type: 'edit-form',
     tooltip:
       'You cannot edit while you have sent this out for signature. You can either void or wait for the signature to get completed.'
