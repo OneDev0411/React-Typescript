@@ -692,7 +692,6 @@ ActionsButton.propTypes = {
   task: PropTypes.object.isRequired,
   document: PropTypes.object
 }
-
 ActionsButton.defaultProps = {
   document: null
 }
