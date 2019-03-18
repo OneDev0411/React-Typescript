@@ -1,10 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Helmet } from 'react-helmet'
 
 import { isBackOffice } from 'utils/user-teams'
 import { getDeal, getContexts } from 'actions/deals'
 import { selectDealById } from 'reducers/deals/list'
 import { selectTaskById } from 'reducers/deals/tasks'
+
+import { getDealTitle } from '../utils/get-deal-title'
 
 import { PageHeader } from './Header'
 import TabSections from './Tabs'
@@ -80,6 +83,14 @@ class DealDetails extends React.Component {
     })
   }
 
+  get PageTitle() {
+    const pageTitle = getDealTitle(this.props.deal)
+
+    return pageTitle
+      ? `${pageTitle} | Deals | Rechat`
+      : 'Show Deal | Deals | Rechat'
+  }
+
   render() {
     const { props, state } = this
 
@@ -89,6 +100,10 @@ class DealDetails extends React.Component {
 
     return (
       <DealContainer>
+        <Helmet>
+          <title>{this.PageTitle}</title>
+        </Helmet>
+
         <PageWrapper>
           <PageHeader deal={props.deal} isBackOffice={props.isBackOffice} />
 

@@ -1,6 +1,7 @@
 // Oops.js
 import React from 'react'
 import { Link } from 'react-router'
+import { Helmet } from 'react-helmet'
 
 const TITLE = 'Something went wrong!'
 
@@ -14,6 +15,9 @@ const MESSAGE = (
 
 const Oops = ({ title = TITLE, message = MESSAGE }) => (
   <div className="c-oops">
+    <Helmet>
+      <title>Oops! | Rechat</title>
+    </Helmet>
     <Link to="/" className="c-oops__logo">
       Rechat
     </Link>

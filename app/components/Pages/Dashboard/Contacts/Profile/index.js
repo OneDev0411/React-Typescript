@@ -3,6 +3,7 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
+import { Helmet } from 'react-helmet'
 
 import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
@@ -91,6 +92,16 @@ class ContactProfile extends React.Component {
 
   componentWillUnmount = () =>
     window.removeEventListener('resize', this.detectScreenSize)
+
+  /**
+   * Web page (document) title
+   * @returns {String} Title
+   */
+  get documentTitle() {
+    let title = this.state.contact.summary.display_name || ''
+
+    return title ? `${title} | Contacts | Rechat` : 'Contact | Rechat'
+  }
 
   detectScreenSize = () => {
     if (window.innerWidth < 1681 && this.state.isDesktopScreen) {
@@ -247,6 +258,9 @@ class ContactProfile extends React.Component {
 
     return (
       <PageWrapper>
+        <Helmet>
+          <title>{this.documentTitle}</title>
+        </Helmet>
         <PageContainer>
           <Header contact={contact} />
 
