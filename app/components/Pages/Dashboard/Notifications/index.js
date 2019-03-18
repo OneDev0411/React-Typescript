@@ -5,6 +5,8 @@ import S from 'shorti'
 import timeago from 'timeago.js'
 import { Helmet } from 'react-helmet'
 
+import { selectNotificationNewCount } from '../../../../reducers/notifications'
+
 import {
   selectNotifications,
   selectNotificationIsFetching
@@ -32,6 +34,14 @@ class Notifications extends Component {
     const { deleteNewNotifications } = this.props
 
     deleteNewNotifications()
+  }
+
+  get documentTitle() {
+    const { unreadNotificationsCount } = this.props
+    const counter =
+      unreadNotificationsCount > 0 ? `: ${unreadNotificationsCount} unread` : ''
+
+    return `Notifications${counter} | Rechat`
   }
 
   openCRMTaskDrawer = selectedEvent => {
@@ -365,7 +375,7 @@ class Notifications extends Component {
         }}
       >
         <Helmet>
-          <title>Notifications | Rechat</title>
+          <title>{this.documentTitle}</title>
         </Helmet>
         <Header />
         {this.getNotifications()}
@@ -388,8 +398,9 @@ export default withRouter(
   connect(
     ({ user, globalNotifications }) => ({
       user,
+      isFetching: selectNotificationIsFetching(globalNotifications),
       notifications: selectNotifications(globalNotifications),
-      isFetching: selectNotificationIsFetching(globalNotifications)
+      unreadNotificationsCount: selectNotificationNewCount(globalNotifications)
     }),
     { deleteNewNotifications, markNotificationAsSeen }
   )(Notifications)
