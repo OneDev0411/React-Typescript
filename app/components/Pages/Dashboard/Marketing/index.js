@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
-import Cookie from 'js-cookie'
 import { Helmet } from 'react-helmet'
 
 import Onboarding from 'components/Onboarding'
