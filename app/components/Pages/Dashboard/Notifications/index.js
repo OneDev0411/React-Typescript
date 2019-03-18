@@ -11,10 +11,7 @@ import {
   selectNotifications,
   selectNotificationIsFetching
 } from '../../../../reducers/notifications'
-import {
-  deleteNewNotifications,
-  markNotificationAsSeen
-} from '../../../../store_actions/notifications'
+import { markNotificationAsSeen } from '../../../../store_actions/notifications'
 
 import Header from './Header'
 import { CrmEvents } from './CrmEvents'
@@ -28,12 +25,6 @@ class Notifications extends Component {
     this.state = {
       selectedEvent: (params.type && params.type === 'crm' && params.id) || null
     }
-  }
-
-  componentDidMount() {
-    const { deleteNewNotifications } = this.props
-
-    deleteNewNotifications()
   }
 
   get documentTitle() {
@@ -402,6 +393,6 @@ export default withRouter(
       notifications: selectNotifications(globalNotifications),
       unreadNotificationsCount: selectNotificationNewCount(globalNotifications)
     }),
-    { deleteNewNotifications, markNotificationAsSeen }
+    { markNotificationAsSeen }
   )(Notifications)
 )
