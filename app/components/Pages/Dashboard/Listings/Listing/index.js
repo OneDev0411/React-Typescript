@@ -45,6 +45,23 @@ class Listing extends React.Component {
     }
   }
 
+  /**
+   * Web page (document) title
+   * @returns {String} Title
+   */
+  get documentTitle() {
+    const { listing } = this.state
+
+    let title =
+      listing && listing.property
+        ? `${listing_util.addressTitle(listing.property.address)} | `
+        : ''
+
+    title = `${title}Properties | Rechat`
+
+    return title
+  }
+
   logActivity(object) {
     logUserActivity({
       object,
@@ -75,12 +92,6 @@ class Listing extends React.Component {
 
   render() {
     const { listing, isFetching, errorMessage } = this.state
-    let pageTitle =
-      listing && listing.property
-        ? `${listing_util.addressTitle(listing.property.address)} | `
-        : ''
-
-    pageTitle = `${pageTitle}Properties | Rechat`
 
     let content = (
       <ListingDesktopView
@@ -106,7 +117,7 @@ class Listing extends React.Component {
     return (
       <React.Fragment>
         <Helmet>
-          <title> {pageTitle} </title>
+          <title>{this.pageTitle}</title>
         </Helmet>
         {content}
       </React.Fragment>
