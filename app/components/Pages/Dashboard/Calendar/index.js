@@ -77,6 +77,16 @@ class CalendarContainer extends React.Component {
     }
   }
 
+  /**
+   * Web page (document) title
+   * @returns {String} Title
+   */
+  get documentTitle() {
+    return `Calendar: ${moment(this.props.selectedDate).format(
+      'MMM DD'
+    )} | Rechat`
+  }
+
   getCalendar = async (
     startRange,
     endRange,
@@ -278,7 +288,7 @@ class CalendarContainer extends React.Component {
     return (
       <React.Fragment>
         <Helmet>
-          <title>Calendar | Rechat</title>
+          <title>{this.documentTitle}</title>
         </Helmet>
         <Container isOpen={isMenuOpen}>
           <Menu isOpen={isMenuOpen} width={MENU_WIDTH}>
