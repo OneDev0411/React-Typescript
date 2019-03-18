@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { connect } from 'react-redux'
+
 import { getAttributeFromSummary } from 'models/contacts/helpers'
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import IconInfoOutline from 'components/SvgIcons/InfoOutline/IconInfoOutline'
@@ -9,6 +11,9 @@ import Tooltip from 'components/tooltip'
 import Table from 'components/Grid/Table'
 import IconButton from 'components/Button/IconButton'
 import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
+
+import { putUserSetting } from 'models/user/put-user-setting'
+import getUserTeams from 'actions/user/teams'
 
 import TagsOverlay from '../../components/TagsOverlay'
 import NoSearchResults from '../../../../../Partials/no-search-results'
@@ -243,7 +248,10 @@ class ContactsList extends React.Component {
             sortable: {
               columns: this.sortableColumns,
               onChange: this.props.handleChangeOrder,
-              userSettingKey: SORT_FIELD_SETTING_KEY,
+              onPostChange: async item => {
+                await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
+                await this.props.getUserTeams(this.props.user)
+              },
               defaultIndex:
                 this.sortableColumns.find(
                   ({ value }) => value === this.props.sortBy
@@ -278,4 +286,7 @@ class ContactsList extends React.Component {
   }
 }
 
-export default ContactsList
+export default connect(
+  ({ user }) => ({ user }),
+  { getUserTeams }
+)(ContactsList)
