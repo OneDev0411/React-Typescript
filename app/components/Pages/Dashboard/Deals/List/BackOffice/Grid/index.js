@@ -6,6 +6,8 @@ import moment from 'moment'
 
 import Deal from 'models/Deal'
 
+import { getActiveTeamSettings } from 'utils/user-teams'
+
 import Table from 'components/Grid/Table'
 
 import EmptyState from './EmptyState'
@@ -15,8 +17,15 @@ import Address from '../../components/table-columns/Address'
 import Notifications from '../../components/table-columns/NotificationBadge'
 
 import { getPrimaryAgentName } from '../../../utils/roles'
+import { SORT_FIELD_SETTING_KEY, SORTABLE_COLUMNS } from '../../constants'
 
 class Grid extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.order = getActiveTeamSettings(props.user, SORT_FIELD_SETTING_KEY)
+  }
+
   get Columns() {
     const { roles } = this.props
 
@@ -148,7 +157,13 @@ class Grid extends React.Component {
     return (
       <Table
         plugins={{
-          sortable: {}
+          sortable: {
+            columns: SORTABLE_COLUMNS,
+            userSettingKey: SORT_FIELD_SETTING_KEY,
+            defaultIndex:
+              SORTABLE_COLUMNS.find(({ value }) => value === this.order) ||
+              SORTABLE_COLUMNS[0]
+          }
         }}
         getTdProps={this.getTdProps}
         isFetching={isFetchingDeals}
@@ -161,12 +176,13 @@ class Grid extends React.Component {
   }
 }
 
-function mapStateToProps({ deals }) {
+function mapStateToProps({ user, deals }) {
   const { properties, list, roles } = deals
 
   return {
     isFetchingDeals: properties.isFetchingDeals,
     deals: list,
+    user,
     roles
   }
 }

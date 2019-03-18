@@ -27,6 +27,8 @@ import TagsString from './columns/Tags'
 import { Contact } from './columns/Contact'
 import { LastTouchedCell } from './columns/LastTouched'
 
+import { SORT_FIELD_SETTING_KEY } from '../constants'
+
 const IconLastTouch = styled(IconInfoOutline)`
   margin-left: 0.5rem;
   width: 1.25rem;
@@ -200,6 +202,16 @@ class ContactsList extends React.Component {
     }
   ]
 
+  sortableColumns = [
+    { label: 'Most Recent', value: '-updated_at' },
+    { label: 'Last Touch', value: 'last_touch' },
+    { label: 'First name A-Z', value: 'display_name' },
+    { label: 'First name Z-A', value: '-display_name' },
+    { label: 'Last name A-Z', value: 'sort_field' },
+    { label: 'Last name Z-A', value: '-sort_field' },
+    { label: 'Created At', value: 'created_at' }
+  ]
+
   getGridTrProps = (rowIndex, { isSelected }) => {
     if (this.props.isRowsUpdating && isSelected) {
       return {
@@ -229,17 +241,13 @@ class ContactsList extends React.Component {
               actions: this.actions
             },
             sortable: {
-              columns: [
-                { label: 'Most Recent', value: '-updated_at' },
-                { label: 'Last Touch', value: 'last_touch' },
-                //  { label: 'Next Touch', value: 'next_touch' },
-                { label: 'First name A-Z', value: 'display_name' },
-                { label: 'First name Z-A', value: '-display_name' },
-                { label: 'Last name A-Z', value: 'sort_field' },
-                { label: 'Last name Z-A', value: '-sort_field' },
-                { label: 'Created At', value: 'created_at' }
-              ],
-              onChange: this.props.handleChangeOrder
+              columns: this.sortableColumns,
+              onChange: this.props.handleChangeOrder,
+              userSettingKey: SORT_FIELD_SETTING_KEY,
+              defaultIndex:
+                this.sortableColumns.find(
+                  ({ value }) => value === this.props.sortBy
+                ) || this.sortableColumns[0]
             }
           }}
           data={this.props.data}
