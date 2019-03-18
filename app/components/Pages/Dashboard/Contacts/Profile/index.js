@@ -93,6 +93,16 @@ class ContactProfile extends React.Component {
   componentWillUnmount = () =>
     window.removeEventListener('resize', this.detectScreenSize)
 
+  /**
+   * Web page (document) title
+   * @returns {String} Title
+   */
+  get documentTitle() {
+    let title = this.state.contact.summary.display_name || ''
+
+    return title ? `${title} | Contacts | Rechat` : 'Contact | Rechat'
+  }
+
   detectScreenSize = () => {
     if (window.innerWidth < 1681 && this.state.isDesktopScreen) {
       return this.setState({ isDesktopScreen: false })
@@ -246,16 +256,10 @@ class ContactProfile extends React.Component {
       submitCallback: this.setContact
     }
 
-    let pageTitle = contact.summary.display_name || ''
-
-    pageTitle = pageTitle
-      ? `${pageTitle} | Contacts | Rechat`
-      : 'Contact | Rechat'
-
     return (
       <PageWrapper>
         <Helmet>
-          <title> {pageTitle} </title>
+          <title>{this.documentTitle}</title>
         </Helmet>
         <PageContainer>
           <Header contact={contact} />
