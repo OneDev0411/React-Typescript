@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
+import { Helmet } from 'react-helmet'
 
 import { ICalContainer, PageDescription } from './styled'
 
@@ -179,6 +180,9 @@ class DealTemplates extends React.Component {
 
     return (
       <Fragment>
+        <Helmet>
+          <title>Calendar Export | Settings | Rechat</title>
+        </Helmet>
         <PageHeader
           isFlat
           style={{

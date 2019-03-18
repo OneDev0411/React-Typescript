@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import { Helmet } from 'react-helmet'
 
 import getFavorites from '../../../../../store_actions/listings/favorites/get-favorites'
 import { selectListings } from '../../../../../reducers/listings'
@@ -60,6 +61,9 @@ class Favorites extends React.Component {
   render() {
     return (
       <React.Fragment>
+        <Helmet>
+          <title>Following | Properties | Rechat</title>
+        </Helmet>
         <Header
           title="Following"
           onChangeView={this.onChangeView}
