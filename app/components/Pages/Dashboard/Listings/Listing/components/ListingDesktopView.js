@@ -712,7 +712,7 @@ const ListingDesktopView = ({
                         property.parking_spaces_garage ? 'Yes' : 'No'
                       )}
                       {renderFeatures(
-                        'Garage Spaces',
+                        'Parking Spaces',
                         property.parking_spaces_covered_total
                       )}
                       {renderFeatures(
