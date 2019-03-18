@@ -7,7 +7,7 @@ export async function sendContactsEmail(email) {
       due_at: email.due_at || new Date()
     }
 
-    const response = await new Fetch().post('/emails').send(data)
+    const response = await new Fetch().post('/emails/individual').send(data)
 
     return response.body
   } catch (error) {
