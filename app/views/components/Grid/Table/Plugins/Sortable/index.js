@@ -120,38 +120,29 @@ export class SortablePlugin {
     return list
   }
 
-  render = (columns, isFetching) => {
-    console.log('OPT', this.options)
+  render = (columns, isFetching) => (
+    <BasicDropdown
+      maxHeight={400}
+      noBorder
+      buttonStyle={{ fontWeight: 500, paddingRight: 0 }}
+      defaultSelectedItem={this.options.defaultIndex}
+      disabled={isFetching}
+      items={this.getSortableColumns(columns)}
+      itemToString={item => item.label}
+      onChange={async item => {
+        const userSettingKey = this.options.userSettingKey
 
-    return (
-      <BasicDropdown
-        maxHeight={400}
-        noBorder
-        buttonStyle={{ fontWeight: 500, paddingRight: 0 }}
-        defaultSelectedItem={this.options.defaultIndex}
-        disabled={isFetching}
-        items={this.getSortableColumns(columns)}
-        itemToString={item => item.label}
-        onChange={async item => {
-          console.log('item', item)
-          console.log('options', this.options)
+        if (userSettingKey) {
+          await putUserSetting(userSettingKey, item.value)
+        }
 
-          const userSettingKey = this.options.userSettingKey
+        if (this.options.onChange) {
+          return this.options.onChange(item)
+        }
 
-          console.log('userSettingKey', userSettingKey)
-
-          if (userSettingKey) {
-            await putUserSetting(userSettingKey, item.value)
-          }
-
-          if (this.options.onChange) {
-            return this.options.onChange(item)
-          }
-
-          this.changeSort(item.column, item.ascending)
-        }}
-        menuStyle={{ right: 0, left: 'auto' }}
-      />
-    )
-  }
+        this.changeSort(item.column, item.ascending)
+      }}
+      menuStyle={{ right: 0, left: 'auto' }}
+    />
+  )
 }
