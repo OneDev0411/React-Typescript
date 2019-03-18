@@ -871,6 +871,7 @@ class CreateDeal extends React.Component {
             <Fragment>
               <DealType
                 isDraft={isDraft}
+                isRequired={true}
                 onChangeDealType={this.changeDealType}
               />
 
