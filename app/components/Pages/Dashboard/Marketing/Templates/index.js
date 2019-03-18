@@ -69,18 +69,19 @@ export default class Templates extends Component {
 
   render() {
     const { state, props } = this
-    const selectedTemplate = headers[props.types]
+    const selectedType = headers[props.types]
 
     return (
       <React.Fragment>
         <Helmet>
-          <title>Template: {selectedTemplate.title} | Marketing | Rechat</title>
+          <title>{selectedType.title} | Marketing | Rechat</title>
         </Helmet>
 
         <Header
-          selectedTemplate={selectedTemplate}
+          data={selectedType}
           isSideMenuOpen={props.isSideMenuOpen}
           toggleSideMenu={props.toggleSideMenu}
+          types={props.types}
         />
         <List
           isLoading={state.isLoading}
