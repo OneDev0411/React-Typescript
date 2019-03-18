@@ -64,7 +64,7 @@ export default class History extends React.Component {
     return (
       <React.Fragment>
         <Helmet>
-          <title>My Designs| Marketing | Rechat</title>
+          <title>My Designs | Marketing | Rechat</title>
         </Helmet>
         <Header
           title="My Designs"
