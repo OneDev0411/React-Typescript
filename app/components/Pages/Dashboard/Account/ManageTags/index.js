@@ -195,7 +195,7 @@ class ManageTags extends Component {
     return (
       <Fragment>
         <Helmet>
-          <title>Manage Tags | Rechat</title>
+          <title>Manage Tags | Settings | Rechat</title>
         </Helmet>
         <PageHeader style={{ marginBottom: '1rem', marginTop: '1.5rem' }}>
           <PageHeader.Title showBackButton={false}>

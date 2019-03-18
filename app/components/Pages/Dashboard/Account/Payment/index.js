@@ -6,7 +6,7 @@ import PageHeader from '../../../../../views/components/PageHeader'
 const Payment = () => (
   <PageHeader isFlat style={{ marginBottom: '1.5em', marginTop: '1.5rem' }}>
     <Helmet>
-      <title>Payment | Rechat</title>
+      <title>Payment | Settings | Rechat</title>
     </Helmet>
     <PageHeader.Title showBackButton={false}>
       <PageHeader.Heading>Payment</PageHeader.Heading>

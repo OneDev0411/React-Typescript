@@ -11,7 +11,7 @@ import PageHeader from '../../../../../views/components/PageHeader'
 const Profile = ({ user, brand }) => (
   <Fragment>
     <Helmet>
-      <title>Profile | Rechat</title>
+      <title>Profile | Settings | Rechat</title>
     </Helmet>
     <PageHeader isFlat style={{ marginBottom: '1.5em', marginTop: '1.5rem' }}>
       <PageHeader.Title showBackButton={false}>

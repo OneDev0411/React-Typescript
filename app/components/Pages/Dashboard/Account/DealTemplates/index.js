@@ -78,7 +78,7 @@ class DealTemplates extends React.Component {
     return (
       <Fragment>
         <Helmet>
-          <title>Form Templates | Rechat</title>
+          <title>Form Templates | Settings | Rechat</title>
         </Helmet>
         <PageHeader
           isFlat

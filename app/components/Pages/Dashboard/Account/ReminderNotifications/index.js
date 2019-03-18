@@ -257,7 +257,7 @@ class ReminderNotifications extends Component {
     return (
       <Fragment>
         <Helmet>
-          <title>Reminder Notifications | Rechat</title>
+          <title>Reminder Notifications | Settings | Rechat</title>
         </Helmet>
         <PageHeader style={{ marginBottom: '1.5rem', marginTop: '1.5rem' }}>
           <PageHeader.Title showBackButton={false}>

@@ -181,7 +181,7 @@ class DealTemplates extends React.Component {
     return (
       <Fragment>
         <Helmet>
-          <title>Calendar Export | Rechat</title>
+          <title>Calendar Export | Settings | Rechat</title>
         </Helmet>
         <PageHeader
           isFlat

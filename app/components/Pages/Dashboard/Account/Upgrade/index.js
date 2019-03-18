@@ -38,7 +38,7 @@ class AgentConfirm extends React.Component {
     return (
       <div>
         <Helmet>
-          <title>Upgrade Account | Rechat</title>
+          <title>Upgrade Account | Settings | Rechat</title>
         </Helmet>
         <PageHeader
           isFlat
