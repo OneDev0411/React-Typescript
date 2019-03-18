@@ -1,8 +1,6 @@
 import React from 'react'
 import _ from 'underscore'
 
-import { putUserSetting } from 'models/user/put-user-setting'
-
 import { BasicDropdown } from 'components/BasicDropdown'
 
 export class SortablePlugin {
@@ -130,17 +128,13 @@ export class SortablePlugin {
       items={this.getSortableColumns(columns)}
       itemToString={item => item.label}
       onChange={async item => {
-        const userSettingKey = this.options.userSettingKey
-
-        if (userSettingKey) {
-          await putUserSetting(userSettingKey, item.value)
-        }
-
         if (this.options.onChange) {
-          return this.options.onChange(item)
+          this.options.onChange(item)
+        } else {
+          this.changeSort(item.column, item.ascending)
         }
 
-        this.changeSort(item.column, item.ascending)
+        this.options.onPostChange && this.options.onPostChange(item)
       }}
       menuStyle={{ right: 0, left: 'auto' }}
     />
