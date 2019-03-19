@@ -10,6 +10,9 @@ import { getActiveTeamSettings } from 'utils/user-teams'
 
 import Table from 'components/Grid/Table'
 
+import { putUserSetting } from 'models/user/put-user-setting'
+import getUserTeams from 'actions/user/teams'
+
 import EmptyState from './EmptyState'
 import LoadingState from '../../components/LoadingState'
 
@@ -17,7 +20,8 @@ import Address from '../../components/table-columns/Address'
 import Notifications from '../../components/table-columns/NotificationBadge'
 
 import { getPrimaryAgentName } from '../../../utils/roles'
-import { SORT_FIELD_SETTING_KEY, SORTABLE_COLUMNS } from '../../constants'
+
+const SORT_FIELD_SETTING_KEY = 'grid_deals_sort_field_bo'
 
 class Grid extends React.Component {
   constructor(props) {
@@ -149,20 +153,47 @@ class Grid extends React.Component {
     return merged
   }
 
+  getDefaultSort = () => {
+    const sortSetting =
+      getActiveTeamSettings(this.props.user, SORT_FIELD_SETTING_KEY) ||
+      'address'
+    let id = sortSetting
+    let ascending = true
+
+    if (sortSetting.startsWith('-')) {
+      id = sortSetting.slice(1)
+      ascending = false
+    }
+
+    const column = this.Columns.find(col => col.id === id)
+
+    return {
+      column,
+      ascending
+    }
+  }
+
+  getDefaultIndex = () =>
+    getActiveTeamSettings(this.props.user, SORT_FIELD_SETTING_KEY) || 'address'
+
   render() {
     const { isFetchingDeals } = this.props
     const columns = this.Columns
     const data = this.Data
 
+    const defaultSort = this.getDefaultSort()
+    const defaultIndex = this.getDefaultIndex()
+
     return (
       <Table
         plugins={{
           sortable: {
-            columns: SORTABLE_COLUMNS,
-            userSettingKey: SORT_FIELD_SETTING_KEY,
-            defaultIndex:
-              SORTABLE_COLUMNS.find(({ value }) => value === this.order) ||
-              SORTABLE_COLUMNS[0]
+            defaultSort,
+            defaultIndex,
+            onPostChange: async item => {
+              await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
+              await this.props.getUserTeams(this.props.user)
+            }
           }
         }}
         getTdProps={this.getTdProps}
@@ -187,4 +218,7 @@ function mapStateToProps({ user, deals }) {
   }
 }
 
-export default connect(mapStateToProps)(Grid)
+export default connect(
+  mapStateToProps,
+  { getUserTeams }
+)(Grid)

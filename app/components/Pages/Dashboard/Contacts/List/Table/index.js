@@ -252,10 +252,7 @@ class ContactsList extends React.Component {
                 await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
                 await this.props.getUserTeams(this.props.user)
               },
-              defaultIndex:
-                this.sortableColumns.find(
-                  ({ value }) => value === this.props.sortBy
-                ) || this.sortableColumns[0]
+              defaultIndex: this.props.sortBy
             }
           }}
           data={this.props.data}

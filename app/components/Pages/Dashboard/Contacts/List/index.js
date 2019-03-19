@@ -6,7 +6,6 @@ import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { getContacts, searchContacts, deleteContacts } from 'actions/contacts'
 import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-text-filter'
-import getUserTeams from 'actions/user/teams'
 
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import {
@@ -202,11 +201,7 @@ class ContactsList extends React.Component {
     })
   }
 
-  reloadUser = () => this.props.getUserTeams(this.props.user)
-
   handleChangeOrder = async ({ value: order }) => {
-    await this.reloadUser()
-
     this.order = order
     this.handleFilterChange({
       filters: this.state.filters,
@@ -381,7 +376,6 @@ export default connect(
     deleteContacts,
     confirmation,
     setContactsListTextFilter,
-    getContactsTags,
-    getUserTeams
+    getContactsTags
   }
 )(ContactsList)
