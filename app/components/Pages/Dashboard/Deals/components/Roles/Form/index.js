@@ -29,7 +29,13 @@ export class RoleFormModal extends React.Component {
   }
 
   get FormType() {
-    return this.props.form.role_type || TYPE_PERSON
+    const { form } = this.props
+
+    if (form && form.role_type) {
+      return form.role_type
+    }
+
+    return TYPE_PERSON
   }
 
   /**
