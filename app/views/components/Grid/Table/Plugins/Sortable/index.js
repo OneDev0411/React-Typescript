@@ -118,25 +118,31 @@ export class SortablePlugin {
     return list
   }
 
-  render = (columns, isFetching) => (
-    <BasicDropdown
-      maxHeight={400}
-      noBorder
-      buttonStyle={{ fontWeight: 500, paddingRight: 0 }}
-      defaultSelectedItem={this.options.defaultIndex}
-      disabled={isFetching}
-      items={this.getSortableColumns(columns)}
-      itemToString={item => item.label}
-      onChange={async item => {
-        if (this.options.onChange) {
-          this.options.onChange(item)
-        } else {
-          this.changeSort(item.column, item.ascending)
-        }
+  render = (columns, isFetching) => {
+    const items = this.getSortableColumns(columns)
 
-        this.options.onPostChange && this.options.onPostChange(item)
-      }}
-      menuStyle={{ right: 0, left: 'auto' }}
-    />
-  )
+    return (
+      <BasicDropdown
+        maxHeight={400}
+        noBorder
+        buttonStyle={{ fontWeight: 500, paddingRight: 0 }}
+        defaultSelectedItem={items.find(
+          item => item.value === this.options.defaultIndex
+        )}
+        disabled={isFetching}
+        items={items}
+        itemToString={item => item.label}
+        onChange={async item => {
+          if (this.options.onChange) {
+            this.options.onChange(item)
+          } else {
+            this.changeSort(item.column, item.ascending)
+          }
+
+          this.options.onPostChange && this.options.onPostChange(item)
+        }}
+        menuStyle={{ right: 0, left: 'auto' }}
+      />
+    )
+  }
 }
