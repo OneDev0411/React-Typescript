@@ -120,6 +120,13 @@ export class SortablePlugin {
 
   render = (columns, isFetching) => {
     const items = this.getSortableColumns(columns)
+    let defaultIndexValue = null
+
+    if (typeof this.options.defaultIndex === 'object') {
+      defaultIndexValue = this.options.defaultIndex.value
+    } else if (typeof this.options.defaultIndex === 'string') {
+      defaultIndexValue = this.options.defaultIndex
+    }
 
     return (
       <BasicDropdown
@@ -127,7 +134,7 @@ export class SortablePlugin {
         noBorder
         buttonStyle={{ fontWeight: 500, paddingRight: 0 }}
         defaultSelectedItem={items.find(
-          item => item.value === this.options.defaultIndex
+          item => item.value === defaultIndexValue
         )}
         disabled={isFetching}
         items={items}
