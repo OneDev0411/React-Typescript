@@ -14,7 +14,7 @@ import {
   moveTaskFile
 } from 'actions/deals'
 
-import { getChecklists } from 'reducers/deals/checklists'
+import { getDealChecklists } from 'reducers/deals/checklists'
 import { selectTaskById } from 'reducers/deals/tasks'
 import { selectFormById } from 'reducers/deals/forms'
 
@@ -186,7 +186,7 @@ function mapStateToProps({ deals, user }, props) {
     user,
     forms: deals.forms,
     tasks: deals.tasks,
-    checklists: getChecklists(props.deal, deals.checklists)
+    checklists: getDealChecklists(props.deal, deals.checklists)
   }
 }
 
