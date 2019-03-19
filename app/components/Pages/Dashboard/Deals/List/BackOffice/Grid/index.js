@@ -27,7 +27,8 @@ class Grid extends React.Component {
   constructor(props) {
     super(props)
 
-    this.order = getActiveTeamSettings(props.user, SORT_FIELD_SETTING_KEY)
+    this.order =
+      getActiveTeamSettings(props.user, SORT_FIELD_SETTING_KEY) || 'address'
   }
 
   get Columns() {
