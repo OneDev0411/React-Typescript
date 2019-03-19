@@ -1,6 +1,6 @@
 export * from './set-deals'
 export * from './create-deal'
-export * from './archive-deal'
+export * from './delete-deal'
 export * from './update-deal'
 export * from './append-checklist'
 export * from './update-listing'
