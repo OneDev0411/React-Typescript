@@ -20,15 +20,15 @@ export class RoleFormModal extends React.Component {
 
     this.formObject = {
       ...this.props.form,
-      ...this.FormType,
       ...this.PreselectRole,
-      ...this.CommissionAttributes
+      ...this.CommissionAttributes,
+      role_type: this.getRoleType()
     }
 
     return this.formObject
   }
 
-  get FormType() {
+  getRoleType() {
     const { form } = this.props
 
     if (form && form.role_type) {
