@@ -57,11 +57,7 @@ class EmailCompose extends React.Component {
 
   validate = values => {
     const errors = {}
-    const { subject, recipients } = values
-
-    if (!subject || subject.length === 0) {
-      errors.subject = 'Please enter the subject'
-    }
+    const { recipients } = values
 
     if (!recipients || recipients.length === 0) {
       errors.recipients = 'You should select one recipient at least'
