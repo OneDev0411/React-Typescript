@@ -201,7 +201,7 @@ class ContactsList extends React.Component {
     })
   }
 
-  handleChangeOrder = async ({ value: order }) => {
+  handleChangeOrder = ({ value: order }) => {
     this.order = order
     this.handleFilterChange({
       filters: this.state.filters,
