@@ -2,8 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import Deal from 'models/Deal'
-import DealContext from 'models/Deal/helpers/dynamic-context'
 import { upsertContexts } from 'actions/deals'
+import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
 
 import { BasicDropdown } from 'components/BasicDropdown'
 
@@ -49,15 +49,7 @@ class DealSide extends React.Component {
     }
 
     this.props.upsertContexts(this.props.deal.id, [
-      {
-        definition: DealContext.getDefinitionId(
-          this.props.deal.brand.id,
-          'ender_type'
-        ),
-        checklist: DealContext.getChecklist(this.props.deal, 'ender_type'),
-        value: item.value,
-        approved: true
-      }
+      createUpsertObject(this.props.deal, 'ender_type', item.value, true)
     ])
   }
 

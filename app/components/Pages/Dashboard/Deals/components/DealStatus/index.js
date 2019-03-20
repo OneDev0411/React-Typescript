@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { getStatusColorClass } from 'utils/listing'
 import { upsertContexts } from 'actions/deals'
 import { getDealChecklists } from 'reducers/deals/checklists'
+import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
 
 import Deal from 'models/Deal'
 import DealContext from 'models/Deal/helpers/dynamic-context'
@@ -103,18 +104,7 @@ class DealStatus extends React.Component {
 
     if (this.props.isBackOffice) {
       await this.props.upsertContexts(this.props.deal.id, [
-        {
-          definition: DealContext.getDefinitionId(
-            this.props.deal.brand.id,
-            'listing_status'
-          ),
-          checklist: DealContext.getChecklist(
-            this.props.deal,
-            'listing_status'
-          ),
-          value: status,
-          approved: true
-        }
+        createUpsertObject(this.props.deal, 'listing_status', status, true)
       ])
     } else {
       await this.notifyAdmin(status)
