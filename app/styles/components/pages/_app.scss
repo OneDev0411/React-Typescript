@@ -1,7 +1,4 @@
 .l-app__main {
   height: 100vh;
-
-  &.is-logged-in {
-    margin-left: $app-sidenav-width;
-  }
+  margin-left: $app-sidenav-width;
 }
