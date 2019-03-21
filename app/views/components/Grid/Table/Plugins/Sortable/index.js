@@ -6,10 +6,6 @@ import { BasicDropdown } from 'components/BasicDropdown'
 export class SortablePlugin {
   constructor({ options, onRequestForceUpdate }) {
     this.options = {
-      defaultIndex: {
-        label: 'Sort by',
-        value: 'Sort by'
-      },
       ...options
     }
     this.onRequestForceUpdate = onRequestForceUpdate
@@ -120,12 +116,22 @@ export class SortablePlugin {
 
   render = (columns, isFetching) => {
     const items = this.getSortableColumns(columns)
-    let defaultIndexValue = null
+    let defaultIndex
 
-    if (typeof this.options.defaultIndex === 'object') {
-      defaultIndexValue = this.options.defaultIndex.value
-    } else if (typeof this.options.defaultIndex === 'string') {
-      defaultIndexValue = this.options.defaultIndex
+    if (typeof this.options.defaultIndex === 'string') {
+      defaultIndex = items.find(
+        item => item.value === this.options.defaultIndex
+      )
+    } else if (
+      this.options.defaultIndex &&
+      typeof this.options.defaultIndex === 'object'
+    ) {
+      defaultIndex = this.options.defaultIndex
+    } else {
+      defaultIndex = {
+        label: 'Sort by',
+        value: 'Sort by'
+      }
     }
 
     return (
@@ -133,9 +139,7 @@ export class SortablePlugin {
         maxHeight={400}
         noBorder
         buttonStyle={{ fontWeight: 500, paddingRight: 0 }}
-        defaultSelectedItem={items.find(
-          item => item.value === defaultIndexValue
-        )}
+        defaultSelectedItem={defaultIndex}
         disabled={isFetching}
         items={items}
         itemToString={item => item.label}
