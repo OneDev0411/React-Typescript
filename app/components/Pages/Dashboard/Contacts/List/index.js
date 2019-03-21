@@ -15,7 +15,11 @@ import {
   selectContactsListFetching
 } from 'reducers/contacts/list'
 
-import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
+import {
+  viewAs,
+  viewAsEveryoneOnTeam,
+  getActiveTeamSettings
+} from 'utils/user-teams'
 
 import {
   Container as PageContainer,
@@ -32,6 +36,8 @@ import { Header } from './Header'
 import ContactFilters from './Filters'
 import TagsList from './TagsList'
 
+import { SORT_FIELD_SETTING_KEY } from './constants'
+
 class ContactsList extends React.Component {
   constructor(props) {
     super(props)
@@ -45,7 +51,7 @@ class ContactsList extends React.Component {
       activeSegment: {}
     }
 
-    this.order = this.props.listInfo.order
+    this.order = getActiveTeamSettings(props.user, SORT_FIELD_SETTING_KEY)
   }
 
   componentDidMount() {
@@ -372,6 +378,7 @@ class ContactsList extends React.Component {
           />
           <Table
             bulkEventCreationCallback={this.reloadContacts}
+            sortBy={this.order}
             handleChangeOrder={this.handleChangeOrder}
             handleChangeContactsAttributes={this.handleChangeContactsAttributes}
             data={contacts}

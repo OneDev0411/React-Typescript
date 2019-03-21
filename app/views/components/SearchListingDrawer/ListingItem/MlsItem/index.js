@@ -1,7 +1,8 @@
 import React from 'react'
+import fecha from 'fecha'
 import Flex from 'styled-flex-component'
 
-import listingsHelper from 'utils/listing'
+import { getStatusColorClass, getListingAddressObj } from 'utils/listing'
 
 import IconDrag from 'components/SvgIcons/Drag/IconDrag'
 import IconHome from 'components/SvgIcons/NewHome/IconHome'
@@ -19,7 +20,20 @@ import {
 } from '../styled'
 
 export function MlsItem({ item, ...props }) {
-  const address = item.address_components
+  const address = getListingAddressObj(item)
+
+  const getStatus = () => {
+    const { status, close_date } = item
+
+    if ((status === 'Sold' || status === 'Leased') && close_date) {
+      return `${status} ${fecha.format(
+        new Date(close_date * 1000),
+        'mediumDate'
+      )}`
+    }
+
+    return status
+  }
 
   return (
     <ListItem {...props} className="c-search-listings__mls-item">
@@ -51,10 +65,10 @@ export function MlsItem({ item, ...props }) {
         <ListItemStatus>
           <Status
             style={{
-              backgroundColor: listingsHelper.getStatusColorClass(item.status)
+              backgroundColor: getStatusColorClass(item.status)
             }}
           >
-            {item.status}
+            {getStatus()}
           </Status>
 
           {props.removable && (
