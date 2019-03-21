@@ -1,10 +1,9 @@
 import S from 'shorti'
-import ReactDOM from 'react-dom'
+// import ReactDOM from 'react-dom'
 import Map from 'google-map-react'
 import ReactSwipe from 'react-swipe'
-import React, { Component } from 'react'
-import { browserHistory } from 'react-router'
-import { Col, Button } from 'react-bootstrap'
+import React from 'react'
+// import { browserHistory } from 'react-router'
 
 // import { connect } from 'react-redux'
 // import compose from 'recompose/compose'
@@ -23,7 +22,7 @@ import listing_util from '../../../../../../utils/listing'
 import FetchError from './FetchError'
 
 import Loading from '../../../../../Partials/Loading'
-import FavoriteHeart from '../../components/FavoriteHeart'
+// import FavoriteHeart from '../../components/FavoriteHeart'
 import ListingMarker from '../../../Partials/ListingMarker'
 import ListingMapMarker from '../../../Partials/ListingMapMarker'
 
@@ -165,11 +164,11 @@ const ListingMobileView = ({
         style={S('bg-ebeef1 relative t-7 br-100 pt-11 h-35 pl-36 pr-15 mr-15')}
       >
         <span
-          style={S(`mr-5 font-46 l-10 t-17n absolute color-${status_color}`)}
+          style={S(`mr-5 font-46 l-10 t-22n absolute color-${status_color}`)}
         >
           &#8226;
         </span>
-        <span style={S('font-14 relative t-3n')}>
+        <span style={S('font-14 relative t-5n')}>
           <b>
             {listing.status} {sold_date}
           </b>
@@ -336,12 +335,12 @@ const ListingMobileView = ({
 
       location_area = (
         <div>
-          <Col xs={12}>
+          <div style={{ padding: '0 1rem' }}>
             <div style={S('fw-600 font-18 mb-10')}>
               Location
               <div className="clearfix" />
             </div>
-          </Col>
+          </div>
           <div style={S('relative w-100p pull-left')}>
             <Map
               zoom={12}
@@ -389,7 +388,7 @@ const ListingMobileView = ({
           <div className="clearfix" />
         </div>
         <div>
-          <Col xs={12}>
+          <div style={{ padding: '0 1rem' }}>
             <div style={S('fw-700 font-30')}>
               ${price}
               {listing.property &&
@@ -424,26 +423,26 @@ const ListingMobileView = ({
               <span>{year_built ? `Built in ${year_built}` : ''}</span>
               {lot_size_area}
             </div>
-          </Col>
-          <Col xs={12} style={S('mb-15')}>
+          </div>
+          <div style={{ padding: '0 1rem', marginBottom: '1rem' }}>
             {brand_agent_area}
             {list_agent_area}
-          </Col>
+          </div>
           <div className="clearfix" />
           <div style={S('mb-20')}>
             {location_area}
             <div className="clearfix" />
           </div>
           <div>
-            <Col xs={12}>
+            <div style={{ padding: '0 1rem' }}>
               <div style={S('fw-600 font-18 mb-10')}>Description</div>
               <div style={S('color-4a4a4a font-18 mb-20 pr-30')}>
                 {description}
               </div>
-            </Col>
+            </div>
             <div className="clearfix" />
           </div>
-          <Col xs={12}>
+          <div style={{ padding: '0 1rem' }}>
             <div style={S('mb-15 font-15')}>
               <div style={S('pr-20')}>
                 <div style={S('mb-20')}>
@@ -547,7 +546,7 @@ const ListingMobileView = ({
               </div>
               <div className="clearfix" />
             </div>
-          </Col>
+          </div>
           <div className="clearfix" />
         </div>
       </div>
@@ -557,7 +556,7 @@ const ListingMobileView = ({
   const viewer_wrap_style = S(
     'absolute h-100p bg-fff t-0 l-0 z-1000 ml-0 w-100p'
   )
-  const nav_bar_style = S('mb-0 p-0 h-65 pt-7 w-100p')
+  // const nav_bar_style = S('mb-0 p-0 h-65 pt-7 w-100p')
 
   // let join_area
   // let brand_logo = (
@@ -597,7 +596,12 @@ const ListingMobileView = ({
             src={Brand.asset('site_logo_wide')}
           />
         ) : (
-          'Rechat'
+          <img
+            alt="Rechat"
+            width={36}
+            height={36}
+            src="/static/images/appicon.png"
+          />
         )}
       </a>
     </div>
