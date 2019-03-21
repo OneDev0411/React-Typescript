@@ -122,7 +122,10 @@ export class SortablePlugin {
       defaultIndex = items.find(
         item => item.value === this.options.defaultIndex
       )
-    } else if (typeof this.options.defaultIndex === 'object') {
+    } else if (
+      this.options.defaultIndex &&
+      typeof this.options.defaultIndex === 'object'
+    ) {
       defaultIndex = this.options.defaultIndex
     } else {
       defaultIndex = {
