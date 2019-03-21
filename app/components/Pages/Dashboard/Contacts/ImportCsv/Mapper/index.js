@@ -53,7 +53,8 @@ class Mapper extends React.Component {
       setCurrentStepValidation,
       mappedFields
     } = this.props
-    const colNames = data[0]
+    const colNames = data[0].map(c => c.trim())
+
     const contacts = data
       .slice(1)
       .filter(columns => columns.join('').length > 0)
