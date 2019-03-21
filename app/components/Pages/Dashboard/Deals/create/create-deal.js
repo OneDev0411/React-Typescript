@@ -83,7 +83,7 @@ class CreateDeal extends React.Component {
       dealSide: deal.deal_type,
       dealPropertyType: deal.property_type,
       enderType,
-      dealStatus: Deal.get.field(deal, 'listing_status') || '',
+      dealStatus: Deal.get.status(deal) || '',
       contexts: this.generateContextsFromDeal(deal),
       defaultDealAddress: dealAddress,
       dealAddress,
@@ -680,6 +680,18 @@ class CreateDeal extends React.Component {
     return dealPropertyType.includes('Lease') ? 'Lease' : 'Active'
   }
 
+  getDealStatus = () => {
+    if (this.state.dealSide === 'Buying') {
+      return {
+        contract_status: this.state.dealStatus
+      }
+    }
+
+    return {
+      listing_status: this.getDefaultStatus()
+    }
+  }
+
   /**
    * create context object
    */
@@ -771,10 +783,7 @@ class CreateDeal extends React.Component {
   get Contexts() {
     let contexts = {
       ...this.state.contexts,
-      listing_status:
-        this.state.dealSide === 'Buying'
-          ? this.state.dealStatus
-          : this.getDefaultStatus()
+      ...this.getDealStatus()
     }
 
     if (this.state.enderType !== -1) {
@@ -875,7 +884,7 @@ class CreateDeal extends React.Component {
             <Fragment>
               <DealType
                 isDraft={isDraft}
-                isRequired={true}
+                isRequired
                 onChangeDealType={this.changeDealType}
               />
 
