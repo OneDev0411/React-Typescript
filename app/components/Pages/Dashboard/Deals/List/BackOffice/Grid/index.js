@@ -1,12 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import merge from 'merge'
 import moment from 'moment'
 
 import Deal from 'models/Deal'
 
 import Table from 'components/Grid/Table'
+
+import flattenBrand from 'utils/flatten-brand'
 
 import EmptyState from './EmptyState'
 import LoadingState from '../../components/LoadingState'
@@ -86,7 +87,7 @@ class Grid extends React.Component {
   }
 
   getOffice = deal => {
-    const brand = this.flattenBrand(deal.brand)
+    const brand = flattenBrand(deal.brand)
 
     return brand && brand.messages ? brand.messages.branch_title : 'N/A'
   }
@@ -115,29 +116,6 @@ class Grid extends React.Component {
     }
 
     return {}
-  }
-
-  flattenBrand = brand => {
-    if (!brand) {
-      return null
-    }
-
-    const brands = [brand]
-
-    while (brand.parent) {
-      brands.push(brand.parent)
-      brand = brand.parent
-    }
-
-    brands.reverse()
-
-    let merged = {}
-
-    brands.forEach(brand_loop => {
-      merge.recursive(merged, { ...brand_loop, parent: undefined })
-    })
-
-    return merged
   }
 
   render() {
