@@ -100,7 +100,6 @@ const ListingDesktopView = ({
   container,
   isFetching,
   errorMessage,
-  onClickFollow,
   showShareModal,
   onHideShareModal,
   showModalGallery,
@@ -120,7 +119,7 @@ const ListingDesktopView = ({
   if (typeof window !== 'undefined') {
     viewer_width = window.innerWidth
 
-    if (user && !data.is_widget && container !== 'modal') {
+    if (!data.is_widget && container !== 'modal') {
       viewer_width -= 80
     }
   }
@@ -780,7 +779,7 @@ const ListingDesktopView = ({
     `absolute h-100p bg-fff t-0 l-0 z-10 ml-80 w-${viewer_width}`
   )
 
-  if (!user || data.is_widget) {
+  if (data.is_widget) {
     viewer_wrap_style = {
       ...viewer_wrap_style,
       ...S('ml-0 w-100p')
