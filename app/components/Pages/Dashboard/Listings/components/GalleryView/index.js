@@ -1,99 +1,64 @@
 import React from 'react'
 
-import { connect } from 'react-redux'
-
-import { putUserSetting } from 'models/user/put-user-setting'
-import getUserTeams from 'actions/user/teams'
-import { getActiveTeamSettings } from 'utils/user-teams'
-
 import Table from '../../../../../../views/components/Grid/Table'
 import LoadingComponent from '../../../../../../views/components/Spinner'
 
 import ListingCard from '../ListingCard'
 import { formatListing } from '../../helpers/format-listing'
+import { sortOptions } from '../../helpers/sort-plugin-options'
 import { bodyStyle, rowStyle } from './styled'
 
-const SORT_FIELD_SETTING_KEY = 'grid_properties_sort_field'
+export class GalleryView extends React.Component {
+  state = {
+    sortBy: {
+      index: 'price',
+      isDescending: true
+    }
+  }
 
-class GalleryViewComponent extends React.Component {
   columns = [
     {
       id: 'price',
-      header: 'Price',
-      sortType: 'number',
+      accessor: listing => listing.price,
       render: ({ rowData: listing }) => (
-        <ListingCard isShowOnMap listing={listing} key={listing.value} />
+        <ListingCard isShowOnMap listing={listing} key={listing.id} />
       )
-    },
-    {
-      id: 'beds',
-      header: 'Bedrooms',
-      sortType: 'number',
-      accessor: item => item.beds,
-      render: false
-    },
-    {
-      id: 'baths',
-      header: 'Bathrooms',
-      sortType: 'number',
-      render: false
-    },
-    {
-      id: 'sqft',
-      header: 'Sqft',
-      sortType: 'number',
-      render: false
-    },
-    {
-      id: 'lotSizeArea',
-      header: 'Lot Size Area',
-      sortType: 'number',
-      render: false
-    },
-    {
-      id: 'builtYear',
-      header: 'Year Built',
-      sortType: 'number',
-      render: false
     }
   ]
 
   format = listing => formatListing(listing, this.props.user)
 
-  getDefaultSort = () => {
-    const sortSetting =
-      getActiveTeamSettings(this.props.user, SORT_FIELD_SETTING_KEY) || '-price'
-    let id = sortSetting
-    let ascending = false
+  onChangeSort = ({ value: index }) => {
+    const isDescending = index.charAt(0) === '-'
 
-    if (sortSetting.startsWith('-')) {
-      id = sortSetting.slice(1)
-    } else {
-      ascending = true
+    if (isDescending) {
+      index = index.slice(1)
     }
 
-    const column = this.columns.find(col => col.id === id)
-
-    return {
-      column,
-      ascending
-    }
+    this.setState({
+      sortBy: {
+        index,
+        isDescending
+      }
+    })
   }
 
-  getDefaultIndex = () =>
-    getActiveTeamSettings(this.props.user, SORT_FIELD_SETTING_KEY) || '-price'
+  sort = (a, b) => {
+    const { index } = this.state.sortBy
+
+    return this.state.sortBy.isDescending
+      ? a[index] - b[index]
+      : b[index] - a[index]
+  }
 
   render() {
     const { listings } = this.props
-
-    const defaultSort = this.getDefaultSort()
-    const defaultIndex = this.getDefaultIndex()
 
     return (
       <div style={{ padding: '1.5em 1.5em 0.5em' }}>
         <Table
           columns={this.columns}
-          data={listings.data.map(this.format)}
+          data={listings.data.map(this.format).sort(this.sort)}
           isFetching={this.props.isFetching}
           LoadingState={LoadingComponent}
           showTableHeader={false}
@@ -106,12 +71,8 @@ class GalleryViewComponent extends React.Component {
           getTdProps={() => ({ style: { padding: 0 } })}
           plugins={{
             sortable: {
-              defaultSort,
-              defaultIndex,
-              onPostChange: async item => {
-                await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
-                await this.props.getUserTeams(this.props.user)
-              }
+              ...sortOptions,
+              onChange: this.onChangeSort
             }
           }}
         />
@@ -119,8 +80,3 @@ class GalleryViewComponent extends React.Component {
     )
   }
 }
-
-export const GalleryView = connect(
-  ({ user }) => ({ user }),
-  { getUserTeams }
-)(GalleryViewComponent)
