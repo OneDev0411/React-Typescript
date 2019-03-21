@@ -856,7 +856,7 @@ const ListingDesktopView = ({
     justifyBetween: true,
     style: { height: '70px', padding: '0 1.5rem' }
   }
-  const Header = user ? (
+  const Header = (
     <Flex {...headerProps}>
       <TextIconButton
         appearance="outline"
@@ -864,37 +864,27 @@ const ListingDesktopView = ({
         iconLeft={IconClose}
         text="Close"
       />
-      <Flex alignCenter>
-        <div style={{ marginRight: '1em' }}>
-          <FavoriteHeart listing={listing} width="40px" height="40px" />
-        </div>
-        <ActionButton onClick={showShareModal} brandColor={brandColor}>
-          Share
-        </ActionButton>
-        {/* <Follow
-          dropdownStyle={{ right: '0px' }}
-          statuses={listingStatuses}
-          activeStatuses={
-            (listing.user_listing_notification_setting &&
-              listing.user_listing_notification_setting.status) ||
-            []
-          }
-          isFetching={isFetching}
-          onClick={onClickFollow}
-        /> */}
-      </Flex>
-    </Flex>
-  ) : (
-    <Flex {...headerProps}>
-      {brand_logo}
-      <LinkButton
-        appearance="primary"
-        to={`/signin?redirectTo=${encodeURIComponent(window.location.pathname)}
+      {user ? (
+        <Flex alignCenter>
+          <div style={{ marginRight: '1em' }}>
+            <FavoriteHeart listing={listing} width="40px" height="40px" />
+          </div>
+          <ActionButton onClick={showShareModal} brandColor={brandColor}>
+            Share
+          </ActionButton>
+        </Flex>
+      ) : (
+        <LinkButton
+          appearance="primary"
+          to={`/signin?redirectTo=${encodeURIComponent(
+            window.location.pathname
+          )}
         ${contact_info ? `&username=${contact_info}` : ''}
         ${window.location.search}`}
-      >
-        Login
-      </LinkButton>
+        >
+          Login
+        </LinkButton>
+      )}
     </Flex>
   )
 
