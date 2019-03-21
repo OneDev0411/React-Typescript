@@ -15,7 +15,7 @@
     left: $app-sidenav-width + 220px; 
   }
   .l-listings--logged &.side-menu--open {
-    left: $app-sidenav-width + 478px;
+    left: $app-sidenav-width + 400px;
   }
   &.c-filters--isOpen {
     pointer-events: auto;
