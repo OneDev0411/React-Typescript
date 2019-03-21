@@ -33,6 +33,8 @@ class Form extends React.Component {
     validationErrors: {}
   }
 
+  exitOnFinish = false
+
   handleSelectTask = id =>
     this.setState({ task: this.props.tasks[id] }, () => this.validateForm())
 

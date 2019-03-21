@@ -346,7 +346,7 @@ export default class ListingViewerMobile extends Component {
                 <div style={S('pr-20')}>
                   <div style={S('fw-600 font-18 mb-10')}>All Features</div>
                   <div style={S('color-aaaaaa mb-10')}>
-                    Garage Spaces:&nbsp;
+                    Parking Spaces:&nbsp;
                     <span style={S('color-777')}>
                       { property.parking_spaces_garage }
                     </span>

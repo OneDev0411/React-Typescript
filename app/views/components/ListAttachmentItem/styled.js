@@ -3,9 +3,6 @@ import styled from 'styled-components'
 import IconClose from 'components/SvgIcons/Close/CloseIcon'
 import { red, primary } from 'views/utils/colors'
 
-export const Container = styled.div`
-  margin: 1rem 0;
-`
 export const DeleteIcon = styled(IconClose)`
   fill: ${red.A100};
   cursor: pointer;

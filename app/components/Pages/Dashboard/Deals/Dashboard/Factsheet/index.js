@@ -9,6 +9,7 @@ import DealContext from 'models/Deal/helpers/dynamic-context'
 import ToolTip from 'components/tooltip'
 
 import { upsertContexts, approveContext } from 'actions/deals'
+import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
 
 import LinkButton from 'components/Button/LinkButton'
 
@@ -94,16 +95,14 @@ class Factsheet extends React.Component {
     })
 
     try {
-      const context = [
-        {
-          definition: field.id,
-          checklist: DealContext.getChecklist(this.props.deal, field.key),
-          approved: this.props.isBackOffice ? true : !field.needs_approval,
-          value
-        }
-      ]
+      const context = createUpsertObject(
+        this.props.deal,
+        field.key,
+        value,
+        this.props.isBackOffice ? true : !field.needs_approval
+      )
 
-      await this.props.upsertContexts(this.props.deal.id, context)
+      await this.props.upsertContexts(this.props.deal.id, [context])
     } catch (e) {
       console.log(e)
     }

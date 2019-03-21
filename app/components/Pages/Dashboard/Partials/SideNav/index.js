@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import Flex from 'styled-flex-component'
 import { Dropdown, MenuItem } from 'react-bootstrap'
 
 import IntercomTrigger from '../IntercomTrigger'
@@ -17,6 +18,7 @@ import { selectNotificationNewCount } from '../../../../../reducers/notification
 import Badge from '../../../../../views/components/Badge'
 import IconButton from '../../../../../views/components/Button/IconButton'
 import Link from '../../../../../views/components/Button/LinkButton'
+import LoginIcon from '../../../../../views/components/SvgIcons/Login/LoginIcon'
 import DealsIcon from '../../../../../views/components/SvgIcons/Deals/IconDeal'
 import StoreIcon from '../../../../../views/components/SvgIcons/Marketing/IconMarketing'
 import MarketingIcon from '../../../../../views/components/SvgIcons/PencilRuler/IconPencilRuler'
@@ -68,59 +70,85 @@ class appSideNav extends React.Component {
   onToggle = isDropDownOpen => this.setState({ isDropDownOpen })
 
   render() {
+    let hasAdminPermission
+    let hasDealsPermission
+    let hasBackOfficePermission
+    let hasContactsPermission
+    let hasMarketingPermission
+    let hasWebsitePermission
     const { user, activePath, appNotifications } = this.props
-    const acl = getActiveTeamACL(user)
 
-    const hasAdminPermission = acl.includes('Admin')
-    const hasDealsPermission = acl.includes('Deals')
-    const hasBackOfficePermission = acl.includes('BackOffice')
-    const hasContactsPermission = acl.includes('CRM')
-    const hasMarketingPermission = acl.includes('Marketing')
+    if (user) {
+      const acl = getActiveTeamACL(user)
+
+      hasAdminPermission = acl.includes('Admin')
+      hasDealsPermission = acl.includes('Deals')
+      hasBackOfficePermission = acl.includes('BackOffice')
+      hasContactsPermission = acl.includes('CRM')
+      hasMarketingPermission = acl.includes('Marketing')
+      hasWebsitePermission =
+        user.agent &&
+        user.user_type === 'Agent' &&
+        user.agent.office_mlsid === 'CSTPP01'
+    }
 
     return (
       <aside className="c-app-sidenav">
-        <Dropdown
-          dropup
-          id="account-dropdown"
-          className="c-app-sidenav__account-dropdown"
-          onToggle={this.onToggle}
-        >
-          <SettingsDropdownButton
-            user={user}
-            bsRole="toggle"
-            isDropDownOpen={this.state.isDropDownOpen}
-          />
+        {user ? (
+          <Dropdown
+            dropup
+            id="account-dropdown"
+            className="c-app-sidenav__account-dropdown"
+            onToggle={this.onToggle}
+          >
+            <SettingsDropdownButton
+              user={user}
+              bsRole="toggle"
+              isDropDownOpen={this.state.isDropDownOpen}
+            />
 
-          <Dropdown.Menu>
-            <TeamSwitcher user={user} />
+            <Dropdown.Menu>
+              <TeamSwitcher user={user} />
 
-            {user.teams && user.teams.length > 1 && (
-              <li className="separator">Account</li>
-            )}
+              {user.teams && user.teams.length > 1 && (
+                <li className="separator">Account</li>
+              )}
 
-            <MenuItem href="/dashboard/account">Settings</MenuItem>
+              <MenuItem href="/dashboard/account">Settings</MenuItem>
 
-            {hasAdminPermission && (
-              <React.Fragment>
-                <li role="separator" className="divider" />
-                <li>
-                  <Link to="/dashboard/brands">Brands</Link>
-                </li>
-              </React.Fragment>
-            )}
-            <li role="separator" className="divider" />
-            <li>
-              <a
-                href="/signout"
-                onClick={() => {
-                  window.localStorage.removeItem('verificationBanner')
-                }}
-              >
-                Sign out
-              </a>
-            </li>
-          </Dropdown.Menu>
-        </Dropdown>
+              {hasAdminPermission && (
+                <React.Fragment>
+                  <li role="separator" className="divider" />
+                  <li>
+                    <Link to="/dashboard/brands">Brands</Link>
+                  </li>
+                </React.Fragment>
+              )}
+              <li role="separator" className="divider" />
+              <li>
+                <a
+                  href="/signout"
+                  onClick={() => {
+                    window.localStorage.removeItem('verificationBanner')
+                  }}
+                >
+                  Sign out
+                </a>
+              </li>
+            </Dropdown.Menu>
+          </Dropdown>
+        ) : (
+          <Flex center style={{ padding: '0.75em 0' }}>
+            <Link to="/">
+              <img
+                src="/static/images/appicon.png"
+                alt="Rechat"
+                width="32"
+                height="32"
+              />
+            </Link>
+          </Flex>
+        )}
         <ul className="c-app-sidenav__list">
           {hasContactsPermission && (
             <SideNavItem isActive={activePath === 'CALENDAR'}>
@@ -135,9 +163,12 @@ class appSideNav extends React.Component {
               </SideNavTooltip>
             </SideNavItem>
           )}
-          <SideNavItem>
-            <Inbox />
-          </SideNavItem>
+
+          {user && (
+            <SideNavItem>
+              <Inbox />
+            </SideNavItem>
+          )}
 
           <SideNavItem isActive={activePath === 'MAP'}>
             <SideNavTooltip caption="Properties">
@@ -180,21 +211,19 @@ class appSideNav extends React.Component {
             </SideNavItem>
           )}
 
-          {user.agent &&
-            user.user_type === 'Agent' &&
-            user.agent.office_mlsid === 'CSTPP01' && (
-              <SideNavItem isActive={activePath === 'STORE'}>
-                <SideNavTooltip caption="Store">
-                  <Link
-                    inverse
-                    to="/dashboard/website"
-                    className="c-app-sidenav__item__title"
-                  >
-                    <StoreIcon />
-                  </Link>
-                </SideNavTooltip>
-              </SideNavItem>
-            )}
+          {hasWebsitePermission && (
+            <SideNavItem isActive={activePath === 'STORE'}>
+              <SideNavTooltip caption="Store">
+                <Link
+                  inverse
+                  to="/dashboard/website"
+                  className="c-app-sidenav__item__title"
+                >
+                  <StoreIcon />
+                </Link>
+              </SideNavTooltip>
+            </SideNavItem>
+          )}
 
           {hasMarketingPermission && (
             <SideNavItem isActive={activePath === 'MARKETING'}>
@@ -212,28 +241,30 @@ class appSideNav extends React.Component {
         </ul>
 
         <ul className="c-app-sidenav__list c-app-sidenav__list--bottom">
-          <SideNavItem isActive={activePath === 'NOTIF'}>
-            <SideNavTooltip caption="Notifications">
-              <Link
-                inverse
-                to="/dashboard/notifications"
-                className="c-app-sidenav__item__title"
-              >
-                <NotificationsIcon style={{ width: 24, height: 24 }} />
-                {appNotifications > 0 && (
-                  <Badge
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: '50%'
-                    }}
-                  >
-                    {appNotifications > 99 ? '99+' : appNotifications}
-                  </Badge>
-                )}
-              </Link>
-            </SideNavTooltip>
-          </SideNavItem>
+          {user && (
+            <SideNavItem isActive={activePath === 'NOTIF'}>
+              <SideNavTooltip caption="Notifications">
+                <Link
+                  inverse
+                  to="/dashboard/notifications"
+                  className="c-app-sidenav__item__title"
+                >
+                  <NotificationsIcon style={{ width: 24, height: 24 }} />
+                  {appNotifications > 0 && (
+                    <Badge
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: '50%'
+                      }}
+                    >
+                      {appNotifications > 99 ? '99+' : appNotifications}
+                    </Badge>
+                  )}
+                </Link>
+              </SideNavTooltip>
+            </SideNavItem>
+          )}
 
           <IntercomTrigger
             render={({ activeIntercom, intercomIsActive }) => (
@@ -251,6 +282,22 @@ class appSideNav extends React.Component {
               </SideNavItem>
             )}
           />
+
+          {!user && (
+            <SideNavItem>
+              <SideNavTooltip caption="Login">
+                <Link
+                  inverse
+                  to={`/signin?redirectTo=${encodeURIComponent(
+                    window.location.pathname
+                  )}`}
+                  className="c-app-sidenav__item__title"
+                >
+                  <LoginIcon />
+                </Link>
+              </SideNavTooltip>
+            </SideNavItem>
+          )}
         </ul>
       </aside>
     )

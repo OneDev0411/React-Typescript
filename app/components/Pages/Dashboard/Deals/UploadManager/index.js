@@ -1,3 +1,5 @@
+// todo: needs refactor
+
 import React from 'react'
 import { connect } from 'react-redux'
 import Dropzone from 'react-dropzone'

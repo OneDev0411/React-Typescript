@@ -186,12 +186,13 @@ class SendDealPromotion extends React.Component {
         {this.state.isComposeEmailOpen && (
           <EmailCompose
             isOpen
-            from={this.state.owner}
-            onClose={this.toggleComposeEmail}
-            recipients={this.props.recipients}
-            html={this.state.templateScreenshot}
-            onClickSend={this.handleSendEmails}
+            hasStaticBody
             isSubmitting={this.state.isSendingEmail}
+            from={this.state.owner}
+            recipients={this.props.recipients}
+            body={this.state.templateScreenshot}
+            onClickSend={this.handleSendEmails}
+            onClose={this.toggleComposeEmail}
           />
         )}
 

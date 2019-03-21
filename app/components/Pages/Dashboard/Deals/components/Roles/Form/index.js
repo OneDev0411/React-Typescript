@@ -20,23 +20,22 @@ export class RoleFormModal extends React.Component {
 
     this.formObject = {
       ...this.props.form,
-      ...this.FormType,
       ...this.PreselectRole,
-      ...this.CommissionAttributes
+      ...this.CommissionAttributes,
+      role_type: this.getRoleType()
     }
 
     return this.formObject
   }
 
-  get FormType() {
+  getRoleType() {
     const { form } = this.props
 
-    return {
-      user_type:
-        !form || form.legal_first_name || form.legal_last_name
-          ? TYPE_PERSON
-          : TYPE_COMPANY
+    if (form && form.role_type) {
+      return form.role_type
     }
+
+    return TYPE_PERSON
   }
 
   /**
@@ -148,7 +147,8 @@ export class RoleFormModal extends React.Component {
       'commission',
       'commission_dollar',
       'commission_percentage',
-      'source_type'
+      'source_type',
+      'role_type'
     ]
 
     if (commission_type === 'commission_dollar') {
@@ -179,9 +179,9 @@ export class RoleFormModal extends React.Component {
   getRequiredFields = values => {
     const list = ['role']
 
-    const { role, user_type } = values
+    const { role, role_type } = values
 
-    if (user_type === TYPE_COMPANY) {
+    if (role_type === TYPE_COMPANY) {
       list.push('company_title')
     } else {
       list.push('legal_first_name', 'legal_last_name')

@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import { Helmet } from 'react-helmet'
 
 import { isLoadedContactAttrDefs } from '../../../../reducers/contacts/attributeDefs'
 import Loading from '../../../../views/components/Spinner'
@@ -26,9 +27,14 @@ class Contacts extends React.Component {
     }
 
     return (
-      <div className="contacts">
-        <ContactsList />
-      </div>
+      <React.Fragment>
+        <Helmet>
+          <title>Contacts | Rechat</title>
+        </Helmet>
+        <div className="contacts">
+          <ContactsList />
+        </div>
+      </React.Fragment>
     )
   }
 }

@@ -6,10 +6,12 @@ import { Input } from 'components/inline-editable-fields/styled'
 export class TextField extends React.Component {
   static propTypes = {
     onChange: PropTypes.func.isRequired,
+    onKeyDown: PropTypes.func,
     value: PropTypes.string
   }
 
   static defaultProps = {
+    onKeyDown() {},
     value: ''
   }
 
@@ -23,6 +25,13 @@ export class TextField extends React.Component {
     )
 
   render() {
-    return <Input value={this.state.value} onChange={this.onChange} autoFocus />
+    return (
+      <Input
+        value={this.state.value}
+        onChange={this.onChange}
+        onKeyDown={this.props.onKeyDown}
+        autoFocus
+      />
+    )
   }
 }

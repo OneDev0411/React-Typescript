@@ -4,6 +4,7 @@ import { addNotification as notify } from 'reapop'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
 import moment from 'moment'
+import { Helmet } from 'react-helmet'
 
 import { getActiveTeamId } from 'utils/user-teams'
 
@@ -856,6 +857,9 @@ class CreateDeal extends React.Component {
 
     return (
       <div className="deal-create">
+        <Helmet>
+          <title>Create New Deal | Deals | Rechat</title>
+        </Helmet>
         <FullPageHeader
           title={
             deal ? 'Update deal information to Go Live' : 'Create New Deal'
@@ -871,6 +875,7 @@ class CreateDeal extends React.Component {
             <Fragment>
               <DealType
                 isDraft={isDraft}
+                isRequired={true}
                 onChangeDealType={this.changeDealType}
               />
 

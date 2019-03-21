@@ -9,14 +9,15 @@ import Deal from 'models/Deal'
 
 import Tooltip from 'components/tooltip'
 
-import { getSide } from 'models/Deal/helpers/context'
-
 import { ListingImage } from './Image'
 import MlsConnect from './MlsConnect'
+import Side from './Side'
+import Address from '../../components/Address'
+
+import { getDealTitle } from '../../utils/get-deal-title'
 
 import { Divider } from '../styled'
 import { TitleContainer } from './styled'
-import Address from '../../components/Address'
 
 export class ListingInfo extends React.Component {
   state = {
@@ -39,8 +40,6 @@ export class ListingInfo extends React.Component {
     })
   }
 
-  getTitle = deal => Deal.get.field(deal, 'street_address') || deal.title
-
   getAddress = deal => {
     const city = Deal.get.field(deal, 'city') || ''
     const state = Deal.get.field(deal, 'state') || ''
@@ -51,21 +50,6 @@ export class ListingInfo extends React.Component {
     }
 
     return `${city}, ${state} ${zipcode}`
-  }
-
-  getSideName = deal => {
-    const enderType = Deal.get.field(deal, 'ender_type')
-    const dealType = deal.deal_type === 'Buying' ? 'Buying' : 'Listing'
-
-    if (enderType === 'AgentDoubleEnder') {
-      return 'Both'
-    }
-
-    if (enderType === 'OfficeDoubleEnder') {
-      return `${dealType} (Office DE)`
-    }
-
-    return dealType
   }
 
   render() {
@@ -101,7 +85,7 @@ export class ListingInfo extends React.Component {
                   editable={!props.deal.listing}
                 >
                   <H1 style={{ lineHeight: 1.5 }}>
-                    {this.getTitle(props.deal)}
+                    {getDealTitle(props.deal)}
                   </H1>
                 </TitleContainer>
               </Tooltip>
@@ -111,7 +95,7 @@ export class ListingInfo extends React.Component {
               {address}
               {address.length > 0 && <Divider small />}
 
-              <span>Side: {this.getSideName(props.deal)}</span>
+              <Side deal={props.deal} isBackOffice={this.props.isBackOffice} />
               <Divider small />
 
               {props.deal.property_type}
@@ -123,7 +107,7 @@ export class ListingInfo extends React.Component {
                 <Fragment>
                   <Divider small />
                   <Link to={`/dashboard/mls/${props.deal.listing}`}>
-                    View MLS Listing
+                    View MLS
                   </Link>
                 </Fragment>
               )}

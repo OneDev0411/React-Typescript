@@ -1,28 +1,54 @@
 import React, { Fragment } from 'react'
+import PropTypes from 'prop-types'
+
+import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
+
 import { Field } from 'react-final-form'
+import _ from 'underscore'
+
+import { TextEditor } from 'components/TextEditor'
+
+import { normalizeAttachments } from 'components/SelectDealFileDrawer/helpers/normalize-attachment'
+
+import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
 import Loading from '../../../components/Partials/Loading'
 
 import { FinalFormDrawer } from '../FinalFormDrawer'
 import { TextInput } from '../Forms/TextInput'
 import { MultipleContactsSelect } from '../Forms/MultipleContactsSelect'
+import { AttachmentsList } from './fields/Attachments'
 
-export default class EmailCompose extends React.Component {
+import { Footer } from './Footer'
+
+class EmailCompose extends React.Component {
+  state = {
+    isSendingEmail: false
+  }
+
   get InitialValues() {
-    if (
-      (this.formObject && !this.isRecipientsChanged()) ||
-      this.props.isSubmitting
-    ) {
+    if ((this.formObject && !this.isRecipientsChanged()) || this.IsSubmitting) {
       return this.formObject
     }
+
+    this.initialAttachments = normalizeAttachments(
+      this.props.defaultAttachments
+    )
 
     this.formObject = {
       fromId: this.props.from.id,
       from: `${this.props.from.display_name} <${this.props.from.email}>`,
-      recipients: this.props.recipients || []
+      recipients: this.props.recipients,
+      body: this.props.hasStaticBody ? '' : this.props.body,
+      attachments: this.initialAttachments
     }
 
     return this.formObject
+  }
+
+  get IsSubmitting() {
+    return this.props.isSubmitting || this.state.isSendingEmail
   }
 
   isRecipientsChanged = () =>
@@ -50,7 +76,40 @@ export default class EmailCompose extends React.Component {
       recipients: this.normalizeRecipients(values.recipients)
     }
 
-    await this.props.onClickSend(form)
+    return this.props.onClickSend
+      ? this.props.onClickSend(form)
+      : this.handleSendEmail(form)
+  }
+
+  handleSendEmail = async form => {
+    const email = {
+      from: form.fromId,
+      to: form.recipients,
+      subject: form.subject,
+      html: form.body,
+      attachments: _.map(form.attachments, item => item.file_id)
+    }
+
+    try {
+      this.setState({
+        isSendingEmail: true
+      })
+
+      await sendContactsEmail(email)
+
+      this.props.notify({
+        status: 'success',
+        message: 'The email has been sent'
+      })
+    } catch (e) {
+      console.log(e)
+    } finally {
+      this.setState({
+        isSendingEmail: false
+      })
+
+      this.props.onClose()
+    }
   }
 
   normalizeRecipients = recipients =>
@@ -89,11 +148,19 @@ export default class EmailCompose extends React.Component {
         onClose={this.props.onClose}
         onSubmit={this.handleSubmit}
         validate={this.validate}
-        submitting={this.props.isSubmitting}
+        submitting={this.IsSubmitting}
         closeDrawerOnBackdropClick={false}
         submitButtonLabel="Send"
         submittingButtonLabel="Sending ..."
         title="New Email"
+        footerRenderer={data => (
+          <Footer
+            {...data}
+            initialAttachments={this.initialAttachments}
+            isSubmitting={this.IsSubmitting}
+            deal={this.props.deal}
+          />
+        )}
         render={() => (
           <Fragment>
             <Field
@@ -112,18 +179,58 @@ export default class EmailCompose extends React.Component {
 
             <Field placeholder="Subject" name="subject" component={TextInput} />
 
-            <div>
-              {this.props.html === null && <Loading />}
-
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: this.props.html
-                }}
+            {this.props.hasStaticBody === false && (
+              <Field
+                name="body"
+                defaultValue={this.props.body}
+                component={TextEditor}
               />
-            </div>
+            )}
+
+            {this.props.hasStaticBody && (
+              <Fragment>
+                {this.props.body ? (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: this.props.body
+                    }}
+                  />
+                ) : (
+                  <Loading />
+                )}
+              </Fragment>
+            )}
+
+            <Field name="attachments" component={AttachmentsList} />
           </Fragment>
         )}
       />
     )
   }
 }
+
+EmailCompose.propTypes = {
+  from: PropTypes.object.isRequired,
+  recipients: PropTypes.array,
+  isSubmitting: PropTypes.bool,
+  defaultAttachments: PropTypes.array,
+  hasStaticBody: PropTypes.bool,
+  body: PropTypes.string,
+  isOpen: PropTypes.bool.isRequired,
+  onClickSend: PropTypes.func,
+  onClose: PropTypes.func.isRequired
+}
+
+EmailCompose.defaultProps = {
+  recipients: [],
+  defaultAttachments: [],
+  body: '',
+  onClickSend: null,
+  isSubmitting: false,
+  hasStaticBody: false
+}
+
+export default connect(
+  null,
+  { notify }
+)(EmailCompose)

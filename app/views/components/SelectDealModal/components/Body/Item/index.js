@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
 import {
@@ -11,21 +10,10 @@ import {
   getFormattedPrice
 } from 'models/Deal/helpers/context'
 
-import { getStatusColor } from '../../../../../../utils/listing'
-
 import Avatar from '../../../../Avatar'
 import { Container } from '../../../../SelectContactModal/components/ContactItem'
 
-const Details = styled.span`
-  font-size: 0.875rem;
-  margin-right: 1rem;
-  font-weight: 500;
-`
-
-const Status = styled.span`
-  line-height: 1;
-  color: ${props => `#${getStatusColor(props.status)}`};
-`
+import { Details, Status } from './styled'
 
 Item.propTypes = {
   item: PropTypes.object.isRequired,
@@ -36,6 +24,16 @@ Item.propTypes = {
 export function Item(props) {
   const { item, onClickHandler } = props
   const status = getStatus(item)
+
+  if (props.itemRenderer) {
+    return props.itemRenderer({
+      ...props,
+      status,
+      getAvatarProps,
+      getPrice,
+      onClickHandler
+    })
+  }
 
   return (
     <Container {...props} onClick={() => onClickHandler(item)}>

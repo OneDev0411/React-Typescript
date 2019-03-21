@@ -1,12 +1,14 @@
 import React from 'react'
 import _ from 'underscore'
 
+import { setTime } from 'utils/set-time'
+import { months } from 'utils/date-times/months'
+import { EditNoteDrawer } from 'components/EditNoteDrawer'
+import { EventDrawer } from 'components/EventDrawer'
+import { TourDrawer } from 'components/tour/TourDrawer'
+import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
+
 import Loading from '../../../../../Partials/Loading'
-import { EditNoteDrawer } from '../../../../../../views/components/EditNoteDrawer'
-import { EventDrawer } from '../../../../../../views/components/EventDrawer'
-import { TourDrawer } from '../../../../../../views/components/tour/TourDrawer'
-import { OpenHouseDrawer } from '../../../../../../views/components/open-house/OpenHouseDrawer'
-import { setTime } from '../../../../../../utils/set-time'
 
 import { Card } from '../styled'
 import { NoteItem } from './NoteItem'
@@ -39,6 +41,93 @@ export class Timeline extends React.Component {
     this.closeEventDrawer()
     this.props.deleteEventHandler(deletedEvent.id)
   }
+
+  get events() {
+    const todayEvents = []
+    const upcomingEvents = []
+    const pastEventsIndexedInMonths = {}
+
+    this.props.items.forEach(item => {
+      let date
+      let { due_date } = item
+
+      function getDateMonthAndYear(date) {
+        date = new Date(date)
+
+        const monthNumber = date.getMonth()
+        const year = date.getFullYear()
+
+        const index = `${monthNumber}_${year}`
+
+        const title = `${months[monthNumber]} ${year}`
+
+        return {
+          index,
+          title
+        }
+      }
+
+      if (due_date) {
+        due_date *= 1000
+
+        if (isToday(due_date)) {
+          return todayEvents.push(item)
+        }
+
+        if (due_date > new Date().getTime()) {
+          return upcomingEvents.push(item)
+        }
+
+        date = new Date(due_date)
+      } else {
+        const createdAt = item.created_at * 1000
+
+        if (isToday(createdAt)) {
+          return todayEvents.push(item)
+        }
+
+        date = new Date(createdAt)
+      }
+
+      const monthAndYear = getDateMonthAndYear(date)
+
+      if (pastEventsIndexedInMonths[monthAndYear.index]) {
+        pastEventsIndexedInMonths[monthAndYear.index].items.push(item)
+      } else {
+        pastEventsIndexedInMonths[monthAndYear.index] = {
+          title: monthAndYear.title,
+          items: [item]
+        }
+      }
+    })
+
+    let pastEvents = []
+
+    if (Object.keys(pastEventsIndexedInMonths).length > 0) {
+      pastEvents = Object.keys(pastEventsIndexedInMonths).sort((a, b) => {
+        const [aMonth, aYear] = a.split('_')
+        const [bMonth, bYear] = b.split('_')
+
+        if (aYear === bYear) {
+          return bMonth - aMonth
+        }
+
+        return bYear - aYear
+      })
+    }
+
+    return {
+      pastEvents,
+      pastEventsIndexedInMonths,
+      todayEvents,
+      upcomingEvents
+    }
+  }
+
+  sort = items =>
+    _.sortBy(items, item =>
+      item.due_date == null ? -item.created_at : -item.due_date
+    )
 
   renderCRMTaskItem(key, task) {
     const _props = {
@@ -127,93 +216,12 @@ export class Timeline extends React.Component {
       return <EmptyState />
     }
 
-    const todayEvents = []
-    const upcomingEvents = []
-    const pastEventsIndexedInMonths = {}
-
-    this.props.items.forEach(item => {
-      let date
-      let { due_date } = item
-
-      function getDateMonthAndYear(date) {
-        date = new Date(date)
-
-        const months = [
-          'January',
-          'February',
-          'March',
-          'April',
-          'May',
-          'June',
-          'July',
-          'August',
-          'September',
-          'October',
-          'November',
-          'December'
-        ]
-
-        const monthNumber = date.getMonth()
-        const year = date.getFullYear()
-
-        const index = `${monthNumber}_${year}`
-
-        const title = `${months[monthNumber]} ${year}`
-
-        return {
-          index,
-          title
-        }
-      }
-
-      if (due_date) {
-        due_date *= 1000
-
-        if (isToday(due_date)) {
-          return todayEvents.push(item)
-        }
-
-        if (due_date > new Date().getTime()) {
-          return upcomingEvents.push(item)
-        }
-
-        date = new Date(due_date)
-      } else {
-        const createdAt = item.created_at * 1000
-
-        if (isToday(createdAt)) {
-          return todayEvents.push(item)
-        }
-
-        date = new Date(createdAt)
-      }
-
-      const monthAndYear = getDateMonthAndYear(date)
-
-      if (pastEventsIndexedInMonths[monthAndYear.index]) {
-        pastEventsIndexedInMonths[monthAndYear.index].items.push(item)
-      } else {
-        pastEventsIndexedInMonths[monthAndYear.index] = {
-          title: monthAndYear.title,
-          items: [item]
-        }
-      }
-    })
-
-    let sortedPastEvents = []
-
-    if (Object.keys(pastEventsIndexedInMonths).length > 0) {
-      sortedPastEvents = Object.keys(pastEventsIndexedInMonths).sort((a, b) => {
-        const [aMonth, aYear] = a.split('_')
-        const [bMonth, bYear] = b.split('_')
-
-        if (aYear === bYear) {
-          return bMonth - aMonth
-        }
-
-        return bYear - aYear
-      })
-    }
+    const {
+      pastEvents,
+      pastEventsIndexedInMonths,
+      todayEvents,
+      upcomingEvents
+    } = this.events
 
     return (
       <div>
@@ -221,7 +229,7 @@ export class Timeline extends React.Component {
           <Container id="upcoming_events" key="upcoming_events">
             {this.renderItems({
               title: 'Upcoming Events',
-              items: upcomingEvents.sort((a, b) => a.due_date < b.due_date)
+              items: this.sort(upcomingEvents)
             })}
           </Container>
         )}
@@ -230,13 +238,13 @@ export class Timeline extends React.Component {
           <Container id="today_events" key="today_events">
             {this.renderItems({
               title: 'Today Events',
-              items: todayEvents.sort((a, b) => a.due_date < b.due_date)
+              items: this.sort(todayEvents)
             })}
           </Container>
         )}
 
-        {sortedPastEvents.length > 0 &&
-          sortedPastEvents.map(monthIndex => {
+        {pastEvents.length > 0 &&
+          pastEvents.map(monthIndex => {
             const month = pastEventsIndexedInMonths[monthIndex]
             const id = month.title.replace(' ', '_')
 
@@ -244,9 +252,7 @@ export class Timeline extends React.Component {
               <Container id={id} key={`past_events_${id}`}>
                 {this.renderItems({
                   title: month.title,
-                  items: _.sortBy(month.items, item =>
-                    item.due_date != null ? !item.due_date : !item.created_at
-                  )
+                  items: this.sort(month.items)
                 })}
               </Container>
             )
@@ -271,5 +277,3 @@ export class Timeline extends React.Component {
 function isToday(date) {
   return setTime(new Date(date)).getTime() === setTime(new Date()).getTime()
 }
-
-// todo: bug - sorting of past events when a event is edited.

@@ -165,7 +165,13 @@ class FileViewer extends React.Component {
     // browserHistory.push(`/dashboard/deals/${this.state.deal.id}`)
   }
 
-  normalizeName = name => decodeURIComponent(name).replace(/[_-]/g, ' ')
+  normalizeName = name => {
+    try {
+      return decodeURIComponent(name).replace(/[_-]/g, ' ')
+    } catch (e) {
+      return name
+    }
+  }
 
   render() {
     if (this.ShowLoader) {

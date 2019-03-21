@@ -8,9 +8,6 @@ export default (state = null, action) => {
     case actionTypes.CLEAR_DEALS:
       return {}
 
-    case actionTypes.ARCHIVE_DEAL:
-      return _.omit(state, envelope => envelope.deal === action.deal_id)
-
     case actionTypes.SET_ENVELOPES:
       return {
         ...state,

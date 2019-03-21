@@ -101,6 +101,7 @@ class SendMlsListingCard extends React.Component {
             )
 
             return {
+              data_type: 'contact',
               contactId: contact.id,
               name: contact.summary.display_name,
               avatar: contact.summary.profile_image_url,
@@ -335,12 +336,13 @@ class SendMlsListingCard extends React.Component {
         {this.state.isComposeEmailOpen && (
           <EmailCompose
             isOpen
-            from={this.state.owner}
-            onClose={this.toggleComposeEmail}
-            recipients={this.Recipients}
-            html={this.state.templateScreenshot}
-            onClickSend={this.handleSendEmails}
+            hasStaticBody
             isSubmitting={this.state.isSendingEmail}
+            from={this.state.owner}
+            recipients={this.Recipients}
+            body={this.state.templateScreenshot}
+            onClickSend={this.handleSendEmails}
+            onClose={this.toggleComposeEmail}
           />
         )}
 

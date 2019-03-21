@@ -11,7 +11,12 @@ import {
 export class Label extends React.Component {
   static propTypes = {
     attribute: PropTypes.shape().isRequired,
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
+    placeholder: PropTypes.string
+  }
+
+  static defaultProps = {
+    placeholder: ''
   }
 
   constructor(props) {
@@ -77,6 +82,7 @@ export class Label extends React.Component {
       <Input
         type="text"
         onChange={this.onChangeInput}
+        placeholder={this.props.placeholder}
         value={this.state.inputValue}
       />
     )

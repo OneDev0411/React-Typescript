@@ -164,11 +164,12 @@ class General extends React.Component {
         {this.state.isComposeEmailOpen && (
           <EmailCompose
             isOpen
-            from={this.state.owner}
-            onClose={this.toggleComposeEmail}
-            html={this.state.templateScreenshot}
-            onClickSend={this.handleSendEmails}
+            hasStaticBody
             isSubmitting={this.state.isSendingEmail}
+            from={this.state.owner}
+            body={this.state.templateScreenshot}
+            onClose={this.toggleComposeEmail}
+            onClickSend={this.handleSendEmails}
           />
         )}
 
