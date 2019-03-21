@@ -288,7 +288,9 @@ class appSideNav extends React.Component {
               <SideNavTooltip caption="Login">
                 <Link
                   inverse
-                  to="/signin"
+                  to={`/signin?redirectTo=${encodeURIComponent(
+                    window.location.pathname
+                  )}`}
                   className="c-app-sidenav__item__title"
                 >
                   <LoginIcon />
