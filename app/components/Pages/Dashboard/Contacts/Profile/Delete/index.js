@@ -11,7 +11,7 @@ class Delete extends React.Component {
       confirmation({
         message: 'Delete contact?',
         description:
-          ' Deleting this contact will remove it from your contacts list, but it will not be removed from any deals.',
+          'Deleting this contact will remove it from your contacts list, but it will not be removed from any deals.',
         confirmLabel: 'Delete',
         onConfirm: this.props.handleDelete
       })
