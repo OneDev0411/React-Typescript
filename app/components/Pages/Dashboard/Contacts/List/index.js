@@ -248,18 +248,20 @@ class ContactsList extends React.Component {
 
   handleOnDelete = (e, { selectedRows, resetSelectedRows }) => {
     const selectedRowsLength = selectedRows.length
+    const isManyContacts = selectedRowsLength > 1
 
     this.props.confirmation({
-      show: true,
       confirmLabel: 'Delete',
-      message: `Delete ${selectedRowsLength > 1 ? 'contacts' : 'contact'}`,
+      message: `Delete ${isManyContacts ? 'contacts' : 'contact'}?`,
       onConfirm: () =>
         this.handleDeleteContact(selectedRows, resetSelectedRows),
-      description: `Are you sure you want to delete ${
-        selectedRowsLength > 1
-          ? `these ${selectedRowsLength} contacts`
-          : 'this contact'
-      }?`
+      description: `Deleting ${
+        isManyContacts ? `these ${selectedRowsLength} contacts` : 'this contact'
+      } will remove ${
+        isManyContacts ? 'them' : 'it'
+      } from your contacts list, but ${
+        isManyContacts ? 'they' : 'it'
+      }  will not be removed from any deals.`
     })
   }
 

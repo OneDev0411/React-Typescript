@@ -11,6 +11,7 @@ import Tooltip from 'components/tooltip'
 
 import { ListingImage } from './Image'
 import MlsConnect from './MlsConnect'
+import Side from './Side'
 import Address from '../../components/Address'
 
 import { getDealTitle } from '../../utils/get-deal-title'
@@ -49,21 +50,6 @@ export class ListingInfo extends React.Component {
     }
 
     return `${city}, ${state} ${zipcode}`
-  }
-
-  getSideName = deal => {
-    const enderType = Deal.get.field(deal, 'ender_type')
-    const dealType = deal.deal_type === 'Buying' ? 'Buying' : 'Listing'
-
-    if (enderType === 'AgentDoubleEnder') {
-      return 'Both'
-    }
-
-    if (enderType === 'OfficeDoubleEnder') {
-      return `${dealType} (Office DE)`
-    }
-
-    return dealType
   }
 
   render() {
@@ -109,7 +95,7 @@ export class ListingInfo extends React.Component {
               {address}
               {address.length > 0 && <Divider small />}
 
-              <span>Side: {this.getSideName(props.deal)}</span>
+              <Side deal={props.deal} isBackOffice={this.props.isBackOffice} />
               <Divider small />
 
               {props.deal.property_type}
@@ -121,7 +107,7 @@ export class ListingInfo extends React.Component {
                 <Fragment>
                   <Divider small />
                   <Link to={`/dashboard/mls/${props.deal.listing}`}>
-                    View MLS Listing
+                    View MLS
                   </Link>
                 </Fragment>
               )}

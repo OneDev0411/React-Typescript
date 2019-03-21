@@ -419,6 +419,15 @@ export function getChecklist(deal, fieldKey) {
   )
 }
 
+export function createUpsertObject(deal, field, value, approved = false) {
+  return {
+    definition: getDefinitionId(deal.brand.id, field),
+    checklist: getChecklist(deal, field),
+    value,
+    approved
+  }
+}
+
 function getFormattedValue(value) {
   if (!value) {
     return value
@@ -453,5 +462,6 @@ export default {
   validate,
   validateDate,
   validateList,
-  isAddressField
+  isAddressField,
+  createUpsertObject
 }

@@ -1,4 +1,5 @@
 import _ from 'underscore'
+
 import * as actionTypes from '../../constants/deals'
 
 export default (state = null, action) => {
@@ -6,9 +7,6 @@ export default (state = null, action) => {
     case actionTypes.GET_DEALS_FAILED:
     case actionTypes.CLEAR_DEALS:
       return {}
-
-    case actionTypes.ARCHIVE_DEAL:
-      return _.omit(state, role => role.deal === action.deal_id)
 
     case actionTypes.GET_ROLES:
       return {

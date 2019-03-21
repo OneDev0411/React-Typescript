@@ -8,11 +8,12 @@ import { Helmet } from 'react-helmet'
 import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 
-import { getContact } from '../../../../../models/contacts/get-contact'
-import { updateContactSelf } from '../../../../../models/contacts/update-contact-self'
-import { getContactTimeline } from '../../../../../models/contacts/get-contact-timeline'
-import { upsertContactAttributes } from '../../../../../models/contacts/helpers/upsert-contact-attributes'
-import { deleteAttribute } from '../../../../../models/contacts/delete-attribute'
+import { getContact } from 'models/contacts/get-contact'
+import { deleteContacts } from 'models/contacts/delete-contact'
+import { updateContactSelf } from 'models/contacts/update-contact-self'
+import { getContactTimeline } from 'models/contacts/get-contact-timeline'
+import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
+import { deleteAttribute } from 'models/contacts/delete-attribute'
 
 import {
   selectDefinitionByName,
@@ -37,6 +38,7 @@ import { ContactInfo } from './ContactInfo'
 import Addresses from './Addresses'
 import { AddNote } from './AddNote'
 import { Owner } from './Owner'
+import Delete from './Delete'
 import {
   PageContainer,
   ColumnsContainer,
@@ -53,6 +55,7 @@ import { Timeline } from './Timeline'
 class ContactProfile extends React.Component {
   state = {
     contact: null,
+    isDeleting: false,
     isUpdatingOwner: false,
     isDesktopScreen: true,
     isFetchingTimeline: true,
@@ -229,6 +232,18 @@ class ContactProfile extends React.Component {
     }
   }
 
+  delete = async () => {
+    try {
+      this.setState({ isDeleting: true })
+
+      await deleteContacts([this.state.contact.id])
+
+      browserHistory.push('/dashboard/contacts')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   render() {
     const { contact } = this.state
     const { user } = this.props
@@ -292,6 +307,10 @@ class ContactProfile extends React.Component {
                   disabled={this.state.isUpdatingOwner}
                 />
               </Card>
+              <Delete
+                handleDelete={this.delete}
+                isDeleting={this.state.isDeleting}
+              />
             </SideColumnWrapper>
 
             <SecondColumn>

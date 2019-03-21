@@ -7,7 +7,7 @@ import { ListingInfo } from '../ListingInfo'
 export function PageHeader(props) {
   return (
     <Flex justifyBetween style={{ padding: '1.5em 2.5em' }}>
-      <ListingInfo deal={props.deal} />
+      <ListingInfo deal={props.deal} isBackOffice={props.isBackOffice} />
       <Menu deal={props.deal} isBackOffice={props.isBackOffice} />
     </Flex>
   )

@@ -1,23 +1,19 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
+
+import { getStatusColorClass } from 'utils/listing'
+import { upsertContexts } from 'actions/deals'
+import { getDealChecklists } from 'reducers/deals/checklists'
+import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
+
+import Deal from 'models/Deal'
+import DealContext from 'models/Deal/helpers/dynamic-context'
 
 import { BasicDropdown } from 'components/BasicDropdown'
 import Spinner from 'components/Spinner'
 import { Icon as ArrowIcon } from 'components/Dropdown'
 
-import { getStatusColorClass } from 'utils/listing'
-
-import {
-  upsertContexts,
-  createGenericTask,
-  changeNeedsAttention
-} from 'actions/deals'
-
-import Deal from 'models/Deal'
-import DealContext from 'models/Deal/helpers/dynamic-context'
-
-import Message from '../../../Chatroom/Util/message'
+import { createAdminRequestTask } from '../../utils/create-request-task'
 
 import { DropDownButton, StatusBullet, StatusOption } from './styled'
 
@@ -108,18 +104,7 @@ class DealStatus extends React.Component {
 
     if (this.props.isBackOffice) {
       await this.props.upsertContexts(this.props.deal.id, [
-        {
-          definition: DealContext.getDefinitionId(
-            this.props.deal.brand.id,
-            'listing_status'
-          ),
-          checklist: DealContext.getChecklist(
-            this.props.deal,
-            'listing_status'
-          ),
-          value: status,
-          approved: true
-        }
+        createUpsertObject(this.props.deal, 'listing_status', status, true)
       ])
     } else {
       await this.notifyAdmin(status)
@@ -136,43 +121,24 @@ class DealStatus extends React.Component {
    * @param {String} status the new deal status
    */
   notifyAdmin = async status => {
-    const title = `Change listing status to ${status}`
-
-    const activeOfferChecklist = this.props.deal.checklists
-      .map(id => this.props.checklists[id])
-      .find(
-        checklist =>
-          checklist.is_deactivated === false &&
-          checklist.is_terminated === false &&
-          checklist.checklist_type === 'Buying'
-      )
+    const activeOfferChecklist = this.props.checklists.find(
+      checklist =>
+        checklist.checklist_type === 'Buying' &&
+        checklist.is_deactivated === false &&
+        checklist.is_terminated === false
+    )
 
     if (!activeOfferChecklist) {
       return false
     }
 
-    const task = await this.props.createGenericTask(
-      this.props.deal.id,
-      title,
-      activeOfferChecklist.id
-    )
-
-    const message = {
-      comment: `Hello, Please change listing status to ${status}`,
-      author: this.props.user.id,
-      room: task.room.id
-    }
-
-    // send comment message
-    Message.postTaskComment(task, message)
-
-    this.props.changeNeedsAttention(this.props.deal.id, task.id, true)
-
-    return this.props.notify({
-      message: 'Back office has been notified to change listing status',
-      status: 'success',
-      dismissible: true,
-      dismissAfter: 4000
+    createAdminRequestTask({
+      checklist: activeOfferChecklist,
+      userId: this.props.user.id,
+      dealId: this.props.deal.id,
+      taskTitle: `Change listing status to ${status}`,
+      taskComment: `Hello, Please change listing status to ${status}`,
+      notifyMessage: 'Back office has been notified to change listing status'
     })
   }
 
@@ -233,15 +199,16 @@ class DealStatus extends React.Component {
   }
 }
 
-export default connect(
-  ({ deals, user }) => ({
+function mapStateToProps({ deals, user }, props) {
+  return {
     user,
-    checklists: deals.checklists
-  }),
+    checklists: getDealChecklists(props.deal, deals.checklists)
+  }
+}
+
+export default connect(
+  mapStateToProps,
   {
-    notify,
-    upsertContexts,
-    createGenericTask,
-    changeNeedsAttention
+    upsertContexts
   }
 )(DealStatus)

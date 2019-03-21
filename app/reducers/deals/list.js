@@ -12,7 +12,13 @@ export default (state = {}, action) => {
       return null
 
     case actionTypes.ARCHIVE_DEAL:
-      return _.omit(state, deal => deal.id === action.deal_id)
+      return {
+        ...state,
+        [action.deal_id]: {
+          ...state[action.deal_id],
+          deleted_at: new Date().getTime()
+        }
+      }
 
     case actionTypes.CLEAR_DEAL_NOTIFICATIONS:
       return {

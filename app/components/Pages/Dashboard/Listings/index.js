@@ -14,7 +14,7 @@ import SavedSearchesList from './SavedSearchesList'
 
 class Listings extends Component {
   state = {
-    isSideMenuOpen: true
+    isSideMenuOpen: !!this.props.user
   }
 
   toggleSideMenu = () =>
