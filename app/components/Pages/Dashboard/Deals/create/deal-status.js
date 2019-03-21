@@ -1,10 +1,13 @@
 import React from 'react'
 import cn from 'classnames'
+
+import styled from 'styled-components'
+
+import { H2 } from 'components/Typography/headings'
+
 import RadioButton from '../../../../../views/components/RadioButton'
 import { getStatusColorClass } from '../../../../../utils/listing'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
-import { H2 } from 'components/Typography/headings'
-import styled from 'styled-components'
 
 const LabelBox = styled.span`
   display: inline-block;
