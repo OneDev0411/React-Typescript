@@ -274,7 +274,7 @@ class CreateOffer extends React.Component {
         // create/update contexts
         await this.saveContexts(checklist, {
           ...contexts,
-          listing_status: dealStatus,
+          contract_status: dealStatus,
           ender_type: enderType
         })
       }
