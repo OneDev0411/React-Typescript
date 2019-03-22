@@ -61,29 +61,33 @@ export const LoadingContainer = styled.div`
 `
 
 export const ListContainer = styled(Card)`
+  width: 126%;
   position: absolute;
   top: calc(100% + 0.5rem);
   left: 0;
-  width: 100%;
   z-index: 2;
 `
 
 export const ListTitle = styled.div`
   color: ${grey.A900};
-  padding: 0.5rem 0;
+  padding: 0.5rem 0.75rem;
   font-weight: 500;
 `
 
 export const Item = styled.div`
   cursor: default;
-  padding: 0 0.25rem;
+  padding: 0 0.75rem;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
   line-height: 2rem;
-  border-top: 1px solid ${borderColor};
+  border-bottom: 1px solid ${borderColor};
   font-size: 0.75rem;
   color: ${grey.A900};
+
+  &:hover {
+    background: ${grey.A100};
+  }
 
   .item__query {
     font-size: 0.875rem;

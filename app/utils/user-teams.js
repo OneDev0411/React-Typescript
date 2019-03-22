@@ -75,7 +75,8 @@ export function viewAs(user, activeTeam = getActiveTeam(user)) {
 
 export function getActiveTeamSettings(user, key = null) {
   const team = getActiveTeam(user)
-  return key ? team.settings[key] : team.settings
+  const settings = team.settings || {}
+  return key ? settings[key] : settings
 }
 
 export function viewAsEveryoneOnTeam(user) {

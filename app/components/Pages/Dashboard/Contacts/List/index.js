@@ -50,9 +50,7 @@ class ContactsList extends React.Component {
       activeSegment: {}
     }
 
-    this.order =
-      getActiveTeamSettings(props.user, SORT_FIELD_SETTING_KEY) ||
-      this.props.listInfo.order
+    this.order = getActiveTeamSettings(props.user, SORT_FIELD_SETTING_KEY)
   }
 
   componentDidMount() {

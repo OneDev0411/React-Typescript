@@ -1,3 +1,5 @@
+import { SEARCH_BY_GOOGLE_SUGGESTS } from 'constants/listings/search'
+
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
@@ -5,32 +7,26 @@ import Downshift from 'downshift'
 import debounce from 'lodash/debounce'
 import { batchActions } from 'redux-batched-actions'
 
-import getPlace from '../../../../../../../models/listings/search/get-place'
-import { searchListings } from '../../../../../../../models/listings/search/search-listings'
-import { getMapBoundsInCircle } from '../../../../../../../utils/get-coordinates-points'
-import { getBounds } from '../../../../../../../utils/map'
-import resetAreasOptions from '../../../../../../../store_actions/listings/search/reset-areas-options'
-import {
-  goToPlace,
-  setMapProps
-} from '../../../../../../../store_actions/listings/map'
-import searchActions from '../../../../../../../store_actions/listings/search'
-import { SEARCH_BY_GOOGLE_SUGGESTS } from '../../../../../../../constants/listings/search'
-import {
-  removePolygon,
-  inactiveDrawing
-} from '../../../../../../../store_actions/listings/map/drawing'
+import getPlace from 'models/listings/search/get-place'
+import { searchListings } from 'models/listings/search/search-listings'
+
+import { getBounds } from 'utils/map'
+import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
+import { getListingAddressObj, getListingAddress } from 'utils/listing'
+
 import {
   reset as resetSearchType,
   setSearchType
-} from '../../../../../../../store_actions/listings/search/set-type'
-import IconClose from '../../../../../../../views/components/SvgIcons/Close/CloseIcon'
-import Loading from '../../../../../../../views/components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
-import {
-  getStatusColor,
-  getListingAddressObj,
-  getListingAddress
-} from '../../../../../../../utils/listing'
+} from 'actions/listings/search/set-type'
+import searchActions from 'actions/listings/search'
+import { goToPlace, setMapProps } from 'actions/listings/map'
+import resetAreasOptions from 'actions/listings/search/reset-areas-options'
+import { removePolygon, inactiveDrawing } from 'actions/listings/map/drawing'
+
+import IconClose from 'components/SvgIcons/Close/CloseIcon'
+import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
+import { MlsItem } from 'components/SearchListingDrawer/ListingItem/MlsItem'
+
 import {
   ListContainer,
   Input,
@@ -251,18 +247,6 @@ class MlsAutocompleteSearch extends Component {
     </React.Fragment>
   )
 
-  renderListingItem = item => (
-    <React.Fragment>
-      <span className="item__query">
-        <span className="item__matched">{item.description}</span>
-        <span style={{ color: `#${getStatusColor(item.status)}` }}>
-          {' '}
-          {item.status}
-        </span>
-      </span>
-    </React.Fragment>
-  )
-
   render() {
     return (
       <div style={{ position: 'relative' }}>
@@ -284,28 +268,24 @@ class MlsAutocompleteSearch extends Component {
                   placeholder="Search location or MLS#"
                 />
                 {isOpen && (
-                  <ListContainer
-                    style={{
-                      padding: '0 0.75rem'
-                    }}
-                  >
+                  <ListContainer>
                     {this.state.listings.length > 0 && (
                       <div
                         style={{
-                          marginBottom: '1rem'
+                          marginBottom: '0.5rem'
                         }}
                       >
                         <ListTitle>Listings</ListTitle>
-                        {this.state.listings.map((item, index) => (
-                          <Item
+                        {this.state.listings.map(item => (
+                          <MlsItem
+                            item={item}
                             key={item.id}
-                            {...getItemProps({
-                              item,
-                              isHighlighted: highlightedIndex === index
-                            })}
-                          >
-                            {this.renderListingItem(item)}
-                          </Item>
+                            onClick={() => this.handleSelectedItem(item)}
+                            style={{
+                              padding: '0.5em 0.75em',
+                              borderBottom: '1px solid #d4d4d4'
+                            }}
+                          />
                         ))}
                       </div>
                     )}
