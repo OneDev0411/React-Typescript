@@ -4,7 +4,7 @@ import serve from 'koa-static'
 import views from 'koa-views'
 import session from 'koa-session'
 import cookie from 'koa-cookie'
-import sslify from 'koa-sslify'
+import { default as sslify } from 'koa-sslify'
 
 import path from 'path'
 import webpack from 'webpack'
