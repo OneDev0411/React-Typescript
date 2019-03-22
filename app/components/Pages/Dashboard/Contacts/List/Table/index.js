@@ -263,6 +263,7 @@ class ContactsList extends React.Component {
           }}
           isFetching={this.props.isFetching}
           isFetchingMore={this.props.isFetchingMore}
+          isFetchingMoreBefore={this.props.isFetchingMoreBefore}
           columns={this.columns}
           LoadingState={LoadingComponent}
           getTrProps={this.getGridTrProps}

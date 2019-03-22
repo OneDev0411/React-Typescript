@@ -45,10 +45,12 @@ class ContactsList extends React.Component {
     this.state = {
       isSideMenuOpen: true,
       isFetchingMoreContacts: false,
+      isFetchingMoreContactsBefore: false,
       isRowsUpdating: false,
       filters: this.props.filters,
       searchInputValue: this.props.list.textFilter,
-      activeSegment: {}
+      activeSegment: {},
+      loadedRanges: []
     }
 
     this.order = getActiveTeamSettings(props.user, SORT_FIELD_SETTING_KEY)
@@ -114,6 +116,11 @@ class ContactsList extends React.Component {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
   }
 
+  addLoadedRange = start =>
+    this.setState(prevState => ({
+      loadedRanges: _.uniq([...prevState.loadedRanges, parseInt(start, 10)])
+    }))
+
   hasSearchState = () =>
     this.state.filter || this.state.searchInputValue || this.order
 
@@ -130,6 +137,7 @@ class ContactsList extends React.Component {
           start
         })
       } else {
+        this.addLoadedRange(start)
         await this.props.getContacts(start)
       }
     } catch (e) {
@@ -172,9 +180,9 @@ class ContactsList extends React.Component {
       prependResult = false
     } = newFilters
 
-    this.setState({ filters })
+    this.addLoadedRange(start)
 
-    if (start === 0) {
+    if (start === 0 && !prependResult) {
       this.resetSelectedRows()
     }
 
@@ -226,14 +234,18 @@ class ContactsList extends React.Component {
   handleLoadMore = async () => {
     const { total } = this.props.listInfo
     const totalLoadedCount = this.props.list.ids.length
-    const startFrom =
+    const prevStart =
       parseInt(browserHistory.getCurrentLocation().query.s, 10) || 0
 
-    if (this.state.isFetchingMoreContacts || totalLoadedCount === total) {
+    if (
+      this.state.isFetchingMoreContacts ||
+      this.state.isFetchingMoreContactsBefore ||
+      totalLoadedCount === total
+    ) {
       return false
     }
 
-    const start = startFrom + 50
+    const start = Math.max(prevStart, ...this.state.loadedRanges) + 50
 
     console.log(`[ Loading More ] Start: ${start}`)
 
@@ -259,26 +271,31 @@ class ContactsList extends React.Component {
   handleLoadMoreBefore = async () => {
     const { total } = this.props.listInfo
     const totalLoadedCount = this.props.list.ids.length
-    const startFrom =
+    const prevStart =
       parseInt(browserHistory.getCurrentLocation().query.s, 10) || 0
 
     if (
       this.state.isFetchingMoreContacts ||
+      this.state.isFetchingMoreContactsBefore ||
       totalLoadedCount === total ||
-      startFrom < 50
+      prevStart < 50
     ) {
       return false
     }
 
-    const start = Math.max(startFrom - totalLoadedCount, 0)
-
-    console.log(`[ Loading More Before ] Start: ${start}`)
+    const start = prevStart - 50
 
     browserHistory.replace(
       `${browserHistory.getCurrentLocation().pathname}?s=${start}`
     )
 
-    this.setState({ isFetchingMoreContacts: true })
+    if (this.state.loadedRanges.includes(start)) {
+      return false
+    }
+
+    console.log(`[ Loading More Before ] Start: ${start}`)
+
+    this.setState({ isFetchingMoreContactsBefore: true })
 
     if (this.hasSearchState()) {
       await this.fetchList(start)
@@ -291,7 +308,7 @@ class ContactsList extends React.Component {
       })
     }
 
-    this.setState({ isFetchingMoreContacts: false })
+    this.setState({ isFetchingMoreContactsBefore: false })
   }
 
   handleOnDelete = (e, { selectedRows, resetSelectedRows }) => {
@@ -385,6 +402,7 @@ class ContactsList extends React.Component {
             listInfo={this.props.listInfo}
             isFetching={isFetchingContacts}
             isFetchingMore={this.state.isFetchingMoreContacts}
+            isFetchingMoreBefore={this.state.isFetchingMoreContactsBefore}
             isRowsUpdating={this.state.isRowsUpdating}
             onRequestLoadMore={this.handleLoadMore}
             onRequestLoadMoreBefore={this.handleLoadMoreBefore}
