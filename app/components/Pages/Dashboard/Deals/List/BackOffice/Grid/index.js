@@ -130,6 +130,26 @@ class Grid extends React.Component {
   getDefaultIndex = () =>
     getActiveTeamSettings(this.props.user, SORT_FIELD_SETTING_KEY) || 'address'
 
+  getDefaultSort = () => {
+    const sortSetting =
+      getActiveTeamSettings(this.props.user, SORT_FIELD_SETTING_KEY) ||
+      'address'
+    let id = sortSetting
+    let ascending = true
+
+    if (sortSetting.startsWith('-')) {
+      id = sortSetting.slice(1)
+      ascending = false
+    }
+
+    const column = this.Columns.find(col => col.id === id)
+
+    return {
+      column,
+      ascending
+    }
+  }
+
   render() {
     const { isFetchingDeals } = this.props
     const columns = this.Columns
