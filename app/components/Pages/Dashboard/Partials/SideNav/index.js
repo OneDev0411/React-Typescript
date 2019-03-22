@@ -5,6 +5,8 @@ import { Dropdown, MenuItem } from 'react-bootstrap'
 
 import IntercomTrigger from '../IntercomTrigger'
 
+import Brand from '../../../../../controllers/Brand'
+
 // utils
 import { getActiveTeamACL } from '../../../../../utils/user-teams'
 
@@ -70,6 +72,7 @@ class appSideNav extends React.Component {
   onToggle = isDropDownOpen => this.setState({ isDropDownOpen })
 
   render() {
+    let brandLogoSrc = '/static/images/appicon.png'
     let hasAdminPermission
     let hasDealsPermission
     let hasBackOfficePermission
@@ -90,6 +93,8 @@ class appSideNav extends React.Component {
         user.agent &&
         user.user_type === 'Agent' &&
         user.agent.office_mlsid === 'CSTPP01'
+    } else if (Brand.asset('office_logo')) {
+      brandLogoSrc = Brand.asset('office_logo')
     }
 
     return (
@@ -140,12 +145,7 @@ class appSideNav extends React.Component {
         ) : (
           <Flex center style={{ padding: '0.75em 0' }}>
             <Link to="/">
-              <img
-                src="/static/images/appicon.png"
-                alt="Rechat"
-                width="32"
-                height="32"
-              />
+              <img src={brandLogoSrc} alt="Rechat" width="32" height="32" />
             </Link>
           </Flex>
         )}
