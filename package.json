@@ -46,7 +46,6 @@
     "babel-preset-react-optimize": "^1.0.1",
     "babel-preset-stage-0": "^6.24.1",
     "balloon-css": "^0.5.0",
-    "blocked-at": "^1.1.3",
     "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",
     "bowser": "^2.0.0-alpha.4",

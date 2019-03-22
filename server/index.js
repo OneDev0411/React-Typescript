@@ -9,7 +9,6 @@ import sslify from 'koa-sslify'
 import path from 'path'
 import webpack from 'webpack'
 import _ from 'underscore'
-import blocked from 'blocked-at'
 
 import config from '../config/private'
 import render from './util/render'
@@ -29,13 +28,6 @@ const { entry, output, publicPath } = appConfig.compile
 app.proxy = true
 
 if (!__DEV__) {
-  blocked(
-    (time, stack) => {
-      console.log(time, stack)
-    },
-    { trimFalsePositives: true, threshold: 500 }
-  )
-
   app.use(sslify.default())
 }
 
