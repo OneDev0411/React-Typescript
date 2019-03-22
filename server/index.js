@@ -28,7 +28,7 @@ const { entry, output, publicPath } = appConfig.compile
 app.proxy = true
 
 if (!__DEV__) {
-  app.use(sslify.default())
+  app.use(sslify())
 }
 
 // handle application errors
