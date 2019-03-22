@@ -68,8 +68,7 @@ class ContactsList extends React.Component {
         ]
       )
     } else {
-      console.log('BH', browserHistory.getCurrentLocation())
-      this.fetchList(browserHistory.getCurrentLocation().query.s || 0)
+      this.fetchList(this.getStartQueryParam())
     }
 
     if (this.props.fetchTags) {
@@ -120,6 +119,14 @@ class ContactsList extends React.Component {
     this.setState(prevState => ({
       loadedRanges: _.uniq([...prevState.loadedRanges, parseInt(start, 10)])
     }))
+
+  getStartQueryParam = () =>
+    parseInt(browserHistory.getCurrentLocation().query.s, 10) || 0
+
+  setStartQueryParam = value =>
+    browserHistory.replace(
+      `${browserHistory.getCurrentLocation().pathname}?s=${value}`
+    )
 
   hasSearchState = () =>
     this.state.filter || this.state.searchInputValue || this.order
@@ -181,6 +188,7 @@ class ContactsList extends React.Component {
     } = newFilters
 
     this.addLoadedRange(start)
+    this.setStartQueryParam(start)
 
     if (start === 0 && !prependResult) {
       this.resetSelectedRows()
@@ -234,8 +242,7 @@ class ContactsList extends React.Component {
   handleLoadMore = async () => {
     const { total } = this.props.listInfo
     const totalLoadedCount = this.props.list.ids.length
-    const prevStart =
-      parseInt(browserHistory.getCurrentLocation().query.s, 10) || 0
+    const prevStart = this.getStartQueryParam()
 
     if (
       this.state.isFetchingMoreContacts ||
@@ -248,10 +255,6 @@ class ContactsList extends React.Component {
     const start = Math.max(prevStart, ...this.state.loadedRanges) + 50
 
     console.log(`[ Loading More ] Start: ${start}`)
-
-    browserHistory.replace(
-      `${browserHistory.getCurrentLocation().pathname}?s=${start}`
-    )
 
     this.setState({ isFetchingMoreContacts: true })
 
@@ -271,8 +274,7 @@ class ContactsList extends React.Component {
   handleLoadMoreBefore = async () => {
     const { total } = this.props.listInfo
     const totalLoadedCount = this.props.list.ids.length
-    const prevStart =
-      parseInt(browserHistory.getCurrentLocation().query.s, 10) || 0
+    const prevStart = this.getStartQueryParam()
 
     if (
       this.state.isFetchingMoreContacts ||
@@ -284,10 +286,6 @@ class ContactsList extends React.Component {
     }
 
     const start = prevStart - 50
-
-    browserHistory.replace(
-      `${browserHistory.getCurrentLocation().pathname}?s=${start}`
-    )
 
     if (this.state.loadedRanges.includes(start)) {
       return false
