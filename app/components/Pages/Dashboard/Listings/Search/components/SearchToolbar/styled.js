@@ -86,7 +86,7 @@ export const Item = styled.div`
   color: ${grey.A900};
 
   &:hover {
-    background: ${grey.A100};
+    background: ${grey.A000};
   }
 
   .item__query {
