@@ -239,6 +239,7 @@ class ContactsList extends React.Component {
             },
             loadable: {
               accuracy: 300, // px
+              accuracyTop: 600, // px
               debounceTime: 300, // ms
               onScrollBottom: this.props.onRequestLoadMore,
               onScrollTop: this.props.onRequestLoadMoreBefore
