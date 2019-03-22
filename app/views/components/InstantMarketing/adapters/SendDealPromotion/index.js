@@ -36,6 +36,12 @@ class SendDealPromotion extends React.Component {
     this.getDealListing()
   }
 
+  componentDidUpdate(props) {
+    if (props.deal.id !== this.props.deal.id) {
+      this.getDealListing()
+    }
+  }
+
   toggleInstantMarketingBuilder = () =>
     this.setState(state => ({
       isInstantMarketingBuilderOpen: !state.isInstantMarketingBuilderOpen
@@ -81,17 +87,24 @@ class SendDealPromotion extends React.Component {
     try {
       await sendContactsEmail(email, this.state.owner.id)
 
-      this.props.notify({
-        status: 'success',
-        message: `${
-          values.recipients.length
-        } emails has been sent to your contacts`
-      })
+      this.props.dispatch(
+        notify({
+          status: 'success',
+          message: `${
+            values.recipients.length
+          } emails has been sent to your contacts`
+        })
+      )
     } catch (e) {
       console.log(e)
       // todo
     } finally {
-      this.setState(initialState)
+      this.setState(state => ({
+        ...initialState,
+        // If the user wants to send some new emails for current deal listing
+        // we still need the listing data web#2461
+        listing: state.listing
+      }))
     }
   }
 
@@ -147,7 +160,7 @@ class SendDealPromotion extends React.Component {
     }))
   }
 
-  getTypes = () => {
+  get types() {
     if (Array.isArray(this.props.types)) {
       return this.props.types
     }
@@ -172,16 +185,18 @@ class SendDealPromotion extends React.Component {
           {this.props.children}
         </ActionButton>
 
-        <InstantMarketing
-          isOpen={this.state.isInstantMarketingBuilderOpen}
-          onClose={this.toggleInstantMarketingBuilder}
-          handleSave={this.handleSaveMarketingCard}
-          handleSocialSharing={this.handleSocialSharing}
-          templateData={{ listing, user }}
-          mediums={this.props.mediums}
-          templateTypes={this.getTypes()}
-          assets={this.Assets}
-        />
+        {this.state.isInstantMarketingBuilderOpen && (
+          <InstantMarketing
+            isOpen
+            onClose={this.toggleInstantMarketingBuilder}
+            handleSave={this.handleSaveMarketingCard}
+            handleSocialSharing={this.handleSocialSharing}
+            templateData={{ listing, user }}
+            mediums={this.props.mediums}
+            templateTypes={this.types}
+            assets={this.Assets}
+          />
+        )}
 
         {this.state.isComposeEmailOpen && (
           <EmailCompose
@@ -215,7 +230,4 @@ function mapStateToProps({ user }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { notify }
-)(SendDealPromotion)
+export default connect(mapStateToProps)(SendDealPromotion)

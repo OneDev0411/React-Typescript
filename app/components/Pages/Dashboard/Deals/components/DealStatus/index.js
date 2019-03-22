@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { getStatusColorClass } from 'utils/listing'
 import { upsertContexts } from 'actions/deals'
 import { getDealChecklists } from 'reducers/deals/checklists'
-import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
 
 import Deal from 'models/Deal'
 import DealContext from 'models/Deal/helpers/dynamic-context'
@@ -27,35 +26,27 @@ class DealStatus extends React.Component {
       return false
     }
 
-    if (this.getStatusList().includes(this.CurrentStatus) === false) {
-      return false
-    }
+    // if (this.getStatusList().includes(this.CurrentStatus) === false) {
+    //   return false
+    // }
 
     return (
       this.props.isBackOffice || DealContext.getHasActiveOffer(this.props.deal)
     )
   }
 
-  getStatusList() {
-    const { deal, isBackOffice } = this.props
-    const isLeaseDeal = deal.property_type.includes('Lease')
+  get IsLease() {
+    return this.props.deal.property_type.includes('Lease')
+  }
 
-    if (isLeaseDeal) {
-      return isBackOffice
-        ? [
-            'Active',
-            'Temp Off Market',
-            'Lease Contract',
-            'Leased',
-            'Withdrawn',
-            'Expired',
-            'Cancelled',
-            'Contract Terminated'
-          ]
-        : ['Leased', 'Lease Contract']
+  get ListingStatusList() {
+    if (this.IsLease) {
+      return this.props.isBackOffice
+        ? ['Active', 'Temp Off Market', 'Leased']
+        : ['Leased']
     }
 
-    return isBackOffice
+    return this.props.isBackOffice
       ? [
           'Active',
           'Sold',
@@ -66,8 +57,7 @@ class DealStatus extends React.Component {
           'Active Kick Out',
           'Withdrawn',
           'Expired',
-          'Cancelled',
-          'Contract Terminated'
+          'Cancelled'
         ]
       : [
           'Pending',
@@ -75,6 +65,37 @@ class DealStatus extends React.Component {
           'Active Contingent',
           'Active Kick Out'
         ]
+  }
+
+  get ContractStatusList() {
+    if (this.IsLease) {
+      return this.props.isBackOffice
+        ? ['Contract Terminated', 'Leased', 'Lease Contract']
+        : ['Lease Contract']
+    }
+
+    return this.props.isBackOffice
+      ? [
+          'Active Option Contract',
+          'Active Contingent',
+          'Active Kick Out',
+          'Pending',
+          'Sold',
+          'Contract Terminated'
+        ]
+      : [
+          'Active Option Contract',
+          'Active Contingent',
+          'Active Kick Out',
+          'Pending',
+          'Sold'
+        ]
+  }
+
+  getStatusList() {
+    return this.props.deal.deal_type === 'Selling'
+      ? this.ListingStatusList
+      : this.ContractStatusList
   }
 
   get StatusOptions() {
@@ -104,7 +125,12 @@ class DealStatus extends React.Component {
 
     if (this.props.isBackOffice) {
       await this.props.upsertContexts(this.props.deal.id, [
-        createUpsertObject(this.props.deal, 'listing_status', status, true)
+        DealContext.createUpsertObject(
+          this.props.deal,
+          DealContext.getStatusField(this.props.deal),
+          status,
+          true
+        )
       ])
     } else {
       await this.notifyAdmin(status)

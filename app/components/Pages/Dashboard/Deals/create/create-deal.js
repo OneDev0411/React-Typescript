@@ -83,7 +83,7 @@ class CreateDeal extends React.Component {
       dealSide: deal.deal_type,
       dealPropertyType: deal.property_type,
       enderType,
-      dealStatus: Deal.get.field(deal, 'listing_status') || '',
+      dealStatus: Deal.get.status(deal) || '',
       contexts: this.generateContextsFromDeal(deal),
       defaultDealAddress: dealAddress,
       dealAddress,
@@ -671,13 +671,20 @@ class CreateDeal extends React.Component {
     return dealObject
   }
 
-  /**
-   * get deal status based selected property type
-   */
-  getDefaultStatus = () => {
-    const { dealPropertyType } = this.state
+  getDealStatus = () => {
+    if (this.state.dealSide === 'Buying') {
+      return {
+        contract_status: this.state.dealStatus
+      }
+    }
 
-    return dealPropertyType.includes('Lease') ? 'Lease' : 'Active'
+    const defaultListingStatus = this.state.dealPropertyType.includes('Lease')
+      ? 'Lease'
+      : 'Active'
+
+    return {
+      listing_status: this.state.dealStatus || defaultListingStatus
+    }
   }
 
   /**
@@ -771,10 +778,7 @@ class CreateDeal extends React.Component {
   get Contexts() {
     let contexts = {
       ...this.state.contexts,
-      listing_status:
-        this.state.dealSide === 'Buying'
-          ? this.state.dealStatus
-          : this.getDefaultStatus()
+      ...this.getDealStatus()
     }
 
     if (this.state.enderType !== -1) {
@@ -875,7 +879,7 @@ class CreateDeal extends React.Component {
             <Fragment>
               <DealType
                 isDraft={isDraft}
-                isRequired={true}
+                isRequired
                 onChangeDealType={this.changeDealType}
               />
 
@@ -979,17 +983,18 @@ class CreateDeal extends React.Component {
                         }
                       />
                     )}
-
-                    {!isDraft && (
-                      <DealStatus
-                        isRequired={requiredFields.includes('status')}
-                        hasError={this.hasError('status')}
-                        property_type={dealPropertyType}
-                        dealStatus={dealStatus}
-                        onChangeDealStatus={this.changeDealStatus}
-                      />
-                    )}
                   </Fragment>
+                )}
+
+                {!isDraft && (
+                  <DealStatus
+                    isRequired={requiredFields.includes('status')}
+                    hasError={this.hasError('status')}
+                    dealSide={dealSide}
+                    propertyType={dealPropertyType}
+                    dealStatus={dealStatus}
+                    onChangeDealStatus={this.changeDealStatus}
+                  />
                 )}
 
                 <DealAddress
