@@ -19,12 +19,6 @@ export class LoadablePlugin {
     const top = target.scrollTop - target.clientTop
     const end = target.scrollHeight - target.offsetHeight
 
-    // if (top >= end - accuracy) {
-    //   this.lastScrollTop = top
-
-    //   this.options.onTrigger(top)
-    // }
-
     const { onScrollBottom, onScrollTop } = this.options
 
     if (top >= end - accuracy) {
