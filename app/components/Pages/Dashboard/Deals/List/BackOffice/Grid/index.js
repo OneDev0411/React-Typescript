@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import merge from 'merge'
 import moment from 'moment'
 
 import Deal from 'models/Deal'
@@ -12,6 +11,7 @@ import Table from 'components/Grid/Table'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import getUserTeams from 'actions/user/teams'
+import flattenBrand from 'utils/flatten-brand'
 
 import EmptyState from './EmptyState'
 import LoadingState from '../../components/LoadingState'
@@ -24,12 +24,8 @@ import { getPrimaryAgentName } from '../../../utils/roles'
 const SORT_FIELD_SETTING_KEY = 'grid_deals_sort_field_bo'
 
 class Grid extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.order =
-      getActiveTeamSettings(props.user, SORT_FIELD_SETTING_KEY) || 'address'
-  }
+  order =
+    getActiveTeamSettings(this.props.user, SORT_FIELD_SETTING_KEY) || 'address'
 
   get Columns() {
     const { roles } = this.props
@@ -100,7 +96,7 @@ class Grid extends React.Component {
   }
 
   getOffice = deal => {
-    const brand = this.flattenBrand(deal.brand)
+    const brand = flattenBrand(deal.brand)
 
     return brand && brand.messages ? brand.messages.branch_title : 'N/A'
   }
@@ -131,49 +127,6 @@ class Grid extends React.Component {
     return {}
   }
 
-  flattenBrand = brand => {
-    if (!brand) {
-      return null
-    }
-
-    const brands = [brand]
-
-    while (brand.parent) {
-      brands.push(brand.parent)
-      brand = brand.parent
-    }
-
-    brands.reverse()
-
-    let merged = {}
-
-    brands.forEach(brand_loop => {
-      merge.recursive(merged, { ...brand_loop, parent: undefined })
-    })
-
-    return merged
-  }
-
-  getDefaultSort = () => {
-    const sortSetting =
-      getActiveTeamSettings(this.props.user, SORT_FIELD_SETTING_KEY) ||
-      'address'
-    let id = sortSetting
-    let ascending = true
-
-    if (sortSetting.startsWith('-')) {
-      id = sortSetting.slice(1)
-      ascending = false
-    }
-
-    const column = this.Columns.find(col => col.id === id)
-
-    return {
-      column,
-      ascending
-    }
-  }
-
   getDefaultIndex = () =>
     getActiveTeamSettings(this.props.user, SORT_FIELD_SETTING_KEY) || 'address'
 
@@ -182,15 +135,12 @@ class Grid extends React.Component {
     const columns = this.Columns
     const data = this.Data
 
-    const defaultSort = this.getDefaultSort()
-    const defaultIndex = this.getDefaultIndex()
-
     return (
       <Table
         plugins={{
           sortable: {
-            defaultSort,
-            defaultIndex,
+            defaultSort: this.getDefaultSort(),
+            defaultIndex: this.getDefaultIndex(),
             onPostChange: async item => {
               await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
               await this.props.getUserTeams(this.props.user)

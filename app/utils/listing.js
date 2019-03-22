@@ -7,6 +7,7 @@ export const getStatusColor = status => {
   switch (status) {
     case 'Active':
     case 'Lease':
+    case 'Coming Soon':
       return '32b86d'
 
     case 'Pending':
@@ -31,6 +32,7 @@ export const getStatusColorClass = status => {
   switch (status) {
     case 'Active':
     case 'Lease':
+    case 'Coming Soon':
       return 'green'
 
     case 'Pending':

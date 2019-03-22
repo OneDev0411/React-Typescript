@@ -102,27 +102,3 @@ export function allMembersOfTeam(team) {
 
   return Object.values(indexedMembers)
 }
-
-export function isTrainingAccount(user) {
-
-  // Hide training banner
-  // https://gitlab.com/rechat/web/issues/1688#note_104530885
-  return false
-  
-  const activeTeam = getActiveTeam(user) || {}
-  let { brand } = activeTeam
-
-  if (!activeTeam || !brand) {
-    return false
-  }
-
-  do {
-    if (brand.training) {
-      return true
-    }
-
-    brand = brand.parent
-  } while (brand)
-
-  return false
-}

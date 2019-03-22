@@ -428,6 +428,10 @@ export function createUpsertObject(deal, field, value, approved = false) {
   }
 }
 
+export function getStatusField(deal) {
+  return deal.deal_type === 'Selling' ? 'listing_status' : 'contract_status'
+}
+
 function getFormattedValue(value) {
   if (!value) {
     return value
@@ -457,6 +461,7 @@ export default {
   getValue,
   getValueByContext,
   getDateValue,
+  getStatusField,
   parseDate,
   getDateFormatString,
   validate,
