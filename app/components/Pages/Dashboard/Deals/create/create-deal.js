@@ -671,15 +671,6 @@ class CreateDeal extends React.Component {
     return dealObject
   }
 
-  /**
-   * get deal status based selected property type
-   */
-  getDefaultStatus = () => {
-    const { dealPropertyType } = this.state
-
-    return dealPropertyType.includes('Lease') ? 'Lease' : 'Active'
-  }
-
   getDealStatus = () => {
     if (this.state.dealSide === 'Buying') {
       return {
@@ -687,8 +678,12 @@ class CreateDeal extends React.Component {
       }
     }
 
+    const defaultListingStatus = this.state.dealPropertyType.includes('Lease')
+      ? 'Lease'
+      : 'Active'
+
     return {
-      listing_status: this.getDefaultStatus()
+      listing_status: this.state.dealStatus || defaultListingStatus
     }
   }
 
@@ -988,17 +983,18 @@ class CreateDeal extends React.Component {
                         }
                       />
                     )}
-
-                    {!isDraft && (
-                      <DealStatus
-                        isRequired={requiredFields.includes('status')}
-                        hasError={this.hasError('status')}
-                        property_type={dealPropertyType}
-                        dealStatus={dealStatus}
-                        onChangeDealStatus={this.changeDealStatus}
-                      />
-                    )}
                   </Fragment>
+                )}
+
+                {!isDraft && (
+                  <DealStatus
+                    isRequired={requiredFields.includes('status')}
+                    hasError={this.hasError('status')}
+                    dealSide={dealSide}
+                    propertyType={dealPropertyType}
+                    dealStatus={dealStatus}
+                    onChangeDealStatus={this.changeDealStatus}
+                  />
                 )}
 
                 <DealAddress
