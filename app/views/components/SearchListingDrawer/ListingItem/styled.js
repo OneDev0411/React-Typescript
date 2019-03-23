@@ -31,7 +31,7 @@ export const ListItem = styled.div`
   }
 
   :hover {
-    background-color: ${grey.A100};
+    background-color: ${grey.A000};
   }
 `
 
