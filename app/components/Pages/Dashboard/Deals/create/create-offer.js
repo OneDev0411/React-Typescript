@@ -556,7 +556,7 @@ class CreateOffer extends React.Component {
               <DealStatus
                 isRequired={requiredFields.includes('deal_status')}
                 hasError={this.hasError('deal_status')}
-                property_type={deal.property_type}
+                propertyType={deal.property_type}
                 dealStatus={dealStatus}
                 onChangeDealStatus={status => this.changeDealStatus(status)}
               />
