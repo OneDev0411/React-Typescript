@@ -28,7 +28,7 @@ function getStatusList(dealSide, propertyType) {
   }
 
   return propertyType.includes('Lease')
-    ? ['Active', 'Lease Contract']
+    ? ['Lease Contract']
     : [
         'Active Contingent',
         'Active Kick Out',
