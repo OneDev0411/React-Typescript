@@ -164,7 +164,7 @@ class ContactsList extends React.Component {
               selectedRows={selectedRows}
               submitCallback={async () => {
                 resetSelectedRows()
-                await this.props.bulkEventCreationCallback()
+                await this.props.reloadContacts()
               }}
             />
           </ActionWrapper>
@@ -180,8 +180,10 @@ class ContactsList extends React.Component {
             <MergeContacts
               disabled={disabled}
               selectedRows={selectedRows}
-              rowsUpdating={this.props.rowsUpdating}
-              resetSelectedRows={resetSelectedRows}
+              submitCallback={async () => {
+                resetSelectedRows()
+                await this.props.reloadContacts()
+              }}
             />
           </ActionWrapper>
         )

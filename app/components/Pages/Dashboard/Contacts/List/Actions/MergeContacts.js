@@ -17,10 +17,8 @@ class MergeContacts extends React.Component {
         'The selected contacts will be merged into the 1st contact you selected. Once merged, it can not be undone. Are you sure you want to continue?',
       confirmLabel: 'Yes, merge',
       onConfirm: async () => {
-        this.props.rowsUpdating(true)
         await this.props.mergeContact(selectedRows[0], selectedRows.slice(1))
-        this.props.rowsUpdating(false)
-        this.props.resetSelectedRows()
+        await this.props.submitCallback()
       }
     })
   }

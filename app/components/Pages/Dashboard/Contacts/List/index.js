@@ -283,10 +283,10 @@ class ContactsList extends React.Component {
     resetGridSelectedItems('contacts')
   }
 
-  reloadContacts = async () => {
+  reloadContacts = async (start = 0) => {
     await this.props.searchContacts(
       this.state.filters,
-      0,
+      start,
       undefined,
       this.state.searchInputValue,
       this.order,
@@ -327,7 +327,7 @@ class ContactsList extends React.Component {
             isSearching={isFetchingContacts}
           />
           <Table
-            bulkEventCreationCallback={this.reloadContacts}
+            reloadContacts={this.reloadContacts}
             sortBy={this.order}
             handleChangeOrder={this.handleChangeOrder}
             handleChangeContactsAttributes={this.handleChangeContactsAttributes}
