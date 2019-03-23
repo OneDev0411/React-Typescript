@@ -26,9 +26,9 @@ class DealStatus extends React.Component {
       return false
     }
 
-    // if (this.getStatusList().includes(this.CurrentStatus) === false) {
-    //   return false
-    // }
+    if (this.getStatusList().includes(this.CurrentStatus) === false) {
+      return false
+    }
 
     return (
       this.props.isBackOffice || DealContext.getHasActiveOffer(this.props.deal)
