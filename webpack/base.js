@@ -50,6 +50,13 @@ export default {
         options: {}
       },
       {
+        test: /\.js$/,
+        include: config.compile.entry,
+        use: [
+          'react-hot-loader/webpack',
+        ]
+      },
+      {
         test: /\.woff(\?.*)?$/,
         use: [
           {
