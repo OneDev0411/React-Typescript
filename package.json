@@ -124,6 +124,7 @@
         "react-final-form-arrays": "^2.0.1",
         "react-final-form-listeners": "^1.0.1",
         "react-ga": "^2.5.3",
+        "react-helmet": "^5.2.0",
         "react-hot-loader": "^4.6.3",
         "react-images": "^0.5.11",
         "react-input-mask": "^1.1.0",
