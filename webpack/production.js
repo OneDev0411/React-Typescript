@@ -82,7 +82,7 @@ webpackConfig.plugins.push(
   new S3Plugin({
     progress: false, // Messes the terminal up
     exclude: /.*\.html$/,
-    basePath: 'dist',
+    basePath: 'dist/',
     s3Options: {
       //     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
       //     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
