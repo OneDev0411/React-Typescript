@@ -96,19 +96,25 @@ _.each(require('./api/routes'), route => {
   app.use(mount('/api', require(route.path)))
 })
 
-if (__DEV__) {
-  // eslint-disable-next-line global-require
-  const webpackDevMiddleware = require('./util/webpack-dev').default
-  // eslint-disable-next-line global-require
-  const webpackHMRMiddleware = require('./util/webpack-hmr').default
+const development = async () => {
+  const koaWebpack = require('koa-webpack')
 
-  const compiler = webpack(webpackConfig)
+  const middleware = await koaWebpack({
+    config: webpackConfig,
+  })
 
-  app.use(webpackDevMiddleware(compiler, publicPath))
-  app.use(webpackHMRMiddleware(compiler))
+  app.use(middleware)
 
   app.use(mount(publicPath, serve(path.join(entry, publicPath))))
-} else {
+
+  // parse pages
+  app.use(mount(pagesMiddleware))
+
+  // universal rendering middleware
+  app.use(mount(universalMiddleware))
+}
+
+const production = async () => {
   app.use(
     mount(
       serve(path.join(output), {
@@ -117,12 +123,18 @@ if (__DEV__) {
       })
     )
   )
+
+  // parse pages
+  app.use(mount(pagesMiddleware))
+
+  // universal rendering middleware
+  app.use(mount(universalMiddleware))
 }
 
-// parse pages
-app.use(mount(pagesMiddleware))
+if (__DEV__)
+  webpackServer()
+else
+  production()
 
-// universal rendering middleware
-app.use(mount(universalMiddleware))
 
 export default app

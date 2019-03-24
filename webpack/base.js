@@ -9,13 +9,8 @@ function resolvePath(dirPath) {
 }
 
 export default {
-  devtool: 'eval-source-map',
+  devtool: false,
   entry: {},
-  optimization: {
-    splitChunks: {
-      chunks: 'all'
-    }
-  },
   output: {
     path: config.compile.output,
     filename: config.compile.jsBundle,

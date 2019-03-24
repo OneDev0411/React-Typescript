@@ -25,8 +25,6 @@ const postcss = function postcss() {
 
 webpackConfig.entry = [
   'babel-polyfill',
-  'react-hot-loader/patch',
-  'webpack-hot-middleware/client',
   appConfig.compile.entry
 ]
 
@@ -35,7 +33,6 @@ webpackConfig.plugins.push(
     analyzerMode: 'static',
     openAnalyzer: false
   }),
-  new webpack.HotModuleReplacementPlugin(),
   new Webpackbar()
 )
 

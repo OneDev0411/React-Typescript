@@ -16,6 +16,13 @@ import path from 'path'
 
 webpackConfig.mode = 'production'
 
+webpackConfig.optimization = {
+  splitChunks: {
+    chunks: 'all'
+  }
+}
+
+
 const Expires = moment()
   .utc()
   .add('1', 'month')
