@@ -54,8 +54,6 @@ import { getAllNotifications } from '../store_actions/notifications'
 
 import { checkBrowser } from './helpers/check-browser'
 
-import { hot } from 'react-hot-loader'
-
 class App extends Component {
   componentWillMount() {
     // check branding
@@ -358,4 +356,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default hot(module)(connect(mapStateToProps)(App))
+export default connect(mapStateToProps)(App)

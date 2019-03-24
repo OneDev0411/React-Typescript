@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './app'
+import Provider from './provider'
 
 const rootEl = document.getElementById('app')
 
-ReactDOM.render(<App />, rootEl)
+ReactDOM.render(<Provider />, rootEl)
 
 if (window != null) {
   window.isSet = object => typeof object !== 'undefined'
