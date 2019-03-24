@@ -132,7 +132,7 @@ const production = async () => {
 }
 
 if (__DEV__)
-  webpackServer()
+  development()
 else
   production()
 
