@@ -66,6 +66,7 @@
         "hogan.js": "^3.0.2",
         "html-webpack-plugin": "^4.0.0-beta.5",
         "idx": "^2.5.2",
+        "immutable": "^3.8.2",
         "intercom-client": "^2.10.4",
         "intersection-observer": "^0.5.1",
         "js-cookie": "^2.2.0",
