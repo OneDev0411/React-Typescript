@@ -159,10 +159,7 @@ class ActionsButton extends React.Component {
       document_type: documentType,
       file_uploaded: isFile,
       form_saved: isTask && this.props.document.submission !== null,
-      envelope_status: this.getLastEnvelopeStatus(envelopes),
-      task_active_envelopes: this.getActiveEnvelopes(
-        getTaskEnvelopes(this.props.envelopes, this.props.task)
-      )
+      envelope_status: this.getLastEnvelopeStatus(envelopes)
     }
   }
 
@@ -178,8 +175,7 @@ class ActionsButton extends React.Component {
       is_task_notified: this.props.task.attention_requested === true,
       file_uploaded: this.hasTaskAttachments(this.props.task),
       form_saved: this.props.task.submission !== null,
-      envelope_status: this.getLastEnvelopeStatus(envelopes),
-      task_active_envelopes: this.getActiveEnvelopes(envelopes)
+      envelope_status: this.getLastEnvelopeStatus(envelopes)
     }
   }
 
