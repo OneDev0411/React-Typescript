@@ -179,7 +179,7 @@ class MlsAutocompleteSearch extends Component {
 
       const [places, listings] = await Promise.all([
         this.autocompleteAddress(input),
-        searchListings(input, { limit: 5 }, false)
+        searchListings(input, { limit: 5 })
       ])
 
       this.setState({
@@ -237,18 +237,24 @@ class MlsAutocompleteSearch extends Component {
     }
   }
 
-  handleEnterKey = () => {
+  handleEnterKey = async () => {
     const { dispatch } = this.props
 
     try {
-      this.setState({ isLoading: false, isOpen: false })
+      this.setState({
+        isLoading: false,
+        isOpen: false,
+        listings: [],
+        places: []
+      })
 
       batchActions([
         dispatch(resetAreasOptions()),
         this.disableDrawing(),
-        dispatch(setSearchType(SEARCH_BY_QUERY)),
-        getListingsByQuery(this.state.input, { limit: 200 })
+        dispatch(setSearchType(SEARCH_BY_QUERY))
       ])
+
+      await dispatch(getListingsByQuery(this.state.input, { limit: 200 }))
     } catch (error) {
       console.log(error)
     }
