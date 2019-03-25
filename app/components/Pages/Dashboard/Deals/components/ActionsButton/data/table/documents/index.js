@@ -62,10 +62,10 @@ export default normalizeConditions([
         envelope_status: ENVELOPE_NONE
       }),
     actions: {
-      [VIEW_BUTTON]: {
+      [DOCUSIGN_BUTTON]: {
         primary: true
       },
-      [DOCUSIGN_BUTTON]: {},
+      [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {}
     }
   },
@@ -103,6 +103,8 @@ export default normalizeConditions([
       [EDIT_BUTTON]: {
         disabled: true
       },
+      [DOCUSIGN_BUTTON]: {},
+      [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {}
     }
@@ -120,6 +122,8 @@ export default normalizeConditions([
       [EDIT_BUTTON]: {
         primary: true
       },
+      [DOCUSIGN_BUTTON]: {},
+      [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {}
     }
@@ -137,9 +141,9 @@ export default normalizeConditions([
       [VIEW_BUTTON]: {
         primary: true
       },
+      [DOCUSIGN_BUTTON]: {},
       [EDIT_BUTTON]: {}
     }
-  },
   {
     conditions: data =>
       evaluateCondition(data, {
@@ -150,10 +154,10 @@ export default normalizeConditions([
         envelope_status: ENVELOPE_NONE
       }),
     actions: {
-      [VIEW_BUTTON]: {
+      [DOCUSIGN_BUTTON]: {
         primary: true
       },
-      [DOCUSIGN_BUTTON]: {},
+      [VIEW_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
       [MOVE_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
@@ -191,6 +195,9 @@ export default normalizeConditions([
       [RESEND_BUTTON]: {
         primary: true
       },
+      [DOCUSIGN_BUTTON]: {
+        disabled: true
+      },
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
@@ -206,10 +213,10 @@ export default normalizeConditions([
         envelope_status: [].concat(ENVELOPE_DECLINED, ENVELOPE_VOIDED)
       }),
     actions: {
-      [VIEW_BUTTON]: {
+      [DOCUSIGN_BUTTON]: {
         primary: true
       },
-      [DOCUSIGN_BUTTON]: {},
+      [VIEW_BUTTON]: {},
       [MOVE_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
@@ -228,6 +235,7 @@ export default normalizeConditions([
       [VIEW_BUTTON]: {
         primary: true
       },
+      [DOCUSIGN_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
     }
   },

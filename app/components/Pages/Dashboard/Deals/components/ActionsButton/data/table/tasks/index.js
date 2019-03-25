@@ -90,6 +90,7 @@ export default normalizeConditions([
         primary: true
       },
       ...sharedActions,
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
@@ -110,6 +111,7 @@ export default normalizeConditions([
       },
       ...sharedActions,
       [VOID_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
@@ -147,6 +149,7 @@ export default normalizeConditions([
         primary: true
       },
       ...sharedActions,
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {}
@@ -261,6 +264,7 @@ export default normalizeConditions([
       },
       ...sharedActions,
       [EDIT_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
@@ -299,6 +303,7 @@ export default normalizeConditions([
       ...sharedActions,
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
@@ -321,6 +326,7 @@ export default normalizeConditions([
       ...sharedActions,
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
@@ -340,6 +346,7 @@ export default normalizeConditions([
       ...sharedActions,
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
@@ -357,6 +364,7 @@ export default normalizeConditions([
         primary: true
       },
       ...sharedActions,
+      [DOCUSIGN_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
@@ -418,6 +426,7 @@ export default normalizeConditions([
       ...sharedActions,
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
@@ -455,6 +464,7 @@ export default normalizeConditions([
       },
       ...sharedActions,
       [EDIT_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
