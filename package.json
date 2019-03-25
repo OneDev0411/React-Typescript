@@ -5,6 +5,7 @@
     "repository": "git@gitlab.com:rechat/web.git",
     "scripts": {
         "develop": "NODE_ENV=development nodemon ./bin/server --config ./nodemon.config.json --exec babel-node",
+        "developClient": "NODE_ENV=development notify=true npx babel-node ./bin/server",
         "debug": "ndb npm run develop",
         "build": "rimraf dist && NODE_ENV=production babel-node ./build",
         "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build",
