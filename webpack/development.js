@@ -9,6 +9,9 @@ import webpackConfig from './base'
 
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
+import UnusedFilesWebpackPlugin from 'unused-files-webpack-plugin'
+
+
 webpackConfig.mode = 'development'
 
 const postcss = function postcss() {
@@ -29,6 +32,17 @@ webpackConfig.entry = [
 ]
 
 webpackConfig.plugins.push(
+  new UnusedFilesWebpackPlugin({
+    patterns: ['app/**/*.*'],
+    globOptions: {
+      ignore: [
+        'app/static/**',
+        'app/views/components/SvgIcons/**',
+        'app/templates/**',
+        'app/styles/vendor/**'
+      ]
+    }
+  }),
   new BundleAnalyzerPlugin({
     analyzerMode: 'static',
     openAnalyzer: false
