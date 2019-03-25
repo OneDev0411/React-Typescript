@@ -104,7 +104,6 @@ export default normalizeConditions([
         disabled: true
       },
       [DOCUSIGN_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {}
     }
@@ -123,7 +122,6 @@ export default normalizeConditions([
         primary: true
       },
       [DOCUSIGN_BUTTON]: {},
-      [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {}
     }
@@ -144,6 +142,8 @@ export default normalizeConditions([
       [DOCUSIGN_BUTTON]: {},
       [EDIT_BUTTON]: {}
     }
+  },
+
   {
     conditions: data =>
       evaluateCondition(data, {
