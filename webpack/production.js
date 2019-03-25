@@ -30,9 +30,7 @@ const Expires = moment()
 
 function postcss() {
   return [
-    require('autoprefixer')({
-      browsers: ['> 1%', 'IE 10', 'Last 2 versions']
-    })
+    require('autoprefixer')()
   ]
 }
 
