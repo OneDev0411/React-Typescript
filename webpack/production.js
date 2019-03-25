@@ -46,7 +46,7 @@ webpackConfig.performance = {
 }
 
 webpackConfig.entry = {
-  app: ['babel-polyfill', appConfig.compile.entry],
+  app: [appConfig.compile.entry],
   vendor: appConfig.compile.vendors
 }
 

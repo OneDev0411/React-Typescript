@@ -27,7 +27,6 @@ const postcss = function postcss() {
 }
 
 webpackConfig.entry = [
-  'babel-polyfill',
   appConfig.compile.entry
 ]
 
