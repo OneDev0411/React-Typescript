@@ -9,7 +9,7 @@
         "debug": "ndb npm run develop",
         "build": "rimraf dist && NODE_ENV=production babel-node ./build.js",
         "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build.js",
-        "serve": "NODE_ENV=production forever babel-node ./bin/server",
+        "serve": "NODE_ENV=production forever node_modules/@babel/node/bin/babel-node.js ./bin/server",
         "serve:stage": "NODE_ENV=stage babel-node ./bin/server",
         "lint": "npm run lint:app && npm run lint:server",
         "lint:app": "eslint ./app",
