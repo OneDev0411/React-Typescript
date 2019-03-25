@@ -346,7 +346,6 @@ export default normalizeConditions([
       ...sharedActions,
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
-      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
