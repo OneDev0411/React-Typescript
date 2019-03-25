@@ -1,5 +1,3 @@
-import { SEARCH_BY_GOOGLE_SUGGESTS } from 'constants/listings/search'
-
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
@@ -19,6 +17,7 @@ import {
   setSearchType
 } from 'actions/listings/search/set-type'
 import searchActions from 'actions/listings/search'
+import { getListingsByQuery } from 'actions/listings/search/get-listings-by-query'
 import { goToPlace, setMapProps } from 'actions/listings/map'
 import resetAreasOptions from 'actions/listings/search/reset-areas-options'
 import { removePolygon, inactiveDrawing } from 'actions/listings/map/drawing'
@@ -26,6 +25,11 @@ import { removePolygon, inactiveDrawing } from 'actions/listings/map/drawing'
 import IconClose from 'components/SvgIcons/Close/CloseIcon'
 import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
 import { MlsItem } from 'components/SearchListingDrawer/ListingItem/MlsItem'
+
+import {
+  SEARCH_BY_GOOGLE_SUGGESTS,
+  SEARCH_BY_QUERY
+} from '../../../../../../../constants/listings/search'
 
 import {
   ListContainer,
@@ -68,6 +72,12 @@ class MlsAutocompleteSearch extends Component {
     const input = e.target.value
 
     this.setState(() => ({ input, isDrity: true }), () => this.search(input))
+  }
+
+  handleKeyDownInput = e => {
+    if (e.keyCode === 13) {
+      this.handleEnterKey()
+    }
   }
 
   onClear = () => {
@@ -176,7 +186,7 @@ class MlsAutocompleteSearch extends Component {
         isLoading: false,
         isOpen: true,
         places,
-        listings: listings.data.slice(0, 5).map(l => ({
+        listings: listings.data.map(l => ({
           ...l,
           description: getListingAddress(getListingAddressObj(l))
         }))
@@ -227,6 +237,23 @@ class MlsAutocompleteSearch extends Component {
     }
   }
 
+  handleEnterKey = () => {
+    const { dispatch } = this.props
+
+    try {
+      this.setState({ isLoading: false, isOpen: false })
+
+      batchActions([
+        dispatch(resetAreasOptions()),
+        this.disableDrawing(),
+        dispatch(setSearchType(SEARCH_BY_QUERY)),
+        getListingsByQuery(this.state.input, { limit: 200 })
+      ])
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   renderPlacesItem = item => (
     <React.Fragment>
       <span className="item__query">
@@ -264,6 +291,7 @@ class MlsAutocompleteSearch extends Component {
                 <Input
                   value={this.state.input}
                   onChange={this.handleChangeInput}
+                  onKeyDown={this.handleKeyDownInput}
                   onFocus={this.handleInputFocus}
                   placeholder="Search location or MLS#"
                 />

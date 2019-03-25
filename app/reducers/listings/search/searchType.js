@@ -1,4 +1,5 @@
 import {
+  SEARCH_BY_QUERY,
   RESET_SEARCH_TYPE,
   SEARCH_BY_MAP_BOUNDS,
   SEARCH_BY_MLS_NUMBER,
@@ -12,6 +13,9 @@ const type = (state = 'by_map_bounds', action) => {
     case RESET_SEARCH_TYPE:
     case SEARCH_BY_MAP_BOUNDS:
       return 'by_map_bounds'
+
+    case SEARCH_BY_QUERY:
+      return 'by_query'
 
     case SEARCH_BY_GOOGLE_SUGGESTS:
       return 'by_google_suggests'

@@ -196,7 +196,7 @@ const mapHOC = compose(
           resetSearchType()
         }
 
-        if (searchType === 'by_filters_areas') {
+        if (['by_filters_areas', 'by_query'].includes(searchType)) {
           resetSearchType()
         }
 

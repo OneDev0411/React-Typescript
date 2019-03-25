@@ -22,7 +22,7 @@ import {
 } from '../../../../../../../store_actions/listings/search/set-type'
 import IconClose from '../../../../../../../views/components/SvgIcons/Close/CloseIcon'
 import { mapInitialState } from '../../../mapOptions'
-import { Form, Input, ClearButton, SearchIcon } from './styled'
+import { Input, ClearButton, SearchIcon } from './styled'
 
 let inputNode = React.createRef()
 
