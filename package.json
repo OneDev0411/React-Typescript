@@ -13,8 +13,7 @@
         "serve:stage": "NODE_ENV=stage babel-node ./bin/server",
         "lint": "npm run lint:app && npm run lint:server",
         "lint:app": "eslint ./app",
-        "lint:server": "eslint ./server",
-        "heroku-postbuild": "npm run build"
+        "lint:server": "eslint ./server"
     },
     "engines": {
         "node": "10.x"
