@@ -31,7 +31,7 @@ class Landing extends Component {
     const { user } = this.props
 
     if (user) {
-      window.location = getDefaultHomePage(user)
+      this.props.router.replace(getDefaultHomePage(user))
       return null
     }
 
