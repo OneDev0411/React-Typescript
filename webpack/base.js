@@ -9,7 +9,7 @@ function resolvePath(dirPath) {
 }
 
 export default {
-  devtool: false,
+  devtool: 'eval-source-map',
   entry: {},
   output: {
     path: config.compile.output,
