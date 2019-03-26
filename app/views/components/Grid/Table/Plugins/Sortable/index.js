@@ -92,8 +92,8 @@ export class SortablePlugin {
         return false
       }
 
-      const lowText = col.sortType === 'number' ? 'Lo' : 'A'
-      const highText = col.sortType === 'number' ? 'Hi' : 'Z'
+      const lowText = col.sortType === 'number' ? 'Low' : 'A'
+      const highText = col.sortType === 'number' ? 'High' : 'Z'
 
       list.push(
         {
