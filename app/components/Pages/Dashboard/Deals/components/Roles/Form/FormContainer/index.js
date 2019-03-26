@@ -49,6 +49,16 @@ export const RoleFormContainer = ({
     <FormContainer onSubmit={handleSubmit}>
       <FormType name="role_type" selectedValue={values.role_type} />
 
+      <Field
+        name="role"
+        isRequired={requiredFields.includes('role')}
+        placeholder="Select Role"
+        options={ROLE_NAMES}
+        component={RolesDropDown}
+        formRole={values.role}
+        isAllowed={isAllowedRole}
+      />
+
       {role_type === TYPE_PERSON && (
         <Field
           name="legal_prefix"
@@ -127,16 +137,6 @@ export const RoleFormContainer = ({
           singularName: 'phone_number',
           pluralName: 'phones'
         })}
-      />
-
-      <Field
-        name="role"
-        isRequired={requiredFields.includes('role')}
-        placeholder="Select Role"
-        options={ROLE_NAMES}
-        component={RolesDropDown}
-        formRole={values.role}
-        isAllowed={isAllowedRole}
       />
 
       {shouldShowCommission(values.role) && (
