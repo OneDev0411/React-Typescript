@@ -43,8 +43,9 @@ import {
 
 class MlsAutocompleteSearch extends Component {
   state = {
-    isOpen: false,
     isLoading: false,
+    isOpen: false,
+    isSearchingByQuery: false,
     places: [],
     listings: [],
     input: '',
@@ -68,6 +69,8 @@ class MlsAutocompleteSearch extends Component {
     this.props.dispatch(searchActions.setSearchInput(this.state.input))
   }
 
+  inputRef = React.createRef()
+
   handleChangeInput = e => {
     const input = e.target.value
 
@@ -78,6 +81,13 @@ class MlsAutocompleteSearch extends Component {
     if (e.keyCode === 13) {
       this.handleEnterKey()
     }
+  }
+
+  handleInputBlur = () => {
+    this.setState({
+      isLoading: false,
+      isOpen: false
+    })
   }
 
   onClear = () => {
@@ -170,7 +180,7 @@ class MlsAutocompleteSearch extends Component {
   }
 
   search = debounce(async input => {
-    if (input.length <= 3) {
+    if (input.length <= 3 || this.state.isSearchingByQuery) {
       return
     }
 
@@ -181,6 +191,11 @@ class MlsAutocompleteSearch extends Component {
         this.autocompleteAddress(input),
         searchListings(input, { limit: 5 })
       ])
+
+      // For cancel search after starting search by query
+      if (this.state.isSearchingByQuery) {
+        return
+      }
 
       this.setState({
         isLoading: false,
@@ -238,16 +253,13 @@ class MlsAutocompleteSearch extends Component {
   }
 
   handleEnterKey = async () => {
+    this.inputRef.current.blur()
+
     const { dispatch } = this.props
 
-    try {
-      this.setState({
-        isLoading: false,
-        isOpen: false,
-        listings: [],
-        places: []
-      })
+    this.setState({ isSearchingByQuery: true })
 
+    try {
       batchActions([
         dispatch(resetAreasOptions()),
         this.disableDrawing(),
@@ -255,6 +267,8 @@ class MlsAutocompleteSearch extends Component {
       ])
 
       await dispatch(getListingsByQuery(this.state.input, { limit: 200 }))
+
+      this.setState({ isSearchingByQuery: false })
     } catch (error) {
       console.log(error)
     }
@@ -295,10 +309,12 @@ class MlsAutocompleteSearch extends Component {
             return (
               <div>
                 <Input
+                  ref={this.inputRef}
                   value={this.state.input}
                   onChange={this.handleChangeInput}
                   onKeyDown={this.handleKeyDownInput}
                   onFocus={this.handleInputFocus}
+                  onBlur={this.handleInputBlur}
                   placeholder="Search location or MLS#"
                 />
                 {isOpen && (
