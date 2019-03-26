@@ -26,14 +26,13 @@ class FormRoles extends React.PureComponent {
             ]
 
             const text =
-              typeof formValue === 'string'
-                ? formValue
-                : getRolesText(
-                    this.props.dealsRoles,
-                    this.props.deal,
-                    roleName,
-                    annotationContext
-                  )
+              formValue ||
+              getRolesText(
+                this.props.dealsRoles,
+                this.props.deal,
+                roleName,
+                annotationContext
+              )
 
             return (
               <ContextAnnotation
