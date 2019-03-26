@@ -1,6 +1,8 @@
+import { INACTIVE_DRAWING } from '../../../constants/listings/map'
+
 import {
-  SEARCH_BY_QUERY,
   RESET_SEARCH_TYPE,
+  SEARCH_BY_QUERY,
   SEARCH_BY_MAP_BOUNDS,
   SEARCH_BY_MLS_NUMBER,
   SEARCH_BY_POSTAL_CODE,
@@ -10,6 +12,7 @@ import {
 
 const type = (state = 'by_map_bounds', action) => {
   switch (action.type) {
+    case INACTIVE_DRAWING:
     case RESET_SEARCH_TYPE:
     case SEARCH_BY_MAP_BOUNDS:
       return 'by_map_bounds'
