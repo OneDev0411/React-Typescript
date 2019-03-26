@@ -93,7 +93,7 @@ export default normalizeConditions([
       },
       ...sharedActions,
       [EMAIL_BUTTON]: {},
-      [VOID_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
@@ -114,6 +114,7 @@ export default normalizeConditions([
       ...sharedActions,
       [EMAIL_BUTTON]: {},
       [VOID_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
@@ -153,6 +154,7 @@ export default normalizeConditions([
       },
       ...sharedActions,
       [VIEW_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {}
@@ -268,6 +270,7 @@ export default normalizeConditions([
       ...sharedActions,
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
@@ -308,6 +311,7 @@ export default normalizeConditions([
       [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
@@ -331,6 +335,7 @@ export default normalizeConditions([
       [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
@@ -369,6 +374,7 @@ export default normalizeConditions([
       },
       ...sharedActions,
       [TASK_NOTIFICATION_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
@@ -433,6 +439,7 @@ export default normalizeConditions([
       [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
@@ -472,6 +479,7 @@ export default normalizeConditions([
       ...sharedActions,
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
