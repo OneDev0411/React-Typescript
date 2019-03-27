@@ -1,6 +1,9 @@
 import { getField } from '../get-field'
-import { getStatusField } from '../../dynamic-context'
 
 export function getStatus(deal) {
-  return deal.deleted_at ? 'Archived' : getField(deal, getStatusField(deal))
+  if (deal.deleted_at) {
+    return 'Archived'
+  }
+
+  return getField(deal, 'contract_status') || getField(deal, 'listing_status')
 }
