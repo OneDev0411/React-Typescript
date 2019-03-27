@@ -113,11 +113,11 @@ export function TextEditor(props) {
 
         <Separator />
 
-        <BlockquoteButton>
+        {/* <BlockquoteButton>
           <IconButton isBlockButton>
             <IconQuote />
           </IconButton>
-        </BlockquoteButton>
+        </BlockquoteButton> */}
       </Toolbar>
 
       <div
