@@ -62,17 +62,17 @@ export function TextEditor(props) {
           </IconButton>
         </BoldButton>
 
-        <UnderlineButton>
+        <ItalicButton>
           <IconButton>
             <IconItalic />
           </IconButton>
-        </UnderlineButton>
+        </ItalicButton>
 
-        <ItalicButton>
+        <UnderlineButton>
           <IconButton>
             <IconUnderline />
           </IconButton>
-        </ItalicButton>
+        </UnderlineButton>
 
         <Separator />
 
