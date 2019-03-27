@@ -12,7 +12,7 @@ export function TextButton(props) {
         color: props.isActive ? primary : '#262626'
       }}
     >
-      {props.label}
+      {props.title}
     </Button>
   )
 }

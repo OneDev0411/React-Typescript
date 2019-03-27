@@ -30,7 +30,7 @@ export default function HeadingButtons(props) {
         return (
           <div key={index} {...props}>
             <Component>
-              <TextButton label={label} />
+              <TextButton title={label} />
             </Component>
           </div>
         )
