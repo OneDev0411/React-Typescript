@@ -40,6 +40,7 @@ class EmailCompose extends React.Component {
       fromId: this.props.from.id,
       from: `${this.props.from.display_name} <${this.props.from.email}>`,
       recipients: this.props.recipients,
+      subject: '',
       body: this.props.hasStaticBody ? '' : this.props.body,
       attachments: this.initialAttachments
     }
