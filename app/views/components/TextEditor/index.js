@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useCallback } from 'react'
+import React, { Fragment, useState, useCallback, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { EditorState } from 'draft-js'
 import Editor from 'draft-js-plugins-editor'
@@ -36,6 +36,7 @@ const {
 } = richButtonsPlugin
 
 export function TextEditor(props) {
+  const editorRef = useRef()
   const [editorState, setEditorState] = useState(
     EditorState.createWithContent(stateFromHTML(props.defaultValue))
   )
@@ -119,14 +120,22 @@ export function TextEditor(props) {
         </BlockquoteButton>
       </Toolbar>
 
-      <Editor
-        spellCheck
-        editorState={editorState}
-        onChange={handleTextChange}
-        plugins={[richButtonsPlugin, ...props.plugins]}
-        placeholder={props.placeholder}
-        {...props.settings}
-      />
+      <div
+        onClick={() => editorRef.current.focus()}
+        style={{
+          minHeight: '10rem'
+        }}
+      >
+        <Editor
+          spellCheck
+          editorState={editorState}
+          onChange={handleTextChange}
+          plugins={[richButtonsPlugin, ...props.plugins]}
+          placeholder={props.placeholder}
+          ref={editorRef}
+          {...props.settings}
+        />
+      </div>
 
       {props.meta && props.meta.error && props.meta.touched && (
         <InputError style={{ marginTop: '0.5rem' }}>
