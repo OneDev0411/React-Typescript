@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { Fragment, useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { EditorState } from 'draft-js'
 import Editor from 'draft-js-plugins-editor'
@@ -16,12 +16,10 @@ import IconNumberedList from '../SvgIcons/NumberedList/IconNumberedList'
 import IconQuote from '../SvgIcons/Quote/IconQuote'
 
 import { Toolbar, Separator } from './styled'
-import {
-  CustomButton,
-  CustomBlockButton,
-  CustomHButton,
-  TextSizeButton
-} from './CutstomButtons'
+// import { CustomHButton, TextSizeButton } from './CutstomButtons'
+
+import IconButton from './Buttons/IconButton'
+import HeadingButton from './Buttons/HeadingButton'
 
 const richButtonsPlugin = createRichButtonsPlugin()
 
@@ -42,7 +40,6 @@ export function TextEditor(props) {
   const [editorState, setEditorState] = useState(
     EditorState.createWithContent(stateFromHTML(props.defaultValue))
   )
-  const [isOpen, setOpen] = useState(false)
 
   const handleTextChange = useCallback(newState => {
     if (!newState) {
@@ -57,33 +54,64 @@ export function TextEditor(props) {
   })
 
   return (
-    <div>
+    <Fragment>
       <Toolbar>
         <BoldButton>
-          <CustomButton iconComponent={<IconBold />} />
+          <IconButton>
+            <IconBold />
+          </IconButton>
         </BoldButton>
 
         <UnderlineButton>
-          <CustomButton iconComponent={<IconUnderline />} />
+          <IconButton>
+            <IconItalic />
+          </IconButton>
         </UnderlineButton>
 
         <ItalicButton>
-          <CustomButton iconComponent={<IconItalic />} />
+          <IconButton>
+            <IconUnderline />
+          </IconButton>
         </ItalicButton>
 
         <Separator />
 
         <ULButton>
-          <CustomBlockButton iconComponent={<IconList color="#333" />} />
+          <IconButton isBlockButton>
+            <IconList />
+          </IconButton>
         </ULButton>
 
         <OLButton>
-          <CustomBlockButton iconComponent={<IconNumberedList />} />
+          <IconButton isBlockButton>
+            <IconNumberedList />
+          </IconButton>
         </OLButton>
 
         <Separator />
 
-        <TextSizeButton isOpen={isOpen} setOpen={setOpen}>
+        <HeadingButton
+          options={[
+            {
+              title: 'Small',
+              component: H6Button
+            },
+            {
+              title: 'Medium',
+              component: H4Button
+            },
+            {
+              title: 'Large',
+              component: H3Button
+            },
+            {
+              title: 'Huge',
+              component: H1Button
+            }
+          ]}
+        />
+
+        {/* <TextSizeButton isOpen={isOpen} setOpen={setOpen}>
           <H6Button>
             <CustomHButton title="Small" isOpen={isOpen} setOpen={setOpen} />
           </H6Button>
@@ -96,12 +124,14 @@ export function TextEditor(props) {
           <H1Button>
             <CustomHButton title="Huge" isOpen={isOpen} setOpen={setOpen} />
           </H1Button>
-        </TextSizeButton>
+        </TextSizeButton> */}
 
         <Separator />
 
         <BlockquoteButton>
-          <CustomBlockButton iconComponent={<IconQuote />} />
+          <IconButton isBlockButton>
+            <IconQuote />
+          </IconButton>
         </BlockquoteButton>
       </Toolbar>
 
@@ -119,7 +149,7 @@ export function TextEditor(props) {
           {props.meta.error}
         </InputError>
       )}
-    </div>
+    </Fragment>
   )
 }
 

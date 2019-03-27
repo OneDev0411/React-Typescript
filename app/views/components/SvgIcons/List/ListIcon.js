@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 
 const width = '24'
 const height = '24'
-const viewBox = '0 0 24 24'
+const viewBox = '0 0 16 16'
 
 const getDimensionsCss = () => css`
   width: ${width}px;
@@ -19,7 +19,7 @@ function ListIcon(props) {
 
   return (
     <Image viewBox={viewBox}>
-      <g fill={color} fillRule="evenodd" transform="translate(4 5)" key="key-0">
+      <g fill={color} fillRule="evenodd" key="key-0">
         <ellipse cx="1.667" cy="1.908" rx="1.667" ry="1.591" />
         <path d="M5.667 2.545h9.666c.369 0 .667-.284.667-.636 0-.351-.298-.636-.667-.636H5.667c-.369 0-.667.285-.667.636 0 .352.298.636.667.636z" />
         <ellipse cx="1.667" cy="6.999" rx="1.667" ry="1.591" />
