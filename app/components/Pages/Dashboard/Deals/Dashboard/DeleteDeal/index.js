@@ -6,6 +6,7 @@ import { addNotification as notify } from 'reapop'
 import { getDealChecklists } from 'reducers/deals/checklists'
 import { deleteDeal } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
+import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
 
 import ActionButton from 'components/Button/ActionButton'
 
@@ -42,13 +43,7 @@ class DeleteDeal extends React.Component {
   }
 
   handleSendRequest = () => {
-    let checklist = this.props.checklists[0]
-
-    if (this.props.deal.deal_type === 'Selling') {
-      checklist = this.props.checklists.find(
-        checklist => checklist.checklist_type === 'Selling'
-      )
-    }
+    const checklist = getActiveChecklist(this.props.deal, this.props.checklists)
 
     createAdminRequestTask({
       checklist,
