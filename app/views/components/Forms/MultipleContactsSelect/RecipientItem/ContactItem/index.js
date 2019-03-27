@@ -19,10 +19,15 @@ export default class RecipientItem extends React.Component {
     isMenuOpen: false
   }
 
-  toggleOpenMenu = () =>
+  toggleOpenMenu = () => {
+    if (Array.isArray(this.props.recipient.emails) === false) {
+      return false
+    }
+
     this.setState(state => ({
       isMenuOpen: !state.isMenuOpen
     }))
+  }
 
   handleChangeEmail = email => {
     const { input, recipient } = this.props
@@ -32,8 +37,8 @@ export default class RecipientItem extends React.Component {
       email
     }
 
-    const recipients = input.value.map(
-      item => (item.email === recipient.email ? nextRecipient : item)
+    const recipients = input.value.map(item =>
+      item.email === recipient.email ? nextRecipient : item
     )
 
     input.onChange(recipients)
@@ -87,16 +92,14 @@ export default class RecipientItem extends React.Component {
             <div>
               {isOpen && (
                 <EmailsList>
-                  {recipient.emails
-                    .filter(email => email !== recipient.email)
-                    .map((email, index) => (
-                      <EmailItem
-                        key={index}
-                        onClick={() => this.handleChangeEmail(email)}
-                      >
-                        {email}
-                      </EmailItem>
-                    ))}
+                  {this.props.recipient.emails.map((email, index) => (
+                    <EmailItem
+                      key={index}
+                      onClick={() => this.handleChangeEmail(email)}
+                    >
+                      {email}
+                    </EmailItem>
+                  ))}
                 </EmailsList>
               )}
             </div>

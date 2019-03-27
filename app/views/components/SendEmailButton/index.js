@@ -23,6 +23,7 @@ function SendEmailButton(props) {
         <EmailCompose
           isOpen
           defaultAttachments={[]}
+          recipients={props.recipients}
           from={props.user}
           deal={props.deal}
           onClose={toggleOpenDrawer}
@@ -40,12 +41,14 @@ function mapStateToProps({ user }) {
 
 SendEmailButton.propTypes = {
   deal: PropTypes.object,
-  defaultAttachments: PropTypes.array
+  defaultAttachments: PropTypes.array,
+  recipients: PropTypes.array
 }
 
 SendEmailButton.defaultProps = {
   deal: null,
-  defaultAttachments: []
+  defaultAttachments: [],
+  recipients: []
 }
 
 export default connect(mapStateToProps)(SendEmailButton)
