@@ -5,7 +5,7 @@ import IconTextSize from 'components/SvgIcons/TextSize/IconTextSize'
 
 import { TextButton } from './TextButton'
 
-export default function HeadingButton(props) {
+export default function HeadingButtons(props) {
   return (
     <BasicDropdown
       items={props.options.map(item => ({

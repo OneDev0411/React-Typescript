@@ -16,10 +16,9 @@ import IconNumberedList from '../SvgIcons/NumberedList/IconNumberedList'
 import IconQuote from '../SvgIcons/Quote/IconQuote'
 
 import { Toolbar, Separator } from './styled'
-// import { CustomHButton, TextSizeButton } from './CutstomButtons'
 
-import IconButton from './Buttons/IconButton'
-import HeadingButton from './Buttons/HeadingButton'
+import IconButton from './buttons/IconButton'
+import HeadingButtons from './buttons/HeadingButtons'
 
 const richButtonsPlugin = createRichButtonsPlugin()
 
@@ -90,7 +89,7 @@ export function TextEditor(props) {
 
         <Separator />
 
-        <HeadingButton
+        <HeadingButtons
           options={[
             {
               title: 'Small',
@@ -110,21 +109,6 @@ export function TextEditor(props) {
             }
           ]}
         />
-
-        {/* <TextSizeButton isOpen={isOpen} setOpen={setOpen}>
-          <H6Button>
-            <CustomHButton title="Small" isOpen={isOpen} setOpen={setOpen} />
-          </H6Button>
-          <H4Button>
-            <CustomHButton title="Medium" isOpen={isOpen} setOpen={setOpen} />
-          </H4Button>
-          <H3Button>
-            <CustomHButton title="Large" isOpen={isOpen} setOpen={setOpen} />
-          </H3Button>
-          <H1Button>
-            <CustomHButton title="Huge" isOpen={isOpen} setOpen={setOpen} />
-          </H1Button>
-        </TextSizeButton> */}
 
         <Separator />
 
