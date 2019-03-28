@@ -41,7 +41,7 @@ export default function Footer({
               style={{ width: '14px', height: '14px' }}
             />
             <Slider
-              min={0.5}
+              min={1}
               max={2}
               step={0.01}
               defaultValue={scale}
