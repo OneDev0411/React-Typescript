@@ -1,7 +1,7 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
 
-import { Menu } from './Menu'
+import Menu from './Menu'
 import { Catalog } from './Catalog'
 
 export function Header(props) {

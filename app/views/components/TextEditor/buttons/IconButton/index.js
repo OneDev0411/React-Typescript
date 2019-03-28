@@ -3,8 +3,8 @@ import React from 'react'
 import { IconButton } from './styled'
 
 export default function Button(props) {
-  const onClick = () =>
-    props.isBlockButton ? props.toggleBlockType() : props.toggleInlineStyle()
+  const onClick = e =>
+    props.isBlockButton ? props.toggleBlockType(e) : props.toggleInlineStyle(e)
 
   return (
     <IconButton onClick={onClick} isFit {...props}>

@@ -24,13 +24,13 @@ export default function HeadingButtons(props) {
           <IconTextSize />
         </div>
       )}
-      itemRenderer={props => {
+      itemRenderer={(props, index) => {
         const { Component, label } = props.item
 
         return (
-          <div {...props}>
+          <div key={index} {...props}>
             <Component>
-              <TextButton label={label} />
+              <TextButton title={label} />
             </Component>
           </div>
         )

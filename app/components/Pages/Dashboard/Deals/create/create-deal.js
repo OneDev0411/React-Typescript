@@ -74,6 +74,10 @@ class CreateDeal extends React.Component {
   initializeDeal = async () => {
     const { deal } = this.props
 
+    if (!deal.checklists) {
+      return browserHistory.push(`/dashboard/deals/${deal.id}`)
+    }
+
     const enderType = Deal.get.field(deal, 'ender_type') || -1
 
     const dealAddress = this.generateAddressFromDeal(deal)
