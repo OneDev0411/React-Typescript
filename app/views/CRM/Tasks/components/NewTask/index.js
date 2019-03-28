@@ -78,7 +78,7 @@ export default class Task extends Component {
 
             const submitting = props.submitting || props.validating
             const isActive =
-              values.title ||
+              (typeof values.title === 'string' && values.title.trim()) ||
               (defaultAssociation
                 ? values.associations.length > 1
                 : values.associations.length > 0)
