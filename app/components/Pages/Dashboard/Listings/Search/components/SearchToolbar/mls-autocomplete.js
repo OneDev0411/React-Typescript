@@ -12,7 +12,7 @@ import { searchListings } from 'models/listings/search/search-listings'
 
 import { getBounds } from 'utils/map'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
-import { getListingAddressObj, getListingAddress } from 'utils/listing'
+import { getListingAddress } from 'utils/listing'
 
 import {
   reset as resetSearchType,
@@ -178,7 +178,7 @@ class MlsAutocompleteSearch extends Component {
         places,
         listings: listings.data.slice(0, 5).map(l => ({
           ...l,
-          description: getListingAddress(getListingAddressObj(l))
+          description: getListingAddress(l)
         }))
       })
     } catch (error) {
