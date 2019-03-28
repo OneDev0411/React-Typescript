@@ -1,4 +1,4 @@
-export * from './date'
-export * from './email'
-export * from './number'
-export * from './phone-number'
+export { isValidDate } from './date-field'
+export { isEmail } from './email'
+export { isNumber } from './number'
+export { isPhoneNumber } from './phone-number'

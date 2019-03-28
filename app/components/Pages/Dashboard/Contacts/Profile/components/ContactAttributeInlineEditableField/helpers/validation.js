@@ -1,12 +1,12 @@
 import {
   isEmail,
-  isFormatedDate,
+  isValidDate,
   isPhoneNumber,
   isNumber
 } from 'utils/validations'
 
 const validators = {
-  date: isFormatedDate,
+  date: isValidDate,
   email: isEmail,
   number: isNumber,
   phone_number: isPhoneNumber
