@@ -1,4 +1,8 @@
-export function isValidDate(values, isYearOptional = true) {
+export function isValidDate(
+  values,
+  isYearOptional = true,
+  validateYear = year => /(?:(?:18|19|20)[0-9]{2})/.test(year)
+) {
   const { day, month, year } = values
 
   if (day.value == null || month.value == null) {
@@ -10,7 +14,7 @@ export function isValidDate(values, isYearOptional = true) {
     return 'Year is required!'
   }
 
-  if (year && !/(?:(?:18|20)[0-9]{2})/.test(year)) {
+  if (year && !validateYear(Number(year))) {
     return 'Year is invalid!'
   }
 }
