@@ -36,7 +36,13 @@ export class DateField extends React.Component {
     year: ''
   }
 
-  onChangeYear = e => this.props.onChangeYear(e.target.value)
+  onChangeYear = event => {
+    const { value } = event.target
+
+    if (!value || /^\d+$/.test(value)) {
+      this.props.onChangeYear(value)
+    }
+  }
 
   render() {
     const { props } = this
