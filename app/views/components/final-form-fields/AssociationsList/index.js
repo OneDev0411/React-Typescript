@@ -24,11 +24,11 @@ class List extends React.Component {
     }
   }
 
-  isRemovable = association => {
+  isDefaultAssociation = association => {
     const { defaultAssociation } = this.props
 
     if (!defaultAssociation) {
-      return true
+      return false
     }
 
     const { association_type } = defaultAssociation
@@ -37,28 +37,34 @@ class List extends React.Component {
       !association_type ||
       association_type !== association.association_type
     ) {
-      return true
+      return false
     }
 
     const { id: associationId } = association[association_type]
     const { id: defaultAssociationId } = defaultAssociation[association_type]
 
     if (
-      defaultAssociationId &&
       associationId &&
+      defaultAssociationId &&
       defaultAssociationId === associationId
     ) {
-      return false
+      return true
     }
 
-    return true
+    return false
   }
 
   render() {
     return (
       <Flex wrap>
         {this.props.associations.map((association, index) => {
-          if (!association || !association.association_type) {
+          const isDefaultAssociation = this.isDefaultAssociation(association)
+
+          if (
+            !association ||
+            !association.association_type ||
+            isDefaultAssociation
+          ) {
             return null
           }
 
@@ -67,7 +73,7 @@ class List extends React.Component {
               association={association}
               key={`association_${index}`}
               handleRemove={this.removeHandler}
-              isRemovable={this.isRemovable(association)}
+              isRemovable={!isDefaultAssociation}
             />
           )
         })}
