@@ -20,7 +20,7 @@ export async function preSaveFormat(values, originalValues) {
   const dueDateTimestamp = dueDate.getTime()
 
   const task = {
-    title,
+    title: title.trim(),
     due_date: dueDateTimestamp / 1000,
     task_type: task_type.value,
     assignees: assignees.map(a => a.id),
@@ -29,7 +29,7 @@ export async function preSaveFormat(values, originalValues) {
   }
 
   if ((originalValues && originalValues.id) || description) {
-    task.description = description || ''
+    task.description = (description && description.trim()) || ''
   }
 
   if (task.status === 'DONE') {

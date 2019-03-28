@@ -7,10 +7,7 @@ import {
   DropdownButton,
   DropdownArrowIcon
 } from 'components/inline-editable-fields/styled'
-import {
-  getDateValues,
-  parseDateValues
-} from 'components/inline-editable-fields/InlineDateField/helpers'
+import { getDateValues } from 'components/inline-editable-fields/InlineDateField/helpers'
 
 export class DateField extends React.Component {
   static propTypes = {
@@ -24,7 +21,7 @@ export class DateField extends React.Component {
 
   state = getDateValues(this.props.value)
 
-  onChange = () => this.props.onChange(parseDateValues(this.state))
+  onChange = () => this.props.onChange(this.state)
 
   onChangeDay = day => this.setState({ day }, this.onChange)
 

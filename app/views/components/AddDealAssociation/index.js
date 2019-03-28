@@ -30,12 +30,14 @@ export class AddDealAssociation extends React.Component {
             <Tooltip id={`tooltip_${title}`} caption={title}>
               {this.props.buttonRenderer(handleOpen)}
             </Tooltip>
-            <SearchDealDrawer
-              title={title}
-              isOpen={isActive}
-              onClose={handleClose}
-              onSelect={deal => this.onSelectHandler(deal, handleClose)}
-            />
+            {isActive && (
+              <SearchDealDrawer
+                title={title}
+                isOpen={isActive}
+                onClose={handleClose}
+                onSelect={deal => this.onSelectHandler(deal, handleClose)}
+              />
+            )}
           </div>
         )}
       />

@@ -20,12 +20,7 @@ const defaultProps = {
 
 function SearchDealDrawer(props) {
   return (
-    <Drawer
-      isOpen={props.isOpen}
-      onClose={props.onClose}
-      showBackdrop={props.showBackdrop}
-      showFooter={false}
-    >
+    <Drawer isOpen={props.isOpen} onClose={props.onClose} showFooter={false}>
       <Drawer.Header title={props.title} />
       <Drawer.Body>
         <Body
