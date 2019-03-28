@@ -177,12 +177,13 @@ export default class Task extends Component {
                 {this.state.formValues && (
                   <EventDrawer
                     isOpen
-                    user={this.props.user}
+                    defaultAssociation={defaultAssociation}
                     initialValues={this.state.formValues}
                     onClose={this.handleDrawerClose}
                     submitCallback={newEvent =>
                       this.handleDrawerClose(props, newEvent)
                     }
+                    user={this.props.user}
                   />
                 )}
               </React.Fragment>
