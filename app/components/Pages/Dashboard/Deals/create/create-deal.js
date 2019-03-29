@@ -359,7 +359,8 @@ class CreateDeal extends React.Component {
         validator: () => dealPropertyType.length > 0
       },
       status: {
-        validator: () => this.StatusList.includes(dealStatus)
+        validator: () =>
+          dealSide === 'Buying' ? this.StatusList.includes(dealStatus) : true
       },
       address: {
         validator: () => dealAddress !== null
