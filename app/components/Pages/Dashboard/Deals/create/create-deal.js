@@ -314,6 +314,25 @@ class CreateDeal extends React.Component {
     return getActiveTeamId(this.props.user)
   }
 
+  get StatusList() {
+    if (this.state.dealSide === 'Selling') {
+      const isLeaseOrCommercial =
+        this.state.dealPropertyType.includes('Commercial') ||
+        this.state.dealPropertyType.includes('Lease')
+
+      return isLeaseOrCommercial ? [] : ['Coming Soon', 'Active']
+    }
+
+    return this.state.dealPropertyType.includes('Lease')
+      ? ['Active', 'Lease Contract']
+      : [
+          'Active Contingent',
+          'Active Kick Out',
+          'Active Option Contract',
+          'Pending'
+        ]
+  }
+
   /**
    * returns list of validators
    */
@@ -340,7 +359,7 @@ class CreateDeal extends React.Component {
         validator: () => dealPropertyType.length > 0
       },
       status: {
-        validator: () => (dealSide === 'Buying' ? dealStatus.length > 0 : true)
+        validator: () => this.StatusList.includes(dealStatus)
       },
       address: {
         validator: () => dealAddress !== null
@@ -979,8 +998,8 @@ class CreateDeal extends React.Component {
                       <DealStatus
                         isRequired={requiredFields.includes('status')}
                         hasError={this.hasError('status')}
-                        property_type={dealPropertyType}
                         dealStatus={dealStatus}
+                        statuses={this.StatusList}
                         onChangeDealStatus={this.changeDealStatus}
                       />
                     )}
