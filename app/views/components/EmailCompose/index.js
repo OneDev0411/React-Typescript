@@ -98,19 +98,19 @@ class EmailCompose extends React.Component {
         status: 'success',
         message: 'The email has been sent'
       })
+
+      this.props.onClose()
     } catch (e) {
       console.log(e)
+
+      this.props.notify({
+        status: 'error',
+        message: 'Could not send the email. try again.'
+      })
     } finally {
       this.setState({
         isSendingEmail: false
       })
-
-      this.props.notify({
-        status: 'error',
-        message: 'Could not send the email. please try again.'
-      })
-
-      this.props.onClose()
     }
   }
 
