@@ -96,6 +96,7 @@ export default normalizeConditions([
       [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {},
+      [VOID_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },

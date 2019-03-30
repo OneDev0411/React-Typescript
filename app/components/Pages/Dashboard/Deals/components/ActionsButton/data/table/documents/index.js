@@ -149,6 +149,7 @@ export default normalizeConditions([
       [EDIT_BUTTON]: {}
     }
   },
+
   {
     conditions: data =>
       evaluateCondition(data, {
