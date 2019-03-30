@@ -452,6 +452,17 @@ class CreateOffer extends React.Component {
     }
   }
 
+  get StatusList() {
+    return this.props.deal.property_type.includes('Lease')
+      ? ['Active', 'Lease Contract']
+      : [
+          'Active Contingent',
+          'Active Kick Out',
+          'Active Option Contract',
+          'Pending'
+        ]
+  }
+
   render() {
     const {
       saving,
@@ -552,7 +563,7 @@ class CreateOffer extends React.Component {
               <DealStatus
                 isRequired={requiredFields.includes('deal_status')}
                 hasError={this.hasError('deal_status')}
-                property_type={deal.property_type}
+                statuses={this.StatusList}
                 dealStatus={dealStatus}
                 onChangeDealStatus={status => this.changeDealStatus(status)}
               />
