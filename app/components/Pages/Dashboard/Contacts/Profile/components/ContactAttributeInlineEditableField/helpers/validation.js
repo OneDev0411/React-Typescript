@@ -5,10 +5,10 @@ import {
   isNumber
 } from 'utils/validations'
 
+import { validateYear } from './validate-year'
+
 const validators = {
-  date: isValidDate,
   email: isEmail,
-  number: isNumber,
   phone_number: isPhoneNumber
 }
 
@@ -22,11 +22,11 @@ export function validation(attribute_def, value) {
   }
 
   if (attribute_def.data_type === 'date') {
-    return validators.date(value)
+    return isValidDate(value, true, validateYear)
   }
 
   if (attribute_def.data_type === 'number') {
-    return validators.number(value)
+    return isNumber(value)
   }
 
   if (validators[attribute_def.name]) {

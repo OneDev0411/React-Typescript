@@ -12,6 +12,10 @@ export function normalizeContact(contact, attributeDefs, options = {}) {
     selectDefinitionByName(attributeDefs, 'email')
   )
 
+  if (emails.length === 0) {
+    return []
+  }
+
   return [
     {
       data_type: 'contact',

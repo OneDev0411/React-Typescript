@@ -85,30 +85,19 @@ export const normalizeListing = listing => {
     return null
   }
 
-  const { id, property } = listing
-
-  let title = ''
-  let location = listing.location || property.address.location
-
-  if (listing.type === 'listing') {
-    title = property.address.full_address || getListingAddress(property.address)
-  } else {
-    title = getListingAddress(listing.address)
-  }
-
   return {
-    id,
-    title,
     avatar: {
       image: listing.cover_image_url,
       size: 32,
       placeHolderImage: '/static/icons/listing-place-holder.svg'
     },
-    location,
+    details: getListingAddress(listing),
+    id: listing.id,
+    location: listing.location || listing.property.address.location,
+    original: listing,
+    title: `Listing - ${listing.status}, $${listing.price.toLocaleString()}`,
     type: 'listing',
-    url: `/dashboard/mls/${id}`,
-    details: detailText([listing.status, `$${listing.price.toLocaleString()}`]),
-    original: listing
+    url: `/dashboard/mls/${listing.id}`
   }
 }
 
@@ -122,21 +111,17 @@ export const normalizeDeal = deal => {
     return null
   }
 
-  const { id, type, deal_type, property_type } = deal
-  const image = getDealfield(deal, 'photo')
-  const title = getDealAddress(deal)
-
   return {
-    id,
-    type,
-    title,
     avatar: {
-      image,
+      image: getDealfield(deal, 'photo'),
       size: 32,
       placeHolderImage: '/static/icons/associated-deals-place-holder.svg'
     },
-    url: `/dashboard/deals/${id}`,
-    details: detailText([deal_type, property_type])
+    details: getDealAddress(deal),
+    id: deal.id,
+    title: `Deal - ${deal.deal_type}, ${deal.property_type}`,
+    type: deal.type,
+    url: `/dashboard/deals/${deal.id}`
   }
 }
 

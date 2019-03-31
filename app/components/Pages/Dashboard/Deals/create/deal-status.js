@@ -18,38 +18,14 @@ const LabelBox = styled.span`
   margin: 0 8px 0 9px;
   background: ${({ name }) => getStatusColorClass(name)};
 `
-
-function getStatusList(dealSide, propertyType) {
-  if (dealSide === 'Selling') {
-    const isLeaseOrCommercial =
-      propertyType.includes('Commercial') || propertyType.includes('Lease')
-
-    return isLeaseOrCommercial ? [] : ['Coming Soon', 'Active']
-  }
-
-  return propertyType.includes('Lease')
-    ? ['Lease Contract']
-    : [
-        'Active Contingent',
-        'Active Kick Out',
-        'Active Option Contract',
-        'Pending'
-      ]
-}
-
-export default props => {
-  const {
-    isRequired,
-    hasError,
-    dealSide,
-    propertyType,
-    dealStatus,
-    onChangeDealStatus
-  } = props
-
-  const statuses = getStatusList(dealSide, propertyType)
-
-  if (statuses.length === 0) {
+export default ({
+  isRequired,
+  hasError,
+  dealStatus,
+  statuses,
+  onChangeDealStatus
+}) => {
+  if (Array.isArray(statuses) === false) {
     return false
   }
 

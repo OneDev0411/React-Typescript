@@ -20,7 +20,7 @@ export async function preSaveFormat(values) {
     due_date: dueDateTimestamp / 1000,
     status: 'DONE',
     task_type: task_type.value,
-    title
+    title: title.trim()
   }
 
   if (
