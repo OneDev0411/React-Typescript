@@ -36,7 +36,8 @@ const INITIAL_VALUES = {
   priceZeroCleaner: false,
   minimum_bedrooms: 'any',
   minimum_bathrooms: 'any',
-  minimum_parking_spaces: 'any'
+  minimum_parking_spaces: 'any',
+  master_bedroom_in_first_floor: 'NO'
 }
 
 const Filters = ({
@@ -152,6 +153,14 @@ const Filters = ({
                 { title: 'Yes', value: 'YES' },
                 { title: 'No', value: 'NO' },
                 { title: 'Either', value: 'either' }
+              ]}
+            />
+            <GroupRadios
+              label="Master Bedroom on Main"
+              name="master_bedroom_in_first_floor"
+              fields={[
+                { title: 'Yes', value: 'YES' },
+                { title: 'No', value: 'NO' }
               ]}
             />
             <YearBuilt />
