@@ -7,6 +7,13 @@ import Webpackbar from 'webpackbar'
 import appConfig from '../config/webpack'
 import webpackConfig from './base'
 
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
+
+import UnusedFilesWebpackPlugin from 'unused-files-webpack-plugin'
+
+
+webpackConfig.mode = 'development'
+
 const postcss = function postcss() {
   return [
     require('postcss-cssnext')({
@@ -20,20 +27,29 @@ const postcss = function postcss() {
 }
 
 webpackConfig.entry = [
-  'babel-polyfill',
-  'react-hot-loader/patch',
-  'webpack-hot-middleware/client',
   appConfig.compile.entry
 ]
 
 webpackConfig.plugins.push(
-  new webpack.HotModuleReplacementPlugin(),
+  new UnusedFilesWebpackPlugin({
+    patterns: ['app/**/*.*'],
+    globOptions: {
+      ignore: [
+        'app/static/**',
+        'app/views/components/SvgIcons/**',
+        'app/templates/**',
+        'app/styles/vendor/**'
+      ]
+    }
+  }),
+  new BundleAnalyzerPlugin({
+    analyzerMode: 'static',
+    openAnalyzer: false
+  }),
   new Webpackbar()
 )
 
-if (process.env.notify) {
-  webpackConfig.plugins.push(new WebpackNotifierPlugin({ alwaysNotify: true }))
-}
+webpackConfig.plugins.push(new WebpackNotifierPlugin({ alwaysNotify: true }))
 
 webpackConfig.module.rules.push(
   {

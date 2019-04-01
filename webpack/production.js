@@ -1,17 +1,27 @@
 import webpack from 'webpack'
-import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
-import Visualizer from 'webpack-visualizer-plugin'
 import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
 import CompressionPlugin from 'compression-webpack-plugin'
-import ChangeExtensionPlugin from 'change-extension-plugin'
 import S3Plugin from 'webpack-s3-plugin'
-import UglifyJSPlugin from 'uglifyjs-webpack-plugin'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
+import TerserPlugin from 'terser-webpack-plugin'
 
 import moment from 'moment'
 
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
+
+import path from 'path'
+
+webpackConfig.mode = 'production'
+
+webpackConfig.optimization = {
+  splitChunks: {
+    chunks: 'all'
+  }
+}
+
 
 const Expires = moment()
   .utc()
@@ -20,13 +30,14 @@ const Expires = moment()
 
 function postcss() {
   return [
-    require('autoprefixer')({
-      browsers: ['> 1%', 'IE 10', 'Last 2 versions']
-    })
+    require('autoprefixer')()
   ]
 }
 
 webpackConfig.devtool = 'source-map'
+
+webpackConfig.output.pathinfo = false
+webpackConfig.output.publicPath = process.env.ASSETS_BASEURL
 
 webpackConfig.performance = {
   hints: 'warning',
@@ -35,33 +46,27 @@ webpackConfig.performance = {
 }
 
 webpackConfig.entry = {
-  app: ['babel-polyfill', appConfig.compile.entry],
+  app: [appConfig.compile.entry],
   vendor: appConfig.compile.vendors
 }
 
+webpackConfig.optimization.minimize = true
+
+webpackConfig.optimization.minimizer = [
+  new TerserPlugin({
+    cache: true,
+    parallel: true,
+    sourceMap: true
+  })
+]
+
 webpackConfig.plugins.push(
   new webpack.optimize.AggressiveMergingPlugin(),
-  new Visualizer({
-    filename: './statistics.html'
-  }),
-  new webpack.optimize.CommonsChunkPlugin({
-    name: 'vendor',
-    filename: appConfig.compile.jsVendorBundle
-  }),
-  new UglifyJSPlugin({
-    sourceMap: true,
-    parallel: true,
-    cache: true,
-    uglifyOptions: {
-      output: { comments: false }
-    }
-  }),
-  // reduce moment bundle size by removing unnecessary locales
   new MomentLocalesPlugin(),
-  new ExtractTextPlugin({
-    filename: appConfig.compile.cssBundle,
-    allChunks: true
+  new MiniCssExtractPlugin({
+    filename: '[name].[hash].css'
   }),
+  new OptimizeCSSAssetsPlugin(),
   new HtmlWebpackPlugin({
     template: appConfig.compile.template,
     hash: false,
@@ -71,17 +76,17 @@ webpackConfig.plugins.push(
       collapseWhitespace: false
     }
   }),
+
   new CompressionPlugin({
-    asset: '[path].gz[query]',
     algorithm: 'gzip',
-    test: /\.js$|\.css$/
+    test: /\.js$|\.css$/,
+    filename: '[path]'
   }),
-  new ChangeExtensionPlugin({
-    extensions: ['js']
-  }),
+
   new S3Plugin({
+    progress: false, // Messes the terminal up
     exclude: /.*\.html$/,
-    basePath: 'dist',
+    basePath: 'dist/',
     s3Options: {
       //     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
       //     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -91,7 +96,7 @@ webpackConfig.plugins.push(
       Bucket: process.env.ASSETS_BUCKET,
       Expires,
       ContentEncoding(fileName) {
-        if (/\.gz/.test(fileName)) {
+        if (/\.js|.css/.test(fileName)) {
           return 'gzip'
         }
       },
@@ -108,50 +113,23 @@ webpackConfig.plugins.push(
         return 'text/plain'
       }
     },
-    cdnizerOptions: {
-      defaultCDNBase: process.env.ASSETS_BASEURL
-    }
+    noCdnizer: true
   })
 )
 
-webpackConfig.module.rules.push(
-  {
-    test: /\.css/,
-    use: ExtractTextPlugin.extract({
-      fallback: 'style-loader',
-      use: [
-        {
-          loader: 'css-loader',
-          options: { minimize: true }
-        },
-        {
-          loader: 'postcss-loader',
-          options: {
-            plugins: postcss
-          }
-        }
-      ]
-    })
-  },
-  {
-    test: /\.scss/,
-    use: ExtractTextPlugin.extract({
-      fallback: 'style-loader',
-      use: [
-        {
-          loader: 'css-loader',
-          options: { minimize: true }
-        },
-        {
-          loader: 'postcss-loader',
-          options: {
-            plugins: postcss
-          }
-        },
-        { loader: 'sass-loader' }
-      ]
-    })
-  }
-)
+webpackConfig.module.rules.push({
+  test: /\.(sa|sc|c)ss$/,
+  use: [
+    MiniCssExtractPlugin.loader,
+    'css-loader',
+    {
+      loader: 'postcss-loader',
+      options: {
+        plugins: postcss
+      }
+    },
+    'sass-loader',
+  ],
+})
 
 export default webpackConfig
