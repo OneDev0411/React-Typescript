@@ -26,8 +26,6 @@ import {
 } from '../styled'
 
 export function MlsItem({ item, ...props }) {
-  const address = getListingAddressObj(item)
-
   const getStatus = () => {
     const { status, close_date } = item
 
@@ -39,6 +37,12 @@ export function MlsItem({ item, ...props }) {
     }
 
     return status
+  }
+
+  const address = getListingAddressObj(item)
+
+  if (!address) {
+    return false
   }
 
   return (
