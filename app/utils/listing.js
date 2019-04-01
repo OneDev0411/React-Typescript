@@ -123,6 +123,7 @@ export const getListingAddressObj = (listing) => {
 
   switch (listing.type) {
     case 'compact_listing':
+    case 'property':
       return listing.address
     case 'listing':
       return listing.property.address
