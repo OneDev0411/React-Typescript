@@ -131,8 +131,8 @@ class ContactsList extends React.Component {
   hasSearchState = () =>
     this.state.filter || this.state.searchInputValue || this.order
 
-  fetchList = async (start = 0) => {
-    if (start === 0) {
+  fetchList = async (start = 0, loadMoreBefore = false) => {
+    if (start === 0 && !loadMoreBefore) {
       this.resetSelectedRows()
     }
 
@@ -141,7 +141,8 @@ class ContactsList extends React.Component {
         await this.handleFilterChange({
           filters: this.state.filters,
           searchInputValue: this.state.searchInputValue,
-          start
+          start,
+          prependResult: loadMoreBefore
         })
       } else {
         this.addLoadedRange(start)
@@ -296,7 +297,7 @@ class ContactsList extends React.Component {
     this.setState({ isFetchingMoreContactsBefore: true })
 
     if (this.hasSearchState()) {
-      await this.fetchList(start)
+      await this.fetchList(start, true)
     } else {
       await this.handleFilterChange({
         filters: this.state.filters,
