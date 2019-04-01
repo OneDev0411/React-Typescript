@@ -8,7 +8,7 @@ import FilterButton from '../../../../../../views/components/Button/DropButton'
 import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
 
 import Filters from '../components/Filters'
-import SearchField from '../components/SearchToolbar/mls-autocomplete'
+import Autocomplete from '../components/Autocomplete'
 import { ViewSwitcher } from '../../components/ViewSwitcher'
 
 const Container = styled(Flex)`
@@ -39,7 +39,7 @@ export function Header(props) {
             isExpended={isSideMenuOpen}
           />
         )}
-        <SearchField activeView={activeView} />
+        <Autocomplete activeView={activeView} />
         <FilterButton
           style={{ marginLeft: '0.5em' }}
           onClick={onClickFilter}

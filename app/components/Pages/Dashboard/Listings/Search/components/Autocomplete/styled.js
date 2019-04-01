@@ -14,8 +14,8 @@ export const Input = styled.input`
   height: 3em;
   padding: 0.5em 2.75em 0.5em 2.5em;
   border-radius: 3px;
+  border: solid 1px ${grey.A400};
   background-color: ${props => (props.value ? '#fff' : grey.A125)};
-  border: solid 1px ${props => (props.value ? primary : grey.A400)};
 
   &:focus {
     outline: none;
