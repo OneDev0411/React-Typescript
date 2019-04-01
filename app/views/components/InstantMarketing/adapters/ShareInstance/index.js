@@ -131,11 +131,12 @@ class ShareInstance extends React.Component {
         {state.isComposeDrawerOpen && (
           <EmailCompose
             isOpen
-            from={props.user}
-            onClose={this.toggleComposeEmail}
-            html={props.instance.html}
-            onClickSend={this.handleSendEmails}
+            hasStaticBody
             isSubmitting={state.isSendingEmail}
+            from={props.user}
+            body={props.instance.html}
+            onClickSend={this.handleSendEmails}
+            onClose={this.toggleComposeEmail}
           />
         )}
 

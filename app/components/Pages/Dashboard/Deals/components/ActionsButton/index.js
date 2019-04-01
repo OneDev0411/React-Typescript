@@ -9,7 +9,10 @@ import _ from 'underscore'
 
 import {
   changeNeedsAttention,
+  changeTaskStatus,
+  setSelectedTask,
   voidEnvelope,
+  deleteTask,
   asyncDeleteFile
 } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
@@ -20,8 +23,12 @@ import Deal from 'models/Deal'
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 import Tooltip from 'components/tooltip'
+import TasksDrawer from 'components/SelectDealTasksDrawer'
+import EmailCompose from 'components/EmailCompose'
 
 import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
+
+import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 
 import { selectActions } from './helpers/select-actions'
 import { getEsignAttachments } from './helpers/get-esign-attachments'
@@ -36,7 +43,6 @@ import { SelectItemDrawer } from './components/SelectItemDrawer'
 
 import GetSignature from '../../Signature'
 import PdfSplitter from '../../PdfSplitter'
-import TasksDrawer from '../TasksDrawer'
 import UploadManager from '../../UploadManager'
 
 import {
@@ -56,6 +62,7 @@ class ActionsButton extends React.Component {
       isSignatureFormOpen: false,
       isPdfSplitterOpen: false,
       isTasksDrawerOpen: false,
+      isComposeEmailOpen: false,
       multipleItemsSelection: null
     }
 
@@ -63,13 +70,19 @@ class ActionsButton extends React.Component {
       upload: this.handleUpload,
       view: this.handleView,
       download: this.handleDownload,
-      delete: this.handleDelete,
+      comments: this.handleShowComments,
+      'send-email': this.handleToggleComposeEmail,
+      'delete-task': this.handleDeleteTask,
+      'delete-file': this.handleDeleteFile,
       'move-file': this.toggleMoveFile,
       'split-pdf': this.handleToggleSplitPdf,
       'review-envelope': this.handleReviewEnvelope,
       'get-signature': this.handleGetSignature,
       'edit-form': this.handleEditForm,
-      'notify-office': this.handleNotifyOffice,
+      'notify-task': this.handleNotifyOffice,
+      'approve-task': this.handleApproveTask,
+      'decline-task': this.handleDeclineTask,
+      'remove-task-notification': this.handleRemoveTaskNotification,
       'resend-envelope': this.handleResendEnvelope,
       'void-envelope': this.handleVoidEnvelope
     }
@@ -78,13 +91,20 @@ class ActionsButton extends React.Component {
   }
 
   handleSelectAction = button => {
-    const { type, disabled } = button
-
-    if (disabled === true) {
+    if (button.disabled === true) {
       return false
     }
 
     this.handleCloseMenu()
+
+    let type = button.type
+
+    if (typeof type === 'function') {
+      type = button.type({
+        task: this.props.task,
+        isBackOffice: this.props.isBackOffice
+      })
+    }
 
     this.actions[type] && this.actions[type]()
   }
@@ -123,6 +143,8 @@ class ActionsButton extends React.Component {
 
     const isTask = this.props.document.type === 'task'
     const isFile = this.props.document.type === 'file'
+
+    // get all envelopes of the document
     const envelopes = getDocumentEnvelopes(
       this.props.envelopes,
       this.props.document
@@ -136,7 +158,7 @@ class ActionsButton extends React.Component {
     }
 
     return {
-      has_task: this.props.task !== null,
+      has_task: this.props.task !== null, // is stash file or not
       document_type: documentType,
       file_uploaded: isFile,
       form_saved: isTask && this.props.document.submission !== null,
@@ -152,6 +174,8 @@ class ActionsButton extends React.Component {
         this.props.task.task_type === 'Form' && this.props.task.form
           ? 'Form'
           : 'Generic',
+      is_backoffice: this.props.isBackOffice,
+      is_task_notified: this.props.task.attention_requested === true,
       file_uploaded: this.hasTaskAttachments(this.props.task),
       form_saved: this.props.task.submission !== null,
       envelope_status: this.getLastEnvelopeStatus(envelopes)
@@ -171,15 +195,40 @@ class ActionsButton extends React.Component {
     return envelopes[0].status
   }
 
+  getActiveEnvelopes = envelopes =>
+    envelopes.filter(
+      envelope => ['Voided', 'Declined'].includes(envelope.status) === false
+    )
+
   getSplitterFiles = () => {
     const files = getFileUrl({
       type: this.props.type,
       deal: this.props.deal,
       task: this.props.task,
-      document: this.props.document
+      document: this.props.document,
+      envelopes: this.props.envelopes
     })
 
     return files.filter(file => file.mime === 'application/pdf')
+  }
+
+  getEmailComposeFiles = () => {
+    if (this.props.type === 'task') {
+      return []
+    }
+
+    return getFileUrl({
+      type: this.props.type,
+      deal: this.props.deal,
+      task: this.props.task,
+      document: this.props.document,
+      envelopes: this.props.envelopes
+    }).map(file => ({
+      type: 'document',
+      attachmentType: 'deal-file',
+      file,
+      task: this.props.task
+    }))
   }
 
   getPrimaryAction = actions =>
@@ -273,6 +322,58 @@ class ActionsButton extends React.Component {
   /**
    *
    */
+  handleApproveTask = async () => {
+    await this.props.changeTaskStatus(this.props.task.id, 'Approved')
+
+    this.props.changeNeedsAttention(
+      this.props.deal.id,
+      this.props.task.id,
+      false
+    )
+  }
+
+  /**
+   *
+   */
+  handleDeclineTask = async () => {
+    await this.props.changeTaskStatus(this.props.task.id, 'Declined')
+
+    this.props.changeNeedsAttention(
+      this.props.deal.id,
+      this.props.task.id,
+      false
+    )
+  }
+
+  /**
+   *
+   */
+  handleRemoveTaskNotification = () => {
+    this.props.changeNeedsAttention(
+      this.props.deal.id,
+      this.props.task.id,
+      false
+    )
+  }
+
+  /**
+   *
+   */
+  handleShowComments = () => {
+    this.props.setSelectedTask(this.props.task)
+  }
+
+  /**
+   *
+   */
+  handleToggleComposeEmail = () =>
+    this.setState(state => ({
+      isComposeEmailOpen: !state.isComposeEmailOpen
+    }))
+
+  /**
+   *
+   */
   handleResendEnvelope = () => {
     this.props.confirmation({
       message: 'Resend Envelope?',
@@ -307,6 +408,7 @@ class ActionsButton extends React.Component {
       deal: this.props.deal,
       task: this.props.task,
       document: this.props.document,
+      envelopes: this.props.envelopes,
       isBackOffice: this.props.isBackOffice
     })
 
@@ -335,11 +437,12 @@ class ActionsButton extends React.Component {
       deal: this.props.deal,
       task: this.props.task,
       document: this.props.document,
+      envelopes: this.props.envelopes,
       isBackOffice: this.props.isBackOffice
     })
 
     if (links.length === 1) {
-      return this.props.isBackOffice
+      return this.props.isBackOffice && links[0].openInNewTab !== true
         ? browserHistory.push(links[0].url)
         : window.open(links[0].url, '_blank')
     }
@@ -350,7 +453,7 @@ class ActionsButton extends React.Component {
         title: 'Select a file to view/print',
         actionTitle: 'View/Print',
         onSelect: item =>
-          this.props.isBackOffice
+          this.props.isBackOffice && item.openInNewTab !== true
             ? browserHistory.push(item.url)
             : window.open(item.url, '_blank')
       }
@@ -360,7 +463,32 @@ class ActionsButton extends React.Component {
   /**
    *
    */
-  handleDelete = () => {
+  handleDeleteTask = () => {
+    if (this.props.task.is_deletable === false && !this.props.isBackOffice) {
+      return this.props.confirmation({
+        message: 'Delete a required folder?',
+        description: 'Only your back office can delete this folder.',
+        confirmLabel: 'Notify Office',
+        needsUserEntry: true,
+        inputDefaultValue: 'Please remove from my folder.',
+        onConfirm: this.notifyOffice
+      })
+    }
+
+    this.props.confirmation({
+      message: 'Delete this folder?',
+      description: 'You cannot undo this action',
+      confirmLabel: 'Delete',
+      confirmButtonColor: 'danger',
+      onConfirm: () =>
+        this.props.deleteTask(this.props.task.checklist, this.props.task.id)
+    })
+  }
+
+  /**
+   *
+   */
+  handleDeleteFile = () => {
     this.props.confirmation({
       message: 'Are you sure you want delete this file?',
       confirmLabel: 'Yes, Delete',
@@ -422,9 +550,21 @@ class ActionsButton extends React.Component {
     }
   }
 
+  getButtonLabel = button => {
+    if (typeof button.label === 'function') {
+      return button.label({
+        task: this.props.task,
+        isBackOffice: this.props.isBackOffice
+      })
+    }
+
+    return button.label
+  }
+
   render() {
     const actionButtons = this.getActions()
     const primaryAction = this.getPrimaryAction(actionButtons)
+    const secondaryActions = this.getSecondaryActions(actionButtons)
 
     if (!primaryAction) {
       return false
@@ -440,42 +580,43 @@ class ActionsButton extends React.Component {
             <div style={{ position: 'relative' }}>
               <Container>
                 <PrimaryAction
+                  hasSecondaryActions={secondaryActions.length > 0}
                   onClick={() => this.handleSelectAction(primaryAction)}
                 >
-                  {primaryAction.label}
+                  {this.getButtonLabel(primaryAction)}
                 </PrimaryAction>
 
-                <MenuButton onClick={this.handleToggleMenu}>
-                  <ArrowDownIcon
-                    style={{
-                      transform: isOpen ? 'rotateX(180deg)' : 'initial'
-                    }}
-                  />
-                </MenuButton>
+                {secondaryActions.length > 0 && (
+                  <MenuButton onClick={this.handleToggleMenu}>
+                    <ArrowDownIcon
+                      style={{
+                        transform: isOpen ? 'rotateX(180deg)' : 'initial'
+                      }}
+                    />
+                  </MenuButton>
+                )}
               </Container>
 
               {isOpen && (
                 <MenuContainer>
-                  {this.getSecondaryActions(actionButtons).map(
-                    (button, index) => (
-                      <MenuItem
-                        key={index}
-                        disabled={button.disabled === true}
-                        onClick={() => this.handleSelectAction(button)}
+                  {secondaryActions.map((button, index) => (
+                    <MenuItem
+                      key={index}
+                      disabled={button.disabled === true}
+                      onClick={() => this.handleSelectAction(button)}
+                    >
+                      <Tooltip
+                        placement="left"
+                        caption={
+                          button.disabled && button.tooltip
+                            ? button.tooltip
+                            : null
+                        }
                       >
-                        <Tooltip
-                          placement="left"
-                          caption={
-                            button.disabled && button.tooltip
-                              ? button.tooltip
-                              : null
-                          }
-                        >
-                          <span>{button.label}</span>
-                        </Tooltip>
-                      </MenuItem>
-                    )
-                  )}
+                        <span>{this.getButtonLabel(button)}</span>
+                      </Tooltip>
+                    </MenuItem>
+                  ))}
                 </MenuContainer>
               )}
             </div>
@@ -519,6 +660,16 @@ class ActionsButton extends React.Component {
           />
         )}
 
+        {this.state.isComposeEmailOpen && (
+          <EmailCompose
+            isOpen
+            defaultAttachments={this.getEmailComposeFiles()}
+            from={this.props.user}
+            deal={this.props.deal}
+            onClose={this.handleToggleComposeEmail}
+          />
+        )}
+
         {this.state.multipleItemsSelection && (
           <SelectItemDrawer
             isOpen
@@ -537,15 +688,14 @@ ActionsButton.propTypes = {
   task: PropTypes.object.isRequired,
   document: PropTypes.object
 }
-
 ActionsButton.defaultProps = {
   document: null
 }
 
-function mapStateToProps({ deals, user }) {
+function mapStateToProps({ deals, user }, props) {
   return {
     user,
-    envelopes: deals.envelopes,
+    envelopes: selectDealEnvelopes(props.deal, deals.envelopes),
     isBackOffice: isBackOffice(user)
   }
 }
@@ -554,8 +704,11 @@ export default connect(
   mapStateToProps,
   {
     changeNeedsAttention,
+    changeTaskStatus,
     asyncDeleteFile,
+    setSelectedTask,
     voidEnvelope,
+    deleteTask,
     confirmation,
     notify
   }

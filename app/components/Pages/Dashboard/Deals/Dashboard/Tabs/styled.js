@@ -26,7 +26,7 @@ export const FactsheetContainer = styled.div`
 `
 
 export const MainContainer = styled.div`
-  flex: 1;
+  width: calc(100% - 22.5rem);
   margin-left: 1.5rem;
 `
 

@@ -1,3 +1,5 @@
+// todo: needs refactor
+
 import React from 'react'
 import { connect } from 'react-redux'
 import Dropzone from 'react-dropzone'
@@ -17,6 +19,14 @@ class UploadDocument extends React.Component {
     this.setState({
       dropzoneActive: false
     })
+
+    if (
+      Array.isArray(rejectedFiles) &&
+      rejectedFiles.length === 1 &&
+      rejectedFiles[0] instanceof DataTransferItem
+    ) {
+      return false
+    }
 
     if (
       this.props.activeChecklist &&

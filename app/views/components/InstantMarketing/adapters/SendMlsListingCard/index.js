@@ -101,6 +101,7 @@ class SendMlsListingCard extends React.Component {
             )
 
             return {
+              data_type: 'contact',
               contactId: contact.id,
               name: contact.summary.display_name,
               avatar: contact.summary.profile_image_url,
@@ -275,7 +276,7 @@ class SendMlsListingCard extends React.Component {
   }
 
   render() {
-    const { user } = this.props
+    const { user, disabled } = this.props
 
     if (hasMarketingAccess(user) === false) {
       return false
@@ -285,6 +286,7 @@ class SendMlsListingCard extends React.Component {
       <Fragment>
         {!this.props.hasExternalTrigger && (
           <ActionButton
+            disabled={disabled}
             appearance="outline"
             onClick={this.openListingModal}
             size="small"
@@ -334,12 +336,13 @@ class SendMlsListingCard extends React.Component {
         {this.state.isComposeEmailOpen && (
           <EmailCompose
             isOpen
-            from={this.state.owner}
-            onClose={this.toggleComposeEmail}
-            recipients={this.Recipients}
-            html={this.state.templateScreenshot}
-            onClickSend={this.handleSendEmails}
+            hasStaticBody
             isSubmitting={this.state.isSendingEmail}
+            from={this.state.owner}
+            recipients={this.Recipients}
+            body={this.state.templateScreenshot}
+            onClickSend={this.handleSendEmails}
+            onClose={this.toggleComposeEmail}
           />
         )}
 

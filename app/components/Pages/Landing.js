@@ -29,6 +29,12 @@ class Landing extends Component {
 
   render() {
     const { user } = this.props
+
+    if (user) {
+      this.props.router.replace(getDefaultHomePage(user))
+      return null
+    }
+
     const { renderTypest } = this.state
 
     const BUTTON_STYLE = {
@@ -130,41 +136,22 @@ class Landing extends Component {
               {brand_logo}
             </div>
           </div>
-          {user ? (
-            <div>
-              <Link
-                to={getDefaultHomePage(user)}
-                className="btn btn-default"
-                style={{ ...BUTTON_STYLE, marginRight: '1em' }}
-              >
-                DASHBOARD
-              </Link>
-              <a
-                className="btn btn-default"
-                style={BUTTON_STYLE}
-                href="/signout"
-              >
-                SIGN OUT
-              </a>
-            </div>
-          ) : (
-            <div>
-              <Link
-                className="btn btn-default"
-                to="/signin"
-                style={{ ...BUTTON_STYLE, marginRight: '1em' }}
-              >
-                SIGN IN
-              </Link>
-              <Link
-                className="btn btn-default"
-                to="/signup"
-                style={BUTTON_STYLE}
-              >
-                SIGN UP
-              </Link>
-            </div>
-          )}
+          <div>
+            <Link
+              className="btn btn-default"
+              to="/signin"
+              style={{ ...BUTTON_STYLE, marginRight: '1em' }}
+            >
+              SIGN IN
+            </Link>
+            <Link
+              className="btn btn-default"
+              to="/signup"
+              style={BUTTON_STYLE}
+            >
+              SIGN UP
+            </Link>
+          </div>
         </header>
         <main className="container" style={S('h-100p z-2 relative')}>
           <div className="landing-main text-center" style={S('h-100p')}>

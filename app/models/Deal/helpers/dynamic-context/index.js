@@ -293,6 +293,7 @@ export function validate(ctx, value) {
     case 'Number':
     case 'Numeric':
       return _.isUndefined(value) ||
+        value === null ||
         (typeof value === 'string' && value.length === 0)
         ? !ctx.mandatory
         : !Number.isNaN(parseFloat(value)) && /^\d*\.?\d*$/.test(value)
@@ -418,6 +419,21 @@ export function getChecklist(deal, fieldKey) {
   )
 }
 
+export function createUpsertObject(deal, field, value, approved = false) {
+  return {
+    definition: getDefinitionId(deal.brand.id, field),
+    checklist: getChecklist(deal, field),
+    value,
+    approved
+  }
+}
+
+export function getStatusField(deal) {
+  return getField(deal, 'contract_status')
+    ? 'contract_status'
+    : 'listing_status'
+}
+
 function getFormattedValue(value) {
   if (!value) {
     return value
@@ -447,10 +463,12 @@ export default {
   getValue,
   getValueByContext,
   getDateValue,
+  getStatusField,
   parseDate,
   getDateFormatString,
   validate,
   validateDate,
   validateList,
-  isAddressField
+  isAddressField,
+  createUpsertObject
 }

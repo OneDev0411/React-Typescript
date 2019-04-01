@@ -8,9 +8,6 @@ export default (state = null, action) => {
     case actionTypes.CLEAR_DEALS:
       return {}
 
-    case actionTypes.ARCHIVE_DEAL:
-      return _.omit(state, task => task.deal === action.deal_id)
-
     case actionTypes.DELETE_TASK:
       return _.omit(state, task => task.id === action.taskId)
 

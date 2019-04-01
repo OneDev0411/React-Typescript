@@ -19,7 +19,7 @@ export const Title = styled.div`
 `
 
 export const TitleContainer = styled.div`
-  text-align: right;
+  text-align: left;
 `
 
 export const WhoSignedContainer = styled.div``
@@ -44,5 +44,6 @@ export const RoleName = styled.div`
 
 export const SignDate = styled.div`
   font-size: 0.875rem;
-  color: #ccc;
+  color: #000;
+  margin-left: 0.5rem;
 `

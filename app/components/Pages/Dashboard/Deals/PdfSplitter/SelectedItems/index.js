@@ -25,16 +25,17 @@ function collect(connect, monitor) {
 
 class SelectedItems extends React.Component {
   getListStyle = (isDraggingOver, canDrop) => ({
+    flex: 1,
     border: canDrop ? '1px dashed #003bdf' : 'none',
     background: isDraggingOver ? '#eee' : '#fff',
-    filter: isDraggingOver ? 'blur(2px)' : 'none',
-    minHeight: '100vh'
+    filter: isDraggingOver ? 'blur(2px)' : 'none'
   })
 
   render() {
     const DropTarget = (
       <div style={this.getListStyle(this.props.isOver, this.props.canDrop)}>
         {_.size(this.props.selectedPages) === 0 && <EmptyState />}
+
         {_.map(this.props.selectedPages, (item, key) => (
           <Page
             key={key}

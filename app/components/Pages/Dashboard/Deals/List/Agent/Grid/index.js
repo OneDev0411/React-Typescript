@@ -5,6 +5,11 @@ import Deal from 'models/Deal'
 
 import Table from 'components/Grid/Table'
 
+import { getActiveTeamSettings } from 'utils/user-teams'
+
+import { putUserSetting } from 'models/user/put-user-setting'
+import getUserTeams from 'actions/user/teams'
+
 import EmptyState from './EmptyState'
 import LoadingState from '../../components/LoadingState'
 
@@ -18,6 +23,8 @@ import Notification from '../../components/table-columns/NotificationBadge'
 import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
 import { Filters } from '../Filters'
 import { statusSortMethod } from '../../components/table-columns/Status'
+
+const SORT_FIELD_SETTING_KEY = 'grid_deals_sort_field'
 
 class Grid extends React.Component {
   get Columns() {
@@ -52,7 +59,6 @@ class Grid extends React.Component {
         render: ({ rowData: deal }) =>
           Deal.get.formattedPrice(this.getPriceValue(deal), 'currency', 0)
       },
-
       {
         id: 'critical-dates',
         header: 'Critical Dates',
@@ -127,7 +133,17 @@ class Grid extends React.Component {
     return {}
   }
 
-  getDefaultSort = (id, ascending) => {
+  getDefaultSort = () => {
+    const sortSetting =
+      getActiveTeamSettings(this.props.user, SORT_FIELD_SETTING_KEY) || 'status'
+    let id = sortSetting
+    let ascending = true
+
+    if (sortSetting.startsWith('-')) {
+      id = sortSetting.slice(1)
+      ascending = false
+    }
+
     const column = this.Columns.find(col => col.id === id)
 
     return {
@@ -136,16 +152,27 @@ class Grid extends React.Component {
     }
   }
 
+  getDefaultIndex = () =>
+    getActiveTeamSettings(this.props.user, SORT_FIELD_SETTING_KEY) || 'status'
+
   render() {
     const { isFetchingDeals } = this.props
     const columns = this.Columns
     const data = this.Data
 
+    const defaultSort = this.getDefaultSort()
+    const defaultIndex = this.getDefaultIndex()
+
     return (
       <Table
         plugins={{
           sortable: {
-            defaultSort: this.getDefaultSort('status', true)
+            defaultSort,
+            defaultIndex,
+            onPostChange: async item => {
+              await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
+              await this.props.getUserTeams(this.props.user)
+            }
           }
         }}
         isFetching={isFetchingDeals}
@@ -159,14 +186,18 @@ class Grid extends React.Component {
   }
 }
 
-function mapStateToProps({ deals }) {
+function mapStateToProps({ user, deals }) {
   const { properties, list, roles } = deals
 
   return {
     isFetchingDeals: properties.isFetchingDeals,
     deals: list,
-    roles
+    roles,
+    user
   }
 }
 
-export default connect(mapStateToProps)(Grid)
+export default connect(
+  mapStateToProps,
+  { getUserTeams }
+)(Grid)

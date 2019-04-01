@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import Search from '../../../../../../views/components/Grid/Search'
 
 const SearchContainer = styled.div`
-  margin-bottom: 1.5em;
   padding: 0 1.5em;
 `
 
@@ -21,7 +20,6 @@ export class SearchContacts extends React.Component {
       <SearchContainer>
         <Search
           disableOnSearch={false}
-          showLoadingOnSearch
           isSearching={this.props.isSearching}
           placeholder="Search"
           onChange={this.handleSearch}

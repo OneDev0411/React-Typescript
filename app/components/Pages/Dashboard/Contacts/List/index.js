@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 import _ from 'underscore'
 
 import { confirmation } from 'actions/confirmation'
@@ -14,7 +15,11 @@ import {
   selectContactsListFetching
 } from 'reducers/contacts/list'
 
-import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
+import {
+  viewAs,
+  viewAsEveryoneOnTeam,
+  getActiveTeamSettings
+} from 'utils/user-teams'
 
 import {
   Container as PageContainer,
@@ -27,9 +32,11 @@ import { resetGridSelectedItems } from 'components/Grid/Table/Plugins/Selectable
 import Table from './Table'
 import { SearchContacts } from './Search'
 import { Header } from './Header'
-import DuplicateContacts from '../components/DuplicateContacts'
+// import DuplicateContacts from '../components/DuplicateContacts'
 import ContactFilters from './Filters'
 import TagsList from './TagsList'
+
+import { SORT_FIELD_SETTING_KEY } from './constants'
 
 class ContactsList extends React.Component {
   constructor(props) {
@@ -38,13 +45,15 @@ class ContactsList extends React.Component {
     this.state = {
       isSideMenuOpen: true,
       isFetchingMoreContacts: false,
+      isFetchingMoreContactsBefore: false,
       isRowsUpdating: false,
       filters: this.props.filters,
       searchInputValue: this.props.list.textFilter,
-      activeSegment: {}
+      activeSegment: {},
+      loadedRanges: []
     }
 
-    this.order = this.props.listInfo.order
+    this.order = getActiveTeamSettings(props.user, SORT_FIELD_SETTING_KEY)
   }
 
   componentDidMount() {
@@ -59,7 +68,7 @@ class ContactsList extends React.Component {
         ]
       )
     } else {
-      this.fetchList()
+      this.fetchList(this.getStartQueryParam())
     }
 
     if (this.props.fetchTags) {
@@ -106,11 +115,24 @@ class ContactsList extends React.Component {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
   }
 
+  addLoadedRange = start =>
+    this.setState(prevState => ({
+      loadedRanges: _.uniq([...prevState.loadedRanges, parseInt(start, 10)])
+    }))
+
+  getStartQueryParam = () =>
+    parseInt(browserHistory.getCurrentLocation().query.s, 10) || 0
+
+  setStartQueryParam = value =>
+    browserHistory.replace(
+      `${browserHistory.getCurrentLocation().pathname}?s=${value}`
+    )
+
   hasSearchState = () =>
     this.state.filter || this.state.searchInputValue || this.order
 
-  fetchList = async (start = 0) => {
-    if (start === 0) {
+  fetchList = async (start = 0, loadMoreBefore = false) => {
+    if (start === 0 && !loadMoreBefore) {
       this.resetSelectedRows()
     }
 
@@ -119,9 +141,11 @@ class ContactsList extends React.Component {
         await this.handleFilterChange({
           filters: this.state.filters,
           searchInputValue: this.state.searchInputValue,
-          start
+          start,
+          prependResult: loadMoreBefore
         })
       } else {
+        this.addLoadedRange(start)
         await this.props.getContacts(start)
       }
     } catch (e) {
@@ -160,12 +184,14 @@ class ContactsList extends React.Component {
       start = 0,
       order = this.order,
       viewAsUsers = this.props.viewAsUsers,
-      conditionOperator = this.props.conditionOperator
+      conditionOperator = this.props.conditionOperator,
+      prependResult = false
     } = newFilters
 
-    this.setState({ filters })
+    this.addLoadedRange(start)
+    this.setStartQueryParam(start)
 
-    if (start === 0) {
+    if (start === 0 && !prependResult) {
       this.resetSelectedRows()
     }
 
@@ -177,7 +203,8 @@ class ContactsList extends React.Component {
         searchInputValue,
         order,
         viewAsUsers,
-        conditionOperator
+        conditionOperator,
+        prependResult
       )
     } catch (e) {
       console.log('fetch search error: ', e)
@@ -189,7 +216,7 @@ class ContactsList extends React.Component {
     this.setState({ searchInputValue: value })
     this.handleFilterChange({
       filters: this.state.filters,
-      searchInputValie: value
+      searchInputValue: value
     })
   }
 
@@ -215,43 +242,90 @@ class ContactsList extends React.Component {
 
   handleLoadMore = async () => {
     const { total } = this.props.listInfo
-    const startFrom = this.props.list.ids.length
+    const totalLoadedCount = this.props.list.ids.length
+    const prevStart = this.getStartQueryParam()
 
-    if (this.state.isFetchingMoreContacts || startFrom === total) {
+    if (
+      this.state.isFetchingMoreContacts ||
+      this.state.isFetchingMoreContactsBefore ||
+      totalLoadedCount === total
+    ) {
       return false
     }
 
-    console.log(`[ Loading More ] Start: ${startFrom}`)
+    const start = Math.max(prevStart, ...this.state.loadedRanges) + 50
+
+    console.log(`[ Loading More ] Start: ${start}`)
 
     this.setState({ isFetchingMoreContacts: true })
 
     if (this.hasSearchState()) {
-      await this.fetchList(startFrom)
+      await this.fetchList(start)
     } else {
       await this.handleFilterChange({
         filters: this.state.filters,
         searchInputValue: this.state.searchInputValue,
-        start: startFrom
+        start
       })
     }
 
     this.setState({ isFetchingMoreContacts: false })
   }
 
+  handleLoadMoreBefore = async () => {
+    const { total } = this.props.listInfo
+    const totalLoadedCount = this.props.list.ids.length
+    const prevStart = this.getStartQueryParam()
+
+    if (
+      this.state.isFetchingMoreContacts ||
+      this.state.isFetchingMoreContactsBefore ||
+      totalLoadedCount === total ||
+      prevStart < 50
+    ) {
+      return false
+    }
+
+    const start = prevStart - 50
+
+    if (this.state.loadedRanges.includes(start)) {
+      return false
+    }
+
+    console.log(`[ Loading More Before ] Start: ${start}`)
+
+    this.setState({ isFetchingMoreContactsBefore: true })
+
+    if (this.hasSearchState()) {
+      await this.fetchList(start, true)
+    } else {
+      await this.handleFilterChange({
+        filters: this.state.filters,
+        searchInputValue: this.state.searchInputValue,
+        start,
+        prependResult: true
+      })
+    }
+
+    this.setState({ isFetchingMoreContactsBefore: false })
+  }
+
   handleOnDelete = (e, { selectedRows, resetSelectedRows }) => {
     const selectedRowsLength = selectedRows.length
+    const isManyContacts = selectedRowsLength > 1
 
     this.props.confirmation({
-      show: true,
       confirmLabel: 'Delete',
-      message: `Delete ${selectedRowsLength > 1 ? 'contacts' : 'contact'}`,
+      message: `Delete ${isManyContacts ? 'contacts' : 'contact'}?`,
       onConfirm: () =>
         this.handleDeleteContact(selectedRows, resetSelectedRows),
-      description: `Are you sure you want to delete ${
-        selectedRowsLength > 1
-          ? `these ${selectedRowsLength} contacts`
-          : 'this contact'
-      }?`
+      description: `Deleting ${
+        isManyContacts ? `these ${selectedRowsLength} contacts` : 'this contact'
+      } will remove ${
+        isManyContacts ? 'them' : 'it'
+      } from your contacts list, but ${
+        isManyContacts ? 'they' : 'it'
+      }  will not be removed from any deals.`
     })
   }
 
@@ -299,7 +373,7 @@ class ContactsList extends React.Component {
             name="contacts"
             onChange={this.handleChangeSavedSegment}
           />
-          <DuplicateContacts />
+          {/* <DuplicateContacts /> */}
           <TagsList onFilterChange={this.handleFilterChange} />
         </SideMenu>
 
@@ -320,18 +394,22 @@ class ContactsList extends React.Component {
           />
           <Table
             bulkEventCreationCallback={this.reloadContacts}
+            sortBy={this.order}
             handleChangeOrder={this.handleChangeOrder}
             handleChangeContactsAttributes={this.handleChangeContactsAttributes}
             data={contacts}
             listInfo={this.props.listInfo}
             isFetching={isFetchingContacts}
             isFetchingMore={this.state.isFetchingMoreContacts}
+            isFetchingMoreBefore={this.state.isFetchingMoreContactsBefore}
             isRowsUpdating={this.state.isRowsUpdating}
             onRequestLoadMore={this.handleLoadMore}
+            onRequestLoadMoreBefore={this.handleLoadMoreBefore}
             rowsUpdating={this.rowsUpdating}
             onChangeSelectedRows={this.onChangeSelectedRows}
             onRequestDelete={this.handleOnDelete}
-            filters={this.state.filter}
+            filters={this.state.filters}
+            conditionOperator={this.props.conditionOperator}
             users={viewAsUsers}
           />
         </PageContent>
@@ -354,7 +432,7 @@ function mapStateToUser({ user, contacts }) {
     list: contacts.list,
     listInfo,
     user,
-    viewAsUsers: viewAs(user)
+    viewAsUsers: viewAsEveryoneOnTeam(user) ? [] : viewAs(user)
   }
 }
 

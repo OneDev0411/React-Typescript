@@ -40,16 +40,26 @@ export const RoleFormContainer = ({
   isAllowedRole,
   requiredFields
 }) => {
-  const { user_type } = values
+  const { role_type } = values
   const isCompanyRequired = requiredFields.includes('company_title')
   const isFirstNameRequired = requiredFields.includes('legal_first_name')
   const isLastNameRequired = requiredFields.includes('legal_last_name')
 
   return (
     <FormContainer onSubmit={handleSubmit}>
-      <FormType name="user_type" selectedValue={values.user_type} />
+      <FormType name="role_type" selectedValue={values.role_type} />
 
-      {user_type === TYPE_PERSON && (
+      <Field
+        name="role"
+        isRequired={requiredFields.includes('role')}
+        placeholder="Select Role"
+        options={ROLE_NAMES}
+        component={RolesDropDown}
+        formRole={values.role}
+        isAllowed={isAllowedRole}
+      />
+
+      {role_type === TYPE_PERSON && (
         <Field
           name="legal_prefix"
           placeholder="Title"
@@ -57,7 +67,7 @@ export const RoleFormContainer = ({
         />
       )}
 
-      {(user_type === TYPE_PERSON || isFirstNameRequired) && (
+      {(role_type === TYPE_PERSON || isFirstNameRequired) && (
         <Field
           parse={value => value || ''}
           name="legal_first_name"
@@ -67,7 +77,7 @@ export const RoleFormContainer = ({
         />
       )}
 
-      {user_type === TYPE_PERSON && (
+      {role_type === TYPE_PERSON && (
         <Field
           parse={value => value || ''}
           name="legal_middle_name"
@@ -77,7 +87,7 @@ export const RoleFormContainer = ({
         />
       )}
 
-      {(user_type === TYPE_PERSON || isLastNameRequired) && (
+      {(role_type === TYPE_PERSON || isLastNameRequired) && (
         <Field
           parse={value => value || ''}
           name="legal_last_name"
@@ -127,16 +137,6 @@ export const RoleFormContainer = ({
           singularName: 'phone_number',
           pluralName: 'phones'
         })}
-      />
-
-      <Field
-        name="role"
-        isRequired={requiredFields.includes('role')}
-        placeholder="Select Role"
-        options={ROLE_NAMES}
-        component={RolesDropDown}
-        formRole={values.role}
-        isAllowed={isAllowedRole}
       />
 
       {shouldShowCommission(values.role) && (

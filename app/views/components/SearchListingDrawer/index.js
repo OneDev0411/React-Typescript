@@ -1,11 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import _ from 'underscore'
 
 import Deal from '../../../models/Deal'
 import Listing from '../../../models/listings/listing'
-import listingsHelper from '../../../utils/listing'
 
 import SearchDrawer from '../SearchDrawer'
 import ListingItem from './ListingItem'
@@ -51,25 +49,11 @@ class SearchListingDrawer extends React.Component {
   searchListing = async value => {
     const response = await Deal.searchListings(value)
 
-    const listings = response
-      .map(item => ({
-        id: item.id,
-        full_address: listingsHelper.addressTitle(item.address),
-        address_components: item.address,
-        price: item.price,
-        status: item.status,
-        image: item.cover_image_url,
-        gallery_image_urls: item.gallery_image_urls,
-        is_mls_search: item.is_mls_search || false
-      }))
-      .filter(
-        item =>
-          item.is_mls_search ||
-          item.status.includes('Active') ||
-          ['Pending', 'Leased'].includes(item.status)
-      )
-
-    return listings
+    return response.filter(
+      item =>
+        item.is_mls_search ||
+        ['Pending', 'Leased', 'Active'].includes(item.status)
+    )
   }
 
   render() {

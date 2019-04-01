@@ -14,6 +14,9 @@ export default {
   forms: {
     url: process.env.RECHAT_FORMS_URL
   },
+  splitter: {
+    url: process.env.RECHAT_SPLITTER_URL
+  },
   cosmicjs: {
     bucket: {
       slug: process.env.COSMIC_BUCKET,
@@ -32,5 +35,8 @@ export default {
   itunes_url: process.env.ITUNES_URL,
   google: {
     api_key: process.env.GOOGLE_API_KEY
+  },
+  fb: {
+    app_id: process.env.FB_APP_ID
   }
 }

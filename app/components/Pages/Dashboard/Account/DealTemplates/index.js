@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import styled from 'styled-components'
+import { Helmet } from 'react-helmet'
 
 import ActionButton from '../../../../../views/components/Button/ActionButton'
 
@@ -76,6 +77,9 @@ class DealTemplates extends React.Component {
 
     return (
       <Fragment>
+        <Helmet>
+          <title>Form Templates | Settings | Rechat</title>
+        </Helmet>
         <PageHeader
           isFlat
           style={{ marginBottom: '1.5em', marginTop: '1.5rem' }}

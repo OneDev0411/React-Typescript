@@ -8,7 +8,7 @@ export function getTemplateTypes(listing) {
     return []
   }
 
-  if (Array.isArray(listing)) {
+  if (Array.isArray(listing) && listing.length > 1) {
     return ['Listings']
   }
 

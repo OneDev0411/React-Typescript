@@ -3,15 +3,15 @@ import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 import S from 'shorti'
 import timeago from 'timeago.js'
+import { Helmet } from 'react-helmet'
+
+import { selectNotificationNewCount } from '../../../../reducers/notifications'
 
 import {
   selectNotifications,
   selectNotificationIsFetching
 } from '../../../../reducers/notifications'
-import {
-  deleteNewNotifications,
-  markNotificationAsSeen
-} from '../../../../store_actions/notifications'
+import { markNotificationAsSeen } from '../../../../store_actions/notifications'
 
 import Header from './Header'
 import { CrmEvents } from './CrmEvents'
@@ -27,10 +27,12 @@ class Notifications extends Component {
     }
   }
 
-  componentDidMount() {
-    const { deleteNewNotifications } = this.props
+  get documentTitle() {
+    const { unreadNotificationsCount } = this.props
+    const counter =
+      unreadNotificationsCount > 0 ? `: ${unreadNotificationsCount} unread` : ''
 
-    deleteNewNotifications()
+    return `Notifications${counter} | Rechat`
   }
 
   openCRMTaskDrawer = selectedEvent => {
@@ -70,6 +72,12 @@ class Notifications extends Component {
         break
       case 'OpenHouseAvailableListing':
         browserHistory.push(`/dashboard/mls/${notification.objects[0].id}`)
+        break
+      case 'ContactAttributeIsDueContact':
+        browserHistory.push(`/dashboard/contacts/${notification.objects[0].id}`)
+        break
+      case 'DealContextIsDueDeal':
+        browserHistory.push(`/dashboard/deals/${notification.objects[0].id}`)
         break
 
       case 'CrmTaskIsDueCrmTask':
@@ -357,6 +365,9 @@ class Notifications extends Component {
           overflowY: 'scroll'
         }}
       >
+        <Helmet>
+          <title>{this.documentTitle}</title>
+        </Helmet>
         <Header />
         {this.getNotifications()}
         {this.state.selectedEvent && (
@@ -378,9 +389,10 @@ export default withRouter(
   connect(
     ({ user, globalNotifications }) => ({
       user,
+      isFetching: selectNotificationIsFetching(globalNotifications),
       notifications: selectNotifications(globalNotifications),
-      isFetching: selectNotificationIsFetching(globalNotifications)
+      unreadNotificationsCount: selectNotificationNewCount(globalNotifications)
     }),
-    { deleteNewNotifications, markNotificationAsSeen }
+    { markNotificationAsSeen }
   )(Notifications)
 )

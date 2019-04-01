@@ -1,4 +1,5 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+
 import {
   Container,
   Menu,
@@ -7,6 +8,7 @@ import {
 
 export const LayoutContainer = styled.div`
   padding: 2rem;
+  padding-top: 0;
   background-color: #f2f2f2;
   box-shadow: -1px 0 2px 0 rgba(0, 0, 0, 0.04), -1px 0 20px 0 rgba(0, 0, 0, 0.1);
 `
@@ -25,9 +27,9 @@ export const SideMenu = styled(Menu)`
 
   ${props =>
     props.isOpen === false &&
-    `
-    margin: 0;
-  `};
+    css`
+      margin: 0;
+    `};
 `
 
 export const PageContent = styled(Content)`

@@ -46,7 +46,14 @@ const ids = (state = [], action) => {
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.SEARCH_CONTACTS_SUCCESS:
     case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_SUCCESS:
-      const newState = [...state, ...action.response.result.contacts]
+      let newState = []
+
+      // For adding contacts to the top
+      if (action.prependResult) {
+        newState = [...action.response.result.contacts, ...state]
+      } else {
+        newState = [...state, ...action.response.result.contacts]
+      }
 
       // removing duplicates
       return [...new Set(newState)]

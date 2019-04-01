@@ -1,13 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import _ from 'underscore'
-
-import { deleteNotifications } from 'models/Deal/notification'
+import { Helmet } from 'react-helmet'
 
 import { isBackOffice } from 'utils/user-teams'
 import { getDeal, getContexts } from 'actions/deals'
 import { selectDealById } from 'reducers/deals/list'
 import { selectTaskById } from 'reducers/deals/tasks'
+
+import { getDealTitle } from '../utils/get-deal-title'
 
 import { PageHeader } from './Header'
 import TabSections from './Tabs'
@@ -25,8 +25,6 @@ class DealDetails extends React.Component {
   }
 
   componentDidMount() {
-    this.handleNotifications(this.props.deal)
-
     this.initializeDeal()
   }
 
@@ -34,6 +32,8 @@ class DealDetails extends React.Component {
     const { props } = this
 
     if (props.deal && props.deal.checklists) {
+      this.fetchContexts(props.deal)
+
       return false
     }
 
@@ -83,18 +83,12 @@ class DealDetails extends React.Component {
     })
   }
 
-  handleNotifications(deal) {
-    if (!deal || !Array.isArray(deal.new_notifications)) {
-      return false
-    }
+  get PageTitle() {
+    const pageTitle = getDealTitle(this.props.deal)
 
-    const notifications = deal.new_notifications.filter(
-      notification => !notification.room
-    )
-
-    if (notifications.length > 0) {
-      deleteNotifications(_.pluck(notifications, 'id'))
-    }
+    return pageTitle
+      ? `${pageTitle} | Deals | Rechat`
+      : 'Show Deal | Deals | Rechat'
   }
 
   render() {
@@ -106,6 +100,10 @@ class DealDetails extends React.Component {
 
     return (
       <DealContainer>
+        <Helmet>
+          <title>{this.PageTitle}</title>
+        </Helmet>
+
         <PageWrapper>
           <PageHeader deal={props.deal} isBackOffice={props.isBackOffice} />
 

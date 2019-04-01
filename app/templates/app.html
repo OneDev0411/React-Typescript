@@ -22,10 +22,14 @@
 
   <!-- -->
   {{# openGraph.has_og }}
+  <meta property="fb:app_id" content="{{ openGraph.app_id }}" />
+  <meta property="og:type" content="website" />
   <meta property="og:url" content="{{ openGraph.og_url }}" />
   <meta property="og:title" content="{{ openGraph.og_title }}" />
   <meta property="og:description" content="{{ openGraph.og_description }}" />
-  <meta property="og:image" content="{{ openGraph.og_image_url }}" /> {{/ openGraph.has_og }}
+  <meta property="og:image" content="{{ openGraph.og_image_url }}" />
+  <meta property="og:image:alt" content="Listing" />
+  {{/ openGraph.has_og }}
 
   <!-- -->
   <link rel="apple-touch-icon" sizes="180x180" href="/static/images/favicons/apple-touch-icon.png">

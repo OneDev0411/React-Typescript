@@ -9,15 +9,19 @@ import ActionButton from 'components/Button/ActionButton'
 import { Container, Title, Section, Actions } from './styled'
 
 export default class Onboarding extends React.Component {
-  get Display() {
-    if (this.props.onTimeDisplay) {
-      return Cookie.get(this.props.onTimeDisplay) === undefined
+  getDisplay() {
+    if (this.props.display === true) {
+      return true
     }
 
-    return this.props.display
+    if (this.props.cookie) {
+      return Cookie.get(this.props.cookie) === undefined
+    }
+
+    return false
   }
 
-  get NormalizedSteps() {
+  getNormalizedSteps() {
     return this.props.steps.map(step => ({
       ...step,
       disableBeacon: true,
@@ -56,25 +60,28 @@ export default class Onboarding extends React.Component {
   }
 
   onCallback = data => {
-    if (data.type === 'tour:end' && this.props.onTimeDisplay) {
-      Cookie.set(this.props.onTimeDisplay, '', {
+    if (data.type === 'tour:end' && this.props.cookie) {
+      Cookie.set(this.props.cookie, '', {
         path: '/',
         expires: 10000
       })
+
+      this.props.onFinishIntro()
     }
 
     this.props.callback(data)
   }
 
   render() {
-    if (this.Display === false) {
+    if (this.getDisplay() === false) {
       return false
     }
 
     return (
       <div>
         <Joyride
-          steps={this.NormalizedSteps}
+          autoStart
+          steps={this.getNormalizedSteps()}
           run={this.props.run}
           scrollToFirstStep
           continuous
@@ -97,11 +104,13 @@ export default class Onboarding extends React.Component {
 Onboarding.propTypes = {
   steps: PropTypes.array.isRequired,
   callback: PropTypes.func,
+  onFinishIntro: PropTypes.func,
   display: PropTypes.bool,
-  onTimeDisplay: PropTypes.string
+  cookie: PropTypes.string
 }
 
 Onboarding.defaultProps = {
   callback: () => null,
-  display: true
+  onFinishIntro: () => null,
+  display: false
 }

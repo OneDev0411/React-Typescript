@@ -1,24 +1,29 @@
 import React, { Fragment } from 'react'
-import { connect } from 'react-redux'
-
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import juice from 'juice'
 
+import { Portal } from 'components/Portal'
 import IconButton from 'components/Button/IconButton'
 import DropButton from 'components/Button/DropButton'
 import ActionButton from 'components/Button/ActionButton'
-// import { Icon as DropdownIcon } from 'components/Dropdown'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 
-import { VideoToolbar } from './VideoToolbar'
-
-import config from './config'
+import { getActiveTeam } from 'utils/user-teams'
 
 import nunjucks from '../helpers/nunjucks'
+import {
+  getAsset as getBrandAsset,
+  getListingUrl
+} from '../helpers/nunjucks-functions'
 
-import loadGrapes from '../helpers/load-grapes'
+import { loadGrapesjs } from './utils/load-grapes'
+import { createGrapesInstance } from './utils/create-grapes-instance'
+
+import Templates from '../Templates'
+import { VideoToolbar } from './VideoToolbar'
 
 import {
   Container,
@@ -28,7 +33,6 @@ import {
   Header,
   Divider
 } from './styled'
-import Templates from '../Templates'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -55,33 +59,19 @@ class Builder extends React.Component {
   }
 
   async componentDidMount() {
-    const { Grapesjs } = await loadGrapes()
-    const { addPlugin } = await import('./AssetManager')
+    const { Grapesjs } = await loadGrapesjs()
 
-    await addPlugin()
+    const { load: loadAssetManagerPlugin } = await import('./AssetManager')
+    const { load: loadStyleManagerPlugin } = await import('./StyleManager')
+
+    await Promise.all([loadAssetManagerPlugin(), loadStyleManagerPlugin()])
 
     this.setState({
       isLoading: false
     })
 
-    this.editor = Grapesjs.init({
-      ...config,
-      avoidInlineStyle: false,
-      keepUnusedStyles: true,
-      forceClass: false,
-      container: '#grapesjs-canvas',
-      components: null,
-      assetManager: {
-        assets: [...this.props.assets, ...this.UserAssets]
-      },
-      storageManager: {
-        autoload: 0,
-        params: {
-          templateId: null
-        }
-      },
-      showDevices: false,
-      plugins: ['asset-blocks']
+    this.editor = createGrapesInstance(Grapesjs, {
+      assets: [...this.props.assets, ...this.UserAssets]
     })
 
     this.editor.on('load', this.setupGrapesJs)
@@ -214,7 +204,15 @@ class Builder extends React.Component {
   handleSocialSharing = socialNetworkName =>
     this.props.onSocialSharing(this.getSavedTemplate(), socialNetworkName)
 
-  generateTemplate = (template, data) => nunjucks.renderString(template, data)
+  generateBrandedTemplate = (template, data) => {
+    const { brand } = getActiveTeam(this.props.user)
+
+    return nunjucks.renderString(template, {
+      ...data,
+      getAsset: getBrandAsset.bind(null, brand),
+      getListingUrl: getListingUrl.bind(null, brand)
+    })
+  }
 
   setEditorTemplateId = id => {
     this.editor.StorageManager.store({
@@ -312,10 +310,13 @@ class Builder extends React.Component {
       state => ({
         selectedTemplate: {
           ...state.selectedTemplate,
-          template: this.generateTemplate(state.originalTemplate.template, {
-            ...this.props.templateData,
-            ...newData
-          })
+          template: this.generateBrandedTemplate(
+            state.originalTemplate.template,
+            {
+              ...this.props.templateData,
+              ...newData
+            }
+          )
         }
       }),
       () => {
@@ -334,113 +335,115 @@ class Builder extends React.Component {
     const isSocialMedium = this.IsSocialMedium
 
     return (
-      <Container className="template-builder">
-        <Header>
-          <h1>{this.props.headerTitle}</h1>
+      <Portal root="marketing-center">
+        <Container className="template-builder">
+          <Header>
+            <h1>{this.props.headerTitle}</h1>
 
-          <Actions>
-            {this.state.selectedTemplate && (
-              <TeamContactSelect
-                fullHeight
-                pullTo="right"
-                user={this.props.templateData.user}
-                owner={this.state.owner}
-                onSelect={this.handleOwnerChange}
-                buttonRenderer={this.renderAgentPickerButton}
-                style={{
-                  marginRight: '0.5rem'
-                }}
-              />
-            )}
+            <Actions>
+              {this.state.selectedTemplate && (
+                <TeamContactSelect
+                  fullHeight
+                  pullTo="right"
+                  user={this.props.templateData.user}
+                  owner={this.state.owner}
+                  onSelect={this.handleOwnerChange}
+                  buttonRenderer={this.renderAgentPickerButton}
+                  style={{
+                    marginRight: '0.5rem'
+                  }}
+                />
+              )}
 
-            {this.ShowEditListingsButton && (
-              <ActionButton
-                style={{ marginLeft: '0.5rem' }}
-                appearance="outline"
-                onClick={this.props.onShowEditListings}
-              >
-                Edit Listings ({this.props.templateData.listings.length})
-              </ActionButton>
-            )}
-
-            {this.state.selectedTemplate && isSocialMedium && (
-              <Fragment>
-                <ActionButton
-                  onClick={() => this.handleSocialSharing('Instagram')}
-                >
-                  <i
-                    className="fa fa-instagram"
-                    style={{
-                      fontSize: '1.5rem',
-                      marginRight: '0.5rem'
-                    }}
-                  />
-                  Post to Instagram
-                </ActionButton>
-
+              {this.ShowEditListingsButton && (
                 <ActionButton
                   style={{ marginLeft: '0.5rem' }}
-                  onClick={() => this.handleSocialSharing('Facebook')}
+                  appearance="outline"
+                  onClick={this.props.onShowEditListings}
                 >
-                  <i
-                    className="fa fa-facebook-square"
-                    style={{
-                      fontSize: '1.5rem',
-                      marginRight: '0.5rem'
-                    }}
-                  />
-                  Post to Facebook
+                  Edit Listings ({this.props.templateData.listings.length})
                 </ActionButton>
-              </Fragment>
-            )}
+              )}
 
-            {this.state.selectedTemplate && !isSocialMedium && (
-              <ActionButton
-                style={{ marginLeft: '0.5rem' }}
-                onClick={this.handleSave}
+              {this.state.selectedTemplate && isSocialMedium && (
+                <Fragment>
+                  <ActionButton
+                    onClick={() => this.handleSocialSharing('Instagram')}
+                  >
+                    <i
+                      className="fa fa-instagram"
+                      style={{
+                        fontSize: '1.5rem',
+                        marginRight: '0.5rem'
+                      }}
+                    />
+                    Post to Instagram
+                  </ActionButton>
+
+                  <ActionButton
+                    style={{ marginLeft: '0.5rem' }}
+                    onClick={() => this.handleSocialSharing('Facebook')}
+                  >
+                    <i
+                      className="fa fa-facebook-square"
+                      style={{
+                        fontSize: '1.5rem',
+                        marginRight: '0.5rem'
+                      }}
+                    />
+                    Post to Facebook
+                  </ActionButton>
+                </Fragment>
+              )}
+
+              {this.state.selectedTemplate && !isSocialMedium && (
+                <ActionButton
+                  style={{ marginLeft: '0.5rem' }}
+                  onClick={this.handleSave}
+                >
+                  Next
+                </ActionButton>
+              )}
+
+              <Divider />
+              <IconButton
+                isFit
+                iconSize="large"
+                inverse
+                onClick={this.props.onClose}
               >
-                Next
-              </ActionButton>
-            )}
+                <CloseIcon />
+              </IconButton>
+            </Actions>
+          </Header>
 
-            <Divider />
-            <IconButton
-              isFit
-              iconSize="large"
-              inverse
-              onClick={this.props.onClose}
+          <BuilderContainer>
+            <TemplatesContainer
+              isInvisible={this.props.showTemplatesColumn === false}
             >
-              <CloseIcon />
-            </IconButton>
-          </Actions>
-        </Header>
-
-        <BuilderContainer>
-          <TemplatesContainer
-            isInvisible={this.props.showTemplatesColumn === false}
-          >
-            <Templates
-              defaultTemplate={this.props.defaultTemplate}
-              medium={this.props.mediums}
-              onTemplateSelect={this.handleSelectTemplate}
-              templateTypes={this.props.templateTypes}
-            />
-          </TemplatesContainer>
-
-          <div
-            id="grapesjs-canvas"
-            ref={ref => (this.grapes = ref)}
-            style={{ position: 'relative' }}
-          >
-            {this.IsVideoTemplate && this.IsTemplateLoaded && (
-              <VideoToolbar
-                onRef={ref => (this.videoToolbar = ref)}
-                editor={this.editor}
+              <Templates
+                defaultTemplate={this.props.defaultTemplate}
+                medium={this.props.mediums}
+                onTemplateSelect={this.handleSelectTemplate}
+                templateTypes={this.props.templateTypes}
               />
-            )}
-          </div>
-        </BuilderContainer>
-      </Container>
+            </TemplatesContainer>
+
+            <div
+              id="grapesjs-canvas"
+              ref={ref => (this.grapes = ref)}
+              style={{ position: 'relative' }}
+            >
+              {this.IsVideoTemplate && this.IsTemplateLoaded && (
+                <VideoToolbar
+                  onRef={ref => (this.videoToolbar = ref)}
+                  editor={this.editor}
+                />
+              )}
+            </div>
+          </BuilderContainer>
+        </Container>
+      </Portal>
     )
   }
 }

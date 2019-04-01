@@ -33,7 +33,7 @@ export const ColumnsContainer = styled.div`
 `
 
 export const SideColumnWrapper = styled.div`
-  overflow: hidden;
+  /* overflow: hidden; */
 
   @media (min-width: 48em) {
     width: 30%;

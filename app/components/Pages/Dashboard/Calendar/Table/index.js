@@ -94,7 +94,7 @@ export class Table extends React.Component {
             <EventIcon event={rowData} />
 
             <div>
-              <Title onClick={this.onTitleClick(rowData)}>
+              <Title onClick={() => this.onTitleClick(rowData)}>
                 {rowData.title}
               </Title>
 
@@ -117,24 +117,19 @@ export class Table extends React.Component {
   }
 
   onTitleClick = row => {
-    let onClick = () => {}
-
     switch (row.object_type) {
       case 'deal_context':
-        onClick = () => goTo(`/dashboard/deals/${row.deal}`, 'Calendar')
+        goTo(`/dashboard/deals/${row.deal}`, 'Calendar')
         break
 
       case 'contact_attribute':
-        onClick = () => goTo(`/dashboard/contacts/${row.contact}`, 'Calendar')
+        goTo(`/dashboard/contacts/${row.contact}`, 'Calendar')
         break
 
       case 'crm_task':
-        onClick = () =>
-          this.props.onSelectTask({ id: row.crm_task, type: row.event_type })
+        this.props.onSelectTask({ id: row.id, type: row.event_type })
         break
     }
-
-    return onClick
   }
 
   onHoverDate = value => {

@@ -9,6 +9,7 @@ import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 import { EventDrawer } from 'components/EventDrawer'
 import ActionButton from 'components/Button/ActionButton'
 import {
+  AssociationsList,
   DateTimeField,
   ReminderField,
   WhenFieldChanges
@@ -23,7 +24,6 @@ import { postLoadFormat } from './helpers/post-load-format'
 import { Title } from './components/Title'
 import { TaskType } from './components/TaskType'
 import { AssociationsButtons } from './components/AssociationsButtons'
-import { AssociationsList } from './components/AssociationsList'
 import { FormContainer, FieldContainer } from './styled'
 
 const propTypes = {
@@ -78,7 +78,7 @@ export default class Task extends Component {
 
             const submitting = props.submitting || props.validating
             const isActive =
-              values.title ||
+              (typeof values.title === 'string' && values.title.trim()) ||
               (defaultAssociation
                 ? values.associations.length > 1
                 : values.associations.length > 0)
@@ -135,6 +135,7 @@ export default class Task extends Component {
                         </FieldContainer>
                       </Flex>
                       <AssociationsList
+                        name="associations"
                         associations={values.associations}
                         defaultAssociation={defaultAssociation}
                       />
@@ -176,12 +177,13 @@ export default class Task extends Component {
                 {this.state.formValues && (
                   <EventDrawer
                     isOpen
-                    user={this.props.user}
+                    defaultAssociation={defaultAssociation}
                     initialValues={this.state.formValues}
                     onClose={this.handleDrawerClose}
                     submitCallback={newEvent =>
                       this.handleDrawerClose(props, newEvent)
                     }
+                    user={this.props.user}
                   />
                 )}
               </React.Fragment>

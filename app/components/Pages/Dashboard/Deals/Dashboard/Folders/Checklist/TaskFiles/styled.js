@@ -5,12 +5,6 @@ import LinkButton from 'components/Button/LinkButton'
 export const Container = styled.div`
   justify-content: space-between;
   align-items: center;
-
-  ${props =>
-    props.isOpen === false &&
-    `
-    display: none;
-  `};
 `
 
 export const FileContainer = styled.div`
@@ -37,8 +31,10 @@ export const FileLink = styled(LinkButton)`
   color: #000;
   font-size: 1rem;
   font-weight: 500;
-  padding: 0;
+  padding: 0 1rem 0 0;
   margin: 0;
+  white-space: normal;
+  line-height: 1.8;
 `
 
 export const FileRow = styled.div`

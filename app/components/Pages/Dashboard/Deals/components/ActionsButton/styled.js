@@ -9,10 +9,11 @@ export const PrimaryAction = styled.div`
   font-size: 1rem;
   font-weight: 500;
   height: 100%;
-  width: 10rem;
+  width: ${props => (props.hasSecondaryActions ? '10rem' : '12.3rem')};
 
   :hover {
     color: ${primary};
+    background-color: #d9d9d9;
   }
 
   :active {
@@ -23,10 +24,11 @@ export const PrimaryAction = styled.div`
 export const MenuButton = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   border-left: 1px solid #ccc;
-  padding: 0 0.625rem;
   background-color: #f2f2f2;
   border-radius: 0 3px 3px 0;
+  width: 2.3rem;
 
   :hover,
   :focus {

@@ -137,7 +137,7 @@ const Filters = ({
             />
             <GroupRadios name="minimum_bedrooms" label="Bedrooms" />
             <GroupRadios name="minimum_bathrooms" label="Bathrooms" />
-            <GroupRadios name="minimum_parking_spaces" label="Garage Space" />
+            <GroupRadios name="minimum_parking_spaces" label="Parking Spaces" />
             <Subdivision />
             <Schools />
             <MinMaxInputs name="square_meters" label="Square Footage" />

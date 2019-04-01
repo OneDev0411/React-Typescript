@@ -15,13 +15,18 @@ class Tags extends React.Component {
   }
 
   openOverLay = () => this.setState({ overlayIsOpen: true })
+
   closeOverlay = () => this.setState({ overlayIsOpen: false })
 
   render() {
     const hasTags = this.props.tags.length > 0
 
     return (
-      <Section onEdit={hasTags ? this.openOverLay : undefined} title="Tags">
+      <Section
+        onEdit={hasTags ? this.openOverLay : undefined}
+        title="Tags"
+        style={{ padding: '0 1.5rem' }}
+      >
         {hasTags ? (
           <TagsList tags={this.props.tags} />
         ) : (
@@ -37,6 +42,7 @@ class Tags extends React.Component {
         )}
 
         <TagsOverlay
+          contact={this.props.contact}
           closeOverlay={this.closeOverlay}
           isOpen={this.state.overlayIsOpen}
           selectedContactsIds={[this.props.contact.id]}

@@ -118,17 +118,22 @@ export class Associations extends React.Component {
 
     return (
       <Flex wrap style={{ marginTop: '2em' }}>
-        {associations.slice(0, 6).map((association, index) => (
-          <AssociationItem
-            association={association}
-            key={`association_${index}`}
-            isRemovable={false}
-            isReadOnly={
-              this.defaultAssociationId ===
-              association[association.association_type].id
-            }
-          />
-        ))}
+        {associations
+          .slice(0, 6)
+          .map((association, index) =>
+            this.defaultAssociationId ===
+            association[association.association_type].id ? null : (
+              <AssociationItem
+                association={association}
+                key={`association_${index}`}
+                isRemovable={false}
+                isReadOnly={
+                  this.defaultAssociationId ===
+                  association[association.association_type].id
+                }
+              />
+            )
+          )}
         {associationsLength > 6 && (
           <Button size="large" appearance="link" onClick={this.openMoreDrawer}>
             View All Associations

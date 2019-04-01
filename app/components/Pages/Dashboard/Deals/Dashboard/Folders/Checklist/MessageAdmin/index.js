@@ -2,9 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
+import PendingIcon from 'components/SvgIcons/DealTaskPending/IconPending'
+
 import { setSelectedTask, updateDealNotifications } from 'actions/deals'
 
 import ActionButton from 'components/Button/ActionButton'
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import { Container, BadgeCounter } from './styled'
 
@@ -45,11 +48,26 @@ class MessageAdmin extends React.Component {
           size="small"
           onClick={() => this.handleSelectTask(task, room)}
         >
-          Messsage Admin
+          <TextMiddleTruncate text={this.props.checklistName} maxLength={15} />
+          &nbsp;General Comments
         </ActionButton>
 
-        {new_notifications > 0 && (
-          <BadgeCounter>{new_notifications}</BadgeCounter>
+        {(new_notifications > 0 || task.attention_requested) && (
+          <BadgeCounter
+            isRectangle={new_notifications > 0 && task.attention_requested}
+          >
+            {task.attention_requested && <PendingIcon />}
+
+            {new_notifications > 0 && (
+              <span
+                style={{
+                  marginLeft: task.attention_requested ? '0.5rem' : 0
+                }}
+              >
+                {new_notifications}
+              </span>
+            )}
+          </BadgeCounter>
         )}
       </Container>
     )

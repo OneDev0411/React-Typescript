@@ -20,7 +20,13 @@ class CommentInput extends React.Component {
     height: 40
   }
 
-  onHeightChangeHandler = height => this.setState({ height: height + 5 })
+  onHeightChangeHandler = height => {
+    if (isNaN(height)) {
+      return false
+    }
+
+    this.setState({ height: height + 5 })
+  }
 
   /**
    * post comment,

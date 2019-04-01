@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
+import { Helmet } from 'react-helmet'
 
 import { getSavedSearchListings } from '../../../../../models/listings/alerts/get-alert-listings'
 import { selectAlert } from '../../../../../reducers/listings/alerts/list'
@@ -126,6 +127,9 @@ class SavedSearch extends React.Component {
   render() {
     return (
       <React.Fragment>
+        <Helmet>
+          <title> {this.props.savedSearch.title} | Properties | Rechat</title>
+        </Helmet>
         <Header
           title={this.props.savedSearch.title}
           subtitle={this.props.savedSearch.proposed_title}

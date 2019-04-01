@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
+import { Helmet } from 'react-helmet'
 
 import CoverImage from './components/CoverImage'
 import PersonalInfo from './components/PersonalInfo'
@@ -9,6 +10,9 @@ import PageHeader from '../../../../../views/components/PageHeader'
 
 const Profile = ({ user, brand }) => (
   <Fragment>
+    <Helmet>
+      <title>Profile | Settings | Rechat</title>
+    </Helmet>
     <PageHeader isFlat style={{ marginBottom: '1.5em', marginTop: '1.5rem' }}>
       <PageHeader.Title showBackButton={false}>
         <PageHeader.Heading>Profile</PageHeader.Heading>

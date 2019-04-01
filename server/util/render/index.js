@@ -1,6 +1,8 @@
 import urlParser from 'url'
+
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
+
 import reducers from '../../../app/reducers'
 import config from '../../../config/webpack'
 import getBrand from '../../../app/models/brand'
@@ -76,7 +78,7 @@ async function display(file, renderProps) {
   // append user data to render props params
   if (initialState.user) {
     try {
-      await store.dispatch(getTeams(initialState.user))
+      await store.dispatch(getTeams(initialState.user, true))
     } catch (e) {
       if (e.response && e.response.status === 401) {
         console.log('Can not get user teams. signing out...')

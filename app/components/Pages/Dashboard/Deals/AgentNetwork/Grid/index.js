@@ -10,7 +10,12 @@ import { Company } from './columns/Company'
 import { ContactInfo } from './columns/ContactInfo'
 import { ListingsListViewDrawer } from './ListingsListViewDrawer'
 
-const buttonStyle = { padding: 0, height: 'auto', lineHeight: 1 }
+const buttonStyle = {
+  padding: '0.25rem 0 1rem',
+  height: 'auto',
+  lineHeight: 1,
+  width: '100%'
+}
 
 export class Grid extends React.Component {
   state = {
@@ -44,6 +49,7 @@ export class Grid extends React.Component {
     return data
       .filter(agent => selectedRows.includes(agent.id))
       .map(agent => ({
+        data_type: 'email',
         name: agent.name,
         email: agent.email
       }))
@@ -166,7 +172,7 @@ export class Grid extends React.Component {
             loadable: {
               accuracy: 300, // px
               debounceTime: 300, // ms
-              onTrigger: this.props.onRequestLoadMore
+              onScrollBottom: this.props.onRequestLoadMore
             }
           }}
         />

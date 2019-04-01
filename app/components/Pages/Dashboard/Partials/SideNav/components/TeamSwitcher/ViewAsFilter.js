@@ -54,6 +54,20 @@ class ViewAsFilter extends React.Component {
   }
 
   setViewAsSetting = _.debounce(() => {
+    const viewAsList = viewAs(this.props.user)
+    const currentUserFilterLength = viewAsList.length
+    const nextUserFilterLength = this.state.viewAsList.length
+    const activeTeamMemberCount = this.props.brandMembers.length
+
+    if (
+      (currentUserFilterLength === 0 ||
+        currentUserFilterLength === activeTeamMemberCount) &&
+      (nextUserFilterLength === 0 ||
+        nextUserFilterLength === activeTeamMemberCount)
+    ) {
+      return
+    }
+
     this.props.dispatch(setViewAsFilter(this.props.user, this.state.viewAsList))
   }, 500)
 

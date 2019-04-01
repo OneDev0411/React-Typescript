@@ -21,7 +21,7 @@ class TextIconButton extends PureComponent {
     /**
      * Sets an icon before the text. Can be any icon from Rechat SVG icons.
      */
-    iconLeft: PropTypes.func,
+    iconLeft: PropTypes.oneOf(PropTypes.func, PropTypes.object),
 
     /**
      * The aim of the left icon. Not a big use case for this.
@@ -41,9 +41,10 @@ class TextIconButton extends PureComponent {
 
   static defaultProps = {
     ...Button.defaultProps,
-    text: '',
+    appearance: 'outline',
     iconLeftAim: 'none',
-    iconRightAim: 'none'
+    iconRightAim: 'none',
+    text: ''
   }
 
   render() {

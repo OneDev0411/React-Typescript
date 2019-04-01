@@ -2,6 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import Flex from 'styled-flex-component'
 
+import Tooltip from 'components/tooltip'
 import IconNotification from 'components/SvgIcons/Notifications/IconNotifications'
 
 export default ({ message }) => (
@@ -22,6 +23,11 @@ export default ({ message }) => (
       <span className="name">{message.comment}</span>
     </Flex>
 
-    <span>{moment.unix(message.created_at).fromNow()}</span>
+    <Tooltip
+      caption={moment.unix(message.created_at).format('MMM DD, YYYY h:mmA')}
+      placement="left"
+    >
+      <span>{moment.unix(message.created_at).fromNow()}</span>
+    </Tooltip>
   </div>
 )

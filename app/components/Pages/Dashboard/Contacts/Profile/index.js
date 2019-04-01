@@ -3,27 +3,27 @@ import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
+import { Helmet } from 'react-helmet'
 
 import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 
-import { getContactTimeline } from '../../../../../models/contacts/get-contact-timeline'
+import { getContact } from 'models/contacts/get-contact'
+import { deleteContacts } from 'models/contacts/delete-contact'
+import { updateContactSelf } from 'models/contacts/update-contact-self'
+import { getContactTimeline } from 'models/contacts/get-contact-timeline'
+import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
+import { deleteAttribute } from 'models/contacts/delete-attribute'
 
 import {
   selectDefinitionByName,
   isLoadedContactAttrDefs
 } from '../../../../../reducers/contacts/attributeDefs'
-
-import { getContactsTags } from '../../../../../store_actions/contacts/get-contacts-tags'
-import {
-  getContact,
-  deleteAttributes,
-  updateContactSelf,
-  upsertContactAttributes
-} from '../../../../../store_actions/contacts'
 import { selectContact } from '../../../../../reducers/contacts/list'
-import { selectContactError } from '../../../../../reducers/contacts/contact'
-import { normalizeContact } from '../../../../../views/utils/association-normalizers'
+
+import { normalizeContact } from '../../../../../store_actions/contacts/helpers/normalize-contacts'
+import { getContactsTags } from '../../../../../store_actions/contacts/get-contacts-tags'
+import { normalizeContact as associationNormalizer } from '../../../../../views/utils/association-normalizers'
 
 import Loading from '../../../../Partials/Loading'
 import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
@@ -38,6 +38,7 @@ import { ContactInfo } from './ContactInfo'
 import Addresses from './Addresses'
 import { AddNote } from './AddNote'
 import { Owner } from './Owner'
+import Delete from './Delete'
 import {
   PageContainer,
   ColumnsContainer,
@@ -53,20 +54,30 @@ import { Timeline } from './Timeline'
 
 class ContactProfile extends React.Component {
   state = {
+    contact: null,
+    isDeleting: false,
     isUpdatingOwner: false,
     isDesktopScreen: true,
     isFetchingTimeline: true,
     timeline: []
   }
 
+  static getDerivedStateFromProps(props, state) {
+    if (!props.contact) {
+      return state
+    }
+
+    if (!state.contact || props.contact.updated_at > state.contact.updated_at) {
+      return { contact: props.contact }
+    }
+
+    return state
+  }
+
   componentDidMount = () => {
     this.detectScreenSize()
     window.addEventListener('resize', this.detectScreenSize)
     this.initializeContact()
-
-    if (this.props.fetchTags) {
-      this.props.getContactsTags()
-    }
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -85,6 +96,16 @@ class ContactProfile extends React.Component {
   componentWillUnmount = () =>
     window.removeEventListener('resize', this.detectScreenSize)
 
+  /**
+   * Web page (document) title
+   * @returns {String} Title
+   */
+  get documentTitle() {
+    let title = this.state.contact.summary.display_name || ''
+
+    return title ? `${title} | Contacts | Rechat` : 'Contact | Rechat'
+  }
+
   detectScreenSize = () => {
     if (window.innerWidth < 1681 && this.state.isDesktopScreen) {
       return this.setState({ isDesktopScreen: false })
@@ -95,16 +116,26 @@ class ContactProfile extends React.Component {
     }
   }
 
-  async initializeContact() {
-    if (!this.props.contact || !this.props.contact.user) {
-      await this.props.getContact(this.props.params.id)
-    }
+  fetchContact = async (callback = () => {}) => {
+    try {
+      const response = await getContact(this.props.params.id)
 
-    this.fetchTimeline()
+      this.setState({ contact: normalizeContact(response.data) }, callback)
+    } catch (error) {
+      if (error.status === 404 || error.status === 400) {
+        browserHistory.push('/dashboard/contacts')
+      }
+    }
   }
 
-  updateContact() {
-    this.props.getContact(this.props.params.id)
+  initializeContact() {
+    this.fetchContact(() => {
+      if (this.props.fetchTags) {
+        this.props.getContactsTags()
+      }
+
+      this.fetchTimeline()
+    })
   }
 
   fetchTimeline = async () => {
@@ -118,12 +149,18 @@ class ContactProfile extends React.Component {
     }
   }
 
+  setContact = (newContact, fallback) =>
+    this.setState(
+      contact => ({ contact: { ...contact, ...newContact } }),
+      fallback
+    )
+
   addEvent = crm_event => {
     this.setState(
       state => ({
         timeline: [crm_event, ...state.timeline]
       }),
-      this.updateContact
+      this.fetchContact
     )
   }
 
@@ -138,7 +175,7 @@ class ContactProfile extends React.Component {
           updatedEvent
         ]
       }),
-      this.updateContact
+      this.fetchContact
     )
 
   deleteEvent = id =>
@@ -146,52 +183,70 @@ class ContactProfile extends React.Component {
       state => ({
         timeline: this.filterTimelineById(state, id)
       }),
-      this.updateContact
+      this.fetchContact
     )
 
   handleAddNote = async text => {
-    await this.props.upsertContactAttributes(this.props.contact.id, [
+    const contact = await upsertContactAttributes(this.state.contact.id, [
       {
         text,
         attribute_def: selectDefinitionByName(this.props.attributeDefs, 'note')
       }
     ])
-    this.fetchTimeline()
+
+    this.setContact(contact, this.fetchTimeline)
   }
 
   editNote = async note => {
-    await this.props.upsertContactAttributes(this.props.contact.id, [
+    const contact = await upsertContactAttributes(this.state.contact.id, [
       {
         id: note.id,
         text: note.text
       }
     ])
-    this.fetchTimeline()
+
+    this.setContact(contact, this.fetchTimeline)
   }
 
   deleteNote = async note => {
-    await this.props.deleteAttributes(this.props.contact.id, [note.id])
-    this.fetchTimeline()
+    const response = await deleteAttribute(this.state.contact.id, note.id)
+
+    this.setContact(normalizeContact(response.data), this.fetchTimeline)
   }
 
   onChangeOwner = async item => {
     this.setState({ isUpdatingOwner: true })
-    await this.props.updateContactSelf(this.props.contact.id, {
-      user: item.value.id
-    })
-    this.setState({ isUpdatingOwner: false })
+
+    try {
+      const contact = await updateContactSelf(this.state.contact.id, {
+        user: item.value.id
+      })
+
+      this.setState(state => ({
+        isUpdatingOwner: false,
+        contact: { ...state.contact, ...contact }
+      }))
+    } catch (error) {
+      console.log(error)
+      this.setState({ isUpdatingOwner: false })
+    }
+  }
+
+  delete = async () => {
+    try {
+      this.setState({ isDeleting: true })
+
+      await deleteContacts([this.state.contact.id])
+
+      browserHistory.push('/dashboard/contacts')
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   render() {
-    const { user, contact, fetchError } = this.props
-
-    if (fetchError) {
-      if (fetchError.status === 404 || fetchError.status === 400) {
-        browserHistory.push('/dashboard/contacts')
-      }
-
-      return <Container>{fetchError.message}</Container>
-    }
+    const { contact } = this.state
+    const { user } = this.props
 
     if (!isLoadedContactAttrDefs(this.props.attributeDefs) || !contact) {
       return (
@@ -203,7 +258,7 @@ class ContactProfile extends React.Component {
 
     const defaultAssociation = {
       association_type: 'contact',
-      contact: normalizeContact(contact)
+      contact: associationNormalizer(contact)
     }
 
     const thirdColumnSections = [
@@ -211,8 +266,16 @@ class ContactProfile extends React.Component {
       <DealsListWidget contactId={contact.id} key="key-1" />
     ]
 
+    const _props = {
+      contact,
+      submitCallback: this.setContact
+    }
+
     return (
       <PageWrapper>
+        <Helmet>
+          <title>{this.documentTitle}</title>
+        </Helmet>
         <PageContainer>
           <Header contact={contact} />
 
@@ -222,15 +285,15 @@ class ContactProfile extends React.Component {
                 <Tags contact={contact} />
               </Card>
               <Card>
-                {!this.state.isDesktopScreen && <Dates contact={contact} />}
+                {!this.state.isDesktopScreen && <Dates {..._props} />}
 
-                <ContactInfo contact={contact} />
+                <ContactInfo {..._props} />
 
-                <Addresses contact={contact} />
+                <Addresses {..._props} />
 
-                <Details contact={contact} />
+                <Details {..._props} />
 
-                <Partner contact={contact} />
+                <Partner {..._props} />
 
                 {!this.state.isDesktopScreen && (
                   <DealsListWidget contactId={contact.id} />
@@ -244,6 +307,10 @@ class ContactProfile extends React.Component {
                   disabled={this.state.isUpdatingOwner}
                 />
               </Card>
+              <Delete
+                handleDelete={this.delete}
+                isDeleting={this.state.isDeleting}
+              />
             </SideColumnWrapper>
 
             <SecondColumn>
@@ -320,12 +387,11 @@ class ContactProfile extends React.Component {
   }
 }
 
-const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
-  const { list, contact: fetchContact, attributeDefs } = contacts
+const mapStateToProps = ({ user, contacts }, props) => {
   const tags = contacts.list
   const fetchTags = !isFetchingTags(tags) && selectTags(tags).length === 0
 
-  let contact = selectContact(list, contactId)
+  let contact = selectContact(contacts.list, props.params.id)
 
   if (!contact || !contact.user) {
     contact = null
@@ -333,21 +399,16 @@ const mapStateToProps = ({ user, contacts }, { params: { id: contactId } }) => {
 
   return {
     user,
-    attributeDefs,
     contact,
-    fetchError: selectContactError(fetchContact),
     fetchTags,
-    viewAsUsers: viewAs(user)
+    viewAsUsers: viewAs(user),
+    attributeDefs: contacts.attributeDefs
   }
 }
 
 export default connect(
   mapStateToProps,
   {
-    getContact,
-    deleteAttributes,
-    updateContactSelf,
-    upsertContactAttributes,
     getContactsTags
   }
 )(ContactProfile)

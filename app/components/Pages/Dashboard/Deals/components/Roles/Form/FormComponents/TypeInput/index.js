@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { Container } from './styled'
-
 import { RadioGroup } from 'components/Forms/RadioGroupInput'
 
-export const TYPE_PERSON = 'person'
-export const TYPE_COMPANY = 'company'
+import { Container } from './styled'
+
+export const TYPE_PERSON = 'Person'
+export const TYPE_COMPANY = 'Organization'
 
 export const FormType = props => (
   <Container>

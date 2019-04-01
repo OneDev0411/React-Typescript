@@ -5,41 +5,32 @@ import _ from 'underscore'
 import unionBy from 'lodash/unionBy'
 import intersectionBy from 'lodash/intersectionBy'
 
-import OverlayDrawer from '../../../../../../views/components/OverlayDrawer'
-import Info from './Info'
-import CustomTag from './CustomTag'
-import DrawerFooter from './DrawerFooter'
-import { SubHeaderContainer } from './styled'
-import Tags from './Tags'
+import { defaultTags } from 'utils/default-tags'
+import OverlayDrawer from 'views/components/OverlayDrawer'
+
 import {
-  addAttributes,
+  getAttributeFromSummary,
+  getContactAttribute
+} from 'models/contacts/helpers'
+
+import {
+  updateContact,
   deleteAttributes,
   deleteAttributesFromContacts,
   getContactsTags,
   upsertAttributesToContacts
-} from '../../../../../../store_actions/contacts'
-import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
-import {
-  getAttributeFromSummary,
-  getContactAttribute
-} from '../../../../../../models/contacts/helpers'
-import {
-  selectContact,
-  selectContactsInfo
-} from '../../../../../../reducers/contacts/list'
-import { selectTags } from '../../../../../../reducers/contacts/tags'
-import { confirmation } from '../../../../../../store_actions/confirmation'
+} from 'actions/contacts'
+import { confirmation } from 'actions/confirmation'
 
-const defaultTags = [
-  'Warm List',
-  'Hot List',
-  'Past Client',
-  'Seller',
-  'Agent',
-  'Contractor',
-  'Closing Officer',
-  'Buyer'
-]
+import { selectTags } from 'reducers/contacts/tags'
+import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
+import { selectContact, selectContactsInfo } from 'reducers/contacts/list'
+
+import Tags from './Tags'
+import Info from './Info'
+import CustomTag from './CustomTag'
+import DrawerFooter from './DrawerFooter'
+import { SubHeaderContainer } from './styled'
 
 class TagsOverlay extends React.Component {
   constructor(props) {
@@ -150,9 +141,9 @@ class TagsOverlay extends React.Component {
     const removedTags = tags.filter(tag => !tag.isSelected && tag.id)
 
     const {
+      contact,
       upsertAttributesToContacts,
       deleteAttributesFromContacts,
-      addAttributes,
       deleteAttributes,
       getContactsTags,
       selectedContactsIds,
@@ -170,7 +161,7 @@ class TagsOverlay extends React.Component {
       }))
 
       if (selectedContactsIds.length === 1) {
-        await addAttributes(selectedContactsIds[0], attributes)
+        await this.props.updateContact(selectedContactsIds[0], attributes)
       } else {
         const updatedContacts = []
 
@@ -201,12 +192,14 @@ class TagsOverlay extends React.Component {
     }
 
     if (removedTags.length > 0) {
-      const contactsTags = selectedContactsIds.map(contactId =>
-        getContactAttribute(
-          selectContact(ContactListStore, contactId),
-          attribute_def
-        )
-      )
+      const contactsTags = selectedContactsIds.map(contactId => {
+        const selectedContact =
+          contact && contact.id === contactId
+            ? contact
+            : selectContact(ContactListStore, contactId)
+
+        return getContactAttribute(selectedContact, attribute_def)
+      })
       const flattedContactsTags = [].concat(...contactsTags)
       const removedContactsTags = []
 
@@ -243,17 +236,17 @@ class TagsOverlay extends React.Component {
 
   // get common tags between selected contacts & default tags
   getCommonTags = (selectedContactsIds, ContactListStore, existingTags) => {
-    if (
-      selectedContactsIds.length === 0 ||
-      selectContactsInfo(ContactListStore).total === 0
-    ) {
+    if (selectedContactsIds.length === 0) {
       return []
     }
 
     const { attributeDefs } = this.props
     const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
     const contactsTags = selectedContactsIds.map(contactId => {
-      const contact = selectContact(ContactListStore, contactId)
+      const contact =
+        this.props.contact && this.props.contact.id === contactId
+          ? this.props.contact
+          : selectContact(ContactListStore, contactId)
 
       if (contact) {
         return getContactAttribute(contact, attribute_def)
@@ -386,9 +379,9 @@ export default connect(
   {
     upsertAttributesToContacts,
     deleteAttributesFromContacts,
-    addAttributes,
     deleteAttributes,
     getContactsTags,
-    confirmation
+    confirmation,
+    updateContact
   }
 )(TagsOverlay)

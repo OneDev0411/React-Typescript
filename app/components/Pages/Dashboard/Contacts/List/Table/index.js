@@ -1,17 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { connect } from 'react-redux'
+
+import { getAttributeFromSummary } from 'models/contacts/helpers'
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import IconInfoOutline from 'components/SvgIcons/InfoOutline/IconInfoOutline'
 
-import Table from '../../../../../../views/components/Grid/Table'
+import Tooltip from 'components/tooltip'
+import Table from 'components/Grid/Table'
+import IconButton from 'components/Button/IconButton'
+import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 
-import Menu from './columns/Menu'
-import TagsString from './columns/Tags'
-import Name from './columns/Name'
-import { LastTouchedCell } from './columns/LastTouched'
+import { putUserSetting } from 'models/user/put-user-setting'
+import getUserTeams from 'actions/user/teams'
 
-import { LoadingComponent } from './components/LoadingComponent'
+import TagsOverlay from '../../components/TagsOverlay'
 import NoSearchResults from '../../../../../Partials/no-search-results'
 
 import MergeContacts from '../Actions/MergeContacts'
@@ -19,14 +23,16 @@ import ExportContacts from '../Actions/ExportContactsButton'
 import TagContacts from '../Actions/TagContacts'
 import CreateEvent from '../Actions/CreateEvent'
 
-import TagsOverlay from '../../components/TagsOverlay'
+import { ActionWrapper } from './components/ActionWrapper'
+import { LoadingComponent } from './components/LoadingComponent'
 
-import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
-
+import Menu from './columns/Menu'
+import Name from './columns/Name'
+import TagsString from './columns/Tags'
 import { Contact } from './columns/Contact'
-import IconButton from '../../../../../../views/components/Button/IconButton'
-import IconDeleteOutline from '../../../../../../views/components/SvgIcons/DeleteOutline/IconDeleteOutline'
-import Tooltip from '../../../../../../views/components/tooltip'
+import { LastTouchedCell } from './columns/LastTouched'
+
+import { SORT_FIELD_SETTING_KEY } from '../constants'
 
 const IconLastTouch = styled(IconInfoOutline)`
   margin-left: 0.5rem;
@@ -109,6 +115,7 @@ class ContactsList extends React.Component {
       render: ({ selectedRows }) => (
         <ExportContacts
           filters={this.props.filters}
+          conditionOperator={this.props.conditionOperator}
           users={this.props.users}
           exportIds={selectedRows}
           disabled={this.props.isFetching}
@@ -116,59 +123,98 @@ class ContactsList extends React.Component {
       )
     },
     {
-      display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows }) => (
-        <SendMlsListingCard selectedRows={selectedRows} isMultiListing>
-          Marketing
-        </SendMlsListingCard>
-      )
+      render: ({ selectedRows }) => {
+        const disabled = selectedRows.length === 0
+
+        return (
+          <ActionWrapper action="marketing" disabled={disabled}>
+            <SendMlsListingCard disabled={disabled} selectedRows={selectedRows}>
+              Marketing
+            </SendMlsListingCard>
+          </ActionWrapper>
+        )
+      }
     },
     {
-      display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows, resetSelectedRows }) => (
-        <TagContacts
-          selectedRows={selectedRows}
-          resetSelectedRows={resetSelectedRows}
-          handleChangeContactsAttributes={
-            this.props.handleChangeContactsAttributes
-          }
-        />
-      )
+      render: ({ selectedRows, resetSelectedRows }) => {
+        const disabled = selectedRows.length === 0
+
+        return (
+          <ActionWrapper action="tagging" disabled={disabled}>
+            <TagContacts
+              disabled={disabled}
+              selectedRows={selectedRows}
+              resetSelectedRows={resetSelectedRows}
+              handleChangeContactsAttributes={
+                this.props.handleChangeContactsAttributes
+              }
+            />
+          </ActionWrapper>
+        )
+      }
     },
     {
-      display: ({ selectedRows }) => selectedRows.length > 0,
-      render: ({ selectedRows, resetSelectedRows }) => (
-        <CreateEvent
-          selectedRows={selectedRows}
-          submitCallback={async () => {
-            resetSelectedRows()
-            await this.props.bulkEventCreationCallback()
-          }}
-        />
-      )
+      render: ({ selectedRows, resetSelectedRows }) => {
+        const disabled = selectedRows.length === 0
+
+        return (
+          <ActionWrapper action="creating an event" disabled={disabled}>
+            <CreateEvent
+              disabled={disabled}
+              selectedRows={selectedRows}
+              submitCallback={async () => {
+                resetSelectedRows()
+                await this.props.bulkEventCreationCallback()
+              }}
+            />
+          </ActionWrapper>
+        )
+      }
     },
     {
-      display: ({ selectedRows }) => selectedRows.length >= 2,
-      render: ({ selectedRows, resetSelectedRows }) => (
-        <MergeContacts
-          selectedRows={selectedRows}
-          rowsUpdating={this.props.rowsUpdating}
-          resetSelectedRows={resetSelectedRows}
-        />
-      )
+      render: ({ selectedRows, resetSelectedRows }) => {
+        const disabled = selectedRows.length < 2
+
+        return (
+          <ActionWrapper action="merging" atLeast="two" disabled={disabled}>
+            <MergeContacts
+              disabled={disabled}
+              selectedRows={selectedRows}
+              rowsUpdating={this.props.rowsUpdating}
+              resetSelectedRows={resetSelectedRows}
+            />
+          </ActionWrapper>
+        )
+      }
     },
     {
-      display: ({ selectedRows }) => selectedRows.length > 0,
-      render: rowData => (
-        <IconButton
-          size="small"
-          appearance="outline"
-          onClick={e => this.props.onRequestDelete(e, rowData)}
-        >
-          <IconDeleteOutline size={24} />
-        </IconButton>
-      )
+      render: rowData => {
+        const disabled = rowData.selectedRows.length === 0
+
+        return (
+          <ActionWrapper action="delete" disabled={disabled}>
+            <IconButton
+              disabled={disabled}
+              size="small"
+              appearance="outline"
+              onClick={e => this.props.onRequestDelete(e, rowData)}
+            >
+              <IconDeleteOutline size={24} />
+            </IconButton>
+          </ActionWrapper>
+        )
+      }
     }
+  ]
+
+  sortableColumns = [
+    { label: 'Most Recent', value: '-updated_at' },
+    { label: 'Last Touch', value: 'last_touch' },
+    { label: 'First name A-Z', value: 'display_name' },
+    { label: 'First name Z-A', value: '-display_name' },
+    { label: 'Last name A-Z', value: 'sort_field' },
+    { label: 'Last name Z-A', value: '-sort_field' },
+    { label: 'Created At', value: 'created_at' }
   ]
 
   getGridTrProps = (rowIndex, { isSelected }) => {
@@ -194,24 +240,22 @@ class ContactsList extends React.Component {
             },
             loadable: {
               accuracy: 300, // px
+              accuracyTop: 600, // px
               debounceTime: 300, // ms
-              onTrigger: this.props.onRequestLoadMore
+              onScrollBottom: this.props.onRequestLoadMore,
+              onScrollTop: this.props.onRequestLoadMoreBefore
             },
             actionable: {
               actions: this.actions
             },
             sortable: {
-              columns: [
-                { label: 'Most Recent', value: '-updated_at' },
-                { label: 'Last Touch', value: 'last_touch' },
-                //  { label: 'Next Touch', value: 'next_touch' },
-                { label: 'First name A-Z', value: 'display_name' },
-                { label: 'First name Z-A', value: '-display_name' },
-                { label: 'Last name A-Z', value: 'sort_field' },
-                { label: 'Last name Z-A', value: '-sort_field' },
-                { label: 'Created At', value: 'created_at' }
-              ],
-              onChange: this.props.handleChangeOrder
+              columns: this.sortableColumns,
+              onChange: this.props.handleChangeOrder,
+              onPostChange: async item => {
+                await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
+                await this.props.getUserTeams(this.props.user)
+              },
+              defaultIndex: this.props.sortBy
             }
           }}
           data={this.props.data}
@@ -221,6 +265,7 @@ class ContactsList extends React.Component {
           }}
           isFetching={this.props.isFetching}
           isFetchingMore={this.props.isFetchingMore}
+          isFetchingMoreBefore={this.props.isFetchingMoreBefore}
           columns={this.columns}
           LoadingState={LoadingComponent}
           getTrProps={this.getGridTrProps}
@@ -242,4 +287,7 @@ class ContactsList extends React.Component {
   }
 }
 
-export default ContactsList
+export default connect(
+  ({ user }) => ({ user }),
+  { getUserTeams }
+)(ContactsList)

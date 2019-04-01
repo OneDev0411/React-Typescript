@@ -12,7 +12,7 @@ export function Owner(props) {
   }
 
   return (
-    <Section title="Contact Owner">
+    <Section title="Contact Owner" style={{ padding: '0 1.5rem' }}>
       <TeamContactSelect
         {...props}
         upsideDown

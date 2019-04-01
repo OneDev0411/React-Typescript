@@ -22,15 +22,9 @@ function handleIds(ids) {
 }
 
 function handleFilters(filters) {
-  if (typeof filters === 'string') {
-    return {
-      filter: [JSON.parse(decodeURIComponent(filters))]
-    }
-  }
-
   if (Array.isArray(filters)) {
     return {
-      filter: filters.map(filter => JSON.parse(decodeURIComponent(filter)))
+      filter: filters
     }
   }
 
@@ -48,7 +42,7 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
       return
     }
 
-    const { ids, filters, users, type } = ctx.request.body
+    const { ids, filters, users, type, filter_type = 'and' } = ctx.request.body
 
     const { brand } = ctx.params
     let data = {}
@@ -62,16 +56,16 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
 
     if (typeof users === 'string') {
       usersString = `&users[]=${users}`
-    } else if (Array.isArray(users)) {
+    } else if (Array.isArray(users) && users.length > 0) {
       usersString = `&users[]=${users.join('&users[]=')}`
     }
 
     let url
 
     if (type === 'same') {
-      url = '/analytics/contact_joint_export/facts?format=csv'
+      url = `/analytics/contact_joint_export/facts?filter_type=${filter_type}&format=csv`
     } else if (type === 'separate') {
-      url = '/analytics/contact_export/facts?format=csv'
+      url = `/analytics/contact_export/facts?filter_type=${filter_type}&format=csv`
     }
 
     const response = await ctx

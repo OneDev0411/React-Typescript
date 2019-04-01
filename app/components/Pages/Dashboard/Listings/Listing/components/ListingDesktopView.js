@@ -100,7 +100,6 @@ const ListingDesktopView = ({
   container,
   isFetching,
   errorMessage,
-  onClickFollow,
   showShareModal,
   onHideShareModal,
   showModalGallery,
@@ -120,7 +119,7 @@ const ListingDesktopView = ({
   if (typeof window !== 'undefined') {
     viewer_width = window.innerWidth
 
-    if (user && !data.is_widget && container !== 'modal') {
+    if (!data.is_widget && container !== 'modal') {
       viewer_width -= 80
     }
   }
@@ -501,7 +500,7 @@ const ListingDesktopView = ({
             scrollwheel: false,
             disableDefaultUI: true
           }}
-          bootstrapURLKeys={{ key: bootstrap_url_keys.key }}
+          bootstrapURLKeys={bootstrap_url_keys}
         >
           <ListingMapMarker
             style={S('pointer mt-10')}
@@ -712,7 +711,7 @@ const ListingDesktopView = ({
                         property.parking_spaces_garage ? 'Yes' : 'No'
                       )}
                       {renderFeatures(
-                        'Garage Spaces',
+                        'Parking Spaces',
                         property.parking_spaces_covered_total
                       )}
                       {renderFeatures(
@@ -780,7 +779,7 @@ const ListingDesktopView = ({
     `absolute h-100p bg-fff t-0 l-0 z-10 ml-80 w-${viewer_width}`
   )
 
-  if (!user || data.is_widget) {
+  if (data.is_widget) {
     viewer_wrap_style = {
       ...viewer_wrap_style,
       ...S('ml-0 w-100p')
@@ -857,7 +856,7 @@ const ListingDesktopView = ({
     justifyBetween: true,
     style: { height: '70px', padding: '0 1.5rem' }
   }
-  const Header = user ? (
+  const Header = (
     <Flex {...headerProps}>
       <TextIconButton
         appearance="outline"
@@ -865,37 +864,27 @@ const ListingDesktopView = ({
         iconLeft={IconClose}
         text="Close"
       />
-      <Flex alignCenter>
-        <div style={{ marginRight: '1em' }}>
-          <FavoriteHeart listing={listing} width="40px" height="40px" />
-        </div>
-        <ActionButton onClick={showShareModal} brandColor={brandColor}>
-          Share
-        </ActionButton>
-        {/* <Follow
-          dropdownStyle={{ right: '0px' }}
-          statuses={listingStatuses}
-          activeStatuses={
-            (listing.user_listing_notification_setting &&
-              listing.user_listing_notification_setting.status) ||
-            []
-          }
-          isFetching={isFetching}
-          onClick={onClickFollow}
-        /> */}
-      </Flex>
-    </Flex>
-  ) : (
-    <Flex {...headerProps}>
-      {brand_logo}
-      <LinkButton
-        appearance="primary"
-        to={`/signin?redirectTo=${encodeURIComponent(window.location.pathname)}
+      {user ? (
+        <Flex alignCenter>
+          <div style={{ marginRight: '1em' }}>
+            <FavoriteHeart listing={listing} width="40px" height="40px" />
+          </div>
+          <ActionButton onClick={showShareModal} brandColor={brandColor}>
+            Share
+          </ActionButton>
+        </Flex>
+      ) : (
+        <LinkButton
+          appearance="primary"
+          to={`/signin?redirectTo=${encodeURIComponent(
+            window.location.pathname
+          )}
         ${contact_info ? `&username=${contact_info}` : ''}
         ${window.location.search}`}
-      >
-        Login
-      </LinkButton>
+        >
+          Login
+        </LinkButton>
+      )}
     </Flex>
   )
 

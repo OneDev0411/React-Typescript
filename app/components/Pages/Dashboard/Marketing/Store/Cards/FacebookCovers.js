@@ -30,7 +30,7 @@ export default function FacebookCovers(props) {
       <Jumbo style={{ marginBottom: '1rem' }}>Facebook Covers</Jumbo>
       <Button
         appearance="outline"
-        to="/dashboard/marketing/Christmas,NewYear/FacebookCover"
+        to="/dashboard/marketing/Christmas,NewYear,Valentines,StPatrick,Easter,OtherHoliday/FacebookCover"
       >
         Browse Designs
       </Button>

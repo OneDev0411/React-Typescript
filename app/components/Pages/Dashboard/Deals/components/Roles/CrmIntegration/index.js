@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
 import { createRoles, updateRole } from 'actions/deals'
-import { createContacts, upsertContactAttributes } from 'actions/contacts'
+import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
+import { createContacts } from 'models/contacts/create-contacts'
 import { confirmation } from 'actions/confirmation'
 
 import {
@@ -43,10 +44,7 @@ class RoleFormWrapper extends React.Component {
           )
 
           if (upsertedAttributes.length > 0) {
-            await this.props.upsertContactAttributes(
-              form.contact.id,
-              upsertedAttributes
-            )
+            await upsertContactAttributes(form.contact.id, upsertedAttributes)
 
             this.showNotification(`${getLegalFullName(form)} Updated.`)
           }
@@ -98,9 +96,9 @@ class RoleFormWrapper extends React.Component {
   }
 
   createCrmContact = async form => {
-    await this.props.createContacts(
+    await createContacts([
       convertRoleToContact(form, this.props.user.id, this.props.attributeDefs)
-    )
+    ])
 
     this.showNotification(`New Contact Created: ${getLegalFullName(form)}`)
   }
@@ -165,8 +163,6 @@ export default connect(
     notify,
     updateRole,
     createRoles,
-    confirmation,
-    createContacts,
-    upsertContactAttributes
+    confirmation
   }
 )(RoleFormWrapper)

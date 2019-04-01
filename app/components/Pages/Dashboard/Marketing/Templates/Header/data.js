@@ -1,3 +1,5 @@
+const DEFAULT_SIZE = { width: 403, height: 214 }
+
 export const headers = {
   AsSeenIn: {
     title: 'As Seen In',
@@ -9,14 +11,14 @@ export const headers = {
   Birthday: {
     title: 'Birthday',
     brandColor: '#e4bfe8',
-    size: { width: 403, height: 214 },
+    size: DEFAULT_SIZE,
     description:
       '“Wow! My agent remembered my birthday.” - Your astounded client.'
   },
   Brand: {
     title: 'Brand Campaigns',
     brandColor: '#ded8d8',
-    size: { width: 403, height: 214 },
+    size: DEFAULT_SIZE,
     description: 'Promote the power of your unique brand to clients.'
   },
   ComingSoon: {
@@ -26,7 +28,7 @@ export const headers = {
     size: { width: 452, height: 230 },
     description: 'Promote your listing before it even hits the market.'
   },
-  'Christmas,NewYear': {
+  'Christmas,NewYear,Valentines,StPatrick,Easter,OtherHoliday': {
     title: 'Holiday',
     name: 'Holiday',
     brandColor: '#eccde9',
@@ -37,7 +39,7 @@ export const headers = {
   JustListed: {
     title: 'Just Listed',
     brandColor: '#DBE8BF',
-    size: { width: 403, height: 214 },
+    size: DEFAULT_SIZE,
     description: 'Promote your listings via email and social.'
   },
   JustSold: {
@@ -49,21 +51,21 @@ export const headers = {
   Listings: {
     title: 'Multi Listings',
     brandColor: '#C3CDE6',
-    size: { width: 403, height: 214 },
+    size: DEFAULT_SIZE,
     description:
       'Choose the perfect design to compliment all your featured listings.'
   },
   NewAgent: {
     title: 'New Agent',
-    name: 'Brand',
-    brandColor: '#ded8d8',
-    size: { width: 403, height: 214 },
-    description: 'Promote the power of your unique brand to clients.'
+    brandColor: '#F2EAC2',
+    size: DEFAULT_SIZE,
+    description:
+      'Let your contacts know you’ve joined one of the best teams in real estate.'
   },
   OpenHouse: {
     title: 'Open House',
     brandColor: '#bfd6e8',
-    size: { width: 403, height: 214 },
+    size: DEFAULT_SIZE,
     description:
       'Invite potential buyers with designs that compliment your listing.'
   },

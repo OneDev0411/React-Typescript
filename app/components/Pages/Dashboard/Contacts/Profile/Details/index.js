@@ -9,16 +9,18 @@ const fieldsOrder = [
   'last_name',
   'nickname',
   'job_title',
-  'company'
+  'company',
+  'marketing_name'
 ]
 
 export function Details(props) {
   return (
     <SectionWithFields
-      addNewFieldButtonText="Add Details"
+      addCustomAttributeButtonText="detail"
       contact={props.contact}
       fieldsOrder={fieldsOrder}
       section="Details"
+      submitCallback={props.submitCallback}
     />
   )
 }

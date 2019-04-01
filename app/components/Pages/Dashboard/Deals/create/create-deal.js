@@ -4,6 +4,7 @@ import { addNotification as notify } from 'reapop'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
 import moment from 'moment'
+import { Helmet } from 'react-helmet'
 
 import { getActiveTeamId } from 'utils/user-teams'
 
@@ -73,6 +74,10 @@ class CreateDeal extends React.Component {
   initializeDeal = async () => {
     const { deal } = this.props
 
+    if (!deal.checklists) {
+      return browserHistory.push(`/dashboard/deals/${deal.id}`)
+    }
+
     const enderType = Deal.get.field(deal, 'ender_type') || -1
 
     const dealAddress = this.generateAddressFromDeal(deal)
@@ -82,7 +87,7 @@ class CreateDeal extends React.Component {
       dealSide: deal.deal_type,
       dealPropertyType: deal.property_type,
       enderType,
-      dealStatus: Deal.get.field(deal, 'listing_status') || '',
+      dealStatus: Deal.get.status(deal) || '',
       contexts: this.generateContextsFromDeal(deal),
       defaultDealAddress: dealAddress,
       dealAddress,
@@ -314,6 +319,25 @@ class CreateDeal extends React.Component {
     return getActiveTeamId(this.props.user)
   }
 
+  get StatusList() {
+    if (this.state.dealSide === 'Selling') {
+      const isLeaseOrCommercial =
+        this.state.dealPropertyType.includes('Commercial') ||
+        this.state.dealPropertyType.includes('Lease')
+
+      return isLeaseOrCommercial ? [] : ['Coming Soon', 'Active']
+    }
+
+    return this.state.dealPropertyType.includes('Lease')
+      ? ['Active', 'Lease Contract']
+      : [
+          'Active Contingent',
+          'Active Kick Out',
+          'Active Option Contract',
+          'Pending'
+        ]
+  }
+
   /**
    * returns list of validators
    */
@@ -340,7 +364,8 @@ class CreateDeal extends React.Component {
         validator: () => dealPropertyType.length > 0
       },
       status: {
-        validator: () => (dealSide === 'Buying' ? dealStatus.length > 0 : true)
+        validator: () =>
+          this.StatusList.length === 0 || this.StatusList.includes(dealStatus)
       },
       address: {
         validator: () => dealAddress !== null
@@ -670,13 +695,20 @@ class CreateDeal extends React.Component {
     return dealObject
   }
 
-  /**
-   * get deal status based selected property type
-   */
-  getDefaultStatus = () => {
-    const { dealPropertyType } = this.state
+  getDealStatus = () => {
+    if (this.state.dealSide === 'Buying') {
+      return {
+        contract_status: this.state.dealStatus
+      }
+    }
 
-    return dealPropertyType.includes('Lease') ? 'Lease' : 'Active'
+    const defaultListingStatus = this.state.dealPropertyType.includes('Lease')
+      ? 'Lease'
+      : 'Active'
+
+    return {
+      listing_status: this.state.dealStatus || defaultListingStatus
+    }
   }
 
   /**
@@ -770,10 +802,7 @@ class CreateDeal extends React.Component {
   get Contexts() {
     let contexts = {
       ...this.state.contexts,
-      listing_status:
-        this.state.dealSide === 'Buying'
-          ? this.state.dealStatus
-          : this.getDefaultStatus()
+      ...this.getDealStatus()
     }
 
     if (this.state.enderType !== -1) {
@@ -856,6 +885,9 @@ class CreateDeal extends React.Component {
 
     return (
       <div className="deal-create">
+        <Helmet>
+          <title>Create New Deal | Deals | Rechat</title>
+        </Helmet>
         <FullPageHeader
           title={
             deal ? 'Update deal information to Go Live' : 'Create New Deal'
@@ -871,6 +903,7 @@ class CreateDeal extends React.Component {
             <Fragment>
               <DealType
                 isDraft={isDraft}
+                isRequired
                 onChangeDealType={this.changeDealType}
               />
 
@@ -925,7 +958,7 @@ class CreateDeal extends React.Component {
                     <EnderType
                       isRequired={false}
                       enderType={enderType}
-                      showAgentDoubleEnder={false}
+                      showAgentDoubleEnder
                       onChangeEnderType={this.changeEnderType}
                     />
 
@@ -974,17 +1007,17 @@ class CreateDeal extends React.Component {
                         }
                       />
                     )}
-
-                    {!isDraft && (
-                      <DealStatus
-                        isRequired={requiredFields.includes('status')}
-                        hasError={this.hasError('status')}
-                        property_type={dealPropertyType}
-                        dealStatus={dealStatus}
-                        onChangeDealStatus={this.changeDealStatus}
-                      />
-                    )}
                   </Fragment>
+                )}
+
+                {!isDraft && (
+                  <DealStatus
+                    isRequired={requiredFields.includes('status')}
+                    hasError={this.hasError('status')}
+                    dealStatus={dealStatus}
+                    statuses={this.StatusList}
+                    onChangeDealStatus={this.changeDealStatus}
+                  />
                 )}
 
                 <DealAddress
