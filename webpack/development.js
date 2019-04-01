@@ -1,16 +1,13 @@
-import webpack from 'webpack'
-
 import WebpackNotifierPlugin from 'webpack-notifier'
 
 import Webpackbar from 'webpackbar'
-
-import appConfig from '../config/webpack'
-import webpackConfig from './base'
 
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
 import UnusedFilesWebpackPlugin from 'unused-files-webpack-plugin'
 
+import appConfig from '../config/webpack'
+import webpackConfig from './base'
 
 webpackConfig.mode = 'development'
 
@@ -26,9 +23,7 @@ const postcss = function postcss() {
   ]
 }
 
-webpackConfig.entry = [
-  appConfig.compile.entry
-]
+webpackConfig.entry = [appConfig.compile.entry]
 
 webpackConfig.plugins.push(
   new UnusedFilesWebpackPlugin({
@@ -49,7 +44,7 @@ webpackConfig.plugins.push(
   new Webpackbar()
 )
 
-webpackConfig.plugins.push(new WebpackNotifierPlugin({ alwaysNotify: true }))
+webpackConfig.plugins.push(new WebpackNotifierPlugin({ alwaysNotify: false }))
 
 webpackConfig.module.rules.push(
   {
