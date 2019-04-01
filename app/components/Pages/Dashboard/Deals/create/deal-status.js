@@ -25,7 +25,7 @@ export default ({
   statuses,
   onChangeDealStatus
 }) => {
-  if (Array.isArray(statuses) === false) {
+  if (Array.isArray(statuses) === false || statuses.length === 0) {
     return false
   }
 
