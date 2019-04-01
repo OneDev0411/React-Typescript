@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { getStatusColorClass } from 'utils/listing'
 import { upsertContexts } from 'actions/deals'
 import { getDealChecklists } from 'reducers/deals/checklists'
+import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
 
 import Deal from 'models/Deal'
 import DealContext from 'models/Deal/helpers/dynamic-context'
@@ -11,6 +12,8 @@ import DealContext from 'models/Deal/helpers/dynamic-context'
 import { BasicDropdown } from 'components/BasicDropdown'
 import Spinner from 'components/Spinner'
 import { Icon as ArrowIcon } from 'components/Dropdown'
+
+import { getField } from 'models/Deal/helpers/context'
 
 import { createAdminRequestTask } from '../../utils/create-request-task'
 
@@ -22,16 +25,9 @@ class DealStatus extends React.Component {
   }
 
   get CanChangeStatus() {
-    if (this.props.deal.is_draft) {
-      return false
-    }
-
-    // if (this.getStatusList().includes(this.CurrentStatus) === false) {
-    //   return false
-    // }
-
     return (
-      this.props.isBackOffice || DealContext.getHasActiveOffer(this.props.deal)
+      this.props.deal.is_draft === false &&
+      this.getStatusList().includes(this.CurrentStatus)
     )
   }
 
@@ -48,6 +44,7 @@ class DealStatus extends React.Component {
 
     return this.props.isBackOffice
       ? [
+          'Coming Soon',
           'Active',
           'Sold',
           'Pending',
@@ -59,12 +56,7 @@ class DealStatus extends React.Component {
           'Expired',
           'Cancelled'
         ]
-      : [
-          'Pending',
-          'Active Option Contract',
-          'Active Contingent',
-          'Active Kick Out'
-        ]
+      : ['Coming Soon', 'Active']
   }
 
   get ContractStatusList() {
@@ -93,9 +85,11 @@ class DealStatus extends React.Component {
   }
 
   getStatusList() {
-    return this.props.deal.deal_type === 'Selling'
-      ? this.ListingStatusList
-      : this.ContractStatusList
+    if (getField(this.props.deal, 'contract_status')) {
+      return this.ContractStatusList
+    }
+
+    return this.ListingStatusList
   }
 
   get StatusOptions() {
@@ -147,19 +141,10 @@ class DealStatus extends React.Component {
    * @param {String} status the new deal status
    */
   notifyAdmin = async status => {
-    const activeOfferChecklist = this.props.checklists.find(
-      checklist =>
-        checklist.checklist_type === 'Buying' &&
-        checklist.is_deactivated === false &&
-        checklist.is_terminated === false
-    )
-
-    if (!activeOfferChecklist) {
-      return false
-    }
+    const checklist = getActiveChecklist(this.props.deal, this.props.checklists)
 
     createAdminRequestTask({
-      checklist: activeOfferChecklist,
+      checklist,
       userId: this.props.user.id,
       dealId: this.props.deal.id,
       taskTitle: `Change listing status to ${status}`,

@@ -40,6 +40,7 @@ class EmailCompose extends React.Component {
       fromId: this.props.from.id,
       from: `${this.props.from.display_name} <${this.props.from.email}>`,
       recipients: this.props.recipients,
+      subject: '',
       body: this.props.hasStaticBody ? '' : this.props.body,
       attachments: this.initialAttachments
     }
@@ -57,11 +58,7 @@ class EmailCompose extends React.Component {
 
   validate = values => {
     const errors = {}
-    const { subject, recipients } = values
-
-    if (!subject || subject.length === 0) {
-      errors.subject = 'Please enter the subject'
-    }
+    const { recipients } = values
 
     if (!recipients || recipients.length === 0) {
       errors.recipients = 'You should select one recipient at least'
@@ -101,14 +98,19 @@ class EmailCompose extends React.Component {
         status: 'success',
         message: 'The email has been sent'
       })
+
+      this.props.onClose()
     } catch (e) {
       console.log(e)
+
+      this.props.notify({
+        status: 'error',
+        message: 'Could not send the email. try again.'
+      })
     } finally {
       this.setState({
         isSendingEmail: false
       })
-
-      this.props.onClose()
     }
   }
 

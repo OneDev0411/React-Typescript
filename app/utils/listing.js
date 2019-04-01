@@ -131,10 +131,12 @@ export const getListingAddressObj = (listing) => {
   }
 }
 
-export const getListingAddress = address => {
-  if (!address) {
-    throw new Error('address parameter in empty')
+export const getListingAddress = listing => {
+  if (!listing) {
+    throw new Error('Listing is empty!')
   }
+
+  const address = getListingAddressObj(listing)
 
   const { street_number, street_name, street_suffix, unit_number } = address
 

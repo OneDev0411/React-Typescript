@@ -1,4 +1,5 @@
 import React from 'react'
+
 import Avatar from 'components/Avatar'
 
 import Deal from 'models/Deal'
@@ -15,9 +16,9 @@ export function ListingImage({ deal }) {
       image={imageUrl || placeholderImageUrl}
       title={deal.title}
       placeHolderImage=""
+      showStatus={status !== null}
       statusColor={getStatusColorClass(status)}
       isOnline
-      showStatus
     />
   )
 }

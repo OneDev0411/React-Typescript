@@ -30,14 +30,16 @@ export class AddListingAssociation extends React.Component {
             <Tooltip id={`tooltip_${title}`} caption={title}>
               {this.props.buttonRenderer(handleOpen)}
             </Tooltip>
-            <SearchListingsDrawer
-              isOpen={isActive}
-              title={title}
-              onClose={handleClose}
-              onSelectListings={listings =>
-                this.onSelectHandler(listings[0], handleClose)
-              }
-            />
+            {isActive && (
+              <SearchListingsDrawer
+                isOpen={isActive}
+                title={title}
+                onClose={handleClose}
+                onSelectListings={listings =>
+                  this.onSelectHandler(listings[0], handleClose)
+                }
+              />
+            )}
           </div>
         )}
       />

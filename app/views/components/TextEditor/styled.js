@@ -1,14 +1,20 @@
 import styled from 'styled-components'
 
 import 'draft-js/dist/Draft.css'
-import 'draft-js-emoji-plugin/lib/plugin.css'
 
 export const Toolbar = styled.div`
+  display: flex;
+  align-items: center;
   margin: 1rem 0;
   border-bottom: 1px solid #eee;
-  padding-bottom: 0.5rem;
+  padding-bottom: 1rem;
+  display: flex;
+  align-items: center;
 `
 
-export const ToolbarRow = styled.div`
-  margin: 0.25rem;
+export const Separator = styled.span`
+  height: 1rem;
+  width: 2px;
+  background-color: #ccc;
+  margin-right: 1rem;
 `

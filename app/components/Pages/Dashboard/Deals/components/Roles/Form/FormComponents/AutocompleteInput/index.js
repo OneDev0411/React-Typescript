@@ -25,6 +25,11 @@ export class AutoCompleteInput extends Component {
 
   onChange = selectedItem => {
     this.setState({ selectedItem })
+
+    if (!selectedItem) {
+      return false
+    }
+
     this.props.input.onChange(selectedItem)
   }
 
