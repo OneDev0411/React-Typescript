@@ -1,3 +1,5 @@
+import path from 'path'
+
 import webpack from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MomentLocalesPlugin from 'moment-locales-webpack-plugin'
@@ -12,8 +14,6 @@ import moment from 'moment'
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
 
-import path from 'path'
-
 webpackConfig.mode = 'production'
 
 webpackConfig.optimization = {
@@ -22,16 +22,13 @@ webpackConfig.optimization = {
   }
 }
 
-
 const Expires = moment()
   .utc()
   .add('1', 'month')
   .toDate()
 
 function postcss() {
-  return [
-    require('autoprefixer')()
-  ]
+  return [require('autoprefixer')()]
 }
 
 webpackConfig.devtool = 'source-map'
@@ -88,9 +85,9 @@ webpackConfig.plugins.push(
     exclude: /.*\.html$/,
     basePath: 'dist/',
     s3Options: {
-      //     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      //     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-      //     region: 'us-west-1'
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      region: 'us-west-1'
     },
     s3UploadOptions: {
       Bucket: process.env.ASSETS_BUCKET,
@@ -128,8 +125,8 @@ webpackConfig.module.rules.push({
         plugins: postcss
       }
     },
-    'sass-loader',
-  ],
+    'sass-loader'
+  ]
 })
 
 export default webpackConfig
