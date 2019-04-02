@@ -31,7 +31,7 @@ function Menu(props) {
         isFit
         iconSize="large"
         inverse
-        // backUrl="/dashboard/contacts"
+        fallbackUrl="/dashboard/contacts"
       />
     </Flex>
   )
