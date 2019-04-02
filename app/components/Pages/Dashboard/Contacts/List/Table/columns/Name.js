@@ -12,7 +12,8 @@ import Tooltip from '../../../../../../../views/components/tooltip'
 import PartnerIcon from '../../../../../../../views/components/SvgIcons/Partner/IconPartner'
 import {
   getContactAttribute,
-  getAttributeFromSummary
+  getAttributeFromSummary,
+  getContactOnlineStatus
 } from '../../../../../../../models/contacts/helpers'
 
 import ImageStatus from '../../../../../../../views/components/ImageStatus'
@@ -54,23 +55,9 @@ const ContactsListName = ({ contact, attributeDefs }) => {
 
   const name = getAttributeFromSummary(contact, 'display_name')
 
-  let userStatuses = []
+  const is_user_active = getContactOnlineStatus(contact)
 
-  contact.sub_contacts.forEach(
-    ({ users: subContactUsers }) =>
-      subContactUsers &&
-      subContactUsers.forEach(user => userStatuses.push(user.user_status))
-  )
-
-  let statusColor
-
-  if (userStatuses.length > 0) {
-    if (userStatuses[0] === 'Active') {
-      statusColor = '#32b86d'
-    } else {
-      statusColor = '#c3c3c3'
-    }
-  }
+  const statusColor = is_user_active ? '#32b86d' : '#c3c3c3'
 
   return (
     <Flex nowrap style={{ minWidth: '0' }}>
