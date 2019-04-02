@@ -10,7 +10,7 @@ const config = {
     entry: path.resolve(__dirname, '../../app'),
     output: path.resolve(__dirname, '../../dist'),
     publicDirName: 'static',
-    publicPath: __DEV__ ? '/static' : '/',
+    publicPath: __DEV__ ? '/static' : null,
     jsBundle: __DEV__ ? 'app.js' : '[name].[hash].js',
     jsVendorBundle: 'core.[hash].js',
     cssBundle: 'app.[hash].css',
