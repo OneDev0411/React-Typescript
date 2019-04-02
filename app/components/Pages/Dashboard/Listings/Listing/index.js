@@ -117,7 +117,7 @@ class Listing extends React.Component {
     return (
       <React.Fragment>
         <Helmet>
-          <title>{this.pageTitle}</title>
+          <title>{this.documentTitle}</title>
         </Helmet>
         {content}
       </React.Fragment>
