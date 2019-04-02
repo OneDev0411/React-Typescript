@@ -1,7 +1,8 @@
 # Browsers that we support based on Google Analytics data
 # Oct 1, 2018 - Apr 1, 2019
 
-last 2 version and > 1% in US
+last 2 version
+> 1% in US
 Chrome >= 68
 Firefox >= 61
 Safari >= 10
