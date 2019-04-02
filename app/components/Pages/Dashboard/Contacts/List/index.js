@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
+import { withRouter } from 'react-router'
 import _ from 'underscore'
 
 import { confirmation } from 'actions/confirmation'
@@ -111,6 +111,12 @@ class ContactsList extends React.Component {
     }
   }
 
+  componentDidUpdate() {
+    if (!this.props.router.getCurrentLocation().query.s) {
+      this.fetchList()
+    }
+  }
+
   componentWillUnmount() {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
   }
@@ -121,11 +127,11 @@ class ContactsList extends React.Component {
     }))
 
   getStartQueryParam = () =>
-    parseInt(browserHistory.getCurrentLocation().query.s, 10) || 0
+    parseInt(this.props.router.getCurrentLocation().query.s, 10) || 0
 
   setStartQueryParam = value =>
-    browserHistory.replace(
-      `${browserHistory.getCurrentLocation().pathname}?s=${value}`
+    this.props.router.replace(
+      `${this.props.router.getCurrentLocation().pathname}?s=${value}`
     )
 
   hasSearchState = () =>
@@ -436,14 +442,16 @@ function mapStateToUser({ user, contacts }) {
   }
 }
 
-export default connect(
-  mapStateToUser,
-  {
-    getContacts,
-    searchContacts,
-    deleteContacts,
-    confirmation,
-    setContactsListTextFilter,
-    getContactsTags
-  }
-)(ContactsList)
+export default withRouter(
+  connect(
+    mapStateToUser,
+    {
+      getContacts,
+      searchContacts,
+      deleteContacts,
+      confirmation,
+      setContactsListTextFilter,
+      getContactsTags
+    }
+  )(ContactsList)
+)
