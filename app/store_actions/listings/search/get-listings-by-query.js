@@ -25,11 +25,11 @@ export const getListingsByQuery = (text, query) => async (
 
     const { code, info, data } = response
 
-    const normilizedListings = normalize(data, schema.listingsList)
+    const normalizedListings = normalize(data, schema.listingsList)
 
     const successPatch = {
       response: {
-        ...normilizedListings,
+        ...normalizedListings,
         info: {
           code,
           ...info
@@ -44,10 +44,12 @@ export const getListingsByQuery = (text, query) => async (
     }
 
     const newProps = extendedBounds(
-      data.map(({ location: { latitude: lat, longitude: lng } }) => ({
-        lat,
-        lng
-      })),
+      data
+        .filter(l => l.location != null)
+        .map(({ location: { latitude: lat, longitude: lng } }) => ({
+          lat,
+          lng
+        })),
       getState().search.map.props
     )
 
