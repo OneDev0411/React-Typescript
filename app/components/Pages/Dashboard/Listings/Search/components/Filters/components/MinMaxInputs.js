@@ -58,7 +58,8 @@ const MinMaxInputs = ({
   placeholder = 'Any',
   warnMin,
   warnMax,
-  formatHandler = turnToNumber,
+  formatHandler = value =>
+    !value || value == null ? '' : value.replace(/[^0-9.]/g, ''),
   normalizeHandler = v => v || null
 }) => {
   const minName = `minimum_${name}`
