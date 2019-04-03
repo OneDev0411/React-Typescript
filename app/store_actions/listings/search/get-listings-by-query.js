@@ -23,7 +23,9 @@ export const getListingsByQuery = (text, query) => async (
 
     const response = await searchListings(text, query)
 
-    const { code, info, data } = response
+    let { code, info, data } = response
+
+    data = data.filter(l => l.location != null)
 
     const normalizedListings = normalize(data, schema.listingsList)
 
@@ -44,12 +46,10 @@ export const getListingsByQuery = (text, query) => async (
     }
 
     const newProps = extendedBounds(
-      data
-        .filter(l => l.location != null)
-        .map(({ location: { latitude: lat, longitude: lng } }) => ({
-          lat,
-          lng
-        })),
+      data.map(({ location: { latitude: lat, longitude: lng } }) => ({
+        lat,
+        lng
+      })),
       getState().search.map.props
     )
 
