@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
-import { connect } from 'react-redux'
-
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import juice from 'juice'
 
@@ -9,38 +8,22 @@ import { Portal } from 'components/Portal'
 import IconButton from 'components/Button/IconButton'
 import DropButton from 'components/Button/DropButton'
 import ActionButton from 'components/Button/ActionButton'
-// import { Icon as DropdownIcon } from 'components/Dropdown'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 
-import { VideoToolbar } from './VideoToolbar'
-
-import config from './config'
+import { getActiveTeam } from 'utils/user-teams'
 
 import nunjucks from '../helpers/nunjucks'
+import {
+  getAsset as getBrandAsset,
+  getListingUrl
+} from '../helpers/nunjucks-functions'
 
-import loadGrapes from '../helpers/load-grapes'
+import { loadGrapesjs } from './utils/load-grapes'
+import { createGrapesInstance } from './utils/create-grapes-instance'
 
-const STYLE_MANAGER_TEXT_TAGS = [
-  'div',
-  'section',
-  'table',
-  'tr',
-  'td',
-  'ol',
-  'ul',
-  'li',
-  'p',
-  'span',
-  'a',
-  'h1',
-  'h2',
-  'h3',
-  'h4',
-  'h5',
-  'h6',
-  'address'
-]
+import Templates from '../Templates'
+import { VideoToolbar } from './VideoToolbar'
 
 import {
   Container,
@@ -50,7 +33,6 @@ import {
   Header,
   Divider
 } from './styled'
-import Templates from '../Templates'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -77,7 +59,8 @@ class Builder extends React.Component {
   }
 
   async componentDidMount() {
-    const { Grapesjs } = await loadGrapes()
+    const { Grapesjs } = await loadGrapesjs()
+
     const { load: loadAssetManagerPlugin } = await import('./AssetManager')
     const { load: loadStyleManagerPlugin } = await import('./StyleManager')
 
@@ -87,47 +70,8 @@ class Builder extends React.Component {
       isLoading: false
     })
 
-    this.editor = Grapesjs.init({
-      ...config,
-      avoidInlineStyle: false,
-      keepUnusedStyles: true,
-      forceClass: false,
-      container: '#grapesjs-canvas',
-      components: null,
-      assetManager: {
-        assets: [...this.props.assets, ...this.UserAssets]
-      },
-      storageManager: {
-        autoload: 0,
-        params: {
-          templateId: null
-        }
-      },
-      showDevices: false,
-      plugins: ['asset-blocks', 'style-manager'],
-      pluginsOpts: {
-        'style-manager': {
-          fontSizePicker: {
-            conditions: {
-              allowedTags: STYLE_MANAGER_TEXT_TAGS,
-              forbiddenStyles: ['background-image']
-            }
-          },
-          fontWeightPicker: {
-            conditions: {
-              allowedTags: STYLE_MANAGER_TEXT_TAGS,
-              forbiddenStyles: ['background-image']
-            }
-          },
-          colorPicker: {
-            disabled: true,
-            conditions: {
-              allowedTags: STYLE_MANAGER_TEXT_TAGS,
-              forbiddenStyles: ['background-image']
-            }
-          }
-        }
-      }
+    this.editor = createGrapesInstance(Grapesjs, {
+      assets: [...this.props.assets, ...this.UserAssets]
     })
 
     this.editor.on('load', this.setupGrapesJs)
@@ -260,7 +204,15 @@ class Builder extends React.Component {
   handleSocialSharing = socialNetworkName =>
     this.props.onSocialSharing(this.getSavedTemplate(), socialNetworkName)
 
-  generateTemplate = (template, data) => nunjucks.renderString(template, data)
+  generateBrandedTemplate = (template, data) => {
+    const { brand } = getActiveTeam(this.props.user)
+
+    return nunjucks.renderString(template, {
+      ...data,
+      getAsset: getBrandAsset.bind(null, brand),
+      getListingUrl: getListingUrl.bind(null, brand)
+    })
+  }
 
   setEditorTemplateId = id => {
     this.editor.StorageManager.store({
@@ -358,10 +310,13 @@ class Builder extends React.Component {
       state => ({
         selectedTemplate: {
           ...state.selectedTemplate,
-          template: this.generateTemplate(state.originalTemplate.template, {
-            ...this.props.templateData,
-            ...newData
-          })
+          template: this.generateBrandedTemplate(
+            state.originalTemplate.template,
+            {
+              ...this.props.templateData,
+              ...newData
+            }
+          )
         }
       }),
       () => {

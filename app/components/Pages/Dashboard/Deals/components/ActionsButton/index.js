@@ -23,6 +23,8 @@ import Deal from 'models/Deal'
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 import Tooltip from 'components/tooltip'
+import TasksDrawer from 'components/SelectDealTasksDrawer'
+import EmailCompose from 'components/EmailCompose'
 
 import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
 
@@ -41,7 +43,6 @@ import { SelectItemDrawer } from './components/SelectItemDrawer'
 
 import GetSignature from '../../Signature'
 import PdfSplitter from '../../PdfSplitter'
-import TasksDrawer from '../TasksDrawer'
 import UploadManager from '../../UploadManager'
 
 import {
@@ -61,6 +62,7 @@ class ActionsButton extends React.Component {
       isSignatureFormOpen: false,
       isPdfSplitterOpen: false,
       isTasksDrawerOpen: false,
+      isComposeEmailOpen: false,
       multipleItemsSelection: null
     }
 
@@ -69,6 +71,7 @@ class ActionsButton extends React.Component {
       view: this.handleView,
       download: this.handleDownload,
       comments: this.handleShowComments,
+      'send-email': this.handleToggleComposeEmail,
       'delete-task': this.handleDeleteTask,
       'delete-file': this.handleDeleteFile,
       'move-file': this.toggleMoveFile,
@@ -140,6 +143,8 @@ class ActionsButton extends React.Component {
 
     const isTask = this.props.document.type === 'task'
     const isFile = this.props.document.type === 'file'
+
+    // get all envelopes of the document
     const envelopes = getDocumentEnvelopes(
       this.props.envelopes,
       this.props.document
@@ -190,6 +195,11 @@ class ActionsButton extends React.Component {
     return envelopes[0].status
   }
 
+  getActiveEnvelopes = envelopes =>
+    envelopes.filter(
+      envelope => ['Voided', 'Declined'].includes(envelope.status) === false
+    )
+
   getSplitterFiles = () => {
     const files = getFileUrl({
       type: this.props.type,
@@ -200,6 +210,25 @@ class ActionsButton extends React.Component {
     })
 
     return files.filter(file => file.mime === 'application/pdf')
+  }
+
+  getEmailComposeFiles = () => {
+    if (this.props.type === 'task') {
+      return []
+    }
+
+    return getFileUrl({
+      type: this.props.type,
+      deal: this.props.deal,
+      task: this.props.task,
+      document: this.props.document,
+      envelopes: this.props.envelopes
+    }).map(file => ({
+      type: 'document',
+      attachmentType: 'deal-file',
+      file,
+      task: this.props.task
+    }))
   }
 
   getPrimaryAction = actions =>
@@ -337,6 +366,14 @@ class ActionsButton extends React.Component {
   /**
    *
    */
+  handleToggleComposeEmail = () =>
+    this.setState(state => ({
+      isComposeEmailOpen: !state.isComposeEmailOpen
+    }))
+
+  /**
+   *
+   */
   handleResendEnvelope = () => {
     this.props.confirmation({
       message: 'Resend Envelope?',
@@ -405,7 +442,7 @@ class ActionsButton extends React.Component {
     })
 
     if (links.length === 1) {
-      return this.props.isBackOffice || links[0].blankTarget === false
+      return this.props.isBackOffice && links[0].openInNewTab !== true
         ? browserHistory.push(links[0].url)
         : window.open(links[0].url, '_blank')
     }
@@ -416,7 +453,7 @@ class ActionsButton extends React.Component {
         title: 'Select a file to view/print',
         actionTitle: 'View/Print',
         onSelect: item =>
-          this.props.isBackOffice || item.blankTarget === false
+          this.props.isBackOffice && item.openInNewTab !== true
             ? browserHistory.push(item.url)
             : window.open(item.url, '_blank')
       }
@@ -543,6 +580,7 @@ class ActionsButton extends React.Component {
             <div style={{ position: 'relative' }}>
               <Container>
                 <PrimaryAction
+                  hasSecondaryActions={secondaryActions.length > 0}
                   onClick={() => this.handleSelectAction(primaryAction)}
                 >
                   {this.getButtonLabel(primaryAction)}
@@ -622,6 +660,16 @@ class ActionsButton extends React.Component {
           />
         )}
 
+        {this.state.isComposeEmailOpen && (
+          <EmailCompose
+            isOpen
+            defaultAttachments={this.getEmailComposeFiles()}
+            from={this.props.user}
+            deal={this.props.deal}
+            onClose={this.handleToggleComposeEmail}
+          />
+        )}
+
         {this.state.multipleItemsSelection && (
           <SelectItemDrawer
             isOpen
@@ -640,7 +688,6 @@ ActionsButton.propTypes = {
   task: PropTypes.object.isRequired,
   document: PropTypes.object
 }
-
 ActionsButton.defaultProps = {
   document: null
 }

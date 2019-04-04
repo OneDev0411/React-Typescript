@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
-import { Menu } from './Menu'
+import Menu from './Menu'
 import { Catalog } from './Catalog'
 
 Header.propTypes = {

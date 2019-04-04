@@ -2,7 +2,12 @@ import Fetch from '../../../services/fetch'
 
 export async function sendContactsEmail(email) {
   try {
-    const response = await new Fetch().post('/contacts/emails').send(email)
+    const data = {
+      ...email,
+      due_at: email.due_at || new Date()
+    }
+
+    const response = await new Fetch().post('/emails/individual').send(data)
 
     return response.body
   } catch (error) {

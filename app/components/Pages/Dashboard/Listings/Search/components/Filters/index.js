@@ -6,7 +6,11 @@ import withHandlers from 'recompose/withHandlers'
 import cn from 'classnames'
 import ClickOutside from 'react-click-outside'
 
-import { getStatusColor } from '../../../../../../../utils/listing'
+import { getStatusColor } from 'utils/listing'
+import actions from 'actions/listings/search/filters'
+import ActionButton from 'components/Button/ActionButton'
+
+import { property_subtypes, architectural_styles } from '../../../mapOptions'
 
 import Price from './Price'
 import Schools from './Schools'
@@ -21,9 +25,7 @@ import MinMaxInputs from './components/MinMaxInputs'
 import SoldStatusChildrens from './SoldStatusChildrens'
 import { pendingStatuses, otherStatuses } from './statuses'
 import FiltersListingsStatusRow from './FiltersListingsStatusRow'
-import { property_subtypes, architectural_styles } from '../../../mapOptions'
-import actions from '../../../../../../../store_actions/listings/search/filters'
-import ActionButton from '../../../../../../../views/components/Button/ActionButton'
+import { yesNoEitherFieldItems } from './helpers/yes-no-either-field-items'
 
 const INITIAL_VALUES = {
   pool: 'either',
@@ -36,7 +38,8 @@ const INITIAL_VALUES = {
   priceZeroCleaner: false,
   minimum_bedrooms: 'any',
   minimum_bathrooms: 'any',
-  minimum_parking_spaces: 'any'
+  minimum_parking_spaces: 'any',
+  master_bedroom_in_first_floor: 'either'
 }
 
 const Filters = ({
@@ -137,7 +140,7 @@ const Filters = ({
             />
             <GroupRadios name="minimum_bedrooms" label="Bedrooms" />
             <GroupRadios name="minimum_bathrooms" label="Bathrooms" />
-            <GroupRadios name="minimum_parking_spaces" label="Garage Space" />
+            <GroupRadios name="minimum_parking_spaces" label="Parking Spaces" />
             <Subdivision />
             <Schools />
             <MinMaxInputs name="square_meters" label="Square Footage" />
@@ -148,11 +151,12 @@ const Filters = ({
             <GroupRadios
               label="Pool"
               name="pool"
-              fields={[
-                { title: 'Yes', value: 'YES' },
-                { title: 'No', value: 'NO' },
-                { title: 'Either', value: 'either' }
-              ]}
+              fields={yesNoEitherFieldItems}
+            />
+            <GroupRadios
+              label="Master Bedroom on Main"
+              name="master_bedroom_in_first_floor"
+              fields={yesNoEitherFieldItems}
             />
             <YearBuilt />
           </div>

@@ -4,6 +4,7 @@ import { browserHistory } from 'react-router'
 import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import moment from 'moment'
+import { Helmet } from 'react-helmet'
 
 import Deal from 'models/Deal'
 import DealContext from 'models/Deal/helpers/dynamic-context'
@@ -273,7 +274,7 @@ class CreateOffer extends React.Component {
         // create/update contexts
         await this.saveContexts(checklist, {
           ...contexts,
-          listing_status: dealStatus,
+          contract_status: dealStatus,
           ender_type: enderType
         })
       }
@@ -452,6 +453,17 @@ class CreateOffer extends React.Component {
     }
   }
 
+  get StatusList() {
+    return this.props.deal.property_type.includes('Lease')
+      ? ['Active', 'Lease Contract']
+      : [
+          'Active Contingent',
+          'Active Kick Out',
+          'Active Option Contract',
+          'Pending'
+        ]
+  }
+
   render() {
     const {
       saving,
@@ -480,6 +492,9 @@ class CreateOffer extends React.Component {
 
     return (
       <div className="deal-create-offer">
+        <Helmet>
+          <title>Add Offer | Deals | Rechat</title>
+        </Helmet>
         <FullPageHeader
           title="Add New Offer"
           handleClose={this.cancelCreateOffer}
@@ -552,7 +567,7 @@ class CreateOffer extends React.Component {
               <DealStatus
                 isRequired={requiredFields.includes('deal_status')}
                 hasError={this.hasError('deal_status')}
-                property_type={deal.property_type}
+                statuses={this.StatusList}
                 dealStatus={dealStatus}
                 onChangeDealStatus={status => this.changeDealStatus(status)}
               />

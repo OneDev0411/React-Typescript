@@ -20,7 +20,6 @@ export class SearchContacts extends React.Component {
       <SearchContainer>
         <Search
           disableOnSearch={false}
-          showLoadingOnSearch
           isSearching={this.props.isSearching}
           placeholder="Search"
           onChange={this.handleSearch}

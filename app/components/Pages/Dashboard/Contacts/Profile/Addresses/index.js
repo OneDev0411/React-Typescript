@@ -91,8 +91,8 @@ class Addresses extends React.Component {
         attributes,
         {
           associations: [
+            'contact.attributes',
             'contact.updated_by',
-            'contact.sub_contacts',
             'contact_attribute.attribute_def'
           ]
         }

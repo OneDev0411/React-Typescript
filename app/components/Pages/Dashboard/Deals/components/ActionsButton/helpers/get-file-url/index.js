@@ -1,4 +1,5 @@
 import { getDocumentEnvelopes } from '../../../../utils/get-document-envelopes'
+import { getEnvelopeFileUrl } from '../../../../utils/get-envelope-file-url'
 
 /**
  *
@@ -43,8 +44,8 @@ function getSubmissionUrl(data) {
     return [
       {
         ...normalizeFile(data.task.submission.file),
-        url: `${url}/envelope/${submissionEnvelopes[0].id}`,
-        blankTarget: false
+        url: getEnvelopeFileUrl(submissionEnvelopes[0], data.task),
+        openInNewTab: true
       }
     ]
   }
@@ -63,18 +64,16 @@ function getSubmissionUrl(data) {
  *
  */
 function getDocumentUrl(data) {
-  const taskId = data.task ? data.task.id : 'draft'
+  const taskId = data.task ? data.task.id : 'stash'
   const baseUrl = `/dashboard/deals/${data.deal.id}/view/${taskId}`
 
   const documentEnvelopes = getDocumentEnvelopes(data.envelopes, data.document)
 
   if (documentEnvelopes.length > 0) {
-    const item = documentEnvelopes[0]
-
     return {
       ...normalizeFile(data.document),
-      url: `${baseUrl}/envelope/${item.id}`,
-      blankTarget: false
+      url: getEnvelopeFileUrl(documentEnvelopes[0], data.task),
+      openInNewTab: true
     }
   }
 

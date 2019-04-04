@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { noop } from 'utils/helpers'
+import Tooltip from 'components/tooltip'
 import IconButton from 'components/Button/IconButton'
 import ActionButton from 'components/Button/ActionButton'
 import DeleteIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
@@ -46,13 +47,16 @@ export class EditMode extends React.Component {
           isStatic={this.props.isStatic}
         >
           {showDelete && (
-            <IconButton
-              isFit
-              disabled={isDisabled}
-              onClick={this.props.handleDelete}
-            >
-              <DeleteIcon />
-            </IconButton>
+            <Tooltip caption="Delete">
+              <IconButton
+                isFit
+                inverse
+                disabled={isDisabled}
+                onClick={this.props.handleDelete}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
           )}
           <div
             style={{
@@ -62,9 +66,11 @@ export class EditMode extends React.Component {
           >
             <ActionButton
               size="small"
+              inverse
               appearance="link"
               disabled={isDisabled}
               onClick={this.props.handleCancel}
+              style={{ fontWeight: 500 }}
             >
               Cancel
             </ActionButton>

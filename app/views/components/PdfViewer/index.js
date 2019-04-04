@@ -8,22 +8,28 @@ import ProgressBar from 'components/ProgressBar'
 import importPdfJs from 'utils/import-pdf-js'
 import { getPdfSize } from 'models/Deal/form'
 
-import WentWrong from '../../../components/Pages/Dashboard/Partials/UserMessages/WentWrong/index.js'
+import WentWrong from '../../../components/Pages/Dashboard/Partials/UserMessages/WentWrong'
 
 import { Container, LoadingDealContainer } from './styled'
 import { Page } from './Page'
 import { Toolbar } from './Toolbar'
 
 export class PdfViewer extends React.Component {
-  state = {
-    isLoading: false,
-    visiblePages: [1, 2],
-    isFailed: true,
-    document: null,
-    downloadPercents: 1,
-    rotation: 0,
-    zoomScale: 0,
-    isFitWindow: false
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      isLoading: false,
+      visiblePages: [1, 2],
+      isFailed: false,
+      document: null,
+      downloadPercents: 1,
+      rotation: 0,
+      zoomScale: 0,
+      isFitWindow: false
+    }
+
+    document.addEventListener('keydown', this.handleKeyboardShortcuts)
   }
 
   componentDidMount() {
@@ -135,7 +141,7 @@ export class PdfViewer extends React.Component {
       return false
     }
 
-    this.setState({ isLoading: true, isFailed: false })
+    this.setState({ isLoading: true })
 
     const PDFJS = await importPdfJs()
 
@@ -164,8 +170,6 @@ export class PdfViewer extends React.Component {
       this.setState({
         downloadPercents: (progress.loaded / progress.total) * 100
       })
-
-      document.addEventListener('keydown', this.handleKeyboardShortcuts)
     }
 
     pdfDocument
@@ -176,12 +180,17 @@ export class PdfViewer extends React.Component {
           document
         })
       })
-      .catch(() => {
+      .catch(e => {
+        console.log(e)
         this.setState({ isLoading: false, isFailed: true })
       })
   }
 
   handleKeyboardShortcuts = event => {
+    if (!this.state.document) {
+      return false
+    }
+
     const keyCode = event.keyCode || event.which
 
     switch (keyCode) {

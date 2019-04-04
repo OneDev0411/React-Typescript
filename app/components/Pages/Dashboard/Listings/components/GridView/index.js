@@ -70,7 +70,7 @@ export class GridView extends React.Component {
 
   render() {
     return (
-      <div style={{ padding: '1.5em 1.5em 0.5em' }}>
+      <div style={{ padding: ' 0 1.5em 1.5em' }}>
         <Table
           columns={this.columns}
           data={this.props.listings.data.map(this.format)}

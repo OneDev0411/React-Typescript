@@ -15,7 +15,8 @@ import {
   DELETE_TASK_BUTTON,
   SHOW_COMMENTS_BUTTON,
   APPROVE_TASK_BUTTON,
-  DECLINE_TASK_BUTTON
+  DECLINE_TASK_BUTTON,
+  EMAIL_BUTTON
 } from '../../action-buttons'
 
 import {
@@ -72,6 +73,7 @@ export default normalizeConditions([
       },
       ...sharedActions,
       [UPLOAD_BUTTON]: {},
+      [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {}
@@ -90,9 +92,11 @@ export default normalizeConditions([
         primary: true
       },
       ...sharedActions,
+      [EMAIL_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {},
+      [VOID_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -109,8 +113,9 @@ export default normalizeConditions([
         primary: true
       },
       ...sharedActions,
-      [DOCUSIGN_BUTTON]: {},
+      [EMAIL_BUTTON]: {},
       [VOID_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
@@ -129,6 +134,7 @@ export default normalizeConditions([
         primary: true
       },
       ...sharedActions,
+      [EMAIL_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
@@ -144,10 +150,11 @@ export default normalizeConditions([
         envelope_status: ENVELOPE_COMPLETED
       }),
     actions: {
-      [VIEW_BUTTON]: {
+      [EMAIL_BUTTON]: {
         primary: true
       },
       ...sharedActions,
+      [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
@@ -203,6 +210,7 @@ export default normalizeConditions([
       },
       ...sharedActions,
       [TASK_NOTIFICATION_BUTTON]: {},
+      [VOID_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
       [VIEW_BUTTON]: {}
     }
@@ -224,7 +232,6 @@ export default normalizeConditions([
       },
       ...sharedActions,
       [VIEW_BUTTON]: {},
-      [DOCUSIGN_BUTTON]: {},
       [VOID_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
@@ -258,10 +265,11 @@ export default normalizeConditions([
         envelope_status: ENVELOPE_COMPLETED
       }),
     actions: {
-      [VIEW_BUTTON]: {
+      [EMAIL_BUTTON]: {
         primary: true
       },
       ...sharedActions,
+      [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
@@ -281,6 +289,7 @@ export default normalizeConditions([
         primary: true
       },
       ...sharedActions,
+      [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
@@ -300,7 +309,9 @@ export default normalizeConditions([
         primary: true
       },
       ...sharedActions,
+      [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
+      [VOID_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
@@ -322,9 +333,10 @@ export default normalizeConditions([
         disabled: true
       },
       ...sharedActions,
+      [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
-      [DOCUSIGN_BUTTON]: {},
       [VOID_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
@@ -342,6 +354,7 @@ export default normalizeConditions([
         primary: true
       },
       ...sharedActions,
+      [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
@@ -357,13 +370,14 @@ export default normalizeConditions([
         envelope_status: ENVELOPE_COMPLETED
       }),
     actions: {
-      [TASK_NOTIFICATION_BUTTON]: {
+      [EMAIL_BUTTON]: {
         primary: true
       },
       ...sharedActions,
+      [TASK_NOTIFICATION_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
-      [DOCUSIGN_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },
@@ -380,6 +394,7 @@ export default normalizeConditions([
         primary: true
       },
       ...sharedActions,
+      [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
@@ -399,7 +414,9 @@ export default normalizeConditions([
         primary: true
       },
       ...sharedActions,
+      [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
+      [VOID_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
@@ -409,7 +426,7 @@ export default normalizeConditions([
       evaluateCondition(data, {
         task_type: TASK_FORM,
         file_uploaded: true,
-        form_saved: false,
+        form_saved: true,
         envelope_status: ENVELOPE_DELIVERED
       }),
     actions: {
@@ -420,9 +437,10 @@ export default normalizeConditions([
         disabled: true
       },
       ...sharedActions,
+      [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
-      [DOCUSIGN_BUTTON]: {},
       [VOID_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
@@ -440,6 +458,7 @@ export default normalizeConditions([
         primary: true
       },
       ...sharedActions,
+      [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},
@@ -455,10 +474,11 @@ export default normalizeConditions([
         envelope_status: ENVELOPE_COMPLETED
       }),
     actions: {
-      [VIEW_BUTTON]: {
+      [EMAIL_BUTTON]: {
         primary: true
       },
       ...sharedActions,
+      [VIEW_BUTTON]: {},
       [EDIT_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [TASK_NOTIFICATION_BUTTON]: {},

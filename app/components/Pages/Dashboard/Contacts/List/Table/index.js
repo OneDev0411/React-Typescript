@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { connect } from 'react-redux'
+
 import { getAttributeFromSummary } from 'models/contacts/helpers'
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import IconInfoOutline from 'components/SvgIcons/InfoOutline/IconInfoOutline'
@@ -9,6 +11,9 @@ import Tooltip from 'components/tooltip'
 import Table from 'components/Grid/Table'
 import IconButton from 'components/Button/IconButton'
 import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
+
+import { putUserSetting } from 'models/user/put-user-setting'
+import getUserTeams from 'actions/user/teams'
 
 import TagsOverlay from '../../components/TagsOverlay'
 import NoSearchResults from '../../../../../Partials/no-search-results'
@@ -26,6 +31,8 @@ import Name from './columns/Name'
 import TagsString from './columns/Tags'
 import { Contact } from './columns/Contact'
 import { LastTouchedCell } from './columns/LastTouched'
+
+import { SORT_FIELD_SETTING_KEY } from '../constants'
 
 const IconLastTouch = styled(IconInfoOutline)`
   margin-left: 0.5rem;
@@ -157,7 +164,7 @@ class ContactsList extends React.Component {
               selectedRows={selectedRows}
               submitCallback={async () => {
                 resetSelectedRows()
-                await this.props.bulkEventCreationCallback()
+                await this.props.reloadContacts()
               }}
             />
           </ActionWrapper>
@@ -173,8 +180,10 @@ class ContactsList extends React.Component {
             <MergeContacts
               disabled={disabled}
               selectedRows={selectedRows}
-              rowsUpdating={this.props.rowsUpdating}
-              resetSelectedRows={resetSelectedRows}
+              submitCallback={async () => {
+                resetSelectedRows()
+                await this.props.reloadContacts()
+              }}
             />
           </ActionWrapper>
         )
@@ -198,6 +207,16 @@ class ContactsList extends React.Component {
         )
       }
     }
+  ]
+
+  sortableColumns = [
+    { label: 'Most Recent', value: '-updated_at' },
+    { label: 'Last Touch', value: 'last_touch' },
+    { label: 'First name A-Z', value: 'display_name' },
+    { label: 'First name Z-A', value: '-display_name' },
+    { label: 'Last name A-Z', value: 'sort_field' },
+    { label: 'Last name Z-A', value: '-sort_field' },
+    { label: 'Created At', value: 'created_at' }
   ]
 
   getGridTrProps = (rowIndex, { isSelected }) => {
@@ -229,17 +248,13 @@ class ContactsList extends React.Component {
               actions: this.actions
             },
             sortable: {
-              columns: [
-                { label: 'Most Recent', value: '-updated_at' },
-                { label: 'Last Touch', value: 'last_touch' },
-                //  { label: 'Next Touch', value: 'next_touch' },
-                { label: 'First name A-Z', value: 'display_name' },
-                { label: 'First name Z-A', value: '-display_name' },
-                { label: 'Last name A-Z', value: 'sort_field' },
-                { label: 'Last name Z-A', value: '-sort_field' },
-                { label: 'Created At', value: 'created_at' }
-              ],
-              onChange: this.props.handleChangeOrder
+              columns: this.sortableColumns,
+              onChange: this.props.handleChangeOrder,
+              onPostChange: async item => {
+                await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
+                await this.props.getUserTeams(this.props.user)
+              },
+              defaultIndex: this.props.sortBy
             }
           }}
           data={this.props.data}
@@ -270,4 +285,7 @@ class ContactsList extends React.Component {
   }
 }
 
-export default ContactsList
+export default connect(
+  ({ user }) => ({ user }),
+  { getUserTeams }
+)(ContactsList)

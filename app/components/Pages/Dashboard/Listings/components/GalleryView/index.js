@@ -55,7 +55,7 @@ export class GalleryView extends React.Component {
     const { listings } = this.props
 
     return (
-      <div style={{ padding: '1.5em 1.5em 0.5em' }}>
+      <div style={{ padding: ' 0 1.5em 1.5em' }}>
         <Table
           columns={this.columns}
           data={listings.data.map(this.format).sort(this.sort)}

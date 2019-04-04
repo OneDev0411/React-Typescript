@@ -1,40 +1,28 @@
 import agent from 'superagent'
-import { addNotification as notify } from 'reapop'
 
-import store from '../../../../stores'
+import config from '../../../../../config/public'
 
 /**
  * split files
  */
-export async function splitPDF(title, task_id, room_id, files, pages) {
+export async function splitPDF(user, title, task_id, files, pages) {
   try {
-    const response = await agent.post('/api/deals/pdf-splitter').send({
-      pages,
-      files,
-      title,
-      room_id,
-      task_id
-    })
+    const response = await agent
+      .post(`${config.splitter.url}/split`)
+      .send({
+        pages,
+        files,
+        title,
+        task_id
+      })
+      .set({
+        api_url: config.api_url,
+        access_token: user.access_token
+      })
 
-    const body = JSON.parse(response.text)
-
-    if (body.success) {
-      return body
-    }
-
-    throw new Error(body.error)
+    return response.body
   } catch (e) {
-    if (e.status === 401) {
-      store.dispatch(
-        notify({
-          status: 'error',
-          message: 'You should login to be able split the pdf'
-        })
-      )
-
-      setTimeout(() => (window.location.href = '/signout'), 2000)
-    }
-
+    console.log(e)
     throw e
   }
 }

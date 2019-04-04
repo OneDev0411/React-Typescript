@@ -7,6 +7,7 @@ export const getStatusColor = status => {
   switch (status) {
     case 'Active':
     case 'Lease':
+    case 'Coming Soon':
       return '32b86d'
 
     case 'Pending':
@@ -31,6 +32,7 @@ export const getStatusColorClass = status => {
   switch (status) {
     case 'Active':
     case 'Lease':
+    case 'Coming Soon':
       return 'green'
 
     case 'Pending':
@@ -121,6 +123,7 @@ export const getListingAddressObj = (listing) => {
 
   switch (listing.type) {
     case 'compact_listing':
+    case 'property':
       return listing.address
     case 'listing':
       return listing.property.address
@@ -129,10 +132,12 @@ export const getListingAddressObj = (listing) => {
   }
 }
 
-export const getListingAddress = address => {
-  if (!address) {
-    throw new Error('address parameter in empty')
+export const getListingAddress = listing => {
+  if (!listing) {
+    throw new Error('Listing is empty!')
   }
+
+  const address = getListingAddressObj(listing)
 
   const { street_number, street_name, street_suffix, unit_number } = address
 

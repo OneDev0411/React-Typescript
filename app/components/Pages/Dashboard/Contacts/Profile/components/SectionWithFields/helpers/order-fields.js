@@ -1,34 +1,19 @@
 export function orderFields(fields, orders) {
-  let orderedList = []
-  let customAttributeList = []
+  const mainFields = []
+  const customAttr = []
+  const getIndex = def => orders.indexOf(def.name)
 
-  fields.forEach(field => {
-    const order = orders.indexOf(field.attribute_def.name)
+  const compareFunc = (a, b) =>
+    getIndex(a.attribute_def) - getIndex(b.attribute_def)
 
-    if (order === -1) {
-      customAttributeList.push(field)
-    } else {
-      orderedList.push({
-        ...field,
-        order
-      })
-    }
-  })
+  fields.forEach(f =>
+    orders.indexOf(f.attribute_def.name) > -1
+      ? mainFields.push(f)
+      : customAttr.push(f)
+  )
 
-  if (customAttributeList.length > 0) {
-    customAttributeList
-      .sort(
-        (a, b) =>
-          a[a.attribute_def.data_type] - b[b.attribute_def.data_type] &&
-          a.attribute_def.label - b.attribute_def.label
-      )
-      .forEach(field => {
-        orderedList.push({
-          ...field,
-          order: orderedList.length
-        })
-      })
-  }
-
-  return orderedList.sort((a, b) => a.order - b.order)
+  return [...mainFields.sort(compareFunc), ...customAttr].map((f, order) => ({
+    ...f,
+    order
+  }))
 }

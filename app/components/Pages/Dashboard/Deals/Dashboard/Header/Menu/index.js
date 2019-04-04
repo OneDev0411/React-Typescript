@@ -3,8 +3,10 @@ import Flex from 'styled-flex-component'
 
 import LinkButton from 'components/Button/LinkButton'
 import { CloseButton } from 'components/Button/CloseButton'
+import SendEmail from 'components/SendEmailButton'
 
 import { RemoveDraft } from './RemoveDraft'
+
 import DealStatus from '../../../components/DealStatus'
 
 import { Divider } from '../../styled'
@@ -15,6 +17,8 @@ export function Menu(props) {
   return (
     <Flex style={{ padding: '1.5em 0' }}>
       {deal.is_draft === true && <RemoveDraft deal={deal} />}
+
+      <SendEmail deal={deal} style={{ marginLeft: '0.5rem' }} />
 
       {deal.deal_type === 'Selling' && !deal.has_active_offer && (
         <LinkButton

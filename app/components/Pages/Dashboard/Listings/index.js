@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Helmet } from 'react-helmet'
 
 import {
   Container as PageContainer,
@@ -13,7 +14,7 @@ import SavedSearchesList from './SavedSearchesList'
 
 class Listings extends Component {
   state = {
-    isSideMenuOpen: true
+    isSideMenuOpen: !!this.props.user
   }
 
   toggleSideMenu = () =>
@@ -26,30 +27,35 @@ class Listings extends Component {
     const { isSideMenuOpen } = this.state
 
     return (
-      <PageContainer
-        isOpen={isSideMenuOpen}
-        className={`l-listings ${user ? 'l-listings--logged' : ''}`}
-      >
-        {user && (
-          <SideMenu isOpen={isSideMenuOpen}>
-            <ListTitle>Properties</ListTitle>
-            <MainNav />
+      <React.Fragment>
+        <Helmet>
+          <title>Properties | Rechat</title>
+        </Helmet>
+        <PageContainer
+          isOpen={isSideMenuOpen}
+          className={`l-listings ${user ? 'l-listings--logged' : ''}`}
+        >
+          {user && (
+            <SideMenu isOpen={isSideMenuOpen}>
+              <ListTitle>Properties</ListTitle>
+              <MainNav />
 
-            <SavedSearchesList />
-          </SideMenu>
-        )}
+              <SavedSearchesList />
+            </SideMenu>
+          )}
 
-        <PageContent isSideMenuOpen={isSideMenuOpen} style={{ padding: 0 }}>
-          {user
-            ? React.Children.map(this.props.children, child =>
-                React.cloneElement(child, {
-                  isSideMenuOpen,
-                  toggleSideMenu: this.toggleSideMenu
-                })
-              )
-            : this.props.children}
-        </PageContent>
-      </PageContainer>
+          <PageContent isSideMenuOpen={isSideMenuOpen} style={{ padding: 0 }}>
+            {user
+              ? React.Children.map(this.props.children, child =>
+                  React.cloneElement(child, {
+                    isSideMenuOpen,
+                    toggleSideMenu: this.toggleSideMenu
+                  })
+                )
+              : this.props.children}
+          </PageContent>
+        </PageContainer>
+      </React.Fragment>
     )
   }
 }

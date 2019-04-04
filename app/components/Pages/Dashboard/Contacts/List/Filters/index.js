@@ -47,6 +47,25 @@ class ContactFilters extends React.PureComponent {
     }))
   }
 
+  getOriginNameByTitle = title => {
+    switch (title) {
+      case 'Brokerage widget':
+        return 'BrokerageWidget'
+      case 'Created by you':
+        return 'ExplicitlyCreated'
+      case 'iOS Contact':
+        return 'IOSAddressBook'
+      case 'Rechat Contact':
+        return 'SharesRoom'
+      case 'Outlook':
+        return 'External/Outlook'
+      case 'Open House':
+        return 'OpenHouse'
+      case 'CSV':
+        return 'CSV'
+    }
+  }
+
   get Config() {
     const { tags, attributeDefs } = this.props
 
@@ -71,13 +90,14 @@ class ContactFilters extends React.PureComponent {
         label: 'Origin',
         type: 'Set',
         multi: false,
+        postSelectFormat: this.getOriginNameByTitle,
         options: [
-          'BrokerageWidget',
-          'IOSAddressBook',
-          'SharesRoom',
-          'ExplicitlyCreated',
-          'External/Outlook',
-          'OpenHouse',
+          'Brokerage widget',
+          'Created by you',
+          'iOS Contact',
+          'Rechat Contact',
+          'Outlook',
+          'Open House',
           'CSV'
         ],
         tooltip: 'Source type'

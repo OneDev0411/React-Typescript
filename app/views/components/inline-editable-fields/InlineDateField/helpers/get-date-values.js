@@ -1,7 +1,7 @@
 import { months, addZero } from 'utils/date-times'
 
-export function getDateValues(unixUTC) {
-  if (!unixUTC) {
+export function getDateValues(date) {
+  if (!date) {
     return {
       day: { label: 'Day', value: null },
       month: { label: 'Month', value: null },
@@ -9,7 +9,11 @@ export function getDateValues(unixUTC) {
     }
   }
 
-  const utcDate = new Date(unixUTC * 1000)
+  if (date.day) {
+    return date
+  }
+
+  const utcDate = new Date(date * 1000)
   const day = utcDate.getUTCDate()
   const month = utcDate.getUTCMonth()
   const year = utcDate.getUTCFullYear()

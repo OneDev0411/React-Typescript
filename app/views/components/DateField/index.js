@@ -36,10 +36,17 @@ export class DateField extends React.Component {
     year: ''
   }
 
-  onChangeYear = e => this.props.onChangeYear(e.target.value)
+  onChangeYear = event => {
+    const { value } = event.target
+
+    if (!value || /^\d+$/.test(value)) {
+      this.props.onChangeYear(value)
+    }
+  }
 
   render() {
     const { props } = this
+    const display = 'flex'
 
     return (
       <Flex>
@@ -47,13 +54,14 @@ export class DateField extends React.Component {
           items={monthsItems}
           onChange={props.onChangeMonth}
           selectedItem={props.month}
+          style={{ display }}
           buttonRenderer={props.dropdownButtonRenderer}
         />
         <BasicDropdown
           items={daysItems}
           selectedItem={props.day}
           onChange={props.onChangeDay}
-          style={{ margin: '0 0.5rem 0' }}
+          style={{ display, margin: '0 0.5rem 0' }}
           buttonRenderer={props.dropdownButtonRenderer}
         />
         {props.showYear ? (

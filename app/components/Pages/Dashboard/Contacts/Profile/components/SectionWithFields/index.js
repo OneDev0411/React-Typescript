@@ -4,25 +4,34 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
+import { getContact } from 'models/contacts/get-contact'
 import { addAttributes } from 'models/contacts/add-attributes'
 import { updateAttribute } from 'models/contacts/update-attribute'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
+import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 
-import Button from 'components/Button/ActionButton'
+import AddIcon from 'components/SvgIcons/Add/AddIcon'
 import { ShowMoreLess } from 'components/ShowMoreLess'
+import TextIconButton from 'components/Button/TextIconButton'
 
 import { Section } from '../Section'
 import MasterField from '../ContactAttributeInlineEditableField'
 import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
 
-import { orderFields, normalizeAttributes } from './helpers'
+import {
+  fieldsNeedUpdateContact,
+  orderFields,
+  normalizeAttributes
+} from './helpers'
+
+const SHOW_MORE_LESS_LIMIT = 5
 
 const propTypes = {
-  showCustomAttributeMenu: PropTypes.bool
+  addCustomAttributeButtonText: PropTypes.string
 }
 
 const defaultProps = {
-  showCustomAttributeMenu: true
+  addCustomAttributeButtonText: ''
 }
 
 function generateEmptyAttribute(attribute_def, is_partner, order) {
@@ -73,9 +82,15 @@ class SectionWithFields extends React.Component {
     const orderedAttributes = orderAttributes(allAttributes, props.fieldsOrder)
 
     this.state = {
+      isOpenCustomAttributeDrawer: false,
       orderedAttributes,
-      isOpenCustomAttributeDrawer: false
+      showMoreLessCount: 5
     }
+  }
+
+  get orderedAttributesCopy() {
+    // a shalowCopy
+    return this.state.orderedAttributes.slice()
   }
 
   openCustomAttributeDrawer = () =>
@@ -91,8 +106,44 @@ class SectionWithFields extends React.Component {
       )
     }))
 
-  insert = async (cuid, data, attribute_def) => {
+  updateContact = async attribute_def => {
+    if (
+      this.props.isPartner ||
+      !fieldsNeedUpdateContact.includes(attribute_def.name)
+    ) {
+      return
+    }
+
+    const { contact } = this.props
+
     try {
+      const response = await getContact(contact.id)
+
+      this.props.submitCallback(normalizeContact(response.data))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  insert = async (cuid, data, attribute_def) => {
+    const orderedAttributesCopy = this.orderedAttributesCopy
+
+    try {
+      if (data.is_primary) {
+        this.setState(({ orderedAttributes }) => ({
+          orderedAttributes: orderedAttributes.map(attribute =>
+            attribute.cuid !== cuid &&
+            attribute.attribute_def.id === attribute_def.id
+              ? {
+                  ...attribute,
+                  is_primary: false,
+                  updated_at: new Date().getTime()
+                }
+              : attribute
+          )
+        }))
+      }
+
       const response = await addAttributes(this.props.contact.id, [
         { ...data, attribute_def: attribute_def.id }
       ])
@@ -117,21 +168,67 @@ class SectionWithFields extends React.Component {
               }
         )
       }))
+
+      this.updateContact(attribute_def)
     } catch (error) {
+      this.setState({
+        orderedAttributes: orderedAttributesCopy
+      })
       console.log(error)
     }
   }
 
   update = async (id, data, attribute_def) => {
+    const orderedAttributesCopy = this.orderedAttributesCopy
+
     try {
-      await updateAttribute(this.props.contact.id, id, data)
+      if (data.is_primary) {
+        this.setState(({ orderedAttributes }) => ({
+          orderedAttributes: orderedAttributes.map(attribute =>
+            attribute.id !== id &&
+            attribute.attribute_def.id === attribute_def.id
+              ? {
+                  ...attribute,
+                  is_primary: false,
+                  updated_at: new Date().getTime()
+                }
+              : attribute
+          )
+        }))
+      }
+
+      const updatedAttribute = await updateAttribute(
+        this.props.contact.id,
+        id,
+        data
+      )
 
       this.props.notify({
         status: 'success',
         dismissAfter: 4000,
         message: `${attribute_def.label || attribute_def.name} updated.`
       })
+
+      this.setState(
+        state =>
+          console.log('update state') || {
+            orderedAttributes: state.orderedAttributes.map(a =>
+              a.id !== id
+                ? a
+                : {
+                    ...updatedAttribute,
+                    attribute_def,
+                    order: a.order
+                  }
+            )
+          }
+      )
+
+      this.updateContact(attribute_def)
     } catch (error) {
+      this.setState({
+        orderedAttributes: orderedAttributesCopy
+      })
       console.log(error)
     }
   }
@@ -152,7 +249,7 @@ class SectionWithFields extends React.Component {
     }
   }
 
-  isOnlyNonSingularInstance = (state, attribute) => {
+  isNotOnlyNonSingularInstanceOf = (attribute, state) => {
     const { attribute_def } = attribute
 
     return (
@@ -165,13 +262,15 @@ class SectionWithFields extends React.Component {
 
   deleteFromState = (state, attribute) => {
     const { isPrimary } = this.props
-    const isShadowField = !!attribute.id
+    const isShadowField = !attribute.id
 
-    if (this.isOnlyNonSingularInstance(state, attribute)) {
+    if (this.isNotOnlyNonSingularInstanceOf(attribute, state)) {
       return {
-        orderedAttributes: state.orderedAttributes.filter(a =>
-          isShadowField ? a.id !== attribute.id : a.cuid !== attribute.cuid
-        )
+        orderedAttributes: state.orderedAttributes
+          .filter(a =>
+            isShadowField ? a.cuid !== attribute.cuid : a.id !== attribute.id
+          )
+          .map((a, order) => ({ ...a, order }))
       }
     }
 
@@ -184,10 +283,10 @@ class SectionWithFields extends React.Component {
         )
 
         if (isShadowField) {
-          return a.id === attribute.id ? emptyAttribute : a
+          return a.cuid === attribute.cuid ? emptyAttribute : a
         }
 
-        return a.cuid === attribute.cuid ? emptyAttribute : a
+        return a.id === attribute.id ? emptyAttribute : a
       })
     }
   }
@@ -203,9 +302,7 @@ class SectionWithFields extends React.Component {
 
     try {
       const { contact } = this.props
-      const updatedContent = await deleteAttribute(contact.id, attribute.id, {
-        associations: ['contact.updated_by']
-      })
+      const response = await deleteAttribute(contact.id, attribute.id)
 
       this.props.notify({
         status: 'success',
@@ -214,10 +311,7 @@ class SectionWithFields extends React.Component {
           attribute.attribute_def.name} deleted.`
       })
 
-      this.props.submitCallback({
-        ...contact,
-        ...updatedContent
-      })
+      this.props.submitCallback(normalizeContact(response.data))
     } catch (error) {
       console.log(error)
       this.setState({ orderedAttributes: backupList })
@@ -234,28 +328,52 @@ class SectionWithFields extends React.Component {
 
   addShadowAttribute = attribute => {
     const { attribute_def, order, is_partner } = attribute
+    const newOrder = order + 1
 
     const field = {
       attribute_def,
       cuid: cuid(),
       is_partner,
       isActive: true,
-      order: order + 1,
+      order: newOrder,
       [attribute_def.data_type]: ''
     }
 
     this.setState(state => {
       const shallowCopy = state.orderedAttributes.slice()
 
-      shallowCopy.splice(order + 1, 0, field)
+      shallowCopy.splice(newOrder, 0, field)
+
+      const newState = {
+        orderedAttributes: shallowCopy.map((a, order) => ({ ...a, order }))
+      }
+
+      if (
+        shallowCopy.length > SHOW_MORE_LESS_LIMIT &&
+        newOrder >= SHOW_MORE_LESS_LIMIT
+      ) {
+        newState.showMoreLessCount = state.showMoreLessCount + 1
+      }
+
+      return newState
+    })
+  }
+
+  AddCustomAttributeCallback = attribute_def => {
+    this.setState(({ orderedAttributes }) => {
+      const order = Math.max(...orderedAttributes.map(a => a.order)) + 1
 
       return {
-        orderedAttributes: shallowCopy.map((a, order) => ({ ...a, order }))
+        orderedAttributes: [
+          ...orderedAttributes,
+          generateEmptyAttribute(attribute_def, this.props.isPartner, order)
+        ]
       }
     })
   }
 
-  renderFields = sectionTitle => {
+  renderFields = () => {
+    const { addCustomAttributeButtonText } = this.props
     let items = this.state.orderedAttributes.map(attribute => (
       <MasterField
         attribute={attribute}
@@ -268,17 +386,15 @@ class SectionWithFields extends React.Component {
       />
     ))
 
-    if (this.props.showCustomAttributeMenu) {
+    if (addCustomAttributeButtonText) {
       items.push(
-        <Button
+        <TextIconButton
           key={cuid()}
-          appearance="link"
+          iconLeft={AddIcon}
           onClick={this.openCustomAttributeDrawer}
-          size="large"
-          style={{ margin: '0 -1em 1em' }}
-        >
-          {`+ Add a custom ${sectionTitle.toLowerCase()}`}
-        </Button>
+          style={{ marginBottom: '1em' }}
+          text={`Add a custom ${addCustomAttributeButtonText}`}
+        />
       )
     }
 
@@ -288,18 +404,19 @@ class SectionWithFields extends React.Component {
   render() {
     const { section } = this.props
     const sectionTitle = this.props.title || section
-    const sectionContainerStyle = { padding: '0 1.5rem' }
+    const sectionContainerStyle = { padding: '0 1.5rem', display: 'block' }
 
     return (
       <Section title={sectionTitle}>
-        {this.state.orderedAttributes.length > 5 ? (
-          <ShowMoreLess count={4} style={sectionContainerStyle}>
-            {this.renderFields(sectionTitle)}
+        {this.state.orderedAttributes.length > SHOW_MORE_LESS_LIMIT ? (
+          <ShowMoreLess
+            count={this.state.showMoreLessCount}
+            style={sectionContainerStyle}
+          >
+            {this.renderFields()}
           </ShowMoreLess>
         ) : (
-          <div style={sectionContainerStyle}>
-            {this.renderFields(sectionTitle)}
-          </div>
+          <div style={sectionContainerStyle}>{this.renderFields()}</div>
         )}
 
         {this.state.isOpenCustomAttributeDrawer && (
@@ -307,6 +424,7 @@ class SectionWithFields extends React.Component {
             isOpen
             onClose={this.closeNewAttributeDrawer}
             section={Array.isArray(section) ? undefined : section}
+            submitCallback={this.AddCustomAttributeCallback}
           />
         )}
       </Section>

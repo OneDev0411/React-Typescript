@@ -1,12 +1,15 @@
 import React from 'react'
 import NotificationsSystem from 'reapop'
 import notificationTheme from 'reapop-theme-wybo'
-import { Router, browserHistory, applyRouterMiddleware } from 'react-router'
-import { Provider } from 'react-redux'
-import { syncHistoryWithStore } from 'react-router-redux'
 import useScroll from 'react-router-scroll/lib/useScroll'
-
 import ConfirmationModal from './components/Partials/Confirmation'
+import { Router, browserHistory, applyRouterMiddleware } from 'react-router'
+import { syncHistoryWithStore } from 'react-router-redux'
+
+import { hot } from 'react-hot-loader/root'
+
+// import styles
+import './styles/main.scss'
 
 // Routes config
 import routes from './routes'
@@ -14,22 +17,20 @@ import routes from './routes'
 // store
 import store from './stores'
 
+
 // history
 const history = syncHistoryWithStore(browserHistory, store)
 
-// import styles
-import './styles/main.scss'
+const A = () => (
+  <div>
+    <Router history={history} render={applyRouterMiddleware(useScroll())}>
+      {routes}
+    </Router>
 
-export default () => (
-  <Provider store={store}>
-    <div>
-      <Router history={history} render={applyRouterMiddleware(useScroll())}>
-        {routes}
-      </Router>
+    <NotificationsSystem theme={notificationTheme} />
 
-      <NotificationsSystem theme={notificationTheme} />
-
-      <ConfirmationModal />
-    </div>
-  </Provider>
+    <ConfirmationModal />
+  </div>
 )
+
+export default hot(A)

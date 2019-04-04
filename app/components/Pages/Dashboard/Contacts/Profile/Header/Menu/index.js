@@ -1,9 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 import { AddToFlow } from 'components/AddToFlow'
+
+import { normalizeContact } from 'models/email-compose/helpers/normalize-contact'
+
+import SendEmailButton from 'components/SendEmailButton'
 
 import { CloseButton } from 'components/Button/CloseButton'
 
@@ -19,7 +24,7 @@ Menu.defaultProps = {
   addToFlowCallback() {}
 }
 
-export function Menu(props) {
+function Menu(props) {
   const { contact } = props
 
   return (
@@ -28,10 +33,31 @@ export function Menu(props) {
         associations={{ contacts: [contact.id] }}
         callback={props.addToFlowCallback}
       />
+
       <SendContactCard contact={contact}>Send a Card</SendContactCard>
+
+      <SendEmailButton
+        recipients={normalizeContact(contact, props.attributeDefs)}
+        style={{ marginLeft: '1rem' }}
+      />
+
       <Chat contact={contact} />
       <Divider />
-      <CloseButton isFit iconSize="large" inverse />
+
+      <CloseButton
+        isFit
+        iconSize="large"
+        inverse
+        backUrl="/dashboard/contacts"
+      />
     </Flex>
   )
 }
+
+function mapStateToProps({ contacts }) {
+  return {
+    attributeDefs: contacts.attributeDefs
+  }
+}
+
+export default connect(mapStateToProps)(Menu)

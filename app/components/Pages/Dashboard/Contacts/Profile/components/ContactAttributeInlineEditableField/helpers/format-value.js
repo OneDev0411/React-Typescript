@@ -1,5 +1,6 @@
-import { addZero } from 'utils/date-times'
+import { isNumeric } from 'utils/helpers'
 import { formatPhoneNumber } from 'utils/format'
+import { addZero, months_abbr } from 'utils/date-times'
 
 export function formatValue(attribute_def, value) {
   if (value == null || value === '') {
@@ -7,13 +8,25 @@ export function formatValue(attribute_def, value) {
   }
 
   if (attribute_def.data_type === 'date') {
-    const utcDate = new Date(value * 1000)
-    const day = utcDate.getUTCDate()
-    const month = utcDate.getUTCMonth() + 1
-    const _year = utcDate.getUTCFullYear()
-    const year = _year === 1800 ? '' : `/${_year}`
+    if (isNumeric(value)) {
+      const utcDate = new Date(value * 1000)
+      const day = utcDate.getUTCDate()
+      const month = months_abbr[utcDate.getUTCMonth()]
+      const _year = utcDate.getUTCFullYear()
+      const year = _year === 1800 ? '' : `, ${_year}`
 
-    return `${addZero(month)}/${addZero(day)}${year}`
+      return `${month} ${addZero(day)}${year}`
+    }
+
+    if (value.day) {
+      let { year } = value
+
+      year = year === 1800 || !year ? '' : `, ${year}`
+
+      return `${months_abbr[value.month.value]} ${addZero(
+        value.day.value
+      )}${year}`
+    }
   }
 
   if (attribute_def.name === 'phone_number') {

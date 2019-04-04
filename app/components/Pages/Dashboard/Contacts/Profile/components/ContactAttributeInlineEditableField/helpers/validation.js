@@ -1,24 +1,32 @@
 import {
   isEmail,
-  isFormatedDate,
+  isValidDate,
   isPhoneNumber,
   isNumber
 } from 'utils/validations'
 
+import { validateYear } from './validate-year'
+
 const validators = {
-  date: isFormatedDate,
   email: isEmail,
-  number: isNumber,
   phone_number: isPhoneNumber
 }
 
 export function validation(attribute_def, value) {
+  if (typeof value === 'string') {
+    value = value.trim()
+  }
+
+  if (!attribute_def.singular && !value) {
+    return 'Invalid input! Enter a value.'
+  }
+
   if (attribute_def.data_type === 'date') {
-    return validators.date(value)
+    return isValidDate(value, true, validateYear)
   }
 
   if (attribute_def.data_type === 'number') {
-    return validators.number(value)
+    return isNumber(value)
   }
 
   if (validators[attribute_def.name]) {

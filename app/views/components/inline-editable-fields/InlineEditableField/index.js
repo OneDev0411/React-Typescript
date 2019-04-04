@@ -12,6 +12,7 @@ export class InlineEditableField extends React.Component {
     error: PropTypes.string,
     cancelOnOutsideClick: PropTypes.bool,
     handleCancel: PropTypes.any,
+    handleOutsideClick: PropTypes.any,
     handleDelete: PropTypes.func,
     handleSave: PropTypes.func.isRequired,
     handleAddNew: PropTypes.func,
@@ -33,6 +34,7 @@ export class InlineEditableField extends React.Component {
     error: '',
     cancelOnOutsideClick: false,
     handleCancel: null,
+    handleOutsideClick: null,
     handleDelete: noop,
     handleAddNew: noop,
     isDisabled: false,
@@ -62,6 +64,16 @@ export class InlineEditableField extends React.Component {
 
   handleCancel = () => {
     if (typeof this.props.handleCancel === 'function') {
+      this.props.handleCancel()
+    } else {
+      this.props.toggleMode()
+    }
+  }
+
+  handleOutsideClick = () => {
+    if (typeof this.props.handleOutsideClick === 'function') {
+      this.props.handleOutsideClick()
+    } else if (typeof this.props.handleCancel === 'function') {
       this.props.handleCancel()
     } else {
       this.props.toggleMode()
@@ -118,7 +130,7 @@ export class InlineEditableField extends React.Component {
   render() {
     if (this.props.isEditing) {
       return this.props.cancelOnOutsideClick ? (
-        <ClickOutside onClickOutside={this.handleCancel}>
+        <ClickOutside onClickOutside={this.handleOutsideClick}>
           <EditMode {...this.editModeProps} />
         </ClickOutside>
       ) : (

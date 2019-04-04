@@ -14,7 +14,11 @@ import {
   selectContactsListFetching
 } from 'reducers/contacts/list'
 
-import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
+import {
+  viewAs,
+  viewAsEveryoneOnTeam,
+  getActiveTeamSettings
+} from 'utils/user-teams'
 
 import {
   Container as PageContainer,
@@ -27,9 +31,11 @@ import { resetGridSelectedItems } from 'components/Grid/Table/Plugins/Selectable
 import Table from './Table'
 import { SearchContacts } from './Search'
 import { Header } from './Header'
-import DuplicateContacts from '../components/DuplicateContacts'
+// import DuplicateContacts from '../components/DuplicateContacts'
 import ContactFilters from './Filters'
 import TagsList from './TagsList'
+
+import { SORT_FIELD_SETTING_KEY } from './constants'
 
 class ContactsList extends React.Component {
   constructor(props) {
@@ -44,7 +50,7 @@ class ContactsList extends React.Component {
       activeSegment: {}
     }
 
-    this.order = this.props.listInfo.order
+    this.order = getActiveTeamSettings(props.user, SORT_FIELD_SETTING_KEY)
   }
 
   componentDidMount() {
@@ -240,18 +246,20 @@ class ContactsList extends React.Component {
 
   handleOnDelete = (e, { selectedRows, resetSelectedRows }) => {
     const selectedRowsLength = selectedRows.length
+    const isManyContacts = selectedRowsLength > 1
 
     this.props.confirmation({
-      show: true,
       confirmLabel: 'Delete',
-      message: `Delete ${selectedRowsLength > 1 ? 'contacts' : 'contact'}`,
+      message: `Delete ${isManyContacts ? 'contacts' : 'contact'}?`,
       onConfirm: () =>
         this.handleDeleteContact(selectedRows, resetSelectedRows),
-      description: `Are you sure you want to delete ${
-        selectedRowsLength > 1
-          ? `these ${selectedRowsLength} contacts`
-          : 'this contact'
-      }?`
+      description: `Deleting ${
+        isManyContacts ? `these ${selectedRowsLength} contacts` : 'this contact'
+      } will remove ${
+        isManyContacts ? 'them' : 'it'
+      } from your contacts list, but ${
+        isManyContacts ? 'they' : 'it'
+      }  will not be removed from any deals.`
     })
   }
 
@@ -275,10 +283,10 @@ class ContactsList extends React.Component {
     resetGridSelectedItems('contacts')
   }
 
-  reloadContacts = async () => {
+  reloadContacts = async (start = 0) => {
     await this.props.searchContacts(
       this.state.filters,
-      0,
+      start,
       undefined,
       this.state.searchInputValue,
       this.order,
@@ -299,7 +307,7 @@ class ContactsList extends React.Component {
             name="contacts"
             onChange={this.handleChangeSavedSegment}
           />
-          <DuplicateContacts />
+          {/* <DuplicateContacts /> */}
           <TagsList onFilterChange={this.handleFilterChange} />
         </SideMenu>
 
@@ -319,7 +327,8 @@ class ContactsList extends React.Component {
             isSearching={isFetchingContacts}
           />
           <Table
-            bulkEventCreationCallback={this.reloadContacts}
+            reloadContacts={this.reloadContacts}
+            sortBy={this.order}
             handleChangeOrder={this.handleChangeOrder}
             handleChangeContactsAttributes={this.handleChangeContactsAttributes}
             data={contacts}

@@ -1,27 +1,32 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import merge from 'merge'
 import moment from 'moment'
-
-import Flex from 'styled-flex-component'
 
 import Deal from 'models/Deal'
 
+import { getActiveTeamSettings } from 'utils/user-teams'
+
 import Table from 'components/Grid/Table'
+
+import { putUserSetting } from 'models/user/put-user-setting'
+import getUserTeams from 'actions/user/teams'
+import flattenBrand from 'utils/flatten-brand'
 
 import EmptyState from './EmptyState'
 import LoadingState from '../../components/LoadingState'
 
 import Address from '../../components/table-columns/Address'
-import CriticalDate, {
-  getCriticalDateNextValue
-} from '../../components/table-columns/CriticalDate'
 import Notifications from '../../components/table-columns/NotificationBadge'
 
 import { getPrimaryAgentName } from '../../../utils/roles'
 
+const SORT_FIELD_SETTING_KEY = 'grid_deals_sort_field_bo'
+
 class Grid extends React.Component {
+  order =
+    getActiveTeamSettings(this.props.user, SORT_FIELD_SETTING_KEY) || 'address'
+
   get Columns() {
     const { roles } = this.props
 
@@ -45,18 +50,6 @@ class Grid extends React.Component {
         header: 'Office',
         accessor: deal => this.getOffice(deal),
         render: ({ rowData: deal }) => this.getOffice(deal)
-      },
-      {
-        id: 'critical-dates',
-        header: 'Critical Dates',
-        accessor: deal => getCriticalDateNextValue(deal),
-        render: ({ rowData: deal, totalRows, rowIndex }) => (
-          <CriticalDate
-            deal={deal}
-            rowId={rowIndex + 1}
-            rowsCount={totalRows}
-          />
-        )
       },
       {
         id: 'submitted-at',
@@ -103,7 +96,7 @@ class Grid extends React.Component {
   }
 
   getOffice = deal => {
-    const brand = this.flattenBrand(deal.brand)
+    const brand = flattenBrand(deal.brand)
 
     return brand && brand.messages ? brand.messages.branch_title : 'N/A'
   }
@@ -134,27 +127,27 @@ class Grid extends React.Component {
     return {}
   }
 
-  flattenBrand = brand => {
-    if (!brand) {
-      return null
+  getDefaultIndex = () =>
+    getActiveTeamSettings(this.props.user, SORT_FIELD_SETTING_KEY) || 'address'
+
+  getDefaultSort = () => {
+    const sortSetting =
+      getActiveTeamSettings(this.props.user, SORT_FIELD_SETTING_KEY) ||
+      'address'
+    let id = sortSetting
+    let ascending = true
+
+    if (sortSetting.startsWith('-')) {
+      id = sortSetting.slice(1)
+      ascending = false
     }
 
-    const brands = [brand]
+    const column = this.Columns.find(col => col.id === id)
 
-    while (brand.parent) {
-      brands.push(brand.parent)
-      brand = brand.parent
+    return {
+      column,
+      ascending
     }
-
-    brands.reverse()
-
-    let merged = {}
-
-    brands.forEach(brand_loop => {
-      merge.recursive(merged, { ...brand_loop, parent: undefined })
-    })
-
-    return merged
   }
 
   render() {
@@ -165,7 +158,14 @@ class Grid extends React.Component {
     return (
       <Table
         plugins={{
-          sortable: {}
+          sortable: {
+            defaultSort: this.getDefaultSort(),
+            defaultIndex: this.getDefaultIndex(),
+            onPostChange: async item => {
+              await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
+              await this.props.getUserTeams(this.props.user)
+            }
+          }
         }}
         getTdProps={this.getTdProps}
         isFetching={isFetchingDeals}
@@ -178,14 +178,18 @@ class Grid extends React.Component {
   }
 }
 
-function mapStateToProps({ deals }) {
+function mapStateToProps({ user, deals }) {
   const { properties, list, roles } = deals
 
   return {
     isFetchingDeals: properties.isFetchingDeals,
     deals: list,
+    user,
     roles
   }
 }
 
-export default connect(mapStateToProps)(Grid)
+export default connect(
+  mapStateToProps,
+  { getUserTeams }
+)(Grid)

@@ -8,6 +8,7 @@ import ActionButton from 'components/Button/ActionButton'
 import CancelButton from 'components/Button/CancelButton'
 
 import { upsertContexts } from 'actions/deals'
+import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
 
 import Deal from 'models/Deal'
 import DealContext from 'models/Deal/helpers/dynamic-context'
@@ -73,20 +74,14 @@ class Context extends React.Component {
       true
     )
 
-    const context = [
-      {
-        checklist: DealContext.getChecklist(this.props.deal, contextName),
-        definition: DealContext.getDefinitionId(
-          this.props.deal.brand.id,
-          contextName
-        ),
-        value: contextValue,
-        approved: false
-      }
-    ]
-
     try {
-      this.props.upsertContexts(this.props.deal.id, context)
+      const context = createUpsertObject(
+        this.props.deal,
+        contextName,
+        contextValue
+      )
+
+      this.props.upsertContexts(this.props.deal.id, [context])
     } catch (e) {
       console.log(e)
     }
