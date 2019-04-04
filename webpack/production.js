@@ -47,15 +47,15 @@ webpackConfig.entry = {
   vendor: appConfig.compile.vendors
 }
 
-webpackConfig.optimization.minimize = false
+webpackConfig.optimization.minimize = true
 
-// webpackConfig.optimization.minimizer = [
-//   new TerserPlugin({
-//     cache: true,
-//     parallel: true,
-//     sourceMap: true
-//   })
-// ]
+webpackConfig.optimization.minimizer = [
+  new TerserPlugin({
+    cache: true,
+    parallel: true,
+    sourceMap: true
+  })
+]
 
 webpackConfig.plugins.push(
   new webpack.optimize.AggressiveMergingPlugin(),
