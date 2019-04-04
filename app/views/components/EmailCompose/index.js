@@ -161,6 +161,7 @@ class EmailCompose extends React.Component {
             initialAttachments={this.initialAttachments}
             isSubmitting={this.IsSubmitting}
             deal={this.props.deal}
+            hasDealsAttachments={this.props.hasDealsAttachments}
           />
         )}
         render={() => (
@@ -220,7 +221,8 @@ EmailCompose.propTypes = {
   body: PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
   onClickSend: PropTypes.func,
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired,
+  hasDealsAttachments: PropTypes.bool
 }
 
 EmailCompose.defaultProps = {
@@ -229,7 +231,8 @@ EmailCompose.defaultProps = {
   body: '',
   onClickSend: null,
   isSubmitting: false,
-  hasStaticBody: false
+  hasStaticBody: false,
+  hasDealsAttachments: false
 }
 
 export default connect(
