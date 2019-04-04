@@ -15,7 +15,8 @@ export default {
     path: config.compile.output,
     filename: config.compile.jsBundle,
     chunkFilename: '[name].[chunkhash].js',
-    publicPath: config.compile.publicPath
+    publicPath: config.compile.publicPath,
+    globalObject: 'this'
   },
   resolve: {
     modules: [resolvePath('../app'), 'node_modules'],
