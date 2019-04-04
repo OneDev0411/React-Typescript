@@ -8,6 +8,7 @@ import { Helmet } from 'react-helmet'
 import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 
+import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { getContact } from 'models/contacts/get-contact'
 import { deleteContacts } from 'models/contacts/delete-contact'
 import { updateContactSelf } from 'models/contacts/update-contact-self'
@@ -21,7 +22,6 @@ import {
 } from '../../../../../reducers/contacts/attributeDefs'
 import { selectContact } from '../../../../../reducers/contacts/list'
 
-import { normalizeContact } from '../../../../../store_actions/contacts/helpers/normalize-contacts'
 import { getContactsTags } from '../../../../../store_actions/contacts/get-contacts-tags'
 import { normalizeContact as associationNormalizer } from '../../../../../views/utils/association-normalizers'
 

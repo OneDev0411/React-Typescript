@@ -8,8 +8,7 @@ import { getContact } from 'models/contacts/get-contact'
 import { addAttributes } from 'models/contacts/add-attributes'
 import { updateAttribute } from 'models/contacts/update-attribute'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
-
-import { normalizeContact } from 'actions/contacts/helpers/normalize-contacts'
+import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 
 import AddIcon from 'components/SvgIcons/Add/AddIcon'
 import { ShowMoreLess } from 'components/ShowMoreLess'

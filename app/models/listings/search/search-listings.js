@@ -2,7 +2,7 @@ import Fetch from '../../../services/fetch'
 
 export const searchListings = async (text, query) => {
   if (typeof text !== 'string') {
-    throw new Error('The query param should be a string!')
+    throw new Error('The text param should be a string!')
   }
 
   try {
