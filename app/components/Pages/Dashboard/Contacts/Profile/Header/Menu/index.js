@@ -34,12 +34,17 @@ function Menu(props) {
         callback={props.addToFlowCallback}
       />
 
-      <SendContactCard contact={contact}>Send a Card</SendContactCard>
-
       <SendEmailButton
         recipients={normalizeContact(contact, props.attributeDefs)}
         style={{ marginLeft: '1rem' }}
       />
+
+      <SendContactCard
+        contact={contact}
+        buttonStyle={{ style: { marginLeft: '1rem' } }}
+      >
+        Send a Card
+      </SendContactCard>
 
       <Chat contact={contact} />
       <Divider />
