@@ -7,7 +7,7 @@ const SwitchToggle = ({
   isField,
   disabled,
   className,
-  onChangeHandler
+  onChangeHandler = () => {}
 }) => (
   <div className={`c-switch-toggle ${className}`}>
     {isField ? (
