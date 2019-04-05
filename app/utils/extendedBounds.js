@@ -56,7 +56,7 @@ export const getExtededMapProps = (mapProps, bounds) => {
   return {
     zoom,
     center,
-    bounds: { nw, se }
+    bounds
   }
 }
 

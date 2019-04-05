@@ -84,10 +84,13 @@ class MlsAutocompleteSearch extends Component {
   }
 
   handleInputBlur = () => {
-    this.setState({
-      isLoading: false,
-      isOpen: false
-    })
+    if (this.state.isSearchingByQuery) {
+      this.setState({
+        isLoading: false,
+        isOpen: false,
+        isSearchingByQuery: false
+      })
+    }
   }
 
   onClear = () => {
@@ -253,11 +256,9 @@ class MlsAutocompleteSearch extends Component {
   }
 
   handleEnterKey = async () => {
-    this.inputRef.current.blur()
-
     const { dispatch } = this.props
 
-    this.setState({ isSearchingByQuery: true })
+    this.setState({ isSearchingByQuery: true, isLoading: true })
 
     try {
       batchActions([
@@ -267,10 +268,10 @@ class MlsAutocompleteSearch extends Component {
       ])
 
       await dispatch(getListingsByQuery(this.state.input, { limit: 200 }))
-
-      this.setState({ isSearchingByQuery: false })
     } catch (error) {
       console.log(error)
+    } finally {
+      this.inputRef.current.blur()
     }
   }
 

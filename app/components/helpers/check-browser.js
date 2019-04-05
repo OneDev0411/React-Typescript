@@ -43,16 +43,16 @@ export function checkBrowser() {
     const isValidBrowser = browser.satisfies({
       // declare browsers per OS
       windows: {
-        'Internet Explorer': '>10',
+        'Internet Explorer': '>12',
         'Microsoft Edge': '<12'
       },
       macos: {
-        safari: '>10.1.2'
+        safari: '>=10'
       },
 
       // or in general
-      chrome: '>65',
-      firefox: '>60'
+      chrome: '>=68',
+      firefox: '>=61'
     })
 
     if (isValidBrowser === false) {

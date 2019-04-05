@@ -11,12 +11,14 @@ export function Footer(props) {
   return (
     <Flex justifyBetween alignCenter style={{ width: '100%' }}>
       <Flex>
-        <Field
-          name="attachments"
-          deal={props.deal}
-          initialAttachments={props.initialAttachments}
-          component={AddDealFile}
-        />
+        {props.hasDealsAttachments && (
+          <Field
+            name="attachments"
+            deal={props.deal}
+            initialAttachments={props.initialAttachments}
+            component={AddDealFile}
+          />
+        )}
       </Flex>
 
       <ActionButton

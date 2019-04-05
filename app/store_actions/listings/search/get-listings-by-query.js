@@ -23,13 +23,15 @@ export const getListingsByQuery = (text, query) => async (
 
     const response = await searchListings(text, query)
 
-    const { code, info, data } = response
+    let { code, info, data } = response
 
-    const normilizedListings = normalize(data, schema.listingsList)
+    data = data.filter(l => l.location != null)
+
+    const normalizedListings = normalize(data, schema.listingsList)
 
     const successPatch = {
       response: {
-        ...normilizedListings,
+        ...normalizedListings,
         info: {
           code,
           ...info
