@@ -21,15 +21,6 @@ export function goTo(url, pageTitle = null, query = {}, state = {}) {
     return `${acc}${mark}${curr}=${query[curr]}`
   }, '')
 
-  console.log('GO TO', {
-    pathname: url,
-    search,
-    state: {
-      ...state,
-      previousPage
-    }
-  })
-
   browserHistory.push({
     pathname: url,
     search,
