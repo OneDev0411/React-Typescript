@@ -14,7 +14,7 @@ import Chat from './ChatButton'
 import { Divider } from './Divider'
 
 function Menu(props) {
-  const { contact } = props
+  const { contact, closeButtonQuery } = props
 
   return (
     <Flex alignCenter style={{ padding: '1.5em 0' }}>
@@ -31,7 +31,8 @@ function Menu(props) {
         isFit
         iconSize="large"
         inverse
-        fallbackUrl="/dashboard/contacts"
+        backUrl="/dashboard/contacts"
+        query={closeButtonQuery}
       />
     </Flex>
   )
