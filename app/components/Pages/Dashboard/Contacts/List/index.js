@@ -134,7 +134,7 @@ class ContactsList extends React.Component {
     const selectedElement = document.querySelector(selector)
 
     if (selectedElement) {
-      selectedElement.scrollIntoView({ block: 'center', behavior: 'smooth' })
+      selectedElement.scrollIntoView({ block: 'center' })
     }
   }
 
