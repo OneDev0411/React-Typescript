@@ -121,7 +121,7 @@ class ContactsList extends React.Component {
   }
 
   componentDidUpdate() {
-    if (!this.props.router.getCurrentLocation().query.s) {
+    if (this.props.router.getCurrentLocation().query.s === undefined) {
       this.fetchList()
     }
   }
