@@ -41,7 +41,6 @@ import { SORT_FIELD_SETTING_KEY } from './constants'
 class ContactsList extends React.Component {
   constructor(props) {
     super(props)
-
     this.state = {
       isSideMenuOpen: true,
       isFetchingMoreContacts: false,
@@ -56,7 +55,7 @@ class ContactsList extends React.Component {
     this.order = getActiveTeamSettings(props.user, SORT_FIELD_SETTING_KEY)
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     if (
       !['default', 'duplicate contacts'].includes(
         this.props.filterSegments.activeSegmentId
@@ -68,7 +67,17 @@ class ContactsList extends React.Component {
         ]
       )
     } else {
-      this.fetchList(this.getStartQueryParam())
+      this.setState({
+        isFetchingMoreContacts: true
+      })
+      await this.fetchList(this.getStartQueryParam())
+      this.setState({
+        isFetchingMoreContacts: false
+      })
+
+      const selector = `#grid-item-${this.getIdQueryParam()}`
+
+      this.scrollToSelector(selector)
     }
 
     if (this.props.fetchTags) {
@@ -121,6 +130,14 @@ class ContactsList extends React.Component {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
   }
 
+  scrollToSelector(selector) {
+    const selectedElement = document.querySelector(selector)
+
+    if (selectedElement) {
+      selectedElement.scrollIntoView({ block: 'center', behavior: 'smooth' })
+    }
+  }
+
   addLoadedRange = start =>
     this.setState(prevState => ({
       loadedRanges: _.uniq([...prevState.loadedRanges, parseInt(start, 10)])
@@ -129,10 +146,19 @@ class ContactsList extends React.Component {
   getStartQueryParam = () =>
     parseInt(this.props.router.getCurrentLocation().query.s, 10) || 0
 
-  setStartQueryParam = value =>
-    this.props.router.replace(
-      `${this.props.router.getCurrentLocation().pathname}?s=${value}`
-    )
+  getIdQueryParam = () => this.props.router.getCurrentLocation().query.id
+
+  setStartQueryParam = value => {
+    const currentLocation = this.props.router.getCurrentLocation()
+
+    this.props.router.replace({
+      ...currentLocation,
+      query: {
+        ...currentLocation.query,
+        s: value
+      }
+    })
+  }
 
   hasSearchState = () =>
     this.state.filter || this.state.searchInputValue || this.order
