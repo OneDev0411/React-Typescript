@@ -13,18 +13,20 @@ export class CloseButton extends React.Component {
   static propTypes = {
     ...Button.propTypes,
     backUrl: PropTypes.string,
-    fallbackUrl: PropTypes.string
+    fallbackUrl: PropTypes.string,
+    query: PropTypes.object
   }
 
   static defaultProps = {
     ...Button.defaultProps,
     backUrl: '',
-    fallbackUrl: ''
+    fallbackUrl: '',
+    query: {}
   }
 
   handleOnClick = () => {
     if (this.props.backUrl) {
-      return goTo(this.props.backUrl)
+      return goTo(this.props.backUrl, null, this.props.query)
     }
 
     const currentLocation = browserHistory.getCurrentLocation()
@@ -33,7 +35,11 @@ export class CloseButton extends React.Component {
       return browserHistory.goBack()
     }
 
-    return goTo(this.props.fallbackUrl || getDefaultHomePage())
+    return goTo(
+      this.props.fallbackUrl || getDefaultHomePage(),
+      null,
+      this.props.query
+    )
   }
 
   render() {
