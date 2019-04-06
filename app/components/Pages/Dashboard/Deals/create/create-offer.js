@@ -66,11 +66,7 @@ class CreateOffer extends React.Component {
     const contexts = {}
     const { deal } = this.props
 
-    const dealContexts = DealContext.getItems(
-      deal.brand.id,
-      deal.deal_type,
-      deal.property_type
-    )
+    const dealContexts = this.getDealContexts()
 
     const indexedContexts = _.indexBy(dealContexts, 'key')
 
@@ -487,6 +483,7 @@ class CreateOffer extends React.Component {
         <Helmet>
           <title>Add Offer | Deals | Rechat</title>
         </Helmet>
+
         <FullPageHeader
           title="Add New Offer"
           handleClose={this.cancelCreateOffer}
