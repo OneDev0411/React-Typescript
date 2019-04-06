@@ -120,11 +120,11 @@ class ContactsList extends React.Component {
     }
   }
 
-  componentDidUpdate() {
-    if (this.props.router.getCurrentLocation().query.s === undefined) {
-      this.fetchList()
-    }
-  }
+  // componentDidUpdate() {
+  //   if (this.props.router.getCurrentLocation().query.s === undefined) {
+  //     this.fetchList()
+  //   }
+  // }
 
   componentWillUnmount() {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
