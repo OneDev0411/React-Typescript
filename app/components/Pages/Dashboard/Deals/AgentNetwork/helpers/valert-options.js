@@ -17,5 +17,5 @@ export const valertOptions = {
     'RES-Townhouse',
     'RES-Single Family'
   ],
-  limit: 333
+  limit: 999
 }

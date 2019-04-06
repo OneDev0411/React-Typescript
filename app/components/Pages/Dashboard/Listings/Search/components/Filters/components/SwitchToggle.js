@@ -7,7 +7,7 @@ const SwitchToggle = ({
   isField,
   disabled,
   className,
-  onChangeHandler
+  onChangeHandler = () => {}
 }) => (
   <div className={`c-switch-toggle ${className}`}>
     {isField ? (
@@ -18,9 +18,7 @@ const SwitchToggle = ({
         disabled={disabled}
         id={`${name}_checkbox`}
         normalize={v => (v ? value : null)}
-        onChange={(event, newValue, previousValue) =>
-          onChangeHandler(event, newValue)
-        }
+        onChange={(event, newValue) => onChangeHandler(event, newValue)}
       />
     ) : (
       <input
