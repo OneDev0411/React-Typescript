@@ -103,14 +103,14 @@ class PdfList extends React.Component {
     return <UsedPage>Used</UsedPage>
   }
 
-  renderPageFooter = (props, id, i) => (
+  renderPageFooter = (props, documentId, page) => (
     <Flex alignCenter style={{ marginTop: '0.5rem' }}>
       <PageNumber>{props.pageNumber}</PageNumber>
-      {this.isPageSelected(id, i + 1) === false && (
+      {this.isPageSelected(documentId, page) === false && (
         <ActionButton
           appearance="outline"
           size="small"
-          onClick={() => this.props.onChangeSelectedPages(id, i + 1)}
+          onClick={() => this.props.onChangeSelectedPages(documentId, page)}
         >
           Add Page
         </ActionButton>
