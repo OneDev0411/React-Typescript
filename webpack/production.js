@@ -47,15 +47,15 @@ webpackConfig.entry = {
   vendor: appConfig.compile.vendors
 }
 
-webpackConfig.optimization.minimize = true
+// webpackConfig.optimization.minimize = true
 
-webpackConfig.optimization.minimizer = [
-  new TerserPlugin({
-    cache: true,
-    parallel: true,
-    sourceMap: true
-  })
-]
+// webpackConfig.optimization.minimizer = [
+//   new TerserPlugin({
+//     cache: true,
+//     parallel: true,
+//     sourceMap: true
+//   })
+// ]
 
 webpackConfig.plugins.push(
   new webpack.optimize.AggressiveMergingPlugin(),
@@ -79,7 +79,6 @@ webpackConfig.plugins.push(
     test: /\.js$|\.css$/,
     filename: '[path]'
   }),
-
   new S3Plugin({
     progress: false, // Messes the terminal up
     exclude: /.*\.html$/,
