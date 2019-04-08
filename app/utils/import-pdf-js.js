@@ -1,6 +1,9 @@
 export default async function importPdfJs() {
   /* eslint-disable max-len */
-  const PDFJS = await import('pdfjs-dist/webpack' /* webpackChunkName: "pdfjs" */)
+  const pdfjs = await import('pdfjs-dist' /* webpackChunkName: "pdfjs" */)
 
-  return PDFJS
+  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
+
+
+  return pdfjs
 }
