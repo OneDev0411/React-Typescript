@@ -1,33 +1,27 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Modal } from 'react-bootstrap'
 
 import { hideConfirmation } from '../../../store_actions/confirmation'
+
+import Modal from '../../../views/components/BareModal'
 import Button from '../../../views/components/Button/ActionButton'
 
 class Confirmation extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
   onCancel() {
-    const { confirmation, hideConfirmation } = this.props
+    this.props.dispatch(hideConfirmation())
 
-    hideConfirmation()
-
-    if (confirmation.onCancel) {
-      confirmation.onCancel()
+    if (this.props.confirmation.onCancel) {
+      this.props.confirmation.onCancel()
     }
   }
 
   onConfirm() {
-    const { confirmation, hideConfirmation } = this.props
     const userValue = this.input ? this.input.value : ''
 
-    hideConfirmation()
+    this.props.dispatch(hideConfirmation())
 
-    if (confirmation.onConfirm) {
-      confirmation.onConfirm(userValue)
+    if (this.props.confirmation.onConfirm) {
+      this.props.confirmation.onConfirm(userValue)
     }
   }
 
@@ -35,63 +29,52 @@ class Confirmation extends React.Component {
     const { confirmation } = this.props
 
     return (
-      <div>
-        <Modal
-          show={confirmation.show}
-          backdrop="static"
-          backdropClassName="modal-confirmation-backdrop"
-          dialogClassName="modal-confirmation"
-          style={{
-            zIndex: 2000
+      <Modal
+        className="modal-confirmation"
+        contentLabel="Confirmation Modal"
+        isOpen={confirmation.show}
+        onRequestClose={this.onCancel}
+        noFooter
+      >
+        <div
+          className="confirmation-title"
+          dangerouslySetInnerHTML={{
+            __html: confirmation.message
           }}
-        >
-          <Modal.Body>
-            <div
-              className="confirmation-title"
-              dangerouslySetInnerHTML={{
-                __html: confirmation.message
-              }}
-            />
-            {confirmation.description && (
-              <div className="confirmation-descr">
-                {confirmation.description}
-              </div>
-            )}
+        />
+        {confirmation.description && (
+          <div className="confirmation-descr">{confirmation.description}</div>
+        )}
 
-            {confirmation.needsUserEntry && (
-              <textarea
-                className="confirmation-input"
-                defaultValue={confirmation.inputDefaultValue}
-                placeholder={confirmation.inputPlaceholder || ''}
-                ref={ref => (this.input = ref)}
-              />
-            )}
+        {confirmation.needsUserEntry && (
+          <textarea
+            className="confirmation-input"
+            defaultValue={confirmation.inputDefaultValue}
+            placeholder={confirmation.inputPlaceholder || ''}
+            ref={ref => (this.input = ref)}
+          />
+        )}
 
-            <div className="cta">
-              {!confirmation.hideCancelButton && (
-                <Button appearance="outline" onClick={() => this.onCancel()}>
-                  {confirmation.cancelLabel || 'Cancel'}
-                </Button>
-              )}
-              {!confirmation.hideConfirmButton && (
-                <Button
-                  style={{ marginLeft: '1em' }}
-                  onClick={() => this.onConfirm()}
-                >
-                  {confirmation.confirmLabel || 'Confirm'}
-                </Button>
-              )}
-            </div>
-          </Modal.Body>
-        </Modal>
-      </div>
+        <div className="cta">
+          {!confirmation.hideCancelButton && (
+            <Button appearance="outline" onClick={() => this.onCancel()}>
+              {confirmation.cancelLabel || 'Cancel'}
+            </Button>
+          )}
+          {!confirmation.hideConfirmButton && (
+            <Button
+              style={{ marginLeft: '1em' }}
+              onClick={() => this.onConfirm()}
+            >
+              {confirmation.confirmLabel || 'Confirm'}
+            </Button>
+          )}
+        </div>
+      </Modal>
     )
   }
 }
 
-export default connect(
-  ({ confirmation }) => ({
-    confirmation
-  }),
-  { hideConfirmation }
-)(Confirmation)
+export default connect(({ confirmation }) => ({
+  confirmation
+}))(Confirmation)
