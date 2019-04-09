@@ -9,7 +9,7 @@ import { changeNeedsAttention } from '../../task'
 /**
  * move a file from a task to another task
  */
-export function moveTaskFile(user, dealId, task, file, notifyOffice) {
+export function moveTaskFile(user, deal, task, file, notifyOffice) {
   return async dispatch => {
     try {
       let response
@@ -30,18 +30,18 @@ export function moveTaskFile(user, dealId, task, file, notifyOffice) {
           attachments: [fileData.id]
         }).then(() => null)
       } else {
-        response = await Deal.createDealFile(dealId, { file: file.id })
+        response = await Deal.createDealFile(deal.id, { file: file.id })
         fileData = response.body.data
       }
 
       /*
        * remove file from it's current place (task or stash based on given task)
        */
-      await dispatch(
-        asyncDeleteFile(dealId, {
-          [file.id]: file.task ? { id: file.task.id } : null
-        })
-      )
+      asyncDeleteFile({
+        dealId: deal.id,
+        fileId: file.id,
+        taskId: file.task || null
+      })
 
       if (task) {
         dispatch({
@@ -52,13 +52,13 @@ export function moveTaskFile(user, dealId, task, file, notifyOffice) {
       } else {
         dispatch({
           type: actionTypes.ADD_STASH_FILE,
-          deal_id: dealId,
+          deal_id: deal.id,
           file: fileData
         })
       }
 
       if (notifyOffice && task) {
-        dispatch(changeNeedsAttention(dealId, task.id, true))
+        dispatch(changeNeedsAttention(deal.id, task.id, true))
       }
 
       return fileData
