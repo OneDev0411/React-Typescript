@@ -537,8 +537,10 @@ class ActionsButton extends React.Component {
 
   deleteFile = async () => {
     try {
-      await asyncDeleteFile(this.props.deal.id, {
-        [this.props.document.id]: this.props.task
+      await asyncDeleteFile({
+        deal: this.props.deal,
+        file: this.props.document,
+        task: this.props.task
       })
 
       this.props.notify({

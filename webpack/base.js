@@ -15,7 +15,8 @@ export default {
     path: config.compile.output,
     filename: config.compile.jsBundle,
     chunkFilename: '[name].[chunkhash].js',
-    publicPath: config.compile.publicPath
+    publicPath: config.compile.publicPath,
+    globalObject: 'this'
   },
   resolve: {
     modules: [resolvePath('../app'), 'node_modules'],
@@ -47,29 +48,7 @@ export default {
         test: /\.js$/,
         loader: 'babel-loader',
         include: config.compile.entry,
-        options: {
-          cacheDirectory: true,
-          babelrc: false,
-          presets: ['react', ['es2015', { modules: false }], 'stage-0'],
-          env: {
-            development: {
-              plugins: [
-                ['react-hot-loader/babel'],
-                [
-                  'react-transform',
-                  {
-                    transforms: [
-                      {
-                        transform: 'react-transform-catch-errors',
-                        imports: ['react', 'redbox-react']
-                      }
-                    ]
-                  }
-                ]
-              ]
-            }
-          }
-        }
+        options: {}
       },
       {
         test: /\.woff(\?.*)?$/,

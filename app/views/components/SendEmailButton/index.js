@@ -27,6 +27,7 @@ function SendEmailButton(props) {
           from={props.user}
           deal={props.deal}
           onClose={toggleOpenDrawer}
+          hasDealsAttachments
         />
       )}
     </Fragment>

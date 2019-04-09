@@ -106,7 +106,6 @@ class Chatroom extends React.Component {
       >
         <div className="chatroom">
           <audio id="chatroom-new-message">
-            <source src="/static/audio/ding.wav" type="audio/wav" />
             <source src="/static/audio/ding.mp3" type="audio/mpeg" />
           </audio>
 

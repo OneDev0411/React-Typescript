@@ -182,8 +182,6 @@ class EditDigitalForm extends React.Component {
         message: 'The form has been saved!',
         status: 'success'
       })
-
-      this.closeForm()
     } catch (err) {
       console.log(err)
 

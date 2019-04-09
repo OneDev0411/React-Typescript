@@ -38,5 +38,5 @@ export const Header = styled.div`
   position: sticky;
   background-color: #fff;
   top: 0;
-  z-index: 1;
+  z-index: 2;
 `
