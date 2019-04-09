@@ -5,7 +5,7 @@ import ActionButton from 'components/Button/ActionButton'
 import IconButton from 'components/Button/IconButton'
 import TimeIcon from 'components/SvgIcons/Time/IconTime'
 import Tooltip from 'components/tooltip'
-import DateTimePicker from 'components/DateTimePicker/new'
+import DateTimePicker from 'components/DateTimePicker/next'
 import { formatDate } from 'components/DateTimePicker/helpers'
 
 import { AddDealFile } from '../components/AddDealFile'
@@ -19,6 +19,18 @@ function SchedulerButton(props) {
       </IconButton>
     </Tooltip>
   )
+}
+
+function textForSubmitButton({ isSubmitting, isDateSet }) {
+  if (isSubmitting) {
+    return 'Sending...'
+  }
+
+  if (isDateSet) {
+    return 'Save'
+  }
+
+  return 'Send'
 }
 
 export function Footer(props) {
@@ -47,7 +59,10 @@ export function Footer(props) {
           disabled={props.isSubmitting}
           onClick={props.handleSubmit}
         >
-          {props.isSubmitting ? 'Sending...' : 'Send'}
+          {textForSubmitButton({
+            isSubmitting: props.isSubmitting,
+            isDateSet: !!due_at
+          })}
         </ActionButton>
         <Field
           name="due_at"
@@ -56,6 +71,7 @@ export function Footer(props) {
               popUpButton={buttonProps => (
                 <SchedulerButton onOpen={buttonProps.toggleOpen} />
               )}
+              saveButtonText="Schedule"
               selectedDate={fieldProps.input.value}
               onDone={fieldProps.input.onChange}
               containerStyle={{

@@ -1,10 +1,19 @@
-import styled from "styled-components"
+import styled from 'styled-components'
 // import styled from 'styled-components'
 
 import Card from '../Card'
 import { grey, primary } from '../../utils/colors'
 
-export const PickerContainer = styled(Card)`
+const PickerContent = styled.div`
+  & .pickerActions {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+`
+
+const PickerContainer = styled(Card) `
   position: absolute;
   left: 0;
   top: 3px;
@@ -93,3 +102,5 @@ export const PickerContainer = styled(Card)`
     background-color: ${primary};
   }
 `
+
+export { PickerContent, PickerContainer }

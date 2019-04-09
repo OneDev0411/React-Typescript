@@ -85,7 +85,8 @@ class EmailCompose extends React.Component {
       to: form.recipients,
       subject: form.subject,
       html: form.body,
-      attachments: _.map(form.attachments, item => item.file_id)
+      attachments: _.map(form.attachments, item => item.file_id),
+      due_at: form.due_at
     }
 
     try {
