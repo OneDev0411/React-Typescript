@@ -3,33 +3,33 @@ import _ from 'underscore'
 import * as actionTypes from '../../../../constants/deals'
 import { deleteTaskFile, deleteStashFile } from '../../../../models/Deal/file'
 
-function deleteFile({ deal, file, task }) {
+function deleteFile({ dealId, fileId, taskId }) {
   return dispatch => {
-    if (task) {
+    if (taskId) {
       return dispatch({
         type: actionTypes.DELETE_TASK_FILE,
-        task_id: task.id,
-        file_id: file.id
+        task_id: taskId,
+        file_id: fileId
       })
     }
 
     dispatch({
       type: actionTypes.DELETE_STASH_FILE,
-      deal_id: deal.id,
-      file_id: file.id
+      deal_id: dealId,
+      file_id: fileId
     })
   }
 }
 
-export function asyncDeleteFile({ deal, file, task }) {
+export function asyncDeleteFile({ dealId, fileId, taskId }) {
   try {
-    if (task) {
-      deleteTaskFile(task.id, file.id)
+    if (taskId) {
+      deleteTaskFile(taskId, fileId)
     } else {
-      deleteStashFile(deal.id, file.id)
+      deleteStashFile(dealId, fileId)
     }
 
-    return deleteFile({ deal, file, task })
+    return deleteFile({ dealId, fileId, taskId })
   } catch (e) {
     throw e
   }
