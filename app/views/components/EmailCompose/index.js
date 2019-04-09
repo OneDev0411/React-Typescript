@@ -42,7 +42,8 @@ class EmailCompose extends React.Component {
       recipients: this.props.recipients,
       subject: '',
       body: this.props.hasStaticBody ? '' : this.props.body,
-      attachments: this.initialAttachments
+      attachments: this.initialAttachments,
+      due_at: ''
     }
 
     return this.formObject

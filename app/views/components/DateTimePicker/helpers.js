@@ -3,10 +3,10 @@ import fecha from 'fecha'
 import { setTime } from '../../../utils/set-time'
 
 export function formatDate(date) {
-  return fecha.format(date, 'MMM D, YYYY hh:mm A')
+  return date ? fecha.format(date, 'MMM D, YYYY hh:mm A') : ''
 }
 
-export function setTimeStringToDate(date, time) {
+export function setTimeStringToDate(date = new Date(), time) {
   // [hours, minutes]
   const timeArray = time.split(':').map(t => parseInt(t, 10))
 

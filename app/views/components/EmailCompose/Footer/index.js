@@ -1,22 +1,32 @@
-import React, { useState } from 'react'
-import Flex from 'styled-flex-component'
+import React from 'react'
 import { Field } from 'react-final-form'
 
 import ActionButton from 'components/Button/ActionButton'
 import IconButton from 'components/Button/IconButton'
 import TimeIcon from 'components/SvgIcons/Time/IconTime'
 import Tooltip from 'components/tooltip'
-
-import DatePicker from '../../../../components/Pages/Dashboard/Deals/components/DatePicker'
+import DateTimePicker from 'components/DateTimePicker/new'
+import { formatDate } from 'components/DateTimePicker/helpers'
 
 import { AddDealFile } from '../components/AddDealFile'
+import { FooterContainer } from './styled'
+
+function SchedulerButton(props) {
+  return (
+    <Tooltip caption="Schedule Email">
+      <IconButton inverse appearance="primary" onClick={props.onOpen}>
+        <TimeIcon />
+      </IconButton>
+    </Tooltip>
+  )
+}
 
 export function Footer(props) {
-  const [isSchedulerOpen, setSchedulerOpen] = useState(true)
+  const due_at = props.formProps.values.due_at
 
   return (
-    <Flex justifyBetween alignCenter style={{ width: '100%' }}>
-      <Flex>
+    <FooterContainer>
+      <div className="featuresList">
         {props.hasDealsAttachments && (
           <Field
             name="attachments"
@@ -25,23 +35,13 @@ export function Footer(props) {
             component={AddDealFile}
           />
         )}
-      </Flex>
+      </div>
 
-      <div>
-        <DatePicker
-          show={isSchedulerOpen}
-          saveText="Schedule"
-          onClose={() => setSchedulerOpen(false)}
-          // saveText={contexts[selectedField] ? 'Update Date' : 'Add Date'}
-          // initialDate={contexts[selectedField]}
-          // onSelectDate={date => this.onChangeDateContext(date)}
-          containerStyle={{
-            top: '-8px',
-            right: '0',
-            left: 'unset',
-            transform: 'translateY(-100%)'
-          }}
-        />
+      <div className="actionBar">
+        {due_at && (
+          <span className="scheduled-on">Send on {formatDate(due_at)}</span>
+        )}
+
         <ActionButton
           type="submit"
           disabled={props.isSubmitting}
@@ -49,17 +49,25 @@ export function Footer(props) {
         >
           {props.isSubmitting ? 'Sending...' : 'Send'}
         </ActionButton>
-
-        <Tooltip caption="Schedule Email">
-          <IconButton
-            inverse
-            appearance="primary"
-            onClick={() => setSchedulerOpen(!isSchedulerOpen)}
-          >
-            <TimeIcon />
-          </IconButton>
-        </Tooltip>
+        <Field
+          name="due_at"
+          render={fieldProps => (
+            <DateTimePicker
+              popUpButton={buttonProps => (
+                <SchedulerButton onOpen={buttonProps.toggleOpen} />
+              )}
+              selectedDate={fieldProps.input.value}
+              onDone={fieldProps.input.onChange}
+              containerStyle={{
+                top: '-8px',
+                right: '0',
+                left: 'unset',
+                transform: 'translateY(-100%)'
+              }}
+            />
+          )}
+        />
       </div>
-    </Flex>
+    </FooterContainer>
   )
 }
