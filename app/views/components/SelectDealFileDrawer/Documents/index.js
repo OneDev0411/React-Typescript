@@ -87,7 +87,7 @@ class DocumentRow extends React.Component {
     try {
       return this.props.moveTaskFile(
         this.props.user,
-        this.props.deal.id,
+        this.props.deal,
         task,
         this.props.stashFile,
         notifyOffice
