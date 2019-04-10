@@ -61,6 +61,8 @@ export const load = async () => {
 
                 const uploadedAssetsCollection = uploadedAssets.map(asset => ({
                   image: asset.url,
+                  listing:
+                    target.attributes.attributes['rechat-listing'] || null,
                   userFile: true
                 }))
 
