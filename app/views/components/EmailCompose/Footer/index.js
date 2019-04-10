@@ -71,15 +71,10 @@ export function Footer(props) {
               popUpButton={buttonProps => (
                 <SchedulerButton onOpen={buttonProps.toggleOpen} />
               )}
+              popUpPosition="top-right"
               saveButtonText="Schedule"
               selectedDate={fieldProps.input.value}
               onDone={fieldProps.input.onChange}
-              containerStyle={{
-                top: '-8px',
-                right: '0',
-                left: 'unset',
-                transform: 'translateY(-100%)'
-              }}
             />
           )}
         />

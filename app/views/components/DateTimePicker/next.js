@@ -36,7 +36,7 @@ function DateTimePicker(props) {
   }, [])
 
   // Extract needed props
-  const { mode, hasRemove, saveButtonText, containerStyle } = props
+  const { mode, hasRemove, saveButtonText, popUpPosition } = props
 
   // Which mode?
   let component = (
@@ -61,7 +61,7 @@ function DateTimePicker(props) {
         <PickerPopUp
           onClose={toggleOpen}
           isPopUpOpen={isPopUpOpen}
-          containerStyle={containerStyle}
+          popUpPosition={popUpPosition}
         >
           {component}
         </PickerPopUp>
@@ -79,7 +79,7 @@ DateTimePicker.defaultProps = {
   hasRemove: true,
   selectedDate: null,
   isPopUpOpen: false,
-  containerStyle: {},
+  popUpPosition: 'bottom-left',
   datePickerModifiers: {}
 }
 
@@ -87,6 +87,7 @@ DateTimePicker.propTypes = {
   // Visual Props
   mode: PropTypes.oneOf(['PopUp', 'PickerOnly']),
   popUpButton: PropTypes.func,
+  popUpPosition: PropTypes.string,
   saveButtonText: PropTypes.string,
   hasRemove: PropTypes.bool,
 
@@ -97,8 +98,7 @@ DateTimePicker.propTypes = {
   // Functionality Props
   onDone: PropTypes.func.isRequired,
 
-  // Style & Other props
-  containerStyle: PropTypes.object,
+  // Other props
   datePickerModifiers: PropTypes.object
 }
 
