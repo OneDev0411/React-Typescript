@@ -19,15 +19,24 @@ class SearchListingDrawer extends React.Component {
     })
 
     try {
+      const { mockListings } = this.props
+      const mockedMLSData = mockListings
+        ? await import('./mock_listing.json')
+        : null
+
       const listings = await Promise.all(
         _.map(items, item => {
           if (item.gallery_image_urls) {
             return item
           }
 
-          const id = item.type === 'deal' ? item.listing : item.id
+          const listing = item.type === 'deal' ? item.listing : item.id
 
-          return Listing.getListing(id)
+          if (mockListings && !listing) {
+            return mockedMLSData
+          }
+
+          return Listing.getListing(listing)
         })
       )
 
@@ -78,11 +87,13 @@ class SearchListingDrawer extends React.Component {
 }
 
 SearchListingDrawer.propTypes = {
-  searchPlaceholder: PropTypes.string
+  searchPlaceholder: PropTypes.string,
+  mockListings: PropTypes.bool
 }
 
 SearchListingDrawer.defaultProps = {
-  searchPlaceholder: 'Enter MLS # or address'
+  searchPlaceholder: 'Enter MLS # or address',
+  mockListings: false
 }
 
 export default SearchListingDrawer
