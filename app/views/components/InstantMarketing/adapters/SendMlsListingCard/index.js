@@ -245,7 +245,7 @@ class SendMlsListingCard extends React.Component {
   }
 
   get DefaultList() {
-    return getMlsDrawerInitialDeals(this.props.deals)
+    return getMlsDrawerInitialDeals(this.props.deals, true)
   }
 
   get Assets() {
@@ -296,6 +296,7 @@ class SendMlsListingCard extends React.Component {
         )}
 
         <SearchListingDrawer
+          mockListings
           isOpen={
             this.state.isListingsModalOpen || this.state.isEditingListings
           }
