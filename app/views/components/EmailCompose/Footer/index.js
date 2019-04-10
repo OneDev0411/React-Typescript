@@ -10,6 +10,7 @@ import { formatDate } from 'components/DateTimePicker/helpers'
 
 import { AddDealFile } from '../components/AddDealFile'
 import { FooterContainer } from './styled'
+import { textForSubmitButton } from './helpers'
 
 function SchedulerButton(props) {
   return (
@@ -19,18 +20,6 @@ function SchedulerButton(props) {
       </IconButton>
     </Tooltip>
   )
-}
-
-function textForSubmitButton({ isSubmitting, isDateSet }) {
-  if (isSubmitting) {
-    return 'Sending...'
-  }
-
-  if (isDateSet) {
-    return 'Save'
-  }
-
-  return 'Send'
 }
 
 export function Footer(props) {
