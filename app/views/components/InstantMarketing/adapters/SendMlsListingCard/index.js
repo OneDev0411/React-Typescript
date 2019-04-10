@@ -245,7 +245,7 @@ class SendMlsListingCard extends React.Component {
   }
 
   get DefaultList() {
-    return getMlsDrawerInitialDeals(this.props.deals, true)
+    return getMlsDrawerInitialDeals(this.props.deals)
   }
 
   get Assets() {
