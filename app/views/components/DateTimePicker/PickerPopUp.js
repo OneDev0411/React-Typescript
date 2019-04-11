@@ -10,7 +10,7 @@ function PickerPopUp(props) {
     isPopUpOpen && (
       <div style={{ position: 'relative' }}>
         <ClickOutSide onClickOutside={onClose}>
-          <PickerContainer depth={3} popUpPosition={popUpPosition}>
+          <PickerContainer popUpPosition={popUpPosition}>
             {children}
           </PickerContainer>
         </ClickOutSide>

@@ -9,10 +9,13 @@ function formatDate(date) {
 function setTimeStringToDate(date = new Date(), time) {
   // [hours, minutes]
   const timeArray = time.split(':').map(t => parseInt(t, 10))
-
-  return new Date(
+  const output = new Date(
     setTime(date).getTime() + timeArray[0] * 3600000 + timeArray[1] * 60000
   )
+
+  // if the output is Invalid Date, we have a fallback to default date.
+  // eslint-disable-next-line
+  return isNaN(output) ? date : output
 }
 
 function isToday(date) {

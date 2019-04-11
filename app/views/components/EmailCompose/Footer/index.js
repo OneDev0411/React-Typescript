@@ -62,7 +62,7 @@ export function Footer(props) {
               )}
               popUpPosition="top-right"
               saveButtonText="Schedule"
-              selectedDate={fieldProps.input.value}
+              initialSelectedDate={fieldProps.input.value}
               onDone={fieldProps.input.onChange}
             />
           )}

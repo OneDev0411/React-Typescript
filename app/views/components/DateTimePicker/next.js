@@ -1,24 +1,44 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
+
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import PickerPopUp from './PickerPopUp'
 import Picker from './Picker'
 
 function DateTimePicker(props) {
   // State
-  const [selectedDate, setDate] = useState(props.selectedDate)
-  const [isPopUpOpen, setOpen] = useState(props.isPopUpOpen)
+  const [selectedDate, setDate] = useState(props.initialSelectedDate)
+  const [isPopUpOpen, setOpen] = useState(props.initialIsPopUpOpen)
+
+  // Contexts
+  const modal = useContext(ConfirmationModalContext)
 
   // Callbacks
-  const toggleOpen = useCallback(() => {
-    setOpen(!isPopUpOpen)
-  }, [isPopUpOpen])
+  const toggleOpen = () => {
+    if (isPopUpOpen && props.initialSelectedDate !== selectedDate) {
+      modal.setConfirmationModal({
+        message: 'Heads up!',
+        // eslint-disable-next-line
+        description: "You didn't save your selected date.Are you sure ? ",
+        onConfirm: () => {
+          setOpen(!isPopUpOpen)
 
-  const handleChange = useCallback(date => {
-    setDate(date)
-  }, [])
+          // When we are closing modal, we should reset the state
+          // to the initial value because next time user is opening the modal,
+          // he should see the initial time as selected date not the last one
+          // that he did not save.
+          setDate(props.initialSelectedDate)
+        }
+      })
+    } else {
+      setOpen(!isPopUpOpen)
+    }
+  }
 
-  const handleDone = useCallback(() => {
+  const handleChange = date => setDate(date)
+
+  const handleDone = () => {
     if (!selectedDate) {
       return false
     }
@@ -27,13 +47,13 @@ function DateTimePicker(props) {
     props.onDone(selectedDate)
 
     // Close PopUp
-    toggleOpen()
-  }, [selectedDate])
+    setOpen(false)
+  }
 
-  const handleRemove = useCallback(() => {
-    setDate(null)
-    props.onDone(null)
-  }, [])
+  const handleRemove = () => {
+    setDate('')
+    props.onDone('')
+  }
 
   // Extract needed props
   const { mode, hasRemove, saveButtonText, popUpPosition } = props
@@ -77,8 +97,8 @@ DateTimePicker.defaultProps = {
   mode: 'PopUp',
   saveButtonText: 'Add Date',
   hasRemove: true,
-  selectedDate: null,
-  isPopUpOpen: false,
+  initialSelectedDate: null,
+  initialIsPopUpOpen: false,
   popUpPosition: 'bottom-left',
   datePickerModifiers: {}
 }
@@ -92,8 +112,8 @@ DateTimePicker.propTypes = {
   hasRemove: PropTypes.bool,
 
   // State Props
-  selectedDate: PropTypes.instanceOf(Date),
-  isPopUpOpen: PropTypes.bool,
+  initialSelectedDate: PropTypes.instanceOf(Date),
+  initialIsPopUpOpen: PropTypes.bool,
 
   // Functionality Props
   onDone: PropTypes.func.isRequired,
