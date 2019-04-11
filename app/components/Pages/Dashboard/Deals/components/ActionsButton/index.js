@@ -25,7 +25,6 @@ import Tooltip from 'components/tooltip'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
 import EmailCompose from 'components/EmailCompose'
 
-import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
 
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 
@@ -42,6 +41,8 @@ import { SelectItemDrawer } from './components/SelectItemDrawer'
 
 import { deleteFile } from './helpers/actions/delete-file'
 import { voidEnvelope } from './helpers/actions/void-envelope'
+import { reviewEnvelope } from './helpers/actions/review-envelope'
+import { resendEnvelope } from './helpers/actions/resend-envelope'
 
 import GetSignature from '../../Signature'
 import PdfSplitter from '../../PdfSplitter'
@@ -78,16 +79,16 @@ class ActionsButton extends React.Component {
       'delete-task': this.handleDeleteTask,
       'move-file': this.toggleMoveFile,
       'split-pdf': this.handleToggleSplitPdf,
-      'review-envelope': this.handleReviewEnvelope,
       'get-signature': this.handleGetSignature,
       'edit-form': this.handleEditForm,
       'notify-task': this.handleNotifyOffice,
       'approve-task': this.handleApproveTask,
       'decline-task': this.handleDeclineTask,
       'remove-task-notification': this.handleRemoveTaskNotification,
-      'resend-envelope': this.handleResendEnvelope,
-      'delete-file': () => deleteFile(this.props),
-      'void-envelope': () => voidEnvelope(this.props)
+      'resend-envelope': resendEnvelope,
+      'review-envelope': reviewEnvelope,
+      'delete-file': deleteFile,
+      'void-envelope': voidEnvelope
     }
 
     this.handleSelectAction = this.handleSelectAction.bind(this)
@@ -109,7 +110,7 @@ class ActionsButton extends React.Component {
       })
     }
 
-    this.actions[type] && this.actions[type]()
+    this.actions[type] && this.actions[type](this.props)
   }
 
   handleCloseMenu = () => this.setState({ isMenuOpen: false })
@@ -265,20 +266,6 @@ class ActionsButton extends React.Component {
     })
   }
 
-  /**
-   *
-   */
-  resendEnvelope = async () => {
-    const envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
-
-    await Deal.resendEnvelope(envelopes[0].id)
-
-    this.props.notify({
-      title: 'e-Signature is resent',
-      status: 'success'
-    })
-  }
-
 
   /**
    *
@@ -391,17 +378,7 @@ class ActionsButton extends React.Component {
     this.setState(state => ({
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
-
-  /**
-   *
-   */
-  handleResendEnvelope = () => {
-    this.props.confirmation({
-      message: 'Resend Envelope?',
-      confirmLabel: 'Resend',
-      onConfirm: this.resendEnvelope
-    })
-  }
+  
 
   /**
    *
@@ -511,34 +488,6 @@ class ActionsButton extends React.Component {
       isPdfSplitterOpen: !state.isPdfSplitterOpen
     }))
 
-  /**
-   *
-   */
-  handleReviewEnvelope = () => {
-    let envelopes = []
-
-    if (this.props.type === 'task') {
-      envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
-    }
-
-    if (this.props.type === 'document') {
-      envelopes = getDocumentEnvelopes(
-        this.props.envelopes,
-        this.props.document
-      )
-    }
-
-    if (envelopes.length === 0) {
-      return false
-    }
-
-    const link = getEnvelopeEditLink(
-      envelopes[0].id,
-      this.props.user.access_token
-    )
-
-    window.open(link, '_blank')
-  }
 
   /**
    *
