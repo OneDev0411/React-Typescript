@@ -13,6 +13,7 @@ import {
   setSelectedTask,
   voidEnvelope,
   deleteTask,
+  renameTaskFile,
   asyncDeleteFile
 } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
@@ -71,6 +72,7 @@ class ActionsButton extends React.Component {
       view: this.handleView,
       download: this.handleDownload,
       comments: this.handleShowComments,
+      rename: this.handleRenameFile,
       'send-email': this.handleToggleComposeEmail,
       'delete-task': this.handleDeleteTask,
       'delete-file': this.handleDeleteFile,
@@ -237,6 +239,9 @@ class ActionsButton extends React.Component {
   getSecondaryActions = actions =>
     _.filter(actions, properties => properties.primary !== true)
 
+  /**
+   *
+   */
   notifyOffice = async comment => {
     if (comment) {
       // send message
@@ -259,6 +264,9 @@ class ActionsButton extends React.Component {
     })
   }
 
+  /**
+   *
+   */
   resendEnvelope = async () => {
     const envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
 
@@ -270,6 +278,9 @@ class ActionsButton extends React.Component {
     })
   }
 
+  /**
+   *
+   */
   voidEnvelope = async () => {
     const envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
 
@@ -361,6 +372,35 @@ class ActionsButton extends React.Component {
    */
   handleShowComments = () => {
     this.props.setSelectedTask(this.props.task)
+  }
+
+  /**
+   *
+   */
+  handleRenameFile = () => {
+    this.props.confirmation({
+      message: 'Enter Name Name...',
+      confirmLabel: 'Update',
+      needsUserEntry: true,
+      multilineEntry: false,
+      inputDefaultValue: this.props.document.name,
+      onConfirm: this.renameFile
+    })
+  }
+
+  renameFile = filename => {
+    if (filename.trim().length === 0) {
+      return this.props.notify({
+        title: 'Invalid file name',
+        status: 'error'
+      })
+    }
+
+    return this.props.renameTaskFile(
+      this.props.task.id,
+      this.props.document.id,
+      filename
+    )
   }
 
   /**
@@ -530,11 +570,17 @@ class ActionsButton extends React.Component {
     window.open(link, '_blank')
   }
 
+  /**
+   *
+   */
   toggleMoveFile = () =>
     this.setState(state => ({
       isTasksDrawerOpen: !state.isTasksDrawerOpen
     }))
 
+  /**
+   *
+   */
   deleteFile = async () => {
     try {
       await asyncDeleteFile({
@@ -709,6 +755,7 @@ export default connect(
     changeTaskStatus,
     asyncDeleteFile,
     setSelectedTask,
+    renameTaskFile,
     voidEnvelope,
     deleteTask,
     confirmation,
