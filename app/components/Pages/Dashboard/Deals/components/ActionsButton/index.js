@@ -34,6 +34,8 @@ import { getDocumentEnvelopes } from '../../utils/get-document-envelopes'
 import { SelectItemDrawer } from './components/SelectItemDrawer'
 
 import { deleteFile } from './helpers/actions/delete-file'
+import { renameFile } from './helpers/actions/rename-file'
+import { editForm } from './helpers/actions/edit-form'
 import { voidEnvelope } from './helpers/actions/void-envelope'
 import { reviewEnvelope } from './helpers/actions/review-envelope'
 import { resendEnvelope } from './helpers/actions/resend-envelope'
@@ -70,15 +72,11 @@ class ActionsButton extends React.Component {
 
     this.actions = {
       upload: this.handleUpload,
+      comments: this.handleShowComments,
       view: this.handleView,
       download: this.handleDownload,
-      comments: this.handleShowComments,
-      rename: this.handleRenameFile,
-      'send-email': this.handleToggleComposeEmail,
-      'move-file': this.toggleMoveFile,
-      'split-pdf': this.handleToggleSplitPdf,
-      'get-signature': this.handleGetSignature,
-      'edit-form': this.handleEditForm,
+      rename: renameFile,
+      'edit-form': editForm,
       'delete-task': deleteTask,
       'notify-task': createNeedsAttention,
       'approve-task': approveTask,
@@ -87,7 +85,11 @@ class ActionsButton extends React.Component {
       'resend-envelope': resendEnvelope,
       'review-envelope': reviewEnvelope,
       'delete-file': deleteFile,
-      'void-envelope': voidEnvelope
+      'void-envelope': voidEnvelope,
+      'move-file': this.toggleMoveFile,
+      'split-pdf': this.handleToggleSplitPdf,
+      'get-signature': this.handleGetSignature,
+      'send-email': this.handleToggleComposeEmail
     }
 
     this.handleSelectAction = this.handleSelectAction.bind(this)
@@ -248,55 +250,7 @@ class ActionsButton extends React.Component {
   /**
    *
    */
-
-  /**
-   *
-   */
-  handleShowComments = () => {
-    this.props.setSelectedTask(this.props.task)
-  }
-
-  /**
-   *
-   */
-  handleRenameFile = () => {
-    this.props.confirmation({
-      message: 'Enter Name Name...',
-      confirmLabel: 'Update',
-      needsUserEntry: true,
-      multilineEntry: false,
-      inputDefaultValue: this.props.document.name,
-      onConfirm: this.renameFile
-    })
-  }
-
-  renameFile = filename => {
-    if (filename.trim().length === 0) {
-      return this.props.notify({
-        title: 'Invalid file name',
-        status: 'error'
-      })
-    }
-
-    const extension = this.props.document.name.split('.').pop()
-
-    const newFilename = filename.endsWith(extension)
-      ? filename
-      : `${filename}.${extension}`
-
-    try {
-      return this.props.renameTaskFile(
-        this.props.task.id,
-        this.props.document.id,
-        newFilename
-      )
-    } catch (e) {
-      return this.props.notify({
-        title: 'Could not rename the file',
-        status: 'error'
-      })
-    }
-  }
+  handleShowComments = () => this.props.setSelectedTask(this.props.task)
 
   /**
    *
@@ -305,14 +259,6 @@ class ActionsButton extends React.Component {
     this.setState(state => ({
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
-
-  /**
-   *
-   */
-  handleEditForm = () =>
-    browserHistory.push(
-      `/dashboard/deals/${this.props.deal.id}/form-edit/${this.props.task.id}`
-    )
 
   /**
    *
