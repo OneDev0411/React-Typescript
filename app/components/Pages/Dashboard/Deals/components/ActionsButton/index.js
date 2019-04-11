@@ -11,7 +11,6 @@ import {
   changeNeedsAttention,
   changeTaskStatus,
   setSelectedTask,
-  voidEnvelope,
   deleteTask,
   renameTaskFile
 } from 'actions/deals'
@@ -42,6 +41,7 @@ import Message from '../../../Chatroom/Util/message'
 import { SelectItemDrawer } from './components/SelectItemDrawer'
 
 import { deleteFile } from './helpers/actions/delete-file'
+import { voidEnvelope } from './helpers/actions/void-envelope'
 
 import GetSignature from '../../Signature'
 import PdfSplitter from '../../PdfSplitter'
@@ -76,7 +76,6 @@ class ActionsButton extends React.Component {
       rename: this.handleRenameFile,
       'send-email': this.handleToggleComposeEmail,
       'delete-task': this.handleDeleteTask,
-      'delete-file': () => deleteFile(this.props),
       'move-file': this.toggleMoveFile,
       'split-pdf': this.handleToggleSplitPdf,
       'review-envelope': this.handleReviewEnvelope,
@@ -87,7 +86,8 @@ class ActionsButton extends React.Component {
       'decline-task': this.handleDeclineTask,
       'remove-task-notification': this.handleRemoveTaskNotification,
       'resend-envelope': this.handleResendEnvelope,
-      'void-envelope': this.handleVoidEnvelope
+      'delete-file': () => deleteFile(this.props),
+      'void-envelope': () => voidEnvelope(this.props)
     }
 
     this.handleSelectAction = this.handleSelectAction.bind(this)
@@ -279,44 +279,11 @@ class ActionsButton extends React.Component {
     })
   }
 
-  /**
-   *
-   */
-  voidEnvelope = async () => {
-    const envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
-
-    try {
-      await this.props.voidEnvelope(this.props.deal.id, envelopes[0].id)
-
-      this.props.notify({
-        title: 'e-Signature is voided',
-        status: 'success'
-      })
-    } catch (e) {
-      console.log(e)
-
-      this.props.notify({
-        message: 'Can not void this eSign',
-        status: 'error'
-      })
-    }
-  }
 
   /**
    *
    */
   handleUpload = () => this.dropzone.open()
-
-  /**
-   *
-   */
-  handleVoidEnvelope = () => {
-    this.props.confirmation({
-      message: 'Void Envelope?',
-      confirmLabel: 'Yes, Void',
-      onConfirm: this.voidEnvelope
-    })
-  }
 
   /**
    *
@@ -739,7 +706,6 @@ export default connect(
     changeTaskStatus,
     setSelectedTask,
     renameTaskFile,
-    voidEnvelope,
     deleteTask,
     confirmation,
     notify
