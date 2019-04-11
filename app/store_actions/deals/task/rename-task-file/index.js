@@ -10,7 +10,7 @@ export function renameTaskFile(taskId, fileId, name) {
         return null
       }
 
-      await rename(taskId, fileId, newFileName)
+      rename(taskId, fileId, newFileName)
 
       dispatch({
         type: actionTypes.RENAME_TASK_FILE,

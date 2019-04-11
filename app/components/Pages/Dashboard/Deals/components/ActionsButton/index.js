@@ -396,11 +396,24 @@ class ActionsButton extends React.Component {
       })
     }
 
-    return this.props.renameTaskFile(
-      this.props.task.id,
-      this.props.document.id,
-      filename
-    )
+    const extension = this.props.document.name.split('.').pop()
+
+    const newFilename = filename.endsWith(extension)
+      ? filename
+      : `${filename}.${extension}`
+
+    try {
+      return this.props.renameTaskFile(
+        this.props.task.id,
+        this.props.document.id,
+        newFilename
+      )
+    } catch (e) {
+      return this.props.notify({
+        title: 'Could not rename the file',
+        status: 'error'
+      })
+    }
   }
 
   /**
