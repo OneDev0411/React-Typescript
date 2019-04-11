@@ -1,22 +1,26 @@
 import { addNotification as notify } from 'reapop'
 
-import { voidEnvelope } from 'actions/deals'
+import { voidEnvelope as voidEnvelopeDocument } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
+
+import { getTaskEnvelopes } from '../../../../../utils/get-task-envelopes'
+
+import store from '../../../../../../../../../stores'
 
 export function voidEnvelope(props) {
   store.dispatch(confirmation({
     message: 'Void Envelope?',
     confirmLabel: 'Yes, Void',
-    onConfirm: () => voidEnvelope(props)
+    onConfirm: () => handleVoidEnvelope(props)
   }))
 }
 
 
-handleVoidEnvelope = async ({ envelopes, task, deal }) => {
-  const envelopes = getTaskEnvelopes(envelopes, task)
+async function handleVoidEnvelope({ envelopes, task, deal }) {
+  const envelopeDocuments = getTaskEnvelopes(envelopes, task)
 
   try {
-    await store.dispatch(voidEnvelope(deal.id, envelopes[0].id))
+    await store.dispatch(voidEnvelopeDocument(deal.id, envelopeDocuments[0].id))
 
     store.dispatch(notify({
       title: 'e-Signature is voided',
