@@ -11,20 +11,16 @@ import {
   changeNeedsAttention,
   changeTaskStatus,
   setSelectedTask,
-  deleteTask,
   renameTaskFile
 } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 import { isBackOffice } from 'utils/user-teams'
-
-import Deal from 'models/Deal'
 
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 import Tooltip from 'components/tooltip'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
 import EmailCompose from 'components/EmailCompose'
-
 
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 
@@ -35,14 +31,17 @@ import { getFileUrl } from './helpers/get-file-url'
 import { getTaskEnvelopes } from '../../utils/get-task-envelopes'
 import { getDocumentEnvelopes } from '../../utils/get-document-envelopes'
 
-import Message from '../../../Chatroom/Util/message'
-
 import { SelectItemDrawer } from './components/SelectItemDrawer'
 
 import { deleteFile } from './helpers/actions/delete-file'
 import { voidEnvelope } from './helpers/actions/void-envelope'
 import { reviewEnvelope } from './helpers/actions/review-envelope'
 import { resendEnvelope } from './helpers/actions/resend-envelope'
+import { approveTask } from './helpers/actions/approve-task'
+import { declineTask } from './helpers/actions/decline-task'
+import { deleteTask } from './helpers/actions/delete-task'
+import { createNeedsAttention } from './helpers/actions/create-needs-attention'
+import { removeTaskNotification } from './helpers/actions/remove-task-notification'
 
 import GetSignature from '../../Signature'
 import PdfSplitter from '../../PdfSplitter'
@@ -76,15 +75,15 @@ class ActionsButton extends React.Component {
       comments: this.handleShowComments,
       rename: this.handleRenameFile,
       'send-email': this.handleToggleComposeEmail,
-      'delete-task': this.handleDeleteTask,
       'move-file': this.toggleMoveFile,
       'split-pdf': this.handleToggleSplitPdf,
       'get-signature': this.handleGetSignature,
       'edit-form': this.handleEditForm,
-      'notify-task': this.handleNotifyOffice,
-      'approve-task': this.handleApproveTask,
-      'decline-task': this.handleDeclineTask,
-      'remove-task-notification': this.handleRemoveTaskNotification,
+      'delete-task': deleteTask,
+      'notify-task': createNeedsAttention,
+      'approve-task': approveTask,
+      'decline-task': declineTask,
+      'remove-task-notification': removeTaskNotification,
       'resend-envelope': resendEnvelope,
       'review-envelope': reviewEnvelope,
       'delete-file': deleteFile,
@@ -244,83 +243,11 @@ class ActionsButton extends React.Component {
   /**
    *
    */
-  notifyOffice = async comment => {
-    if (comment) {
-      // send message
-      Message.postTaskComment(this.props.task, {
-        comment,
-        author: this.props.user.id,
-        room: this.props.task.room.id
-      })
-    }
-
-    await this.props.changeNeedsAttention(
-      this.props.deal.id,
-      this.props.task.id,
-      true
-    )
-
-    this.props.notify({
-      title: 'Admin notification is sent.',
-      status: 'success'
-    })
-  }
-
-
-  /**
-   *
-   */
   handleUpload = () => this.dropzone.open()
 
   /**
    *
    */
-  handleNotifyOffice = () => {
-    this.props.confirmation({
-      message: 'Notify Office?',
-      confirmLabel: 'Notify Office',
-      needsUserEntry: true,
-      inputDefaultValue: '',
-      onConfirm: this.notifyOffice
-    })
-  }
-
-  /**
-   *
-   */
-  handleApproveTask = async () => {
-    await this.props.changeTaskStatus(this.props.task.id, 'Approved')
-
-    this.props.changeNeedsAttention(
-      this.props.deal.id,
-      this.props.task.id,
-      false
-    )
-  }
-
-  /**
-   *
-   */
-  handleDeclineTask = async () => {
-    await this.props.changeTaskStatus(this.props.task.id, 'Declined')
-
-    this.props.changeNeedsAttention(
-      this.props.deal.id,
-      this.props.task.id,
-      false
-    )
-  }
-
-  /**
-   *
-   */
-  handleRemoveTaskNotification = () => {
-    this.props.changeNeedsAttention(
-      this.props.deal.id,
-      this.props.task.id,
-      false
-    )
-  }
 
   /**
    *
@@ -378,7 +305,6 @@ class ActionsButton extends React.Component {
     this.setState(state => ({
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
-  
 
   /**
    *
@@ -458,36 +384,10 @@ class ActionsButton extends React.Component {
     })
   }
 
-  /**
-   *
-   */
-  handleDeleteTask = () => {
-    if (this.props.task.is_deletable === false && !this.props.isBackOffice) {
-      return this.props.confirmation({
-        message: 'Delete a required folder?',
-        description: 'Only your back office can delete this folder.',
-        confirmLabel: 'Notify Office',
-        needsUserEntry: true,
-        inputDefaultValue: 'Please remove from my folder.',
-        onConfirm: this.notifyOffice
-      })
-    }
-
-    this.props.confirmation({
-      message: 'Delete this folder?',
-      description: 'You cannot undo this action',
-      confirmLabel: 'Delete',
-      confirmButtonColor: 'danger',
-      onConfirm: () =>
-        this.props.deleteTask(this.props.task.checklist, this.props.task.id)
-    })
-  }
-
   handleToggleSplitPdf = () =>
     this.setState(state => ({
       isPdfSplitterOpen: !state.isPdfSplitterOpen
     }))
-
 
   /**
    *
@@ -655,7 +555,6 @@ export default connect(
     changeTaskStatus,
     setSelectedTask,
     renameTaskFile,
-    deleteTask,
     confirmation,
     notify
   }
