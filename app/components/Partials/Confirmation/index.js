@@ -7,7 +7,7 @@ import Modal from '../../../views/components/BareModal'
 import Button from '../../../views/components/Button/ActionButton'
 
 class Confirmation extends React.Component {
-  onCancel() {
+  onCancel = () => {
     this.props.dispatch(hideConfirmation())
 
     if (this.props.confirmation.onCancel) {
@@ -15,7 +15,7 @@ class Confirmation extends React.Component {
     }
   }
 
-  onConfirm() {
+  onConfirm = () => {
     const userValue = this.input ? this.input.value : ''
 
     this.props.dispatch(hideConfirmation())
