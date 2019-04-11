@@ -30,7 +30,7 @@ async function handleVoidEnvelope({ envelopes, task, deal }) {
     console.log(e)
 
     store.dispatch(notify({
-      message: 'Can not void this eSign',
+      message: 'Could not void the e-Signature. Please try again.',
       status: 'error'
     }))
   }
