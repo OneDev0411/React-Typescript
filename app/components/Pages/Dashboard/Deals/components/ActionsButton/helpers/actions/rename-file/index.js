@@ -8,7 +8,7 @@ import store from '../../../../../../../../../stores'
 export async function renameFile(props) {
   store.dispatch(
     confirmation({
-      message: 'Enter Name Name...',
+      message: 'Enter New Name...',
       confirmLabel: 'Update',
       needsUserEntry: true,
       multilineEntry: false,
