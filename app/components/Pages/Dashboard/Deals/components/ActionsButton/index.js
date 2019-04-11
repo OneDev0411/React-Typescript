@@ -13,8 +13,7 @@ import {
   setSelectedTask,
   voidEnvelope,
   deleteTask,
-  renameTaskFile,
-  asyncDeleteFile
+  renameTaskFile
 } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 import { isBackOffice } from 'utils/user-teams'
@@ -41,6 +40,8 @@ import { getDocumentEnvelopes } from '../../utils/get-document-envelopes'
 import Message from '../../../Chatroom/Util/message'
 
 import { SelectItemDrawer } from './components/SelectItemDrawer'
+
+import { deleteFile } from './helpers/actions/delete-file'
 
 import GetSignature from '../../Signature'
 import PdfSplitter from '../../PdfSplitter'
@@ -75,7 +76,7 @@ class ActionsButton extends React.Component {
       rename: this.handleRenameFile,
       'send-email': this.handleToggleComposeEmail,
       'delete-task': this.handleDeleteTask,
-      'delete-file': this.handleDeleteFile,
+      'delete-file': () => deleteFile(this.props),
       'move-file': this.toggleMoveFile,
       'split-pdf': this.handleToggleSplitPdf,
       'review-envelope': this.handleReviewEnvelope,
@@ -538,17 +539,6 @@ class ActionsButton extends React.Component {
     })
   }
 
-  /**
-   *
-   */
-  handleDeleteFile = () => {
-    this.props.confirmation({
-      message: 'Are you sure you want delete this file?',
-      confirmLabel: 'Yes, Delete',
-      onConfirm: this.deleteFile
-    })
-  }
-
   handleToggleSplitPdf = () =>
     this.setState(state => ({
       isPdfSplitterOpen: !state.isPdfSplitterOpen
@@ -590,26 +580,6 @@ class ActionsButton extends React.Component {
     this.setState(state => ({
       isTasksDrawerOpen: !state.isTasksDrawerOpen
     }))
-
-  /**
-   *
-   */
-  deleteFile = async () => {
-    try {
-      await asyncDeleteFile({
-        dealId: this.props.deal.id,
-        fileId: this.props.document.id,
-        taskId: this.props.task ? this.props.task.id : null
-      })
-
-      this.props.notify({
-        title: 'File deleted',
-        status: 'success'
-      })
-    } catch (e) {
-      console.log(e)
-    }
-  }
 
   getButtonLabel = button => {
     if (typeof button.label === 'function') {
@@ -749,6 +719,7 @@ ActionsButton.propTypes = {
   task: PropTypes.object.isRequired,
   document: PropTypes.object
 }
+
 ActionsButton.defaultProps = {
   document: null
 }
@@ -766,7 +737,6 @@ export default connect(
   {
     changeNeedsAttention,
     changeTaskStatus,
-    asyncDeleteFile,
     setSelectedTask,
     renameTaskFile,
     voidEnvelope,
