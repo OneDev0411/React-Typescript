@@ -13,7 +13,7 @@ import { initialConfimationModal } from './context/Provider'
  *
  */
 
-function ConfirmationModal(props) {
+function ConfirmationModal() {
   const confirmation = useContext(ConfirmationModalContext)
 
   // Refs
