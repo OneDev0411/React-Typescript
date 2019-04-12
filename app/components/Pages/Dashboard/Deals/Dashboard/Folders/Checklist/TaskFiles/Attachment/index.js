@@ -1,9 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
-
 import Flex from 'styled-flex-component'
-
-import { syncDeleteFile } from 'actions/deals'
 
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
@@ -59,7 +55,4 @@ class Attachments extends React.Component {
   }
 }
 
-export default connect(
-  null,
-  { syncDeleteFile }
-)(Attachments)
+export default Attachments

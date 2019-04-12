@@ -1,47 +1,39 @@
-.modal-confirmation-backdrop {
-  z-index: 1999;
-}
-
 .modal-confirmation {
-  width: 550px;
-
-  .modal-content {
-    border: none;
-    box-shadow: none;
+  width: 35rem;
+  height: auto;
+  padding: 2.5rem;
+  align-items: center;
+  justify-content: center;
+    
+  .confirmation-title {
+    margin-bottom: 0.5em; 
+    font-size: 2.6rem;
+    font-weight: 600;
+  }
+  
+  .confirmation-descr {
+    margin-bottom: 2em;
+    font-size: 1.7rem;
   }
 
-  .modal-body {
-    text-align: center;
-    padding: 2em;
-    background-color: #ffffff;
-    box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    
-    .confirmation-title {
-      margin-bottom: 0.5em; 
-      font-size: 2.6rem;
-      font-weight: 600;
-    }
-    
-    .confirmation-descr {
-      margin-bottom: 2em;
-      font-size: 1.7rem;
+  .confirmation-input {
+    width: 400px;
+    height: 80px;
+    padding: 0.5em;
+    margin-bottom: 2em;
+    font-size: 1.7rem;
+    resize: none;
+    border-radius: 3px;
+    border: solid 1px #d4d4d4;
+    backdrop-filter: blur(10px);
+
+    &.textinput {
+      height: auto;
+      font-size: 1rem;
     }
 
-    .confirmation-input {
-      width: 400px;
-      height: 80px;
-      padding: 0.5em;
-      margin-bottom: 2em;
-      font-size: 1.7rem;
-      resize: none;
-      border-radius: 3px;
-      border: solid 1px #d4d4d4;
-      backdrop-filter: blur(10px);
-
-      &:focus {
-        outline-width: 2px;
-      }
+    &:focus {
+      outline-width: 2px;
     }
   }
 }

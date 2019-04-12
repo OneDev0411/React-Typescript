@@ -54,7 +54,7 @@ export class PageSelector extends React.Component {
   }
 
   getSelectedPages = () => {
-    const { numPages } = this.props
+    const { pagesCount } = this.props
     const { inputText } = this.state
     const list = inputText.trim().split(' ')
 
@@ -76,7 +76,11 @@ export class PageSelector extends React.Component {
       .flatten()
       .uniq()
       .filter(number => {
-        if (!this.isNumeric(~~number) || ~~number <= 0 || ~~number > numPages) {
+        if (
+          !this.isNumeric(~~number) ||
+          ~~number <= 0 ||
+          ~~number > pagesCount
+        ) {
           return false
         }
 
