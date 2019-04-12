@@ -1,19 +1,23 @@
-import React, { useContext } from 'react'
-import { Modal } from 'react-bootstrap'
+import React, { useContext, useRef } from 'react'
 
-import Button from '../Button/ActionButton'
+import Modal from '../BareModal'
+
+import ActionBar from './ActionBar'
+import UserEntry from './UserEntry'
 import ConfirmationModalContext from './context'
-import { initialConfimationModal } from './ContextProvider'
+import { initialConfimationModal } from './context/Provider'
 /*
  *
  * This is redux-free confirmation modal.
  * We will deprecate `app/components/Partials/Confirmation/index.js` asap.
  *
- * @todo This component doesn't have support for needsUserEntry and hiding buttons atm.
  */
 
 function ConfirmationModal(props) {
   const confirmation = useContext(ConfirmationModalContext)
+
+  // Refs
+  const entryInputRef = useRef(null)
 
   // Callbacks
   const handleCancel = () => {
@@ -26,8 +30,10 @@ function ConfirmationModal(props) {
   }
 
   const handleConfirm = () => {
+    const userValue = entryInputRef ? entryInputRef.current.value : ''
+
     if (confirmation.onConfirm) {
-      confirmation.onConfirm()
+      confirmation.onConfirm(userValue)
     }
 
     // reset context values
@@ -36,36 +42,36 @@ function ConfirmationModal(props) {
 
   return (
     <Modal
-      show={confirmation.isShow}
-      backdrop="static"
-      backdropClassName="modal-confirmation-backdrop"
-      dialogClassName="modal-confirmation"
-      style={{
-        zIndex: 2000
-      }}
+      className="modal-confirmation"
+      contentLabel="Confirmation Modal"
+      isOpen={confirmation.isShow}
+      onRequestClose={handleCancel}
+      noFooter
     >
-      {confirmation.isShow && (
-        <Modal.Body>
-          <div
-            className="confirmation-title"
-            dangerouslySetInnerHTML={{
-              __html: confirmation.message
-            }}
-          />
-          {confirmation.description && (
-            <div className="confirmation-descr">{confirmation.description}</div>
-          )}
+      <div
+        className="confirmation-title"
+        dangerouslySetInnerHTML={{
+          __html: confirmation.message
+        }}
+      />
 
-          <div className="cta">
-            <Button appearance="outline" onClick={handleCancel}>
-              {confirmation.cancelLabel || 'Cancel'}
-            </Button>
-            <Button style={{ marginLeft: '1em' }} onClick={handleConfirm}>
-              {confirmation.confirmLabel || 'Confirm'}
-            </Button>
-          </div>
-        </Modal.Body>
+      {confirmation.description && (
+        <div className="confirmation-descr">{confirmation.description}</div>
       )}
+
+      <UserEntry
+        isShow={confirmation.needsUserEntry}
+        inputDefaultValue={confirmation.inputDefaultValue}
+        inputPlaceholder={confirmation.inputPlaceholder}
+        multilineEntry={confirmation.multilineEntry}
+        ref={entryInputRef}
+      />
+
+      <ActionBar
+        confirmation={confirmation}
+        onCancel={handleCancel}
+        onConfirm={handleConfirm}
+      />
     </Modal>
   )
 }

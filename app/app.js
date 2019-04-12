@@ -9,7 +9,7 @@ import { syncHistoryWithStore } from 'react-router-redux'
 import { hot } from 'react-hot-loader/root'
 
 // This is our new confirmation modal. use this please.
-import ConfirmationModalProvider from 'components/ConfirmationModal/ContextProvider'
+import ConfirmationModalProvider from 'components/ConfirmationModal/context/Provider'
 import ConfirmationModal from 'components/ConfirmationModal'
 
 // This is a redux-based confirmation and will be deprecate asap.
