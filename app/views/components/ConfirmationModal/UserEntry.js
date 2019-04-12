@@ -1,16 +1,14 @@
 import React from 'react'
 
 function UserEntry(props, ref) {
-  const { isShow, inputDefaultValue, inputPlaceholder, multilineEntry } = props
-
-  if (isShow) {
+  if (props.isShow) {
     const sharedProps = {
-      defaultValue: inputDefaultValue,
-      placeholder: inputPlaceholder,
+      defaultValue: props.inputDefaultValue,
+      placeholder: props.inputPlaceholder,
       ref
     }
 
-    if (multilineEntry === false) {
+    if (props.multilineEntry === false) {
       return <input {...sharedProps} className="confirmation-input textinput" />
     }
 
