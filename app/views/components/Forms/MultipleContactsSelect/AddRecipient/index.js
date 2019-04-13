@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import Fuse from 'fuse.js'
 
 import Downshift from 'downshift'
 import _ from 'underscore'
@@ -29,8 +30,8 @@ import ContactItem from '../../../SelectContactModal/components/ContactItem'
 import { ListItem } from './ListItem'
 
 const initialState = {
-  isLoading: false,
-  isListMenuOpen: false,
+  isContactsLoading: false,
+  forceCloseSuggestions: false,
   searchText: '',
   list: [],
   filteredTags: [],
@@ -117,13 +118,25 @@ class AddRecipient extends React.Component {
     this.setState(initialState)
   }
 
+  // We have two methods for searching and we are searching in parallel
+  // For searching in contacts we need to use server and for searching
+  // In tags & segments list we can get them once and search in them locally
   handleSearchContact = e => {
     const { value } = e.target
 
+    // Reset the state (clearing the inputs) when the value is empty
+    if (value.length === 0) {
+      return this.setState(initialState)
+    }
+
     this.setState({
-      searchText: value
+      searchText: value,
+      forceCloseSuggestions: false
     })
 
+    // We are searching for tags/list and contacts from server in parallel
+    // Because we can show the results instantly for tags/list
+    this.handleSearchInTagsAndLists(value)
     this.search(value)
   }
 
@@ -144,17 +157,42 @@ class AddRecipient extends React.Component {
     this.handleSelectNewContact(contact)
   }
 
-  search = async value => {
-    if (value.length === 0) {
-      return this.setState(initialState)
+  // Searching in tags & lists locally
+  handleSearchInTagsAndLists = value => {
+    let tagsFuseOptions = {
+      keys: ['text'],
+      threshold: 0.3
     }
 
+    let segmentsFuseOptions = {
+      keys: ['name'],
+      threshold: 0.3
+    }
+
+    // Tags result
+    let filteredTags = new Fuse(this.props.tags, tagsFuseOptions)
+      .search(value)
+      .slice(0, 5)
+
+    // Segments result
+    let filteredList = new Fuse(this.props.segmentsList, segmentsFuseOptions)
+      .search(value)
+      .slice(0, 5)
+
+    this.setState({
+      filteredTags,
+      filteredList
+    })
+  }
+
+  // Searching in contacts remotely by connecting to the server.
+  search = async value => {
     try {
-      this.setState({ isLoading: true, isListMenuOpen: false })
+      this.setState({ isContactsLoading: true })
 
       const response = await searchContacts(value)
 
-      const list = normalizeContactAttribute(response)
+      let list = normalizeContactAttribute(response)
 
       if (list.length === 0 && this.isEmail(value)) {
         list.push({
@@ -165,33 +203,109 @@ class AddRecipient extends React.Component {
         })
       }
 
-      const filteredTags = this.props.tags.filter(
-        ({ text }) => text.toLowerCase() === value.toLowerCase()
-      )
-
-      const filteredList = this.props.segmentsList.filter(
-        ({ name, id }) =>
-          name.toLowerCase() === value.toLowerCase() && id !== 'default'
-      )
+      // This is a workaround for when user is searching for something
+      // before the results are loaded, click on a tags or segments results
+      // causing memory leak and dead-results. the proper way is canceling
+      // request but we don't support this atm.
+      if (this.state.searchText === '') {
+        list = []
+      }
 
       this.setState({
-        isLoading: false,
-        isListMenuOpen: true,
-        list,
-        filteredTags,
-        filteredList
+        isContactsLoading: false,
+        list
       })
     } catch (e) {
       console.log(e)
-      this.setState({ isLoading: false, isListMenuOpen: false })
+      this.setState({ isContactsLoading: false })
     }
+  }
+
+  // if we had any items in contacts/list/tags we should show dropdown
+  isOpen = () => {
+    if (this.state.forceCloseSuggestions) {
+      return false
+    }
+
+    return !!(
+      this.state.filteredList.length ||
+      this.state.filteredTags.length ||
+      this.state.list.length
+    )
+  }
+
+  renderTagsList = () =>
+    this.state.filteredTags.length > 0 && (
+      <React.Fragment>
+        <Title>Tags</Title>
+        {this.state.filteredTags.map((tag, index) => (
+          <ListItem
+            key={tag.id || index}
+            text={tag.text}
+            type="tag"
+            onClick={() => this.handleSelectNewListItem(tag, 'tag')}
+          />
+        ))}
+        <SectionSeparator />
+      </React.Fragment>
+    )
+
+  renderSegmentsList = () =>
+    this.state.filteredList.length > 0 && (
+      <React.Fragment>
+        <Title>Lists</Title>
+        {this.state.filteredList.map((list, index) => (
+          <ListItem
+            key={list.id || index}
+            text={list.name}
+            membersCount={list.member_count}
+            type="list"
+            onClick={() => this.handleSelectNewListItem(list, 'list')}
+          />
+        ))}
+        <SectionSeparator />
+      </React.Fragment>
+    )
+
+  renderContactResults = getItemProps => {
+    if (this.state.isContactsLoading === false && this.state.list.length == 0) {
+      return null
+    }
+
+    const hasResults =
+      !this.state.isContactsLoading && this.state.list.length > 0
+
+    return (
+      <React.Fragment>
+        <Title>
+          Contacts &nbsp;
+          {this.state.isContactsLoading && (
+            <i className="fa fa-spin fa-spinner" />
+          )}
+        </Title>
+
+        {hasResults &&
+          this.state.list
+            .filter(item => !!item.summary.email)
+            .map((item, index) => (
+              <ContactItem
+                key={item.id || index}
+                item={item}
+                {...getItemProps({ item })}
+                summary={item.summary.email || ''}
+                onClickHandler={this.handleSelectNewContact}
+                isHighlighted={false}
+              />
+            ))}
+      </React.Fragment>
+    )
   }
 
   render() {
     return (
       <Downshift
-        isOpen={this.state.isListMenuOpen}
-        onOuterClick={() => this.setState({ isListMenuOpen: false })}
+        isOpen={this.isOpen()}
+        onOuterClick={() => this.setState({ forceCloseSuggestions: true })}
         render={({ isOpen, getInputProps, getItemProps }) => (
           <div style={{ position: 'relative' }}>
             <SearchInputContainer textLength={this.state.searchText.length}>
@@ -201,62 +315,22 @@ class AddRecipient extends React.Component {
                   onChange: this.handleSearchContact,
                   onBlur: this.handleInputBlur,
                   placeholder: 'Add new recipient',
-                  readOnly: this.state.isLoading
+                  readOnly: this.state.isContactsLoading
                 })}
               />
 
-              {this.state.isLoading && <i className="fa fa-spin fa-spinner" />}
+              {this.state.isContactsLoading && (
+                <i className="fa fa-spin fa-spinner" />
+              )}
             </SearchInputContainer>
 
             {isOpen && (
               <SearchResults>
-                {this.state.filteredTags.length > 0 && (
-                  <React.Fragment>
-                    <Title>Tags</Title>
-                    {this.state.filteredTags.map((tag, index) => (
-                      <ListItem
-                        key={tag.id || index}
-                        text={tag.text}
-                        type="tag"
-                        onClick={() => this.handleSelectNewListItem(tag, 'tag')}
-                      />
-                    ))}
-                    <SectionSeparator />
-                  </React.Fragment>
-                )}
+                {this.renderTagsList()}
 
-                {this.state.filteredList.length > 0 && (
-                  <React.Fragment>
-                    <Title>Lists</Title>
-                    {this.state.filteredList.map((list, index) => (
-                      <ListItem
-                        key={list.id || index}
-                        text={list.name}
-                        membersCount={list.member_count}
-                        type="list"
-                        onClick={() =>
-                          this.handleSelectNewListItem(list, 'list')
-                        }
-                      />
-                    ))}
-                    <SectionSeparator />
-                  </React.Fragment>
-                )}
+                {this.renderSegmentsList()}
 
-                {this.state.list.length > 0 && <Title>Contacts</Title>}
-
-                {this.state.list
-                  .filter(item => !!item.summary.email)
-                  .map((item, index) => (
-                    <ContactItem
-                      key={item.id || index}
-                      item={item}
-                      {...getItemProps({ item })}
-                      summary={item.summary.email || ''}
-                      onClickHandler={this.handleSelectNewContact}
-                      isHighlighted={false}
-                    />
-                  ))}
+                {this.renderContactResults(getItemProps)}
               </SearchResults>
             )}
           </div>
