@@ -42,7 +42,8 @@ class EmailCompose extends React.Component {
       recipients: this.props.recipients,
       subject: '',
       body: this.props.hasStaticBody ? '' : this.props.body,
-      attachments: this.initialAttachments
+      attachments: this.initialAttachments,
+      due_at: ''
     }
 
     return this.formObject
@@ -84,7 +85,8 @@ class EmailCompose extends React.Component {
       to: form.recipients,
       subject: form.subject,
       html: form.body,
-      attachments: _.map(form.attachments, item => item.file_id)
+      attachments: _.map(form.attachments, item => item.file_id),
+      due_at: form.due_at
     }
 
     try {
