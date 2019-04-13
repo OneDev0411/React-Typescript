@@ -1,5 +1,4 @@
-
-function textForSubmitButton({ isSubmitting, isDateSet }) {
+export function textForSubmitButton({ isSubmitting, isDateSet }) {
   if (isSubmitting) {
     return 'Sending...'
   }
@@ -10,5 +9,3 @@ function textForSubmitButton({ isSubmitting, isDateSet }) {
 
   return 'Send'
 }
-
-export {textForSubmitButton}

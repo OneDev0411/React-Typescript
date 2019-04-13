@@ -6,6 +6,35 @@ import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import PickerPopUp from './PickerPopUp'
 import Picker from './Picker'
 
+DateTimePicker.defaultProps = {
+  mode: 'PopUp',
+  saveButtonText: 'Add Date',
+  hasRemove: true,
+  initialSelectedDate: null,
+  initialIsPopUpOpen: false,
+  popUpPosition: 'bottom-left',
+  datePickerModifiers: {}
+}
+
+DateTimePicker.propTypes = {
+  // Visual Props
+  mode: PropTypes.oneOf(['PopUp', 'PickerOnly']),
+  popUpButton: PropTypes.func,
+  popUpPosition: PropTypes.string,
+  saveButtonText: PropTypes.string,
+  hasRemove: PropTypes.bool,
+
+  // State Props
+  initialSelectedDate: PropTypes.instanceOf(Date),
+  initialIsPopUpOpen: PropTypes.bool,
+
+  // Functionality Props
+  onDone: PropTypes.func.isRequired,
+
+  // Other props
+  datePickerModifiers: PropTypes.object
+}
+
 function DateTimePicker(props) {
   // State
   const [selectedDate, setDate] = useState(props.initialSelectedDate)
@@ -91,35 +120,6 @@ function DateTimePicker(props) {
 
   // Let's go
   return component
-}
-
-DateTimePicker.defaultProps = {
-  mode: 'PopUp',
-  saveButtonText: 'Add Date',
-  hasRemove: true,
-  initialSelectedDate: null,
-  initialIsPopUpOpen: false,
-  popUpPosition: 'bottom-left',
-  datePickerModifiers: {}
-}
-
-DateTimePicker.propTypes = {
-  // Visual Props
-  mode: PropTypes.oneOf(['PopUp', 'PickerOnly']),
-  popUpButton: PropTypes.func,
-  popUpPosition: PropTypes.string,
-  saveButtonText: PropTypes.string,
-  hasRemove: PropTypes.bool,
-
-  // State Props
-  initialSelectedDate: PropTypes.instanceOf(Date),
-  initialIsPopUpOpen: PropTypes.bool,
-
-  // Functionality Props
-  onDone: PropTypes.func.isRequired,
-
-  // Other props
-  datePickerModifiers: PropTypes.object
 }
 
 export default DateTimePicker

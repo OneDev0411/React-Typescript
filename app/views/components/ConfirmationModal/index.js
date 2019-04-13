@@ -30,7 +30,7 @@ function ConfirmationModal() {
   }
 
   const handleConfirm = () => {
-    const userValue = entryInputRef ? entryInputRef.current.value : ''
+    const userValue = entryInputRef.current ? entryInputRef.current.value : ''
 
     if (confirmation.onConfirm) {
       confirmation.onConfirm(userValue)

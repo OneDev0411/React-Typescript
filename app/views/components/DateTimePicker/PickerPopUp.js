@@ -4,14 +4,12 @@ import ClickOutSide from 'react-click-outside'
 import { PickerContainer } from './styled'
 
 function PickerPopUp(props) {
-  const { isPopUpOpen, onClose, popUpPosition, children } = props
-
   return (
-    isPopUpOpen && (
+    props.isPopUpOpen && (
       <div style={{ position: 'relative' }}>
-        <ClickOutSide onClickOutside={onClose}>
-          <PickerContainer popUpPosition={popUpPosition}>
-            {children}
+        <ClickOutSide onClickOutside={props.onClose}>
+          <PickerContainer popUpPosition={props.popUpPosition}>
+            {props.children}
           </PickerContainer>
         </ClickOutSide>
       </div>

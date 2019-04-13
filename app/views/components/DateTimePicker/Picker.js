@@ -31,7 +31,7 @@ function Picker(props) {
         onChange={handleChangeTime}
       />
       <Divider margin="0.5em 0" />
-      <div className="pickerActions">
+      <div className="picker-actions">
         <div>
           {isDateSet && (
             <ActionButton

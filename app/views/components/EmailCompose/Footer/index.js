@@ -2,32 +2,21 @@ import React from 'react'
 import { Field } from 'react-final-form'
 
 import ActionButton from 'components/Button/ActionButton'
-import IconButton from 'components/Button/IconButton'
-import TimeIcon from 'components/SvgIcons/Time/IconTime'
-import Tooltip from 'components/tooltip'
+
 import DateTimePicker from 'components/DateTimePicker/next'
 import { formatDate } from 'components/DateTimePicker/helpers'
 
 import { AddDealFile } from '../components/AddDealFile'
 import { FooterContainer } from './styled'
 import { textForSubmitButton } from './helpers'
-
-function SchedulerButton(props) {
-  return (
-    <Tooltip caption="Schedule Email">
-      <IconButton inverse appearance="primary" onClick={props.onOpen}>
-        <TimeIcon />
-      </IconButton>
-    </Tooltip>
-  )
-}
+import SchedulerButton from './SchedulerButton'
 
 export function Footer(props) {
   const due_at = props.formProps.values.due_at
 
   return (
     <FooterContainer>
-      <div className="featuresList">
+      <div className="features-list">
         {props.hasDealsAttachments && (
           <Field
             name="attachments"
@@ -38,7 +27,7 @@ export function Footer(props) {
         )}
       </div>
 
-      <div className="actionBar">
+      <div className="action-bar">
         {due_at && (
           <span className="scheduled-on">Send on {formatDate(due_at)}</span>
         )}

@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components'
-// import styled from 'styled-components'
 
 import Card from '../Card'
 import { grey, primary } from '../../utils/colors'
@@ -44,8 +43,8 @@ function popUpPositionStyle(props) {
 }
 
 // styles
-const PickerContent = styled.div`
-  & .pickerActions {
+export const PickerContent = styled.div`
+  & .picker-actions {
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
@@ -53,7 +52,7 @@ const PickerContent = styled.div`
   }
 `
 
-const PickerContainer = styled(Card) `
+export const PickerContainer = styled(Card)`
   position: absolute;
   z-index: 1;
   overflow: hidden;
@@ -141,5 +140,3 @@ const PickerContainer = styled(Card) `
     background-color: ${primary};
   }
 `
-
-export { PickerContent, PickerContainer }

@@ -6,13 +6,13 @@ const FooterContainer = styled.div`
   align-items: center;
   justify-content: space-between;
 
-  & .featuresList {
+  & .features-list {
     dispay: flex;
     flex-wrap: nowrap;
     align-content: strech;
   }
 
-  & .actionBar {
+  & .action-bar {
     display: flex;
     align-items: center;
 
