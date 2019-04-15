@@ -21,9 +21,12 @@ import { getTemplatePreviewImage } from 'components/InstantMarketing/helpers/get
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
+import MissingEmailModal from './MissingEmailModal'
+
 class SendContactCard extends React.Component {
   state = {
     isFetchingContact: false,
+    isMissingEmailModalOpen: false,
     contact: this.props.contact,
     isBuilderOpen: false,
     isComposeEmailOpen: false,
@@ -89,11 +92,8 @@ class SendContactCard extends React.Component {
   openBuilder = () => {
     // todo: removing c.summary
     if (!idx(this.state, state => state.contact.summary.email)) {
-      return this.props.confirmation({
-        description:
-          'You should provide an email address for this contact to be able send a card',
-        hideCancelButton: true,
-        confirmLabel: 'Okay'
+      return this.setState({
+        isMissingEmailModalOpen: true
       })
     }
 
@@ -182,6 +182,12 @@ class SendContactCard extends React.Component {
     }
   }
 
+  closeMissingEmailDialog = () => {
+    this.setState({
+      isMissingEmailModalOpen: false
+    })
+  }
+
   get TemplateInstanceData() {
     return {
       contacts: this.Recipients.map(r => r.contactId)
@@ -201,6 +207,11 @@ class SendContactCard extends React.Component {
 
     return (
       <Fragment>
+        <MissingEmailModal
+          isOpen={this.state.isMissingEmailModalOpen}
+          contact={this.state.contact}
+          onClose={this.closeMissingEmailDialog}
+        />
         {this.props.contact || this.props.contactId ? (
           <ActionButton
             appearance="outline"

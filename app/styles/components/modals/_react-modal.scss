@@ -39,6 +39,14 @@
     }
   }
 
+  &.modal__content--height-auto {
+    height: auto;
+  }
+
+  &.modal__content--padding {
+    padding: 24px;
+  }
+
   
   
   &.c-tour-sheets,
@@ -53,7 +61,7 @@
       border-radius: 0;
     }
   }
-  
+
   &.c-preview-image-modal {
     background: rgba(0, 0, 0, 0.6);
   }
