@@ -103,7 +103,7 @@ export default class Task extends Component {
                       )
 
                       if (items.length === 0) {
-                        return
+                        return onChange(REMINDER_DROPDOWN_OPTIONS[0])
                       }
 
                       // 15 Minutes Before
