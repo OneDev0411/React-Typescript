@@ -77,8 +77,12 @@ export default class Task extends Component {
             const { values } = props
 
             const submitting = props.submitting || props.validating
+
+            const hasTitle =
+              typeof values.title === 'string' && values.title.trim()
+
             const isActive =
-              (typeof values.title === 'string' && values.title.trim()) ||
+              hasTitle ||
               (defaultAssociation
                 ? values.associations.length > 1
                 : values.associations.length > 0)
@@ -165,7 +169,7 @@ export default class Task extends Component {
                         </ActionButton>
                         <ActionButton
                           type="submit"
-                          disabled={submitting || !values.title}
+                          disabled={submitting || !hasTitle}
                         >
                           {submitting ? 'Saving...' : 'Save'}
                         </ActionButton>
