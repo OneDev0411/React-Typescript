@@ -21,7 +21,12 @@ const byId = (state = {}, action) => {
     case actionTypes.DELETE_ATTRIBUTES_FROM_CONTACTS_SUCCESS:
       return {
         ...state,
-        ...action.response.entities.contacts
+        // ...action.response.entities.contacts
+        ...state,
+        ..._.mapObject(action.response.entities.contacts, contact => ({
+          ...contact,
+          meta: { ...action.meta }
+        }))
       }
 
     case actionTypes.CREATE_CONTACTS_SUCCESS:

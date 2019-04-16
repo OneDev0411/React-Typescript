@@ -60,6 +60,14 @@ const ContactsListName = ({ contact, attributeDefs, router }) => {
 
   const statusColor = is_user_active ? '#32b86d' : '#c3c3c3'
 
+  let s
+
+  if (contact.meta && contact.meta.s) {
+    s = contact.meta.s
+  } else {
+    s = '0'
+  }
+
   return (
     <Flex nowrap style={{ minWidth: '0' }}>
       <AvatarContainer>
@@ -86,7 +94,7 @@ const ContactsListName = ({ contact, attributeDefs, router }) => {
             pathname: `/dashboard/contacts/${contact.id}`,
             state: {
               id: contact.id,
-              s: router.getCurrentLocation().query.s || '0'
+              s
             }
           }}
           style={{
