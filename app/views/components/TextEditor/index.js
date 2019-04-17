@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useCallback, useRef } from 'react'
+import React, { Fragment, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { EditorState } from 'draft-js'
 import Editor from 'draft-js-plugins-editor'
