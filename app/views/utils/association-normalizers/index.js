@@ -1,8 +1,9 @@
 import {
   getField as getDealfield,
+  getStatus as getDealStatus,
   getAddress as getDealAddress
-} from '../../../models/Deal/helpers/context'
-import { getListingAddress } from '../../../utils/listing'
+} from 'models/Deal/helpers/context'
+import { getListingAddress, getStatusColor } from 'utils/listing'
 
 /**
  * Normalizing associations
@@ -78,9 +79,10 @@ export function normalizeContact(contact) {
 /**
  * Normalizing listing entity as an association object
  * @param {object} listing The listing entity
+ * @param {boolean} showStatus
  * @returns {object} a normalized associations
  */
-export const normalizeListing = listing => {
+export const normalizeListing = (listing, showStatus = true) => {
   if (!listing) {
     return null
   }
@@ -88,7 +90,10 @@ export const normalizeListing = listing => {
   return {
     avatar: {
       image: listing.cover_image_url,
+      isOnline: showStatus,
       size: 32,
+      showStatus,
+      statusColor: `#${getStatusColor(listing.status)}`,
       placeHolderImage: '/static/icons/listing-place-holder.svg'
     },
     details: getListingAddress(listing),
@@ -104,9 +109,10 @@ export const normalizeListing = listing => {
 /**
  * Normalizing deal entity as an association object
  * @param {object} deal The deal
+ * @param {boolean} showStatus
  * @returns {object} a normalized association
  */
-export const normalizeDeal = deal => {
+export const normalizeDeal = (deal, showStatus = true) => {
   if (!deal) {
     return null
   }
@@ -114,7 +120,10 @@ export const normalizeDeal = deal => {
   return {
     avatar: {
       image: getDealfield(deal, 'photo'),
+      isOnline: showStatus,
       size: 32,
+      showStatus,
+      statusColor: `#${getStatusColor(getDealStatus(deal))}`,
       placeHolderImage: '/static/icons/associated-deals-place-holder.svg'
     },
     details: getDealAddress(deal),

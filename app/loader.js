@@ -27,7 +27,10 @@ const LoadingHandler = props => {
   if (error || (isLoading && timedOut)) {
     console.log('Error while loading', error)
 
-    if (typeof window !== 'undefined') {
+    if (
+      typeof window !== 'undefined' &&
+      process.env.NODE_ENV === 'production'
+    ) {
       window.location.reload(true)
     }
 

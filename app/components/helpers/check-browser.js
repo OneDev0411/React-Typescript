@@ -10,11 +10,11 @@ export function checkBrowser() {
 
     const content = (() => {
       switch (browserInfo.name) {
-        case 'Microsoft Edge':
+        case 'Internet Explorer':
           return {
-            title: 'Sorry. Microsoft Edge is not a supported browser.',
+            title: 'Sorry. Internet Explorer is not a supported browser.',
             description:
-              'For the best experience on Rechat, we recommend using Chrome.',
+              'For the best experience on Rechat, we recommend using Google Chrome.',
             confirmLabel: 'Get Chrome'
           }
         default:
@@ -43,28 +43,23 @@ export function checkBrowser() {
     const isValidBrowser = browser.satisfies({
       // declare browsers per OS
       windows: {
-        'Internet Explorer': '>10',
-        'Microsoft Edge': '<12'
+        'Internet Explorer': '>12'
       },
       macos: {
-        safari: '>10.1.2'
+        safari: '>=10'
       },
 
       // or in general
-      chrome: '>65',
-      firefox: '>60'
+      chrome: '>=68',
+      firefox: '>=61'
     })
 
     if (isValidBrowser === false) {
       let downloadLink
 
       switch (browserInfo.name) {
-        case 'Internet Explorer':
-          downloadLink =
-            'https://www.microsoft.com/en-us/download/internet-explorer.aspx'
-          break
         case 'Chrome':
-        case 'Microsoft Edge':
+        case 'Internet Explorer':
           downloadLink = 'https://www.google.com/chrome/'
           break
         case 'Firefox':

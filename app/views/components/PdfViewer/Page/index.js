@@ -108,6 +108,12 @@ export class Page extends React.Component {
         data-page={this.props.pageNumber}
         data-pdf={this.props.pdfId}
       >
+        {this.props.headerRenderer &&
+          this.props.headerRenderer({
+            pageNumber: this.props.pageNumber,
+            pagesCount: this.props.totalPages
+          })}
+
         {this.state.isLoading && <Spinner />}
 
         <canvas

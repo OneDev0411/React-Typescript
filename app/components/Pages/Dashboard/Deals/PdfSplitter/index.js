@@ -100,6 +100,7 @@ class PdfSplitter extends React.Component {
           <PdfList
             style={{ width: '54%' }}
             files={this.props.files}
+            usedPages={this.state.usedPages}
             documents={this.state.documents}
             onDocumentLoad={this.handleLoadDocument}
             selectedPages={this.state.selectedPages}

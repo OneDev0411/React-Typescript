@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
 import Flex from 'styled-flex-component'
-import { Helmet } from 'react-helmet'
 
 import Spinner from 'components/Spinner'
 
@@ -58,14 +57,7 @@ class DealsContainer extends React.Component {
       )
     }
 
-    return (
-      <React.Fragment>
-        <Helmet>
-          <title>Deals | Rechat</title>
-        </Helmet>
-        {this.props.children}
-      </React.Fragment>
-    )
+    return this.props.children
   }
 }
 

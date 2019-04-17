@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+
 import { merriweatherFamilyStyle } from '../../Typography/styles'
 import { borderColor } from '../../../utils/colors'
 
@@ -14,7 +15,7 @@ export const Container = styled.div`
   margin: 0 1.5rem;
   border-bottom: 1px solid ${borderColor};
   background-color: #fff;
-  z-index: 1;
+  z-index: 2;
 `
 
 export const Title = styled.h2`

@@ -55,7 +55,8 @@ class Signature extends React.Component {
         formData.subject,
         formData.message,
         attachments,
-        recipients
+        recipients,
+        formData.auto_notify
       )
 
       await this.props.createEnvelope(envelope)

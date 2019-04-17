@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+
 import BareModal from '../BareModal'
 
 import Header from './components/Header'

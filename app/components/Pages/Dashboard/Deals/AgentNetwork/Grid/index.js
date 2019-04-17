@@ -158,7 +158,6 @@ export class Grid extends React.Component {
           columns={this.columns}
           LoadingState={Loading}
           isFetching={this.props.isFetching}
-          isFetchingMore={this.props.isFetchingMore}
           summary={{ entityName: 'Agents' }}
           plugins={{
             sortable: {},
