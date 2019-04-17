@@ -1,7 +1,11 @@
 import Fetch from '../../services/fetch'
 
 const defaultQuery = {
-  associations: ['brand_flow.steps', 'brand_flow_step.event']
+  associations: [
+    'brand_flow.steps',
+    'brand_flow_step.event',
+    'brand_flow_step.email'
+  ]
 }
 
 export async function getBrandFlows(id, query = defaultQuery) {
