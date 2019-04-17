@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import { getBrandFlows } from 'models/brand/get-brand-flows'
+import { getBrandFlows } from 'models/flows/get-brand-flows'
 
 import { getActiveTeamId } from 'utils/user-teams'
 
