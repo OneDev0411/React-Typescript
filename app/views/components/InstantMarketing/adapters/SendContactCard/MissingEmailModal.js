@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { withRouter } from 'react-router'
 
@@ -6,17 +7,31 @@ import Button from 'components/Button/ActionButton'
 import LinkButton from 'components/Button/LinkButton'
 import BareModal from 'components/BareModal'
 
+const ModalContant = styled.div`
+  font-size: 1.7em;
+  text-align: center;
+  p {
+    margin-bottom: 2em;
+  }
+  button {
+    margin: 1em;
+  }
+`
+
 function MissingEmailModal({ contact, isOpen, onClose, ...props }) {
   return (
-    <BareModal isOpen={isOpen} onRequestClose={onClose} padding autoHeight>
-      <div>
-        You should provide an email address for this contact to be able to send
-        a card
-      </div>
-      <br />
-      <div style={{ textAlign: 'center' }}>
+    <BareModal
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      hasDefaultPadding
+      autoHeight
+    >
+      <ModalContant>
+        <p>
+          You should provide an email address for this contact to be able to
+          send a card
+        </p>
         <Button onClick={onClose}>Okay</Button>
-        &nbsp;&nbsp;
         {contact && !isContactPagePath(props.location.pathname, contact) && (
           <LinkButton
             onClick={onClose}
@@ -27,7 +42,7 @@ function MissingEmailModal({ contact, isOpen, onClose, ...props }) {
             Edit Contact
           </LinkButton>
         )}
-      </div>
+      </ModalContant>
     </BareModal>
   )
 }
