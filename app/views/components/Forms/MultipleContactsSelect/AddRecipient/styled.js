@@ -24,7 +24,7 @@ export const SearchInput = styled.input`
   }
 `
 
-export const SearchResults = styled.div`
+export const SearchResultsContainer = styled.div`
   position: absolute;
   top: 40px;
   left: 0;

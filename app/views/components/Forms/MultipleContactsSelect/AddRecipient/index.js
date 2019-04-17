@@ -18,16 +18,11 @@ import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-co
 
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
-import {
-  SearchInput,
-  SearchInputContainer,
-  SearchResults,
-  Title,
-  SectionSeparator
-} from './styled'
+import { SearchInput, SearchInputContainer } from './styled'
 
 import ContactItem from '../../../SelectContactModal/components/ContactItem'
 import { ListItem } from './ListItem'
+import SearchResults from './SearchResults'
 
 const initialState = {
   isContactsLoading: false,
@@ -234,71 +229,53 @@ class AddRecipient extends React.Component {
     )
   }
 
-  renderTagsList = () =>
-    this.state.filteredTags.length > 0 && (
-      <React.Fragment>
-        <Title>Tags</Title>
-        {this.state.filteredTags.map((tag, index) => (
-          <ListItem
-            key={tag.id || index}
-            text={tag.text}
-            type="tag"
-            onClick={() => this.handleSelectNewListItem(tag, 'tag')}
-          />
-        ))}
-        <SectionSeparator />
-      </React.Fragment>
-    )
-
-  renderSegmentsList = () =>
-    this.state.filteredList.length > 0 && (
-      <React.Fragment>
-        <Title>Lists</Title>
-        {this.state.filteredList.map((list, index) => (
-          <ListItem
-            key={list.id || index}
-            text={list.name}
-            membersCount={list.member_count}
-            type="list"
-            onClick={() => this.handleSelectNewListItem(list, 'list')}
-          />
-        ))}
-        <SectionSeparator />
-      </React.Fragment>
-    )
-
-  renderContactResults = getItemProps => {
-    if (this.state.isContactsLoading === false && this.state.list.length == 0) {
-      return null
+  createResultSections = getItemProps => {
+    let tags = {
+      title: 'Tags',
+      items: this.state.filteredTags,
+      itemRenderer: itemDefaultProps => (
+        <ListItem
+          {...itemDefaultProps}
+          text={itemDefaultProps.item.text}
+          type="tag"
+          onClick={() =>
+            this.handleSelectNewListItem(itemDefaultProps.item, 'tag')
+          }
+        />
+      )
+    }
+    let segmentsList = {
+      title: 'Lists',
+      items: this.state.filteredList,
+      itemRenderer: itemDefaultProps => (
+        <ListItem
+          {...itemDefaultProps}
+          text={itemDefaultProps.item.name}
+          membersCount={itemDefaultProps.item.member_count}
+          type="list"
+          onClick={() =>
+            this.handleSelectNewListItem(itemDefaultProps.item, 'list')
+          }
+        />
+      )
     }
 
-    const hasResults =
-      !this.state.isContactsLoading && this.state.list.length > 0
+    let contacts = {
+      title: 'Contacts',
+      isLoading: this.state.isContactsLoading,
+      items: this.state.list,
+      itemRenderer: itemDefaultProps => (
+        <ContactItem
+          {...itemDefaultProps}
+          {...getItemProps({ item: itemDefaultProps.item })}
+          summary={itemDefaultProps.item.summary.email || ''}
+          onClickHandler={this.handleSelectNewContact}
+          isHighlighted={false}
+        />
+      )
+    }
 
-    return (
-      <React.Fragment>
-        <Title>
-          Contacts &nbsp;
-          {this.state.isContactsLoading && (
-            <i className="fa fa-spin fa-spinner" />
-          )}
-        </Title>
-
-        {hasResults &&
-          this.state.list
-            .filter(item => !!item.summary.email)
-            .map((item, index) => (
-              <ContactItem
-                key={item.id || index}
-                item={item}
-                {...getItemProps({ item })}
-                summary={item.summary.email || ''}
-                onClickHandler={this.handleSelectNewContact}
-                isHighlighted={false}
-              />
-            ))}
-      </React.Fragment>
-    )
+    return [tags, segmentsList, contacts]
   }
 
   render() {
@@ -325,13 +302,7 @@ class AddRecipient extends React.Component {
             </SearchInputContainer>
 
             {isOpen && (
-              <SearchResults>
-                {this.renderTagsList()}
-
-                {this.renderSegmentsList()}
-
-                {this.renderContactResults(getItemProps)}
-              </SearchResults>
+              <SearchResults data={this.createResultSections(getItemProps)} />
             )}
           </div>
         )}
