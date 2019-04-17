@@ -53,7 +53,7 @@ function Menu(props) {
         isFit
         iconSize="large"
         inverse
-        backUrl="/dashboard/contacts"
+        defaultBackUrl="/dashboard/contacts"
       />
     </Flex>
   )

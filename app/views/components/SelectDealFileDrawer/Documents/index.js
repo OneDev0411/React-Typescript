@@ -87,7 +87,7 @@ class DocumentRow extends React.Component {
     try {
       return this.props.moveTaskFile(
         this.props.user,
-        this.props.deal.id,
+        this.props.deal,
         task,
         this.props.stashFile,
         notifyOffice
@@ -97,12 +97,14 @@ class DocumentRow extends React.Component {
     }
   }
 
-  isInitialAttachment = document =>
-    Object.values(this.props.initialAttachments).some(item => {
-      const key = document.type === 'form' ? 'task_id' : 'file_id'
+  isInitialAttachment = document => {
+    return this.props.initialAttachments && 
+      Object.values(this.props.initialAttachments).some(item => {
+        const key = document.type === 'form' ? 'task_id' : 'file_id'
 
-      return item[key] === document[key]
-    })
+        return item[key] === document[key]
+      })
+  }
 
   getFormattedDate = date => fecha.format(new Date(date), 'MMM DD YYYY, h:mm A')
 

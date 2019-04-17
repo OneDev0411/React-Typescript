@@ -11,7 +11,6 @@ import DealContext from 'models/Deal/helpers/dynamic-context'
 
 import { FullPageHeader } from 'components/FullPageHeader'
 
-// import OfferType from './offer-type'
 import { confirmation } from 'actions/confirmation'
 
 import ActionButton from 'components/Button/ActionButton'
@@ -41,7 +40,6 @@ class CreateOffer extends React.Component {
       saving: false,
       buyerName: '',
       dealStatus: '',
-      // offerType: dealHasPrimaryOffer ? 'backup' : '',
       offerType: 'primary',
       enderType: -1,
       contexts: this.initializeContexts(),
@@ -68,11 +66,7 @@ class CreateOffer extends React.Component {
     const contexts = {}
     const { deal } = this.props
 
-    const dealContexts = DealContext.getItems(
-      deal.brand.id,
-      deal.deal_type,
-      deal.property_type
-    )
+    const dealContexts = this.getDealContexts()
 
     const indexedContexts = _.indexBy(dealContexts, 'key')
 
@@ -174,12 +168,6 @@ class CreateOffer extends React.Component {
   openDeal = id => {
     browserHistory.push(`/dashboard/deals/${id}`)
   }
-
-  // changeOfferType(offerType) {
-  //   console.log(offerType)
-  //   this.isFormSubmitted = false
-  //   this.setState({ offerType, validationErrors: [] })
-  // }
 
   changeEnderType = enderType => {
     this.setState({ enderType }, () => this.validateForm())
@@ -495,20 +483,13 @@ class CreateOffer extends React.Component {
         <Helmet>
           <title>Add Offer | Deals | Rechat</title>
         </Helmet>
+
         <FullPageHeader
           title="Add New Offer"
           handleClose={this.cancelCreateOffer}
         />
 
         <div className="form">
-          {/* <OfferType
-            hasError={this.hasError('offer_type')}
-            dealHasPrimaryOffer={dealHasPrimaryOffer}
-            offerType={offerType}
-            deal={deal}
-            onChangeOfferType={offer => this.changeOfferType(offer)}
-          /> */}
-
           {this.isBackupOffer() && (
             <BuyerName
               hasError={this.hasError('buyer_name')}
@@ -624,9 +605,6 @@ class CreateOffer extends React.Component {
           )}
 
           <ActionButton
-            // className={cn('create-offer-button', {
-            //   disabled: saving || offerType.length === 0
-            // })}
             disabled={saving || offerType.length === 0}
             onClick={this.createOffer}
           >

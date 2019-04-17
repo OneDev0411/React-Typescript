@@ -18,6 +18,7 @@ import Counties from './Counties'
 import YearBuilt from './YearBuilt'
 import Tags from './components/Tags'
 import Subdivision from './Subdivision'
+import MasterBedroom from './MasterBedroom'
 import MlsAreaSelects from './MlsAreaSelects'
 import GroupRadios from './components/GroupRadios'
 import SubStatuses from './components/SubStatuses'
@@ -38,13 +39,12 @@ const INITIAL_VALUES = {
   priceZeroCleaner: false,
   minimum_bedrooms: 'any',
   minimum_bathrooms: 'any',
-  minimum_parking_spaces: 'any',
-  master_bedroom_in_first_floor: 'either'
+  minimum_parking_spaces: 'any'
 }
 
 const Filters = ({
   isOpen,
-  reset,
+  resetHandler,
   pristine,
   activeSold,
   handleClose,
@@ -139,6 +139,7 @@ const Filters = ({
               fields={architectural_styles}
             />
             <GroupRadios name="minimum_bedrooms" label="Bedrooms" />
+            <MasterBedroom />
             <GroupRadios name="minimum_bathrooms" label="Bathrooms" />
             <GroupRadios name="minimum_parking_spaces" label="Parking Spaces" />
             <Subdivision />
@@ -153,11 +154,6 @@ const Filters = ({
               name="pool"
               fields={yesNoEitherFieldItems}
             />
-            <GroupRadios
-              label="Master Bedroom on Main"
-              name="master_bedroom_in_first_floor"
-              fields={yesNoEitherFieldItems}
-            />
             <YearBuilt />
           </div>
         </form>
@@ -166,7 +162,7 @@ const Filters = ({
             size="large"
             style={{ marginRight: '1rem' }}
             appearance="outline"
-            onClick={reset}
+            onClick={resetHandler}
             disabled={isSubmitting || pristine}
           >
             Reset Filters
@@ -205,6 +201,22 @@ export default compose(
   withHandlers({
     onSubmitHandler: ({ submitFiltersForm }) => values => {
       submitFiltersForm(values)
+    }
+  }),
+  withHandlers({
+    resetHandler: ({
+      reset,
+      initialValues,
+      submitFiltersForm,
+      submitSucceeded,
+      submitFailed
+    }) => () => {
+      if (submitSucceeded || submitFailed) {
+        reset()
+        submitFiltersForm(initialValues)
+      } else {
+        reset()
+      }
     }
   })
 )(Filters)

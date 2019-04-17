@@ -95,7 +95,7 @@ class TasksDrawer extends React.Component {
 
       const newFile = await this.props.moveTaskFile(
         this.props.user,
-        this.props.deal.id,
+        this.props.deal,
         task,
         this.props.file,
         selectedItem.notifyOffice

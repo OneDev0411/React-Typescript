@@ -75,6 +75,7 @@ export class Table extends React.Component {
         <SendContactCard
           contactId={row.contact}
           buttonStyle={{
+            alignSelf: 'center',
             size: 'small'
           }}
         >
