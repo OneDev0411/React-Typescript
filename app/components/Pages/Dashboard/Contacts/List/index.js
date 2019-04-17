@@ -41,7 +41,6 @@ import { SORT_FIELD_SETTING_KEY } from './constants'
 class ContactsList extends React.Component {
   constructor(props) {
     super(props)
-
     this.state = {
       isSideMenuOpen: true,
       isFetchingMoreContacts: false,
@@ -56,7 +55,7 @@ class ContactsList extends React.Component {
     this.order = getActiveTeamSettings(props.user, SORT_FIELD_SETTING_KEY)
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     if (
       !['default', 'duplicate contacts'].includes(
         this.props.filterSegments.activeSegmentId
@@ -68,7 +67,20 @@ class ContactsList extends React.Component {
         ]
       )
     } else {
-      this.fetchList(this.getStartQueryParam())
+      this.setState({
+        isFetchingMoreContacts: true
+      })
+
+      const start = this.getQueryParam('s')
+      const idSelector = `#grid-item-${this.getQueryParam('id')}`
+
+      this.scrollToSelector(idSelector)
+
+      await this.fetchList(start)
+
+      this.setState({
+        isFetchingMoreContacts: false
+      })
     }
 
     if (this.props.fetchTags) {
@@ -109,11 +121,11 @@ class ContactsList extends React.Component {
 
       this.props.getContactsTags(viewAsUsers)
     }
-  }
 
-  componentDidUpdate() {
-    if (!this.props.router.getCurrentLocation().query.s) {
-      this.fetchList()
+    const nextStart = nextProps.router.getCurrentLocation().query.s
+
+    if (nextStart === undefined) {
+      window.location.reload()
     }
   }
 
@@ -121,18 +133,32 @@ class ContactsList extends React.Component {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
   }
 
+  scrollToSelector(selector) {
+    const selectedElement = document.querySelector(selector)
+
+    if (selectedElement) {
+      selectedElement.scrollIntoView({ block: 'center' })
+    }
+  }
+
   addLoadedRange = start =>
     this.setState(prevState => ({
       loadedRanges: _.uniq([...prevState.loadedRanges, parseInt(start, 10)])
     }))
 
-  getStartQueryParam = () =>
-    parseInt(this.props.router.getCurrentLocation().query.s, 10) || 0
+  getQueryParam = key => this.props.router.getCurrentLocation().query[key]
 
-  setStartQueryParam = value =>
-    this.props.router.replace(
-      `${this.props.router.getCurrentLocation().pathname}?s=${value}`
-    )
+  setQueryParam = (key, value) => {
+    const currentLocation = this.props.router.getCurrentLocation()
+
+    this.props.router.replace({
+      ...currentLocation,
+      query: {
+        ...currentLocation.query,
+        [key]: value
+      }
+    })
+  }
 
   hasSearchState = () =>
     this.state.filter || this.state.searchInputValue || this.order
@@ -195,7 +221,7 @@ class ContactsList extends React.Component {
     } = newFilters
 
     this.addLoadedRange(start)
-    this.setStartQueryParam(start)
+    this.setQueryParam('s', start)
 
     if (start === 0 && !prependResult) {
       this.resetSelectedRows()
@@ -210,7 +236,10 @@ class ContactsList extends React.Component {
         order,
         viewAsUsers,
         conditionOperator,
-        prependResult
+        prependResult,
+        {
+          s: start
+        }
       )
     } catch (e) {
       console.log('fetch search error: ', e)
@@ -249,7 +278,7 @@ class ContactsList extends React.Component {
   handleLoadMore = async () => {
     const { total } = this.props.listInfo
     const totalLoadedCount = this.props.list.ids.length
-    const prevStart = this.getStartQueryParam()
+    const prevStart = parseInt(this.getQueryParam('s'), 10) || 0
 
     if (
       this.state.isFetchingMoreContacts ||
@@ -281,7 +310,7 @@ class ContactsList extends React.Component {
   handleLoadMoreBefore = async () => {
     const { total } = this.props.listInfo
     const totalLoadedCount = this.props.list.ids.length
-    const prevStart = this.getStartQueryParam()
+    const prevStart = parseInt(this.getQueryParam('s'), 10) || 0
 
     if (
       this.state.isFetchingMoreContacts ||
@@ -424,9 +453,9 @@ class ContactsList extends React.Component {
   }
 }
 
-function mapStateToUser({ user, contacts }) {
+function mapStateToProps({ user, contacts }) {
   const listInfo = selectContactsInfo(contacts.list)
-  const tags = contacts.list
+  const tags = contacts.tags
   const fetchTags = !isFetchingTags(tags) && selectTags(tags).length === 0
 
   return {
@@ -444,7 +473,7 @@ function mapStateToUser({ user, contacts }) {
 
 export default withRouter(
   connect(
-    mapStateToUser,
+    mapStateToProps,
     {
       getContacts,
       searchContacts,

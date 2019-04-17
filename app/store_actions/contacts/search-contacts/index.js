@@ -13,7 +13,8 @@ export function searchContacts(
   order = '-created_at',
   users,
   conditionOperator = 'and',
-  prependResult = false
+  prependResult = false,
+  meta = {}
 ) {
   return async (dispatch, getState) => {
     if (start === 0 && !prependResult) {
@@ -61,7 +62,8 @@ export function searchContacts(
           ...normalizeContacts(response)
         },
         type: actionTypes.SEARCH_CONTACTS_SUCCESS,
-        prependResult
+        prependResult,
+        meta
       })
     } catch (error) {
       dispatch({
