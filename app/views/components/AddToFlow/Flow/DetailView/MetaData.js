@@ -24,7 +24,8 @@ export function MetaData({ steps }) {
     Math.max(...steps.map(s => s.due_in)) / (24 * 3600)
   )
   const automatedSteps = steps.filter(s => s.is_automated).length
-  const automationPercent = automatedSteps > 0 ? totalSteps / automatedSteps : 0
+  const automationPercent =
+    automatedSteps > 0 ? Math.floor((automatedSteps / totalSteps) * 100) : 0
 
   return (
     <div style={{ display: 'inline-block', marginBottom: '1em' }}>
