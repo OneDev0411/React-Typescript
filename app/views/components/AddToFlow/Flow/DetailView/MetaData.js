@@ -20,10 +20,8 @@ const Item = styled.span`
 
 export function MetaData({ steps }) {
   const totalSteps = steps.length
-  // const getDays = ({ due_in }) => Math.ceil(due_in / (24 * 3600))
-  // const totalDays = steps.map(getDays).reduce((acc, cur) => acc + cur)
-  const totalDays = Math.ceil(
-    steps.reduce((acc, cur) => acc.due_in + cur.due_in) / (24 * 3600)
+  const MaxDueIn = Math.ceil(
+    Math.max(...steps.map(s => s.due_in)) / (24 * 3600)
   )
   const automatedSteps = steps.filter(s => s.is_automated).length
   const automationPercent = automatedSteps > 0 ? totalSteps / automatedSteps : 0
@@ -34,7 +32,7 @@ export function MetaData({ steps }) {
         {totalSteps}&nbsp;<span>steps</span>&nbsp;&nbsp;.&nbsp;&nbsp;
       </Item>
       <Item>
-        {totalDays}&nbsp;<span>days</span>
+        {MaxDueIn}&nbsp;<span>days</span>
         &nbsp;&nbsp;.&nbsp;&nbsp;
       </Item>
       <Item>
