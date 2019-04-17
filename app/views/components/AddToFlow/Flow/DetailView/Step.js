@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-import ms from 'ms'
 import idx from 'idx'
 
 import { grey } from 'views/utils/colors'
@@ -26,7 +25,11 @@ export class Step extends React.Component {
   render() {
     const { step } = this.props
     const days = Math.floor(step.due_in / (24 * 3600)) + 1
-    const Icon = idx(eventTypesIcons, icons => icons[step.event.task_type].icon)
+    let Icon = idx(eventTypesIcons, icons => icons[step.event.task_type].icon)
+
+    if (!Icon && step.email) {
+      Icon = eventTypesIcons.Email.icon
+    }
 
     return (
       <StepContainer alignCenter justifyBetween>
