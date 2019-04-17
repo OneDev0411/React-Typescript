@@ -3,13 +3,18 @@ import NotificationsSystem from 'reapop'
 import notificationTheme from 'reapop-theme-wybo'
 import useScroll from 'react-router-scroll/lib/useScroll'
 
-import ConfirmationModal from './components/Partials/Confirmation'
-
 import { Router, browserHistory, applyRouterMiddleware } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import smoothscroll from 'smoothscroll-polyfill'
 
 import { hot } from 'react-hot-loader/root'
+
+// This is our new confirmation modal. use this please.
+import ConfirmationModalProvider from 'components/ConfirmationModal/context/Provider'
+import ConfirmationModal from 'components/ConfirmationModal'
+
+// This is a redux-based confirmation and will be deprecate asap.
+import ReduxConfirmationModal from './components/Partials/Confirmation'
 
 // import styles
 import './styles/main.scss'
@@ -30,13 +35,16 @@ if (typeof window !== 'undefined') {
 
 const A = () => (
   <div>
-    <Router history={history} render={applyRouterMiddleware(useScroll())}>
-      {routes}
-    </Router>
+    <ConfirmationModalProvider>
+      <Router history={history} render={applyRouterMiddleware(useScroll())}>
+        {routes}
+      </Router>
+      <ConfirmationModal />
+    </ConfirmationModalProvider>
 
     <NotificationsSystem theme={notificationTheme} />
 
-    <ConfirmationModal />
+    <ReduxConfirmationModal />
   </div>
 )
 

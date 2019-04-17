@@ -79,7 +79,6 @@ webpackConfig.plugins.push(
     test: /\.js$|\.css$/,
     filename: '[path]'
   }),
-
   new S3Plugin({
     progress: false, // Messes the terminal up
     exclude: /.*\.html$/,

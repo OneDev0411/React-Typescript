@@ -2,8 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { browserHistory } from 'react-router'
 
-import getDefaultHomePage from 'utils/get-default-home-page'
-
 import { goTo } from '../../../../utils/go-to'
 
 import Button from '../IconButton'
@@ -13,33 +11,32 @@ export class CloseButton extends React.Component {
   static propTypes = {
     ...Button.propTypes,
     backUrl: PropTypes.string,
-    fallbackUrl: PropTypes.string,
+    defaultBackUrl: PropTypes.string,
     query: PropTypes.object
   }
 
   static defaultProps = {
     ...Button.defaultProps,
     backUrl: '',
-    fallbackUrl: '',
+    defaultBackUrl: '',
     query: {}
   }
 
   handleOnClick = () => {
+    // Force redirect
     if (this.props.backUrl) {
       return goTo(this.props.backUrl, null, this.props.query)
     }
 
+    // Redirect using the histroy
     const currentLocation = browserHistory.getCurrentLocation()
 
     if (currentLocation.key) {
       return browserHistory.goBack()
     }
 
-    return goTo(
-      this.props.fallbackUrl || getDefaultHomePage(),
-      null,
-      this.props.query
-    )
+    // Default
+    return goTo(this.props.defaultBackUrl, null, this.props.query)
   }
 
   render() {

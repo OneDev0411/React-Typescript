@@ -136,6 +136,10 @@ $item-height: 56px;
     margin: 0;
     width: 250px;
     height: min-content;
+    // we set a max height to prevent menu from being clipped when it's longer
+    // than viewport height. 80px is roughly the offset top.
+    max-height: calc(100vh - 80px);
+    overflow: auto;
     border-radius: 5px;
     background-color: #fff;
     border: 1px solid $gray;

@@ -10,18 +10,19 @@ export async function sendEnvelope(
   subject,
   message,
   attachments,
-  recipients
+  recipients,
+  auto_notify = false
 ) {
-  const data = {
-    deal: deal_id,
-    title: subject,
-    body: message,
-    documents: attachments,
-    recipients: _.map(recipients, recipient => recipient)
-  }
 
   try {
-    const response = await new Fetch().post('/envelopes').send(data)
+    const response = await new Fetch().post('/envelopes').send({
+      deal: deal_id,
+      title: subject,
+      body: message,
+      documents: attachments,
+      recipients: _.map(recipients, recipient => recipient),
+      auto_notify
+    })
 
     if (response.body && ~~response.body.http === 412) {
       throw new Error(
