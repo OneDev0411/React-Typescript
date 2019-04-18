@@ -30,6 +30,8 @@ function addDealDataToListing(deal, listing) {
           Deal.get.field(deal, 'postal_code') ||
           listing.property.address.postal_code
       },
+      list_date: Deal.get.field(deal, 'list_date') || listing.list_date,
+      status: Deal.get.field(deal, 'listing_status') || listing.status,
       year_built:
         Deal.get.field(deal, 'year_built') || listing.property.year_built
     }
