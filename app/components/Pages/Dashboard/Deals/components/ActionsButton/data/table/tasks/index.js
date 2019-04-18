@@ -56,6 +56,7 @@ export default normalizeConditions([
       [UPLOAD_BUTTON]: {
         primary: true
       },
+      [TASK_NOTIFICATION_BUTTON]: {},
       ...sharedActions
     }
   },

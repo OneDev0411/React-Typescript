@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
 import { hideConfirmation } from '../../../store_actions/confirmation'
@@ -7,7 +7,7 @@ import Modal from '../../../views/components/BareModal'
 import Button from '../../../views/components/Button/ActionButton'
 
 class Confirmation extends React.Component {
-  onCancel() {
+  onCancel = () => {
     this.props.dispatch(hideConfirmation())
 
     if (this.props.confirmation.onCancel) {
@@ -15,7 +15,7 @@ class Confirmation extends React.Component {
     }
   }
 
-  onConfirm() {
+  onConfirm = () => {
     const userValue = this.input ? this.input.value : ''
 
     this.props.dispatch(hideConfirmation())
@@ -23,6 +23,21 @@ class Confirmation extends React.Component {
     if (this.props.confirmation.onConfirm) {
       this.props.confirmation.onConfirm(userValue)
     }
+  }
+
+  renderInput() {
+    const { confirmation } = this.props
+    const sharedProps = {
+      defaultValue: confirmation.inputDefaultValue,
+      placeholder: confirmation.inputPlaceholder || '',
+      ref: ref => (this.input = ref)
+    }
+
+    if (confirmation.multilineEntry === false) {
+      return <input {...sharedProps} className="confirmation-input textinput" />
+    }
+
+    return <textarea {...sharedProps} className="confirmation-input textarea" />
   }
 
   render() {
@@ -46,14 +61,7 @@ class Confirmation extends React.Component {
           <div className="confirmation-descr">{confirmation.description}</div>
         )}
 
-        {confirmation.needsUserEntry && (
-          <textarea
-            className="confirmation-input"
-            defaultValue={confirmation.inputDefaultValue}
-            placeholder={confirmation.inputPlaceholder || ''}
-            ref={ref => (this.input = ref)}
-          />
-        )}
+        {confirmation.needsUserEntry && this.renderInput()}
 
         <div className="cta">
           {!confirmation.hideCancelButton && (
