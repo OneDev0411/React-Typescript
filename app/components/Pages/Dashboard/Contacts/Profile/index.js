@@ -279,6 +279,11 @@ class ContactProfile extends React.Component {
         <PageContainer>
           <Header
             contact={contact}
+            backUrl={
+              this.props.location.state && this.props.location.state.id
+                ? '/dashboard/contacts'
+                : null
+            }
             closeButtonQuery={this.props.location.state}
           />
 
