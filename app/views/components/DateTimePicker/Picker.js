@@ -23,7 +23,8 @@ function Picker(props) {
       <DatePicker
         selectedDays={props.selectedDate}
         month={props.selectedDate}
-        onDayClick={handleChangeDate}
+        modifiers={props.dateModifiers}
+        disabledDays={props.disabledDays}
       />
       <Divider margin="0.5em 0" />
       <TimePicker

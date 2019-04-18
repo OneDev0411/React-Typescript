@@ -13,7 +13,8 @@ DateTimePicker.defaultProps = {
   initialSelectedDate: null,
   initialIsPopUpOpen: false,
   popUpPosition: 'bottom-left',
-  datePickerModifiers: {}
+  dateModifiers: {},
+  disabledDays: {}
 }
 
 DateTimePicker.propTypes = {
@@ -32,7 +33,8 @@ DateTimePicker.propTypes = {
   onDone: PropTypes.func.isRequired,
 
   // Other props
-  datePickerModifiers: PropTypes.object
+  disabledDays: PropTypes.shape(),
+  dateModifiers: PropTypes.shape()
 }
 
 function DateTimePicker(props) {
@@ -90,12 +92,14 @@ function DateTimePicker(props) {
   // Which mode?
   let component = (
     <Picker
+      disabledDays={props.disabledDays}
       selectedDate={selectedDate}
       onChange={handleChange}
       onDone={handleDone}
       hasRemove={hasRemove}
       onRemove={handleRemove}
-      saveButtonText={saveButtonText}
+      saveButtonText={props.saveButtonText}
+      dateModifiers={props.dateModifiers}
       // We don't update the form field value unless the user clicks
       // on save button inside the picker. This is useful for when want to
       // know we are editing a date or we are setting a new date.
