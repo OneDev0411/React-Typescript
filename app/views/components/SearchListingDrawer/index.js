@@ -8,6 +8,34 @@ import Listing from '../../../models/listings/listing'
 import SearchDrawer from '../SearchDrawer'
 import ListingItem from './ListingItem'
 
+function addDealDataToListing(deal, listing) {
+  return {
+    ...listing,
+    price: Deal.get.field(deal, 'list_price') || listing.price,
+    property: {
+      address: {
+        full_address:
+          Deal.get.field(deal, 'full_address') ||
+          listing.property.address.full_address,
+        street_address:
+          Deal.get.field(deal, 'street_address') ||
+          listing.property.address.street_address,
+        unit_number:
+          Deal.get.field(deal, 'unit_number') ||
+          listing.property.address.unit_number,
+        street_number:
+          Deal.get.field(deal, 'street_number') ||
+          listing.property.address.street_number,
+        postal_code:
+          Deal.get.field(deal, 'postal_code') ||
+          listing.property.address.postal_code
+      },
+      year_built:
+        Deal.get.field(deal, 'year_built') || listing.property.year_built
+    }
+  }
+}
+
 class SearchListingDrawer extends React.Component {
   state = {
     isWorking: false
@@ -33,7 +61,7 @@ class SearchListingDrawer extends React.Component {
           const listing = item.type === 'deal' ? item.listing : item.id
 
           if (mockListings && !listing) {
-            return mockedMLSData
+            return addDealDataToListing(item, mockedMLSData)
           }
 
           return Listing.getListing(listing)
