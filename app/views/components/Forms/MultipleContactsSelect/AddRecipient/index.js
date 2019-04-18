@@ -236,16 +236,16 @@ class AddRecipient extends React.Component {
       itemRenderer: itemDefaultProps => (
         <ListItem
           {...itemDefaultProps}
-          text={itemDefaultProps.item.text}
-          type="tag"
-          onClick={() =>
-            this.handleSelectNewListItem(itemDefaultProps.item, 'tag')
-          }
           {...getItemProps({
             key: itemDefaultProps.key,
             index: itemDefaultProps.key,
             item: itemDefaultProps.item
           })}
+          text={itemDefaultProps.item.text}
+          type="tag"
+          onClick={() =>
+            this.handleSelectNewListItem(itemDefaultProps.item, 'tag')
+          }
         />
       )
     }
@@ -255,17 +255,17 @@ class AddRecipient extends React.Component {
       itemRenderer: itemDefaultProps => (
         <ListItem
           {...itemDefaultProps}
+          {...getItemProps({
+            key: itemDefaultProps.key,
+            index: itemDefaultProps.key,
+            item: itemDefaultProps.item
+          })}
           text={itemDefaultProps.item.name}
           membersCount={itemDefaultProps.item.member_count}
           type="list"
           onClick={() =>
             this.handleSelectNewListItem(itemDefaultProps.item, 'list')
           }
-          {...getItemProps({
-            key: itemDefaultProps.key,
-            index: itemDefaultProps.key,
-            item: itemDefaultProps.item
-          })}
         />
       )
     }
