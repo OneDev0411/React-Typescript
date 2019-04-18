@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
 import Avatar from 'react-avatar'
 import Flex from 'styled-flex-component'
 
@@ -33,7 +32,7 @@ const AvatarContainer = styled.div`
     font-weight: 700 !important;
   }
 `
-const ContactsListName = ({ contact, attributeDefs, router }) => {
+const ContactsListName = ({ contact, attributeDefs }) => {
   let avatar = ''
   const attribute_def = selectDefinitionByName(
     attributeDefs,
@@ -139,4 +138,4 @@ function mapStateToProps(state) {
   return { attributeDefs }
 }
 
-export default withRouter(connect(mapStateToProps)(ContactsListName))
+export default connect(mapStateToProps)(ContactsListName)
