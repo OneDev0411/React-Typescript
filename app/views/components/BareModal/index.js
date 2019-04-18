@@ -4,15 +4,15 @@ import cn from 'classnames'
 
 export default function BareModal({
   autoHeight,
-  hasDefaultPadding,
   children,
   className,
   overlayClassName,
   ...modalProps
 }) {
-  const classes = cn('c-modal__content', className, {
-    'modal__content--padding': hasDefaultPadding,
-    'modal__content--height-auto': autoHeight
+  const baseClassName = 'c-modal__content'
+  const autoHeightClassName = `${baseClassName}--height-auto`
+  const classes = cn(baseClassName, className, {
+    [autoHeightClassName]: autoHeight
   })
 
   return (

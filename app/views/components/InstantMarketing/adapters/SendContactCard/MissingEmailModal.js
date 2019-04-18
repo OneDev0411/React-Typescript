@@ -8,24 +8,20 @@ import LinkButton from 'components/Button/LinkButton'
 import BareModal from 'components/BareModal'
 
 const ModalContant = styled.div`
-  font-size: 1.7em;
+  font-size: 1.7rem;
+  padding: 2.5rem;
   text-align: center;
   p {
-    margin-bottom: 2em;
+    margin-bottom: 2rem;
   }
   button {
-    margin: 1em;
+    margin-right: 1rem;
   }
 `
 
 function MissingEmailModal({ contact, isOpen, onClose, ...props }) {
   return (
-    <BareModal
-      isOpen={isOpen}
-      onRequestClose={onClose}
-      hasDefaultPadding
-      autoHeight
-    >
+    <BareModal isOpen={isOpen} onRequestClose={onClose} autoHeight>
       <ModalContant>
         <p>
           You should provide an email address for this contact to be able to
