@@ -9,7 +9,9 @@ import Picker from './Picker'
 DateTimePicker.defaultProps = {
   mode: 'PopUp',
   saveButtonText: 'Add Date',
+  hasDone: true,
   hasRemove: true,
+  hasTime: false,
   initialSelectedDate: null,
   initialIsPopUpOpen: false,
   popUpPosition: 'bottom-left',
@@ -21,9 +23,16 @@ DateTimePicker.propTypes = {
   // Visual Props
   mode: PropTypes.oneOf(['PopUp', 'PickerOnly']),
   popUpButton: PropTypes.func,
-  popUpPosition: PropTypes.string,
   saveButtonText: PropTypes.string,
+  hasDone: PropTypes.bool,
   hasRemove: PropTypes.bool,
+  hasTime: PropTypes.bool,
+  popUpPosition: PropTypes.oneOf([
+    'top-left',
+    'top-right',
+    'bottom-left',
+    'bottom-right'
+  ]),
 
   // State Props
   initialSelectedDate: PropTypes.instanceOf(Date),
@@ -67,7 +76,18 @@ function DateTimePicker(props) {
     }
   }
 
-  const handleChange = date => setDate(date)
+  const handleChange = (date, modifiers) => {
+    if (modifiers.disabled) {
+      return
+    }
+
+    setDate(date)
+
+    if (!props.hasTime || !props.hasDone) {
+      // Close PopUp
+      setOpen(false)
+    }
+  }
 
   const handleDone = () => {
     if (!selectedDate) {
@@ -86,17 +106,16 @@ function DateTimePicker(props) {
     props.onDone('')
   }
 
-  // Extract needed props
-  const { mode, hasRemove, saveButtonText, popUpPosition } = props
-
   // Which mode?
   let component = (
     <Picker
       disabledDays={props.disabledDays}
+      hasDone={props.hasDone}
+      hasTime={props.hasTime}
+      hasRemove={props.hasRemove}
       selectedDate={selectedDate}
       onChange={handleChange}
       onDone={handleDone}
-      hasRemove={hasRemove}
       onRemove={handleRemove}
       saveButtonText={props.saveButtonText}
       dateModifiers={props.dateModifiers}
@@ -107,14 +126,14 @@ function DateTimePicker(props) {
     />
   )
 
-  if (mode == 'PopUp') {
+  if (props.mode == 'PopUp') {
     component = (
       <React.Fragment>
-        {props.popUpButton({ toggleOpen })}
+        {props.popUpButton({ toggleOpen, selectedDate })}
         <PickerPopUp
           onClose={toggleOpen}
           isPopUpOpen={isPopUpOpen}
-          popUpPosition={popUpPosition}
+          popUpPosition={props.popUpPosition}
         >
           {component}
         </PickerPopUp>

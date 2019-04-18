@@ -26,39 +26,49 @@ function Picker(props) {
         modifiers={props.dateModifiers}
         disabledDays={props.disabledDays}
       />
-      <Divider margin="0.5em 0" />
-      <TimePicker
-        defaultTime={dateFallback(props.selectedDate)}
-        onChange={handleChangeTime}
-      />
-      <Divider margin="0.5em 0" />
-      <div className="picker-actions">
-        <div>
-          {isDateSet && (
-            <ActionButton
-              appearance="outline"
-              size="small"
-              style={{ fontWeight: 500 }}
-              onClick={props.onRemove}
-            >
-              Remove
-            </ActionButton>
-          )}
-        </div>
-        <ActionButton
-          size="small"
-          type="button"
-          onClick={props.onDone}
-          disabled={!isDateSet}
-          style={{ fontWeight: 500 }}
-        >
-          {pickerSaveButtonText({
-            isDateSet,
-            hasInitialDate: props.hasInitialDate,
-            saveButtonText: props.saveButtonText
-          })}
-        </ActionButton>
-      </div>
+      {props.hasTime && (
+        <React.Fragment>
+          <Divider margin="0.5em 0" />
+          <TimePicker
+            defaultTime={dateFallback(props.selectedDate)}
+            onChange={handleChangeTime}
+          />
+        </React.Fragment>
+      )}
+      {(props.hasDone || props.hasRemove) && (
+        <React.Fragment>
+          <Divider margin="0.5em 0" />
+          <div className="picker-actions">
+            <div>
+              {props.hasRemove && isDateSet && (
+                <ActionButton
+                  appearance="outline"
+                  size="small"
+                  style={{ fontWeight: 500 }}
+                  onClick={props.onRemove}
+                >
+                  Remove
+                </ActionButton>
+              )}
+            </div>
+            {props.hasDone && (
+              <ActionButton
+                size="small"
+                type="button"
+                onClick={props.onDone}
+                disabled={!isDateSet}
+                style={{ fontWeight: 500 }}
+              >
+                {pickerSaveButtonText({
+                  isDateSet,
+                  hasInitialDate: props.hasInitialDate,
+                  saveButtonText: props.saveButtonText
+                })}
+              </ActionButton>
+            )}
+          </div>
+        </React.Fragment>
+      )}
     </PickerContent>
   )
 }
