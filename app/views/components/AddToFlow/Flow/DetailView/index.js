@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 
 import { Name } from '../styled'
 
+import StartAt from './StartAt'
 import { Steps } from './Steps'
-import { StartAt } from './StartAt'
 import { Footer } from './Footer'
 import { MetaData } from './MetaData'
 import { DefaultView } from './DefaultView'
