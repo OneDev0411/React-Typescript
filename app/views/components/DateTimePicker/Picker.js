@@ -13,16 +13,16 @@ import {
 } from './helpers'
 
 function Picker(props) {
-  const handleChangeDate = date => props.onChange(date)
+  const isDateSet = !!props.selectedDate
   const handleChangeTime = time =>
     props.onChange(setTimeStringToDate(props.selectedDate, time))
-  const isDateSet = !!props.selectedDate
 
   return (
     <PickerContent>
       <DatePicker
         selectedDays={props.selectedDate}
         month={props.selectedDate}
+        onDayClick={props.onChange}
         modifiers={props.dateModifiers}
         disabledDays={props.disabledDays}
       />
