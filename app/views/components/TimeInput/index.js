@@ -28,7 +28,7 @@ function TimeInput(props) {
         <input
           id="TimeInput-hours"
           type="number"
-          onKeyDown={e => time.onChangeHours(e.key)}
+          onKeyDown={time.onChangeHours}
           value={time.hours}
           readOnly
         />
@@ -41,7 +41,7 @@ function TimeInput(props) {
         <input
           id="TimeInput-minutes"
           type="number"
-          onKeyDown={e => time.onChangeMinutes(e.key)}
+          onKeyDown={time.onChangeMinutes}
           value={time.minutes}
           readOnly
         />
@@ -51,7 +51,7 @@ function TimeInput(props) {
         <input
           id="TimeInput-meridian"
           type="text"
-          onKeyDown={e => time.onChangeMeridian(e.keyCode)}
+          onKeyDown={time.onChangeMeridian}
           value={time.meridian}
           readOnly
         />

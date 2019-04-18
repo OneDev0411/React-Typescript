@@ -8,7 +8,8 @@ import {
   getMinutes,
   getHours,
   changeMeridian,
-  changeHours
+  changeHours,
+  handleArrowKeys
 } from './helpers'
 
 function useTime({ defaultDate, initialDate, onChange }) {
@@ -40,17 +41,37 @@ function useTime({ defaultDate, initialDate, onChange }) {
         onChange(newDate)
       }
     },
-    [date]
+    [date, onChange]
   )
 
   // ---------- Event Handlers ----------
 
   const onChangeHours = useCallback(
-    val => {
-      val = Number(val)
-
+    e => {
       const lastHours = getHours(date)
-      const lastValueInTwelveFormat = twelveFormat(lastHours)
+      const arrowDirection = handleArrowKeys(e)
+      let lastValueInTwelveFormat = twelveFormat(lastHours)
+      let val = Number(e.key)
+
+      if (arrowDirection.up) {
+        val = lastValueInTwelveFormat >= 12 ? 12 : lastValueInTwelveFormat + 1
+
+        // preventing concat
+        if (lastValueInTwelveFormat <= 9) {
+          lastValueInTwelveFormat = 0
+        }
+      }
+
+      if (arrowDirection.down) {
+        // preventing concat
+        if (lastValueInTwelveFormat <= 1) {
+          lastValueInTwelveFormat = 0
+          val = 1
+        } else {
+          val = lastValueInTwelveFormat - 1
+        }
+      }
+
       const nextHours = inRange({
         start: 1,
         end: 12,
@@ -60,14 +81,34 @@ function useTime({ defaultDate, initialDate, onChange }) {
 
       setTime('hours', nextHours)
     },
-    [date]
+    [date, setTime]
   )
 
   const onChangeMinutes = useCallback(
-    val => {
-      val = Number(val)
+    e => {
+      const arrowDirection = handleArrowKeys(e)
+      let lastMinutes = getMinutes(date)
+      let val = Number(e.key)
 
-      const lastMinutes = getMinutes(date)
+      if (arrowDirection.up) {
+        val = lastMinutes >= 59 ? 59 : lastMinutes + 1
+
+        // preventing concat
+        if (lastMinutes <= 9) {
+          lastMinutes = 0
+        }
+      }
+
+      if (arrowDirection.down) {
+        // preventing concat
+        if (lastMinutes <= 5) {
+          lastMinutes = 0
+          val = 1
+        } else {
+          val = lastMinutes - 1
+        }
+      }
+
       const nextMinuets = inRange({
         start: 1,
         end: 59,
@@ -77,14 +118,14 @@ function useTime({ defaultDate, initialDate, onChange }) {
 
       setTime('minutes', nextMinuets)
     },
-    [date]
+    [date, setTime]
   )
 
   const onChangeMeridian = useCallback(
-    val => {
-      setTime('meridian', keyHandlerForMeridian(val, getMeridian(date)))
+    e => {
+      setTime('meridian', keyHandlerForMeridian(e, getMeridian(date)))
     },
-    [date]
+    [date, setTime]
   )
 
   // ---------- end of event handlers ---------- //

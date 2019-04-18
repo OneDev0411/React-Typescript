@@ -70,7 +70,10 @@ export function inRange({ start, end, value, lastValue }) {
 }
 
 // Returns meridian according to key code (keyboard event)
-export function keyHandlerForMeridian(pressedKey, meridian) {
+export function keyHandlerForMeridian(e, meridian) {
+  const pressedKey = e.keyCode
+  const arrowDirection = handleArrowKeys(e)
+
   // A key
   if (pressedKey == 65) {
     return 'AM'
@@ -81,12 +84,36 @@ export function keyHandlerForMeridian(pressedKey, meridian) {
     return 'PM'
   }
 
-  // ArrowUp & ArrowDown
-  if (['ArrowUp', 'ArrowDown', 37, 38, 39, 40].includes(pressedKey)) {
+  if (arrowDirection.up || arrowDirection.down) {
     return meridian == 'AM' ? 'PM' : 'AM'
   }
 
   return meridian
+}
+
+export function handleArrowKeys(e) {
+  const pressedKey = e.keyCode
+
+  let direction = {
+    up: false,
+    down: false
+  }
+
+  // 38 - up
+  // 39 - right
+  // 37 - left
+  // 40 - bottom
+  if (['ArrowUp', 38, 39].includes(pressedKey)) {
+    direction.up = true
+    e.preventDefault()
+  }
+
+  if (['ArrowDown', 37, 40].includes(pressedKey)) {
+    direction.down = true
+    e.preventDefault()
+  }
+
+  return direction
 }
 
 // ---------- TimeInput helpers ---------- //
