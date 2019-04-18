@@ -229,7 +229,7 @@ class AddRecipient extends React.Component {
     )
   }
 
-  createResultSections = getItemProps => {
+  createResultSections = ({ getItemProps, highlightedIndex }) => {
     let tags = {
       title: 'Tags',
       items: this.state.filteredTags,
@@ -241,6 +241,11 @@ class AddRecipient extends React.Component {
           onClick={() =>
             this.handleSelectNewListItem(itemDefaultProps.item, 'tag')
           }
+          {...getItemProps({
+            key: itemDefaultProps.key,
+            index: itemDefaultProps.key,
+            item: itemDefaultProps.item
+          })}
         />
       )
     }
@@ -256,6 +261,11 @@ class AddRecipient extends React.Component {
           onClick={() =>
             this.handleSelectNewListItem(itemDefaultProps.item, 'list')
           }
+          {...getItemProps({
+            key: itemDefaultProps.key,
+            index: itemDefaultProps.key,
+            item: itemDefaultProps.item
+          })}
         />
       )
     }
@@ -267,10 +277,14 @@ class AddRecipient extends React.Component {
       itemRenderer: itemDefaultProps => (
         <ContactItem
           {...itemDefaultProps}
-          {...getItemProps({ item: itemDefaultProps.item })}
           summary={itemDefaultProps.item.summary.email || ''}
           onClickHandler={this.handleSelectNewContact}
-          isHighlighted={false}
+          isHighlighted={itemDefaultProps.key == highlightedIndex}
+          {...getItemProps({
+            key: itemDefaultProps.key,
+            index: itemDefaultProps.key,
+            item: itemDefaultProps.item
+          })}
         />
       )
     }
@@ -283,7 +297,13 @@ class AddRecipient extends React.Component {
       <Downshift
         isOpen={this.isOpen()}
         onOuterClick={() => this.setState({ forceCloseSuggestions: true })}
-        render={({ isOpen, getInputProps, getItemProps }) => (
+        render={({
+          isOpen,
+          getInputProps,
+          getItemProps,
+          getMenuProps,
+          highlightedIndex
+        }) => (
           <div style={{ position: 'relative' }}>
             <SearchInputContainer textLength={this.state.searchText.length}>
               <SearchInput
@@ -300,9 +320,16 @@ class AddRecipient extends React.Component {
                 <i className="fa fa-spin fa-spinner" />
               )}
             </SearchInputContainer>
-
             {isOpen && (
-              <SearchResults data={this.createResultSections(getItemProps)} />
+              <SearchResults
+                data={this.createResultSections({
+                  getItemProps,
+                  highlightedIndex
+                })}
+                containerProps={{
+                  getMenuProps
+                }}
+              />
             )}
           </div>
         )}
@@ -317,7 +344,6 @@ function mapStateToProps({ contacts }) {
   const segmentsList = getSegments(contacts.filterSegments, 'contacts')
 
   return {
-    contacts: contacts.list,
     attributeDefs: contacts.attributeDefs,
     tags,
     isLoadingTags,

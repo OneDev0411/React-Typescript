@@ -61,7 +61,7 @@ export const IconContainer = styled(Flex)`
 `
 
 export const Title = styled.div`
-  padding: 0.5em 1rem 0;
+  padding: 0.5em 1em 0.5em 1em;
   color: ${grey.A900};
   font-weight: 600;
 `
