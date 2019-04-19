@@ -1,5 +1,7 @@
 import React from 'react'
 
+import IconCircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+
 import { SearchResultsContainer, Title } from './styled'
 
 function SearchResults(props) {
@@ -16,8 +18,7 @@ function SearchResults(props) {
                 {section.title}
                 {section.isLoading && (
                   <>
-                    &nbsp;
-                    <i className="fa fa-spin fa-spinner" />
+                    <IconCircleSpinner />
                   </>
                 )}
               </Title>

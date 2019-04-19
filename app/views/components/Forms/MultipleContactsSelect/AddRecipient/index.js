@@ -18,6 +18,8 @@ import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-co
 
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
+import IconCircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+
 import { SearchInput, SearchInputContainer } from './styled'
 
 import ContactItem from '../../../SelectContactModal/components/ContactItem'
@@ -316,9 +318,7 @@ class AddRecipient extends React.Component {
                 })}
               />
 
-              {this.state.isContactsLoading && (
-                <i className="fa fa-spin fa-spinner" />
-              )}
+              {this.state.isContactsLoading && <IconCircleSpinner />}
             </SearchInputContainer>
             {isOpen && (
               <SearchResults
