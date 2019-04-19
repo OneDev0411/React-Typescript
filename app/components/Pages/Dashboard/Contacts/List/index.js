@@ -152,10 +152,10 @@ class ContactsList extends React.Component {
       ]
     }))
 
-  getQueryParam = key => this.props.router.getCurrentLocation().query[key]
+  getQueryParam = key => this.props.location.query[key]
 
   setQueryParam = (key, value) => {
-    const currentLocation = this.props.router.getCurrentLocation()
+    const currentLocation = this.props.location
 
     this.props.router.replace({
       ...currentLocation,
