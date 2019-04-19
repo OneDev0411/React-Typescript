@@ -13,6 +13,8 @@ import { normalizeAttachments } from 'components/SelectDealFileDrawer/helpers/no
 
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+
 import Loading from '../../../components/Partials/Loading'
 
 import { FinalFormDrawer } from '../FinalFormDrawer'
@@ -26,6 +28,8 @@ class EmailCompose extends React.Component {
   state = {
     isSendingEmail: false
   }
+
+  static contextType = ConfirmationModalContext
 
   get InitialValues() {
     if ((this.formObject && !this.isRecipientsChanged()) || this.IsSubmitting) {
@@ -74,9 +78,23 @@ class EmailCompose extends React.Component {
       recipients: this.normalizeRecipients(values.recipients)
     }
 
-    return this.props.onClickSend
-      ? this.props.onClickSend(form)
-      : this.handleSendEmail(form)
+    const handleSubmit = this.props.onClickSend
+      ? this.props.onClickSend
+      : this.handleSendEmail
+
+    if ((form.subject || '').trim() === '') {
+      this.context.setConfirmationModal({
+        message: 'Send without subject?',
+        description:
+          'This message has no subject. Are you sure you want to send it?',
+        confirmLabel: 'Send anyway',
+        onConfirm: () => {
+          handleSubmit(form)
+        }
+      })
+    } else {
+      return handleSubmit(form)
+    }
   }
 
   handleSendEmail = async form => {
