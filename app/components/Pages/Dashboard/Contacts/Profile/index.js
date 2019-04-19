@@ -9,6 +9,7 @@ import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
+import { updateContactQuery } from 'models/contacts/helpers/default-query'
 import { getContact } from 'models/contacts/get-contact'
 import { deleteContacts } from 'models/contacts/delete-contact'
 import { updateContactSelf } from 'models/contacts/update-contact-self'
@@ -30,7 +31,7 @@ import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
 
 import { Container } from '../components/Container'
 import { Dates } from './Dates'
-import { DealsListWidget } from './Deals'
+import Deals from './Deals'
 import { Details } from './Details'
 import { Partner } from './Partner'
 import Tags from './Tags'
@@ -118,7 +119,15 @@ class ContactProfile extends React.Component {
 
   fetchContact = async (callback = () => {}) => {
     try {
-      const response = await getContact(this.props.params.id)
+      const response = await getContact(this.props.params.id, {
+        associations: [
+          ...updateContactQuery.associations,
+          'contact.deals',
+          'contact.flows',
+          'flow_step.email',
+          'flow_step.crm_task'
+        ]
+      })
 
       this.setState({ contact: normalizeContact(response.data) }, callback)
     } catch (error) {
@@ -262,8 +271,8 @@ class ContactProfile extends React.Component {
     }
 
     const thirdColumnSections = [
-      <Dates contact={contact} key="key-0" />,
-      <DealsListWidget contactId={contact.id} key="key-1" />
+      <Dates contact={contact} key="s1" />,
+      <Deals contact={contact} key="s3" />
     ]
 
     const _props = {
@@ -295,9 +304,7 @@ class ContactProfile extends React.Component {
 
                 <Partner {..._props} />
 
-                {!this.state.isDesktopScreen && (
-                  <DealsListWidget contactId={contact.id} />
-                )}
+                {!this.state.isDesktopScreen && <Deals contact={contact} />}
 
                 <Owner
                   onSelect={this.onChangeOwner}
