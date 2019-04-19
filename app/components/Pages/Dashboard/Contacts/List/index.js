@@ -55,7 +55,7 @@ class ContactsList extends React.Component {
     this.order = getActiveTeamSettings(props.user, SORT_FIELD_SETTING_KEY)
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     if (
       !['default', 'duplicate contacts'].includes(
         this.props.filterSegments.activeSegmentId
@@ -67,20 +67,7 @@ class ContactsList extends React.Component {
         ]
       )
     } else {
-      this.setState({
-        isFetchingMoreContacts: true
-      })
-
-      const start = this.getQueryParam('s')
-      const idSelector = `#grid-item-${this.getQueryParam('id')}`
-
-      this.scrollToSelector(idSelector)
-
-      await this.fetchList(start)
-
-      this.setState({
-        isFetchingMoreContacts: false
-      })
+      this.fetchContactsAndJumpToSelected()
     }
 
     if (this.props.fetchTags) {
@@ -131,6 +118,23 @@ class ContactsList extends React.Component {
 
   componentWillUnmount() {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
+  }
+
+  async fetchContactsAndJumpToSelected() {
+    this.setState({
+      isFetchingMoreContacts: true
+    })
+
+    const start = this.getQueryParam('s')
+    const idSelector = `#grid-item-${this.getQueryParam('id')}`
+
+    this.scrollToSelector(idSelector)
+
+    await this.fetchList(start)
+
+    this.setState({
+      isFetchingMoreContacts: false
+    })
   }
 
   scrollToSelector(selector) {
