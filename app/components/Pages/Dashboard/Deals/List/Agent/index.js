@@ -69,13 +69,10 @@ class AgentTable extends React.Component {
 
   render() {
     const { isSideMenuOpen } = this.state
-    const { params, isFetchingDeals, isTrainingAccount } = this.props
+    const { params, isFetchingDeals } = this.props
 
     return (
-      <PageContainer
-        isOpen={isSideMenuOpen}
-        isTrainingAccount={isTrainingAccount}
-      >
+      <PageContainer isOpen={isSideMenuOpen}>
         <Menu isOpen={isSideMenuOpen}>
           <AgentFilters
             activeFilter={params.filter}
@@ -91,7 +88,7 @@ class AgentTable extends React.Component {
             onMenuTriggerChange={this.toggleSideMenu}
           />
 
-          <GridContainer isTrainingAccount={isTrainingAccount}>
+          <GridContainer>
             <SearchContainer>
               <Search
                 disableOnSearch

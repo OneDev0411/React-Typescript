@@ -1,5 +1,9 @@
 import { getField } from '../get-field'
 
 export function getStatus(deal) {
-  return deal.deleted_at ? 'Archived' : getField(deal, 'listing_status')
+  if (deal.deleted_at) {
+    return 'Archived'
+  }
+
+  return getField(deal, 'contract_status') || getField(deal, 'listing_status')
 }

@@ -15,6 +15,7 @@ const propTypes = {
   address: PropTypes.string,
   style: PropTypes.shape(),
   handleDelete: PropTypes.func,
+  handleInputChange: PropTypes.func,
   showDeleteButton: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
   preSaveFormat: PropTypes.func.isRequired,
@@ -25,6 +26,7 @@ const defaultTypes = {
   address: '',
   style: {},
   handleDelete() {},
+  handleInputChange() {},
   showDeleteButton: false
 }
 
@@ -133,15 +135,38 @@ export class InlineAddressField extends React.Component {
 
         return { address: input, isDrity: true }
       },
-      () => this.search(input)
+      () => {
+        this.props.handleInputChange(input)
+        this.search(input)
+      }
     )
   }
 
   onClickSuggestionItem = item => {
-    this.setState({
+    let newState = {
       address: item.description,
       isShowSuggestion: false,
       isShowForm: true
+    }
+
+    const request = {
+      placeId: item.place_id,
+      fields: ['name', 'formatted_address', 'place_id', 'geometry']
+    }
+
+    const service = new window.google.maps.places.PlacesService(
+      document.createElement('div')
+    )
+
+    service.getDetails(request, (place, status) => {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        newState = {
+          ...newState,
+          address: place.formatted_address
+        }
+      }
+
+      this.setState(newState)
     })
   }
 

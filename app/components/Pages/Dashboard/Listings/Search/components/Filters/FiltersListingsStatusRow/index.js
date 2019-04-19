@@ -5,9 +5,10 @@ import withState from 'recompose/withState'
 import { formValueSelector } from 'redux-form'
 import withHandlers from 'recompose/withHandlers'
 
+import SwitchToggle from '../components/SwitchToggle'
+
 import Flag from './Flag'
 import Accordion from './Accordion'
-import SwitchToggle from './SwitchToggle'
 import AccordionTrigger from './AccordionTrigger'
 
 const selector = formValueSelector('filters')
@@ -73,8 +74,9 @@ const FiltersListingsStatus = ({
             />
           )}
 
-          {hasAccordion &&
-            hasSwitchToggle && <span className="c-filters-status__separator" />}
+          {hasAccordion && hasSwitchToggle && (
+            <span className="c-filters-status__separator" />
+          )}
 
           {hasSwitchToggle && (
             <SwitchToggle

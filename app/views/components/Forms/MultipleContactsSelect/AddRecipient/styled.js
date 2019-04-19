@@ -34,7 +34,7 @@ export const SearchResults = styled.div`
   border-radius: 6px;
   background-color: #fff;
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  z-index: 2;
 `
 
 export const RowContainer = styled(Flex)`

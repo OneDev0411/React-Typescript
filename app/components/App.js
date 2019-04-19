@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import ReactGA from 'react-ga'
+import { Helmet } from 'react-helmet'
 
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
@@ -321,21 +322,24 @@ class App extends Component {
     })
 
     return (
-      <div className="u-scrollbar">
-        {user && !user.email_confirmed && (
-          <VerificationBanner email={user.email} />
-        )}
+      <React.Fragment>
+        <Helmet>
+          <title>Rechat</title>
+        </Helmet>
+        <div className="u-scrollbar">
+          {user && !user.email_confirmed && (
+            <VerificationBanner email={user.email} />
+          )}
 
-        {user && <SideNav data={data} location={location} />}
+          <SideNav data={data} location={location} />
 
-        {user && <InstantChat user={user} rooms={rooms} />}
+          {user && <InstantChat user={user} rooms={rooms} />}
 
-        <main className={`l-app__main ${user ? 'is-logged-in' : ''}`}>
-          {children}
-        </main>
+          <main className="l-app__main">{children}</main>
 
-        <Intercom />
-      </div>
+          <Intercom />
+        </div>
+      </React.Fragment>
     )
   }
 }

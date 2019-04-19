@@ -27,6 +27,7 @@ function SearchDealDrawer(props) {
           isDrawer
           user={props.user}
           deals={props.deals}
+          itemRenderer={props.itemRenderer}
           handleSelectedItem={props.onSelect}
           defaultSearchFilter={props.defaultSearchFilter}
         />

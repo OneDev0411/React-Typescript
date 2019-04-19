@@ -5,7 +5,11 @@ import { Checkbox } from 'components/Checkbox'
 import { BasicDropdown } from 'components/BasicDropdown'
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
 
-import { Input, DropdownButton, DropdownArrowIcon } from './styled'
+import {
+  Input,
+  DropdownButton,
+  DropdownArrowIcon
+} from 'components/inline-editable-fields/styled'
 
 export function EditMode(props) {
   return (
@@ -38,7 +42,10 @@ export function EditMode(props) {
         handleSubmit={props.handleSubmit}
         preSaveFormat={props.preSaveFormat}
         postLoadFormat={props.postLoadFormat}
-        renderSearchField={props => <Input {...props} type="text" autoFocus />}
+        handleInputChange={props.onChangeInput}
+        renderSearchField={inputProps => (
+          <Input {...inputProps} type="text" autoFocus />
+        )}
       />
     </React.Fragment>
   )

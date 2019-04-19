@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Form } from 'react-final-form'
 import { FORM_ERROR } from 'final-form'
+import _ from 'underscore'
 
 import { Spinner } from '../../../components/Partials/Loading'
 
@@ -62,6 +63,10 @@ export default class LoadSaveReinitializeForm extends React.Component {
       let valuesToSave = preSaveFormat
         ? await preSaveFormat(values, this.state.originalValues)
         : values
+
+      if (!valuesToSave || _.isEmpty(valuesToSave)) {
+        return
+      }
 
       await this.props.save(valuesToSave)
 

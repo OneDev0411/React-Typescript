@@ -51,6 +51,7 @@ export default class FontSizePicker extends Component {
           selectedItem={this.findSelectedItemByValue(this.state.value)}
           items={OPTIONS}
           onSelect={this.handleChange}
+          centerSelected
         />
       </ItemContainer>
     )

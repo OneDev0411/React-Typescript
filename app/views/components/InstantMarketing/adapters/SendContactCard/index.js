@@ -3,13 +3,14 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import idx from 'idx'
 
+import { normalizeContact } from 'models/email-compose/helpers/normalize-contact'
+
 import InstantMarketing from 'components/InstantMarketing'
 import ActionButton from 'components/Button/ActionButton'
 
 import { confirmation } from 'actions/confirmation'
 
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
-import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 
 import EmailCompose from 'components/EmailCompose'
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
@@ -20,11 +21,12 @@ import { getTemplatePreviewImage } from 'components/InstantMarketing/helpers/get
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
-import { selectDefinitionByName } from '../../../../../reducers/contacts/attributeDefs'
+import MissingEmailModal from './MissingEmailModal'
 
 class SendContactCard extends React.Component {
   state = {
     isFetchingContact: false,
+    isMissingEmailModalOpen: false,
     contact: this.props.contact,
     isBuilderOpen: false,
     isComposeEmailOpen: false,
@@ -88,12 +90,10 @@ class SendContactCard extends React.Component {
   }
 
   openBuilder = () => {
-    if (this.contactHasEmail() === false) {
-      return this.props.confirmation({
-        description:
-          'You should provide an email address for this contact to be able send a card',
-        hideCancelButton: true,
-        confirmLabel: 'Okay'
+    // todo: removing c.summary
+    if (!idx(this.state, state => state.contact.summary.email)) {
+      return this.setState({
+        isMissingEmailModalOpen: true
       })
     }
 
@@ -124,7 +124,7 @@ class SendContactCard extends React.Component {
       },
       () => {
         this.props.handleTrigger()
-        this.closeBuilder()
+        this.openBuilder()
       }
     )
 
@@ -182,6 +182,12 @@ class SendContactCard extends React.Component {
     }
   }
 
+  closeMissingEmailDialog = () => {
+    this.setState({
+      isMissingEmailModalOpen: false
+    })
+  }
+
   get TemplateInstanceData() {
     return {
       contacts: this.Recipients.map(r => r.contactId)
@@ -189,30 +195,10 @@ class SendContactCard extends React.Component {
   }
 
   get Recipients() {
-    const { contact } = this.state
-
-    if (!contact) {
-      return []
-    }
-
-    const emails = getContactAttribute(
-      contact,
-      selectDefinitionByName(this.props.attributeDefs, 'email')
-    )
-
-    return [
-      {
-        contactId: contact.id,
-        name: contact.summary.display_name,
-        avatar: contact.summary.profile_image_url,
-        email: contact.summary.email,
-        emails: emails.map(email => email.text),
-        readOnly: true
-      }
-    ]
+    return normalizeContact(this.state.contact, this.props.attributeDefs, {
+      readOnly: true
+    })
   }
-
-  contactHasEmail = () => idx(this.state.contact, c => c.summary.email) !== null
 
   render() {
     if (hasMarketingAccess(this.props.user) === false) {
@@ -221,6 +207,11 @@ class SendContactCard extends React.Component {
 
     return (
       <Fragment>
+        <MissingEmailModal
+          isOpen={this.state.isMissingEmailModalOpen}
+          contact={this.state.contact}
+          onClose={this.closeMissingEmailDialog}
+        />
         {this.props.contact || this.props.contactId ? (
           <ActionButton
             appearance="outline"
@@ -252,13 +243,14 @@ class SendContactCard extends React.Component {
         {this.state.isComposeEmailOpen && (
           <EmailCompose
             isOpen
-            from={this.state.owner}
-            onClose={this.toggleComposeEmail}
-            recipients={this.Recipients}
-            html={this.state.templateScreenshot}
-            onClickSend={this.handleSendEmails}
-            isSubmitting={this.state.isSendingEmail}
+            hasStaticBody
             disableAddNewRecipient
+            isSubmitting={this.state.isSendingEmail}
+            from={this.state.owner}
+            recipients={this.Recipients}
+            body={this.state.templateScreenshot}
+            onClose={this.toggleComposeEmail}
+            onClickSend={this.handleSendEmails}
           />
         )}
       </Fragment>

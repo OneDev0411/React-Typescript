@@ -6,6 +6,10 @@ const fieldsOrder = [
   'email',
   'phone_number',
   'source',
+  'facebook',
+  'instagram',
+  'linkedin',
+  'social',
   'website',
   'source_type'
 ]
@@ -13,7 +17,7 @@ const fieldsOrder = [
 export function ContactInfo(props) {
   return (
     <SectionWithFields
-      addNewFieldButtonText="Add Some Information"
+      addCustomAttributeButtonText="information"
       contact={props.contact}
       fieldsOrder={fieldsOrder}
       section="Contact Info"

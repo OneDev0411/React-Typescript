@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { H4 } from 'components/Typography/headings'
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
@@ -43,10 +43,10 @@ export const ItemsContainer = styled.div`
 
   ${props =>
     props.isOpen === false &&
-    `
-    height: 0;
-    overflow: hidden;
-  `};
+    css`
+      height: 0;
+      overflow: hidden;
+    `};
 `
 
 export const ArrowIcon = styled(ArrowDownIcon)`
@@ -55,7 +55,6 @@ export const ArrowIcon = styled(ArrowDownIcon)`
   margin-right: 0.5rem;
   cursor: pointer;
   fill: #000 !important;
-  transition: all ease-in 0.2s;
   transform: ${({ isOpen }) => (isOpen ? 'inherit' : 'rotateZ(-90deg)')};
   opacity: ${props => (props.display === false ? 0 : 1)};
 `
@@ -67,7 +66,7 @@ export const RowContainer = styled.div`
 
   ${props =>
     props.isTaskExpanded &&
-    `
+    css`
       :nth-child(even) {
         border-left: 3px solid #000;
       }
@@ -85,13 +84,13 @@ export const RowContainer = styled.div`
         opacity: 1;
         color: #000;
       }
-      
+
       ${Notification} {
         svg > path {
           fill: #000;
         }
       }
-  `}
+    `}
 
   :hover ${ActionsButton} {
     opacity: 1;
@@ -126,13 +125,13 @@ export const RowTitle = styled(H4)`
   margin-bottom: 0.75rem;
 
   ${props =>
-    props.hoverable &&
-    `
-    :hover {
-      cursor: pointer;
-      color: #003bdf;
-    }
-  `}
+    props.clickable &&
+    css`
+      :hover {
+        cursor: pointer;
+        color: #003bdf;
+      }
+    `}
 `
 
 export const LabelItem = styled.div`

@@ -1,22 +1,20 @@
 import { SubmissionError } from 'redux-form'
+
 import getListings from '../get-listings'
 import { toNumber } from '../../../../utils/helpers'
 import { generatePointsFromBounds } from '../../../../utils/map'
-import setSearchInput from '../../../../store_actions/listings/search/set-search-input'
-import toogleFiltersArea from '../../../../store_actions/listings/search/filters/toggle-filters-area'
+import setSearchInput from '../set-search-input'
+import toogleFiltersArea from './toggle-filters-area'
 import { goToPlace } from '../../map'
 import { selectListings } from '../../../../reducers/listings'
 import extendedBounds from '../../../../utils/extendedBounds'
 import { normalizeListingsForMarkers } from '../../../../utils/map'
-import {
-  removePolygon,
-  inactiveDrawing
-} from '../../../../store_actions/listings/map/drawing'
-import { feetToMeters, acresToMeters } from '../../../../../app/utils/listing'
+import { removePolygon, inactiveDrawing } from '../../map/drawing'
+import { feetToMeters, acresToMeters } from '../../../../utils/listing'
 import { SCHOOLS_TYPE } from '../../../../components/Pages/Dashboard/Listings/Search/components/Filters/Schools'
 
 import { SEARCH_BY_FILTERS_AREAS } from '../../../../constants/listings/search'
-import { setSearchType } from '../../../../store_actions/listings/search/set-type'
+import { setSearchType } from '../set-type'
 
 // Initial valert options {
 //   limit: '250',
@@ -135,7 +133,7 @@ const normalizeNumberValues = values => {
   return normalizedValues
 }
 
-const normalizPoolValue = value => {
+const normalizYesNoOption = value => {
   switch (value) {
     case 'NO':
       return false
@@ -226,7 +224,10 @@ const normalizeValues = (values, options, state) => {
     })
   }
 
-  const pool = normalizPoolValue(values.pool)
+  const pool = normalizYesNoOption(values.pool)
+  const master_bedroom_in_first_floor = normalizYesNoOption(
+    values.master_bedroom_in_first_floor
+  )
 
   const property_subtypes = getObjectValues(values.property_subtypes)
   const architectural_styles = getObjectValues(values.architectural_styles)
@@ -261,6 +262,7 @@ const normalizeValues = (values, options, state) => {
     mls_areas,
     pool,
     postal_codes,
+    master_bedroom_in_first_floor,
     ...multiSelectFields,
     ...normalizeNumberValues(values)
   }

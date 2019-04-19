@@ -1,7 +1,14 @@
 import React from 'react'
+import fecha from 'fecha'
 import Flex from 'styled-flex-component'
 
-import listingsHelper from 'utils/listing'
+import {
+  addressTitle,
+  getListingAddressObj,
+  getStatusColorClass
+} from 'utils/listing'
+
+import { grey } from 'views/utils/colors'
 
 import IconDrag from 'components/SvgIcons/Drag/IconDrag'
 import IconHome from 'components/SvgIcons/NewHome/IconHome'
@@ -19,7 +26,24 @@ import {
 } from '../styled'
 
 export function MlsItem({ item, ...props }) {
-  const address = item.address_components
+  const getStatus = () => {
+    const { status, close_date } = item
+
+    if ((status === 'Sold' || status === 'Leased') && close_date) {
+      return `${status} ${fecha.format(
+        new Date(close_date * 1000),
+        'mediumDate'
+      )}`
+    }
+
+    return status
+  }
+
+  const address = getListingAddressObj(item)
+
+  if (!address) {
+    return false
+  }
 
   return (
     <ListItem {...props} className="c-search-listings__mls-item">
@@ -27,8 +51,8 @@ export function MlsItem({ item, ...props }) {
 
       <Flex style={{ width: '100%' }} justifyBetween alignCenter>
         <AddressContainer>
-          {item.image ? (
-            <ListItemImage alt="" src={item.image} />
+          {item.cover_image_url ? (
+            <ListItemImage alt="" src={item.cover_image_url} />
           ) : (
             <IconContainer center>
               <IconHome />
@@ -36,14 +60,12 @@ export function MlsItem({ item, ...props }) {
           )}
           <ListItemAddress>
             <Address style={{ fontWeight: '500' }}>
-              {address.street_number} {address.street_name}{' '}
-              {address.street_suffix}
-              {address.unit_number ? ` Unit ${address.unit_number}` : ''}
+              {addressTitle(address)}
             </Address>
 
-            <Address style={{ color: '#a0a0a0' }}>
+            <Address style={{ color: grey.A550 }}>
               {address.city}, {address.state}, {address.postal_code}, $
-              {item.price}
+              {item.price.toLocaleString()}
             </Address>
           </ListItemAddress>
         </AddressContainer>
@@ -51,10 +73,10 @@ export function MlsItem({ item, ...props }) {
         <ListItemStatus>
           <Status
             style={{
-              backgroundColor: listingsHelper.getStatusColorClass(item.status)
+              backgroundColor: getStatusColorClass(item.status)
             }}
           >
-            {item.status}
+            {getStatus()}
           </Status>
 
           {props.removable && (

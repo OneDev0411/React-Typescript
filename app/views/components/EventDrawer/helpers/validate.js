@@ -1,7 +1,7 @@
 export function validate(values) {
   const errors = {}
 
-  if (!values.title) {
+  if (!values.title || !values.title.trim()) {
     errors.title = 'Required!'
   }
 

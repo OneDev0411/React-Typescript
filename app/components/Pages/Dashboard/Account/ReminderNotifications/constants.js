@@ -6,6 +6,10 @@ export const CONTACT_DATE_OBJECT_TYPE = 'contact_attribute'
 
 export const DROPDOWN_OPTIONS = [
   {
+    label: 'Day of',
+    value: 0
+  },
+  {
     label: '1 day before',
     value: 86400
   },
@@ -39,4 +43,4 @@ export const DROPDOWN_OPTIONS = [
   }
 ]
 
-export const SHOULD_RENDER_FORCEPUSH_BUTTON = true
+export const SHOULD_RENDER_FORCEPUSH_BUTTON = false

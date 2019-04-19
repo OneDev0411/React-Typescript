@@ -8,9 +8,6 @@ export default (state = null, action) => {
     case actionTypes.CLEAR_DEALS:
       return {}
 
-    case actionTypes.ARCHIVE_DEAL:
-      return _.omit(state, task => task.deal === action.deal_id)
-
     case actionTypes.DELETE_TASK:
       return _.omit(state, task => task.id === action.taskId)
 
@@ -101,6 +98,26 @@ export default (state = null, action) => {
             ...state[action.task_id].room,
             attachments: (state[action.task_id].room.attachments || []).filter(
               file => file.id !== action.file_id
+            )
+          }
+        }
+      }
+
+    case actionTypes.RENAME_TASK_FILE:
+      return {
+        ...state,
+        [action.task_id]: {
+          ...state[action.task_id],
+          room: {
+            ...state[action.task_id].room,
+            attachments: (state[action.task_id].room.attachments || []).map(
+              file =>
+                file.id !== action.file_id
+                  ? file
+                  : {
+                      ...file,
+                      name: action.filename
+                    }
             )
           }
         }

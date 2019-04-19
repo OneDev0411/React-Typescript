@@ -6,6 +6,21 @@ import _ from 'underscore'
 const app = new Koa()
 
 app.use(async (ctx, next) => {
+  if (ctx.path === '/unsupported') {
+    return next()
+  }
+
+  const ua = ctx.get('user-agent')
+  const isIE = ua.indexOf('MSIE ') >= 0 || ua.indexOf('Trident/') >= 0
+
+  if (isIE) {
+    return ctx.redirect('/unsupported')
+  }
+
+  return next()
+})
+
+app.use(async (ctx, next) => {
   const isMobile = new MobileDetect(ctx.req.headers['user-agent'])
 
   const isDashboard = url => url.toLowerCase().indexOf('dashboard') !== -1
@@ -38,7 +53,8 @@ app.use(async (ctx, next) => {
 
 const routes = {
   app: ['signout', 'reset_password', 'listing'],
-  openhouse: ['registration']
+  openhouse: ['registration'],
+  others: ['unsupported']
 }
 
 _.each(routes, (group, name) => {

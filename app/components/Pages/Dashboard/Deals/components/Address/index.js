@@ -4,9 +4,9 @@ import { Field } from 'react-final-form'
 import _ from 'underscore'
 
 import Deal from 'models/Deal'
-import DealContext from 'models/Deal/helpers/dynamic-context'
 
 import { upsertContexts } from 'actions/deals'
+import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
 
 import { TextInput } from 'components/Forms/TextInput'
 
@@ -226,12 +226,14 @@ class Address extends React.Component {
     const contexts = []
 
     _.each(address_components, (value, name) => {
-      contexts.push({
-        definition: DealContext.getDefinitionId(this.props.deal.brand.id, name),
-        checklist: DealContext.getChecklist(this.props.deal, name),
-        value: address_components[name],
-        approved: true // none of address contexts, don't need admin approval
-      })
+      contexts.push(
+        createUpsertObject(
+          this.props.deal,
+          name,
+          address_components[name],
+          true
+        )
+      )
     })
 
     const newDeal = await this.props.upsertContexts(

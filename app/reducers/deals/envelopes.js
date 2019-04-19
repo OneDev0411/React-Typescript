@@ -1,4 +1,5 @@
 import _ from 'underscore'
+
 import * as actionTypes from '../../constants/deals'
 
 export default (state = null, action) => {
@@ -6,9 +7,6 @@ export default (state = null, action) => {
     case actionTypes.GET_DEALS_FAILED:
     case actionTypes.CLEAR_DEALS:
       return {}
-
-    case actionTypes.ARCHIVE_DEAL:
-      return _.omit(state, envelope => envelope.deal === action.deal_id)
 
     case actionTypes.SET_ENVELOPES:
       return {
@@ -29,3 +27,6 @@ export default (state = null, action) => {
       return state
   }
 }
+
+export const selectDealEnvelopes = (deal, state) =>
+  Array.isArray(deal.envelopes) ? deal.envelopes.map(id => state[id]) : []

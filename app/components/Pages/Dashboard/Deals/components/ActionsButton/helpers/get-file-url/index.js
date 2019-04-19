@@ -1,3 +1,24 @@
+import { getDocumentEnvelopes } from '../../../../utils/get-document-envelopes'
+import { getEnvelopeFileUrl } from '../../../../utils/get-envelope-file-url'
+
+/**
+ *
+ */
+export function getFileUrl({ type, ...data }) {
+  if (type === 'task') {
+    return getTaskUrls(data)
+  }
+
+  if (type === 'document') {
+    return getDocumentUrls(data)
+  }
+
+  return []
+}
+
+/**
+ *
+ */
 function normalizeFile(file) {
   return {
     id: file.id,
@@ -8,70 +29,91 @@ function normalizeFile(file) {
   }
 }
 
-function getDocumentsUrl({ deal, task, document, isBackOffice }) {
-  if (document.type === 'task' && document.submission) {
-    return isBackOffice
-      ? [
-          {
-            ...normalizeFile(task.submission.file),
-            url: `/dashboard/deals/${deal.id}/view/${task.id}`
-          }
-        ]
-      : [normalizeFile(task.submission.file)]
+/**
+ *
+ */
+function getSubmissionUrl(data) {
+  if (!data.task.submission) {
+    return []
   }
 
-  return isBackOffice
+  let url = `/dashboard/deals/${data.deal.id}/view/${data.task.id}`
+  const submissionEnvelopes = getDocumentEnvelopes(data.envelopes, data.task)
+
+  if (submissionEnvelopes.length > 0) {
+    return [
+      {
+        ...normalizeFile(data.task.submission.file),
+        url: getEnvelopeFileUrl(submissionEnvelopes[0], data.task),
+        openInNewTab: true
+      }
+    ]
+  }
+
+  return data.isBackOffice
     ? [
         {
-          ...normalizeFile(document, true),
-          url: `/dashboard/deals/${deal.id}/view/${task.id}/attachment/${
-            document.id
-          }`
+          ...normalizeFile(data.task.submission.file),
+          url
         }
       ]
-    : [normalizeFile(document, true)]
+    : [normalizeFile(data.task.submission.file)]
 }
 
-function getTaskDocumentsUrl({ deal, task, isBackOffice }) {
-  if (task.submission) {
-    return isBackOffice
-      ? [
-          {
-            ...normalizeFile(task.submission.file),
-            url: `/dashboard/deals/${deal.id}/view/${task.id}`
-          }
-        ]
-      : [normalizeFile(task.submission.file)]
+/**
+ *
+ */
+function getDocumentUrl(data) {
+  const taskId = data.task ? data.task.id : 'stash'
+  const baseUrl = `/dashboard/deals/${data.deal.id}/view/${taskId}`
+
+  const documentEnvelopes = getDocumentEnvelopes(data.envelopes, data.document)
+
+  if (documentEnvelopes.length > 0) {
+    return {
+      ...normalizeFile(data.document),
+      url: getEnvelopeFileUrl(documentEnvelopes[0], data.task),
+      openInNewTab: true
+    }
   }
 
-  const attachments = Array.isArray(task.room.attachments)
-    ? task.room.attachments.sort((a, b) => b.created_at - a.created_at)
+  return data.isBackOffice
+    ? {
+        ...normalizeFile(data.document),
+        url: `${baseUrl}/attachment/${data.document.id}`
+      }
+    : normalizeFile(data.document)
+}
+
+/**
+ *
+ */
+function getDocumentUrls(data) {
+  if (data.document.type === 'task' && data.document.submission) {
+    return getSubmissionUrl(data)
+  }
+
+  return [getDocumentUrl(data)]
+}
+
+/**
+ *
+ */
+function getTaskUrls(data) {
+  const submissionUrl = getSubmissionUrl(data)
+
+  if (submissionUrl.length > 0) {
+    return submissionUrl
+  }
+
+  const attachments = Array.isArray(data.task.room.attachments)
+    ? data.task.room.attachments.sort((a, b) => b.created_at - a.created_at)
     : []
 
-  return isBackOffice
-    ? attachments.map(attachment => ({
-        ...normalizeFile(attachment),
-        url: `/dashboard/deals/${deal.id}/view/${task.id}/attachment/${
-          attachment.id
-        }`
-      }))
-    : attachments.map(normalizeFile)
-}
-
-export function getFileUrl({
-  type,
-  deal,
-  task,
-  document,
-  isBackOffice = false
-}) {
-  if (type === 'task') {
-    return getTaskDocumentsUrl({ deal, task, document, isBackOffice })
-  }
-
-  if (type === 'document') {
-    return getDocumentsUrl({ deal, task, document, isBackOffice })
-  }
-
-  return []
+  return attachments.map(document =>
+    getDocumentUrl({
+      ...data,
+      document
+    })
+  )
 }

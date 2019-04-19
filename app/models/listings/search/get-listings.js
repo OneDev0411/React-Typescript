@@ -1,6 +1,12 @@
-import Fetch from '../../../services/fetch'
 import { normalize } from 'normalizr'
+
+import Fetch from '../../../services/fetch'
+
 import * as schema from '../schema'
+
+function filterListingsWithoutLocation(listings) {
+  return listings.filter(l => l.location != null)
+}
 
 export const byValert = async (options, query, hasNeedNormalized = true) => {
   if (!options) {
@@ -19,7 +25,10 @@ export const byValert = async (options, query, hasNeedNormalized = true) => {
 
     const { code, info, data } = response.body
 
-    const normilizedListings = normalize(data, schema.listingsList)
+    const normilizedListings = normalize(
+      filterListingsWithoutLocation(data),
+      schema.listingsList
+    )
 
     return {
       ...normilizedListings,
@@ -45,7 +54,10 @@ export const byMlsNumber = async mlsNumber => {
 
     const { code, data } = response.body
 
-    const normilizedListings = normalize([data], schema.listingsList)
+    const normilizedListings = normalize(
+      [filterListingsWithoutLocation(data)],
+      schema.listingsList
+    )
 
     return {
       ...normilizedListings,

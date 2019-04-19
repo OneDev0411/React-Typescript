@@ -9,7 +9,7 @@ import { toNumber } from '../../../../../../../../utils/helpers'
 
 const turnToNumber = value => {
   if (!value || value == null) {
-    return null
+    return ''
   }
 
   return typeof value === 'number' ? value : toNumber(value)
@@ -58,7 +58,8 @@ const MinMaxInputs = ({
   placeholder = 'Any',
   warnMin,
   warnMax,
-  formatHandler = v => v,
+  formatHandler = value =>
+    !value || value == null ? '' : value.replace(/[^0-9.]/g, ''),
   normalizeHandler = v => v || null
 }) => {
   const minName = `minimum_${name}`

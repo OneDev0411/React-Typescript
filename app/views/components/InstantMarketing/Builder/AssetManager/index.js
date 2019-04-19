@@ -7,12 +7,12 @@ import { AssetImage } from './AssetImage'
 
 import Fetch from '../../../../../services/fetch'
 
-import loadGrapes from '../../helpers/load-grapes'
+import { loadGrapesjs } from '../utils/load-grapes'
 
 const CUSTOM_ASSET_UPLOAD_PATH = '/templates/assets'
 
 export const load = async () => {
-  const { Grapesjs, Backbone } = await loadGrapes()
+  const { Grapesjs, Backbone } = await loadGrapesjs()
 
   Grapesjs.plugins.add('asset-blocks', editor => {
     let target
@@ -61,6 +61,8 @@ export const load = async () => {
 
                 const uploadedAssetsCollection = uploadedAssets.map(asset => ({
                   image: asset.url,
+                  listing:
+                    target.attributes.attributes['rechat-listing'] || null,
                   userFile: true
                 }))
 

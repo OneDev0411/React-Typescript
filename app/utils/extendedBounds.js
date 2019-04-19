@@ -45,7 +45,8 @@ export const getBounds = points => {
 export const getExtededMapProps = (mapProps, bounds) => {
   const { ne, sw, nw, se } = bounds
 
-  const { size } = mapProps
+  const { size = { width: 600, height: 480 } } = mapProps
+
   let { zoom, center } = fitBounds({ ne, sw }, size)
 
   if (zoom === mapProps.zoom) {
@@ -55,7 +56,7 @@ export const getExtededMapProps = (mapProps, bounds) => {
   return {
     zoom,
     center,
-    bounds: { nw, se }
+    bounds
   }
 }
 

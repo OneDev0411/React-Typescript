@@ -1,14 +1,12 @@
-import * as actionTypes from '../../constants/deals'
 import _ from 'underscore'
+
+import * as actionTypes from '../../constants/deals'
 
 export default (state = null, action) => {
   switch (action.type) {
     case actionTypes.GET_DEALS_FAILED:
     case actionTypes.CLEAR_DEALS:
       return {}
-
-    case actionTypes.ARCHIVE_DEAL:
-      return _.omit(state, checklist => checklist.deal === action.deal_id)
 
     case actionTypes.DELETE_TASK:
       return {
@@ -43,12 +41,24 @@ export default (state = null, action) => {
         }
       }
 
+    case actionTypes.SET_EXPAND_CHECKLIST:
+      return {
+        ...state,
+        [action.checklistId]: {
+          ...state[action.checklistId],
+          is_expanded: action.isExpanded
+        }
+      }
+
     default:
       return state
   }
 }
 
-export const getChecklists = (deal, state) =>
-  deal.checklists.map(id => state[id])
+export const getDealChecklists = (deal, state) =>
+  Array.isArray(deal.checklists) ? deal.checklists.map(id => state[id]) : []
 
 export const getChecklistById = (state, id) => state && state[id]
+
+export const isChecklistExpanded = (state, id) =>
+  state[id].is_expanded !== undefined ? state[id].is_expanded : true

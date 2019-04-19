@@ -21,7 +21,7 @@ export async function preSaveFormat(values, originalValues, deal, template) {
   const task_type = 'Open House'
 
   const task = {
-    title,
+    title: title.trim(),
     due_date: dueDateTimestamp / 1000,
     task_type,
     metadata: { template },
@@ -31,7 +31,7 @@ export async function preSaveFormat(values, originalValues, deal, template) {
   }
 
   if ((originalValues && originalValues.id) || description) {
-    task.description = description || ''
+    task.description = (description && description.trim()) || ''
   }
 
   if (task.status === 'DONE') {

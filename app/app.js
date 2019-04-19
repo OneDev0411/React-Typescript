@@ -1,12 +1,22 @@
 import React from 'react'
 import NotificationsSystem from 'reapop'
 import notificationTheme from 'reapop-theme-wybo'
-import { Router, browserHistory, applyRouterMiddleware } from 'react-router'
-import { Provider } from 'react-redux'
-import { syncHistoryWithStore } from 'react-router-redux'
 import useScroll from 'react-router-scroll/lib/useScroll'
 
-import ConfirmationModal from './components/Partials/Confirmation'
+import { Router, browserHistory, applyRouterMiddleware } from 'react-router'
+import { syncHistoryWithStore } from 'react-router-redux'
+
+import { hot } from 'react-hot-loader/root'
+
+// This is our new confirmation modal. use this please.
+import ConfirmationModalProvider from 'components/ConfirmationModal/context/Provider'
+import ConfirmationModal from 'components/ConfirmationModal'
+
+// This is a redux-based confirmation and will be deprecate asap.
+import ReduxConfirmationModal from './components/Partials/Confirmation'
+
+// import styles
+import './styles/main.scss'
 
 // Routes config
 import routes from './routes'
@@ -17,19 +27,19 @@ import store from './stores'
 // history
 const history = syncHistoryWithStore(browserHistory, store)
 
-// import styles
-import './styles/main.scss'
-
-export default () => (
-  <Provider store={store}>
-    <div>
+const A = () => (
+  <div>
+    <ConfirmationModalProvider>
       <Router history={history} render={applyRouterMiddleware(useScroll())}>
         {routes}
       </Router>
-
-      <NotificationsSystem theme={notificationTheme} />
-
       <ConfirmationModal />
-    </div>
-  </Provider>
+    </ConfirmationModalProvider>
+
+    <NotificationsSystem theme={notificationTheme} />
+
+    <ReduxConfirmationModal />
+  </div>
 )
+
+export default hot(A)

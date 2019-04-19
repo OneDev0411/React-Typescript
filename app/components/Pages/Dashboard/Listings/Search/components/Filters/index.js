@@ -6,7 +6,11 @@ import withHandlers from 'recompose/withHandlers'
 import cn from 'classnames'
 import ClickOutside from 'react-click-outside'
 
-import { getStatusColor } from '../../../../../../../utils/listing'
+import { getStatusColor } from 'utils/listing'
+import actions from 'actions/listings/search/filters'
+import ActionButton from 'components/Button/ActionButton'
+
+import { property_subtypes, architectural_styles } from '../../../mapOptions'
 
 import Price from './Price'
 import Schools from './Schools'
@@ -14,6 +18,7 @@ import Counties from './Counties'
 import YearBuilt from './YearBuilt'
 import Tags from './components/Tags'
 import Subdivision from './Subdivision'
+import MasterBedroom from './MasterBedroom'
 import MlsAreaSelects from './MlsAreaSelects'
 import GroupRadios from './components/GroupRadios'
 import SubStatuses from './components/SubStatuses'
@@ -21,9 +26,7 @@ import MinMaxInputs from './components/MinMaxInputs'
 import SoldStatusChildrens from './SoldStatusChildrens'
 import { pendingStatuses, otherStatuses } from './statuses'
 import FiltersListingsStatusRow from './FiltersListingsStatusRow'
-import { property_subtypes, architectural_styles } from '../../../mapOptions'
-import actions from '../../../../../../../store_actions/listings/search/filters'
-import ActionButton from '../../../../../../../views/components/Button/ActionButton'
+import { yesNoEitherFieldItems } from './helpers/yes-no-either-field-items'
 
 const INITIAL_VALUES = {
   pool: 'either',
@@ -41,7 +44,7 @@ const INITIAL_VALUES = {
 
 const Filters = ({
   isOpen,
-  reset,
+  resetHandler,
   pristine,
   activeSold,
   handleClose,
@@ -136,8 +139,9 @@ const Filters = ({
               fields={architectural_styles}
             />
             <GroupRadios name="minimum_bedrooms" label="Bedrooms" />
+            <MasterBedroom />
             <GroupRadios name="minimum_bathrooms" label="Bathrooms" />
-            <GroupRadios name="minimum_parking_spaces" label="Garage Space" />
+            <GroupRadios name="minimum_parking_spaces" label="Parking Spaces" />
             <Subdivision />
             <Schools />
             <MinMaxInputs name="square_meters" label="Square Footage" />
@@ -148,11 +152,7 @@ const Filters = ({
             <GroupRadios
               label="Pool"
               name="pool"
-              fields={[
-                { title: 'Yes', value: 'YES' },
-                { title: 'No', value: 'NO' },
-                { title: 'Either', value: 'either' }
-              ]}
+              fields={yesNoEitherFieldItems}
             />
             <YearBuilt />
           </div>
@@ -162,7 +162,7 @@ const Filters = ({
             size="large"
             style={{ marginRight: '1rem' }}
             appearance="outline"
-            onClick={reset}
+            onClick={resetHandler}
             disabled={isSubmitting || pristine}
           >
             Reset Filters
@@ -201,6 +201,22 @@ export default compose(
   withHandlers({
     onSubmitHandler: ({ submitFiltersForm }) => values => {
       submitFiltersForm(values)
+    }
+  }),
+  withHandlers({
+    resetHandler: ({
+      reset,
+      initialValues,
+      submitFiltersForm,
+      submitSucceeded,
+      submitFailed
+    }) => () => {
+      if (submitSucceeded || submitFailed) {
+        reset()
+        submitFiltersForm(initialValues)
+      } else {
+        reset()
+      }
     }
   })
 )(Filters)

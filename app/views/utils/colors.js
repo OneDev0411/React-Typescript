@@ -18,8 +18,8 @@ export const grey = {
   A250: '#e6e6e6',
   A300: '#d4d4d4',
   A400: '#c4c4c4',
-  A550: '#b2b2b2',
   A500: '#b4b4b4',
+  A550: '#b2b2b2',
   A600: '#a4a4a4',
   A900: '#7F7F7F'
 }

@@ -14,6 +14,7 @@ import Spinner from 'components/Spinner'
 
 import { getFileById } from '../utils/files/get-file-by-id'
 import { getTaskForm } from '../utils/get-task-form'
+import { getEnvelopeFileUrl } from '../utils/get-envelope-file-url'
 
 import TaskView from '../Dashboard/TaskView'
 
@@ -108,48 +109,28 @@ class FileViewer extends React.Component {
     }
   }
 
-  get Envelope() {
+  getEnvelope() {
     return this.EntityType === 'envelope'
       ? this.props.envelopes[this.props.params.entityId]
       : null
   }
 
   get EnvelopeFile() {
-    const envelope = this.Envelope
+    const envelope = this.getEnvelope()
 
     if (!this.props.task || !envelope.documents) {
       return null
     }
 
-    // get document index
-    let document = null
+    const url = getEnvelopeFileUrl(envelope, this.props.task)
 
-    if (this.props.task.submission) {
-      document = envelope.documents.find(
-        doc => doc.submission === this.props.task.submission.id
-      )
-    }
-
-    // if couldn't find the file, try to find that in attachments
-    if (!document) {
-      document = envelope.documents.find(doc =>
-        this.props.task.room.attachments.find(file => file.id === doc.file)
-      )
-    }
-
-    if (!document) {
-      return null
-    }
-
-    let url
-
-    if (!document.pdf) {
+    if (!url) {
       this.props.notify({
         title: 'File not found',
         status: 'error'
       })
-    } else {
-      url = document.pdf.url
+
+      return false
     }
 
     return {
@@ -184,7 +165,13 @@ class FileViewer extends React.Component {
     // browserHistory.push(`/dashboard/deals/${this.state.deal.id}`)
   }
 
-  normalizeName = name => decodeURIComponent(name).replace(/[_-]/g, ' ')
+  normalizeName = name => {
+    try {
+      return decodeURIComponent(name).replace(/[_-]/g, ' ')
+    } catch (e) {
+      return name
+    }
+  }
 
   render() {
     if (this.ShowLoader) {
@@ -222,7 +209,7 @@ class FileViewer extends React.Component {
             <EnvelopeSideMenu
               deal={this.state.deal}
               file={file}
-              envelope={this.Envelope}
+              envelope={this.getEnvelope()}
             />
           )}
         </PageContainer>

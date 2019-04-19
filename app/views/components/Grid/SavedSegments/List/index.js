@@ -27,6 +27,7 @@ import {
   ListItemName,
   DeleteButton
 } from 'components/SlideMenu/Menu/styled'
+import { ShowMoreLess } from 'components/ShowMoreLess'
 
 class SegmentsList extends React.Component {
   state = {
@@ -93,32 +94,38 @@ class SegmentsList extends React.Component {
       <div>
         <ListTitle>Lists</ListTitle>
 
-        {list.map((item, index) => {
-          const id = item.id
+        <ShowMoreLess
+          moreText="More lists"
+          lessText="Less lists"
+          style={{ marginBottom: '1rem' }}
+        >
+          {list.map((item, index) => {
+            const id = item.id
 
-          return (
-            <ToolTip key={index} caption={item.name} placement="right">
-              <ListItem
-                isDeleting={isDeleting.includes(id)}
-                isSelected={isSelected(id)}
-              >
-                <ListItemName
+            return (
+              <ToolTip key={index} caption={item.name} placement="right">
+                <ListItem
+                  isDeleting={isDeleting.includes(id)}
+                  isSelected={isSelected(id)}
                   onClick={() => !isSelected(id) && this.onSelectList(item)}
                 >
-                  {uppercaseFirstLetter(item.name)}
-                </ListItemName>
-                {item.is_editable && (
-                  <DeleteButton
-                    onClick={() => this.onRequestDelete(item)}
-                    isFit
-                  >
-                    <IconClose />
-                  </DeleteButton>
-                )}
-              </ListItem>
-            </ToolTip>
-          )
-        })}
+                  <ListItemName>{uppercaseFirstLetter(item.name)}</ListItemName>
+                  {item.is_editable && (
+                    <DeleteButton
+                      onClick={event => {
+                        this.onRequestDelete(item)
+                        event.stopPropagation()
+                      }}
+                      isFit
+                    >
+                      <IconClose />
+                    </DeleteButton>
+                  )}
+                </ListItem>
+              </ToolTip>
+            )
+          })}
+        </ShowMoreLess>
 
         {isFetching && (
           <ListItem>

@@ -184,7 +184,6 @@ desktop/builds
 dist
 .tmp
 .idea/
-.package-lock.json
-*.lock
+yarn.lock
 
 tests/E2E/log

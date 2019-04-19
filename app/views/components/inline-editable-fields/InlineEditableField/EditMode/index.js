@@ -2,27 +2,32 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { noop } from 'utils/helpers'
+import Tooltip from 'components/tooltip'
 import IconButton from 'components/Button/IconButton'
 import ActionButton from 'components/Button/ActionButton'
 import DeleteIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 
-import { ActionBar, Container } from './styled'
+import { EditModeActionBar, EditModeContainer } from '../../styled'
 
 export class EditMode extends React.Component {
   static propTypes = {
+    error: PropTypes.string,
     handleCancel: PropTypes.func.isRequired,
     handleDelete: PropTypes.func,
     handleSave: PropTypes.func.isRequired,
     isDisabled: PropTypes.bool,
     render: PropTypes.func.isRequired,
     showDelete: PropTypes.bool,
+    isStatic: PropTypes.bool,
     style: PropTypes.shape()
   }
 
   static defaultProps = {
+    error: '',
     isDisabled: false,
     handleDelete: noop,
     showDelete: false,
+    isStatic: false,
     style: {}
   }
 
@@ -30,17 +35,28 @@ export class EditMode extends React.Component {
     const { isDisabled, showDelete } = this.props
 
     return (
-      <Container style={this.props.style}>
+      <EditModeContainer
+        hasError={!!this.props.error}
+        style={this.props.style}
+        isStatic={this.props.isStatic}
+        className={this.props.isStatic ? 'is-static' : ''}
+      >
         {this.props.render(this.props)}
-        <ActionBar showDelete={showDelete}>
+        <EditModeActionBar
+          showDelete={showDelete}
+          isStatic={this.props.isStatic}
+        >
           {showDelete && (
-            <IconButton
-              isFit
-              disabled={isDisabled}
-              onClick={this.props.handleDelete}
-            >
-              <DeleteIcon />
-            </IconButton>
+            <Tooltip caption="Delete">
+              <IconButton
+                isFit
+                inverse
+                disabled={isDisabled}
+                onClick={this.props.handleDelete}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
           )}
           <div
             style={{
@@ -50,9 +66,11 @@ export class EditMode extends React.Component {
           >
             <ActionButton
               size="small"
+              inverse
               appearance="link"
               disabled={isDisabled}
               onClick={this.props.handleCancel}
+              style={{ fontWeight: 500 }}
             >
               Cancel
             </ActionButton>
@@ -64,8 +82,8 @@ export class EditMode extends React.Component {
               {isDisabled ? 'Saving...' : 'Save'}
             </ActionButton>
           </div>
-        </ActionBar>
-      </Container>
+        </EditModeActionBar>
+      </EditModeContainer>
     )
   }
 }

@@ -184,8 +184,6 @@ class EditDigitalForm extends React.Component {
         message: 'The form has been saved!',
         status: 'success'
       })
-
-      this.closeForm()
     } catch (err) {
       console.log(err)
 
@@ -205,7 +203,6 @@ class EditDigitalForm extends React.Component {
 
   closeForm = () => {
     browserHistory.goBack()
-    // browserHistory.push(`/dashboard/deals/${this.props.task.deal}`)
   }
 
   render() {

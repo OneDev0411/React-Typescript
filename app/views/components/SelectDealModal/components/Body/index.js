@@ -16,11 +16,13 @@ import Alert from '../../../../../components/Pages/Dashboard/Partials/Alert'
 
 const propTypes = {
   deals: PropTypes.arrayOf(PropTypes.shape),
+  itemRenderer: PropTypes.func,
   handleSelectedItem: PropTypes.func.isRequired
 }
 
 const defaultProps = {
-  deals: []
+  deals: [],
+  itemRenderer: null
 }
 
 class Body extends Component {
@@ -127,6 +129,7 @@ class Body extends Component {
                   {items.map((item, index) => (
                     <Item
                       item={item}
+                      itemRenderer={this.props.itemRenderer}
                       isDrawer={isDrawer}
                       key={item.id || `downshift_search_result_item_${index}`}
                       {...getItemProps({ item })}

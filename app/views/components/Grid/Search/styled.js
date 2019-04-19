@@ -1,17 +1,18 @@
 import styled from 'styled-components'
-import { primary, grey } from '../../../utils/colors'
+
+import { primary, grey, borderColor } from '../../../utils/colors'
 import IconSearchBase from '../../SvgIcons/Search/IconSearch'
 import IconButtonFlex from '../../Button/IconButton'
 
 export const Container = styled.div`
   display: flex;
   align-items: center;
-  padding-left: 16px;
-  border-radius: 4px;
-  background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : '#f9f9f9')};
-  border: solid 1px ${({ isFocused }) => (isFocused ? primary : '#d4d4d4')};
+  padding-left: 1em;
+  border-radius: 3px;
+  background-color: ${({ isFocused }) => (isFocused ? '#fff' : grey.A175)};
+  border: solid 1px ${({ isFocused }) => (isFocused ? primary : borderColor)};
   :hover {
-    background-color: ${({ isFocused }) => (isFocused ? '#ffffff' : grey.A100)};
+    background-color: ${({ isFocused }) => (isFocused ? '#fff' : grey.A100)};
   }
 `
 
@@ -45,12 +46,6 @@ export const TextInput = styled.input`
   :focus {
     outline: none;
   }
-
-  ${Container}:hover & {
-    ::placeholder {
-      color: #000000;
-    }
-  }
 `
 
 export const IconSearch = styled(IconSearchBase)`
@@ -58,7 +53,7 @@ export const IconSearch = styled(IconSearchBase)`
     fill: ${grey.A900} !important;
   }
   ${Container}:hover & path {
-    fill: #000000 !important;
+    fill: #000 !important;
   }
 `
 export const Icon = styled.div`

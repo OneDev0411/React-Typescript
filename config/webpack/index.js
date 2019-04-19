@@ -10,7 +10,7 @@ const config = {
     entry: path.resolve(__dirname, '../../app'),
     output: path.resolve(__dirname, '../../dist'),
     publicDirName: 'static',
-    publicPath: __DEV__ ? '/static' : '/',
+    publicPath: __DEV__ ? '/static' : null,
     jsBundle: __DEV__ ? 'app.js' : '[name].[hash].js',
     jsVendorBundle: 'core.[hash].js',
     cssBundle: 'app.[hash].css',
@@ -46,7 +46,8 @@ const config = {
       AWS_SECRET_ACCESS_KEY: JSON.stringify(process.env.AWS_SECRET_ACCESS_KEY),
       ASSETS_BUCKET: JSON.stringify(process.env.ASSETS_BUCKET),
       ASSETS_BASEURL: JSON.stringify(process.env.ASSETS_BASEURL),
-      FB_APP_ID: JSON.stringify(process.env.FB_APP_ID)
+      FB_APP_ID: JSON.stringify(process.env.FB_APP_ID),
+      RECHAT_SPLITTER_URL: JSON.stringify(process.env.RECHAT_SPLITTER_URL)
     },
     __DEV__: __DEV__,
     NODE_ENV: env,

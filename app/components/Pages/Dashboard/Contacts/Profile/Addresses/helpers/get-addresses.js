@@ -87,4 +87,4 @@ export function getAddresses(addressesFields, addressAttributeDefs) {
 }
 
 export const generateNextIndex = addresses =>
-  Math.max(...addresses.map(a => a.index)) + 1
+  addresses.length > 0 ? Math.max(...addresses.map(a => a.index)) + 1 : 1

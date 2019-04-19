@@ -1,14 +1,42 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import _ from 'underscore'
 
 import Deal from '../../../models/Deal'
 import Listing from '../../../models/listings/listing'
-import listingsHelper from '../../../utils/listing'
 
 import SearchDrawer from '../SearchDrawer'
 import ListingItem from './ListingItem'
+
+function addDealDataToListing(deal, listing) {
+  return {
+    ...listing,
+    price: Deal.get.field(deal, 'list_price') || listing.price,
+    property: {
+      address: {
+        full_address:
+          Deal.get.field(deal, 'full_address') ||
+          listing.property.address.full_address,
+        street_address:
+          Deal.get.field(deal, 'street_address') ||
+          listing.property.address.street_address,
+        unit_number:
+          Deal.get.field(deal, 'unit_number') ||
+          listing.property.address.unit_number,
+        street_number:
+          Deal.get.field(deal, 'street_number') ||
+          listing.property.address.street_number,
+        postal_code:
+          Deal.get.field(deal, 'postal_code') ||
+          listing.property.address.postal_code
+      },
+      list_date: Deal.get.field(deal, 'list_date') || listing.list_date,
+      status: Deal.get.field(deal, 'listing_status') || listing.status,
+      year_built:
+        Deal.get.field(deal, 'year_built') || listing.property.year_built
+    }
+  }
+}
 
 class SearchListingDrawer extends React.Component {
   state = {
@@ -21,15 +49,24 @@ class SearchListingDrawer extends React.Component {
     })
 
     try {
+      const { mockListings } = this.props
+      const mockedMLSData = mockListings
+        ? await import('./mock_listing.json')
+        : null
+
       const listings = await Promise.all(
         _.map(items, item => {
           if (item.gallery_image_urls) {
             return item
           }
 
-          const id = item.type === 'deal' ? item.listing : item.id
+          const listing = item.type === 'deal' ? item.listing : item.id
 
-          return Listing.getListing(id)
+          if (mockListings && !listing) {
+            return addDealDataToListing(item, mockedMLSData)
+          }
+
+          return Listing.getListing(listing)
         })
       )
 
@@ -51,25 +88,11 @@ class SearchListingDrawer extends React.Component {
   searchListing = async value => {
     const response = await Deal.searchListings(value)
 
-    const listings = response
-      .map(item => ({
-        id: item.id,
-        full_address: listingsHelper.addressTitle(item.address),
-        address_components: item.address,
-        price: item.price,
-        status: item.status,
-        image: item.cover_image_url,
-        gallery_image_urls: item.gallery_image_urls,
-        is_mls_search: item.is_mls_search || false
-      }))
-      .filter(
-        item =>
-          item.is_mls_search ||
-          item.status.includes('Active') ||
-          ['Pending', 'Leased'].includes(item.status)
-      )
-
-    return listings
+    return response.filter(
+      item =>
+        item.is_mls_search ||
+        ['Pending', 'Leased', 'Active'].includes(item.status)
+    )
   }
 
   render() {
@@ -94,11 +117,13 @@ class SearchListingDrawer extends React.Component {
 }
 
 SearchListingDrawer.propTypes = {
-  searchPlaceholder: PropTypes.string
+  searchPlaceholder: PropTypes.string,
+  mockListings: PropTypes.bool
 }
 
 SearchListingDrawer.defaultProps = {
-  searchPlaceholder: 'Enter MLS # or address'
+  searchPlaceholder: 'Enter MLS # or address',
+  mockListings: false
 }
 
 export default SearchListingDrawer

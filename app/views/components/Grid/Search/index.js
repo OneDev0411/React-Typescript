@@ -36,11 +36,17 @@ class Search extends React.Component {
   }
 
   handleClearSearch = () => {
+    const { onClearSearch } = this.props
+
     this.setState({
       searchValue: ''
     })
 
-    this.props.onClearSearch('')
+    if (onClearSearch) {
+      onClearSearch('')
+    } else {
+      this.onChangeHandler('')
+    }
   }
 
   onRef = ref => {
@@ -117,8 +123,7 @@ Search.defaultProps = {
   isSearching: false,
   showLoadingOnSearch: false,
   disableOnSearch: true,
-  showClearSearch: true,
-  onClearSearch: () => null
+  showClearSearch: true
 }
 
 export default Search

@@ -73,6 +73,12 @@ export function viewAs(user, activeTeam = getActiveTeam(user)) {
   return []
 }
 
+export function getActiveTeamSettings(user, key = null) {
+  const team = getActiveTeam(user)
+  const settings = team.settings || {}
+  return key ? settings[key] : settings
+}
+
 export function viewAsEveryoneOnTeam(user) {
   const users = viewAs(user)
   return users.length === 0 ||
@@ -96,28 +102,4 @@ export function allMembersOfTeam(team) {
   })
 
   return Object.values(indexedMembers)
-}
-
-export function isTrainingAccount(user) {
-
-  // Hide training banner
-  // https://gitlab.com/rechat/web/issues/1688#note_104530885
-  return false
-  
-  const activeTeam = getActiveTeam(user) || {}
-  let { brand } = activeTeam
-
-  if (!activeTeam || !brand) {
-    return false
-  }
-
-  do {
-    if (brand.training) {
-      return true
-    }
-
-    brand = brand.parent
-  } while (brand)
-
-  return false
 }

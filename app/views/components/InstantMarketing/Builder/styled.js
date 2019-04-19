@@ -26,7 +26,6 @@ export const TemplatesContainer = styled.div`
 
 export const BuilderContainer = styled.div`
   display: flex;
-  background: red;
 
   #grapesjs-canvas {
     height: 90vh !important;

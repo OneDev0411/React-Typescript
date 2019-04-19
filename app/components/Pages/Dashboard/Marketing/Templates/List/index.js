@@ -13,7 +13,11 @@ import { Template } from '../../components/Template'
 import { mediumsCollection } from './mediums-collection'
 import { Tab, ListContainer } from './styled'
 
-const GENERAL_FLOW_TYPES = ['Brand', 'Christmas,NewYear,Valentines,StPatrick', 'NewAgent']
+const GENERAL_FLOW_TYPES = [
+  'Brand',
+  'Christmas,NewYear,Valentines,StPatrick,Easter,OtherHoliday',
+  'NewAgent'
+]
 
 export class List extends React.Component {
   state = {
@@ -64,6 +68,66 @@ export class List extends React.Component {
       isGeneralFlowActive: false
     })
 
+  getSelectedMediumTemplates = () =>
+    this.props.templates.filter(t => t.medium === this.props.medium)
+
+  getTemplateIndex = template =>
+    this.getSelectedMediumTemplates().findIndex(t => t.id === template.id)
+
+  selectPreviousTemplate = () => {
+    const { selectedTemplate } = this.state
+
+    if (!selectedTemplate) {
+      return
+    }
+
+    const templates = this.getSelectedMediumTemplates()
+    const selectedTemplateIndex = this.getTemplateIndex(selectedTemplate)
+
+    let nextIndex = selectedTemplateIndex
+
+    nextIndex =
+      selectedTemplateIndex === 0
+        ? templates.length - 1
+        : selectedTemplateIndex - 1
+
+    this.setState({
+      selectedTemplate: templates[nextIndex]
+    })
+  }
+
+  selectNextTemplate = () => {
+    const { selectedTemplate } = this.state
+
+    if (!selectedTemplate) {
+      return
+    }
+
+    const templates = this.getSelectedMediumTemplates()
+    const selectedTemplateIndex = this.getTemplateIndex(selectedTemplate)
+
+    let nextIndex = selectedTemplateIndex
+
+    nextIndex =
+      selectedTemplateIndex === templates.length - 1
+        ? 0
+        : selectedTemplateIndex + 1
+
+    this.setState({
+      selectedTemplate: templates[nextIndex]
+    })
+  }
+
+  handleKeyDown = e => {
+    if (e.key === 'ArrowLeft') {
+      this.selectPreviousTemplate()
+    }
+
+    if (e.key === 'ArrowRight') {
+      this.selectNextTemplate()
+    }
+  }
+
   handleCustomize = template => {
     const { types } = this.props
 
@@ -94,12 +158,10 @@ export class List extends React.Component {
     />
   )
 
-  renderList = selectedMedium => (
+  renderList = () => (
     <ListContainer isSideMenuOpen={this.props.isSideMenuOpen}>
       <Masonry options={{ transitionDuration: 0 }}>
-        {this.props.templates
-          .filter(t => t.medium === selectedMedium)
-          .map(this.renderTemplate)}
+        {this.getSelectedMediumTemplates().map(this.renderTemplate)}
       </Masonry>
     </ListContainer>
   )
@@ -178,12 +240,18 @@ export class List extends React.Component {
             </Tab>
           ))}
         </Flex>
-        {this.renderList(selectedMedium)}
+        {this.renderList()}
         {state.isPreviewModalOpen && (
           <ImagePreviewModal
             isOpen
+            showPreviousButton
+            onPreviousButtonClick={this.selectPreviousTemplate}
+            showNextButton
+            onNextButtonClick={this.selectNextTemplate}
             handleClose={this.closePreviewModal}
+            handleKeyDown={this.handleKeyDown}
             imgSrc={`${selectedTemplate.url}/preview.png`}
+            imgSrcTiny={`${selectedTemplate.url}/thumbnail.png`}
             menuRenderer={this.renderPreviewModalMenu}
           />
         )}
