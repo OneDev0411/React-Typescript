@@ -99,7 +99,7 @@ function DateTimePicker(props) {
       // We don't update the form field value unless the user clicks
       // on save button inside the picker. This is useful for when want to
       // know we are editing a date or we are setting a new date.
-      hasInitialDate={!!props.selectedDate}
+      hasInitialDate={!!props.initialSelectedDate}
     />
   )
 

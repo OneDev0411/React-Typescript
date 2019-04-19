@@ -22,7 +22,7 @@ const FooterContainer = styled.div`
     }
 
     & button {
-      margin-left: 4px;
+      margin-left: 2px;
     }
   }
 `

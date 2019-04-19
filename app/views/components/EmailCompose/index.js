@@ -88,6 +88,10 @@ class EmailCompose extends React.Component {
       attachments: _.map(form.attachments, item => item.file_id),
       due_at: form.due_at
     }
+    const successMessage = email.due_at
+      ? 'The email has been scheduled'
+      : 'The email has been sent'
+    const errorMessage = 'Could not send the email. try again.'
 
     try {
       this.setState({
@@ -98,7 +102,7 @@ class EmailCompose extends React.Component {
 
       this.props.notify({
         status: 'success',
-        message: 'The email has been sent'
+        message: successMessage
       })
 
       this.props.onClose()
@@ -107,7 +111,7 @@ class EmailCompose extends React.Component {
 
       this.props.notify({
         status: 'error',
-        message: 'Could not send the email. try again.'
+        message: errorMessage
       })
     } finally {
       this.setState({
