@@ -109,7 +109,7 @@ class ContactsList extends React.Component {
       this.props.getContactsTags(viewAsUsers)
     }
 
-    const nextStart = nextProps.router.getCurrentLocation().query.s
+    const nextStart = nextProps.location.query.s
 
     if (nextStart === undefined) {
       window.location.reload()
