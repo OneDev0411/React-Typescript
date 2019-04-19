@@ -447,7 +447,10 @@ class ActionsButton extends React.Component {
           <TasksDrawer
             isOpen
             deal={this.props.deal}
-            file={this.props.document}
+            file={{
+              ...this.props.document,
+              task: this.props.task ? this.props.task.id : null
+            }}
             onClose={this.toggleMoveFile}
             title="Move to Checklist"
           />
