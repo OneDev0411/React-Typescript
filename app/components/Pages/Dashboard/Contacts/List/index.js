@@ -147,7 +147,9 @@ class ContactsList extends React.Component {
 
   addLoadedRange = start =>
     this.setState(prevState => ({
-      loadedRanges: _.uniq([...prevState.loadedRanges, parseInt(start, 10)])
+      loadedRanges: [
+        ...new Set([...prevState.loadedRanges, parseInt(start, 10)])
+      ]
     }))
 
   getQueryParam = key => this.props.router.getCurrentLocation().query[key]
