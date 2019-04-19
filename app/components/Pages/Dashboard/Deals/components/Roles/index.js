@@ -167,7 +167,7 @@ class Roles extends React.Component {
       <RolesContainer style={this.props.containerStyle}>
         {this.props.showTitle !== false && <RolesTitle>Contacts</RolesTitle>}
 
-        {(this.props.deal.roles || [])
+        {this.props.roles
           .filter(
             role =>
               this.props.filter(role) &&
