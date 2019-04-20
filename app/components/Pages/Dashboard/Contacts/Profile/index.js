@@ -30,6 +30,7 @@ import Loading from '../../../../Partials/Loading'
 import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
 
 import { Container } from '../components/Container'
+import Flows from './Flows'
 import { Dates } from './Dates'
 import Deals from './Deals'
 import { Details } from './Details'
@@ -272,6 +273,12 @@ class ContactProfile extends React.Component {
 
     const thirdColumnSections = [
       <Dates contact={contact} key="s1" />,
+      <Flows
+        key="s2"
+        contactId={contact.id}
+        flows={contact.flows}
+        user={user}
+      />,
       <Deals contact={contact} key="s3" />
     ]
 
@@ -303,6 +310,14 @@ class ContactProfile extends React.Component {
                 <Details {..._props} />
 
                 <Partner {..._props} />
+
+                {!this.state.isDesktopScreen && (
+                  <Flows
+                    contactId={contact.id}
+                    flows={contact.flows}
+                    user={user}
+                  />
+                )}
 
                 {!this.state.isDesktopScreen && <Deals contact={contact} />}
 
