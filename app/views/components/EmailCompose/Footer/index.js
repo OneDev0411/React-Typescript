@@ -13,6 +13,7 @@ import SchedulerButton from './SchedulerButton'
 
 export function Footer(props) {
   const due_at = props.formProps.values.due_at
+  const isScheduled = !!due_at
 
   return (
     <FooterContainer>
@@ -28,7 +29,7 @@ export function Footer(props) {
       </div>
 
       <div className="action-bar">
-        {due_at && (
+        {isScheduled && (
           <span className="scheduled-on">Send on {formatDate(due_at)}</span>
         )}
 
@@ -39,7 +40,7 @@ export function Footer(props) {
         >
           {textForSubmitButton({
             isSubmitting: props.isSubmitting,
-            isDateSet: !!due_at
+            isDateSet: isScheduled
           })}
         </ActionButton>
         <Field
@@ -47,7 +48,10 @@ export function Footer(props) {
           render={fieldProps => (
             <DateTimePicker
               popUpButton={buttonProps => (
-                <SchedulerButton onOpen={buttonProps.toggleOpen} />
+                <SchedulerButton
+                  onOpen={buttonProps.toggleOpen}
+                  isScheduled={isScheduled}
+                />
               )}
               popUpPosition="top-right"
               saveButtonText="Schedule"

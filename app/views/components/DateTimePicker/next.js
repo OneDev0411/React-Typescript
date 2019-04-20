@@ -11,7 +11,7 @@ DateTimePicker.defaultProps = {
   saveButtonText: 'Add Date',
   hasDone: true,
   hasRemove: true,
-  hasTime: false,
+  hasTime: true,
   initialSelectedDate: null,
   initialIsPopUpOpen: false,
   popUpPosition: 'bottom-left',
@@ -76,7 +76,7 @@ function DateTimePicker(props) {
     }
   }
 
-  const handleChange = (date, modifiers) => {
+  const handleChange = (date, modifiers = {}) => {
     if (modifiers.disabled) {
       return
     }
@@ -122,7 +122,7 @@ function DateTimePicker(props) {
       // We don't update the form field value unless the user clicks
       // on save button inside the picker. This is useful for when want to
       // know we are editing a date or we are setting a new date.
-      hasInitialDate={!!props.selectedDate}
+      hasInitialDate={!!props.initialSelectedDate}
     />
   )
 

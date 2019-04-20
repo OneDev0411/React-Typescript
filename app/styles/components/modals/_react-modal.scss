@@ -39,7 +39,9 @@
     }
   }
 
-  
+  &.c-modal__content--height-auto {
+    height: auto;
+  }
   
   &.c-tour-sheets,
   &.c-preview-image-modal,
@@ -53,7 +55,7 @@
       border-radius: 0;
     }
   }
-  
+
   &.c-preview-image-modal {
     background: rgba(0, 0, 0, 0.6);
   }
