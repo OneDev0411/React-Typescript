@@ -6,7 +6,10 @@ export function formatDate(date) {
   return date ? fecha.format(date, 'MMM D, YYYY hh:mm A') : ''
 }
 
-export function setTimeStringToDate(date = new Date(), time) {
+export function setTimeStringToDate(date, time) {
+  // for handling when date is "" or undefined
+  date = date || new Date()
+
   // [hours, minutes]
   const timeArray = time.split(':').map(t => parseInt(t, 10))
   const output = new Date(
