@@ -22,7 +22,7 @@ export default ({
   tooltipStyles = {},
   children,
   leftAlign = false,
-  size = '', // just accepet large for now
+  size = '', // just accepet small for now
   type = '', // just accepet error for now
   isCustom = true // this is a temporary prop. don't use it.
 }) => {
