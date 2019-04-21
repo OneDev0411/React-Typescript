@@ -8,12 +8,15 @@ import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-
 import { createContacts } from 'models/contacts/create-contacts'
 import { confirmation } from 'actions/confirmation'
 
+import DealRole from 'components/DealRole'
+
 import {
   convertRoleToContact,
   getLegalFullName,
   getContactDiff
 } from '../../../utils/roles'
-import RoleForm from '../Form'
+
+// import RoleForm from '../Form'
 
 const initialState = {
   isSaving: false
@@ -118,21 +121,23 @@ class RoleFormWrapper extends React.Component {
   }
 
   render() {
-    return (
-      <RoleForm
-        form={this.props.role}
-        deal={this.props.deal}
-        dealSide={this.props.dealSide}
-        modalTitle={this.props.modalTitle}
-        isSubmitting={this.state.isSaving}
-        isEmailRequired={this.props.isEmailRequired}
-        isCommissionRequired={this.props.isCommissionRequired}
-        isOpen={this.props.isOpen}
-        onHide={this.props.onHide}
-        onFormSubmit={this.onSubmit}
-        allowedRoles={this.props.allowedRoles}
-      />
-    )
+    return <DealRole isOpen={this.props.isOpen} onClose={this.props.onHide} />
+
+    // return (
+    //   <RoleForm
+    //     form={this.props.role}
+    //     deal={this.props.deal}
+    //     dealSide={this.props.dealSide}
+    //     modalTitle={this.props.modalTitle}
+    //     isSubmitting={this.state.isSaving}
+    //     isEmailRequired={this.props.isEmailRequired}
+    //     isCommissionRequired={this.props.isCommissionRequired}
+    //     isOpen={this.props.isOpen}
+    //     onHide={this.props.onHide}
+    //     onFormSubmit={this.onSubmit}
+    //     allowedRoles={this.props.allowedRoles}
+    //   />
+    // )
   }
 }
 
