@@ -12,15 +12,30 @@ import Tooltip from 'components/tooltip'
 import { TextInput } from 'components/Forms/TextInput'
 
 import { TitleInput } from './form-components/TitleInput'
+import { TypeInput } from './form-components/TypeInput'
+import { Roles } from './form-components/Roles'
+import { Address } from './form-components/Address'
 
 import { Header, Body, Footer } from '../styled'
 
 export function FormContainer(props) {
-  const { role_type } = props.values
-
   return (
     <Fragment>
-      <Header>***</Header>
+      <Header>
+        <TypeInput
+          name="role_type"
+          label="Type"
+          selectedValue={props.values.role_type}
+          style={{ marginRight: '0.5rem' }}
+        />
+
+        <Field
+          name="role"
+          label="Role"
+          formRole={props.values.role}
+          component={Roles}
+        />
+      </Header>
 
       <Body>
         <Flex>
@@ -29,20 +44,21 @@ export function FormContainer(props) {
             name="legal_first_name"
             label="First Name"
             component={TextInput}
-            style={{ marginRight: '0.5rem' }}
+            style={{ width: '30%', marginRight: '0.5rem' }}
           />
 
           <Field
             name="legal_middle_name"
             label="Mid. Name"
             component={TextInput}
-            style={{ width: '20%', marginRight: '0.5rem' }}
+            style={{ width: '15%', marginRight: '0.5rem' }}
           />
 
           <Field
             name="legal_last_name"
             label="Last Name"
             component={TextInput}
+            style={{ width: '30%' }}
           />
         </Flex>
 
@@ -77,14 +93,15 @@ export function FormContainer(props) {
           <Field
             name="current_address"
             label="Current Address"
-            component={TextInput}
+            component={Address}
             style={{ width: '50%', marginRight: '0.5rem' }}
           />
 
           <Field
             name="future_address"
             label="Future Address"
-            component={TextInput}
+            value={props.values.future_address}
+            component={Address}
             style={{ width: '50%' }}
           />
         </Flex>
@@ -100,7 +117,7 @@ export function FormContainer(props) {
         </Flex>
 
         <Flex>
-          <LinkButton>Cancel</LinkButton>
+          <LinkButton onClick={props.onClose}>Cancel</LinkButton>
           <ActionButton appearance="outline">Save</ActionButton>
           <ActionButton
             style={{

@@ -25,21 +25,20 @@ class Role extends React.Component {
     }
 
     return (
-      <ClickOutside onClickOutside={this.props.onClose}>
-        <Container>
-          <Form
-            validate={this.validate}
-            onSubmit={this.onSubmit}
-            initialValues={this.InitialValues}
-            render={formProps => (
-              <FormContainer
-                {...formProps}
-                onDeleteRole={this.handleDeleteRole}
-              />
-            )}
-          />
-        </Container>
-      </ClickOutside>
+      <Container>
+        <Form
+          validate={this.validate}
+          onSubmit={this.onSubmit}
+          initialValues={this.InitialValues}
+          render={formProps => (
+            <FormContainer
+              {...formProps}
+              onDeleteRole={this.handleDeleteRole}
+              onClose={this.props.onClose}
+            />
+          )}
+        />
+      </Container>
     )
   }
 }

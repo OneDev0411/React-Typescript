@@ -15,6 +15,7 @@ export const Container = styled.div`
 export const Header = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background-color: #f2f2f2;
   padding: 1rem 0.5rem;
 `
