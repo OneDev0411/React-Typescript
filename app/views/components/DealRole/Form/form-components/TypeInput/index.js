@@ -2,15 +2,13 @@ import React from 'react'
 
 import { RadioGroup } from 'components/Forms/RadioGroupInput'
 
-import { Container } from './styled'
-
 export const TYPE_PERSON = 'Person'
 export const TYPE_COMPANY = 'Organization'
 
-export const FormType = props => (
-  <Container>
+export function TypeInput(props) {
+  return (
     <RadioGroup
-      {...props}
+      label="Type"
       options={[
         {
           name: TYPE_PERSON,
@@ -21,6 +19,7 @@ export const FormType = props => (
           label: 'Company/Trust'
         }
       ]}
+      {...props}
     />
-  </Container>
-)
+  )
+}
