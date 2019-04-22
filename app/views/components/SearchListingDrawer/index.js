@@ -13,7 +13,11 @@ function addDealDataToListing(deal, listing) {
     ...listing,
     price: Deal.get.field(deal, 'list_price') || listing.price,
     property: {
+      ...listing.property,
       address: {
+        ...listing.property.address,
+        city: Deal.get.field(deal, 'city') || listing.property.address.city,
+        state: Deal.get.field(deal, 'state') || listing.property.address.state,
         full_address:
           Deal.get.field(deal, 'full_address') ||
           listing.property.address.full_address,
@@ -23,9 +27,15 @@ function addDealDataToListing(deal, listing) {
         unit_number:
           Deal.get.field(deal, 'unit_number') ||
           listing.property.address.unit_number,
+        street_name:
+          Deal.get.field(deal, 'street_name') ||
+          listing.property.address.street_name,
         street_number:
           Deal.get.field(deal, 'street_number') ||
           listing.property.address.street_number,
+        street_suffix:
+          Deal.get.field(deal, 'street_suffix') ||
+          listing.property.address.street_suffix,
         postal_code:
           Deal.get.field(deal, 'postal_code') ||
           listing.property.address.postal_code

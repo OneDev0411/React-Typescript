@@ -190,7 +190,10 @@ class Roles extends React.Component {
 
                   <RoleInfo onClick={() => this.onSelectRole(role)}>
                     <RoleTitle>{getLegalFullName(role)}</RoleTitle>
-                    <RoleType>{roleName(role.role)}</RoleType>
+                    <RoleType>
+                      {roleName(role.role)}
+                      {role.user ? ` . ${role.user.email}` : null}
+                    </RoleType>
                   </RoleInfo>
                 </Flex>
 
