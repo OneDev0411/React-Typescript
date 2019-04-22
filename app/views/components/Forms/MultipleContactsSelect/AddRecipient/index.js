@@ -156,23 +156,23 @@ class AddRecipient extends React.Component {
 
   // Searching in tags & lists locally
   handleSearchInTagsAndLists = value => {
-    let tagsFuseOptions = {
+    const tagsFuseOptions = {
       keys: ['text'],
       threshold: 0.3
     }
 
-    let segmentsFuseOptions = {
+    const segmentsFuseOptions = {
       keys: ['name'],
       threshold: 0.3
     }
 
     // Tags result
-    let filteredTags = new Fuse(this.props.tags, tagsFuseOptions)
+    const filteredTags = new Fuse(this.props.tags, tagsFuseOptions)
       .search(value)
       .slice(0, 5)
 
     // Segments result
-    let filteredList = new Fuse(this.props.segmentsList, segmentsFuseOptions)
+    const filteredList = new Fuse(this.props.segmentsList, segmentsFuseOptions)
       .search(value)
       .slice(0, 5)
 
@@ -232,7 +232,7 @@ class AddRecipient extends React.Component {
   }
 
   createResultSections = ({ getItemProps, highlightedIndex }) => {
-    let tags = {
+    const tags = {
       title: 'Tags',
       items: this.state.filteredTags,
       itemRenderer: itemDefaultProps => (
@@ -251,7 +251,7 @@ class AddRecipient extends React.Component {
         />
       )
     }
-    let segmentsList = {
+    const segmentsList = {
       title: 'Lists',
       items: this.state.filteredList,
       itemRenderer: itemDefaultProps => (
@@ -272,7 +272,7 @@ class AddRecipient extends React.Component {
       )
     }
 
-    let contacts = {
+    const contacts = {
       title: 'Contacts',
       isLoading: this.state.isContactsLoading,
       items: this.state.list,
