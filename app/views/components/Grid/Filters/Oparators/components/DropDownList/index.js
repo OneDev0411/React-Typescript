@@ -135,12 +135,12 @@ export class DropDownList extends React.Component {
                     allowMultipleSelections && _.size(selectedItems) > 0
                   }
                   inputFocused={this.state.inputFocused}
+                  onClick={this.toggleMenu}
                 >
                   <Input
                     {...getInputProps({
                       placeholder: 'Select'
                     })}
-                    onClick={this.toggleMenu}
                     onFocus={() => this.setState({ inputFocused: true })}
                     onBlur={() => this.setState({ inputFocused: false })}
                   />
