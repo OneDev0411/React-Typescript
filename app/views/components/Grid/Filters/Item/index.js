@@ -37,7 +37,7 @@ const getCurrentValues = (isActive, values) => {
     return 'Missing value'
   }
 
-  return _.isArray(values) && values.join(' OR ')
+  return _.isArray(values) && values.map(item => item.label).join(' OR ')
 }
 
 export const FilterItem = props => {
