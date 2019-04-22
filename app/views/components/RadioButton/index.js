@@ -18,7 +18,7 @@ const RadioLabel = styled.div`
 `
 const Caption = styled.div`
   color: #7f7f7f;
-  font-size: 0.875rem;
+  font-size: 1rem;
 `
 
 export default ({
@@ -32,7 +32,7 @@ export default ({
 }) => (
   <Flex justifyStart style={style} onClick={onClick}>
     <ToolTip caption={tooltip}>
-      <Flex alignStart>
+      <Flex alignStart style={{ cursor: 'pointer' }}>
         {selected ? <IconSelectedRadio /> : <IconUnSelectedRadio />}
         <LabelContainer>
           <RadioLabel disabled={disabled}>{title}</RadioLabel>

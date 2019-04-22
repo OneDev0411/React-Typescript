@@ -17,7 +17,7 @@ export const Header = styled.div`
   align-items: center;
   justify-content: space-between;
   background-color: #f2f2f2;
-  padding: 1rem 0.5rem;
+  padding: 0 0.5rem;
 `
 
 export const Body = styled.div`
