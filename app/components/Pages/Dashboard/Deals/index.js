@@ -49,6 +49,7 @@ class DealsContainer extends React.Component {
   isLoading = () => this.props.isFetchingDeals && this.props.params.id
 
   render() {
+    console.log('loading deals');
     if (this.isLoading()) {
       return (
         <Flex justifyCenter alignCenter style={{ height: '100vh' }}>
