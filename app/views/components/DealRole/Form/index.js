@@ -87,12 +87,7 @@ export function FormContainer(props) {
             style={{ width: '80%', marginRight: '0.5rem' }}
           />
 
-          <Field
-            name="mls_id"
-            label="MLS ID"
-            isRequired={props.requiredFields.includes('mls_id')}
-            component={TextInput}
-          />
+          <Field name="mls_id" label="MLS ID" component={TextInput} />
         </Flex>
 
         <Flex style={{ marginTop: '1rem' }}>
@@ -117,7 +112,6 @@ export function FormContainer(props) {
           <Field
             name="current_address"
             label="Current Address"
-            isRequired={props.requiredFields.includes('current_address')}
             value={props.values.current_address}
             component={Address}
             style={{ width: '50%', marginRight: '0.5rem' }}
@@ -126,7 +120,6 @@ export function FormContainer(props) {
           <Field
             name="future_address"
             label="Future Address"
-            isRequired={props.requiredFields.includes('future_address')}
             value={props.values.future_address}
             component={Address}
             style={{ width: '50%' }}
