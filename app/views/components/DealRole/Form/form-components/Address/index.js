@@ -23,6 +23,7 @@ export function Address(props) {
 
       <InlineAddressField
         address={props.value}
+        needsAddressForm={false}
         handleSubmit={props.input.onChange}
         preSaveFormat={x => {
           console.log(x)
