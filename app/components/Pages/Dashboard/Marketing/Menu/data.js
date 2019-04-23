@@ -27,10 +27,10 @@ export const items = [
     title: 'Just Sold',
     url: '/JustSold'
   },
-  // {
-  //   title: 'Multi Listings',
-  //   url: '/Listings'
-  // },
+  {
+    title: 'Multi Listings',
+    url: '/Listings'
+  },
   {
     title: 'New Agent',
     url: '/NewAgent'

@@ -190,7 +190,10 @@ class Roles extends React.Component {
 
                   <RoleInfo onClick={() => this.onSelectRole(role)}>
                     <RoleTitle>{getLegalFullName(role)}</RoleTitle>
-                    <RoleType>{roleName(role.role)}</RoleType>
+                    <RoleType>
+                      {roleName(role.role)}
+                      {this.props.showEmail && role.user ? ` . ${role.user.email}` : null}
+                    </RoleType>
                   </RoleInfo>
                 </Flex>
 
@@ -266,6 +269,8 @@ class Roles extends React.Component {
 Roles.propsTypes = {
   disableAddRole: PropTypes.bool,
   allowDeleteRole: PropTypes.bool,
+  showEmail: PropTypes.bool,
+  showTitle: PropTypes.bool,
   isEmailRequired: PropTypes.bool,
   filter: PropTypes.func,
   addRoleActionRenderer: PropTypes.func,
@@ -274,6 +279,7 @@ Roles.propsTypes = {
 }
 
 Roles.defaultProps = {
+  showEmail: false,
   disableAddRole: false,
   allowDeleteRole: true,
   isEmailRequired: false,

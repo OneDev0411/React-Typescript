@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 
 import { updateTask } from 'actions/deals'
@@ -11,7 +11,7 @@ import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import TaskStatus from '../../Folders/Checklist/TaskRow/Status'
 
-import { Input, Toolbar, TitleContainer, Title } from './styled'
+import { Container, Input, Toolbar, TitleContainer, Title } from './styled'
 
 class Header extends React.Component {
   state = {
@@ -58,7 +58,7 @@ class Header extends React.Component {
     }
 
     return (
-      <Fragment>
+      <Container>
         <Toolbar>
           <div>
             <TaskStatus
@@ -116,7 +116,7 @@ class Header extends React.Component {
 
           {this.state.isSavingName && <Spinner />}
         </TitleContainer>
-      </Fragment>
+      </Container>
     )
   }
 }

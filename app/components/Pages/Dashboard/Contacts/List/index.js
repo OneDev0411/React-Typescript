@@ -109,9 +109,10 @@ class ContactsList extends React.Component {
       this.props.getContactsTags(viewAsUsers)
     }
 
+    const prevStart = this.props.location.query.s
     const nextStart = nextProps.location.query.s
 
-    if (nextStart === undefined) {
+    if (prevStart !== undefined && nextStart === undefined) {
       window.location.reload()
     }
   }
