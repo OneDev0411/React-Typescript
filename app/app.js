@@ -5,6 +5,7 @@ import useScroll from 'react-router-scroll/lib/useScroll'
 
 import { Router, browserHistory, applyRouterMiddleware } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
+import smoothscroll from 'smoothscroll-polyfill'
 
 import { hot } from 'react-hot-loader/root'
 
@@ -26,6 +27,11 @@ import store from './stores'
 
 // history
 const history = syncHistoryWithStore(browserHistory, store)
+
+// smooth scroll polyfill
+if (typeof window !== 'undefined') {
+  smoothscroll.polyfill()
+}
 
 const A = () => (
   <div>

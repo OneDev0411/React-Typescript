@@ -8,7 +8,11 @@ export function Header(props) {
   return (
     <Flex justifyBetween style={{ padding: '1.5em 2.5em' }}>
       <Catalog contact={props.contact} />
-      <Menu contact={props.contact} />
+      <Menu
+        contact={props.contact}
+        backUrl={props.backUrl}
+        closeButtonQuery={props.closeButtonQuery}
+      />
     </Flex>
   )
 }

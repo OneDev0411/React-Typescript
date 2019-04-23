@@ -180,6 +180,7 @@
     "sass-loader": "^6.0.6",
     "shorti": "^1.2.6",
     "simplebar": "github:izadmehr/simplebar#35b9bf51a13adf85e705c972a3d4a5e6e0df5fbd",
+    "smoothscroll-polyfill": "^0.4.4",
     "socket.io-client": "^1.7.3",
     "stream-to-promise": "^2.2.0",
     "style-loader": "^0.19.1",
