@@ -14,15 +14,26 @@ export class LoadablePlugin {
 
   onScroll = el => {
     const accuracy = this.options.accuracy || 90
+    const accuracyTop = this.options.accuracyTop || 90
     const target = el.target.scrollingElement || el.target
 
     const top = target.scrollTop - target.clientTop
     const end = target.scrollHeight - target.offsetHeight
 
+    const { onScrollBottom, onScrollTop } = this.options
+
     if (top >= end - accuracy) {
       this.lastScrollTop = top
 
-      this.options.onTrigger(top)
+      return onScrollBottom && onScrollBottom(top)
+    }
+
+    const isScrolledToTop = top <= this.lastScrollTop
+
+    this.lastScrollTop = top
+
+    if (isScrolledToTop && top <= accuracyTop) {
+      return onScrollTop && onScrollTop(top)
     }
   }
 
