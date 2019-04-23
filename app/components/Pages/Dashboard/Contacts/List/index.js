@@ -55,7 +55,7 @@ class ContactsList extends React.Component {
     this.order = getActiveTeamSettings(props.user, SORT_FIELD_SETTING_KEY)
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     if (
       !['default', 'duplicate contacts'].includes(
         this.props.filterSegments.activeSegmentId
@@ -67,20 +67,7 @@ class ContactsList extends React.Component {
         ]
       )
     } else {
-      this.setState({
-        isFetchingMoreContacts: true
-      })
-
-      const start = this.getQueryParam('s')
-      const idSelector = `#grid-item-${this.getQueryParam('id')}`
-
-      this.scrollToSelector(idSelector)
-
-      await this.fetchList(start)
-
-      this.setState({
-        isFetchingMoreContacts: false
-      })
+      this.fetchContactsAndJumpToSelected()
     }
 
     if (this.props.fetchTags) {
@@ -122,7 +109,7 @@ class ContactsList extends React.Component {
       this.props.getContactsTags(viewAsUsers)
     }
 
-    const nextStart = nextProps.router.getCurrentLocation().query.s
+    const nextStart = nextProps.location.query.s
 
     if (nextStart === undefined) {
       window.location.reload()
@@ -131,6 +118,23 @@ class ContactsList extends React.Component {
 
   componentWillUnmount() {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
+  }
+
+  async fetchContactsAndJumpToSelected() {
+    this.setState({
+      isFetchingMoreContacts: true
+    })
+
+    const start = this.getQueryParam('s')
+    const idSelector = `#grid-item-${this.getQueryParam('id')}`
+
+    this.scrollToSelector(idSelector)
+
+    await this.fetchList(start)
+
+    this.setState({
+      isFetchingMoreContacts: false
+    })
   }
 
   scrollToSelector(selector) {
@@ -143,13 +147,15 @@ class ContactsList extends React.Component {
 
   addLoadedRange = start =>
     this.setState(prevState => ({
-      loadedRanges: _.uniq([...prevState.loadedRanges, parseInt(start, 10)])
+      loadedRanges: [
+        ...new Set([...prevState.loadedRanges, parseInt(start, 10)])
+      ]
     }))
 
-  getQueryParam = key => this.props.router.getCurrentLocation().query[key]
+  getQueryParam = key => this.props.location.query[key]
 
   setQueryParam = (key, value) => {
-    const currentLocation = this.props.router.getCurrentLocation()
+    const currentLocation = this.props.location
 
     this.props.router.replace({
       ...currentLocation,
