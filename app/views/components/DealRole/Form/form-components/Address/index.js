@@ -10,8 +10,6 @@ import {
   InputLabel
 } from 'components/Forms/styled'
 
-import { postLoadFormat } from '../../../../../../components/Pages/Dashboard/Contacts/Profile/Addresses/AddressField/helpers/post-load-format'
-
 export function Address(props) {
   return (
     <InputContainer style={props.style}>
@@ -30,7 +28,6 @@ export function Address(props) {
 
           return x
         }}
-        postLoadFormat={postLoadFormat}
         handleInputChange={props.input.onChange}
         renderSearchField={inputProps => (
           <Input
