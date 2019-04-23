@@ -2,13 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
+import SendEmailButton from 'components/SendEmailButton'
+import { CloseButton } from 'components/Button/CloseButton'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 
-import { normalizeContact } from 'models/email-compose/helpers/normalize-contact'
-
-import SendEmailButton from 'components/SendEmailButton'
-
-import { CloseButton } from 'components/Button/CloseButton'
+import normalizeContactForEmailCompose from 'models/email-compose/helpers/normalize-contact'
 
 import Chat from './ChatButton'
 import { Divider } from './Divider'
@@ -20,7 +18,10 @@ function Menu(props) {
     <Flex alignCenter style={{ padding: '1.5em 0' }}>
       <SendContactCard contact={contact}>Send a Card</SendContactCard>
       <SendEmailButton
-        recipients={normalizeContact(contact, props.attributeDefs)}
+        recipients={normalizeContactForEmailCompose(
+          contact,
+          props.attributeDefs
+        )}
         style={{ marginLeft: '1rem' }}
       />
 
