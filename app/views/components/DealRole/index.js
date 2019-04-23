@@ -151,7 +151,10 @@ class Role extends React.Component {
       'commission_dollar',
       'commission_percentage',
       'source_type',
-      'role_type'
+      'role_type',
+      'mls_id',
+      'current_address',
+      'future_address'
     ]
 
     if (commission_type === 'commission_dollar') {
