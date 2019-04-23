@@ -20,7 +20,7 @@ const propTypes = {
   needsAddressForm: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
   preSaveFormat: PropTypes.func.isRequired,
-  postLoadFormat: PropTypes.func.isRequired
+  postLoadFormat: PropTypes.func
 }
 
 const defaultProps = {
