@@ -23,7 +23,7 @@ const propTypes = {
   postLoadFormat: PropTypes.func.isRequired
 }
 
-const defaultTypes = {
+const defaultProps = {
   address: '',
   style: {},
   handleDelete() {},
@@ -239,4 +239,4 @@ export class InlineAddressField extends React.Component {
 }
 
 InlineAddressField.propTypes = propTypes
-InlineAddressField.defaultTypes = defaultTypes
+InlineAddressField.defaultProps = defaultProps
