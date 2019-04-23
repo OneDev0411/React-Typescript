@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useCallback, useRef } from 'react'
+import React, { Fragment, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { EditorState } from 'draft-js'
 import Editor from 'draft-js-plugins-editor'
@@ -41,7 +41,7 @@ export function TextEditor(props) {
     EditorState.createWithContent(stateFromHTML(props.defaultValue))
   )
 
-  const handleTextChange = useCallback(newState => {
+  const handleTextChange = newState => {
     if (!newState) {
       return false
     }
@@ -51,7 +51,7 @@ export function TextEditor(props) {
     const html = stateToHTML(newState.getCurrentContent())
 
     return props.input ? props.input.onChange(html) : props.onChange(html)
-  })
+  }
 
   return (
     <Fragment>

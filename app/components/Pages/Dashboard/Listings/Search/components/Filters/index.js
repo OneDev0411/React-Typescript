@@ -44,7 +44,7 @@ const INITIAL_VALUES = {
 
 const Filters = ({
   isOpen,
-  reset,
+  resetHandler,
   pristine,
   activeSold,
   handleClose,
@@ -162,7 +162,7 @@ const Filters = ({
             size="large"
             style={{ marginRight: '1rem' }}
             appearance="outline"
-            onClick={reset}
+            onClick={resetHandler}
             disabled={isSubmitting || pristine}
           >
             Reset Filters
@@ -201,6 +201,22 @@ export default compose(
   withHandlers({
     onSubmitHandler: ({ submitFiltersForm }) => values => {
       submitFiltersForm(values)
+    }
+  }),
+  withHandlers({
+    resetHandler: ({
+      reset,
+      initialValues,
+      submitFiltersForm,
+      submitSucceeded,
+      submitFailed
+    }) => () => {
+      if (submitSucceeded || submitFailed) {
+        reset()
+        submitFiltersForm(initialValues)
+      } else {
+        reset()
+      }
     }
   })
 )(Filters)

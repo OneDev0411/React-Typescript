@@ -13,6 +13,7 @@ import { TextArea } from 'components/Forms/TextArea'
 
 import { Recipients } from './components/Recipients'
 import { AddAttachment } from './components/AddAttachment'
+import { AutoNotify } from './components/AutoNotify'
 import AttachmentsList from './components/AttachmentsList'
 
 export default class SignatureComposeDrawer extends React.Component {
@@ -34,6 +35,7 @@ export default class SignatureComposeDrawer extends React.Component {
     this.formObject = {
       subject: 'Please DocuSign',
       recipients: {},
+      auto_notify: true,
       from: `${this.props.user.display_name} <${this.props.user.email}>`,
       attachments: this.initialAttachments
     }
@@ -113,15 +115,19 @@ export default class SignatureComposeDrawer extends React.Component {
               component={AddAttachment}
             />
 
-            <ActionButton
-              type="submit"
-              disabled={this.props.isSubmitting}
-              onClick={props.handleSubmit}
-            >
-              {this.props.isSubmitting
-                ? 'Please Wait...'
-                : 'Next: View in Docusign'}
-            </ActionButton>
+            <Flex>
+              <Field name="auto_notify" component={AutoNotify} />
+
+              <ActionButton
+                type="submit"
+                disabled={this.props.isSubmitting}
+                onClick={props.handleSubmit}
+              >
+                {this.props.isSubmitting
+                  ? 'Please Wait...'
+                  : 'Next: View in Docusign'}
+              </ActionButton>
+            </Flex>
           </Flex>
         )}
         render={() => (

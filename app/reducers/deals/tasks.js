@@ -103,6 +103,26 @@ export default (state = null, action) => {
         }
       }
 
+    case actionTypes.RENAME_TASK_FILE:
+      return {
+        ...state,
+        [action.task_id]: {
+          ...state[action.task_id],
+          room: {
+            ...state[action.task_id].room,
+            attachments: (state[action.task_id].room.attachments || []).map(
+              file =>
+                file.id !== action.file_id
+                  ? file
+                  : {
+                      ...file,
+                      name: action.filename
+                    }
+            )
+          }
+        }
+      }
+
     default:
       return state
   }

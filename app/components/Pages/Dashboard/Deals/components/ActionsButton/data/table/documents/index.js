@@ -13,7 +13,8 @@ import {
   DELETE_FILE_BUTTON,
   REVIEW_ENVELOPE_BUTTON,
   SPLIT_PDF_BUTTON,
-  EMAIL_BUTTON
+  EMAIL_BUTTON,
+  RENAME_BUTTON
 } from '../../action-buttons'
 
 import {
@@ -163,6 +164,7 @@ export default normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
+      [RENAME_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [SPLIT_PDF_BUTTON]: {},
@@ -183,6 +185,7 @@ export default normalizeConditions([
       [REVIEW_ENVELOPE_BUTTON]: {
         primary: true
       },
+      [RENAME_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
@@ -206,6 +209,7 @@ export default normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         disabled: true
       },
+      [RENAME_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [VOID_BUTTON]: {},
@@ -225,6 +229,7 @@ export default normalizeConditions([
       [DOCUSIGN_BUTTON]: {
         primary: true
       },
+      [RENAME_BUTTON]: {},
       [EMAIL_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [MOVE_BUTTON]: {},
@@ -245,6 +250,7 @@ export default normalizeConditions([
       [EMAIL_BUTTON]: {
         primary: true
       },
+      [RENAME_BUTTON]: {},
       [DOCUSIGN_BUTTON]: {},
       [VIEW_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
@@ -263,6 +269,7 @@ export default normalizeConditions([
       [VIEW_BUTTON]: {
         primary: true
       },
+      [RENAME_BUTTON]: {},
       [MOVE_BUTTON]: {},
       [DELETE_FILE_BUTTON]: {}
     }

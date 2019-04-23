@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-import { getStatusColor } from '../../../../../../../../utils/listing'
-
 import {
   grey,
   brandBackground
@@ -31,7 +29,10 @@ export const Price = styled.b`
 export const Status = styled.span`
   font-size: 0.875rem;
   line-height: 1;
-  color: ${props => `#${getStatusColor(props.status)}`};
+  color: #fff;
+  padding: 0.25em 0.5em;
+  border-radius: 3px;
+  background-color: ${props => props.color};
 `
 
 export const Address = styled.div`

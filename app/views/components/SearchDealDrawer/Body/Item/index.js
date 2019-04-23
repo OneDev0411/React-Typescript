@@ -10,8 +10,8 @@ import {
   getFormattedPrice
 } from 'models/Deal/helpers/context'
 
-import Avatar from '../../../../Avatar'
-import { Container } from '../../../../SelectContactModal/components/ContactItem'
+import Avatar from 'components/Avatar'
+import { Container } from 'components/SelectContactModal/components/ContactItem'
 
 import { Details, Status } from './styled'
 
