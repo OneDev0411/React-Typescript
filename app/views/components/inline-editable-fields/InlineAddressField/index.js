@@ -148,7 +148,7 @@ export class InlineAddressField extends React.Component {
     let newState = {
       address: item.description,
       isShowSuggestion: false,
-      isShowForm: this.props.needsAddressForm
+      isShowForm: true
     }
 
     const request = {
@@ -189,7 +189,7 @@ export class InlineAddressField extends React.Component {
   onClickDefaultItem = () =>
     this.setState({
       isShowSuggestion: false,
-      isShowForm: this.props.needsAddressForm
+      isShowForm: true
     })
 
   onClickOutside = () => this.setState({ isShowSuggestion: false })
@@ -221,7 +221,7 @@ export class InlineAddressField extends React.Component {
             />
           )}
 
-          {this.state.isShowForm && (
+          {this.props.needsAddressForm && this.state.isShowForm && (
             <InlineAddressForm
               address={address}
               handleCancel={this.handleFormCancel}
