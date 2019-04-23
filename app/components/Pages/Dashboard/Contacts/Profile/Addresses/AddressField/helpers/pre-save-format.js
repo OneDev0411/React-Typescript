@@ -1,4 +1,4 @@
-import { postLoadFormat } from './post-load-format'
+import postLoadFormat from 'components/inline-editable-fields/InlineAddressField/InlineAddressForm/helpers/post-load-format'
 
 function normalizer(values) {
   return {
