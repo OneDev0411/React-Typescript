@@ -11,30 +11,32 @@ export class CloseButton extends React.Component {
   static propTypes = {
     ...Button.propTypes,
     backUrl: PropTypes.string,
-    defaultBackUrl: PropTypes.string
+    defaultBackUrl: PropTypes.string,
+    query: PropTypes.object
   }
 
   static defaultProps = {
     ...Button.defaultProps,
     backUrl: '',
-    defaultBackUrl: ''
+    defaultBackUrl: '',
+    query: {}
   }
 
   handleOnClick = () => {
     // Force redirect
     if (this.props.backUrl) {
-      return goTo(this.props.backUrl)
+      return goTo(this.props.backUrl, null, this.props.query)
     }
 
     // Redirect using the histroy
     const currentLocation = browserHistory.getCurrentLocation()
 
     if (currentLocation.key) {
-      browserHistory.goBack()
+      return browserHistory.goBack()
     }
 
     // Default
-    return goTo(this.props.defaultBackUrl)
+    return goTo(this.props.defaultBackUrl, null, this.props.query)
   }
 
   render() {
