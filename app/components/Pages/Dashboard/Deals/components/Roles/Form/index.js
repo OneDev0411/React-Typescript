@@ -174,7 +174,7 @@ export class RoleFormModal extends React.Component {
 
   /**
    * get required fields based on different scenarios
-   * @param {Object} values - couples of form {Field:Value}
+   * @param {Object} values - couples of form { Field:Value }
    */
   getRequiredFields = values => {
     const list = ['role']
