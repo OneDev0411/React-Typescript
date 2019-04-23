@@ -52,14 +52,14 @@ export const Filters = {
 
 class AgentFilters extends React.Component {
   componentDidMount() {
-    const { active = 'All' } = this.props
+    const { activeFilter = 'All' } = this.props
 
-    if (!_.find(Filters, (fn, name) => name === active)) {
+    if (!_.find(Filters, (fn, name) => name === activeFilter)) {
       return browserHistory.push('/dashboard/deals')
     }
 
-    if (active) {
-      this.setFilter(active)
+    if (activeFilter) {
+      this.setFilter(activeFilter)
     }
   }
 
