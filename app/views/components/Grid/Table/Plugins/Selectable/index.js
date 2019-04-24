@@ -22,7 +22,7 @@ export class SelectablePlugin {
         persistent: false,
         allowSelectAll: true,
         unselectableRow: [],
-        allowSelectEntireList: true,
+        allowSelectEntireList: false,
         entityName: ''
       },
       options
