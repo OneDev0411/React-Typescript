@@ -3,36 +3,14 @@ import DatePicker from 'react-day-picker'
 
 import ActionButton from 'components/Button/ActionButton'
 import { Divider } from 'components/Divider'
-import { TimePicker } from 'components/TimePicker'
+import TimeInput from 'components/TimeInput'
 
 import { PickerContent } from './styled'
-import {
-  setTimeStringToDate,
-  dateFallback,
-  pickerSaveButtonText
-} from './helpers'
+import { dateFallback, pickerSaveButtonText } from './helpers'
 
 function Picker(props) {
   const isDateSet = !!props.selectedDate
-  const handleChangeDate = date => {
-    // An ugly trick for setting correct time
-    // because react-day-picker is setting time to 12AM automaticly each time.
-    if (isDateSet) {
-      // If the date is set before we are using that
-      date.setHours(props.selectedDate.getHours())
-      date.setMinutes(props.selectedDate.getMinutes())
-    } else {
-      // if it's not set, we are using current time of user
-      const now = new Date()
-
-      date.setHours(now.getHours())
-      date.setMinutes(now.getMinutes())
-    }
-
-    props.onChange(date)
-  }
-  const handleChangeTime = time =>
-    props.onChange(setTimeStringToDate(props.selectedDate, time))
+  const handleChangeDate = date => props.onChange(date)
 
   return (
     <PickerContent>
@@ -42,9 +20,9 @@ function Picker(props) {
         onDayClick={handleChangeDate}
       />
       <Divider margin="0.5em 0" />
-      <TimePicker
-        defaultTime={dateFallback(props.selectedDate)}
-        onChange={handleChangeTime}
+      <TimeInput
+        initialDate={dateFallback(props.selectedDate)}
+        onChange={handleChangeDate}
       />
       <Divider margin="0.5em 0" />
       <div className="picker-actions">
