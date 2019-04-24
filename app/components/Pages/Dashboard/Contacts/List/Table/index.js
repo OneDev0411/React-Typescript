@@ -123,8 +123,8 @@ class ContactsList extends React.Component {
       )
     },
     {
-      render: ({ selectedRows }) => {
-        const disabled = selectedRows.length === 0
+      render: ({ entireMode, selectedRows }) => {
+        const disabled = entireMode ? true : selectedRows.length === 0
 
         return (
           <ActionWrapper action="marketing" disabled={disabled}>
@@ -136,8 +136,8 @@ class ContactsList extends React.Component {
       }
     },
     {
-      render: ({ selectedRows, resetSelectedRows }) => {
-        const disabled = selectedRows.length === 0
+      render: ({ entireMode, selectedRows, resetSelectedRows }) => {
+        const disabled = entireMode ? false : selectedRows.length === 0
 
         return (
           <ActionWrapper action="tagging" disabled={disabled}>
@@ -154,8 +154,8 @@ class ContactsList extends React.Component {
       }
     },
     {
-      render: ({ selectedRows, resetSelectedRows }) => {
-        const disabled = selectedRows.length === 0
+      render: ({ entireMode, selectedRows, resetSelectedRows }) => {
+        const disabled = entireMode ? true : selectedRows.length === 0
 
         return (
           <ActionWrapper action="creating an event" disabled={disabled}>
@@ -172,8 +172,8 @@ class ContactsList extends React.Component {
       }
     },
     {
-      render: ({ selectedRows, resetSelectedRows }) => {
-        const disabled = selectedRows.length < 2
+      render: ({ entireMode, selectedRows, resetSelectedRows }) => {
+        const disabled = entireMode ? true : selectedRows.length < 2
 
         return (
           <ActionWrapper action="merging" atLeast="two" disabled={disabled}>
@@ -190,8 +190,10 @@ class ContactsList extends React.Component {
       }
     },
     {
-      render: rowData => {
-        const disabled = rowData.selectedRows.length === 0
+      render: data => {
+        const disabled = data.entireMode
+          ? false
+          : data.selectedRows.length === 0
 
         return (
           <ActionWrapper action="delete" disabled={disabled}>
@@ -199,7 +201,7 @@ class ContactsList extends React.Component {
               disabled={disabled}
               size="small"
               appearance="outline"
-              onClick={e => this.props.onRequestDelete(e, rowData)}
+              onClick={e => this.props.onRequestDelete(e, data)}
             >
               <IconDeleteOutline size={24} />
             </IconButton>
@@ -237,6 +239,7 @@ class ContactsList extends React.Component {
           plugins={{
             selectable: {
               persistent: true,
+              allowSelectEntireList: true,
               storageKey: 'contacts',
               entityName: 'Contacts'
             },
