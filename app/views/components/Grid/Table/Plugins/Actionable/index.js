@@ -57,6 +57,7 @@ export class ActionablePlugin {
 
     if (this.selectablePlugin) {
       params.resetSelectedRows = this.selectablePlugin.resetSelectedItems
+      params.totalRowsCount = this.selectablePlugin.totalCount
     }
 
     switch (type) {
