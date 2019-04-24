@@ -59,6 +59,14 @@ const ContactsListName = ({ contact, attributeDefs }) => {
 
   const statusColor = is_user_active ? '#32b86d' : '#c3c3c3'
 
+  let s
+
+  if (contact.meta && contact.meta.s) {
+    s = contact.meta.s
+  } else {
+    s = '0'
+  }
+
   return (
     <Flex nowrap style={{ minWidth: '0' }}>
       <AvatarContainer>
@@ -81,7 +89,13 @@ const ContactsListName = ({ contact, attributeDefs }) => {
         }}
       >
         <Link
-          to={`/dashboard/contacts/${contact.id}`}
+          to={{
+            pathname: `/dashboard/contacts/${contact.id}`,
+            state: {
+              id: contact.id,
+              s
+            }
+          }}
           style={{
             ...ellipsis,
             fontWeight: 500,

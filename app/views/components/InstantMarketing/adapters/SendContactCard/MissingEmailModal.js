@@ -25,15 +25,15 @@ function MissingEmailModal({ contact, isOpen, onClose, ...props }) {
       <ModalContant>
         <p>
           You should provide an email address for this contact to be able to
-          send a card
+          send a card.
         </p>
-        <Button onClick={onClose}>Okay</Button>
+        <Button onClick={onClose} appearance="outline">Cancel</Button>
         {contact && !isContactPagePath(props.location.pathname, contact) && (
           <LinkButton
+            appearance="primary"
             onClick={onClose}
             target="_blank"
             to={`/dashboard/contacts/${contact.id}`}
-            appearance="outline"
           >
             Edit Contact
           </LinkButton>

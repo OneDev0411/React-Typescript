@@ -295,6 +295,7 @@ const normalizeValues = (values, options, state) => {
 
   return {
     ...queryOptions,
+    limit: 200,
     property_types: ['Residential']
   }
 }
