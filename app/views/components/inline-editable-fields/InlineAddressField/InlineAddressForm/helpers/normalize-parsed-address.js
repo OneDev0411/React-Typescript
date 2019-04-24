@@ -1,4 +1,4 @@
-export function normalizeParsedAddress(parsedAddress) {
+export default function normalizeParsedAddress(parsedAddress) {
   const {
     number: street_number,
     prefix: street_prefix,

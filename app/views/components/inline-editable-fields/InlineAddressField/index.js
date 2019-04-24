@@ -17,17 +17,19 @@ const propTypes = {
   handleDelete: PropTypes.func,
   handleInputChange: PropTypes.func,
   showDeleteButton: PropTypes.bool,
+  needsAddressForm: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
   preSaveFormat: PropTypes.func.isRequired,
-  postLoadFormat: PropTypes.func.isRequired
+  postLoadFormat: PropTypes.func
 }
 
-const defaultTypes = {
+const defaultProps = {
   address: '',
   style: {},
   handleDelete() {},
   handleInputChange() {},
-  showDeleteButton: false
+  showDeleteButton: false,
+  needsAddressForm: true
 }
 
 export class InlineAddressField extends React.Component {
@@ -185,7 +187,10 @@ export class InlineAddressField extends React.Component {
   }
 
   onClickDefaultItem = () =>
-    this.setState({ isShowSuggestion: false, isShowForm: true })
+    this.setState({
+      isShowSuggestion: false,
+      isShowForm: true
+    })
 
   onClickOutside = () => this.setState({ isShowSuggestion: false })
 
@@ -216,7 +221,7 @@ export class InlineAddressField extends React.Component {
             />
           )}
 
-          {this.state.isShowForm && (
+          {this.props.needsAddressForm && this.state.isShowForm && (
             <InlineAddressForm
               address={address}
               handleCancel={this.handleFormCancel}
@@ -234,4 +239,4 @@ export class InlineAddressField extends React.Component {
 }
 
 InlineAddressField.propTypes = propTypes
-InlineAddressField.defaultTypes = defaultTypes
+InlineAddressField.defaultProps = defaultProps

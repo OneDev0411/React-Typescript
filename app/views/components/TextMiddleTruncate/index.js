@@ -28,7 +28,7 @@ TextMiddleTruncate.propTypes = {
   tooltipPlacement: PropTypes.string
 }
 
-TextMiddleTruncate.defaultTypes = {
+TextMiddleTruncate.defaultProps = {
   maxLength: 40,
   tooltipPlacement: 'top'
 }

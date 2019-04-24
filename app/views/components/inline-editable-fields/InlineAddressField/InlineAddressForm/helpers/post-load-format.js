@@ -1,6 +1,6 @@
-import { normalizeParsedAddress } from './normalize-parsed-address'
+import normalizeParsedAddress from './normalize-parsed-address'
 
-export function postLoadFormat(parsedAddress) {
+export default function postLoadFormat(parsedAddress) {
   if (!parsedAddress || Object.keys(parsedAddress).length === 0) {
     return {
       street_number: '',
