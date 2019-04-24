@@ -122,7 +122,9 @@ class Grid extends React.Component {
             {this.sortablePlugin &&
               this.sortablePlugin.render(
                 this.Columns,
-                this.props.isFetching || this.props.isFetchingMore
+                this.props.isFetching ||
+                  this.props.isFetchingMore ||
+                  this.props.isFetchingMoreBefore
               )}
           </SortableContainer>
         </ToolbarContainer>
@@ -156,6 +158,7 @@ Grid.propTypes = {
   plugins: PropTypes.object,
   isFetching: PropTypes.bool,
   isFetchingMore: PropTypes.bool,
+  isFetchingMoreBefore: PropTypes.bool,
   isToolbarSticky: PropTypes.bool,
   showTableHeader: PropTypes.bool,
   getTrProps: PropTypes.func,
@@ -173,6 +176,7 @@ Grid.propTypes = {
 Grid.defaultProps = {
   isFetching: false,
   isFetchingMore: false,
+  isFetchingMoreBefore: false,
   showTableHeader: true,
   isToolbarSticky: true,
   getBodyProps: () => {},

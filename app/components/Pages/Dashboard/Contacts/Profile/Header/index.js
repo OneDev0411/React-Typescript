@@ -20,6 +20,8 @@ export function Header(props) {
       <Catalog contact={props.contact} />
       <Menu
         contact={props.contact}
+        backUrl={props.backUrl}
+        closeButtonQuery={props.closeButtonQuery}
         addToFlowCallback={props.addToFlowCallback}
       />
     </Flex>

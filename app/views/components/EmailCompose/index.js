@@ -83,18 +83,23 @@ class EmailCompose extends React.Component {
       : this.handleSendEmail
 
     if ((form.subject || '').trim() === '') {
-      this.context.setConfirmationModal({
-        message: 'Send without subject?',
-        description:
-          'This message has no subject. Are you sure you want to send it?',
-        confirmLabel: 'Send anyway',
-        onConfirm: () => {
-          handleSubmit(form)
-        }
+      return new Promise((resolve, reject) => {
+        this.context.setConfirmationModal({
+          message: 'Send without subject?',
+          description:
+            'This message has no subject. Are you sure you want to send it?',
+          confirmLabel: 'Send anyway',
+          onCancel: reject,
+          onConfirm: () => {
+            handleSubmit(form)
+              .then(resolve)
+              .catch(reject)
+          }
+        })
       })
-    } else {
-      return handleSubmit(form)
     }
+
+    return handleSubmit(form)
   }
 
   handleSendEmail = async form => {

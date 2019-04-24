@@ -1,5 +1,5 @@
 import React from 'react'
-import { browserHistory } from 'react-router'
+import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 import { Tab, Nav, NavItem } from 'react-bootstrap'
@@ -133,7 +133,7 @@ class ContactProfile extends React.Component {
       this.setState({ contact: normalizeContact(response.data) }, callback)
     } catch (error) {
       if (error.status === 404 || error.status === 400) {
-        browserHistory.push('/dashboard/contacts')
+        this.props.router.push('/dashboard/contacts')
       }
     }
   }
@@ -248,7 +248,7 @@ class ContactProfile extends React.Component {
 
       await deleteContacts([this.state.contact.id])
 
-      browserHistory.push('/dashboard/contacts')
+      this.props.router.push('/dashboard/contacts')
     } catch (error) {
       console.log(error)
     }
@@ -293,7 +293,16 @@ class ContactProfile extends React.Component {
           <title>{this.documentTitle}</title>
         </Helmet>
         <PageContainer>
-          <Header contact={contact} addToFlowCallback={this.fetchTimeline} />
+          <Header
+            contact={contact}
+            backUrl={
+              this.props.location.state && this.props.location.state.id
+                ? '/dashboard/contacts'
+                : null
+            }
+            closeButtonQuery={this.props.location.state}
+            addToFlowCallback={this.fetchTimeline}
+          />
 
           <ColumnsContainer>
             <SideColumnWrapper>
@@ -428,12 +437,14 @@ const mapStateToProps = ({ user, contacts }, props) => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    getContactsTags
-  }
-)(ContactProfile)
+export default withRouter(
+  connect(
+    mapStateToProps,
+    {
+      getContactsTags
+    }
+  )(ContactProfile)
+)
 
 // todo
 // infinit scroll + lazy loading
