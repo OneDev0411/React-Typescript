@@ -215,7 +215,7 @@ class ManageTags extends Component {
                 onSubmit={this.handleAdd}
                 value={this.state.createTagInputValue}
                 isDisabled={
-                  this.state.isSaving || !this.state.createTagInputValue
+                  this.state.isSaving || !this.state.createTagInputValue.trim()
                 }
               />
               {Object.keys(rows)
