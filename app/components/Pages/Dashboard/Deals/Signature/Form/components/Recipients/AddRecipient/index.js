@@ -84,6 +84,7 @@ export class AddRecipient extends React.Component {
                 <Menu>
                   <Roles
                     showTitle={false}
+                    showEmail
                     deal={this.props.deal}
                     isEmailRequired
                     allowDeleteRole={false}

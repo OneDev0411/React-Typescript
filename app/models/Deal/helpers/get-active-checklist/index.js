@@ -1,11 +1,11 @@
 export function getActiveChecklist(deal, checklists) {
-  let checklist = checklists[0]
+  let checklist = null
 
   if (deal.deal_type === 'Selling') {
     checklist = checklists.find(
-      checklist => checklist.checklist_type === 'Selling'
+      checklist => checklist.checklist_type === 'Buying'
     )
   }
 
-  return checklist
+  return checklist || checklists[0]
 }

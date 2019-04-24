@@ -4,15 +4,16 @@ import Downshift from 'downshift'
 import _ from 'underscore'
 
 import { searchDeals } from 'models/Deal/deal'
-
-import { Item } from './Item'
-import SearchInput from './SearchInput'
-import Loading from '../../../Spinner'
 import {
   ListContainer,
   List
-} from '../../../SelectContactModal/components/Body/styled'
-import Alert from '../../../../../components/Pages/Dashboard/Partials/Alert'
+} from 'components/SelectContactModal/components/Body/styled'
+
+import Alert from '../../../../components/Pages/Dashboard/Partials/Alert'
+
+import { Item } from './Item'
+import SearchInput from './SearchInput'
+import Loading from '../../Spinner'
 
 const propTypes = {
   deals: PropTypes.arrayOf(PropTypes.shape),

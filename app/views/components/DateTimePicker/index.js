@@ -57,7 +57,7 @@ export class DateTimePicker extends React.Component {
         <div style={{ position: 'relative' }}>
           {this.state.isOpen && (
             <ClickOutSide onClickOutside={this.handleClose}>
-              <PickerContainer depth={3}>
+              <PickerContainer depth={3} style={{ zIndex: 2 }}>
                 <DayPicker
                   initialMonth={selectedDate}
                   selectedDays={selectedDate}

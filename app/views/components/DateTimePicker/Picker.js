@@ -6,15 +6,11 @@ import { Divider } from 'components/Divider'
 import TimeInput from 'components/TimeInput'
 
 import { PickerContent } from './styled'
-import {
-  setTimeStringToDate,
-  dateFallback,
-  pickerSaveButtonText
-} from './helpers'
+import { dateFallback, pickerSaveButtonText } from './helpers'
 
 function Picker(props) {
-  const handleChangeDate = date => props.onChange(date)
   const isDateSet = !!props.selectedDate
+  const handleChangeDate = date => props.onChange(date)
 
   return (
     <PickerContent>
@@ -31,7 +27,7 @@ function Picker(props) {
       <Divider margin="0.5em 0" />
       <div className="picker-actions">
         <div>
-          {isDateSet && (
+          {isDateSet && props.hasInitialDate && (
             <ActionButton
               appearance="outline"
               size="small"

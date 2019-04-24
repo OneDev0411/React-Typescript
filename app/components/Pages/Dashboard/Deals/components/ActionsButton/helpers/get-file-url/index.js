@@ -41,13 +41,12 @@ function getSubmissionUrl(data) {
   const submissionEnvelopes = getDocumentEnvelopes(data.envelopes, data.task)
 
   if (submissionEnvelopes.length > 0) {
-    return [
-      {
-        ...normalizeFile(data.task.submission.file),
-        url: getEnvelopeFileUrl(submissionEnvelopes[0], data.task),
-        openInNewTab: true
-      }
-    ]
+    return submissionEnvelopes.map(envelope => ({
+      ...normalizeFile(data.task.submission.file),
+      name: `Docusign: ${envelope.title}`,
+      url: getEnvelopeFileUrl(envelope, data.task),
+      openInNewTab: true
+    }))
   }
 
   return data.isBackOffice
@@ -102,7 +101,7 @@ function getDocumentUrls(data) {
 function getTaskUrls(data) {
   const submissionUrl = getSubmissionUrl(data)
 
-  if (submissionUrl.length > 0) {
+  if (submissionUrl.length === 1) {
     return submissionUrl
   }
 
@@ -110,10 +109,13 @@ function getTaskUrls(data) {
     ? data.task.room.attachments.sort((a, b) => b.created_at - a.created_at)
     : []
 
-  return attachments.map(document =>
-    getDocumentUrl({
-      ...data,
-      document
-    })
-  )
+  return [
+    ...submissionUrl,
+    ...attachments.map(document =>
+      getDocumentUrl({
+        ...data,
+        document
+      })
+    )
+  ]
 }

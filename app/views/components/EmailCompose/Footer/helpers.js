@@ -1,6 +1,6 @@
 export function textForSubmitButton({ isSubmitting, isDateSet }) {
   if (isSubmitting) {
-    return 'Sending...'
+    return isDateSet ? 'Saving...' : 'Sending...'
   }
 
   if (isDateSet) {
