@@ -9,7 +9,7 @@ import { normalizeAssociations } from '../../../utils/association-normalizers'
 export async function getAssociations(task) {
   try {
     let query = []
-    const types = ['deal', 'contact', 'listing']
+    const types = ['deal', 'contact', 'listing', 'email']
     const queryName = 'associations[]=crm_association.'
 
     types.forEach(type => {
