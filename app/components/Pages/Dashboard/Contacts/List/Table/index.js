@@ -128,7 +128,11 @@ class ContactsList extends React.Component {
         const disabled = entireMode ? true : selectedRows.length === 0
 
         return (
-          <ActionWrapper action="marketing" disabled={disabled}>
+          <ActionWrapper
+            bulkMode={entireMode}
+            action="marketing"
+            disabled={disabled}
+          >
             <SendMlsListingCard disabled={disabled} selectedRows={selectedRows}>
               Marketing
             </SendMlsListingCard>
@@ -159,7 +163,11 @@ class ContactsList extends React.Component {
         const disabled = entireMode ? true : selectedRows.length === 0
 
         return (
-          <ActionWrapper action="creating an event" disabled={disabled}>
+          <ActionWrapper
+            bulkMode={entireMode}
+            action="creating an event"
+            disabled={disabled}
+          >
             <CreateEvent
               disabled={disabled}
               selectedRows={selectedRows}
@@ -177,7 +185,12 @@ class ContactsList extends React.Component {
         const disabled = entireMode ? true : selectedRows.length < 2
 
         return (
-          <ActionWrapper action="merging" atLeast="two" disabled={disabled}>
+          <ActionWrapper
+            bulkMode={entireMode}
+            action="merging"
+            atLeast="two"
+            disabled={disabled}
+          >
             <MergeContacts
               disabled={disabled}
               selectedRows={selectedRows}
