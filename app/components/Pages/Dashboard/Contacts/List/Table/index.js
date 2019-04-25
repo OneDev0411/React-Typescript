@@ -137,7 +137,7 @@ class ContactsList extends React.Component {
     },
     {
       render: ({ entireMode, selectedRows, resetSelectedRows }) => {
-        const disabled = entireMode ? false : selectedRows.length === 0
+        const disabled = entireMode ? true : selectedRows.length === 0
 
         return (
           <ActionWrapper action="tagging" disabled={disabled}>
