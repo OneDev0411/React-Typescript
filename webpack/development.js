@@ -33,7 +33,8 @@ webpackConfig.plugins.push(
         'app/static/**',
         'app/views/components/SvgIcons/**',
         'app/templates/**',
-        'app/styles/vendor/**'
+        'app/styles/vendor/**',
+        'app/models/user/get-self/index.js'
       ]
     }
   }),
