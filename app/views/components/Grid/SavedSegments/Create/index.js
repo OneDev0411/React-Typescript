@@ -55,14 +55,9 @@ class SaveSegment extends React.Component {
     const { selectedOption, newFilterName } = this.state
     const { segment, filters } = this.props
 
-    const list = {}
-
-    if (selectedOption === CURRENT_SEGMENT) {
-      list.id = segment.id
-    }
-
-    if (selectedOption === NEW_SEGMENT) {
-      list.name = newFilterName.trim()
+    const list = {
+      id: selectedOption === CURRENT_SEGMENT && segment.id,
+      name: selectedOption === NEW_SEGMENT && newFilterName.trim()
     }
 
     return {
