@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 
-import { primary } from 'views/utils/colors'
+import ActionButton from 'components/Button/ActionButton'
 
-export const SelectEntireText = styled.span`
-  color: ${primary};
-  cursor: pointer;
+export const SelectEntireLinkButton = styled(ActionButton).attrs(() => ({
+  appearance: 'link'
+}))`
   font-weight: 600;
 `

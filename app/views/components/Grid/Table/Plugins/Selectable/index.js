@@ -6,7 +6,7 @@ import PopOver from 'components/Popover'
 import { CheckBoxButton } from '../../../../Button/CheckboxButton'
 import { CheckBoxButtonWithoutState } from '../../../../Button/CheckboxButton/CheckboxWithoutState'
 
-import { SelectEntireText } from './styled'
+import { SelectEntireLinkButton } from './styled'
 
 const SESSION_KEY_PREFIX = 'Rechat--Grid--Selectable--'
 
@@ -374,9 +374,9 @@ export class SelectablePlugin {
             popoverStyles={{ textAlign: 'center' }}
             containerStyle={{ display: 'inline-block' }}
             caption={
-              <SelectEntireText onClick={() => this.toggleSelectEntireRows()}>
+              <SelectEntireLinkButton onClick={this.toggleSelectEntireRows}>
                 Select All {this.totalCount} {this.options.entityName}
-              </SelectEntireText>
+              </SelectEntireLinkButton>
             }
           >
             <CheckBoxButtonWithoutState
