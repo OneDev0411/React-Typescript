@@ -10,6 +10,7 @@ import ExportButton from './button'
 class ExportContacts extends React.Component {
   sendDownloadReuqest = async exportType => {
     const {
+      excludedRows,
       exportIds,
       filters,
       user,
@@ -20,27 +21,30 @@ class ExportContacts extends React.Component {
     const url = `/api/contacts/export/outlook/${activeBrand}/`
 
     const params = {
-      type: exportType,
-      filter_type
+      type: exportType
     }
 
     if (Array.isArray(exportIds) && exportIds.length > 0) {
       params.ids = exportIds
-    } else {
-      if (Array.isArray(filters) && filters.length > 0) {
-        params.filters = filters.map(
-          ({ attribute_def, invert, operator, value }) => ({
-            attribute_def,
-            invert,
-            operator,
-            value
-          })
-        )
-      }
+    } else if (Array.isArray(filters) && filters.length > 0) {
+      params.filter_type = filter_type
 
-      if (Array.isArray(users) && users.length > 0) {
-        params.users = users
+      params.filters = filters.map(
+        ({ attribute_def, invert, operator, value }) => ({
+          attribute_def,
+          invert,
+          operator,
+          value
+        })
+      )
+
+      if (Array.isArray(excludedRows) && excludedRows.length > 0) {
+        params.excludes = excludedRows
       }
+    }
+
+    if (Array.isArray(users) && users.length > 0) {
+      params.users = users
     }
 
     const response = await superagent.post(url).send(params)

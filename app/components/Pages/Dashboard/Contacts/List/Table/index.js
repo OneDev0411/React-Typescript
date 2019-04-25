@@ -112,12 +112,13 @@ class ContactsList extends React.Component {
 
   actions = [
     {
-      render: ({ selectedRows }) => (
+      render: ({ excludedRows, selectedRows }) => (
         <ExportContacts
+          excludedRows={excludedRows}
+          exportIds={selectedRows}
           filters={this.props.filters}
           conditionOperator={this.props.conditionOperator}
           users={this.props.users}
-          exportIds={selectedRows}
           disabled={this.props.isFetching}
         />
       )

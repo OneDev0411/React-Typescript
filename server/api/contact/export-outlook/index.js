@@ -21,14 +21,18 @@ function handleIds(ids) {
   return {}
 }
 
-function handleFilters(filters) {
+function handleFilters(filters, excludes = []) {
+  const resultFilters = {}
+
   if (Array.isArray(filters)) {
-    return {
-      filter: filters
-    }
+    resultFilters.filter = filters
   }
 
-  return {}
+  if (Array.isArray(excludes)) {
+    resultFilters.excludes = excludes
+  }
+
+  return resultFilters
 }
 
 router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
@@ -42,7 +46,14 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
       return
     }
 
-    const { ids, filters, users, type, filter_type = 'and' } = ctx.request.body
+    const {
+      ids,
+      filters,
+      excludes,
+      users,
+      type,
+      filter_type = 'and'
+    } = ctx.request.body
 
     const { brand } = ctx.params
     let data = {}
@@ -51,7 +62,7 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
     if (ids) {
       data = handleIds(ids)
     } else if (filters) {
-      data = handleFilters(filters)
+      data = handleFilters(filters, excludes)
     }
 
     if (typeof users === 'string') {
