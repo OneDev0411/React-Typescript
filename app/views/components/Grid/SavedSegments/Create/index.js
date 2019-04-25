@@ -36,12 +36,15 @@ class SaveSegment extends React.Component {
 
   onNewFilterNameChange = e => this.setState({ newFilterName: e.target.value })
 
-  isEditable = segment => segment && segment.is_editable !== false
+  isEditable = segment => segment && segment.is_editable === true
 
   canSaveList = () => {
     const { selectedOption, newFilterName, isSaving } = this.state
 
-    if ((selectedOption === NEW_SEGMENT && !newFilterName) || isSaving) {
+    if (
+      (selectedOption === NEW_SEGMENT && newFilterName.trim() === '') ||
+      isSaving
+    ) {
       return false
     }
 
@@ -52,14 +55,9 @@ class SaveSegment extends React.Component {
     const { selectedOption, newFilterName } = this.state
     const { segment, filters } = this.props
 
-    const list = {}
-
-    if (selectedOption === CURRENT_SEGMENT) {
-      list.id = segment.id
-    }
-
-    if (selectedOption === NEW_SEGMENT) {
-      list.name = newFilterName
+    const list = {
+      id: selectedOption === CURRENT_SEGMENT && segment.id,
+      name: selectedOption === NEW_SEGMENT && newFilterName.trim()
     }
 
     return {
