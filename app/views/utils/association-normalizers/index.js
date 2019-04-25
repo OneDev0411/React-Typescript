@@ -34,6 +34,13 @@ export function normalizeAssociations(associations) {
           ...record,
           listing
         }
+      case 'email':
+        const email = normalizeEmail(record.email)
+
+        return {
+          ...record,
+          email
+        }
       default:
         return null
     }
@@ -132,6 +139,20 @@ export const normalizeDeal = (deal, showStatus = true) => {
     type: deal.type,
     url: `/dashboard/deals/${deal.id}`
   }
+}
+
+/**
+ * Normalizing email entity as an association object
+ * @param {object} email The Email
+ * @param {boolean} showStatus
+ * @returns {object} a normalized association
+ */
+export const normalizeEmail = email => {
+  if (!email) {
+    return null
+  }
+
+  return email
 }
 
 function detailText(props) {
