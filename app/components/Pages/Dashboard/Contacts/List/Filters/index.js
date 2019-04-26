@@ -53,6 +53,13 @@ class ContactFilters extends React.PureComponent {
     }
   ]
 
+  getOriginLabelByValue = value => {
+    const origins = this.getOrigins()
+    const origin = origins.find(item => item.value === value)
+
+    return origin ? origin.label : value
+  }
+
   /**
    * creates a search criteria for contacts filters
    */
@@ -74,7 +81,7 @@ class ContactFilters extends React.PureComponent {
       isIncomplete: false,
       values: [
         {
-          label: filter.value,
+          label: this.getOriginLabelByValue(filter.value),
           value: filter.value
         }
       ],
