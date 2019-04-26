@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import Fuse from 'fuse.js'
 
 import Downshift from 'downshift'
 import _ from 'underscore'
@@ -17,20 +18,17 @@ import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-co
 
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
-import {
-  SearchInput,
-  SearchInputContainer,
-  SearchResults,
-  Title,
-  SectionSeparator
-} from './styled'
+import IconCircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+
+import { SearchInput, SearchInputContainer } from './styled'
 
 import ContactItem from '../../../SelectContactModal/components/ContactItem'
 import { ListItem } from './ListItem'
+import SearchResults from './SearchResults'
 
 const initialState = {
-  isLoading: false,
-  isListMenuOpen: false,
+  isContactsLoading: false,
+  forceCloseSuggestions: false,
   searchText: '',
   list: [],
   filteredTags: [],
@@ -117,13 +115,25 @@ class AddRecipient extends React.Component {
     this.setState(initialState)
   }
 
+  // We have two methods for searching and we are searching in parallel
+  // For searching in contacts we need to use server and for searching
+  // In tags & segments list we can get them once and search in them locally
   handleSearchContact = e => {
     const { value } = e.target
 
+    // Reset the state (clearing the inputs) when the value is empty
+    if (value.length === 0) {
+      return this.setState(initialState)
+    }
+
     this.setState({
-      searchText: value
+      searchText: value,
+      forceCloseSuggestions: false
     })
 
+    // We are searching for tags/list and contacts from server in parallel
+    // Because we can show the results instantly for tags/list
+    this.handleSearchInTagsAndLists(value)
     this.search(value)
   }
 
@@ -144,17 +154,42 @@ class AddRecipient extends React.Component {
     this.handleSelectNewContact(contact)
   }
 
-  search = async value => {
-    if (value.length === 0) {
-      return this.setState(initialState)
+  // Searching in tags & lists locally
+  handleSearchInTagsAndLists = value => {
+    const tagsFuseOptions = {
+      keys: ['text'],
+      threshold: 0.3
     }
 
+    const segmentsFuseOptions = {
+      keys: ['name'],
+      threshold: 0.3
+    }
+
+    // Tags result
+    const filteredTags = new Fuse(this.props.tags, tagsFuseOptions)
+      .search(value)
+      .slice(0, 5)
+
+    // Segments result
+    const filteredList = new Fuse(this.props.segmentsList, segmentsFuseOptions)
+      .search(value)
+      .slice(0, 5)
+
+    this.setState({
+      filteredTags,
+      filteredList
+    })
+  }
+
+  // Searching in contacts remotely by connecting to the server.
+  search = async value => {
     try {
-      this.setState({ isLoading: true, isListMenuOpen: false })
+      this.setState({ isContactsLoading: true })
 
       const response = await searchContacts(value)
 
-      const list = normalizeContactAttribute(response)
+      let list = normalizeContactAttribute(response)
 
       if (list.length === 0 && this.isEmail(value)) {
         list.push({
@@ -165,34 +200,112 @@ class AddRecipient extends React.Component {
         })
       }
 
-      const filteredTags = this.props.tags.filter(
-        ({ text }) => text.toLowerCase() === value.toLowerCase()
-      )
-
-      const filteredList = this.props.segmentsList.filter(
-        ({ name, id }) =>
-          name.toLowerCase() === value.toLowerCase() && id !== 'default'
-      )
+      // This is a workaround for when user is searching for something
+      // before the results are loaded, click on a tags or segments results
+      // causing memory leak and dead-results. the proper way is canceling
+      // request but we don't support this atm.
+      if (this.state.searchText === '') {
+        list = []
+      }
 
       this.setState({
-        isLoading: false,
-        isListMenuOpen: true,
-        list,
-        filteredTags,
-        filteredList
+        isContactsLoading: false,
+        list
       })
     } catch (e) {
       console.log(e)
-      this.setState({ isLoading: false, isListMenuOpen: false })
+      this.setState({ isContactsLoading: false })
     }
+  }
+
+  // if we had any items in contacts/list/tags we should show dropdown
+  isOpen = () => {
+    if (this.state.forceCloseSuggestions) {
+      return false
+    }
+
+    return !!(
+      this.state.filteredList.length ||
+      this.state.filteredTags.length ||
+      this.state.list.length
+    )
+  }
+
+  createResultSections = ({ getItemProps, highlightedIndex }) => {
+    const tags = {
+      title: 'Tags',
+      items: this.state.filteredTags,
+      itemRenderer: itemDefaultProps => (
+        <ListItem
+          {...itemDefaultProps}
+          {...getItemProps({
+            key: itemDefaultProps.key,
+            index: itemDefaultProps.key,
+            item: itemDefaultProps.item
+          })}
+          text={itemDefaultProps.item.text}
+          type="tag"
+          onClick={() =>
+            this.handleSelectNewListItem(itemDefaultProps.item, 'tag')
+          }
+        />
+      )
+    }
+    const segmentsList = {
+      title: 'Lists',
+      items: this.state.filteredList,
+      itemRenderer: itemDefaultProps => (
+        <ListItem
+          {...itemDefaultProps}
+          {...getItemProps({
+            key: itemDefaultProps.key,
+            index: itemDefaultProps.key,
+            item: itemDefaultProps.item
+          })}
+          text={itemDefaultProps.item.name}
+          membersCount={itemDefaultProps.item.member_count}
+          type="list"
+          onClick={() =>
+            this.handleSelectNewListItem(itemDefaultProps.item, 'list')
+          }
+        />
+      )
+    }
+
+    const contacts = {
+      title: 'Contacts',
+      isLoading: this.state.isContactsLoading,
+      items: this.state.list,
+      itemRenderer: itemDefaultProps => (
+        <ContactItem
+          {...itemDefaultProps}
+          summary={itemDefaultProps.item.summary.email || ''}
+          onClickHandler={this.handleSelectNewContact}
+          isHighlighted={itemDefaultProps.key == highlightedIndex}
+          {...getItemProps({
+            key: itemDefaultProps.key,
+            index: itemDefaultProps.key,
+            item: itemDefaultProps.item
+          })}
+        />
+      )
+    }
+
+    return [tags, segmentsList, contacts]
   }
 
   render() {
     return (
       <Downshift
-        isOpen={this.state.isListMenuOpen}
-        onOuterClick={() => this.setState({ isListMenuOpen: false })}
-        render={({ isOpen, getInputProps, getItemProps }) => (
+        isOpen={this.isOpen()}
+        onOuterClick={() => this.setState({ forceCloseSuggestions: true })}
+        render={({
+          isOpen,
+          getInputProps,
+          getItemProps,
+          getMenuProps,
+          highlightedIndex
+        }) => (
           <div style={{ position: 'relative' }}>
             <SearchInputContainer textLength={this.state.searchText.length}>
               <SearchInput
@@ -201,63 +314,22 @@ class AddRecipient extends React.Component {
                   onChange: this.handleSearchContact,
                   onBlur: this.handleInputBlur,
                   placeholder: 'Add new recipient',
-                  readOnly: this.state.isLoading
+                  readOnly: this.state.isContactsLoading
                 })}
               />
 
-              {this.state.isLoading && <i className="fa fa-spin fa-spinner" />}
+              {this.state.isContactsLoading && <IconCircleSpinner />}
             </SearchInputContainer>
-
             {isOpen && (
-              <SearchResults>
-                {this.state.filteredTags.length > 0 && (
-                  <React.Fragment>
-                    <Title>Tags</Title>
-                    {this.state.filteredTags.map((tag, index) => (
-                      <ListItem
-                        key={tag.id || index}
-                        text={tag.text}
-                        type="tag"
-                        onClick={() => this.handleSelectNewListItem(tag, 'tag')}
-                      />
-                    ))}
-                    <SectionSeparator />
-                  </React.Fragment>
-                )}
-
-                {this.state.filteredList.length > 0 && (
-                  <React.Fragment>
-                    <Title>Lists</Title>
-                    {this.state.filteredList.map((list, index) => (
-                      <ListItem
-                        key={list.id || index}
-                        text={list.name}
-                        membersCount={list.member_count}
-                        type="list"
-                        onClick={() =>
-                          this.handleSelectNewListItem(list, 'list')
-                        }
-                      />
-                    ))}
-                    <SectionSeparator />
-                  </React.Fragment>
-                )}
-
-                {this.state.list.length > 0 && <Title>Contacts</Title>}
-
-                {this.state.list
-                  .filter(item => !!item.summary.email)
-                  .map((item, index) => (
-                    <ContactItem
-                      key={item.id || index}
-                      item={item}
-                      {...getItemProps({ item })}
-                      summary={item.summary.email || ''}
-                      onClickHandler={this.handleSelectNewContact}
-                      isHighlighted={false}
-                    />
-                  ))}
-              </SearchResults>
+              <SearchResults
+                data={this.createResultSections({
+                  getItemProps,
+                  highlightedIndex
+                })}
+                containerProps={{
+                  getMenuProps
+                }}
+              />
             )}
           </div>
         )}
@@ -272,7 +344,6 @@ function mapStateToProps({ contacts }) {
   const segmentsList = getSegments(contacts.filterSegments, 'contacts')
 
   return {
-    contacts: contacts.list,
     attributeDefs: contacts.attributeDefs,
     tags,
     isLoadingTags,
