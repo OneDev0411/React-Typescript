@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+
 import { H3 } from 'components/Typography/headings'
 
 export const Container = styled.div`
@@ -8,7 +9,7 @@ export const Container = styled.div`
   right: 0;
   bottom: 0;
   background-color: #fff;
-  z-index: 1;
+  z-index: 2;
 `
 
 export const Header = styled.div`

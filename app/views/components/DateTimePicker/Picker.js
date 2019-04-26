@@ -3,20 +3,14 @@ import DatePicker from 'react-day-picker'
 
 import ActionButton from 'components/Button/ActionButton'
 import { Divider } from 'components/Divider'
-import { TimePicker } from 'components/TimePicker'
+import TimeInput from 'components/TimeInput'
 
 import { PickerContent } from './styled'
-import {
-  setTimeStringToDate,
-  dateFallback,
-  pickerSaveButtonText
-} from './helpers'
+import { dateFallback, pickerSaveButtonText } from './helpers'
 
 function Picker(props) {
-  const handleChangeDate = date => props.onChange(date)
-  const handleChangeTime = time =>
-    props.onChange(setTimeStringToDate(props.selectedDate, time))
   const isDateSet = !!props.selectedDate
+  const handleChangeDate = date => props.onChange(date)
 
   return (
     <PickerContent>
@@ -26,14 +20,14 @@ function Picker(props) {
         onDayClick={handleChangeDate}
       />
       <Divider margin="0.5em 0" />
-      <TimePicker
-        defaultTime={dateFallback(props.selectedDate)}
-        onChange={handleChangeTime}
+      <TimeInput
+        initialDate={dateFallback(props.selectedDate)}
+        onChange={handleChangeDate}
       />
       <Divider margin="0.5em 0" />
       <div className="picker-actions">
         <div>
-          {isDateSet && (
+          {isDateSet && props.hasInitialDate && (
             <ActionButton
               appearance="outline"
               size="small"

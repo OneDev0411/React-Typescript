@@ -241,8 +241,10 @@ class ContactsList extends React.Component {
             },
             loadable: {
               accuracy: 300, // px
+              accuracyTop: 600, // px
               debounceTime: 300, // ms
-              onTrigger: this.props.onRequestLoadMore
+              onScrollBottom: this.props.onRequestLoadMore,
+              onScrollTop: this.props.onRequestLoadMoreBefore
             },
             actionable: {
               actions: this.actions
@@ -264,6 +266,7 @@ class ContactsList extends React.Component {
           }}
           isFetching={this.props.isFetching}
           isFetchingMore={this.props.isFetchingMore}
+          isFetchingMoreBefore={this.props.isFetchingMoreBefore}
           columns={this.columns}
           LoadingState={LoadingComponent}
           getTrProps={this.getGridTrProps}

@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import IconSearchBase from '../../../../SvgIcons/Search/IconSearch'
-import { grey, primary } from '../../../../../utils/colors'
+import { grey, primary } from 'views/utils/colors'
+import IconSearchBase from 'components/SvgIcons/Search/IconSearch'
 
 const Container = styled.div`
   display: flex;

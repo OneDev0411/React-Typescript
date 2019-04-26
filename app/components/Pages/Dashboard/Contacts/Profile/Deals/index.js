@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Flex from 'styled-flex-component'
 
 import { goTo } from '../../../../../../utils/go-to'
 
@@ -11,14 +10,12 @@ import Loading from '../../../../../Partials/Loading'
 import { getContact } from '../../../../../../models/contacts/get-contact'
 import { getContactDeals } from '../../../../../../models/contacts/helpers/get-contact-deals'
 import { normalizeContacts } from '../../../../../../store_actions/contacts/helpers/normalize-contacts'
-import SelectDealModal from '../../../../../../views/components/SelectDealModal'
 
 import { grey } from '../../../../../../views/utils/colors'
 import { getAttributeFromSummary } from '../../../../../../models/contacts/helpers'
 
 export class DealsListWidget extends React.Component {
   state = {
-    isOpen: false,
     contact: {},
     isLoading: false,
     list: []
@@ -61,14 +58,6 @@ export class DealsListWidget extends React.Component {
     }
   }
 
-  handleOnOpen = () => {
-    this.setState({ isOpen: true })
-  }
-
-  handleOnClose = () => {
-    this.setState({ isOpen: false })
-  }
-
   handleSelectedItem = deal => {
     this.setState(
       prevState => ({ list: [...prevState.list, deal] }),
@@ -90,7 +79,6 @@ export class DealsListWidget extends React.Component {
   render() {
     return (
       <Section title="Deals" style={{ padding: '0 1.5rem' }}>
-        {/* <Section title="Deals" onEdit={this.handleOnOpen}> */}
         {this.state.isLoading ? (
           <Loading style={{ margin: '4em auto' }} />
         ) : this.state.list.length > 0 ? (
@@ -104,13 +92,6 @@ export class DealsListWidget extends React.Component {
             No deals connected to this contact.
           </div>
         )}
-
-        <SelectDealModal
-          isOpen={this.state.isOpen}
-          handleOnClose={this.handleOnClose}
-          handleSelectedItem={this.handleOnClickItem}
-          title="Add a deal"
-        />
       </Section>
     )
   }

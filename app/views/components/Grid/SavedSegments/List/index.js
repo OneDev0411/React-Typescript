@@ -107,15 +107,15 @@ class SegmentsList extends React.Component {
                 <ListItem
                   isDeleting={isDeleting.includes(id)}
                   isSelected={isSelected(id)}
+                  onClick={() => !isSelected(id) && this.onSelectList(item)}
                 >
-                  <ListItemName
-                    onClick={() => !isSelected(id) && this.onSelectList(item)}
-                  >
-                    {uppercaseFirstLetter(item.name)}
-                  </ListItemName>
+                  <ListItemName>{uppercaseFirstLetter(item.name)}</ListItemName>
                   {item.is_editable && (
                     <DeleteButton
-                      onClick={() => this.onRequestDelete(item)}
+                      onClick={event => {
+                        this.onRequestDelete(item)
+                        event.stopPropagation()
+                      }}
                       isFit
                     >
                       <IconClose />

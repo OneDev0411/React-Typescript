@@ -13,6 +13,8 @@ import { normalizeAttachments } from 'components/SelectDealFileDrawer/helpers/no
 
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+
 import Loading from '../../../components/Partials/Loading'
 
 import { FinalFormDrawer } from '../FinalFormDrawer'
@@ -26,6 +28,8 @@ class EmailCompose extends React.Component {
   state = {
     isSendingEmail: false
   }
+
+  static contextType = ConfirmationModalContext
 
   get InitialValues() {
     if ((this.formObject && !this.isRecipientsChanged()) || this.IsSubmitting) {
@@ -74,20 +78,43 @@ class EmailCompose extends React.Component {
       recipients: this.normalizeRecipients(values.recipients)
     }
 
-    return this.props.onClickSend
-      ? this.props.onClickSend(form)
-      : this.handleSendEmail(form)
+    const handleSubmit = this.props.onClickSend
+      ? this.props.onClickSend
+      : this.handleSendEmail
+
+    if ((form.subject || '').trim() === '') {
+      return new Promise((resolve, reject) => {
+        this.context.setConfirmationModal({
+          message: 'Send without subject?',
+          description:
+            'This message has no subject. Are you sure you want to send it?',
+          confirmLabel: 'Send anyway',
+          onCancel: reject,
+          onConfirm: () => {
+            handleSubmit(form)
+              .then(resolve)
+              .catch(reject)
+          }
+        })
+      })
+    }
+
+    return handleSubmit(form)
   }
 
   handleSendEmail = async form => {
     const email = {
       from: form.fromId,
       to: form.recipients,
-      subject: form.subject,
+      subject: form.subject.trim(),
       html: form.body,
       attachments: _.map(form.attachments, item => item.file_id),
       due_at: form.due_at
     }
+    const successMessage = email.due_at
+      ? 'The email has been scheduled'
+      : 'The email has been sent'
+    const errorMessage = 'Could not send the email. try again.'
 
     try {
       this.setState({
@@ -98,7 +125,7 @@ class EmailCompose extends React.Component {
 
       this.props.notify({
         status: 'success',
-        message: 'The email has been sent'
+        message: successMessage
       })
 
       this.props.onClose()
@@ -107,7 +134,7 @@ class EmailCompose extends React.Component {
 
       this.props.notify({
         status: 'error',
-        message: 'Could not send the email. try again.'
+        message: errorMessage
       })
     } finally {
       this.setState({

@@ -45,6 +45,7 @@ export const CommissionInput = ({
     <TextInput
       {...input}
       {...rest}
+      value={input.value || ''}
       meta={meta}
       hasLabel={false}
       highlightOnError
