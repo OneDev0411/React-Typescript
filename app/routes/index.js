@@ -195,6 +195,25 @@ const AsyncMarketingHistory = Load({
 })
 
 /* ==================================== */
+//  Insights
+/* ==================================== */
+
+const AsyncInsights = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Insights' /* webpackChunkName: "marketing" */)
+})
+
+const AsyncInsightsStore = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Insights/Main' /* webpackChunkName: "marketing_store" */)
+})
+
+const AsyncInsightsDetails = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Insights/Details' /* webpackChunkName: "marketing_store" */)
+})
+
+/* ==================================== */
 //  Chatroom
 /* ==================================== */
 
@@ -470,6 +489,11 @@ export default (
         <IndexRoute component={AsyncMarketingStore} />
         <Route component={AsyncMarketingHistory} path="history" />
         <Route component={AsyncMarketingTemplates} path=":types(/:medium)" />
+      </Route>
+
+      <Route path="/dashboard/insights" component={AsyncInsights}>
+        <IndexRoute component={AsyncInsightsStore} />
+        <Route path="campaigns/:campaignId" component={AsyncInsightsDetails} />
       </Route>
 
       <Route path="dashboard/account" component={AsyncAccountLayout}>

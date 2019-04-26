@@ -50,6 +50,8 @@ const getActivePath = path => {
       return 'DEALS'
     case checkPath(/\/dashboard\/marketing/):
       return 'MARKETING'
+    case checkPath(/\/dashboard\/insights/):
+      return 'INSIGHTS'
     case checkPath(/\/dashboard\/calendar/):
       return 'CALENDAR'
 
@@ -234,6 +236,20 @@ class appSideNav extends React.Component {
                   className="c-app-sidenav__item__title"
                 >
                   <MarketingIcon />
+                </Link>
+              </SideNavTooltip>
+            </SideNavItem>
+          )}
+
+          {hasMarketingPermission && (
+            <SideNavItem isActive={activePath === 'INSIGHTS'}>
+              <SideNavTooltip caption="Marketing Insights">
+                <Link
+                  inverse
+                  to="/dashboard/insights"
+                  className="c-app-sidenav__item__title"
+                >
+                  <CalendarIcon />
                 </Link>
               </SideNavTooltip>
             </SideNavItem>
