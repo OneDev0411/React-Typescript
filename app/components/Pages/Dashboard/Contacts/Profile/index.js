@@ -13,7 +13,7 @@ import { updateContactQuery } from 'models/contacts/helpers/default-query'
 import { getContact } from 'models/contacts/get-contact'
 import { deleteContacts } from 'models/contacts/delete-contact'
 import { updateContactSelf } from 'models/contacts/update-contact-self'
-import { getContactTimeline } from 'models/contacts/get-contact-timeline'
+import getContactTimeline from 'models/contacts/get-contact-timeline'
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
 

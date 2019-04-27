@@ -1,5 +1,5 @@
-import { getTaskAssociations } from '../../../../models/tasks/get-task-associations'
-import { normalizeAssociations } from '../../../utils/association-normalizers'
+import { getTaskAssociations } from 'models/tasks/get-task-associations'
+import { normalizeAssociations } from 'views/utils/association-normalizers'
 
 /**
  * Fetch and normalize task assosiations
@@ -24,6 +24,10 @@ export async function getAssociations(task) {
 
         if (type === 'deal') {
           query.push('associations[]=deal.brand')
+        }
+
+        if (type === 'email') {
+          query.push('associations[]=email_campaign.emails')
         }
       }
     })

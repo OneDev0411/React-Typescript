@@ -20,9 +20,10 @@ import {
   createTask,
   deleteTask,
   deleteTaskAssociation
-} from '../../../../models/tasks'
-import getListing from '../../../../models/listings/listing/get-listing'
-import { isSoloActiveTeam } from '../../../../utils/user-teams'
+} from 'models/tasks'
+import getListing from 'models/listings/listing/get-listing'
+import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
+import { isSoloActiveTeam } from 'utils/user-teams'
 
 import { Divider } from '../../Divider'
 import Drawer from '../../OverlayDrawer'
@@ -47,12 +48,6 @@ import { postLoadFormat } from './helpers/post-load-format'
 
 import { Location } from './Location'
 import { Footer } from './styled'
-
-const QUERY = {
-  associations: ['reminders', 'assignees', 'created_by', 'updated_by'].map(
-    a => `crm_task.${a}`
-  )
-}
 
 const propTypes = {
   ...Drawer.propTypes,
@@ -134,7 +129,7 @@ class OpenHouseDrawerInternal extends React.Component {
 
     if (this.props.openHouseId) {
       try {
-        const openHouse = await getTask(this.props.openHouseId, QUERY)
+        const openHouse = await getTask(this.props.openHouseId, CRM_TASKS_QUERY)
 
         // get template if exists
         const template = openHouse.metadata ? openHouse.metadata.template : null
@@ -220,10 +215,10 @@ class OpenHouseDrawerInternal extends React.Component {
       )
 
       if (openHouse.id) {
-        newTour = await updateTask(openHouse, QUERY)
+        newTour = await updateTask(openHouse, CRM_TASKS_QUERY)
         action = 'updated'
       } else {
-        newTour = await createTask(openHouse, QUERY)
+        newTour = await createTask(openHouse, CRM_TASKS_QUERY)
       }
 
       this.setState({ isDisabled: false, isSaving: false, openHouse: newTour })

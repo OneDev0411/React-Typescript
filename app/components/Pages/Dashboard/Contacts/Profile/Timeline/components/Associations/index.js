@@ -3,6 +3,8 @@ import _ from 'underscore'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
+import { normalizeAssociations } from 'views/utils/association-normalizers'
+
 import Button from 'components/Button/ActionButton'
 import { AssociationItem } from 'components/AssocationItem'
 import EmailAssociation from 'components/CRMEmailAssocation'
@@ -24,25 +26,28 @@ export class Associations extends React.Component {
   constructor(props) {
     super(props)
 
-    const { defaultAssociation } = this.props
+    const { defaultAssociation } = props
     const { id: defaultAssociationId } = defaultAssociation[
       defaultAssociation.association_type
     ]
 
     this.defaultAssociationId = defaultAssociationId
 
+    let associations = []
+
+    if (Array.isArray(props.task.associations)) {
+      associations = normalizeAssociations(props.task.associations)
+    }
+
     this.state = {
-      associations: [],
+      associations,
       isOpenMoreDrawer: false
     }
   }
 
-  componentDidMount() {
-    this.fetchAssociations()
-  }
-
   componentDidUpdate(prevProps) {
     if (this.isAssociationsGotChange(this.props.task, prevProps.task)) {
+      console.log('it changes', this.props.task, prevProps.task)
       this.fetchAssociations()
     }
   }
@@ -66,15 +71,16 @@ export class Associations extends React.Component {
     return !_.isEqual(nextTaskAssociations, currentTaskAssociations)
   }
 
-  getTaskAssociationsIds = task => {
-    const types = ['deals', 'contacts', 'listings', 'emails']
-    let associations = []
+  getTaskAssociationsIds = ({ associations }) => {
+    if (Array.isArray(associations) && associations.length > 0) {
+      return associations.map(a =>
+        a.association_type === 'email'
+          ? a.email.emails[0].email.id
+          : a[a.association_type].id
+      )
+    }
 
-    types.forEach(type => {
-      associations = [...associations, ...task[type]]
-    })
-
-    return associations
+    return []
   }
 
   fetchAssociations = async () => {
@@ -126,8 +132,7 @@ export class Associations extends React.Component {
         : otherAssociations.push(a)
     )
 
-    const hasOtherAssociations =
-      hasOtherAssociations && !hasOnlyDefaultAssociation(otherAssociations)
+    const hasOtherAssociations = !hasOnlyDefaultAssociation(otherAssociations)
 
     return (
       <div>
