@@ -8,6 +8,10 @@ import { RadioLabel } from './styled'
 import { InputLabel, InputRequired } from '../styled'
 
 export function RadioGroup(props) {
+  if (props.isVisible === false) {
+    return false
+  }
+
   return (
     <Flex column>
       <Flex>
@@ -16,7 +20,7 @@ export function RadioGroup(props) {
         </InputLabel>
       </Flex>
 
-      <Flex alignCenter style={{ height: '2.5rem' }}>
+      <Flex alignCenter>
         {props.options.map((option, index) => (
           <Field
             key={index}
