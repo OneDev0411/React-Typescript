@@ -31,7 +31,8 @@ class SendContactCard extends React.Component {
     isBuilderOpen: false,
     isComposeEmailOpen: false,
     isSearchDrawerOpen: false,
-    owner: this.props.user
+    owner: this.props.user,
+    template: {}
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -136,7 +137,7 @@ class SendContactCard extends React.Component {
       owner,
       isComposeEmailOpen: true,
       isBuilderOpen: true,
-      htmlTemplate: template.result,
+      template,
       templateScreenshot: null
     })
   }
@@ -158,11 +159,15 @@ class SendContactCard extends React.Component {
       from: values.fromId,
       to: values.recipients,
       subject: values.subject,
-      html: this.state.htmlTemplate
+      html: this.state.template.result
+    }
+
+    if (values.template) {
+      email.template = values.template
     }
 
     try {
-      await sendContactsEmail(email, this.state.owner.id)
+      await sendContactsEmail(email)
 
       this.props.notify({
         status: 'success',
@@ -251,6 +256,9 @@ class SendContactCard extends React.Component {
             body={this.state.templateScreenshot}
             onClose={this.toggleComposeEmail}
             onClickSend={this.handleSendEmails}
+            associations={{
+              template: this.state.template.id
+            }}
           />
         )}
       </Fragment>
