@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { BasicDropdown } from 'components/BasicDropdown'
+import IconDrop from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 import {
   InputContainer,
@@ -9,6 +10,8 @@ import {
   InputRequired,
   InputError
 } from '../styled'
+
+import { MenuButton } from './styled'
 
 SelectInput.propTypes = {
   items: PropTypes.arrayOf(
@@ -25,6 +28,7 @@ SelectInput.propTypes = {
   defaultSelectedItem: PropTypes.object,
   noBorder: PropTypes.bool,
   isRequired: PropTypes.bool,
+  isVisible: PropTypes.bool,
   container: PropTypes.element
 }
 
@@ -36,10 +40,15 @@ SelectInput.defaultProps = {
   defaultSelectedItem: null,
   noBorder: true,
   isRequired: false,
+  isVisible: true,
   container: InputContainer
 }
 
 export function SelectInput(props) {
+  if (props.isVisible === false) {
+    return false
+  }
+
   const handleChange = item =>
     props.onChange
       ? props.onChange(item)
@@ -52,9 +61,12 @@ export function SelectInput(props) {
       </InputLabel>
 
       <BasicDropdown
-        buttonStyle={{
-          padding: 0
-        }}
+        buttonRenderer={props => (
+          <MenuButton onClick={props.onClick}>
+            <span>{props.text}</span>
+            <IconDrop />
+          </MenuButton>
+        )}
         defaultSelectedItem={props.defaultSelectedItem}
         items={props.items}
         noBorder={props.noBorder}
