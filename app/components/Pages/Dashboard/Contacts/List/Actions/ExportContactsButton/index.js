@@ -15,6 +15,7 @@ class ExportContacts extends React.Component {
       filters,
       user,
       users,
+      searchText,
       conditionOperator: filter_type
     } = this.props
     const activeBrand = getActiveTeamId(user)
@@ -37,6 +38,14 @@ class ExportContacts extends React.Component {
           value
         })
       )
+
+      const cleanedSearchText = searchText
+        .trim()
+        .replace(/[~`!#$%^&*(){}=<>?,:;'"\]\[\/\\]/g, '')
+
+      if (cleanedSearchText.length > 0) {
+        params.query = cleanedSearchText
+      }
 
       if (Array.isArray(excludedRows) && excludedRows.length > 0) {
         params.excludes = excludedRows
