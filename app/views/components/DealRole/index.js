@@ -11,6 +11,7 @@ import { TYPE_PERSON } from './constants/role-types'
 import { normalizeForm } from './helpers/normalize-form'
 import getRequiredFields from './helpers/get-required-fields'
 import getVisibleFields from './helpers/get-visible-fields'
+import { getFormValidators } from './validators'
 import { getCommissionAttributes } from './helpers/get-commission-attributes'
 
 import { Container } from './styled'
@@ -102,9 +103,10 @@ class Role extends React.Component {
 
   validate = async values => {
     const errors = {}
-    const validators = this.getFormValidators(this.state.requiredFields)
+    const { requiredFields } = this.getFormProperties(values)
+    const validators = getFormValidators(requiredFields)
 
-    this.state.requiredFields.forEach(fieldName => {
+    requiredFields.forEach(fieldName => {
       let value = values[fieldName]
 
       if (value === undefined || value === null || value.length === 0) {
@@ -121,19 +123,18 @@ class Role extends React.Component {
         }
 
         if (!errors[fieldName] && !(await validator(fieldValue))) {
-          errors[fieldName] = this.errorNames[fieldName]
+          errors[fieldName] = Role.errorNames[fieldName]
         }
       })
     )
 
-    console.log(errors)
     return errors
   }
 
   /**
    * get error names
    */
-  get errorNames() {
+  static get errorNames() {
     return {
       legal_first_name: 'Invalid Legal First Name',
       legal_last_name: 'Invalid Legal Last Name',
@@ -167,6 +168,28 @@ class Role extends React.Component {
     return !form || !form.role
   }
 
+  getFormProperties = values => {
+    const visibleFields = getVisibleFields({
+      ..._.pluck(this.props, ['isFirstNameRequired', 'isLastNameRequired']),
+      role: values.role,
+      role_type: values.role_type
+    })
+
+    const requiredFields = getRequiredFields({
+      ..._.pluck(this.props, [
+        'deal',
+        'dealSide',
+        'isEmailRequired',
+        'isCommissionRequired'
+      ]),
+      role: values.role,
+      role_type: values.role_type,
+      visibleFields
+    })
+
+    return { visibleFields, requiredFields }
+  }
+
   setAgent = ([agent], state, { changeValue }) => {
     changeValue(state, 'legal_first_name', value => agent.first_name || value)
     changeValue(state, 'legal_last_name', value => agent.last_name || value)
@@ -192,31 +215,16 @@ class Role extends React.Component {
     return (
       <Container>
         <Form
-          mutators={{
-            setAgent: this.setAgent
-          }}
           validate={this.validate}
           onSubmit={this.onSubmit}
           initialValues={this.getInitialValues()}
+          mutators={{
+            setAgent: this.setAgent
+          }}
           render={formProps => {
-            const visibleFields = getVisibleFields({
-              role: formProps.values.role,
-              role_type: formProps.values.role_type,
-              isFirstNameRequired: this.props.isFirstNameRequired,
-              isLastNameRequired: this.props.isLastNameRequired
-            })
-
-            const requiredFields = getRequiredFields({
-              ..._.pluck(this.props, [
-                'deal',
-                'dealSide',
-                'isEmailRequired',
-                'isCommissionRequired'
-              ]),
-              role: formProps.values.role,
-              role_type: formProps.values.role_type,
-              visibleFields
-            })
+            const { visibleFields, requiredFields } = this.getFormProperties(
+              formProps.values
+            )
 
             return (
               <FormContainer
