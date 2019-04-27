@@ -10,10 +10,10 @@ import {
 
 export function Roles(props) {
   const sortedOptions = _.chain([null, ...ROLE_NAMES])
+    .filter(value => props.isAllowedRole(value, props.formRole))
     .map(value => ({
       value,
-      label: value ? roleName(value) : 'Select Role',
-      disabled: true // !props.isAllowed(value, props.formRole)
+      label: value ? roleName(value) : 'Select Role'
     }))
     .sortBy(item => item.disabled)
     .value()
@@ -33,8 +33,10 @@ export function Roles(props) {
       items={sortedOptions}
       defaultSelectedItem={sortedOptions[0]}
       dropdownOptions={{
+        fullWidth: true,
         pullTo: 'right',
-        maxHeight: 350
+        maxHeight: 350,
+        fullHeight: sortedOptions.length < 8
       }}
     />
   )
