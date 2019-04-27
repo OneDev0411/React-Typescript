@@ -12,17 +12,21 @@ import Tooltip from 'components/tooltip'
 import { TextInput } from 'components/Forms/TextInput'
 
 import { TitleInput } from './form-components/TitleInput'
-import { TypeInput, TYPE_PERSON } from './form-components/TypeInput'
+import { TypeInput } from './form-components/TypeInput'
 import { Roles } from './form-components/Roles'
 import { Address } from './form-components/Address'
+import { MlsIdInput } from './form-components/MlsIdInput'
+import { NameInput } from './form-components/NameInput'
+import { CommissionInput } from './form-components/CommissionInput'
 
 import { Header, Body, Footer } from '../styled'
 
 export function FormContainer(props) {
-  const { role_type } = props.values
-  const isCompanyRequired = props.requiredFields.includes('company_title')
-  const isFirstNameRequired = props.requiredFields.includes('legal_first_name')
-  const isLastNameRequired = props.requiredFields.includes('legal_last_name')
+  const normalizeCommission = value =>
+    !value ? value : value.replace(/[^0-9.]/g, '')
+
+  const isRequired = field => props.requiredFields.includes(field)
+  const isVisible = field => props.visibleFields.includes(field)
 
   return (
     <Fragment>
@@ -38,73 +42,87 @@ export function FormContainer(props) {
           name="role"
           label="Role"
           formRole={props.values.role}
+          isAllowedRole={props.isAllowedRole}
           component={Roles}
         />
       </Header>
 
       <Body>
         <Flex>
-          {role_type === TYPE_PERSON && (
-            <Field name="legal_prefix" component={TitleInput} />
-          )}
+          <Field
+            name="legal_prefix"
+            component={TitleInput}
+            isVisible={isVisible('title')}
+          />
 
-          {(role_type === TYPE_PERSON || isFirstNameRequired) && (
-            <Field
-              name="legal_first_name"
-              label="First Name"
-              isRequired={isFirstNameRequired}
-              component={TextInput}
-              style={{ width: '30%', marginRight: '0.5rem' }}
-            />
-          )}
+          <Field
+            name="legal_first_name"
+            autocompleteField="first_name"
+            label="First Name"
+            isVisible={isVisible('legal_first_name')}
+            isRequired={isRequired('legal_first_name')}
+            mutators={props.form.mutators}
+            component={NameInput}
+            style={{ flex: 3, marginRight: '0.5rem' }}
+          />
 
-          {role_type === TYPE_PERSON && (
-            <Field
-              name="legal_middle_name"
-              label="Mid. Name"
-              component={TextInput}
-              style={{ width: '15%', marginRight: '0.5rem' }}
-            />
-          )}
+          <Field
+            name="legal_middle_name"
+            label="Mid. Name"
+            isVisible={isVisible('legal_middle_name')}
+            component={TextInput}
+            style={{ flex: 1.5, marginRight: '0.5rem' }}
+          />
 
-          {(role_type === TYPE_PERSON || isLastNameRequired) && (
-            <Field
-              name="legal_last_name"
-              label="Last Name"
-              isRequired={isLastNameRequired}
-              component={TextInput}
-              style={{ width: '30%' }}
-            />
-          )}
+          <Field
+            name="legal_last_name"
+            autocompleteField="last_name"
+            label="Last Name"
+            isVisible={isVisible('legal_last_name')}
+            isRequired={isRequired('legal_last_name')}
+            component={NameInput}
+            mutators={props.form.mutators}
+            style={{ flex: 3 }}
+          />
         </Flex>
 
         <Flex style={{ marginTop: '1rem' }}>
           <Field
             name="company"
             label="Company / Trust"
-            isRequired={isCompanyRequired}
+            isVisible={isVisible('company')}
+            isRequired={isRequired('company')}
             component={TextInput}
-            style={{ width: '80%', marginRight: '0.5rem' }}
+            style={{ flex: 7, marginRight: '0.5rem' }}
           />
 
-          <Field name="mls_id" label="MLS ID" component={TextInput} />
+          <Field
+            name="mls_id"
+            label="MLS ID"
+            isVisible={isVisible('mls_id')}
+            mutators={props.form.mutators}
+            component={MlsIdInput}
+            style={{ flex: 3 }}
+          />
         </Flex>
 
         <Flex style={{ marginTop: '1rem' }}>
           <Field
             name="email"
             label="Email"
-            isRequired={props.requiredFields.includes('email')}
+            isVisible={isVisible('email')}
+            isRequired={isRequired('email')}
             component={TextInput}
-            style={{ width: '50%', marginRight: '0.5rem' }}
+            style={{ flex: 5, marginRight: '0.5rem' }}
           />
 
           <Field
             name="phone"
             label="Phone"
-            isRequired={props.requiredFields.includes('phone_number')}
+            isVisible={isVisible('phone_number')}
+            isRequired={isRequired('phone_number')}
             component={TextInput}
-            style={{ width: '50%' }}
+            style={{ flex: 5 }}
           />
         </Flex>
 
@@ -112,31 +130,32 @@ export function FormContainer(props) {
           <Field
             name="current_address"
             label="Current Address"
+            isVisible={isVisible('current_address')}
             value={props.values.current_address}
             component={Address}
-            style={{ width: '50%', marginRight: '0.5rem' }}
+            style={{ flex: 5, marginRight: '0.5rem' }}
           />
 
           <Field
             name="future_address"
             label="Future Address"
+            isVisible={isVisible('future_address')}
             value={props.values.future_address}
             component={Address}
-            style={{ width: '50%' }}
+            style={{ flex: 5 }}
           />
         </Flex>
 
-        <Flex>
-          {/* {shouldShowCommission(values.role) && (
-            <Field
-              parse={normalizeCommission}
-              isRequired={requiredFields.includes('commission')}
-              name="commission"
-              placeholder="Commission"
-              commissionType={values.commission_type}
-              component={CommissionInput}
-            />
-          )} */}
+        <Flex style={{ marginTop: '1rem' }}>
+          <Field
+            parse={normalizeCommission}
+            isVisible={isVisible('commission')}
+            isRequired={isRequired('commission')}
+            name="commission"
+            placeholder="Commission"
+            commissionType={props.values.commission_type}
+            component={CommissionInput}
+          />
         </Flex>
       </Body>
 
