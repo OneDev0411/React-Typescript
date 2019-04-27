@@ -487,6 +487,7 @@ class ContactsList extends React.Component {
             onChangeSelectedRows={this.onChangeSelectedRows}
             onRequestDelete={this.handleOnDelete}
             filters={this.props.filters}
+            searchInputValue={this.state.searchInputValue}
             conditionOperator={this.props.conditionOperator}
             users={viewAsUsers}
           />
