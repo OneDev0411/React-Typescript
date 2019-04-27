@@ -18,7 +18,7 @@ async function getAll(user) {
     throw new Error('Access denied to brand resource')
   }
 
-  const endpoint = `/brands/${brandId}/emails/campaigns`
+  const endpoint = `/brands/${brandId}/emails/campaigns?associations[]=email_campaign.recipients&associations[]=email_campaign_recipient.list&associations[]=email_campaign_recipient.contact`
 
   try {
     const fetchCampaigns = new Fetch().get(`${endpoint}`)

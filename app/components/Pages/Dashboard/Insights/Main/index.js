@@ -20,6 +20,36 @@ function percent(num, allNum) {
   return num / allNum
 }
 
+function Recipients(props) {
+  if (!Array.isArray(props.data)) {
+    return null
+  }
+
+  const recipients = recipientsList(props.data)
+
+  const tagsCount = recipients.tags.length || 0
+  const listCount = recipients.list.length || 0
+  const emailsCount = recipients.emails.length || 0
+  const contactsCount = recipients.contacts.length || 0
+  const recipientsCount = emailsCount + contactsCount
+
+  const items = []
+
+  if (recipientsCount) {
+    items.push(`${recipientsCount} Recipients`)
+  }
+
+  if (listCount) {
+    items.push(`${listCount} List`)
+  }
+
+  if (tagsCount) {
+    items.push(`${tagsCount} Tags`)
+  }
+
+  return <span>{items.join(', ')}</span>
+}
+
 const columns = [
   {
     header: 'Details',
@@ -29,19 +59,26 @@ const columns = [
     // accessor: contact => getAttributeFromSummary(contact, 'display_name'),
     render: props => {
       const { rowData, rowIndex, totalRows } = props
+      const isScheduled = !rowData.executed_at
 
       return (
         <>
-          <Link to={`/dashboard/insights/campaigns/${rowData.id}`}>
+          <Link
+            to={
+              isScheduled ? '' : `/dashboard/insights/campaigns/${rowData.id}`
+            }
+          >
             {rowData.subject.trim() || 'No Title'}
           </Link>
           <Info>
             <div className="sub-info">
-              {formatDate(new Date(rowData.created_at * 1000))}
+              {isScheduled
+                ? `Scheduled for ${formatDate(new Date(rowData.due_at * 1000))}`
+                : formatDate(new Date(rowData.executed_at * 1000))}
             </div>
-            <div className="main-info">{`${
-              rowData.recipients
-            } Recipients`}</div>
+            <div className="main-info">
+              <Recipients data={rowData.recipients} />
+            </div>
           </Info>
         </>
       )
@@ -95,6 +132,32 @@ function useListData(user) {
     list,
     isLoading,
     hasError
+  }
+}
+
+function recipientsList(recipients) {
+  const list = []
+  const tags = []
+  const contacts = []
+  const emails = []
+
+  recipients.forEach(recipient => {
+    if (recipient.tag) {
+      tags.push(recipient.tag)
+    } else if (recipient.list) {
+      list.push(recipient.list)
+    } else if (recipient.contact) {
+      contacts.push(recipient.contact)
+    } else {
+      emails.push(recipient.email)
+    }
+  })
+
+  return {
+    list,
+    tags,
+    contacts,
+    emails
   }
 }
 
