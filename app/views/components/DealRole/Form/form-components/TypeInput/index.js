@@ -2,8 +2,7 @@ import React from 'react'
 
 import { RadioGroup } from 'components/Forms/RadioGroupInput'
 
-export const TYPE_PERSON = 'Person'
-export const TYPE_COMPANY = 'Organization'
+import { TYPE_PERSON, TYPE_COMPANY } from '../../../constants/role-types'
 
 export function TypeInput(props) {
   return (
