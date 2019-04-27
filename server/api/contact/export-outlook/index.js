@@ -21,7 +21,7 @@ function handleIds(ids) {
   return {}
 }
 
-function handleFilters(filters, excludes = []) {
+function handleFilters(filters, excludes = [], searchText = '') {
   const resultFilters = {}
 
   if (Array.isArray(filters)) {
@@ -30,6 +30,10 @@ function handleFilters(filters, excludes = []) {
 
   if (Array.isArray(excludes)) {
     resultFilters.excludes = excludes
+  }
+
+  if (searchText.length > 0) {
+    resultFilters.query = searchText
   }
 
   return resultFilters
@@ -52,6 +56,7 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
       excludes,
       users,
       type,
+      searchText,
       filter_type = 'and'
     } = ctx.request.body
 
@@ -62,7 +67,7 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
     if (ids) {
       data = handleIds(ids)
     } else if (filters) {
-      data = handleFilters(filters, excludes)
+      data = handleFilters(filters, excludes, searchText)
     }
 
     if (typeof users === 'string') {
