@@ -16,8 +16,6 @@ import {
   getContactDiff
 } from '../../../utils/roles'
 
-// import RoleForm from '../Form'
-
 const initialState = {
   isSaving: false
 }
@@ -121,23 +119,21 @@ class RoleFormWrapper extends React.Component {
   }
 
   render() {
-    return <DealRole isOpen={this.props.isOpen} onClose={this.props.onHide} />
-
-    // return (
-    //   <RoleForm
-    //     form={this.props.role}
-    //     deal={this.props.deal}
-    //     dealSide={this.props.dealSide}
-    //     modalTitle={this.props.modalTitle}
-    //     isSubmitting={this.state.isSaving}
-    //     isEmailRequired={this.props.isEmailRequired}
-    //     isCommissionRequired={this.props.isCommissionRequired}
-    //     isOpen={this.props.isOpen}
-    //     onHide={this.props.onHide}
-    //     onFormSubmit={this.onSubmit}
-    //     allowedRoles={this.props.allowedRoles}
-    //   />
-    // )
+    return (
+      <DealRole
+        form={this.props.role}
+        deal={this.props.deal}
+        dealSide={this.props.dealSide}
+        isSubmitting={this.state.isSaving}
+        isEmailRequired={this.props.isEmailRequired}
+        formTitle={this.props.modalTitle}
+        isCommissionRequired={this.props.isCommissionRequired}
+        allowedRoles={this.props.allowedRoles}
+        isOpen={this.props.isOpen}
+        onFormSubmit={this.onSubmit}
+        onClose={this.props.onHide}
+      />
+    )
   }
 }
 
