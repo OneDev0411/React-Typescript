@@ -117,6 +117,7 @@ class ContactsList extends React.Component {
           excludedRows={excludedRows}
           exportIds={selectedRows}
           filters={this.props.filters}
+          searchText={this.props.searchInputValue}
           conditionOperator={this.props.conditionOperator}
           users={this.props.users}
           disabled={this.props.isFetching}
