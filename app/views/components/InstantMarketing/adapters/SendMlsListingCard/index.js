@@ -7,6 +7,7 @@ import _ from 'underscore'
 
 import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
+import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 import { selectContact } from 'reducers/contacts/list'
@@ -14,7 +15,7 @@ import { selectContact } from 'reducers/contacts/list'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import EmailCompose from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
-import { getTemplatePreviewImage } from 'components/InstantMarketing/helpers/get-template-preview-image'
+import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import ActionButton from 'components/Button/ActionButton'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
@@ -41,9 +42,11 @@ class SendMlsListingCard extends React.Component {
     isSendingEmail: false,
     isSocialDrawerOpen: false,
     htmlTemplate: '',
-    templateScreenshot: null,
     socialNetworkName: '',
-    owner: this.props.user
+    owner: this.props.user,
+    emailBody: '',
+    templateInstanceId: '',
+    isGettingTemplateInstance: false
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -125,6 +128,10 @@ class SendMlsListingCard extends React.Component {
       html: this.state.htmlTemplate.result
     }
 
+    if (values.template) {
+      email.template = values.template
+    }
+
     try {
       await sendContactsEmail(email, this.state.owner.id)
 
@@ -188,7 +195,7 @@ class SendMlsListingCard extends React.Component {
       isComposeEmailOpen: true,
       isInstantMarketingBuilderOpen: true,
       htmlTemplate: template,
-      templateScreenshot: null
+      emailBody: ''
     })
   }
 
@@ -200,13 +207,20 @@ class SendMlsListingCard extends React.Component {
     })
   }
 
-  generatePreviewImage = async template =>
-    this.setState({
-      templateScreenshot: await getTemplatePreviewImage(
-        template,
-        this.TemplateInstanceData
-      )
+  generatePreviewImage = async template => {
+    this.setState({ isGettingTemplateInstance: true })
+
+    const instance = await getTemplateInstances(template.id, {
+      ...this.TemplateInstanceData,
+      html: template.result
     })
+
+    this.setState({
+      emailBody: getTemplateInstancePreviewImage(instance),
+      templateInstanceId: instance.id,
+      isGettingTemplateInstance: false
+    })
+  }
 
   closeMarketing = () =>
     this.setState({
@@ -341,9 +355,13 @@ class SendMlsListingCard extends React.Component {
             isSubmitting={this.state.isSendingEmail}
             from={this.state.owner}
             recipients={this.Recipients}
-            body={this.state.templateScreenshot}
+            body={this.state.emailBody}
             onClickSend={this.handleSendEmails}
             onClose={this.toggleComposeEmail}
+            associations={{
+              template: this.state.templateInstanceId
+            }}
+            isSubmitDisabled={this.state.isGettingTemplateInstance}
           />
         )}
 

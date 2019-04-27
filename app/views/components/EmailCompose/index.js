@@ -29,6 +29,7 @@ const propTypes = {
   from: PropTypes.object.isRequired,
   recipients: PropTypes.array,
   isSubmitting: PropTypes.bool,
+  isSubmitDisabled: PropTypes.bool,
   defaultAttachments: PropTypes.array,
   hasStaticBody: PropTypes.bool,
   body: PropTypes.string,
@@ -45,6 +46,7 @@ const propTypes = {
 const defaultProps = {
   recipients: [],
   defaultAttachments: [],
+  isSubmitDisabled: false,
   body: '',
   onClickSend: null,
   isSubmitting: false,
@@ -231,11 +233,11 @@ class EmailCompose extends React.Component {
         submitButtonLabel="Send"
         submittingButtonLabel="Sending ..."
         title="New Email"
+        isSubmitDisabled={this.props.isSubmitDisabled}
         footerRenderer={data => (
           <Footer
             {...data}
             initialAttachments={this.initialAttachments}
-            isSubmitting={this.IsSubmitting}
             deal={this.props.deal}
             hasDealsAttachments={this.props.hasDealsAttachments}
           />

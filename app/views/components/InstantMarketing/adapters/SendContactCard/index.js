@@ -4,6 +4,7 @@ import { addNotification as notify } from 'reapop'
 import idx from 'idx'
 
 import { normalizeContact } from 'models/email-compose/helpers/normalize-contact'
+import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 
 import InstantMarketing from 'components/InstantMarketing'
 import ActionButton from 'components/Button/ActionButton'
@@ -17,7 +18,7 @@ import { SearchContactDrawer } from 'components/SearchContactDrawer'
 
 import { getContact } from 'models/contacts/get-contact'
 
-import { getTemplatePreviewImage } from 'components/InstantMarketing/helpers/get-template-preview-image'
+import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
@@ -32,7 +33,9 @@ class SendContactCard extends React.Component {
     isComposeEmailOpen: false,
     isSearchDrawerOpen: false,
     owner: this.props.user,
-    template: {}
+    emailBody: '',
+    templateInstanceId: '',
+    isGettingTemplateInstance: false
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -142,13 +145,20 @@ class SendContactCard extends React.Component {
     })
   }
 
-  generatePreviewImage = async template =>
-    this.setState({
-      templateScreenshot: await getTemplatePreviewImage(
-        template,
-        this.TemplateInstanceData
-      )
+  generatePreviewImage = async template => {
+    this.setState({ isGettingTemplateInstance: true })
+
+    const instance = await getTemplateInstances(template.id, {
+      ...this.TemplateInstanceData,
+      html: template.result
     })
+
+    this.setState({
+      emailBody: getTemplateInstancePreviewImage(instance),
+      templateInstanceId: instance.id,
+      isGettingTemplateInstance: false
+    })
+  }
 
   handleSendEmails = async values => {
     this.setState({
@@ -253,12 +263,13 @@ class SendContactCard extends React.Component {
             isSubmitting={this.state.isSendingEmail}
             from={this.state.owner}
             recipients={this.Recipients}
-            body={this.state.templateScreenshot}
+            body={this.state.emailBody}
             onClose={this.toggleComposeEmail}
             onClickSend={this.handleSendEmails}
             associations={{
-              template: this.state.template.id
+              template: this.state.templateInstanceId
             }}
+            isSubmitDisabled={this.state.isGettingTemplateInstance}
           />
         )}
       </Fragment>
