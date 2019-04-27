@@ -17,7 +17,7 @@ SelectInput.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired
+      value: PropTypes.string
     }).isRequired
   ).isRequired,
   label: PropTypes.string.isRequired,
