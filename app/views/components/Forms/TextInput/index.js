@@ -8,7 +8,7 @@ import {
 } from '../styled'
 import { InputField } from './styled'
 
-export const TextInput = ({
+export function TextInput({
   input,
   meta,
   isRequired,
@@ -19,27 +19,36 @@ export const TextInput = ({
   highlightOnError = false,
   style,
   Container = InputContainer,
+  children,
+  isVisible = true,
+  render,
   ...rest
-}) => (
-  <Container style={style}>
-    {hasLabel && (
-      <InputLabel hasError={meta.submitFailed && meta.error}>
-        {label || placeholder}
-        &nbsp;
-        <InputRequired>{isRequired && '*'}</InputRequired>
-      </InputLabel>
-    )}
+}) {
+  if (isVisible === false) {
+    return false
+  }
 
-    <InputField
-      {...input}
-      autoComplete="Off"
-      placeholder={placeholder}
-      hasError={highlightOnError && meta.submitFailed && meta.error}
-      {...rest}
-    />
+  return (
+    <Container style={style}>
+      {hasLabel && (
+        <InputLabel hasError={meta.submitFailed && meta.error}>
+          {label || placeholder}
+          &nbsp;
+          <InputRequired>{isRequired && '*'}</InputRequired>
+        </InputLabel>
+      )}
 
-    {showError && meta.error && meta.touched && (
-      <InputError>{meta.error}</InputError>
-    )}
-  </Container>
-)
+      <InputField
+        {...input}
+        autoComplete="Off"
+        placeholder={placeholder}
+        hasError={highlightOnError && meta.submitFailed && meta.error}
+        {...rest}
+      />
+
+      {showError && meta.error && meta.touched && (
+        <InputError>{meta.error}</InputError>
+      )}
+    </Container>
+  )
+}
