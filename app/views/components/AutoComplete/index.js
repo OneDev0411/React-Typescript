@@ -19,6 +19,8 @@ const propTypes = {
   label: PropTypes.string,
   defaultSelectedItem: PropTypes.string,
   resultsCount: PropTypes.number,
+  debounce: PropTypes.number,
+  searchConfiguration: PropTypes.object,
   inputRenderer: PropTypes.func,
   itemRenderer: PropTypes.func,
   options: PropTypes.oneOfType([
@@ -42,6 +44,8 @@ const defaultProps = {
   label: '',
   defaultSelectedItem: null,
   resultsCount: 10,
+  debounce: 500,
+  searchConfiguration: {},
   inputRenderer: null,
   itemRenderer: null
 }
@@ -72,45 +76,49 @@ export class AutoComplete extends React.Component {
     }
   }
 
-  fetchOptions = _.debounce(async value => {
-    if (this.state.cache[value] || !value) {
-      return false
-    }
-
-    try {
-      const list = await this.props.options(value)
-
-      if (!Array.isArray(list)) {
+  fetchOptions = _.debounce(
+    async value => {
+      if (this.state.cache[value] || !value) {
         return false
       }
 
-      let newState = {
-        options: list
-      }
+      try {
+        const list = await this.props.options(value)
 
-      if (this.props.useCache) {
-        newState = {
-          ...newState,
-          cache: {
-            ...this.state.cache,
-            [value]: list
+        if (!Array.isArray(list)) {
+          return false
+        }
+
+        let newState = {
+          options: list
+        }
+
+        if (this.props.useCache) {
+          newState = {
+            ...newState,
+            cache: {
+              ...this.state.cache,
+              [value]: list
+            }
           }
         }
-      }
 
-      this.setState(newState)
-    } catch (e) {
-      // todo: better handling
-      console.log(e)
-    }
-  }, 500)
+        this.setState(newState)
+      } catch (e) {
+        // todo: better handling
+        console.log(e)
+      }
+    },
+    typeof this.props.options === 'function' ? this.props.debounce : 0
+  )
 
   handleItemToString = item => (typeof item !== 'string' ? '' : item)
 
   getOptions = value =>
     new Fuse(this.state.options, {
       keys: ['label'],
-      threshold: 0.3
+      threshold: 0.3,
+      ...this.props.searchConfiguration
     })
       .search(value)
       .slice(0, this.props.resultsCount)
