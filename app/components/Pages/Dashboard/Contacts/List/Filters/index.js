@@ -17,7 +17,47 @@ class ContactFilters extends React.PureComponent {
       return []
     }
 
-    return _.uniq([...defaultTags, ..._.pluck(tags, 'text')]).sort()
+    return _.uniq([...defaultTags, ..._.pluck(tags, 'text')])
+      .sort()
+      .map(tag => ({ label: tag, value: tag }))
+  }
+
+  getOrigins = () => [
+    {
+      label: 'Brokerage widget',
+      value: 'BrokerageWidget'
+    },
+    {
+      label: 'Created by you',
+      value: 'ExplicitlyCreated'
+    },
+    {
+      label: 'iOS Contact',
+      value: 'IOSAddressBook'
+    },
+    {
+      label: 'Rechat Contact',
+      value: 'SharesRoom'
+    },
+    {
+      label: 'Outlook',
+      value: 'External/Outlook'
+    },
+    {
+      label: 'Open House',
+      value: 'OpenHouse'
+    },
+    {
+      label: 'CSV',
+      value: 'CSV'
+    }
+  ]
+
+  getFilterLabelByValue = value => {
+    const origins = this.getOrigins()
+    const origin = origins.find(item => item.value === value)
+
+    return origin ? origin.label : value
   }
 
   /**
@@ -39,31 +79,17 @@ class ContactFilters extends React.PureComponent {
       id: filter.attribute_def,
       isActive: false,
       isIncomplete: false,
-      values: [filter.value],
+      values: [
+        {
+          label: this.getFilterLabelByValue(filter.value),
+          value: filter.value
+        }
+      ],
       operator: {
         name: filter.invert ? 'is not' : 'is',
         invert: filter.invert
       }
     }))
-  }
-
-  getOriginNameByTitle = title => {
-    switch (title) {
-      case 'Brokerage widget':
-        return 'BrokerageWidget'
-      case 'Created by you':
-        return 'ExplicitlyCreated'
-      case 'iOS Contact':
-        return 'IOSAddressBook'
-      case 'Rechat Contact':
-        return 'SharesRoom'
-      case 'Outlook':
-        return 'External/Outlook'
-      case 'Open House':
-        return 'OpenHouse'
-      case 'CSV':
-        return 'CSV'
-    }
   }
 
   get Config() {
@@ -90,16 +116,7 @@ class ContactFilters extends React.PureComponent {
         label: 'Origin',
         type: 'Set',
         multi: false,
-        postSelectFormat: this.getOriginNameByTitle,
-        options: [
-          'Brokerage widget',
-          'Created by you',
-          'iOS Contact',
-          'Rechat Contact',
-          'Outlook',
-          'Open House',
-          'CSV'
-        ],
+        options: this.getOrigins(),
         tooltip: 'Source type'
       }
     ]

@@ -132,8 +132,8 @@ class Filters extends React.Component {
   }
 
   isFilterChanged = (current, next) =>
-    (current.values && current.values.join('')) !==
-      (next.values && next.values.join('')) ||
+    (current.values && current.values.map(({ value }) => value).join('')) !==
+      (next.values && next.values.map(({ value }) => value).join('')) ||
     current.operator.name !== next.operator.name
 
   hasMissingValue = () =>
@@ -156,23 +156,8 @@ class Filters extends React.Component {
       item => item.isIncomplete === false
     )
 
-    const formattedFilters = completedFilters.map(filter => {
-      const filterConfig = this.props.config.find(
-        config => config.id === filter.id
-      )
-
-      if (!filterConfig.postSelectFormat) {
-        return filter
-      }
-
-      return {
-        ...filter,
-        values: filter.values.map(filterConfig.postSelectFormat)
-      }
-    })
-
     this.props.onChange({
-      filters: this.props.createSegmentFromFilters(formattedFilters).filters,
+      filters: this.props.createSegmentFromFilters(completedFilters).filters,
       conditionOperator: this.props.conditionOperator
     })
   }
