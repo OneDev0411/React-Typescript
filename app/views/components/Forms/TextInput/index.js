@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import {
   InputContainer,
@@ -6,49 +7,56 @@ import {
   InputRequired,
   InputLabel
 } from '../styled'
+
 import { InputField } from './styled'
 
-export function TextInput({
-  input,
-  meta,
-  isRequired,
-  placeholder,
-  label,
-  hasLabel = true,
-  showError = true,
-  highlightOnError = false,
-  style,
-  Container = InputContainer,
-  children,
-  isVisible = true,
-  render,
-  ...rest
-}) {
-  if (isVisible === false) {
-    return false
+TextInput.propTypes = {
+  input: PropTypes.object,
+  label: PropTypes.string.isRequired,
+  styles: PropTypes.object,
+  meta: PropTypes.object,
+  isRequired: PropTypes.bool,
+  isVisible: PropTypes.bool,
+  container: PropTypes.element
+}
+
+TextInput.defaultProps = {
+  input: null,
+  meta: {},
+  styles: {},
+  isRequired: false,
+  isVisible: true,
+  container: InputContainer
+}
+
+export function TextInput(props) {
+  if (props.isVisible === false) {
+    return null
   }
 
   return (
-    <Container style={style}>
-      {hasLabel && (
-        <InputLabel hasError={meta.submitFailed && meta.error}>
-          {label || placeholder}
+    <props.container style={props.style}>
+      {props.hasLabel && (
+        <InputLabel hasError={props.meta.submitFailed && props.meta.error}>
+          {props.label || props.placeholder}
           &nbsp;
-          <InputRequired>{isRequired && '*'}</InputRequired>
+          <InputRequired>{props.isRequired && '*'}</InputRequired>
         </InputLabel>
       )}
 
       <InputField
-        {...input}
+        {...props.input}
         autoComplete="Off"
-        placeholder={placeholder}
-        hasError={highlightOnError && meta.submitFailed && meta.error}
-        {...rest}
+        placeholder={props.placeholder}
+        hasError={
+          props.highlightOnError && props.meta.submitFailed && props.meta.error
+        }
+        {...props}
       />
 
-      {showError && meta.error && meta.touched && (
-        <InputError>{meta.error}</InputError>
+      {props.showError && props.meta.error && props.meta.touched && (
+        <InputError>{props.meta.error}</InputError>
       )}
-    </Container>
+    </props.container>
   )
 }
