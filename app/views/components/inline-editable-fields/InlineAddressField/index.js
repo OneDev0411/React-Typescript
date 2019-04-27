@@ -18,8 +18,8 @@ const propTypes = {
   handleInputChange: PropTypes.func,
   showDeleteButton: PropTypes.bool,
   needsAddressForm: PropTypes.bool,
-  handleSubmit: PropTypes.func.isRequired,
-  preSaveFormat: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func,
+  preSaveFormat: PropTypes.func,
   postLoadFormat: PropTypes.func
 }
 
