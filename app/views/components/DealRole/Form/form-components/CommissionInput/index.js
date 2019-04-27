@@ -12,46 +12,44 @@ import {
   CommissionInputContainer
 } from './styled'
 
-export const CommissionInput = ({
-  input,
-  meta,
-  commissionType,
-  isRequired,
-  placeholder,
-  ...rest
-}) => (
-  <CommissionContainer>
-    <CommissionRadioContainer>
-      <InputLabel hasError={meta.submitFailed && meta.error}>
-        {placeholder} <InputRequired>{isRequired && '*'}</InputRequired>
-      </InputLabel>
+export function CommissionInput(props) {
+  if (props.isVisible === false) {
+    return false
+  }
 
-      <RadioGroup
-        name="commission_type"
-        selectedValue={commissionType}
-        options={[
-          {
-            name: 'commission_percentage',
-            label: '%'
-          },
-          {
-            name: 'commission_dollar',
-            label: '$'
-          }
-        ]}
+  return (
+    <CommissionContainer>
+      <CommissionRadioContainer>
+        <InputLabel hasError={props.meta.submitFailed && props.meta.error}>
+          {props.placeholder}{' '}
+          <InputRequired>{props.isRequired && '*'}</InputRequired>
+        </InputLabel>
+
+        <RadioGroup
+          name="commission_type"
+          selectedValue={props.commissionType}
+          options={[
+            {
+              name: 'commission_percentage',
+              label: '%'
+            },
+            {
+              name: 'commission_dollar',
+              label: '$'
+            }
+          ]}
+        />
+      </CommissionRadioContainer>
+
+      <TextInput
+        {...props.input}
+        meta={props.meta}
+        hasLabel={false}
+        highlightOnError
+        Container={CommissionInputContainer}
+        autoComplete="off"
+        placeholder="Enter commission for this agent"
       />
-    </CommissionRadioContainer>
-
-    <TextInput
-      {...input}
-      {...rest}
-      value={input.value || ''}
-      meta={meta}
-      hasLabel={false}
-      highlightOnError
-      Container={CommissionInputContainer}
-      autoComplete="off"
-      placeholder="Enter commission for this agent"
-    />
-  </CommissionContainer>
-)
+    </CommissionContainer>
+  )
+}
