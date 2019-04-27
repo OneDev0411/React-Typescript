@@ -8,6 +8,10 @@ const items = [null, 'Mr', 'Ms', 'Mrs', 'Miss', 'Dr'].map(value => ({
 }))
 
 export function TitleInput(props) {
+  if (props.isVisible === false) {
+    return false
+  }
+
   return (
     <SelectInput
       style={{
@@ -24,7 +28,7 @@ export function TitleInput(props) {
       dropdownOptions={{
         fullHeight: true
       }}
-      onChange={props.input.onChange}
+      // onChange={props.input.onChange}
     />
   )
 }
