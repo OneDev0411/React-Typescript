@@ -11,6 +11,10 @@ import {
 } from 'components/Forms/styled'
 
 export function Address(props) {
+  if (props.isVisible === false) {
+    return false
+  }
+
   return (
     <InputContainer style={props.style}>
       <InputLabel hasError={props.meta.submitFailed && props.meta.error}>
@@ -20,20 +24,14 @@ export function Address(props) {
       </InputLabel>
 
       <InlineAddressField
+        key={props.name}
         address={props.value}
         needsAddressForm={false}
-        handleSubmit={props.input.onChange}
-        preSaveFormat={x => {
-          console.log(x)
-
-          return x
-        }}
         handleInputChange={props.input.onChange}
         renderSearchField={inputProps => (
           <Input
             {...inputProps}
             type="text"
-            autoFocus
             style={{
               padding: 0,
               border: 'none'
