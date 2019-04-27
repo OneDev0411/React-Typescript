@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 import TagsOverlay from '../../components/TagsOverlay'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
-import TextIconButton from '../../../../../../views/components/Button/TextIconButton'
 import TagIcon from '../../../../../../views/components/SvgIcons/Tag/TagIcon'
 
 const Tag = styled(TagIcon)`
@@ -22,7 +21,19 @@ export default class TagContacts extends React.Component {
   closeOverlay = () => this.setState({ overlayIsOpen: false })
 
   render() {
-    const { selectedRows, disabled } = this.props
+    const {
+      disabled,
+      entireMode,
+      totalRowsCount,
+      excludedRows,
+      selectedRows,
+      filters,
+      searchText,
+      conditionOperator,
+      users,
+      resetSelectedRows,
+      handleChangeContactsAttributes
+    } = this.props
     const { overlayIsOpen } = this.state
 
     return (
@@ -38,13 +49,18 @@ export default class TagContacts extends React.Component {
         </ActionButton>
 
         <TagsOverlay
+          entireMode={entireMode}
+          totalContactsCount={totalRowsCount}
           selectedContactsIds={selectedRows}
+          excludedContactsIds={excludedRows}
+          filters={filters}
+          searchText={searchText}
+          conditionOperator={conditionOperator}
+          users={users}
           isOpen={overlayIsOpen}
           closeOverlay={this.closeOverlay}
-          resetSelectedRows={this.props.resetSelectedRows}
-          handleChangeContactsAttributes={
-            this.props.handleChangeContactsAttributes
-          }
+          resetSelectedRows={resetSelectedRows}
+          handleChangeContactsAttributes={handleChangeContactsAttributes}
         />
       </Fragment>
     )

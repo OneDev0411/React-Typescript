@@ -6,7 +6,7 @@ import unionBy from 'lodash/unionBy'
 import intersectionBy from 'lodash/intersectionBy'
 
 import { defaultTags } from 'utils/default-tags'
-import OverlayDrawer from 'views/components/OverlayDrawer'
+import OverlayDrawer from 'components/OverlayDrawer'
 
 import {
   getAttributeFromSummary,
@@ -22,6 +22,8 @@ import {
 } from 'actions/contacts'
 import { confirmation } from 'actions/confirmation'
 
+import { addAttributesBulk } from 'models/contacts/add-attributes-bulk'
+
 import { selectTags } from 'reducers/contacts/tags'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 import { selectContact, selectContactsInfo } from 'reducers/contacts/list'
@@ -36,30 +38,40 @@ class TagsOverlay extends React.Component {
   constructor(props) {
     super(props)
 
-    const { selectedContactsIds, ContactListStore, existingTags } = this.props
+    const {
+      entireMode,
+      selectedContactsIds,
+      ContactListStore,
+      existingTags
+    } = this.props
+
+    const tags = entireMode
+      ? this.getAllTags()
+      : this.getCommonTags(selectedContactsIds, ContactListStore, existingTags)
 
     this.state = {
-      tags: this.getCommonTags(
-        selectedContactsIds,
-        ContactListStore,
-        existingTags
-      ),
+      tags,
       isSubmitting: false,
       newTagValue: ''
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const newTags = this.getCommonTags(
-      nextProps.selectedContactsIds,
-      nextProps.ContactListStore,
-      nextProps.existingTags
-    )
-    const oldTags = this.getCommonTags(
-      this.props.selectedContactsIds,
-      this.props.ContactListStore,
-      this.props.existingTags
-    )
+    const newTags = this.props.entireMode
+      ? this.getAllTags()
+      : this.getCommonTags(
+          nextProps.selectedContactsIds,
+          nextProps.ContactListStore,
+          nextProps.existingTags
+        )
+
+    const oldTags = this.props.entireMode
+      ? this.state.tags
+      : this.getCommonTags(
+          this.props.selectedContactsIds,
+          this.props.ContactListStore,
+          this.props.existingTags
+        )
 
     if (!_.isEqual(newTags, oldTags) || !nextProps.isOpen) {
       this.setState({ tags: newTags })
@@ -129,15 +141,49 @@ class TagsOverlay extends React.Component {
     if (/\S/.test(newTagValue)) {
       return this.props.confirmation({
         description:
-          "We noticed you have un-added tag. Please select the 'Add' link before saving",
+          "We noticed you have un-added tag. Please select the 'Add' button before saving", // eslint-disable-line
         hideCancelButton: true,
-        confirmLabel: 'Ok'
+        confirmLabel: 'OK'
       })
     }
 
-    const { closeOverlay } = this.props
+    const { entireMode, closeOverlay } = this.props
     const { tags } = this.state
     const newTags = tags.filter(tag => tag.isSelected && !tag.id)
+
+    // We only support add tags for entire mode
+    // Se having new tags is enough for us
+    if (entireMode) {
+      const {
+        users,
+        searchText,
+        conditionOperator,
+        filters,
+        excludedContactsIds: excludes,
+        getContactsTags,
+        resetSelectedRows,
+        handleChangeContactsAttributes
+      } = this.props
+
+      this.setState({ isSubmitting: true })
+
+      await addAttributesBulk({
+        attributes: newTags,
+        users,
+        searchText,
+        conditionOperator,
+        filters,
+        excludes
+      })
+      handleChangeContactsAttributes && (await handleChangeContactsAttributes())
+      resetSelectedRows && resetSelectedRows()
+
+      await getContactsTags()
+      this.setState({ isSubmitting: false })
+
+      closeOverlay()
+    }
+
     const removedTags = tags.filter(tag => !tag.isSelected && tag.id)
 
     const {
@@ -234,6 +280,26 @@ class TagsOverlay extends React.Component {
     closeOverlay()
   }
 
+  // get all tags returns default tags and all the other tags
+  // It's used for bulk mode tagging experience
+  getAllTags = () => {
+    const attributeDef = selectDefinitionByName(this.props.attributeDefs, 'tag')
+    const existingTags = this.props.existingTags
+    const allTags = defaultTags
+      .concat(existingTags.map(tag => tag[attributeDef.data_type]))
+      .map(
+        tagText => ({
+          [attributeDef.data_type]: tagText,
+          attribute_def: attributeDef.id,
+          isSelected: false
+        }),
+        existingTags
+      )
+    const uniqTags = _.uniq(allTags, attributeDef.data_type)
+
+    return this.sortTags(uniqTags)
+  }
+
   // get common tags between selected contacts & default tags
   getCommonTags = (selectedContactsIds, ContactListStore, existingTags) => {
     if (selectedContactsIds.length === 0) {
@@ -297,33 +363,45 @@ class TagsOverlay extends React.Component {
     })
   }
 
-  render() {
+  getDrawerHeader() {
+    let contactsHeader = ''
     const {
-      closeOverlay,
+      entireMode,
+      totalContactsCount,
+      excludedContactsIds,
       selectedContactsIds,
-      ContactListStore,
-      isOpen
+      ContactListStore
     } = this.props
+    const contactsCount = entireMode
+      ? totalContactsCount - excludedContactsIds.length
+      : selectedContactsIds.length
+
+    if (contactsCount > 1) {
+      contactsHeader = `${contactsCount} contacts`
+    } else if (contactsCount === 1) {
+      const contact = selectContact(ContactListStore, selectedContactsIds[0])
+
+      if (contact) {
+        contactsHeader = getAttributeFromSummary(contact, 'display_name')
+      } else {
+        contactsHeader = 'contact'
+      }
+    }
+
+    return `Tags for ${contactsHeader}`
+  }
+
+  render() {
+    const { closeOverlay, isOpen } = this.props
     const { tags, isSubmitting, newTagValue } = this.state
     const { attributeDefs } = this.props
     const { data_type: tagDataType } =
       selectDefinitionByName(attributeDefs, 'tag') || {}
-    const { count: contactsCount } = selectContactsInfo(ContactListStore)
-    let DrawerHeaderText = ''
-
-    if (selectedContactsIds.length > 1) {
-      DrawerHeaderText = `${selectedContactsIds.length} contacts`
-    } else if (selectedContactsIds.length === 1 && contactsCount) {
-      const contact = selectContact(ContactListStore, selectedContactsIds[0])
-
-      if (contact) {
-        DrawerHeaderText = getAttributeFromSummary(contact, 'display_name')
-      }
-    }
+    const drawerHeader = this.getDrawerHeader()
 
     return (
       <OverlayDrawer isOpen={isOpen} width={50} onClose={closeOverlay}>
-        <OverlayDrawer.Header title={`Tags for ${DrawerHeaderText}`} />
+        <OverlayDrawer.Header title={drawerHeader} />
 
         <OverlayDrawer.Body>
           <SubHeaderContainer>
