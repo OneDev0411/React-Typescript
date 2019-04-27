@@ -142,14 +142,27 @@ class ContactsList extends React.Component {
       }
     },
     {
-      render: ({ entireMode, selectedRows, resetSelectedRows }) => {
-        const disabled = entireMode ? true : selectedRows.length === 0
+      render: ({
+        entireMode,
+        totalRowsCount,
+        excludedRows,
+        selectedRows,
+        resetSelectedRows
+      }) => {
+        const disabled = entireMode ? false : selectedRows.length === 0
 
         return (
           <ActionWrapper action="tagging" disabled={disabled}>
             <TagContacts
               disabled={disabled}
+              entireMode={entireMode}
+              totalRowsCount={totalRowsCount}
+              excludedRows={excludedRows}
               selectedRows={selectedRows}
+              filters={this.props.filters}
+              searchText={this.props.searchInputValue}
+              conditionOperator={this.props.conditionOperator}
+              users={this.props.users}
               resetSelectedRows={resetSelectedRows}
               handleChangeContactsAttributes={
                 this.props.handleChangeContactsAttributes
