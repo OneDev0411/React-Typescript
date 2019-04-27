@@ -24,6 +24,38 @@ import { AttachmentsList } from './fields/Attachments'
 
 import { Footer } from './Footer'
 
+const propTypes = {
+  deal: PropTypes.shape(),
+  from: PropTypes.object.isRequired,
+  recipients: PropTypes.array,
+  isSubmitting: PropTypes.bool,
+  defaultAttachments: PropTypes.array,
+  hasStaticBody: PropTypes.bool,
+  body: PropTypes.string,
+  isOpen: PropTypes.bool.isRequired,
+  onClickSend: PropTypes.func,
+  onClose: PropTypes.func.isRequired,
+  hasDealsAttachments: PropTypes.bool,
+  associations: PropTypes.shape({
+    deal: PropTypes.string,
+    template: PropTypes.string
+  })
+}
+
+const defaultProps = {
+  recipients: [],
+  defaultAttachments: [],
+  body: '',
+  onClickSend: null,
+  isSubmitting: false,
+  hasStaticBody: false,
+  hasDealsAttachments: false,
+  associations: {
+    template: '',
+    deal: ''
+  }
+}
+
 class EmailCompose extends React.Component {
   state = {
     isSendingEmail: false
@@ -111,6 +143,8 @@ class EmailCompose extends React.Component {
   }
 
   handleSendEmail = async form => {
+    const { dispatch } = this.props
+
     const email = {
       from: form.fromId,
       to: form.recipients,
@@ -132,19 +166,23 @@ class EmailCompose extends React.Component {
 
       await sendContactsEmail(email)
 
-      this.props.notify({
-        status: 'success',
-        message: successMessage
-      })
+      dispatch(
+        notify({
+          status: 'success',
+          message: successMessage
+        })
+      )
 
       this.props.onClose()
     } catch (e) {
       console.log(e)
 
-      this.props.notify({
-        status: 'error',
-        message: errorMessage
-      })
+      dispatch(
+        notify({
+          status: 'error',
+          message: errorMessage
+        })
+      )
     } finally {
       this.setState({
         isSendingEmail: false
@@ -250,38 +288,7 @@ class EmailCompose extends React.Component {
   }
 }
 
-EmailCompose.propTypes = {
-  from: PropTypes.object.isRequired,
-  recipients: PropTypes.array,
-  isSubmitting: PropTypes.bool,
-  defaultAttachments: PropTypes.array,
-  hasStaticBody: PropTypes.bool,
-  body: PropTypes.string,
-  isOpen: PropTypes.bool.isRequired,
-  onClickSend: PropTypes.func,
-  onClose: PropTypes.func.isRequired,
-  hasDealsAttachments: PropTypes.bool,
-  associations: PropTypes.shape({
-    deal: PropTypes.string,
-    template: PropTypes.string
-  })
-}
+EmailCompose.propTypes = propTypes
+EmailCompose.defaultProps = defaultProps
 
-EmailCompose.defaultProps = {
-  recipients: [],
-  defaultAttachments: [],
-  body: '',
-  onClickSend: null,
-  isSubmitting: false,
-  hasStaticBody: false,
-  hasDealsAttachments: false,
-  associations: {
-    template: '',
-    deal: ''
-  }
-}
-
-export default connect(
-  null,
-  { notify }
-)(EmailCompose)
+export default connect()(EmailCompose)
