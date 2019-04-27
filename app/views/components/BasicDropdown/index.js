@@ -6,6 +6,15 @@ import { Item } from '../Dropdown/Item'
 import DropButton from '../Button/DropButton'
 
 export class BasicDropdown extends React.Component {
+  state = {
+    isOpen: false
+  }
+
+  toggleOpenMenu = () =>
+    this.setState(state => ({
+      isOpen: !state.isOpen
+    }))
+
   render() {
     const {
       buttonIcon,
@@ -38,6 +47,7 @@ export class BasicDropdown extends React.Component {
       <Downshift
         onChange={onChange}
         onSelect={onSelect}
+        isOpen={this.state.isOpen}
         onStateChange={(changes, downshift) => {
           changes.isOpen &&
             centerSelected &&
@@ -53,29 +63,31 @@ export class BasicDropdown extends React.Component {
           <div style={{ position: 'relative', ...style }}>
             {buttonRenderer ? (
               buttonRenderer({
-                ...downshift.getButtonProps({
-                  disabled,
-                  isBlock: fullWidth,
-                  noBorder,
-                  isOpen: downshift.isOpen,
-                  selectedItem: downshift.selectedItem
-                })
+                onClick: this.toggleOpenMenu,
+                disabled,
+                isBlock: fullWidth,
+                noBorder,
+                isOpen: downshift.isOpen,
+                selectedItem: downshift.selectedItem,
+                text:
+                  buttonText ||
+                  (downshift.selectedItem && downshift.selectedItem.label)
               })
             ) : (
               <DropButton
-                {...downshift.getButtonProps({
-                  disabled,
-                  iconLeft: buttonIcon,
-                  iconSize: buttonIconSize,
-                  isBlock,
-                  isOpen: downshift.isOpen,
-                  size: buttonSize,
-                  noBorder,
-                  style: buttonStyle,
-                  text:
-                    buttonText ||
-                    (downshift.selectedItem && downshift.selectedItem.label)
-                })}
+                onClick={this.toggleOpenMenu}
+                disabled={disabled}
+                iconLeft={buttonIcon}
+                iconSize={buttonIconSize}
+                isBlock={isBlock}
+                isOpen={downshift.isOpen}
+                size={buttonSize}
+                noBorder={noBorder}
+                style={buttonStyle}
+                text={
+                  buttonText ||
+                  (downshift.selectedItem && downshift.selectedItem.label)
+                }
               />
             )}
             {downshift.isOpen && (
@@ -101,6 +113,7 @@ export class BasicDropdown extends React.Component {
                     ...downshift.getItemProps({
                       item,
                       isActive: downshift.highlightedIndex === index,
+                      onClick: this.toggleOpenMenu,
                       isSelected:
                         downshift.selectedItem &&
                         downshift.selectedItem.label === item.label
