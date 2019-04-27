@@ -57,6 +57,13 @@ class EmailCompose extends React.Component {
     return this.props.isSubmitting || this.state.isSendingEmail
   }
 
+  get associations() {
+    return _.pick(
+      this.props.associations,
+      value => typeof value === 'string' && value.length > 0
+    )
+  }
+
   isRecipientsChanged = () =>
     (this.formObject.recipients || []).length !==
     (this.props.recipients || []).length
@@ -75,6 +82,7 @@ class EmailCompose extends React.Component {
   handleSubmit = async values => {
     const form = {
       ...values,
+      ...this.associations,
       recipients: this.normalizeRecipients(values.recipients)
     }
 
@@ -109,7 +117,8 @@ class EmailCompose extends React.Component {
       subject: form.subject.trim(),
       html: form.body,
       attachments: _.map(form.attachments, item => item.file_id),
-      due_at: form.due_at
+      due_at: form.due_at,
+      ...this.associations
     }
     const successMessage = email.due_at
       ? 'The email has been scheduled'
@@ -251,7 +260,11 @@ EmailCompose.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClickSend: PropTypes.func,
   onClose: PropTypes.func.isRequired,
-  hasDealsAttachments: PropTypes.bool
+  hasDealsAttachments: PropTypes.bool,
+  associations: PropTypes.shape({
+    deal: PropTypes.string,
+    template: PropTypes.string
+  })
 }
 
 EmailCompose.defaultProps = {
@@ -261,7 +274,11 @@ EmailCompose.defaultProps = {
   onClickSend: null,
   isSubmitting: false,
   hasStaticBody: false,
-  hasDealsAttachments: false
+  hasDealsAttachments: false,
+  associations: {
+    template: '',
+    deal: ''
+  }
 }
 
 export default connect(
