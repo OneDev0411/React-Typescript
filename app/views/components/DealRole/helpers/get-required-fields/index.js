@@ -64,7 +64,7 @@ function getRequiredFields(args) {
   }
 
   if (role_type === TYPE_COMPANY) {
-    list.push('company_title')
+    list.push('company')
   }
 
   // when adding an agent, company should be mandatory
