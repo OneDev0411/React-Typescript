@@ -15,8 +15,11 @@ TextInput.propTypes = {
   label: PropTypes.string.isRequired,
   styles: PropTypes.object,
   meta: PropTypes.object,
+  hasLabel: PropTypes.bool,
   isRequired: PropTypes.bool,
   isVisible: PropTypes.bool,
+  showError: PropTypes.bool,
+  highlightOnError: PropTypes.bool,
   container: PropTypes.element
 }
 
@@ -24,18 +27,22 @@ TextInput.defaultProps = {
   input: null,
   meta: {},
   styles: {},
+  hasLabel: true,
   isRequired: false,
   isVisible: true,
+  showError: true,
+  highlightOnError: true,
   container: InputContainer
 }
 
 export function TextInput(props) {
-  if (props.isVisible === false) {
-    return null
-  }
-
   return (
-    <props.container style={props.style}>
+    <props.container
+      style={{
+        ...props.style,
+        display: props.isVisible ? 'block' : 'hidden'
+      }}
+    >
       {props.hasLabel && (
         <InputLabel hasError={props.meta.submitFailed && props.meta.error}>
           {props.label || props.placeholder}
@@ -45,12 +52,9 @@ export function TextInput(props) {
       )}
 
       <InputField
-        {...props.input}
         autoComplete="Off"
         placeholder={props.placeholder}
-        hasError={
-          props.highlightOnError && props.meta.submitFailed && props.meta.error
-        }
+        hasError={props.highlightOnError && props.meta.error}
         {...props}
       />
 
