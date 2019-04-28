@@ -41,7 +41,7 @@ const LOADING_POSITIONS = {
   Middle: 2
 }
 
-const MENU_WIDTH = '18.75rem'
+const MENU_WIDTH = '19.5rem'
 
 class CalendarContainer extends React.Component {
   state = {

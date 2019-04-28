@@ -1,10 +1,11 @@
 import styled from 'styled-components'
+
 import { primary } from '../../../utils/colors'
 
 export const Container = styled.div`
   position: absolute;
   right: 0rem;
-  top: 4px;
+  top: 0.3rem;
   display: flex;
 `
 
