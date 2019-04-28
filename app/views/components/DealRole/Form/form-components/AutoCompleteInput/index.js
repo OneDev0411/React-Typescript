@@ -65,7 +65,6 @@ export function AutoCompleteInput(props) {
       onSelect={item => props.mutators && props.mutators.setAgent(item)}
       options={getOptions}
       inputProps={{
-        showError: false,
         highlightOnError: true
       }}
     />

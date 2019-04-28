@@ -23,9 +23,6 @@ import { getAutocompleteOptions } from '../helpers/get-autocomplete-options'
 import { Header, Body, Footer } from '../styled'
 
 export function FormContainer(props) {
-  const normalizeCommission = value =>
-    !value ? value : value.replace(/[^0-9.]/g, '')
-
   const isRequired = field => props.requiredFields.includes(field)
   const isVisible = field => props.visibleFields.includes(field)
 
@@ -71,8 +68,6 @@ export function FormContainer(props) {
             name="legal_middle_name"
             label="Mid. Name"
             isVisible={isVisible('legal_middle_name')}
-            highlightOnError
-            showError={false}
             component={TextInput}
             style={{ flex: 1.5, marginRight: '0.5rem' }}
           />
@@ -169,11 +164,11 @@ export function FormContainer(props) {
 
         <Flex style={{ marginTop: '1rem' }}>
           <Field
-            parse={normalizeCommission}
+            name="commission"
+            parse={value => (!value ? value : value.replace(/[^0-9.]/g, ''))}
             isVisible={isVisible('commission')}
             isRequired={isRequired('commission')}
-            name="commission"
-            placeholder="Commission"
+            label="Commission"
             commissionType={props.values.commission_type}
             component={CommissionInput}
           />

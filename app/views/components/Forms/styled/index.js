@@ -4,6 +4,7 @@ export const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
   border-bottom: 1px solid #dce5eb;
   padding: 0.5rem 0;
   text-align: left;

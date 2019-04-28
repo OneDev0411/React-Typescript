@@ -40,7 +40,7 @@ export function TextInput(props) {
     <props.container
       style={{
         ...props.style,
-        display: props.isVisible ? 'block' : 'hidden'
+        display: props.isVisible ? 'block' : 'none'
       }}
     >
       {props.hasLabel && (
@@ -54,7 +54,9 @@ export function TextInput(props) {
       <InputField
         autoComplete="Off"
         placeholder={props.placeholder}
-        hasError={props.highlightOnError && props.meta.error}
+        hasError={
+          props.highlightOnError && props.meta.submitFailed && props.meta.error
+        }
         {...props}
       />
 

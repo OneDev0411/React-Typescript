@@ -13,15 +13,15 @@ import {
 } from './styled'
 
 export function CommissionInput(props) {
-  if (props.isVisible === false) {
-    return false
-  }
-
   return (
-    <CommissionContainer>
+    <CommissionContainer
+      style={{
+        display: props.isVisible ? 'flex' : 'none'
+      }}
+    >
       <CommissionRadioContainer>
         <InputLabel hasError={props.meta.submitFailed && props.meta.error}>
-          {props.placeholder}{' '}
+          {props.label}&nbsp;
           <InputRequired>{props.isRequired && '*'}</InputRequired>
         </InputLabel>
 
@@ -42,13 +42,16 @@ export function CommissionInput(props) {
       </CommissionRadioContainer>
 
       <TextInput
-        {...props.input}
-        meta={props.meta}
+        {...props}
+        style={{
+          borderBottom: 'none',
+          paddingBottom: 0
+        }}
         hasLabel={false}
         highlightOnError
         Container={CommissionInputContainer}
         autoComplete="off"
-        placeholder="Enter commission for this agent"
+        placeholder="Enter agent commission"
       />
     </CommissionContainer>
   )
