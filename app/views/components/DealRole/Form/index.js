@@ -15,9 +15,10 @@ import { TitleInput } from './form-components/TitleInput'
 import { TypeInput } from './form-components/TypeInput'
 import { Roles } from './form-components/Roles'
 import { Address } from './form-components/Address'
-import { MlsIdInput } from './form-components/MlsIdInput'
-import { NameInput } from './form-components/NameInput'
+import { AutoCompleteInput } from './form-components/AutoCompleteInput'
 import { CommissionInput } from './form-components/CommissionInput'
+
+import { getAutocompleteOptions } from '../helpers/get-autocomplete-options'
 
 import { Header, Body, Footer } from '../styled'
 
@@ -62,7 +63,7 @@ export function FormContainer(props) {
             isVisible={isVisible('legal_first_name')}
             isRequired={isRequired('legal_first_name')}
             mutators={props.form.mutators}
-            component={NameInput}
+            component={AutoCompleteInput}
             style={{ flex: 3, marginRight: '0.5rem' }}
           />
 
@@ -70,6 +71,8 @@ export function FormContainer(props) {
             name="legal_middle_name"
             label="Mid. Name"
             isVisible={isVisible('legal_middle_name')}
+            highlightOnError
+            showError={false}
             component={TextInput}
             style={{ flex: 1.5, marginRight: '0.5rem' }}
           />
@@ -80,7 +83,7 @@ export function FormContainer(props) {
             label="Last Name"
             isVisible={isVisible('legal_last_name')}
             isRequired={isRequired('legal_last_name')}
-            component={NameInput}
+            component={AutoCompleteInput}
             mutators={props.form.mutators}
             style={{ flex: 3 }}
           />
@@ -90,9 +93,15 @@ export function FormContainer(props) {
           <Field
             name="company"
             label="Company / Trust"
+            form={props.form}
             isVisible={isVisible('company')}
             isRequired={isRequired('company')}
-            component={TextInput}
+            component={AutoCompleteInput}
+            options={getAutocompleteOptions(
+              props.formObject,
+              'company',
+              'companies'
+            )}
             style={{ flex: 7, marginRight: '0.5rem' }}
           />
 
@@ -101,7 +110,7 @@ export function FormContainer(props) {
             label="MLS ID"
             isVisible={isVisible('mls_id')}
             mutators={props.form.mutators}
-            component={MlsIdInput}
+            component={AutoCompleteInput}
             style={{ flex: 3 }}
           />
         </Flex>
@@ -110,18 +119,30 @@ export function FormContainer(props) {
           <Field
             name="email"
             label="Email"
+            form={props.form}
             isVisible={isVisible('email')}
             isRequired={isRequired('email')}
-            component={TextInput}
+            component={AutoCompleteInput}
+            options={getAutocompleteOptions(
+              props.formObject,
+              'email',
+              'emails'
+            )}
             style={{ flex: 5, marginRight: '0.5rem' }}
           />
 
           <Field
             name="phone"
             label="Phone"
+            form={props.form}
             isVisible={isVisible('phone_number')}
             isRequired={isRequired('phone_number')}
-            component={TextInput}
+            component={AutoCompleteInput}
+            options={getAutocompleteOptions(
+              props.formObject,
+              'phone_numbers',
+              'phones'
+            )}
             style={{ flex: 5 }}
           />
         </Flex>
