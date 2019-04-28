@@ -16,7 +16,7 @@ import { MenuButton } from './styled'
 SelectInput.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.shape({
-      title: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
       value: PropTypes.string
     }).isRequired
   ).isRequired,
