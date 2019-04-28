@@ -229,6 +229,7 @@ class Role extends React.Component {
             return (
               <FormContainer
                 {...formProps}
+                formObject={this.props.form}
                 requiredFields={requiredFields}
                 visibleFields={visibleFields}
                 isAllowedRole={this.isAllowedRole}
