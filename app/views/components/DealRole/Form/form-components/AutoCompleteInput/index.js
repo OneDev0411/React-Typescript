@@ -32,6 +32,10 @@ export function NameInput(props) {
       {...props}
       onSelect={props.mutators.setAgent}
       options={value => search(value, props.autocompleteField)}
+      inputProps={{
+        showError: false,
+        highlightOnError: true
+      }}
     />
   )
 }

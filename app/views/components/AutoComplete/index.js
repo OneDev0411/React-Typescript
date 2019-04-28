@@ -21,6 +21,7 @@ const propTypes = {
   resultsCount: PropTypes.number,
   debounce: PropTypes.number,
   searchConfiguration: PropTypes.object,
+  inputProps: PropTypes.object,
   inputRenderer: PropTypes.func,
   itemRenderer: PropTypes.func,
   options: PropTypes.oneOfType([
@@ -46,6 +47,7 @@ const defaultProps = {
   resultsCount: 10,
   debounce: 500,
   searchConfiguration: {},
+  inputProps: {},
   inputRenderer: null,
   itemRenderer: null
 }
@@ -151,7 +153,7 @@ export class AutoComplete extends React.Component {
                 placeholder={props.placeholder}
                 label={props.label}
                 style={this.props.inputStyle}
-                {...getInputProps({ ...props.input })}
+                {...getInputProps({ ...props.input, ...props.inputProps })}
               />
             ) : (
               <Fragment>
@@ -165,7 +167,7 @@ export class AutoComplete extends React.Component {
                   <input
                     style={this.props.inputStyle}
                     placeholder={props.placeholder}
-                    {...getInputProps()}
+                    {...getInputProps({ ...props.inputProps })}
                   />
                 )}
               </Fragment>
