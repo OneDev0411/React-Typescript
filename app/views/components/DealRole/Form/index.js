@@ -186,14 +186,32 @@ export function FormContainer(props) {
 
         <Flex>
           <LinkButton onClick={props.onClose}>Cancel</LinkButton>
-          <ActionButton appearance="outline">Save</ActionButton>
-          <ActionButton
-            style={{
-              marginLeft: '0.5rem'
-            }}
-          >
-            Save & Add to My Contacts
-          </ActionButton>
+
+          {props.isSubmitting ? (
+            <ActionButton>
+              {props.isNewRecord ? 'Saving...' : 'Updating...'}
+            </ActionButton>
+          ) : (
+            <Fragment>
+              <ActionButton
+                appearance={props.isNewRecord ? 'outline' : 'primary'}
+                onClick={() => props.onSubmit(props.form, false)}
+              >
+                Save
+              </ActionButton>
+
+              {props.isNewRecord && (
+                <ActionButton
+                  onClick={() => props.onSubmit(props.form, true)}
+                  style={{
+                    marginLeft: '0.5rem'
+                  }}
+                >
+                  Save & Add to My Contacts
+                </ActionButton>
+              )}
+            </Fragment>
+          )}
         </Flex>
       </Footer>
     </Fragment>

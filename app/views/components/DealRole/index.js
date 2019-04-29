@@ -29,6 +29,7 @@ class Role extends React.Component {
     }
 
     this.formObject = {
+      saveRoleInContacts: true,
       ...this.props.form,
       ...this.PreselectRole,
       ...getCommissionAttributes(this.props.form),
@@ -93,12 +94,19 @@ class Role extends React.Component {
     }
   }
 
+  handleSubmit = async (form, saveContact = true) => {
+    this.formObject.saveRoleInContacts = saveContact
+    form.submit()
+  }
+
   onSubmit = async values => {
     // keeps the last object of submitted form
+    const { saveRoleInContacts } = this.formObject
+
     this.formObject = values
 
     // send form to the parent
-    await this.props.onFormSubmit(normalizeForm(values))
+    await this.props.onFormSubmit(normalizeForm(values), saveRoleInContacts)
   }
 
   validate = async values => {
@@ -147,25 +155,10 @@ class Role extends React.Component {
   }
 
   /**
-   * returns Submit button's caption
-   */
-  get submitCaption() {
-    const { isSubmitting } = this.props
-
-    if (isSubmitting) {
-      return this.isNewRecord ? 'Saving...' : 'Updating...'
-    }
-
-    return this.isNewRecord ? 'Add' : 'Update'
-  }
-
-  /**
    * get form is new record or not
    */
   get isNewRecord() {
-    const { form } = this.props
-
-    return !form || !form.role
+    return !this.props.form || !this.props.form.role
   }
 
   getFormProperties = values => {
@@ -229,11 +222,14 @@ class Role extends React.Component {
             return (
               <FormContainer
                 {...formProps}
+                isSubmitting={this.props.isSubmitting}
+                isNewRecord={this.isNewRecord}
                 formObject={this.props.form}
                 requiredFields={requiredFields}
                 visibleFields={visibleFields}
                 isAllowedRole={this.isAllowedRole}
                 onDeleteRole={this.handleDeleteRole}
+                onSubmit={this.handleSubmit}
                 onClose={this.handleClose}
               />
             )
