@@ -5,6 +5,7 @@ import Table from 'components/Grid/Table'
 import { formatDate } from 'components/DateTimePicker/helpers'
 
 import Header from './Header'
+import Layout from './Layout'
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
 import NoSearchResults from '../../../../Partials/no-search-results'
@@ -163,27 +164,30 @@ function recipientsList(recipients) {
 
 function List(props) {
   const { list, isLoading } = useListData(props.user)
+  const [isSideMenuOpen, setSideMenuOpen] = useState(true)
 
   return (
-    <InsightContainer>
-      <Header
-        title="Sent Emails"
-        isSideMenuOpen={props.isSideMenuOpen}
-        onMenuTriggerChange={props.toggleSideMenu}
-      />
-
-      <div className="table-container">
-        <Table
-          data={list}
-          columns={columns}
-          isFetching={isLoading}
-          EmptyState={() => (
-            <NoSearchResults description="Try sending your first campaign using " />
-          )}
-          LoadingState={LoadingComponent}
+    <Layout isSideMenuOpen={isSideMenuOpen} sentBadge={list.length}>
+      <InsightContainer>
+        <Header
+          title="Sent Emails"
+          isSideMenuOpen={isSideMenuOpen}
+          onMenuTriggerChange={() => setSideMenuOpen(!isSideMenuOpen)}
         />
-      </div>
-    </InsightContainer>
+
+        <div className="table-container">
+          <Table
+            data={list}
+            columns={columns}
+            isFetching={isLoading}
+            EmptyState={() => (
+              <NoSearchResults description="Try sending your first campaign using " />
+            )}
+            LoadingState={LoadingComponent}
+          />
+        </div>
+      </InsightContainer>
+    </Layout>
   )
 }
 

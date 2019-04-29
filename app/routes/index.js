@@ -198,12 +198,7 @@ const AsyncMarketingHistory = Load({
 //  Insights
 /* ==================================== */
 
-const AsyncInsights = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Insights' /* webpackChunkName: "marketing" */)
-})
-
-const AsyncInsightsStore = Load({
+const AsyncInsightsMain = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Insights/Main' /* webpackChunkName: "marketing_store" */)
 })
@@ -491,8 +486,8 @@ export default (
         <Route component={AsyncMarketingTemplates} path=":types(/:medium)" />
       </Route>
 
-      <Route path="/dashboard/insights" component={AsyncInsights}>
-        <IndexRoute component={AsyncInsightsStore} />
+      <Route path="/dashboard/insights">
+        <IndexRoute component={AsyncInsightsMain} />
         <Route path="campaigns/:campaignId" component={AsyncInsightsDetails} />
       </Route>
 

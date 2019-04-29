@@ -21,7 +21,7 @@ export function Header({ title, isSideMenuOpen, onMenuTriggerChange }) {
       </PageHeader.Title>
 
       <PageHeader.Menu>
-        <Tooltip caption="From CSV Spreadsheet" placement="bottom">
+        <Tooltip placement="bottom">
           <ActionButton
             appearance="outline"
             style={{ marginRight: '1em' }}

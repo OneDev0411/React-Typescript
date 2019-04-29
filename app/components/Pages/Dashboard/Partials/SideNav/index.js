@@ -28,6 +28,7 @@ import ContactsIcon from '../../../../../views/components/SvgIcons/Contacts/Icon
 import NotificationsIcon from '../../../../../views/components/SvgIcons/Notifications/IconNotifications'
 import SupportIcon from '../../../../../views/components/SvgIcons/Support/IconSupport'
 import CalendarIcon from '../../../../../views/components/SvgIcons/Calendar2/IconCalendar'
+import MarketingInsights from '../../../../../views/components/SvgIcons/MarketingInsights/IconMarketingInsights'
 import IconProperties from '../../../../../views/components/SvgIcons/Properties/IconProperties'
 
 import TeamSwitcher from './components/TeamSwitcher'
@@ -145,12 +146,12 @@ class appSideNav extends React.Component {
             </Dropdown.Menu>
           </Dropdown>
         ) : (
-          <Flex center style={{ padding: '0.75em 0' }}>
-            <Link to="/">
-              <img src={brandLogoSrc} alt="Rechat" width="32" height="32" />
-            </Link>
-          </Flex>
-        )}
+            <Flex center style={{ padding: '0.75em 0' }}>
+              <Link to="/">
+                <img src={brandLogoSrc} alt="Rechat" width="32" height="32" />
+              </Link>
+            </Flex>
+          )}
         <ul className="c-app-sidenav__list">
           {hasContactsPermission && (
             <SideNavItem isActive={activePath === 'CALENDAR'}>
@@ -249,7 +250,7 @@ class appSideNav extends React.Component {
                   to="/dashboard/insights"
                   className="c-app-sidenav__item__title"
                 >
-                  <CalendarIcon />
+                  <MarketingInsights />
                 </Link>
               </SideNavTooltip>
             </SideNavItem>
