@@ -48,6 +48,14 @@ function Recipients(props) {
     items.push(`${tagsCount} Tags`)
   }
 
+  if (recipientsCount === 1 && listCount === 0 && tagsCount === 0) {
+    // server puts the email on props.data even it sends to a contact
+    // so maybe it confusing at some point that email isn't include the contact itself.
+    const emailAddress = props.data[0].email
+
+    return <span>{emailAddress}</span>
+  }
+
   return <span>{items.join(', ')}</span>
 }
 
