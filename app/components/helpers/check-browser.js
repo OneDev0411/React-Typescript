@@ -35,8 +35,6 @@ export function checkBrowser() {
       return
     }
 
-    console.log(browserInfo)
-
     let content = {
       title: `Sorry. ${name} is not a supported browser.`,
       description:
