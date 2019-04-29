@@ -24,11 +24,11 @@ function SendEmailButton(props) {
   return (
     <Fragment>
       <ActionButton
-        appearance="outline"
+        appearance={props.appearance}
         style={props.style}
         onClick={toggleOpenDrawer}
       >
-        Email
+        {props.title}
       </ActionButton>
 
       {isOpen && (
@@ -57,13 +57,17 @@ function mapStateToProps({ user }) {
 SendEmailButton.propTypes = {
   deal: PropTypes.object,
   defaultAttachments: PropTypes.array,
-  recipients: PropTypes.array
+  recipients: PropTypes.array,
+  appearance: PropTypes.string,
+  title: PropTypes.string
 }
 
 SendEmailButton.defaultProps = {
   deal: null,
   defaultAttachments: [],
-  recipients: []
+  recipients: [],
+  appearance: 'outline',
+  title: 'Email'
 }
 
 export default connect(mapStateToProps)(SendEmailButton)

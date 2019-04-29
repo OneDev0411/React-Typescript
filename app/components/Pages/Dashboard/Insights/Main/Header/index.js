@@ -2,9 +2,10 @@ import React from 'react'
 import { browserHistory } from 'react-router'
 
 import Tooltip from 'components/tooltip'
+import SendEmailButton from 'components/SendEmailButton'
 
 import PageHeader from '../../../../../../views/components/PageHeader'
-import { CreateContact } from '../../../../../../views/components/CreateContact'
+
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
 import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
@@ -31,7 +32,7 @@ export function Header({ title, isSideMenuOpen, onMenuTriggerChange }) {
           </ActionButton>
         </Tooltip>
 
-        <CreateContact />
+        <SendEmailButton appearance="primary" title="Send New Email" />
       </PageHeader.Menu>
     </PageHeader>
   )
