@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet'
 
 import { formatDate } from 'components/DateTimePicker/helpers'
 import Table from 'components/Grid/Table'
+import ContactInfo from 'components/ContactInfo'
 
 import Header from './Header'
 import { Container } from '../../Contacts/components/Container'
@@ -10,7 +11,12 @@ import getCampaing from '../../../../../models/insights/emails/get-campaign-by-i
 import { PageContainer, PageWrapper } from '../../Contacts/Profile/styled'
 import Loading from '../../../../Partials/Loading'
 
-import { DetailsContainer, SummaryCard } from './styled'
+import {
+  DetailsContainer,
+  SummaryCard,
+  ContactColumn,
+  StyledBadge
+} from './styled'
 
 function percent(num, allNum) {
   if (num == 0 || allNum === 0) {
@@ -66,23 +72,45 @@ function contactsList(item) {
   }))
 }
 
+function RowBadges(data) {
+  const output = []
+
+  if (data.unsubscribed > 0) {
+    const count = data.unsubscribed >= 2 ? `(${data.unsubscribed})` : null
+
+    output.push(
+      <StyledBadge appearance="warning">Unsubscribed {count}</StyledBadge>
+    )
+  }
+
+  if (data.failed > 0) {
+    const count = data.failed >= 2 ? `(${data.failed})` : null
+
+    output.push(<StyledBadge>Bounced {count}</StyledBadge>)
+  }
+
+  return output
+}
+
 const columns = [
   {
     header: 'Contact',
     id: 'contact',
-    width: '50%',
+    width: '75%',
     verticalAlign: 'center',
     // accessor: contact => getAttributeFromSummary(contact, 'display_name'),
     render: props => {
       const { rowData, rowIndex, totalRows } = props
 
       return (
-        <>
-          <div>{rowData.display_name}</div>
+        <ContactColumn>
           <div>
-            <div className="sub-info">{rowData.to}</div>
+            <ContactInfo data={rowData} />
           </div>
-        </>
+          <div className="labels-container">
+            <RowBadges data={rowData} />
+          </div>
+        </ContactColumn>
       )
     }
   },
@@ -148,6 +176,19 @@ function Details(props) {
     )
   }
 
+  const totalSent = Array.isArray(item.emails) ? item.emails.length : 0
+  const sentFrom = {
+    display_name: '',
+    to: '',
+    profile_image_url: ''
+  }
+
+  if (item.from) {
+    sentFrom.profile_image_url = item.from.profile_image_url
+    sentFrom.to = item.from.email
+    sentFrom.display_name = item.from.display_name
+  }
+
   return (
     <PageWrapper>
       {/* <Helmet>
@@ -168,46 +209,52 @@ function Details(props) {
                 </li>
                 <li>
                   <div className="field-name">Total Sent</div>
-                  <div className="field-value">{item.recipients}</div>
+                  <div className="field-value">{totalSent}</div>
                 </li>
                 <li>
                   <div className="field-name">Successful Deliveries</div>
                   <div className="field-value">{`${percent(
                     item.delivered,
-                    item.recipients
+                    totalSent
                   )}% (${item.delivered})`}</div>
                 </li>
                 <li>
                   <div className="field-name">Open Rate</div>
                   <div className="field-value">{`${percent(
                     item.opened,
-                    item.recipients
+                    totalSent
                   )}% (${item.opened})`}</div>
                 </li>
                 <li>
                   <div className="field-name">Bounced</div>
                   <div className="field-value">{`${percent(
                     item.failed,
-                    item.recipients
+                    totalSent
                   )}% (${item.failed})`}</div>
                 </li>
                 <li>
                   <div className="field-name">Click Rate</div>
                   <div className="field-value">{`${percent(
                     item.clicked,
-                    item.recipients
+                    totalSent
                   )}% (${item.clicked})`}</div>
                 </li>
               </ul>
+              {item.from && (
+                <div className="sent-from">
+                  <div className="title">Sent From</div>
+                  <ContactInfo data={sentFrom} />
+                </div>
+              )}
             </SummaryCard>
           </aside>
           <section className="sidebar">
             <Table
               data={contactsList(item)}
               columns={columns}
-              // EmptyState={() => (
-              //   <NoSearchResults description="Try typing another name, email, phone or tag." />
-              // )}
+            // EmptyState={() => (
+            //   <NoSearchResults description="Try typing another name, email, phone or tag." />
+            // )}
             />
           </section>
         </DetailsContainer>

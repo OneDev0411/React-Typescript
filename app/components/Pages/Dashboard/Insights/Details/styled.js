@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import Badge from 'components/Badge'
+
 export const DetailsContainer = styled.div`
   display: flex;
   padding: 0 1.5rem 3rem 1.5rem;
@@ -45,10 +47,12 @@ export const SummaryCard = styled.div`
   .sent-from {
     position: relative;
     padding: 1rem 0;
+    margin-top: 1.5rem;
 
     & .title {
       font-size: 1.25rem;
       font-weight: bold;
+      margin-bottom: 1.5rem;
     }
 
     &:before {
@@ -62,4 +66,28 @@ export const SummaryCard = styled.div`
       content: '';
     }
   }
+`
+
+export const InsightsHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+`
+
+export const ContactColumn = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 1rem;
+
+  .labels-container {
+    & > span {
+      margin-left: 0.5rem;
+    }
+  }
+`
+
+export const StyledBadge = styled(Badge)`
+  padding: 0.25rem 0.75rem;
 `

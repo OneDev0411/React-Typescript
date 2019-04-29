@@ -1,7 +1,7 @@
 import React from 'react'
-import Flex from 'styled-flex-component'
 
 import Menu from './Menu'
+import { InsightsHeader } from '../styled'
 import { H1 } from '../../../../../../views/components/Typography/headings'
 
 Header.defaultProps = {
@@ -9,16 +9,17 @@ Header.defaultProps = {
 }
 function Header(props) {
   return (
-    <Flex justifyBetween style={{ padding: '1.5em 2.5em' }}>
-      <Flex>
-        <Flex column style={{ padding: '0.5em 1.5em' }}>
-          <H1 style={{ lineHeight: 1.5 }}>
-            {props.title.trim() || 'No Title'}
-          </H1>
-        </Flex>
-      </Flex>
-      <Menu backUrl={props.backUrl} closeButtonQuery={props.closeButtonQuery} />
-    </Flex>
+    <InsightsHeader justifyBetween>
+      <div>
+        <H1 style={{ lineHeight: 1.5 }}>{props.title.trim() || 'No Title'}</H1>
+      </div>
+      <div>
+        <Menu
+          backUrl={props.backUrl}
+          closeButtonQuery={props.closeButtonQuery}
+        />
+      </div>
+    </InsightsHeader>
   )
 }
 
