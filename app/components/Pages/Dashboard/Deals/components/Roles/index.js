@@ -193,7 +193,9 @@ class Roles extends React.Component {
                     <RoleTitle>{getLegalFullName(role)}</RoleTitle>
                     <RoleType>
                       {roleName(role.role)}
-                      {this.props.showEmail && role.user ? ` . ${role.user.email}` : null}
+                      {this.props.showEmail && role.user
+                        ? ` . ${role.user.email}`
+                        : null}
                     </RoleType>
                   </RoleInfo>
                 </Flex>

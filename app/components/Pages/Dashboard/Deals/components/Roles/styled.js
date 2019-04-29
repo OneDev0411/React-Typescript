@@ -4,7 +4,9 @@ import { primary } from 'views/utils/colors'
 
 import { SectionTitle } from '../../Dashboard/Factsheet/styled'
 
-export const RolesContainer = styled.div``
+export const RolesContainer = styled.div`
+  position: relative;
+`
 
 export const RolesTitle = styled(SectionTitle)`
   padding: 0 1.5rem;
