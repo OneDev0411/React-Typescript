@@ -42,11 +42,12 @@ export function CommissionInput(props) {
       </CommissionRadioContainer>
 
       <TextInput
-        {...props}
+        {...props.input}
         style={{
           borderBottom: 'none',
           paddingBottom: 0
         }}
+        name="commission"
         hasLabel={false}
         highlightOnError
         Container={CommissionInputContainer}
