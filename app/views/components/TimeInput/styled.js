@@ -6,6 +6,7 @@ export const TimeInputContainer = styled.div`
   border: 1px solid #ccc;
   box-shadow: inset 0 1px 1px #f5f5f5;
   padding: 4px;
+  overflow: hidden;
 
   & .time,
   & .meridian {
