@@ -10,7 +10,24 @@ import { dateFallback, pickerSaveButtonText } from './helpers'
 
 function Picker(props) {
   const isDateSet = !!props.selectedDate
-  const handleChangeDate = date => props.onChange(date)
+  const handleChangeDate = date => {
+    // An ugly trick for setting correct time
+    // because react-day-picker is setting time to 12AM automaticly each time.
+    if (isDateSet) {
+      // If the date is set before we are using that
+      date.setHours(props.selectedDate.getHours())
+      date.setMinutes(props.selectedDate.getMinutes())
+    } else {
+      // if it's not set, we are using current time of user
+      const now = new Date()
+
+      date.setHours(now.getHours())
+      date.setMinutes(now.getMinutes())
+    }
+
+    props.onChange(date)
+  }
+  const handleChangeTime = date => props.onChange(date)
 
   return (
     <PickerContent>
@@ -22,7 +39,7 @@ function Picker(props) {
       <Divider margin="0.5em 0" />
       <TimeInput
         initialDate={dateFallback(props.selectedDate)}
-        onChange={handleChangeDate}
+        onChange={handleChangeTime}
       />
       <Divider margin="0.5em 0" />
       <div className="picker-actions">
