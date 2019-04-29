@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { Field } from 'react-final-form'
 import Flex from 'styled-flex-component'
 
-import TrashIcon from 'components/SvgIcons/TrashIcon/'
+import TrashIcon from 'components/SvgIcons/Delete/IconDelete'
 
 import IconButton from 'components/Button/IconButton'
 import ActionButton from 'components/Button/ActionButton'
