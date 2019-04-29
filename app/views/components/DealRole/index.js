@@ -16,6 +16,16 @@ import { getCommissionAttributes } from './helpers/get-commission-attributes'
 
 import { Container } from './styled'
 
+const propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  formOptions: PropTypes.object
+}
+
+const defaultProps = {
+  formOptions: {}
+}
+
 class Role extends React.Component {
   handleDeleteRole = () => {}
 
@@ -206,7 +216,7 @@ class Role extends React.Component {
     }
 
     return (
-      <Container>
+      <Container position={this.props.formOptions.position}>
         <Form
           validate={this.validate}
           onSubmit={this.onSubmit}
@@ -240,11 +250,7 @@ class Role extends React.Component {
   }
 }
 
-Role.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired
-}
-
-Role.defaultProps = {}
+Role.propTypes = propTypes
+Role.defaultProps = defaultProps
 
 export default Role

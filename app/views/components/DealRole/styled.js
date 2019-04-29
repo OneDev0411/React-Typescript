@@ -2,8 +2,8 @@ import styled from 'styled-components'
 
 export const Container = styled.div`
   position: absolute;
-  top: 40px;
-  left: 0;
+  top: ${props => (props.position && props.position.top) || 0};
+  left: ${props => (props.position && props.position.left) || 0};
   z-index: 3;
   max-width: 100vw;
   width: 35rem;

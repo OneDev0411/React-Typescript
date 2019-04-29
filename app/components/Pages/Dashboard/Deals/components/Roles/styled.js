@@ -55,6 +55,7 @@ export const RoleItem = styled.div`
   margin-bottom: 1rem;
   padding: 0 1.5rem;
   cursor: pointer;
+  position: relative;
 
   :hover {
     background: ${props =>

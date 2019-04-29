@@ -228,6 +228,25 @@ class Roles extends React.Component {
                     </ActionButton>
                   )}
                 </RoleActions>
+
+                {this.state.isRoleFormOpen && role.id === this.state.user.id && (
+                  <RoleCrmIntegration
+                    isOpen
+                    formOptions={{
+                      position: {
+                        top: '3rem',
+                        left: '1.5rem'
+                      }
+                    }}
+                    deal={this.props.deal}
+                    role={this.state.user}
+                    modalTitle="Update Contact"
+                    isEmailRequired={this.props.isEmailRequired}
+                    allowedRoles={this.props.allowedRoles}
+                    onUpsertRole={this.props.onUpsertRole}
+                    onHide={this.closeRoleForm}
+                  />
+                )}
               </RoleItem>
             )
           })}
@@ -240,19 +259,6 @@ class Roles extends React.Component {
             allowedRoles={this.AllowedRoles}
             onCreateRole={this.props.onCreateRole}
             onCloseDrawer={this.props.onCloseAddRoleDrawer}
-          />
-        )}
-
-        {this.state.isRoleFormOpen && (
-          <RoleCrmIntegration
-            isOpen
-            deal={this.props.deal}
-            role={this.state.user}
-            modalTitle="Update Contact"
-            isEmailRequired={this.props.isEmailRequired}
-            allowedRoles={this.props.allowedRoles}
-            onUpsertRole={this.props.onUpsertRole}
-            onHide={this.closeRoleForm}
           />
         )}
 

@@ -112,6 +112,11 @@ class AddRoleForm extends React.Component {
             isPrimaryAgent={['BuyerAgent', 'SellerAgent'].includes(
               this.state.selectedRole
             )}
+            roleFormOptions={{
+              position: {
+                top: '40px'
+              }
+            }}
             modalTitle="Add to Deal"
             onUpsertRole={this.props.onCreateRole}
             onHide={this.closeDrawer}
