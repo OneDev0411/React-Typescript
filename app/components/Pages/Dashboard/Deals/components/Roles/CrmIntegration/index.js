@@ -29,7 +29,7 @@ class RoleFormWrapper extends React.Component {
       status
     })
 
-  onSubmit = async form => {
+  onSubmit = async (form, saveRoleInContacts) => {
     const isNewRecord = !this.props.role || !this.props.role.role
 
     try {
@@ -50,7 +50,7 @@ class RoleFormWrapper extends React.Component {
             this.showNotification(`${getLegalFullName(form)} Updated.`)
           }
         } else {
-          this.askCreateContact(form, this.props.role)
+          this.createCrmContact(form, saveRoleInContacts)
         }
 
         if (this.props.deal) {
@@ -58,7 +58,6 @@ class RoleFormWrapper extends React.Component {
             form
           ])
 
-          console.log('[ Role Created ] ', newRoles)
           this.props.onUpsertRole(newRoles[0])
         } else {
           this.props.onUpsertRole({
@@ -73,7 +72,6 @@ class RoleFormWrapper extends React.Component {
           ? await this.props.updateRole(this.props.deal.id, form)
           : form
 
-        console.log('[ Role Updated ] ', updatedRole)
         this.props.onUpsertRole(updatedRole)
       }
 
@@ -96,26 +94,16 @@ class RoleFormWrapper extends React.Component {
     }
   }
 
-  createCrmContact = async form => {
+  createCrmContact = async (form, saveRoleInContacts) => {
+    if (!saveRoleInContacts || this.props.user.email === form.email) {
+      return false
+    }
+
     await createContacts([
       convertRoleToContact(form, this.props.user.id, this.props.attributeDefs)
     ])
 
     this.showNotification(`New Contact Created: ${getLegalFullName(form)}`)
-  }
-
-  askCreateContact = form => {
-    if (this.props.user.email === form.email) {
-      return false
-    }
-
-    this.props.confirmation({
-      message: `Should we add ${form.legal_first_name ||
-        form.company_title} to your Contacts?`,
-      cancelLabel: 'No',
-      confirmLabel: 'Yes, Add',
-      onConfirm: () => this.createCrmContact(form)
-    })
   }
 
   render() {
