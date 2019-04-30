@@ -1,8 +1,8 @@
 import React from 'react'
 
 import Menu from './Menu'
-import { InsightsHeader } from '../styled'
-import { H1 } from '../../../../../../views/components/Typography/headings'
+import { InsightsHeader } from './styled'
+import { H1 } from '../../../../../views/components/Typography/headings'
 
 Header.defaultProps = {
   title: ''

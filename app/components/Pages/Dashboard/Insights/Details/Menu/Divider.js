@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { borderColor } from '../../../../../../../../views/utils/colors'
+import { borderColor } from '../../../../../../views/utils/colors'
 
-export function Divider() {
+function Divider() {
   return (
     <div
       style={{
@@ -14,3 +14,5 @@ export function Divider() {
     />
   )
 }
+
+export default Divider

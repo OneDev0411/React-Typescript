@@ -4,7 +4,7 @@ import Flex from 'styled-flex-component'
 
 import { CloseButton } from 'components/Button/CloseButton'
 
-import { Divider } from './Divider'
+import Divider from './Divider'
 
 function Menu(props) {
   const { closeButtonQuery, backUrl } = props

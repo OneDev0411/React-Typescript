@@ -4,11 +4,11 @@ import { browserHistory } from 'react-router'
 import Tooltip from 'components/tooltip'
 import SendEmailButton from 'components/SendEmailButton'
 
-import PageHeader from '../../../../../../views/components/PageHeader'
+import PageHeader from '../../../../../views/components/PageHeader'
 
-import ActionButton from '../../../../../../views/components/Button/ActionButton'
+import ActionButton from '../../../../../views/components/Button/ActionButton'
 
-import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
+import { Trigger as MenuTrigger } from '../../../../../views/components/SlideMenu'
 
 export function Header({ title, isSideMenuOpen, onMenuTriggerChange }) {
   return (
