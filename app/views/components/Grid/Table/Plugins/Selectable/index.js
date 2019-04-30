@@ -20,7 +20,6 @@ export class SelectablePlugin {
       {
         persistent: false,
         allowSelectAll: true,
-        unselectableRow: [],
         allowSelectEntireList: false,
         entityName: ''
       },
@@ -415,12 +414,10 @@ export class SelectablePlugin {
       ),
       render: ({ rowData: row }) => (
         <Fragment>
-          {this.options.unselectableRow.includes(row.id) === false && (
-            <CheckBoxButton
-              onClick={() => this.toggleSelectOrExcludeRow(row.id)}
-              isSelected={this.isRowChecked(row.id)}
-            />
-          )}
+          <CheckBoxButton
+            onClick={() => this.toggleSelectOrExcludeRow(row.id)}
+            isSelected={this.isRowChecked(row.id)}
+          />
         </Fragment>
       )
     }
