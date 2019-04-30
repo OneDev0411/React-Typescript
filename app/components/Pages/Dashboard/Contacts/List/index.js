@@ -53,6 +53,7 @@ class ContactsList extends React.Component {
     }
 
     this.order = getActiveTeamSettings(props.user, SORT_FIELD_SETTING_KEY)
+    this.tableContainerId = 'contacts--page-container'
   }
 
   componentDidMount() {
@@ -419,7 +420,7 @@ class ContactsList extends React.Component {
           <TagsList onFilterChange={this.handleFilterChange} />
         </SideMenu>
 
-        <PageContent isSideMenuOpen={isSideMenuOpen}>
+        <PageContent id={this.tableContainerId} isSideMenuOpen={isSideMenuOpen}>
           <Header
             title={activeSegment.name || 'All Contacts'}
             isSideMenuOpen={this.state.isSideMenuOpen}
@@ -435,6 +436,7 @@ class ContactsList extends React.Component {
             isSearching={isFetchingContacts}
           />
           <Table
+            tableContainerId={this.tableContainerId}
             reloadContacts={this.reloadContacts}
             sortBy={this.order}
             handleChangeOrder={this.handleChangeOrder}
