@@ -18,15 +18,17 @@ export function formatValue(attribute_def, value) {
       return `${month} ${addZero(day)}${year}`
     }
 
-    if (value.day) {
-      let { year } = value
+    const { day, month } = value
 
-      year = year === 1800 || !year ? '' : `, ${year}`
-
-      return `${months_abbr[value.month.value]} ${addZero(
-        value.day.value
-      )}${year}`
+    if (day.value == null || month.value == null) {
+      return
     }
+
+    let { year } = value
+
+    year = year === 1800 || !year ? '' : `, ${year}`
+
+    return `${months_abbr[month.value]} ${addZero(day.value)}${year}`
   }
 
   if (attribute_def.name === 'phone_number') {
