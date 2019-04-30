@@ -22,25 +22,10 @@ export default class TagContacts extends React.Component {
   closeOverlay = () => this.setState({ overlayIsOpen: false })
 
   render() {
-    const {
-      disabled,
-      entireMode,
-      totalRowsCount,
-      excludedRows,
-      selectedRows,
-      filters,
-      searchText,
-      conditionOperator,
-      users,
-      resetSelectedRows,
-      handleChangeContactsAttributes
-    } = this.props
-    const { overlayIsOpen } = this.state
-
     return (
       <Fragment>
         <ActionButton
-          disabled={disabled}
+          disabled={this.props.disabled}
           appearance="outline"
           size="small"
           onClick={this.openOverLay}
@@ -50,18 +35,20 @@ export default class TagContacts extends React.Component {
         </ActionButton>
 
         <TagsOverlay
-          entireMode={entireMode}
-          totalContactsCount={totalRowsCount}
-          selectedContactsIds={selectedRows}
-          excludedContactsIds={excludedRows}
-          filters={filters}
-          searchText={searchText}
-          conditionOperator={conditionOperator}
-          users={users}
-          isOpen={overlayIsOpen}
+          entireMode={this.props.entireMode}
+          totalContactsCount={this.props.totalRowsCount}
+          selectedContactsIds={this.props.selectedRows}
+          excludedContactsIds={this.props.excludedRows}
+          filters={this.props.filters}
+          searchText={this.props.searchText}
+          conditionOperator={this.props.conditionOperator}
+          users={this.props.users}
+          isOpen={this.state.overlayIsOpen}
           closeOverlay={this.closeOverlay}
-          resetSelectedRows={resetSelectedRows}
-          handleChangeContactsAttributes={handleChangeContactsAttributes}
+          resetSelectedRows={this.props.resetSelectedRows}
+          handleChangeContactsAttributes={
+            this.props.handleChangeContactsAttributes
+          }
         />
       </Fragment>
     )
