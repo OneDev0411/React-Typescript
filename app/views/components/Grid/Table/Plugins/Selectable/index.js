@@ -250,8 +250,6 @@ export class SelectablePlugin {
 
   toggleSelectAllOrEntire = () => {
     if (this.isEntireRowsSelected()) {
-      console.log('toggleSelectEntireRows')
-
       return this.toggleSelectEntireRows()
     }
 
@@ -331,8 +329,6 @@ export class SelectablePlugin {
   }
 
   isRowChecked = id => {
-    console.log()
-
     if (this.isEntireRowsSelected()) {
       return !this.isRowExcluded(id)
     }
