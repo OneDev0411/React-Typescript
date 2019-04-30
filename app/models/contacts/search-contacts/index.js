@@ -1,4 +1,4 @@
-import { cleanSearchQuery } from 'utils/clean-search-query'
+import { cleanSearchQuery } from '../../../utils/clean-search-query'
 
 import Fetch from '../../../services/fetch'
 import { defaultQuery } from '../helpers/default-query'
