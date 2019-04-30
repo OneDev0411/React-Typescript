@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
 
+import ActionButton from 'components/Button/ActionButton'
+import TagIcon from 'components/SvgIcons/Tag/TagIcon'
+
 import TagsOverlay from '../../components/TagsOverlay'
-import ActionButton from '../../../../../../views/components/Button/ActionButton'
-import TagIcon from '../../../../../../views/components/SvgIcons/Tag/TagIcon'
 
 const Tag = styled(TagIcon)`
   margin-right: 0.5rem;
