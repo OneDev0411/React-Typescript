@@ -1,12 +1,11 @@
 import React, { Fragment } from 'react'
 import _ from 'underscore'
 
+import LinkButton from 'components/Button/LinkButton'
 import PopOver from 'components/Popover'
 
 import { CheckBoxButton } from '../../../../Button/CheckboxButton'
 import { CheckBoxButtonWithoutState } from '../../../../Button/CheckboxButton/CheckboxWithoutState'
-
-import { SelectEntireLinkButton } from './styled'
 
 const SESSION_KEY_PREFIX = 'Rechat--Grid--Selectable--'
 
@@ -370,9 +369,9 @@ export class SelectablePlugin {
             popoverStyles={{ textAlign: 'center' }}
             containerStyle={{ display: 'inline-block' }}
             caption={
-              <SelectEntireLinkButton onClick={this.toggleSelectEntireRows}>
+              <LinkButton onClick={this.toggleSelectEntireRows}>
                 Select All {this.totalCount} {this.options.entityName}
-              </SelectEntireLinkButton>
+              </LinkButton>
             }
           >
             <CheckBoxButtonWithoutState
