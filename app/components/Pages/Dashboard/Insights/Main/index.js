@@ -1,63 +1,20 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 
 import Table from 'components/Grid/Table'
 import { formatDate } from 'components/DateTimePicker/helpers'
+import Tooltip from 'components/tooltip'
 
 import Header from './Header'
 import Layout from './Layout'
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
 import NoSearchResults from '../../../../Partials/no-search-results'
-import getCampaings from '../../../../../models/insights/emails/get-all-campaigns'
 
 import { InsightContainer, Link, Info } from './styled'
-
-function percent(num, allNum) {
-  if (num === 0 || allNum === 0) {
-    return 0
-  }
-
-  return num / allNum
-}
-
-function Recipients(props) {
-  if (!Array.isArray(props.data)) {
-    return null
-  }
-
-  const recipients = recipientsList(props.data)
-
-  const tagsCount = recipients.tags.length || 0
-  const listCount = recipients.list.length || 0
-  const emailsCount = recipients.emails.length || 0
-  const contactsCount = recipients.contacts.length || 0
-  const recipientsCount = emailsCount + contactsCount
-
-  const items = []
-
-  if (recipientsCount) {
-    items.push(`${recipientsCount} Recipients`)
-  }
-
-  if (listCount) {
-    items.push(`${listCount} List`)
-  }
-
-  if (tagsCount) {
-    items.push(`${tagsCount} Tags`)
-  }
-
-  if (recipientsCount === 1 && listCount === 0 && tagsCount === 0) {
-    // server puts the email on props.data even it sends to a contact
-    // so maybe it confusing at some point that email isn't include the contact itself.
-    const emailAddress = props.data[0].email
-
-    return <span>{emailAddress}</span>
-  }
-
-  return <span>{items.join(', ')}</span>
-}
+import { percent, show_title } from './helpers'
+import useListData from './useListData'
+import Recipients from './Recipients'
 
 const columns = [
   {
@@ -65,28 +22,30 @@ const columns = [
     id: 'details',
     width: '50%',
     verticalAlign: 'center',
-    // accessor: contact => getAttributeFromSummary(contact, 'display_name'),
     render: props => {
-      const { rowData, rowIndex, totalRows } = props
-      const isScheduled = !rowData.executed_at
+      const isScheduled = !props.rowData.executed_at
 
       return (
         <>
           <Link
             to={
-              isScheduled ? '' : `/dashboard/insights/campaigns/${rowData.id}`
+              isScheduled
+                ? ''
+                : `/dashboard/insights/campaigns/${props.rowData.id}`
             }
           >
-            {rowData.subject.trim() || 'No Title'}
+            {show_title(props.rowData.subject)}
           </Link>
           <Info>
             <div className="sub-info">
               {isScheduled
-                ? `Scheduled for ${formatDate(new Date(rowData.due_at * 1000))}`
-                : formatDate(new Date(rowData.executed_at * 1000))}
+                ? `Scheduled for ${formatDate(
+                    new Date(props.rowData.due_at * 1000)
+                  )}`
+                : formatDate(new Date(props.rowData.executed_at * 1000))}
             </div>
             <div className="main-info">
-              <Recipients data={rowData.recipients} />
+              <Recipients data={props.rowData.recipients} />
             </div>
           </Info>
         </>
@@ -97,82 +56,32 @@ const columns = [
     header: 'Open Rate',
     id: 'open-rate',
     verticalAlign: 'center',
-    // accessor: contact => getAttributeFromSummary(contact, 'display_name'),
-    render: props => {
-      const { rowData, rowIndex, totalRows } = props
-      const opened = percent(rowData.opened, rowData.recipients)
-
-      return <span>{opened}%</span>
-    }
+    render: props => (
+      <Tooltip caption="Opened">
+        <span>{percent(props.rowData.opened, props.rowData.recipients)}%</span>
+      </Tooltip>
+    )
   },
   {
     header: 'Click Rate',
     id: 'click-rate',
     verticalAlign: 'center',
-    // accessor: contact => getAttributeFromSummary(contact, 'display_name'),
-    render: props => {
-      const { rowData, rowIndex, totalRows } = props
-      const clicked = percent(rowData.clicked, rowData.recipients)
-
-      return <span>{clicked}%</span>
-    }
+    render: props => (
+      <Tooltip caption="Clicked">
+        <span>{percent(props.rowData.clicked, props.rowData.recipients)}%</span>
+      </Tooltip>
+    )
   }
 ]
-
-function useListData(user) {
-  const [isLoading, setLoading] = useState(true)
-  const [hasError, setError] = useState(false)
-  const [list, setList] = useState([])
-
-  useEffect(() => {
-    getCampaings(user).then(data => {
-      setError(false)
-      setLoading(false)
-      setList(data)
-    })
-    // .catch(() => {
-    //   setError(true)
-    //   setLoading(false)
-    //   setList([])
-    // })
-  }, [user])
-
-  return {
-    list,
-    isLoading,
-    hasError
-  }
-}
-
-function recipientsList(recipients) {
-  const list = []
-  const tags = []
-  const contacts = []
-  const emails = []
-
-  recipients.forEach(recipient => {
-    if (recipient.tag) {
-      tags.push(recipient.tag)
-    } else if (recipient.list) {
-      list.push(recipient.list)
-    } else if (recipient.contact) {
-      contacts.push(recipient.contact)
-    } else {
-      emails.push(recipient.email)
-    }
-  })
-
-  return {
-    list,
-    tags,
-    contacts,
-    emails
-  }
-}
 
 function List(props) {
   const { list, isLoading } = useListData(props.user)
   const [isSideMenuOpen, setSideMenuOpen] = useState(true)
+  const tableClassName = ['table-container']
+
+  if (isLoading === false) {
+    tableClassName.push('show')
+  }
 
   return (
     <Layout isSideMenuOpen={isSideMenuOpen} sentBadge={list.length}>
@@ -183,7 +92,7 @@ function List(props) {
           onMenuTriggerChange={() => setSideMenuOpen(!isSideMenuOpen)}
         />
 
-        <div className="table-container">
+        <div className={tableClassName.join(' ')}>
           <Table
             data={list}
             columns={columns}

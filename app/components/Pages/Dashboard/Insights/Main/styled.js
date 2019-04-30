@@ -5,6 +5,14 @@ import ALink from 'components/ALink'
 export const InsightContainer = styled.div`
   & .table-container {
     padding: 0 1.5rem;
+    opacity: 0;
+    transform: translateY(3rem);
+    transition: all 0.5s 0.2s;
+
+    &.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 `
 
@@ -28,7 +36,7 @@ export const Info = styled.div`
   }
 `
 
-export const Link = styled(ALink)`
+export const Link = styled(ALink) `
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
