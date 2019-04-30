@@ -1,3 +1,5 @@
+import { cleanSearchQuery } from 'utils/clean-search-query'
+
 import Fetch from '../../../services/fetch'
 
 export async function deleteContactsBulk({
@@ -23,9 +25,7 @@ export async function deleteContactsBulk({
       })),
       excludes
     }
-    const cleanedSearchText = searchText
-      .trim()
-      .replace(/[~`!#$%^&*(){}=<>?,:;'"\]\[\/\\]/g, '')
+    const cleanedSearchText = cleanSearchQuery(searchText.trim())
 
     if (cleanedSearchText.length > 0) {
       payload.query = cleanedSearchText
