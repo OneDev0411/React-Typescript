@@ -9,8 +9,13 @@ import {
   ListItem
 } from 'components/Grid/SavedSegments/List/styled'
 
-import { BadgeCounter } from '../../styles/filters/styled'
+import ALink from 'components/ALink'
+
 import { ListItemName } from 'components/Grid/SavedSegments/List/styled'
+
+import { BadgeCounter } from '../../styles/filters/styled'
+
+import { getPathForFilter } from '../../utils'
 
 class BackofficeFilters extends React.Component {
   componentDidMount() {
@@ -40,9 +45,7 @@ class BackofficeFilters extends React.Component {
    * set filter tab tooltip
    */
   setFilter(filter) {
-    const arg = `/filter/${filter}`
-
-    browserHistory.push(`/dashboard/deals${arg}`)
+    browserHistory.push(getPathForFilter(filter))
   }
 
   getTabs(deals = {}) {
@@ -99,15 +102,16 @@ class BackofficeFilters extends React.Component {
               }
 
               return (
-                <ListItem
+                <ALink noStyle
                   key={`FILTER_${tabName}`}
-                  isSelected={tabName === activeFilter}
-                  onClick={() => this.setFilter(tabName)}
+                  to={getPathForFilter(tabName)}
                 >
-                  <ListItemName>{tabName}</ListItemName>
+                  <ListItem isSelected={tabName === activeFilter}>
+                    <ListItemName>{tabName}</ListItemName>
 
-                  <BadgeCounter>{counter}</BadgeCounter>
-                </ListItem>
+                    <BadgeCounter>{counter}</BadgeCounter>
+                  </ListItem>
+                </ALink>
               )
             })}
           </Fragment>
