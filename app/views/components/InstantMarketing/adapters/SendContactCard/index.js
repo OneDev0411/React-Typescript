@@ -19,6 +19,8 @@ import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketin
 
 import MissingEmailModal from './MissingEmailModal'
 
+import { generate_email_request } from '../../helpers/general'
+
 class SendContactCard extends React.Component {
   state = {
     isFetchingContact: false,
@@ -150,12 +152,9 @@ class SendContactCard extends React.Component {
       isSendingEmail: true
     })
 
-    const email = {
-      from: values.fromId,
-      to: values.recipients,
-      subject: values.subject,
+    const email = generate_email_request(values, {
       html: this.state.htmlTemplate
-    }
+    })
 
     try {
       await sendContactsEmail(email, this.state.owner.id)
@@ -164,7 +163,7 @@ class SendContactCard extends React.Component {
         status: 'success',
         message: `${
           values.recipients.length
-        } emails has been sent to your contacts`
+          } emails has been sent to your contacts`
       })
     } catch (e) {
       console.log(e)
@@ -222,13 +221,13 @@ class SendContactCard extends React.Component {
             {this.props.children}
           </ActionButton>
         ) : (
-          <SearchContactDrawer
-            title="Select a Contact"
-            isOpen={this.state.isSearchDrawerOpen}
-            onSelect={this.handleSelectedContact}
-            onClose={this.closeSearchDrawer}
-          />
-        )}
+            <SearchContactDrawer
+              title="Select a Contact"
+              isOpen={this.state.isSearchDrawerOpen}
+              onSelect={this.handleSelectedContact}
+              onClose={this.closeSearchDrawer}
+            />
+          )}
 
         <InstantMarketing
           isOpen={this.state.isBuilderOpen}

@@ -10,6 +10,8 @@ import ActionButton from 'components/Button/ActionButton'
 import SocialDrawer from '../../components/SocialDrawer'
 import hasMarketingAccess from '../../helpers/has-marketing-access'
 
+import { generate_email_request } from '../../helpers/general'
+
 class ShareInstance extends React.Component {
   state = {
     isComposeDrawerOpen: false,
@@ -64,12 +66,9 @@ class ShareInstance extends React.Component {
       isSendingEmail: true
     })
 
-    const email = {
-      from: values.fromId,
-      to: values.recipients,
-      subject: values.subject,
+    const email = generate_email_request(values, {
       html: this.props.instance.html
-    }
+    })
 
     try {
       await sendContactsEmail(email, this.props.user.id)
@@ -83,7 +82,7 @@ class ShareInstance extends React.Component {
         status: 'success',
         message: `${
           values.recipients.length
-        } emails has been sent to your contacts`
+          } emails has been sent to your contacts`
       })
     } catch (e) {
       console.log(e)
