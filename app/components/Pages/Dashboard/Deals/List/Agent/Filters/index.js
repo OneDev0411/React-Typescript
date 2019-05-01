@@ -17,7 +17,7 @@ import { BadgeCounter } from '../../styles/filters/styled'
 import { getPathForFilter } from '../../utils'
 
 const FilterNames = {
-  Active: ['Active', 'Lease'],
+  Active: ['Active', 'Lease', 'Coming Soon'],
   Drafts: ['Drafts'],
   Pending: [
     'Active Contingent',
