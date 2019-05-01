@@ -72,12 +72,8 @@ export class Associations extends React.Component {
   }
 
   getTaskAssociationsIds = ({ associations }) => {
-    if (Array.isArray(associations) && associations.length > 0) {
-      return associations.map(a =>
-        a.association_type === 'email'
-          ? a.email.emails[0].email.id
-          : a[a.association_type].id
-      )
+    if (Array.isArray(associations)) {
+      return associations.map(a => a[a.association_type].id)
     }
 
     return []
