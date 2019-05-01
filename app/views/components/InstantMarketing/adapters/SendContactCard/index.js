@@ -10,8 +10,6 @@ import ActionButton from 'components/Button/ActionButton'
 
 import { confirmation } from 'actions/confirmation'
 
-import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
-
 import EmailCompose from 'components/EmailCompose'
 
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
@@ -25,8 +23,6 @@ import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketin
 import SocialDrawer from '../../components/SocialDrawer'
 
 import MissingEmailModal from './MissingEmailModal'
-
-import { generate_email_request } from '../../helpers/general'
 
 class SendContactCard extends React.Component {
   state = {
@@ -111,7 +107,8 @@ class SendContactCard extends React.Component {
 
   closeBuilder = () => {
     this.setState({
-      isBuilderOpen: false
+      isBuilderOpen: false,
+      isComposeEmailOpen: false
     })
   }
 
@@ -156,39 +153,15 @@ class SendContactCard extends React.Component {
       )
     })
 
-  handleSendEmails = async values => {
-    this.setState({
-      isSendingEmail: true
-    })
-
-    const email = generate_email_request(values, {
-      html: this.state.htmlTemplate
-    })
-
-    try {
-      await sendContactsEmail(email, this.state.owner.id)
-
-      this.props.notify({
-        status: 'success',
-        message: `${
-          values.recipients.length
-        } emails has been sent to your contacts`
-      })
-    } catch (e) {
-      console.log(e)
-      // todo
-    } finally {
-      this.setState({
-        isSendingEmail: false,
-        isComposeEmailOpen: false,
-        isBuilderOpen: false
-      })
-    }
-  }
+  getEmail = email => ({
+    ...email,
+    html: this.state.htmlTemplate
+  })
 
   closeMissingEmailDialog = () => {
     this.setState({
-      isMissingEmailModalOpen: false
+      isMissingEmailModalOpen: false,
+      isComposeEmailOpen: false
     })
   }
 
@@ -263,12 +236,12 @@ class SendContactCard extends React.Component {
             isOpen
             hasStaticBody
             disableAddNewRecipient
-            isSubmitting={this.state.isSendingEmail}
             from={this.state.owner}
             recipients={this.Recipients}
             body={this.state.templateScreenshot}
+            onSent={this.closeBuilder}
             onClose={this.toggleComposeEmail}
-            onClickSend={this.handleSendEmails}
+            getEmail={this.getEmail}
           />
         )}
 

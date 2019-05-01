@@ -1,12 +1,10 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
 
 import _ from 'underscore'
 
 import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
-import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 import { selectContact } from 'reducers/contacts/list'
@@ -19,8 +17,6 @@ import ActionButton from 'components/Button/ActionButton'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
 import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-deals'
-
-import { generate_email_request } from '../../helpers/general'
 import { getTemplateTypes } from '../../helpers/get-template-types'
 import SocialDrawer from '../../components/SocialDrawer'
 
@@ -39,7 +35,6 @@ class SendMlsListingCard extends React.Component {
     isEditingListings: false,
     isInstantMarketingBuilderOpen: false,
     isComposeEmailOpen: false,
-    isSendingEmail: false,
     isSocialDrawerOpen: false,
     htmlTemplate: '',
     templateScreenshot: null,
@@ -114,40 +109,10 @@ class SendMlsListingCard extends React.Component {
       : []
   }
 
-  handleSendEmails = async (values, form) => {
-    this.setState({
-      isSendingEmail: true
-    })
-
-    const email = generate_email_request(values, {
-      html: this.state.htmlTemplate.result
-    })
-
-    try {
-      await sendContactsEmail(email, this.state.owner.id)
-
-      // reset form
-      if (form) {
-        form.reset()
-      }
-
-      this.props.notify({
-        status: 'success',
-        message: `${
-          values.recipients.length
-        } emails has been sent to your contacts`
-      })
-    } catch (e) {
-      console.log(e)
-      // todo
-    } finally {
-      this.setState({
-        isSendingEmail: false,
-        isComposeEmailOpen: false,
-        isInstantMarketingBuilderOpen: false
-      })
-    }
-  }
+  getEmail = email => ({
+    ...email,
+    html: this.state.htmlTemplate.result
+  })
 
   openListingModal = () => this.setState({ isListingsModalOpen: true })
 
@@ -336,12 +301,12 @@ class SendMlsListingCard extends React.Component {
           <EmailCompose
             isOpen
             hasStaticBody
-            isSubmitting={this.state.isSendingEmail}
             from={this.state.owner}
             recipients={this.Recipients}
             body={this.state.templateScreenshot}
-            onClickSend={this.handleSendEmails}
+            getEmail={this.getEmail}
             onClose={this.toggleComposeEmail}
+            onSent={this.closeMarketing}
           />
         )}
 
@@ -351,6 +316,7 @@ class SendMlsListingCard extends React.Component {
             templateInstanceData={this.TemplateInstanceData}
             socialNetworkName={this.state.socialNetworkName}
             onClose={this.closeSocialDrawer}
+            onSent={this.closeMarketing}
           />
         )}
       </Fragment>
@@ -370,7 +336,4 @@ function mapStateToProps({ contacts, deals, user }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { notify }
-)(SendMlsListingCard)
+export default connect(mapStateToProps)(SendMlsListingCard)

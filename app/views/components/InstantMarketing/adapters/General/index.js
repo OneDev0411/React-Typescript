@@ -1,8 +1,5 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
-
-import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
 import EmailCompose from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
@@ -10,15 +7,12 @@ import { getTemplatePreviewImage } from 'components/InstantMarketing/helpers/get
 import ActionButton from 'components/Button/ActionButton'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
-import { generate_email_request } from '../../helpers/general'
-
 import SocialDrawer from '../../components/SocialDrawer'
 
 class General extends React.Component {
   state = {
     isBuilderOpen: false,
     isComposeEmailOpen: false,
-    isSendingEmail: false,
     isSocialDrawerOpen: false,
     htmlTemplate: '',
     templateScreenshot: null,
@@ -61,39 +55,10 @@ class General extends React.Component {
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
 
-  handleSendEmails = async (values, form) => {
-    this.setState({
-      isSendingEmail: true
-    })
-
-    const email = generate_email_request(values, {
-      html: this.state.htmlTemplate.result
-    })
-
-    try {
-      await sendContactsEmail(email, this.state.owner.id)
-
-      // reset form
-      if (form) {
-        form.reset()
-      }
-
-      this.props.notify({
-        status: 'success',
-        message: `${
-          values.recipients.length
-          } emails has been sent to your contacts`
-      })
-    } catch (e) {
-      console.log(e)
-      // todo
-    } finally {
-      this.setState({
-        isSendingEmail: false,
-        isComposeEmailOpen: false
-      })
-    }
-  }
+  getEmail = email => ({
+    ...email,
+    html: this.state.htmlTemplate.result
+  })
 
   handleSocialSharing = template => {
     this.setState({
@@ -164,11 +129,11 @@ class General extends React.Component {
           <EmailCompose
             isOpen
             hasStaticBody
-            isSubmitting={this.state.isSendingEmail}
             from={this.state.owner}
             body={this.state.templateScreenshot}
             onClose={this.toggleComposeEmail}
-            onClickSend={this.handleSendEmails}
+            onSent={this.toggleComposeEmail}
+            getEmail={this.getEmail}
           />
         )}
 
@@ -190,7 +155,4 @@ function mapStateToProps({ user }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { notify }
-)(General)
+export default connect(mapStateToProps)(General)
