@@ -31,13 +31,6 @@ class Grid extends React.Component {
       })
     }
 
-    if (plugins.actionable) {
-      this.actionablePlugin = new ActionablePlugin({
-        actions: plugins.actionable.actions,
-        selectablePlugin: this.selectablePlugin
-      })
-    }
-
     if (plugins.selectable) {
       this.selectablePlugin = new SelectablePlugin({
         options: plugins.selectable,
@@ -45,6 +38,13 @@ class Grid extends React.Component {
       })
 
       this.selectablePlugin.setData(this.props.data)
+    }
+
+    if (plugins.actionable) {
+      this.actionablePlugin = new ActionablePlugin({
+        actions: plugins.actionable.actions,
+        selectablePlugin: this.selectablePlugin
+      })
     }
   }
 
