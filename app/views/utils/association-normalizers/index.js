@@ -152,7 +152,21 @@ export const normalizeEmail = email => {
     return null
   }
 
-  return email
+  let img = ''
+  let body = email.html
+  const { template } = email
+
+  if (template) {
+    body = template.template && template.template.template_type
+    img = template.file && template.file.preview_url
+  }
+
+  return {
+    body,
+    id: email.id,
+    img,
+    subject: email.subject
+  }
 }
 
 function detailText(props) {
