@@ -1,3 +1,5 @@
+import { cleanSearchQuery } from '../../../utils/clean-search-query'
+
 import Fetch from '../../../services/fetch'
 import { defaultQuery } from '../helpers/default-query'
 
@@ -14,7 +16,7 @@ export async function searchContacts(
   try {
     const payload = {}
 
-    const q = searchText.trim().replace(/[~`!#$%^&*(){}=<>?,:;'"\]\[\/\\]/g, '')
+    const q = cleanSearchQuery(searchText.trim())
 
     const request = new Fetch().post('/contacts/filter').query(query)
 

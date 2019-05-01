@@ -31,13 +31,6 @@ class Grid extends React.Component {
       })
     }
 
-    if (plugins.actionable) {
-      this.actionablePlugin = new ActionablePlugin({
-        actions: plugins.actionable.actions,
-        selectablePlugin: this.selectablePlugin
-      })
-    }
-
     if (plugins.selectable) {
       this.selectablePlugin = new SelectablePlugin({
         options: plugins.selectable,
@@ -46,10 +39,22 @@ class Grid extends React.Component {
 
       this.selectablePlugin.setData(this.props.data)
     }
+
+    if (plugins.actionable) {
+      this.actionablePlugin = new ActionablePlugin({
+        actions: plugins.actionable.actions,
+        selectablePlugin: this.selectablePlugin
+      })
+    }
   }
 
-  componentWillReceiveProps({ data }) {
-    this.selectablePlugin && this.selectablePlugin.setData(data)
+  componentWillReceiveProps(props) {
+    const { data, summary } = props
+
+    if (this.selectablePlugin) {
+      this.selectablePlugin.setData(data)
+      this.selectablePlugin.setTotalCount(summary.total)
+    }
   }
 
   componentWillUnmount() {
@@ -104,9 +109,7 @@ class Grid extends React.Component {
             totalRowsCount={this.props.summary.total || this.props.data.length}
             selectedRowsCount={
               this.props.summary.selectedRowsCount ||
-              (this.selectablePlugin
-                ? this.selectablePlugin.SelectedRows.length
-                : 0)
+              (this.selectablePlugin ? this.selectablePlugin.SelectedCount : 0)
             }
           />
 

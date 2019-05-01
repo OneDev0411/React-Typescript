@@ -3,8 +3,16 @@ import styled from 'styled-components'
 
 import Tooltip from 'components/tooltip'
 
-function getCaption(action, atLeast = 'one') {
-  return `You need to have at least ${atLeast} contact selected before ${action}.`
+function getCaption(action, atLeast = 'one', bulkMode = false) {
+  let entityName = 'contact'
+
+  if (atLeast !== 'one') {
+    entityName = 'contacts'
+  }
+
+  return bulkMode
+    ? 'You can not use this action in bulk selection mode.'
+    : `You need to have at least ${atLeast} ${entityName} selected before ${action}.`
 }
 
 const DisabledActionContainer = styled.div`
@@ -13,15 +21,18 @@ const DisabledActionContainer = styled.div`
   }
 `
 
-export function ActionWrapper(props) {
-  return props.disabled ? (
-    <Tooltip
-      placement="bottom"
-      caption={getCaption(props.action, props.atLeast)}
-    >
-      <DisabledActionContainer>{props.children}</DisabledActionContainer>
+export function ActionWrapper({
+  children,
+  disabled,
+  action,
+  atLeast,
+  bulkMode
+}) {
+  return disabled ? (
+    <Tooltip placement="bottom" caption={getCaption(action, atLeast, bulkMode)}>
+      <DisabledActionContainer>{children}</DisabledActionContainer>
     </Tooltip>
   ) : (
-    props.children
+    children
   )
 }
