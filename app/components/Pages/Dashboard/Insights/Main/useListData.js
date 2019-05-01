@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react'
 
 import getCampaings from '../../../../../models/insights/emails/get-all-campaigns'
 
-function useListData(user) {
+function useListData(user, queue) {
   const [isLoading, setLoading] = useState(true)
   const [hasError, setError] = useState(false)
   const [list, setList] = useState([])
 
   useEffect(() => {
+    setLoading(true)
+
     getCampaings(user).then(data => {
       setError(false)
       setLoading(false)
@@ -18,7 +20,7 @@ function useListData(user) {
     //   setLoading(false)
     //   setList([])
     // })
-  }, [user])
+  }, [user, queue])
 
   return {
     list,

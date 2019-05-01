@@ -59,7 +59,8 @@ SendEmailButton.propTypes = {
   defaultAttachments: PropTypes.array,
   recipients: PropTypes.array,
   appearance: PropTypes.string,
-  title: PropTypes.string
+  title: PropTypes.string,
+  afterSend: PropTypes.func
 }
 
 SendEmailButton.defaultProps = {
@@ -67,7 +68,8 @@ SendEmailButton.defaultProps = {
   defaultAttachments: [],
   recipients: [],
   appearance: 'outline',
-  title: 'Email'
+  title: 'Email',
+  afterSend: () => {}
 }
 
 export default connect(mapStateToProps)(SendEmailButton)

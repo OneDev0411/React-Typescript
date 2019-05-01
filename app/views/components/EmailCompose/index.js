@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
+import { browserHistory, withRouter } from 'react-router'
 
 import { Field } from 'react-final-form'
 
@@ -133,6 +134,16 @@ class EmailCompose extends React.Component {
     return this.handleSendEmail(form)
   }
 
+  needsNotifyButton = () => {
+    try {
+      const isOnInsights = this.props.router.isActive('/dashboard/insights')
+
+      return !isOnInsights
+    } catch (e) {
+      return true
+    }
+  }
+
   handleSendEmail = async form => {
     const { dispatch } = this.props
 
@@ -167,12 +178,22 @@ class EmailCompose extends React.Component {
       })
     }
 
-    dispatch(
-      notify({
-        status: 'success',
-        message: successMessage
-      })
-    )
+    let notifySuccessOptions = {
+      status: 'success',
+      message: successMessage
+    }
+
+    if (this.needsNotifyButton()) {
+      notifySuccessOptions.buttons = [
+        {
+          name: 'Details',
+          primary: true,
+          onClick: () => browserHistory.push('/dashboard/insights')
+        }
+      ]
+    }
+
+    dispatch(notify(notifySuccessOptions))
 
     this.props.onSent()
   }

@@ -10,15 +10,15 @@ import ActionButton from '../../../../../views/components/Button/ActionButton'
 
 import { Trigger as MenuTrigger } from '../../../../../views/components/SlideMenu'
 
-export function Header({ title, isSideMenuOpen, onMenuTriggerChange }) {
+export function Header(props) {
   return (
     <PageHeader>
       <PageHeader.Title showBackButton={false}>
         <MenuTrigger
-          isExpended={isSideMenuOpen}
-          onClick={onMenuTriggerChange}
+          isExpended={props.isSideMenuOpen}
+          onClick={props.onMenuTriggerChange}
         />
-        <PageHeader.Heading>{title}</PageHeader.Heading>
+        <PageHeader.Heading>{props.title}</PageHeader.Heading>
       </PageHeader.Title>
 
       <PageHeader.Menu>
@@ -32,7 +32,11 @@ export function Header({ title, isSideMenuOpen, onMenuTriggerChange }) {
           </ActionButton>
         </Tooltip>
 
-        <SendEmailButton appearance="primary" title="Send New Email" />
+        <SendEmailButton
+          appearance="primary"
+          title="Send New Email"
+          afterSend={props.afterSend}
+        />
       </PageHeader.Menu>
     </PageHeader>
   )

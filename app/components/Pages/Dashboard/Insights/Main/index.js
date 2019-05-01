@@ -51,8 +51,9 @@ const columns = [
 ]
 
 function List(props) {
-  const { list, isLoading } = useListData(props.user)
   const [isSideMenuOpen, setSideMenuOpen] = useState(true)
+  const [queue, setQueue] = useState(0)
+  const { list, isLoading } = useListData(props.user, queue)
   const tableClassName = ['insight-table-container']
 
   if (isLoading === false) {
@@ -66,6 +67,7 @@ function List(props) {
           title="Sent Emails"
           isSideMenuOpen={isSideMenuOpen}
           onMenuTriggerChange={() => setSideMenuOpen(!isSideMenuOpen)}
+          afterSend={() => setQueue(queue + 1)}
         />
 
         {isLoading && <LoadingComponent />}
@@ -76,6 +78,8 @@ function List(props) {
             EmptyState={() => (
               <NoSearchResults description='Try sending your first campaign using "Send New Email" button.' />
             )}
+            isFetching={isLoading}
+            LoadingState={LoadingComponent}
           />
         </div>
       </InsightContainer>
