@@ -2,6 +2,8 @@ import React from 'react'
 import ReactModal from 'react-modal'
 import cn from 'classnames'
 
+ReactModal.setAppElement('#app')
+
 export default function BareModal({
   autoHeight,
   children,

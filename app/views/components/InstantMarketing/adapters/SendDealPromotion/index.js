@@ -15,6 +15,7 @@ import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers
 
 import SocialDrawer from '../../components/SocialDrawer'
 import { getTemplateTypes } from '../../helpers/get-template-types'
+import { generate_email_request } from '../../helpers/general'
 
 const initialState = {
   owner: null,
@@ -80,12 +81,9 @@ class SendDealPromotion extends React.Component {
       isSendingEmail: true
     })
 
-    const email = {
-      from: values.fromId,
-      to: values.recipients,
-      subject: values.subject,
+    const email = generate_email_request(values, {
       html: this.state.htmlTemplate.result
-    }
+    })
 
     if (values.template) {
       email.template = values.template
@@ -103,7 +101,7 @@ class SendDealPromotion extends React.Component {
           status: 'success',
           message: `${
             values.recipients.length
-          } emails has been sent to your contacts`
+            } emails has been sent to your contacts`
         })
       )
     } catch (e) {

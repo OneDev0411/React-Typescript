@@ -5,12 +5,18 @@ import ListIcon from 'components/SvgIcons/List/ListIcon'
 
 import { IconContainer, RowContainer } from '../styled'
 
-export function ListItem({ text, membersCount, onClick, type = 'tag' }) {
+export function ListItem({
+  text,
+  membersCount,
+  onClick,
+  type = 'tag',
+  ...restProps
+}) {
   const summery =
     membersCount && `${membersCount} Contact${membersCount > 1 ? 's' : ''}`
 
   return (
-    <RowContainer onClick={onClick}>
+    <RowContainer onClick={onClick} {...restProps}>
       <IconContainer center>
         {type === 'tag' ? <TagIcon /> : <ListIcon />}
       </IconContainer>

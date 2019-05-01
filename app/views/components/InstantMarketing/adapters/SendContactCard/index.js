@@ -24,6 +24,8 @@ import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketin
 
 import MissingEmailModal from './MissingEmailModal'
 
+import { generate_email_request } from '../../helpers/general'
+
 class SendContactCard extends React.Component {
   state = {
     isFetchingContact: false,
@@ -165,12 +167,9 @@ class SendContactCard extends React.Component {
       isSendingEmail: true
     })
 
-    const email = {
-      from: values.fromId,
-      to: values.recipients,
-      subject: values.subject,
-      html: this.state.template.result
-    }
+    const email = generate_email_request(values, {
+      html: this.state.htmlTemplate
+    })
 
     if (values.template) {
       email.template = values.template

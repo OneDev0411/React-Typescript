@@ -89,7 +89,9 @@ export class Associations extends React.Component {
       const associations = await getAssociations(this.props.task)
 
       const filteredAssociations = associations.filter(
-        a => a[a.association_type].id !== this.props.defaultAssociationId
+        a =>
+          a != null &&
+          a[a.association_type].id !== this.props.defaultAssociationId
       )
 
       this.setState({ associations: filteredAssociations }, () =>

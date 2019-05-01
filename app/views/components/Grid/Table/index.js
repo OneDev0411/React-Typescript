@@ -15,21 +15,12 @@ import { ActionablePlugin } from './Plugins/Actionable'
 import { TableSummary } from './TableSummary'
 
 class Grid extends React.Component {
-  constructor(props) {
-    super(props)
-
-    const { plugins } = props
+  componentDidMount() {
+    const { plugins } = this.props
 
     if (plugins.sortable) {
       this.sortablePlugin = new SortablePlugin({
         options: plugins.sortable,
-        onRequestForceUpdate: () => this.forceUpdate()
-      })
-    }
-
-    if (plugins.selectable) {
-      this.selectablePlugin = new SelectablePlugin({
-        options: plugins.selectable,
         onRequestForceUpdate: () => this.forceUpdate()
       })
     }
@@ -46,10 +37,15 @@ class Grid extends React.Component {
         selectablePlugin: this.selectablePlugin
       })
     }
-  }
 
-  componentDidMount() {
-    this.selectablePlugin && this.selectablePlugin.setData(this.props.data)
+    if (plugins.selectable) {
+      this.selectablePlugin = new SelectablePlugin({
+        options: plugins.selectable,
+        onRequestForceUpdate: () => this.forceUpdate()
+      })
+
+      this.selectablePlugin.setData(this.props.data)
+    }
   }
 
   componentWillReceiveProps({ data }) {
