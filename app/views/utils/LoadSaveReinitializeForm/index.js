@@ -4,7 +4,7 @@ import { Form } from 'react-final-form'
 import { FORM_ERROR } from 'final-form'
 import _ from 'underscore'
 
-import { Spinner } from '../../../components/Partials/Loading'
+import Loading from './Loading'
 
 const propTypes = {
   initialValues: PropTypes.shape(),
@@ -16,7 +16,7 @@ const propTypes = {
 }
 
 const defaultProps = {
-  loading: <Spinner />,
+  loading: <Loading />,
   initialValues: {}
 }
 
