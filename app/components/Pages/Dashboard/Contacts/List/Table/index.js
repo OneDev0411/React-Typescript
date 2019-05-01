@@ -275,6 +275,7 @@ class ContactsList extends React.Component {
               accuracy: 300, // px
               accuracyTop: 600, // px
               debounceTime: 300, // ms
+              container: this.props.tableContainerId,
               onScrollBottom: this.props.onRequestLoadMore,
               onScrollTop: this.props.onRequestLoadMoreBefore
             },

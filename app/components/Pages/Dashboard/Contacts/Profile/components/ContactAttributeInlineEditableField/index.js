@@ -28,7 +28,7 @@ function getStateFromAttribute(attribute) {
       is_primary: attribute.is_primary,
       label: attribute.label || '',
       updated_at: attribute.updated_at || updated_at,
-      value: getValue(attribute) || ''
+      value: getValue(attribute)
     }
   }
 
