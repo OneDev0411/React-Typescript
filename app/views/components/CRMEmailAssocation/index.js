@@ -16,27 +16,26 @@ CRMEmailAssociation.defaultProps = {
 }
 
 function CRMEmailAssociation({ association, style }) {
-  if (!association.association_type) {
+  if (!association.email) {
     return null
   }
 
-  const email = association[association.association_type]
+  const { email } = association
 
   return (
     <Container style={style}>
-      <div className={`cover ${email.img ? 'img' : 'icon'}`}>
-        {email.img ? (
-          <img src={email.img} alt="email" />
-        ) : (
-          <MailAttachmentIcon />
-        )}
+      <div
+        className={`cover ${email.img ? 'img' : 'icon'}`}
+        style={{ backgroundImage: email.img && `url(${email.img})` }}
+      >
+        {!email.img && <MailAttachmentIcon />}
       </div>
       <div className="details">
         <div className="subject">
           <div className="subject__text">{email.subject}</div>
           <LongArrowRightIcon className="subject__icon" />
         </div>
-        <div className="body">{email.html}</div>
+        <div className="body">{email.body}</div>
       </div>
     </Container>
   )
