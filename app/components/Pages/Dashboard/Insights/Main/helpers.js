@@ -3,7 +3,7 @@ export function percent(num, allNum) {
     return 0
   }
 
-  return num / allNum
+  return Math.floor((num * 100) / allNum)
 }
 
 export function recipientsList(recipients) {

@@ -3,16 +3,16 @@ import { connect } from 'react-redux'
 
 import Table from 'components/Grid/Table'
 import { formatDate } from 'components/DateTimePicker/helpers'
-import Tooltip from 'components/tooltip'
 
 import Header from './Header'
 import Layout from './Layout'
+import StatColumn from './StatColumn'
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
 import NoSearchResults from '../../../../Partials/no-search-results'
 
 import { InsightContainer, Link, Info } from './styled'
-import { percent, show_title } from './helpers'
+import { show_title } from './helpers'
 import useListData from './useListData'
 import Recipients from './Recipients'
 
@@ -57,9 +57,11 @@ const columns = [
     id: 'open-rate',
     verticalAlign: 'center',
     render: props => (
-      <Tooltip caption="Opened">
-        <span>{percent(props.rowData.opened, props.rowData.recipients)}%</span>
-      </Tooltip>
+      <StatColumn
+        num={props.rowData.opened}
+        all={props.rowData.sent}
+        title="recipients"
+      />
     )
   },
   {
@@ -67,9 +69,11 @@ const columns = [
     id: 'click-rate',
     verticalAlign: 'center',
     render: props => (
-      <Tooltip caption="Clicked">
-        <span>{percent(props.rowData.clicked, props.rowData.recipients)}%</span>
-      </Tooltip>
+      <StatColumn
+        num={props.rowData.clicked}
+        all={props.rowData.sent}
+        title="times"
+      />
     )
   }
 ]
