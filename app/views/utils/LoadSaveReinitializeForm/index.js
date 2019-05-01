@@ -10,6 +10,7 @@ const propTypes = {
   initialValues: PropTypes.shape(),
   load: PropTypes.func.isRequired,
   loading: PropTypes.node,
+  needsReinitialize: PropTypes.bool,
   postLoadFormat: PropTypes.func,
   preSaveFormat: PropTypes.func,
   save: PropTypes.func.isRequired
@@ -17,7 +18,8 @@ const propTypes = {
 
 const defaultProps = {
   loading: <Loading />,
-  initialValues: {}
+  initialValues: {},
+  needsReinitialize: false
 }
 
 class LoadSaveReinitializeForm extends React.Component {
@@ -63,12 +65,15 @@ class LoadSaveReinitializeForm extends React.Component {
 
       await this.props.save(valuesToSave)
 
-      this.setState({
-        originalValues: valuesToSave,
-        initialValues: postLoadFormat
-          ? await postLoadFormat(valuesToSave.id ? valuesToSave : null)
-          : valuesToSave
-      })
+      // Reinitializing
+      if (this.props.needsReinitialize) {
+        this.setState({
+          originalValues: valuesToSave,
+          initialValues: postLoadFormat
+            ? await postLoadFormat(valuesToSave.id ? valuesToSave : null)
+            : valuesToSave
+        })
+      }
     } catch (error) {
       console.error(error)
 
