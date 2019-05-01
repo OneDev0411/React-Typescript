@@ -17,7 +17,7 @@ FlowsList.defaultProps = {
 function FlowsList({ flows }) {
   return (
     <Section title="Flows" style={{ padding: '0 1.5rem' }}>
-      {flows.length > 0 ? (
+      {Array.isArray(flows) && flows.length > 0 ? (
         <List items={flows} />
       ) : (
         <div style={{ color: grey.A900 }}>

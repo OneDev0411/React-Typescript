@@ -13,7 +13,7 @@ DealsList.propTypes = {
 function DealsList({ contact }) {
   return (
     <Section title="Deals" style={{ padding: '0 1.5rem' }}>
-      {contact.deals.length > 0 ? (
+      {Array.isArray(contact.deals) && contact.deals.length > 0 ? (
         <List contact={contact} items={contact.deals} />
       ) : (
         <div style={{ color: grey.A900 }}>
