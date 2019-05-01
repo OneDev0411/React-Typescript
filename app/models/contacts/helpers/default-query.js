@@ -37,6 +37,7 @@ export const CRM_TASKS_QUERY = {
     'contact.summary',
     'deal.brand',
     'email_campaign.emails',
-    'email_campaign.template'
+    'email_campaign.template',
+    'template_instance.template'
   ]
 }
