@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 
 import Table from 'components/Grid/Table'
-import { formatDate } from 'components/DateTimePicker/helpers'
 
 import Header from './Header'
 import Layout from './Layout'
@@ -11,10 +10,9 @@ import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingCo
 
 import NoSearchResults from '../../../../Partials/no-search-results'
 
-import { InsightContainer, Link, Info } from './styled'
-import { show_title } from './helpers'
+import { InsightContainer } from './styled'
 import useListData from './useListData'
-import Recipients from './Recipients'
+import InfoColumn from './InfoColumn'
 
 const columns = [
   {
@@ -22,35 +20,7 @@ const columns = [
     id: 'details',
     width: '50%',
     verticalAlign: 'center',
-    render: props => {
-      const isScheduled = !props.rowData.executed_at
-
-      return (
-        <>
-          <Link
-            to={
-              isScheduled
-                ? ''
-                : `/dashboard/insights/campaigns/${props.rowData.id}`
-            }
-          >
-            {show_title(props.rowData.subject)}
-          </Link>
-          <Info>
-            <div className="sub-info">
-              {isScheduled
-                ? `Scheduled for ${formatDate(
-                    new Date(props.rowData.due_at * 1000)
-                  )}`
-                : formatDate(new Date(props.rowData.executed_at * 1000))}
-            </div>
-            <div className="main-info">
-              <Recipients data={props.rowData.recipients} />
-            </div>
-          </Info>
-        </>
-      )
-    }
+    render: props => <InfoColumn data={props.rowData} />
   },
   {
     header: 'Open Rate',
@@ -61,6 +31,7 @@ const columns = [
         num={props.rowData.opened}
         all={props.rowData.sent}
         title="recipients"
+        isVisibile={!!props.rowData.executed_at}
       />
     )
   },
@@ -73,6 +44,7 @@ const columns = [
         num={props.rowData.clicked}
         all={props.rowData.sent}
         title="times"
+        isVisibile={!!props.rowData.executed_at}
       />
     )
   }

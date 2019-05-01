@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import ALink from 'components/ALink'
+import Badge from 'components/Badge'
 
 export const InsightContainer = styled.div`
   & .table-container {
@@ -36,11 +37,16 @@ export const Info = styled.div`
   }
 `
 
-export const Link = styled(ALink) `
+export const Link = styled(ALink)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
   font-weight: 500;
   margin-top: -4px;
+`
+
+export const StyledBadge = styled(Badge)`
+  padding: 0.25rem 0.75rem;
+  margin-left: 0.25rem;
 `

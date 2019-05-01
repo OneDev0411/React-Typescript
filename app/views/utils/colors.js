@@ -11,6 +11,10 @@ export const orange = {
   primary: '#f6a623'
 }
 
+export const green = {
+  primary: '#5cb85c'
+}
+
 export const blue = {
   A100: '#003bdf',
   A200: '#022ca0'
