@@ -68,15 +68,14 @@ function List(props) {
           onMenuTriggerChange={() => setSideMenuOpen(!isSideMenuOpen)}
         />
 
+        {isLoading && <LoadingComponent />}
         <div className={tableClassName.join(' ')}>
           <Table
             data={list}
             columns={columns}
-            isFetching={isLoading}
             EmptyState={() => (
               <NoSearchResults description="Try sending your first campaign using " />
             )}
-            LoadingState={LoadingComponent}
           />
         </div>
       </InsightContainer>
