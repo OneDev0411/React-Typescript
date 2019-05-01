@@ -51,12 +51,10 @@ class Grid extends React.Component {
   componentWillReceiveProps(props) {
     const { data, summary } = props
 
-    if (!this.selectablePlugin) {
-      return
+    if (this.selectablePlugin) {
+      this.selectablePlugin.setData(data)
+      this.selectablePlugin.setTotalCount(summary.total)
     }
-
-    this.selectablePlugin.setData(data)
-    this.selectablePlugin.setTotalCount(summary.total)
   }
 
   componentWillUnmount() {
