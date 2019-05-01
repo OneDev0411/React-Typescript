@@ -6,6 +6,7 @@ import ActionButton from 'components/Button/ActionButton'
 import EmailCompose from 'components/EmailCompose'
 
 function SendEmailButton(props) {
+  const { deal } = props
   const [isOpen, setIsOpen] = useState(false)
   const toggleOpenDrawer = () => setIsOpen(!isOpen)
 
@@ -25,11 +26,11 @@ function SendEmailButton(props) {
           defaultAttachments={[]}
           recipients={props.recipients}
           from={props.user}
-          deal={props.deal}
+          deal={deal}
           onClose={toggleOpenDrawer}
           hasDealsAttachments
           associations={{
-            deal: props.deal.id
+            deal: deal != null && deal.id
           }}
         />
       )}
