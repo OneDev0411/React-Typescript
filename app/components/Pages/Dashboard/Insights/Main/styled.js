@@ -4,7 +4,7 @@ import ALink from 'components/ALink'
 import Badge from 'components/Badge'
 
 export const InsightContainer = styled.div`
-  & .table-container {
+  & .insight-table-container {
     padding: 0 1.5rem;
     opacity: 0;
     transform: translateY(3rem);

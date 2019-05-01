@@ -53,7 +53,7 @@ const columns = [
 function List(props) {
   const { list, isLoading } = useListData(props.user)
   const [isSideMenuOpen, setSideMenuOpen] = useState(true)
-  const tableClassName = ['table-container']
+  const tableClassName = ['insight-table-container']
 
   if (isLoading === false) {
     tableClassName.push('show')
@@ -74,7 +74,7 @@ function List(props) {
             data={list}
             columns={columns}
             EmptyState={() => (
-              <NoSearchResults description="Try sending your first campaign using " />
+              <NoSearchResults description='Try sending your first campaign using "Send New Email" button.' />
             )}
           />
         </div>
