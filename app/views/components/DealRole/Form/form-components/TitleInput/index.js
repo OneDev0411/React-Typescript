@@ -18,6 +18,9 @@ export function TitleInput(props) {
         width: '20%',
         marginRight: '0.5rem'
       }}
+      dropdownStyle={{
+        borderBottom: '1px solid #dce5eb'
+      }}
       searchable={false}
       clearable
       input={props.input}
@@ -28,7 +31,6 @@ export function TitleInput(props) {
       dropdownOptions={{
         fullHeight: true
       }}
-      // onChange={props.input.onChange}
     />
   )
 }
