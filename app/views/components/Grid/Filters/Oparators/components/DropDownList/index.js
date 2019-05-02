@@ -69,11 +69,12 @@ export class DropDownList extends React.Component {
     return [...selectedItems, item]
   }
 
-  onInputValueChange = (_, { selectedItem }) =>
+  onInputValueChange = value => {
     this.setState({
-      filterValue: selectedItem,
+      filterValue: value,
       isMenuOpen: true
     })
+  }
 
   getFilteredOptions = filter => {
     const { options } = this.props
@@ -83,7 +84,7 @@ export class DropDownList extends React.Component {
     }
 
     return options.filter(item =>
-      item.value.toLowerCase().includes(filter.value.toLowerCase())
+      item.value.toLowerCase().includes(filter.toLowerCase())
     )
   }
 

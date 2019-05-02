@@ -21,6 +21,8 @@ import {
   getActiveTeamSettings
 } from 'utils/user-teams'
 
+import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
+
 import {
   Container as PageContainer,
   Menu as SideMenu,
@@ -46,7 +48,6 @@ class ContactsList extends React.Component {
       isFetchingMoreContacts: false,
       isFetchingMoreContactsBefore: false,
       isRowsUpdating: false,
-      filters: this.props.filters,
       searchInputValue: this.props.list.textFilter,
       activeSegment: {},
       loadedRanges: []
@@ -98,7 +99,7 @@ class ContactsList extends React.Component {
         : nextProps.viewAsUsers
 
       this.handleFilterChange({
-        filters: this.state.filters,
+        filters: this.props.filters,
         searchInputValue: this.state.searchInputValue,
         start: 0,
         order: this.order,
@@ -169,7 +170,7 @@ class ContactsList extends React.Component {
   }
 
   hasSearchState = () =>
-    this.state.filter || this.state.searchInputValue || this.order
+    this.props.filters || this.state.searchInputValue || this.order
 
   fetchList = async (start = 0, loadMoreBefore = false) => {
     if (start === 0 && !loadMoreBefore) {
@@ -179,7 +180,7 @@ class ContactsList extends React.Component {
     try {
       if (this.hasSearchState()) {
         await this.handleFilterChange({
-          filters: this.state.filters,
+          filters: this.props.filters,
           searchInputValue: this.state.searchInputValue,
           start,
           prependResult: loadMoreBefore
@@ -219,7 +220,7 @@ class ContactsList extends React.Component {
 
   handleFilterChange = async newFilters => {
     const {
-      filters = this.state.filters,
+      filters = this.props.filters,
       searchInputValue = this.state.searchInputValue,
       start = 0,
       order = this.order,
@@ -258,7 +259,7 @@ class ContactsList extends React.Component {
     console.log(`[ Search ] ${value}`)
     this.setState({ searchInputValue: value })
     this.handleFilterChange({
-      filters: this.state.filters,
+      filters: this.props.filters,
       searchInputValue: value
     })
   }
@@ -266,14 +267,14 @@ class ContactsList extends React.Component {
   handleChangeOrder = ({ value: order }) => {
     this.order = order
     this.handleFilterChange({
-      filters: this.state.filters,
+      filters: this.props.filters,
       searchInputValue: this.state.searchInputValue
     })
   }
 
   handleChangeContactsAttributes = () => {
     this.handleFilterChange({
-      filters: this.state.filters,
+      filters: this.props.filters,
       searchInputValue: this.state.searchInputValue
     })
   }
@@ -306,7 +307,7 @@ class ContactsList extends React.Component {
       await this.fetchList(start)
     } else {
       await this.handleFilterChange({
-        filters: this.state.filters,
+        filters: this.props.filters,
         searchInputValue: this.state.searchInputValue,
         start
       })
@@ -343,7 +344,7 @@ class ContactsList extends React.Component {
       await this.fetchList(start, true)
     } else {
       await this.handleFilterChange({
-        filters: this.state.filters,
+        filters: this.props.filters,
         searchInputValue: this.state.searchInputValue,
         start,
         prependResult: true
@@ -353,15 +354,32 @@ class ContactsList extends React.Component {
     this.setState({ isFetchingMoreContactsBefore: false })
   }
 
-  handleOnDelete = (e, { selectedRows, resetSelectedRows }) => {
-    const selectedRowsLength = selectedRows.length
-    const isManyContacts = selectedRowsLength > 1
+  handleOnDelete = (
+    e,
+    {
+      totalRowsCount,
+      entireMode,
+      selectedRows,
+      excludedRows,
+      resetSelectedRows
+    }
+  ) => {
+    const selectedRowsLength = entireMode
+      ? totalRowsCount - excludedRows.length
+      : selectedRows.length
+    const isManyContacts = entireMode ? true : selectedRowsLength > 1
 
     this.props.confirmation({
       confirmLabel: 'Delete',
       message: `Delete ${isManyContacts ? 'contacts' : 'contact'}?`,
-      onConfirm: () =>
-        this.handleDeleteContact(selectedRows, resetSelectedRows),
+      onConfirm: () => {
+        this.handleDeleteContact({
+          entireMode,
+          selectedRows,
+          excludedRows,
+          resetSelectedRows
+        })
+      },
       description: `Deleting ${
         isManyContacts ? `these ${selectedRowsLength} contacts` : 'this contact'
       } will remove ${
@@ -372,14 +390,32 @@ class ContactsList extends React.Component {
     })
   }
 
-  handleDeleteContact = async (ids, resetRowsHandler) => {
+  handleDeleteContact = async ({
+    entireMode,
+    selectedRows,
+    excludedRows,
+    resetSelectedRows
+  }) => {
     try {
       this.rowsUpdating(true)
 
-      await this.props.deleteContacts(ids)
+      if (entireMode) {
+        const bulkDeleteParams = {
+          users: this.props.viewAsUsers,
+          searchText: this.state.searchInputValue,
+          conditionOperator: this.props.conditionOperator,
+          filters: this.props.filters,
+          excludes: excludedRows
+        }
+
+        await deleteContactsBulk(bulkDeleteParams)
+        await this.reloadContacts()
+      } else {
+        await this.props.deleteContacts(selectedRows)
+      }
 
       this.rowsUpdating(false)
-      resetRowsHandler()
+      resetSelectedRows()
     } catch (error) {
       console.log(error)
     }
@@ -394,7 +430,7 @@ class ContactsList extends React.Component {
 
   reloadContacts = async (start = 0) => {
     await this.props.searchContacts(
-      this.state.filters,
+      this.props.filters,
       start,
       undefined,
       this.state.searchInputValue,
@@ -452,7 +488,8 @@ class ContactsList extends React.Component {
             rowsUpdating={this.rowsUpdating}
             onChangeSelectedRows={this.onChangeSelectedRows}
             onRequestDelete={this.handleOnDelete}
-            filters={this.state.filters}
+            filters={this.props.filters}
+            searchInputValue={this.state.searchInputValue}
             conditionOperator={this.props.conditionOperator}
             users={viewAsUsers}
           />

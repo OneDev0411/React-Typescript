@@ -92,28 +92,28 @@ class SendMlsListingCard extends React.Component {
   get Recipients() {
     return this.props.selectedRows
       ? this.props.selectedRows
-        .map(id => {
-          const contact = selectContact(this.props.contacts, id)
+          .map(id => {
+            const contact = selectContact(this.props.contacts, id)
 
-          if (!contact || !contact.summary.email) {
-            return null
-          }
+            if (!contact || !contact.summary.email) {
+              return null
+            }
 
-          const emails = getContactAttribute(
-            contact,
-            selectDefinitionByName(this.props.attributeDefs, 'email')
-          )
+            const emails = getContactAttribute(
+              contact,
+              selectDefinitionByName(this.props.attributeDefs, 'email')
+            )
 
-          return {
-            data_type: 'contact',
-            contactId: contact.id,
-            name: contact.summary.display_name,
-            avatar: contact.summary.profile_image_url,
-            email: contact.summary.email,
-            emails: emails.map(email => email.text)
-          }
-        })
-        .filter(recipient => recipient !== null)
+            return {
+              data_type: 'contact',
+              contactId: contact.id,
+              name: contact.summary.display_name,
+              avatar: contact.summary.profile_image_url,
+              email: contact.summary.email,
+              emails: emails.map(email => email.text)
+            }
+          })
+          .filter(recipient => recipient !== null)
       : []
   }
 
@@ -142,7 +142,7 @@ class SendMlsListingCard extends React.Component {
         status: 'success',
         message: `${
           values.recipients.length
-          } emails has been sent to your contacts`
+        } emails has been sent to your contacts`
       })
     } catch (e) {
       console.log(e)
@@ -324,10 +324,10 @@ class SendMlsListingCard extends React.Component {
               {this.state.isEditingListings ? (
                 'Apply Changes'
               ) : (
-                  <Fragment>
-                    Next ({_.size(props.selectedItems)} Listings Selected)
+                <Fragment>
+                  Next ({_.size(props.selectedItems)} Listings Selected)
                 </Fragment>
-                )}
+              )}
             </ActionButton>
           )}
         />

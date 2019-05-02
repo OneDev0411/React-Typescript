@@ -49,7 +49,8 @@ class TagsList extends React.Component {
       const filter = activeFilters[id]
 
       return (
-        filter.id === this.tagDefinitionId && filter.values.includes(item.text)
+        filter.id === this.tagDefinitionId &&
+        filter.values.some(({ value }) => value === item.text)
       )
     })
 
@@ -57,13 +58,14 @@ class TagsList extends React.Component {
     nextFilters = _.filter(
       activeFilters,
       filter =>
-        filter.id !== this.tagDefinitionId || !filter.values.includes(item.text)
+        filter.id !== this.tagDefinitionId ||
+        !filter.values.some(({ value }) => value === item.text)
     )
 
     if (!this.isSelected(item.text)) {
       const filter = {
         id: this.tagDefinitionId,
-        values: [item.text],
+        values: [{ value: item.text, label: item.text }],
         operator: {
           name: 'is',
           invert: false
@@ -89,7 +91,7 @@ class TagsList extends React.Component {
       filter =>
         filter.id === this.tagDefinitionId &&
         filter.values &&
-        filter.values.includes(text) &&
+        filter.values.some(({ value }) => value === text) &&
         !filter.operator.invert
     )
 
