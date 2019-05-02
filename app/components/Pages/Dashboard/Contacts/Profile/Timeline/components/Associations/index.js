@@ -7,7 +7,7 @@ import { normalizeAssociations } from 'views/utils/association-normalizers'
 
 import Button from 'components/Button/ActionButton'
 import { AssociationItem } from 'components/AssocationItem'
-import EmailAssociation from 'components/CRMEmailAssocation'
+import EmailAssociation from 'components/CRMEmailAssociation'
 import AssociationsDrawer from 'components/AssociationsDrawer'
 import { getAssociations } from 'components/EventDrawer/helpers/get-associations'
 

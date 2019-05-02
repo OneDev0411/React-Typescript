@@ -5,7 +5,7 @@ import Flex from 'styled-flex-component'
 
 import Button from '../../Button/ActionButton'
 import { AssociationItem } from '../../AssocationItem'
-import EmailAssociation from '../../CRMEmailAssocation'
+import EmailAssociation from '../../CRMEmailAssociation'
 import AssociationsDrawer from '../../AssociationsDrawer'
 
 class List extends React.Component {
