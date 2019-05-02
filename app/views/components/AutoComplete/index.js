@@ -185,7 +185,7 @@ export class AutoComplete extends React.Component {
                   return (
                     <Fragment key={index}>
                       {props.itemRenderer ? (
-                        props.itemRenderer({ itemProps, item })
+                        props.itemRenderer({ index, itemProps, item })
                       ) : (
                         <ListItem {...itemProps}>{item.label}</ListItem>
                       )}

@@ -1,72 +1,33 @@
 import React from 'react'
-import _ from 'underscore'
 
-import searchAgents from 'models/agent/search'
 import { AutoComplete } from 'components/AutoComplete'
 
-async function searchByMlsId(mls) {
-  if (!mls || mls.length < 6) {
-    return false
-  }
+import { ListItem } from 'components/AutoComplete/styled'
 
-  try {
-    const agent = await searchAgents(mls)
-
-    return [
-      {
-        ...agent,
-        value: agent.mlsid,
-        label: `${agent.full_name} (${agent.mlsid})`
-      }
-    ]
-  } catch (e) {
-    /* nothing */
-  }
-}
-
-async function searchByName(name, field) {
-  if (!name || name.length < 2) {
-    return false
-  }
-
-  try {
-    const list = await searchAgents(name, 'q')
-
-    return list.map(agent => ({
-      ...agent,
-      value: agent[field],
-      label: agent.full_name
-    }))
-  } catch (e) {
-    /* nothing */
-  }
-}
+import { ItemTitle, ItemDescription } from './styled'
 
 export function AutoCompleteInput(props) {
   if (props.isVisible === false) {
     return false
   }
 
-  const getOptions = value => {
-    if (props.options) {
-      return props.options
-    }
-
-    if (props.input.name === 'mls_id') {
-      return searchByMlsId(value, 'mlsid')
-    }
-
-    return searchByName(value, props.autocompleteField)
-  }
-
   return (
     <AutoComplete
       {...props}
       onSelect={item => props.mutators && props.mutators.setAgent(item)}
-      options={getOptions}
+      options={props.options}
       inputProps={{
         highlightOnError: true
       }}
+      itemRenderer={({ index, itemProps, item }) => (
+        <ListItem key={index} {...itemProps}>
+          <ItemTitle>{item.label}</ItemTitle>
+          <ItemDescription isActive={itemProps.isActive}>
+            <div>{item.email}</div>
+            {item.mlsid && <div>MLS ID: {item.mlsid}</div>}
+          </ItemDescription>
+        </ListItem>
+      )}
     />
   )
 }
