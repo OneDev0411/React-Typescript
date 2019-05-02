@@ -8,6 +8,7 @@ import { Helmet } from 'react-helmet'
 import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 
+import deleteFlow from 'models/flows/delete-flow'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { updateContactQuery } from 'models/contacts/helpers/default-query'
 import { getContact } from 'models/contacts/get-contact'
@@ -254,6 +255,20 @@ class ContactProfile extends React.Component {
     }
   }
 
+  stopFlow = async id => {
+    try {
+      await deleteFlow(id)
+      this.fetchContact()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  addToFlowCallback = () => {
+    this.fetchContact()
+    this.fetchTimeline()
+  }
+
   render() {
     const { contact } = this.state
     const { user } = this.props
@@ -301,7 +316,7 @@ class ContactProfile extends React.Component {
                 : null
             }
             closeButtonQuery={this.props.location.state}
-            addToFlowCallback={this.fetchTimeline}
+            addToFlowCallback={this.addToFlowCallback}
           />
 
           <ColumnsContainer>
@@ -325,6 +340,7 @@ class ContactProfile extends React.Component {
                     contactId={contact.id}
                     flows={contact.flows}
                     user={user}
+                    onStop={this.stopFlow}
                   />
                 )}
 

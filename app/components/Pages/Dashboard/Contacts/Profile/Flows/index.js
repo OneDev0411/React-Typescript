@@ -7,18 +7,19 @@ import { List } from './List'
 import { Section } from '../components/Section'
 
 FlowsList.propTypes = {
-  flows: PropTypes.arrayOf()
+  flows: PropTypes.arrayOf(),
+  onStop: PropTypes.func.isRequired
 }
 
 FlowsList.defaultProps = {
   flows: []
 }
 
-function FlowsList({ flows }) {
+function FlowsList({ flows, onStop }) {
   return (
     <Section title="Flows" style={{ padding: '0 1.5rem' }}>
       {Array.isArray(flows) && flows.length > 0 ? (
-        <List items={flows} />
+        <List items={flows} onStop={onStop} />
       ) : (
         <div style={{ color: grey.A900 }}>
           No flows connected to this contact.

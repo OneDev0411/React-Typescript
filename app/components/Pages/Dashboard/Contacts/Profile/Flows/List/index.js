@@ -4,9 +4,12 @@ import PropTypes from 'prop-types'
 import Item from './Item'
 
 List.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape()).isRequired
+  items: PropTypes.arrayOf().isRequired,
+  onStop: PropTypes.func.isRequired
 }
 
 export function List(props) {
-  return props.items.map(item => <Item key={item.id} item={item} />)
+  return props.items.map(item => (
+    <Item key={item.id} item={item} onStop={props.onStop} />
+  ))
 }
