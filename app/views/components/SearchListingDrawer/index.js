@@ -92,7 +92,7 @@ class SearchListingDrawer extends React.Component {
 
   normalizeSelectedItem = item => ({
     ...item,
-    id: item.type === 'deal' ? item.listing : item.id
+    id: item.type === 'deal' && item.listing ? item.listing : item.id
   })
 
   searchListing = async value => {

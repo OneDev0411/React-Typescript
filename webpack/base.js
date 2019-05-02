@@ -1,14 +1,14 @@
-import path from 'path'
+const path = require('path')
 
-import webpack from 'webpack'
+const webpack = require('webpack')
 
-import config from '../config/webpack'
+const config = require('../config/webpack')
 
 function resolvePath(dirPath) {
   return path.resolve(__dirname, dirPath)
 }
 
-export default {
+module.exports = {
   devtool: 'eval-source-map',
   entry: {},
   output: {

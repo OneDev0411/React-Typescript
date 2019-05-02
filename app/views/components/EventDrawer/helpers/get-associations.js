@@ -31,7 +31,7 @@ export async function getAssociations(task) {
     if (query.length > 0) {
       const records = await getTaskAssociations(task.id, query.join('&'))
 
-      return normalizeAssociations(records)
+      return normalizeAssociations(records).filter(Boolean)
     }
 
     return query

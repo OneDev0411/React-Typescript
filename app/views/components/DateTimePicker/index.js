@@ -8,11 +8,11 @@ import { getTime } from '../../../utils/get-time'
 import { setTime } from '../../../utils/set-time'
 
 import { Divider } from '../Divider'
-import { TimePicker } from '../TimePicker'
 import ActionButton from '../Button/ActionButton'
+import TimeInput from '../TimeInput'
 
 import { PickerContainer } from './styled'
-import { isToday, formatDate, setTimeStringToDate } from './helpers'
+import { isToday, formatDate } from './helpers'
 
 export class DateTimePicker extends React.Component {
   static propTypes = {
@@ -37,8 +37,7 @@ export class DateTimePicker extends React.Component {
   handleDate = date =>
     this.props.onChange(setTime(date, getTime(this.props.selectedDate)))
 
-  handleTime = time =>
-    this.props.onChange(setTimeStringToDate(this.props.selectedDate, time))
+  handleTime = updatedDate => this.props.onChange(updatedDate)
 
   render() {
     const { selectedDate } = this.props
@@ -67,8 +66,8 @@ export class DateTimePicker extends React.Component {
                 />
                 <Divider margin="0.5em 0" />
                 <Flex alignCenter justifyBetween>
-                  <TimePicker
-                    defaultTime={selectedDate}
+                  <TimeInput
+                    initialDate={selectedDate}
                     onChange={this.handleTime}
                   />
                   <ActionButton

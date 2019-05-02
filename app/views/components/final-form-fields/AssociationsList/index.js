@@ -57,7 +57,7 @@ class List extends React.Component {
   render() {
     return (
       <Flex wrap>
-        {this.props.associations.map((association, index) => {
+        {this.props.associations.map(association => {
           const isDefaultAssociation = this.isDefaultAssociation(association)
 
           if (
@@ -71,7 +71,7 @@ class List extends React.Component {
           return (
             <AssociationItem
               association={association}
-              key={`association_${index}`}
+              key={association.id}
               handleRemove={this.removeHandler}
               isRemovable={!isDefaultAssociation}
             />

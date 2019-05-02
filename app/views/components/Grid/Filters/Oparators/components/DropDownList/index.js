@@ -69,8 +69,12 @@ export class DropDownList extends React.Component {
     return [...selectedItems, item]
   }
 
-  onInputValueChange = (value = '') =>
-    this.setState({ filterValue: value.trim(), isMenuOpen: true })
+  onInputValueChange = value => {
+    this.setState({
+      filterValue: value,
+      isMenuOpen: true
+    })
+  }
 
   getFilteredOptions = filter => {
     const { options } = this.props
@@ -80,21 +84,18 @@ export class DropDownList extends React.Component {
     }
 
     return options.filter(item =>
-      item.toLowerCase().includes(filter.toLowerCase())
+      item.value.toLowerCase().includes(filter.toLowerCase())
     )
   }
 
-  isItemSelected = item => {
-    const { selectedItems } = this.state
-
-    return selectedItems.includes(item)
-  }
+  isItemSelected = item =>
+    this.state.selectedItems.some(({ value }) => value === item.value)
 
   getDefaultInputValue = () => {
     const { defaultValue, values } = this.props
 
     if (values && values.length > 0) {
-      return values[0]
+      return values[0].label
     }
 
     if (defaultValue) {
@@ -111,6 +112,7 @@ export class DropDownList extends React.Component {
     return (
       <div style={{ position: 'relative' }}>
         <Downshift
+          itemToString={item => (item ? item.label : '')}
           isOpen={isMenuOpen}
           defaultInputValue={this.getDefaultInputValue()}
           onSelect={this.onSelectItem}
@@ -121,12 +123,12 @@ export class DropDownList extends React.Component {
             <div>
               <ItemsContainer selectedItems={selectedItems}>
                 {allowMultipleSelections &&
-                  _.map(selectedItems, (value, index) => (
+                  _.map(selectedItems, (item, index) => (
                     <SelectedItem
                       key={index}
-                      onClick={() => this.onSelectItem(value)}
+                      onClick={() => this.onSelectItem(item)}
                     >
-                      {value}
+                      {item.label}
                     </SelectedItem>
                   ))}
 
@@ -135,12 +137,12 @@ export class DropDownList extends React.Component {
                     allowMultipleSelections && _.size(selectedItems) > 0
                   }
                   inputFocused={this.state.inputFocused}
+                  onClick={this.toggleMenu}
                 >
                   <Input
                     {...getInputProps({
                       placeholder: 'Select'
                     })}
-                    onClick={this.toggleMenu}
                     onFocus={() => this.setState({ inputFocused: true })}
                     onBlur={() => this.setState({ inputFocused: false })}
                   />
@@ -163,7 +165,7 @@ export class DropDownList extends React.Component {
                         isSelected: this.isItemSelected(item)
                       })}
                     >
-                      {item}
+                      {item.label}
                     </Item>
                   ))}
                 </List>

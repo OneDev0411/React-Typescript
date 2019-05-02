@@ -209,20 +209,17 @@ class SectionWithFields extends React.Component {
         message: `${attribute_def.label || attribute_def.name} updated.`
       })
 
-      this.setState(
-        state =>
-          console.log('update state') || {
-            orderedAttributes: state.orderedAttributes.map(a =>
-              a.id !== id
-                ? a
-                : {
-                    ...updatedAttribute,
-                    attribute_def,
-                    order: a.order
-                  }
-            )
-          }
-      )
+      this.setState(state => {
+        state.orderedAttributes.map(a =>
+          a.id !== id
+            ? a
+            : {
+                ...updatedAttribute,
+                attribute_def,
+                order: a.order
+              }
+        )
+      })
 
       this.updateContact(attribute_def)
     } catch (error) {

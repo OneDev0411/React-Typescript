@@ -7,6 +7,12 @@ import { Router, browserHistory, applyRouterMiddleware } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import smoothscroll from 'smoothscroll-polyfill'
 
+// The following polyfill is temporary fix for https://github.com/zloirock/core-js/issues/536
+// core-js RegExp polyfill screws up toString method of native RegExp in IE and Edge,
+// when useBuiltIns is set to "usage" in @babel/preset-env options.
+// related issue in rechat: https://gitlab.com/rechat/web/issues/2587
+import 'core-js/es/regexp/flags'
+
 import { hot } from 'react-hot-loader/root'
 
 // This is our new confirmation modal. use this please.

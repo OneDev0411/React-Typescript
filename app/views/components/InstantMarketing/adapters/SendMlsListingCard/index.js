@@ -20,6 +20,7 @@ import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketin
 
 import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-deals'
 
+import { generate_email_request } from '../../helpers/general'
 import { getTemplateTypes } from '../../helpers/get-template-types'
 import SocialDrawer from '../../components/SocialDrawer'
 
@@ -118,12 +119,9 @@ class SendMlsListingCard extends React.Component {
       isSendingEmail: true
     })
 
-    const email = {
-      from: values.fromId,
-      to: values.recipients,
-      subject: values.subject,
+    const email = generate_email_request(values, {
       html: this.state.htmlTemplate.result
-    }
+    })
 
     try {
       await sendContactsEmail(email, this.state.owner.id)

@@ -14,6 +14,7 @@ import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketin
 import SocialDrawer from '../../components/SocialDrawer'
 import { getTemplatePreviewImage } from '../../helpers/get-template-preview-image'
 import { getTemplateTypes } from '../../helpers/get-template-types'
+import { generate_email_request } from '../../helpers/general'
 
 const initialState = {
   owner: null,
@@ -77,12 +78,9 @@ class SendDealPromotion extends React.Component {
       isSendingEmail: true
     })
 
-    const email = {
-      from: values.fromId,
-      to: values.recipients,
-      subject: values.subject,
+    const email = generate_email_request(values, {
       html: this.state.htmlTemplate.result
-    }
+    })
 
     try {
       await sendContactsEmail(email, this.state.owner.id)
@@ -92,7 +90,7 @@ class SendDealPromotion extends React.Component {
           status: 'success',
           message: `${
             values.recipients.length
-          } emails has been sent to your contacts`
+            } emails has been sent to your contacts`
         })
       )
     } catch (e) {
