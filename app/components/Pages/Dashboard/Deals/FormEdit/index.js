@@ -13,13 +13,14 @@ import ProgressBar from 'components/ProgressBar'
 
 import importPdfJs from 'utils/import-pdf-js'
 
-import { selectDealById } from 'reducers/deals/list';
+import { selectDealById } from 'reducers/deals/list'
+import { selectTaskById } from 'reducers/deals/tasks'
+
 import PDFEdit from './Editor'
 import { Header } from './Header'
 
 import { Container, LoadingDealContainer } from './styled'
 import config from '../../../../../../config/public'
-import { selectTaskById } from 'reducers/deals/tasks'
 
 class EditDigitalForm extends React.Component {
   state = {

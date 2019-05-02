@@ -2,9 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { selectDealRoles } from 'reducers/deals/roles'
-
+import DealRole from 'components/DealRole'
 import ActionButton from 'components/Button/ActionButton'
 
+import { normalizeRoleNames } from '../../../utils/get-roles-text'
 import { getLegalFullName, roleName } from '../../../../utils/roles'
 
 export class RolesEdit extends React.Component {
@@ -16,6 +17,12 @@ export class RolesEdit extends React.Component {
     this.setState({
       selectedRole: role.id
     })
+
+  get AllowedRoles() {
+    const roles = this.props.selectedAnnotation.data.roleName
+
+    return normalizeRoleNames(this.props.deal, roles)
+  }
 
   get DefaultSelectedRole() {
     const { props } = this
@@ -33,6 +40,25 @@ export class RolesEdit extends React.Component {
 
   render() {
     // console.log('?????', this.props)
+
+    const role = this.props.roles[0]
+
+    return (
+      <DealRole
+        form={role}
+        deal={this.props.deal}
+        // dealSide={this.props.dealSide}
+        // isSubmitting={this.state.isSaving}
+        // isEmailRequired={this.props.isEmailRequired}
+        // formTitle={this.props.modalTitle}
+        // formOptions={this.props.formOptions}
+        // isCommissionRequired={this.props.isCommissionRequired}
+        // allowedRoles={this.AllowedRoles}
+        isOpen={this.props.isOpen}
+        // onFormSubmit={this.onSubmit}
+        // onClose={this.props.onHide}
+      />
+    )
 
     return (
       <div>
