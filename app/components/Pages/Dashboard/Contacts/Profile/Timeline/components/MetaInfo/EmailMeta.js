@@ -1,4 +1,5 @@
 import React from 'react'
+import Flex from 'styled-flex-component'
 
 import { Divider } from 'components/Divider'
 import { grey, red, yellow } from 'views/utils/colors'
@@ -23,7 +24,7 @@ export default function EmailMeta({ bounced, unsubscribed, opened, clicked }) {
   const unsubscribedColor = yellow.A100
 
   return (
-    <React.Fragment>
+    <Flex alignCenter style={{ fontWeight: 500 }}>
       <Divider {...dividerProps} />
       {bounced && (
         <React.Fragment>
@@ -44,6 +45,6 @@ export default function EmailMeta({ bounced, unsubscribed, opened, clicked }) {
       <Divider {...dividerProps} />
       <ClickedIcon style={iconStyle} />
       {`${clicked} Clicked`}
-    </React.Fragment>
+    </Flex>
   )
 }

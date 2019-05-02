@@ -42,7 +42,7 @@ export function MetaInfo(props) {
     <Flex alignCenter style={{ marginBottom: '2em' }}>
       <Flex alignCenter onClick={props.onEdit} className="u-cursor--pointer">
         <Icon style={{ marginRight: '0.5em', fill: iconColor }} />
-        <span>{task_type}</span>
+        <span style={{ fontWeight: 500 }}>{task_type}</span>
       </Flex>
       <Divider margin="0 0.5em" width="1px" height="16px" />
       <Flex alignCenter style={{ color: '#7f7f7f' }}>
