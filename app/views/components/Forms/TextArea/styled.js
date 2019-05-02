@@ -7,7 +7,7 @@ export const InputField = styled(AutoTextarea)`
   border: none;
   font-size: 16px;
   width: 100%;
-  border-radius: 4px;
+  border-bottom: 1px solid #dce5eb;
   resize: none;
 
   ::placeholder {

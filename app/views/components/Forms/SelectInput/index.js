@@ -24,6 +24,7 @@ SelectInput.propTypes = {
   input: PropTypes.object,
   styles: PropTypes.object,
   dropdownOptions: PropTypes.object,
+  dropdownStyle: PropTypes.object,
   meta: PropTypes.object,
   defaultSelectedItem: PropTypes.object,
   noBorder: PropTypes.bool,
@@ -37,6 +38,7 @@ SelectInput.defaultProps = {
   meta: {},
   styles: {},
   dropdownOptions: {},
+  dropdownStyle: {},
   defaultSelectedItem: null,
   noBorder: true,
   isRequired: false,
@@ -55,12 +57,21 @@ export function SelectInput(props) {
       : item => props.input.onChange(item.value)
 
   return (
-    <props.container style={props.style}>
+    <props.container
+      style={{
+        justifyContent: 'flex-start',
+        ...props.style
+      }}
+    >
       <InputLabel hasError={props.meta.submitFailed && props.meta.error}>
         {props.label} <InputRequired>{props.isRequired && '*'}</InputRequired>
       </InputLabel>
 
       <BasicDropdown
+        style={{
+          height: '1.7rem',
+          ...props.dropdownStyle
+        }}
         buttonRenderer={props => (
           <MenuButton onClick={props.onClick}>
             <span>{props.text}</span>

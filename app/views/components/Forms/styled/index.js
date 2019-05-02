@@ -5,7 +5,6 @@ export const InputContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   position: relative;
-  border-bottom: 1px solid #dce5eb;
   padding: 0.5rem 0;
   text-align: left;
 `
@@ -19,10 +18,10 @@ export const InputLabel = styled.label`
 
 export const InputError = styled.span`
   color: #fe3824;
-  font-size: 13px;
-  margin-top: 8px;
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
 `
 
 export const InputRequired = styled(InputError)`
-  font-size: 15px;
+  font-size: 1rem;
 `
