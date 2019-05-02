@@ -16,6 +16,8 @@ import { TypeInput } from './form-components/TypeInput'
 import { Roles } from './form-components/Roles'
 import { Address } from './form-components/Address'
 import { AutoCompleteInput } from './form-components/AutoCompleteInput'
+import { NameInput } from './form-components/NameInput'
+import { MlsInput } from './form-components/MlsInput'
 import { CommissionInput } from './form-components/CommissionInput'
 
 import { getAutocompleteOptions } from '../helpers/get-autocomplete-options'
@@ -55,12 +57,13 @@ export function FormContainer(props) {
 
           <Field
             name="legal_first_name"
-            autocompleteField="first_name"
+            searchField="first_name"
             label="First Name"
             isVisible={isVisible('legal_first_name')}
             isRequired={isRequired('legal_first_name')}
+            crmSearch={isVisible('mls_id') === false}
             mutators={props.form.mutators}
-            component={AutoCompleteInput}
+            component={NameInput}
             style={{ flex: 3, marginRight: '0.5rem' }}
           />
 
@@ -74,11 +77,12 @@ export function FormContainer(props) {
 
           <Field
             name="legal_last_name"
-            autocompleteField="last_name"
+            searchField="last_name"
             label="Last Name"
             isVisible={isVisible('legal_last_name')}
             isRequired={isRequired('legal_last_name')}
-            component={AutoCompleteInput}
+            crmSearch={isVisible('mls_id') === false}
+            component={NameInput}
             mutators={props.form.mutators}
             style={{ flex: 3 }}
           />
@@ -105,7 +109,7 @@ export function FormContainer(props) {
             label="MLS ID"
             isVisible={isVisible('mls_id')}
             mutators={props.form.mutators}
-            component={AutoCompleteInput}
+            component={MlsInput}
             style={{ flex: 3 }}
           />
         </Flex>
@@ -184,7 +188,7 @@ export function FormContainer(props) {
           </Tooltip>
         </Flex>
 
-        <Flex>
+        <Flex alignCenter>
           <LinkButton onClick={props.onClose}>Cancel</LinkButton>
 
           {props.isSubmitting ? (
@@ -194,6 +198,7 @@ export function FormContainer(props) {
           ) : (
             <Fragment>
               <ActionButton
+                size="small"
                 appearance={props.isNewRecord ? 'outline' : 'primary'}
                 onClick={() => props.onSubmit(props.form, false)}
               >
@@ -202,6 +207,7 @@ export function FormContainer(props) {
 
               {props.isNewRecord && (
                 <ActionButton
+                  size="small"
                   onClick={() => props.onSubmit(props.form, true)}
                   style={{
                     marginLeft: '0.5rem'

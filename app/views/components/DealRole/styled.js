@@ -17,17 +17,19 @@ export const Header = styled.div`
   align-items: center;
   justify-content: space-between;
   background-color: #f2f2f2;
+  margin: 0.5rem;
   padding: 0 0.5rem;
 `
 
 export const Body = styled.div`
-  padding: 1rem 0.5rem;
+  padding: 0.5rem 1rem;
 `
 
 export const Footer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 0.5rem;
+  margin: 0.5rem;
+  padding: 0.25rem 0.5rem;
   background-color: #f2f2f2;
 `
