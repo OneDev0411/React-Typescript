@@ -165,7 +165,7 @@ export class Timeline extends React.Component {
           }
 
           if (activity.type === 'email_campaign') {
-            return <AutoEmailItem email={activity} />
+            return <AutoEmailItem email={activity} key={key} />
           }
 
           if (
