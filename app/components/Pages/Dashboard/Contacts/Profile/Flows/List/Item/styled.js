@@ -13,10 +13,6 @@ const Container = styled.div`
   &:hover {
     border-radius: 3px;
     background-color: ${brandBackground};
-
-    .stop {
-      visibility: visible;
-    }
   }
 
   .title {
@@ -44,32 +40,20 @@ const Container = styled.div`
     margin-right: 0.25em;
   }
 
-  > .next-step-counter {
-    padding-left: 2em;
+  .upcoming {
+    font-weight: 600;
+    color: ${grey.A600};
+    padding-left: 1.5rem;
+  }
+
+  .missed-steps {
+    padding-left: 1.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .small-text {
     font-size: 0.875rem;
-    font-weight: 500;
-    color: ${grey.A900};
-  }
-
-  .stop {
-    width: 1.5em;
-    height: 1.5em;
-    visibility: hidden;
-  }
-
-  .stop__icon {
-    width: 1.125em;
-    height: 1.125em;
-    border-radius: 100%;
-    border: 2px solid #000;
-
-    &:after {
-      content: '';
-      width: 0.4em;
-      height: 0.4em;
-      border-radius: 2px;
-      background-color: #000;
-    }
+    line-height: 1.71;
   }
 `
 
