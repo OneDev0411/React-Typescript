@@ -153,7 +153,7 @@ export const normalizeEmail = email => {
   }
 
   let img = ''
-  let body = email.html
+  let body = email.text
   const { template } = email
 
   if (template) {

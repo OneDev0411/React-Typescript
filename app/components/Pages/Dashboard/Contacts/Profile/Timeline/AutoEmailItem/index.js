@@ -11,7 +11,7 @@ export default function AutoEmailItem({ email }) {
     <Container style={{ backgroundColor: brandBackground }}>
       <MetaInfo scheduledFor={email.due_date} />
       <EmailAssociation
-        association={{ email: { ...email, body: email.html } }}
+        association={{ email: { ...email, body: email.text } }}
       />
     </Container>
   )
