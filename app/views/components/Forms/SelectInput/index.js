@@ -69,7 +69,7 @@ export function SelectInput(props) {
 
       <BasicDropdown
         style={{
-          height: '1.7rem',
+          height: '2rem',
           ...props.dropdownStyle
         }}
         buttonRenderer={props => (

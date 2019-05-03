@@ -7,17 +7,13 @@ import RadioButton from 'components/RadioButton'
 import { InputLabel, InputRequired } from '../styled'
 
 export function RadioGroup(props) {
-  if (props.isVisible === false) {
-    return false
-  }
-
   return (
-    <Flex column>
+    <Flex column flexStart>
       <InputLabel>
         {props.label} <InputRequired>{props.isRequired && '*'}</InputRequired>
       </InputLabel>
 
-      <Flex>
+      <Flex style={{ height: '2rem' }}>
         {props.options.map((option, index) => (
           <Field
             key={index}
