@@ -1,4 +1,10 @@
-import React, { Fragment, useState, useRef } from 'react'
+import React, {
+  forwardRef,
+  Fragment,
+  useImperativeHandle,
+  useRef,
+  useState
+} from 'react'
 import PropTypes from 'prop-types'
 import { EditorState } from 'draft-js'
 import Editor from 'draft-js-plugins-editor'
@@ -13,9 +19,8 @@ import IconUnderline from '../SvgIcons/Underline/IconUnderline'
 import IconItalic from '../SvgIcons/Italic/IconItalic'
 import IconList from '../SvgIcons/List/ListIcon'
 import IconNumberedList from '../SvgIcons/NumberedList/IconNumberedList'
-import IconQuote from '../SvgIcons/Quote/IconQuote'
 
-import { Toolbar, Separator } from './styled'
+import { Separator, Toolbar } from './styled'
 
 import IconButton from './buttons/IconButton'
 import HeadingButtons from './buttons/HeadingButtons'
@@ -35,10 +40,38 @@ const {
   H6Button
 } = richButtonsPlugin
 
-export function TextEditor(props) {
+/**
+ * Html wysiwyg editor.
+ *
+ * NOTE: this is an uncontrolled (stateful) component, and `onChange`
+ * prop is only for being notified of changes. However it's possible
+ * to reset html content imperatively via ref.
+ */
+export const TextEditor = forwardRef((props, ref) => {
   const editorRef = useRef()
   const [editorState, setEditorState] = useState(
     EditorState.createWithContent(stateFromHTML(props.defaultValue))
+  )
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      // convenient method for resetting editor html content
+      reset: (html = '') => {
+        setEditorState(EditorState.createWithContent(stateFromHTML(html)))
+      },
+      // convenient method for getting plain text of the editor content
+      getPlainText: () =>
+        editorRef.current
+          .getEditorState()
+          .getCurrentContent()
+          .getPlainText(),
+      // convenient method for getting html content of the editor
+      getHtml: () =>
+        stateToHTML(editorRef.current.getEditorState().getCurrentContent()),
+      editorRef
+    }),
+    []
   )
 
   const handleTextChange = newState => {
@@ -50,7 +83,9 @@ export function TextEditor(props) {
 
     const html = stateToHTML(newState.getCurrentContent())
 
-    return props.input ? props.input.onChange(html) : props.onChange(html)
+    setTimeout(() =>
+      props.input ? props.input.onChange(html) : props.onChange(html)
+    )
   }
 
   return (
@@ -128,6 +163,7 @@ export function TextEditor(props) {
       >
         <Editor
           spellCheck
+          readOnly={props.disabled}
           editorState={editorState}
           onChange={handleTextChange}
           plugins={[richButtonsPlugin, ...props.plugins]}
@@ -144,12 +180,13 @@ export function TextEditor(props) {
       )}
     </Fragment>
   )
-}
+})
 
 TextEditor.propTypes = {
   placeholder: PropTypes.string,
   defaultValue: PropTypes.string,
   input: PropTypes.object,
+  disabled: PropTypes.bool,
   meta: PropTypes.object,
   settings: PropTypes.object,
   plugins: PropTypes.array,
@@ -160,6 +197,7 @@ TextEditor.defaultProps = {
   placeholder: 'Type something…',
   defaultValue: '',
   input: null,
+  disabled: false,
   meta: null,
   plugins: [],
   settings: {},
