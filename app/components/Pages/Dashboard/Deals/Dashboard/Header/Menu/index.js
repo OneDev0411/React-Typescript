@@ -42,7 +42,7 @@ export function Menu(props) {
           isFit
           iconSize="large"
           inverse
-          defaultBackUrl="/dashboard/deals"
+          backUrl="/dashboard/deals"
         />
       </Flex>
     </Flex>
