@@ -170,7 +170,7 @@ class ContactsList extends React.Component {
   }
 
   hasSearchState = () =>
-    this.state.filter || this.state.searchInputValue || this.order
+    this.props.filters || this.state.searchInputValue || this.order
 
   fetchList = async (start = 0, loadMoreBefore = false) => {
     if (start === 0 && !loadMoreBefore) {
