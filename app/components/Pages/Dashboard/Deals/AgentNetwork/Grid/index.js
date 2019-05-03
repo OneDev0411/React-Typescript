@@ -141,6 +141,13 @@ export class Grid extends React.Component {
           recipients={this.getRecipients(props.selectedRows)}
           selectedRows={props.selectedRows}
           mediums="Email"
+          types={[
+            'OpenHouse',
+            'JustSold',
+            'ComingSoon',
+            'JustListed',
+            'PriceImprovement'
+          ]}
         >
           Promote Listing
         </SendDealPromotionCard>
