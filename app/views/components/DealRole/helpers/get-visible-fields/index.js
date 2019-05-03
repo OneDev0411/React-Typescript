@@ -3,7 +3,7 @@ import _ from 'underscore'
 import { TYPE_PERSON } from '../../constants/role-types'
 
 function getVisibleFields(args) {
-  const list = ['company', 'email', 'phone_number']
+  const list = ['company_title', 'email', 'phone_number']
 
   if (args.role_type === TYPE_PERSON) {
     list.push(

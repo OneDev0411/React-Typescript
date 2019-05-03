@@ -89,15 +89,15 @@ export function FormContainer(props) {
 
         <Flex>
           <Field
-            name="company"
+            name="company_title"
             label="Company / Trust"
             form={props.form}
-            isVisible={isVisible('company')}
-            isRequired={isRequired('company')}
+            isVisible={isVisible('company_title')}
+            isRequired={isRequired('company_title')}
             component={AutoCompleteInput}
             options={getAutocompleteOptions(
               props.formObject,
-              'company',
+              'company_title',
               'companies'
             )}
             style={{ flex: 7, marginRight: '0.5rem' }}
@@ -191,7 +191,7 @@ export function FormContainer(props) {
           <LinkButton onClick={props.onClose}>Cancel</LinkButton>
 
           {props.isSubmitting ? (
-            <ActionButton>
+            <ActionButton size="small">
               {props.isNewRecord ? 'Saving...' : 'Updating...'}
             </ActionButton>
           ) : (
