@@ -1,16 +1,20 @@
 // import styled from 'styled-components'
 import 'react-day-picker/lib/style.css'
 
-import { primary, grey } from '../../utils/colors'
 import styled from 'styled-components'
 
+import { primary, grey } from '../../utils/colors'
+
 export const Container = styled.div`
+  text-align: center;
   .DayPicker {
     padding: 0 !important;
   }
 
   .DayPicker-Month {
     margin: 0 !important;
+    border-collapse: separate;
+    border-spacing: 0.2rem;
   }
 
   .DayPicker-Week {
