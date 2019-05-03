@@ -43,13 +43,16 @@ export function CommissionInput(props) {
 
       <TextInput
         {...props.input}
+        meta={props.meta}
         style={{
           borderBottom: 'none',
-          paddingBottom: 0
+          paddingBottom: 0,
+          width: '100%'
         }}
         name="commission"
         hasLabel={false}
         highlightOnError
+        showError={false}
         Container={CommissionInputContainer}
         autoComplete="off"
         placeholder="Enter agent commission"
