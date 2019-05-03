@@ -86,9 +86,9 @@ export function SelectInput(props) {
         {...props.dropdownOptions}
       />
 
-      {props.meta.error && props.meta.touched && (
-        <InputError>{props.meta.error}</InputError>
-      )}
+      <InputError display={props.meta.error && props.meta.touched}>
+        {props.meta.error}
+      </InputError>
     </props.container>
   )
 }

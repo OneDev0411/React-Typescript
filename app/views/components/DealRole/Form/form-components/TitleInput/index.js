@@ -19,7 +19,9 @@ export function TitleInput(props) {
         marginRight: '0.5rem'
       }}
       dropdownStyle={{
-        borderBottom: '1px solid #dce5eb'
+        borderBottom: '1px solid #dce5eb',
+        height: '2rem',
+        paddingBottom: '0.25rem'
       }}
       searchable={false}
       clearable

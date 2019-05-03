@@ -87,7 +87,7 @@ export function FormContainer(props) {
           />
         </Flex>
 
-        <Flex style={{ marginTop: '1rem' }}>
+        <Flex>
           <Field
             name="company"
             label="Company / Trust"
@@ -145,7 +145,7 @@ export function FormContainer(props) {
           />
         </Flex>
 
-        <Flex style={{ marginTop: '1rem' }}>
+        <Flex>
           <Field
             name="current_address"
             label="Current Address"
@@ -165,7 +165,7 @@ export function FormContainer(props) {
           />
         </Flex>
 
-        <Flex style={{ marginTop: '1rem' }}>
+        <Flex>
           <Field
             name="commission"
             parse={value => (!value ? value : value.replace(/[^0-9.]/g, ''))}

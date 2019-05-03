@@ -51,8 +51,10 @@ export class TextArea extends React.Component {
           {...this.props.rest}
         />
 
-        {this.props.showError && meta.error && meta.touched && (
-          <InputError>{meta.error}</InputError>
+        {this.props.showError && (
+          <InputError display={meta.error && meta.touched}>
+            {meta.error}
+          </InputError>
         )}
       </Container>
     )

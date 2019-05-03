@@ -1,10 +1,9 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { Field } from 'react-final-form'
 import Flex from 'styled-flex-component'
 
 import RadioButton from 'components/RadioButton'
 
-import { RadioLabel } from './styled'
 import { InputLabel, InputRequired } from '../styled'
 
 export function RadioGroup(props) {
@@ -14,13 +13,11 @@ export function RadioGroup(props) {
 
   return (
     <Flex column>
-      <Flex>
-        <InputLabel>
-          {props.label} <InputRequired>{props.isRequired && '*'}</InputRequired>
-        </InputLabel>
-      </Flex>
+      <InputLabel>
+        {props.label} <InputRequired>{props.isRequired && '*'}</InputRequired>
+      </InputLabel>
 
-      <Flex alignCenter>
+      <Flex>
         {props.options.map((option, index) => (
           <Field
             key={index}

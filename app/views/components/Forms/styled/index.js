@@ -16,12 +16,14 @@ export const InputLabel = styled.label`
   font-weight: ${props => (props.hasError ? '500' : 'normal')};
 `
 
-export const InputError = styled.span`
+export const InputError = styled.div`
   color: #fe3824;
   font-size: 0.75rem;
-  margin-top: 0.5rem;
+  opacity: ${props => (props.display ? 1 : 0)};
 `
 
-export const InputRequired = styled(InputError)`
+export const InputRequired = styled.span`
+  color: #fe3824;
   font-size: 1rem;
+  margin-left: 3px;
 `

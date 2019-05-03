@@ -46,7 +46,6 @@ export function TextInput(props) {
       {props.hasLabel && (
         <InputLabel hasError={props.meta.submitFailed && props.meta.error}>
           {props.label || props.placeholder}
-          &nbsp;
           <InputRequired>{props.isRequired && '*'}</InputRequired>
         </InputLabel>
       )}
@@ -60,8 +59,10 @@ export function TextInput(props) {
         {...props}
       />
 
-      {props.showError && props.meta.error && props.meta.touched && (
-        <InputError>{props.meta.error}</InputError>
+      {props.showError && (
+        <InputError display={props.meta.error && props.meta.touched}>
+          {props.meta.error}&nbsp;
+        </InputError>
       )}
     </props.container>
   )
