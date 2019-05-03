@@ -1,22 +1,14 @@
 import React from 'react'
-import _ from 'underscore'
 
 import { SelectInput } from 'components/Forms/SelectInput'
 
-import {
-  roleName,
-  ROLE_NAMES
-} from '../../../../../../components/Pages/Dashboard/Deals/utils/roles'
+import getSortedOptions from '../../../helpers/normalize-roles-options'
 
 export function Roles(props) {
-  const sortedOptions = _.chain([null, ...ROLE_NAMES])
-    .filter(value => props.isAllowedRole(value, props.formRole))
-    .map(value => ({
-      value,
-      label: value ? roleName(value) : 'Select Role'
-    }))
-    .sortBy(item => item.disabled)
-    .value()
+  const options = getSortedOptions({
+    role: props.input.value,
+    isAllowedRole: props.isAllowedRole
+  })
 
   return (
     <SelectInput
@@ -30,13 +22,17 @@ export function Roles(props) {
       meta={props.meta}
       label="Role"
       onChange={item => props.input.onChange(item.value)}
-      items={sortedOptions}
-      defaultSelectedItem={sortedOptions[0]}
+      items={options}
+      defaultSelectedItem={
+        props.input.value
+          ? options.find(item => item.value === props.input.value)
+          : options[0]
+      }
       dropdownOptions={{
         fullWidth: true,
         pullTo: 'right',
         maxHeight: 350,
-        fullHeight: sortedOptions.length < 8
+        fullHeight: options.length < 8
       }}
     />
   )
