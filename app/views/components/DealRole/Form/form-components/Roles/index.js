@@ -1,14 +1,37 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+import _ from 'underscore'
 
 import { SelectInput } from 'components/Forms/SelectInput'
 
-import getSortedOptions from '../../../helpers/normalize-roles-options'
+import {
+  roleName,
+  ROLE_NAMES
+} from '../../../../../../components/Pages/Dashboard/Deals/utils/roles'
 
-export function Roles(props) {
-  const options = getSortedOptions({
-    role: props.input.value,
-    isAllowedRole: props.isAllowedRole
-  })
+export function Roles({ input, meta, isAllowedRole, isRequired }) {
+  const role = input.value
+
+  const options = useMemo(() => {
+    let options = _.chain([null, ...ROLE_NAMES])
+      .filter(value => isAllowedRole(value, role))
+      .map(value => ({
+        value,
+        label: value ? roleName(value) : 'Select Role'
+      }))
+      .value()
+
+    if (options.length === 0 && role) {
+      options = [
+        {
+          value: role,
+          label: roleName(role)
+        }
+      ]
+    }
+
+    return options
+    // eslint-disable-next-line
+  }, [ role ])
 
   return (
     <SelectInput
@@ -16,16 +39,16 @@ export function Roles(props) {
         width: '45%',
         borderBottom: 'none'
       }}
-      isRequired={props.isRequired}
+      isRequired={isRequired}
       searchable={false}
-      input={props.input}
-      meta={props.meta}
+      input={input}
+      meta={meta}
       label="Role"
-      onChange={item => props.input.onChange(item.value)}
+      onChange={item => input.onChange(item.value)}
       items={options}
       defaultSelectedItem={
-        props.input.value
-          ? options.find(item => item.value === props.input.value)
+        input.value
+          ? options.find(item => item.value === input.value)
           : options[0]
       }
       dropdownOptions={{
