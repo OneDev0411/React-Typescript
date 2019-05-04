@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { Field } from 'react-final-form'
 import Flex from 'styled-flex-component'
 
-import TrashIcon from 'components/SvgIcons/Delete/IconDelete'
+import TrashIcon from 'components/SvgIcons/TrashIcon'
 
 import IconButton from 'components/Button/IconButton'
 import ActionButton from 'components/Button/ActionButton'
@@ -181,11 +181,13 @@ export function FormContainer(props) {
 
       <Footer>
         <Flex>
-          <Tooltip caption="Delete Role">
-            <IconButton isFit iconSize="large" onClick={props.onDeleteRole}>
-              <TrashIcon />
-            </IconButton>
-          </Tooltip>
+          {!props.isNewRecord && (
+            <Tooltip caption="Delete Role">
+              <IconButton isFit iconSize="large" onClick={props.onDeleteRole}>
+                <TrashIcon />
+              </IconButton>
+            </Tooltip>
+          )}
         </Flex>
 
         <Flex alignCenter>
