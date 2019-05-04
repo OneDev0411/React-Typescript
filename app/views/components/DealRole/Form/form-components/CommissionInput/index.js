@@ -1,4 +1,5 @@
 import React from 'react'
+import Flex from 'styled-flex-component'
 
 import { InputLabel, InputRequired } from 'components/Forms/styled'
 
@@ -6,26 +7,25 @@ import { TextInput } from 'components/Forms/TextInput'
 
 import { RadioGroup } from 'components/Forms/RadioGroupInput'
 
-import {
-  CommissionContainer,
-  CommissionRadioContainer,
-  CommissionInputContainer
-} from './styled'
-
 export function CommissionInput(props) {
   return (
-    <CommissionContainer
+    <Flex
+      column
       style={{
-        display: props.isVisible ? 'flex' : 'none'
+        width: '100%',
+        paddingBottom: '2px',
+        display: props.isVisible ? 'flex' : 'none',
+        borderBottom: '1px solid #dce5eb'
       }}
     >
-      <CommissionRadioContainer>
-        <InputLabel hasError={props.meta.submitFailed && props.meta.error}>
-          {props.label}&nbsp;
-          <InputRequired>{props.isRequired && '*'}</InputRequired>
-        </InputLabel>
+      <InputLabel hasError={props.meta.submitFailed && props.meta.error}>
+        {props.label}&nbsp;
+        <InputRequired>{props.isRequired && '*'}</InputRequired>
+      </InputLabel>
 
+      <Flex alignCenter>
         <RadioGroup
+          hasLabel={false}
           name="commission_type"
           selectedValue={props.commissionType}
           options={[
@@ -39,24 +39,24 @@ export function CommissionInput(props) {
             }
           ]}
         />
-      </CommissionRadioContainer>
 
-      <TextInput
-        {...props.input}
-        meta={props.meta}
-        style={{
-          borderBottom: 'none',
-          paddingBottom: 0,
-          width: '100%'
-        }}
-        name="commission"
-        hasLabel={false}
-        highlightOnError
-        showError={false}
-        Container={CommissionInputContainer}
-        autoComplete="off"
-        placeholder="Enter agent commission"
-      />
-    </CommissionContainer>
+        <TextInput
+          {...props.input}
+          meta={props.meta}
+          style={{
+            border: 'none',
+            margin: 0,
+            padding: 0,
+            width: '100%'
+          }}
+          name="commission"
+          hasLabel={false}
+          highlightOnError
+          showError={false}
+          autoComplete="off"
+          placeholder="Enter agent commission"
+        />
+      </Flex>
+    </Flex>
   )
 }
