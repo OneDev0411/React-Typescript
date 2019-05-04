@@ -64,7 +64,8 @@ export class GalleryView extends React.Component {
           showTableHeader={false}
           summary={{
             entityName: 'Listings',
-            style: { color: '#000' }
+            style: { color: '#000' },
+            total: this.props.listings.info.total
           }}
           getBodyProps={() => ({ style: bodyStyle })}
           getTrProps={() => ({ css: rowStyle })}
