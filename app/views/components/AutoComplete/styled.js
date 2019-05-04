@@ -8,7 +8,7 @@ export const List = styled.div`
   left: 0
   z-index: 2;
   width: 250px;
-  max-height: 200px;
+  max-height: 250px;
   overflow-y: auto;
   border-radius: 3px;
   background: #fff;

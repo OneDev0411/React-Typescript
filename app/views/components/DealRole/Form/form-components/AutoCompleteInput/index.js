@@ -14,6 +14,9 @@ export function AutoCompleteInput(props) {
   return (
     <AutoComplete
       {...props}
+      listStyle={{
+        top: '75%'
+      }}
       onSelect={item => props.mutators && props.mutators.setAgent(item)}
       options={props.options}
       inputProps={{

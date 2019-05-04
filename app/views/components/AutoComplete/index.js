@@ -12,6 +12,7 @@ import { List, ListItem } from './styled'
 const propTypes = {
   useCache: PropTypes.bool,
   inputStyle: PropTypes.object,
+  listStyle: PropTypes.object,
   input: PropTypes.object,
   meta: PropTypes.object,
   isRequired: PropTypes.bool,
@@ -38,6 +39,7 @@ const propTypes = {
 const defaultProps = {
   useCache: true,
   inputStyle: {},
+  listStyle: {},
   input: null,
   meta: null,
   isRequired: false,
@@ -174,7 +176,7 @@ export class AutoComplete extends React.Component {
             )}
 
             {isOpen && inputValue && (
-              <List>
+              <List style={props.listStyle}>
                 {this.getOptions(inputValue).map((item, index) => {
                   const itemProps = getItemProps({
                     item,
