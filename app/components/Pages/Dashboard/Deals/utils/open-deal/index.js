@@ -1,14 +1,8 @@
 import { browserHistory } from 'react-router'
-import { batchActions } from 'redux-batched-actions'
 
-import { setSelectedTask, resetUploadFiles } from 'actions/deals'
-
-import store from '../../../../../../stores'
+import onDealOpened from '../on-deal-opened'
 
 export default function(dealId) {
-  const { dispatch } = store
-
-  batchActions([dispatch(setSelectedTask(null)), dispatch(resetUploadFiles())])
-
+  onDealOpened()
   browserHistory.push(`/dashboard/deals/${dealId}`)
 }
