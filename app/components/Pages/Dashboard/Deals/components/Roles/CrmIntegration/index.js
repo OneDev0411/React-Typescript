@@ -117,6 +117,7 @@ class RoleFormWrapper extends React.Component {
         formTitle={this.props.modalTitle}
         formOptions={this.props.formOptions}
         isCommissionRequired={this.props.isCommissionRequired}
+        isRoleRemovable={this.props.isRoleRemovable}
         allowedRoles={this.props.allowedRoles}
         isOpen={this.props.isOpen}
         onFormSubmit={this.onSubmit}
@@ -130,6 +131,7 @@ RoleFormWrapper.propTypes = {
   deal: PropTypes.object,
   role: PropTypes.object,
   formOptions: PropTypes.object,
+  isRoleRemovable: PropTypes.bool,
   onUpsertRole: PropTypes.func,
   onHide: PropTypes.func
 }
@@ -138,6 +140,7 @@ RoleFormWrapper.defaultProps = {
   deal: null,
   role: null,
   formOptions: {},
+  isRoleRemovable: false,
   onUpsertRole: () => null,
   onHide: () => null
 }

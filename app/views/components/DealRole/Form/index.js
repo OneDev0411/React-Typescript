@@ -2,14 +2,12 @@ import React, { Fragment } from 'react'
 import { Field } from 'react-final-form'
 import Flex from 'styled-flex-component'
 
-import TrashIcon from 'components/SvgIcons/TrashIcon'
-
-import IconButton from 'components/Button/IconButton'
 import ActionButton from 'components/Button/ActionButton'
 import LinkButton from 'components/Button/LinkButton'
-import Tooltip from 'components/tooltip'
 
 import { TextInput } from 'components/Forms/TextInput'
+
+import DeleteRole from '../components/DeleteRole'
 
 import { TitleInput } from './form-components/TitleInput'
 import { TypeInput } from './form-components/TypeInput'
@@ -181,12 +179,8 @@ export function FormContainer(props) {
 
       <Footer>
         <Flex>
-          {!props.isNewRecord && (
-            <Tooltip caption="Delete Role">
-              <IconButton isFit iconSize="large" onClick={props.onDeleteRole}>
-                <TrashIcon />
-              </IconButton>
-            </Tooltip>
+          {props.isRoleRemovable && (
+            <DeleteRole deal={props.deal} role={props.formObject} />
           )}
         </Flex>
 

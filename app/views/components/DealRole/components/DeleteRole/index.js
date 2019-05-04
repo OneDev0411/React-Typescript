@@ -9,19 +9,24 @@ import { confirmation } from 'actions/confirmation'
 import IconButton from 'components/Button/IconButton'
 import TrashIcon from 'components/SvgIcons/TrashIcon'
 import Spinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+import Tooltip from 'components/tooltip'
 
 DeleteRole.propTypes = {
   role: PropTypes.object.isRequired,
   deal: PropTypes.object.isRequired,
+  tooltip: PropTypes.string,
   style: PropTypes.object,
   buttonStyle: PropTypes.object,
+  iconProps: PropTypes.object,
   onDeleteRole: PropTypes.func
 }
 
 DeleteRole.defaultProps = {
   onDeleteRole: () => null,
+  tooltip: 'Delete Role',
   style: {},
-  buttonStyle: {}
+  buttonStyle: {},
+  iconProps: {}
 }
 
 function DeleteRole(props) {
@@ -38,6 +43,10 @@ function DeleteRole(props) {
           setIsDeleting(true)
           await props.deleteRole(props.deal.id, props.role.id)
           props.onDeleteRole(props.role)
+
+          props.notify({
+            message: 'Contact removed'
+          })
         } catch (e) {
           props.notify({
             message:
@@ -56,15 +65,18 @@ function DeleteRole(props) {
   }
 
   return (
-    <IconButton
-      appearance="icon"
-      inverse
-      onClick={handleRemoveRole}
-      style={props.style}
-      {...props.buttonProps}
-    >
-      <TrashIcon />
-    </IconButton>
+    <Tooltip caption={props.tooltip}>
+      <IconButton
+        appearance="icon"
+        isFit
+        onClick={handleRemoveRole}
+        style={props.style}
+        iconSize="large"
+        {...props.buttonProps}
+      >
+        <TrashIcon {...props.iconProps} />
+      </IconButton>
+    </Tooltip>
   )
 }
 

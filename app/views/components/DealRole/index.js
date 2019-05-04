@@ -19,11 +19,20 @@ import { Container } from './styled'
 const propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  formOptions: PropTypes.object
+  onFormSubmit: PropTypes.func.isRequired,
+  deal: PropTypes.object.isRequired,
+  form: PropTypes.object.isRequired,
+  allowedRoles: PropTypes.array,
+  formOptions: PropTypes.object,
+  isRoleRemovable: PropTypes.bool,
+  isSubmitting: PropTypes.bool
 }
 
 const defaultProps = {
-  formOptions: {}
+  formOptions: {},
+  isRoleRemovable: false,
+  isSubmitting: false,
+  allowedRoles: []
 }
 
 class Role extends React.Component {
@@ -234,11 +243,13 @@ class Role extends React.Component {
                 {...formProps}
                 isSubmitting={this.props.isSubmitting}
                 isNewRecord={this.isNewRecord}
+                isRoleRemovable={this.props.isRoleRemovable}
+                deal={this.props.deal}
                 formObject={this.props.form}
                 requiredFields={requiredFields}
                 visibleFields={visibleFields}
                 isAllowedRole={this.isAllowedRole}
-                onDeleteRole={this.handleDeleteRole}
+                onDeleteRole={this.handleClose}
                 onSubmit={this.handleSubmit}
                 onClose={this.handleClose}
               />

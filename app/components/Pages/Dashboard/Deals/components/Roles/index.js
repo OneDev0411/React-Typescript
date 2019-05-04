@@ -139,6 +139,10 @@ class Roles extends React.Component {
     return this.props.allowedRoles
   }
 
+  getIsRowRemovable(role) {
+    return this.props.allowDeleteRole && !this.isPrimaryAgent(role)
+  }
+
   render() {
     return (
       <RolesContainer style={this.props.containerStyle}>
@@ -152,7 +156,7 @@ class Roles extends React.Component {
                 this.props.allowedRoles.includes(role.role))
           )
           .map(role => {
-            const isPrimaryAgent = this.isPrimaryAgent(role.role)
+            const isRowRemovable = this.getIsRowRemovable(role.role)
 
             return (
               <RoleItem key={role.id} className="item">
@@ -178,15 +182,13 @@ class Roles extends React.Component {
                 </Flex>
 
                 <RoleActions>
-                  {this.props.allowDeleteRole && !isPrimaryAgent && (
+                  {isRowRemovable ? (
                     <DeleteRole
                       deal={this.props.deal}
                       role={role}
                       style={{ padding: 0, marginLeft: '0.5rem' }}
                     />
-                  )}
-
-                  {this.props.allowDeleteRole && isPrimaryAgent && (
+                  ) : (
                     <ActionButton
                       appearance="outline"
                       size="small"
@@ -210,7 +212,7 @@ class Roles extends React.Component {
                     deal={this.props.deal}
                     role={this.state.user}
                     modalTitle="Update Contact"
-                    isRoleRemovable={this.props.allowDeleteRole}
+                    isRoleRemovable={isRowRemovable}
                     isEmailRequired={this.props.isEmailRequired}
                     allowedRoles={this.props.allowedRoles}
                     onUpsertRole={this.props.onUpsertRole}
