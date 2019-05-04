@@ -40,6 +40,7 @@ export function Roles({ input, meta, isAllowedRole, isRequired }) {
         borderBottom: 'none'
       }}
       isRequired={isRequired}
+      showError={false}
       searchable={false}
       input={input}
       meta={meta}

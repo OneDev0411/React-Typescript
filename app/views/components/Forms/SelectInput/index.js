@@ -30,6 +30,7 @@ SelectInput.propTypes = {
   noBorder: PropTypes.bool,
   isRequired: PropTypes.bool,
   isVisible: PropTypes.bool,
+  showError: PropTypes.bool,
   container: PropTypes.element
 }
 
@@ -43,6 +44,7 @@ SelectInput.defaultProps = {
   noBorder: true,
   isRequired: false,
   isVisible: true,
+  showError: true,
   container: InputContainer
 }
 
@@ -86,9 +88,11 @@ export function SelectInput(props) {
         {...props.dropdownOptions}
       />
 
-      <InputError display={props.meta.error && props.meta.touched}>
-        {props.meta.error}
-      </InputError>
+      {props.showError && (
+        <InputError display={props.meta.error && props.meta.touched}>
+          {props.meta.error}
+        </InputError>
+      )}
     </props.container>
   )
 }

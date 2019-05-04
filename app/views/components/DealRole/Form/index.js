@@ -41,6 +41,7 @@ export function FormContainer(props) {
         <Field
           name="role"
           label="Role"
+          isRequired={isRequired('role')}
           isAllowedRole={props.isAllowedRole}
           component={Roles}
         />

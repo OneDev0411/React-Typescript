@@ -1,4 +1,6 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+
 import { Field } from 'react-final-form'
 import Flex from 'styled-flex-component'
 
@@ -6,14 +8,39 @@ import RadioButton from 'components/RadioButton'
 
 import { InputLabel, InputRequired } from '../styled'
 
+RadioGroup.propTypes = {
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      name: PropTypes.string
+    }).isRequired
+  ).isRequired,
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  styles: PropTypes.object,
+  isRequired: PropTypes.bool,
+  hasLabel: PropTypes.bool,
+  showError: PropTypes.bool
+}
+
+RadioGroup.defaultProps = {
+  styles: {},
+  label: '',
+  hasLabel: true,
+  isRequired: false,
+  showError: true
+}
+
 export function RadioGroup(props) {
   return (
     <Flex column flexStart>
-      <InputLabel>
-        {props.label} <InputRequired>{props.isRequired && '*'}</InputRequired>
-      </InputLabel>
+      {props.hasLabel && (
+        <InputLabel>
+          {props.label} <InputRequired>{props.isRequired && '*'}</InputRequired>
+        </InputLabel>
+      )}
 
-      <Flex style={{ height: '2rem' }}>
+      <Flex alignCenter style={{ height: '2rem' }}>
         {props.options.map((option, index) => (
           <Field
             key={index}
