@@ -1,15 +1,23 @@
-import styled from "styled-components"
+import styled from 'styled-components'
 import React from 'react'
 import fecha from 'fecha'
 import Flex from 'styled-flex-component'
 
-import Icon from '../../../../../../../views/components/SvgIcons/Note/IconNote'
-import { Divider } from '../../../../../../../views/components/Divider'
+import SanitizedHtml from 'components/SanitizedHtml'
+
+import Icon from 'components/SvgIcons/Note/IconNote'
+import { Divider } from 'components/Divider'
+
 import { Container } from '../CRMTaskItem/styled'
-import { Title } from '../components/GeneralInfo/styled'
 
 const ItemContainer = styled(Container)`
   cursor: pointer;
+`
+
+export const NoteBody = styled.div`
+  ul li {
+    list-style: initial;
+  }
 `
 
 export class NoteItem extends React.Component {
@@ -29,7 +37,9 @@ export class NoteItem extends React.Component {
             )}
           </div>
         </Flex>
-        <Title style={{ margin: 0 }}>{this.props.note.text}</Title>
+        <NoteBody>
+          <SanitizedHtml html={this.props.note.text} />
+        </NoteBody>
       </ItemContainer>
     )
   }

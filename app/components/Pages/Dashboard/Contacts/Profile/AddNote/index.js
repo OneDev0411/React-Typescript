@@ -1,37 +1,34 @@
-import React from 'react'
+import React, { createRef } from 'react'
+
 import styled from 'styled-components'
 
-import { grey } from '../../../../../../views/utils/colors'
+import { TextEditor } from 'components/TextEditor'
+
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
-const Input = styled.textarea`
-  width: 100%;
-  min-height: 102px;
-  padding: 0;
-  display: block;
-  overflow: auto;
-  resize: none;
-  border: none;
-  font-size: 1.5rem;
-  font-weight: 500;
+export const Form = styled.form`
+  padding: 0 1em 1em;
+`
 
-  &:focus {
-    outline: none;
-  }
-
-  &::placeholder {
-    color: ${grey.A550};
-  }
+export const Actions = styled.div`
+  text-align: right;
+  margin-top: 1.5em;
 `
 
 export class AddNote extends React.Component {
+  textEditorRef = createRef()
+
   state = {
-    note: '',
+    isEmpty: true,
     isSaving: false
   }
 
-  handleOnChange = event => {
-    this.setState({ note: event.target.value })
+  handleOnChange = () => {
+    let editorRef = this.textEditorRef.current
+
+    this.setState({
+      isEmpty: !editorRef || !editorRef.getPlainText()
+    })
   }
 
   handleAddNote = async event => {
@@ -40,33 +37,34 @@ export class AddNote extends React.Component {
     this.setState({ isSaving: true })
 
     // save note
-    await this.props.onSubmit(this.state.note.trim())
+    await this.props.onSubmit(this.textEditorRef.current.getHtml())
 
     this.setState({
-      isSaving: false,
-      note: ''
+      isSaving: false
     })
+
+    this.textEditorRef.current.reset()
   }
 
   render() {
-    const { note, isSaving } = this.state
+    const { isSaving, isEmpty } = this.state
 
     return (
-      <form onSubmit={this.handleAddNote} style={{ padding: '1.5em' }}>
-        <Input
-          value={note}
+      <Form onSubmit={this.handleAddNote}>
+        <TextEditor
+          ref={this.textEditorRef}
           disabled={isSaving}
           placeholder="Add your note…"
           onChange={this.handleOnChange}
         />
-        {note.trim().length > 0 && (
-          <div style={{ textAlign: 'right', marginTop: '1.5em' }}>
+        {!isEmpty && (
+          <Actions>
             <ActionButton type="submit" disabled={isSaving}>
               {isSaving ? 'Adding...' : 'Add'}
             </ActionButton>
-          </div>
+          </Actions>
         )}
-      </form>
+      </Form>
     )
   }
 }
