@@ -30,8 +30,7 @@ export function Roles({ input, meta, isAllowedRole, isRequired }) {
     }
 
     return options
-    // eslint-disable-next-line
-  }, [ role ])
+  }, [isAllowedRole, role])
 
   return (
     <SelectInput

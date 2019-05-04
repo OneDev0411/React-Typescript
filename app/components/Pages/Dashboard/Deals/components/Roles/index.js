@@ -6,14 +6,11 @@ import { addNotification as notify } from 'reapop'
 import Flex from 'styled-flex-component'
 
 import UserAvatar from 'components/Avatar'
-import { deleteRole, createRoles } from 'actions/deals'
+import { createRoles } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
-import IconButton from 'components/Button/IconButton'
-
-import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
-
 import ActionButton from 'components/Button/ActionButton'
+import DeleteRole from 'components/DealRole/components/DeleteRole'
 
 import { selectDealRoles } from 'reducers/deals/roles'
 
@@ -36,10 +33,31 @@ import {
   RoleActions
 } from './styled'
 
+const propTypes = {
+  disableAddRole: PropTypes.bool,
+  allowDeleteRole: PropTypes.bool,
+  showEmail: PropTypes.bool,
+  showTitle: PropTypes.bool,
+  isEmailRequired: PropTypes.bool,
+  filter: PropTypes.func,
+  addRoleActionRenderer: PropTypes.func,
+  onCloseAddRoleDrawer: PropTypes.func,
+  onTriggerRequiredEmail: PropTypes.func
+}
+
+const defaultProps = {
+  showEmail: false,
+  disableAddRole: false,
+  allowDeleteRole: true,
+  isEmailRequired: false,
+  filter: () => true,
+  onCloseAddRoleDrawer: () => null,
+  onTriggerRequiredEmail: () => null
+}
+
 class Roles extends React.Component {
   state = {
     user: null,
-    deletingRoleId: null,
     isRoleFormOpen: false,
     isReplaceAgentDrawerOpen: false
   }
@@ -55,43 +73,6 @@ class Roles extends React.Component {
     }
 
     return false
-  }
-
-  handleRemoveRole = role => {
-    this.props.confirmation({
-      message: `Remove <b>${role.legal_first_name} ${
-        role.legal_last_name
-      }</b>?`,
-      confirmLabel: 'Yes, remove contact',
-      onConfirm: () => this.removeRole(role)
-    })
-  }
-
-  removeRole = async role => {
-    if (this.state.deletingRoleId) {
-      return false
-    }
-
-    this.setState({
-      deletingRoleId: role.id
-    })
-
-    try {
-      await this.props.deleteRole(this.props.deal.id, role.id)
-
-      if (this.props.onDeleteRole) {
-        this.props.onDeleteRole(role)
-      }
-    } catch (e) {
-      this.props.notify({
-        message: 'Can not remove the contact from this deal, please try again',
-        status: 'error'
-      })
-    } finally {
-      this.setState({
-        deletingRoleId: null
-      })
-    }
   }
 
   onSelectRole = role => {
@@ -158,10 +139,6 @@ class Roles extends React.Component {
     return this.props.allowedRoles
   }
 
-  get ShowDeleteButton() {
-    return !this.state.deletingRoleId && this.props.allowDeleteRole
-  }
-
   render() {
     return (
       <RolesContainer style={this.props.containerStyle}>
@@ -201,23 +178,15 @@ class Roles extends React.Component {
                 </Flex>
 
                 <RoleActions>
-                  {role.id === this.state.deletingRoleId && (
-                    <i className="fa fa-spinner fa-spin" />
-                  )}
-
-                  {this.ShowDeleteButton && !isPrimaryAgent && (
-                    <IconButton
-                      appearance="icon"
-                      inverse
-                      onClick={() => this.handleRemoveRole(role)}
+                  {this.props.allowDeleteRole && !isPrimaryAgent && (
+                    <DeleteRole
+                      deal={this.props.deal}
+                      role={role}
                       style={{ padding: 0, marginLeft: '0.5rem' }}
-                      className="delete-button"
-                    >
-                      <CloseIcon />
-                    </IconButton>
+                    />
                   )}
 
-                  {this.ShowDeleteButton && isPrimaryAgent && (
+                  {this.props.allowDeleteRole && isPrimaryAgent && (
                     <ActionButton
                       appearance="outline"
                       size="small"
@@ -241,6 +210,7 @@ class Roles extends React.Component {
                     deal={this.props.deal}
                     role={this.state.user}
                     modalTitle="Update Contact"
+                    isRoleRemovable={this.props.allowDeleteRole}
                     isEmailRequired={this.props.isEmailRequired}
                     allowedRoles={this.props.allowedRoles}
                     onUpsertRole={this.props.onUpsertRole}
@@ -275,27 +245,8 @@ class Roles extends React.Component {
   }
 }
 
-Roles.propsTypes = {
-  disableAddRole: PropTypes.bool,
-  allowDeleteRole: PropTypes.bool,
-  showEmail: PropTypes.bool,
-  showTitle: PropTypes.bool,
-  isEmailRequired: PropTypes.bool,
-  filter: PropTypes.func,
-  addRoleActionRenderer: PropTypes.func,
-  onCloseAddRoleDrawer: PropTypes.func,
-  onTriggerRequiredEmail: PropTypes.func
-}
-
-Roles.defaultProps = {
-  showEmail: false,
-  disableAddRole: false,
-  allowDeleteRole: true,
-  isEmailRequired: false,
-  filter: () => true,
-  onCloseAddRoleDrawer: () => null,
-  onTriggerRequiredEmail: () => null
-}
+Roles.propTypes = propTypes
+Roles.defaultProps = defaultProps
 
 function mapStateToProps({ deals }, props) {
   return {
@@ -307,7 +258,6 @@ export default connect(
   mapStateToProps,
   {
     notify,
-    deleteRole,
     createRoles,
     confirmation
   }
