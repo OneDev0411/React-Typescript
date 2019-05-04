@@ -23,13 +23,17 @@ export class CloseButton extends React.Component {
   }
 
   handleOnClick = () => {
+    // Redirect using the history
+    const currentLocation = browserHistory.getCurrentLocation()
+
+    if (currentLocation.state && currentLocation.state.from) {
+      return goTo(currentLocation.state.from)
+    }
+
     // Force redirect
     if (this.props.backUrl) {
       return goTo(this.props.backUrl, null, this.props.query)
     }
-
-    // Redirect using the histroy
-    const currentLocation = browserHistory.getCurrentLocation()
 
     if (currentLocation.key) {
       return browserHistory.goBack()
