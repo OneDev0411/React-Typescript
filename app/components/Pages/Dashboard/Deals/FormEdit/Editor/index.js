@@ -9,10 +9,6 @@ import Annotations from './Annotations'
 
 import { ContextInlineEdit } from './ContextInlineEdit'
 
-const Container = styled.div`
-  /* text-align: center; */
-`
-
 const PageContainer = styled.div`
   position: relative;
   padding-bottom: 20px;
@@ -23,7 +19,6 @@ export default class PDFPreview extends React.Component {
     selectedAnnotation: null
   }
 
-  // roleColors = {}
   contextsAnnotations = {}
 
   scale = window.devicePixelRatio * 1.2
@@ -59,7 +54,7 @@ export default class PDFPreview extends React.Component {
     }
 
     return (
-      <Container>
+      <div>
         {Array.apply(null, { length: document.numPages }).map(
           (value, index) => (
             <PageContainer key={index}>
@@ -93,7 +88,7 @@ export default class PDFPreview extends React.Component {
             onDismiss={this.deselectActiveAnnotation}
           />
         )}
-      </Container>
+      </div>
     )
   }
 }

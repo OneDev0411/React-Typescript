@@ -4,31 +4,23 @@ import parseAppearanceString from '../../../../utils/appearance'
 
 import { TextArea, TextInput } from './styled'
 
-class TextAnnotation extends React.PureComponent {
-  onChange = e => this.props.onValueUpdate(e.target.value)
+export default React.memo(props => {
+  const appearance = parseAppearanceString(props.annotation.defaultAppearance)
 
-  render() {
-    const appearance = parseAppearanceString(
-      this.props.annotation.defaultAppearance
-    )
+  const isTextArea = props.annotation.multiLine === true
 
-    const isTextArea = this.props.annotation.multiLine === true
-    const defaultValue = this.props.value
-
-    const props = {
-      id: this.props.annotation.fieldName,
-      appearance,
-      fontSize: this.props.fontSize,
-      rect: this.props.annotation.rect,
-      onInput: this.onChange
-    }
-
-    if (isTextArea) {
-      return <TextArea {...props} defaultValue={defaultValue} />
-    }
-
-    return <TextInput {...props} defaultValue={defaultValue} />
+  const sharedProps = {
+    id: props.annotation.fieldName,
+    appearance,
+    fontSize: props.fontSize,
+    rect: props.annotation.rect,
+    onInput: e => props.onValueUpdate(e.target.value),
+    defaultValue: props.value
   }
-}
 
-export default TextAnnotation
+  if (isTextArea) {
+    return <TextArea {...sharedProps} />
+  }
+
+  return <TextInput {...sharedProps} />
+})
