@@ -8,12 +8,14 @@ import usePromise from 'react-use-promise'
  */
 
 /*
- sanitize-html is a large library (~160kb), so we lazy load it while nothing
+ sanitize-html is a large library (~217kb), so we lazy load it while nothing
  is blocked.
 */
 
+const sanitizeHtmlPromise = import('sanitize-html')
+
 export default function SanitizedHtml({ html }) {
-  const [sanitizeHtmlModule] = usePromise(import('sanitize-html'), [])
+  const [sanitizeHtmlModule] = usePromise(sanitizeHtmlPromise, [])
 
   const { default: sanitizeHtml } = sanitizeHtmlModule || {}
 
