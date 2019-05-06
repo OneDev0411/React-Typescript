@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
@@ -6,20 +6,14 @@ import ContextAnnotation from '../ContextAnnotation'
 import { getRolesText } from '../../../../utils/get-roles-text'
 import { getRoleTooltip } from '../../../../utils/get-role-tooltip'
 
-class FormRoles extends React.PureComponent {
-  state = {
-    roles: []
-  }
+const FormRoles = React.memo(props => {
+  const [roles, setRoles] = useState([])
 
-  componentDidMount() {
-    this.initialize()
-  }
-
-  initialize = () => {
+  useEffect(() => {
     const roles = []
 
-    _.each(this.props.roles, (list, roleName) => {
-      const info = this.props.roles[roleName]
+    _.each(props.roles, (list, roleName) => {
+      const info = props.roles[roleName]
       const groups = _.groupBy(
         info,
         item => `${item.role.sort().join('_')}-${item.attribute}-${item.group}`
@@ -28,15 +22,14 @@ class FormRoles extends React.PureComponent {
       _.each(groups, (group, groupIndex) => {
         const annotationContext = groups[groupIndex][0]
         const annotations = groups[groupIndex].map(info => info.annotation)
-        const formValue = this.props.formValues[
-          annotationContext.annotation.fieldName
-        ]
+        const formValue =
+          props.formValues[annotationContext.annotation.fieldName]
 
         const text =
           formValue ||
           getRolesText(
-            this.props.dealsRoles,
-            this.props.deal,
+            props.dealsRoles,
+            props.deal,
             roleName,
             annotationContext
           )
@@ -52,37 +45,34 @@ class FormRoles extends React.PureComponent {
       })
     })
 
-    this.setState({
-      roles
-    })
-  }
+    setRoles(roles)
+    // eslint-disable-next-line
+  }, [])
 
-  render() {
-    return (
-      <Fragment>
-        {this.state.roles.map(item => (
-          <ContextAnnotation
-            key={`${item.roleName}-${item.groupIndex}`}
-            annotationContext={item.annotationContext}
-            annotations={item.annotations}
-            value={item.text}
-            maxFontSize={20}
-            readOnly={item.annotationContext.isReadOnly}
-            tooltip={getRoleTooltip(item.annotationContext, true)}
-            onClick={bounds =>
-              item.annotationContext.readonly !== true &&
-              this.props.onClick('Role', {
-                bounds,
-                ...item
-              })
-            }
-            onSetValues={this.props.onSetValues}
-          />
-        ))}
-      </Fragment>
-    )
-  }
-}
+  return (
+    <Fragment>
+      {roles.map(item => (
+        <ContextAnnotation
+          key={`${item.roleName}-${item.groupIndex}`}
+          annotationContext={item.annotationContext}
+          annotations={item.annotations}
+          value={item.text}
+          maxFontSize={20}
+          readOnly={item.annotationContext.isReadOnly}
+          tooltip={getRoleTooltip(item.annotationContext, true)}
+          onClick={bounds =>
+            item.annotationContext.readonly !== true &&
+            props.onClick('Role', {
+              bounds,
+              ...item
+            })
+          }
+          onSetValues={props.onSetValues}
+        />
+      ))}
+    </Fragment>
+  )
+})
 
 function mapStateToProps({ deals }) {
   return {

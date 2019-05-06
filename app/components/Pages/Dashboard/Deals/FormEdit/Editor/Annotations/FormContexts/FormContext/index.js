@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import _ from 'underscore'
 
 import DealContext from 'models/Deal/helpers/dynamic-context'
@@ -7,18 +7,10 @@ import { getAnnotationsValues } from '../../../../utils/word-wrap'
 
 import ContextAnnotation from '../ContextAnnotation'
 
-export class FormContext extends React.Component {
-  state = {
-    contexts: []
-  }
+export function FormContext(props) {
+  const [contexts, setContexts] = useState([])
 
-  componentDidMount() {
-    this.initialize()
-  }
-
-  initialize = () => {
-    const { props } = this
-
+  useEffect(() => {
     const grouped = {}
     const contexts = []
     let defaultValues = {}
@@ -36,8 +28,8 @@ export class FormContext extends React.Component {
 
       _.each(groups, (group, id) => {
         const annotations = group.map(item => item.annotation)
-        const contextType = this.getContextType(context)
-        const formValue = this.getFormValue(props.formValues, annotations)
+        const contextType = getContextType(context)
+        const formValue = getFormValue(props.formValues, annotations)
 
         const value =
           formValue || (group[0].disableAutopopulate ? null : contextValue)
@@ -56,75 +48,72 @@ export class FormContext extends React.Component {
           defaultValues = {
             ...defaultValues,
             ...getAnnotationsValues(annotations, value, {
-              maxFontSize: this.props.maxFontSize
+              maxFontSize: props.maxFontSize
             })
           }
         }
       })
     })
 
-    this.props.onSetValues(defaultValues)
-    this.setState({
-      contexts
-    })
-  }
+    props.onSetValues(defaultValues)
+    setContexts(contexts)
+    // eslint-disable-next-line
+  }, [])
 
-  getContextType = context => {
-    if (context && DealContext.isAddressField(context.name)) {
-      return 'Address'
-    }
+  return (
+    <Fragment>
+      {contexts.map(context => (
+        <ContextAnnotation
+          key={`${context.name}-${context.id}`}
+          maxFontSize={20}
+          value={context.value}
+          annotations={context.annotations}
+          tooltip={getTooltip(context)}
+          isReadOnly={context.isAddressField && context.isDealConnectedToMls}
+          onClick={bounds =>
+            props.onClick('Context', {
+              bounds,
+              ...context
+            })
+          }
+        />
+      ))}
+    </Fragment>
+  )
+}
 
-    return 'Singular'
-  }
-
-  getFormValue = (values, annotations) => {
-    const valueList = annotations
-      .map(ann => values[ann.fieldName])
-      .filter(Boolean)
-
-    if (valueList.length === 0) {
-      return undefined
-    }
-
-    return valueList.join(' ')
-  }
-
-  getTooltip = context => {
-    if (context.isAddressField && context.isDealConnectedToMls) {
-      return (
-        <React.Fragment>
-          <img src="/static/images/deals/lock.svg" alt="locked" />
-          <div>
-            Listing information can only be changed on MLS. Once changed, the
-            update will be reflected here.
-          </div>
-        </React.Fragment>
-      )
-    }
-
-    return null
-  }
-
-  render() {
+function getTooltip(context) {
+  if (context.isAddressField && context.isDealConnectedToMls) {
     return (
-      <Fragment>
-        {this.state.contexts.map(context => (
-          <ContextAnnotation
-            key={`${context.name}-${context.id}`}
-            maxFontSize={20}
-            value={context.value}
-            annotations={context.annotations}
-            tooltip={this.getTooltip(context)}
-            isReadOnly={context.isAddressField && context.isDealConnectedToMls}
-            onClick={bounds =>
-              this.props.onClick('Context', {
-                bounds,
-                ...context
-              })
-            }
-          />
-        ))}
-      </Fragment>
+      <React.Fragment>
+        <img src="/static/images/deals/lock.svg" alt="locked" />
+        <div>
+          Listing information can only be changed on MLS. Once changed, the
+          update will be reflected here.
+        </div>
+      </React.Fragment>
     )
   }
+
+  return null
+}
+
+function getContextType(context) {
+  if (context && DealContext.isAddressField(context.name)) {
+    return 'Address'
+  }
+
+  return 'Singular'
+}
+
+function getFormValue(values, annotations) {
+  const valueList = annotations
+    .map(ann => values[ann.fieldName])
+    .filter(Boolean)
+
+  if (valueList.length === 0) {
+    return undefined
+  }
+
+  return valueList.join(' ')
 }
