@@ -12,7 +12,7 @@ import usePromise from 'react-use-promise'
  is blocked.
 */
 
-const sanitizeHtmlPromise = import('sanitize-html')
+const sanitizeHtmlPromise = import('sanitize-html' /* webpackChunkName: "sanitize-html" */)
 
 export default function SanitizedHtml({ html }) {
   const [sanitizeHtmlModule] = usePromise(sanitizeHtmlPromise, [])
