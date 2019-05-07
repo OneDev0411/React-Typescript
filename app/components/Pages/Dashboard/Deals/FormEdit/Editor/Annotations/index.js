@@ -144,13 +144,13 @@ export default class Annotations extends React.Component {
           right: 0
         }}
       >
-        <FormInputs
+        {/* <FormInputs
           inputs={this.inputs}
           values={this.props.values}
           annotations={this.annotations}
           onValueUpdate={this.props.onValueUpdate}
           onSetValues={this.props.onSetValues}
-        />
+        /> */}
 
         <FormContexts
           deal={this.props.deal}
