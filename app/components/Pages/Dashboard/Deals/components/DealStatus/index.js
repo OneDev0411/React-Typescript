@@ -38,7 +38,7 @@ class DealStatus extends React.Component {
   get ListingStatusList() {
     if (this.IsLease) {
       return this.props.isBackOffice
-        ? ['Active', 'Temp Off Market', 'Leased']
+        ? ['Active', 'Temp Off Market', 'Leased', 'Expired', 'Cancelled']
         : ['Leased']
     }
 
