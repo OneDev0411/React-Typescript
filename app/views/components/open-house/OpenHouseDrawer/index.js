@@ -172,9 +172,9 @@ class OpenHouseDrawerInternal extends React.Component {
         crmopenhouse.due_date = new Date(this.props.openHouse.dueDate * 1000)
       }
 
-      const template = this.renderTemplate(this.state.rawTemplate, crmopenhouse)
-
-      this.setState({ template })
+      this.setState(state => ({
+        template: this.renderTemplate(state.rawTemplate, crmopenhouse)
+      }))
     } catch (error) {
       console.log(error)
     }
@@ -198,13 +198,16 @@ class OpenHouseDrawerInternal extends React.Component {
       this.setState({ isDisabled: true, isSaving: true })
 
       if (this.state.rawTemplate) {
-        const template = this.renderTemplate(this.state.rawTemplate, {
-          ...openHouse,
-          due_date: new Date(openHouse.due_date * 1000)
-        })
+        this.setState(state => {
+          const template = this.renderTemplate(state.rawTemplate, {
+            ...openHouse,
+            due_date: new Date(openHouse.due_date * 1000)
+          })
 
-        openHouse.metadata.template = template
-        this.setState({ template })
+          openHouse.metadata.template = template
+
+          return { template }
+        })
       }
 
       openHouse.metadata.template = openHouse.metadata.template.replace(
