@@ -112,22 +112,28 @@ class ContactsList extends React.Component {
 
   actions = [
     {
-      render: ({ selectedRows }) => (
+      render: ({ excludedRows, selectedRows }) => (
         <ExportContacts
+          excludedRows={excludedRows}
+          exportIds={selectedRows}
           filters={this.props.filters}
+          searchText={this.props.searchInputValue}
           conditionOperator={this.props.conditionOperator}
           users={this.props.users}
-          exportIds={selectedRows}
           disabled={this.props.isFetching}
         />
       )
     },
     {
-      render: ({ selectedRows }) => {
-        const disabled = selectedRows.length === 0
+      render: ({ entireMode, selectedRows }) => {
+        const disabled = entireMode ? true : selectedRows.length === 0
 
         return (
-          <ActionWrapper action="marketing" disabled={disabled}>
+          <ActionWrapper
+            bulkMode={entireMode}
+            action="marketing"
+            disabled={disabled}
+          >
             <SendMlsListingCard disabled={disabled} selectedRows={selectedRows}>
               Marketing
             </SendMlsListingCard>
@@ -136,14 +142,27 @@ class ContactsList extends React.Component {
       }
     },
     {
-      render: ({ selectedRows, resetSelectedRows }) => {
-        const disabled = selectedRows.length === 0
+      render: ({
+        entireMode,
+        totalRowsCount,
+        excludedRows,
+        selectedRows,
+        resetSelectedRows
+      }) => {
+        const disabled = entireMode ? false : selectedRows.length === 0
 
         return (
           <ActionWrapper action="tagging" disabled={disabled}>
             <TagContacts
               disabled={disabled}
+              entireMode={entireMode}
+              totalRowsCount={totalRowsCount}
+              excludedRows={excludedRows}
               selectedRows={selectedRows}
+              filters={this.props.filters}
+              searchText={this.props.searchInputValue}
+              conditionOperator={this.props.conditionOperator}
+              users={this.props.users}
               resetSelectedRows={resetSelectedRows}
               handleChangeContactsAttributes={
                 this.props.handleChangeContactsAttributes
@@ -154,11 +173,15 @@ class ContactsList extends React.Component {
       }
     },
     {
-      render: ({ selectedRows, resetSelectedRows }) => {
-        const disabled = selectedRows.length === 0
+      render: ({ entireMode, selectedRows, resetSelectedRows }) => {
+        const disabled = entireMode ? true : selectedRows.length === 0
 
         return (
-          <ActionWrapper action="creating an event" disabled={disabled}>
+          <ActionWrapper
+            bulkMode={entireMode}
+            action="creating an event"
+            disabled={disabled}
+          >
             <CreateEvent
               disabled={disabled}
               selectedRows={selectedRows}
@@ -172,11 +195,16 @@ class ContactsList extends React.Component {
       }
     },
     {
-      render: ({ selectedRows, resetSelectedRows }) => {
-        const disabled = selectedRows.length < 2
+      render: ({ entireMode, selectedRows, resetSelectedRows }) => {
+        const disabled = entireMode ? true : selectedRows.length < 2
 
         return (
-          <ActionWrapper action="merging" atLeast="two" disabled={disabled}>
+          <ActionWrapper
+            bulkMode={entireMode}
+            action="merging"
+            atLeast="two"
+            disabled={disabled}
+          >
             <MergeContacts
               disabled={disabled}
               selectedRows={selectedRows}
@@ -190,8 +218,10 @@ class ContactsList extends React.Component {
       }
     },
     {
-      render: rowData => {
-        const disabled = rowData.selectedRows.length === 0
+      render: data => {
+        const disabled = data.entireMode
+          ? false
+          : data.selectedRows.length === 0
 
         return (
           <ActionWrapper action="delete" disabled={disabled}>
@@ -199,7 +229,7 @@ class ContactsList extends React.Component {
               disabled={disabled}
               size="small"
               appearance="outline"
-              onClick={e => this.props.onRequestDelete(e, rowData)}
+              onClick={e => this.props.onRequestDelete(e, data)}
             >
               <IconDeleteOutline size={24} />
             </IconButton>
@@ -237,12 +267,17 @@ class ContactsList extends React.Component {
           plugins={{
             selectable: {
               persistent: true,
-              storageKey: 'contacts'
+              allowSelectEntireList: true,
+              storageKey: 'contacts',
+              entityName: 'Contacts'
             },
             loadable: {
               accuracy: 300, // px
+              accuracyTop: 600, // px
               debounceTime: 300, // ms
-              onTrigger: this.props.onRequestLoadMore
+              container: this.props.tableContainerId,
+              onScrollBottom: this.props.onRequestLoadMore,
+              onScrollTop: this.props.onRequestLoadMoreBefore
             },
             actionable: {
               actions: this.actions
@@ -264,6 +299,7 @@ class ContactsList extends React.Component {
           }}
           isFetching={this.props.isFetching}
           isFetchingMore={this.props.isFetchingMore}
+          isFetchingMoreBefore={this.props.isFetchingMoreBefore}
           columns={this.columns}
           LoadingState={LoadingComponent}
           getTrProps={this.getGridTrProps}

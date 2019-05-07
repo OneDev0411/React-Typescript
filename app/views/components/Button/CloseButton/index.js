@@ -11,30 +11,50 @@ export class CloseButton extends React.Component {
   static propTypes = {
     ...Button.propTypes,
     backUrl: PropTypes.string,
-    defaultBackUrl: PropTypes.string
+    defaultBackUrl: PropTypes.string,
+    query: PropTypes.object
   }
 
   static defaultProps = {
     ...Button.defaultProps,
     backUrl: '',
-    defaultBackUrl: ''
+    defaultBackUrl: '',
+    query: {}
+  }
+
+  componentDidMount() {
+    /**
+     * We capture the **from** value from current navigation when the component
+     * is rendered. So that if subsequent navigations happen in the page we are
+     * already in (the page that contains the close button), we don't lose
+     * track of where we were previously.
+     * We don't need to use state, as it has nothing to do with rendering
+     */
+    this.initialFrom = getFrom()
   }
 
   handleOnClick = () => {
-    // Force redirect
-    if (this.props.backUrl) {
-      return goTo(this.props.backUrl)
+    // Redirect using the history
+
+    const from = getFrom() || this.initialFrom
+
+    if (from) {
+      return goTo(from)
     }
 
-    // Redirect using the histroy
+    // Force redirect
+    if (this.props.backUrl) {
+      return goTo(this.props.backUrl, null, this.props.query)
+    }
+
     const currentLocation = browserHistory.getCurrentLocation()
 
     if (currentLocation.key) {
-      browserHistory.goBack()
+      return browserHistory.goBack()
     }
 
     // Default
-    return goTo(this.props.defaultBackUrl)
+    return goTo(this.props.defaultBackUrl, null, this.props.query)
   }
 
   render() {
@@ -44,6 +64,12 @@ export class CloseButton extends React.Component {
       </Button>
     )
   }
+}
+
+function getFrom() {
+  const currentLocation = browserHistory.getCurrentLocation()
+
+  return currentLocation.state && currentLocation.state.from
 }
 
 // todo - refactor its name to PageCloseButton

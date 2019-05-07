@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
@@ -36,6 +37,22 @@ const normalize = rec => ({
   lat: rec.listing.property.address.location.latitude,
   lng: rec.listing.property.address.location.longitude
 })
+
+const propTypes = {
+  savedSearch: PropTypes.shape(),
+  location: PropTypes.shape().isRequired,
+  isSideMenuOpen: PropTypes.bool,
+  toggleSideMenu: PropTypes.func.isRequired
+}
+
+const defaultProps = {
+  savedSearch: {
+    title: '',
+    proposed_title: '',
+    users: []
+  },
+  isSideMenuOpen: true
+}
 
 class SavedSearch extends React.Component {
   constructor(props) {
@@ -125,21 +142,24 @@ class SavedSearch extends React.Component {
   }
 
   render() {
+    const { props } = this
+    const { title } = props.savedSearch
+
     return (
       <React.Fragment>
         <Helmet>
-          <title> {this.props.savedSearch.title} | Properties | Rechat</title>
+          <title> {title && `${`${title} | `}`}Properties | Rechat</title>
         </Helmet>
         <Header
-          title={this.props.savedSearch.title}
-          subtitle={this.props.savedSearch.proposed_title}
+          title={title}
+          subtitle={props.savedSearch.proposed_title}
           onChangeView={this.onChangeView}
           activeView={this.state.activeView}
-          isSideMenuOpen={this.props.isSideMenuOpen}
-          toggleSideMenu={this.props.toggleSideMenu}
+          isSideMenuOpen={props.isSideMenuOpen}
+          toggleSideMenu={props.toggleSideMenu}
           RightComponent={() => (
             <Avatars
-              users={this.props.savedSearch.users}
+              users={props.savedSearch.users}
               style={{ marginRight: '2rem' }}
               tooltipPlacement="bottom"
             />
@@ -150,6 +170,9 @@ class SavedSearch extends React.Component {
     )
   }
 }
+
+SavedSearch.propTypes = propTypes
+SavedSearch.defaultProps = defaultProps
 
 const mapStateToProps = (state, props) => ({
   savedSearch: selectAlert(state.alerts.list, props.params.id)

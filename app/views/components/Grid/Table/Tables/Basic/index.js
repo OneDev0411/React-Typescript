@@ -90,6 +90,7 @@ class BasicTable extends React.Component {
 
           {this.Rows.map((row, rowIndex) => (
             <Row
+              id={`grid-item-${row.id || rowIndex}`}
               multiple={multiple}
               key={row.key || rowIndex}
               firstRow={rowIndex === 0}

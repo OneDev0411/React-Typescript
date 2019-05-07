@@ -1,89 +1,78 @@
-import React from 'react'
+import React, {
+  forwardRef,
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useState
+} from 'react'
 import PropTypes from 'prop-types'
 
-import Cookie from 'js-cookie'
+import { connect } from 'react-redux'
 import Joyride from 'react-joyride'
 
-import ActionButton from 'components/Button/ActionButton'
+import { OnboardingStepCard } from 'components/Onboarding/OnboardingStepCard'
+import { getActiveTeamSettings } from 'utils/user-teams'
+import { putUserSetting } from 'models/user/put-user-setting'
 
-import { Container, Title, Section, Actions } from './styled'
+const ONBOARDING_SETTING_KEY_PREFIX = 'onboarding_'
 
-export default class Onboarding extends React.Component {
-  getDisplay() {
-    if (this.props.display === true) {
-      return true
-    }
+Onboarding.propTypes = {
+  steps: PropTypes.array.isRequired,
+  tourId: PropTypes.string.isRequired,
+  callback: PropTypes.func,
+  onFinishIntro: PropTypes.func
+}
 
-    if (this.props.cookie) {
-      return Cookie.get(this.props.cookie) === undefined
-    }
+function Onboarding({
+  user,
+  tourId,
+  steps,
+  onFinishIntro,
+  callback,
+  run,
+  onboardingRef
+}) {
+  const SETTING_KEY = `${ONBOARDING_SETTING_KEY_PREFIX}_${tourId}`
+  const alreadyShown = getActiveTeamSettings(user, SETTING_KEY)
 
-    return false
-  }
+  const [shown, toggle] = useState(alreadyShown == null)
 
-  getNormalizedSteps() {
-    return this.props.steps.map(step => ({
-      ...step,
-      disableBeacon: true,
-      tooltipComponent: props => (
-        <Container {...props.tooltipProps} style={step.tooltipStyle}>
-          <Section>
-            <Title>{step.title}</Title>
-            {step.text}
+  useImperativeHandle(onboardingRef, () => ({
+    show: () => toggle(true)
+  }))
 
-            <Actions>
-              {step.actions.back && (
-                <ActionButton onClick={props.backProps.onClick}>
-                  {step.actions.back || props.backProps.title}
-                </ActionButton>
-              )}
+  const normalizedSteps = useMemo(
+    () =>
+      steps.map(step => ({
+        ...step,
+        disableBeacon: true,
+        tooltipComponent: OnboardingStepCard
+      })),
+    [steps]
+  )
 
-              {step.actions.primary && (
-                <ActionButton
-                  onClick={props.primaryProps.onClick}
-                  style={{ marginLeft: '0.5rem' }}
-                >
-                  {step.actions.primary || props.primaryProps.title}
-                </ActionButton>
-              )}
-            </Actions>
-          </Section>
+  const onCallback = useCallback(
+    data => {
+      if ((isCloseEvent(data) || isFinishEvent(data)) && tourId) {
+        putUserSetting(SETTING_KEY, '1')
+        toggle(false)
+        onFinishIntro && onFinishIntro()
+      }
 
-          {step.image && (
-            <Section>
-              <img src={step.image} alt="" style={step.imageStyle} />
-            </Section>
-          )}
-        </Container>
-      )
-    }))
-  }
+      callback && callback(data)
+    },
+    [SETTING_KEY, callback, onFinishIntro, tourId]
+  )
 
-  onCallback = data => {
-    if (data.type === 'tour:end' && this.props.cookie) {
-      Cookie.set(this.props.cookie, '', {
-        path: '/',
-        expires: 10000
-      })
-
-      this.props.onFinishIntro()
-    }
-
-    this.props.callback(data)
-  }
-
-  render() {
-    if (this.getDisplay() === false) {
-      return false
-    }
-
-    return (
+  return (
+    shown && (
       <div>
         <Joyride
           autoStart
-          steps={this.getNormalizedSteps()}
-          run={this.props.run}
+          steps={normalizedSteps}
+          run={run}
           scrollToFirstStep
+          disableOverlayClose
           continuous
           spotlightPadding={5}
           floaterProps={{
@@ -94,23 +83,27 @@ export default class Onboarding extends React.Component {
               overlayColor: 'rgba(0, 0, 0, 0.8)'
             }
           }}
-          callback={this.onCallback}
+          callback={onCallback}
         />
       </div>
     )
-  }
+  )
 }
 
-Onboarding.propTypes = {
-  steps: PropTypes.array.isRequired,
-  callback: PropTypes.func,
-  onFinishIntro: PropTypes.func,
-  display: PropTypes.bool,
-  cookie: PropTypes.string
+const mapStateToProps = state => ({
+  user: state.user
+})
+
+const ConnectedOnboarding = connect(mapStateToProps)(Onboarding)
+
+export default forwardRef((props, ref) => (
+  <ConnectedOnboarding {...props} onboardingRef={ref} />
+))
+
+function isCloseEvent({ type, action }) {
+  return type === 'step:after' && action === 'close'
 }
 
-Onboarding.defaultProps = {
-  callback: () => null,
-  onFinishIntro: () => null,
-  display: false
+function isFinishEvent({ type }) {
+  return type === 'tour:end'
 }

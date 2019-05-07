@@ -12,7 +12,7 @@ import Chat from './ChatButton'
 import { Divider } from './Divider'
 
 function Menu(props) {
-  const { contact } = props
+  const { contact, closeButtonQuery, backUrl } = props
 
   return (
     <Flex alignCenter style={{ padding: '1.5em 0' }}>
@@ -33,6 +33,8 @@ function Menu(props) {
         iconSize="large"
         inverse
         defaultBackUrl="/dashboard/contacts"
+        backUrl={backUrl}
+        query={closeButtonQuery}
       />
     </Flex>
   )

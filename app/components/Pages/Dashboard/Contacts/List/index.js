@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
 import _ from 'underscore'
 
 import { confirmation } from 'actions/confirmation'
@@ -19,6 +20,8 @@ import {
   viewAsEveryoneOnTeam,
   getActiveTeamSettings
 } from 'utils/user-teams'
+
+import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
 
 import {
   Container as PageContainer,
@@ -40,17 +43,18 @@ import { SORT_FIELD_SETTING_KEY } from './constants'
 class ContactsList extends React.Component {
   constructor(props) {
     super(props)
-
     this.state = {
       isSideMenuOpen: true,
       isFetchingMoreContacts: false,
+      isFetchingMoreContactsBefore: false,
       isRowsUpdating: false,
-      filters: this.props.filters,
       searchInputValue: this.props.list.textFilter,
-      activeSegment: {}
+      activeSegment: {},
+      loadedRanges: []
     }
 
     this.order = getActiveTeamSettings(props.user, SORT_FIELD_SETTING_KEY)
+    this.tableContainerId = 'contacts--page-container'
   }
 
   componentDidMount() {
@@ -65,7 +69,7 @@ class ContactsList extends React.Component {
         ]
       )
     } else {
-      this.fetchList()
+      this.fetchContactsAndJumpToSelected()
     }
 
     if (this.props.fetchTags) {
@@ -95,7 +99,7 @@ class ContactsList extends React.Component {
         : nextProps.viewAsUsers
 
       this.handleFilterChange({
-        filters: this.state.filters,
+        filters: this.props.filters,
         searchInputValue: this.state.searchInputValue,
         start: 0,
         order: this.order,
@@ -106,28 +110,83 @@ class ContactsList extends React.Component {
 
       this.props.getContactsTags(viewAsUsers)
     }
+
+    const prevStart = this.props.location.query.s
+    const nextStart = nextProps.location.query.s
+
+    if (prevStart !== undefined && nextStart === undefined) {
+      window.location.reload()
+    }
   }
 
   componentWillUnmount() {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
   }
 
-  hasSearchState = () =>
-    this.state.filter || this.state.searchInputValue || this.order
+  async fetchContactsAndJumpToSelected() {
+    this.setState({
+      isFetchingMoreContacts: true
+    })
 
-  fetchList = async (start = 0) => {
-    if (start === 0) {
+    const start = this.getQueryParam('s')
+    const idSelector = `#grid-item-${this.getQueryParam('id')}`
+
+    this.scrollToSelector(idSelector)
+
+    await this.fetchList(start)
+
+    this.setState({
+      isFetchingMoreContacts: false
+    })
+  }
+
+  scrollToSelector(selector) {
+    const selectedElement = document.querySelector(selector)
+
+    if (selectedElement) {
+      selectedElement.scrollIntoView({ block: 'center' })
+    }
+  }
+
+  addLoadedRange = start =>
+    this.setState(prevState => ({
+      loadedRanges: [
+        ...new Set([...prevState.loadedRanges, parseInt(start, 10)])
+      ]
+    }))
+
+  getQueryParam = key => this.props.location.query[key]
+
+  setQueryParam = (key, value) => {
+    const currentLocation = this.props.location
+
+    this.props.router.replace({
+      ...currentLocation,
+      query: {
+        ...currentLocation.query,
+        [key]: value
+      }
+    })
+  }
+
+  hasSearchState = () =>
+    this.props.filters || this.state.searchInputValue || this.order
+
+  fetchList = async (start = 0, loadMoreBefore = false) => {
+    if (start === 0 && !loadMoreBefore) {
       this.resetSelectedRows()
     }
 
     try {
       if (this.hasSearchState()) {
         await this.handleFilterChange({
-          filters: this.state.filters,
+          filters: this.props.filters,
           searchInputValue: this.state.searchInputValue,
-          start
+          start,
+          prependResult: loadMoreBefore
         })
       } else {
+        this.addLoadedRange(start)
         await this.props.getContacts(start)
       }
     } catch (e) {
@@ -161,17 +220,19 @@ class ContactsList extends React.Component {
 
   handleFilterChange = async newFilters => {
     const {
-      filters = this.state.filters,
+      filters = this.props.filters,
       searchInputValue = this.state.searchInputValue,
       start = 0,
       order = this.order,
       viewAsUsers = this.props.viewAsUsers,
-      conditionOperator = this.props.conditionOperator
+      conditionOperator = this.props.conditionOperator,
+      prependResult = false
     } = newFilters
 
-    this.setState({ filters })
+    this.addLoadedRange(start)
+    this.setQueryParam('s', start)
 
-    if (start === 0) {
+    if (start === 0 && !prependResult) {
       this.resetSelectedRows()
     }
 
@@ -183,7 +244,11 @@ class ContactsList extends React.Component {
         searchInputValue,
         order,
         viewAsUsers,
-        conditionOperator
+        conditionOperator,
+        prependResult,
+        {
+          s: start
+        }
       )
     } catch (e) {
       console.log('fetch search error: ', e)
@@ -194,7 +259,7 @@ class ContactsList extends React.Component {
     console.log(`[ Search ] ${value}`)
     this.setState({ searchInputValue: value })
     this.handleFilterChange({
-      filters: this.state.filters,
+      filters: this.props.filters,
       searchInputValue: value
     })
   }
@@ -202,14 +267,14 @@ class ContactsList extends React.Component {
   handleChangeOrder = ({ value: order }) => {
     this.order = order
     this.handleFilterChange({
-      filters: this.state.filters,
+      filters: this.props.filters,
       searchInputValue: this.state.searchInputValue
     })
   }
 
   handleChangeContactsAttributes = () => {
     this.handleFilterChange({
-      filters: this.state.filters,
+      filters: this.props.filters,
       searchInputValue: this.state.searchInputValue
     })
   }
@@ -221,38 +286,83 @@ class ContactsList extends React.Component {
 
   handleLoadMore = async () => {
     const { total } = this.props.listInfo
-    const startFrom = this.props.list.ids.length
+    const totalLoadedCount = this.props.list.ids.length
+    const prevStart = parseInt(this.getQueryParam('s'), 10) || 0
 
-    if (this.state.isFetchingMoreContacts || startFrom === total) {
+    if (
+      this.state.isFetchingMoreContacts ||
+      this.state.isFetchingMoreContactsBefore ||
+      totalLoadedCount === total
+    ) {
       return false
     }
 
-    console.log(`[ Loading More ] Start: ${startFrom}`)
+    const start = Math.max(prevStart, ...this.state.loadedRanges) + 50
+
+    console.log(`[ Loading More ] Start: ${start}`)
 
     this.setState({ isFetchingMoreContacts: true })
 
-    if (this.hasSearchState()) {
-      await this.fetchList(startFrom)
-    } else {
-      await this.handleFilterChange({
-        filters: this.state.filters,
-        searchInputValue: this.state.searchInputValue,
-        start: startFrom
-      })
-    }
+    await this.fetchList(start)
 
     this.setState({ isFetchingMoreContacts: false })
   }
 
-  handleOnDelete = (e, { selectedRows, resetSelectedRows }) => {
-    const selectedRowsLength = selectedRows.length
-    const isManyContacts = selectedRowsLength > 1
+  handleLoadMoreBefore = async () => {
+    const { total } = this.props.listInfo
+    const totalLoadedCount = this.props.list.ids.length
+    const prevStart = parseInt(this.getQueryParam('s'), 10) || 0
+
+    if (
+      this.state.isFetchingMoreContacts ||
+      this.state.isFetchingMoreContactsBefore ||
+      totalLoadedCount === total ||
+      prevStart < 50
+    ) {
+      return false
+    }
+
+    const start = prevStart - 50
+
+    if (this.state.loadedRanges.includes(start)) {
+      return false
+    }
+
+    console.log(`[ Loading More Before ] Start: ${start}`)
+
+    this.setState({ isFetchingMoreContactsBefore: true })
+
+    await this.fetchList(start, true)
+
+    this.setState({ isFetchingMoreContactsBefore: false })
+  }
+
+  handleOnDelete = (
+    e,
+    {
+      totalRowsCount,
+      entireMode,
+      selectedRows,
+      excludedRows,
+      resetSelectedRows
+    }
+  ) => {
+    const selectedRowsLength = entireMode
+      ? totalRowsCount - excludedRows.length
+      : selectedRows.length
+    const isManyContacts = entireMode ? true : selectedRowsLength > 1
 
     this.props.confirmation({
       confirmLabel: 'Delete',
       message: `Delete ${isManyContacts ? 'contacts' : 'contact'}?`,
-      onConfirm: () =>
-        this.handleDeleteContact(selectedRows, resetSelectedRows),
+      onConfirm: () => {
+        this.handleDeleteContact({
+          entireMode,
+          selectedRows,
+          excludedRows,
+          resetSelectedRows
+        })
+      },
       description: `Deleting ${
         isManyContacts ? `these ${selectedRowsLength} contacts` : 'this contact'
       } will remove ${
@@ -263,14 +373,32 @@ class ContactsList extends React.Component {
     })
   }
 
-  handleDeleteContact = async (ids, resetRowsHandler) => {
+  handleDeleteContact = async ({
+    entireMode,
+    selectedRows,
+    excludedRows,
+    resetSelectedRows
+  }) => {
     try {
       this.rowsUpdating(true)
 
-      await this.props.deleteContacts(ids)
+      if (entireMode) {
+        const bulkDeleteParams = {
+          users: this.props.viewAsUsers,
+          searchText: this.state.searchInputValue,
+          conditionOperator: this.props.conditionOperator,
+          filters: this.props.filters,
+          excludes: excludedRows
+        }
+
+        await deleteContactsBulk(bulkDeleteParams)
+        await this.reloadContacts()
+      } else {
+        await this.props.deleteContacts(selectedRows)
+      }
 
       this.rowsUpdating(false)
-      resetRowsHandler()
+      resetSelectedRows()
     } catch (error) {
       console.log(error)
     }
@@ -285,7 +413,7 @@ class ContactsList extends React.Component {
 
   reloadContacts = async (start = 0) => {
     await this.props.searchContacts(
-      this.state.filters,
+      this.props.filters,
       start,
       undefined,
       this.state.searchInputValue,
@@ -311,7 +439,7 @@ class ContactsList extends React.Component {
           <TagsList onFilterChange={this.handleFilterChange} />
         </SideMenu>
 
-        <PageContent isSideMenuOpen={isSideMenuOpen}>
+        <PageContent id={this.tableContainerId} isSideMenuOpen={isSideMenuOpen}>
           <Header
             title={activeSegment.name || 'All Contacts'}
             isSideMenuOpen={this.state.isSideMenuOpen}
@@ -327,6 +455,7 @@ class ContactsList extends React.Component {
             isSearching={isFetchingContacts}
           />
           <Table
+            tableContainerId={this.tableContainerId}
             reloadContacts={this.reloadContacts}
             sortBy={this.order}
             handleChangeOrder={this.handleChangeOrder}
@@ -335,12 +464,15 @@ class ContactsList extends React.Component {
             listInfo={this.props.listInfo}
             isFetching={isFetchingContacts}
             isFetchingMore={this.state.isFetchingMoreContacts}
+            isFetchingMoreBefore={this.state.isFetchingMoreContactsBefore}
             isRowsUpdating={this.state.isRowsUpdating}
             onRequestLoadMore={this.handleLoadMore}
+            onRequestLoadMoreBefore={this.handleLoadMoreBefore}
             rowsUpdating={this.rowsUpdating}
             onChangeSelectedRows={this.onChangeSelectedRows}
             onRequestDelete={this.handleOnDelete}
-            filters={this.state.filters}
+            filters={this.props.filters}
+            searchInputValue={this.state.searchInputValue}
             conditionOperator={this.props.conditionOperator}
             users={viewAsUsers}
           />
@@ -350,9 +482,9 @@ class ContactsList extends React.Component {
   }
 }
 
-function mapStateToUser({ user, contacts }) {
+function mapStateToProps({ user, contacts }) {
   const listInfo = selectContactsInfo(contacts.list)
-  const tags = contacts.list
+  const tags = contacts.tags
   const fetchTags = !isFetchingTags(tags) && selectTags(tags).length === 0
 
   return {
@@ -368,14 +500,16 @@ function mapStateToUser({ user, contacts }) {
   }
 }
 
-export default connect(
-  mapStateToUser,
-  {
-    getContacts,
-    searchContacts,
-    deleteContacts,
-    confirmation,
-    setContactsListTextFilter,
-    getContactsTags
-  }
-)(ContactsList)
+export default withRouter(
+  connect(
+    mapStateToProps,
+    {
+      getContacts,
+      searchContacts,
+      deleteContacts,
+      confirmation,
+      setContactsListTextFilter,
+      getContactsTags
+    }
+  )(ContactsList)
+)

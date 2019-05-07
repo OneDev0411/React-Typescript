@@ -1,6 +1,9 @@
 import React, { Fragment } from 'react'
 import _ from 'underscore'
 
+import LinkButton from 'components/Button/LinkButton'
+import PopOver from 'components/Popover'
+
 import { CheckBoxButton } from '../../../../Button/CheckboxButton'
 import { CheckBoxButtonWithoutState } from '../../../../Button/CheckboxButton/CheckboxWithoutState'
 
@@ -17,7 +20,8 @@ export class SelectablePlugin {
       {
         persistent: false,
         allowSelectAll: true,
-        unselectableRow: []
+        allowSelectEntireList: false,
+        entityName: ''
       },
       options
     )
@@ -51,6 +55,10 @@ export class SelectablePlugin {
     this.data = data
   }
 
+  setTotalCount(count = 0) {
+    this.totalCount = count
+  }
+
   /**
    * reset all selected rows in persistent mode
    */
@@ -82,12 +90,27 @@ export class SelectablePlugin {
     return JSON.parse(this.StorageEngine) || {}
   }
 
+  get SelectedCount() {
+    if (this.isEntireRowsSelected()) {
+      return this.totalCount - this.ExcludedRows.length
+    }
+
+    return this.SelectedRows.length
+  }
+
   /**
    * returns whether a row is selected or not
    * @param { UUID } id - the row id
    */
   isRowSelected = id =>
     this.StorageObject.selectedRows && this.StorageObject.selectedRows[id]
+
+  /**
+   * returns whether a row is excluded from entire items selection or not
+   * @param { UUID } id - the row id
+   */
+  isRowExcluded = id =>
+    this.StorageObject.excludedRows && this.StorageObject.excludedRows[id]
 
   /**
    * returns true when some rows is selected
@@ -97,9 +120,21 @@ export class SelectablePlugin {
     Object.keys(this.StorageObject.selectedRows).length > 0
 
   /**
+   * returns true when some rows are excluded from enitre items selection
+   */
+  someRowsExcluded = () =>
+    this.StorageObject.excludedRows &&
+    Object.keys(this.StorageObject.excludedRows).length > 0
+
+  /**
    * checks whether all rows are selected or not
    */
   isAllRowsSelected = () => this.StorageObject.selectAllRows === true
+
+  /**
+   * checks whether entier rows are selected or not
+   */
+  isEntireRowsSelected = () => this.StorageObject.selectEntireRows === true
 
   /**
    * checks whether all rows of subTable selected or not
@@ -130,6 +165,13 @@ export class SelectablePlugin {
   }
 
   /**
+   * returns all excluded rows when selected entire items
+   */
+  get ExcludedRows() {
+    return Object.keys(this.StorageObject.excludedRows || {})
+  }
+
+  /**
    * returns storage engine
    */
   get StorageEngine() {
@@ -141,6 +183,37 @@ export class SelectablePlugin {
    */
   set StorageEngine(data) {
     window.gridSelectableStorage[this.StorageKey] = data
+  }
+
+  toggleSelectOrExcludeRow = id => {
+    if (this.isEntireRowsSelected()) {
+      return this.toggleExcludeRow(id)
+    }
+
+    this.toggleSelectRow(id)
+  }
+
+  toggleExcludeRow = id => {
+    if (!id) {
+      console.error(
+        '[ Grid -> Selectable ] Unique Id for this row is not provided'
+      )
+
+      return false
+    }
+
+    const { excludedRows = {}, selectEntireRows = false } = this.StorageObject
+
+    if (excludedRows[id]) {
+      delete excludedRows[id]
+    } else {
+      excludedRows[id] = true
+    }
+
+    this.StorageObject = { excludedRows, selectEntireRows }
+
+    this.onChange()
+    this.onRequestForceUpdate()
   }
 
   /**
@@ -173,6 +246,14 @@ export class SelectablePlugin {
     this.onRequestForceUpdate()
   }
 
+  toggleSelectAllOrEntire = () => {
+    if (this.isEntireRowsSelected()) {
+      return this.toggleSelectEntireRows()
+    }
+
+    this.toggleSelectAllRows()
+  }
+
   /**
    * toggles selecting all rows
    */
@@ -189,6 +270,22 @@ export class SelectablePlugin {
     this.StorageObject = {
       selectAllRows: !selectAllRows,
       selectedRows
+    }
+
+    this.onChange()
+  }
+
+  /**
+   * toggles selecting entire rows
+   */
+  toggleSelectEntireRows = () => {
+    const { selectEntireRows = false } = this.StorageObject
+
+    this.StorageObject = {
+      selectEntireRows: !selectEntireRows,
+      selectAllRows: false,
+      excludedRows: {},
+      selectedRows: {}
     }
 
     this.onChange()
@@ -229,25 +326,79 @@ export class SelectablePlugin {
     this.options.onChange(this.SelectedRows)
   }
 
+  isRowChecked = id => {
+    if (this.isEntireRowsSelected()) {
+      return !this.isRowExcluded(id)
+    }
+
+    return this.isRowSelected(id)
+  }
+
+  shouldShowSelectEnitre() {
+    return (
+      this.options.allowSelectEntireList &&
+      this.isAllRowsSelected() &&
+      this.totalCount > this.data.length
+    )
+  }
+
+  someItemSelected = () => {
+    if (this.isEntireRowsSelected()) {
+      return this.someRowsExcluded()
+    }
+
+    return !this.isAllRowsSelected() && this.someRowsSelected()
+  }
+
+  allItemsSelected = () =>
+    this.isEntireRowsSelected() ||
+    this.isAllRowsSelected() ||
+    this.someRowsSelected()
+
+  renderColumnHeader = () => {
+    if (!this.options.allowSelectAll) {
+      return null
+    }
+
+    if (this.shouldShowSelectEnitre()) {
+      return (
+        <Fragment>
+          <PopOver
+            show
+            popoverStyles={{ textAlign: 'center' }}
+            containerStyle={{ display: 'inline-block' }}
+            caption={
+              <LinkButton onClick={this.toggleSelectEntireRows}>
+                Select All {this.totalCount} {this.options.entityName}
+              </LinkButton>
+            }
+          >
+            <CheckBoxButtonWithoutState
+              someRowsSelected={this.someItemSelected()}
+              onClick={this.toggleSelectAllOrEntire}
+              isSelected={this.allItemsSelected()}
+            />
+          </PopOver>
+        </Fragment>
+      )
+    }
+
+    return (
+      <CheckBoxButtonWithoutState
+        someRowsSelected={this.someItemSelected()}
+        onClick={this.toggleSelectAllOrEntire}
+        isSelected={this.allItemsSelected()}
+      />
+    )
+  }
+
   registerColumn = columns => {
     const column = {
       id: 'plugin--selectable',
       width: '24px',
       sortable: false,
       verticalAlign: 'center',
-      header: () => (
-        <Fragment>
-          {this.options.allowSelectAll !== false && (
-            <CheckBoxButtonWithoutState
-              someRowsSelected={
-                !this.isAllRowsSelected() && this.someRowsSelected()
-              }
-              onClick={this.toggleSelectAllRows}
-              isSelected={this.isAllRowsSelected() || this.someRowsSelected()}
-            />
-          )}
-        </Fragment>
-      ),
+      header: () => this.renderColumnHeader(),
       subHeader: subData => (
         <CheckBoxButtonWithoutState
           onClick={() => this.toggleSelectAllSubTableRows(subData)}
@@ -263,12 +414,10 @@ export class SelectablePlugin {
       ),
       render: ({ rowData: row }) => (
         <Fragment>
-          {this.options.unselectableRow.includes(row.id) === false && (
-            <CheckBoxButton
-              onClick={() => this.toggleSelectRow(row.id)}
-              isSelected={this.isRowSelected(row.id)}
-            />
-          )}
+          <CheckBoxButton
+            onClick={() => this.toggleSelectOrExcludeRow(row.id)}
+            isSelected={this.isRowChecked(row.id)}
+          />
         </Fragment>
       )
     }

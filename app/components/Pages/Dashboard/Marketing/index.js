@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, createRef } from 'react'
 import { withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
 
@@ -19,9 +19,10 @@ import { OnboardingSteps } from './helpers/onboarding'
 import { Menu } from './Menu'
 
 class Marketing extends Component {
+  onboardingRef = createRef()
+
   state = {
-    isSideMenuOpen: true,
-    isShowingIntro: false
+    isSideMenuOpen: true
   }
 
   toggleSideMenu = () =>
@@ -29,15 +30,9 @@ class Marketing extends Component {
       isSideMenuOpen: !state.isSideMenuOpen
     }))
 
-  handleShowIntro = () =>
-    this.setState({
-      isShowingIntro: true
-    })
-
-  handleFinishIntro = () =>
-    this.setState({
-      isShowingIntro: false
-    })
+  handleShowIntro = () => {
+    this.onboardingRef.current.show()
+  }
 
   render() {
     const { isSideMenuOpen } = this.state
@@ -72,10 +67,9 @@ class Marketing extends Component {
         </PageContent>
 
         <Onboarding
-          display={this.state.isShowingIntro}
+          ref={this.onboardingRef}
           steps={OnboardingSteps}
-          cookie="marketing-center-onboarding"
-          onFinishIntro={this.handleFinishIntro}
+          tourId="marketing-center"
         />
       </PageContainer>
     )
