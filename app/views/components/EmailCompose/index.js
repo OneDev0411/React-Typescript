@@ -15,6 +15,8 @@ import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
+import { getSendEmailResultMessages } from 'components/EmailCompose/helpers/email-result-messages'
+
 import Loading from '../../../components/Partials/Loading'
 
 import { FinalFormDrawer } from '../FinalFormDrawer'
@@ -78,20 +80,16 @@ class EmailCompose extends React.Component {
       recipients: this.normalizeRecipients(values.recipients)
     }
 
-    const handleSubmit = this.props.onClickSend
-      ? this.props.onClickSend
-      : this.handleSendEmail
-
     if ((form.subject || '').trim() === '') {
       return new Promise((resolve, reject) => {
         this.context.setConfirmationModal({
           message: 'Send without subject?',
           description:
-            'This message has no subject. Are you sure you want to send it?',
+            'This email has no subject. Are you sure you want to send it?',
           confirmLabel: 'Send anyway',
           onCancel: reject,
           onConfirm: () => {
-            handleSubmit(form)
+            this.handleSendEmail(form)
               .then(resolve)
               .catch(reject)
           }
@@ -99,40 +97,30 @@ class EmailCompose extends React.Component {
       })
     }
 
-    return handleSubmit(form)
+    return this.handleSendEmail(form)
   }
 
   handleSendEmail = async form => {
     const email = {
       from: form.fromId,
       to: form.recipients,
-      subject: form.subject.trim(),
+      subject: (form.subject || '').trim(),
       html: form.body,
       attachments: _.map(form.attachments, item => item.file_id),
       due_at: form.due_at
     }
-    const successMessage = email.due_at
-      ? 'The email has been scheduled'
-      : 'The email has been sent'
-    const errorMessage = 'Could not send the email. try again.'
+    const { successMessage, errorMessage } = getSendEmailResultMessages(
+      form.recipients.length,
+      email.due_at
+    )
 
     try {
       this.setState({
         isSendingEmail: true
       })
-
-      await sendContactsEmail(email)
-
-      this.props.notify({
-        status: 'success',
-        message: successMessage
-      })
-
-      this.props.onClose()
+      await sendContactsEmail(this.props.getEmail(email))
     } catch (e) {
-      console.log(e)
-
-      this.props.notify({
+      return this.props.notify({
         status: 'error',
         message: errorMessage
       })
@@ -141,6 +129,13 @@ class EmailCompose extends React.Component {
         isSendingEmail: false
       })
     }
+
+    this.props.notify({
+      status: 'success',
+      message: successMessage
+    })
+
+    this.props.onSent()
   }
 
   normalizeRecipients = recipients =>
@@ -250,7 +245,12 @@ EmailCompose.propTypes = {
   body: PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
   onClickSend: PropTypes.func,
+  /**
+   * function of the form email => email
+   */
+  getEmail: PropTypes.func,
   onClose: PropTypes.func.isRequired,
+  onSent: PropTypes.func,
   hasDealsAttachments: PropTypes.bool
 }
 
@@ -260,6 +260,8 @@ EmailCompose.defaultProps = {
   body: '',
   onClickSend: null,
   isSubmitting: false,
+  onSent: () => {},
+  getEmail: email => email,
   hasStaticBody: false,
   hasDealsAttachments: false
 }
