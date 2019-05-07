@@ -13,6 +13,7 @@ import { confirmation } from 'actions/confirmation'
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
 import EmailCompose from 'components/EmailCompose'
+
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
 
 import { getContact } from 'models/contacts/get-contact'
@@ -20,6 +21,8 @@ import { getContact } from 'models/contacts/get-contact'
 import { getTemplatePreviewImage } from 'components/InstantMarketing/helpers/get-template-preview-image'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
+
+import SocialDrawer from '../../components/SocialDrawer'
 
 import MissingEmailModal from './MissingEmailModal'
 
@@ -33,6 +36,8 @@ class SendContactCard extends React.Component {
     isBuilderOpen: false,
     isComposeEmailOpen: false,
     isSearchDrawerOpen: false,
+    isSocialDrawerOpen: false,
+    socialNetworkName: '',
     owner: this.props.user
   }
 
@@ -167,7 +172,7 @@ class SendContactCard extends React.Component {
         status: 'success',
         message: `${
           values.recipients.length
-          } emails has been sent to your contacts`
+        } emails has been sent to your contacts`
       })
     } catch (e) {
       console.log(e)
@@ -187,6 +192,14 @@ class SendContactCard extends React.Component {
     })
   }
 
+  handleSocialSharing = (template, socialNetworkName) => {
+    this.setState({
+      htmlTemplate: template,
+      isSocialDrawerOpen: true,
+      socialNetworkName
+    })
+  }
+
   get TemplateInstanceData() {
     return {
       contacts: this.Recipients.map(r => r.contactId)
@@ -198,6 +211,11 @@ class SendContactCard extends React.Component {
       readOnly: true
     })
   }
+
+  closeSocialDrawer = () =>
+    this.setState({
+      isSocialDrawerOpen: false
+    })
 
   render() {
     if (hasMarketingAccess(this.props.user) === false) {
@@ -221,13 +239,13 @@ class SendContactCard extends React.Component {
             {this.props.children}
           </ActionButton>
         ) : (
-            <SearchContactDrawer
-              title="Select a Contact"
-              isOpen={this.state.isSearchDrawerOpen}
-              onSelect={this.handleSelectedContact}
-              onClose={this.closeSearchDrawer}
-            />
-          )}
+          <SearchContactDrawer
+            title="Select a Contact"
+            isOpen={this.state.isSearchDrawerOpen}
+            onSelect={this.handleSelectedContact}
+            onClose={this.closeSearchDrawer}
+          />
+        )}
 
         <InstantMarketing
           isOpen={this.state.isBuilderOpen}
@@ -237,6 +255,7 @@ class SendContactCard extends React.Component {
           templateData={{ user: this.props.user, contact: this.state.contact }}
           templateTypes={['Birthday']}
           defaultTemplate={this.props.selectedTemplate}
+          handleSocialSharing={this.handleSocialSharing}
         />
 
         {this.state.isComposeEmailOpen && (
@@ -250,6 +269,15 @@ class SendContactCard extends React.Component {
             body={this.state.templateScreenshot}
             onClose={this.toggleComposeEmail}
             onClickSend={this.handleSendEmails}
+          />
+        )}
+
+        {this.state.isSocialDrawerOpen && (
+          <SocialDrawer
+            template={this.state.htmlTemplate}
+            templateInstanceData={this.TemplateInstanceData}
+            socialNetworkName={this.state.socialNetworkName}
+            onClose={this.closeSocialDrawer}
           />
         )}
       </Fragment>
