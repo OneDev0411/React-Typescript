@@ -2,61 +2,32 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { selectDealRoles } from 'reducers/deals/roles'
-import DealRole from 'components/DealRole'
 import ActionButton from 'components/Button/ActionButton'
+
+import RoleCrmIntegration from '../../../../components/Roles/CrmIntegration'
 
 import { normalizeRoleNames } from '../../../utils/get-roles-text'
 import { getLegalFullName, roleName } from '../../../../utils/roles'
 
-export class RolesEdit extends React.Component {
-  state = {
-    selectedRole: this.DefaultSelectedRole
-  }
-
-  handleSelectRole = role =>
-    this.setState({
-      selectedRole: role.id
-    })
-
-  get AllowedRoles() {
-    const roles = this.props.selectedAnnotation.data.roleName
-
-    return normalizeRoleNames(this.props.deal, roles)
-  }
-
-  get DefaultSelectedRole() {
-    const { props } = this
-
-    if (props.roles.length === 0) {
-      return null
-    }
-
-    if (props.annotationContext && props.annotationContext.number >= 0) {
-      return this.props.roles[props.annotationContext.number].id
-    }
-
-    return this.props.roles[0].id
-  }
+class RolesEdit extends React.Component {
+  getAllowedRoles = () =>
+    normalizeRoleNames(this.props.deal, this.props.roleName)
 
   render() {
-    // console.log('?????', this.props)
-
-    const role = this.props.roles[0]
+    const allowedRoles = this.getAllowedRoles()
+    const roles = this.props.roles.filter(user =>
+      allowedRoles.includes(user.role)
+    )
 
     return (
-      <DealRole
-        form={role}
+      <RoleCrmIntegration
+        isOpen
         deal={this.props.deal}
-        // dealSide={this.props.dealSide}
-        // isSubmitting={this.state.isSaving}
-        // isEmailRequired={this.props.isEmailRequired}
-        // formTitle={this.props.modalTitle}
-        // formOptions={this.props.formOptions}
-        // isCommissionRequired={this.props.isCommissionRequired}
-        // allowedRoles={this.AllowedRoles}
-        isOpen={this.props.isOpen}
-        // onFormSubmit={this.onSubmit}
-        // onClose={this.props.onHide}
+        role={roles[this.props.roleIndex]}
+        // isRoleRemovable={isRowRemovable}
+        allowedRoles={allowedRoles}
+        // onUpsertRole={this.props.onUpsertRole}
+        // onHide={this.closeRoleForm}
       />
     )
 

@@ -55,6 +55,7 @@ const FormRole = React.memo(props => {
       {roles.map(item => (
         <ContextAnnotation
           key={`${item.roleName}-${item.groupIndex}`}
+          type="role"
           annotationContext={item.annotationContext}
           annotations={item.annotations}
           value={item.text}

@@ -54,16 +54,18 @@ const FormRoles = React.memo(props => {
       {roles.map(item => (
         <ContextAnnotation
           key={`${item.roleName}-${item.groupIndex}`}
+          type="role"
           annotationContext={item.annotationContext}
           annotations={item.annotations}
           value={item.text}
           maxFontSize={20}
           readOnly={item.annotationContext.isReadOnly}
           tooltip={getRoleTooltip(item.annotationContext, true)}
-          onClick={bounds =>
+          onClick={(bounds, roleIndex) =>
             item.annotationContext.readonly !== true &&
             props.onClick('Role', {
               bounds,
+              roleIndex,
               ...item
             })
           }
