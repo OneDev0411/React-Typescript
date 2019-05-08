@@ -10,7 +10,7 @@ position: absolute;
   font-size: ${props => props.fontSize || 16}px;
   font-family: ${props => props.appearance.font};
   color: ${props => props.appearance.color};
-  font-weight: ${props => (props.appearance.bold ? 'bold' : 'normal')}
+  font-weight: ${props => (props.appearance.bold ? 'bold' : 'normal')};
   min-width: 15px;
   background-color: #d2e5f2;
   border: 1px solid #ccc;
