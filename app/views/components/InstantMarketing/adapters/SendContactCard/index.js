@@ -10,9 +10,10 @@ import normalizeContactForEmailCompose from 'models/email-compose/helpers/normal
 
 import { confirmation } from 'actions/confirmation'
 
-import EmailCompose from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
 import ActionButton from 'components/Button/ActionButton'
+
+import EmailComposeDrawer from 'components/EmailCompose'
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
@@ -261,7 +262,7 @@ class SendContactCard extends React.Component {
         />
 
         {this.state.isComposeEmailOpen && (
-          <EmailCompose
+          <EmailComposeDrawer
             isOpen
             hasStaticBody
             disableAddNewRecipient

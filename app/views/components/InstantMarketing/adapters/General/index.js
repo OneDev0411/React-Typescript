@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 
-import EmailCompose from 'components/EmailCompose'
+import { BatchEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import ActionButton from 'components/Button/ActionButton'
@@ -151,7 +151,7 @@ class General extends React.Component {
         />
 
         {this.state.isComposeEmailOpen && (
-          <EmailCompose
+          <BatchEmailComposeDrawer
             isOpen
             hasStaticBody
             from={this.state.owner}

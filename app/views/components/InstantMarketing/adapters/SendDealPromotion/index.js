@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import Listing from 'models/listings/listing'
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 
-import EmailCompose from 'components/EmailCompose'
+import { BatchEmailComposeDrawer } from 'components/EmailCompose'
 import ActionButton from 'components/Button/ActionButton'
 import InstantMarketing from 'components/InstantMarketing'
 
@@ -194,7 +194,7 @@ class SendDealPromotion extends React.Component {
         )}
 
         {this.state.isComposeEmailOpen && (
-          <EmailCompose
+          <BatchEmailComposeDrawer
             isOpen
             hasStaticBody
             from={this.state.owner}
