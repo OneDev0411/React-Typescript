@@ -10,10 +10,16 @@ function SendEmailButton(props) {
   const [isOpen, setIsOpen] = useState(false)
   const toggleOpenDrawer = () => setIsOpen(!isOpen)
 
-  const getEmail = email => ({
-    ...email,
-    deal: deal != null && deal.id
-  })
+  const getEmail = email => {
+    if (deal != null && deal.id) {
+      return {
+        ...email,
+        deal: deal.id
+      }
+    }
+
+    return email
+  }
 
   return (
     <Fragment>
