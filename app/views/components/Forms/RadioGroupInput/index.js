@@ -9,7 +9,7 @@ import RadioButton from 'components/RadioButton'
 import { InputLabel, InputRequired } from '../styled'
 
 RadioGroup.propTypes = {
-  items: PropTypes.arrayOf(
+  options: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string.isRequired,
       name: PropTypes.string

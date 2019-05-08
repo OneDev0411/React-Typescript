@@ -31,7 +31,7 @@ SelectInput.propTypes = {
   isRequired: PropTypes.bool,
   isVisible: PropTypes.bool,
   showError: PropTypes.bool,
-  container: PropTypes.element
+  container: PropTypes.oneOfType([PropTypes.element, PropTypes.object])
 }
 
 SelectInput.defaultProps = {

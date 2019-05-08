@@ -12,7 +12,7 @@ import { InputField } from './styled'
 
 TextInput.propTypes = {
   input: PropTypes.object,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   styles: PropTypes.object,
   meta: PropTypes.object,
   hasLabel: PropTypes.bool,
@@ -20,7 +20,7 @@ TextInput.propTypes = {
   isVisible: PropTypes.bool,
   showError: PropTypes.bool,
   highlightOnError: PropTypes.bool,
-  container: PropTypes.element
+  container: PropTypes.oneOfType([PropTypes.element, PropTypes.object])
 }
 
 TextInput.defaultProps = {
