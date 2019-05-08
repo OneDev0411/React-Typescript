@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { primary } from 'views/utils/colors'
+import { primary, primaryDark } from 'views/utils/colors'
 
 export const Image = styled.img`
   margin: 8px 3% 8px 5%;
@@ -14,15 +14,14 @@ export const CropButton = styled.div`
   display: none;
   left: 10%;
   bottom: 10%;
-  color: #000;
-  background: rgba(255, 255, 255, 0.5);
   padding: 2px 6px;
   cursor: pointer;
   border-radius: 3px;
+  color: #fff;
+  background: ${primary};
 
   :hover {
-    color: #fff;
-    background: ${primary};
+    background: ${primaryDark};
   }
 `
 
