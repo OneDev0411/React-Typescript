@@ -1,21 +1,18 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-
 import _ from 'underscore'
 
-import ContextAnnotation from '../ContextAnnotation'
-import { getRoleText } from '../../../../utils/get-roles-text'
-import { getRoleTooltip } from '../../../../utils/get-role-tooltip'
+import ContextAnnotation from '../../ContextAnnotation'
+import { getRolesText } from '../../../../../utils/get-roles-text'
+import { getRoleTooltip } from '../../../../../utils/get-role-tooltip'
 
-const FormRole = React.memo(props => {
+import { AddRole } from '../AddRole'
+
+const FormRoles = React.memo(props => {
   const [roles, setRoles] = useState([])
 
   useEffect(() => {
     const roles = []
-
-    if (!props.roles) {
-      return false
-    }
 
     _.each(props.roles, (list, roleName) => {
       const info = props.roles[roleName]
@@ -27,16 +24,20 @@ const FormRole = React.memo(props => {
       _.each(groups, (group, groupIndex) => {
         const annotationContext = groups[groupIndex][0]
         const annotations = groups[groupIndex].map(info => info.annotation)
-
         const formValue =
           props.formValues[annotationContext.annotation.fieldName]
 
         const text =
           formValue ||
-          getRoleText(props.dealsRoles, props.deal, roleName, annotationContext)
+          getRolesText(
+            props.dealsRoles,
+            props.deal,
+            roleName,
+            annotationContext
+          )
 
         roles.push({
-          contextType: 'Role',
+          contextType: 'Roles',
           groupIndex,
           roleName,
           annotations,
@@ -50,6 +51,16 @@ const FormRole = React.memo(props => {
     // eslint-disable-next-line
   }, [])
 
+  // const handleClick = (item, bounds, roleIndex = 0) => {
+  //   console.log(item, bounds)
+  //   // item.annotationContext.readonly !== true &&
+  //   // props.onClick('Role', {
+  //   //   bounds,
+  //   //   roleIndex,
+  //   //   ...item
+  //   // })
+  // }
+
   return (
     <Fragment>
       {roles.map(item => (
@@ -60,17 +71,13 @@ const FormRole = React.memo(props => {
           annotations={item.annotations}
           value={item.text}
           maxFontSize={20}
-          isReadOnly={item.annotationContext.readonly === true}
-          tooltip={getRoleTooltip(item.annotationContext)}
-          onClick={bounds =>
-            item.annotationContext.readonly !== true &&
-            props.onClick('Role', {
-              bounds,
-              ...item
-            })
-          }
+          readOnly={item.annotationContext.isReadOnly}
+          tooltip={getRoleTooltip(item.annotationContext, true)}
+          onClick={props.onClick.bind(null, item)}
           onSetValues={props.onSetValues}
-        />
+        >
+          <AddRole onClick={props.onClick.bind(null, item)} />
+        </ContextAnnotation>
       ))}
     </Fragment>
   )
@@ -82,4 +89,4 @@ function mapStateToProps({ deals }) {
   }
 }
 
-export default connect(mapStateToProps)(FormRole)
+export default connect(mapStateToProps)(FormRoles)

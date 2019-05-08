@@ -2,9 +2,6 @@ import React, { useRef } from 'react'
 
 import ToolTip from 'components/tooltip'
 
-import IconButton from 'components/Button/IconButton'
-import IconAdd from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
-
 import { calculateWordWrap } from '../../../../utils/word-wrap'
 
 export default function Context(props) {
@@ -67,15 +64,7 @@ export default function Context(props) {
               )}
             </div>
 
-            {props.type === 'role' && (
-              <span style={{ marginLeft: '0.5rem' }}>
-                <ToolTip caption="Add new role" placement="bottom">
-                  <IconButton isFit iconSize="medium">
-                    <IconAdd style={{ fill: appearance.color }} />
-                  </IconButton>
-                </ToolTip>
-              </span>
-            )}
+            {props.children}
           </div>
         )
       })}
