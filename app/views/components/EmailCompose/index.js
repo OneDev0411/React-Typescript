@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
 import { Field } from 'react-final-form'
-import _ from 'underscore'
 
 import { TextEditor } from 'components/TextEditor'
 
@@ -14,6 +13,8 @@ import { normalizeAttachments } from 'components/SelectDealFileDrawer/helpers/no
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+
+import { getSendEmailResultMessages } from 'components/EmailCompose/helpers/email-result-messages'
 
 import Loading from '../../../components/Partials/Loading'
 
@@ -35,27 +36,26 @@ const propTypes = {
   body: PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
   onClickSend: PropTypes.func,
+  /**
+   * function of the form email => email
+   */
+  getEmail: PropTypes.func,
   onClose: PropTypes.func.isRequired,
-  hasDealsAttachments: PropTypes.bool,
-  associations: PropTypes.shape({
-    deal: PropTypes.string,
-    template: PropTypes.string
-  })
+  onSent: PropTypes.func,
+  hasDealsAttachments: PropTypes.bool
 }
 
 const defaultProps = {
+  body: '',
   recipients: [],
   defaultAttachments: [],
   isSubmitDisabled: false,
-  body: '',
   onClickSend: null,
   isSubmitting: false,
+  onSent: () => {},
+  getEmail: email => email,
   hasStaticBody: false,
-  hasDealsAttachments: false,
-  associations: {
-    template: '',
-    deal: ''
-  }
+  hasDealsAttachments: false
 }
 
 class EmailCompose extends React.Component {
@@ -91,13 +91,6 @@ class EmailCompose extends React.Component {
     return this.props.isSubmitting || this.state.isSendingEmail
   }
 
-  get associations() {
-    return _.pick(
-      this.props.associations,
-      value => typeof value === 'string' && value.length > 0
-    )
-  }
-
   isRecipientsChanged = () =>
     (this.formObject.recipients || []).length !==
     (this.props.recipients || []).length
@@ -120,20 +113,16 @@ class EmailCompose extends React.Component {
       recipients: this.normalizeRecipients(values.recipients)
     }
 
-    const handleSubmit = this.props.onClickSend
-      ? this.props.onClickSend
-      : this.handleSendEmail
-
     if ((form.subject || '').trim() === '') {
       return new Promise((resolve, reject) => {
         this.context.setConfirmationModal({
           message: 'Send without subject?',
           description:
-            'This message has no subject. Are you sure you want to send it?',
+            'This email has no subject. Are you sure you want to send it?',
           confirmLabel: 'Send anyway',
           onCancel: reject,
           onConfirm: () => {
-            handleSubmit(form)
+            this.handleSendEmail(form)
               .then(resolve)
               .catch(reject)
           }
@@ -141,7 +130,7 @@ class EmailCompose extends React.Component {
       })
     }
 
-    return handleSubmit(form)
+    return this.handleSendEmail(form)
   }
 
   handleSendEmail = async form => {
@@ -150,36 +139,23 @@ class EmailCompose extends React.Component {
     const email = {
       from: form.fromId,
       to: form.recipients,
-      subject: form.subject.trim(),
+      subject: (form.subject || '').trim(),
       html: form.body,
-      attachments: _.map(form.attachments, item => item.file_id),
-      due_at: form.due_at,
-      ...this.associations
+      attachments: Object.values(form.attachments).map(item => item.file_id),
+      due_at: form.due_at
     }
-    const successMessage = email.due_at
-      ? 'The email has been scheduled'
-      : 'The email has been sent'
-    const errorMessage = 'Could not send the email. try again.'
+    const { successMessage, errorMessage } = getSendEmailResultMessages(
+      form.recipients.length,
+      email.due_at
+    )
 
     try {
       this.setState({
         isSendingEmail: true
       })
-
-      await sendContactsEmail(email)
-
-      dispatch(
-        notify({
-          status: 'success',
-          message: successMessage
-        })
-      )
-
-      this.props.onClose()
+      await sendContactsEmail(this.props.getEmail(email))
     } catch (e) {
-      console.log(e)
-
-      dispatch(
+      return dispatch(
         notify({
           status: 'error',
           message: errorMessage
@@ -190,6 +166,15 @@ class EmailCompose extends React.Component {
         isSendingEmail: false
       })
     }
+
+    dispatch(
+      notify({
+        status: 'success',
+        message: successMessage
+      })
+    )
+
+    this.props.onSent()
   }
 
   normalizeRecipients = recipients =>

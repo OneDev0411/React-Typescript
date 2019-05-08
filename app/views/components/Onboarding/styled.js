@@ -9,6 +9,9 @@ export const Container = styled.div`
   width: 30rem;
   min-height: 3rem;
 `
+export const Row = styled.div`
+  display: flex;
+`
 
 export const Title = styled.div`
   color: #262626;
@@ -22,7 +25,12 @@ export const Section = styled.div`
 `
 
 export const Actions = styled.div`
-  text-align: right;
+  display: flex;
+  justify-content: flex-end;
   margin-top: 1rem;
   margin-right: 0.5rem;
+`
+
+export const Spacer = styled.span`
+  flex: 1 1;
 `

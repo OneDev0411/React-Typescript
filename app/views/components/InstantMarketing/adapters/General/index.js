@@ -1,8 +1,6 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
 
-import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 
 import EmailCompose from 'components/EmailCompose'
@@ -11,20 +9,17 @@ import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers
 import ActionButton from 'components/Button/ActionButton'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
-import { generate_email_request } from '../../helpers/general'
-
 import SocialDrawer from '../../components/SocialDrawer'
 
 class General extends React.Component {
   state = {
     isBuilderOpen: false,
     isComposeEmailOpen: false,
-    isSendingEmail: false,
     isSocialDrawerOpen: false,
     htmlTemplate: '',
     owner: this.props.user,
     emailBody: '',
-    templateInstanceId: '',
+    templateInstance: null,
     isGettingTemplateInstance: false
   }
 
@@ -64,41 +59,19 @@ class General extends React.Component {
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
 
-  handleSendEmails = async (values, form) => {
-    this.setState({
-      isSendingEmail: true
-    })
+  getEmail = email => {
+    const { templateInstance } = this.state
 
-    const email = generate_email_request(values, {
-      html: this.state.htmlTemplate.result
-    })
-
-    if (values.template) {
-      email.template = values.template
+    if (templateInstance == null) {
+      throw new Error(`Template instance is ${typeof templateInstance}!`)
     }
 
-    try {
-      await sendContactsEmail(email, this.state.owner.id)
+    const { html, id: template } = templateInstance
 
-      // reset form
-      if (form) {
-        form.reset()
-      }
-
-      this.props.notify({
-        status: 'success',
-        message: `${
-          values.recipients.length
-          } emails has been sent to your contacts`
-      })
-    } catch (e) {
-      console.log(e)
-      // todo
-    } finally {
-      this.setState({
-        isSendingEmail: false,
-        isComposeEmailOpen: false
-      })
+    return {
+      ...email,
+      html,
+      template
     }
   }
 
@@ -136,7 +109,7 @@ class General extends React.Component {
 
     this.setState({
       emailBody: getTemplateInstancePreviewImage(instance),
-      templateInstanceId: instance.id,
+      templateInstance: instance,
       isGettingTemplateInstance: false
     })
   }
@@ -181,14 +154,11 @@ class General extends React.Component {
           <EmailCompose
             isOpen
             hasStaticBody
-            isSubmitting={this.state.isSendingEmail}
             from={this.state.owner}
             body={this.state.emailBody}
             onClose={this.toggleComposeEmail}
-            onClickSend={this.handleSendEmails}
-            associations={{
-              template: this.state.templateInstanceId
-            }}
+            onSent={this.toggleComposeEmail}
+            getEmail={this.getEmail}
             isSubmitDisabled={this.state.isGettingTemplateInstance}
           />
         )}
@@ -211,7 +181,4 @@ function mapStateToProps({ user }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { notify }
-)(General)
+export default connect(mapStateToProps)(General)

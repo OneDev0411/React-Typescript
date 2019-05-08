@@ -3,28 +3,23 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import idx from 'idx'
 
+import { getContact } from 'models/contacts/get-contact'
 import { normalizeContact } from 'models/email-compose/helpers/normalize-contact'
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
+
+import { confirmation } from 'actions/confirmation'
 
 import InstantMarketing from 'components/InstantMarketing'
 import ActionButton from 'components/Button/ActionButton'
 
-import { confirmation } from 'actions/confirmation'
-
-import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
-
 import EmailCompose from 'components/EmailCompose'
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
-
-import { getContact } from 'models/contacts/get-contact'
-
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
-
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
-import MissingEmailModal from './MissingEmailModal'
+import SocialDrawer from '../../components/SocialDrawer'
 
-import { generate_email_request } from '../../helpers/general'
+import MissingEmailModal from './MissingEmailModal'
 
 class SendContactCard extends React.Component {
   state = {
@@ -34,9 +29,11 @@ class SendContactCard extends React.Component {
     isBuilderOpen: false,
     isComposeEmailOpen: false,
     isSearchDrawerOpen: false,
+    isSocialDrawerOpen: false,
+    socialNetworkName: '',
     owner: this.props.user,
     emailBody: '',
-    templateInstanceId: '',
+    templateInstance: null,
     isGettingTemplateInstance: false
   }
 
@@ -110,7 +107,8 @@ class SendContactCard extends React.Component {
 
   closeBuilder = () => {
     this.setState({
-      isBuilderOpen: false
+      isBuilderOpen: false,
+      isComposeEmailOpen: false
     })
   }
 
@@ -157,48 +155,39 @@ class SendContactCard extends React.Component {
 
     this.setState({
       emailBody: getTemplateInstancePreviewImage(instance),
-      templateInstanceId: instance.id,
+      templateInstance: instance,
       isGettingTemplateInstance: false
     })
   }
 
-  handleSendEmails = async values => {
-    this.setState({
-      isSendingEmail: true
-    })
+  getEmail = email => {
+    const { templateInstance } = this.state
 
-    const email = generate_email_request(values, {
-      html: this.state.htmlTemplate
-    })
-
-    if (values.template) {
-      email.template = values.template
+    if (templateInstance == null) {
+      throw new Error(`Template instance is ${typeof templateInstance}!`)
     }
 
-    try {
-      await sendContactsEmail(email)
+    const { html, id: template } = templateInstance
 
-      this.props.notify({
-        status: 'success',
-        message: `${
-          values.recipients.length
-        } emails has been sent to your contacts`
-      })
-    } catch (e) {
-      console.log(e)
-      // todo
-    } finally {
-      this.setState({
-        isSendingEmail: false,
-        isComposeEmailOpen: false,
-        isBuilderOpen: false
-      })
+    return {
+      ...email,
+      html,
+      template
     }
   }
 
   closeMissingEmailDialog = () => {
     this.setState({
-      isMissingEmailModalOpen: false
+      isMissingEmailModalOpen: false,
+      isComposeEmailOpen: false
+    })
+  }
+
+  handleSocialSharing = (template, socialNetworkName) => {
+    this.setState({
+      htmlTemplate: template,
+      isSocialDrawerOpen: true,
+      socialNetworkName
     })
   }
 
@@ -213,6 +202,11 @@ class SendContactCard extends React.Component {
       readOnly: true
     })
   }
+
+  closeSocialDrawer = () =>
+    this.setState({
+      isSocialDrawerOpen: false
+    })
 
   render() {
     if (hasMarketingAccess(this.props.user) === false) {
@@ -252,6 +246,7 @@ class SendContactCard extends React.Component {
           templateData={{ user: this.props.user, contact: this.state.contact }}
           templateTypes={['Birthday']}
           defaultTemplate={this.props.selectedTemplate}
+          handleSocialSharing={this.handleSocialSharing}
         />
 
         {this.state.isComposeEmailOpen && (
@@ -259,16 +254,22 @@ class SendContactCard extends React.Component {
             isOpen
             hasStaticBody
             disableAddNewRecipient
-            isSubmitting={this.state.isSendingEmail}
             from={this.state.owner}
             recipients={this.Recipients}
             body={this.state.emailBody}
+            onSent={this.closeBuilder}
             onClose={this.toggleComposeEmail}
-            onClickSend={this.handleSendEmails}
-            associations={{
-              template: this.state.templateInstanceId
-            }}
+            getEmail={this.getEmail}
             isSubmitDisabled={this.state.isGettingTemplateInstance}
+          />
+        )}
+
+        {this.state.isSocialDrawerOpen && (
+          <SocialDrawer
+            template={this.state.htmlTemplate}
+            templateInstanceData={this.TemplateInstanceData}
+            socialNetworkName={this.state.socialNetworkName}
+            onClose={this.closeSocialDrawer}
           />
         )}
       </Fragment>

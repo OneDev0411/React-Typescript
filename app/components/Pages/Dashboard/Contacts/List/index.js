@@ -303,15 +303,7 @@ class ContactsList extends React.Component {
 
     this.setState({ isFetchingMoreContacts: true })
 
-    if (this.hasSearchState()) {
-      await this.fetchList(start)
-    } else {
-      await this.handleFilterChange({
-        filters: this.props.filters,
-        searchInputValue: this.state.searchInputValue,
-        start
-      })
-    }
+    await this.fetchList(start)
 
     this.setState({ isFetchingMoreContacts: false })
   }
@@ -340,16 +332,7 @@ class ContactsList extends React.Component {
 
     this.setState({ isFetchingMoreContactsBefore: true })
 
-    if (this.hasSearchState()) {
-      await this.fetchList(start, true)
-    } else {
-      await this.handleFilterChange({
-        filters: this.props.filters,
-        searchInputValue: this.state.searchInputValue,
-        start,
-        prependResult: true
-      })
-    }
+    await this.fetchList(start, true)
 
     this.setState({ isFetchingMoreContactsBefore: false })
   }

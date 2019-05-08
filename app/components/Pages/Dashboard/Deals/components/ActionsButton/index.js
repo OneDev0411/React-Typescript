@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import { addNotification as notify } from 'reapop'
 import Downshift from 'downshift'
 
 import _ from 'underscore'
@@ -10,8 +9,8 @@ import _ from 'underscore'
 import {
   changeNeedsAttention,
   changeTaskStatus,
-  setSelectedTask,
-  renameTaskFile
+  renameTaskFile,
+  setSelectedTask
 } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 import { isBackOffice } from 'utils/user-teams'
@@ -51,10 +50,10 @@ import UploadManager from '../../UploadManager'
 
 import {
   Container,
-  PrimaryAction,
   MenuButton,
   MenuContainer,
-  MenuItem
+  MenuItem,
+  PrimaryAction
 } from './styled'
 
 class ActionsButton extends React.Component {
@@ -463,6 +462,7 @@ class ActionsButton extends React.Component {
             from={this.props.user}
             deal={this.props.deal}
             onClose={this.handleToggleComposeEmail}
+            onSent={this.handleToggleComposeEmail}
           />
         )}
 
@@ -504,7 +504,6 @@ export default connect(
     changeTaskStatus,
     setSelectedTask,
     renameTaskFile,
-    confirmation,
-    notify
+    confirmation
   }
 )(ActionsButton)

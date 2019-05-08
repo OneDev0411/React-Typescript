@@ -33,7 +33,7 @@ export async function postLoadFormat(task, owner, listing) {
       location,
       reminder,
       task_type: 'Open House',
-      title: addressTitle(listing.property.address)
+      title: (listing && addressTitle(listing.property.address)) || ''
     }
   }
 

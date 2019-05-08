@@ -10,6 +10,11 @@ function SendEmailButton(props) {
   const [isOpen, setIsOpen] = useState(false)
   const toggleOpenDrawer = () => setIsOpen(!isOpen)
 
+  const getEmail = email => ({
+    ...email,
+    deal: deal != null && deal.id
+  })
+
   return (
     <Fragment>
       <ActionButton
@@ -28,10 +33,9 @@ function SendEmailButton(props) {
           from={props.user}
           deal={deal}
           onClose={toggleOpenDrawer}
+          onSent={toggleOpenDrawer}
           hasDealsAttachments
-          associations={{
-            deal: deal != null && deal.id
-          }}
+          getEmail={getEmail}
         />
       )}
     </Fragment>

@@ -1,9 +1,7 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
 
 import Listing from 'models/listings/listing'
-import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 
 import EmailCompose from 'components/EmailCompose'
@@ -15,7 +13,6 @@ import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers
 
 import SocialDrawer from '../../components/SocialDrawer'
 import { getTemplateTypes } from '../../helpers/get-template-types'
-import { generate_email_request } from '../../helpers/general'
 
 const initialState = {
   owner: null,
@@ -26,7 +23,7 @@ const initialState = {
   htmlTemplate: '',
   socialNetworkName: '',
   emailBody: '',
-  templateInstanceId: '',
+  templateInstance: null,
   isGettingTemplateInstance: false
 }
 
@@ -76,45 +73,30 @@ class SendDealPromotion extends React.Component {
     })
   }
 
-  handleSendEmails = async values => {
-    this.setState({
-      isSendingEmail: true
-    })
+  getEmail = email => {
+    const { templateInstance } = this.state
 
-    const email = generate_email_request(values, {
-      html: this.state.htmlTemplate.result
-    })
-
-    if (values.template) {
-      email.template = values.template
+    if (templateInstance == null) {
+      throw new Error(`Template instance is ${typeof templateInstance}!`)
     }
 
-    if (values.deal) {
-      email.deal = values.deal
-    }
+    const { html, id: template } = templateInstance
 
-    try {
-      await sendContactsEmail(email, this.state.owner.id)
-
-      this.props.dispatch(
-        notify({
-          status: 'success',
-          message: `${
-            values.recipients.length
-            } emails has been sent to your contacts`
-        })
-      )
-    } catch (e) {
-      console.log(e)
-      // todo
-    } finally {
-      this.setState(state => ({
-        ...initialState,
-        // If the user wants to send some new emails for current deal listing
-        // we still need the listing data web#2461
-        listing: state.listing
-      }))
+    return {
+      ...email,
+      html,
+      template,
+      deal: this.props.deal.id
     }
+  }
+
+  onEmailSent = () => {
+    this.setState(state => ({
+      ...initialState,
+      // If the user wants to send some new emails for current deal listing
+      // we still need the listing data web#2461
+      listing: state.listing
+    }))
   }
 
   generatePreviewImage = async template => {
@@ -127,7 +109,7 @@ class SendDealPromotion extends React.Component {
 
     this.setState({
       emailBody: getTemplateInstancePreviewImage(instance),
-      templateInstanceId: instance.id,
+      templateInstance: instance,
       isGettingTemplateInstance: false
     })
   }
@@ -215,16 +197,12 @@ class SendDealPromotion extends React.Component {
           <EmailCompose
             isOpen
             hasStaticBody
-            isSubmitting={this.state.isSendingEmail}
             from={this.state.owner}
             recipients={this.props.recipients}
             body={this.state.emailBody}
-            onClickSend={this.handleSendEmails}
+            getEmail={this.getEmail}
+            onSent={this.onEmailSent}
             onClose={this.toggleComposeEmail}
-            associations={{
-              template: this.state.templateInstanceId,
-              deal: this.props.deal.id
-            }}
             isSubmitDisabled={this.state.isGettingTemplateInstance}
           />
         )}

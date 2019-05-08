@@ -7,10 +7,10 @@ import { getStatusColor } from 'utils/listing'
 import IconHome from 'components/SvgIcons/NewHome/IconHome'
 import Avatar from 'components/Avatar'
 
-import openDeal from '../../../../utils/open-deal'
 import DealSide from '../Side'
 
 import { Container, Name, SubAddress, Dot, IconContainer, Link } from './styled'
+import onDealOpened from '../../../../utils/on-deal-opened'
 
 const Address = ({ deal, roles, rowIndex, totalRows }) => {
   const status = Deal.get.status(deal)
@@ -29,10 +29,7 @@ const Address = ({ deal, roles, rowIndex, totalRows }) => {
       </Container>
 
       <Name>
-        <Link
-          onClick={() => openDeal(deal.id)}
-          to={`/dashboard/deals/${deal.id}`}
-        >
+        <Link onClick={onDealOpened} to={`/dashboard/deals/${deal.id}`}>
           {deal.title}
         </Link>
         <SubAddress className="hover-color--black">

@@ -7,7 +7,8 @@ import IconButton from '../Button/IconButton'
 import IconDelete from '../SvgIcons/DeleteOutline/IconDeleteOutline'
 import Alert from '../../../components/Pages/Dashboard/Partials/Alert'
 
-import { Container, Input } from './styled'
+import { Container } from './styled'
+import { TextEditor } from '../TextEditor'
 
 const propTypes = {
   ...Drawer.propTypes,
@@ -24,8 +25,8 @@ export class EditNoteDrawer extends React.Component {
     text: this.props.note.text
   }
 
-  onChange = event => {
-    this.setState({ text: event.target.value })
+  onChange = value => {
+    this.setState({ text: value })
   }
 
   onSubmit = async () => {
@@ -65,10 +66,10 @@ export class EditNoteDrawer extends React.Component {
         <Drawer.Header title="Edit Note" />
         <Drawer.Body style={{ overflow: 'hidden' }}>
           <Container>
-            <Input
-              value={this.state.text}
-              onChange={this.onChange}
+            <TextEditor
               disabled={isSaving}
+              defaultValue={this.state.text}
+              onChange={this.onChange}
             />
             {this.state.error && (
               <Alert type="error" message={this.state.error.message} />
