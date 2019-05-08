@@ -44,7 +44,9 @@ export function ContextInlineEdit(props) {
   return (
     <ClickOutside onClickOutside={props.onDismiss}>
       <Container position={getPosition(bounds)}>
-        {type === 'Role' && <RolesEdit {...sharedProps} />}
+        {type === 'Role' && (
+          <RolesEdit {...sharedProps} onClose={props.onDismiss} />
+        )}
       </Container>
     </ClickOutside>
   )

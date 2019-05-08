@@ -21,7 +21,7 @@ const propTypes = {
   onClose: PropTypes.func.isRequired,
   onFormSubmit: PropTypes.func.isRequired,
   deal: PropTypes.object.isRequired,
-  form: PropTypes.object.isRequired,
+  form: PropTypes.object,
   allowedRoles: PropTypes.array,
   formOptions: PropTypes.object,
   isRoleRemovable: PropTypes.bool,
@@ -29,6 +29,7 @@ const propTypes = {
 }
 
 const defaultProps = {
+  form: null,
   formOptions: {},
   isRoleRemovable: false,
   isSubmitting: false,
