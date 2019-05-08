@@ -132,6 +132,8 @@ class OpenHouseDrawerInternal extends React.Component {
     }
 
     if (this.props.openHouse) {
+      this.setState({ isDisabled: false })
+
       return this.props.openHouse
     }
 
@@ -142,16 +144,18 @@ class OpenHouseDrawerInternal extends React.Component {
         // get template if exists
         const template = openHouse.metadata ? openHouse.metadata.template : null
 
-        this.setState({ openHouse, template })
+        this.setState({ isDisabled: false, openHouse, template })
 
         return openHouse
       } catch (error) {
         console.log(error)
-        this.setState({ isDisabled: false, error })
+        this.setState({ error })
       }
     }
 
     if (this.state.error == null) {
+      this.setState({ isDisabled: false })
+
       this.loadRegistrationTemplate()
     }
 
