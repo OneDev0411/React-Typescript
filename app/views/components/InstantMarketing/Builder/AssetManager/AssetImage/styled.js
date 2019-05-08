@@ -21,7 +21,8 @@ export const CropButton = styled.div`
   border-radius: 3px;
 
   :hover {
-    color: ${primary};
+    color: #fff;
+    background: ${primary};
   }
 `
 
