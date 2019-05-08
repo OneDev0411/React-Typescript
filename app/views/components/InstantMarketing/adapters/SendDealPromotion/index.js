@@ -2,15 +2,16 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
 import Listing from 'models/listings/listing'
+import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 
 import EmailCompose from 'components/EmailCompose'
 import ActionButton from 'components/Button/ActionButton'
 import InstantMarketing from 'components/InstantMarketing'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
+import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 
 import SocialDrawer from '../../components/SocialDrawer'
-import { getTemplatePreviewImage } from '../../helpers/get-template-preview-image'
 import { getTemplateTypes } from '../../helpers/get-template-types'
 
 const initialState = {
@@ -20,8 +21,10 @@ const initialState = {
   isComposeEmailOpen: false,
   isSocialDrawerOpen: false,
   htmlTemplate: '',
-  templateScreenshot: null,
-  socialNetworkName: ''
+  socialNetworkName: '',
+  emailBody: '',
+  templateInstance: null,
+  isGettingTemplateInstance: false
 }
 
 class SendDealPromotion extends React.Component {
@@ -58,7 +61,7 @@ class SendDealPromotion extends React.Component {
       isComposeEmailOpen: true,
       isInstantMarketingBuilderOpen: true,
       htmlTemplate: template,
-      templateScreenshot: null
+      emailBody: ''
     })
   }
 
@@ -70,10 +73,22 @@ class SendDealPromotion extends React.Component {
     })
   }
 
-  getEmail = email => ({
-    ...email,
-    html: this.state.htmlTemplate.result
-  })
+  getEmail = email => {
+    const { templateInstance } = this.state
+
+    if (templateInstance == null) {
+      throw new Error(`Template instance is ${typeof templateInstance}!`)
+    }
+
+    const { html, id: template } = templateInstance
+
+    return {
+      ...email,
+      html,
+      template,
+      deal: this.props.deal.id
+    }
+  }
 
   onEmailSent = () => {
     this.setState(state => ({
@@ -85,13 +100,17 @@ class SendDealPromotion extends React.Component {
   }
 
   generatePreviewImage = async template => {
-    const templateScreenshot = await getTemplatePreviewImage(
-      template,
-      this.TemplateInstanceData
-    )
+    this.setState({ isGettingTemplateInstance: true })
+
+    const instance = await getTemplateInstances(template.id, {
+      ...this.TemplateInstanceData,
+      html: template.result
+    })
 
     this.setState({
-      templateScreenshot
+      emailBody: getTemplateInstancePreviewImage(instance),
+      templateInstance: instance,
+      isGettingTemplateInstance: false
     })
   }
 
@@ -180,10 +199,11 @@ class SendDealPromotion extends React.Component {
             hasStaticBody
             from={this.state.owner}
             recipients={this.props.recipients}
-            body={this.state.templateScreenshot}
+            body={this.state.emailBody}
             getEmail={this.getEmail}
             onSent={this.onEmailSent}
             onClose={this.toggleComposeEmail}
+            isSubmitDisabled={this.state.isGettingTemplateInstance}
           />
         )}
 

@@ -1,6 +1,5 @@
 import { getReminderItem } from 'views/utils/reminder'
-
-import { getAssociations } from './get-associations'
+import { normalizeAssociations } from 'views/utils/association-normalizers'
 
 /**
  * Format form data for api model
@@ -50,7 +49,11 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
     task.assignees = []
   }
 
-  task.associations = await getAssociations(task)
+  if (Array.isArray(task.associations)) {
+    task.associations = normalizeAssociations(task.associations)
+  } else {
+    task.associations = []
+  }
 
   return {
     ...task,

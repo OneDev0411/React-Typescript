@@ -35,11 +35,11 @@ export function Footer(props) {
 
         <ActionButton
           type="submit"
-          disabled={props.isSubmitting}
+          disabled={props.submitting || props.isSubmitDisabled}
           onClick={props.handleSubmit}
         >
           {textForSubmitButton({
-            isSubmitting: props.isSubmitting,
+            isSubmitting: props.submitting,
             isDateSet: isScheduled
           })}
         </ActionButton>

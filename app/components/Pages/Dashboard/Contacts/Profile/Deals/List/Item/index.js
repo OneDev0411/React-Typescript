@@ -17,6 +17,8 @@ import {
   getAddress
 } from 'models/Deal/helpers/context'
 
+import { goTo } from 'utils/go-to'
+
 import { roleName } from '../../../../../Deals/utils/roles'
 
 import { Container, Price, Status, Address, Role } from './styled'
@@ -38,6 +40,12 @@ class Item extends React.Component {
   componentDidMount() {
     this.searchRoles()
   }
+
+  handleOnClickItem = () =>
+    goTo(
+      `/dashboard/deals/${this.props.item.id}`,
+      `Contact - ${this.props.contact.display_name}`
+    )
 
   searchRoles = async () => {
     const { item, contact, attributeDefs } = this.props
@@ -94,7 +102,7 @@ class Item extends React.Component {
     const contactRoleName = roles.map(role => roleName(role.role)).join(', ')
 
     return (
-      <Container onClick={() => this.props.handleOnClickItem(item)}>
+      <Container onClick={this.handleOnClickItem}>
         <Avatar {...avatar} />
         <div style={{ marginLeft: '1rem', width: 'calc(100% - 3rem)' }}>
           <Flex alignCenter justifyBetween style={{ marginBottom: '0.5em' }}>

@@ -34,6 +34,13 @@ export function normalizeAssociations(associations) {
           ...record,
           listing
         }
+      case 'email':
+        const email = normalizeEmail(record.email)
+
+        return {
+          ...record,
+          email
+        }
       default:
         return null
     }
@@ -131,6 +138,34 @@ export const normalizeDeal = (deal, showStatus = true) => {
     title: `Deal - ${deal.deal_type}, ${deal.property_type}`,
     type: deal.type,
     url: `/dashboard/deals/${deal.id}`
+  }
+}
+
+/**
+ * Normalizing email entity as an association object
+ * @param {object} email The Email
+ * @param {boolean} showStatus
+ * @returns {object} a normalized association
+ */
+export const normalizeEmail = email => {
+  if (!email) {
+    return null
+  }
+
+  let img = ''
+  let body = email.text
+  const { template } = email
+
+  if (template) {
+    body = template.template && template.template.template_type
+    img = template.file && template.file.preview_url
+  }
+
+  return {
+    body,
+    id: email.id,
+    img,
+    subject: email.subject
   }
 }
 

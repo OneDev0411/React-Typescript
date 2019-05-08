@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
 import { Field } from 'react-final-form'
-import _ from 'underscore'
 
 import { TextEditor } from 'components/TextEditor'
 
@@ -25,6 +24,39 @@ import { MultipleContactsSelect } from '../Forms/MultipleContactsSelect'
 import { AttachmentsList } from './fields/Attachments'
 
 import { Footer } from './Footer'
+
+const propTypes = {
+  deal: PropTypes.shape(),
+  from: PropTypes.object.isRequired,
+  recipients: PropTypes.array,
+  isSubmitting: PropTypes.bool,
+  isSubmitDisabled: PropTypes.bool,
+  defaultAttachments: PropTypes.array,
+  hasStaticBody: PropTypes.bool,
+  body: PropTypes.string,
+  isOpen: PropTypes.bool.isRequired,
+  onClickSend: PropTypes.func,
+  /**
+   * function of the form email => email
+   */
+  getEmail: PropTypes.func,
+  onClose: PropTypes.func.isRequired,
+  onSent: PropTypes.func,
+  hasDealsAttachments: PropTypes.bool
+}
+
+const defaultProps = {
+  body: '',
+  recipients: [],
+  defaultAttachments: [],
+  isSubmitDisabled: false,
+  onClickSend: null,
+  isSubmitting: false,
+  onSent: () => {},
+  getEmail: email => email,
+  hasStaticBody: false,
+  hasDealsAttachments: false
+}
 
 class EmailCompose extends React.Component {
   state = {
@@ -77,6 +109,7 @@ class EmailCompose extends React.Component {
   handleSubmit = async values => {
     const form = {
       ...values,
+      ...this.associations,
       recipients: this.normalizeRecipients(values.recipients)
     }
 
@@ -101,12 +134,14 @@ class EmailCompose extends React.Component {
   }
 
   handleSendEmail = async form => {
+    const { dispatch } = this.props
+
     const email = {
       from: form.fromId,
       to: form.recipients,
       subject: (form.subject || '').trim(),
       html: form.body,
-      attachments: _.map(form.attachments, item => item.file_id),
+      attachments: Object.values(form.attachments).map(item => item.file_id),
       due_at: form.due_at
     }
     const { successMessage, errorMessage } = getSendEmailResultMessages(
@@ -120,20 +155,24 @@ class EmailCompose extends React.Component {
       })
       await sendContactsEmail(this.props.getEmail(email))
     } catch (e) {
-      return this.props.notify({
-        status: 'error',
-        message: errorMessage
-      })
+      return dispatch(
+        notify({
+          status: 'error',
+          message: errorMessage
+        })
+      )
     } finally {
       this.setState({
         isSendingEmail: false
       })
     }
 
-    this.props.notify({
-      status: 'success',
-      message: successMessage
-    })
+    dispatch(
+      notify({
+        status: 'success',
+        message: successMessage
+      })
+    )
 
     this.props.onSent()
   }
@@ -179,11 +218,11 @@ class EmailCompose extends React.Component {
         submitButtonLabel="Send"
         submittingButtonLabel="Sending ..."
         title="New Email"
+        isSubmitDisabled={this.props.isSubmitDisabled}
         footerRenderer={data => (
           <Footer
             {...data}
             initialAttachments={this.initialAttachments}
-            isSubmitting={this.IsSubmitting}
             deal={this.props.deal}
             hasDealsAttachments={this.props.hasDealsAttachments}
           />
@@ -236,37 +275,7 @@ class EmailCompose extends React.Component {
   }
 }
 
-EmailCompose.propTypes = {
-  from: PropTypes.object.isRequired,
-  recipients: PropTypes.array,
-  isSubmitting: PropTypes.bool,
-  defaultAttachments: PropTypes.array,
-  hasStaticBody: PropTypes.bool,
-  body: PropTypes.string,
-  isOpen: PropTypes.bool.isRequired,
-  onClickSend: PropTypes.func,
-  /**
-   * function of the form email => email
-   */
-  getEmail: PropTypes.func,
-  onClose: PropTypes.func.isRequired,
-  onSent: PropTypes.func,
-  hasDealsAttachments: PropTypes.bool
-}
+EmailCompose.propTypes = propTypes
+EmailCompose.defaultProps = defaultProps
 
-EmailCompose.defaultProps = {
-  recipients: [],
-  defaultAttachments: [],
-  body: '',
-  onClickSend: null,
-  isSubmitting: false,
-  onSent: () => {},
-  getEmail: email => email,
-  hasStaticBody: false,
-  hasDealsAttachments: false
-}
-
-export default connect(
-  null,
-  { notify }
-)(EmailCompose)
+export default connect()(EmailCompose)

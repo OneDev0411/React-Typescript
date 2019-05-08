@@ -2,8 +2,8 @@ import IconCall from '../../components/SvgIcons/CallOutline/IconCallOutline'
 import IconFollowUp from '../../components/SvgIcons/FollowUp/IconFollowUp'
 import Text from '../../components/SvgIcons/Text/IconText'
 import Chat from '../../components/SvgIcons/Chat/IconChat'
-import IconMessage from '../../components/SvgIcons/EmailOutline/IconEmailOutline'
-import Email from '../../components/SvgIcons/AtSign/IconAtSign'
+import Email from '../../components/SvgIcons/EmailOutline/IconEmailOutline'
+import IconMessage from '../../components/SvgIcons/Mail/IconMail'
 import OpenHouse from '../../components/SvgIcons/OpenHouse/IconOpenHouse'
 import Tour from '../../components/SvgIcons/Tour/IconTour'
 import Other from '../../components/SvgIcons/MenuRounded/IconMenuRounded'
@@ -11,8 +11,7 @@ import Closing from '../../components/SvgIcons/Closing/IconClosing'
 import IconInPerson from '../../components/SvgIcons/InPerson/IconInPerson'
 import IconTodo from '../../components/SvgIcons/Todo/IconTodo'
 import IconListingAppointment from '../../components/SvgIcons/ListingAppointment/IconListingAppointment'
-import IconTaskCritical
-  from '../../components/SvgIcons/TaskCritical/IconTaskCritical'
+import IconTaskCritical from '../../components/SvgIcons/TaskCritical/IconTaskCritical'
 
 function getIcons() {
   const icons = {}
@@ -40,12 +39,12 @@ function getIcons() {
     {
       name: 'Mail',
       icon: IconMessage,
-      color: '#8F6CF0'
+      color: '#7ED321'
     },
     {
       name: 'Email',
       icon: Email,
-      color: '#7ED321'
+      color: '#8F6CF0'
     },
     {
       name: 'Open House',

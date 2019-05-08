@@ -3,21 +3,18 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import idx from 'idx'
 
+import { getContact } from 'models/contacts/get-contact'
 import { normalizeContact } from 'models/email-compose/helpers/normalize-contact'
+import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
+
+import { confirmation } from 'actions/confirmation'
 
 import InstantMarketing from 'components/InstantMarketing'
 import ActionButton from 'components/Button/ActionButton'
 
-import { confirmation } from 'actions/confirmation'
-
 import EmailCompose from 'components/EmailCompose'
-
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
-
-import { getContact } from 'models/contacts/get-contact'
-
-import { getTemplatePreviewImage } from 'components/InstantMarketing/helpers/get-template-preview-image'
-
+import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
 import SocialDrawer from '../../components/SocialDrawer'
@@ -34,7 +31,10 @@ class SendContactCard extends React.Component {
     isSearchDrawerOpen: false,
     isSocialDrawerOpen: false,
     socialNetworkName: '',
-    owner: this.props.user
+    owner: this.props.user,
+    emailBody: '',
+    templateInstance: null,
+    isGettingTemplateInstance: false
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -140,23 +140,41 @@ class SendContactCard extends React.Component {
       owner,
       isComposeEmailOpen: true,
       isBuilderOpen: true,
-      htmlTemplate: template.result,
+      template,
       templateScreenshot: null
     })
   }
 
-  generatePreviewImage = async template =>
-    this.setState({
-      templateScreenshot: await getTemplatePreviewImage(
-        template,
-        this.TemplateInstanceData
-      )
+  generatePreviewImage = async template => {
+    this.setState({ isGettingTemplateInstance: true })
+
+    const instance = await getTemplateInstances(template.id, {
+      ...this.TemplateInstanceData,
+      html: template.result
     })
 
-  getEmail = email => ({
-    ...email,
-    html: this.state.htmlTemplate
-  })
+    this.setState({
+      emailBody: getTemplateInstancePreviewImage(instance),
+      templateInstance: instance,
+      isGettingTemplateInstance: false
+    })
+  }
+
+  getEmail = email => {
+    const { templateInstance } = this.state
+
+    if (templateInstance == null) {
+      throw new Error(`Template instance is ${typeof templateInstance}!`)
+    }
+
+    const { html, id: template } = templateInstance
+
+    return {
+      ...email,
+      html,
+      template
+    }
+  }
 
   closeMissingEmailDialog = () => {
     this.setState({
@@ -238,10 +256,11 @@ class SendContactCard extends React.Component {
             disableAddNewRecipient
             from={this.state.owner}
             recipients={this.Recipients}
-            body={this.state.templateScreenshot}
+            body={this.state.emailBody}
             onSent={this.closeBuilder}
             onClose={this.toggleComposeEmail}
             getEmail={this.getEmail}
+            isSubmitDisabled={this.state.isGettingTemplateInstance}
           />
         )}
 

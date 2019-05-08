@@ -1,7 +1,8 @@
 import { getReminderItem } from 'views/utils/reminder'
-
-import { getAssociations } from '../../../EventDrawer/helpers/get-associations'
-import { normalizeListing } from '../../../../utils/association-normalizers'
+import {
+  normalizeListing,
+  normalizeAssociations
+} from 'views/utils/association-normalizers'
 
 /**
  * Format form data for api model
@@ -47,7 +48,11 @@ export async function postLoadFormat(task, owner, listings) {
     }
   }
 
-  const allAssociations = await getAssociations(task)
+  let allAssociations = []
+
+  if (Array.isArray(task.associations)) {
+    allAssociations = normalizeAssociations(task.associations)
+  }
 
   if (allAssociations.length > 0) {
     allAssociations.forEach(a => {

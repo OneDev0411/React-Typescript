@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 import { Field } from 'react-final-form'
 
+import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
+
 import { createTask } from 'models/tasks/create-task'
 import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 
@@ -15,7 +17,6 @@ import {
   WhenFieldChanges
 } from 'components/final-form-fields'
 
-import { QUERY } from 'components/EventDrawer/index.js'
 import LoadSaveReinitializeForm from 'views/utils/LoadSaveReinitializeForm'
 
 import { preSaveFormat } from './helpers/pre-save-format'
@@ -42,7 +43,7 @@ export default class Task extends Component {
 
   save = async task => {
     try {
-      const newTask = await createTask(task, QUERY)
+      const newTask = await createTask(task, CRM_TASKS_QUERY)
 
       return this.props.submitCallback(newTask)
     } catch (error) {

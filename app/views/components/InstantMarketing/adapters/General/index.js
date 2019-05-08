@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
+import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
+
 import EmailCompose from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
-import { getTemplatePreviewImage } from 'components/InstantMarketing/helpers/get-template-preview-image'
+import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import ActionButton from 'components/Button/ActionButton'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
@@ -15,8 +17,10 @@ class General extends React.Component {
     isComposeEmailOpen: false,
     isSocialDrawerOpen: false,
     htmlTemplate: '',
-    templateScreenshot: null,
-    owner: this.props.user
+    owner: this.props.user,
+    emailBody: '',
+    templateInstance: null,
+    isGettingTemplateInstance: false
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -55,10 +59,21 @@ class General extends React.Component {
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
 
-  getEmail = email => ({
-    ...email,
-    html: this.state.htmlTemplate.result
-  })
+  getEmail = email => {
+    const { templateInstance } = this.state
+
+    if (templateInstance == null) {
+      throw new Error(`Template instance is ${typeof templateInstance}!`)
+    }
+
+    const { html, id: template } = templateInstance
+
+    return {
+      ...email,
+      html,
+      template
+    }
+  }
 
   handleSocialSharing = template => {
     this.setState({
@@ -80,14 +95,24 @@ class General extends React.Component {
       isComposeEmailOpen: true,
       isBuilderOpen: true,
       htmlTemplate: template,
-      templateScreenshot: null
+      emailBody: ''
     })
   }
 
-  generatePreviewImage = async template =>
-    this.setState({
-      templateScreenshot: await getTemplatePreviewImage(template)
+  generatePreviewImage = async template => {
+    this.setState({ isGettingTemplateInstance: true })
+
+    const instance = await getTemplateInstances(template.id, {
+      ...this.TemplateInstanceData,
+      html: template.result
     })
+
+    this.setState({
+      emailBody: getTemplateInstancePreviewImage(instance),
+      templateInstance: instance,
+      isGettingTemplateInstance: false
+    })
+  }
 
   get TemplateInstanceData() {
     return {
@@ -130,10 +155,11 @@ class General extends React.Component {
             isOpen
             hasStaticBody
             from={this.state.owner}
-            body={this.state.templateScreenshot}
+            body={this.state.emailBody}
             onClose={this.toggleComposeEmail}
             onSent={this.toggleComposeEmail}
             getEmail={this.getEmail}
+            isSubmitDisabled={this.state.isGettingTemplateInstance}
           />
         )}
 
