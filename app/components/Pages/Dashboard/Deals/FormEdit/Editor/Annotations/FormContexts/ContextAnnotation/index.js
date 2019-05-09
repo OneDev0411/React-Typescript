@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { Fragment, useRef } from 'react'
 
 import ToolTip from 'components/tooltip'
 
@@ -33,8 +33,18 @@ export default function Context(props) {
           width: `${rect.width}px`,
           height: `${rect.height}px`,
           backgroundColor: props.readOnly ? 'transparent' : '#d2e5f2',
-          cursor: props.readOnly ? 'auto' : 'pointer',
+          cursor: props.isReadOnly ? 'auto' : 'pointer',
           lineHeight: 'normal'
+        }
+
+        if (props.annotationRenderer) {
+          return props.annotationRenderer({
+            style,
+            appearance,
+            rect,
+            values,
+            fontSize
+          })
         }
 
         return (
@@ -43,7 +53,6 @@ export default function Context(props) {
             id={props.annotations[index].fieldName}
             ref={container}
             style={style}
-            readOnly={props.isReadOnly}
           >
             <div style={{ display: 'inline-block' }}>
               {props.type === 'role' && values[index] ? (

@@ -2,6 +2,11 @@ import React, { Fragment, useState, useEffect } from 'react'
 import _ from 'underscore'
 
 import DealContext from 'models/Deal/helpers/dynamic-context'
+import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
+
+import { upsertContexts } from 'actions/deals'
+
+import store from '../../../../../../../../../stores'
 
 import { getAnnotationsValues } from '../../../../utils/word-wrap'
 
@@ -9,6 +14,11 @@ import ContextAnnotation from '../ContextAnnotation'
 
 export function FormContext(props) {
   const [contexts, setContexts] = useState([])
+
+  const handleSaveAddress = async address => {
+    console.log(address)
+    store.dispatch(upsertContexts(props.deal, address))
+  }
 
   useEffect(() => {
     const grouped = {}
@@ -62,22 +72,66 @@ export function FormContext(props) {
 
   return (
     <Fragment>
-      {contexts.map(context => (
-        <ContextAnnotation
-          key={`${context.name}-${context.id}`}
-          maxFontSize={20}
-          value={context.value}
-          annotations={context.annotations}
-          tooltip={getTooltip(context)}
-          isReadOnly={context.isAddressField && context.isDealConnectedToMls}
-          onClick={bounds =>
-            props.onClick('Context', {
-              bounds,
-              ...context
-            })
-          }
-        />
-      ))}
+      {contexts.map(context => {
+        const key = `${context.name}-${context.id}`
+        const sharedProps = {
+          maxFontSize: 20,
+          value: context.value,
+          annotations: context.annotations
+        }
+
+        if (context.isAddressField) {
+          return (
+            <ContextAnnotation
+              {...sharedProps}
+              key={key}
+              annotationRenderer={props => (
+                <InlineAddressField
+                  style={{
+                    top: props.style.top,
+                    left: props.style.left,
+                    width: '300px'
+                  }}
+                  suggestionsStyle={{
+                    top: 'calc(100% + 1rem)'
+                  }}
+                  formStyle={{
+                    top: 'calc(100% + 1rem)'
+                  }}
+                  handleSubmit={handleSaveAddress}
+                  // address={props.value}
+                  renderSearchField={inputProps => (
+                    <input
+                      {...inputProps}
+                      style={{
+                        ...props.style,
+                        border: 'none',
+                        top: '0',
+                        left: 0
+                      }}
+                    />
+                  )}
+                />
+              )}
+            />
+          )
+        }
+
+        return (
+          <ContextAnnotation
+            {...sharedProps}
+            key={key}
+            tooltip={getTooltip(context)}
+            isReadOnly={context.isAddressField && context.isDealConnectedToMls}
+            onClick={bounds =>
+              props.onClick('Context', {
+                bounds,
+                ...context
+              })
+            }
+          />
+        )
+      })}
     </Fragment>
   )
 }
