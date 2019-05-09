@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 import { addNotification as notify } from 'reapop'
 
-import { saveSubmission, getDeal, getForms } from 'actions/deals'
+import { saveSubmission, getDeal, getForms, getContexts } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
 import { getPdfSize } from 'models/Deal/form'
@@ -56,19 +56,31 @@ class EditDigitalForm extends React.Component {
   }
 
   initialize = async () => {
-    const { deal } = this.props
+    let { deal } = this.props
 
     try {
       if (!deal || !deal.checklists) {
-        await this.props.getDeal(this.props.params.id)
+        deal = await this.props.getDeal(this.props.params.id)
       }
     } catch (e) {
       return browserHistory.push('/dashboard/deals')
     }
 
+    await this.fetchContexts(deal)
+
     if (!this.state.pdfDocument) {
       this.loadPdfDocument()
     }
+  }
+
+  fetchContexts = async deal => {
+    const brandId = deal.brand.id
+
+    if (this.props.contexts[brandId]) {
+      return false
+    }
+
+    return this.props.getContexts(brandId)
   }
 
   loadPdfDocument = async () => {
@@ -259,13 +271,14 @@ function mapStateToProps({ deals, user }, props) {
     user,
     task: selectTaskById(deals.tasks, props.params.taskId),
     deal: selectDealById(deals.list, props.params.id),
-    forms: deals.forms
+    forms: deals.forms,
+    contexts: deals.contexts
   }
 }
 
 export default withRouter(
   connect(
     mapStateToProps,
-    { saveSubmission, getDeal, getForms, notify, confirmation }
+    { saveSubmission, getDeal, getForms, getContexts, notify, confirmation }
   )(EditDigitalForm)
 )
