@@ -81,7 +81,7 @@ export class EventDrawer extends Component {
 
     this.isNew =
       (!props.event && !props.eventId) ||
-      Object(this.props.initialValues).length > 0
+      Object.keys(this.props.initialValues).length > 0
   }
 
   load = async () => {
