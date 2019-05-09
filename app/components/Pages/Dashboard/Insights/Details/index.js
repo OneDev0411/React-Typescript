@@ -97,9 +97,9 @@ function Details(props) {
 
   return (
     <PageWrapper>
-      {/* <Helmet>
-        <title>Campaign Details</title>
-      </Helmet> */}
+      <Helmet>
+        <title>Campaign Details | Insights | Rechat</title>
+      </Helmet>
       <PageContainer>
         <Header backUrl="/dashboard/insights" title={item.subject} />
 
