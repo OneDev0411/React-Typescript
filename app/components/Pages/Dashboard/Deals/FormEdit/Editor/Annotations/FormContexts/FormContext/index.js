@@ -99,7 +99,7 @@ function getTooltip(context) {
 }
 
 function getContextType(context) {
-  if (context && DealContext.isAddressField(context.name)) {
+  if (context && DealContext.isAddressField(context.key)) {
     return 'Address'
   }
 
