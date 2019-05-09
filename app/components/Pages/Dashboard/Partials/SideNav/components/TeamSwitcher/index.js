@@ -65,7 +65,7 @@ export default class TeamSwitcher extends React.Component {
           isSelected={isActiveTeam}
           onClick={e => this.changeTeam(e, team)}
         >
-          <Flex alignCenter>
+          <Flex alignCenter style={{ width: 'calc(100% - 2.25rem)' }}>
             {this.getAvatar(team.brand)}
 
             <TeamName>{team.brand.name}</TeamName>
@@ -76,7 +76,7 @@ export default class TeamSwitcher extends React.Component {
             )}
 
             {savingTeam === team.brand.id && (
-              <i className="fa fa-spinner fa-spin" />
+              <Loading style={{ width: '2.25rem', height: '2.25rem' }} />
             )}
           </Flex>
         </Button>
