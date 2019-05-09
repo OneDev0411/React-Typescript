@@ -36,9 +36,7 @@ export class InlineAddressField extends React.Component {
   state = {
     address: '',
     isShowSuggestion: false,
-    // eslint-disable-next-line
     isDrity: false,
-    isGoogleApiReady: false,
     places: []
   }
 
@@ -51,24 +49,20 @@ export class InlineAddressField extends React.Component {
   }
 
   componentDidMount() {
-    window.initInlineAddressField = this.initialize
+    if (!window.isLoadingGoogleApi && !idx(window, w => w.google.maps.places)) {
+      window.isLoadingGoogleApi = true
 
-    if (!idx(window, w => w.google.maps.places)) {
       loadJS(
         `https://maps.googleapis.com/maps/api/js?key=${
           bootstrapURLKeys.key
-        }&libraries=places&callback=initInlineAddressField`
+        }&libraries=places`
       )
-    } else {
-      this.initialize()
     }
   }
 
   componentWillUnmount() {
-    delete window.initInlineAddressField
+    delete window.isLoadingGoogleApi
   }
-
-  initialize = () => this.setState({ isGoogleApiReady: true })
 
   autocompleteAddress(input) {
     const { google } = window
@@ -197,10 +191,6 @@ export class InlineAddressField extends React.Component {
   handleFormCancel = () => this.setState({ isShowForm: false })
 
   render() {
-    if (!this.state.isGoogleApiReady) {
-      return null
-    }
-
     const { address } = this.state
 
     return (
