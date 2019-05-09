@@ -16,7 +16,7 @@ import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import { getSendEmailResultMessages } from 'components/EmailCompose/helpers/email-result-messages'
 
-import Loading from '../../../components/Partials/Loading'
+import Loading from 'components/LoadingContainer'
 
 import { FinalFormDrawer } from '../FinalFormDrawer'
 import { TextInput } from '../Forms/TextInput'
