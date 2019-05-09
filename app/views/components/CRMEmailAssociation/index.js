@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import MailAttachmentIcon from 'components/SvgIcons/MailAttachment/IconMailAttachment'
-import LongArrowRightIcon from 'components/SvgIcons/LongArrowRight/IconLongArrowRight'
+// import LongArrowRightIcon from 'components/SvgIcons/LongArrowRight/IconLongArrowRight'
 
 import Container from './styled'
 
@@ -33,7 +33,7 @@ function CRMEmailAssociation({ association, style }) {
       <div className="details">
         <div className="subject">
           <div className="subject__text">{email.subject}</div>
-          <LongArrowRightIcon className="subject__icon" />
+          {/* <LongArrowRightIcon className="subject__icon" /> */}
         </div>
         <div className="body">{email.body}</div>
       </div>
