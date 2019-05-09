@@ -28,6 +28,7 @@ const Container = styled.div`
 
     &.img {
       background-size: cover;
+      border-radius: 3px 0 0 3px;
     }
 
     &.icon {
