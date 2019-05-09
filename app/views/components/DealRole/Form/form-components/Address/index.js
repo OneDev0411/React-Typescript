@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
-import { Input } from 'components/inline-editable-fields/styled'
 
 import {
   InputContainer,
@@ -9,6 +8,8 @@ import {
   InputRequired,
   InputLabel
 } from 'components/Forms/styled'
+
+import { Input } from './styled'
 
 export function Address(props) {
   if (props.isVisible === false) {
@@ -28,16 +29,7 @@ export function Address(props) {
         address={props.value}
         needsAddressForm={false}
         handleInputChange={props.input.onChange}
-        renderSearchField={inputProps => (
-          <Input
-            {...inputProps}
-            type="text"
-            style={{
-              padding: 0,
-              border: 'none'
-            }}
-          />
-        )}
+        renderSearchField={inputProps => <Input {...inputProps} />}
       />
 
       {props.showError && props.meta.error && props.meta.touched && (
