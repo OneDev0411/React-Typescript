@@ -54,12 +54,12 @@ export default class Task extends Component {
   onClickMoreOptions = formValues => this.setState({ formValues })
 
   handleDrawerClose = (formProps, newEvent) => {
-    if (formProps && !formProps.preventDefault) {
-      formProps.form.reset()
-      this.props.submitCallback(newEvent)
-    }
-
-    this.setState({ formValues: null })
+    this.setState({ formValues: null }, () => {
+      if (formProps && formProps.form && newEvent != null) {
+        formProps.form.reset()
+        this.props.submitCallback(newEvent)
+      }
+    })
   }
 
   render() {
