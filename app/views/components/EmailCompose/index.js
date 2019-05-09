@@ -1,20 +1,15 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { browserHistory, withRouter } from 'react-router'
-
 import { Field } from 'react-final-form'
-
-import { TextEditor } from 'components/TextEditor'
-
-import { normalizeAttachments } from 'components/SelectDealFileDrawer/helpers/normalize-attachment'
 
 import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
 
+import { TextEditor } from 'components/TextEditor'
+import { normalizeAttachments } from 'components/SelectDealFileDrawer/helpers/normalize-attachment'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
 import { getSendEmailResultMessages } from 'components/EmailCompose/helpers/email-result-messages'
 
 import Loading from '../../../components/Partials/Loading'
@@ -299,4 +294,4 @@ class EmailCompose extends React.Component {
 EmailCompose.propTypes = propTypes
 EmailCompose.defaultProps = defaultProps
 
-export default connect()(EmailCompose)
+export default withRouter(connect()(EmailCompose))
