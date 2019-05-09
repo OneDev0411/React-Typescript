@@ -14,6 +14,8 @@ const propTypes = {
   renderSearchField: PropTypes.func.isRequired,
   address: PropTypes.string,
   style: PropTypes.shape(),
+  suggestionsStyle: PropTypes.shape(),
+  formStyle: PropTypes.shape(),
   handleDelete: PropTypes.func,
   handleInputChange: PropTypes.func,
   showDeleteButton: PropTypes.bool,
@@ -26,6 +28,8 @@ const propTypes = {
 const defaultProps = {
   address: '',
   style: {},
+  suggestionsStyle: {},
+  formStyle: {},
   handleDelete() {},
   handleInputChange() {},
   showDeleteButton: false,
@@ -214,6 +218,7 @@ export class InlineAddressField extends React.Component {
           })}
           {this.state.isShowSuggestion && (
             <Suggestions
+              style={this.props.suggestionsStyle}
               items={this.state.places}
               searchText={address}
               onClickDefaultItem={this.onClickDefaultItem}
@@ -223,6 +228,7 @@ export class InlineAddressField extends React.Component {
 
           {this.props.needsAddressForm && this.state.isShowForm && (
             <InlineAddressForm
+              style={this.props.formStyle}
               address={address}
               handleCancel={this.handleFormCancel}
               handleDelete={this.props.handleDelete}
