@@ -13,7 +13,7 @@ import { confirmation } from 'actions/confirmation'
 import InstantMarketing from 'components/InstantMarketing'
 import ActionButton from 'components/Button/ActionButton'
 
-import EmailComposeDrawer from 'components/EmailCompose'
+import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
@@ -262,7 +262,7 @@ class SendContactCard extends React.Component {
         />
 
         {this.state.isComposeEmailOpen && (
-          <EmailComposeDrawer
+          <SingleEmailComposeDrawer
             isOpen
             hasStaticBody
             disableAddNewRecipient

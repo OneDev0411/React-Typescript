@@ -6,13 +6,21 @@ import EmailComposeDrawer from 'components/EmailCompose/EmailComposeDrawer'
 
 import { MultipleContactsSelect } from 'components/Forms/MultipleContactsSelect'
 
+import { getSendEmailResultMessages } from 'components/EmailCompose/helpers/email-result-messages'
+
+import { sendEmail } from 'models/email-compose/send-email'
+
 import { To } from '../fields/To'
 
-export function SingleEmailComposeDrawer({ getEmail, ...otherProps }) {
+export function SingleEmailComposeDrawer({
+  getEmail,
+  disableAddNewRecipient,
+  ...otherProps
+}) {
   const [hasCc, setCc] = useState(false)
   const [hasBcc, setBcc] = useState(false)
 
-  const sendEmail = formValue =>
+  const handleSendEmail = formValue =>
     sendEmail(
       getEmail({
         from: formValue.fromId,
@@ -29,11 +37,18 @@ export function SingleEmailComposeDrawer({ getEmail, ...otherProps }) {
     )
 
   return (
-    <EmailComposeDrawer {...otherProps} sendEmail={sendEmail}>
+    <EmailComposeDrawer
+      {...otherProps}
+      sendEmail={handleSendEmail}
+      getSendEmailResultMessages={form =>
+        getSendEmailResultMessages(1, form.due_at)
+      }
+    >
       <Field
         placeholder="To"
         name="recipients"
         component={To}
+        disableAddNewRecipient
         showCc={!hasCc}
         showBcc={!hasBcc}
         onCcAdded={() => setCc(true)}

@@ -11,7 +11,7 @@ import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 import { selectContact } from 'reducers/contacts/list'
 
 import SearchListingDrawer from 'components/SearchListingDrawer'
-import { BatchEmailComposeDrawer } from 'components/EmailCompose'
+import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import ActionButton from 'components/Button/ActionButton'
@@ -319,7 +319,7 @@ class SendMlsListingCard extends React.Component {
         />
 
         {this.state.isComposeEmailOpen && (
-          <BatchEmailComposeDrawer
+          <BulkEmailComposeDrawer
             isOpen
             hasStaticBody
             from={this.state.owner}

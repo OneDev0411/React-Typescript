@@ -8,8 +8,6 @@ import { Field } from 'react-final-form'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
-import { getSendEmailResultMessages } from 'components/EmailCompose/helpers/email-result-messages'
-
 import EmailBody from 'components/EmailCompose/components/EmailBody'
 
 import { normalizeAttachments } from 'components/SelectDealFileDrawer/helpers/normalize-attachment'
@@ -34,6 +32,7 @@ const propTypes = {
   onClose: PropTypes.func.isRequired,
   onSent: PropTypes.func,
   hasDealsAttachments: PropTypes.bool,
+  getSendEmailResultMessages: PropTypes.func.isRequired,
   children: PropTypes.element
 }
 
@@ -48,16 +47,16 @@ const defaultProps = {
 }
 
 /**
- * Shared parts of different email compose drawers.
+ * Shared parts of the different email compose drawers.
  * Currently there are two types of email compose:
- *  - Batch ({@link BatchEmailComposeDrawer})
+ *  - Batch ({@link BulkEmailComposeDrawer})
  *  - Single ({@link SingleEmailComposeDrawer})
  * Difference between these types are:
  * - Different way of sending email (different endpoint and DTOs)
  * - Some UI differences in the input form.
  *
  * These differences are abstracted away from EmailComposeDrawer
- * as props to be provided by concrete email compose components.
+ * as props to be provided by concrete email compose drawer components.
  */
 class EmailComposeDrawer extends React.Component {
   state = {
@@ -135,10 +134,10 @@ class EmailComposeDrawer extends React.Component {
   handleSendEmail = async form => {
     const { dispatch } = this.props
 
-    const { successMessage, errorMessage } = getSendEmailResultMessages(
-      form.recipients.length,
-      form.due_at
-    )
+    const {
+      successMessage,
+      errorMessage
+    } = this.props.getSendEmailResultMessages(form)
 
     try {
       this.setState({

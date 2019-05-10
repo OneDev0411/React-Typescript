@@ -1,6 +1,6 @@
-import { SingleEmailComposeDrawer } from 'components/EmailCompose/SingleEmailComposeDrawer'
-import { BatchEmailComposeDrawer } from 'components/EmailCompose/BatchEmailComposeDrawer'
-
-export { SingleEmailComposeDrawer, BatchEmailComposeDrawer }
-
-export default SingleEmailComposeDrawer
+export {
+  SingleEmailComposeDrawer
+} from 'components/EmailCompose/SingleEmailComposeDrawer'
+export {
+  BulkEmailComposeDrawer
+} from 'components/EmailCompose/BulkEmailComposeDrawer'

@@ -4,17 +4,18 @@ import { Field } from 'react-final-form'
 
 import { MultipleContactsSelect } from 'components/Forms/MultipleContactsSelect'
 
-import { sendMultipleEmails } from 'models/email-compose/send-contacts-email'
+import EmailComposeDrawer from 'components/EmailCompose/EmailComposeDrawer'
+import { getSendEmailResultMessages } from 'components/EmailCompose/helpers/email-result-messages'
 
-import EmailComposeDrawer from '../EmailComposeDrawer'
+import { sendBulkEmail } from 'models/email-compose/send-bulk-email'
 
-export function BatchEmailComposeDrawer({
+export function BulkEmailComposeDrawer({
   getEmail,
   disableAddNewRecipient,
   ...otherProps
 }) {
   const sendEmail = formValue =>
-    sendMultipleEmails(
+    sendBulkEmail(
       getEmail({
         from: formValue.fromId,
         to: formValue.recipients,
@@ -28,7 +29,13 @@ export function BatchEmailComposeDrawer({
     )
 
   return (
-    <EmailComposeDrawer {...otherProps} sendEmail={sendEmail}>
+    <EmailComposeDrawer
+      {...otherProps}
+      sendEmail={sendEmail}
+      getSendEmailResultMessages={form =>
+        getSendEmailResultMessages(form.recipients.length, form.due_at)
+      }
+    >
       <Field
         placeholder="Bcc"
         name="recipients"

@@ -19,7 +19,7 @@ import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArr
 
 import Tooltip from 'components/tooltip'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
-import EmailComposeDrawer from 'components/EmailCompose'
+import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 
@@ -456,7 +456,7 @@ class ActionsButton extends React.Component {
         )}
 
         {this.state.isComposeEmailOpen && (
-          <EmailComposeDrawer
+          <SingleEmailComposeDrawer
             isOpen
             defaultAttachments={this.getEmailComposeFiles()}
             from={this.props.user}
