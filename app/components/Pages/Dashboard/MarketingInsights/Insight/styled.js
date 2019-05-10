@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import Badge from 'components/Badge'
 
-export const DetailsContainer = styled.div`
+export const InsightContainer = styled.div`
   display: flex;
   padding: 0 1.5rem 3rem 1.5rem;
   min-height: calc(100vh - 7.5rem);

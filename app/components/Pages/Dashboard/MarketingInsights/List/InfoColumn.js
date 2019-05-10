@@ -2,15 +2,15 @@ import React from 'react'
 
 import { formatDate } from 'components/DateTimePicker/helpers'
 
+import Recipients from './Recipients'
 import { show_title } from './helpers'
 import { Link, Info, StyledBadge } from './styled'
-import Recipients from './Recipients'
 
-function InfoColumn(props) {
-  const isScheduled = !props.data.executed_at
+function InfoColumn({ data }) {
+  const isScheduled = !data.executed_at
   const title = (
     <>
-      {show_title(props.data.subject)}
+      {show_title(data.subject)}
       {isScheduled && <StyledBadge appearance="success">Scheduled</StyledBadge>}
     </>
   )
@@ -18,14 +18,12 @@ function InfoColumn(props) {
   let titleRenderer
 
   if (isScheduled) {
-    subTitle = `Scheduled for ${formatDate(new Date(props.data.due_at * 1000))}`
+    subTitle = `Scheduled for ${formatDate(new Date(data.due_at * 1000))}`
     titleRenderer = title
   } else {
-    subTitle = formatDate(new Date(props.data.executed_at * 1000))
+    subTitle = formatDate(new Date(data.executed_at * 1000))
     titleRenderer = (
-      <Link
-        to={isScheduled ? '' : `/dashboard/insights/campaigns/${props.data.id}`}
-      >
+      <Link to={isScheduled ? '' : `/dashboard/insights/${data.id}`}>
         {title}
       </Link>
     )
@@ -37,7 +35,7 @@ function InfoColumn(props) {
       <Info>
         <div className="sub-info">{subTitle}</div>
         <div className="main-info">
-          <Recipients data={props.data.recipients} />
+          <Recipients data={data.recipients} />
         </div>
       </Info>
     </>

@@ -3,7 +3,7 @@ import React from 'react'
 import Menu from './Menu'
 import { InsightsHeader } from './styled'
 import { H1 } from '../../../../../views/components/Typography/headings'
-import { show_title } from '../Main/helpers'
+import { show_title } from '../List/helpers'
 
 Header.defaultProps = {
   title: ''

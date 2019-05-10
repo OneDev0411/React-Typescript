@@ -10,9 +10,9 @@ import { Container } from '../../Contacts/components/Container'
 import { PageContainer, PageWrapper } from '../../Contacts/Profile/styled'
 import Loading from '../../../../Partials/Loading'
 
-import { percent } from '../Main/helpers'
+import { percent } from '../List/helpers'
 
-import { DetailsContainer, SummaryCard, ContactColumn } from './styled'
+import { InsightContainer, SummaryCard, ContactColumn } from './styled'
 import { contactsList } from './helpers'
 import useItemData from './useItemData'
 import RowBadges from './RowBadges'
@@ -49,8 +49,8 @@ const columns = [
   }
 ]
 
-function Details(props) {
-  const id = props.params.campaignId
+function Insight(props) {
+  const { id } = props.params
 
   const { item, isLoading } = useItemData(id)
 
@@ -95,15 +95,19 @@ function Details(props) {
     sentFrom.display_name = item.from.display_name
   }
 
+  const { subject } = item
+
   return (
     <PageWrapper>
       <Helmet>
-        <title>Campaign Details | Insights | Rechat</title>
+        <title>{`${
+          subject ? `${subject} | ` : ''
+        }Marketing Insights | Rechat`}</title>
       </Helmet>
       <PageContainer>
-        <Header backUrl="/dashboard/insights" title={item.subject} />
+        <Header backUrl="/dashboard/insights" title={subject} />
 
-        <DetailsContainer>
+        <InsightContainer>
           <aside className="sidebar">
             <SummaryCard>
               <Summary items={summaryItems} />
@@ -118,10 +122,10 @@ function Details(props) {
           <section className="sidebar">
             <Table data={contactsList(item)} columns={columns} />
           </section>
-        </DetailsContainer>
+        </InsightContainer>
       </PageContainer>
     </PageWrapper>
   )
 }
 
-export default Details
+export default Insight
