@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('components/head.ejs', {title:title}) %>
+</head>
+
+<body>
+
+
+  <%- include('components/nav.ejs') %>
+
+
+    <!-- Hero -->
+    <section class="hero contact-hero">
+      <div class="desc container">
+        <h2>Learn how Rechat can help you work smarter.</h2>
+        <p>Our platform has generated billions in revenue for the brokerages and agents. Let our industry tailored solutions
+          help you at every stage of the buying and selling process.</p>
+      </div>
+    </section>
+
+    <!-- Contact form -->
+
+    <section class="contact">
+
+      <form onsubmit="return formSubmited();">
+        <div class="field">
+          <label for="firstname">First Name
+            <span>*</span>
+          </label>
+          <input type="text" id="firstname" required>
+        </div>
+
+        <div class="field">
+          <label for="lastname">Last Name
+            <span>*</span>
+          </label>
+          <input type="text" id="lastname" required>
+        </div>
+
+        <div class="field">
+          <label for="email">Email
+            <span>*</span>
+          </label>
+          <input type="email" id="email" required>
+        </div>
+
+
+        <div class="field">
+          <label for="phone">Phone number
+            <span>*</span>
+          </label>
+          <input type="text" id="phone" required>
+        </div>
+
+        <div class="field">
+          <label for="brokerage">Brokerage Name
+            <span>*</span>
+          </label>
+          <input type="text" id="brokerage" required>
+        </div>
+
+        <div class="agreement">
+          We’re committed to your privacy. Rechat uses the information you provide to us to contact you about our relevant content,
+          products, and services. You may unsubscribe from these communications at any time. For more information, check
+          out our
+          <a href="#" class="button-text-link">Privacy Policy</a>.
+        </div>
+
+        <button class="button-primary">Submit</button>
+      </form>
+
+    </section>
+
+    <%- include('components/footer.ejs') %>
+
+      <script>
+        function formSubmited() {
+
+          alert("🎉")
+
+          return false;
+        }
+      </script>
+</body>
+
+</html>

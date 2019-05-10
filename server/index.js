@@ -1,12 +1,16 @@
+import path from 'path'
+
+import { createReadStream } from 'fs'
+
 import Koa from 'koa'
 import mount from 'koa-mount'
 import serve from 'koa-static'
 import views from 'koa-views'
 import session from 'koa-session'
 import cookie from 'koa-cookie'
+import Router from 'koa-router'
 import { default as sslify } from 'koa-sslify'
 
-import path from 'path'
 import webpack from 'webpack'
 import _ from 'underscore'
 
@@ -19,6 +23,7 @@ import appConfig from '../config/webpack'
 import webpackConfig from '../webpack.config.babel'
 
 const app = new Koa()
+const router = new Router()
 const __DEV__ = process.env.NODE_ENV === 'development'
 
 // webpack configs
@@ -27,8 +32,9 @@ const { entry, output, publicPath } = appConfig.compile
 // app uses proxy
 app.proxy = true
 
-if (!__DEV__)
+if (!__DEV__) {
   app.use(sslify())
+}
 
 // handle application errors
 app.use(async (ctx, next) => {
@@ -50,7 +56,7 @@ const templatesDir = __DEV__
   : appConfig.compile.output
 
 // use template engine
-app.use(views(templatesDir, { map: { html: 'hogan' } }))
+app.use(views(templatesDir, { map: { html: 'hogan', ejs: 'ejs' } }))
 
 // use cookies
 app.use(cookie())
@@ -96,11 +102,35 @@ _.each(require('./api/routes'), route => {
   app.use(mount('/api', require(route.path)))
 })
 
+router.get(
+  '/',
+  async ctx => await ctx.render('_website/index.ejs', { title: 'Rechat' })
+)
+
+router.get(
+  '/faq',
+  async ctx => await ctx.render('_website/faq.ejs', { title: 'FAQ | Rechat' })
+)
+
+router.get(
+  '/contact',
+  async ctx =>
+    await ctx.render('_website/contact.ejs', { title: 'Learn More | Rechat' })
+)
+
+router.get(
+  '/about',
+  async ctx =>
+    await ctx.render('_website/about.ejs', { title: 'About | Rechat' })
+)
+
+app.use(router.routes())
+
 const development = async () => {
   const koaWebpack = require('koa-webpack')
 
   const middleware = await koaWebpack({
-    config: webpackConfig,
+    config: webpackConfig
   })
 
   app.use(middleware)
@@ -131,10 +161,10 @@ const production = async () => {
   app.use(mount(universalMiddleware))
 }
 
-if (__DEV__)
+if (__DEV__) {
   development()
-else
+} else {
   production()
-
+}
 
 export default app
