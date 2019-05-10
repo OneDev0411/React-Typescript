@@ -5,7 +5,7 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
 import { TextEditor } from 'components/TextEditor'
-import Loading from 'partials/Loading'
+import Loading from 'components/LoadingContainer'
 
 export default function EmailBody({ content, hasStaticBody = false }) {
   return (
