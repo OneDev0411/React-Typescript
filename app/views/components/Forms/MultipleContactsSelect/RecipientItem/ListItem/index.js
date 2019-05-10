@@ -10,7 +10,7 @@ export default class ListItem extends React.Component {
   omitRecipient = () =>
     this.props.input.onChange(
       this.props.input.value.filter(
-        recipient => recipient.email !== this.props.recipient.email
+        recipient => recipient.id !== this.props.recipient.id
       )
     )
 
