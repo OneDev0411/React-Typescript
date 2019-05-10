@@ -11,7 +11,7 @@ import { sendBulkEmail } from 'models/email-compose/send-bulk-email'
 
 export function BulkEmailComposeDrawer({
   getEmail,
-  disableAddNewRecipient,
+  disableAddNewRecipient = false,
   ...otherProps
 }) {
   const sendEmail = formValue =>

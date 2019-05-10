@@ -14,7 +14,7 @@ import { To } from '../fields/To'
 
 export function SingleEmailComposeDrawer({
   getEmail,
-  disableAddNewRecipient,
+  disableAddNewRecipient = false,
   ...otherProps
 }) {
   const [hasCc, setCc] = useState(false)
@@ -48,7 +48,7 @@ export function SingleEmailComposeDrawer({
         placeholder="To"
         name="recipients"
         component={To}
-        disableAddNewRecipient
+        disableAddNewRecipient={disableAddNewRecipient}
         showCc={!hasCc}
         showBcc={!hasBcc}
         onCcAdded={() => setCc(true)}
