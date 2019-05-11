@@ -99,6 +99,7 @@
     "koa-webpack": "^5.2.2",
     "linkifyjs": "github:izadmehr/linkifyjs#build",
     "lodash": "^4.17.11",
+    "mailgun-js": "^0.22.0",
     "match-sorter": "^2.2.3",
     "merge": "^1.2.1",
     "mini-css-extract-plugin": "^0.5.0",

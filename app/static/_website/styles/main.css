@@ -66,6 +66,16 @@ h1,h2,h3,h4,h5,h6{
   transform: scale(0.9)
 }
 
+[class|=button]:disabled{
+
+  background: #ccc;
+}
+[class|=button]:disabled:hover{
+
+  background: #ccc;
+}
+
+
 .button-link{
 
   padding: 0.25rem 1.5rem;
