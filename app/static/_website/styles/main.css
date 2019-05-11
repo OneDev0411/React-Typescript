@@ -35,6 +35,7 @@ body{
   font-family: 'Barlow', sans-serif;
   font-size: var(--normal-size);
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 a{
