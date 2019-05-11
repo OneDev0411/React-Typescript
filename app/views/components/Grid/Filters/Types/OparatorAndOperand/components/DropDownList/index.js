@@ -2,9 +2,9 @@ import React from 'react'
 import Downshift from 'downshift'
 import _ from 'underscore'
 
-import { Item } from '../../../../../Dropdown/Item'
-import IconKeyboardArrowDown from '../../../../../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
-import IconKeyboardArrowUp from '../../../../../SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
+import { Item } from '../../../../../../Dropdown/Item'
+import IconKeyboardArrowDown from '../../../../../../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import IconKeyboardArrowUp from '../../../../../../SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
 
 import {
   List,

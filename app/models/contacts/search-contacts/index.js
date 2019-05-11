@@ -1,3 +1,5 @@
+import { negate } from 'lodash'
+
 import { cleanSearchQuery } from '../../../utils/clean-search-query'
 
 import Fetch from '../../../services/fetch'
@@ -25,14 +27,18 @@ export async function searchContacts(
     }
 
     if (Array.isArray(filter) && filter.length > 0) {
-      payload.filter = filter.map(
-        ({ attribute_def, invert, operator, value }) => ({
+      payload.crm_task = filter
+        .filter(filter => filter.crm_task)
+        .map(({ value }) => value)
+
+      payload.filter = filter
+        .filter(filter => filter.attribute_def)
+        .map(({ attribute_def, invert, operator, value }) => ({
           attribute_def,
           invert,
           operator,
           value
-        })
-      )
+        }))
     }
 
     if (Array.isArray(users) && users.length) {

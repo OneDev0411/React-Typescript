@@ -10,17 +10,18 @@ import {
 
 import {
   addActiveFilter,
+  changeConditionOperator,
   createActiveFilters,
+  createActiveFiltersWithConditionOperator,
   removeActiveFilter,
   toggleActiveFilter,
-  updateActiveFilter,
-  changeConditionOperator,
-  createActiveFiltersWithConditionOperator
+  updateActiveFilter
 } from 'actions/filter-segments/active-filters'
 
 import { ConditionOperators } from './ConditionOperators'
 import { AddFilter } from './Create'
 import { FilterItem } from './Item'
+import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 
 const Container = styled.div`
   display: flex;
@@ -93,12 +94,12 @@ class Filters extends React.Component {
   removeFilter = filterId => {
     const { activeFilters } = this.props
 
-    const isIncompleteFilter = activeFilters[filterId].isIncomplete === true
+    const isInvalid = !isFilterValid(activeFilters[filterId])
     const nextFilters = _.omit(activeFilters, (filter, id) => id === filterId)
 
     this.props.removeActiveFilter(this.props.name, filterId)
 
-    if (!isIncompleteFilter) {
+    if (!isInvalid) {
       this.onChangeFilters(nextFilters)
     }
   }
@@ -108,10 +109,9 @@ class Filters extends React.Component {
    */
   onFilterChange = (id, values, operator) => {
     const current = this.props.activeFilters[id]
-    const isCompleted = this.isFilterCompleted({ values, operator })
+    const isValid = isFilterValid({ values, operator })
 
     this.props.updateActiveFilter(this.props.name, id, {
-      isIncomplete: !isCompleted,
       values,
       operator
     })
@@ -120,13 +120,12 @@ class Filters extends React.Component {
       ...this.props.activeFilters,
       [id]: {
         ...this.props.activeFilters[id],
-        isIncomplete: !isCompleted,
         values,
         operator
       }
     }
 
-    if (isCompleted && this.isFilterChanged(current, { values, operator })) {
+    if (isValid && this.isFilterChanged(current, { values, operator })) {
       this.onChangeFilters(nextFilters)
     }
   }
@@ -137,10 +136,7 @@ class Filters extends React.Component {
     current.operator.name !== next.operator.name
 
   hasMissingValue = () =>
-    _.some(this.props.activeFilters, filter => filter.isIncomplete)
-
-  isFilterCompleted = filter =>
-    filter.operator && filter.values && filter.values.length > 0
+    _.some(this.props.activeFilters, filter => !isFilterValid(filter))
 
   /**
    *
@@ -151,13 +147,10 @@ class Filters extends React.Component {
    *
    */
   onChangeFilters = filterItems => {
-    const completedFilters = _.filter(
-      filterItems,
-      item => item.isIncomplete === false
-    )
+    const validFilters = _.filter(filterItems, item => isFilterValid(item))
 
     this.props.onChange({
-      filters: this.props.createSegmentFromFilters(completedFilters).filters,
+      filters: this.props.createSegmentFromFilters(validFilters).filters,
       conditionOperator: this.props.conditionOperator
     })
   }
@@ -194,6 +187,7 @@ class Filters extends React.Component {
           <FilterItem
             key={id}
             {...filter}
+            isIncomplete={!isFilterValid(filter)}
             filterConfig={this.findFilterById(filter.id)}
             onToggleFilterActive={() => this.toggleFilterActive(id)}
             onRemove={() => this.removeFilter(id)}
@@ -249,3 +243,4 @@ export default connect(
     createActiveFiltersWithConditionOperator
   }
 )(Filters)
+

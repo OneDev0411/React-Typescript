@@ -69,8 +69,7 @@ class TagsList extends React.Component {
         operator: {
           name: 'is',
           invert: false
-        },
-        isIncomplete: false
+        }
       }
 
       this.props.updateActiveFilter('contacts', item.id, filter)

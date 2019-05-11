@@ -4,36 +4,17 @@ import _ from 'underscore'
 
 import IconRemove from 'components/SvgIcons/Close/CloseIcon'
 
-import { ListFilter } from '../Types/List'
-
 import {
   Container,
-  Menu,
   Content,
   ItemTitle,
-  TitleContainer,
+  Menu,
   RemoveButton,
-  DoneButton
+  TitleContainer
 } from './styled'
 
-const getComponent = (filterConfig, props) => {
-  const { onFilterChange, values, operator } = props
-
-  const data = {
-    ...filterConfig,
-    values,
-    operator,
-    onFilterChange
-  }
-
-  switch (filterConfig.type) {
-    case 'Set':
-      return <ListFilter {...data} />
-  }
-}
-
 const getCurrentValues = (isActive, values) => {
-  if (!isActive && values && values.length === 0) {
+  if (!isActive && (!values || values.length === 0)) {
     return 'Missing value'
   }
 
@@ -48,7 +29,8 @@ export const FilterItem = props => {
     values,
     operator,
     onToggleFilterActive,
-    onRemove
+    onRemove,
+    onFilterChange
   } = props
 
   return (
@@ -69,14 +51,14 @@ export const FilterItem = props => {
 
             {isOpen && (
               <Menu depth={3}>
-                <Content>{getComponent(filterConfig, props)}</Content>
-                <DoneButton
-                  disabled={!values || values.length === 0}
-                  appearance="link"
-                  onClick={onToggleFilterActive}
-                >
-                  Done
-                </DoneButton>
+                <Content>
+                  {filterConfig.renderer({
+                    onFilterChange,
+                    onToggleFilterActive,
+                    values,
+                    operator
+                  })}
+                </Content>
               </Menu>
             )}
           </div>

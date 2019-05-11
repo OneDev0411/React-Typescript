@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 
-import { blue, grey, primary } from '../../../../../../utils/colors'
-import Card from '../../../../../Card'
+import { blue, grey, primary } from '../../../../../../../utils/colors'
+import Card from '../../../../../../Card'
 
 export const List = styled(Card)`
   position: absolute;

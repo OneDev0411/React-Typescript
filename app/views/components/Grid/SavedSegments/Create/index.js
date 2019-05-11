@@ -2,6 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
+import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
+
 import Modal from '../../../BasicModal'
 import Button from '../../../Button/ActionButton'
 import RadioButton from '../../../RadioButton'
@@ -131,11 +133,14 @@ class SaveSegment extends React.Component {
     const { showModal, selectedOption, newFilterName, isSaving } = this.state
     const { filters, segment } = this.props
     const hasFilters = _.size(filters) > 0 || this.isEditable(segment)
+    const areFiltersValid = _.values(filters || {}).every(isFilterValid)
 
     return (
       <div>
         {hasFilters && (
-          <Button onClick={this.toggleShowModal}>Save List</Button>
+          <Button onClick={this.toggleShowModal} disabled={!areFiltersValid}>
+            Save List
+          </Button>
         )}
 
         <Modal

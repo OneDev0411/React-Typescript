@@ -4,12 +4,31 @@ import _ from 'underscore'
 
 import { defaultTags } from 'utils/default-tags'
 
+import { operatorAndOperandFilterRenderer } from 'components/Grid/Filters/Types/OparatorAndOperand/renderer'
+
+import { simpleListFilterRenderer } from 'components/Grid/Filters/Types/SimpleList/renderer'
+
+import { searchEvents } from 'models/tasks/search-events'
+
 import { selectTags } from '../../../../../../reducers/contacts/tags'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 
 import Filters from '../../../../../../views/components/Grid/Filters'
 import SaveSegment from '../../../../../../views/components/Grid/SavedSegments/Create'
 import { normalizeFilters } from '../utils'
+
+let getOpenHouseEvents = async () => {
+  console.log('getting options')
+
+  const result = await searchEvents({ task_type: 'Open House' })
+
+  console.log('result', result)
+
+  return result.data.map(item => ({
+    label: item.title,
+    value: item.id
+  }))
+}
 
 class ContactFilters extends React.PureComponent {
   getUniqTags = tags => {
@@ -78,7 +97,6 @@ class ContactFilters extends React.PureComponent {
     return filters.map(filter => ({
       id: filter.attribute_def,
       isActive: false,
-      isIncomplete: false,
       values: [
         {
           label: this.getFilterLabelByValue(filter.value),
@@ -105,18 +123,26 @@ class ContactFilters extends React.PureComponent {
       {
         id: tagDefinition.id,
         label: 'Tag',
-        type: 'Set',
-        multi: false,
-        options: this.getUniqTags(tags),
+        renderer: operatorAndOperandFilterRenderer({
+          options: this.getUniqTags(tags)
+        }),
         tooltip:
           'A group a person belongs to, based on a tag you’ve manually applied to them.'
       },
       {
+        id: 'openHouse',
+        label: 'Open House',
+        renderer: simpleListFilterRenderer({
+          getOptions: getOpenHouseEvents
+        }),
+        tooltip: 'Contacts invited to an specific Open House'
+      },
+      {
         id: sourceDefinition.id,
         label: 'Origin',
-        type: 'Set',
-        multi: false,
-        options: this.getOrigins(),
+        renderer: operatorAndOperandFilterRenderer({
+          options: this.getOrigins()
+        }),
         tooltip: 'Source type'
       }
     ]
