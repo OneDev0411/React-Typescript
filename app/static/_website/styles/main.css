@@ -50,6 +50,7 @@ a:hover{
 
 h1,h2,h3,h4,h5,h6{
   margin: 0;
+  font-family: 'Merriweather', sans-serif;
 }
 
 
@@ -202,11 +203,26 @@ nav ul li{
   background: #ccc;
   background-size: cover;
   color: #fff;
+  position: relative;
+}
+
+.hero:before{
+
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  content: "";
 }
 
 .hero .desc{
 
   width: 100%;
+  z-index: 2;
 }
 .hero .desc h2{
   font-size: var(--head-size);
@@ -227,6 +243,7 @@ nav ul li{
 .hero .btn-container > a{
 
   margin-right: 1rem;
+  box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.2);
 }
 
 
@@ -280,8 +297,9 @@ nav ul li{
 
 .quick-intro .desc{
 
-  font-size: var(--big-size);
   width: 37%;
+  font-family: 'Merriweather', serif;
+  font-size: var(--big-size);
   font-weight: bold;
 }
 
@@ -323,8 +341,10 @@ nav ul li{
 }
 
 .main-features .cols h4{
+  font-family: 'Barlow';
   font-size: var(--not-too-big-size);
-  margin: 3.25rem 0 1rem 0;
+  font-weight: 600;
+  margin: 1.5rem 0 1rem 0;
 }
 
 
@@ -342,11 +362,18 @@ nav ul li{
 
   width: 35%;
 }
+
 .feature .desc h4{
 
   font-size: var(--big-size);
   margin-bottom: 1rem;
 }
+
+.feature .desc p{
+
+  line-height: 1.5;
+}
+
 .feature .presentation{
 
   width: 47%;
