@@ -21,6 +21,7 @@ import fetch from './util/fetch'
 import universalMiddleware from './util/universal'
 import appConfig from '../config/webpack'
 import webpackConfig from '../webpack.config.babel'
+import websiteRoutes from './_website'
 
 const app = new Koa()
 const router = new Router()
@@ -102,29 +103,8 @@ _.each(require('./api/routes'), route => {
   app.use(mount('/api', require(route.path)))
 })
 
-router.get(
-  '/',
-  async ctx => await ctx.render('_website/index.ejs', { title: 'Rechat' })
-)
-
-router.get(
-  '/faq',
-  async ctx => await ctx.render('_website/faq.ejs', { title: 'FAQ | Rechat' })
-)
-
-router.get(
-  '/contact',
-  async ctx =>
-    await ctx.render('_website/contact.ejs', { title: 'Learn More | Rechat' })
-)
-
-router.get(
-  '/about',
-  async ctx =>
-    await ctx.render('_website/about.ejs', { title: 'About | Rechat' })
-)
-
-app.use(router.routes())
+// Adding websites route
+app.use(websiteRoutes)
 
 const development = async () => {
   const koaWebpack = require('koa-webpack')
