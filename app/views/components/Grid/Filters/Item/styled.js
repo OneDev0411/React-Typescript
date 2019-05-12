@@ -63,11 +63,9 @@ export const Menu = styled(Card)`
   left: 0;
   z-index: 1000;
   width: 280px;
-  min-height: 100px;
 `
 
 export const Content = styled.div`
-  min-height: 50px;
   cursor: auto;
 `
 export const DoneButton = styled(Button)`

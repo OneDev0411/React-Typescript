@@ -10,6 +10,10 @@ import { simpleListFilterRenderer } from 'components/Grid/Filters/Types/SimpleLi
 
 import { searchEvents } from 'models/tasks/search-events'
 
+import { getBrandFlows } from 'models/flows/get-brand-flows'
+
+import { getActiveTeamId } from 'utils/user-teams'
+
 import { selectTags } from '../../../../../../reducers/contacts/tags'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 
@@ -17,12 +21,8 @@ import Filters from '../../../../../../views/components/Grid/Filters'
 import SaveSegment from '../../../../../../views/components/Grid/SavedSegments/Create'
 import { normalizeFilters } from '../utils'
 
-let getOpenHouseEvents = async () => {
-  console.log('getting options')
-
+const getOpenHouseEvents = async () => {
   const result = await searchEvents({ task_type: 'Open House' })
-
-  console.log('result', result)
 
   return result.data.map(item => ({
     label: item.title,
@@ -39,6 +39,15 @@ class ContactFilters extends React.PureComponent {
     return _.uniq([...defaultTags, ..._.pluck(tags, 'text')])
       .sort()
       .map(tag => ({ label: tag, value: tag }))
+  }
+
+  getFlows = async () => {
+    const result = await getBrandFlows(getActiveTeamId(this.props.user, {}))
+
+    return result.map(item => ({
+      label: item.name,
+      value: item.id
+    }))
   }
 
   getOrigins = () => [
@@ -138,6 +147,14 @@ class ContactFilters extends React.PureComponent {
         tooltip: 'Contacts invited to an specific Open House'
       },
       {
+        id: 'flow',
+        label: 'Flows',
+        renderer: simpleListFilterRenderer({
+          getOptions: this.getFlows
+        }),
+        tooltip: 'Contacts who are active in an specific flow'
+      },
+      {
         id: sourceDefinition.id,
         label: 'Origin',
         renderer: operatorAndOperandFilterRenderer({
@@ -165,10 +182,11 @@ class ContactFilters extends React.PureComponent {
   }
 }
 
-function mapStateToProps({ contacts }) {
+function mapStateToProps({ contacts, user }) {
   const { tags, attributeDefs } = contacts
 
   return {
+    user,
     tags: selectTags(tags),
     conditionOperator: contacts.filterSegments.conditionOperator,
     attributeDefs

@@ -18,9 +18,13 @@ function getFilter(value, invert, filterId) {
   switch (filterId) {
     case 'openHouse':
       return {
-        value,
         invert,
-        crm_task: filterId
+        crm_task: value
+      }
+    case 'flow':
+      return {
+        invert,
+        flow: value
       }
     default:
       return {

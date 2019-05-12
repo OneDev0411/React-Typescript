@@ -29,7 +29,11 @@ export async function searchContacts(
     if (Array.isArray(filter) && filter.length > 0) {
       payload.crm_task = filter
         .filter(filter => filter.crm_task)
-        .map(({ value }) => value)
+        .map(({ crm_task }) => crm_task)
+
+      payload.flows = filter
+        .filter(filter => filter.flow)
+        .map(({ flow }) => flow)
 
       payload.filter = filter
         .filter(filter => filter.attribute_def)
