@@ -1037,7 +1037,7 @@ footer{
 }
 
 /* Mobile*/
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 560px) {
 
   nav ul li a:not(.button-outline){
 
@@ -1190,6 +1190,18 @@ footer{
 
     padding-top: calc(var(--sectionPadding) / 2);
     padding-bottom: calc(var(--sectionPadding) / 2);
+  }
+
+}
+
+
+/* Extra Small */
+@media screen and (max-width: 360px) {
+
+  .hero.hero{
+
+    height: calc( 100vw * 1.5 );
+    background-position: center center;
   }
 
 }
