@@ -29,7 +29,7 @@ const propTypes = {
   showDeleteButton: PropTypes.bool,
   handleCancel: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  preSaveFormat: PropTypes.func.isRequired,
+  preSaveFormat: PropTypes.func,
   postLoadFormat: PropTypes.func
 }
 
