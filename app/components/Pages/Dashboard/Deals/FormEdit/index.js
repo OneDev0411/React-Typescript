@@ -16,6 +16,8 @@ import importPdfJs from 'utils/import-pdf-js'
 import { selectDealById } from 'reducers/deals/list'
 import { selectTaskById } from 'reducers/deals/tasks'
 
+import { extractAnnotations } from './utils/extract-annotations'
+
 import PDFEdit from './Editor'
 import { Header } from './Header'
 
@@ -28,6 +30,8 @@ class EditDigitalForm extends React.Component {
     isSaving: false,
     pdfDocument: null,
     pdfUrl: '',
+    values: {},
+    annotations: {},
     downloadPercents: 1,
     promptOnQuit: false
   }
@@ -45,7 +49,9 @@ class EditDigitalForm extends React.Component {
     this.unregisterLeaveHook()
   }
 
-  values = {}
+  scale = window.devicePixelRatio * 1.2
+
+  displayWidth = Math.min(window.innerWidth - 80, 900)
 
   routerWillLeave = () => {
     if (this.state.promptOnQuit === false) {
@@ -83,6 +89,9 @@ class EditDigitalForm extends React.Component {
     return this.props.getContexts(brandId)
   }
 
+  /**
+   *
+   */
   loadPdfDocument = async () => {
     const PDFJS = await importPdfJs()
 
@@ -130,6 +139,8 @@ class EditDigitalForm extends React.Component {
     }
 
     pdfDocument.then(document => {
+      this.loadAnnotations(document)
+
       this.setState({
         isFormLoaded: true,
         downloadPercents: 100,
@@ -146,83 +157,66 @@ class EditDigitalForm extends React.Component {
     })
   }
 
-  changeFormValue = (name, value, forceUpdate = false) => {
-    this.values = {
-      ...this.values,
-      [name]: value
-    }
+  loadAnnotations = async document => {
+    const { annotations, values } = await extractAnnotations(document, {
+      scale: this.scale,
+      displayWidth: this.displayWidth
+    })
 
-    if (!this.state.promptOnQuit) {
-      this.setState({
-        promptOnQuit: true
-      })
-    }
-
-    if (forceUpdate) {
-      this.forceUpdate()
-    }
-  }
-
-  setFormValues = (values, forceUpdate = false) => {
-    this.values = {
-      ...this.values,
-      ...values
-    }
-
-    if (forceUpdate) {
-      this.forceUpdate()
-    }
+    this.setState({
+      values,
+      annotations
+    })
   }
 
   handleSave = async () => {
-    const { task, notify } = this.props
-    // const { notifyOffice } = this.state
+    console.log('>>><<<<', this.state.values)
 
-    this.setState({ isSaving: true, promptOnQuit: false })
+    // const { task, notify } = this.props
 
-    // save form
-    try {
-      await this.props.saveSubmission(
-        task.id,
-        this.state.pdfUrl,
-        task.form,
-        this.values
-      )
+    // this.setState({ isSaving: true, promptOnQuit: false })
 
-      // if (notifyOffice) {
-      //   await this.props.changeNeedsAttention(task.deal, task.id, true)
-      // }
+    // // save form
+    // try {
+    //   await this.props.saveSubmission(
+    //     task.id,
+    //     this.state.pdfUrl,
+    //     task.form,
+    //     this.values
+    //   )
 
-      notify({
-        message: 'The form has been saved!',
-        status: 'success'
-      })
-    } catch (err) {
-      console.log(err)
+    //   notify({
+    //     message: 'The form has been saved!',
+    //     status: 'success'
+    //   })
+    // } catch (err) {
+    //   console.log(err)
 
-      notify({
-        message:
-          err && err.response && err.response.body
-            ? err.response.body.message
-            : 'We were unable to save your form. Please try saving again',
-        status: 'error'
-      })
-    }
+    //   notify({
+    //     message:
+    //       err && err.response && err.response.body
+    //         ? err.response.body.message
+    //         : 'We were unable to save your form. Please try saving again',
+    //     status: 'error'
+    //   })
+    // }
 
-    this.setState({ isSaving: false })
+    // this.setState({ isSaving: false })
   }
 
-  handleSelectContext = () => this.setState({ promptOnQuit: true })
-
-  closeForm = () => {
-    browserHistory.goBack()
+  handleUpdateValue = list => {
+    this.setState(state => ({
+      values: {
+        ...state.values,
+        ...list
+      }
+    }))
   }
 
   render() {
-    const { isFormLoaded, isSaving, pdfDocument } = this.state
-    const { task } = this.props
+    const { state, props } = this
 
-    if (!task) {
+    if (!props.task) {
       return (
         <LoadingDealContainer>
           <Spinner />
@@ -231,10 +225,10 @@ class EditDigitalForm extends React.Component {
       )
     }
 
-    if (!pdfDocument || !isFormLoaded) {
+    if (!state.pdfDocument || !state.isFormLoaded) {
       return (
         <LoadingDealContainer>
-          {isFormLoaded ? 'Opening Digital Form' : 'Loading Digital Form'}
+          {state.isFormLoaded ? 'Opening Digital Form' : 'Loading Digital Form'}
 
           <ProgressBar
             percents={this.state.downloadPercents}
@@ -247,19 +241,20 @@ class EditDigitalForm extends React.Component {
     return (
       <Container>
         <Header
-          task={task}
-          isSaving={isSaving}
-          isFormLoaded={isFormLoaded}
+          task={props.task}
+          isSaving={state.isSaving}
+          isFormLoaded={state.isFormLoaded}
           onSave={this.handleSave}
         />
 
         <PDFEdit
-          document={pdfDocument}
-          deal={this.props.deal}
-          values={this.values}
-          onValueUpdate={this.changeFormValue}
-          onSetValues={this.setFormValues}
-          onSelectContext={this.handleSelectContext}
+          document={state.pdfDocument}
+          deal={props.deal}
+          scale={this.scale}
+          displayWidth={this.displayWidth}
+          annotations={state.annotations}
+          values={state.values}
+          onValueUpdate={this.handleUpdateValue}
         />
       </Container>
     )
@@ -269,10 +264,10 @@ class EditDigitalForm extends React.Component {
 function mapStateToProps({ deals, user }, props) {
   return {
     user,
-    task: selectTaskById(deals.tasks, props.params.taskId),
-    deal: selectDealById(deals.list, props.params.id),
     forms: deals.forms,
-    contexts: deals.contexts
+    contexts: deals.contexts,
+    task: selectTaskById(deals.tasks, props.params.taskId),
+    deal: selectDealById(deals.list, props.params.id)
   }
 }
 
