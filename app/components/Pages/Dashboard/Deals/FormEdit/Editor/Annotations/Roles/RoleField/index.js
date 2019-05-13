@@ -14,7 +14,16 @@ export function RoleField(props) {
     props.annotation.role.join(',')
   )
 
-  // console.log(props.annotation)
+  const getRoleIndex = index => {
+    let position = index
+
+    for (let i = 0; i < props.rectIndex; i++) {
+      position += props.values[i].split(',').length - 1
+    }
+
+    return position
+  }
+
   const handleSelectRole = (index = null) => {
     if (index === null) {
       return setRole(null)
@@ -22,7 +31,7 @@ export function RoleField(props) {
 
     const roles = props.roles.filter(user => allowedRoles.includes(user.role))
 
-    setRole(roles[index])
+    setRole(roles[getRoleIndex(index)])
   }
 
   return (
