@@ -91,17 +91,6 @@ h1,h2,h3,h4,h5,h6{
 }
 
 
-.button-link{
-
-  padding: 0.25rem 1.5rem;
-}
-
-.button-link.selected{
-
-  color: var(--primary-color);
-}
-
-
 .button-outline{
   display: flex;
   align-items: center;
@@ -204,23 +193,23 @@ h1,h2,h3,h4,h5,h6{
   margin: 0 auto;
 }
 
-nav{
-
+.c-main-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 5rem;
 }
 
-nav ul{
-
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.c-main-nav__list {
+  display: inline-flex;
 }
-nav ul li{
 
-  display: inline-block;
+.c-main-nav__item {
+  margin: 0 1.5rem;
+}
+  
+.c-main-nav__item > a.selected{
+  color: var(--primary-color);
 }
 
 /* Hero */
