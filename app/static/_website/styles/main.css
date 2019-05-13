@@ -7,8 +7,10 @@
   --big-size: 2rem;
   --not-too-big-size: 1.5rem;
   --medium-size: 1.25rem;
-  --normal-size: 1rem;
-  --small-size: 0.75rem;
+  --normal-size: 1.125rem;
+  --base-size: 1rem;
+  --small-size: 0.875rem;
+  --x-small-size: 0.75rem;
 
   --primary-color: #003CDF;
   --primary-darker-color: #002383;
@@ -237,7 +239,6 @@ nav ul li{
 }
 .hero .desc h2{
   font-size: var(--head-size);
-  max-width: 600px;
 }
 
 .hero .desc p{
@@ -281,7 +282,9 @@ nav ul li{
 .faq-hero .desc h2{
 
   margin: auto;
+  max-width: 600px;
 }
+
 .faq-support-hero{
 
   height: calc( 100vw * 0.5 );
@@ -452,6 +455,7 @@ nav ul li{
 .more li .sub{
 
   color: #7F7E7E;
+  font-size: var(--base-size);
 }
 
 .more li:hover{
@@ -578,6 +582,7 @@ footer{
   justify-content: center;
   flex-wrap: wrap;
   margin: 0;
+  padding: 0;
   padding-bottom: 0.5rem;
   text-align: center;
 }
@@ -586,6 +591,7 @@ footer{
 
   padding: 0 1rem;
   color: #646664;
+  font-size: var(--small-size);
 }
 
 .additional-links a:hover{
@@ -614,7 +620,7 @@ footer{
 
 .contact .agreement{
 
-  font-size: var(--small-size);
+  font-size: var(--x-small-size);
   margin-bottom: 1.5rem;
 }
 
