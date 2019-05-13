@@ -22,13 +22,7 @@ export function AddressInputs(props) {
         _.each(groups, group => {
           const annotations = group.map(item => item.annotation)
 
-          const { values } = calculateWordWrap(
-            annotations,
-            addressFields[name],
-            {
-              maxFontSize: 20
-            }
-          )
+          const { values } = calculateWordWrap(annotations, addressFields[name])
 
           group.forEach((item, index) => {
             valuesList[item.annotation.fieldName] = values[index]

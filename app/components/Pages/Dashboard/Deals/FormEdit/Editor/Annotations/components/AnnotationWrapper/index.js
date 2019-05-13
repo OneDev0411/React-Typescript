@@ -28,10 +28,7 @@ export function AnnotationWrapper(props) {
 
           const { appearance, rects, values, fontSize } = calculateWordWrap(
             annotations,
-            formValue,
-            {
-              maxFontSize: 20
-            }
+            formValue
           )
 
           return rects.map((rect, key) => {
@@ -56,6 +53,8 @@ export function AnnotationWrapper(props) {
             return props.render({
               key,
               style,
+              rect,
+              annotation: group[0],
               value: values[key]
             })
           })

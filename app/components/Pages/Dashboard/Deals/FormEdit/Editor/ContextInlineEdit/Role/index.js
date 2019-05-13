@@ -10,8 +10,6 @@ import { normalizeRoleNames } from '../../../utils/get-roles-text'
 import { getLegalFullName, roleName } from '../../../../utils/roles'
 
 function RolesEdit(props) {
-  const getAllowedRoles = () => normalizeRoleNames(props.deal, props.roleName)
-
   const allowedRoles = getAllowedRoles()
 
   const roles = props.roles.filter(user => allowedRoles.includes(user.role))
