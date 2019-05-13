@@ -5,33 +5,30 @@ import _ from 'underscore'
 import { getField } from 'models/Deal/helpers/context/get-field'
 
 import { AnnotationWrapper } from '../components/AnnotationWrapper'
-import { calculateWordWrap } from '../../../utils/word-wrap'
+import { getGroupValues } from '../../../utils/get-group-values'
+import { getAnnotationsByType } from '../../../utils/get-annotations-by-type'
 
 import AddressField from './AddressField'
 
 export function AddressInputs(props) {
   const handleAddressUpdate = addressFields => {
-    const valuesList = {}
+    let fields = {}
+    const list = getAnnotationsByType(props.annotations, 'addresses')
 
-    _.each(props.annotations, page => {
-      _.each(page.addresses, (groups, name) => {
-        if (addressFields.hasOwnProperty(name) === false) {
-          return false
-        }
+    list.forEach(group => {
+      const name = group[0].context
 
-        _.each(groups, group => {
-          const annotations = group.map(item => item.annotation)
+      if (addressFields.hasOwnProperty(name) === false) {
+        return false
+      }
 
-          const { values } = calculateWordWrap(annotations, addressFields[name])
-
-          group.forEach((item, index) => {
-            valuesList[item.annotation.fieldName] = values[index]
-          })
-        })
-      })
+      fields = {
+        ...fields,
+        ...getGroupValues(group, addressFields[name])
+      }
     })
 
-    props.onValueUpdate(valuesList)
+    props.onValueUpdate(fields)
   }
 
   return (

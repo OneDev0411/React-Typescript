@@ -1,26 +1,31 @@
 import React from 'react'
+import _ from 'underscore'
 
 import { getField } from 'models/Deal/helpers/context/get-field'
 
-import { calculateWordWrap } from '../../../utils/word-wrap'
+import { getAnnotationsByType } from '../../../utils/get-annotations-by-type'
+import { getGroupValues } from '../../../utils/get-group-values'
 
 import { AnnotationWrapper } from '../components/AnnotationWrapper'
 import { ContextField } from './ContextField'
 
 function Contexts(props) {
   const handleSaveValue = (inputProps, value, updateContext = true) => {
-    const annotations = inputProps.group.map(item => item.annotation)
-    const valuesList = {}
+    let fields = {}
+    const list = getAnnotationsByType(props.annotations, 'contexts')
 
-    const { values } = calculateWordWrap(annotations, value)
-
-    if (!updateContext) {
-      inputProps.group.forEach((item, index) => {
-        valuesList[item.annotation.fieldName] = values[index]
+    if (updateContext) {
+      list.forEach(group => {
+        fields = {
+          ...fields,
+          ...getGroupValues(group, value)
+        }
       })
+    } else {
+      fields = getGroupValues(inputProps.group, value)
     }
 
-    console.log('>>>>', valuesList)
+    console.log(fields)
   }
 
   return (
