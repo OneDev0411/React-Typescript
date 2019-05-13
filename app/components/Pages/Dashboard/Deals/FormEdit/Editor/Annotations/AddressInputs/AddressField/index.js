@@ -8,10 +8,6 @@ import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
 
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
 
-const componentStyle = {
-  top: 'calc(100% + 1rem)'
-}
-
 function AddressField({
   deal,
   upsertContexts,
@@ -48,19 +44,23 @@ function AddressField({
 
   return (
     <InlineAddressField
-      // address={inputProps.value}
       ref={formRef}
       handleSubmit={handleSaveAddress}
-      suggestionsStyle={componentStyle}
-      formStyle={componentStyle}
+      suggestionsStyle={{
+        top: 'calc(100% + 1rem)'
+      }}
+      formStyle={{
+        top: 'calc(100% + 1rem)',
+        ...calculateFormPosition(inputProps.rect)
+      }}
       style={{
         top: inputProps.style.top,
         left: inputProps.style.left,
-        maxWidth: '20rem'
+        width: Math.max(inputProps.rect.width, 300)
       }}
       renderSearchField={addressProps => (
         <input
-          {...inputProps}
+          key={inputProps.rectIndex}
           {...addressProps}
           value={inputValue}
           onChange={e => {
@@ -76,6 +76,27 @@ function AddressField({
       )}
     />
   )
+}
+
+function calculateFormPosition(bounds) {
+  const ww = Math.max(
+    document.documentElement.clientWidth,
+    window.innerWidth || 0
+  )
+
+  const percent = (bounds.right * 100) / ww
+
+  if (percent > 60) {
+    return {
+      left: 'auto',
+      right: 0
+    }
+  }
+
+  return {
+    left: 0,
+    right: 'auto'
+  }
 }
 
 export default connect(
