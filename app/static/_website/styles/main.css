@@ -57,6 +57,16 @@ h1,h2,h3,h4,h5,h6{
 }
 
 
+
+
+/* List */
+.u-no-style-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+
 /* Buttons */
 
 [class|=button]{
@@ -179,11 +189,8 @@ h1,h2,h3,h4,h5,h6{
 /* Styling */
 
 .container{
-  max-width: calc( var(--maxContainerWidth) - 2rem );
-  padding-right: 1rem;
-  padding-left: 1rem;
-  /* width: var(--maxContainerWidth); */
-  margin: auto;
+  max-width: var(--maxContainerWidth);
+  margin: 0 auto;
 }
 
 nav{
@@ -192,9 +199,6 @@ nav{
   justify-content: space-between;
   align-items: center;
   height: 5rem;
-  padding: 0 1rem;
-  max-width: calc( var(--maxContainerWidth) + 2rem );
-  margin: auto;
 }
 
 nav ul{
@@ -212,6 +216,8 @@ nav ul li{
 .hero{
   display: flex;
   align-items: center;
+  padding-top: 10%;
+  padding-bottom: 10%;
   width: 100vw;
   background: #ccc;
   background-size: cover;
@@ -261,21 +267,15 @@ nav ul li{
 
 
 .homepage-hero{
-
-  height: calc( 100vw * 0.43 );
   background-image: url('../files/images/homepage-hero.jpg');
 }
 
 
 .contact-hero{
-
-  height: calc( 100vw * 0.27 );
   background-image: url('../files/images/contact-hero.jpg');
 }
 
 .faq-hero{
-
-  height: calc( 100vw * 0.27 );
   background-image: url('../files/images/faq-hero.jpg');
   text-align: center;
 }
@@ -286,16 +286,12 @@ nav ul li{
 }
 
 .faq-support-hero{
-
-  height: calc( 100vw * 0.5 );
   background-image: url('../files/images/faq-support.jpg');
 }
 
 
 
 .about-hero{
-
-  height: calc( 100vw * 0.33 );
   background-image: url('../files/images/about-hero.jpg');
 }
 
@@ -937,6 +933,14 @@ footer{
 }
 
 
+/* Tablet */
+@media screen and (max-width: 1200px) {
+
+  .container{
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+}
 
 
 /* Tablet */
@@ -964,7 +968,7 @@ footer{
   }
 
   .contact-hero, .about-hero{
-    height: calc( 100vw * 0.45 );
+    /* height: calc( 100vw * 0.45 ); */
   }
 
   .quick-intro{
@@ -1051,8 +1055,6 @@ footer{
   }
 
   .hero.hero{
-
-    height: calc( 100vw * 1.25 );
     background-position: center center;
   }
 
@@ -1205,8 +1207,8 @@ footer{
 @media screen and (max-width: 360px) {
 
   .hero.hero{
-
-    height: calc( 100vw * 1.5 );
+    padding-left: 1rem;
+    padding-right: 1rem;
     background-position: center center;
   }
 
