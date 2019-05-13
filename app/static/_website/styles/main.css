@@ -180,7 +180,6 @@ h1,h2,h3,h4,h5,h6{
   max-width: calc( var(--maxContainerWidth) - 2rem );
   padding-right: 1rem;
   padding-left: 1rem;
-  /* width: var(--maxContainerWidth); */
   margin: auto;
 }
 
@@ -210,6 +209,7 @@ nav ul li{
 .hero{
   display: flex;
   align-items: center;
+  padding: 10% 0;
   width: 100vw;
   background: #ccc;
   background-size: cover;
@@ -260,21 +260,15 @@ nav ul li{
 
 
 .homepage-hero{
-
-  height: calc( 100vw * 0.43 );
   background-image: url('../files/images/homepage-hero.jpg');
 }
 
 
 .contact-hero{
-
-  height: calc( 100vw * 0.27 );
   background-image: url('../files/images/contact-hero.jpg');
 }
 
 .faq-hero{
-
-  height: calc( 100vw * 0.27 );
   background-image: url('../files/images/faq-hero.jpg');
   text-align: center;
 }
@@ -283,16 +277,12 @@ nav ul li{
   margin: auto;
 }
 .faq-support-hero{
-
-  height: calc( 100vw * 0.5 );
   background-image: url('../files/images/faq-support.jpg');
 }
 
 
 
 .about-hero{
-
-  height: calc( 100vw * 0.33 );
   background-image: url('../files/images/about-hero.jpg');
 }
 
@@ -958,7 +948,7 @@ footer{
   }
 
   .contact-hero, .about-hero{
-    height: calc( 100vw * 0.45 );
+    /* height: calc( 100vw * 0.45 ); */
   }
 
   .quick-intro{
@@ -1045,8 +1035,6 @@ footer{
   }
 
   .hero.hero{
-
-    height: calc( 100vw * 1.25 );
     background-position: center center;
   }
 
@@ -1199,8 +1187,8 @@ footer{
 @media screen and (max-width: 360px) {
 
   .hero.hero{
-
-    height: calc( 100vw * 1.5 );
+    padding-left: 1rem;
+    padding-right: 1rem;
     background-position: center center;
   }
 
