@@ -3,7 +3,7 @@ import ClickOutside from 'react-click-outside'
 
 import { Container } from './styled'
 
-function getPosition(bounds) {
+function getPosition(bounds, width = 400) {
   if (!window) {
     return {}
   }
@@ -12,8 +12,6 @@ function getPosition(bounds) {
     document.documentElement.clientWidth,
     window.innerWidth || 0
   )
-
-  const width = 500
 
   const left =
     bounds.left + window.scrollX + width < ww
@@ -32,7 +30,7 @@ function getPosition(bounds) {
 export function ContextInlineEdit(props) {
   return (
     <ClickOutside onClickOutside={props.onDismiss}>
-      <Container position={getPosition(props.bounds)}>
+      <Container position={getPosition(props.bounds, props.width)}>
         {props.children}
       </Container>
     </ClickOutside>
