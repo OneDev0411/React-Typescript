@@ -20,7 +20,9 @@ export function AnnotationWrapper(props) {
     <Fragment>
       {_.map(props.items, (groups, name) =>
         _.map(groups, group => {
-          const annotations = group.map(item => item.annotation)
+          const annotations = group
+            .sort((a, b) => a.order - b.order)
+            .map(item => item.annotation)
 
           const formValue =
             getFormValue(props.values, annotations) ||
