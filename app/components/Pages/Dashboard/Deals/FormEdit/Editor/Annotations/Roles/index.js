@@ -15,7 +15,7 @@ const Roles = React.memo(props => {
     const valuesList = {}
 
     _.each(props.annotations, page => {
-      _.each(page.roles, (groups, name) => {
+      _.each(page.roles, groups => {
         _.each(groups, group => {
           if (group[0].role.includes(form.role) === false) {
             return false
