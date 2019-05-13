@@ -3,8 +3,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import S from 'shorti'
 import PropTypes from 'prop-types'
+
 import ListingSection from './Partials/ListingSection'
-import AppStore from '../../../../stores/AppStore'
 
 class ListingsWidget extends Component {
   constructor(props) {
@@ -39,7 +39,8 @@ class ListingsWidget extends Component {
             target="_blank"
             style={S('color-2196f3 fw-500')}
           >
-            Rechat<span style={S('color-2196f3 font-9 relative t-7n fw-500')}>
+            Rechat
+            <span style={S('color-2196f3 font-9 relative t-7n fw-500')}>
               TM
             </span>
           </a>

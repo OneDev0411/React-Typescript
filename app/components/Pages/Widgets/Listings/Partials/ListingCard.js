@@ -3,11 +3,36 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import PropTypes from 'prop-types'
 import S from 'shorti'
+import styled from 'styled-components'
 
 import listing_util from '../../../../../utils/listing'
 import { numberWithCommas } from '../../../../../utils/helpers'
 import FavoriteHeart from '../../../Dashboard/Listings/components/FavoriteHeart'
 import AgentImage from './AgentImage'
+
+const Container = styled.div`
+  overflow: hidden;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
+
+  .c-listing-card__link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .c-listing-card__favorite-heart {
+    position: absolute;
+    right: 1em;
+    top: 1em;
+    width: 2rem;
+    height: 2rem;
+  }
+`
 
 export default class ListingCard extends Component {
   side(listing) {
@@ -65,11 +90,9 @@ export default class ListingCard extends Component {
     const square_feet = numberWithCommas(
       Math.floor(listing_util.metersToFeet(property.square_meters))
     )
-    let listing_card_style = {
-      ...S('w-380 h-360 mr-10 ml-10 mb-20 pull-left br-3 pointer relative'),
-      boxShadow: '0 0 2px 0 rgba(0, 0, 0, 0.2)',
-      overflow: 'hidden'
-    }
+    let listing_card_style = S(
+      'w-380 h-360 mr-10 ml-10 mb-20 pull-left br-3 pointer relative'
+    )
     const listing_image_style = {
       ...S(
         `bg-cover bg-url(${listing_util.getResizeUrl(
@@ -126,7 +149,7 @@ export default class ListingCard extends Component {
     }
 
     return (
-      <div
+      <Container
         style={listing_card_style}
         className={this.props.className}
         key={`widget-listing-viewer-${listing.id}`}
@@ -188,7 +211,7 @@ export default class ListingCard extends Component {
             <FavoriteHeart listing={listing} />
           </div>
         )}
-      </div>
+      </Container>
     )
   }
 }

@@ -2,7 +2,7 @@ import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribu
 
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
-export function normalizeContact(contact, attributeDefs, options = {}) {
+function normalizeContactForEmailCompose(contact, attributeDefs, options = {}) {
   if (!contact) {
     return []
   }
@@ -28,3 +28,5 @@ export function normalizeContact(contact, attributeDefs, options = {}) {
     }
   ]
 }
+
+export default normalizeContactForEmailCompose
