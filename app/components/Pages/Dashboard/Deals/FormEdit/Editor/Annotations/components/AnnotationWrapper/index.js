@@ -57,6 +57,7 @@ export function AnnotationWrapper(props) {
               style,
               rect,
               values,
+              group,
               rectIndex: key,
               annotation: group[0],
               value: values[key]
