@@ -1,14 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { connect } from 'react-redux'
-import _ from 'underscore'
-
-import { upsertContexts } from 'actions/deals'
-import { normalizeAddress } from 'models/Deal/helpers/normalize-address'
-import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
 
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
 
-function AddressField({
+export function AddressField({
   deal,
   upsertContexts,
   onAddressUpdate,
@@ -22,21 +16,8 @@ function AddressField({
   }, [inputProps.value])
 
   const handleSaveAddress = async address => {
-    const normalized = normalizeAddress(address)
-
-    _.each(address, (item, name) => {
-      normalized[name] = typeof item === 'object' ? item.value : item
-    })
-
-    const contexts = _.map(normalized, (value, name) =>
-      createUpsertObject(deal, name, value, true)
-    ).filter(value => value)
-
     // update form values
-    onAddressUpdate(normalized)
-
-    // save contexts
-    await upsertContexts(deal.id, contexts)
+    onAddressUpdate(address)
 
     // close form
     formRef.current.handleFormCancel()
@@ -98,8 +79,3 @@ function calculateFormPosition(bounds) {
     right: 'auto'
   }
 }
-
-export default connect(
-  null,
-  { upsertContexts }
-)(AddressField)

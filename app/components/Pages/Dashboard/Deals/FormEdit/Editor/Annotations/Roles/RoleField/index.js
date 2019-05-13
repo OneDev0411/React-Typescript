@@ -34,8 +34,6 @@ export function RoleField(props) {
     setRole(roles[getRoleIndex(index)])
   }
 
-  // console.log(props)
-
   const values = props.value ? props.value.split(',') : []
 
   return (
@@ -43,7 +41,9 @@ export function RoleField(props) {
       <div style={props.style}>
         {values.map((value, index) => (
           <span
-            style={{ cursor: 'pointer' }}
+            style={{
+              cursor: 'pointer'
+            }}
             key={index}
             onClick={() => handleSelectRole(index)}
           >

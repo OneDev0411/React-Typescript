@@ -11,21 +11,23 @@ import { ContextField } from './ContextField'
 
 function Contexts(props) {
   const handleSaveValue = (inputProps, value, updateContext = true) => {
+    if (!updateContext) {
+      return props.onValueUpdate(getGroupValues(inputProps.group, value))
+    }
+
     let fields = {}
     const list = getAnnotationsByType(props.annotations, 'contexts')
 
-    if (updateContext) {
-      list.forEach(group => {
-        fields = {
-          ...fields,
-          ...getGroupValues(group, value)
-        }
-      })
-    } else {
-      fields = getGroupValues(inputProps.group, value)
-    }
+    list.forEach(group => {
+      fields = {
+        ...fields,
+        ...getGroupValues(group, value)
+      }
+    })
 
-    console.log(fields)
+    props.onValueUpdate(fields, {
+      [inputProps.annotation.context]: value
+    })
   }
 
   return (

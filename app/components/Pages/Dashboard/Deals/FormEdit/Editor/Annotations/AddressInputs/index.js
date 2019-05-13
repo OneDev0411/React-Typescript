@@ -3,17 +3,21 @@ import React from 'react'
 import _ from 'underscore'
 
 import { getField } from 'models/Deal/helpers/context/get-field'
+import { normalizeAddress } from 'models/Deal/helpers/normalize-address'
 
 import { AnnotationWrapper } from '../components/AnnotationWrapper'
 import { getGroupValues } from '../../../utils/get-group-values'
 import { getAnnotationsByType } from '../../../utils/get-annotations-by-type'
 
-import AddressField from './AddressField'
+import { AddressField } from './AddressField'
 
 export function AddressInputs(props) {
-  const handleAddressUpdate = addressFields => {
+  const handleAddressUpdate = address => {
     let fields = {}
+    const contexts = {}
+
     const list = getAnnotationsByType(props.annotations, 'addresses')
+    const addressFields = normalizeAddressFields(address)
 
     list.forEach(group => {
       const name = group[0].context
@@ -26,9 +30,11 @@ export function AddressInputs(props) {
         ...fields,
         ...getGroupValues(group, addressFields[name])
       }
+
+      contexts[name] = addressFields[name]
     })
 
-    props.onValueUpdate(fields)
+    props.onValueUpdate(fields, contexts)
   }
 
   return (
@@ -47,6 +53,16 @@ export function AddressInputs(props) {
       )}
     />
   )
+}
+
+function normalizeAddressFields(address) {
+  const addressFields = normalizeAddress(address)
+
+  _.each(address, (item, name) => {
+    addressFields[name] = typeof item === 'object' ? item.value : item
+  })
+
+  return addressFields
 }
 
 // function getTooltip(context) {

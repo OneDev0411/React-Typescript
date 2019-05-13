@@ -23,8 +23,8 @@ export default function Annotations(props) {
     <Container>
       <FormInputs {...sharedProps} />
       <Roles {...sharedProps} />
+      <AddressInputs {...sharedProps}  />
       <ContextInputs {...sharedProps} />
-      <AddressInputs {...sharedProps} />
     </Container>
   )
 }

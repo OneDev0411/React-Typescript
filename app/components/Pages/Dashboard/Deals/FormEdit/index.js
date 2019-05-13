@@ -3,9 +3,16 @@ import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 import { addNotification as notify } from 'reapop'
 
-import { saveSubmission, getDeal, getForms, getContexts } from 'actions/deals'
+import {
+  saveSubmission,
+  getDeal,
+  getForms,
+  getContexts,
+  upsertContexts
+} from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
+import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
 import { getPdfSize } from 'models/Deal/form'
 
 import Spinner from 'components/Spinner'
@@ -52,6 +59,8 @@ class EditDigitalForm extends React.Component {
   scale = window.devicePixelRatio * 1.2
 
   displayWidth = Math.min(window.innerWidth - 80, 900)
+
+  pendingContexts = {}
 
   routerWillLeave = () => {
     if (this.state.promptOnQuit === false) {
@@ -170,12 +179,10 @@ class EditDigitalForm extends React.Component {
   }
 
   handleSave = async () => {
-    console.log('>>><<<<', this.state.values)
+    this.saveContexts()
 
     // const { task, notify } = this.props
-
     // this.setState({ isSaving: true, promptOnQuit: false })
-
     // // save form
     // try {
     //   await this.props.saveSubmission(
@@ -184,14 +191,12 @@ class EditDigitalForm extends React.Component {
     //     task.form,
     //     this.values
     //   )
-
     //   notify({
     //     message: 'The form has been saved!',
     //     status: 'success'
     //   })
     // } catch (err) {
     //   console.log(err)
-
     //   notify({
     //     message:
     //       err && err.response && err.response.body
@@ -200,17 +205,29 @@ class EditDigitalForm extends React.Component {
     //     status: 'error'
     //   })
     // }
-
     // this.setState({ isSaving: false })
   }
 
-  handleUpdateValue = list => {
+  saveContexts = () => {
+    const contexts = _.map(this.pendingContexts, (value, name) =>
+      createUpsertObject(this.props.deal, name, value, true)
+    )
+
+    this.props.upsertContexts(this.props.deal.id, contexts)
+  }
+
+  handleUpdateValue = (fields, contexts = {}) => {
     this.setState(state => ({
       values: {
         ...state.values,
-        ...list
+        ...fields
       }
     }))
+
+    this.pendingContexts = {
+      ...this.pendingContexts,
+      ...contexts
+    }
   }
 
   render() {
@@ -274,6 +291,14 @@ function mapStateToProps({ deals, user }, props) {
 export default withRouter(
   connect(
     mapStateToProps,
-    { saveSubmission, getDeal, getForms, getContexts, notify, confirmation }
+    {
+      saveSubmission,
+      getDeal,
+      getForms,
+      getContexts,
+      upsertContexts,
+      notify,
+      confirmation
+    }
   )(EditDigitalForm)
 )
