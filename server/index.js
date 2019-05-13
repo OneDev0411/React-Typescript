@@ -1,17 +1,12 @@
 import path from 'path'
 
-import { createReadStream } from 'fs'
-
 import Koa from 'koa'
 import mount from 'koa-mount'
 import serve from 'koa-static'
 import views from 'koa-views'
 import session from 'koa-session'
 import cookie from 'koa-cookie'
-import Router from 'koa-router'
-import { default as sslify } from 'koa-sslify'
-
-import webpack from 'webpack'
+import sslify from 'koa-sslify'
 import _ from 'underscore'
 
 import config from '../config/private'
@@ -24,7 +19,6 @@ import webpackConfig from '../webpack.config.babel'
 import websiteRoutes from './_website'
 
 const app = new Koa()
-const router = new Router()
 const __DEV__ = process.env.NODE_ENV === 'development'
 
 // webpack configs

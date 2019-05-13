@@ -86,4 +86,6 @@ router.post('/contact', bodyParser(), async ctx => {
   })
 })
 
-module.exports = router.routes()
+const routes = router.routes()
+
+export default routes
