@@ -45,7 +45,10 @@ export function getRoleText(roles, deal, roleNames, annotation) {
   )
 
   if (annotation.type === 'Roles') {
-    return list.map(role => getAttributeValue(role, annotation, '')).join(', ')
+    return list
+      .map(role => getAttributeValue(role, annotation, ''))
+      .filter(item => item)
+      .join(', ')
   }
 
   return list.length > 0

@@ -34,21 +34,27 @@ export function RoleField(props) {
     setRole(roles[getRoleIndex(index)])
   }
 
+  // console.log(props)
+
+  const values = props.value ? props.value.split(',') : []
+
   return (
     <Fragment>
       <div style={props.style}>
-        {props.value &&
-          props.value.split(',').map((value, index) => (
-            <span
-              style={{ cursor: 'pointer' }}
-              key={index}
-              onClick={() => handleSelectRole(index)}
-            >
-              {value ? `${value}, ` : ''}
-            </span>
-          ))}
+        {values.map((value, index) => (
+          <span
+            style={{ cursor: 'pointer' }}
+            key={index}
+            onClick={() => handleSelectRole(index)}
+          >
+            {value &&
+              `${value.trim()}${index !== values.length - 1 ? ', ' : ''}`}
+          </span>
+        ))}
 
-        <AddRole onClick={() => handleSelectRole(null)} />
+        {props.rectIndex === Object.keys(props.values).length - 1 && (
+          <AddRole onClick={() => handleSelectRole(null)} />
+        )}
       </div>
 
       {activeRole !== undefined && (

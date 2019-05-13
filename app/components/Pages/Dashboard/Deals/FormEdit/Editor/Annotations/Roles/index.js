@@ -32,12 +32,14 @@ const Roles = React.memo(props => {
 
           const { values } = calculateWordWrap(annotations, roleText)
 
-          console.log(name, group, roleText, values)
+          group.forEach((item, index) => {
+            valuesList[item.annotation.fieldName] = values[index]
+          })
         })
       })
     })
 
-    // props.onValueUpdate(valuesList)
+    props.onValueUpdate(valuesList)
   }
 
   return (
