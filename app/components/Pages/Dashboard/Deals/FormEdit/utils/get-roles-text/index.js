@@ -39,30 +39,16 @@ function getAttributeValue(role, context, defaultValue) {
   return value
 }
 
-export function getRolesText(roles, deal, roleNames, annotationContext) {
-  if (!Array.isArray(deal.roles)) {
-    return ''
+export function getRoleText(roles, deal, roleNames, annotation) {
+  const list = roles.filter(role =>
+    normalizeRoleNames(deal, roleNames).includes(role.role)
+  )
+
+  if (annotation.type === 'Roles') {
+    return list.map(role => getAttributeValue(role, annotation, '')).join(', ')
   }
-
-  return deal.roles
-    .map(id => roles[id])
-    .filter(role => normalizeRoleNames(deal, roleNames).includes(role.role))
-    .map(role => getAttributeValue(role, annotationContext, ''))
-    .join(', ')
-}
-
-export function getRoleText(roles, deal, roleNames, annotationContext) {
-  if (!Array.isArray(deal.roles)) {
-    return ''
-  }
-
-  const { number } = annotationContext
-
-  const list = deal.roles
-    .map(id => roles[id])
-    .filter(role => normalizeRoleNames(deal, roleNames).includes(role.role))
 
   return list.length > 0
-    ? getAttributeValue(list[number], annotationContext)
+    ? getAttributeValue(list[annotation.number], annotation)
     : ''
 }
