@@ -55,6 +55,16 @@ h1,h2,h3,h4,h5,h6{
 }
 
 
+
+
+/* List */
+.u-no-style-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+
 /* Buttons */
 
 [class|=button]{
@@ -177,10 +187,8 @@ h1,h2,h3,h4,h5,h6{
 /* Styling */
 
 .container{
-  max-width: calc( var(--maxContainerWidth) - 2rem );
-  padding-right: 1rem;
-  padding-left: 1rem;
-  margin: auto;
+  max-width: var(--maxContainerWidth);
+  margin: 0 auto;
 }
 
 nav{
@@ -189,9 +197,6 @@ nav{
   justify-content: space-between;
   align-items: center;
   height: 5rem;
-  padding: 0 1rem;
-  max-width: calc( var(--maxContainerWidth) + 2rem );
-  margin: auto;
 }
 
 nav ul{
@@ -209,7 +214,8 @@ nav ul li{
 .hero{
   display: flex;
   align-items: center;
-  padding: 10% 0;
+  padding-top: 10%;
+  padding-bottom: 10%;
   width: 100vw;
   background: #ccc;
   background-size: cover;
@@ -921,6 +927,14 @@ footer{
 }
 
 
+/* Tablet */
+@media screen and (max-width: 1200px) {
+
+  .container{
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+}
 
 
 /* Tablet */
