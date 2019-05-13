@@ -1056,8 +1056,7 @@ footer{
 /* Mobile*/
 @media screen and (max-width: 560px) {
 
-  nav ul li a:not(.button-outline){
-
+  .c-main-nav__item{
     display: none;
   }
 
