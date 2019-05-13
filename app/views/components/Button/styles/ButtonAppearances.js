@@ -50,6 +50,10 @@ export const ButtonAppearances = {
     font-weight: 500;
     background-color: ${props => props.brandColor || primary};
 
+    svg {
+      fill: #fff;
+    }
+
     &[disabled] {
       background-color: ${grey.A550};
     }

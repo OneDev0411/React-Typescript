@@ -10,7 +10,7 @@ import { dateFallback, pickerSaveButtonText } from './helpers'
 
 function Picker(props) {
   const isDateSet = !!props.selectedDate
-  const handleChangeDate = date => {
+  const handleChangeDate = (date, modifiers) => {
     // An ugly trick for setting correct time
     // because react-day-picker is setting time to 12AM automaticly each time.
     if (isDateSet) {
@@ -25,7 +25,7 @@ function Picker(props) {
       date.setMinutes(now.getMinutes())
     }
 
-    props.onChange(date)
+    props.onChange(date, modifiers)
   }
   const handleChangeTime = date => props.onChange(date)
 
@@ -35,40 +35,53 @@ function Picker(props) {
         selectedDays={props.selectedDate}
         month={props.selectedDate}
         onDayClick={handleChangeDate}
+        modifiers={props.dateModifiers}
+        disabledDays={props.disabledDays}
       />
-      <Divider margin="0.5em 0" />
-      <TimeInput
-        initialDate={dateFallback(props.selectedDate)}
-        onChange={handleChangeTime}
-      />
-      <Divider margin="0.5em 0" />
-      <div className="picker-actions">
-        <div>
-          {isDateSet && props.hasInitialDate && (
-            <ActionButton
-              appearance="outline"
-              size="small"
-              style={{ fontWeight: 500 }}
-              onClick={props.onRemove}
-            >
-              Remove
-            </ActionButton>
-          )}
-        </div>
-        <ActionButton
-          size="small"
-          type="button"
-          onClick={props.onDone}
-          disabled={!isDateSet}
-          style={{ fontWeight: 500 }}
-        >
-          {pickerSaveButtonText({
-            isDateSet,
-            hasInitialDate: props.hasInitialDate,
-            saveButtonText: props.saveButtonText
-          })}
-        </ActionButton>
-      </div>
+
+      {props.hasTime && (
+        <React.Fragment>
+          <Divider margin="0.5em 0" />
+          <TimeInput
+            initialDate={dateFallback(props.selectedDate)}
+            onChange={handleChangeTime}
+          />
+        </React.Fragment>
+      )}
+      {(props.hasDone || props.hasRemove) && (
+        <React.Fragment>
+          <Divider margin="0.5em 0" />
+          <div className="picker-actions">
+            <div>
+              {props.hasRemove && isDateSet && props.hasInitialDate && (
+                <ActionButton
+                  appearance="outline"
+                  size="small"
+                  style={{ fontWeight: 500 }}
+                  onClick={props.onRemove}
+                >
+                  Remove
+                </ActionButton>
+              )}
+            </div>
+            {props.hasDone && (
+              <ActionButton
+                size="small"
+                type="button"
+                onClick={props.onDone}
+                disabled={!isDateSet}
+                style={{ fontWeight: 500 }}
+              >
+                {pickerSaveButtonText({
+                  isDateSet,
+                  hasInitialDate: props.hasInitialDate,
+                  saveButtonText: props.saveButtonText
+                })}
+              </ActionButton>
+            )}
+          </div>
+        </React.Fragment>
+      )}
     </PickerContent>
   )
 }

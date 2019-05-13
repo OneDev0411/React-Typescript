@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "48.0.0",
+  "version": "51.0.0",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -101,6 +101,7 @@
     "koa-webpack": "^5.2.2",
     "linkifyjs": "github:izadmehr/linkifyjs#build",
     "lodash": "^4.17.11",
+    "mailgun-js": "^0.22.0",
     "match-sorter": "^2.2.3",
     "merge": "^1.2.1",
     "mini-css-extract-plugin": "^0.5.0",

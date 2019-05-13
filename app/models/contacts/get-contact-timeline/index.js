@@ -1,10 +1,11 @@
 import Fetch from '../../../services/fetch'
 
-const defaultQuery = {
-  associations: ['crm_task.reminders', 'crm_task.assignees']
-}
+import { CRM_TASKS_QUERY } from '../helpers/default-query'
 
-export async function getContactTimeline(contactId, query = defaultQuery) {
+export default async function getContactTimeline(
+  contactId,
+  query = CRM_TASKS_QUERY
+) {
   if (!contactId) {
     throw new Error('Contact id is required.')
   }

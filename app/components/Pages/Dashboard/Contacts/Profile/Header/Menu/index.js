@@ -1,28 +1,51 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
+import { AddToFlow } from 'components/AddToFlow'
+import SendEmailButton from 'components/SendEmailButton'
+import { CloseButton } from 'components/Button/CloseButton'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 
-import { normalizeContact } from 'models/email-compose/helpers/normalize-contact'
-
-import SendEmailButton from 'components/SendEmailButton'
-
-import { CloseButton } from 'components/Button/CloseButton'
+import normalizeContactForEmailCompose from 'models/email-compose/helpers/normalize-contact'
 
 import Chat from './ChatButton'
 import { Divider } from './Divider'
+
+Menu.propTypes = {
+  contact: PropTypes.shape().isRequired,
+  addToFlowCallback: PropTypes.func
+}
+
+Menu.defaultProps = {
+  addToFlowCallback() {}
+}
 
 function Menu(props) {
   const { contact, closeButtonQuery, backUrl } = props
 
   return (
     <Flex alignCenter style={{ padding: '1.5em 0' }}>
-      <SendContactCard contact={contact}>Send a Card</SendContactCard>
+      <AddToFlow
+        associations={{ contacts: [contact.id] }}
+        callback={props.addToFlowCallback}
+      />
+
       <SendEmailButton
-        recipients={normalizeContact(contact, props.attributeDefs)}
+        recipients={normalizeContactForEmailCompose(
+          contact,
+          props.attributeDefs
+        )}
         style={{ marginLeft: '1rem' }}
       />
+
+      <SendContactCard
+        contact={contact}
+        buttonStyle={{ style: { marginLeft: '1rem' } }}
+      >
+        Send a Card
+      </SendContactCard>
 
       <Chat contact={contact} />
       <Divider />

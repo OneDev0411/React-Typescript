@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react'
-import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 import idx from 'idx'
 
@@ -10,16 +9,12 @@ import flattenBrand from '../../../../../../../utils/flatten-brand'
 import CheckmarkIcon from '../../../../../../../views/components/SvgIcons/Checkmark/IconCheckmark'
 import Loading from '../../../../../../../views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
-import { primary, borderColor } from '../../../../../../../views/utils/colors'
+import { primary } from '../../../../../../../views/utils/colors'
 
 import Avatar from '../../../../../../Partials/UserAvatar'
 
 import ViewAsFilter from './ViewAsFilter'
 import { TeamName, Button } from './styled'
-
-const Team = styled.li`
-  border-bottom: 1px solid ${borderColor};
-`
 
 export default class TeamSwitcher extends React.Component {
   state = {
@@ -70,7 +65,7 @@ export default class TeamSwitcher extends React.Component {
           isSelected={isActiveTeam}
           onClick={e => this.changeTeam(e, team)}
         >
-          <Flex alignCenter>
+          <Flex alignCenter style={{ width: 'calc(100% - 2.25rem)' }}>
             {this.getAvatar(team.brand)}
 
             <TeamName>{team.brand.name}</TeamName>
@@ -81,7 +76,7 @@ export default class TeamSwitcher extends React.Component {
             )}
 
             {savingTeam === team.brand.id && (
-              <i className="fa fa-spinner fa-spin" />
+              <Loading style={{ width: '2.25rem', height: '2.25rem' }} />
             )}
           </Flex>
         </Button>
@@ -98,7 +93,7 @@ export default class TeamSwitcher extends React.Component {
       return (
         <Fragment>
           <Flex center>
-            <Loading style={{ fill: primary }} />
+            <Loading />
           </Flex>
           <li role="separator" className="divider" />
         </Fragment>

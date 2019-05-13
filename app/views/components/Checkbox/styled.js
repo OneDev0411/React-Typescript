@@ -16,33 +16,30 @@ export const Input = styled.input`
 `
 
 export const Label = styled.label`
-  position: relative;
   display: inline-flex;
   align-items: center;
-  margin: 0 1em 0 0;
+  margin: 0;
   font-weight: normal;
   cursor: pointer;
+`
 
-  &:before {
-    content: '';
-    width: ${props => props.size}px;
-    height: ${props => props.size}px;
-    margin-right: 0.5em;
-    border-radius: 3px;
-    background-color: ${props => (props.checked ? primary : '#fff')};
-    border: solid 1px ${props => (props.checked ? primary : grey.A550)};
+export const CheckMarkBox = styled.div`
+  width: ${props => props.size / 16}rem;
+  height: ${props => props.size / 16}rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  background-color: ${props => (props.checked ? primary : '#fff')};
+  border: solid 1px ${props => (props.checked ? primary : grey.A550)};
 
-    &:hover {
-      background-color: ${props => (props.checked ? primary : grey.A100)};
-    }
+  &:hover {
+    background-color: ${props => (props.checked ? primary : grey.A100)};
   }
 `
 
 export const CheckMark = styled(IconCheck)`
-  position: absolute;
-  left: 0;
-  top: 0.25em;
-  width: ${props => props.size}px;
-  height: ${props => props.size}px;
+  width: 100%;
+  height: 100%;
   fill: #fff;
 `

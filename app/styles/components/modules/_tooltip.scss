@@ -2,7 +2,14 @@
   
   .tooltip-inner {
     font-size: 1rem; 
-    padding: 0.5em 1em; 
+    padding: 0.5em 1em;
+  }
+
+  &.small {
+    .tooltip-inner {
+      font-size: 0.875rem; 
+      padding: 0.2rem 0.5rem 0.25rem; 
+    }
   }
 
   &.right {

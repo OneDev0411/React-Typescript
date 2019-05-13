@@ -8,11 +8,13 @@ import { Helmet } from 'react-helmet'
 import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 
+import deleteFlow from 'models/flows/delete-flow'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
+import { updateContactQuery } from 'models/contacts/helpers/default-query'
 import { getContact } from 'models/contacts/get-contact'
 import { deleteContacts } from 'models/contacts/delete-contact'
 import { updateContactSelf } from 'models/contacts/update-contact-self'
-import { getContactTimeline } from 'models/contacts/get-contact-timeline'
+import getContactTimeline from 'models/contacts/get-contact-timeline'
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
 
@@ -29,8 +31,9 @@ import Loading from '../../../../Partials/Loading'
 import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
 
 import { Container } from '../components/Container'
+import Flows from './Flows'
 import { Dates } from './Dates'
-import { DealsListWidget } from './Deals'
+import Deals from './Deals'
 import { Details } from './Details'
 import { Partner } from './Partner'
 import Tags from './Tags'
@@ -118,7 +121,15 @@ class ContactProfile extends React.Component {
 
   fetchContact = async (callback = () => {}) => {
     try {
-      const response = await getContact(this.props.params.id)
+      const response = await getContact(this.props.params.id, {
+        associations: [
+          ...updateContactQuery.associations,
+          'contact.deals',
+          'contact.flows',
+          'flow_step.email',
+          'flow_step.crm_task'
+        ]
+      })
 
       this.setState({ contact: normalizeContact(response.data) }, callback)
     } catch (error) {
@@ -244,6 +255,20 @@ class ContactProfile extends React.Component {
     }
   }
 
+  stopFlow = async id => {
+    try {
+      await deleteFlow(id)
+      this.fetchContact()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  addToFlowCallback = () => {
+    this.fetchContact()
+    this.fetchTimeline()
+  }
+
   render() {
     const { contact } = this.state
     const { user } = this.props
@@ -262,8 +287,14 @@ class ContactProfile extends React.Component {
     }
 
     const thirdColumnSections = [
-      <Dates contact={contact} key="key-0" />,
-      <DealsListWidget contactId={contact.id} key="key-1" />
+      <Dates contact={contact} key="s1" />,
+      <Flows
+        key="s2"
+        contactId={contact.id}
+        flows={contact.flows}
+        user={user}
+      />,
+      <Deals contact={contact} key="s3" />
     ]
 
     const _props = {
@@ -285,6 +316,7 @@ class ContactProfile extends React.Component {
                 : null
             }
             closeButtonQuery={this.props.location.state}
+            addToFlowCallback={this.addToFlowCallback}
           />
 
           <ColumnsContainer>
@@ -304,8 +336,15 @@ class ContactProfile extends React.Component {
                 <Partner {..._props} />
 
                 {!this.state.isDesktopScreen && (
-                  <DealsListWidget contactId={contact.id} />
+                  <Flows
+                    contactId={contact.id}
+                    flows={contact.flows}
+                    user={user}
+                    onStop={this.stopFlow}
+                  />
                 )}
+
+                {!this.state.isDesktopScreen && <Deals contact={contact} />}
 
                 <Owner
                   onSelect={this.onChangeOwner}

@@ -2,14 +2,14 @@ import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
+import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import {
   getTask,
   updateTask,
   createTask,
   deleteTask,
-  // createTaskAssociation,
   deleteTaskAssociation
-} from '../../../models/tasks'
+} from 'models/tasks'
 
 import Drawer from '../OverlayDrawer'
 import { Divider } from '../Divider'
@@ -39,12 +39,6 @@ import { UpdateReminder } from './components/UpdateReminder'
 import { Description } from './components/Description'
 import { EventType } from './components/EventType'
 import { FormContainer, FieldContainer, Footer } from './styled'
-
-export const QUERY = {
-  associations: ['reminders', 'assignees', 'created_by', 'updated_by'].map(
-    a => `crm_task.${a}`
-  )
-}
 
 const propTypes = {
   ...Drawer.propTypes,
@@ -87,7 +81,7 @@ export class EventDrawer extends Component {
 
     this.isNew =
       (!props.event && !props.eventId) ||
-      Object(this.props.initialValues).length > 0
+      Object.keys(this.props.initialValues).length > 0
   }
 
   load = async () => {
@@ -99,7 +93,7 @@ export class EventDrawer extends Component {
       try {
         this.setState({ isDisabled: true })
 
-        const event = await getTask(this.props.eventId, QUERY)
+        const event = await getTask(this.props.eventId, CRM_TASKS_QUERY)
 
         this.setState({ isDisabled: false, event })
 
@@ -121,10 +115,10 @@ export class EventDrawer extends Component {
       this.setState({ isDisabled: true, isSaving: true })
 
       if (event.id) {
-        newEvent = await updateTask(event, QUERY)
+        newEvent = await updateTask(event, CRM_TASKS_QUERY)
         action = 'updated'
       } else {
-        newEvent = await createTask(event, QUERY)
+        newEvent = await createTask(event, CRM_TASKS_QUERY)
       }
 
       this.setState({ isDisabled: false, isSaving: false, event: newEvent })
@@ -148,27 +142,6 @@ export class EventDrawer extends Component {
       this.setState({ isDisabled: false, error })
     }
   }
-
-  // handleCreateAssociation = async association => {
-  //   const crm_task =
-  //     this.props.eventId || (this.props.event && this.props.event.id)
-
-  //   if (crm_task) {
-  //     try {
-  //       const newAssociation = {
-  //         ...association,
-  //         crm_task
-  //       }
-
-  //       return await createTaskAssociation(crm_task, newAssociation)
-  //     } catch (error) {
-  //       console.log(error)
-  //       throw error
-  //     }
-  //   }
-
-  //   return Promise.resolve()
-  // }
 
   handleDeleteAssociation = async association => {
     if (association.id) {

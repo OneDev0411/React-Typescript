@@ -14,6 +14,7 @@ import { Card } from '../styled'
 import { NoteItem } from './NoteItem'
 import { TourItem } from './TourItem'
 import { EventItem } from './EventItem'
+import AutoEmailItem from './AutoEmailItem'
 import { OpenHouseItem } from './OpenHouseItem'
 import { EmptyState } from './EmptyState'
 import { Container, Title } from './styled'
@@ -47,59 +48,61 @@ export class Timeline extends React.Component {
     const upcomingEvents = []
     const pastEventsIndexedInMonths = {}
 
-    this.props.items.forEach(item => {
-      let date
-      let { due_date } = item
+    this.props.items
+      .map(item => (item.due_at ? { ...item, due_date: item.due_at } : item))
+      .forEach(item => {
+        let date
+        let { due_date } = item
 
-      function getDateMonthAndYear(date) {
-        date = new Date(date)
+        function getDateMonthAndYear(date) {
+          date = new Date(date)
 
-        const monthNumber = date.getMonth()
-        const year = date.getFullYear()
+          const monthNumber = date.getMonth()
+          const year = date.getFullYear()
 
-        const index = `${monthNumber}_${year}`
+          const index = `${monthNumber}_${year}`
 
-        const title = `${months[monthNumber]} ${year}`
+          const title = `${months[monthNumber]} ${year}`
 
-        return {
-          index,
-          title
-        }
-      }
-
-      if (due_date) {
-        due_date *= 1000
-
-        if (isToday(due_date)) {
-          return todayEvents.push(item)
+          return {
+            index,
+            title
+          }
         }
 
-        if (due_date > new Date().getTime()) {
-          return upcomingEvents.push(item)
+        if (due_date) {
+          due_date *= 1000
+
+          if (isToday(due_date)) {
+            return todayEvents.push(item)
+          }
+
+          if (due_date > new Date().getTime()) {
+            return upcomingEvents.push(item)
+          }
+
+          date = new Date(due_date)
+        } else {
+          const createdAt = item.created_at * 1000
+
+          if (isToday(createdAt)) {
+            return todayEvents.push(item)
+          }
+
+          date = new Date(createdAt)
         }
 
-        date = new Date(due_date)
-      } else {
-        const createdAt = item.created_at * 1000
+        const monthAndYear = getDateMonthAndYear(date)
 
-        if (isToday(createdAt)) {
-          return todayEvents.push(item)
+        if (pastEventsIndexedInMonths[monthAndYear.index]) {
+          pastEventsIndexedInMonths[monthAndYear.index].items.push(item)
+        } else {
+          pastEventsIndexedInMonths[monthAndYear.index] = {
+            title: monthAndYear.title,
+            items: [item]
+          }
         }
-
-        date = new Date(createdAt)
-      }
-
-      const monthAndYear = getDateMonthAndYear(date)
-
-      if (pastEventsIndexedInMonths[monthAndYear.index]) {
-        pastEventsIndexedInMonths[monthAndYear.index].items.push(item)
-      } else {
-        pastEventsIndexedInMonths[monthAndYear.index] = {
-          title: monthAndYear.title,
-          items: [item]
-        }
-      }
-    })
+      })
 
     let pastEvents = []
 
@@ -159,6 +162,10 @@ export class Timeline extends React.Component {
 
           if (activity.type === 'crm_task') {
             return this.renderCRMTaskItem(key, activity)
+          }
+
+          if (activity.type === 'email_campaign') {
+            return <AutoEmailItem email={activity} key={key} />
           }
 
           if (

@@ -4,34 +4,29 @@ import { Form } from 'react-final-form'
 import { FORM_ERROR } from 'final-form'
 import _ from 'underscore'
 
-import { Spinner } from '../../../components/Partials/Loading'
+import Loading from 'components/LoadingContainer'
 
-export default class LoadSaveReinitializeForm extends React.Component {
-  static propTypes = {
-    initialValues: PropTypes.shape(),
-    load: PropTypes.func.isRequired,
-    loading: PropTypes.node,
-    postLoadFormat: PropTypes.func,
-    preSaveFormat: PropTypes.func,
-    save: PropTypes.func.isRequired
-  }
+const propTypes = {
+  initialValues: PropTypes.shape(),
+  load: PropTypes.func.isRequired,
+  loading: PropTypes.node,
+  needsReinitialize: PropTypes.bool,
+  postLoadFormat: PropTypes.func,
+  preSaveFormat: PropTypes.func,
+  save: PropTypes.func.isRequired
+}
 
-  static defaultProps = {
-    loading: <Spinner />,
-    initialValues: {}
-  }
+const defaultProps = {
+  loading: <Loading />,
+  initialValues: {},
+  needsReinitialize: false
+}
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      isLoading: false,
-      originalValues: undefined,
-      initialValues: this.props.initialValues
-    }
-
-    this.load = this.load.bind(this)
-    this.save = this.save.bind(this)
+class LoadSaveReinitializeForm extends React.Component {
+  state = {
+    isLoading: false,
+    originalValues: undefined,
+    initialValues: this.props.initialValues
   }
 
   componentDidMount() {
@@ -40,7 +35,7 @@ export default class LoadSaveReinitializeForm extends React.Component {
     }
   }
 
-  async load() {
+  load = async () => {
     const { postLoadFormat } = this.props
 
     this.setState({ isLoading: true })
@@ -57,7 +52,7 @@ export default class LoadSaveReinitializeForm extends React.Component {
     })
   }
 
-  async save(values) {
+  save = async values => {
     try {
       const { postLoadFormat, preSaveFormat } = this.props
       let valuesToSave = preSaveFormat
@@ -70,12 +65,15 @@ export default class LoadSaveReinitializeForm extends React.Component {
 
       await this.props.save(valuesToSave)
 
-      this.setState({
-        originalValues: valuesToSave,
-        initialValues: postLoadFormat
-          ? await postLoadFormat(valuesToSave.id ? valuesToSave : null)
-          : valuesToSave
-      })
+      // Reinitializing
+      if (this.props.needsReinitialize) {
+        this.setState({
+          originalValues: valuesToSave,
+          initialValues: postLoadFormat
+            ? await postLoadFormat(valuesToSave.id ? valuesToSave : null)
+            : valuesToSave
+        })
+      }
     } catch (error) {
       console.error(error)
 
@@ -104,3 +102,8 @@ export default class LoadSaveReinitializeForm extends React.Component {
     )
   }
 }
+
+LoadSaveReinitializeForm.propTypes = propTypes
+LoadSaveReinitializeForm.defaultProps = defaultProps
+
+export default LoadSaveReinitializeForm

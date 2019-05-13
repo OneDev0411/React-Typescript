@@ -6,8 +6,20 @@ import ActionButton from 'components/Button/ActionButton'
 import EmailCompose from 'components/EmailCompose'
 
 function SendEmailButton(props) {
+  const { deal } = props
   const [isOpen, setIsOpen] = useState(false)
   const toggleOpenDrawer = () => setIsOpen(!isOpen)
+
+  const getEmail = email => {
+    if (deal != null && deal.id) {
+      return {
+        ...email,
+        deal: deal.id
+      }
+    }
+
+    return email
+  }
 
   return (
     <Fragment>
@@ -25,9 +37,11 @@ function SendEmailButton(props) {
           defaultAttachments={[]}
           recipients={props.recipients}
           from={props.user}
-          deal={props.deal}
+          deal={deal}
           onClose={toggleOpenDrawer}
+          onSent={toggleOpenDrawer}
           hasDealsAttachments
+          getEmail={getEmail}
         />
       )}
     </Fragment>

@@ -27,7 +27,7 @@ export class AddNote extends React.Component {
     let editorRef = this.textEditorRef.current
 
     this.setState({
-      isEmpty: !editorRef || !editorRef.getPlainText()
+      isEmpty: !editorRef || !editorRef.getPlainText().trim()
     })
   }
 

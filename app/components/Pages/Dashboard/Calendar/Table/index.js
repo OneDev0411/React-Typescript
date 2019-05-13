@@ -75,7 +75,6 @@ export class Table extends React.Component {
         <SendContactCard
           contactId={row.contact}
           buttonStyle={{
-            alignSelf: 'center',
             size: 'small'
           }}
         >
@@ -177,10 +176,7 @@ export class Table extends React.Component {
   getGridTdProps = (colIndex, { column }) => {
     if (column.id === 'action') {
       return {
-        style: {
-          textAlign: 'right',
-          paddingRight: '1rem'
-        }
+        style: { alignSelf: 'center', textAlign: 'right', paddingRight: '1rem' }
       }
     }
 

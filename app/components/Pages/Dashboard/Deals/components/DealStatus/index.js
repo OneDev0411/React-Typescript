@@ -25,10 +25,7 @@ class DealStatus extends React.Component {
   }
 
   get CanChangeStatus() {
-    return (
-      this.props.deal.is_draft === false &&
-      this.getStatusList().includes(this.CurrentStatus)
-    )
+    return this.props.deal.is_draft === false
   }
 
   get IsLease() {
