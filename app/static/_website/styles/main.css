@@ -658,6 +658,11 @@ footer{
 
 /* FAQ */
 
+.faq-container{
+
+  max-width: 888px;
+}
+
 .faq{
   padding-top: var(--sectionPadding);
   padding-bottom: var(--sectionPadding);
