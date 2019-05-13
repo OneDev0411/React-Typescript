@@ -6,14 +6,13 @@ import { Item } from 'components/Dropdown/Item'
 
 import Loading from 'partials/Loading'
 
-import { List } from './styled'
+import { List, Placeholder } from './styled'
 
 export function SimpleList({
   options,
   getOptions,
   onFilterChange,
-  onToggleFilterActive,
-  values
+  onToggleFilterActive
 }) {
   const [resolvedOptions = [], error, state] = usePromise(
     () => Promise.resolve(getOptions ? getOptions() : options || []),
@@ -21,11 +20,15 @@ export function SimpleList({
   )
 
   if (error) {
-    return 'Could not fetch options'
+    return <Placeholder hasError>Could not fetch options</Placeholder>
   }
 
-  return state === 'pending' ? (
-    <Loading />
+  if (state === 'pending') {
+    return <Loading />
+  }
+
+  return resolvedOptions.length === 0 ? (
+    <Placeholder>Nothing to select</Placeholder>
   ) : (
     <List className="u-scrollbar--thinner--self">
       {resolvedOptions.map((item, index) => (
