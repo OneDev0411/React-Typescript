@@ -1,7 +1,13 @@
 import parseAppearanceString from '../appearance'
 import linebreak from '../linebreak'
 
-export function calculateWordWrap(annotations, value, options = {}) {
+export function calculateWordWrap(
+  annotations,
+  value,
+  options = {
+    maxFontSize: 20
+  }
+) {
   const first = annotations[0]
   const appearance = parseAppearanceString(first.defaultAppearance)
 
@@ -12,6 +18,8 @@ export function calculateWordWrap(annotations, value, options = {}) {
     return {
       left: rect[0],
       top: rect[1],
+      right: rect[2],
+      bottom: rect[3],
       width: Math.floor(rect[2] - rect[0]),
       height: Math.floor(rect[3] - rect[1]),
       multiline: annotation.multiLine
