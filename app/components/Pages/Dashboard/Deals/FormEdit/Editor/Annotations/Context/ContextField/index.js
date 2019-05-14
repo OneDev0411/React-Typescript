@@ -1,11 +1,11 @@
-import React, { Fragment, useState, useRef, useMemo } from 'react'
+import React, { Fragment, useState, useRef } from 'react'
 
 import DealContext from 'models/Deal/helpers/dynamic-context'
 
 import ActionButton from 'components/Button/ActionButton'
 import DatePicker from 'components/DatePicker'
 
-import { ContextInlineEdit } from '../../../ContextInlineEdit'
+import { ContextInlineEdit } from 'deals/FormEdit/Editor/ContextInlineEdit'
 
 import { TextInput } from './TextInput'
 import { Body, Footer } from './styled'

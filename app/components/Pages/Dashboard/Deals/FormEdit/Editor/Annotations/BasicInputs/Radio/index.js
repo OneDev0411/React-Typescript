@@ -1,6 +1,7 @@
 import React from 'react'
 
-import parseAppearanceString from '../../../../utils/appearance'
+import parseAppearanceString from 'deals/FormEdit/utils/appearance'
+
 import { RadioInput } from './styled'
 
 export default React.memo(props => {

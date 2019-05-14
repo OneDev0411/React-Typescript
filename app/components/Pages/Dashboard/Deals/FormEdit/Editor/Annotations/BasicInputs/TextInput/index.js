@@ -1,6 +1,6 @@
 import React from 'react'
 
-import parseAppearanceString from '../../../../utils/appearance'
+import parseAppearanceString from 'deals/FormEdit/utils/appearance'
 
 export default React.memo(props => {
   const appearance = parseAppearanceString(props.annotation.defaultAppearance)

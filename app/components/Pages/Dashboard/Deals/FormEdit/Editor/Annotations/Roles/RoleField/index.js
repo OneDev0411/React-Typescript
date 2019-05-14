@@ -1,10 +1,11 @@
 import React, { useState, Fragment } from 'react'
 
-import { normalizeRoleNames } from '../../../../utils/get-roles-text'
+import { normalizeRoleNames } from 'deals/FormEdit/utils/get-roles-text'
+
+import RoleCrmIntegration from 'deals/components/Roles/CrmIntegration'
+import { ContextInlineEdit } from 'deals/FormEdit/Editor/ContextInlineEdit'
 
 import { AddRole } from '../AddRole'
-import RoleCrmIntegration from '../../../../../components/Roles/CrmIntegration'
-import { ContextInlineEdit } from '../../../ContextInlineEdit'
 
 export function RoleField(props) {
   const [activeRole, setRole] = useState(undefined)

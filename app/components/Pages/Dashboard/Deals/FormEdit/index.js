@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 import { addNotification as notify } from 'reapop'
 
+import config from 'config/public'
+
 import {
   saveSubmission,
   getDeal,
@@ -29,7 +31,6 @@ import PDFEdit from './Editor'
 import { Header } from './Header'
 
 import { Container, LoadingDealContainer } from './styled'
-import config from '../../../../../../config/public'
 
 class EditDigitalForm extends React.Component {
   state = {

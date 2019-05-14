@@ -2,10 +2,7 @@ import React, { useMemo } from 'react'
 
 import { SelectInput } from 'components/Forms/SelectInput'
 
-import {
-  roleName,
-  ROLE_NAMES
-} from '../../../../../../components/Pages/Dashboard/Deals/utils/roles'
+import { roleName, ROLE_NAMES } from 'deals/utils/roles'
 
 export function Roles({ input, meta, isAllowedRole, isRequired }) {
   const role = input.value

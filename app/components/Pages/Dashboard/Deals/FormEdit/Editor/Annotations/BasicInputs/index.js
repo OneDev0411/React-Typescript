@@ -2,11 +2,11 @@ import React, { Fragment } from 'react'
 
 import debounce from 'debounce'
 
+import { getType, Types } from 'deals/FormEdit/utils/types'
+
 import CheckboxAnnotation from './Checkbox'
 import RadioAnnotation from './Radio'
 import TextInputAnnotation from './TextInput'
-
-import { getType, Types } from '../../../utils/types'
 
 export const FormInputs = React.memo(
   props => (

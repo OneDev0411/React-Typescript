@@ -2,8 +2,8 @@ import React from 'react'
 
 import { getField } from 'models/Deal/helpers/context/get-field'
 
-import { getAnnotationsByType } from '../../../utils/get-annotations-by-type'
-import { getGroupValues } from '../../../utils/get-group-values'
+import { getAnnotationsByType } from 'deals/FormEdit/utils/get-annotations-by-type'
+import { getGroupValues } from 'deals/FormEdit/utils/get-group-values'
 
 import { AnnotationWrapper } from '../components/AnnotationWrapper'
 import { ContextField } from './ContextField'

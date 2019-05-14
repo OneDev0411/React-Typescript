@@ -3,9 +3,10 @@ import React from 'react'
 import { getField } from 'models/Deal/helpers/context/get-field'
 import { normalizeAddress } from 'models/Deal/helpers/normalize-address'
 
+import { getGroupValues } from 'deals/FormEdit/utils/get-group-values'
+import { getAnnotationsByType } from 'deals/FormEdit/utils/get-annotations-by-type'
+
 import { AnnotationWrapper } from '../components/AnnotationWrapper'
-import { getGroupValues } from '../../../utils/get-group-values'
-import { getAnnotationsByType } from '../../../utils/get-annotations-by-type'
 
 import { AddressField } from './AddressField'
 
@@ -20,8 +21,8 @@ export function AddressInputs(props) {
     list.forEach(group => {
       const name = group[0].context
 
-      if (addressFields.hasOwnProperty(name) === false) {
-        return false
+      if (!addressFields.hasOwnProperty(name)) {
+        return
       }
 
       fields = {

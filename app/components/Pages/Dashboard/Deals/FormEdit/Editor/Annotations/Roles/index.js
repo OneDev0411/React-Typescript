@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 
 import { selectDealRoles } from 'reducers/deals/roles'
 
-import { getRoleText } from '../../../utils/get-roles-text'
-import { getGroupValues } from '../../../utils/get-group-values'
-import { getAnnotationsByType } from '../../../utils/get-annotations-by-type'
+import { getRoleText } from 'deals/FormEdit/utils/get-roles-text'
+import { getGroupValues } from 'deals/FormEdit/utils/get-group-values'
+import { getAnnotationsByType } from 'deals/FormEdit/utils/get-annotations-by-type'
 
 import { AnnotationWrapper } from '../components/AnnotationWrapper'
 import { RoleField } from './RoleField'

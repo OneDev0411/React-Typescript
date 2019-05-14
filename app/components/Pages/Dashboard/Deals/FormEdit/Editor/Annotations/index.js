@@ -1,7 +1,5 @@
 import React from 'react'
 
-// import { getValue } from '../../utils/types'
-
 import { Container } from './styled'
 
 import { FormInputs } from './BasicInputs'

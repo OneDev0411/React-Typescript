@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import { calculateWordWrap } from '../../../../utils/word-wrap'
+import { calculateWordWrap } from 'deals/FormEdit/utils/word-wrap'
 
 export function AnnotationWrapper(props) {
   function getFormValue(values, annotations) {

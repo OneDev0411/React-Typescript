@@ -2,8 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Form } from 'react-final-form'
 
+import { ROLE_NAMES } from 'deals/utils/roles'
+
 import { FormContainer } from './Form'
-import { ROLE_NAMES } from '../../../components/Pages/Dashboard/Deals/utils/roles'
 
 import { TYPE_PERSON } from './constants/role-types'
 

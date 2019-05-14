@@ -1,6 +1,6 @@
 import { get as getAttribute } from 'underscore.get'
 
-import { getLegalFullName } from '../../../utils/roles'
+import { getLegalFullName } from 'deals/utils/roles'
 
 export function normalizeRoleNames(deal, roleNames) {
   return roleNames.split(',').map(name => {
