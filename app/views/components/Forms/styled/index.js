@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import { red } from 'views/utils/colors'
+
 export const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -17,13 +19,13 @@ export const InputLabel = styled.label`
 `
 
 export const InputError = styled.div`
-  color: #fe3824;
+  color: ${red.A100};
   font-size: 0.75rem;
   opacity: ${props => (props.display ? 1 : 0)};
 `
 
 export const InputRequired = styled.span`
-  color: #fe3824;
+  color: ${red.A100};
   font-size: 1rem;
   margin-left: 3px;
 `

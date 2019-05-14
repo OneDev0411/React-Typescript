@@ -25,7 +25,8 @@ const propTypes = {
   allowedRoles: PropTypes.array,
   formOptions: PropTypes.object,
   isRoleRemovable: PropTypes.bool,
-  isSubmitting: PropTypes.bool
+  isSubmitting: PropTypes.bool,
+  isCommissionRequired: PropTypes.bool
 }
 
 const defaultProps = {
@@ -33,6 +34,7 @@ const defaultProps = {
   formOptions: {},
   isRoleRemovable: false,
   isSubmitting: false,
+  isCommissionRequired: false,
   allowedRoles: []
 }
 
@@ -126,7 +128,11 @@ class Role extends React.Component {
     this.formObject = values
 
     // send form to the parent
-    await this.props.onFormSubmit(normalizeForm(values), saveRoleInContacts)
+    try {
+      await this.props.onFormSubmit(normalizeForm(values), saveRoleInContacts)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   validate = async values => {
@@ -225,7 +231,7 @@ class Role extends React.Component {
   }
 
   render() {
-    if (this.props.isOpen === false) {
+    if (!this.props.isOpen) {
       return false
     }
 

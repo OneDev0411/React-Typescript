@@ -7,8 +7,8 @@ export const List = styled.div`
   top: 100%;
   left: 0
   z-index: 2;
-  width: 250px;
-  max-height: 250px;
+  width: 15.5rem;
+  max-height: 15.5rem;
   overflow-y: auto;
   border-radius: 3px;
   background: #fff;
@@ -20,7 +20,7 @@ export const ListItem = styled.div`
   font-size: 1rem;
   font-weight: ${props => (props.isSelected ? '500' : 'normal')};
   background-color: ${props => (props.isActive ? primary : '#fff')};
-  color: ${props => (props.isActive ? '#fff' : '#262626')};
+  color: ${props => (props.isActive ? '#fff' : primary)};
   text-transform: none;
   white-space: normal;
   word-wrap: normal;

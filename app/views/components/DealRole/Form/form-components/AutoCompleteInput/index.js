@@ -7,7 +7,7 @@ import { ListItem } from 'components/AutoComplete/styled'
 import { ItemTitle, ItemDescription } from './styled'
 
 export function AutoCompleteInput(props) {
-  if (props.isVisible === false) {
+  if (!props.isVisible) {
     return false
   }
 

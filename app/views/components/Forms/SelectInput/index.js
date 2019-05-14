@@ -49,7 +49,7 @@ SelectInput.defaultProps = {
 }
 
 export function SelectInput(props) {
-  if (props.isVisible === false) {
+  if (!props.isVisible) {
     return false
   }
 

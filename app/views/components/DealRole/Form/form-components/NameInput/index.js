@@ -6,8 +6,8 @@ import { searchContacts } from 'models/contacts/search-contacts'
 import { AutoCompleteInput } from '../AutoCompleteInput'
 
 export function NameInput(props) {
-  const searchByName = async name => {
-    if (!name || name.length < 2) {
+  const searchByName = async (name, minLength = 2) => {
+    if (!name || name.length < minLength) {
       return false
     }
 

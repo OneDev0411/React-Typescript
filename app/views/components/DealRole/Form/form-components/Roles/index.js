@@ -15,7 +15,7 @@ export function Roles({ input, meta, isAllowedRole, isRequired }) {
         label: value ? roleName(value) : 'Select Role'
       }))
 
-    if (options.length === 0 && role) {
+    if (!options.length && role) {
       options = [
         {
           value: role,

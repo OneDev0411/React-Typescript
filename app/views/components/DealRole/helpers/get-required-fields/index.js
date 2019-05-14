@@ -15,7 +15,7 @@ function getIsCommissionRequired(args) {
     return false
   }
 
-  return visibleFields.includes('commission') && isCommissionRequired !== false
+  return visibleFields.includes('commission') && isCommissionRequired
 }
 
 /**

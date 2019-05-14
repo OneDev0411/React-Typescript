@@ -12,7 +12,7 @@ import {
 import { Input } from './styled'
 
 export function Address(props) {
-  if (props.isVisible === false) {
+  if (!props.isVisible) {
     return false
   }
 

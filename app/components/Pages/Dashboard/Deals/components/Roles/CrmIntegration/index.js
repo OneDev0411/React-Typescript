@@ -99,11 +99,15 @@ class RoleFormWrapper extends React.Component {
       return false
     }
 
-    await createContacts([
-      convertRoleToContact(form, this.props.user.id, this.props.attributeDefs)
-    ])
+    try {
+      await createContacts([
+        convertRoleToContact(form, this.props.user.id, this.props.attributeDefs)
+      ])
 
-    this.showNotification(`New Contact Created: ${getLegalFullName(form)}`)
+      this.showNotification(`New Contact Created: ${getLegalFullName(form)}`)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   render() {

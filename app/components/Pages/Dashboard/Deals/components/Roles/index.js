@@ -50,6 +50,7 @@ const defaultProps = {
   disableAddRole: false,
   allowDeleteRole: true,
   isEmailRequired: false,
+  showTitle: true,
   filter: () => true,
   onCloseAddRoleDrawer: () => null,
   onTriggerRequiredEmail: () => null
@@ -146,7 +147,7 @@ class Roles extends React.Component {
   render() {
     return (
       <RolesContainer style={this.props.containerStyle}>
-        {this.props.showTitle !== false && <RolesTitle>Contacts</RolesTitle>}
+        {this.props.showTitle && <RolesTitle>Contacts</RolesTitle>}
 
         {this.props.roles
           .filter(

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 import { addNotification as notify } from 'reapop'
 
-import config from 'config/public'
+import config from 'config'
 
 import {
   saveSubmission,
@@ -78,11 +78,11 @@ class EditDigitalForm extends React.Component {
       if (!deal || !deal.checklists) {
         deal = await this.props.getDeal(this.props.params.id)
       }
+
+      await this.fetchContexts(deal)
     } catch (e) {
       return browserHistory.push('/dashboard/deals')
     }
-
-    await this.fetchContexts(deal)
 
     if (!this.state.pdfDocument) {
       this.loadPdfDocument()

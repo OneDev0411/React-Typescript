@@ -2,6 +2,8 @@ import React from 'react'
 import Flex from 'styled-flex-component'
 import styled, { css } from 'styled-components'
 
+import { grey } from 'views/utils/colors'
+
 import ToolTip from '../tooltip'
 import IconSelectedRadio from '../SvgIcons/Radio/SelectedRadio/IconSelectedRadio'
 import IconUnSelectedRadio from '../SvgIcons/Radio/UnSelectedRadio/IconUnSelectedRadio'
@@ -17,7 +19,7 @@ const RadioLabel = styled.div`
     `};
 `
 const Caption = styled.div`
-  color: #7f7f7f;
+  color: ${grey.A900};
   font-size: 1rem;
 `
 

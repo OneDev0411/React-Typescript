@@ -8,7 +8,7 @@ const items = [null, 'Mr', 'Ms', 'Mrs', 'Miss', 'Dr'].map(value => ({
 }))
 
 export function TitleInput(props) {
-  if (props.isVisible === false) {
+  if (!props.isVisible) {
     return false
   }
 

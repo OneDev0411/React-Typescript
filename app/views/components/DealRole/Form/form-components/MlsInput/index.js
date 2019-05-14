@@ -4,8 +4,8 @@ import searchAgents from 'models/agent/search'
 
 import { AutoCompleteInput } from '../AutoCompleteInput'
 
-async function searchByMlsId(mls) {
-  if (!mls || mls.length < 6) {
+async function searchByMlsId(mls, minLength = 6) {
+  if (!mls || mls.length < minLength) {
     return false
   }
 

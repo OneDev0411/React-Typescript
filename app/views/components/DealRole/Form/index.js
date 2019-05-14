@@ -59,7 +59,7 @@ export function FormContainer(props) {
             label="First Name"
             isVisible={isVisible('legal_first_name')}
             isRequired={isRequired('legal_first_name')}
-            crmSearch={isVisible('mls_id') === false}
+            crmSearch={!isVisible('mls_id')}
             mutators={props.form.mutators}
             component={NameInput}
             style={{ flex: 3, marginRight: '0.5rem' }}

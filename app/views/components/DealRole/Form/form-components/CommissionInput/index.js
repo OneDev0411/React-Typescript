@@ -2,6 +2,7 @@ import React from 'react'
 import Flex from 'styled-flex-component'
 
 import { InputLabel, InputRequired } from 'components/Forms/styled'
+import { borderColor } from 'views/utils/colors'
 
 import { TextInput } from 'components/Forms/TextInput'
 
@@ -15,7 +16,7 @@ export function CommissionInput(props) {
         width: '100%',
         paddingBottom: '2px',
         display: props.isVisible ? 'flex' : 'none',
-        borderBottom: '1px solid #dce5eb'
+        borderBottom: `1px solid ${borderColor}`
       }}
     >
       <InputLabel hasError={props.meta.submitFailed && props.meta.error}>

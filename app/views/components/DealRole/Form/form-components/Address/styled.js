@@ -1,13 +1,14 @@
 import styled from 'styled-components'
 
 import { Input as BaseInput } from 'components/inline-editable-fields/styled'
+import { grey, borderColor } from 'views/utils/colors'
 
 export const Input = styled(BaseInput)`
-  border-bottom: 1px solid #dce5eb;
+  border-bottom: 1px solid ${borderColor};
 
   :focus {
     border-radius: 0;
     border: none;
-    border-bottom: 1px solid #262626;
+    border-bottom: 1px solid ${grey.A900};
   }
 `
