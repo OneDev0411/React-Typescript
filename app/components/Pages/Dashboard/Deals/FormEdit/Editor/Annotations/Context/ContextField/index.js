@@ -29,8 +29,7 @@ export function ContextField(props) {
       <div
         style={{
           ...props.style,
-          cursor: 'pointer',
-          background: 'red'
+          cursor: 'pointer'
         }}
         onClick={toggle}
       >

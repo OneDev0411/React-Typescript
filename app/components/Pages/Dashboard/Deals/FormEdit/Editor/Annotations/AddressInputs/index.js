@@ -1,7 +1,5 @@
 import React from 'react'
 
-import _ from 'underscore'
-
 import { getField } from 'models/Deal/helpers/context/get-field'
 import { normalizeAddress } from 'models/Deal/helpers/normalize-address'
 
@@ -56,13 +54,11 @@ export function AddressInputs(props) {
 }
 
 function normalizeAddressFields(address) {
-  const addressFields = normalizeAddress(address)
-
-  _.each(address, (item, name) => {
+  return Object.entries(address).reduce((addressFields, [name, item]) => {
     addressFields[name] = typeof item === 'object' ? item.value : item
-  })
 
-  return addressFields
+    return addressFields
+  }, normalizeAddress(address))
 }
 
 // function getTooltip(context) {

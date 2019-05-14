@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react'
-import _ from 'underscore'
 
 import { calculateWordWrap } from '../../../../utils/word-wrap'
 
@@ -18,8 +17,8 @@ export function AnnotationWrapper(props) {
 
   return (
     <Fragment>
-      {_.map(props.items, (groups, name) =>
-        _.map(groups, group => {
+      {Object.entries(props.items).map(([name, groups]) =>
+        Object.entries(groups).map(([, group]) => {
           const annotations = group
             .sort((a, b) => a.order - b.order)
             .map(item => item.annotation)

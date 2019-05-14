@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import _ from 'underscore'
+import debounce from 'debounce'
 
 import CheckboxAnnotation from './Checkbox'
 import RadioAnnotation from './Radio'
@@ -26,7 +26,7 @@ export const FormInputs = React.memo(
         const sharedProps = {
           annotation,
           defaultValue: annotation.fieldValue,
-          onChange: _.debounce(
+          onChange: debounce(
             value =>
               props.onValueUpdate({
                 [annotation.fieldName]: value

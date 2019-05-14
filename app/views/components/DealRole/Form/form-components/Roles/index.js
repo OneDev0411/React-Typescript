@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react'
-import _ from 'underscore'
 
 import { SelectInput } from 'components/Forms/SelectInput'
 
@@ -12,13 +11,12 @@ export function Roles({ input, meta, isAllowedRole, isRequired }) {
   const role = input.value
 
   const options = useMemo(() => {
-    let options = _.chain([null, ...ROLE_NAMES])
+    let options = [null, ...ROLE_NAMES]
       .filter(value => isAllowedRole(value, role))
       .map(value => ({
         value,
         label: value ? roleName(value) : 'Select Role'
       }))
-      .value()
 
     if (options.length === 0 && role) {
       options = [

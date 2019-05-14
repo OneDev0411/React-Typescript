@@ -1,5 +1,3 @@
-import _ from 'underscore'
-
 /**
  * get normalized form
  * commission logic: commission_type + commission = commission_<type>
@@ -41,11 +39,14 @@ export function normalizeForm(values) {
     newValues.source_type = 'ExplicitlyCreated'
   }
 
-  return _.pick(
-    {
-      ...values,
-      ...newValues
-    },
-    validFields
-  )
+  return Object.entries({
+    ...values,
+    ...newValues
+  }).reduce((current, [name, value]) => {
+    if (validFields.includes(name)) {
+      current[name] = value
+    }
+
+    return current
+  }, {})
 }

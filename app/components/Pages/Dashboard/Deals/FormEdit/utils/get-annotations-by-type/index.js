@@ -1,15 +1,19 @@
-import _ from 'underscore'
-
 export function getAnnotationsByType(annotations, type) {
-  const list = []
+  const list = annotations.reduce(
+    (current, page) => current.concat(getPageAnnotations(page, type)),
+    []
+  )
 
-  _.each(annotations, page => {
-    _.each(page[type], (groups, name) => {
-      _.each(groups, group => {
-        list.push(group)
-      })
-    })
-  })
+  return [].concat(list)
+}
 
-  return list
+function getPageAnnotations(page, type) {
+  return Object.entries(page[type]).reduce(
+    (current, [, groups]) => current.concat(flattenGroups(groups)),
+    []
+  )
+}
+
+function flattenGroups(groups) {
+  return Object.entries(groups).map(([, group]) => group)
 }

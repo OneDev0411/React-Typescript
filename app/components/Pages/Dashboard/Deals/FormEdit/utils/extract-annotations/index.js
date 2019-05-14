@@ -1,6 +1,5 @@
-import _ from 'underscore'
-
 import DealContext from 'models/Deal/helpers/dynamic-context'
+import { groupBy } from 'views/utils/object-helpers'
 
 import uuid from 'utils/uuid'
 import importPdfJs from 'utils/import-pdf-js'
@@ -34,9 +33,9 @@ async function getPageAnnotations(document, pageNumber, options) {
 
   const annotations = await page.getAnnotations()
 
-  const info = _.chain(annotations)
-    .sortBy(annotation => annotation.order)
-    .map(annotation => {
+  const info = Object.entries(annotations)
+    .sort(([, a], [, b]) => a.order - b.order)
+    .map(([, annotation]) => {
       const item = {
         ...annotation,
         page: pageNumber,
@@ -47,7 +46,6 @@ async function getPageAnnotations(document, pageNumber, options) {
 
       return getAnnotationInfo(item)
     })
-    .value()
 
   return {
     values: info.map(item => ({
@@ -76,15 +74,15 @@ function serializeValues(pages) {
 }
 
 function normalizeRoles(list) {
-  const grouped = {}
+  const normalized = groupBy(
+    Object.entries(list)
+      .filter(([, item]) => ['Role', 'Roles'].includes(item.type))
+      .map(([, item]) => item),
+    'role'
+  )
 
-  const normalized = _.chain(list)
-    .filter(item => ['Role', 'Roles'].includes(item.type))
-    .groupBy('role')
-    .value()
-
-  _.each(normalized, (data, context_name) => {
-    grouped[context_name] = _.groupBy(
+  return Object.entries(normalized).reduce((current, [context_name]) => {
+    current[context_name] = groupBy(
       normalized[context_name],
       item =>
         `${item.role
@@ -92,24 +90,24 @@ function normalizeRoles(list) {
           .join('')
           .toLowerCase()}${item.attribute}${item.group}`
     )
-  })
 
-  return grouped
+    return current
+  }, {})
 }
 
 function normalizeContexts(list, type) {
-  const grouped = {}
+  const normalized = groupBy(
+    Object.entries(list)
+      .filter(([, item]) => item.type === type)
+      .map(([, item]) => item),
+    item => item.context
+  )
 
-  const normalized = _.chain(list)
-    .filter(item => item.type === type)
-    .groupBy(item => item.context)
-    .value()
+  return Object.entries(normalized).reduce((current, [context_name]) => {
+    current[context_name] = groupBy(normalized[context_name], 'group')
 
-  _.each(normalized, (data, context_name) => {
-    grouped[context_name] = _.groupBy(normalized[context_name], 'group')
-  })
-
-  return grouped
+    return current
+  }, {})
 }
 
 function getAnnotationInfo(annotation) {

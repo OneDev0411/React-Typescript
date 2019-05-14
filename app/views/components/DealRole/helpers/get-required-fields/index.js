@@ -1,4 +1,4 @@
-import _ from 'underscore'
+import { memoize } from 'lodash/memoize'
 
 import { TYPE_PERSON, TYPE_COMPANY } from '../../constants/role-types'
 
@@ -98,9 +98,10 @@ function getRequiredFields(args) {
     )
   }
 
-  return _.uniq(list)
+  // unique array
+  return [...new Set(list)]
 }
 
-export default _.memoize(getRequiredFields, args =>
+export default memoize(getRequiredFields, args =>
   [args.role, args.role_type].join('')
 )

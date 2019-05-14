@@ -1,5 +1,4 @@
 import React from 'react'
-import _ from 'underscore'
 
 // import { getValue } from '../../utils/types'
 
@@ -23,7 +22,7 @@ export default function Annotations(props) {
     <Container>
       <FormInputs {...sharedProps} />
       <Roles {...sharedProps} />
-      <AddressInputs {...sharedProps}  />
+      <AddressInputs {...sharedProps} />
       <ContextInputs {...sharedProps} />
     </Container>
   )

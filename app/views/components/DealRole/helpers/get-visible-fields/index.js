@@ -1,4 +1,4 @@
-import _ from 'underscore'
+import { memoize } from 'lodash/memoize'
 
 import { TYPE_PERSON } from '../../constants/role-types'
 
@@ -48,9 +48,10 @@ function getVisibleFields(args) {
     list.push('current_address', 'future_address')
   }
 
-  return _.uniq(list)
+  // unique array
+  return [...new Set(list)]
 }
 
-export default _.memoize(getVisibleFields, args =>
+export default memoize(getVisibleFields, args =>
   [args.role, args.role_type].join('')
 )

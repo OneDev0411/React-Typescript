@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Form } from 'react-final-form'
-import _ from 'underscore'
 
 import { FormContainer } from './Form'
 import { ROLE_NAMES } from '../../../components/Pages/Dashboard/Deals/utils/roles'
@@ -143,7 +142,7 @@ class Role extends React.Component {
     })
 
     await Promise.all(
-      _.map(values, async (fieldValue, fieldName) => {
+      Object.entries(values).map(async ([fieldName, fieldValue]) => {
         const validator = validators[fieldName]
 
         if (!validator) {
@@ -182,22 +181,26 @@ class Role extends React.Component {
   }
 
   getFormProperties = values => {
-    const visibleFields = getVisibleFields({
-      ..._.pluck(this.props, ['isFirstNameRequired', 'isLastNameRequired']),
+    const { props } = this
+
+    const shared = {
       role: values.role,
       role_type: values.role_type
+    }
+
+    const visibleFields = getVisibleFields({
+      isFirstNameRequired: props.isFirstNameRequired,
+      isLastNameRequired: props.isLastNameRequired,
+      ...shared
     })
 
     const requiredFields = getRequiredFields({
-      ..._.pluck(this.props, [
-        'deal',
-        'dealSide',
-        'isEmailRequired',
-        'isCommissionRequired'
-      ]),
-      role: values.role,
-      role_type: values.role_type,
-      visibleFields
+      deal: props.deal,
+      dealSide: props.dealSide,
+      isEmailRequired: props.isEmailRequired,
+      isCommissionRequired: props.isCommissionRequired,
+      visibleFields,
+      ...shared
     })
 
     return { visibleFields, requiredFields }

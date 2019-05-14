@@ -1,5 +1,4 @@
 import React from 'react'
-import _ from 'underscore'
 
 import { getField } from 'models/Deal/helpers/context/get-field'
 
