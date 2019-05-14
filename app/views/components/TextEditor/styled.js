@@ -18,3 +18,11 @@ export const Separator = styled.span`
   background-color: #ccc;
   margin-right: 1rem;
 `
+
+export const EditorWrapper = styled.div`
+  &.hide-placeholder {
+    .public-DraftEditorPlaceholder-root {
+      display: none;
+    }
+  }
+`
