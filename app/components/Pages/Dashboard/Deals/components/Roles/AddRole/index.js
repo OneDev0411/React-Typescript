@@ -51,10 +51,10 @@ class AddRoleForm extends React.Component {
     const roles = this.AllowedRoles || ROLE_NAMES
 
     return roles
-      .filter(roleName => !isPrimaryAgent(roleName, this.props.deal.deal_type))
-      .map(roleName => ({
-        label: roleName(roleName),
-        value: roleName
+      .filter(name => !isPrimaryAgent(name, this.props.deal.deal_type))
+      .map(name => ({
+        label: roleName(name),
+        value: name
       }))
   }
 
