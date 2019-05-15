@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 import ALink from 'components/ALink'
 import Badge from 'components/Badge'
+import { grey } from 'views/utils/colors'
 
 export const InsightContainer = styled.div`
   & .insight-table-container {
@@ -18,13 +19,11 @@ export const InsightContainer = styled.div`
 `
 
 export const Info = styled.div`
-  /* width: calc(100% - 40px - 1.5rem); */
-  /* margin-left: 1rem; */
   display: flex;
   align-items: center;
 
   & .sub-info {
-    color: #ccc;
+    color: ${grey.A600};
     font-size: 0.875rem;
     white-space: nowrap;
     overflow: hidden;

@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import Badge from 'components/Badge'
+import { grey } from 'views/utils/colors'
 
 export const InsightContainer = styled.div`
   display: flex;
@@ -16,7 +17,7 @@ export const InsightContainer = styled.div`
     width: 70%;
     background: #fff;
     border-radius: 0.18rem;
-    border: solid 1px #d4d4d4;
+    border: solid 1px ${grey.A300};
     padding: 1.5rem;
   }
 `
@@ -24,7 +25,7 @@ export const InsightContainer = styled.div`
 export const SummaryCard = styled.div`
   background: #fff;
   border-radius: 0.18rem;
-  border: solid 1px #d4d4d4;
+  border: solid 1px ${grey.A300};
   padding: 1.5rem;
 
   ul {
@@ -36,7 +37,7 @@ export const SummaryCard = styled.div`
       margin-bottom: 1rem;
 
       .field-name {
-        color: #7f7f7f;
+        color: ${grey.A900};
         margin-bottom: 0.125rem;
       }
       .field-value {
@@ -89,6 +90,6 @@ export const ContactColumn = styled.div`
   }
 `
 
-export const StyledBadge = styled(Badge)`
+export const StyledBadge = styled(Badge) `
   padding: 0.25rem 0.75rem;
 `

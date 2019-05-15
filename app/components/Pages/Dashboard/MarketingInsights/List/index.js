@@ -67,7 +67,7 @@ function List(props) {
           title="Sent Emails"
           isSideMenuOpen={isSideMenuOpen}
           onMenuTriggerChange={() => setSideMenuOpen(!isSideMenuOpen)}
-          afterSend={() => setQueue(queue + 1)}
+          onSent={() => setQueue(queue + 1)}
         />
 
         {isLoading && <LoadingComponent />}

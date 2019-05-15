@@ -8,6 +8,9 @@ import { Link, Info, StyledBadge } from './styled'
 
 function InfoColumn({ data }) {
   const isScheduled = !data.executed_at
+
+  // This is a workaround and we don't acutually need to detect scheduled email here.
+  // In phase 2, we are going to have a separate table and page so this code will clean up in there.
   const title = (
     <>
       {show_title(data.subject)}

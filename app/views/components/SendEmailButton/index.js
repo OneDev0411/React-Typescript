@@ -39,7 +39,10 @@ function SendEmailButton(props) {
           from={props.user}
           deal={deal}
           onClose={toggleOpenDrawer}
-          onSent={toggleOpenDrawer}
+          onSent={() => {
+            toggleOpenDrawer()
+            props.onSent()
+          }}
           hasDealsAttachments
           getEmail={getEmail}
         />
@@ -60,7 +63,7 @@ SendEmailButton.propTypes = {
   recipients: PropTypes.array,
   appearance: PropTypes.string,
   title: PropTypes.string,
-  afterSend: PropTypes.func
+  onSent: PropTypes.func
 }
 
 SendEmailButton.defaultProps = {
@@ -69,7 +72,7 @@ SendEmailButton.defaultProps = {
   recipients: [],
   appearance: 'outline',
   title: 'Email',
-  afterSend: () => {}
+  onSent: () => {}
 }
 
 export default connect(mapStateToProps)(SendEmailButton)

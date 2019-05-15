@@ -35,7 +35,7 @@ export function Header(props) {
         <SendEmailButton
           appearance="primary"
           title="Send New Email"
-          afterSend={props.afterSend}
+          onSent={props.onSent}
         />
       </PageHeader.Menu>
     </PageHeader>
