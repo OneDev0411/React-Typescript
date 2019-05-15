@@ -4,15 +4,16 @@ import { primary } from 'views/utils/colors'
 
 export const List = styled.div`
   position: absolute;
+  z-index: 5;
   top: 100%;
   left: 0
-  z-index: 2;
   width: 15.5rem;
   max-height: 15.5rem;
   overflow-y: auto;
   border-radius: 3px;
   background: #fff;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  min-width: 12rem;
 `
 
 export const ListItem = styled.div`
