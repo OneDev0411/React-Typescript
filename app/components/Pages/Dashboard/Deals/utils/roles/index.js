@@ -72,7 +72,7 @@ export function getLegalFullName(userRole) {
     company_title
   } = userRole
 
-  if (legal_first_name || legal_last_name) {
+  if (userRole.role_type === 'Person') {
     name = legal_full_name
       ? [legal_full_name]
       : [legal_prefix, legal_first_name, legal_middle_name, legal_last_name]
@@ -321,7 +321,7 @@ export function getPrimaryAgentName(deal, roles) {
 
   let name = []
 
-  if (agent.legal_first_name || agent.legal_last_name) {
+  if (agent.role_type === 'Person') {
     name = [agent.legal_first_name, agent.legal_last_name]
   } else {
     name = [agent.company_title]
