@@ -195,6 +195,20 @@ const AsyncMarketingHistory = Load({
 })
 
 /* ==================================== */
+//  Insights
+/* ==================================== */
+
+const AsyncMarketingInsightsList = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/MarketingInsights/List' /* webpackChunkName: "marketing_insights_list" */)
+})
+
+const AsyncMarketingInsight = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/MarketingInsights/Insight' /* webpackChunkName: "email_insight" */)
+})
+
+/* ==================================== */
 //  Chatroom
 /* ==================================== */
 
@@ -259,7 +273,7 @@ const AsyncUpgradeAccount = Load({
 
 const WidgetsContainer = Load({
   loader: () =>
-    import('../components/Pages/Widgets/' /* webpackChunkName: "widgets_container" */)
+    import('../components/Pages/Widgets' /* webpackChunkName: "widgets_container" */)
 })
 const AsyncListingsWidget = Load({
   loader: () =>
@@ -470,6 +484,11 @@ export default (
         <IndexRoute component={AsyncMarketingStore} />
         <Route component={AsyncMarketingHistory} path="history" />
         <Route component={AsyncMarketingTemplates} path=":types(/:medium)" />
+      </Route>
+
+      <Route path="/dashboard/insights">
+        <IndexRoute component={AsyncMarketingInsightsList} />
+        <Route path=":id" component={AsyncMarketingInsight} />
       </Route>
 
       <Route path="dashboard/account" component={AsyncAccountLayout}>

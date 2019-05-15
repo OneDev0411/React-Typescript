@@ -1,6 +1,6 @@
 import { css } from 'styled-components'
 
-import { red } from '../../utils/colors'
+import { red, orange, green } from '../../utils/colors'
 
 export const badgeBaseStyle = css`
   -webkit-appearance: none;
@@ -20,5 +20,15 @@ export const badgeAppearances = {
     ${badgeBaseStyle};
     color: #fff;
     background-color: ${red.A200};
+  `,
+  warning: css`
+    ${badgeBaseStyle};
+    color: #fff;
+    background-color: ${orange.primary};
+  `,
+  success: css`
+    ${badgeBaseStyle};
+    color: #fff;
+    background-color: ${green.primary};
   `
 }
