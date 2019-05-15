@@ -11,6 +11,7 @@ import Editor from 'draft-js-plugins-editor'
 import { stateToHTML } from 'draft-js-export-html'
 import { stateFromHTML } from 'draft-js-import-html'
 import createRichButtonsPlugin from 'draft-js-richbuttons-plugin'
+import cn from 'classnames'
 
 import { InputError } from 'components/Forms/styled'
 
@@ -20,7 +21,7 @@ import IconItalic from '../SvgIcons/Italic/IconItalic'
 import IconList from '../SvgIcons/List/ListIcon'
 import IconNumberedList from '../SvgIcons/NumberedList/IconNumberedList'
 
-import { Separator, Toolbar } from './styled'
+import { EditorWrapper, Separator, Toolbar } from './styled'
 
 import IconButton from './buttons/IconButton'
 import HeadingButtons from './buttons/HeadingButtons'
@@ -155,7 +156,10 @@ export const TextEditor = forwardRef((props, ref) => {
         </BlockquoteButton> */}
       </Toolbar>
 
-      <div
+      <EditorWrapper
+        className={cn({
+          'hide-placeholder': shouldHidePlaceholder(editorState)
+        })}
         onClick={() => editorRef.current.focus()}
         style={{
           minHeight: '10rem'
@@ -171,7 +175,7 @@ export const TextEditor = forwardRef((props, ref) => {
           ref={editorRef}
           {...props.settings}
         />
-      </div>
+      </EditorWrapper>
 
       {props.meta && props.meta.error && props.meta.touched && (
         <InputError style={{ marginTop: '0.5rem' }}>
@@ -202,4 +206,21 @@ TextEditor.defaultProps = {
   plugins: [],
   settings: {},
   onChange: () => {}
+}
+
+function shouldHidePlaceholder(editorState) {
+  const contentState = editorState.getCurrentContent()
+
+  if (!contentState.hasText()) {
+    if (
+      contentState
+        .getBlockMap()
+        .first()
+        .getType() !== 'unstyled'
+    ) {
+      return true
+    }
+  }
+
+  return false
 }
