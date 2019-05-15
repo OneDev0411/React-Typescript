@@ -180,41 +180,45 @@ class EditDigitalForm extends React.Component {
   }
 
   handleSave = async () => {
-    this.saveContexts()
+    const { task, notify } = this.props
 
-    // const { task, notify } = this.props
-    // this.setState({ isSaving: true, promptOnQuit: false })
-    // // save form
-    // try {
-    //   await this.props.saveSubmission(
-    //     task.id,
-    //     this.state.pdfUrl,
-    //     task.form,
-    //     this.values
-    //   )
-    //   notify({
-    //     message: 'The form has been saved!',
-    //     status: 'success'
-    //   })
-    // } catch (err) {
-    //   console.log(err)
-    //   notify({
-    //     message:
-    //       err && err.response && err.response.body
-    //         ? err.response.body.message
-    //         : 'We were unable to save your form. Please try saving again',
-    //     status: 'error'
-    //   })
-    // }
-    // this.setState({ isSaving: false })
+    this.setState({ isSaving: true, promptOnQuit: false })
+
+    // save form
+    try {
+      await this.props.saveSubmission(
+        task.id,
+        this.state.pdfUrl,
+        task.form,
+        this.values
+      )
+
+      await this.saveContexts()
+
+      notify({
+        message: 'The form has been saved!',
+        status: 'success'
+      })
+    } catch (err) {
+      console.log(err)
+      notify({
+        message:
+          err && err.response && err.response.body
+            ? err.response.body.message
+            : 'We were unable to save your form. Please try saving again',
+        status: 'error'
+      })
+    }
+
+    this.setState({ isSaving: false })
   }
 
-  saveContexts = () => {
-    const contexts = _.map(this.pendingContexts, (value, name) =>
+  saveContexts = async () => {
+    const contexts = Object.entries(this.pendingContexts).map(([name, value]) =>
       createUpsertObject(this.props.deal, name, value, true)
     )
 
-    this.props.upsertContexts(this.props.deal.id, contexts)
+    return this.props.upsertContexts(this.props.deal.id, contexts)
   }
 
   handleUpdateValue = (fields, contexts = {}) => {
