@@ -101,18 +101,16 @@ class Role extends React.Component {
     const formRole = form && form.role
 
     if (formRole) {
-      return {}
+      return {
+        role: formRole
+      }
     }
 
     const availableRoles = ROLE_NAMES.filter(name => this.isAllowedRole(name))
     const preselectedRole = availableRoles.length === 1 && availableRoles[0]
 
-    if (!preselectedRole) {
-      return {}
-    }
-
     return {
-      role: preselectedRole
+      role: preselectedRole || null
     }
   }
 
