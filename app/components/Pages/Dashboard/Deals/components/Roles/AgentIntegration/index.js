@@ -200,6 +200,7 @@ class RoleAgentIntegration extends React.Component {
           dealSide={this.props.dealSide}
           modalTitle={this.props.modalTitle}
           allowedRoles={this.props.allowedRoles}
+          formOptions={this.props.roleFormOptions}
           isEmailRequired={this.props.isEmailRequired}
           isCommissionRequired={this.props.isCommissionRequired}
           onHide={this.onClose}

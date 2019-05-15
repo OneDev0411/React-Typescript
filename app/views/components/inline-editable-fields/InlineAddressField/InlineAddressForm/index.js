@@ -15,6 +15,8 @@ import {
   STATES_ITEMS
 } from './helpers/dropdown-fields-items'
 
+import postLoadFormat from './helpers/post-load-format'
+
 import { Container, Body, Row, Footer } from './styled'
 import { Select } from './fields/Select'
 import { TextField } from './fields/TextField'
@@ -27,15 +29,16 @@ const propTypes = {
   showDeleteButton: PropTypes.bool,
   handleCancel: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  preSaveFormat: PropTypes.func.isRequired,
-  postLoadFormat: PropTypes.func.isRequired
+  preSaveFormat: PropTypes.func,
+  postLoadFormat: PropTypes.func
 }
 
 const defaultProps = {
   style: {},
   validate() {},
   handleDelete() {},
-  showDeleteButton: false
+  showDeleteButton: false,
+  postLoadFormat
 }
 
 export class InlineAddressForm extends React.Component {

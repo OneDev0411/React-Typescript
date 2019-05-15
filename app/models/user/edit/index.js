@@ -7,6 +7,7 @@ import Fetch from '../../../services/fetch'
 const editUser = async params => {
   try {
     const response = await new Fetch().put('/users/self').send(params)
+
     return response.body.data
   } catch (error) {
     throw error

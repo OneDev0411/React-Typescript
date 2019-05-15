@@ -33,3 +33,6 @@ export default (state = null, action) => {
       return state
   }
 }
+
+export const selectDealRoles = (state, deal) =>
+  Array.isArray(deal.roles) ? deal.roles.map(id => state[id]) : []

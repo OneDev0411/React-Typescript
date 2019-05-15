@@ -329,3 +329,10 @@ export function getPrimaryAgentName(deal, roles) {
 
   return name.join(' ').trim()
 }
+
+export function isPrimaryAgent(roleName, dealType) {
+  return (
+    (roleName === 'BuyerAgent' && dealType === 'Buying') ||
+    (roleName === 'SellerAgent' && dealType === 'Selling')
+  )
+}

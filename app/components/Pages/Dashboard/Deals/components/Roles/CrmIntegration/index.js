@@ -8,12 +8,13 @@ import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-
 import { createContacts } from 'models/contacts/create-contacts'
 import { confirmation } from 'actions/confirmation'
 
+import DealRole from 'components/DealRole'
+
 import {
   convertRoleToContact,
   getLegalFullName,
   getContactDiff
 } from '../../../utils/roles'
-import RoleForm from '../Form'
 
 const initialState = {
   isSaving: false
@@ -28,7 +29,7 @@ class RoleFormWrapper extends React.Component {
       status
     })
 
-  onSubmit = async form => {
+  onSubmit = async (form, saveRoleInContacts) => {
     const isNewRecord = !this.props.role || !this.props.role.role
 
     try {
@@ -49,7 +50,7 @@ class RoleFormWrapper extends React.Component {
             this.showNotification(`${getLegalFullName(form)} Updated.`)
           }
         } else {
-          this.askCreateContact(form, this.props.role)
+          this.createCrmContact(form, saveRoleInContacts)
         }
 
         if (this.props.deal) {
@@ -57,7 +58,6 @@ class RoleFormWrapper extends React.Component {
             form
           ])
 
-          console.log('[ Role Created ] ', newRoles)
           this.props.onUpsertRole(newRoles[0])
         } else {
           this.props.onUpsertRole({
@@ -72,7 +72,6 @@ class RoleFormWrapper extends React.Component {
           ? await this.props.updateRole(this.props.deal.id, form)
           : form
 
-        console.log('[ Role Updated ] ', updatedRole)
         this.props.onUpsertRole(updatedRole)
       }
 
@@ -95,42 +94,37 @@ class RoleFormWrapper extends React.Component {
     }
   }
 
-  createCrmContact = async form => {
-    await createContacts([
-      convertRoleToContact(form, this.props.user.id, this.props.attributeDefs)
-    ])
-
-    this.showNotification(`New Contact Created: ${getLegalFullName(form)}`)
-  }
-
-  askCreateContact = form => {
-    if (this.props.user.email === form.email) {
+  createCrmContact = async (form, saveRoleInContacts) => {
+    if (!saveRoleInContacts || this.props.user.email === form.email) {
       return false
     }
 
-    this.props.confirmation({
-      message: `Should we add ${form.legal_first_name ||
-        form.company_title} to your Contacts?`,
-      cancelLabel: 'No',
-      confirmLabel: 'Yes, Add',
-      onConfirm: () => this.createCrmContact(form)
-    })
+    try {
+      await createContacts([
+        convertRoleToContact(form, this.props.user.id, this.props.attributeDefs)
+      ])
+
+      this.showNotification(`New Contact Created: ${getLegalFullName(form)}`)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   render() {
     return (
-      <RoleForm
+      <DealRole
         form={this.props.role}
         deal={this.props.deal}
         dealSide={this.props.dealSide}
-        modalTitle={this.props.modalTitle}
         isSubmitting={this.state.isSaving}
         isEmailRequired={this.props.isEmailRequired}
+        formOptions={this.props.formOptions}
         isCommissionRequired={this.props.isCommissionRequired}
-        isOpen={this.props.isOpen}
-        onHide={this.props.onHide}
-        onFormSubmit={this.onSubmit}
+        isRoleRemovable={this.props.isRoleRemovable}
         allowedRoles={this.props.allowedRoles}
+        isOpen={this.props.isOpen}
+        onFormSubmit={this.onSubmit}
+        onClose={this.props.onHide}
       />
     )
   }
@@ -139,6 +133,8 @@ class RoleFormWrapper extends React.Component {
 RoleFormWrapper.propTypes = {
   deal: PropTypes.object,
   role: PropTypes.object,
+  formOptions: PropTypes.object,
+  isRoleRemovable: PropTypes.bool,
   onUpsertRole: PropTypes.func,
   onHide: PropTypes.func
 }
@@ -146,6 +142,8 @@ RoleFormWrapper.propTypes = {
 RoleFormWrapper.defaultProps = {
   deal: null,
   role: null,
+  formOptions: {},
+  isRoleRemovable: false,
   onUpsertRole: () => null,
   onHide: () => null
 }
