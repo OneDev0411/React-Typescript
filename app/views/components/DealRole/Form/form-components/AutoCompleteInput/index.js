@@ -17,7 +17,7 @@ export function AutoCompleteInput(props) {
       listStyle={{
         top: '75%'
       }}
-      onSelect={item => props.mutators && props.mutators.setAgent(item)}
+      onSelect={item => props.mutators && props.mutators.populateRole(item)}
       options={props.options}
       inputProps={{
         highlightOnError: true

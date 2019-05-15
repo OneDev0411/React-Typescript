@@ -211,7 +211,7 @@ class Role extends React.Component {
     return { visibleFields, requiredFields }
   }
 
-  setAgent = ([agent], state, { changeValue }) => {
+  populateRole = ([agent], state, { changeValue }) => {
     changeValue(state, 'legal_first_name', value => agent.first_name || value)
     changeValue(state, 'legal_last_name', value => agent.last_name || value)
     changeValue(state, 'mls_id', value => agent.mlsid || value)
@@ -241,7 +241,7 @@ class Role extends React.Component {
             onSubmit={this.onSubmit}
             initialValues={this.getInitialValues()}
             mutators={{
-              setAgent: this.setAgent
+              populateRole: this.populateRole
             }}
             render={formProps => {
               const { visibleFields, requiredFields } = this.getFormProperties(
