@@ -118,7 +118,6 @@ class RoleFormWrapper extends React.Component {
         dealSide={this.props.dealSide}
         isSubmitting={this.state.isSaving}
         isEmailRequired={this.props.isEmailRequired}
-        formTitle={this.props.modalTitle}
         formOptions={this.props.formOptions}
         isCommissionRequired={this.props.isCommissionRequired}
         isRoleRemovable={this.props.isRoleRemovable}

@@ -53,9 +53,7 @@ export function RoleField(props) {
           </span>
         ))}
 
-        {props.rectIndex === Object.keys(props.values).length - 1 && (
-          <AddRole onClick={() => handleSelectRole(null)} />
-        )}
+        <AddRole {...props} onClick={() => handleSelectRole(null)} />
       </div>
 
       {activeRole !== undefined && (

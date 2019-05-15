@@ -16,7 +16,7 @@ import { selectDealRoles } from 'reducers/deals/roles'
 
 import TeamAgents from './AgentIntegration/AgentsList'
 
-import { roleName, getLegalFullName } from '../../utils/roles'
+import { roleName, getLegalFullName, isPrimaryAgent } from '../../utils/roles'
 import { getAvatarTitle } from '../../utils/get-avatar-title'
 import RoleCrmIntegration from './CrmIntegration'
 
@@ -61,19 +61,6 @@ class Roles extends React.Component {
     user: null,
     isRoleFormOpen: false,
     isReplaceAgentDrawerOpen: false
-  }
-
-  isPrimaryAgent = role => {
-    const { deal_type } = this.props.deal
-
-    if (
-      (deal_type === 'Buying' && role === 'BuyerAgent') ||
-      (deal_type === 'Selling' && role === 'SellerAgent')
-    ) {
-      return true
-    }
-
-    return false
   }
 
   onSelectRole = role => {
@@ -141,7 +128,10 @@ class Roles extends React.Component {
   }
 
   getIsRowRemovable(role) {
-    return this.props.allowDeleteRole && !this.isPrimaryAgent(role)
+    return (
+      this.props.allowDeleteRole &&
+      !isPrimaryAgent(role, this.props.deal.deal_type)
+    )
   }
 
   render() {
