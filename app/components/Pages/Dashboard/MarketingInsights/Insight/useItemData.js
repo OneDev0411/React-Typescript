@@ -8,16 +8,16 @@ function useItemData(id) {
   const [item, setItem] = useState({})
 
   useEffect(() => {
-    getCampaing(id).then(data => {
-      setError(false)
-      setLoading(false)
-      setItem(data)
-    })
-    // .catch(() => {
-    //   setError(true)
-    //   setLoading(false)
-    //   setItem([])
-    // })
+    getCampaing(id)
+      .then(data => {
+        setError(false)
+        setLoading(false)
+        setItem(data)
+      })
+      .catch(e => {
+        // Todo: Adding error state
+        console.log(e)
+      })
   }, [id])
 
   return {

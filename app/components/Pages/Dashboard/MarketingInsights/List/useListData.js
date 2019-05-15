@@ -10,16 +10,16 @@ function useListData(user, queue) {
   useEffect(() => {
     setLoading(true)
 
-    getCampaings(user).then(data => {
-      setError(false)
-      setLoading(false)
-      setList(data)
-    })
-    // .catch(() => {
-    //   setError(true)
-    //   setLoading(false)
-    //   setList([])
-    // })
+    getCampaings(user)
+      .then(data => {
+        setError(false)
+        setLoading(false)
+        setList(data)
+      })
+      .catch(e => {
+        // Todo: Adding error state
+        console.log(e)
+      })
   }, [user, queue])
 
   return {
