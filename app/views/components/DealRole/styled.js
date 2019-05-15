@@ -6,7 +6,7 @@ export const Container = styled.div`
   position: absolute;
   top: ${props => (props.position && props.position.top) || 0};
   left: ${props => (props.position && props.position.left) || 0};
-  z-index: 3;
+  z-index: 101;
   max-width: 100vw;
   width: 35rem;
   border-radius: 3px;
@@ -32,4 +32,14 @@ export const Footer = styled.div`
   justify-content: space-between;
   padding: 0.25rem 0.5rem;
   background-color: ${grey.A100};
+`
+
+export const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.1);
 `

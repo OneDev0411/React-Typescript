@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Form } from 'react-final-form'
 
@@ -14,7 +14,7 @@ import getVisibleFields from './helpers/get-visible-fields'
 import { getFormValidators } from './validators'
 import { getCommissionAttributes } from './helpers/get-commission-attributes'
 
-import { Container } from './styled'
+import { Container, Overlay } from './styled'
 
 const propTypes = {
   isOpen: PropTypes.bool.isRequired,
@@ -234,38 +234,41 @@ class Role extends React.Component {
     }
 
     return (
-      <Container position={this.props.formOptions.position}>
-        <Form
-          validate={this.validate}
-          onSubmit={this.onSubmit}
-          initialValues={this.getInitialValues()}
-          mutators={{
-            setAgent: this.setAgent
-          }}
-          render={formProps => {
-            const { visibleFields, requiredFields } = this.getFormProperties(
-              formProps.values
-            )
+      <Fragment>
+        <Container position={this.props.formOptions.position}>
+          <Form
+            validate={this.validate}
+            onSubmit={this.onSubmit}
+            initialValues={this.getInitialValues()}
+            mutators={{
+              setAgent: this.setAgent
+            }}
+            render={formProps => {
+              const { visibleFields, requiredFields } = this.getFormProperties(
+                formProps.values
+              )
 
-            return (
-              <FormContainer
-                {...formProps}
-                isSubmitting={this.props.isSubmitting}
-                isNewRecord={this.isNewRecord}
-                isRoleRemovable={this.props.isRoleRemovable}
-                deal={this.props.deal}
-                formObject={this.props.form}
-                requiredFields={requiredFields}
-                visibleFields={visibleFields}
-                isAllowedRole={this.isAllowedRole}
-                onDeleteRole={this.handleClose}
-                onSubmit={this.handleSubmit}
-                onClose={this.handleClose}
-              />
-            )
-          }}
-        />
-      </Container>
+              return (
+                <FormContainer
+                  {...formProps}
+                  isSubmitting={this.props.isSubmitting}
+                  isNewRecord={this.isNewRecord}
+                  isRoleRemovable={this.props.isRoleRemovable}
+                  deal={this.props.deal}
+                  formObject={this.props.form}
+                  requiredFields={requiredFields}
+                  visibleFields={visibleFields}
+                  isAllowedRole={this.isAllowedRole}
+                  onDeleteRole={this.handleClose}
+                  onSubmit={this.handleSubmit}
+                  onClose={this.handleClose}
+                />
+              )
+            }}
+          />
+        </Container>
+        <Overlay />
+      </Fragment>
     )
   }
 }
