@@ -4,7 +4,7 @@ import { Form } from 'react-final-form'
 import { FORM_ERROR } from 'final-form'
 import _ from 'underscore'
 
-import Loading from './Loading'
+import Loading from 'components/LoadingContainer'
 
 const propTypes = {
   initialValues: PropTypes.shape(),

@@ -1,13 +1,12 @@
+import path from 'path'
+
 import Koa from 'koa'
 import mount from 'koa-mount'
 import serve from 'koa-static'
 import views from 'koa-views'
 import session from 'koa-session'
 import cookie from 'koa-cookie'
-import { default as sslify } from 'koa-sslify'
-
-import path from 'path'
-import webpack from 'webpack'
+import sslify from 'koa-sslify'
 import _ from 'underscore'
 
 import config from '../config/private'
@@ -17,6 +16,7 @@ import fetch from './util/fetch'
 import universalMiddleware from './util/universal'
 import appConfig from '../config/webpack'
 import webpackConfig from '../webpack.config.babel'
+import websiteRoutes from './_website'
 
 const app = new Koa()
 const __DEV__ = process.env.NODE_ENV === 'development'
@@ -27,8 +27,9 @@ const { entry, output, publicPath } = appConfig.compile
 // app uses proxy
 app.proxy = true
 
-if (!__DEV__)
+if (!__DEV__) {
   app.use(sslify())
+}
 
 // handle application errors
 app.use(async (ctx, next) => {
@@ -50,7 +51,7 @@ const templatesDir = __DEV__
   : appConfig.compile.output
 
 // use template engine
-app.use(views(templatesDir, { map: { html: 'hogan' } }))
+app.use(views(templatesDir, { map: { html: 'hogan', ejs: 'ejs' } }))
 
 // use cookies
 app.use(cookie())
@@ -96,11 +97,14 @@ _.each(require('./api/routes'), route => {
   app.use(mount('/api', require(route.path)))
 })
 
+// Adding websites route
+app.use(websiteRoutes)
+
 const development = async () => {
   const koaWebpack = require('koa-webpack')
 
   const middleware = await koaWebpack({
-    config: webpackConfig,
+    config: webpackConfig
   })
 
   app.use(middleware)
@@ -131,10 +135,10 @@ const production = async () => {
   app.use(mount(universalMiddleware))
 }
 
-if (__DEV__)
+if (__DEV__) {
   development()
-else
+} else {
   production()
-
+}
 
 export default app

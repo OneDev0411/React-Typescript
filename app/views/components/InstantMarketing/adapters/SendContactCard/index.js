@@ -4,21 +4,21 @@ import { addNotification as notify } from 'reapop'
 import idx from 'idx'
 
 import { getContact } from 'models/contacts/get-contact'
-import { normalizeContact } from 'models/email-compose/helpers/normalize-contact'
+import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
+import normalizeContactForEmailCompose from 'models/email-compose/helpers/normalize-contact'
 
 import { confirmation } from 'actions/confirmation'
 
 import InstantMarketing from 'components/InstantMarketing'
 import ActionButton from 'components/Button/ActionButton'
 
-import EmailCompose from 'components/EmailCompose'
+import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
 import SocialDrawer from '../../components/SocialDrawer'
-
 import MissingEmailModal from './MissingEmailModal'
 
 class SendContactCard extends React.Component {
@@ -80,7 +80,7 @@ class SendContactCard extends React.Component {
 
       this.setState(
         {
-          contact: response.data,
+          contact: normalizeContact(response.data),
           isFetchingContact: false
         },
         this.openBuilder
@@ -191,6 +191,14 @@ class SendContactCard extends React.Component {
     })
   }
 
+  handleSocialSharing = (template, socialNetworkName) => {
+    this.setState({
+      htmlTemplate: template,
+      isSocialDrawerOpen: true,
+      socialNetworkName
+    })
+  }
+
   get TemplateInstanceData() {
     return {
       contacts: this.Recipients.map(r => r.contactId)
@@ -198,9 +206,13 @@ class SendContactCard extends React.Component {
   }
 
   get Recipients() {
-    return normalizeContact(this.state.contact, this.props.attributeDefs, {
-      readOnly: true
-    })
+    return normalizeContactForEmailCompose(
+      this.state.contact,
+      this.props.attributeDefs,
+      {
+        readOnly: true
+      }
+    )
   }
 
   closeSocialDrawer = () =>
@@ -250,7 +262,7 @@ class SendContactCard extends React.Component {
         />
 
         {this.state.isComposeEmailOpen && (
-          <EmailCompose
+          <SingleEmailComposeDrawer
             isOpen
             hasStaticBody
             disableAddNewRecipient
@@ -261,6 +273,15 @@ class SendContactCard extends React.Component {
             onClose={this.toggleComposeEmail}
             getEmail={this.getEmail}
             isSubmitDisabled={this.state.isGettingTemplateInstance}
+          />
+        )}
+
+        {this.state.isSocialDrawerOpen && (
+          <SocialDrawer
+            template={this.state.htmlTemplate}
+            templateInstanceData={this.TemplateInstanceData}
+            socialNetworkName={this.state.socialNetworkName}
+            onClose={this.closeSocialDrawer}
           />
         )}
 

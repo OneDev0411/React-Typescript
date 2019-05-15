@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
-import EmailCompose from 'components/EmailCompose'
+import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import ActionButton from 'components/Button/ActionButton'
 
 import SocialDrawer from '../../components/SocialDrawer'
@@ -100,7 +100,7 @@ class ShareInstance extends React.Component {
         )}
 
         {state.isComposeDrawerOpen && (
-          <EmailCompose
+          <BulkEmailComposeDrawer
             isOpen
             hasStaticBody
             from={props.user}

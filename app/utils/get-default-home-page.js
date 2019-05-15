@@ -1,8 +1,8 @@
 import { hasUserAccess } from './user-teams'
 
-let defaultHomepage = '/dashboard/mls'
+export default function getUserDefaultHomepage(user) {
+  let defaultHomepage = '/dashboard/mls'
 
-export default function getHomepage(user) {
   if (!user) {
     return defaultHomepage
   }

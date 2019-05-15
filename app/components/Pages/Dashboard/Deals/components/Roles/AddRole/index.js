@@ -5,7 +5,7 @@ import Deal from 'models/Deal'
 import { BasicDropdown } from 'components/BasicDropdown'
 import AddIcon from 'components/SvgIcons/Add/AddIcon'
 
-import { ROLE_NAMES, roleName } from '../../../utils/roles'
+import { ROLE_NAMES, roleName, isPrimaryAgent } from '../../../utils/roles'
 
 import RoleAgentIntegration from '../AgentIntegration'
 
@@ -48,20 +48,10 @@ class AddRoleForm extends React.Component {
   }
 
   get RoleItems() {
-    const { deal_type } = this.props.deal
     const roles = this.AllowedRoles || ROLE_NAMES
 
     return roles
-      .filter(name => {
-        if (
-          (name === 'BuyerAgent' && deal_type === 'Buying') ||
-          (name === 'SellerAgent' && deal_type === 'Selling')
-        ) {
-          return false
-        }
-
-        return true
-      })
+      .filter(name => !isPrimaryAgent(name, this.props.deal.deal_type))
       .map(name => ({
         label: roleName(name),
         value: name
@@ -112,7 +102,11 @@ class AddRoleForm extends React.Component {
             isPrimaryAgent={['BuyerAgent', 'SellerAgent'].includes(
               this.state.selectedRole
             )}
-            modalTitle="Add to Deal"
+            roleFormOptions={{
+              position: {
+                top: '40px'
+              }
+            }}
             onUpsertRole={this.props.onCreateRole}
             onHide={this.closeDrawer}
           />

@@ -28,5 +28,9 @@ export default {
   },
   fb: {
     app_id: process.env.FB_APP_ID
+  },
+  mailgun: {
+    api_key: process.env.MAILGUN_API_KEY,
+    domain_url: process.env.MAILGUN_DOMAIN_URL
   }
 }

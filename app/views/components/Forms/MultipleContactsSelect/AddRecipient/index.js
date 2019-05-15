@@ -62,7 +62,7 @@ class AddRecipient extends React.Component {
   handleSelectNewContact = contact => {
     let newRecipient
 
-    const isEmailExists = this.props.input.value.some(
+    const isEmailExists = (this.props.input.value || []).some(
       recipient => recipient.email === contact.summary.email
     )
 
@@ -99,7 +99,7 @@ class AddRecipient extends React.Component {
   }
 
   handleSelectNewListItem = (item, type) => {
-    const isItemExists = this.props.input.value.some(
+    const isItemExists = (this.props.input.value || []).some(
       recipient => recipient.data_type === type && item.id === recipient.id
     )
 
