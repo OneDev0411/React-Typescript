@@ -35,7 +35,7 @@ TextInput.defaultProps = {
   container: InputContainer
 }
 
-export function TextInput(props) {
+export function TextInput({ input, ...props }) {
   return (
     <props.container
       style={{
@@ -52,11 +52,11 @@ export function TextInput(props) {
 
       <InputField
         autoComplete="Off"
-        {...props.input || {}}
         placeholder={props.placeholder}
         hasError={
           props.highlightOnError && props.meta.submitFailed && props.meta.error
         }
+        {...input || {}}
         {...props}
       />
 
