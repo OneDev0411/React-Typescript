@@ -22,6 +22,7 @@ SelectInput.propTypes = {
   ).isRequired,
   label: PropTypes.string.isRequired,
   input: PropTypes.object,
+  onChange: PropTypes.func,
   styles: PropTypes.object,
   dropdownOptions: PropTypes.object,
   dropdownStyle: PropTypes.object,
@@ -45,6 +46,7 @@ SelectInput.defaultProps = {
   isRequired: false,
   isVisible: true,
   showError: true,
+  onChange: null,
   container: InputContainer
 }
 
@@ -54,9 +56,7 @@ export function SelectInput(props) {
   }
 
   const handleChange = item =>
-    props.onChange
-      ? props.onChange(item)
-      : item => props.input.onChange(item.value)
+    props.onChange ? props.onChange(item) : props.input.onChange(item.value)
 
   return (
     <props.container
