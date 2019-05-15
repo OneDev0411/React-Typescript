@@ -129,7 +129,7 @@ export function FormContainer(props) {
           />
 
           <Field
-            name="phone"
+            name="phone_number"
             label="Phone"
             form={props.form}
             isVisible={isVisible('phone_number')}
