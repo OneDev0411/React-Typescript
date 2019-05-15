@@ -143,6 +143,18 @@ export class InlineAddressField extends React.Component {
   }
 
   onClickSuggestionItem = item => {
+    if (!this.props.needsAddressForm) {
+      return this.setState(
+        {
+          isShowSuggestion: false,
+          address: item.description
+        },
+        () => {
+          this.props.handleInputChange(item.description)
+        }
+      )
+    }
+
     let newState = {
       address: item.description,
       isShowSuggestion: false,
