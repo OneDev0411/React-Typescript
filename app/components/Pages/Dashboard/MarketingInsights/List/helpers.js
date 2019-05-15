@@ -33,5 +33,5 @@ export function recipientsList(recipients) {
 }
 
 export function show_title(title) {
-  return title.trim() || 'No Title'
+  return title ? title.trim() : 'No Title'
 }

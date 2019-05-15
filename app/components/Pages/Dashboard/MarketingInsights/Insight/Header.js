@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import PageHeader from 'components/PageHeader'
+
 import Menu from './Menu'
-import { InsightsHeader } from './styled'
-import { H1 } from '../../../../../views/components/Typography/headings'
 import { show_title } from '../List/helpers'
 
 Header.propsType = {
@@ -15,14 +15,14 @@ Header.defaultProps = {
 }
 function Header(props) {
   return (
-    <InsightsHeader justifyBetween>
-      <div>
-        <H1 style={{ lineHeight: 1.5 }}>{show_title(props.title)}</H1>
-      </div>
-      <div>
+    <PageHeader isFlat>
+      <PageHeader.Title showBackButton={false}>
+        <PageHeader.Heading>{show_title(props.title)}</PageHeader.Heading>
+      </PageHeader.Title>
+      <PageHeader.Menu>
         <Menu backUrl={props.backUrl} />
-      </div>
-    </InsightsHeader>
+      </PageHeader.Menu>
+    </PageHeader>
   )
 }
 
