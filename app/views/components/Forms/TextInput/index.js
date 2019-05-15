@@ -52,6 +52,7 @@ export function TextInput(props) {
 
       <InputField
         autoComplete="Off"
+        {...props.input || {}}
         placeholder={props.placeholder}
         hasError={
           props.highlightOnError && props.meta.submitFailed && props.meta.error
