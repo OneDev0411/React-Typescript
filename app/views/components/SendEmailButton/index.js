@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import ActionButton from 'components/Button/ActionButton'
-import EmailCompose from 'components/EmailCompose'
+import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 
 function SendEmailButton(props) {
   const { deal } = props
@@ -32,7 +32,7 @@ function SendEmailButton(props) {
       </ActionButton>
 
       {isOpen && (
-        <EmailCompose
+        <SingleEmailComposeDrawer
           isOpen
           defaultAttachments={[]}
           recipients={props.recipients}
