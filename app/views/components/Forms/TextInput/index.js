@@ -24,7 +24,7 @@ TextInput.propTypes = {
 }
 
 TextInput.defaultProps = {
-  input: null,
+  input: {},
   meta: {},
   styles: {},
   hasLabel: true,
@@ -56,7 +56,7 @@ export function TextInput({ input, ...props }) {
         hasError={
           props.highlightOnError && props.meta.submitFailed && props.meta.error
         }
-        {...input || {}}
+        {...input}
         {...props}
       />
 
