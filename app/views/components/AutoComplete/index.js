@@ -57,7 +57,7 @@ const defaultProps = {
 export class AutoComplete extends React.Component {
   state = {
     selectedItem: this.props.defaultSelectedItem,
-    options: Array.isArray(this.props.options) ? this.props.options : [],
+    options: [],
     cache: {}
   }
 
@@ -120,9 +120,10 @@ export class AutoComplete extends React.Component {
 
   getOptions = value => {
     const options =
-      typeof this.props.options === 'function'
-        ? this.state.options
-        : this.props.options
+      typeof this.props.options !== 'function' &&
+      Array.isArray(this.props.options)
+        ? this.props.options
+        : this.state.options
 
     return new Fuse(options, {
       keys: ['label'],
