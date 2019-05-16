@@ -390,7 +390,7 @@ class SectionWithFields extends React.Component {
           iconLeft={AddIcon}
           onClick={this.openCustomAttributeDrawer}
           style={{ marginBottom: '1em' }}
-          text={`Add a custom ${addCustomAttributeButtonText}`}
+          text={`Add custom ${addCustomAttributeButtonText}`}
         />
       )
     }
