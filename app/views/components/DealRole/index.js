@@ -217,14 +217,19 @@ class Role extends React.Component {
     changeValue(state, 'legal_first_name', value => user.first_name || value)
     changeValue(state, 'legal_last_name', value => user.last_name || value)
     changeValue(state, 'email', value => user.email || value)
+    changeValue(state, 'company_title', value => user.company || value)
     changeValue(
       state,
-      'phone',
+      'phone_number',
       value => user.phone_number || user.work_phone || value
     )
-
     changeValue(state, 'mls_id', value => user.mlsid || value)
     changeValue(state, 'agent', () => (user.mlsid ? user.id : null))
+
+    // set plural autosuggestion values
+    changeValue(state, 'emails', () => user.emails || [])
+    changeValue(state, 'phone_numbers', () => user.phone_numbers || [])
+    changeValue(state, 'companies', () => user.companies || [])
   }
 
   handleClose = () => {
@@ -259,7 +264,7 @@ class Role extends React.Component {
                   isNewRecord={this.isNewRecord}
                   isRoleRemovable={this.props.isRoleRemovable}
                   deal={this.props.deal}
-                  formObject={this.props.form}
+                  formObject={this.formObject}
                   requiredFields={requiredFields}
                   visibleFields={visibleFields}
                   isAllowedRole={this.isAllowedRole}

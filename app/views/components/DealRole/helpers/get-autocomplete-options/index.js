@@ -1,30 +1,10 @@
-export function getAutocompleteOptions(form, singularName, pluralName) {
-  if (!form || !Object.values(form).length) {
+export function getAutocompleteOptions(form, pluralName) {
+  if (!form || !Array.isArray(form[pluralName])) {
     return []
   }
 
-  const values = form[pluralName] || []
-
-  if (!values || Object.values(values).length) {
-    return values.map(item => {
-      const value = item[item.attribute_def.data_type]
-
-      return {
-        value,
-        label: value
-      }
-    })
-  }
-
-  // get single value
-  const value = form[singularName]
-
-  return value
-    ? [
-        {
-          label: value,
-          value
-        }
-      ]
-    : []
+  return form[pluralName].map(value => ({
+    label: value,
+    value
+  }))
 }

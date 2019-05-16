@@ -26,7 +26,7 @@ export function AutoCompleteInput(props) {
         <ListItem key={index} {...itemProps}>
           <ItemTitle>{item.label}</ItemTitle>
           <ItemDescription isActive={itemProps.isActive}>
-            <div>{item.email || 'No email'}</div>
+            <div>{item.email}</div>
             {item.mlsid && <div>MLS ID: {item.mlsid}</div>}
           </ItemDescription>
         </ListItem>

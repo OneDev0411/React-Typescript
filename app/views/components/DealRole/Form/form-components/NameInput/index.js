@@ -5,6 +5,12 @@ import { searchContacts } from 'models/contacts/search-contacts'
 
 import { AutoCompleteInput } from '../AutoCompleteInput'
 
+function getOptionsByAttributeType(contact, type) {
+  return contact.attributes
+    .filter(attr => attr.attribute_type === type)
+    .map(item => item.text)
+}
+
 export function NameInput(props) {
   const searchByName = async (name, minLength = 2) => {
     if (!name || name.length < minLength) {
@@ -17,6 +23,9 @@ export function NameInput(props) {
 
         return contacts.map(contact => ({
           ...contact.summary,
+          phone_numbers: getOptionsByAttributeType(contact, 'phone_number'),
+          emails: getOptionsByAttributeType(contact, 'email'),
+          companies: getOptionsByAttributeType(contact, 'company'),
           value: contact.summary[props.searchField],
           label: contact.summary.display_name
         }))

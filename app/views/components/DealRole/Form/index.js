@@ -94,11 +94,7 @@ export function FormContainer(props) {
             isVisible={isVisible('company_title')}
             isRequired={isRequired('company_title')}
             component={AutoCompleteInput}
-            options={getAutocompleteOptions(
-              props.formObject,
-              'company_title',
-              'companies'
-            )}
+            options={getAutocompleteOptions(props.values, 'companies')}
             style={{ flex: 7, marginRight: '0.5rem' }}
           />
 
@@ -120,11 +116,7 @@ export function FormContainer(props) {
             isVisible={isVisible('email')}
             isRequired={isRequired('email')}
             component={AutoCompleteInput}
-            options={getAutocompleteOptions(
-              props.formObject,
-              'email',
-              'emails'
-            )}
+            options={getAutocompleteOptions(props.values, 'emails')}
             style={{ flex: 5, marginRight: '0.5rem' }}
           />
 
@@ -135,11 +127,7 @@ export function FormContainer(props) {
             isVisible={isVisible('phone_number')}
             isRequired={isRequired('phone_number')}
             component={AutoCompleteInput}
-            options={getAutocompleteOptions(
-              props.formObject,
-              'phone_numbers',
-              'phones'
-            )}
+            options={getAutocompleteOptions(props.values, 'phone_numbers')}
             style={{ flex: 5 }}
           />
         </Flex>
