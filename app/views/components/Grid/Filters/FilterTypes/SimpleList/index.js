@@ -9,13 +9,12 @@ import Loading from 'partials/Loading'
 import { List, Placeholder } from './styled'
 
 export function SimpleList({
-  options,
   getOptions,
   onFilterChange,
   onToggleFilterActive
 }) {
   const [resolvedOptions = [], error, state] = usePromise(
-    () => Promise.resolve(getOptions ? getOptions() : options || []),
+    () => Promise.resolve(getOptions()),
     []
   )
 
@@ -27,9 +26,11 @@ export function SimpleList({
     return <Loading />
   }
 
-  return resolvedOptions.length === 0 ? (
-    <Placeholder>Nothing to select</Placeholder>
-  ) : (
+  if (resolvedOptions.length === 0) {
+    return <Placeholder>Nothing to select</Placeholder>
+  }
+
+  return (
     <List className="u-scrollbar--thinner--self">
       {resolvedOptions.map((item, index) => (
         <Item

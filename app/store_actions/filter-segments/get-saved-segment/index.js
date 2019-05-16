@@ -3,7 +3,7 @@ import _ from 'underscore'
 import * as actionTypes from '../../../constants/filter-segments'
 import { getSavedSegments as fetchAll } from '../../../models/filter-segments/get-saved-segments'
 
-export function getSavedSegments(nameId) {
+export function getSavedSegments(nameId, associations) {
   return async dispatch => {
     try {
       dispatch({
@@ -12,7 +12,7 @@ export function getSavedSegments(nameId) {
         id: nameId
       })
 
-      const { data } = await fetchAll(nameId)
+      const { data } = await fetchAll(nameId, associations)
 
       dispatch({
         type: actionTypes.FETCH_FILTER_SEGMENTS_SUCCESS,

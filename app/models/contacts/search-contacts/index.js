@@ -1,5 +1,3 @@
-import { negate } from 'lodash'
-
 import { cleanSearchQuery } from '../../../utils/clean-search-query'
 
 import Fetch from '../../../services/fetch'
@@ -7,13 +5,15 @@ import { defaultQuery } from '../helpers/default-query'
 
 export async function searchContacts(
   searchText = '',
-  filter,
+  attributeFilters,
   query = {
     ...defaultQuery,
     order: '-created_at',
     filter_type: 'and'
   },
-  users
+  users,
+  flows = null,
+  crmTasks = null
 ) {
   try {
     const payload = {}
@@ -26,16 +26,11 @@ export async function searchContacts(
       payload.query = q
     }
 
-    if (Array.isArray(filter) && filter.length > 0) {
-      payload.crm_task = filter
-        .filter(filter => filter.crm_task)
-        .map(({ crm_task }) => crm_task)
+    payload.crm_task = crmTasks
+    payload.flows = flows
 
-      payload.flows = filter
-        .filter(filter => filter.flow)
-        .map(({ flow }) => flow)
-
-      payload.filter = filter
+    if (Array.isArray(attributeFilters) && attributeFilters.length > 0) {
+      payload.filter = attributeFilters
         .filter(filter => filter.attribute_def)
         .map(({ attribute_def, invert, operator, value }) => ({
           attribute_def,

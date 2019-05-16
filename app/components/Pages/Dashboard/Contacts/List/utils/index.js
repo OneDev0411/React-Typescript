@@ -1,36 +1,23 @@
 import _ from 'underscore'
 
-export function normalizeFilters(filters) {
+import { FLOW_FILTER_ID, OPEN_HOUSE_FILTER_ID } from 'crm/List/constants'
+
+export function normalizeAttributeFilters(filters) {
   const criteria = []
 
   _.each(filters, filter => {
     _.each(filter.values, ({ value }) => {
-      criteria.push(
-        getFilter(value, filter.operator.invert === true, filter.id)
-      )
+      criteria.push({
+        value,
+        invert: filter.operator.invert === true,
+        attribute_def: filter.id
+      })
     })
   })
 
   return criteria
 }
 
-function getFilter(value, invert, filterId) {
-  switch (filterId) {
-    case 'openHouse':
-      return {
-        invert,
-        crm_task: value
-      }
-    case 'flow':
-      return {
-        invert,
-        flow: value
-      }
-    default:
-      return {
-        value,
-        invert,
-        attribute_def: filterId
-      }
-  }
+export function isAttributeFilter(filter) {
+  return ![OPEN_HOUSE_FILTER_ID, FLOW_FILTER_ID].includes(filter.id)
 }

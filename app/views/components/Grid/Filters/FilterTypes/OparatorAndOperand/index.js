@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react'
 
+import PropTypes from 'prop-types'
+
 import { DoneButton } from 'components/Grid/Filters/Item/styled'
 
 import { DropDownList } from './components/DropDownList'
@@ -7,6 +9,17 @@ import { TextInput } from './components/TextInput'
 import { Container, InputContainer, Operator, Title } from './styled'
 import IconSelectedRadio from '../../../../SvgIcons/Radio/SelectedRadio/IconSelectedRadio'
 import IconUnSelectedRadio from '../../../../SvgIcons/Radio/UnSelectedRadio/IconUnSelectedRadio'
+
+export const operators = [
+  {
+    name: 'is',
+    default: true
+  },
+  {
+    name: 'is not',
+    invert: true
+  }
+]
 
 export class OperatorAndOperandFilter extends React.Component {
   constructor(props) {
@@ -111,4 +124,25 @@ export class OperatorAndOperandFilter extends React.Component {
       </Fragment>
     )
   }
+}
+
+OperatorAndOperandFilter.propTypes = {
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired
+    })
+  ),
+  getOptions: PropTypes.func,
+  type: PropTypes.string,
+  multi: PropTypes.bool,
+  allowedOperators: PropTypes.arrayOf(PropTypes.string)
+}
+
+OperatorAndOperandFilter.defaultProps = {
+  options: [],
+  getOptions: null,
+  type: 'Set',
+  multi: false,
+  allowedOperators: operators
 }

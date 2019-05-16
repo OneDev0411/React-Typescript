@@ -18,10 +18,11 @@ import {
   updateActiveFilter
 } from 'actions/filter-segments/active-filters'
 
+import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
+
 import { ConditionOperators } from './ConditionOperators'
 import { AddFilter } from './Create'
 import { FilterItem } from './Item'
-import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 
 const Container = styled.div`
   display: flex;
@@ -56,10 +57,7 @@ class Filters extends React.Component {
   }
 
   createFiltersFromSegment = async (segment, activeFilters) => {
-    const filters = this.props.createFiltersFromSegment(
-      segment.filters,
-      activeFilters
-    )
+    const filters = this.props.createFiltersFromSegment(segment, activeFilters)
 
     let conditionOperator = 'and'
 
@@ -91,13 +89,13 @@ class Filters extends React.Component {
   /**
    *
    */
-  removeFilter = filterId => {
+  removeFilter = async filterId => {
     const { activeFilters } = this.props
 
     const isInvalid = !isFilterValid(activeFilters[filterId])
     const nextFilters = _.omit(activeFilters, (filter, id) => id === filterId)
 
-    this.props.removeActiveFilter(this.props.name, filterId)
+    await this.props.removeActiveFilter(this.props.name, filterId)
 
     if (!isInvalid) {
       this.onChangeFilters(nextFilters)
@@ -107,11 +105,11 @@ class Filters extends React.Component {
   /**
    *
    */
-  onFilterChange = (id, values, operator) => {
+  onFilterChange = async (id, values, operator) => {
     const current = this.props.activeFilters[id]
     const isValid = isFilterValid({ values, operator })
 
-    this.props.updateActiveFilter(this.props.name, id, {
+    await this.props.updateActiveFilter(this.props.name, id, {
       values,
       operator
     })
@@ -150,21 +148,20 @@ class Filters extends React.Component {
     const validFilters = _.filter(filterItems, item => isFilterValid(item))
 
     this.props.onChange({
-      filters: this.props.createSegmentFromFilters(validFilters).filters,
+      filters: validFilters,
       conditionOperator: this.props.conditionOperator
     })
   }
 
-  onConditionChange = ({ value: conditionOperator }) => {
-    this.props.changeConditionOperator(this.props.name, conditionOperator)
+  onConditionChange = async ({ value: conditionOperator }) => {
+    await this.props.changeConditionOperator(this.props.name, conditionOperator)
 
     if (_.size(this.props.activeFilters) <= 1) {
       return false
     }
 
     this.props.onChange({
-      filters: this.props.createSegmentFromFilters(this.props.activeFilters)
-        .filters,
+      filters: this.props.activeFilters,
       conditionOperator
     })
   }
@@ -203,6 +200,10 @@ class Filters extends React.Component {
           onNewFilter={this.createFilter}
         />
 
+        {/*
+        TODO: don't pass all props to the child. Refactor SaveSegment component
+        to read required stuff from redux state instead
+        */}
         {React.Children.map(children, child =>
           React.cloneElement(child, {
             filters: activeFilters,
@@ -243,4 +244,3 @@ export default connect(
     createActiveFiltersWithConditionOperator
   }
 )(Filters)
-

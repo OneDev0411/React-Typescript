@@ -39,15 +39,15 @@ class SegmentsList extends React.Component {
   }
 
   init = () => {
-    const { getSavedSegments, isListFetched, name } = this.props
+    const { getSavedSegments, isListFetched, name, associations } = this.props
 
     if (isListFetched === false) {
-      getSavedSegments(name)
+      getSavedSegments(name, associations)
     }
   }
 
-  onSelectList = item => {
-    this.props.changeActiveFilterSegment(this.props.name, item.id)
+  onSelectList = async item => {
+    await this.props.changeActiveFilterSegment(this.props.name, item.id)
 
     if (this.props.onChange) {
       this.props.onChange(item)

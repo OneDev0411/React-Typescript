@@ -62,7 +62,7 @@ export const Menu = styled(Card)`
   top: 48px;
   left: 0;
   z-index: 1000;
-  width: 280px;
+  min-width: 12rem;
 `
 
 export const Content = styled.div`

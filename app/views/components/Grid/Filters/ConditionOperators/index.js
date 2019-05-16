@@ -39,7 +39,7 @@ export function ConditionOperators(props) {
         backgroundColor: `${grey.A150}`
       }}
       itemRenderer={({ item, ...rest }) => (
-        <Item title={item.title} {...rest} />
+        <Item key={item.value} title={item.title} {...rest} />
       )}
     />
   )

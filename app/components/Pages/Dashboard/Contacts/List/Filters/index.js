@@ -2,11 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
+import * as fecha from 'fecha'
+
 import { defaultTags } from 'utils/default-tags'
-
-import { operatorAndOperandFilterRenderer } from 'components/Grid/Filters/Types/OparatorAndOperand/renderer'
-
-import { simpleListFilterRenderer } from 'components/Grid/Filters/Types/SimpleList/renderer'
 
 import { searchEvents } from 'models/tasks/search-events'
 
@@ -14,20 +12,29 @@ import { getBrandFlows } from 'models/flows/get-brand-flows'
 
 import { getActiveTeamId } from 'utils/user-teams'
 
+import {
+  FLOW_FILTER_ID,
+  OPEN_HOUSE_FILTER_ID,
+  ORIGINS
+} from 'crm/List/constants'
+
+import { isAttributeFilter } from 'crm/List/utils'
+
+import { SimpleList } from 'components/Grid/Filters/FilterTypes/SimpleList'
+
+import { OperatorAndOperandFilter } from 'components/Grid/Filters/FilterTypes/OparatorAndOperand'
+
 import { selectTags } from '../../../../../../reducers/contacts/tags'
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
 
 import Filters from '../../../../../../views/components/Grid/Filters'
 import SaveSegment from '../../../../../../views/components/Grid/SavedSegments/Create'
-import { normalizeFilters } from '../utils'
+import { normalizeAttributeFilters } from '../utils'
 
 const getOpenHouseEvents = async () => {
   const result = await searchEvents({ task_type: 'Open House' })
 
-  return result.data.map(item => ({
-    label: item.title,
-    value: item.id
-  }))
+  return result.data.map(getOpenHouseFilter)
 }
 
 class ContactFilters extends React.PureComponent {
@@ -44,42 +51,10 @@ class ContactFilters extends React.PureComponent {
   getFlows = async () => {
     const result = await getBrandFlows(getActiveTeamId(this.props.user, {}))
 
-    return result.map(item => ({
-      label: item.name,
-      value: item.id
-    }))
+    return result.map(getFlowFilter)
   }
 
-  getOrigins = () => [
-    {
-      label: 'Brokerage widget',
-      value: 'BrokerageWidget'
-    },
-    {
-      label: 'Created by you',
-      value: 'ExplicitlyCreated'
-    },
-    {
-      label: 'iOS Contact',
-      value: 'IOSAddressBook'
-    },
-    {
-      label: 'Rechat Contact',
-      value: 'SharesRoom'
-    },
-    {
-      label: 'Outlook',
-      value: 'External/Outlook'
-    },
-    {
-      label: 'Open House',
-      value: 'OpenHouse'
-    },
-    {
-      label: 'CSV',
-      value: 'CSV'
-    }
-  ]
+  getOrigins = () => ORIGINS
 
   getFilterLabelByValue = value => {
     const origins = this.getOrigins()
@@ -91,19 +66,28 @@ class ContactFilters extends React.PureComponent {
   /**
    * creates a search criteria for contacts filters
    */
-  normalizeFilters = filters => ({
-    filters: normalizeFilters(filters),
-    args: {
-      filter_type: this.props.conditionOperator
-    }
-  })
+  createSegmentFromFilters = (filters, operator) => {
+    const activeFilters = Object.values(filters)
+    const flowFilters = activeFilters.filter(
+      filter => filter.id === FLOW_FILTER_ID
+    )
+    const openHouseFilters = activeFilters.filter(
+      filter => filter.id === OPEN_HOUSE_FILTER_ID
+    )
+    const attributeFilters = activeFilters.filter(isAttributeFilter)
 
-  normalizeSegment = (filters, activeFilters) => {
-    if (_.size(activeFilters) > 0) {
-      return Object.values(activeFilters)
+    return {
+      filters: normalizeAttributeFilters(attributeFilters),
+      args: {
+        flows: flowFilters.map(filter => filter.values[0].value),
+        crm_task: openHouseFilters.map(filter => filter.values[0].value),
+        filter_type: this.props.conditionOperator
+      }
     }
+  }
 
-    return filters.map(filter => ({
+  createFiltersFromSegment = segment => {
+    const attributeFilters = (segment.filters || []).map(filter => ({
       id: filter.attribute_def,
       isActive: false,
       values: [
@@ -117,6 +101,30 @@ class ContactFilters extends React.PureComponent {
         invert: filter.invert
       }
     }))
+
+    const { flows, crm_task } = segment.args || {}
+
+    const flowFilters = (flows || []).map(flowId => ({
+      id: FLOW_FILTER_ID,
+      isActive: false,
+      values: [getFlowFilter(segment.flows.find(flow => flow.id === flowId))],
+      operator: {
+        name: 'is'
+      }
+    }))
+
+    const openHouseFilters = (crm_task || []).map(crmTaskId => ({
+      id: OPEN_HOUSE_FILTER_ID,
+      isActive: false,
+      values: [
+        getOpenHouseFilter(segment.crm_task.find(flow => flow.id === crmTaskId))
+      ],
+      operator: {
+        name: 'is'
+      }
+    }))
+
+    return [...attributeFilters, ...flowFilters, ...openHouseFilters]
   }
 
   get Config() {
@@ -132,34 +140,35 @@ class ContactFilters extends React.PureComponent {
       {
         id: tagDefinition.id,
         label: 'Tag',
-        renderer: operatorAndOperandFilterRenderer({
-          options: this.getUniqTags(tags)
-        }),
+        renderer: props => (
+          <OperatorAndOperandFilter
+            {...props}
+            options={this.getUniqTags(tags)}
+          />
+        ),
         tooltip:
           'A group a person belongs to, based on a tag you’ve manually applied to them.'
       },
       {
-        id: 'openHouse',
+        id: OPEN_HOUSE_FILTER_ID,
         label: 'Open House',
-        renderer: simpleListFilterRenderer({
-          getOptions: getOpenHouseEvents
-        }),
-        tooltip: 'Contacts invited to an specific Open House'
+        renderer: props => (
+          <SimpleList {...props} getOptions={getOpenHouseEvents} />
+        ),
+        tooltip: 'Contacts invited to a specific Open House'
       },
       {
-        id: 'flow',
+        id: FLOW_FILTER_ID,
         label: 'Flows',
-        renderer: simpleListFilterRenderer({
-          getOptions: this.getFlows
-        }),
-        tooltip: 'Contacts who are active in an specific flow'
+        renderer: props => <SimpleList {...props} getOptions={this.getFlows} />,
+        tooltip: 'Contacts who are active in a specific flow'
       },
       {
         id: sourceDefinition.id,
         label: 'Origin',
-        renderer: operatorAndOperandFilterRenderer({
-          options: this.getOrigins()
-        }),
+        renderer: props => (
+          <OperatorAndOperandFilter {...props} options={this.getOrigins()} />
+        ),
         tooltip: 'Source type'
       }
     ]
@@ -171,12 +180,11 @@ class ContactFilters extends React.PureComponent {
         name="contacts"
         plugins={['segments']}
         config={this.Config}
-        createFiltersFromSegment={this.normalizeSegment}
-        createSegmentFromFilters={this.normalizeFilters}
-        onChange={this.props.onFilterChange}
+        createFiltersFromSegment={this.createFiltersFromSegment}
+        onChange={() => this.props.onFilterChange()}
         disableConditionOperators={this.props.disableConditionOperators}
       >
-        <SaveSegment />
+        <SaveSegment createSegmentFromFilters={this.createSegmentFromFilters} />
       </Filters>
     )
   }
@@ -190,6 +198,23 @@ function mapStateToProps({ contacts, user }) {
     tags: selectTags(tags),
     conditionOperator: contacts.filterSegments.conditionOperator,
     attributeDefs
+  }
+}
+
+export function getOpenHouseFilter(openHouse) {
+  return {
+    label: `${openHouse.title} - ${fecha.format(
+      new Date(openHouse.due_date * 1000),
+      'mediumDate'
+    )}`,
+    value: openHouse.id
+  }
+}
+
+function getFlowFilter(flow) {
+  return {
+    label: flow.name,
+    value: flow.id
   }
 }
 
