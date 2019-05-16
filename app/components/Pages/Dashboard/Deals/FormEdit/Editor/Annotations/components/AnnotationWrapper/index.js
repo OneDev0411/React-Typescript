@@ -3,18 +3,6 @@ import React, { Fragment } from 'react'
 import { calculateWordWrap } from 'deals/FormEdit/utils/word-wrap'
 
 export function AnnotationWrapper(props) {
-  function getFormValue(values, annotations) {
-    const valueList = annotations
-      .map(annotation => values[annotation.fieldName])
-      .filter(Boolean)
-
-    if (valueList.length === 0) {
-      return undefined
-    }
-
-    return valueList.join(' ')
-  }
-
   return (
     <Fragment>
       {Object.entries(props.items).map(([name, groups]) =>
@@ -66,4 +54,16 @@ export function AnnotationWrapper(props) {
       )}
     </Fragment>
   )
+}
+
+function getFormValue(values, annotations) {
+  const valueList = annotations
+    .map(annotation => values[annotation.fieldName])
+    .filter(Boolean)
+
+  if (valueList.length === 0) {
+    return undefined
+  }
+
+  return valueList.join(' ')
 }
