@@ -39,8 +39,6 @@ const defaultProps = {
 }
 
 class Role extends React.Component {
-  handleDeleteRole = () => {}
-
   getInitialValues = () => {
     if (!this.props.isOpen) {
       return {}
@@ -50,12 +48,15 @@ class Role extends React.Component {
       return this.formObject
     }
 
+    const { form } = this.props
+
     this.formObject = {
       saveRoleInContacts: true,
-      ...this.props.form,
+      ...form,
       ...this.PreselectRole,
-      ...getCommissionAttributes(this.props.form),
-      role_type: this.getRoleType()
+      ...getCommissionAttributes(form),
+      role_type: this.getRoleType(),
+      mls_id: form.agent ? form.agent.mlsid : ''
     }
 
     return this.formObject
@@ -135,6 +136,7 @@ class Role extends React.Component {
 
   validate = async values => {
     const errors = {}
+
     const { requiredFields } = this.getFormProperties(values)
     const validators = getFormValidators(requiredFields)
 
@@ -211,16 +213,18 @@ class Role extends React.Component {
     return { visibleFields, requiredFields }
   }
 
-  populateRole = ([agent], state, { changeValue }) => {
-    changeValue(state, 'legal_first_name', value => agent.first_name || value)
-    changeValue(state, 'legal_last_name', value => agent.last_name || value)
-    changeValue(state, 'mls_id', value => agent.mlsid || value)
-    changeValue(state, 'email', value => agent.email || value)
+  populateRole = ([user], state, { changeValue }) => {
+    changeValue(state, 'legal_first_name', value => user.first_name || value)
+    changeValue(state, 'legal_last_name', value => user.last_name || value)
+    changeValue(state, 'email', value => user.email || value)
     changeValue(
       state,
       'phone',
-      value => agent.phone_number || agent.work_phone || value
+      value => user.phone_number || user.work_phone || value
     )
+
+    changeValue(state, 'mls_id', value => user.mlsid || value)
+    changeValue(state, 'agent', () => (user.mlsid ? user.id : null))
   }
 
   handleClose = () => {

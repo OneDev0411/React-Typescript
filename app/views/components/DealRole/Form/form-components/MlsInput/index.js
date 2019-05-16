@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { Fragment } from 'react'
+import { Field } from 'react-final-form'
 
 import searchAgents from 'models/agent/search'
 
@@ -26,12 +27,16 @@ async function searchByMlsId(mls, minLength = 6) {
 
 export function MlsInput(props) {
   return (
-    <AutoCompleteInput
-      {...props}
-      options={searchByMlsId}
-      searchConfiguration={{
-        keys: ['value']
-      }}
-    />
+    <Fragment>
+      <AutoCompleteInput
+        {...props}
+        options={searchByMlsId}
+        searchConfiguration={{
+          keys: ['value']
+        }}
+      />
+
+      {/* <Field name="agent" render={() => null} /> */}
+    </Fragment>
   )
 }

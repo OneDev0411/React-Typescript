@@ -9,6 +9,7 @@ export function normalizeForm(values) {
   const validFields = [
     'id',
     'contact',
+    'agent',
     'legal_prefix',
     'legal_first_name',
     'legal_middle_name',
@@ -22,7 +23,6 @@ export function normalizeForm(values) {
     'commission_percentage',
     'source_type',
     'role_type',
-    'mls_id',
     'current_address',
     'future_address'
   ]
