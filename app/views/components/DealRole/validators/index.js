@@ -1,3 +1,5 @@
+import { ROLE_NAMES } from 'deals/utils/roles'
+
 import { isValidCommission } from './is-valid-commission'
 import { isValidEmail } from './is-valid-email'
 import { isValidLegalPrefix } from './is-valid-legal-prefix'
@@ -10,10 +12,10 @@ import { isValidNumber } from './is-valid-number'
  */
 export function getFormValidators(requiredFields) {
   return {
-    role: role => role,
+    role: role => ROLE_NAMES.includes(role),
     current_address: value => isValidString(value, requiredFields),
     future_address: value => isValidString(value, requiredFields),
-    mls_id: value => isValidNumber(value, requiredFields),
+    mls_id: value => isValidNumber(value, requiredFields, 'mls_id'),
     legal_prefix: value => isValidLegalPrefix(value, requiredFields),
     legal_last_name: name =>
       isValidString(name, requiredFields, 'legal_last_name'),
