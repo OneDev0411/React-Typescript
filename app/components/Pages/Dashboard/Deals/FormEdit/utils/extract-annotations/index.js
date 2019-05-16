@@ -10,7 +10,7 @@ export async function extractAnnotations(document, options) {
   PDFJS = await importPdfJs()
 
   const pages = await Promise.all(
-    new Array(10)
+    new Array(document.numPages)
       .fill(null)
       .map((v, index) => getPageAnnotations(document, index + 1, options))
   )
