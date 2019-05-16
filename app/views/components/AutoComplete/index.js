@@ -118,14 +118,20 @@ export class AutoComplete extends React.Component {
 
   handleItemToString = item => (typeof item !== 'string' ? '' : item)
 
-  getOptions = value =>
-    new Fuse(this.state.options, {
+  getOptions = value => {
+    const options =
+      typeof this.props.options === 'function'
+        ? this.state.options
+        : this.props.options
+
+    return new Fuse(options, {
       keys: ['label'],
       threshold: 0.3,
       ...this.props.searchConfiguration
     })
       .search(value)
       .slice(0, this.props.resultsCount)
+  }
 
   render() {
     const { props, state } = this
