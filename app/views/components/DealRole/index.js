@@ -56,7 +56,7 @@ class Role extends React.Component {
       ...this.PreselectRole,
       ...getCommissionAttributes(form),
       role_type: this.getRoleType(),
-      mls_id: form.agent ? form.agent.mlsid : ''
+      mls_id: form && form.agent ? form.agent.mlsid : ''
     }
 
     return this.formObject
