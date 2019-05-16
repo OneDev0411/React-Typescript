@@ -26,7 +26,7 @@ export function Address(props) {
 
       <InlineAddressField
         key={props.name}
-        address={props.value}
+        address={props.input.value}
         needsAddressForm={false}
         handleInputChange={props.input.onChange}
         renderSearchField={inputProps => <Input {...inputProps} />}
