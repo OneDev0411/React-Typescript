@@ -1,13 +1,7 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import PDFPage from './PdfPage'
 import Annotations from './Annotations'
-
-const PageContainer = styled.div`
-  position: relative;
-  padding-bottom: 20px;
-`
 
 export default function Editor(props) {
   if (!props.document) {
@@ -15,9 +9,15 @@ export default function Editor(props) {
   }
 
   return (
-    <div>
+    <div style={{ paddingBottom: '20rem' }}>
       {new Array(props.document.numPages).fill(null).map((_, index) => (
-        <PageContainer key={index}>
+        <div
+          key={index}
+          style={{
+            position: 'relative',
+            paddingBottom: '1.25rem'
+          }}
+        >
           <PDFPage
             document={props.document}
             page={index + 1}
@@ -32,7 +32,7 @@ export default function Editor(props) {
             annotations={props.annotations}
             onValueUpdate={props.onValueUpdate}
           />
-        </PageContainer>
+        </div>
       ))}
     </div>
   )
