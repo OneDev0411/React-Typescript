@@ -33,8 +33,7 @@ class Search extends React.Component {
     let activeView = query.view
 
     if (!activeView) {
-      activeView =
-        props.user && props.user.user_type === 'Agent' ? 'grid' : 'map'
+      activeView = 'map'
     }
 
     this.state = {
