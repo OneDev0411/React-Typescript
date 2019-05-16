@@ -1,8 +1,9 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+import Cleave from 'cleave.js/react'
 
 import { grey, borderColor } from '../../../utils/colors'
 
-export const InputField = styled.input`
+const inputStyle = css`
   border: none;
   font-size: 1rem;
   width: 100%;
@@ -21,4 +22,12 @@ export const InputField = styled.input`
   }
 
   background: ${props => (props.hasError ? '#fff5f4' : 'transparent')};
+`
+
+export const InputField = styled.input`
+  ${inputStyle}
+`
+
+export const FormattedInputField = styled(Cleave)`
+  ${inputStyle}
 `

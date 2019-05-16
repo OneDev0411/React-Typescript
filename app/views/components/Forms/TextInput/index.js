@@ -8,7 +8,7 @@ import {
   InputLabel
 } from '../styled'
 
-import { InputField } from './styled'
+import { InputField, FormattedInputField } from './styled'
 
 TextInput.propTypes = {
   input: PropTypes.object,
@@ -20,6 +20,7 @@ TextInput.propTypes = {
   isVisible: PropTypes.bool,
   showError: PropTypes.bool,
   highlightOnError: PropTypes.bool,
+  format: PropTypes.object,
   container: PropTypes.oneOfType([PropTypes.element, PropTypes.object])
 }
 
@@ -32,10 +33,19 @@ TextInput.defaultProps = {
   isVisible: true,
   showError: true,
   highlightOnError: true,
+  format: null,
   container: InputContainer
 }
 
 export function TextInput({ input, ...props }) {
+  const inputProps = {
+    autoComplete: 'Off',
+    hasError:
+      props.highlightOnError && props.meta.submitFailed && props.meta.error,
+    ...input,
+    ...props
+  }
+
   return (
     <props.container
       style={{
@@ -50,15 +60,15 @@ export function TextInput({ input, ...props }) {
         </InputLabel>
       )}
 
-      <InputField
-        autoComplete="Off"
-        placeholder={props.placeholder}
-        hasError={
-          props.highlightOnError && props.meta.submitFailed && props.meta.error
-        }
-        {...input}
-        {...props}
-      />
+      {props.format ? (
+        <FormattedInputField
+          {...inputProps}
+          options={props.format}
+          onChange={e => input.onChange(e.target.rawValue)}
+        />
+      ) : (
+        <InputField {...inputProps} />
+      )}
 
       {props.showError && (
         <InputError display={props.meta.error && props.meta.touched}>
