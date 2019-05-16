@@ -6,7 +6,7 @@ import { addNotification as notify } from 'reapop'
 import Flex from 'styled-flex-component'
 
 import UserAvatar from 'components/Avatar'
-import { createRoles } from 'actions/deals'
+import { createRoles, deleteRole } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
 import ActionButton from 'components/Button/ActionButton'
@@ -90,7 +90,7 @@ class Roles extends React.Component {
       isRoleFormOpen: true
     })
 
-  toggleOpenReplaceAgentDrawer = user =>
+  toggleReplaceAgentDrawer = user =>
     this.setState(state => ({
       user: state.user ? null : user,
       isReplaceAgentDrawerOpen: !state.isReplaceAgentDrawerOpen
@@ -112,15 +112,23 @@ class Roles extends React.Component {
       commission_percentage: currentRole.commission_percentage
     }
 
-    await this.removeRole(this.state.user)
-    await this.props.createRoles(this.props.deal.id, [role])
+    try {
+      await this.props.deleteRole(this.props.deal.id, this.state.user.id)
+      await this.props.createRoles(this.props.deal.id, [role])
 
-    this.toggleOpenReplaceAgentDrawer()
+      this.toggleReplaceAgentDrawer()
 
-    this.props.notify({
-      message: 'Primary Agent replaced',
-      status: 'success'
-    })
+      this.props.notify({
+        message: 'Primary Agent replaced',
+        status: 'success'
+      })
+    } catch (e) {
+      console.log(e)
+      this.props.notify({
+        message: 'Could not replace the primary agent. please try again.',
+        status: 'success'
+      })
+    }
   }
 
   get AllowedRoles() {
@@ -184,7 +192,7 @@ class Roles extends React.Component {
                       appearance="outline"
                       size="small"
                       style={{ marginLeft: '0.5rem' }}
-                      onClick={() => this.toggleOpenReplaceAgentDrawer(role)}
+                      onClick={() => this.toggleReplaceAgentDrawer(role)}
                     >
                       Replace
                     </ActionButton>
@@ -230,7 +238,7 @@ class Roles extends React.Component {
             isPrimaryAgent
             title="Select New Primary Agent"
             onSelectAgent={this.handleReplaceAgent}
-            onClose={this.toggleOpenReplaceAgentDrawer}
+            onClose={this.toggleReplaceAgentDrawer}
           />
         )}
       </RolesContainer>
@@ -252,6 +260,7 @@ export default connect(
   {
     notify,
     createRoles,
+    deleteRole,
     confirmation
   }
 )(Roles)
