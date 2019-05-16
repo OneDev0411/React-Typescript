@@ -154,6 +154,7 @@ export class AutoComplete extends React.Component {
                 isRequired={props.isRequired}
                 placeholder={props.placeholder}
                 label={props.label}
+                autocomplete="off"
                 style={this.props.inputStyle}
                 {...getInputProps({ ...props.input, ...props.inputProps })}
               />
