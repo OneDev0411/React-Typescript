@@ -42,13 +42,17 @@ export function CommissionInput(props) {
         />
 
         <TextInput
-          {...props.input}
+          input={props.input}
           meta={props.meta}
           style={{
-            border: 'none',
+            borderBottom: 'none',
             margin: 0,
             padding: 0,
             width: '100%'
+          }}
+          format={{
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand'
           }}
           name="commission"
           hasLabel={false}
