@@ -12,7 +12,7 @@ export function Roles({ input, meta, isAllowedRole, isRequired }) {
       .filter(value => isAllowedRole(value, role))
       .map(value => ({
         value,
-        label: value
+        label: roleName(value)
       }))
 
     if (role && !options.length) {
