@@ -3,7 +3,7 @@
  * commission logic: commission_type + commission = commission_<type>
  */
 export function normalizeForm(values) {
-  const newValues = {}
+  const normalized = {}
   const { commission, commission_type } = values
 
   const validFields = [
@@ -27,21 +27,25 @@ export function normalizeForm(values) {
     'future_address'
   ]
 
+  if (values.agent instanceof Object && values.agent.id) {
+    normalized.agent = values.agent.id
+  }
+
   if (commission_type === 'commission_dollar') {
-    newValues.commission_dollar = parseFloat(commission)
-    newValues.commission_percentage = null
+    normalized.commission_dollar = parseFloat(commission)
+    normalized.commission_percentage = null
   } else if (commission_type === 'commission_percentage') {
-    newValues.commission_percentage = parseFloat(commission)
-    newValues.commission_dollar = null
+    normalized.commission_percentage = parseFloat(commission)
+    normalized.commission_dollar = null
   }
 
   if (!values.contact) {
-    newValues.source_type = 'ExplicitlyCreated'
+    normalized.source_type = 'ExplicitlyCreated'
   }
 
   return Object.entries({
     ...values,
-    ...newValues
+    ...normalized
   }).reduce((current, [name, value]) => {
     if (validFields.includes(name)) {
       current[name] = value
