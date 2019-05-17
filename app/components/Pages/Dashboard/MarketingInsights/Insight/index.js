@@ -62,7 +62,7 @@ function Insight(props) {
     )
   }
 
-  const totalSent = Array.isArray(item.emails) ? item.emails.length : 0
+  const totalSent = item.sent
   const summaryItems = [
     { name: 'Date', value: formatDate(item.executed_at * 1000) },
     { name: 'Total Sent', value: totalSent },
