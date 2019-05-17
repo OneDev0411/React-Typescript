@@ -13,7 +13,8 @@
     "serve:stage": "NODE_ENV=stage babel-node ./bin/server",
     "lint": "npm run lint:app && npm run lint:server",
     "lint:app": "eslint ./app",
-    "lint:server": "eslint ./server"
+    "lint:server": "eslint ./server",
+    "test:e2e": "jest --config tests/e2e/jest.config.js"
   },
   "engines": {
     "node": "10.x"
@@ -203,6 +204,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
+    "babel-jest": "^24.8.0",
     "babel-plugin-add-module-exports": "^0.2.1",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
@@ -217,9 +219,11 @@
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.3",
     "eslint-plugin-react-hooks": "^1.6.0",
+    "jest": "^24.8.0",
     "ndb": "^1.0.41",
     "nodemon": "^1.18.9",
     "prettier": "^1.15.3",
+    "puppeteer": "^1.16.0",
     "webpack-cli": "^3.2.1",
     "webpack-notifier": "^1.7.0",
     "webpackbar": "^3.1.5"
