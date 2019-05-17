@@ -18,6 +18,14 @@ export default class EventsPane extends React.Component {
 
   componentDidMount() {
     this.fetchTimeline()
+
+    window.socket.on('crm_task:create', this.fetchTimeline)
+    window.socket.on('email_campaign:create', this.fetchTimeline)
+  }
+
+  componentWillUnmount() {
+    window.socket.off('crm_task:create', this.fetchTimeline)
+    window.socket.off('email_campaign:create', this.fetchTimeline)
   }
 
   defaultAssociation = {
@@ -38,11 +46,6 @@ export default class EventsPane extends React.Component {
       this.setState({ isFetching: false })
     }
   }
-
-  addEvent = event =>
-    this.setState(state => ({
-      timeline: [event, ...state.timeline]
-    }))
 
   filterTimelineById = (state, id) =>
     state.timeline.filter(item => item.id !== id)
@@ -78,7 +81,6 @@ export default class EventsPane extends React.Component {
           <Card style={{ marginBottom: '1.5rem' }}>
             <NewTask
               user={this.props.user}
-              submitCallback={this.addEvent}
               defaultAssociation={this.defaultAssociation}
             />
           </Card>
