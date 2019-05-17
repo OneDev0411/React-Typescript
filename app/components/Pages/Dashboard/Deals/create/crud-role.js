@@ -49,7 +49,7 @@ class CrudRole extends React.Component {
             role={user}
             onHide={this.closeModal}
             onUpsertRole={onUpsertUser}
-            roleFormOptions={{}}
+            showRoleOverlay={false}
             {...rest}
           />
         )}

@@ -1,9 +1,6 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
-import TextIconButton from 'components/Button/TextIconButton'
-import AddIcon from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
-
 import { convertContactToRole, AGENT_ROLES } from '../../../utils/roles'
 
 import RoleCrmIntegration from '../CrmIntegration'
@@ -153,9 +150,9 @@ class RoleAgentIntegration extends React.Component {
           isOpen={this.state.isRoleFormOpen}
           role={this.state.role}
           dealSide={this.props.dealSide}
-          modalTitle={this.props.modalTitle}
           allowedRoles={this.props.allowedRoles}
           formOptions={this.props.roleFormOptions}
+          showOverlay={this.props.showOverlay}
           isEmailRequired={this.props.isEmailRequired}
           isCommissionRequired={this.props.isCommissionRequired}
           onHide={this.props.onHide}

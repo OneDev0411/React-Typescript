@@ -26,7 +26,8 @@ const propTypes = {
   formOptions: PropTypes.object,
   isRoleRemovable: PropTypes.bool,
   isSubmitting: PropTypes.bool,
-  isCommissionRequired: PropTypes.bool
+  isCommissionRequired: PropTypes.bool,
+  showOverlay: PropTypes.bool
 }
 
 const defaultProps = {
@@ -35,6 +36,7 @@ const defaultProps = {
   isRoleRemovable: false,
   isSubmitting: false,
   isCommissionRequired: false,
+  showOverlay: true,
   allowedRoles: []
 }
 
@@ -276,7 +278,7 @@ class Role extends React.Component {
             }}
           />
         </Container>
-        <Overlay />
+        {this.props.showOverlay && <Overlay />}
       </Fragment>
     )
   }

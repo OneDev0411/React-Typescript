@@ -124,6 +124,7 @@ class RoleFormWrapper extends React.Component {
         allowedRoles={this.props.allowedRoles}
         isOpen={this.props.isOpen}
         onFormSubmit={this.onSubmit}
+        showOverlay={this.props.showOverlay}
         onClose={this.props.onHide}
       />
     )
