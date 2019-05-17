@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
-import { convertContactToRole, AGENT_ROLES } from '../../../utils/roles'
+import DealRole from 'components/DealRole'
 
-import RoleCrmIntegration from '../CrmIntegration'
+import { convertContactToRole, AGENT_ROLES } from 'deals/utils/roles'
+
 import AgentModal from './AgentsList'
 
 const initialState = {
@@ -145,17 +146,17 @@ class RoleAgentIntegration extends React.Component {
           />
         )}
 
-        <RoleCrmIntegration
+        <DealRole
           deal={this.props.deal}
           isOpen={this.state.isRoleFormOpen}
-          role={this.state.role}
+          form={this.state.role}
           dealSide={this.props.dealSide}
           allowedRoles={this.props.allowedRoles}
-          formOptions={this.props.roleFormOptions}
+          position={this.props.roleFormPosition}
           showOverlay={this.props.showOverlay}
           isEmailRequired={this.props.isEmailRequired}
           isCommissionRequired={this.props.isCommissionRequired}
-          onHide={this.props.onHide}
+          onClose={this.props.onClose}
           onUpsertRole={this.onUpsertRole}
         />
       </Fragment>

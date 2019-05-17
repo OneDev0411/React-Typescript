@@ -14,11 +14,11 @@ import DeleteRole from 'components/DealRole/components/DeleteRole'
 
 import { selectDealRoles } from 'reducers/deals/roles'
 
+import DealRole from 'components/DealRole'
 import TeamAgents from './AgentIntegration/AgentsList'
 
 import { roleName, getLegalFullName, isPrimaryAgent } from '../../utils/roles'
 import { getAvatarTitle } from '../../utils/get-avatar-title'
-import RoleCrmIntegration from './CrmIntegration'
 
 import AddRole from './AddRole'
 
@@ -200,22 +200,19 @@ class Roles extends React.Component {
                 </RoleActions>
 
                 {this.state.isRoleFormOpen && role.id === this.state.user.id && (
-                  <RoleCrmIntegration
+                  <DealRole
                     isOpen
-                    formOptions={{
-                      position: {
-                        top: '3rem',
-                        left: '1.5rem'
-                      }
+                    position={{
+                      top: '3rem',
+                      left: '1.5rem'
                     }}
                     deal={this.props.deal}
-                    role={this.state.user}
-                    modalTitle="Update Contact"
+                    form={this.state.user}
                     isRoleRemovable={isRowRemovable}
                     isEmailRequired={this.props.isEmailRequired}
                     allowedRoles={this.props.allowedRoles}
                     onUpsertRole={this.props.onUpsertRole}
-                    onHide={this.closeRoleForm}
+                    onClose={this.closeRoleForm}
                   />
                 )}
               </RoleItem>

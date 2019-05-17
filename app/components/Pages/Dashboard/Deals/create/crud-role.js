@@ -47,7 +47,7 @@ class CrudRole extends React.Component {
         {this.state.isModalOpen && (
           <RoleAgentIntegration
             role={user}
-            onHide={this.closeModal}
+            onClose={this.closeModal}
             onUpsertRole={onUpsertUser}
             showRoleOverlay={false}
             {...rest}

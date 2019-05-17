@@ -1,8 +1,22 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 import { Form } from 'react-final-form'
 
-import { ROLE_NAMES } from 'deals/utils/roles'
+import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
+
+import { createContacts } from 'models/contacts/create-contacts'
+
+import { createRoles, updateRole } from 'actions/deals'
+import { confirmation } from 'actions/confirmation'
+
+import {
+  ROLE_NAMES,
+  convertRoleToContact,
+  getLegalFullName,
+  getContactDiff
+} from 'deals/utils/roles'
 
 import { FormContainer } from './Form'
 
@@ -23,30 +37,34 @@ const propTypes = {
   deal: PropTypes.object.isRequired,
   form: PropTypes.object,
   allowedRoles: PropTypes.array,
-  formOptions: PropTypes.object,
+  position: PropTypes.object,
   isRoleRemovable: PropTypes.bool,
-  isSubmitting: PropTypes.bool,
   isCommissionRequired: PropTypes.bool,
-  showOverlay: PropTypes.bool
+  showOverlay: PropTypes.bool,
+  onUpsertRole: PropTypes.func
 }
 
 const defaultProps = {
   form: null,
-  formOptions: {},
+  position: {},
   isRoleRemovable: false,
-  isSubmitting: false,
   isCommissionRequired: false,
   showOverlay: true,
-  allowedRoles: []
+  allowedRoles: [],
+  onUpsertRole: () => null
 }
 
 class Role extends React.Component {
+  state = {
+    isSaving: false
+  }
+
   getInitialValues = () => {
     if (!this.props.isOpen) {
       return {}
     }
 
-    if (this.props.isSubmitting) {
+    if (this.state.isSaving) {
       return this.formObject
     }
 
@@ -123,14 +141,86 @@ class Role extends React.Component {
   }
 
   onSubmit = async values => {
-    // keeps the last object of submitted form
-    const { saveRoleInContacts } = this.formObject
-
-    this.formObject = values
-
-    // send form to the parent
     try {
-      await this.props.onFormSubmit(normalizeForm(values), saveRoleInContacts)
+      const form = normalizeForm(values)
+
+      this.setState({
+        isSaving: true
+      })
+
+      if (this.isNewRecord) {
+        if (form.contact) {
+          const upsertedAttributes = getContactDiff(
+            form,
+            this.props.attributeDefs
+          )
+
+          if (upsertedAttributes.length > 0) {
+            await upsertContactAttributes(form.contact.id, upsertedAttributes)
+
+            this.props.notify({
+              message: `${getLegalFullName(form)} Updated.`,
+              status: 'success'
+            })
+          }
+        } else {
+          this.createNewContact(form)
+        }
+
+        if (this.props.deal) {
+          const newRoles = await this.props.createRoles(this.props.deal.id, [
+            form
+          ])
+
+          this.props.onUpsertRole(newRoles[0])
+        } else {
+          this.props.onUpsertRole({
+            id: new Date().getTime(),
+            ...form
+          })
+        }
+      }
+
+      if (!this.isNewRecord) {
+        const updatedRole = this.props.deal
+          ? await this.props.updateRole(this.props.deal.id, form)
+          : form
+
+        this.props.onUpsertRole(updatedRole)
+      }
+    } catch (e) {
+      this.props.notify({
+        message: 'Could not save the contact. please try again.',
+        status: 'error'
+      })
+
+      console.log(e)
+    } finally {
+      this.setState({
+        isSaving: false
+      })
+
+      this.handleClose()
+    }
+  }
+
+  createNewContact = async form => {
+    if (
+      !this.formObject.saveRoleInContacts ||
+      this.props.user.email === form.email
+    ) {
+      return false
+    }
+
+    try {
+      await createContacts([
+        convertRoleToContact(form, this.props.user.id, this.props.attributeDefs)
+      ])
+
+      this.props.notify({
+        message: `New Contact Created: ${getLegalFullName(form)}`,
+        status: 'success'
+      })
     } catch (e) {
       console.log(e)
     }
@@ -246,7 +336,7 @@ class Role extends React.Component {
 
     return (
       <Fragment>
-        <Container position={this.props.formOptions.position}>
+        <Container position={this.props.position}>
           <Form
             validate={this.validate}
             onSubmit={this.onSubmit}
@@ -262,7 +352,7 @@ class Role extends React.Component {
               return (
                 <FormContainer
                   {...formProps}
-                  isSubmitting={this.props.isSubmitting}
+                  isSubmitting={this.state.isSaving}
                   isNewRecord={this.isNewRecord}
                   isRoleRemovable={this.props.isRoleRemovable}
                   deal={this.props.deal}
@@ -287,4 +377,19 @@ class Role extends React.Component {
 Role.propTypes = propTypes
 Role.defaultProps = defaultProps
 
-export default Role
+function mapStateToProps({ user, contacts }) {
+  return {
+    user,
+    attributeDefs: contacts.attributeDefs
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  {
+    notify,
+    updateRole,
+    createRoles,
+    confirmation
+  }
+)(Role)

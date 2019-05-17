@@ -4,7 +4,8 @@ import { normalizeRoleNames } from 'deals/FormEdit/utils/get-roles-text'
 
 import { isPrimaryAgent } from 'deals/utils/roles'
 
-import RoleCrmIntegration from 'deals/components/Roles/CrmIntegration'
+import DealRole from 'components/DealRole'
+
 import { ContextInlineEdit } from 'deals/FormEdit/Editor/ContextInlineEdit'
 
 import { AddRole } from '../AddRole'
@@ -63,14 +64,14 @@ export function RoleField(props) {
           bounds={props.rect}
           onDismiss={() => setRole(undefined)}
         >
-          <RoleCrmIntegration
+          <DealRole
             isOpen
             deal={props.deal}
-            role={activeRole}
+            form={activeRole}
             allowedRoles={allowedRoles}
             onUpsertRole={props.onUpsertRole}
             isRoleRemovable={activeRole && !isPrimaryAgent(activeRole.role)}
-            onHide={() => setRole(undefined)}
+            onClose={() => setRole(undefined)}
           />
         </ContextInlineEdit>
       )}
