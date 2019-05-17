@@ -2,6 +2,8 @@ import React, { useState, Fragment } from 'react'
 
 import { normalizeRoleNames } from 'deals/FormEdit/utils/get-roles-text'
 
+import { isPrimaryAgent } from 'deals/utils/roles'
+
 import RoleCrmIntegration from 'deals/components/Roles/CrmIntegration'
 import { ContextInlineEdit } from 'deals/FormEdit/Editor/ContextInlineEdit'
 
@@ -67,6 +69,7 @@ export function RoleField(props) {
             role={activeRole}
             allowedRoles={allowedRoles}
             onUpsertRole={props.onUpsertRole}
+            isRoleRemovable={activeRole && !isPrimaryAgent(activeRole.role)}
             onHide={() => setRole(undefined)}
           />
         </ContextInlineEdit>
