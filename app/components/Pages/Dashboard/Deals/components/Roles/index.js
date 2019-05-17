@@ -15,6 +15,7 @@ import DeleteRole from 'components/DealRole/components/DeleteRole'
 import { selectDealRoles } from 'reducers/deals/roles'
 
 import DealRole from 'components/DealRole'
+
 import TeamAgents from './AgentIntegration/AgentsList'
 
 import { roleName, getLegalFullName, isPrimaryAgent } from '../../utils/roles'
@@ -180,24 +181,26 @@ class Roles extends React.Component {
                   </RoleInfo>
                 </Flex>
 
-                <RoleActions>
-                  {isRowRemovable ? (
-                    <DeleteRole
-                      deal={this.props.deal}
-                      role={role}
-                      style={{ padding: 0, marginLeft: '0.5rem' }}
-                    />
-                  ) : (
-                    <ActionButton
-                      appearance="outline"
-                      size="small"
-                      style={{ marginLeft: '0.5rem' }}
-                      onClick={() => this.toggleReplaceAgentDrawer(role)}
-                    >
-                      Replace
-                    </ActionButton>
-                  )}
-                </RoleActions>
+                {this.props.allowDeleteRole && (
+                  <RoleActions>
+                    {isRowRemovable ? (
+                      <DeleteRole
+                        deal={this.props.deal}
+                        role={role}
+                        style={{ padding: 0, marginLeft: '0.5rem' }}
+                      />
+                    ) : (
+                      <ActionButton
+                        appearance="outline"
+                        size="small"
+                        style={{ marginLeft: '0.5rem' }}
+                        onClick={() => this.toggleReplaceAgentDrawer(role)}
+                      >
+                        Replace
+                      </ActionButton>
+                    )}
+                  </RoleActions>
+                )}
 
                 {this.state.isRoleFormOpen && role.id === this.state.user.id && (
                   <DealRole
