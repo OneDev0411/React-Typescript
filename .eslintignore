@@ -5,4 +5,3 @@ app/utils/
 app/styles/vendor
 
 **/*.test.js
-tests/

@@ -11,9 +11,10 @@
     "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build.js",
     "serve": "NODE_ENV=production forever node_modules/@babel/node/bin/babel-node.js ./bin/server",
     "serve:stage": "NODE_ENV=stage babel-node ./bin/server",
-    "lint": "npm run lint:app && npm run lint:server",
+    "lint": "npm run lint:app && npm run lint:server && npm run lint:tests",
     "lint:app": "eslint ./app",
     "lint:server": "eslint ./server",
+    "lint:tests": "eslint ./tests --fix",
     "test:e2e": "jest --config tests/e2e/jest.config.js"
   },
   "engines": {
@@ -215,6 +216,7 @@
     "eslint-import-resolver-webpack": "^0.11.0",
     "eslint-loader": "^2.1.1",
     "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jest": "^22.5.1",
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.3",

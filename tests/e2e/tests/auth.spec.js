@@ -1,11 +1,13 @@
-import {init} from '../helpers'
-import {signIn, signOut} from '../helpers/auth'
+import { init } from '../helpers'
+import { signIn, signOut } from '../helpers/auth'
 
 describe('Authentication', () => {
-  let browser, page
+  let browser
+  let page
 
   beforeAll(async () => {
     const instances = await init()
+
     browser = instances.browser
     page = instances.page
   })
