@@ -2,7 +2,7 @@ import React from 'react'
 
 import { StyledBadge } from './styled'
 
-function RowBadges(data) {
+function RowBadges({ data }) {
   const output = []
 
   if (data.unsubscribed > 0) {

@@ -73,7 +73,6 @@ export const SummaryCard = styled.div`
 export const ContactColumn = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
   padding-right: 1rem;
 
   .labels-container {
@@ -83,6 +82,6 @@ export const ContactColumn = styled.div`
   }
 `
 
-export const StyledBadge = styled(Badge)`
+export const StyledBadge = styled(Badge) `
   padding: 0.25rem 0.75rem;
 `
