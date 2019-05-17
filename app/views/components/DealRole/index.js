@@ -6,8 +6,9 @@ import { Form } from 'react-final-form'
 
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 
-import { createContacts } from 'models/contacts/create-contacts'
+import BareModal from 'components/BareModal'
 
+import { createContacts } from 'models/contacts/create-contacts'
 import { createRoles, updateRole } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
@@ -38,6 +39,7 @@ const propTypes = {
   form: PropTypes.object,
   allowedRoles: PropTypes.array,
   position: PropTypes.object,
+  container: PropTypes.oneOf(['Modal', 'Inline']),
   isRoleRemovable: PropTypes.bool,
   isCommissionRequired: PropTypes.bool,
   showOverlay: PropTypes.bool,
@@ -47,6 +49,7 @@ const propTypes = {
 const defaultProps = {
   form: null,
   position: {},
+  container: 'Modal',
   isRoleRemovable: false,
   isCommissionRequired: false,
   showOverlay: true,
@@ -334,40 +337,53 @@ class Role extends React.Component {
       return false
     }
 
+    const FormComponent = () => (
+      <Form
+        validate={this.validate}
+        onSubmit={this.onSubmit}
+        initialValues={this.getInitialValues()}
+        mutators={{
+          populateRole: this.populateRole
+        }}
+        render={formProps => {
+          const { visibleFields, requiredFields } = this.getFormProperties(
+            formProps.values
+          )
+
+          return (
+            <FormContainer
+              {...formProps}
+              isSubmitting={this.state.isSaving}
+              isNewRecord={this.isNewRecord}
+              isRoleRemovable={this.props.isRoleRemovable}
+              deal={this.props.deal}
+              formObject={this.formObject}
+              requiredFields={requiredFields}
+              visibleFields={visibleFields}
+              isAllowedRole={this.isAllowedRole}
+              onDeleteRole={this.handleClose}
+              onSubmit={this.handleSubmit}
+              onClose={this.handleClose}
+            />
+          )
+        }}
+      />
+    )
+
+    if (this.props.container === 'Modal') {
+      return (
+        <BareModal isOpen style={{ content: { height: 'auto' } }}>
+          <FormComponent />
+        </BareModal>
+      )
+    }
+
     return (
       <Fragment>
         <Container position={this.props.position}>
-          <Form
-            validate={this.validate}
-            onSubmit={this.onSubmit}
-            initialValues={this.getInitialValues()}
-            mutators={{
-              populateRole: this.populateRole
-            }}
-            render={formProps => {
-              const { visibleFields, requiredFields } = this.getFormProperties(
-                formProps.values
-              )
-
-              return (
-                <FormContainer
-                  {...formProps}
-                  isSubmitting={this.state.isSaving}
-                  isNewRecord={this.isNewRecord}
-                  isRoleRemovable={this.props.isRoleRemovable}
-                  deal={this.props.deal}
-                  formObject={this.formObject}
-                  requiredFields={requiredFields}
-                  visibleFields={visibleFields}
-                  isAllowedRole={this.isAllowedRole}
-                  onDeleteRole={this.handleClose}
-                  onSubmit={this.handleSubmit}
-                  onClose={this.handleClose}
-                />
-              )
-            }}
-          />
+          <FormComponent />
         </Container>
+
         {this.props.showOverlay && <Overlay />}
       </Fragment>
     )
