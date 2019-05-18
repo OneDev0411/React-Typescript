@@ -165,7 +165,9 @@ class App extends Component {
 
     dispatch(checkBrowser())
 
-    dispatch(syncOpenHouseData(this.props.user.access_token))
+    if (user) {
+      dispatch(syncOpenHouseData(user.access_token))
+    }
   }
 
   getBrand() {

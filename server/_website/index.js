@@ -1,6 +1,6 @@
 import bodyParser from 'koa-bodyparser'
 
-import { isEmpty, template_path } from './helpers'
+import { isEmpty, template_path, isLoggedIn } from './helpers'
 import config from '../../config/private'
 
 let mailgun = require('mailgun-js')({
@@ -11,32 +11,51 @@ let mailgun = require('mailgun-js')({
 const router = require('koa-router')()
 
 router.get('/', async ctx =>
-  ctx.render(template_path('index.ejs'), { title: 'Rechat' })
+  ctx.render(template_path('index.ejs'), {
+    title: 'Rechat',
+    isLoggedIn: isLoggedIn(ctx)
+  })
 )
 
 router.get('/faq', async ctx =>
-  ctx.render(template_path('faq.ejs'), { title: 'FAQ | Rechat' })
+  ctx.render(template_path('faq.ejs'), {
+    title: 'FAQ | Rechat',
+    isLoggedIn: isLoggedIn(ctx)
+  })
 )
 
 router.get('/contact', async ctx =>
-  ctx.render(template_path('contact.ejs'), { title: 'Learn More | Rechat' })
+  ctx.render(template_path('contact.ejs'), {
+    title: 'Learn More | Rechat',
+    isLoggedIn: isLoggedIn(ctx)
+  })
 )
 
 router.get('/about', async ctx =>
-  ctx.render(template_path('about.ejs'), { title: 'About | Rechat' })
+  ctx.render(template_path('about.ejs'), {
+    title: 'About | Rechat',
+    isLoggedIn: isLoggedIn(ctx)
+  })
 )
 
 router.get('/terms', async ctx =>
-  ctx.render(template_path('terms.ejs'), { title: 'Terms of Use | Rechat' })
+  ctx.render(template_path('terms.ejs'), {
+    title: 'Terms of Use | Rechat',
+    isLoggedIn: isLoggedIn(ctx)
+  })
 )
 
 router.get('/terms/mls', async ctx =>
-  ctx.render(template_path('mlsTerms.ejs'), { title: 'MLS® Terms | Rechat' })
+  ctx.render(template_path('mlsTerms.ejs'), {
+    title: 'MLS® Terms | Rechat',
+    isLoggedIn: isLoggedIn(ctx)
+  })
 )
 
 router.get('/privacy', async ctx =>
   ctx.render(template_path('privacy.ejs'), {
-    title: 'Privacy Policy | Rechat'
+    title: 'Privacy Policy | Rechat',
+    isLoggedIn: isLoggedIn(ctx)
   })
 )
 
