@@ -9,7 +9,7 @@ import { Field, reduxForm } from 'redux-form'
 
 import { getBrandInfo } from '../SignIn'
 import Button from '../../../../views/components/Button/ActionButton'
-import SimpleField from '../../../Pages/Dashboard/Account/Profile/components/SimpleField'
+import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'
 
 import editUser from '../../../../store_actions/user/edit'
 import submitSigninForm from '../../../../store_actions/auth/signin'
@@ -53,7 +53,7 @@ const RegisterForm = ({
   paramsFromURI: { phone_number }
 }) => {
   const isDisabled = isSubmitting || invalid || pristine
-  const { siteLogo, siteTitle, brandColor } = getBrandInfo(brand)
+  const { siteLogo, siteTitle } = getBrandInfo(brand)
 
   return (
     <div className="signin-page-wrapper c-auth--register clearfix">
@@ -63,13 +63,13 @@ const RegisterForm = ({
       <article className="c-auth">
         <header className="c-auth__header">
           {siteLogo && (
-            <Link to="/" tabIndex={-1}>
+            <a href="/" tabIndex={-1}>
               <img
                 src={siteLogo}
                 alt={`${siteTitle} logo`}
                 className="c-auth__logo"
               />
-            </Link>
+            </a>
           )}
           <h1 className="c-auth__title">{siteTitle}</h1>
           <p className="c-auth__subtitle">Thanks! You're almost there...</p>

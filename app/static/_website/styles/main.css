@@ -269,7 +269,7 @@ h1,h2,h3,h4,h5,h6{
 
 
 .homepage-hero{
-  background-image: url('../files/images/homepage-hero.jpg');
+  background-image: url('../files/images/homepage-hero@1x.jpg');
 }
 
 
@@ -1218,4 +1218,33 @@ footer{
     background-position: center center;
   }
 
+}
+
+
+
+/* High resolutions */
+
+@media screen and (min-width: 1440px) {
+
+
+  .homepage-hero{
+    background-image: url('../files/images/homepage-hero@2x.jpg');
+  }
+
+
+  .contact-hero{
+    background-image: url('../files/images/contact-hero@2x.jpg');
+  }
+
+  .faq-hero{
+    background-image: url('../files/images/faq-hero@2x.jpg');
+  }
+
+  .faq-support-hero{
+    background-image: url('../files/images/faq-support@2x.jpg');
+  }
+
+  .about-hero{
+    background-image: url('../files/images/about-hero@2x.jpg');
+  }
 }
