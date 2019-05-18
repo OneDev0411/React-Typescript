@@ -1,6 +1,8 @@
 import React from 'react'
 import { IndexRoute, Route } from 'react-router'
 
+import GoToDashboard from '../views/components/GoToDashboard'
+
 // Containers
 import AppLayout from '../components/App'
 // Pages
@@ -370,6 +372,11 @@ function authenticate(nextState, replace) {
 
 export default (
   <Route>
+    <Route path="/">
+      <IndexRoute component={GoToDashboard} />} />
+      <Route path="/dashboard" component={GoToDashboard} />
+    </Route>
+
     <Route path="/" component={AsyncAuthenticationLayout}>
       <IndexRoute component={Landing} />
       <Route path="/branch" component={AsyncBranch} />

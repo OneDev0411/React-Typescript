@@ -14,7 +14,12 @@
     </li>
     <!-- <li class="c-main-nav__item"><a  href="/">Resources</a></li> -->
     <li class="c-main-nav__item">
-      <a href="/signin">Sign In</a>
+      <% if (isLoggedIn) { %>
+        <a href="/dashboard">Dashboard</a>
+        <% } %>
+          <% if (!isLoggedIn) { %>
+            <a href="/signin">Sign In</a>
+            <% } %>
     </li>
     <li>
       <a class="button-outline button-outline--small" href="/contact">Learn More</a>
