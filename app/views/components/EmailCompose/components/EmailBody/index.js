@@ -17,9 +17,13 @@ export default function EmailBody({ content, hasStaticBody = false }) {
       {hasStaticBody && (
         <Fragment>
           {content ? (
-            <div
-              dangerouslySetInnerHTML={{
-                __html: content
+            <iframe
+              title="email body"
+              width="100%"
+              srcDoc={content}
+              style={{
+                border: '0',
+                height: '50vh'
               }}
             />
           ) : (
