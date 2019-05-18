@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
@@ -7,7 +7,6 @@ import { Form } from 'react-final-form'
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 
 import BareModal from 'components/BareModal'
-import { Portal } from 'components/Portal'
 
 import { createContacts } from 'models/contacts/create-contacts'
 import { createRoles, updateRole } from 'actions/deals'
@@ -33,7 +32,6 @@ import { getCommissionAttributes } from './helpers/get-commission-attributes'
 const propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onFormSubmit: PropTypes.func.isRequired,
   deal: PropTypes.object.isRequired,
   form: PropTypes.object,
   allowedRoles: PropTypes.array,

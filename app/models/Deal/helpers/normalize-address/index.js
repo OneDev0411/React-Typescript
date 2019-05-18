@@ -1,6 +1,10 @@
+import { stateToAbbreviated } from 'deals/utils/address'
+
 export function normalizeAddress(address) {
   return {
     ...address,
+    street_dir_prefix: address.street_prefix,
+    state_code: stateToAbbreviated(address.state),
     full_address: [
       address.street_number || '',
       address.street_name || '',

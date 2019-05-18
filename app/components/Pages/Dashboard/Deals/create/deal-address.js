@@ -1,138 +1,150 @@
-import React from 'react'
+import React, { useState } from 'react'
 import cn from 'classnames'
+import styled from 'styled-components'
+import Flex from 'styled-flex-component'
 
-import { H2 } from 'components/Typography/headings'
+import { normalizeAddress } from 'models/Deal/helpers/normalize-address'
+
+import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
 
 import ActionButton from 'components/Button/ActionButton'
-
 import SearchListings from 'components/SearchListingDrawer'
 
-import Address from '../components/Address'
+import { H2 } from 'components/Typography/headings'
+import { primary } from 'views/utils/colors'
 
-import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
+import RequiredIcon from 'components/SvgIcons/Required/IconRequired'
 
-const BUYING = 'Buying'
+const AddressInput = styled.input`
+  border: 1px dashed ${primary};
+  border-radius: 3px;
+  height: 35px;
+  width: 20rem;
+  margin: 0.5rem 0 0 0;
+  padding: 0 5px;
+`
 
-export default class DealAddress extends React.Component {
-  state = {
-    showManualAddress: false,
-    showMlsSearch: false
-  }
+export default function DealAddress(props) {
+  const [showManualAddress, setShowManualAddress] = useState(false)
+  const [showMlsDrawer, setShowMlsDrawer] = useState(false)
 
-  toggleManualAddressDrawer = () => {
-    this.setState(state => ({
-      showManualAddress: !state.showManualAddress
-    }))
-  }
+  const isBuyingSide = props.dealSide === 'Buying'
+  const listingImage =
+    (props.dealAddress && props.dealAddress.image) ||
+    '/static/images/deals/home.svg'
 
-  toggleMlsDrawer = () => {
-    this.setState(state => ({
-      showMlsSearch: !state.showMlsSearch
-    }))
-  }
+  const toggleMlsDrawer = () => setShowMlsDrawer(!showMlsDrawer)
+  const toggleManualAddressEntry = () =>
+    setShowManualAddress(!showManualAddress)
 
-  onCreateAddress = address => {
-    this.setState({
-      showManualAddress: false,
-      showMlsSearch: false
+  const handleSubmitManualAddress = address =>
+    onCreateAddress({
+      address_components: normalizeAddress(address)
     })
 
-    this.props.onCreateAddress(address, 'address')
-  }
-
-  handleSelectListing = listings => {
-    this.onCreateAddress({
+  const handleSelectListing = listings =>
+    onCreateAddress({
       id: listings[0].id,
       image: listings[0].cover_image_url,
       address_components: listings[0].property.address
     })
+
+  const onCreateAddress = address => {
+    setShowManualAddress(false)
+    setShowMlsDrawer(false)
+
+    props.onCreateAddress(address, 'address')
   }
 
-  getListingImage = address => address.image || '/static/images/deals/home.svg'
+  return (
+    <div className="form-section deal-address">
+      <H2 className={cn('hero', { hasError: props.hasError })}>
+        What is the address of the subject property?&nbsp;
+        {props.isRequired && <span className="required">*</span>}
+        {props.hasError && <RequiredIcon />}
+      </H2>
 
-  render() {
-    const {
-      isRequired,
-      hasError,
-      defaultDealAddress,
-      dealAddress,
-      dealSide,
-      onRemoveAddress
-    } = this.props
+      {props.dealAddress ? (
+        <div className="address-info">
+          <img alt="" src={listingImage} />
+          <span className="name">
+            {props.dealAddress.address_components.street_number}
+            &nbsp;
+            {props.dealAddress.address_components.street_name}
+            &nbsp;
+            {props.dealAddress.address_components.street_suffix}
+          </span>
 
-    // don't show address component when deal is created (web#1610)
-    if (defaultDealAddress) {
-      return false
-    }
-
-    return (
-      <div className="form-section deal-address">
-        <H2 className={cn('hero', { hasError })}>
-          What is the address of the subject property?&nbsp;
-          {isRequired && <span className="required">*</span>}
-          {hasError && <RequiredIcon />}
-        </H2>
-
-        <SearchListings
-          isOpen={this.state.showMlsSearch}
-          title="Address"
-          searchPlaceholder="Enter MLS# or an address"
-          onSelectListings={this.handleSelectListing}
-          onClose={this.toggleMlsDrawer}
-        />
-
-        <Address
-          show={this.state.showManualAddress}
-          onClose={this.toggleManualAddressDrawer}
-          onCreateAddress={this.onCreateAddress}
-        />
-
-        {dealAddress ? (
-          <div className="address-info">
-            <img
-              alt="listing not available"
-              src={this.getListingImage(dealAddress)}
-            />
-            <span className="name">
-              {dealAddress.address_components.street_number}
-              &nbsp;
-              {dealAddress.address_components.street_name}
-              &nbsp;
-              {dealAddress.address_components.street_suffix}
-            </span>
-
-            <span className="remove-address" onClick={onRemoveAddress}>
-              Remove Address
-            </span>
-          </div>
-        ) : (
-          <div>
-            {dealSide === BUYING && (
-              <div
-                className="entity-item address new"
-                onClick={() => this.toggleMlsDrawer()}
+          <span className="remove-address" onClick={props.onRemoveAddress}>
+            Remove Address
+          </span>
+        </div>
+      ) : (
+        <div>
+          {isBuyingSide && (
+            <div className="entity-item address new">
+              <ActionButton
+                appearance="link"
+                className="add-item"
+                onClick={toggleMlsDrawer}
               >
-                <ActionButton appearance="link" className="add-item">
-                  <span className="icon">+</span>
-                  <span className="text">Enter MLS #</span>
-                </ActionButton>
-              </div>
-            )}
+                <span className="icon">+</span>
+                <span className="text">Enter MLS #</span>
+              </ActionButton>
+            </div>
+          )}
 
-            <div
-              className="entity-item address new"
-              onClick={() => this.toggleManualAddressDrawer()}
-            >
-              <ActionButton appearance="link" className="add-item">
+          {showManualAddress ? (
+            <Flex alignCenter>
+              <InlineAddressField
+                address={props.address}
+                handleCancel={props.toggleMode}
+                handleSubmit={handleSubmitManualAddress}
+                style={{
+                  width: '20rem'
+                }}
+                renderSearchField={inputProps => (
+                  <AddressInput
+                    {...inputProps}
+                    placeholder="Search address..."
+                    type="text"
+                    autoFocus
+                  />
+                )}
+              />
+
+              <ActionButton
+                appearance="link"
+                style={{ margin: 0, padding: 0, marginLeft: '0.5rem' }}
+                onClick={toggleManualAddressEntry}
+              >
+                Cancel
+              </ActionButton>
+            </Flex>
+          ) : (
+            <div className="entity-item address new">
+              <ActionButton
+                appearance="link"
+                className="add-item"
+                onClick={toggleManualAddressEntry}
+              >
                 <span className="icon">+</span>
                 <span className="text">
-                  {dealSide === BUYING ? 'Or manually input' : 'Add address'}
+                  {isBuyingSide ? 'Or manually input' : 'Add address'}
                 </span>
               </ActionButton>
             </div>
-          </div>
-        )}
-      </div>
-    )
-  }
+          )}
+        </div>
+      )}
+
+      <SearchListings
+        isOpen={showMlsDrawer}
+        title="Address"
+        searchPlaceholder="Enter MLS# or an address"
+        onSelectListings={handleSelectListing}
+        onClose={toggleMlsDrawer}
+      />
+    </div>
+  )
 }
