@@ -81,6 +81,7 @@ class ContactProfile extends React.Component {
     this.detectScreenSize()
     window.addEventListener('resize', this.detectScreenSize)
     this.initializeContact()
+    window.socket.on('email_campaign:create', this.fetchTimeline)
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -96,8 +97,10 @@ class ContactProfile extends React.Component {
     }
   }
 
-  componentWillUnmount = () =>
+  componentWillUnmount = () => {
     window.removeEventListener('resize', this.detectScreenSize)
+    window.socket.off('email_campaign:create', this.fetchTimeline)
+  }
 
   /**
    * Web page (document) title
