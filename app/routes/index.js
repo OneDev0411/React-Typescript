@@ -4,7 +4,6 @@ import { IndexRoute, Route } from 'react-router'
 // Containers
 import AppLayout from '../components/App'
 // Pages
-import Landing from '../components/Pages/Landing'
 import Load from '../loader'
 import store from '../stores'
 import UserIsNotAuthenticated from './userIsNotAuthenticated'
@@ -259,7 +258,7 @@ const AsyncUpgradeAccount = Load({
 
 const WidgetsContainer = Load({
   loader: () =>
-    import('../components/Pages/Widgets/' /* webpackChunkName: "widgets_container" */)
+    import('../components/Pages/Widgets' /* webpackChunkName: "widgets_container" */)
 })
 const AsyncListingsWidget = Load({
   loader: () =>
@@ -357,7 +356,6 @@ function authenticate(nextState, replace) {
 export default (
   <Route>
     <Route path="/" component={AsyncAuthenticationLayout}>
-      <IndexRoute component={Landing} />
       <Route path="/branch" component={AsyncBranch} />
       <Route path="/share" component={AsyncShare} />
 
