@@ -8,12 +8,12 @@ export function Roles({ input, meta, isAllowedRole, isRequired }) {
   const role = input.value
 
   const options = useMemo(() => {
-    let options = [null, ...ROLE_NAMES]
-      .filter(value => isAllowedRole(value, role))
-      .map(value => ({
+    let options = ROLE_NAMES.filter(value => isAllowedRole(value, role)).map(
+      value => ({
         value,
         label: roleName(value)
-      }))
+      })
+    )
 
     if (role && !options.length) {
       options = [

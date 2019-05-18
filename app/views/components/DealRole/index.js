@@ -7,6 +7,7 @@ import { Form } from 'react-final-form'
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 
 import BareModal from 'components/BareModal'
+import { Portal } from 'components/Portal'
 
 import { createContacts } from 'models/contacts/create-contacts'
 import { createRoles, updateRole } from 'actions/deals'
@@ -29,8 +30,6 @@ import getVisibleFields from './helpers/get-visible-fields'
 import { getFormValidators } from './validators'
 import { getCommissionAttributes } from './helpers/get-commission-attributes'
 
-import { Container, Overlay } from './styled'
-
 const propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
@@ -38,21 +37,17 @@ const propTypes = {
   deal: PropTypes.object.isRequired,
   form: PropTypes.object,
   allowedRoles: PropTypes.array,
-  position: PropTypes.object,
   container: PropTypes.oneOf(['Modal', 'Inline']),
   isRoleRemovable: PropTypes.bool,
   isCommissionRequired: PropTypes.bool,
-  showOverlay: PropTypes.bool,
   onUpsertRole: PropTypes.func
 }
 
 const defaultProps = {
   form: null,
-  position: {},
   container: 'Modal',
   isRoleRemovable: false,
   isCommissionRequired: false,
-  showOverlay: true,
   allowedRoles: [],
   onUpsertRole: () => null
 }
@@ -108,7 +103,7 @@ class Role extends React.Component {
     }
 
     if (
-      !this.props.allowedRoles ||
+      !this.props.allowedRoles.length ||
       (!this.isNewRecord && this.props.form.role === name)
     ) {
       return true
@@ -337,55 +332,39 @@ class Role extends React.Component {
       return false
     }
 
-    const FormComponent = () => (
-      <Form
-        validate={this.validate}
-        onSubmit={this.onSubmit}
-        initialValues={this.getInitialValues()}
-        mutators={{
-          populateRole: this.populateRole
-        }}
-        render={formProps => {
-          const { visibleFields, requiredFields } = this.getFormProperties(
-            formProps.values
-          )
-
-          return (
-            <FormContainer
-              {...formProps}
-              isSubmitting={this.state.isSaving}
-              isNewRecord={this.isNewRecord}
-              isRoleRemovable={this.props.isRoleRemovable}
-              deal={this.props.deal}
-              formObject={this.formObject}
-              requiredFields={requiredFields}
-              visibleFields={visibleFields}
-              isAllowedRole={this.isAllowedRole}
-              onDeleteRole={this.handleClose}
-              onSubmit={this.handleSubmit}
-              onClose={this.handleClose}
-            />
-          )
-        }}
-      />
-    )
-
-    if (this.props.container === 'Modal') {
-      return (
-        <BareModal isOpen style={{ content: { height: 'auto' } }}>
-          <FormComponent />
-        </BareModal>
-      )
-    }
-
     return (
-      <Fragment>
-        <Container position={this.props.position}>
-          <FormComponent />
-        </Container>
+      <BareModal isOpen style={{ content: { height: 'auto' } }}>
+        <Form
+          validate={this.validate}
+          onSubmit={this.onSubmit}
+          initialValues={this.getInitialValues()}
+          mutators={{
+            populateRole: this.populateRole
+          }}
+          render={formProps => {
+            const { visibleFields, requiredFields } = this.getFormProperties(
+              formProps.values
+            )
 
-        {this.props.showOverlay && <Overlay />}
-      </Fragment>
+            return (
+              <FormContainer
+                {...formProps}
+                isSubmitting={this.state.isSaving}
+                isNewRecord={this.isNewRecord}
+                isRoleRemovable={this.props.isRoleRemovable}
+                deal={this.props.deal}
+                formObject={this.formObject}
+                requiredFields={requiredFields}
+                visibleFields={visibleFields}
+                isAllowedRole={this.isAllowedRole}
+                onDeleteRole={this.handleClose}
+                onSubmit={this.handleSubmit}
+                onClose={this.handleClose}
+              />
+            )
+          }}
+        />
+      </BareModal>
     )
   }
 }

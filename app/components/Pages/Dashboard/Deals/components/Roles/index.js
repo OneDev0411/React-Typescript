@@ -202,22 +202,19 @@ class Roles extends React.Component {
                   </RoleActions>
                 )}
 
-                {this.state.isRoleFormOpen && role.id === this.state.user.id && (
-                  <DealRole
-                    isOpen
-                    position={{
-                      top: '3rem',
-                      left: '1.5rem'
-                    }}
-                    deal={this.props.deal}
-                    form={this.state.user}
-                    isRoleRemovable={isRowRemovable}
-                    isEmailRequired={this.props.isEmailRequired}
-                    allowedRoles={this.props.allowedRoles}
-                    onUpsertRole={this.props.onUpsertRole}
-                    onClose={this.closeRoleForm}
-                  />
-                )}
+                {this.state.isRoleFormOpen &&
+                  role.id === this.state.user.id && (
+                    <DealRole
+                      isOpen
+                      deal={this.props.deal}
+                      form={this.state.user}
+                      isRoleRemovable={isRowRemovable}
+                      isEmailRequired={this.props.isEmailRequired}
+                      allowedRoles={this.props.allowedRoles}
+                      onUpsertRole={this.props.onUpsertRole}
+                      onClose={this.closeRoleForm}
+                    />
+                  )}
               </RoleItem>
             )
           })}

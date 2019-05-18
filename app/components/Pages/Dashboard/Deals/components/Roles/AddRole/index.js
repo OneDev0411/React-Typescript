@@ -102,9 +102,6 @@ class AddRoleForm extends React.Component {
             isPrimaryAgent={['BuyerAgent', 'SellerAgent'].includes(
               this.state.selectedRole
             )}
-            roleFormPosition={{
-              top: '40px'
-            }}
             onUpsertRole={this.props.onCreateRole}
             onClose={this.closeDrawer}
           />

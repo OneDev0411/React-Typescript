@@ -6,8 +6,6 @@ import { isPrimaryAgent } from 'deals/utils/roles'
 
 import DealRole from 'components/DealRole'
 
-import { ContextInlineEdit } from 'deals/FormEdit/Editor/ContextInlineEdit'
-
 import { AddRole } from '../AddRole'
 
 export function RoleField(props) {
@@ -60,20 +58,15 @@ export function RoleField(props) {
       </div>
 
       {activeRole !== undefined && (
-        <ContextInlineEdit
-          bounds={props.rect}
-          onDismiss={() => setRole(undefined)}
-        >
-          <DealRole
-            isOpen
-            deal={props.deal}
-            form={activeRole}
-            allowedRoles={allowedRoles}
-            onUpsertRole={props.onUpsertRole}
-            isRoleRemovable={activeRole && !isPrimaryAgent(activeRole.role)}
-            onClose={() => setRole(undefined)}
-          />
-        </ContextInlineEdit>
+        <DealRole
+          isOpen
+          deal={props.deal}
+          form={activeRole}
+          allowedRoles={allowedRoles}
+          onUpsertRole={props.onUpsertRole}
+          isRoleRemovable={activeRole && !isPrimaryAgent(activeRole.role)}
+          onClose={() => setRole(undefined)}
+        />
       )}
     </Fragment>
   )
