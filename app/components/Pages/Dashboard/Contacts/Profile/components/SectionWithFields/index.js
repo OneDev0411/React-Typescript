@@ -332,13 +332,15 @@ class SectionWithFields extends React.Component {
       [attribute_def.data_type]: ''
     }
 
-    this.setState(state => ({
-      orderedAttributes: state.orderedAttributes
-        // create a shallow copy from the state
-        .slice()
-        .splice(newOrder, 0, field)
-        .map((a, order) => ({ ...a, order }))
-    }))
+    this.setState(state => {
+      const shallowCopy = state.orderedAttributes.slice()
+
+      shallowCopy.splice(newOrder, 0, field)
+
+      return {
+        orderedAttributes: shallowCopy.map((a, order) => ({ ...a, order }))
+      }
+    })
   }
 
   AddCustomAttributeCallback = attribute_def => {
