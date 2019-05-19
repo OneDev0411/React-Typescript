@@ -8,7 +8,7 @@ import { Helmet } from 'react-helmet'
 import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 
-import deleteFlow from 'models/flows/delete-flow'
+// import deleteFlow from 'models/flows/delete-flow'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { updateContactQuery } from 'models/contacts/helpers/default-query'
 import { getContact } from 'models/contacts/get-contact'
@@ -31,7 +31,7 @@ import Loading from '../../../../Partials/Loading'
 import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
 
 import { Container } from '../components/Container'
-import Flows from './Flows'
+// import Flows from './Flows'
 import { Dates } from './Dates'
 import Deals from './Deals'
 import { Details } from './Details'
@@ -124,10 +124,10 @@ class ContactProfile extends React.Component {
       const response = await getContact(this.props.params.id, {
         associations: [
           ...updateContactQuery.associations,
-          'contact.deals',
-          'contact.flows',
-          'flow_step.email',
-          'flow_step.crm_task'
+          'contact.deals'
+          // 'contact.flows',
+          // 'flow_step.email',
+          // 'flow_step.crm_task'
         ]
       })
 
@@ -255,19 +255,19 @@ class ContactProfile extends React.Component {
     }
   }
 
-  stopFlow = async id => {
-    try {
-      await deleteFlow(id)
-      this.fetchContact()
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  // stopFlow = async id => {
+  //   try {
+  //     await deleteFlow(id)
+  //     this.fetchContact()
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
-  addToFlowCallback = () => {
-    this.fetchContact()
-    this.fetchTimeline()
-  }
+  // addToFlowCallback = () => {
+  //   this.fetchContact()
+  //   this.fetchTimeline()
+  // }
 
   render() {
     const { contact } = this.state
@@ -288,12 +288,12 @@ class ContactProfile extends React.Component {
 
     const thirdColumnSections = [
       <Dates contact={contact} key="s1" />,
-      <Flows
-        key="s2"
-        contactId={contact.id}
-        flows={contact.flows}
-        user={user}
-      />,
+      // <Flows
+      //   key="s2"
+      //   contactId={contact.id}
+      //   flows={contact.flows}
+      //   user={user}
+      // />,
       <Deals contact={contact} key="s3" />
     ]
 
@@ -316,7 +316,7 @@ class ContactProfile extends React.Component {
                 : null
             }
             closeButtonQuery={this.props.location.state}
-            addToFlowCallback={this.addToFlowCallback}
+            // addToFlowCallback={this.addToFlowCallback}
           />
 
           <ColumnsContainer>
@@ -335,14 +335,14 @@ class ContactProfile extends React.Component {
 
                 <Partner {..._props} />
 
-                {!this.state.isDesktopScreen && (
+                {/* {!this.state.isDesktopScreen && (
                   <Flows
                     contactId={contact.id}
                     flows={contact.flows}
                     user={user}
                     onStop={this.stopFlow}
                   />
-                )}
+                )} */}
 
                 {!this.state.isDesktopScreen && <Deals contact={contact} />}
 
