@@ -10,7 +10,7 @@ import { validateEmail } from '../Password/Forgot'
 import { getBrandInfo } from '../SignIn'
 import signup from '../../../../models/auth/signup'
 import Button from '../../../../views/components/Button/ActionButton'
-import SimpleField from '../../../Pages/Dashboard/Account/Profile/components/SimpleField'
+import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'
 
 const getErrorMessage = (errorCode, email) => {
   if (errorCode === 409) {
@@ -23,7 +23,8 @@ const getErrorMessage = (errorCode, email) => {
         or{' '}
         <Link to={`/signin?username=${encodeURIComponent(email)}`}>
           sign in
-        </Link>.
+        </Link>
+        .
       </div>
     )
   }
@@ -52,13 +53,13 @@ const Signup = ({
       <article className="c-auth">
         <header className="c-auth__header">
           {siteLogo && (
-            <Link to="/" tabIndex={-1}>
+            <a href="/" tabIndex={-1}>
               <img
                 src={siteLogo}
                 alt={`${siteTitle} logo`}
                 className="c-auth__logo"
               />
-            </Link>
+            </a>
           )}
           <h1 className="c-auth__title">{`${siteTitle}`}</h1>
           {!submitSuccessfully ? (
@@ -100,7 +101,8 @@ const Signup = ({
             <div style={{ textAlign: 'center' }}>
               <p className="c-auth__submit-alert--success">
                 We {submitSuccessfully.isShadow ? 'resent a new' : ' sent an'}{' '}
-                activation email.<br />
+                activation email.
+                <br />
                 Please check <b>{submitSuccessfully.email}</b>
               </p>
               <Link

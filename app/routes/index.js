@@ -6,7 +6,6 @@ import GoToDashboard from '../views/components/GoToDashboard'
 // Containers
 import AppLayout from '../components/App'
 // Pages
-import Landing from '../components/Pages/Landing'
 import Load from '../loader'
 import store from '../stores'
 import UserIsNotAuthenticated from './userIsNotAuthenticated'
@@ -361,7 +360,6 @@ export default (
     </Route>
 
     <Route path="/" component={AsyncAuthenticationLayout}>
-      <IndexRoute component={Landing} />
       <Route path="/branch" component={AsyncBranch} />
       <Route path="/share" component={AsyncShare} />
 
