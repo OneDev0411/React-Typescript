@@ -30,7 +30,6 @@ export default function EmailMeta({ bounced, unsubscribed, opened, clicked }) {
         <React.Fragment>
           <BouncedIcon style={{ ...iconStyle, fill: bouncedColor }} />
           <span style={{ color: bouncedColor }}>Bounced</span>
-          <Divider {...dividerProps} />
         </React.Fragment>
       )}
       {unsubscribed && (
@@ -40,11 +39,15 @@ export default function EmailMeta({ bounced, unsubscribed, opened, clicked }) {
           <Divider {...dividerProps} />
         </React.Fragment>
       )}
-      <OpenedIcon style={iconStyle} />
-      {`${opened} Opened`}
-      <Divider {...dividerProps} />
-      <ClickedIcon style={iconStyle} />
-      {`${clicked} Clicked`}
+      {!bounced && (
+        <React.Fragment>
+          <OpenedIcon style={iconStyle} />
+          {`${opened} Opened`}
+          <Divider {...dividerProps} />
+          <ClickedIcon style={iconStyle} />
+          {`${clicked} Clicked`}
+        </React.Fragment>
+      )}
     </Flex>
   )
 }
