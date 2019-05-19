@@ -18,7 +18,7 @@ export function MetaInfo(props) {
     task,
     t =>
       t.associations.filter(a => a.association_type === 'email')[0].email
-        .emails[0].email
+        .emails[0]
   )
 
   let iconColor = '#000'
