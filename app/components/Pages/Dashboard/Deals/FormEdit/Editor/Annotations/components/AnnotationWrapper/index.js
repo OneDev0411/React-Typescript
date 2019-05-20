@@ -36,14 +36,20 @@ export function AnnotationWrapper(props) {
               fontWeight: appearance.bold ? 'bold' : 'normal',
               minWidth: '15px',
               border: '1px solid #ccc',
-              transition: '0.1s ease-in all',
-              padding: '0 3px',
-              lineHeight: 'normal'
+              padding: '0 3px'
             }
 
             if (annotation.readonly) {
               return (
-                <div key={key} style={style}>
+                <div
+                  key={key}
+                  style={{
+                    ...style,
+                    padding: 0,
+                    backgroundColor: 'transparent',
+                    border: 'none'
+                  }}
+                >
                   {values[key]}
                 </div>
               )
