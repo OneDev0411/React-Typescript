@@ -18,7 +18,7 @@ const LockIcon = styled(IconLock)`
 `
 
 export function BulkEmailComposeDrawer({
-  getEmail,
+  getEmail = email => email,
   disableAddNewRecipient = false,
   ...otherProps
 }) {

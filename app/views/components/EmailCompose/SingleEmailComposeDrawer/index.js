@@ -13,7 +13,7 @@ import { sendEmail } from 'models/email-compose/send-email'
 import { To } from '../fields/To'
 
 export function SingleEmailComposeDrawer({
-  getEmail,
+  getEmail = email => email,
   disableAddNewRecipient = false,
   ...otherProps
 }) {
