@@ -11,6 +11,7 @@ import { getSendEmailResultMessages } from 'components/EmailCompose/helpers/emai
 
 import { sendBulkEmail } from 'models/email-compose/send-bulk-email'
 import IconLock from 'components/SvgIcons/Lock/IconLock'
+import { normalizeRecipients } from 'components/EmailCompose/helpers/normalize-recepients'
 
 const LockIcon = styled(IconLock)`
   vertical-align: text-bottom;
@@ -26,7 +27,7 @@ export function BulkEmailComposeDrawer({
     sendBulkEmail(
       getEmail({
         from: formValue.fromId,
-        to: formValue.recipients,
+        to: normalizeRecipients(formValue.recipients),
         subject: (formValue.subject || '').trim(),
         html: formValue.body,
         attachments: Object.values(formValue.attachments).map(

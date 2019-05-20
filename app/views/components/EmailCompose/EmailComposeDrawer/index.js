@@ -105,12 +105,7 @@ class EmailComposeDrawer extends React.Component {
     return errors
   }
 
-  handleSubmit = async values => {
-    const form = {
-      ...values,
-      recipients: normalizeRecipients(values.recipients)
-    }
-
+  handleSubmit = async form => {
     if ((form.subject || '').trim() === '') {
       return new Promise((resolve, reject) => {
         this.context.setConfirmationModal({
@@ -145,6 +140,8 @@ class EmailComposeDrawer extends React.Component {
       })
       await this.props.sendEmail(form)
     } catch (e) {
+      console.error('error in sending email', e)
+
       return dispatch(
         notify({
           status: 'error',

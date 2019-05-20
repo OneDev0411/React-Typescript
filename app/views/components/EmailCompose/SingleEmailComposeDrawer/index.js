@@ -10,6 +10,8 @@ import { getSendEmailResultMessages } from 'components/EmailCompose/helpers/emai
 
 import { sendEmail } from 'models/email-compose/send-email'
 
+import { normalizeRecipients } from 'components/EmailCompose/helpers/normalize-recepients'
+
 import { To } from '../fields/To'
 
 export function SingleEmailComposeDrawer({
@@ -24,9 +26,9 @@ export function SingleEmailComposeDrawer({
     sendEmail(
       getEmail({
         from: formValue.fromId,
-        to: formValue.recipients,
-        cc: formValue.cc,
-        bcc: formValue.bcc,
+        to: normalizeRecipients(formValue.recipients),
+        cc: normalizeRecipients(formValue.cc),
+        bcc: normalizeRecipients(formValue.bcc),
         subject: (formValue.subject || '').trim(),
         html: formValue.body,
         attachments: Object.values(formValue.attachments).map(
