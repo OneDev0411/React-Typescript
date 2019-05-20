@@ -45,7 +45,12 @@ export const calculateWordWrap = memoize(
       fontSize
     }
   },
-  (...args) => JSON.stringify(...args)
+  (annotations, value, options) =>
+    JSON.stringify({
+      annotations,
+      value,
+      options
+    })
 )
 
 export function getAnnotationsValues(annotations, value, options = {}) {
