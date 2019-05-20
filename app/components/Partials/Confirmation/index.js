@@ -49,6 +49,11 @@ class Confirmation extends React.Component {
         contentLabel="Confirmation Modal"
         isOpen={confirmation.show}
         onRequestClose={this.onCancel}
+        style={{
+          overlay: {
+            zIndex: 1003
+          }
+        }}
         noFooter
       >
         <div

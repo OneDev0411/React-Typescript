@@ -21,7 +21,7 @@ export default function BareModal({
     <ReactModal
       {...modalProps}
       className={classes}
-      overlayClassName={`c-modal__overlay ${overlayClassName}`}
+      overlayClassName={`c-modal__overlay ${overlayClassName || ''}`}
     >
       {children}
     </ReactModal>
