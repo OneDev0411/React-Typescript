@@ -53,7 +53,7 @@ function getIsCompanyRequired(args) {
   return otherSideAgents.includes(role)
 }
 
-function getRequiredFields(args) {
+export default function getRequiredFields(args) {
   const { role, role_type } = args
 
   // role and role_type are always mandatory
@@ -101,7 +101,3 @@ function getRequiredFields(args) {
   // unique array
   return [...new Set(list)]
 }
-
-export default memoize(getRequiredFields, args =>
-  [args.role, args.role_type].join('')
-)

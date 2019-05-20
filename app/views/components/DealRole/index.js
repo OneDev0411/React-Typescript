@@ -45,7 +45,7 @@ const defaultProps = {
   form: null,
   container: 'Modal',
   isRoleRemovable: false,
-  isCommissionRequired: false,
+  isCommissionRequired: true,
   allowedRoles: [],
   onUpsertRole: () => null
 }

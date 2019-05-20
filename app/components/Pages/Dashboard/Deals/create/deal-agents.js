@@ -1,9 +1,11 @@
 import React from 'react'
 import _ from 'underscore'
 import cn from 'classnames'
+
+import { H2 } from 'components/Typography/headings'
+
 import CrudRole from './crud-role'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
-import { H2 } from 'components/Typography/headings'
 
 const BUYING = 'Buying'
 const SELLING = 'Selling'

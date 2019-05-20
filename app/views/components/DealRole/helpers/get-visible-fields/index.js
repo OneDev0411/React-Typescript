@@ -1,8 +1,6 @@
-import memoize from 'lodash/memoize'
-
 import { TYPE_PERSON } from '../../constants/role-types'
 
-function getVisibleFields(args) {
+export default function getVisibleFields(args) {
   const list = ['company_title', 'email', 'phone_number']
 
   if (args.role_type === TYPE_PERSON) {
@@ -51,7 +49,3 @@ function getVisibleFields(args) {
   // unique array
   return [...new Set(list)]
 }
-
-export default memoize(getVisibleFields, args =>
-  [args.role, args.role_type].join('')
-)
