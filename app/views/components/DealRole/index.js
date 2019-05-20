@@ -305,6 +305,9 @@ class Role extends React.Component {
     changeValue(state, 'legal_first_name', value => user.first_name || value)
     changeValue(state, 'legal_last_name', value => user.last_name || value)
     changeValue(state, 'email', value => user.email || value)
+    changeValue(state, 'legal_prefix', value =>
+      user.title ? user.title.replace('.', '') : value
+    )
     changeValue(state, 'company_title', value => user.company || value)
     changeValue(
       state,
@@ -331,7 +334,12 @@ class Role extends React.Component {
     }
 
     return (
-      <BareModal isOpen style={{ content: { height: 'auto' } }}>
+      <BareModal
+        isOpen
+        style={{
+          content: { top: '45%', height: 'auto', overflow: 'initial' }
+        }}
+      >
         <Form
           validate={this.validate}
           onSubmit={this.onSubmit}
