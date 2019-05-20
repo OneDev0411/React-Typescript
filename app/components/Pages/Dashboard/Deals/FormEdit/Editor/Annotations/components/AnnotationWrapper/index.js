@@ -7,13 +7,15 @@ export function AnnotationWrapper(props) {
     <Fragment>
       {Object.entries(props.items).map(([name, groups]) =>
         Object.entries(groups).map(([, group]) => {
+          const annotation = group[0]
+
           const annotations = group
             .sort((a, b) => a.order - b.order)
             .map(item => item.annotation)
 
           const formValue =
             getFormValue(props.values, annotations) ||
-            props.getValue(name, group[0])
+            props.getValue(name, annotation)
 
           const { appearance, rects, values, fontSize } = calculateWordWrap(
             annotations,
@@ -39,14 +41,22 @@ export function AnnotationWrapper(props) {
               lineHeight: 'normal'
             }
 
+            if (annotation.readonly) {
+              return (
+                <div key={key} style={style}>
+                  {values[key]}
+                </div>
+              )
+            }
+
             return props.render({
               key,
               style,
               rect,
               values,
               group,
+              annotation,
               rectIndex: key,
-              annotation: group[0],
               value: values[key]
             })
           })
