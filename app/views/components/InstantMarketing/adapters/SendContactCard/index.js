@@ -183,21 +183,12 @@ class SendContactCard extends React.Component {
     })
   }
 
-  handleSocialSharing = (template, socialNetworkName) => {
+  handleSocialSharing = (template, socialNetworkName) =>
     this.setState({
       htmlTemplate: template,
       isSocialDrawerOpen: true,
       socialNetworkName
     })
-  }
-
-  handleSocialSharing = (template, socialNetworkName) => {
-    this.setState({
-      htmlTemplate: template,
-      isSocialDrawerOpen: true,
-      socialNetworkName
-    })
-  }
 
   get TemplateInstanceData() {
     return {
