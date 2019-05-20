@@ -7,17 +7,17 @@ import RoleItem from './role-item'
 
 class CrudRole extends React.Component {
   state = {
-    isModalOpen: false
+    isDrawerOpen: false
   }
 
   closeModal = () =>
     this.setState({
-      isModalOpen: false
+      isDrawerOpen: false
     })
 
   showModal = () =>
     this.setState({
-      isModalOpen: true
+      isDrawerOpen: true
     })
 
   render() {
@@ -44,7 +44,7 @@ class CrudRole extends React.Component {
           </div>
         )}
 
-        {this.state.isModalOpen && (
+        {this.state.isDrawerOpen && (
           <RoleAgentIntegration
             role={user}
             onClose={this.closeModal}

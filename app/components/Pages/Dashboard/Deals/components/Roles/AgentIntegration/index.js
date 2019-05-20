@@ -141,7 +141,7 @@ class RoleAgentIntegration extends React.Component {
           <AgentModal
             title={this.props.modalTitle}
             isPrimaryAgent={this.getIsPrimaryAgent()}
-            onClose={this.props.onHide}
+            onClose={this.props.onClose}
             onSelectAgent={this.onSelectAgent}
           />
         )}
