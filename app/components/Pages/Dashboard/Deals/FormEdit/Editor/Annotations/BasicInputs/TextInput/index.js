@@ -1,8 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import parseAppearanceString from 'deals/FormEdit/utils/appearance'
+import { calculateWordWrap } from 'deals/FormEdit/utils/word-wrap'
 
 export default React.memo(props => {
+  const [value, setValue] = useState(props.defaultValue)
+
+  const handleValueChange = e => {
+    setValue(e.target.value)
+    props.onChange(e.target.value)
+  }
+
+  const getFontSize = () => {
+    let fontSize = appearance.size
+
+    if (appearance.size === 0 && !props.annotation.multiLine) {
+      fontSize = calculateWordWrap([props.annotation], value, {
+        maxFontSize: appearance.size
+      }).fontSize
+    }
+
+    return `${fontSize - 1}px`
+  }
+
   const appearance = parseAppearanceString(props.annotation.defaultAppearance)
   const { rect } = props.annotation
 
@@ -12,7 +32,6 @@ export default React.memo(props => {
     top: `${rect[1]}px`,
     width: `${Math.floor(rect[2] - rect[0])}px`,
     height: `${Math.floor(rect[3] - rect[1])}px`,
-    fontSize: `${props.fontSize || 16}px`,
     fontFamily: appearance.font,
     color: appearance.color,
     fontWeight: appearance.bold ? 'bold' : 'normal',
@@ -21,14 +40,15 @@ export default React.memo(props => {
     border: '1px solid #ccc',
     transition: '0.1s ease-in all',
     padding: '0 3px',
-    lineHeight: 'normal'
+    lineHeight: 'normal',
+    fontSize: getFontSize()
   }
 
   const sharedProps = {
     style,
     id: props.annotation.fieldName,
     defaultValue: props.defaultValue,
-    onInput: e => props.onChange(e.target.value)
+    onInput: handleValueChange
   }
 
   if (props.annotation.multiLine) {
