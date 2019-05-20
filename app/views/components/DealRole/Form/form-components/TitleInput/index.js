@@ -12,6 +12,10 @@ export function TitleInput(props) {
     return false
   }
 
+  const selectedItem = props.input.value
+    ? items.find(item => item.value === props.input.value)
+    : items[0]
+
   return (
     <SelectInput
       style={{
@@ -29,11 +33,8 @@ export function TitleInput(props) {
       meta={props.meta}
       label="Title"
       items={items}
-      defaultSelectedItem={
-        props.input.value
-          ? items.find(item => item.value === props.input.value)
-          : items[0]
-      }
+      selectedItem={selectedItem}
+      defaultSelectedItem={selectedItem}
       dropdownOptions={{
         fullHeight: true
       }}

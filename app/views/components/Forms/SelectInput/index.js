@@ -27,6 +27,7 @@ SelectInput.propTypes = {
   dropdownOptions: PropTypes.object,
   dropdownStyle: PropTypes.object,
   meta: PropTypes.object,
+  selectedItem: PropTypes.object,
   defaultSelectedItem: PropTypes.object,
   noBorder: PropTypes.bool,
   isRequired: PropTypes.bool,
@@ -41,6 +42,7 @@ SelectInput.defaultProps = {
   styles: {},
   dropdownOptions: {},
   dropdownStyle: {},
+  selectedItem: null,
   defaultSelectedItem: null,
   noBorder: true,
   isRequired: false,
@@ -80,6 +82,7 @@ export function SelectInput(props) {
             <IconDrop />
           </MenuButton>
         )}
+        selectedItem={props.selectedItem}
         defaultSelectedItem={props.defaultSelectedItem}
         items={props.items}
         noBorder={props.noBorder}
