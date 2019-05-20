@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "51.0.0",
+  "version": "51.1.0",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -168,7 +168,6 @@
     "react-text-mask": "^5.4.2",
     "react-textarea-autosize": "^5.2.1",
     "react-transition-group": "^2.5.3",
-    "react-typist": "^2.0.5",
     "react-use-promise": "^0.2.0",
     "reapop": "^1.1.4",
     "reapop-theme-wybo": "^0.4.1",

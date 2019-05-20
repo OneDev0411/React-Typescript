@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
-import { grey } from 'views/utils/colors'
+import { grey, placeholderColor } from 'views/utils/colors'
 
 export const SearchInputContainer = styled.div`
   position: relative;
@@ -22,6 +22,9 @@ export const SearchInput = styled.input`
   height: 40px;
   border: none;
 
+  ::placeholder {
+    color: ${placeholderColor};
+  }
   :focus {
     outline: none;
   }

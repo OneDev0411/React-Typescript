@@ -69,13 +69,13 @@ const SigninForm = props => {
       <article className="c-auth">
         <header className="c-auth__header">
           {siteLogo && (
-            <Link to="/" tabIndex={-1}>
+            <a href="/" tabIndex={-1}>
               <img
                 src={siteLogo}
                 alt={`${siteTitle} logo`}
                 className="c-auth__logo"
               />
-            </Link>
+            </a>
           )}
           <h1 className="c-auth__title">{siteTitle}</h1>
           <p className="c-auth__subtitle">Hi, welcome back!</p>

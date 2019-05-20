@@ -1,4 +1,5 @@
 export const normalizeRecipients = recipients =>
+  recipients &&
   recipients.map(recipient => {
     if (recipient.data_type === 'contact') {
       return {
