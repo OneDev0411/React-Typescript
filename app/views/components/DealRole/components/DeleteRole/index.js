@@ -6,6 +6,8 @@ import { addNotification as notify } from 'reapop'
 import { deleteRole } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
+import { getLegalFullName } from 'deals/utils/roles'
+
 import IconButton from 'components/Button/IconButton'
 import TrashIcon from 'components/SvgIcons/TrashIcon'
 import Spinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
@@ -34,9 +36,7 @@ function DeleteRole(props) {
 
   const handleRemoveRole = useCallback(() => {
     props.confirmation({
-      message: `Remove <b>${props.role.legal_first_name} ${
-        props.role.legal_last_name
-      }</b>?`,
+      message: `Remove <b>${getLegalFullName(props.role)}</b>?`,
       confirmLabel: 'Yes, remove contact',
       onConfirm: async () => {
         try {
