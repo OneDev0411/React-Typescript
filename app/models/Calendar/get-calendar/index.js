@@ -3,17 +3,17 @@ import Fetch from '../../../services/fetch'
 async function getCalendar(
   low,
   high,
-  filter = [],
-  deal = undefined,
-  contact = undefined
+  users = [],
+  filterBy = {},
+  associations = []
 ) {
   try {
     const query = {
       low,
       high,
-      deal,
-      contact,
-      'users[]': filter
+      'users[]': users,
+      ...filterBy,
+      associations
     }
 
     const response = await new Fetch().get('/calendar').query(query)
