@@ -14,7 +14,7 @@ import {
   createDateRange,
   createPastRange,
   createFutureRange
-} from 'models/Calendar/helpers/create-date-range'
+} from 'models/calendar/helpers/create-date-range'
 
 import PageHeader from 'components/PageHeader'
 import DatePicker from 'components/DatePicker'
