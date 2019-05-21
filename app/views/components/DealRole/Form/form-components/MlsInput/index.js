@@ -16,6 +16,7 @@ async function searchByMlsId(mls, minLength = 6) {
     return [
       {
         ...agent,
+        company: agent.office ? agent.office.name : '',
         value: agent.mlsid,
         label: agent.full_name
       }
@@ -27,16 +28,12 @@ async function searchByMlsId(mls, minLength = 6) {
 
 export function MlsInput(props) {
   return (
-    <Fragment>
-      <AutoCompleteInput
-        {...props}
-        options={searchByMlsId}
-        searchConfiguration={{
-          keys: ['value']
-        }}
-      />
-
-      {/* <Field name="agent" render={() => null} /> */}
-    </Fragment>
+    <AutoCompleteInput
+      {...props}
+      options={searchByMlsId}
+      searchConfiguration={{
+        keys: ['value']
+      }}
+    />
   )
 }

@@ -305,17 +305,17 @@ class Role extends React.Component {
     changeValue(state, 'legal_first_name', value => user.first_name || value)
     changeValue(state, 'legal_last_name', value => user.last_name || value)
     changeValue(state, 'email', value => user.email || value)
+    changeValue(state, 'company_title', value => user.company || value)
+    changeValue(state, 'mls_id', value => user.mlsid || value)
+    changeValue(state, 'agent', () => (user.mlsid ? user.id : null))
     changeValue(state, 'legal_prefix', value =>
       user.title ? user.title.replace('.', '') : value
     )
-    changeValue(state, 'company_title', value => user.company || value)
     changeValue(
       state,
       'phone_number',
       value => user.phone_number || user.work_phone || value
     )
-    changeValue(state, 'mls_id', value => user.mlsid || value)
-    changeValue(state, 'agent', () => (user.mlsid ? user.id : null))
 
     // set plural autosuggestion values
     changeValue(state, 'emails', () => user.emails || [])

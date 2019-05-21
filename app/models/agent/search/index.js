@@ -5,6 +5,7 @@ const search = async (criteria, field = 'mlsid') => {
     const response = await new Fetch()
       .get('/agents/search')
       .query({ [field]: criteria })
+      .query({ 'associations[]': 'agent.office' })
 
     return response.body.data
   } catch ({ status }) {

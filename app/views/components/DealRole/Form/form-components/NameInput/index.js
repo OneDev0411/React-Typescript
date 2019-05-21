@@ -35,6 +35,7 @@ export function NameInput(props) {
 
       return agents.map(user => ({
         ...user,
+        company: user.office ? user.office.name : '',
         value: user[props.searchField],
         label: user.full_name
       }))
