@@ -24,7 +24,7 @@ export function ContextField(props) {
   const getDate = () => {
     const date = new Date(contextValue)
 
-    return date instanceof Date ? date : new Date()
+    return date instanceof Date && !isNaN(date) ? date : new Date()
   }
 
   const handleSaveValue = (value, updateContext) => {
