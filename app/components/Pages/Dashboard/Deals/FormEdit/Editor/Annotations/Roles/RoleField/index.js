@@ -40,7 +40,13 @@ export function RoleField(props) {
 
   return (
     <Fragment>
-      <div style={props.style}>
+      <div
+        style={{
+          ...props.style,
+          border: 'none',
+          backgroundColor: 'transparent'
+        }}
+      >
         {values.map((value, index) => (
           <span
             style={{
