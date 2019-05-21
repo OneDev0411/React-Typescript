@@ -161,5 +161,9 @@ export const load = async () => {
       view.reset()
       view.$el.show()
     })
+
+    editor.on('component:remove', () => {
+      view.$el.empty()
+    })
   })
 }
