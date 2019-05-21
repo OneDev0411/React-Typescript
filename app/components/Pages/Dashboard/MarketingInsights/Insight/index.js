@@ -36,7 +36,7 @@ const columns = [
     )
   },
   {
-    header: 'Open Rate',
+    header: 'Opened',
     id: 'opened',
     verticalAlign: 'center',
     render: props => <span>{props.rowData.opened}</span>
