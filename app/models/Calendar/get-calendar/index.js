@@ -1,6 +1,6 @@
 import Fetch from '../../../services/fetch'
 
-export async function getCalendar(
+async function getCalendar(
   low,
   high,
   filter = [],
@@ -23,3 +23,5 @@ export async function getCalendar(
     console.log(e)
   }
 }
+
+export default getCalendar

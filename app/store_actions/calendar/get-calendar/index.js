@@ -1,8 +1,10 @@
 import _ from 'underscore'
 
-import * as actionTypes from '../../../constants/calendar'
+import * as actionTypes from 'constants/calendar'
+
+import fetchCalendar from 'models/Calendar/get-calendar'
+
 import { normalizeByDays } from '../normalize-calendar'
-import { getCalendar as fetchCalendar } from '../../../models/Calendar/get-calendar'
 
 export function getCalendar(fromUnix, toUnix, filter = []) {
   return async dispatch => {
