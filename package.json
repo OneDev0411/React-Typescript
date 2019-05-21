@@ -41,7 +41,6 @@
     "@babel/polyfill": "^7.4.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "@types/styled-components": "^4.1.5",
     "autoprefixer": "^7.2.3",
     "babel-loader": "^8.0.5",
     "balloon-css": "^0.5.0",
@@ -205,6 +204,7 @@
     "webpack-s3-plugin": "^1.0.3"
   },
   "devDependencies": {
+    "@types/styled-components": "^4.1.5",
     "babel-eslint": "^9.0.0",
     "babel-plugin-add-module-exports": "^0.2.1",
     "enzyme": "^3.8.0",
@@ -223,6 +223,7 @@
     "ndb": "^1.0.41",
     "nodemon": "^1.18.9",
     "prettier": "^1.15.3",
+    "typescript": "^3.3.4000",
     "webpack-cli": "^3.2.1",
     "webpack-notifier": "^1.7.0",
     "webpackbar": "^3.1.5"
