@@ -11,7 +11,7 @@ export function TextInput(props) {
         numeral: true,
         numeralThousandsGroupStyle: 'thousand',
         numeralPositiveOnly: format === 'Currency',
-        prefix: format === 'Currency' ? '$' : null,
+        // prefix: format === 'Currency' ? '$' : null,
         noImmediatePrefix: true,
         rawValueTrimPrefix: true
       }
@@ -26,12 +26,12 @@ export function TextInput(props) {
         <FormattedInput
           value={props.defaultValue}
           options={formattedInputOptions}
-          onChange={e => props.onChange(e.target.rawValue)}
+          onChange={props.onChange}
         />
       ) : (
         <BasicInput
           defaultValue={props.defaultValue}
-          onChange={e => props.onChange(e.target.value)}
+          onChange={props.onChange}
         />
       )}
     </Fragment>

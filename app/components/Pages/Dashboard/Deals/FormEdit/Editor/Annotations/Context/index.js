@@ -8,8 +8,25 @@ import { getGroupValues } from 'deals/FormEdit/utils/get-group-values'
 import { AnnotationWrapper } from '../components/AnnotationWrapper'
 import { ContextField } from './ContextField'
 
+function normalizeContextValue(context, value) {
+  if (context.data_type === 'Number') {
+    return parseFloat(value.replace(/,/g, ''))
+  }
+
+  if (context.data_type === 'Date') {
+    return new Date(value)
+  }
+
+  return value
+}
+
 function Contexts(props) {
-  const handleSaveValue = (inputProps, value, updateContext = true) => {
+  const handleSaveValue = (
+    inputProps,
+    context,
+    value,
+    updateContext = true
+  ) => {
     if (!updateContext) {
       return props.onValueUpdate(getGroupValues(inputProps.group, value))
     }
@@ -18,14 +35,16 @@ function Contexts(props) {
     const list = getAnnotationsByType(props.annotations, 'contexts')
 
     list.forEach(group => {
-      fields = {
-        ...fields,
-        ...getGroupValues(group, value)
+      if (group[0].context === inputProps.annotation.context) {
+        fields = {
+          ...fields,
+          ...getGroupValues(group, value)
+        }
       }
     })
 
     props.onValueUpdate(fields, {
-      [inputProps.annotation.context]: value
+      [inputProps.annotation.context]: normalizeContextValue(context, value)
     })
   }
 

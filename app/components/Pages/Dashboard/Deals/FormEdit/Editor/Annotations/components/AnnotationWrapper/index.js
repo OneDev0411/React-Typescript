@@ -29,14 +29,13 @@ export function AnnotationWrapper(props) {
               top: `${rect.top}px`,
               width: `${rect.width}px`,
               height: `${rect.height}px`,
-              backgroundColor: '#d2e5f2',
               fontSize: `${fontSize || 16}px`,
               fontFamily: appearance.font,
               color: appearance.color,
               fontWeight: appearance.bold ? 'bold' : 'normal',
               minWidth: '15px',
-              border: '1px solid #ccc',
-              padding: '0 3px'
+              padding: '0 3px',
+              cursor: 'pointer'
             }
 
             if (annotation.readonly) {

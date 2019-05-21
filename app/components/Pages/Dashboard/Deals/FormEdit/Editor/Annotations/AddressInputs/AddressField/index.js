@@ -50,6 +50,8 @@ export function AddressField({
           }}
           style={{
             ...inputProps.style,
+            backgroundColor: '#d2e5f2',
+            border: '1px solid #ccc',
             top: 0,
             left: 0
           }}

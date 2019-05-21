@@ -28,6 +28,10 @@ function getPosition(bounds, width = 400) {
 }
 
 export function ContextInlineEdit(props) {
+  if (!props.isOpen) {
+    return false
+  }
+
   return (
     <ClickOutside onClickOutside={props.onDismiss}>
       <Container position={getPosition(props.bounds, props.width)}>
