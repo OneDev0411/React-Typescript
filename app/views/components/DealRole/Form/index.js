@@ -27,7 +27,7 @@ export function FormContainer(props) {
   const isVisible = field => props.visibleFields.includes(field)
 
   return (
-    <Fragment>
+    <form autoComplete="off" onSubmit={props.handleSubmit}>
       <Header>
         <TypeInput
           name="role_type"
@@ -204,6 +204,6 @@ export function FormContainer(props) {
           )}
         </Flex>
       </Footer>
-    </Fragment>
+    </form>
   )
 }
