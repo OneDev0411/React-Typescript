@@ -12,7 +12,8 @@ import LoadSaveReinitializeForm from 'views/utils/LoadSaveReinitializeForm'
 import {
   PREFIX_ITEMS,
   SUFFIX_ITEMS,
-  STATES_ITEMS
+  STATES_ITEMS,
+  COUNTY_ITEMS
 } from './helpers/dropdown-fields-items'
 
 import postLoadFormat from './helpers/post-load-format'
@@ -134,7 +135,13 @@ export class InlineAddressForm extends React.Component {
                 </Row>
                 <Row>
                   <TextField name="unit_number" label="Unit" width={20} />
-                  <TextField name="city" label="City" width={40} />
+                  <TextField name="city" label="City" width={20} />
+                  <AutocompleteField
+                    name="county"
+                    label="County"
+                    items={COUNTY_ITEMS}
+                    width={20}
+                  />
                   <AutocompleteField
                     name="state"
                     label="State"

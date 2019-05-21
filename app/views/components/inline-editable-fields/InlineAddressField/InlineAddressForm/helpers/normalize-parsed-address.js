@@ -6,6 +6,7 @@ export default function normalizeParsedAddress(parsedAddress) {
     type: street_suffix,
     sec_unit_num: unit_number,
     city,
+    county,
     state,
     zip: postal_code
   } = parsedAddress
@@ -19,6 +20,7 @@ export default function normalizeParsedAddress(parsedAddress) {
     street_suffix,
     unit_number,
     city,
+    county,
     state,
     postal_code
   }

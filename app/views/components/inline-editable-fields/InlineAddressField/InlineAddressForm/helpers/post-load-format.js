@@ -9,6 +9,7 @@ export default function postLoadFormat(parsedAddress) {
       street_suffix: '',
       unit_number: '',
       city: '',
+      county: '',
       state: '',
       postal_code: ''
     }
