@@ -26,7 +26,7 @@ function InsightsLayout(props) {
       </Helmet>
 
       <SideMenu isOpen={props.isSideMenuOpen}>
-        <ListTitle className="onboarding--intro">Emails</ListTitle>
+        <ListTitle className="onboarding--intro">Email Insight</ListTitle>
         <Menu items={items} />
       </SideMenu>
 

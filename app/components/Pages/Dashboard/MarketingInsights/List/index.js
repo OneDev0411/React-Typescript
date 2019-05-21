@@ -6,6 +6,7 @@ import Table from 'components/Grid/Table'
 import Header from './Header'
 import Layout from './Layout'
 import StatColumn from './StatColumn'
+import { percent } from './helpers'
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
 import NoSearchResults from '../../../../Partials/no-search-results'
@@ -23,14 +24,28 @@ const columns = [
     render: props => <InfoColumn data={props.rowData} />
   },
   {
+    header: 'Delivered',
+    id: 'delivered',
+    verticalAlign: 'center',
+    render: props => (
+      <StatColumn
+        content={`${percent(props.rowData.delivered, props.rowData.sent)}%`}
+        tooltipTitle={`${percent(
+          props.rowData.failed,
+          props.rowData.sent
+        )}% Bounced`}
+        isVisibile={!!props.rowData.executed_at}
+      />
+    )
+  },
+  {
     header: 'Open Rate',
     id: 'open-rate',
     verticalAlign: 'center',
     render: props => (
       <StatColumn
-        num={props.rowData.opened}
-        all={props.rowData.sent}
-        title="recipients"
+        content={`${percent(props.rowData.opened, props.rowData.sent)}%`}
+        tooltipTitle={`${props.rowData.opened} Recipients`}
         isVisibile={!!props.rowData.executed_at}
       />
     )
@@ -41,9 +56,8 @@ const columns = [
     verticalAlign: 'center',
     render: props => (
       <StatColumn
-        num={props.rowData.clicked}
-        all={props.rowData.sent}
-        title="times"
+        content={`${percent(props.rowData.clicked, props.rowData.sent)}%`}
+        tooltipTitle={`${props.rowData.clicked} Times`}
         isVisibile={!!props.rowData.executed_at}
       />
     )
