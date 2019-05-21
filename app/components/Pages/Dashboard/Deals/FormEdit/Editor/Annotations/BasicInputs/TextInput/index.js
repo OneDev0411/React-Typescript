@@ -22,7 +22,7 @@ export default React.memo(props => {
       }).fontSize
     }
 
-    return `${fontSize - 1}px`
+    return `${fontSize}px`
   }
 
   const appearance = parseAppearanceString(props.annotation.defaultAppearance)

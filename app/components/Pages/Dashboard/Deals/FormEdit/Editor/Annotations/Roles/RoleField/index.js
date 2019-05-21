@@ -44,7 +44,8 @@ export function RoleField(props) {
         {values.map((value, index) => (
           <span
             style={{
-              cursor: 'pointer'
+              cursor: 'pointer',
+              fontSize: `${props.appearance.fontSize}px`
             }}
             key={index}
             onClick={() => handleSelectRole(index)}

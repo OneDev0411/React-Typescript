@@ -60,6 +60,10 @@ export function AnnotationWrapper(props) {
               rect,
               values,
               group,
+              appearance: {
+                ...appearance,
+                fontSize
+              },
               annotation,
               rectIndex: key,
               value: values[key]
