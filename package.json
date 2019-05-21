@@ -198,6 +198,7 @@
     "underscore.get": "^0.2.9",
     "universal-cookie": "^2.2.0",
     "unused-files-webpack-plugin": "^3.4.0",
+    "use-debounce": "^2.0.1",
     "validator": "^9.2.0",
     "webpack": "^4.28.4",
     "webpack-bundle-analyzer": "^2.13.1",

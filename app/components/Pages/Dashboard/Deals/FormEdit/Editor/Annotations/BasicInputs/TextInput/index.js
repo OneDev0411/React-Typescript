@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
+import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import parseAppearanceString from 'deals/FormEdit/utils/appearance'
 import { calculateWordWrap } from 'deals/FormEdit/utils/word-wrap'
 
 export default React.memo(props => {
   const [value, setValue] = useState(props.defaultValue)
+  const [debouncedSetValue] = useDebouncedCallback(setValue, 500)
 
   const handleValueChange = e => {
-    setValue(e.target.value)
+    debouncedSetValue(e.target.value)
     props.onChange(e.target.value)
   }
 
