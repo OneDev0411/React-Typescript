@@ -40,9 +40,6 @@ export function AddressInputs(props) {
     <AnnotationWrapper
       items={props.annotations[props.pageIndex].addresses}
       values={props.values}
-      getValue={(name, annotation) =>
-        !annotation.disableAutopopulate && getField(props.deal, name)
-      }
       render={inputProps => (
         <AddressField
           {...inputProps}
@@ -61,19 +58,3 @@ function normalizeAddressFields(address) {
     return addressFields
   }, normalizeAddress(address))
 }
-
-// function getTooltip(context) {
-//   if (context.isAddressField && context.isDealConnectedToMls) {
-//     return (
-//       <React.Fragment>
-//         <img src="/static/images/deals/lock.svg" alt="locked" />
-//         <div>
-//           Listing information can only be changed on MLS. Once changed, the
-//           update will be reflected here.
-//         </div>
-//       </React.Fragment>
-//     )
-//   }
-
-//   return null
-// }

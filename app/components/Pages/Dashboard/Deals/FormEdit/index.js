@@ -24,8 +24,9 @@ import importPdfJs from 'utils/import-pdf-js'
 
 import { selectDealById } from 'reducers/deals/list'
 import { selectTaskById } from 'reducers/deals/tasks'
+import { selectDealRoles } from 'reducers/deals/roles'
 
-import { extractAnnotations } from './utils/extract-annotations'
+import { parseAnnotations } from './utils/parse-annotations'
 
 import PDFEdit from './Editor'
 import { Header } from './Header'
@@ -148,33 +149,30 @@ class EditDigitalForm extends React.Component {
       })
     }
 
-    pdfDocument.then(document => {
-      this.loadAnnotations(document)
+    pdfDocument.then(this.onDocumentLoad.bind(null, pdfUrl))
+  }
 
-      this.setState({
-        isFormLoaded: true,
-        downloadPercents: 100,
-        pdfUrl
-      })
+  onDocumentLoad = async (pdfUrl, document) => {
+    await this.getAnnotations(document)
 
-      window.setTimeout(
-        () =>
-          this.setState({
-            pdfDocument: document
-          }),
-        500
-      )
+    this.setState({
+      isFormLoaded: true,
+      downloadPercents: 100,
+      pdfDocument: document,
+      pdfUrl
     })
   }
 
-  loadAnnotations = async document => {
-    const { annotations, values } = await extractAnnotations(document, {
+  getAnnotations = async document => {
+    const { annotations, fields } = await parseAnnotations(document, {
+      deal: this.props.deal,
+      roles: this.props.roles,
       scale: this.scale,
       displayWidth: this.displayWidth
     })
 
     this.setState({
-      values,
+      values: fields,
       annotations
     })
   }
@@ -284,12 +282,15 @@ class EditDigitalForm extends React.Component {
 }
 
 function mapStateToProps({ deals, user }, props) {
+  const deal = selectDealById(deals.list, props.params.id)
+
   return {
     user,
+    deal,
     forms: deals.forms,
     contexts: deals.contexts,
     task: selectTaskById(deals.tasks, props.params.taskId),
-    deal: selectDealById(deals.list, props.params.id)
+    roles: selectDealRoles(deals.roles, deal)
   }
 }
 

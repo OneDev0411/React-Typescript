@@ -1,6 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { Fragment, useState, useRef, useEffect } from 'react'
 
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
+
+import Tooltip from 'components/tooltip'
+
+const sharedStyles = {
+  top: 'calc(100% + 1rem)'
+}
+
+const inputStyles = {
+  backgroundColor: '#d2e5f2',
+  border: '1px solid #ccc',
+  top: 0,
+  left: 0
+}
 
 export function AddressField({
   deal,
@@ -23,15 +36,42 @@ export function AddressField({
     formRef.current.handleFormCancel()
   }
 
+  if (deal.listing) {
+    return (
+      <div
+        style={{
+          ...inputProps.style,
+          cursor: 'not-allowed'
+        }}
+      >
+        <Tooltip
+          captionIsHTML
+          isCustom={false}
+          placement="bottom"
+          multiline
+          caption={
+            <Fragment>
+              <img src="/static/images/deals/lock.svg" alt="locked" />
+              <div>
+                Listing information can only be changed on MLS. Once changed,
+                the update will be reflected here.
+              </div>
+            </Fragment>
+          }
+        >
+          <span>{inputProps.value}</span>
+        </Tooltip>
+      </div>
+    )
+  }
+
   return (
     <InlineAddressField
       ref={formRef}
       handleSubmit={handleSaveAddress}
-      suggestionsStyle={{
-        top: 'calc(100% + 1rem)'
-      }}
+      suggestionsStyle={sharedStyles}
       formStyle={{
-        top: 'calc(100% + 1rem)',
+        ...sharedStyles,
         ...calculateFormPosition(inputProps.rect)
       }}
       style={{
@@ -50,10 +90,7 @@ export function AddressField({
           }}
           style={{
             ...inputProps.style,
-            backgroundColor: '#d2e5f2',
-            border: '1px solid #ccc',
-            top: 0,
-            left: 0
+            ...inputStyles
           }}
         />
       )}

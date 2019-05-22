@@ -5,7 +5,7 @@ import { calculateWordWrap } from 'deals/FormEdit/utils/word-wrap'
 export function AnnotationWrapper(props) {
   return (
     <Fragment>
-      {Object.entries(props.items).map(([name, groups]) =>
+      {Object.entries(props.items).map(([, groups]) =>
         Object.entries(groups).map(([, group]) => {
           const annotation = group[0]
 
@@ -13,13 +13,9 @@ export function AnnotationWrapper(props) {
             .sort((a, b) => a.order - b.order)
             .map(item => item.annotation)
 
-          const formValue =
-            getFormValue(props.values, annotations) ||
-            props.getValue(name, annotation)
-
           const { appearance, rects, values, fontSize } = calculateWordWrap(
             annotations,
-            formValue
+            getFormValue(props.values, annotations)
           )
 
           return rects.map((rect, key) => {
@@ -66,7 +62,7 @@ export function AnnotationWrapper(props) {
               },
               annotation,
               rectIndex: key,
-              value: values[key]
+              value: values[key] || ''
             })
           })
         })

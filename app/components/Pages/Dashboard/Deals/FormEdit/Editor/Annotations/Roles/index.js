@@ -41,9 +41,6 @@ const Roles = React.memo(props => {
     <AnnotationWrapper
       items={props.annotations[props.pageIndex].roles}
       values={props.values}
-      getValue={(roleName, annotation) =>
-        getRoleText(props.dealRoles, props.deal, roleName, annotation)
-      }
       render={inputProps => (
         <RoleField
           deal={props.deal}

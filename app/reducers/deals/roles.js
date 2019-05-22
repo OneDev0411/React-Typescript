@@ -35,4 +35,4 @@ export default (state = null, action) => {
 }
 
 export const selectDealRoles = (state, deal) =>
-  Array.isArray(deal.roles) ? deal.roles.map(id => state[id]) : []
+  deal && Array.isArray(deal.roles) ? deal.roles.map(id => state[id]) : []

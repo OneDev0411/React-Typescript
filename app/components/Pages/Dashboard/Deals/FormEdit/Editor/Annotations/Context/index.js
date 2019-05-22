@@ -4,21 +4,10 @@ import { getField } from 'models/Deal/helpers/context/get-field'
 
 import { getAnnotationsByType } from 'deals/FormEdit/utils/get-annotations-by-type'
 import { getGroupValues } from 'deals/FormEdit/utils/get-group-values'
+import { normalizeContextValue } from 'deals/FormEdit/utils/normalize-context-value'
 
 import { AnnotationWrapper } from '../components/AnnotationWrapper'
 import { ContextField } from './ContextField'
-
-function normalizeContextValue(context, value) {
-  if (context.data_type === 'Number') {
-    return parseFloat(value.replace(/,/g, ''))
-  }
-
-  if (context.data_type === 'Date') {
-    return new Date(value)
-  }
-
-  return value
-}
 
 function Contexts(props) {
   const handleSaveValue = (
@@ -52,9 +41,6 @@ function Contexts(props) {
     <AnnotationWrapper
       items={props.annotations[props.pageIndex].contexts}
       values={props.values}
-      getValue={(name, annotation) =>
-        !annotation.disableAutopopulate && getField(props.deal, name)
-      }
       render={inputProps => (
         <ContextField
           key={inputProps.key}

@@ -3,7 +3,9 @@ import { get as getAttribute } from 'underscore.get'
 import { getLegalFullName } from 'deals/utils/roles'
 
 export function normalizeRoleNames(deal, roleNames) {
-  return roleNames.split(',').map(name => {
+  const names = Array.isArray(roleNames) ? roleNames : roleNames.split(',')
+
+  return names.map(name => {
     if (name !== 'PrimaryAgent') {
       return name
     }

@@ -4,9 +4,11 @@ import { groupBy } from 'views/utils/object-helpers'
 import uuid from 'utils/uuid'
 import importPdfJs from 'utils/import-pdf-js'
 
+import { populateFormValues } from '../populate-form-values'
+
 let PDFJS
 
-export async function extractAnnotations(document, options) {
+export async function parseAnnotations(document, options) {
   PDFJS = await importPdfJs()
 
   const pages = await Promise.all(
@@ -15,9 +17,11 @@ export async function extractAnnotations(document, options) {
       .map((v, index) => getPageAnnotations(document, index + 1, options))
   )
 
+  const annotations = pages.map(page => page.annotations)
+
   return {
-    annotations: pages.map(page => page.annotations),
-    values: serializeValues(pages)
+    annotations,
+    fields: populateFormValues(annotations, serializeValues(pages), options)
   }
 }
 

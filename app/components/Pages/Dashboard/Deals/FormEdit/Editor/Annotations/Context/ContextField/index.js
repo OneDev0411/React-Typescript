@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useRef } from 'react'
-import fecha from 'fecha'
 
 import DealContext from 'models/Deal/helpers/dynamic-context'
 
@@ -7,6 +6,8 @@ import ActionButton from 'components/Button/ActionButton'
 import DatePicker from 'components/DatePicker'
 
 import { ContextInlineEdit } from 'deals/FormEdit/Editor/ContextInlineEdit'
+
+import { formatDate } from '../../../../utils/format-date'
 
 import { TextInput } from './TextInput'
 import { Body, Footer } from './styled'
@@ -53,9 +54,7 @@ export function ContextField(props) {
             {context.current.data_type === 'Date' ? (
               <DatePicker
                 showTodayButton={false}
-                onChange={date =>
-                  setContextValue(fecha.format(new Date(date), 'MMM D, YYYY'))
-                }
+                onChange={date => setContextValue(formatDate(date))}
                 selectedDate={getDate()}
               />
             ) : (
