@@ -38,7 +38,8 @@ const propTypes = {
   container: PropTypes.oneOf(['Modal', 'Inline']),
   isRoleRemovable: PropTypes.bool,
   isCommissionRequired: PropTypes.bool,
-  onUpsertRole: PropTypes.func
+  onUpsertRole: PropTypes.func,
+  onDeleteRole: PropTypes.func
 }
 
 const defaultProps = {
@@ -47,7 +48,8 @@ const defaultProps = {
   isRoleRemovable: false,
   isCommissionRequired: true,
   allowedRoles: [],
-  onUpsertRole: () => null
+  onUpsertRole: () => null,
+  onDeleteRole: () => null
 }
 
 class Role extends React.Component {
@@ -328,6 +330,15 @@ class Role extends React.Component {
     this.props.onClose()
   }
 
+  handleDeleteRole = () => {
+    this.props.onDeleteRole({
+      ...this.formObject,
+      is_deleted: true
+    })
+
+    this.handleClose()
+  }
+
   render() {
     if (!this.props.isOpen) {
       return false
@@ -363,7 +374,7 @@ class Role extends React.Component {
                 requiredFields={requiredFields}
                 visibleFields={visibleFields}
                 isAllowedRole={this.isAllowedRole}
-                onDeleteRole={this.handleClose}
+                onDeleteRole={this.handleDeleteRole}
                 onSubmit={this.handleSubmit}
                 onClose={this.handleClose}
               />

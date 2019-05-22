@@ -10,8 +10,8 @@ import { getAnnotationsByType } from 'deals/FormEdit/utils/get-annotations-by-ty
 import { AnnotationWrapper } from '../components/AnnotationWrapper'
 import { RoleField } from './RoleField'
 
-const Roles = React.memo(props => {
-  const handleUpsert = form => {
+function Roles(props) {
+  const handleChangeRoles = form => {
     let fields = {}
 
     const list = getAnnotationsByType(props.annotations, 'roles')
@@ -21,12 +21,7 @@ const Roles = React.memo(props => {
         return false
       }
 
-      const roleText = getRoleText(
-        props.dealRoles,
-        props.deal,
-        form.role,
-        group[0]
-      )
+      const roleText = getRoleText(props.roles, props.deal, form.role, group[0])
 
       fields = {
         ...fields,
@@ -44,18 +39,19 @@ const Roles = React.memo(props => {
       render={inputProps => (
         <RoleField
           deal={props.deal}
-          roles={props.dealRoles}
-          onUpsertRole={handleUpsert}
+          roles={props.roles}
+          onUpsertRole={handleChangeRoles}
+          onDeleteRole={handleChangeRoles}
           {...inputProps}
         />
       )}
     />
   )
-})
+}
 
 function mapStateToProps({ deals }, props) {
   return {
-    dealRoles: selectDealRoles(deals.roles, props.deal)
+    roles: selectDealRoles(deals.roles, props.deal)
   }
 }
 

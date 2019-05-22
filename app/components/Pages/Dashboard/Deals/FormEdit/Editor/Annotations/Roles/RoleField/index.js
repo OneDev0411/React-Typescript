@@ -65,6 +65,7 @@ export function RoleField(props) {
           form={activeRole}
           allowedRoles={allowedRoles}
           onUpsertRole={props.onUpsertRole}
+          onDeleteRole={props.onDeleteRole}
           isRoleRemovable={activeRole && !isPrimaryAgent(activeRole.role)}
           onClose={() => setRole(undefined)}
         />

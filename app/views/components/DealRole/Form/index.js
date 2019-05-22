@@ -168,12 +168,18 @@ export function FormContainer(props) {
       <Footer>
         <Flex>
           {props.isRoleRemovable && (
-            <DeleteRole deal={props.deal} role={props.formObject} />
+            <DeleteRole
+              deal={props.deal}
+              role={props.formObject}
+              onDeleteRole={props.onDeleteRole}
+            />
           )}
         </Flex>
 
         <Flex alignCenter>
-          <LinkButton onClick={props.onClose}>Cancel</LinkButton>
+          <LinkButton type="button" onClick={props.onClose}>
+            Cancel
+          </LinkButton>
 
           {props.isSubmitting ? (
             <ActionButton size="small">

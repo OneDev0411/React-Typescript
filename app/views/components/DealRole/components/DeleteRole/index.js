@@ -45,7 +45,8 @@ function DeleteRole(props) {
           props.onDeleteRole(props.role)
 
           props.notify({
-            message: 'Contact removed'
+            message: 'Contact removed',
+            status: 'success'
           })
         } catch (e) {
           props.notify({
@@ -68,6 +69,7 @@ function DeleteRole(props) {
     <Tooltip caption={props.tooltip}>
       <IconButton
         appearance="icon"
+        type="button"
         isFit
         onClick={handleRemoveRole}
         style={props.style}
