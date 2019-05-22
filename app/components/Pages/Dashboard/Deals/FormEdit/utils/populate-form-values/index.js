@@ -3,7 +3,6 @@ import { getContext } from 'models/Deal/helpers/context/get-context'
 
 import { getAnnotationsByType } from '../get-annotations-by-type'
 import { getGroupValues } from '../get-group-values'
-import { normalizeFormValue } from '../normalize-form-value'
 import { getRoleText } from '../get-roles-text'
 import { formatDate } from '../format-date'
 import { contextOverwriteValues } from '../context-overwrite-values'
@@ -28,12 +27,9 @@ function getContexts(annotations, deal, fields) {
 
 function getContextsByType(annotations, type, deal, fields) {
   return getAnnotationsByType(annotations, type).reduce((current, group) => {
-    const contextName = group[0].context
-
     const value = normalizeContextValue(
+      deal,
       group[0],
-      getContext(deal, contextName),
-      getField(deal, contextName),
       getFormValue(group, fields)
     )
 
@@ -62,25 +58,30 @@ function getFormValue(group, fields) {
     .trim()
 }
 
-function normalizeContextValue(annotation, context, value, formValue = '') {
-  const noValue = !value && value !== 0
+function normalizeContextValue(deal, annotation, formValue = '') {
+  const context = getContext(deal, annotation.context)
 
   if (
     !context ||
-    noValue ||
     annotation.disableAutopopulate ||
     contextOverwriteValues.includes(formValue)
   ) {
     return formValue
   }
 
+  const contextValue = getField(deal, annotation.context)
+
+  if (!contextValue && contextValue !== 0) {
+    return formValue
+  }
+
   if (context.data_type === 'Number') {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    return contextValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   }
 
   if (context.data_type === 'Date') {
-    return formatDate(isNaN(value) ? value : value * 1000)
+    return formatDate(isNaN(contextValue) ? contextValue : contextValue * 1000)
   }
 
-  return value
+  return contextValue
 }
