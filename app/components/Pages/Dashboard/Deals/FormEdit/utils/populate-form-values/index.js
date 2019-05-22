@@ -63,9 +63,11 @@ function getFormValue(group, fields) {
 }
 
 function normalizeContextValue(annotation, context, value, formValue = '') {
+  const noValue = !value && value !== 0
+
   if (
     !context ||
-    !value ||
+    noValue ||
     annotation.disableAutopopulate ||
     contextOverwriteValues.includes(formValue)
   ) {
