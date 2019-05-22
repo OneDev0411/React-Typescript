@@ -8,6 +8,7 @@ import DatePicker from 'components/DatePicker'
 import { ContextInlineEdit } from 'deals/FormEdit/Editor/ContextInlineEdit'
 
 import { formatDate } from '../../../../utils/format-date'
+import { contextOverwriteValues } from '../../../../utils/context-overwrite-values'
 
 import { TextInput } from './TextInput'
 import { Body, Footer } from './styled'
@@ -67,21 +68,16 @@ export function ContextField(props) {
           </Body>
 
           <Footer>
-            <ActionButton
-              size="small"
-              appearance="outline"
-              onClick={() => handleSaveValue('TBD', false)}
-            >
-              TBD
-            </ActionButton>
-
-            <ActionButton
-              size="small"
-              appearance="outline"
-              onClick={() => handleSaveValue('N/A', false)}
-            >
-              N/A
-            </ActionButton>
+            {contextOverwriteValues.map((value, index) => (
+              <ActionButton
+                key={index}
+                size="small"
+                appearance="outline"
+                onClick={() => handleSaveValue(value, false)}
+              >
+                {value}
+              </ActionButton>
+            ))}
 
             <ActionButton
               size="small"

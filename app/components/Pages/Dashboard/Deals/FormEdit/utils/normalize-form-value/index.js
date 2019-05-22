@@ -1,8 +1,14 @@
 import { formatDate } from '../format-date'
+import { contextOverwriteValues } from '../context-overwrite-values'
 
-export function normalizeFormValue(context, value) {
-  if (!context || !value) {
-    return value
+export function normalizeFormValue(annotation, context, value, formValue = '') {
+  if (
+    !context ||
+    !value ||
+    annotation.disableAutopopulate ||
+    contextOverwriteValues.includes(formValue)
+  ) {
+    return formValue
   }
 
   if (context.data_type === 'Number') {

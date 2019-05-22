@@ -6,31 +6,33 @@ import { getGroupValues } from '../get-group-values'
 import { normalizeFormValue } from '../normalize-form-value'
 import { getRoleText } from '../get-roles-text'
 
-export function populateFormValues(annotations, values, { deal, roles }) {
+export function populateFormValues(annotations, fields, { deal, roles }) {
   return {
-    ...values,
-    ...getContexts(annotations, deal),
+    ...fields,
+    ...getContexts(annotations, deal, fields),
     ...getRoles(annotations, deal, roles)
   }
 }
 
-function getContexts(annotations, deal) {
+function getContexts(annotations, deal, fields) {
   return ['addresses', 'contexts'].reduce(
     (current, type) => ({
       ...current,
-      ...getContextsByType(annotations, type, deal)
+      ...getContextsByType(annotations, type, deal, fields)
     }),
     {}
   )
 }
 
-function getContextsByType(annotations, type, deal) {
+function getContextsByType(annotations, type, deal, fields) {
   return getAnnotationsByType(annotations, type).reduce((current, group) => {
     const contextName = group[0].context
 
     const value = normalizeFormValue(
+      group[0],
       getContext(deal, contextName),
-      getField(deal, contextName)
+      getField(deal, contextName),
+      getFormValue(group, fields)
     )
 
     return {
@@ -49,4 +51,11 @@ function getRoles(annotations, deal, roles) {
       ...getGroupValues(group, value)
     }
   }, {})
+}
+
+function getFormValue(group, fields) {
+  return group
+    .map(item => fields[item.annotation.fieldName])
+    .join(' ')
+    .trim()
 }
