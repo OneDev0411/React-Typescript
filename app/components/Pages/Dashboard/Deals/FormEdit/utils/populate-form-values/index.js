@@ -5,6 +5,8 @@ import { getAnnotationsByType } from '../get-annotations-by-type'
 import { getGroupValues } from '../get-group-values'
 import { normalizeFormValue } from '../normalize-form-value'
 import { getRoleText } from '../get-roles-text'
+import { formatDate } from '../format-date'
+import { contextOverwriteValues } from '../context-overwrite-values'
 
 export function populateFormValues(annotations, fields, { deal, roles }) {
   return {
@@ -28,7 +30,7 @@ function getContextsByType(annotations, type, deal, fields) {
   return getAnnotationsByType(annotations, type).reduce((current, group) => {
     const contextName = group[0].context
 
-    const value = normalizeFormValue(
+    const value = normalizeContextValue(
       group[0],
       getContext(deal, contextName),
       getField(deal, contextName),
@@ -58,4 +60,25 @@ function getFormValue(group, fields) {
     .map(item => fields[item.annotation.fieldName])
     .join(' ')
     .trim()
+}
+
+function normalizeContextValue(annotation, context, value, formValue = '') {
+  if (
+    !context ||
+    !value ||
+    annotation.disableAutopopulate ||
+    contextOverwriteValues.includes(formValue)
+  ) {
+    return formValue
+  }
+
+  if (context.data_type === 'Number') {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  }
+
+  if (context.data_type === 'Date') {
+    return formatDate(isNaN(value) ? value : value * 1000)
+  }
+
+  return value
 }
