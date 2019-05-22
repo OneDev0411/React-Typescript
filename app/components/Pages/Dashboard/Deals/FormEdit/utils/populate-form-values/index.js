@@ -5,7 +5,6 @@ import { getAnnotationsByType } from '../get-annotations-by-type'
 import { getGroupValues } from '../get-group-values'
 import { getRoleText } from '../get-roles-text'
 import { formatDate } from '../format-date'
-import { contextOverwriteValues } from '../context-overwrite-values'
 
 export function populateFormValues(annotations, fields, { deal, roles }) {
   return {
@@ -61,11 +60,7 @@ function getFormValue(group, fields) {
 function normalizeContextValue(deal, annotation, formValue = '') {
   const context = getContext(deal, annotation.context)
 
-  if (
-    !context ||
-    annotation.disableAutopopulate ||
-    contextOverwriteValues.includes(formValue)
-  ) {
+  if (!context || annotation.disableAutopopulate) {
     return formValue
   }
 
