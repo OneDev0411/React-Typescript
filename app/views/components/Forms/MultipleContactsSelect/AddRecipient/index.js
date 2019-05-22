@@ -25,7 +25,7 @@ import { SearchInput, SearchInputContainer } from './styled'
 import ContactItem from '../../../SelectContactModal/components/ContactItem'
 import { ListItem } from './ListItem'
 import SearchResults from './SearchResults'
-import { onlyItemsWithUUID } from './helpers'
+import { idIsUUID } from './helpers'
 
 const initialState = {
   isContactsLoading: false,
@@ -169,7 +169,7 @@ class AddRecipient extends React.Component {
 
     // Tags result
     const filteredTags = new Fuse(
-      onlyItemsWithUUID(this.props.tags),
+      this.props.tags.filter(idIsUUID),
       tagsFuseOptions
     )
       .search(value)
@@ -177,7 +177,7 @@ class AddRecipient extends React.Component {
 
     // Segments result
     const filteredList = new Fuse(
-      onlyItemsWithUUID(this.props.segmentsList),
+      this.props.segmentsList.filter(idIsUUID),
       segmentsFuseOptions
     )
       .search(value)
