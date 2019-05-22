@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useRef } from 'react'
 
 import DealContext from 'models/Deal/helpers/dynamic-context'
+import { getField } from 'models/Deal/helpers/context/get-field'
 
 import ActionButton from 'components/Button/ActionButton'
 import DatePicker from 'components/DatePicker'
@@ -8,7 +9,6 @@ import DatePicker from 'components/DatePicker'
 import { ContextInlineEdit } from 'deals/FormEdit/Editor/ContextInlineEdit'
 
 import { formatDate } from '../../../../utils/format-date'
-import { contextOverwriteValues } from '../../../../utils/context-overwrite-values'
 
 import { TextInput } from './TextInput'
 import { Body, Footer } from './styled'
@@ -18,13 +18,15 @@ export function ContextField(props) {
     DealContext.searchContext(props.deal.brand.id, props.annotation.context)
   )
 
+  const contextValue = getField(props.deal, props.annotation.context)
+
   const [isEditorOpen, setEditorStatus] = useState(false)
-  const [contextValue, setContextValue] = useState(
+  const [fieldValue, setFieldValue] = useState(
     Object.values(props.values).join(' ')
   )
 
   const getDate = () => {
-    const date = new Date(contextValue)
+    const date = new Date(fieldValue)
 
     return date instanceof Date && !isNaN(date) ? date : new Date()
   }
@@ -37,7 +39,10 @@ export function ContextField(props) {
   return (
     <Fragment>
       <div
-        style={props.style}
+        style={{
+          ...props.style,
+          backgroundColor: props.value ? 'transparent' : '#d2e5f2'
+        }}
         title={props.annotation.context}
         onClick={() => setEditorStatus(true)}
       >
@@ -55,33 +60,34 @@ export function ContextField(props) {
             {context.current.data_type === 'Date' ? (
               <DatePicker
                 showTodayButton={false}
-                onChange={date => setContextValue(formatDate(date))}
+                onChange={date => setFieldValue(formatDate(date))}
                 selectedDate={getDate()}
               />
             ) : (
               <TextInput
                 context={context.current}
-                defaultValue={contextValue}
-                onChange={e => setContextValue(e.target.value)}
+                defaultValue={fieldValue}
+                onChange={e => setFieldValue(e.target.value)}
               />
             )}
           </Body>
 
           <Footer>
-            {contextOverwriteValues.map((value, index) => (
-              <ActionButton
-                key={index}
-                size="small"
-                appearance="outline"
-                onClick={() => handleSaveValue(value, false)}
-              >
-                {value}
-              </ActionButton>
-            ))}
+            {!contextValue &&
+              ['TBD', 'N/A'].map((value, index) => (
+                <ActionButton
+                  key={index}
+                  size="small"
+                  appearance="outline"
+                  onClick={() => handleSaveValue(value, false)}
+                >
+                  {value}
+                </ActionButton>
+              ))}
 
             <ActionButton
               size="small"
-              onClick={() => handleSaveValue(contextValue)}
+              onClick={() => handleSaveValue(fieldValue)}
             >
               Save
             </ActionButton>
