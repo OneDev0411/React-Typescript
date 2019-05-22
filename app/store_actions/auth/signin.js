@@ -18,12 +18,7 @@ const submitSigninForm = (userInfo, redirectTo) => (dispatch, getState) => {
 
       try {
         if (!user.teams) {
-          const teams = await dispatch(getTeams())
-
-          user = {
-            ...user,
-            teams
-          }
+          await dispatch(getTeams(user, true))
         }
       } catch (error) {
         throw error
