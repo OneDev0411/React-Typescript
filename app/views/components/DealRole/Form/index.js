@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react'
-import { Field } from 'react-final-form'
 import Flex from 'styled-flex-component'
 
 import ActionButton from 'components/Button/ActionButton'
@@ -8,6 +7,8 @@ import LinkButton from 'components/Button/LinkButton'
 import { TextInput } from 'components/Forms/TextInput'
 
 import DeleteRole from '../components/DeleteRole'
+
+import Field from '../components/CustomField'
 
 import { TitleInput } from './form-components/TitleInput'
 import { TypeInput } from './form-components/TypeInput'
