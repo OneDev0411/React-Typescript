@@ -67,7 +67,7 @@ function AppSideNav(props) {
         brandLogoSrc={brandLogoSrc}
       />
 
-      <ScrollableArea style={{ flex: '1 1' }}>
+      <ScrollableArea style={{ flex: '1 1' }} hasThinnerScrollbar>
         <SidenavList>
           <Acl.Crm>
             <SideNavLinkItem

@@ -19,7 +19,7 @@ UserMenuContent.propTypes = {
 export function UserMenuContent({ user, onClose = () => {} }) {
   return (
     <SideMenuContainer>
-      <ScrollableArea>
+      <ScrollableArea hasThinnerScrollbar>
         <SideMenuList>
           <TeamSwitcher user={user} />
         </SideMenuList>

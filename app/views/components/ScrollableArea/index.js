@@ -26,7 +26,8 @@ export function ScrollableArea({
   style = {},
   offset = 0,
   debounce = 0,
-  children
+  children,
+  hasThinnerScrollbar = false
 }) {
   const contentRef = useRef()
 
@@ -37,6 +38,7 @@ export function ScrollableArea({
   })
 
   const classes = cn({
+    'u-scrollbar--thinner': hasThinnerScrollbar,
     'has-bottom-shadow': !reachedEnd,
     'has-top-shadow': !reachedStart
   })
