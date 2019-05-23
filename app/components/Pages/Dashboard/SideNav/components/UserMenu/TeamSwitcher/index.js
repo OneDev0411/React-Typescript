@@ -1,20 +1,23 @@
 import React, { Fragment } from 'react'
 import Flex from 'styled-flex-component'
-import idx from 'idx'
+import idx from 'idx/lib/idx'
 
-import { selectTeamIsFetching } from '../../../../../../../reducers/user'
-import { viewAs, getActiveTeamId } from '../../../../../../../utils/user-teams'
+import Avatar from '../../../../../../Partials/UserAvatar'
+
 import { putUserSetting } from '../../../../../../../models/user/put-user-setting'
+
+import { primary } from '../../../../../../../views/utils/colors'
+
 import flattenBrand from '../../../../../../../utils/flatten-brand'
 import CheckmarkIcon from '../../../../../../../views/components/SvgIcons/Checkmark/IconCheckmark'
 import Loading from '../../../../../../../views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
-import { primary } from '../../../../../../../views/utils/colors'
-
-import Avatar from '../../../../../../Partials/UserAvatar'
+import { viewAs, getActiveTeamId } from '../../../../../../../utils/user-teams'
+import { selectTeamIsFetching } from '../../../../../../../reducers/user'
 
 import ViewAsFilter from './ViewAsFilter'
 import { TeamName, Button } from './styled'
+import { ListItemDivider } from '../../../styled'
 
 export default class TeamSwitcher extends React.Component {
   state = {
@@ -82,7 +85,7 @@ export default class TeamSwitcher extends React.Component {
         </Button>
         <ViewAsFilter team={team} isActive={isActiveTeam && !savingTeam} />
       </li>,
-      <li key={`sp_${team.brand.id}`} role="separator" className="divider" />
+      <ListItemDivider key={`sp_${team.brand.id}`} role="separator" />
     ]
   }
 
@@ -95,7 +98,7 @@ export default class TeamSwitcher extends React.Component {
           <Flex center>
             <Loading />
           </Flex>
-          <li role="separator" className="divider" />
+          <ListItemDivider role="separator" />
         </Fragment>
       )
     }

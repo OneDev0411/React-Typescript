@@ -16,7 +16,7 @@ import ContactSocket from '../services/socket/contacts'
 import NotificationSocket from '../services/socket/Notifications'
 
 // navs
-import SideNav from './Pages/Dashboard/Partials/SideNav'
+import SideNav from './Pages/Dashboard/SideNav'
 
 // global chat components
 import { getRooms } from '../store_actions/chatroom'

@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import Avatar from './Avatar'
-
 import IconButton from '../../../../../../views/components/Button/IconButton'
-import ArrowDownIcon from '../../../../../../views/components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
-import { SideNavTooltip } from './Tooltip'
+import UserAvatar from '../UserAvatar'
 
-export class SettingsDropdownButton extends Component {
+import { SideNavTooltip } from '../Tooltip'
+import { DropdownDots } from './styled'
+
+export class DropdownButton extends Component {
   static propTypes = {
     user: PropTypes.shape().isRequired
   }
@@ -26,14 +26,10 @@ export class SettingsDropdownButton extends Component {
           iconSize="large"
           inverse
           onClick={this.handleClick}
-          style={{ alignItems: 'flex-end', padding: 0 }}
+          style={{ padding: 0 }}
         >
-          <Avatar user={this.props.user} size={32} />
-          <ArrowDownIcon
-            style={{
-              transform: this.props.isDropDownOpen ? 'rotate(180deg)' : 'none'
-            }}
-          />
+          <UserAvatar user={this.props.user} size={32} />
+          <DropdownDots />
         </IconButton>
       </SideNavTooltip>
     )

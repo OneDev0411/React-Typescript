@@ -11,6 +11,7 @@
     "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build.js",
     "serve": "NODE_ENV=production forever node_modules/@babel/node/bin/babel-node.js ./bin/server",
     "serve:stage": "NODE_ENV=stage babel-node ./bin/server",
+    "styled-svg": "styled-svg app/views/components/SvgIcons/**/*.svg --size=24x24",
     "lint": "npm run lint:app && npm run lint:server",
     "lint:app": "eslint ./app",
     "lint:server": "eslint ./server"
@@ -224,6 +225,7 @@
     "nodemon": "^1.18.9",
     "prettier": "^1.15.3",
     "typescript": "^3.3.4000",
+    "styled-svg": "^2.3.4",
     "webpack-cli": "^3.2.1",
     "webpack-notifier": "^1.7.0",
     "webpackbar": "^3.1.5"
