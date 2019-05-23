@@ -18,7 +18,14 @@ router.get('/', async ctx => {
   // because we need to define a middleware and redirect the users automaticly
   // for all the website routes, not only home page
   const { hostname } = urlParser.parse(ctx.request.origin)
-  const brand = await getBrand(hostname)
+
+  let brand
+
+  try {
+    brand = await getBrand(hostname)
+  } catch(e) {
+    //Ignore error it's ok not to find a brand here.
+  }
 
   if (brand) {
     return ctx.redirect('/dashboard/mls')
