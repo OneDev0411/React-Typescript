@@ -7,7 +7,8 @@ export function getGroupValues(group, value) {
   const { values } = calculateWordWrap(annotations, value)
 
   group.forEach((item, index) => {
-    fields[item.annotation.fieldName] = values[index] || ''
+    fields[item.annotation.fieldName] =
+      value || value === 0 ? values[index] : ''
   })
 
   return fields
