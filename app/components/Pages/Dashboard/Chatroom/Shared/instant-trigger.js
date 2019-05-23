@@ -33,7 +33,6 @@ const InstantTrigger = ({ rooms, toggleChatbar }) => {
       <IconButton
         inverse
         size="large"
-        className="c-app-sidenav__item__title--button"
         onClick={() => openChatbar(toggleChatbar)}
       >
         <ChatIcon style={{ width: '28px', height: '28px' }} />
@@ -41,7 +40,7 @@ const InstantTrigger = ({ rooms, toggleChatbar }) => {
           <Badge
             style={{
               position: 'absolute',
-              top: '4px',
+              top: '6px',
               left: '50%'
             }}
           >

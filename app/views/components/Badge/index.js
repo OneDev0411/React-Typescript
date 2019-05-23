@@ -15,11 +15,11 @@ const defaultProps = {
 }
 
 const Badge = styled.span`
-  padding: 0.2em 0.5em;
-  min-width: 28px;
+  padding: 0.04rem 0.3rem;
+  font-size: 12px;
+  min-width: 24px;
   text-align: center;
-  font-size: 14px;
-  line-height: 1;
+  line-height: 1.33;
 
   ${props => badgeAppearances[props.appearance]};
 `

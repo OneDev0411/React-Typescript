@@ -9,11 +9,14 @@ import {
   getActiveTeam,
   allMembersOfTeam
 } from '../../../../../../../utils/user-teams'
-import { grey, borderColor } from '../../../../../../../views/utils/colors'
+import { grey } from '../../../../../../../views/utils/colors'
 
 import { setViewAsFilter } from '../../../../../../../store_actions/user/set-view-as-filter'
 
 import { CheckBoxButton } from '../../../../../../../views/components/Button/CheckboxButton'
+
+import { Divider } from '../../../styled'
+import { Container } from './styled'
 
 class ViewAsFilter extends React.Component {
   constructor(props) {
@@ -81,19 +84,18 @@ class ViewAsFilter extends React.Component {
     }
 
     return (
-      <div
-        style={{
-          maxHeight: '15.1rem',
-          overflowY: 'auto',
-          background: grey.A000,
-          borderTop: `1px solid ${borderColor}`
-        }}
-        className="u-scrollbar--thinner--self"
-      >
+      <Container>
+        <Divider />
         <div style={{ padding: '0.5rem 1rem 0' }}>View as</div>
         {brandMembers.length > 1 && (
           <React.Fragment>
-            <Flex alignCenter style={rowStyle}>
+            <Flex
+              alignCenter
+              style={rowStyle}
+              role="button"
+              data-view-as="All"
+              onClick={this.handleViewAs}
+            >
               <CheckBoxButton
                 square
                 data-view-as="All"
@@ -115,12 +117,19 @@ class ViewAsFilter extends React.Component {
           </React.Fragment>
         )}
         {brandMembers.map((member, index) => (
-          <Flex alignCenter key={index} style={rowStyle}>
+          <Flex
+            alignCenter
+            key={index}
+            style={rowStyle}
+            role="button"
+            onClick={this.handleViewAs}
+            data-view-as={member.id}
+          >
             <CheckBoxButton
               square
               data-view-as={member.id}
-              isSelected={viewAsList.indexOf(member.id) > -1}
               onClick={this.handleViewAs}
+              isSelected={viewAsList.indexOf(member.id) > -1}
               style={{ marginRight: '0.5rem' }}
             />
             {`${member.first_name} ${member.last_name}${
@@ -128,7 +137,7 @@ class ViewAsFilter extends React.Component {
             }`}
           </Flex>
         ))}
-      </div>
+      </Container>
     )
   }
 }

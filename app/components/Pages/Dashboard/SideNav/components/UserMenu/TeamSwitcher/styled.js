@@ -1,13 +1,18 @@
 import styled from 'styled-components'
 
 import ActionButton from '../../../../../../../views/components/Button/ActionButton'
-import { primary } from '../../../../../../../views/utils/colors'
+
+import { grey, primary } from '../../../../../../../views/utils/colors'
 
 export const TeamName = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0 1em;
   max-width: 136px;
+`
+
+export const Container = styled.div`
+  background: ${grey.A000};
 `
 
 export const Button = styled(ActionButton)`

@@ -1,6 +1,8 @@
 // ProfileImage.js
 import React from 'react'
 
+import { Avatar } from '../styled'
+
 const getNameInitials = user => {
   let initials = ''
   const { first_name, last_name } = user
@@ -16,7 +18,7 @@ const getNameInitials = user => {
   return initials
 }
 
-const Avatar = ({ user, size = 48 }) => {
+const UserAvatar = ({ user, size = 48 }) => {
   const { profile_image_url } = user
   const style = {
     width: `${size}px`,
@@ -32,17 +34,13 @@ const Avatar = ({ user, size = 48 }) => {
     avatar = (
       <img
         alt="rechat avatar"
+        style={{ verticalAlign: 'top' }}
         src={profile_image_url}
-        className="c-avatar__image"
       />
     )
   }
 
-  return (
-    <div className="c-avatar" style={style}>
-      {avatar}
-    </div>
-  )
+  return <Avatar style={style}>{avatar}</Avatar>
 }
 
-export default Avatar
+export default UserAvatar
