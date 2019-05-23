@@ -1,6 +1,9 @@
 import React, { useState, Fragment } from 'react'
 
-import { normalizeRoleNames } from 'deals/FormEdit/utils/get-roles-text'
+import {
+  normalizeRoleNames,
+  getAttributeValue
+} from 'deals/FormEdit/utils/get-roles-text'
 
 import { isPrimaryAgent } from 'deals/utils/roles'
 
@@ -11,51 +14,28 @@ import { AddRole } from '../AddRole'
 export function RoleField(props) {
   const [activeRole, setRole] = useState(undefined)
 
-  const allowedRoles = normalizeRoleNames(
-    props.deal,
-    props.annotation.role.join(',')
-  )
-
-  const getRoleIndex = index => {
-    let position = index
-
-    for (let i = 0; i < props.rectIndex; i++) {
-      position += props.values[i].split(',').length - 1
-    }
-
-    return position
-  }
-
-  const handleSelectRole = (index = null) => {
-    if (index === null) {
-      return setRole(null)
-    }
-
-    const roles = props.roles.filter(user => allowedRoles.includes(user.role))
-
-    setRole(roles[getRoleIndex(index)])
-  }
-
-  const values = props.value ? props.value.split(',') : []
+  const { annotation } = props
+  const allowedRoles = normalizeRoleNames(props.deal, annotation.role)
+  const roles = getRolesList(props.roles, allowedRoles, annotation)
 
   return (
     <Fragment>
       <div style={props.style}>
-        {values.map((value, index) => (
+        {roles.map((role, index) => (
           <span
+            key={index}
             style={{
               cursor: 'pointer',
               fontSize: `${props.appearance.fontSize}px`
             }}
-            key={index}
-            onClick={() => handleSelectRole(index)}
+            onClick={() => setRole(role)}
           >
-            {value &&
-              `${value.trim()}${index !== values.length - 1 ? ', ' : ''}`}
+            {role.value}
+            {index === roles.length - 1 ? '' : ', '}
           </span>
         ))}
 
-        <AddRole {...props} onClick={() => handleSelectRole(null)} />
+        <AddRole {...props} onClick={() => setRole(null)} />
       </div>
 
       {activeRole !== undefined && (
@@ -72,4 +52,31 @@ export function RoleField(props) {
       )}
     </Fragment>
   )
+}
+
+function getRolesList(roles, allowedRoles, annotation) {
+  const filteredRoles = roles.filter(role => allowedRoles.includes(role.role))
+  let list = []
+
+  if (annotation.type === 'Roles') {
+    list = filteredRoles.map(role => ({
+      ...role,
+      value: getAttributeValue(role, annotation, '')
+    }))
+  }
+
+  // if type isn't Roles then it's singular and we should extract that
+  // based on the number that is defined in annotation
+  const role = filteredRoles[annotation.number]
+
+  if (role) {
+    list = [
+      {
+        ...role,
+        value: getAttributeValue(role, annotation)
+      }
+    ]
+  }
+
+  return list.filter(item => item.value)
 }

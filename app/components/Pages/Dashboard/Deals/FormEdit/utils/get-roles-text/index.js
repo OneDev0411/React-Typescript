@@ -22,7 +22,7 @@ export function normalizeRoleNames(deal, roleNames) {
   })
 }
 
-function getAttributeValue(role, context, defaultValue) {
+export function getAttributeValue(role, context, defaultValue) {
   const attributes = context.attributes || [context.attribute]
 
   let value = ''
