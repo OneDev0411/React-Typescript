@@ -50,7 +50,6 @@ const Image = styled.svg`
 const children = (
   <Fragment>
     <g fill="none" fillRule="evenodd" key="key-0">
-      <path fill="#FFF" d="M-16-478H90V36H-16z" />
       <path
         fill="#000"
         fillRule="nonzero"

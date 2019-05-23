@@ -14,6 +14,24 @@ const sidenavButtonStyles = css`
   line-height: ${minItemHeight}px;
   height: ${minItemHeight}px;
   width: ${minItemHeight}px;
+
+  border-radius: 50%;
+
+  &:hover {
+    background-color: ${grey.A200};
+    svg {
+      fill: ${primary};
+    }
+  }
+
+  ${({ active }) =>
+    active &&
+    css`
+      background-color: #d9e6ff;
+      svg {
+        fill: ${primary};
+      }
+    `}
 `
 export const Sidenav = styled.aside`
   width: ${appSidenavWidth}px;
@@ -49,15 +67,6 @@ export const SidenavLink = styled(Link)`
   color: #000;
   font-size: 16px;
 
-  ${({ active }) =>
-    active &&
-    css`
-      background-color: #d9e6ff;
-      border-radius: 50%;
-      svg {
-        fill: ${primary};
-      }
-    `}
   ${sidenavButtonStyles}
 `
 

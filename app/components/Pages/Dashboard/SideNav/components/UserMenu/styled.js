@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 import { grey, primary } from '../../../../../../views/utils/colors'
 import VerticalDotsIcon from '../../../../../../views/components/SvgIcons/VeriticalDots/VerticalDotsIcon'
+import { headerHeight } from '../../variables'
 
 export const SideMenuList = styled.ul`
   padding: 0;
@@ -53,8 +54,8 @@ export const SideMenuContainer = styled.div`
   width: 250px;
   height: min-content;
   // we set a max height to prevent menu from being clipped when it's longer
-  // than viewport height. 80px is roughly the offset top.
-  max-height: calc(100vh - 80px);
+  // than viewport height.
+  max-height: calc(100vh - ${headerHeight});
   overflow: auto;
   border-radius: 5px;
   background-color: #fff;
