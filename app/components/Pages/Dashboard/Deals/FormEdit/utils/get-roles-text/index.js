@@ -38,7 +38,7 @@ export function getAttributeValue(role, context, defaultValue) {
     return !(!value && value !== 0)
   })
 
-  return value
+  return value && value.trim()
 }
 
 export function getRoleText(roles, deal, roleNames, annotation) {
