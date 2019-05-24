@@ -44,6 +44,7 @@ export default class Templates extends Component {
       const templates = await getTemplates(types.split(','), [
         'Email',
         'Social',
+        'LinkedInCover',
         'FacebookCover',
         'InstagramStory'
       ])
