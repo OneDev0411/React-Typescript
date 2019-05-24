@@ -48,61 +48,59 @@ export class Timeline extends React.Component {
     const upcomingEvents = []
     const pastEventsIndexedInMonths = {}
 
-    this.props.items
-      .map(item => (item.due_at ? { ...item, due_date: item.due_at } : item))
-      .forEach(item => {
-        let date
-        let { due_date } = item
+    this.props.items.forEach(item => {
+      let date
+      let { due_date } = item
 
-        function getDateMonthAndYear(date) {
-          date = new Date(date)
+      function getDateMonthAndYear(date) {
+        date = new Date(date)
 
-          const monthNumber = date.getMonth()
-          const year = date.getFullYear()
+        const monthNumber = date.getMonth()
+        const year = date.getFullYear()
 
-          const index = `${monthNumber}_${year}`
+        const index = `${monthNumber}_${year}`
 
-          const title = `${months[monthNumber]} ${year}`
+        const title = `${months[monthNumber]} ${year}`
 
-          return {
-            index,
-            title
-          }
+        return {
+          index,
+          title
+        }
+      }
+
+      if (due_date) {
+        due_date *= 1000
+
+        if (isToday(due_date)) {
+          return todayEvents.push(item)
         }
 
-        if (due_date) {
-          due_date *= 1000
-
-          if (isToday(due_date)) {
-            return todayEvents.push(item)
-          }
-
-          if (due_date > new Date().getTime()) {
-            return upcomingEvents.push(item)
-          }
-
-          date = new Date(due_date)
-        } else {
-          const createdAt = item.created_at * 1000
-
-          if (isToday(createdAt)) {
-            return todayEvents.push(item)
-          }
-
-          date = new Date(createdAt)
+        if (due_date > new Date().getTime()) {
+          return upcomingEvents.push(item)
         }
 
-        const monthAndYear = getDateMonthAndYear(date)
+        date = new Date(due_date)
+      } else {
+        const createdAt = item.created_at * 1000
 
-        if (pastEventsIndexedInMonths[monthAndYear.index]) {
-          pastEventsIndexedInMonths[monthAndYear.index].items.push(item)
-        } else {
-          pastEventsIndexedInMonths[monthAndYear.index] = {
-            title: monthAndYear.title,
-            items: [item]
-          }
+        if (isToday(createdAt)) {
+          return todayEvents.push(item)
         }
-      })
+
+        date = new Date(createdAt)
+      }
+
+      const monthAndYear = getDateMonthAndYear(date)
+
+      if (pastEventsIndexedInMonths[monthAndYear.index]) {
+        pastEventsIndexedInMonths[monthAndYear.index].items.push(item)
+      } else {
+        pastEventsIndexedInMonths[monthAndYear.index] = {
+          title: monthAndYear.title,
+          items: [item]
+        }
+      }
+    })
 
     let pastEvents = []
 

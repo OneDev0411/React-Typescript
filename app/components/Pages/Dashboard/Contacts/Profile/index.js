@@ -14,11 +14,10 @@ import { updateContactQuery } from 'models/contacts/helpers/default-query'
 import { getContact } from 'models/contacts/get-contact'
 import { deleteContacts } from 'models/contacts/delete-contact'
 import { updateContactSelf } from 'models/contacts/update-contact-self'
-import getContactTimeline from 'models/calendar/get-calendar'
+import getCRMTimeline from 'models/get-crm-timeline'
 
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
-import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 
 import {
   selectDefinitionByName,
@@ -155,28 +154,15 @@ class ContactProfile extends React.Component {
   }
 
   fetchTimeline = async () => {
-    const [low, high] = [15, 25].map(
-      y => new Date(`20${y}-01-01`).getTime() / 1000
-    )
-
     try {
-      const timeline = await getContactTimeline(
-        low,
-        high,
-        [],
-        {
-          contact: this.props.params.id,
-          object_types: ['crm_association', 'email_campaign']
-        },
-        [
-          ...CRM_TASKS_QUERY.associations,
-          ...['full_campaign', 'full_crm_task', 'contact_summary'].map(
-            item => `calendar_event.${item}`
-          )
-        ]
-      )
+      const timeline = await getCRMTimeline({
+        contact: this.props.params.id
+      })
 
-      this.setState({ isFetchingTimeline: false, timeline })
+      this.setState({
+        isFetchingTimeline: false,
+        timeline
+      })
     } catch (error) {
       console.log(error)
       this.setState({ isFetchingTimeline: false })
