@@ -22,66 +22,10 @@
 
     "skipLibCheck": true,
 
-    "jsx": "react",
-
-    // If "extends" would work, we could have remove these duplications
-    // but it seems it doesn't work
-    "baseUrl": ".",
-    "paths": {
-      "actions/*": [
-        "app/store_actions/*"
-      ],
-      "assets/*": [
-        "app/static/*"
-      ],
-      "components/*": [
-        "app/views/components/*"
-      ],
-      "constants/*": [
-        "app/constants/*"
-      ],
-      "dashboard/*": [
-        "app/components/Dashboard/*"
-      ],
-      "hooks/*": [
-        "app/hooks/*"
-      ],
-      "models/*": [
-        "app/models/*"
-      ],
-      "reducers/*": [
-        "app/reducers/*"
-      ],
-      "routes/*": [
-        "app/routes/*"
-      ],
-      "partials/*": [
-        "app/components/Partials/*"
-      ],
-      "services/*": [
-        "app/services/*"
-      ],
-      "utils/*": [
-        "app/utils/*"
-      ],
-      "views/*": [
-        "app/views/*"
-      ],
-      "deals/*": [
-        "app/components/Pages/Dashboard/Deals/*"
-      ],
-      "crm/*": [
-        "app/components/Pages/Dashboard/Contacts/*"
-      ],
-      "types/*": [
-        "types/*"
-      ]
-    }
-
+    "jsx": "react"
   },
   "include": [
     "app/**/*.ts",
-    "app/**/*.tsx",
-    "types/**/*.ts"
+    "app/**/*.tsx"
   ]
 }
