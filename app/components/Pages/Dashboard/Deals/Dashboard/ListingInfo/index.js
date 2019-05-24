@@ -8,6 +8,7 @@ import { getField } from 'models/Deal/helpers/context/get-field'
 import { ListingImage } from './Image'
 import MlsConnect from './MlsConnect'
 import Side from './Side'
+import PropertyType from './PropertyType'
 import Address from './Address'
 
 import { Divider } from '../styled'
@@ -44,7 +45,7 @@ export function ListingInfo(props) {
             <Side deal={props.deal} isBackOffice={props.isBackOffice} />
             <Divider small />
 
-            {props.deal.property_type}
+            <PropertyType deal={props.deal} isBackOffice={props.isBackOffice} />
             <Divider small />
 
             <MlsConnect deal={props.deal} />
