@@ -25,6 +25,7 @@ import { SearchInput, SearchInputContainer } from './styled'
 import ContactItem from '../../../SelectContactModal/components/ContactItem'
 import { ListItem } from './ListItem'
 import SearchResults from './SearchResults'
+import { idIsUUID } from './helpers'
 
 const initialState = {
   isContactsLoading: false,
@@ -167,12 +168,18 @@ class AddRecipient extends React.Component {
     }
 
     // Tags result
-    const filteredTags = new Fuse(this.props.tags, tagsFuseOptions)
+    const filteredTags = new Fuse(
+      this.props.tags.filter(idIsUUID),
+      tagsFuseOptions
+    )
       .search(value)
       .slice(0, 5)
 
     // Segments result
-    const filteredList = new Fuse(this.props.segmentsList, segmentsFuseOptions)
+    const filteredList = new Fuse(
+      this.props.segmentsList.filter(idIsUUID),
+      segmentsFuseOptions
+    )
       .search(value)
       .slice(0, 5)
 
@@ -232,7 +239,7 @@ class AddRecipient extends React.Component {
   }
 
   createResultSections = ({ getItemProps, highlightedIndex }) => {
-    const tags = {
+    const tagsList = {
       title: 'Tags',
       items: this.state.filteredTags,
       itemRenderer: itemDefaultProps => (
@@ -272,7 +279,7 @@ class AddRecipient extends React.Component {
       )
     }
 
-    const contacts = {
+    const contactsList = {
       title: 'Contacts',
       isLoading: this.state.isContactsLoading,
       items: this.state.list,
@@ -291,7 +298,7 @@ class AddRecipient extends React.Component {
       )
     }
 
-    return [tags, segmentsList, contacts]
+    return [tagsList, segmentsList, contactsList]
   }
 
   render() {
