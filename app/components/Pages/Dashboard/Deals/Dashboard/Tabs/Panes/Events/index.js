@@ -1,8 +1,6 @@
 import React, { Fragment } from 'react'
 
-import { searchEvents } from 'models/tasks/search-events'
-import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
-
+import getCRMTimeline from 'models/get-crm-timeline'
 import NewTask from 'views/CRM/Tasks/components/NewTask'
 import { normalizeDeal } from 'views/utils/association-normalizers'
 
@@ -35,12 +33,11 @@ export default class EventsPane extends React.Component {
 
   fetchTimeline = async () => {
     try {
-      const response = await searchEvents({
-        deal: this.props.deal.id,
-        associations: CRM_TASKS_QUERY.associations
+      const timeline = await getCRMTimeline({
+        deal: this.props.deal.id
       })
 
-      this.setState({ isFetching: false, timeline: response.data })
+      this.setState({ isFetching: false, timeline })
     } catch (error) {
       console.log(error)
       this.setState({ isFetching: false })
