@@ -55,7 +55,7 @@ export const SideMenuContainer = styled.div`
   height: min-content;
   // we set a max height to prevent menu from being clipped when it's longer
   // than viewport height.
-  max-height: calc(100vh - ${headerHeight});
+  max-height: calc(100vh - ${headerHeight}px);
   overflow: auto;
   border-radius: 5px;
   background-color: #fff;
