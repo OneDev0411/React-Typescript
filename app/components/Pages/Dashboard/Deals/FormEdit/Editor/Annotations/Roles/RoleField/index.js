@@ -1,39 +1,46 @@
 import React, { useState, Fragment } from 'react'
 
-import {
-  normalizeRoleNames,
-  getAttributeValue
-} from 'deals/FormEdit/utils/get-roles-text'
-
+import { normalizeRoleNames } from 'deals/FormEdit/utils/get-roles-text'
+import { getRolesList } from 'deals/FormEdit/utils/get-roles-list'
 import { isPrimaryAgent } from 'deals/utils/roles'
 
 import DealRole from 'components/DealRole'
 
 import { AddRole } from '../AddRole'
+import { RoleItem } from './styled'
 
 export function RoleField(props) {
   const [activeRole, setRole] = useState(undefined)
 
-  const { annotation } = props
-  const allowedRoles = normalizeRoleNames(props.deal, annotation.role)
-  const roles = getRolesList(props.roles, allowedRoles, annotation)
+  const allowedRoles = normalizeRoleNames(props.deal, props.annotation.role)
+
+  const roles = getRolesList({
+    allowedRoles,
+    roles: props.roles,
+    values: props.values,
+    annotation: props.annotation
+  })
+
+  const annotationRoles = roles[props.rectIndex]
 
   return (
     <Fragment>
       <div style={props.style}>
-        {roles.map((role, index) => (
-          <span
-            key={index}
-            style={{
-              cursor: 'pointer',
-              fontSize: `${props.appearance.fontSize}px`
-            }}
-            onClick={() => setRole(role)}
-          >
-            {role.value}
-            {index === roles.length - 1 ? '' : ', '}
-          </span>
-        ))}
+        {Array.isArray(annotationRoles) &&
+          annotationRoles.map((role, index) => (
+            <Fragment key={index}>
+              <RoleItem
+                isActive={activeRole && role.id === activeRole.id}
+                style={{
+                  fontSize: `${props.appearance.fontSize}px`
+                }}
+                onClick={() => setRole(role)}
+              >
+                {role.value}
+              </RoleItem>
+              {index === annotationRoles.length - 1 ? '' : ', '}
+            </Fragment>
+          ))}
 
         <AddRole {...props} onClick={() => setRole(null)} />
       </div>
@@ -52,31 +59,4 @@ export function RoleField(props) {
       )}
     </Fragment>
   )
-}
-
-function getRolesList(roles, allowedRoles, annotation) {
-  const filteredRoles = roles.filter(role => allowedRoles.includes(role.role))
-  let list = []
-
-  if (annotation.type === 'Roles') {
-    list = filteredRoles.map(role => ({
-      ...role,
-      value: getAttributeValue(role, annotation, '')
-    }))
-  }
-
-  // if type isn't Roles then it's singular and we should extract that
-  // based on the number that is defined in annotation
-  const role = filteredRoles[annotation.number]
-
-  if (role) {
-    list = [
-      {
-        ...role,
-        value: getAttributeValue(role, annotation)
-      }
-    ]
-  }
-
-  return list.filter(item => item.value)
 }
