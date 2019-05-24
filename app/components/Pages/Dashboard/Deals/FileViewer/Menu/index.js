@@ -10,7 +10,7 @@ import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import PdfSplitter from '../../PdfSplitter'
 
-import { Container, Actions, Title, Divider } from './styled'
+import { MenuContainer, MenuTitle, MenuDivider } from '../styled'
 
 export class Menu extends React.Component {
   state = {
@@ -27,17 +27,17 @@ export class Menu extends React.Component {
 
     return (
       <React.Fragment>
-        <Container>
-          <Title>
+        <MenuContainer>
+          <MenuTitle>
             <TextMiddleTruncate
               text={props.title}
               maxLength={50}
               tooltipPlacement="bottom"
             />
-          </Title>
+          </MenuTitle>
 
           <Flex alignCenter>
-            <Actions>
+            <div>
               <ActionButton
                 appearance="outline"
                 onClick={props.onToggleFactsheet}
@@ -63,9 +63,9 @@ export class Menu extends React.Component {
                   Split PDF
                 </ActionButton>
               )}
-            </Actions>
+            </div>
 
-            <Divider />
+            <MenuDivider />
 
             <IconButton
               iconSize="XLarge"
@@ -76,7 +76,7 @@ export class Menu extends React.Component {
               <CloseIcon />
             </IconButton>
           </Flex>
-        </Container>
+        </MenuContainer>
 
         {this.state.isPdfSplitterOpen && (
           <PdfSplitter
