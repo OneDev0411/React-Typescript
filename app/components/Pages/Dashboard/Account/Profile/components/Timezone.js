@@ -61,17 +61,19 @@ const Timezone = ({ timezone, dispatch }) => {
           <form onSubmit={handleSubmit} className="c-account__form clearfix">
             <Field
               name="time_zone"
-              render={({ input }) => (
-                <Fragment>
+              render={({ input }) => {
+                console.log('!!!', input)
+                return <Fragment>
                   <label className="c-simple-field__label">Timezones</label>
                   <Dropdown
                     input={input}
                     hasSearch
                     items={timezones}
                     itemToString={handleItemToString}
+                    data-test="timezone-dropdown"
                   />
                 </Fragment>
-              )}
+              }}
             />
             {submitFailed && (
               <div className="c-auth__submit-error-alert">
@@ -79,7 +81,7 @@ const Timezone = ({ timezone, dispatch }) => {
               </div>
             )}
             <div style={{ textAlign: 'right' }}>
-              <Button type="submit" disabled={submitting}>
+              <Button type="submit" disabled={submitting} data-test="timezone-form-submit-button">
                 {submitting ? 'Updating...' : 'Update'}
               </Button>
             </div>

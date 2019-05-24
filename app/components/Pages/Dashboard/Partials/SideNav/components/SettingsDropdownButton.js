@@ -27,6 +27,7 @@ export class SettingsDropdownButton extends Component {
           inverse
           onClick={this.handleClick}
           style={{ alignItems: 'flex-end', padding: 0 }}
+          data-test="settings-dropdown-button"
         >
           <Avatar user={this.props.user} size={32} />
           <ArrowDownIcon
