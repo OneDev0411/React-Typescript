@@ -74,7 +74,9 @@ export function RoleField(props) {
           allowedRoles={allowedRoles}
           onUpsertRole={props.onUpsertRole}
           onDeleteRole={props.onDeleteRole}
-          isRoleRemovable={activeRole && !isPrimaryAgent(activeRole.role)}
+          isRoleRemovable={
+            activeRole && !isPrimaryAgent(activeRole.role, props.deal.deal_type)
+          }
           onClose={() => setRole(undefined)}
         />
       )}
