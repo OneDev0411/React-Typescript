@@ -29,7 +29,10 @@ router.get('/', async ctx => {
     // Ignore error it's ok not to find a brand here.
   }
 
-  return ctx.render(template_path('index.ejs'), { title: 'Rechat' })
+  return ctx.render(template_path('index.ejs'), {
+    title: 'Rechat',
+    isLoggedIn: isLoggedIn(ctx)
+  })
 })
 
 router.get('/faq', async ctx =>
