@@ -151,7 +151,7 @@ class Builder extends React.Component {
   }
 
   lockIn = () => {
-    const updateAll = model => {
+    const updateAll = (model, selectImage = false) => {
       const editable =
         model && model.view && model.view.$el.attr('rechat-editable')
 
@@ -169,10 +169,21 @@ class Builder extends React.Component {
         traits: this.traits[model.get('type')] || []
       })
 
-      model.get('components').each(model => updateAll(model))
+      let shouldSelectImage = selectImage
+
+      if (
+        shouldSelectImage &&
+        editable &&
+        model.view.$el.attr('rechat-assets') === 'listing-image'
+      ) {
+        this.editor.select(model)
+        shouldSelectImage = false
+      }
+
+      model.get('components').each(model => updateAll(model, shouldSelectImage))
     }
 
-    updateAll(this.editor.DomComponents.getWrapper())
+    updateAll(this.editor.DomComponents.getWrapper(), true)
   }
 
   getSavedTemplate() {
