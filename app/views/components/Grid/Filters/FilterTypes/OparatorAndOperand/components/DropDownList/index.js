@@ -2,9 +2,9 @@ import React from 'react'
 import Downshift from 'downshift'
 import _ from 'underscore'
 
-import { Item } from '../../../../../../Dropdown/Item'
-import IconKeyboardArrowDown from '../../../../../../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
-import IconKeyboardArrowUp from '../../../../../../SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
+import { Item } from 'components/Dropdown/Item'
+import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import IconKeyboardArrowUp from 'components/SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
 
 import {
   List,
@@ -40,7 +40,7 @@ export class DropDownList extends React.Component {
     return []
   }
 
-  toggleMenu = () => this.setState({ isMenuOpen: !this.state.isMenuOpen })
+  toggleMenu = () => this.setState(state => ({ isMenuOpen: !state.isMenuOpen }))
 
   onSelectItem = item => {
     const selectedItems = this.getNewSelectedItems(item)
@@ -123,7 +123,7 @@ export class DropDownList extends React.Component {
             <div>
               <ItemsContainer selectedItems={selectedItems}>
                 {allowMultipleSelections &&
-                  _.map(selectedItems, (item, index) => (
+                  selectedItems.map((item, index) => (
                     <SelectedItem
                       key={index}
                       onClick={() => this.onSelectItem(item)}
@@ -134,7 +134,7 @@ export class DropDownList extends React.Component {
 
                 <InputContainer
                   withMargin={
-                    allowMultipleSelections && _.size(selectedItems) > 0
+                    allowMultipleSelections && selectedItems.length > 0
                   }
                   inputFocused={this.state.inputFocused}
                   onClick={this.toggleMenu}
