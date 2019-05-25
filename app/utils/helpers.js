@@ -1,9 +1,12 @@
 export function sortAlphabetically(a, b) {
-  if (a < b) {
+  const _a = a.toLowerCase()
+  const _b = b.toLowerCase()
+
+  if (_a < _b) {
     return -1
   }
 
-  if (a > b) {
+  if (_a > _b) {
     return 1
   }
 
