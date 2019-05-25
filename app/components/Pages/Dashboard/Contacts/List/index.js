@@ -22,6 +22,7 @@ import {
 } from 'utils/user-teams'
 
 import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
+import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
 
 import {
   Container as PageContainer,
@@ -404,7 +405,7 @@ class ContactsList extends React.Component {
         <SideMenu isOpen={isSideMenuOpen}>
           <SavedSegments
             name="contacts"
-            associations={['contact_list.crm_task', 'contact_list.flows']}
+            associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
             onChange={this.handleChangeSavedSegment}
           />
           {/* <DuplicateContacts /> */}

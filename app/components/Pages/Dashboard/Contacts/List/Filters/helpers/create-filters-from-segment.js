@@ -35,7 +35,9 @@ const createFiltersFromSegment = segment => {
     id: OPEN_HOUSE_FILTER_ID,
     isActive: false,
     values: [
-      getOpenHouseFilter(segment.crm_task.find(flow => flow.id === crmTaskId))
+      getOpenHouseFilter(
+        segment.crm_task.find(crmTask => crmTask.id === crmTaskId)
+      )
     ],
     operator: {
       name: 'is'

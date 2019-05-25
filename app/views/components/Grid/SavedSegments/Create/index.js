@@ -7,12 +7,18 @@ import {
   changeActiveFilterSegment
 } from 'store_actions/filter-segments'
 
+import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
+
 import Modal from 'components/BasicModal'
 import Button from 'components/Button/ActionButton'
 import RadioButton from 'components/RadioButton'
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 
 import { ItemRow, ItemTitle, TextInput } from './styled'
+
+const DEFAULT_QUERY = {
+  associations: CRM_LIST_DEFAULT_ASSOCIATIONS
+}
 
 const CURRENT_SEGMENT = 0
 const NEW_SEGMENT = 1
@@ -77,6 +83,8 @@ class SaveSegment extends React.Component {
   }
 
   saveList = async () => {
+    const { props } = this
+    const { dispatch, name } = props
     const segment = this.getSegmentObject()
 
     this.setState({
@@ -85,13 +93,22 @@ class SaveSegment extends React.Component {
 
     try {
       if (segment.id) {
-        await this.updateSegment(segment)
-      } else {
-        const newSegmentId = await this.createSegment(segment)
-
-        this.props.dispatch(
-          changeActiveFilterSegment(this.props.name, newSegmentId)
+        await props.dispatch(
+          updateFilterSegment(
+            props.name,
+            {
+              ...props.segment,
+              ...segment
+            },
+            DEFAULT_QUERY
+          )
         )
+      } else {
+        const newSegment = await dispatch(
+          createFilterSegment(name, segment, DEFAULT_QUERY)
+        )
+
+        dispatch(changeActiveFilterSegment(name, newSegment.id))
       }
 
       this.setState({
@@ -100,24 +117,13 @@ class SaveSegment extends React.Component {
         selectedOption: CURRENT_SEGMENT,
         showModal: false
       })
-    } catch (e) {
-      console.log(e)
+    } catch (error) {
+      console.error(error)
       this.setState({
         isSaving: false
       })
     }
   }
-
-  updateSegment = segment =>
-    this.props.dispatch(
-      updateFilterSegment(this.props.name, {
-        ...this.props.segment,
-        ...segment
-      })
-    )
-
-  createSegment = segment =>
-    this.props.dispatch(createFilterSegment(this.props.name, segment))
 
   getButtonCaption = () => {
     const { selectedOption, isSaving } = this.state
