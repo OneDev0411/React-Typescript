@@ -28,7 +28,7 @@ export function FormContainer(props) {
   const isVisible = field => props.visibleFields.includes(field)
 
   return (
-    <form autoComplete="off" onSubmit={props.handleSubmit}>
+    <form onSubmit={props.handleSubmit}>
       <Header>
         <TypeInput
           name="role_type"

@@ -157,13 +157,13 @@ export class AutoComplete extends React.Component {
           <div style={{ position: 'relative', ...props.style }}>
             {this.props.input ? (
               <TextInput
+                {...getInputProps({ ...props.input, ...props.inputProps })}
                 meta={props.meta}
                 isRequired={props.isRequired}
                 placeholder={props.placeholder}
                 label={props.label}
-                autoComplete="dummy"
                 style={this.props.inputStyle}
-                {...getInputProps({ ...props.input, ...props.inputProps })}
+                autoComplete="disable-autocomplete"
               />
             ) : (
               <Fragment>
