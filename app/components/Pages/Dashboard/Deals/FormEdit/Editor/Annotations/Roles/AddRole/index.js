@@ -12,13 +12,21 @@ export function AddRole(props) {
     isPrimaryAgent(roleName, props.deal.deal_type)
   )
 
-  if (isPrimaryRole || props.rectIndex < Object.keys(props.values).length - 1) {
+  if (
+    isPrimaryRole ||
+    (Object.keys(props.values).length > 1 &&
+      props.rectIndex < props.group.length - 1) ||
+    (props.annotation.type === 'Role' && props.roles.length > 0)
+  ) {
     return false
   }
 
+  const tooltip =
+    props.tooltip || `Add new ${props.annotation.role.join(' or ')}`
+
   return (
     <span style={{ marginLeft: '0.25rem' }}>
-      <ToolTip caption="Add new role" placement="bottom">
+      <ToolTip caption={tooltip} placement="top">
         <IconButton isFit iconSize="medium" onClick={props.onClick}>
           <IconAdd />
         </IconButton>

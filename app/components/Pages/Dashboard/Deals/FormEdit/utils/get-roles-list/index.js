@@ -1,9 +1,7 @@
 import { getAttributeValue } from '../get-roles-text'
 
-export function getRolesList({ roles, allowedRoles, values, annotation }) {
-  const filteredRoles = roles.filter(role => allowedRoles.includes(role.role))
-
-  if (filteredRoles.length === 0) {
+export function getRolesList({ roles, values, annotation, rectIndex }) {
+  if (roles.length === 0) {
     return []
   }
 
@@ -11,11 +9,11 @@ export function getRolesList({ roles, allowedRoles, values, annotation }) {
 
   let cursor = 0
 
-  return filteredRoles.reduce((acc, role) => {
+  const groups = roles.reduce((acc, role) => {
     const text =
       annotation.type === 'Roles'
         ? getAttributeValue(role, annotation)
-        : getAttributeValue(filteredRoles[annotation.number], annotation)
+        : getAttributeValue(roles[annotation.number], annotation)
 
     if (!text) {
       return acc
@@ -46,6 +44,8 @@ export function getRolesList({ roles, allowedRoles, values, annotation }) {
 
     return acc
   }, {})
+
+  return groups[rectIndex] || []
 }
 
 function getRoleGroups(valuesList, text, textIndex) {
