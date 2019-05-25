@@ -8,8 +8,8 @@ import IconButton from 'components/Button/IconButton'
 import IconAdd from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 
 export function AddRole(props) {
-  const isPrimaryRole = props.annotation.role.some(roleName =>
-    isPrimaryAgent(roleName, props.deal.deal_type)
+  const isPrimaryRole = props.annotation.role.some(
+    roleName => roleName === 'PrimaryAgent'
   )
 
   if (
