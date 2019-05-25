@@ -32,7 +32,6 @@ const propTypes = {
   ),
   getOptions: PropTypes.func,
   type: PropTypes.string,
-  multi: PropTypes.bool,
   allowedOperators: PropTypes.arrayOf(PropTypes.string)
 }
 
@@ -40,7 +39,6 @@ const defaultProps = {
   options: [],
   getOptions: null,
   type: 'Set',
-  multi: false,
   allowedOperators: operators
 }
 
