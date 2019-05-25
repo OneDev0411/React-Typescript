@@ -1,7 +1,10 @@
+import urlParser from 'url'
+
 import bodyParser from 'koa-bodyparser'
 
 import { isEmpty, template_path, isLoggedIn } from './helpers'
 import config from '../../config/private'
+import getBrand from '../../app/models/brand'
 
 let mailgun = require('mailgun-js')({
   apiKey: config.mailgun.api_key,
@@ -10,12 +13,27 @@ let mailgun = require('mailgun-js')({
 
 const router = require('koa-router')()
 
-router.get('/', async ctx =>
-  ctx.render(template_path('index.ejs'), {
+router.get('/', async ctx => {
+  // TODO: This is quickfix for claystapp,
+  // because we need to define a middleware and redirect the users automaticly
+  // for all the website routes, not only home page
+  const { hostname } = urlParser.parse(ctx.request.origin)
+
+  try {
+    const brand = await getBrand(hostname)
+
+    if (brand) {
+      return ctx.redirect('/dashboard/mls')
+    }
+  } catch (e) {
+    // Ignore error it's ok not to find a brand here.
+  }
+
+  return ctx.render(template_path('index.ejs'), {
     title: 'Rechat',
     isLoggedIn: isLoggedIn(ctx)
   })
-)
+})
 
 router.get('/faq', async ctx =>
   ctx.render(template_path('faq.ejs'), {

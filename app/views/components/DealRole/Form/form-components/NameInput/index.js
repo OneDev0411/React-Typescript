@@ -12,7 +12,7 @@ function getOptionsByAttributeType(contact, type) {
 }
 
 export function NameInput(props) {
-  const searchByName = async (name, minLength = 2) => {
+  const searchByName = async (name, minLength = 3) => {
     if (!name || name.length < minLength) {
       return false
     }

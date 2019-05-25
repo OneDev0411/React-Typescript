@@ -3,6 +3,7 @@ import S from 'shorti'
 import Map from 'google-map-react'
 import ReactSwipe from 'react-swipe'
 import React from 'react'
+
 // import { browserHistory } from 'react-router'
 
 // import { connect } from 'react-redux'
@@ -20,6 +21,7 @@ import Brand from '../../../../../../controllers/Brand'
 import listing_util from '../../../../../../utils/listing'
 
 import FetchError from './FetchError'
+import MLSNote from './MLSNote'
 
 import Loading from '../../../../../Partials/Loading'
 // import FavoriteHeart from '../../components/FavoriteHeart'
@@ -548,6 +550,9 @@ const ListingMobileView = ({
             </div>
           </div>
           <div className="clearfix" />
+          <div style={{ padding: '0 1rem 2rem', marginTop: '-1em' }}>
+            <MLSNote />
+          </div>
         </div>
       </div>
     )
