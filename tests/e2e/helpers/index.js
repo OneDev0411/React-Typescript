@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer'
 
-export const init = async (options = { headless: false, slowMo: 50 }) => {
+export const init = async (options = { headless: true, slowMo: 0 }) => {
   const browser = await puppeteer.launch(options)
   const page = await browser.newPage()
 

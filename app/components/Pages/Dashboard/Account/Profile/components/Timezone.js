@@ -61,9 +61,8 @@ const Timezone = ({ timezone, dispatch }) => {
           <form onSubmit={handleSubmit} className="c-account__form clearfix">
             <Field
               name="time_zone"
-              render={({ input }) => {
-                console.log('!!!', input)
-                return <Fragment>
+              render={({ input }) => (
+                <Fragment>
                   <label className="c-simple-field__label">Timezones</label>
                   <Dropdown
                     input={input}
@@ -73,7 +72,7 @@ const Timezone = ({ timezone, dispatch }) => {
                     data-test="timezone-dropdown"
                   />
                 </Fragment>
-              }}
+              )}
             />
             {submitFailed && (
               <div className="c-auth__submit-error-alert">

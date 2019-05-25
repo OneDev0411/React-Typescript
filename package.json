@@ -15,7 +15,7 @@
     "lint:app": "eslint ./app",
     "lint:server": "eslint ./server",
     "lint:tests": "eslint ./tests --fix",
-    "test:e2e": "jest --config tests/e2e/jest.config.js"
+    "test:e2e": "jest --verbose --config tests/e2e/jest.config.js"
   },
   "engines": {
     "node": "10.x"
