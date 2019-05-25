@@ -7,6 +7,7 @@ async function getCRMTimeline(query = {}, associations = []) {
   )
 
   const calenderAssociations = [
+    'calendar_event.crm_task',
     'calendar_event.full_campaign',
     'calendar_event.full_crm_task'
   ]
