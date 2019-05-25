@@ -46,11 +46,14 @@ export function normalizeForm(values) {
   return Object.entries({
     ...values,
     ...normalized
-  }).reduce((current, [name, value]) => {
-    if (validFields.includes(name)) {
-      current[name] = value
+  }).reduce((acc, [name, value]) => {
+    if (!validFields.includes(name)) {
+      return acc
     }
 
-    return current
+    return {
+      ...acc,
+      [name]: typeof value === 'string' ? value.trim() : value
+    }
   }, {})
 }

@@ -27,7 +27,12 @@ function Roles(props) {
         return false
       }
 
-      const roleText = getRoleText(props.roles, props.deal, form.role, group[0])
+      const roleText = getRoleText(
+        props.roles,
+        props.deal,
+        group[0].role,
+        group[0]
+      )
 
       fields = {
         ...fields,

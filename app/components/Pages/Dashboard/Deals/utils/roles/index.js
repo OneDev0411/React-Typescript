@@ -55,29 +55,24 @@ export function roleName(role) {
 
 /**
  * returns user legal name based on given fields
- * @param {Object} userRole - the roles including name parts
+ * @param {Object} role - the roles including name parts
  */
-export function getLegalFullName(userRole) {
-  if (!userRole) {
+export function getLegalFullName(role) {
+  if (!role) {
     return ''
   }
 
-  let name = []
-  const {
-    legal_prefix,
-    legal_first_name,
-    legal_last_name,
-    legal_middle_name,
-    legal_full_name,
-    company_title
-  } = userRole
+  let name = role.legal_full_name
+    ? [role.legal_full_name]
+    : [
+        role.legal_prefix,
+        role.legal_first_name,
+        role.legal_middle_name,
+        role.legal_last_name
+      ]
 
-  if (userRole.role_type === 'Person') {
-    name = legal_full_name
-      ? [legal_full_name]
-      : [legal_prefix, legal_first_name, legal_middle_name, legal_last_name]
-  } else {
-    name = [company_title]
+  if (role.role_type === 'Company') {
+    name = [role.company_title]
   }
 
   return name.join(' ').trim()

@@ -42,9 +42,8 @@ export function getAttributeValue(role, context, defaultValue) {
 }
 
 export function getRoleText(roles, deal, roleNames, annotation) {
-  const list = roles.filter(role =>
-    normalizeRoleNames(deal, roleNames).includes(role.role)
-  )
+  const validRoles = normalizeRoleNames(deal, roleNames)
+  const list = roles.filter(role => validRoles.includes(role.role))
 
   if (annotation.type === 'Roles') {
     return list

@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { isPrimaryAgent } from 'deals/utils/roles'
-
 import ToolTip from 'components/tooltip'
 
 import IconButton from 'components/Button/IconButton'
@@ -9,7 +8,9 @@ import IconAdd from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 
 export function AddRole(props) {
   const isPrimaryRole = props.annotation.role.some(
-    roleName => roleName === 'PrimaryAgent'
+    roleName =>
+      roleName === 'PrimaryAgent' ||
+      isPrimaryAgent(roleName, props.deal.deal_type)
   )
 
   if (
