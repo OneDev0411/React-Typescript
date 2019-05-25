@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import _ from 'underscore'
 
 import {
   createFilterSegment,
@@ -131,11 +130,16 @@ class SaveSegment extends React.Component {
   }
 
   render() {
+    let areFiltersValid = true
     const { state, props } = this
     const { selectedOption } = state
-    const { filters, segment } = props
-    const hasFilters = _.size(filters) > 0 || this.isEditable(segment)
-    const areFiltersValid = _.values(filters || {}).every(isFilterValid)
+    const { filters = {}, segment } = props
+    const hasFilters =
+      Object.keys(filters).length > 0 || this.isEditable(segment)
+
+    if (hasFilters) {
+      areFiltersValid = Object.values(filters).every(isFilterValid)
+    }
 
     return (
       <div>
