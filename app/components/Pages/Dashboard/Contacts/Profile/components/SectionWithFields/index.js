@@ -11,7 +11,6 @@ import { deleteAttribute } from 'models/contacts/delete-attribute'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 
 import AddIcon from 'components/SvgIcons/Add/AddIcon'
-import { ShowMoreLess } from 'components/ShowMoreLess'
 import TextIconButton from 'components/Button/TextIconButton'
 
 import { Section } from '../Section'
@@ -23,8 +22,6 @@ import {
   orderFields,
   normalizeAttributes
 } from './helpers'
-
-const SHOW_MORE_LESS_LIMIT = 5
 
 const propTypes = {
   addCustomAttributeButtonText: PropTypes.string
@@ -83,8 +80,7 @@ class SectionWithFields extends React.Component {
 
     this.state = {
       isOpenCustomAttributeDrawer: false,
-      orderedAttributes,
-      showMoreLessCount: 5
+      orderedAttributes
     }
   }
 
@@ -341,18 +337,9 @@ class SectionWithFields extends React.Component {
 
       shallowCopy.splice(newOrder, 0, field)
 
-      const newState = {
+      return {
         orderedAttributes: shallowCopy.map((a, order) => ({ ...a, order }))
       }
-
-      if (
-        shallowCopy.length > SHOW_MORE_LESS_LIMIT &&
-        newOrder >= SHOW_MORE_LESS_LIMIT
-      ) {
-        newState.showMoreLessCount = state.showMoreLessCount + 1
-      }
-
-      return newState
     })
   }
 
@@ -390,7 +377,7 @@ class SectionWithFields extends React.Component {
           iconLeft={AddIcon}
           onClick={this.openCustomAttributeDrawer}
           style={{ marginBottom: '1em' }}
-          text={`Add a custom ${addCustomAttributeButtonText}`}
+          text={`Add custom ${addCustomAttributeButtonText}`}
         />
       )
     }
@@ -400,21 +387,12 @@ class SectionWithFields extends React.Component {
 
   render() {
     const { section } = this.props
-    const sectionTitle = this.props.title || section
-    const sectionContainerStyle = { padding: '0 1.5rem', display: 'block' }
 
     return (
-      <Section title={sectionTitle}>
-        {this.state.orderedAttributes.length > SHOW_MORE_LESS_LIMIT ? (
-          <ShowMoreLess
-            count={this.state.showMoreLessCount}
-            style={sectionContainerStyle}
-          >
-            {this.renderFields()}
-          </ShowMoreLess>
-        ) : (
-          <div style={sectionContainerStyle}>{this.renderFields()}</div>
-        )}
+      <Section title={this.props.title || section}>
+        <div style={{ padding: '0 1.5rem', display: 'block' }}>
+          {this.renderFields()}
+        </div>
 
         {this.state.isOpenCustomAttributeDrawer && (
           <CustomAttributeDrawer

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
 require('intersection-observer')
@@ -238,23 +238,7 @@ export class PdfViewer extends React.Component {
     }
 
     return (
-      <Container ref={ref => (this.pdfContainer = ref)}>
-        {Array.apply(null, { length: this.state.document.numPages }).map(
-          (v, i) => (
-            <Page
-              key={i}
-              observer={this.observer}
-              document={this.state.document}
-              isFitWindow={this.state.isFitWindow}
-              rotation={this.state.rotation}
-              zoomScale={this.state.zoomScale}
-              isVisible={this.state.visiblePages.includes(i + 1)}
-              pageNumber={i + 1}
-              totalPages={this.state.document.numPages}
-            />
-          )
-        )}
-
+      <Fragment>
         <Toolbar
           downloadLink={this.props.downloadUrl || this.props.url}
           onFitWindow={this.handleFitWindow}
@@ -262,7 +246,24 @@ export class PdfViewer extends React.Component {
           onZoomOut={this.handleZoomOut}
           onRotate={this.handleRotate}
         />
-      </Container>
+        <Container ref={ref => (this.pdfContainer = ref)}>
+          {Array.apply(null, { length: this.state.document.numPages }).map(
+            (v, i) => (
+              <Page
+                key={i}
+                observer={this.observer}
+                document={this.state.document}
+                isFitWindow={this.state.isFitWindow}
+                rotation={this.state.rotation}
+                zoomScale={this.state.zoomScale}
+                isVisible={this.state.visiblePages.includes(i + 1)}
+                pageNumber={i + 1}
+                totalPages={this.state.document.numPages}
+              />
+            )
+          )}
+        </Container>
+      </Fragment>
     )
   }
 }

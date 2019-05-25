@@ -196,7 +196,7 @@ class FileViewer extends React.Component {
           onClickBackButton={this.handleBackButton}
         />
 
-        <PageContainer>
+        <PageContainer className="u-scrollbar--thinner">
           <FactsheetSideMenu
             isFactsheetOpen={this.state.isFactsheetOpen}
             deal={this.state.deal}
@@ -205,7 +205,7 @@ class FileViewer extends React.Component {
 
           <FileDisplay file={file} />
 
-          {isEnvelopeView && (
+          {isEnvelopeView && !this.state.isFactsheetOpen && (
             <EnvelopeSideMenu
               deal={this.state.deal}
               file={file}

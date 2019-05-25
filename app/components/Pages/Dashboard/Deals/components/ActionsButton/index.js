@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import { addNotification as notify } from 'reapop'
 import Downshift from 'downshift'
 
 import _ from 'underscore'
@@ -10,9 +9,8 @@ import _ from 'underscore'
 import {
   changeNeedsAttention,
   changeTaskStatus,
-  setSelectedTask,
   renameTaskFile,
-  asyncDeleteFile
+  setSelectedTask
 } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 import { isBackOffice } from 'utils/user-teams'
@@ -21,7 +19,7 @@ import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArr
 
 import Tooltip from 'components/tooltip'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
-import EmailCompose from 'components/EmailCompose'
+import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 
@@ -52,10 +50,10 @@ import UploadManager from '../../UploadManager'
 
 import {
   Container,
-  PrimaryAction,
   MenuButton,
   MenuContainer,
-  MenuItem
+  MenuItem,
+  PrimaryAction
 } from './styled'
 
 class ActionsButton extends React.Component {
@@ -344,23 +342,6 @@ class ActionsButton extends React.Component {
       isTasksDrawerOpen: !state.isTasksDrawerOpen
     }))
 
-  deleteFile = async () => {
-    try {
-      await asyncDeleteFile({
-        dealId: this.props.deal.id,
-        fileId: this.props.document.id,
-        taskId: this.props.task ? this.props.task.id : null
-      })
-
-      this.props.notify({
-        title: 'File deleted',
-        status: 'success'
-      })
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
   getButtonLabel = button => {
     if (typeof button.label === 'function') {
       return button.label({
@@ -475,12 +456,13 @@ class ActionsButton extends React.Component {
         )}
 
         {this.state.isComposeEmailOpen && (
-          <EmailCompose
+          <SingleEmailComposeDrawer
             isOpen
             defaultAttachments={this.getEmailComposeFiles()}
             from={this.props.user}
             deal={this.props.deal}
             onClose={this.handleToggleComposeEmail}
+            onSent={this.handleToggleComposeEmail}
           />
         )}
 
@@ -522,7 +504,6 @@ export default connect(
     changeTaskStatus,
     setSelectedTask,
     renameTaskFile,
-    confirmation,
-    notify
+    confirmation
   }
 )(ActionsButton)

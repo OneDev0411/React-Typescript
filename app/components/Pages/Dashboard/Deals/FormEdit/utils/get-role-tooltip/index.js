@@ -1,4 +1,4 @@
-import { roleName } from '../../../utils/roles'
+import { roleName } from 'deals/utils/roles'
 
 const ordinalNumbers = [
   'First',

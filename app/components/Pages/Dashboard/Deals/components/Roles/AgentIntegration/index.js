@@ -1,19 +1,15 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
-import { SearchContactDrawer } from 'components/SearchContactDrawer'
-import TextIconButton from 'components/Button/TextIconButton'
-import AddIcon from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
+import DealRole from 'components/DealRole'
 
-import { convertContactToRole, AGENT_ROLES } from '../../../utils/roles'
+import { convertContactToRole, AGENT_ROLES } from 'deals/utils/roles'
 
-import RoleCrmIntegration from '../CrmIntegration'
 import AgentModal from './AgentsList'
 
 const initialState = {
-  showAgentModal: false,
-  showContactModal: false,
-  showRoleDrawer: false,
+  isAgentDrawerOpen: false,
+  isRoleFormOpen: false,
   role: null,
   selectedAgent: null
 }
@@ -21,55 +17,33 @@ const initialState = {
 class RoleAgentIntegration extends React.Component {
   state = {
     ...initialState,
-    ...this.InitialState
+    ...this.getInitialState()
   }
 
-  get InitialState() {
-    if (this.props.role) {
-      return {
-        showRoleDrawer: true,
-        role: this.props.role
-      }
-    }
-
+  getInitialState() {
     if (this.getShouldSelectRoleFromAgentsList()) {
       return {
-        showAgentModal: true
+        isAgentDrawerOpen: true
       }
     }
 
     return {
-      showContactModal: true
+      isRoleFormOpen: true,
+      role: this.props.role || null
     }
   }
-
-  onSelectContactUser = contact =>
-    this.setState(state => ({
-      ...initialState,
-      showRoleDrawer: true,
-      selectedAgent: state.selectedAgent,
-      role: convertContactToRole(contact, this.props.attributeDefs)
-    }))
 
   onUpsertRole = role => {
-    const { selectedAgent } = this.state
+    const { state, props } = this
 
-    if (role && selectedAgent) {
-      role.user = selectedAgent.id
-    }
+    props.onUpsertRole &&
+      props.onUpsertRole({
+        ...role,
+        user: state.selectedAgent ? state.selectedAgent.id : role.user
+      })
 
     this.setState(initialState)
-
-    if (this.props.onUpsertRole) {
-      this.props.onUpsertRole(role)
-    }
   }
-
-  showRoleDrawer = () =>
-    this.setState({
-      ...initialState,
-      showRoleDrawer: true
-    })
 
   getShouldSelectRoleFromAgentsList() {
     const { deal, allowedRoles } = this.props
@@ -92,7 +66,7 @@ class RoleAgentIntegration extends React.Component {
     return false
   }
 
-  get IsPrimaryAgent() {
+  getIsPrimaryAgent() {
     const { deal, allowedRoles } = this.props
     const dealSide = deal ? deal.deal_type : this.props.dealSide
     const role = allowedRoles && allowedRoles[0]
@@ -129,7 +103,7 @@ class RoleAgentIntegration extends React.Component {
           phone_number: phone_number || work_phone,
           company: office ? office.name : ''
         },
-        showRoleDrawer: true
+        isRoleFormOpen: true
       }
     }
 
@@ -148,7 +122,7 @@ class RoleAgentIntegration extends React.Component {
       }
 
       newState = {
-        showRoleDrawer: true,
+        isRoleFormOpen: true,
         role
       }
     }
@@ -160,58 +134,28 @@ class RoleAgentIntegration extends React.Component {
     })
   }
 
-  onClose = () => {
-    this.props.onHide()
-  }
-
-  renderSearchContactDrawerHeaderMenu = () => {
-    if (this.state.selectedAgent) {
-      return null
-    }
-
-    return (
-      <TextIconButton
-        onClick={this.showRoleDrawer}
-        text="Add New Contact"
-        type="button"
-        appearance="outline"
-        iconLeft={AddIcon}
-        iconSize="large"
-      />
-    )
-  }
-
   render() {
     return (
       <Fragment>
-        {this.state.showAgentModal && (
+        {this.state.isAgentDrawerOpen && (
           <AgentModal
             title={this.props.modalTitle}
-            isPrimaryAgent={this.IsPrimaryAgent}
-            onClose={this.onClose}
+            isPrimaryAgent={this.getIsPrimaryAgent()}
+            onClose={this.props.onClose}
             onSelectAgent={this.onSelectAgent}
           />
         )}
 
-        <RoleCrmIntegration
+        <DealRole
           deal={this.props.deal}
-          isOpen={this.state.showRoleDrawer}
-          role={this.state.role}
+          isOpen={this.state.isRoleFormOpen}
+          form={this.state.role}
           dealSide={this.props.dealSide}
-          modalTitle={this.props.modalTitle}
           allowedRoles={this.props.allowedRoles}
           isEmailRequired={this.props.isEmailRequired}
           isCommissionRequired={this.props.isCommissionRequired}
-          onHide={this.onClose}
+          onClose={this.props.onClose}
           onUpsertRole={this.onUpsertRole}
-        />
-
-        <SearchContactDrawer
-          title={this.props.modalTitle}
-          isOpen={this.state.showContactModal}
-          onClose={this.onClose}
-          onSelect={this.onSelectContactUser}
-          renderHeaderMenu={this.renderSearchContactDrawerHeaderMenu}
         />
       </Fragment>
     )

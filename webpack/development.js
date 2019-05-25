@@ -34,7 +34,10 @@ webpackConfig.plugins.push(
         'app/views/components/SvgIcons/**',
         'app/templates/**',
         'app/styles/vendor/**',
-        'app/models/user/get-self/index.js'
+        'app/models/user/get-self/index.js',
+        'app/models/flows/**',
+        'app/views/components/AddToFlow/**',
+        'app/components/Pages/Dashboard/Contacts/Profile/Flows/**'
       ]
     }
   }),

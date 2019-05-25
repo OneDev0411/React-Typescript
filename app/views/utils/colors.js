@@ -3,6 +3,18 @@ export const red = {
   A200: '#f00'
 }
 
+export const yellow = {
+  A100: '#F8A700'
+}
+
+export const orange = {
+  primary: '#f6a623'
+}
+
+export const green = {
+  primary: '#5cb85c'
+}
+
 export const blue = {
   A100: '#003bdf',
   A200: '#022ca0'
@@ -34,5 +46,5 @@ export const disabledColor = grey.A900
 export const disabledBgColor = grey.A550
 export const borderColor = grey.A300
 export const brandBackground = grey.A150
-export const placeholderColor = grey.A900
+export const placeholderColor = grey.A500
 export const InputFocusBgColor = grey.A100

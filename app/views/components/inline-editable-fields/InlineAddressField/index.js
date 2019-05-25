@@ -14,29 +14,33 @@ const propTypes = {
   renderSearchField: PropTypes.func.isRequired,
   address: PropTypes.string,
   style: PropTypes.shape(),
+  suggestionsStyle: PropTypes.shape(),
+  formStyle: PropTypes.shape(),
   handleDelete: PropTypes.func,
   handleInputChange: PropTypes.func,
   showDeleteButton: PropTypes.bool,
-  handleSubmit: PropTypes.func.isRequired,
-  preSaveFormat: PropTypes.func.isRequired,
-  postLoadFormat: PropTypes.func.isRequired
+  needsAddressForm: PropTypes.bool,
+  handleSubmit: PropTypes.func,
+  preSaveFormat: PropTypes.func,
+  postLoadFormat: PropTypes.func
 }
 
-const defaultTypes = {
+const defaultProps = {
   address: '',
   style: {},
+  suggestionsStyle: {},
+  formStyle: {},
   handleDelete() {},
   handleInputChange() {},
-  showDeleteButton: false
+  showDeleteButton: false,
+  needsAddressForm: true
 }
 
 export class InlineAddressField extends React.Component {
   state = {
     address: '',
     isShowSuggestion: false,
-    // eslint-disable-next-line
     isDrity: false,
-    isGoogleApiReady: false,
     places: []
   }
 
@@ -49,24 +53,20 @@ export class InlineAddressField extends React.Component {
   }
 
   componentDidMount() {
-    window.initInlineAddressField = this.initialize
+    if (!window.isLoadingGoogleApi && !idx(window, w => w.google.maps.places)) {
+      window.isLoadingGoogleApi = true
 
-    if (!idx(window, w => w.google.maps.places)) {
       loadJS(
         `https://maps.googleapis.com/maps/api/js?key=${
           bootstrapURLKeys.key
-        }&libraries=places&callback=initInlineAddressField`
+        }&libraries=places`
       )
-    } else {
-      this.initialize()
     }
   }
 
   componentWillUnmount() {
-    delete window.initInlineAddressField
+    delete window.isLoadingGoogleApi
   }
-
-  initialize = () => this.setState({ isGoogleApiReady: true })
 
   autocompleteAddress(input) {
     const { google } = window
@@ -143,6 +143,18 @@ export class InlineAddressField extends React.Component {
   }
 
   onClickSuggestionItem = item => {
+    if (!this.props.needsAddressForm) {
+      return this.setState(
+        {
+          isShowSuggestion: false,
+          address: item.description
+        },
+        () => {
+          this.props.handleInputChange(item.description)
+        }
+      )
+    }
+
     let newState = {
       address: item.description,
       isShowSuggestion: false,
@@ -185,17 +197,16 @@ export class InlineAddressField extends React.Component {
   }
 
   onClickDefaultItem = () =>
-    this.setState({ isShowSuggestion: false, isShowForm: true })
+    this.setState({
+      isShowSuggestion: false,
+      isShowForm: true
+    })
 
   onClickOutside = () => this.setState({ isShowSuggestion: false })
 
   handleFormCancel = () => this.setState({ isShowForm: false })
 
   render() {
-    if (!this.state.isGoogleApiReady) {
-      return null
-    }
-
     const { address } = this.state
 
     return (
@@ -209,6 +220,7 @@ export class InlineAddressField extends React.Component {
           })}
           {this.state.isShowSuggestion && (
             <Suggestions
+              style={this.props.suggestionsStyle}
               items={this.state.places}
               searchText={address}
               onClickDefaultItem={this.onClickDefaultItem}
@@ -216,8 +228,9 @@ export class InlineAddressField extends React.Component {
             />
           )}
 
-          {this.state.isShowForm && (
+          {this.props.needsAddressForm && this.state.isShowForm && (
             <InlineAddressForm
+              style={this.props.formStyle}
               address={address}
               handleCancel={this.handleFormCancel}
               handleDelete={this.props.handleDelete}
@@ -234,4 +247,4 @@ export class InlineAddressField extends React.Component {
 }
 
 InlineAddressField.propTypes = propTypes
-InlineAddressField.defaultTypes = defaultTypes
+InlineAddressField.defaultProps = defaultProps

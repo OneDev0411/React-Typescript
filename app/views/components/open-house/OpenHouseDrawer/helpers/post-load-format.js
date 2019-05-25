@@ -1,8 +1,9 @@
+import { addressTitle } from 'utils/listing'
 import { getReminderItem } from 'views/utils/reminder'
-
-import { getAssociations } from '../../../EventDrawer/helpers/get-associations'
-import { normalizeListing } from '../../../../utils/association-normalizers'
-import { addressTitle } from '../../../../../utils/listing'
+import {
+  normalizeListing,
+  normalizeAssociations
+} from 'views/utils/association-normalizers'
 
 /**
  * Format form data for api model
@@ -32,7 +33,7 @@ export async function postLoadFormat(task, owner, listing) {
       location,
       reminder,
       task_type: 'Open House',
-      title: addressTitle(listing.property.address)
+      title: (listing && addressTitle(listing.property.address)) || ''
     }
   }
 
@@ -51,7 +52,11 @@ export async function postLoadFormat(task, owner, listing) {
     task.assignees = []
   }
 
-  const allAssociations = await getAssociations(task)
+  let allAssociations = []
+
+  if (Array.isArray(task.associations)) {
+    allAssociations = normalizeAssociations(task.associations)
+  }
 
   if (allAssociations.length > 0) {
     allAssociations.forEach(a => {

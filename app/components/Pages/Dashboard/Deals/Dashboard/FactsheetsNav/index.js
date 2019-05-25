@@ -11,12 +11,7 @@ function FactsheetsSideNav(props) {
   const { deal, isBackOffice } = props
 
   return (
-    <Card
-      style={{
-        padding: '1.5rem 0',
-        marginBottom: '1rem'
-      }}
-    >
+    <Card style={props.style}>
       <FactsheetSection
         showDivider={props.showCriticalDatesDivider}
         display={props.showCriticalDates}

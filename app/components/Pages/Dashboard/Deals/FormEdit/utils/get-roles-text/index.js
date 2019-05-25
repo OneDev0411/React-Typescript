@@ -1,9 +1,11 @@
 import { get as getAttribute } from 'underscore.get'
 
-import { getLegalFullName } from '../../../utils/roles'
+import { getLegalFullName } from 'deals/utils/roles'
 
 export function normalizeRoleNames(deal, roleNames) {
-  return roleNames.split(',').map(name => {
+  const names = Array.isArray(roleNames) ? roleNames : roleNames.split(',')
+
+  return names.map(name => {
     if (name !== 'PrimaryAgent') {
       return name
     }
@@ -20,7 +22,7 @@ export function normalizeRoleNames(deal, roleNames) {
   })
 }
 
-function getAttributeValue(role, context, defaultValue) {
+export function getAttributeValue(role, context, defaultValue) {
   const attributes = context.attributes || [context.attribute]
 
   let value = ''
@@ -36,33 +38,21 @@ function getAttributeValue(role, context, defaultValue) {
     return !(!value && value !== 0)
   })
 
-  return value
+  return value && value.trim()
 }
 
-export function getRolesText(roles, deal, roleNames, annotationContext) {
-  if (!Array.isArray(deal.roles)) {
-    return ''
+export function getRoleText(roles, deal, roleNames, annotation) {
+  const validRoles = normalizeRoleNames(deal, roleNames)
+  const list = roles.filter(role => validRoles.includes(role.role))
+
+  if (annotation.type === 'Roles') {
+    return list
+      .map(role => getAttributeValue(role, annotation, ''))
+      .filter(item => item)
+      .join(', ')
   }
-
-  return deal.roles
-    .map(id => roles[id])
-    .filter(role => normalizeRoleNames(deal, roleNames).includes(role.role))
-    .map(role => getAttributeValue(role, annotationContext, ''))
-    .join(', ')
-}
-
-export function getRoleText(roles, deal, roleNames, annotationContext) {
-  if (!Array.isArray(deal.roles)) {
-    return ''
-  }
-
-  const { number } = annotationContext
-
-  const list = deal.roles
-    .map(id => roles[id])
-    .filter(role => normalizeRoleNames(deal, roleNames).includes(role.role))
 
   return list.length > 0
-    ? getAttributeValue(list[number], annotationContext)
+    ? getAttributeValue(list[annotation.number], annotation)
     : ''
 }

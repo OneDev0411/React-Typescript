@@ -1,6 +1,6 @@
 import { css } from 'styled-components'
 
-import { red } from '../../utils/colors'
+import { red, orange, green } from '../../utils/colors'
 
 export const badgeBaseStyle = css`
   -webkit-appearance: none;
@@ -11,7 +11,7 @@ export const badgeBaseStyle = css`
   border-radius: 30px;
 
   font-family: Barlow;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
 `
 
@@ -20,5 +20,15 @@ export const badgeAppearances = {
     ${badgeBaseStyle};
     color: #fff;
     background-color: ${red.A200};
+  `,
+  warning: css`
+    ${badgeBaseStyle};
+    color: #fff;
+    background-color: ${orange.primary};
+  `,
+  success: css`
+    ${badgeBaseStyle};
+    color: #fff;
+    background-color: ${green.primary};
   `
 }

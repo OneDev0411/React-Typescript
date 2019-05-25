@@ -6,8 +6,8 @@ import { toggleChatbar } from '../../../../../store_actions/chatroom'
 
 import Badge from '../../../../../views/components/Badge'
 import Tooltip from '../../../../../views/components/tooltip'
-import IconButton from '../../../../../views/components/Button/IconButton'
 import ChatIcon from '../../../../../views/components/SvgIcons/Chat/IconChat'
+import { SidenavIconButton } from '../../SideNav/styled'
 
 const openChatbar = toggleChatbar => {
   if (window && window.location.pathname.includes('/recents/')) {
@@ -30,10 +30,9 @@ const InstantTrigger = ({ rooms, toggleChatbar }) => {
 
   return (
     <Tooltip caption="Chat" placement="right">
-      <IconButton
+      <SidenavIconButton
         inverse
         size="large"
-        className="c-app-sidenav__item__title--button"
         onClick={() => openChatbar(toggleChatbar)}
       >
         <ChatIcon style={{ width: '28px', height: '28px' }} />
@@ -41,14 +40,14 @@ const InstantTrigger = ({ rooms, toggleChatbar }) => {
           <Badge
             style={{
               position: 'absolute',
-              top: '4px',
+              top: '6px',
               left: '50%'
             }}
           >
             {counter > 99 ? '99+' : counter}
           </Badge>
         )}
-      </IconButton>
+      </SidenavIconButton>
     </Tooltip>
   )
 }

@@ -1,191 +1,39 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import _ from 'underscore'
-
-import styled from 'styled-components'
 
 import PDFPage from './PdfPage'
 import Annotations from './Annotations'
 
-import RolesManager from './integrations/Roles'
-import AddressForm from './integrations/Address'
-import ContextForm from './integrations/Context'
-
-const Container = styled.div`
-  /* text-align: center; */
-`
-
-const PageContainer = styled.div`
-  position: relative;
-  padding-bottom: 20px;
-`
-
-class PDFPreview extends React.Component {
-  state = {
-    selectedAnnotation: null
+export default function Editor(props) {
+  if (!props.document) {
+    return false
   }
 
-  // roleColors = {}
-  contextsAnnotations = {}
-
-  scale = window.devicePixelRatio * 1.2
-
-  displayWidth = Math.min(window.innerWidth - 80, 900)
-
-  onSelectContext = (type, data) => {
-    this.setState({
-      selectedAnnotation: { type, data }
-    })
-
-    this.props.onSelectContext()
-  }
-
-  deselectActiveAnnotation = () => {
-    this.setState({
-      selectedAnnotation: null
-    })
-  }
-
-  setPageContextsAnnotations = contexts => {
-    this.contextsAnnotations = {
-      ...this.contextsAnnotations,
-      ..._.indexBy(contexts, c => c.annotation.fieldName)
-    }
-  }
-
-  get IsRolesManagerOpen() {
-    return (
-      this.state.selectedAnnotation &&
-      this.state.selectedAnnotation.type === 'Role'
-    )
-  }
-
-  get IsAddressFormOpen() {
-    return (
-      this.state.selectedAnnotation &&
-      this.state.selectedAnnotation.type === 'Context' &&
-      this.state.selectedAnnotation.data.type === 'Address'
-    )
-  }
-
-  get IsContextFormOpen() {
-    return (
-      this.state.selectedAnnotation &&
-      this.state.selectedAnnotation.type === 'Context' &&
-      this.state.selectedAnnotation.data.type === 'Singular'
-    )
-  }
-
-  // getRoleColor = assignment => {
-  //   const { deal, roles } = this.props
-
-  //   const colors = [
-  //     '#ffe084',
-  //     '#d2dfec',
-  //     '#f9caaf',
-  //     '#b1d6cf',
-  //     '#d0bbdb',
-  //     '#c1e5ec'
-  //   ]
-
-  //   const matchedRoles = deal.roles
-  //     .map(role => roles[role])
-  //     .filter(role => assignment.role.includes(role.role))
-
-  //   if (!matchedRoles || matchedRoles.length === 0) {
-  //     return false
-  //   }
-
-  //   const role = matchedRoles[assignment.number]
-
-  //   if (!role) {
-  //     return false
-  //   }
-
-  //   if (this.roleColors[role.id]) {
-  //     return this.roleColors[role.id]
-  //   }
-
-  //   this.roleColors[role.id] = colors[_.size(this.roleColors)]
-
-  //   return this.roleColors[role.id]
-  // }
-
-  render() {
-    const { document } = this.props
-    const { selectedAnnotation } = this.state
-
-    if (!document) {
-      return false
-    }
-
-    return (
-      <Container>
-        {Array.apply(null, { length: document.numPages }).map(
-          (value, index) => (
-            <PageContainer key={index}>
-              <Annotations
-                deal={this.props.deal}
-                roles={this.props.roles}
-                document={document}
-                page={index + 1}
-                scale={this.scale}
-                displayWidth={this.displayWidth}
-                values={this.props.values}
-                onCalculateContextAnnotations={this.setPageContextsAnnotations}
-                onSetValues={this.props.onSetValues}
-                onValueUpdate={this.props.onValueUpdate}
-                onClick={this.onSelectContext}
-              />
-
-              <PDFPage
-                document={document}
-                page={index + 1}
-                scale={this.scale}
-                displayWidth={this.displayWidth}
-              />
-            </PageContainer>
-          )
-        )}
-
-        {this.IsRolesManagerOpen && (
-          <RolesManager
-            selectedAnnotation={selectedAnnotation}
-            formValues={this.props.values}
-            deal={this.props.deal}
-            onClose={this.deselectActiveAnnotation}
-            onSetValues={this.props.onSetValues}
+  return (
+    <div style={{ paddingBottom: '20rem' }}>
+      {new Array(props.document.numPages).fill(null).map((_, index) => (
+        <div
+          key={index}
+          style={{
+            position: 'relative',
+            paddingBottom: '1.25rem'
+          }}
+        >
+          <PDFPage
+            document={props.document}
+            page={index + 1}
+            scale={props.scale}
+            displayWidth={props.displayWidth}
           />
-        )}
 
-        <AddressForm
-          selectedAnnotation={selectedAnnotation}
-          isOpen={this.IsAddressFormOpen}
-          contextsAnnotations={this.contextsAnnotations}
-          data={selectedAnnotation && selectedAnnotation.data}
-          onClose={this.deselectActiveAnnotation}
-          onSetValues={this.props.onSetValues}
-          deal={this.props.deal}
-        />
-
-        {this.IsContextFormOpen && (
-          <ContextForm
-            formValues={this.props.values}
-            data={selectedAnnotation && selectedAnnotation.data}
-            deal={this.props.deal}
-            onValueUpdate={this.props.onValueUpdate}
-            onClose={this.deselectActiveAnnotation}
+          <Annotations
+            deal={props.deal}
+            values={props.values}
+            pageIndex={index}
+            annotations={props.annotations}
+            onValueUpdate={props.onValueUpdate}
           />
-        )}
-      </Container>
-    )
-  }
+        </div>
+      ))}
+    </div>
+  )
 }
-
-function mapStateToProps({ deals }) {
-  return {
-    roles: deals.roles
-  }
-}
-
-export default connect(mapStateToProps)(PDFPreview)

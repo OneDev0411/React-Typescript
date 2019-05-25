@@ -4,11 +4,12 @@ import addressParser from 'parse-address'
 
 import { confirmation } from 'actions/confirmation'
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
+import postLoadFormat from 'components/inline-editable-fields/InlineAddressField/InlineAddressForm/helpers/post-load-format'
 
 import { EditMode } from './EditMode'
 import { ViewMode } from './ViewMode'
 
-import { postLoadFormat, preSaveFormat, getUpsertAttributes } from './helpers'
+import { preSaveFormat, getUpsertAttributes } from './helpers'
 
 const DEFAULT_LABEL = { label: 'Select', value: '' }
 
@@ -212,7 +213,6 @@ class AddressField extends React.Component {
       handleSubmit={this.handleSubmit}
       labels={this.labels}
       preSaveFormat={this.preSaveFormat}
-      postLoadFormat={postLoadFormat}
       onChangeLabel={this.onChangeLabel}
       onChangePrimary={this.onChangePrimary}
       onChangeInput={this.onChangeInput}

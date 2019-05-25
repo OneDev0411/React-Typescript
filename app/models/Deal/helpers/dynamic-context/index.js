@@ -377,7 +377,9 @@ export function isAddressField(key) {
 }
 
 export function getDefinitionId(brand_id, key) {
-  return _.find(getList(brand_id), { key }).id
+  const definition = _.find(getList(brand_id), { key })
+
+  return definition && definition.id
 }
 
 export function getChecklist(deal, fieldKey) {
@@ -420,8 +422,14 @@ export function getChecklist(deal, fieldKey) {
 }
 
 export function createUpsertObject(deal, field, value, approved = false) {
+  const definition = getDefinitionId(deal.brand.id, field)
+
+  if (!definition) {
+    return null
+  }
+
   return {
-    definition: getDefinitionId(deal.brand.id, field),
+    definition,
     checklist: getChecklist(deal, field),
     value,
     approved

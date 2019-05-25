@@ -8,6 +8,7 @@ import ActionButton from '../Button/ActionButton'
 
 export class FinalFormDrawer extends React.Component {
   static propTypes = {
+    isSubmitDisabled: PropTypes.bool,
     initialValues: PropTypes.shape(),
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
@@ -24,6 +25,7 @@ export class FinalFormDrawer extends React.Component {
   }
 
   static defaultProps = {
+    isSubmitDisabled: false,
     initialValues: {},
     showFooter: true,
     disableSubmitByEnter: false,
@@ -82,6 +84,8 @@ export class FinalFormDrawer extends React.Component {
   }
 
   render() {
+    const { isSubmitDisabled } = this.props
+
     return (
       <Form
         validate={this.props.validate}
@@ -113,6 +117,7 @@ export class FinalFormDrawer extends React.Component {
                 <Drawer.Footer rowReverse>
                   {this.props.footerRenderer ? (
                     this.props.footerRenderer({
+                      isSubmitDisabled,
                       formProps,
                       submitting,
                       handleSubmit: this.handleSubmit
@@ -120,7 +125,9 @@ export class FinalFormDrawer extends React.Component {
                   ) : (
                     <ActionButton
                       type="submit"
-                      disabled={submitting || formProps.validating}
+                      isSubmitDisabled={
+                        isSubmitDisabled || submitting || formProps.validating
+                      }
                       onClick={this.handleSubmit}
                     >
                       {submitting

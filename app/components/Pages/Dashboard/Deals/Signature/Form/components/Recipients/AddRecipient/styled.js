@@ -6,6 +6,7 @@ export const Container = styled.div`
 
 export const Menu = styled.div`
   position: absolute;
+  z-index: 1;
   top: 2.5rem;
   left: 0;
   right: 0;

@@ -1,16 +1,9 @@
 import React from 'react'
 
-import { H2 } from '../../../../../views/components/Typography/headings'
-import { BasicDropdown } from '../../../../../views/components/BasicDropdown'
+import { H2 } from 'components/Typography/headings'
+import { BasicDropdown } from 'components/BasicDropdown'
 
-const properties = [
-  'Resale',
-  'Residential Lease',
-  'New Home',
-  'Lot / Land',
-  'Commercial Sale',
-  'Commercial Lease'
-]
+import { propertyTypes } from 'deals/utils/property-types'
 
 function getItems(items) {
   return items.map(item => ({ label: item, value: item }))
@@ -28,7 +21,7 @@ export default ({ selectedType, onChangeDealType }) => (
     <BasicDropdown
       maxHeight="unset"
       style={{ display: 'inline-block' }}
-      items={getItems(properties)}
+      items={getItems(propertyTypes)}
       itemToString={itemToString}
       buttonText={selectedType || 'Choose a checklist type'}
       onChange={item => onChangeDealType(item.value)}

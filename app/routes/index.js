@@ -1,6 +1,8 @@
 import React from 'react'
 import { IndexRoute, Route } from 'react-router'
 
+import GoToDashboard from '../views/components/GoToDashboard'
+
 // Containers
 import AppLayout from '../components/App'
 // Pages
@@ -194,6 +196,20 @@ const AsyncMarketingHistory = Load({
 })
 
 /* ==================================== */
+//  Insights
+/* ==================================== */
+
+const AsyncMarketingInsightsList = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/MarketingInsights/List' /* webpackChunkName: "marketing_insights_list" */)
+})
+
+const AsyncMarketingInsight = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/MarketingInsights/Insight' /* webpackChunkName: "email_insight" */)
+})
+
+/* ==================================== */
 //  Chatroom
 /* ==================================== */
 
@@ -328,23 +344,6 @@ function authenticate(nextState, replace) {
   const { user } = store.getState()
   const isLoggedIn = user && user.access_token
 
-  const noAuthList = [
-    '/branch',
-    '/dashboard/mls',
-    '/dashboard/mls/:id',
-    '/widgets/map',
-    '/widgets/search',
-    '/widgets/listings'
-  ]
-
-  for (let url of noAuthList) {
-    for (let route of nextState.routes) {
-      if (route.path && route.path !== '/' && route.path === url) {
-        return true
-      }
-    }
-  }
-
   if (typeof window !== 'undefined' && !isLoggedIn) {
     replace({
       pathname: '/signin',
@@ -355,6 +354,11 @@ function authenticate(nextState, replace) {
 
 export default (
   <Route>
+    <Route path="/">
+      <IndexRoute component={GoToDashboard} />} />
+      <Route path="/dashboard" component={GoToDashboard} />
+    </Route>
+
     <Route path="/" component={AsyncAuthenticationLayout}>
       <Route path="/branch" component={AsyncBranch} />
       <Route path="/share" component={AsyncShare} />
@@ -395,6 +399,7 @@ export default (
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />
       </Route>
+      <Route path="dashboard/mls/:id" component={AsyncListingSinglePage} />
     </Route>
 
     <Route path="/" component={AppLayout} onEnter={authenticate}>
@@ -408,10 +413,7 @@ export default (
         <Route path="following" component={AsyncListingsFavorites} />
         <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
       </Route>
-
-      <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
-
-      <Route component={AsyncContacts} path="/dashboard/contacts" />
+      <Route path="/dashboard/contacts" component={AsyncContacts} />
       <Route
         path="/dashboard/contacts/duplicate-contacts"
         component={AsyncContactsDuplicateContacts}
@@ -468,6 +470,11 @@ export default (
         <IndexRoute component={AsyncMarketingStore} />
         <Route component={AsyncMarketingHistory} path="history" />
         <Route component={AsyncMarketingTemplates} path=":types(/:medium)" />
+      </Route>
+
+      <Route path="/dashboard/insights">
+        <IndexRoute component={AsyncMarketingInsightsList} />
+        <Route path=":id" component={AsyncMarketingInsight} />
       </Route>
 
       <Route path="dashboard/account" component={AsyncAccountLayout}>

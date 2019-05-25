@@ -1,10 +1,12 @@
 import styled from 'styled-components'
 
+import { red } from 'views/utils/colors'
+
 export const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border-bottom: 1px solid #dce5eb;
+  position: relative;
   padding: 0.5rem 0;
   text-align: left;
 `
@@ -16,12 +18,14 @@ export const InputLabel = styled.label`
   font-weight: ${props => (props.hasError ? '500' : 'normal')};
 `
 
-export const InputError = styled.span`
-  color: #fe3824;
-  font-size: 13px;
-  margin-top: 8px;
+export const InputError = styled.div`
+  color: ${red.A100};
+  font-size: 0.75rem;
+  opacity: ${props => (props.display ? 1 : 0)};
 `
 
-export const InputRequired = styled(InputError)`
-  font-size: 15px;
+export const InputRequired = styled.span`
+  color: ${red.A100};
+  font-size: 1rem;
+  margin-left: 3px;
 `

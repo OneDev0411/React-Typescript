@@ -1,5 +1,7 @@
 import React from 'react'
 
+import Flex, { FlexItem } from 'styled-flex-component'
+
 import {
   InputContainer,
   InputLabel,
@@ -19,15 +21,21 @@ export const MultipleContactsSelect = ({
   meta,
   isRequired,
   placeholder,
-  labelText
+  labelText,
+  labelExtra = null
 }) => (
   <InputContainer>
     {hasLabel && (
-      <InputLabel hasError={meta.submitFailed && meta.error}>
-        {labelText || placeholder}
-        &nbsp;
-        <InputRequired>{isRequired && '*'}</InputRequired>
-      </InputLabel>
+      <Flex>
+        <FlexItem grow={1}>
+          <InputLabel hasError={meta.submitFailed && meta.error}>
+            {labelText || placeholder}
+            &nbsp;
+            <InputRequired>{isRequired && '*'}</InputRequired>
+          </InputLabel>
+        </FlexItem>
+        {labelExtra}
+      </Flex>
     )}
 
     <RecipientContainer>

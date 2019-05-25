@@ -3,31 +3,48 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import ActionButton from 'components/Button/ActionButton'
-import EmailCompose from 'components/EmailCompose'
+import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 
 function SendEmailButton(props) {
+  const { deal } = props
   const [isOpen, setIsOpen] = useState(false)
   const toggleOpenDrawer = () => setIsOpen(!isOpen)
+
+  const getEmail = email => {
+    if (deal != null && deal.id) {
+      return {
+        ...email,
+        deal: deal.id
+      }
+    }
+
+    return email
+  }
 
   return (
     <Fragment>
       <ActionButton
-        appearance="outline"
+        appearance={props.appearance}
         style={props.style}
         onClick={toggleOpenDrawer}
       >
-        Email
+        {props.title}
       </ActionButton>
 
       {isOpen && (
-        <EmailCompose
+        <SingleEmailComposeDrawer
           isOpen
           defaultAttachments={[]}
           recipients={props.recipients}
           from={props.user}
-          deal={props.deal}
+          deal={deal}
           onClose={toggleOpenDrawer}
+          onSent={() => {
+            toggleOpenDrawer()
+            props.onSent()
+          }}
           hasDealsAttachments
+          getEmail={getEmail}
         />
       )}
     </Fragment>
@@ -43,13 +60,19 @@ function mapStateToProps({ user }) {
 SendEmailButton.propTypes = {
   deal: PropTypes.object,
   defaultAttachments: PropTypes.array,
-  recipients: PropTypes.array
+  recipients: PropTypes.array,
+  appearance: PropTypes.string,
+  title: PropTypes.string,
+  onSent: PropTypes.func
 }
 
 SendEmailButton.defaultProps = {
   deal: null,
   defaultAttachments: [],
-  recipients: []
+  recipients: [],
+  appearance: 'outline',
+  title: 'Email',
+  onSent: () => {}
 }
 
 export default connect(mapStateToProps)(SendEmailButton)

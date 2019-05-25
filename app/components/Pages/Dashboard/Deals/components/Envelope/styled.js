@@ -6,6 +6,9 @@ export const Header = styled.div`
   justify-content: space-between;
   background-color: #eee;
   padding: 0.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 
   button {
     margin-left: 0.5rem;

@@ -67,7 +67,7 @@ function PageHeader(props) {
           subtitle={props.subtitle}
         />
       )}
-      {React.Children.map(props.children, children => children)}
+      {props.children}
     </Container>
   )
 }

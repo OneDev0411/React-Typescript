@@ -7,3 +7,7 @@ export function template_path(name) {
 
   return isDev ? `_website/${name}` : `../app/templates/_website/${name}`
 }
+
+export function isLoggedIn(ctx) {
+  return !!(ctx.session && ctx.session.user && ctx.session.user.access_token)
+}

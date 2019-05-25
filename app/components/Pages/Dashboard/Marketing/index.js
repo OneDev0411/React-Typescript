@@ -19,11 +19,11 @@ import { OnboardingSteps } from './helpers/onboarding'
 import { Menu } from './Menu'
 
 class Marketing extends Component {
-  onboardingRef = createRef()
-
   state = {
     isSideMenuOpen: true
   }
+
+  onboardingRef = createRef()
 
   toggleSideMenu = () =>
     this.setState(state => ({

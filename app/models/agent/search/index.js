@@ -1,8 +1,12 @@
 import Fetch from '../../../services/fetch'
 
-const search = async mlsid => {
+const search = async (criteria, field = 'mlsid') => {
   try {
-    const response = await new Fetch().get('/agents/search').query({ mlsid })
+    const response = await new Fetch()
+      .get('/agents/search')
+      .query({ [field]: criteria })
+      .query({ 'associations[]': 'agent.office' })
+
     return response.body.data
   } catch ({ status }) {
     throw status

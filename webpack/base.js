@@ -35,7 +35,10 @@ module.exports = {
       services: resolvePath('../app/services'),
       utils: resolvePath('../app/utils'),
       views: resolvePath('../app/views'),
-      config: resolvePath('../config/public')
+      config: resolvePath('../config/public'),
+      /* components */
+      deals: resolvePath('../app/components/Pages/Dashboard/Deals'),
+      crm: resolvePath('../app/components/Pages/Dashboard/Contacts')
     }
   },
   plugins: [new webpack.DefinePlugin(config.globals)],

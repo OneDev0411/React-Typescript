@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import fecha from 'fecha'
 
 import DayPicker, { DateUtils } from 'react-day-picker'
+
 import Toolbar from './Toolbar'
 
 import ActionButton from '../Button/ActionButton'
@@ -69,8 +70,11 @@ export default class DatePicker extends React.Component {
   }
 
   handleToday = () => this.setState(initialState, this.onChange)
+
   handlePreviousMonth = () => this.addMonths(-1)
+
   handleNextMonth = () => this.addMonths(1)
+
   onChange = () => this.props.onChange(this.Date)
 
   handleDayClick = currentDate =>
@@ -111,17 +115,19 @@ export default class DatePicker extends React.Component {
             />
           )}
         />
-        <ActionButton
-          size="small"
-          isBlock
-          appearance="outline"
-          onClick={this.handleToday}
-          data-balloon={fecha.format(new Date(), 'dddd, MMMM DD')}
-          data-balloon-pos="down"
-          style={{ fontSize: '1rem' }}
-        >
-          Today
-        </ActionButton>
+        {this.props.showTodayButton && (
+          <ActionButton
+            size="small"
+            isBlock
+            appearance="outline"
+            onClick={this.handleToday}
+            data-balloon={fecha.format(new Date(), 'dddd, MMMM DD')}
+            data-balloon-pos="down"
+            style={{ fontSize: '1rem' }}
+          >
+            Today
+          </ActionButton>
+        )}
       </Container>
     )
   }

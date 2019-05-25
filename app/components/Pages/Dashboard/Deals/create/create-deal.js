@@ -1,3 +1,5 @@
+// todo: reimplement from scratch
+
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
