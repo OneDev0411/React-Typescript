@@ -1,6 +1,5 @@
 import React from 'react'
 import Downshift from 'downshift'
-import _ from 'underscore'
 
 import IconRemove from 'components/SvgIcons/Close/CloseIcon'
 
@@ -18,7 +17,7 @@ const getCurrentValues = (isActive, values) => {
     return 'Missing value'
   }
 
-  return _.isArray(values) && values.map(item => item.label).join(' OR ')
+  return Array.isArray(values) && values.map(item => item.label).join(' OR ')
 }
 
 export const FilterItem = props => {

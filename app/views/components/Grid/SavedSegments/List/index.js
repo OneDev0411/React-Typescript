@@ -41,7 +41,7 @@ class SegmentsList extends React.Component {
   init = () => {
     const { getSavedSegments, isListFetched, name, associations } = this.props
 
-    if (isListFetched === false) {
+    if (!isListFetched) {
       getSavedSegments(name, associations)
     }
   }

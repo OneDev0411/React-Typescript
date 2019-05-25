@@ -1,5 +1,4 @@
 import React from 'react'
-
 import usePromise from 'react-use-promise'
 
 import { Item } from 'components/Dropdown/Item'
@@ -19,7 +18,9 @@ export function SimpleList({
   )
 
   if (error) {
-    return <Placeholder hasError>Could not fetch options</Placeholder>
+    console.error(error)
+
+    return <Placeholder hasError>Could not fetch items</Placeholder>
   }
 
   if (state === 'pending') {
