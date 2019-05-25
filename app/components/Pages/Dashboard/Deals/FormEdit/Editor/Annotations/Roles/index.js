@@ -3,7 +3,10 @@ import { connect } from 'react-redux'
 
 import { selectDealRoles } from 'reducers/deals/roles'
 
-import { getRoleText } from 'deals/FormEdit/utils/get-roles-text'
+import {
+  getRoleText,
+  normalizeRoleNames
+} from 'deals/FormEdit/utils/get-roles-text'
 import { getGroupValues } from 'deals/FormEdit/utils/get-group-values'
 import { getAnnotationsByType } from 'deals/FormEdit/utils/get-annotations-by-type'
 
@@ -17,7 +20,10 @@ function Roles(props) {
     const list = getAnnotationsByType(props.annotations, 'roles')
 
     list.forEach(group => {
-      if (group[0].role.includes(form.role) === false) {
+      if (
+        normalizeRoleNames(props.deal, group[0].role).includes(form.role) ===
+        false
+      ) {
         return false
       }
 
