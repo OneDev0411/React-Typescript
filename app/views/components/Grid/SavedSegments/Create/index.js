@@ -2,18 +2,18 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
-import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
-
-import Modal from '../../../BasicModal'
-import Button from '../../../Button/ActionButton'
-import RadioButton from '../../../RadioButton'
-import { ItemRow, ItemTitle, TextInput } from './styled'
-
 import {
   createFilterSegment,
   updateFilterSegment,
   changeActiveFilterSegment
-} from '../../../../../store_actions/filter-segments'
+} from 'store_actions/filter-segments'
+
+import Modal from 'components/BasicModal'
+import Button from 'components/Button/ActionButton'
+import RadioButton from 'components/RadioButton'
+import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
+
+import { ItemRow, ItemTitle, TextInput } from './styled'
 
 const CURRENT_SEGMENT = 0
 const NEW_SEGMENT = 1
@@ -22,21 +22,25 @@ class SaveSegment extends React.Component {
   constructor(props) {
     super(props)
 
+    const selectedOption = this.isEditable(props.segment)
+      ? CURRENT_SEGMENT
+      : NEW_SEGMENT
+
     this.state = {
-      showModal: false,
       isSaving: false,
-      selectedOption: this.isEditable(props.segment)
-        ? CURRENT_SEGMENT
-        : NEW_SEGMENT,
-      newFilterName: ''
+      newFilterName: '',
+      selectedOption,
+      showModal: false
     }
   }
 
-  toggleShowModal = () => this.setState({ showModal: !this.state.showModal })
+  toggleShowModal = () =>
+    this.setState(state => ({ showModal: !state.showModal }))
 
   changeSelectedOption = option => this.setState({ selectedOption: option })
 
-  onNewFilterNameChange = e => this.setState({ newFilterName: e.target.value })
+  onNewFilterNameChange = event =>
+    this.setState({ newFilterName: event.target.value })
 
   isEditable = segment => segment && segment.is_editable === true
 
@@ -74,7 +78,6 @@ class SaveSegment extends React.Component {
   }
 
   saveList = async () => {
-    const { changeActiveFilterSegment, name } = this.props
     const segment = this.getSegmentObject()
 
     this.setState({
@@ -87,14 +90,16 @@ class SaveSegment extends React.Component {
       } else {
         const newSegmentId = await this.createSegment(segment)
 
-        changeActiveFilterSegment(name, newSegmentId)
+        this.props.dispatch(
+          changeActiveFilterSegment(this.props.name, newSegmentId)
+        )
       }
 
       this.setState({
-        showModal: false,
+        isSaving: false,
         newFilterName: '',
         selectedOption: CURRENT_SEGMENT,
-        isSaving: false
+        showModal: false
       })
     } catch (e) {
       console.log(e)
@@ -104,20 +109,16 @@ class SaveSegment extends React.Component {
     }
   }
 
-  updateSegment = segment => {
-    const { name } = this.props
+  updateSegment = segment =>
+    this.props.dispatch(
+      updateFilterSegment(this.props.name, {
+        ...this.props.segment,
+        ...segment
+      })
+    )
 
-    return this.props.updateFilterSegment(name, {
-      ...this.props.segment,
-      ...segment
-    })
-  }
-
-  createSegment = segment => {
-    const { name } = this.props
-
-    return this.props.createFilterSegment(name, segment)
-  }
+  createSegment = segment =>
+    this.props.dispatch(createFilterSegment(this.props.name, segment))
 
   getButtonCaption = () => {
     const { selectedOption, isSaving } = this.state
@@ -130,8 +131,9 @@ class SaveSegment extends React.Component {
   }
 
   render() {
-    const { showModal, selectedOption, newFilterName, isSaving } = this.state
-    const { filters, segment } = this.props
+    const { state, props } = this
+    const { selectedOption } = state
+    const { filters, segment } = props
     const hasFilters = _.size(filters) > 0 || this.isEditable(segment)
     const areFiltersValid = _.values(filters || {}).every(isFilterValid)
 
@@ -143,65 +145,60 @@ class SaveSegment extends React.Component {
           </Button>
         )}
 
-        <Modal
-          isOpen={showModal && hasFilters}
-          handleOnClose={this.toggleShowModal}
-          className="half-size"
-        >
-          <Modal.Header title="Save list" />
-          <Modal.Body style={{ height: '115px' }}>
-            {this.isEditable(segment) && (
-              <ItemRow
-                onClick={() => this.changeSelectedOption(CURRENT_SEGMENT)}
-              >
-                <RadioButton selected={selectedOption === CURRENT_SEGMENT} />
-                <ItemTitle>
-                  Save changes to the list <b>‘{segment.name}’</b>
-                </ItemTitle>
+        {state.showModal && hasFilters && (
+          <Modal
+            isOpen
+            className="half-size"
+            handleOnClose={this.toggleShowModal}
+          >
+            <Modal.Header title="Save list" />
+            <Modal.Body style={{ height: '115px' }}>
+              {this.isEditable(segment) && (
+                <ItemRow
+                  onClick={() => this.changeSelectedOption(CURRENT_SEGMENT)}
+                >
+                  <RadioButton selected={selectedOption === CURRENT_SEGMENT} />
+                  <ItemTitle>
+                    Save changes to the list <b>‘{segment.name}’</b>
+                  </ItemTitle>
+                </ItemRow>
+              )}
+
+              <ItemRow onClick={() => this.changeSelectedOption(NEW_SEGMENT)}>
+                <RadioButton selected={selectedOption === NEW_SEGMENT} />
+                <ItemTitle>Create new list</ItemTitle>
+                <TextInput
+                  type="text"
+                  value={state.newFilterName}
+                  placeholder="Enter new list name"
+                  onChange={this.onNewFilterNameChange}
+                />
               </ItemRow>
-            )}
+            </Modal.Body>
 
-            <ItemRow onClick={() => this.changeSelectedOption(NEW_SEGMENT)}>
-              <RadioButton selected={selectedOption === NEW_SEGMENT} />
-              <ItemTitle>Create new list</ItemTitle>
-              <TextInput
-                type="text"
-                value={newFilterName}
-                placeholder="Enter new list name"
-                onChange={this.onNewFilterNameChange}
-              />
-            </ItemRow>
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button
-              size="small"
-              appearance="outline"
-              disabled={isSaving}
-              onClick={this.toggleShowModal}
-              style={{ marginRight: '0.5em' }}
-            >
-              Cancel
-            </Button>
-            <Button
-              size="small"
-              disabled={!this.canSaveList()}
-              onClick={this.saveList}
-            >
-              {this.getButtonCaption()}
-            </Button>
-          </Modal.Footer>
-        </Modal>
+            <Modal.Footer>
+              <Button
+                size="small"
+                appearance="outline"
+                disabled={state.isSaving}
+                onClick={this.toggleShowModal}
+                style={{ marginRight: '0.5em' }}
+              >
+                Cancel
+              </Button>
+              <Button
+                size="small"
+                disabled={!this.canSaveList()}
+                onClick={this.saveList}
+              >
+                {this.getButtonCaption()}
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
       </div>
     )
   }
 }
 
-export default connect(
-  null,
-  {
-    createFilterSegment,
-    updateFilterSegment,
-    changeActiveFilterSegment
-  }
-)(SaveSegment)
+export default connect()(SaveSegment)
