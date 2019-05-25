@@ -1,15 +1,11 @@
 import React from 'react'
-import _ from 'underscore'
 import { connect } from 'react-redux'
-
-import { uppercaseFirstLetter } from 'utils/helpers'
 
 import {
   getSavedSegments,
   deleteFilterSegment,
   changeActiveFilterSegment
 } from 'actions/filter-segments'
-import { confirmation } from 'actions/confirmation'
 
 import {
   isListFetched,
@@ -18,20 +14,15 @@ import {
   getDefaultList
 } from 'reducers/filter-segments'
 
-import ToolTip from 'components/tooltip'
-import IconClose from 'components/SvgIcons/Close/CloseIcon'
 import LoadingIcon from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-import {
-  ListTitle,
-  ListItem,
-  ListItemName,
-  DeleteButton
-} from 'components/SlideMenu/Menu/styled'
+import { ListTitle, ListItem } from 'components/SlideMenu/Menu/styled'
 import { ShowMoreLess } from 'components/ShowMoreLess'
+
+import Item from './Item'
 
 class SegmentsList extends React.Component {
   state = {
-    isDeleting: []
+    deletingItems: []
   }
 
   componentDidMount() {
@@ -39,56 +30,50 @@ class SegmentsList extends React.Component {
   }
 
   init = () => {
-    const { getSavedSegments, isListFetched, name, associations } = this.props
+    const { props } = this
 
-    if (!isListFetched) {
-      getSavedSegments(name, associations)
+    if (!props.isListFetched) {
+      props.getSavedSegments(props.name, { associations: props.associations })
     }
   }
 
-  onSelectList = async item => {
-    await this.props.changeActiveFilterSegment(this.props.name, item.id)
+  selectItem = async item => {
+    const { props } = this
 
-    if (this.props.onChange) {
-      this.props.onChange(item)
+    await props.changeActiveFilterSegment(props.name, item.id)
+
+    if (props.onChange) {
+      props.onChange(item)
     }
   }
 
-  onRequestDelete = item =>
-    this.props.confirmation({
-      message: `Delete '${item.name}'?`,
-      confirmLabel: 'Yes',
-      onConfirm: () => this.deleteList(item)
-    })
-
-  deleteList = async item => {
-    const { isDeleting } = this.state
-    const { activeItem, name } = this.props
-
-    this.setState({
-      isDeleting: [...isDeleting, item.id]
-    })
+  deleteItem = async item => {
+    const { name, activeItem } = this.props
 
     try {
+      this.setState(state => ({
+        deletingItems: [...state.deletingItems, item.id]
+      }))
+
       await this.props.deleteFilterSegment(name, item)
 
-      if (activeItem.id === item.id) {
-        this.onSelectList(getDefaultList(name))
+      this.setState(state => ({
+        deletingItems: state.deletingItems.filter(id => id !== item.id)
+      }))
+
+      if (activeItem == null || activeItem.id === item.id) {
+        this.selectItem(getDefaultList(name))
       }
-    } catch (e) {
+    } catch (error) {
       // todo
-      console.log(e)
-    } finally {
-      this.setState({
-        isDeleting: _.without(isDeleting, item.id)
-      })
+      console.error(error)
     }
   }
 
+  isSelected = id => this.props.activeItem && this.props.activeItem.id === id
+
   render() {
-    const { list, activeItem, isFetching } = this.props
-    const { isDeleting } = this.state
-    const isSelected = id => activeItem && activeItem.id === id
+    const { props } = this
 
     return (
       <div>
@@ -99,35 +84,23 @@ class SegmentsList extends React.Component {
           lessText="Less lists"
           style={{ marginBottom: '1rem' }}
         >
-          {list.map((item, index) => {
-            const id = item.id
+          {props.list.map(item => {
+            const { id } = item
 
             return (
-              <ToolTip key={index} caption={item.name} placement="right">
-                <ListItem
-                  isDeleting={isDeleting.includes(id)}
-                  isSelected={isSelected(id)}
-                  onClick={() => !isSelected(id) && this.onSelectList(item)}
-                >
-                  <ListItemName>{uppercaseFirstLetter(item.name)}</ListItemName>
-                  {item.is_editable && (
-                    <DeleteButton
-                      onClick={event => {
-                        this.onRequestDelete(item)
-                        event.stopPropagation()
-                      }}
-                      isFit
-                    >
-                      <IconClose />
-                    </DeleteButton>
-                  )}
-                </ListItem>
-              </ToolTip>
+              <Item
+                key={id}
+                isDeleting={this.state.deletingItems.includes(id)}
+                item={item}
+                deleteHandler={this.deleteItem}
+                selectHandler={this.selectItem}
+                selected={this.isSelected(id)}
+              />
             )
           })}
         </ShowMoreLess>
 
-        {isFetching && (
+        {props.isFetching && (
           <ListItem>
             <LoadingIcon />
           </ListItem>
@@ -153,7 +126,6 @@ export default connect(
   {
     changeActiveFilterSegment,
     deleteFilterSegment,
-    getSavedSegments,
-    confirmation
+    getSavedSegments
   }
 )(SegmentsList)
