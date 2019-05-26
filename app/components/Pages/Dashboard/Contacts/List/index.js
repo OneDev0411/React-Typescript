@@ -5,7 +5,7 @@ import _ from 'underscore'
 
 import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
-import { getContacts, searchContacts, deleteContacts } from 'actions/contacts'
+import { deleteContacts, getContacts, searchContacts } from 'actions/contacts'
 import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-text-filter'
 
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
@@ -16,20 +16,25 @@ import {
 } from 'reducers/contacts/list'
 
 import {
+  getActiveTeamSettings,
   viewAs,
-  viewAsEveryoneOnTeam,
-  getActiveTeamSettings
+  viewAsEveryoneOnTeam
 } from 'utils/user-teams'
 
 import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
+import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
 
 import {
   Container as PageContainer,
-  Menu as SideMenu,
-  Content as PageContent
+  Content as PageContent,
+  Menu as SideMenu
 } from 'components/SlideMenu'
 import SavedSegments from 'components/Grid/SavedSegments/List'
 import { resetGridSelectedItems } from 'components/Grid/Table/Plugins/Selectable'
+
+import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
+
+import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 
 import Table from './Table'
 import { SearchContacts } from './Search'
@@ -38,7 +43,11 @@ import { Header } from './Header'
 import ContactFilters from './Filters'
 import TagsList from './TagsList'
 
-import { SORT_FIELD_SETTING_KEY } from './constants'
+import {
+  FLOW_FILTER_ID,
+  OPEN_HOUSE_FILTER_ID,
+  SORT_FIELD_SETTING_KEY
+} from './constants'
 
 class ContactsList extends React.Component {
   constructor(props) {
@@ -49,7 +58,6 @@ class ContactsList extends React.Component {
       isFetchingMoreContactsBefore: false,
       isRowsUpdating: false,
       searchInputValue: this.props.list.textFilter,
-      activeSegment: {},
       loadedRanges: []
     }
 
@@ -58,19 +66,7 @@ class ContactsList extends React.Component {
   }
 
   componentDidMount() {
-    if (
-      !['default', 'duplicate contacts'].includes(
-        this.props.filterSegments.activeSegmentId
-      )
-    ) {
-      this.handleChangeSavedSegment(
-        this.props.filterSegments.list[
-          this.props.filterSegments.activeSegmentId
-        ]
-      )
-    } else {
-      this.fetchContactsAndJumpToSelected()
-    }
+    this.fetchContactsAndJumpToSelected()
 
     if (this.props.fetchTags) {
       this.props.getContactsTags()
@@ -78,18 +74,6 @@ class ContactsList extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.filterSegments.activeSegmentId !==
-        this.props.filterSegments.activeSegmentId &&
-      nextProps.filterSegments.activeSegmentId !==
-        this.state.activeSegment.id &&
-      nextProps.filterSegments.list[nextProps.filterSegments.activeSegmentId]
-    ) {
-      this.handleChangeSavedSegment(
-        nextProps.filterSegments.list[nextProps.filterSegments.activeSegmentId]
-      )
-    }
-
     if (
       nextProps.viewAsUsers.length !== this.props.viewAsUsers.length ||
       !_.isEqual(nextProps.viewAsUsers, this.props.viewAsUsers)
@@ -180,8 +164,6 @@ class ContactsList extends React.Component {
     try {
       if (this.hasSearchState()) {
         await this.handleFilterChange({
-          filters: this.props.filters,
-          searchInputValue: this.state.searchInputValue,
           start,
           prependResult: loadMoreBefore
         })
@@ -194,28 +176,8 @@ class ContactsList extends React.Component {
     }
   }
 
-  handleChangeSavedSegment = segment => {
-    this.setState(
-      {
-        activeSegment: segment
-      },
-      () => {
-        let conditionOperator = 'and'
-
-        if (segment.args && segment.args.filter_type) {
-          conditionOperator = segment.args.filter_type
-        }
-
-        this.handleFilterChange({
-          filters: segment.filters,
-          searchInputValue: this.state.searchInputValue,
-          start: 0,
-          order: this.order,
-          viewAsUsers: this.props.viewAsUsers,
-          conditionOperator
-        })
-      }
-    )
+  handleChangeSavedSegment = () => {
+    this.handleFilterChange()
   }
 
   handleFilterChange = async newFilters => {
@@ -225,9 +187,11 @@ class ContactsList extends React.Component {
       start = 0,
       order = this.order,
       viewAsUsers = this.props.viewAsUsers,
+      flows = this.props.flows,
+      crmTasks = this.props.crmTasks,
       conditionOperator = this.props.conditionOperator,
       prependResult = false
-    } = newFilters
+    } = newFilters || {}
 
     this.addLoadedRange(start)
     this.setQueryParam('s', start)
@@ -248,7 +212,9 @@ class ContactsList extends React.Component {
         prependResult,
         {
           s: start
-        }
+        },
+        flows,
+        crmTasks
       )
     } catch (e) {
       console.log('fetch search error: ', e)
@@ -424,8 +390,14 @@ class ContactsList extends React.Component {
   }
 
   render() {
-    const { isSideMenuOpen, activeSegment } = this.state
-    const { user, list, viewAsUsers, isFetchingContacts } = this.props
+    const { isSideMenuOpen } = this.state
+    const {
+      user,
+      list,
+      viewAsUsers,
+      isFetchingContacts,
+      activeSegment
+    } = this.props
     const contacts = selectContacts(list)
 
     return (
@@ -433,6 +405,7 @@ class ContactsList extends React.Component {
         <SideMenu isOpen={isSideMenuOpen}>
           <SavedSegments
             name="contacts"
+            associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
             onChange={this.handleChangeSavedSegment}
           />
           {/* <DuplicateContacts /> */}
@@ -441,7 +414,7 @@ class ContactsList extends React.Component {
 
         <PageContent id={this.tableContainerId} isSideMenuOpen={isSideMenuOpen}>
           <Header
-            title={activeSegment.name || 'All Contacts'}
+            title={(activeSegment && activeSegment.name) || 'All Contacts'}
             isSideMenuOpen={this.state.isSideMenuOpen}
             user={user}
             onMenuTriggerChange={this.toggleSideMenu}
@@ -487,15 +460,32 @@ function mapStateToProps({ user, contacts }) {
   const tags = contacts.tags
   const fetchTags = !isFetchingTags(tags) && selectTags(tags).length === 0
 
+  const filterSegments = contacts.filterSegments
+  const activeFilters = Object.values(filterSegments.activeFilters).filter(
+    isFilterValid
+  )
+  const attributeFilters = activeFilters.filter(isAttributeFilter)
+  const flowFilters = activeFilters.filter(
+    filter => filter.id === FLOW_FILTER_ID
+  )
+  const openHouseFilters = activeFilters.filter(
+    filter => filter.id === OPEN_HOUSE_FILTER_ID
+  )
+
   return {
     fetchTags,
-    filters: listInfo.filter || [],
-    filterSegments: contacts.filterSegments,
-    conditionOperator: contacts.filterSegments.conditionOperator,
+    filters: normalizeAttributeFilters(attributeFilters),
+    filterSegments,
+    conditionOperator: filterSegments.conditionOperator,
     isFetchingContacts: selectContactsListFetching(contacts.list),
+    flows: flowFilters.map(filter => filter.values[0].value),
+    crmTasks: openHouseFilters.map(filter => filter.values[0].value),
     list: contacts.list,
     listInfo,
     user,
+    activeSegment:
+      filterSegments.list &&
+      filterSegments.list[filterSegments.activeSegmentId],
     viewAsUsers: viewAsEveryoneOnTeam(user) ? [] : viewAs(user)
   }
 }

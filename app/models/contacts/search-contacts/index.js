@@ -5,13 +5,15 @@ import { defaultQuery } from '../helpers/default-query'
 
 export async function searchContacts(
   searchText = '',
-  filter,
+  attributeFilters,
   query = {
     ...defaultQuery,
     order: '-created_at',
     filter_type: 'and'
   },
-  users
+  users,
+  flows = null,
+  crmTasks = null
 ) {
   try {
     const payload = {}
@@ -24,15 +26,18 @@ export async function searchContacts(
       payload.query = q
     }
 
-    if (Array.isArray(filter) && filter.length > 0) {
-      payload.filter = filter.map(
-        ({ attribute_def, invert, operator, value }) => ({
+    payload.crm_task = crmTasks
+    payload.flows = flows
+
+    if (Array.isArray(attributeFilters) && attributeFilters.length > 0) {
+      payload.filter = attributeFilters
+        .filter(filter => filter.attribute_def)
+        .map(({ attribute_def, invert, operator, value }) => ({
           attribute_def,
           invert,
           operator,
           value
-        })
-      )
+        }))
     }
 
     if (Array.isArray(users) && users.length) {

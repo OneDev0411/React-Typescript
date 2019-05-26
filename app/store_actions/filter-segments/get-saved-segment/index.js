@@ -1,9 +1,8 @@
-import _ from 'underscore'
+import * as actionTypes from 'constants/filter-segments'
 
-import * as actionTypes from '../../../constants/filter-segments'
-import { getSavedSegments as fetchAll } from '../../../models/filter-segments/get-saved-segments'
+import getSegments from 'models/filter-segments/get-segments'
 
-export function getSavedSegments(nameId) {
+export function getSavedSegments(nameId, query) {
   return async dispatch => {
     try {
       dispatch({
@@ -12,13 +11,17 @@ export function getSavedSegments(nameId) {
         id: nameId
       })
 
-      const { data } = await fetchAll(nameId)
+      const { data } = await getSegments(nameId, query)
+
+      const list = {}
+
+      data.forEach(item => (list[item.id] = item))
 
       dispatch({
         type: actionTypes.FETCH_FILTER_SEGMENTS_SUCCESS,
         namespace: 'filter-segments',
         id: nameId,
-        list: _.indexBy(data, 'id')
+        list
       })
     } catch (error) {
       dispatch({

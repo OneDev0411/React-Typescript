@@ -1,11 +1,16 @@
 import Fetch from '../../../services/fetch'
 
-export async function createSegment(namespace, segment) {
+async function createSegment(namespace, segment, query = {}) {
   try {
-    const response = await new Fetch().post(`/${namespace}/lists`).send(segment)
+    const response = await new Fetch()
+      .post(`/${namespace}/lists`)
+      .send(segment)
+      .query(query)
 
     return response.body
   } catch (error) {
     throw error
   }
 }
+
+export default createSegment

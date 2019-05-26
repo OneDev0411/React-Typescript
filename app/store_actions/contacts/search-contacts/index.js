@@ -5,8 +5,9 @@ import { defaultQuery } from '../../../models/contacts/helpers'
 import { normalizeContacts } from '../helpers/normalize-contacts'
 import { selectContacts } from '../../../reducers/contacts/list'
 
+// TODO: make args an object
 export function searchContacts(
-  filter,
+  attributeFilters,
   start = 0,
   limit = 50,
   searchInputValue,
@@ -14,7 +15,9 @@ export function searchContacts(
   users,
   conditionOperator = 'and',
   prependResult = false,
-  meta = {}
+  meta = {},
+  flows = [],
+  crmTasks = []
 ) {
   return async (dispatch, getState) => {
     if (start === 0 && !prependResult) {
@@ -30,7 +33,7 @@ export function searchContacts(
 
       const response = await search(
         searchInputValue,
-        filter,
+        attributeFilters,
         {
           ...defaultQuery,
           start,
@@ -38,7 +41,9 @@ export function searchContacts(
           order,
           filter_type: conditionOperator
         },
-        users
+        users,
+        flows,
+        crmTasks
       )
 
       const contactsLength = selectContacts(getState().contacts.list).length
@@ -56,8 +61,8 @@ export function searchContacts(
             searchInputValue,
             order,
             users,
-            filter,
-            type: 'filter'
+            filter: attributeFilters,
+            type: 'attributeFilters'
           },
           ...normalizeContacts(response)
         },

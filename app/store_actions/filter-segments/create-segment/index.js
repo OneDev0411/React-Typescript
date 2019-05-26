@@ -1,18 +1,11 @@
-import * as actionTypes from '../../../constants/filter-segments'
-import { createSegment } from '../../../models/filter-segments/create-segment'
+import * as actionTypes from 'constants/filter-segments'
 
-export function createFilterSegment(nameId, segment) {
+import createSegment from 'models/filter-segments/create-segment'
+
+export function createFilterSegment(nameId, segment, query) {
   return async dispatch => {
     try {
-      const {
-        data: { id, is_editable }
-      } = await createSegment(nameId, segment)
-
-      const list = {
-        id,
-        is_editable,
-        ...segment
-      }
+      const { data: list } = await createSegment(nameId, segment, query)
 
       dispatch({
         type: actionTypes.SAVE_FILTER_SEGMENTS,
@@ -21,7 +14,7 @@ export function createFilterSegment(nameId, segment) {
         list
       })
 
-      return id
+      return list
     } catch (error) {
       throw error
     }
