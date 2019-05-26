@@ -2,8 +2,8 @@ import React from 'react'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-import { Tab, Nav, NavItem } from 'react-bootstrap'
 import { Helmet } from 'react-helmet'
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs'
 
 import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
@@ -14,7 +14,8 @@ import { updateContactQuery } from 'models/contacts/helpers/default-query'
 import { getContact } from 'models/contacts/get-contact'
 import { deleteContacts } from 'models/contacts/delete-contact'
 import { updateContactSelf } from 'models/contacts/update-contact-self'
-import getContactTimeline from 'models/contacts/get-contact-timeline'
+import getCRMTimeline from 'models/get-crm-timeline'
+
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
 
@@ -49,7 +50,8 @@ import {
   SecondColumn,
   ThirdColumn,
   PageWrapper,
-  Card
+  Card,
+  TabsContainer
 } from './styled'
 
 import { Header } from './Header'
@@ -81,6 +83,7 @@ class ContactProfile extends React.Component {
     this.detectScreenSize()
     window.addEventListener('resize', this.detectScreenSize)
     this.initializeContact()
+    window.socket.on('email_campaign:create', this.fetchTimeline)
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -96,8 +99,10 @@ class ContactProfile extends React.Component {
     }
   }
 
-  componentWillUnmount = () =>
+  componentWillUnmount = () => {
     window.removeEventListener('resize', this.detectScreenSize)
+    window.socket.off('email_campaign:create', this.fetchTimeline)
+  }
 
   /**
    * Web page (document) title
@@ -151,9 +156,14 @@ class ContactProfile extends React.Component {
 
   fetchTimeline = async () => {
     try {
-      const timeline = await getContactTimeline(this.props.params.id)
+      const timeline = await getCRMTimeline({
+        contact: this.props.params.id
+      })
 
-      this.setState({ isFetchingTimeline: false, timeline })
+      this.setState({
+        isFetchingTimeline: false,
+        timeline
+      })
     } catch (error) {
       console.log(error)
       this.setState({ isFetchingTimeline: false })
@@ -361,54 +371,35 @@ class ContactProfile extends React.Component {
             </SideColumnWrapper>
 
             <SecondColumn>
-              <Tab.Container
-                id="profile-todo-tabs"
-                defaultActiveKey="event"
-                className="c-contact-profile-todo-tabs c-contact-profile-card"
-              >
-                <div>
-                  <Nav className="c-contact-profile-todo-tabs__tabs-list">
-                    <NavItem
-                      className="c-contact-profile-todo-tabs__tab"
-                      eventKey="event"
-                    >
-                      Add Event
-                    </NavItem>
+              <TabsContainer>
+                <Tabs>
+                  <TabList>
+                    <Tab>
+                      <span>Add Event</span>
+                    </Tab>
+                    <Tab>
+                      <span>Add Note</span>
+                    </Tab>
+                  </TabList>
 
-                    <NavItem
-                      className="c-contact-profile-todo-tabs__tab"
-                      eventKey="note"
-                    >
-                      Add Note
-                    </NavItem>
-                  </Nav>
-
-                  <Tab.Content
-                    animation
-                    className="c-contact-profile-todo-tabs__pane-container"
-                  >
-                    <Tab.Pane
-                      eventKey="event"
-                      className="c-contact-profile-todo-tabs__pane"
-                    >
+                  <TabPanels>
+                    <TabPanel>
                       <NewTask
                         user={user}
                         submitCallback={this.addEvent}
                         defaultAssociation={defaultAssociation}
                       />
-                    </Tab.Pane>
-                    <Tab.Pane
-                      eventKey="note"
-                      className="c-contact-profile-todo-tabs__pane"
-                    >
+                    </TabPanel>
+                    <TabPanel>
                       <AddNote
                         contact={contact}
                         onSubmit={this.handleAddNote}
                       />
-                    </Tab.Pane>
-                  </Tab.Content>
-                </div>
-              </Tab.Container>
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+              </TabsContainer>
+
               <Timeline
                 contact={contact}
                 defaultAssociation={defaultAssociation}

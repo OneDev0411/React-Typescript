@@ -3,6 +3,7 @@ import S from 'shorti'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FormControl } from 'react-bootstrap'
+
 import config from '../../../../../config/public'
 
 export default class Search extends Component {
@@ -74,10 +75,7 @@ export default class Search extends Component {
         <div style={S('absolute z-1 t-0 l-0 w-100p h-100p bg-000 op-.5')} />
         <div style={S('relative z-2 p-10')}>
           <div style={S('relative t-190 maxw-770 center-block')}>
-            <div
-              style={S('color-fff text-center font-58 mb-30')}
-              className="tempo"
-            >
+            <div style={S('color-fff text-center font-58 mb-30')}>
               {brand && brand.messages.search_headline
                 ? brand.messages.search_headline
                 : ''}
@@ -95,10 +93,7 @@ export default class Search extends Component {
                 href="https://rechat.com"
                 target="_blank"
               >
-                Powered by{' '}
-                <span style={S('fw-600')} className="futurastd">
-                  Rechat
-                </span>
+                Powered by <span style={S('fw-600')}>Rechat</span>
                 <sup>TM</sup>
               </a>
             </div>

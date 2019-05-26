@@ -1,12 +1,11 @@
 import React from 'react'
 import cn from 'classnames'
 
+import './styles.scss'
+
 export default class Stepper extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      active: this.props.active
-    }
+  state = {
+    active: this.props.active
   }
 
   componentWillReceiveProps(nextProps) {
@@ -75,14 +74,13 @@ export default class Stepper extends React.Component {
                     />
                   )}
 
-                  {key === active &&
-                    !isActiveStageFinished && (
-                      <i
-                        className={`fa ${
-                          isProcessing ? 'fa-spin fa-spinner' : ''
-                        }`}
-                      />
-                    )}
+                  {key === active && !isActiveStageFinished && (
+                    <i
+                      className={`fa ${
+                        isProcessing ? 'fa-spin fa-spinner' : ''
+                      }`}
+                    />
+                  )}
                 </span>
               </a>
               <span className="name">{step}</span>

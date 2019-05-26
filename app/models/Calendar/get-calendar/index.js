@@ -1,15 +1,27 @@
 import Fetch from '../../../services/fetch'
 
-export async function getCalendar(low, high, filter = []) {
+async function getCalendar(
+  low,
+  high,
+  users = [],
+  filterBy = {},
+  associations = []
+) {
   try {
-    const response = await new Fetch()
-      .get('/calendar')
-      .query({ low })
-      .query({ high })
-      .query({ 'users[]': filter })
+    const query = {
+      low,
+      high,
+      'users[]': users,
+      ...filterBy,
+      associations
+    }
+
+    const response = await new Fetch().get('/calendar').query(query)
 
     return response.body && response.body.data
   } catch (e) {
     console.log(e)
   }
 }
+
+export default getCalendar
