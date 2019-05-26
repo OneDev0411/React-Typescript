@@ -40,7 +40,9 @@
 
       Object.values(icons).forEach(element => {
         const name = element.getAttribute('data-name')
-        element.style.display = name.includes(value) ? 'block' : 'none'
+        element.style.display = name
+          .toLowerCase()
+          .includes(value.toLowerCase()) ? 'block' : 'none'
       })
     }
   </script>
