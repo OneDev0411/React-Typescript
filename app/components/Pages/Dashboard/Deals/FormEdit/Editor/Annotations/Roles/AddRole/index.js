@@ -3,7 +3,6 @@ import React from 'react'
 import { isPrimaryAgent } from 'deals/utils/roles'
 import ToolTip from 'components/tooltip'
 
-import IconButton from 'components/Button/IconButton'
 import IconAdd from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 
 export function AddRole(props) {
@@ -13,11 +12,14 @@ export function AddRole(props) {
       isPrimaryAgent(roleName, props.deal.deal_type)
   )
 
+  const isSingularRole =
+    props.annotation.type === 'Role' && props.roles.length > 0
+
   if (
     isPrimaryRole ||
+    isSingularRole ||
     (Object.keys(props.values).length > 1 &&
-      props.rectIndex < props.group.length - 1) ||
-    (props.annotation.type === 'Role' && props.roles.length > 0)
+      props.rectIndex < props.group.length - 1)
   ) {
     return false
   }
@@ -28,9 +30,13 @@ export function AddRole(props) {
   return (
     <span style={{ marginLeft: '0.25rem' }}>
       <ToolTip caption={tooltip} placement="top">
-        <IconButton isFit iconSize="medium" onClick={props.onClick}>
-          <IconAdd />
-        </IconButton>
+        <IconAdd
+          onClick={props.onClick}
+          style={{
+            height: props.style.height,
+            fill: props.style.color
+          }}
+        />
       </ToolTip>
     </span>
   )

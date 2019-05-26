@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState, useMemo, Fragment } from 'react'
 
 import { normalizeRoleNames } from 'deals/FormEdit/utils/get-roles-text'
 import { getRoleTooltip } from 'deals/FormEdit/utils/get-role-tooltip'
@@ -7,6 +7,7 @@ import { isPrimaryAgent } from 'deals/utils/roles'
 
 import Tooltip from 'components/tooltip'
 import DealRole from 'components/DealRole'
+import EditIcon from 'components/SvgIcons/Edit/EditIcon'
 
 import { AddRole } from '../AddRole'
 import { RoleItem } from './styled'
@@ -16,13 +17,18 @@ export function RoleField(props) {
 
   const allowedRoles = normalizeRoleNames(props.deal, props.annotation.role)
   const roles = props.roles.filter(role => allowedRoles.includes(role.role))
+  const isEmpty = !Object.values(props.values).join('').length
 
-  const annotationRoles = getRolesList({
-    roles,
-    values: props.values,
-    annotation: props.annotation,
-    rectIndex: props.rectIndex
-  })
+  const annotationRoles = useMemo(
+    () =>
+      getRolesList({
+        roles,
+        values: props.values,
+        annotation: props.annotation,
+        rectIndex: props.rectIndex
+      }),
+    [props.annotation, props.rectIndex, props.values, roles]
+  )
 
   const tooltip = getRoleTooltip(
     props.annotation,
@@ -39,7 +45,11 @@ export function RoleField(props) {
         }}
       >
         <Tooltip caption={tooltip}>
-          <div style={{ display: 'inline-block' }}>
+          <div
+            style={{
+              display: 'inline-block'
+            }}
+          >
             {annotationRoles.map((role, index) => (
               <Fragment key={index}>
                 <RoleItem
@@ -55,6 +65,18 @@ export function RoleField(props) {
                 {index === annotationRoles.length - 1 ? '' : ', '}
               </Fragment>
             ))}
+
+            {isEmpty &&
+              props.annotation.type === 'Role' &&
+              roles[props.annotation.number] && (
+                <EditIcon
+                  onClick={() => setRole(roles[props.annotation.number])}
+                  style={{
+                    height: props.style.height,
+                    fill: props.style.color
+                  }}
+                />
+              )}
           </div>
         </Tooltip>
 
