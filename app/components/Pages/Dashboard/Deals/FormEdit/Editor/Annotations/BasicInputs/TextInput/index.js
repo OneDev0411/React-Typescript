@@ -16,7 +16,7 @@ export default React.memo(props => {
   const getFontSize = () => {
     let fontSize = appearance.size
 
-    if (appearance.size === 0 && !props.annotation.multiLine) {
+    if (appearance.size === 0) {
       fontSize = calculateWordWrap([props.annotation], value, {
         maxFontSize: appearance.size
       }).fontSize
