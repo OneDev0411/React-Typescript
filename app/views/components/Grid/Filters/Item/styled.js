@@ -21,6 +21,12 @@ export const RemoveButton = styled(IconButton)`
   padding: 0;
 `
 
+export const ItemTitle = styled.div`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
 export const Container = styled(Flex)`
   position: relative;
   height: 40px;
@@ -51,23 +57,15 @@ export const TitleContainer = styled.div`
   padding: 0 0.5em;
 `
 
-export const ItemTitle = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`
-
 export const Menu = styled(Card)`
   position: absolute;
   top: 48px;
   left: 0;
   z-index: 1000;
-  width: 280px;
-  min-height: 190px;
+  min-width: 12rem;
 `
 
 export const Content = styled.div`
-  min-height: 150px;
   cursor: auto;
 `
 export const DoneButton = styled(Button)`
