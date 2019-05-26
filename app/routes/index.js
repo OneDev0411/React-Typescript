@@ -344,6 +344,12 @@ function authenticate(nextState, replace) {
   const { user } = store.getState()
   const isLoggedIn = user && user.access_token
 
+  const noAuthList = ['/dashboard/mls', '/dashboard/mls/:id']
+
+  if (nextState.routes.some(route => noAuthList.includes(route.path))) {
+    return true
+  }
+
   if (typeof window !== 'undefined' && !isLoggedIn) {
     replace({
       pathname: '/signin',
@@ -399,7 +405,6 @@ export default (
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />
       </Route>
-      <Route path="dashboard/mls/:id" component={AsyncListingSinglePage} />
     </Route>
 
     <Route path="/" component={AppLayout} onEnter={authenticate}>
@@ -413,7 +418,10 @@ export default (
         <Route path="following" component={AsyncListingsFavorites} />
         <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
       </Route>
-      <Route path="/dashboard/contacts" component={AsyncContacts} />
+
+      <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
+
+      <Route component={AsyncContacts} path="/dashboard/contacts" />
       <Route
         path="/dashboard/contacts/duplicate-contacts"
         component={AsyncContactsDuplicateContacts}
