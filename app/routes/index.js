@@ -344,21 +344,10 @@ function authenticate(nextState, replace) {
   const { user } = store.getState()
   const isLoggedIn = user && user.access_token
 
-  const noAuthList = [
-    '/branch',
-    '/dashboard/mls',
-    '/dashboard/mls/:id',
-    '/widgets/map',
-    '/widgets/search',
-    '/widgets/listings'
-  ]
+  const noAuthList = ['/dashboard/mls', '/dashboard/mls/:id']
 
-  for (let url of noAuthList) {
-    for (let route of nextState.routes) {
-      if (route.path && route.path !== '/' && route.path === url) {
-        return true
-      }
-    }
+  if (nextState.routes.some(route => noAuthList.includes(route.path))) {
+    return true
   }
 
   if (typeof window !== 'undefined' && !isLoggedIn) {
