@@ -1,40 +1,21 @@
 import styled, { css } from 'styled-components'
 
-import { blue, grey, primary } from 'views/utils/colors'
+import { grey, primary } from 'views/utils/colors'
 
 import Card from 'components/Card'
 
 export const List = styled(Card)`
   position: absolute;
-  top: calc(100% + 8px);
-  overflow: auto;
+  top: calc(100% + 0.5rem);
   left: 0;
-  width: 300px;
-  min-height: 32px;
-  max-height: 300px;
+  overflow: auto;
+  width: 18.75rem;
+  min-height: 2rem;
+  max-height: 18.75rem;
   z-index: 1001;
 `
 
-export const SelectedItem = styled.span`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 40px;
-  margin: 0 4px 0 4px;
-  padding: 0 4px;
-  font-size: 14px;
-  line-height: 24px;
-  border-radius: 3px;
-  color: #fff;
-  background-color: ${primary};
-
-  &:hover {
-    background-color: ${blue.A200};
-  }
-`
-
 export const ItemsContainer = styled.div`
-  padding: ${props => (props.selectedItems.length > 1 ? '0.5em' : 0)};
   border-radius: 3px;
   background-color: ${grey.A200};
 `
@@ -44,9 +25,8 @@ export const InputContainer = styled.div`
   overflow: hidden;
   border-radius: 3px;
   border: solid 1px ${grey.A300};
-  min-height: 40px;
+  min-height: 2.5rem;
   cursor: pointer;
-  margin: ${props => (props.withMargin ? '2px 4px' : '0')};
   display: flex;
   align-items: center;
   background-color: #ffffff;
@@ -61,8 +41,8 @@ export const InputContainer = styled.div`
 
 export const Input = styled.input`
   width: 100%;
-  height: 38px;
-  padding: 0 32px 0 8px;
+  height: 2.5rem;
+  padding: 0 2rem 0 0.5rem;
   border: none;
   cursor: pointer;
 

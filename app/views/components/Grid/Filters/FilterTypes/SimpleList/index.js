@@ -1,10 +1,10 @@
 import React from 'react'
-
 import usePromise from 'react-use-promise'
+import Flex from 'styled-flex-component'
 
 import { Item } from 'components/Dropdown/Item'
 
-import Loading from 'partials/Loading'
+import Loading from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 import { List, Placeholder } from './styled'
 
@@ -19,11 +19,17 @@ export function SimpleList({
   )
 
   if (error) {
-    return <Placeholder hasError>Could not fetch options</Placeholder>
+    console.error(error)
+
+    return <Placeholder hasError>Could not fetch items</Placeholder>
   }
 
   if (state === 'pending') {
-    return <Loading />
+    return (
+      <Flex center>
+        <Loading />
+      </Flex>
+    )
   }
 
   if (resolvedOptions.length === 0) {

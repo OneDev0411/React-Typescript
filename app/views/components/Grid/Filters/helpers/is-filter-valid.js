@@ -1,3 +1,5 @@
 export function isFilterValid(filter) {
-  return filter.operator && filter.values && filter.values.length > 0
+  return (
+    filter.operator && Array.isArray(filter.values) && filter.values.length > 0
+  )
 }

@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import _ from 'underscore'
 
 import {
   selectActiveFilters,
@@ -72,41 +71,30 @@ class Filters extends React.Component {
     )
   }
 
-  /**
-   *
-   */
   createFilter = ({ id }) => {
     this.props.addActiveFilter(this.props.name, id)
   }
 
-  /**
-   *
-   */
   toggleFilterActive = id => {
     this.props.toggleActiveFilter(this.props.name, id)
   }
 
-  /**
-   *
-   */
   removeFilter = async filterId => {
     const { activeFilters } = this.props
 
-    const isInvalid = !isFilterValid(activeFilters[filterId])
-    const nextFilters = _.omit(activeFilters, (filter, id) => id === filterId)
+    const nextFilters = {}
+
+    Object.keys(activeFilters)
+      .filter(id => id !== filterId)
+      .forEach(id => (nextFilters[id] = activeFilters[id]))
 
     await this.props.removeActiveFilter(this.props.name, filterId)
-
-    if (!isInvalid) {
-      this.onChangeFilters(nextFilters)
-    }
+    this.onChangeFilters(nextFilters)
   }
 
-  /**
-   *
-   */
   onFilterChange = async (id, values, operator) => {
-    const current = this.props.activeFilters[id]
+    const { activeFilters } = this.props
+    const current = activeFilters[id]
     const isValid = isFilterValid({ values, operator })
 
     await this.props.updateActiveFilter(this.props.name, id, {
@@ -115,9 +103,9 @@ class Filters extends React.Component {
     })
 
     const nextFilters = {
-      ...this.props.activeFilters,
+      ...activeFilters,
       [id]: {
-        ...this.props.activeFilters[id],
+        ...activeFilters[id],
         values,
         operator
       }
@@ -133,43 +121,33 @@ class Filters extends React.Component {
       (next.values && next.values.map(({ value }) => value).join('')) ||
     current.operator.name !== next.operator.name
 
-  hasMissingValue = () =>
-    _.some(this.props.activeFilters, filter => !isFilterValid(filter))
-
-  /**
-   *
-   */
   findFilterById = id => this.props.config.find(filter => filter.id === id)
 
-  /**
-   *
-   */
-  onChangeFilters = filterItems => {
-    const validFilters = _.filter(filterItems, item => isFilterValid(item))
-
+  onChangeFilters = filters => {
     this.props.onChange({
-      filters: validFilters,
-      conditionOperator: this.props.conditionOperator
+      conditionOperator: this.props.conditionOperator,
+      filters: Object.values(filters).filter(isFilterValid)
     })
   }
 
   onConditionChange = async ({ value: conditionOperator }) => {
-    await this.props.changeConditionOperator(this.props.name, conditionOperator)
+    const { props } = this
 
-    if (_.size(this.props.activeFilters) <= 1) {
+    await props.changeConditionOperator(props.name, conditionOperator)
+
+    if (Object.keys(props.activeFilters).length <= 1) {
       return false
     }
 
-    this.props.onChange({
-      filters: this.props.activeFilters,
+    props.onChange({
+      filters: props.activeFilters,
       conditionOperator
     })
   }
 
   render() {
-    const { children, ...rest } = this.props
-    const { config } = rest
-    const { activeFilters } = this.props
+    const { children, ...props } = this.props
+    const { activeFilters } = props
 
     return (
       <Container>
@@ -180,23 +158,27 @@ class Filters extends React.Component {
           />
         )}
 
-        {_.map(activeFilters, (filter, id) => (
-          <FilterItem
-            key={id}
-            {...filter}
-            isIncomplete={!isFilterValid(filter)}
-            filterConfig={this.findFilterById(filter.id)}
-            onToggleFilterActive={() => this.toggleFilterActive(id)}
-            onRemove={() => this.removeFilter(id)}
-            onFilterChange={(values, operator) =>
-              this.onFilterChange(id, values, operator)
-            }
-          />
-        ))}
+        {Object.keys(activeFilters).map(id => {
+          const filter = activeFilters[id]
+
+          return (
+            <FilterItem
+              key={id}
+              {...filter}
+              isIncomplete={!isFilterValid(filter)}
+              filterConfig={this.findFilterById(filter.id)}
+              onToggleFilterActive={() => this.toggleFilterActive(id)}
+              onRemove={() => this.removeFilter(id)}
+              onFilterChange={(values, operator) =>
+                this.onFilterChange(id, values, operator)
+              }
+            />
+          )
+        })}
 
         <AddFilter
-          hasMissingValue={this.hasMissingValue()}
-          config={config}
+          config={props.config}
+          disabled={!Object.values(activeFilters).every(isFilterValid)}
           onNewFilter={this.createFilter}
         />
 
@@ -207,7 +189,7 @@ class Filters extends React.Component {
         {React.Children.map(children, child =>
           React.cloneElement(child, {
             filters: activeFilters,
-            ...rest
+            ...props
           })
         )}
       </Container>

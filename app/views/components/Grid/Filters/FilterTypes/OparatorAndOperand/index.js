@@ -3,12 +3,14 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
 import { DoneButton } from 'components/Grid/Filters/Item/styled'
+import IconSelectedRadio from 'components/SvgIcons/Radio/SelectedRadio/IconSelectedRadio'
+import IconUnSelectedRadio from 'components/SvgIcons/Radio/UnSelectedRadio/IconUnSelectedRadio'
 
 import { DropDownList } from './components/DropDownList'
 import { TextInput } from './components/TextInput'
 import { Container, InputContainer, Operator, Title } from './styled'
-import IconSelectedRadio from '../../../../SvgIcons/Radio/SelectedRadio/IconSelectedRadio'
-import IconUnSelectedRadio from '../../../../SvgIcons/Radio/UnSelectedRadio/IconUnSelectedRadio'
+
+import getOperator from './get-operator'
 
 export const operators = [
   {
@@ -21,34 +23,33 @@ export const operators = [
   }
 ]
 
-export class OperatorAndOperandFilter extends React.Component {
-  constructor(props) {
-    super(props)
+const propTypes = {
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired
+    })
+  ),
+  getOptions: PropTypes.func,
+  type: PropTypes.string,
+  allowedOperators: PropTypes.arrayOf(PropTypes.string)
+}
 
-    this.state = this.DefaultState
+const defaultProps = {
+  options: [],
+  getOptions: null,
+  type: 'Set',
+  allowedOperators: operators
+}
+
+export class OperatorAndOperandFilter extends React.Component {
+  state = {
+    selectedOperator: getOperator(this.props)
   }
 
   async componentDidMount() {
     if (typeof this.props.getOptions === 'function') {
       this.setState({ options: await this.props.getOptions() })
-    }
-  }
-
-  getOperator = () => {
-    const { allowedOperators, operator } = this.props
-
-    return (
-      operator ||
-      Object.values(allowedOperators).find(
-        operator => operator.default === true
-      ) ||
-      allowedOperators[0]
-    )
-  }
-
-  get DefaultState() {
-    return {
-      selectedOperator: this.getOperator()
     }
   }
 
@@ -65,7 +66,10 @@ export class OperatorAndOperandFilter extends React.Component {
   }
 
   onFilterChange = filters =>
-    this.props.onFilterChange(_.values(filters), this.state.selectedOperator)
+    this.props.onFilterChange(
+      Object.values(filters),
+      this.state.selectedOperator
+    )
 
   getOperatorComponent = type => {
     const props = {
@@ -126,23 +130,5 @@ export class OperatorAndOperandFilter extends React.Component {
   }
 }
 
-OperatorAndOperandFilter.propTypes = {
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired
-    })
-  ),
-  getOptions: PropTypes.func,
-  type: PropTypes.string,
-  multi: PropTypes.bool,
-  allowedOperators: PropTypes.arrayOf(PropTypes.string)
-}
-
-OperatorAndOperandFilter.defaultProps = {
-  options: [],
-  getOptions: null,
-  type: 'Set',
-  multi: false,
-  allowedOperators: operators
-}
+OperatorAndOperandFilter.propTypes = propTypes
+OperatorAndOperandFilter.defaultProps = defaultProps
