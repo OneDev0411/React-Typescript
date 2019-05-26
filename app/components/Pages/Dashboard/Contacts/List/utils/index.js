@@ -1,6 +1,8 @@
 import _ from 'underscore'
 
-export function normalizeFilters(filters) {
+import { FLOW_FILTER_ID, OPEN_HOUSE_FILTER_ID } from 'crm/List/constants'
+
+export function normalizeAttributeFilters(filters) {
   const criteria = []
 
   _.each(filters, filter => {
@@ -14,4 +16,8 @@ export function normalizeFilters(filters) {
   })
 
   return criteria
+}
+
+export function isAttributeFilter(filter) {
+  return ![OPEN_HOUSE_FILTER_ID, FLOW_FILTER_ID].includes(filter.id)
 }

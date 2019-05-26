@@ -23,7 +23,7 @@ import {
 } from 'components/Grid/SavedSegments/List/styled'
 import { ShowMoreLess } from 'components/ShowMoreLess'
 
-import { normalizeFilters } from '../utils'
+import { normalizeAttributeFilters } from '../utils'
 
 const CustomListItem = styled(ListItem)`
   justify-content: flex-start;
@@ -69,8 +69,7 @@ class TagsList extends React.Component {
         operator: {
           name: 'is',
           invert: false
-        },
-        isIncomplete: false
+        }
       }
 
       this.props.updateActiveFilter('contacts', item.id, filter)
@@ -81,7 +80,7 @@ class TagsList extends React.Component {
     }
 
     this.props.onFilterChange({
-      filters: normalizeFilters(nextFilters)
+      filters: normalizeAttributeFilters(nextFilters)
     })
   }
 
