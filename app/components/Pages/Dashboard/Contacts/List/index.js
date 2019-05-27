@@ -267,16 +267,16 @@ class ContactsList extends React.Component {
     const { total } = this.props.listInfo
     const totalLoadedCount = this.props.list.ids.length
     const prevStart = parseInt(this.getQueryParam('s'), 10) || 0
+    const start = Math.max(prevStart, ...this.state.loadedRanges) + 50
 
     if (
       this.state.isFetchingMoreContacts ||
       this.state.isFetchingMoreContactsBefore ||
-      totalLoadedCount === total
+      totalLoadedCount === total ||
+      start > total
     ) {
       return false
     }
-
-    const start = Math.max(prevStart, ...this.state.loadedRanges) + 50
 
     console.log(`[ Loading More ] Start: ${start}`)
 
