@@ -294,7 +294,7 @@ class ContactsList extends React.Component {
       this.state.isFetchingMoreContacts ||
       this.state.isFetchingMoreContactsBefore ||
       totalLoadedCount === total ||
-      start >= total + 1
+      start > total
     ) {
       return false
     }
