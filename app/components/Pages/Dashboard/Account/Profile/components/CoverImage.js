@@ -60,7 +60,6 @@ const CoverImage = ({
               type="file"
               id="image-cover-input"
               onChange={uploadHandler}
-              accept="image/jpeg, image/png"
               className="c-cover-image__input"
               value={value}
             />
@@ -73,7 +72,7 @@ const CoverImage = ({
               {submitLabelText}
             </label>
             {((coverImage && !isUploading) || (!coverImage && isDeleting)) && (
-              <Button appearance="outline" size="small" onClick={deleteHandler}>
+              <Button appearance="outline" size="small" onClick={deleteHandler} data-test="cover-image-form-delete-button">
                 {isDeleting ? 'Deleting...' : 'Delete Cover'}
               </Button>
             )}

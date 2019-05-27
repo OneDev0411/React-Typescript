@@ -8,12 +8,20 @@ function ActionBar(props) {
   return (
     <div className="cta">
       {confirmation.needsCancel && (
-        <Button appearance="outline" onClick={onCancel}>
+        <Button
+          appearance="outline"
+          onClick={onCancel}
+          data-test="confirmation-modal-cancel-button"
+        >
           {confirmation.cancelLabel || 'Cancel'}
         </Button>
       )}
       {confirmation.needsConfirm && (
-        <Button style={{ marginLeft: '1em' }} onClick={onConfirm}>
+        <Button
+          style={{ marginLeft: '1em' }}
+          onClick={onConfirm}
+          data-test="confirmation-modal-confirm-button"
+        >
           {confirmation.confirmLabel || 'Confirm'}
         </Button>
       )}

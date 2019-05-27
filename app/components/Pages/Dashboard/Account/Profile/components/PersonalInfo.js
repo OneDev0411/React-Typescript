@@ -72,7 +72,7 @@ let PersonalInfoForm = ({
           </div>
         )}
         <div style={{ textAlign: 'right' }}>
-          <Button type="submit" disabled={isDisabled}>
+          <Button type="submit" disabled={isDisabled} data-test="personal-info-form-submit-button">
             {isSubmitting ? 'Updating...' : 'Update'}
           </Button>
         </div>
