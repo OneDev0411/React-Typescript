@@ -4,7 +4,7 @@ import { primary, grey, borderColor } from '../../../utils/colors'
 import IconSearchBase from '../../SvgIcons/Search/IconSearch'
 import IconButtonFlex from '../../Button/IconButton'
 
-export const Container = styled.div`
+export const Container = styled.div<{ isFocused: boolean }>`
   display: flex;
   align-items: center;
   padding-left: 1em;
@@ -56,7 +56,7 @@ export const IconSearch = styled(IconSearchBase)`
     fill: #000 !important;
   }
 `
-export const Icon = styled.div`
+export const Icon = styled.div<{ isSearching: boolean }>`
   color: ${grey.A900};
   padding-top: ${props => (props.isSearching ? '0' : '4px')};
 `

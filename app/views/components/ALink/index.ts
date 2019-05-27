@@ -34,7 +34,7 @@ const defaultProps = {
   isBlock: false
 }
 
-const ALink = styled.a`
+const ALink = styled.a<{ noStyle?: boolean }>`
   color: #000;
 
   ${({ noStyle }) =>

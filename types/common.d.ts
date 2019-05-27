@@ -37,6 +37,7 @@ declare type TCallback<T> = ((err: any) => void) | ((err: null, res: T) => void)
 declare interface ApiResponse<T> {
   data: T
   info: {
+    // TODO: info not always existing
     count: number
     total: number
   }

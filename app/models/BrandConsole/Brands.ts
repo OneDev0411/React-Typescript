@@ -1,13 +1,11 @@
+import { Team } from 'types/Team'
+
 import Fetch from '../../services/fetch/index'
 
-export async function getBrands(brandId) {
-  try {
-    return await new Fetch().get(
-      `/brands/${brandId}?associations[]=brand.roles&associations[]=brand_role.members`
-    )
-  } catch (error) {
-    return { error }
-  }
+export async function getBrands(brandId: string): Promise<ApiResponse<Team>> {
+  return (await new Fetch().get(
+    `/brands/${brandId}?associations=brand.children&associations=brand.roles&associations=brand_role.members`
+  )).body
 }
 
 export async function getChildrenBrands(brandId) {

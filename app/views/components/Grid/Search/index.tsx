@@ -1,13 +1,44 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { RefObject } from 'react'
 
 import _ from 'underscore'
 
 import IconClose from '../../SvgIcons/Close/CloseIcon'
 
-import { Container, TextInput, Icon, IconSearch, IconButton } from './styled'
+import { Container, Icon, IconButton, IconSearch, TextInput } from './styled'
 
-class Search extends React.Component {
+interface Props {
+  onChange: (value) => any
+  placeholder?: string
+  debounceTime?: number
+  minimumLength?: number
+  isSearching?: boolean
+  disableOnSearch?: boolean
+  className?: string
+  showLoadingOnSearch?: boolean
+  showClearSearch?: boolean
+  onClearSearch?: (string) => any
+
+  inputRef?: RefObject<HTMLInputElement>
+}
+
+interface State {
+  isFocused: boolean
+}
+
+class Search extends React.Component<Props, State> {
+  static defaultProps = {
+    placeholder: '',
+    className: '',
+    debounceTime: 0,
+    minimumLength: 0,
+    isSearching: false,
+    showLoadingOnSearch: false,
+    disableOnSearch: true,
+    showClearSearch: true
+  }
+
+  private onChangeHandler: any
+
   constructor(props) {
     super(props)
 
@@ -75,7 +106,7 @@ class Search extends React.Component {
     } = this.props
 
     return (
-      <Container style={style} isFocused={this.state.isFocused}>
+      <Container style={style} isFocused={this.state.isFocused} className={this.props.className}>
         <Icon isSearching={isSearching}>
           {isSearching && showLoadingOnSearch ? (
             <i className="fa fa-spin fa-spinner" />
@@ -102,28 +133,6 @@ class Search extends React.Component {
       </Container>
     )
   }
-}
-
-Search.propTypes = {
-  placeholder: PropTypes.string,
-  debounceTime: PropTypes.number,
-  onChange: PropTypes.func.isRequired,
-  minimumLength: PropTypes.number,
-  isSearching: PropTypes.bool,
-  disableOnSearch: PropTypes.bool,
-  showLoadingOnSearch: PropTypes.bool,
-  showClearSearch: PropTypes.bool,
-  onClearSearch: PropTypes.func
-}
-
-Search.defaultProps = {
-  placeholder: '',
-  debounceTime: 0,
-  minimumLength: 0,
-  isSearching: false,
-  showLoadingOnSearch: false,
-  disableOnSearch: true,
-  showClearSearch: true
 }
 
 export default Search

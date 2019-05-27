@@ -1,7 +1,12 @@
 // Loading.js
-import React from 'react'
+import React, { HTMLProps } from 'react'
 
-export default function Spinner(props) {
+interface Props {
+  size: number
+  style: HTMLProps<HTMLElement>['style']
+}
+
+export default function Spinner(props: Props) {
   return (
     <div
       className={`sk-circle ${props.size ? `sk-circle--${props.size}` : ''}`}

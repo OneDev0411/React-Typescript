@@ -82,6 +82,6 @@
   "include": [
     "app/**/*.ts",
     "app/**/*.tsx",
-    "types/**/*.ts"
+    "types/**/*"
   ]
 }
