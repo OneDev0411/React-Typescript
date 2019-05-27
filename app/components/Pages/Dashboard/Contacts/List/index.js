@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import _ from 'underscore'
+import { FlexItem } from 'styled-flex-component'
 
 import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
@@ -36,6 +37,8 @@ import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
 
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 
+import { AlphabetFilter } from '../../../../../views/components/AlphabetFilter'
+
 import Table from './Table'
 import { SearchContacts } from './Search'
 import { Header } from './Header'
@@ -48,11 +51,13 @@ import {
   OPEN_HOUSE_FILTER_ID,
   SORT_FIELD_SETTING_KEY
 } from './constants'
+import { Container, SearchWrapper } from './styled'
 
 class ContactsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      firstLetter: this.props.location.query.letter || null,
       isSideMenuOpen: true,
       isFetchingMoreContacts: false,
       isFetchingMoreContactsBefore: false,
@@ -190,7 +195,8 @@ class ContactsList extends React.Component {
       flows = this.props.flows,
       crmTasks = this.props.crmTasks,
       conditionOperator = this.props.conditionOperator,
-      prependResult = false
+      prependResult = false,
+      firstLetter = this.state.firstLetter
     } = newFilters || {}
 
     this.addLoadedRange(start)
@@ -214,7 +220,8 @@ class ContactsList extends React.Component {
           s: start
         },
         flows,
-        crmTasks
+        crmTasks,
+        firstLetter
       )
     } catch (e) {
       console.log('fetch search error: ', e)
@@ -222,11 +229,17 @@ class ContactsList extends React.Component {
   }
 
   handleSearch = value => {
-    console.log(`[ Search ] ${value}`)
     this.setState({ searchInputValue: value })
     this.handleFilterChange({
       filters: this.props.filters,
       searchInputValue: value
+    })
+  }
+
+  handleFirstLetterChange = value => {
+    this.setQueryParam('letter', value)
+    this.setState({ firstLetter: value }, () => {
+      this.handleFilterChange({})
     })
   }
 
@@ -419,36 +432,48 @@ class ContactsList extends React.Component {
             user={user}
             onMenuTriggerChange={this.toggleSideMenu}
           />
-          <ContactFilters
-            onFilterChange={this.handleFilterChange}
-            users={viewAsUsers}
-          />
-          <SearchContacts
-            onSearch={this.handleSearch}
-            isSearching={isFetchingContacts}
-          />
-          <Table
-            tableContainerId={this.tableContainerId}
-            reloadContacts={this.reloadContacts}
-            sortBy={this.order}
-            handleChangeOrder={this.handleChangeOrder}
-            handleChangeContactsAttributes={this.handleChangeContactsAttributes}
-            data={contacts}
-            listInfo={this.props.listInfo}
-            isFetching={isFetchingContacts}
-            isFetchingMore={this.state.isFetchingMoreContacts}
-            isFetchingMoreBefore={this.state.isFetchingMoreContactsBefore}
-            isRowsUpdating={this.state.isRowsUpdating}
-            onRequestLoadMore={this.handleLoadMore}
-            onRequestLoadMoreBefore={this.handleLoadMoreBefore}
-            rowsUpdating={this.rowsUpdating}
-            onChangeSelectedRows={this.onChangeSelectedRows}
-            onRequestDelete={this.handleOnDelete}
-            filters={this.props.filters}
-            searchInputValue={this.state.searchInputValue}
-            conditionOperator={this.props.conditionOperator}
-            users={viewAsUsers}
-          />
+          <Container>
+            <ContactFilters
+              onFilterChange={this.handleFilterChange}
+              users={viewAsUsers}
+            />
+            <SearchWrapper row alignCenter>
+              <FlexItem basis="100%">
+                <SearchContacts
+                  onSearch={this.handleSearch}
+                  isSearching={isFetchingContacts}
+                />
+              </FlexItem>
+              <AlphabetFilter
+                value={this.state.firstLetter}
+                onChange={this.handleFirstLetterChange}
+              />
+            </SearchWrapper>
+            <Table
+              tableContainerId={this.tableContainerId}
+              reloadContacts={this.reloadContacts}
+              sortBy={this.order}
+              handleChangeOrder={this.handleChangeOrder}
+              handleChangeContactsAttributes={
+                this.handleChangeContactsAttributes
+              }
+              data={contacts}
+              listInfo={this.props.listInfo}
+              isFetching={isFetchingContacts}
+              isFetchingMore={this.state.isFetchingMoreContacts}
+              isFetchingMoreBefore={this.state.isFetchingMoreContactsBefore}
+              isRowsUpdating={this.state.isRowsUpdating}
+              onRequestLoadMore={this.handleLoadMore}
+              onRequestLoadMoreBefore={this.handleLoadMoreBefore}
+              rowsUpdating={this.rowsUpdating}
+              onChangeSelectedRows={this.onChangeSelectedRows}
+              onRequestDelete={this.handleOnDelete}
+              filters={this.props.filters}
+              searchInputValue={this.state.searchInputValue}
+              conditionOperator={this.props.conditionOperator}
+              users={viewAsUsers}
+            />
+          </Container>
         </PageContent>
       </PageContainer>
     )

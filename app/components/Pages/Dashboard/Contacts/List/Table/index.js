@@ -262,7 +262,7 @@ class ContactsList extends React.Component {
 
   render() {
     return (
-      <div style={{ padding: '0 1.5em' }}>
+      <div>
         <Table
           plugins={{
             selectable: {
