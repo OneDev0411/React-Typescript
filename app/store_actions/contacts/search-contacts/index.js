@@ -17,7 +17,8 @@ export function searchContacts(
   prependResult = false,
   meta = {},
   flows = [],
-  crmTasks = []
+  crmTasks = [],
+  alphabet
 ) {
   return async (dispatch, getState) => {
     if (start === 0 && !prependResult) {
@@ -39,11 +40,13 @@ export function searchContacts(
           start,
           limit,
           order,
+          alphabet,
           filter_type: conditionOperator
         },
         users,
         flows,
-        crmTasks
+        crmTasks,
+        alphabet
       )
 
       const contactsLength = selectContacts(getState().contacts.list).length
