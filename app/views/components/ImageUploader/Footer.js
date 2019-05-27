@@ -93,6 +93,7 @@ export default function Footer({
           </ActionButton>
         )}
         <ActionButton
+          data-test="image-uploader-modal-save-button"
           style={{ width: '120px', paddingLeft: '22px' }}
           onClick={async () => onSave()}
         >

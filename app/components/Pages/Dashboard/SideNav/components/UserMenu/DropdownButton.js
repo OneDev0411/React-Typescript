@@ -27,6 +27,7 @@ export class DropdownButton extends Component {
           inverse
           onClick={this.handleClick}
           style={{ padding: 0 }}
+          data-test="settings-dropdown-button"
         >
           <UserAvatar user={this.props.user} size={32} />
           <DropdownDots />

@@ -69,6 +69,7 @@ const Timezone = ({ timezone, dispatch }) => {
                     hasSearch
                     items={timezones}
                     itemToString={handleItemToString}
+                    data-test="timezone-dropdown"
                   />
                 </Fragment>
               )}
@@ -79,7 +80,7 @@ const Timezone = ({ timezone, dispatch }) => {
               </div>
             )}
             <div style={{ textAlign: 'right' }}>
-              <Button type="submit" disabled={submitting}>
+              <Button type="submit" disabled={submitting} data-test="timezone-form-submit-button">
                 {submitting ? 'Updating...' : 'Update'}
               </Button>
             </div>

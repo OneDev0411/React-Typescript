@@ -96,7 +96,10 @@ class ProfileCatalog extends Component {
     return (
       <React.Fragment>
         <Container>
-          <Avatar user={this.props.user} />
+          <Avatar
+            user={this.props.user}
+            data-test="profile-avatar-image"
+          />
 
           <ProfileImageActions>
             {this.props.user.profile_image_url && (
@@ -105,6 +108,7 @@ class ProfileCatalog extends Component {
                   disabled={this.props.isUploading}
                   appearance="outline"
                   style={{ marginRight: '1rem', marginBottom: '1rem' }}
+                  data-test="profile-avatar-delete-button"
                   onClick={this.onDelete}
                 >
                   <DeleteIcon />
@@ -112,6 +116,7 @@ class ProfileCatalog extends Component {
               </Tooltip>
             )}
             <Button
+              data-test="profile-avatar-upload-button"
               disabled={this.props.isUploading}
               appearance="outline"
               onClick={this.openModal}
