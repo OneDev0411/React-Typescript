@@ -45,8 +45,7 @@ export function searchContacts(
         },
         users,
         flows,
-        crmTasks,
-        alphabet
+        crmTasks
       )
 
       const contactsLength = selectContacts(getState().contacts.list).length
