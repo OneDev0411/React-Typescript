@@ -7,6 +7,9 @@ import { CheckboxInput } from './styled'
 export default React.memo(props => {
   const { annotation } = props
   const appearance = parseAppearanceString(annotation.defaultAppearance)
+  const isDefaultChecked = props.defaultValue
+    ? props.defaultValue.toLowerCase() !== 'off'
+    : false
 
   const { rect } = annotation
 
@@ -25,7 +28,7 @@ export default React.memo(props => {
       appearance={appearance}
       key={annotation.fieldName}
       onClick={e => props.onChange(e.target.checked)}
-      defaultChecked={props.defaultValue}
+      defaultChecked={isDefaultChecked}
     />
   )
 })
