@@ -10,10 +10,10 @@ export function getRolesList({ roles, values, annotation, rectIndex }) {
   let cursor = 0
 
   const groups = roles.reduce((acc, role) => {
-    const text =
-      annotation.type === 'Roles'
-        ? getAttributeValue(role, annotation)
-        : getAttributeValue(roles[annotation.number], annotation)
+    const roleItem =
+      annotation.type === 'Roles' ? role : roles[annotation.number]
+
+    const text = getAttributeValue(roleItem, annotation)
 
     if (!text) {
       return acc
@@ -34,7 +34,7 @@ export function getRolesList({ roles, values, annotation, rectIndex }) {
       acc[groupIndex] = [
         ...(acc[groupIndex] || []),
         {
-          ...role,
+          ...roleItem,
           value: groupValue
         }
       ]
