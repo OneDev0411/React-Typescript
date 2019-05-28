@@ -3,7 +3,25 @@ import { combineReducers } from 'redux'
 
 import * as actionTypes from '../../constants/contacts'
 
-const byId = (state = {}, action) => {
+interface ByIdState {
+  [attributeId: string]: IContactAttributeDef
+}
+
+interface ByNameState {
+  [attributeName: string]: UUID
+}
+
+interface BySectionState {
+  [sectionName: string]: UUID[]
+}
+
+export interface AttributeDefsState {
+  byId: ByIdState
+  byName: ByNameState
+  bySection: BySectionState
+}
+
+function byId(state: ByIdState = {}, action): ByIdState {
   switch (action.type) {
     case actionTypes.FETCH_CONTACT_ATTR_DEFS_SUCCESS:
     case actionTypes.CREATE_CONTACT_ATTR_DEF_SUCCESS:
@@ -14,7 +32,7 @@ const byId = (state = {}, action) => {
   }
 }
 
-const byName = (state = {}, action) => {
+function byName(state: ByNameState = {}, action): ByNameState {
   switch (action.type) {
     case actionTypes.FETCH_CONTACT_ATTR_DEFS_SUCCESS:
       const names = {}
@@ -32,11 +50,14 @@ const byName = (state = {}, action) => {
   }
 }
 
-const bySection = (state = {}, action) => {
+function bySection(state: BySectionState = {}, action): BySectionState {
   switch (action.type) {
     case actionTypes.FETCH_CONTACT_ATTR_DEFS_SUCCESS:
     case actionTypes.CREATE_CONTACT_ATTR_DEF_SUCCESS:
-      const groupBySection = _.groupBy(action.definitions, 'section')
+      const groupBySection = _.groupBy<IContactAttributeDef>(
+        action.definitions,
+        'section'
+      )
 
       const result = {}
 
