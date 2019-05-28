@@ -103,6 +103,7 @@ router.post('/contact', bodyParser(), async ctx => {
   let data = {
     from: `${first_name} ${last_name}<noreply@rechat.com>`,
     to: 'support@rechat.com',
+    bcc: 'seth@rechat.com',
     subject: 'Get in touch request - Rechat Website',
     text: `
       First Name: ${first_name}
