@@ -29,7 +29,7 @@ export function ScrollableArea({
   children,
   hasThinnerScrollbar = false
 }) {
-  const contentRef = useRef()
+  const contentRef = useRef<HTMLDivElement>(null)
 
   const { reachedEnd, reachedStart } = useScrollDetector(contentRef, {
     enabled: hasScrollIndicatorShadows,
@@ -44,11 +44,7 @@ export function ScrollableArea({
   })
 
   return (
-    <Wrapper
-      style={style}
-      className={classes}
-      hasScrollIndicatorShadows={hasScrollIndicatorShadows}
-    >
+    <Wrapper style={style} className={classes}>
       <Content ref={contentRef}>{children}</Content>
     </Wrapper>
   )

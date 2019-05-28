@@ -1,5 +1,12 @@
-import { useCallback, useEffect, useState } from 'react'
+import { RefObject, useCallback, useEffect, useState } from 'react'
 import { debounce } from 'lodash'
+import { Cancelable } from 'underscore'
+
+interface UseScrollDetectorOptions {
+  offset?: number
+  enabled?: boolean
+  debounceWait?: number
+}
 
 /**
  * Given an element (normally from a ref), it returns an object in the form of
@@ -17,8 +24,8 @@ import { debounce } from 'lodash'
  * @returns {{reachedStart, reachedEnd}}
  */
 export function useScrollDetector(
-  ref,
-  { offset = 0, enabled = true, debounceWait = 0 }
+  ref: RefObject<HTMLElement>,
+  { offset = 0, enabled = true, debounceWait = 0 }: UseScrollDetectorOptions
 ) {
   const [reachedStart, setReachedStart] = useState(false)
   const [reachedEnd, setReachedEnd] = useState(false)
@@ -49,7 +56,10 @@ export function useScrollDetector(
       window.addEventListener('resize', listener, { passive: true })
 
       return () => {
-        listener.cancel && listener.cancel()
+        if (isCancelable(listener)) {
+          listener.cancel()
+        }
+
         window.removeEventListener('resize', listener)
         element.removeEventListener('scroll', listener)
       }
@@ -60,4 +70,8 @@ export function useScrollDetector(
     reachedStart,
     reachedEnd
   }
+}
+
+function isCancelable(fn: any | Cancelable): fn is Cancelable {
+  return fn && typeof fn.cancel === 'function'
 }
