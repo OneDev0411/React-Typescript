@@ -1,6 +1,4 @@
-import { cleanSearchQuery } from 'utils/clean-search-query'
-
-import preSearchFormat from 'models/contacts/helpers/pre-search-format'
+import preSearchFormat from '../helpers/pre-search-format'
 
 import Fetch from '../../../services/fetch'
 import { defaultQuery } from '../helpers/default-query'
@@ -22,7 +20,7 @@ export async function searchContacts(
       attributeFilters,
       crm_tasks,
       flows,
-      query: searchText,
+      query: searchText
     })
 
     const request = new Fetch().post('/contacts/filter').query(query)

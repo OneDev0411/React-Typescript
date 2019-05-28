@@ -1,17 +1,11 @@
-import { cleanSearchQuery } from 'utils/clean-search-query'
+import { cleanSearchQuery } from '../../../utils/clean-search-query'
 
 function validArrayFilter(filter) {
   return Array.isArray(filter) && filter.length > 0
 }
 
 function preFilterFormat(filters) {
-  let {
-    query,
-    attributeFilters,
-    flows,
-    crm_tasks,
-    ...rest
-  } = filters
+  let { query, attributeFilters, flows, crm_tasks, ...rest } = filters
 
   let payload = rest
 
