@@ -1,4 +1,6 @@
-import { cleanSearchQuery } from '../../../utils/clean-search-query'
+import { cleanSearchQuery } from 'utils/clean-search-query'
+
+import preSearchFormat from 'models/contacts/helpers/pre-search-format'
 
 import Fetch from '../../../services/fetch'
 import { defaultQuery } from '../helpers/default-query'
@@ -12,33 +14,18 @@ export async function searchContacts(
     filter_type: 'and'
   },
   users,
-  flows = null,
-  crmTasks = null
+  flows,
+  crm_tasks
 ) {
   try {
-    const payload = {}
-
-    const q = cleanSearchQuery(searchText.trim())
+    let payload = preSearchFormat({
+      attributeFilters,
+      crm_tasks,
+      flows,
+      query: searchText,
+    })
 
     const request = new Fetch().post('/contacts/filter').query(query)
-
-    if (q.length > 0) {
-      payload.query = q
-    }
-
-    payload.crm_task = crmTasks
-    payload.flows = flows
-
-    if (Array.isArray(attributeFilters) && attributeFilters.length > 0) {
-      payload.filter = attributeFilters
-        .filter(filter => filter.attribute_def)
-        .map(({ attribute_def, invert, operator, value }) => ({
-          attribute_def,
-          invert,
-          operator,
-          value
-        }))
-    }
 
     if (Array.isArray(users) && users.length) {
       request.query(`users[]=${users.join('&users[]=')}`)
