@@ -72,12 +72,16 @@
       ],
       "crm/*": [
         "app/components/Pages/Dashboard/Contacts/*"
+      ],
+      "types/*": [
+        "types/*"
       ]
     }
 
   },
   "include": [
     "app/**/*.ts",
-    "app/**/*.tsx"
+    "app/**/*.tsx",
+    "types/**/*.ts"
   ]
 }
