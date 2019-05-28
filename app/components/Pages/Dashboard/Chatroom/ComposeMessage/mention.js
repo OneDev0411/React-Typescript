@@ -1,6 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
-import UserAvatar from '../../../../Partials/UserAvatar'
+import UserAvatar from '../../../../../views/components/UserAvatar'
 
 const KEYS = {
   8: 'BACKSPACE',

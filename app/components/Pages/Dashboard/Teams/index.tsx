@@ -1,5 +1,3 @@
-import usePromise from 'react-use-promise'
-
 import { connect } from 'react-redux'
 
 import * as React from 'react'
@@ -10,12 +8,8 @@ import styled from 'styled-components'
 
 import { RouteComponentProps } from 'react-router'
 
-import { getBrands } from 'models/BrandConsole/Brands'
-
 import { Container, Content, Menu } from 'components/SlideMenu'
 import ALink from 'components/ALink'
-
-import { getActiveTeamId } from 'utils/user-teams'
 
 import TreeView from 'components/TreeView'
 import { H4 } from 'components/Typography/headings'
@@ -24,21 +18,30 @@ import { primary } from 'views/utils/colors'
 
 import Search from 'components/Grid/Search'
 
-import { Team } from 'types/Team'
+import { findNode } from 'utils/tree-utils'
 
 import { TeamsSearch } from './styled'
+import { TeamView } from './TeamView'
+import { useTeamsPage } from './use-teams-page.hook'
 
 type Props = {
   user: any
 } & RouteComponentProps<{ id: string }, {}>
 
-function TeamsPage(props: Props) {
-  const [result, error, state] = usePromise<ApiResponse<Team>>(
-    async () => getBrands(getActiveTeamId(props.user)),
-    []
-  )
+const getId = team => team.id
 
-  if (state === 'pending') {
+function TeamsPage(props: Props) {
+  const {
+    rootTeam,
+    error,
+    loading,
+    updatingUserIds,
+    updateRoles,
+    getChildNodes,
+    initialExpandedNodes
+  } = useTeamsPage(props.user)
+
+  if (loading) {
     return <Spinner />
   }
 
@@ -46,7 +49,12 @@ function TeamsPage(props: Props) {
     return <div>Error</div> // TODO
   }
 
-  if (result) {
+  if (rootTeam) {
+    const selectedTeam =
+      (props.params.id &&
+        findNode(getChildNodes, team => team.id === props.params.id)) ||
+      rootTeam
+
     return (
       <React.Fragment>
         <Helmet>
@@ -63,18 +71,23 @@ function TeamsPage(props: Props) {
               />
             </TeamsSearch>
             <TreeView
-              getChildNodes={parent => (parent ? parent.children : result.data)}
+              getChildNodes={getChildNodes}
               selectable
-              initialExpandedNodes={[
-                result.data.id,
-                ...result.data.children.map(team => team.id)
-              ]}
-              getNodeId={team => team.id}
+              initialExpandedNodes={initialExpandedNodes}
+              getNodeId={getId}
               renderNode={renderTeam}
             />
           </Menu>
 
-          <Content />
+          <Content>
+            {selectedTeam && (
+              <TeamView
+                team={selectedTeam}
+                updatingUserIds={updatingUserIds}
+                updateRoles={updateRoles}
+              />
+            )}
+          </Content>
         </Container>
       </React.Fragment>
     )
@@ -97,7 +110,7 @@ function renderTeam(team) {
   return (
     <TeamLink
       noStyle
-      replace /* doesn't seem to work (v4 only?) */
+      // replace /* doesn't seem to work (v4 only?) */
       activeClassName="active"
       style={{ display: 'block' }}
       to={`/dashboard/teams/${team.id}`}

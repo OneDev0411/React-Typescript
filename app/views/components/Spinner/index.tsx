@@ -2,8 +2,8 @@
 import React, { HTMLProps } from 'react'
 
 interface Props {
-  size: number
-  style: HTMLProps<HTMLElement>['style']
+  size?: number
+  style?: HTMLProps<HTMLElement>['style']
 }
 
 export default function Spinner(props: Props) {

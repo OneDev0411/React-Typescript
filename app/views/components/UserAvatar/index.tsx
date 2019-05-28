@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { HTMLProps } from 'react'
 import { connect } from 'react-redux'
+import cn from 'classnames'
 import Avatar from 'react-avatar'
 
 const Colors = {
@@ -8,10 +9,26 @@ const Colors = {
   Background: 'darkgreen'
 }
 
-const UserAvatar = ({
+interface Props {
+  name: string | number
+  userId?: string
+  image?: string
+  className?: string
+  color?: string
+  style?: HTMLProps<HTMLDivElement>['style']
+  size?: number
+  borderColor?: string
+  showStateIndicator?: boolean
+  textSizeRatio?: number
+  fgColor?: number
+  state: string | undefined // make it enum or string union
+}
+
+function UserAvatar({
   name,
   image,
   state,
+  className,
   color = '#D4D4D4',
   style,
   size = 50,
@@ -19,8 +36,8 @@ const UserAvatar = ({
   showStateIndicator = true,
   textSizeRatio = 3,
   fgColor
-}) => {
-  const defaultStyles = showStateIndicator
+}: Props) {
+  const defaultStyles: HTMLProps<HTMLDivElement>['style'] = showStateIndicator
     ? { position: 'relative', width: `${size}px` }
     : {}
 
@@ -29,7 +46,7 @@ const UserAvatar = ({
 
   let props
 
-  if (typeof normalizedName === 'number') {
+  if (typeof name === 'number') {
     props = {
       value: normalizedName.toString()
     }
@@ -47,7 +64,7 @@ const UserAvatar = ({
 
   return (
     <div
-      className="user-avatar"
+      className={cn('user-avatar', className)}
       style={{
         ...defaultStyles,
         ...style
@@ -69,7 +86,7 @@ const UserAvatar = ({
             position: 'absolute',
             width: `${size / 4}px`,
             height: `${size / 4}px`,
-            backgroundColor: Colors[state] || '#000',
+            backgroundColor: (state && Colors[state]) || '#000',
             borderRadius: '100px',
             top: `${size / 25}px`,
             right: `${size / 25}px`,
@@ -81,11 +98,14 @@ const UserAvatar = ({
   )
 }
 
-function mapStateToProps({ chatroom }, ownProps) {
+function mapStateToProps(
+  { chatroom },
+  ownProps
+): { state: string | undefined } {
   const { states } = chatroom
 
   if (!states || ownProps.showStateIndicator === false) {
-    return {}
+    return { state: undefined }
   }
 
   const state = states[ownProps.userId]

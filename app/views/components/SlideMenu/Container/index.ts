@@ -1,6 +1,10 @@
 import styled from 'styled-components'
 
-export const Container = styled.div`
+interface Props {
+  isOpen
+}
+
+export const Container = styled.div<Props>`
   position: relative;
   display: flex;
   flex-direction: row;

@@ -9,6 +9,5 @@ const defaultProps = {
 
 export default Object.assign(Button.withComponent(Link), {
   defaultProps,
-  propTypes: Button.propTypes,
   displayName: 'LinkButton'
 })

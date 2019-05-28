@@ -8,10 +8,6 @@ import { getIconSize, iconAims, getIconStatesStyle } from '../helpers'
 
 class TextIconButton extends PureComponent {
   static propTypes = {
-    /**
-     * Composes the Button component as the base.
-     */
-    ...Button.propTypes,
 
     /**
      * The button text.

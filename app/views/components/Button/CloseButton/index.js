@@ -9,7 +9,6 @@ import Icon from '../../SvgIcons/Close/CloseIcon'
 
 export class CloseButton extends React.Component {
   static propTypes = {
-    ...Button.propTypes,
     backUrl: PropTypes.string,
     defaultBackUrl: PropTypes.string,
     query: PropTypes.object

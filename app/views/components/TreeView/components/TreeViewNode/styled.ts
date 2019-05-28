@@ -9,6 +9,7 @@ export const TreeViewNodeContainer = styled.div<{ selectable?: boolean }>`
   align-items: center;
   line-height: 2.2;
   white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
   padding-left: 2rem;
   font-weight: 500;
@@ -18,7 +19,7 @@ export const TreeViewNodeContainer = styled.div<{ selectable?: boolean }>`
     css`
       &:hover {
         border-radius: 0.2rem;
-        background: #fff;
+        background: ${grey.A250};
       }
     `}
 `
@@ -27,23 +28,22 @@ type Props = { expanded?: boolean }
 
 export const TreeViewExpandButton = styled.button`
   background: none;
-  width: auto;
-  height: auto;
+  width: 2rem;
+  height: 2.5rem;
   padding: 0;
   line-height: 0;
-  border-radius: 50%;
   margin-right: 0.2rem;
   border: none;
-  margin-left: -1.75rem;
+  margin-left: -2rem;
 
   outline: none;
   color: ${grey.A900};
-  :hover,
-  :focus {
+  :hover {
     color: ${primary};
+    background: ${grey.A300};
   }
   :focus {
-    background: ${`${primary}12`};
+    color: ${primary};
   }
 `
 export const TreeViewExpandArrow = styled(IconKeyboardArrowDown)<Props>`

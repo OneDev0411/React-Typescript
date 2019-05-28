@@ -1,30 +1,29 @@
-import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 import styled, { css } from 'styled-components'
 
 import { grey, primary } from '../../utils/colors'
 
-const propTypes = {
+interface Props {
   /**
    * When true, the link is disabled.
    */
-  disabled: PropTypes.bool,
+  disabled?: boolean
 
   /**
    * When true, the link is activated.
    */
-  isActive: PropTypes.bool,
+  isActive?: boolean
 
   /**
    * When true, default appearance of links is not applied.
    * Useful for wrapping link around arbitrary elements.
    */
-  noStyle: PropTypes.bool,
+  noStyle?: boolean
 
   /**
    * When true, the link width is 100%.
    */
-  isBlock: PropTypes.bool
+  isBlock?: boolean
 }
 
 const defaultProps = {
@@ -34,7 +33,7 @@ const defaultProps = {
   isBlock: false
 }
 
-const ALink = styled.a<{ noStyle?: boolean }>`
+const ALink = styled.a<Props>`
   color: #000;
 
   ${({ noStyle }) =>
@@ -58,6 +57,5 @@ const ALink = styled.a<{ noStyle?: boolean }>`
 `
 
 export default Object.assign(ALink.withComponent(Link), {
-  propTypes,
   defaultProps
 })

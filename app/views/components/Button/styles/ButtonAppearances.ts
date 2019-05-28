@@ -1,6 +1,8 @@
 import { css } from 'styled-components'
 import Chromath from 'chromath'
 
+import { ActionButtonProps } from 'components/Button/ActionButton'
+
 import { grey, primary, primaryDark } from '../../../utils/colors'
 
 function checkRoundedDirection(props) {
@@ -17,7 +19,7 @@ function checkRoundedDirection(props) {
   }
 }
 
-export const buttonBaseStyle = css`
+export const buttonBaseStyle = css<ActionButtonProps>`
   width: ${props => (props.isBlock ? '100%' : 'auto')};
 
   cursor: pointer;
@@ -60,7 +62,7 @@ export const buttonBaseStyle = css`
 const isNotDisableState = '&:not([disabled]):'
 
 export const ButtonAppearances = {
-  primary: css`
+  primary: css<ActionButtonProps>`
     ${buttonBaseStyle};
     color: #fff;
     font-weight: 500;
@@ -83,7 +85,7 @@ export const ButtonAppearances = {
           : primaryDark};
     }
   `,
-  outline: css`
+  outline: css<ActionButtonProps>`
     ${buttonBaseStyle};
     font-weight: 500;
     border-style: solid;
@@ -114,7 +116,32 @@ export const ButtonAppearances = {
       fill: ${props => (props.isOpen ? primary : '#000')};
     }
   `,
-  link: css`
+  flat: css<ActionButtonProps>`
+    ${buttonBaseStyle};
+    font-weight: 500;
+    color: ${props => (props.isOpen ? primary : '#000')};
+    background-color: ${props => (props.isActive ? grey.A200 : grey.A150)};
+
+    &[disabled] {
+      svg {
+        fill: ${grey.A550};
+      }
+    }
+
+    ${isNotDisableState}hover, ${isNotDisableState}focus {
+      color: ${props => props.brandColor || primary};
+      text-decoration: none;
+
+      svg {
+        fill: ${props => props.brandColor || primary};
+      }
+    }
+
+    svg {
+      fill: ${props => (props.isOpen ? primary : '#000')};
+    }
+  `,
+  link: css<ActionButtonProps>`
     ${buttonBaseStyle};
     color: ${props => (props.inverse ? '#000' : props.brandColor || primary)};
     background-color: transparent;
@@ -145,7 +172,7 @@ export const ButtonAppearances = {
           : '#000'};
     }
   `,
-  icon: css`
+  icon: css<ActionButtonProps>`
     ${buttonBaseStyle};
     background-color: transparent;
 

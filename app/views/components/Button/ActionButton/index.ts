@@ -1,48 +1,51 @@
-import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
 import { isOutline } from '../helpers'
 import { ButtonAppearances } from '../styles/ButtonAppearances'
 
-export const propTypes = {
+export interface ActionButtonProps {
   /**
    * The appearance of the button.  {primary, outline, icon, link}
    */
-  appearance: PropTypes.oneOf(Object.keys(ButtonAppearances)),
+  appearance?: keyof typeof ButtonAppearances
 
   /**
    * When true, the button is disabled.
    */
-  disabled: PropTypes.bool,
+  disabled?: boolean
 
   /**
    * When true, the button is activated.
    */
-  isActive: PropTypes.bool,
+  isActive?: boolean
 
   /**
    * When true, the button width is 100%.
    */
-  isBlock: PropTypes.bool,
+  isBlock?: boolean
 
   /**
    * DEPRECATED
    * When true, the button appearances should be ghost.
    */
-  inverse: PropTypes.bool,
+  inverse?: boolean
 
   /**
    * The size of the button.
    */
-  size: PropTypes.oneOf(['small', 'medium', 'large', 'XLarge']),
+  size?: 'small' | 'medium' | 'large' | 'XLarge'
 
   /**
    * The brand color of active team.
    */
-  brandColor: PropTypes.string
+  brandColor?: string
+
+  noBorder?: boolean
+  isOpen?: boolean
+  isBlock?: boolean
 }
 
-export const defaultProps = {
+export const defaultProps: ActionButtonProps = {
   appearance: 'primary',
   disabled: false,
   isActive: false,
@@ -87,9 +90,8 @@ export const getAppearance = props => {
   `
 }
 
-const Button = styled.button(getAppearance)
+const Button = styled.button<ActionButtonProps>(getAppearance)
 
-export default Object.assign(Button, {
-  propTypes,
-  defaultProps
-})
+Button.defaultProps = defaultProps
+
+export default Button

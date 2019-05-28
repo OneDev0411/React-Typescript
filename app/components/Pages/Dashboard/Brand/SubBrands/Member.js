@@ -1,7 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
 import { Popover, OverlayTrigger } from 'react-bootstrap'
-import UserAvatar from '../../../../Partials/UserAvatar'
+import UserAvatar from 'components/UserAvatar'
 
 const Member = ({ member, roles, deleteMembers, addMembers }) => {
   const popoverHoverFocus = (

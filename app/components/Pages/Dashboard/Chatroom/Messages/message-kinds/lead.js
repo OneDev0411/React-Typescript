@@ -1,7 +1,8 @@
 import React from 'react'
 
+import UserAvatar from 'components/UserAvatar'
+
 import DateSplitter from '../components/date-splitter'
-import UserAvatar from '../../../../../Partials/UserAvatar'
 import Message from '../message-types'
 import DeliveryReport from '../components/delivery-report'
 import MessageDate from '../components/message-date'

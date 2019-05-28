@@ -37,11 +37,13 @@ interface Props<NodeType> {
  * @param props
  * @constructor
  */
-export default function TreeView<NodeType = any>({
+export default React.memo(function TreeView<NodeType = any>({
   getNodeId = (node => node.id) as any,
   getChildNodes = (node => node.children) as any,
   ...props
 }: Props<NodeType>) {
+  console.log('render tree')
+
   const [expandedNodes, setExpandedNodes] = useControllableState(
     props.expandedNodes,
     props.onExpandedNodesChanged,
@@ -73,16 +75,4 @@ export default function TreeView<NodeType = any>({
       ))}
     </>
   )
-}
-/*
-
-function reduceTree<NodeType>(
-  root: NodeType,
-  getChildren,
-  reducer,
-  initialValue
-) {
-  let value = reducer(initialValue, root)
-  const children = getChildren(root).reduce()
-}
-*/
+})

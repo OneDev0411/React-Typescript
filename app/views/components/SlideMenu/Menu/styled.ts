@@ -2,8 +2,18 @@ import styled from 'styled-components'
 
 import { blue } from '../../../utils/colors'
 import IconButton from '../../Button/IconButton'
+import { CSSProperties } from 'react'
 
-export const Container = styled.div`
+interface ContainerProps {
+  isOpen?: boolean
+  width?: CSSProperties['width']
+}
+
+interface ItemListProps {
+  isSelected?: boolean
+}
+
+export const Container = styled.div<ContainerProps>`
   width: ${props => (props.isOpen ? props.width : '0')};
   height: 100vh;
   overflow-x: hidden;
@@ -24,10 +34,10 @@ export const ListTitle = styled.div`
 export const DeleteButton = styled(IconButton)`
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3 linear;
+  transition: all 0.3s linear;
 `
 
-export const ListItem = styled.div`
+export const ListItem = styled.div<ItemListProps>`
   display: flex;
   align-items: center;
   justify-content: space-between;

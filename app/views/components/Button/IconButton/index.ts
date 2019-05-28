@@ -1,34 +1,28 @@
-import styled from "styled-components"
-import PropTypes from 'prop-types'
-import { css } from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { blue } from '../../../utils/colors'
 
-import Button from '../ActionButton'
+import Button, { ActionButtonProps, IconSize } from '../ActionButton'
 import { getIconSize, getIconStatesStyle } from '../helpers'
 
-const propTypes = {
-  /**
-   * Composes the Button component as the base.
-   */
-  ...Button.propTypes,
-
+interface IconButtonProps extends ActionButtonProps {
   /**
    * When true, the button size will be same as icon size.
    */
-  isFit: PropTypes.bool,
+  isFit?: boolean
+  inverse?: boolean
 
   /**
    * The size of the button. {small, medium, large, XLarge}
    */
-  iconSize: Button.propTypes.size
+  iconSize?: IconSize
 }
 
-const defaultProps = {
+const defaultProps: IconButtonProps = {
   ...Button.defaultProps,
   appearance: 'icon',
   isFit: false,
-  iconSize: Button.defaultProps.size
+  iconSize: Button.defaultProps!.size
 }
 
 const getColor = props => {
@@ -59,7 +53,7 @@ const checkFit = props => {
   }
 }
 
-const IconButton = styled(Button)`
+const IconButton = styled(Button)<IconButtonProps>`
   ${props => checkFit(props)};
 
   ${props =>
@@ -74,7 +68,6 @@ const IconButton = styled(Button)`
   ${props => getIconStatesStyle(props)};
 `
 
-export default Object.assign(IconButton, {
-  propTypes,
-  defaultProps
-})
+IconButton.defaultProps = defaultProps
+
+export default IconButton

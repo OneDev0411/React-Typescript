@@ -24,44 +24,46 @@ interface Props<NodeType> {
   onToggleExpanded: (node: NodeType) => any
 }
 
-export function TreeViewNode<NodeType = any>({
-  node,
-  onToggleExpanded,
-  ...props
-}: Props<NodeType>) {
-  const childNodes = props.getChildNodes(node) || []
-
-  const expanded = props.expandedNodes.indexOf(props.getId(node)) > -1
-
-  const toggle = useCallback(() => onToggleExpanded(node), [
+export const TreeViewNode = React.memo(
+  <NodeType extends any = any>({
     node,
-    onToggleExpanded
-  ])
+    onToggleExpanded,
+    ...props
+  }: Props<NodeType>) => {
+    const childNodes = props.getChildNodes(node) || []
 
-  const arrow =
-    childNodes.length > 0 ? (
-      <TreeViewExpandButton onClick={toggle}>
-        <TreeViewExpandArrow expanded={expanded} />
-      </TreeViewExpandButton>
-    ) : null
+    const expanded = props.expandedNodes.indexOf(props.getId(node)) > -1
 
-  return (
-    <>
-      <TreeViewNodeContainer selectable={props.selectable}>
-        {arrow} <FlexItem grow={1}>{props.renderNode(node)}</FlexItem>
-      </TreeViewNodeContainer>
-      {expanded && (
-        <TreeViewNodeChildrenContainer>
-          {childNodes.map(node => (
-            <TreeViewNode
-              key={props.getId(node)}
-              node={node}
-              onToggleExpanded={onToggleExpanded}
-              {...props}
-            />
-          ))}
-        </TreeViewNodeChildrenContainer>
-      )}
-    </>
-  )
-}
+    const toggle = useCallback(() => onToggleExpanded(node), [
+      node,
+      onToggleExpanded
+    ])
+
+    const arrow =
+      childNodes.length > 0 ? (
+        <TreeViewExpandButton onClick={toggle}>
+          <TreeViewExpandArrow expanded={expanded} />
+        </TreeViewExpandButton>
+      ) : null
+
+    return (
+      <>
+        <TreeViewNodeContainer selectable={props.selectable}>
+          {arrow} <FlexItem grow={1}>{props.renderNode(node)}</FlexItem>
+        </TreeViewNodeContainer>
+        {expanded && (
+          <TreeViewNodeChildrenContainer>
+            {childNodes.map(node => (
+              <TreeViewNode
+                key={props.getId(node)}
+                node={node}
+                onToggleExpanded={onToggleExpanded}
+                {...props}
+              />
+            ))}
+          </TreeViewNodeChildrenContainer>
+        )}
+      </>
+    )
+  }
+)

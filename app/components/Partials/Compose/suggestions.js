@@ -2,7 +2,7 @@ import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import cn from 'classnames'
 import _ from 'underscore'
-import UserAvatar from '../UserAvatar'
+import UserAvatar from '../../../views/components/UserAvatar'
 
 export default ({
   dropDownBox,

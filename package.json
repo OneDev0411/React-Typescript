@@ -223,6 +223,7 @@
     "@types/google-maps": "^3.2.1",
     "@types/history": "^3.2.3",
     "@types/intercom-client": "^2.9.5",
+    "@types/jest": "^24.0.13",
     "@types/js-cookie": "^2.2.0",
     "@types/lodash": "^4.14.132",
     "@types/mailgun-js": "^0.16.3",

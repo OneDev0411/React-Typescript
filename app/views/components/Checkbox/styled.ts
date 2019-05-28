@@ -23,7 +23,12 @@ export const Label = styled.label`
   cursor: pointer;
 `
 
-export const CheckMarkBox = styled.div`
+interface CheckMarkBoxProps {
+  size?: number
+  checked?: boolean
+}
+
+export const CheckMarkBox = styled.div<CheckMarkBoxProps>`
   width: ${props => props.size / 16}rem;
   height: ${props => props.size / 16}rem;
   display: flex;

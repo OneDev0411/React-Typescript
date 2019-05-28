@@ -1,16 +1,16 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { CSSProperties, ReactNode } from 'react'
 
-import { Label, Input, CheckMarkBox, CheckMark } from './styled'
+import { CheckMark, CheckMarkBox, Input, Label } from './styled'
 
-Checkbox.propTypes = {
-  size: PropTypes.number,
-  inputProps: PropTypes.shape(),
-  id: PropTypes.string.isRequired,
-  checked: PropTypes.bool.isRequired,
-  onChange: PropTypes.func.isRequired,
-  checkboxStyle: PropTypes.shape(),
-  containerStyle: PropTypes.shape()
+interface Props {
+  size?: number
+  inputProps?: any
+  id: string
+  checked: boolean
+  onChange?: (event: Event) => void
+  checkboxStyle?: CSSProperties
+  containerStyle?: CSSProperties
+  children?: ReactNode
 }
 
 Checkbox.defaultProps = {
@@ -20,7 +20,7 @@ Checkbox.defaultProps = {
   containerStyle: {}
 }
 
-export function Checkbox(props) {
+export function Checkbox(props: Props) {
   const { id, size, checked } = props
 
   return (

@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'underscore'
 import cn from 'classnames'
 import AutoSizeInput from '../AutoSizeInput'
-import UserAvatar from '../UserAvatar'
+import UserAvatar from '../../../views/components/UserAvatar'
 
 export default class extends React.Component {
   state = { isFocused: false }
