@@ -4,6 +4,6 @@
  * @param {string} text
  * @returns {string}
  */
-export default function removeSpecialCharacters(text: string) {
+export default function removeSpecialCharacters(text: string): string {
   return text.trim().replace(/[~`!#$%^&*(){}=<>?,:;"\]\[\/\\]/g, '')
 }
