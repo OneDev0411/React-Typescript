@@ -1,4 +1,4 @@
-import removeSpecialCharacters from 'utils/remove-special-characters'
+import removeSpecialCharacters from '../../../utils/remove-special-characters'
 
 function preSearchFormat({
   attributeFilters,
