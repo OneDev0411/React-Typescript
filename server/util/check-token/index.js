@@ -22,7 +22,7 @@ export default async function checkToken(ctx, next) {
     ctx.session.user = {
       access_token,
       refresh_token,
-      expire_date: new Date().getTime() + expires_in * 1000
+      expire_date: new Date().getTime() + 3600000 // expires_in * 1000
     }
   } catch (e) {
     console.log(e)
