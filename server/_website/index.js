@@ -29,6 +29,12 @@ router.get('/', async ctx => {
     // Ignore error it's ok not to find a brand here.
   }
 
+  // After discussing we decided to revert back the previous experience
+  // and redirect users to dashboard automatically for now.
+  if (isLoggedIn(ctx)) {
+    ctx.redirect('/dashboard')
+  }
+
   return ctx.render(template_path('index.ejs'), {
     title: 'Rechat',
     isLoggedIn: isLoggedIn(ctx)
@@ -103,6 +109,7 @@ router.post('/contact', bodyParser(), async ctx => {
   let data = {
     from: `${first_name} ${last_name}<noreply@rechat.com>`,
     to: 'support@rechat.com',
+    bcc: 'seth@rechat.com',
     subject: 'Get in touch request - Rechat Website',
     text: `
       First Name: ${first_name}

@@ -42,7 +42,6 @@ import { AlphabetFilter } from '../../../../../views/components/AlphabetFilter'
 import Table from './Table'
 import { SearchContacts } from './Search'
 import { Header } from './Header'
-// import DuplicateContacts from '../components/DuplicateContacts'
 import ContactFilters from './Filters'
 import TagsList from './TagsList'
 
@@ -403,7 +402,8 @@ class ContactsList extends React.Component {
   }
 
   render() {
-    const { isSideMenuOpen } = this.state
+    const { props, state } = this
+    const { isSideMenuOpen } = state
     const {
       user,
       list,
@@ -421,14 +421,13 @@ class ContactsList extends React.Component {
             associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
             onChange={this.handleChangeSavedSegment}
           />
-          {/* <DuplicateContacts /> */}
           <TagsList onFilterChange={this.handleFilterChange} />
         </SideMenu>
 
         <PageContent id={this.tableContainerId} isSideMenuOpen={isSideMenuOpen}>
           <Header
             title={(activeSegment && activeSegment.name) || 'All Contacts'}
-            isSideMenuOpen={this.state.isSideMenuOpen}
+            isSideMenuOpen={state.isSideMenuOpen}
             user={user}
             onMenuTriggerChange={this.toggleSideMenu}
           />
@@ -445,33 +444,38 @@ class ContactsList extends React.Component {
                 />
               </FlexItem>
               <AlphabetFilter
-                value={this.state.firstLetter}
+                value={state.firstLetter}
                 onChange={this.handleFirstLetterChange}
               />
             </SearchWrapper>
             <Table
-              tableContainerId={this.tableContainerId}
-              reloadContacts={this.reloadContacts}
-              sortBy={this.order}
-              handleChangeOrder={this.handleChangeOrder}
-              handleChangeContactsAttributes={
-                this.handleChangeContactsAttributes
-              }
               data={contacts}
-              listInfo={this.props.listInfo}
+              order={this.order}
+              listInfo={props.listInfo}
               isFetching={isFetchingContacts}
-              isFetchingMore={this.state.isFetchingMoreContacts}
-              isFetchingMoreBefore={this.state.isFetchingMoreContactsBefore}
-              isRowsUpdating={this.state.isRowsUpdating}
+              isFetchingMore={state.isFetchingMoreContacts}
+              isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
+              isRowsUpdating={state.isRowsUpdating}
               onRequestLoadMore={this.handleLoadMore}
               onRequestLoadMoreBefore={this.handleLoadMoreBefore}
               rowsUpdating={this.rowsUpdating}
               onChangeSelectedRows={this.onChangeSelectedRows}
               onRequestDelete={this.handleOnDelete}
-              filters={this.props.filters}
-              searchInputValue={this.state.searchInputValue}
-              conditionOperator={this.props.conditionOperator}
-              users={viewAsUsers}
+              tableContainerId={this.tableContainerId}
+              reloadContacts={this.reloadContacts}
+              handleChangeOrder={this.handleChangeOrder}
+              handleChangeContactsAttributes={
+                this.handleChangeContactsAttributes
+              }
+              filters={{
+                alphabet: state.firstLetter,
+                attributeFilters: props.filters,
+                crm_tasks: props.crmTasks,
+                filter_type: props.conditionOperator,
+                flows: props.flows,
+                query: state.searchInputValue,
+                users: viewAsUsers
+              }}
             />
           </Container>
         </PageContent>

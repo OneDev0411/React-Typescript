@@ -7,10 +7,14 @@ export default function getUserDefaultHomepage(user) {
     return defaultHomepage
   }
 
-  const hasDealsPermission = hasUserAccess(user, 'Deals')
-  const hasBackOfficePermission = hasUserAccess(user, 'BackOffice')
+  if (hasUserAccess(user, 'CRM')) {
+    defaultHomepage = '/dashboard/contacts'
+  }
 
-  if (hasDealsPermission || hasBackOfficePermission) {
+  if (
+    hasUserAccess(user, 'Deals') ||
+    hasUserAccess(user, 'BackOffice')
+  ) {
     defaultHomepage = '/dashboard/deals'
   }
 

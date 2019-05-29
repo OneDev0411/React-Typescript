@@ -3,6 +3,20 @@ import Chromath from 'chromath'
 
 import { grey, primary, primaryDark } from '../../../utils/colors'
 
+function checkRoundedDirection(props) {
+  if (props.rightRounded) {
+    return css`
+      border-radius: 0 3px 3px 0;
+    `
+  }
+
+  if (props.leftRounded) {
+    return css`
+      border-radius: 3px 0 0 3px;
+    `
+  }
+}
+
 export const buttonBaseStyle = css`
   width: ${props => (props.isBlock ? '100%' : 'auto')};
 
@@ -39,6 +53,8 @@ export const buttonBaseStyle = css`
       fill: ${grey.A900};
     }
   }
+
+  ${checkRoundedDirection}
 `
 
 const isNotDisableState = '&:not([disabled]):'

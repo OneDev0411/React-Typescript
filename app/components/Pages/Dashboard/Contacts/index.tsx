@@ -3,14 +3,22 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { Helmet } from 'react-helmet'
 
-import { isLoadedContactAttrDefs } from '../../../../reducers/contacts/attributeDefs'
+import {
+  AttributeDefsState,
+  isLoadedContactAttrDefs
+} from '../../../../reducers/contacts/attributeDefs'
 import Loading from '../../../../views/components/Spinner'
 import { hasUserAccess } from '../../../../utils/user-teams'
 
 import ContactsList from './List'
 import { Container } from './components/Container'
 
-class Contacts extends React.Component {
+interface Props {
+  attributeDefs: AttributeDefsState
+  user: IUser
+}
+
+class Contacts extends React.Component<Props> {
   componentDidMount() {
     if (!hasUserAccess(this.props.user, 'CRM')) {
       browserHistory.push('/dashboard/mls')
@@ -40,7 +48,7 @@ class Contacts extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  attributeDefs: state.contacts.attributeDefs
+  attributeDefs: state.contacts.attributeDefs as AttributeDefsState
 })
 
 export default connect(mapStateToProps)(Contacts)

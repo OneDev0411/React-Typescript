@@ -112,17 +112,21 @@ class ContactsList extends React.Component {
 
   actions = [
     {
-      render: ({ excludedRows, selectedRows }) => (
-        <ExportContacts
-          excludedRows={excludedRows}
-          exportIds={selectedRows}
-          filters={this.props.filters}
-          searchText={this.props.searchInputValue}
-          conditionOperator={this.props.conditionOperator}
-          users={this.props.users}
-          disabled={this.props.isFetching}
-        />
-      )
+      render: ({ excludedRows, selectedRows }) => {
+        const { filters } = this.props
+        
+        return (
+          <ExportContacts
+            excludedRows={excludedRows}
+            exportIds={selectedRows}
+            filters={filters.attributeFilters}
+            searchText={filters.query}
+            conditionOperator={filters.filter_types}
+            users={filters.users}
+            disabled={this.props.isFetching}
+          />
+        )
+        }
     },
     {
       render: ({ entireMode, selectedRows }) => {
@@ -149,6 +153,7 @@ class ContactsList extends React.Component {
         selectedRows,
         resetSelectedRows
       }) => {
+        const { filters } = this.props
         const disabled = entireMode ? false : selectedRows.length === 0
 
         return (
@@ -159,10 +164,10 @@ class ContactsList extends React.Component {
               totalRowsCount={totalRowsCount}
               excludedRows={excludedRows}
               selectedRows={selectedRows}
-              filters={this.props.filters}
-              searchText={this.props.searchInputValue}
-              conditionOperator={this.props.conditionOperator}
-              users={this.props.users}
+              filters={filters.attributeFilters}
+              searchText={filters.query}
+              conditionOperator={filters.filter_type}
+              users={filters.users}
               resetSelectedRows={resetSelectedRows}
               handleChangeContactsAttributes={
                 this.props.handleChangeContactsAttributes
@@ -261,6 +266,8 @@ class ContactsList extends React.Component {
   }
 
   render() {
+    const { props, state } = this
+
     return (
       <div>
         <Table
@@ -275,31 +282,31 @@ class ContactsList extends React.Component {
               accuracy: 300, // px
               accuracyTop: 600, // px
               debounceTime: 300, // ms
-              container: this.props.tableContainerId,
-              onScrollBottom: this.props.onRequestLoadMore,
-              onScrollTop: this.props.onRequestLoadMoreBefore
+              container: props.tableContainerId,
+              onScrollBottom: props.onRequestLoadMore,
+              onScrollTop: props.onRequestLoadMoreBefore
             },
             actionable: {
               actions: this.actions
             },
             sortable: {
               columns: this.sortableColumns,
-              onChange: this.props.handleChangeOrder,
+              defaultIndex: props.order,
+              onChange: props.handleChangeOrder,
               onPostChange: async item => {
                 await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
-                await this.props.getUserTeams(this.props.user)
-              },
-              defaultIndex: this.props.sortBy
+                await props.getUserTeams(props.user)
+              }
             }
           }}
-          data={this.props.data}
+          data={props.data}
           summary={{
             entityName: 'Contacts',
-            total: this.props.listInfo.total || 0
+            total: props.listInfo.total || 0
           }}
-          isFetching={this.props.isFetching}
-          isFetchingMore={this.props.isFetchingMore}
-          isFetchingMoreBefore={this.props.isFetchingMoreBefore}
+          isFetching={props.isFetching}
+          isFetchingMore={props.isFetchingMore}
+          isFetchingMoreBefore={props.isFetchingMoreBefore}
           columns={this.columns}
           LoadingState={LoadingComponent}
           getTrProps={this.getGridTrProps}
@@ -309,11 +316,11 @@ class ContactsList extends React.Component {
         />
 
         <TagsOverlay
-          selectedContactsIds={this.state.selectedTagContact}
-          isOpen={this.state.selectedTagContact.length > 0}
           closeOverlay={this.closeTagsOverlay}
+          isOpen={state.selectedTagContact.length > 0}
+          selectedContactsIds={state.selectedTagContact}
           handleChangeContactsAttributes={
-            this.props.handleChangeContactsAttributes
+            props.handleChangeContactsAttributes
           }
         />
       </div>
