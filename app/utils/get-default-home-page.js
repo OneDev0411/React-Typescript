@@ -12,7 +12,7 @@ export default function getUserDefaultHomepage(user) {
   }
 
   if (
-    hasDealshasUserAccess(user, 'Deals') ||
+    hasUserAccess(user, 'Deals') ||
     hasUserAccess(user, 'BackOffice')
   ) {
     defaultHomepage = '/dashboard/deals'
