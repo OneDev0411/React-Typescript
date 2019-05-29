@@ -14,6 +14,7 @@ import render from './util/render'
 import pagesMiddleware from './util/pages'
 import fetch from './util/fetch'
 import universalMiddleware from './util/universal'
+import checkToken from './util/check-token'
 import appConfig from '../config/webpack'
 import webpackConfig from '../webpack.config.babel'
 import websiteRoutes from './_website'
@@ -27,8 +28,39 @@ const { entry, output, publicPath } = appConfig.compile
 // app uses proxy
 app.proxy = true
 
-if (!__DEV__) {
+async function development() {
+  const koaWebpackMiddleware = await require('koa-webpack')({
+    config: webpackConfig
+  })
+
+  app.use(koaWebpackMiddleware)
+
+  app.use(mount(publicPath, serve(path.join(entry, publicPath))))
+
+  // parse pages
+  app.use(mount(pagesMiddleware))
+
+  // universal rendering middleware
+  app.use(mount(universalMiddleware))
+}
+
+async function production() {
   app.use(sslify())
+
+  app.use(
+    mount(
+      serve(path.join(output), {
+        gzip: true,
+        maxage: 86400000
+      })
+    )
+  )
+
+  // parse pages
+  app.use(mount(pagesMiddleware))
+
+  // universal rendering middleware
+  app.use(mount(universalMiddleware))
 }
 
 // handle application errors
@@ -41,7 +73,7 @@ app.use(async (ctx, next) => {
 
     ctx.status = e.status || 500
     ctx.body = e.message || 'Internal Server Error'
-    ctx.app.emit('error', e, ctx)
+    ctx.app.emit('error', e)
   }
 })
 
@@ -55,6 +87,9 @@ app.use(views(templatesDir, { map: { html: 'hogan', ejs: 'ejs' } }))
 
 // use cookies
 app.use(cookie())
+
+// check token and refresh that if is required
+app.use(checkToken)
 
 // use renders
 app.use(render())
@@ -99,41 +134,6 @@ _.each(require('./api/routes'), route => {
 
 // Adding websites route
 app.use(websiteRoutes)
-
-const development = async () => {
-  const koaWebpack = require('koa-webpack')
-
-  const middleware = await koaWebpack({
-    config: webpackConfig
-  })
-
-  app.use(middleware)
-
-  app.use(mount(publicPath, serve(path.join(entry, publicPath))))
-
-  // parse pages
-  app.use(mount(pagesMiddleware))
-
-  // universal rendering middleware
-  app.use(mount(universalMiddleware))
-}
-
-const production = async () => {
-  app.use(
-    mount(
-      serve(path.join(output), {
-        gzip: true,
-        maxage: 86400000
-      })
-    )
-  )
-
-  // parse pages
-  app.use(mount(pagesMiddleware))
-
-  // universal rendering middleware
-  app.use(mount(universalMiddleware))
-}
 
 if (__DEV__) {
   development()

@@ -1,4 +1,5 @@
 import { match } from 'react-router'
+
 import routes from '../../../app/routes'
 
 function matcher(location) {
