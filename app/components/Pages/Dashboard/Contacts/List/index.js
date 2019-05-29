@@ -473,7 +473,7 @@ class ContactsList extends React.Component {
                 crm_tasks: props.crmTasks,
                 filter_type: props.conditionOperator,
                 flows: props.flows,
-                query: state.searchInputValue,
+                text: state.searchInputValue,
                 users: viewAsUsers
               }}
             />

@@ -3,7 +3,7 @@ import fileSaver from 'file-saver'
 import superagent from 'superagent'
 import { connect } from 'react-redux'
 
-import { cleanSearchQuery } from 'utils/clean-search-query'
+import removeSpecialCharacters from 'utils/remove-special-characters'
 import { getActiveTeamId } from 'utils/user-teams'
 
 import ExportButton from './button'
@@ -40,7 +40,7 @@ class ExportContacts extends React.Component {
         })
       )
 
-      const cleanedSearchText = cleanSearchQuery(searchText.trim())
+      const cleanedSearchText = removeSpecialCharacters(searchText)
 
       if (cleanedSearchText.length > 0) {
         params.query = cleanedSearchText

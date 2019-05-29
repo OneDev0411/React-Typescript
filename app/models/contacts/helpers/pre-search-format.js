@@ -1,18 +1,18 @@
-import { cleanSearchQuery } from '../../../utils/clean-search-query'
+import removeSpecialCharacters from 'utils/remove-special-characters'
 
-function validArrayFilter(filter) {
-  return Array.isArray(filter) && filter.length > 0
-}
-
-function preFilterFormat(filters) {
-  let { query, attributeFilters, flows, crm_tasks, ...rest } = filters
-
-  let payload = rest
-
-  query = cleanSearchQuery(query.trim())
+function preSearchFormat({
+  attributeFilters,
+  crm_tasks,
+  flows,
+  text,
+  queryParams,
+  users
+}) {
+  const payload = {}
+  const query = removeSpecialCharacters(text)
 
   if (query.length > 0) {
-    payload.query = q
+    payload.query = query
   }
 
   if (validArrayFilter(flows)) {
@@ -20,21 +20,33 @@ function preFilterFormat(filters) {
   }
 
   if (validArrayFilter(crm_tasks)) {
-    payload.crm_tasks = flows
+    payload.crm_task = crm_tasks
+  }
+
+  if (validArrayFilter(users)) {
+    payload.users = users
   }
 
   if (validArrayFilter(attributeFilters)) {
-    payload.filter = attributeFilters
-      .filter(filter => filter.attribute_def)
-      .map(({ attribute_def, invert, operator, value }) => ({
-        attribute_def,
-        invert,
-        operator,
-        value
-      }))
+    payload.filter = normalizeAttributeFilters(attributeFilters)
   }
 
-  return payload
+  return [payload, queryParams]
 }
 
-export default preFilterFormat
+function validArrayFilter(filter) {
+  return Array.isArray(filter) && filter.length > 0
+}
+
+function normalizeAttributeFilters(filters) {
+  return filters
+    .filter(({ attribute_def }) => attribute_def)
+    .map(({ attribute_def, invert, operator, value }) => ({
+      attribute_def,
+      invert,
+      operator,
+      value
+    }))
+}
+
+export default preSearchFormat
