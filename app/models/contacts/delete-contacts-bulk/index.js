@@ -1,4 +1,4 @@
-import { cleanSearchQuery } from 'utils/clean-search-query'
+import removeSpecialCharacters from 'utils/remove-special-characters'
 
 import Fetch from '../../../services/fetch'
 
@@ -25,7 +25,7 @@ export async function deleteContactsBulk({
       })),
       excludes
     }
-    const cleanedSearchText = cleanSearchQuery(searchText.trim())
+    const cleanedSearchText = removeSpecialCharacters(searchText)
 
     if (cleanedSearchText.length > 0) {
       payload.query = cleanedSearchText

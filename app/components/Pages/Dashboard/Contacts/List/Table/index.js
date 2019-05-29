@@ -120,7 +120,7 @@ class ContactsList extends React.Component {
             excludedRows={excludedRows}
             exportIds={selectedRows}
             filters={filters.attributeFilters}
-            searchText={filters.query}
+            searchText={filters.text}
             conditionOperator={filters.filter_types}
             users={filters.users}
             disabled={this.props.isFetching}
