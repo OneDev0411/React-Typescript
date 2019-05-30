@@ -1,16 +1,13 @@
 import { connect } from 'react-redux'
 
 import * as React from 'react'
+import { useCallback, useState } from 'react'
 
 import { Helmet } from 'react-helmet'
 
 import styled from 'styled-components'
 
 import { RouteComponentProps } from 'react-router'
-
-import { useCallback, useState } from 'react'
-
-import { render } from 'react-dom'
 
 import { Container, Content, Menu } from 'components/SlideMenu'
 import ALink from 'components/ALink'

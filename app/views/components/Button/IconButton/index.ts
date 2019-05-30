@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 
 import { blue } from '../../../utils/colors'
 
-import Button, { ActionButtonProps, IconSize } from '../ActionButton'
+import Button, { ActionButtonProps } from '../ActionButton'
 import { getIconSize, getIconStatesStyle } from '../helpers'
 
 interface IconButtonProps extends ActionButtonProps {
@@ -15,7 +15,7 @@ interface IconButtonProps extends ActionButtonProps {
   /**
    * The size of the button. {small, medium, large, XLarge}
    */
-  iconSize?: IconSize
+  iconSize?: ActionButtonProps['size']
 }
 
 const defaultProps: IconButtonProps = {

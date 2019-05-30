@@ -24,7 +24,7 @@ export const Label = styled.label`
 `
 
 interface CheckMarkBoxProps {
-  size?: number
+  size: number
   checked?: boolean
 }
 

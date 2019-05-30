@@ -20,7 +20,8 @@ interface Props {
   /**
    * component or tag to use for rendering matches. defaults to 'mark'
    */
-  HighlightComponent?: React.ElementType<{ children: string }>
+  // refine type to only accept strings or a component which accepts string as children
+  HighlightComponent?: ReactType
 
   /**
    * props to be passed to highlights

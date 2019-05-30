@@ -42,7 +42,6 @@ export interface ActionButtonProps {
 
   noBorder?: boolean
   isOpen?: boolean
-  isBlock?: boolean
 }
 
 export const defaultProps: ActionButtonProps = {

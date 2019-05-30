@@ -1,5 +1,4 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { ReactNode } from 'react'
 import { browserHistory } from 'react-router'
 import Flex from 'styled-flex-component'
 
@@ -15,22 +14,23 @@ import { goTo } from '../../../../utils/go-to'
 
 import { Subtitle } from './Subtitle'
 
-PageTitle.propTypes = {
-  backUrl: PropTypes.string,
-  showBackButton: PropTypes.bool,
-  onClickBackButton: PropTypes.func,
-  onClickCloseButton: PropTypes.func,
-  title: PropTypes.string
+interface Props {
+  backUrl?: string
+  showBackButton?: boolean
+  onClickBackButton?: (event: React.MouseEvent) => void
+  onClickCloseButton?: (event: React.MouseEvent) => void
+  title?: string
+  subtitle?: string
+  maxTitleLength?: number
+  children?: ReactNode
 }
 
 PageTitle.defaultProps = {
-  showBackButton: true,
-  backUrl: '',
-  title: ''
+  showBackButton: true
 }
 
-export function PageTitle(props) {
-  const { title, subtitle, backUrl, onClickCloseButton } = props
+export function PageTitle(props: Props) {
+  const { title = '', subtitle, backUrl = '', onClickCloseButton } = props
 
   function handleOnBack() {
     if (backUrl) {

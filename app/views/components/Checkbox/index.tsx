@@ -15,13 +15,12 @@ interface Props {
 
 Checkbox.defaultProps = {
   inputProps: {},
-  size: 16,
   checkboxStyle: { marginRight: '0.5em' },
   containerStyle: {}
 }
 
 export function Checkbox(props: Props) {
-  const { id, size, checked } = props
+  const { id, size = 16, checked } = props
 
   return (
     <Label htmlFor={id} style={props.containerStyle}>

@@ -56,7 +56,7 @@ export const IconSearch = styled(IconSearchBase)`
     fill: #000 !important;
   }
 `
-export const Icon = styled.div<{ isSearching: boolean }>`
+export const Icon = styled.div<{ isSearching?: boolean }>`
   color: ${grey.A900};
   padding-top: ${props => (props.isSearching ? '0' : '4px')};
 `

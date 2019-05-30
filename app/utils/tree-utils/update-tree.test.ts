@@ -6,21 +6,25 @@ const sampleTree = {
   children: [
     {
       name: 'b',
+      children: []
     },
     {
       name: 'c',
       children:[
         {
-          name: 'd'
+          name: 'd',
+          children: []
         },
         {
           name: 'e',
           children:[
             {
-              name: 'f'
+              name: 'f',
+              children: []
             },
             {
-              name: 'g'
+              name: 'g',
+              children: []
             }
           ]
         }

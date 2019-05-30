@@ -1,4 +1,4 @@
-import React, { RefObject } from 'react'
+import React, { CSSProperties, Ref, RefObject } from 'react'
 
 import _ from 'underscore'
 
@@ -16,13 +16,15 @@ interface Props {
   className?: string
   showLoadingOnSearch?: boolean
   showClearSearch?: boolean
+  style?: CSSProperties
   onClearSearch?: (string) => any
 
-  inputRef?: RefObject<HTMLInputElement>
+  inputRef?: (ref: RefObject<HTMLInputElement>) => void
 }
 
 interface State {
   isFocused: boolean
+  searchValue: string
 }
 
 class Search extends React.Component<Props, State> {
@@ -33,6 +35,7 @@ class Search extends React.Component<Props, State> {
     minimumLength: 0,
     isSearching: false,
     showLoadingOnSearch: false,
+    style: {},
     disableOnSearch: true,
     showClearSearch: true
   }
@@ -61,7 +64,7 @@ class Search extends React.Component<Props, State> {
       searchValue: value
     })
 
-    if (value.length === 0 || value.length >= minimumLength) {
+    if (value.length === 0 || value.length >= (minimumLength || 0)) {
       this.onChangeHandler(value)
     }
   }
@@ -106,7 +109,11 @@ class Search extends React.Component<Props, State> {
     } = this.props
 
     return (
-      <Container style={style} isFocused={this.state.isFocused} className={this.props.className}>
+      <Container
+        style={style}
+        isFocused={this.state.isFocused}
+        className={this.props.className}
+      >
         <Icon isSearching={isSearching}>
           {isSearching && showLoadingOnSearch ? (
             <i className="fa fa-spin fa-spinner" />

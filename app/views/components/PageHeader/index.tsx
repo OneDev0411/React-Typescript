@@ -1,6 +1,5 @@
-import React from 'react'
-import { withRouter } from 'react-router'
-import PropTypes from 'prop-types'
+import React, { CSSProperties, ReactNode } from 'react'
+import { withRouter, WithRouterProps } from 'react-router'
 import styled from 'styled-components'
 
 import Menu from './Menu'
@@ -8,7 +7,7 @@ import { PageTitle } from './PageTitle'
 import { Subtitle } from './PageTitle/Subtitle'
 import { H1 } from '../Typography/headings'
 
-const Container = styled.div`
+const Container = styled.div<{ isFlat?: boolean }>`
   width: calc(100% - 3em);
   display: flex;
   align-items: center;
@@ -19,15 +18,18 @@ const Container = styled.div`
   border-bottom: ${props => (props.isFlat ? 'none' : '1px solid #d4d4d4')};
 `
 
-const propTypes = {
-  backUrl: PropTypes.string,
-  showBackButton: PropTypes.bool,
-  isFlat: PropTypes.bool,
-  title: PropTypes.string,
-  maxTitleLength: PropTypes.number,
-  subtitle: PropTypes.string,
-  style: PropTypes.shape(),
-  className: PropTypes.string
+interface Props {
+  backUrl?: string
+  showBackButton?: boolean
+  isFlat?: boolean
+  title?: string
+  maxTitleLength?: number
+  subtitle?: string
+  style?: CSSProperties
+  className?: string
+  children?: ReactNode
+  onClickBackButton?: (event: React.MouseEvent) => void
+  onClickCloseButton?: (event: React.MouseEvent) => void
 }
 
 const defaultProps = {
@@ -41,7 +43,7 @@ const defaultProps = {
   className: ''
 }
 
-function PageHeader(props) {
+function PageHeader(props: Props & WithRouterProps) {
   let { title, backUrl, location } = props
 
   if (location.state && location.state.previousPage) {
@@ -53,7 +55,6 @@ function PageHeader(props) {
     <Container
       isFlat={props.isFlat}
       style={props.style}
-      hasSubtitle={props.subtitle}
       className={props.className}
     >
       {title && (
@@ -72,7 +73,6 @@ function PageHeader(props) {
   )
 }
 
-PageHeader.propTypes = propTypes
 PageHeader.defaultProps = defaultProps
 
 PageHeader.Menu = Menu
