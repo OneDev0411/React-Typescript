@@ -60,6 +60,10 @@ export function SelectInput(props) {
   const handleChange = item =>
     props.onChange ? props.onChange(item) : props.input.onChange(item.value)
 
+  const selectedItem = props.input.value
+    ? props.items.find(item => item.value === props.input.value)
+    : props.items[0]
+
   return (
     <props.container
       style={{
@@ -82,8 +86,8 @@ export function SelectInput(props) {
             <IconDrop />
           </MenuButton>
         )}
-        selectedItem={props.selectedItem}
-        defaultSelectedItem={props.defaultSelectedItem}
+        selectedItem={selectedItem}
+        defaultSelectedItem={selectedItem}
         items={props.items}
         noBorder={props.noBorder}
         hasSearch={props.searchable}
