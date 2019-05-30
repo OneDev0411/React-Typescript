@@ -144,7 +144,17 @@ class OpenHouseDrawerInternal extends React.Component {
         // get template if exists
         const template = openHouse.metadata ? openHouse.metadata.template : null
 
-        this.setState({ isDisabled: false, openHouse, template })
+        const newState = { isDisabled: false, openHouse, template }
+
+        // Get listing from OH listing associations if the deal object is not provided
+        // It's done to cover some flows like calendar OH event edit flow
+        if (!deal || !deal.listing) {
+          newState.listing = openHouse.associations.find(
+            ({ association_type }) => association_type === 'listing'
+          ).listing
+        }
+
+        this.setState(newState)
 
         return openHouse
       } catch (error) {
