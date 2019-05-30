@@ -4,6 +4,7 @@ import AvatarEditor from 'react-avatar-editor'
 export default function ImageEditor({
   editorRef,
   image,
+  noImageCache,
   width,
   height,
   border,
@@ -29,7 +30,11 @@ export default function ImageEditor({
     >
       <AvatarEditor
         ref={editorRef}
-        image={image}
+        image={
+          typeof image === 'string' && noImageCache
+            ? `${image}?${new Date().getTime()}`
+            : image
+        }
         width={width}
         height={height}
         border={border}
