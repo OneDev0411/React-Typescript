@@ -1,46 +1,5 @@
-$col-padding: 20px;
-$deal-info-width: 300px;
-$deal-tasks-width: 388px;
-$deal-dashboard-header-height: 54px;
 
-@import './dashboard/_info';
 @import './dashboard/_create_offer';
-@import './dashboard/_tasks';
-@import './dashboard/_task_detail';
-@import './dashboard/_fact_sheet';
-@import './dashboard/_esign';
-@import './dashboard/_esign_compose';
-@import './dashboard/_task_creator';
-@import './dashboard/_listing_card';
-@import './dashboard/_comment';
-@import './dashboard/_files';
-@import './dashboard/_mls';
-@import './dashboard/_deal_side';
-@import './dashboard/_edit_form';
-@import './dashboard/_form_viewer';
-@import './dashboard/_form_context';
 @import './dashboard/_date_picker';
-@import './dashboard/_mls_status_modal';
 @import './dashboard/_upload';
-@import './dashboard/_context_discrepency';
-@import './dashboard/_deal_email';
 
-%deal-dashboard {
-  margin-left: 0;
-  margin-right: 0;
-  display: flex;
-  flex-direction: column;
-
-  &.loading-deal {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100vh;
-    font-size: 18px;
-    font-weight: bold;
-    i {
-      margin-bottom: 10px;
-    }
-  }
-}
