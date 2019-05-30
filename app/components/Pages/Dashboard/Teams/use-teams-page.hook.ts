@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
+import { FormApi } from 'final-form'
+
 import { ITeam, ITeamRole } from 'types/Team'
-import { getBrands } from 'models/BrandConsole/Brands'
+import { editBrand, getBrands } from 'models/BrandConsole/Brands'
 import { getActiveTeamId } from 'utils/user-teams'
 
 import { updateTree } from 'utils/tree-utils/update-tree'
@@ -13,6 +15,7 @@ export function useTeamsPage(user: IUser, searchTerm: string) {
   const [error, setError] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [updatingUserIds, setUpdatingUserIds] = useState<string[]>([])
+  const [editingTeam, setEditingTeam] = useState<ITeam | null>(null)
 
   useEffect(() => {
     setLoading(true)
@@ -36,15 +39,27 @@ export function useTeamsPage(user: IUser, searchTerm: string) {
 
     const newTeam = await updateUserRoles(team, userId, newRoles)
 
-    if (newTeam !== team) {
-      setRootTeam(updateTree(rootTeam!, aTeam => aTeam === team, () => newTeam))
-    }
+    updateTeam(team, newTeam)
 
     setUpdatingUserIds(updatingUserIds =>
       updatingUserIds.filter(aUserId => aUserId !== userId)
     )
   }
 
+  const updateTeam = (team, newTeam, keepChildren = true) => {
+    if (newTeam !== team) {
+      setRootTeam(
+        updateTree(
+          rootTeam!,
+          aTeam => aTeam === team,
+          () => ({
+            ...newTeam,
+            children: keepChildren ? team.children : newTeam.children
+          })
+        )
+      )
+    }
+  }
   const matches = useCallback(
     (team: ITeam) => {
       const regExp = new RegExp(searchTerm, 'gi')
@@ -81,6 +96,31 @@ export function useTeamsPage(user: IUser, searchTerm: string) {
     updatingUserIds,
     updateRoles,
     getChildNodes,
+    editDialog: {
+      open: (team: ITeam) => setEditingTeam(team),
+      close: () => setEditingTeam(null),
+      isOpen: !!editingTeam,
+      submit: async (values: Partial<ITeam>, form: FormApi) => {
+        if (editingTeam && values.id) {
+          updateTeam(editingTeam, (await editBrand(values)).data)
+          setEditingTeam(null)
+        } else {
+          //  TODO: new team
+        }
+      },
+      validate: values => {
+        const errors: { [key in keyof ITeam]?: string } = {}
+        const { name } = values
+
+        if (!name || name.length === 0) {
+          errors.name = 'Name cannot be empty'
+        }
+
+        return errors
+      },
+      isSubmitting: false,
+      team: editingTeam
+    },
     initialExpandedNodes
   }
 }

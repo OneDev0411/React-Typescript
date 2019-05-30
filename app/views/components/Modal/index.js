@@ -18,7 +18,11 @@ const HeaderContainer = styled.div`
   line-height: 3.6;
 `
 
-export function ModalHeader({ title, children, closeHandler = () => {} }) {
+export function ModalHeader({
+  title,
+  children = null,
+  closeHandler = () => {}
+}) {
   return (
     <HeaderContainer>
       <div
@@ -49,7 +53,7 @@ export const ModalFooter = styled.div`
   border-top: 1px solid #d4d4d4;
 `
 
-export function Modal({ Header, Footer, children, ...props }) {
+export function Modal({ Header = null, Footer = null, children, ...props }) {
   return (
     <BareModal {...props}>
       {Header}

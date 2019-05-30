@@ -17,10 +17,11 @@ interface Props {
   team: ITeam
   updateRoles: (team: ITeam, userId: string, roles: ITeamRole[]) => void
   updatingUserIds: string[]
+  onEdit: (event: React.MouseEvent) => void
 }
 
 export const TeamView = React.memo(
-  ({ team, updateRoles, updatingUserIds }: Props) => {
+  ({ team, updateRoles, updatingUserIds, onEdit }: Props) => {
     const teamUsers = useMemo(() => getTeamUsers(team), [team])
 
     return (
@@ -37,7 +38,7 @@ export const TeamView = React.memo(
               </IconButton>
             </Tooltip>
             <Tooltip placement="bottom" caption="Edit Team">
-              <IconButton>
+              <IconButton onClick={onEdit}>
                 <EditOutlineIcon style={{ padding: '.1rem' }} />
               </IconButton>
             </Tooltip>
