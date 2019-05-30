@@ -4,14 +4,27 @@ import parseAppearanceString from 'deals/FormEdit/utils/appearance'
 
 import { CheckboxInput } from './styled'
 
+function normalizeCheckboxValue(value) {
+  const normalizedValue =
+    typeof value === 'string' ? value.trim().toLowerCase() : value
+
+  if (normalizedValue === 'off') {
+    return false
+  }
+
+  if (normalizedValue === 'on') {
+    return true
+  }
+
+  return value
+}
+
 export default React.memo(props => {
   const { annotation } = props
-  const appearance = parseAppearanceString(annotation.defaultAppearance)
-  const isDefaultChecked = props.defaultValue
-    ? props.defaultValue.toLowerCase() !== 'off'
-    : false
-
   const { rect } = annotation
+
+  const appearance = parseAppearanceString(annotation.defaultAppearance)
+  const isDefaultChecked = normalizeCheckboxValue(props.defaultValue)
 
   const box = {
     left: rect[0],
