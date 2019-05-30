@@ -62,6 +62,12 @@ function UserAvatar({
     }
   }
 
+  const indicatorSize = size * 0.3
+
+  // Finally Pythagorean theorem worked in practice! \O/
+  const indicatorOffset =
+    size / Math.sqrt(2) - size / 2 - indicatorSize / Math.sqrt(2)
+
   return (
     <div
       className={cn('user-avatar', className)}
@@ -84,13 +90,13 @@ function UserAvatar({
           className="user-avatar-indicator"
           style={{
             position: 'absolute',
-            width: `${size / 4}px`,
-            height: `${size / 4}px`,
+            width: `${indicatorSize}px`,
+            height: `${indicatorSize}px`,
             backgroundColor: (state && Colors[state]) || '#000',
             borderRadius: '100px',
-            top: `${size / 25}px`,
-            right: `${size / 25}px`,
-            border: `${size / 25}px solid ${borderColor}`
+            bottom: `${indicatorOffset}px`,
+            right: `${indicatorOffset}px`,
+            border: `${indicatorSize / 8}px solid ${borderColor}`
           }}
         />
       )}
