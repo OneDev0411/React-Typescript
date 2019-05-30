@@ -7,7 +7,12 @@ import Tooltip from 'components/tooltip'
 function SchedulerButton(props) {
   return (
     <Tooltip caption={props.isScheduled ? 'Edit Schedule' : 'Schedule Email'}>
-      <IconButton inverse appearance="primary" onClick={props.onOpen}>
+      <IconButton
+        inverse
+        iconSize="large"
+        appearance="primary"
+        onClick={props.onOpen}
+      >
         <TimeIcon />
       </IconButton>
     </Tooltip>
