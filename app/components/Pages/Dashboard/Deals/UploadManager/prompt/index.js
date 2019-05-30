@@ -205,13 +205,17 @@ class UploadModal extends React.Component {
     return checklists[task.checklist].is_deactivated
   }
 
-  get AllPdfsUploaded() {
-    const { upload } = this.props
-
-    return _.filter(
-      upload.files,
+  get isSplitButtonActive() {
+    const pdfFiles = _.filter(
+      this.props.upload.files,
       file => file.fileObject.type === 'application/pdf'
-    ).every(file => file.properties.status === STATUS_UPLOADED)
+    )
+
+    if (pdfFiles.length === 0) {
+      return false
+    }
+
+    return pdfFiles.every(file => file.properties.status === STATUS_UPLOADED)
   }
 
   getFileUniqueId(fileObject) {
@@ -358,12 +362,12 @@ class UploadModal extends React.Component {
           <Modal.Footer>
             <ToolTip
               caption={
-                !this.AllPdfsUploaded &&
+                !this.isSplitButtonActive &&
                 'You can split files as soon as upload them'
               }
             >
               <ActionButton
-                disabled={!this.AllPdfsUploaded}
+                disabled={!this.isSplitButtonActive}
                 style={{ marginRight: '1rem' }}
                 onClick={this.handleOpenSplitter}
               >
