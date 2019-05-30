@@ -1,30 +1,15 @@
 import React from 'react'
 
 import parseAppearanceString from 'deals/FormEdit/utils/appearance'
+import { normalizeCheckboxValue } from 'deals/FormEdit/utils/normalize-checkbox-value'
 
 import { CheckboxInput } from './styled'
-
-function normalizeCheckboxValue(value) {
-  const normalizedValue =
-    typeof value === 'string' ? value.trim().toLowerCase() : value
-
-  if (normalizedValue === 'off') {
-    return false
-  }
-
-  if (normalizedValue === 'on') {
-    return true
-  }
-
-  return value
-}
 
 export default React.memo(props => {
   const { annotation } = props
   const { rect } = annotation
 
   const appearance = parseAppearanceString(annotation.defaultAppearance)
-  const isDefaultChecked = normalizeCheckboxValue(props.defaultValue)
 
   const box = {
     left: rect[0],
@@ -41,7 +26,7 @@ export default React.memo(props => {
       appearance={appearance}
       key={annotation.fieldName}
       onClick={e => props.onChange(e.target.checked)}
-      defaultChecked={isDefaultChecked}
+      defaultChecked={normalizeCheckboxValue(props.defaultValue)}
     />
   )
 })
