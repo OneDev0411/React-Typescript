@@ -22,6 +22,7 @@ import PropertiesIcon from '../../../../views/components/SvgIcons/Properties/Ico
 import PropertiesIconActive from '../../../../views/components/SvgIcons/Properties/IconPropertiesActive'
 import CalendarIcon from '../../../../views/components/SvgIcons/Calendar2/IconCalendar'
 import CalendarIconActive from '../../../../views/components/SvgIcons/Calendar2/IconCalendarActive'
+import DealsNotifications from '../Deals/components/SideNavBadge'
 
 import { selectNotificationNewCount } from '../../../../reducers/notifications'
 
@@ -106,7 +107,9 @@ function AppSideNav(props) {
               to="/dashboard/deals"
               Icon={DealsIcon}
               ActiveIcon={DealsIconActive}
-            />
+            >
+              <DealsNotifications />
+            </SideNavLinkItem>
           </Acl>
 
           <Acl access={hasWebsitePermission}>
