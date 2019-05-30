@@ -1,17 +1,34 @@
 import { getField } from 'models/Deal/helpers/context/get-field'
 import { getContext } from 'models/Deal/helpers/context/get-context'
+import { getType, Types } from 'deals/FormEdit/utils/types'
 
 import { getAnnotationsByType } from '../get-annotations-by-type'
+import { getInputAnnotations } from '../get-input-annotations'
 import { getGroupValues } from '../get-group-values'
+import { normalizeCheckboxValue } from '../normalize-checkbox-value'
 import { getRoleText } from '../get-roles-text'
 import { formatDate } from '../format-date'
 
 export function populateFormValues(annotations, fields, { deal, roles }) {
   return {
     ...fields,
+    ...getCheckboxes(annotations),
     ...getContexts(annotations, deal, fields),
     ...getRoles(annotations, deal, roles)
   }
+}
+
+function getCheckboxes(annotations) {
+  return getInputAnnotations(annotations)
+    .filter(item => getType(item.annotation) === Types.CHECKBOX_ANNOTATION)
+    .reduce((acc, item) => {
+      return {
+        ...acc,
+        [item.annotation.fieldName]: normalizeCheckboxValue(
+          item.annotation.fieldValue
+        )
+      }
+    }, {})
 }
 
 function getContexts(annotations, deal, fields) {
