@@ -1,0 +1,110 @@
+.deal-fact-sheet {
+  @extend %deal-fact-sheet;
+}
+
+%deal-fact-approve-row {
+  .approve-row {
+    text-align: right;
+  }
+}
+
+%deal-fact-sheet {
+  background: #fff;
+  margin-bottom: $col-padding;
+  .fact-table {
+    font-size: 14px;
+    border-collapse: separate;
+    border-spacing: 0 1px;
+
+    @extend %deal-fact-approve-row;
+
+    .deal-context-discrepency > .icon-trigger {
+      margin-right: 5px;
+    }
+
+    .fact-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      min-height: 35px;
+      align-items: center;
+      cursor: pointer;
+      &.disabled {
+        cursor: inherit;
+      }
+      &:not(.disabled):hover {
+        border: 1px dashed #003bdf;
+        padding: 0 3px;
+        .cta__button {
+          display: inline-block;
+          
+        }
+      }
+
+      .name {
+        .status {
+          margin-right: 5px;
+          color: #eeeeee;
+
+          &.past {
+            color: #35b863;
+          }
+          &.next {
+            color: #f6a623;
+          }
+        }
+      }
+
+      .disabeld-field {
+        text-align: right;
+        width: 100%;
+        display: inline-block;
+      }
+
+      .field {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        font-size: 14px;
+        text-align: right;
+        border: 1px dashed #fff;
+        transition: 0.1s ease-in all;
+        cursor: pointer;
+        border-radius: 3px;
+
+        .cta {
+          display: flex;
+        }
+        
+        .cta__button {
+          display: none;
+        }
+
+      
+
+        &.disabled {
+          &:hover {
+            border-color: #fff;
+            cursor: auto;
+          }
+        }
+
+        .input-edit {
+          display: inline-block;
+          width: calc(100% - 34px);
+          height: 20px;
+          margin-right: 3px;
+          border: none;
+          &:focus {
+            outline: none;
+          }
+        }
+
+        &.editable.error {
+          border-color: red;
+        }
+
+      }
+    }
+  }
+}

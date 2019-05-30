@@ -1,0 +1,117 @@
+.deal-task-detail {
+  @extend %deal-task-detail;
+}
+
+%deal-task-detail {
+  $width: calc(
+    100% - #{$deal-info-width} - #{$deal-tasks-width} - #{$col-padding}
+  );
+  min-width: $width;
+  max-width: $width;
+  border: 1px solid #dce5eb;
+  margin: 20px $col-padding 20px 5px;
+  border-radius: 4px;
+  background-color: #fff;
+
+  .header {
+    @extend %deal-task-detail-header;
+  }
+
+  .scrollable {
+    $hg: calc(100vh - 110px - 113px);
+    height: $hg;
+    overflow: auto;
+    &[data-simplebar] {
+      overflow-y: visible;
+      overflow-x: hidden;
+    }
+  }
+
+  .full-width {
+    width: 100%;
+    position: relative;
+  }
+}
+
+%deal-task-detail-header {
+  padding: 16px $col-padding 0 $col-padding;
+  margin-bottom: 24px;
+
+  .top {
+    border-radius: 3px 3px 0 0;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .task-status {
+      width: 60%;
+      text-align: left;
+      .status {
+        @extend %status-colors;
+        width: 76px;
+        padding: 3px 5px;
+      }
+    }
+
+    .cta {
+      width: 40%;
+      text-align: right;
+      vertical-align: middle;
+    }
+
+
+  }
+
+  .saving-title {
+    i {
+      color: #003bdf;
+      font-size: 15px;
+    }
+  }
+
+  .title {
+    position: relative;
+    width: 100%;
+    font-size: 21px;
+    letter-spacing: 0.8px;
+    text-align: left;
+    padding: 1px 20px 1px 1px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    textarea {
+      width: 100%;
+      height: 100%;
+      resize: none;
+      border: none;
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .cta {
+      cursor: pointer;
+      color: #003bdf;
+      font-size: 13px;
+
+      .save {
+        border: 1px solid #003bdf;
+        padding: 3px;
+        border-radius: 4px;
+      }
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &.isEditingTitle,
+    &:hover {
+      padding: 0 20px 0 0;
+      border: dashed 1px #003bdf;
+      border-radius: 4px;
+    }
+  }
+}

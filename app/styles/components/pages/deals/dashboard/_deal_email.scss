@@ -1,0 +1,55 @@
+.deal-email {
+  margin-left: 0;
+  color: #000000;
+  font-weight: normal;
+  background-color: #f2f2f2;
+  padding: 8px;
+  border-radius: 3px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .deal-email__label {
+    margin-bottom: 0px;
+  }
+
+  .deal-email__text {
+    color: #003bdf;
+    margin-bottom: 0px;
+    margin-left: 8px;
+  }
+  .deal-email__share-icon {
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+  }
+  &.marginBottom {
+    margin-bottom: 16px;
+  }
+}
+
+.deal-email__tooltip {
+  text-align: left;
+  padding: 1rem 1rem 0.7rem;
+  left: -25%;
+  width: 25rem;
+  font-size: 1.3rem;
+  font-weight: normal;
+  color: #fff;
+  border-radius: 5px;
+  background-color: #263445;
+  transform: translate(0, 0);
+  &:before {
+    content: '';
+    position: absolute;
+    top: -22%;
+    left: 15%;
+    width: 10px;
+    height: 10px;
+    border: 10px transparent solid;
+    border-bottom-color: #263445;
+  }
+  p {
+    margin: 0;
+  }
+}

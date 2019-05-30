@@ -1,0 +1,42 @@
+.modal-deal-mls-status-modal {
+  .modal-header {
+    @extend %deal-modal-header;
+  }
+
+  .modal-body {
+    .radio {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      line-height: 16px;
+      background-color: #ffffff;
+      border: solid 1px #e9e9e9;
+      border-radius: 40px;
+      text-align: center;
+      margin-right: 14px;
+      i {
+        color: transparent;
+      }
+
+      &.selected {
+        border-color: #003bdf;
+        i {
+          color: #003bdf;
+          font-size: 12px;
+        }
+      }
+    }
+
+    .status {
+      display: inline-block;
+      width: 20px;
+      height: 12px;
+      margin-right: 8px;
+      border-radius: 2px;
+    }
+
+    
+  }
+
+  
+}

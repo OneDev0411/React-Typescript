@@ -1,0 +1,63 @@
+.modal-deal-update-context {
+  .modal-content {
+    padding: 0;
+    width: 800px;
+    height: 500px;
+  }
+
+  .modal-body {
+    padding: 0;
+  }
+
+  .wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    height: 500px;
+
+    .guide {
+      width: 300px;
+      color: #fff;
+      background-color: #567990;
+      padding: 0 29px;
+      .title {
+        margin-top: 175px;
+        font-size: 24px;
+        font-weight: 600;
+      }
+
+      .descr {
+        font-size: 17px;
+      }
+    }
+
+    .context-data {
+      width: 500px;
+      iframe {
+        width: 500px;
+        height: 434px;
+      }
+
+      .cta {
+        text-align: right;
+        height: 60px;
+        line-height: 60px;
+        vertical-align: middle;
+        padding-right: 13px;
+        background-color: #ffffff;
+        box-shadow: 0 -1px 0 0 rgba(226, 230, 234, 0.5),
+          0 -1px 4px 0 rgba(0, 0, 0, 0.12);
+        button {
+          width: 70px;
+          margin-left: 13px;
+          border-color: #dde2e6;
+          color: #8da2b5;
+          line-height: 17px;
+          &:hover {
+            border: solid 1px #dde2e6;
+          }
+        }
+      }
+    }
+  }
+}
