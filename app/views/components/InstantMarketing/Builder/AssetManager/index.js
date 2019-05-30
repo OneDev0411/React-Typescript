@@ -5,11 +5,8 @@ import { Uploader } from 'components/Uploader'
 
 import { AssetImage } from './AssetImage'
 
-import Fetch from '../../../../../services/fetch'
-
 import { loadGrapesjs } from '../utils/load-grapes'
-
-const CUSTOM_ASSET_UPLOAD_PATH = '/templates/assets'
+import { uploadAsset } from './helpers'
 
 export const load = async () => {
   const { Grapesjs, Backbone } = await loadGrapesjs()
@@ -46,12 +43,7 @@ export const load = async () => {
 
               try {
                 const uploadResponses = await Promise.all(
-                  files.map(file =>
-                    new Fetch()
-                      .upload(CUSTOM_ASSET_UPLOAD_PATH)
-                      .attach('attachment', file, file.name)
-                      .field('template', templateId)
-                  )
+                  files.map(file => uploadAsset(file, templateId))
                 )
 
                 const uploadedAssets = uploadResponses.map(response => ({
