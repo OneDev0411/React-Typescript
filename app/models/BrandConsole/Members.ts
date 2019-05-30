@@ -1,4 +1,4 @@
-import { ITeamRole } from 'types/Team'
+import { ITeamRole } from 'models/BrandConsole/types'
 
 import Fetch from '../../services/fetch/index'
 

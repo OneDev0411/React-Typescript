@@ -2,7 +2,7 @@ import React from 'react'
 
 import { FlexItem } from 'styled-flex-component'
 
-import { ITeamRole } from 'types/Team'
+import { ITeamRole } from 'models/BrandConsole/types'
 
 import { BasicMultiSelectDropdown } from 'components/BasicMultiSelectDropdown'
 

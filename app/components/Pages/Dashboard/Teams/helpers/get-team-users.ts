@@ -1,6 +1,6 @@
 import { groupBy, flatten } from 'lodash'
 
-import { ITeam, ITeamRole } from 'types/Team'
+import { ITeam, ITeamRole } from 'models/BrandConsole/types'
 
 export function getTeamUsers(team: ITeam) {
   const roles = (team.roles || []).filter(role => !role.deleted_at)

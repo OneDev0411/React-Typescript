@@ -13,6 +13,8 @@ import { Field, Form } from 'react-final-form'
 
 import Flex, { FlexItem } from 'styled-flex-component'
 
+import Tooltip from 'components/tooltip'
+
 import { Container, Content, Menu } from 'components/SlideMenu'
 import ALink from 'components/ALink'
 
@@ -33,6 +35,13 @@ import { Modal, ModalHeader } from 'components/Modal'
 
 import Button from 'components/Button/ActionButton'
 
+import IconButton from 'components/Button/IconButton'
+
+import AddCircleOutlineIcon
+  from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
+
+import { BrandTypes } from 'models/BrandConsole/types'
+
 import { TeamsSearch } from './styled'
 import { TeamView } from './TeamView'
 import { useTeamsPage } from './use-teams-page.hook'
@@ -51,14 +60,16 @@ function TeamsPage(props: Props) {
     loading,
     updatingUserIds,
     updateRoles,
+    deleteTeam,
     getChildNodes,
-    editDialog,
+    addEditModal,
     initialExpandedNodes
   } = useTeamsPage(props.user, searchTerm)
 
-  const teamRenderer = useCallback(team => renderTeam(team, searchTerm), [
-    searchTerm
-  ])
+  const teamRenderer = useCallback(
+    team => renderTeam(team, searchTerm, addEditModal.openAdd),
+    [addEditModal.openAdd, searchTerm]
+  )
 
   if (loading) {
     return <Spinner />
@@ -103,25 +114,27 @@ function TeamsPage(props: Props) {
               <TeamView
                 team={selectedTeam}
                 updatingUserIds={updatingUserIds}
-                onEdit={() => editDialog.open(selectedTeam)}
+                onDelete={() => deleteTeam(selectedTeam)}
+                onEdit={() => addEditModal.openEdit(selectedTeam)}
                 updateRoles={updateRoles}
               />
             )}
           </Content>
         </Container>
         <Modal
-          isOpen={editDialog.isOpen}
-          onRequestClose={editDialog.close}
+          style={{ content: { overflow: 'visible' } }}
+          isOpen={addEditModal.isOpen}
+          onRequestClose={addEditModal.close}
           autoHeight
         >
           <ModalHeader
-            closeHandler={editDialog.close}
-            title={editDialog.team ? 'Edit team' : 'Add team'}
+            closeHandler={addEditModal.close}
+            title={addEditModal.team ? 'Edit team' : 'Add team'}
           />
           <Form
-            onSubmit={editDialog.submit}
-            validate={editDialog.validate}
-            initialValues={editDialog.team || {}}
+            onSubmit={addEditModal.submit}
+            validate={addEditModal.validate}
+            initialValues={addEditModal.team || { brand_type: BrandTypes.Team }}
             render={({ handleSubmit, submitting }) => (
               <form
                 onSubmit={handleSubmit}
@@ -134,23 +147,21 @@ function TeamsPage(props: Props) {
                       name="name"
                       label="Title"
                       required
-                      component={TextInput}
+                      component={TextInput as any}
                     />
                   </FlexItem>
                   <FlexItem grow={1} basis="0%" style={{ padding: '0.75rem' }}>
                     <Field
-                      name="type"
-                      items={[
-                        {
-                          value: 'brand',
-                          label: 'Brand'
-                        }
-                      ]}
+                      name="brand_type"
+                      items={Object.values(BrandTypes).map(value => ({
+                        label: value,
+                        value
+                      }))}
                       dropdownOptions={{
                         fullWidth: true
                       }}
                       label="Type"
-                      component={SelectInput}
+                      component={SelectInput as any}
                     />
                   </FlexItem>
                 </Flex>
@@ -184,23 +195,48 @@ const Highlight = styled.span`
   color: ${primary};
 `
 
-function renderTeam(team, searchTerm) {
+const TeamLinkWrapper = styled(Flex)`
+  ${IconButton} {
+    display: none;
+  }
+  &:hover ${IconButton} {
+    display: flex;
+  }
+`
+
+function renderTeam(team, searchTerm, onAddChild) {
   return (
-    <TeamLink
-      noStyle
-      // replace /* doesn't seem to work (v4 only?) */
-      activeClassName="active"
-      style={{ display: 'block' }}
-      to={`/dashboard/teams/${team.id}`}
-    >
-      {searchTerm ? (
-        <TextWithHighlights HighlightComponent={Highlight} search={searchTerm}>
-          {team.name}
-        </TextWithHighlights>
-      ) : (
-        team.name
-      )}
-    </TeamLink>
+    <TeamLinkWrapper alignCenter>
+      <TeamLink
+        noStyle
+        // replace /* doesn't seem to work (v4 only?) */
+        activeClassName="active"
+        style={{ flex: '1', overflow: 'hidden', textOverflow: 'ellipsis' }}
+        to={`/dashboard/teams/${team.id}`}
+      >
+        {searchTerm ? (
+          <TextWithHighlights
+            HighlightComponent={Highlight}
+            search={searchTerm}
+          >
+            {team.name}
+          </TextWithHighlights>
+        ) : (
+          team.name
+        )}
+      </TeamLink>
+      <Tooltip caption="Add New Team" placement="bottom">
+        <IconButton
+          inverse
+          iconSize="large"
+          onClick={() => onAddChild(team)}
+          isFit
+          style={{ margin: '0.3rem' }}
+        >
+          <AddCircleOutlineIcon />
+        </IconButton>
+      </Tooltip>
+    </TeamLinkWrapper>
   )
 }
 

@@ -1,3 +1,5 @@
+import { CSSProperties } from 'react'
+
 declare module 'styled-flex-component' {
   import * as React from 'react'
   import { CSSProperties } from 'react'
@@ -38,7 +40,9 @@ declare module 'styled-flex-component' {
     justifyEvenly: boolean
   }>
 
-  export class FlexItem extends React.Component<FlexItemProps> {}
+  export class FlexItem extends React.Component<
+    FlexItemProps & { style?: CSSProperties }
+  > {}
 
   // this can be improved. maybe StyledComponent can be used
   class Flex extends React.Component<FlexProps & { style?: CSSProperties }> {}

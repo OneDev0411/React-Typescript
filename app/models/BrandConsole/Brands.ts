@@ -1,4 +1,4 @@
-import { ITeam } from 'types/Team'
+import { ICreateBrand, ITeam } from 'models/BrandConsole/types'
 
 import Fetch from '../../services/fetch/index'
 
@@ -39,7 +39,16 @@ export async function getChildrenBrands(brandId) {
   }
 }
 
-export async function addBrand(brand) {
+export async function addBrand(
+  brand: ICreateBrand,
+  parentId: string
+): Promise<ApiResponse<ITeam>> {
+  const payload = { ...brand }
+
+  if (parentId) {
+    payload.parent = parentId
+  }
+
   return (await new Fetch()
     .post('/brands')
     .query({ associations: defaultAssociations })
@@ -50,7 +59,7 @@ export async function editBrand(
   brand: Partial<ITeam>
 ): Promise<ApiResponse<ITeam>> {
   if (!brand.id) {
-    throw new Error('team id is empty', brand)
+    throw new Error('team id is empty')
   }
 
   return (await new Fetch()
@@ -59,12 +68,8 @@ export async function editBrand(
     .send(brand)).body
 }
 
-export async function deleteBrand(brandId) {
-  try {
-    return await new Fetch().delete(`/brands/${brandId}`)
-  } catch (error) {
-    return { error }
-  }
+export async function deleteBrand(brandId: string) {
+  return new Fetch().delete(`/brands/${brandId}`)
 }
 
 export default {

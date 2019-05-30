@@ -1,8 +1,15 @@
-import React from 'react'
-import ReactModal from 'react-modal'
+import React, { ReactNode } from 'react'
+import ReactModal, { Props as ReactModalProps } from 'react-modal'
 import cn from 'classnames'
 
 ReactModal.setAppElement('#app')
+
+interface Props extends ReactModalProps {
+  autoHeight: boolean
+  children: ReactNode
+  className: string
+  overlayClassName: string
+}
 
 export default function BareModal({
   autoHeight,
@@ -10,7 +17,7 @@ export default function BareModal({
   className,
   overlayClassName,
   ...modalProps
-}) {
+}: Props) {
   const baseClassName = 'c-modal__content'
   const autoHeightClassName = `${baseClassName}--height-auto`
   const classes = cn(baseClassName, className, {

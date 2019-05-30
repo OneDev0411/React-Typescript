@@ -1,7 +1,5 @@
-export enum IBrandType {
-  Other = 'Other' // TODO: other values
-}
-
+// TODO: move it to types folder when types moved under app or webpack problem
+// is solved anyhow
 export interface IBrandMessage {
   branch_title: string
   listing_url: string
@@ -50,4 +48,14 @@ export interface ITeam {
   updated_at: number
 }
 
+export const BrandTypes = {
+  Team: 'Team',
+  Brokerage: 'Brokerage',
+  Office: 'Office',
+  Personal: 'Personal',
+  Other: 'Other'
+}
+export type IBrandType = typeof BrandTypes[keyof typeof BrandTypes]
+
 // export type WithAssociations<T, K extends keyof T> = Required<Pick<T, K>>
+export type ICreateBrand = Pick<ITeam, 'name' | 'brand_type'>

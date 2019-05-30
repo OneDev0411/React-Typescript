@@ -49,7 +49,7 @@ export const TreeViewNode = React.memo(
     return (
       <>
         <TreeViewNodeContainer selectable={props.selectable}>
-          {arrow} <FlexItem grow={1}>{props.renderNode(node)}</FlexItem>
+          {arrow} <FlexItem grow={1} style={{maxWidth: '100%'}}>{props.renderNode(node)}</FlexItem>
         </TreeViewNodeContainer>
         {expanded && (
           <TreeViewNodeChildrenContainer>

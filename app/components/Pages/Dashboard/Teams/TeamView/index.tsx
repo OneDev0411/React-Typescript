@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { useMemo } from 'react'
 
-import { ITeam, ITeamRole } from 'types/Team'
-
 import EditOutlineIcon from 'components/SvgIcons/EditOutline/EditOutlineIcon'
 import EditRolesIcon from 'components/SvgIcons/EditRoles/EditRolesIcon'
 import DeleteOutlineIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 import Tooltip from 'components/tooltip'
 import PageHeader from 'components/PageHeader'
+
+import { ITeam, ITeamRole } from 'models/BrandConsole/types'
 
 import { Container, IconButton } from './styled'
 import { TeamMember } from './components/TeamMember'
@@ -18,10 +18,11 @@ interface Props {
   updateRoles: (team: ITeam, userId: string, roles: ITeamRole[]) => void
   updatingUserIds: string[]
   onEdit: (event: React.MouseEvent) => void
+  onDelete: (event: React.MouseEvent) => void
 }
 
 export const TeamView = React.memo(
-  ({ team, updateRoles, updatingUserIds, onEdit }: Props) => {
+  ({ team, updateRoles, updatingUserIds, onEdit, onDelete }: Props) => {
     const teamUsers = useMemo(() => getTeamUsers(team), [team])
 
     return (
@@ -43,7 +44,7 @@ export const TeamView = React.memo(
               </IconButton>
             </Tooltip>
             <Tooltip placement="bottom" caption="Delete Team">
-              <IconButton>
+              <IconButton onClick={onDelete}>
                 <DeleteOutlineIcon style={{ padding: '.1rem' }} />
               </IconButton>
             </Tooltip>

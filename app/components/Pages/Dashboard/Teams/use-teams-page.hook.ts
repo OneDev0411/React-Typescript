@@ -1,9 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
-import { FormApi } from 'final-form'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
-import { ITeam, ITeamRole } from 'types/Team'
-import { editBrand, getBrands } from 'models/BrandConsole/Brands'
+import { ICreateBrand, ITeam, ITeamRole } from 'models/BrandConsole/types'
+import {
+  addBrand,
+  deleteBrand,
+  editBrand,
+  getBrands
+} from 'models/BrandConsole/Brands'
 import { getActiveTeamId } from 'utils/user-teams'
 
 import { updateTree } from 'utils/tree-utils/update-tree'
@@ -16,6 +21,9 @@ export function useTeamsPage(user: IUser, searchTerm: string) {
   const [loading, setLoading] = useState(false)
   const [updatingUserIds, setUpdatingUserIds] = useState<string[]>([])
   const [editingTeam, setEditingTeam] = useState<ITeam | null>(null)
+  const [newItemParent, setNewItemParent] = useState<ITeam | null>(null)
+
+  const deleteConfirmation = useContext(ConfirmationModalContext)
 
   useEffect(() => {
     setLoading(true)
@@ -89,6 +97,11 @@ export function useTeamsPage(user: IUser, searchTerm: string) {
     [rootTeam]
   )
 
+  const closeAddEditModal = () => {
+    setEditingTeam(null)
+    setNewItemParent(null)
+  }
+
   return {
     rootTeam,
     error,
@@ -96,16 +109,62 @@ export function useTeamsPage(user: IUser, searchTerm: string) {
     updatingUserIds,
     updateRoles,
     getChildNodes,
-    editDialog: {
-      open: (team: ITeam) => setEditingTeam(team),
-      close: () => setEditingTeam(null),
-      isOpen: !!editingTeam,
-      submit: async (values: Partial<ITeam>, form: FormApi) => {
+    deleteTeam: useCallback(
+      (team: ITeam) => {
+        // @ts-ignore until confirmation modal types are fixed
+        deleteConfirmation.setConfirmationModal({
+          message: 'Heads up!',
+          description: 'The team will be removed for ever! Are you sure?',
+          onConfirm: async () => {
+            await deleteBrand(team.id)
+            updateTree(
+              rootTeam!,
+              node => (node.children || []).includes(team),
+              parentTeam => {
+                console.log('updating', parentTeam, {
+                  ...parentTeam,
+                  children: (parentTeam.children || []).filter(
+                    child => child !== team
+                  )
+                })
+
+                return {
+                  ...parentTeam,
+                  children: (parentTeam.children || []).filter(
+                    child => child !== team
+                  )
+                }
+              }
+            )
+          }
+        })
+      },
+      [deleteConfirmation, rootTeam]
+    ),
+    addEditModal: {
+      openAdd: useCallback((parent: ITeam) => {
+        setEditingTeam(null)
+        setNewItemParent(parent)
+      }, []),
+      openEdit: (team: ITeam) => setEditingTeam(team),
+      close: closeAddEditModal,
+      isOpen: !!editingTeam || !!newItemParent,
+      submit: async (values: Partial<ITeam> & ICreateBrand) => {
         if (editingTeam && values.id) {
           updateTeam(editingTeam, (await editBrand(values)).data)
-          setEditingTeam(null)
-        } else {
-          //  TODO: new team
+          closeAddEditModal()
+        } else if (newItemParent) {
+          const newTeam = (await addBrand(values, newItemParent.id)).data
+
+          updateTeam(
+            newItemParent,
+            {
+              ...newItemParent,
+              children: [...newItemParent.children, newTeam]
+            },
+            false
+          )
+          closeAddEditModal()
         }
       },
       validate: values => {

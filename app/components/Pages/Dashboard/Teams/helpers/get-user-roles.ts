@@ -1,4 +1,4 @@
-import { ITeam } from 'types/Team'
+import { ITeam } from 'models/BrandConsole/types'
 
 export function getUserRoles(team: ITeam, userId: string) {
   return team.roles!.filter(role =>
