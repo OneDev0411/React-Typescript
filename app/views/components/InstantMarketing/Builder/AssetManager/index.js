@@ -11,7 +11,7 @@ import { uploadAsset } from './helpers'
 export const load = async () => {
   const { Grapesjs, Backbone } = await loadGrapesjs()
 
-  Grapesjs.plugins.add('asset-blocks', editor => {
+  Grapesjs.plugins.add('asset-blocks', async editor => {
     let target
 
     const getStorageData = async key =>
@@ -19,13 +19,19 @@ export const load = async () => {
         editor.StorageManager.load(key, data => res(data))
       })
 
+    const { templateId } = await getStorageData('templateId')
+
     const AssetView = Backbone.View.extend({
       initialize({ model }) {
         this.model = model
       },
       render() {
         ReactDOM.render(
-          <AssetImage model={this.model} target={target} />,
+          <AssetImage
+            model={this.model}
+            target={target}
+            templateId={templateId}
+          />,
           this.el
         )
 
@@ -39,8 +45,6 @@ export const load = async () => {
           <Uploader
             accept="image/*"
             uploadHandler={async files => {
-              const { templateId } = await getStorageData('templateId')
-
               try {
                 const uploadResponses = await Promise.all(
                   files.map(file => uploadAsset(file, templateId))
