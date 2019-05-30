@@ -18,7 +18,7 @@ const createSegmentFromFilters = filter_type => filters => {
     filters: normalizeAttributeFilters(attributeFilters),
     args: {
       flows: flowFilters.map(filter => filter.values[0].value),
-      crm_task: openHouseFilters.map(filter => filter.values[0].value),
+      crm_tasks: openHouseFilters.map(filter => filter.values[0].value),
       filter_type
     }
   }

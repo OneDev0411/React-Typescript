@@ -20,7 +20,7 @@ const createFiltersFromSegment = segment => {
     }
   }))
 
-  const { flows, crm_task } = segment.args || {}
+  const { flows, crm_tasks } = segment.args || {}
 
   const flowFilters = (flows || []).map(flowId => ({
     id: FLOW_FILTER_ID,
@@ -31,12 +31,12 @@ const createFiltersFromSegment = segment => {
     }
   }))
 
-  const openHouseFilters = (crm_task || []).map(crmTaskId => ({
+  const openHouseFilters = (crm_tasks || []).map(crmTaskId => ({
     id: OPEN_HOUSE_FILTER_ID,
     isActive: false,
     values: [
       getOpenHouseFilter(
-        segment.crm_task.find(crmTask => crmTask.id === crmTaskId)
+        segment.crm_tasks.find(crmTask => crmTask.id === crmTaskId)
       )
     ],
     operator: {
