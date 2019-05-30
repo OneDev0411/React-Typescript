@@ -41,7 +41,7 @@ const submitSigninForm = (userInfo, redirectTo) => (dispatch, getState) => {
         window.Raven.setUserContext(userData)
       }
 
-      const defaultHomePage = getDefaultHomePage(user)
+      const defaultHomePage = getDefaultHomePage(getState().user)
 
       if (redirectTo && redirectTo.includes('http')) {
         browserHistory.push('/branch?waitingForRedirect')
