@@ -144,6 +144,7 @@ function TeamsPage(props: Props) {
                 <Flex>
                   <FlexItem grow={1} basis="0%" style={{ padding: '0.75rem' }}>
                     <Field
+                      autoFocus
                       name="name"
                       label="Title"
                       required

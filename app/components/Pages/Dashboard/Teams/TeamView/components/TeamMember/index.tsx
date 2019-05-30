@@ -36,6 +36,7 @@ export function TeamMember({
       <UserAvatar
         userId={user.id}
         color="#000"
+        size={40}
         name={user.display_name}
         image={user.profile_image_url}
       />
