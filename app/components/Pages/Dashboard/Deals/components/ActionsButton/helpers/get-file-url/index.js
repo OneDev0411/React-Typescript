@@ -38,7 +38,10 @@ function getSubmissionUrl(data) {
   }
 
   let url = `/dashboard/deals/${data.deal.id}/view/${data.task.id}`
-  const submissionEnvelopes = getDocumentEnvelopes(data.envelopes, data.task)
+  const submissionEnvelopes = getDocumentEnvelopes(
+    data.envelopes,
+    data.task
+  ).filter(envelope => envelope.status !== 'Voided')
 
   if (submissionEnvelopes.length > 0) {
     return submissionEnvelopes.map(envelope => ({
@@ -66,7 +69,10 @@ function getDocumentUrl(data) {
   const taskId = data.task ? data.task.id : 'stash'
   const baseUrl = `/dashboard/deals/${data.deal.id}/view/${taskId}`
 
-  const documentEnvelopes = getDocumentEnvelopes(data.envelopes, data.document)
+  const documentEnvelopes = getDocumentEnvelopes(
+    data.envelopes,
+    data.document
+  ).filter(envelope => envelope.status !== 'Voided')
 
   if (documentEnvelopes.length > 0) {
     return {

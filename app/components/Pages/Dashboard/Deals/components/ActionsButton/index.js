@@ -32,17 +32,19 @@ import { getDocumentEnvelopes } from '../../utils/get-document-envelopes'
 
 import { SelectItemDrawer } from './components/SelectItemDrawer'
 
-import { deleteFile } from './helpers/actions/delete-file'
-import { renameFile } from './helpers/actions/rename-file'
-import { editForm } from './helpers/actions/edit-form'
-import { voidEnvelope } from './helpers/actions/void-envelope'
-import { reviewEnvelope } from './helpers/actions/review-envelope'
-import { resendEnvelope } from './helpers/actions/resend-envelope'
-import { approveTask } from './helpers/actions/approve-task'
-import { declineTask } from './helpers/actions/decline-task'
-import { deleteTask } from './helpers/actions/delete-task'
-import { createNeedsAttention } from './helpers/actions/create-needs-attention'
-import { removeTaskNotification } from './helpers/actions/remove-task-notification'
+import {
+  deleteFile,
+  renameFile,
+  deleteTask,
+  editForm,
+  voidEnvelope,
+  reviewEnvelope,
+  resendEnvelope,
+  approveTask,
+  declineTask,
+  createNeedsAttention,
+  removeTaskNotification
+} from './helpers/actions'
 
 import GetSignature from '../../Signature'
 import PdfSplitter from '../../PdfSplitter'
@@ -217,10 +219,6 @@ class ActionsButton extends React.Component {
   }
 
   getEmailComposeFiles = () => {
-    if (this.props.type === 'task') {
-      return []
-    }
-
     return getFileUrl({
       type: this.props.type,
       deal: this.props.deal,
@@ -463,6 +461,7 @@ class ActionsButton extends React.Component {
             deal={this.props.deal}
             onClose={this.handleToggleComposeEmail}
             onSent={this.handleToggleComposeEmail}
+            hasDealsAttachments
           />
         )}
 

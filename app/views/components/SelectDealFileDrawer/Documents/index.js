@@ -98,12 +98,14 @@ class DocumentRow extends React.Component {
   }
 
   isInitialAttachment = document => {
-    return this.props.initialAttachments && 
+    return (
+      this.props.initialAttachments &&
       Object.values(this.props.initialAttachments).some(item => {
         const key = document.type === 'form' ? 'task_id' : 'file_id'
 
         return item[key] === document[key]
       })
+    )
   }
 
   getFormattedDate = date => fecha.format(new Date(date), 'MMM DD YYYY, h:mm A')
@@ -203,7 +205,7 @@ class DocumentRow extends React.Component {
 
                 <NameSection onClick={() => this.props.onToggleItem(document)}>
                   <Title isSelectable={!!checklist}>
-                    <TextMiddleTruncate text={document.title} maxLength={60} />
+                    <TextMiddleTruncate text={document.title} maxLength={45} />
                   </Title>
 
                   <ChecklistName error={!checklist}>

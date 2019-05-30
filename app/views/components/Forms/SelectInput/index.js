@@ -33,6 +33,7 @@ SelectInput.propTypes = {
   isRequired: PropTypes.bool,
   isVisible: PropTypes.bool,
   showError: PropTypes.bool,
+  hasBottomLine: PropTypes.bool,
   container: PropTypes.oneOfType([PropTypes.element, PropTypes.object])
 }
 
@@ -48,6 +49,7 @@ SelectInput.defaultProps = {
   isRequired: false,
   isVisible: true,
   showError: true,
+  hasBottomLine: true,
   onChange: null,
   container: InputContainer
 }
@@ -59,6 +61,10 @@ export function SelectInput(props) {
 
   const handleChange = item =>
     props.onChange ? props.onChange(item) : props.input.onChange(item.value)
+
+  const selectedItem = props.input.value
+    ? props.items.find(item => item.value === props.input.value)
+    : props.items[0]
 
   return (
     <props.container
@@ -73,7 +79,11 @@ export function SelectInput(props) {
 
       <BasicDropdown
         style={{
-          height: '2rem',
+          ...(props.hasBottomLine && {
+            borderBottom: '1px solid #dce5eb',
+            height: '2rem',
+            paddingBottom: '0.25rem'
+          }),
           ...props.dropdownStyle
         }}
         buttonRenderer={props => (
@@ -82,8 +92,8 @@ export function SelectInput(props) {
             <IconDrop />
           </MenuButton>
         )}
-        selectedItem={props.selectedItem}
-        defaultSelectedItem={props.defaultSelectedItem}
+        selectedItem={selectedItem}
+        defaultSelectedItem={selectedItem}
         items={props.items}
         noBorder={props.noBorder}
         hasSearch={props.searchable}
