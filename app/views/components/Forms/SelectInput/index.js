@@ -33,6 +33,7 @@ SelectInput.propTypes = {
   isRequired: PropTypes.bool,
   isVisible: PropTypes.bool,
   showError: PropTypes.bool,
+  hasBottomLine: PropTypes.bool,
   container: PropTypes.oneOfType([PropTypes.element, PropTypes.object])
 }
 
@@ -48,6 +49,7 @@ SelectInput.defaultProps = {
   isRequired: false,
   isVisible: true,
   showError: true,
+  hasBottomLine: true,
   onChange: null,
   container: InputContainer
 }
@@ -77,7 +79,11 @@ export function SelectInput(props) {
 
       <BasicDropdown
         style={{
-          height: '2rem',
+          ...(props.hasBottomLine && {
+            borderBottom: '1px solid #dce5eb',
+            height: '2rem',
+            paddingBottom: '0.25rem'
+          }),
           ...props.dropdownStyle
         }}
         buttonRenderer={props => (
