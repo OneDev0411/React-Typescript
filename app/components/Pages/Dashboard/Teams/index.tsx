@@ -8,6 +8,10 @@ import styled from 'styled-components'
 
 import { RouteComponentProps } from 'react-router'
 
+import { useCallback, useState } from 'react'
+
+import { render } from 'react-dom'
+
 import { Container, Content, Menu } from 'components/SlideMenu'
 import ALink from 'components/ALink'
 
@@ -20,6 +24,8 @@ import Search from 'components/Grid/Search'
 
 import { findNode } from 'utils/tree-utils'
 
+import { TextWithHighlights } from 'components/TextWithHighlights'
+
 import { TeamsSearch } from './styled'
 import { TeamView } from './TeamView'
 import { useTeamsPage } from './use-teams-page.hook'
@@ -31,6 +37,7 @@ type Props = {
 const getId = team => team.id
 
 function TeamsPage(props: Props) {
+  const [searchTerm, setSearchTerm] = useState('')
   const {
     rootTeam,
     error,
@@ -39,7 +46,11 @@ function TeamsPage(props: Props) {
     updateRoles,
     getChildNodes,
     initialExpandedNodes
-  } = useTeamsPage(props.user)
+  } = useTeamsPage(props.user, searchTerm)
+
+  const teamRenderer = useCallback(team => renderTeam(team, searchTerm), [
+    searchTerm
+  ])
 
   if (loading) {
     return <Spinner />
@@ -67,7 +78,7 @@ function TeamsPage(props: Props) {
             <TeamsSearch>
               <Search
                 placeholder="Search for teams and agents"
-                onChange={value => console.log(value)}
+                onChange={value => setSearchTerm(value)}
               />
             </TeamsSearch>
             <TreeView
@@ -75,7 +86,7 @@ function TeamsPage(props: Props) {
               selectable
               initialExpandedNodes={initialExpandedNodes}
               getNodeId={getId}
-              renderNode={renderTeam}
+              renderNode={teamRenderer}
             />
           </Menu>
 
@@ -106,7 +117,11 @@ const TeamLink = styled(ALink)`
   }
 `
 
-function renderTeam(team) {
+const Highlight = styled.span`
+  color: ${primary};
+`
+
+function renderTeam(team, searchTerm) {
   return (
     <TeamLink
       noStyle
@@ -115,7 +130,13 @@ function renderTeam(team) {
       style={{ display: 'block' }}
       to={`/dashboard/teams/${team.id}`}
     >
-      {team.name}
+      {searchTerm ? (
+        <TextWithHighlights HighlightComponent={Highlight} search={searchTerm}>
+          {team.name}
+        </TextWithHighlights>
+      ) : (
+        team.name
+      )}
     </TeamLink>
   )
 }

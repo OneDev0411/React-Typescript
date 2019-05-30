@@ -8,7 +8,7 @@ import { updateTree } from 'utils/tree-utils/update-tree'
 
 import { updateUserRoles } from './helpers/update-user-roles'
 
-export function useTeamsPage(user: IUser) {
+export function useTeamsPage(user: IUser, searchTerm: string) {
   const [rootTeam, setRootTeam] = useState<ITeam | null>(null)
   const [error, setError] = useState<any>(null)
   const [loading, setLoading] = useState(false)
@@ -45,10 +45,25 @@ export function useTeamsPage(user: IUser) {
     )
   }
 
+  const matches = useCallback(
+    (team: ITeam) => {
+      const regExp = new RegExp(searchTerm, 'gi')
+
+      // performance improvement is possible by memoizing result of matches
+      // because for deep nodes it's called so many times because of the
+      // recursion
+      return team.name.match(regExp) || (team.children || []).some(matches)
+    },
+    [searchTerm]
+  )
+
   const getChildNodes = useCallback(
-    (parent?: ITeam) =>
-      parent ? parent.children || [] : rootTeam ? [rootTeam] : [],
-    [rootTeam]
+    (parent?: ITeam) => {
+      const nodes = parent ? parent.children || [] : rootTeam ? [rootTeam] : []
+
+      return searchTerm ? nodes.filter(matches) : nodes
+    },
+    [matches, rootTeam, searchTerm]
   )
 
   const initialExpandedNodes = useMemo(

@@ -12,10 +12,19 @@ export async function deprecatedGetBrands(brandId) {
   }
 }
 
-export async function getBrands(brandId: string): Promise<ApiResponse<ITeam>> {
-  return (await new Fetch().get(
-    `/brands/${brandId}?associations=brand.children&associations=brand.roles&associations=brand_role.users`
-  )).body
+export async function getBrands(
+  brandId: string,
+  fetchChildren = true
+): Promise<ApiResponse<ITeam>> {
+  const associations = ['brand.roles', 'brand_role.users']
+
+  if (fetchChildren) {
+    associations.push('brand.children')
+  }
+
+  return (await new Fetch().get(`/brands/${brandId}`).query({
+    associations
+  })).body
 }
 
 export async function getChildrenBrands(brandId) {

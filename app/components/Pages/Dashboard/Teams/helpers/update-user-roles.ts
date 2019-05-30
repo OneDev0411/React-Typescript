@@ -9,7 +9,7 @@ export async function updateUserRoles(
   team: ITeam,
   userId: string,
   newRoles: ITeamRole[]
-) {
+): Promise<ITeam> {
   const roles = getUserRoles(team, userId)
   const rolesToRemove = roles.filter(
     role => !newRoles.find(newRole => newRole.id === role.id)
@@ -40,5 +40,12 @@ export async function updateUserRoles(
 
   await Promise.all(allPromises)
 
-  return allPromises.length ? (await getBrands(team.id)).data : team
+  if (!allPromises.length) {
+    return team
+  }
+
+  return {
+    ...(await getBrands(team.id, false)).data,
+    children: team.children
+  }
 }
