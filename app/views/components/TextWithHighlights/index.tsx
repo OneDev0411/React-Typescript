@@ -48,7 +48,7 @@ export function TextWithHighlights({
   highlightProps = {},
   search,
   children
-}: Props): ReactElement {
+}: Props) {
   const searchContext = useContext(SearchContext)
 
   const searchTerm = search || searchContext
@@ -62,7 +62,9 @@ export function TextWithHighlights({
   )
 
   if (!searchTerm) {
-    return children
+    // why wrapping in fragment? see this:
+    // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/20544#issuecomment-459665668
+    return <>{children}</>
   }
 
   return (

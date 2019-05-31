@@ -8,7 +8,7 @@ import IconButton from 'components/Button/IconButton'
 import Badge from 'components/Badge'
 import UserIcon from 'components/SvgIcons/InPerson/IconInPerson'
 
-import { saleInAnimation } from '../../../../../../../animations/scale-in'
+import { saleInAnimation } from '../../../../../../animations/scale-in'
 
 export const TeamLink = styled(ALink)`
   &.active {

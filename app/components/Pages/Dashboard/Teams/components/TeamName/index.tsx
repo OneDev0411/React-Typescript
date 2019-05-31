@@ -10,8 +10,8 @@ import AddCircleOutlineIcon from 'components/SvgIcons/AddCircleOutline/IconAddCi
 
 import { ITeam } from 'models/BrandConsole/types'
 
-import { userMatches } from '../../../helpers/users-matches'
-import { getTeamUsers } from '../../../helpers/get-team-users'
+import { userMatches } from '../../helpers/users-matches'
+import { getTeamUsers } from '../../helpers/get-team-users'
 import { TeamLink, TeamLinkWrapper, TeamUserBadge } from './styled'
 
 interface Props {

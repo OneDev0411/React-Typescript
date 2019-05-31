@@ -10,8 +10,8 @@ import PageHeader from 'components/PageHeader'
 import { ITeam, ITeamRole } from 'models/BrandConsole/types'
 
 import { Container, IconButton } from './styled'
-import { TeamMember } from './components/TeamMember'
-import { getTeamUsersWithRoles } from '../helpers/get-team-users-with-roles'
+import { TeamMember } from '../TeamMember'
+import { getTeamUsersWithRoles } from '../../helpers/get-team-users-with-roles'
 
 interface Props {
   team: ITeam
