@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import cn from 'classnames'
 
-import { useScrollDetector } from '../../../hooks/useScrollDetector'
+import { useScrollDetector } from '../../../hooks/use-scroll-detector'
 
 import { Content, Wrapper } from './styled'
 

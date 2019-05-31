@@ -16,12 +16,6 @@ interface UseScrollDetectorOptions {
  * - Showing a shadow at the ends of an scrollable area if they haven't reached
  *   to the end on each side.
  * - Creating useInfiniteScroll on top of it
- *
- * @param {React.RefObject<HTMLElement>} ref
- * @param offset
- * @param enabled
- * @param debounceWait
- * @returns {{reachedStart, reachedEnd}}
  */
 export function useScrollDetector(
   ref: RefObject<HTMLElement>,
