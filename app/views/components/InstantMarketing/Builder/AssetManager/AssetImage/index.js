@@ -97,7 +97,7 @@ export class AssetImage extends React.Component {
     const elementType = this.getTargetType()
 
     if (elementType === 'image') {
-      const fileName = files.originalFile.split('/').reverse()[0]
+      const fileName = files.originalFile.split('/').pop()
       const file = new File([files.file], fileName)
 
       return this.onCropImg(file)
