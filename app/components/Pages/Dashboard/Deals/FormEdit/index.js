@@ -212,9 +212,13 @@ class EditDigitalForm extends React.Component {
   }
 
   saveContexts = async () => {
-    const contexts = Object.entries(this.pendingContexts).map(([name, value]) =>
-      createUpsertObject(this.props.deal, name, value, true)
-    )
+    const contexts = Object.entries(this.pendingContexts)
+      .map(([name, value]) =>
+        createUpsertObject(this.props.deal, name, value, true)
+      )
+      .filter(item => item)
+
+    this.pendingContexts = {}
 
     return this.props.upsertContexts(this.props.deal.id, contexts)
   }
