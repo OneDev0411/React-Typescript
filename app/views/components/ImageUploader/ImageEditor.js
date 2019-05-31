@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import AvatarEditor from 'react-avatar-editor'
 
 export default function ImageEditor({
@@ -14,6 +14,14 @@ export default function ImageEditor({
   borderRadius,
   disableBoundaryChecks
 }) {
+  const imageFile = useMemo(
+    () =>
+      typeof image === 'string' && noImageCache
+        ? `${image}?${new Date().getTime()}`
+        : image,
+    [image, noImageCache]
+  )
+
   return (
     <div
       style={{
@@ -30,11 +38,7 @@ export default function ImageEditor({
     >
       <AvatarEditor
         ref={editorRef}
-        image={
-          typeof image === 'string' && noImageCache
-            ? `${image}?${new Date().getTime()}`
-            : image
-        }
+        image={imageFile}
         width={width}
         height={height}
         border={border}
