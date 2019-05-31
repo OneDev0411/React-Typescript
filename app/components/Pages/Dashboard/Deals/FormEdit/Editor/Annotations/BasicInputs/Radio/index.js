@@ -7,8 +7,26 @@ import { RadioInput } from './styled'
 export default React.memo(props => {
   const { annotation } = props
   const appearance = parseAppearanceString(annotation.defaultAppearance)
-
   const rect = annotation.rect
+  const [fieldName, fieldId] = annotation.fieldName.split('.')
+  const defaultChecked = props.defaultValue === annotation.buttonValue
+
+  const handleChange = e => {
+    const newValues = Object.entries(props.values).reduce((acc, [formName]) => {
+      const [fName, fId] = formName.split('.')
+
+      if (fName !== fieldName) {
+        return acc
+      }
+
+      return {
+        ...acc,
+        [formName]: fId === fieldId ? e.target.value : ''
+      }
+    }, {})
+
+    props.onChange(newValues)
+  }
 
   const box = {
     left: rect[0],
@@ -19,14 +37,14 @@ export default React.memo(props => {
 
   return (
     <RadioInput
-      name={annotation.fieldName.split('.')[0]}
+      key={annotation.id}
+      name={fieldName}
       appearance={appearance}
       box={box}
       type="radio"
-      key={annotation.id}
       value={annotation.buttonValue}
-      defaultChecked={props.defaultValue}
-      onChange={e => props.onChange(e.target.value)}
+      defaultChecked={defaultChecked}
+      onChange={handleChange}
     />
   )
 })

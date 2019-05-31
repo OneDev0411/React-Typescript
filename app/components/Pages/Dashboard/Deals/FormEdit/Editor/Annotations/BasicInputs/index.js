@@ -26,13 +26,7 @@ export const FormInputs = React.memo(
         const sharedProps = {
           annotation,
           defaultValue: annotation.fieldValue,
-          onChange: debounce(
-            value =>
-              props.onValueUpdate({
-                [annotation.fieldName]: value
-              }),
-            1000
-          )
+          onChange: debounce(props.onValueUpdate, 1000)
         }
 
         if (type === Types.CHECKBOX_ANNOTATION) {
@@ -40,7 +34,13 @@ export const FormInputs = React.memo(
         }
 
         if (type === Types.RADIO_ANNOTATION) {
-          return <RadioAnnotation key={index} {...sharedProps} />
+          return (
+            <RadioAnnotation
+              key={index}
+              {...sharedProps}
+              values={props.values}
+            />
+          )
         }
 
         return <TextInputAnnotation key={index} {...sharedProps} />

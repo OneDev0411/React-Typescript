@@ -21,11 +21,16 @@ export default React.memo(props => {
   return (
     <CheckboxInput
       type="checkbox"
+      title={annotation.fieldName}
       id={annotation.fieldName}
       box={box}
       appearance={appearance}
       key={annotation.fieldName}
-      onClick={e => props.onChange(e.target.checked)}
+      onClick={e =>
+        props.onChange({
+          [props.annotation.fieldName]: e.target.checked
+        })
+      }
       defaultChecked={normalizeCheckboxValue(props.defaultValue)}
     />
   )
