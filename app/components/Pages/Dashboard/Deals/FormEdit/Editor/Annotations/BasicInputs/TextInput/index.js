@@ -10,7 +10,10 @@ export default React.memo(props => {
 
   const handleValueChange = e => {
     debouncedSetValue(e.target.value)
-    props.onChange(e.target.value)
+
+    props.onChange({
+      [props.annotation.fieldName]: e.target.value
+    })
   }
 
   const getFontSize = () => {
