@@ -97,7 +97,10 @@ export class AssetImage extends React.Component {
     const elementType = this.getTargetType()
 
     if (elementType === 'image') {
-      const fileName = files.originalFile.split('/').pop()
+      const fileName = files.originalFile
+        .split('?')[0]
+        .split('/')
+        .pop()
       const file = new File([files.file], fileName)
 
       return this.onCropImg(file)
@@ -113,6 +116,7 @@ export class AssetImage extends React.Component {
 
     const image = this.props.model.get('image')
     const targetElement = this.getTargetElement()
+    const imageWithoutCache = `${image}?${new Date().getTime()}`
 
     return (
       <Container>
@@ -123,8 +127,7 @@ export class AssetImage extends React.Component {
           <ImageUploader
             disableChangePhoto
             disableRotate
-            noImageCache
-            file={image}
+            file={imageWithoutCache}
             width={targetElement.clientWidth}
             height={targetElement.clientHeight}
             saveHandler={this.onCrop}

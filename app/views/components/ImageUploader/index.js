@@ -167,7 +167,6 @@ export class ImageUploader extends Component {
             <ImageEditor
               editorRef={this.editor}
               image={this.state.file}
-              noImageCache={this.props.noImageCache}
               width={this.props.width}
               height={this.props.height}
               border={this.props.border}
@@ -220,7 +219,6 @@ ImageUploader.defaultProps = {
   notes: null,
   showRules: false,
   file: null,
-  noImageCache: false,
   width: 382,
   height: 382,
   border: 50,
@@ -249,7 +247,6 @@ ImageUploader.propTypes = {
   notes: PropTypes.element,
   showRules: PropTypes.bool,
   file: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(File)]),
-  noImageCache: PropTypes.bool,
   width: PropTypes.number,
   height: PropTypes.number,
   border: PropTypes.number,
