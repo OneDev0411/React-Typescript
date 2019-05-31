@@ -3,14 +3,23 @@ import React from 'react'
 import { ImageUploader } from 'components/ImageUploader'
 
 import { Container, CropButton, Image } from './styled'
+import { uploadAsset } from '../helpers'
 
 export class AssetImage extends React.Component {
   state = {
     isCropperOpen: false
   }
 
+  getTargetElement() {
+    return this.props.target.view.el
+  }
+
+  getTargetType() {
+    return this.props.target.get('type')
+  }
+
   onImageSelect = (options = {}) => {
-    const url = this.props.model.get('image')
+    const url = options.url || this.props.model.get('image')
 
     const setSrc = () => this.props.target.set('src', url)
     const setBg = () => {
@@ -39,18 +48,9 @@ export class AssetImage extends React.Component {
       '': setBg
     }
 
-    const type = this.props.target.get('type')
+    const type = this.getTargetType()
 
     setters[type]()
-  }
-
-  get Target() {
-    const el = this.props.target.view.el
-
-    return {
-      width: el.clientWidth,
-      height: el.clientHeight
-    }
   }
 
   showCropper = () =>
@@ -63,14 +63,25 @@ export class AssetImage extends React.Component {
       isCropperOpen: false
     })
 
-  onCrop = ({ croppedArea }) => {
-    const target = this.Target
+  onCropImg = async file => {
+    const response = await uploadAsset(file, this.props.templateId)
+
+    this.onImageSelect({ url: response.body.data.file.url })
+    this.setState({
+      isCropperOpen: false
+    })
+  }
+
+  onCropNonImg = croppedArea => {
+    const target = this.getTargetElement()
 
     // this formula is patented by Ramin :))
     const newWidth = (1 / croppedArea.width).toFixed(2)
     const newHeight = (1 / croppedArea.height).toFixed(2)
-    const left = (croppedArea.x * target.width).toFixed(0) * (-1 * newWidth)
-    const top = (croppedArea.y * target.height).toFixed(0) * (-1 * newHeight)
+    const left =
+      (croppedArea.x * target.clientWidth).toFixed(0) * (-1 * newWidth)
+    const top =
+      (croppedArea.y * target.clientHeight).toFixed(0) * (-1 * newHeight)
 
     this.onImageSelect({
       backgroundPosition: `${left}px ${top}px`,
@@ -82,12 +93,26 @@ export class AssetImage extends React.Component {
     })
   }
 
+  onCrop = ({ croppedArea, files }) => {
+    const elementType = this.getTargetType()
+
+    if (elementType === 'image') {
+      const fileName = files.originalFile.split('/').reverse()[0]
+      const file = new File([files.file], fileName)
+
+      return this.onCropImg(file)
+    }
+
+    return this.onCropNonImg(croppedArea)
+  }
+
   render() {
     if (!this.props.target) {
       return false
     }
 
     const image = this.props.model.get('image')
+    const targetElement = this.getTargetElement()
 
     return (
       <Container>
@@ -97,11 +122,11 @@ export class AssetImage extends React.Component {
         {this.state.isCropperOpen && (
           <ImageUploader
             disableChangePhoto
-            croppedAreaOnly
             disableRotate
+            noImageCache
             file={image}
-            width={this.Target.width}
-            height={this.Target.height}
+            width={targetElement.clientWidth}
+            height={targetElement.clientHeight}
             saveHandler={this.onCrop}
             closeHandler={this.closeCropper}
           />
