@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ReactNode } from 'react'
+import { ReactNode, useCallback } from 'react'
 
 import { useControllableState } from 'react-use-controllable-state/dist'
 
@@ -50,13 +50,19 @@ export default React.memo(function TreeView<NodeType = any>({
     props.initialExpandedNodes || []
   )
 
-  const toggleNode = node => {
-    setExpandedNodes(expandedNodes =>
-      expandedNodes.includes(getNodeId(node))
-        ? expandedNodes.filter(someNode => someNode !== getNodeId(node))
-        : [...expandedNodes, getNodeId(node)]
-    )
-  }
+  const toggleNode = useCallback(
+    node => {
+      setExpandedNodes(expandedNodes =>
+        expandedNodes.includes(getNodeId(node))
+          ? expandedNodes.filter(someNode => someNode !== getNodeId(node))
+          : [...expandedNodes, getNodeId(node)]
+      )
+    },
+    [getNodeId, setExpandedNodes]
+  )
+
+  const onToggleExpanded = useCallback(node => toggleNode(node), [toggleNode])
+
   const root = getChildNodes()
 
   return (
@@ -66,7 +72,7 @@ export default React.memo(function TreeView<NodeType = any>({
           node={node}
           key={getNodeId(node)}
           expandedNodes={expandedNodes}
-          onToggleExpanded={node => toggleNode(node)}
+          onToggleExpanded={onToggleExpanded}
           getId={getNodeId}
           getChildNodes={getChildNodes}
           selectable={props.selectable}

@@ -43,16 +43,12 @@ export async function addBrand(
   brand: ICreateBrand,
   parentId: string
 ): Promise<ApiResponse<ITeam>> {
-  const payload = { ...brand }
-
-  if (parentId) {
-    payload.parent = parentId
-  }
+  const payload = { ...brand, parent: parentId }
 
   return (await new Fetch()
     .post('/brands')
     .query({ associations: defaultAssociations })
-    .send(brand)).body
+    .send(payload)).body
 }
 
 export async function editBrand(

@@ -8,6 +8,8 @@ import { BasicMultiSelectDropdown } from 'components/BasicMultiSelectDropdown'
 
 import { notUndefined } from 'utils/ts-utils'
 
+import { TextWithHighlights } from 'components/TextWithHighlights'
+
 import {
   DeactivatedOverlay,
   TeamMemberItem,
@@ -41,8 +43,12 @@ export function TeamMember({
         image={user.profile_image_url}
       />
       <FlexItem grow={1}>
-        <TeamMemberTitle>{user.display_name}</TeamMemberTitle>
-        <TeamMemberSubTitle>{user.email}</TeamMemberSubTitle>
+        <TeamMemberTitle>
+          <TextWithHighlights>{user.display_name}</TextWithHighlights>
+        </TeamMemberTitle>
+        <TeamMemberSubTitle>
+          <TextWithHighlights>{user.email}</TextWithHighlights>
+        </TeamMemberSubTitle>
       </FlexItem>
       {user.is_shadow ? (
         <span style={{ marginRight: '1rem' }}>Pending</span>

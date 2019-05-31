@@ -11,7 +11,7 @@ import { ITeam, ITeamRole } from 'models/BrandConsole/types'
 
 import { Container, IconButton } from './styled'
 import { TeamMember } from './components/TeamMember'
-import { getTeamUsers } from '../helpers/get-team-users'
+import { getTeamUsersWithRoles } from '../helpers/get-team-users-with-roles'
 
 interface Props {
   team: ITeam
@@ -23,7 +23,7 @@ interface Props {
 
 export const TeamView = React.memo(
   ({ team, updateRoles, updatingUserIds, onEdit, onDelete }: Props) => {
-    const teamUsers = useMemo(() => getTeamUsers(team), [team])
+    const teamUsers = useMemo(() => getTeamUsersWithRoles(team), [team])
 
     return (
       <Container>

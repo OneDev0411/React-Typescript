@@ -1,7 +1,19 @@
 import * as React from 'react'
-import { ReactType, useMemo } from 'react'
+import { createContext, ReactNode, ReactType, useContext, useMemo } from 'react'
+
+import styled from 'styled-components'
+
+import { ReactElement } from 'react'
 
 import { splitByMatches } from 'components/TextWithHighlights/helpers/split-by-matches'
+
+import { primary } from '../../utils/colors'
+
+const DefaultHighlightComponent = styled.span`
+  color: ${primary};
+`
+
+export const SearchContext = createContext<string | null>(null)
 
 interface Props {
   /**
@@ -11,14 +23,15 @@ interface Props {
   /**
    * Matches to be highlighted
    */
-  search: string
+  search?: string
   /**
    * Treat matches case insensitive or not. defaults to true
    */
   caseInsensitive?: boolean
 
   /**
-   * component or tag to use for rendering matches. defaults to 'mark'
+   * component or tag to use for rendering matches. defaults to
+   * {@link DefaultHighlightComponent}
    */
   // refine type to only accept strings or a component which accepts string as children
   HighlightComponent?: ReactType
@@ -30,20 +43,31 @@ interface Props {
 }
 
 export function TextWithHighlights({
-  HighlightComponent = 'mark',
+  HighlightComponent = DefaultHighlightComponent,
   caseInsensitive = true,
   highlightProps = {},
   search,
   children
-}: Props) {
+}: Props): ReactElement {
+  const searchContext = useContext(SearchContext)
+
+  const searchTerm = search || searchContext
+
   const regExp = useMemo(
-    () => new RegExp(search, `g${caseInsensitive ? 'i' : ''}`),
-    [caseInsensitive, search]
+    () =>
+      searchTerm
+        ? new RegExp(searchTerm, `g${caseInsensitive ? 'i' : ''}`)
+        : null,
+    [caseInsensitive, searchTerm]
   )
+
+  if (!searchTerm) {
+    return children
+  }
 
   return (
     <>
-      {splitByMatches(regExp, children).map(({ match, text }) =>
+      {splitByMatches(regExp!, children).map(({ match, text }) =>
         match ? (
           <HighlightComponent {...highlightProps}>{text}</HighlightComponent>
         ) : (

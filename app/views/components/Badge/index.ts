@@ -14,7 +14,7 @@ const defaultProps = {
   appearance: 'red'
 }
 
-const Badge = styled.span`
+const Badge = styled.span<{ appearance?: keyof typeof badgeAppearances }>`
   padding: 0.04rem 0.3rem;
   font-size: 12px;
   min-width: 24px;

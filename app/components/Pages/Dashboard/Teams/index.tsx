@@ -5,46 +5,36 @@ import { useCallback, useState } from 'react'
 
 import { Helmet } from 'react-helmet'
 
-import styled from 'styled-components'
-
 import { RouteComponentProps } from 'react-router'
 
 import { Field, Form } from 'react-final-form'
 
 import Flex, { FlexItem } from 'styled-flex-component'
 
-import Tooltip from 'components/tooltip'
-
 import { Container, Content, Menu } from 'components/SlideMenu'
-import ALink from 'components/ALink'
 
 import TreeView from 'components/TreeView'
 import { TextInput } from 'components/Forms/TextInput'
 import { SelectInput } from 'components/Forms/SelectInput'
 import { H4 } from 'components/Typography/headings'
 import Spinner from 'components/Spinner'
-import { primary } from 'views/utils/colors'
 
 import Search from 'components/Grid/Search'
 
 import { findNode } from 'utils/tree-utils'
 
-import { TextWithHighlights } from 'components/TextWithHighlights'
+import { SearchContext } from 'components/TextWithHighlights'
 
 import { Modal, ModalHeader } from 'components/Modal'
 
 import Button from 'components/Button/ActionButton'
-
-import IconButton from 'components/Button/IconButton'
-
-import AddCircleOutlineIcon
-  from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 
 import { BrandTypes } from 'models/BrandConsole/types'
 
 import { TeamsSearch } from './styled'
 import { TeamView } from './TeamView'
 import { useTeamsPage } from './use-teams-page.hook'
+import { TeamName } from './TeamView/components/TeamName'
 
 type Props = {
   user: any
@@ -67,7 +57,13 @@ function TeamsPage(props: Props) {
   } = useTeamsPage(props.user, searchTerm)
 
   const teamRenderer = useCallback(
-    team => renderTeam(team, searchTerm, addEditModal.openAdd),
+    team => (
+      <TeamName
+        team={team}
+        searchTerm={searchTerm}
+        onAddChild={addEditModal.openAdd}
+      />
+    ),
     [addEditModal.openAdd, searchTerm]
   )
 
@@ -90,37 +86,40 @@ function TeamsPage(props: Props) {
         <Helmet>
           <title>Teams</title>
         </Helmet>
-        <Container isOpen>
-          <Menu isOpen width="25rem">
-            <H4>Teams Management</H4>
+        <SearchContext.Provider value={searchTerm}>
+          <Container isOpen>
+            <Menu isOpen width="25rem">
+              <H4>Teams Management</H4>
 
-            <TeamsSearch>
-              <Search
-                placeholder="Search for teams and agents"
-                onChange={value => setSearchTerm(value)}
+              <TeamsSearch>
+                <Search
+                  placeholder="Search for teams and agents"
+                  onChange={value => setSearchTerm(value)}
+                />
+              </TeamsSearch>
+              <TreeView
+                getChildNodes={getChildNodes}
+                selectable
+                initialExpandedNodes={initialExpandedNodes}
+                getNodeId={getId}
+                renderNode={teamRenderer}
               />
-            </TeamsSearch>
-            <TreeView
-              getChildNodes={getChildNodes}
-              selectable
-              initialExpandedNodes={initialExpandedNodes}
-              getNodeId={getId}
-              renderNode={teamRenderer}
-            />
-          </Menu>
+            </Menu>
 
-          <Content>
-            {selectedTeam && (
-              <TeamView
-                team={selectedTeam}
-                updatingUserIds={updatingUserIds}
-                onDelete={() => deleteTeam(selectedTeam)}
-                onEdit={() => addEditModal.openEdit(selectedTeam)}
-                updateRoles={updateRoles}
-              />
-            )}
-          </Content>
-        </Container>
+            <Content>
+              {selectedTeam && (
+                <TeamView
+                  team={selectedTeam}
+                  updatingUserIds={updatingUserIds}
+                  onDelete={() => deleteTeam(selectedTeam)}
+                  onEdit={() => addEditModal.openEdit(selectedTeam)}
+                  searchTerm={searchTerm}
+                  updateRoles={updateRoles}
+                />
+              )}
+            </Content>
+          </Container>
+        </SearchContext.Provider>
         <Modal
           style={{ content: { overflow: 'visible' } }}
           isOpen={addEditModal.isOpen}
@@ -180,65 +179,6 @@ function TeamsPage(props: Props) {
   }
 
   return null
-}
-
-const TeamLink = styled(ALink)`
-  &.active {
-    color: ${primary};
-  }
-  &:active,
-  &:focus {
-    outline: none;
-  }
-`
-
-const Highlight = styled.span`
-  color: ${primary};
-`
-
-const TeamLinkWrapper = styled(Flex)`
-  ${IconButton} {
-    display: none;
-  }
-  &:hover ${IconButton} {
-    display: flex;
-  }
-`
-
-function renderTeam(team, searchTerm, onAddChild) {
-  return (
-    <TeamLinkWrapper alignCenter>
-      <TeamLink
-        noStyle
-        // replace /* doesn't seem to work (v4 only?) */
-        activeClassName="active"
-        style={{ flex: '1', overflow: 'hidden', textOverflow: 'ellipsis' }}
-        to={`/dashboard/teams/${team.id}`}
-      >
-        {searchTerm ? (
-          <TextWithHighlights
-            HighlightComponent={Highlight}
-            search={searchTerm}
-          >
-            {team.name}
-          </TextWithHighlights>
-        ) : (
-          team.name
-        )}
-      </TeamLink>
-      <Tooltip caption="Add New Team" placement="bottom">
-        <IconButton
-          inverse
-          iconSize="large"
-          onClick={() => onAddChild(team)}
-          isFit
-          style={{ margin: '0.3rem' }}
-        >
-          <AddCircleOutlineIcon />
-        </IconButton>
-      </Tooltip>
-    </TeamLinkWrapper>
-  )
 }
 
 export default connect(({ user }: any) => ({ user }))(TeamsPage)

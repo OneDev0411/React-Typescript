@@ -1,4 +1,13 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
@@ -14,6 +23,18 @@ import { getActiveTeamId } from 'utils/user-teams'
 import { updateTree } from 'utils/tree-utils/update-tree'
 
 import { updateUserRoles } from './helpers/update-user-roles'
+import { userMatches } from './helpers/users-matches'
+import { getTeamUsers } from './helpers/get-team-users'
+
+function teamMatches(team: ITeam, searchTerm: string) {
+  const regExp = new RegExp(searchTerm, 'gi')
+
+  // TODO: improve search UX with fuse
+  return (
+    team.name.match(regExp) ||
+    getTeamUsers(team).some(user => userMatches(user, searchTerm))
+  )
+}
 
 export function useTeamsPage(user: IUser, searchTerm: string) {
   const [rootTeam, setRootTeam] = useState<ITeam | null>(null)
@@ -70,12 +91,12 @@ export function useTeamsPage(user: IUser, searchTerm: string) {
   }
   const matches = useCallback(
     (team: ITeam) => {
-      const regExp = new RegExp(searchTerm, 'gi')
-
       // performance improvement is possible by memoizing result of matches
       // because for deep nodes it's called so many times because of the
       // recursion
-      return team.name.match(regExp) || (team.children || []).some(matches)
+      return (
+        teamMatches(team, searchTerm) || (team.children || []).some(matches)
+      )
     },
     [searchTerm]
   )
@@ -117,24 +138,19 @@ export function useTeamsPage(user: IUser, searchTerm: string) {
           description: 'The team will be removed for ever! Are you sure?',
           onConfirm: async () => {
             await deleteBrand(team.id)
-            updateTree(
-              rootTeam!,
-              node => (node.children || []).includes(team),
-              parentTeam => {
-                console.log('updating', parentTeam, {
-                  ...parentTeam,
-                  children: (parentTeam.children || []).filter(
-                    child => child !== team
-                  )
-                })
-
-                return {
-                  ...parentTeam,
-                  children: (parentTeam.children || []).filter(
-                    child => child !== team
-                  )
+            setRootTeam(
+              updateTree(
+                rootTeam!,
+                node => (node.children || []).includes(team),
+                parentTeam => {
+                  return {
+                    ...parentTeam,
+                    children: (parentTeam.children || []).filter(
+                      child => child !== team
+                    )
+                  }
                 }
-              }
+              )
             )
           }
         })
@@ -143,6 +159,7 @@ export function useTeamsPage(user: IUser, searchTerm: string) {
     ),
     addEditModal: {
       openAdd: useCallback((parent: ITeam) => {
+        useState
         setEditingTeam(null)
         setNewItemParent(parent)
       }, []),

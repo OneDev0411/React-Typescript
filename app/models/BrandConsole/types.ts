@@ -8,7 +8,7 @@ export interface IBrandMessage {
   type: string
 }
 
-export interface TeamRoleUser {
+export interface ITeamRoleUser {
   deleted_at: string
   id: UUID
   role: UUID
@@ -21,7 +21,7 @@ export interface ITeamRole {
   created_at: number
   deleted_at: number | null
   id: UUID
-  users?: TeamRoleUser[] // TODO
+  users?: ITeamRoleUser[] // TODO
   role: string
   type: string
   updated_at: number

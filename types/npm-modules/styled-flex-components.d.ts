@@ -1,5 +1,3 @@
-import { CSSProperties } from 'react'
-
 declare module 'styled-flex-component' {
   import * as React from 'react'
   import { CSSProperties } from 'react'
