@@ -20,7 +20,7 @@ function preSearchFormat({
   }
 
   if (validArrayFilter(crm_tasks)) {
-    payload.crm_task = crm_tasks
+    payload.crm_tasks = crm_tasks
   }
 
   if (validArrayFilter(users)) {

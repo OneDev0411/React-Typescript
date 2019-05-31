@@ -16,17 +16,21 @@ class UploadDocument extends React.Component {
   }
 
   onDrop = async (files, rejectedFiles) => {
+    const filteredRejectedFiles = rejectedFiles.filter(
+      item => item instanceof File
+    )
+
     this.setState({
       dropzoneActive: false
     })
 
-    if (
-      Array.isArray(rejectedFiles) &&
-      rejectedFiles.length === 1 &&
-      rejectedFiles[0] instanceof DataTransferItem
-    ) {
-      return false
-    }
+    // if (
+    //   Array.isArray(rejectedFiles) &&
+    //   rejectedFiles.length >= 1 &&
+    //   rejectedFiles[0] instanceof DataTransferItem
+    // ) {
+    //   return false
+    // }
 
     if (
       this.props.activeChecklist &&
@@ -41,7 +45,7 @@ class UploadDocument extends React.Component {
       })
     }
 
-    if (rejectedFiles && rejectedFiles.length > 0) {
+    if (filteredRejectedFiles && filteredRejectedFiles.length > 0) {
       const acceptedFiles = Deal.upload
         .getAcceptedDocuments()
         .replace(/,/gi, ', ')

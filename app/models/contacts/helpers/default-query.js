@@ -43,6 +43,6 @@ export const CRM_TASKS_QUERY = {
 }
 
 export const CRM_LIST_DEFAULT_ASSOCIATIONS = [
-  'contact_list.crm_task',
+  'contact_list.crm_tasks',
   'contact_list.flows'
 ]
