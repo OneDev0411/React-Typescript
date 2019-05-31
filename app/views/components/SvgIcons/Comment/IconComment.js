@@ -35,5 +35,5 @@ export default Object.assign(Image, {
   getDimensions,
   getDimensionsCss,
   defaultProps,
-  displayName: 'IcomComment'
+  displayName: 'IconComment'
 })

@@ -48,5 +48,5 @@ export default Object.assign(Image, {
   getDimensions,
   getDimensionsCss,
   defaultProps,
-  displayName: 'Email'
+  displayName: 'IconEmail'
 })
