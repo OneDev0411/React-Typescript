@@ -12,8 +12,6 @@ export async function getTeams(user = {}, fetchMembers = true) {
     }
 
     if (fetchMembers) {
-      console.log('BRAND_USERS_QUERY')
-
       fetchTeams.query(BRAND_USERS_QUERY)
     }
 
