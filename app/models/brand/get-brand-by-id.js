@@ -1,6 +1,8 @@
 import Fetch from '../../services/fetch'
 
-export async function getBrand(id, query) {
+import DEFAULT_QUERY from './helpers/default-query'
+
+export async function getBrandById(id, query = DEFAULT_QUERY) {
   if (!id) {
     throw new Error(`The brand id must be a UUID. ${id}`)
   }
@@ -13,5 +15,3 @@ export async function getBrand(id, query) {
     throw error
   }
 }
-
-export default getBrand

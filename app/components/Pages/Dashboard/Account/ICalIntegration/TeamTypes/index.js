@@ -1,6 +1,9 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import _ from 'underscore'
-import { SectionTitle } from '../styled'
+
+import { getBrandAvailableMembers } from '../../../../../../utils/user-teams'
+
+import { Section, Title } from '../styled'
 import MemberRow from './MemberRow'
 
 const TeamTypes = ({
@@ -14,83 +17,88 @@ const TeamTypes = ({
   let allMembers = {}
 
   userTeams.forEach(({ brand }) => {
-    brand.roles.forEach(
-      role =>
-        (allMembers[brand.id] = (allMembers[brand.id] || []).concat(
-          role.members.map(({ id }) => id)
-        ))
-    )
+    allMembers[brand.id] = getBrandAvailableMembers(brand).map(({ id }) => id)
   })
 
   return (
-    <Fragment>
-      <SectionTitle>
-        Which teams did you want to send calendar events from?
-      </SectionTitle>
+    <Section>
+      <Title>Which teams did you want to send calendar events from?</Title>
       <MemberRow
         selected={_.isEqual(allMembers, selectedMembers)}
         title="All Teams"
-        style={{ marginBottom: '1rem' }}
-        onClick={() => {
+        onChange={() => {
           if (!_.isEqual(allMembers, selectedMembers)) {
             onChangeSelectAllMembers(allMembers)
           } else {
             onChangeSelectAllMembers({})
           }
         }}
+        style={{ marginBottom: '1rem' }}
       />
-      {_.map(userTeams, team => {
-        let members = []
+      <div>
+        {userTeams.map(({ brand }) => {
+          let members = getBrandAvailableMembers(brand)
 
-        team.brand.roles.forEach(
-          role => (members = members.concat(role.members))
-        )
+          const teamMembers = { [brand.id]: members.map(({ id }) => id) }
+          const isTeamSelected =
+            selectedMembers[brand.id] &&
+            members.every(member =>
+              selectedMembers[brand.id].includes(member.id)
+            )
 
-        const teamMembers = { [team.brand.id]: members.map(({ id }) => id) }
-        const isTeamSelected =
-          selectedMembers[team.brand.id] &&
-          members.every(member =>
-            selectedMembers[team.brand.id].includes(member.id)
+          members = _.uniq(members, 'id')
+
+          console.log(members)
+
+          return (
+            <div
+              key={brand.id}
+              style={{ marginLeft: '1.5rem', marginBottom: '1rem' }}
+            >
+              <MemberRow
+                style={{
+                  fontWeight: 500,
+                  fontSize: '1.25rem',
+                  marginBottom: '0.25em'
+                }}
+                selected={isTeamSelected}
+                title={brand.name}
+                onChange={() => {
+                  if (!isTeamSelected) {
+                    onSelectTeam(teamMembers)
+                  } else {
+                    onRemoveTeam(Object.keys(teamMembers))
+                  }
+                }}
+              />
+              {brand.member_count > 0 && (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    marginLeft: '2rem'
+                  }}
+                >
+                  {members.map((member, index) => (
+                    <MemberRow
+                      key={`${member.id}-${index}`}
+                      selected={
+                        selectedMembers[brand.id] &&
+                        selectedMembers[brand.id].includes(member.id)
+                      }
+                      title={member.display_name}
+                      onChange={() =>
+                        onChangeSelectedMember(brand.id, member.id)
+                      }
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           )
-
-        members = _.uniq(members, 'id')
-
-        return (
-          <React.Fragment key={team.brand.id}>
-            <MemberRow
-              style={{ fontWeight: 'bold', fontSize: '1.25rem' }}
-              selected={isTeamSelected}
-              title={team.brand.name}
-              onClick={() => {
-                if (!isTeamSelected) {
-                  onSelectTeam(teamMembers)
-                } else {
-                  onRemoveTeam(Object.keys(teamMembers))
-                }
-              }}
-            />
-            {team.brand.member_count > 0 && (
-              <div style={{ marginLeft: '2rem', marginBottom: '1rem' }}>
-                {members.map((member, index) => (
-                  <MemberRow
-                    key={`${member.id}-${index}`}
-                    selected={
-                      selectedMembers[team.brand.id] &&
-                      selectedMembers[team.brand.id].includes(member.id)
-                    }
-                    title={member.display_name}
-                    onClick={() =>
-                      onChangeSelectedMember(team.brand.id, member.id)
-                    }
-                    style={{ marginLeft: '1rem' }}
-                  />
-                ))}
-              </div>
-            )}
-          </React.Fragment>
-        )
-      })}
-    </Fragment>
+        })}
+      </div>
+    </Section>
   )
 }
 

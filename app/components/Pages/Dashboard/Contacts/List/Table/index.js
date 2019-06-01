@@ -13,7 +13,7 @@ import IconButton from 'components/Button/IconButton'
 import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 
 import { putUserSetting } from 'models/user/put-user-setting'
-import getUserTeams from 'actions/user/teams'
+import { getUserTeams } from 'actions/user/teams'
 
 import TagsOverlay from '../../components/TagsOverlay'
 import NoSearchResults from '../../../../../Partials/no-search-results'
@@ -114,7 +114,7 @@ class ContactsList extends React.Component {
     {
       render: ({ excludedRows, selectedRows }) => {
         const { filters } = this.props
-        
+
         return (
           <ExportContacts
             excludedRows={excludedRows}
@@ -126,7 +126,7 @@ class ContactsList extends React.Component {
             disabled={this.props.isFetching}
           />
         )
-        }
+      }
     },
     {
       render: ({ entireMode, selectedRows }) => {
@@ -295,7 +295,7 @@ class ContactsList extends React.Component {
               onChange: props.handleChangeOrder,
               onPostChange: async item => {
                 await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
-                await props.getUserTeams(props.user)
+                await props.dispatch(getUserTeams(props.user))
               }
             }
           }}
@@ -319,16 +319,11 @@ class ContactsList extends React.Component {
           closeOverlay={this.closeTagsOverlay}
           isOpen={state.selectedTagContact.length > 0}
           selectedContactsIds={state.selectedTagContact}
-          handleChangeContactsAttributes={
-            props.handleChangeContactsAttributes
-          }
+          handleChangeContactsAttributes={props.handleChangeContactsAttributes}
         />
       </div>
     )
   }
 }
 
-export default connect(
-  ({ user }) => ({ user }),
-  { getUserTeams }
-)(ContactsList)
+export default connect(({ user }) => ({ user }))(ContactsList)

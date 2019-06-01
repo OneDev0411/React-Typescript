@@ -1,8 +1,8 @@
 import React from 'react'
-import Flex from 'styled-flex-component'
 
-import { SectionTitle } from '../styled'
-import { CheckBoxButton } from '../../../../../../views/components/Button/CheckboxButton'
+import { Checkbox } from 'components/Checkbox'
+
+import { Title } from '../styled'
 
 const CategoryTypes = ({
   title,
@@ -11,36 +11,30 @@ const CategoryTypes = ({
   onChangeSelectedTypes,
   onSelectOneCategoriesTypes
 }) => {
+  const containerStyle = { display: 'flex', marginBottom: '2rem' }
   const allSelected = types.every(type => selectedTypes.includes(type.name))
 
   return (
-    <div style={{ marginBottom: '2em' }}>
-      <SectionTitle>{title}</SectionTitle>
-      <Flex alignCenter style={{ marginBottom: '2rem' }}>
-        <CheckBoxButton
-          square
-          isSelected={allSelected}
-          onClick={() =>
-            onSelectOneCategoriesTypes(
-              types.map(type => type.name),
-              allSelected
-            )
-          }
-          style={{ marginRight: '0.5rem' }}
-        />
+    <div>
+      <Title>{title}</Title>
+      <Checkbox
+        checked={allSelected}
+        containerStyle={containerStyle}
+        onChange={() =>
+          onSelectOneCategoriesTypes(types.map(type => type.name), allSelected)
+        }
+      >
         All
-      </Flex>
+      </Checkbox>
       {types.map(type => (
-        <Flex alignCenter key={type.name} style={{ marginBottom: '2rem' }}>
-          <CheckBoxButton
-            square
-            key={type.name}
-            isSelected={selectedTypes.includes(type.name)}
-            onClick={() => onChangeSelectedTypes(type.name)}
-            style={{ marginRight: '0.5rem' }}
-          />
+        <Checkbox
+          key={type.name}
+          containerStyle={containerStyle}
+          checked={selectedTypes.includes(type.name)}
+          onChange={() => onChangeSelectedTypes(type.name)}
+        >
           {type.label}
-        </Flex>
+        </Checkbox>
       ))}
     </div>
   )
