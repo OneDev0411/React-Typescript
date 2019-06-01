@@ -23,7 +23,8 @@ import { TeamsSearch } from './styled'
 import { TeamView } from './components/TeamView'
 import { useTeamsPage } from './hooks/use-teams-page.hook'
 import { TeamName } from './components/TeamName'
-import { AddEditModal } from './components/AddEditModal'
+import { AddEditTeamModal } from './components/AddEditTeamModal'
+import { EditTeamRolesModal } from './components/EditTeamRolesModal'
 
 type Props = {
   user: any
@@ -42,6 +43,7 @@ function TeamsPage(props: Props) {
     deleteTeam,
     getChildNodes,
     addEditModal,
+    editRolesModal,
     initialExpandedNodes
   } = useTeamsPage(props.user, searchTerm)
 
@@ -102,18 +104,25 @@ function TeamsPage(props: Props) {
                   updatingUserIds={updatingUserIds}
                   onDelete={() => deleteTeam(selectedTeam)}
                   onEdit={() => addEditModal.openEdit(selectedTeam)}
+                  onEditRoles={() => editRolesModal.open(selectedTeam)}
                   updateRoles={updateRoles}
                 />
               )}
             </Content>
           </Container>
         </SearchContext.Provider>
-        <AddEditModal
-          validate={addEditModal.validate}
-          team={addEditModal.team}
+        <AddEditTeamModal
           close={addEditModal.close}
           isOpen={addEditModal.isOpen}
           submit={addEditModal.submit}
+          team={addEditModal.team}
+          validate={addEditModal.validate}
+        />
+        <EditTeamRolesModal
+          close={editRolesModal.close}
+          isOpen={editRolesModal.isOpen}
+          submit={editRolesModal.submit}
+          team={editRolesModal.team}
         />
       </React.Fragment>
     )

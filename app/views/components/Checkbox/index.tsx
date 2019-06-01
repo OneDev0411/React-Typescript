@@ -5,7 +5,7 @@ import { CheckMark, CheckMarkBox, Input, Label } from './styled'
 interface Props {
   size?: number
   inputProps?: any
-  id: string
+  id?: string
   checked: boolean
   onChange?: (event: Event) => void
   checkboxStyle?: CSSProperties
@@ -20,7 +20,11 @@ Checkbox.defaultProps = {
 }
 
 export function Checkbox(props: Props) {
-  const { id, size = 16, checked } = props
+  const {
+    id = `checkbox-${Math.ceil(Math.random() * 100000000)}`,
+    size = 16,
+    checked
+  } = props
 
   return (
     <Label htmlFor={id} style={props.containerStyle}>

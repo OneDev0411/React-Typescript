@@ -20,7 +20,7 @@ interface Props {
   team: ITeam | null
 }
 
-export function AddEditModal(props: Props) {
+export function AddEditTeamModal(props: Props) {
   return (
     <Modal
       style={{ content: { overflow: 'visible' } }}
@@ -39,11 +39,11 @@ export function AddEditModal(props: Props) {
         render={({ handleSubmit, submitting }) => (
           <form
             onSubmit={handleSubmit}
-            style={{ padding: '0.75rem' }}
+            style={{ padding: '1.5rem' }}
             noValidate
           >
             <Flex>
-              <FlexItem grow={1} basis="0%" style={{ padding: '0.75rem' }}>
+              <FlexItem grow={1} basis="0%" style={{ paddingRight: '0.75rem' }}>
                 <Field
                   autoFocus
                   name="name"
@@ -52,7 +52,7 @@ export function AddEditModal(props: Props) {
                   component={TextInput as any}
                 />
               </FlexItem>
-              <FlexItem grow={1} basis="0%" style={{ padding: '0.75rem' }}>
+              <FlexItem grow={1} basis="0%">
                 <Field
                   name="brand_type"
                   items={Object.values(BrandTypes).map(value => ({
@@ -67,7 +67,7 @@ export function AddEditModal(props: Props) {
                 />
               </FlexItem>
             </Flex>
-            <Flex justifyEnd>
+            <Flex>
               <Button type="submit" disabled={submitting}>
                 {submitting ? 'Saving...' : 'Save'}
               </Button>

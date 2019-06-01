@@ -52,13 +52,12 @@ export function useAddEditTeamModal(
       const errors: { [key in keyof ITeam]?: string } = {}
       const { name } = values
 
-      if (!name || name.length === 0) {
+      if (!name) {
         errors.name = 'Name cannot be empty'
       }
 
       return errors
     },
-    isSubmitting: false,
     team: editingTeam
   }
 }

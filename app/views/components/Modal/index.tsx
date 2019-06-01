@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { ComponentProps, ReactNode } from 'react'
 import styled from 'styled-components'
+
+import Flex from 'styled-flex-component'
 
 import CloseIcon from '../SvgIcons/Close/CloseIcon'
 import BareModal from '../BareModal'
@@ -46,14 +48,25 @@ export const ModalFooter = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   height: 72px;
   padding: 0 1em;
   border-top: 1px solid #d4d4d4;
 `
 
-export function Modal({ Header = null, Footer = null, children, ...props }) {
+interface Props extends ComponentProps<typeof BareModal> {
+  Header?: ReactNode
+  Footer?: ReactNode
+  children: ReactNode
+}
+
+export function Modal({
+  Header = null,
+  Footer = null,
+  children,
+  ...props
+}: Props) {
   return (
     <BareModal {...props}>
       {Header}
