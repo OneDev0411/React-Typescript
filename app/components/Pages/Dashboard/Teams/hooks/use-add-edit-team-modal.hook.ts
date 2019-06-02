@@ -3,7 +3,7 @@ import { Dispatch, useCallback, useState } from 'react'
 import { ICreateBrand, ITeam } from 'models/BrandConsole/types'
 import { addBrand, editBrand } from 'models/BrandConsole/Brands'
 
-import { updateTeam } from '../helpers/update-team'
+import { getUpdatedRootTeam } from '../helpers/get-updated-root-team'
 
 export function useAddEditTeamModal(
   setRootTeam: Dispatch<(prevState: ITeam) => ITeam>
@@ -28,14 +28,14 @@ export function useAddEditTeamModal(
       if (editingTeam && values.id) {
         const newTeam = (await editBrand(values)).data
 
-        setRootTeam(rootTeam => updateTeam(rootTeam, editingTeam, newTeam))
+        setRootTeam(rootTeam => getUpdatedRootTeam(rootTeam, editingTeam, newTeam))
 
         closeAddEditModal()
       } else if (newItemParent) {
         const newTeam = (await addBrand(values, newItemParent.id)).data
 
         setRootTeam(rootTeam =>
-          updateTeam(
+          getUpdatedRootTeam(
             rootTeam,
             newItemParent,
             {

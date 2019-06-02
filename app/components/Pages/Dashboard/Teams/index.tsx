@@ -25,6 +25,7 @@ import { useTeamsPage } from './hooks/use-teams-page.hook'
 import { TeamName } from './components/TeamName'
 import { AddEditTeamModal } from './components/AddEditTeamModal'
 import { EditTeamRolesModal } from './components/EditTeamRolesModal'
+import { AddTeamMembersModal } from './components/AddTeamMembersModal'
 
 type Props = {
   user: any
@@ -43,6 +44,7 @@ function TeamsPage(props: Props) {
     deleteTeam,
     getChildNodes,
     addEditModal,
+    addMembersModal,
     editRolesModal,
     initialExpandedNodes
   } = useTeamsPage(props.user, searchTerm)
@@ -104,6 +106,7 @@ function TeamsPage(props: Props) {
                   updatingUserIds={updatingUserIds}
                   onDelete={() => deleteTeam(selectedTeam)}
                   onEdit={() => addEditModal.openEdit(selectedTeam)}
+                  onAddMember={() => addMembersModal.open(selectedTeam)}
                   onEditRoles={() => editRolesModal.open(selectedTeam)}
                   updateRoles={updateRoles}
                 />
@@ -123,6 +126,12 @@ function TeamsPage(props: Props) {
           isOpen={editRolesModal.isOpen}
           submit={editRolesModal.submit}
           team={editRolesModal.team}
+        />
+        <AddTeamMembersModal
+          close={addMembersModal.close}
+          isOpen={addMembersModal.isOpen}
+          submit={addMembersModal.submit}
+          team={addMembersModal.team}
         />
       </React.Fragment>
     )

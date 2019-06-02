@@ -14,10 +14,16 @@ async function getMembers(role) {
   }
 }
 
+interface IAddTeamMembers {
+  users?: UUID[]
+  emails?: string[]
+  phone_numbers?: string[]
+}
+
 async function addMembers(
   brandId: string,
   roleId: string,
-  members: { users: string[] }
+  members: IAddTeamMembers
 ) {
   try {
     return await new Fetch()

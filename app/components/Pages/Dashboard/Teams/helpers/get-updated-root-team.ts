@@ -1,7 +1,7 @@
 import { updateTree } from 'utils/tree-utils/update-tree'
 import { ITeam } from 'models/BrandConsole/types'
 
-export const updateTeam = (
+export const getUpdatedRootTeam = (
   rootTeam: ITeam,
   team,
   newTeam,

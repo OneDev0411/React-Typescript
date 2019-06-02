@@ -46,7 +46,7 @@ export function BulkEmailComposeDrawer({
       }
     >
       <Field
-        placeholder={
+        labelText={
           <>
             Recipients
             <Tooltip caption="Emails will be sent individually">

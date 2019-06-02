@@ -8,8 +8,9 @@ import { updateUserRoles } from '../helpers/update-user-roles'
 import { useTeamsFilterHook } from './use-teams-filter.hook'
 import { useAddEditTeamModal } from './use-add-edit-team-modal.hook'
 import { useDeleteTeam } from './use-delete-team.hook'
-import { updateTeam } from '../helpers/update-team'
+import { getUpdatedRootTeam } from '../helpers/get-updated-root-team'
 import { useEditRolesModal } from './use-edit-roles-modal.hook'
+import { useAddMembersModal } from './use-add-members-modal.hook'
 
 export function useTeamsPage(user: IUser, searchTerm: string) {
   const [rootTeam, setRootTeam] = useState<ITeam | null>(null)
@@ -40,7 +41,7 @@ export function useTeamsPage(user: IUser, searchTerm: string) {
     const updatedTeam = await updateUserRoles(team, userId, newRoles)
 
     if (rootTeam) {
-      setRootTeam(updateTeam(rootTeam, team, updatedTeam))
+      setRootTeam(getUpdatedRootTeam(rootTeam, team, updatedTeam))
     }
 
     setUpdatingUserIds(updatingUserIds =>
@@ -71,6 +72,7 @@ export function useTeamsPage(user: IUser, searchTerm: string) {
     deleteTeam: useDeleteTeam(rootTeam, setRootTeam),
     addEditModal: useAddEditTeamModal(setRootTeam),
     editRolesModal: useEditRolesModal(setRootTeam),
+    addMembersModal: useAddMembersModal(setRootTeam),
     initialExpandedNodes
   }
 }

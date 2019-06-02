@@ -9,9 +9,12 @@ import PageHeader from 'components/PageHeader'
 
 import { ITeam, ITeamRole } from 'models/BrandConsole/types'
 
-import { Container, IconButton } from './styled'
+import AddUserIcon from 'components/SvgIcons/AddUser/AddUserIcon'
+
+import { AddTeamMemberButton, Container, IconButton } from './styled'
 import { TeamMember } from '../TeamMember'
 import { getTeamUsersWithRoles } from '../../helpers/get-team-users-with-roles'
+import { TeamMemberTitle } from '../TeamMember/styled'
 
 interface Props {
   team: ITeam
@@ -20,6 +23,7 @@ interface Props {
   onEdit: (event: React.MouseEvent) => void
   onEditRoles: (event: React.MouseEvent) => void
   onDelete: (event: React.MouseEvent) => void
+  onAddMember: (event: React.MouseEvent) => void
 }
 
 export const TeamView = React.memo(
@@ -29,6 +33,7 @@ export const TeamView = React.memo(
     updatingUserIds,
     onEdit,
     onEditRoles,
+    onAddMember,
     onDelete
   }: Props) => {
     const teamUsers = useMemo(() => getTeamUsersWithRoles(team), [team])
@@ -60,6 +65,10 @@ export const TeamView = React.memo(
         </PageHeader>
 
         <div>
+          <AddTeamMemberButton onClick={onAddMember}>
+            <AddUserIcon />
+            <TeamMemberTitle>Add New Member</TeamMemberTitle>
+          </AddTeamMemberButton>
           {teamUsers.map(teamUser => (
             <TeamMember
               key={teamUser.user.id}

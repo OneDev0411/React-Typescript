@@ -20,6 +20,8 @@ import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
 import IconCircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
+import { isEmail } from 'utils/validations'
+
 import { SearchInput, SearchInputContainer } from './styled'
 
 import ContactItem from '../../../SelectContactModal/components/ContactItem'
@@ -55,9 +57,7 @@ class AddRecipient extends React.Component {
   }
 
   isEmail = (email = '') => {
-    const regular = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-
-    return regular.test(email.trim())
+    return email && typeof isEmail(email) != 'string'
   }
 
   handleSelectNewContact = contact => {
@@ -79,6 +79,7 @@ class AddRecipient extends React.Component {
         avatar: contact.summary.profile_image_url,
         email: contact.summary.email,
         emails: emails.map(email => email.text),
+        users: contact.users,
         data_type: 'contact'
       }
 
@@ -134,7 +135,10 @@ class AddRecipient extends React.Component {
 
     // We are searching for tags/list and contacts from server in parallel
     // Because we can show the results instantly for tags/list
-    this.handleSearchInTagsAndLists(value)
+    if (this.props.suggestTagsAndLists) {
+      this.handleSearchInTagsAndLists(value)
+    }
+
     this.search(value)
   }
 
@@ -320,7 +324,7 @@ class AddRecipient extends React.Component {
                   value: this.state.searchText,
                   onChange: this.handleSearchContact,
                   onBlur: this.handleInputBlur,
-                  placeholder: 'Add new recipient',
+                  placeholder: this.props.placeholder || 'Add new recipient',
                   readOnly: this.state.isContactsLoading
                 })}
               />
