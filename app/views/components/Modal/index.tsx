@@ -1,8 +1,6 @@
 import React, { ComponentProps, ReactNode } from 'react'
 import styled from 'styled-components'
 
-import Flex from 'styled-flex-component'
-
 import CloseIcon from '../SvgIcons/Close/CloseIcon'
 import BareModal from '../BareModal'
 import { H3 } from '../Typography/headings'
