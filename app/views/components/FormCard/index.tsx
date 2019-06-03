@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import { Container, Title, Content } from './styled'
 
 interface Props {
   title?: string
-  children: React.ReactNode
+  noBorder?: boolean
+  children: ReactNode
 }
 
-export default function FormCard({ title, children }: Props) {
+export default function FormCard({ title, noBorder, children }: Props) {
   return (
     <Container>
       {title && (
@@ -15,7 +16,7 @@ export default function FormCard({ title, children }: Props) {
           <Title>{title}</Title>
         </div>
       )}
-      <Content>{children}</Content>
+      <Content noBorder={noBorder}>{children}</Content>
     </Container>
   )
 }

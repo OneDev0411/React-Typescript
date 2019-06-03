@@ -19,9 +19,13 @@ export const Title = styled.h3`
   margin: 0 0 0.5rem;
 `
 
-export const Content = styled.div`
+interface ContentProps {
+  noBorder?: boolean
+}
+
+export const Content = styled.div<ContentProps>`
   padding: 1rem;
   border-radius: 3px;
   background-color: #fff;
-  border: 1px solid ${borderColor};
+  border: ${({ noBorder }) => (noBorder ? 'none' : `1px solid ${borderColor}`)};
 `
