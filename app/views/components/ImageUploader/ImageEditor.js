@@ -37,6 +37,7 @@ export default function ImageEditor({
         scale={scale}
         rotate={rotate}
         borderRadius={borderRadius}
+        crossOrigin="anonymous"
         disableBoundaryChecks={disableBoundaryChecks}
       />
     </div>

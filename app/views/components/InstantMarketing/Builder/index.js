@@ -99,7 +99,9 @@ class Builder extends React.Component {
 
   singleClickTextEditing = () => {
     this.editor.on('component:selected', selected => {
-      if (!selected.view.onActive) {
+      const isImageAsset = selected.get('type') === 'image'
+
+      if (!selected.view.onActive || isImageAsset) {
         return
       }
 
@@ -155,11 +157,14 @@ class Builder extends React.Component {
       const editable =
         model && model.view && model.view.$el.attr('rechat-editable')
 
+      const isRechatAsset =
+        model && model.view && model.view.$el.attr('rechat-assets')
+
       if (!editable) {
         model.set({
           editable: false,
-          selectable: false,
-          hoverable: false
+          selectable: isRechatAsset,
+          hoverable: isRechatAsset
         })
       }
 
