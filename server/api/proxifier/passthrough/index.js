@@ -50,7 +50,8 @@ router.post('/proxifier', bodyParser(), async ctx => {
     if (headers['x-auth-mode'] && response.body.access_token) {
       ctx.session.user = {
         access_token: response.body.access_token,
-        refresh_token: response.body.refresh_token
+        refresh_token: response.body.refresh_token,
+        expire_date: new Date().getTime() + response.body.expires_in * 1000
       }
     }
 
