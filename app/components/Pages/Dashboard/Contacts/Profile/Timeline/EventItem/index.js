@@ -15,7 +15,11 @@ export function EventItem(props) {
       {...props}
       render={({ onEdit, statusHandler, disabled }) => (
         <React.Fragment>
-          <MetaInfo task={task} onEdit={onEdit} />
+          <MetaInfo
+            task={task}
+            onEdit={onEdit}
+            defaultAssociationType={props.defaultAssociation.association_type}
+          />
           <Assignees task={task} />
           <GeneralInfo
             disabled={disabled}

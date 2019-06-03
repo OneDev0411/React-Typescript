@@ -30,6 +30,8 @@ webpackConfig.plugins.push(
     patterns: ['app/**/*.*'],
     globOptions: {
       ignore: [
+        'app/types/**',
+        'app/hooks/**',
         'app/static/**',
         'app/views/components/SvgIcons/**',
         'app/templates/**',
