@@ -3,9 +3,9 @@ import {
   FETCH_USER_TEAMS_SUCCESS,
   FETCH_USER_TEAMS_FAILURE
 } from '../../constants/user'
-import getTeams from '../../models/user/get-teams'
+import { getTeams } from '../../models/user/get-teams'
 
-export default function getUserTeams(user = {}, fetchMembers) {
+export function getUserTeams(user = {}, fetchMembers) {
   return async dispatch => {
     dispatch({
       type: FETCH_USER_TEAMS_REQUEST
@@ -13,12 +13,6 @@ export default function getUserTeams(user = {}, fetchMembers) {
 
     try {
       const teams = await getTeams(user, fetchMembers)
-
-      fetchMembers &&
-        teams.forEach(({ brand }) => {
-          brand.roles = brand.roles || []
-          brand.roles.forEach(role => (role.members = role.members || []))
-        })
 
       dispatch({
         type: FETCH_USER_TEAMS_SUCCESS,
@@ -33,5 +27,3 @@ export default function getUserTeams(user = {}, fetchMembers) {
     }
   }
 }
-
-// todo: refactoring teams.forEach

@@ -4,7 +4,7 @@ import bodyParser from 'koa-bodyparser'
 
 import { isEmpty, template_path, isLoggedIn } from './helpers'
 import config from '../../config/private'
-import getBrand from '../../app/models/brand'
+import { getBrandByHostname } from '../../app/models/brand/get-brand-by-hostname'
 
 let mailgun = require('mailgun-js')({
   apiKey: config.mailgun.api_key,
@@ -20,7 +20,7 @@ router.get('/', async ctx => {
   const { hostname } = urlParser.parse(ctx.request.origin)
 
   try {
-    const brand = await getBrand(hostname)
+    const brand = await getBrandByHostname(hostname)
 
     if (brand) {
       return ctx.redirect('/dashboard/mls')

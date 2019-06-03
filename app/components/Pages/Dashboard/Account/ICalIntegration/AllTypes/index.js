@@ -1,19 +1,15 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import { getContexts } from 'actions/deals'
-
 import { getActiveTeamId } from 'utils/user-teams'
-
-import RadioButton from 'components/RadioButton'
+import { Checkbox } from 'components/Checkbox'
 
 import CategoryType from '../CategoryTypes'
 
+import { Section, Title } from '../styled'
 import { CategoryTypesContainer } from './styled'
-import { SectionTitle } from '../styled'
-
-const radioButtonStyle = { display: 'block', marginTop: '2rem' }
 
 const defaultTaskTypes = [
   'Call',
@@ -72,21 +68,21 @@ class ICalAllTypes extends React.Component {
     )
 
     return (
-      <Fragment>
-        <SectionTitle>
+      <Section>
+        <Title>
           What event types would you like to export to your calendar?
-        </SectionTitle>
-        <RadioButton
-          selected={selectedTypes.length === allTypes.length}
-          title="All of my dates from Rechat"
-          onClick={() =>
+        </Title>
+        <Checkbox
+          checked={selectedTypes.length === allTypes.length}
+          onChange={() =>
             onChangeSelectAllTypes(
               selectedTypes.length === allTypes.length ? [] : allTypes
             )
           }
-          style={radioButtonStyle}
-          square
-        />
+          containerStyle={{ display: 'flex', marginBottom: '2rem' }}
+        >
+          All of my dates from Rechat
+        </Checkbox>
         <CategoryTypesContainer>
           <CategoryType
             title="Event Types:"
@@ -114,7 +110,7 @@ class ICalAllTypes extends React.Component {
             />
           )}
         </CategoryTypesContainer>
-      </Fragment>
+      </Section>
     )
   }
 }

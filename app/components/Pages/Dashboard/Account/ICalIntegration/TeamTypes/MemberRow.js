@@ -1,18 +1,18 @@
 import React from 'react'
-import Flex from 'styled-flex-component'
 
-import { CheckBoxButton } from '../../../../../../views/components/Button/CheckboxButton'
+import { Checkbox } from 'components/Checkbox'
 
-const MemberRow = ({ title, selected, onClick, style }) => (
-  <Flex alignCenter style={{ margin: '1rem 0', ...style }}>
-    <CheckBoxButton
-      square
-      isSelected={selected}
-      onClick={onClick}
-      style={{ marginRight: '0.5rem' }}
-    />
+const MemberRow = ({ title, selected, onChange, style = {} }) => (
+  <Checkbox
+    checked={selected}
+    onChange={onChange}
+    containerStyle={{
+      margin‌Bottom: '1rem',
+      ...style
+    }}
+  >
     {title}
-  </Flex>
+  </Checkbox>
 )
 
 export default MemberRow

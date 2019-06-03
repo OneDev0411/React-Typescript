@@ -5,8 +5,8 @@ import thunk from 'redux-thunk'
 
 import reducers from '../../../app/reducers'
 import config from '../../../config/webpack'
-import getBrand from '../../../app/models/brand'
-import getTeams from '../../../app/store_actions/user/teams'
+import { getUserTeams } from '../../../app/store_actions/user/teams'
+import { getBrandByHostname } from '../../../app/models/brand/get-brand-by-hostname'
 
 import getUserProfile from '../get-user-profile'
 
@@ -40,7 +40,7 @@ async function display(file, renderProps) {
 
   try {
     const { hostname } = urlParser.parse(this.request.origin)
-    const brand = await getBrand(hostname)
+    const brand = await getBrandByHostname(hostname)
 
     initialState = {
       ...initialState,
@@ -65,7 +65,7 @@ async function display(file, renderProps) {
   // append user data to render props params
   if (initialState.user) {
     try {
-      await store.dispatch(getTeams(initialState.user, true))
+      await store.dispatch(getUserTeams(initialState.user))
     } catch (e) {
       if (e.response && e.response.status === 401) {
         console.log('Can not get user teams. signing out...')

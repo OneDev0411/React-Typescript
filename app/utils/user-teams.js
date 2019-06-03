@@ -82,24 +82,23 @@ export function getActiveTeamSettings(user, key = null) {
 export function viewAsEveryoneOnTeam(user) {
   const users = viewAs(user)
   return users.length === 0 ||
-    allMembersOfTeam(getActiveTeam(user)).length === users.length
+    getTeamAvailableMembers(getActiveTeam(user)).length === users.length
 }
 
-export function allMembersOfTeam(team) {
-  const members =
-    team && team.brand.roles
-      ? team.brand.roles.reduce(
+export function getTeamAvailableMembers(team) {
+  return team && team.brand ? getBrandAvailableMembers(team.brand) : []
+}
+
+export function getBrandAvailableMembers(brand) {
+  return brand && brand.roles
+      ? brand.roles.reduce(
           (members, role) =>
-            role.members ? members.concat(role.members) : members,
+            Array.isArray(role.users) && role.users.length > 0 ? [...members, ...getRoleNotDeletedUsers(role)] : members,
           []
         )
       : []
+}
 
-  const indexedMembers = {}
-
-  members.forEach(m => {
-    indexedMembers[m.id] = m
-  })
-
-  return Object.values(indexedMembers)
+export function getRoleNotDeletedUsers(role) {
+  return role.users.filter(({ deleted_at }) => deleted_at == null).map(({ user }) => user )
 }
