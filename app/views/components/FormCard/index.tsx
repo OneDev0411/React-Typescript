@@ -2,7 +2,12 @@ import React from 'react'
 
 import { Container, Title, Content } from './styled'
 
-export default function FormCard({ title, children }) {
+interface Props {
+  title?: string
+  children: React.ReactNode
+}
+
+export default function FormCard({ title, children }: Props) {
   return (
     <Container>
       {title && (
