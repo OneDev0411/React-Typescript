@@ -1,11 +1,15 @@
 import { connect } from 'react-redux'
 
 import * as React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
 import { Helmet } from 'react-helmet'
 
 import { RouteComponentProps } from 'react-router'
+
+import { debounce } from 'lodash'
+
+import useStartTyping from 'react-use/esm/useStartTyping'
 
 import { Container, Content, Menu } from 'components/SlideMenu'
 
@@ -18,6 +22,8 @@ import Search from 'components/Grid/Search'
 import { findNode } from 'utils/tree-utils'
 
 import { SearchContext } from 'components/TextWithHighlights'
+
+import { useCaptureTyping } from 'hooks/use-capture-typing'
 
 import { TeamsSearch } from './styled'
 import { TeamView } from './components/TeamView'
@@ -35,6 +41,8 @@ const getId = team => team.id
 
 function TeamsPage(props: Props) {
   const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSetSearchTerm = debounce(setSearchTerm, 400)
+
   const {
     rootTeam,
     error,
@@ -48,6 +56,12 @@ function TeamsPage(props: Props) {
     editRolesModal,
     initialExpandedNodes
   } = useTeamsPage(props.user, searchTerm)
+
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  // FIXME: move useCaptureTyping into Search component when it's refactored
+  // into a function component.
+  useCaptureTyping(inputRef)
 
   const teamRenderer = useCallback(
     team => (
@@ -82,12 +96,15 @@ function TeamsPage(props: Props) {
         <SearchContext.Provider value={searchTerm}>
           <Container isOpen>
             <Menu isOpen width="25rem">
-              <H4>Teams Management</H4>
+              <H4>Team Management</H4>
 
               <TeamsSearch>
                 <Search
+                  inputRef={ref => {
+                    inputRef.current = ref
+                  }}
                   placeholder="Search for teams and agents"
-                  onChange={value => setSearchTerm(value)}
+                  onChange={value => debouncedSetSearchTerm(value)}
                 />
               </TeamsSearch>
               <TreeView

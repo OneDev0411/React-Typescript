@@ -28,7 +28,9 @@ export function useAddEditTeamModal(
       if (editingTeam && values.id) {
         const newTeam = (await editBrand(values)).data
 
-        setRootTeam(rootTeam => getUpdatedRootTeam(rootTeam, editingTeam, newTeam))
+        setRootTeam(rootTeam =>
+          getUpdatedRootTeam(rootTeam, editingTeam, newTeam)
+        )
 
         closeAddEditModal()
       } else if (newItemParent) {

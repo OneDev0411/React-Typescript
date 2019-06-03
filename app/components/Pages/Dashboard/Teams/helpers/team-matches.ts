@@ -1,4 +1,5 @@
 import { ITeam } from 'models/BrandConsole/types'
+
 import { getTeamUsers } from './get-team-users'
 import { userMatches } from './users-matches'
 
