@@ -1,7 +1,8 @@
 import React from 'react'
-import _ from 'underscore'
+import uniqBy from 'lodash/uniqBy'
+import isEqual from 'lodash/isEqual'
 
-import { getBrandAvailableMembers } from '../../../../../../utils/user-teams'
+import { getBrandAvailableMembers } from 'utils/user-teams'
 
 import { Section, Title } from '../styled'
 import MemberRow from './MemberRow'
@@ -14,20 +15,22 @@ const TeamTypes = ({
   onSelectTeam,
   onRemoveTeam
 }) => {
-  let allMembers = {}
-
-  userTeams.forEach(({ brand }) => {
-    allMembers[brand.id] = getBrandAvailableMembers(brand).map(({ id }) => id)
-  })
+  const allMembers = userTeams.reduce(
+    (acc, { brand }) => ({
+      ...acc,
+      [brand.id]: getBrandAvailableMembers(brand).map(({ id }) => id)
+    }),
+    {}
+  )
 
   return (
     <Section>
       <Title>Which teams did you want to send calendar events from?</Title>
       <MemberRow
-        selected={_.isEqual(allMembers, selectedMembers)}
+        selected={isEqual(allMembers, selectedMembers)}
         title="All Teams"
         onChange={() => {
-          if (!_.isEqual(allMembers, selectedMembers)) {
+          if (!isEqual(allMembers, selectedMembers)) {
             onChangeSelectAllMembers(allMembers)
           } else {
             onChangeSelectAllMembers({})
@@ -46,9 +49,7 @@ const TeamTypes = ({
               selectedMembers[brand.id].includes(member.id)
             )
 
-          members = _.uniq(members, 'id')
-
-          console.log(members)
+          members = uniqBy(members, 'id')
 
           return (
             <div
