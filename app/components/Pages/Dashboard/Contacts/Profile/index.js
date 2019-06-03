@@ -17,6 +17,7 @@ import { updateContactSelf } from 'models/contacts/update-contact-self'
 import getContactTimeline from 'models/contacts/get-contact-timeline'
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
+import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 
 import {
   selectDefinitionByName,
@@ -151,7 +152,11 @@ class ContactProfile extends React.Component {
 
   fetchTimeline = async () => {
     try {
-      const timeline = await getContactTimeline(this.props.params.id)
+      const timeline = await getContactTimeline(this.props.params.id, {
+        ...CRM_TASKS_QUERY,
+        // eslint-disable-next-line
+        'association_condition[email_campaign.emails][contact]': this.state.contact.id
+      })
 
       this.setState({ isFetchingTimeline: false, timeline })
     } catch (error) {
