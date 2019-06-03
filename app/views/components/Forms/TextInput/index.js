@@ -1,14 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import {
-  InputContainer,
-  InputError,
-  InputRequired,
-  InputLabel
-} from '../styled'
+import { InputContainer, InputLabel, InputRequired } from '../styled'
 
-import { InputField, FormattedInputField } from './styled'
+import { FormattedInputField, InputField } from './styled'
+import { FieldError } from '../../final-form-fields/FieldError'
 
 TextInput.propTypes = {
   input: PropTypes.object,
@@ -45,6 +41,7 @@ export function TextInput({ input, ...props }) {
     ...input,
     ...props
   }
+  const name = (input && input.name) || props.name
 
   return (
     <props.container
@@ -70,11 +67,7 @@ export function TextInput({ input, ...props }) {
         <InputField {...inputProps} />
       )}
 
-      {props.showError && (
-        <InputError display={props.meta.error && props.meta.touched}>
-          {props.meta.error}&nbsp;
-        </InputError>
-      )}
+      {props.showError && <FieldError name={name} />}
     </props.container>
   )
 }
