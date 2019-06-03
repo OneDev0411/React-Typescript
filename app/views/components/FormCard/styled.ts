@@ -24,8 +24,8 @@ interface ContentProps {
 }
 
 export const Content = styled.div<ContentProps>`
-  padding: 1rem;
   border-radius: 3px;
   background-color: #fff;
   border: ${({ noBorder }) => (noBorder ? 'none' : `1px solid ${borderColor}`)};
+  padding: ${({ noBorder }) => (noBorder ? '0' : '1rem')};
 `
