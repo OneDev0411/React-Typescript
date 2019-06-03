@@ -397,7 +397,12 @@ class ContactsList extends React.Component {
       this.state.searchInputValue,
       this.order,
       this.props.viewAsUsers,
-      this.props.conditionOperator
+      this.props.conditionOperator,
+      false,
+      {},
+      this.props.flows,
+      this.props.crmTasks,
+      this.state.firstLetter
     )
   }
 
