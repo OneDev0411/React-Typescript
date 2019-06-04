@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 
 import { TreeFn } from 'utils/tree-utils/types'
-import { ITeam } from 'models/BrandConsole/types'
 
 import { teamMatches } from '../helpers/team-matches'
 

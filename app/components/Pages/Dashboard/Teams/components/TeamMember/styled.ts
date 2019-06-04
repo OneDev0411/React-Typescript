@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { grey } from 'views/utils/colors'
+import { dimmerOverlayColor, grey } from 'views/utils/colors'
 import OriginalUserAvatar from 'components/UserAvatar'
 
 export const TeamMemberItem = styled.div`
@@ -29,7 +29,7 @@ export const DeactivatedOverlay = styled.div`
   position: absolute;
   top: 0;
   bottom: 0;
-  background: #ffffffaa;
+  background: ${dimmerOverlayColor};
   left: 0;
   right: 0;
   pointer-events: none;

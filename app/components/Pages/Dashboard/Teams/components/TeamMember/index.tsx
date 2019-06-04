@@ -2,8 +2,6 @@ import React from 'react'
 
 import { FlexItem } from 'styled-flex-component'
 
-import { ITeamRole } from 'models/BrandConsole/types'
-
 import { BasicMultiSelectDropdown } from 'components/BasicMultiSelectDropdown'
 
 import { notUndefined } from 'utils/ts-utils'

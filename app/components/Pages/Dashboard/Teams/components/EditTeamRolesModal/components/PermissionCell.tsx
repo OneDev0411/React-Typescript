@@ -1,6 +1,6 @@
 import { Field } from 'react-final-form'
 
-import * as React from 'react'
+import React from 'react'
 
 import { Checkbox } from 'components/Checkbox'
 

@@ -6,10 +6,10 @@ export const TeamsSearch = styled.div`
   background: inherit;
   position: sticky;
   z-index: 1;
-  top: -40px;
+  top: -2.5rem;
 
   input {
-    height: 40px;
+    height: 2.5rem;
   }
 
   button {

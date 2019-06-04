@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 
 import Flex from 'styled-flex-component'
 
@@ -8,7 +8,7 @@ import IconButton from 'components/Button/IconButton'
 import Badge from 'components/Badge'
 import UserIcon from 'components/SvgIcons/InPerson/IconInPerson'
 
-import { saleInAnimation } from '../../../../../../animations/scale-in'
+import { scaleInAnimation } from 'animations/scale-in'
 
 export const TeamLink = styled(ALink)`
   &.active {
@@ -31,7 +31,7 @@ export const TeamLinkWrapper = styled(Flex)`
 export const TeamUserBadge = styled(Badge)`
   margin-left: 0.4rem;
   padding: 0.1rem 0.3rem;
-  animation: ${saleInAnimation} 50ms ease forwards;
+  animation: ${scaleInAnimation} 50ms ease forwards;
   ${UserIcon} {
     vertical-align: bottom;
     width: 1rem;

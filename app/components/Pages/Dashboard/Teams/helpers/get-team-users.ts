@@ -1,6 +1,5 @@
 import { flatMap, uniqBy } from 'lodash'
 
-import { ITeam } from 'models/BrandConsole/types'
 import { notDeleted } from 'utils/not-deleted'
 
 export function getTeamUsers(team: ITeam): IUser[] {

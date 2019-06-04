@@ -24,4 +24,3 @@ function getUpdatedTree(path: Tree[], newChild: Tree) {
   return {...parent, children: parent.children!.map(
     aChild => aChild === rest[0] ? getUpdatedTree(rest, newChild) : aChild)}
 }
-

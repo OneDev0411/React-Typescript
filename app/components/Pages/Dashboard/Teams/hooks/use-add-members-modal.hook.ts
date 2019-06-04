@@ -1,6 +1,5 @@
 import { Dispatch, useCallback, useState } from 'react'
 
-import { ITeam } from 'models/BrandConsole/types'
 import Members from 'models/BrandConsole/Members'
 import { getBrands } from 'models/BrandConsole/Brands'
 
@@ -21,8 +20,6 @@ export function useAddMembersModal(
       if (!team) {
         return
       }
-
-      console.log(values)
 
       // Currently we only use email but there are some cases when the contact
       // has multiple or no users related to it. These cases cannot be handled

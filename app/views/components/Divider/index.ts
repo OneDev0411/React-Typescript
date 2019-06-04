@@ -5,6 +5,7 @@ import { CSSProperties } from 'react'
 import { borderColor } from '../../utils/colors'
 
 interface Props {
+  vertical?: boolean
   width?: CSSProperties['width']
   height?: CSSProperties['width']
   margin?: CSSProperties['margin']

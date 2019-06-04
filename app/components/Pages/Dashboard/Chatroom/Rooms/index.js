@@ -8,12 +8,13 @@ import UserAvatar from 'components/UserAvatar'
 
 import Badge from 'components/Badge'
 
+import Tooltip from 'components/tooltip'
+
 import SocketStatus from '../SocketStatus'
 import CreateRoom from './create-room'
 import UserTyping from '../UserTyping'
 import TwoDirectionArrow from '../../Partials/Svgs/TwoDirectionArrow'
 import SearchInput from '../../../../Partials/SearchInput'
-import Tooltip from '../../../../../views/components/tooltip'
 import {
   changeActiveRoom,
   toggleChatbar,

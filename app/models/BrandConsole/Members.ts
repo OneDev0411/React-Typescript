@@ -1,6 +1,4 @@
-import { ITeamRole } from 'models/BrandConsole/types'
-
-import Fetch from '../../services/fetch/index'
+import Fetch from 'services/fetch'
 
 async function getMembers(role) {
   const endpoint = `/brands/${role.brand}/roles/${role.id}/members`

@@ -1,13 +1,11 @@
 import * as React from 'react'
-import { createContext, ReactNode, ReactType, useContext, useMemo } from 'react'
+import { createContext, ReactType, useContext, useMemo } from 'react'
 
 import styled from 'styled-components'
 
-import { ReactElement } from 'react'
-
 import { splitByMatches } from 'components/TextWithHighlights/helpers/split-by-matches'
 
-import { primary } from '../../utils/colors'
+import { primary } from 'views/utils/colors'
 
 const DefaultHighlightComponent = styled.span`
   color: ${primary};

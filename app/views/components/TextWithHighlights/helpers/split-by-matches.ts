@@ -1,6 +1,6 @@
 export function splitByMatches(regExp: RegExp, text: string) {
   let matchResult
-  let parts: { text: string; match: boolean }[] = []
+  const parts: { text: string; match: boolean }[] = []
   let lastIndex = 0
 
   // eslint-disable-next-line no-cond-assign

@@ -28,7 +28,7 @@ export const AddTeamMemberButton = styled(TeamMemberItem).attrs({
     fill: #fff;
     width: 2.5rem;
     height: 2.5rem;
-    margin-right: 15px;
+    margin-right: 1rem;
     background: #000;
     padding: 0.5rem; // FIXME: update when ehsan updated the icon with normal paddings
     overflow: visible;

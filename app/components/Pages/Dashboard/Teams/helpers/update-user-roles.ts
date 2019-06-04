@@ -1,5 +1,3 @@
-import { ITeam, ITeamRole } from 'models/BrandConsole/types'
-
 import Members from 'models/BrandConsole/Members'
 import { getBrands } from 'models/BrandConsole/Brands'
 

@@ -7,8 +7,6 @@ import DeleteOutlineIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutli
 import Tooltip from 'components/tooltip'
 import PageHeader from 'components/PageHeader'
 
-import { ITeam, ITeamRole } from 'models/BrandConsole/types'
-
 import AddUserIcon from 'components/SvgIcons/AddUser/AddUserIcon'
 
 import { AddTeamMemberButton, Container, IconButton } from './styled'

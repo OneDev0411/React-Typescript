@@ -1,6 +1,5 @@
 import { useCallback, useContext } from 'react'
 
-import { ITeam } from 'models/BrandConsole/types'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { deleteBrand } from 'models/BrandConsole/Brands'
 import { updateTree } from 'utils/tree-utils/update-tree'
@@ -16,7 +15,7 @@ export function useDeleteTeam(
       // @ts-ignore until confirmation modal types are fixed
       deleteConfirmation.setConfirmationModal({
         message: 'Heads up!',
-        description: 'The team will be removed for ever! Are you sure?',
+        description: 'The team will be removed forever! Are you sure?',
         onConfirm: async () => {
           await deleteBrand(team.id)
           setRootTeam(

@@ -1,7 +1,5 @@
 import { Dispatch, useCallback, useState } from 'react'
 
-import { ITeam } from 'models/BrandConsole/types'
-
 import { updateRoles } from '../helpers/update-roles'
 import { getUpdatedRootTeam } from '../helpers/get-updated-root-team'
 
@@ -32,7 +30,7 @@ export function useEditRolesModal(
   return {
     close,
     open,
-    isOpen: team != null,
+    isOpen: team !== null,
     submit,
     team
   }

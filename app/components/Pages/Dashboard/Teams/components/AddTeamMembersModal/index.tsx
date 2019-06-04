@@ -7,7 +7,6 @@ import Flex from 'styled-flex-component'
 import { Modal, ModalHeader } from 'components/Modal'
 
 import { MultipleContactsSelect } from 'components/Forms/MultipleContactsSelect'
-import { ITeam } from 'models/BrandConsole/types'
 import { Checkbox } from 'components/Checkbox'
 import { Divider } from 'components/Divider'
 

@@ -8,8 +8,6 @@ import IconButton from 'components/Button/IconButton'
 import Tooltip from 'components/tooltip'
 import AddCircleOutlineIcon from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 
-import { ITeam } from 'models/BrandConsole/types'
-
 import { userMatches } from '../../helpers/users-matches'
 import { getTeamUsers } from '../../helpers/get-team-users'
 import { TeamLink, TeamLinkWrapper, TeamUserBadge } from './styled'

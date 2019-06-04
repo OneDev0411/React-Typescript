@@ -1,5 +1,4 @@
-import Fetch from '../../services/fetch/index'
-import { ITeam, ITeamRole } from './types'
+import Fetch from 'services/fetch'
 
 type ICreateTeamRole = Pick<ITeamRole, 'acl' | 'role'>
 

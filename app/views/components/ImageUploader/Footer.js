@@ -47,7 +47,7 @@ export default function Footer({
               defaultValue={scale}
               onChange={onScaleChange}
               style={{
-                width: '190px',
+                width: '11.875rem',
                 margin: '0 .8rem',
                 padding: '10px 0'
               }}

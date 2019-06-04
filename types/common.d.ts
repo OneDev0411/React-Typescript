@@ -11,6 +11,12 @@ declare interface StringMap<T> {
   [key: string]: T
 }
 
+declare type Omit<T, K extends keyof any> = T extends any
+  ? Pick<T, Exclude<keyof T, K>>
+  : never
+
+declare type Overwrite<T, U> = Omit<T, keyof U> & U
+
 declare interface PaginationOptions {
   start?: number
   limit?: number
@@ -44,3 +50,13 @@ declare interface ApiResponse<T> {
 }
 
 declare type ApiPromise<T> = Promise<ApiResponse<T>>
+
+declare type PartiallyMappedFields<T, K extends keyof T, MappedType> = {
+  [key in keyof T]: key extends K ? MappedType : T[key]
+}
+
+declare type MapFieldsToUuid<T, K extends keyof T> = PartiallyMappedFields<
+  T,
+  K,
+  UUID
+>

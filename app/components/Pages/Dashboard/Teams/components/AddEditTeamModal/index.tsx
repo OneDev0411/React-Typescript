@@ -10,12 +10,14 @@ import { SelectInput } from 'components/Forms/SelectInput'
 
 import Button from 'components/Button/ActionButton'
 
-import { BrandTypes, ITeam } from 'models/BrandConsole/types'
+import { BrandTypes, IAddEditTeamFormData } from 'models/BrandConsole'
 
 interface Props {
   close: () => void
-  submit: (values: any) => void
-  validate: (values: any) => { [fieldName: string]: string | undefined }
+  submit: (values: Partial<ITeam> & IAddEditTeamFormData) => void
+  validate: (
+    values: IAddEditTeamFormData
+  ) => { [fieldName: string]: string | undefined }
   isOpen: boolean
   team: ITeam | null
 }

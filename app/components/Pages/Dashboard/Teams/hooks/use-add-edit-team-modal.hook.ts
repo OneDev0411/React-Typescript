@@ -1,9 +1,9 @@
 import { Dispatch, useCallback, useState } from 'react'
 
-import { ICreateBrand, ITeam } from 'models/BrandConsole/types'
 import { addBrand, editBrand } from 'models/BrandConsole/Brands'
 
 import { getUpdatedRootTeam } from '../helpers/get-updated-root-team'
+import { IAddEditTeamFormData } from 'models/BrandConsole'
 
 export function useAddEditTeamModal(
   setRootTeam: Dispatch<(prevState: ITeam) => ITeam>
@@ -24,7 +24,7 @@ export function useAddEditTeamModal(
     openEdit: (team: ITeam) => setEditingTeam(team),
     close: closeAddEditModal,
     isOpen: !!editingTeam || !!newItemParent,
-    submit: async (values: Partial<ITeam> & ICreateBrand) => {
+    submit: async (values: Partial<ITeam> & IAddEditTeamFormData) => {
       if (editingTeam && values.id) {
         const newTeam = (await editBrand(values)).data
 
@@ -50,8 +50,8 @@ export function useAddEditTeamModal(
         closeAddEditModal()
       }
     },
-    validate: values => {
-      const errors: { [key in keyof ITeam]?: string } = {}
+    validate: (values: IAddEditTeamFormData) => {
+      const errors: { [key in keyof IAddEditTeamFormData]?: string } = {}
       const { name } = values
 
       if (!name) {

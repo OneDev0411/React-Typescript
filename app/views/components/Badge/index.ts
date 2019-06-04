@@ -16,8 +16,8 @@ const defaultProps = {
 
 const Badge = styled.span<{ appearance: keyof typeof badgeAppearances }>`
   padding: 0.04rem 0.3rem;
-  font-size: 12px;
-  min-width: 24px;
+  font-size: 0.75rem;
+  min-width: 1.5rem;
   text-align: center;
   line-height: 1.33;
 

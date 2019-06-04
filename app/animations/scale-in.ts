@@ -1,6 +1,6 @@
 import { keyframes } from 'styled-components'
 
-export const saleInAnimation = keyframes`
+export const scaleInAnimation = keyframes`
   from {
     transform: scale(0.5);
     opacity: 0;

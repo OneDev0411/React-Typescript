@@ -10,15 +10,13 @@ import { Modal, ModalFooter, ModalHeader } from 'components/Modal'
 import Button from 'components/Button/ActionButton'
 import AddIcon from 'components/SvgIcons/Add/AddIcon'
 
-import { ITeam } from 'models/BrandConsole/types'
-
 import { EditTeamRolesTable, EditTeamRolesTableHeader } from './styled'
 import { RoleRow } from './components/RoleRow'
 import { permissions } from './permissions'
 
 interface Props {
   close: () => void
-  submit: (values: any) => void
+  submit: (values: ITeam) => void
   isOpen: boolean
   team: ITeam | null
 }

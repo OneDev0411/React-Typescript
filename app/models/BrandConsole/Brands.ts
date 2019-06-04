@@ -1,6 +1,4 @@
-import { ICreateBrand, ITeam } from 'models/BrandConsole/types'
-
-import Fetch from '../../services/fetch/index'
+import Fetch from 'services/fetch'
 
 const defaultAssociations = ['brand.roles', 'brand_role.users']
 
@@ -40,10 +38,14 @@ export async function getChildrenBrands(brandId) {
 }
 
 export async function addBrand(
-  brand: ICreateBrand,
+  team: Pick<ITeam, 'name' | 'brand_type'>,
   parentId: string
 ): Promise<ApiResponse<ITeam>> {
-  const payload = { ...brand, parent: parentId }
+  const payload: ITeamInput = {
+    name: team.name,
+    brand_type: team.brand_type,
+    parent: parentId
+  }
 
   return (await new Fetch()
     .post('/brands')

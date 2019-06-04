@@ -1,6 +1,5 @@
 import { difference, differenceBy, differenceWith, isEqual } from 'lodash'
 
-import { ITeam, ITeamRole } from 'models/BrandConsole/types'
 import Roles from 'models/BrandConsole/Roles'
 import { getBrands } from 'models/BrandConsole/Brands'
 
@@ -14,7 +13,7 @@ export async function updateRoles(
     difference(newRoles, addedRoles),
     team.roles || [],
     (role1, role2) => {
-      return isEqual(role1.acl.sort(), role2.acl.sort())
+      return isEqual([...role1.acl].sort(), [...role2.acl].sort())
     }
   )
 

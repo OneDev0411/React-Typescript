@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { ITeam, ITeamRole } from 'models/BrandConsole/types'
 import { getBrands } from 'models/BrandConsole/Brands'
 import { getActiveTeamId } from 'utils/user-teams'
 

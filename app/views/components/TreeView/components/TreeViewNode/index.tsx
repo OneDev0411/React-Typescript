@@ -36,12 +36,11 @@ export const TreeViewNode = React.memo(function TreeViewNode<
     onToggleExpanded
   ])
 
-  const arrow =
-    childNodes.length > 0 ? (
-      <TreeViewExpandButton onClick={toggle}>
-        <TreeViewExpandArrow expanded={expanded} />
-      </TreeViewExpandButton>
-    ) : null
+  const arrow = childNodes.length ? (
+    <TreeViewExpandButton onClick={toggle}>
+      <TreeViewExpandArrow expanded={expanded} />
+    </TreeViewExpandButton>
+  ) : null
 
   return (
     <>
@@ -54,8 +53,7 @@ export const TreeViewNode = React.memo(function TreeViewNode<
       {expanded && (
         <TreeViewNodeChildrenContainer>
           {childNodes.map(node => (
-            <TreeViewNode
-              key={props.getId(node)}
+            <TreeViewNode key={props.getId(node)}
               node={node}
               onToggleExpanded={onToggleExpanded}
               {...props}

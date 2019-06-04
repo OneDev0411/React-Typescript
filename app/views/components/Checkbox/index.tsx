@@ -1,5 +1,7 @@
 import React, { CSSProperties, ReactNode } from 'react'
 
+import { useCuid } from 'hooks/use-cuid'
+
 import { CheckMark, CheckMarkBox, Input, Label } from './styled'
 
 interface Props {
@@ -20,11 +22,9 @@ Checkbox.defaultProps = {
 }
 
 export function Checkbox(props: Props) {
-  const {
-    id = `checkbox-${Math.ceil(Math.random() * 100000000)}`,
-    size = 16,
-    checked
-  } = props
+  const cuid = useCuid()
+
+  const { id = cuid, size = 16, checked } = props
 
   return (
     <Label htmlFor={id} style={props.containerStyle}>

@@ -1,15 +1,13 @@
 import { connect } from 'react-redux'
 
 import * as React from 'react'
-import { useCallback, useRef, useState } from 'react'
+import { MutableRefObject, useCallback, useRef, useState } from 'react'
 
 import { Helmet } from 'react-helmet'
 
 import { RouteComponentProps } from 'react-router'
 
 import { debounce } from 'lodash'
-
-import useStartTyping from 'react-use/esm/useStartTyping'
 
 import { Container, Content, Menu } from 'components/SlideMenu'
 
@@ -57,7 +55,9 @@ function TeamsPage(props: Props) {
     initialExpandedNodes
   } = useTeamsPage(props.user, searchTerm)
 
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef: MutableRefObject<HTMLInputElement | null> = useRef<HTMLInputElement | null>(
+    null
+  )
 
   // FIXME: move useCaptureTyping into Search component when it's refactored
   // into a function component.
@@ -79,82 +79,85 @@ function TeamsPage(props: Props) {
   }
 
   if (error) {
-    return <div>Error</div> // TODO
+    // TODO: figure out the correct way of handling this. Are we have a
+    // upper level error boundary which handles http errros in a unified
+    // manner? So maybe we can throw the error in this case
+    return <div>Error</div>
   }
 
-  if (rootTeam) {
-    const selectedTeam =
-      (props.params.id &&
-        findNode(getChildNodes, team => team.id === props.params.id)) ||
-      rootTeam
+  if (!rootTeam) {
+    return null
+  }
 
-    return (
-      <React.Fragment>
-        <Helmet>
-          <title>Teams</title>
-        </Helmet>
-        <SearchContext.Provider value={searchTerm}>
-          <Container isOpen>
-            <Menu isOpen width="25rem">
-              <H4>Team Management</H4>
+  const selectedTeam =
+    (props.params.id &&
+      findNode(getChildNodes, team => team.id === props.params.id)) ||
+    rootTeam
 
-              <TeamsSearch>
-                <Search
-                  inputRef={ref => {
-                    inputRef.current = ref
-                  }}
-                  placeholder="Search for teams and agents"
-                  onChange={value => debouncedSetSearchTerm(value)}
-                />
-              </TeamsSearch>
-              <TreeView
-                getChildNodes={getChildNodes}
-                selectable
-                initialExpandedNodes={initialExpandedNodes}
-                getNodeId={getId}
-                renderNode={teamRenderer}
+  return (
+    <React.Fragment>
+      <Helmet>
+        <title>Teams</title>
+      </Helmet>
+      <SearchContext.Provider value={searchTerm}>
+        <Container isOpen>
+          <Menu isOpen width="25rem">
+            <H4>Team Management</H4>
+
+            <TeamsSearch>
+              <Search
+                inputRef={ref => {
+                  inputRef.current = ref
+                }}
+                placeholder="Search for teams and agents"
+                onChange={value => debouncedSetSearchTerm(value)}
               />
-            </Menu>
+            </TeamsSearch>
+            <TreeView
+              getChildNodes={getChildNodes}
+              selectable
+              initialExpandedNodes={initialExpandedNodes}
+              getNodeId={getId}
+              renderNode={teamRenderer}
+            />
+          </Menu>
 
-            <Content>
-              {selectedTeam && (
-                <TeamView
-                  team={selectedTeam}
-                  updatingUserIds={updatingUserIds}
-                  onDelete={() => deleteTeam(selectedTeam)}
-                  onEdit={() => addEditModal.openEdit(selectedTeam)}
-                  onAddMember={() => addMembersModal.open(selectedTeam)}
-                  onEditRoles={() => editRolesModal.open(selectedTeam)}
-                  updateRoles={updateRoles}
-                />
-              )}
-            </Content>
-          </Container>
-        </SearchContext.Provider>
-        <AddEditTeamModal
-          close={addEditModal.close}
-          isOpen={addEditModal.isOpen}
-          submit={addEditModal.submit}
-          team={addEditModal.team}
-          validate={addEditModal.validate}
-        />
-        <EditTeamRolesModal
-          close={editRolesModal.close}
-          isOpen={editRolesModal.isOpen}
-          submit={editRolesModal.submit}
-          team={editRolesModal.team}
-        />
-        <AddTeamMembersModal
-          close={addMembersModal.close}
-          isOpen={addMembersModal.isOpen}
-          submit={addMembersModal.submit}
-          team={addMembersModal.team}
-        />
-      </React.Fragment>
-    )
-  }
-
-  return null
+          <Content>
+            {selectedTeam && (
+              <TeamView
+                team={selectedTeam}
+                updatingUserIds={updatingUserIds}
+                onDelete={() => deleteTeam(selectedTeam)}
+                onEdit={() => addEditModal.openEdit(selectedTeam)}
+                onAddMember={() => addMembersModal.open(selectedTeam)}
+                onEditRoles={() => editRolesModal.open(selectedTeam)}
+                updateRoles={updateRoles}
+              />
+            )}
+          </Content>
+        </Container>
+      </SearchContext.Provider>
+      <AddEditTeamModal
+        close={addEditModal.close}
+        isOpen={addEditModal.isOpen}
+        submit={addEditModal.submit}
+        team={addEditModal.team}
+        validate={addEditModal.validate}
+      />
+      <EditTeamRolesModal
+        close={editRolesModal.close}
+        isOpen={editRolesModal.isOpen}
+        submit={editRolesModal.submit}
+        team={editRolesModal.team}
+      />
+      <AddTeamMembersModal
+        close={addMembersModal.close}
+        isOpen={addMembersModal.isOpen}
+        submit={addMembersModal.submit}
+        team={addMembersModal.team}
+      />
+    </React.Fragment>
+  )
 }
 
 export default connect(({ user }: any) => ({ user }))(TeamsPage)

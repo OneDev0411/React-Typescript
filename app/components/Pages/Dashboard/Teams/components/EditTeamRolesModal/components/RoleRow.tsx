@@ -16,7 +16,7 @@ interface Props {
 }
 
 export function RoleRow({ fieldName, onRemove }: Props) {
-  const nameField = `${fieldName}.role`
+  const roleField = `${fieldName}.role` // role name
   const aclField = `${fieldName}.acl`
 
   return (
@@ -26,7 +26,7 @@ export function RoleRow({ fieldName, onRemove }: Props) {
           <Field
             validate={value => !value && 'Role name is required'}
             autoFocus
-            name={`${nameField}`}
+            name={`${roleField}`}
             placeholder="Role"
             hasLabel={false}
             required

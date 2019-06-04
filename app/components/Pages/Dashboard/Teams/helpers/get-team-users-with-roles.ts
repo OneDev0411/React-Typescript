@@ -1,6 +1,5 @@
 import { groupBy, flatten } from 'lodash'
 
-import { ITeam, ITeamRole } from 'models/BrandConsole/types'
 import { notDeleted } from 'utils/not-deleted'
 
 export interface UserWithRoles {

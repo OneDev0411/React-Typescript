@@ -1,4 +1,4 @@
-import React, { CSSProperties, Ref, RefObject } from 'react'
+import React, { CSSProperties, RefObject } from 'react'
 
 import _ from 'underscore'
 
@@ -19,7 +19,7 @@ interface Props {
   style?: CSSProperties
   onClearSearch?: (string) => any
 
-  inputRef?: (ref: RefObject<HTMLInputElement>) => void
+  inputRef?: (ref: HTMLInputElement) => void
 }
 
 interface State {
@@ -58,13 +58,13 @@ class Search extends React.Component<Props, State> {
 
   handleChange = e => {
     const { value } = e.target
-    const { minimumLength } = this.props
+    const { minimumLength = 0 } = this.props
 
     this.setState({
       searchValue: value
     })
 
-    if (value.length === 0 || value.length >= (minimumLength || 0)) {
+    if (value.length === 0 || value.length >= minimumLength) {
       this.onChangeHandler(value)
     }
   }

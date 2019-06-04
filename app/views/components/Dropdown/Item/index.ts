@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { grey, primary } from '../../../utils/colors'
+import { grey, primary } from 'views/utils/colors'
 
 interface Props {
   isActive?: boolean
