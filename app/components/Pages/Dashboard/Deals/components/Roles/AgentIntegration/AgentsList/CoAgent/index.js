@@ -32,9 +32,11 @@ export function CoAgent(props) {
       />
 
       {props.agents.map((office, officeIndex) => {
-        const users = getBrandAvailableMembers(office)
+        const agents = getBrandAvailableMembers(office).filter(
+          user => user.user_type === 'Agent'
+        )
 
-        if (!users.length) {
+        if (!agents.length) {
           return false
         }
 
@@ -45,7 +47,7 @@ export function CoAgent(props) {
               <SubTitle>{getSubtitle(office)}</SubTitle>
             </Header>
             <Body>
-              {users.map((user, userIndex) => (
+              {agents.map((user, userIndex) => (
                 <RowItem key={`${officeIndex}${userIndex}`}>
                   <AgentTitle onClick={() => props.onSelectAgent(user)}>
                     {user.display_name}

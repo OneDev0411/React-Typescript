@@ -50,4 +50,5 @@ export const AgentTitle = styled(LinkButton)`
   font-weight: 500;
   padding: 0;
   margin: 0;
+  color: #262626;
 `
