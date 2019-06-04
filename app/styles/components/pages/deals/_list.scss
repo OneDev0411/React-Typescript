@@ -1,5 +1,6 @@
 %deals-list {
   overflow-x: hidden;
+
   // height: 100vh;
   .table-container {
     @extend %deal-list--table;
@@ -10,14 +11,17 @@
 .deals-error {
   text-align: center;
   margin-top: 5%;
+
   img {
     width: 91px;
     margin-bottom: 21px;
   }
+
   .fa-search {
     font-size: 82px;
     margin-bottom: 28px;
   }
+
   .title {
     margin-bottom: 10px;
     font-size: 26px;
@@ -34,6 +38,7 @@
     color: #2196f3;
     cursor: pointer;
     margin-left: 5px;
+
     &:hover {
       text-decoration: underline;
     }
@@ -47,7 +52,7 @@
   padding: 2rem;
 
   .table {
-    $border-color: #CAD4DB;
+    $border-color: #cad4db;
     border-collapse: separate;
     border-spacing: 0 8px;
     font-size: 15px;
@@ -72,9 +77,10 @@
       border-top: 1px solid $border-color !important;
     }
 
-    td > .hoverable {
+    td>.hoverable {
       padding-bottom: 4px;
       border-bottom: 1px dashed #ccc;
+
       i {
         margin-left: 6px;
         margin-top: 6px;
@@ -84,6 +90,7 @@
 
     td.notification-container {
       padding: 0 16px 0 0;
+
       .unread-notifications {
         background-color: #ff4747;
         border-radius: 50%;
@@ -93,6 +100,7 @@
         padding: 2px;
       }
     }
+
     tr.header td {
       border: none !important;
     }
@@ -104,7 +112,7 @@
       text-align: left;
       color: #67717c;
 
-      td > i {
+      td>i {
         margin-right: 5px;
       }
 
@@ -125,6 +133,7 @@
       background-color: #fff;
       color: #5b6469;
       transition: 0.2s ease-in all;
+
       &:hover {
         background-color: #f8fafb;
       }
@@ -138,6 +147,7 @@
       display: flex;
       flex-direction: row;
       align-items: center;
+
       &:hover {
         text-decoration: underline;
       }
@@ -176,6 +186,7 @@
     &:before {
       border-top: 8px solid $border-color;
     }
+
     &:after {
       border-top-color: $background-color;
       border-top-style: solid;
@@ -187,6 +198,7 @@
     &:before {
       border-bottom: 8px solid $border-color;
     }
+
     &:after {
       border-bottom-color: $background-color;
       border-bottom-style: solid;
@@ -198,6 +210,7 @@
     &:before {
       border-left: 8px solid $border-color;
     }
+
     &:after {
       border-left-color: $background-color;
       border-left-style: solid;
@@ -209,6 +222,7 @@
     &:before {
       border-right: 8px solid $border-color;
     }
+
     &:after {
       border-right-color: $background-color;
       border-right-style: solid;
@@ -277,35 +291,37 @@
  * this is named pop-over to prevent name collision with existing popover.
  * It's going to be cleaned in next release as Ramin said.
  */
-.pop-over {
-
-  &.pop-over--light {
-    background-color: #fff;
-    &.top {
-      .arrow{
-        border-top-color:#fff;
-        &:after{
-          border-top-color: #fff !important;
-        }
-      }
-    }
-
-    .arrow{
-      border-bottom-color: #fff !important;
-      &:after{
-        border-bottom-color: #fff !important;
-      }
-    }
-  }
-
-  &.pop-over--dark {
-    color: rgba(255,255,255, .8);
-    fill: #fff;
-  }
+.white--popover {
+  background-color: #fff;
   border: none;
-  min-width: 280px;;
+  min-width: 280px;
   max-width: inherit;
   box-shadow: -1px 0 10px 0 rgba(0, 0, 0, 0.1), 0 0 10px 0 rgba(0, 0, 0, 0.1);
+
+  &.top {
+    .arrow {
+      border-top-color: #fff;
+
+      &:after {
+        border-top-color: #fff !important;
+      }
+    }
+  }
+
+  .arrow {
+    border-bottom-color: #fff !important;
+
+    &:after {
+      border-bottom-color: #fff !important;
+    }
+  }
+
+  border: none;
+  min-width: 280px;
+  ;
+  max-width: inherit;
+  box-shadow: -1px 0 10px 0 rgba(0, 0, 0, 0.1),
+  0 0 10px 0 rgba(0, 0, 0, 0.1);
 
   &.push-left {
     margin-left: -5px;
@@ -315,7 +331,7 @@
     padding: 1rem;
   }
 
-  &.no-padding .popover-content{
+  &.no-padding .popover-content {
     padding: 0;
   }
 
@@ -325,20 +341,24 @@
       flex-direction: row;
       align-items: center;
       margin-bottom: 1rem;
+
       &:last-child {
         margin-bottom: 0;
       }
 
       .info {
         padding-left: 0.5rem;
+
         .role-name-container {
           display: flex;
           flex-direction: row;
           white-space: nowrap;
+
           .role {
             padding-left: 4px;
           }
         }
+
         .email {
           display: block;
           color: darken($color: #fff, $amount: 30%);
@@ -361,6 +381,7 @@
       .name {
         color: #000;
         width: 200px;
+
         .status {
           margin-right: 0.5em;
           color: darken($color: #fff, $amount: 30%);
@@ -368,6 +389,7 @@
           &.past {
             color: #35b863;
           }
+
           &.next {
             color: #f6a623;
           }
@@ -383,5 +405,11 @@
         }
       }
     }
+  }
+}
+
+.white--popover-noPadding {
+  .popover-content {
+    padding: 0;
   }
 }
