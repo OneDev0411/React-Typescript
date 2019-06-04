@@ -62,7 +62,14 @@ export function CoAgent(props) {
                   />
 
                   <div>
-                    <AgentTitle onClick={() => props.onSelectAgent(user)}>
+                    <AgentTitle
+                      onClick={() =>
+                        props.onSelectAgent({
+                          ...user,
+                          brand_id: office.id
+                        })
+                      }
+                    >
                       {user.display_name}
                     </AgentTitle>
                     <AgentEmail>{user.email}</AgentEmail>
