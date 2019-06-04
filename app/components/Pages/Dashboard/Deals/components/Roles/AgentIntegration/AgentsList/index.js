@@ -132,7 +132,7 @@ class TeamAgents extends React.Component {
               <Fragment>
                 {this.props.isPrimaryAgent ? (
                   <PrimaryAgent
-                    team={this.teamAgents[0]}
+                    teams={this.teamAgents}
                     onSelectAgent={this.handleSelectAgent}
                   />
                 ) : (
