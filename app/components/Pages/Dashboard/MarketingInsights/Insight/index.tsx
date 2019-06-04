@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet'
 
 import { formatDate } from 'components/DateTimePicker/helpers'
 import ContactInfo from 'components/ContactInfo'
+import MiniContact from 'components/MiniContact'
 
 import Header from './Header'
 import { Container } from '../../Contacts/components/Container'
@@ -16,9 +17,36 @@ import useItemData from './useItemData'
 import Summary from './Summary'
 import ContactsTable from './ContactsTable'
 
-interface InsightPropsType {
-  params: {
-    id: string
+const columns = [
+  {
+    header: 'Contact',
+    id: 'contact',
+    width: '75%',
+    verticalAlign: 'center',
+    render: props => (
+      <ContactColumn>
+        <div>
+          <MiniContact data={props.rowData.original_data} type="insight">
+            <ContactInfo data={props.rowData} />
+          </MiniContact>
+        </div>
+        <div className="labels-container">
+          <RowBadges data={props.rowData} />
+        </div>
+      </ContactColumn>
+    )
+  },
+  {
+    header: 'Opened',
+    id: 'opened',
+    verticalAlign: 'center',
+    render: props => <span>{props.rowData.opened}</span>
+  },
+  {
+    header: 'Clicked',
+    id: 'clicked',
+    verticalAlign: 'center',
+    render: props => <span>{props.rowData.clicked}</span>
   }
 }
 
@@ -74,6 +102,8 @@ function Insight(props: InsightPropsType) {
   }
 
   const { subject } = item
+
+  // console.log({ item })
 
   return (
     <PageWrapper>
