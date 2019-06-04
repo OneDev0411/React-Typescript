@@ -47,7 +47,7 @@ function ContactFilters(props) {
       },
       // {
       //   id: FLOW_FILTER_ID,
-      //   label: 'Flows',
+      //   label: 'Flow',
       //   renderer: props => (
       //     <SimpleList {...props} getOptions={() => getFlows(user)} />
       //   ),
