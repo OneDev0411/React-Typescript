@@ -2,13 +2,9 @@ export function normalizeCheckboxValue(value) {
   const normalizedValue =
     typeof value === 'string' ? value.trim().toLowerCase() : value
 
-  if (normalizedValue === 'off') {
+  if (['off', 'no'].includes(normalizedValue)) {
     return false
   }
 
-  if (normalizedValue === 'on') {
-    return true
-  }
-
-  return value
+  return Boolean(value)
 }
