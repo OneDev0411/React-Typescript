@@ -33,6 +33,8 @@ export const SubTitle = styled.div`
 `
 
 export const RowItem = styled.div`
+  display: flex;
+  align-items: center;
   padding: 0.5rem 1rem;
   border-bottom: 1px solid #f5f5f5;
 `
@@ -51,4 +53,8 @@ export const AgentTitle = styled(LinkButton)`
   padding: 0;
   margin: 0;
   color: #262626;
+`
+
+export const AgentEmail = styled(SubTitle)`
+  font-size: 1rem;
 `

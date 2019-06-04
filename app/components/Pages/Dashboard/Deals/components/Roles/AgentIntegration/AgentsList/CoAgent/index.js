@@ -2,6 +2,8 @@ import React from 'react'
 import memoize from 'lodash/memoize'
 import PropTypes from 'prop-types'
 
+import Avatar from 'components/Avatar'
+import { getUserInitials } from 'models/user/helpers/get-user-initials'
 import { getBrandAvailableMembers } from 'utils/user-teams'
 
 import Search from 'components/Grid/Search'
@@ -13,7 +15,8 @@ import {
   Title,
   SubTitle,
   RowItem,
-  AgentTitle
+  AgentTitle,
+  AgentEmail
 } from './styled'
 
 CoAgent.propTypes = {
@@ -49,10 +52,21 @@ export function CoAgent(props) {
             <Body>
               {agents.map((user, userIndex) => (
                 <RowItem key={`${officeIndex}${userIndex}`}>
-                  <AgentTitle onClick={() => props.onSelectAgent(user)}>
-                    {user.display_name}
-                  </AgentTitle>
-                  <SubTitle>{user.email}</SubTitle>
+                  <Avatar
+                    size={40}
+                    title={getUserInitials(user)}
+                    image={user.profile_image_url}
+                    style={{
+                      marginRight: '1rem'
+                    }}
+                  />
+
+                  <div>
+                    <AgentTitle onClick={() => props.onSelectAgent(user)}>
+                      {user.display_name}
+                    </AgentTitle>
+                    <AgentEmail>{user.email}</AgentEmail>
+                  </div>
                 </RowItem>
               ))}
             </Body>
