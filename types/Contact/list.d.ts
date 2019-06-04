@@ -15,7 +15,7 @@ declare interface IContactList {
   filters: IContactAttributeFilter[]
   query?: string
   args: Pick<IContactFilterOptions, 'filter_type'>
-  is_pinned: boolean
+  is_editable: boolean
   touch_freq?: number
 
   member_count: number

@@ -41,7 +41,7 @@ import { AlphabetFilter } from '../../../../../views/components/AlphabetFilter'
 
 import Table from './Table'
 import { SearchContacts } from './Search'
-import { Header } from './Header'
+import Header from './Header'
 import ContactFilters from './Filters'
 import TagsList from './TagsList'
 
@@ -51,6 +51,7 @@ import {
   SORT_FIELD_SETTING_KEY
 } from './constants'
 import { Container, SearchWrapper } from './styled'
+import { CONTACTS_SEGMENT_NAME } from '../constants'
 
 class ContactsList extends React.Component {
   constructor(props) {
@@ -422,7 +423,7 @@ class ContactsList extends React.Component {
       <PageContainer isOpen={isSideMenuOpen}>
         <SideMenu isOpen={isSideMenuOpen}>
           <SavedSegments
-            name="contacts"
+            name={CONTACTS_SEGMENT_NAME}
             associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
             onChange={this.handleChangeSavedSegment}
           />
@@ -432,6 +433,7 @@ class ContactsList extends React.Component {
         <PageContent id={this.tableContainerId} isSideMenuOpen={isSideMenuOpen}>
           <Header
             title={(activeSegment && activeSegment.name) || 'All Contacts'}
+            activeSegment={activeSegment}
             isSideMenuOpen={state.isSideMenuOpen}
             user={user}
             onMenuTriggerChange={this.toggleSideMenu}
