@@ -8,8 +8,6 @@ import GeneralFlow from 'components/InstantMarketing/adapters/General'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
-import { red } from 'views/utils/colors'
-
 import { Loader } from '../../components/Loader'
 import { Template } from '../../components/Template'
 import { mediumsCollection } from './mediums-collection'
@@ -160,30 +158,13 @@ export class List extends React.Component {
     />
   )
 
-  renderList = () => {
-    return (
-      <ListContainer isSideMenuOpen={this.props.isSideMenuOpen}>
-        {this.props.medium === 'Email' && (
-          <div
-            style={{
-              margin: '1rem 1.5rem',
-              padding: '0.625rem 0.5rem',
-              backgroundColor: red.A100,
-              color: '#fff',
-              borderRadius: '3px'
-            }}
-          >
-            Temporary: We are working on emails sent to the latest version of
-            Outlook Desktop right now, please come back in a few hours.
-          </div>
-        )}
-
-        <Masonry options={{ transitionDuration: 0 }}>
-          {this.getSelectedMediumTemplates().map(this.renderTemplate)}
-        </Masonry>
-      </ListContainer>
-    )
-  }
+  renderList = () => (
+    <ListContainer isSideMenuOpen={this.props.isSideMenuOpen}>
+      <Masonry options={{ transitionDuration: 0 }}>
+        {this.getSelectedMediumTemplates().map(this.renderTemplate)}
+      </Masonry>
+    </ListContainer>
+  )
 
   renderFlow = () => {
     const { props, state } = this
