@@ -40,7 +40,7 @@ webpackConfig.plugins.push(
         'app/models/flows/**',
         'app/views/components/AddToFlow/**',
         'app/components/Pages/Dashboard/Contacts/Profile/Flows/**',
-        'app/components/Pages/Dashboard/Contacts/List/Filters/helpers/get-flows'
+        'app/components/Pages/Dashboard/Contacts/List/Filters/helpers/get-flows.js'
       ]
     }
   }),
