@@ -116,11 +116,6 @@ class TeamAgents extends React.Component {
   render() {
     const { props } = this
 
-    const sharedAgentsProps = {
-      agents: this.teamAgents,
-      onSelectAgent: this.handleSelectAgent
-    }
-
     return (
       <Drawer isOpen onClose={props.onClose} showFooter={false}>
         <Drawer.Header title={props.title || 'Team Agents'} />
@@ -131,17 +126,21 @@ class TeamAgents extends React.Component {
               <EmptyState>We could not find any agent in your brand</EmptyState>
             )}
 
-            {this.isLoading && <Loading />}
-
-            {this.isLoading === false && (
+            {this.isLoading ? (
+              <Loading />
+            ) : (
               <Fragment>
                 {this.props.isPrimaryAgent ? (
-                  <PrimaryAgent {...sharedAgentsProps} />
+                  <PrimaryAgent
+                    team={this.teamAgents[0]}
+                    onSelectAgent={this.handleSelectAgent}
+                  />
                 ) : (
                   <CoAgent
-                    {...sharedAgentsProps}
+                    teams={this.teamAgents}
                     searchTerm={this.state.searchTerm}
                     onSearch={this.handleSearchCoAgents}
+                    onSelectAgent={this.handleSelectAgent}
                   />
                 )}
               </Fragment>

@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import Flex from 'styled-flex-component'
 
 import Avatar from 'components/Avatar'
+import { getBrandAvailableMembers } from 'utils/user-teams'
 
 import { roleName } from 'deals/utils/roles'
 
@@ -16,7 +17,7 @@ import {
 export function PrimaryAgent(props) {
   return (
     <Fragment>
-      {props.agents.map(user => (
+      {getBrandAvailableMembers(props.team).map(user => (
         <Flex key={user.id}>
           <RoleItem
             onClick={() => props.onSelectAgent(user)}

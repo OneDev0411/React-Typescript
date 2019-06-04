@@ -34,10 +34,8 @@ export function CoAgent(props) {
         placeholder="Search for teams or agents"
       />
 
-      {props.agents.map((office, officeIndex) => {
-        const agents = getBrandAvailableMembers(office).filter(
-          user => user.user_type === 'Agent'
-        )
+      {props.teams.map((office, officeIndex) => {
+        const agents = getBrandAvailableMembers(office)
 
         if (!agents.length) {
           return false
