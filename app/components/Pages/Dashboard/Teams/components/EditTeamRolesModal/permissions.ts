@@ -1,4 +1,4 @@
-export const permissions = [
+export const permissions: { value: IPermission; label: string }[] = [
   {
     value: 'Deals',
     label: 'Deals'

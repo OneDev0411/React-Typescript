@@ -20,6 +20,7 @@ declare interface IUserInput extends IUserBase {
   actions?: string[]
 }
 declare interface IUser extends IUserBase {
+  brand: string | null
   id: UUID
 
   email_confirmed: boolean
@@ -27,6 +28,9 @@ declare interface IUser extends IUserBase {
   timezone: string
 
   secondary_password?: string
+
+  active_brand?: string
+  teams: IUserTeam[]
 
   agent?: IAgent
 }
@@ -48,4 +52,12 @@ declare interface IUserActivationContext {
   alert?: UUID
   listing?: UUID
   room?: UUID
+}
+
+declare interface IUserTeam {
+  id: UUID
+  brand: ITeam
+  acl: IPermission[]
+  type: 'user_role'
+  settings: StringMap<any>
 }

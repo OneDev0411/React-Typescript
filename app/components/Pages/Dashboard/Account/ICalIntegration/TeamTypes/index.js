@@ -2,7 +2,7 @@ import React from 'react'
 import uniqBy from 'lodash/uniqBy'
 import isEqual from 'lodash/isEqual'
 
-import { getBrandAvailableMembers } from 'utils/user-teams'
+import { getTeamUsers } from 'utils/user-teams'
 
 import { Section, Title } from '../styled'
 import MemberRow from './MemberRow'
@@ -18,7 +18,7 @@ const TeamTypes = ({
   const allMembers = userTeams.reduce(
     (acc, { brand }) => ({
       ...acc,
-      [brand.id]: getBrandAvailableMembers(brand).map(({ id }) => id)
+      [brand.id]: getTeamUsers(brand).map(({ id }) => id)
     }),
     {}
   )
@@ -40,7 +40,7 @@ const TeamTypes = ({
       />
       <div>
         {userTeams.map(({ brand }) => {
-          let members = getBrandAvailableMembers(brand)
+          let members = getTeamUsers(brand)
 
           const teamMembers = { [brand.id]: members.map(({ id }) => id) }
           const isTeamSelected =

@@ -5,7 +5,6 @@ import Fuse from 'fuse.js'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import Avatar from 'components/Avatar'
-import { getBrandAvailableMembers } from 'utils/user-teams'
 
 import Search from 'components/Grid/Search'
 

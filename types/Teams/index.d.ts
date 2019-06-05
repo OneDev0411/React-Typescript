@@ -1,4 +1,10 @@
 declare type IBrandType = 'Team' | 'Brokerage' | 'Office' | 'Personal' | 'Other'
+declare type IPermission =
+  | 'Deals'
+  | 'BackOffice'
+  | 'Admin'
+  | 'Marketing'
+  | 'CRM'
 
 declare interface ITeam {
   assets: any | null

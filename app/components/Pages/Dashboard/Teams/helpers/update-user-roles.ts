@@ -1,7 +1,7 @@
 import Members from 'models/BrandConsole/Members'
 import { getBrands } from 'models/BrandConsole/Brands'
 
-import { getUserRoles } from './get-user-roles'
+import { getUserRoles } from 'utils/user-teams'
 
 export async function updateUserRoles(
   team: ITeam,

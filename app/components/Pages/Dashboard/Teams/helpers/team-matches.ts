@@ -1,4 +1,5 @@
-import { getTeamUsers } from './get-team-users'
+import { getTeamUsers } from 'utils/user-teams'
+
 import { userMatches } from './users-matches'
 
 export function teamMatches(team: ITeam, searchTerm: string) {

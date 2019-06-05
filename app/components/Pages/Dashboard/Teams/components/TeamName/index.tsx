@@ -9,8 +9,8 @@ import Tooltip from 'components/tooltip'
 import AddCircleOutlineIcon from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 
 import { userMatches } from '../../helpers/users-matches'
-import { getTeamUsers } from '../../helpers/get-team-users'
 import { TeamLink, TeamLinkWrapper, TeamUserBadge } from './styled'
+import { getTeamUsers } from 'utils/user-teams'
 
 interface Props {
   team: ITeam

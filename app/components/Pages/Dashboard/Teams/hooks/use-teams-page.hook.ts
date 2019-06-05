@@ -19,15 +19,20 @@ export function useTeamsPage(user: IUser, searchTerm: string) {
 
   useEffect(() => {
     setLoading(true)
-    getBrands(getActiveTeamId(user))
-      .then(team => {
-        setRootTeam(team.data)
-        setLoading(false)
-      })
-      .catch(e => {
-        setError(e)
-        setLoading(false)
-      })
+
+    const activeTeamId = getActiveTeamId(user)
+
+    if (activeTeamId) {
+      getBrands(activeTeamId)
+        .then(team => {
+          setRootTeam(team.data)
+          setLoading(false)
+        })
+        .catch(e => {
+          setError(e)
+          setLoading(false)
+        })
+    }
   }, [user])
 
   const updateRoles = async (
