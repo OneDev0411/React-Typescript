@@ -9,6 +9,7 @@ LoadingContainer.propTypes = {
   className: PropTypes.string,
   color: PropTypes.string,
   size: PropTypes.string,
+  title: PropTypes.string,
   style: PropTypes.shape()
 }
 
@@ -16,13 +17,15 @@ LoadingContainer.defaultProps = {
   className: '',
   color: primary,
   size: '6em',
+  title: '',
   style: { padding: '50% 0' }
 }
 
-export default function LoadingContainer({ color, size, ...props }) {
+export default function LoadingContainer({ color, size, title, ...props }) {
   return (
-    <Flex center {...props}>
+    <Flex center column {...props}>
       <Spinner style={{ width: size, height: size }} fillColor={color} />
+      {title}
     </Flex>
   )
 }
