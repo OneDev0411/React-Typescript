@@ -3,7 +3,6 @@ import Flex from 'styled-flex-component'
 
 import Avatar from 'components/Avatar'
 import { getBrandAvailableMembers } from 'utils/user-teams'
-import { getUserInitials } from 'models/user/helpers/get-user-initials'
 
 import { roleName } from 'deals/utils/roles'
 
@@ -26,7 +25,7 @@ export function PrimaryAgent(props) {
               }}
             >
               <Avatar
-                title={getUserInitials(user)}
+                title={user.display_name}
                 image={user.profile_image_url}
                 size={40}
                 style={{

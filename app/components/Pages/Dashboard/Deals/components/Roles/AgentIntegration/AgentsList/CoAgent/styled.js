@@ -13,8 +13,7 @@ export const Card = styled.div`
 export const Header = styled.div`
   display: flex;
   flex-direction: column;
-  height: 3.875rem;
-  background-color: #f6f6f6;
+  background-color: ${grey.A125};
   padding: 0.5rem 1rem;
   border-radius: 3px 3px 0 0;
   border-bottom: solid 1px ${grey.A300};
@@ -36,12 +35,15 @@ export const RowItem = styled.div`
   display: flex;
   align-items: center;
   padding: 0.5rem 1rem;
-  border-bottom: 1px solid #f5f5f5;
-`
+  transition: 0.1s ease-in background-color;
 
-export const Body = styled.div`
-  ${RowItem}:last-child {
-    border-bottom: none;
+  :not(:last-child) {
+    border-bottom: 1px solid ${grey.A300};
+  }
+
+  :hover {
+    cursor: pointer;
+    background-color: ${grey.A125};
   }
 `
 
