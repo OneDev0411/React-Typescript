@@ -48,14 +48,14 @@ function TouchReminder({
   }
 
   const handleUpdate = useCallback(async () => {
-    if (activeSegment.touch_freq === value) {
+    if ((activeSegment.touch_freq || 0) === value) {
       return
     }
 
     try {
       const segment: IContactList = {
         ...activeSegment,
-        touch_freq: value
+        touch_freq: value === 0 ? undefined : value
       }
 
       await updateSegment(CONTACTS_SEGMENT_NAME, segment, DEFAULT_QUERY)
