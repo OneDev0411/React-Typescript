@@ -42,7 +42,9 @@ export class Page extends React.Component {
     // load page
     const page = await this.props.document.getPage(this.props.pageNumber)
 
-    const viewport = page.getViewport(this.getScale(isVisible))
+    const viewport = page.getViewport({
+      scale: this.getScale(isVisible)
+    })
     const { width, height } = viewport
     const canvas = this.canvas
 

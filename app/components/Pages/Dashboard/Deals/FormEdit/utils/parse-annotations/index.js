@@ -29,11 +29,13 @@ async function getPageAnnotations(document, pageNumber, options) {
   const page = await document.getPage(pageNumber)
 
   // get width of actual viewport
-  const { width } = page.getViewport(options.scale)
+  const { width } = page.getViewport({
+    scale: options.scale
+  })
 
-  const viewport = page.getViewport(
-    options.displayWidth / (width / options.scale)
-  )
+  const viewport = page.getViewport({
+    scale: options.displayWidth / (width / options.scale)
+  })
 
   const annotations = await page.getAnnotations()
 
