@@ -304,11 +304,11 @@ const submitFiltersForm = values => async (dispatch, getState) => {
   const state = getState().search
   const { options } = state
 
-  Object.keys(options).forEach(o => {
-    if (options[o] && typeof values[o] === 'undefined') {
-      options[o] = null
-    }
-  })
+  // Object.keys(options).forEach(o => {
+  //   if (options[o] && typeof values[o] === 'undefined') {
+  //     options[o] = null
+  //   }
+  // })
 
   const queryOptions = normalizeValues(values, options, state)
 
