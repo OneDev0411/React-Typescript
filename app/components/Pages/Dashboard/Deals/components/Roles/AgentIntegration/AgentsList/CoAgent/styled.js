@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { grey } from 'views/utils/colors'
+import { grey, primary } from 'views/utils/colors'
 
 import LinkButton from 'components/Button/LinkButton'
 
@@ -31,6 +31,16 @@ export const SubTitle = styled.div`
   color: #000;
 `
 
+export const AgentTitle = styled(LinkButton)`
+  line-height: inherit;
+  height: auto;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0;
+  margin: 0;
+  color: #262626;
+`
+
 export const RowItem = styled.div`
   display: flex;
   align-items: center;
@@ -45,16 +55,10 @@ export const RowItem = styled.div`
     cursor: pointer;
     background-color: ${grey.A125};
   }
-`
 
-export const AgentTitle = styled(LinkButton)`
-  line-height: inherit;
-  height: auto;
-  font-size: 1rem;
-  font-weight: 500;
-  padding: 0;
-  margin: 0;
-  color: #262626;
+  :hover ${AgentTitle} {
+    color: ${primary};
+  }
 `
 
 export const AgentEmail = styled(SubTitle)`

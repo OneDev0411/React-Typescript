@@ -122,7 +122,12 @@ const getSubtitle = memoize(
       currentOffice = currentOffice.parent
     }
 
-    return names.length > 1 ? names.reverse().join(' > ') : ''
+    return names.length > 1
+      ? names
+          .reverse()
+          .slice(0, -1)
+          .join(' > ')
+      : ''
   },
   office => office.id
 )
