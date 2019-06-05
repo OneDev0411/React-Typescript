@@ -40,7 +40,8 @@ export const Icon = styled(IconTime)`
 export const Input = styled.input.attrs({
   type: 'number',
   step: '1',
-  min: '0'
+  min: '0',
+  max: '99999'
 })`
   outline: none;
   border: none;

@@ -41,6 +41,12 @@ function TouchReminder({
     ev.currentTarget.select()
   }
 
+  function handleKeyPress(ev: React.KeyboardEvent<HTMLInputElement>) {
+    if (value.toString().length === 5 && parseInt(ev.key, 10) <= 9) {
+      return ev.preventDefault()
+    }
+  }
+
   const handleUpdate = useCallback(async () => {
     if (activeSegment.touch_freq === value) {
       return
@@ -76,6 +82,7 @@ function TouchReminder({
         onChange={handleChange}
         onFocus={handleFocus}
         onBlur={handleUpdate}
+        onKeyPress={handleKeyPress}
       />
       <Label bold>Days</Label>
     </Container>
