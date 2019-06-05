@@ -66,7 +66,7 @@ export function MetaInfo(props) {
           </Flex>
         )}
       </Flex>
-      {email && (
+      {email && props.defaultAssociationType === 'contact' && (
         <EmailMeta
           bounced={email.failed > 0}
           unsubscribed={email.unsubscribed > 0}

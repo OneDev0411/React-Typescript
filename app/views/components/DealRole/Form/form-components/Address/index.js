@@ -29,7 +29,9 @@ export function Address(props) {
         address={props.input.value}
         needsAddressForm={false}
         handleInputChange={props.input.onChange}
-        renderSearchField={inputProps => <Input {...inputProps} />}
+        renderSearchField={inputProps => (
+          <Input {...inputProps} autoComplete="disable-autocomplete" />
+        )}
       />
 
       {props.showError && props.meta.error && props.meta.touched && (

@@ -7,7 +7,7 @@ import {
   viewAs,
   isBackOffice,
   getActiveTeam,
-  allMembersOfTeam
+  getTeamAvailableMembers
 } from '../../../../../../../utils/user-teams'
 import { grey } from '../../../../../../../views/utils/colors'
 
@@ -145,7 +145,7 @@ class ViewAsFilter extends React.Component {
 function mapStateToProps({ user }) {
   return {
     user,
-    brandMembers: allMembersOfTeam(getActiveTeam(user))
+    brandMembers: getTeamAvailableMembers(getActiveTeam(user))
   }
 }
 

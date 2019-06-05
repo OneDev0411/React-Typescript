@@ -1,14 +1,15 @@
 import React from 'react'
 import { browserHistory } from 'react-router'
 
-import PageHeader from '../../../../../../views/components/PageHeader'
-import { CreateContact } from '../../../../../../views/components/CreateContact'
-import ActionButton from '../../../../../../views/components/Button/ActionButton'
-
-import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
 import Tooltip from 'components/tooltip'
+import PageHeader from 'components/PageHeader'
+import { CreateContact } from 'components/CreateContact'
+import ActionButton from 'components/Button/ActionButton'
+import { Trigger as MenuTrigger } from 'components/SlideMenu'
 
-export function Header({ title, isSideMenuOpen, onMenuTriggerChange }) {
+import TouchReminder from '../TouchReminder'
+
+function Header({ title, isSideMenuOpen, onMenuTriggerChange, activeSegment }) {
   return (
     <PageHeader>
       <PageHeader.Title showBackButton={false}>
@@ -22,6 +23,9 @@ export function Header({ title, isSideMenuOpen, onMenuTriggerChange }) {
       <PageHeader.Menu>
         {/* <Import userId={user.id} /> */}
 
+        {activeSegment && activeSegment.is_editable && (
+          <TouchReminder activeSegment={activeSegment} />
+        )}
         <Tooltip caption="From CSV Spreadsheet" placement="bottom">
           <ActionButton
             appearance="outline"

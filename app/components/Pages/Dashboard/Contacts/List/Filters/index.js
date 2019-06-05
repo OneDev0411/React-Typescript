@@ -9,17 +9,17 @@ import SaveSegment from 'components/Grid/SavedSegments/Create'
 import { SimpleList } from 'components/Grid/Filters/FilterTypes/SimpleList'
 import { OperatorAndOperandFilter } from 'components/Grid/Filters/FilterTypes/OparatorAndOperand'
 
-import { FLOW_FILTER_ID, OPEN_HOUSE_FILTER_ID, ORIGINS } from '../constants'
+import { OPEN_HOUSE_FILTER_ID, ORIGINS } from '../constants'
 
 import createFiltersFromSegment from './helpers/create-filters-from-segment'
 import createSegmentFromFilters from './helpers/create-segment-from-filters'
-import getFlows from './helpers/get-flows'
+// import getFlows from './helpers/get-flows'
 import getOpenHouseEvents from './helpers/get-open-house-events'
 import getUniqTags from './helpers/get-uniq-tags'
 
 function ContactFilters(props) {
   const getConfig = () => {
-    const { attributeDefs, tags, user } = props
+    const { attributeDefs, tags } = props
 
     const tagDefinition = selectDefinitionByName(attributeDefs, 'tag')
     const sourceDefinition = selectDefinitionByName(
@@ -45,14 +45,14 @@ function ContactFilters(props) {
         ),
         tooltip: 'Contacts invited to a specific Open House'
       },
-      {
-        id: FLOW_FILTER_ID,
-        label: 'Flows',
-        renderer: props => (
-          <SimpleList {...props} getOptions={() => getFlows(user)} />
-        ),
-        tooltip: 'Contacts who are active in a specific flow'
-      },
+      // {
+      //   id: FLOW_FILTER_ID,
+      //   label: 'Flow',
+      //   renderer: props => (
+      //     <SimpleList {...props} getOptions={() => getFlows(user)} />
+      //   ),
+      //   tooltip: 'Contacts who are active in a specific flow'
+      // },
       {
         id: sourceDefinition.id,
         label: 'Origin',

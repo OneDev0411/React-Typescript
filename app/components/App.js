@@ -22,7 +22,7 @@ import SideNav from './Pages/Dashboard/SideNav'
 import { getRooms } from '../store_actions/chatroom'
 
 // get user roles
-import getTeams from '../store_actions/user/teams'
+import { getUserTeams } from '../store_actions/user/teams'
 import { hasUserAccess, viewAsEveryoneOnTeam } from '../utils/user-teams'
 
 // deals featch on launch
@@ -105,7 +105,7 @@ class App extends Component {
       if (!user.teams || !user.teams[0].brand.roles) {
         user = {
           ...user,
-          teams: await dispatch(getTeams(user, true))
+          teams: await dispatch(getUserTeams(user))
         }
       }
 

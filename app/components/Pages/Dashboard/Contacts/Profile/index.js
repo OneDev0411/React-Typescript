@@ -18,6 +18,7 @@ import getCRMTimeline from 'models/get-crm-timeline'
 
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
+import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 
 import {
   selectDefinitionByName,

@@ -10,7 +10,7 @@ import { getActiveTeamSettings } from 'utils/user-teams'
 import Table from 'components/Grid/Table'
 
 import { putUserSetting } from 'models/user/put-user-setting'
-import getUserTeams from 'actions/user/teams'
+import { getUserTeams } from 'actions/user/teams'
 import flattenBrand from 'utils/flatten-brand'
 
 import EmptyState from './EmptyState'
@@ -163,7 +163,7 @@ class Grid extends React.Component {
             defaultIndex: this.getDefaultIndex(),
             onPostChange: async item => {
               await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
-              await this.props.getUserTeams(this.props.user)
+              await this.props.dispatch(getUserTeams(this.props.user))
             }
           }
         }}
@@ -189,7 +189,4 @@ function mapStateToProps({ user, deals }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { getUserTeams }
-)(Grid)
+export default connect(mapStateToProps)(Grid)

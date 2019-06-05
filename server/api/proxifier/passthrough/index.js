@@ -51,7 +51,7 @@ router.post('/proxifier', bodyParser(), async ctx => {
       ctx.session.user = {
         access_token: response.body.access_token,
         refresh_token: response.body.refresh_token,
-        expire_date: new Date().getTime() + 3600000 // response.body.expires_in * 1000
+        expire_date: new Date().getTime() + response.body.expires_in * 1000
       }
     }
 

@@ -9,7 +9,7 @@ export default React.memo(props => {
   const appearance = parseAppearanceString(annotation.defaultAppearance)
   const rect = annotation.rect
   const [fieldName, fieldId] = annotation.fieldName.split('.')
-  const defaultChecked = props.defaultValue === annotation.buttonValue
+  const defaultChecked = annotation.fieldValue === annotation.buttonValue
 
   const handleChange = e => {
     const newValues = Object.entries(props.values).reduce((acc, [formName]) => {
