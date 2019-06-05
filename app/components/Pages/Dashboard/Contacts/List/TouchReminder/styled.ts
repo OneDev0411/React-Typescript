@@ -50,7 +50,7 @@ export const Input = styled.input.attrs({
   font-weight: bold;
   font-size: 1rem;
   color: ${primary};
-  width: 2rem;
+  width: 3rem;
   margin: 0 0.5rem;
 
   &::-webkit-outer-spin-button,
