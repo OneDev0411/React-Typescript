@@ -23,7 +23,7 @@ export const RadioInput = styled.input`
 
   :checked {
     :before {
-      content: '❌';
+      content: 'X';
     }
   }
 
