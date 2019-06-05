@@ -56,7 +56,7 @@ SelectInput.defaultProps = {
 
 export function SelectInput(props) {
   if (!props.isVisible) {
-    return false
+    return null
   }
 
   const handleChange = item =>
