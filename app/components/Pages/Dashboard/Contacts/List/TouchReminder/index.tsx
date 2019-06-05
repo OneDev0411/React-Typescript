@@ -37,6 +37,10 @@ function TouchReminder({
     setValue(parseInt(ev.target.value, 10))
   }
 
+  function handleFocus(ev: React.FocusEvent<HTMLInputElement>) {
+    ev.currentTarget.select()
+  }
+
   const handleUpdate = useCallback(async () => {
     if (activeSegment.touch_freq === value) {
       return
@@ -70,6 +74,7 @@ function TouchReminder({
       <Input
         value={value.toString()}
         onChange={handleChange}
+        onFocus={handleFocus}
         onBlur={handleUpdate}
       />
       <Label bold>Days</Label>
