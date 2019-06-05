@@ -1,7 +1,7 @@
 import { stateToAbbreviated } from 'deals/utils/address'
 
 export function normalizeAddress(address) {
-  return {
+  const list = {
     ...address,
     street_dir_prefix: address.street_prefix,
     state_code: stateToAbbreviated(address.state),
@@ -27,4 +27,22 @@ export function normalizeAddress(address) {
       .join(' ')
       .trim()
   }
+
+  return Object.entries(list).reduce((acc, [field, value]) => {
+    if (value == null) {
+      return acc
+    }
+
+    if (typeof value === 'object' && value.hasOwnProperty('value')) {
+      return {
+        ...acc,
+        [field]: value.value
+      }
+    }
+
+    return {
+      ...acc,
+      [field]: value
+    }
+  }, {})
 }
