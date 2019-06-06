@@ -1,6 +1,10 @@
 {
   "name": "rechat",
+<<<<<<< HEAD
   "version": "52.2.6",
+=======
+  "version": "52.2.9",
+>>>>>>> master
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -96,7 +100,7 @@
     "js-cookie": "^2.2.0",
     "juice": "^4.3.1",
     "koa": "^2.6.2",
-    "koa-bodyparser": "next",
+    "koa-bodyparser": "4.2.1",
     "koa-cookie": "^1.0.0",
     "koa-mount": "^3.0.0",
     "koa-router": "^7.3.0",
@@ -122,7 +126,7 @@
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "papaparse": "^4.6.2",
     "parse-address": "^1.1.0",
-    "pdfjs-dist": "github:rechat/pdfjs-dist#97aaa",
+    "pdfjs-dist": "github:rechat/pdfjs-dist#da7d4a6",
     "points-cluster": "^0.1.4",
     "postcss-browser-reporter": "^0.5.0",
     "postcss-cssnext": "^3.0.2",
