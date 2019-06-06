@@ -5,11 +5,11 @@ import { TreeFn } from 'utils/tree-utils/types'
 import { teamMatches } from '../helpers/team-matches'
 
 export function useTeamsFilterHook(
-  getChildNodes: TreeFn<ITeam>,
+  getChildNodes: TreeFn<IBrand>,
   searchTerm: string
 ) {
   const matches = useCallback(
-    (team: ITeam) => {
+    (team: IBrand) => {
       // performance improvement is possible by memoizing result of matches
       // because for deep nodes it's called so many times because of the
       // recursion
@@ -21,7 +21,7 @@ export function useTeamsFilterHook(
   )
 
   return useCallback(
-    (parent?: ITeam) => {
+    (parent?: IBrand) => {
       const nodes = getChildNodes(parent)
 
       return searchTerm ? nodes.filter(matches) : nodes

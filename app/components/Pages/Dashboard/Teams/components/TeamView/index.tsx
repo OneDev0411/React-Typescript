@@ -15,8 +15,8 @@ import { getTeamUsersWithRoles } from '../../helpers/get-team-users-with-roles'
 import { TeamMemberTitle } from '../TeamMember/styled'
 
 interface Props {
-  team: ITeam
-  updateRoles: (team: ITeam, userId: string, roles: ITeamRole[]) => void
+  team: IBrand
+  updateRoles: (team: IBrand, userId: string, roles: IBrandRole[]) => void
   updatingUserIds: string[]
   onEdit: (event: React.MouseEvent) => void
   onEditRoles: (event: React.MouseEvent) => void

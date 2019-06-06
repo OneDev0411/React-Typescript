@@ -12,7 +12,7 @@ import { useEditRolesModal } from './use-edit-roles-modal.hook'
 import { useAddMembersModal } from './use-add-members-modal.hook'
 
 export function useTeamsPage(user: IUser, searchTerm: string) {
-  const [rootTeam, setRootTeam] = useState<ITeam | null>(null)
+  const [rootTeam, setRootTeam] = useState<IBrand | null>(null)
   const [error, setError] = useState<any>(null)
   const [loading, setLoading] = useState(false)
   const [updatingUserIds, setUpdatingUserIds] = useState<string[]>([])
@@ -36,9 +36,9 @@ export function useTeamsPage(user: IUser, searchTerm: string) {
   }, [user])
 
   const updateRoles = async (
-    team: ITeam,
+    team: IBrand,
     userId: string,
-    newRoles: ITeamRole[]
+    newRoles: IBrandRole[]
   ) => {
     setUpdatingUserIds(updatingUserIds => [...updatingUserIds, userId])
 

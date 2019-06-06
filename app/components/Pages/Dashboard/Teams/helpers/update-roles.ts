@@ -4,9 +4,9 @@ import Roles from 'models/BrandConsole/Roles'
 import { getBrands } from 'models/BrandConsole/Brands'
 
 export async function updateRoles(
-  team: ITeam,
-  newRoles: ITeamRole[]
-): Promise<ITeam> {
+  team: IBrand,
+  newRoles: IBrandRole[]
+): Promise<IBrand> {
   const removedRoles = differenceBy(team.roles, newRoles || [], 'id')
   const addedRoles = differenceBy(newRoles, team.roles || [], 'id')
   const editedRoles = differenceWith(

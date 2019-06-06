@@ -16,9 +16,9 @@ import { permissions } from './permissions'
 
 interface Props {
   close: () => void
-  submit: (values: ITeam) => void
+  submit: (values: IBrand) => void
   isOpen: boolean
-  team: ITeam | null
+  team: IBrand | null
 }
 
 export function EditTeamRolesModal(props: Props) {

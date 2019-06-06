@@ -4,9 +4,9 @@ import { notDeleted } from 'utils/not-deleted'
 
 export interface UserWithRoles {
   user: IUser
-  roles: ITeamRole[]
+  roles: IBrandRole[]
 }
-export function getTeamUsersWithRoles(team: ITeam): UserWithRoles[] {
+export function getTeamUsersWithRoles(team: IBrand): UserWithRoles[] {
   const roles = (team.roles || []).filter(notDeleted)
 
   const allRoleUsers = flatten(roles.map(role => role.users || []))
@@ -17,7 +17,7 @@ export function getTeamUsersWithRoles(team: ITeam): UserWithRoles[] {
       roles: roleUserArray
         .filter(notDeleted)
         .map(roleUser => roles.find(role => role.id === roleUser.role))
-        .filter(i => i != undefined) as ITeamRole[]
+        .filter(i => i != undefined) as IBrandRole[]
     })
   )
 }

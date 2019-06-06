@@ -1,8 +1,5 @@
 import { getBrandById } from '../../../models/brand/get-brand-by-id'
-import {
-  getActiveTeamId,
-  getTeamUsers
-} from '../../../utils/user-teams'
+import { getActiveTeamId, getBrandUsers } from '../../../utils/user-teams'
 
 export async function getMembers(user) {
   if (!user) {
@@ -16,7 +13,7 @@ export async function getMembers(user) {
       return null
     }
 
-    return getTeamUsers(brand)
+    return getBrandUsers(brand)
   } catch (error) {
     console.log(error)
     throw error

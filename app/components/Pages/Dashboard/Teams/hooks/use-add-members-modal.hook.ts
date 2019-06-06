@@ -6,13 +6,13 @@ import { getBrands } from 'models/BrandConsole/Brands'
 import { getUpdatedRootTeam } from '../helpers/get-updated-root-team'
 
 export function useAddMembersModal(
-  setRootTeam: Dispatch<(prevState: ITeam) => ITeam>
+  setRootTeam: Dispatch<(prevState: IBrand) => IBrand>
 ) {
-  const [team, setTeam] = useState<ITeam | null>(null)
+  const [team, setTeam] = useState<IBrand | null>(null)
 
   const close = useCallback(() => setTeam(null), [])
 
-  const open = useCallback((team: ITeam) => setTeam(team), [])
+  const open = useCallback((team: IBrand) => setTeam(team), [])
 
   const submit = useCallback(
     // FIXME: fix types when they are added for MultipleContactSelect output

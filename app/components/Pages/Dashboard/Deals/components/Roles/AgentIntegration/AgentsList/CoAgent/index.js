@@ -8,7 +8,7 @@ import Avatar from 'components/Avatar'
 
 import Search from 'components/Grid/Search'
 
-import { getTeamUsers } from 'utils/user-teams'
+import { getBrandUsers } from 'utils/user-teams'
 
 import { EmptyState } from '../styled'
 
@@ -93,7 +93,7 @@ export function CoAgent(props) {
 
 function normalizeTeams(teams, searchTerm) {
   const list = teams.map(office => {
-    const agents = getTeamUsers(office).map(user => ({
+    const agents = getBrandUsers(office).map(user => ({
       ...user,
       office: office.name
     }))

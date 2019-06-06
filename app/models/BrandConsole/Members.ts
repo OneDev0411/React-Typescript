@@ -33,7 +33,7 @@ async function addMembers(
   }
 }
 
-async function deleteMember(role: ITeamRole, member_id: string) {
+async function deleteMember(role: IBrandRole, member_id: string) {
   try {
     return await new Fetch().delete(
       `/brands/${role.brand}/roles/${role.id}/members/${member_id}`

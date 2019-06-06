@@ -5,13 +5,13 @@ import { deleteBrand } from 'models/BrandConsole/Brands'
 import { updateTree } from 'utils/tree-utils/update-tree'
 
 export function useDeleteTeam(
-  rootTeam: ITeam | null,
-  setRootTeam: (team: ITeam) => void
+  rootTeam: IBrand | null,
+  setRootTeam: (team: IBrand) => void
 ) {
   const deleteConfirmation = useContext(ConfirmationModalContext)
 
   return useCallback(
-    (team: ITeam) => {
+    (team: IBrand) => {
       // @ts-ignore until confirmation modal types are fixed
       deleteConfirmation.setConfirmationModal({
         message: 'Heads up!',

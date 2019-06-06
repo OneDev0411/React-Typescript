@@ -56,7 +56,7 @@ declare interface IUserActivationContext {
 
 declare interface IUserTeam {
   id: UUID
-  brand: ITeam
+  brand: IBrand
   acl: IPermission[]
   type: 'user_role'
   settings: StringMap<any>

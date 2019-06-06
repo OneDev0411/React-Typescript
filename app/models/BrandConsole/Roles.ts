@@ -1,6 +1,6 @@
 import Fetch from 'services/fetch'
 
-type ICreateTeamRole = Pick<ITeamRole, 'acl' | 'role'>
+type ICreateTeamRole = Pick<IBrandRole, 'acl' | 'role'>
 
 async function getRoles(teamId: string) {
   const endpoint = `/brands/${teamId}/roles`
@@ -22,7 +22,7 @@ async function addRole(teamId: string, role: ICreateTeamRole) {
   }
 }
 
-async function deleteRole(role: ITeamRole) {
+async function deleteRole(role: IBrandRole) {
   try {
     return await new Fetch().delete(`/brands/${role.brand}/roles/${role.id}`)
   } catch (error) {
@@ -30,7 +30,7 @@ async function deleteRole(role: ITeamRole) {
   }
 }
 
-async function editRole(role: ITeamRole) {
+async function editRole(role: IBrandRole) {
   try {
     return await new Fetch()
       .put(`/brands/${role.brand}/roles/${role.id}`)

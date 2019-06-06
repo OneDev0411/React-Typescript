@@ -10,17 +10,17 @@ import AddCircleOutlineIcon from 'components/SvgIcons/AddCircleOutline/IconAddCi
 
 import { userMatches } from '../../helpers/users-matches'
 import { TeamLink, TeamLinkWrapper, TeamUserBadge } from './styled'
-import { getTeamUsers } from 'utils/user-teams'
+import { getBrandUsers } from 'utils/user-teams'
 
 interface Props {
-  team: ITeam
+  team: IBrand
   searchTerm: string
-  onAddChild: (team: ITeam) => void
+  onAddChild: (team: IBrand) => void
 }
 
 export function TeamName({ team, searchTerm, onAddChild }: Props) {
   const numUsers = searchTerm
-    ? getTeamUsers(team).filter(user => userMatches(user, searchTerm)).length
+    ? getBrandUsers(team).filter(user => userMatches(user, searchTerm)).length
     : 0
 
   return (

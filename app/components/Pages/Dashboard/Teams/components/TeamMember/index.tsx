@@ -18,10 +18,10 @@ import {
 
 interface Props {
   user: IUser
-  userRoles: ITeamRole[]
-  allRoles: ITeamRole[]
+  userRoles: IBrandRole[]
+  allRoles: IBrandRole[]
   isSaving: boolean
-  onRolesChanged: (roles: ITeamRole[]) => void
+  onRolesChanged: (roles: IBrandRole[]) => void
 }
 
 export function TeamMember({

@@ -1,7 +1,7 @@
 import { updateTree } from 'utils/tree-utils/update-tree'
 
 export const getUpdatedRootTeam = (
-  rootTeam: ITeam,
+  rootTeam: IBrand,
   team,
   newTeam,
   keepChildren = true

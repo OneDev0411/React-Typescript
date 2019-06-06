@@ -4,10 +4,10 @@ import { getBrands } from 'models/BrandConsole/Brands'
 import { getUserRoles } from 'utils/user-teams'
 
 export async function updateUserRoles(
-  team: ITeam,
+  team: IBrand,
   userId: string,
-  newRoles: ITeamRole[]
-): Promise<ITeam> {
+  newRoles: IBrandRole[]
+): Promise<IBrand> {
   const roles = getUserRoles(team, userId)
   const rolesToRemove = roles.filter(
     role => !newRoles.find(newRole => newRole.id === role.id)

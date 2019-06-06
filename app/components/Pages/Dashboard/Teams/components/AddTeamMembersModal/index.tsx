@@ -18,7 +18,7 @@ interface Props {
   close: () => void
   submit: (values: any) => void
   isOpen: boolean
-  team: ITeam | null
+  team: IBrand | null
 }
 
 export function AddTeamMembersModal(props: Props) {

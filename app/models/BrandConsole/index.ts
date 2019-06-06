@@ -22,4 +22,4 @@ export const BrandTypes: { [key: string]: IBrandType } = {
   Other: 'Other'
 }
 
-export type IAddEditTeamFormData = Omit<ITeamInput, 'parent'>
+export type IAddEditTeamFormData = Omit<IBrandInput, 'parent'>

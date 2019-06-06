@@ -94,17 +94,17 @@ export function viewAsEveryoneOnTeam(user: IUser): boolean {
 }
 
 export function getTeamAvailableMembers(team: IUserTeam | null) {
-  return team && team.brand ? getTeamUsers(team.brand) : []
+  return team && team.brand ? getBrandUsers(team.brand) : []
 }
 
-export function getRoleUsers(role: ITeamRole, includeDeletedUsers = false) {
+export function getRoleUsers(role: IBrandRole, includeDeletedUsers = false) {
   return (role.users || [])
     .filter(includeDeletedUsers ? identity : notDeleted)
     .map(roleUser => roleUser.user)
 }
 
-export function getTeamUsers(
-  team: ITeam,
+export function getBrandUsers(
+  team: IBrand,
   includeDeletedUsers = false
 ): IUser[] {
   return uniqBy(
@@ -117,7 +117,7 @@ export function getTeamUsers(
   )
 }
 
-export function getUserRoles(team: ITeam, userId: string) {
+export function getUserRoles(team: IBrand, userId: string) {
   return (team.roles || []).filter(
     role =>
       notDeleted(role) &&

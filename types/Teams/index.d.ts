@@ -6,12 +6,12 @@ declare type IPermission =
   | 'Marketing'
   | 'CRM'
 
-declare interface ITeam {
+declare interface IBrand {
   assets: any | null
   base_url: string
   brand_type: IBrandType
   created_at: number
-  children: ITeam[]
+  children: IBrand[]
   deleted_at: number | null
   hostnames: string[]
   id: UUID
@@ -20,8 +20,8 @@ declare interface ITeam {
   name: string
   offices: string[]
   palette: { primary: string; type: string }
-  parent: ITeam | null
-  roles?: ITeamRole[]
+  parent: IBrand | null
+  roles?: IBrandRole[]
   training: boolean
   type: 'brand'
   updated_at: number
@@ -34,26 +34,26 @@ declare interface IBrandMessage {
   type: string
 }
 
-declare interface ITeamRoleUser {
+declare interface IBrandUser {
   deleted_at: string
   id: UUID
   role: UUID
   type: 'brand_user' // is it fixed?
   user: IUser
 }
-declare interface ITeamRole {
+declare interface IBrandRole {
   acl: string[]
   brand: string
   created_at: number
   deleted_at: number | null
   id: UUID
-  users?: ITeamRoleUser[]
+  users?: IBrandUser[]
   role: string
   type: string
   updated_at: number
 }
 
-declare type ITeamInput = MapFieldsToUuid<
-  Pick<ITeam, 'name' | 'brand_type', 'parent'>,
+declare type IBrandInput = MapFieldsToUuid<
+  Pick<IBrand, 'name' | 'brand_type', 'parent'>,
   'parent'
 >
