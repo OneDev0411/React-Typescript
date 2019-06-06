@@ -1,10 +1,6 @@
 {
   "name": "rechat",
-<<<<<<< HEAD
-  "version": "52.2.6",
-=======
   "version": "52.2.9",
->>>>>>> master
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
