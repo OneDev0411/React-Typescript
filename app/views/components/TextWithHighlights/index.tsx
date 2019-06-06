@@ -23,23 +23,46 @@ interface Props {
    */
   search?: string
   /**
-   * Treat matches case insensitive or not. defaults to true
+   * Treat matches case insensitive or not. Defaults to true
    */
   caseInsensitive?: boolean
 
   /**
-   * component or tag to use for rendering matches. defaults to
+   * component or tag to use for rendering matches. Defaults to
    * {@link DefaultHighlightComponent}
    */
   // refine type to only accept strings or a component which accepts string as children
   HighlightComponent?: ReactType
 
   /**
-   * props to be passed to highlights
+   * props to be passed to HighlightComponent
    */
   highlightProps?: { [prop: string]: any }
 }
 
+/**
+ * @usage
+ *
+ * ```
+ * <TextWithHighlights search={matchesToHighlight}>
+ *   The text to highlight matches in it
+ * </TextWithHighlights>
+ * ```
+ *
+ * If the you need to highlight matches somewhere deep in component tree
+ * or in several places, you can avoid drilling down the search text with props
+ * by using {@link SearchContext}:
+ *
+ * ```
+ * <SearchContext.Provider value={searchTerm}>
+ *   <SomeComponentNLevelDeeper>
+ *     <TextWithHighlights>The text to highlight matches in it</TextWithHighlights>
+ *   </SomeComponentNLevelDeeper>
+ * </SearchContext>
+ * ```
+ *
+ * `search` always overrides the value provided by SearchContext
+ */
 export function TextWithHighlights({
   HighlightComponent = DefaultHighlightComponent,
   caseInsensitive = true,
