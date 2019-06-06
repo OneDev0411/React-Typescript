@@ -38,6 +38,20 @@ const initialState = {
   filteredList: []
 }
 
+/**
+ * We should refactor this component into a component which accepts a list
+ * of of **providers** for different kind of items. This way:
+ * - It will be easier to compose these together. There are cases that
+ *   suggesting lists and tags doesn't make sense and we only want emails
+ *   for example. With the current design, we end up adding lots of
+ *   configuration props. Besides, there are use cases in which
+ *   different kinds of list items (not necessarily related to contacts)
+ *   with the same UI are needed.
+ * - Extracting the logic for fetching and rendering each kind of
+ *   suggestion (list, tag, email, contact) into a separate provider,
+ *   simplifies the code here and is more inline with Single Responsibility
+ *   principle
+ */
 class AddRecipient extends React.Component {
   constructor(props) {
     super(props)
@@ -284,7 +298,7 @@ class AddRecipient extends React.Component {
     }
 
     const contactsList = {
-      title: 'Contacts',
+      title: this.props.suggestTagsAndLists ? 'Contacts' : '',
       isLoading: this.state.isContactsLoading,
       items: this.state.list,
       itemRenderer: itemDefaultProps => (

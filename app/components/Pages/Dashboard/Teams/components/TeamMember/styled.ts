@@ -15,7 +15,7 @@ export const TeamMemberItem = styled.div`
 `
 
 export const TeamMemberTitle = styled.div`
-  font-weight: bold;
+  font-weight: 500;
 `
 
 export const TeamMemberSubTitle = styled.div`

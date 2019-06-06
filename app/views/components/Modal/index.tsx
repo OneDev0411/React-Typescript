@@ -12,6 +12,7 @@ const HeaderContainer = styled.div`
   justify-content: space-between;
   padding: 0 1em;
   box-shadow: 0 1px 3px 0 #d4d4d4;
+  border-radius: 5px 5px 0 0;
   font-family: Merriweather, sans-serif;
   font-size: 20px;
   font-weight: 900;

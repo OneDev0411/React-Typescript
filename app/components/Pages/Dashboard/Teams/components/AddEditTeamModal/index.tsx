@@ -62,7 +62,8 @@ export function AddEditTeamModal(props: Props) {
                     value
                   }))}
                   dropdownOptions={{
-                    fullWidth: true
+                    fullWidth: true,
+                    fullHeight: true
                   }}
                   label="Type"
                   component={SelectInput as any}

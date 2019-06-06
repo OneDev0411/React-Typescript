@@ -67,7 +67,7 @@ export function AddTeamMembersModal(props: Props) {
                   const roles = (props.team && props.team.roles) || []
 
                   return (
-                    roles.length && (
+                    roles.length > 0 && (
                       <>
                         <div>
                           <RolesLabel>Roles</RolesLabel>
