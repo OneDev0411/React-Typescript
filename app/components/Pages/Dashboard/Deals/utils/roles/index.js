@@ -3,6 +3,11 @@ import _ from 'underscore'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 
+import {
+  TYPE_COMPANY,
+  TYPE_PERSON
+} from 'components/DealRole/constants/role-types'
+
 export const ROLE_NAMES = [
   'BuyerAgent',
   'BuyerReferral',
@@ -71,7 +76,7 @@ export function getLegalFullName(role) {
         role.legal_last_name
       ]
 
-  if (role.role_type === 'Company') {
+  if (role.role_type === TYPE_COMPANY) {
     name = [role.company_title]
   }
 
@@ -316,7 +321,7 @@ export function getPrimaryAgentName(deal, roles) {
 
   let name = []
 
-  if (agent.role_type === 'Person') {
+  if (agent.role_type === TYPE_PERSON) {
     name = [agent.legal_first_name, agent.legal_last_name]
   } else {
     name = [agent.company_title]
