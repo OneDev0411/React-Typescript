@@ -1,7 +1,6 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import debounce from 'lodash/debounce'
 
 import { searchContacts } from 'models/contacts/search-contacts'
 import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
@@ -9,8 +8,9 @@ import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-co
 import { getActiveTeam } from 'utils/user-teams'
 
 import Drawer from 'components/OverlayDrawer'
-import { getAgents } from 'models/Deal/agent'
 import Loading from 'components/LoadingContainer'
+
+import { getAgents } from 'models/Deal/agent'
 
 import { PrimaryAgent } from './PrimaryAgent'
 import { CoAgent } from './CoAgent'
@@ -33,31 +33,30 @@ class TeamAgents extends React.Component {
   state = {
     isLoading: true,
     isSearchingContacts: false,
-    teamAgents: null,
-    searchTerm: ''
+    teamAgents: null
   }
 
   componentDidMount() {
     this.getTeamAgents()
   }
 
-  async getTeamAgents(criteria) {
+  async getTeamAgents() {
     try {
       this.setState({
-        teamAgents: await getAgents(this.brand, criteria),
-        isLoading: false,
-        searchTerm: criteria // todo: we need this for match highlighting
+        isLoading: true
+      })
+
+      const teamAgents = await getAgents(this.brand)
+
+      this.setState({
+        teamAgents,
+        isLoading: false
       })
     } catch (e) {
       console.log(e)
       this.setState({ teamAgents: [], isLoading: false })
     }
   }
-
-  handleSearchCoAgents = debounce(
-    searchTerm => this.getTeamAgents(searchTerm),
-    500
-  )
 
   handleSelectAgent = async user => {
     this.setState({
@@ -116,36 +115,31 @@ class TeamAgents extends React.Component {
   render() {
     const { props } = this
 
+    const sharedProps = {
+      teams: this.teamAgents,
+      onSelectAgent: this.handleSelectAgent
+    }
+
     return (
       <Drawer isOpen onClose={props.onClose} showFooter={false}>
         <Drawer.Header title={props.title || 'Team Agents'} />
 
         <Drawer.Body>
-          <Container>
-            {this.isEmptyState && (
-              <EmptyState>We could not find any agent in your brand</EmptyState>
-            )}
+          {this.isEmptyState && (
+            <EmptyState>We could not find any agent in your brand</EmptyState>
+          )}
 
-            {this.isLoading ? (
-              <Loading />
-            ) : (
-              <Fragment>
-                {this.props.isPrimaryAgent ? (
-                  <PrimaryAgent
-                    teams={this.teamAgents}
-                    onSelectAgent={this.handleSelectAgent}
-                  />
-                ) : (
-                  <CoAgent
-                    teams={this.teamAgents}
-                    searchTerm={this.state.searchTerm}
-                    onSearch={this.handleSearchCoAgents}
-                    onSelectAgent={this.handleSelectAgent}
-                  />
-                )}
-              </Fragment>
-            )}
-          </Container>
+          {this.isLoading ? (
+            <Loading style={{ padding: '35% 0' }} />
+          ) : (
+            <Container>
+              {this.props.isPrimaryAgent ? (
+                <PrimaryAgent {...sharedProps} />
+              ) : (
+                <CoAgent {...sharedProps} />
+              )}
+            </Container>
+          )}
         </Drawer.Body>
       </Drawer>
     )

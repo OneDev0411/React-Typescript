@@ -38,8 +38,8 @@ export function UserMenuContent({ user, onClose = () => {} }) {
           <React.Fragment>
             <ListItemDivider role="separator" />
             <li>
-              <Link noStyle to="/dashboard/brands" onClick={onClose}>
-                Brands
+              <Link noStyle to="/dashboard/teams" onClick={onClose}>
+                Teams
               </Link>
             </li>
           </React.Fragment>

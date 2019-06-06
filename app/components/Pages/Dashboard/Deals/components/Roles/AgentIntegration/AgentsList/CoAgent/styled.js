@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { grey } from 'views/utils/colors'
+import { grey, primary } from 'views/utils/colors'
 
 import LinkButton from 'components/Button/LinkButton'
 
@@ -13,8 +13,7 @@ export const Card = styled.div`
 export const Header = styled.div`
   display: flex;
   flex-direction: column;
-  height: 3.875rem;
-  background-color: #f6f6f6;
+  background-color: ${grey.A125};
   padding: 0.5rem 1rem;
   border-radius: 3px 3px 0 0;
   border-bottom: solid 1px ${grey.A300};
@@ -32,19 +31,6 @@ export const SubTitle = styled.div`
   color: #000;
 `
 
-export const RowItem = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid #f5f5f5;
-`
-
-export const Body = styled.div`
-  ${RowItem}:last-child {
-    border-bottom: none;
-  }
-`
-
 export const AgentTitle = styled(LinkButton)`
   line-height: inherit;
   height: auto;
@@ -53,6 +39,26 @@ export const AgentTitle = styled(LinkButton)`
   padding: 0;
   margin: 0;
   color: #262626;
+`
+
+export const RowItem = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  transition: 0.1s ease-in background-color;
+
+  :not(:last-child) {
+    border-bottom: 1px solid ${grey.A300};
+  }
+
+  :hover {
+    cursor: pointer;
+    background-color: ${grey.A125};
+  }
+
+  :hover ${AgentTitle} {
+    color: ${primary};
+  }
 `
 
 export const AgentEmail = styled(SubTitle)`

@@ -9,7 +9,8 @@ function SearchResults(props) {
     <SearchResultsContainer {...props.containerProps}>
       {props.data.map((section, i) => {
         const hasResults = !section.isLoading && section.items.length > 0
-        const isShowTitle = section.isLoading === true || hasResults
+        const isShowTitle =
+          section.title && (section.isLoading === true || hasResults)
 
         return (
           <React.Fragment key={section.id || i}>

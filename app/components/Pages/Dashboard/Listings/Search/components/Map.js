@@ -281,7 +281,7 @@ const mapHOC = compose(
     }) => () => {
       removePolygon(map.drawing.shape)
       inactiveDrawing()
-      getListingsByMapBounds(map.props.marginBounds)
+      getListingsByMapBounds(map.props.marginBounds || map.props.bounds)
     }
   }),
   withPropsOnChange(

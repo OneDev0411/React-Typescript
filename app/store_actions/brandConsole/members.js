@@ -1,6 +1,7 @@
+import { addNotification as notify } from 'reapop'
+
 import types from '../../constants/brandConsole'
 import BrandConsole from '../../models/BrandConsole'
-import { addNotification as notify } from 'reapop'
 
 function _getMembers(role_id, members) {
   return {

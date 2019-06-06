@@ -40,7 +40,8 @@ export const Icon = styled(IconTime)`
 export const Input = styled.input.attrs({
   type: 'number',
   step: '1',
-  min: '0'
+  min: '0',
+  max: '99999'
 })`
   outline: none;
   border: none;
@@ -49,7 +50,7 @@ export const Input = styled.input.attrs({
   font-weight: bold;
   font-size: 1rem;
   color: ${primary};
-  width: 2rem;
+  width: 3rem;
   margin: 0 0.5rem;
 
   &::-webkit-outer-spin-button,

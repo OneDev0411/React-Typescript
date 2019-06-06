@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import Flex from 'styled-flex-component'
 import idx from 'idx/lib/idx'
 
-import Avatar from '../../../../../../Partials/UserAvatar'
+import Avatar from '../../../../../../../views/components/UserAvatar'
 
 import { putUserSetting } from '../../../../../../../models/user/put-user-setting'
 

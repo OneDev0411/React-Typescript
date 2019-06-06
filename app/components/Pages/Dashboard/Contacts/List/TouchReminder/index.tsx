@@ -37,15 +37,25 @@ function TouchReminder({
     setValue(parseInt(ev.target.value, 10))
   }
 
+  function handleFocus(ev: React.FocusEvent<HTMLInputElement>) {
+    ev.currentTarget.select()
+  }
+
+  function handleKeyPress(ev: React.KeyboardEvent<HTMLInputElement>) {
+    if (value.toString().length === 5 && parseInt(ev.key, 10) <= 9) {
+      return ev.preventDefault()
+    }
+  }
+
   const handleUpdate = useCallback(async () => {
-    if (activeSegment.touch_freq === value) {
+    if ((activeSegment.touch_freq || 0) === value) {
       return
     }
 
     try {
       const segment: IContactList = {
         ...activeSegment,
-        touch_freq: value
+        touch_freq: value === 0 ? undefined : value
       }
 
       await updateSegment(CONTACTS_SEGMENT_NAME, segment, DEFAULT_QUERY)
@@ -70,7 +80,9 @@ function TouchReminder({
       <Input
         value={value.toString()}
         onChange={handleChange}
+        onFocus={handleFocus}
         onBlur={handleUpdate}
+        onKeyPress={handleKeyPress}
       />
       <Label bold>Days</Label>
     </Container>

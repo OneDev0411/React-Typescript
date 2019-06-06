@@ -9,8 +9,8 @@ export function getAvatarTitle(role) {
 
   const fullName =
     role_type === 'Person'
-      ? company_title
-      : `${legal_first_name} ${legal_last_name}`.trim()
+      ? `${legal_first_name} ${legal_last_name}`.trim()
+      : company_title
 
   return fullName || (user && user.display_name)
 }

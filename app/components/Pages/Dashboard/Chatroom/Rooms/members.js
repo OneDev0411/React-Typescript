@@ -2,8 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Col } from 'react-bootstrap'
 import cn from 'classnames'
+
+import UserAvatar from 'components/UserAvatar'
+
+import Tooltip from 'components/tooltip'
+
 import Compose from '../Shared/compose-wrapper'
-import UserAvatar from '../../../../Partials/UserAvatar'
 import MembersIcon from '../../Partials/Svgs/MembersIcon'
 import {
   addRecipients,
@@ -11,7 +15,6 @@ import {
 } from '../../../../../store_actions/chatroom'
 import LastSeen from './components/last-seen'
 import Chatroom from '../Util/chatroom'
-import Tooltip from '../../../../../views/components/tooltip'
 
 const ManageMembers = ({
   addRecipients,
