@@ -268,6 +268,11 @@ const AsyncUpgradeAccount = Load({
     import('../components/Pages/Dashboard/Account/Upgrade' /* webpackChunkName: "upgrade" */)
 })
 
+const AsyncCSS = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account/CentralizedShowingService' /* webpackChunkName: "centralized_showing_service" */)
+})
+
 /* ==================================== */
 //  Widgets
 /* ==================================== */
@@ -502,6 +507,7 @@ export default (
           path="reminder-notifications"
           component={ReminderNotifications}
         />
+        <Route path="css" component={AsyncCSS} />
       </Route>
 
       <Route path="/dashboard/teams(/:id)">
