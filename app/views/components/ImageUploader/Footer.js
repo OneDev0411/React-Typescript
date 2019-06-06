@@ -19,9 +19,10 @@ export default function Footer({
       <div
         style={{
           display: 'flex',
+          flex: '1 1',
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'space-between',
+          justifyContent: 'start',
           width: '320px'
         }}
       >
@@ -31,8 +32,7 @@ export default function Footer({
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'center',
-              justifyContent: 'space-around',
-              width: '260px'
+              width: '280px'
             }}
           >
             <img
@@ -47,8 +47,8 @@ export default function Footer({
               defaultValue={scale}
               onChange={onScaleChange}
               style={{
-                width: '190px',
-                margin: '0',
+                width: '11.875rem',
+                margin: '0 .8rem',
                 padding: '10px 0'
               }}
               trackStyle={{

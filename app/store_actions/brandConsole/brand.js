@@ -29,7 +29,7 @@ export function getBrand(brandId) {
   return async dispatch => {
     dispatch({ type: types.SHOW_SPINNER })
 
-    const response = await BrandConsole.getBrands(brandId)
+    const response = await BrandConsole.deprecatedGetBrands(brandId)
 
     dispatch({ type: types.HIDE_SPINNER })
 

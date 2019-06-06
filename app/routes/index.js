@@ -300,6 +300,11 @@ const AsyncShare = Load({
     import('../components/Pages/Dashboard/Marketing/SharePage' /* webpackChunkName: "mc_share_page" */)
 })
 
+const AsyncTeams = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Teams' /* webpackChunkName: "teams" */)
+})
+
 const AsyncBrands = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Brand/index' /* webpackChunkName: "brand_settings" */)
@@ -499,6 +504,9 @@ export default (
         />
       </Route>
 
+      <Route path="/dashboard/teams(/:id)">
+        <IndexRoute component={AsyncTeams} />
+      </Route>
       <Route path="/dashboard/brands">
         <IndexRoute component={AsyncBrands} />
         <Route

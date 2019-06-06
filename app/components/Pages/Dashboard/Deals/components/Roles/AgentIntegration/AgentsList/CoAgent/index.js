@@ -5,20 +5,21 @@ import Fuse from 'fuse.js'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import Avatar from 'components/Avatar'
-import { getBrandAvailableMembers } from 'utils/user-teams'
 
 import Search from 'components/Grid/Search'
+
+import { getBrandUsers } from 'utils/user-teams'
 
 import { EmptyState } from '../styled'
 
 import {
+  AgentEmail,
+  AgentTitle,
   Card,
   Header,
-  Title,
-  SubTitle,
   RowItem,
-  AgentTitle,
-  AgentEmail
+  SubTitle,
+  Title
 } from './styled'
 
 CoAgent.propTypes = {
@@ -92,7 +93,7 @@ export function CoAgent(props) {
 
 function normalizeTeams(teams, searchTerm) {
   const list = teams.map(office => {
-    const agents = getBrandAvailableMembers(office).map(user => ({
+    const agents = getBrandUsers(office).map(user => ({
       ...user,
       office: office.name
     }))

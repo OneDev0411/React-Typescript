@@ -6,6 +6,8 @@ export default async function getProfile(session) {
   try {
     if (session.user) {
       user = await getUserProfile(session.user.access_token)
+      console.log('user', user)
+      console.log('session.user', session.user)
 
       // attach tokens into user profile object
       user = {

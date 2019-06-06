@@ -53,8 +53,8 @@
       "crm/*": [
         "app/components/Pages/Dashboard/Contacts/*"
       ],
-      "types/*": [
-        "types/*"
+      "animations/*": [
+        "app/animations/*"
       ]
     }
   },

@@ -1,11 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col } from 'react-bootstrap'
+import { Col, OverlayTrigger, Popover, Row } from 'react-bootstrap'
 import _ from 'underscore'
 import cn from 'classnames'
 import moment from 'moment'
-import { Popover, OverlayTrigger } from 'react-bootstrap'
-import UserAvatar from '../../../../../Partials/UserAvatar'
+
+import UserAvatar from 'components/UserAvatar'
 
 function getAckedUsers(message, room) {
   if (!message.acked_by) {

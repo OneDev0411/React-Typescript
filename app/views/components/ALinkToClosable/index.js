@@ -4,7 +4,6 @@ import { browserHistory } from 'react-router'
 
 import ALink from '../ALink'
 
-ALinkToClosable.propTypes = ALink.propTypes
 ALinkToClosable.defaultProps = ALink.defaultProps
 
 function ALinkToClosable(props) {
