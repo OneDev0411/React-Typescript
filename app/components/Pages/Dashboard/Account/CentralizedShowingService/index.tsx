@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
+import { addNotification, Notification } from 'reapop'
 import Flex from 'styled-flex-component'
 import { Helmet } from 'react-helmet'
 
@@ -40,7 +42,11 @@ function getCSSInput({
   }
 }
 
-export default function CentralizedShowingService() {
+interface Props {
+  notify: (notification: Notification) => any
+}
+
+function CentralizedShowingService({ notify }: Props) {
   const [loading, setLoading] = useState<boolean>(true)
   const [cssData, setCSSData] = useState<CSSData | null>(null)
 
@@ -77,6 +83,13 @@ export default function CentralizedShowingService() {
 
       await connectCSS(cssInput)
     } catch (err) {
+      if (err.status === 403) {
+        notify({
+          status: 'error',
+          message: 'The username or password is incorrect.'
+        })
+      }
+
       console.error(err)
     } finally {
       setLoading(false)
@@ -127,3 +140,8 @@ export default function CentralizedShowingService() {
     </>
   )
 }
+
+export default connect(
+  null,
+  { notify: addNotification }
+)(CentralizedShowingService)
