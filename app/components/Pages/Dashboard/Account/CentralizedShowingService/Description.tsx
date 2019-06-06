@@ -6,8 +6,8 @@ export default function Description() {
   return (
     <FormCard noBorder>
       <p>
-        By connectiong your CSS account, your appointments for your deals are
-        automatically logged as and event in Rechat.
+        By connecting your CSS account, your appointments for your deals are
+        automatically logged as an event in Rechat.
       </p>
     </FormCard>
   )
