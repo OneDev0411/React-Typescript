@@ -148,11 +148,15 @@ class ContactsList extends React.Component {
 
   setQueryParam = (key, value) => {
     const currentLocation = this.props.location
+    // because in handleFilterChange before adding new queries we overwrite
+    // again with previous queries for updating start number
+    const letter = this.state.firstLetter
 
     this.props.router.replace({
       ...currentLocation,
       query: {
         ...currentLocation.query,
+        letter,
         [key]: value
       }
     })
@@ -229,33 +233,22 @@ class ContactsList extends React.Component {
   }
 
   handleSearch = value => {
-    this.setState({ searchInputValue: value })
-    this.handleFilterChange({
-      filters: this.props.filters,
-      searchInputValue: value
+    this.setState({ searchInputValue: value, firstLetter: null }, () => {
+      this.setQueryParam('letter', '')
+      this.handleFilterChange()
     })
   }
 
   handleFirstLetterChange = value => {
     this.setQueryParam('letter', value)
     this.setState({ firstLetter: value }, () => {
-      this.handleFilterChange({})
+      this.handleFilterChange()
     })
   }
 
   handleChangeOrder = ({ value: order }) => {
     this.order = order
-    this.handleFilterChange({
-      filters: this.props.filters,
-      searchInputValue: this.state.searchInputValue
-    })
-  }
-
-  handleChangeContactsAttributes = () => {
-    this.handleFilterChange({
-      filters: this.props.filters,
-      searchInputValue: this.state.searchInputValue
-    })
+    this.handleFilterChange()
   }
 
   toggleSideMenu = () =>
@@ -471,9 +464,7 @@ class ContactsList extends React.Component {
               tableContainerId={this.tableContainerId}
               reloadContacts={this.reloadContacts}
               handleChangeOrder={this.handleChangeOrder}
-              handleChangeContactsAttributes={
-                this.handleChangeContactsAttributes
-              }
+              handleChangeContactsAttributes={this.handleFilterChange}
               filters={{
                 alphabet: state.firstLetter,
                 attributeFilters: props.filters,
