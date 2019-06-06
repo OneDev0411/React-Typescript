@@ -1,8 +1,8 @@
-import { ACL } from 'constants/acl'
+// import { ACL } from 'constants/acl'
 
 import React from 'react'
 
-import Acl from 'components/Acl'
+// import Acl from 'components/Acl'
 
 import { hasUserAccessToDeals, hasUserAccessToCrm } from 'utils/user-teams'
 
@@ -38,12 +38,14 @@ export const ProfileTabs = ({ user }) => (
         to="/dashboard/account/reminder-notifications"
       />
     )}
-    <Acl access={{ oneOf: [ACL.CRM, ACL.DEALS] }}>
+    {/* TODO: Unhide CSS (Centralized Showing Service) from users */}
+    {/* Note that there are some imports commented at top which needs to be uncommented too */}
+    {/* <Acl access={{ oneOf: [ACL.CRM, ACL.DEALS] }}>
       <Tab
         indexed
         text="Centralized Showing Service"
         to="/dashboard/account/css"
       />
-    </Acl>
+    </Acl> */}
   </ul>
 )
