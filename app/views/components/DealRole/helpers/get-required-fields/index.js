@@ -63,13 +63,8 @@ export default function getRequiredFields(args) {
     list.push('legal_first_name', 'legal_last_name')
   }
 
-  if (role_type === TYPE_COMPANY) {
+  if (role_type === TYPE_COMPANY || (role && role.includes('Agent'))) {
     list.push('company_title')
-  }
-
-  // when adding an agent, company should be mandatory
-  if (role && role.includes('Agent')) {
-    list.push('legal_first_name', 'legal_last_name')
   }
 
   if (getIsEmailRequired(args)) {
