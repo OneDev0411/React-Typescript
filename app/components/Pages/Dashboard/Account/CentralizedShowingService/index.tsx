@@ -81,7 +81,9 @@ function CentralizedShowingService({ notify }: Props) {
 
       const cssInput: CSSInput = getCSSInput(data)
 
-      await connectCSS(cssInput)
+      const connectedCSS = await connectCSS(cssInput)
+
+      setCSSData(connectedCSS)
     } catch (err) {
       if (err.status === 403) {
         notify({
