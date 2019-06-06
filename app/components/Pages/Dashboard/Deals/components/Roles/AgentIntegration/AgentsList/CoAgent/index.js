@@ -5,6 +5,7 @@ import Fuse from 'fuse.js'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import Avatar from 'components/Avatar'
+import { TextWithHighlights } from 'components/TextWithHighlights'
 
 import Search from 'components/Grid/Search'
 
@@ -55,7 +56,11 @@ export function CoAgent(props) {
         return (
           <Card key={officeIndex}>
             <Header>
-              <Title>{office.name}</Title>
+              <Title>
+                <TextWithHighlights search={searchTerm}>
+                  {office.name}
+                </TextWithHighlights>
+              </Title>
               <SubTitle>{office.subtitle}</SubTitle>
             </Header>
 
@@ -79,8 +84,17 @@ export function CoAgent(props) {
                 />
 
                 <div>
-                  <AgentTitle>{user.display_name}</AgentTitle>
-                  <AgentEmail>{user.email}</AgentEmail>
+                  <AgentTitle>
+                    <TextWithHighlights search={searchTerm}>
+                      {user.display_name}
+                    </TextWithHighlights>
+                  </AgentTitle>
+
+                  <AgentEmail>
+                    <TextWithHighlights search={searchTerm}>
+                      {user.email}
+                    </TextWithHighlights>
+                  </AgentEmail>
                 </div>
               </RowItem>
             ))}
