@@ -8,16 +8,18 @@ import Avatar from 'components/Avatar'
 
 import Search from 'components/Grid/Search'
 
+import { getTeamUsers } from 'utils/user-teams'
+
 import { EmptyState } from '../styled'
 
 import {
+  AgentEmail,
+  AgentTitle,
   Card,
   Header,
-  Title,
-  SubTitle,
   RowItem,
-  AgentTitle,
-  AgentEmail
+  SubTitle,
+  Title
 } from './styled'
 
 CoAgent.propTypes = {
@@ -91,7 +93,7 @@ export function CoAgent(props) {
 
 function normalizeTeams(teams, searchTerm) {
   const list = teams.map(office => {
-    const agents = getBrandAvailableMembers(office).map(user => ({
+    const agents = getTeamUsers(office).map(user => ({
       ...user,
       office: office.name
     }))
