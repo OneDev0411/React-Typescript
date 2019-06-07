@@ -340,9 +340,8 @@ const AsyncMobile = Load({
     import('../components/Pages/Mobile' /* webpackChunkName: "mobile" */)
 })
 
-const AsyncNoMatch = Load({
-  loader: () =>
-    import('../components/Pages/NoMatch' /* webpackChunkName: "404" */)
+const Async404 = Load({
+  loader: () => import('../components/Pages/404' /* webpackChunkName: "404" */)
 })
 
 const AsyncOops = Load({
@@ -530,6 +529,6 @@ export default (
     </Route>
 
     <Route path="/oops" component={AsyncOops} />
-    <Route path="*" component={AsyncNoMatch} />
+    <Route path="*" component={Async404} />
   </Route>
 )
