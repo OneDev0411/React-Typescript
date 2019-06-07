@@ -21,6 +21,7 @@ export const Container = styled.div`
   .wrapper {
     padding: 1.5em;
     max-width: 75em;
+    margin: 0 auto;
   }
 
   .logo {
@@ -34,7 +35,6 @@ export const Container = styled.div`
   }
   
   .content {
-    margin: 0 auto;
     padding-top: 12%;
     text-align: center;
 
