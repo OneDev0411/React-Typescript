@@ -1,17 +1,19 @@
 import styled, { css } from 'styled-components'
 
+import { FlexItem } from 'styled-flex-component'
+
 import { primary, grey } from 'views/utils/colors'
 
 import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
-export const TreeViewNodeContainer = styled.div<{ selectable?: boolean }>`
+export const TreeViewNodeContainer = styled.div<{
+  selectable?: boolean
+  expandable?: boolean
+}>`
   display: flex;
   align-items: center;
   line-height: 2.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-left: 2rem;
+  padding-left: 1rem;
   font-weight: 500;
 
   ${({ selectable }) =>
@@ -22,6 +24,18 @@ export const TreeViewNodeContainer = styled.div<{ selectable?: boolean }>`
         background: ${grey.A250};
       }
     `}
+  ${({ expandable }) =>
+    !expandable &&
+    css`
+      margin-left: 1.2rem;
+    `}
+`
+
+export const TreeViewNodeContent = styled(FlexItem).attrs({ grow: 1 })`
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 type Props = { expanded?: boolean }
@@ -29,12 +43,13 @@ type Props = { expanded?: boolean }
 export const TreeViewExpandButton = styled.button`
   background: none;
   width: 2rem;
+  min-width: 2rem;
   height: 2.5rem;
   padding: 0;
   line-height: 0;
   margin-right: 0.2rem;
   border: none;
-  margin-left: -2rem;
+  margin-left: -1rem;
 
   outline: none;
   color: ${grey.A900};
@@ -60,5 +75,5 @@ export const TreeViewExpandArrow = styled(IconKeyboardArrowDown)<Props>`
 `
 
 export const TreeViewNodeChildrenContainer = styled.div`
-  padding-left: 1.7rem;
+  padding-left: 1.4rem;
 `

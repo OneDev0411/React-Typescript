@@ -42,7 +42,7 @@ export function useAddEditTeamModal(
             newItemParent,
             {
               ...newItemParent,
-              children: [...newItemParent.children, newTeam]
+              children: [...(newItemParent.children || []), newTeam]
             },
             false
           )

@@ -32,7 +32,7 @@ export function RoleRow({ fieldName, onRemove }: Props) {
             required
             component={TextInput as any}
           />
-          <IconButton type="button" onClick={onRemove}>
+          <IconButton type="button" inverse onClick={onRemove}>
             <DeleteOutlineIcon />
           </IconButton>
         </Flex>
