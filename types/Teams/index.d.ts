@@ -11,7 +11,7 @@ declare interface IBrand {
   base_url: string
   brand_type: IBrandType
   created_at: number
-  children: IBrand[]
+  children?: IBrand[]
   deleted_at: number | null
   hostnames: string[]
   id: UUID

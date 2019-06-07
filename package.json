@@ -12,14 +12,15 @@
     "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build.js",
     "serve": "NODE_ENV=production forever node_modules/@babel/node/bin/babel-node.js --extensions \".js,.ts,.tsx\" ./bin/server ",
     "serve:stage": "NODE_ENV=stage babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
-    "styled-svg": "styled-svg app/views/components/SvgIcons/**/*.svg --size=24x24",
+    "styled-svg": "styled-svg app/views/components/SvgIcons/**/*.svg --no-tests --size=24x24",
     "types:check": "tsc",
     "lint": "npm run lint:app && npm run lint:server && npm run lint:tests",
     "lint:app": "eslint ./app",
     "lint:server": "eslint ./server",
     "lint:tests": "eslint ./tests --fix",
     "test:e2e": "jest --config tests/e2e/jest.config.js",
-    "test:unit": "jest"
+    "test:unit": "jest",
+    "test": "npm run test:unit && npm run test:e2e"
   },
   "engines": {
     "node": "10.x"

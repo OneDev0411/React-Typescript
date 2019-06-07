@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import CloseIcon from '../SvgIcons/Close/CloseIcon'
 import BareModal from '../BareModal'
 import { H3 } from '../Typography/headings'
+import IconButton from '../Button/IconButton'
 
 const HeaderContainer = styled.div`
   height: 72px;
@@ -36,7 +37,9 @@ export function ModalHeader({
         }}
       >
         <H3>{title}</H3>
-        <CloseIcon onClick={closeHandler} style={{ cursor: 'pointer' }} />
+        <IconButton iconSize="large" isFit inverse onClick={closeHandler}>
+          <CloseIcon />
+        </IconButton>
       </div>
       {children}
     </HeaderContainer>

@@ -1,12 +1,12 @@
 import * as React from 'react'
 import { ReactNode, useCallback } from 'react'
-import { FlexItem } from 'styled-flex-component'
 
 import {
   TreeViewExpandArrow,
   TreeViewExpandButton,
   TreeViewNodeChildrenContainer,
-  TreeViewNodeContainer
+  TreeViewNodeContainer,
+  TreeViewNodeContent
 } from './styled'
 
 interface Props<NodeType> {
@@ -36,7 +36,8 @@ export const TreeViewNode = React.memo(function TreeViewNode<
     onToggleExpanded
   ])
 
-  const arrow = childNodes.length ? (
+  const expandable = childNodes.length > 0
+  const arrow = expandable ? (
     <TreeViewExpandButton onClick={toggle}>
       <TreeViewExpandArrow expanded={expanded} />
     </TreeViewExpandButton>
@@ -44,16 +45,18 @@ export const TreeViewNode = React.memo(function TreeViewNode<
 
   return (
     <>
-      <TreeViewNodeContainer selectable={props.selectable}>
+      <TreeViewNodeContainer
+        selectable={props.selectable}
+        expandable={expandable}
+      >
         {arrow}{' '}
-        <FlexItem grow={1} style={{ maxWidth: '100%' }}>
-          {props.renderNode(node)}
-        </FlexItem>
+        <TreeViewNodeContent>{props.renderNode(node)}</TreeViewNodeContent>
       </TreeViewNodeContainer>
       {expanded && (
         <TreeViewNodeChildrenContainer>
           {childNodes.map(node => (
-            <TreeViewNode key={props.getId(node)}
+            <TreeViewNode
+              key={props.getId(node)}
               node={node}
               onToggleExpanded={onToggleExpanded}
               {...props}

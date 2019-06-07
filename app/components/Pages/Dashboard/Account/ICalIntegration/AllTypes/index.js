@@ -37,33 +37,38 @@ class ICalAllTypes extends React.Component {
   }
 
   render() {
+    const { props } = this
     const {
       onChangeSelectedTypes,
       onChangeSelectAllTypes,
       onSelectOneCategoriesTypes
-    } = this.props
-    const filteredContexts =
-      this.props.contexts &&
-      this.props.contexts
-        .filter(context => context.data_type === 'Date')
-        .map(context => ({ ...context, name: context.key }))
+    } = props
 
-    const filteredContactsAttributesDefs =
-      this.props.contactsAttributesDefs &&
-      _.chain(this.props.contactsAttributesDefs)
-        .filter(def => def.data_type === 'date' && def.editable)
-        .map(type => ({ ...type, name: type.name || type.label }))
-        .value()
-    const allTypes = taskTypes
-      .map(type => type.name)
-      .concat(
-        filteredContactsAttributesDefs
-          ? filteredContactsAttributesDefs.map(type => type.name)
-          : [],
-        filteredContexts ? filteredContexts.map(type => type.name) : []
-      )
+    const filteredContexts = props.contexts
+      ? props.contexts
+          .filter(context => context.data_type === 'Date')
+          .map(context => ({ ...context, name: context.key }))
+      : []
 
-    const selectedTypes = this.props.selectedTypes.filter(selectedType =>
+    const filteredContactsAttributesDefs = props.contactsAttributesDefs
+      ? Object.values(props.contactsAttributesDefs)
+          .filter(
+            def =>
+              def.data_type === 'date' &&
+              def.editable &&
+              ((def.name != null && def.name.trim().length) ||
+                (def.label != null && def.label.trim().length))
+          )
+          .map(type => ({ ...type, name: type.name || type.label }))
+      : []
+
+    const allTypes = [
+      ...taskTypes,
+      ...filteredContexts,
+      ...filteredContactsAttributesDefs
+    ].map(type => type.name)
+
+    const selectedTypes = props.selectedTypes.filter(selectedType =>
       allTypes.includes(selectedType)
     )
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import uniqBy from 'lodash/uniqBy'
-import isEqual from 'lodash/isEqual'
+import flatten from 'lodash/flatten'
 
 import { getBrandUsers } from 'utils/user-teams'
 
@@ -23,14 +23,20 @@ const TeamTypes = ({
     {}
   )
 
+  const AllMembersIds = flatten(Object.values(allMembers))
+  const selectedMembersIds = flatten(Object.values(selectedMembers))
+  const allMembersSelected = AllMembersIds.every(id =>
+    selectedMembersIds.includes(id)
+  )
+
   return (
     <Section>
       <Title>Which teams did you want to send calendar events from?</Title>
       <MemberRow
-        selected={isEqual(allMembers, selectedMembers)}
+        selected={allMembersSelected}
         title="All Teams"
         onChange={() => {
-          if (!isEqual(allMembers, selectedMembers)) {
+          if (!allMembersSelected) {
             onChangeSelectAllMembers(allMembers)
           } else {
             onChangeSelectAllMembers({})

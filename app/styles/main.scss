@@ -31,13 +31,11 @@
 @import 'components/c-verify-phone-modal';
 @import 'components/radio-button';
 @import 'components/react-avatar';
-
 @import 'components/modules/alert';
 @import '../../node_modules/simplebar/dist/simplebar.css';
-// Pages
-@import 'components/pages/noMatch';
-@import 'components/pages/oops';
 
+// Pages
+@import 'components/pages/oops';
 @import 'components/pages/app';
 @import 'components/pages/dashboard';
 @import 'components/pages/listing';

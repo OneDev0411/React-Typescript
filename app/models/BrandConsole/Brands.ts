@@ -49,7 +49,7 @@ export async function addBrand(
 
   return (await new Fetch()
     .post('/brands')
-    .query({ associations: defaultAssociations })
+    .query({ associations: [...defaultAssociations, 'brand.children'] })
     .send(payload)).body
 }
 
