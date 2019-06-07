@@ -92,11 +92,26 @@ export function TextWithHighlights({
     <>
       {splitByMatches(regExp!, children).map(({ match, text }) =>
         match ? (
-          <HighlightComponent {...highlightProps}>{text}</HighlightComponent>
+          <HighlightComponent {...highlightProps}>
+            {encodeEdgeSpaces(text)}
+          </HighlightComponent>
         ) : (
-          <span>{text}</span>
+          <span>{encodeEdgeSpaces(text)}</span>
         )
       )}
+    </>
+  )
+}
+
+function encodeEdgeSpaces(text: string) {
+  const startsWithSpace = text.charAt(0) === ' '
+  const endsWithSpace = text.charAt(text.length - 1) === ' '
+
+  return (
+    <>
+      {startsWithSpace && <>&nbsp;</>}
+      {text.slice(startsWithSpace ? 1 : 0, endsWithSpace ? -1 : text.length)}
+      {endsWithSpace && <>&nbsp;</>}
     </>
   )
 }
