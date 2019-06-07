@@ -1,10 +1,16 @@
+import { size } from 'lodash'
+
 import { FLOW_FILTER_ID, OPEN_HOUSE_FILTER_ID } from '../../constants'
 
 import getFilterLabelByValue from './get-filter-label-by-value'
 import getFlowFilter from './get-flow-filter'
 import getOpenHouseFilter from './get-open-house-filter'
 
-const createFiltersFromSegment = segment => {
+const createFiltersFromSegment = (segment, activeFilters) => {
+  if (size(activeFilters) > 0) {
+    return Object.values(activeFilters)
+  }
+
   const attributeFilters = (segment.filters || []).map(filter => ({
     id: filter.attribute_def,
     isActive: false,
