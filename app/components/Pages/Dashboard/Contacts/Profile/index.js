@@ -84,6 +84,7 @@ class ContactProfile extends React.Component {
     this.detectScreenSize()
     window.addEventListener('resize', this.detectScreenSize)
     this.initializeContact()
+    window.socket.on('crm_task:create', this.fetchTimeline)
     window.socket.on('email_campaign:create', this.fetchTimeline)
   }
 
@@ -102,6 +103,7 @@ class ContactProfile extends React.Component {
 
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.detectScreenSize)
+    window.socket.off('crm_task:create', this.fetchTimeline)
     window.socket.off('email_campaign:create', this.fetchTimeline)
   }
 
@@ -176,15 +178,6 @@ class ContactProfile extends React.Component {
       contact => ({ contact: { ...contact, ...newContact } }),
       fallback
     )
-
-  addEvent = crm_event => {
-    this.setState(
-      state => ({
-        timeline: [crm_event, ...state.timeline]
-      }),
-      this.fetchContact
-    )
-  }
 
   filterTimelineById = (state, id) =>
     state.timeline.filter(item => item.id !== id)
