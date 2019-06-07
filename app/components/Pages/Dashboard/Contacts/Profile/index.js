@@ -15,10 +15,10 @@ import { getContact } from 'models/contacts/get-contact'
 import { deleteContacts } from 'models/contacts/delete-contact'
 import { updateContactSelf } from 'models/contacts/update-contact-self'
 import getCRMTimeline from 'models/get-crm-timeline'
+import { getNotes } from 'models/contacts/helpers/get-notes'
 
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
-import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 
 import {
   selectDefinitionByName,
@@ -163,10 +163,10 @@ class ContactProfile extends React.Component {
         contact: this.props.params.id
       })
 
-      this.setState({
+      this.setState(state => ({
         isFetchingTimeline: false,
-        timeline
-      })
+        timeline: [...timeline, ...getNotes(state.contact)]
+      }))
     } catch (error) {
       console.log(error)
       this.setState({ isFetchingTimeline: false })
