@@ -1,6 +1,5 @@
 import { updateTree } from 'utils/tree-utils/update-tree'
 
-
 const sampleTree = {
   name: 'a',
   children: [
@@ -10,14 +9,14 @@ const sampleTree = {
     },
     {
       name: 'c',
-      children:[
+      children: [
         {
           name: 'd',
           children: []
         },
         {
           name: 'e',
-          children:[
+          children: [
             {
               name: 'f',
               children: []
@@ -33,46 +32,60 @@ const sampleTree = {
   ]
 }
 
-describe('updateTree',() => {
-  it('should work', () =>{
-      const newTree = updateTree(sampleTree, (node) => node.name === 'c', () => ({
+describe('updateTree', () => {
+  it('should work', () => {
+    const newTree = updateTree(
+      sampleTree,
+      node => node.name === 'c',
+      () => ({
         name: 'c2'
-      }))
-      expect(newTree).toEqual({ name: 'a', children: [ { name: 'b' }, { name: 'c2' } ] })
+      })
+    )
+    expect(newTree).toEqual({
+      name: 'a',
+      children: [{ name: 'b', children: [] }, { name: 'c2' }]
+    })
 
-      expect(newTree).not.toBe(sampleTree) // no mutation
+    expect(newTree).not.toBe(sampleTree) // no mutation
   })
 
-  it('should replace the whole tree if root is to be replaced', () =>{
-      const newTree = updateTree(sampleTree, (node) => node.name==='a', () => ({
+  it('should replace the whole tree if root is to be replaced', () => {
+    const newTree = updateTree(
+      sampleTree,
+      node => node.name === 'a',
+      () => ({
         name: 'a2'
-      }))
-      expect(newTree).toEqual({      name: 'a2', })
+      })
+    )
+    expect(newTree).toEqual({ name: 'a2' })
 
-      expect(newTree).not.toBe(sampleTree) // no mutation
+    expect(newTree).not.toBe(sampleTree) // no mutation
   })
-  it('should replace the leaves', () =>{
-      const newTree = updateTree(sampleTree, (node) => node.name==='f', () => ({
+  it('should replace the leaves', () => {
+    const newTree = updateTree(
+      sampleTree,
+      node => node.name === 'f',
+      () => ({
         name: 'f2'
-      }))
-      expect(newTree).toEqual({
-          name: 'a',
+      })
+    )
+    expect(newTree).toEqual({
+      name: 'a',
+      children: [
+        { name: 'b', children: [] },
+        {
+          name: 'c',
           children: [
-            {name: 'b'},
+            { name: 'd', children: [] },
             {
-              name: 'c',
-              children:[
-                {name: 'd'},
-                {
-                  name: 'e',
-                  children:[ {name: 'f2'},{name: 'g'}]
-                }
-              ]
+              name: 'e',
+              children: [{ name: 'f2' }, { name: 'g', children: [] }]
             }
           ]
         }
-      )
+      ]
+    })
 
-      expect(newTree).not.toBe(sampleTree) // no mutation
+    expect(newTree).not.toBe(sampleTree) // no mutation
   })
 })
