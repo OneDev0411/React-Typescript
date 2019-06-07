@@ -66,7 +66,10 @@ class DealTemplates extends React.Component {
       }
 
       this.setState({
-        selectedTypes: (setting && setting.selected_types) || [],
+        selectedTypes:
+          (setting &&
+            setting.selected_types.filter(type => type.trim().length)) ||
+          [],
         selectedMembers: (setting && normalizedSetting) || {},
         feedURl: (setting && setting.url) || ''
       })
@@ -86,15 +89,17 @@ class DealTemplates extends React.Component {
 
   onChangeSelectAllTypes = selectedTypes => this.setState({ selectedTypes })
 
-  onSelectOneCategoriesTypes = (types, selected) => {
+  onSelectOneCategoriesTypes = (types, allTypesSelected) => {
     this.setState(state => {
-      let selectedTypes = state.selectedTypes.slice(0)
+      let selectedTypes = state.selectedTypes.slice()
 
-      types.forEach(selectedType => {
-        if (selected && selectedTypes.includes(selectedType)) {
-          selectedTypes = selectedTypes.filter(type => type !== selectedType)
-        } else {
-          selectedTypes.push(selectedType)
+      types.forEach(type => {
+        const isSelected = selectedTypes.includes(type)
+
+        if (allTypesSelected && selectedTypes.includes(type)) {
+          selectedTypes = selectedTypes.filter(item => item !== type)
+        } else if (!isSelected) {
+          selectedTypes.push(type)
         }
       })
 
