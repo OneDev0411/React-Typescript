@@ -11,9 +11,18 @@ export class BasicDropdown extends React.Component {
   }
 
   toggleOpenMenu = () =>
-    this.setState(state => ({
-      isOpen: !state.isOpen
-    }))
+    this.setState(
+      state => ({
+        isOpen: !state.isOpen
+      }),
+      () => {
+        const cb = this.state.isOpen ? this.props.onOpen : this.props.onClose
+
+        if (cb) {
+          cb()
+        }
+      }
+    )
 
   render() {
     const {
@@ -22,6 +31,7 @@ export class BasicDropdown extends React.Component {
       buttonSize,
       buttonStyle = {},
       buttonText,
+      buttonAppearance,
       buttonRenderer,
       disabled,
       items,
@@ -47,6 +57,7 @@ export class BasicDropdown extends React.Component {
       <Downshift
         onChange={onChange}
         onSelect={onSelect}
+        onOuterClick={this.toggleOpenMenu}
         isOpen={this.state.isOpen}
         onStateChange={(changes, downshift) => {
           changes.isOpen &&
@@ -83,6 +94,7 @@ export class BasicDropdown extends React.Component {
                 isOpen={downshift.isOpen}
                 size={buttonSize}
                 noBorder={noBorder}
+                appearance={buttonAppearance || 'outline'}
                 style={buttonStyle}
                 text={
                   buttonText ||

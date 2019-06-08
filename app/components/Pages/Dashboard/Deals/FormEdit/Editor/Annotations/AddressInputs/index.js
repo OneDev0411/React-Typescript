@@ -12,7 +12,7 @@ import { AddressField } from './AddressField'
 export function AddressInputs(props) {
   const handleAddressUpdate = address => {
     const list = getAnnotationsByType(props.annotations, 'addresses')
-    const addressFields = normalizeAddressFields(address)
+    const addressFields = normalizeAddress(address)
 
     const fields = list.reduce((acc, group) => {
       const name = group[0].context
@@ -43,17 +43,4 @@ export function AddressInputs(props) {
       )}
     />
   )
-}
-
-function normalizeAddressFields(address) {
-  const normalized = normalizeAddress(address)
-
-  return Object.entries(normalized).reduce((fields, [name, item]) => {
-    const value = typeof item === 'object' ? item.value : item
-
-    return {
-      ...fields,
-      [name]: typeof value === 'undefined' ? '' : value
-    }
-  }, {})
 }

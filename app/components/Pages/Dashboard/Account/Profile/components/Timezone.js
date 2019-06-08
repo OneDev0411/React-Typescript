@@ -1,13 +1,15 @@
+import { EDIT_USER_REQUEST, EDIT_USER_SUCCESS } from 'constants/user'
+
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { Form, Field } from 'react-final-form'
 import { addNotification as notify } from 'reapop'
 import moment from 'moment-timezone'
 
-import FormCard from './FormCard'
+import FormCard from 'components/FormCard'
 import { Dropdown } from 'components/Dropdown'
 import { setUserTimezone } from 'models/user/set-user-timezone'
-import { EDIT_USER_REQUEST, EDIT_USER_SUCCESS } from 'constants/user'
+
 import Button from '../../../../../../views/components/Button/ActionButton'
 
 const Timezone = ({ timezone, dispatch }) => {
@@ -63,12 +65,13 @@ const Timezone = ({ timezone, dispatch }) => {
               name="time_zone"
               render={({ input }) => (
                 <Fragment>
-                  <label className="c-simple-field__label">Timezones</label>
+                  <label className="c-simple-field__label">Timezones</label> {/* eslint-disable-line */}
                   <Dropdown
                     input={input}
                     hasSearch
                     items={timezones}
                     itemToString={handleItemToString}
+                    data-test="timezone-dropdown"
                   />
                 </Fragment>
               )}
@@ -79,7 +82,11 @@ const Timezone = ({ timezone, dispatch }) => {
               </div>
             )}
             <div style={{ textAlign: 'right' }}>
-              <Button type="submit" disabled={submitting}>
+              <Button
+                type="submit"
+                disabled={submitting}
+                data-test="timezone-form-submit-button"
+              >
                 {submitting ? 'Updating...' : 'Update'}
               </Button>
             </div>

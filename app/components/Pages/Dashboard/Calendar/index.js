@@ -14,7 +14,7 @@ import {
   createDateRange,
   createPastRange,
   createFutureRange
-} from 'models/Calendar/helpers/create-date-range'
+} from 'models/calendar/helpers/create-date-range'
 
 import PageHeader from 'components/PageHeader'
 import DatePicker from 'components/DatePicker'
@@ -27,7 +27,7 @@ import { CrmEvents } from './CrmEvents'
 import {
   viewAs,
   getActiveTeamACL,
-  allMembersOfTeam,
+  getTeamAvailableMembers,
   getActiveTeam
 } from '../../../../utils/user-teams'
 
@@ -356,7 +356,7 @@ function mapStateToProps({ user, calendar }) {
     viewAsUsers: viewAs(user),
     startRange: getStartRange(calendar),
     endRange: getEndRange(calendar),
-    brandMembers: allMembersOfTeam(getActiveTeam(user))
+    brandMembers: getTeamAvailableMembers(getActiveTeam(user))
   }
 }
 

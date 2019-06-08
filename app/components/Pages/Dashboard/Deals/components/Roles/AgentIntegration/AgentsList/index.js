@@ -2,37 +2,38 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import Flex from 'styled-flex-component'
-
 import { searchContacts } from 'models/contacts/search-contacts'
 import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
 
 import { getActiveTeam } from 'utils/user-teams'
 
 import Drawer from 'components/OverlayDrawer'
+import Loading from 'components/LoadingContainer'
+
 import { getAgents } from 'models/Deal/agent'
-import Loading from 'components/Spinner'
 
-import Avatar from 'components/Avatar'
+import { PrimaryAgent } from './PrimaryAgent'
+import { CoAgent } from './CoAgent'
 
-import { roleName } from '../../../../utils/roles'
+import { Container, EmptyState } from './styled'
 
-import {
-  RoleItem,
-  RoleAvatar,
-  RoleInfo,
-  RoleTitle,
-  RoleType
-} from '../../styled'
+const propTypes = {
+  filter: PropTypes.func,
+  onSelectAgent: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  isPrimaryAgent: PropTypes.bool
+}
 
-import { Container, SearchInput, EmptyState } from './styled'
+const defaultProps = {
+  filter: () => true,
+  isPrimaryAgent: false
+}
 
 class TeamAgents extends React.Component {
   state = {
     isLoading: true,
     isSearchingContacts: false,
-    teamAgents: null,
-    searchFilter: ''
+    teamAgents: null
   }
 
   componentDidMount() {
@@ -40,10 +41,12 @@ class TeamAgents extends React.Component {
   }
 
   async getTeamAgents() {
-    const brandId = this.Brand
-
     try {
-      const teamAgents = await getAgents(brandId)
+      this.setState({
+        isLoading: true
+      })
+
+      const teamAgents = await getAgents(this.brand)
 
       this.setState({
         teamAgents,
@@ -53,22 +56,6 @@ class TeamAgents extends React.Component {
       console.log(e)
       this.setState({ teamAgents: [], isLoading: false })
     }
-  }
-
-  get Brand() {
-    const team = getActiveTeam(this.props.user)
-
-    if (this.props.isPrimaryAgent) {
-      return team.brand.id
-    }
-
-    let brand = team.brand
-
-    while (brand.parent !== null) {
-      brand = brand.parent
-    }
-
-    return brand.id
   }
 
   handleSelectAgent = async user => {
@@ -93,112 +80,73 @@ class TeamAgents extends React.Component {
     })
   }
 
-  handleChangeSearchFilter = e =>
-    this.setState({
-      searchFilter: e.target.value
-    })
-
-  get ShowEmptyState() {
+  get isEmptyState() {
     return (
-      this.TeamAgents.length === 0 &&
       !this.state.isLoading &&
-      !this.state.isSearchingContacts
+      !this.state.isSearchingContacts &&
+      this.teamAgents.length === 0
     )
   }
 
-  get ShowLoading() {
+  get isLoading() {
     return this.state.isSearchingContacts || this.state.isLoading
   }
 
-  get TeamAgents() {
+  get teamAgents() {
     return this.state.teamAgents || []
   }
 
+  get brand() {
+    const team = getActiveTeam(this.props.user)
+
+    if (this.props.isPrimaryAgent) {
+      return team.brand.id
+    }
+
+    let brand = team.brand
+
+    while (brand.parent !== null) {
+      brand = brand.parent
+    }
+
+    return brand.id
+  }
+
   render() {
-    const { state, props } = this
+    const { props } = this
+
+    const sharedProps = {
+      teams: this.teamAgents,
+      onSelectAgent: this.handleSelectAgent
+    }
 
     return (
       <Drawer isOpen onClose={props.onClose} showFooter={false}>
         <Drawer.Header title={props.title || 'Team Agents'} />
 
         <Drawer.Body>
-          <Container>
-            {this.ShowEmptyState && (
-              <EmptyState>
-                We cannot find any Primary Agent in your brand
-              </EmptyState>
-            )}
+          {this.isEmptyState && (
+            <EmptyState>We could not find any agent in your brand</EmptyState>
+          )}
 
-            {this.ShowLoading === false && this.TeamAgents.length >= 6 && (
-              <SearchInput
-                type="text"
-                placeholder="Search Agent..."
-                value={state.searchFilter}
-                onChange={this.handleChangeSearchFilter}
-              />
-            )}
-
-            {this.ShowLoading && <Loading />}
-
-            {this.ShowLoading === false &&
-              this.TeamAgents.filter(
-                user =>
-                  this.props.filter(user) &&
-                  user.display_name &&
-                  user.display_name
-                    .toLowerCase()
-                    .includes(state.searchFilter.toLowerCase())
-              ).map(user => (
-                <Flex key={user.id}>
-                  <RoleItem
-                    onClick={() => this.handleSelectAgent(user)}
-                    style={{
-                      width: '100%',
-                      justifyContent: 'flex-start',
-                      height: '3.5rem',
-                      marginBottom: 0,
-                      padding: 0
-                    }}
-                  >
-                    <RoleAvatar>
-                      <Avatar
-                        title={user.display_name}
-                        image={user.profile_image_url}
-                        size={40}
-                      />
-                    </RoleAvatar>
-
-                    <RoleInfo>
-                      <RoleTitle
-                        style={{
-                          fontSize: '1rem',
-                          fontWeight: 500
-                        }}
-                      >
-                        {user.display_name}
-                      </RoleTitle>
-                      <RoleType>{roleName(user.role || '')}</RoleType>
-                    </RoleInfo>
-                  </RoleItem>
-                </Flex>
-              ))}
-          </Container>
+          {this.isLoading ? (
+            <Loading style={{ padding: '35% 0' }} />
+          ) : (
+            <Container>
+              {this.props.isPrimaryAgent ? (
+                <PrimaryAgent {...sharedProps} />
+              ) : (
+                <CoAgent {...sharedProps} />
+              )}
+            </Container>
+          )}
         </Drawer.Body>
       </Drawer>
     )
   }
 }
 
-TeamAgents.propTypes = {
-  filter: PropTypes.func,
-  onSelectAgent: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
-  isPrimaryAgent: PropTypes.bool
-}
-
-TeamAgents.defaultProps = {
-  filter: () => true,
-  isPrimaryAgent: false
-}
+TeamAgents.defaultProps = defaultProps
+TeamAgents.propTypes = propTypes
 
 export default connect(({ user }) => ({ user }))(TeamAgents)

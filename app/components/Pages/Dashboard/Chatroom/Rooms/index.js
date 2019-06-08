@@ -1,21 +1,25 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col } from 'react-bootstrap'
+import { Col, Row } from 'react-bootstrap'
 import _ from 'underscore'
 import cn from 'classnames'
+
+import UserAvatar from 'components/UserAvatar'
+
+import Badge from 'components/Badge'
+
+import Tooltip from 'components/tooltip'
+
 import SocketStatus from '../SocketStatus'
 import CreateRoom from './create-room'
-import UserAvatar from '../../../../Partials/UserAvatar'
 import UserTyping from '../UserTyping'
 import TwoDirectionArrow from '../../Partials/Svgs/TwoDirectionArrow'
 import SearchInput from '../../../../Partials/SearchInput'
-import Tooltip from '../../../../../views/components/tooltip'
 import {
-  toggleInstantMode,
   changeActiveRoom,
-  toggleChatbar
+  toggleChatbar,
+  toggleInstantMode
 } from '../../../../../store_actions/chatroom'
-import Badge from '../../../../../views/components/Badge'
 
 class Rooms extends React.Component {
   constructor(props) {

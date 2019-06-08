@@ -9,6 +9,7 @@ export function normalizeForm(values) {
   const validFields = [
     'id',
     'contact',
+    'brand',
     'agent',
     'legal_prefix',
     'legal_first_name',

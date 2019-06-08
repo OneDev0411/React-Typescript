@@ -1,5 +1,5 @@
-import { getBrand } from '../../../models/brand/get-brand'
-import { getActiveTeamId } from '../../../utils/user-teams'
+import { getBrandById } from '../../../models/brand/get-brand-by-id'
+import { getActiveTeamId, getBrandUsers } from '../../../utils/user-teams'
 
 export async function getMembers(user) {
   if (!user) {
@@ -7,25 +7,13 @@ export async function getMembers(user) {
   }
 
   try {
-    const brandId = getActiveTeamId(user)
-    const brand = await getBrand(
-      brandId,
-      'associations[]=brand.roles&associations[]=brand_role.members'
-    )
+    const brand = await getBrandById(getActiveTeamId(user))
 
-    if (brand && Array.isArray(brand.roles) && brand.roles.length > 0) {
-      let members = []
-
-      brand.roles.forEach(role => {
-        if (role.members) {
-          members = [...members, ...role.members]
-        }
-      })
-
-      return members
+    if (brand == null) {
+      return null
     }
 
-    return null
+    return getBrandUsers(brand)
   } catch (error) {
     console.log(error)
     throw error

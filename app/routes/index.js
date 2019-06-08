@@ -268,6 +268,11 @@ const AsyncUpgradeAccount = Load({
     import('../components/Pages/Dashboard/Account/Upgrade' /* webpackChunkName: "upgrade" */)
 })
 
+const AsyncCSS = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account/CentralizedShowingService' /* webpackChunkName: "centralized_showing_service" */)
+})
+
 /* ==================================== */
 //  Widgets
 /* ==================================== */
@@ -300,6 +305,11 @@ const AsyncShare = Load({
     import('../components/Pages/Dashboard/Marketing/SharePage' /* webpackChunkName: "mc_share_page" */)
 })
 
+const AsyncTeams = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Teams' /* webpackChunkName: "teams" */)
+})
+
 const AsyncBrands = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Brand/index' /* webpackChunkName: "brand_settings" */)
@@ -330,9 +340,8 @@ const AsyncMobile = Load({
     import('../components/Pages/Mobile' /* webpackChunkName: "mobile" */)
 })
 
-const AsyncNoMatch = Load({
-  loader: () =>
-    import('../components/Pages/NoMatch' /* webpackChunkName: "404" */)
+const Async404 = Load({
+  loader: () => import('../components/Pages/404' /* webpackChunkName: "404" */)
 })
 
 const AsyncOops = Load({
@@ -497,8 +506,12 @@ export default (
           path="reminder-notifications"
           component={ReminderNotifications}
         />
+        <Route path="css" component={AsyncCSS} />
       </Route>
 
+      <Route path="/dashboard/teams(/:id)">
+        <IndexRoute component={AsyncTeams} />
+      </Route>
       <Route path="/dashboard/brands">
         <IndexRoute component={AsyncBrands} />
         <Route
@@ -516,6 +529,6 @@ export default (
     </Route>
 
     <Route path="/oops" component={AsyncOops} />
-    <Route path="*" component={AsyncNoMatch} />
+    <Route path="*" component={Async404} />
   </Route>
 )

@@ -37,10 +37,6 @@ export function Roles({ input, meta, isAllowedRole, isRequired }) {
     return options
   }, [isAllowedRole, role])
 
-  const selectedItem = input.value
-    ? options.find(item => item.value === input.value)
-    : options[0]
-
   return (
     <SelectInput
       style={{
@@ -48,6 +44,7 @@ export function Roles({ input, meta, isAllowedRole, isRequired }) {
         borderBottom: 'none'
       }}
       isRequired={isRequired}
+      hasBottomLine={false}
       showError={false}
       searchable={false}
       input={input}
@@ -55,8 +52,6 @@ export function Roles({ input, meta, isAllowedRole, isRequired }) {
       label="Role"
       onChange={item => input.onChange(item.value)}
       items={options}
-      selectedItem={selectedItem}
-      defaultSelectedItem={selectedItem}
       dropdownOptions={{
         fullWidth: true,
         pullTo: 'right',

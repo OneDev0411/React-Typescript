@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 
 import { changeSocketStatus } from '../../store_actions/socket'
-import getTeams from '../../models/user/get-teams'
+import { getTeams } from '../../models/user/get-teams'
 import { getActiveTeamACL, getActiveTeamId } from '../../utils/user-teams'
 import config from '../../../config/public'
 import store from '../../stores'
@@ -162,7 +162,7 @@ export default class Socket {
 
     return {
       ...user,
-      teams: await getTeams()
+      teams: await getTeams(user)
     }
   }
 

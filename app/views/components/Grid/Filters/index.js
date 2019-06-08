@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import _ from 'underscore'
 
 import {
   selectActiveFilters,
@@ -10,13 +9,15 @@ import {
 
 import {
   addActiveFilter,
+  changeConditionOperator,
   createActiveFilters,
+  createActiveFiltersWithConditionOperator,
   removeActiveFilter,
   toggleActiveFilter,
-  updateActiveFilter,
-  changeConditionOperator,
-  createActiveFiltersWithConditionOperator
+  updateActiveFilter
 } from 'actions/filter-segments/active-filters'
+
+import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 
 import { ConditionOperators } from './ConditionOperators'
 import { AddFilter } from './Create'
@@ -27,7 +28,6 @@ const Container = styled.div`
   flex-wrap: wrap;
   align-items: center;
   margin-bottom: 1.5em;
-  padding: 0 1.5em;
 `
 
 class Filters extends React.Component {
@@ -55,10 +55,7 @@ class Filters extends React.Component {
   }
 
   createFiltersFromSegment = async (segment, activeFilters) => {
-    const filters = this.props.createFiltersFromSegment(
-      segment.filters,
-      activeFilters
-    )
+    const filters = this.props.createFiltersFromSegment(segment, activeFilters)
 
     let conditionOperator = 'and'
 
@@ -73,60 +70,47 @@ class Filters extends React.Component {
     )
   }
 
-  /**
-   *
-   */
   createFilter = ({ id }) => {
     this.props.addActiveFilter(this.props.name, id)
   }
 
-  /**
-   *
-   */
   toggleFilterActive = id => {
     this.props.toggleActiveFilter(this.props.name, id)
   }
 
-  /**
-   *
-   */
-  removeFilter = filterId => {
+  removeFilter = async filterId => {
     const { activeFilters } = this.props
 
-    const isIncompleteFilter = activeFilters[filterId].isIncomplete === true
-    const nextFilters = _.omit(activeFilters, (filter, id) => id === filterId)
+    const nextFilters = {}
 
-    this.props.removeActiveFilter(this.props.name, filterId)
+    Object.keys(activeFilters)
+      .filter(id => id !== filterId)
+      .forEach(id => (nextFilters[id] = activeFilters[id]))
 
-    if (!isIncompleteFilter) {
-      this.onChangeFilters(nextFilters)
-    }
+    await this.props.removeActiveFilter(this.props.name, filterId)
+    this.onChangeFilters(nextFilters)
   }
 
-  /**
-   *
-   */
-  onFilterChange = (id, values, operator) => {
-    const current = this.props.activeFilters[id]
-    const isCompleted = this.isFilterCompleted({ values, operator })
+  onFilterChange = async (id, values, operator) => {
+    const { activeFilters } = this.props
+    const current = activeFilters[id]
+    const isValid = isFilterValid({ values, operator })
 
-    this.props.updateActiveFilter(this.props.name, id, {
-      isIncomplete: !isCompleted,
+    await this.props.updateActiveFilter(this.props.name, id, {
       values,
       operator
     })
 
     const nextFilters = {
-      ...this.props.activeFilters,
+      ...activeFilters,
       [id]: {
-        ...this.props.activeFilters[id],
-        isIncomplete: !isCompleted,
+        ...activeFilters[id],
         values,
         operator
       }
     }
 
-    if (isCompleted && this.isFilterChanged(current, { values, operator })) {
+    if (isValid && this.isFilterChanged(current, { values, operator })) {
       this.onChangeFilters(nextFilters)
     }
   }
@@ -136,50 +120,33 @@ class Filters extends React.Component {
       (next.values && next.values.map(({ value }) => value).join('')) ||
     current.operator.name !== next.operator.name
 
-  hasMissingValue = () =>
-    _.some(this.props.activeFilters, filter => filter.isIncomplete)
-
-  isFilterCompleted = filter =>
-    filter.operator && filter.values && filter.values.length > 0
-
-  /**
-   *
-   */
   findFilterById = id => this.props.config.find(filter => filter.id === id)
 
-  /**
-   *
-   */
-  onChangeFilters = filterItems => {
-    const completedFilters = _.filter(
-      filterItems,
-      item => item.isIncomplete === false
-    )
-
+  onChangeFilters = filters => {
     this.props.onChange({
-      filters: this.props.createSegmentFromFilters(completedFilters).filters,
-      conditionOperator: this.props.conditionOperator
+      conditionOperator: this.props.conditionOperator,
+      filters: Object.values(filters).filter(isFilterValid)
     })
   }
 
-  onConditionChange = ({ value: conditionOperator }) => {
-    this.props.changeConditionOperator(this.props.name, conditionOperator)
+  onConditionChange = async ({ value: conditionOperator }) => {
+    const { props } = this
 
-    if (_.size(this.props.activeFilters) <= 1) {
+    await props.changeConditionOperator(props.name, conditionOperator)
+
+    if (Object.keys(props.activeFilters).length <= 1) {
       return false
     }
 
-    this.props.onChange({
-      filters: this.props.createSegmentFromFilters(this.props.activeFilters)
-        .filters,
+    props.onChange({
+      filters: props.activeFilters,
       conditionOperator
     })
   }
 
   render() {
-    const { children, ...rest } = this.props
-    const { config } = rest
-    const { activeFilters } = this.props
+    const { children, ...props } = this.props
+    const { activeFilters } = props
 
     return (
       <Container>
@@ -190,29 +157,38 @@ class Filters extends React.Component {
           />
         )}
 
-        {_.map(activeFilters, (filter, id) => (
-          <FilterItem
-            key={id}
-            {...filter}
-            filterConfig={this.findFilterById(filter.id)}
-            onToggleFilterActive={() => this.toggleFilterActive(id)}
-            onRemove={() => this.removeFilter(id)}
-            onFilterChange={(values, operator) =>
-              this.onFilterChange(id, values, operator)
-            }
-          />
-        ))}
+        {Object.keys(activeFilters).map(id => {
+          const filter = activeFilters[id]
+
+          return (
+            <FilterItem
+              key={id}
+              {...filter}
+              isIncomplete={!isFilterValid(filter)}
+              filterConfig={this.findFilterById(filter.id)}
+              onToggleFilterActive={() => this.toggleFilterActive(id)}
+              onRemove={() => this.removeFilter(id)}
+              onFilterChange={(values, operator) =>
+                this.onFilterChange(id, values, operator)
+              }
+            />
+          )
+        })}
 
         <AddFilter
-          hasMissingValue={this.hasMissingValue()}
-          config={config}
+          config={props.config}
+          disabled={!Object.values(activeFilters).every(isFilterValid)}
           onNewFilter={this.createFilter}
         />
 
+        {/*
+        TODO: don't pass all props to the child. Refactor SaveSegment component
+        to read required stuff from redux state instead
+        */}
         {React.Children.map(children, child =>
           React.cloneElement(child, {
             filters: activeFilters,
-            ...rest
+            ...props
           })
         )}
       </Container>

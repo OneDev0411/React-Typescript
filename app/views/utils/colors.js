@@ -48,3 +48,4 @@ export const borderColor = grey.A300
 export const brandBackground = grey.A150
 export const placeholderColor = grey.A500
 export const InputFocusBgColor = grey.A100
+export const dimmerOverlayColor = '#ffffffaa'

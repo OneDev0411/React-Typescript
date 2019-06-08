@@ -4,24 +4,26 @@ import { addNotification as notify } from 'reapop'
 import _ from 'underscore'
 import { Helmet } from 'react-helmet'
 
-import { ICalContainer, PageDescription } from './styled'
+import PageHeader from 'components/PageHeader'
+import { getUserTeams } from 'store_actions/user/teams'
+import getCalenderFeedSetting from 'models/user/calendar-feed-setting'
+import { getTeamAvailableMembers } from 'utils/user-teams'
+
+import Loading from '../../../../Partials/Loading'
 
 import TeamType from './TeamTypes'
 import SelectedTypes from './AllTypes'
 import GenerateUrl from './GenerateUrl'
 import UpdateGenerateUrlInfo from './UpdateGenerateUrlInfo'
-import getCalenderFeedSetting from '../../../../../models/user/calendar-feed-setting'
-import getTeams from '../../../../../store_actions/user/teams'
 
-import Loading from '../../../../Partials/Loading'
-import PageHeader from '../../../../../views/components/PageHeader'
+import { ICalContainer, PageDescription } from './styled'
 
 class DealTemplates extends React.Component {
   state = {
+    feedURl: '',
     selectedTypes: [],
     selectedMembers: {},
-    isFetchingSetting: true,
-    feedURl: ''
+    isFetchingSetting: true
   }
 
   componentDidMount() {
@@ -29,10 +31,13 @@ class DealTemplates extends React.Component {
   }
 
   fetchData = async () => {
+    const { dispatch, user } = this.props
+    const { teams } = user
+
     try {
       const promiseSetting = getCalenderFeedSetting()
 
-      await this.props.getTeams(this.props.user, true)
+      await dispatch(getUserTeams(user))
 
       const setting = await promiseSetting
 
@@ -43,47 +48,40 @@ class DealTemplates extends React.Component {
           if (filter.users && filter.users.length > 1) {
             normalizedSetting[filter.brand] = filter.users
           } else {
-            const filterTeam = this.props.userTeams.filter(
+            const filterTeam = teams.filter(
               ({ brand }) => brand.id === filter.brand
             )[0]
 
-            let members = []
-
-            filterTeam &&
-              filterTeam.brand.roles.forEach(
-                role =>
-                  (members = members.concat(role.members.map(({ id }) => id)))
-              )
-
-            normalizedSetting[filter.brand] = members
+            normalizedSetting[filter.brand] = filterTeam
+              ? getTeamAvailableMembers(filterTeam).map(({ id }) => id)
+              : []
           }
         })
       } else {
-        this.props.userTeams.forEach(team => {
-          let members = []
-
-          team &&
-            team.brand.roles.forEach(
-              role =>
-                (members = members.concat(role.members.map(({ id }) => id)))
-            )
-
-          normalizedSetting[team.brand.id] = members
+        teams.forEach(team => {
+          normalizedSetting[team.brand.id] = getTeamAvailableMembers(team).map(
+            ({ id }) => id
+          )
         })
       }
 
       this.setState({
-        selectedTypes: (setting && setting.selected_types) || [],
+        selectedTypes:
+          (setting &&
+            setting.selected_types.filter(type => type.trim().length)) ||
+          [],
         selectedMembers: (setting && normalizedSetting) || {},
         feedURl: (setting && setting.url) || ''
       })
     } catch (e) {
       console.log(e)
-      this.props.notify({
-        title: 'Could not get calender feed setting',
-        status: 'error',
-        dismissible: true
-      })
+      dispatch(
+        notify({
+          title: 'Could not get calender feed setting',
+          status: 'error',
+          dismissible: true
+        })
+      )
     } finally {
       this.setState({ isFetchingSetting: false })
     }
@@ -91,18 +89,22 @@ class DealTemplates extends React.Component {
 
   onChangeSelectAllTypes = selectedTypes => this.setState({ selectedTypes })
 
-  onSelectOneCategoriesTypes = (types, selected) => {
-    let selectedTypes = this.state.selectedTypes.slice(0)
+  onSelectOneCategoriesTypes = (types, allTypesSelected) => {
+    this.setState(state => {
+      let selectedTypes = state.selectedTypes.slice()
 
-    types.forEach(selectedType => {
-      if (selected && selectedTypes.includes(selectedType)) {
-        selectedTypes = selectedTypes.filter(type => type !== selectedType)
-      } else {
-        selectedTypes.push(selectedType)
-      }
+      types.forEach(type => {
+        const isSelected = selectedTypes.includes(type)
+
+        if (allTypesSelected && selectedTypes.includes(type)) {
+          selectedTypes = selectedTypes.filter(item => item !== type)
+        } else if (!isSelected) {
+          selectedTypes.push(type)
+        }
+      })
+
+      return { selectedTypes }
     })
-
-    this.setState({ selectedTypes })
   }
 
   onChangeSelectedTypes = selectedType => {
@@ -121,17 +123,15 @@ class DealTemplates extends React.Component {
     this.setState({ selectedMembers })
 
   onSelectTeam = newSelectedTeam => {
-    this.setState({
-      selectedMembers: { ...this.state.selectedMembers, ...newSelectedTeam }
-    })
+    this.setState(state => ({
+      selectedMembers: { ...state.selectedMembers, ...newSelectedTeam }
+    }))
   }
 
   onRemoveTeam = removedTeam => {
-    const newSelectedMembers = _.omit(this.state.selectedMembers, removedTeam)
-
-    this.setState({
-      selectedMembers: newSelectedMembers
-    })
+    this.setState(state => ({
+      selectedMembers: _.omit(state.selectedMembers, removedTeam)
+    }))
   }
 
   onChangeSelectedMember = (brandId, selectedMember) => {
@@ -172,6 +172,7 @@ class DealTemplates extends React.Component {
   }
 
   render() {
+    const { teams } = this.props.user
     const { selectedTypes, selectedMembers } = this.state
 
     if (this.state.isFetchingSetting) {
@@ -200,7 +201,7 @@ class DealTemplates extends React.Component {
             Rechat into your local calendar experience.
           </PageDescription>
           <TeamType
-            userTeams={this.props.userTeams}
+            userTeams={teams}
             selectedMembers={selectedMembers}
             onChangeSelectAllMembers={this.onChangeSelectAllMembers}
             onChangeSelectedMember={this.onChangeSelectedMember}
@@ -214,7 +215,7 @@ class DealTemplates extends React.Component {
             onSelectOneCategoriesTypes={this.onSelectOneCategoriesTypes}
           />
           <GenerateUrl
-            userTeams={this.props.userTeams}
+            userTeams={teams}
             selectedTypes={selectedTypes}
             selectedMembers={selectedMembers}
             feedURl={this.state.feedURl}
@@ -226,13 +227,6 @@ class DealTemplates extends React.Component {
   }
 }
 
-export default connect(
-  ({ user }) => ({
-    userTeams: user.teams,
-    user
-  }),
-  {
-    notify,
-    getTeams
-  }
-)(DealTemplates)
+export default connect(({ user }) => ({
+  user
+}))(DealTemplates)

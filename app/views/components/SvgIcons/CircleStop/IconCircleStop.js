@@ -89,5 +89,5 @@ export default Object.assign(Image, {
   getCss,
   defaultProps,
   propTypes,
-  displayName: 'CircleStopIcon'
+  displayName: 'IconCircleStop'
 })

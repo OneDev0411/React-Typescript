@@ -37,6 +37,7 @@ export function Footer(props) {
           type="submit"
           disabled={props.submitting || props.isSubmitDisabled}
           onClick={props.handleSubmit}
+          leftRounded
         >
           {textForSubmitButton({
             isSubmitting: props.submitting,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import getBrand from '../../../models/brand'
+import { getBrandByHostname } from '../../../models/brand/get-brand-by-hostname'
 // favorites
 import getFavorites from '../../../store_actions/listings/favorites/get-favorites'
 
@@ -34,7 +34,7 @@ class App extends Component {
   }
 
   fetchBrand = async () => {
-    const brand = await getBrand(window.location.hostname)
+    const brand = await getBrandByHostname(window.location.hostname)
 
     this.setState({ brand })
   }

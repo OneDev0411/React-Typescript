@@ -18,6 +18,7 @@ export const MultipleContactsSelect = ({
   hasLabel = true,
   showError = true,
   disableAddNewRecipient = false,
+  suggestTagsAndLists = true,
   meta,
   isRequired,
   placeholder,
@@ -29,7 +30,8 @@ export const MultipleContactsSelect = ({
       <Flex>
         <FlexItem grow={1}>
           <InputLabel hasError={meta.submitFailed && meta.error}>
-            {labelText || placeholder}
+            {/* TODO: handle breaking change of removing placeholder. replace all usages with labelText */}
+            {labelText}
             &nbsp;
             <InputRequired>{isRequired && '*'}</InputRequired>
           </InputLabel>
@@ -43,7 +45,13 @@ export const MultipleContactsSelect = ({
         <RecipientItem key={index} recipient={recipient} input={input} />
       ))}
 
-      {!disableAddNewRecipient && <AddRecipient input={input} />}
+      {!disableAddNewRecipient && (
+        <AddRecipient
+          placeholder={placeholder}
+          input={input}
+          suggestTagsAndLists={suggestTagsAndLists}
+        />
+      )}
     </RecipientContainer>
 
     {showError && meta.error && meta.touched && (

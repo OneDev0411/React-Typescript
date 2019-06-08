@@ -5,8 +5,9 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import { Field, reduxForm } from 'redux-form'
 
+import FormCard from 'components/FormCard'
+
 import Catalog from './ProfileCatalog'
-import FormCard from './FormCard'
 import SimpleField from './SimpleField'
 import PhoneNumberField from './PhoneNumberField'
 import VerifyMobileNumber from './VerifyPhoneNumber'
@@ -72,7 +73,11 @@ let PersonalInfoForm = ({
           </div>
         )}
         <div style={{ textAlign: 'right' }}>
-          <Button type="submit" disabled={isDisabled}>
+          <Button
+            type="submit"
+            disabled={isDisabled}
+            data-test="personal-info-form-submit-button"
+          >
             {isSubmitting ? 'Updating...' : 'Update'}
           </Button>
         </div>

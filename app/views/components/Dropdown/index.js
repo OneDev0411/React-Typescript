@@ -39,7 +39,8 @@ export const Dropdown = ({
   buttonRenderer,
   pullRight = false,
   noBorder = true,
-  buttonStyle = {}
+  buttonStyle = {},
+  ...props
 }) => (
   <Downshift
     {...input}
@@ -112,7 +113,7 @@ export const Dropdown = ({
               <Icon isOpen={isOpen} />
             </Button>
           )}
-          <div style={{ position: 'relative' }}>
+          <div style={{ position: 'relative' }} {...props}>
             {isOpen && (
               <Card
                 depth={3}

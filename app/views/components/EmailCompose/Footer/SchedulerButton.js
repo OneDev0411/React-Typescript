@@ -9,6 +9,7 @@ function SchedulerButton(props) {
     <Tooltip caption={props.isScheduled ? 'Edit Schedule' : 'Schedule Email'}>
       <IconButton
         inverse
+        rightRounded
         iconSize="large"
         appearance="primary"
         onClick={props.onOpen}

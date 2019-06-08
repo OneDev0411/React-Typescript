@@ -1,11 +1,7 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import Search from '../../../../../../views/components/Grid/Search'
 
-const SearchContainer = styled.div`
-  padding: 0 1.5em;
-`
 
 let persistentSearchInput = ''
 export class SearchContacts extends React.Component {
@@ -17,7 +13,7 @@ export class SearchContacts extends React.Component {
 
   render() {
     return (
-      <SearchContainer>
+      <div>
         <Search
           disableOnSearch={false}
           isSearching={this.props.isSearching}
@@ -28,7 +24,7 @@ export class SearchContacts extends React.Component {
           defaultValue={persistentSearchInput}
           onClearSearch={this.handleSearch}
         />
-      </SearchContainer>
+      </div>
     )
   }
 }

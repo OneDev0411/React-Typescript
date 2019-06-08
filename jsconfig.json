@@ -26,7 +26,7 @@
       "hooks/*": [
         "app/hooks/*"
       ],
-      "Models/*": [
+      "models/*": [
         "app/models/*"
       ],
       "reducers/*": [
@@ -53,6 +53,9 @@
       "crm/*": [
         "app/components/Pages/Dashboard/Contacts/*"
       ],
+      "animations/*": [
+        "app/animations/*"
+      ]
     }
   },
   "exclude": [

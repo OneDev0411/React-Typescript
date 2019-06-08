@@ -1,8 +1,6 @@
 import React, { Fragment } from 'react'
 
-import { searchEvents } from 'models/tasks/search-events'
-import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
-
+import getCRMTimeline from 'models/get-crm-timeline'
 import NewTask from 'views/CRM/Tasks/components/NewTask'
 import { normalizeDeal } from 'views/utils/association-normalizers'
 
@@ -18,6 +16,14 @@ export default class EventsPane extends React.Component {
 
   componentDidMount() {
     this.fetchTimeline()
+
+    window.socket.on('crm_task:create', this.fetchTimeline)
+    window.socket.on('email_campaign:create', this.fetchTimeline)
+  }
+
+  componentWillUnmount() {
+    window.socket.off('crm_task:create', this.fetchTimeline)
+    window.socket.off('email_campaign:create', this.fetchTimeline)
   }
 
   defaultAssociation = {
@@ -27,22 +33,16 @@ export default class EventsPane extends React.Component {
 
   fetchTimeline = async () => {
     try {
-      const response = await searchEvents({
-        deal: this.props.deal.id,
-        associations: CRM_TASKS_QUERY.associations
+      const timeline = await getCRMTimeline({
+        deal: this.props.deal.id
       })
 
-      this.setState({ isFetching: false, timeline: response.data })
+      this.setState({ isFetching: false, timeline })
     } catch (error) {
       console.log(error)
       this.setState({ isFetching: false })
     }
   }
-
-  addEvent = event =>
-    this.setState(state => ({
-      timeline: [event, ...state.timeline]
-    }))
 
   filterTimelineById = (state, id) =>
     state.timeline.filter(item => item.id !== id)
@@ -78,7 +78,6 @@ export default class EventsPane extends React.Component {
           <Card style={{ marginBottom: '1.5rem' }}>
             <NewTask
               user={this.props.user}
-              submitCallback={this.addEvent}
               defaultAssociation={this.defaultAssociation}
             />
           </Card>

@@ -1,9 +1,12 @@
 export function sortAlphabetically(a, b) {
-  if (a < b) {
+  const _a = a.toLowerCase()
+  const _b = b.toLowerCase()
+
+  if (_a < _b) {
     return -1
   }
 
-  if (a > b) {
+  if (_a > _b) {
     return 1
   }
 
@@ -33,7 +36,7 @@ export function getNameInitials(name) {
     .map(word => /^[A-Za-z\s]+$/.test(word) ? word.charAt(0).toUpperCase() : '')
     .join('')
     .trim()
-    .substring(0, 3)
+    .substring(0, 2)
 }
 
 export async function getPhoneNumberUtil() {

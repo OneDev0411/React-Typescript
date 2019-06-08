@@ -8,8 +8,7 @@ import editUser from 'actions/user/edit'
 import uploadCoverImage from 'actions/user/upload-cover-image'
 
 import Button from 'components/Button/ActionButton'
-
-import FormCard from './FormCard'
+import FormCard from 'components/FormCard'
 
 const MAX_SIZE = 256
 const MIN_WIDTH = 240
@@ -60,7 +59,6 @@ const CoverImage = ({
               type="file"
               id="image-cover-input"
               onChange={uploadHandler}
-              accept="image/jpeg, image/png"
               className="c-cover-image__input"
               value={value}
             />
@@ -73,7 +71,12 @@ const CoverImage = ({
               {submitLabelText}
             </label>
             {((coverImage && !isUploading) || (!coverImage && isDeleting)) && (
-              <Button appearance="outline" size="small" onClick={deleteHandler}>
+              <Button
+                appearance="outline"
+                size="small"
+                onClick={deleteHandler}
+                data-test="cover-image-form-delete-button"
+              >
                 {isDeleting ? 'Deleting...' : 'Delete Cover'}
               </Button>
             )}

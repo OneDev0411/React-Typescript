@@ -47,7 +47,7 @@ export function SingleEmailComposeDrawer({
       }
     >
       <Field
-        placeholder="To"
+        labelText="To"
         name="recipients"
         component={To}
         disableAddNewRecipient={disableAddNewRecipient}
@@ -57,11 +57,11 @@ export function SingleEmailComposeDrawer({
         onBccAdded={() => setBcc(true)}
       />
       {hasCc && (
-        <Field placeholder="Cc" name="cc" component={MultipleContactsSelect} />
+        <Field labelText="Cc" name="cc" component={MultipleContactsSelect} />
       )}
       {hasBcc && (
         <Field
-          placeholder="Bcc"
+          labelText="Bcc"
           name="bcc"
           component={MultipleContactsSelect}
         />

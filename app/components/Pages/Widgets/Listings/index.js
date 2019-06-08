@@ -49,7 +49,7 @@ class ListingsWidget extends Component {
     )
 
     return (
-      <div className="futurastd" ref={ref => (this.parentDiv = ref)}>
+      <div ref={ref => (this.parentDiv = ref)}>
         <ListingSection
           title="Exclusive Listings"
           data={data}

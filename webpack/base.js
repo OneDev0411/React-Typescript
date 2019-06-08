@@ -20,7 +20,7 @@ module.exports = {
   },
   resolve: {
     modules: [resolvePath('../app'), 'node_modules'],
-    extensions: ['.js', '.jsx', '.json', '.css'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.css'],
     alias: {
       actions: resolvePath('../app/store_actions'),
       assets: resolvePath('../app/static'),
@@ -38,7 +38,8 @@ module.exports = {
       config: resolvePath('../config/public'),
       /* components */
       deals: resolvePath('../app/components/Pages/Dashboard/Deals'),
-      crm: resolvePath('../app/components/Pages/Dashboard/Contacts')
+      crm: resolvePath('../app/components/Pages/Dashboard/Contacts'),
+      animations: resolvePath('../app/animations')
     }
   },
   plugins: [new webpack.DefinePlugin(config.globals)],
@@ -48,7 +49,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(ts|tsx|js)$/,
         loader: 'babel-loader',
         include: config.compile.entry,
         options: {}

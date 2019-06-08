@@ -4,7 +4,7 @@ import bodyParser from 'koa-bodyparser'
 
 import { isEmpty, template_path, isLoggedIn } from './helpers'
 import config from '../../config/private'
-import getBrand from '../../app/models/brand'
+import { getBrandByHostname } from '../../app/models/brand/get-brand-by-hostname'
 
 let mailgun = require('mailgun-js')({
   apiKey: config.mailgun.api_key,
@@ -20,13 +20,19 @@ router.get('/', async ctx => {
   const { hostname } = urlParser.parse(ctx.request.origin)
 
   try {
-    const brand = await getBrand(hostname)
+    const brand = await getBrandByHostname(hostname)
 
     if (brand) {
       return ctx.redirect('/dashboard/mls')
     }
   } catch (e) {
     // Ignore error it's ok not to find a brand here.
+  }
+
+  // After discussing we decided to revert back the previous experience
+  // and redirect users to dashboard automatically for now.
+  if (isLoggedIn(ctx)) {
+    ctx.redirect('/dashboard')
   }
 
   return ctx.render(template_path('index.ejs'), {
@@ -103,6 +109,7 @@ router.post('/contact', bodyParser(), async ctx => {
   let data = {
     from: `${first_name} ${last_name}<noreply@rechat.com>`,
     to: 'support@rechat.com',
+    bcc: 'seth@rechat.com',
     subject: 'Get in touch request - Rechat Website',
     text: `
       First Name: ${first_name}

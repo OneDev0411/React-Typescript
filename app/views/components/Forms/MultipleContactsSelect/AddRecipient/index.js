@@ -20,6 +20,8 @@ import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
 import IconCircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
+import { isEmail } from 'utils/validations'
+
 import { SearchInput, SearchInputContainer } from './styled'
 
 import ContactItem from '../../../SelectContactModal/components/ContactItem'
@@ -36,6 +38,20 @@ const initialState = {
   filteredList: []
 }
 
+/**
+ * We should refactor this component into a component which accepts a list
+ * of of **providers** for different kind of items. This way:
+ * - It will be easier to compose these together. There are cases that
+ *   suggesting lists and tags doesn't make sense and we only want emails
+ *   for example. With the current design, we end up adding lots of
+ *   configuration props. Besides, there are use cases in which
+ *   different kinds of list items (not necessarily related to contacts)
+ *   with the same UI are needed.
+ * - Extracting the logic for fetching and rendering each kind of
+ *   suggestion (list, tag, email, contact) into a separate provider,
+ *   simplifies the code here and is more inline with Single Responsibility
+ *   principle
+ */
 class AddRecipient extends React.Component {
   constructor(props) {
     super(props)
@@ -55,9 +71,7 @@ class AddRecipient extends React.Component {
   }
 
   isEmail = (email = '') => {
-    const regular = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-
-    return regular.test(email.trim())
+    return email && typeof isEmail(email) != 'string'
   }
 
   handleSelectNewContact = contact => {
@@ -79,6 +93,7 @@ class AddRecipient extends React.Component {
         avatar: contact.summary.profile_image_url,
         email: contact.summary.email,
         emails: emails.map(email => email.text),
+        users: contact.users,
         data_type: 'contact'
       }
 
@@ -134,7 +149,10 @@ class AddRecipient extends React.Component {
 
     // We are searching for tags/list and contacts from server in parallel
     // Because we can show the results instantly for tags/list
-    this.handleSearchInTagsAndLists(value)
+    if (this.props.suggestTagsAndLists) {
+      this.handleSearchInTagsAndLists(value)
+    }
+
     this.search(value)
   }
 
@@ -280,7 +298,7 @@ class AddRecipient extends React.Component {
     }
 
     const contactsList = {
-      title: 'Contacts',
+      title: this.props.suggestTagsAndLists ? 'Contacts' : '',
       isLoading: this.state.isContactsLoading,
       items: this.state.list,
       itemRenderer: itemDefaultProps => (
@@ -320,7 +338,7 @@ class AddRecipient extends React.Component {
                   value: this.state.searchText,
                   onChange: this.handleSearchContact,
                   onBlur: this.handleInputBlur,
-                  placeholder: 'Add new recipient',
+                  placeholder: this.props.placeholder || 'Add new recipient',
                   readOnly: this.state.isContactsLoading
                 })}
               />

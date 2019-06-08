@@ -152,7 +152,7 @@ class Section extends Component {
     }
 
     return (
-      <div className="futurastd listing-section">
+      <div style={{ overflow: 'auto', marginBottom: '2em' }}>
         <div
           style={{
             textAlign: 'center',

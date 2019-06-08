@@ -70,7 +70,11 @@ class Confirmation extends React.Component {
 
         <div className="cta">
           {!confirmation.hideCancelButton && (
-            <Button appearance="outline" onClick={() => this.onCancel()}>
+            <Button
+              appearance="outline"
+              onClick={() => this.onCancel()}
+              data-test="confirmation-modal-cancel-button"
+            >
               {confirmation.cancelLabel || 'Cancel'}
             </Button>
           )}
@@ -78,6 +82,7 @@ class Confirmation extends React.Component {
             <Button
               style={{ marginLeft: '1em' }}
               onClick={() => this.onConfirm()}
+              data-test="confirmation-modal-confirm-button"
             >
               {confirmation.confirmLabel || 'Confirm'}
             </Button>

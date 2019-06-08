@@ -1,13 +1,15 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "env": {
     "browser": true,
+    "jest/globals": true,
     "node": true
   },
   "extends": [
     "airbnb",
     "prettier",
     "prettier/react",
+    "prettier/@typescript-eslint",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
     "plugin:import/errors",
@@ -15,9 +17,11 @@
   ],
   "plugins": [
     "import",
+    "jest",
     "react",
     "react-hooks",
-    "prettier"
+    "prettier",
+    "@typescript-eslint"
   ],
   "settings": {
     "import/resolver": {
@@ -270,5 +274,21 @@
         "next": "return"
       }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "rules": {
+        "no-unused-vars": ["off"],
+        "no-undef": ["off"],
+        "@typescript-eslint/no-unused-vars": [2, { "args": "none" }]
+      }
+    },
+    {
+      "files": ["**/*.d.ts"],
+      "rules": {
+        "react/no-multi-comp": ["off"]
+      }
+    }
+  ]
 }
