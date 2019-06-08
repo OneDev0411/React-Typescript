@@ -18,7 +18,7 @@ import { createAdminRequestTask } from '../../utils/create-request-task'
 
 import { DropDownButton, StatusBullet, StatusOption } from './styled'
 
-class DealStatus extends React.Component {
+export class DealStatus extends React.Component {
   state = {
     isSaving: false
   }
