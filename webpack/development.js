@@ -27,16 +27,35 @@ webpackConfig.entry = [appConfig.compile.entry]
 
 webpackConfig.plugins.push(
   new UnusedFilesWebpackPlugin({
-    patterns: ['app/**/*.*'],
+    patterns: ['app/**/*.+(css|js|jsx|ts|tsx)'],
     globOptions: {
       ignore: [
-        'app/types/**',
-        'app/hooks/**',
+        // Tests
+        // Somehow, it seems the ts test files look unused here
+        'app/**/*.test.+(js|jsx|ts|tsx)',
+
+        // Our TS interface ONLY name convention
+        // It somehow thinks they are unused when they only export interfaces :/
+        'app/**/types.ts',
+
+        // Static directory
+        // This plugin thinks some CSS files there are unused but they aren't
         'app/static/**',
+
+        // All icons
+        // We got a lot of unused ones
+        // TODO: Do something about icons and remove unused ones
         'app/views/components/SvgIcons/**',
-        'app/templates/**',
-        'app/styles/vendor/**',
+
+        // Used in server directory which is out of webpack
         'app/models/user/get-self/index.js',
+
+        // Mostly bootstrap and other 3rd party stuff
+        // TODO: Get rid of these too if it's possible
+        'app/styles/vendor/**',
+
+        // Flows stuff
+        // TODO: remove them from here when we enabled flows
         'app/models/flows/**',
         'app/views/components/AddToFlow/**',
         'app/components/Pages/Dashboard/Contacts/Profile/Flows/**',
