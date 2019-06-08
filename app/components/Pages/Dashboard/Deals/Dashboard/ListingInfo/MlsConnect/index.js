@@ -86,6 +86,7 @@ class MlsConnect extends React.Component {
         <SearchListingDrawer
           title="Connect Deal to MLS"
           isOpen={this.state.isDrawerOpen}
+          allowedStatuses={['Pending', 'Leased', 'Active']}
           onClose={this.toggleDrawer}
           onSelectListings={this.handleSelectListing}
         />
