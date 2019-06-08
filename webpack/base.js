@@ -39,9 +39,7 @@ module.exports = {
       /* components */
       deals: resolvePath('../app/components/Pages/Dashboard/Deals'),
       crm: resolvePath('../app/components/Pages/Dashboard/Contacts'),
-      animations: resolvePath('../app/animations'),
-      /* tests */
-      unitFixtures: resolvePath('../tests/unit/fixtures')
+      animations: resolvePath('../app/animations')
     }
   },
   plugins: [new webpack.DefinePlugin(config.globals)],

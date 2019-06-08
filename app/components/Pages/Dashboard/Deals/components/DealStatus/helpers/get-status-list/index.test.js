@@ -1,6 +1,4 @@
-// import liveSeller from 'fixtures/deal/live-seller'
-// import liveSeller from '../../../../../../../../../tests/unit/fixtures/deal/live-seller'
-import liveSeller from 'unitFixtures/deal/live-seller'
+import liveSeller from 'fixtures/deal/live-seller'
 
 import { getStatusList } from '.'
 
