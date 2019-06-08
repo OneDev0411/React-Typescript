@@ -178,7 +178,6 @@ class Builder extends React.Component {
 
       if (
         shouldSelectImage &&
-        editable &&
         model.view.$el.attr('rechat-assets') === 'listing-image'
       ) {
         this.editor.select(model)
