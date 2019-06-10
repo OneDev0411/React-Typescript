@@ -214,6 +214,7 @@
     "webpack-s3-plugin": "^1.0.3"
   },
   "devDependencies": {
+    "@testing-library/react": "^8.0.1",
     "@types/classnames": "^2.2.7",
     "@types/cleave.js": "^1.4.0",
     "@types/clipboard": "^1.5.36",
