@@ -8,14 +8,14 @@ export default function getUserDefaultHomepage(user) {
   }
 
   if (hasUserAccess(user, 'CRM')) {
-    defaultHomepage = '/dashboard/contacts'
+    return '/dashboard/contacts'
   }
 
   if (
     hasUserAccess(user, 'Deals') ||
     hasUserAccess(user, 'BackOffice')
   ) {
-    defaultHomepage = '/dashboard/deals'
+    return '/dashboard/deals'
   }
 
   return defaultHomepage
