@@ -24,6 +24,12 @@
 
     "jsx": "react",
 
+    // Allow importing JSON files
+    "resolveJsonModule": true,
+
+    // Allow dynamic importing
+    "module": "esnext",
+
     // If "extends" would work, we could have remove these duplications
     // but it seems it doesn't work
     "baseUrl": ".",
@@ -82,6 +88,6 @@
   "include": [
     "app/**/*.ts",
     "app/**/*.tsx",
-    "types/**/*"
+    "types/**/*", "app/views/components/SearchListingDrawer/helpers/get-mock-listing/index.js"
   ]
 }
