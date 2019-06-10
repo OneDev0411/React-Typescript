@@ -27,9 +27,7 @@ export default class Tabs extends React.Component {
     {
       id: 'marketing',
       label: 'Marketing',
-      isDisabled: deal => !deal.listing,
-      tooltipWhenDisabled:
-        'To enable marketing tab, connect this deal to a MLS listing',
+      isDisabled: () => false,
       render: props => <MarketingPane {...props} />
     }
   ]
