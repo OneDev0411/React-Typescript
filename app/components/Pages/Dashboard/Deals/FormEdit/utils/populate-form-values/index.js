@@ -1,6 +1,7 @@
 import { getField } from 'models/Deal/helpers/context/get-field'
 import { getContext } from 'models/Deal/helpers/context/get-context'
 import { getType, Types } from 'deals/FormEdit/utils/types'
+import { searchContext } from 'models/Deal/helpers/dynamic-context'
 
 import { getAnnotationsByType } from '../get-annotations-by-type'
 import { getInputAnnotations } from '../get-input-annotations'
@@ -75,7 +76,7 @@ function getFormValue(group, fields) {
 }
 
 function normalizeContextValue(deal, annotation, formValue = '') {
-  const context = getContext(deal, annotation.context)
+  const context = searchContext(deal.brand.id, annotation.context)
 
   if (!context || annotation.disableAutopopulate) {
     return formValue
@@ -87,7 +88,7 @@ function normalizeContextValue(deal, annotation, formValue = '') {
     return formValue
   }
 
-  if (context.data_type === 'Number') {
+  if (context.data_type === 'Number' && context.format === 'Currency') {
     return contextValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   }
 
