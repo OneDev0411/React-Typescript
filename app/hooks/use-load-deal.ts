@@ -10,6 +10,7 @@ export function useLoadDeal(id: string, deal: IDeal) {
   const [isFetchingDeal, setIsFetchingDeal] = useState(false)
   const [isFetchingContexts, setIsFetchingContexts] = useState(false)
   const [isFetchingForms, setIsFetchingForms] = useState(false)
+  const [isFetchingCompleted, setIsFetchingCompleted] = useState(false)
 
   const { contexts, forms } = useMemo(() => {
     const deals = store.getState().deals
@@ -85,10 +86,12 @@ export function useLoadDeal(id: string, deal: IDeal) {
     await fetchDeal()
 
     // fetch deal contexts
-    fetchContexts()
+    await fetchContexts()
 
     // fetch deal forms
-    fetchForms()
+    await fetchForms()
+
+    setIsFetchingCompleted(true)
   }
 
   useEffect(() => {
@@ -99,6 +102,7 @@ export function useLoadDeal(id: string, deal: IDeal) {
     isFetchingDeal,
     isFetchingContexts,
     isFetchingForms,
+    isFetchingCompleted,
     deal: fetchedDeal
   }
 }
