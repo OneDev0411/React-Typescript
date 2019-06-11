@@ -198,23 +198,20 @@ class MasterField extends React.Component {
   }
 
   handleDelete = () => {
-    const title = this.attribute_def.label
+    this.setState({ disabled: true })
 
+    const title = this.attribute_def.label
     const options = {
       show: true,
       confirmLabel: 'Yes, I do',
       message: `Delete ${title}`,
-      description: `You have made changes, are you sure about deleting "${title}" field?`,
-      onConfirm: this.delete
+      onConfirm: this.delete,
+      onCancel: () => this.setState({ disabled: false }),
+      description: `You have made changes, are you sure about deleting "${title}" field?`
     }
 
     if (this.isDrity) {
-      this.props.dispatch(
-        confirmation({
-          ...options,
-          description: `You have made changes, are you sure about the deleting "${title}" field?`
-        })
-      )
+      this.props.dispatch(confirmation(options))
     } else if (this.props.attribute[this.attribute_def.data_type]) {
       this.props.dispatch(
         confirmation({
