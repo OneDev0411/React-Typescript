@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
-import { confirmation } from 'store_actions/confirmation'
+import { confirmation } from 'actions/confirmation'
 
 import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 import InstantMarketing from 'components/InstantMarketing'
