@@ -33,6 +33,7 @@ const TagsString = ({ contact, attributeDefs, onSelectTagContact }) => {
 
   return (
     <ALink
+      data-test="add-tag"
       style={{ cursor: 'pointer' }}
       onClick={event => {
         event.stopPropagation()

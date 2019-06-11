@@ -25,14 +25,14 @@ export class ShowMoreLess extends Component {
   }
 
   renderShowMore = () => (
-    <ShowMoreLessText onClick={this.toggleState}>
+    <ShowMoreLessText data-test="show-more-button" onClick={this.toggleState}>
       {this.props.moreText}
       <ArrowDown />
     </ShowMoreLessText>
   )
 
   renderShowLess = () => (
-    <ShowMoreLessText onClick={this.toggleState}>
+    <ShowMoreLessText data-test="show-more-button" onClick={this.toggleState}>
       {this.props.lessText}
       <ArrowUp />
     </ShowMoreLessText>
