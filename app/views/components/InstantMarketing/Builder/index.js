@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
@@ -33,6 +33,9 @@ import {
   Header,
   Divider
 } from './styled'
+
+import SocialActions from './SocialActions'
+import { SOCIAL_NETWORKS } from './constants'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -381,34 +384,10 @@ class Builder extends React.Component {
               )}
 
               {this.state.selectedTemplate && isSocialMedium && (
-                <Fragment>
-                  <ActionButton
-                    onClick={() => this.handleSocialSharing('Instagram')}
-                  >
-                    <i
-                      className="fa fa-instagram"
-                      style={{
-                        fontSize: '1.5rem',
-                        marginRight: '0.5rem'
-                      }}
-                    />
-                    Post to Instagram
-                  </ActionButton>
-
-                  <ActionButton
-                    style={{ marginLeft: '0.5rem' }}
-                    onClick={() => this.handleSocialSharing('Facebook')}
-                  >
-                    <i
-                      className="fa fa-facebook-square"
-                      style={{
-                        fontSize: '1.5rem',
-                        marginRight: '0.5rem'
-                      }}
-                    />
-                    Post to Facebook
-                  </ActionButton>
-                </Fragment>
+                <SocialActions
+                  networks={SOCIAL_NETWORKS}
+                  onClick={this.handleSocialSharing}
+                />
               )}
 
               {this.state.selectedTemplate && !isSocialMedium && (
