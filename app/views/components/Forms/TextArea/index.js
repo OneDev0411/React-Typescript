@@ -1,13 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import {
-  InputContainer,
-  InputError,
-  InputRequired,
-  InputLabel
-} from '../styled'
+import { InputContainer, InputRequired, InputLabel } from '../styled'
 import { InputField } from './styled'
+import { FieldError } from '../../final-form-fields/FieldError'
 
 export class TextArea extends React.Component {
   state = {
@@ -51,11 +47,7 @@ export class TextArea extends React.Component {
           {...this.props.rest}
         />
 
-        {this.props.showError && (
-          <InputError display={meta.error && meta.touched}>
-            {meta.error}
-          </InputError>
-        )}
+        {this.props.showError && <FieldError name={this.props.input.name} />}
       </Container>
     )
   }

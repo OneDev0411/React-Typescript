@@ -3,9 +3,8 @@ import { connect } from 'react-redux'
 
 import _ from 'underscore'
 
-import { InputError } from 'components/Forms/styled'
-
 import { ListAttachmentItem } from 'components/ListAttachmentItem'
+import { FieldError } from 'components/final-form-fields/FieldError'
 
 function AttachmentsList(props) {
   const handleDelete = attachment => {
@@ -27,9 +26,7 @@ function AttachmentsList(props) {
         />
       ))}
 
-      {props.meta.error && props.meta.touched && (
-        <InputError>{props.meta.error}</InputError>
-      )}
+      <FieldError name={props.input.name} />
     </div>
   )
 }

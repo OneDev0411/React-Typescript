@@ -4,12 +4,12 @@ import { InlineAddressField } from 'components/inline-editable-fields/InlineAddr
 
 import {
   InputContainer,
-  InputError,
   InputRequired,
   InputLabel
 } from 'components/Forms/styled'
 
 import { Input } from './styled'
+import { FieldError } from '../../../../final-form-fields/FieldError'
 
 export function Address(props) {
   if (!props.isVisible) {
@@ -34,9 +34,7 @@ export function Address(props) {
         )}
       />
 
-      {props.showError && props.meta.error && props.meta.touched && (
-        <InputError>{props.meta.error}</InputError>
-      )}
+      {props.showError && <FieldError name={props.input.name} />}
     </InputContainer>
   )
 }

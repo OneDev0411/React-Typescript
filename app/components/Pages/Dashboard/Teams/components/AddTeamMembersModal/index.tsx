@@ -10,7 +10,7 @@ import { MultipleContactsSelect } from 'components/Forms/MultipleContactsSelect'
 import { Checkbox } from 'components/Checkbox'
 import { Divider } from 'components/Divider'
 
-import { InputError } from 'components/Forms/styled'
+import { FieldError } from 'components/final-form-fields/FieldError'
 
 import { Button, RolesLabel } from './styled'
 
@@ -82,11 +82,7 @@ export function AddTeamMembersModal(props: Props) {
                             </Checkbox>
                           ))}
                         </div>
-                        {meta.error && meta.touched && (
-                          <InputError display={meta.touched}>
-                            {meta.error}
-                          </InputError>
-                        )}
+                        <FieldError name={input.name}>{meta.error}</FieldError>
                       </>
                     )
                   )

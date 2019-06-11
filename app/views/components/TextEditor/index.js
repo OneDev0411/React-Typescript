@@ -13,8 +13,6 @@ import { stateFromHTML } from 'draft-js-import-html'
 import createRichButtonsPlugin from 'draft-js-richbuttons-plugin'
 import cn from 'classnames'
 
-import { InputError } from 'components/Forms/styled'
-
 import IconBold from '../SvgIcons/Bold/IconBold'
 import IconUnderline from '../SvgIcons/Underline/IconUnderline'
 import IconItalic from '../SvgIcons/Italic/IconItalic'
@@ -25,6 +23,7 @@ import { EditorWrapper, Separator, Toolbar } from './styled'
 
 import IconButton from './buttons/IconButton'
 import HeadingButtons from './buttons/HeadingButtons'
+import { FieldError } from '../final-form-fields/FieldError'
 
 const richButtonsPlugin = createRichButtonsPlugin()
 
@@ -177,11 +176,7 @@ export const TextEditor = forwardRef((props, ref) => {
         />
       </EditorWrapper>
 
-      {props.meta && props.meta.error && props.meta.touched && (
-        <InputError style={{ marginTop: '0.5rem' }}>
-          {props.meta.error}
-        </InputError>
-      )}
+      {props.input && <FieldError name={props.input.name} />}
     </Fragment>
   )
 })

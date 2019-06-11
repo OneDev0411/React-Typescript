@@ -4,14 +4,10 @@ import PropTypes from 'prop-types'
 import { BasicDropdown } from 'components/BasicDropdown'
 import IconDrop from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
-import {
-  InputContainer,
-  InputLabel,
-  InputRequired,
-  InputError
-} from '../styled'
+import { InputContainer, InputLabel, InputRequired } from '../styled'
 
 import { MenuButton } from './styled'
+import { FieldError } from '../../final-form-fields/FieldError'
 
 SelectInput.propTypes = {
   items: PropTypes.arrayOf(
@@ -101,11 +97,7 @@ export function SelectInput(props) {
         {...props.dropdownOptions}
       />
 
-      {props.showError && (
-        <InputError display={props.meta.error && props.meta.touched}>
-          {props.meta.error}
-        </InputError>
-      )}
+      {props.showError && <FieldError name={props.input.name} />}
     </props.container>
   )
 }
