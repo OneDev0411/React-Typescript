@@ -238,11 +238,6 @@ const AsyncProfile = Load({
     import('../components/Pages/Dashboard/Account/Profile' /* webpackChunkName: "profile" */)
 })
 
-const AsyncDealTemplates = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Account/DealTemplates' /* webpackChunkName: "deal_templates" */)
-})
-
 const ExportCalendar = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Account/ICalIntegration' /* webpackChunkName: "deal_templates" */)
@@ -256,11 +251,6 @@ const ManageTags = Load({
 const ReminderNotifications = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Account/ReminderNotifications' /* webpackChunkName: "reminder_notifications" */)
-})
-
-const AsyncEditDealTemplate = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Account/DealTemplates/EditTemplate' /* webpackChunkName: "deal_templates_edit" */)
 })
 
 const AsyncUpgradeAccount = Load({
@@ -483,8 +473,6 @@ export default (
         <IndexRoute component={AsyncProfile} />
         <Route path="upgrade" component={AsyncUpgradeAccount} />
 
-        <Route path="deal/templates" component={AsyncDealTemplates} />
-        <Route path="deal/templates/:id" component={AsyncEditDealTemplate} />
         <Route path="exportCalendar" component={ExportCalendar} />
         <Route path="manage-tags" component={ManageTags} />
         <Route
