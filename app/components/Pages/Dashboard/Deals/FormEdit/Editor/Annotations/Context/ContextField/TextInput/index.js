@@ -9,8 +9,7 @@ export function TextInput(props) {
     if (['Number', 'Numeric'].includes(data_type)) {
       return {
         numeral: true,
-        numeralThousandsGroupStyle: 'thousand',
-        delimiter: format === 'Currency' ? ',' : '',
+        numeralThousandsGroupStyle: format === 'Currency' ? 'thousand' : 'none',
         numeralPositiveOnly: format === 'Currency',
         // prefix: format === 'Currency' ? '$' : null,
         noImmediatePrefix: true,
