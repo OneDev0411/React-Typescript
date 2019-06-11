@@ -151,6 +151,7 @@ class Roles extends React.Component {
         {this.props.roles
           .filter(
             role =>
+              role &&
               this.props.filter(role) &&
               (!this.props.allowedRoles ||
                 this.props.allowedRoles.includes(role.role))

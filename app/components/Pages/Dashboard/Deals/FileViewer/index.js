@@ -141,7 +141,11 @@ class FileViewer extends React.Component {
   }
 
   get DigitalForm() {
-    return getTaskForm(this.state.deal, this.props.task)
+    return {
+      type: 'pdf',
+      name: this.props.task.title,
+      url: this.props.task.pdf_url
+    }
   }
 
   get EntityType() {

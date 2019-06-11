@@ -21,7 +21,7 @@ export function useLoadDeal(id: string, deal: IDeal) {
   }, [])
 
 
-  const brandId: UUID = fetchedDeal.brand && fetchedDeal.brand.id
+  const brandId: UUID = fetchedDeal && fetchedDeal.brand && fetchedDeal.brand.id
 
   /**
    * fetches and returns a deal if it's not fetched yet

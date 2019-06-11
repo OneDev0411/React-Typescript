@@ -81,7 +81,7 @@ class EditDigitalForm extends React.Component {
     }
 
     const pdfUrl = task.submission
-      ? task.submission.file.url
+      ? task.pdf_url
       : `${config.forms.url}/${form.id}.pdf`
 
     // get form size in bytes, because pdfjs sucks

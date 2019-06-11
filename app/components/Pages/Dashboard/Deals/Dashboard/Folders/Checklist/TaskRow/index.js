@@ -133,7 +133,7 @@ class Task extends React.Component {
     }
 
     link = props.task.submission
-      ? props.task.submission.file.url
+      ? props.task.pdf_url
       : props.task.room.attachments[0].url
 
     window.open(link, '_blank')

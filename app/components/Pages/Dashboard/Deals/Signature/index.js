@@ -33,7 +33,7 @@ class Signature extends React.Component {
     const formData = this.state.formData || values
 
     const attachments = _.map(formData.attachments, attachment => ({
-      revision: attachment.revision,
+      task_id: attachment.task_id,
       file: attachment.file_id
     }))
 

@@ -44,9 +44,8 @@ export function normalizeSubmissionForm(task) {
     task_id: task.id,
     file_id: task.submission.file.id,
     checklist: task.checklist,
-    revision: task.submission.last_revision,
     title: `${task.title}.pdf`,
-    url: task.submission.file.url,
+    url: task.pdf_url,
     date: normalizeDate(task.created_at)
   }
 }

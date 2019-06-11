@@ -10,7 +10,6 @@ const routes = {
   deal: [
     'docusign-login',
     'envelope-sign',
-    'download-pdf',
     'envelope-edit',
     'export-all-deals',
     'export-custom-report'
