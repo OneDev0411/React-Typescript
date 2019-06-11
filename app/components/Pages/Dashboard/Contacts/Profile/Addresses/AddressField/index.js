@@ -98,8 +98,6 @@ class AddressField extends React.Component {
   }
 
   delete = async () => {
-    this.setState({ isDisabled: true })
-
     const attributeIds = this.props.address.attributes
       .filter(attribute => attribute.id)
       .map(attribute => attribute.id)
@@ -122,11 +120,13 @@ class AddressField extends React.Component {
   onChangeInput = address => this.setState({ address })
 
   handleDelete = () => {
+    this.setState({ isDisabled: true })
+
     const options = {
-      show: true,
       onConfirm: this.delete,
       confirmLabel: 'Yes, I do',
       message: 'Delete Address',
+      onCancel: () => this.setState({ isDisabled: false }),
       description:
         'You have made changes, are you sure about deleting this address?'
     }
