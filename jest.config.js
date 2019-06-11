@@ -19,6 +19,9 @@ module.exports = {
     '^utils/(.*)': '<rootDir>/app/utils/$1',
     '^views/(.*)': '<rootDir>/app/views/$1',
     '^store/(.*)': '<rootDir>/app/stores/$1',
-    '^fixtures/(.*)': '<rootDir>/tests/unit/fixtures/$1'
+    '^config$': '<rootDir>/config/public',
+    '^fixtures/(.*)': '<rootDir>/tests/unit/fixtures/$1',
+    '\\.(css|less|sass|scss)$': '<rootDir>/tests/unit/mocks/styles.js',
+    '\\.(gif|ttf|eot|svg)$': '<rootDir>/tests/unit/mocks/files.js'
   }
 }
