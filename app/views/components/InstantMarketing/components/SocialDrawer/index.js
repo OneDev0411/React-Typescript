@@ -49,6 +49,10 @@ class SocialDrawer extends React.Component {
       return [DownloadImage, SendSMS, CopyImageUrl]
     }
 
+    if (this.props.socialNetworkName === 'LinkedIn') {
+      return [DownloadImage, CopyImageUrl]
+    }
+
     return [SendSMS, DownloadImage, CopyImageUrl]
   }
 
