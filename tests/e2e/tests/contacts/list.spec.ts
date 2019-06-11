@@ -1,6 +1,6 @@
 import { Browser, Page } from 'puppeteer'
 
-import { init } from '../../helpers'
+import { init, getTestSelector } from '../../helpers'
 import { navigateRelative } from '../../helpers/page'
 import { signIn } from '../../helpers/auth'
 import { expandTags } from './expand-tags'
@@ -36,15 +36,9 @@ describe('Contacts list page', () => {
     await addNewTag(page, tagName)
 
     // Assert that the new tag exists in tags section in side menu
-    await page.waitForFunction(
-      // Another solution for finding the new tag would be to set a unique
-      // data-test attribute for each tag (like tag-item-[tagName]), and
-      // directly query it.
-      `[...document.querySelectorAll('[data-test="tag-item"]')].find(
-          tag => tag.textContent === '${tagName}'
-        )`,
-      { timeout: 20000 }
-    )
+    await page.waitForSelector(getTestSelector(`tag-item-${tagName}`), {
+      timeout: 20000
+    })
 
     // Remove the new tag
     await navigateRelative(page, '/dashboard/account/manage-tags')

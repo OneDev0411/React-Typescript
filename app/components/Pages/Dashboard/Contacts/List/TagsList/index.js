@@ -112,7 +112,7 @@ class TagsList extends React.Component {
             return (
               <ToolTip key={index} caption={item.text} placement="right">
                 <CustomListItem
-                  data-test="tag-item"
+                  data-test={`tag-item-${item.text}`}
                   isSelected={isSelected}
                   onClick={() => this.onSelectList(item)}
                 >

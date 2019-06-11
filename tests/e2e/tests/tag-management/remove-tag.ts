@@ -3,13 +3,14 @@ import { Page } from 'puppeteer'
 import { getTestSelector } from '../../helpers'
 
 export async function removeTag(tagManagementPage: Page, tag: string) {
-  const addedTagElem = await tagManagementPage.$(
-    getTestSelector(`tag-item-${tag}`)
+  const tagElement = await tagManagementPage.waitForSelector(
+    getTestSelector(`tag-item-${tag}`),
+    { timeout: 5000 }
   )
 
-  expect(addedTagElem).not.toBeNull()
+  expect(tagElement).not.toBeNull()
 
-  const deleteButton = await addedTagElem!.$('button')
+  const deleteButton = await tagElement!.$('button')
 
   await deleteButton!.click()
 
