@@ -161,6 +161,87 @@ exports[`Svg-generated styled components AddCircleOutline/IconAddCircleOutline r
 </StyledComponent>
 `;
 
+exports[`Svg-generated styled components AddUser/AddUserIcon renders correctly according to snapshot 1`] = `
+<StyledComponent
+  color="red"
+  fillColor={null}
+  fillColorRule="&&& path, &&& use, &&& g"
+  forwardedComponent={
+    Object {
+      "$$typeof": Symbol(react.forward_ref),
+      "attrs": Array [],
+      "componentStyle": ComponentStyle {
+        "componentId": "AddUserIcon__Image-sc-12uq97t-0",
+        "isStatic": false,
+        "rules": Array [
+          [Function],
+        ],
+      },
+      "defaultProps": Object {
+        "children": <React.Fragment>
+          <path
+            d="M17.25 24a6.75 6.75 0 1 0 0-13.5 6.75 6.75 0 0 0 0 13.5zm0-1.5a5.25 5.25 0 1 1 0-10.5 5.25 5.25 0 0 1 0 10.5z"
+          />
+          <path
+            d="M16.5 14.25v6H18v-6z"
+          />
+          <path
+            d="M14.25 18h6v-1.5h-6zM1.5 17.25a6.003 6.003 0 0 1 8.356-5.518l.588-1.38A7.503 7.503 0 0 0 0 17.249l1.5.002z"
+          />
+          <path
+            d="M7.5 9.75A4.875 4.875 0 1 0 7.5 0a4.875 4.875 0 0 0 0 9.75zm0-1.5a3.375 3.375 0 1 1 0-6.75 3.375 3.375 0 0 1 0 6.75z"
+          />
+        </React.Fragment>,
+        "fillColor": null,
+        "fillColorRule": "&&& path, &&& use, &&& g",
+        "size": null,
+        "sizes": Object {},
+        "viewBox": "0 0 24 24",
+      },
+      "displayName": "AddUserIcon",
+      "foldedComponentIds": Array [],
+      "getCss": [Function],
+      "getDimensions": [Function],
+      "propTypes": Object {
+        "children": [Function],
+        "fillColor": [Function],
+        "fillColorRule": [Function],
+        "size": [Function],
+        "sizes": [Function],
+        "viewBox": [Function],
+      },
+      "render": [Function],
+      "styledComponentId": "AddUserIcon__Image-sc-12uq97t-0",
+      "target": "svg",
+      "toString": [Function],
+      "warnTooManyClasses": [Function],
+      "withComponent": [Function],
+    }
+  }
+  forwardedRef={null}
+  size={null}
+  sizes={Object {}}
+  viewBox="0 0 24 24"
+>
+  <path
+    d="M17.25 24a6.75 6.75 0 1 0 0-13.5 6.75 6.75 0 0 0 0 13.5zm0-1.5a5.25 5.25 0 1 1 0-10.5 5.25 5.25 0 0 1 0 10.5z"
+    key="key-0"
+  />
+  <path
+    d="M16.5 14.25v6H18v-6z"
+    key="key-1"
+  />
+  <path
+    d="M14.25 18h6v-1.5h-6zM1.5 17.25a6.003 6.003 0 0 1 8.356-5.518l.588-1.38A7.503 7.503 0 0 0 0 17.249l1.5.002z"
+    key="key-2"
+  />
+  <path
+    d="M7.5 9.75A4.875 4.875 0 1 0 7.5 0a4.875 4.875 0 0 0 0 9.75zm0-1.5a3.375 3.375 0 1 1 0-6.75 3.375 3.375 0 0 1 0 6.75z"
+    key="key-3"
+  />
+</StyledComponent>
+`;
+
 exports[`Svg-generated styled components Alarm/IconAlarm renders correctly according to snapshot 1`] = `
 <StyledComponent
   color="red"
@@ -3240,6 +3321,140 @@ exports[`Svg-generated styled components EditFile/IconEditFile renders correctly
       />
     </g>
   </g>
+</StyledComponent>
+`;
+
+exports[`Svg-generated styled components EditOutline/EditOutlineIcon renders correctly according to snapshot 1`] = `
+<StyledComponent
+  color="red"
+  fillColor={null}
+  fillColorRule="&&& path, &&& use, &&& g"
+  forwardedComponent={
+    Object {
+      "$$typeof": Symbol(react.forward_ref),
+      "attrs": Array [],
+      "componentStyle": ComponentStyle {
+        "componentId": "EditOutlineIcon__Image-pvvbce-0",
+        "isStatic": false,
+        "rules": Array [
+          [Function],
+        ],
+      },
+      "defaultProps": Object {
+        "children": <React.Fragment>
+          <path
+            d="M19.593 0a4.388 4.388 0 0 0-3.108 1.32L1.99 15.816a.75.75 0 0 0-.196.344l-1.77 6.904a.75.75 0 0 0 .912.912l6.905-1.77a.75.75 0 0 0 .344-.197l14.5-14.5a4.388 4.388 0 0 0 .036-6.229A4.39 4.39 0 0 0 19.593 0zM22.5 4.397a2.888 2.888 0 0 1-.87 2.046L7.27 20.803 1.79 22.21l1.405-5.479L17.551 2.375a2.888 2.888 0 0 1 4.108-.035c.544.546.846 1.287.841 2.057z"
+          />
+          <path
+            d="M16.076 2.79l5.134 5.134a.75.75 0 0 0 1.06-1.06L17.136 1.73a.75.75 0 0 0-1.06 1.06zm-2.094 2.094l5.134 5.134a.75.75 0 0 0 1.06-1.06l-5.134-5.134a.75.75 0 0 0-1.06 1.06zM1.991 16.876l5.14 5.129a.75.75 0 1 0 1.059-1.062l-5.14-5.129a.75.75 0 1 0-1.059 1.062z"
+          />
+        </React.Fragment>,
+        "fillColor": null,
+        "fillColorRule": "&&& path, &&& use, &&& g",
+        "size": null,
+        "sizes": Object {},
+        "viewBox": "0 0 24 24",
+      },
+      "displayName": "EditOutlineIcon",
+      "foldedComponentIds": Array [],
+      "getCss": [Function],
+      "getDimensions": [Function],
+      "propTypes": Object {
+        "children": [Function],
+        "fillColor": [Function],
+        "fillColorRule": [Function],
+        "size": [Function],
+        "sizes": [Function],
+        "viewBox": [Function],
+      },
+      "render": [Function],
+      "styledComponentId": "EditOutlineIcon__Image-pvvbce-0",
+      "target": "svg",
+      "toString": [Function],
+      "warnTooManyClasses": [Function],
+      "withComponent": [Function],
+    }
+  }
+  forwardedRef={null}
+  size={null}
+  sizes={Object {}}
+  viewBox="0 0 24 24"
+>
+  <path
+    d="M19.593 0a4.388 4.388 0 0 0-3.108 1.32L1.99 15.816a.75.75 0 0 0-.196.344l-1.77 6.904a.75.75 0 0 0 .912.912l6.905-1.77a.75.75 0 0 0 .344-.197l14.5-14.5a4.388 4.388 0 0 0 .036-6.229A4.39 4.39 0 0 0 19.593 0zM22.5 4.397a2.888 2.888 0 0 1-.87 2.046L7.27 20.803 1.79 22.21l1.405-5.479L17.551 2.375a2.888 2.888 0 0 1 4.108-.035c.544.546.846 1.287.841 2.057z"
+    key="key-0"
+  />
+  <path
+    d="M16.076 2.79l5.134 5.134a.75.75 0 0 0 1.06-1.06L17.136 1.73a.75.75 0 0 0-1.06 1.06zm-2.094 2.094l5.134 5.134a.75.75 0 0 0 1.06-1.06l-5.134-5.134a.75.75 0 0 0-1.06 1.06zM1.991 16.876l5.14 5.129a.75.75 0 1 0 1.059-1.062l-5.14-5.129a.75.75 0 1 0-1.059 1.062z"
+    key="key-1"
+  />
+</StyledComponent>
+`;
+
+exports[`Svg-generated styled components EditRoles/EditRolesIcon renders correctly according to snapshot 1`] = `
+<StyledComponent
+  color="red"
+  fillColor={null}
+  fillColorRule="&&& path, &&& use, &&& g"
+  forwardedComponent={
+    Object {
+      "$$typeof": Symbol(react.forward_ref),
+      "attrs": Array [],
+      "componentStyle": ComponentStyle {
+        "componentId": "EditRolesIcon__Image-sc-11v1ylb-0",
+        "isStatic": false,
+        "rules": Array [
+          [Function],
+        ],
+      },
+      "defaultProps": Object {
+        "children": <React.Fragment>
+          <path
+            d="M23.16 15.4l-7.79 7.79-5.076 1.016 1.015-5.076.16-.16 7.63-7.631c1.12-1.12 2.934-1.12 4.084.032l-.023-.024a2.863 2.863 0 0 1 0 4.053zm-8.53 6.41l7.47-7.471c.256-.257.4-.604.4-.966 0-.361-.144-.708-.43-.997l.022.023a1.366 1.366 0 0 0-1.932 0l-7.47 7.47-.484 2.425 2.424-.485zM6 7.5A3.75 3.75 0 1 0 6 0a3.75 3.75 0 0 0 0 7.5zM6 6a2.25 2.25 0 1 1 0-4.5A2.25 2.25 0 0 1 6 6z"
+          />
+          <path
+            d="M2.321 16.5l.75 7.5H8.93l.75-7.5H12v-3a6 6 0 0 0-12 0v3h2.321zM10.5 15H8.321l-.75 7.5H4.43L3.68 15H1.5v-1.5a4.5 4.5 0 1 1 9 0V15z"
+          />
+        </React.Fragment>,
+        "fillColor": null,
+        "fillColorRule": "&&& path, &&& use, &&& g",
+        "size": null,
+        "sizes": Object {},
+        "viewBox": "0 0 24 24",
+      },
+      "displayName": "EditRolesIcon",
+      "foldedComponentIds": Array [],
+      "getCss": [Function],
+      "getDimensions": [Function],
+      "propTypes": Object {
+        "children": [Function],
+        "fillColor": [Function],
+        "fillColorRule": [Function],
+        "size": [Function],
+        "sizes": [Function],
+        "viewBox": [Function],
+      },
+      "render": [Function],
+      "styledComponentId": "EditRolesIcon__Image-sc-11v1ylb-0",
+      "target": "svg",
+      "toString": [Function],
+      "warnTooManyClasses": [Function],
+      "withComponent": [Function],
+    }
+  }
+  forwardedRef={null}
+  size={null}
+  sizes={Object {}}
+  viewBox="0 0 24 24"
+>
+  <path
+    d="M23.16 15.4l-7.79 7.79-5.076 1.016 1.015-5.076.16-.16 7.63-7.631c1.12-1.12 2.934-1.12 4.084.032l-.023-.024a2.863 2.863 0 0 1 0 4.053zm-8.53 6.41l7.47-7.471c.256-.257.4-.604.4-.966 0-.361-.144-.708-.43-.997l.022.023a1.366 1.366 0 0 0-1.932 0l-7.47 7.47-.484 2.425 2.424-.485zM6 7.5A3.75 3.75 0 1 0 6 0a3.75 3.75 0 0 0 0 7.5zM6 6a2.25 2.25 0 1 1 0-4.5A2.25 2.25 0 0 1 6 6z"
+    key="key-0"
+  />
+  <path
+    d="M2.321 16.5l.75 7.5H8.93l.75-7.5H12v-3a6 6 0 0 0-12 0v3h2.321zM10.5 15H8.321l-.75 7.5H4.43L3.68 15H1.5v-1.5a4.5 4.5 0 1 1 9 0V15z"
+    key="key-1"
+  />
 </StyledComponent>
 `;
 
