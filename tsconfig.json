@@ -87,7 +87,6 @@
   },
   "include": [
     "app/**/*.ts",
-    "app/**/*.tsx",
-    "types/**/*", "app/views/components/SearchListingDrawer/helpers/get-mock-listing/index.js"
+    "app/**/*.tsx"
   ]
 }
