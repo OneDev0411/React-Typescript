@@ -19,12 +19,6 @@ export const ProfileTabs = ({ user }) => (
     />
     <Tab
       indexed
-      text="Form Templates"
-      to="/dashboard/account/deal/templates"
-      disabled
-    />
-    <Tab
-      indexed
       text="Calendar Export"
       to="/dashboard/account/exportCalendar"
     />
