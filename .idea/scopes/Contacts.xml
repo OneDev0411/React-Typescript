@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Contacts" pattern="file[web]:types/Contact//*||file[web]:app/constants/contacts//*||file[web]:app/reducers/contacts//*||file[web]:app/models/contacts//*||file[web]:app/store_actions/contacts//*||file[web]:app/components/Pages/Dashboard/Contacts//*" />
+</component>
