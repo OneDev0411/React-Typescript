@@ -12,7 +12,6 @@ import contacts from './contacts'
 import chatroom from './chatroom'
 import deals from './deals'
 import calendar from './calendar'
-import brandConsole from './brandConsole'
 import search from './listings/search'
 import alerts from './listings/alerts'
 import favorites from './listings/favorites'
@@ -37,7 +36,6 @@ const appReducer = combineReducers({
   globalNotifications,
   /* deals reducers */
   deals,
-  brandConsole,
 
   /* calendar */
   calendar,
