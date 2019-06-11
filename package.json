@@ -159,7 +159,7 @@
     "react-joyride": "^2.0.0-15",
     "react-lazy-load": "^3.0.13",
     "react-loadable": "^5.4.0",
-    "react-masonry-component": "^6.2.1",
+    "react-masonry-css": "^1.0.12",
     "react-modal": "^3.8.1",
     "react-motion": "^0.5.2",
     "react-progressive-image": "^0.6.0",
@@ -214,6 +214,7 @@
     "webpack-s3-plugin": "^1.0.3"
   },
   "devDependencies": {
+    "@testing-library/react": "^8.0.1",
     "@types/classnames": "^2.2.7",
     "@types/cleave.js": "^1.4.0",
     "@types/clipboard": "^1.5.36",
@@ -233,6 +234,7 @@
     "@types/moment-timezone": "^0.5.12",
     "@types/offline-js": "^0.7.28",
     "@types/papaparse": "^4.5.9",
+    "@types/puppeteer": "^1.12.4",
     "@types/rc-slider": "^8.6.3",
     "@types/react": "^16.8.1",
     "@types/react-avatar-editor": "^10.3.4",
@@ -292,6 +294,7 @@
     "prettier": "^1.15.3",
     "puppeteer": "^1.16.0",
     "styled-svg": "^2.3.4",
+    "ts-jest": "^24.0.2",
     "typescript": "^3.4.5",
     "webpack-cli": "^3.2.1",
     "webpack-notifier": "^1.7.0",

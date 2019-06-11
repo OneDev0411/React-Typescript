@@ -1,98 +1,78 @@
-import React, { Component } from 'react'
-import _ from 'underscore'
+import React, { useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { browserHistory } from 'react-router'
 
-import { onlyUnique, sortAlphabetically } from 'utils/helpers'
-import { getTemplates } from 'models/instant-marketing/get-templates'
+import TemplatesList from 'components/TemplatesList'
+import { getSelectedMediumTemplates } from 'components/TemplatesList/helpers'
 
 import { Header } from './Header'
-import { List } from './List'
 import { headers } from './Header/data'
+import useTemplatesList from './useTemplatesList'
+import { getMediums, getTabName } from './helpers'
+import { Tab, ListView } from './styled'
 
-function getMediums(templates) {
-  return templates
-    .map(t => t.medium)
-    .filter(onlyUnique)
-    .sort(sortAlphabetically)
-    .reverse()
+const mediumsCollection = {
+  FacebookCover: 'Facebook Covers',
+  InstagramStory: 'Instagram Stories',
+  LinkedInCover: 'Linked In Covers'
 }
 
-export default class Templates extends Component {
-  state = {
-    tabs: [],
-    templates: [],
-    isLoading: false
-  }
+function Templates(props) {
+  const selectedType = headers[props.types]
+  const [templates, isLoading] = useTemplatesList(props.types)
+  const tabs = getMediums(templates)
+  const selectedMedium = getTabName(props.medium, tabs)
+  const availableTemplates = getSelectedMediumTemplates(
+    templates,
+    selectedMedium
+  )
 
-  componentDidMount() {
-    this.fetch()
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.types !== this.props.types) {
-      this.fetch()
-    }
-  }
-
-  fetch = _.debounce(async () => {
-    const { types } = this.props
-
-    try {
-      this.setState({ isLoading: true })
-
-      const templates = await getTemplates(types.split(','), [
-        'Email',
-        'Social',
-        'LinkedInCover',
-        'FacebookCover',
-        'InstagramStory'
-      ])
-
-      const tabs = getMediums(templates)
-
-      this.setState(
-        {
-          isLoading: false,
-          templates,
-          tabs
-        },
-        () =>
-          browserHistory.push(
-            `/dashboard/marketing/${types}/${this.props.medium || tabs[0]}`
-          )
+  useEffect(() => {
+    if (selectedMedium) {
+      browserHistory.push(
+        `/dashboard/marketing/${props.types}/${selectedMedium}`
       )
-    } catch (error) {
-      console.log(error)
-      this.setState({ isLoading: false })
     }
-  }, 500)
+  }, [props.types, selectedMedium])
 
-  render() {
-    const { state, props } = this
-    const selectedType = headers[props.types]
+  return (
+    <React.Fragment>
+      <Helmet>
+        <title>{selectedType.title} | Marketing | Rechat</title>
+      </Helmet>
 
-    return (
-      <React.Fragment>
-        <Helmet>
-          <title>{selectedType.title} | Marketing | Rechat</title>
-        </Helmet>
+      <Header
+        data={selectedType}
+        isSideMenuOpen={props.isSideMenuOpen}
+        toggleSideMenu={props.toggleSideMenu}
+        types={props.types}
+      />
 
-        <Header
-          data={selectedType}
-          isSideMenuOpen={props.isSideMenuOpen}
-          toggleSideMenu={props.toggleSideMenu}
-          types={props.types}
+      <ListView>
+        <TemplatesList
+          items={availableTemplates}
+          isLoading={isLoading}
+          type={props.type}
+          medium={selectedMedium}
+          titleRenderer={() => (
+            <ul className="tabs">
+              {tabs.map((medium, index) => (
+                <li key={index}>
+                  <Tab
+                    inverse
+                    to={`/dashboard/marketing/${props.types}/${medium}`}
+                    selected={selectedMedium === medium}
+                  >
+                    {mediumsCollection[medium] || medium}
+                  </Tab>
+                </li>
+              ))}
+            </ul>
+          )}
         />
-        <List
-          isLoading={state.isLoading}
-          isSideMenuOpen={props.isSideMenuOpen}
-          medium={props.medium || state.tabs[0]}
-          tabs={state.tabs}
-          templates={state.templates}
-          types={props.types}
-        />
-      </React.Fragment>
-    )
-  }
+      </ListView>
+    </React.Fragment>
+  )
 }
+
+export default Templates

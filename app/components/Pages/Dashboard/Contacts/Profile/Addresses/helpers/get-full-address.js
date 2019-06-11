@@ -19,7 +19,12 @@ export function getFullAddress(fields) {
 
   const unit = idxName.unit_number ? `Unit ${idxName.unit_number}` : ''
 
-  const others = [idxName.city, idxName.state, idxName.postal_code]
+  const others = [
+    idxName.city,
+    idxName.county,
+    idxName.state,
+    idxName.postal_code
+  ]
     .filter(i => i)
     .join(' ')
 

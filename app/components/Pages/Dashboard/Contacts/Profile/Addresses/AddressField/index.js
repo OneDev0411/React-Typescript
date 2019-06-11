@@ -1,8 +1,7 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import addressParser from 'parse-address'
 
-import { confirmation } from 'actions/confirmation'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 import postLoadFormat from 'components/inline-editable-fields/InlineAddressField/InlineAddressForm/helpers/post-load-format'
 
@@ -71,6 +70,8 @@ class AddressField extends React.Component {
     return null
   }
 
+  static contextType = ConfirmationModalContext
+
   toggleMode = () => this.props.toggleMode(this.props.address)
 
   cancel = () => {
@@ -85,23 +86,18 @@ class AddressField extends React.Component {
     }
 
     if (diffAddressStateWithProp(this.props, this.state)) {
-      this.props.dispatch(
-        confirmation({
-          show: true,
-          confirmLabel: 'Yes, I do',
-          message: 'Heads up!',
-          description: 'You have made changes, do you want to discard them?',
-          onConfirm: this.toggleMode
-        })
-      )
+      this.context.setConfirmationModal({
+        confirmLabel: 'Yes, I do',
+        message: 'Heads up!',
+        description: 'You have made changes, do you want to discard them?',
+        onConfirm: this.toggleMode
+      })
     } else {
       this.toggleMode()
     }
   }
 
   delete = async () => {
-    this.setState({ isDisabled: true })
-
     const attributeIds = this.props.address.attributes
       .filter(attribute => attribute.id)
       .map(attribute => attribute.id)
@@ -124,31 +120,25 @@ class AddressField extends React.Component {
   onChangeInput = address => this.setState({ address })
 
   handleDelete = () => {
+    this.setState({ isDisabled: true })
+
     const options = {
-      show: true,
+      onConfirm: this.delete,
       confirmLabel: 'Yes, I do',
       message: 'Delete Address',
+      onCancel: () => this.setState({ isDisabled: false }),
       description:
-        'You have made changes, are you sure about deleting this address?',
-      onConfirm: this.delete
+        'You have made changes, are you sure about deleting this address?'
     }
 
     if (diffAddressStateWithProp(this.props, this.state)) {
-      this.props.dispatch(
-        confirmation({
-          ...options,
-          description:
-            'You have made changes, are you sure about the deleting this address?'
-        })
-      )
+      this.context.setConfirmationModal(options)
     } else if (this.props.address.full_address) {
-      this.props.dispatch(
-        confirmation({
-          ...options,
-          description:
-            'Are you sure about deleting this address, you will lose it forever?'
-        })
-      )
+      this.context.setConfirmationModal({
+        ...options,
+        description:
+          'Are you sure about deleting this address, you will lose it forever?'
+      })
     } else {
       this.delete()
     }
@@ -244,4 +234,4 @@ class AddressField extends React.Component {
   }
 }
 
-export default connect()(AddressField)
+export default AddressField

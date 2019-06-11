@@ -19,6 +19,8 @@ module.exports = {
     '^utils/(.*)': '<rootDir>/app/utils/$1',
     '^views/(.*)': '<rootDir>/app/views/$1',
     '^store/(.*)': '<rootDir>/app/stores/$1',
-    '^fixtures/(.*)': '<rootDir>/tests/unit/fixtures/$1'
+    '^fixtures/(.*)': '<rootDir>/tests/unit/fixtures/$1',
+    '^hooks/(.*)': '<rootDir>/app/hooks/$1',
+    '^animations/(.*)': '<rootDir>/app/animations/$1'
   }
 }

@@ -20,7 +20,11 @@ const TagsOverlayFooter = ({
       <ActionButton appearance="outline" onClick={closeOverlay}>
         Cancel
       </ActionButton>
-      <ActionButton style={{ marginLeft: '0.5em' }} onClick={onSubmit}>
+      <ActionButton
+        data-test="save-tags-button"
+        style={{ marginLeft: '0.5em' }}
+        onClick={onSubmit}
+      >
         {isSubmitting ? 'Saving...' : 'Save'}
       </ActionButton>
     </Flex>

@@ -1,7 +1,6 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
-import { confirmation } from 'actions/confirmation'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 
 import {
@@ -81,6 +80,8 @@ class MasterField extends React.Component {
     return null
   }
 
+  static contextType = ConfirmationModalContext
+
   get attributePropsFromState() {
     const { is_primary, label } = this.state
 
@@ -138,15 +139,12 @@ class MasterField extends React.Component {
     }
 
     if (this.isDrity) {
-      this.props.dispatch(
-        confirmation({
-          show: true,
-          confirmLabel: 'Yes, I do',
-          message: 'Heads up!',
-          description: 'You have made changes, do you want to discard them?',
-          onConfirm: this.setInitialState
-        })
-      )
+      this.context.setConfirmationModal({
+        message: 'Heads up!',
+        confirmLabel: 'Yes, I do',
+        onConfirm: this.setInitialState,
+        description: 'You have made changes, do you want to discard them?'
+      })
     } else {
       this.setInitialState()
     }
@@ -192,36 +190,31 @@ class MasterField extends React.Component {
   delete = async () => {
     try {
       await this.props.handleDelete(this.props.attribute)
+      this.setState({ disabled: false })
     } catch (error) {
       console.error(error)
     }
   }
 
   handleDelete = () => {
-    const title = this.attribute_def.label
+    this.setState({ disabled: true })
 
+    const title = this.attribute_def.label
     const options = {
-      show: true,
       confirmLabel: 'Yes, I do',
       message: `Delete ${title}`,
-      description: `You have made changes, are you sure about deleting "${title}" field?`,
-      onConfirm: this.delete
+      onConfirm: this.delete,
+      onCancel: () => this.setState({ disabled: false }),
+      description: `You have made changes, are you sure about deleting "${title}" field?`
     }
 
     if (this.isDrity) {
-      this.props.dispatch(
-        confirmation({
-          ...options,
-          description: `You have made changes, are you sure about the deleting "${title}" field?`
-        })
-      )
+      this.context.setConfirmationModal(options)
     } else if (this.props.attribute[this.attribute_def.data_type]) {
-      this.props.dispatch(
-        confirmation({
-          ...options,
-          description: `Are you sure about deleting "${title}" field, you will lose it forever?`
-        })
-      )
+      this.context.setConfirmationModal({
+        ...options,
+        description: `Are you sure about deleting "${title}" field, you will lose it forever?`
+      })
     } else {
       this.delete()
     }
@@ -295,4 +288,4 @@ class MasterField extends React.Component {
   }
 }
 
-export default connect()(MasterField)
+export default MasterField
