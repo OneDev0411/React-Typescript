@@ -40,7 +40,13 @@ function DealsContainer(props) {
   const isLoading = props.isFetchingDeals && props.params.id
 
   if (isLoading) {
-    return <LoadingContainer style={{ padding: '45% 0' }} />
+    return (
+      <LoadingContainer
+        style={{
+          height: 'calc(100vh - 6em)'
+        }}
+      />
+    )
   }
 
   return props.children
@@ -50,7 +56,6 @@ export default connect(({ deals, user }) => ({
   error: deals.properties.error,
   deals: deals.list,
   contexts: deals.contexts,
-  forms: deals.forms,
   isFetchingDeals: deals.properties.isFetchingDeals,
   user
 }))(DealsContainer)
