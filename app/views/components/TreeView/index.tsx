@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ReactNode, useCallback } from 'react'
 
-import { useControllableState } from 'react-use-controllable-state/dist'
+import { useControllableState } from 'react-use-controllable-state'
 
 import { TreeViewNode } from './components/TreeViewNode'
 
