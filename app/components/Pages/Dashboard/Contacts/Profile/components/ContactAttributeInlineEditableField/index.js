@@ -190,6 +190,7 @@ class MasterField extends React.Component {
   delete = async () => {
     try {
       await this.props.handleDelete(this.props.attribute)
+      this.setState({ disabled: false })
     } catch (error) {
       console.error(error)
     }
