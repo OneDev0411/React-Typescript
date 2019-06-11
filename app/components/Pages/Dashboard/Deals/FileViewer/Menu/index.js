@@ -2,6 +2,8 @@ import React from 'react'
 
 import Flex from 'styled-flex-component'
 
+import { getDealTitle } from 'deals/utils/get-deal-title'
+
 import ActionButton from 'components/Button/ActionButton'
 import IconButton from 'components/Button/IconButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
@@ -10,7 +12,7 @@ import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import PdfSplitter from '../../PdfSplitter'
 
-import { MenuContainer, MenuTitle, MenuDivider } from '../styled'
+import { MenuContainer, MenuTitle, MenuSubTitle, MenuDivider } from '../styled'
 
 export class Menu extends React.Component {
   state = {
@@ -28,13 +30,17 @@ export class Menu extends React.Component {
     return (
       <React.Fragment>
         <MenuContainer>
-          <MenuTitle>
-            <TextMiddleTruncate
-              text={props.title}
-              maxLength={50}
-              tooltipPlacement="bottom"
-            />
-          </MenuTitle>
+          <div>
+            <MenuTitle>
+              <TextMiddleTruncate
+                text={props.title}
+                maxLength={50}
+                tooltipPlacement="bottom"
+              />
+            </MenuTitle>
+
+            <MenuSubTitle>{getDealTitle(props.deal)}</MenuSubTitle>
+          </div>
 
           <Flex alignCenter>
             <div>
