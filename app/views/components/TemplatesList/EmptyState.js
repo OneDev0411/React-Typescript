@@ -3,9 +3,9 @@ import Flex from 'styled-flex-component'
 
 import { H2 } from 'components/Typography/headings'
 
-import Image from './Image/ZeroHistoryImage'
+import Image from './EmptyStateImage'
 
-export function ZeroState() {
+function EmptyState() {
   return (
     <Flex center column style={{ height: '100vh' }}>
       <Image style={{ marginBottom: '1.5rem' }} />
@@ -17,3 +17,5 @@ export function ZeroState() {
     </Flex>
   )
 }
+
+export default EmptyState

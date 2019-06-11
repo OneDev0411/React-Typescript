@@ -3,14 +3,6 @@ import styled, { css } from 'styled-components'
 import Button from 'components/Button/LinkButton'
 import { primary } from 'views/utils/colors'
 
-import { getMQWidth } from '../../components/Template/styled'
-
-export const ListContainer = styled.div`
-  @media (min-width: ${props => getMQWidth(43, props)}em) {
-    margin: 0 -1.5rem;
-  }
-`
-
 export const Tab = styled(Button)`
   margin-right: 3rem;
   font-weight: 600;
@@ -32,4 +24,13 @@ export const Tab = styled(Button)`
           }
         `
       : ''};
+`
+
+export const ListView = styled.div`
+  & .tabs {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 `
