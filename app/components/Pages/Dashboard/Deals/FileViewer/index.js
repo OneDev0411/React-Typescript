@@ -13,7 +13,6 @@ import { isBackOffice } from 'utils/user-teams'
 import Spinner from 'components/Spinner'
 
 import { getFileById } from '../utils/files/get-file-by-id'
-import { getTaskForm } from '../utils/get-task-form'
 import { getEnvelopeFileUrl } from '../utils/get-envelope-file-url'
 
 import TaskView from '../Dashboard/TaskView'
