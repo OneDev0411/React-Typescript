@@ -12,8 +12,14 @@ import OpenHouse from './OpenHouse'
 import Marketing from '.'
 
 describe('Deal MarketingPane component', () => {
-  it('renders', () => {
+  it('renders with listing', () => {
     const wrapper = shallow(<Marketing deal={liveDealWithListing} />)
+
+    expect(toJson(wrapper)).toMatchSnapshot()
+  })
+
+  it('renders without listing', () => {
+    const wrapper = shallow(<Marketing deal={draftDeal} />)
 
     expect(toJson(wrapper)).toMatchSnapshot()
   })
