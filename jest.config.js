@@ -1,6 +1,6 @@
 // jest.config.js
 module.exports = {
-  roots: ['<rootDir>/app/'],
+  roots: ['<rootDir>/app/', '<rootDir>/tests/unit'],
   moduleFileExtensions: ['js', 'jsx', 'json', 'ts', 'tsx'],
   testURL: 'http://localhost:8080',
   setupFilesAfterEnv: ['./setupTests.js'],
