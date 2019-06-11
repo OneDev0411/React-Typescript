@@ -38,7 +38,7 @@ export const Icon = styled(IconTime)`
 `
 
 export const Input = styled.input.attrs({
-  type: 'number',
+  type: 'tel', // forced to use type tel in order to get selectionStart and selectionEnd
   step: '1',
   min: '0',
   max: '99999'

@@ -34,7 +34,9 @@ function TouchReminder({
   }, [activeSegment.id, activeSegment.touch_freq])
 
   function handleChange(ev: React.ChangeEvent<HTMLInputElement>) {
-    setValue(parseInt(ev.target.value, 10))
+    const newValue = parseInt(ev.target.value, 10)
+
+    setValue(Number.isNaN(newValue) ? 0 : newValue)
   }
 
   function handleFocus(ev: React.FocusEvent<HTMLInputElement>) {
@@ -42,7 +44,26 @@ function TouchReminder({
   }
 
   function handleKeyPress(ev: React.KeyboardEvent<HTMLInputElement>) {
-    if (value.toString().length === 5 && parseInt(ev.key, 10) <= 9) {
+    const eventTargetValue = parseInt(ev.key, 10)
+
+    // It's some other key like Backspace
+    if (Number.isNaN(eventTargetValue)) {
+      return
+    }
+
+    const currentValue = value.toString()
+
+    const selectionRange =
+      Number(ev.currentTarget.selectionEnd) -
+      Number(ev.currentTarget.selectionStart)
+
+    // It's a numeric input key
+    // But we already reached 5 digits and the user has not selected any text inside
+    if (
+      currentValue.length === 5 &&
+      selectionRange === 0 &&
+      eventTargetValue <= 9
+    ) {
       return ev.preventDefault()
     }
   }
