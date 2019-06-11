@@ -13,25 +13,22 @@ export const Tasks = ({
   onChangeNotifyOffice
 }) => (
   <div>
-    {checklist.tasks &&
-      checklist.tasks
-        .filter(id =>
-          tasks[id].title
-            .toLowerCase()
-            .includes((filterValue || '').toLowerCase())
-        )
-        .map(id => (
-          <ChecklistItem
-            key={id}
-            id={id}
-            checklist={checklist}
-            title={tasks[id].title}
-            selectedItem={selectedTask && selectedTask.id}
-            onSelect={onSelectItem}
-            showNotifyOption={showNotifyOption}
-            shouldNotifyOffice={shouldNotifyOffice}
-            onChangeNotifyOffice={onChangeNotifyOffice}
-          />
-        ))}
+    {tasks
+      .filter(task =>
+        task.title.toLowerCase().includes((filterValue || '').toLowerCase())
+      )
+      .map((task, index) => (
+        <ChecklistItem
+          key={index}
+          id={task.id}
+          checklist={checklist}
+          title={task.title}
+          selectedItem={selectedTask && selectedTask.id}
+          onSelect={onSelectItem}
+          showNotifyOption={showNotifyOption}
+          shouldNotifyOffice={shouldNotifyOffice}
+          onChangeNotifyOffice={onChangeNotifyOffice}
+        />
+      ))}
   </div>
 )

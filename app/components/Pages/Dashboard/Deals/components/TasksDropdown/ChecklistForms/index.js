@@ -1,9 +1,14 @@
 import React from 'react'
+import { connect } from 'react-redux'
+
 import _ from 'underscore'
+
+import { selectFormsByBrand } from 'reducers/deals/forms'
 
 import { ChecklistItem } from '../ChecklistItem'
 
-export const Forms = ({
+const Forms = ({
+  forms,
   tasks,
   checklist,
   filterValue,
@@ -13,15 +18,12 @@ export const Forms = ({
   onChangeNotifyOffice
 }) => (
   <div>
-    {_.chain(checklist.allowed_forms)
+    {Object.values(forms)
       .filter(form => {
-        const isFormExists = _.find(
-          checklist.tasks,
-          id => tasks[id].form === form.id
-        )
+        const isFormExists = tasks.find(task => task.form === form.id)
 
         return (
-          typeof isFormExists === 'undefined' &&
+          !isFormExists &&
           form.name.toLowerCase().includes((filterValue || '').toLowerCase())
         )
       })
@@ -36,7 +38,14 @@ export const Forms = ({
           shouldNotifyOffice={shouldNotifyOffice}
           onChangeNotifyOffice={onChangeNotifyOffice}
         />
-      ))
-      .value()}
+      ))}
   </div>
 )
+
+function mapStateToProps({ deals }, ownProps) {
+  return {
+    forms: selectFormsByBrand(deals.forms, ownProps.deal.brand.id)
+  }
+}
+
+export default connect(mapStateToProps)(Forms)
