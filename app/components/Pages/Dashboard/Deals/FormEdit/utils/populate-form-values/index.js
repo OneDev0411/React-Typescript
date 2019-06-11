@@ -1,5 +1,4 @@
 import { getField } from 'models/Deal/helpers/context/get-field'
-import { getContext } from 'models/Deal/helpers/context/get-context'
 import { getType, Types } from 'deals/FormEdit/utils/types'
 import { searchContext } from 'models/Deal/helpers/dynamic-context'
 

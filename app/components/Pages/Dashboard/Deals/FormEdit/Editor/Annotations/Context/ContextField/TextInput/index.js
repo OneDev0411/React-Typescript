@@ -10,6 +10,7 @@ export function TextInput(props) {
       return {
         numeral: true,
         numeralThousandsGroupStyle: 'thousand',
+        delimiter: format === 'Currency' ? ',' : '',
         numeralPositiveOnly: format === 'Currency',
         // prefix: format === 'Currency' ? '$' : null,
         noImmediatePrefix: true,
