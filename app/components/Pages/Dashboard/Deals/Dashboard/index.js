@@ -20,10 +20,14 @@ import { DealContainer, PageWrapper } from './styled'
 
 function DealDetails(props) {
   const [activeTab, setActiveTab] = useState(props.params.tab || 'checklists')
-  const { deal, isFetchingDeal, isFetchingContexts } = useLoadDeal(
+  const { isFetchingDeal, isFetchingContexts } = useLoadDeal(
     props.params.id,
     props.deal
   )
+
+  if (!props.deal) {
+    return false
+  }
 
   const getPageTitle = () => {
     const pageTitle = getDealTitle(props.deal)
@@ -33,10 +37,6 @@ function DealDetails(props) {
       : 'Show Deal | Deals | Rechat'
   }
 
-  if (!deal) {
-    return false
-  }
-
   return (
     <DealContainer>
       <Helmet>
@@ -44,10 +44,10 @@ function DealDetails(props) {
       </Helmet>
 
       <PageWrapper>
-        <PageHeader deal={deal} isBackOffice={props.isBackOffice} />
+        <PageHeader deal={props.deal} isBackOffice={props.isBackOffice} />
 
         <TabSections
-          deal={deal}
+          deal={props.deal}
           user={props.user}
           activeTab={activeTab}
           onChangeTab={tab => setActiveTab(tab.id)}
@@ -57,7 +57,7 @@ function DealDetails(props) {
         />
 
         <TaskView
-          deal={deal}
+          deal={props.deal}
           task={props.selectedTask}
           isOpen={props.selectedTask !== null}
           isBackOffice={props.isBackOffice}

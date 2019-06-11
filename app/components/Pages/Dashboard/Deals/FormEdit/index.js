@@ -205,7 +205,7 @@ class EditDigitalForm extends React.Component {
         deal={props.deal}
         onLoad={this.loadPdfDocument}
       >
-        {({ deal, isFetchingDeal }) => {
+        {({ isFetchingDeal }) => {
           if (isFetchingDeal) {
             return (
               <LoadingDealContainer>
@@ -241,7 +241,7 @@ class EditDigitalForm extends React.Component {
 
               <PDFEdit
                 document={state.pdfDocument}
-                deal={deal}
+                deal={props.deal}
                 scale={this.scale}
                 displayWidth={this.displayWidth}
                 annotations={state.annotations}
