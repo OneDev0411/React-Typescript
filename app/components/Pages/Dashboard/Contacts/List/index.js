@@ -165,17 +165,24 @@ class ContactsList extends React.Component {
   hasSearchState = () =>
     this.props.filters || this.state.searchInputValue || this.order
 
-  fetchList = async (start = 0, loadMoreBefore = false) => {
+  fetchList = async (
+    start = 0,
+    loadMoreBefore = false,
+    resetLoadedRanges = false
+  ) => {
     if (start === 0 && !loadMoreBefore) {
       this.resetSelectedRows()
     }
 
     try {
       if (this.hasSearchState()) {
-        await this.handleFilterChange({
-          start,
-          prependResult: loadMoreBefore
-        })
+        await this.handleFilterChange(
+          {
+            start,
+            prependResult: loadMoreBefore
+          },
+          resetLoadedRanges
+        )
       } else {
         this.addLoadedRange(start)
         await this.props.getContacts(start)
@@ -185,11 +192,9 @@ class ContactsList extends React.Component {
     }
   }
 
-  handleChangeSavedSegment = () => {
-    this.handleFilterChange()
-  }
+  handleChangeSavedSegment = () => this.handleFilterChange({}, true)
 
-  handleFilterChange = async newFilters => {
+  handleFilterChange = async (newFilters, resetLoadedRanges = false) => {
     const {
       filters = this.props.filters,
       searchInputValue = this.state.searchInputValue,
@@ -202,6 +207,10 @@ class ContactsList extends React.Component {
       prependResult = false,
       firstLetter = this.state.firstLetter
     } = newFilters || {}
+
+    if (resetLoadedRanges) {
+      this.setState({ loadedRanges: [] })
+    }
 
     this.addLoadedRange(start)
     this.setQueryParam('s', start)
@@ -235,20 +244,20 @@ class ContactsList extends React.Component {
   handleSearch = value => {
     this.setState({ searchInputValue: value, firstLetter: null }, () => {
       this.setQueryParam('letter', '')
-      this.handleFilterChange()
+      this.handleFilterChange({}, true)
     })
   }
 
   handleFirstLetterChange = value => {
     this.setQueryParam('letter', value)
     this.setState({ firstLetter: value }, () => {
-      this.handleFilterChange()
+      this.handleFilterChange({}, true)
     })
   }
 
   handleChangeOrder = ({ value: order }) => {
     this.order = order
-    this.handleFilterChange()
+    this.handleFilterChange({}, true)
   }
 
   toggleSideMenu = () =>
@@ -420,7 +429,9 @@ class ContactsList extends React.Component {
             associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
             onChange={this.handleChangeSavedSegment}
           />
-          <TagsList onFilterChange={this.handleFilterChange} />
+          <TagsList
+            onFilterChange={filters => this.handleFilterChange(filters, true)}
+          />
         </SideMenu>
 
         <PageContent id={this.tableContainerId} isSideMenuOpen={isSideMenuOpen}>
@@ -433,7 +444,7 @@ class ContactsList extends React.Component {
           />
           <Container>
             <ContactFilters
-              onFilterChange={this.handleFilterChange}
+              onFilterChange={() => this.handleFilterChange({}, true)}
               users={viewAsUsers}
             />
             <SearchWrapper row alignCenter>
@@ -464,7 +475,9 @@ class ContactsList extends React.Component {
               tableContainerId={this.tableContainerId}
               reloadContacts={this.reloadContacts}
               handleChangeOrder={this.handleChangeOrder}
-              handleChangeContactsAttributes={this.handleFilterChange}
+              handleChangeContactsAttributes={() =>
+                this.handleFilterChange({}, true)
+              }
               filters={{
                 alphabet: state.firstLetter,
                 attributeFilters: props.filters,
