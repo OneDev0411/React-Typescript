@@ -1,3 +1,5 @@
+import { Browser, Page } from 'puppeteer'
+
 import { init } from '../../helpers'
 import { navigateRelative } from '../../helpers/page'
 import { signIn } from '../../helpers/auth'
@@ -6,8 +8,8 @@ import { addNewTag } from './add-new-tag'
 import { removeTag } from '../tag-management/remove-tag'
 
 describe('Contacts list page', () => {
-  let browser
-  let page
+  let browser: Browser
+  let page: Page
 
   beforeAll(async () => {
     const instances = await init()
