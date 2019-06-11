@@ -2,16 +2,12 @@ import React from 'react'
 
 import Flex, { FlexItem } from 'styled-flex-component'
 
-import {
-  InputContainer,
-  InputLabel,
-  InputRequired,
-  InputError
-} from '../styled'
+import { InputContainer, InputLabel, InputRequired } from '../styled'
 import { RecipientContainer } from './styled'
 
 import AddRecipient from './AddRecipient'
 import { RecipientItem } from './RecipientItem'
+import { FieldError } from '../../final-form-fields/FieldError'
 
 export const MultipleContactsSelect = ({
   input,
@@ -54,8 +50,6 @@ export const MultipleContactsSelect = ({
       )}
     </RecipientContainer>
 
-    {showError && meta.error && meta.touched && (
-      <InputError>{meta.error}</InputError>
-    )}
+    {showError && <FieldError name={input.name} />}
   </InputContainer>
 )
