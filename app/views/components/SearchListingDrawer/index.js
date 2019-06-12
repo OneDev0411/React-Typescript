@@ -9,6 +9,7 @@ import { attachDealDataToListing } from './helpers/attach-deal-to-listing'
 
 import SearchDrawer from '../SearchDrawer'
 import ListingItem from './ListingItem'
+import getMockListing from './helpers/get-mock-listing'
 
 class SearchListingDrawer extends React.Component {
   state = {
@@ -23,9 +24,7 @@ class SearchListingDrawer extends React.Component {
     })
 
     try {
-      const mockedMLSData = mockListings
-        ? await import('./mock_listing.json')
-        : null
+      const mockedMLSData = mockListings ? await getMockListing() : null
 
       const listings = await Promise.all(
         _.map(items, item => {
