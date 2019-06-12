@@ -7,7 +7,23 @@ import { getActiveTeamId } from '../../utils/user-teams'
 import herokuFix from './middlewares/heroku-fix'
 
 export default class Fetch {
-  constructor(options) {
+  private _middlewares: { [name: string]: any }
+
+  private options: any
+
+  private _isProductionEnv: boolean
+
+  private _appUrl: string
+
+  private _startTime: null | number
+
+  private _isServerSide: boolean
+
+  private _proxyUrl: string
+
+  private _isLoggedIn: boolean
+
+  constructor(options?) {
     const isServerSide = typeof window === 'undefined'
     const isProductionEnv = process.env.NODE_ENV === 'production'
 
@@ -44,10 +60,6 @@ export default class Fetch {
 
     this._isLoggedIn = user && user.access_token !== undefined
 
-    if (this._isProductionEnv) {
-      console.log(`${method.toUpperCase()} ${endpoint}`)
-    }
-
     this._startTime = Date.now()
 
     let agent
@@ -73,12 +85,11 @@ export default class Fetch {
     agent.on('response', response => {
       herokuFix(response)
 
-      this.onResponse(response)
+      this.logResponse(response)
     })
 
     agent.on('error', error => {
-      console.log(error.response)
-      console.log('[ Request Error ]', error)
+      this.logResponse(error.response)
 
       const errorCode = error.response && ~~error.response.statusCode
 
@@ -138,17 +149,16 @@ export default class Fetch {
     return this._create(method, endpoint)
   }
 
-  onResponse(response) {
-    return response
-  }
-
-  createErrorLog(code, error = {}) {
+  createErrorLog(
+    code,
+    error: { response?: SuperAgent.ResponseError; message?: string } = {}
+  ) {
     if (!this._isProductionEnv) {
       return
     }
 
     const now = Date.now()
-    const diff = now - this._startTime
+    const diff = now - (this._startTime || now)
 
     console.error(
       `Error ${code}: `,
@@ -161,5 +171,17 @@ export default class Fetch {
     this._middlewares[name] = options
 
     return this
+  }
+
+  logResponse(
+    response: SuperAgent.Response & { req: SuperAgent.SuperAgentRequest }
+  ) {
+    if (this._isProductionEnv) {
+      const requestId = response.header['x-request-id']
+      const status = response.status
+      const request = response.req
+
+      console.log(`${status} <${requestId}> ${request.method} ${request.url}`)
+    }
   }
 }
