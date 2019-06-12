@@ -6,6 +6,7 @@ import store from '../stores'
 
 
 export function useLoadDeal(id: string, deal: IDeal) {
+  const [dealWithChecklists, setDeal] = useState(deal)
   const [isFetchingDeal, setIsFetchingDeal] = useState(false)
   const [isFetchingContexts, setIsFetchingContexts] = useState(false)
   const [isFetchingForms, setIsFetchingForms] = useState(false)
@@ -93,7 +94,8 @@ export function useLoadDeal(id: string, deal: IDeal) {
     await fetchForms(fetchedDeal)
 
     setIsFetchingCompleted(true)
-    // setDeals(fetchedDeal)
+
+    setDeal(fetchedDeal)
   }
 
   useEffect(() => {
@@ -108,6 +110,7 @@ export function useLoadDeal(id: string, deal: IDeal) {
     isFetchingDeal,
     isFetchingContexts,
     isFetchingForms,
-    isFetchingCompleted
+    isFetchingCompleted,
+    deal: dealWithChecklists
   }
 }
