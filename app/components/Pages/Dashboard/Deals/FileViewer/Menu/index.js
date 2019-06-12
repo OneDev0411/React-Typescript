@@ -46,6 +46,7 @@ export class Menu extends React.Component {
             <div>
               <ActionButton
                 appearance="outline"
+                size="small"
                 onClick={props.onToggleFactsheet}
               >
                 {props.isFactsheetOpen ? 'Hide' : 'Show'} Factsheet
@@ -54,6 +55,7 @@ export class Menu extends React.Component {
               {props.task && (
                 <ActionButton
                   appearance="outline"
+                  size="small"
                   style={{ marginLeft: '1rem' }}
                   onClick={props.onToggleComments}
                 >
@@ -63,6 +65,7 @@ export class Menu extends React.Component {
 
               {props.file.type === 'pdf' && !props.isEnvelopeView && (
                 <ActionButton
+                  size="small"
                   style={{ marginLeft: '1rem' }}
                   onClick={this.toggleOpenPdfSplitter}
                 >
@@ -74,7 +77,7 @@ export class Menu extends React.Component {
             <MenuDivider />
 
             <IconButton
-              iconSize="XLarge"
+              iconSize="Large"
               inverse
               isFit
               onClick={props.onClickBackButton}

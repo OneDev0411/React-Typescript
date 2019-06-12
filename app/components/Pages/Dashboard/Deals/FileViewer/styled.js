@@ -55,7 +55,7 @@ export const MenuContainer = styled.div`
 `
 
 export const MenuTitle = styled.div`
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: bold;
   line-height: 1.25;
   color: #000;
