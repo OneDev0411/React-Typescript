@@ -22,7 +22,6 @@ function LoadDeal({ onLoad, ...props }) {
     if (isFetchingCompleted) {
       onLoad()
     }
-    // eslint-disable-next-line
   }, [isFetchingCompleted, onLoad])
 
   return props.children({ ...data, isFetchingCompleted })
