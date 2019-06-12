@@ -17,6 +17,7 @@ class General extends React.Component {
     isComposeEmailOpen: false,
     isSocialDrawerOpen: false,
     htmlTemplate: '',
+    socialNetworkName: '',
     owner: this.props.user,
     emailBody: '',
     templateInstance: null,
@@ -75,10 +76,11 @@ class General extends React.Component {
     }
   }
 
-  handleSocialSharing = template => {
+  handleSocialSharing = (template, socialNetworkName) => {
     this.setState({
       htmlTemplate: template,
-      isSocialDrawerOpen: true
+      isSocialDrawerOpen: true,
+      socialNetworkName
     })
   }
 
@@ -165,6 +167,7 @@ class General extends React.Component {
 
         {this.state.isSocialDrawerOpen && (
           <SocialDrawer
+            socialNetworkName={this.state.socialNetworkName}
             template={this.state.htmlTemplate}
             templateInstanceData={this.TemplateInstanceData}
             onClose={this.closeSocialDrawer}
