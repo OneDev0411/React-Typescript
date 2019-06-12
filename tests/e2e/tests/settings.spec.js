@@ -35,14 +35,6 @@ describe('Profile Settings', () => {
     await page.waitForSelector('.c-account__form')
   })
 
-  it('User is able to delete avatar', async () => {
-    await page.click('[data-test="profile-avatar-delete-button"]')
-    await page.click('[data-test="confirmation-modal-confirm-button"]')
-    await page.waitFor('[data-test="profile-avatar-delete-button"]', {
-      hidden: true
-    })
-  })
-
   it('User is able to upload avatar', async () => {
     await page.click('[data-test="profile-avatar-upload-button"]')
 
@@ -56,6 +48,14 @@ describe('Profile Settings', () => {
     await page.click('[data-test="image-uploader-modal-save-button"]')
     await page.waitForSelector('[data-test="profile-avatar-delete-button"]')
     await page.waitForSelector('[data-test="profile-avatar-image"]')
+  })
+
+  it('User is able to delete avatar', async () => {
+    await page.click('[data-test="profile-avatar-delete-button"]')
+    await page.click('[data-test="confirmation-modal-confirm-button"]')
+    await page.waitFor('[data-test="profile-avatar-delete-button"]', {
+      hidden: true
+    })
   })
 
   it('User is able to update personal info', async () => {
