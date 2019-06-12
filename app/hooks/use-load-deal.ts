@@ -1,12 +1,11 @@
 import { useEffect, useState, useMemo } from 'react'
 
-import { getDeal, getContexts, getForms } from 'actions/deals'
+import { getDeal, getContexts, getForms, setDeals } from 'actions/deals'
 
 import store from '../stores'
 
 
 export function useLoadDeal(id: string, deal: IDeal) {
-  const [fetchedDeal, setDeal] = useState(deal)
   const [isFetchingDeal, setIsFetchingDeal] = useState(false)
   const [isFetchingContexts, setIsFetchingContexts] = useState(false)
   const [isFetchingForms, setIsFetchingForms] = useState(false)
@@ -20,15 +19,12 @@ export function useLoadDeal(id: string, deal: IDeal) {
     }
   }, [])
 
-
-  const brandId: UUID = fetchedDeal && fetchedDeal.brand && fetchedDeal.brand.id
-
   /**
    * fetches and returns a deal if it's not fetched yet
    */
-  async function fetchDeal(): Promise<void> {
+  async function fetchDeal(): Promise<IDeal> {
     if (deal && deal.checklists) {
-      return
+      return deal
     }
 
     setIsFetchingDeal(true)
@@ -37,13 +33,16 @@ export function useLoadDeal(id: string, deal: IDeal) {
     const result: IDeal = await store.dispatch<any>(getDeal(id))
 
     setIsFetchingDeal(false)
-    setDeal(result)
+
+    return result
   }
 
   /**
    * fetches contexts of a deal
    */
-  async function fetchContexts(): Promise<void> {
+  async function fetchContexts(deal: IDeal): Promise<void> {
+    const brandId: UUID = deal.brand.id
+
     if (contexts[brandId]) {
       return
     }
@@ -62,7 +61,9 @@ export function useLoadDeal(id: string, deal: IDeal) {
   /**
    * fetches forms of a deal
    */
-  async function fetchForms() {
+  async function fetchForms(deal: IDeal): Promise<void> {
+    const brandId: UUID = deal.brand.id
+
     if (forms[brandId]) {
       return
     }
@@ -83,18 +84,23 @@ export function useLoadDeal(id: string, deal: IDeal) {
    */
   async function load(): Promise<void> {
     // fetch deal with its checklists
-    await fetchDeal()
+    const fetchedDeal: IDeal = await fetchDeal()
 
     // fetch deal contexts
-    await fetchContexts()
+    await fetchContexts(fetchedDeal)
 
     // fetch deal forms
-    await fetchForms()
+    await fetchForms(fetchedDeal)
 
     setIsFetchingCompleted(true)
+    // setDeals(fetchedDeal)
   }
 
   useEffect(() => {
+    if (!id) {
+      throw new Error(`Can not load deal. id is ${id}`)
+    }
+
     load()
   }, [])
 
@@ -102,7 +108,6 @@ export function useLoadDeal(id: string, deal: IDeal) {
     isFetchingDeal,
     isFetchingContexts,
     isFetchingForms,
-    isFetchingCompleted,
-    deal: fetchedDeal
+    isFetchingCompleted
   }
 }
