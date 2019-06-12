@@ -8,6 +8,11 @@ export const clickAndWait = async (page, selector, fullWait = true) => {
   await navigation
 }
 
+export const clickAndType = async (page, selector, value) => {
+  await page.click(selector)
+  await page.type(selector, value)
+}
+
 export const clearAndType = async (page, selector, value) => {
   await page.click(selector, { clickCount: 3 })
   await page.type(selector, value)

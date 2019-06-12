@@ -17,3 +17,6 @@ export const init = async (
 }
 
 export const getTestSelector = name => `[data-test="${name}"]`
+
+export const getFirstChildOfTestSelector = name =>
+  `${getTestSelector(name)} *:first-child`

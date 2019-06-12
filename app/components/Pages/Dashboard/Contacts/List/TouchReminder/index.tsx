@@ -104,8 +104,11 @@ function TouchReminder({
         onFocus={handleFocus}
         onBlur={handleUpdate}
         onKeyPress={handleKeyPress}
+        data-test="touch-reminder-input"
       />
-      <Label bold>Days</Label>
+      <Label data-test="touch-reminder-days" bold>
+        Days
+      </Label>
     </Container>
   )
 }
