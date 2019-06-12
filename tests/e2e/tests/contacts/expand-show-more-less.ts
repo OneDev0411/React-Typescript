@@ -2,9 +2,12 @@ import { Page } from 'puppeteer'
 
 import { getTestSelector } from '../../helpers'
 
-export async function expandTags(contactsPage: Page) {
+export async function expandShowMoreLess(
+  contactsPage: Page,
+  parentSelector: string
+) {
   const showMore = await contactsPage.$(
-    `${getTestSelector('tags-list')} ${getTestSelector('show-more-button')}`
+    `${parentSelector} ${getTestSelector('show-more-button')}`
   )
 
   if (showMore) {

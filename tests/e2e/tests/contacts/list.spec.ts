@@ -7,14 +7,16 @@ import {
   navigateRelative,
   clickAndWait,
   clickAndType,
-  getElProp
+  getElProp,
+  acceptConfirmationModal,
+  waitFor2xxResponse,
+  waitForRemove
 } from '../../helpers/page'
 import { signIn } from '../../helpers/auth'
-import { expandTags } from './expand-tags'
-import { expandLists } from './expand-lists'
 import { addNewTag } from './add-new-tag'
 import { removeTag } from '../tag-management/remove-tag'
 import { createList } from './create-list'
+import { expandShowMoreLess } from './expand-show-more-less'
 
 describe('Contacts list page', () => {
   let browser: Browser
@@ -41,7 +43,7 @@ describe('Contacts list page', () => {
   })
 
   test('User should be able to create contacts list', async () => {
-    await expandLists(page)
+    await expandShowMoreLess(page, getTestSelector('lists-list'))
 
     await createList(page, listName)
 
@@ -51,7 +53,7 @@ describe('Contacts list page', () => {
   })
 
   test('User should be able to set touch reminder for a list', async () => {
-    await expandLists(page)
+    await expandShowMoreLess(page, getTestSelector('lists-list'))
 
     await clickAndWait(page, listSelector)
 
@@ -62,7 +64,7 @@ describe('Contacts list page', () => {
 
     await page.click(getTestSelector('touch-reminder-days'))
 
-    page.waitForResponse(() => true)
+    await waitFor2xxResponse(page)
 
     expect(await getElProp(page, touchReminderInputSelector, 'value')).toBe(
       touchFrequency
@@ -70,7 +72,7 @@ describe('Contacts list page', () => {
   })
 
   test('User should be able to delete contacts lists', async () => {
-    await expandLists(page)
+    await expandShowMoreLess(page, getTestSelector('lists-list'))
 
     await page.waitForSelector(listSelector)
     await page.hover(listSelector)
@@ -82,15 +84,9 @@ describe('Contacts list page', () => {
     await page.waitForSelector(deleteListSelector)
     await page.click(deleteListSelector)
 
-    const confirmButton = await page.waitForSelector(
-      getTestSelector('confirmation-modal-confirm-button')
-    )
+    await acceptConfirmationModal(page)
 
-    await confirmButton.click()
-    await page.waitForResponse(
-      response =>
-        response.status() >= 200 && response.url().includes('contacts/lists/')
-    )
+    await waitForRemove(page, listSelector)
   })
 
   test('Tags are updated after a new tag is added to a contact', async () => {
@@ -99,7 +95,7 @@ describe('Contacts list page', () => {
     const tagName = `test-tag-${Math.floor(Math.random() * 10 ** 6)}`
 
     // Expand tags to ensure all of them exist in dom
-    await expandTags(page)
+    await expandShowMoreLess(page, getTestSelector('tags-list'))
 
     await addNewTag(page, tagName)
 
