@@ -24,6 +24,12 @@
 
     "jsx": "react",
 
+    // Allow importing JSON files
+    "resolveJsonModule": true,
+
+    // Allow dynamic importing
+    "module": "esnext",
+
     // If "extends" would work, we could have remove these duplications
     // but it seems it doesn't work
     "baseUrl": ".",
