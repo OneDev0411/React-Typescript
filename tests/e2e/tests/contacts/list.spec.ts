@@ -89,7 +89,7 @@ describe('Contacts list page', () => {
     await waitForRemove(page, listSelector)
   })
 
-  test('Tags are updated after a new tag is added to a contact', async () => {
+  test('Tags are always updated after a new tag is added to a contact', async () => {
     // navigate to contacts list page
 
     const tagName = `test-tag-${Math.floor(Math.random() * 10 ** 6)}`
@@ -100,12 +100,31 @@ describe('Contacts list page', () => {
     await addNewTag(page, tagName)
 
     // Assert that the new tag exists in tags section in side menu
-    await page.waitForSelector(getTestSelector(`tag-item-${tagName}`), {
-      timeout: 20000
-    })
+    await checkTagExistsInList(page, tagName)
 
     // Remove the new tag
-    await navigateRelative(page, '/dashboard/account/manage-tags')
-    await removeTag(page, tagName)
+    await navigateToTagManagementAndRemoveTheTag(page, tagName)
+
+    await navigateRelative(page, '/dashboard/contacts')
+    // Add tag again and check if it's added to the list of tags
+    await addNewTag(page, tagName)
+    // Expand tags to ensure all of them exist in dom
+    await expandTags(page)
+    await checkTagExistsInList(page, tagName)
+
+    // cleanup. can be removed when sandbox environment for tests are added
+    await navigateToTagManagementAndRemoveTheTag(page, tagName)
   })
 })
+
+async function navigateToTagManagementAndRemoveTheTag(page, tagName) {
+  await navigateRelative(page, '/dashboard/account/manage-tags')
+  await removeTag(page, tagName)
+}
+
+async function checkTagExistsInList(page: Page, tagName) {
+  // Assert that the new tag exists in tags section in side menu
+  await page.waitForSelector(getTestSelector(`tag-item-${tagName}`), {
+    timeout: 10000
+  })
+}
