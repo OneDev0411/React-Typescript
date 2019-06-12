@@ -1,25 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import _ from 'underscore'
-import Flex from 'styled-flex-component'
 
-import Spinner from 'components/Spinner'
+import LoadingContainer from 'components/LoadingContainer'
 
-import { getDeals, searchDeals, getContexts, getForms } from 'actions/deals'
+import { getDeals, searchDeals, getContexts } from 'actions/deals'
 import {
   getActiveTeamId,
   hasUserAccess,
   viewAsEveryoneOnTeam
 } from 'utils/user-teams'
 
-class DealsContainer extends React.Component {
-  componentDidMount() {
-    this.init()
-  }
-
-  init = async () => {
-    const { props } = this
+function DealsContainer(props) {
+  useEffect(() => {
     const { dispatch, user } = props
     const brandId = getActiveTeamId(user)
 
@@ -33,7 +26,7 @@ class DealsContainer extends React.Component {
       dispatch(getContexts(brandId))
     }
 
-    if (_.size(props.deals) === 0 && !props.isFetchingDeals) {
+    if (Object.keys(props.deals).length === 0 && !props.isFetchingDeals) {
       if (isBackOffice || viewAsEveryoneOnTeam(user)) {
         dispatch(getDeals(user))
       } else {
@@ -41,31 +34,28 @@ class DealsContainer extends React.Component {
       }
     }
 
-    if (!props.forms) {
-      dispatch(getForms())
-    }
+    // eslint-disable-next-line
+  }, [])
+
+  const isLoading = props.isFetchingDeals && props.params.id
+
+  if (isLoading) {
+    return (
+      <LoadingContainer
+        style={{
+          height: 'calc(100vh - 6em)'
+        }}
+      />
+    )
   }
 
-  isLoading = () => this.props.isFetchingDeals && this.props.params.id
-
-  render() {
-    if (this.isLoading()) {
-      return (
-        <Flex justifyCenter alignCenter style={{ height: '100vh' }}>
-          <Spinner />
-        </Flex>
-      )
-    }
-
-    return this.props.children
-  }
+  return props.children
 }
 
 export default connect(({ deals, user }) => ({
   error: deals.properties.error,
   deals: deals.list,
   contexts: deals.contexts,
-  forms: deals.forms,
   isFetchingDeals: deals.properties.isFetchingDeals,
   user
 }))(DealsContainer)

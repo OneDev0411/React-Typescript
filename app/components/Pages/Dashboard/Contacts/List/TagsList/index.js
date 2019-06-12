@@ -98,7 +98,7 @@ class TagsList extends React.Component {
     const { existingTags, isFetching } = this.props
 
     return (
-      <div style={{ marginTop: '2rem' }}>
+      <div style={{ marginTop: '2rem' }} data-test="tags-list">
         <ListTitle>Tags</ListTitle>
 
         <ShowMoreLess
@@ -112,6 +112,7 @@ class TagsList extends React.Component {
             return (
               <ToolTip key={index} caption={item.text} placement="right">
                 <CustomListItem
+                  data-test={`tag-item-${item.text}`}
                   isSelected={isSelected}
                   onClick={() => this.onSelectList(item)}
                 >

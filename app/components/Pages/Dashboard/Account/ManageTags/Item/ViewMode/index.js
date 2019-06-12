@@ -20,7 +20,7 @@ export class ViewMode extends React.Component {
     const { tag, loading } = this.props
 
     return (
-      <Container highlight={tag.highlight}>
+      <Container highlight={tag.highlight} data-test={`tag-item-${tag.text}`}>
         <Title>{tag.text}</Title>
         {loading ? (
           <div>

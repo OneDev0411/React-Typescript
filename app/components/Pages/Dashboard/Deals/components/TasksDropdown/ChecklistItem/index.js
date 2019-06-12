@@ -32,16 +32,15 @@ export const ChecklistItem = ({
       {title}
     </ChecklistItemTitle>
 
-    {showNotifyOption &&
-      selectedItem !== id && (
-        <ChecklistItemNotifyOffice>
-          <NotifyOffice
-            id={id}
-            checklist={checklist}
-            isSelected={shouldNotifyOffice}
-            onChange={onChangeNotifyOffice}
-          />
-        </ChecklistItemNotifyOffice>
-      )}
+    {showNotifyOption && selectedItem !== id && (
+      <ChecklistItemNotifyOffice>
+        <NotifyOffice
+          id={id}
+          checklist={checklist}
+          isSelected={shouldNotifyOffice}
+          onChange={onChangeNotifyOffice}
+        />
+      </ChecklistItemNotifyOffice>
+    )}
   </ChecklistItemContainer>
 )

@@ -1,6 +1,9 @@
 declare interface IDeal {
-  id: UUID
-
+  id: UUID,
+  brand: {
+    id: UUID
+  },
+  checklists: any[],
   roles: IDealRole[]
 }
 

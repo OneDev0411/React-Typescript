@@ -13,7 +13,6 @@ import { isBackOffice } from 'utils/user-teams'
 import Spinner from 'components/Spinner'
 
 import { getFileById } from '../utils/files/get-file-by-id'
-import { getTaskForm } from '../utils/get-task-form'
 import { getEnvelopeFileUrl } from '../utils/get-envelope-file-url'
 
 import TaskView from '../Dashboard/TaskView'
@@ -141,7 +140,11 @@ class FileViewer extends React.Component {
   }
 
   get DigitalForm() {
-    return getTaskForm(this.state.deal, this.props.task)
+    return {
+      type: 'pdf',
+      name: this.props.task.title,
+      url: this.props.task.pdf_url
+    }
   }
 
   get EntityType() {

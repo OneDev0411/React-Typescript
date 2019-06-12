@@ -21,6 +21,8 @@ module.exports = {
     '^store/(.*)': '<rootDir>/app/stores/$1',
     '^config$': '<rootDir>/config/public',
     '^fixtures/(.*)': '<rootDir>/tests/unit/fixtures/$1',
+    '^hooks/(.*)': '<rootDir>/app/hooks/$1',
+    '^animations/(.*)': '<rootDir>/app/animations/$1',
     '\\.(css|less|sass|scss)$': '<rootDir>/tests/unit/mocks/styles.js',
     '\\.(gif|ttf|eot|svg)$': '<rootDir>/tests/unit/mocks/files.js'
   }

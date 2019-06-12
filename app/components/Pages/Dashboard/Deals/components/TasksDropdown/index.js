@@ -6,11 +6,15 @@ import { addNotification as notify } from 'reapop'
 
 import { createFormTask, changeNeedsAttention } from 'actions/deals'
 
+import { selectChecklistTasks } from 'reducers/deals/tasks'
+import { getDealChecklists } from 'reducers/deals/checklists'
+
 import { Tasks } from './ChecklistTasks'
-import { Forms } from './ChecklistForms'
 import { CreateTaskItem } from './CreateTask/NewItem'
 import { CreateTaskForm } from './CreateTask/Form'
 import { ChecklistStash } from './ChecklistStash'
+import Forms from './ChecklistForms'
+
 import { ChecklistTitle } from './styled'
 
 import { SearchInput } from './SearchInput'
@@ -294,22 +298,27 @@ class DropDownTasks extends React.Component {
                     />
                   )}
 
-                  {deal.checklists &&
-                    deal.checklists
-                      .filter(chId => !checklists[chId].is_terminated)
-                      .map(chId => (
-                        <div key={chId}>
+                  {checklists
+                    .filter(checklist => !checklist.is_terminated)
+                    .map((checklist, index) => {
+                      const checklistTasks = selectChecklistTasks(
+                        checklist,
+                        tasks
+                      )
+
+                      return (
+                        <div key={index}>
                           <ChecklistTitle
                             className="checklist"
                             onClick={e => e.stopPropagation()}
                           >
-                            {checklists[chId].title}
+                            {checklist.title}
                           </ChecklistTitle>
 
                           <Tasks
                             filterValue={filterValue}
-                            checklist={checklists[chId]}
-                            tasks={tasks}
+                            checklist={checklist}
+                            tasks={checklistTasks}
                             onSelectItem={this.onSelectTask}
                             selectedTask={selectedTask}
                             showNotifyOption={showNotifyOption}
@@ -318,31 +327,33 @@ class DropDownTasks extends React.Component {
                           />
 
                           <Forms
+                            deal={deal}
+                            tasks={checklistTasks}
+                            checklist={checklist}
                             filterValue={filterValue}
-                            checklist={checklists[chId]}
-                            tasks={tasks}
                             onSelectItem={this.onSelectChecklistForm}
                             showNotifyOption={showNotifyOption}
                             onChangeNotifyOffice={this.onChangeNotifyOffice}
                             shouldNotifyOffice={shouldNotifyOffice}
                           />
 
-                          {showCreateTaskForm === chId ? (
+                          {showCreateTaskForm === checklist.id ? (
                             <CreateTaskForm
                               isSaving={isSaving}
                               showNotifyOption={showNotifyOption}
-                              checklist={checklists[chId]}
+                              checklist={checklist}
                               onCancel={this.onCancelNewTask}
                               onFinish={this.createNewTask}
                             />
                           ) : (
                             <CreateTaskItem
-                              checklist={checklists[chId]}
+                              checklist={checklist}
                               onSelect={this.onRequestNewTask}
                             />
                           )}
                         </div>
-                      ))}
+                      )
+                    })}
                 </DropDownMenu>
               )}
             </DropDownContainer>
@@ -353,9 +364,9 @@ class DropDownTasks extends React.Component {
   }
 }
 
-function mapStateToProps({ deals }) {
+function mapStateToProps({ deals }, props) {
   return {
-    checklists: deals.checklists,
+    checklists: getDealChecklists(props.deal, deals.checklists),
     tasks: deals.tasks
   }
 }

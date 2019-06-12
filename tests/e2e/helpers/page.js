@@ -1,6 +1,9 @@
-export const clickAndWait = async (page, selector) => {
-  const navigation = page.waitForNavigation({ waitUnitl: 'networkidle0' })
+export const clickAndWait = async (page, selector, fullWait = true) => {
+  const navigation = page.waitForNavigation({
+    waitUntil: fullWait ? 'networkidle0' : 'networkidle2'
+  })
 
+  await page.waitForSelector(selector)
   await page.click(selector)
   await navigation
 }
@@ -25,3 +28,12 @@ export const skipPhoneNagScreen = async page => {
     // All is good, nothing to handle.
   }
 }
+export const navigateRelative = async (page, relativeUrl, fullWait = true) =>
+  page.goto(
+    `${global.host}${relativeUrl}`
+      // Remove possible extra slashes
+      .split('/')
+      .filter(i => i)
+      .join('/'),
+    { waitUntil: fullWait ? 'networkidle0' : 'networkidle2' }
+  )
