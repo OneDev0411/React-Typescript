@@ -1,41 +1,81 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { connect } from 'react-redux'
+import { addNotification as notify } from 'reapop'
 
-import Button from 'components/Button/ActionButton'
+import IconButton from 'components/Button/IconButton'
+import ActionButton from 'components/Button/ActionButton'
+import DeleteIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 
-import { getThumbnail, createdAt } from './helpers'
+import { getThumbnail, itemButtonText, itemDateText } from './helpers'
 
 function Item(props) {
+  const [isDeleting, setDeleting] = useState(false)
   const thumbnail = getThumbnail(props.template)
   const isInstance = props.template.type === 'template_instance'
-  const isVideo = false
-  const editButtonText = 'Customize'
+  const isEmail = props.template.medium === 'Email'
+  const gridClassNames = ['grid-item']
+
+  if (isDeleting) {
+    gridClassNames.push('loading')
+  }
 
   return (
     <div key={props.template.id}>
-      <div className="grid-item">
-        <img alt={props.template.name} src={thumbnail} />
+      <div
+        className={gridClassNames.join(' ')}
+        onClick={() => props.handlePreview(props.template)}
+      >
         <div className="action-bar">
-          {!isVideo && (
-            <Button
-              appearance="outline"
-              onClick={() => props.handlePreview(props.template)}
-              style={{ backgroundColor: '#FFF' }}
+          {props.handleDelete && (
+            <IconButton
+              onClick={e => {
+                e.stopPropagation()
+                setDeleting(true)
+
+                props.handleDelete({
+                  template: props.template,
+                  onCancel: () => {
+                    setDeleting(false)
+                  },
+                  onFailed: () => {
+                    setDeleting(false)
+                    props.notify({
+                      title:
+                        'There is a problem for deleting the template. Please try again.',
+                      status: 'error',
+                      dismissible: true
+                    })
+                  }
+                })
+              }}
+              className="actionbar-delete"
             >
-              Preview
-            </Button>
+              <DeleteIcon />
+            </IconButton>
           )}
-          <Button onClick={() => props.handleCustomize(props.template)}>
-            {editButtonText}
-          </Button>
+          <ActionButton
+            onClick={e => {
+              e.stopPropagation()
+
+              props.handleCustomize(props.template)
+            }}
+            isBlock
+          >
+            {itemButtonText(isInstance, isEmail)}
+          </ActionButton>
         </div>
+        <img alt={props.template.name} src={thumbnail} />
       </div>
       {isInstance && (
         <div className="template_date">
-          {`Created ${createdAt(props.template.created_at)}`}
+          {itemDateText(props.template.created_at, isDeleting)}
         </div>
       )}
     </div>
   )
 }
 
-export default Item
+export default connect(
+  null,
+  { notify }
+)(Item)

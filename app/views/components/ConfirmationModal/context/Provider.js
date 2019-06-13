@@ -5,6 +5,7 @@ import ConfirmationModalContext from './index'
 export const initialConfimationModal = {
   // Visibility
   isShow: false,
+  appearance: 'normal', // normal, danger
 
   // Default Interface
   message: '',
