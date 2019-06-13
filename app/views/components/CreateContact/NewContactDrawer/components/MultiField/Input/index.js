@@ -12,7 +12,7 @@ export function TextField({ input, meta, placeholder }) {
         {...input}
         id={`new-contact__${input.name}`}
         placeholder={placeholder}
-        autoComplete="off"
+        autoComplete="disabled"
         type="text"
       />
       {hasError && (

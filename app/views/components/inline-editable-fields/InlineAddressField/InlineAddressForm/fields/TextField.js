@@ -32,7 +32,7 @@ export function TextField(props) {
             {...input}
             id={id}
             type="text"
-            autoComplete="off"
+            autoComplete="disabled"
             placeholder={props.placeholder}
           />
         </Container>

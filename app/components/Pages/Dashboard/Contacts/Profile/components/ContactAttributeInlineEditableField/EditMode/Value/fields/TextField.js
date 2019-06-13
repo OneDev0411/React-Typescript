@@ -27,6 +27,7 @@ export class TextField extends React.Component {
   render() {
     return (
       <Input
+        autoComplete="disabled"
         value={this.state.value}
         onChange={this.onChange}
         onKeyDown={this.props.onKeyDown}

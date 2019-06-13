@@ -5,7 +5,8 @@ const simpleField = ({
   input,
   label,
   placeholder,
-  meta: { dirty, error }
+  meta: { dirty, error },
+  ...inputProps
 }) => {
   const hasError = dirty && error
 
@@ -16,6 +17,7 @@ const simpleField = ({
       </label>
       <input
         {...input}
+        {...inputProps}
         type={type}
         id={input.name}
         placeholder={placeholder}
