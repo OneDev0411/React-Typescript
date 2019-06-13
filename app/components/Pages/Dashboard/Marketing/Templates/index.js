@@ -52,7 +52,7 @@ function Templates(props) {
         <TemplatesList
           items={availableTemplates}
           isLoading={isLoading}
-          type={props.type}
+          type={props.types}
           medium={selectedMedium}
           titleRenderer={() => (
             <ul className="tabs">

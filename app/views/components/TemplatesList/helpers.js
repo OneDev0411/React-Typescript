@@ -101,3 +101,21 @@ export function navigateBetweenTemplatesUsingKeyboard(
     return selectNextTemplate(templates, selectedTemplate, wantedMedium)
   }
 }
+
+export function itemButtonText(isInstance, isEmail) {
+  let text = 'Customize'
+
+  if (isInstance) {
+    text = isEmail ? 'Compose' : 'Share'
+  }
+
+  return text
+}
+
+export function itemDateText(time, isLoading) {
+  if (isLoading) {
+    return 'Deleting...'
+  }
+
+  return `Created ${createdAt(time)}`
+}
