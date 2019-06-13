@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Helmet } from 'react-helmet'
 
+import { deleteTemplateInstance } from 'models/instant-marketing/delete-template-instance'
 import TemplatesList from 'components/TemplatesList'
 
 import { Header } from '../components/PageHeader'
@@ -8,6 +9,17 @@ import useTemplatesHistory from './useTemplatesHistory'
 
 function History(props) {
   const [templates, isLoading] = useTemplatesHistory()
+  const [deletedTemplates, setDeletedTemplates] = useState([])
+  // We are using this for filtering the deleted items
+  const finalTemplates = templates.filter(
+    template => !deletedTemplates.includes(template.id)
+  )
+
+  function handleDelete(id) {
+    return deleteTemplateInstance(id).then(() => {
+      setDeletedTemplates([...deletedTemplates, id])
+    })
+  }
 
   return (
     <React.Fragment>
@@ -20,7 +32,12 @@ function History(props) {
         isSideMenuOpen={props.isSideMenuOpen}
         toggleSideMenu={props.toggleSideMenu}
       />
-      <TemplatesList type="history" items={templates} isLoading={isLoading} />
+      <TemplatesList
+        type="history"
+        items={finalTemplates}
+        isLoading={isLoading}
+        onDelete={handleDelete}
+      />
     </React.Fragment>
   )
 }

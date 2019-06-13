@@ -2,11 +2,13 @@ import React from 'react'
 
 import Button from '../Button/ActionButton'
 
+import { ActionBarContainer } from './styled'
+
 function ActionBar(props) {
   const { confirmation, onCancel, onConfirm } = props
 
   return (
-    <div className="cta">
+    <ActionBarContainer className="cta" appearance={confirmation.appearance}>
       {confirmation.needsCancel && (
         <Button
           appearance="outline"
@@ -20,12 +22,13 @@ function ActionBar(props) {
         <Button
           style={{ marginLeft: '1em' }}
           onClick={onConfirm}
+          className="modal-confirm"
           data-test="confirmation-modal-confirm-button"
         >
           {confirmation.confirmLabel || 'Confirm'}
         </Button>
       )}
-    </div>
+    </ActionBarContainer>
   )
 }
 

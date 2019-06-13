@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import Masonry from 'react-masonry-css'
+
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import { TemplatesListContainer, TemplatesContainer } from './styled'
 import Item from './Item'
@@ -12,6 +14,21 @@ function TemplatesList(props) {
   const [isPreviewModalOpen, setPreviewModalOpen] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState(null)
   const [isActionTriggered, setActionTriggered] = useState(false)
+  const modal = useContext(ConfirmationModalContext)
+  const handleDelete = props.onDelete
+    ? ({ template, onFailed, onCancel }) => {
+        modal.setConfirmationModal({
+          message: 'Delete your design?',
+          description: 'Once deleted you would not be able to recover it.',
+          confirmLabel: 'Delete',
+          appearance: 'danger',
+          onConfirm: () => {
+            props.onDelete(template.id).catch(onFailed)
+          },
+          onCancel
+        })
+      }
+    : undefined
 
   const isEmpty = props.items.length == 0
 
@@ -50,6 +67,7 @@ function TemplatesList(props) {
                 setActionTriggered(true)
                 setSelectedTemplate(selectedTemplate)
               }}
+              handleDelete={handleDelete}
             />
           ))}
         </Masonry>
@@ -68,6 +86,7 @@ function TemplatesList(props) {
 
       <TemplateAction
         type={props.type}
+        medium={props.medium}
         isTriggered={isActionTriggered}
         setTriggered={setActionTriggered}
         selectedTemplate={selectedTemplate}

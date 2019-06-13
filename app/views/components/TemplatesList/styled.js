@@ -22,11 +22,24 @@ export const TemplatesListContainer = styled.div`
     position: relative;
     border-radius: 3px;
     box-shadow: 0px 2px 15px -5px rgba(0, 0, 0, 0.5);
-    transform: translate3d(0, 0, 0);
     transition: 0.3s;
     min-height: 15.8rem;
     background: #eee;
     overflow: hidden;
+    cursor: zoom-in;
+
+    &:after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      z-index: 1;
+      transition: all 0.5s;
+      content: '';
+    }
 
     & img {
       width: 100%;
@@ -35,38 +48,78 @@ export const TemplatesListContainer = styled.div`
     & .action-bar {
       display: flex;
       justify-content: space-between;
+      width: 100%;
       position: absolute;
-      bottom: 0;
+      top: 0;
       left: 0;
-      right: 0;
-      visibility: hidden;
       padding: 1rem;
-      background-color: rgba(255, 255, 255, 0.95);
+      z-index: 2;
+      opacity: 0;
+      transform: translateY(0.5rem);
+      transition: all 0.35s;
+
+      .actionbar-delete {
+        background: #000;
+
+        & svg {
+          fill: #fff;
+        }
+
+        &:hover {
+          background: #fff;
+
+          & svg {
+            fill: #000;
+          }
+        }
+      }
+
+      & button:nth-child(2) {
+        margin-left: 1rem;
+      }
     }
 
-    &:hover {
-      box-shadow: 0 22px 43px rgba(0, 0, 0, 0.15);
-      transform: translateY(-4px);
-
+    &:not(.loading):hover {
       .action-bar {
-        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
       }
-      .template_date {
-        display: block;
+
+      &:after {
+        opacity: 1;
       }
+    }
+
+    &.loading {
+      &:after {
+        background: rgba(255, 255, 255, 0.7);
+        opacity: 1;
+      }
+    }
+
+    &.loading {
+      cursor: wait;
     }
   }
 
   & .template_date {
     margin-top: 0.5rem;
-    display: none;
     color: #7f7f7f;
     position: absolute;
     bottom: -2rem;
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition: all 0.35s;
   }
 
   .grid-item:hover + .template_date {
-    display: block;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .grid-item.loading + .template_date {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .templates-masonry-grid {
