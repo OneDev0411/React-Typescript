@@ -12,7 +12,6 @@ function Item(props) {
   const [isDeleting, setDeleting] = useState(false)
   const thumbnail = getThumbnail(props.template)
   const isInstance = props.template.type === 'template_instance'
-  const isEmail = props.template.medium === 'Email'
   const gridClassNames = ['grid-item']
 
   if (isDeleting) {
@@ -61,7 +60,7 @@ function Item(props) {
             }}
             isBlock
           >
-            {itemButtonText(isInstance, isEmail)}
+            {itemButtonText(props.template)}
           </ActionButton>
         </div>
         <img alt={props.template.name} src={thumbnail} />

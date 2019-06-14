@@ -2,12 +2,12 @@ import React from 'react'
 
 import Button from 'components/Button/ActionButton'
 
-import { buttonTextForPreviewAction } from './helpers'
+import { itemButtonText } from './helpers'
 
 function PreviewModalMenu(props) {
   return (
     <Button onClick={props.handlePreviewShare}>
-      {buttonTextForPreviewAction(props.selectedTemplate)}
+      {itemButtonText(props.selectedTemplate)}
     </Button>
   )
 }

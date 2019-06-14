@@ -16,14 +16,6 @@ export function plural(word, isPlural) {
   return isPlural ? `${word}s` : word
 }
 
-export function buttonTextForPreviewAction(selectedTemplate) {
-  if (selectedTemplate && selectedTemplate.template) {
-    return selectedTemplate.template.medium === 'Email' ? 'Compose' : 'Share'
-  }
-
-  return 'Customize'
-}
-
 export function getSelectedMediumTemplates(templates, wantedMedium) {
   return templates.filter(t => t.medium === wantedMedium)
 }
@@ -102,8 +94,15 @@ export function navigateBetweenTemplatesUsingKeyboard(
   }
 }
 
-export function itemButtonText(isInstance, isEmail) {
+export function itemButtonText(item) {
+  let isInstance = false
+  let isEmail = false
   let text = 'Customize'
+
+  if (item && item.template) {
+    isInstance = item.type === 'template_instance'
+    isEmail = item.template.medium === 'Email'
+  }
 
   if (isInstance) {
     text = isEmail ? 'Compose' : 'Share'
