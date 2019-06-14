@@ -76,7 +76,7 @@ class SegmentsList extends React.Component {
     const { props } = this
 
     return (
-      <div>
+      <div data-test="lists-list">
         <ListTitle>Lists</ListTitle>
 
         <ShowMoreLess

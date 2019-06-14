@@ -122,6 +122,7 @@ export class OperatorAndOperandFilter extends React.Component {
           disabled={!this.props.values || this.props.values.length === 0}
           appearance="link"
           onClick={this.props.onToggleFilterActive}
+          data-test="filter-done-button"
         >
           Done
         </DoneButton>

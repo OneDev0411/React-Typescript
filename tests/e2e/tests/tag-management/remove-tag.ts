@@ -1,6 +1,7 @@
 import { Page } from 'puppeteer'
 
 import { getTestSelector } from '../../helpers'
+import { acceptConfirmationModal, waitFor2xxResponse } from '../../helpers/page'
 
 export async function removeTag(tagManagementPage: Page, tag: string) {
   const tagElement = await tagManagementPage.waitForSelector(
@@ -14,11 +15,7 @@ export async function removeTag(tagManagementPage: Page, tag: string) {
 
   await deleteButton!.click()
 
-  const confirmButton = await tagManagementPage.waitForSelector(
-    getTestSelector('confirmation-modal-confirm-button')
-  )
+  await acceptConfirmationModal(tagManagementPage)
 
-  await confirmButton.click()
-
-  await tagManagementPage.waitForResponse(() => true)
+  await waitFor2xxResponse(tagManagementPage)
 }
