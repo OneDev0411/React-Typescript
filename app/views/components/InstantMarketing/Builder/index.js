@@ -86,6 +86,7 @@ class Builder extends React.Component {
     this.singleClickTextEditing()
     this.disableAssetManager()
     this.makeTemplateCentered()
+    this.removeTextStylesOnPaste()
 
     if (this.IsVideoTemplate) {
       this.grapes.appendChild(this.videoToolbar)
@@ -134,6 +135,22 @@ class Builder extends React.Component {
     }
 
     iframe.contentDocument.head.appendChild(style)
+  }
+
+  removeTextStylesOnPaste = () => {
+    const iframe = this.editor.Canvas.getBody()
+
+    iframe.addEventListener('paste', ev => {
+      if (!ev.target.contentEditable) {
+        return
+      }
+
+      ev.preventDefault()
+
+      const text = ev.clipboardData.getData('text')
+
+      ev.target.ownerDocument.execCommand('insertText', false, text)
+    })
   }
 
   disableResize = () => {
