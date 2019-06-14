@@ -7,6 +7,7 @@ export async function updateRole(deal_id, role) {
   try {
     const response = await new Fetch()
       .put(`/deals/${deal_id}/roles/${role.id}`)
+      .query({ 'associations[]': ['agent.office'] })
       .send(role)
 
     return response.body.data
