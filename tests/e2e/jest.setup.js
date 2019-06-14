@@ -1,4 +1,4 @@
-jest.setTimeout(60000)
+jest.setTimeout(5 * 60 * 1000)
 
 global.host = process.env.E2E_HOST || 'http://0.0.0.0:8080'
 global.email = process.env.E2E_EMAIL || 'emil+agent@rechat.com'
