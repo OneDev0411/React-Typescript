@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { connect, Dispatch } from 'react-redux'
 import { addNotification, Notification } from 'reapop'
 
+import useInput from 'hooks/use-input'
 import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers'
 import { updateFilterSegment } from 'actions/filter-segments'
 import { CONTACTS_SEGMENT_NAME } from 'crm/constants'
@@ -27,45 +28,13 @@ function TouchReminder({
   updateSegment,
   notify
 }: TouchReminderProps) {
-  const [value, setValue] = useState(activeSegment.touch_freq || 0)
-
-  useEffect(() => {
-    setValue(activeSegment.touch_freq || 0)
-  }, [activeSegment.id, activeSegment.touch_freq])
-
-  function handleChange(ev: React.ChangeEvent<HTMLInputElement>) {
-    const newValue = parseInt(ev.target.value, 10)
-
-    setValue(Number.isNaN(newValue) ? 0 : newValue)
-  }
+  const { value, onChange } = useInput({
+    initialValue: activeSegment.touch_freq || 0,
+    pattern: /^[0-9]{0,5}$/
+  })
 
   function handleFocus(ev: React.FocusEvent<HTMLInputElement>) {
     ev.currentTarget.select()
-  }
-
-  function handleKeyPress(ev: React.KeyboardEvent<HTMLInputElement>) {
-    const eventTargetValue = parseInt(ev.key, 10)
-
-    // It's some other key like Backspace
-    if (Number.isNaN(eventTargetValue)) {
-      return
-    }
-
-    const currentValue = value.toString()
-
-    const selectionRange =
-      Number(ev.currentTarget.selectionEnd) -
-      Number(ev.currentTarget.selectionStart)
-
-    // It's a numeric input key
-    // But we already reached 5 digits and the user has not selected any text inside
-    if (
-      currentValue.length === 5 &&
-      selectionRange === 0 &&
-      eventTargetValue <= 9
-    ) {
-      return ev.preventDefault()
-    }
   }
 
   const handleUpdate = useCallback(async () => {
@@ -74,9 +43,10 @@ function TouchReminder({
     }
 
     try {
+      const numericValue = Number(value)
       const segment: IContactList = {
         ...activeSegment,
-        touch_freq: value === 0 ? undefined : value
+        touch_freq: numericValue === 0 ? undefined : numericValue
       }
 
       await updateSegment(CONTACTS_SEGMENT_NAME, segment, DEFAULT_QUERY)
@@ -100,10 +70,9 @@ function TouchReminder({
       <Label>Touch Reminder</Label>
       <Input
         value={value.toString()}
-        onChange={handleChange}
+        onChange={onChange}
         onFocus={handleFocus}
         onBlur={handleUpdate}
-        onKeyPress={handleKeyPress}
         data-test="touch-reminder-input"
       />
       <Label data-test="touch-reminder-days" bold>
