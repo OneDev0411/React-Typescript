@@ -3,6 +3,7 @@ import React from 'react'
 import Flex from 'styled-flex-component'
 
 import { getDealTitle } from 'deals/utils/get-deal-title'
+import { getDealAddress } from 'deals/utils/get-deal-address'
 
 import ActionButton from 'components/Button/ActionButton'
 import IconButton from 'components/Button/IconButton'
@@ -39,7 +40,11 @@ export class Menu extends React.Component {
               />
             </MenuTitle>
 
-            <MenuSubTitle>{getDealTitle(props.deal)}</MenuSubTitle>
+            <MenuSubTitle>
+              {[getDealTitle(props.deal), getDealAddress(props.deal)].join(
+                ', '
+              )}
+            </MenuSubTitle>
           </div>
 
           <Flex alignCenter>

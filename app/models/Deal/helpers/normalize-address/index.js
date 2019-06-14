@@ -1,4 +1,6 @@
-import { stateToAbbreviated } from 'deals/utils/address'
+import _ from 'underscore'
+
+import { STATES } from 'utils/address'
 
 export function normalizeAddress(address) {
   const list = {
@@ -45,4 +47,8 @@ export function normalizeAddress(address) {
       [field]: value
     }
   }, {})
+}
+
+function stateToAbbreviated(stateName) {
+  return _.findKey(STATES, name => name === stateName)
 }
