@@ -22,7 +22,7 @@ export function AddressInputs(props) {
       }
 
       return {
-        ...acc.fields,
+        ...acc,
         ...getGroupValues(group, addressFields[name])
       }
     }, {})
