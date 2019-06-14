@@ -109,7 +109,7 @@ describe('Contacts list page', () => {
     // Add tag again and check if it's added to the list of tags
     await addNewTag(page, tagName)
     // Expand tags to ensure all of them exist in dom
-    await expandTags(page)
+    await expandShowMoreLess(page, getTestSelector('tags-list'))
     await checkTagExistsInList(page, tagName)
 
     // cleanup. can be removed when sandbox environment for tests are added
@@ -125,6 +125,6 @@ async function navigateToTagManagementAndRemoveTheTag(page, tagName) {
 async function checkTagExistsInList(page: Page, tagName) {
   // Assert that the new tag exists in tags section in side menu
   await page.waitForSelector(getTestSelector(`tag-item-${tagName}`), {
-    timeout: 10000
+    timeout: 20000
   })
 }

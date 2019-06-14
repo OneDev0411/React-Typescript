@@ -121,6 +121,10 @@ export const cancelConfirmationModal = async (page: Page) => {
   await cancelButton.click()
 }
 
+export const waitForDrawerToClose = async (page: Page) => {
+  await waitForRemove(page, getTestSelector('open-overlay'))
+}
+
 export const waitForResponseInRange = (
   page: Page,
   minStatusCode: number,

@@ -1,7 +1,11 @@
 import { Page } from 'puppeteer'
 
 import { getTestSelector } from '../../helpers'
-import { acceptConfirmationModal, waitFor2xxResponse } from '../../helpers/page'
+import {
+  acceptConfirmationModal,
+  waitFor2xxResponse,
+  waitForRemove
+} from '../../helpers/page'
 
 export async function removeTag(tagManagementPage: Page, tag: string) {
   const tagElement = await tagManagementPage.waitForSelector(
@@ -17,5 +21,5 @@ export async function removeTag(tagManagementPage: Page, tag: string) {
 
   await acceptConfirmationModal(tagManagementPage)
 
-  await waitFor2xxResponse(tagManagementPage)
+  await waitForRemove(tagManagementPage, getTestSelector(`tag-item-${tag}`))
 }
