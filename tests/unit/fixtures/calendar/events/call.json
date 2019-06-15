@@ -1,0 +1,26 @@
+{
+  "id": "43279720-dd9f-4b3c-8166-debb94e3ae78",
+  "created_by": "21c04d82-0e8d-11e8-b6c0-0ae785638eb4",
+  "object_type": "crm_task",
+  "event_type": "Call",
+  "type_label": "Call",
+  "timestamp": 1560583889.559,
+  "date": "2019-06-15T07:31:29.559Z",
+  "next_occurence": "2019-06-15T07:31:29.559Z",
+  "recurring": false,
+  "title": "Mamal test Call",
+  "crm_task": "43279720-dd9f-4b3c-8166-debb94e3ae78",
+  "deal": null,
+  "contact": null,
+  "campaign": null,
+  "users": [
+    "21c04d82-0e8d-11e8-b6c0-0ae785638eb4"
+  ],
+  "status": "DONE",
+  "metadata": {
+    "status": "DONE"
+  },
+  "timestamp_readable": "2019-06-15T07:31:29.559Z",
+  "timestamp_midday": "2019-06-15T19:31:29.559Z",
+  "type": "calendar_event"
+}
