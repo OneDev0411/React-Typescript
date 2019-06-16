@@ -80,12 +80,19 @@ class Builder extends React.Component {
     this.editor.on('load', this.setupGrapesJs)
   }
 
+  componentWillUnmount() {
+    const iframe = this.editor.Canvas.getBody()
+
+    iframe.removeEventListener('paste', this.iframePasteHandler)
+  }
+
   setupGrapesJs = () => {
     this.lockIn()
     this.disableResize()
     this.singleClickTextEditing()
     this.disableAssetManager()
     this.makeTemplateCentered()
+    this.removeTextStylesOnPaste()
 
     if (this.IsVideoTemplate) {
       this.grapes.appendChild(this.videoToolbar)
@@ -134,6 +141,24 @@ class Builder extends React.Component {
     }
 
     iframe.contentDocument.head.appendChild(style)
+  }
+
+  removeTextStylesOnPaste = () => {
+    const iframe = this.editor.Canvas.getBody()
+
+    iframe.addEventListener('paste', this.iframePasteHandler)
+  }
+
+  iframePasteHandler = ev => {
+    if (!ev.target.contentEditable) {
+      return
+    }
+
+    ev.preventDefault()
+
+    const text = ev.clipboardData.getData('text')
+
+    ev.target.ownerDocument.execCommand('insertText', false, text)
   }
 
   disableResize = () => {
