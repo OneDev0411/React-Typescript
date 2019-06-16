@@ -112,6 +112,7 @@ class NewContactDrawer extends React.Component {
         render={({ submitError, form }) => (
           <React.Fragment>
             <Select
+              data-test="contact-title-select"
               items={this.getDefaultValues('title', 'enum_values')}
               name="title"
               label="Title"
