@@ -80,6 +80,12 @@ class Builder extends React.Component {
     this.editor.on('load', this.setupGrapesJs)
   }
 
+  componentWillUnmount() {
+    const iframe = this.editor.Canvas.getBody()
+
+    iframe.removeEventListener('paste', this.iframePasteHandler)
+  }
+
   setupGrapesJs = () => {
     this.lockIn()
     this.disableResize()
@@ -140,17 +146,19 @@ class Builder extends React.Component {
   removeTextStylesOnPaste = () => {
     const iframe = this.editor.Canvas.getBody()
 
-    iframe.addEventListener('paste', ev => {
-      if (!ev.target.contentEditable) {
-        return
-      }
+    iframe.addEventListener('paste', this.iframePasteHandler)
+  }
 
-      ev.preventDefault()
+  iframePasteHandler = ev => {
+    if (!ev.target.contentEditable) {
+      return
+    }
 
-      const text = ev.clipboardData.getData('text')
+    ev.preventDefault()
 
-      ev.target.ownerDocument.execCommand('insertText', false, text)
-    })
+    const text = ev.clipboardData.getData('text')
+
+    ev.target.ownerDocument.execCommand('insertText', false, text)
   }
 
   disableResize = () => {
