@@ -1,0 +1,26 @@
+{
+  "id": "2104e9fc-70e0-4f8f-92b4-7209ada931d3",
+  "created_by": "21c04d82-0e8d-11e8-b6c0-0ae785638eb4",
+  "object_type": "crm_task",
+  "event_type": "Text",
+  "type_label": "Text",
+  "timestamp": 1560583928.437,
+  "date": "2019-06-15T07:32:08.437Z",
+  "next_occurence": "2019-06-15T07:32:08.437Z",
+  "recurring": false,
+  "title": "Mamal test Text",
+  "crm_task": "2104e9fc-70e0-4f8f-92b4-7209ada931d3",
+  "deal": null,
+  "contact": null,
+  "campaign": null,
+  "users": [
+    "21c04d82-0e8d-11e8-b6c0-0ae785638eb4"
+  ],
+  "status": "DONE",
+  "metadata": {
+    "status": "DONE"
+  },
+  "timestamp_readable": "2019-06-15T07:32:08.437Z",
+  "timestamp_midday": "2019-06-15T19:32:08.437Z",
+  "type": "calendar_event"
+}

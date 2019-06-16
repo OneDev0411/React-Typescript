@@ -1,0 +1,26 @@
+{
+  "id": "a4aaa4e1-9ed3-4c79-9ad5-5bc910acc855",
+  "created_by": "23d3a48c-7889-11e8-85a5-0a95998482ac",
+  "object_type": "contact_attribute",
+  "event_type": "birthday",
+  "type_label": "Spouse Birthday",
+  "timestamp": -5350233600,
+  "date": "1800-06-17T00:00:00.000Z",
+  "next_occurence": "2019-06-17T00:00:00.000Z",
+  "recurring": true,
+  "title": "Spouse Birthday (Test Partner) - Al Day",
+  "crm_task": null,
+  "deal": null,
+  "contact": "457095c0-f884-498c-89a5-da74636d5718",
+  "campaign": null,
+  "users": [
+    "23d3a48c-7889-11e8-85a5-0a95998482ac"
+  ],
+  "status": null,
+  "metadata": {
+    "is_partner": true
+  },
+  "timestamp_readable": "1800-06-17T00:00:00.000Z",
+  "timestamp_midday": "1800-06-17T12:00:00.000Z",
+  "type": "calendar_event"
+}

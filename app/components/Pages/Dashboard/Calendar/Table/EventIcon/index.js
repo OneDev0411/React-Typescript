@@ -18,7 +18,7 @@ const getImportantDateIcon = label => {
     return importantDatesIcons[label]
   }
 
-  if (label === 'Spouse birthday') {
+  if (label === 'Spouse Birthday' || label === 'Child Birthday') {
     return importantDatesIcons.Birthday
   }
 
