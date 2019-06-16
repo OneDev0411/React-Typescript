@@ -1,9 +1,10 @@
 import React from 'react'
 import { Dropdown, MenuItem } from 'react-bootstrap'
 
+import styled from 'styled-components'
+
 import IconButtonBase from '../../../../../../../views/components/Button/IconButton'
 import VerticalDotsIcon from '../../../../../../../views/components/SvgIcons/VeriticalDots/VerticalDotsIcon'
-import styled from 'styled-components'
 import { grey } from '../../../../../../../views/utils/colors'
 
 const IconButton = styled(IconButtonBase)`
@@ -19,6 +20,7 @@ const Menu = ({ contactId, handleOnDelete }) => (
     id={`contact_${contactId}__dropdown`}
   >
     <IconButton
+      data-test="contact-menu"
       bsRole="toggle"
       inverse
       isFit
@@ -29,6 +31,7 @@ const Menu = ({ contactId, handleOnDelete }) => (
 
     <Dropdown.Menu bsRole="menu">
       <MenuItem
+        data-test="contact-row-delete-action"
         eventKey="Delete"
         key={`contact_${contactId}__dropdown__item_delete`}
         style={{ width: '100%', textAlign: 'left' }}

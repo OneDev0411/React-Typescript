@@ -29,6 +29,7 @@ const CheckBox = styled.span`
 
 export const CheckBoxButtonWithoutState = props => (
   <CheckBox
+    data-test="checkbox"
     onClick={props.onClick}
     isSelected={props.isSelected || props.someRowsSelected}
     style={props.style}

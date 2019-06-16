@@ -1,7 +1,7 @@
 import { Page } from 'puppeteer'
 
 import { getTestSelector } from '../../helpers'
-import { waitForDrawerToClose } from '../../helpers/page'
+import { waitForDrawerToClose } from '../../helpers/drawer-helpers'
 
 export async function addNewTag(contactsPage: Page, tagName: string) {
   const firstAddTagButton = await contactsPage.waitForSelector(

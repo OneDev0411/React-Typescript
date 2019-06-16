@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from 'styled-components'
 import React from 'react'
 import Downshift from 'downshift'
 import matchSorter from 'match-sorter'
@@ -92,6 +92,7 @@ export const Dropdown = ({
           ) : (
             <Button
               appearance="outline"
+              data-test={`${input.name}-select`}
               noBorder={noBorder}
               {...getButtonProps({
                 fullWidth,
@@ -100,15 +101,14 @@ export const Dropdown = ({
                 name: input.name
               })}
             >
-              {selectedItem &&
-                selectedItem.icon && (
-                  <selectedItem.icon
-                    style={{
-                      marginRight: '0.5em',
-                      fill: selectedItem.iconColor
-                    }}
-                  />
-                )}
+              {selectedItem && selectedItem.icon && (
+                <selectedItem.icon
+                  style={{
+                    marginRight: '0.5em',
+                    fill: selectedItem.iconColor
+                  }}
+                />
+              )}
               {selectedItem && selectedItem.title}
               <Icon isOpen={isOpen} />
             </Button>
@@ -173,7 +173,11 @@ export const Dropdown = ({
                   return itemRenderer ? (
                     itemRenderer(props, item)
                   ) : (
-                    <Item {...props} key={item.value}>
+                    <Item
+                      {...props}
+                      key={item.value}
+                      data-test={`${input.name}-select-option-${item.value}`}
+                    >
                       {item.icon && <item.icon />}
                       {`${title}${item.hint ? ` (${item.hint})` : ''}`}
                     </Item>

@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer'
+import puppeteer, { ElementHandle } from 'puppeteer'
 
 export const init = async (
   options = {
@@ -11,12 +11,20 @@ export const init = async (
   const browser = await puppeteer.launch(options)
   const page = await browser.newPage()
 
-  await page.goto(global.host)
+  await page.goto((global as any).host)
 
   return { browser, page }
 }
 
-export const getTestSelector = name => `[data-test="${name}"]`
+export const getTestSelector = (name: string | string[]) => {
+  return ([] as string[])
+    .concat(name)
+    .map(item => `[data-test="${item}"]`)
+    .join(' ')
+}
+
+export const getElementText = async (element: ElementHandle) =>
+  (await element.getProperty('textContent')).jsonValue()
 
 export const getFirstChildOfTestSelector = name =>
   `${getTestSelector(name)} *:first-child`
