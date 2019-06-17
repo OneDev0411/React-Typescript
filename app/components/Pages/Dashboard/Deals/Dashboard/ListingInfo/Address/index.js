@@ -17,7 +17,7 @@ import { InlineAddressField } from 'components/inline-editable-fields/InlineAddr
 
 import { TitleContainer, AddressInput } from './styled'
 
-function Address(props) {
+export function Address(props) {
   const [isEditingAddress, setIsEditingAddress] = useState(false)
 
   const cancleEdit = () => setIsEditingAddress(false)
