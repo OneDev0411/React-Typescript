@@ -13,7 +13,7 @@ interface ContactData {
 
 export async function createContact(
   contactsPage: Page,
-  { title, firstName, lastName }: ContactData = {}
+  { title = 'Mr.', firstName, lastName }: ContactData = {}
 ) {
   const addButton = (await contactsPage.$(
     getTestSelector('create-contact-button')
@@ -27,9 +27,7 @@ export async function createContact(
 
   await titleSelect.click()
 
-  const titleValueSelector = getTestSelector(
-    `title-select-option-${title || 'Mr.'}`
-  )
+  const titleValueSelector = getTestSelector(`title-select-option-${title}`)
 
   const titleOption = await contactsPage.waitForSelector(titleValueSelector)
 
