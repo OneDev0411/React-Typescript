@@ -105,6 +105,7 @@ export class DropDownList extends React.Component {
                 >
                   {this.getFilteredOptions(filterValue).map((item, index) => (
                     <Item
+                      data-test={`filter-item-${item.label}`}
                       key={index}
                       {...getItemProps({
                         index,

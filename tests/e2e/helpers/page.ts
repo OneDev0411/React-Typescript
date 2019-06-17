@@ -93,7 +93,7 @@ export const navigateRelative = (
       .split('/')
       .filter(i => i)
       .join('/'),
-    { waitUntil: fullWait ? 'networkidle0' : 'networkidle2' }
+    { waitUntil: fullWait ? 'networkidle0' : 'networkidle2', timeout: 40000 }
   )
 }
 
