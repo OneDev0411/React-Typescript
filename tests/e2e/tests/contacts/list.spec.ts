@@ -84,7 +84,7 @@ describe('Contacts list page', () => {
     await removeList(page, secondListName)
   })
 
-  test.skip('Tags are always updated after a new tag is added to a contact', async () => {
+  test('Tags are always updated after a new tag is added to a contact', async () => {
     // navigate to contacts list page
 
     const tagName = `test-tag-${Math.floor(Math.random() * 10 ** 6)}`

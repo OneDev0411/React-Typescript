@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { connect, Dispatch } from 'react-redux'
 import { addNotification, Notification } from 'reapop'
 
@@ -28,14 +28,13 @@ function TouchReminder({
   updateSegment,
   notify
 }: TouchReminderProps) {
-  const { value, onChange } = useInput({
-    initialValue: activeSegment.touch_freq || 0,
+  const { value, onChange, setValue } = useInput({
     pattern: /^[0-9]{0,5}$/
   })
 
-  function handleFocus(ev: React.FocusEvent<HTMLInputElement>) {
-    ev.currentTarget.select()
-  }
+  useEffect(() => {
+    setValue(activeSegment.touch_freq || 0)
+  }, [activeSegment, setValue])
 
   const handleUpdate = useCallback(async () => {
     if ((activeSegment.touch_freq || 0) === value) {
@@ -63,6 +62,10 @@ function TouchReminder({
       console.error(err)
     }
   }, [activeSegment, notify, updateSegment, value])
+
+  function handleFocus(ev: React.FocusEvent<HTMLInputElement>) {
+    ev.currentTarget.select()
+  }
 
   return (
     <Container>
