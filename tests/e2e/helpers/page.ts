@@ -59,14 +59,6 @@ export const skipPhoneNagScreen = async (page: Page) => {
   }
 }
 
-export const waitForAdd = (
-  page: Page,
-  selector: string,
-  timeout: number = 5000
-) => {
-  return page.waitForSelector(selector, { timeout })
-}
-
 export const waitForRemove = async (
   page: Page,
   selector: string,
