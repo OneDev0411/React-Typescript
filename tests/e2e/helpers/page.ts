@@ -113,6 +113,10 @@ export const cancelConfirmationModal = async (page: Page) => {
   await cancelButton.click()
 }
 
+export const waitForModalToClose = (page: Page) => {
+  return waitForRemove(page, '.ReactModal__Overlay')
+}
+
 export const waitForDrawerToClose = (page: Page) => {
   return waitForRemove(page, getTestSelector('open-overlay'))
 }

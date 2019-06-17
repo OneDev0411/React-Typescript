@@ -33,6 +33,7 @@ export default function BareModal({
       {...modalProps}
       className={classes}
       overlayClassName={`c-modal__overlay ${overlayClassName || ''}`}
+      data-test="dialog"
     >
       {children}
     </ReactModal>
