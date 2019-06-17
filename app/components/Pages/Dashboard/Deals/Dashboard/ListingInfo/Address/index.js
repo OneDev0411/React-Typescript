@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import { getField } from 'models/Deal/helpers/context/get-field'
 import { getDealTitle } from 'deals/utils/get-deal-title'
+import { getDealAddress } from 'deals/utils/get-deal-address'
 
 import { upsertContexts } from 'actions/deals'
 import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
@@ -44,6 +45,9 @@ function Address(props) {
       console.log(e)
     }
   }
+
+  const title = getDealTitle(props.deal)
+  const address = getDealAddress(props.deal)
 
   return (
     <Fragment>
@@ -87,9 +91,9 @@ function Address(props) {
           multiline
         >
           <TitleContainer onClick={editAddress} editable={!props.deal.listing}>
-            <H1 style={{ lineHeight: 1.5 }}>{getDealTitle(props.deal)}</H1>
+            <H1 style={{ lineHeight: 1.5 }}>{title}</H1>
 
-            <span>Edit</span>
+            <span>{address.length ? 'Edit Address' : '+ Add Address'}</span>
           </TitleContainer>
         </Tooltip>
       )}
