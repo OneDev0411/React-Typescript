@@ -10,8 +10,8 @@ export const TitleContainer = styled.div`
 
   span {
     color: ${primary};
-    margin-left: 0.5rem;
-    opacity: 0;
+    margin-left: 1rem;
+    font-weight: 500;
   }
 
   ${props =>
@@ -20,10 +20,6 @@ export const TitleContainer = styled.div`
       :hover {
         cursor: pointer;
         border: 1px dashed ${primary};
-      }
-
-      :hover span {
-        opacity: 1;
       }
     `}
 `
