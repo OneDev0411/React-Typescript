@@ -55,6 +55,9 @@
       ],
       "animations/*": [
         "app/animations/*"
+      ],
+      "fixtures/*": [
+        "tests/unit/fixtures/*"
       ]
     }
   },
