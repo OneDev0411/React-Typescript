@@ -16,6 +16,9 @@ stages:
 
 deps:
   stage: build
+  only:
+    changes:
+      - package-lock.json
   script:
     - npm i
 
