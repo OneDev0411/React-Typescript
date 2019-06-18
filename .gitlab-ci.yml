@@ -24,7 +24,7 @@ build:deps:
 run:serve:
   stage: run
   script:
-    - npm run serve:ci
+    - npm run serve:ci & 
   dependencies:
     - build:deps
 
@@ -41,3 +41,5 @@ test:e2e:
     - npm run test:e2e
   dependencies:
     - run:serve
+  after_script:
+    - killall node
