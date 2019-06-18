@@ -24,7 +24,7 @@ build:deps:
 run:serve:
   stage: run
   script:
-    - npm run develop
+    - npm run serve:ci
   dependencies:
     - build:deps
 
