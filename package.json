@@ -10,7 +10,9 @@
     "icons": "babel-node ./icon-manager",
     "build": "rimraf dist && NODE_ENV=production babel-node ./build.js",
     "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build.js",
+    "build:ci": "rimraf dist && NODE_ENV=ci babel-node ./build.js",
     "serve": "NODE_ENV=production forever node_modules/@babel/node/bin/babel-node.js --extensions \".js,.ts,.tsx\" ./bin/server ",
+    "serve:ci": "NODE_ENV=ci babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
     "serve:stage": "NODE_ENV=stage babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
     "styled-svg": "styled-svg app/views/components/SvgIcons/**/*.svg --no-tests --size=24x24",
     "types:check": "tsc",
@@ -288,6 +290,7 @@
     "eslint-plugin-react": "^7.12.3",
     "eslint-plugin-react-hooks": "^1.6.0",
     "find": "^0.3.0",
+    "husky": "^2.4.1",
     "jest": "^24.8.0",
     "ndb": "^1.0.41",
     "nodemon": "^1.18.9",
@@ -305,5 +308,10 @@
     "semi": false,
     "singleQuote": true,
     "printWidth": 80
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "./pre-commit.sh"
+    }
   }
 }
