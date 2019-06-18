@@ -1,10 +1,13 @@
 import puppeteer from 'puppeteer'
 
+const __CI__ = process.env.NODE_ENV === 'ci'
+const args = __CI__ ? ['--no-sandbox'] : ['--window-size=1100,800']
+
 export const init = async (
   options = {
-    headless: process.env.HEADLESS !== 'false',
+    headless: __CI__ || process.env.HEADLESS !== 'false',
     slowMo: 0,
-    args: ['--window-size=1100,800', '--no-sandbox'],
+    args,
     defaultViewport: null
   }
 ) => {
