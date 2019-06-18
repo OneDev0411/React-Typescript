@@ -40,6 +40,7 @@ export class DateField extends React.Component {
 
   validateSelect = (meta, allValues, parentName) => {
     const { name, value } = meta
+
     if (!value) {
       return
     }
@@ -47,18 +48,24 @@ export class DateField extends React.Component {
     const fieldName = name.substring(name.indexOf('.') + 1)
     let parent = allValues[parentName]
     const startingBracketIndex = parentName.indexOf('[')
-    
+
     if (!parent && startingBracketIndex !== -1) {
       const id = parentName.substring(0, startingBracketIndex)
-      const index = parentName.substring(startingBracketIndex + 1, parentName.indexOf(']'))
+      const index = parentName.substring(
+        startingBracketIndex + 1,
+        parentName.indexOf(']')
+      )
+
       parent = allValues[id][Number(index)]
     }
 
     // console.log(fieldName, meta, allValues, parent)
     let siblingName = 'day'
+
     if (fieldName === siblingName) {
       siblingName = 'month'
     }
+
     const siblingValue = parent[siblingName] && parent[siblingName].value
 
     if (value.value == null && (siblingValue != null || parent.year)) {
@@ -134,7 +141,7 @@ export class DateField extends React.Component {
                 <Input
                   {...input}
                   type="text"
-                  autoComplete="off"
+                  autoComplete="disable"
                   placeholder="Year"
                   maxLength="4"
                 />

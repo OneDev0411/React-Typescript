@@ -35,7 +35,7 @@ TextInput.defaultProps = {
 
 export function TextInput({ input, ...props }) {
   const inputProps = {
-    autoComplete: 'Off',
+    autoComplete: 'disabled',
     hasError:
       props.highlightOnError && props.meta.submitFailed && props.meta.error,
     ...input,

@@ -30,7 +30,6 @@ const ChangePasswordForm = ({
         onSubmit={handleSubmit(onSubmitHandler)}
       >
         <Field
-          autoComplete="off"
           component={SimpleField}
           label="Current Password"
           name="old_password"
@@ -42,7 +41,7 @@ const ChangePasswordForm = ({
           }}
         />
         <Field
-          autoComplete="off"
+          autoComplete="new-password"
           component={SimpleField}
           label="New Password"
           name="new_password"
@@ -54,7 +53,7 @@ const ChangePasswordForm = ({
           }}
         />
         <Field
-          autoComplete="off"
+          autoComplete="new-password"
           component={SimpleField}
           label="Confirm New Password"
           name="confirm_password"
