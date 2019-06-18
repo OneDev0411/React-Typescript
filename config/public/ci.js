@@ -1,31 +1,27 @@
 export default {
   app: {
-    url: process.env.APP_URL || 'http://localhost:8080'
+    url: process.env.APP_URL
   },
-  api_url: process.env.API_URL || 'https://rechat-boer.herokuapp.com',
+  api_url: process.env.API_URL,
   socket: {
-    server: process.env.SOCKET_SERVER || 'https://rechat-boer.herokuapp.com'
+    server: process.env.SOCKET_SERVER
   },
   forms: {
-    url:
-      process.env.FORMS_URL || 'https://rechat-forms.s3-us-west-2.amazonaws.com'
+    url: process.env.FORMS_URL
   },
   store: {
     url: ''
   },
   images: {
     avatars: {
-      cloudfront_url:
-        process.env.IMAGES_AVATARS_CLOUDFRONT_URL ||
-        'https://dzr6z49fv66hq.cloudfront.net',
-      imgix_url:
-        process.env.IMAGES_AVATARS_IMGIX_URL || 'https://rechat-test.imgix.net'
+      cloudfront_url: process.env.IMAGES_AVATARS_CLOUDFRONT_URL,
+      imgix_url: process.env.IMAGES_AVATARS_IMGIX_URL
     }
   },
   branch: {
-    key: process.env.BRANCH_KEY || 'dummy'
+    key: process.env.BRANCH_KEY
   },
   google: {
-    api_key: process.env.GOOGLE_API_KEY || 'dummy'
+    api_key: process.env.GOOGLE_API_KEY
   }
 }

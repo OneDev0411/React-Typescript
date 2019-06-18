@@ -1,30 +1,28 @@
-/* eslint-disable */
-// config/private/development.js
 export default {
-  app_url: process.env.APP_URL || 'http://localhost:8080',
-  api_url: process.env.API_URL || 'https://rechat-boer.herokuapp.com',
-  app_name: process.env.APP_NAME || 'Rechat Web',
+  app_url: process.env.APP_URL,
+  api_url: process.env.API_URL,
+  app_name: process.env.APP_NAME,
   api: {
-    url: process.env.API_URL || 'https://rechat-boer.herokuapp.com',
-    client_id: process.env.API_CLIENT_ID || 'dummy',
-    client_secret: process.env.API_CLIENT_SECRET || 'secret'
+    url: process.env.API_URL,
+    client_id: process.env.API_CLIENT_ID,
+    client_secret: process.env.API_CLIENT_SECRET
   },
   forms: {
-    url: process.env.FORMS_URL || 'https://rechat-forms.s3-us-west-2.amazonaws.com'
+    url: process.env.FORMS_URL
   },
   crypto: {
-    key: process.env.CRYPTO_KEY || '',
-    iv: process.env.CRYPTO_KEY || ''
+    key: process.env.CRYPTO_KEY,
+    iv: process.env.CRYPTO_KEY
   },
   sentry: {
-    url: process.env.SENTRY_URL || ''
+    url: process.env.SENTRY_URL
   },
   intercom: {
-    app_id: process.env.INTERCOM_APP_ID || 'dummy',
-    secret_key: process.env.INTERCOM_SECRET_KEY || 'dummy'
+    app_id: process.env.INTERCOM_APP_ID,
+    secret_key: process.env.INTERCOM_SECRET_KEY
   },
   mailgun: {
-    api_key: process.env.MAILGUN_API_KEY || 'dummy',
-    domain_url: process.env.MAILGUN_DOMAIN_URL || 'rechat.com'
+    api_key: process.env.MAILGUN_API_KEY,
+    domain_url: process.env.MAILGUN_DOMAIN_URL
   }
 }
