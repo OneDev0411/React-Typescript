@@ -1,5 +1,11 @@
 image: node:10
 
+cache:
+  untracked: true
+  key: "$CI_BUILD_REF_NAME"
+  paths:
+    - node_modules/
+
 stages:
   - build
   - run
@@ -14,9 +20,6 @@ build:deps:
     - apt-get install -yyq gconf-service lsb-release wget xdg-utils
     - apt-get install -yyq fonts-liberation
     - npm i
-  artifacts:
-    paths:
-      - node_modules/
 
 run:serve:
   stage: run
