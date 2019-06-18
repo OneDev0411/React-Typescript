@@ -93,7 +93,7 @@ export const navigateRelative = (
       .split('/')
       .filter(i => i)
       .join('/'),
-    { waitUntil: fullWait ? 'networkidle0' : 'networkidle2' }
+    { waitUntil: fullWait ? 'networkidle0' : 'networkidle2', timeout: 40000 }
   )
 }
 
@@ -111,6 +111,10 @@ export const cancelConfirmationModal = async (page: Page) => {
   )
 
   await cancelButton.click()
+}
+
+export const waitForModalToClose = (page: Page) => {
+  return waitForRemove(page, '.ReactModal__Overlay')
 }
 
 export const waitForDrawerToClose = (page: Page) => {

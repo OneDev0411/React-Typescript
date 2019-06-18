@@ -40,6 +40,7 @@ export function SimpleList({
     <List className="u-scrollbar--thinner--self">
       {resolvedOptions.map((item, index) => (
         <Item
+          data-test="filter-item"
           onClick={() => {
             onFilterChange([item], {
               name: 'is'

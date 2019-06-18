@@ -20,5 +20,5 @@ export default function useInput({ initialValue = '', pattern }: Props) {
     }
   }
 
-  return { value, onChange }
+  return { value, setValue, onChange }
 }
