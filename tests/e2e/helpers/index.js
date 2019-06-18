@@ -4,7 +4,7 @@ export const init = async (
   options = {
     headless: process.env.HEADLESS !== 'false',
     slowMo: 0,
-    args: ['--window-size=1100,800'],
+    args: ['--window-size=1100,800', '--no-sandbox'],
     defaultViewport: null
   }
 ) => {
