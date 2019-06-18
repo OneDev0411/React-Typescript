@@ -5,17 +5,17 @@ variables:
   # based on package-lock.json file checksum
   CI_CACHE_KEY: "14c09c8b5b9dcbfa5aa1309c049c8acd"
 
-cache:
-  key: ${CI_CACHE_KEY}
-  paths:
-    - node_modules/
-
 stages:
   - build
   - test
 
 deps:
   stage: build
+  cache:
+    key: ${CI_CACHE_KEY}
+    paths:
+      - node_modules/
+    policy: push
   only:
     changes:
       - package-lock.json
@@ -24,5 +24,10 @@ deps:
 
 unit:
   stage: test
+  cache:
+    key: ${CI_CACHE_KEY}
+    paths:
+      - node_modules/
+    policy: pull
   script:
     - npm run test:unit
