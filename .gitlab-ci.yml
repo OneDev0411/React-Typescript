@@ -20,7 +20,7 @@ build:
 test:unit:
   stage: test
   script:
-    - npm run test:unit
+    - NODE_ENV=ci npm run test:unit
   dependencies:
     - build
 
@@ -32,7 +32,7 @@ test:e2e:
   after_script:
     - killall node
   script:
-    - npm run test:e2e
+    - NODE_ENV=ci npm run test:e2e
   dependencies:
     - build
   tags:
