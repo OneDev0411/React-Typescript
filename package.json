@@ -290,6 +290,7 @@
     "eslint-plugin-react": "^7.12.3",
     "eslint-plugin-react-hooks": "^1.6.0",
     "find": "^0.3.0",
+    "husky": "^2.4.1",
     "jest": "^24.8.0",
     "ndb": "^1.0.41",
     "nodemon": "^1.18.9",
@@ -307,5 +308,10 @@
     "semi": false,
     "singleQuote": true,
     "printWidth": 80
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "./pre-commit.sh"
+    }
   }
 }
