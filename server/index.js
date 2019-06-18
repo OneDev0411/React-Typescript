@@ -21,6 +21,7 @@ import websiteRoutes from './_website'
 
 const app = new Koa()
 const __DEV__ = process.env.NODE_ENV === 'development'
+const __CI__ = process.env.NODE_ENV === 'ci'
 
 // webpack configs
 const { entry, output, publicPath } = appConfig.compile
@@ -135,7 +136,7 @@ _.each(require('./api/routes'), route => {
 // Adding websites route
 app.use(websiteRoutes)
 
-if (__DEV__) {
+if (__DEV__ || __CI__) {
   development()
 } else {
   production()
