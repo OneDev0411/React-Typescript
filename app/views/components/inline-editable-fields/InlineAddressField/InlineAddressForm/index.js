@@ -122,9 +122,10 @@ export class InlineAddressForm extends React.Component {
                     width={15}
                   />
                   <TextField
-                    name="street_name"
-                    label="Street Name"
                     width={45}
+                    name="street_name"
+                    label="Street Name (PO Box)"
+                    hint="Please don't separate words with comma into the street name field. You can have PO Box value alongside of the street name in this format: Avondale PO Box 12 Ave"
                   />
                   <AutocompleteField
                     name="street_suffix"
@@ -134,7 +135,7 @@ export class InlineAddressForm extends React.Component {
                   />
                 </Row>
                 <Row>
-                  <TextField name="unit_number" label="Unit" width={20} />
+                  <TextField name="unit_number" label="Unit / Suite" width={20} />
                   <TextField name="city" label="City" width={20} />
                   <AutocompleteField
                     name="county"
