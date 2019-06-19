@@ -30,8 +30,17 @@ function normalizeFile(file) {
 }
 
 function normalizeSubmissionFile(task) {
+  const file = task.submission
+    ? task.submission.file
+    : {
+        id: task.id,
+        name: task.title,
+        mime: 'application/pdf',
+        date: task.created_at
+      }
+
   return normalizeFile({
-    ...task.submission.file,
+    ...file,
     url: task.pdf_url
   })
 }
@@ -40,10 +49,6 @@ function normalizeSubmissionFile(task) {
  *
  */
 function getSubmissionUrl(data) {
-  if (!data.task.submission) {
-    return []
-  }
-
   let url = `/dashboard/deals/${data.deal.id}/view/${data.task.id}`
   const submissionEnvelopes = getDocumentEnvelopes(
     data.envelopes,
