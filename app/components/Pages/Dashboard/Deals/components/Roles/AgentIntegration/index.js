@@ -97,6 +97,7 @@ class RoleAgentIntegration extends React.Component {
 
       newState = {
         role: {
+          agent,
           email,
           brand: user.brand_id,
           legal_last_name: last_name,
@@ -114,6 +115,7 @@ class RoleAgentIntegration extends React.Component {
       if (user.id === this.props.user.id) {
         role = {
           ...role,
+          agent: user.agent,
           brand: user.brand_id,
           legal_first_name: user.first_name || role.legal_first_name,
           legal_last_name: user.last_name || role.legal_last_name
