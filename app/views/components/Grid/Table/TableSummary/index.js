@@ -17,7 +17,7 @@ export const TableSummary = ({
 }) => {
   if (!Component && entityName) {
     return (
-      <Title style={style}>
+      <Title style={style} data-test="table-summary">
         {selectedRowsCount > 0 ? (
           <Fragment>
             <strong style={{ color: '#000' }}>{selectedRowsCount}</strong>
@@ -34,7 +34,7 @@ export const TableSummary = ({
   }
 
   return (
-    <Title style={style}>
+    <Title style={style} data-test="table-summary">
       {Component && (
         <Component
           totalRowsCount={totalRowsCount}
