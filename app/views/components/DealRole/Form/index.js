@@ -175,6 +175,21 @@ export function FormContainer(props) {
               onDeleteRole={props.onDeleteRole}
             />
           )}
+
+          {props.values.contact && (
+            <Fragment>
+              <LinkButton
+                to={`/dashboard/contacts/${props.values.contact.id}`}
+                target="_blank"
+                style={{
+                  margin: 0,
+                  padding: 0
+                }}
+              >
+                Open Contact Profile
+              </LinkButton>
+            </Fragment>
+          )}
         </Flex>
 
         <Flex alignCenter>
@@ -204,7 +219,10 @@ export function FormContainer(props) {
                     marginLeft: '0.5rem'
                   }}
                 >
-                  Save & Add to My Contacts
+                  Save &{' '}
+                  {props.values.contact
+                    ? 'Update Contact'
+                    : 'Add to My Contacts'}
                 </ActionButton>
               )}
             </Fragment>
