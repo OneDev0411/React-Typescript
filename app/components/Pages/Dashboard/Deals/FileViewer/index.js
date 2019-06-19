@@ -187,7 +187,7 @@ class FileViewer extends React.Component {
 
                 {isEnvelopeView && !state.isFactsheetOpen && (
                   <EnvelopeSideMenu
-                    deal={state.deal}
+                    deal={props.deal}
                     file={file}
                     envelope={this.getEnvelope()}
                   />

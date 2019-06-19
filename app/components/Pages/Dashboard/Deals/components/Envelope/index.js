@@ -77,6 +77,8 @@ class Envelope extends React.Component {
         isVoiding: false
       })
     } catch (e) {
+      console.log(e)
+
       this.props.notify({
         message: 'Can not void this eSign',
         status: 'error'
