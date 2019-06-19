@@ -4,12 +4,15 @@ import { connect } from 'react-redux'
 import arrayMutators from 'final-form-arrays'
 import { browserHistory } from 'react-router'
 
-import Alert from '../../../../components/Pages/Dashboard/Partials/Alert/index.js'
-import { defaultQuery } from '../../../../models/contacts/helpers/default-query'
-import { createContacts } from '../../../../store_actions/contacts/create-contacts'
-import { selectDefinitionByName } from '../../../../reducers/contacts/attributeDefs'
-import { FinalFormDrawer } from '../../FinalFormDrawer'
-import { TextField, Select } from '../../final-form-fields'
+import { createContacts } from 'models/contacts/create-contacts'
+import { defaultQuery } from 'models/contacts/helpers/default-query'
+
+import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
+
+import { FinalFormDrawer } from 'components/FinalFormDrawer'
+import { TextField, Select } from 'components/final-form-fields'
+
+import Alert from '../../../../components/Pages/Dashboard/Partials/Alert'
 
 import { Owner } from './Owner'
 import { Emails } from './Emails'
@@ -67,8 +70,9 @@ class NewContactDrawer extends React.Component {
         activity: false
       }
 
-      const response = await this.props.dispatch(
-        createContacts([{ attributes, user: values.owner.id }], query)
+      const response = await createContacts(
+        [{ attributes, user: values.owner.id }],
+        query
       )
 
       const contact = response.data[0]
