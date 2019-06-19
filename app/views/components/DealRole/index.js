@@ -16,7 +16,7 @@ import {
   ROLE_NAMES,
   convertRoleToContact,
   getLegalFullName,
-  getContactDiff
+  getContactChangedAttributes
 } from 'deals/utils/roles'
 
 import { FormContainer } from './Form'
@@ -147,44 +147,12 @@ class Role extends React.Component {
       })
 
       if (this.isNewRecord) {
-        if (form.contact) {
-          const upsertedAttributes = getContactDiff(
-            form,
-            this.props.attributeDefs
-          )
-
-          if (upsertedAttributes.length > 0) {
-            await upsertContactAttributes(form.contact.id, upsertedAttributes)
-
-            this.props.notify({
-              message: `${getLegalFullName(form)} Updated.`,
-              status: 'success'
-            })
-          }
-        } else {
-          this.createNewContact(form)
-        }
-
-        if (this.props.deal) {
-          const newRoles = await this.props.createRoles(this.props.deal.id, [
-            form
-          ])
-
-          this.props.onUpsertRole(newRoles[0])
-        } else {
-          this.props.onUpsertRole({
-            id: new Date().getTime(),
-            ...form
-          })
-        }
-      }
-
-      if (!this.isNewRecord) {
-        const updatedRole = this.props.deal
-          ? await this.props.updateRole(this.props.deal.id, form)
-          : form
-
-        this.props.onUpsertRole(updatedRole)
+        await Promise.all([
+          await this.upsertContact(form),
+          await this.createRole(form)
+        ])
+      } else {
+        await this.updateRole(form)
       }
     } catch (e) {
       this.props.notify({
@@ -202,26 +170,61 @@ class Role extends React.Component {
     }
   }
 
-  createNewContact = async form => {
+  upsertContact = async form => {
     if (
       !this.formObject.saveRoleInContacts ||
       this.props.user.email === form.email
     ) {
-      return false
+      return
     }
 
-    try {
-      await createContacts([
-        convertRoleToContact(form, this.props.user.id, this.props.attributeDefs)
-      ])
+    if (form.contact) {
+      const upsertedAttributes = getContactChangedAttributes(
+        form,
+        this.props.attributeDefs
+      )
+
+      await upsertContactAttributes(form.contact.id, upsertedAttributes)
 
       this.props.notify({
-        message: `New Contact Created: ${getLegalFullName(form)}`,
+        message: `${getLegalFullName(form)} Updated.`,
         status: 'success'
       })
-    } catch (e) {
-      console.log(e)
+
+      return
     }
+
+    await createContacts([
+      convertRoleToContact(form, this.props.user.id, this.props.attributeDefs)
+    ])
+
+    this.props.notify({
+      message: `New Contact Created: ${getLegalFullName(form)}`,
+      status: 'success'
+    })
+  }
+
+  createRole = async form => {
+    if (this.props.deal) {
+      const newRoles = await this.props.createRoles(this.props.deal.id, [form])
+
+      this.props.onUpsertRole(newRoles[0])
+
+      return
+    }
+
+    this.props.onUpsertRole({
+      id: new Date().getTime(),
+      ...form
+    })
+  }
+
+  updateRole = async form => {
+    const updatedRole = this.props.deal
+      ? await this.props.updateRole(this.props.deal.id, form)
+      : form
+
+    this.props.onUpsertRole(updatedRole)
   }
 
   validate = async values => {
@@ -304,12 +307,18 @@ class Role extends React.Component {
   }
 
   populateRole = ([user], state, { changeValue }) => {
+    if (user.contact) {
+      changeValue(state, 'contact', () => user.contact)
+    }
+
     changeValue(state, 'legal_first_name', () => user.first_name || '')
     changeValue(state, 'legal_last_name', () => user.last_name || '')
     changeValue(state, 'email', () => user.email || '')
     changeValue(state, 'company_title', () => user.company || '')
     changeValue(state, 'mls_id', () => user.mlsid || '')
     changeValue(state, 'agent', () => (user.mlsid ? user.id : null))
+    changeValue(state, 'future_address', () => user.future_address || '')
+    changeValue(state, 'current_address', () => user.current_address || '')
     changeValue(state, 'legal_prefix', () =>
       user.title ? user.title.replace('.', '') : ''
     )
