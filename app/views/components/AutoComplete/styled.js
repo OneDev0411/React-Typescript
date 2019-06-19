@@ -28,3 +28,23 @@ export const ListItem = styled.div`
   cursor: pointer;
   padding: 0.5rem;
 `
+
+export const Hint = styled(List)`
+  display: flex;
+  align-items: center;
+  width: max-content;
+  padding: 0 0.5rem;
+  border-radius: 3px;
+  opacity: 0;
+  transition: 0.1s ease-in opacity;
+  font-size: 0.875rem;
+  height: 2rem;
+`
+
+export const Container = styled.div`
+  :focus-within {
+    ${Hint} {
+      opacity: 1;
+    }
+  }
+`

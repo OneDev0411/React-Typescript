@@ -6,8 +6,9 @@ import Fuse from 'fuse.js'
 import _ from 'underscore'
 
 import { TextInput } from 'components/Forms/TextInput'
+import Spinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
-import { List, ListItem } from './styled'
+import { Container, List, ListItem, Hint } from './styled'
 
 const propTypes = {
   useCache: PropTypes.bool,
@@ -25,6 +26,9 @@ const propTypes = {
   inputProps: PropTypes.object,
   inputRenderer: PropTypes.func,
   itemRenderer: PropTypes.func,
+  showHintOnFocus: PropTypes.bool,
+  hintMessage: PropTypes.string,
+  hintStyle: PropTypes.object,
   options: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.arrayOf(
@@ -37,7 +41,7 @@ const propTypes = {
 }
 
 const defaultProps = {
-  useCache: true,
+  useCache: false,
   inputStyle: {},
   listStyle: {},
   input: null,
@@ -51,12 +55,16 @@ const defaultProps = {
   searchConfiguration: {},
   inputProps: {},
   inputRenderer: null,
-  itemRenderer: null
+  itemRenderer: null,
+  showHintOnFocus: false,
+  hintMessage: '',
+  hintStyle: {}
 }
 
 export class AutoComplete extends React.Component {
   state = {
     selectedItem: this.props.defaultSelectedItem,
+    isSearching: false,
     options: [],
     cache: {}
   }
@@ -87,7 +95,15 @@ export class AutoComplete extends React.Component {
       }
 
       try {
+        this.setState({
+          isSearching: true
+        })
+
         const list = await this.props.options(value)
+
+        this.setState({
+          isSearching: false
+        })
 
         if (!Array.isArray(list)) {
           return false
@@ -153,59 +169,81 @@ export class AutoComplete extends React.Component {
           selectedItem,
           highlightedIndex,
           inputValue
-        }) => (
-          <div style={{ position: 'relative', ...props.style }}>
-            {this.props.input ? (
-              <TextInput
-                {...getInputProps({ ...props.input, ...props.inputProps })}
-                meta={props.meta}
-                isRequired={props.isRequired}
-                placeholder={props.placeholder}
-                label={props.label}
-                style={this.props.inputStyle}
-                autoComplete="disable-autocomplete"
-              />
-            ) : (
-              <Fragment>
-                {this.props.inputRenderer ? (
-                  this.props.inputRenderer({
-                    getInputProps,
-                    inputValue,
-                    placeholder: props.placeholder
-                  })
-                ) : (
-                  <input
-                    style={this.props.inputStyle}
+        }) => {
+          const isSuggestionsOpen =
+            isOpen && inputValue && !this.state.isSearching
+
+          return (
+            <div style={{ position: 'relative', ...props.style }}>
+              <Container>
+                {this.props.input ? (
+                  <TextInput
+                    {...getInputProps({ ...props.input, ...props.inputProps })}
+                    meta={props.meta}
+                    isRequired={props.isRequired}
                     placeholder={props.placeholder}
-                    {...getInputProps({ ...props.inputProps })}
+                    label={props.label}
+                    style={this.props.inputStyle}
+                    autoComplete="disable-autocomplete"
                   />
+                ) : (
+                  <Fragment>
+                    {this.props.inputRenderer ? (
+                      this.props.inputRenderer({
+                        getInputProps,
+                        inputValue,
+                        placeholder: props.placeholder
+                      })
+                    ) : (
+                      <input
+                        style={this.props.inputStyle}
+                        placeholder={props.placeholder}
+                        {...getInputProps({ ...props.inputProps })}
+                      />
+                    )}
+                  </Fragment>
                 )}
-              </Fragment>
-            )}
 
-            {isOpen && inputValue && (
-              <List style={props.listStyle}>
-                {this.getOptions(inputValue).map((item, index) => {
-                  const itemProps = getItemProps({
-                    item,
-                    isSelected: selectedItem === item,
-                    isActive: highlightedIndex === index
-                  })
+                {!isSuggestionsOpen &&
+                  props.showHintOnFocus &&
+                  props.hintMessage && (
+                    <Hint style={props.hintStyle}>
+                      {this.state.isSearching && (
+                        <Spinner
+                          style={{
+                            width: '1.5rem'
+                          }}
+                        />
+                      )}{' '}
+                      {props.hintMessage}
+                    </Hint>
+                  )}
 
-                  return (
-                    <Fragment key={index}>
-                      {props.itemRenderer ? (
-                        props.itemRenderer({ index, itemProps, item })
-                      ) : (
-                        <ListItem {...itemProps}>{item.label}</ListItem>
-                      )}
-                    </Fragment>
-                  )
-                })}
-              </List>
-            )}
-          </div>
-        )}
+                {isSuggestionsOpen && (
+                  <List style={props.listStyle}>
+                    {this.getOptions(inputValue).map((item, index) => {
+                      const itemProps = getItemProps({
+                        item,
+                        isSelected: selectedItem === item,
+                        isActive: highlightedIndex === index
+                      })
+
+                      return (
+                        <Fragment key={index}>
+                          {props.itemRenderer ? (
+                            props.itemRenderer({ index, itemProps, item })
+                          ) : (
+                            <ListItem {...itemProps}>{item.label}</ListItem>
+                          )}
+                        </Fragment>
+                      )
+                    })}
+                  </List>
+                )}
+              </Container>
+            </div>
+          )
+        }}
       />
     )
   }
