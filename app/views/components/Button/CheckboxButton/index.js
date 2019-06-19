@@ -69,6 +69,7 @@ export class CheckBoxButton extends React.Component {
     return (
       <CheckBox
         {...this.props}
+        data-test="checkbox"
         onClick={this.handleClick}
         isSelected={isSelected}
         isDisabled={this.props.isDisabled}

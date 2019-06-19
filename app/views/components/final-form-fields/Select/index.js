@@ -56,10 +56,12 @@ export function Select(props) {
           <Container fullWidth={props.fullWidth}>
             <Label required={props.required}>
               <span>{props.label}</span>
-              {props.labelNote &&
-                !props.required && <LabelNote>{props.labelNote}</LabelNote>}
+              {props.labelNote && !props.required && (
+                <LabelNote>{props.labelNote}</LabelNote>
+              )}
             </Label>
             <Dropdown
+              data-test={props.name}
               noBorder
               fullWidth={props.fullWidth}
               input={input}
@@ -68,7 +70,12 @@ export function Select(props) {
               buttonStyle={{ padding: 0 }}
               itemRenderer={(props, item) => (
                 <Tooltip caption={item.hint} placement="left" key={item.value}>
-                  <Item {...props}>{item.title}</Item>
+                  <Item
+                    {...props}
+                    data-test={`${input.name}-select-option-${item.value}`}
+                  >
+                    {item.title}
+                  </Item>
                 </Tooltip>
               )}
             />

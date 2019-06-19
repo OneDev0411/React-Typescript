@@ -53,6 +53,31 @@ export class SelectablePlugin {
   setData(data = []) {
     // set new data
     this.data = data
+    this.removeInvalids()
+  }
+
+  /**
+   * Make sure all selected or excluded rows exist in the data.
+   * Removes selected or excluded items which don't exist in the data anymore.
+   */
+  removeInvalids() {
+    const { selectedRows = {}, excludedRows = {} } = this.StorageObject
+    const ids = this.data.map(item => item.id)
+
+    const removeInvalids = mapping =>
+      Object.entries(mapping || {}).reduce((acc, [id, value]) => {
+        return !ids.includes(id)
+          ? acc
+          : {
+              ...acc,
+              [id]: value
+            }
+      }, {})
+
+    this.StorageObject = {
+      selectedRows: removeInvalids(selectedRows),
+      excludedRows: removeInvalids(excludedRows)
+    }
   }
 
   setTotalCount(count = 0) {

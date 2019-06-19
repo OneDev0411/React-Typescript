@@ -54,6 +54,7 @@ export function TextField(props) {
               {...input}
               id={id}
               placeholder={props.placeholder}
+              data-test={`text-field-${props.name}`}
               type="text"
             />
             {hasError && <ErrorMessage>{meta.error}</ErrorMessage>}
