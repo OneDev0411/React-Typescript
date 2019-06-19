@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 
 import searchAgents from 'models/agent/search'
 import { searchContacts } from 'models/contacts/search-contacts'
@@ -35,12 +35,16 @@ function getAddressFromContact(contact, label) {
 }
 
 export function NameInput(props) {
+  const [isSearching, setIsSearching] = useState(false)
+
   const searchByName = async (name, minLength = 3) => {
     if (!name || name.length < minLength) {
       return false
     }
 
     try {
+      setIsSearching(true)
+
       if (props.crmSearch) {
         const { data: contacts } = await searchContacts(name)
 
@@ -67,8 +71,27 @@ export function NameInput(props) {
       }))
     } catch (e) {
       console.log(e)
+    } finally {
+      setIsSearching(false)
     }
   }
 
-  return <AutoCompleteInput {...props} options={searchByName} />
+  const getHintMessage = () => {
+    if (props.crmSearch) {
+      return isSearching
+        ? 'Searching your contacts'
+        : 'Type to search your contacts'
+    }
+
+    return isSearching ? 'Searching MLS agents' : 'Type to search MLS agents'
+  }
+
+  return (
+    <AutoCompleteInput
+      {...props}
+      options={useCallback(searchByName)}
+      hintMessage={getHintMessage()}
+      showHintOnFocus
+    />
+  )
 }
