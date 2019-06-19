@@ -1,6 +1,6 @@
 import _ from 'underscore'
 
-import { getFullAddress } from './get-full-address'
+import { getFullAddress } from 'models/contacts/helpers/get-contact-fulladdress'
 
 const indexAddressByFields = address =>
   _.indexBy(address, attribute => attribute.attribute_def.name)
