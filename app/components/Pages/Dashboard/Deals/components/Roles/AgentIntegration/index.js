@@ -84,7 +84,7 @@ class RoleAgentIntegration extends React.Component {
     )
   }
 
-  onSelectAgent = (user, relatedContacts) => {
+  onSelectAgent = (user, relatedContacts = []) => {
     let newState
 
     /**
@@ -109,10 +109,7 @@ class RoleAgentIntegration extends React.Component {
     }
 
     if (relatedContacts.length > 0) {
-      let role = convertContactToRole(
-        relatedContacts[0],
-        this.props.attributeDefs
-      )
+      let role = convertContactToRole(relatedContacts[0])
 
       if (user.id === this.props.user.id) {
         role = {
@@ -164,10 +161,9 @@ class RoleAgentIntegration extends React.Component {
   }
 }
 
-function mapStateToProps({ contacts, user }) {
+function mapStateToProps({ user }) {
   return {
-    user,
-    attributeDefs: contacts.attributeDefs
+    user
   }
 }
 
