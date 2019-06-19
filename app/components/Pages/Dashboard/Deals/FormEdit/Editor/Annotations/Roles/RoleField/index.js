@@ -82,9 +82,12 @@ export function RoleField(props) {
 
         <AddRole
           {...props}
+          isEmpty={isEmpty}
           tooltip={annotationRoles.length === 0 && tooltip}
           roles={annotationRoles}
+          deal={props.deal}
           onClick={() => setRole(null)}
+          onUpsertRole={props.onUpsertRole}
         />
       </div>
 

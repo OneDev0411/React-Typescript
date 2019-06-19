@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { isPrimaryAgent } from 'deals/utils/roles'
 import ToolTip from 'components/tooltip'
+import Roles from 'deals/components/Roles'
 
 import IconAdd from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 
+import { Container, RolesList } from './styled'
+
 export function AddRole(props) {
+  const [showRolesList, setShowRoles] = useState(false)
+
   const isPrimaryRole = props.annotation.role.some(
     roleName =>
       roleName === 'PrimaryAgent' ||
@@ -27,17 +32,46 @@ export function AddRole(props) {
   const tooltip =
     props.tooltip || `Add new ${props.annotation.role.join(' or ')}`
 
+  const handleClick = () => {
+    if (!isSingularRole && props.isEmpty) {
+      setShowRoles(!showRolesList)
+
+      return
+    }
+
+    props.onClick()
+  }
+
+  const handleUpsertRole = role => {
+    setShowRoles(false)
+    props.onUpsertRole(role)
+  }
+
   return (
-    <span style={{ marginLeft: '0.25rem' }}>
+    <Container>
       <ToolTip caption={tooltip} placement="top">
         <IconAdd
-          onClick={props.onClick}
+          onClick={handleClick}
           style={{
             height: props.style.height,
             fill: props.style.color
           }}
         />
       </ToolTip>
-    </span>
+
+      {showRolesList && (
+        <RolesList top={props.rect.height}>
+          <Roles
+            showEmail={false}
+            showTitle={false}
+            allowDeleteRole={false}
+            deal={props.deal}
+            filter={role => props.annotation.role.includes(role.role)}
+            allowedRoles={props.annotation.role}
+            onUpsertRole={handleUpsertRole}
+          />
+        </RolesList>
+      )}
+    </Container>
   )
 }
