@@ -338,6 +338,18 @@ class Builder extends React.Component {
       }))
   }
 
+  get socialNetworks() {
+    if (!this.state.selectedTemplate) {
+      return []
+    }
+
+    if (this.state.selectedTemplate.medium === 'LinkedInCover') {
+      return SOCIAL_NETWORKS.filter(({ name }) => name === 'LinkedIn')
+    }
+
+    return SOCIAL_NETWORKS.filter(({ name }) => name !== 'LinkedIn')
+  }
+
   renderAgentPickerButton = buttonProps => (
     <DropButton
       {...buttonProps}
@@ -376,6 +388,7 @@ class Builder extends React.Component {
     }
 
     const isSocialMedium = this.IsSocialMedium
+    const socialNetworks = this.socialNetworks
 
     return (
       <Portal root="marketing-center">
@@ -410,7 +423,7 @@ class Builder extends React.Component {
 
               {this.state.selectedTemplate && isSocialMedium && (
                 <SocialActions
-                  networks={SOCIAL_NETWORKS}
+                  networks={socialNetworks}
                   onClick={this.handleSocialSharing}
                 />
               )}
