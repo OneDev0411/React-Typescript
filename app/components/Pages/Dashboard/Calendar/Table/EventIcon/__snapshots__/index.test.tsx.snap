@@ -55,7 +55,7 @@ exports[`EventIcon component renders Chat 1`] = `
 </IconChat>
 `;
 
-exports[`EventIcon component renders Child Birthday 1`] = `
+exports[`EventIcon component renders Child Birthday (Sam) 1`] = `
 <IconBirthday
   fill="#FF6F6F"
   style={

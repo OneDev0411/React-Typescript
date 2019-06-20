@@ -13,12 +13,18 @@ const getIcon = Icon => (
   />
 )
 
-const getImportantDateIcon = label => {
+const getImportantDateIcon = event => {
+  console.log('event', event)
+
+  const { type_label: label, event_type: type } = event
+
   if (importantDatesIcons[label]) {
     return importantDatesIcons[label]
   }
 
-  if (label === 'Spouse Birthday' || label === 'Child Birthday') {
+  // Child or spouse birthdays
+  // Todo: Refactor icons and related stuff
+  if (type === 'birthday' || type === 'child_birthday') {
     return importantDatesIcons.Birthday
   }
 
@@ -49,7 +55,7 @@ const EventIcon = ({ event }) => {
       break
 
     case 'contact_attribute':
-      icon = getImportantDateIcon(event.type_label)
+      icon = getImportantDateIcon(event)
       break
 
     default:
