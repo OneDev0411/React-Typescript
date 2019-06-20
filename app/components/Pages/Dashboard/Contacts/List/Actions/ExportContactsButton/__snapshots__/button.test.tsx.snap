@@ -65,8 +65,9 @@ exports[`ExportContactsButton inner button component renders 1`] = `
   }
   menuStyle={
     Object {
+      "maxHeight": "auto",
       "overflow": "hidden",
-      "width": "350px",
+      "width": "22.8125rem",
     }
   }
   onChange={[Function]}
