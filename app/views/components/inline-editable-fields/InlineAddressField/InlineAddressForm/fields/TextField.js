@@ -13,7 +13,7 @@ TextField.propTypes = {
   validate: PropTypes.func,
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  hint:  PropTypes.string,
+  hint: PropTypes.string
 }
 
 TextField.defaultProps = {
@@ -34,9 +34,13 @@ export function TextField(props) {
         <Container width={props.width} style={props.style}>
           <Label htmlFor={id}>
             {props.label}
-            {props.hint && <Hint>
-              <Tooltip caption={props.hint} ><InfoIcon /></Tooltip>
-            </Hint>}
+            {props.hint && (
+              <Hint>
+                <Tooltip caption={props.hint} placement="bottom">
+                  <InfoIcon />
+                </Tooltip>
+              </Hint>
+            )}
           </Label>
           <Input
             {...input}
