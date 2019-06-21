@@ -25,13 +25,18 @@ npm run develop
 ```
 Go to [http://localhost:8080](http://localhost:8080)
 
-##### Run app tests by Jest
+
+##### Run all tests
 ```bash
-npm run test:app
+npm test
+```
+
+##### Run unit tests
+```bash
+npm run test:unit
 ```
 
 ##### Run E2E tests
 ```bash
-npm run setup-e2e
 npm run test:e2e
 ```
