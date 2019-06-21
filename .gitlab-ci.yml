@@ -33,13 +33,30 @@ unit:
   script:
     - npm run test:unit
 
-irish:
+deploy_alpha:
   stage: deploy
   image: ruby:latest
-  script:
+  before_script:
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
+  script:
+    - dpl --provider=heroku --app=rechat-web-alpha --api-key=$HEROKU_API_KEY
+  environment:
+    name: irish
+    url: https://irish.rechat.com
+  when: manual
+  only:
+  - alpha
+
+deploy_irish:
+  stage: deploy
+  image: ruby:latest
+  before_script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+  script:
     - dpl --provider=heroku --app=rechat-irish --api-key=$HEROKU_API_KEY
   environment:
     name: irish
@@ -47,3 +64,19 @@ irish:
   when: manual
   only:
   - stage
+
+deploy_production:
+  stage: deploy
+  image: ruby:latest
+  before_script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+  script:
+    - dpl --provider=heroku --app=rechat-web --api-key=$HEROKU_API_KEY
+  environment:
+    name: irish
+    url: https://irish.rechat.com
+  when: manual
+  only:
+  - master
