@@ -1,3 +1,6 @@
+[![pipeline status](https://gitlab.com/rechat/web/badges/stage/pipeline.svg)](https://gitlab.com/rechat/web/commits/stage)
+[![coverage report](https://gitlab.com/rechat/web/badges/stage/coverage.svg)](https://gitlab.com/rechat/web/commits/stage)
+
 ### Rechat Web App
 
 ##### Stack
