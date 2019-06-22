@@ -5,6 +5,7 @@ import { browserHistory } from 'react-router'
 import PageHeader from 'components/PageHeader'
 import { Trigger as MenuTrigger } from 'components/SlideMenu'
 import ActionButton from 'components/Button/ActionButton'
+
 import ExportDeals from './ExportDeals'
 
 const Header = ({
@@ -25,6 +26,7 @@ const Header = ({
 
       {showCreateDeal && (
         <ActionButton
+          data-test="create-deal-button"
           style={{ marginLeft: '1rem' }}
           onClick={() => browserHistory.push('/dashboard/deals/create')}
         >
