@@ -45,7 +45,6 @@ deploy_alpha:
   environment:
     name: irish
     url: https://irish.rechat.com
-  when: manual
   only:
   - alpha
 
@@ -61,7 +60,6 @@ deploy_irish:
   environment:
     name: irish
     url: https://irish.rechat.com
-  when: manual
   only:
   - stage
 
