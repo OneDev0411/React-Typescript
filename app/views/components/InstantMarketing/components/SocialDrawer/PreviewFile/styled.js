@@ -22,7 +22,7 @@ export const Container = styled.div`
 
 const previewStyles = css`
   max-height: 90%;
-  width: auto;
+  max-width: 100%;
   box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.26);
 `
 
