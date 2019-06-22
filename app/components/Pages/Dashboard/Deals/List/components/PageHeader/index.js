@@ -35,8 +35,6 @@ export const Header = ({
 )
 
 function mapStateToProps({ user }) {
-  console.log(JSON.stringify(user))
-
   return { user }
 }
 
