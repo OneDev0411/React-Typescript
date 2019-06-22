@@ -10,5 +10,6 @@
     "E2E_HOST": "http://0.0.0.0:8080",
     "E2E_EMAIL": "ramin+agent@rechat.com",
     "E2E_PASSWORD": "aaaaaa"
-  }
+  },
+  "testFiles": "**/*.test.ts"
 }
