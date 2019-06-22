@@ -210,7 +210,7 @@ class SendMlsListingCard extends React.Component {
 
   get TemplateInstanceData() {
     return {
-      listings: [this.state.listings.map(listing => listing.id)]
+      listings: this.state.listings.map(listing => listing.id)
     }
   }
 

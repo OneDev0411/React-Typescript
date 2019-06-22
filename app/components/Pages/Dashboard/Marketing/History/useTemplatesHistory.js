@@ -15,7 +15,12 @@ function useTemplatesHistory() {
 
         // get templates history
         const templates = await getHistory({
-          associations: 'template_instance.template'
+          'associations[]': [
+            'template_instance.template',
+            'template_instance.deals',
+            'template_instance.contacts',
+            'template_instance.listings'
+          ]
         })
 
         // Setting states
