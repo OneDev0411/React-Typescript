@@ -8,12 +8,11 @@ import ActionButton from 'components/Button/ActionButton'
 
 import ExportDeals from './ExportDeals'
 
-const Header = ({
+export const Header = ({
   user,
   title,
   isSideMenuOpen,
-  onMenuTriggerChange,
-  showCreateDeal = true
+  onMenuTriggerChange
 }) => (
   <PageHeader isFlat>
     <PageHeader.Title showBackButton={false}>
@@ -24,20 +23,20 @@ const Header = ({
     <PageHeader.Menu>
       <ExportDeals user={user} />
 
-      {showCreateDeal && (
-        <ActionButton
-          data-test="create-deal-button"
-          style={{ marginLeft: '1rem' }}
-          onClick={() => browserHistory.push('/dashboard/deals/create')}
-        >
-          Create New Deal
-        </ActionButton>
-      )}
+      <ActionButton
+        data-test="create-deal-button"
+        style={{ marginLeft: '1rem' }}
+        onClick={() => browserHistory.push('/dashboard/deals/create')}
+      >
+        Create New Deal
+      </ActionButton>
     </PageHeader.Menu>
   </PageHeader>
 )
 
 function mapStateToProps({ user }) {
+  console.log(JSON.stringify(user))
+
   return { user }
 }
 
