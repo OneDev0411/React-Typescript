@@ -17,9 +17,9 @@ build_deps:
     paths:
       - node_modules/
     policy: push
-  # only:
-  #   changes:
-  #     - package-lock.json
+  only:
+    changes:
+      - package-lock.json
   script:
     - npm i
 
