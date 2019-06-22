@@ -2,7 +2,7 @@ import deal from 'fixtures/deal/seller-with-offer'
 
 import { getRoleText } from '.'
 
-describe('Test deal form get role names', () => {
+describe('Test deal form get-role-names helper', () => {
   it('Should return correct names when annotation type is Roles and attribute is legal_full_name', () => {
     // @ts-ignore
     const names = getRoleText(deal.roles, deal, ['SellerAgent', 'Seller'], {

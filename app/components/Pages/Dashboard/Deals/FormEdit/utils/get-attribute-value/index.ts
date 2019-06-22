@@ -17,8 +17,8 @@ export function getAttributeValue(
         ? getLegalFullName(role)
         : getAttribute(role, attribute, defaultValue)
 
-    return value != null || value === 0
+    return value != null && value !== ''
   })
 
-  return value && value.trim()
+  return value && value.toString().trim()
 }
