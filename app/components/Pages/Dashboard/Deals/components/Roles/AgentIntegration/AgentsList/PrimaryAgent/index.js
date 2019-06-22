@@ -15,7 +15,12 @@ export function PrimaryAgent(props) {
         getBrandUsers(office).map(user => (
           <Flex key={user.id}>
             <RoleItem
-              onClick={() => props.onSelectAgent(user)}
+              onClick={() =>
+                props.onSelectAgent({
+                  ...user,
+                  brand_id: office.id
+                })
+              }
               style={{
                 width: '100%',
                 justifyContent: 'flex-start',

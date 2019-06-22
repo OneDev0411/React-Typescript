@@ -110,13 +110,15 @@ class RoleAgentIntegration extends React.Component {
     }
 
     if (relatedContacts.length > 0) {
-      let role = convertContactToRole(relatedContacts[0])
+      let role = {
+        ...convertContactToRole(relatedContacts[0], this.props.attributeDefs),
+        brand: user.brand_id
+      }
 
       if (user.id === this.props.user.id) {
         role = {
           ...role,
           agent: user.agent,
-          brand: user.brand_id,
           legal_first_name: user.first_name || role.legal_first_name,
           legal_last_name: user.last_name || role.legal_last_name
         }
