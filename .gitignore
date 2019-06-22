@@ -192,3 +192,7 @@ dist
 !.idea/jsLibraryMappings.xml
 
 yarn.lock
+
+// cypress
+tests/cypress/screenshots/
+tests/cypress/videos/
