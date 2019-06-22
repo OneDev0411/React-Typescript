@@ -2,6 +2,7 @@
 module.exports = {
   roots: ['<rootDir>/app/', '<rootDir>/tests/unit'],
   moduleFileExtensions: ['js', 'jsx', 'json', 'ts', 'tsx'],
+  collectCoverageFrom: ['app/**/*.{js,jsx,ts,tsx}', '!**/node_modules/**'],
   testURL: 'http://localhost:8080',
   setupFilesAfterEnv: ['./setupTests.js'],
   verbose: true,
