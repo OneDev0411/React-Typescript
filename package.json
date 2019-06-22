@@ -20,7 +20,7 @@
     "lint:app": "eslint ./app",
     "lint:server": "eslint ./server",
     "lint:tests": "eslint ./tests --fix",
-    "test:e2e": "cypress run",
+    "test:e2e": "cypress run --browser chrome",
     "test:unit": "jest",
     "test": "npm run test:unit && npm run test:e2e",
     "cypress": "cypress open"
