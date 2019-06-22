@@ -4,8 +4,7 @@ import { getAttributeValue } from '.'
 
 describe('Test deal form get-attribute-value helper', () => {
   it('Should return correct value when attribute is legal_full_name', () => {
-    // @ts-ignore
-    const value = getAttributeValue(deal.roles[0], {
+    const value = getAttributeValue(deal.roles[0] as any, {
       attribute: 'legal_full_name'
     })
 
@@ -13,8 +12,7 @@ describe('Test deal form get-attribute-value helper', () => {
   })
 
   it('Should return correct value when attribute is array and legal_full_name', () => {
-    // @ts-ignore
-    const value = getAttributeValue(deal.roles[0], {
+    const value = getAttributeValue(deal.roles[0] as any, {
       attributes: ['wrong_field', 'legal_full_name']
     })
 
@@ -27,8 +25,7 @@ describe('Test deal form get-attribute-value helper', () => {
       foo: 0
     }
 
-    // @ts-ignore
-    const value = getAttributeValue(role, {
+    const value = getAttributeValue(role as any, {
       attribute: 'foo'
     })
 
@@ -36,8 +33,7 @@ describe('Test deal form get-attribute-value helper', () => {
   })
 
   it('Should return correct value when attribute is not legal_full_name', () => {
-    // @ts-ignore
-    const value = getAttributeValue(deal.roles[0], {
+    const value = getAttributeValue(deal.roles[0] as any, {
       attribute: 'legal_first_name'
     })
 

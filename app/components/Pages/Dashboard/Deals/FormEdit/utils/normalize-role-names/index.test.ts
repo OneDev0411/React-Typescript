@@ -19,22 +19,19 @@ function setDoubleEnded(isDoubleEnded) {
 
 describe('Test deal form normalize-role-names helper', () => {
   it('Should return correct list when there is PrimaryAgent and deal is Selling', () => {
-    // @ts-ignore
-    const list = normalizeRoleNames(liveSeller, ['PrimaryAgent'])
+    const list = normalizeRoleNames(liveSeller as any, ['PrimaryAgent'])
 
     expect(list).toStrictEqual(['SellerAgent'])
   })
 
   it('Should return correct list when there is PrimaryAgent and deal is Buying', () => {
-    // @ts-ignore
-    const list = normalizeRoleNames(liveBuyer, ['PrimaryAgent'])
+    const list = normalizeRoleNames(liveBuyer as any, ['PrimaryAgent'])
 
     expect(list).toStrictEqual(['BuyerAgent'])
   })
 
   it('Should return correct list when there is InternalBuyerAgents and deal is DoubleEnded', () => {
-    // @ts-ignore
-    const list = normalizeRoleNames(setDoubleEnded(true), [
+    const list = normalizeRoleNames(setDoubleEnded(true) as any, [
       'InternalBuyerAgents'
     ])
 
@@ -42,8 +39,7 @@ describe('Test deal form normalize-role-names helper', () => {
   })
 
   it('Should return correct list when there is InternalBuyerAgents and deal is not DoubleEnded', () => {
-    // @ts-ignore
-    const list = normalizeRoleNames(setDoubleEnded(false), [
+    const list = normalizeRoleNames(setDoubleEnded(false) as any, [
       'InternalBuyerAgents'
     ])
 
@@ -51,8 +47,7 @@ describe('Test deal form normalize-role-names helper', () => {
   })
 
   it('Should return correct list when there is ExternalBuyerAgents and deal is DoubleEnded', () => {
-    // @ts-ignore
-    const list = normalizeRoleNames(setDoubleEnded(true), [
+    const list = normalizeRoleNames(setDoubleEnded(true) as any, [
       'ExternalBuyerAgents'
     ])
 
@@ -60,8 +55,7 @@ describe('Test deal form normalize-role-names helper', () => {
   })
 
   it('Should return correct list when there is ExternalBuyerAgents and deal is not DoubleEnded', () => {
-    // @ts-ignore
-    const list = normalizeRoleNames(setDoubleEnded(false), [
+    const list = normalizeRoleNames(setDoubleEnded(false) as any, [
       'ExternalBuyerAgents'
     ])
 
