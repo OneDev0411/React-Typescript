@@ -20,9 +20,10 @@
     "lint:app": "eslint ./app",
     "lint:server": "eslint ./server",
     "lint:tests": "eslint ./tests --fix",
-    "test:e2e": "jest --config tests/e2e/jest.config.js",
+    "test:e2e": "cypress run",
     "test:unit": "jest",
-    "test": "npm run test:unit && npm run test:e2e"
+    "test": "npm run test:unit && npm run test:e2e",
+    "cypress": "cypress open"
   },
   "engines": {
     "node": "10.x"
@@ -46,7 +47,6 @@
     "@babel/plugin-proposal-throw-expressions": "^7.0.0",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/plugin-syntax-import-meta": "^7.0.0",
-    "@babel/polyfill": "^7.4.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
@@ -216,6 +216,8 @@
     "webpack-s3-plugin": "^1.0.3"
   },
   "devDependencies": {
+    "@babel/polyfill": "^7.4.4",
+    "@cypress/webpack-preprocessor": "^4.1.0",
     "@testing-library/react": "^8.0.1",
     "@types/classnames": "^2.2.7",
     "@types/cleave.js": "^1.4.0",
@@ -275,6 +277,8 @@
     "babel-eslint": "^9.0.0",
     "babel-jest": "^24.8.0",
     "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "cypress": "^3.3.1",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
     "enzyme-to-json": "^3.3.5",
