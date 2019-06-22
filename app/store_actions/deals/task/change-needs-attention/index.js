@@ -1,10 +1,10 @@
 import * as actionTypes from '../../../../constants/deals'
-import Deal from '../../../../models/Deal'
+import { updateNeedsAttention } from '../../../../models/Deal/task'
 
 export function changeNeedsAttention(dealId, taskId, status) {
   return async dispatch => {
     try {
-      await Deal.needsAttention(dealId, taskId, status)
+      await updateNeedsAttention(dealId, taskId, status)
 
       dispatch({
         type: actionTypes.CHANGE_ATTENTION_REQUESTED,
