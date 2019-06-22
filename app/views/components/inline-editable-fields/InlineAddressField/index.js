@@ -215,7 +215,8 @@ export class InlineAddressField extends React.Component {
             isLoading: this.state.isLoading,
             onChange: this.handleChangeInput,
             onFocus: this.handleInputFocus,
-            value: address
+            value: address,
+            autoComplete: 'disabled'
           })}
           {this.state.isShowSuggestion && (
             <Suggestions
