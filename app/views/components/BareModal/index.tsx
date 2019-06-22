@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import ReactModal, { Props as ReactModalProps } from 'react-modal'
 import cn from 'classnames'
 
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'ci') {
   ReactModal.setAppElement('#app')
 }
 
