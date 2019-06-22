@@ -113,6 +113,7 @@ function normalizeTeams(teams, searchTerm) {
     }))
 
     return {
+      id: office.id,
       name: office.name,
       subtitle: getSubtitle(office),
       users: searchTerm
