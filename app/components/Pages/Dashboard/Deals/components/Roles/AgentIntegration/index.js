@@ -5,7 +5,7 @@ import DealRole from 'components/DealRole'
 
 import { convertContactToRole, AGENT_ROLES } from 'deals/utils/roles'
 
-import AgentModal from './AgentsList'
+import Agents from './AgentsList'
 
 const initialState = {
   isAgentDrawerOpen: false,
@@ -14,7 +14,7 @@ const initialState = {
   selectedAgent: null
 }
 
-class RoleAgentIntegration extends React.Component {
+export class RoleAgentIntegration extends React.Component {
   state = {
     ...initialState,
     ...this.getInitialState()
@@ -141,7 +141,7 @@ class RoleAgentIntegration extends React.Component {
     return (
       <Fragment>
         {this.state.isAgentDrawerOpen && (
-          <AgentModal
+          <Agents
             title={this.props.modalTitle}
             isPrimaryAgent={this.getIsPrimaryAgent()}
             onClose={this.props.onClose}
