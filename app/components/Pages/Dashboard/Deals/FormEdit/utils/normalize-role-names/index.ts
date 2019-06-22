@@ -1,4 +1,10 @@
-import { getField } from 'models/Deal/helpers/context/get-field'
+import { isDoubleEnded } from 'deals/utils/get-is-double-ended'
+
+const specialRoles: string[] = [
+  'PrimaryAgent',
+  'InternalBuyerAgents',
+  'ExternalBuyerAgents'
+]
 
 export function normalizeRoleNames(
   deal: IDeal,
@@ -8,28 +14,35 @@ export function normalizeRoleNames(
     ? roleNames
     : roleNames.split(',')
 
-  return names.map(name => {
-    if (name !== 'PrimaryAgent') {
+  return names.map(
+    (name): string => {
+      if (specialRoles.includes(name) === false) {
+        return name
+      }
+
+      if (name === 'PrimaryAgent') {
+        return resolvePrimaryAgent(deal, name)
+      }
+
+      const doubleEnded: boolean = isDoubleEnded(deal)
+
+      if (name === 'InternalBuyerAgents' && doubleEnded) {
+        return 'BuyerAgent'
+      }
+
+      if (name === 'ExternalBuyerAgents' && !doubleEnded) {
+        return 'BuyerAgent'
+      }
+
       return name
     }
+  )
+}
 
-    if (deal.deal_type === 'Buying') {
-      return 'BuyerAgent'
-    }
+function resolvePrimaryAgent(deal: IDeal, name: string): string {
+  if (deal.deal_type === 'Buying') {
+    return 'BuyerAgent'
+  }
 
-    if (deal.deal_type === 'Selling') {
-      return 'SellerAgent'
-    }
-
-    const enderType = getField(deal, 'ender_type')
-
-    if (['AgentDoubleEnder', 'OfficeDoubleEnder'].includes(enderType)) {
-    }
-    //     if (deal.context.ender_type === 'AgentDoubleEnder' || deal.context.ender_type === 'OfficeDoubleEnder')
-    // ExternalBuyerAgents = deal.roles.filter(r => r.role === 'BuyerAgent')
-    // else
-    // InternalBuyerAgents = deal.roles.filter(r => r.role === 'BuyerAgent')
-
-    return name
-  })
+  return 'SellerAgent'
 }
