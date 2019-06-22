@@ -14,8 +14,6 @@ const getIcon = Icon => (
 )
 
 const getImportantDateIcon = event => {
-  console.log('event', event)
-
   const { type_label: label, event_type: type } = event
 
   if (importantDatesIcons[label]) {
