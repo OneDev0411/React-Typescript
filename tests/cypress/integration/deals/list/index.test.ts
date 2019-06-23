@@ -1,7 +1,5 @@
-// / <reference types="cypress" />
-
-import { signin } from '../../helpers/authentication'
-import { getTestSelector, waitForPage } from '../../helpers/page'
+import { signin } from 'helpers/authentication'
+import { getTestSelector, waitForPage } from 'helpers'
 
 describe('Deals: List', () => {
   // https://docs.cypress.io/guides/references/best-practices.html#Having-tests-rely-on-the-state-of-previous-tests
