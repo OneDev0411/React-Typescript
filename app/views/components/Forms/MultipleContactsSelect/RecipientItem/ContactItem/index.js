@@ -1,17 +1,20 @@
 import React from 'react'
 import Downshift from 'downshift'
 
+import Flex from 'styled-flex-component'
+
 import UserAvatar from 'components/Avatar'
 
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
 import {
-  Recipient,
-  Title,
-  EmailsList,
-  EmailItem,
   ArrowIcon,
-  DeleteButton
+  DeleteButton,
+  EmailItem,
+  EmailsList,
+  Recipient,
+  Subtitle,
+  Title
 } from '../styled'
 
 export default class RecipientItem extends React.Component {
@@ -69,13 +72,20 @@ export default class RecipientItem extends React.Component {
         />
 
         <div onClick={this.toggleOpenMenu}>
-          <Title>{recipient.name}</Title>
+          <Flex alignCenter>
+            <div>
+              <Title>{recipient.name}</Title>
+              <Subtitle>{recipient.email}</Subtitle>
+            </div>
 
-          {hasMultipleEmails && (
-            <ArrowIcon
-              className={`fa fa-angle-${this.state.isMenuOpen ? 'up' : 'down'}`}
-            />
-          )}
+            {hasMultipleEmails && (
+              <ArrowIcon
+                className={`fa fa-angle-${
+                  this.state.isMenuOpen ? 'up' : 'down'
+                }`}
+              />
+            )}
+          </Flex>
         </div>
 
         {recipient.readOnly !== true && (
