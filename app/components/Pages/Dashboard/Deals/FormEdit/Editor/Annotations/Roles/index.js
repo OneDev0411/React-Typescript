@@ -2,11 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { selectDealRoles } from 'reducers/deals/roles'
+import { getRoleText } from 'deals/FormEdit/utils/get-roles-text'
+import { normalizeRoleNames } from 'deals/FormEdit/utils/normalize-role-names'
 
-import {
-  getRoleText,
-  normalizeRoleNames
-} from 'deals/FormEdit/utils/get-roles-text'
 import { getGroupValues } from 'deals/FormEdit/utils/get-group-values'
 import { getAnnotationsByType } from 'deals/FormEdit/utils/get-annotations-by-type'
 

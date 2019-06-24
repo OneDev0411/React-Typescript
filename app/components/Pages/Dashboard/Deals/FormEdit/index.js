@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { browserHistory, withRouter } from 'react-router'
+import { withRouter } from 'react-router'
 import { addNotification as notify } from 'reapop'
 
 import config from 'config'
