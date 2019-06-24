@@ -1,11 +1,11 @@
-import { getTestSelector, waitForRemove } from './page'
+import { getTestSelector } from './page'
 
 export const waitForDrawerToClose = () => {
-  waitForRemove(getTestSelector('open-drawer-overlay'))
+  cy.waitForRemove(getTestSelector('open-drawer-overlay'))
 }
 
 export const submitDrawerForm = () => {
-  cy.get(getTestSelector('open-drawer-content'))
+  cy.getByTestSelector('open-drawer-content')
     .get('button[type=submit]')
     .click()
 

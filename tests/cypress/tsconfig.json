@@ -6,6 +6,7 @@
     "moduleResolution": "node",
     "target": "esnext",
     "allowJs": true,
+    "isolatedModules": false,
     "module": "esnext",
     "lib": [
       "es5",

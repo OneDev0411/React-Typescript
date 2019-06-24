@@ -1,13 +1,11 @@
-import { waitForRemove } from './page'
-
 export const acceptConfirmationModal = () => {
-  cy.get('confirmation-modal-confirm-button').click()
+  cy.getByTestSelector('confirmation-modal-confirm-button').click()
 }
 
 export const cancelConfirmationModal = () => {
-  cy.get('confirmation-modal-cancel-button').click()
+  cy.getByTestSelector('confirmation-modal-cancel-button').click()
 }
 
 export const waitForModalToClose = () => {
-  waitForRemove('.ReactModal__Overlay')
+  cy.waitForRemove('.ReactModal__Overlay')
 }
