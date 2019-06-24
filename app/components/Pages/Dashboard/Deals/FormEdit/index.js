@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { browserHistory, withRouter } from 'react-router'
+import { withRouter } from 'react-router'
 import { addNotification as notify } from 'reapop'
 
 import config from 'config'
@@ -81,7 +81,7 @@ class EditDigitalForm extends React.Component {
     }
 
     const pdfUrl = task.submission
-      ? task.pdf_url
+      ? task.submission.file.url
       : `${config.forms.url}/${form.id}.pdf`
 
     // get form size in bytes, because pdfjs sucks

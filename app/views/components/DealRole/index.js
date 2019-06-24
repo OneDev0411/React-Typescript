@@ -383,6 +383,7 @@ class Role extends React.Component {
                 requiredFields={requiredFields}
                 visibleFields={visibleFields}
                 isAllowedRole={this.isAllowedRole}
+                userEmail={this.props.user.email}
                 onDeleteRole={this.handleDeleteRole}
                 onSubmit={this.handleSubmit}
                 onClose={this.handleClose}

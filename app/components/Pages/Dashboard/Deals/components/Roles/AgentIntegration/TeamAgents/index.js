@@ -12,10 +12,9 @@ import Loading from 'components/LoadingContainer'
 
 import { getAgents } from 'models/Deal/agent'
 
-import { PrimaryAgent } from './PrimaryAgent'
-import { CoAgent } from './CoAgent'
+import { AgentsList } from './List'
 
-import { Container, EmptyState } from './styled'
+import { EmptyState } from './styled'
 
 const propTypes = {
   filter: PropTypes.func,
@@ -132,13 +131,7 @@ class TeamAgents extends React.Component {
           {this.isLoading ? (
             <Loading style={{ padding: '35% 0' }} />
           ) : (
-            <Container>
-              {this.props.isPrimaryAgent ? (
-                <PrimaryAgent {...sharedProps} />
-              ) : (
-                <CoAgent {...sharedProps} />
-              )}
-            </Container>
+            <AgentsList {...sharedProps} />
           )}
         </Drawer.Body>
       </Drawer>

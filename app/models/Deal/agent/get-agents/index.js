@@ -20,6 +20,8 @@ export async function getAgents(brandId, query = '') {
       .get(`/brands/${brandId}/agents`)
       .query({ 'associations[]': ['brand.roles'] })
       .query({ 'associations[]': ['brand_role.users'] })
+      .query({ 'associations[]': ['user.agent'] })
+      .query({ 'associations[]': ['agent.office'] })
       .query(searchQuery)
 
     return response.body.data

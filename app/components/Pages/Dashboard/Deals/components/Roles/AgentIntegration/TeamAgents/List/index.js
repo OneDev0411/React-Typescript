@@ -23,13 +23,13 @@ import {
   Title
 } from './styled'
 
-CoAgent.propTypes = {
+AgentsList.propTypes = {
   agents: PropTypes.array.isRequired,
   onSearch: PropTypes.func.isRequired,
   onSelectAgent: PropTypes.func.isRequired
 }
 
-export function CoAgent(props) {
+export function AgentsList(props) {
   const [searchTerm, setSearchTerm] = useState('')
   const [debouncedSetSearchTerm] = useDebouncedCallback(setSearchTerm, 500)
 

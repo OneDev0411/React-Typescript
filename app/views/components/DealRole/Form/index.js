@@ -26,6 +26,8 @@ import { Header, Body, Footer } from '../styled'
 export function FormContainer(props) {
   const isRequired = field => props.requiredFields.includes(field)
   const isVisible = field => props.visibleFields.includes(field)
+  const showSaveContactButton =
+    props.isNewRecord && props.values.email !== props.userEmail
 
   return (
     <Fragment>
@@ -205,13 +207,13 @@ export function FormContainer(props) {
             <Fragment>
               <ActionButton
                 size="small"
-                appearance={props.isNewRecord ? 'outline' : 'primary'}
+                appearance={showSaveContactButton ? 'outline' : 'primary'}
                 onClick={() => props.onSubmit(props.form, false)}
               >
                 Save
               </ActionButton>
 
-              {props.isNewRecord && (
+              {showSaveContactButton && (
                 <ActionButton
                   size="small"
                   onClick={() => props.onSubmit(props.form, true)}
