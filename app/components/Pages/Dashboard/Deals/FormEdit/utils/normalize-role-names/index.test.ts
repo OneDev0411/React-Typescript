@@ -32,7 +32,7 @@ describe('Test deal form normalize-role-names helper', () => {
 
   it('Should return correct list when there is InternalBuyerAgents and deal is DoubleEnded', () => {
     const list = normalizeRoleNames(setDoubleEnded(true) as any, [
-      'InternalBuyerAgents'
+      'InternalBuyerAgent'
     ])
 
     expect(list).toStrictEqual(['BuyerAgent'])
@@ -40,23 +40,23 @@ describe('Test deal form normalize-role-names helper', () => {
 
   it('Should return correct list when there is InternalBuyerAgents and deal is not DoubleEnded', () => {
     const list = normalizeRoleNames(setDoubleEnded(false) as any, [
-      'InternalBuyerAgents'
+      'InternalBuyerAgent'
     ])
 
-    expect(list).toStrictEqual(['InternalBuyerAgents'])
+    expect(list).toStrictEqual(['InternalBuyerAgent'])
   })
 
   it('Should return correct list when there is ExternalBuyerAgents and deal is DoubleEnded', () => {
     const list = normalizeRoleNames(setDoubleEnded(true) as any, [
-      'ExternalBuyerAgents'
+      'ExternalBuyerAgent'
     ])
 
-    expect(list).toStrictEqual(['ExternalBuyerAgents'])
+    expect(list).toStrictEqual(['ExternalBuyerAgent'])
   })
 
   it('Should return correct list when there is ExternalBuyerAgents and deal is not DoubleEnded', () => {
     const list = normalizeRoleNames(setDoubleEnded(false) as any, [
-      'ExternalBuyerAgents'
+      'ExternalBuyerAgent'
     ])
 
     expect(list).toStrictEqual(['BuyerAgent'])

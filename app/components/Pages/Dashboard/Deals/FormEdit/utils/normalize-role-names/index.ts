@@ -2,8 +2,8 @@ import { isDoubleEnded } from 'deals/utils/get-is-double-ended'
 
 const specialRoles: string[] = [
   'PrimaryAgent',
-  'InternalBuyerAgents',
-  'ExternalBuyerAgents'
+  'InternalBuyerAgent',
+  'ExternalBuyerAgent'
 ]
 
 export function normalizeRoleNames(
@@ -26,11 +26,11 @@ export function normalizeRoleNames(
 
       const doubleEnded: boolean = isDoubleEnded(deal)
 
-      if (name === 'InternalBuyerAgents' && doubleEnded) {
+      if (name === 'InternalBuyerAgent' && doubleEnded) {
         return 'BuyerAgent'
       }
 
-      if (name === 'ExternalBuyerAgents' && !doubleEnded) {
+      if (name === 'ExternalBuyerAgent' && !doubleEnded) {
         return 'BuyerAgent'
       }
 
