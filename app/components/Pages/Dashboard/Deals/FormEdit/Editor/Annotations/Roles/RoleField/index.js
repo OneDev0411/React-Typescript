@@ -1,6 +1,6 @@
 import React, { useState, useMemo, Fragment } from 'react'
 
-import { normalizeRoleNames } from 'deals/FormEdit/utils/get-roles-text'
+import { normalizeRoleNames } from 'deals/FormEdit/utils/normalize-role-names'
 import { getRoleTooltip } from 'deals/FormEdit/utils/get-role-tooltip'
 import { getRolesList } from 'deals/FormEdit/utils/get-roles-list'
 import { isPrimaryAgent } from 'deals/utils/roles'
