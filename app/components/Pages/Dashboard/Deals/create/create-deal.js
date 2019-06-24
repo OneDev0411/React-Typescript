@@ -593,6 +593,7 @@ class CreateDeal extends React.Component {
 
     const dealObject = {
       ...this.createDealObject(),
+      brand: this.getPrimaryAgentBrandId(),
       is_draft: isDraft
     }
 
@@ -711,6 +712,14 @@ class CreateDeal extends React.Component {
     return {
       listing_status: this.state.dealStatus || defaultListingStatus
     }
+  }
+
+  getPrimaryAgentBrandId = () => {
+    const primaryAgent = Object.values(this.state.agents).find(agent =>
+      ['SellerAgent', 'BuyerAgent'].includes(agent.role)
+    )
+
+    return primaryAgent.brand
   }
 
   /**
@@ -966,6 +975,7 @@ class CreateDeal extends React.Component {
 
                     <DealAgents
                       isRequired={requiredFields.includes('selling_agents')}
+                      isBackOffice={this.props.isBackOffice}
                       hasError={this.hasError('selling_agents')}
                       scenario="CreateDeal"
                       dealSide={dealSide}
