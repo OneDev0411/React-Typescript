@@ -1,7 +1,7 @@
 const email = Cypress.env('E2E_EMAIL')
 const password = Cypress.env('E2E_PASSWORD')
 
-import { getTestSelector, waitForPage } from '.'
+import { getTestSelector, waitForPage } from './page'
 
 export function signin() {
   cy.visit('/signin')

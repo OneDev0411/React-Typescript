@@ -1,4 +1,4 @@
-import { getTestSelector, waitForRemove } from '.'
+import { getTestSelector, waitForRemove } from './page'
 
 export const waitForDrawerToClose = () => {
   waitForRemove(getTestSelector('open-drawer-overlay'))

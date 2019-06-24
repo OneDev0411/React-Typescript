@@ -2,7 +2,7 @@
   "extends": "../../tsconfig",
   "compilerOptions": {
     "strict": true,
-    "baseUrl": "../../node_modules",
+    "baseUrl": ".",
     "moduleResolution": "node",
     "target": "esnext",
     "allowJs": true,
@@ -13,7 +13,12 @@
     ],
     "types": [
       "cypress"
-    ]
+    ],
+    "paths": {
+      "helpers/*": [
+        "integration/helpers/*"
+      ]
+    }
   },
   "include": [
     "**/*.ts"

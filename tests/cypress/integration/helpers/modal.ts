@@ -1,4 +1,4 @@
-import { waitForRemove } from '.'
+import { waitForRemove } from './page'
 
 export const acceptConfirmationModal = () => {
   cy.get('confirmation-modal-confirm-button').click()
