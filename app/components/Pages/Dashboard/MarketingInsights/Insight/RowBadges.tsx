@@ -3,14 +3,12 @@ import React from 'react'
 import { StyledBadge } from './styled'
 import { ContactsListType } from './types'
 
-type OutputType = React.ReactNode[]
-
 interface BadgePropsType {
   data: ContactsListType
 }
 
 function RowBadges({ data }: BadgePropsType) {
-  const output: OutputType = []
+  const output: React.Node[] = []
 
   if (data.unsubscribed > 0) {
     const count = data.unsubscribed >= 2 ? `(${data.unsubscribed})` : null
@@ -26,7 +24,7 @@ function RowBadges({ data }: BadgePropsType) {
     output.push(<StyledBadge>Bounced {count}</StyledBadge>)
   }
 
-  return output
+  return <React.Fragment>{output}</React.Fragment>
 }
 
 export default RowBadges

@@ -59,8 +59,9 @@ function ContactsTable(props: ContactsPropsType) {
   }
 
   const sortableColumns = [
-    { label: 'Alphabetical', value: SortValues.ALPHABETICAL },
+    { label: 'Name A-Z', value: SortValues.ALPHABETICAL },
     { label: 'Bounced', value: SortValues.BOUNCED },
+    { label: 'Unsubscribed', value: SortValues.UNSUBSCRIBED },
     { label: 'Most Clicked', value: SortValues.MOST_CLICKED },
     { label: 'Most Opened', value: SortValues.MOST_OPENED }
   ]
