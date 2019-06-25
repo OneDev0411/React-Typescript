@@ -31,7 +31,8 @@
 
     "test:e2e": "cypress run --browser chrome",
     "test:unit": "NODE_ENV=ci jest",
-    "test": "npm run test:unit && npm run test:e2e",
+    "test:ci": "npm run test:unit && npm run test:e2e",
+    "test": "jest --watch",
     "cypress": "cypress open"
   },
   "engines": {
