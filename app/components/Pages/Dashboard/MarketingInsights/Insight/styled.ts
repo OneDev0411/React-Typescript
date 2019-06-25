@@ -82,6 +82,6 @@ export const ContactColumn = styled.div`
   }
 `
 
-export const StyledBadge = styled(Badge) `
+export const StyledBadge = styled(Badge)`
   padding: 0.25rem 0.75rem;
 `
