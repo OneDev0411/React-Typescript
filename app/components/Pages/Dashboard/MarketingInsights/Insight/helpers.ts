@@ -1,5 +1,4 @@
 import { ContactStatType, ContactsListType } from './types'
-import { doesNotReject } from 'assert'
 
 export function getContactStat(email: IInsightEmail): ContactStatType {
   return {
