@@ -21,7 +21,7 @@ export function addOpenHouseFilter(index: number = 0) {
     .click()
 }
 
-function openNewFilterDropdown(filterType: string) {
+function openNewFilterDropdown(filterType: 'Tag' | 'Open House' | 'Origin') {
   cy.getByTestSelector('add-filter').click()
 
   return cy.getByTestSelector(`add-filter-item-${filterType}`).click()
