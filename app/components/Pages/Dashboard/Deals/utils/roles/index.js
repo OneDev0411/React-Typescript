@@ -231,6 +231,9 @@ export function convertRoleToContact(form = {}, user, attributeDefs) {
     ]
   })
 
+  // add role name as tag
+  contact.attributes.push(createContactTag(attributeDefs, form.role))
+
   return contact
 }
 
@@ -241,42 +244,73 @@ export function convertRoleToContact(form = {}, user, attributeDefs) {
 export function getContactChangedAttributes(form = {}, attributeDefs) {
   const attributes = []
 
-  getContactFields().forEach(item => {
-    const definitions = getContactDefinitions(attributeDefs, form, item)
+  getContactFields()
+    // currently ignore address field when updading an existance contact record
+    .filter(
+      item =>
+        ['parsed_current_address', 'parsed_future_address'].includes(
+          item.role
+        ) === false
+    )
+    .forEach(item => {
+      const definitions = getContactDefinitions(attributeDefs, form, item)
 
-    definitions.forEach(definition => {
-      const attribute = form.contact.attributes.find(attr => {
-        const condition = attr.attribute_def.id === definition.attribute_def
+      definitions.forEach(definition => {
+        const attribute = form.contact.attributes.find(attr => {
+          const condition = attr.attribute_def.id === definition.attribute_def
 
-        return definition.index == null
-          ? condition
-          : condition &&
-              attr.index === definition.index &&
-              attr.label === definition.label
+          return definition.index == null
+            ? condition
+            : condition &&
+                attr.index === definition.index &&
+                attr.label === definition.label
+        })
+
+        const { data_type } = selectDefinition(
+          attributeDefs,
+          definition.attribute_def
+        )
+
+        const value = definition[data_type]
+
+        if (!attribute && !value) {
+          return
+        }
+
+        const item = definition
+
+        if (attribute) {
+          item.id = attribute.id
+        }
+
+        attributes.push(item)
       })
-
-      const { data_type } = selectDefinition(
-        attributeDefs,
-        definition.attribute_def
-      )
-
-      const value = definition[data_type]
-
-      if (!attribute && !value) {
-        return
-      }
-
-      const item = definition
-
-      if (attribute) {
-        item.id = attribute.id
-      }
-
-      attributes.push(item)
     })
+
+  const isTagExists = form.contact.attributes.some(attr => {
+    const { data_type } = attr.attribute_def
+
+    return (
+      attr.attribute_type === 'tag' &&
+      attr[data_type].toLowerCase() === form.role.toLowerCase()
+    )
   })
 
+  if (!isTagExists) {
+    attributes.push(createContactTag(attributeDefs, form.role))
+  }
+
   return attributes
+}
+
+function createContactTag(attributeDefs, text) {
+  const tagDef = selectDefinitionByName(attributeDefs, 'tag')
+
+  // add role name to contact as a new tag
+  return {
+    attribute_def: tagDef.id,
+    [tagDef.data_type]: text
+  }
 }
 
 /**
