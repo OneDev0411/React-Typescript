@@ -13,7 +13,7 @@ Cypress.Commands.add('signout', signout)
 function signin(
   email: string = Cypress.env('E2E_EMAIL'),
   password: string = Cypress.env('E2E_PASSWORD')
-): ReturnType<typeof cy.waitForPage> {
+) {
   cy.visit('/signin')
 
   cy.get('#username').type(email)
@@ -23,11 +23,11 @@ function signin(
   return cy.waitForPage('/dashboard')
 }
 
-function signout(): ReturnType<typeof cy.waitForPage> {
+function signout() {
   cy.getByTestSelector('settings-dropdown-button').click()
   cy.get('[href="/signout"]').click()
 
   return cy.waitForPage('/signin')
 }
 
-export {}
+export { }

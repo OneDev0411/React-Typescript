@@ -2,7 +2,7 @@ import { waitForModalToClose } from 'helpers/modal'
 
 import { addOpenHouseFilter } from '../helpers'
 
-export function createList(listName: string): ReturnType<typeof cy.get> {
+export function createList(listName: string) {
   addOpenHouseFilter()
 
   cy.getByTestSelector('save-list-button').click()

@@ -1,4 +1,4 @@
-export function addTagFilter(): ReturnType<typeof cy.getByTestSelector> {
+export function addTagFilter() {
   openNewFilterDropdown('Tag')
 
   cy.getByTestSelector('open-filters-list').click()
@@ -12,7 +12,7 @@ export function addTagFilter(): ReturnType<typeof cy.getByTestSelector> {
 
   return cy.getByTestSelector('filter-done-button').click()
 }
-export function addOpenHouseFilter(): ReturnType<typeof cy.getByTestSelector> {
+export function addOpenHouseFilter() {
   openNewFilterDropdown('Open House')
 
   return cy
@@ -21,9 +21,7 @@ export function addOpenHouseFilter(): ReturnType<typeof cy.getByTestSelector> {
     .click()
 }
 
-function openNewFilterDropdown(
-  filterType: string
-): ReturnType<typeof cy.getByTestSelector> {
+function openNewFilterDropdown(filterType: string) {
   cy.getByTestSelector('add-filter').click()
 
   return cy.getByTestSelector(`add-filter-item-${filterType}`).click()

@@ -1,4 +1,4 @@
-describe('Deals: List', () => {
+describe('Deals list', () => {
   beforeEach(() => {
     cy.signin()
     cy.visit('/dashboard/deals')

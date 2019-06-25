@@ -10,9 +10,7 @@ declare global {
 
 Cypress.Commands.add('getByTestSelector', getByTestSelector)
 
-function getByTestSelector(
-  value: string | string[]
-): Cypress.Chainable<JQuery<HTMLElement>> {
+function getByTestSelector(value: string | string[]) {
   const selector = getTestSelector(value)
 
   return cy.get(selector)

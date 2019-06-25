@@ -1,9 +1,7 @@
 import { getTestSelector } from 'helpers/page'
 import { acceptConfirmationModal } from 'helpers/modal'
 
-export function deleteList(
-  listName: string
-): ReturnType<typeof cy.waitForRemove> {
+export function deleteList(listName: string) {
   const listSelector = getTestSelector(`contact-list-${listName}`)
 
   cy.get(listSelector).scrollIntoView()

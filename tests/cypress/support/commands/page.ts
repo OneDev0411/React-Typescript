@@ -10,17 +10,11 @@ declare global {
 Cypress.Commands.add('waitForRemove', waitForRemove)
 Cypress.Commands.add('waitForPage', waitForPage)
 
-function waitForRemove(
-  selector: string,
-  timeout: number = 10000
-): ReturnType<typeof cy.get> {
+function waitForRemove(selector: string, timeout: number = 10000) {
   return cy.get(selector, { timeout }).should('not.exist')
 }
 
-function waitForPage(
-  url: string,
-  timeout = 60000
-): ReturnType<typeof cy.location> {
+function waitForPage(url: string, timeout = 60000) {
   return cy.location('pathname', { timeout }).should('include', url)
 }
 

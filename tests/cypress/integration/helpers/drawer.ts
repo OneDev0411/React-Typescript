@@ -1,4 +1,4 @@
-export function submitDrawerForm(): ReturnType<typeof cy.getByTestSelector> {
+export function submitDrawerForm() {
   return cy.getByTestSelector('open-drawer-content').within(() => {
     cy.get('button[type=submit]').click()
   })

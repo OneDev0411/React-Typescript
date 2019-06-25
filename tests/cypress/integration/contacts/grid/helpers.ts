@@ -40,6 +40,6 @@ export function deleteContact(index = 0) {
   return acceptConfirmationModal()
 }
 
-function getGridRowSelector(index: number): string {
+function getGridRowSelector(index: number) {
   return `${getTestSelector('grid-row')}:nth-child(${index + 1})`
 }
