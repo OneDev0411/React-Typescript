@@ -1,4 +1,4 @@
-export function addTagFilter() {
+export function addTagFilter(index: number = 0) {
   openNewFilterDropdown('Tag')
 
   cy.getByTestSelector('open-filters-list').click()
@@ -7,17 +7,17 @@ export function addTagFilter() {
 
   cy.getByTestSelector('filter-items-list')
     .children()
-    .first()
+    .eq(index)
     .click()
 
   return cy.getByTestSelector('filter-done-button').click()
 }
-export function addOpenHouseFilter() {
+export function addOpenHouseFilter(index: number = 0) {
   openNewFilterDropdown('Open House')
 
   return cy
     .getByTestSelector('filter-item')
-    .first()
+    .eq(index)
     .click()
 }
 
