@@ -29,7 +29,7 @@ export function selectGridRow(index: number = 0) {
     .click()
 }
 
-export function deleteContact(index = 0) {
+export function deleteContact(index: number = 0) {
   cy.get(
     [getGridRowSelector(index), getTestSelector('contact-menu')].join(' ')
   ).click()
