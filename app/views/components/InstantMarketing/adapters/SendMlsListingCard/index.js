@@ -209,8 +209,16 @@ class SendMlsListingCard extends React.Component {
     })
 
   get TemplateInstanceData() {
+    // We are offering marketing for unlisted deals by merging the deal data with
+    // a base json which we are using it as base object (it is a mock `listing` object)
+    // for preventing making a relation between mock object and template instance,
+    // we should filter it.
+    // see: `app/views/components/SearchListingDrawer/index.js`
+
     return {
-      listings: this.state.listings.map(listing => listing.id)
+      listings: this.state.listings
+        .filter(listing => !listing.isMock)
+        .map(listing => listing.id)
     }
   }
 
