@@ -1,9 +1,27 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
+import classNames from 'classnames'
 import { Overlay, Popover } from 'react-bootstrap'
 
-class PopOver extends React.Component {
+interface Props {
+  id?: string
+  caption?: string
+  placement?: 'top' | 'bottom' // probably more
+  overlayOptions?: {
+    trigger?: ('hover')[]
+  }
+  popoverStyles?: CSSProperties
+  containerStyle?: CSSProperties
+  show?: boolean
+  dark?: boolean
+}
+
+interface State {
+  show: boolean
+}
+
+class PopOver extends React.Component<Props, State> {
   state = {
-    show: this.props.show
+    show: !!this.props.show
   }
 
   onMouseEnter = () => this.setState({ show: true })
@@ -42,7 +60,10 @@ class PopOver extends React.Component {
           {...overlayOptions}
         >
           <Popover
-            className="white--popover"
+            className={classNames(
+              'pop-over',
+              this.props.dark ? 'pop-over--dark' : 'pop-over--light'
+            )}
             id={id}
             style={{ ...popoverStyles }}
           >

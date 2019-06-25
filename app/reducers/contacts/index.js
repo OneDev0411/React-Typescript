@@ -7,6 +7,7 @@ import spinner from './spinner'
 import importOutlook from './importOutlook'
 import importCsv from './importCsv'
 import { contactsFilterSegments } from '../filter-segments'
+import { googleAccounts } from './googleAccounts'
 
 export default combineReducers({
   attributeDefs,
@@ -15,5 +16,6 @@ export default combineReducers({
   spinner,
   importOutlook,
   importCsv,
+  googleAccounts,
   filterSegments: contactsFilterSegments
 })

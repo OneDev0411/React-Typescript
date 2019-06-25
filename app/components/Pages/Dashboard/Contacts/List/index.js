@@ -37,6 +37,8 @@ import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
 
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 
+import { getGoogleAccounts } from 'actions/contacts/get-google-accounts'
+
 import { AlphabetFilter } from '../../../../../views/components/AlphabetFilter'
 
 import Table from './Table'
@@ -71,6 +73,7 @@ class ContactsList extends React.Component {
   }
 
   componentDidMount() {
+    this.props.getGoogleAccounts()
     this.fetchContactsAndJumpToSelected()
 
     if (this.props.fetchTags) {
@@ -535,6 +538,7 @@ export default withRouter(
     mapStateToProps,
     {
       getContacts,
+      getGoogleAccounts,
       searchContacts,
       deleteContacts,
       confirmation,
