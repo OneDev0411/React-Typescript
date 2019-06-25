@@ -1,3 +1,6 @@
 {
-  "extends": "../../.eslintrc"
+  "extends": "../../.eslintrc",
+  "rules": {
+    "import/no-unresolved": 0
+  }
 }

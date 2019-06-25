@@ -1,4 +1,4 @@
-import { getTestSelector } from "helpers/page";
+import { getTestSelector } from 'helpers/page'
 
 declare global {
   namespace Cypress {
@@ -10,12 +10,12 @@ declare global {
 
 Cypress.Commands.add('getByTestSelector', getByTestSelector)
 
-
-function getByTestSelector(value: string | string[]): ReturnType<typeof cy.get> {
+function getByTestSelector(
+  value: string | string[]
+): Cypress.Chainable<JQuery<HTMLElement>> {
   const selector = getTestSelector(value)
 
   return cy.get(selector)
 }
 
-export { }
-
+export {}

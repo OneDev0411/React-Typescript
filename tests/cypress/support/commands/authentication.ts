@@ -10,8 +10,10 @@ declare global {
 Cypress.Commands.add('signin', signin)
 Cypress.Commands.add('signout', signout)
 
-
-function signin(email: string = Cypress.env('E2E_EMAIL'), password: string = Cypress.env('E2E_PASSWORD')): ReturnType<typeof cy.waitForPage> {
+function signin(
+  email: string = Cypress.env('E2E_EMAIL'),
+  password: string = Cypress.env('E2E_PASSWORD')
+): ReturnType<typeof cy.waitForPage> {
   cy.visit('/signin')
 
   cy.get('#username').type(email)
@@ -28,4 +30,4 @@ function signout(): ReturnType<typeof cy.waitForPage> {
   return cy.waitForPage('/signin')
 }
 
-export { }
+export {}
