@@ -10,7 +10,7 @@ import { ViewMode } from './ViewMode'
 
 import { preSaveFormat, getUpsertAttributes } from './helpers'
 
-const DEFAULT_LABEL = { label: 'Select', value: '' }
+const DEFAULT_LABEL = { label: 'Select', value: null }
 
 function destructuringAddress(address) {
   let { label, full_address, is_primary } = address
