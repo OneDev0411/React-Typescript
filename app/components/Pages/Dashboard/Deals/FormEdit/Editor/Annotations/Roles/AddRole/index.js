@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import { isPrimaryAgent } from 'deals/utils/roles'
+import { specialRoles } from 'deals/FormEdit/utils/normalize-role-names'
 import ToolTip from 'components/tooltip'
 import Roles from 'deals/components/Roles'
 
@@ -10,6 +11,10 @@ import { Container, RolesList } from './styled'
 
 export function AddRole(props) {
   const [showRolesList, setShowRoles] = useState(false)
+
+  const isSpecialRole = props.annotation.role.some(roleName =>
+    specialRoles.includes(roleName)
+  )
 
   const isPrimaryRole = props.annotation.role.some(
     roleName =>
@@ -21,12 +26,13 @@ export function AddRole(props) {
     props.annotation.type === 'Role' && props.roles.length > 0
 
   if (
+    isSpecialRole ||
     isPrimaryRole ||
     isSingularRole ||
     (Object.keys(props.values).length > 1 &&
       props.rectIndex < props.group.length - 1)
   ) {
-    return false
+    return null
   }
 
   const tooltip =
