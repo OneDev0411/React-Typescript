@@ -70,7 +70,7 @@ export class Table extends React.Component {
   }
 
   getEventActions = row => {
-    if (row.event_type === 'birthday') {
+    if (row.event_type === 'birthday' && !row.metadata.is_partner) {
       return (
         <SendContactCard
           contactId={row.contact}
