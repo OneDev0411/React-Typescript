@@ -4,6 +4,7 @@
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
+    "commit": "commit",
     "develop": "NODE_ENV=development nodemon ./bin/server --config ./nodemon.config.json --exec babel-node --extensions \".js,.ts,.tsx\"",
     "developClient": "NODE_ENV=development notify=true npx babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
     "debug": "ndb npm run develop",
@@ -217,6 +218,9 @@
   },
   "devDependencies": {
     "@babel/polyfill": "^7.4.4",
+    "@commitlint/cli": "^8.0.0",
+    "@commitlint/config-conventional": "^8.0.0",
+    "@commitlint/prompt-cli": "^8.0.0",
     "@cypress/webpack-preprocessor": "^4.1.0",
     "@testing-library/react": "^8.0.1",
     "@types/classnames": "^2.2.7",
@@ -313,7 +317,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "./pre-commit.sh"
+      "pre-commit": "./pre-commit.sh",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && ./commit-msg.js $HUSKY_GIT_PARAMS `git rev-parse --abbrev-ref HEAD`"
     }
   }
 }
