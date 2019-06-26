@@ -10,10 +10,13 @@ declare global {
 
 Cypress.Commands.add('getByTestSelector', getByTestSelector)
 
-function getByTestSelector(value: string | string[]) {
+function getByTestSelector(
+  value: string | string[],
+  options?: Partial<Cypress.Loggable & Cypress.Timeoutable>
+) {
   const selector = getTestSelector(value)
 
-  return cy.get(selector)
+  return cy.get(selector, options)
 }
 
 export {}

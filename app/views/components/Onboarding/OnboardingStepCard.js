@@ -28,6 +28,7 @@ export function OnboardingStepCard(props) {
               style={{ padding: 0 }}
               appearance="link"
               {...props.closeProps}
+              data-test="finish-skip-onboarding"
             >
               {props.index > 0 ? 'Finish Tour' : 'Skip'}
             </ActionButton>

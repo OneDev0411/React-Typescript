@@ -10,13 +10,13 @@ import { ViewMode } from './ViewMode'
 
 import { preSaveFormat, getUpsertAttributes } from './helpers'
 
-const DEFAULT_LABEL = { label: 'Select', value: '' }
+const DEFAULT_LABEL = { label: 'Select', value: null }
 
 function destructuringAddress(address) {
   let { label, full_address, is_primary } = address
 
   if (!label) {
-    label = address.id ? DEFAULT_LABEL : { label: 'Home', value: 'Home' }
+    label = address.id ? DEFAULT_LABEL : { label: 'Other', value: 'Other' }
   } else {
     label = { label, value: label }
   }

@@ -60,6 +60,7 @@ export class Uploader extends Component {
   render() {
     return (
       <Dropzone
+        data-test="image-upload-dropzone"
         accept={this.props.accept}
         multiple={this.props.multiple}
         minSize={this.props.minSize}

@@ -66,6 +66,7 @@ export class Body extends React.Component {
                 onClick: () => handleSelectItem && handleSelectItem(item)
               })}
               {...sharedProps}
+              data-test="listing-search-drawer-item"
             />
           ))}
         </Fragment>
