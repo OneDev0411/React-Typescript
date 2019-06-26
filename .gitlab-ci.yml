@@ -12,24 +12,24 @@ stages:
 
 build_deps:
   stage: build
-  # cache:
-  #   key: ${CI_CACHE_KEY}
-  #   paths:
-  #     - node_modules/
-  #   policy: push
-  # only:
-  #   changes:
-  #     - package-lock.json
+  cache:
+    key: ${CI_CACHE_KEY}
+    paths:
+      - node_modules/
+    policy: push
+  only:
+    changes:
+      - package-lock.json
   script:
     - npm i
 
 test_unit:
   stage: test
-  # cache:
-  #   key: ${CI_CACHE_KEY}
-  #   paths:
-  #     - node_modules/
-  #   policy: pull
+  cache:
+    key: ${CI_CACHE_KEY}
+    paths:
+      - node_modules/
+    policy: pull
   script:
     - npm run test:unit -- --coverage
 
