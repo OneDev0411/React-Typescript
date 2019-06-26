@@ -28,7 +28,11 @@ const normalizeAttributesToFields = (
   return fields
 }
 
-const normalizeAddress = (attributes, isActive = false) => {
+const normalizeAddress = (
+  attributes,
+  isActive = false,
+  defaultLabel = 'Other'
+) => {
   const {
     id,
     label,
@@ -41,7 +45,7 @@ const normalizeAddress = (attributes, isActive = false) => {
     id,
     index,
     isActive,
-    label,
+    label: id && label != null ? label : defaultLabel,
     labels,
     is_primary,
     attributes,
@@ -52,7 +56,8 @@ const normalizeAddress = (attributes, isActive = false) => {
 export const generateEmptyAddress = (
   addressAttributeDefs,
   addresses,
-  isActive
+  isActive,
+  defaultLabel
 ) =>
   normalizeAddress(
     normalizeAttributesToFields(
@@ -61,7 +66,8 @@ export const generateEmptyAddress = (
       undefined,
       generateNextIndex(addresses)
     ),
-    isActive
+    isActive,
+    defaultLabel
   )
 
 export function getAddresses(addressesFields, addressAttributeDefs) {
@@ -80,7 +86,9 @@ export function getAddresses(addressesFields, addressAttributeDefs) {
       address
     ).filter(field => field.attribute_def.show)
 
-    addresses.push(normalizeAddress(fields))
+    const defaultLabel = addresses.length === 0 ? 'Home' : 'Other'
+
+    addresses.push(normalizeAddress(fields, false, defaultLabel))
   })
 
   return addresses

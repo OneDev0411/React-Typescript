@@ -21,11 +21,18 @@ class Addresses extends React.Component {
     )
 
     const addresses = getContactAddresses(props.contact)
+    const normalizedAddresses = getAddresses(addresses, addressAttributeDefs)
+    const defaultLabel = normalizedAddresses.length === 0 ? 'Home' : 'Other'
 
     this.state = {
       addresses: [
-        ...getAddresses(addresses, addressAttributeDefs),
-        generateEmptyAddress(addressAttributeDefs, addresses)
+        ...normalizedAddresses,
+        generateEmptyAddress(
+          addressAttributeDefs,
+          addresses,
+          false,
+          defaultLabel
+        )
       ]
     }
 
@@ -60,13 +67,31 @@ class Addresses extends React.Component {
           address => address.index !== addressIndex
         )
 
-        if (addresses.length > 0) {
+        if (addresses.length > 1) {
           return { addresses }
+        }
+
+        if (addresses.length === 1) {
+          const address = addresses[0]
+
+          return {
+            addresses: [
+              {
+                ...address,
+                label: address.id ? address.label : 'Home'
+              }
+            ]
+          }
         }
 
         return {
           addresses: [
-            generateEmptyAddress(this.addressAttributeDefs, addresses)
+            generateEmptyAddress(
+              this.addressAttributeDefs,
+              addresses,
+              false,
+              'Home'
+            )
           ]
         }
       })
