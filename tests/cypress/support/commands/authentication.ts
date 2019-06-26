@@ -30,4 +30,4 @@ function signout() {
   return cy.waitForPage('/signin')
 }
 
-export { }
+export {}

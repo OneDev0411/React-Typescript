@@ -1,3 +1,5 @@
+import { CONTACTS__IMPORT_CSV__STEP_UPLOAD_FILE } from 'constants/contacts'
+
 import React from 'react'
 import { connect } from 'react-redux'
 import { batchActions } from 'redux-batched-actions'
@@ -5,26 +7,23 @@ import { batchActions } from 'redux-batched-actions'
 import CsvParser from 'papaparse'
 import _ from 'underscore'
 
-import { compareTwoStrings } from '../../../../../../utils/dice-coefficient'
-import { isAddressField } from '../helpers/address'
-
-import FieldDropDown from '../FieldDropDown'
-import FieldLabel from '../FieldLabel'
-import CustomAttributeDrawer from '../../components/CustomAttributeDrawer'
-import Loading from '../../../../../Partials/Loading'
-
 import {
   updateCsvFieldsMap,
   updateCsvInfo,
   updateWizardStep,
   setCurrentStepValidation
-} from '../../../../../../store_actions/contacts'
+} from 'actions/contacts'
 
-import { CONTACTS__IMPORT_CSV__STEP_UPLOAD_FILE } from '../../../../../../constants/contacts'
+import { selectDefinition } from 'reducers/contacts/attributeDefs'
 
-import { selectDefinition } from '../../../../../../reducers/contacts/attributeDefs'
+import { confirmation as showMessageModal } from 'actions/confirmation'
 
-import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
+import { automaticMapping } from './auto-map'
+
+import FieldDropDown from '../FieldDropDown'
+import FieldLabel from '../FieldLabel'
+import CustomAttributeDrawer from '../../components/CustomAttributeDrawer'
+import Loading from '../../../../../Partials/Loading'
 
 class Mapper extends React.Component {
   state = {
@@ -91,45 +90,12 @@ class Mapper extends React.Component {
 
       setTimeout(() => {
         this.autoMap(columns)
-      }, 100)
+      }, 1000)
     }
   }
 
   autoMap = csvColoumns => {
-    const { attributeDefs } = this.props
-    const mappedFields = {}
-
-    _.each(csvColoumns, ({ name: columnName }) => {
-      let index = 0
-      const attribute = this.findMatchedAttribute(columnName)
-
-      if (!attribute) {
-        return false
-      }
-
-      const isSingular = attributeDefs.byId[attribute.id]
-      const isAddress = isAddressField(attributeDefs, attribute.id)
-
-      // singular attrs can't be mapped more than once
-      if (
-        isSingular &&
-        _.some(mappedFields, field => field.definitionId === attribute.id)
-      ) {
-        return false
-      }
-
-      if (isAddress) {
-        index = _.filter(
-          mappedFields,
-          ({ definitionId }) => definitionId === attribute.id
-        ).length
-      }
-
-      mappedFields[columnName] = {
-        definitionId: attribute.id,
-        index
-      }
-    })
+    const mappedFields = automaticMapping(csvColoumns, this.props.attributeDefs)
 
     this.props.updateCsvInfo({
       mappedFields
@@ -138,45 +104,6 @@ class Mapper extends React.Component {
     this.setState({
       isAutoMapping: false
     })
-  }
-
-  /**
-   * find most similar attribute for given csv column name
-   * based on sorenson algorithm
-   */
-  findMatchedAttribute = csvColoumnName => {
-    const { attributeDefs } = this.props
-    const list = []
-
-    _.some(attributeDefs.byId, definition => {
-      const rate = compareTwoStrings(
-        csvColoumnName.toLowerCase(),
-        definition.label.toLowerCase()
-      )
-
-      list.push({
-        id: definition.id,
-        label: definition.label,
-        rate
-      })
-
-      if (rate === 1) {
-        return true
-      }
-    })
-
-    if (list.length === 0) {
-      return null
-    }
-
-    const bestMatches = _.sortBy(list, item => item.rate * -1)
-    const bestMatch = bestMatches[0]
-
-    if (bestMatch.rate > 0.32) {
-      return bestMatch
-    }
-
-    return null
   }
 
   analyzeColumns = (columns, fields) => {

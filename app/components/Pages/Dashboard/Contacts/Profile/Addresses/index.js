@@ -20,12 +20,26 @@ class Addresses extends React.Component {
       'Addresses'
     )
 
+    let defaultLabel = 'Other'
+    let defaultIsPrimary = false
     const addresses = getContactAddresses(props.contact)
+    const normalizedAddresses = getAddresses(addresses, addressAttributeDefs)
+
+    if (normalizedAddresses.length === 0) {
+      defaultLabel = 'Home'
+      defaultIsPrimary = true
+    }
 
     this.state = {
       addresses: [
-        ...getAddresses(addresses, addressAttributeDefs),
-        generateEmptyAddress(addressAttributeDefs, addresses)
+        ...normalizedAddresses,
+        generateEmptyAddress(
+          addressAttributeDefs,
+          addresses,
+          false,
+          defaultLabel,
+          defaultIsPrimary
+        )
       ]
     }
 
@@ -60,13 +74,33 @@ class Addresses extends React.Component {
           address => address.index !== addressIndex
         )
 
-        if (addresses.length > 0) {
+        if (addresses.length > 1) {
           return { addresses }
+        }
+
+        if (addresses.length === 1) {
+          const address = addresses[0]
+
+          return {
+            addresses: [
+              {
+                ...address,
+                is_primary: true,
+                label: address.id ? address.label : 'Home'
+              }
+            ]
+          }
         }
 
         return {
           addresses: [
-            generateEmptyAddress(this.addressAttributeDefs, addresses)
+            generateEmptyAddress(
+              this.addressAttributeDefs,
+              addresses,
+              false,
+              'Home',
+              true
+            )
           ]
         }
       })

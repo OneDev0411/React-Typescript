@@ -1,6 +1,6 @@
 import { isDoubleEnded } from 'deals/utils/get-is-double-ended'
 
-const specialRoles: string[] = [
+export const specialRoles: string[] = [
   'PrimaryAgent',
   'InternalBuyerAgent',
   'ExternalBuyerAgent'

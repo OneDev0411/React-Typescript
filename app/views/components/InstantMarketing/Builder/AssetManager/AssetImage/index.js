@@ -121,15 +121,17 @@ export class AssetImage extends React.Component {
     return (
       <Container>
         <Image src={image} onClick={this.onImageSelect} />
-        <CropButton onClick={this.showCropper}>Crop and Select</CropButton>
+        <CropButton data-test="crop-button" onClick={this.showCropper}>
+          Crop and Select
+        </CropButton>
 
         {this.state.isCropperOpen && (
           <ImageUploader
             disableChangePhoto
             disableRotate
             file={imageWithoutCache}
-            width={targetElement.clientWidth}
-            height={targetElement.clientHeight}
+            width={targetElement.clientWidth * 2}
+            height={targetElement.clientHeight * 2}
             saveHandler={this.onCrop}
             closeHandler={this.closeCropper}
           />
