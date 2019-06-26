@@ -1,6 +1,6 @@
 import { createContact, selectGridRow, deleteContact } from './helpers'
 
-describe('contacts page', () => {
+describe('Contacts grid', () => {
   beforeEach(() => {
     cy.signin()
     cy.visit('/dashboard/contacts')

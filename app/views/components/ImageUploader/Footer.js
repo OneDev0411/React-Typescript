@@ -34,6 +34,7 @@ export default function Footer({
               alignItems: 'center',
               width: '280px'
             }}
+            data-test="crop-zoom-slider"
           >
             <img
               src="/static/icons/image-icon.svg"
