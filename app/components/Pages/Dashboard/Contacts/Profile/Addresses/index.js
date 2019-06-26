@@ -20,9 +20,15 @@ class Addresses extends React.Component {
       'Addresses'
     )
 
+    let defaultLabel = 'Other'
+    let defaultIsPrimary = false
     const addresses = getContactAddresses(props.contact)
     const normalizedAddresses = getAddresses(addresses, addressAttributeDefs)
-    const defaultLabel = normalizedAddresses.length === 0 ? 'Home' : 'Other'
+
+    if (normalizedAddresses.length === 0) {
+      defaultLabel = 'Home'
+      defaultIsPrimary = true
+    }
 
     this.state = {
       addresses: [
@@ -31,7 +37,8 @@ class Addresses extends React.Component {
           addressAttributeDefs,
           addresses,
           false,
-          defaultLabel
+          defaultLabel,
+          defaultIsPrimary
         )
       ]
     }
@@ -78,6 +85,7 @@ class Addresses extends React.Component {
             addresses: [
               {
                 ...address,
+                is_primary: true,
                 label: address.id ? address.label : 'Home'
               }
             ]
@@ -90,7 +98,8 @@ class Addresses extends React.Component {
               this.addressAttributeDefs,
               addresses,
               false,
-              'Home'
+              'Home',
+              true
             )
           ]
         }
