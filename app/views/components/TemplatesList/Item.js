@@ -23,6 +23,7 @@ function Item(props) {
       <div
         className={gridClassNames.join(' ')}
         onClick={() => props.handlePreview(props.template)}
+        data-test="marketing-template"
       >
         <div className="action-bar">
           {props.handleDelete && (
@@ -59,6 +60,7 @@ function Item(props) {
               props.handleCustomize(props.template)
             }}
             isBlock
+            data-test="marketing-customize-button"
           >
             {itemButtonText(props.template)}
           </ActionButton>
