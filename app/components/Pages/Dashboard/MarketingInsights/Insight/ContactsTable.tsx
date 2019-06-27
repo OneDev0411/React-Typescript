@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Table from 'components/Grid/Table'
 import ContactInfo from 'components/ContactInfo'
 
@@ -17,10 +17,18 @@ interface ContactsPropsType {
 }
 
 function ContactsTable(props: ContactsPropsType) {
-  const [itemData, setItemData] = useState(
-    doSort(contactsList(props.item), defaultSort)
-  )
+  const [itemData, setItemData] = useState<ContactsListType[]>([])
   const [sort, setSort] = useState(defaultSort)
+
+  // This is weird? For sure. Seems we have a bug on Grid plugins which
+  // doesn't work properly on first mount, so this is a workaround :(
+  useEffect(
+    function() {
+      const list = doSort(contactsList(props.item), sort)
+      setItemData(list)
+    },
+    [sort]
+  )
 
   const columns = [
     {
@@ -53,11 +61,6 @@ function ContactsTable(props: ContactsPropsType) {
     }
   ]
 
-  function sortHandler({ value }) {
-    setSort(value)
-    setItemData(doSort(itemData, value))
-  }
-
   const sortableColumns = [
     { label: 'Name A-Z', value: SortValues.ALPHABETICAL },
     { label: 'Bounced', value: SortValues.BOUNCED },
@@ -74,7 +77,7 @@ function ContactsTable(props: ContactsPropsType) {
         sortable: {
           columns: sortableColumns,
           defaultIndex: sort,
-          onChange: sortHandler
+          onChange: ({ value }) => setSort(value)
         }
       }}
     />
