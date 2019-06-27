@@ -46,7 +46,7 @@ Cypress is used for end to end testing. A local version of API is used for e2e
 tests which uses a suitable dump of the database as test data.
 
 ### 1. Pre-requisites
-The following requirements should be met on the machine that e2e tests runs.
+The following requirements should be met on the machine that runs e2e tests.
 
 - [docker-compose][docker-compose] should be installed. It's required for 
   running e2e api server.
@@ -60,7 +60,7 @@ up and running.
 
 #### Running e2e API server
 - Ensure `.env` file exists in [/tests/services/api](/tests/services/api) 
-  directory. If [you have heroku installed](#pre-requisites) you can run
+  directory. If [you have heroku installed](#1-pre-requisites) you can run
   `npm run e2e:api:fetch-config` to create/update it.
 - run `npm run e2e:api:start`
 
@@ -97,14 +97,16 @@ npm run test:e2e
 ### Test data
 In each run of the e2e test api server, a clean database is seeded with
 [test-data.sql](/tests/services/db/test-data.sql) file. So tests can freely
-mutate the state of the database without worrying about subsequent runs of the
-tests. In order to update the test data all you need to do is to 
+mutate the state of the database in tests without worrying about subsequent 
+runs of the tests. In order to update the test data all you need to do is to 
 [start e2e servers](#2-setting-up-e2e-test-servers), create the desired state
 via the UI, and then run the following command:
 
 ```bash
 npm run e2e:update-db
 ```
+
+This will update the test-data.sql file in `/tests/services/db/data`.
 
 ### Sandboxing
 Spec-level isolation is provided by means of a custom cypress command: `sandbox`. 
@@ -126,12 +128,16 @@ each other. This enables ability of running multiple test suites **in parallel**
 without flakiness.
 
 ### API image version
-By default, API images with tag `testing` are pulled from the 
+By default, API image with tag `testing` is pulled from the 
 [container registry][container-registry]. This can be changed by setting
 `API_IMAGE_TAG` environment variable when 
 [running e2e api server](#running-e2e-api-server).
 
-You can also update the api image by running:
+This is particularly useful when some branch depends on an specific
+branches of the API. In this case the `e2e:api:start` can be changed to 
+set appropriate value of the `API_IMAGE_TAG` environment variable.
+
+You can also update (pull the latest version of) the api image by running:
 
 ```bash
 npm run e2e:api:update-image
