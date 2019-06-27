@@ -112,9 +112,9 @@ This will update the test-data.sql file in `/tests/services/db/data`.
 Spec-level isolation is provided by means of a custom cypress command: `sandbox`. 
 It's recommended to use it in all test suites this way:
 ```javascript
-  beforeEach(() => {
-    cy.sandbox()
-  })
+beforeEach(() => {
+  cy.sandbox()
+})
 ```
 
 With this command, all http requests are enriched with `x-suite` header equal to
