@@ -77,6 +77,19 @@ export default class Fetch {
       agent.set('Authorization', `Bearer ${user.access_token}`)
     }
 
+    // We currently have problems in using any environment other than development
+    // when we want the server to work in development mode (run webpack in
+    // dev mode and in memory). So we use e2e as a workaround.
+    if (process.env.NODE_ENV === 'ci' || process.env.E2E) {
+      // Without this header, API is partly broken because background jobs
+      // are not handled in the request normally. We need to either run
+      // worker process or send this header. Running worker process didn't work
+      // out for some unknown reason.
+      // more info:
+      // https://rechathq.slack.com/archives/DJ1EYKXCM/p1561551805103700
+      agent.set('x-handle-jobs', 'yes')
+    }
+
     if (brandId) {
       agent.set('X-RECHAT-BRAND', brandId)
     }

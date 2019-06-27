@@ -10,6 +10,7 @@ describe('Contacts saved lists', () => {
   const secondListName = `test-list-${cuid()}`
 
   beforeEach(() => {
+    cy.sandbox()
     cy.signin()
     cy.visit('/dashboard/contacts')
   })
