@@ -10,7 +10,7 @@ declare interface IInsight {
   html: string
   due_at: number
   executed_at: number
-  from: From
+  from: IInsightFrom
   individual: boolean
   accepted: number
   rejected: number
@@ -49,7 +49,7 @@ declare interface IInsightEmail {
   profile_image_url: string | null
 }
 
-interface From {
+interface IInsightFrom {
   type: string
   username: string | null
   first_name: string | null

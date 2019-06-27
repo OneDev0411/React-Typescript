@@ -25,15 +25,15 @@ export function contactsList(item: IInsight): ContactsListType[] {
   }))
 }
 
-export const SortValues = {
-  ALPHABETICAL: 'ALPHABETICAL',
-  BOUNCED: 'BOUNCED',
-  MOST_CLICKED: 'MOST_CLICKED',
-  MOST_OPENED: 'MOST_OPENED',
-  UNSUBSCRIBED: 'UNSUBSCRIBED'
+export enum SortValues {
+  ALPHABETICAL = 'ALPHABETICAL',
+  BOUNCED = 'BOUNCED',
+  MOST_CLICKED = 'MOST_CLICKED',
+  MOST_OPENED = 'MOST_OPENED',
+  UNSUBSCRIBED = 'UNSUBSCRIBED'
 }
 
-export function doSort(list: ContactsListType[], sort_value: string) {
+export function doSort(list: ContactsListType[], sort_value: SortValues) {
   const sort = SortValues[sort_value]
 
   if (sort === SortValues.ALPHABETICAL) {
