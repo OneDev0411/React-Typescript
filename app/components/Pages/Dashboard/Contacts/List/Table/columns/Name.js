@@ -89,6 +89,7 @@ const ContactsListName = ({ contact, attributeDefs }) => {
         }}
       >
         <Link
+          data-test="contact-link"
           to={{
             pathname: `/dashboard/contacts/${contact.id}`,
             state: {
