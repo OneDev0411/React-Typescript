@@ -2,7 +2,6 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 
 import { formatDate } from 'components/DateTimePicker/helpers'
-import Table from 'components/Grid/Table'
 import ContactInfo from 'components/ContactInfo'
 
 import Header from './Header'
@@ -12,44 +11,18 @@ import Loading from '../../../../Partials/Loading'
 
 import { percent } from '../List/helpers'
 
-import { InsightContainer, SummaryCard, ContactColumn } from './styled'
-import { contactsList } from './helpers'
+import { InsightContainer, SummaryCard } from './styled'
 import useItemData from './useItemData'
-import RowBadges from './RowBadges'
 import Summary from './Summary'
+import ContactsTable from './ContactsTable'
 
-const columns = [
-  {
-    header: 'Contact',
-    id: 'contact',
-    width: '75%',
-    verticalAlign: 'center',
-    render: props => (
-      <ContactColumn>
-        <div>
-          <ContactInfo data={props.rowData} />
-        </div>
-        <div className="labels-container">
-          <RowBadges data={props.rowData} />
-        </div>
-      </ContactColumn>
-    )
-  },
-  {
-    header: 'Opened',
-    id: 'opened',
-    verticalAlign: 'center',
-    render: props => <span>{props.rowData.opened}</span>
-  },
-  {
-    header: 'Clicked',
-    id: 'clicked',
-    verticalAlign: 'center',
-    render: props => <span>{props.rowData.clicked}</span>
+interface InsightPropsType {
+  params: {
+    id: string
   }
-]
+}
 
-function Insight(props) {
+function Insight(props: InsightPropsType) {
   const { id } = props.params
 
   const { item, isLoading } = useItemData(id)
@@ -60,6 +33,11 @@ function Insight(props) {
         <Loading />
       </Container>
     )
+  }
+
+  if (!item) {
+    // TODO: Adding a fallback (This useful for when a request failing, or a user doesn't have access to the item.)
+    return null
   }
 
   const totalSent = item.sent
@@ -92,7 +70,7 @@ function Insight(props) {
   if (item.from) {
     sentFrom.profile_image_url = item.from.profile_image_url
     sentFrom.to = item.from.email
-    sentFrom.display_name = item.from.display_name
+    sentFrom.display_name = item.from.display_name || ''
   }
 
   const { subject } = item
@@ -120,7 +98,7 @@ function Insight(props) {
             </SummaryCard>
           </aside>
           <section className="sidebar">
-            <Table data={contactsList(item)} columns={columns} />
+            <ContactsTable item={item} />
           </section>
         </InsightContainer>
       </PageContainer>
