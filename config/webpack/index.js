@@ -29,6 +29,7 @@ const config = {
   globals: {
     'process.env': {
       NODE_ENV: JSON.stringify(env),
+      E2E: JSON.stringify(process.env.E2E),
       APP_URL: JSON.stringify(process.env.APP_URL),
       RECHAT_API_URL: JSON.stringify(process.env.RECHAT_API_URL),
       SOCKET_SERVER: JSON.stringify(process.env.SOCKET_SERVER),

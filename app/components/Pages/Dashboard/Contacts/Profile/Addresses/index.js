@@ -85,8 +85,8 @@ class Addresses extends React.Component {
             addresses: [
               {
                 ...address,
-                is_primary: true,
-                label: address.id ? address.label : 'Home'
+                label: address.id ? address.label : 'Home',
+                is_primary: address.id ? address.is_primary : true
               }
             ]
           }

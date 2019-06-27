@@ -2,12 +2,15 @@ import { createContact, selectGridRow, deleteContact } from './helpers'
 
 describe('Contacts grid', () => {
   beforeEach(() => {
+    cy.sandbox()
     cy.signin()
     cy.visit('/dashboard/contacts')
   })
 
   it('User can create contact', () => {
     createContact({ firstName: 'Paul', lastName: 'Scholes' })
+    cy.visit('/dashboard/contacts')
+    // TODO: check if contact exists
   })
 
   it('User can remove a selected contact and selection should correctly get updated', () => {
