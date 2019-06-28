@@ -19,6 +19,11 @@ export function AutoCompleteInput(props) {
       }}
       onSelect={item => props.mutators && props.mutators.populateRole(item)}
       options={props.options}
+      showHintOnFocus={props.showHintOnFocus}
+      hintMessage={props.hintMessage}
+      hintStyle={{
+        top: '70%'
+      }}
       inputProps={{
         highlightOnError: true
       }}

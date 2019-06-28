@@ -183,7 +183,16 @@ config/private/development.js
 desktop/builds
 dist
 .tmp
-.idea/
+
+!.idea/
+.idea/*
+!.idea/scopes
+!.idea/codeStyles
+!.idea/misc.xml
+!.idea/jsLibraryMappings.xml
+
 yarn.lock
 
-tests/E2E/log
+// cypress
+tests/cypress/screenshots/
+tests/cypress/videos/

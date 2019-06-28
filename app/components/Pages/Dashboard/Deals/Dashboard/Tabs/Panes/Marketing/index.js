@@ -10,8 +10,8 @@ import { MarketingContainer } from './styled'
 export default function MarketingPane(props) {
   return (
     <MarketingContainer>
-      <AgentNetwork deal={props.deal} />
-      <OpenHouse deal={props.deal} user={props.user} />
+      {props.deal.listing && <AgentNetwork deal={props.deal} />}
+      {props.deal.listing && <OpenHouse deal={props.deal} user={props.user} />}
       <EmailMarketing deal={props.deal} user={props.user} />
       <SocialMarketing deal={props.deal} user={props.user} />
     </MarketingContainer>

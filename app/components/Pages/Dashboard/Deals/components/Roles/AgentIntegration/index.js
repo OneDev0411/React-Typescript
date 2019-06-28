@@ -5,7 +5,7 @@ import DealRole from 'components/DealRole'
 
 import { convertContactToRole, AGENT_ROLES } from 'deals/utils/roles'
 
-import AgentModal from './AgentsList'
+import TeamAgents from './TeamAgents'
 
 const initialState = {
   isAgentDrawerOpen: false,
@@ -14,7 +14,7 @@ const initialState = {
   selectedAgent: null
 }
 
-class RoleAgentIntegration extends React.Component {
+export class RoleAgentIntegration extends React.Component {
   state = {
     ...initialState,
     ...this.getInitialState()
@@ -84,40 +84,43 @@ class RoleAgentIntegration extends React.Component {
     )
   }
 
-  onSelectAgent = (user, relatedContacts) => {
+  onSelectAgent = (user, relatedContacts = []) => {
     let newState
+
+    const { agent, first_name, last_name, email, phone_number } = user
+    const { office, work_phone } = agent || {}
 
     /**
      * if there is no related contact for this agent:
      * populate role form with agent data
      */
     if (relatedContacts.length === 0) {
-      let { agent, first_name, last_name, email, phone_number } = user
-      let { office, work_phone } = agent || {}
-
       newState = {
         role: {
+          agent,
           email,
           brand: user.brand_id,
           legal_last_name: last_name,
           legal_first_name: first_name,
           phone_number: phone_number || work_phone,
-          company: office ? office.name : ''
+          company_title: office ? office.name : ''
         },
         isRoleFormOpen: true
       }
     }
 
     if (relatedContacts.length > 0) {
-      let role = convertContactToRole(
-        relatedContacts[0],
-        this.props.attributeDefs
-      )
+      let role = {
+        ...convertContactToRole(relatedContacts[0], this.props.attributeDefs),
+        brand: user.brand_id,
+        phone_number: phone_number || work_phone,
+        company_title: office ? office.name : ''
+      }
 
       if (user.id === this.props.user.id) {
         role = {
           ...role,
-          brand: user.brand_id,
+          agent: user.agent,
           legal_first_name: user.first_name || role.legal_first_name,
           legal_last_name: user.last_name || role.legal_last_name
         }
@@ -140,7 +143,7 @@ class RoleAgentIntegration extends React.Component {
     return (
       <Fragment>
         {this.state.isAgentDrawerOpen && (
-          <AgentModal
+          <TeamAgents
             title={this.props.modalTitle}
             isPrimaryAgent={this.getIsPrimaryAgent()}
             onClose={this.props.onClose}
@@ -164,10 +167,9 @@ class RoleAgentIntegration extends React.Component {
   }
 }
 
-function mapStateToProps({ contacts, user }) {
+function mapStateToProps({ user }) {
   return {
-    user,
-    attributeDefs: contacts.attributeDefs
+    user
   }
 }
 

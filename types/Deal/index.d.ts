@@ -1,6 +1,10 @@
 declare interface IDeal {
   id: UUID
-
+  brand: {
+    id: UUID
+  }
+  deal_type: 'Selling' | 'Buying'
+  checklists: any[]
   roles: IDealRole[]
 }
 

@@ -150,7 +150,11 @@ class SaveSegment extends React.Component {
     return (
       <div>
         {hasFilters && (
-          <Button onClick={this.toggleShowModal} disabled={!areFiltersValid}>
+          <Button
+            data-test="save-list-button"
+            onClick={this.toggleShowModal}
+            disabled={!areFiltersValid}
+          >
             Save List
           </Button>
         )}
@@ -176,12 +180,15 @@ class SaveSegment extends React.Component {
 
               <ItemRow onClick={() => this.changeSelectedOption(NEW_SEGMENT)}>
                 <RadioButton selected={selectedOption === NEW_SEGMENT} />
-                <ItemTitle>Create new list</ItemTitle>
+                <ItemTitle data-test="create-new-list">
+                  Create new list
+                </ItemTitle>
                 <TextInput
                   type="text"
                   value={state.newFilterName}
                   placeholder="Enter new list name"
                   onChange={this.onNewFilterNameChange}
+                  data-test="new-list-name-input"
                 />
               </ItemRow>
             </Modal.Body>
@@ -200,6 +207,7 @@ class SaveSegment extends React.Component {
                 size="small"
                 disabled={!this.canSaveList()}
                 onClick={this.saveList}
+                data-test="save-list-button-modal"
               >
                 {this.getButtonCaption()}
               </Button>

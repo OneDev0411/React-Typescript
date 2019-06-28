@@ -2,6 +2,9 @@ import React from 'react'
 
 import Flex from 'styled-flex-component'
 
+import { getDealTitle } from 'deals/utils/get-deal-title'
+import { getDealAddress } from 'deals/utils/get-deal-address'
+
 import ActionButton from 'components/Button/ActionButton'
 import IconButton from 'components/Button/IconButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
@@ -10,7 +13,7 @@ import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import PdfSplitter from '../../PdfSplitter'
 
-import { MenuContainer, MenuTitle, MenuDivider } from '../styled'
+import { MenuContainer, MenuTitle, MenuSubTitle, MenuDivider } from '../styled'
 
 export class Menu extends React.Component {
   state = {
@@ -28,18 +31,27 @@ export class Menu extends React.Component {
     return (
       <React.Fragment>
         <MenuContainer>
-          <MenuTitle>
-            <TextMiddleTruncate
-              text={props.title}
-              maxLength={50}
-              tooltipPlacement="bottom"
-            />
-          </MenuTitle>
+          <div>
+            <MenuTitle>
+              <TextMiddleTruncate
+                text={props.title}
+                maxLength={50}
+                tooltipPlacement="bottom"
+              />
+            </MenuTitle>
+
+            <MenuSubTitle>
+              {[getDealTitle(props.deal), getDealAddress(props.deal)].join(
+                ', '
+              )}
+            </MenuSubTitle>
+          </div>
 
           <Flex alignCenter>
             <div>
               <ActionButton
                 appearance="outline"
+                size="small"
                 onClick={props.onToggleFactsheet}
               >
                 {props.isFactsheetOpen ? 'Hide' : 'Show'} Factsheet
@@ -48,6 +60,7 @@ export class Menu extends React.Component {
               {props.task && (
                 <ActionButton
                   appearance="outline"
+                  size="small"
                   style={{ marginLeft: '1rem' }}
                   onClick={props.onToggleComments}
                 >
@@ -57,6 +70,7 @@ export class Menu extends React.Component {
 
               {props.file.type === 'pdf' && !props.isEnvelopeView && (
                 <ActionButton
+                  size="small"
                   style={{ marginLeft: '1rem' }}
                   onClick={this.toggleOpenPdfSplitter}
                 >
@@ -68,7 +82,7 @@ export class Menu extends React.Component {
             <MenuDivider />
 
             <IconButton
-              iconSize="XLarge"
+              iconSize="Large"
               inverse
               isFit
               onClick={props.onClickBackButton}

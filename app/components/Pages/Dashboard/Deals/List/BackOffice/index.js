@@ -67,7 +67,6 @@ class BackofficeTable extends React.Component {
             title={params.filter}
             isSideMenuOpen={isSideMenuOpen}
             onMenuTriggerChange={this.toggleSideMenu}
-            showCreateDeal={false}
           />
 
           <GridContainer>

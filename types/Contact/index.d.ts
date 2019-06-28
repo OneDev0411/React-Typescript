@@ -192,7 +192,8 @@ declare interface IContactFilterOptions {
   created_gte?: number
   created_lte?: number
   alphabet?: string
-  crm_task?: UUID[]
+  crm_tasks?: UUID[]
+  flows?: UUID[]
   ids?: UUID[]
   excludes?: UUID[]
   list?: UUID

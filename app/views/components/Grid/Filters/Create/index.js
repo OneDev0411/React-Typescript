@@ -64,6 +64,7 @@ export class AddFilter extends React.Component {
           {({ isOpen, getItemProps }) => (
             <div>
               <AddItem
+                data-test="add-filter"
                 appearance="link"
                 onClick={this.toggleMenu}
                 disabled={disabled}
@@ -81,6 +82,7 @@ export class AddFilter extends React.Component {
                   {config.map((item, index) => (
                     <FilterItemToolTip key={index} item={item}>
                       <ListItem
+                        data-test={`add-filter-item-${item.label}`}
                         {...getItemProps({
                           index,
                           item

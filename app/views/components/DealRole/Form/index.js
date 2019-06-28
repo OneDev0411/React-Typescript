@@ -26,6 +26,8 @@ import { Header, Body, Footer } from '../styled'
 export function FormContainer(props) {
   const isRequired = field => props.requiredFields.includes(field)
   const isVisible = field => props.visibleFields.includes(field)
+  const showSaveContactButton =
+    props.isNewRecord && props.values.email !== props.userEmail
 
   return (
     <Fragment>
@@ -175,6 +177,21 @@ export function FormContainer(props) {
               onDeleteRole={props.onDeleteRole}
             />
           )}
+
+          {props.values.contact && (
+            <Fragment>
+              <LinkButton
+                to={`/dashboard/contacts/${props.values.contact.id}`}
+                target="_blank"
+                style={{
+                  margin: 0,
+                  padding: 0
+                }}
+              >
+                Open Contact Profile
+              </LinkButton>
+            </Fragment>
+          )}
         </Flex>
 
         <Flex alignCenter>
@@ -190,13 +207,13 @@ export function FormContainer(props) {
             <Fragment>
               <ActionButton
                 size="small"
-                appearance={props.isNewRecord ? 'outline' : 'primary'}
+                appearance={showSaveContactButton ? 'outline' : 'primary'}
                 onClick={() => props.onSubmit(props.form, false)}
               >
                 Save
               </ActionButton>
 
-              {props.isNewRecord && (
+              {showSaveContactButton && (
                 <ActionButton
                   size="small"
                   onClick={() => props.onSubmit(props.form, true)}
@@ -204,7 +221,10 @@ export function FormContainer(props) {
                     marginLeft: '0.5rem'
                   }}
                 >
-                  Save & Add to My Contacts
+                  Save &{' '}
+                  {props.values.contact
+                    ? 'Update Contact'
+                    : 'Add to My Contacts'}
                 </ActionButton>
               )}
             </Fragment>

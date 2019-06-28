@@ -2,51 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import _ from 'underscore'
 
-import Deal from '../../../models/Deal'
+import { searchListings } from 'models/Deal/listing'
+
 import Listing from '../../../models/listings/listing'
+import { attachDealDataToListing } from './helpers/attach-deal-to-listing'
 
 import SearchDrawer from '../SearchDrawer'
 import ListingItem from './ListingItem'
-
-function addDealDataToListing(deal, listing) {
-  return {
-    ...listing,
-    price: Deal.get.field(deal, 'list_price') || listing.price,
-    property: {
-      ...listing.property,
-      address: {
-        ...listing.property.address,
-        city: Deal.get.field(deal, 'city') || listing.property.address.city,
-        state: Deal.get.field(deal, 'state') || listing.property.address.state,
-        full_address:
-          Deal.get.field(deal, 'full_address') ||
-          listing.property.address.full_address,
-        street_address:
-          Deal.get.field(deal, 'street_address') ||
-          listing.property.address.street_address,
-        unit_number:
-          Deal.get.field(deal, 'unit_number') ||
-          listing.property.address.unit_number,
-        street_name:
-          Deal.get.field(deal, 'street_name') ||
-          listing.property.address.street_name,
-        street_number:
-          Deal.get.field(deal, 'street_number') ||
-          listing.property.address.street_number,
-        street_suffix:
-          Deal.get.field(deal, 'street_suffix') ||
-          listing.property.address.street_suffix,
-        postal_code:
-          Deal.get.field(deal, 'postal_code') ||
-          listing.property.address.postal_code
-      },
-      list_date: Deal.get.field(deal, 'list_date') || listing.list_date,
-      status: Deal.get.field(deal, 'listing_status') || listing.status,
-      year_built:
-        Deal.get.field(deal, 'year_built') || listing.property.year_built
-    }
-  }
-}
+import getMockListing from './helpers/get-mock-listing'
 
 class SearchListingDrawer extends React.Component {
   state = {
@@ -54,15 +17,14 @@ class SearchListingDrawer extends React.Component {
   }
 
   handleSelectListings = async items => {
+    const { mockListings } = this.props
+
     this.setState({
       isWorking: true
     })
 
     try {
-      const { mockListings } = this.props
-      const mockedMLSData = mockListings
-        ? await import('./mock_listing.json')
-        : null
+      const mockedMLSData = mockListings ? await getMockListing() : null
 
       const listings = await Promise.all(
         _.map(items, item => {
@@ -73,7 +35,7 @@ class SearchListingDrawer extends React.Component {
           const listing = item.type === 'deal' ? item.listing : item.id
 
           if (mockListings && !listing) {
-            return addDealDataToListing(item, mockedMLSData)
+            return attachDealDataToListing(item, mockedMLSData)
           }
 
           return Listing.getListing(listing)
@@ -96,13 +58,15 @@ class SearchListingDrawer extends React.Component {
   })
 
   searchListing = async value => {
-    const response = await Deal.searchListings(value)
+    const response = await searchListings(value)
 
-    return response.filter(
-      item =>
-        item.is_mls_search ||
-        ['Pending', 'Leased', 'Active'].includes(item.status)
-    )
+    return response.filter(item => {
+      if (item.is_mls_search || !this.props.allowedStatuses.length) {
+        return true
+      }
+
+      return this.props.allowedStatuses.includes(item.status)
+    })
   }
 
   render() {
@@ -128,12 +92,14 @@ class SearchListingDrawer extends React.Component {
 
 SearchListingDrawer.propTypes = {
   searchPlaceholder: PropTypes.string,
-  mockListings: PropTypes.bool
+  mockListings: PropTypes.bool,
+  allowedStatuses: PropTypes.array
 }
 
 SearchListingDrawer.defaultProps = {
   searchPlaceholder: 'Enter MLS # or address',
-  mockListings: false
+  mockListings: false,
+  allowedStatuses: []
 }
 
 export default SearchListingDrawer

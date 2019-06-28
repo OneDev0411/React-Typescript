@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link, browserHistory } from 'react-router'
+import { browserHistory } from 'react-router'
 import compose from 'recompose/compose'
 import lifecycle from 'recompose/lifecycle'
 import withState from 'recompose/withState'
@@ -87,14 +87,12 @@ const RegisterForm = ({
               label="First Name"
               tabIndex={0}
               component={SimpleField}
-              autoComplete="off"
             />
             <Field
               name="last_name"
               type="text"
               label="Last Name"
               component={SimpleField}
-              autoComplete="off"
             />
             {phone_number && (
               <Field
@@ -102,7 +100,6 @@ const RegisterForm = ({
                 type="email"
                 label="Email"
                 component={SimpleField}
-                autoComplete="off"
               />
             )}
             <Field
@@ -110,7 +107,7 @@ const RegisterForm = ({
               type="password"
               label="Password"
               component={SimpleField}
-              autoComplete="off"
+              autoComplete="new-password"
             />
             <div className="clearfix" style={{ margin: '0 0 2rem' }}>
               <Field

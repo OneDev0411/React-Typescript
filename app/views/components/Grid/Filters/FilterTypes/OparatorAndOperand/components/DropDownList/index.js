@@ -87,6 +87,7 @@ export class DropDownList extends React.Component {
                     })}
                     onFocus={() => this.setState({ inputFocused: true })}
                     onBlur={() => this.setState({ inputFocused: false })}
+                    data-test="open-filters-list"
                   />
                   {isMenuOpen ? (
                     <IconKeyboardArrowUp />
@@ -97,9 +98,14 @@ export class DropDownList extends React.Component {
               </ItemsContainer>
 
               {isOpen && (
-                <List depth={3} className="u-scrollbar--thinner--self">
+                <List
+                  data-test="filter-items-list"
+                  depth={3}
+                  className="u-scrollbar--thinner--self"
+                >
                   {this.getFilteredOptions(filterValue).map((item, index) => (
                     <Item
+                      data-test={`filter-item-${item.label}`}
                       key={index}
                       {...getItemProps({
                         index,

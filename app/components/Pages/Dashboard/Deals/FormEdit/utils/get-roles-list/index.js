@@ -1,4 +1,4 @@
-import { getAttributeValue } from '../get-roles-text'
+import { getAttributeValue } from '../get-attribute-value'
 
 export function getRolesList({ roles, values, annotation, rectIndex }) {
   if (roles.length === 0) {

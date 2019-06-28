@@ -38,7 +38,8 @@ export default props => {
   const sharedProps = {
     roleType: 'agent',
     dealSide,
-    isPrimaryAgent,
+    // https://gitlab.com/rechat/web/issues/1671#note_184505249
+    isPrimaryAgent: isPrimaryAgent && !props.isBackOffice,
     dealEnderType: props.dealEnderType,
     isDoubleEnded: props.isDoubleEnded,
     isCommissionRequired: props.isCommissionRequired,

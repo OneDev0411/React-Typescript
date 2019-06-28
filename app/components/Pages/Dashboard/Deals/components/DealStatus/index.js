@@ -13,91 +13,23 @@ import { BasicDropdown } from 'components/BasicDropdown'
 import Spinner from 'components/Spinner'
 import { Icon as ArrowIcon } from 'components/Dropdown'
 
-import { getField } from 'models/Deal/helpers/context'
-
+import { getStatusList } from './helpers/get-status-list'
 import { createAdminRequestTask } from '../../utils/create-request-task'
 
 import { DropDownButton, StatusBullet, StatusOption } from './styled'
 
-class DealStatus extends React.Component {
+export class DealStatus extends React.Component {
   state = {
     isSaving: false
   }
 
-  get CanChangeStatus() {
-    return this.props.deal.is_draft === false
-  }
-
-  get IsLease() {
-    return this.props.deal.property_type.includes('Lease')
-  }
-
-  get ListingStatusList() {
-    if (this.IsLease) {
-      return this.props.isBackOffice
-        ? ['Active', 'Temp Off Market', 'Leased', 'Expired', 'Cancelled']
-        : ['Leased']
-    }
-
-    return this.props.isBackOffice
-      ? [
-          'Coming Soon',
-          'Active',
-          'Sold',
-          'Pending',
-          'Temp Off Market',
-          'Active Option Contract',
-          'Active Contingent',
-          'Active Kick Out',
-          'Withdrawn',
-          'Expired',
-          'Cancelled'
-        ]
-      : ['Coming Soon', 'Active']
-  }
-
-  get ContractStatusList() {
-    if (this.IsLease) {
-      return this.props.isBackOffice
-        ? ['Contract Terminated', 'Leased', 'Lease Contract']
-        : ['Lease Contract']
-    }
-
-    return this.props.isBackOffice
-      ? [
-          'Active Option Contract',
-          'Active Contingent',
-          'Active Kick Out',
-          'Pending',
-          'Sold',
-          'Contract Terminated'
-        ]
-      : [
-          'Active Option Contract',
-          'Active Contingent',
-          'Active Kick Out',
-          'Pending',
-          'Sold'
-        ]
-  }
-
-  getStatusList() {
-    if (getField(this.props.deal, 'contract_status')) {
-      return this.ContractStatusList
-    }
-
-    return this.ListingStatusList
-  }
-
   get StatusOptions() {
-    return this.getStatusList().map(statusName => ({
-      label: statusName,
-      value: statusName
-    }))
-  }
-
-  get CurrentStatus() {
-    return Deal.get.status(this.props.deal)
+    return getStatusList(this.props.deal, this.props.isBackOffice).map(
+      statusName => ({
+        label: statusName,
+        value: statusName
+      })
+    )
   }
 
   /**
@@ -151,11 +83,11 @@ class DealStatus extends React.Component {
   }
 
   render() {
-    if (this.CanChangeStatus === false) {
+    if (this.props.deal.is_draft) {
       return false
     }
 
-    const dealStatus = this.CurrentStatus
+    const dealStatus = Deal.get.status(this.props.deal)
 
     return (
       <BasicDropdown

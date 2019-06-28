@@ -10,6 +10,8 @@ import InstantMarketing from 'components/InstantMarketing'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
+import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
+import { attachDealDataToListing } from 'components/SearchListingDrawer/helpers/attach-deal-to-listing'
 
 import SocialDrawer from '../../components/SocialDrawer'
 import { getTemplateTypes } from '../../helpers/get-template-types'
@@ -124,12 +126,14 @@ class SendDealPromotion extends React.Component {
 
     let listing = {}
 
-    if (deal.listing) {
-      try {
+    try {
+      if (deal.listing) {
         listing = await Listing.getListing(deal.listing)
-      } catch (e) {
-        console.log(e)
+      } else {
+        listing = attachDealDataToListing(deal, await getMockListing())
       }
+    } catch (e) {
+      console.log(e)
     }
 
     this.setState({

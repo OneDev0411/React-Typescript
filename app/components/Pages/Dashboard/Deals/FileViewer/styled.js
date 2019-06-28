@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { borderColor } from 'views/utils/colors'
+import { borderColor, grey } from 'views/utils/colors'
 
 import { Container, Menu, Content } from 'components/SlideMenu'
 
@@ -55,10 +55,15 @@ export const MenuContainer = styled.div`
 `
 
 export const MenuTitle = styled.div`
-  font-size: 2rem;
+  font-size: 1.3rem;
   font-weight: bold;
   line-height: 1.25;
   color: #000;
+`
+
+export const MenuSubTitle = styled.div`
+  font-size: 1.1rem;
+  color: ${grey.A900};
 `
 
 export const MenuDivider = styled.div`

@@ -16,7 +16,12 @@ export class CreateContact extends React.Component {
   render() {
     return (
       <Fragment>
-        <ActionButton onClick={this.handleOpen}>Create Contact</ActionButton>
+        <ActionButton
+          data-test="create-contact-button"
+          onClick={this.handleOpen}
+        >
+          Create Contact
+        </ActionButton>
 
         <NewContactDrawer
           isOpen={this.state.isOpen}

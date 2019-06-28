@@ -42,10 +42,11 @@ function Item(props) {
         isDeleting={props.isDeleting}
         isSelected={selected}
         onClick={onSelect}
+        data-test={`contact-list-${item.name}`}
       >
         <ListItemName>{uppercaseFirstLetter(name)}</ListItemName>
         {item.is_editable && (
-          <DeleteButton onClick={onDelete} isFit>
+          <DeleteButton data-test="delete-list" onClick={onDelete} isFit>
             <IconClose />
           </DeleteButton>
         )}

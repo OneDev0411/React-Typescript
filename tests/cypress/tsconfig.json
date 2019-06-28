@@ -1,0 +1,27 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": ".",
+    "moduleResolution": "node",
+    "target": "esnext",
+    "allowJs": true,
+    "isolatedModules": false,
+    "module": "esnext",
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "types": [
+      "cypress"
+    ],
+    "paths": {
+      "helpers/*": [
+        "integration/helpers/*"
+      ]
+    }
+  },
+  "include": [
+    "**/*.ts"
+  ]
+}

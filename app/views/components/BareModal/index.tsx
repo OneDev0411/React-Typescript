@@ -2,7 +2,9 @@ import React, { ReactNode } from 'react'
 import ReactModal, { Props as ReactModalProps } from 'react-modal'
 import cn from 'classnames'
 
-ReactModal.setAppElement('#app')
+if (process.env.NODE_ENV !== 'ci') {
+  ReactModal.setAppElement('#app')
+}
 
 interface Props extends ReactModalProps {
   autoHeight?: boolean
@@ -33,6 +35,7 @@ export default function BareModal({
       {...modalProps}
       className={classes}
       overlayClassName={`c-modal__overlay ${overlayClassName || ''}`}
+      data-test="dialog"
     >
       {children}
     </ReactModal>

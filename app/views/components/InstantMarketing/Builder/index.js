@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
@@ -33,6 +33,9 @@ import {
   Header,
   Divider
 } from './styled'
+
+import SocialActions from './SocialActions'
+import { SOCIAL_NETWORKS } from './constants'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -77,12 +80,19 @@ class Builder extends React.Component {
     this.editor.on('load', this.setupGrapesJs)
   }
 
+  componentWillUnmount() {
+    const iframe = this.editor.Canvas.getBody()
+
+    iframe.removeEventListener('paste', this.iframePasteHandler)
+  }
+
   setupGrapesJs = () => {
     this.lockIn()
     this.disableResize()
     this.singleClickTextEditing()
     this.disableAssetManager()
     this.makeTemplateCentered()
+    this.removeTextStylesOnPaste()
 
     if (this.IsVideoTemplate) {
       this.grapes.appendChild(this.videoToolbar)
@@ -133,6 +143,24 @@ class Builder extends React.Component {
     iframe.contentDocument.head.appendChild(style)
   }
 
+  removeTextStylesOnPaste = () => {
+    const iframe = this.editor.Canvas.getBody()
+
+    iframe.addEventListener('paste', this.iframePasteHandler)
+  }
+
+  iframePasteHandler = ev => {
+    if (!ev.target.contentEditable) {
+      return
+    }
+
+    ev.preventDefault()
+
+    const text = ev.clipboardData.getData('text')
+
+    ev.target.ownerDocument.execCommand('insertText', false, text)
+  }
+
   disableResize = () => {
     const components = this.editor.DomComponents
 
@@ -153,7 +181,9 @@ class Builder extends React.Component {
   }
 
   lockIn = () => {
-    const updateAll = (model, selectImage = false) => {
+    let shouldSelectImage = true
+
+    const updateAll = model => {
       const editable =
         model && model.view && model.view.$el.attr('rechat-editable')
 
@@ -174,21 +204,20 @@ class Builder extends React.Component {
         traits: this.traits[model.get('type')] || []
       })
 
-      let shouldSelectImage = selectImage
-
       if (
         shouldSelectImage &&
-        editable &&
         model.view.$el.attr('rechat-assets') === 'listing-image'
       ) {
-        this.editor.select(model)
         shouldSelectImage = false
+        this.editor.select(model)
       }
 
-      model.get('components').each(model => updateAll(model, shouldSelectImage))
+      model.get('components').each(model => {
+        updateAll(model, shouldSelectImage)
+      })
     }
 
-    updateAll(this.editor.DomComponents.getWrapper(), true)
+    updateAll(this.editor.DomComponents.getWrapper())
   }
 
   getSavedTemplate() {
@@ -311,6 +340,18 @@ class Builder extends React.Component {
       }))
   }
 
+  get socialNetworks() {
+    if (!this.state.selectedTemplate) {
+      return []
+    }
+
+    if (this.state.selectedTemplate.medium === 'LinkedInCover') {
+      return SOCIAL_NETWORKS.filter(({ name }) => name === 'LinkedIn')
+    }
+
+    return SOCIAL_NETWORKS.filter(({ name }) => name !== 'LinkedIn')
+  }
+
   renderAgentPickerButton = buttonProps => (
     <DropButton
       {...buttonProps}
@@ -349,6 +390,7 @@ class Builder extends React.Component {
     }
 
     const isSocialMedium = this.IsSocialMedium
+    const socialNetworks = this.socialNetworks
 
     return (
       <Portal root="marketing-center">
@@ -382,34 +424,10 @@ class Builder extends React.Component {
               )}
 
               {this.state.selectedTemplate && isSocialMedium && (
-                <Fragment>
-                  <ActionButton
-                    onClick={() => this.handleSocialSharing('Instagram')}
-                  >
-                    <i
-                      className="fa fa-instagram"
-                      style={{
-                        fontSize: '1.5rem',
-                        marginRight: '0.5rem'
-                      }}
-                    />
-                    Post to Instagram
-                  </ActionButton>
-
-                  <ActionButton
-                    style={{ marginLeft: '0.5rem' }}
-                    onClick={() => this.handleSocialSharing('Facebook')}
-                  >
-                    <i
-                      className="fa fa-facebook-square"
-                      style={{
-                        fontSize: '1.5rem',
-                        marginRight: '0.5rem'
-                      }}
-                    />
-                    Post to Facebook
-                  </ActionButton>
-                </Fragment>
+                <SocialActions
+                  networks={socialNetworks}
+                  onClick={this.handleSocialSharing}
+                />
               )}
 
               {this.state.selectedTemplate && !isSocialMedium && (

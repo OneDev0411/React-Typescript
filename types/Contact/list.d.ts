@@ -7,16 +7,23 @@ declare interface IContactListInput {
   touch_freq?: number
 }
 
+type IContactListArgs = Pick<
+  IContactFilterOptions,
+  'filter_type' | 'crm_tasks' | 'flows' | 'q' | 'type'
+>
+
 declare interface IContactList {
   id: UUID
   deleted_at?: number
 
   name: string
-  filters: IContactAttributeFilter[]
+  filters?: IContactAttributeFilter[]
   query?: string
-  args: Pick<IContactFilterOptions, 'filter_type'>
+  args: IContactListArgs
   is_editable: boolean
   touch_freq?: number
+  flows: any[] | null // fixme: update types when IFlow added
+  crm_tasks: any[] | null // fixme: update types when ICrmTask added
 
   member_count: number
 

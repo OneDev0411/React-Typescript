@@ -175,6 +175,8 @@ export default normalizeConditions([
         primary: true
       },
       ...sharedActions,
+      [VIEW_BUTTON]: {},
+      [DOCUSIGN_BUTTON]: {},
       [UPLOAD_BUTTON]: {}
     }
   },

@@ -32,10 +32,15 @@ class Signature extends React.Component {
   handleSubmit = async values => {
     const formData = this.state.formData || values
 
-    const attachments = _.map(formData.attachments, attachment => ({
-      revision: attachment.revision,
-      file: attachment.file_id
-    }))
+    const attachments = _.map(formData.attachments, attachment => {
+      return attachment.type === 'form'
+        ? {
+            task: attachment.task_id
+          }
+        : {
+            file: attachment.file_id
+          }
+    })
 
     const recipients = _.map(formData.recipients, recipient => ({
       role: recipient.id,

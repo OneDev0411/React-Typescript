@@ -142,6 +142,7 @@ export default function DealAddress(props) {
         isOpen={showMlsDrawer}
         title="Address"
         searchPlaceholder="Enter MLS# or an address"
+        allowedStatuses={['Pending', 'Leased', 'Active']}
         onSelectListings={handleSelectListing}
         onClose={toggleMlsDrawer}
       />

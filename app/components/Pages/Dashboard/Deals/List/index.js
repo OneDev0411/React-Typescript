@@ -7,13 +7,13 @@ import BackOfficeTable from './BackOffice'
 import { isBackOffice } from '../../../../../utils/user-teams'
 
 const List = ({ isBackOffice, ...rest }) => (
-  <React.Fragment>
+  <div data-test="deals-list">
     <Helmet>
       <title>Deals | Rechat</title>
     </Helmet>
 
     {isBackOffice ? <BackOfficeTable {...rest} /> : <AgentTable {...rest} />}
-  </React.Fragment>
+  </div>
 )
 
 function mapStateToProps({ user }) {

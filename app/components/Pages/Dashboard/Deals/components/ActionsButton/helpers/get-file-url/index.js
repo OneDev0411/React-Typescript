@@ -29,14 +29,26 @@ function normalizeFile(file) {
   }
 }
 
+function normalizeSubmissionFile(task) {
+  const file = task.submission
+    ? task.submission.file
+    : {
+        id: task.id,
+        name: task.title,
+        mime: 'application/pdf',
+        date: task.created_at
+      }
+
+  return normalizeFile({
+    ...file,
+    url: task.pdf_url
+  })
+}
+
 /**
  *
  */
 function getSubmissionUrl(data) {
-  if (!data.task.submission) {
-    return []
-  }
-
   let url = `/dashboard/deals/${data.deal.id}/view/${data.task.id}`
   const submissionEnvelopes = getDocumentEnvelopes(
     data.envelopes,
@@ -45,7 +57,7 @@ function getSubmissionUrl(data) {
 
   if (submissionEnvelopes.length > 0) {
     return submissionEnvelopes.map(envelope => ({
-      ...normalizeFile(data.task.submission.file),
+      ...normalizeSubmissionFile(data.task),
       name: `Docusign: ${envelope.title}`,
       url: getEnvelopeFileUrl(envelope, data.task),
       openInNewTab: true
@@ -55,11 +67,11 @@ function getSubmissionUrl(data) {
   return data.isBackOffice
     ? [
         {
-          ...normalizeFile(data.task.submission.file),
+          ...normalizeSubmissionFile(data.task),
           url
         }
       ]
-    : [normalizeFile(data.task.submission.file)]
+    : [normalizeSubmissionFile(data.task)]
 }
 
 /**

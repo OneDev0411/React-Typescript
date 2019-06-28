@@ -1,9 +1,8 @@
 import React, { Fragment } from 'react'
 import Flex from 'styled-flex-component'
-
 import { Link } from 'react-router'
 
-import { getField } from 'models/Deal/helpers/context/get-field'
+import { getDealAddress } from 'deals/utils/get-deal-address'
 
 import { ListingImage } from './Image'
 import MlsConnect from './MlsConnect'
@@ -14,19 +13,8 @@ import Address from './Address'
 import { Divider } from '../styled'
 
 export function ListingInfo(props) {
-  const getAddress = () => {
-    const city = getField(props.deal, 'city') || ''
-    const state = getField(props.deal, 'state') || ''
-    const zipcode = getField(props.deal, 'postal_code') || ''
 
-    if (!city && !state && !zipcode) {
-      return ''
-    }
-
-    return `${city}, ${state} ${zipcode}`
-  }
-
-  const address = getAddress(props.deal)
+  const address = getDealAddress(props.deal)
 
   return (
     <React.Fragment>

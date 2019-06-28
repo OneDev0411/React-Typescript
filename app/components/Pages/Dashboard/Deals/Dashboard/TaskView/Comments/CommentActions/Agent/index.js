@@ -29,7 +29,7 @@ class Agent extends React.Component {
         'Your pending Notify Office request will be canceled for this task',
       confirmLabel: 'Yes, cancel',
       cancelLabel: 'No',
-      onConfirm: () => this.props.onSendComment(false)
+      onConfirm: () => this.props.onSendComment(false, 'Incomplete')
     })
 
   render() {

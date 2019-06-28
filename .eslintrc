@@ -25,6 +25,15 @@
   ],
   "settings": {
     "import/resolver": {
+      "node": {
+        "import/extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx",
+          ".json"
+        ]
+      },
       "webpack": {}
     }
   },
@@ -277,17 +286,33 @@
   },
   "overrides": [
     {
-      "files": ["**/*.ts", "**/*.tsx"],
+      "files": [
+        "**/*.ts",
+        "**/*.tsx"
+      ],
       "rules": {
-        "no-unused-vars": ["off"],
-        "no-undef": ["off"],
-        "@typescript-eslint/no-unused-vars": [2, { "args": "none" }]
+        "no-unused-vars": [
+          "off"
+        ],
+        "no-undef": [
+          "off"
+        ],
+        "@typescript-eslint/no-unused-vars": [
+          2,
+          {
+            "args": "none"
+          }
+        ]
       }
     },
     {
-      "files": ["**/*.d.ts"],
+      "files": [
+        "**/*.d.ts"
+      ],
       "rules": {
-        "react/no-multi-comp": ["off"]
+        "react/no-multi-comp": [
+          "off"
+        ]
       }
     }
   ]

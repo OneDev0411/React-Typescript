@@ -1,7 +1,10 @@
-import { changeNeedsAttention } from 'actions/deals'
+import store from 'store'
 
-import store from '../../../../../../../../../stores'
+import { changeNeedsAttention, changeTaskStatus } from 'actions/deals'
 
 export async function removeTaskNotification(props) {
-  store.dispatch(changeNeedsAttention(props.deal.id, props.task.id, false))
+  await store.dispatch(changeTaskStatus(props.task.id, 'Incomplete'))
+  await store.dispatch(
+    changeNeedsAttention(props.deal.id, props.task.id, false)
+  )
 }

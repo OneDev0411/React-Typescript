@@ -37,12 +37,7 @@ export const Icon = styled(IconTime)`
   margin-right: 0.5rem;
 `
 
-export const Input = styled.input.attrs({
-  type: 'number',
-  step: '1',
-  min: '0',
-  max: '99999'
-})`
+export const Input = styled.input`
   outline: none;
   border: none;
   border-bottom: 1px solid ${borderColor};
@@ -52,10 +47,4 @@ export const Input = styled.input.attrs({
   color: ${primary};
   width: 3rem;
   margin: 0 0.5rem;
-
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
 `

@@ -49,7 +49,7 @@ export class DateField extends React.Component {
     const display = 'flex'
 
     return (
-      <Flex>
+      <Flex data-test="date-field">
         <BasicDropdown
           items={monthsItems}
           onChange={props.onChangeMonth}
@@ -67,7 +67,7 @@ export class DateField extends React.Component {
         {props.showYear ? (
           <Input
             type="text"
-            autoComplete="off"
+            autoComplete="disabled"
             placeholder="Year"
             maxLength="4"
             onChange={this.onChangeYear}

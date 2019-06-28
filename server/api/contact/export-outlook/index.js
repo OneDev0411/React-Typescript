@@ -76,13 +76,7 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
       usersString = `&users[]=${users.join('&users[]=')}`
     }
 
-    let url
-
-    if (type === 'same') {
-      url = `/analytics/contact_joint_export/facts?filter_type=${filter_type}&format=csv`
-    } else if (type === 'separate') {
-      url = `/analytics/contact_export/facts?filter_type=${filter_type}&format=csv`
-    }
+    const url = `/analytics/${type}/facts?filter_type=${filter_type}&format=csv`
 
     const response = await ctx
       .fetch(`${url}${usersString}`, 'POST')

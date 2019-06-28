@@ -1,0 +1,56 @@
+version: '3.1'
+services:
+
+  # Redis which is used by API
+  redis:
+    container_name: e2e_redis
+    image: "redis:alpine"
+    ports:
+      - '6379:6379'
+
+  # Database with initial seed
+  postgres:
+    container_name: e2e_postgres
+    build: db
+    logging:
+      driver: none
+    environment:
+      POSTGRES_DB: 'rechat'
+      POSTGRES_USER: 'rechat'
+      POSTGRES_PASSWORD: 'rechat'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rechat"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+    ports:
+      - '5432:5432'
+
+  # Api server from the latest image pushed to gitlab registry
+  api:
+    container_name: e2e_api
+    image: "registry.gitlab.com/rechat/server:${API_IMAGE_TAG:-testing}"
+
+     # uncomment the line above and set the path to server repo if you want to
+     # create image from your local version of the api.
+#    build: ../../../server
+
+    # Wait for database service (postgres) to be up and running.
+    # Note that depends_on is not enough (https://stackoverflow.com/a/52699978)
+    restart: on-failure:5
+
+    env_file:
+      - api/.env # Necessary configuration, copied from rechat-boer app in Heroku
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=postgres://rechat:rechat@postgres/rechat
+      - MSGRAPH_REDIRECT_URL= # production value doesn't work for some reason
+
+    # this command runs api server in a mode which accepts x-suite header
+    command: node ./tests/functional/run --curl --keep authorize
+    depends_on:
+      - redis
+      - postgres
+    ports:
+      - '3079:3079'
+      - '3078:3078'

@@ -16,7 +16,7 @@ import { selectDealRoles } from 'reducers/deals/roles'
 
 import DealRole from 'components/DealRole'
 
-import TeamAgents from './AgentIntegration/AgentsList'
+import TeamAgents from './AgentIntegration/TeamAgents'
 
 import { roleName, getLegalFullName, isPrimaryAgent } from '../../utils/roles'
 import { getAvatarTitle } from '../../utils/get-avatar-title'
@@ -151,6 +151,7 @@ class Roles extends React.Component {
         {this.props.roles
           .filter(
             role =>
+              role &&
               this.props.filter(role) &&
               (!this.props.allowedRoles ||
                 this.props.allowedRoles.includes(role.role))

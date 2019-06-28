@@ -17,13 +17,6 @@ export const InputLabel = styled.label<{ hasError?: boolean }>`
   color: ${props => (props.hasError ? 'red' : '#7f7f7f')};
   font-weight: ${props => (props.hasError ? '500' : 'normal')};
 `
-
-export const InputError = styled.div<{ display?: boolean }>`
-  color: ${red.A100};
-  font-size: 0.75rem;
-  opacity: ${props => (props.display ? 1 : 0)};
-`
-
 export const InputRequired = styled.span`
   color: ${red.A100};
   font-size: 1rem;

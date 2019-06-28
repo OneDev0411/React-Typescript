@@ -1,22 +1,12 @@
-import styled from "styled-components"
 import React from 'react'
 import { connect } from 'react-redux'
 import IntercomSDK from 'react-intercom'
 
 import { inactiveIntercom } from '../../../../../store_actions/intercom'
 
-import IconButton from '../../../../../views/components/Button/IconButton'
 import IconClose from '../../../../../views/components/SvgIcons/Close/CloseIcon'
 
-const Button = styled(IconButton)`
-  width: 48px;
-  height: 48px;
-  position: fixed;
-  right: 2em;
-  bottom: 2em;
-  z-index: 3860017101;
-  border-radius: 100%;
-`
+import { Button, GlobalIntercomStyles } from './styled'
 
 const Intercom = ({ user, intercomIsActive, inactiveIntercom }) => {
   const getUserInfo =
@@ -30,14 +20,26 @@ const Intercom = ({ user, intercomIsActive, inactiveIntercom }) => {
 
   return (
     <div>
+      <GlobalIntercomStyles />
       {window.INTERCOM_ID && (
-        <IntercomSDK appID={window.INTERCOM_ID} {...getUserInfo} />
+        <IntercomSDK
+          appID={window.INTERCOM_ID}
+          alignment="left"
+          horizontal_padding={8}
+          vertical_padding={0}
+          custom_launcher_selector=".open_intercom"
+          {...getUserInfo}
+        />
       )}
-      {intercomIsActive && (
-        <Button title="Close" appearance="primary" onClick={inactiveIntercom}>
-          <IconClose />
-        </Button>
-      )}
+      <Button
+        title="Close"
+        className="open_intercom"
+        appearance="primary"
+        onClick={inactiveIntercom}
+        isShow={intercomIsActive}
+      >
+        <IconClose />
+      </Button>
     </div>
   )
 }
