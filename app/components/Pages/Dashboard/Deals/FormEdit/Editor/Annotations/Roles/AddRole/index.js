@@ -39,7 +39,7 @@ export function AddRole(props) {
     props.tooltip || `Add new ${props.annotation.role.join(' or ')}`
 
   const handleClick = () => {
-    if (!isSingularRole && props.isEmpty) {
+    if (!isSingularRole) {
       setShowRoles(!showRolesList)
 
       return
@@ -50,6 +50,7 @@ export function AddRole(props) {
 
   const handleUpsertRole = role => {
     setShowRoles(false)
+
     props.onUpsertRole(role)
   }
 
@@ -75,6 +76,7 @@ export function AddRole(props) {
             filter={role => props.annotation.role.includes(role.role)}
             allowedRoles={props.annotation.role}
             onUpsertRole={handleUpsertRole}
+            onCreateRole={handleUpsertRole}
           />
         </RolesList>
       )}
