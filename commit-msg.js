@@ -2,12 +2,10 @@
 
 const fs = require('fs')
 
-const ISSUE_NUMBER_MIN_LENGTH = 3
-
 const [, , COMMIT_MESSAGE_FILE, BRANCH_NAME] = process.argv
 
 function getIssueNumber(branchName) {
-  const match = branchName.match(new RegExp(`\d{${ISSUE_NUMBER_MIN_LENGTH},}`))
+  const match = branchName.match(/\d{3,}/)
 
   if (match && match.length) {
     return `#${match[0]} `
