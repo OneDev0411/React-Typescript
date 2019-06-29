@@ -360,7 +360,7 @@ export class DealRole extends React.Component {
       <BareModal
         isOpen
         style={{
-          content: { top: '45%', height: 'auto', overflow: 'initial' }
+          content: { top: '40%', height: 'auto', overflow: 'initial' }
         }}
       >
         <Form

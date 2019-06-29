@@ -11,6 +11,14 @@ import {
 import { Input } from './styled'
 import { FieldError } from '../../../../final-form-fields/FieldError'
 
+function getInitialAddress(input) {
+  const { value } = input
+
+  return value && typeof value === 'object' && value.hasOwnProperty('full')
+    ? value.full
+    : value
+}
+
 export function Address(props) {
   if (!props.isVisible) {
     return false
@@ -26,9 +34,10 @@ export function Address(props) {
 
       <InlineAddressField
         key={props.name}
-        address={props.input.value}
-        needsAddressForm={false}
-        handleInputChange={props.input.onChange}
+        address={getInitialAddress(props.input)}
+        needsAddressForm={props.needsAddressForm || false}
+        // handleInputChange={props.input.onChange}
+        handleSubmit={props.input.onChange}
         renderSearchField={inputProps => (
           <Input {...inputProps} autoComplete="disable-autocomplete" />
         )}

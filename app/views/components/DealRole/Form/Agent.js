@@ -140,7 +140,6 @@ export function AgentForm(props) {
             name="current_address"
             label="Current Address"
             isVisible={isVisible('current_address')}
-            value={props.values.current_address}
             component={Address}
             style={{ flex: 5, marginRight: '0.5rem' }}
           />
@@ -149,7 +148,6 @@ export function AgentForm(props) {
             name="future_address"
             label="Future Address"
             isVisible={isVisible('future_address')}
-            value={props.values.future_address}
             component={Address}
             style={{ flex: 5 }}
           />

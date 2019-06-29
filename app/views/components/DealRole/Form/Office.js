@@ -6,6 +6,8 @@ import LinkButton from 'components/Button/LinkButton'
 
 import { TextInput } from 'components/Forms/TextInput'
 
+import { Address } from './form-fields/Address'
+
 import Field from '../components/CustomField'
 
 import { Body, Footer, OfficeTitle } from '../styled'
@@ -66,9 +68,11 @@ export function OfficeForm(props) {
 
         <Flex style={{ marginTop: '1rem' }}>
           <Field
+            isVisible
             label="Office Address"
             name="office_address"
-            component={TextInput}
+            needsAddressForm
+            component={Address}
             style={{ flex: 1 }}
           />
         </Flex>
