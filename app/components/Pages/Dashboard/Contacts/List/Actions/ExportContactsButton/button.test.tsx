@@ -8,7 +8,7 @@ import ExportButton from './button'
 describe('ExportContactsButton inner button component', () => {
   it('renders', () => {
     const wrapper = shallow(
-      <ExportButton disabled={false} onExportClick={() => null} />
+      <ExportButton disabled={false} onExportClick={jest.fn()} />
     )
 
     expect(toJson(wrapper)).toMatchSnapshot()
@@ -16,7 +16,7 @@ describe('ExportContactsButton inner button component', () => {
 
   it('renders with proper items prop', () => {
     const wrapper = shallow(
-      <ExportButton disabled={false} onExportClick={() => null} />
+      <ExportButton disabled={false} onExportClick={jest.fn()} />
     )
 
     expect(wrapper.prop('items')).toBe(DOWNLOAD_TYPES_DROPDOWN_ITEMS)
