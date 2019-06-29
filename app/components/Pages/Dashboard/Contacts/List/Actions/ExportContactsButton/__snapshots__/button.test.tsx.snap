@@ -135,7 +135,7 @@ exports[`ExportContactsButton inner button component renders 1`] = `
           "warnTooManyClasses": [Function],
           "withComponent": [Function],
         },
-        "title": "Export For E-mail",
+        "title": "Export For Email",
         "type": "contact_email_export",
       },
       Object {
