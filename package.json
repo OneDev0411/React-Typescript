@@ -29,6 +29,7 @@
     "e2e:update-db": "docker exec e2e_postgres pg_dump --clean --if-exists -U rechat rechat > tests/services/db/data/test-data.sql",
     "test:e2e": "cypress run --browser chrome",
     "test:unit": "NODE_ENV=ci jest",
+    "test:update-snapshots": "npm run test:unit -- -u",
     "test:ci": "npm run test:unit && npm run test:e2e",
     "test": "jest --watch",
     "cypress": "cypress open"
