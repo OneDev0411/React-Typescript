@@ -46,8 +46,8 @@ deploy_alpha:
   script:
     - dpl --provider=heroku --app=rechat-web-alpha --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
   environment:
-    name: irish
-    url: https://irish.rechat.com
+    name: alpha
+    url: https://alpha.rechat.com
   only:
   - alpha
 
@@ -76,8 +76,8 @@ deploy_production:
   script:
     - dpl --provider=heroku --app=rechat-web --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
   environment:
-    name: irish
-    url: https://irish.rechat.com
+    name: production
+    url: https://rechat.com
   when: manual
   only:
   - master
