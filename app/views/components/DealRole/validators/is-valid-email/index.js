@@ -1,8 +1,8 @@
 /**
  * validate email
  */
-export function isValidEmail(email, requiredFields) {
-  if (!email && !requiredFields.includes('email')) {
+export function isValidEmail(email, requiredFields, fieldName) {
+  if (!email && !requiredFields.includes(fieldName)) {
     return true
   }
 
