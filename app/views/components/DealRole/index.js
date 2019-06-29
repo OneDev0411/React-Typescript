@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
@@ -19,7 +19,8 @@ import {
   getContactChangedAttributes
 } from 'deals/utils/roles'
 
-import { FormContainer } from './Form'
+import { AgentForm } from './Form/Agent'
+import { OfficeForm } from './Form/Office'
 
 import { TYPE_PERSON } from './constants/role-types'
 
@@ -38,6 +39,7 @@ const propTypes = {
   container: PropTypes.oneOf(['Modal', 'Inline']),
   isRoleRemovable: PropTypes.bool,
   isCommissionRequired: PropTypes.bool,
+  showBrokerageFields: PropTypes.bool,
   onUpsertRole: PropTypes.func,
   onDeleteRole: PropTypes.func
 }
@@ -47,6 +49,7 @@ const defaultProps = {
   container: 'Modal',
   isRoleRemovable: false,
   isCommissionRequired: true,
+  showBrokerageFields: false,
   allowedRoles: [],
   onUpsertRole: () => null,
   onDeleteRole: () => null
@@ -80,7 +83,7 @@ export class DealRole extends React.Component {
     return this.formObject
   }
 
-  getRoleType() {
+  getRoleType = () => {
     const { form } = this.props
 
     if (form && form.role_type) {
@@ -372,22 +375,32 @@ export class DealRole extends React.Component {
               formProps.values
             )
 
+            const sharedProps = {
+              ...formProps,
+              deal: this.props.deal,
+              isSubmitting: this.state.isSaving,
+              onSubmit: this.handleSubmit,
+              onClose: this.handleClose
+            }
+
             return (
-              <FormContainer
-                {...formProps}
-                isSubmitting={this.state.isSaving}
-                isNewRecord={this.isNewRecord}
-                isRoleRemovable={this.props.isRoleRemovable}
-                deal={this.props.deal}
-                formObject={this.formObject}
-                requiredFields={requiredFields}
-                visibleFields={visibleFields}
-                isAllowedRole={this.isAllowedRole}
-                userEmail={this.props.user.email}
-                onDeleteRole={this.handleDeleteRole}
-                onSubmit={this.handleSubmit}
-                onClose={this.handleClose}
-              />
+              <Fragment>
+                {this.props.showBrokerageFields ? (
+                  <OfficeForm {...sharedProps} />
+                ) : (
+                  <AgentForm
+                    {...sharedProps}
+                    isNewRecord={this.isNewRecord}
+                    isRoleRemovable={this.props.isRoleRemovable}
+                    formObject={this.formObject}
+                    requiredFields={requiredFields}
+                    visibleFields={visibleFields}
+                    isAllowedRole={this.isAllowedRole}
+                    userEmail={this.props.user.email}
+                    onDeleteRole={this.handleDeleteRole}
+                  />
+                )}
+              </Fragment>
             )
           }}
         />

@@ -31,7 +31,13 @@ export function normalizeForm(values) {
     'current_address',
     'parsed_current_address',
     'future_address',
-    'parsed_future_address'
+    'parsed_future_address',
+    'office_email',
+    'office_fax',
+    'office_license_number',
+    'office_mls_id',
+    'office_name',
+    'office_address'
   ]
 
   if (values.agent instanceof Object && values.agent.id) {
