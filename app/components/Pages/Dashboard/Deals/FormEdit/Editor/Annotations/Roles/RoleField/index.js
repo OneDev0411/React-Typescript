@@ -95,6 +95,9 @@ export function RoleField(props) {
           isOpen
           deal={props.deal}
           form={activeRole}
+          showBrokerageFields={props.annotation.attribute.includes(
+            'agent.office'
+          )}
           allowedRoles={allowedRoles}
           onUpsertRole={props.onUpsertRole}
           onDeleteRole={props.onDeleteRole}
