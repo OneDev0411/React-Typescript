@@ -27,7 +27,7 @@ export const DOWNLOAD_TYPES_DROPDOWN_ITEMS: DownloadType[] = [
     icon: IconMailer
   },
   {
-    title: 'Export For E-mail',
+    title: 'Export For Email',
     description: 'Use this for email campaigns, like importing into Rezora',
     type: ExportType.Email,
     icon: IconEmail
