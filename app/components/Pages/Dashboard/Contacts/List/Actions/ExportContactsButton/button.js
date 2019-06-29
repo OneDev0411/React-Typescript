@@ -21,10 +21,16 @@ export default function ExportButton({ disabled, onExportClick }) {
       onChange={async item => onExportClick(item.type)}
       buttonText="Export Contacts"
       disabled={disabled}
-      menuStyle={{ width: '22.8125rem', overflow: 'hidden', maxHeight: 'auto' }}
+      menuStyle={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: 'max-content',
+        overflow: 'hidden'
+      }}
       itemRenderer={({ item, ...rest }) => (
         <Item
           key={item.type}
+          icon={item.icon}
           title={item.title}
           description={item.description}
           {...rest}
