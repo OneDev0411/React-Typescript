@@ -2,7 +2,7 @@ import _ from 'underscore'
 
 import * as types from '../../constants/filter-segments'
 
-const initialState = {
+const initialState: IContactReduxFilterSegmentState = {
   list: null,
   isFetching: false,
   conditionOperator: 'and',
@@ -18,7 +18,7 @@ export const getDefaultList = (name = '') => ({
   filters: []
 })
 
-const filterSegments = (state, action) => {
+const filterSegments = (state: IContactReduxFilterSegmentState, action) => {
   switch (action.type) {
     case types.CHANGE_ACTIVE_FILTER_SEGMENT:
       return {
@@ -162,9 +162,15 @@ export const selectActiveSavedSegment = (state, listName = '') =>
     : state.list[state.activeSegmentId]
 
 export const getSegments = (state, listName) =>
-  [].concat([getDefaultList(listName)], Object.values(state.list || {}))
+  ([] as any[]).concat(
+    [getDefaultList(listName)],
+    Object.values(state.list || {})
+  )
 
-export const selectSavedSegmentById = (state, id) =>
-  state.list && state.list[id]
+export const selectSavedSegmentById = (
+  state: IContactReduxFilterSegmentState,
+  id
+) => state.list && state.list[id]
 
-export const selectActiveFilters = state => state.activeFilters
+export const selectActiveFilters = (state: IContactReduxFilterSegmentState) =>
+  state.activeFilters

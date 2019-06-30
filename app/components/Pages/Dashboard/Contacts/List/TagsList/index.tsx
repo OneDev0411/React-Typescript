@@ -11,7 +11,10 @@ import {
 
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import { selectContactsInfo } from 'reducers/contacts/list'
-import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
+import {
+  AttributeDefsState,
+  selectDefinitionByName
+} from 'reducers/contacts/attributeDefs'
 import { selectActiveFilters } from 'reducers/filter-segments'
 
 import ToolTip from 'components/tooltip'
@@ -32,7 +35,23 @@ const CustomListItemName = styled(ListItemName)`
   margin-left: 0.5em;
 `
 
-class TagsList extends React.Component {
+interface Props {
+  attributeDefs: AttributeDefsState
+  activeFilters: StringMap<IActiveFilter>
+  removeActiveFilter: (segmentName: string, filterId: string) => void
+  onFilterChange: ({ filters: any }) => void // TODO
+  existingTags: any // TODO
+  isFetching: boolean
+  updateActiveFilter: (
+    segmentName: string,
+    filterId: string,
+    filter: any
+  ) => void
+}
+
+class TagsList extends React.Component<Props> {
+  private tagDefinitionId: string
+
   constructor(props) {
     super(props)
     this.tagDefinitionId = selectDefinitionByName(
@@ -54,13 +73,16 @@ class TagsList extends React.Component {
       )
     })
 
-    this.props.removeActiveFilter('contacts', filterId)
-    nextFilters = _.filter(
-      activeFilters,
-      filter =>
-        filter.id !== this.tagDefinitionId ||
-        !filter.values.some(({ value }) => value === item.text)
-    )
+    if (filterId) {
+      this.props.removeActiveFilter('contacts', filterId)
+
+      nextFilters = _.filter(
+        activeFilters,
+        filter =>
+          filter.id !== this.tagDefinitionId ||
+          !filter.values.some(({ value }) => value === item.text)
+      )
+    }
 
     if (!this.isSelected(item.text)) {
       const filter = {
@@ -137,7 +159,14 @@ class TagsList extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: {
+  contacts: {
+    attributeDefs: AttributeDefsState
+    list: any
+    tags: any
+    filterSegments: IContactReduxFilterSegmentState
+  }
+}) {
   const {
     contacts: { attributeDefs, list: ContactListStore, tags }
   } = state
