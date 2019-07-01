@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import { blue } from '../../../../utils/colors'
-import IconButton from '../../../../../views/components/Button/IconButton'
+import IconButton from '../../../Button/IconButton'
 
 export const Container = styled.div`
   padding: 1.5rem 1rem;
@@ -23,10 +23,10 @@ export const ListItemName = styled.div`
 export const DeleteButton = styled(IconButton)`
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3 linear;
+  transition: all 0.3s linear;
 `
 
-export const ListItem = styled.div`
+export const ListItem = styled.div<{ isSelected?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
