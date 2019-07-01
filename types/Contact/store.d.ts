@@ -20,9 +20,12 @@ declare interface IContactReduxListState {
 }
 
 declare interface IContactReduxFilterSegmentState {
-  activeSegmentId: UUID
-  list: Record<string, IContactList>
+  list: null | StringMap<IContactList> // leaky abstraction 😕
+  isFetching: boolean
   conditionOperator: 'and' | 'or'
+  activeSegmentId: string
+  fetchError: null | string /* ? */
+  activeFilters: StringMap<IActiveFilter>
 }
 
 declare interface IContactReduxState {

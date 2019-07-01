@@ -25,6 +25,7 @@ module.exports = {
     '^fixtures/(.*)': '<rootDir>/tests/unit/fixtures/$1',
     '^hooks/(.*)': '<rootDir>/app/hooks/$1',
     '^animations/(.*)': '<rootDir>/app/animations/$1',
+    '^crm/(.*)': '<rootDir>/app/components/Pages/Dashboard/Contacts/$1',
     '\\.(css|less|sass|scss)$': '<rootDir>/tests/unit/mocks/styles.js',
     '\\.(gif|ttf|eot|svg)$': '<rootDir>/tests/unit/mocks/files.js'
   }

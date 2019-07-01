@@ -40,6 +40,11 @@ declare type TIsRequirePropPresent<T, K extends keyof T> = TIsPropertyPresent<
 
 declare type TCallback<T> = ((err: any) => void) | ((err: null, res: T) => void)
 
+interface ILabelValue {
+  label: string
+  value: string
+}
+
 declare interface ApiResponse<T> {
   data: T
   info: {
