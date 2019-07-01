@@ -23,7 +23,7 @@ export class CRMTaskItem extends React.Component {
         const dueDate = new Date(task.due_date * 1000)
         const now = new Date()
 
-        if (dueDate <= now || task.status !== 'PENDING') {
+        if (dueDate <= now || task.status === 'DONE') {
           return resolve([
             true,
             {
@@ -59,7 +59,7 @@ export class CRMTaskItem extends React.Component {
         return
       }
 
-      if (task.status === 'DONE' && Array.isArray(task.reminders)) {
+      if (newTask.status === 'DONE' && Array.isArray(task.reminders)) {
         newTask.reminders = []
       }
 
