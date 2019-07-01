@@ -9,31 +9,20 @@ function deepReplace(data, references) {
   }
 
   if (hasReferenceProperty(data)) {
-    data = replace(data, references)
+    data = references[data.object_type][data.id]
   }
 
-  Object.entries(data).forEach(([key, value]) => {
+  Object.entries(data).forEach(([key, value]: any) => {
     if (Array.isArray(value)) {
       data[key] = value.map(item => deepReplace(item, references))
     }
 
     if (hasReferenceProperty(value)) {
-      data[key] = replace(value, references)
+      data[key] = deepReplace(value, references)
     }
   })
 
   return data
-}
-
-/**
- * replaces the object with reference data
- * @param object - the object
- * @param references - list of references
- */
-function replace(object, references) {
-  const { object_type, id } = object
-
-  return references[object_type][id]
 }
 
 /**
@@ -44,8 +33,10 @@ function hasReferenceProperty(object: any): boolean {
   return object && typeof object === 'object' && object.type === 'reference'
 }
 
-export function compressResponse(response: ApiResponse<any>): void {
-  const abc = deepReplace(response.body.data, response.body.references)
+export function useReferencedFormat(response: ApiResponse<any>): any {
+  const normalized = deepReplace(response.body.data, response.body.references)
 
-  console.log(abc[0].roles[0].users)
+  response.body.data = normalized
+
+  return normalized
 }
