@@ -5,7 +5,7 @@ import { FLOW_FILTER_ID, OPEN_HOUSE_FILTER_ID } from 'crm/List/constants'
 export function normalizeAttributeFilters(filters: IActiveFilter[]) {
   const criteria: IContactAttributeFilter[] = []
 
-  _.each(filters, filter => {
+  _.each(filters.filter(isAttributeFilter), filter => {
     _.each(filter.values, ({ value }) => {
       criteria.push({
         value,
