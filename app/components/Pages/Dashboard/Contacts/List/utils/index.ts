@@ -2,17 +2,19 @@ import _ from 'underscore'
 
 import { FLOW_FILTER_ID, OPEN_HOUSE_FILTER_ID } from 'crm/List/constants'
 
-export function normalizeAttributeFilters(filters: IActiveFilter[]) {
+export function normalizeAttributeFilters(filters: StringMap<IActiveFilter>) {
   const criteria: IContactAttributeFilter[] = []
 
-  _.each(filters.filter(isAttributeFilter), filter => {
-    _.each(filter.values, ({ value }) => {
-      criteria.push({
-        value,
-        invert: filter.operator.invert === true,
-        attribute_def: filter.id
+  _.each(filters, filter => {
+    if (isAttributeFilter(filter)) {
+      _.each(filter.values, ({ value }) => {
+        criteria.push({
+          value,
+          invert: filter.operator.invert === true,
+          attribute_def: filter.id
+        })
       })
-    })
+    }
   })
 
   return criteria
