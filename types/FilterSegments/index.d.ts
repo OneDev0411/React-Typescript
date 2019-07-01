@@ -1,7 +1,7 @@
 declare interface IFilterOperator {
   name: string
   invert?: boolean
-  default: boolean
+  default?: boolean
 }
 
 declare interface IActiveFilter {

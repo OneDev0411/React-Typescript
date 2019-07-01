@@ -49,7 +49,7 @@ interface Props {
   ) => void
 }
 
-class TagsList extends React.Component<Props> {
+export class TagsList extends React.Component<Props> {
   private tagDefinitionId: string
 
   constructor(props) {
