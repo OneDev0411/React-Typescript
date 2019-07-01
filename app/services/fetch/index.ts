@@ -4,7 +4,8 @@ import store from '../../stores'
 import config from '../../../config/public'
 import { getActiveTeamId } from '../../utils/user-teams'
 
-import { compressResponse } from './middlewares/x-rechat-format'
+import { herokuFix } from './middlewares/heroku-fix'
+import { useReferencedFormat } from './middlewares/x-rechat-format'
 
 import { IOptions, IMiddleware } from './types'
 
@@ -33,7 +34,7 @@ export default class Fetch {
       {
         proxy: false,
         progress: null,
-        compressResponse: false
+        useReferencedFormat: true
       },
       options
     )
@@ -75,7 +76,7 @@ export default class Fetch {
       agent = SuperAgent[method](`${config.api_url}${endpoint}`)
     }
 
-    if (this.options.compressResponse && !useProxy) {
+    if (this.options.useReferencedFormat && !useProxy) {
       agent.set('X-RECHAT-FORMAT', 'references')
     }
 
@@ -171,8 +172,11 @@ export default class Fetch {
   registerMiddlewares(options: IOptions): IMiddleware {
     const list: IMiddleware = {}
 
-    if (options.compressResponse) {
-      list['x-rechat-format'] = compressResponse
+    // it's required
+    list['heroku-fix'] = herokuFix
+
+    if (options.useReferencedFormat) {
+      list['x-rechat-format'] = useReferencedFormat
     }
 
     return list
