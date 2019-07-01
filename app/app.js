@@ -28,6 +28,10 @@ import store from './stores'
 // history
 const history = syncHistoryWithStore(browserHistory, store)
 
+if (window.Cypress) {
+  window.__history = history
+}
+
 // smooth scroll polyfill
 if (typeof window !== 'undefined') {
   smoothscroll.polyfill()
