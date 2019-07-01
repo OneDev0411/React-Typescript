@@ -5,8 +5,6 @@ import user from 'fixtures/users/agent'
 
 import { DealRole } from '.'
 
-const form = {}
-
 describe('Test Deal Roles component', () => {
   it('Should show legal_names when role is Title', () => {
     const wrapper = render(
