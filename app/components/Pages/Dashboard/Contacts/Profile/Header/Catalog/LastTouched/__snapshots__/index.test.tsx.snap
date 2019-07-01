@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Contact profile last touched component renders 1`] = `
+<div>
+  <span>
+    Last Touch was 
+    <b>
+      2 months ago
+    </b>
+  </span>
+  <span>
+    , you wanted to be in touch every 
+    <b>
+      23123
+    </b>
+     days.
+  </span>
+</div>
+`;
