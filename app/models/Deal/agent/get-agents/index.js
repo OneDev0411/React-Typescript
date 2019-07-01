@@ -16,9 +16,7 @@ export async function getAgents(brandId, query = '') {
     }
 
   try {
-    const response = await new Fetch({
-      compressResponse: true
-    })
+    const response = await new Fetch()
       .get(`/brands/${brandId}/agents`)
       .query({ 'associations[]': ['brand.roles'] })
       .query({ 'associations[]': ['brand_role.users'] })

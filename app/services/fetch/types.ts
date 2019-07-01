@@ -2,7 +2,7 @@ type Progress = () => void
 
 export interface IOptions {
   proxy: boolean
-  compressResponse: boolean
+  useReferencedFormat: boolean
   progress: null | Progress
 }
 
