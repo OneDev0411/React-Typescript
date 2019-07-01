@@ -189,7 +189,7 @@ export default class Fetch {
   logResponse(
     response: SuperAgent.Response & { req: SuperAgent.SuperAgentRequest }
   ) {
-    if (this._isProductionEnv) {
+    if (this._isProductionEnv && response) {
       const requestId = response.header['x-request-id']
       const status = response.status
       const request = response.req
