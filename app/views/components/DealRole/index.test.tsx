@@ -10,7 +10,7 @@ describe('Test Deal Roles component', () => {
     const wrapper = render(
       <DealRole
         isOpen
-        form={form}
+        form={{}}
         user={user}
         dealSide="Buyer"
         allowedRoles={['Title']}
