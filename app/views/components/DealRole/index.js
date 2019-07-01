@@ -250,7 +250,7 @@ export class DealRole extends React.Component {
         }
 
         if (!errors[fieldName] && !(await validator(fieldValue))) {
-          errors[fieldName] = Role.errorNames[fieldName]
+          errors[fieldName] = this.errorNames[fieldName]
         }
       })
     )
@@ -261,7 +261,7 @@ export class DealRole extends React.Component {
   /**
    * get error names
    */
-  static get errorNames() {
+  get errorNames() {
     return {
       legal_first_name: 'Invalid Legal First Name',
       legal_last_name: 'Invalid Legal Last Name',
