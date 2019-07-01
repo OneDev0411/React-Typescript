@@ -46,6 +46,13 @@ export default function getVisibleFields(args) {
     list.push('current_address', 'future_address')
   }
 
+  /**
+   * https://gitlab.com/rechat/web/issues/1192
+   */
+  if (args.role === 'Title') {
+    list.push('legal_first_name', 'legal_last_name')
+  }
+
   // unique array
   return [...new Set(list)]
 }

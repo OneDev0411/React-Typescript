@@ -1,5 +1,3 @@
-import memoize from 'lodash/memoize'
-
 import { TYPE_PERSON, TYPE_COMPANY } from '../../constants/role-types'
 
 /**

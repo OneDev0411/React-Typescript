@@ -32,7 +32,7 @@ import { getCommissionAttributes } from './helpers/get-commission-attributes'
 const propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  deal: PropTypes.object.isRequired,
+  deal: PropTypes.object,
   form: PropTypes.object,
   allowedRoles: PropTypes.array,
   container: PropTypes.oneOf(['Modal', 'Inline']),
@@ -52,7 +52,7 @@ const defaultProps = {
   onDeleteRole: () => null
 }
 
-class Role extends React.Component {
+export class DealRole extends React.Component {
   state = {
     isSaving: false
   }
@@ -396,8 +396,8 @@ class Role extends React.Component {
   }
 }
 
-Role.propTypes = propTypes
-Role.defaultProps = defaultProps
+DealRole.propTypes = propTypes
+DealRole.defaultProps = defaultProps
 
 function mapStateToProps({ user, contacts }) {
   return {
@@ -414,4 +414,4 @@ export default connect(
     createRoles,
     confirmation
   }
-)(Role)
+)(DealRole)
