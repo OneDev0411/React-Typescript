@@ -11,6 +11,8 @@ import {
   deleteTaskAssociation
 } from 'models/tasks'
 
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+
 import Drawer from '../OverlayDrawer'
 import { Divider } from '../Divider'
 import IconButton from '../Button/IconButton'
@@ -83,6 +85,8 @@ export class EventDrawer extends Component {
       (!props.event && !props.eventId) ||
       Object.keys(this.props.initialValues).length > 0
   }
+
+  static contextType = ConfirmationModalContext
 
   load = async () => {
     if (this.props.event) {
@@ -230,6 +234,28 @@ export class EventDrawer extends Component {
                               }
                             } else if (isDone) {
                               onChange('PENDING')
+                            }
+                          }}
+                        />
+                      )}
+                      {/* Set future event due date to now if user wants to mark it as done */}
+                      {!this.isNew && (
+                        <WhenFieldChanges
+                          set="dueDate"
+                          watch="status"
+                          setter={onChange => {
+                            if (isDone && !isPastDate) {
+                              this.context.setConfirmationModal({
+                                message: 'Heads up!',
+                                description:
+                                  'If you mark this event as done, the event due date will change to now. Are you sure?',
+                                onConfirm: () => {
+                                  onChange(new Date())
+                                },
+                                onCancel: () => {
+                                  values.status = 'PENDING'
+                                }
+                              })
                             }
                           }}
                         />
