@@ -9,7 +9,7 @@ export function GeneralInfo(props) {
   const { description } = task
 
   return (
-    <Flex>
+    <Flex data-test="crm-task-item-general-info">
       <Status
         disabled={props.disabled}
         checked={task.status === 'DONE'}

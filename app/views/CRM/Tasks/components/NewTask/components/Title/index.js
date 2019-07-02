@@ -31,6 +31,7 @@ export function Title() {
           {...input}
           type="text"
           autoComplete="off"
+          data-test="add-task"
           placeholder="Add a descriptive title…"
         />
       )}
