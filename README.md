@@ -30,7 +30,7 @@ npm run develop
 Go to [http://localhost:8080](http://localhost:8080)
 
 
-##### Run all tests
+##### Run unit tests in watch mode
 ```bash
 npm test
 ```
@@ -50,6 +50,7 @@ The following requirements should be met on the machine that runs e2e tests.
 
 - [docker-compose][docker-compose] should be installed. It's required for 
   running e2e api server.
+- You should also be logged in to Gitlab docker registery to pull private images. This can be done by running `docker login registry.gitlab.com` command.
 - `recommended` - Heroku cli should be installed and logged in with an account 
   which has access to [rechat-irish](heroku-irish) application.
 
@@ -62,13 +63,13 @@ up and running.
 - Ensure `.env` file exists in [/tests/services/api](/tests/services/api) 
   directory. If [you have heroku installed](#1-pre-requisites) you can run
   `npm run e2e:api:fetch-config` to create/update it.
-- run `npm run e2e:api:start`
+- Run `npm run e2e:api:start`
 
 #### Running e2e web app
 You can either run e2e web app in dev mode, or build it for CI environment.
 and serve it
 ##### - Run in dev mode
-- run `npm run e2e:server:start`. IMPORTANT: make sure you have appropriate
+- Run `npm run e2e:server:start`. IMPORTANT: make sure you have appropriate
   `development.js` configuration files which use e2e api server address
   if `E2E` environment variable is set.
 ##### - Build and run

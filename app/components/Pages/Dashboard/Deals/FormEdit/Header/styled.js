@@ -8,7 +8,7 @@ export const Container = styled.div`
   justify-content: space-between;
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 10;
   background-color: #fff;
   height: 97px;
   border-bottom: 1px solid #d4d4d4;
