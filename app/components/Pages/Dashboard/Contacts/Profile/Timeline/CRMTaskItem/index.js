@@ -81,7 +81,7 @@ export class CRMTaskItem extends React.Component {
 
   render() {
     return (
-      <Container>
+      <Container data-test="crm-task-item">
         {this.props.render({
           ...this.state,
           onEdit: this.handleOnClick,

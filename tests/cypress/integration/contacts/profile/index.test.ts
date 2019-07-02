@@ -1,8 +1,15 @@
 import { setInlineDateField } from 'helpers/fields'
 
+import {
+  acceptConfirmationModal,
+  cancelConfirmationModal,
+  waitForModalToClose
+} from 'helpers/modal'
+import { getTestSelector } from 'helpers/page'
+
 import { createContact } from '../grid/helpers'
 
-const contact = { firstName: 'David', lastName: 'Beckham' }
+const contact = { firstName: 'Keanu', lastName: 'Reeves' }
 
 describe('Contact profile', () => {
   beforeEach(() => {
@@ -38,22 +45,33 @@ describe('Contact profile', () => {
     setInlineDateField()
   })
 
-  it.only('User can log and create events/tasks from contact profile', () => {
-    const taskTitle = 'Call David about new contract'
+  it('User can create events/tasks and mark them as done from contact profile', () => {
+    const taskTitle = 'Call Keanu and tell him you are breathtaking'
     const futureTaskTitle = `${taskTitle} in the future`
+
+    const crmTaskItemDataTest = 'crm-task-item'
+    const crmTaskItemGeneralInfo = 'crm-task-item-general-info'
+    const nextMonthDate = new Date()
+
+    nextMonthDate.setMonth((nextMonthDate.getMonth() + 1) % 12)
+
+    const nextMonthShortName = nextMonthDate.toLocaleString('en-us', {
+      month: 'short'
+    })
 
     cy.visit('/dashboard/contacts')
     createContact(contact)
     cy.getByTestSelector('add-task').type(taskTitle)
     cy.getByTestSelector('save-task').click()
-    cy.getByTestSelector('crm-task-item-general-info')
+    cy.getByTestSelector(crmTaskItemDataTest)
       .first()
       .within(() => {
         cy.contains(taskTitle)
-        cy.get('div > button')
-          .children()
-          .should('have.length', 1)
-      }) // it should be marked as done
+        cy.getByTestSelector(crmTaskItemGeneralInfo).within(() => {
+          // it should be marked as done (svg inside button)
+          cy.get('svg', { timeout: 10000 }).should('exist')
+        })
+      })
 
     cy.getByTestSelector('add-task').type(futureTaskTitle)
     cy.getByTestSelector('date-time-picker-button').click()
@@ -64,16 +82,40 @@ describe('Contact profile', () => {
     cy.getByTestSelector('date-picker-done').click()
     cy.getByTestSelector('save-task').click()
 
-    // now we should wait until we got 2 tasks here
-    cy.getByTestSelector('crm-task-item-general-info').should('have.length', 2)
+    // now we should wait have 2 tasks here
+    cy.getByTestSelector(crmTaskItemDataTest).should('have.length', 2)
 
-    cy.getByTestSelector('crm-task-item-general-info')
+    cy.getByTestSelector(crmTaskItemDataTest)
       .first()
       .within(() => {
         cy.contains(futureTaskTitle)
-        cy.get('div > button')
-          .children()
-          .should('have.length', 0)
-      }) // it shouldn't be marked as done
+        cy.contains(nextMonthShortName)
+        cy.getByTestSelector(crmTaskItemGeneralInfo).within(() => {
+          // it shouldn't be marked as done (svg inside button)
+          cy.get('svg', { timeout: 10000 }).should('not.exist')
+          cy.get('button').click() // toggle task
+        })
+      })
+    cancelConfirmationModal() // not now!
+    waitForModalToClose()
+
+    cy.get(
+      `${getTestSelector([crmTaskItemDataTest, crmTaskItemGeneralInfo])} svg`
+    ).should('have.length', 1)
+
+    cy.getByTestSelector(crmTaskItemDataTest)
+      .first()
+      .within(() => {
+        cy.get('button').click() // toggle task
+      })
+    acceptConfirmationModal() // now!
+    waitForModalToClose()
+
+    cy.get(
+      `${getTestSelector([crmTaskItemDataTest, crmTaskItemGeneralInfo])} svg`
+    ).should('have.length', 2)
+
+    // make sure that future task month is changed to current
+    cy.should('not.contain', nextMonthShortName)
   })
 })
