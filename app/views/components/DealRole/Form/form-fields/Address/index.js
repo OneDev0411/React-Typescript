@@ -59,7 +59,11 @@ export function Address(props) {
         handleSubmit={onAddressSubmit}
         preSaveFormat={normalizePostgressStdaddr}
         renderSearchField={inputProps => (
-          <Input {...inputProps} autoComplete="disable-autocomplete" />
+          <Input
+            {...inputProps}
+            name={props.input.name}
+            autoComplete="disable-autocomplete"
+          />
         )}
       />
 
