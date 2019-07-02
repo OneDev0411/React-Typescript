@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useRef } from 'react'
 
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
+
+import { normalizePostgressStdaddr } from 'components/inline-editable-fields/InlineAddressField/InlineAddressForm/helpers/normalize-postgres-stdaddr'
 
 import {
   InputContainer,
@@ -20,8 +22,24 @@ function getInitialAddress(input) {
 }
 
 export function Address(props) {
+  const formRef = useRef(null)
+
   if (!props.isVisible) {
     return false
+  }
+
+  const onAddressSubmit = address => {
+    formRef.current.handleFormCancel()
+
+    props.input.onChange(address)
+  }
+
+  const onInputChange = fullAddress => {
+    if (!fullAddress && props.needsAddressForm) {
+      return props.input.onChange(null)
+    }
+
+    return props.input.onChange(fullAddress)
   }
 
   return (
@@ -34,16 +52,18 @@ export function Address(props) {
 
       <InlineAddressField
         key={props.name}
+        ref={formRef}
         address={getInitialAddress(props.input)}
         needsAddressForm={props.needsAddressForm || false}
-        // handleInputChange={props.input.onChange}
-        handleSubmit={props.input.onChange}
+        handleInputChange={onInputChange}
+        handleSubmit={onAddressSubmit}
+        preSaveFormat={normalizePostgressStdaddr}
         renderSearchField={inputProps => (
           <Input {...inputProps} autoComplete="disable-autocomplete" />
         )}
       />
 
-      {props.showError && <FieldError name={props.input.name} />}
+      <FieldError name={props.input.name} />
     </InputContainer>
   )
 }

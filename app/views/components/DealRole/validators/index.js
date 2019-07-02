@@ -5,6 +5,7 @@ import { isValidEmail } from './is-valid-email'
 import { isValidLegalPrefix } from './is-valid-legal-prefix'
 import { isValidPhoneNumber } from './is-valid-phone'
 import { isValidString } from './is-valid-string'
+import { isValidAddress } from './is-valid-address'
 import { isValidNumber } from './is-valid-number'
 
 /**
@@ -70,6 +71,9 @@ export function getFormValidators(requiredFields) {
 
     /* validate Office Phone */
     office_phone: name =>
-      isValidPhoneNumber(name, requiredFields, 'office_phone')
+      isValidPhoneNumber(name, requiredFields, 'office_phone'),
+
+    /* validate Office Address */
+    office_address: value => isValidAddress(value, requiredFields)
   }
 }

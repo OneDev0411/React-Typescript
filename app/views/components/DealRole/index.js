@@ -252,7 +252,15 @@ export class DealRole extends React.Component {
           return false
         }
 
-        if (!errors[fieldName] && !(await validator(fieldValue))) {
+        let isValid = false
+
+        try {
+          isValid = await validator(fieldValue)
+        } catch (e) {
+          /* nothing */
+        }
+
+        if (!errors[fieldName] && !isValid) {
           errors[fieldName] = this.errorNames[fieldName]
         }
       })
@@ -272,7 +280,8 @@ export class DealRole extends React.Component {
       company_title: 'Invalid Company',
       email: 'Invalid Email Address',
       phone_number: 'Phone Number is invalid (###)###-####',
-      commission: 'Invalid Commission value'
+      commission: 'Invalid Commission value',
+      office_address: 'Invalid address'
     }
   }
 
