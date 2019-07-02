@@ -55,11 +55,11 @@ export function hasUserAccess(user: IUser, access: string) {
   return getActiveTeamACL(user).includes(access)
 }
 
-export function hasUserAccessToDeals(user): boolean {
+export function hasUserAccessToDeals(user: IUser): boolean {
   return hasUserAccess(user, 'Deals') || isBackOffice(user)
 }
 
-export function hasUserAccessToCrm(user): boolean {
+export function hasUserAccessToCrm(user: IUser): boolean {
   return hasUserAccess(user, 'CRM')
 }
 
