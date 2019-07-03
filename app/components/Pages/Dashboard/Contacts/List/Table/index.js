@@ -30,7 +30,7 @@ import Menu from './columns/Menu'
 import Name from './columns/Name'
 import TagsString from './columns/Tags'
 import { Contact } from './columns/Contact'
-import { LastTouchedCell } from './columns/LastTouched'
+import LastTouched from './columns/LastTouched'
 
 import { SORT_FIELD_SETTING_KEY } from '../constants'
 
@@ -81,7 +81,7 @@ class ContactsList extends React.Component {
       ),
       id: 'last_touched',
       sortable: false,
-      render: ({ rowData: contact }) => <LastTouchedCell contact={contact} />
+      render: ({ rowData: contact }) => <LastTouched contact={contact} />
     },
     {
       header: 'Tags',

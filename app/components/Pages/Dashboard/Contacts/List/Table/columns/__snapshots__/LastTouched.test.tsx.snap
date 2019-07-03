@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Contacts list last touched component renders for contacts with last touch 1`] = `
+<div>
+  <span>
+    Last Touch was 
+    <b>
+      2 months ago
+    </b>
+  </span>
+</div>
+`;
+
+exports[`Contacts list last touched component renders for contacts without last touch 1`] = `
+<div
+  class="hover-color--black styled__NoTouches-sc-1as214f-0 kwVaCt"
+>
+  No Touches
+</div>
+`;
