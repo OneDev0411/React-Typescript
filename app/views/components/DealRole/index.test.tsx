@@ -60,10 +60,12 @@ describe('Test Deal Roles component', () => {
     expect(wrapper.find('[name="office_address"]')).toHaveLength(1)
   })
 
-  it.only('Should pre-populate office fields', () => {
-    const sellerAgentRole = deal.roles.find(
+  it('Should pre-populate office fields', () => {
+    const sellerAgentRole: IDealRole = deal.roles.find(
       role => role.id === '7e104e10-89f3-11e9-8b7c-0a95998482ac'
     )
+
+    const office: IAgentOffice | undefined = sellerAgentRole.user.agent!.office
 
     const wrapper = render(
       <DealRole
@@ -76,20 +78,13 @@ describe('Test Deal Roles component', () => {
       />
     )
 
-    expect(wrapper.find('[name="office_name"]').val()).toEqual('Briggs Freeman')
-
+    expect(wrapper.find('[name="office_name"]').val()).toEqual(office!.name)
+    expect(wrapper.find('[name="office_mls_id"]').val()).toEqual(office!.mls_id)
+    expect(wrapper.find('[name="office_email"]').val()).toEqual(office!.email)
+    expect(wrapper.find('[name="office_phone"]').val()).toEqual(office!.phone)
+    expect(wrapper.find('[name="office_fax"]').val()).toEqual(office!.fax)
     expect(wrapper.find('[name="office_license_number"]').val()).toEqual(
-      '1234567'
+      office!.license_number
     )
-
-    expect(wrapper.find('[name="office_mls_id"]').val()).toEqual('12344321')
-
-    expect(wrapper.find('[name="office_email"]').val()).toEqual(
-      'briggs@freeman.com'
-    )
-    expect(wrapper.find('[name="office_phone"]').val()).toEqual(
-      '(972) 989-9701'
-    )
-    expect(wrapper.find('[name="office_fax"]').val()).toEqual('(972) 989-9702')
   })
 })

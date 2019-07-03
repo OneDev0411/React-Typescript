@@ -171,7 +171,7 @@ export function AgentForm(props) {
           {props.isRoleRemovable && (
             <DeleteRole
               deal={props.deal}
-              role={props.formObject}
+              role={props.initialValues}
               onDeleteRole={props.onDeleteRole}
             />
           )}

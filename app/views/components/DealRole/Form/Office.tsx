@@ -1,4 +1,5 @@
 import * as React from 'react'
+import * as FinalForm from 'react-final-form'
 import Flex from 'styled-flex-component'
 import idx from 'idx/lib/idx'
 
@@ -12,13 +13,21 @@ import { Address } from './form-fields/Address'
 import Field from '../components/CustomField'
 import { Body, Footer, OfficeTitle } from '../styled'
 
-export function OfficeForm(props) {
-  const [office] = React.useState<IAgentOffice>(
-    idx(props.formObject, data => data.user.agent.office) || {}
-  )
+interface Props {
+  initialValues: IDealRole
+  values: IDealRole
+  isSubmitting: boolean
+  form: FinalForm.FormProps
+  onClose: () => void
+  onSubmit: (form: FinalForm.FormProps, saveContact: false) => void
+}
+
+export function OfficeForm(props: Props) {
+  const office: IAgentOffice | StringMap<{}> =
+    idx(props.initialValues, data => data.user.agent.office) || {}
 
   return (
-    <React.Fragment>
+    <>
       <Body>
         <OfficeTitle>
           Office info for {props.values.legal_full_name}
@@ -106,6 +115,6 @@ export function OfficeForm(props) {
           </ActionButton>
         </Flex>
       </Footer>
-    </React.Fragment>
+    </>
   )
 }

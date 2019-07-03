@@ -34,6 +34,13 @@ declare interface IDealRole {
   role: string
   role_type: string
   type: string
+  office_phone: string
+  office_email: string
+  office_fax: string
+  office_license_number: string
+  office_mls_id: string
+  office_name: string
+  office_address: string
   updated_at: number
   user: IUser
 }

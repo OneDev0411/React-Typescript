@@ -396,7 +396,7 @@ export class DealRole extends React.Component {
 
             const sharedProps = {
               ...formProps,
-              formObject: this.formObject,
+              initialValues: this.formObject,
               deal: this.props.deal,
               isSubmitting: this.state.isSaving,
               onSubmit: this.handleSubmit,
