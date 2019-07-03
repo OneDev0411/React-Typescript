@@ -5,7 +5,7 @@ import { useReferencedFormat } from '.'
 
 describe('Test Fetch Service X-RECHAT-FORMAT middleware', () => {
   it('Should return nothing when response is 204 or 206', () => {
-    expect(useReferencedFormat({} as any)).toBe({})
+    expect(useReferencedFormat({} as any)).toEqual({})
   })
 
   it('Should return correct data after parsing the response', () => {
