@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router'
 import styled from 'styled-components'
 import _ from 'underscore'
 
@@ -25,6 +26,7 @@ import {
   ListItemName
 } from 'components/Grid/SavedSegments/List/styled'
 import { ShowMoreLess } from 'components/ShowMoreLess'
+import IconCog from 'components/SvgIcons/Cog/IconCog'
 
 import { normalizeAttributeFilters } from '../utils'
 
@@ -121,7 +123,14 @@ export class TagsList extends React.Component<Props> {
 
     return (
       <div style={{ marginTop: '2rem' }} data-test="tags-list">
-        <ListTitle>Tags</ListTitle>
+        <ListTitle>
+          <span>Tags</span>
+          <Link to="/dashboard/account/manage-tags">
+            <ToolTip caption="Manage your tags">
+              <IconCog />
+            </ToolTip>
+          </Link>
+        </ListTitle>
 
         <ShowMoreLess
           moreText="More tags"

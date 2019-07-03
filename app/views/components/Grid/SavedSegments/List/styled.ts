@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { blue } from '../../../../utils/colors'
+import { blue, primary } from '../../../../utils/colors'
 import IconButton from '../../../Button/IconButton'
 
 export const Container = styled.div`
@@ -11,6 +11,17 @@ export const ListTitle = styled.div`
   font-size: 21px;
   margin-bottom: 1.5rem;
   font-weight: 500;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    &:hover {
+      fill: ${primary};
+    }
+  }
 `
 
 export const ListItemName = styled.div`
