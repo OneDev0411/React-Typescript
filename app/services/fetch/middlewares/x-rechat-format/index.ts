@@ -34,6 +34,10 @@ function hasReferenceProperty(object: any): boolean {
 }
 
 export function useReferencedFormat(response: ApiResponse<any>): any {
+  if (!response.body || !response.body.data) {
+    return null
+  }
+
   const normalized = deepReplace(response.body.data, response.body.references)
 
   response.body.data = normalized
