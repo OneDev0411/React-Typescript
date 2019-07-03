@@ -10,20 +10,20 @@ import DeleteRole from '../components/DeleteRole'
 
 import Field from '../components/CustomField'
 
-import { TitleInput } from './form-components/TitleInput'
-import { TypeInput } from './form-components/TypeInput'
-import { Roles } from './form-components/Roles'
-import { Address } from './form-components/Address'
-import { AutoCompleteInput } from './form-components/AutoCompleteInput'
-import { NameInput } from './form-components/NameInput'
-import { MlsInput } from './form-components/MlsInput'
-import { CommissionInput } from './form-components/CommissionInput'
+import { TitleInput } from './form-fields/TitleInput'
+import { TypeInput } from './form-fields/TypeInput'
+import { Roles } from './form-fields/Roles'
+import { Address } from './form-fields/Address'
+import { AutoCompleteInput } from './form-fields/AutoCompleteInput'
+import { NameInput } from './form-fields/NameInput'
+import { MlsInput } from './form-fields/MlsInput'
+import { CommissionInput } from './form-fields/CommissionInput'
 
 import { getAutocompleteOptions } from '../helpers/get-autocomplete-options'
 
 import { Header, Body, Footer } from '../styled'
 
-export function FormContainer(props) {
+export function AgentForm(props) {
   const isRequired = field => props.requiredFields.includes(field)
   const isVisible = field => props.visibleFields.includes(field)
   const showSaveContactButton =
@@ -140,7 +140,6 @@ export function FormContainer(props) {
             name="current_address"
             label="Current Address"
             isVisible={isVisible('current_address')}
-            value={props.values.current_address}
             component={Address}
             style={{ flex: 5, marginRight: '0.5rem' }}
           />
@@ -149,7 +148,6 @@ export function FormContainer(props) {
             name="future_address"
             label="Future Address"
             isVisible={isVisible('future_address')}
-            value={props.values.future_address}
             component={Address}
             style={{ flex: 5 }}
           />
