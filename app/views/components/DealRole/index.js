@@ -36,7 +36,6 @@ const propTypes = {
   deal: PropTypes.object,
   form: PropTypes.object,
   allowedRoles: PropTypes.array,
-  container: PropTypes.oneOf(['Modal', 'Inline']),
   isRoleRemovable: PropTypes.bool,
   isCommissionRequired: PropTypes.bool,
   showBrokerageFields: PropTypes.bool,
@@ -46,7 +45,6 @@ const propTypes = {
 
 const defaultProps = {
   form: null,
-  container: 'Modal',
   isRoleRemovable: false,
   isCommissionRequired: true,
   showBrokerageFields: false,
@@ -261,7 +259,7 @@ export class DealRole extends React.Component {
         }
 
         if (!errors[fieldName] && !isValid) {
-          errors[fieldName] = this.errorNames[fieldName]
+          errors[fieldName] = this.errorNames[fieldName] || 'Invalid input'
         }
       })
     )
@@ -273,15 +271,27 @@ export class DealRole extends React.Component {
    * get error names
    */
   get errorNames() {
+    const INVALID_EMAIL = 'Invalid Email Address'
+    const INVALID_PHONE = 'Number is invalid (###)###-####'
+    const INVALID_ADDRESS = 'Invalid address'
+    const INVALID_MLS = 'Invalid MLS ID'
+
     return {
       legal_first_name: 'Invalid Legal First Name',
       legal_last_name: 'Invalid Legal Last Name',
-      mls_id: 'Invalid MLS ID',
+      mls_id: INVALID_MLS,
+      office_mls_id: INVALID_MLS,
+      office_license_number: 'Invalid license number',
       company_title: 'Invalid Company',
-      email: 'Invalid Email Address',
-      phone_number: 'Phone Number is invalid (###)###-####',
+      email: INVALID_EMAIL,
+      office_email: INVALID_EMAIL,
+      phone_number: `Phone ${INVALID_PHONE}`,
+      office_phone: `Phone ${INVALID_PHONE}`,
+      office_fax: `Fax ${INVALID_PHONE}`,
       commission: 'Invalid Commission value',
-      office_address: 'Invalid address'
+      current_address: INVALID_ADDRESS,
+      future_address: INVALID_ADDRESS,
+      office_address: INVALID_ADDRESS
     }
   }
 
@@ -329,8 +339,8 @@ export class DealRole extends React.Component {
     changeValue(state, 'company_title', () => user.company || '')
     changeValue(state, 'mls_id', () => user.mlsid || '')
     changeValue(state, 'agent', () => (user.mlsid ? user.id : null))
-    changeValue(state, 'future_address', () => user.future_address || '')
-    changeValue(state, 'current_address', () => user.current_address || '')
+    changeValue(state, 'future_address', () => user.future_address || {})
+    changeValue(state, 'current_address', () => user.current_address || {})
     changeValue(state, 'legal_prefix', () =>
       user.title ? user.title.replace('.', '') : ''
     )
@@ -386,6 +396,7 @@ export class DealRole extends React.Component {
 
             const sharedProps = {
               ...formProps,
+              initialValues: this.formObject,
               deal: this.props.deal,
               isSubmitting: this.state.isSaving,
               onSubmit: this.handleSubmit,
@@ -401,7 +412,6 @@ export class DealRole extends React.Component {
                     {...sharedProps}
                     isNewRecord={this.isNewRecord}
                     isRoleRemovable={this.props.isRoleRemovable}
-                    formObject={this.formObject}
                     requiredFields={requiredFields}
                     visibleFields={visibleFields}
                     isAllowedRole={this.isAllowedRole}

@@ -16,9 +16,7 @@ import { FieldError } from '../../../../final-form-fields/FieldError'
 function getInitialAddress(input) {
   const { value } = input
 
-  return value && typeof value === 'object' && value.hasOwnProperty('full')
-    ? value.full
-    : value
+  return value && value.full
 }
 
 export function Address(props) {
@@ -35,11 +33,9 @@ export function Address(props) {
   }
 
   const onInputChange = fullAddress => {
-    if (!fullAddress && props.needsAddressForm) {
+    if (!fullAddress) {
       return props.input.onChange(null)
     }
-
-    return props.input.onChange(fullAddress)
   }
 
   return (
@@ -54,7 +50,6 @@ export function Address(props) {
         key={props.name}
         ref={formRef}
         address={getInitialAddress(props.input)}
-        needsAddressForm={props.needsAddressForm || false}
         handleInputChange={onInputChange}
         handleSubmit={onAddressSubmit}
         preSaveFormat={normalizePostgressStdaddr}
