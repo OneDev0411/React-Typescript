@@ -37,9 +37,11 @@ import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
 
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 
-import { getGoogleAccounts } from 'actions/contacts/get-google-accounts'
+import { fetchGoogleAccounts } from 'actions/contacts/fetch-google-accounts'
 
-import { AlphabetFilter } from '../../../../../views/components/AlphabetFilter'
+import { Callout } from 'components/Callout'
+
+import { AlphabetFilter } from 'components/AlphabetFilter'
 
 import Table from './Table'
 import { SearchContacts } from './Search'
@@ -54,6 +56,11 @@ import {
 } from './constants'
 import { Container, SearchWrapper } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
+import {
+  clearImportingGoogleContacts,
+  getNewConnectedGoogleAccount
+} from './ImportContactsButton/helpers'
+import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 
 class ContactsList extends React.Component {
   constructor(props) {
@@ -73,7 +80,7 @@ class ContactsList extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getGoogleAccounts()
+    this.props.fetchGoogleAccounts()
     this.fetchContactsAndJumpToSelected()
 
     if (this.props.fetchTags) {
@@ -81,7 +88,30 @@ class ContactsList extends React.Component {
     }
   }
 
+  updateSyncState(googleAccounts = this.props.googleAccounts) {
+    const account = getNewConnectedGoogleAccount(googleAccounts)
+
+    if (account) {
+      switch (account.sync_status) {
+        case null:
+        case 'pending':
+          this.setState({ syncStatus: 'pending' })
+          break
+        case 'sunccess':
+          clearImportingGoogleContacts()
+          this.setState({ syncStatus: 'finished' })
+          break
+      }
+    } else {
+      clearImportingGoogleContacts()
+    }
+  }
+
   UNSAFE_componentWillReceiveProps(nextProps) {
+    if (!_.isEqual(nextProps.googleAccounts, this.props.googleAccounts)) {
+      this.updateSyncState(nextProps.googleAccounts)
+    }
+
     if (
       nextProps.viewAsUsers.length !== this.props.viewAsUsers.length ||
       !_.isEqual(nextProps.viewAsUsers, this.props.viewAsUsers)
@@ -197,12 +227,16 @@ class ContactsList extends React.Component {
 
   handleChangeSavedSegment = () => this.handleFilterChange({}, true)
 
-  handleFilterChange = async (newFilters, resetLoadedRanges = false) => {
+  handleFilterChange = async (
+    newFilters,
+    resetLoadedRanges = false,
+    newOrder
+  ) => {
     const {
       filters = this.props.filters,
       searchInputValue = this.state.searchInputValue,
       start = 0,
-      order = this.order,
+      order = newOrder || this.order,
       viewAsUsers = this.props.viewAsUsers,
       flows = this.props.flows,
       crmTasks = this.props.crmTasks,
@@ -438,6 +472,24 @@ class ContactsList extends React.Component {
         </SideMenu>
 
         <PageContent id={this.tableContainerId} isSideMenuOpen={isSideMenuOpen}>
+          {this.state.syncStatus === 'pending' && (
+            <Callout onClose={() => this.setState({ syncStatus: null })}>
+              <i
+                className="fa fa-spin fa-spinner"
+                style={{ marginRight: '0.5rem' }}
+              />
+              Doing Science! wait a moment till you can see how really Rechat
+              works with contacts and emails
+            </Callout>
+          )}
+          {this.state.syncStatus === 'finished' && (
+            <SyncSuccessfulModal
+              close={() => this.setState({ syncStatus: null })}
+              handleFilterChange={filters =>
+                this.handleFilterChange({ filters }, true, '-updated_at')
+              }
+            />
+          )}
           <Header
             title={(activeSegment && activeSegment.name) || 'All Contacts'}
             activeSegment={activeSegment}
@@ -498,6 +550,11 @@ class ContactsList extends React.Component {
   }
 }
 
+/**
+ *
+ * @param user
+ * @param {IContactReduxState} contacts
+ */
 function mapStateToProps({ user, contacts }) {
   const listInfo = selectContactsInfo(contacts.list)
   const tags = contacts.tags
@@ -516,6 +573,7 @@ function mapStateToProps({ user, contacts }) {
   )
 
   return {
+    googleAccounts: contacts.googleAccounts,
     fetchTags,
     filters: normalizeAttributeFilters(attributeFilters),
     filterSegments,
@@ -538,7 +596,7 @@ export default withRouter(
     mapStateToProps,
     {
       getContacts,
-      getGoogleAccounts,
+      fetchGoogleAccounts,
       searchContacts,
       deleteContacts,
       confirmation,

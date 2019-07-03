@@ -46,7 +46,8 @@ export default function SplitButton({
             <PrimaryActionButton disabled={disabled} onClick={onClick}>
               {children}
             </PrimaryActionButton>
-            <ToggleActionsMenuButton disabled={disabled}
+            <ToggleActionsMenuButton
+              disabled={disabled}
               type="button"
               isActive={isOpen}
               {...getToggleButtonProps()}

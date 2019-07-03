@@ -1,4 +1,4 @@
-import Fetch from 'services/fetch'
+import Fetch from '../../../services/fetch'
 
 export async function getGoogleAccounts(): Promise<IGoogleAccount[]> {
   const response = await new Fetch().get('/users/self/google').send()

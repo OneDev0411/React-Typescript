@@ -62,13 +62,11 @@ const appReducer = combineReducers({
 // Typings in the Latest redux version allows this beautiful store type inference
 // without any extra effort, but in v3.7.2 that we currently use, it doesn't work
 // So we can uncomment this line wen migrated to V4.x.x or higher.
-// export type AppState = ReturnType<typeof appReducer>
+// export type IAppState = ReturnType<typeof appReducer>
 
-export type AppState = {
-  contacts: {
-    AttributeDefs: AttributeDefsState,
-    googleAccounts: ReturnType<typeof googleAccounts>
-  }
+export type IAppState = {
+  contacts: IContactReduxState
+  user: any // TODO
 }
 
 export default (state, action) => appReducer(state, action)

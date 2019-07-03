@@ -10,7 +10,7 @@ export const PrimaryActionButton = styled.button`
   border-radius: 3px 0 0 3px;
   padding: 0.4rem 0.7rem;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: ${grey.A300};
     color: ${primary};
   }

@@ -3,6 +3,8 @@ export const SORT_FIELD_SETTING_KEY = 'grid_contacts_sort_field'
 export const OPEN_HOUSE_FILTER_ID = 'openHouse'
 export const FLOW_FILTER_ID = 'flow'
 
+export const IMPORT_TOOLTIP_VISITED_SETTINGS_KEY = 'import_tooltip_visited'
+
 export const ORIGINS = [
   {
     label: 'Brokerage widget',

@@ -23,6 +23,7 @@ declare interface IGoogleAccount {
   photo: string
   resource_name: string
   revoked: boolean
+  sync_status: 'success' | 'pending' | null
   scope: string[]
   threads_total: null | number
   type: string

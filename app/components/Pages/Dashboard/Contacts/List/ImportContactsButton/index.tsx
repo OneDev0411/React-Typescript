@@ -1,8 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { connect } from 'react-redux'
-
-import Flex from 'styled-flex-component'
 
 import SplitButton from 'components/SplitButton'
 
@@ -12,31 +10,55 @@ import ALink from 'components/ALink'
 
 import { importGoogleContacts } from 'models/contacts/import-google-contacts'
 
-import { AppState } from 'reducers/index'
-import Avatar from 'components/Avatar'
+import { IAppState } from 'reducers/index'
 
 import { Divider } from 'components/Divider'
 
 import PopOver from 'components/Popover'
 
+import { getActiveTeamSettings } from 'utils/user-teams'
+
+import { putUserSetting } from 'models/user/put-user-setting'
+
 import { CsvIcon, GoogleIcon } from './styled'
 import { ConnectedAccount } from './ConnectedAccount'
+import { startImportingGoogleContacts } from './helpers'
+import { IMPORT_TOOLTIP_VISITED_SETTINGS_KEY } from '../constants'
 
 interface Props {
   accounts: IGoogleAccount[]
+  user: IUser
 }
 
-export function ImportContactsButton({ accounts }: Props) {
-  const [loading, setLoading] = useState(false)
+export function ImportContactsButton({ accounts, user }: Props) {
+  const [redirecting, setRedirecting] = useState(false)
+
+  const syncing = accounts.some(account => account.sync_status === 'pending')
+
+  const isTooltipOpen = !getActiveTeamSettings(
+    user,
+    IMPORT_TOOLTIP_VISITED_SETTINGS_KEY
+  )
+
+  useEffect(() => {
+    if (isTooltipOpen) {
+      putUserSetting(IMPORT_TOOLTIP_VISITED_SETTINGS_KEY, '1')
+    }
+  }, [isTooltipOpen])
 
   const redirectToGoogle = async () => {
-    window.location.href = (await importGoogleContacts()).url
-    setLoading(true)
+    const url = (await importGoogleContacts()).url
+
+    setRedirecting(true)
+
+    startImportingGoogleContacts(accounts)
+
+    window.location.href = url
   }
 
   return (
     <SplitButton
-      disabled={loading}
+      disabled={redirecting || syncing}
       onClick={redirectToGoogle}
       style={{ marginRight: '1rem' }}
       renderMenu={() => (
@@ -56,7 +78,7 @@ export function ImportContactsButton({ accounts }: Props) {
       {/* PopOver is used here instead of tooltip, because control over showing it initially is required */}
       <PopOver
         placement="bottom"
-        show /* TODO: decide about when to show initially */
+        show={isTooltipOpen}
         dark
         popoverStyles={{ width: '350px', marginTop: '1.5rem' }}
         caption={
@@ -84,9 +106,10 @@ export function ImportContactsButton({ accounts }: Props) {
   )
 }
 
-function mapStateToProps(state: AppState) {
+function mapStateToProps(state: IAppState) {
   return {
-    accounts: state.contacts.googleAccounts
+    accounts: state.contacts.googleAccounts,
+    user: state.user
   }
 }
 
