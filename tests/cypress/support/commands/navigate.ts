@@ -21,6 +21,9 @@ Cypress.Commands.add('navigate', navigate)
  *
  * This also depends on react router history to be exposed when running tests
  * with Cypress.
+ *
+ * https://github.com/cypress-io/cypress/issues/128
+ * https://github.com/cypress-io/cypress/issues/3120#issuecomment-453254393
  */
 function navigate(route: string) {
   return cy

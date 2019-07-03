@@ -28,6 +28,10 @@ import store from './stores'
 // history
 const history = syncHistoryWithStore(browserHistory, store)
 
+/**
+ * We put history on window for e2e tests for
+ * {@link Cypress.Chainable.navigate navigate command}
+ */
 if (window.Cypress) {
   window.__history = history
 }
