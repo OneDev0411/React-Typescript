@@ -46,12 +46,20 @@ interface ILabelValue {
 }
 
 declare interface ApiResponse<T> {
-  data: T
-  info: {
-    // TODO: info not always existing
-    count: number
-    total: number
+  body: {
+    data: T
+    references: T
   }
+  code: string
+  status: number
+  statusCode: number
+  statusText: number
+  info:
+    | boolean
+    | {
+        count: number
+        total: number
+      }
 }
 
 declare type ApiPromise<T> = Promise<ApiResponse<T>>
