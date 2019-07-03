@@ -3,7 +3,7 @@
  * @param data - the response data
  * @param references - the reference list
  */
-function deepReplace(data, references) {
+function deepReplace(data: object, references: StringMap<StringMap<object>>) {
   if (Array.isArray(data)) {
     return data.map(item => deepReplace(item, references))
   }
