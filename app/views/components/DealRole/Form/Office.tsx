@@ -1,5 +1,6 @@
-import React, { Fragment } from 'react'
+import * as React from 'react'
 import Flex from 'styled-flex-component'
+import idx from 'idx/lib/idx'
 
 import ActionButton from 'components/Button/ActionButton'
 import LinkButton from 'components/Button/LinkButton'
@@ -9,12 +10,15 @@ import { TextInput } from 'components/Forms/TextInput'
 import { Address } from './form-fields/Address'
 
 import Field from '../components/CustomField'
-
 import { Body, Footer, OfficeTitle } from '../styled'
 
 export function OfficeForm(props) {
+  const [office] = React.useState<IAgentOffice>(
+    idx(props.formObject, data => data.user.agent.office) || {}
+  )
+
   return (
-    <Fragment>
+    <React.Fragment>
       <Body>
         <OfficeTitle>
           Office info for {props.values.legal_full_name}
@@ -24,6 +28,7 @@ export function OfficeForm(props) {
           <Field
             label="Office Name"
             name="office_name"
+            initialValue={props.values.office_name || office.name}
             component={TextInput}
             style={{ flex: 4, marginRight: '0.5rem' }}
           />
@@ -31,6 +36,9 @@ export function OfficeForm(props) {
           <Field
             label="Office Lisence Number"
             name="office_license_number"
+            initialValue={
+              props.values.office_license_number || office.license_number
+            }
             component={TextInput}
             style={{ flex: 3, marginRight: '0.5rem' }}
           />
@@ -38,6 +46,7 @@ export function OfficeForm(props) {
           <Field
             label="Office MLS ID"
             name="office_mls_id"
+            initialValue={props.values.office_mls_id || office.mls_id}
             component={TextInput}
             style={{ flex: 3 }}
           />
@@ -47,6 +56,7 @@ export function OfficeForm(props) {
           <Field
             label="Office Email"
             name="office_email"
+            initialValue={props.values.office_email || office.email}
             component={TextInput}
             style={{ flex: 4, marginRight: '0.5rem' }}
           />
@@ -54,6 +64,7 @@ export function OfficeForm(props) {
           <Field
             label="Office Phone"
             name="office_phone"
+            initialValue={props.values.office_phone || office.phone}
             component={TextInput}
             style={{ flex: 3, marginRight: '0.5rem' }}
           />
@@ -61,6 +72,7 @@ export function OfficeForm(props) {
           <Field
             label="Office Fax"
             name="office_fax"
+            initialValue={props.values.office_fax || office.fax}
             component={TextInput}
             style={{ flex: 3 }}
           />
@@ -71,6 +83,7 @@ export function OfficeForm(props) {
             isVisible
             label="Office Address"
             name="office_address"
+            initialValue={props.values.office_address || {}}
             needsAddressForm
             component={Address}
             style={{ flex: 1 }}
@@ -93,6 +106,6 @@ export function OfficeForm(props) {
           </ActionButton>
         </Flex>
       </Footer>
-    </Fragment>
+    </React.Fragment>
   )
 }

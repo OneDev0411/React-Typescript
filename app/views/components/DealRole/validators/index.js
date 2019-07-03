@@ -17,10 +17,12 @@ export function getFormValidators(requiredFields) {
     role: role => ROLE_NAMES.includes(role),
 
     /* validate Current Address */
-    current_address: value => isValidString(value, requiredFields),
+    current_address: value =>
+      isValidAddress(value, requiredFields, 'current_address'),
 
     /* validate Future Address */
-    future_address: value => isValidString(value, requiredFields),
+    future_address: value =>
+      isValidAddress(value, requiredFields, 'future_address'),
 
     /* validate MLS ID */
     mls_id: value => isValidNumber(value, requiredFields, 'mls_id'),
@@ -56,9 +58,6 @@ export function getFormValidators(requiredFields) {
     /* validate Office Email */
     office_email: name => isValidEmail(name, requiredFields, 'office_email'),
 
-    /* validate Office Fax */
-    office_fax: name => isValidString(name, requiredFields, 'office_fax'),
-
     /* validate Office Lisence Number */
     office_license_number: name =>
       isValidString(name, requiredFields, 'office_license_number'),
@@ -72,6 +71,8 @@ export function getFormValidators(requiredFields) {
     /* validate Office Phone */
     office_phone: name =>
       isValidPhoneNumber(name, requiredFields, 'office_phone'),
+    /* validate Office Fax */
+    office_fax: name => isValidPhoneNumber(name, requiredFields, 'office_fax'),
 
     /* validate Office Address */
     office_address: value => isValidAddress(value, requiredFields)

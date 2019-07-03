@@ -35,6 +35,5 @@ declare interface IDealRole {
   role_type: string
   type: string
   updated_at: number
-
   user: IUser
 }
