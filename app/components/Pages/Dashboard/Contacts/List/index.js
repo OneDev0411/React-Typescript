@@ -61,6 +61,7 @@ import {
   getNewConnectedGoogleAccount
 } from './ImportContactsButton/helpers'
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
+import { ZeroState } from './ZeroState'
 
 class ContactsList extends React.Component {
   constructor(props) {
@@ -458,6 +459,12 @@ class ContactsList extends React.Component {
     } = this.props
     const contacts = selectContacts(list)
 
+    const isZeroState =
+      !isFetchingContacts &&
+      contacts.length === 0 &&
+      props.filters.length === 0 &&
+      !this.state.searchInputValue
+
     return (
       <PageContainer isOpen={isSideMenuOpen}>
         <SideMenu isOpen={isSideMenuOpen}>
@@ -495,55 +502,60 @@ class ContactsList extends React.Component {
             activeSegment={activeSegment}
             isSideMenuOpen={state.isSideMenuOpen}
             user={user}
+            showActions={!isZeroState}
             onMenuTriggerChange={this.toggleSideMenu}
           />
-          <Container>
-            <ContactFilters
-              onFilterChange={() => this.handleFilterChange({}, true)}
-              users={viewAsUsers}
-            />
-            <SearchWrapper row alignCenter>
-              <FlexItem basis="100%">
-                <SearchContacts
-                  onSearch={this.handleSearch}
-                  isSearching={isFetchingContacts}
-                />
-              </FlexItem>
-              <AlphabetFilter
-                value={state.firstLetter}
-                onChange={this.handleFirstLetterChange}
+          {isZeroState ? (
+            <ZeroState />
+          ) : (
+            <Container>
+              <ContactFilters
+                onFilterChange={() => this.handleFilterChange({}, true)}
+                users={viewAsUsers}
               />
-            </SearchWrapper>
-            <Table
-              data={contacts}
-              order={this.order}
-              listInfo={props.listInfo}
-              isFetching={isFetchingContacts}
-              isFetchingMore={state.isFetchingMoreContacts}
-              isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
-              isRowsUpdating={state.isRowsUpdating}
-              onRequestLoadMore={this.handleLoadMore}
-              onRequestLoadMoreBefore={this.handleLoadMoreBefore}
-              rowsUpdating={this.rowsUpdating}
-              onChangeSelectedRows={this.onChangeSelectedRows}
-              onRequestDelete={this.handleOnDelete}
-              tableContainerId={this.tableContainerId}
-              reloadContacts={this.reloadContacts}
-              handleChangeOrder={this.handleChangeOrder}
-              handleChangeContactsAttributes={() =>
-                this.handleFilterChange({}, true)
-              }
-              filters={{
-                alphabet: state.firstLetter,
-                attributeFilters: props.filters,
-                crm_tasks: props.crmTasks,
-                filter_type: props.conditionOperator,
-                flows: props.flows,
-                text: state.searchInputValue,
-                users: viewAsUsers
-              }}
-            />
-          </Container>
+              <SearchWrapper row alignCenter>
+                <FlexItem basis="100%">
+                  <SearchContacts
+                    onSearch={this.handleSearch}
+                    isSearching={isFetchingContacts}
+                  />
+                </FlexItem>
+                <AlphabetFilter
+                  value={state.firstLetter}
+                  onChange={this.handleFirstLetterChange}
+                />
+              </SearchWrapper>
+              <Table
+                data={contacts}
+                order={this.order}
+                listInfo={props.listInfo}
+                isFetching={isFetchingContacts}
+                isFetchingMore={state.isFetchingMoreContacts}
+                isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
+                isRowsUpdating={state.isRowsUpdating}
+                onRequestLoadMore={this.handleLoadMore}
+                onRequestLoadMoreBefore={this.handleLoadMoreBefore}
+                rowsUpdating={this.rowsUpdating}
+                onChangeSelectedRows={this.onChangeSelectedRows}
+                onRequestDelete={this.handleOnDelete}
+                tableContainerId={this.tableContainerId}
+                reloadContacts={this.reloadContacts}
+                handleChangeOrder={this.handleChangeOrder}
+                handleChangeContactsAttributes={() =>
+                  this.handleFilterChange({}, true)
+                }
+                filters={{
+                  alphabet: state.firstLetter,
+                  attributeFilters: props.filters,
+                  crm_tasks: props.crmTasks,
+                  filter_type: props.conditionOperator,
+                  flows: props.flows,
+                  text: state.searchInputValue,
+                  users: viewAsUsers
+                }}
+              />
+            </Container>
+          )}
         </PageContent>
       </PageContainer>
     )
