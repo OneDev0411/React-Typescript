@@ -28,7 +28,6 @@ export function SyncSuccessfulModal({ close, handleFilterChange }) {
                 // inside contacts list component which means whenever filters
                 // are changed we should manually call this.handleFilterChange.
                 handleFilterChange(filters)
-                close()
               }}
             >
               Manage Synced Contacts

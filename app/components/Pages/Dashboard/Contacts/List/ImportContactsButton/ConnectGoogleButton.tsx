@@ -1,4 +1,5 @@
-import { ReactElement, ReactNode, useState } from 'react'
+import * as React from 'react'
+import { ReactElement, useState } from 'react'
 import { connect } from 'react-redux'
 
 import { IAppState } from 'reducers/index'
@@ -9,10 +10,9 @@ import { startImportingGoogleContacts } from './helpers'
 
 interface RenderProps {
   connecting: boolean
-  connect: (event: MouseEvent) => void
+  connect: (event: React.MouseEvent) => void
 }
 interface Props {
-  user: IUser
   googleAccounts: IGoogleAccount[]
   children: (renderProps: RenderProps) => ReactElement<any>
 }

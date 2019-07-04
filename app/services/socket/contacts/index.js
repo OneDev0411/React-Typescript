@@ -22,7 +22,9 @@ export default class ContactSocket extends Socket {
   async bindEvents() {
     const { socket } = window
 
-    socket.on('Google.Contacts.Imported', () => fetchGoogleAccounts())
+    socket.on('Google.Contacts.Imported', () =>
+      fetchGoogleAccounts()(store.dispatch)
+    )
     socket.on('importDone', () => store.dispatch(importDone()))
     socket.on('importSuccesfullLogin', () => store.dispatch(loginSuccessful()))
     socket.on('importFail', () => store.dispatch(importFail()))

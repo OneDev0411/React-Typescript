@@ -37,10 +37,9 @@ interface Props {
 export function ImportContactsButton({ accounts, user }: Props) {
   const syncing = accounts.some(account => account.sync_status === 'pending')
 
-  const isTooltipOpen = !getActiveTeamSettings(
-    user,
-    IMPORT_TOOLTIP_VISITED_SETTINGS_KEY
-  )
+  const isTooltipOpen =
+    !getActiveTeamSettings(user, IMPORT_TOOLTIP_VISITED_SETTINGS_KEY) &&
+    accounts.length === 0
 
   useEffect(() => {
     if (isTooltipOpen) {

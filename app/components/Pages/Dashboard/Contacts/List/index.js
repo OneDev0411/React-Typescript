@@ -98,7 +98,7 @@ class ContactsList extends React.Component {
         case 'pending':
           this.setState({ syncStatus: 'pending' })
           break
-        case 'sunccess':
+        case 'success':
           clearImportingGoogleContacts()
           this.setState({ syncStatus: 'finished' })
           break
@@ -459,10 +459,16 @@ class ContactsList extends React.Component {
     } = this.props
     const contacts = selectContacts(list)
 
+    const syncing = this.props.googleAccounts.some(
+      account => account.sync_status !== 'success'
+    )
+
     const isZeroState =
       !isFetchingContacts &&
       contacts.length === 0 &&
       props.filters.length === 0 &&
+      !syncing &&
+      !state.syncStatus &&
       !this.state.searchInputValue
 
     return (
@@ -491,10 +497,16 @@ class ContactsList extends React.Component {
           )}
           {this.state.syncStatus === 'finished' && (
             <SyncSuccessfulModal
-              close={() => this.setState({ syncStatus: null })}
-              handleFilterChange={filters =>
+              close={() => {
+                this.setState({ syncStatus: null })
+                this.reloadContacts()
+                this.props.getContactsTags()
+              }}
+              handleFilterChange={filters => {
+                this.setState({ syncStatus: null })
+                this.props.getContactsTags()
                 this.handleFilterChange({ filters }, true, '-updated_at')
-              }
+              }}
             />
           )}
           <Header
