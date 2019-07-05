@@ -1,7 +1,3 @@
-import addressParser from 'parse-address'
-
-import normalizeParsedAddress from 'components/inline-editable-fields/InlineAddressField/InlineAddressForm/helpers/normalize-parsed-address'
-
 /**
  * get normalized form
  * commission logic: commission_type + commission = commission_<type>
@@ -29,9 +25,7 @@ export function normalizeForm(values) {
     'source_type',
     'role_type',
     'current_address',
-    'parsed_current_address',
     'future_address',
-    'parsed_future_address',
     'office_email',
     'office_phone',
     'office_fax',
@@ -57,10 +51,6 @@ export function normalizeForm(values) {
     normalized.source_type = 'ExplicitlyCreated'
   }
 
-  // parse current and future address separated fields for saving into contact
-  normalized.parsed_current_address = addressNormalizer(values.current_address)
-  normalized.parsed_future_address = addressNormalizer(values.future_address)
-
   return Object.entries({
     ...values,
     ...normalized
@@ -72,24 +62,6 @@ export function normalizeForm(values) {
     return {
       ...acc,
       [name]: typeof value === 'string' ? value.trim() : value
-    }
-  }, {})
-}
-
-function addressNormalizer(address) {
-  const parsed = address ? addressParser.parseLocation(address) : {}
-  const normalized = normalizeParsedAddress(parsed)
-
-  return Object.entries(normalized).reduce((acc, [name, item]) => {
-    const value = typeof item === 'object' && item !== null ? item.value : item
-
-    if (!value) {
-      return acc
-    }
-
-    return {
-      ...acc,
-      [name]: value
     }
   }, {})
 }

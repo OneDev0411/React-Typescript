@@ -130,15 +130,14 @@ export function convertContactToRole(contact) {
  */
 function getContactFields() {
   const addressFields = [
-    'street_number',
-    'street_prefix',
-    'street_name',
-    'street_suffix',
-    'unit_number',
-    'city',
-    'county',
-    'state',
-    'postal_code'
+    { contact: 'street_number', role: 'house_num' },
+    { contact: 'street_prefix', role: 'predir' },
+    { contact: 'street_name', role: 'name' },
+    { contact: 'street_suffix', role: 'suftype' },
+    { contact: 'unit_number', role: 'unit' },
+    { contact: 'city', role: 'city' },
+    { contact: 'state', role: 'state' },
+    { contact: 'postal_code', role: 'postcode' }
   ]
 
   return [
@@ -176,14 +175,16 @@ function getContactFields() {
     },
     {
       contact: addressFields,
-      role: 'parsed_current_address',
+      role: 'current_address',
       label: 'Past',
+      type: 'address',
       index: 0
     },
     {
       contact: addressFields,
-      role: 'parsed_future_address',
+      role: 'future_address',
       label: 'Home',
+      type: 'address',
       index: 1
     }
   ]
@@ -193,12 +194,16 @@ function getContactDefinitions(attributeDefs, form, item) {
   const list = Array.isArray(item.contact) ? item.contact : [item.contact]
 
   return list.map(name => {
-    const definition = selectDefinitionByName(attributeDefs, name)
+    const contactFieldName = typeof name === 'string' ? name : name.contact
+    const roleFieldName = typeof name === 'string' ? name : name.role
+
+    const definition = selectDefinitionByName(attributeDefs, contactFieldName)
 
     const formValue = form[item.role]
+
     const value =
       typeof formValue === 'object' && formValue !== null
-        ? formValue[name]
+        ? formValue[roleFieldName]
         : formValue
 
     return {
@@ -248,9 +253,7 @@ export function getContactChangedAttributes(form = {}, attributeDefs) {
     // currently ignore address field when updading an existance contact record
     .filter(
       item =>
-        ['parsed_current_address', 'parsed_future_address'].includes(
-          item.role
-        ) === false
+        ['current_address', 'future_address'].includes(item.role) === false
     )
     .forEach(item => {
       const definitions = getContactDefinitions(attributeDefs, form, item)
