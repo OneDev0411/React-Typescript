@@ -82,7 +82,7 @@ describe('Contact profile', () => {
     cy.getByTestSelector('date-picker-done').click()
     cy.getByTestSelector('save-task').click()
 
-    // now we should wait have 2 tasks here
+    // now we should wait to have 2 tasks here
     cy.getByTestSelector(crmTaskItemDataTest).should('have.length', 2)
 
     cy.getByTestSelector(crmTaskItemDataTest)
