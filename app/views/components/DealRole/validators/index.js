@@ -25,7 +25,7 @@ export function getFormValidators(requiredFields) {
       isValidAddress(value, requiredFields, 'future_address'),
 
     /* validate MLS ID */
-    mls_id: value => isValidNumber(value, requiredFields, 'mls_id'),
+    mls_id: value => isValidString(value, requiredFields, 'mls_id'),
 
     /* validate Legal Prefix */
     legal_prefix: value => isValidLegalPrefix(value, requiredFields),
@@ -63,7 +63,7 @@ export function getFormValidators(requiredFields) {
       isValidString(name, requiredFields, 'office_license_number'),
 
     /* validate Office MLS ID */
-    office_mls_id: name => isValidNumber(name, requiredFields, 'office_mls_id'),
+    office_mls_id: name => isValidString(name, requiredFields, 'office_mls_id'),
 
     /* validate  Office Name */
     office_name: name => isValidString(name, requiredFields, 'office_name'),

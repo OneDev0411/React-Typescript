@@ -33,6 +33,7 @@ export function normalizeForm(values) {
     'future_address',
     'parsed_future_address',
     'office_email',
+    'office_phone',
     'office_fax',
     'office_license_number',
     'office_mls_id',
