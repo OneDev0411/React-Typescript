@@ -14,6 +14,7 @@ class ExportContacts extends React.Component {
       excludedRows,
       exportIds,
       filters,
+      crmTasks,
       user,
       users,
       searchText,
@@ -28,17 +29,19 @@ class ExportContacts extends React.Component {
 
     if (Array.isArray(exportIds) && exportIds.length > 0) {
       params.ids = exportIds
-    } else if (Array.isArray(filters) && filters.length > 0) {
-      params.filter_type = filter_type
+    } else {
+      if (Array.isArray(filters) && filters.length > 0) {
+        params.filter_type = filter_type
 
-      params.filters = filters.map(
-        ({ attribute_def, invert, operator, value }) => ({
-          attribute_def,
-          invert,
-          operator,
-          value
-        })
-      )
+        params.filters = filters.map(
+          ({ attribute_def, invert, operator, value }) => ({
+            attribute_def,
+            invert,
+            operator,
+            value
+          })
+        )
+      }
 
       const cleanedSearchText = removeSpecialCharacters(searchText)
 
@@ -48,6 +51,10 @@ class ExportContacts extends React.Component {
 
       if (Array.isArray(excludedRows) && excludedRows.length > 0) {
         params.excludes = excludedRows
+      }
+
+      if (Array.isArray(crmTasks) && crmTasks.length > 0) {
+        params.crm_tasks = crmTasks
       }
     }
 
