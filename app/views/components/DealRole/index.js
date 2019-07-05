@@ -321,6 +321,7 @@ export class DealRole extends React.Component {
       dealSide: props.dealSide,
       isEmailRequired: props.isEmailRequired,
       isCommissionRequired: props.isCommissionRequired,
+      isBrokerageForm: props.showBrokerageFields,
       visibleFields,
       ...shared
     })

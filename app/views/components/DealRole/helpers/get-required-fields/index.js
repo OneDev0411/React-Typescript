@@ -54,6 +54,10 @@ function getIsCompanyRequired(args) {
 export default function getRequiredFields(args) {
   const { role, role_type } = args
 
+  if (args.isBrokerageForm) {
+    return []
+  }
+
   // role and role_type are always mandatory
   const list = ['role', 'role_type']
 
