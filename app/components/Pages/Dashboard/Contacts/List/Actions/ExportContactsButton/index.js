@@ -30,9 +30,9 @@ class ExportContacts extends React.Component {
     if (Array.isArray(exportIds) && exportIds.length > 0) {
       params.ids = exportIds
     } else {
-      if (Array.isArray(filters) && filters.length > 0) {
-        params.filter_type = filter_type
+      params.filter_type = filter_type
 
+      if (Array.isArray(filters) && filters.length > 0) {
         params.filters = filters.map(
           ({ attribute_def, invert, operator, value }) => ({
             attribute_def,

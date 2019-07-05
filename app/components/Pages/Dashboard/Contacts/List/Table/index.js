@@ -122,7 +122,7 @@ class ContactsList extends React.Component {
             filters={filters.attributeFilters}
             crmTasks={filters.crm_tasks}
             searchText={filters.text}
-            conditionOperator={filters.filter_types}
+            conditionOperator={filters.filter_type}
             users={filters.users}
             disabled={this.props.isFetching}
           />
