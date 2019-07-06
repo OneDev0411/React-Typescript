@@ -12,27 +12,21 @@ function getOptionsByAttributeType(contact, type) {
     .map(item => item.text)
 }
 
-// function getAddressFromContact(contact, label) {
-//   const fields = [
-//     'street_number',
-//     'street_prefix',
-//     'street_name',
-//     'street_suffix',
-//     'unit_number',
-//     'city',
-//     'county',
-//     'state',
-//     'postal_code'
-//   ]
-//     .map(type => {
-//       return contact.attributes.find(
-//         attr => attr.attribute_type === type && attr.label === label
-//       )
-//     })
-//     .filter(attr => attr)
+function getAddressFromContact(contact, label) {
+  if (!Array.isArray(contact.address)) {
+    return null
+  }
 
-//   return getFullAddress(fields)
-// }
+  const address = contact.address.find(
+    addressItem => addressItem.extra === label
+  )
+
+  if (!address) {
+    return null
+  }
+
+  return address
+}
 
 export function NameInput(props) {
   const [isSearching, setIsSearching] = useState(false)
@@ -54,8 +48,8 @@ export function NameInput(props) {
           phone_numbers: getOptionsByAttributeType(contact, 'phone_number'),
           emails: getOptionsByAttributeType(contact, 'email'),
           companies: getOptionsByAttributeType(contact, 'company'),
-          // current_address: getAddressFromContact(contact, 'Past'),
-          // future_address: getAddressFromContact(contact, 'Home'),
+          current_address: getAddressFromContact(contact, 'Past'),
+          future_address: getAddressFromContact(contact, 'Home'),
           value: contact.summary[props.searchField],
           label: contact.summary.display_name
         }))
