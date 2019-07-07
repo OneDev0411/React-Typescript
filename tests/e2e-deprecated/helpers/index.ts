@@ -23,6 +23,13 @@ export const getTestSelector = (name: string | string[]) => {
     .join(' ')
 }
 
+export const getTestIdSelector = (name: string | string[]) => {
+  return ([] as string[])
+    .concat(name)
+    .map(item => `[data-testid="${item}"]`)
+    .join(' ')
+}
+
 export const getElementText = async (element: ElementHandle) =>
   (await element.getProperty('textContent')).jsonValue()
 

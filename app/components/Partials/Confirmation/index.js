@@ -73,7 +73,7 @@ class Confirmation extends React.Component {
             <Button
               appearance="outline"
               onClick={() => this.onCancel()}
-              data-test="confirmation-modal-cancel-button"
+              data-testid="confirmation-modal-cancel-button"
             >
               {confirmation.cancelLabel || 'Cancel'}
             </Button>
@@ -82,7 +82,7 @@ class Confirmation extends React.Component {
             <Button
               style={{ marginLeft: '1em' }}
               onClick={() => this.onConfirm()}
-              data-test="confirmation-modal-confirm-button"
+              data-testid="confirmation-modal-confirm-button"
             >
               {confirmation.confirmLabel || 'Confirm'}
             </Button>

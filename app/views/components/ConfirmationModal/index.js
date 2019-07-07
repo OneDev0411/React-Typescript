@@ -48,30 +48,40 @@ function ConfirmationModal() {
       onRequestClose={handleCancel}
       noFooter
     >
-      <div
-        className="confirmation-title"
-        dangerouslySetInnerHTML={{
-          __html: confirmation.message
-        }}
-      />
+      {confirmation.isShow && (
+        <>
+          <div
+            className="confirmation-title"
+            dangerouslySetInnerHTML={{
+              __html: confirmation.message
+            }}
+            data-testid="confirmation-modal-title"
+          />
 
-      {confirmation.description && (
-        <div className="confirmation-descr">{confirmation.description}</div>
+          {confirmation.description && (
+            <div
+              className="confirmation-descr"
+              data-testid="confirmation-modal-description"
+            >
+              {confirmation.description}
+            </div>
+          )}
+
+          <UserEntry
+            isShow={confirmation.needsUserEntry}
+            inputDefaultValue={confirmation.inputDefaultValue}
+            inputPlaceholder={confirmation.inputPlaceholder}
+            multilineEntry={confirmation.multilineEntry}
+            ref={entryInputRef}
+          />
+
+          <ActionBar
+            confirmation={confirmation}
+            onCancel={handleCancel}
+            onConfirm={handleConfirm}
+          />
+        </>
       )}
-
-      <UserEntry
-        isShow={confirmation.needsUserEntry}
-        inputDefaultValue={confirmation.inputDefaultValue}
-        inputPlaceholder={confirmation.inputPlaceholder}
-        multilineEntry={confirmation.multilineEntry}
-        ref={entryInputRef}
-      />
-
-      <ActionBar
-        confirmation={confirmation}
-        onCancel={handleCancel}
-        onConfirm={handleConfirm}
-      />
     </Modal>
   )
 }

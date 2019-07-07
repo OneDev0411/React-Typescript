@@ -13,7 +13,7 @@ function ActionBar(props) {
         <Button
           appearance="outline"
           onClick={onCancel}
-          data-test="confirmation-modal-cancel-button"
+          data-testid="confirmation-modal-cancel-button"
         >
           {confirmation.cancelLabel || 'Cancel'}
         </Button>
@@ -23,7 +23,7 @@ function ActionBar(props) {
           style={{ marginLeft: '1em' }}
           onClick={onConfirm}
           className="modal-confirm"
-          data-test="confirmation-modal-confirm-button"
+          data-testid="confirmation-modal-confirm-button"
         >
           {confirmation.confirmLabel || 'Confirm'}
         </Button>

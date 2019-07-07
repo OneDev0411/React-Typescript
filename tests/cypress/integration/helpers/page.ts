@@ -5,6 +5,13 @@ export function getTestSelector(name: string | string[]) {
     .join(' ')
 }
 
+export function getTestIdSelector(name: string | string[]) {
+  return ([] as string[])
+    .concat(name)
+    .map(item => `[data-testid="${item}"]`)
+    .join(' ')
+}
+
 export function getFirstChildOfTestSelector(name: string) {
   return `${getTestSelector(name)} *:first-child`
 }
