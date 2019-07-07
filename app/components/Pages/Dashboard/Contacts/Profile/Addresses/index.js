@@ -115,6 +115,7 @@ class Addresses extends React.Component {
 
       return removeAddressFromState()
     } catch (error) {
+      console.log(error)
       this.props.notify({
         message:
           'An error occurred while deleting the address. Please try again.',
@@ -176,7 +177,7 @@ function mapStateToProps(state) {
   }
 }
 
-// This is using for
+// This is using for testing
 export { Addresses }
 export default connect(
   mapStateToProps,
