@@ -2,7 +2,8 @@ import styled from 'styled-components'
 
 import { ComponentProps } from 'react'
 
-import { green, red } from '../../utils/colors'
+import { green, red } from 'views/utils/colors'
+
 import IconButton from '../Button/IconButton'
 
 import { Callout } from '.'
@@ -15,6 +16,7 @@ export const BG_MAPPING: {
   success: green.primary,
   error: red.A100
 }
+
 export const CalloutContainer = styled.div<
   Required<Pick<ComponentProps<typeof Callout>, 'type'>>
 >`
@@ -28,6 +30,7 @@ export const CalloutContainer = styled.div<
 export const CalloutContent = styled.div`
   flex: 1;
 `
+
 export const CalloutCloseButton = styled(IconButton)`
   background: rgba(0, 0, 0, 0.1);
   border-radius: 50%;

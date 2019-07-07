@@ -2,7 +2,7 @@ import * as React from 'react'
 import { ReactElement, useState } from 'react'
 import { connect } from 'react-redux'
 
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 
 import { importGoogleContacts } from 'models/contacts/import-google-contacts'
 

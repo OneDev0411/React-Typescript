@@ -1,8 +1,12 @@
 import { maxBy } from 'lodash'
 
 const KEY = 'importingGoogleContacts'
-// A helper for remembering google contacts import in progress when user
-// is navigated to google and back to Rechat
+/**
+ * A helper for remembering google contacts import in progress when user
+ * is navigated to google and back to Rechat.
+ * It's called to check if any account is added since the last time
+ * {@link startImportingGoogleContacts} is called
+ */
 export function getNewConnectedGoogleAccount(
   currentAccounts: IGoogleAccount[]
 ): IGoogleAccount | null {
@@ -21,7 +25,8 @@ export function getNewConnectedGoogleAccount(
 }
 
 /**
- *
+ * It remembers the last connected account to detect if a new account is
+ * connected after the user is navigated back from google to our website.
  */
 export function startImportingGoogleContacts(
   currentAccounts: IGoogleAccount[]

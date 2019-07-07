@@ -28,7 +28,7 @@ export const ORIGINS = [
   },
   {
     label: 'Outlook',
-    description: 'Imported from outlook',
+    description: 'Imported from Outlook',
     value: 'External/Outlook'
   },
   {

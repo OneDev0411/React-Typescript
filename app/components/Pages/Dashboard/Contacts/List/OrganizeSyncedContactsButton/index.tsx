@@ -1,17 +1,15 @@
 import { connect } from 'react-redux'
 
-import { ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 
-import * as React from 'react'
-
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 import { createActiveFilters } from 'actions/filter-segments/active-filters'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
 import createFiltersFromSegment from '../Filters/helpers/create-filters-from-segment'
 
 interface RenderProps {
-  applyFilters: () => void
+  applyFilters: () => IContactAttributeFilter[]
 }
 
 interface Props {

@@ -6,7 +6,12 @@ import ActionButton from 'components/Button/ActionButton'
 
 import OrganizeSyncedContactsButton from '../OrganizeSyncedContactsButton'
 
-export function SyncSuccessfulModal({ close, handleFilterChange }) {
+interface Props {
+  close: () => void
+  handleFilterChange: (filters: IContactAttributeFilter[]) => void
+}
+
+export function SyncSuccessfulModal({ close, handleFilterChange }: Props) {
   return (
     <BareModal isOpen autoHeight onRequestClose={close}>
       <div style={{ padding: '2rem', textAlign: 'center' }}>

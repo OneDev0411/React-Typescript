@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 
 import { CSSProperties } from 'react'
 
-import { borderColor, grey } from '../../utils/colors'
+import { borderColor, grey } from 'views/utils/colors'
 
 interface Props {
   vertical?: boolean

@@ -66,7 +66,7 @@ const appReducer = combineReducers({
 
 export type IAppState = {
   contacts: IContactReduxState
-  user: any // TODO
+  user: IUser
 }
 
 export default (state, action) => appReducer(state, action)

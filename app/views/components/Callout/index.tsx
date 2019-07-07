@@ -10,12 +10,12 @@ interface Props {
   children: ReactNode
 }
 
-export function Callout(props: Props) {
+export function Callout({ type = 'info', children, onClose }: Props) {
   return (
-    <CalloutContainer type={props.type || 'info'}>
-      <CalloutContent>{props.children}</CalloutContent>
-      {props.onClose && (
-        <CalloutCloseButton iconSize="small" onClick={props.onClose}>
+    <CalloutContainer type={type}>
+      <CalloutContent>{children}</CalloutContent>
+      {onClose && (
+        <CalloutCloseButton iconSize="small" onClick={onClose}>
           <CloseIcon />
         </CalloutCloseButton>
       )}

@@ -54,7 +54,7 @@ import {
   OPEN_HOUSE_FILTER_ID,
   SORT_FIELD_SETTING_KEY
 } from './constants'
-import { Container, SearchWrapper } from './styled'
+import { CalloutSpinner, Container, SearchWrapper } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
 import {
   clearImportingGoogleContacts,
@@ -487,10 +487,7 @@ class ContactsList extends React.Component {
         <PageContent id={this.tableContainerId} isSideMenuOpen={isSideMenuOpen}>
           {this.state.syncStatus === 'pending' && (
             <Callout onClose={() => this.setState({ syncStatus: null })}>
-              <i
-                className="fa fa-spin fa-spinner"
-                style={{ marginRight: '0.5rem' }}
-              />
+              <CalloutSpinner viewBox="20 20 60 60" />
               Doing Science! wait a moment till you can see how really Rechat
               works with contacts and emails
             </Callout>
