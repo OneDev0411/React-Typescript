@@ -71,7 +71,7 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
 
     if (ids) {
       data = handleIds(ids)
-    } else if (filters) {
+    } else {
       data = handleFilters(filters, crm_tasks, excludes, searchText)
     }
 
