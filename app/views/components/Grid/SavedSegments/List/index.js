@@ -110,18 +110,22 @@ class SegmentsList extends React.Component {
   }
 }
 
-function mapStateToProps(state, { name }) {
+function mapStateToProps(state, { name, getPredefinedLists }) {
   const { filterSegments } = state[name]
 
   return {
     isListFetched: isListFetched(filterSegments),
     isFetching: filterSegments.isFetching,
-    list: getSegments(filterSegments, name),
-    activeItem: selectActiveSavedSegment(filterSegments, name)
+    list: getSegments(filterSegments, name, getPredefinedLists),
+    activeItem: selectActiveSavedSegment(
+      filterSegments,
+      name,
+      getPredefinedLists
+    )
   }
 }
 
-export default connect(
+const ConnectedSegmentsList = connect(
   mapStateToProps,
   {
     changeActiveFilterSegment,
@@ -129,3 +133,9 @@ export default connect(
     getSavedSegments
   }
 )(SegmentsList)
+
+ConnectedSegmentsList.defaultProps = {
+  getPredefinedLists: name => ({ default: getDefaultList(name) })
+}
+
+export default ConnectedSegmentsList
