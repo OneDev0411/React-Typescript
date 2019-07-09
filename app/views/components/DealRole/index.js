@@ -378,6 +378,7 @@ export class DealRole extends React.Component {
 
     return (
       <BareModal
+        className="deal-role-form-modal"
         isOpen
         style={{
           content: { top: '40%', height: 'auto', overflow: 'initial' }

@@ -91,7 +91,7 @@ function normalizeRoles(list) {
     current[context_name] = groupBy(normalized[context_name], item => {
       return `${item.group}_${item.role
         .sort()
-        .concat(item.attributes.sort())
+        .concat(item.attributes)
         .join('_')}`
     })
 
