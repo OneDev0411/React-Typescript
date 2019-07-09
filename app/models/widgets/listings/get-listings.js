@@ -1,6 +1,6 @@
 import Fetch from '../../../services/fetch'
 
-const byValert = async (options, widgetOptions = {}, brand) => {
+const byValert = async (options, params = {}, brand) => {
   if (!options) {
     return
   }
@@ -13,7 +13,7 @@ const byValert = async (options, widgetOptions = {}, brand) => {
       .send(options)
       .query({
         associations: 'compact_listing.proposed_agent',
-        ...widgetOptions
+        ...params
       })
 
     if (brand && brand.id) {

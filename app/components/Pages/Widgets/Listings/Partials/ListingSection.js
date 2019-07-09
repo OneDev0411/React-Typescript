@@ -12,19 +12,21 @@ import Loading from '../../../../Partials/Loading'
 import Brand from '../../../../../controllers/Brand'
 import getListing from '../../../../../store_actions/widgets/listings/get-listings'
 
-class Section extends Component {
-  componentDidMount() {
-    const { user, location } = this.props
+import { getOptions } from './get-options'
 
-    this.options = this.initOptions(
-      location.query.brokerage,
-      location.query.agent,
-      this.props.type,
-      location.query.brand,
-      user
-    )
-    this.widgetOptions = this.initWidgetOptions()
-    this.props.getListing(this.options, this.widgetOptions)
+class Section extends Component {
+  constructor(props) {
+    super(props)
+
+    const {
+      location: { query }
+    } = props
+
+    this.options = getOptions(query.brokerage, query.agent, props.type)
+  }
+
+  componentDidMount() {
+    this.props.getListing(this.options, this.params)
   }
 
   componentDidUpdate(prevProps) {
@@ -33,116 +35,22 @@ class Section extends Component {
     }
   }
 
+  get params() {
+    return {
+      type: this.props.type,
+      'order_by[]': 'price'
+    }
+  }
+
   handleListingClick(listing) {
     window.open(`/dashboard/mls/${listing.id}`, '_blank')
   }
 
-  initWidgetOptions() {
-    let queryString = ''
-
-    if (
-      (this.options.list_offices && this.options.list_offices.length) ||
-      this.options.brand
-    ) {
-      queryString +=
-        '?associations=compact_listing.proposed_agent&order_by[]=price'
-    }
-
-    return {
-      queryString,
-      type: this.props.type
-    }
-  }
-
-  initOptions(brokerage, agent, type, brand, user) {
-    const options = {
-      property_types: [
-        'Residential',
-        'Residential Lease',
-        'Lots & Acreage',
-        'Multi-Family'
-      ],
-      property_subtypes: [
-        'RES-Single Family',
-        'RES-Half Duplex',
-        'RES-Farm/Ranch',
-        'RES-Condo',
-        'RES-Townhouse',
-        'LSE-Apartment',
-        'LSE-Condo/Townhome',
-        'LSE-Duplex',
-        'LSE-Fourplex',
-        'LSE-House',
-        'LSE-Mobile',
-        'LSE-Triplex',
-        'LND-Commercial',
-        'LND-Farm/Ranch',
-        'LND-Residential',
-        'MUL-Full Duplex'
-      ]
-    }
-
-    if (brokerage) {
-      options.list_offices = [brokerage]
-    }
-
-    if (agent) {
-      options.agents = [agent]
-    }
-
-    if (brand) {
-      options.brand = brand
-    }
-
-    if (user) {
-      options.access_token = user.access_token
-    }
-
-    if (type === 'sold') {
-      options.limit = '6'
-      options.listing_statuses = ['Sold', 'Leased']
-    } else {
-      options.listing_statuses = [
-        'Active',
-        'Active Contingent',
-        'Active Kick Out',
-        'Active Option Contract',
-        'Pending'
-      ]
-    }
-
-    return options
-  }
-
-  generateQueryString(query, newQuery, newValue) {
-    if (query.indexOf('?') < 0) {
-      return `${query}?${newQuery}=${newValue}`
-    }
-
-    return `${query}&${newQuery}=${newValue}`
-  }
-
-  triggerNextPage() {
+  getNextPage = () => {
     this.props.getListing(this.options, {
-      ...this.widgetOptions,
-      queryString: this.generateQueryString(
-        this.widgetOptions.queryString,
-        'offset',
-        this.props.listings.length
-      )
+      ...this.params,
+      offset: this.props.listings.length
     })
-  }
-
-  sort = ({ price: a }, { price: b }) => {
-    if (a > b) {
-      return -1
-    }
-
-    if (b > a) {
-      return 1
-    }
-
-    return 0
   }
 
   render() {
@@ -170,18 +78,16 @@ class Section extends Component {
           <span style={S('h-1 bg-e2e2e2 w-80 m-20 inline-block')} />
         </div>
         {listings.length > 0 &&
-          listings
-            .sort(this.sort)
-            .map(listing => (
-              <ListingCard
-                className="listing-card"
-                key={listing.id}
-                brandColor={brandColor}
-                defaultAvatar={defaultAvatar}
-                user={user}
-                listing={listing}
-              />
-            ))}
+          listings.map(listing => (
+            <ListingCard
+              className="listing-card"
+              key={listing.id}
+              brandColor={brandColor}
+              defaultAvatar={defaultAvatar}
+              user={user}
+              listing={listing}
+            />
+          ))}
         <div className="clearfix" />
         {this.props.isFetching && (
           <div style={S('text-center')}>
@@ -192,7 +98,7 @@ class Section extends Component {
         {showLoadMore && (
           <div style={S('text-center')}>
             <ActionButton
-              onClick={this.triggerNextPage.bind(this, 'active')}
+              onClick={this.getNextPage}
               style={{
                 backgroundColor: brandColor,
                 paddingLeft: '3em',
@@ -210,10 +116,12 @@ class Section extends Component {
 
 export default withRouter(
   connect(
-    ({ widgets }, { type, location }) => {
+    ({ widgets, user, brand }, { type, location }) => {
       const listings = widgets.listings[type] || {}
 
       return {
+        user,
+        brand,
         location,
         listings: listings.listings || [],
         listingsInfo: listings.listingsInfo || {},
