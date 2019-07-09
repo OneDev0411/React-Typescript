@@ -23,6 +23,7 @@ declare interface IReduxFilterSegmentState<ListType = any> {
 declare interface ISavedSegment<F = any> {
   id: UUID
   name: string
+  badge?: number | string
   filters?: F[]
   is_editable: boolean
 }

@@ -1,39 +1,12 @@
 import React, { useState } from 'react'
 
+import { initialConfirmationModal } from './initial-confirmation-modal'
+
 import ConfirmationModalContext from './index'
-
-export const initialConfimationModal = {
-  // Visibility
-  isShow: false,
-  appearance: 'normal', // normal, danger
-
-  // Default Interface
-  message: '',
-  description: '',
-
-  // User Entry
-  multilineEntry: true,
-  needsUserEntry: false,
-  inputDefaultValue: '',
-  inputPlaceholder: '',
-
-  // Cancel Button
-  onCancel: null,
-  cancelLabel: '',
-  needsCancel: true,
-
-  // Confirm Button
-  onConfirm: null,
-  confirmLabel: '',
-  needsConfirm: true,
-
-  // Methods
-  setConfirmationModal: () => {}
-}
 
 function ContextProvider(props) {
   const [confimationState, setConfirmationModal] = useState(
-    initialConfimationModal
+    initialConfirmationModal
   )
 
   return (
@@ -48,7 +21,7 @@ function ContextProvider(props) {
             updateContext.isShow === null
 
           setConfirmationModal({
-            ...initialConfimationModal,
+            ...initialConfirmationModal,
             ...updateContext,
             isShow
           })

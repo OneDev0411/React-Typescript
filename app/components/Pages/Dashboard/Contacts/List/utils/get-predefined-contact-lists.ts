@@ -17,6 +17,7 @@ export const getPredefinedContactLists = (
     predefinedLists.synced = {
       id: 'synced',
       name: 'Synced Contacts',
+      badge: undefined, // TODO: handle when server api is added for it.
       is_editable: false,
       filters: getOrganizeSyncedContactsAttributeFilters(
         state.contacts.attributeDefs

@@ -474,7 +474,7 @@ class ContactsList extends React.Component {
 
     return (
       <PageContainer isOpen={isSideMenuOpen}>
-        <SideMenu isOpen={isSideMenuOpen}>
+        <SideMenu isOpen={isSideMenuOpen} width="13rem">
           <SavedSegments
             name={CONTACTS_SEGMENT_NAME}
             associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
