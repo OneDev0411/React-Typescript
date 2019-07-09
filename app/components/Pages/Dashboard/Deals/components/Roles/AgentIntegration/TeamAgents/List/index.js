@@ -106,27 +106,46 @@ export function AgentsList(props) {
 }
 
 function normalizeTeams(teams, searchTerm) {
-  const list = teams.map(office => {
-    const agents = getBrandUsers(office).map(user => ({
-      ...user,
-      office: office.name
-    }))
+  const list = teams
+    .filter(office => !isTrainingBrand(office))
+    .map(office => {
+      const agents = getBrandUsers(office).map(user => ({
+        ...user,
+        office: office.name
+      }))
 
-    return {
-      id: office.id,
-      name: office.name,
-      subtitle: getSubtitle(office),
-      users: searchTerm
-        ? new Fuse(agents, {
-            keys: ['office', 'display_name', 'email'],
-            threshold: 0.1
-          }).search(searchTerm)
-        : agents
-    }
-  })
+      return {
+        id: office.id,
+        name: office.name,
+        subtitle: getSubtitle(office),
+        users: searchTerm
+          ? new Fuse(agents, {
+              keys: ['office', 'display_name', 'email'],
+              threshold: 0.1
+            }).search(searchTerm)
+          : agents
+      }
+    })
 
   return list.every(office => !office.users.length) ? [] : list
 }
+
+const isTrainingBrand = memoize(
+  office => {
+    let current = office
+
+    do {
+      if (current.training) {
+        return true
+      }
+
+      current = current.parent
+    } while (current !== null)
+
+    return false
+  },
+  office => office.id
+)
 
 const getSubtitle = memoize(
   office => {
