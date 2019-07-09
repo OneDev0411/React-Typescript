@@ -43,7 +43,7 @@
         "app/constants/*"
       ],
       "dashboard/*": [
-        "app/components/Dashboard/*"
+        "app/components/Pages/Dashboard/*"
       ],
       "hooks/*": [
         "app/hooks/*"
