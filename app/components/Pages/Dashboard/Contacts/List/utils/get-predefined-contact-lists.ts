@@ -13,16 +13,14 @@ export const getPredefinedContactLists = (
 
   const accounts = state.contacts.googleAccounts
 
-  // if (accounts.length > 0 && accounts[0].con) {
-  //
-  // }
-
   if (accounts.length > 0) {
     predefinedLists.synced = {
       id: 'synced',
       name: 'Synced Contacts',
       is_editable: false,
-      filters: getOrganizeSyncedContactsAttributeFilters(state.contacts.attributeDefs)
+      filters: getOrganizeSyncedContactsAttributeFilters(
+        state.contacts.attributeDefs
+      )
     }
   }
 

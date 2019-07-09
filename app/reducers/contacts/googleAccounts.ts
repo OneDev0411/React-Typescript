@@ -3,7 +3,7 @@ import { IGoogleAccountActions } from 'actions/contacts/fetch-google-accounts'
 import * as actionTypes from '../../constants/contacts'
 
 export function googleAccounts(
-  state: IGoogleAccountWithHistory[] = [],
+  state: IGoogleAccount[] = [],
   action: IGoogleAccountActions
 ) {
   switch (action.type) {

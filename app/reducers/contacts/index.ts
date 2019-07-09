@@ -10,7 +10,7 @@ import { contactsFilterSegments } from '../filter-segments'
 import { googleAccounts } from './googleAccounts'
 
 export interface IContactReduxState {
-  googleAccounts: IGoogleAccountWithHistory[]
+  googleAccounts: IGoogleAccount[]
   attributeDefs: IAttributeDefsState
   list: IContactReduxListState
   filterSegments: IContactReduxFilterSegmentState

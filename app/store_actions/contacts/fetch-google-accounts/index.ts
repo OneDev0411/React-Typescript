@@ -1,5 +1,3 @@
-import { getGoogleAccountsSyncHistory } from '../../../models/contacts/get-google-account-sync-history'
-
 import { getGoogleAccounts } from '../../../models/contacts/get-google-accounts'
 
 import * as actionTypes from '../../../constants/contacts'
@@ -8,7 +6,7 @@ export type IGoogleAccountActions =
   | { type: typeof actionTypes.FETCH_GOOGLE_ACCOUNTS_REQUEST }
   | {
       type: typeof actionTypes.FETCH_GOOGLE_ACCOUNTS_SUCCESS
-      accounts: IGoogleAccountWithHistory[]
+      accounts: IGoogleAccount[]
     }
 export function fetchGoogleAccounts() {
   return async dispatch => {
@@ -17,17 +15,10 @@ export function fetchGoogleAccounts() {
         type: actionTypes.FETCH_GOOGLE_ACCOUNTS_REQUEST
       })
 
-      const accounts = await getGoogleAccounts()
-
-      const syncHistories = await Promise.all(
-        accounts.map(account => getGoogleAccountsSyncHistory(account.id))
-      )
+      const accounts = await getGoogleAccounts(true)
 
       dispatch({
-        accounts: accounts.map((account, index) => ({
-          ...account,
-          sync_history: syncHistories[index]
-        })),
+        accounts,
         type: actionTypes.FETCH_GOOGLE_ACCOUNTS_SUCCESS
       })
     } catch (error) {

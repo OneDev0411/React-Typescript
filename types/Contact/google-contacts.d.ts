@@ -24,16 +24,13 @@ declare interface IGoogleAccount {
   photo: string
   resource_name: string
   revoked: boolean
+  sync_history?: IGoogleSyncHistory[]
   sync_status: 'success' | 'pending' | null
   scope: string[]
   threads_total: null | number
   type: string
   updated_at: string
   user: UUID
-}
-
-declare interface IGoogleAccountWithHistory extends IGoogleAccount {
-  sync_history: IGoogleSyncHistory[]
 }
 
 declare interface IGoogleSyncHistory {
