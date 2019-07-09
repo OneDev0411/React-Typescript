@@ -4,9 +4,9 @@ import React, { ReactNode } from 'react'
 
 import { IAppState } from 'reducers'
 import { createActiveFilters } from 'actions/filter-segments/active-filters'
-import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
 import createFiltersFromSegment from '../Filters/helpers/create-filters-from-segment'
+import { getOrganizeSyncedContactsAttributeFilters } from './helpers'
 
 interface RenderProps {
   applyFilters: () => IContactAttributeFilter[]
@@ -31,21 +31,9 @@ function OrganizeSyncedContactsButton(props: Props) {
 }
 
 function mapStateToProps({ contacts }: IAppState) {
-  const sourceDefinition = selectDefinitionByName(
-    contacts.attributeDefs,
-    'source_type'
-  )
-
-  const origin = 'Google'
-
   return {
-    getOriginFilters: () => [
-      {
-        attribute_def: sourceDefinition.id,
-        invert: false,
-        value: origin
-      }
-    ]
+    getOriginFilters: () =>
+      getOrganizeSyncedContactsAttributeFilters(contacts.attributeDefs)
   }
 }
 

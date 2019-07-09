@@ -13,7 +13,7 @@ import {
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import { selectContactsInfo } from 'reducers/contacts/list'
 import {
-  AttributeDefsState,
+  IAttributeDefsState,
   selectDefinitionByName
 } from 'reducers/contacts/attributeDefs'
 import { selectActiveFilters } from 'reducers/filter-segments'
@@ -38,7 +38,7 @@ const CustomListItemName = styled(ListItemName)`
 `
 
 interface Props {
-  attributeDefs: AttributeDefsState
+  attributeDefs: IAttributeDefsState
   activeFilters: StringMap<IActiveFilter>
   removeActiveFilter: (segmentName: string, filterId: string) => void
   onFilterChange: ({ filters: any }) => void // TODO
@@ -170,7 +170,7 @@ export class TagsList extends React.Component<Props> {
 
 function mapStateToProps(state: {
   contacts: {
-    attributeDefs: AttributeDefsState
+    attributeDefs: IAttributeDefsState
     list: any
     tags: any
     filterSegments: IContactReduxFilterSegmentState

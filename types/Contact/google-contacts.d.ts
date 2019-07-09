@@ -1,3 +1,4 @@
+
 declare interface IGoogleContactsImport {
   redirect: string
   url: string
@@ -27,6 +28,31 @@ declare interface IGoogleAccount {
   scope: string[]
   threads_total: null | number
   type: string
+  updated_at: string
+  user: UUID
+}
+
+declare interface IGoogleAccountWithHistory extends IGoogleAccount {
+  sync_history: IGoogleSyncHistory[]
+}
+
+declare interface IGoogleSyncHistory {
+  brand: string
+  contacts_total: number
+  created_at: string
+  deleted_at: null | string
+  glsh: UUID
+  google_credential: UUID
+  id: UUID
+  messages_total: number
+  ord: string
+  status: boolean
+  sync_duration: number
+  synced_contacts_num: number
+  synced_messages_num: number
+  synced_threads_num: number
+  threads_total: number
+  type: 'google_sync_history'
   updated_at: string
   user: UUID
 }

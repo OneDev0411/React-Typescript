@@ -62,6 +62,7 @@ import {
 } from './ImportContactsButton/helpers'
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import { ZeroState } from './ZeroState'
+import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
 
 class ContactsList extends React.Component {
   constructor(props) {
@@ -477,6 +478,7 @@ class ContactsList extends React.Component {
           <SavedSegments
             name={CONTACTS_SEGMENT_NAME}
             associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
+            getPredefinedLists={getPredefinedContactLists}
             onChange={this.handleChangeSavedSegment}
           />
           <TagsList

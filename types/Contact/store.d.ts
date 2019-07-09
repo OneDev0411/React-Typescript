@@ -22,10 +22,3 @@ declare interface IContactReduxListState {
 declare type IContactReduxFilterSegmentState = IReduxFilterSegmentState<
   IContactList
 >
-
-declare interface IContactReduxState {
-  googleAccounts: IGoogleAccount[]
-  attributeDefs: IContactAttributeDef[]
-  list: IContactReduxListState
-  filterSegments: IContactReduxFilterSegmentState
-}

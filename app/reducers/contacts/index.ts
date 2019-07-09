@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 
-import { attributeDefs } from './attributeDefs'
+import { attributeDefs, IAttributeDefsState } from './attributeDefs'
 import list from './list'
 import tags from './tags'
 import spinner from './spinner'
@@ -9,7 +9,14 @@ import importCsv from './importCsv'
 import { contactsFilterSegments } from '../filter-segments'
 import { googleAccounts } from './googleAccounts'
 
-export default combineReducers({
+export interface IContactReduxState {
+  googleAccounts: IGoogleAccountWithHistory[]
+  attributeDefs: IAttributeDefsState
+  list: IContactReduxListState
+  filterSegments: IContactReduxFilterSegmentState
+}
+
+export default combineReducers<IContactReduxState>({
   attributeDefs,
   list,
   tags,

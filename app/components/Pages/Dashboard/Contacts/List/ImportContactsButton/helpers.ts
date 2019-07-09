@@ -42,3 +42,16 @@ export function startImportingGoogleContacts(
 export function clearImportingGoogleContacts() {
   localStorage.removeItem(KEY)
 }
+
+export function getNumOfSyncedContacts(
+  since: string | number | Date,
+  accounts: IGoogleAccount[]
+) {
+  return accounts.reduce(
+    (numSyncedContacts, account) =>
+      new Date(account.updated_at) > new Date(since)
+        ? numSyncedContacts + 0
+        : 0,
+    0
+  )
+}

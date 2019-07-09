@@ -8,7 +8,7 @@ import auth from './auth'
 import user from './user'
 import brand from './brand'
 import socket from './socket'
-import contacts from './contacts'
+import contacts, { IContactReduxState } from './contacts'
 import chatroom from './chatroom'
 import deals from './deals'
 import calendar from './calendar'
@@ -20,8 +20,6 @@ import confirmation from './confirmation'
 import { intercom } from './intercom'
 import { tasks } from './tasks'
 import { notifications as globalNotifications } from './notifications'
-import { AttributeDefsState } from './contacts/attributeDefs'
-import { googleAccounts } from './contacts/googleAccounts'
 
 const appReducer = combineReducers({
   socket,

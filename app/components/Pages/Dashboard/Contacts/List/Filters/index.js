@@ -16,6 +16,7 @@ import createSegmentFromFilters from './helpers/create-segment-from-filters'
 // import getFlows from './helpers/get-flows'
 import getOpenHouseEvents from './helpers/get-open-house-events'
 import getUniqTags from './helpers/get-uniq-tags'
+import { getPredefinedContactLists } from '../utils/get-predefined-contact-lists'
 
 function ContactFilters(props) {
   const getConfig = () => {
@@ -70,6 +71,7 @@ function ContactFilters(props) {
       plugins={['segments']}
       config={getConfig()}
       createFiltersFromSegment={createFiltersFromSegment}
+      getPredefinedLists={getPredefinedContactLists}
       onChange={() => props.onFilterChange()}
       disableConditionOperators={props.disableConditionOperators}
     >
