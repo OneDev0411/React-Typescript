@@ -32,6 +32,7 @@
     "test:update-snapshots": "npm run test:unit -- -u",
     "test:ci": "npm run test:unit && npm run test:e2e",
     "test": "jest --watch",
+    "jest": "jest",
     "cypress": "cypress open"
   },
   "engines": {
