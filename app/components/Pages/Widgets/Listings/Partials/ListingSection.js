@@ -33,13 +33,6 @@ class Section extends Component {
     }
   }
 
-  // shouldComponentUpdate(nextProps) {
-  //   return (
-  //     nextProps.listings.length !== this.props.listings.length
-  //     || nextProps.isFetching !== this.props.isFetching
-  //   )
-  // }
-
   handleListingClick(listing) {
     window.open(`/dashboard/mls/${listing.id}`, '_blank')
   }
@@ -140,14 +133,25 @@ class Section extends Component {
     })
   }
 
+  sort = ({ price: a }, { price: b }) => {
+    if (a > b) {
+      return -1
+    }
+
+    if (b > a) {
+      return 1
+    }
+
+    return 0
+  }
+
   render() {
     let showLoadMore
-    const { data, user, brand } = this.props
-
+    const { user, brand, listings } = this.props
     const brandColor = Brand.color('primary', primary, brand)
     const defaultAvatar = Brand.asset('default_avatar', '', brand)
 
-    if (this.props.listingsInfo.total > this.props.listings.length) {
+    if (this.props.listingsInfo.total > listings.length) {
       showLoadMore = true
     }
 
@@ -162,29 +166,22 @@ class Section extends Component {
             marginBottom: '40px'
           }}
         >
-          <h1
-            style={S(
-              `font-50 color-263445 mb-0${
-                this.props.data.is_mobile ? ' ml-10 mr-10' : ''
-              }`
-            )}
-          >
-            {this.props.title}
-          </h1>
+          <h1 style={S('font-50 color-263445 mb-0')}>{this.props.title}</h1>
           <span style={S('h-1 bg-e2e2e2 w-80 m-20 inline-block')} />
         </div>
-        {this.props.listings &&
-          this.props.listings.map((listing, i) => (
-            <ListingCard
-              className="listing-card"
-              key={i}
-              brandColor={brandColor}
-              defaultAvatar={defaultAvatar}
-              data={data}
-              user={user}
-              listing={listing}
-            />
-          ))}
+        {listings.length > 0 &&
+          listings
+            .sort(this.sort)
+            .map(listing => (
+              <ListingCard
+                className="listing-card"
+                key={listing.id}
+                brandColor={brandColor}
+                defaultAvatar={defaultAvatar}
+                user={user}
+                listing={listing}
+              />
+            ))}
         <div className="clearfix" />
         {this.props.isFetching && (
           <div style={S('text-center')}>

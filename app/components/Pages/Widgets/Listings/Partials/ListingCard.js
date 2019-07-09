@@ -70,7 +70,7 @@ export default class ListingCard extends Component {
   }
 
   render() {
-    const { listing, user, data } = this.props
+    const { listing, user } = this.props
     let { property } = listing
 
     if (!listing) {
@@ -167,7 +167,7 @@ export default class ListingCard extends Component {
         <div style={S('absolute b-0 h-100 p-10 pl-15 color-000')}>
           <div style={S('font-14')}>{listing_util.addressTitle(address)}</div>
           <div style={S('font-14')}>
-            <div style={S(`mt-8${data.is_mobile ? ' font-14' : ''}`)}>
+            <div style={S('mt-8')}>
               <span>{property.bedroom_count} Beds</span>
               &nbsp;&middot;&nbsp;
               <span>{property.bathroom_count} Baths</span>
@@ -177,11 +177,7 @@ export default class ListingCard extends Component {
             </div>
           </div>
           <div style={S('font-14')}>
-            <div
-              style={S(
-                `pull-left mr-15 mt-18${data.is_mobile ? ' font-14' : ''}`
-              )}
-            >
+            <div style={S('pull-left mr-15 mt-18')}>
               <div
                 style={S(`pull-left w-10 h-10 br-100 mr-8 bg-${status_color}`)}
               />
@@ -218,6 +214,5 @@ export default class ListingCard extends Component {
 
 ListingCard.propTypes = {
   user: PropTypes.object,
-  data: PropTypes.object.isRequired,
   listing: PropTypes.object.isRequired
 }
