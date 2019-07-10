@@ -24,7 +24,7 @@ interface Props {
 
 export function OfficeForm(props: Props) {
   const office: IAgentOffice | StringMap<{}> =
-    idx(props.initialValues, data => data.user.agent.office) || {}
+    idx(props.initialValues, data => data.agent.office) || {}
 
   return (
     <>
