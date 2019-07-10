@@ -1,4 +1,4 @@
-export function getOptions(brokerage, agent, type) {
+export function getOptions(brokerage, agent, type, brandId, user) {
   const options = {
     property_types: [
       'Residential',
@@ -32,6 +32,14 @@ export function getOptions(brokerage, agent, type) {
 
   if (agent) {
     options.agents = [agent]
+  }
+
+  if (brandId) {
+    options.brand = brandId
+  }
+
+  if (user) {
+    options.access_token = user.access_token
   }
 
   if (type === 'sold') {

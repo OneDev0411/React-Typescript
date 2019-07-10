@@ -15,16 +15,6 @@ import getListing from '../../../../../store_actions/widgets/listings/get-listin
 import { getOptions } from './get-options'
 
 class Section extends Component {
-  constructor(props) {
-    super(props)
-
-    const {
-      location: { query }
-    } = props
-
-    this.options = getOptions(query.brokerage, query.agent, props.type)
-  }
-
   componentDidMount() {
     this.props.getListing(this.options, this.params)
   }
@@ -40,6 +30,25 @@ class Section extends Component {
       type: this.props.type,
       'order_by[]': 'price'
     }
+  }
+
+  get options() {
+    const {
+      type,
+      user,
+      brand,
+      location: {
+        query: { brokerage, agent, brand: brandId }
+      }
+    } = this.props
+
+    return getOptions(
+      brokerage,
+      agent,
+      type,
+      brandId || (brand && brand.id),
+      user
+    )
   }
 
   handleListingClick(listing) {
