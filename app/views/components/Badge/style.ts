@@ -42,5 +42,13 @@ export const badgeAppearances = {
     ${ALink}:hover, ${ALink}.active & {
       background-color: ${primary};
     }
+  `,
+  gray: css`
+    ${badgeBaseStyle};
+    color: #4d4d4d;
+    background-color: #e6e6e6;
+    ${ALink}:hover, ${ALink}.active & {
+      background-color: ${primary};
+    }
   `
 }
