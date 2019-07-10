@@ -11,7 +11,7 @@ function InfoColumn({ data }) {
   const now = new Date().getTime()
   const isQueued = data.due_at * 1000 > now
   const isScheduled = !data.executed_at && isQueued
-  const isInProggress = !data.executed_at && !isQueued
+  const isInProgress = !data.executed_at && !isQueued
 
   // This is a workaround and we don't acutually need to detect scheduled email here.
   // In phase 2, we are going to have a separate table and page so this code will clean up in there.
@@ -22,7 +22,7 @@ function InfoColumn({ data }) {
         {isScheduled && (
           <StyledBadge appearance="primary">Scheduled</StyledBadge>
         )}
-        {isInProggress && (
+        {isInProgress && (
           <StyledBadge appearance="warning">In Progress</StyledBadge>
         )}
       </div>
@@ -31,7 +31,7 @@ function InfoColumn({ data }) {
   let subTitle
   let titleRenderer
 
-  if (isScheduled || isInProggress) {
+  if (isScheduled || isInProgress) {
     const date = formatDate(new Date(data.due_at * 1000))
 
     subTitle = isScheduled ? `Scheduled for ${date}` : date

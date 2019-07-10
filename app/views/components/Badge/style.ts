@@ -1,6 +1,6 @@
 import { css } from 'styled-components'
 
-import { primary, grey, red, orange, green } from '../../utils/colors'
+import { primary, red, orange, green } from '../../utils/colors'
 
 import ALink from '../ALink'
 
@@ -42,14 +42,6 @@ export const badgeAppearances = {
     ${badgeBaseStyle};
     color: #fff;
     background-color: #000;
-    ${ALink}:hover, ${ALink}.active & {
-      background-color: ${primary};
-    }
-  `,
-  gray: css`
-    ${badgeBaseStyle};
-    color: #4d4d4d;
-    background-color: ${grey.A250};
     ${ALink}:hover, ${ALink}.active & {
       background-color: ${primary};
     }
