@@ -17,6 +17,8 @@ export function contactsList(item: IInsight): ContactsListType[] {
   }
 
   return emails.map(email => ({
+    // This is using for mini contact
+    original_data: email,
     id: email.id,
     display_name: email.display_name,
     profile_image_url: email.profile_image_url,

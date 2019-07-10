@@ -5,10 +5,8 @@ import { getAttributeFromSummary } from 'models/contacts/helpers/get-attribute-f
 import store from '../../../stores'
 import { selectDefsBySection } from '../../../reducers/contacts/attributeDefs'
 import { getAddresses } from '../../../components/Pages/Dashboard/Contacts/Profile/Addresses/helpers/get-addresses'
-import { attributeDefs } from '../../../reducers/contacts/attributeDefs'
 
 import { FormatterOutputType, ProfileType } from './useProfile'
-import { SELECT_SPLITTER_PAGE } from 'constants/deals'
 
 // Formatters
 
