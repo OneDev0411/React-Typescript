@@ -6,8 +6,9 @@ import { ShadowLink } from '../ShadowLink'
 import CloseIcon from '../SvgIcons/Close/CloseIcon'
 
 import { Container, Title, Details, RemoveButton } from './styled'
+import { renderWithMiniContact } from './helpers'
 
-export class AssociationItem extends Component {
+class AssociationItemBase extends Component {
   static propTypes = {
     association: PropTypes.shape().isRequired,
     handleRemove: PropTypes.func,
@@ -51,3 +52,6 @@ export class AssociationItem extends Component {
     )
   }
 }
+
+const AssociationItem = renderWithMiniContact(AssociationItemBase)
+export { AssociationItem }

@@ -40,9 +40,10 @@ export const ProfileContainer = styled.div`
       & > li {
         display: flex;
         align-items: center;
+        margin-bottom: 0.25rem;
 
         & .icon {
-          margin-right: 0.25rem;
+          margin-right: 0.5rem;
         }
       }
     }

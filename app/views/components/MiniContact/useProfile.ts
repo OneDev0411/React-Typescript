@@ -31,8 +31,6 @@ function useProfile(type, initData): FormatterOutputType {
   let data = formatter(type, initData)
   const [output, setOutput] = useState(data)
 
-  console.log({ initData, type, output })
-
   useEffect(function useProfileEffect() {
     if (data.contact_id) {
       // Loading mode.
