@@ -92,7 +92,11 @@ export function OfficeForm(props: Props) {
             isVisible
             label="Office Address"
             name="office_address"
-            initialValue={props.values.office_address || {}}
+            initialValue={
+              props.values.office_address || {
+                full: office.address
+              }
+            }
             needsAddressForm
             component={Address}
             style={{ flex: 1 }}
