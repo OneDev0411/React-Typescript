@@ -1,12 +1,25 @@
+import { useEffect } from 'react'
 import { connect } from 'react-redux'
-
 import { withProps } from 'recompose'
+import { browserHistory } from 'react-router'
 
 import PropTypes from 'prop-types'
 
 import { getActiveTeamACL } from '../../../utils/user-teams'
 
 import { ACL } from '../../../constants/acl'
+
+interface Props {
+  access: string | string[]
+  fallback: React.ReactNode
+  children: React.ReactNode
+  fallbackUrl: string | null
+  user: IUser
+}
+
+interface StateProps {
+  user: IUser
+}
 
 /**
  * Renders children only if the current user has access to the specified
@@ -27,10 +40,24 @@ import { ACL } from '../../../constants/acl'
  * <Acl access={{oneOf: [ACL.BACK_OFFICE, ACL.DEAL]}}>Agent or BackOffice</Acl>
  * ```
  */
-function Acl({ access, fallback = null, children, user }) {
+function Acl({
+  access,
+  fallback = null,
+  fallbackUrl = null,
+  children,
+  user
+}: Props) {
   const acl = user ? getActiveTeamACL(user) : []
+  const userHasAccess = ([] as string[]).concat(access).every(hasAccess)
 
-  return [].concat(access).every(hasAccess) ? children : fallback
+  useEffect(() => {
+    if (!userHasAccess && fallbackUrl) {
+      browserHistory.push('/dashboard/mls')
+    }
+    // eslint-disable-next-line
+  }, [])
+
+  return userHasAccess ? children : fallback
 
   function hasAccess(requiredAccess) {
     if (typeof requiredAccess === 'function') {
@@ -45,7 +72,11 @@ function Acl({ access, fallback = null, children, user }) {
   }
 }
 
-const ConnectedAcl = connect(({ user }) => ({ user }))(Acl)
+const ConnectedAcl = connect<StateProps, null, Props>(
+  ({ user }: StateProps) => ({
+    user
+  })
+)(Acl)
 
 const AccessType = PropTypes.oneOfType([
   PropTypes.string,
