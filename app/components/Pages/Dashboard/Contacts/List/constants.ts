@@ -5,6 +5,11 @@ export const FLOW_FILTER_ID = 'flow'
 
 export const IMPORT_TOOLTIP_VISITED_SETTINGS_KEY = 'import_tooltip_visited'
 
+export const SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY =
+  'SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY'
+
+export const SYNCED_CONTACTS_LIST_ID = 'synced'
+
 export const ORIGINS = [
   {
     label: 'Brokerage widget',

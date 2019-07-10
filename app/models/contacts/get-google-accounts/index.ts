@@ -5,7 +5,7 @@ export async function getGoogleAccounts(
 ): Promise<IGoogleAccount[]> {
   const response = await new Fetch()
     .get('/users/self/google')
-    .query({ associations: 'sync_history' })
+    .query(withHistory ? { associations: 'google_credential.histories' } : {})
     .send()
 
   return response.body && response.body.data

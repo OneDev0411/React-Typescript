@@ -59,7 +59,7 @@ export class TagsList extends React.Component<Props> {
     this.tagDefinitionId = selectDefinitionByName(
       this.props.attributeDefs,
       'tag'
-    ).id
+    )!.id
   }
 
   onSelectList = item => {

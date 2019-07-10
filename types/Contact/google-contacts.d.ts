@@ -1,4 +1,3 @@
-
 declare interface IGoogleContactsImport {
   redirect: string
   url: string
@@ -24,7 +23,7 @@ declare interface IGoogleAccount {
   photo: string
   resource_name: string
   revoked: boolean
-  sync_history?: IGoogleSyncHistory[]
+  histories?: IGoogleSyncHistory[]
   sync_status: 'success' | 'pending' | null
   scope: string[]
   threads_total: null | number

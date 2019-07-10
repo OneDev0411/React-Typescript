@@ -17,7 +17,7 @@ import {
 } from 'reducers/contacts/list'
 
 import {
-  getActiveTeamSettings,
+  getUserSettingsInActiveTeam,
   viewAs,
   viewAsEveryoneOnTeam
 } from 'utils/user-teams'
@@ -43,6 +43,8 @@ import { Callout } from 'components/Callout'
 
 import { AlphabetFilter } from 'components/AlphabetFilter'
 
+import { updateTeamSetting } from 'actions/user/update-team-setting'
+
 import Table from './Table'
 import { SearchContacts } from './Search'
 import Header from './Header'
@@ -51,8 +53,9 @@ import TagsList from './TagsList'
 
 import {
   FLOW_FILTER_ID,
+  SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY,
   OPEN_HOUSE_FILTER_ID,
-  SORT_FIELD_SETTING_KEY
+  SORT_FIELD_SETTING_KEY, SYNCED_CONTACTS_LIST_ID
 } from './constants'
 import { CalloutSpinner, Container, SearchWrapper } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
@@ -77,7 +80,7 @@ class ContactsList extends React.Component {
       loadedRanges: []
     }
 
-    this.order = getActiveTeamSettings(props.user, SORT_FIELD_SETTING_KEY)
+    this.order = getUserSettingsInActiveTeam(props.user, SORT_FIELD_SETTING_KEY)
     this.tableContainerId = 'contacts--page-container'
   }
 
@@ -227,7 +230,23 @@ class ContactsList extends React.Component {
     }
   }
 
-  handleChangeSavedSegment = () => this.handleFilterChange({}, true)
+  /**
+   * @param {ISavedSegment} savedSegment
+   */
+  handleChangeSavedSegment = savedSegment => {
+    this.handleFilterChange({}, true)
+
+    if (savedSegment.id === SYNCED_CONTACTS_LIST_ID) {
+      this.updateSyncedContactsSeenDate()
+    }
+  }
+
+  updateSyncedContactsSeenDate() {
+    this.props.updateTeamSetting(
+      SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY,
+      new Date()
+    )
+  }
 
   handleFilterChange = async (
     newFilters,
@@ -504,6 +523,7 @@ class ContactsList extends React.Component {
               handleFilterChange={filters => {
                 this.setState({ syncStatus: null })
                 this.props.getContactsTags()
+                this.updateSyncedContactsSeenDate()
                 this.handleFilterChange({ filters }, true, '-updated_at')
               }}
             />
@@ -624,7 +644,8 @@ export default withRouter(
       deleteContacts,
       confirmation,
       setContactsListTextFilter,
-      getContactsTags
+      getContactsTags,
+      updateTeamSetting
     }
   )(ContactsList)
 )

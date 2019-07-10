@@ -14,7 +14,7 @@ import { Divider } from 'components/Divider'
 
 import PopOver from 'components/Popover'
 
-import { getActiveTeamSettings } from 'utils/user-teams'
+import { getUserSettingsInActiveTeam } from 'utils/user-teams'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 
@@ -38,7 +38,7 @@ export function ImportContactsButton({ accounts, user }: Props) {
   const syncing = accounts.some(account => account.sync_status === 'pending')
 
   const isTooltipOpen =
-    !getActiveTeamSettings(user, IMPORT_TOOLTIP_VISITED_SETTINGS_KEY) &&
+    !getUserSettingsInActiveTeam(user, IMPORT_TOOLTIP_VISITED_SETTINGS_KEY) &&
     accounts.length === 0
 
   useEffect(() => {
