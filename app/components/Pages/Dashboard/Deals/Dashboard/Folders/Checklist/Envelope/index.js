@@ -41,6 +41,11 @@ class EnvelopeView extends React.Component {
     const recipients = envelope.recipients.filter(
       recipient => recipient.envelope_recipient_type === 'Signer'
     )
+
+    if (recipients.length === 0) {
+      return 'No Signers'
+    }
+
     const signedCount = recipients.filter(r => r.status === 'Completed').length
 
     return `${signedCount} of ${recipients.length} signed`
