@@ -19,9 +19,11 @@ function InfoColumn({ data }) {
     <div className="info-title">
       <div>{show_title(data.subject)}</div>
       <div>
-        {isScheduled && <StyledBadge appearance="gray">Scheduled</StyledBadge>}
+        {isScheduled && (
+          <StyledBadge appearance="primary">Scheduled</StyledBadge>
+        )}
         {isInProggress && (
-          <StyledBadge appearance="gray">In Progress</StyledBadge>
+          <StyledBadge appearance="warning">In Progress</StyledBadge>
         )}
       </div>
     </div>
