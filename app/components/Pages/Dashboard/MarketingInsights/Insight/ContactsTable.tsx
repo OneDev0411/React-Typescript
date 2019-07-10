@@ -7,7 +7,7 @@ import { ContactColumn } from './styled'
 import { contactsList, SortValues, doSort } from './helpers'
 import { ContactsListType } from './types'
 
-const defaultSort = SortValues.ALPHABETICAL
+const defaultSort = SortValues.MOST_OPENED
 
 interface TableColumnProps {
   rowData: ContactsListType

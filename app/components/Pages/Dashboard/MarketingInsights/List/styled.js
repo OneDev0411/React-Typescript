@@ -16,6 +16,11 @@ export const InsightContainer = styled.div`
       transform: translateY(0);
     }
   }
+
+  & .info-title {
+    display: flex;
+    justify-content: space-between;
+  }
 `
 
 export const Info = styled.div`
