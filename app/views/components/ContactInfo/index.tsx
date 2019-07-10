@@ -2,8 +2,15 @@ import React from 'react'
 import Avatar from 'react-avatar'
 
 import { ContactInfoContainer } from './styled'
+import ContactName from './ContactName'
 
-function ContactInfo(props) {
+import { ContactsListType } from 'dashboard/MarketingInsights/Insight/types'
+
+interface ContactInfoPropsType {
+  data: ContactsListType
+}
+
+function ContactInfo(props: ContactInfoPropsType) {
   return (
     <ContactInfoContainer>
       <div className="profile-picture">
@@ -17,7 +24,7 @@ function ContactInfo(props) {
         />
       </div>
       <div className="profile-info">
-        {props.data.display_name && <span>{props.data.display_name}</span>}
+        <ContactName data={props.data} />
         {props.data.to && <span>{props.data.to}</span>}
       </div>
     </ContactInfoContainer>

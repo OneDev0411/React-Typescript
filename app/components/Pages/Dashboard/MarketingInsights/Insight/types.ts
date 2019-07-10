@@ -10,4 +10,5 @@ export interface ContactsListType extends ContactStatType {
   display_name: string | null
   profile_image_url: string | null
   to: string
+  contact: UUID | null
 }

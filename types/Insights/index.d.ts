@@ -32,7 +32,7 @@ declare interface IInsightEmail {
   id: string
   campaign: string
   email: string
-  contact: string
+  contact: UUID | null
   recipient_type: string
   accepted: number
   rejected: number
