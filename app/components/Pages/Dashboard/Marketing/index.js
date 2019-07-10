@@ -1,8 +1,9 @@
 import React, { Component, createRef } from 'react'
-import { withRouter } from 'react-router'
+import { withRouter, browserHistory } from 'react-router'
 import { Helmet } from 'react-helmet'
 
 import Onboarding from 'components/Onboarding'
+import Acl from 'components/Acl'
 
 import IconButton from 'components/Button/IconButton'
 import IconInfo from 'components/SvgIcons/InfoOutline/IconInfoOutline'
@@ -38,40 +39,42 @@ class Marketing extends Component {
     const { isSideMenuOpen } = this.state
 
     return (
-      <PageContainer isOpen={isSideMenuOpen}>
-        <Helmet>
-          <title>Marketing | Rechat</title>
-        </Helmet>
+      <Acl.Marketing fallbackUrl="/dashboard/mls">
+        <PageContainer isOpen={isSideMenuOpen}>
+          <Helmet>
+            <title>Marketing | Rechat</title>
+          </Helmet>
 
-        <SideMenu isOpen={isSideMenuOpen}>
-          <ListTitle className="onboarding--intro">
-            Marketing
-            <IconButton isFit iconSize="large" onClick={this.handleShowIntro}>
-              <IconInfo />
-            </IconButton>
-          </ListTitle>
-          <Menu />
-        </SideMenu>
+          <SideMenu isOpen={isSideMenuOpen}>
+            <ListTitle className="onboarding--intro">
+              Marketing
+              <IconButton isFit iconSize="large" onClick={this.handleShowIntro}>
+                <IconInfo />
+              </IconButton>
+            </ListTitle>
+            <Menu />
+          </SideMenu>
 
-        <PageContent
-          isSideMenuOpen={isSideMenuOpen}
-          style={{ background: '#f2f2f2' }}
-        >
-          {React.Children.map(this.props.children, child =>
-            React.cloneElement(child, {
-              ...this.props.params,
-              isSideMenuOpen,
-              toggleSideMenu: this.toggleSideMenu
-            })
-          )}
-        </PageContent>
+          <PageContent
+            isSideMenuOpen={isSideMenuOpen}
+            style={{ background: '#f2f2f2' }}
+          >
+            {React.Children.map(this.props.children, child =>
+              React.cloneElement(child, {
+                ...this.props.params,
+                isSideMenuOpen,
+                toggleSideMenu: this.toggleSideMenu
+              })
+            )}
+          </PageContent>
 
-        <Onboarding
-          ref={this.onboardingRef}
-          steps={OnboardingSteps}
-          tourId="marketing-center"
-        />
-      </PageContainer>
+          <Onboarding
+            ref={this.onboardingRef}
+            steps={OnboardingSteps}
+            tourId="marketing-center"
+          />
+        </PageContainer>
+      </Acl.Marketing>
     )
   }
 }
