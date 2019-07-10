@@ -38,11 +38,12 @@ class EnvelopeView extends React.Component {
   }
 
   getTitle = envelope => {
-    const signedCount = envelope.recipients.filter(
-      r => r.status === 'Completed'
-    ).length
+    const recipients = envelope.recipients.filter(
+      recipient => recipient.envelope_recipient_type === 'Signer'
+    )
+    const signedCount = recipients.filter(r => r.status === 'Completed').length
 
-    return `${signedCount} of ${envelope.recipients.length} signed`
+    return `${signedCount} of ${recipients.length} signed`
   }
 
   getLink = id =>
