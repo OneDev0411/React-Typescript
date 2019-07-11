@@ -199,7 +199,12 @@ class EmailComposeDrawer extends React.Component {
               component={TextInput}
             />
 
-            <Field placeholder="Subject" name="subject" component={TextInput} />
+            <Field
+              data-test="email-subject"
+              placeholder="Subject"
+              name="subject"
+              component={TextInput}
+            />
 
             <EmailBody
               hasStaticBody={this.props.hasStaticBody}

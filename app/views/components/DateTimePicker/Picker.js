@@ -59,6 +59,7 @@ function Picker(props) {
                   size="small"
                   style={{ fontWeight: 500 }}
                   onClick={props.onRemove}
+                  data-test="date-picker-remove"
                 >
                   Remove
                 </ActionButton>
@@ -71,6 +72,7 @@ function Picker(props) {
                 onClick={props.onDone}
                 disabled={!isDateSet}
                 style={{ fontWeight: 500 }}
+                data-test="date-picker-done"
               >
                 {pickerSaveButtonText({
                   isDateSet,

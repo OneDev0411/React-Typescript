@@ -34,6 +34,7 @@ export function Footer(props) {
         )}
 
         <ActionButton
+          data-test="compose-send-email"
           type="submit"
           disabled={props.submitting || props.isSubmitDisabled}
           onClick={props.handleSubmit}

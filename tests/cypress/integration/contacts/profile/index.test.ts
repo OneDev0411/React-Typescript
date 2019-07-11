@@ -1,11 +1,11 @@
-import { setInlineDateField } from 'helpers/fields'
-
+import { setInlineDateField, setDateFieldToFuture } from 'helpers/fields'
 import {
   acceptConfirmationModal,
   cancelConfirmationModal,
   waitForModalToClose
 } from 'helpers/modal'
 import { getTestSelector } from 'helpers/page'
+import { fillEmailComposeDrawer, waitForDrawerToClose } from 'helpers/drawer'
 
 import { addTask } from './helpers'
 
@@ -42,6 +42,34 @@ describe('Contact profile', () => {
       .click()
 
     setInlineDateField()
+  })
+
+  it.only('User can create and see created email event in contact profile', () => {
+    cy.visit(`/dashboard/contacts/${EMPTY_CONTACT_ID}`)
+
+    const subject = 'test subject'
+    const content = 'test content'
+
+    const futureSubject = 'test subject future'
+    const futureContent = 'test content future'
+
+    // Normal send
+    cy.getByTestSelector('send-email').click()
+    fillEmailComposeDrawer(subject, content)
+    cy.getByTestSelector('compose-send-email').click()
+    waitForDrawerToClose()
+    cy.pageShouldContain(subject)
+    cy.pageShouldContain(content)
+
+    // Scheduled send
+    cy.getByTestSelector('send-email').click()
+    fillEmailComposeDrawer(futureSubject, futureContent)
+    cy.getByTestSelector('compose-schedule-email').click()
+    setDateFieldToFuture(true)
+    cy.getByTestSelector('compose-send-email').click()
+    waitForDrawerToClose()
+    cy.pageShouldContain(futureSubject)
+    cy.pageShouldContain(futureContent)
   })
 
   it('User can create events/tasks and mark them as done from contact profile', () => {

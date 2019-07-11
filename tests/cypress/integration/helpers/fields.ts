@@ -46,3 +46,27 @@ export function setInlineDateField(
         })
     })
 }
+
+// Sets draft-js based text editor content
+export function setTextEditorData(content: string) {
+  cy.getByTestSelector('text-editor-wrapper')
+    .last()
+    .within(() => {
+      cy.get('.public-DraftEditor-content').type(content)
+    })
+}
+
+// Sets date field to last day of next month
+// TODO: Add another function with functionality of
+// setting a specific date and time
+export function setDateFieldToFuture(isPickerAlreadyOpen = false) {
+  if (!isPickerAlreadyOpen) {
+    cy.getByTestSelector('date-time-picker-button').click()
+  }
+
+  cy.get('.DayPicker-NavButton--next').click()
+  cy.get('.DayPicker-Day')
+    .last()
+    .click()
+  cy.getByTestSelector('date-picker-done').click()
+}
