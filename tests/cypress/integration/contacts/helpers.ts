@@ -12,6 +12,7 @@ export function addTagFilter(index: number = 0) {
 
   return cy.getByTestSelector('filter-done-button').click()
 }
+
 export function addOpenHouseFilter(index: number = 0) {
   openNewFilterDropdown('Open House')
 
