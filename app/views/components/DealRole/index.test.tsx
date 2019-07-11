@@ -65,7 +65,7 @@ describe('Test Deal Roles component', () => {
       role => role.id === '7e104e10-89f3-11e9-8b7c-0a95998482ac'
     )
 
-    const office: IAgentOffice | undefined = sellerAgentRole.user.agent!.office
+    const office: IAgentOffice | undefined = sellerAgentRole.agent!.office
 
     const wrapper = render(
       <DealRole
