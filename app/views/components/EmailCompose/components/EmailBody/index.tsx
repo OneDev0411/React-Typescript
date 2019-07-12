@@ -20,7 +20,12 @@ export default forwardRef(
             name="body"
             defaultValue={content}
             render={({ input, meta }) => (
-              <TextEditor uploadImage={uploadImage} input={input} ref={ref} />
+              <TextEditor
+                hasImage
+                uploadImage={uploadImage}
+                input={input}
+                ref={ref}
+              />
             )}
           />
         )}

@@ -19,32 +19,20 @@ import 'draft-js-focus-plugin/lib/plugin.css'
 import createResizeablePlugin from 'draft-js-resizeable-plugin'
 
 import createBlockDndPlugin from 'draft-js-drag-n-drop-plugin'
-// import createDragNDropUploadPlugin from '@mikeljames/draft-js-drag-n-drop-upload-plugin'
-
 import { stateToHTML } from 'draft-js-export-html'
 import { stateFromHTML } from 'draft-js-import-html'
-import createRichButtonsPlugin from 'draft-js-richbuttons-plugin'
 import cn from 'classnames'
 
 import { FieldProps } from 'react-final-form'
 
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 
-import IconBold from '../SvgIcons/Bold/IconBold'
-import IconUnderline from '../SvgIcons/Underline/IconUnderline'
-import IconItalic from '../SvgIcons/Italic/IconItalic'
-import IconList from '../SvgIcons/List/ListIcon'
-import IconNumberedList from '../SvgIcons/NumberedList/IconNumberedList'
-
-import { EditorWrapper, Separator, Toolbar } from './styled'
-
-import IconButton from './buttons/IconButton'
-import HeadingButtons from './buttons/HeadingButtons'
+import { EditorWrapper, Toolbar } from './styled'
 import { FieldError } from '../final-form-fields/FieldError'
 import { AddImageButton } from './buttons/AddImageButton'
 import { getBlocksWhereEntityData } from './utils/get-block-where-entity-data'
-
-const richButtonsPlugin = createRichButtonsPlugin()
+import { richButtonsPlugin, RichTextButtons } from './buttons/RichTextButtons'
+// import createDragNDropUploadPlugin from '@mikeljames/draft-js-drag-n-drop-upload-plugin'
 
 const focusPlugin = createFocusPlugin()
 const resizeablePlugin = createResizeablePlugin()
@@ -69,28 +57,6 @@ const imagePlugin = createImagePlugin({
 //   }
 // })
 
-const {
-  ItalicButton,
-  BoldButton,
-  UnderlineButton,
-  OLButton,
-  ULButton,
-  H1Button,
-  H3Button,
-  H4Button,
-  H6Button
-} = richButtonsPlugin
-
-const defaultPlugins = [
-  richButtonsPlugin,
-  // dragNDropFileUploadPlugin,
-  blockDndPlugin,
-  focusPlugin,
-  alignmentPlugin,
-  resizeablePlugin,
-  imagePlugin
-]
-
 interface Props {
   defaultValue?: string
   input?: FieldProps<any>['input']
@@ -100,6 +66,9 @@ interface Props {
   plugins?: any[]
   settings?: any
   uploadImage?: (blob: File) => Promise<string>
+
+  hasRichText?: boolean
+  hasImage?: boolean
 }
 
 interface EditorComponent {
@@ -124,7 +93,9 @@ export const TextEditor = forwardRef(
       placeholder = 'Type something…',
       plugins = [],
       settings = {},
-      uploadImage
+      uploadImage,
+      hasImage = false,
+      hasRichText = true
     }: Props,
     ref
   ) => {
@@ -132,6 +103,20 @@ export const TextEditor = forwardRef(
     const [editorState, setEditorState] = useState(
       EditorState.createWithContent(stateFromHTML(defaultValue))
     )
+
+    const defaultPlugins = [
+      ...(hasRichText ? [richButtonsPlugin] : []),
+      ...(hasImage
+        ? [
+            // dragNDropFileUploadPlugin,
+            blockDndPlugin,
+            focusPlugin,
+            alignmentPlugin,
+            resizeablePlugin,
+            imagePlugin
+          ]
+        : [])
+    ]
 
     useImperativeHandle(
       ref,
@@ -243,67 +228,14 @@ export const TextEditor = forwardRef(
     return (
       <Fragment>
         <Toolbar>
-          <BoldButton>
-            <IconButton>
-              <IconBold />
-            </IconButton>
-          </BoldButton>
+          {hasRichText && <RichTextButtons />}
 
-          <ItalicButton>
-            <IconButton>
-              <IconItalic />
-            </IconButton>
-          </ItalicButton>
-
-          <UnderlineButton>
-            <IconButton>
-              <IconUnderline />
-            </IconButton>
-          </UnderlineButton>
-
-          <Separator />
-
-          <ULButton>
-            <IconButton isBlockButton>
-              <IconList />
-            </IconButton>
-          </ULButton>
-
-          <OLButton>
-            <IconButton isBlockButton>
-              <IconNumberedList />
-            </IconButton>
-          </OLButton>
-
-          <Separator />
-
-          <HeadingButtons
-            options={[
-              {
-                title: 'Small',
-                component: H6Button
-              },
-              {
-                title: 'Medium',
-                component: H4Button
-              },
-              {
-                title: 'Large',
-                component: H3Button
-              },
-              {
-                title: 'Huge',
-                component: H1Button
-              }
-            ]}
-          />
-
-          <Separator />
-
-          <AddImageButton
-            onImageSelected={addImage}
-            editorState={editorState}
-          />
+          {hasImage && (
+            <AddImageButton
+              onImageSelected={addImage}
+              editorState={editorState}
+            />
+          )}
         </Toolbar>
 
         <EditorWrapper
