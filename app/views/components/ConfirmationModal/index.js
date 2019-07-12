@@ -55,13 +55,13 @@ function ConfirmationModal() {
             dangerouslySetInnerHTML={{
               __html: confirmation.message
             }}
-            data-testid="confirmation-modal-title"
+            data-test="confirmation-modal-title"
           />
 
           {confirmation.description && (
             <div
               className="confirmation-descr"
-              data-testid="confirmation-modal-description"
+              data-test="confirmation-modal-description"
             >
               {confirmation.description}
             </div>

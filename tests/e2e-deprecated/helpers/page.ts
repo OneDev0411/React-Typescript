@@ -1,6 +1,6 @@
 import { Page, JSHandle } from 'puppeteer'
 
-import { getTestIdSelector } from '.'
+import { getTestSelector } from '.'
 
 export const clickAndWait = async (
   page: Page,
@@ -99,7 +99,7 @@ export const navigateRelative = (
 
 export const acceptConfirmationModal = async (page: Page) => {
   const confirmButton = await page.waitForSelector(
-    getTestIdSelector('confirmation-modal-confirm-button')
+    getTestSelector('confirmation-modal-confirm-button')
   )
 
   await confirmButton.click()
@@ -107,7 +107,7 @@ export const acceptConfirmationModal = async (page: Page) => {
 
 export const cancelConfirmationModal = async (page: Page) => {
   const cancelButton = await page.waitForSelector(
-    getTestIdSelector('confirmation-modal-cancel-button')
+    getTestSelector('confirmation-modal-cancel-button')
   )
 
   await cancelButton.click()

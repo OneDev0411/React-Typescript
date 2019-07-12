@@ -2,6 +2,7 @@ import Enzyme, { ShallowWrapper } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 
 import '@testing-library/react/cleanup-after-each'
+import { configure } from '@testing-library/react'
 
 process.env.DISABLE_MODAL = 'true'
 
@@ -48,3 +49,6 @@ ShallowWrapper.prototype.queryAttr = function queryAttr(attr) {
 Enzyme.configure({
   adapter: new Adapter()
 })
+
+// Using data-test instead of data-testId
+configure({ testIdAttribute: 'data-test' })

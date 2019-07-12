@@ -40,7 +40,7 @@ export class EditMode extends React.Component {
         style={this.props.style}
         isStatic={this.props.isStatic}
         className={this.props.isStatic ? 'is-static' : ''}
-        data-testid="inlineedit-container"
+        data-test="inlineedit-container"
       >
         {this.props.render(this.props)}
         <EditModeActionBar
@@ -54,7 +54,7 @@ export class EditMode extends React.Component {
                 inverse
                 disabled={isDisabled}
                 onClick={this.props.handleDelete}
-                data-testid="inlineedit-delete"
+                data-test="inlineedit-delete"
               >
                 <DeleteIcon />
               </IconButton>
@@ -80,7 +80,7 @@ export class EditMode extends React.Component {
               size="small"
               disabled={isDisabled}
               onClick={this.props.handleSave}
-              data-testid="inlineedit-save"
+              data-test="inlineedit-save"
             >
               {isDisabled ? 'Saving...' : 'Save'}
             </ActionButton>

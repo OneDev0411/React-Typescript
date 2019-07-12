@@ -30,7 +30,7 @@ function TestComponent(props) {
     }
   }
   return (
-    <button data-testid="test-button" onClick={handleTestClick}>
+    <button data-test="test-button" onClick={handleTestClick}>
       Open Modal
     </button>
   )

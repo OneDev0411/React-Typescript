@@ -3,19 +3,19 @@
 exports[`ConfirmationModal should works should render modal properly 1`] = `
 <div>
   <button
-    data-testid="test-button"
+    data-test="test-button"
   >
     Open Modal
   </button>
   <div
     class="confirmation-title"
-    data-testid="confirmation-modal-title"
+    data-test="confirmation-modal-title"
   >
     Heads up!
   </div>
   <div
     class="confirmation-descr"
-    data-testid="confirmation-modal-description"
+    data-test="confirmation-modal-description"
   >
     You are missing something important. Are you sure?
   </div>
@@ -24,13 +24,13 @@ exports[`ConfirmationModal should works should render modal properly 1`] = `
   >
     <button
       class="ActionButton__Button-sc-14we8cp-0 jFJVfP"
-      data-testid="confirmation-modal-cancel-button"
+      data-test="confirmation-modal-cancel-button"
     >
       Cancel
     </button>
     <button
       class="modal-confirm ActionButton__Button-sc-14we8cp-0 lnSxYK"
-      data-testid="confirmation-modal-confirm-button"
+      data-test="confirmation-modal-confirm-button"
       style="margin-left: 1em;"
     >
       Confirm
