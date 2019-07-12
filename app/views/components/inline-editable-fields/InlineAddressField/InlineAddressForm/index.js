@@ -135,7 +135,11 @@ export class InlineAddressForm extends React.Component {
                   />
                 </Row>
                 <Row>
-                  <TextField name="unit_number" label="Unit / Suite" width={20} />
+                  <TextField
+                    name="unit_number"
+                    label="Unit / Suite"
+                    width={20}
+                  />
                   <TextField name="city" label="City" width={20} />
                   <AutocompleteField
                     name="county"

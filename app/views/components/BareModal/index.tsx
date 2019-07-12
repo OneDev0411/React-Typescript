@@ -22,6 +22,10 @@ export default function BareModal({
   large,
   ...modalProps
 }: Props) {
+  if (process.env.DISABLE_MODAL) {
+    return children
+  }
+
   const baseClassName = 'c-modal__content'
   const autoHeightClassName = `${baseClassName}--height-auto`
   const largeClassName = `${baseClassName}--large`

@@ -30,7 +30,7 @@ import Menu from './columns/Menu'
 import Name from './columns/Name'
 import TagsString from './columns/Tags'
 import { Contact } from './columns/Contact'
-import { LastTouchedCell } from './columns/LastTouched'
+import LastTouched from './columns/LastTouched'
 
 import { SORT_FIELD_SETTING_KEY } from '../constants'
 
@@ -81,7 +81,7 @@ class ContactsList extends React.Component {
       ),
       id: 'last_touched',
       sortable: false,
-      render: ({ rowData: contact }) => <LastTouchedCell contact={contact} />
+      render: ({ rowData: contact }) => <LastTouched contact={contact} />
     },
     {
       header: 'Tags',
@@ -120,8 +120,9 @@ class ContactsList extends React.Component {
             excludedRows={excludedRows}
             exportIds={selectedRows}
             filters={filters.attributeFilters}
+            crmTasks={filters.crm_tasks}
             searchText={filters.text}
-            conditionOperator={filters.filter_types}
+            conditionOperator={filters.filter_type}
             users={filters.users}
             disabled={this.props.isFetching}
           />

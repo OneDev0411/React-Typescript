@@ -154,7 +154,7 @@ export class Timeline extends React.Component {
       <Title>
         <b>{month.title}</b>
       </Title>
-      <Card>
+      <Card data-test="crm-timeline-card">
         {month.items.map(activity => {
           const key = `timeline_item_${activity.id}`
 

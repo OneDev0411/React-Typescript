@@ -18,6 +18,8 @@ import { FullPageHeader } from 'components/FullPageHeader'
 
 import { confirmation } from 'actions/confirmation'
 
+import { hasUserAccessToDeals } from 'utils/user-teams'
+
 import {
   createDeal,
   upsertContexts,
@@ -66,6 +68,10 @@ class CreateDeal extends React.Component {
   }
 
   componentDidMount() {
+    if (!hasUserAccessToDeals(this.props.user)) {
+      return browserHistory.push('/dashboard/mls')
+    }
+
     if (this.props.params.id) {
       this.initializeDeal()
     }

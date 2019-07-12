@@ -172,6 +172,7 @@ export default class Task extends Component {
                         <ActionButton
                           type="submit"
                           disabled={submitting || !hasTitle}
+                          data-test="save-task"
                         >
                           {submitting ? 'Saving...' : 'Save'}
                         </ActionButton>

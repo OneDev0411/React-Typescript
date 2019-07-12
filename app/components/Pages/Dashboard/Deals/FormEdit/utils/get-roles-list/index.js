@@ -5,6 +5,15 @@ export function getRolesList({ roles, values, annotation, rectIndex }) {
     return []
   }
 
+  if (annotation.type === 'Role' && roles.length === 1) {
+    return [
+      {
+        ...roles[0],
+        value: values[rectIndex]
+      }
+    ]
+  }
+
   const valuesList = Object.entries(values).map(([, value]) => value)
 
   let cursor = 0

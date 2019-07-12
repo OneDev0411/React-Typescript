@@ -31,6 +31,7 @@ import { selectContact, selectContactsInfo } from 'reducers/contacts/list'
 import Tags from './Tags'
 import Info from './Info'
 import CustomTag from './CustomTag'
+import Header from './Header'
 import DrawerFooter from './DrawerFooter'
 import { SubHeaderContainer } from './styled'
 
@@ -400,8 +401,10 @@ class TagsOverlay extends React.Component {
     const drawerHeader = this.getDrawerHeader()
 
     return (
-      <OverlayDrawer isOpen={isOpen} width={50} onClose={closeOverlay}>
-        <OverlayDrawer.Header title={drawerHeader} />
+      <OverlayDrawer isOpen={isOpen} width={50}>
+        <OverlayDrawer.Header
+          render={() => <Header title={drawerHeader} onClose={closeOverlay} />}
+        />
 
         <OverlayDrawer.Body>
           <SubHeaderContainer>

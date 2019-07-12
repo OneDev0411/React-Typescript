@@ -19,11 +19,9 @@ declare interface IContactReduxListState {
   isFetching: boolean
 }
 
-declare interface IContactReduxFilterSegmentState {
-  activeSegmentId: UUID
-  list: Record<string, IContactList>
-  conditionOperator: 'and' | 'or'
-}
+declare type IContactReduxFilterSegmentState = IReduxFilterSegmentState<
+  IContactList
+>
 
 declare interface IContactReduxState {
   attributeDefs: IContactAttributeDef[]

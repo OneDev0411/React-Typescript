@@ -49,6 +49,7 @@ export class DateTimePicker extends React.Component {
           appearance="link"
           onClick={this.handleOpen}
           onFocus={this.handleOpen}
+          data-test="date-time-picker-button"
           style={{ fontWeight: 500 }}
         >
           {isToday(selectedDate) && <span>Today,&nbsp;</span>}
@@ -75,6 +76,7 @@ export class DateTimePicker extends React.Component {
                     appearance="link"
                     onClick={this.handleClose}
                     style={{ fontWeight: 500 }}
+                    data-test="date-picker-done"
                   >
                     Done
                   </ActionButton>

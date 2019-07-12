@@ -4,12 +4,15 @@ import store from '../../stores'
 import config from '../../../config/public'
 import { getActiveTeamId } from '../../utils/user-teams'
 
-import herokuFix from './middlewares/heroku-fix'
+import { herokuFix } from './middlewares/heroku-fix'
+import { useReferencedFormat } from './middlewares/x-rechat-format'
+
+import { IOptions, IMiddleware } from './types'
 
 export default class Fetch {
-  private _middlewares: { [name: string]: any }
+  private _middlewares: IMiddleware = {}
 
-  private options: any
+  private options: IOptions
 
   private _isProductionEnv: boolean
 
@@ -23,19 +26,20 @@ export default class Fetch {
 
   private _isLoggedIn: boolean
 
-  constructor(options?) {
+  constructor(options?: IOptions) {
     const isServerSide = typeof window === 'undefined'
     const isProductionEnv = process.env.NODE_ENV === 'production'
 
     this.options = Object.assign(
       {
         proxy: false,
-        progress: null
+        progress: null,
+        useReferencedFormat: true
       },
       options
     )
 
-    this._middlewares = {}
+    this._middlewares = this.registerMiddlewares(this.options)
     this._isServerSide = isServerSide
     this._appUrl = isServerSide ? config.app.url : ''
     this._proxyUrl = `${this._appUrl}/api/proxifier`
@@ -72,6 +76,10 @@ export default class Fetch {
       agent = SuperAgent[method](`${config.api_url}${endpoint}`)
     }
 
+    if (this.options.useReferencedFormat && !useProxy) {
+      agent.set('X-RECHAT-FORMAT', 'references')
+    }
+
     // auto append access-token
     if (this._isLoggedIn) {
       agent.set('Authorization', `Bearer ${user.access_token}`)
@@ -94,9 +102,8 @@ export default class Fetch {
       agent.set('X-RECHAT-BRAND', brandId)
     }
 
-    // register events
     agent.on('response', response => {
-      herokuFix(response)
+      this.runMiddlewares(response)
 
       this.logResponse(response)
     })
@@ -162,6 +169,23 @@ export default class Fetch {
     return this._create(method, endpoint)
   }
 
+  registerMiddlewares(options: IOptions): IMiddleware {
+    const list: IMiddleware = {}
+
+    // it's required
+    list['heroku-fix'] = herokuFix
+
+    if (options.useReferencedFormat) {
+      list['x-rechat-format'] = useReferencedFormat
+    }
+
+    return list
+  }
+
+  runMiddlewares(response: ApiResponse<any>) {
+    Object.values(this._middlewares).forEach(fn => fn(response))
+  }
+
   createErrorLog(
     code,
     error: { response?: SuperAgent.ResponseError; message?: string } = {}
@@ -178,12 +202,6 @@ export default class Fetch {
       error.response ? error.response.text : error.message,
       `(Response Time: ${diff / 1000}s)`
     )
-  }
-
-  middleware(name, options) {
-    this._middlewares[name] = options
-
-    return this
   }
 
   logResponse(

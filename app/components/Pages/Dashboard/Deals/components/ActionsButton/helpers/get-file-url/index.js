@@ -64,6 +64,10 @@ function getSubmissionUrl(data) {
     }))
   }
 
+  if (!data.task.form) {
+    return []
+  }
+
   return data.isBackOffice
     ? [
         {

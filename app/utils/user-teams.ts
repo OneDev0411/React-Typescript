@@ -3,6 +3,8 @@ import idx from 'idx'
 import { notDeleted } from './not-deleted'
 import { flatMap, identity, uniqBy } from 'lodash'
 
+import { ACL } from '../constants/acl'
+
 function getActiveTeamFromCookieOrUser(user) {
   return user.active_brand || user.brand || cookie.get('rechat-active-team')
 }
@@ -55,16 +57,20 @@ export function hasUserAccess(user: IUser, access: string) {
   return getActiveTeamACL(user).includes(access)
 }
 
-export function hasUserAccessToDeals(user): boolean {
-  return hasUserAccess(user, 'Deals') || isBackOffice(user)
+export function hasUserAccessToDeals(user: IUser): boolean {
+  return hasUserAccess(user, ACL.DEALS) || isBackOffice(user)
 }
 
-export function hasUserAccessToCrm(user): boolean {
-  return hasUserAccess(user, 'CRM')
+export function hasUserAccessToCrm(user: IUser): boolean {
+  return hasUserAccess(user, ACL.CRM)
+}
+
+export function hasUserAccessToMarketingCenter(user: IUser): boolean {
+  return hasUserAccess(user, ACL.MARKETING)
 }
 
 export function isBackOffice(user): boolean {
-  return hasUserAccess(user, 'BackOffice')
+  return hasUserAccess(user, ACL.BACK_OFFICE)
 }
 
 export function viewAs(user, activeTeam = getActiveTeam(user)) {
