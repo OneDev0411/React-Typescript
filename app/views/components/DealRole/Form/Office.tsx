@@ -43,7 +43,7 @@ export function OfficeForm(props: Props) {
           />
 
           <Field
-            label="Office Licence Number"
+            label="Office license Number"
             name="office_license_number"
             initialValue={
               props.values.office_license_number || office.license_number
