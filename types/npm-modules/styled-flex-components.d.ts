@@ -1,6 +1,6 @@
 declare module 'styled-flex-component' {
   import * as React from 'react'
-  import { CSSProperties } from 'react'
+  import { CSSProperties, HTMLProps } from 'react'
   type FlexItemProps = Partial<{
     order: number
     basis: string
@@ -43,7 +43,7 @@ declare module 'styled-flex-component' {
   > {}
 
   // this can be improved. maybe StyledComponent can be used
-  class Flex extends React.Component<FlexProps & { style?: CSSProperties }> {}
+  class Flex extends React.Component<FlexProps & HTMLProps<'div'>> {}
 
   export default Flex
 }

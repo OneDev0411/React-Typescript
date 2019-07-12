@@ -12,6 +12,8 @@ import EmailBody from 'components/EmailCompose/components/EmailBody'
 
 import { normalizeAttachments } from 'components/SelectDealFileDrawer/helpers/normalize-attachment'
 
+import { uploadEmailAttachment } from 'models/email-compose/upload-email-attachment'
+
 import { FinalFormDrawer } from '../../FinalFormDrawer'
 import { TextInput } from '../../Forms/TextInput'
 import { AttachmentsList } from '../fields/Attachments'
@@ -61,6 +63,8 @@ class EmailComposeDrawer extends React.Component {
   state = {
     isSendingEmail: false
   }
+
+  emailBodyRef = React.createRef()
 
   static contextType = ConfirmationModalContext
 
@@ -122,6 +126,26 @@ class EmailComposeDrawer extends React.Component {
       })
     }
 
+    if (
+      this.emailBodyRef.current &&
+      this.emailBodyRef.current.hasUploadingImage()
+    ) {
+      return new Promise((resolve, reject) => {
+        this.context.setConfirmationModal({
+          message: 'Upload in progress',
+          description:
+            'The images are still being uploaded. Send this message without the images?',
+          confirmLabel: 'Send anyway',
+          onCancel: reject,
+          onConfirm: () => {
+            this.handleSendEmail(form)
+              .then(resolve)
+              .catch(reject)
+          }
+        })
+      })
+    }
+
     return this.handleSendEmail(form)
   }
 
@@ -161,6 +185,10 @@ class EmailComposeDrawer extends React.Component {
     )
 
     this.props.onSent()
+  }
+
+  uploadImage = async file => {
+    return (await uploadEmailAttachment(file)).url
   }
 
   render() {
@@ -206,7 +234,9 @@ class EmailComposeDrawer extends React.Component {
             />
 
             <EmailBody
+              ref={this.emailBodyRef}
               hasStaticBody={this.props.hasStaticBody}
+              uploadImage={this.uploadImage}
               content={this.props.body}
             />
 
