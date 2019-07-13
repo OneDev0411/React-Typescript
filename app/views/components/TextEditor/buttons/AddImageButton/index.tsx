@@ -39,7 +39,7 @@ export function AddImageButton(props: Props) {
 
   return (
     <>
-      <IconButton onClick={handleClick}>
+      <IconButton onClick={handleClick} data-testid="add-image-button">
         <ImageFileIcon />
       </IconButton>
       <ImagePickerModal
