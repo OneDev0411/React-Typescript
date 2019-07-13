@@ -3,35 +3,20 @@ import timeago from 'timeago.js'
 import React from 'react'
 import Flex from 'styled-flex-component'
 
-import styled from 'styled-components'
-
 import ALink from 'components/ALink'
-import Avatar from 'components/Avatar'
-import { grey, primary } from 'views/utils/colors'
+import Avatar from 'components/Avatar/index'
+
+import { AccountInfoWrapper } from './styled'
 
 interface Props {
   account: IGoogleAccount
 }
 
-const AccountInfoWrapper = styled.div`
-  line-height: 1.5;
-  .header {
-    font-weight: 600;
-  }
-  .secondary {
-    color: ${grey.A900};
-  }
-  .dot {
-    margin: 0 0.8rem;
-  }
-  ${ALink} {
-    color: ${primary};
-  }
-`
-
 export function ConnectedAccount({ account }: Props) {
   return (
     <Flex inline alignCenter style={{ verticalAlign: 'middle' }}>
+      {/*
+      // @ts-ignore props are detected mandatory from js file */}
       <Avatar
         size={32}
         style={{ marginRight: '1rem' }}

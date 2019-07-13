@@ -26,8 +26,6 @@ function Header({
 
       {showActions && (
         <PageHeader.Menu>
-          {/* <Import userId={user.id} /> */}
-
           {activeSegment && activeSegment.is_editable && (
             <TouchReminder activeSegment={activeSegment} />
           )}
