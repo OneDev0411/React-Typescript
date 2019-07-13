@@ -17,7 +17,6 @@ import { TextInput } from '../../Forms/TextInput'
 import { AttachmentsList } from '../fields/Attachments'
 
 import { Footer } from '../Footer'
-import { normalizeRecipients } from '../helpers/normalize-recepients'
 
 const propTypes = {
   deal: PropTypes.shape(),
