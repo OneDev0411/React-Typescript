@@ -99,6 +99,7 @@ class AddRoleForm extends React.Component {
             allowedRoles={this.AllowedRoles}
             isEmailRequired={this.props.isEmailRequired}
             isDoubleEnded={this.isDoubleEnded}
+            showBrokerageFields={this.props.showBrokerageFields}
             isPrimaryAgent={['BuyerAgent', 'SellerAgent'].includes(
               this.state.selectedRole
             )}
