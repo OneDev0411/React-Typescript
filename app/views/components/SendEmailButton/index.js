@@ -27,6 +27,7 @@ function SendEmailButton(props) {
         appearance={props.appearance}
         style={props.style}
         onClick={toggleOpenDrawer}
+        data-test="send-email"
       >
         {props.title}
       </ActionButton>

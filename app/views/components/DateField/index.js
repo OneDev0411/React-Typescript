@@ -49,7 +49,7 @@ export class DateField extends React.Component {
     const display = 'flex'
 
     return (
-      <Flex>
+      <Flex data-test="date-field">
         <BasicDropdown
           items={monthsItems}
           onChange={props.onChangeMonth}

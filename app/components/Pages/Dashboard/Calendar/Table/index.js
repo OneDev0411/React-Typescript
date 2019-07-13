@@ -70,7 +70,7 @@ export class Table extends React.Component {
   }
 
   getEventActions = row => {
-    if (row.event_type === 'birthday') {
+    if (row.event_type === 'birthday' && !row.metadata.is_partner) {
       return (
         <SendContactCard
           contactId={row.contact}
@@ -90,7 +90,10 @@ export class Table extends React.Component {
         id: 'type',
         isSortable: false,
         render: ({ rowData }) => (
-          <Flex style={{ padding: '4px 1rem' }}>
+          <Flex
+            data-test={`event-type-${rowData.type_label}`}
+            style={{ padding: '4px 1rem' }}
+          >
             <EventIcon event={rowData} />
 
             <div>

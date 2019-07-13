@@ -1,13 +1,16 @@
 import { createContact, selectGridRow, deleteContact } from './helpers'
 
-describe('contacts page', () => {
+describe('Contacts grid', () => {
   beforeEach(() => {
+    cy.sandbox()
     cy.signin()
     cy.visit('/dashboard/contacts')
   })
 
   it('User can create contact', () => {
     createContact({ firstName: 'Paul', lastName: 'Scholes' })
+    cy.visit('/dashboard/contacts')
+    cy.pageShouldContain('Paul Scholes')
   })
 
   it('User can remove a selected contact and selection should correctly get updated', () => {

@@ -7,7 +7,9 @@ import { Label, Star, Value } from 'components/inline-editable-fields/styled'
 export function ViewMode(props) {
   return (
     <React.Fragment>
-      <Label>
+      <Label
+        data-test={`contact-attribute${props.title ? `-${props.title}` : ''}`}
+      >
         {props.title}
         {props.is_primary && (
           <Tooltip caption="Primary">

@@ -3,6 +3,7 @@ import React, { useState, useMemo, Fragment } from 'react'
 import { normalizeRoleNames } from 'deals/FormEdit/utils/normalize-role-names'
 import { getRoleTooltip } from 'deals/FormEdit/utils/get-role-tooltip'
 import { getRolesList } from 'deals/FormEdit/utils/get-roles-list'
+import { isBrokerageField } from 'deals/FormEdit/utils/is-brokerage-field'
 import { isPrimaryAgent } from 'deals/utils/roles'
 
 import Tooltip from 'components/tooltip'
@@ -82,7 +83,6 @@ export function RoleField(props) {
 
         <AddRole
           {...props}
-          isEmpty={isEmpty}
           tooltip={annotationRoles.length === 0 && tooltip}
           roles={annotationRoles}
           deal={props.deal}
@@ -96,6 +96,7 @@ export function RoleField(props) {
           isOpen
           deal={props.deal}
           form={activeRole}
+          showBrokerageFields={isBrokerageField(props.annotation)}
           allowedRoles={allowedRoles}
           onUpsertRole={props.onUpsertRole}
           onDeleteRole={props.onDeleteRole}

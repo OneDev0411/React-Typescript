@@ -163,6 +163,7 @@ export const TextEditor = forwardRef((props, ref) => {
         style={{
           minHeight: '10rem'
         }}
+        data-test="text-editor-wrapper"
       >
         <Editor
           spellCheck

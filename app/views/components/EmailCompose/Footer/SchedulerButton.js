@@ -8,6 +8,7 @@ function SchedulerButton(props) {
   return (
     <Tooltip caption={props.isScheduled ? 'Edit Schedule' : 'Schedule Email'}>
       <IconButton
+        data-test="compose-schedule-email"
         inverse
         rightRounded
         iconSize="large"

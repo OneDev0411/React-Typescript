@@ -1,8 +1,12 @@
 /**
  * validate phone number
  */
-export async function isValidPhoneNumber(phoneNumber, requiredFields) {
-  if (!phoneNumber && !requiredFields.includes('phone_number')) {
+export async function isValidPhoneNumber(
+  phoneNumber,
+  requiredFields,
+  fieldName
+) {
+  if (!phoneNumber && !requiredFields.includes(fieldName)) {
     return true
   }
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
@@ -19,7 +19,8 @@ import {
   getContactChangedAttributes
 } from 'deals/utils/roles'
 
-import { FormContainer } from './Form'
+import { AgentForm } from './Form/Agent'
+import { OfficeForm } from './Form/Office'
 
 import { TYPE_PERSON } from './constants/role-types'
 
@@ -32,27 +33,27 @@ import { getCommissionAttributes } from './helpers/get-commission-attributes'
 const propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  deal: PropTypes.object.isRequired,
+  deal: PropTypes.object,
   form: PropTypes.object,
   allowedRoles: PropTypes.array,
-  container: PropTypes.oneOf(['Modal', 'Inline']),
   isRoleRemovable: PropTypes.bool,
   isCommissionRequired: PropTypes.bool,
+  showBrokerageFields: PropTypes.bool,
   onUpsertRole: PropTypes.func,
   onDeleteRole: PropTypes.func
 }
 
 const defaultProps = {
   form: null,
-  container: 'Modal',
   isRoleRemovable: false,
   isCommissionRequired: true,
+  showBrokerageFields: false,
   allowedRoles: [],
   onUpsertRole: () => null,
   onDeleteRole: () => null
 }
 
-class Role extends React.Component {
+export class DealRole extends React.Component {
   state = {
     isSaving: false
   }
@@ -80,7 +81,7 @@ class Role extends React.Component {
     return this.formObject
   }
 
-  getRoleType() {
+  getRoleType = () => {
     const { form } = this.props
 
     if (form && form.role_type) {
@@ -249,8 +250,16 @@ class Role extends React.Component {
           return false
         }
 
-        if (!errors[fieldName] && !(await validator(fieldValue))) {
-          errors[fieldName] = Role.errorNames[fieldName]
+        let isValid = false
+
+        try {
+          isValid = await validator(fieldValue)
+        } catch (e) {
+          /* nothing */
+        }
+
+        if (!errors[fieldName] && !isValid) {
+          errors[fieldName] = this.errorNames[fieldName] || 'Invalid input'
         }
       })
     )
@@ -261,15 +270,28 @@ class Role extends React.Component {
   /**
    * get error names
    */
-  static get errorNames() {
+  get errorNames() {
+    const INVALID_EMAIL = 'Invalid Email Address'
+    const INVALID_PHONE = 'Number is invalid (###)###-####'
+    const INVALID_ADDRESS = 'Invalid address'
+    const INVALID_MLS = 'Invalid MLS ID'
+
     return {
       legal_first_name: 'Invalid Legal First Name',
       legal_last_name: 'Invalid Legal Last Name',
-      mls_id: 'Invalid MLS ID',
+      mls_id: INVALID_MLS,
+      office_mls_id: INVALID_MLS,
+      office_license_number: 'Invalid license number',
       company_title: 'Invalid Company',
-      email: 'Invalid Email Address',
-      phone_number: 'Phone Number is invalid (###)###-####',
-      commission: 'Invalid Commission value'
+      email: INVALID_EMAIL,
+      office_email: INVALID_EMAIL,
+      phone_number: `Phone ${INVALID_PHONE}`,
+      office_phone: `Phone ${INVALID_PHONE}`,
+      office_fax: `Fax ${INVALID_PHONE}`,
+      commission: 'Invalid Commission value',
+      current_address: INVALID_ADDRESS,
+      future_address: INVALID_ADDRESS,
+      office_address: INVALID_ADDRESS
     }
   }
 
@@ -299,6 +321,7 @@ class Role extends React.Component {
       dealSide: props.dealSide,
       isEmailRequired: props.isEmailRequired,
       isCommissionRequired: props.isCommissionRequired,
+      isBrokerageForm: props.showBrokerageFields,
       visibleFields,
       ...shared
     })
@@ -317,8 +340,8 @@ class Role extends React.Component {
     changeValue(state, 'company_title', () => user.company || '')
     changeValue(state, 'mls_id', () => user.mlsid || '')
     changeValue(state, 'agent', () => (user.mlsid ? user.id : null))
-    changeValue(state, 'future_address', () => user.future_address || '')
-    changeValue(state, 'current_address', () => user.current_address || '')
+    changeValue(state, 'future_address', () => user.future_address || {})
+    changeValue(state, 'current_address', () => user.current_address || {})
     changeValue(state, 'legal_prefix', () =>
       user.title ? user.title.replace('.', '') : ''
     )
@@ -355,9 +378,10 @@ class Role extends React.Component {
 
     return (
       <BareModal
+        className="deal-role-form-modal"
         isOpen
         style={{
-          content: { top: '45%', height: 'auto', overflow: 'initial' }
+          content: { top: '40%', height: 'auto', overflow: 'initial' }
         }}
       >
         <Form
@@ -372,22 +396,32 @@ class Role extends React.Component {
               formProps.values
             )
 
+            const sharedProps = {
+              ...formProps,
+              initialValues: this.formObject,
+              deal: this.props.deal,
+              isSubmitting: this.state.isSaving,
+              onSubmit: this.handleSubmit,
+              onClose: this.handleClose
+            }
+
             return (
-              <FormContainer
-                {...formProps}
-                isSubmitting={this.state.isSaving}
-                isNewRecord={this.isNewRecord}
-                isRoleRemovable={this.props.isRoleRemovable}
-                deal={this.props.deal}
-                formObject={this.formObject}
-                requiredFields={requiredFields}
-                visibleFields={visibleFields}
-                isAllowedRole={this.isAllowedRole}
-                userEmail={this.props.user.email}
-                onDeleteRole={this.handleDeleteRole}
-                onSubmit={this.handleSubmit}
-                onClose={this.handleClose}
-              />
+              <Fragment>
+                {this.props.showBrokerageFields ? (
+                  <OfficeForm {...sharedProps} />
+                ) : (
+                  <AgentForm
+                    {...sharedProps}
+                    isNewRecord={this.isNewRecord}
+                    isRoleRemovable={this.props.isRoleRemovable}
+                    requiredFields={requiredFields}
+                    visibleFields={visibleFields}
+                    isAllowedRole={this.isAllowedRole}
+                    userEmail={this.props.user.email}
+                    onDeleteRole={this.handleDeleteRole}
+                  />
+                )}
+              </Fragment>
             )
           }}
         />
@@ -396,8 +430,8 @@ class Role extends React.Component {
   }
 }
 
-Role.propTypes = propTypes
-Role.defaultProps = defaultProps
+DealRole.propTypes = propTypes
+DealRole.defaultProps = defaultProps
 
 function mapStateToProps({ user, contacts }) {
   return {
@@ -414,4 +448,4 @@ export default connect(
     createRoles,
     confirmation
   }
-)(Role)
+)(DealRole)

@@ -10,18 +10,11 @@ import appConfig from './config/webpack'
 async function run() {
   console.log('[ + ] Start compiling')
 
-  try {
-    const stats = await compile()
+  const stats = await compile()
 
-    console.log(
-      `[ + ] Webpack compile is complete in ${stats.time / 1000} seconds`
-        .magenta
-    )
-  } catch (e) {
-    console.log(e)
-
-    return
-  }
+  console.log(
+    `[ + ] Webpack compile is complete in ${stats.time / 1000} seconds`.magenta
+  )
 
   fs.copySync(
     path.join(appConfig.compile.entry, appConfig.compile.publicDirName),
@@ -76,4 +69,7 @@ function compile() {
   })
 }
 
-run()
+run().catch(e => {
+  console.error('error in build:', e)
+  process.exit(1)
+})

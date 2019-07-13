@@ -16,6 +16,7 @@ function Roles(props) {
     let fields = {}
 
     const list = getAnnotationsByType(props.annotations, 'roles')
+    const roles = [...props.roles.filter(role => role.id !== form.id), form]
 
     list.forEach(group => {
       if (
@@ -25,12 +26,7 @@ function Roles(props) {
         return false
       }
 
-      const roleText = getRoleText(
-        props.roles,
-        props.deal,
-        group[0].role,
-        group[0]
-      )
+      const roleText = getRoleText(roles, props.deal, group[0].role, group[0])
 
       fields = {
         ...fields,

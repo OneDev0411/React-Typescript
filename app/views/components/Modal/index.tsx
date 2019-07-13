@@ -37,7 +37,13 @@ export function ModalHeader({
         }}
       >
         <H3>{title}</H3>
-        <IconButton iconSize="large" isFit inverse onClick={closeHandler}>
+        <IconButton
+          iconSize="large"
+          isFit
+          inverse
+          onClick={closeHandler}
+          data-test="close-modal"
+        >
           <CloseIcon />
         </IconButton>
       </div>

@@ -2,7 +2,7 @@ import { render } from '@testing-library/react'
 
 import * as React from 'react'
 
-import { recipient } from 'fixtures/contacts/contact-item'
+import recipient from 'fixtures/contacts/contact-item'
 
 import ContactItem from '.'
 

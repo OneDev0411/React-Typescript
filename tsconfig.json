@@ -43,7 +43,7 @@
         "app/constants/*"
       ],
       "dashboard/*": [
-        "app/components/Dashboard/*"
+        "app/components/Pages/Dashboard/*"
       ],
       "hooks/*": [
         "app/hooks/*"
@@ -86,7 +86,6 @@
   "include": [
     "app/**/*.ts",
     "app/**/*.tsx",
-    "types/**/*",
-    "tests/**/*"
+    "types/**/*"
   ]
 }

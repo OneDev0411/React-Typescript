@@ -18,27 +18,28 @@ const Forms = ({
   onChangeNotifyOffice
 }) => (
   <div>
-    {Object.values(forms)
-      .filter(form => {
-        const isFormExists = tasks.find(task => task.form === form.id)
+    {forms &&
+      Object.values(forms)
+        .filter(form => {
+          const isFormExists = tasks.find(task => task.form === form.id)
 
-        return (
-          !isFormExists &&
-          form.name.toLowerCase().includes((filterValue || '').toLowerCase())
-        )
-      })
-      .map((form, index) => (
-        <ChecklistItem
-          key={index}
-          id={form.id}
-          checklist={checklist}
-          title={form.name}
-          onSelect={onSelectItem.bind(null, form, checklist.id)}
-          showNotifyOption={showNotifyOption}
-          shouldNotifyOffice={shouldNotifyOffice}
-          onChangeNotifyOffice={onChangeNotifyOffice}
-        />
-      ))}
+          return (
+            !isFormExists &&
+            form.name.toLowerCase().includes((filterValue || '').toLowerCase())
+          )
+        })
+        .map((form, index) => (
+          <ChecklistItem
+            key={index}
+            id={form.id}
+            checklist={checklist}
+            title={form.name}
+            onSelect={onSelectItem.bind(null, form, checklist.id)}
+            showNotifyOption={showNotifyOption}
+            shouldNotifyOffice={shouldNotifyOffice}
+            onChangeNotifyOffice={onChangeNotifyOffice}
+          />
+        ))}
   </div>
 )
 

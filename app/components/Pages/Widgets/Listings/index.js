@@ -1,32 +1,34 @@
 // Widgets/Listings/index.js
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import S from 'shorti'
-import PropTypes from 'prop-types'
 
 import ListingSection from './Partials/ListingSection'
 
 class ListingsWidget extends Component {
-  constructor(props) {
-    super(props)
-    this._updateHeight = this._updateHeight.bind(this)
-    this.height = 0
+  state = {
+    height: 0
   }
 
   componentDidUpdate() {
     this._updateHeight()
   }
 
-  _updateHeight() {
-    if (this.parentDiv && this.height !== this.parentDiv.scrollHeight) {
-      window.parent.postMessage({ height: this.parentDiv.scrollHeight }, '*')
-      this.height = this.parentDiv.scrollHeight
+  _updateHeight = () => {
+    if (this.parentDiv && this.state.height !== this.parentDiv.scrollHeight) {
+      this.setState(
+        {
+          height: this.parentDiv.scrollHeight
+        },
+        () =>
+          window.parent.postMessage(
+            { height: this.parentDiv.scrollHeight },
+            '*'
+          )
+      )
     }
   }
 
   render() {
-    const { user, data, brand } = this.props
-
     let links_area = (
       <div>
         <div
@@ -52,17 +54,12 @@ class ListingsWidget extends Component {
       <div ref={ref => (this.parentDiv = ref)}>
         <ListingSection
           title="Exclusive Listings"
-          data={data}
-          user={user}
-          brand={brand}
           type="active"
           updateHeight={this._updateHeight}
         />
         <div className="clearfix" />
         <ListingSection
           title="Sold"
-          data={data}
-          brand={brand}
           type="sold"
           updateHeight={this._updateHeight}
         />
@@ -73,12 +70,4 @@ class ListingsWidget extends Component {
   }
 }
 
-ListingsWidget.propTypes = {
-  data: PropTypes.object,
-  user: PropTypes.object
-}
-
-export default connect(({ user, data }) => ({
-  data,
-  user
-}))(ListingsWidget)
+export default ListingsWidget

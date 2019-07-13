@@ -1,5 +1,3 @@
-import memoize from 'lodash/memoize'
-
 import { TYPE_PERSON, TYPE_COMPANY } from '../../constants/role-types'
 
 /**
@@ -55,6 +53,10 @@ function getIsCompanyRequired(args) {
 
 export default function getRequiredFields(args) {
   const { role, role_type } = args
+
+  if (args.isBrokerageForm) {
+    return []
+  }
 
   // role and role_type are always mandatory
   const list = ['role', 'role_type']

@@ -21,3 +21,11 @@ export const Footer = styled.div`
   padding: 0.25rem 0.5rem;
   background-color: ${grey.A100};
 `
+
+export const OfficeTitle = styled.div`
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid ${grey.A100};
+`

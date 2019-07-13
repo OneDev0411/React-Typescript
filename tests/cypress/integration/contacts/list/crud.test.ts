@@ -5,11 +5,12 @@ import { expandShowMoreLess } from 'helpers/page'
 import { createList } from './create'
 import { deleteList } from './delete'
 
-describe('contacts lists', () => {
+describe('Contacts saved lists', () => {
   const listName = `test-list-${cuid()}`
   const secondListName = `test-list-${cuid()}`
 
   beforeEach(() => {
+    cy.sandbox()
     cy.signin()
     cy.visit('/dashboard/contacts')
   })
