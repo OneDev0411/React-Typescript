@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react'
-import Draft, { convertToRaw, EditorState } from 'draft-js'
+import { convertToRaw, EditorState } from 'draft-js'
 import Editor, { composeDecorators } from 'draft-js-plugins-editor'
 import createImagePlugin from 'draft-js-image-plugin'
 import 'draft-js-image-plugin/lib/plugin.css'
@@ -27,12 +27,15 @@ import { FieldProps } from 'react-final-form'
 
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 
+import { isImageFile } from 'utils/file-utils/is-image-file'
+
 import { EditorWrapper, Toolbar } from './styled'
 import { FieldError } from '../final-form-fields/FieldError'
 import { AddImageButton } from './buttons/AddImageButton'
-import { getBlocksWhereEntityData } from './utils/get-block-where-entity-data'
 import { richButtonsPlugin, RichTextButtons } from './buttons/RichTextButtons'
-// import createDragNDropUploadPlugin from '@mikeljames/draft-js-drag-n-drop-upload-plugin'
+import { createFilePlugin } from './plugins/handle-files'
+import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
+import { replaceImage } from './utils/replace-image'
 
 const focusPlugin = createFocusPlugin()
 const resizeablePlugin = createResizeablePlugin()
@@ -49,14 +52,6 @@ const imagePlugin = createImagePlugin({
   )
 })
 
-// const dragNDropFileUploadPlugin = createDragNDropUploadPlugin({
-//   handleUpload: (...args) => {
-//   },
-//   addImage: (...args) => {
-//     // return imagePlugin.addImage(...args)
-//   }
-// })
-
 interface Props {
   defaultValue?: string
   input?: FieldProps<any>['input']
@@ -65,7 +60,16 @@ interface Props {
   placeholder?: string
   plugins?: any[]
   settings?: any
-  uploadImage?: (blob: File) => Promise<string>
+  /**
+   * an optional function to be used when hasImage is true and an image is
+   * added to the editor. It should upload the image and return the promise
+   * of the uploaded image url. The src of the image in the editor will be
+   * uploaded to that uploaded image url.
+   * @param file
+   */
+  uploadImage?: (file: File) => Promise<string>
+
+  onAttachmentDropped?: (file: File) => void
 
   hasRichText?: boolean
   hasImage?: boolean
@@ -95,7 +99,8 @@ export const TextEditor = forwardRef(
       settings = {},
       uploadImage,
       hasImage = false,
-      hasRichText = true
+      hasRichText = true,
+      onAttachmentDropped
     }: Props,
     ref
   ) => {
@@ -103,20 +108,6 @@ export const TextEditor = forwardRef(
     const [editorState, setEditorState] = useState(
       EditorState.createWithContent(stateFromHTML(defaultValue))
     )
-
-    const defaultPlugins = [
-      ...(hasRichText ? [richButtonsPlugin] : []),
-      ...(hasImage
-        ? [
-            // dragNDropFileUploadPlugin,
-            blockDndPlugin,
-            focusPlugin,
-            alignmentPlugin,
-            resizeablePlugin,
-            imagePlugin
-          ]
-        : [])
-    ]
 
     useImperativeHandle(
       ref,
@@ -194,6 +185,10 @@ export const TextEditor = forwardRef(
      * @param file
      */
     const addImage = async (file: File) => {
+      if (!isImageFile(file)) {
+        return
+      }
+
       // We first convert image to data url and show it.
       const dataUrl = await readFileAsDataUrl(file)
 
@@ -209,12 +204,15 @@ export const TextEditor = forwardRef(
       // When the upload is finished, we replace the image src with the uploaded
       // file's url.
       if (uploadImage) {
+        // TODO: handle errors and remove the image in this case.
         const uploadedImageUrl = await uploadImage(file)
 
         if (editorRef.current) {
           const latestState = editorRef.current.getEditorState()
 
-          setEditorState(replaceImage(latestState, dataUrl, uploadedImageUrl))
+          setEditorState(
+            replaceImage(imagePlugin, latestState, dataUrl, uploadedImageUrl)
+          )
         }
       } else {
         console.warn(
@@ -222,6 +220,27 @@ export const TextEditor = forwardRef(
         )
       }
     }
+
+    const defaultPlugins = [
+      ...(hasRichText ? [richButtonsPlugin] : []),
+      ...(hasImage
+        ? [
+            blockDndPlugin,
+            focusPlugin,
+            alignmentPlugin,
+            resizeablePlugin,
+            imagePlugin
+          ]
+        : []),
+      ...(hasImage || onAttachmentDropped
+        ? [
+            createFilePlugin({
+              handleImage: addImage,
+              handleOtherFiles: onAttachmentDropped
+            })
+          ]
+        : [])
+    ]
 
     const allPlugins = [...defaultPlugins, ...plugins]
 
@@ -265,48 +284,3 @@ export const TextEditor = forwardRef(
     )
   }
 )
-
-function shouldHidePlaceholder(editorState) {
-  const contentState = editorState.getCurrentContent()
-
-  if (!contentState.hasText()) {
-    if (
-      contentState
-        .getBlockMap()
-        .first()
-        .getType() !== 'unstyled'
-    ) {
-      return true
-    }
-  }
-
-  return false
-}
-
-/**
- * Returns a new editorState in which the image with src `oldUrl` is replaced
- * with a new images with src `newUrl`.
- *
- */
-function replaceImage(
-  editorState: EditorState,
-  oldUrl: string,
-  newUrl: string
-): EditorState {
-  // find image blocks with src equal to `oldUrl`
-  const blocks = getBlocksWhereEntityData(
-    editorState,
-    data => data.src === oldUrl
-  )
-
-  const key = blocks.first().get('key')
-
-  // select the image to make the subsequent imagePlugin.addImage replace it.
-  const newState = EditorState.acceptSelection(
-    editorState,
-    Draft.SelectionState.createEmpty(key)
-  )
-
-  // This adds an image with src equal to newUrl
-  return imagePlugin.addImage(newState, newUrl)
-}
