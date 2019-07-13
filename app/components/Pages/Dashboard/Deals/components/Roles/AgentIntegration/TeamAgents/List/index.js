@@ -9,7 +9,7 @@ import { TextWithHighlights } from 'components/TextWithHighlights'
 
 import Search from 'components/Grid/Search'
 
-import { getBrandUsers } from 'utils/user-teams'
+import { getBrandUsers, getActiveTeam } from 'utils/user-teams'
 
 import { EmptyState } from '../styled'
 
@@ -33,7 +33,7 @@ export function AgentsList(props) {
   const [searchTerm, setSearchTerm] = useState('')
   const [debouncedSetSearchTerm] = useDebouncedCallback(setSearchTerm, 500)
 
-  const teams = normalizeTeams(props.teams, searchTerm)
+  const teams = normalizeTeams(props.user, props.teams, searchTerm)
 
   return (
     <div>
@@ -105,9 +105,11 @@ export function AgentsList(props) {
   )
 }
 
-function normalizeTeams(teams, searchTerm) {
+function normalizeTeams(user, teams, searchTerm) {
+  const activeTeam = getActiveTeam(user)
+
   const list = teams
-    .filter(office => !isTrainingBrand(office))
+    .filter(office => isTrainingOffice(office) === activeTeam.brand.training)
     .map(office => {
       const agents = getBrandUsers(office).map(user => ({
         ...user,
@@ -130,7 +132,7 @@ function normalizeTeams(teams, searchTerm) {
   return list.every(office => !office.users.length) ? [] : list
 }
 
-const isTrainingBrand = memoize(
+const isTrainingOffice = memoize(
   office => {
     let current = office
 
