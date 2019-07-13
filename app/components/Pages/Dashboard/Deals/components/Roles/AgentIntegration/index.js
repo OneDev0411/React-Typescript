@@ -141,7 +141,7 @@ export class RoleAgentIntegration extends React.Component {
 
   render() {
     return (
-      <Fragment>
+      <>
         {this.state.isAgentDrawerOpen && (
           <TeamAgents
             title={this.props.modalTitle}
@@ -163,7 +163,7 @@ export class RoleAgentIntegration extends React.Component {
           onClose={this.props.onClose}
           onUpsertRole={this.onUpsertRole}
         />
-      </Fragment>
+      </>
     )
   }
 }
