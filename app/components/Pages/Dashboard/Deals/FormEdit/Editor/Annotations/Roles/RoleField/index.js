@@ -19,6 +19,7 @@ export function RoleField(props) {
   const allowedRoles = normalizeRoleNames(props.deal, props.annotation.role)
   const roles = props.roles.filter(role => allowedRoles.includes(role.role))
   const isEmpty = !Object.values(props.values).join('').length
+  const showBrokerageFields = isBrokerageField(props.annotation)
 
   const annotationRoles = useMemo(
     () =>
@@ -86,6 +87,7 @@ export function RoleField(props) {
           tooltip={annotationRoles.length === 0 && tooltip}
           roles={annotationRoles}
           deal={props.deal}
+          showBrokerageFields={showBrokerageFields}
           onClick={() => setRole(null)}
           onUpsertRole={props.onUpsertRole}
         />
@@ -96,7 +98,7 @@ export function RoleField(props) {
           isOpen
           deal={props.deal}
           form={activeRole}
-          showBrokerageFields={isBrokerageField(props.annotation)}
+          showBrokerageFields={showBrokerageFields}
           allowedRoles={allowedRoles}
           onUpsertRole={props.onUpsertRole}
           onDeleteRole={props.onDeleteRole}

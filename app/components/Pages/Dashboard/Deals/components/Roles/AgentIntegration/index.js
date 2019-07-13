@@ -156,6 +156,7 @@ export class RoleAgentIntegration extends React.Component {
           isOpen={this.state.isRoleFormOpen}
           form={this.state.role}
           dealSide={this.props.dealSide}
+          showBrokerageFields={this.props.showBrokerageFields}
           allowedRoles={this.props.allowedRoles}
           isEmailRequired={this.props.isEmailRequired}
           isCommissionRequired={this.props.isCommissionRequired}
