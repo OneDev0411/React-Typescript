@@ -19,11 +19,15 @@ describe('Contacts saved lists', () => {
     expandShowMoreLess('lists-list')
     createList(listName)
     createList(secondListName)
+    cy.pageShouldContain(listName)
+    cy.pageShouldContain(secondListName)
   })
 
   it('User should be able to delete contacts lists', () => {
     expandShowMoreLess('lists-list')
     deleteList(listName)
     deleteList(secondListName)
+    cy.waitForRemove(listName)
+    cy.waitForRemove(secondListName)
   })
 })

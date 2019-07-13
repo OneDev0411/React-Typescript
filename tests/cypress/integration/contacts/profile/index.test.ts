@@ -44,7 +44,7 @@ describe('Contact profile', () => {
     setInlineDateField()
   })
 
-  it.only('User can create and see created email event in contact profile', () => {
+  it('User can create and see created email event in contact profile', () => {
     cy.visit(`/dashboard/contacts/${EMPTY_CONTACT_ID}`)
 
     const subject = 'test subject'

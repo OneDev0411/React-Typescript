@@ -1,5 +1,6 @@
 describe('Test Calendar', () => {
   beforeEach(() => {
+    cy.sandbox()
     cy.clock(new Date(2010, 0, 1).getTime())
     cy.signin()
     cy.visit('/dashboard/calendar')

@@ -20,7 +20,6 @@ describe('Contacts page, tags', () => {
 
     expandShowMoreLess('lists-list')
 
-    cy.getByTestSelector('tag-item-Agent').should('not.exist')
-
+    cy.waitForRemove(getTestSelector('tag-item-Agent'))
   })
 })
