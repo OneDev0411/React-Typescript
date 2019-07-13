@@ -265,6 +265,7 @@ export const TextEditor = forwardRef(
           style={{
             minHeight: '10rem'
           }}
+          data-test="text-editor-wrapper"
         >
           <Editor
             spellCheck
