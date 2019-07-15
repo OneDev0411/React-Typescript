@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import _ from 'underscore'
 
-import FolderIcon from 'components/SvgIcons/Folder/IconFolder'
+import AttachDealIcon from 'components/SvgIcons/AttachDeal/IconAttachDeal'
 import SearchDealDrawer from 'components/SearchDealDrawer'
 import SelectDealFileDrawer from 'components/SelectDealFileDrawer'
 
@@ -78,7 +78,9 @@ export class AddDealFile extends React.Component {
     return (
       <Fragment>
         <FooterAction tooltipCaption="Deal Files" onClick={this.handleClick}>
-          <FolderIcon style={{ fill: '#000' }} />
+          <AttachDealIcon
+            style={{ width: '1.5rem', height: '1.5rem', fill: '#000' }}
+          />
         </FooterAction>
 
         {this.state.isDealsListOpen && (
