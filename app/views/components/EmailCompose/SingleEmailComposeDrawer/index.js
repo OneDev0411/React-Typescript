@@ -31,9 +31,7 @@ export function SingleEmailComposeDrawer({
         bcc: normalizeRecipients(formValue.bcc),
         subject: (formValue.subject || '').trim(),
         html: formValue.body,
-        attachments: Object.values(formValue.attachments).map(
-          item => item.file_id
-        ),
+        attachments: formValue.attachments.map(item => item.file_id),
         due_at: formValue.due_at
       })
     )
@@ -60,11 +58,7 @@ export function SingleEmailComposeDrawer({
         <Field labelText="Cc" name="cc" component={MultipleContactsSelect} />
       )}
       {hasBcc && (
-        <Field
-          labelText="Bcc"
-          name="bcc"
-          component={MultipleContactsSelect}
-        />
+        <Field labelText="Bcc" name="bcc" component={MultipleContactsSelect} />
       )}
     </EmailComposeDrawer>
   )

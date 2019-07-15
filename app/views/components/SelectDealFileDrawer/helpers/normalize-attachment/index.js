@@ -5,15 +5,7 @@ export function normalizeAttachment({ type, task, file }) {
 }
 
 export function normalizeAttachments(attachments) {
-  const list = {}
-
-  attachments.forEach(attachment => {
-    const item = normalizeAttachment(attachment)
-
-    list[item.id] = item
-  })
-
-  return list
+  return attachments.map(normalizeAttachment)
 }
 
 function normalizeDate(date) {

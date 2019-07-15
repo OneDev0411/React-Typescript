@@ -328,7 +328,8 @@
   "husky": {
     "hooks": {
       "pre-commit": "./githooks/pre-commit.sh",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && ./githooks/commit-msg.js $HUSKY_GIT_PARAMS `git rev-parse --abbrev-ref HEAD`"
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && ./githooks/commit-msg.js $HUSKY_GIT_PARAMS `git rev-parse --abbrev-ref HEAD`",
+      "pre-push": "npm run test:unit"
     }
   }
 }
