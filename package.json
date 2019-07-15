@@ -21,7 +21,7 @@
     "lint:app": "eslint ./app",
     "lint:server": "eslint ./server",
     "lint:tests": "eslint ./tests --fix",
-    "e2e:start": "npm run e2e:api:start & npm run e2e:server:start",
+    "e2e:start": "npm run e2e:api:update-image && npm run e2e:api:start & npm run e2e:server:start",
     "e2e:server:start": "NODE_ENV=development E2E=true PORT=8081 notify=true npx babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
     "e2e:api:start": "cd tests/services && docker-compose down && docker-compose build --no-cache && docker-compose up",
     "e2e:api:update-image": "cd tests/services && docker-compose pull api",
