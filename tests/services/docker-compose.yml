@@ -12,8 +12,8 @@ services:
   postgres:
     container_name: e2e_postgres
     build: db
-    logging:
-      driver: none
+#    logging:
+#      driver: none
     environment:
       POSTGRES_DB: 'rechat'
       POSTGRES_USER: 'rechat'
