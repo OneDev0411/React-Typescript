@@ -30,9 +30,7 @@ export function BulkEmailComposeDrawer({
         to: normalizeRecipients(formValue.recipients),
         subject: (formValue.subject || '').trim(),
         html: formValue.body,
-        attachments: Object.values(formValue.attachments).map(
-          item => item.file_id
-        ),
+        attachments: formValue.attachments.map(item => item.file_id),
         due_at: formValue.due_at
       })
     )

@@ -42,7 +42,7 @@ describe('Test deal form get-role-names helper', () => {
       }
     )
 
-    expect(names).toBe('ramin@rechat.com, Shayan Hamidi')
+    expect(names).toBe('ramin@rechat.com')
   })
 
   it('Should return correct names when annotation type is Role', () => {

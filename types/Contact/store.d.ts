@@ -19,14 +19,9 @@ declare interface IContactReduxListState {
   isFetching: boolean
 }
 
-declare interface IContactReduxFilterSegmentState {
-  list: null | StringMap<IContactList> // leaky abstraction 😕
-  isFetching: boolean
-  conditionOperator: 'and' | 'or'
-  activeSegmentId: string
-  fetchError: null | string /* ? */
-  activeFilters: StringMap<IActiveFilter>
-}
+declare type IContactReduxFilterSegmentState = IReduxFilterSegmentState<
+  IContactList
+>
 
 declare interface IContactReduxState {
   attributeDefs: IContactAttributeDef[]

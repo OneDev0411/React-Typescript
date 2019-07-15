@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import ClickOutside from 'react-click-outside'
 
 import { isPrimaryAgent } from 'deals/utils/roles'
 import { specialRoles } from 'deals/FormEdit/utils/normalize-role-names'
@@ -48,6 +49,11 @@ export function AddRole(props) {
     props.onClick()
   }
 
+  const handleClickOutside = () =>
+    setShowRoles(
+      document.getElementsByClassName('deal-role-form-modal').length > 0
+    )
+
   const handleUpsertRole = role => {
     setShowRoles(false)
 
@@ -67,18 +73,21 @@ export function AddRole(props) {
       </ToolTip>
 
       {showRolesList && (
-        <RolesList top={props.rect.height}>
-          <Roles
-            showEmail={false}
-            showTitle={false}
-            allowDeleteRole={false}
-            deal={props.deal}
-            filter={role => props.annotation.role.includes(role.role)}
-            allowedRoles={props.annotation.role}
-            onUpsertRole={handleUpsertRole}
-            onCreateRole={handleUpsertRole}
-          />
-        </RolesList>
+        <ClickOutside onClickOutside={handleClickOutside}>
+          <RolesList top={props.rect.height}>
+            <Roles
+              showEmail={false}
+              showTitle={false}
+              allowDeleteRole={false}
+              showBrokerageFields={props.showBrokerageFields}
+              deal={props.deal}
+              filter={role => props.annotation.role.includes(role.role)}
+              allowedRoles={props.annotation.role}
+              onUpsertRole={handleUpsertRole}
+              onCreateRole={handleUpsertRole}
+            />
+          </RolesList>
+        </ClickOutside>
       )}
     </Container>
   )

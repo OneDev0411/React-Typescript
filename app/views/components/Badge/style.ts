@@ -1,10 +1,8 @@
 import { css } from 'styled-components'
 
-import { primary } from '../../utils/colors'
+import { primary, red, orange, green } from '../../utils/colors'
 
 import ALink from '../ALink'
-
-import { red, orange, green } from '../../utils/colors'
 
 export const badgeBaseStyle = css`
   -webkit-appearance: none;
@@ -20,6 +18,11 @@ export const badgeBaseStyle = css`
 `
 
 export const badgeAppearances = {
+  primary: css`
+    ${badgeBaseStyle};
+    color: #fff;
+    background-color: ${primary};
+  `,
   red: css`
     ${badgeBaseStyle};
     color: #fff;

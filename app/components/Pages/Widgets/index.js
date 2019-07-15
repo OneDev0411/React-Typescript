@@ -1,15 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { getBrandByHostname } from '../../../models/brand/get-brand-by-hostname'
-// favorites
+import getBrand from '../../../store_actions/brand'
 import getFavorites from '../../../store_actions/listings/favorites/get-favorites'
 
 class App extends Component {
-  state = {
-    brand: this.props.brand
-  }
-
   componentDidMount() {
     const { brand, user } = this.props
 
@@ -18,7 +13,7 @@ class App extends Component {
     }
 
     if (!brand) {
-      this.fetchBrand()
+      this.props.getBrand()
     }
 
     if (user) {
@@ -29,14 +24,8 @@ class App extends Component {
       this.setFullStoryUser(user)
 
       // set user data for sentry
-      this.setSentryUser(user, this.state.brand)
+      this.setSentryUser(user, this.props.brand)
     }
-  }
-
-  fetchBrand = async () => {
-    const brand = await getBrandByHostname(window.location.hostname)
-
-    this.setState({ brand })
   }
 
   setFullStoryUser(user) {
@@ -67,7 +56,7 @@ class App extends Component {
 
   render() {
     const children = React.cloneElement(this.props.children, {
-      brand: this.state.brand,
+      brand: this.props.brand,
       user: this.props.user
     })
 
@@ -80,5 +69,5 @@ export default connect(
     brand,
     user
   }),
-  { getFavorites }
+  { getFavorites, getBrand }
 )(App)

@@ -11,7 +11,7 @@ module.exports = {
     '^assets/(.*)': '<rootDir>/app/static/$1',
     '^components/(.*)': '<rootDir>/app/views/components/$1',
     '^constants/(.*)': '<rootDir>/app/constants/$1',
-    '^dashboard/(.*)': '<rootDir>/app/components/Dashboard/$1',
+    '^dashboard/(.*)': '<rootDir>/app/components/Pages/Dashboard/$1',
     '^models/(.*)': '<rootDir>/app/models/$1',
     '^reducers/(.*)': '<rootDir>/app/reducers/$1',
     '^routes/(.*)': '<rootDir>/app/routes/$1',

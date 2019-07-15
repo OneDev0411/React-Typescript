@@ -1,15 +1,15 @@
-import { setInlineDateField } from 'helpers/fields'
-
+import { setInlineDateField, setDateFieldToFuture } from 'helpers/fields'
 import {
   acceptConfirmationModal,
   cancelConfirmationModal,
   waitForModalToClose
 } from 'helpers/modal'
 import { getTestSelector } from 'helpers/page'
+import { fillEmailComposeDrawer, waitForDrawerToClose } from 'helpers/drawer'
 
-import { createContact } from '../grid/helpers'
+import { addTask } from './helpers'
 
-const contact = { firstName: 'Keanu', lastName: 'Reeves' }
+const EMPTY_CONTACT_ID = 'c1664da4-cff3-40f8-84f2-7d04affa224e'
 
 describe('Contact profile', () => {
   beforeEach(() => {
@@ -18,8 +18,7 @@ describe('Contact profile', () => {
   })
 
   it('User can edit birthdays for contact, spouse and child', () => {
-    cy.visit('/dashboard/contacts')
-    createContact(contact)
+    cy.visit(`/dashboard/contacts/${EMPTY_CONTACT_ID}`)
 
     const birthdayAttributeTitle = 'Birthday'
     const childBirthdayAttributeTitle = 'Child Birthday'
@@ -45,8 +44,38 @@ describe('Contact profile', () => {
     setInlineDateField()
   })
 
+  it.only('User can create and see created email event in contact profile', () => {
+    cy.visit(`/dashboard/contacts/${EMPTY_CONTACT_ID}`)
+
+    const subject = 'test subject'
+    const content = 'test content'
+
+    const futureSubject = 'test subject future'
+    const futureContent = 'test content future'
+
+    // Normal send
+    cy.getByTestSelector('send-email').click()
+    fillEmailComposeDrawer(subject, content)
+    cy.getByTestSelector('compose-send-email').click()
+    waitForDrawerToClose()
+    cy.pageShouldContain(subject)
+    cy.pageShouldContain(content)
+
+    // Scheduled send
+    cy.getByTestSelector('send-email').click()
+    fillEmailComposeDrawer(futureSubject, futureContent)
+    cy.getByTestSelector('compose-schedule-email').click()
+    setDateFieldToFuture(true)
+    cy.getByTestSelector('compose-send-email').click()
+    waitForDrawerToClose()
+    cy.pageShouldContain(futureSubject)
+    cy.pageShouldContain(futureContent)
+  })
+
   it('User can create events/tasks and mark them as done from contact profile', () => {
-    const taskTitle = 'Call Keanu and tell him you are breathtaking'
+    cy.visit(`/dashboard/contacts/${EMPTY_CONTACT_ID}`)
+
+    const taskTitle = 'Call and tell him you are breathtaking'
     const futureTaskTitle = `${taskTitle} in the future`
 
     const crmTaskItemDataTest = 'crm-task-item'
@@ -59,10 +88,7 @@ describe('Contact profile', () => {
       month: 'short'
     })
 
-    cy.visit('/dashboard/contacts')
-    createContact(contact)
-    cy.getByTestSelector('add-task').type(taskTitle)
-    cy.getByTestSelector('save-task').click()
+    addTask(taskTitle)
     cy.getByTestSelector(crmTaskItemDataTest)
       .first()
       .within(() => {
@@ -73,14 +99,7 @@ describe('Contact profile', () => {
         })
       })
 
-    cy.getByTestSelector('add-task').type(futureTaskTitle)
-    cy.getByTestSelector('date-time-picker-button').click()
-    cy.get('.DayPicker-NavButton--next').click()
-    cy.get('.DayPicker-Day')
-      .last()
-      .click()
-    cy.getByTestSelector('date-picker-done').click()
-    cy.getByTestSelector('save-task').click()
+    addTask(futureTaskTitle, true)
 
     // now we should wait to have 2 tasks here
     cy.getByTestSelector(crmTaskItemDataTest).should('have.length', 2)

@@ -115,6 +115,7 @@ class TeamAgents extends React.Component {
     const { props } = this
 
     const sharedProps = {
+      user: this.props.user,
       teams: this.teamAgents,
       onSelectAgent: this.handleSelectAgent
     }

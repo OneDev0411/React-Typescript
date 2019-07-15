@@ -24,7 +24,7 @@ interface Props {
 
 export function OfficeForm(props: Props) {
   const office: IAgentOffice | StringMap<{}> =
-    idx(props.initialValues, data => data.user.agent.office) || {}
+    idx(props.initialValues, data => data.agent.office) || {}
 
   return (
     <>
@@ -43,7 +43,7 @@ export function OfficeForm(props: Props) {
           />
 
           <Field
-            label="Office Lisence Number"
+            label="Office license Number"
             name="office_license_number"
             initialValue={
               props.values.office_license_number || office.license_number
@@ -92,7 +92,11 @@ export function OfficeForm(props: Props) {
             isVisible
             label="Office Address"
             name="office_address"
-            initialValue={props.values.office_address || {}}
+            initialValue={
+              props.values.office_address || {
+                full: office.address
+              }
+            }
             needsAddressForm
             component={Address}
             style={{ flex: 1 }}

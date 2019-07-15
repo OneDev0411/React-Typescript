@@ -17,7 +17,6 @@ import { TextInput } from '../../Forms/TextInput'
 import { AttachmentsList } from '../fields/Attachments'
 
 import { Footer } from '../Footer'
-import { normalizeRecipients } from '../helpers/normalize-recepients'
 
 const propTypes = {
   deal: PropTypes.shape(),
@@ -199,7 +198,12 @@ class EmailComposeDrawer extends React.Component {
               component={TextInput}
             />
 
-            <Field placeholder="Subject" name="subject" component={TextInput} />
+            <Field
+              data-test="email-subject"
+              placeholder="Subject"
+              name="subject"
+              component={TextInput}
+            />
 
             <EmailBody
               hasStaticBody={this.props.hasStaticBody}

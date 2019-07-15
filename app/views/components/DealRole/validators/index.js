@@ -57,7 +57,7 @@ export function getFormValidators(requiredFields) {
     /* validate Office Email */
     office_email: name => isValidEmail(name, requiredFields, 'office_email'),
 
-    /* validate Office Lisence Number */
+    /* validate Office Licence Number */
     office_license_number: name =>
       isValidString(name, requiredFields, 'office_license_number'),
 

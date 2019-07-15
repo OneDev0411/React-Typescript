@@ -88,14 +88,16 @@ function normalizeRoles(list) {
   )
 
   return Object.entries(normalized).reduce((current, [context_name]) => {
-    current[context_name] = groupBy(
-      normalized[context_name],
-      item =>
-        `${item.role
-          .sort()
-          .join('')
-          .toLowerCase()}${item.attribute}${item.group}`
-    )
+    current[context_name] = groupBy(normalized[context_name], item => {
+      const attrs = [].concat(item.attributes).sort()
+      const role = []
+        .concat(item.role)
+        .sort()
+        .concat(attrs)
+        .join('_')
+
+      return `${item.group}_${role}`
+    })
 
     return current
   }, {})

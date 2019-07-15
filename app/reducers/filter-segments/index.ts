@@ -2,7 +2,7 @@ import _ from 'underscore'
 
 import * as types from '../../constants/filter-segments'
 
-const initialState: IContactReduxFilterSegmentState = {
+const initialState: IReduxFilterSegmentState = {
   list: null,
   isFetching: false,
   conditionOperator: 'and',
@@ -18,7 +18,7 @@ export const getDefaultList = (name = '') => ({
   filters: []
 })
 
-const filterSegments = (state: IContactReduxFilterSegmentState, action) => {
+const filterSegments = <T>(state: IReduxFilterSegmentState<T>, action) => {
   switch (action.type) {
     case types.CHANGE_ACTIVE_FILTER_SEGMENT:
       return {
@@ -135,8 +135,11 @@ const filterSegments = (state: IContactReduxFilterSegmentState, action) => {
   }
 }
 
-function createReducer(id) {
-  const createList = reducer => (state = initialState, action) => {
+function createReducer<T>(id) {
+  const createList = reducer => (
+    state: IReduxFilterSegmentState<T> = initialState,
+    action
+  ) => {
     if (action && action.namespace === 'filter-segments' && action.id === id) {
       return reducer(state, action)
     }
@@ -147,7 +150,7 @@ function createReducer(id) {
   return createList(filterSegments)
 }
 
-export const contactsFilterSegments = createReducer('contacts')
+export const contactsFilterSegments = createReducer<IContactList>('contacts')
 export const dealsFilterSegments = createReducer('deals')
 export const mlsFilterSegments = createReducer('mls')
 
@@ -156,21 +159,44 @@ export const savedSegmentId = state => state.activeSegmentId
 
 export const isListFetched = state => state.list !== null
 
-export const selectActiveSavedSegment = (state, listName = '') =>
-  !state.list || state.activeSegmentId === 'default'
-    ? getDefaultList(listName)
-    : state.list[state.activeSegmentId]
+type GetPredefinedLists<T = any> = <T>(
+  listName: string,
+  state: IReduxFilterSegmentState<T>
+) => StringMap<T>
 
-export const getSegments = (state, listName) =>
+export const selectActiveSavedSegment = (
+  state: IReduxFilterSegmentState,
+  listName = '',
+  getPredefinedLists: GetPredefinedLists
+) => {
+  const predefinedLists = getPredefinedLists(listName, state)
+
+  const activeSegmentId = state.activeSegmentId
+
+  if (!state.list) {
+    return predefinedLists[activeSegmentId || 'default']
+  }
+
+  return predefinedLists[activeSegmentId] || state.list[activeSegmentId]
+}
+
+export const getSegments = <T = any>(
+  state: IReduxFilterSegmentState,
+  listName: string,
+  getPredefinedLists?: GetPredefinedLists<T>
+) =>
   ([] as any[]).concat(
-    [getDefaultList(listName)],
+    getPredefinedLists
+      ? Object.values(getPredefinedLists(listName, state))
+      : [],
     Object.values(state.list || {})
   )
 
-export const selectSavedSegmentById = (
-  state: IContactReduxFilterSegmentState,
+export const selectSavedSegmentById = <T = any>(
+  state: IReduxFilterSegmentState<T>,
   id
 ) => state.list && state.list[id]
 
-export const selectActiveFilters = (state: IContactReduxFilterSegmentState) =>
-  state.activeFilters
+export const selectActiveFilters = <T = any>(
+  state: IReduxFilterSegmentState<T>
+) => state.activeFilters

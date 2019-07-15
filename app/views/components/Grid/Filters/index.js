@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import {
+  getDefaultList,
   selectActiveFilters,
   selectActiveSavedSegment
 } from 'reducers/filter-segments'
@@ -196,7 +197,7 @@ class Filters extends React.Component {
   }
 }
 
-function mapStateToProps(state, { name, plugins }) {
+function mapStateToProps(state, { name, plugins, getPredefinedLists }) {
   let states = {
     name,
     conditionOperator: state[name].filterSegments.conditionOperator,
@@ -206,14 +207,18 @@ function mapStateToProps(state, { name, plugins }) {
   if (plugins.includes('segments')) {
     states = {
       ...states,
-      segment: selectActiveSavedSegment(state[name].filterSegments, name)
+      segment: selectActiveSavedSegment(
+        state[name].filterSegments,
+        name,
+        getPredefinedLists
+      )
     }
   }
 
   return states
 }
 
-export default connect(
+const ConnectedFilters = connect(
   mapStateToProps,
   {
     addActiveFilter,
@@ -225,3 +230,9 @@ export default connect(
     createActiveFiltersWithConditionOperator
   }
 )(Filters)
+
+ConnectedFilters.defaultProps = {
+  getPredefinedLists: name => ({ default: getDefaultList(name) })
+}
+
+export default ConnectedFilters
