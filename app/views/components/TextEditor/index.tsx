@@ -249,12 +249,7 @@ export const TextEditor = forwardRef(
         <Toolbar>
           {hasRichText && <RichTextButtons />}
 
-          {hasImage && (
-            <AddImageButton
-              onImageSelected={addImage}
-              editorState={editorState}
-            />
-          )}
+          {hasImage && <AddImageButton onImageSelected={addImage} />}
         </Toolbar>
 
         <EditorWrapper

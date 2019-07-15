@@ -1,16 +1,16 @@
 export function shouldHidePlaceholder(editorState) {
   const contentState = editorState.getCurrentContent()
 
-  if (!contentState.hasText()) {
-    if (
-      contentState
-        .getBlockMap()
-        .first()
-        .getType() !== 'unstyled'
-    ) {
-      return true
-    }
+  if (contentState.hasText()) {
+    return false
   }
 
-  return false
+  if (
+    contentState
+      .getBlockMap()
+      .first()
+      .getType() !== 'unstyled'
+  ) {
+    return true
+  }
 }

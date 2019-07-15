@@ -36,14 +36,14 @@ export function ImagePickerModal({
       onRequestClose={onClose}
       style={{
         content: {
-          width: '900px',
+          width: '56.25rem',
           maxWidth: '95%',
           maxHeight: '95%'
         }
       }}
     >
       <ModalHeader title={title} closeHandler={onClose} />
-      <Flex style={{ height: 'calc(100% - 74px)' }}>
+      <Flex style={{ height: 'calc(100% - 4.625rem)' }}>
         <UploaderModal
           accept={accept}
           onDrop={onFileSelected}

@@ -9,7 +9,6 @@ import { IconButton } from '../IconButton/styled'
 import { ImagePickerModal } from './ImagePickerModal'
 
 interface Props {
-  editorState: EditorState
   onImageSelected: (file: File) => void
 }
 
@@ -26,7 +25,7 @@ interface Props {
  */
 export function AddImageButton(props: Props) {
   const [open, setOpen] = useState(false)
-  const handleClick = (event: React.MouseEvent) => {
+  const handleClick = () => {
     setOpen(true)
   }
 

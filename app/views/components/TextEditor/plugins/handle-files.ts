@@ -1,4 +1,4 @@
-import Draft from 'draft-js'
+import Draft, { DraftHandleValue } from 'draft-js'
 
 import { isImageFile } from 'utils/file-utils/is-image-file'
 
@@ -7,10 +7,13 @@ interface CreateFilePluginOptions {
   handleOtherFiles?: (file: File) => any
 }
 
-export function createFilePlugin({ handleImage, handleOtherFiles }) {
+export function createFilePlugin({
+  handleImage,
+  handleOtherFiles
+}: CreateFilePluginOptions) {
   // NOTE: draft-js-drag-n-drop-upload-plugin is crap! I know it exists!
 
-  function handleFile(file: File): 'handled' | 'not-handled' {
+  function handleFile(file: File): DraftHandleValue {
     if (file) {
       if (isImageFile(file)) {
         handleImage(file)

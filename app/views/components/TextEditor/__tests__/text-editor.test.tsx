@@ -82,7 +82,7 @@ describe('TextEditor', () => {
     // }, 100)
   })
 
-  it('should show image picker button if hasImage is false', () => {
+  it('should not show image picker button if hasImage is false', () => {
     const { queryByTestId } = render(<TextEditor />)
 
     expect(queryByTestId('add-image-button')).toBeNull()

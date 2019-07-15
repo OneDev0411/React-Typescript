@@ -1,5 +1,3 @@
-
-
 export async function readFileAsDataUrl(file: File): Promise<string> {
   return new Promise( (resolve, reject) => {
     let reader = new FileReader()

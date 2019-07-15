@@ -25,4 +25,8 @@ export const EditorWrapper = styled.div`
       display: none;
     }
   }
+  overflow: hidden; // Allows float styles on images, without collapsing editor height
+  img {
+    z-index: 1; // This ensures images are selectable even when they are floated
+  }
 `
