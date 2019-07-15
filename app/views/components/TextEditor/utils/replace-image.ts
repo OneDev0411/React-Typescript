@@ -21,6 +21,10 @@ export function replaceImage(
 
   const key = blocks.first().get('key')
 
+  // TODO: a better approach is to update src in the old contentBlock,
+  // rather than removing it (by selecting it and then adding image which
+  // will replace it. This way, other states of the image is preserved
+
   // select the image to make the subsequent imagePlugin.addImage replace it.
   const newState = EditorState.acceptSelection(
     editorState,

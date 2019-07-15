@@ -36,6 +36,7 @@ import { richButtonsPlugin, RichTextButtons } from './buttons/RichTextButtons'
 import { createFilePlugin } from './plugins/handle-files'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
 import { replaceImage } from './utils/replace-image'
+import { withUploadingIndicator } from './block-decorators/with-uploading-indicator'
 
 const focusPlugin = createFocusPlugin()
 const resizeablePlugin = createResizeablePlugin()
@@ -45,6 +46,7 @@ const { AlignmentTool } = alignmentPlugin
 
 const imagePlugin = createImagePlugin({
   decorator: composeDecorators(
+    withUploadingIndicator,
     resizeablePlugin.decorator,
     alignmentPlugin.decorator,
     focusPlugin.decorator,
