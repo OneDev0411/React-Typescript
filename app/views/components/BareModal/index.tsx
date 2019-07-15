@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactElement } from 'react'
 import ReactModal, { Props as ReactModalProps } from 'react-modal'
 import cn from 'classnames'
 
@@ -9,7 +9,7 @@ if (process.env.NODE_ENV !== 'ci') {
 interface Props extends ReactModalProps {
   autoHeight?: boolean
   large?: boolean
-  children: ReactNode
+  children: ReactElement<any>
   className?: string
   overlayClassName?: string
 }

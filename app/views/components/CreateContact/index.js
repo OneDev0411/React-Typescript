@@ -17,6 +17,7 @@ export class CreateContact extends React.Component {
     return (
       <Fragment>
         <ActionButton
+          appearance="outline"
           data-test="create-contact-button"
           onClick={this.handleOpen}
         >

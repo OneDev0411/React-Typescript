@@ -4,7 +4,7 @@ import { browserHistory } from 'react-router'
 import { Helmet } from 'react-helmet'
 
 import {
-  AttributeDefsState,
+  IAttributeDefsState,
   isLoadedContactAttrDefs
 } from '../../../../reducers/contacts/attributeDefs'
 import Loading from '../../../../views/components/Spinner'
@@ -14,7 +14,7 @@ import ContactsList from './List'
 import { Container } from './components/Container'
 
 interface Props {
-  attributeDefs: AttributeDefsState
+  attributeDefs: IAttributeDefsState
   user: IUser
 }
 
@@ -48,7 +48,7 @@ class Contacts extends React.Component<Props> {
 }
 
 const mapStateToProps = state => ({
-  attributeDefs: state.contacts.attributeDefs as AttributeDefsState
+  attributeDefs: state.contacts.attributeDefs as IAttributeDefsState
 })
 
 export default connect(mapStateToProps)(Contacts)

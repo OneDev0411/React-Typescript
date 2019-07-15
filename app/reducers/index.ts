@@ -8,7 +8,7 @@ import auth from './auth'
 import user from './user'
 import brand from './brand'
 import socket from './socket'
-import contacts from './contacts'
+import contacts, { IContactReduxState } from './contacts'
 import chatroom from './chatroom'
 import deals from './deals'
 import calendar from './calendar'
@@ -56,5 +56,15 @@ const appReducer = combineReducers({
   form: reduxFormReducer,
   routing: routerReducer
 })
+
+// Typings in the latest redux version allows this beautiful store type inference
+// without any extra effort, but in v3.7.2 that we currently use, it doesn't work
+// So we can uncomment this line wen migrated to V4.x.x or higher.
+// export type IAppState = ReturnType<typeof appReducer>
+
+export type IAppState = {
+  contacts: IContactReduxState
+  user: IUser
+}
 
 export default (state, action) => appReducer(state, action)

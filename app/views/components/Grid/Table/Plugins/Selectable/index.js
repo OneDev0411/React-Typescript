@@ -11,7 +11,10 @@ const SESSION_KEY_PREFIX = 'Rechat--Grid--Selectable--'
 
 export function resetGridSelectedItems(key) {
   console.log('[ Grids -> Selectable ] Reset Selected Items')
-  window.gridSelectableStorage[`${SESSION_KEY_PREFIX}${key}`] = ''
+
+  if (window.gridSelectableStorage) {
+    window.gridSelectableStorage[`${SESSION_KEY_PREFIX}${key}`] = ''
+  }
 }
 
 export class SelectablePlugin {

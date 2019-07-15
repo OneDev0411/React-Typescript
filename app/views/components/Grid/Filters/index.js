@@ -210,7 +210,7 @@ function mapStateToProps(state, { name, plugins, getPredefinedLists }) {
       segment: selectActiveSavedSegment(
         state[name].filterSegments,
         name,
-        getPredefinedLists
+        getPredefinedLists(name, state)
       )
     }
   }
