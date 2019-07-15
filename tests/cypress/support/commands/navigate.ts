@@ -1,12 +1,7 @@
 declare global {
   namespace Cypress {
-    // @ts-ignore // all declarations of Chainable must have identical type parameters
     interface Chainable<Subject> {
       navigate: typeof navigate
-    }
-    // @ts-ignore
-    interface Chainable<Window> {
-      tgHistory: any
     }
   }
 }
@@ -26,10 +21,13 @@ Cypress.Commands.add('navigate', navigate)
  * https://github.com/cypress-io/cypress/issues/3120#issuecomment-453254393
  */
 function navigate(route: string) {
-  return cy
-    .window()
-    .its('__history')
-    .invoke('push', route)
+  return (
+    cy
+      .window()
+      // @ts-ignore
+      .its('__history')
+      .invoke('push', route)
+  )
 }
 
 export {}
