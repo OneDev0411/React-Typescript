@@ -63,7 +63,7 @@ interface Props {
   plugins?: any[]
   settings?: any
   /**
-   * an optional function to be used when hasImage is true and an image is
+   * an optional function to be used when enableImage is true and an image is
    * added to the editor. It should upload the image and return the promise
    * of the uploaded image url. The src of the image in the editor will be
    * uploaded to that uploaded image url.
@@ -73,8 +73,8 @@ interface Props {
 
   onAttachmentDropped?: (file: File) => void
 
-  hasRichText?: boolean
-  hasImage?: boolean
+  enableRichText?: boolean
+  enableImage?: boolean
 }
 
 interface EditorComponent {
@@ -100,8 +100,8 @@ export const TextEditor = forwardRef(
       plugins = [],
       settings = {},
       uploadImage,
-      hasImage = false,
-      hasRichText = true,
+      enableImage = false,
+      enableRichText = true,
       onAttachmentDropped
     }: Props,
     ref
@@ -224,8 +224,8 @@ export const TextEditor = forwardRef(
     }
 
     const defaultPlugins = [
-      ...(hasRichText ? [richButtonsPlugin] : []),
-      ...(hasImage
+      ...(enableRichText ? [richButtonsPlugin] : []),
+      ...(enableImage
         ? [
             blockDndPlugin,
             focusPlugin,
@@ -234,7 +234,7 @@ export const TextEditor = forwardRef(
             imagePlugin
           ]
         : []),
-      ...(hasImage || onAttachmentDropped
+      ...(enableImage || onAttachmentDropped
         ? [
             createFilePlugin({
               handleImage: addImage,
@@ -249,9 +249,9 @@ export const TextEditor = forwardRef(
     return (
       <Fragment>
         <Toolbar>
-          {hasRichText && <RichTextButtons />}
+          {enableRichText && <RichTextButtons />}
 
-          {hasImage && <AddImageButton onImageSelected={addImage} />}
+          {enableImage && <AddImageButton onImageSelected={addImage} />}
         </Toolbar>
 
         <EditorWrapper

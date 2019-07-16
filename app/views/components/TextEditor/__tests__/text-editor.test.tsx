@@ -37,7 +37,7 @@ describe('TextEditor', () => {
     })
   })
 
-  it('should show image picker button if hasImage is true, and it should open image picker dialog', done => {
+  it('should show image picker button if enableImage is true, and it should open image picker dialog', done => {
     const {
       queryByTestId,
       getByTestId,
@@ -45,7 +45,7 @@ describe('TextEditor', () => {
       baseElement,
       debug,
       container
-    } = render(<TextEditor hasImage />)
+    } = render(<TextEditor enableImage />)
 
     fireEvent.click(getByTestId('add-image-button'))
     expect(queryByText('Add an image')).not.toBeNull()
@@ -82,7 +82,7 @@ describe('TextEditor', () => {
     // }, 100)
   })
 
-  it('should not show image picker button if hasImage is false', () => {
+  it('should not show image picker button if enableImage is false', () => {
     const { queryByTestId } = render(<TextEditor />)
 
     expect(queryByTestId('add-image-button')).toBeNull()

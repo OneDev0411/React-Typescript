@@ -80,7 +80,7 @@
     "css-loader": "^0.28.11",
     "cuid": "^2.1.6",
     "downshift": "^1.31.16",
-    "draft-js": "^0.10.5",
+    "draft-js": "^0.11.0",
     "draft-js-alignment-plugin": "^2.0.5",
     "draft-js-drag-n-drop-plugin": "^2.0.3",
     "draft-js-emoji-plugin": "^2.1.1",
