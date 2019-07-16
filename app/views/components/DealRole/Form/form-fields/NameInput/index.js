@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react'
 
 import searchAgents from 'models/agent/search'
 import { searchContacts } from 'models/contacts/search-contacts'
-// import { getFullAddress } from 'models/contacts/helpers/get-contact-fulladdress'
 
 import { AutoCompleteInput } from '../AutoCompleteInput'
 
@@ -50,8 +49,8 @@ export function NameInput(props) {
           companies: getOptionsByAttributeType(contact, 'company'),
           current_address: getAddressFromContact(contact, 'Past'),
           future_address: getAddressFromContact(contact, 'Home'),
-          value: contact.summary[props.searchField],
-          label: contact.summary.display_name
+          value: contact.summary[props.searchFieldValue],
+          label: contact.summary[props.searchFieldLabel]
         }))
       }
 
@@ -60,7 +59,7 @@ export function NameInput(props) {
       return agents.map(user => ({
         ...user,
         company: user.office ? user.office.name : '',
-        value: user[props.searchField],
+        value: user[props.searchFieldValue],
         label: user.full_name
       }))
     } catch (e) {
