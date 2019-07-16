@@ -2,6 +2,7 @@ import React, {
   forwardRef,
   Fragment,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState
 } from 'react'
@@ -9,6 +10,8 @@ import { convertToRaw, EditorState } from 'draft-js'
 import Editor, { composeDecorators } from 'draft-js-plugins-editor'
 import createImagePlugin from 'draft-js-image-plugin'
 import 'draft-js-image-plugin/lib/plugin.css'
+
+import createRichButtonsPlugin from 'draft-js-richbuttons-plugin'
 
 import createAlignmentPlugin from 'draft-js-alignment-plugin'
 import 'draft-js-alignment-plugin/lib/plugin.css'
@@ -32,27 +35,11 @@ import { isImageFile } from 'utils/file-utils/is-image-file'
 import { EditorWrapper, Toolbar } from './styled'
 import { FieldError } from '../final-form-fields/FieldError'
 import { AddImageButton } from './buttons/AddImageButton'
-import { richButtonsPlugin, RichTextButtons } from './buttons/RichTextButtons'
+import { RichTextButtons } from './buttons/RichTextButtons'
 import { createFilePlugin } from './plugins/handle-files'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
 import { replaceImage } from './utils/replace-image'
 import { withUploadingIndicator } from './block-decorators/with-uploading-indicator'
-
-const focusPlugin = createFocusPlugin()
-const resizeablePlugin = createResizeablePlugin()
-const blockDndPlugin = createBlockDndPlugin()
-const alignmentPlugin = createAlignmentPlugin()
-const { AlignmentTool } = alignmentPlugin
-
-const imagePlugin = createImagePlugin({
-  decorator: composeDecorators(
-    withUploadingIndicator,
-    resizeablePlugin.decorator,
-    alignmentPlugin.decorator,
-    focusPlugin.decorator,
-    blockDndPlugin.decorator
-  )
-})
 
 interface Props {
   defaultValue?: string
@@ -73,7 +60,22 @@ interface Props {
 
   onAttachmentDropped?: (file: File) => void
 
+  /** ********
+   * The following props are feature enabler flags.
+   *
+   * NOTE 1: They are meant to be constant props. You can't count on
+   * changing them. and toggle features dynamically, on a mounted component
+   *
+   * NOTE 2: default value varies from one flag to another.
+   ********* */
+
+  /**
+   * Enable/disable rich text editing features like bold, italic, lists, etc.
+   */
   enableRichText?: boolean
+  /**
+   * Enable/disable image insertion.
+   */
   enableImage?: boolean
 }
 
@@ -106,6 +108,52 @@ export const TextEditor = forwardRef(
     }: Props,
     ref
   ) => {
+    /**
+     * NOTE 1: We don't use top level plugin definition to prevent bugs when
+     * more than one instance of Editor is rendered simultaneously
+     * (which is used in contacts profile page right now).
+     * See this for more info:
+     * https://github.com/draft-js-plugins/draft-js-plugins/blob/master/FAQ.md#can-i-use-the-same-plugin-for-multiple-plugin-editors
+     *
+     * NOTE 2: We always create all plugins because hooks can't be called
+     * conditionally. We could have conditionally create real plugins or
+     * undefined, based on enableXXX props but it adds lots of undefined checks
+     * later in code which is not worth it.
+     */
+    const {
+      imagePlugin,
+      focusPlugin,
+      alignmentPlugin,
+      blockDndPlugin,
+      resizeablePlugin,
+      richButtonsPlugin
+    } = useMemo(() => {
+      const focusPlugin = createFocusPlugin({ theme: { focus: 'test' } })
+      const resizeablePlugin = createResizeablePlugin()
+      const blockDndPlugin = createBlockDndPlugin()
+      const alignmentPlugin = createAlignmentPlugin()
+      const { AlignmentTool } = alignmentPlugin
+      const richButtonsPlugin = createRichButtonsPlugin()
+
+      return {
+        AlignmentTool,
+        richButtonsPlugin,
+        focusPlugin,
+        resizeablePlugin,
+        blockDndPlugin,
+        alignmentPlugin,
+        imagePlugin: createImagePlugin({
+          decorator: composeDecorators(
+            withUploadingIndicator,
+            resizeablePlugin.decorator,
+            alignmentPlugin.decorator,
+            focusPlugin.decorator,
+            blockDndPlugin.decorator
+          )
+        })
+      }
+    }, [])
+
     const editorRef = useRef<EditorComponent>(null)
     const [editorState, setEditorState] = useState(
       EditorState.createWithContent(stateFromHTML(defaultValue))
@@ -249,7 +297,9 @@ export const TextEditor = forwardRef(
     return (
       <Fragment>
         <Toolbar>
-          {enableRichText && <RichTextButtons />}
+          {enableRichText && (
+            <RichTextButtons richButtonsPlugin={richButtonsPlugin} />
+          )}
 
           {enableImage && <AddImageButton onImageSelected={addImage} />}
         </Toolbar>
@@ -274,7 +324,7 @@ export const TextEditor = forwardRef(
             ref={editorRef}
             {...settings}
           />
-          <AlignmentTool />
+          <alignmentPlugin.AlignmentTool />
         </EditorWrapper>
 
         {input && <FieldError name={input.name} />}
