@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import LinkButton from 'components/Button/LinkButton'
+import { grey } from 'views/utils/colors'
 
 export const Container = styled.div`
   justify-content: space-between;
@@ -25,6 +26,12 @@ export const FileContainer = styled.div`
 export const FileTitle = styled.div`
   font-size: 1rem;
   font-weight: 500;
+`
+
+export const FileDate = styled.div`
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: ${grey.A900};
 `
 
 export const FileLink = styled(LinkButton)`
