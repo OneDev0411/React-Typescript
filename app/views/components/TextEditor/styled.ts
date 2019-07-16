@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import 'draft-js/dist/Draft.css'
+import { primary, primaryDark } from '../../utils/colors'
 
 export const Toolbar = styled.div`
   display: flex;
@@ -28,5 +29,17 @@ export const EditorWrapper = styled.div`
   overflow: hidden; // Allows float styles on images, without collapsing editor height
   img {
     z-index: 1; // This ensures images are selectable even when they are floated
+  }
+
+  .focused,
+  .unfocused:hover {
+    cursor: default;
+    border-radius: 2px;
+  }
+  .focused {
+    box-shadow: 0 0 0 3px ${primaryDark};
+  }
+  .unfocused:hover {
+    box-shadow: 0 0 0 3px ${primary};
   }
 `

@@ -17,7 +17,6 @@ import createAlignmentPlugin from 'draft-js-alignment-plugin'
 import 'draft-js-alignment-plugin/lib/plugin.css'
 
 import createFocusPlugin from 'draft-js-focus-plugin'
-import 'draft-js-focus-plugin/lib/plugin.css'
 
 import createResizeablePlugin from 'draft-js-resizeable-plugin'
 
@@ -128,7 +127,9 @@ export const TextEditor = forwardRef(
       resizeablePlugin,
       richButtonsPlugin
     } = useMemo(() => {
-      const focusPlugin = createFocusPlugin({ theme: { focus: 'test' } })
+      const focusPlugin = createFocusPlugin({
+        theme: { focused: 'focused', unfocused: 'unfocused' }
+      })
       const resizeablePlugin = createResizeablePlugin()
       const blockDndPlugin = createBlockDndPlugin()
       const alignmentPlugin = createAlignmentPlugin()
