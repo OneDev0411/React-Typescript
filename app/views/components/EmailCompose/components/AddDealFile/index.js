@@ -78,9 +78,7 @@ export class AddDealFile extends React.Component {
     return (
       <Fragment>
         <FooterAction tooltipCaption="Deal Files" onClick={this.handleClick}>
-          <AttachDealIcon
-            style={{ width: '1.5rem', height: '1.5rem', fill: '#000' }}
-          />
+          <AttachDealIcon fillColor="#000" />
         </FooterAction>
 
         {this.state.isDealsListOpen && (
