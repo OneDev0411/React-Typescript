@@ -46,6 +46,7 @@ export const headers = {
   JustListed: JUST_LISTED,
   UnderContract: {
     ...JUST_LISTED,
+    name: 'JustListed',
     title: 'Under Contract'
   },
   JustSold: {
