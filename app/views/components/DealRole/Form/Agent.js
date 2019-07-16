@@ -58,7 +58,8 @@ export function AgentForm(props) {
 
           <Field
             name="legal_first_name"
-            searchField="first_name"
+            searchFieldValue="first_name"
+            searchFieldLabel="display_name"
             label="First Name"
             isVisible={isVisible('legal_first_name')}
             isRequired={isRequired('legal_first_name')}
@@ -78,7 +79,8 @@ export function AgentForm(props) {
 
           <Field
             name="legal_last_name"
-            searchField="last_name"
+            searchFieldValue="last_name"
+            searchFieldLabel="display_name"
             label="Last Name"
             isVisible={isVisible('legal_last_name')}
             isRequired={isRequired('legal_last_name')}
@@ -93,11 +95,13 @@ export function AgentForm(props) {
           <Field
             name="company_title"
             label="Company / Trust"
-            form={props.form}
+            searchFieldValue="company"
+            searchFieldLabel="company"
             isVisible={isVisible('company_title')}
             isRequired={isRequired('company_title')}
-            component={AutoCompleteInput}
-            options={getAutocompleteOptions(props.values, 'companies')}
+            component={NameInput}
+            crmSearch // always search company in crm contacts
+            mutators={props.form.mutators}
             style={{ flex: 7, marginRight: '0.5rem' }}
           />
 
