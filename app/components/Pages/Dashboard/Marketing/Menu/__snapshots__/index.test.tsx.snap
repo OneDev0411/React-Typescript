@@ -117,6 +117,7 @@ exports[`MC Menu renders list of templates type 1`] = `
   </div>
   <div
     className="onboarding--menus"
+    data-test="mc-store-menu"
   >
     <ActiveItem
       indexed={false}
