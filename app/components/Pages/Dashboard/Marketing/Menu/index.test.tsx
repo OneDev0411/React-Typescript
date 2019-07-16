@@ -1,13 +1,12 @@
-import React from 'react'
-import { shallow } from 'enzyme'
-import toJson from 'enzyme-to-json'
+import * as React from 'react'
+import { render } from '@testing-library/react'
 
-import { Menu } from './index'
+import { Menu } from './'
 
 describe('MC Menu', () => {
   it('renders list of templates type', () => {
-    expect(toJson(shallow(
-      <Menu />
-    ))).toMatchSnapshot()
+    const container = render(<Menu />)
+
+    expect(container).toMatchSnapshot()
   })
 })
