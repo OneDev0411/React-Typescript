@@ -23,7 +23,7 @@ export default function BareModal({
   ...modalProps
 }: Props) {
   if (process.env.DISABLE_MODAL) {
-    return children
+    return <>{children}</>
   }
 
   const baseClassName = 'c-modal__content'
