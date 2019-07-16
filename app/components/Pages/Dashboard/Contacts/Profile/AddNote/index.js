@@ -53,7 +53,6 @@ export class AddNote extends React.Component {
       <Form onSubmit={this.handleAddNote}>
         <TextEditor
           ref={this.textEditorRef}
-          hasImage
           disabled={isSaving}
           placeholder="Add your note…"
           onChange={this.handleOnChange}
