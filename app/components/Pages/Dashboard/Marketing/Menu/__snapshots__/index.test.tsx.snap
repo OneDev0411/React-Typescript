@@ -1,0 +1,207 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MC Menu renders list of templates type 1`] = `
+<Fragment>
+  <div
+    style={
+      Object {
+        "marginBottom": "2.5em",
+      }
+    }
+  >
+    <ActiveItem
+      Icon={
+        Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "IconAllDesigns__Image-wgzmtq-0",
+            "isStatic": false,
+            "rules": Array [
+              [Function],
+            ],
+          },
+          "defaultProps": Object {
+            "children": Array [
+              <g
+                fillRule="evenodd"
+              >
+                <path
+                  d="M9.333 4.333A.667.667 0 0 0 10 3.667V1.333C10 .597 9.403 0 8.667 0H1.333C.597 0 0 .597 0 1.333v10.334C0 12.403.597 13 1.333 13h.334a.667.667 0 1 0 0-1.333.333.333 0 0 1-.334-.334V1.667c0-.184.15-.334.334-.334h6.666c.184 0 .334.15.334.334v2c0 .368.298.666.666.666z"
+                />
+                <path
+                  d="M3.333 2.833a.5.5 0 1 0-1 0v6a.5.5 0 1 0 1 0v-6z"
+                />
+                <circle
+                  cx="5"
+                  cy="3.333"
+                  r="1"
+                />
+                <circle
+                  cx="10.667"
+                  cy="8.333"
+                  r="1"
+                />
+                <path
+                  d="M14.667 5.333h-8c-.737 0-1.334.597-1.334 1.334v1.666a.667.667 0 0 0 1.334 0V7c0-.184.149-.333.333-.333h7.333c.184 0 .334.149.334.333v4c0 .184-.15.333-.334.333H13a.667.667 0 0 0 0 1.334h1.667c.736 0 1.333-.597 1.333-1.334V6.667c0-.737-.597-1.334-1.333-1.334z"
+                />
+                <path
+                  d="M3.333 11.333v3.334c0 .736.597 1.333 1.334 1.333H10c.736 0 1.333-.597 1.333-1.333v-3.334c0-.736-.597-1.333-1.333-1.333H4.667c-.737 0-1.334.597-1.334 1.333zm6.667 3c0 .184-.15.334-.333.334H5a.333.333 0 0 1-.333-.334v-1.282a.167.167 0 0 1 .228-.154l2.253.903c.12.047.252.047.37 0l2.253-.901a.167.167 0 0 1 .229.154v1.28zm-5-3h4.667c.184 0 .333.15.333.334 0 .037-.023.07-.057.084l-2.548 1.02a.173.173 0 0 1-.124 0l-2.547-1.02a.091.091 0 0 1-.057-.084c0-.184.149-.334.333-.334z"
+                  fillRule="nonzero"
+                />
+              </g>,
+            ],
+            "viewBox": "0 0 16 16",
+          },
+          "displayName": "IconAllDesigns",
+          "foldedComponentIds": Array [],
+          "getDimensions": [Function],
+          "getDimensionsCss": [Function],
+          "render": [Function],
+          "styledComponentId": "IconAllDesigns__Image-wgzmtq-0",
+          "target": "svg",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        }
+      }
+      className="onboarding--all-designs"
+      indexed={true}
+      text="All Designs"
+      to="/dashboard/marketing"
+    />
+    <ActiveItem
+      Icon={
+        Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "IconMyDesigns__Image-sc-16mri3k-0",
+            "isStatic": false,
+            "rules": Array [
+              [Function],
+            ],
+          },
+          "defaultProps": Object {
+            "children": Array [
+              <g
+                fillRule="evenodd"
+              >
+                <path
+                  d="M10.88 12.16a1.28 1.28 0 0 0 1.28-1.28v-9.6A1.28 1.28 0 0 0 10.88 0h-9.6A1.28 1.28 0 0 0 0 1.28v9.6c0 .707.573 1.28 1.28 1.28h9.6zM1.28 1.6a.32.32 0 0 1 .32-.32h8.96a.32.32 0 0 1 .32.32v8.96a.32.32 0 0 1-.32.32H1.6a.32.32 0 0 1-.32-.32V1.6z"
+                  fillRule="nonzero"
+                />
+                <path
+                  d="M6.38 3.251a.218.218 0 0 0-.28 0L3.277 5.704a.21.21 0 0 0-.064.236c.032.085.114.14.204.14h.423a.32.32 0 0 1 .32.32v1.92c0 .176.144.32.32.32h.64a.32.32 0 0 0 .32-.32v-.8a.8.8 0 1 1 1.6 0v.8c0 .176.144.32.32.32H8a.32.32 0 0 0 .32-.32V6.4a.32.32 0 0 1 .32-.32h.423c.09 0 .172-.056.204-.14a.21.21 0 0 0-.064-.237L6.38 3.251zm8.975 2.659a1.28 1.28 0 0 0-1.16-1.39l-.64-.058a.64.64 0 1 0-.115 1.275l.32.028a.32.32 0 0 1 .29.348l-.698 7.647a.32.32 0 0 1-.347.29L4.4 13.265a.64.64 0 1 0-.113 1.274l8.922.816a1.28 1.28 0 0 0 1.392-1.16l.753-8.286z"
+                />
+              </g>,
+            ],
+            "viewBox": "0 0 16 16",
+          },
+          "displayName": "IconMyDesigns",
+          "foldedComponentIds": Array [],
+          "getDimensions": [Function],
+          "getDimensionsCss": [Function],
+          "render": [Function],
+          "styledComponentId": "IconMyDesigns__Image-sc-16mri3k-0",
+          "target": "svg",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        }
+      }
+      className="onboarding--my-designs"
+      text="My Designs"
+      to="/dashboard/marketing/history"
+    />
+  </div>
+  <div
+    className="onboarding--menus"
+  >
+    <ActiveItem
+      indexed={false}
+      key="0"
+      selected={false}
+      text="As Seen In"
+      to="/dashboard/marketing/AsSeenIn"
+    />
+    <ActiveItem
+      indexed={false}
+      key="1"
+      selected={false}
+      text="Birthday"
+      to="/dashboard/marketing/Birthday"
+    />
+    <ActiveItem
+      indexed={false}
+      key="2"
+      selected={false}
+      text="Brand Campaigns"
+      to="/dashboard/marketing/Brand"
+    />
+    <ActiveItem
+      indexed={false}
+      key="3"
+      selected={false}
+      text="Coming Soon"
+      to="/dashboard/marketing/ComingSoon"
+    />
+    <ActiveItem
+      indexed={false}
+      key="4"
+      selected={false}
+      text="Holiday"
+      to="/dashboard/marketing/Christmas,NewYear,Valentines,StPatrick,Easter,OtherHoliday"
+    />
+    <ActiveItem
+      indexed={false}
+      key="5"
+      selected={false}
+      text="Just Listed"
+      to="/dashboard/marketing/JustListed"
+    />
+    <ActiveItem
+      indexed={false}
+      key="6"
+      selected={false}
+      text="Under Contract"
+      to="/dashboard/marketing/UnderContract"
+    />
+    <ActiveItem
+      indexed={false}
+      key="7"
+      selected={false}
+      text="Just Sold"
+      to="/dashboard/marketing/JustSold"
+    />
+    <ActiveItem
+      indexed={false}
+      key="8"
+      selected={false}
+      text="Multi Listings"
+      to="/dashboard/marketing/Listings"
+    />
+    <ActiveItem
+      indexed={false}
+      key="9"
+      selected={false}
+      text="New Agent"
+      to="/dashboard/marketing/NewAgent"
+    />
+    <ActiveItem
+      indexed={false}
+      key="10"
+      selected={false}
+      text="New Price"
+      to="/dashboard/marketing/PriceImprovement"
+    />
+    <ActiveItem
+      indexed={false}
+      key="11"
+      selected={false}
+      text="Open House"
+      to="/dashboard/marketing/OpenHouse"
+    />
+  </div>
+</Fragment>
+`;
