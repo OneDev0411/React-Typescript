@@ -39,6 +39,38 @@ describe('Test Deal Roles component', () => {
     expect(wrapper).toMatchSnapshot()
   })
 
+  it('Should render Agent form', () => {
+    const wrapper = render(
+      <DealRole
+        isOpen
+        form={{}}
+        user={user}
+        onClose={() => {}}
+        onUpsertRole={() => {}}
+      />
+    )
+
+    expect(wrapper).toMatchSnapshot()
+  })
+
+  it('Should render Agent form with searchable company field', () => {
+    const wrapper = render(
+      <DealRole
+        isOpen
+        allowedRoles={['Seller']}
+        form={{}}
+        user={user}
+        onClose={() => {}}
+        onUpsertRole={() => {}}
+      />
+    )
+
+    expect(wrapper.find('[name="company_title"]')).toHaveLength(1)
+    expect(
+      wrapper.find('[name="company_title"]').prop('autocomplete')
+    ).toBeDefined()
+  })
+
   it('Should show Office form when showBrokerageFields is true', () => {
     const wrapper = render(
       <DealRole

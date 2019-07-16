@@ -5,7 +5,7 @@ import Modal from '../BareModal'
 import ActionBar from './ActionBar'
 import UserEntry from './UserEntry'
 import ConfirmationModalContext from './context'
-import { initialConfimationModal } from './context/Provider'
+import { initialConfirmationModal } from './context/initial-confirmation-modal'
 /*
  *
  * This is redux-free confirmation modal.
@@ -26,7 +26,7 @@ function ConfirmationModal() {
     }
 
     // reset context values
-    confirmation.setConfirmationModal(initialConfimationModal)
+    confirmation.setConfirmationModal(initialConfirmationModal)
   }
 
   const handleConfirm = () => {
@@ -37,7 +37,7 @@ function ConfirmationModal() {
     }
 
     // reset context values
-    confirmation.setConfirmationModal(initialConfimationModal)
+    confirmation.setConfirmationModal(initialConfirmationModal)
   }
 
   return (

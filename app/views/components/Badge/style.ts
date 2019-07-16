@@ -13,7 +13,6 @@ export const badgeBaseStyle = css`
   border-radius: 30px;
 
   font-family: Barlow;
-  font-size: 0.75rem;
   font-weight: 600;
 `
 

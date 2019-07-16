@@ -85,11 +85,18 @@ export function viewAs(user, activeTeam = getActiveTeam(user)) {
   return []
 }
 
-export function getActiveTeamSettings(user: IUser, key: string | null = null) {
+
+type GetSettings = (team: IUserTeam) => StringMap<any> | null
+
+const getSettingsFromActiveTeam = (getSettings: GetSettings) => (user: IUser, key: string) => {
   const team = getActiveTeam(user)
-  const settings = (team && team.settings) || {}
+  const settings = (team && getSettings(team)) || {}
   return key ? settings[key] : settings
 }
+
+export const getActiveTeamSettings = getSettingsFromActiveTeam(team => team.brand_settings)
+export const getUserSettingsInActiveTeam = getSettingsFromActiveTeam(team => team.settings)
+
 
 export function viewAsEveryoneOnTeam(user: IUser): boolean {
   const users = viewAs(user)

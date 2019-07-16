@@ -60,6 +60,9 @@
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
+    "@material-ui/core": "^4.2.0",
+    "@material-ui/styles": "^4.2.0",
+    "@mikeljames/draft-js-drag-n-drop-upload-plugin": "^2.0.1",
     "@reach/tabs": "^0.1.5",
     "autoprefixer": "^7.2.3",
     "babel-loader": "^8.0.5",
@@ -78,10 +81,15 @@
     "cuid": "^2.1.6",
     "downshift": "^1.31.16",
     "draft-js": "^0.10.5",
+    "draft-js-alignment-plugin": "^2.0.5",
+    "draft-js-drag-n-drop-plugin": "^2.0.3",
     "draft-js-emoji-plugin": "^2.1.1",
     "draft-js-export-html": "^1.3.3",
+    "draft-js-focus-plugin": "^2.2.0",
+    "draft-js-image-plugin": "^2.0.6",
     "draft-js-import-html": "^1.3.3",
     "draft-js-plugins-editor": "^2.1.1",
+    "draft-js-resizeable-plugin": "^2.0.8",
     "draft-js-richbuttons-plugin": "^2.2.0",
     "emojify.js": "^1.1.0",
     "es6-promise": "^4.1.0",
@@ -326,7 +334,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "./githooks/pre-commit.sh",
+      "pre-commit": "eslint --fix `git diff --diff-filter=d --staged --name-only` && ./githooks/pre-commit.sh",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && ./githooks/commit-msg.js $HUSKY_GIT_PARAMS `git rev-parse --abbrev-ref HEAD`",
       "pre-push": "npm run test:unit"
     }

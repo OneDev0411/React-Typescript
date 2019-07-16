@@ -11,7 +11,7 @@ const initialState: IReduxFilterSegmentState = {
   activeFilters: {}
 }
 
-export const getDefaultList = (name = '') => ({
+export const getDefaultList: (name: string) => ISavedSegment = (name = '') => ({
   id: 'default',
   is_editable: false,
   name: `All ${name.charAt(0).toUpperCase()}${name.slice(1)}`,
@@ -159,18 +159,11 @@ export const savedSegmentId = state => state.activeSegmentId
 
 export const isListFetched = state => state.list !== null
 
-type GetPredefinedLists<T = any> = <T>(
-  listName: string,
-  state: IReduxFilterSegmentState<T>
-) => StringMap<T>
-
-export const selectActiveSavedSegment = (
+export const selectActiveSavedSegment = <T = any>(
   state: IReduxFilterSegmentState,
   listName = '',
-  getPredefinedLists: GetPredefinedLists
+  predefinedLists: StringMap<T> = {}
 ) => {
-  const predefinedLists = getPredefinedLists(listName, state)
-
   const activeSegmentId = state.activeSegmentId
 
   if (!state.list) {
@@ -183,12 +176,10 @@ export const selectActiveSavedSegment = (
 export const getSegments = <T = any>(
   state: IReduxFilterSegmentState,
   listName: string,
-  getPredefinedLists?: GetPredefinedLists<T>
+  predefinedLists: StringMap<T> = {}
 ) =>
   ([] as any[]).concat(
-    getPredefinedLists
-      ? Object.values(getPredefinedLists(listName, state))
-      : [],
+    Object.values(predefinedLists),
     Object.values(state.list || {})
   )
 

@@ -24,6 +24,10 @@ export const items = [
     url: '/JustListed'
   },
   {
+    title: 'Under Contract',
+    url: '/UnderContract'
+  },
+  {
     title: 'Just Sold',
     url: '/JustSold'
   },

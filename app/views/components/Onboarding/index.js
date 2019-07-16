@@ -11,7 +11,7 @@ import { connect } from 'react-redux'
 import Joyride from 'react-joyride'
 
 import { OnboardingStepCard } from 'components/Onboarding/OnboardingStepCard'
-import { getActiveTeamSettings } from 'utils/user-teams'
+import { getUserSettingsInActiveTeam } from 'utils/user-teams'
 import { putUserSetting } from 'models/user/put-user-setting'
 
 const ONBOARDING_SETTING_KEY_PREFIX = 'onboarding_'
@@ -33,7 +33,7 @@ function Onboarding({
   onboardingRef
 }) {
   const SETTING_KEY = `${ONBOARDING_SETTING_KEY_PREFIX}_${tourId}`
-  const alreadyShown = getActiveTeamSettings(user, SETTING_KEY)
+  const alreadyShown = getUserSettingsInActiveTeam(user, SETTING_KEY)
 
   const [shown, toggle] = useState(alreadyShown == null)
 
