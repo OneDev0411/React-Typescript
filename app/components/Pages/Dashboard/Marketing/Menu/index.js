@@ -25,20 +25,19 @@ export function Menu() {
         />
       </div>
 
-      <div className="onboarding--menus">
-        {items.map(
-          ({ title, url }, index) =>
-            url ? (
-              <ActiveItem
-                key={index}
-                indexed={url === '/'}
-                text={title}
-                selected={window.location.pathname.includes(url)}
-                to={`/dashboard/marketing${url}`}
-              />
-            ) : (
-              <ComingSoonItem text={title} key={index} />
-            )
+      <div className="onboarding--menus" data-test="mc-store-menu">
+        {items.map(({ title, url }, index) =>
+          url ? (
+            <ActiveItem
+              key={index}
+              indexed={url === '/'}
+              text={title}
+              selected={window.location.pathname.includes(url)}
+              to={`/dashboard/marketing${url}`}
+            />
+          ) : (
+            <ComingSoonItem text={title} key={index} />
+          )
         )}
       </div>
     </React.Fragment>
