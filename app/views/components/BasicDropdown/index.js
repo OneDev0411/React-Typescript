@@ -114,7 +114,7 @@ export class BasicDropdown extends React.Component {
                   right: pullTo === 'right' ? 0 : 'auto',
                   top: upsideDown ? 'auto' : 'calc(100% + 8px)',
                   bottom: upsideDown ? 'calc(100% + 0.5em)' : 'auto',
-                  zIndex: 2,
+                  zIndex: 6,
                   ...menuStyle
                 }}
                 className="u-scrollbar--thinner--self"
