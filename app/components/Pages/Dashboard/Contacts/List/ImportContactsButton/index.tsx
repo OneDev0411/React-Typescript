@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 
 import { connect } from 'react-redux'
 
+import { browserHistory } from 'react-router'
+
 import SplitButton from 'components/SplitButton'
 
 import { MenuItem } from 'components/Menu/MenuItem'
@@ -11,12 +13,16 @@ import ALink from 'components/ALink'
 import { IAppState } from 'reducers/index'
 
 import { Divider } from 'components/Divider'
+import Tooltip from 'components/tooltip'
 
 import PopOver from 'components/Popover'
 
 import { getUserSettingsInActiveTeam } from 'utils/user-teams'
 
 import { putUserSetting } from 'models/user/put-user-setting'
+
+import Acl from 'components/Acl'
+import ActionButton from 'components/Button/ActionButton'
 
 import { CsvIcon, GoogleIcon } from './styled'
 import { ConnectedAccount } from './ConnectedAccount'
@@ -48,57 +54,78 @@ export function ImportContactsButton({ accounts, user }: Props) {
   }, [isTooltipOpen])
 
   return (
-    <ConnectGoogleButton>
-      {({ connecting, connect }) => (
-        <SplitButton
-          disabled={connecting || syncing}
-          onClick={connect}
-          style={{ marginRight: '1rem' }}
-          renderMenu={() => (
-            <>
-              <MenuItem as={ALink} noStyle to="/dashboard/contacts/import/csv">
-                <CsvIcon /> Import from CSV spreadsheet
-              </MenuItem>
-              {accounts.length > 0 && <Divider />}
-              {accounts.map(account => (
-                <MenuItem key={account.id}>
-                  <ConnectedAccount account={account} />
-                </MenuItem>
-              ))}
-            </>
-          )}
-        >
-          {/* PopOver is used here instead of tooltip, because control over showing it initially is required */}
-          <PopOver
-            placement="bottom"
-            show={isTooltipOpen}
-            dark
-            popoverStyles={{ width: '350px', marginTop: '1.5rem' }}
-            caption={
-              <div>
-                <div style={{ marginTop: '0.5rem' }}>
-                  <GoogleIcon style={{ margin: '0 1rem 0 0' }} />
-                  <CsvIcon />
-                </div>
-                <div>
-                  <div>
-                    <h4 style={{ marginBottom: 0 }}>
-                      Sync your contacts with one click.
-                    </h4>
-                  </div>
-                  Don't worry, your data is yours, we are serious about this.
-                </div>
-              </div>
+    <Acl
+      access="BetaFeatures"
+      fallback={
+        <Tooltip caption="From CSV Spreadsheet" placement="bottom">
+          <ActionButton
+            appearance="outline"
+            style={{ marginRight: '1em' }}
+            onClick={() =>
+              browserHistory.push('/dashboard/contacts/import/csv')
             }
           >
-            <div>
-              <GoogleIcon size={{ width: 16, height: 16 }} /> Import Google
-              Contacts
-            </div>
-          </PopOver>
-        </SplitButton>
-      )}
-    </ConnectGoogleButton>
+            Import Contacts
+          </ActionButton>
+        </Tooltip>
+      }
+    >
+      <ConnectGoogleButton>
+        {({ connecting, connect }) => (
+          <SplitButton
+            disabled={connecting || syncing}
+            onClick={connect}
+            style={{ marginRight: '1rem' }}
+            renderMenu={() => (
+              <>
+                <MenuItem
+                  as={ALink}
+                  noStyle
+                  to="/dashboard/contacts/import/csv"
+                >
+                  <CsvIcon /> Import from CSV spreadsheet
+                </MenuItem>
+                {accounts.length > 0 && <Divider />}
+                {accounts.map(account => (
+                  <MenuItem key={account.id}>
+                    <ConnectedAccount account={account} />
+                  </MenuItem>
+                ))}
+              </>
+            )}
+          >
+            {/* PopOver is used here instead of tooltip, because control over showing it initially is required */}
+            <PopOver
+              placement="bottom"
+              show={isTooltipOpen}
+              dark
+              popoverStyles={{ width: '350px', marginTop: '1.5rem' }}
+              caption={
+                <div>
+                  <div style={{ marginTop: '0.5rem' }}>
+                    <GoogleIcon style={{ margin: '0 1rem 0 0' }} />
+                    <CsvIcon />
+                  </div>
+                  <div>
+                    <div>
+                      <h4 style={{ marginBottom: 0 }}>
+                        Sync your contacts with one click.
+                      </h4>
+                    </div>
+                    Don't worry, your data is yours, we are serious about this.
+                  </div>
+                </div>
+              }
+            >
+              <div>
+                <GoogleIcon size={{ width: 16, height: 16 }} /> Import Google
+                Contacts
+              </div>
+            </PopOver>
+          </SplitButton>
+        )}
+      </ConnectGoogleButton>
+    </Acl>
   )
 }
 

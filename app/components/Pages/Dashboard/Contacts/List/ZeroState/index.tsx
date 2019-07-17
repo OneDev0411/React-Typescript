@@ -3,6 +3,7 @@ import * as React from 'react'
 import ActionButton from 'components/Button/ActionButton'
 import LinkButton from 'components/Button/LinkButton'
 import IconCsv from 'components/SvgIcons/Csv/IconCsv'
+import Acl from 'components/Acl'
 import { Divider } from 'components/Divider'
 import { CreateContact } from 'components/CreateContact'
 
@@ -19,20 +20,22 @@ export function ZeroState() {
         referral network in Rechat by importing or creating a contact manually.
       </p>
 
-      <ConnectGoogleButton>
-        {({ connecting, connect }) => (
-          <ActionButton
-            disabled={connecting}
-            onClick={connect}
-            appearance="primary"
-          >
-            <GoogleIcon />
-            Import Google Contacts
-          </ActionButton>
-        )}
-      </ConnectGoogleButton>
+      <Acl access="BetaFeatures">
+        <ConnectGoogleButton>
+          {({ connecting, connect }) => (
+            <ActionButton
+              disabled={connecting}
+              onClick={connect}
+              appearance="primary"
+            >
+              <GoogleIcon />
+              Import Google Contacts
+            </ActionButton>
+          )}
+        </ConnectGoogleButton>
 
-      <Divider text="OR" />
+        <Divider text="OR" />
+      </Acl>
 
       <LinkButton appearance="outline" to="/dashboard/contacts/import/csv">
         <IconCsv style={{ marginRight: '0.4rem' }} />
