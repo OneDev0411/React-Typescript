@@ -43,9 +43,9 @@ class SelectDealFileDrawer extends React.Component {
       return false
     }
 
-    const isExists = this.state.selectedItems.some(
-      row => row.id === document.id
-    )
+    const isExists =
+      Array.isArray(this.state.selectedItems) &&
+      this.state.selectedItems.some(row => row.id === document.id)
 
     this.setState(state => ({
       selectedItems: isExists

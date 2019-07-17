@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react'
-import _ from 'underscore'
 
 import AttachDealIcon from 'components/SvgIcons/AttachDeal/IconAttachDeal'
 import SearchDealDrawer from 'components/SearchDealDrawer'
@@ -52,24 +51,16 @@ export class AddDealFile extends React.Component {
       isDealFilesOpen: false
     })
 
-    const documents = {}
+    const documents = files.map(file => ({
+      ...file,
+      attachmentType: 'deal-file'
+    }))
 
-    Object.values(files).forEach(file => {
-      documents[file.id] = {
-        ...file,
-        attachmentType: 'deal-file'
-      }
-    })
-
-    this.props.input.onChange({
-      ...this.props.input.value,
-      ...documents
-    })
+    this.props.input.onChange(documents)
   }
 
   get InitialAttachments() {
-    return _.filter(
-      this.props.initialAttachments,
+    return this.props.initialAttachments.filter(
       item => item.attachmentType === 'deal-file'
     )
   }
