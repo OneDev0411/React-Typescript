@@ -240,16 +240,21 @@ export const TextEditor = forwardRef(
       [stateToHtmlOptions]
     )
 
-    const handleChange = newState => {
+    const handleChange = (newState: EditorState) => {
       if (!newState) {
         return false
       }
 
       setEditorState(newState)
 
-      const html = stateToHTML(newState.getCurrentContent(), stateToHtmlOptions)
+      if (newState.getCurrentContent() !== editorState.getCurrentContent()) {
+        const html = stateToHTML(
+          newState.getCurrentContent(),
+          stateToHtmlOptions
+        )
 
-      setTimeout(() => (input ? input.onChange(html) : onChange(html)))
+        setTimeout(() => (input ? input.onChange(html) : onChange(html)))
+      }
     }
 
     /**
