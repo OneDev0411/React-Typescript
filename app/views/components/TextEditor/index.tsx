@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState
 } from 'react'
-import { convertToRaw, EditorState } from 'draft-js'
+import { ContentBlock, convertToRaw, EditorState } from 'draft-js'
 import Editor, { composeDecorators } from 'draft-js-plugins-editor'
 import createImagePlugin from 'draft-js-image-plugin'
 import 'draft-js-image-plugin/lib/plugin.css'
@@ -39,6 +39,7 @@ import { createFilePlugin } from './plugins/handle-files'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
 import { replaceImage } from './utils/replace-image'
 import { withUploadingIndicator } from './block-decorators/with-uploading-indicator'
+import { renderAtomicBlockStyles } from './utils/render-atomic-block'
 
 interface Props {
   defaultValue?: string
@@ -156,8 +157,39 @@ export const TextEditor = forwardRef(
     }, [])
 
     const editorRef = useRef<EditorComponent>(null)
+
     const [editorState, setEditorState] = useState(
       EditorState.createWithContent(stateFromHTML(defaultValue))
+    )
+
+    /**
+     * Images are not rendered appropriately without this option.
+     */
+    const stateToHtmlOptions = useMemo(
+      () => ({
+        blockRenderers: {
+          atomic: (block: ContentBlock) => {
+            const entityKey = block.getEntityAt(0)
+
+            if (entityKey && editorRef.current) {
+              const entity = editorRef.current
+                .getEditorState()
+                .getCurrentContent()
+                .getEntity(entityKey)
+
+              if (entity.getType().toLocaleLowerCase() === 'image') {
+                const data = entity.getData()
+                const style = renderAtomicBlockStyles(data)
+
+                return `<img src="${data.src}" style="${style}" />`
+              }
+            }
+
+            return undefined as any // typing is wrong, it should accept undefined too
+          }
+        }
+      }),
+      []
     )
 
     useImperativeHandle(
@@ -182,7 +214,8 @@ export const TextEditor = forwardRef(
         getHtml: () => {
           if (editorRef.current) {
             return stateToHTML(
-              editorRef.current.getEditorState().getCurrentContent()
+              editorRef.current.getEditorState().getCurrentContent(),
+              stateToHtmlOptions
             )
           }
         },
@@ -204,7 +237,7 @@ export const TextEditor = forwardRef(
         },
         editorRef
       }),
-      []
+      [stateToHtmlOptions]
     )
 
     const handleChange = newState => {
@@ -214,7 +247,7 @@ export const TextEditor = forwardRef(
 
       setEditorState(newState)
 
-      const html = stateToHTML(newState.getCurrentContent())
+      const html = stateToHTML(newState.getCurrentContent(), stateToHtmlOptions)
 
       setTimeout(() => (input ? input.onChange(html) : onChange(html)))
     }
