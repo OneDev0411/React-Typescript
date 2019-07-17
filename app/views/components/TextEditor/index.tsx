@@ -31,6 +31,10 @@ import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 
 import { isImageFile } from 'utils/file-utils/is-image-file'
 
+import LinkIcon from 'components/SvgIcons/LinkIcon'
+import { LinkEditorPopover } from './components/LinkEditorPopover'
+import IconButton from './buttons/IconButton'
+
 import { EditorWrapper, Toolbar } from './styled'
 import { FieldError } from '../final-form-fields/FieldError'
 import { AddImageButton } from './buttons/AddImageButton'
@@ -157,10 +161,13 @@ export const TextEditor = forwardRef(
     }, [])
 
     const editorRef = useRef<EditorComponent>(null)
+    const editorElementRef = useRef<HTMLDivElement>(null)
 
     const [editorState, setEditorState] = useState(
       EditorState.createWithContent(stateFromHTML(defaultValue))
     )
+
+    const [linkEditorOpen, setLinkEditorOpen] = useState(false)
 
     /**
      * Images are not rendered appropriately without this option.
@@ -339,9 +346,19 @@ export const TextEditor = forwardRef(
           )}
 
           {enableImage && <AddImageButton onImageSelected={addImage} />}
+          <IconButton
+            onMouseDown={event => {
+              setLinkEditorOpen(true)
+              event.preventDefault()
+              event.stopPropagation()
+            }}
+          >
+            <LinkIcon />
+          </IconButton>
         </Toolbar>
 
         <EditorWrapper
+          ref={editorElementRef}
           className={cn({
             'hide-placeholder': shouldHidePlaceholder(editorState)
           })}
@@ -362,6 +379,13 @@ export const TextEditor = forwardRef(
             {...settings}
           />
           <alignmentPlugin.AlignmentTool />
+          <LinkEditorPopover
+            editorState={editorState}
+            editorElementRef={editorElementRef}
+            setEditorState={setEditorState}
+            open={linkEditorOpen}
+            onClose={() => setLinkEditorOpen(false)}
+          />
         </EditorWrapper>
 
         {input && <FieldError name={input.name} />}
