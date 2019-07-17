@@ -151,8 +151,9 @@ class MasterField extends React.Component {
   }
 
   save = async () => {
+    const { attribute } = this.props
+    const { id, cuid } = attribute
     const { is_primary, label, value } = this.state
-    const { id, cuid } = this.props.attribute
 
     if (!this.isDrity) {
       return this.setState({ error: id ? 'Update value!' : 'Input something!' })
@@ -170,7 +171,7 @@ class MasterField extends React.Component {
       const data = {
         cuid,
         id,
-        label,
+        label: label === '' ? null : label,
         [this.type]: parseValue(value, this.attribute_def)
       }
 
@@ -178,7 +179,7 @@ class MasterField extends React.Component {
         data.is_primary = is_primary
       }
 
-      this.props.handleSave(this.attribute_def, data)
+      this.props.handleSave(attribute, data)
 
       this.setState({ disabled: false, isDrity: false }, this.toggleMode)
     } catch (error) {
