@@ -2,19 +2,21 @@ import React, {
   forwardRef,
   Fragment,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState
 } from 'react'
-import { convertToRaw, EditorState } from 'draft-js'
+import { ContentBlock, convertToRaw, EditorState } from 'draft-js'
 import Editor, { composeDecorators } from 'draft-js-plugins-editor'
 import createImagePlugin from 'draft-js-image-plugin'
 import 'draft-js-image-plugin/lib/plugin.css'
+
+import createRichButtonsPlugin from 'draft-js-richbuttons-plugin'
 
 import createAlignmentPlugin from 'draft-js-alignment-plugin'
 import 'draft-js-alignment-plugin/lib/plugin.css'
 
 import createFocusPlugin from 'draft-js-focus-plugin'
-import 'draft-js-focus-plugin/lib/plugin.css'
 
 import createResizeablePlugin from 'draft-js-resizeable-plugin'
 
@@ -32,27 +34,12 @@ import { isImageFile } from 'utils/file-utils/is-image-file'
 import { EditorWrapper, Toolbar } from './styled'
 import { FieldError } from '../final-form-fields/FieldError'
 import { AddImageButton } from './buttons/AddImageButton'
-import { richButtonsPlugin, RichTextButtons } from './buttons/RichTextButtons'
+import { RichTextButtons } from './buttons/RichTextButtons'
 import { createFilePlugin } from './plugins/handle-files'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
 import { replaceImage } from './utils/replace-image'
 import { withUploadingIndicator } from './block-decorators/with-uploading-indicator'
-
-const focusPlugin = createFocusPlugin()
-const resizeablePlugin = createResizeablePlugin()
-const blockDndPlugin = createBlockDndPlugin()
-const alignmentPlugin = createAlignmentPlugin()
-const { AlignmentTool } = alignmentPlugin
-
-const imagePlugin = createImagePlugin({
-  decorator: composeDecorators(
-    withUploadingIndicator,
-    resizeablePlugin.decorator,
-    alignmentPlugin.decorator,
-    focusPlugin.decorator,
-    blockDndPlugin.decorator
-  )
-})
+import { renderAtomicBlockStyles } from './utils/render-atomic-block'
 
 interface Props {
   defaultValue?: string
@@ -63,7 +50,7 @@ interface Props {
   plugins?: any[]
   settings?: any
   /**
-   * an optional function to be used when hasImage is true and an image is
+   * an optional function to be used when enableImage is true and an image is
    * added to the editor. It should upload the image and return the promise
    * of the uploaded image url. The src of the image in the editor will be
    * uploaded to that uploaded image url.
@@ -73,8 +60,23 @@ interface Props {
 
   onAttachmentDropped?: (file: File) => void
 
-  hasRichText?: boolean
-  hasImage?: boolean
+  /** ********
+   * The following props are feature enabler flags.
+   *
+   * NOTE 1: They are meant to be constant props. You can't count on
+   * changing them. and toggle features dynamically, on a mounted component
+   *
+   * NOTE 2: default value varies from one flag to another.
+   ********* */
+
+  /**
+   * Enable/disable rich text editing features like bold, italic, lists, etc.
+   */
+  enableRichText?: boolean
+  /**
+   * Enable/disable image insertion.
+   */
+  enableImage?: boolean
 }
 
 interface EditorComponent {
@@ -100,15 +102,94 @@ export const TextEditor = forwardRef(
       plugins = [],
       settings = {},
       uploadImage,
-      hasImage = false,
-      hasRichText = true,
+      enableImage = false,
+      enableRichText = true,
       onAttachmentDropped
     }: Props,
     ref
   ) => {
+    /**
+     * NOTE 1: We don't use top level plugin definition to prevent bugs when
+     * more than one instance of Editor is rendered simultaneously
+     * (which is used in contacts profile page right now).
+     * See this for more info:
+     * https://github.com/draft-js-plugins/draft-js-plugins/blob/master/FAQ.md#can-i-use-the-same-plugin-for-multiple-plugin-editors
+     *
+     * NOTE 2: We always create all plugins because hooks can't be called
+     * conditionally. We could have conditionally create real plugins or
+     * undefined, based on enableXXX props but it adds lots of undefined checks
+     * later in code which is not worth it.
+     */
+    const {
+      imagePlugin,
+      focusPlugin,
+      alignmentPlugin,
+      blockDndPlugin,
+      resizeablePlugin,
+      richButtonsPlugin
+    } = useMemo(() => {
+      const focusPlugin = createFocusPlugin({
+        theme: { focused: 'focused', unfocused: 'unfocused' }
+      })
+      const resizeablePlugin = createResizeablePlugin()
+      const blockDndPlugin = createBlockDndPlugin()
+      const alignmentPlugin = createAlignmentPlugin()
+      const { AlignmentTool } = alignmentPlugin
+      const richButtonsPlugin = createRichButtonsPlugin()
+
+      return {
+        AlignmentTool,
+        richButtonsPlugin,
+        focusPlugin,
+        resizeablePlugin,
+        blockDndPlugin,
+        alignmentPlugin,
+        imagePlugin: createImagePlugin({
+          decorator: composeDecorators(
+            withUploadingIndicator,
+            resizeablePlugin.decorator,
+            alignmentPlugin.decorator,
+            focusPlugin.decorator,
+            blockDndPlugin.decorator
+          )
+        })
+      }
+    }, [])
+
     const editorRef = useRef<EditorComponent>(null)
+
     const [editorState, setEditorState] = useState(
       EditorState.createWithContent(stateFromHTML(defaultValue))
+    )
+
+    /**
+     * Images are not rendered appropriately without this option.
+     */
+    const stateToHtmlOptions = useMemo(
+      () => ({
+        blockRenderers: {
+          atomic: (block: ContentBlock) => {
+            const entityKey = block.getEntityAt(0)
+
+            if (entityKey && editorRef.current) {
+              const entity = editorRef.current
+                .getEditorState()
+                .getCurrentContent()
+                .getEntity(entityKey)
+
+              if (entity.getType().toLocaleLowerCase() === 'image') {
+                const data = entity.getData()
+                const style = renderAtomicBlockStyles(data)
+
+                return `<img src="${data.src}" style="${style}" />`
+              }
+            }
+
+            return undefined as any // typing is wrong, it should accept undefined too
+          }
+        }
+      }),
+      []
     )
 
     useImperativeHandle(
@@ -133,7 +214,8 @@ export const TextEditor = forwardRef(
         getHtml: () => {
           if (editorRef.current) {
             return stateToHTML(
-              editorRef.current.getEditorState().getCurrentContent()
+              editorRef.current.getEditorState().getCurrentContent(),
+              stateToHtmlOptions
             )
           }
         },
@@ -155,19 +237,24 @@ export const TextEditor = forwardRef(
         },
         editorRef
       }),
-      []
+      [stateToHtmlOptions]
     )
 
-    const handleChange = newState => {
+    const handleChange = (newState: EditorState) => {
       if (!newState) {
         return false
       }
 
       setEditorState(newState)
 
-      const html = stateToHTML(newState.getCurrentContent())
+      if (newState.getCurrentContent() !== editorState.getCurrentContent()) {
+        const html = stateToHTML(
+          newState.getCurrentContent(),
+          stateToHtmlOptions
+        )
 
-      setTimeout(() => (input ? input.onChange(html) : onChange(html)))
+        setTimeout(() => (input ? input.onChange(html) : onChange(html)))
+      }
     }
 
     /**
@@ -224,8 +311,8 @@ export const TextEditor = forwardRef(
     }
 
     const defaultPlugins = [
-      ...(hasRichText ? [richButtonsPlugin] : []),
-      ...(hasImage
+      ...(enableRichText ? [richButtonsPlugin] : []),
+      ...(enableImage
         ? [
             blockDndPlugin,
             focusPlugin,
@@ -234,7 +321,7 @@ export const TextEditor = forwardRef(
             imagePlugin
           ]
         : []),
-      ...(hasImage || onAttachmentDropped
+      ...(enableImage || onAttachmentDropped
         ? [
             createFilePlugin({
               handleImage: addImage,
@@ -249,9 +336,11 @@ export const TextEditor = forwardRef(
     return (
       <Fragment>
         <Toolbar>
-          {hasRichText && <RichTextButtons />}
+          {enableRichText && (
+            <RichTextButtons richButtonsPlugin={richButtonsPlugin} />
+          )}
 
-          {hasImage && <AddImageButton onImageSelected={addImage} />}
+          {enableImage && <AddImageButton onImageSelected={addImage} />}
         </Toolbar>
 
         <EditorWrapper
@@ -274,7 +363,7 @@ export const TextEditor = forwardRef(
             ref={editorRef}
             {...settings}
           />
-          <AlignmentTool />
+          <alignmentPlugin.AlignmentTool />
         </EditorWrapper>
 
         {input && <FieldError name={input.name} />}

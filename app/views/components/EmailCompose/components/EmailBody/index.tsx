@@ -23,7 +23,7 @@ const EmailBody = (
           defaultValue={content}
           render={({ input, meta }) => (
             <TextEditor
-              hasImage
+              enableImage
               uploadImage={uploadImage}
               input={input}
               ref={ref}

@@ -1,7 +1,5 @@
 import React from 'react'
 
-import createRichButtonsPlugin from 'draft-js-richbuttons-plugin'
-
 import IconButton from './IconButton'
 import IconBold from '../../SvgIcons/Bold/IconBold'
 import IconItalic from '../../SvgIcons/Italic/IconItalic'
@@ -11,21 +9,19 @@ import IconList from '../../SvgIcons/List/ListIcon'
 import IconNumberedList from '../../SvgIcons/NumberedList/IconNumberedList'
 import HeadingButtons from './HeadingButtons'
 
-export const richButtonsPlugin = createRichButtonsPlugin()
+export function RichTextButtons({ richButtonsPlugin }) {
+  const {
+    ItalicButton,
+    BoldButton,
+    UnderlineButton,
+    OLButton,
+    ULButton,
+    H1Button,
+    H3Button,
+    H4Button,
+    H6Button
+  } = richButtonsPlugin
 
-const {
-  ItalicButton,
-  BoldButton,
-  UnderlineButton,
-  OLButton,
-  ULButton,
-  H1Button,
-  H3Button,
-  H4Button,
-  H6Button
-} = richButtonsPlugin
-
-export function RichTextButtons() {
   return (
     <>
       <BoldButton>
