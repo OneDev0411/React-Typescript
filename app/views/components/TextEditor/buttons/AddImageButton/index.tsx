@@ -1,8 +1,6 @@
 import * as React from 'react'
 import { useState } from 'react'
 
-import { EditorState } from 'draft-js'
-
 import ImageFileIcon from 'components/SvgIcons/ImageFile/ImageFileIcon'
 
 import { IconButton } from '../IconButton/styled'
@@ -38,7 +36,7 @@ export function AddImageButton(props: Props) {
 
   return (
     <>
-      <IconButton onClick={handleClick} data-testid="add-image-button">
+      <IconButton onClick={handleClick} data-test="add-image-button">
         <ImageFileIcon />
       </IconButton>
       <ImagePickerModal

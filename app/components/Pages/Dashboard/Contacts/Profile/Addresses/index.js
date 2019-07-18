@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { addNotification } from 'reapop'
 
 import { getContactAddresses } from 'models/contacts/helpers/get-contact-addresses'
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
@@ -115,6 +116,11 @@ class Addresses extends React.Component {
       return removeAddressFromState()
     } catch (error) {
       console.error(error)
+      this.props.notify({
+        message:
+          'An error occurred while deleting the address. Please try again.',
+        status: 'error'
+      })
     }
   }
 
@@ -139,6 +145,11 @@ class Addresses extends React.Component {
       })
     } catch (error) {
       console.error(error)
+      this.props.notify({
+        message:
+          'An error occurred while saving the address. Please try again.',
+        status: 'error'
+      })
     }
   }
 
@@ -166,4 +177,9 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(Addresses)
+// This is using for testing
+export { Addresses }
+export default connect(
+  mapStateToProps,
+  { notify: addNotification }
+)(Addresses)
