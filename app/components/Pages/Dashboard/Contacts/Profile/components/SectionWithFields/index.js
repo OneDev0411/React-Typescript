@@ -238,7 +238,7 @@ class SectionWithFields extends React.Component {
     const { attribute_def } = attribute
 
     if (id) {
-      // API doesm't lile emtpy string https://gitlab.com/rechat/web/issues/2932
+      // API doesnt like emtpy string https://gitlab.com/rechat/web/issues/2932
       if (data[attribute_def.data_type] === '') {
         this.deleteFromApi(attribute)
       } else {
