@@ -116,8 +116,7 @@ class EmailComposeDrawer extends React.Component {
       return new Promise((resolve, reject) => {
         this.context.setConfirmationModal({
           message: 'Upload in progress',
-          description:
-            'The images are still being uploaded. Please wait until the upload is finished or remove them',
+          description: 'Please wait while images are uploading, or remove them',
           cancelLabel: 'Ok',
           needsConfirm: false,
           onCancel: reject
