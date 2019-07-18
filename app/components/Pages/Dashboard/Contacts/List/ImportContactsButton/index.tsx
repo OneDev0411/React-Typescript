@@ -83,7 +83,7 @@ export function ImportContactsButton({ accounts, user }: Props) {
                   noStyle
                   to="/dashboard/contacts/import/csv"
                 >
-                  <CsvIcon /> Import from CSV spreadsheet
+                  <CsvIcon /> Import from CSV Spreadsheet
                 </MenuItem>
                 {accounts.length > 0 && <Divider />}
                 {accounts.map(account => (
@@ -109,10 +109,10 @@ export function ImportContactsButton({ accounts, user }: Props) {
                   <div>
                     <div>
                       <h4 style={{ marginBottom: 0 }}>
-                        Sync your contacts with one click.
+                        Sync your contacts with a simple click.
                       </h4>
                     </div>
-                    Don't worry, your data is yours, we are serious about this.
+                    Never worry, your data is always yours
                   </div>
                 </div>
               }

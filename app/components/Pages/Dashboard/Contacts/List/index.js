@@ -517,8 +517,8 @@ class ContactsList extends React.Component {
           {this.state.syncStatus === 'pending' && (
             <Callout onClose={() => this.setState({ syncStatus: null })}>
               <CalloutSpinner viewBox="20 20 60 60" />
-              Doing Science! wait a moment till you can see how really Rechat
-              works with contacts and emails
+              Doing Science! Just a moment for Rechat to complete establishing
+              connections and importing your contacts.
             </Callout>
           )}
           {this.state.syncStatus === 'finished' && (
