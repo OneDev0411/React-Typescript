@@ -45,6 +45,8 @@ import { AlphabetFilter } from 'components/AlphabetFilter'
 
 import { updateTeamSetting } from 'actions/user/update-team-setting'
 
+import { selectActiveSavedSegment } from 'reducers/filter-segments'
+
 import Table from './Table'
 import { SearchContacts } from './Search'
 import Header from './Header'
@@ -55,7 +57,8 @@ import {
   FLOW_FILTER_ID,
   SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY,
   OPEN_HOUSE_FILTER_ID,
-  SORT_FIELD_SETTING_KEY, SYNCED_CONTACTS_LIST_ID
+  SORT_FIELD_SETTING_KEY,
+  SYNCED_CONTACTS_LIST_ID
 } from './constants'
 import { CalloutSpinner, Container, SearchWrapper } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
@@ -491,7 +494,10 @@ class ContactsList extends React.Component {
       props.crmTasks.length === 0 &&
       !syncing &&
       !state.syncStatus &&
-      !this.state.searchInputValue
+      !this.state.searchInputValue &&
+      (!activeSegment ||
+        !activeSegment.filters ||
+        activeSegment.filters.length === 0)
 
     return (
       <PageContainer isOpen={isSideMenuOpen}>
@@ -600,7 +606,7 @@ class ContactsList extends React.Component {
  * @param user
  * @param {IContactReduxState} contacts
  */
-function mapStateToProps({ user, contacts }) {
+function mapStateToProps({ user, contacts, ...restOfState }) {
   const listInfo = selectContactsInfo(contacts.list)
   const tags = contacts.tags
   const fetchTags = !isFetchingTags(tags) && selectTags(tags).length === 0
@@ -629,9 +635,11 @@ function mapStateToProps({ user, contacts }) {
     list: contacts.list,
     listInfo,
     user,
-    activeSegment:
-      filterSegments.list &&
-      filterSegments.list[filterSegments.activeSegmentId],
+    activeSegment: selectActiveSavedSegment(
+      filterSegments,
+      'contacts',
+      getPredefinedContactLists('Contacts', { user, contacts, ...restOfState })
+    ),
     viewAsUsers: viewAsEveryoneOnTeam(user) ? [] : viewAs(user)
   }
 }
