@@ -226,7 +226,7 @@ class SectionWithFields extends React.Component {
     }
   }
 
-  save = (attribute_def, { id, cuid, ...data }) => {
+  save = (attribute, { id, cuid, ...data }) => {
     if (id == null && cuid == null) {
       return
     }
@@ -235,8 +235,15 @@ class SectionWithFields extends React.Component {
       data = { ...data, is_partner: true }
     }
 
+    const { attribute_def } = attribute
+
     if (id) {
-      this.update(id, data, attribute_def)
+      // API doesnt like emtpy string https://gitlab.com/rechat/web/issues/2932
+      if (data[attribute_def.data_type] === '') {
+        this.deleteFromApi(attribute)
+      } else {
+        this.update(id, data, attribute_def)
+      }
     } else {
       this.insert(cuid, data, attribute_def)
     }
@@ -284,31 +291,32 @@ class SectionWithFields extends React.Component {
     }
   }
 
-  deleteFromApi = async attribute => {
-    let backupList
+  deleteFromApi = attribute => {
+    let backupList = this.state.orderedAttributes
 
-    this.setState(state => {
-      backupList = state.orderedAttributes
+    this.setState(
+      state => {
+        return this.deleteFromState(state, attribute)
+      },
+      async () => {
+        try {
+          const { contact } = this.props
+          const response = await deleteAttribute(contact.id, attribute.id)
 
-      return this.deleteFromState(state, attribute)
-    })
+          this.props.notify({
+            status: 'success',
+            dismissAfter: 4000,
+            message: `${attribute.attribute_def.label ||
+              attribute.attribute_def.name} deleted.`
+          })
 
-    try {
-      const { contact } = this.props
-      const response = await deleteAttribute(contact.id, attribute.id)
-
-      this.props.notify({
-        status: 'success',
-        dismissAfter: 4000,
-        message: `${attribute.attribute_def.label ||
-          attribute.attribute_def.name} deleted.`
-      })
-
-      this.props.submitCallback(normalizeContact(response.data))
-    } catch (error) {
-      console.log(error)
-      this.setState({ orderedAttributes: backupList })
-    }
+          this.props.submitCallback(normalizeContact(response.data))
+        } catch (error) {
+          console.log(error)
+          this.setState({ orderedAttributes: backupList })
+        }
+      }
+    )
   }
 
   deleteHandler = attribute => {
