@@ -5,21 +5,42 @@ import GeneralFlow from 'components/InstantMarketing/adapters/General'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
+import { convertType, getMedium, convertToTemplate } from './helpers'
+
+const HOLIDAY_TYPES = [
+  'Christmas',
+  'NewYear',
+  'Valentines',
+  'StPatrick',
+  'Easter',
+  'OtherHoliday'
+]
 const GENERAL_FLOW_TYPES = [
   'Brand',
-  'Christmas,NewYear,Valentines,StPatrick,Easter,OtherHoliday',
-  'NewAgent'
+  'NewAgent',
+  HOLIDAY_TYPES.join(','),
+  ...HOLIDAY_TYPES
 ]
 
 function TemplateAction(props) {
+  const { isEdit } = props
+
   const sharedProps = {
-    mediums: props.medium,
+    mediums: getMedium(props),
     selectedTemplate: props.selectedTemplate,
     isTriggered: props.isTriggered,
-    handleTrigger: () => props.setTriggered(false)
+    isEdit,
+    handleTrigger: () => {
+      props.setTriggered(false)
+      props.setEditActionTriggered(false)
+    }
   }
 
-  if (props.type === 'history') {
+  if (isEdit && !props.isTriggered) {
+    return null
+  }
+
+  if (!isEdit && props.type === 'history') {
     return (
       <ShareInstance
         {...sharedProps}
@@ -29,16 +50,20 @@ function TemplateAction(props) {
     )
   }
 
-  if (props.type === 'Birthday') {
+  const convertedType = convertType(props.type, props.selectedTemplate)
+
+  sharedProps.selectedTemplate = convertToTemplate(props.selectedTemplate)
+
+  if (convertedType === 'Birthday') {
     return <ContactFlow {...sharedProps} />
   }
 
-  if (GENERAL_FLOW_TYPES.includes(props.type)) {
+  if (GENERAL_FLOW_TYPES.includes(convertedType)) {
     return (
       <GeneralFlow
         {...sharedProps}
         hasExternalTrigger
-        types={props.type.split(',')}
+        types={convertedType.split(',')}
       />
     )
   }

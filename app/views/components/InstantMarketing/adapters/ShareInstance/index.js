@@ -7,6 +7,8 @@ import ActionButton from 'components/Button/ActionButton'
 import SocialDrawer from '../../components/SocialDrawer'
 import hasMarketingAccess from '../../helpers/has-marketing-access'
 
+import { getMedium } from './helpers'
+
 class ShareInstance extends React.Component {
   state = {
     isComposeDrawerOpen: false,
@@ -14,7 +16,7 @@ class ShareInstance extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const medium = props.instance && props.instance.template.medium
+    const medium = getMedium(props.instance)
 
     if (props.isTriggered && medium === 'Email' && !state.isComposeDrawerOpen) {
       return {
