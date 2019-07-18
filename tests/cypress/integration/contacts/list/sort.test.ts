@@ -18,8 +18,6 @@ describe('Contacts list sort', () => {
 
     cy.navigate(`/dashboard/contacts/${contactId}`)
     addTask('Test call')
-    // Let's wait for a few seconds to make sure the last touch will be updated
-    cy.wait(5000)
 
     cy.navigate('/dashboard/contacts')
 
