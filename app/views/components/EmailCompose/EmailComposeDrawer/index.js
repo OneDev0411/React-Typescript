@@ -109,23 +109,6 @@ class EmailComposeDrawer extends React.Component {
   }
 
   handleSubmit = async form => {
-    if ((form.subject || '').trim() === '') {
-      return new Promise((resolve, reject) => {
-        this.context.setConfirmationModal({
-          message: 'Send without subject?',
-          description:
-            'This email has no subject. Are you sure you want to send it?',
-          confirmLabel: 'Send anyway',
-          onCancel: reject,
-          onConfirm: () => {
-            this.handleSendEmail(form)
-              .then(resolve)
-              .catch(reject)
-          }
-        })
-      })
-    }
-
     if (
       this.emailBodyRef.current &&
       this.emailBodyRef.current.hasUploadingImage()
@@ -134,7 +117,20 @@ class EmailComposeDrawer extends React.Component {
         this.context.setConfirmationModal({
           message: 'Upload in progress',
           description:
-            'The images are still being uploaded. Send this message without the images?',
+            'The images are still being uploaded. Please wait until the upload is finished or remove them',
+          cancelLabel: 'Ok',
+          needsConfirm: false,
+          onCancel: reject
+        })
+      })
+    }
+
+    if ((form.subject || '').trim() === '') {
+      return new Promise((resolve, reject) => {
+        this.context.setConfirmationModal({
+          message: 'Send without subject?',
+          description:
+            'This email has no subject. Are you sure you want to send it?',
           confirmLabel: 'Send anyway',
           onCancel: reject,
           onConfirm: () => {

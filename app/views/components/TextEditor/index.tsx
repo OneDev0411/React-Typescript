@@ -245,16 +245,14 @@ export const TextEditor = forwardRef(
         return false
       }
 
+      // We could have call onChange only of content state is changed to prevent
+      // unnecessary calls when only selection is changed. But it causes
+      // problems and sometimes it doesn't work for some reason.
       setEditorState(newState)
 
-      if (newState.getCurrentContent() !== editorState.getCurrentContent()) {
-        const html = stateToHTML(
-          newState.getCurrentContent(),
-          stateToHtmlOptions
-        )
+      const html = stateToHTML(newState.getCurrentContent(), stateToHtmlOptions)
 
-        setTimeout(() => (input ? input.onChange(html) : onChange(html)))
-      }
+      setTimeout(() => (input ? input.onChange(html) : onChange(html)))
     }
 
     /**
