@@ -96,25 +96,6 @@ class ContactsList extends React.Component {
     }
   }
 
-  updateSyncState(googleAccounts = this.props.googleAccounts) {
-    const account = getNewConnectedGoogleAccount(googleAccounts)
-
-    if (account) {
-      switch (account.sync_status) {
-        case null:
-        case 'pending':
-          this.setState({ syncStatus: 'pending' })
-          break
-        case 'success':
-          clearImportingGoogleContacts()
-          this.setState({ syncStatus: 'finished' })
-          break
-      }
-    } else {
-      clearImportingGoogleContacts()
-    }
-  }
-
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (!_.isEqual(nextProps.googleAccounts, this.props.googleAccounts)) {
       this.updateSyncState(nextProps.googleAccounts)
@@ -153,12 +134,31 @@ class ContactsList extends React.Component {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
   }
 
+  updateSyncState(googleAccounts = this.props.googleAccounts) {
+    const account = getNewConnectedGoogleAccount(googleAccounts)
+
+    if (account) {
+      switch (account.sync_status) {
+        case null:
+        case 'pending':
+          this.setState({ syncStatus: 'pending' })
+          break
+        case 'success':
+          clearImportingGoogleContacts()
+          this.setState({ syncStatus: 'finished' })
+          break
+      }
+    } else {
+      clearImportingGoogleContacts()
+    }
+  }
+
   async fetchContactsAndJumpToSelected() {
     this.setState({
       isFetchingMoreContacts: true
     })
 
-    const start = this.getQueryParam('s')
+    const start = parseInt(this.getQueryParam('s'), 10) || 0
     const idSelector = `#grid-item-${this.getQueryParam('id')}`
 
     this.scrollToSelector(idSelector)
@@ -254,13 +254,13 @@ class ContactsList extends React.Component {
   handleFilterChange = async (
     newFilters,
     resetLoadedRanges = false,
-    newOrder
+    newOrder = this.order
   ) => {
     const {
       filters = this.props.filters,
       searchInputValue = this.state.searchInputValue,
       start = 0,
-      order = newOrder || this.order,
+      order = newOrder,
       viewAsUsers = this.props.viewAsUsers,
       flows = this.props.flows,
       crmTasks = this.props.crmTasks,
