@@ -43,9 +43,9 @@ describe('Addresses tests', function() {
     const buttonsCount = editButtons.length
     const button = editButtons[0]
     fireEvent.click(button)
-    const inlineEditContainer = queryByTestId('inlineedit-container')
-    const deleteButton = getByTestId('inlineedit-delete')
-    const saveButton = getByTestId('inlineedit-save')
+    const inlineEditContainer = queryByTestId('inline-editable-field-container')
+    const deleteButton = getByTestId('inline-editable-field-delete')
+    const saveButton = getByTestId('inline-editable-field-save')
     fireEvent.click(deleteButton)
     const confirmButton = getByTestId('confirmation-modal-confirm-button')
     fireEvent.click(confirmButton)
