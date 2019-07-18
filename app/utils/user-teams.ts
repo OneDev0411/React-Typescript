@@ -73,6 +73,26 @@ export function isBackOffice(user): boolean {
   return hasUserAccess(user, ACL.BACK_OFFICE)
 }
 
+export function isActiveTeamTraining(user): boolean {
+  const activeTeam: IUserTeam | null = getActiveTeam(user)
+
+  if (!activeTeam) {
+    return false
+  }
+
+  let current: IBrand = activeTeam.brand
+
+  do {
+    if (current.training) {
+      return true
+    }
+
+    current = current.parent as IBrand
+  } while (current != null)
+
+  return false
+}
+
 export function viewAs(user, activeTeam = getActiveTeam(user)) {
   if (
     activeTeam &&

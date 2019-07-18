@@ -9,7 +9,7 @@ import { TextWithHighlights } from 'components/TextWithHighlights'
 
 import Search from 'components/Grid/Search'
 
-import { getBrandUsers, getActiveTeam } from 'utils/user-teams'
+import { getBrandUsers, isActiveTeamTraining } from 'utils/user-teams'
 
 import { EmptyState } from '../styled'
 
@@ -106,10 +106,10 @@ export function AgentsList(props) {
 }
 
 function normalizeTeams(user, teams, searchTerm) {
-  const activeTeam = getActiveTeam(user)
+  const isTraining = isActiveTeamTraining(user)
 
   const list = teams
-    .filter(office => isTrainingOffice(office) === activeTeam.brand.training)
+    .filter(office => isTrainingOffice(office) === isTraining)
     .map(office => {
       const agents = getBrandUsers(office).map(user => ({
         ...user,
