@@ -5,7 +5,7 @@ import GeneralFlow from 'components/InstantMarketing/adapters/General'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
-import { convertType, getMedium, convertToTemplate } from './helpers'
+import { getTemplateType, getMedium, convertToTemplate } from './helpers'
 
 const HOLIDAY_TYPES = [
   'Christmas',
@@ -50,20 +50,20 @@ function TemplateAction(props) {
     )
   }
 
-  const convertedType = convertType(props.type, props.selectedTemplate)
+  const templateType = getTemplateType(props.type, props.selectedTemplate)
 
   sharedProps.selectedTemplate = convertToTemplate(props.selectedTemplate)
 
-  if (convertedType === 'Birthday') {
+  if (templateType === 'Birthday') {
     return <ContactFlow {...sharedProps} />
   }
 
-  if (GENERAL_FLOW_TYPES.includes(convertedType)) {
+  if (GENERAL_FLOW_TYPES.includes(templateType)) {
     return (
       <GeneralFlow
         {...sharedProps}
         hasExternalTrigger
-        types={convertedType.split(',')}
+        types={templateType.split(',')}
       />
     )
   }

@@ -119,20 +119,24 @@ export function itemDateText(time, isLoading) {
   return `Created ${createdAt(time)}`
 }
 
-export function convertType(initType, template) {
-  try {
+export function getTemplateType(initType, template) {
+  if (template && template.template && template.template.template_type) {
     return template.template.template_type
-  } catch (e) {
-    return initType
   }
+
+  return initType
 }
 
 export function getMedium(props) {
-  try {
+  if (
+    props.selectedTemplate &&
+    props.selectedTemplate.template &&
+    props.selectedTemplate.template.medium
+  ) {
     return props.selectedTemplate.template.medium
-  } catch (e) {
-    return props.medium
   }
+
+  return props.medium
 }
 
 export function convertToTemplate(template) {

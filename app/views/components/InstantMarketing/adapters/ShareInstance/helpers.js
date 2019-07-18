@@ -1,11 +1,11 @@
 export function getMedium(instance) {
-  if (instance) {
-    if (typeof instance.template === 'string') {
-      return instance.medium
-    }
-
-    return instance.template.medium
+  if (!instance) {
+    return null
   }
 
-  return null
+  if (typeof instance.template === 'string') {
+    return instance.medium
+  }
+
+  return instance.template.medium
 }

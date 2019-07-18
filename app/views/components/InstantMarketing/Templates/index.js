@@ -120,7 +120,7 @@ export default class Templates extends React.Component {
                   title={template.name}
                   width="97%"
                   style={{
-                    minHeight: '200px',
+                    minHeight: '12.5rem',
                     margin: '1.5%',
                     boxShadow: '0px 5px 10px #c3c3c3'
                   }}

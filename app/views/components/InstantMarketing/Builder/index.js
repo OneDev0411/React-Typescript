@@ -46,7 +46,7 @@ class Builder extends React.Component {
       selectedTemplate: props.defaultTemplate,
       owner: props.templateData.user,
       isLoading: true,
-      isGrapeLoaded: false
+      isEditorLoaded: false
     }
 
     this.keyframe = 0
@@ -88,7 +88,7 @@ class Builder extends React.Component {
   }
 
   setupGrapesJs = () => {
-    this.setState({ isGrapeLoaded: true })
+    this.setState({ isEditorLoaded: true })
 
     this.lockIn()
     this.disableResize()
@@ -458,7 +458,7 @@ class Builder extends React.Component {
             <TemplatesContainer
               isInvisible={this.props.showTemplatesColumn === false}
             >
-              {this.state.isGrapeLoaded && (
+              {this.state.isEditorLoaded && (
                 <Templates
                   defaultTemplate={this.props.defaultTemplate}
                   medium={this.props.mediums}
