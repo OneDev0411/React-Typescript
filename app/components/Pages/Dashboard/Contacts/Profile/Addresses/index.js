@@ -115,7 +115,7 @@ class Addresses extends React.Component {
 
       return removeAddressFromState()
     } catch (error) {
-      console.log(error)
+      console.error(error)
       this.props.notify({
         message:
           'An error occurred while deleting the address. Please try again.',

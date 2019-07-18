@@ -38,7 +38,7 @@ function TestComponent(props) {
 
 afterEach(cleanup)
 
-describe('ConfirmationModal should works', function() {
+describe('ConfirmationModal component', function() {
   it('should render modal properly', async function() {
     const { container, getByTestId } = renderWithConfirmationModal(
       <TestComponent />
@@ -81,7 +81,7 @@ describe('ConfirmationModal should works', function() {
 
   it('should use cancel options by consumer', async function() {
     const options = {
-      cancelLabel: 'This should be cancled!',
+      cancelLabel: 'This should be canceled!',
       onCancel: jest.fn()
     }
     const { getByTestId, queryByTestId } = renderWithConfirmationModal(
@@ -96,7 +96,7 @@ describe('ConfirmationModal should works', function() {
     const title = queryByTestId('confirmation-modal-title')
 
     // Checking text of cancel button
-    expect(cancelBtn.textContent).toBe('This should be cancled!')
+    expect(cancelBtn.textContent).toBe('This should be canceled!')
     // Checking it's called
     expect(options.onCancel).toBeCalledTimes(1)
 

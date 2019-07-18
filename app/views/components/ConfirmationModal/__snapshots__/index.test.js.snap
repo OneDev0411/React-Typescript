@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ConfirmationModal should works should render modal properly 1`] = `
+exports[`ConfirmationModal component should render modal properly 1`] = `
 <div>
   <button
     data-test="test-button"
