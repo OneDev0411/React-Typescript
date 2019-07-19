@@ -9,7 +9,7 @@ import { fillEmailComposeDrawer, waitForDrawerToClose } from 'helpers/drawer'
 
 import { addTask } from './helpers'
 
-const EMPTY_CONTACT_ID = 'c1664da4-cff3-40f8-84f2-7d04affa224e'
+const EMPTY_CONTACT_ID = '9f70a596-7c23-4c6c-bed3-c3d0e224c810'
 
 describe('Contact profile', () => {
   beforeEach(() => {
