@@ -42,7 +42,8 @@ class SendContactCard extends React.Component {
     if (
       props.isTriggered &&
       !state.isSearchDrawerOpen &&
-      !state.isBuilderOpen
+      !state.isBuilderOpen &&
+      !props.isEdit
     ) {
       return {
         isSearchDrawerOpen: true
@@ -211,6 +212,12 @@ class SendContactCard extends React.Component {
       isSocialDrawerOpen: false
     })
 
+  componentDidMount() {
+    if (this.props.isEdit && !this.state.isBuilderOpen) {
+      this.setState({ isBuilderOpen: true })
+    }
+  }
+
   render() {
     if (hasMarketingAccess(this.props.user) === false) {
       return null
@@ -250,6 +257,7 @@ class SendContactCard extends React.Component {
           templateTypes={['Birthday']}
           defaultTemplate={this.props.selectedTemplate}
           handleSocialSharing={this.handleSocialSharing}
+          isEdit={this.props.isEdit}
         />
 
         {this.state.isComposeEmailOpen && (

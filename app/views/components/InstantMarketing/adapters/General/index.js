@@ -150,6 +150,7 @@ class General extends React.Component {
           templateTypes={this.props.types}
           mediums={this.props.mediums}
           defaultTemplate={selectedTemplate}
+          isEdit={this.props.isEdit}
         />
 
         {this.state.isComposeEmailOpen && (
