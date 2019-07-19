@@ -79,6 +79,7 @@ export function AddRole(props) {
               showEmail={false}
               showTitle={false}
               allowDeleteRole={false}
+              showBrokerageFields={props.showBrokerageFields}
               deal={props.deal}
               filter={role => props.annotation.role.includes(role.role)}
               allowedRoles={props.annotation.role}

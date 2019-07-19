@@ -211,6 +211,7 @@ class Roles extends React.Component {
                       form={this.state.user}
                       isRoleRemovable={isRowRemovable}
                       isEmailRequired={this.props.isEmailRequired}
+                      showBrokerageFields={this.props.showBrokerageFields}
                       allowedRoles={this.props.allowedRoles}
                       onUpsertRole={this.props.onUpsertRole}
                       onClose={this.closeRoleForm}
@@ -225,6 +226,7 @@ class Roles extends React.Component {
             isEmailRequired={this.props.isEmailRequired}
             actionRenderer={this.props.addRoleActionRenderer}
             deal={this.props.deal}
+            showBrokerageFields={this.props.showBrokerageFields}
             allowedRoles={this.AllowedRoles}
             onCreateRole={this.props.onCreateRole}
             onCloseDrawer={this.props.onCloseAddRoleDrawer}

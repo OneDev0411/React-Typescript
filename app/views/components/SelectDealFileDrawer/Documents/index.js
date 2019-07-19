@@ -199,7 +199,12 @@ class DocumentRow extends React.Component {
                   <CheckBoxButton
                     isDisabled={!checklist}
                     onClick={() => this.props.onToggleItem(document)}
-                    isSelected={this.props.selectedItems[document.id]}
+                    isSelected={
+                      Array.isArray(this.props.selectedItems) &&
+                      this.props.selectedItems.some(
+                        row => row.id === document.id
+                      )
+                    }
                   />
                 </Tooltip>
 

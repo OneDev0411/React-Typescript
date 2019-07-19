@@ -12,15 +12,10 @@ type IContactListArgs = Pick<
   'filter_type' | 'crm_tasks' | 'flows' | 'q' | 'type'
 >
 
-declare interface IContactList {
-  id: UUID
+declare interface IContactList extends ISavedSegment<IContactAttributeFilter> {
   deleted_at?: number
-
-  name: string
-  filters?: IContactAttributeFilter[]
   query?: string
   args: IContactListArgs
-  is_editable: boolean
   touch_freq?: number
   flows: any[] | null // fixme: update types when IFlow added
   crm_tasks: any[] | null // fixme: update types when ICrmTask added

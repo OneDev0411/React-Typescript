@@ -9,7 +9,7 @@ import { TextWithHighlights } from 'components/TextWithHighlights'
 
 import Search from 'components/Grid/Search'
 
-import { getBrandUsers } from 'utils/user-teams'
+import { getBrandUsers, isActiveTeamTraining } from 'utils/user-teams'
 
 import { EmptyState } from '../styled'
 
@@ -33,7 +33,7 @@ export function AgentsList(props) {
   const [searchTerm, setSearchTerm] = useState('')
   const [debouncedSetSearchTerm] = useDebouncedCallback(setSearchTerm, 500)
 
-  const teams = normalizeTeams(props.teams, searchTerm)
+  const teams = normalizeTeams(props.user, props.teams, searchTerm)
 
   return (
     <div>
@@ -105,28 +105,49 @@ export function AgentsList(props) {
   )
 }
 
-function normalizeTeams(teams, searchTerm) {
-  const list = teams.map(office => {
-    const agents = getBrandUsers(office).map(user => ({
-      ...user,
-      office: office.name
-    }))
+function normalizeTeams(user, teams, searchTerm) {
+  const isTraining = isActiveTeamTraining(user)
 
-    return {
-      id: office.id,
-      name: office.name,
-      subtitle: getSubtitle(office),
-      users: searchTerm
-        ? new Fuse(agents, {
-            keys: ['office', 'display_name', 'email'],
-            threshold: 0.1
-          }).search(searchTerm)
-        : agents
-    }
-  })
+  const list = teams
+    .filter(office => isTrainingOffice(office) === isTraining)
+    .map(office => {
+      const agents = getBrandUsers(office).map(user => ({
+        ...user,
+        office: office.name
+      }))
+
+      return {
+        id: office.id,
+        name: office.name,
+        subtitle: getSubtitle(office),
+        users: searchTerm
+          ? new Fuse(agents, {
+              keys: ['office', 'display_name', 'email'],
+              threshold: 0.1
+            }).search(searchTerm)
+          : agents
+      }
+    })
 
   return list.every(office => !office.users.length) ? [] : list
 }
+
+const isTrainingOffice = memoize(
+  office => {
+    let current = office
+
+    do {
+      if (current.training) {
+        return true
+      }
+
+      current = current.parent
+    } while (current !== null)
+
+    return false
+  },
+  office => office.id
+)
 
 const getSubtitle = memoize(
   office => {

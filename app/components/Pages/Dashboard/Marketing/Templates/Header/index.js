@@ -12,6 +12,7 @@ export function Header({ data, ...props }) {
       size={data.size}
       position={data.position}
       isSideMenuOpen={props.isSideMenuOpen}
+      data-test="mc-store-page-header"
     >
       <MenuTrigger
         onClick={props.toggleSideMenu}

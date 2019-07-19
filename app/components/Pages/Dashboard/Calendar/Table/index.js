@@ -223,6 +223,7 @@ export class Table extends React.Component {
             data={data}
             EmptyState={EmptyState}
             onTableRef={onRef}
+            showToolbar={false}
             getSubTableProps={this.getSubTableProps}
             getTrProps={this.getGridTrProps}
             getTdProps={this.getGridTdProps}

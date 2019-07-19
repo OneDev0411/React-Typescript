@@ -5,7 +5,7 @@ import Deal from 'models/Deal'
 
 import Table from 'components/Grid/Table'
 
-import { getActiveTeamSettings } from 'utils/user-teams'
+import { getUserSettingsInActiveTeam } from 'utils/user-teams'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
@@ -135,7 +135,7 @@ class Grid extends React.Component {
 
   getDefaultSort = () => {
     const sortSetting =
-      getActiveTeamSettings(this.props.user, SORT_FIELD_SETTING_KEY) || 'status'
+      getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) || 'status'
     let id = sortSetting
     let ascending = true
 
@@ -153,7 +153,7 @@ class Grid extends React.Component {
   }
 
   getDefaultIndex = () =>
-    getActiveTeamSettings(this.props.user, SORT_FIELD_SETTING_KEY) || 'status'
+    getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) || 'status'
 
   render() {
     const { isFetchingDeals } = this.props

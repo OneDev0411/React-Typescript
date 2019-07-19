@@ -12,12 +12,13 @@ import EmailBody from 'components/EmailCompose/components/EmailBody'
 
 import { normalizeAttachments } from 'components/SelectDealFileDrawer/helpers/normalize-attachment'
 
+import { uploadEmailAttachment } from 'models/email-compose/upload-email-attachment'
+
 import { FinalFormDrawer } from '../../FinalFormDrawer'
 import { TextInput } from '../../Forms/TextInput'
 import { AttachmentsList } from '../fields/Attachments'
 
 import { Footer } from '../Footer'
-import { normalizeRecipients } from '../helpers/normalize-recepients'
 
 const propTypes = {
   deal: PropTypes.shape(),
@@ -63,6 +64,8 @@ class EmailComposeDrawer extends React.Component {
     isSendingEmail: false
   }
 
+  emailBodyRef = React.createRef()
+
   static contextType = ConfirmationModalContext
 
   get InitialValues() {
@@ -106,6 +109,22 @@ class EmailComposeDrawer extends React.Component {
   }
 
   handleSubmit = async form => {
+    if (
+      this.emailBodyRef.current &&
+      this.emailBodyRef.current.hasUploadingImage()
+    ) {
+      return new Promise((resolve, reject) => {
+        this.context.setConfirmationModal({
+          message: 'Upload in progress',
+          description:
+            'The images are still being uploaded. Please wait until the upload is finished or remove them',
+          cancelLabel: 'Ok',
+          needsConfirm: false,
+          onCancel: reject
+        })
+      })
+    }
+
     if ((form.subject || '').trim() === '') {
       return new Promise((resolve, reject) => {
         this.context.setConfirmationModal({
@@ -164,6 +183,10 @@ class EmailComposeDrawer extends React.Component {
     this.props.onSent()
   }
 
+  uploadImage = async file => {
+    return (await uploadEmailAttachment(file)).url
+  }
+
   render() {
     return (
       <FinalFormDrawer
@@ -207,7 +230,9 @@ class EmailComposeDrawer extends React.Component {
             />
 
             <EmailBody
+              ref={this.emailBodyRef}
               hasStaticBody={this.props.hasStaticBody}
+              uploadImage={this.uploadImage}
               content={this.props.body}
             />
 

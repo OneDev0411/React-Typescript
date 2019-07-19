@@ -19,3 +19,11 @@ declare interface IReduxFilterSegmentState<ListType = any> {
   fetchError: null | string /* ? */
   activeFilters: StringMap<IActiveFilter>
 }
+
+declare interface ISavedSegment<F = any> {
+  id: UUID
+  name: string
+  badge?: number | string
+  filters?: F[]
+  is_editable: boolean
+}

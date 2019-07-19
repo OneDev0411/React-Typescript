@@ -1,4 +1,5 @@
-import Socket from '../'
+import Socket from '..'
+
 import store from '../../../stores'
 
 import {
@@ -7,6 +8,8 @@ import {
   loginSuccessful,
   setWorkerState
 } from '../../../store_actions/contacts'
+
+import { fetchGoogleAccounts } from '../../../store_actions/contacts/fetch-google-accounts'
 
 export default class ContactSocket extends Socket {
   constructor(user) {
@@ -19,6 +22,9 @@ export default class ContactSocket extends Socket {
   async bindEvents() {
     const { socket } = window
 
+    socket.on('Google.Contacts.Imported', () =>
+      fetchGoogleAccounts()(store.dispatch)
+    )
     socket.on('importDone', () => store.dispatch(importDone()))
     socket.on('importSuccesfullLogin', () => store.dispatch(loginSuccessful()))
     socket.on('importFail', () => store.dispatch(importFail()))

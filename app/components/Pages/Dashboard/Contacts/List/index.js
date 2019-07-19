@@ -17,7 +17,7 @@ import {
 } from 'reducers/contacts/list'
 
 import {
-  getActiveTeamSettings,
+  getUserSettingsInActiveTeam,
   viewAs,
   viewAsEveryoneOnTeam
 } from 'utils/user-teams'
@@ -37,7 +37,15 @@ import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
 
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 
-import { AlphabetFilter } from '../../../../../views/components/AlphabetFilter'
+import { fetchGoogleAccounts } from 'actions/contacts/fetch-google-accounts'
+
+import { Callout } from 'components/Callout'
+
+import { AlphabetFilter } from 'components/AlphabetFilter'
+
+import { updateTeamSetting } from 'actions/user/update-team-setting'
+
+import { selectActiveSavedSegment } from 'reducers/filter-segments'
 
 import Table from './Table'
 import { SearchContacts } from './Search'
@@ -47,11 +55,20 @@ import TagsList from './TagsList'
 
 import {
   FLOW_FILTER_ID,
+  SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY,
   OPEN_HOUSE_FILTER_ID,
-  SORT_FIELD_SETTING_KEY
+  SORT_FIELD_SETTING_KEY,
+  SYNCED_CONTACTS_LIST_ID
 } from './constants'
-import { Container, SearchWrapper } from './styled'
+import { CalloutSpinner, Container, SearchWrapper } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
+import {
+  clearImportingGoogleContacts,
+  getNewConnectedGoogleAccount
+} from './ImportContactsButton/helpers'
+import { SyncSuccessfulModal } from './SyncSuccesfulModal'
+import { ZeroState } from './ZeroState'
+import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
 
 class ContactsList extends React.Component {
   constructor(props) {
@@ -66,11 +83,12 @@ class ContactsList extends React.Component {
       loadedRanges: []
     }
 
-    this.order = getActiveTeamSettings(props.user, SORT_FIELD_SETTING_KEY)
+    this.order = getUserSettingsInActiveTeam(props.user, SORT_FIELD_SETTING_KEY)
     this.tableContainerId = 'contacts--page-container'
   }
 
   componentDidMount() {
+    this.props.fetchGoogleAccounts()
     this.fetchContactsAndJumpToSelected()
 
     if (this.props.fetchTags) {
@@ -79,6 +97,10 @@ class ContactsList extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
+    if (!_.isEqual(nextProps.googleAccounts, this.props.googleAccounts)) {
+      this.updateSyncState(nextProps.googleAccounts)
+    }
+
     if (
       nextProps.viewAsUsers.length !== this.props.viewAsUsers.length ||
       !_.isEqual(nextProps.viewAsUsers, this.props.viewAsUsers)
@@ -112,12 +134,31 @@ class ContactsList extends React.Component {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
   }
 
+  updateSyncState(googleAccounts = this.props.googleAccounts) {
+    const account = getNewConnectedGoogleAccount(googleAccounts)
+
+    if (account) {
+      switch (account.sync_status) {
+        case null:
+        case 'pending':
+          this.setState({ syncStatus: 'pending' })
+          break
+        case 'success':
+          clearImportingGoogleContacts()
+          this.setState({ syncStatus: 'finished' })
+          break
+      }
+    } else {
+      clearImportingGoogleContacts()
+    }
+  }
+
   async fetchContactsAndJumpToSelected() {
     this.setState({
       isFetchingMoreContacts: true
     })
 
-    const start = this.getQueryParam('s')
+    const start = parseInt(this.getQueryParam('s'), 10) || 0
     const idSelector = `#grid-item-${this.getQueryParam('id')}`
 
     this.scrollToSelector(idSelector)
@@ -192,14 +233,34 @@ class ContactsList extends React.Component {
     }
   }
 
-  handleChangeSavedSegment = () => this.handleFilterChange({}, true)
+  /**
+   * @param {ISavedSegment} savedSegment
+   */
+  handleChangeSavedSegment = savedSegment => {
+    this.handleFilterChange({}, true)
 
-  handleFilterChange = async (newFilters, resetLoadedRanges = false) => {
+    if (savedSegment.id === SYNCED_CONTACTS_LIST_ID) {
+      this.updateSyncedContactsSeenDate()
+    }
+  }
+
+  updateSyncedContactsSeenDate() {
+    this.props.updateTeamSetting(
+      SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY,
+      new Date()
+    )
+  }
+
+  handleFilterChange = async (
+    newFilters,
+    resetLoadedRanges = false,
+    newOrder = this.order
+  ) => {
     const {
       filters = this.props.filters,
       searchInputValue = this.state.searchInputValue,
       start = 0,
-      order = this.order,
+      order = newOrder,
       viewAsUsers = this.props.viewAsUsers,
       flows = this.props.flows,
       crmTasks = this.props.crmTasks,
@@ -421,12 +482,30 @@ class ContactsList extends React.Component {
     } = this.props
     const contacts = selectContacts(list)
 
+    const syncing = this.props.googleAccounts.some(
+      account => account.sync_status !== 'success'
+    )
+
+    const isZeroState =
+      !isFetchingContacts &&
+      contacts.length === 0 &&
+      props.filters.length === 0 &&
+      props.flows.length === 0 &&
+      props.crmTasks.length === 0 &&
+      !syncing &&
+      !state.syncStatus &&
+      !this.state.searchInputValue &&
+      (!activeSegment ||
+        !activeSegment.filters ||
+        activeSegment.filters.length === 0)
+
     return (
       <PageContainer isOpen={isSideMenuOpen}>
-        <SideMenu isOpen={isSideMenuOpen}>
+        <SideMenu isOpen={isSideMenuOpen} width="13rem">
           <SavedSegments
             name={CONTACTS_SEGMENT_NAME}
             associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
+            getPredefinedLists={getPredefinedContactLists}
             onChange={this.handleChangeSavedSegment}
           />
           <TagsList
@@ -435,67 +514,99 @@ class ContactsList extends React.Component {
         </SideMenu>
 
         <PageContent id={this.tableContainerId} isSideMenuOpen={isSideMenuOpen}>
+          {this.state.syncStatus === 'pending' && (
+            <Callout onClose={() => this.setState({ syncStatus: null })}>
+              <CalloutSpinner viewBox="20 20 60 60" />
+              Doing Science! wait a moment till you can see how really Rechat
+              works with contacts and emails
+            </Callout>
+          )}
+          {this.state.syncStatus === 'finished' && (
+            <SyncSuccessfulModal
+              close={() => {
+                this.setState({ syncStatus: null })
+                this.reloadContacts()
+                this.props.getContactsTags()
+              }}
+              handleFilterChange={filters => {
+                this.setState({ syncStatus: null })
+                this.props.getContactsTags()
+                this.updateSyncedContactsSeenDate()
+                this.handleFilterChange({ filters }, true, '-updated_at')
+              }}
+            />
+          )}
           <Header
             title={(activeSegment && activeSegment.name) || 'All Contacts'}
             activeSegment={activeSegment}
             isSideMenuOpen={state.isSideMenuOpen}
             user={user}
+            showActions={!isZeroState}
             onMenuTriggerChange={this.toggleSideMenu}
           />
-          <Container>
-            <ContactFilters
-              onFilterChange={() => this.handleFilterChange({}, true)}
-              users={viewAsUsers}
-            />
-            <SearchWrapper row alignCenter>
-              <FlexItem basis="100%">
-                <SearchContacts
-                  onSearch={this.handleSearch}
-                  isSearching={isFetchingContacts}
-                />
-              </FlexItem>
-              <AlphabetFilter
-                value={state.firstLetter}
-                onChange={this.handleFirstLetterChange}
+          {isZeroState ? (
+            <ZeroState />
+          ) : (
+            <Container>
+              <ContactFilters
+                onFilterChange={() => this.handleFilterChange({}, true)}
+                users={viewAsUsers}
               />
-            </SearchWrapper>
-            <Table
-              data={contacts}
-              order={this.order}
-              listInfo={props.listInfo}
-              isFetching={isFetchingContacts}
-              isFetchingMore={state.isFetchingMoreContacts}
-              isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
-              isRowsUpdating={state.isRowsUpdating}
-              onRequestLoadMore={this.handleLoadMore}
-              onRequestLoadMoreBefore={this.handleLoadMoreBefore}
-              rowsUpdating={this.rowsUpdating}
-              onChangeSelectedRows={this.onChangeSelectedRows}
-              onRequestDelete={this.handleOnDelete}
-              tableContainerId={this.tableContainerId}
-              reloadContacts={this.reloadContacts}
-              handleChangeOrder={this.handleChangeOrder}
-              handleChangeContactsAttributes={() =>
-                this.handleFilterChange({}, true)
-              }
-              filters={{
-                alphabet: state.firstLetter,
-                attributeFilters: props.filters,
-                crm_tasks: props.crmTasks,
-                filter_type: props.conditionOperator,
-                flows: props.flows,
-                text: state.searchInputValue,
-                users: viewAsUsers
-              }}
-            />
-          </Container>
+              <SearchWrapper row alignCenter>
+                <FlexItem basis="100%">
+                  <SearchContacts
+                    onSearch={this.handleSearch}
+                    isSearching={isFetchingContacts}
+                  />
+                </FlexItem>
+                <AlphabetFilter
+                  value={state.firstLetter}
+                  onChange={this.handleFirstLetterChange}
+                />
+              </SearchWrapper>
+              <Table
+                data={contacts}
+                order={this.order}
+                listInfo={props.listInfo}
+                isFetching={isFetchingContacts}
+                isFetchingMore={state.isFetchingMoreContacts}
+                isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
+                isRowsUpdating={state.isRowsUpdating}
+                onRequestLoadMore={this.handleLoadMore}
+                onRequestLoadMoreBefore={this.handleLoadMoreBefore}
+                rowsUpdating={this.rowsUpdating}
+                onChangeSelectedRows={this.onChangeSelectedRows}
+                onRequestDelete={this.handleOnDelete}
+                tableContainerId={this.tableContainerId}
+                reloadContacts={this.reloadContacts}
+                handleChangeOrder={this.handleChangeOrder}
+                handleChangeContactsAttributes={() =>
+                  this.handleFilterChange({}, true)
+                }
+                filters={{
+                  alphabet: state.firstLetter,
+                  attributeFilters: props.filters,
+                  crm_tasks: props.crmTasks,
+                  filter_type: props.conditionOperator,
+                  flows: props.flows,
+                  text: state.searchInputValue,
+                  users: viewAsUsers
+                }}
+              />
+            </Container>
+          )}
         </PageContent>
       </PageContainer>
     )
   }
 }
 
-function mapStateToProps({ user, contacts }) {
+/**
+ *
+ * @param user
+ * @param {IContactReduxState} contacts
+ */
+function mapStateToProps({ user, contacts, ...restOfState }) {
   const listInfo = selectContactsInfo(contacts.list)
   const tags = contacts.tags
   const fetchTags = !isFetchingTags(tags) && selectTags(tags).length === 0
@@ -513,6 +624,7 @@ function mapStateToProps({ user, contacts }) {
   )
 
   return {
+    googleAccounts: contacts.googleAccounts,
     fetchTags,
     filters: normalizeAttributeFilters(attributeFilters),
     filterSegments,
@@ -523,9 +635,11 @@ function mapStateToProps({ user, contacts }) {
     list: contacts.list,
     listInfo,
     user,
-    activeSegment:
-      filterSegments.list &&
-      filterSegments.list[filterSegments.activeSegmentId],
+    activeSegment: selectActiveSavedSegment(
+      filterSegments,
+      'contacts',
+      getPredefinedContactLists('Contacts', { user, contacts, ...restOfState })
+    ),
     viewAsUsers: viewAsEveryoneOnTeam(user) ? [] : viewAs(user)
   }
 }
@@ -535,11 +649,13 @@ export default withRouter(
     mapStateToProps,
     {
       getContacts,
+      fetchGoogleAccounts,
       searchContacts,
       deleteContacts,
       confirmation,
       setContactsListTextFilter,
-      getContactsTags
+      getContactsTags,
+      updateTeamSetting
     }
   )(ContactsList)
 )
