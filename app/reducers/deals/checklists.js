@@ -8,9 +8,6 @@ export default (state = null, action) => {
     case actionTypes.CLEAR_DEALS:
       return {}
 
-    case actionTypes.ARCHIVE_DEAL:
-      return _.omit(state, checklist => checklist.deal === action.deal_id)
-
     case actionTypes.DELETE_TASK:
       return {
         ...state,
@@ -58,8 +55,8 @@ export default (state = null, action) => {
   }
 }
 
-export const getChecklists = (deal, state) =>
-  deal.checklists.map(id => state[id])
+export const getDealChecklists = (deal, state) =>
+  Array.isArray(deal.checklists) ? deal.checklists.map(id => state[id]) : []
 
 export const getChecklistById = (state, id) => state && state[id]
 

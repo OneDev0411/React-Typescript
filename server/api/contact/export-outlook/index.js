@@ -21,14 +21,26 @@ function handleIds(ids) {
   return {}
 }
 
-function handleFilters(filters) {
-  if (Array.isArray(filters)) {
-    return {
-      filter: filters
-    }
+function handleFilters(filters, crmTasks, excludes = [], searchText = '') {
+  const resultFilters = {}
+
+  if (Array.isArray(filters) && filters.length > 0) {
+    resultFilters.filter = filters
   }
 
-  return {}
+  if (Array.isArray(excludes) && excludes.length > 0) {
+    resultFilters.excludes = excludes
+  }
+
+  if (Array.isArray(crmTasks) && crmTasks.length > 0) {
+    resultFilters.crm_tasks = crmTasks
+  }
+
+  if (searchText.length > 0) {
+    resultFilters.query = searchText
+  }
+
+  return resultFilters
 }
 
 router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
@@ -42,7 +54,16 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
       return
     }
 
-    const { ids, filters, users, type, filter_type = 'and' } = ctx.request.body
+    const {
+      ids,
+      filters,
+      crm_tasks,
+      excludes,
+      users,
+      type,
+      searchText,
+      filter_type = 'and'
+    } = ctx.request.body
 
     const { brand } = ctx.params
     let data = {}
@@ -50,8 +71,8 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
 
     if (ids) {
       data = handleIds(ids)
-    } else if (filters) {
-      data = handleFilters(filters)
+    } else {
+      data = handleFilters(filters, crm_tasks, excludes, searchText)
     }
 
     if (typeof users === 'string') {
@@ -60,13 +81,7 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
       usersString = `&users[]=${users.join('&users[]=')}`
     }
 
-    let url
-
-    if (type === 'same') {
-      url = `/analytics/contact_joint_export/facts?filter_type=${filter_type}&format=csv`
-    } else if (type === 'separate') {
-      url = `/analytics/contact_export/facts?filter_type=${filter_type}&format=csv`
-    }
+    const url = `/analytics/${type}/facts?filter_type=${filter_type}&format=csv`
 
     const response = await ctx
       .fetch(`${url}${usersString}`, 'POST')

@@ -1,75 +1,45 @@
-import React from 'react'
-import Flex from 'styled-flex-component'
+import React, { useState } from 'react'
+import { Helmet } from 'react-helmet'
 
-import { getHistory } from 'models/instant-marketing/get-history'
+import { deleteTemplateInstance } from 'models/instant-marketing/delete-template-instance'
+import TemplatesList from 'components/TemplatesList'
 
 import { Header } from '../components/PageHeader'
-import { Loader } from '../components/Loader'
+import useTemplatesHistory from './useTemplatesHistory'
 
-import { List } from './List'
-import { ZeroState } from './ZeroState'
+function History(props) {
+  const [templates, isLoading] = useTemplatesHistory()
+  const [deletedTemplates, setDeletedTemplates] = useState([])
+  // We are using this for filtering the deleted items
+  const finalTemplates = templates.filter(
+    template => !deletedTemplates.includes(template.id)
+  )
 
-export default class History extends React.Component {
-  state = {
-    templates: [],
-    isLoading: false
+  function handleDelete(id) {
+    return deleteTemplateInstance(id).then(() => {
+      setDeletedTemplates([...deletedTemplates, id])
+    })
   }
 
-  componentDidMount() {
-    this.fetch()
-  }
-
-  fetch = async () => {
-    try {
-      this.setState({ isLoading: true })
-
-      const templates = await getHistory({
-        associations: 'template_instance.template'
-      })
-
-      this.setState({
-        isLoading: false,
-        templates
-      })
-    } catch (error) {
-      console.log(error)
-      this.setState({ isLoading: false })
-    }
-  }
-
-  renderContent = () => {
-    if (this.state.isLoading) {
-      return (
-        <Flex center style={{ height: '100vh' }}>
-          <Loader />
-        </Flex>
-      )
-    }
-
-    if (this.state.templates.length === 0) {
-      return <ZeroState />
-    }
-
-    return (
-      <List
-        isLoading={this.state.isLoading}
-        isSideMenuOpen={this.props.isSideMenuOpen}
-        templates={this.state.templates}
+  return (
+    <React.Fragment>
+      <Helmet>
+        <title>My Designs | Marketing | Rechat</title>
+      </Helmet>
+      <Header
+        title="My Designs"
+        style={{ padding: '0 1.5rem' }}
+        isSideMenuOpen={props.isSideMenuOpen}
+        toggleSideMenu={props.toggleSideMenu}
       />
-    )
-  }
-
-  render() {
-    return (
-      <React.Fragment>
-        <Header
-          title="My Designs"
-          style={{ padding: '0 1.5rem' }}
-          isSideMenuOpen={this.props.isSideMenuOpen}
-          toggleSideMenu={this.props.toggleSideMenu}
-        />
-        {this.renderContent()}
-      </React.Fragment>
-    )
-  }
+      <TemplatesList
+        type="history"
+        items={finalTemplates}
+        isLoading={isLoading}
+        onDelete={handleDelete}
+      />
+    </React.Fragment>
+  )
 }
+
+export default History

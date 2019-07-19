@@ -1,5 +1,12 @@
 const DEFAULT_SIZE = { width: 403, height: 214 }
 
+const JUST_LISTED = {
+  title: 'Just Listed',
+  brandColor: '#DBE8BF',
+  size: DEFAULT_SIZE,
+  description: 'Promote your listings via email and social.'
+}
+
 export const headers = {
   AsSeenIn: {
     title: 'As Seen In',
@@ -28,7 +35,7 @@ export const headers = {
     size: { width: 452, height: 230 },
     description: 'Promote your listing before it even hits the market.'
   },
-  'Christmas,NewYear,Valentines,StPatrick': {
+  'Christmas,NewYear,Valentines,StPatrick,Easter,OtherHoliday': {
     title: 'Holiday',
     name: 'Holiday',
     brandColor: '#eccde9',
@@ -36,11 +43,11 @@ export const headers = {
     description:
       'Share well wishes & greetings with timely designs for every occasion.'
   },
-  JustListed: {
-    title: 'Just Listed',
-    brandColor: '#DBE8BF',
-    size: DEFAULT_SIZE,
-    description: 'Promote your listings via email and social.'
+  JustListed: JUST_LISTED,
+  UnderContract: {
+    ...JUST_LISTED,
+    name: 'JustListed',
+    title: 'Under Contract'
   },
   JustSold: {
     title: 'Just Sold',

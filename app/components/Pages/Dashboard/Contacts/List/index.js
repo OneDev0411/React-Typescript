@@ -1,10 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
 import _ from 'underscore'
+import { FlexItem } from 'styled-flex-component'
 
 import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
-import { getContacts, searchContacts, deleteContacts } from 'actions/contacts'
+import { deleteContacts, getContacts, searchContacts } from 'actions/contacts'
 import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-text-filter'
 
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
@@ -14,53 +16,80 @@ import {
   selectContactsListFetching
 } from 'reducers/contacts/list'
 
-import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
+import {
+  getUserSettingsInActiveTeam,
+  viewAs,
+  viewAsEveryoneOnTeam
+} from 'utils/user-teams'
+
+import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
+import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
 
 import {
   Container as PageContainer,
-  Menu as SideMenu,
-  Content as PageContent
+  Content as PageContent,
+  Menu as SideMenu
 } from 'components/SlideMenu'
 import SavedSegments from 'components/Grid/SavedSegments/List'
 import { resetGridSelectedItems } from 'components/Grid/Table/Plugins/Selectable'
 
+import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
+
+import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
+
+import { fetchGoogleAccounts } from 'actions/contacts/fetch-google-accounts'
+
+import { Callout } from 'components/Callout'
+
+import { AlphabetFilter } from 'components/AlphabetFilter'
+
+import { updateTeamSetting } from 'actions/user/update-team-setting'
+
+import { selectActiveSavedSegment } from 'reducers/filter-segments'
+
 import Table from './Table'
 import { SearchContacts } from './Search'
-import { Header } from './Header'
-import DuplicateContacts from '../components/DuplicateContacts'
+import Header from './Header'
 import ContactFilters from './Filters'
 import TagsList from './TagsList'
+
+import {
+  FLOW_FILTER_ID,
+  SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY,
+  OPEN_HOUSE_FILTER_ID,
+  SORT_FIELD_SETTING_KEY,
+  SYNCED_CONTACTS_LIST_ID
+} from './constants'
+import { CalloutSpinner, Container, SearchWrapper } from './styled'
+import { CONTACTS_SEGMENT_NAME } from '../constants'
+import {
+  clearImportingGoogleContacts,
+  getNewConnectedGoogleAccount
+} from './ImportContactsButton/helpers'
+import { SyncSuccessfulModal } from './SyncSuccesfulModal'
+import { ZeroState } from './ZeroState'
+import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
 
 class ContactsList extends React.Component {
   constructor(props) {
     super(props)
-
     this.state = {
+      firstLetter: this.props.location.query.letter || null,
       isSideMenuOpen: true,
       isFetchingMoreContacts: false,
+      isFetchingMoreContactsBefore: false,
       isRowsUpdating: false,
-      filters: this.props.filters,
       searchInputValue: this.props.list.textFilter,
-      activeSegment: {}
+      loadedRanges: []
     }
 
-    this.order = this.props.listInfo.order
+    this.order = getUserSettingsInActiveTeam(props.user, SORT_FIELD_SETTING_KEY)
+    this.tableContainerId = 'contacts--page-container'
   }
 
   componentDidMount() {
-    if (
-      !['default', 'duplicate contacts'].includes(
-        this.props.filterSegments.activeSegmentId
-      )
-    ) {
-      this.handleChangeSavedSegment(
-        this.props.filterSegments.list[
-          this.props.filterSegments.activeSegmentId
-        ]
-      )
-    } else {
-      this.fetchList()
-    }
+    this.props.fetchGoogleAccounts()
+    this.fetchContactsAndJumpToSelected()
 
     if (this.props.fetchTags) {
       this.props.getContactsTags()
@@ -68,16 +97,8 @@ class ContactsList extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.filterSegments.activeSegmentId !==
-        this.props.filterSegments.activeSegmentId &&
-      nextProps.filterSegments.activeSegmentId !==
-        this.state.activeSegment.id &&
-      nextProps.filterSegments.list[nextProps.filterSegments.activeSegmentId]
-    ) {
-      this.handleChangeSavedSegment(
-        nextProps.filterSegments.list[nextProps.filterSegments.activeSegmentId]
-      )
+    if (!_.isEqual(nextProps.googleAccounts, this.props.googleAccounts)) {
+      this.updateSyncState(nextProps.googleAccounts)
     }
 
     if (
@@ -89,7 +110,7 @@ class ContactsList extends React.Component {
         : nextProps.viewAsUsers
 
       this.handleFilterChange({
-        filters: this.state.filters,
+        filters: this.props.filters,
         searchInputValue: this.state.searchInputValue,
         start: 0,
         order: this.order,
@@ -100,28 +121,111 @@ class ContactsList extends React.Component {
 
       this.props.getContactsTags(viewAsUsers)
     }
+
+    const prevStart = this.props.location.query.s
+    const nextStart = nextProps.location.query.s
+
+    if (prevStart !== undefined && nextStart === undefined) {
+      window.location.reload()
+    }
   }
 
   componentWillUnmount() {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
   }
 
-  hasSearchState = () =>
-    this.state.filter || this.state.searchInputValue || this.order
+  updateSyncState(googleAccounts = this.props.googleAccounts) {
+    const account = getNewConnectedGoogleAccount(googleAccounts)
 
-  fetchList = async (start = 0) => {
-    if (start === 0) {
+    if (account) {
+      switch (account.sync_status) {
+        case null:
+        case 'pending':
+          this.setState({ syncStatus: 'pending' })
+          break
+        case 'success':
+          clearImportingGoogleContacts()
+          this.setState({ syncStatus: 'finished' })
+          break
+      }
+    } else {
+      clearImportingGoogleContacts()
+    }
+  }
+
+  async fetchContactsAndJumpToSelected() {
+    this.setState({
+      isFetchingMoreContacts: true
+    })
+
+    const start = parseInt(this.getQueryParam('s'), 10) || 0
+    const idSelector = `#grid-item-${this.getQueryParam('id')}`
+
+    this.scrollToSelector(idSelector)
+
+    await this.fetchList(start)
+
+    this.setState({
+      isFetchingMoreContacts: false
+    })
+  }
+
+  scrollToSelector(selector) {
+    const selectedElement = document.querySelector(selector)
+
+    if (selectedElement) {
+      selectedElement.scrollIntoView({ block: 'center' })
+    }
+  }
+
+  addLoadedRange = start =>
+    this.setState(prevState => ({
+      loadedRanges: [
+        ...new Set([...prevState.loadedRanges, parseInt(start, 10)])
+      ]
+    }))
+
+  getQueryParam = key => this.props.location.query[key]
+
+  setQueryParam = (key, value) => {
+    const currentLocation = this.props.location
+    // because in handleFilterChange before adding new queries we overwrite
+    // again with previous queries for updating start number
+    const letter = this.state.firstLetter
+
+    this.props.router.replace({
+      ...currentLocation,
+      query: {
+        ...currentLocation.query,
+        letter,
+        [key]: value
+      }
+    })
+  }
+
+  hasSearchState = () =>
+    this.props.filters || this.state.searchInputValue || this.order
+
+  fetchList = async (
+    start = 0,
+    loadMoreBefore = false,
+    resetLoadedRanges = false
+  ) => {
+    if (start === 0 && !loadMoreBefore) {
       this.resetSelectedRows()
     }
 
     try {
       if (this.hasSearchState()) {
-        await this.handleFilterChange({
-          filters: this.state.filters,
-          searchInputValue: this.state.searchInputValue,
-          start
-        })
+        await this.handleFilterChange(
+          {
+            start,
+            prependResult: loadMoreBefore
+          },
+          resetLoadedRanges
+        )
       } else {
+        this.addLoadedRange(start)
         await this.props.getContacts(start)
       }
     } catch (e) {
@@ -129,43 +233,50 @@ class ContactsList extends React.Component {
     }
   }
 
-  handleChangeSavedSegment = segment => {
-    this.setState(
-      {
-        activeSegment: segment
-      },
-      () => {
-        let conditionOperator = 'and'
+  /**
+   * @param {ISavedSegment} savedSegment
+   */
+  handleChangeSavedSegment = savedSegment => {
+    this.handleFilterChange({}, true)
 
-        if (segment.args && segment.args.filter_type) {
-          conditionOperator = segment.args.filter_type
-        }
+    if (savedSegment.id === SYNCED_CONTACTS_LIST_ID) {
+      this.updateSyncedContactsSeenDate()
+    }
+  }
 
-        this.handleFilterChange({
-          filters: segment.filters,
-          searchInputValue: this.state.searchInputValue,
-          start: 0,
-          order: this.order,
-          viewAsUsers: this.props.viewAsUsers,
-          conditionOperator
-        })
-      }
+  updateSyncedContactsSeenDate() {
+    this.props.updateTeamSetting(
+      SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY,
+      new Date()
     )
   }
 
-  handleFilterChange = async newFilters => {
+  handleFilterChange = async (
+    newFilters,
+    resetLoadedRanges = false,
+    newOrder = this.order
+  ) => {
     const {
-      filters = this.state.filters,
+      filters = this.props.filters,
       searchInputValue = this.state.searchInputValue,
       start = 0,
-      order = this.order,
+      order = newOrder,
       viewAsUsers = this.props.viewAsUsers,
-      conditionOperator = this.props.conditionOperator
-    } = newFilters
+      flows = this.props.flows,
+      crmTasks = this.props.crmTasks,
+      conditionOperator = this.props.conditionOperator,
+      prependResult = false,
+      firstLetter = this.state.firstLetter
+    } = newFilters || {}
 
-    this.setState({ filters })
+    if (resetLoadedRanges) {
+      this.setState({ loadedRanges: [] })
+    }
 
-    if (start === 0) {
+    this.addLoadedRange(start)
+    this.setQueryParam('s', start)
+
+    if (start === 0 && !prependResult) {
       this.resetSelectedRows()
     }
 
@@ -177,7 +288,14 @@ class ContactsList extends React.Component {
         searchInputValue,
         order,
         viewAsUsers,
-        conditionOperator
+        conditionOperator,
+        prependResult,
+        {
+          s: start
+        },
+        flows,
+        crmTasks,
+        firstLetter
       )
     } catch (e) {
       console.log('fetch search error: ', e)
@@ -185,27 +303,22 @@ class ContactsList extends React.Component {
   }
 
   handleSearch = value => {
-    console.log(`[ Search ] ${value}`)
-    this.setState({ searchInputValue: value })
-    this.handleFilterChange({
-      filters: this.state.filters,
-      searchInputValue: value
+    this.setState({ searchInputValue: value, firstLetter: null }, () => {
+      this.setQueryParam('letter', '')
+      this.handleFilterChange({}, true)
+    })
+  }
+
+  handleFirstLetterChange = value => {
+    this.setQueryParam('letter', value)
+    this.setState({ firstLetter: value }, () => {
+      this.handleFilterChange({}, true)
     })
   }
 
   handleChangeOrder = ({ value: order }) => {
     this.order = order
-    this.handleFilterChange({
-      filters: this.state.filters,
-      searchInputValue: this.state.searchInputValue
-    })
-  }
-
-  handleChangeContactsAttributes = () => {
-    this.handleFilterChange({
-      filters: this.state.filters,
-      searchInputValue: this.state.searchInputValue
-    })
+    this.handleFilterChange({}, true)
   }
 
   toggleSideMenu = () =>
@@ -215,54 +328,119 @@ class ContactsList extends React.Component {
 
   handleLoadMore = async () => {
     const { total } = this.props.listInfo
-    const startFrom = this.props.list.ids.length
+    const totalLoadedCount = this.props.list.ids.length
+    const prevStart = parseInt(this.getQueryParam('s'), 10) || 0
+    const start = Math.max(prevStart, ...this.state.loadedRanges) + 50
 
-    if (this.state.isFetchingMoreContacts || startFrom === total) {
+    if (
+      this.state.isFetchingMoreContacts ||
+      this.state.isFetchingMoreContactsBefore ||
+      totalLoadedCount === total ||
+      start > total
+    ) {
       return false
     }
 
-    console.log(`[ Loading More ] Start: ${startFrom}`)
+    console.log(`[ Loading More ] Start: ${start}`)
 
     this.setState({ isFetchingMoreContacts: true })
 
-    if (this.hasSearchState()) {
-      await this.fetchList(startFrom)
-    } else {
-      await this.handleFilterChange({
-        filters: this.state.filters,
-        searchInputValue: this.state.searchInputValue,
-        start: startFrom
-      })
-    }
+    await this.fetchList(start)
 
     this.setState({ isFetchingMoreContacts: false })
   }
 
-  handleOnDelete = (e, { selectedRows, resetSelectedRows }) => {
-    const selectedRowsLength = selectedRows.length
+  handleLoadMoreBefore = async () => {
+    const { total } = this.props.listInfo
+    const totalLoadedCount = this.props.list.ids.length
+    const prevStart = parseInt(this.getQueryParam('s'), 10) || 0
+
+    if (
+      this.state.isFetchingMoreContacts ||
+      this.state.isFetchingMoreContactsBefore ||
+      totalLoadedCount === total ||
+      prevStart < 50
+    ) {
+      return false
+    }
+
+    const start = prevStart - 50
+
+    if (this.state.loadedRanges.includes(start)) {
+      return false
+    }
+
+    console.log(`[ Loading More Before ] Start: ${start}`)
+
+    this.setState({ isFetchingMoreContactsBefore: true })
+
+    await this.fetchList(start, true)
+
+    this.setState({ isFetchingMoreContactsBefore: false })
+  }
+
+  handleOnDelete = (
+    e,
+    {
+      totalRowsCount,
+      entireMode,
+      selectedRows,
+      excludedRows,
+      resetSelectedRows
+    }
+  ) => {
+    const selectedRowsLength = entireMode
+      ? totalRowsCount - excludedRows.length
+      : selectedRows.length
+    const isManyContacts = entireMode ? true : selectedRowsLength > 1
 
     this.props.confirmation({
-      show: true,
       confirmLabel: 'Delete',
-      message: `Delete ${selectedRowsLength > 1 ? 'contacts' : 'contact'}`,
-      onConfirm: () =>
-        this.handleDeleteContact(selectedRows, resetSelectedRows),
-      description: `Are you sure you want to delete ${
-        selectedRowsLength > 1
-          ? `these ${selectedRowsLength} contacts`
-          : 'this contact'
-      }?`
+      message: `Delete ${isManyContacts ? 'contacts' : 'contact'}?`,
+      onConfirm: () => {
+        this.handleDeleteContact({
+          entireMode,
+          selectedRows,
+          excludedRows,
+          resetSelectedRows
+        })
+      },
+      description: `Deleting ${
+        isManyContacts ? `these ${selectedRowsLength} contacts` : 'this contact'
+      } will remove ${
+        isManyContacts ? 'them' : 'it'
+      } from your contacts list, but ${
+        isManyContacts ? 'they' : 'it'
+      }  will not be removed from any deals.`
     })
   }
 
-  handleDeleteContact = async (ids, resetRowsHandler) => {
+  handleDeleteContact = async ({
+    entireMode,
+    selectedRows,
+    excludedRows,
+    resetSelectedRows
+  }) => {
     try {
       this.rowsUpdating(true)
 
-      await this.props.deleteContacts(ids)
+      if (entireMode) {
+        const bulkDeleteParams = {
+          users: this.props.viewAsUsers,
+          searchText: this.state.searchInputValue,
+          conditionOperator: this.props.conditionOperator,
+          filters: this.props.filters,
+          excludes: excludedRows
+        }
+
+        await deleteContactsBulk(bulkDeleteParams)
+        await this.reloadContacts()
+      } else {
+        await this.props.deleteContacts(selectedRows)
+      }
 
       this.rowsUpdating(false)
-      resetRowsHandler()
+      resetSelectedRows()
     } catch (error) {
       console.log(error)
     }
@@ -275,98 +453,209 @@ class ContactsList extends React.Component {
     resetGridSelectedItems('contacts')
   }
 
-  reloadContacts = async () => {
+  reloadContacts = async (start = 0) => {
     await this.props.searchContacts(
-      this.state.filters,
-      0,
+      this.props.filters,
+      start,
       undefined,
       this.state.searchInputValue,
       this.order,
       this.props.viewAsUsers,
-      this.props.conditionOperator
+      this.props.conditionOperator,
+      false,
+      {},
+      this.props.flows,
+      this.props.crmTasks,
+      this.state.firstLetter
     )
   }
 
   render() {
-    const { isSideMenuOpen, activeSegment } = this.state
-    const { user, list, viewAsUsers, isFetchingContacts } = this.props
+    const { props, state } = this
+    const { isSideMenuOpen } = state
+    const {
+      user,
+      list,
+      viewAsUsers,
+      isFetchingContacts,
+      activeSegment
+    } = this.props
     const contacts = selectContacts(list)
+
+    const syncing = this.props.googleAccounts.some(
+      account => account.sync_status !== 'success'
+    )
+
+    const isZeroState =
+      !isFetchingContacts &&
+      contacts.length === 0 &&
+      props.filters.length === 0 &&
+      props.flows.length === 0 &&
+      props.crmTasks.length === 0 &&
+      !syncing &&
+      !state.syncStatus &&
+      !this.state.searchInputValue &&
+      (!activeSegment ||
+        !activeSegment.filters ||
+        activeSegment.filters.length === 0)
 
     return (
       <PageContainer isOpen={isSideMenuOpen}>
-        <SideMenu isOpen={isSideMenuOpen}>
+        <SideMenu isOpen={isSideMenuOpen} width="13rem">
           <SavedSegments
-            name="contacts"
+            name={CONTACTS_SEGMENT_NAME}
+            associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
+            getPredefinedLists={getPredefinedContactLists}
             onChange={this.handleChangeSavedSegment}
           />
-          <DuplicateContacts />
-          <TagsList onFilterChange={this.handleFilterChange} />
+          <TagsList
+            onFilterChange={filters => this.handleFilterChange(filters, true)}
+          />
         </SideMenu>
 
-        <PageContent isSideMenuOpen={isSideMenuOpen}>
+        <PageContent id={this.tableContainerId} isSideMenuOpen={isSideMenuOpen}>
+          {this.state.syncStatus === 'pending' && (
+            <Callout onClose={() => this.setState({ syncStatus: null })}>
+              <CalloutSpinner viewBox="20 20 60 60" />
+              Doing Science! Just a moment for Rechat to complete establishing
+              connections and importing your contacts.
+            </Callout>
+          )}
+          {this.state.syncStatus === 'finished' && (
+            <SyncSuccessfulModal
+              close={() => {
+                this.setState({ syncStatus: null })
+                this.reloadContacts()
+                this.props.getContactsTags()
+              }}
+              handleFilterChange={filters => {
+                this.setState({ syncStatus: null })
+                this.props.getContactsTags()
+                this.updateSyncedContactsSeenDate()
+                this.handleFilterChange({ filters }, true, '-updated_at')
+              }}
+            />
+          )}
           <Header
-            title={activeSegment.name || 'All Contacts'}
-            isSideMenuOpen={this.state.isSideMenuOpen}
+            title={(activeSegment && activeSegment.name) || 'All Contacts'}
+            activeSegment={activeSegment}
+            isSideMenuOpen={state.isSideMenuOpen}
             user={user}
+            showActions={!isZeroState}
             onMenuTriggerChange={this.toggleSideMenu}
           />
-          <ContactFilters
-            onFilterChange={this.handleFilterChange}
-            users={viewAsUsers}
-          />
-          <SearchContacts
-            onSearch={this.handleSearch}
-            isSearching={isFetchingContacts}
-          />
-          <Table
-            bulkEventCreationCallback={this.reloadContacts}
-            handleChangeOrder={this.handleChangeOrder}
-            handleChangeContactsAttributes={this.handleChangeContactsAttributes}
-            data={contacts}
-            listInfo={this.props.listInfo}
-            isFetching={isFetchingContacts}
-            isFetchingMore={this.state.isFetchingMoreContacts}
-            isRowsUpdating={this.state.isRowsUpdating}
-            onRequestLoadMore={this.handleLoadMore}
-            rowsUpdating={this.rowsUpdating}
-            onChangeSelectedRows={this.onChangeSelectedRows}
-            onRequestDelete={this.handleOnDelete}
-            filters={this.state.filters}
-            conditionOperator={this.props.conditionOperator}
-            users={viewAsUsers}
-          />
+          {isZeroState ? (
+            <ZeroState />
+          ) : (
+            <Container>
+              <ContactFilters
+                onFilterChange={() => this.handleFilterChange({}, true)}
+                users={viewAsUsers}
+              />
+              <SearchWrapper row alignCenter>
+                <FlexItem basis="100%">
+                  <SearchContacts
+                    onSearch={this.handleSearch}
+                    isSearching={isFetchingContacts}
+                  />
+                </FlexItem>
+                <AlphabetFilter
+                  value={state.firstLetter}
+                  onChange={this.handleFirstLetterChange}
+                />
+              </SearchWrapper>
+              <Table
+                data={contacts}
+                order={this.order}
+                listInfo={props.listInfo}
+                isFetching={isFetchingContacts}
+                isFetchingMore={state.isFetchingMoreContacts}
+                isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
+                isRowsUpdating={state.isRowsUpdating}
+                onRequestLoadMore={this.handleLoadMore}
+                onRequestLoadMoreBefore={this.handleLoadMoreBefore}
+                rowsUpdating={this.rowsUpdating}
+                onChangeSelectedRows={this.onChangeSelectedRows}
+                onRequestDelete={this.handleOnDelete}
+                tableContainerId={this.tableContainerId}
+                reloadContacts={this.reloadContacts}
+                handleChangeOrder={this.handleChangeOrder}
+                handleChangeContactsAttributes={() =>
+                  this.handleFilterChange({}, true)
+                }
+                filters={{
+                  alphabet: state.firstLetter,
+                  attributeFilters: props.filters,
+                  crm_tasks: props.crmTasks,
+                  filter_type: props.conditionOperator,
+                  flows: props.flows,
+                  text: state.searchInputValue,
+                  users: viewAsUsers
+                }}
+              />
+            </Container>
+          )}
         </PageContent>
       </PageContainer>
     )
   }
 }
 
-function mapStateToUser({ user, contacts }) {
+/**
+ *
+ * @param user
+ * @param {IContactReduxState} contacts
+ */
+function mapStateToProps({ user, contacts, ...restOfState }) {
   const listInfo = selectContactsInfo(contacts.list)
-  const tags = contacts.list
+  const tags = contacts.tags
   const fetchTags = !isFetchingTags(tags) && selectTags(tags).length === 0
 
+  const filterSegments = contacts.filterSegments
+  const activeFilters = Object.values(filterSegments.activeFilters).filter(
+    isFilterValid
+  )
+  const attributeFilters = activeFilters.filter(isAttributeFilter)
+  const flowFilters = activeFilters.filter(
+    filter => filter.id === FLOW_FILTER_ID
+  )
+  const openHouseFilters = activeFilters.filter(
+    filter => filter.id === OPEN_HOUSE_FILTER_ID
+  )
+
   return {
+    googleAccounts: contacts.googleAccounts,
     fetchTags,
-    filters: listInfo.filter || [],
-    filterSegments: contacts.filterSegments,
-    conditionOperator: contacts.filterSegments.conditionOperator,
+    filters: normalizeAttributeFilters(attributeFilters),
+    filterSegments,
+    conditionOperator: filterSegments.conditionOperator,
     isFetchingContacts: selectContactsListFetching(contacts.list),
+    flows: flowFilters.map(filter => filter.values[0].value),
+    crmTasks: openHouseFilters.map(filter => filter.values[0].value),
     list: contacts.list,
     listInfo,
     user,
+    activeSegment: selectActiveSavedSegment(
+      filterSegments,
+      'contacts',
+      getPredefinedContactLists('Contacts', { user, contacts, ...restOfState })
+    ),
     viewAsUsers: viewAsEveryoneOnTeam(user) ? [] : viewAs(user)
   }
 }
 
-export default connect(
-  mapStateToUser,
-  {
-    getContacts,
-    searchContacts,
-    deleteContacts,
-    confirmation,
-    setContactsListTextFilter,
-    getContactsTags
-  }
-)(ContactsList)
+export default withRouter(
+  connect(
+    mapStateToProps,
+    {
+      getContacts,
+      fetchGoogleAccounts,
+      searchContacts,
+      deleteContacts,
+      confirmation,
+      setContactsListTextFilter,
+      getContactsTags,
+      updateTeamSetting
+    }
+  )(ContactsList)
+)

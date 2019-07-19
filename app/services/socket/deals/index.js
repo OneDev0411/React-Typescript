@@ -1,5 +1,5 @@
-import { updateDeal } from '../../../store_actions/deals'
 import Deal from '../../../models/Deal'
+import { updateDeal } from '../../../store_actions/deals'
 import { viewAs, viewAsEveryoneOnTeam } from '../../../utils/user-teams'
 import store from '../../../stores'
 
@@ -46,8 +46,8 @@ export default class DealSocket extends Socket {
         return this.onUpsertDeal(dealId)
       case 'Created':
         return this.onUpsertDeal(dealId)
-      // case 'Deleted':
-      //   return this.onArchiveDeal(dealId)
+      case 'Deleted':
+        return this.onArchiveDeal(dealId)
       default:
         return false
     }
@@ -67,14 +67,11 @@ export default class DealSocket extends Socket {
   /**
    * on delete/archive deal
    */
-  // async onArchiveDeal(dealId) {
-  //   const deal = await Deal.getById(dealId)
+  async onArchiveDeal(dealId) {
+    const deal = await Deal.getById(dealId)
 
-  //   if (this.shouldUpdateDeal(deal)) {
-  //     store.dispatch({
-  //       type: actionTypes.ARCHIVE_DEAL,
-  //       deal_id: dealId
-  //     })
-  //   }
-  // }
+    if (this.shouldUpsertDeal(deal)) {
+      store.dispatch(updateDeal(deal))
+    }
+  }
 }

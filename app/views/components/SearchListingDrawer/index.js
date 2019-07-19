@@ -1,14 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import _ from 'underscore'
 
-import Deal from '../../../models/Deal'
+import { searchListings } from 'models/Deal/listing'
+
 import Listing from '../../../models/listings/listing'
-import listingsHelper from '../../../utils/listing'
+import { attachDealDataToListing } from './helpers/attach-deal-to-listing'
 
 import SearchDrawer from '../SearchDrawer'
 import ListingItem from './ListingItem'
+import getMockListing from './helpers/get-mock-listing'
 
 class SearchListingDrawer extends React.Component {
   state = {
@@ -16,20 +17,28 @@ class SearchListingDrawer extends React.Component {
   }
 
   handleSelectListings = async items => {
+    const { mockListings } = this.props
+
     this.setState({
       isWorking: true
     })
 
     try {
+      const mockedMLSData = mockListings ? await getMockListing() : null
+
       const listings = await Promise.all(
         _.map(items, item => {
           if (item.gallery_image_urls) {
             return item
           }
 
-          const id = item.type === 'deal' ? item.listing : item.id
+          const listing = item.type === 'deal' ? item.listing : item.id
 
-          return Listing.getListing(id)
+          if (mockListings && !listing) {
+            return attachDealDataToListing(item, mockedMLSData)
+          }
+
+          return Listing.getListing(listing)
         })
       )
 
@@ -45,31 +54,19 @@ class SearchListingDrawer extends React.Component {
 
   normalizeSelectedItem = item => ({
     ...item,
-    id: item.type === 'deal' ? item.listing : item.id
+    id: item.type === 'deal' && item.listing ? item.listing : item.id
   })
 
   searchListing = async value => {
-    const response = await Deal.searchListings(value)
+    const response = await searchListings(value)
 
-    const listings = response
-      .map(item => ({
-        id: item.id,
-        full_address: listingsHelper.addressTitle(item.address),
-        address_components: item.address,
-        price: item.price,
-        status: item.status,
-        image: item.cover_image_url,
-        gallery_image_urls: item.gallery_image_urls,
-        is_mls_search: item.is_mls_search || false
-      }))
-      .filter(
-        item =>
-          item.is_mls_search ||
-          item.status.includes('Active') ||
-          ['Pending', 'Leased'].includes(item.status)
-      )
+    return response.filter(item => {
+      if (item.is_mls_search || !this.props.allowedStatuses.length) {
+        return true
+      }
 
-    return listings
+      return this.props.allowedStatuses.includes(item.status)
+    })
   }
 
   render() {
@@ -94,11 +91,15 @@ class SearchListingDrawer extends React.Component {
 }
 
 SearchListingDrawer.propTypes = {
-  searchPlaceholder: PropTypes.string
+  searchPlaceholder: PropTypes.string,
+  mockListings: PropTypes.bool,
+  allowedStatuses: PropTypes.array
 }
 
 SearchListingDrawer.defaultProps = {
-  searchPlaceholder: 'Enter MLS # or address'
+  searchPlaceholder: 'Enter MLS # or address',
+  mockListings: false,
+  allowedStatuses: []
 }
 
 export default SearchListingDrawer

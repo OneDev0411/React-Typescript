@@ -9,8 +9,9 @@ import {
   deleteTask,
   createTaskAssociation,
   deleteTaskAssociation
-} from '../../../../models/tasks'
-import { isSoloActiveTeam } from '../../../../utils/user-teams'
+} from 'models/tasks'
+import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
+import { isSoloActiveTeam } from 'utils/user-teams'
 
 import { Divider } from '../../Divider'
 import Drawer from '../../OverlayDrawer'
@@ -37,12 +38,6 @@ import { Locations } from './components/Locations'
 import { PreviewTourSheets } from '../PreviewTourSheets'
 
 import { Footer } from './styled'
-
-const QUERY = {
-  associations: ['reminders', 'assignees', 'created_by', 'updated_by'].map(
-    a => `crm_task.${a}`
-  )
-}
 
 const propTypes = {
   ...Drawer.propTypes,
@@ -80,6 +75,7 @@ export class TourDrawer extends React.Component {
 
     this.state = {
       isDisabled: false,
+      isSaving: false,
       tour: props.tour
     }
 
@@ -97,7 +93,7 @@ export class TourDrawer extends React.Component {
       try {
         this.setState({ isDisabled: true })
 
-        const tour = await getTask(this.props.tourId, QUERY)
+        const tour = await getTask(this.props.tourId, CRM_TASKS_QUERY)
 
         this.setState({ isDisabled: false, tour })
 
@@ -116,20 +112,20 @@ export class TourDrawer extends React.Component {
       let newTour
       let action = 'created'
 
-      this.setState({ isDisabled: true })
+      this.setState({ isDisabled: true, isSaving: true })
 
       if (tour.id) {
-        newTour = await updateTask(tour, QUERY)
+        newTour = await updateTask(tour, CRM_TASKS_QUERY)
         action = 'updated'
       } else {
-        newTour = await createTask(tour, QUERY)
+        newTour = await createTask(tour, CRM_TASKS_QUERY)
       }
 
-      this.setState({ isDisabled: false, tour: newTour })
+      this.setState({ isDisabled: false, isSaving: false, tour: newTour })
       await this.props.submitCallback(newTour, action)
     } catch (error) {
       console.log(error)
-      this.setState({ isDisabled: false })
+      this.setState({ isDisabled: false, isSaving: false })
       throw error
     }
   }
@@ -332,7 +328,7 @@ export class TourDrawer extends React.Component {
                         onClick={this.handleSubmit}
                         style={{ marginLeft: '0.5em' }}
                       >
-                        {isDisabled ? 'Saving...' : 'Save'}
+                        {this.state.isSaving ? 'Saving...' : 'Save'}
                       </ActionButton>
                     </Flex>
                   </Footer>

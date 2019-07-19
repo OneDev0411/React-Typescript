@@ -1,4 +1,4 @@
-import { roleName } from '../../../utils/roles'
+import { roleName } from 'deals/utils/roles'
 
 const ordinalNumbers = [
   'First',
@@ -31,7 +31,9 @@ function normalizeAttribute(context) {
     return text.slice(-2).join(' ')
   })
 
-  return list.length > 1 ? `(${list.join(' Or ')})` : list[0]
+  const uniqList = [...new Set(list)]
+
+  return uniqList.length > 1 ? `(${uniqList.join(' Or ')})` : uniqList[0]
 }
 
 function normalizeRoles(context, multiRoles) {

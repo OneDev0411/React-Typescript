@@ -70,7 +70,7 @@ export class Table extends React.Component {
   }
 
   getEventActions = row => {
-    if (row.event_type === 'birthday') {
+    if (row.event_type === 'birthday' && !row.metadata.is_partner) {
       return (
         <SendContactCard
           contactId={row.contact}
@@ -90,11 +90,14 @@ export class Table extends React.Component {
         id: 'type',
         isSortable: false,
         render: ({ rowData }) => (
-          <Flex style={{ padding: '4px 1rem' }}>
+          <Flex
+            data-test={`event-type-${rowData.type_label}`}
+            style={{ padding: '4px 1rem' }}
+          >
             <EventIcon event={rowData} />
 
             <div>
-              <Title onClick={this.onTitleClick(rowData)}>
+              <Title onClick={() => this.onTitleClick(rowData)}>
                 {rowData.title}
               </Title>
 
@@ -117,24 +120,19 @@ export class Table extends React.Component {
   }
 
   onTitleClick = row => {
-    let onClick = () => {}
-
     switch (row.object_type) {
       case 'deal_context':
-        onClick = () => goTo(`/dashboard/deals/${row.deal}`, 'Calendar')
+        goTo(`/dashboard/deals/${row.deal}`, 'Calendar')
         break
 
       case 'contact_attribute':
-        onClick = () => goTo(`/dashboard/contacts/${row.contact}`, 'Calendar')
+        goTo(`/dashboard/contacts/${row.contact}`, 'Calendar')
         break
 
       case 'crm_task':
-        onClick = () =>
-          this.props.onSelectTask({ id: row.crm_task, type: row.event_type })
+        this.props.onSelectTask({ id: row.id, type: row.event_type })
         break
     }
-
-    return onClick
   }
 
   onHoverDate = value => {
@@ -181,10 +179,7 @@ export class Table extends React.Component {
   getGridTdProps = (colIndex, { column }) => {
     if (column.id === 'action') {
       return {
-        style: {
-          textAlign: 'right',
-          paddingRight: '1rem'
-        }
+        style: { alignSelf: 'center', textAlign: 'right', paddingRight: '1rem' }
       }
     }
 
@@ -228,6 +223,7 @@ export class Table extends React.Component {
             data={data}
             EmptyState={EmptyState}
             onTableRef={onRef}
+            showToolbar={false}
             getSubTableProps={this.getSubTableProps}
             getTrProps={this.getGridTrProps}
             getTdProps={this.getGridTdProps}

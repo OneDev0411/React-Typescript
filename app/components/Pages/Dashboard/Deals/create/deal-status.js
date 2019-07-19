@@ -1,10 +1,13 @@
 import React from 'react'
 import cn from 'classnames'
-import RadioButton from '../../../../../views/components/RadioButton'
-import { getStatusColorClass } from '../../../../../utils/listing'
-import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
-import { H2 } from 'components/Typography/headings'
+
 import styled from 'styled-components'
+
+import { H2 } from 'components/Typography/headings'
+
+import RadioButton from 'components/RadioButton'
+import { getStatusColorClass } from 'utils/listing'
+import RequiredIcon from 'components/SvgIcons/Required/IconRequired'
 
 const LabelBox = styled.span`
   display: inline-block;
@@ -18,18 +21,13 @@ const LabelBox = styled.span`
 export default ({
   isRequired,
   hasError,
-  property_type,
   dealStatus,
+  statuses,
   onChangeDealStatus
 }) => {
-  const statuses = property_type.includes('Lease')
-    ? ['Active', 'Lease Contract']
-    : [
-        'Active Contingent',
-        'Active Kick Out',
-        'Active Option Contract',
-        'Pending'
-      ]
+  if (Array.isArray(statuses) === false || statuses.length === 0) {
+    return false
+  }
 
   return (
     <div className="form-section deal-status">

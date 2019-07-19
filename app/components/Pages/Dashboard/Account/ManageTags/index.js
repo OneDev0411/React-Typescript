@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
+import { Helmet } from 'react-helmet'
 
 import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'models/contacts/get-contacts-tags'
+import { getContactsTags as getContactTagsAction } from 'actions/contacts/get-contacts-tags'
 import { createContactsTags } from 'models/contacts/create-contacts-tags'
 import { updateContactsTags } from 'models/contacts/update-contacts-tags'
 import { deleteContactsTags } from 'models/contacts/delete-contacts-tags'
@@ -112,12 +114,10 @@ class ManageTags extends Component {
         rawTags: [
           ...prevState.rawTags.filter(item => item.text !== oldText),
           {
-            text,
-            highlight: true
+            text
           }
         ]
       }))
-      this.highlightTag({ text }, false, HIGHLIGHT_SECONDS * 1000)
     } catch (e) {
       if (e.status && e.status === 409) {
         this.handleDuplicateTagCreate(text)
@@ -167,6 +167,7 @@ class ManageTags extends Component {
           'Deleting a tag will remove it from the system and remove it from any contacts with this tag.',
         onConfirm: async () => {
           await deleteContactsTags(text)
+          this.props.getContactsTags()
           this.props.notify({
             status: 'success',
             message: `"${text}" deleted.`
@@ -195,6 +196,9 @@ class ManageTags extends Component {
 
     return (
       <Fragment>
+        <Helmet>
+          <title>Manage Tags | Settings | Rechat</title>
+        </Helmet>
         <PageHeader style={{ marginBottom: '1rem', marginTop: '1.5rem' }}>
           <PageHeader.Title showBackButton={false}>
             <PageHeader.Heading>Manage Tags</PageHeader.Heading>
@@ -213,7 +217,7 @@ class ManageTags extends Component {
                 onSubmit={this.handleAdd}
                 value={this.state.createTagInputValue}
                 isDisabled={
-                  this.state.isSaving || !this.state.createTagInputValue
+                  this.state.isSaving || !this.state.createTagInputValue.trim()
                 }
               />
               {Object.keys(rows)
@@ -239,6 +243,7 @@ export default connect(
   null,
   {
     notify,
-    confirmation
+    confirmation,
+    getContactsTags: getContactTagsAction
   }
 )(ManageTags)

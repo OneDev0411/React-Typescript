@@ -1,0 +1,26 @@
+{
+  "id": "e3c595e3-d4a8-4a65-bb7d-7c86cd0d7835",
+  "created_by": "21c04d82-0e8d-11e8-b6c0-0ae785638eb4",
+  "object_type": "crm_task",
+  "event_type": "Chat",
+  "type_label": "Chat",
+  "timestamp": 1560583939.047,
+  "date": "2019-06-15T07:32:19.047Z",
+  "next_occurence": "2019-06-15T07:32:19.047Z",
+  "recurring": false,
+  "title": "Mamal test Chat",
+  "crm_task": "e3c595e3-d4a8-4a65-bb7d-7c86cd0d7835",
+  "deal": null,
+  "contact": null,
+  "campaign": null,
+  "users": [
+    "21c04d82-0e8d-11e8-b6c0-0ae785638eb4"
+  ],
+  "status": "DONE",
+  "metadata": {
+    "status": "DONE"
+  },
+  "timestamp_readable": "2019-06-15T07:32:19.047Z",
+  "timestamp_midday": "2019-06-15T19:32:19.047Z",
+  "type": "calendar_event"
+}

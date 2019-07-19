@@ -19,12 +19,6 @@ export default {
     key: process.env.CRYPTO_KEY,
     iv: process.env.CRYPTO_IV
   },
-  cosmicjs: {
-    bucket: {
-      slug: process.env.COSMIC_BUCKET,
-      read_key: process.env.COSMIC_KEY
-    }
-  },
   intercom: {
     app_id: process.env.INTERCOM_APP_ID,
     secret_key: process.env.INTERCOM_SECRET_KEY
@@ -34,5 +28,9 @@ export default {
   },
   fb: {
     app_id: process.env.FB_APP_ID
+  },
+  mailgun: {
+    api_key: process.env.MAILGUN_API_KEY,
+    domain_url: process.env.MAILGUN_DOMAIN_URL
   }
 }

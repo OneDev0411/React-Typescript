@@ -3,11 +3,13 @@ import _ from 'underscore'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
+import { normalizeAssociations } from 'views/utils/association-normalizers'
+
 import Button from 'components/Button/ActionButton'
 import { AssociationItem } from 'components/AssocationItem'
+import EmailAssociation from 'components/CRMEmailAssociation'
+import AssociationsDrawer from 'components/AssociationsDrawer'
 import { getAssociations } from 'components/EventDrawer/helpers/get-associations'
-
-import { AssociationsDrawer } from '../AssociationsDrawer'
 
 const propTypes = {
   defaultAssociation: PropTypes.shape().isRequired,
@@ -23,21 +25,23 @@ export class Associations extends React.Component {
   constructor(props) {
     super(props)
 
-    const { defaultAssociation } = this.props
+    const { defaultAssociation } = props
     const { id: defaultAssociationId } = defaultAssociation[
       defaultAssociation.association_type
     ]
 
     this.defaultAssociationId = defaultAssociationId
 
+    let associations = []
+
+    if (Array.isArray(props.task.associations)) {
+      associations = normalizeAssociations(props.task.associations)
+    }
+
     this.state = {
-      associations: [],
+      associations,
       isOpenMoreDrawer: false
     }
-  }
-
-  componentDidMount() {
-    this.fetchAssociations()
   }
 
   componentDidUpdate(prevProps) {
@@ -65,15 +69,12 @@ export class Associations extends React.Component {
     return !_.isEqual(nextTaskAssociations, currentTaskAssociations)
   }
 
-  getTaskAssociationsIds = task => {
-    const types = ['deals', 'contacts', 'listings']
-    let associations = []
+  getTaskAssociationsIds = ({ associations }) => {
+    if (Array.isArray(associations)) {
+      return associations.map(a => a[a.association_type].id)
+    }
 
-    types.forEach(type => {
-      associations = [...associations, ...task[type]]
-    })
-
-    return associations
+    return []
   }
 
   fetchAssociations = async () => {
@@ -88,7 +89,9 @@ export class Associations extends React.Component {
       const associations = await getAssociations(this.props.task)
 
       const filteredAssociations = associations.filter(
-        a => a[a.association_type].id !== this.props.defaultAssociationId
+        a =>
+          a != null &&
+          a[a.association_type].id !== this.props.defaultAssociationId
       )
 
       this.setState({ associations: filteredAssociations }, () =>
@@ -107,42 +110,66 @@ export class Associations extends React.Component {
     const { associations } = this.state
     const associationsLength = associations.length
 
-    if (
-      associationsLength === 0 ||
-      (associationsLength === 1 &&
-        associations[0][associations[0].association_type].id ===
-          this.defaultAssociationId)
-    ) {
+    const hasOnlyDefaultAssociation = associations =>
+      associations.length === 1 &&
+      associations[0][associations[0].association_type].id ===
+        this.defaultAssociationId
+
+    if (associationsLength === 0 || hasOnlyDefaultAssociation(associations)) {
       return null
     }
 
+    let emailAssociation
+    let otherAssociations = []
+
+    associations.forEach(association => {
+      if (association.association_type === 'email') {
+        emailAssociation = association
+      } else if (
+        this.defaultAssociationId !==
+        association[association.association_type].id
+      ) {
+        otherAssociations.push(association)
+      }
+    })
+
+    const hasOtherAssociations = !hasOnlyDefaultAssociation(otherAssociations)
+
     return (
-      <Flex wrap style={{ marginTop: '2em' }}>
-        {associations.slice(0, 6).map((association, index) => (
-          <AssociationItem
-            association={association}
-            key={`association_${index}`}
-            isRemovable={false}
-            isReadOnly={
-              this.defaultAssociationId ===
-              association[association.association_type].id
-            }
+      <div>
+        {emailAssociation && (
+          <EmailAssociation
+            association={emailAssociation}
+            style={{
+              marginTop: '1.5em',
+              marginBottom: hasOtherAssociations ? 0 : '0.5em'
+            }}
           />
-        ))}
-        {associationsLength > 6 && (
+        )}
+        {hasOtherAssociations && (
+          <Flex wrap style={{ marginTop: emailAssociation ? '1.5em' : '2em' }}>
+            {otherAssociations.slice(0, 6).map(association => (
+              <AssociationItem
+                association={association}
+                key={association.id}
+                isRemovable={false}
+              />
+            ))}
+          </Flex>
+        )}
+        {otherAssociations.length > 6 && (
           <Button size="large" appearance="link" onClick={this.openMoreDrawer}>
             View All Associations
           </Button>
         )}
         {this.state.isOpenMoreDrawer && (
           <AssociationsDrawer
-            associations={associations}
-            defaultAssociationId={this.defaultAssociationId}
             isOpen
+            associations={otherAssociations}
             onClose={this.closeMoreDrawer}
           />
         )}
-      </Flex>
+      </div>
     )
   }
 }

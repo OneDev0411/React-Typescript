@@ -77,6 +77,8 @@ class Envelope extends React.Component {
         isVoiding: false
       })
     } catch (e) {
+      console.log(e)
+
       this.props.notify({
         message: 'Can not void this eSign',
         status: 'error'
@@ -95,7 +97,9 @@ class Envelope extends React.Component {
     const isDraft = envelope.status === 'Created'
     const isSent = envelope.status === 'Sent'
     const isVoided = envelope.status === 'Voided'
-    const isVoidable = ['Sent', 'Delivered'].includes(envelope.status)
+    const isVoidable = ['Created', 'Sent', 'Delivered'].includes(
+      envelope.status
+    )
 
     return (
       <div style={this.props.containerStyle}>

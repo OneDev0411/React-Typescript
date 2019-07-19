@@ -1,12 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
+
+import { disabledColor, primary } from 'views/utils/colors'
+
 import TagIcon from '../../../../../../../views/components/SvgIcons/Tag/TagIcon'
-import { primary, disabledColor } from 'views/utils/colors'
 
 const borderColor = (inputFocused, error) => {
   if (error) {
     return 'red'
-  } else if (inputFocused) {
+  }
+
+  if (inputFocused) {
     return primary
   }
 
@@ -67,6 +71,7 @@ export default class CustomTag extends React.Component {
   onBlur = () => {
     this.setState({ inputFocused: false })
   }
+
   onChange = event => {
     const inputValue = event.target.value
 
@@ -86,6 +91,7 @@ export default class CustomTag extends React.Component {
       >
         <TagIcon style={{ marginLeft: '1em' }} />
         <Input
+          data-test="new-tag-input"
           value={inputValue}
           type="text"
           onFocus={this.onFocus}

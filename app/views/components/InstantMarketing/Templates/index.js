@@ -19,7 +19,19 @@ class Templates extends React.Component {
   }
 
   componentDidMount() {
-    this.getTemplatesList()
+    if (this.props.isEdit) {
+      this.setState(
+        {
+          isLoading: false,
+          templates: [this.props.defaultTemplate]
+        },
+        () => {
+          this.handleSelectTemplate(this.props.defaultTemplate)
+        }
+      )
+    } else {
+      this.getTemplatesList()
+    }
   }
 
   brokerageBrand = getBrandByType(this.props.user, 'Brokerage')
@@ -89,33 +101,39 @@ class Templates extends React.Component {
       <Container>
         {this.state.isLoading && <Spinner />}
 
-        {this.state.templates.map(template => (
-          <TemplateItem
-            key={template.id}
-            onClick={() => this.handleSelectTemplate(template)}
-            isSelected={this.state.selectedTemplate === template.id}
-          >
-            {template.video ? (
-              <Video
-                autoPlay="true"
-                loop="true"
-                type="video/mp4"
-                src={`${template.url}/${this.brokerageBrand.id}/thumbnail.mp4`}
-              />
-            ) : (
-              <Image
-                src={`${template.url}/${this.brokerageBrand.id}/thumbnail.png`}
-                title={template.name}
-                width="97%"
-                style={{
-                  minHeight: '200px',
-                  margin: '1.5%',
-                  boxShadow: '0px 5px 10px #c3c3c3'
-                }}
-              />
-            )}
-          </TemplateItem>
-        ))}
+        {this.state.templates.map(template => {
+          const preview_url = template.file
+            ? template.file.preview_url
+            : `${template.url}/thumbnail.png`
+
+          return (
+            <TemplateItem
+              key={template.id}
+              onClick={() => this.handleSelectTemplate(template)}
+              isSelected={this.state.selectedTemplate === template.id}
+            >
+              {template.video ? (
+                <Video
+                  autoPlay="true"
+                  loop="true"
+                  type="video/mp4"
+                  src={`${template.url}/thumbnail.mp4`}
+                />
+              ) : (
+                <Image
+                  src={preview_url}
+                  title={template.name}
+                  width="97%"
+                  style={{
+                    minHeight: '12.5rem',
+                    margin: '1.5%',
+                    boxShadow: '0px 5px 10px #c3c3c3'
+                  }}
+                />
+              )}
+            </TemplateItem>
+          )
+        })}
       </Container>
     )
   }

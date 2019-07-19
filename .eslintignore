@@ -3,3 +3,9 @@ app/src/
 desktop/builds/
 app/utils/
 app/styles/vendor
+
+**/*.test.js
+
+app/views/components/SvgIcons/**/*.*
+*.json
+*.sql

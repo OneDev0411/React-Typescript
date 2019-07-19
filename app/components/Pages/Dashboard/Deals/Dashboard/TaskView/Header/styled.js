@@ -3,6 +3,10 @@ import styled from 'styled-components'
 import { primary } from 'views/utils/colors'
 import { merriweatherFamilyStyle } from 'components/Typography/styles'
 
+export const Container = styled.div`
+  padding: 0 1.25rem;
+`
+
 export const Toolbar = styled.div`
   display: flex;
   flex-direction: row;
@@ -40,7 +44,7 @@ export const Title = styled.div`
   font-size: 1.2rem;
   font-weight: 500;
   padding: 0.825rem 2px;
-  border: 1px dashed #fff;
+  border: 1px dashed transparent;
 
   :hover {
     cursor: pointer;

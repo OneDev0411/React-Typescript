@@ -1,0 +1,25 @@
+{
+  "id": "03605504-89f6-11e9-8a5f-0a95998482ac",
+  "created_by": "8725b638-3b09-11e7-b651-0242ac110003",
+  "object_type": "deal_context",
+  "event_type": "contract_date",
+  "type_label": "Executed Date",
+  "timestamp": 1561107600,
+  "date": "2019-06-21T00:00:00.000Z",
+  "next_occurence": "2019-06-21T09:00:00.000Z",
+  "recurring": false,
+  "title": "12001  Brock Highway",
+  "crm_task": null,
+  "deal": "2a05a47c-89f4-11e9-87a3-0a95998482ac",
+  "contact": null,
+  "campaign": null,
+  "users": [
+    "470ab91c-a45a-11e7-a3aa-0242ac110003",
+    "e8edecda-2ea9-11e7-9d96-f23c91b0d077"
+  ],
+  "status": null,
+  "metadata": null,
+  "timestamp_readable": "2019-06-21T00:00:00.000Z",
+  "timestamp_midday": "2019-06-21T12:00:00.000Z",
+  "type": "calendar_event"
+}

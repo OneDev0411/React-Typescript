@@ -1,37 +1,29 @@
 import React from 'react'
-import _ from 'underscore'
 import { connect } from 'react-redux'
 
-import { uppercaseFirstLetter } from 'utils/helpers'
-
 import {
-  getSavedSegments,
+  // eslint-disable-next-line import/named
+  changeActiveFilterSegment,
   deleteFilterSegment,
-  changeActiveFilterSegment
+  getSavedSegments
 } from 'actions/filter-segments'
-import { confirmation } from 'actions/confirmation'
 
 import {
-  isListFetched,
-  selectActiveSavedSegment,
+  getDefaultList,
   getSegments,
-  getDefaultList
+  isListFetched,
+  selectActiveSavedSegment
 } from 'reducers/filter-segments'
 
-import ToolTip from 'components/tooltip'
-import IconClose from 'components/SvgIcons/Close/CloseIcon'
 import LoadingIcon from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-import {
-  ListTitle,
-  ListItem,
-  ListItemName,
-  DeleteButton
-} from 'components/SlideMenu/Menu/styled'
+import { ListItem, ListTitle } from 'components/SlideMenu/Menu/styled'
 import { ShowMoreLess } from 'components/ShowMoreLess'
+
+import Item from './Item'
 
 class SegmentsList extends React.Component {
   state = {
-    isDeleting: []
+    deletingItems: []
   }
 
   componentDidMount() {
@@ -39,59 +31,53 @@ class SegmentsList extends React.Component {
   }
 
   init = () => {
-    const { getSavedSegments, isListFetched, name } = this.props
+    const { props } = this
 
-    if (isListFetched === false) {
-      getSavedSegments(name)
+    if (!props.isListFetched) {
+      props.getSavedSegments(props.name, { associations: props.associations })
     }
   }
 
-  onSelectList = item => {
-    this.props.changeActiveFilterSegment(this.props.name, item.id)
+  selectItem = async item => {
+    const { props } = this
 
-    if (this.props.onChange) {
-      this.props.onChange(item)
+    await props.changeActiveFilterSegment(props.name, item.id)
+
+    if (props.onChange) {
+      props.onChange(item)
     }
   }
 
-  onRequestDelete = item =>
-    this.props.confirmation({
-      message: `Delete '${item.name}'?`,
-      confirmLabel: 'Yes',
-      onConfirm: () => this.deleteList(item)
-    })
-
-  deleteList = async item => {
-    const { isDeleting } = this.state
-    const { activeItem, name } = this.props
-
-    this.setState({
-      isDeleting: [...isDeleting, item.id]
-    })
+  deleteItem = async item => {
+    const { name, activeItem } = this.props
 
     try {
+      this.setState(state => ({
+        deletingItems: [...state.deletingItems, item.id]
+      }))
+
       await this.props.deleteFilterSegment(name, item)
 
-      if (activeItem.id === item.id) {
-        this.onSelectList(getDefaultList(name))
+      this.setState(state => ({
+        deletingItems: state.deletingItems.filter(id => id !== item.id)
+      }))
+
+      if (activeItem == null || activeItem.id === item.id) {
+        this.selectItem(getDefaultList(name))
       }
-    } catch (e) {
+    } catch (error) {
       // todo
-      console.log(e)
-    } finally {
-      this.setState({
-        isDeleting: _.without(isDeleting, item.id)
-      })
+      console.error(error)
     }
   }
 
+  isSelected = id => this.props.activeItem && this.props.activeItem.id === id
+
   render() {
-    const { list, activeItem, isFetching } = this.props
-    const { isDeleting } = this.state
-    const isSelected = id => activeItem && activeItem.id === id
+    const { props } = this
 
     return (
-      <div>
+      <div data-test="lists-list">
         <ListTitle>Lists</ListTitle>
 
         <ShowMoreLess
@@ -99,35 +85,23 @@ class SegmentsList extends React.Component {
           lessText="Less lists"
           style={{ marginBottom: '1rem' }}
         >
-          {list.map((item, index) => {
-            const id = item.id
+          {props.list.map(item => {
+            const { id } = item
 
             return (
-              <ToolTip key={index} caption={item.name} placement="right">
-                <ListItem
-                  isDeleting={isDeleting.includes(id)}
-                  isSelected={isSelected(id)}
-                >
-                  <ListItemName
-                    onClick={() => !isSelected(id) && this.onSelectList(item)}
-                  >
-                    {uppercaseFirstLetter(item.name)}
-                  </ListItemName>
-                  {item.is_editable && (
-                    <DeleteButton
-                      onClick={() => this.onRequestDelete(item)}
-                      isFit
-                    >
-                      <IconClose />
-                    </DeleteButton>
-                  )}
-                </ListItem>
-              </ToolTip>
+              <Item
+                key={id}
+                isDeleting={this.state.deletingItems.includes(id)}
+                item={item}
+                deleteHandler={this.deleteItem}
+                selectHandler={this.selectItem}
+                selected={this.isSelected(id)}
+              />
             )
           })}
         </ShowMoreLess>
 
-        {isFetching && (
+        {props.isFetching && (
           <ListItem>
             <LoadingIcon />
           </ListItem>
@@ -137,23 +111,30 @@ class SegmentsList extends React.Component {
   }
 }
 
-function mapStateToProps(state, { name }) {
+function mapStateToProps(state, { name, getPredefinedLists }) {
   const { filterSegments } = state[name]
+
+  const predefinedLists = getPredefinedLists(name, state)
 
   return {
     isListFetched: isListFetched(filterSegments),
     isFetching: filterSegments.isFetching,
-    list: getSegments(filterSegments, name),
-    activeItem: selectActiveSavedSegment(filterSegments, name)
+    list: getSegments(filterSegments, name, predefinedLists),
+    activeItem: selectActiveSavedSegment(filterSegments, name, predefinedLists)
   }
 }
 
-export default connect(
+const ConnectedSegmentsList = connect(
   mapStateToProps,
   {
     changeActiveFilterSegment,
     deleteFilterSegment,
-    getSavedSegments,
-    confirmation
+    getSavedSegments
   }
 )(SegmentsList)
+
+ConnectedSegmentsList.defaultProps = {
+  getPredefinedLists: name => ({ default: getDefaultList(name) })
+}
+
+export default ConnectedSegmentsList

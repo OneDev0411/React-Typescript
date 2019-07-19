@@ -2,8 +2,8 @@ import Fetch from '../../../services/fetch'
 
 const signin = async userInfo => {
   const requestBody = {
-    ...userInfo,
-    grant_type: 'password'
+    grant_type: 'password',
+    ...userInfo
   }
 
   try {
@@ -11,12 +11,13 @@ const signin = async userInfo => {
       .post('/oauth2/token')
       .set({ 'x-auth-mode': 'client_id' })
       .send(requestBody)
-    const { data, access_token, refresh_token } = response.body
+    const { data, access_token, refresh_token, expires_in } = response.body
 
     return {
       ...data,
       access_token,
-      refresh_token
+      refresh_token,
+      expires_in
     }
   } catch ({ status }) {
     throw status

@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Deal Agent integration with roles renders the component 1`] = `
+<Fragment>
+  <Connect(DealRole)
+    form={null}
+    isOpen={true}
+    onClose={[Function]}
+    onUpsertRole={[Function]}
+  />
+</Fragment>
+`;

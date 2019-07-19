@@ -1,25 +1,23 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
 
 import _ from 'underscore'
 
 import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
-import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
+import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 import { selectContact } from 'reducers/contacts/list'
 
 import SearchListingDrawer from 'components/SearchListingDrawer'
-import EmailCompose from 'components/EmailCompose'
+import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
-import { getTemplatePreviewImage } from 'components/InstantMarketing/helpers/get-template-preview-image'
+import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import ActionButton from 'components/Button/ActionButton'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
 import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-deals'
-
 import { getTemplateTypes } from '../../helpers/get-template-types'
 import SocialDrawer from '../../components/SocialDrawer'
 
@@ -38,12 +36,13 @@ class SendMlsListingCard extends React.Component {
     isEditingListings: false,
     isInstantMarketingBuilderOpen: false,
     isComposeEmailOpen: false,
-    isSendingEmail: false,
     isSocialDrawerOpen: false,
     htmlTemplate: '',
-    templateScreenshot: null,
     socialNetworkName: '',
-    owner: this.props.user
+    owner: this.props.user,
+    emailBody: '',
+    templateInstance: null,
+    isGettingTemplateInstance: false
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -52,7 +51,8 @@ class SendMlsListingCard extends React.Component {
       if (
         props.isTriggered &&
         !state.isListingsModalOpen &&
-        !state.isInstantMarketingBuilderOpen
+        !state.isInstantMarketingBuilderOpen &&
+        !props.isEdit
       ) {
         return {
           isListingsModalOpen: true
@@ -101,6 +101,7 @@ class SendMlsListingCard extends React.Component {
             )
 
             return {
+              data_type: 'contact',
               contactId: contact.id,
               name: contact.summary.display_name,
               avatar: contact.summary.profile_image_url,
@@ -112,41 +113,19 @@ class SendMlsListingCard extends React.Component {
       : []
   }
 
-  handleSendEmails = async (values, form) => {
-    this.setState({
-      isSendingEmail: true
-    })
+  getEmail = email => {
+    const { templateInstance } = this.state
 
-    const email = {
-      from: values.fromId,
-      to: values.recipients,
-      subject: values.subject,
-      html: this.state.htmlTemplate.result
+    if (templateInstance == null) {
+      throw new Error(`Template instance is ${typeof templateInstance}!`)
     }
 
-    try {
-      await sendContactsEmail(email, this.state.owner.id)
+    const { html, id: template } = templateInstance
 
-      // reset form
-      if (form) {
-        form.reset()
-      }
-
-      this.props.notify({
-        status: 'success',
-        message: `${
-          values.recipients.length
-        } emails has been sent to your contacts`
-      })
-    } catch (e) {
-      console.log(e)
-      // todo
-    } finally {
-      this.setState({
-        isSendingEmail: false,
-        isComposeEmailOpen: false,
-        isInstantMarketingBuilderOpen: false
-      })
+    return {
+      ...email,
+      html,
+      template
     }
   }
 
@@ -187,7 +166,7 @@ class SendMlsListingCard extends React.Component {
       isComposeEmailOpen: true,
       isInstantMarketingBuilderOpen: true,
       htmlTemplate: template,
-      templateScreenshot: null
+      emailBody: ''
     })
   }
 
@@ -199,19 +178,29 @@ class SendMlsListingCard extends React.Component {
     })
   }
 
-  generatePreviewImage = async template =>
-    this.setState({
-      templateScreenshot: await getTemplatePreviewImage(
-        template,
-        this.TemplateInstanceData
-      )
+  generatePreviewImage = async template => {
+    this.setState({ isGettingTemplateInstance: true })
+
+    const instance = await getTemplateInstances(template.id, {
+      ...this.TemplateInstanceData,
+      html: template.result
     })
 
-  closeMarketing = () =>
     this.setState({
-      isInstantMarketingBuilderOpen: false,
-      isComposeEmailOpen: false
+      emailBody: getTemplateInstancePreviewImage(instance),
+      templateInstance: instance,
+      isGettingTemplateInstance: false
     })
+  }
+
+  closeMarketing = () =>
+    this.setState(
+      {
+        isInstantMarketingBuilderOpen: false,
+        isComposeEmailOpen: false
+      },
+      this.props.handleTrigger
+    )
 
   closeSocialDrawer = () =>
     this.setState({
@@ -224,8 +213,16 @@ class SendMlsListingCard extends React.Component {
     })
 
   get TemplateInstanceData() {
+    // We are offering marketing for unlisted deals by merging the deal data with
+    // a base json which we are using it as base object (it is a mock `listing` object)
+    // for preventing making a relation between mock object and template instance,
+    // we should filter it.
+    // see: `app/views/components/SearchListingDrawer/index.js`
+
     return {
-      listings: [this.state.listings.map(listing => listing.id)]
+      listings: this.state.listings
+        .filter(listing => !listing.isMock)
+        .map(listing => listing.id)
     }
   }
 
@@ -274,6 +271,15 @@ class SendMlsListingCard extends React.Component {
     return data
   }
 
+  componentDidMount() {
+    if (this.props.isEdit && !this.state.isInstantMarketingBuilderOpen) {
+      this.setState({
+        isInstantMarketingBuilderOpen: true,
+        listings: this.props.selectedTemplate.listings
+      })
+    }
+  }
+
   render() {
     const { user, disabled } = this.props
 
@@ -295,8 +301,10 @@ class SendMlsListingCard extends React.Component {
         )}
 
         <SearchListingDrawer
+          mockListings
           isOpen={
-            this.state.isListingsModalOpen || this.state.isEditingListings
+            (this.state.isListingsModalOpen || this.state.isEditingListings) &&
+            !this.props.isEdit
           }
           title={this.IsMultiListing ? 'Select Listings' : 'Select a Listing'}
           searchPlaceholder="Enter MLS# or an address"
@@ -330,17 +338,20 @@ class SendMlsListingCard extends React.Component {
           mediums={this.props.mediums}
           defaultTemplate={this.props.selectedTemplate}
           onShowEditListings={this.handleEditListings}
+          isEdit={this.props.isEdit}
         />
 
         {this.state.isComposeEmailOpen && (
-          <EmailCompose
+          <BulkEmailComposeDrawer
             isOpen
+            hasStaticBody
             from={this.state.owner}
-            onClose={this.toggleComposeEmail}
             recipients={this.Recipients}
-            html={this.state.templateScreenshot}
-            onClickSend={this.handleSendEmails}
-            isSubmitting={this.state.isSendingEmail}
+            body={this.state.emailBody}
+            getEmail={this.getEmail}
+            onClose={this.toggleComposeEmail}
+            onSent={this.closeMarketing}
+            isSubmitDisabled={this.state.isGettingTemplateInstance}
           />
         )}
 
@@ -350,6 +361,7 @@ class SendMlsListingCard extends React.Component {
             templateInstanceData={this.TemplateInstanceData}
             socialNetworkName={this.state.socialNetworkName}
             onClose={this.closeSocialDrawer}
+            onSent={this.closeMarketing}
           />
         )}
       </Fragment>
@@ -369,7 +381,4 @@ function mapStateToProps({ contacts, deals, user }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { notify }
-)(SendMlsListingCard)
+export default connect(mapStateToProps)(SendMlsListingCard)

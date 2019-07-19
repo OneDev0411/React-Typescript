@@ -8,6 +8,9 @@
     "allowSyntheticDefaultImports": false,
     "baseUrl": ".",
     "paths": {
+      "store/*": [
+        "app/stores/*"
+      ],
       "actions/*": [
         "app/store_actions/*"
       ],
@@ -21,9 +24,12 @@
         "app/constants/*"
       ],
       "dashboard/*": [
-        "app/components/Dashboard/*"
+        "app/components/Pages/Dashboard/*"
       ],
-      "Models/*": [
+      "hooks/*": [
+        "app/hooks/*"
+      ],
+      "models/*": [
         "app/models/*"
       ],
       "reducers/*": [
@@ -44,6 +50,18 @@
       "views/*": [
         "app/views/*"
       ],
+      "deals/*": [
+        "app/components/Pages/Dashboard/Deals/*"
+      ],
+      "crm/*": [
+        "app/components/Pages/Dashboard/Contacts/*"
+      ],
+      "animations/*": [
+        "app/animations/*"
+      ],
+      "fixtures/*": [
+        "tests/unit/fixtures/*"
+      ]
     }
   },
   "exclude": [

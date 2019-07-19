@@ -3,18 +3,20 @@ import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 import { Field } from 'react-final-form'
 
+import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
+
 import { createTask } from 'models/tasks/create-task'
 import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 
 import { EventDrawer } from 'components/EventDrawer'
 import ActionButton from 'components/Button/ActionButton'
 import {
+  AssociationsList,
   DateTimeField,
   ReminderField,
   WhenFieldChanges
 } from 'components/final-form-fields'
 
-import { QUERY } from 'components/EventDrawer/index.js'
 import LoadSaveReinitializeForm from 'views/utils/LoadSaveReinitializeForm'
 
 import { preSaveFormat } from './helpers/pre-save-format'
@@ -23,7 +25,6 @@ import { postLoadFormat } from './helpers/post-load-format'
 import { Title } from './components/Title'
 import { TaskType } from './components/TaskType'
 import { AssociationsButtons } from './components/AssociationsButtons'
-import { AssociationsList } from './components/AssociationsList'
 import { FormContainer, FieldContainer } from './styled'
 
 const propTypes = {
@@ -42,7 +43,7 @@ export default class Task extends Component {
 
   save = async task => {
     try {
-      const newTask = await createTask(task, QUERY)
+      const newTask = await createTask(task, CRM_TASKS_QUERY)
 
       return this.props.submitCallback(newTask)
     } catch (error) {
@@ -53,12 +54,12 @@ export default class Task extends Component {
   onClickMoreOptions = formValues => this.setState({ formValues })
 
   handleDrawerClose = (formProps, newEvent) => {
-    if (formProps && !formProps.preventDefault) {
-      formProps.form.reset()
-      this.props.submitCallback(newEvent)
-    }
-
-    this.setState({ formValues: null })
+    this.setState({ formValues: null }, () => {
+      if (formProps && formProps.form && newEvent != null) {
+        formProps.form.reset()
+        this.props.submitCallback(newEvent)
+      }
+    })
   }
 
   render() {
@@ -67,6 +68,7 @@ export default class Task extends Component {
     return (
       <div>
         <LoadSaveReinitializeForm
+          needsReinitialize
           load={() => null}
           postLoadFormat={() =>
             postLoadFormat(this.props.user, defaultAssociation)
@@ -77,8 +79,12 @@ export default class Task extends Component {
             const { values } = props
 
             const submitting = props.submitting || props.validating
+
+            const hasTitle =
+              typeof values.title === 'string' && values.title.trim()
+
             const isActive =
-              values.title ||
+              hasTitle ||
               (defaultAssociation
                 ? values.associations.length > 1
                 : values.associations.length > 0)
@@ -99,7 +105,7 @@ export default class Task extends Component {
                       )
 
                       if (items.length === 0) {
-                        return
+                        return onChange(REMINDER_DROPDOWN_OPTIONS[0])
                       }
 
                       // 15 Minutes Before
@@ -135,6 +141,7 @@ export default class Task extends Component {
                         </FieldContainer>
                       </Flex>
                       <AssociationsList
+                        name="associations"
                         associations={values.associations}
                         defaultAssociation={defaultAssociation}
                       />
@@ -164,7 +171,8 @@ export default class Task extends Component {
                         </ActionButton>
                         <ActionButton
                           type="submit"
-                          disabled={submitting || !values.title}
+                          disabled={submitting || !hasTitle}
+                          data-test="save-task"
                         >
                           {submitting ? 'Saving...' : 'Save'}
                         </ActionButton>
@@ -176,12 +184,13 @@ export default class Task extends Component {
                 {this.state.formValues && (
                   <EventDrawer
                     isOpen
-                    user={this.props.user}
+                    defaultAssociation={defaultAssociation}
                     initialValues={this.state.formValues}
                     onClose={this.handleDrawerClose}
                     submitCallback={newEvent =>
                       this.handleDrawerClose(props, newEvent)
                     }
+                    user={this.props.user}
                   />
                 )}
               </React.Fragment>

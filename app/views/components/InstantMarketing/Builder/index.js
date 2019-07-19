@@ -1,7 +1,6 @@
-import React, { Fragment } from 'react'
-import { connect } from 'react-redux'
-
+import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import juice from 'juice'
 
@@ -9,42 +8,23 @@ import { Portal } from 'components/Portal'
 import IconButton from 'components/Button/IconButton'
 import DropButton from 'components/Button/DropButton'
 import ActionButton from 'components/Button/ActionButton'
-// import { Icon as DropdownIcon } from 'components/Dropdown'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 
 import { getActiveTeam } from 'utils/user-teams'
 import { getBrandStyles } from 'utils/marketing-center/templates'
 
-import { VideoToolbar } from './VideoToolbar'
-
-import config from './config'
-
 import nunjucks from '../helpers/nunjucks'
-import { getAsset as getBrandAsset } from '../helpers/nunjucks-functions'
+import {
+  getAsset as getBrandAsset,
+  getListingUrl
+} from '../helpers/nunjucks-functions'
 
-import loadGrapes from '../helpers/load-grapes'
+import { loadGrapesjs } from './utils/load-grapes'
+import { createGrapesInstance } from './utils/create-grapes-instance'
 
-const STYLE_MANAGER_TEXT_TAGS = [
-  'div',
-  'section',
-  'table',
-  'tr',
-  'td',
-  'ol',
-  'ul',
-  'li',
-  'p',
-  'span',
-  'a',
-  'h1',
-  'h2',
-  'h3',
-  'h4',
-  'h5',
-  'h6',
-  'address'
-]
+import Templates from '../Templates'
+import { VideoToolbar } from './VideoToolbar'
 
 import {
   Container,
@@ -54,7 +34,9 @@ import {
   Header,
   Divider
 } from './styled'
-import Templates from '../Templates'
+
+import SocialActions from './SocialActions'
+import { SOCIAL_NETWORKS } from './constants'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -64,7 +46,8 @@ class Builder extends React.Component {
       originalTemplate: null,
       selectedTemplate: props.defaultTemplate,
       owner: props.templateData.user,
-      isLoading: true
+      isLoading: true,
+      isEditorLoaded: false
     }
 
     this.keyframe = 0
@@ -81,7 +64,8 @@ class Builder extends React.Component {
   }
 
   async componentDidMount() {
-    const { Grapesjs } = await loadGrapes()
+    const { Grapesjs } = await loadGrapesjs()
+
     const { load: loadAssetManagerPlugin } = await import('./AssetManager')
     const { load: loadStyleManagerPlugin } = await import('./StyleManager')
 
@@ -91,57 +75,28 @@ class Builder extends React.Component {
       isLoading: false
     })
 
-    this.editor = Grapesjs.init({
-      ...config,
-      avoidInlineStyle: false,
-      keepUnusedStyles: true,
-      forceClass: false,
-      container: '#grapesjs-canvas',
-      components: null,
-      assetManager: {
-        assets: [...this.props.assets, ...this.UserAssets]
-      },
-      storageManager: {
-        autoload: 0,
-        params: {
-          templateId: null
-        }
-      },
-      showDevices: false,
-      plugins: ['asset-blocks', 'style-manager'],
-      pluginsOpts: {
-        'style-manager': {
-          fontSizePicker: {
-            conditions: {
-              allowedTags: STYLE_MANAGER_TEXT_TAGS,
-              forbiddenStyles: ['background-image']
-            }
-          },
-          fontWeightPicker: {
-            conditions: {
-              allowedTags: STYLE_MANAGER_TEXT_TAGS,
-              forbiddenStyles: ['background-image']
-            }
-          },
-          colorPicker: {
-            conditions: {
-              allowedTags: STYLE_MANAGER_TEXT_TAGS,
-              forbiddenStyles: ['background-image']
-            }
-          }
-        }
-      }
+    this.editor = createGrapesInstance(Grapesjs, {
+      assets: [...this.props.assets, ...this.UserAssets]
     })
 
     this.editor.on('load', this.setupGrapesJs)
   }
 
+  componentWillUnmount() {
+    const iframe = this.editor.Canvas.getBody()
+
+    iframe.removeEventListener('paste', this.iframePasteHandler)
+  }
+
   setupGrapesJs = () => {
+    this.setState({ isEditorLoaded: true })
+
     this.lockIn()
     this.disableResize()
     this.singleClickTextEditing()
     this.disableAssetManager()
     this.makeTemplateCentered()
+    this.removeTextStylesOnPaste()
 
     if (this.IsVideoTemplate) {
       this.grapes.appendChild(this.videoToolbar)
@@ -158,7 +113,9 @@ class Builder extends React.Component {
 
   singleClickTextEditing = () => {
     this.editor.on('component:selected', selected => {
-      if (!selected.view.onActive) {
+      const isImageAsset = selected.get('type') === 'image'
+
+      if (!selected.view.onActive || isImageAsset) {
         return
       }
 
@@ -190,6 +147,24 @@ class Builder extends React.Component {
     iframe.contentDocument.head.appendChild(style)
   }
 
+  removeTextStylesOnPaste = () => {
+    const iframe = this.editor.Canvas.getBody()
+
+    iframe.addEventListener('paste', this.iframePasteHandler)
+  }
+
+  iframePasteHandler = ev => {
+    if (!ev.target.contentEditable) {
+      return
+    }
+
+    ev.preventDefault()
+
+    const text = ev.clipboardData.getData('text')
+
+    ev.target.ownerDocument.execCommand('insertText', false, text)
+  }
+
   disableResize = () => {
     const components = this.editor.DomComponents
 
@@ -210,15 +185,20 @@ class Builder extends React.Component {
   }
 
   lockIn = () => {
+    let shouldSelectImage = true
+
     const updateAll = model => {
       const editable =
         model && model.view && model.view.$el.attr('rechat-editable')
 
+      const isRechatAsset =
+        model && model.view && model.view.$el.attr('rechat-assets')
+
       if (!editable) {
         model.set({
           editable: false,
-          selectable: false,
-          hoverable: false
+          selectable: isRechatAsset,
+          hoverable: isRechatAsset
         })
       }
 
@@ -228,7 +208,17 @@ class Builder extends React.Component {
         traits: this.traits[model.get('type')] || []
       })
 
-      model.get('components').each(model => updateAll(model))
+      if (
+        shouldSelectImage &&
+        model.view.$el.attr('rechat-assets') === 'listing-image'
+      ) {
+        shouldSelectImage = false
+        this.editor.select(model)
+      }
+
+      model.get('components').each(model => {
+        updateAll(model, shouldSelectImage)
+      })
     }
 
     updateAll(this.editor.DomComponents.getWrapper())
@@ -265,20 +255,17 @@ class Builder extends React.Component {
 
   generateBrandedTemplate = (template, data) => {
     const { brand } = getActiveTeam(this.props.user)
-
     const palette = getBrandStyles(brand)
-    const getAsset = getBrandAsset.bind(null, brand)
 
-    console.log(palette)
+    console.log('PALETTE', palette)
 
     return nunjucks.renderString(template, {
       ...data,
       palette,
-      getAsset
+      getAsset: getBrandAsset.bind(null, brand),
+      getListingUrl: getListingUrl.bind(null, brand)
     })
   }
-
-  // generateTemplate = (template, data) => nunjucks.renderString(template, data)
 
   setEditorTemplateId = id => {
     this.editor.StorageManager.store({
@@ -361,6 +348,18 @@ class Builder extends React.Component {
       }))
   }
 
+  get socialNetworks() {
+    if (!this.state.selectedTemplate) {
+      return []
+    }
+
+    if (this.state.selectedTemplate.medium === 'LinkedInCover') {
+      return SOCIAL_NETWORKS.filter(({ name }) => name === 'LinkedIn')
+    }
+
+    return SOCIAL_NETWORKS.filter(({ name }) => name !== 'LinkedIn')
+  }
+
   renderAgentPickerButton = buttonProps => (
     <DropButton
       {...buttonProps}
@@ -399,6 +398,7 @@ class Builder extends React.Component {
     }
 
     const isSocialMedium = this.IsSocialMedium
+    const socialNetworks = this.socialNetworks
 
     return (
       <Portal root="marketing-center">
@@ -407,7 +407,7 @@ class Builder extends React.Component {
             <h1>{this.props.headerTitle}</h1>
 
             <Actions>
-              {this.state.selectedTemplate && (
+              {this.state.selectedTemplate && !this.props.isEdit && (
                 <TeamContactSelect
                   fullHeight
                   pullTo="right"
@@ -421,7 +421,7 @@ class Builder extends React.Component {
                 />
               )}
 
-              {this.ShowEditListingsButton && (
+              {this.ShowEditListingsButton && !this.props.isEdit && (
                 <ActionButton
                   style={{ marginLeft: '0.5rem' }}
                   appearance="outline"
@@ -432,34 +432,10 @@ class Builder extends React.Component {
               )}
 
               {this.state.selectedTemplate && isSocialMedium && (
-                <Fragment>
-                  <ActionButton
-                    onClick={() => this.handleSocialSharing('Instagram')}
-                  >
-                    <i
-                      className="fa fa-instagram"
-                      style={{
-                        fontSize: '1.5rem',
-                        marginRight: '0.5rem'
-                      }}
-                    />
-                    Post to Instagram
-                  </ActionButton>
-
-                  <ActionButton
-                    style={{ marginLeft: '0.5rem' }}
-                    onClick={() => this.handleSocialSharing('Facebook')}
-                  >
-                    <i
-                      className="fa fa-facebook-square"
-                      style={{
-                        fontSize: '1.5rem',
-                        marginRight: '0.5rem'
-                      }}
-                    />
-                    Post to Facebook
-                  </ActionButton>
-                </Fragment>
+                <SocialActions
+                  networks={socialNetworks}
+                  onClick={this.handleSocialSharing}
+                />
               )}
 
               {this.state.selectedTemplate && !isSocialMedium && (
@@ -487,12 +463,15 @@ class Builder extends React.Component {
             <TemplatesContainer
               isInvisible={this.props.showTemplatesColumn === false}
             >
-              <Templates
-                defaultTemplate={this.props.defaultTemplate}
-                medium={this.props.mediums}
-                onTemplateSelect={this.handleSelectTemplate}
-                templateTypes={this.props.templateTypes}
-              />
+              {this.state.isEditorLoaded && (
+                <Templates
+                  defaultTemplate={this.props.defaultTemplate}
+                  medium={this.props.mediums}
+                  onTemplateSelect={this.handleSelectTemplate}
+                  templateTypes={this.props.templateTypes}
+                  isEdit={this.props.isEdit}
+                />
+              )}
             </TemplatesContainer>
 
             <div

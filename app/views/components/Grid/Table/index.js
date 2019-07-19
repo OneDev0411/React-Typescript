@@ -15,21 +15,12 @@ import { ActionablePlugin } from './Plugins/Actionable'
 import { TableSummary } from './TableSummary'
 
 class Grid extends React.Component {
-  constructor(props) {
-    super(props)
-
-    const { plugins } = props
+  componentDidMount() {
+    const { plugins } = this.props
 
     if (plugins.sortable) {
       this.sortablePlugin = new SortablePlugin({
         options: plugins.sortable,
-        onRequestForceUpdate: () => this.forceUpdate()
-      })
-    }
-
-    if (plugins.selectable) {
-      this.selectablePlugin = new SelectablePlugin({
-        options: plugins.selectable,
         onRequestForceUpdate: () => this.forceUpdate()
       })
     }
@@ -40,6 +31,15 @@ class Grid extends React.Component {
       })
     }
 
+    if (plugins.selectable) {
+      this.selectablePlugin = new SelectablePlugin({
+        options: plugins.selectable,
+        onRequestForceUpdate: () => this.forceUpdate()
+      })
+
+      this.selectablePlugin.setData(this.props.data)
+    }
+
     if (plugins.actionable) {
       this.actionablePlugin = new ActionablePlugin({
         actions: plugins.actionable.actions,
@@ -48,12 +48,13 @@ class Grid extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.selectablePlugin && this.selectablePlugin.setData(this.props.data)
-  }
+  componentWillReceiveProps(props) {
+    const { data, summary } = props
 
-  componentWillReceiveProps({ data }) {
-    this.selectablePlugin && this.selectablePlugin.setData(data)
+    if (this.selectablePlugin) {
+      this.selectablePlugin.setData(data)
+      this.selectablePlugin.setTotalCount(summary.total)
+    }
   }
 
   componentWillUnmount() {
@@ -100,32 +101,38 @@ class Grid extends React.Component {
 
     return (
       <div>
-        <ToolbarContainer isToolbarSticky={this.props.isToolbarSticky}>
-          <TableSummary
-            Component={this.props.summary.render}
-            entityName={this.props.summary.entityName}
-            style={this.props.summary.style}
-            totalRowsCount={this.props.summary.total || this.props.data.length}
-            selectedRowsCount={
-              this.props.summary.selectedRowsCount ||
-              (this.selectablePlugin
-                ? this.selectablePlugin.SelectedRows.length
-                : 0)
-            }
-          />
+        {this.props.showToolbar && (
+          <ToolbarContainer isToolbarSticky={this.props.isToolbarSticky}>
+            <TableSummary
+              Component={this.props.summary.render}
+              entityName={this.props.summary.entityName}
+              style={this.props.summary.style}
+              totalRowsCount={
+                this.props.summary.total || this.props.data.length
+              }
+              selectedRowsCount={
+                this.props.summary.selectedRowsCount ||
+                (this.selectablePlugin
+                  ? this.selectablePlugin.SelectedCount
+                  : 0)
+              }
+            />
 
-          <ActionsBar>
-            {this.actionablePlugin && this.actionablePlugin.render()}
-          </ActionsBar>
+            <ActionsBar>
+              {this.actionablePlugin && this.actionablePlugin.render()}
+            </ActionsBar>
 
-          <SortableContainer>
-            {this.sortablePlugin &&
-              this.sortablePlugin.render(
-                this.Columns,
-                this.props.isFetching || this.props.isFetchingMore
-              )}
-          </SortableContainer>
-        </ToolbarContainer>
+            <SortableContainer>
+              {this.sortablePlugin &&
+                this.sortablePlugin.render(
+                  this.Columns,
+                  this.props.isFetching ||
+                    this.props.isFetchingMore ||
+                    this.props.isFetchingMoreBefore
+                )}
+            </SortableContainer>
+          </ToolbarContainer>
+        )}
 
         {multiple ? (
           <MultipleTable
@@ -156,8 +163,10 @@ Grid.propTypes = {
   plugins: PropTypes.object,
   isFetching: PropTypes.bool,
   isFetchingMore: PropTypes.bool,
+  isFetchingMoreBefore: PropTypes.bool,
   isToolbarSticky: PropTypes.bool,
   showTableHeader: PropTypes.bool,
+  showToolbar: PropTypes.bool,
   getTrProps: PropTypes.func,
   getTdProps: PropTypes.func,
   getBodyProps: PropTypes.func,
@@ -173,7 +182,9 @@ Grid.propTypes = {
 Grid.defaultProps = {
   isFetching: false,
   isFetchingMore: false,
+  isFetchingMoreBefore: false,
   showTableHeader: true,
+  showToolbar: true,
   isToolbarSticky: true,
   getBodyProps: () => {},
   getTrProps: () => {},

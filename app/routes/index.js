@@ -1,10 +1,11 @@
 import React from 'react'
 import { IndexRoute, Route } from 'react-router'
 
+import GoToDashboard from '../views/components/GoToDashboard'
+
 // Containers
 import AppLayout from '../components/App'
 // Pages
-import Landing from '../components/Pages/Landing'
 import Load from '../loader'
 import store from '../stores'
 import UserIsNotAuthenticated from './userIsNotAuthenticated'
@@ -195,6 +196,20 @@ const AsyncMarketingHistory = Load({
 })
 
 /* ==================================== */
+//  Insights
+/* ==================================== */
+
+const AsyncMarketingInsightsList = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/MarketingInsights/List' /* webpackChunkName: "marketing_insights_list" */)
+})
+
+const AsyncMarketingInsight = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/MarketingInsights/Insight' /* webpackChunkName: "email_insight" */)
+})
+
+/* ==================================== */
 //  Chatroom
 /* ==================================== */
 
@@ -223,11 +238,6 @@ const AsyncProfile = Load({
     import('../components/Pages/Dashboard/Account/Profile' /* webpackChunkName: "profile" */)
 })
 
-const AsyncDealTemplates = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Account/DealTemplates' /* webpackChunkName: "deal_templates" */)
-})
-
 const ExportCalendar = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Account/ICalIntegration' /* webpackChunkName: "deal_templates" */)
@@ -243,14 +253,14 @@ const ReminderNotifications = Load({
     import('../components/Pages/Dashboard/Account/ReminderNotifications' /* webpackChunkName: "reminder_notifications" */)
 })
 
-const AsyncEditDealTemplate = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Account/DealTemplates/EditTemplate' /* webpackChunkName: "deal_templates_edit" */)
-})
-
 const AsyncUpgradeAccount = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Account/Upgrade' /* webpackChunkName: "upgrade" */)
+})
+
+const AsyncCSS = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account/CentralizedShowingService' /* webpackChunkName: "centralized_showing_service" */)
 })
 
 /* ==================================== */
@@ -259,7 +269,7 @@ const AsyncUpgradeAccount = Load({
 
 const WidgetsContainer = Load({
   loader: () =>
-    import('../components/Pages/Widgets/' /* webpackChunkName: "widgets_container" */)
+    import('../components/Pages/Widgets' /* webpackChunkName: "widgets_container" */)
 })
 const AsyncListingsWidget = Load({
   loader: () =>
@@ -285,19 +295,9 @@ const AsyncShare = Load({
     import('../components/Pages/Dashboard/Marketing/SharePage' /* webpackChunkName: "mc_share_page" */)
 })
 
-const AsyncBrands = Load({
+const AsyncTeams = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Brand/index' /* webpackChunkName: "brand_settings" */)
-})
-
-const AsyncChecklistBrand = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Brand/Checklists' /* webpackChunkName: "brandChecklist" */)
-})
-
-const AsyncRoleBrand = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Brand/Roles' /* webpackChunkName: "brandRole" */)
+    import('../components/Pages/Dashboard/Teams' /* webpackChunkName: "teams" */)
 })
 
 const AsyncWebsite = Load({
@@ -315,9 +315,8 @@ const AsyncMobile = Load({
     import('../components/Pages/Mobile' /* webpackChunkName: "mobile" */)
 })
 
-const AsyncNoMatch = Load({
-  loader: () =>
-    import('../components/Pages/NoMatch' /* webpackChunkName: "404" */)
+const Async404 = Load({
+  loader: () => import('../components/Pages/404' /* webpackChunkName: "404" */)
 })
 
 const AsyncOops = Load({
@@ -329,21 +328,10 @@ function authenticate(nextState, replace) {
   const { user } = store.getState()
   const isLoggedIn = user && user.access_token
 
-  const noAuthList = [
-    '/branch',
-    '/dashboard/mls',
-    '/dashboard/mls/:id',
-    '/widgets/map',
-    '/widgets/search',
-    '/widgets/listings'
-  ]
+  const noAuthList = ['/dashboard/mls', '/dashboard/mls/:id']
 
-  for (let url of noAuthList) {
-    for (let route of nextState.routes) {
-      if (route.path && route.path !== '/' && route.path === url) {
-        return true
-      }
-    }
+  if (nextState.routes.some(route => noAuthList.includes(route.path))) {
+    return true
   }
 
   if (typeof window !== 'undefined' && !isLoggedIn) {
@@ -356,8 +344,12 @@ function authenticate(nextState, replace) {
 
 export default (
   <Route>
+    <Route path="/">
+      <IndexRoute component={GoToDashboard} />} />
+      <Route path="/dashboard" component={GoToDashboard} />
+    </Route>
+
     <Route path="/" component={AsyncAuthenticationLayout}>
-      <IndexRoute component={Landing} />
       <Route path="/branch" component={AsyncBranch} />
       <Route path="/share" component={AsyncShare} />
 
@@ -472,30 +464,26 @@ export default (
         <Route component={AsyncMarketingTemplates} path=":types(/:medium)" />
       </Route>
 
+      <Route path="/dashboard/insights">
+        <IndexRoute component={AsyncMarketingInsightsList} />
+        <Route path=":id" component={AsyncMarketingInsight} />
+      </Route>
+
       <Route path="dashboard/account" component={AsyncAccountLayout}>
         <IndexRoute component={AsyncProfile} />
         <Route path="upgrade" component={AsyncUpgradeAccount} />
 
-        <Route path="deal/templates" component={AsyncDealTemplates} />
-        <Route path="deal/templates/:id" component={AsyncEditDealTemplate} />
         <Route path="exportCalendar" component={ExportCalendar} />
         <Route path="manage-tags" component={ManageTags} />
         <Route
           path="reminder-notifications"
           component={ReminderNotifications}
         />
+        <Route path="css" component={AsyncCSS} />
       </Route>
 
-      <Route path="/dashboard/brands">
-        <IndexRoute component={AsyncBrands} />
-        <Route
-          path="/dashboard/brands/checklist/:brand"
-          component={AsyncChecklistBrand}
-        />
-        <Route
-          path="/dashboard/brands/role/:brand"
-          component={AsyncRoleBrand}
-        />
+      <Route path="/dashboard/teams(/:id)">
+        <IndexRoute component={AsyncTeams} />
       </Route>
 
       <Route path="/dashboard/website" component={AsyncWebsite} />
@@ -503,6 +491,6 @@ export default (
     </Route>
 
     <Route path="/oops" component={AsyncOops} />
-    <Route path="*" component={AsyncNoMatch} />
+    <Route path="*" component={Async404} />
   </Route>
 )

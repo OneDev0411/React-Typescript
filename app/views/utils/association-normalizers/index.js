@@ -1,8 +1,9 @@
 import {
   getField as getDealfield,
+  getStatus as getDealStatus,
   getAddress as getDealAddress
-} from '../../../models/Deal/helpers/context'
-import { getListingAddress } from '../../../utils/listing'
+} from 'models/Deal/helpers/context'
+import { getListingAddress, getStatusColor } from 'utils/listing'
 
 /**
  * Normalizing associations
@@ -32,6 +33,13 @@ export function normalizeAssociations(associations) {
         return {
           ...record,
           listing
+        }
+      case 'email':
+        const email = normalizeEmail(record.email)
+
+        return {
+          ...record,
+          email
         }
       default:
         return null
@@ -78,65 +86,86 @@ export function normalizeContact(contact) {
 /**
  * Normalizing listing entity as an association object
  * @param {object} listing The listing entity
+ * @param {boolean} showStatus
  * @returns {object} a normalized associations
  */
-export const normalizeListing = listing => {
+export const normalizeListing = (listing, showStatus = true) => {
   if (!listing) {
     return null
   }
 
-  const { id, property } = listing
-
-  let title = ''
-  let location = listing.location || property.address.location
-
-  if (listing.type === 'listing') {
-    title = property.address.full_address || getListingAddress(property.address)
-  } else {
-    title = getListingAddress(listing.address)
-  }
-
   return {
-    id,
-    title,
     avatar: {
       image: listing.cover_image_url,
+      isOnline: showStatus,
       size: 32,
+      showStatus,
+      statusColor: `#${getStatusColor(listing.status)}`,
       placeHolderImage: '/static/icons/listing-place-holder.svg'
     },
-    location,
+    details: getListingAddress(listing),
+    id: listing.id,
+    location: listing.location || listing.property.address.location,
+    original: listing,
+    title: `Listing - ${listing.status}, $${listing.price.toLocaleString()}`,
     type: 'listing',
-    url: `/dashboard/mls/${id}`,
-    details: detailText([listing.status, `$${listing.price.toLocaleString()}`]),
-    original: listing
+    url: `/dashboard/mls/${listing.id}`
   }
 }
 
 /**
  * Normalizing deal entity as an association object
  * @param {object} deal The deal
+ * @param {boolean} showStatus
  * @returns {object} a normalized association
  */
-export const normalizeDeal = deal => {
+export const normalizeDeal = (deal, showStatus = true) => {
   if (!deal) {
     return null
   }
 
-  const { id, type, deal_type, property_type } = deal
-  const image = getDealfield(deal, 'photo')
-  const title = getDealAddress(deal)
-
   return {
-    id,
-    type,
-    title,
     avatar: {
-      image,
+      image: getDealfield(deal, 'photo'),
+      isOnline: showStatus,
       size: 32,
+      showStatus,
+      statusColor: `#${getStatusColor(getDealStatus(deal))}`,
       placeHolderImage: '/static/icons/associated-deals-place-holder.svg'
     },
-    url: `/dashboard/deals/${id}`,
-    details: detailText([deal_type, property_type])
+    details: getDealAddress(deal),
+    id: deal.id,
+    title: `Deal - ${deal.deal_type}, ${deal.property_type}`,
+    type: deal.type,
+    url: `/dashboard/deals/${deal.id}`
+  }
+}
+
+/**
+ * Normalizing email entity as an association object
+ * @param {object} email The Email
+ * @param {boolean} showStatus
+ * @returns {object} a normalized association
+ */
+export const normalizeEmail = email => {
+  if (!email) {
+    return null
+  }
+
+  let img = ''
+  let body = email.text
+  const { template } = email
+
+  if (template) {
+    body = template.template && template.template.template_type
+    img = template.file && template.file.preview_url
+  }
+
+  return {
+    body,
+    id: email.id,
+    img,
+    subject: email.subject
   }
 }
 

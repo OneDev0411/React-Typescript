@@ -64,7 +64,7 @@ class AutocompleteFieldComponent extends React.Component {
                 <Input
                   {...getInputProps({
                     name: input.name,
-                    autoComplete: 'off'
+                    autoComplete: 'disabled'
                   })}
                 />
 

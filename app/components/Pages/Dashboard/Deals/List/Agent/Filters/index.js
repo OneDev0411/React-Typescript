@@ -5,17 +5,19 @@ import _ from 'underscore'
 
 import Deal from 'models/Deal'
 import ToolTip from 'components/tooltip'
+import ALink from 'components/ALink'
 
 import {
-  ListTitle,
-  ListItem
+  ListItem,
+  ListItemName,
+  ListTitle
 } from 'components/Grid/SavedSegments/List/styled'
 
 import { BadgeCounter } from '../../styles/filters/styled'
-import { ListItemName } from 'components/Grid/SavedSegments/List/styled'
+import { getPathForFilter } from '../../utils'
 
 const FilterNames = {
-  Active: ['Active', 'Lease'],
+  Active: ['Active', 'Lease', 'Coming Soon'],
   Drafts: ['Drafts'],
   Pending: [
     'Active Contingent',
@@ -52,24 +54,11 @@ export const Filters = {
 
 class AgentFilters extends React.Component {
   componentDidMount() {
-    const { active = 'All' } = this.props
+    const { activeFilter = 'All' } = this.props
 
-    if (!_.find(Filters, (fn, name) => name === active)) {
+    if (!_.find(Filters, (fn, name) => name === activeFilter)) {
       return browserHistory.push('/dashboard/deals')
     }
-
-    if (active) {
-      this.setFilter(active)
-    }
-  }
-
-  /**
-   * set filter tab tooltip
-   */
-  setFilter(filterName) {
-    const argument = filterName === 'All' ? '' : `/filter/${filterName}`
-
-    browserHistory.push(`/dashboard/deals${argument}`)
   }
 
   /**
@@ -84,6 +73,7 @@ class AgentFilters extends React.Component {
 
     return Object.values(deals).length
   }
+
   /**
    * get filter tab tooltip
    */
@@ -134,14 +124,15 @@ class AgentFilters extends React.Component {
               caption={this.getTooltipCaption(filterName)}
               placement="right"
             >
-              <ListItem
-                isSelected={filterName === activeFilter}
-                onClick={() => this.setFilter(filterName)}
-              >
-                <ListItemName>{filterName}</ListItemName>
+              <ALink noStyle to={getPathForFilter(filterName)}>
+                <ListItem isSelected={filterName === activeFilter}>
+                  <ListItemName>{filterName}</ListItemName>
 
-                <BadgeCounter>{this.getBadgeCounter(filterName)}</BadgeCounter>
-              </ListItem>
+                  <BadgeCounter>
+                    {this.getBadgeCounter(filterName)}
+                  </BadgeCounter>
+                </ListItem>
+              </ALink>
             </ToolTip>
           ))
         )}

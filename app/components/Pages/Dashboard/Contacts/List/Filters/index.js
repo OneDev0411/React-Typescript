@@ -1,52 +1,26 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import _ from 'underscore'
 
-import { selectTags } from '../../../../../../reducers/contacts/tags'
-import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
+import { selectTags } from 'reducers/contacts/tags'
+import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
-import Filters from '../../../../../../views/components/Grid/Filters'
-import SaveSegment from '../../../../../../views/components/Grid/SavedSegments/Create'
-import { normalizeFilters } from '../utils'
+import Filters from 'components/Grid/Filters'
+import SaveSegment from 'components/Grid/SavedSegments/Create'
+import { SimpleList } from 'components/Grid/Filters/FilterTypes/SimpleList'
+import { OperatorAndOperandFilter } from 'components/Grid/Filters/FilterTypes/OparatorAndOperand'
 
-class ContactFilters extends React.PureComponent {
-  getUniqTags = tags => {
-    if (!tags || tags.length === 0) {
-      return []
-    }
+import { OPEN_HOUSE_FILTER_ID, ORIGINS } from '../constants'
 
-    return _.uniq(_.pluck(tags, 'text'))
-  }
+import createFiltersFromSegment from './helpers/create-filters-from-segment'
+import createSegmentFromFilters from './helpers/create-segment-from-filters'
+// import getFlows from './helpers/get-flows'
+import getOpenHouseEvents from './helpers/get-open-house-events'
+import getUniqTags from './helpers/get-uniq-tags'
+import { getPredefinedContactLists } from '../utils/get-predefined-contact-lists'
 
-  /**
-   * creates a search criteria for contacts filters
-   */
-  normalizeFilters = filters => ({
-    filters: normalizeFilters(filters),
-    args: {
-      filter_type: this.props.conditionOperator
-    }
-  })
-
-  normalizeSegment = (filters, activeFilters) => {
-    if (_.size(activeFilters) > 0) {
-      return Object.values(activeFilters)
-    }
-
-    return filters.map(filter => ({
-      id: filter.attribute_def,
-      isActive: false,
-      isIncomplete: false,
-      values: [filter.value],
-      operator: {
-        name: filter.invert ? 'is not' : 'is',
-        invert: filter.invert
-      }
-    }))
-  }
-
-  get Config() {
-    const { tags, attributeDefs } = this.props
+function ContactFilters(props) {
+  const getConfig = () => {
+    const { attributeDefs, tags } = props
 
     const tagDefinition = selectDefinitionByName(attributeDefs, 'tag')
     const sourceDefinition = selectDefinitionByName(
@@ -58,52 +32,63 @@ class ContactFilters extends React.PureComponent {
       {
         id: tagDefinition.id,
         label: 'Tag',
-        type: 'Set',
-        multi: false,
-        options: this.getUniqTags(tags),
+        renderer: props => (
+          <OperatorAndOperandFilter {...props} options={getUniqTags(tags)} />
+        ),
         tooltip:
           'A group a person belongs to, based on a tag you’ve manually applied to them.'
       },
       {
+        id: OPEN_HOUSE_FILTER_ID,
+        label: 'Open House',
+        renderer: props => (
+          <SimpleList {...props} getOptions={getOpenHouseEvents} />
+        ),
+        tooltip: 'Contacts invited to a specific Open House'
+      },
+      // {
+      //   id: FLOW_FILTER_ID,
+      //   label: 'Flow',
+      //   renderer: props => (
+      //     <SimpleList {...props} getOptions={() => getFlows(user)} />
+      //   ),
+      //   tooltip: 'Contacts who are active in a specific flow'
+      // },
+      {
         id: sourceDefinition.id,
         label: 'Origin',
-        type: 'Set',
-        multi: false,
-        options: [
-          'BrokerageWidget',
-          'IOSAddressBook',
-          'SharesRoom',
-          'ExplicitlyCreated',
-          'External/Outlook',
-          'OpenHouse',
-          'CSV'
-        ],
+        renderer: props => (
+          <OperatorAndOperandFilter {...props} options={ORIGINS} />
+        ),
         tooltip: 'Source type'
       }
     ]
   }
 
-  render() {
-    return (
-      <Filters
-        name="contacts"
-        plugins={['segments']}
-        config={this.Config}
-        createFiltersFromSegment={this.normalizeSegment}
-        createSegmentFromFilters={this.normalizeFilters}
-        onChange={this.props.onFilterChange}
-        disableConditionOperators={this.props.disableConditionOperators}
-      >
-        <SaveSegment />
-      </Filters>
-    )
-  }
+  return (
+    <Filters
+      name="contacts"
+      plugins={['segments']}
+      config={getConfig()}
+      createFiltersFromSegment={createFiltersFromSegment}
+      getPredefinedLists={getPredefinedContactLists}
+      onChange={() => props.onFilterChange()}
+      disableConditionOperators={props.disableConditionOperators}
+    >
+      <SaveSegment
+        createSegmentFromFilters={createSegmentFromFilters(
+          props.conditionOperator
+        )}
+      />
+    </Filters>
+  )
 }
 
-function mapStateToProps({ contacts }) {
+function mapStateToProps({ contacts, user }) {
   const { tags, attributeDefs } = contacts
 
   return {
+    user,
     tags: selectTags(tags),
     conditionOperator: contacts.filterSegments.conditionOperator,
     attributeDefs

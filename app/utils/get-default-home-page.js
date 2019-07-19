@@ -1,17 +1,21 @@
 import { hasUserAccess } from './user-teams'
 
-let defaultHomepage = '/dashboard/mls'
+export default function getUserDefaultHomepage(user) {
+  let defaultHomepage = '/dashboard/mls'
 
-export default function getHomepage(user) {
   if (!user) {
     return defaultHomepage
   }
 
-  const hasDealsPermission = hasUserAccess(user, 'Deals')
-  const hasBackOfficePermission = hasUserAccess(user, 'BackOffice')
+  if (hasUserAccess(user, 'CRM')) {
+    return '/dashboard/contacts'
+  }
 
-  if (hasDealsPermission || hasBackOfficePermission) {
-    defaultHomepage = '/dashboard/deals'
+  if (
+    hasUserAccess(user, 'Deals') ||
+    hasUserAccess(user, 'BackOffice')
+  ) {
+    return '/dashboard/deals'
   }
 
   return defaultHomepage

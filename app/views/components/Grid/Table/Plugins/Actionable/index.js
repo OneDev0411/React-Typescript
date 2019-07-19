@@ -13,8 +13,18 @@ export class ActionablePlugin {
     this.selectablePlugin = selectablePlugin
   }
 
+  get EntireModeEnabled() {
+    return this.selectablePlugin
+      ? this.selectablePlugin.isEntireRowsSelected()
+      : false
+  }
+
   get SelectedRows() {
     return this.selectablePlugin ? this.selectablePlugin.SelectedRows : []
+  }
+
+  get ExcludedRows() {
+    return this.selectablePlugin ? this.selectablePlugin.ExcludedRows : []
   }
 
   render = () =>
@@ -36,7 +46,9 @@ export class ActionablePlugin {
     ...otherProps
   }) => {
     const params = {
-      selectedRows: this.SelectedRows
+      entireMode: this.EntireModeEnabled,
+      selectedRows: this.SelectedRows,
+      excludedRows: this.ExcludedRows
     }
 
     if (display && display(params) === false) {
@@ -45,6 +57,7 @@ export class ActionablePlugin {
 
     if (this.selectablePlugin) {
       params.resetSelectedRows = this.selectablePlugin.resetSelectedItems
+      params.totalRowsCount = this.selectablePlugin.totalCount
     }
 
     switch (type) {

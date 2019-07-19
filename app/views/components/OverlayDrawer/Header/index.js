@@ -14,20 +14,22 @@ const Header = ({ title, renderMenu, onClose, style, render }) => {
 
   return (
     <Container style={style}>
-      <Flex alignCenter>{title && <Title>{title}</Title>}</Flex>
-      <Flex alignCenter>
-        {hasMenu && renderMenu()}
-        <IconButton
-          type="button"
-          isFit
-          iconSize="large"
-          inverse
-          onClick={onClose}
-          style={{ marginLeft: hasMenu ? '1rem' : 0 }}
-        >
-          <CloseIcon />
-        </IconButton>
-      </Flex>
+      <div className="header-row">
+        <Flex alignCenter>{title && <Title>{title}</Title>}</Flex>
+        <Flex alignCenter>
+          {hasMenu && renderMenu()}
+          <IconButton
+            type="button"
+            isFit
+            iconSize="large"
+            inverse
+            onClick={onClose}
+            style={{ marginLeft: hasMenu ? '1rem' : 0 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Flex>
+      </div>
     </Container>
   )
 }

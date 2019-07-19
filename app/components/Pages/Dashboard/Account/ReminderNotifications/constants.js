@@ -43,4 +43,4 @@ export const DROPDOWN_OPTIONS = [
   }
 ]
 
-export const SHOULD_RENDER_FORCEPUSH_BUTTON = true
+export const SHOULD_RENDER_FORCEPUSH_BUTTON = false

@@ -2,10 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { selectDeals } from '../../../reducers/deals/list'
+import Drawer from 'components/OverlayDrawer'
+import { selectDeals } from 'reducers/deals/list'
 
-import Drawer from '../OverlayDrawer'
-import Body from '../SelectDealModal/components/Body'
+import Body from './Body'
 
 const propTypes = {
   ...Drawer.propTypes,
@@ -27,6 +27,7 @@ function SearchDealDrawer(props) {
           isDrawer
           user={props.user}
           deals={props.deals}
+          itemRenderer={props.itemRenderer}
           handleSelectedItem={props.onSelect}
           defaultSearchFilter={props.defaultSearchFilter}
         />

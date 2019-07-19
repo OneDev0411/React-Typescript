@@ -66,7 +66,14 @@ class Uploads extends React.Component {
 
           <Flex>
             <UploadManager deal={this.props.deal}>
-              <ActionButton size="small" as="span">
+              <ActionButton
+                size="small"
+                as="span"
+                style={{
+                  width: '9rem',
+                  justifyContent: 'center'
+                }}
+              >
                 Upload
               </ActionButton>
             </UploadManager>

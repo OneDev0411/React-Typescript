@@ -1,23 +1,30 @@
 {
-  "presets": ["react", "es2015", "stage-0"],
-  "plugins": [
+  "presets": [
+    "@babel/preset-typescript",
+    "@babel/react",
     [
-      "system-import-transformer",
+      "@babel/preset-env",
       {
-        "amd": { "useRequireEnsure": true },
-        "syntax": {
-          "import": true,
-          "system-import": false
-        }
+        "useBuiltIns": "usage",
+        "corejs": "^3.0.0"
+      }
+    ]
+  ],
+  "plugins": [
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-proposal-class-properties",
+    [
+      "babel-plugin-styled-components",
+      {
+        "displayName": true
       }
     ]
   ],
   "env": {
-    "test": {
-      "compact": "false"
-    },
-    "production": {
-      "plugins": [["react-remove-properties", { "properties": ["data-test"] }]]
+    "development": {
+      "plugins": [
+        "react-hot-loader/babel"
+      ]
     }
   }
 }

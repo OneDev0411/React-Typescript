@@ -1,8 +1,12 @@
 export function getTaskEnvelopes(envelopes, task) {
+  if (!task) {
+    return []
+  }
+
   return envelopes
     .filter(envelope =>
       envelope.documents.some(document => {
-        if (task.submission && task.submission.id === document.submission) {
+        if (task.id === document.task) {
           return true
         }
 

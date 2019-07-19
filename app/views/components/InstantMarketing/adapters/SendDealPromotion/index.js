@@ -1,18 +1,19 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
 
 import Listing from 'models/listings/listing'
-import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
+import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 
-import EmailCompose from 'components/EmailCompose'
+import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import ActionButton from 'components/Button/ActionButton'
 import InstantMarketing from 'components/InstantMarketing'
 
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
+import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
+import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
+import { attachDealDataToListing } from 'components/SearchListingDrawer/helpers/attach-deal-to-listing'
 
 import SocialDrawer from '../../components/SocialDrawer'
-import { getTemplatePreviewImage } from '../../helpers/get-template-preview-image'
 import { getTemplateTypes } from '../../helpers/get-template-types'
 
 const initialState = {
@@ -22,8 +23,10 @@ const initialState = {
   isComposeEmailOpen: false,
   isSocialDrawerOpen: false,
   htmlTemplate: '',
-  templateScreenshot: null,
-  socialNetworkName: ''
+  socialNetworkName: '',
+  emailBody: '',
+  templateInstance: null,
+  isGettingTemplateInstance: false
 }
 
 class SendDealPromotion extends React.Component {
@@ -34,6 +37,12 @@ class SendDealPromotion extends React.Component {
 
   componentDidMount() {
     this.getDealListing()
+  }
+
+  componentDidUpdate(props) {
+    if (props.deal.id !== this.props.deal.id) {
+      this.getDealListing()
+    }
   }
 
   toggleInstantMarketingBuilder = () =>
@@ -54,7 +63,7 @@ class SendDealPromotion extends React.Component {
       isComposeEmailOpen: true,
       isInstantMarketingBuilderOpen: true,
       htmlTemplate: template,
-      templateScreenshot: null
+      emailBody: ''
     })
   }
 
@@ -66,43 +75,44 @@ class SendDealPromotion extends React.Component {
     })
   }
 
-  handleSendEmails = async values => {
-    this.setState({
-      isSendingEmail: true
-    })
+  getEmail = email => {
+    const { templateInstance } = this.state
 
-    const email = {
-      from: values.fromId,
-      to: values.recipients,
-      subject: values.subject,
-      html: this.state.htmlTemplate.result
+    if (templateInstance == null) {
+      throw new Error(`Template instance is ${typeof templateInstance}!`)
     }
 
-    try {
-      await sendContactsEmail(email, this.state.owner.id)
+    const { html, id: template } = templateInstance
 
-      this.props.notify({
-        status: 'success',
-        message: `${
-          values.recipients.length
-        } emails has been sent to your contacts`
-      })
-    } catch (e) {
-      console.log(e)
-      // todo
-    } finally {
-      this.setState(initialState)
+    return {
+      ...email,
+      html,
+      template,
+      deal: this.props.deal.id
     }
   }
 
+  onEmailSent = () => {
+    this.setState(state => ({
+      ...initialState,
+      // If the user wants to send some new emails for current deal listing
+      // we still need the listing data web#2461
+      listing: state.listing
+    }))
+  }
+
   generatePreviewImage = async template => {
-    const templateScreenshot = await getTemplatePreviewImage(
-      template,
-      this.TemplateInstanceData
-    )
+    this.setState({ isGettingTemplateInstance: true })
+
+    const instance = await getTemplateInstances(template.id, {
+      ...this.TemplateInstanceData,
+      html: template.result
+    })
 
     this.setState({
-      templateScreenshot
+      emailBody: getTemplateInstancePreviewImage(instance),
+      templateInstance: instance,
+      isGettingTemplateInstance: false
     })
   }
 
@@ -116,12 +126,14 @@ class SendDealPromotion extends React.Component {
 
     let listing = {}
 
-    if (deal.listing) {
-      try {
+    try {
+      if (deal.listing) {
         listing = await Listing.getListing(deal.listing)
-      } catch (e) {
-        console.log(e)
+      } else {
+        listing = attachDealDataToListing(deal, await getMockListing())
       }
+    } catch (e) {
+      console.log(e)
     }
 
     this.setState({
@@ -147,7 +159,7 @@ class SendDealPromotion extends React.Component {
     }))
   }
 
-  getTypes = () => {
+  get types() {
     if (Array.isArray(this.props.types)) {
       return this.props.types
     }
@@ -172,26 +184,30 @@ class SendDealPromotion extends React.Component {
           {this.props.children}
         </ActionButton>
 
-        <InstantMarketing
-          isOpen={this.state.isInstantMarketingBuilderOpen}
-          onClose={this.toggleInstantMarketingBuilder}
-          handleSave={this.handleSaveMarketingCard}
-          handleSocialSharing={this.handleSocialSharing}
-          templateData={{ listing, user }}
-          mediums={this.props.mediums}
-          templateTypes={this.getTypes()}
-          assets={this.Assets}
-        />
+        {this.state.isInstantMarketingBuilderOpen && (
+          <InstantMarketing
+            isOpen
+            onClose={this.toggleInstantMarketingBuilder}
+            handleSave={this.handleSaveMarketingCard}
+            handleSocialSharing={this.handleSocialSharing}
+            templateData={{ listing, user }}
+            mediums={this.props.mediums}
+            templateTypes={this.types}
+            assets={this.Assets}
+          />
+        )}
 
         {this.state.isComposeEmailOpen && (
-          <EmailCompose
+          <BulkEmailComposeDrawer
             isOpen
+            hasStaticBody
             from={this.state.owner}
-            onClose={this.toggleComposeEmail}
             recipients={this.props.recipients}
-            html={this.state.templateScreenshot}
-            onClickSend={this.handleSendEmails}
-            isSubmitting={this.state.isSendingEmail}
+            body={this.state.emailBody}
+            getEmail={this.getEmail}
+            onSent={this.onEmailSent}
+            onClose={this.toggleComposeEmail}
+            isSubmitDisabled={this.state.isGettingTemplateInstance}
           />
         )}
 
@@ -214,7 +230,4 @@ function mapStateToProps({ user }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { notify }
-)(SendDealPromotion)
+export default connect(mapStateToProps)(SendDealPromotion)

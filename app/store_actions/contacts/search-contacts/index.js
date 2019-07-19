@@ -5,17 +5,23 @@ import { defaultQuery } from '../../../models/contacts/helpers'
 import { normalizeContacts } from '../helpers/normalize-contacts'
 import { selectContacts } from '../../../reducers/contacts/list'
 
+// TODO: make args an object
 export function searchContacts(
-  filter,
+  attributeFilters,
   start = 0,
   limit = 50,
   searchInputValue,
   order = '-created_at',
   users,
-  conditionOperator = 'and'
+  conditionOperator = 'and',
+  prependResult = false,
+  meta = {},
+  flows = [],
+  crmTasks = [],
+  alphabet
 ) {
   return async (dispatch, getState) => {
-    if (start === 0) {
+    if (start === 0 && !prependResult) {
       dispatch({
         type: actionTypes.CLEAR_CONTACTS_LIST
       })
@@ -28,20 +34,23 @@ export function searchContacts(
 
       const response = await search(
         searchInputValue,
-        filter,
+        attributeFilters,
         {
           ...defaultQuery,
           start,
           limit,
           order,
+          alphabet,
           filter_type: conditionOperator
         },
-        users
+        users,
+        flows,
+        crmTasks
       )
 
       const contactsLength = selectContacts(getState().contacts.list).length
 
-      if (contactsLength && start === 0) {
+      if (contactsLength && start === 0 && !prependResult) {
         dispatch({
           type: actionTypes.CLEAR_CONTACTS_LIST
         })
@@ -54,12 +63,14 @@ export function searchContacts(
             searchInputValue,
             order,
             users,
-            filter,
-            type: 'filter'
+            filter: attributeFilters,
+            type: 'attributeFilters'
           },
           ...normalizeContacts(response)
         },
-        type: actionTypes.SEARCH_CONTACTS_SUCCESS
+        type: actionTypes.SEARCH_CONTACTS_SUCCESS,
+        prependResult,
+        meta
       })
     } catch (error) {
       dispatch({

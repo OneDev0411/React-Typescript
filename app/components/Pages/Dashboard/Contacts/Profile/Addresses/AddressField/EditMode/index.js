@@ -5,7 +5,11 @@ import { Checkbox } from 'components/Checkbox'
 import { BasicDropdown } from 'components/BasicDropdown'
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
 
-import { Input, DropdownButton, DropdownArrowIcon } from './styled'
+import {
+  Input,
+  DropdownButton,
+  DropdownArrowIcon
+} from 'components/inline-editable-fields/styled'
 
 export function EditMode(props) {
   return (

@@ -1,0 +1,16 @@
+{
+  "baseUrl": "http://localhost:8081",
+  "fixturesFolder": "tests/cypress/fixtures",
+  "integrationFolder": "tests/cypress/integration",
+  "pluginsFile": "tests/cypress/plugins",
+  "screenshotsFolder": "tests/cypress/screenshots",
+  "videosFolder": "tests/cypress/videos",
+  "supportFile": "tests/cypress/support",
+  "env": {
+    "E2E_HOST": "http://0.0.0.0:8081",
+    "E2E_EMAIL": "e2e@rechat.com",
+    "E2E_PASSWORD": "aaaaaa"
+  },
+  "defaultCommandTimeout": 20000,
+  "testFiles": "**/*.test.ts"
+}

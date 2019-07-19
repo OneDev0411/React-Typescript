@@ -1,9 +1,11 @@
 import React from 'react'
 import _ from 'underscore'
 import cn from 'classnames'
+
+import { H2 } from 'components/Typography/headings'
+
 import CrudRole from './crud-role'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
-import { H2 } from 'components/Typography/headings'
 
 const BUYING = 'Buying'
 const SELLING = 'Selling'
@@ -36,7 +38,8 @@ export default props => {
   const sharedProps = {
     roleType: 'agent',
     dealSide,
-    isPrimaryAgent,
+    // https://gitlab.com/rechat/web/issues/1671#note_184505249
+    isPrimaryAgent: isPrimaryAgent && !props.isBackOffice,
     dealEnderType: props.dealEnderType,
     isDoubleEnded: props.isDoubleEnded,
     isCommissionRequired: props.isCommissionRequired,

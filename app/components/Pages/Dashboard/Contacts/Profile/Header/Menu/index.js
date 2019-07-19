@@ -1,23 +1,71 @@
 import React from 'react'
+// import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
+// import { AddToFlow } from 'components/AddToFlow'
+import SendEmailButton from 'components/SendEmailButton'
+import { CloseButton } from 'components/Button/CloseButton'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 
-import { CloseButton } from 'components/Button/CloseButton'
+import normalizeContactForEmailCompose from 'models/email-compose/helpers/normalize-contact'
 
 import Chat from './ChatButton'
 import { Divider } from './Divider'
 
-export function Menu(props) {
-  const { contact } = props
+// Menu.propTypes = {
+//   contact: PropTypes.shape().isRequired,
+//   addToFlowCallback: PropTypes.func
+// }
+
+// Menu.defaultProps = {
+//   addToFlowCallback() {}
+// }
+
+function Menu(props) {
+  const { contact, closeButtonQuery, backUrl } = props
 
   return (
     <Flex alignCenter style={{ padding: '1.5em 0' }}>
-      <SendContactCard contact={contact}>Send a Card</SendContactCard>
+      {/* <AddToFlow
+        associations={{ contacts: [contact.id] }}
+        callback={props.addToFlowCallback}
+      /> */}
+
+      <SendEmailButton
+        recipients={normalizeContactForEmailCompose(
+          contact,
+          props.attributeDefs
+        )}
+        // style={{ marginLeft: '1rem' }}
+      />
+
+      <SendContactCard
+        contact={contact}
+        buttonStyle={{ style: { marginLeft: '1rem' } }}
+      >
+        Send a Card
+      </SendContactCard>
 
       <Chat contact={contact} />
       <Divider />
-      <CloseButton isFit iconSize="large" inverse />
+
+      <CloseButton
+        isFit
+        iconSize="large"
+        inverse
+        defaultBackUrl="/dashboard/contacts"
+        backUrl={backUrl}
+        query={closeButtonQuery}
+      />
     </Flex>
   )
 }
+
+function mapStateToProps({ contacts }) {
+  return {
+    attributeDefs: contacts.attributeDefs
+  }
+}
+
+export default connect(mapStateToProps)(Menu)

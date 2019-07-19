@@ -26,7 +26,7 @@ function TaskView(props) {
       <Drawer.Header
         style={{
           flexDirection: 'column',
-          padding: '1.25rem 0',
+          padding: '1rem 0 0 0',
           height: headerHeight
         }}
         render={() => (
@@ -37,7 +37,7 @@ function TaskView(props) {
       <Drawer.Body
         style={{
           paddingTop: headerHeight,
-          paddingRight: '1rem'
+          paddingRight: '1.5rem'
         }}
       >
         <DraftBanner isDraftDeal={props.deal.is_draft} />

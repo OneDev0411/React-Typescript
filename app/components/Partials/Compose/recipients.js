@@ -1,11 +1,14 @@
 import React from 'react'
 import _ from 'underscore'
 import cn from 'classnames'
+
+import UserAvatar from 'components/UserAvatar'
+
 import AutoSizeInput from '../AutoSizeInput'
-import UserAvatar from '../UserAvatar'
 
 export default class extends React.Component {
   state = { isFocused: false }
+
   async componentDidMount() {
     const Rx = await import('rxjs/Rx' /* webpackChunkName: "rx" */)
     const { Observable } = Rx
@@ -57,6 +60,7 @@ export default class extends React.Component {
   }
 
   onBlur = () => this.setState({ isFocused: false })
+
   onFocus = () => this.setState({ isFocused: true })
 
   render() {

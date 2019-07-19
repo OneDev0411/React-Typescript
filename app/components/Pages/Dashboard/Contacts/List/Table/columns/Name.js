@@ -12,7 +12,8 @@ import Tooltip from '../../../../../../../views/components/tooltip'
 import PartnerIcon from '../../../../../../../views/components/SvgIcons/Partner/IconPartner'
 import {
   getContactAttribute,
-  getAttributeFromSummary
+  getAttributeFromSummary,
+  getContactOnlineStatus
 } from '../../../../../../../models/contacts/helpers'
 
 import ImageStatus from '../../../../../../../views/components/ImageStatus'
@@ -54,22 +55,16 @@ const ContactsListName = ({ contact, attributeDefs }) => {
 
   const name = getAttributeFromSummary(contact, 'display_name')
 
-  let userStatuses = []
+  const is_user_active = getContactOnlineStatus(contact)
 
-  contact.sub_contacts.forEach(
-    ({ users: subContactUsers }) =>
-      subContactUsers &&
-      subContactUsers.forEach(user => userStatuses.push(user.user_status))
-  )
+  const statusColor = is_user_active ? '#32b86d' : '#c3c3c3'
 
-  let statusColor
+  let s
 
-  if (userStatuses.length > 0) {
-    if (userStatuses[0] === 'Active') {
-      statusColor = '#32b86d'
-    } else {
-      statusColor = '#c3c3c3'
-    }
+  if (contact.meta && contact.meta.s) {
+    s = contact.meta.s
+  } else {
+    s = '0'
   }
 
   return (
@@ -94,7 +89,14 @@ const ContactsListName = ({ contact, attributeDefs }) => {
         }}
       >
         <Link
-          to={`/dashboard/contacts/${contact.id}`}
+          data-test="contact-link"
+          to={{
+            pathname: `/dashboard/contacts/${contact.id}`,
+            state: {
+              id: contact.id,
+              s
+            }
+          }}
           style={{
             ...ellipsis,
             fontWeight: 500,

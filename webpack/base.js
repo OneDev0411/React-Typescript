@@ -1,29 +1,34 @@
-import path from 'path'
-import webpack from 'webpack'
-import config from '../config/webpack'
+const path = require('path')
+
+const webpack = require('webpack')
+
+const config = require('../config/webpack')
 
 function resolvePath(dirPath) {
   return path.resolve(__dirname, dirPath)
 }
 
-export default {
+module.exports = {
   devtool: 'eval-source-map',
   entry: {},
   output: {
     path: config.compile.output,
     filename: config.compile.jsBundle,
     chunkFilename: '[name].[chunkhash].js',
-    publicPath: config.compile.publicPath
+    publicPath: config.compile.publicPath,
+    globalObject: 'this'
   },
   resolve: {
     modules: [resolvePath('../app'), 'node_modules'],
-    extensions: ['.js', '.jsx', '.json', '.css'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.css'],
     alias: {
+      store: resolvePath('../app/stores'),
       actions: resolvePath('../app/store_actions'),
       assets: resolvePath('../app/static'),
       components: resolvePath('../app/views/components'),
       constants: resolvePath('../app/constants'),
       dashboard: resolvePath('../app/components/Dashboard'),
+      hooks: resolvePath('../app/hooks'),
       models: resolvePath('../app/models'),
       reducers: resolvePath('../app/reducers'),
       routes: resolvePath('../app/routes'),
@@ -31,7 +36,11 @@ export default {
       services: resolvePath('../app/services'),
       utils: resolvePath('../app/utils'),
       views: resolvePath('../app/views'),
-      config: resolvePath('../config/public')
+      config: resolvePath('../config/public'),
+      /* components */
+      deals: resolvePath('../app/components/Pages/Dashboard/Deals'),
+      crm: resolvePath('../app/components/Pages/Dashboard/Contacts'),
+      animations: resolvePath('../app/animations')
     }
   },
   plugins: [new webpack.DefinePlugin(config.globals)],
@@ -41,32 +50,10 @@ export default {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(ts|tsx|js)$/,
         loader: 'babel-loader',
         include: config.compile.entry,
-        options: {
-          cacheDirectory: true,
-          babelrc: false,
-          presets: ['react', ['es2015', { modules: false }], 'stage-0'],
-          env: {
-            development: {
-              plugins: [
-                ['react-hot-loader/babel'],
-                [
-                  'react-transform',
-                  {
-                    transforms: [
-                      {
-                        transform: 'react-transform-catch-errors',
-                        imports: ['react', 'redbox-react']
-                      }
-                    ]
-                  }
-                ]
-              ]
-            }
-          }
-        }
+        options: {}
       },
       {
         test: /\.woff(\?.*)?$/,

@@ -1,8 +1,10 @@
 import { browserHistory } from 'react-router'
+
 import signin from '../../models/auth/signin'
-import getTeams from '../../store_actions/user/teams'
-import getDefaultHomePage from '../../utils/get-default-home-page'
 import * as actionsType from '../../constants/auth/signin'
+import getDefaultHomePage from '../../utils/get-default-home-page'
+
+import { getUserTeams } from '../user/teams'
 
 const submitSigninForm = (userInfo, redirectTo) => (dispatch, getState) => {
   dispatch({
@@ -18,12 +20,7 @@ const submitSigninForm = (userInfo, redirectTo) => (dispatch, getState) => {
 
       try {
         if (!user.teams) {
-          const teams = await dispatch(getTeams())
-
-          user = {
-            ...user,
-            teams
-          }
+          await dispatch(getUserTeams(user))
         }
       } catch (error) {
         throw error
@@ -46,7 +43,7 @@ const submitSigninForm = (userInfo, redirectTo) => (dispatch, getState) => {
         window.Raven.setUserContext(userData)
       }
 
-      const defaultHomePage = getDefaultHomePage(user)
+      const defaultHomePage = getDefaultHomePage(getState().user)
 
       if (redirectTo && redirectTo.includes('http')) {
         browserHistory.push('/branch?waitingForRedirect')

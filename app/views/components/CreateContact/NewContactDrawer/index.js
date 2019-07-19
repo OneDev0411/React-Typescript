@@ -4,12 +4,15 @@ import { connect } from 'react-redux'
 import arrayMutators from 'final-form-arrays'
 import { browserHistory } from 'react-router'
 
-import Alert from '../../../../components/Pages/Dashboard/Partials/Alert/index.js'
-import { defaultQuery } from '../../../../models/contacts/helpers/default-query'
-import { createContacts } from '../../../../store_actions/contacts/create-contacts'
-import { selectDefinitionByName } from '../../../../reducers/contacts/attributeDefs'
-import { FinalFormDrawer } from '../../FinalFormDrawer'
-import { TextField, Select } from '../../final-form-fields'
+import { createContacts } from 'models/contacts/create-contacts'
+import { defaultQuery } from 'models/contacts/helpers/default-query'
+
+import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
+
+import { FinalFormDrawer } from 'components/FinalFormDrawer'
+import { TextField, Select } from 'components/final-form-fields'
+
+import Alert from '../../../../components/Pages/Dashboard/Partials/Alert'
 
 import { Owner } from './Owner'
 import { Emails } from './Emails'
@@ -37,10 +40,25 @@ const INITIAL_VALUES = {
 }
 
 class NewContactDrawer extends React.Component {
+  state = {
+    hasSubmitError: false
+  }
+
+  onClose = () => {
+    this.setState({ hasSubmitError: false })
+    this.props.onClose()
+  }
+
   onSubmit = async values => {
+    if (this.state.hasSubmitError) {
+      this.setState({ hasSubmitError: false })
+    }
+
     const submitError = submitValidate(values)
 
     if (submitError != null) {
+      this.setState({ hasSubmitError: true })
+
       return submitError
     }
 
@@ -52,8 +70,9 @@ class NewContactDrawer extends React.Component {
         activity: false
       }
 
-      const response = await this.props.dispatch(
-        createContacts([{ attributes, user: values.owner.id }], query)
+      const response = await createContacts(
+        [{ attributes, user: values.owner.id }],
+        query
       )
 
       const contact = response.data[0]
@@ -88,7 +107,7 @@ class NewContactDrawer extends React.Component {
           owner: this.props.user
         }}
         isOpen={this.props.isOpen}
-        onClose={this.props.onClose}
+        onClose={this.onClose}
         onSubmit={this.onSubmit}
         title="New Contact"
         mutators={{
@@ -97,6 +116,7 @@ class NewContactDrawer extends React.Component {
         render={({ submitError, form }) => (
           <React.Fragment>
             <Select
+              data-test="contact-title-select"
               items={this.getDefaultValues('title', 'enum_values')}
               name="title"
               label="Title"
@@ -115,7 +135,7 @@ class NewContactDrawer extends React.Component {
               mutators={form.mutators}
             />
             <Owner name="owner" user={this.props.user} />
-            {submitError && (
+            {this.state.hasSubmitError && submitError && (
               <Alert
                 type="error"
                 style={{ textAlign: 'left', marginBottom: '2em' }}

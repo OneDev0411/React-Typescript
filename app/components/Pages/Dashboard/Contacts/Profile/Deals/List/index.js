@@ -5,10 +5,11 @@ import Item from './Item'
 
 List.propTypes = {
   contact: PropTypes.shape().isRequired,
-  list: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-  handleOnClickItem: PropTypes.func.isRequired
+  items: PropTypes.arrayOf(PropTypes.shape()).isRequired
 }
 
 export function List(props) {
-  return props.list.map(item => <Item key={item.id} item={item} {...props} />)
+  return props.items.map(item => (
+    <Item key={item.id} item={item} contact={props.contact} />
+  ))
 }

@@ -1,0 +1,26 @@
+{
+  "id": "8cd0f77c-a61e-4e22-9ea0-17e4ec81eb2e",
+  "created_by": "23d3a48c-7889-11e8-85a5-0a95998482ac",
+  "object_type": "contact_attribute",
+  "event_type": "birthday",
+  "type_label": "Birthday",
+  "timestamp": -5350406400,
+  "date": "1800-06-15T00:00:00.000Z",
+  "next_occurence": "2020-06-15T00:00:00.000Z",
+  "recurring": true,
+  "title": "Al Day's Birthday",
+  "crm_task": null,
+  "deal": null,
+  "contact": "457095c0-f884-498c-89a5-da74636d5718",
+  "campaign": null,
+  "users": [
+    "23d3a48c-7889-11e8-85a5-0a95998482ac"
+  ],
+  "status": null,
+  "metadata": {
+    "is_partner": false
+  },
+  "timestamp_readable": "1800-06-15T00:00:00.000Z",
+  "timestamp_midday": "1800-06-15T12:00:00.000Z",
+  "type": "calendar_event"
+}

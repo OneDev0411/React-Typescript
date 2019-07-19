@@ -16,9 +16,19 @@ export default function EmailMarketing(props) {
     <Container style={{ marginBottom: '1.5rem' }}>
       <LeftColumn>
         <Title>Email Marketing</Title>
-        <Description>Beautiful email collaterals for your listing.</Description>
+        <Description>Beautiful email collateral for your listing.</Description>
 
-        <SendDealPromotion deal={props.deal} mediums="Email">
+        <SendDealPromotion
+          deal={props.deal}
+          mediums="Email"
+          types={[
+            'OpenHouse',
+            'JustSold',
+            'ComingSoon',
+            'JustListed',
+            'PriceImprovement'
+          ]}
+        >
           Explore
         </SendDealPromotion>
       </LeftColumn>

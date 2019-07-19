@@ -21,7 +21,12 @@ const byId = (state = {}, action) => {
     case actionTypes.DELETE_ATTRIBUTES_FROM_CONTACTS_SUCCESS:
       return {
         ...state,
-        ...action.response.entities.contacts
+        // ...action.response.entities.contacts
+        ...state,
+        ..._.mapObject(action.response.entities.contacts, contact => ({
+          ...contact,
+          meta: { ...action.meta }
+        }))
       }
 
     case actionTypes.CREATE_CONTACTS_SUCCESS:
@@ -46,7 +51,14 @@ const ids = (state = [], action) => {
     case actionTypes.FETCH_CONTACTS_SUCCESS:
     case actionTypes.SEARCH_CONTACTS_SUCCESS:
     case actionTypes.UPSERT_ATTRIBUTES_TO_CONTACTS_SUCCESS:
-      const newState = [...state, ...action.response.result.contacts]
+      let newState = []
+
+      // For adding contacts to the top
+      if (action.prependResult) {
+        newState = [...action.response.result.contacts, ...state]
+      } else {
+        newState = [...state, ...action.response.result.contacts]
+      }
 
       // removing duplicates
       return [...new Set(newState)]

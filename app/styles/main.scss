@@ -3,7 +3,6 @@
 @import 'vendor/balloon-css/_balloon.scss';
 @import 'vendor/offline-js/_offline-js.scss';
 
-@import 'components/resets';
 @import 'components/resets-bootstrap';
 
 @import 'settings/settings.core.scss';
@@ -20,29 +19,11 @@
 @import 'utils/utils.scrollbars';
 @import 'utils/utils.ie.input';
 
-@import 'components/typography';
 @import 'components/buttons';
 @import 'components/loader';
-@import 'components/spinner-loading';
-@import 'components/list/index';
-@import 'components/colors';
-@import 'components/flexbox';
 @import 'components/global';
-@import 'components/nav';
-@import 'components/app-sidenav';
-@import 'components/mobile-nav';
 @import 'components/modals';
 @import 'components/listing-viewer';
-@import 'components/animations';
-@import 'components/shadows';
-@import 'components/carousels';
-@import 'components/google';
-@import 'components/react-select';
-@import 'components/dropdowns';
-@import 'components/content-loading-placeholder';
-@import 'components/concierge-modal';
-@import 'components/request-review-modal.scss';
-@import 'components/file-preview-modal.scss';
 @import 'components/cluster-markers.scss';
 @import 'components/listing-modal';
 @import 'components/feed-modal';
@@ -50,14 +31,11 @@
 @import 'components/c-verify-phone-modal';
 @import 'components/radio-button';
 @import 'components/react-avatar';
-
 @import 'components/modules/alert';
 @import '../../node_modules/simplebar/dist/simplebar.css';
-// Pages
-@import 'components/pages/landing';
-@import 'components/pages/noMatch';
-@import 'components/pages/oops';
 
+// Pages
+@import 'components/pages/oops';
 @import 'components/pages/app';
 @import 'components/pages/dashboard';
 @import 'components/pages/listing';
@@ -67,7 +45,6 @@
 @import 'components/pages/chatroom/index';
 @import 'components/pages/brand/index';
 @import 'components/pages/mls';
-@import 'components/pages/agent-report';
 @import 'components/pages/contacts/index';
 @import 'components/pages/account';
 
@@ -75,29 +52,13 @@
 @import 'components/modals/modals';
 
 // Modules
-@import 'components/modules/avatar';
-@import 'components/modules/search-listings';
-@import 'components/modules/drawer';
-@import 'components/modules/daypicker';
-@import 'components/modules/forms';
-@import 'components/modules/empty-state';
-@import 'components/modules/search-rooms-users';
 @import 'components/modules/search-input';
 @import 'components/modules/confirmation';
 @import 'components/modules/compose';
-@import 'components/modules/avatar-uploader';
 @import 'components/modules/verification-banner';
-@import 'components/modules/pdf';
 @import 'components/modules/tooltip';
-@import 'components/modules/crm-task-touch-form';
+@import 'components/modules/daypicker';
 
 // Vendor
 @import 'vendor/react-day-picker/style.scss';
-@import 'vendor/react-ios-switch/index.scss';
 @import 'vendor/react-select/index.scss';
-
-// Stepper
-@import '../components/Partials/Stepper/styles.scss';
-
-//Widgets
-@import './components/widgets/listing';

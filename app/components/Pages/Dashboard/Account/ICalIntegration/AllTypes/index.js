@@ -1,19 +1,15 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import { getContexts } from 'actions/deals'
-
 import { getActiveTeamId } from 'utils/user-teams'
-
-import RadioButton from 'components/RadioButton'
+import { Checkbox } from 'components/Checkbox'
 
 import CategoryType from '../CategoryTypes'
 
+import { Section, Title } from '../styled'
 import { CategoryTypesContainer } from './styled'
-import { SectionTitle } from '../styled'
-
-const radioButtonStyle = { display: 'block', marginTop: '2rem' }
 
 const defaultTaskTypes = [
   'Call',
@@ -41,52 +37,57 @@ class ICalAllTypes extends React.Component {
   }
 
   render() {
+    const { props } = this
     const {
       onChangeSelectedTypes,
       onChangeSelectAllTypes,
       onSelectOneCategoriesTypes
-    } = this.props
-    const filteredContexts =
-      this.props.contexts &&
-      this.props.contexts
-        .filter(context => context.data_type === 'Date')
-        .map(context => ({ ...context, name: context.key }))
+    } = props
 
-    const filteredContactsAttributesDefs =
-      this.props.contactsAttributesDefs &&
-      _.chain(this.props.contactsAttributesDefs)
-        .filter(def => def.data_type === 'date' && def.show)
-        .map(type => ({ ...type, name: type.name || type.label }))
-        .value()
-    const allTypes = taskTypes
-      .map(type => type.name)
-      .concat(
-        filteredContactsAttributesDefs
-          ? filteredContactsAttributesDefs.map(type => type.name)
-          : [],
-        filteredContexts ? filteredContexts.map(type => type.name) : []
-      )
+    const filteredContexts = props.contexts
+      ? props.contexts
+          .filter(context => context.data_type === 'Date')
+          .map(context => ({ ...context, name: context.key }))
+      : []
 
-    const selectedTypes = this.props.selectedTypes.filter(selectedType =>
+    const filteredContactsAttributesDefs = props.contactsAttributesDefs
+      ? Object.values(props.contactsAttributesDefs)
+          .filter(
+            def =>
+              def.data_type === 'date' &&
+              def.editable &&
+              ((def.name != null && def.name.trim().length) ||
+                (def.label != null && def.label.trim().length))
+          )
+          .map(type => ({ ...type, name: type.name || type.label }))
+      : []
+
+    const allTypes = [
+      ...taskTypes,
+      ...filteredContexts,
+      ...filteredContactsAttributesDefs
+    ].map(type => type.name)
+
+    const selectedTypes = props.selectedTypes.filter(selectedType =>
       allTypes.includes(selectedType)
     )
 
     return (
-      <Fragment>
-        <SectionTitle>
+      <Section>
+        <Title>
           What event types would you like to export to your calendar?
-        </SectionTitle>
-        <RadioButton
-          selected={selectedTypes.length === allTypes.length}
-          title="All of my dates from Rechat"
-          onClick={() =>
+        </Title>
+        <Checkbox
+          checked={selectedTypes.length === allTypes.length}
+          onChange={() =>
             onChangeSelectAllTypes(
               selectedTypes.length === allTypes.length ? [] : allTypes
             )
           }
-          style={radioButtonStyle}
-          square
-        />
+          containerStyle={{ display: 'flex', marginBottom: '2rem' }}
+        >
+          All of my dates from Rechat
+        </Checkbox>
         <CategoryTypesContainer>
           <CategoryType
             title="Event Types:"
@@ -114,7 +115,7 @@ class ICalAllTypes extends React.Component {
             />
           )}
         </CategoryTypesContainer>
-      </Fragment>
+      </Section>
     )
   }
 }

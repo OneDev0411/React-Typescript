@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { grey, primary } from 'views/utils/colors'
 
@@ -20,6 +20,12 @@ export const RowContainer = styled.div`
   flex-direction: row;
   padding: 0.5rem 0;
   transition: background-color 1s ease-in;
+
+  ${({ highlight }) =>
+    highlight &&
+    css`
+      background-color: ${grey.A150};
+    `}
 `
 
 export const ItemsContainer = styled.div`

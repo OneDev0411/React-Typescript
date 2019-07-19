@@ -14,10 +14,7 @@ import { sortOptions } from '../../helpers/sort-plugin-options'
 import { MainContainer, MapContainer, TableContainer } from './styled'
 
 const addListingsDistanceFromCenter = (listing, center) => {
-  if (
-    !center ||
-    !idx(window, w => w.google.maps.geometry)
-  ) {
+  if (!center || !idx(window, w => w.google.maps.geometry)) {
     return listing
   }
 
@@ -25,10 +22,7 @@ const addListingsDistanceFromCenter = (listing, center) => {
 
   const centerLatLng = new google.maps.LatLng(center.lat, center.lng)
 
-  const listingLocation = new google.maps.LatLng(
-    listing.lat,
-    listing.lng
-  )
+  const listingLocation = new google.maps.LatLng(listing.lat, listing.lng)
 
   const distanceFromCenter = google.maps.geometry.spherical.computeDistanceBetween(
     centerLatLng,
@@ -89,9 +83,12 @@ export class MapViewContainer extends React.Component {
             data={this.props.data}
             isFetching={this.props.isFetching}
             LoadingState={LoadingComponent}
-            listInfo={this.props.listings.info}
             showTableHeader={false}
-            summary={{ entityName: 'Listings', style: { color: '#000' } }}
+            summary={{
+              entityName: 'Listings',
+              style: { color: '#000' },
+              total: this.props.listings.info.total
+            }}
             getTrProps={() => ({
               style: {
                 padding: 0,
