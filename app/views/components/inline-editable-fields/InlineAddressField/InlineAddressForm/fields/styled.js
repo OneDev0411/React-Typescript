@@ -17,13 +17,26 @@ export const Container = styled.div`
 `
 
 export const Label = styled.label`
-  display: block;
+  display: Flex;
+  align-items: center;
   margin-bottom: 0.5em;
   font-size: 0.875rem;
   line-height: 1.5;
   font-weight: normal;
   cursor: pointer;
   color: ${grey.A900};
+`
+
+export const Hint = styled.span`
+  height: 1rem;
+  width: 1rem;
+  margin-left: 0.5em;
+
+  svg {
+    width: inherit;
+    height: inherit;
+    fill: ${primary};
+  }
 `
 
 export const Input = styled.input`

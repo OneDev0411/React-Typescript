@@ -17,20 +17,24 @@ export const items = [
   },
   {
     title: 'Holiday',
-    url: '/Christmas,NewYear,Valentines,StPatrick'
+    url: '/Christmas,NewYear,Valentines,StPatrick,Easter,OtherHoliday'
   },
   {
     title: 'Just Listed',
     url: '/JustListed'
   },
   {
+    title: 'Under Contract',
+    url: '/UnderContract'
+  },
+  {
     title: 'Just Sold',
     url: '/JustSold'
   },
-  // {
-  //   title: 'Multi Listings',
-  //   url: '/Listings'
-  // },
+  {
+    title: 'Multi Listings',
+    url: '/Listings'
+  },
   {
     title: 'New Agent',
     url: '/NewAgent'

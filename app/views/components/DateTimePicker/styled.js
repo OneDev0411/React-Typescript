@@ -1,16 +1,63 @@
-import styled from "styled-components"
-// import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import Card from '../Card'
 import { grey, primary } from '../../utils/colors'
 
-export const PickerContainer = styled(Card)`
-  position: absolute;
+// modes
+const topRightMode = css`
+  top: -8px;
+  right: 0;
+  transform: translateY(-100%);
+`
+
+const topLeftMode = css`
+  top: -8px;
+  left: 0;
+  transform: translateY(-100%);
+`
+
+const bottomLeftMode = css`
   left: 0;
   top: 3px;
+`
+
+const bottomRightMode = css`
+  right: 0;
+  top: 3px;
+`
+
+// utils
+function popUpPositionStyle(props) {
+  switch (props.popUpPosition) {
+    case 'top-right':
+      return topRightMode
+    case 'top-left':
+      return topLeftMode
+    case 'bottom-left':
+      return bottomLeftMode
+    case 'bottom-right':
+      return bottomRightMode
+    default:
+      return bottomLeftMode
+  }
+}
+
+// styles
+export const PickerContent = styled.div`
+  & .picker-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+`
+
+export const PickerContainer = styled(Card)`
+  position: absolute;
   z-index: 1;
   overflow: hidden;
   padding: 0.5em;
+  ${popUpPositionStyle}
 
   .DayPicker,
   .DayPicker-wrapper {

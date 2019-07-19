@@ -1,5 +1,5 @@
-import { getTaskAssociations } from '../../../../models/tasks/get-task-associations'
-import { normalizeAssociations } from '../../../utils/association-normalizers'
+import { getTaskAssociations } from 'models/tasks/get-task-associations'
+import { normalizeAssociations } from 'views/utils/association-normalizers'
 
 /**
  * Fetch and normalize task assosiations
@@ -9,7 +9,7 @@ import { normalizeAssociations } from '../../../utils/association-normalizers'
 export async function getAssociations(task) {
   try {
     let query = []
-    const types = ['deal', 'contact', 'listing']
+    const types = ['deal', 'contact', 'listing', 'email']
     const queryName = 'associations[]=crm_association.'
 
     types.forEach(type => {
@@ -25,13 +25,17 @@ export async function getAssociations(task) {
         if (type === 'deal') {
           query.push('associations[]=deal.brand')
         }
+
+        if (type === 'email') {
+          query.push('associations[]=email_campaign.emails')
+        }
       }
     })
 
     if (query.length > 0) {
       const records = await getTaskAssociations(task.id, query.join('&'))
 
-      return normalizeAssociations(records)
+      return normalizeAssociations(records).filter(Boolean)
     }
 
     return query

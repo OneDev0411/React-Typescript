@@ -1,5 +1,5 @@
 export { DateTimeField } from './DateTimeField'
-export { ErrorField } from './ErrorField'
+export { FieldError } from './FieldError'
 export { Select } from './Select'
 export { TextAreaField } from './TextAreaField'
 export { TextField } from './TextField'

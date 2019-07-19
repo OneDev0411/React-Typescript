@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { connect } from 'react-redux'
+
 import { getAttributeFromSummary } from 'models/contacts/helpers'
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import IconInfoOutline from 'components/SvgIcons/InfoOutline/IconInfoOutline'
@@ -9,6 +11,9 @@ import Tooltip from 'components/tooltip'
 import Table from 'components/Grid/Table'
 import IconButton from 'components/Button/IconButton'
 import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
+
+import { putUserSetting } from 'models/user/put-user-setting'
+import { getUserTeams } from 'actions/user/teams'
 
 import TagsOverlay from '../../components/TagsOverlay'
 import NoSearchResults from '../../../../../Partials/no-search-results'
@@ -25,7 +30,9 @@ import Menu from './columns/Menu'
 import Name from './columns/Name'
 import TagsString from './columns/Tags'
 import { Contact } from './columns/Contact'
-import { LastTouchedCell } from './columns/LastTouched'
+import LastTouched from './columns/LastTouched'
+
+import { SORT_FIELD_SETTING_KEY } from '../constants'
 
 const IconLastTouch = styled(IconInfoOutline)`
   margin-left: 0.5rem;
@@ -74,7 +81,7 @@ class ContactsList extends React.Component {
       ),
       id: 'last_touched',
       sortable: false,
-      render: ({ rowData: contact }) => <LastTouchedCell contact={contact} />
+      render: ({ rowData: contact }) => <LastTouched contact={contact} />
     },
     {
       header: 'Tags',
@@ -105,22 +112,33 @@ class ContactsList extends React.Component {
 
   actions = [
     {
-      render: ({ selectedRows }) => (
-        <ExportContacts
-          filters={this.props.filters}
-          conditionOperator={this.props.conditionOperator}
-          users={this.props.users}
-          exportIds={selectedRows}
-          disabled={this.props.isFetching}
-        />
-      )
-    },
-    {
-      render: ({ selectedRows }) => {
-        const disabled = selectedRows.length === 0
+      render: ({ excludedRows, selectedRows }) => {
+        const { filters } = this.props
 
         return (
-          <ActionWrapper action="marketing" disabled={disabled}>
+          <ExportContacts
+            excludedRows={excludedRows}
+            exportIds={selectedRows}
+            filters={filters.attributeFilters}
+            crmTasks={filters.crm_tasks}
+            searchText={filters.text}
+            conditionOperator={filters.filter_type}
+            users={filters.users}
+            disabled={this.props.isFetching}
+          />
+        )
+      }
+    },
+    {
+      render: ({ entireMode, selectedRows }) => {
+        const disabled = entireMode ? true : selectedRows.length === 0
+
+        return (
+          <ActionWrapper
+            bulkMode={entireMode}
+            action="marketing"
+            disabled={disabled}
+          >
             <SendMlsListingCard disabled={disabled} selectedRows={selectedRows}>
               Marketing
             </SendMlsListingCard>
@@ -129,14 +147,28 @@ class ContactsList extends React.Component {
       }
     },
     {
-      render: ({ selectedRows, resetSelectedRows }) => {
-        const disabled = selectedRows.length === 0
+      render: ({
+        entireMode,
+        totalRowsCount,
+        excludedRows,
+        selectedRows,
+        resetSelectedRows
+      }) => {
+        const { filters } = this.props
+        const disabled = entireMode ? false : selectedRows.length === 0
 
         return (
           <ActionWrapper action="tagging" disabled={disabled}>
             <TagContacts
               disabled={disabled}
+              entireMode={entireMode}
+              totalRowsCount={totalRowsCount}
+              excludedRows={excludedRows}
               selectedRows={selectedRows}
+              filters={filters.attributeFilters}
+              searchText={filters.query}
+              conditionOperator={filters.filter_type}
+              users={filters.users}
               resetSelectedRows={resetSelectedRows}
               handleChangeContactsAttributes={
                 this.props.handleChangeContactsAttributes
@@ -147,17 +179,21 @@ class ContactsList extends React.Component {
       }
     },
     {
-      render: ({ selectedRows, resetSelectedRows }) => {
-        const disabled = selectedRows.length === 0
+      render: ({ entireMode, selectedRows, resetSelectedRows }) => {
+        const disabled = entireMode ? true : selectedRows.length === 0
 
         return (
-          <ActionWrapper action="creating an event" disabled={disabled}>
+          <ActionWrapper
+            bulkMode={entireMode}
+            action="creating an event"
+            disabled={disabled}
+          >
             <CreateEvent
               disabled={disabled}
               selectedRows={selectedRows}
               submitCallback={async () => {
                 resetSelectedRows()
-                await this.props.bulkEventCreationCallback()
+                await this.props.reloadContacts()
               }}
             />
           </ActionWrapper>
@@ -165,24 +201,33 @@ class ContactsList extends React.Component {
       }
     },
     {
-      render: ({ selectedRows, resetSelectedRows }) => {
-        const disabled = selectedRows.length < 2
+      render: ({ entireMode, selectedRows, resetSelectedRows }) => {
+        const disabled = entireMode ? true : selectedRows.length < 2
 
         return (
-          <ActionWrapper action="merging" atLeast="two" disabled={disabled}>
+          <ActionWrapper
+            bulkMode={entireMode}
+            action="merging"
+            atLeast="two"
+            disabled={disabled}
+          >
             <MergeContacts
               disabled={disabled}
               selectedRows={selectedRows}
-              rowsUpdating={this.props.rowsUpdating}
-              resetSelectedRows={resetSelectedRows}
+              submitCallback={async () => {
+                resetSelectedRows()
+                await this.props.reloadContacts()
+              }}
             />
           </ActionWrapper>
         )
       }
     },
     {
-      render: rowData => {
-        const disabled = rowData.selectedRows.length === 0
+      render: data => {
+        const disabled = data.entireMode
+          ? false
+          : data.selectedRows.length === 0
 
         return (
           <ActionWrapper action="delete" disabled={disabled}>
@@ -190,7 +235,7 @@ class ContactsList extends React.Component {
               disabled={disabled}
               size="small"
               appearance="outline"
-              onClick={e => this.props.onRequestDelete(e, rowData)}
+              onClick={e => this.props.onRequestDelete(e, data)}
             >
               <IconDeleteOutline size={24} />
             </IconButton>
@@ -198,6 +243,16 @@ class ContactsList extends React.Component {
         )
       }
     }
+  ]
+
+  sortableColumns = [
+    { label: 'Most Recent', value: '-updated_at' },
+    { label: 'Last Touch', value: '-last_touch' },
+    { label: 'First name A-Z', value: 'display_name' },
+    { label: 'First name Z-A', value: '-display_name' },
+    { label: 'Last name A-Z', value: 'sort_field' },
+    { label: 'Last name Z-A', value: '-sort_field' },
+    { label: 'Created At', value: 'created_at' }
   ]
 
   getGridTrProps = (rowIndex, { isSelected }) => {
@@ -212,43 +267,47 @@ class ContactsList extends React.Component {
   }
 
   render() {
+    const { props, state } = this
+
     return (
-      <div style={{ padding: '0 1.5em' }}>
+      <div>
         <Table
           plugins={{
             selectable: {
               persistent: true,
-              storageKey: 'contacts'
+              allowSelectEntireList: true,
+              storageKey: 'contacts',
+              entityName: 'Contacts'
             },
             loadable: {
               accuracy: 300, // px
+              accuracyTop: 600, // px
               debounceTime: 300, // ms
-              onTrigger: this.props.onRequestLoadMore
+              container: props.tableContainerId,
+              onScrollBottom: props.onRequestLoadMore,
+              onScrollTop: props.onRequestLoadMoreBefore
             },
             actionable: {
               actions: this.actions
             },
             sortable: {
-              columns: [
-                { label: 'Most Recent', value: '-updated_at' },
-                { label: 'Last Touch', value: 'last_touch' },
-                //  { label: 'Next Touch', value: 'next_touch' },
-                { label: 'First name A-Z', value: 'display_name' },
-                { label: 'First name Z-A', value: '-display_name' },
-                { label: 'Last name A-Z', value: 'sort_field' },
-                { label: 'Last name Z-A', value: '-sort_field' },
-                { label: 'Created At', value: 'created_at' }
-              ],
-              onChange: this.props.handleChangeOrder
+              columns: this.sortableColumns,
+              defaultIndex: props.order,
+              onChange: props.handleChangeOrder,
+              onPostChange: async item => {
+                await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
+                await props.dispatch(getUserTeams(props.user))
+              }
             }
           }}
-          data={this.props.data}
+          data={props.data}
           summary={{
             entityName: 'Contacts',
-            total: this.props.listInfo.total || 0
+            total: props.listInfo.total || 0
           }}
-          isFetching={this.props.isFetching}
-          isFetchingMore={this.props.isFetchingMore}
+          isFetching={props.isFetching}
+          isFetchingMore={props.isFetchingMore}
+          isFetchingMoreBefore={props.isFetchingMoreBefore}
           columns={this.columns}
           LoadingState={LoadingComponent}
           getTrProps={this.getGridTrProps}
@@ -258,16 +317,14 @@ class ContactsList extends React.Component {
         />
 
         <TagsOverlay
-          selectedContactsIds={this.state.selectedTagContact}
-          isOpen={this.state.selectedTagContact.length > 0}
           closeOverlay={this.closeTagsOverlay}
-          handleChangeContactsAttributes={
-            this.props.handleChangeContactsAttributes
-          }
+          isOpen={state.selectedTagContact.length > 0}
+          selectedContactsIds={state.selectedTagContact}
+          handleChangeContactsAttributes={props.handleChangeContactsAttributes}
         />
       </div>
     )
   }
 }
 
-export default ContactsList
+export default connect(({ user }) => ({ user }))(ContactsList)

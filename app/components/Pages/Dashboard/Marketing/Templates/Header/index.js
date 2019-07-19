@@ -2,12 +2,9 @@ import React from 'react'
 
 import { Trigger as MenuTrigger } from 'components/SlideMenu'
 
-import { headers } from './data'
 import { Container, Title, SubTitle } from './styled'
 
-export function Header(props) {
-  const data = headers[props.types]
-
+export function Header({ data, ...props }) {
   return (
     <Container
       brandColor={data.brandColor}
@@ -15,6 +12,7 @@ export function Header(props) {
       size={data.size}
       position={data.position}
       isSideMenuOpen={props.isSideMenuOpen}
+      data-test="mc-store-page-header"
     >
       <MenuTrigger
         onClick={props.toggleSideMenu}

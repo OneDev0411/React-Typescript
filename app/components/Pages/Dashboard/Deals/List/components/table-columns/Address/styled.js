@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
-import ALink from 'components/ALink'
 import { grey } from 'views/utils/colors'
+import ALinkToClosable from 'components/ALinkToClosable'
 
 export const Container = styled.div`
   display: table;
@@ -40,7 +40,7 @@ export const IconContainer = styled(Flex)`
   }
 `
 
-export const Link = styled(ALink)`
+export const Link = styled(ALinkToClosable)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

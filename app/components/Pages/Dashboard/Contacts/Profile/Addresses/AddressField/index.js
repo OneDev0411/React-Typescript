@@ -1,22 +1,22 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import addressParser from 'parse-address'
 
-import { confirmation } from 'actions/confirmation'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
+import postLoadFormat from 'components/inline-editable-fields/InlineAddressField/InlineAddressForm/helpers/post-load-format'
 
 import { EditMode } from './EditMode'
 import { ViewMode } from './ViewMode'
 
-import { postLoadFormat, preSaveFormat, getUpsertAttributes } from './helpers'
+import { preSaveFormat, getUpsertAttributes } from './helpers'
 
-const DEFAULT_LABEL = { label: 'Select', value: '' }
+const DEFAULT_LABEL = { label: 'Select', value: null }
 
 function destructuringAddress(address) {
   let { label, full_address, is_primary } = address
 
   if (!label) {
-    label = address.id ? DEFAULT_LABEL : { label: 'Home', value: 'Home' }
+    label = address.id ? DEFAULT_LABEL : { label: 'Other', value: 'Other' }
   } else {
     label = { label, value: label }
   }
@@ -70,31 +70,34 @@ class AddressField extends React.Component {
     return null
   }
 
+  static contextType = ConfirmationModalContext
+
   toggleMode = () => this.props.toggleMode(this.props.address)
 
   cancel = () => {
+    if (!this.state.isDisabled) {
+      this.toggleMode()
+    }
+  }
+
+  handleOutsideClick = () => {
     if (this.state.isDisabled) {
       return
     }
 
     if (diffAddressStateWithProp(this.props, this.state)) {
-      this.props.dispatch(
-        confirmation({
-          show: true,
-          confirmLabel: 'Yes, I do',
-          message: 'Heads up!',
-          description: 'You have made changes, do you want to discard them?',
-          onConfirm: this.toggleMode
-        })
-      )
+      this.context.setConfirmationModal({
+        confirmLabel: 'Yes, I do',
+        message: 'Heads up!',
+        description: 'You have made changes, do you want to discard them?',
+        onConfirm: this.toggleMode
+      })
     } else {
       this.toggleMode()
     }
   }
 
   delete = async () => {
-    this.setState({ isDisabled: true })
-
     const attributeIds = this.props.address.attributes
       .filter(attribute => attribute.id)
       .map(attribute => attribute.id)
@@ -117,31 +120,25 @@ class AddressField extends React.Component {
   onChangeInput = address => this.setState({ address })
 
   handleDelete = () => {
+    this.setState({ isDisabled: true })
+
     const options = {
-      show: true,
+      onConfirm: this.delete,
       confirmLabel: 'Yes, I do',
       message: 'Delete Address',
+      onCancel: () => this.setState({ isDisabled: false }),
       description:
-        'You have made changes, are you sure about deleting this address?',
-      onConfirm: this.delete
+        'You have made changes, are you sure about deleting this address?'
     }
 
     if (diffAddressStateWithProp(this.props, this.state)) {
-      this.props.dispatch(
-        confirmation({
-          ...options,
-          description:
-            'You have made changes, are you sure about the deleting this address?'
-        })
-      )
+      this.context.setConfirmationModal(options)
     } else if (this.props.address.full_address) {
-      this.props.dispatch(
-        confirmation({
-          ...options,
-          description:
-            'Are you sure about deleting this address, you will lose it forever?'
-        })
-      )
+      this.context.setConfirmationModal({
+        ...options,
+        description:
+          'Are you sure about deleting this address, you will lose it forever?'
+      })
     } else {
       this.delete()
     }
@@ -206,7 +203,6 @@ class AddressField extends React.Component {
       handleSubmit={this.handleSubmit}
       labels={this.labels}
       preSaveFormat={this.preSaveFormat}
-      postLoadFormat={postLoadFormat}
       onChangeLabel={this.onChangeLabel}
       onChangePrimary={this.onChangePrimary}
       onChangeInput={this.onChangeInput}
@@ -219,20 +215,23 @@ class AddressField extends React.Component {
     return (
       <InlineEditableField
         cancelOnOutsideClick
-        handleCancel={this.cancel}
-        handleSave={this.onSubmit}
-        handleDelete={this.handleDelete}
         handleAddNew={this.props.handleAddNew}
+        handleCancel={this.cancel}
+        handleDelete={this.handleDelete}
+        handleOutsideClick={this.handleOutsideClick}
+        handleSave={this.onSubmit}
         isDisabled={this.state.isDisabled}
         isEditing={this.props.address.isActive}
+        isEditModeStatic
         renderEditMode={this.renderEditMode}
         renderViewMode={this.renderViewMode}
         showAdd
         showDelete
+        style={{ margin: '0 1em 1em' }}
         toggleMode={this.toggleMode}
       />
     )
   }
 }
 
-export default connect()(AddressField)
+export default AddressField

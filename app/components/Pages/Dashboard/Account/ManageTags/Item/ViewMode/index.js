@@ -2,7 +2,7 @@ import React from 'react'
 
 import Tooltip from 'components/tooltip'
 import IconButton from 'components/Button/IconButton'
-import DeleteIcon from 'components/SvgIcons/Delete/IconDelete'
+import DeleteIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 
 import { Container, Title } from './styled'
 import { LoadingIcon } from '../styled'
@@ -20,7 +20,7 @@ export class ViewMode extends React.Component {
     const { tag, loading } = this.props
 
     return (
-      <Container highlight={tag.highlight}>
+      <Container highlight={tag.highlight} data-test={`tag-item-${tag.text}`}>
         <Title>{tag.text}</Title>
         {loading ? (
           <div>

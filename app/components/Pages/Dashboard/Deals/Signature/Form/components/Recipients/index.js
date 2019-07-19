@@ -3,10 +3,11 @@ import _ from 'underscore'
 
 import {
   InputContainer,
-  InputError,
-  InputRequired,
-  InputLabel
+  InputLabel,
+  InputRequired
 } from 'components/Forms/styled'
+
+import { FieldError } from 'components/final-form-fields/FieldError'
 
 import { AddRecipient } from './AddRecipient'
 import { RecipientsList } from './List'
@@ -88,9 +89,7 @@ export class Recipients extends React.Component {
           selectedRoles={props.input.value}
         />
 
-        {props.meta.error && props.meta.touched && (
-          <InputError>{props.meta.error}</InputError>
-        )}
+        <FieldError name={props.input.name} />
       </InputContainer>
     )
   }

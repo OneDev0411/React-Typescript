@@ -33,13 +33,14 @@ class Task extends React.Component {
       return false
     }
 
-    const isTaskExpanded = !this.state.isTaskExpanded
-
-    this.setState({
-      isTaskExpanded
-    })
-
-    this.props.setExpandTask(this.props.task.id, isTaskExpanded)
+    this.setState(
+      state => ({
+        isTaskExpanded: !state.isTaskExpanded
+      }),
+      () => {
+        this.props.setExpandTask(this.props.task.id, this.state.isTaskExpanded)
+      }
+    )
   }
 
   handleSelectTask = () => {
@@ -56,12 +57,24 @@ class Task extends React.Component {
     return Array.isArray(attachments) && attachments.length > 0
   }
 
-  isRowClickable = () => this.getRowsCount() > 0
+  isRowClickable = () => {
+    const rowsCount = this.getRowsCount()
 
-  getRowsCount() {
+    return rowsCount > 0 || this.hasDigitalForm
+  }
+
+  get hasDigitalForm() {
+    return this.props.task.form !== null
+  }
+
+  getAttachments = () => {
     const { attachments } = this.props.task.room
 
-    const attachmentsCount = Array.isArray(attachments) ? attachments.length : 0
+    return Array.isArray(attachments) ? attachments : []
+  }
+
+  getRowsCount = () => {
+    const attachmentsCount = this.getAttachments().length
 
     return this.props.task.submission ? attachmentsCount + 1 : attachmentsCount
   }
@@ -71,51 +84,69 @@ class Task extends React.Component {
    * https://gitlab.com/rechat/web/issues/2341
    */
   handleClickTask = () => {
+    const { props } = this
     const rowsCount = this.getRowsCount()
 
+    // If only a base form in there, when user taps on task open up the form as if they pressed Edit ... also wheen the forms is editeed and saved you show the PDF saved version but you should still show the base form when user presses on the name of task ... but once user has an envelope then you show the envelope.
     // If task is empty, i.e no form and no uploaded file: clicking task name does nothing (it's not clickable)
-    if (rowsCount === 0) {
-      return false
+    if (rowsCount === 0 && !this.IsFormTask) {
+      return (
+        this.hasDigitalForm &&
+        browserHistory.push(
+          `/dashboard/deals/${props.deal.id}/form-edit/${props.task.id}`
+        )
+      )
     }
 
     // If there are many files in the task such as: a form and an uploaded file, or multiple uploaded files ... tapping on task name should expand and open up thee task to show the multiple files under it for user to then select the file they are interested in
     if (rowsCount > 1) {
-      return this.toggleTaskOpen()
+      this.toggleTaskOpen()
+
+      return
     }
 
-    const envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
+    const envelopes = getTaskEnvelopes(props.envelopes, props.task)
 
     // If there is a form and an envelope in the task: we should open up the envelop version in the view/print (so for instance if there is a base form and then a signed copy of the envelop, tapping on the task name should open up the version with signatures on them.)
     if (envelopes.length > 0) {
-      return browserHistory.push(
-        `/dashboard/deals/${this.props.deal.id}/view/${
-          this.props.task.id
-        }/envelope/${envelopes[0].id}`
+      browserHistory.push(
+        `/dashboard/deals/${props.deal.id}/view/${props.task.id}/envelope/${
+          envelopes[0].id
+        }`
       )
+
+      return
     }
 
     // If there is only one item in the task, whether it's a form, or an uploaded file: tapping on task name should open up that file as it does with view and print
     let link
 
-    if (this.props.task.submission) {
-      link = this.props.isBackOffice
-        ? `/dashboard/deals/${this.props.deal.id}/view/${this.props.task.id}`
-        : this.props.task.submission.file.url
-    } else {
-      link = this.props.task.room.attachments[0].url
+    if (props.isBackOffice) {
+      link = props.task.submission
+        ? `/dashboard/deals/${props.deal.id}/view/${props.task.id}`
+        : `/dashboard/deals/${props.deal.id}/view/${props.task.id}/attachment/${
+            props.task.room.attachments[0].id
+          }`
+      browserHistory.push(link)
+
+      return
     }
 
-    return this.props.isBackOffice
-      ? browserHistory.push(link)
-      : window.open(link, '_blank')
+    link = props.task.submission
+      ? props.task.pdf_url
+      : props.task.room.attachments[0].url
+
+    window.open(link, '_blank')
   }
 
   render() {
+    const { props, state } = this
+
     return (
-      <RowContainer isTaskExpanded={this.state.isTaskExpanded}>
+      <RowContainer isTaskExpanded={state.isTaskExpanded}>
         <Row>
           <RowArrowIcon
-            isOpen={this.state.isTaskExpanded}
+            isOpen={state.isTaskExpanded}
             display={this.isRowExpandable()}
             onClick={this.toggleTaskOpen}
           />
@@ -126,13 +157,13 @@ class Task extends React.Component {
                 clickable={this.isRowClickable()}
                 onClick={this.handleClickTask}
               >
-                {this.props.task.title}
+                {props.task.title}
               </RowTitle>
 
               <Flex alignCenter>
                 <TaskNotifications
                   onClick={this.handleSelectTask}
-                  task={this.props.task}
+                  task={props.task}
                   tooltip="View Activity"
                   tooltipPlacement="bottom"
                   style={{ margin: '-3px 0.625rem 0 0' }}
@@ -140,39 +171,35 @@ class Task extends React.Component {
 
                 <ActionsButton
                   type="task"
-                  deal={this.props.deal}
-                  task={this.props.task}
+                  deal={props.deal}
+                  task={props.task}
                 />
               </Flex>
             </Flex>
 
             <Flex alignCenter>
               <TaskStatus
-                task={this.props.task}
-                isBackOffice={this.props.isBackOffice}
-                isDraftDeal={this.props.deal.is_draft}
+                task={props.task}
+                isBackOffice={props.isBackOffice}
+                isDraftDeal={props.deal.is_draft}
               />
 
-              <EnvelopeView
-                type="task"
-                deal={this.props.deal}
-                task={this.props.task}
-              />
+              <EnvelopeView type="task" deal={props.deal} task={props.task} />
 
               <Activity
                 onClick={this.handleSelectTask}
-                task={this.props.task}
-                latestActivity={this.props.task.room.latest_activity}
+                task={props.task}
+                latestActivity={props.task.room.latest_activity}
               />
             </Flex>
           </Flex>
         </Row>
 
         <TaskFiles
-          isOpen={this.state.isTaskExpanded}
-          task={this.props.task}
-          deal={this.props.deal}
-          isBackOffice={this.props.isBackOffice}
+          isOpen={state.isTaskExpanded}
+          task={props.task}
+          deal={props.deal}
+          isBackOffice={props.isBackOffice}
         />
       </RowContainer>
     )

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import ReactGA from 'react-ga'
+import { Helmet } from 'react-helmet'
 
 import AppDispatcher from '../dispatcher/AppDispatcher'
 import Load from '../loader'
@@ -15,13 +16,13 @@ import ContactSocket from '../services/socket/contacts'
 import NotificationSocket from '../services/socket/Notifications'
 
 // navs
-import SideNav from './Pages/Dashboard/Partials/SideNav'
+import SideNav from './Pages/Dashboard/SideNav'
 
 // global chat components
 import { getRooms } from '../store_actions/chatroom'
 
 // get user roles
-import getTeams from '../store_actions/user/teams'
+import { getUserTeams } from '../store_actions/user/teams'
 import { hasUserAccess, viewAsEveryoneOnTeam } from '../utils/user-teams'
 
 // deals featch on launch
@@ -104,7 +105,7 @@ class App extends Component {
       if (!user.teams || !user.teams[0].brand.roles) {
         user = {
           ...user,
-          teams: await dispatch(getTeams(user, true))
+          teams: await dispatch(getUserTeams(user))
         }
       }
 
@@ -164,7 +165,9 @@ class App extends Component {
 
     dispatch(checkBrowser())
 
-    dispatch(syncOpenHouseData(this.props.user.access_token))
+    if (user) {
+      dispatch(syncOpenHouseData(user.access_token))
+    }
   }
 
   getBrand() {
@@ -321,21 +324,24 @@ class App extends Component {
     })
 
     return (
-      <div className="u-scrollbar">
-        {user && !user.email_confirmed && (
-          <VerificationBanner email={user.email} />
-        )}
+      <React.Fragment>
+        <Helmet>
+          <title>Rechat</title>
+        </Helmet>
+        <div className="u-scrollbar">
+          {user && !user.email_confirmed && (
+            <VerificationBanner email={user.email} />
+          )}
 
-        {user && <SideNav data={data} location={location} />}
+          <SideNav data={data} location={location} />
 
-        {user && <InstantChat user={user} rooms={rooms} />}
+          {user && <InstantChat user={user} rooms={rooms} />}
 
-        <main className={`l-app__main ${user ? 'is-logged-in' : ''}`}>
-          {children}
-        </main>
+          <main className="l-app__main">{children}</main>
 
-        <Intercom />
-      </div>
+          <Intercom />
+        </div>
+      </React.Fragment>
     )
   }
 }

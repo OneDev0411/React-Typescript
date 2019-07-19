@@ -1,17 +1,24 @@
 import React from 'react'
-import { browserHistory } from 'react-router'
+import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-import { Tab, Nav, NavItem } from 'react-bootstrap'
+import { Helmet } from 'react-helmet'
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs'
 
 import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 
-import { getContact } from '../../../../../models/contacts/get-contact'
-import { updateContactSelf } from '../../../../../models/contacts/update-contact-self'
-import { getContactTimeline } from '../../../../../models/contacts/get-contact-timeline'
-import { upsertContactAttributes } from '../../../../../models/contacts/helpers/upsert-contact-attributes'
-import { deleteAttribute } from '../../../../../models/contacts/delete-attribute'
+// import deleteFlow from 'models/flows/delete-flow'
+import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
+import { updateContactQuery } from 'models/contacts/helpers/default-query'
+import { getContact } from 'models/contacts/get-contact'
+import { deleteContacts } from 'models/contacts/delete-contact'
+import { updateContactSelf } from 'models/contacts/update-contact-self'
+import getCRMTimeline from 'models/get-crm-timeline'
+import { getNotes } from 'models/contacts/helpers/get-notes'
+
+import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
+import { deleteAttribute } from 'models/contacts/delete-attribute'
 
 import {
   selectDefinitionByName,
@@ -19,7 +26,6 @@ import {
 } from '../../../../../reducers/contacts/attributeDefs'
 import { selectContact } from '../../../../../reducers/contacts/list'
 
-import { normalizeContact } from '../../../../../store_actions/contacts/helpers/normalize-contacts'
 import { getContactsTags } from '../../../../../store_actions/contacts/get-contacts-tags'
 import { normalizeContact as associationNormalizer } from '../../../../../views/utils/association-normalizers'
 
@@ -27,8 +33,9 @@ import Loading from '../../../../Partials/Loading'
 import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
 
 import { Container } from '../components/Container'
+// import Flows from './Flows'
 import { Dates } from './Dates'
-import { DealsListWidget } from './Deals'
+import Deals from './Deals'
 import { Details } from './Details'
 import { Partner } from './Partner'
 import Tags from './Tags'
@@ -36,6 +43,7 @@ import { ContactInfo } from './ContactInfo'
 import Addresses from './Addresses'
 import { AddNote } from './AddNote'
 import { Owner } from './Owner'
+import Delete from './Delete'
 import {
   PageContainer,
   ColumnsContainer,
@@ -43,7 +51,8 @@ import {
   SecondColumn,
   ThirdColumn,
   PageWrapper,
-  Card
+  Card,
+  TabsContainer
 } from './styled'
 
 import { Header } from './Header'
@@ -52,6 +61,7 @@ import { Timeline } from './Timeline'
 class ContactProfile extends React.Component {
   state = {
     contact: null,
+    isDeleting: false,
     isUpdatingOwner: false,
     isDesktopScreen: true,
     isFetchingTimeline: true,
@@ -74,6 +84,8 @@ class ContactProfile extends React.Component {
     this.detectScreenSize()
     window.addEventListener('resize', this.detectScreenSize)
     this.initializeContact()
+    window.socket.on('crm_task:create', this.fetchTimeline)
+    window.socket.on('email_campaign:create', this.fetchTimeline)
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -89,8 +101,21 @@ class ContactProfile extends React.Component {
     }
   }
 
-  componentWillUnmount = () =>
+  componentWillUnmount = () => {
     window.removeEventListener('resize', this.detectScreenSize)
+    window.socket.off('crm_task:create', this.fetchTimeline)
+    window.socket.off('email_campaign:create', this.fetchTimeline)
+  }
+
+  /**
+   * Web page (document) title
+   * @returns {String} Title
+   */
+  get documentTitle() {
+    let title = this.state.contact.summary.display_name || ''
+
+    return title ? `${title} | Contacts | Rechat` : 'Contact | Rechat'
+  }
 
   detectScreenSize = () => {
     if (window.innerWidth < 1681 && this.state.isDesktopScreen) {
@@ -104,12 +129,20 @@ class ContactProfile extends React.Component {
 
   fetchContact = async (callback = () => {}) => {
     try {
-      const response = await getContact(this.props.params.id)
+      const response = await getContact(this.props.params.id, {
+        associations: [
+          ...updateContactQuery.associations,
+          'contact.deals'
+          // 'contact.flows',
+          // 'flow_step.email',
+          // 'flow_step.crm_task'
+        ]
+      })
 
       this.setState({ contact: normalizeContact(response.data) }, callback)
     } catch (error) {
       if (error.status === 404 || error.status === 400) {
-        browserHistory.push('/dashboard/contacts')
+        this.props.router.push('/dashboard/contacts')
       }
     }
   }
@@ -126,9 +159,14 @@ class ContactProfile extends React.Component {
 
   fetchTimeline = async () => {
     try {
-      const timeline = await getContactTimeline(this.props.params.id)
+      const timeline = await getCRMTimeline({
+        contact: this.props.params.id
+      })
 
-      this.setState({ isFetchingTimeline: false, timeline })
+      this.setState(state => ({
+        isFetchingTimeline: false,
+        timeline: [...timeline, ...getNotes(state.contact)]
+      }))
     } catch (error) {
       console.log(error)
       this.setState({ isFetchingTimeline: false })
@@ -140,15 +178,6 @@ class ContactProfile extends React.Component {
       contact => ({ contact: { ...contact, ...newContact } }),
       fallback
     )
-
-  addEvent = crm_event => {
-    this.setState(
-      state => ({
-        timeline: [crm_event, ...state.timeline]
-      }),
-      this.fetchContact
-    )
-  }
 
   filterTimelineById = (state, id) =>
     state.timeline.filter(item => item.id !== id)
@@ -218,6 +247,32 @@ class ContactProfile extends React.Component {
     }
   }
 
+  delete = async () => {
+    try {
+      this.setState({ isDeleting: true })
+
+      await deleteContacts([this.state.contact.id])
+
+      this.props.router.push('/dashboard/contacts')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // stopFlow = async id => {
+  //   try {
+  //     await deleteFlow(id)
+  //     this.fetchContact()
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+
+  // addToFlowCallback = () => {
+  //   this.fetchContact()
+  //   this.fetchTimeline()
+  // }
+
   render() {
     const { contact } = this.state
     const { user } = this.props
@@ -236,8 +291,14 @@ class ContactProfile extends React.Component {
     }
 
     const thirdColumnSections = [
-      <Dates contact={contact} key="key-0" />,
-      <DealsListWidget contactId={contact.id} key="key-1" />
+      <Dates contact={contact} key="s1" />,
+      // <Flows
+      //   key="s2"
+      //   contactId={contact.id}
+      //   flows={contact.flows}
+      //   user={user}
+      // />,
+      <Deals contact={contact} key="s3" />
     ]
 
     const _props = {
@@ -247,8 +308,20 @@ class ContactProfile extends React.Component {
 
     return (
       <PageWrapper>
+        <Helmet>
+          <title>{this.documentTitle}</title>
+        </Helmet>
         <PageContainer>
-          <Header contact={contact} />
+          <Header
+            contact={contact}
+            backUrl={
+              this.props.location.state && this.props.location.state.id
+                ? '/dashboard/contacts'
+                : null
+            }
+            closeButtonQuery={this.props.location.state}
+            // addToFlowCallback={this.addToFlowCallback}
+          />
 
           <ColumnsContainer>
             <SideColumnWrapper>
@@ -266,9 +339,16 @@ class ContactProfile extends React.Component {
 
                 <Partner {..._props} />
 
-                {!this.state.isDesktopScreen && (
-                  <DealsListWidget contactId={contact.id} />
-                )}
+                {/* {!this.state.isDesktopScreen && (
+                  <Flows
+                    contactId={contact.id}
+                    flows={contact.flows}
+                    user={user}
+                    onStop={this.stopFlow}
+                  />
+                )} */}
+
+                {!this.state.isDesktopScreen && <Deals contact={contact} />}
 
                 <Owner
                   onSelect={this.onChangeOwner}
@@ -278,57 +358,42 @@ class ContactProfile extends React.Component {
                   disabled={this.state.isUpdatingOwner}
                 />
               </Card>
+              <Delete
+                handleDelete={this.delete}
+                isDeleting={this.state.isDeleting}
+              />
             </SideColumnWrapper>
 
             <SecondColumn>
-              <Tab.Container
-                id="profile-todo-tabs"
-                defaultActiveKey="event"
-                className="c-contact-profile-todo-tabs c-contact-profile-card"
-              >
-                <div>
-                  <Nav className="c-contact-profile-todo-tabs__tabs-list">
-                    <NavItem
-                      className="c-contact-profile-todo-tabs__tab"
-                      eventKey="event"
-                    >
-                      Add Event
-                    </NavItem>
+              <TabsContainer>
+                <Tabs>
+                  <TabList>
+                    <Tab>
+                      <span>Add Event</span>
+                    </Tab>
+                    <Tab>
+                      <span>Add Note</span>
+                    </Tab>
+                  </TabList>
 
-                    <NavItem
-                      className="c-contact-profile-todo-tabs__tab"
-                      eventKey="note"
-                    >
-                      Add Note
-                    </NavItem>
-                  </Nav>
-
-                  <Tab.Content
-                    animation
-                    className="c-contact-profile-todo-tabs__pane-container"
-                  >
-                    <Tab.Pane
-                      eventKey="event"
-                      className="c-contact-profile-todo-tabs__pane"
-                    >
+                  <TabPanels>
+                    <TabPanel>
                       <NewTask
                         user={user}
                         submitCallback={this.addEvent}
                         defaultAssociation={defaultAssociation}
                       />
-                    </Tab.Pane>
-                    <Tab.Pane
-                      eventKey="note"
-                      className="c-contact-profile-todo-tabs__pane"
-                    >
+                    </TabPanel>
+                    <TabPanel>
                       <AddNote
                         contact={contact}
                         onSubmit={this.handleAddNote}
                       />
-                    </Tab.Pane>
-                  </Tab.Content>
-                </div>
-              </Tab.Container>
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+              </TabsContainer>
+
               <Timeline
                 contact={contact}
                 defaultAssociation={defaultAssociation}
@@ -373,12 +438,14 @@ const mapStateToProps = ({ user, contacts }, props) => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    getContactsTags
-  }
-)(ContactProfile)
+export default withRouter(
+  connect(
+    mapStateToProps,
+    {
+      getContactsTags
+    }
+  )(ContactProfile)
+)
 
 // todo
 // infinit scroll + lazy loading

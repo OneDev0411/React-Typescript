@@ -1,12 +1,11 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
 
-import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
+import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 
-import EmailCompose from 'components/EmailCompose'
+import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
-import { getTemplatePreviewImage } from 'components/InstantMarketing/helpers/get-template-preview-image'
+import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import ActionButton from 'components/Button/ActionButton'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
@@ -16,11 +15,13 @@ class General extends React.Component {
   state = {
     isBuilderOpen: false,
     isComposeEmailOpen: false,
-    isSendingEmail: false,
     isSocialDrawerOpen: false,
     htmlTemplate: '',
-    templateScreenshot: null,
-    owner: this.props.user
+    socialNetworkName: '',
+    owner: this.props.user,
+    emailBody: '',
+    templateInstance: null,
+    isGettingTemplateInstance: false
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -59,47 +60,27 @@ class General extends React.Component {
       isComposeEmailOpen: !state.isComposeEmailOpen
     }))
 
-  handleSendEmails = async (values, form) => {
-    this.setState({
-      isSendingEmail: true
-    })
+  getEmail = email => {
+    const { templateInstance } = this.state
 
-    const email = {
-      from: values.fromId,
-      to: values.recipients,
-      subject: values.subject,
-      html: this.state.htmlTemplate.result
+    if (templateInstance == null) {
+      throw new Error(`Template instance is ${typeof templateInstance}!`)
     }
 
-    try {
-      await sendContactsEmail(email, this.state.owner.id)
+    const { html, id: template } = templateInstance
 
-      // reset form
-      if (form) {
-        form.reset()
-      }
-
-      this.props.notify({
-        status: 'success',
-        message: `${
-          values.recipients.length
-        } emails has been sent to your contacts`
-      })
-    } catch (e) {
-      console.log(e)
-      // todo
-    } finally {
-      this.setState({
-        isSendingEmail: false,
-        isComposeEmailOpen: false
-      })
+    return {
+      ...email,
+      html,
+      template
     }
   }
 
-  handleSocialSharing = template => {
+  handleSocialSharing = (template, socialNetworkName) => {
     this.setState({
       htmlTemplate: template,
-      isSocialDrawerOpen: true
+      isSocialDrawerOpen: true,
+      socialNetworkName
     })
   }
 
@@ -116,14 +97,24 @@ class General extends React.Component {
       isComposeEmailOpen: true,
       isBuilderOpen: true,
       htmlTemplate: template,
-      templateScreenshot: null
+      emailBody: ''
     })
   }
 
-  generatePreviewImage = async template =>
-    this.setState({
-      templateScreenshot: await getTemplatePreviewImage(template)
+  generatePreviewImage = async template => {
+    this.setState({ isGettingTemplateInstance: true })
+
+    const instance = await getTemplateInstances(template.id, {
+      ...this.TemplateInstanceData,
+      html: template.result
     })
+
+    this.setState({
+      emailBody: getTemplateInstancePreviewImage(instance),
+      templateInstance: instance,
+      isGettingTemplateInstance: false
+    })
+  }
 
   get TemplateInstanceData() {
     return {
@@ -159,21 +150,25 @@ class General extends React.Component {
           templateTypes={this.props.types}
           mediums={this.props.mediums}
           defaultTemplate={selectedTemplate}
+          isEdit={this.props.isEdit}
         />
 
         {this.state.isComposeEmailOpen && (
-          <EmailCompose
+          <BulkEmailComposeDrawer
             isOpen
+            hasStaticBody
             from={this.state.owner}
+            body={this.state.emailBody}
             onClose={this.toggleComposeEmail}
-            html={this.state.templateScreenshot}
-            onClickSend={this.handleSendEmails}
-            isSubmitting={this.state.isSendingEmail}
+            onSent={this.toggleComposeEmail}
+            getEmail={this.getEmail}
+            isSubmitDisabled={this.state.isGettingTemplateInstance}
           />
         )}
 
         {this.state.isSocialDrawerOpen && (
           <SocialDrawer
+            socialNetworkName={this.state.socialNetworkName}
             template={this.state.htmlTemplate}
             templateInstanceData={this.TemplateInstanceData}
             onClose={this.closeSocialDrawer}
@@ -190,7 +185,4 @@ function mapStateToProps({ user }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { notify }
-)(General)
+export default connect(mapStateToProps)(General)

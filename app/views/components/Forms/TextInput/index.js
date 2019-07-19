@@ -1,44 +1,73 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
-import {
-  InputContainer,
-  InputError,
-  InputRequired,
-  InputLabel
-} from '../styled'
-import { InputField } from './styled'
+import { InputContainer, InputLabel, InputRequired } from '../styled'
 
-export const TextInput = ({
-  input,
-  meta,
-  isRequired,
-  placeholder,
-  labelText,
-  hasLabel = true,
-  showError = true,
-  highlightOnError = false,
-  Container = InputContainer,
-  ...rest
-}) => (
-  <Container>
-    {hasLabel && (
-      <InputLabel hasError={meta.submitFailed && meta.error}>
-        {labelText || placeholder}
-        &nbsp;
-        <InputRequired>{isRequired && '*'}</InputRequired>
-      </InputLabel>
-    )}
+import { FormattedInputField, InputField } from './styled'
+import { FieldError } from '../../final-form-fields/FieldError'
 
-    <InputField
-      {...input}
-      autoComplete="Off"
-      placeholder={placeholder}
-      hasError={highlightOnError && meta.submitFailed && meta.error}
-      {...rest}
-    />
+TextInput.propTypes = {
+  input: PropTypes.object,
+  label: PropTypes.string,
+  style: PropTypes.object,
+  meta: PropTypes.object,
+  hasLabel: PropTypes.bool,
+  isRequired: PropTypes.bool,
+  isVisible: PropTypes.bool,
+  showError: PropTypes.bool,
+  highlightOnError: PropTypes.bool,
+  format: PropTypes.object,
+  container: PropTypes.oneOfType([PropTypes.element, PropTypes.object])
+}
 
-    {showError && meta.error && meta.touched && (
-      <InputError>{meta.error}</InputError>
-    )}
-  </Container>
-)
+TextInput.defaultProps = {
+  input: {},
+  meta: {},
+  style: {},
+  hasLabel: true,
+  isRequired: false,
+  isVisible: true,
+  showError: true,
+  highlightOnError: true,
+  format: null,
+  container: InputContainer
+}
+
+export function TextInput({ input, ...props }) {
+  const inputProps = {
+    autoComplete: 'disabled',
+    hasError:
+      props.highlightOnError && props.meta.submitFailed && props.meta.error,
+    ...input,
+    ...props
+  }
+  const name = (input && input.name) || props.name
+
+  return (
+    <props.container
+      style={{
+        ...props.style,
+        display: props.isVisible ? 'block' : 'none'
+      }}
+    >
+      {props.hasLabel && (
+        <InputLabel hasError={props.meta.submitFailed && props.meta.error}>
+          {props.label || props.placeholder}
+          <InputRequired>{props.isRequired && '*'}</InputRequired>
+        </InputLabel>
+      )}
+
+      {props.format ? (
+        <FormattedInputField
+          {...inputProps}
+          options={props.format}
+          onChange={e => input.onChange(e.target.rawValue)}
+        />
+      ) : (
+        <InputField {...inputProps} />
+      )}
+
+      {props.showError && <FieldError name={name} />}
+    </props.container>
+  )
+}

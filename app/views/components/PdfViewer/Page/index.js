@@ -42,7 +42,9 @@ export class Page extends React.Component {
     // load page
     const page = await this.props.document.getPage(this.props.pageNumber)
 
-    const viewport = page.getViewport(this.getScale(isVisible))
+    const viewport = page.getViewport({
+      scale: this.getScale(isVisible)
+    })
     const { width, height } = viewport
     const canvas = this.canvas
 
@@ -108,6 +110,12 @@ export class Page extends React.Component {
         data-page={this.props.pageNumber}
         data-pdf={this.props.pdfId}
       >
+        {this.props.headerRenderer &&
+          this.props.headerRenderer({
+            pageNumber: this.props.pageNumber,
+            pagesCount: this.props.totalPages
+          })}
+
         {this.state.isLoading && <Spinner />}
 
         <canvas

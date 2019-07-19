@@ -1,6 +1,19 @@
 export const red = {
   A100: '#fe3824',
-  A200: '#f00'
+  A200: '#f00',
+  primary: '#e60000'
+}
+
+export const yellow = {
+  A100: '#F8A700'
+}
+
+export const orange = {
+  primary: '#f6a623'
+}
+
+export const green = {
+  primary: '#5cb85c'
 }
 
 export const blue = {
@@ -18,8 +31,8 @@ export const grey = {
   A250: '#e6e6e6',
   A300: '#d4d4d4',
   A400: '#c4c4c4',
-  A550: '#b2b2b2',
   A500: '#b4b4b4',
+  A550: '#b2b2b2',
   A600: '#a4a4a4',
   A900: '#7F7F7F'
 }
@@ -34,5 +47,6 @@ export const disabledColor = grey.A900
 export const disabledBgColor = grey.A550
 export const borderColor = grey.A300
 export const brandBackground = grey.A150
-export const placeholderColor = grey.A900
+export const placeholderColor = grey.A500
 export const InputFocusBgColor = grey.A100
+export const dimmerOverlayColor = '#ffffffaa'

@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
-import { withRouter } from 'react-router'
-import Cookie from 'js-cookie'
+import React, { Component, createRef } from 'react'
+import { withRouter, browserHistory } from 'react-router'
+import { Helmet } from 'react-helmet'
 
 import Onboarding from 'components/Onboarding'
+import Acl from 'components/Acl'
 
 import IconButton from 'components/Button/IconButton'
 import IconInfo from 'components/SvgIcons/InfoOutline/IconInfoOutline'
@@ -20,60 +21,60 @@ import { Menu } from './Menu'
 
 class Marketing extends Component {
   state = {
-    isSideMenuOpen: true,
-    isShowingIntro: false
+    isSideMenuOpen: true
   }
+
+  onboardingRef = createRef()
 
   toggleSideMenu = () =>
     this.setState(state => ({
       isSideMenuOpen: !state.isSideMenuOpen
     }))
 
-  handleShowIntro = () =>
-    this.setState({
-      isShowingIntro: true
-    })
-
-  handleFinishIntro = () =>
-    this.setState({
-      isShowingIntro: false
-    })
+  handleShowIntro = () => {
+    this.onboardingRef.current.show()
+  }
 
   render() {
     const { isSideMenuOpen } = this.state
 
     return (
-      <PageContainer isOpen={isSideMenuOpen}>
-        <SideMenu isOpen={isSideMenuOpen}>
-          <ListTitle className="onboarding--intro">
-            Marketing
-            <IconButton isFit iconSize="large" onClick={this.handleShowIntro}>
-              <IconInfo />
-            </IconButton>
-          </ListTitle>
-          <Menu />
-        </SideMenu>
+      <Acl.Marketing fallbackUrl="/dashboard/mls">
+        <PageContainer isOpen={isSideMenuOpen}>
+          <Helmet>
+            <title>Marketing | Rechat</title>
+          </Helmet>
 
-        <PageContent
-          isSideMenuOpen={isSideMenuOpen}
-          style={{ background: '#f2f2f2' }}
-        >
-          {React.Children.map(this.props.children, child =>
-            React.cloneElement(child, {
-              ...this.props.params,
-              isSideMenuOpen,
-              toggleSideMenu: this.toggleSideMenu
-            })
-          )}
-        </PageContent>
+          <SideMenu isOpen={isSideMenuOpen}>
+            <ListTitle className="onboarding--intro">
+              Marketing
+              <IconButton isFit iconSize="large" onClick={this.handleShowIntro}>
+                <IconInfo />
+              </IconButton>
+            </ListTitle>
+            <Menu />
+          </SideMenu>
 
-        <Onboarding
-          display={this.state.isShowingIntro}
-          steps={OnboardingSteps}
-          cookie="marketing-center-onboarding"
-          onFinishIntro={this.handleFinishIntro}
-        />
-      </PageContainer>
+          <PageContent
+            isSideMenuOpen={isSideMenuOpen}
+            style={{ background: '#f2f2f2' }}
+          >
+            {React.Children.map(this.props.children, child =>
+              React.cloneElement(child, {
+                ...this.props.params,
+                isSideMenuOpen,
+                toggleSideMenu: this.toggleSideMenu
+              })
+            )}
+          </PageContent>
+
+          <Onboarding
+            ref={this.onboardingRef}
+            steps={OnboardingSteps}
+            tourId="marketing-center"
+          />
+        </PageContainer>
+      </Acl.Marketing>
     )
   }
 }

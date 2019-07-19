@@ -18,7 +18,14 @@ import DraggablePage from '../components/DraggablePage'
 
 import { PageSelector } from './PageSelector'
 
-import { PagesContainer, FileInfo, Title, PagesCount, Divider } from './styled'
+import {
+  PagesContainer,
+  FileInfo,
+  Title,
+  PagesCount,
+  Divider,
+  UsedPage
+} from './styled'
 import { SectionCard, PageNumber, Header } from '../styled'
 
 class PdfList extends React.Component {
@@ -85,6 +92,32 @@ class PdfList extends React.Component {
   isPageSelected = (documentId, page) =>
     !!this.props.selectedPages[`${documentId}-${page}`]
 
+  isPageUsed = (documentId, page) =>
+    !!this.props.usedPages[`${documentId}-${page}`]
+
+  renderPageHeader = (props, documentId, page) => {
+    if (!this.isPageUsed(documentId, page)) {
+      return false
+    }
+
+    return <UsedPage>Used</UsedPage>
+  }
+
+  renderPageFooter = (props, documentId, page) => (
+    <Flex alignCenter style={{ marginTop: '0.5rem' }}>
+      <PageNumber>{props.pageNumber}</PageNumber>
+      {this.isPageSelected(documentId, page) === false && (
+        <ActionButton
+          appearance="outline"
+          size="small"
+          onClick={() => this.props.onChangeSelectedPages(documentId, page)}
+        >
+          Add Page
+        </ActionButton>
+      )}
+    </Flex>
+  )
+
   render() {
     return (
       <SectionCard style={this.props.style}>
@@ -124,24 +157,18 @@ class PdfList extends React.Component {
                   isVisible={this.state.visiblePages.includes(`${id}${i + 1}`)}
                   totalPages={doc.numPages}
                   onEndDrag={this.props.onChangeSelectedPages}
-                  footerRenderer={props => (
-                    <Flex alignCenter style={{ marginTop: '0.5rem' }}>
-                      <PageNumber>{props.pageNumber}</PageNumber>
-                      {this.isPageSelected(id, i + 1) === false && (
-                        <ActionButton
-                          appearance="outline"
-                          size="small"
-                          onClick={() =>
-                            this.props.onChangeSelectedPages(id, i + 1)
-                          }
-                        >
-                          Add Page
-                        </ActionButton>
-                      )}
-                    </Flex>
-                  )}
+                  headerRenderer={props =>
+                    this.renderPageHeader(props, id, i + 1)
+                  }
+                  footerRenderer={props =>
+                    this.renderPageFooter(props, id, i + 1)
+                  }
                   canvasStyle={{
-                    opacity: this.isPageSelected(id, i + 1) ? 0.5 : 1
+                    opacity:
+                      this.isPageSelected(id, i + 1) ||
+                      this.isPageUsed(id, i + 1)
+                        ? 0.5
+                        : 1
                   }}
                   pageStyle={{
                     display: 'inline-block',

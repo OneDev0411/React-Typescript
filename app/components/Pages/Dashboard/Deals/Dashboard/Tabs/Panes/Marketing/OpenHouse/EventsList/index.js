@@ -10,7 +10,6 @@ import LinkButton from 'components/Button/LinkButton'
 import Spinner from 'components/Spinner'
 import { BasicDropdown } from 'components/BasicDropdown'
 import VerticalDotsIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
-import LinkIcon from 'components/SvgIcons/LinkIcon'
 
 import { getActiveTeamId } from 'utils/user-teams'
 import copy from 'utils/copy-text-to-clipboard'
@@ -101,7 +100,7 @@ class EventsList extends React.Component {
                   to={link}
                   style={{ margin: 0 }}
                 >
-                  View Page
+                  View Guest Registration Page
                 </LinkButton>
               </RegistrationLink>
 

@@ -8,26 +8,23 @@ import IconAdd from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
 
 import LinkButton from 'components/Button/LinkButton'
 
-import Roles from '../../../../../components/Roles'
+import Roles from 'deals/components/Roles'
 
 import { Container, Menu } from './styled'
 
 export class AddRecipient extends React.Component {
   state = {
-    isMenuOpen: false,
-    isOuterClickLocked: false
+    isMenuOpen: false
   }
 
   toggleOpenMenu = () =>
     this.setState(state => ({
-      isMenuOpen: !state.isMenuOpen,
-      isOuterClickLocked: false
+      isMenuOpen: !state.isMenuOpen
     }))
 
   closeMenu = () =>
     this.setState({
-      isMenuOpen: false,
-      isOuterClickLocked: false
+      isMenuOpen: false
     })
 
   handleAddRecipient = recipient => {
@@ -36,34 +33,10 @@ export class AddRecipient extends React.Component {
     this.props.onAddRecipient(recipient)
   }
 
-  handleCreateNewRole = props => {
-    this.handleLockOuterClick()
-    props.onClick()
-  }
-
-  handleLockOuterClick = () =>
-    this.setState({
-      isOuterClickLocked: true
-    })
-
-  handleUnlockOuterClick = () =>
-    this.setState({
-      isOuterClickLocked: false
-    })
-
-  handleOuterClick = () => {
-    if (!this.state.isOuterClickLocked) {
-      this.closeMenu()
-    }
-  }
-
   render() {
     return (
       <Container>
-        <Downshift
-          isOpen={this.state.isMenuOpen}
-          onOuterClick={this.handleOuterClick}
-        >
+        <Downshift isOpen={this.state.isMenuOpen}>
           {({ isOpen }) => (
             <div>
               <ActionButton
@@ -83,19 +56,18 @@ export class AddRecipient extends React.Component {
               {isOpen && (
                 <Menu>
                   <Roles
+                    showEmail
+                    isEmailRequired
                     showTitle={false}
                     deal={this.props.deal}
-                    isEmailRequired
                     allowDeleteRole={false}
+                    filter={role => !this.props.selectedRoles[role.id]}
                     onSelect={this.handleAddRecipient}
                     onUpsertRole={this.handleAddRecipient}
                     onCreateRole={this.handleAddRecipient}
-                    onTriggerRequiredEmail={this.handleLockOuterClick}
-                    onCloseAddRoleDrawer={this.handleUnlockOuterClick}
-                    filter={role => !this.props.selectedRoles[role.id]}
                     addRoleActionRenderer={props => (
                       <LinkButton
-                        onClick={() => this.handleCreateNewRole(props)}
+                        {...props}
                         style={{
                           padding: 0
                         }}

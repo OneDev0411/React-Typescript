@@ -27,6 +27,7 @@ export default function UploaderModal({
   return (
     <Container>
       <Dropzone
+        data-test="image-uploader-modal-dropzone"
         accept={accept}
         minSize={minSize}
         maxSize={maxSize}

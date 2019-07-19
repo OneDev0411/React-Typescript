@@ -1,0 +1,26 @@
+{
+  "id": "7b1353da-cc57-402a-ab68-e5b7c85c7731",
+  "created_by": "21c04d82-0e8d-11e8-b6c0-0ae785638eb4",
+  "object_type": "contact_attribute",
+  "event_type": "birthday",
+  "type_label": "Spouse Birthday",
+  "timestamp": -5349715200,
+  "date": "1800-06-23T00:00:00.000Z",
+  "next_occurence": "2019-06-23T00:00:00.000Z",
+  "recurring": true,
+  "title": "Spouse Birthday (Sarah) - Test  Test",
+  "crm_task": null,
+  "deal": null,
+  "contact": "9062c6f0-8ab8-426a-8b6e-42db090b20b8",
+  "campaign": null,
+  "users": [
+    "21c04d82-0e8d-11e8-b6c0-0ae785638eb4"
+  ],
+  "status": null,
+  "metadata": {
+    "is_partner": true
+  },
+  "timestamp_readable": "1800-06-23T00:00:00.000Z",
+  "timestamp_midday": "1800-06-23T12:00:00.000Z",
+  "type": "calendar_event"
+}

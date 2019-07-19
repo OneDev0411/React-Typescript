@@ -8,11 +8,11 @@ import { getTime } from '../../../utils/get-time'
 import { setTime } from '../../../utils/set-time'
 
 import { Divider } from '../Divider'
-import { TimePicker } from '../TimePicker'
 import ActionButton from '../Button/ActionButton'
+import TimeInput from '../TimeInput'
 
 import { PickerContainer } from './styled'
-import { isToday, formatDate, setTimeStringToDate } from './helpers'
+import { isToday, formatDate } from './helpers'
 
 export class DateTimePicker extends React.Component {
   static propTypes = {
@@ -37,8 +37,7 @@ export class DateTimePicker extends React.Component {
   handleDate = date =>
     this.props.onChange(setTime(date, getTime(this.props.selectedDate)))
 
-  handleTime = time =>
-    this.props.onChange(setTimeStringToDate(this.props.selectedDate, time))
+  handleTime = updatedDate => this.props.onChange(updatedDate)
 
   render() {
     const { selectedDate } = this.props
@@ -50,6 +49,7 @@ export class DateTimePicker extends React.Component {
           appearance="link"
           onClick={this.handleOpen}
           onFocus={this.handleOpen}
+          data-test="date-time-picker-button"
           style={{ fontWeight: 500 }}
         >
           {isToday(selectedDate) && <span>Today,&nbsp;</span>}
@@ -58,7 +58,7 @@ export class DateTimePicker extends React.Component {
         <div style={{ position: 'relative' }}>
           {this.state.isOpen && (
             <ClickOutSide onClickOutside={this.handleClose}>
-              <PickerContainer depth={3}>
+              <PickerContainer depth={3} style={{ zIndex: 2 }}>
                 <DayPicker
                   initialMonth={selectedDate}
                   selectedDays={selectedDate}
@@ -67,8 +67,8 @@ export class DateTimePicker extends React.Component {
                 />
                 <Divider margin="0.5em 0" />
                 <Flex alignCenter justifyBetween>
-                  <TimePicker
-                    defaultTime={selectedDate}
+                  <TimeInput
+                    initialDate={selectedDate}
                     onChange={this.handleTime}
                   />
                   <ActionButton
@@ -76,6 +76,7 @@ export class DateTimePicker extends React.Component {
                     appearance="link"
                     onClick={this.handleClose}
                     style={{ fontWeight: 500 }}
+                    data-test="date-picker-done"
                   >
                     Done
                   </ActionButton>

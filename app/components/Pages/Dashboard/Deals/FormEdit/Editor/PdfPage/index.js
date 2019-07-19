@@ -12,7 +12,9 @@ export default class Page extends React.Component {
 
     const page = await this.props.document.getPage(this.props.page)
 
-    const viewport = page.getViewport(this.props.scale)
+    const viewport = page.getViewport({
+      scale: this.props.scale
+    })
     const { width, height } = viewport
     const context = canvas.getContext('2d')
 

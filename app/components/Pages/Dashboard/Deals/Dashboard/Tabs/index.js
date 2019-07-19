@@ -8,6 +8,8 @@ import FoldersPane from './Panes/Folders'
 import EventsPane from './Panes/Events'
 import MarketingPane from './Panes/Marketing'
 
+import Notifications from '../Notifications'
+
 export default class Tabs extends React.Component {
   tabs = [
     {
@@ -25,9 +27,7 @@ export default class Tabs extends React.Component {
     {
       id: 'marketing',
       label: 'Marketing',
-      isDisabled: deal => !deal.listing,
-      tooltipWhenDisabled:
-        'To enable marketing tab, connect this deal to a MLS listing',
+      isDisabled: () => false,
       render: props => <MarketingPane {...props} />
     }
   ]
@@ -70,6 +70,8 @@ export default class Tabs extends React.Component {
             )
           })}
         </NavBar>
+
+        <Notifications deal={this.props.deal} />
 
         <TabContent>{activeTab.render(this.props)}</TabContent>
       </Container>

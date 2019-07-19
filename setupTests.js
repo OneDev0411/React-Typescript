@@ -1,11 +1,27 @@
-import Enzyme, { ShallowWrapper, ReactWrapper } from 'enzyme'
+import Enzyme, { ShallowWrapper } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
+
+import '@testing-library/react/cleanup-after-each'
+import { configure } from '@testing-library/react'
+
+process.env.DISABLE_MODAL = 'true'
+
+const originalConsoleError = console.error
+
+console.error = message => {
+  // disable React Warnings for now
+  if (/Warning/.test(message)) {
+    return null
+  }
+
+  originalConsoleError(message)
+}
 
 /**
  * searchs a "date-test" attribute
  * @returns a dom element
  */
-ShallowWrapper.prototype.findAttr = function (attr) {
+ShallowWrapper.prototype.findAttr = function findAttr(attr) {
   return this.find(`[data-test="${attr}"]`)
 }
 
@@ -15,7 +31,7 @@ ShallowWrapper.prototype.findAttr = function (attr) {
  * example: [data-test="foo"].active
  * @returns a dom element
  */
-ShallowWrapper.prototype.queryAttr = function (attr) {
+ShallowWrapper.prototype.queryAttr = function queryAttr(attr) {
   const params = attr.split('>')
 
   let query = `[data-test="${params[0].trim()}"]`
@@ -33,3 +49,6 @@ ShallowWrapper.prototype.queryAttr = function (attr) {
 Enzyme.configure({
   adapter: new Adapter()
 })
+
+// Using data-test instead of data-testId
+configure({ testIdAttribute: 'data-test' })

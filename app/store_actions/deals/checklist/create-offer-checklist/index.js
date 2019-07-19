@@ -5,7 +5,7 @@ import Deal from '../../../../models/Deal'
 import { appendChecklist } from '../../deal'
 import { setTasks } from '../../task'
 
-import { setChecklists } from '..'
+import { setChecklists } from '../set-checklist'
 
 import * as schema from '../../schema'
 

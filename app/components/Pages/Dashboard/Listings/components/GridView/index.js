@@ -70,14 +70,17 @@ export class GridView extends React.Component {
 
   render() {
     return (
-      <div style={{ padding: '1.5em 1.5em 0.5em' }}>
+      <div style={{ padding: ' 0 1.5em 1.5em' }}>
         <Table
           columns={this.columns}
           data={this.props.listings.data.map(this.format)}
           isFetching={this.props.isFetching}
           LoadingState={LoadingComponent}
-          listInfo={this.props.listings.info}
-          summary={{ entityName: 'Listings', style: { color: '#000' } }}
+          summary={{
+            entityName: 'Listings',
+            style: { color: '#000' },
+            total: this.props.listings.info.total
+          }}
           plugins={{
             sortable: {},
             ...this.props.plugins

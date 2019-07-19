@@ -8,8 +8,7 @@ import editUser from 'actions/user/edit'
 import uploadCoverImage from 'actions/user/upload-cover-image'
 
 import Button from 'components/Button/ActionButton'
-
-import FormCard from './FormCard'
+import FormCard from 'components/FormCard'
 
 const MAX_SIZE = 256
 const MIN_WIDTH = 240
@@ -18,6 +17,7 @@ const SUBMIT_LABEL_TEXT = 'Choose Image'
 const UNEXPECTED_ERROR = 'An unexpected error occurred. Please try again.'
 
 const CoverImage = ({
+  value,
   isDeleting,
   coverImage,
   submitError,
@@ -59,8 +59,8 @@ const CoverImage = ({
               type="file"
               id="image-cover-input"
               onChange={uploadHandler}
-              accept="image/jpeg, image/png"
               className="c-cover-image__input"
+              value={value}
             />
             <label
               htmlFor="image-cover-input"
@@ -71,7 +71,12 @@ const CoverImage = ({
               {submitLabelText}
             </label>
             {((coverImage && !isUploading) || (!coverImage && isDeleting)) && (
-              <Button appearance="outline" size="small" onClick={deleteHandler}>
+              <Button
+                appearance="outline"
+                size="small"
+                onClick={deleteHandler}
+                data-test="cover-image-form-delete-button"
+              >
                 {isDeleting ? 'Deleting...' : 'Delete Cover'}
               </Button>
             )}
@@ -106,6 +111,7 @@ export default compose(
     'setCoverImage',
     ({ user }) => user.cover_image_url || ''
   ),
+  withState('value', 'setValue', ''),
   withState('submitError', 'setSubmitError', ''),
   withState('isDeleting', 'setIsDeleting', false),
   withState('submitLabelText', 'setSubmitLabelText', SUBMIT_LABEL_TEXT),
@@ -171,6 +177,7 @@ export default compose(
       }
     },
     deleteHandler: ({
+      setValue,
       editUser,
       setCoverImage,
       setIsDeleting,
@@ -181,6 +188,7 @@ export default compose(
 
       try {
         await editUser({ cover_image_url: '' })
+        setValue('')
         setCoverImage(null)
         setIsDeleting(false)
       } catch (error) {

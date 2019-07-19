@@ -1,9 +1,14 @@
 import React from 'react'
+import { connect } from 'react-redux'
+
 import _ from 'underscore'
+
+import { selectFormsByBrand } from 'reducers/deals/forms'
 
 import { ChecklistItem } from '../ChecklistItem'
 
-export const Forms = ({
+const Forms = ({
+  forms,
   tasks,
   checklist,
   filterValue,
@@ -13,30 +18,35 @@ export const Forms = ({
   onChangeNotifyOffice
 }) => (
   <div>
-    {_.chain(checklist.allowed_forms)
-      .filter(form => {
-        const isFormExists = _.find(
-          checklist.tasks,
-          id => tasks[id].form === form.id
-        )
+    {forms &&
+      Object.values(forms)
+        .filter(form => {
+          const isFormExists = tasks.find(task => task.form === form.id)
 
-        return (
-          typeof isFormExists === 'undefined' &&
-          form.name.toLowerCase().includes((filterValue || '').toLowerCase())
-        )
-      })
-      .map(form => (
-        <ChecklistItem
-          key={form.id}
-          id={form.id}
-          checklist={checklist}
-          title={form.name}
-          onSelect={onSelectItem.bind(null, form, checklist.id)}
-          showNotifyOption={showNotifyOption}
-          shouldNotifyOffice={shouldNotifyOffice}
-          onChangeNotifyOffice={onChangeNotifyOffice}
-        />
-      ))
-      .value()}
+          return (
+            !isFormExists &&
+            form.name.toLowerCase().includes((filterValue || '').toLowerCase())
+          )
+        })
+        .map((form, index) => (
+          <ChecklistItem
+            key={index}
+            id={form.id}
+            checklist={checklist}
+            title={form.name}
+            onSelect={onSelectItem.bind(null, form, checklist.id)}
+            showNotifyOption={showNotifyOption}
+            shouldNotifyOffice={shouldNotifyOffice}
+            onChangeNotifyOffice={onChangeNotifyOffice}
+          />
+        ))}
   </div>
 )
+
+function mapStateToProps({ deals }, ownProps) {
+  return {
+    forms: selectFormsByBrand(deals.forms, ownProps.deal.brand.id)
+  }
+}
+
+export default connect(mapStateToProps)(Forms)

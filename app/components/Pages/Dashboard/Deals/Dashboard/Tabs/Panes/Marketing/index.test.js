@@ -1,0 +1,47 @@
+import React from 'react'
+import { shallow } from 'enzyme'
+import toJson from 'enzyme-to-json'
+
+import draftDeal from 'fixtures/deal/draft-seller'
+import liveDealWithListing from 'fixtures/deal/live-seller-with-listing'
+
+import EmailMarketing from './EmailMarketing'
+import SocialMarketing from './SocialMarketing'
+import AgentNetwork from './AgentNetwork'
+import OpenHouse from './OpenHouse'
+import Marketing from '.'
+
+describe('Deal MarketingPane component', () => {
+  it('renders with listing', () => {
+    const wrapper = shallow(<Marketing deal={liveDealWithListing} />)
+
+    expect(toJson(wrapper)).toMatchSnapshot()
+  })
+
+  it('renders without listing', () => {
+    const wrapper = shallow(<Marketing deal={draftDeal} />)
+
+    expect(toJson(wrapper)).toMatchSnapshot()
+  })
+
+  it('renders email, social, agent network and open house for deals with listing', () => {
+    const wrapper = shallow(<Marketing deal={liveDealWithListing} />)
+
+    expect(wrapper.children()).toHaveLength(4)
+    expect(wrapper.find(EmailMarketing)).toHaveLength(1)
+    expect(wrapper.find(SocialMarketing)).toHaveLength(1)
+    expect(wrapper.find(AgentNetwork)).toHaveLength(1)
+    expect(wrapper.find(OpenHouse)).toHaveLength(1)
+  })
+
+  it('renders only email and social for deals without listing (hip pockets)', () => {
+    const wrapper = shallow(<Marketing deal={draftDeal} />)
+
+    expect(wrapper.children()).toHaveLength(2)
+    expect(wrapper.find(EmailMarketing)).toHaveLength(1)
+    expect(wrapper.find(SocialMarketing)).toHaveLength(1)
+    expect(wrapper.find(AgentNetwork)).toHaveLength(0)
+    expect(wrapper.find(OpenHouse)).toHaveLength(0)
+  })
+
+})

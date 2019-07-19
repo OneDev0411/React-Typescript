@@ -3,6 +3,7 @@ import fileSaver from 'file-saver'
 import superagent from 'superagent'
 import { connect } from 'react-redux'
 
+import removeSpecialCharacters from 'utils/remove-special-characters'
 import { getActiveTeamId } from 'utils/user-teams'
 
 import ExportButton from './button'
@@ -10,23 +11,27 @@ import ExportButton from './button'
 class ExportContacts extends React.Component {
   sendDownloadReuqest = async exportType => {
     const {
+      excludedRows,
       exportIds,
       filters,
+      crmTasks,
       user,
       users,
+      searchText,
       conditionOperator: filter_type
     } = this.props
     const activeBrand = getActiveTeamId(user)
     const url = `/api/contacts/export/outlook/${activeBrand}/`
 
     const params = {
-      type: exportType,
-      filter_type
+      type: exportType
     }
 
     if (Array.isArray(exportIds) && exportIds.length > 0) {
       params.ids = exportIds
     } else {
+      params.filter_type = filter_type
+
       if (Array.isArray(filters) && filters.length > 0) {
         params.filters = filters.map(
           ({ attribute_def, invert, operator, value }) => ({
@@ -38,9 +43,23 @@ class ExportContacts extends React.Component {
         )
       }
 
-      if (Array.isArray(users) && users.length > 0) {
-        params.users = users
+      const cleanedSearchText = removeSpecialCharacters(searchText)
+
+      if (cleanedSearchText.length > 0) {
+        params.query = cleanedSearchText
       }
+
+      if (Array.isArray(excludedRows) && excludedRows.length > 0) {
+        params.excludes = excludedRows
+      }
+
+      if (Array.isArray(crmTasks) && crmTasks.length > 0) {
+        params.crm_tasks = crmTasks
+      }
+    }
+
+    if (Array.isArray(users) && users.length > 0) {
+      params.users = users
     }
 
     const response = await superagent.post(url).send(params)

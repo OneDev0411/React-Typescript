@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { Container } from './styled'
 
 const propTypes = {
-  isSideMenuOpen: PropTypes.bool.isRequired,
+  isSideMenuOpen: PropTypes.bool,
   menuWidth: PropTypes.string
 }
 

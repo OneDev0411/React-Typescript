@@ -50,5 +50,5 @@ export default Object.assign(Image, {
   getDimensions,
   getDimensionsCss,
   defaultProps,
-  displayName: 'PlayIcon'
+  displayName: 'IconPlay'
 })

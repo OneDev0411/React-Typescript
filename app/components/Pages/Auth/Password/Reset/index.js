@@ -10,7 +10,7 @@ import { getBrandInfo } from '../../SignIn'
 import ConflictModal from '../../../Branch/components/ConflictModal'
 import updatePassword from '../../../../../models/auth/password/update'
 import Button from '../../../../../views/components/Button/ActionButton'
-import SimpleField from '../../../../Pages/Dashboard/Account/Profile/components/SimpleField'
+import SimpleField from '../../../Dashboard/Account/Profile/components/SimpleField'
 
 const Reset = ({
   user,
@@ -30,13 +30,13 @@ const Reset = ({
     <article className="c-auth">
       <header className="c-auth__header">
         {siteLogo && (
-          <Link to="/" tabIndex={-1}>
+          <a href="/" tabIndex={-1}>
             <img
               src={siteLogo}
               alt={`${siteTitle} logo`}
               className="c-auth__logo"
             />
-          </Link>
+          </a>
         )}
         <h1 className="c-auth__title">{siteTitle}</h1>
         {!submitSuccessfully && (
@@ -73,7 +73,8 @@ const Reset = ({
             />
             {submitError && (
               <div className="c-auth__submit-error-alert">
-                An unexpected error occurred. Please try again.<br />
+                An unexpected error occurred. Please try again.
+                <br />
                 <Link to="/password/forgot">request a new password</Link>.
               </div>
             )}
@@ -94,7 +95,8 @@ const Reset = ({
           <div style={{ textAlign: 'center' }}>
             <p className="c-auth__submit-alert--success">
               <span>Your account password for email address </span>
-              <b>{submitSuccessfully}</b> is now updated.<br />
+              <b>{submitSuccessfully}</b> is now updated.
+              <br />
               <span>Please </span>
               <Link
                 to={`/signin?username=${encodeURIComponent(
@@ -102,7 +104,8 @@ const Reset = ({
                 )}`}
               >
                 sign in
-              </Link>.
+              </Link>
+              .
             </p>
           </div>
         )}

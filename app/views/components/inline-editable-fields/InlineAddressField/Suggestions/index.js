@@ -13,7 +13,7 @@ Suggestions.propTypes = {
 
 export function Suggestions({ items, ...props }) {
   return (
-    <ListContainer>
+    <ListContainer style={props.style}>
       <DefaultItem onClick={props.onClickDefaultItem}>
         {'Use "'}
         <span className="search-text">{props.searchText}</span>

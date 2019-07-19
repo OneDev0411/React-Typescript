@@ -1,24 +1,24 @@
 import React, { Fragment } from 'react'
 import { Field } from 'react-final-form'
 import _ from 'underscore'
+import Flex from 'styled-flex-component'
+
+import { normalizeAttachments } from 'components/SelectDealFileDrawer/helpers/normalize-attachment'
 
 import ActionButton from 'components/Button/ActionButton'
-import IconFolder from 'components/SvgIcons/Folder/IconFolder'
 
 import { FinalFormDrawer } from 'components/FinalFormDrawer'
 import { TextInput } from 'components/Forms/TextInput'
 import { TextArea } from 'components/Forms/TextArea'
 
-import Tooltip from 'components/tooltip'
-
-import { normalizeAttachment } from '../helpers/normalize-attachment'
-
 import { Recipients } from './components/Recipients'
-import Attachments from './components/Attachments'
+import { AddAttachment } from './components/AddAttachment'
+import { AutoNotify } from './components/AutoNotify'
+import AttachmentsList from './components/AttachmentsList'
 
 export default class SignatureComposeDrawer extends React.Component {
   state = {
-    isAttachmentsOpen: true
+    isAttachmentDrawerOpen: true
   }
 
   formObject = null
@@ -30,13 +30,12 @@ export default class SignatureComposeDrawer extends React.Component {
       return this.formObject
     }
 
-    this.initialAttachments = this.normalizePreSelectedAttachments(
-      this.props.attachments
-    )
+    this.initialAttachments = normalizeAttachments(this.props.attachments)
 
     this.formObject = {
       subject: 'Please DocuSign',
       recipients: {},
+      auto_notify: true,
       from: `${this.props.user.display_name} <${this.props.user.email}>`,
       attachments: this.initialAttachments
     }
@@ -68,29 +67,14 @@ export default class SignatureComposeDrawer extends React.Component {
     return this.props.onSubmit(values)
   }
 
-  normalizePreSelectedAttachments = attachments => {
-    const list = {}
-
-    attachments.forEach(attachment => {
-      const item = normalizeAttachment(attachment)
-
-      list[item.id] = {
-        ...item,
-        is_preselected: true
-      }
-    })
-
-    return list
-  }
-
   handleSelectAttachments = () =>
     this.setState({
-      isAttachmentsOpen: false
+      isAttachmentDrawerOpen: false
     })
 
   handleOpenAttachments = () => {
     this.setState({
-      isAttachmentsOpen: true
+      isAttachmentDrawerOpen: true
     })
 
     this.shouldQuitOnCloseAttachments = false
@@ -98,7 +82,7 @@ export default class SignatureComposeDrawer extends React.Component {
 
   handleCloseAttachments = () => {
     this.setState({
-      isAttachmentsOpen: false
+      isAttachmentDrawerOpen: false
     })
 
     if (this.shouldQuitOnCloseAttachments) {
@@ -108,32 +92,31 @@ export default class SignatureComposeDrawer extends React.Component {
 
   render() {
     return (
-      <Fragment>
-        <FinalFormDrawer
-          formId="signature-compose-form"
-          isOpen={this.props.isOpen && !this.state.isAttachmentsOpen}
-          initialValues={this.InitialValues}
-          onClose={this.props.onClose}
-          onSubmit={this.handleSubmit}
-          validate={this.validate}
-          submitting={this.props.isSubmitting}
-          closeDrawerOnBackdropClick={false}
-          title="Send for Signatures"
-          footerRenderer={props => (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                width: '100%'
-              }}
-            >
-              <Tooltip caption="Select Documents">
-                <IconFolder
-                  style={{ width: '2rem', cursor: 'pointer' }}
-                  onClick={this.handleOpenAttachments}
-                />
-              </Tooltip>
+      <FinalFormDrawer
+        formId="signature-compose-form"
+        isOpen={this.props.isOpen && !this.state.isAttachmentDrawerOpen}
+        initialValues={this.InitialValues}
+        onClose={this.props.onClose}
+        onSubmit={this.handleSubmit}
+        validate={this.validate}
+        submitting={this.props.isSubmitting}
+        closeDrawerOnBackdropClick={false}
+        title="Send for Signatures"
+        footerRenderer={props => (
+          <Flex alignCenter justifyBetween style={{ width: '100%' }}>
+            <Field
+              name="attachments"
+              isAttachmentDrawerOpen={this.state.isAttachmentDrawerOpen}
+              onSelectAttachments={this.handleSelectAttachments}
+              handleOpenAttachments={this.handleOpenAttachments}
+              handleCloseAttachments={this.handleCloseAttachments}
+              deal={this.props.deal}
+              initialAttachments={this.initialAttachments}
+              component={AddAttachment}
+            />
+
+            <Flex>
+              <Field name="auto_notify" component={AutoNotify} />
 
               <ActionButton
                 type="submit"
@@ -144,59 +127,51 @@ export default class SignatureComposeDrawer extends React.Component {
                   ? 'Please Wait...'
                   : 'Next: View in Docusign'}
               </ActionButton>
-            </div>
-          )}
-          render={() => (
-            <Fragment>
-              <Field
-                placeholder="To"
-                name="recipients"
-                deal={this.props.deal}
-                component={Recipients}
-              />
+            </Flex>
+          </Flex>
+        )}
+        render={() => (
+          <Fragment>
+            <Field
+              placeholder="To"
+              name="recipients"
+              deal={this.props.deal}
+              component={Recipients}
+            />
 
-              <Field
-                placeholder="From"
-                name="from"
-                style={{
-                  fontWeight: '500'
-                }}
-                readOnly
-                component={TextInput}
-              />
+            <Field
+              placeholder="From"
+              name="from"
+              style={{
+                fontWeight: '500'
+              }}
+              readOnly
+              component={TextInput}
+            />
 
-              <Field
-                isRequired
-                placeholder="Subject"
-                name="subject"
-                component={TextInput}
-              />
+            <Field
+              isRequired
+              placeholder="Subject"
+              name="subject"
+              component={TextInput}
+            />
 
-              <Field
-                labelText="Message"
-                placeholder="Write your Message..."
-                containerStyle={{
-                  borderBottom: 'none'
-                }}
-                name="message"
-                minRows={8}
-                maxRows={1000}
-                component={TextArea}
-              />
+            <Field
+              labelText="Message"
+              placeholder="Write your Message..."
+              containerStyle={{
+                borderBottom: 'none'
+              }}
+              name="message"
+              minRows={8}
+              maxRows={1000}
+              component={TextArea}
+            />
 
-              <Field
-                name="attachments"
-                deal={this.props.deal}
-                initialAttachments={this.initialAttachments}
-                isAttachmentsOpen={this.state.isAttachmentsOpen}
-                onCloseAttachmentsDrawer={this.handleCloseAttachments}
-                onChangeSelectedDocuments={this.handleSelectAttachments}
-                component={Attachments}
-              />
-            </Fragment>
-          )}
-        />
-      </Fragment>
+            <Field name="attachments" component={AttachmentsList} />
+          </Fragment>
+        )}
+      />
     )
   }
 }

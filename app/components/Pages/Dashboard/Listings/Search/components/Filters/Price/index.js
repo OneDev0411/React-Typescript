@@ -1,6 +1,7 @@
 import React from 'react'
 import { change as updateField, formValueSelector } from 'redux-form'
 import { connect } from 'react-redux'
+
 import MinMaxInputs from '../components/MinMaxInputs'
 import { toNumber } from '../../../../../../../../utils/helpers'
 

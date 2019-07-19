@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MC SocialActions component renders 1`] = `
+<Fragment>
+  <styled__Button
+    appearance="primary"
+    brandColor=""
+    disabled={false}
+    inverse={false}
+    isActive={false}
+    isBlock={false}
+    key="Instagram"
+    onClick={[Function]}
+    size="medium"
+  >
+    <styled__Icon
+      className="fa fa-instagram"
+    />
+    Post to 
+    Instagram
+  </styled__Button>
+  <styled__Button
+    appearance="primary"
+    brandColor=""
+    disabled={false}
+    inverse={false}
+    isActive={false}
+    isBlock={false}
+    key="Facebook"
+    onClick={[Function]}
+    size="medium"
+  >
+    <styled__Icon
+      className="fa fa-facebook-square"
+    />
+    Post to 
+    Facebook
+  </styled__Button>
+  <styled__Button
+    appearance="primary"
+    brandColor=""
+    disabled={false}
+    inverse={false}
+    isActive={false}
+    isBlock={false}
+    key="LinkedIn"
+    onClick={[Function]}
+    size="medium"
+  >
+    <styled__Icon
+      className="fa fa-linkedin"
+    />
+    Post to 
+    LinkedIn
+  </styled__Button>
+</Fragment>
+`;

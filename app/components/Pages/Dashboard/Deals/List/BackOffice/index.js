@@ -51,13 +51,10 @@ class BackofficeTable extends React.Component {
 
   render() {
     const { isSideMenuOpen } = this.state
-    const { params, isFetchingDeals, isTrainingAccount } = this.props
+    const { params, isFetchingDeals } = this.props
 
     return (
-      <PageContainer
-        isOpen={isSideMenuOpen}
-        isTrainingAccount={isTrainingAccount}
-      >
+      <PageContainer isOpen={isSideMenuOpen}>
         <Menu width={180} isOpen={isSideMenuOpen}>
           <BackofficeFilters
             activeFilter={params.filter}
@@ -70,10 +67,9 @@ class BackofficeTable extends React.Component {
             title={params.filter}
             isSideMenuOpen={isSideMenuOpen}
             onMenuTriggerChange={this.toggleSideMenu}
-            showCreateDeal={false}
           />
 
-          <GridContainer isTrainingAccount={isTrainingAccount}>
+          <GridContainer>
             <SearchContainer>
               <Search
                 disableOnSearch

@@ -1,0 +1,91 @@
+{
+  "compilerOptions": {
+    // Target latest version of ECMAScript.
+    "target": "esnext",
+    // Search under node_modules for non-relative imports.
+    "moduleResolution": "node",
+    // Process & infer types from .js files.
+    "allowJs": true,
+    // Don't emit; allow Babel to transform files.
+    "noEmit": true,
+    // We can start without strict mode (or only with strictNullChecks) to
+    // reduce the initial friction.
+    // Ideally we should be able to adopt full strict mode.
+    //    "strict": true,
+    "strictNullChecks": true,
+    // Disallow features that require cross-file information for emit.
+    "isolatedModules": true,
+    // Import non-ES modules as default imports.
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "jsx": "react",
+    // Allow importing JSON files
+    "resolveJsonModule": true,
+    // Allow dynamic importing
+    "module": "esnext",
+    // If "extends" would work, we could have remove these duplications
+    // but it seems it doesn't work
+    "baseUrl": ".",
+    "paths": {
+      "store/*": [
+        "app/stores/*"
+      ],
+      "actions/*": [
+        "app/store_actions/*"
+      ],
+      "assets/*": [
+        "app/static/*"
+      ],
+      "components/*": [
+        "app/views/components/*"
+      ],
+      "constants/*": [
+        "app/constants/*"
+      ],
+      "dashboard/*": [
+        "app/components/Pages/Dashboard/*"
+      ],
+      "hooks/*": [
+        "app/hooks/*"
+      ],
+      "models/*": [
+        "app/models/*"
+      ],
+      "reducers/*": [
+        "app/reducers/*"
+      ],
+      "routes/*": [
+        "app/routes/*"
+      ],
+      "partials/*": [
+        "app/components/Partials/*"
+      ],
+      "services/*": [
+        "app/services/*"
+      ],
+      "utils/*": [
+        "app/utils/*"
+      ],
+      "views/*": [
+        "app/views/*"
+      ],
+      "deals/*": [
+        "app/components/Pages/Dashboard/Deals/*"
+      ],
+      "crm/*": [
+        "app/components/Pages/Dashboard/Contacts/*"
+      ],
+      "animations/*": [
+        "app/animations/*"
+      ],
+      "fixtures/*": [
+        "tests/unit/fixtures/*"
+      ]
+    }
+  },
+  "include": [
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "types/**/*"
+  ]
+}

@@ -10,7 +10,7 @@ import signup from '../../../../../models/auth/signup'
 import { getBrandInfo } from '../../SignIn'
 import resetPassword from '../../../../../models/auth/password/reset'
 import Button from '../../../../../views/components/Button/ActionButton'
-import SimpleField from '../../../../Pages/Dashboard/Account/Profile/components/SimpleField'
+import SimpleField from '../../../Dashboard/Account/Profile/components/SimpleField'
 
 const ForgotForm = ({
   brand,
@@ -29,13 +29,13 @@ const ForgotForm = ({
       <article className="c-auth">
         <header className="c-auth__header">
           {siteLogo && (
-            <Link to="/" tabIndex={-1}>
+            <a href="/" tabIndex={-1}>
               <img
                 src={siteLogo}
                 alt={`${siteTitle} logo`}
                 className="c-auth__logo"
               />
-            </Link>
+            </a>
           )}
           <h1 className="c-auth__title">{siteTitle}</h1>
           {!resetSuccessfully && (
@@ -76,10 +76,11 @@ const ForgotForm = ({
           ) : (
             <div style={{ textAlign: 'center' }}>
               <p className="c-auth__submit-alert--success">
-                Your reset link was delivered.<br />
+                Your reset link was delivered.
+                <br />
                 Please check <b>{resetSuccessfully}</b>.
               </p>
-              <Link to="/">Back to homepage</Link>
+              <a href="/">Back to homepage</a>
             </div>
           )}
         </main>
@@ -148,7 +149,8 @@ export default compose(
         if (status === 404) {
           errorMessage = (
             <div>
-              Sorry, that email address is not registered with us.<br />
+              Sorry, that email address is not registered with us.
+              <br />
               <span>Please try again or</span>
               <Link to="/signup"> register for a new account</Link>.
             </div>

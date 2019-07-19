@@ -1,17 +1,20 @@
 import React from 'react'
 import Downshift from 'downshift'
 
+import Flex from 'styled-flex-component'
+
 import UserAvatar from 'components/Avatar'
 
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 
 import {
-  Recipient,
-  Title,
-  EmailsList,
-  EmailItem,
   ArrowIcon,
-  DeleteButton
+  DeleteButton,
+  EmailItem,
+  EmailsList,
+  Recipient,
+  Subtitle,
+  Title
 } from '../styled'
 
 export default class RecipientItem extends React.Component {
@@ -19,10 +22,15 @@ export default class RecipientItem extends React.Component {
     isMenuOpen: false
   }
 
-  toggleOpenMenu = () =>
+  toggleOpenMenu = () => {
+    if (Array.isArray(this.props.recipient.emails) === false) {
+      return false
+    }
+
     this.setState(state => ({
       isMenuOpen: !state.isMenuOpen
     }))
+  }
 
   handleChangeEmail = email => {
     const { input, recipient } = this.props
@@ -32,8 +40,8 @@ export default class RecipientItem extends React.Component {
       email
     }
 
-    const recipients = input.value.map(
-      item => (item.email === recipient.email ? nextRecipient : item)
+    const recipients = input.value.map(item =>
+      item.email === recipient.email ? nextRecipient : item
     )
 
     input.onChange(recipients)
@@ -64,13 +72,20 @@ export default class RecipientItem extends React.Component {
         />
 
         <div onClick={this.toggleOpenMenu}>
-          <Title>{recipient.name}</Title>
+          <Flex alignCenter>
+            <div>
+              <Title>{recipient.name}</Title>
+              <Subtitle>{recipient.email}</Subtitle>
+            </div>
 
-          {hasMultipleEmails && (
-            <ArrowIcon
-              className={`fa fa-angle-${this.state.isMenuOpen ? 'up' : 'down'}`}
-            />
-          )}
+            {hasMultipleEmails && (
+              <ArrowIcon
+                className={`fa fa-angle-${
+                  this.state.isMenuOpen ? 'up' : 'down'
+                }`}
+              />
+            )}
+          </Flex>
         </div>
 
         {recipient.readOnly !== true && (
@@ -87,16 +102,14 @@ export default class RecipientItem extends React.Component {
             <div>
               {isOpen && (
                 <EmailsList>
-                  {recipient.emails
-                    .filter(email => email !== recipient.email)
-                    .map((email, index) => (
-                      <EmailItem
-                        key={index}
-                        onClick={() => this.handleChangeEmail(email)}
-                      >
-                        {email}
-                      </EmailItem>
-                    ))}
+                  {this.props.recipient.emails.map((email, index) => (
+                    <EmailItem
+                      key={index}
+                      onClick={() => this.handleChangeEmail(email)}
+                    >
+                      {email}
+                    </EmailItem>
+                  ))}
                 </EmailsList>
               )}
             </div>

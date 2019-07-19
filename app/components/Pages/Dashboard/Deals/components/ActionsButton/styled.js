@@ -9,7 +9,7 @@ export const PrimaryAction = styled.div`
   font-size: 1rem;
   font-weight: 500;
   height: 100%;
-  width: 10rem;
+  width: ${props => (props.hasSecondaryActions ? '10rem' : '12.3rem')};
 
   :hover {
     color: ${primary};

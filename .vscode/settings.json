@@ -6,10 +6,9 @@
   },
   "eslint.autoFixOnSave": true,
   "eslint.alwaysShowStatus": true,
-  "spellright.language": "en",
-  "spellright.documentTypes": [
-    "markdown",
-    "latex",
-    "plaintext"
-  ],
+  "typescript.tsdk": "./node_modules/typescript/lib",
+  "search.exclude": {
+    "**/*.sql": true,
+    "**/__snapshots__": true
+  }
 }

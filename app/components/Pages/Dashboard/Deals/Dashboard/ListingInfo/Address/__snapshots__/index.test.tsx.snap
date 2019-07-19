@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Deal address component renders with address 1`] = `
+<div
+  class="styled__TitleContainer-xmjc75-0 cHduYt"
+>
+  <h1
+    class="headings__H1-sc-15tq5ag-1 Kubky"
+    style="line-height:1.5"
+  >
+    1200 Main St
+  </h1>
+  <span>
+    Edit Address
+  </span>
+</div>
+`;
+
+exports[`Deal address component renders without address 1`] = `
+<div
+  class="styled__TitleContainer-xmjc75-0 cHduYt"
+>
+  <h1
+    class="headings__H1-sc-15tq5ag-1 Kubky"
+    style="line-height:1.5"
+  >
+    Some title for a deal without address
+  </h1>
+  <span>
+    + Add Address
+  </span>
+</div>
+`;

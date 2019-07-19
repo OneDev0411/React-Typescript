@@ -1,16 +1,1 @@
-@import './list';
-@import './tags';
-@import './editable';
-@import './stage';
-@import './empty_state';
-@import './profile/index';
 @import './import-csv';
-
-/* modals */
-@import './modal_add_contact';
-@import './modal_add_tag';
-
-.contacts {
-  margin-right: 0;
-  min-height: 100vh;
-}

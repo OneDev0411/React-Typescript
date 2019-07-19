@@ -32,8 +32,15 @@ const OverlayDrawer = ({
   ...rest
 }) => (
   <Portal root="overlay-drawer">
-    <div style={{ position: 'relative' }}>
-      <Content width={width} isOpen={isOpen}>
+    <div
+      style={{ position: 'relative' }}
+      data-test={`${isOpen ? 'open' : 'closed'}-drawer-overlay`}
+    >
+      <Content
+        width={width}
+        isOpen={isOpen}
+        data-test={`${isOpen ? 'open' : 'closed'}-drawer-content`}
+      >
         {React.Children.map(children, child => React.cloneElement(child, rest))}
       </Content>
 

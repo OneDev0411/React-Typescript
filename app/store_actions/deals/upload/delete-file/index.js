@@ -1,46 +1,36 @@
 import _ from 'underscore'
 
 import * as actionTypes from '../../../../constants/deals'
-import Deal from '../../../../models/Deal'
+import { deleteTaskFile, deleteStashFile } from '../../../../models/Deal/file'
 
-function deleteFile(dealId, files) {
+function deleteFile({ dealId, fileId, taskId }) {
   return dispatch => {
-    _.each(files, (task, fileId) => {
-      if (task) {
-        return dispatch({
-          type: actionTypes.DELETE_TASK_FILE,
-          task_id: task.id,
-          file_id: fileId
-        })
-      }
-
-      dispatch({
-        type: actionTypes.DELETE_STASH_FILE,
-        deal_id: dealId,
+    if (taskId) {
+      return dispatch({
+        type: actionTypes.DELETE_TASK_FILE,
+        task_id: taskId,
         file_id: fileId
       })
+    }
+
+    dispatch({
+      type: actionTypes.DELETE_STASH_FILE,
+      deal_id: dealId,
+      file_id: fileId
     })
   }
 }
 
-export function asyncDeleteFile(dealId, files) {
+export function asyncDeleteFile({ dealId, fileId, taskId }) {
   try {
-    Deal.deleteFiles(dealId, _.keys(files)).then(() => null)
+    if (taskId) {
+      deleteTaskFile(taskId, fileId)
+    } else {
+      deleteStashFile(dealId, fileId)
+    }
 
-    return deleteFile(dealId, files)
+    return deleteFile({ dealId, fileId, taskId })
   } catch (e) {
     throw e
-  }
-}
-
-export function syncDeleteFile(dealId, files) {
-  return async dispatch => {
-    try {
-      await Deal.deleteFiles(dealId, _.keys(files)).then(() => null)
-
-      return dispatch(deleteFile(dealId, files))
-    } catch (e) {
-      throw e
-    }
   }
 }

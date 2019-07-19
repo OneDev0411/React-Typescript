@@ -1,7 +1,8 @@
 import React from 'react'
 
-import { SideMenu } from '../styled'
-import FactsheetsNav from '../../Dashboard/FactsheetsNav'
+import FactsheetsNav from 'deals/Dashboard/FactsheetsNav'
+
+import { SideMenu, containerHeight } from '../styled'
 
 export class FactsheetSideMenu extends React.Component {
   render() {
@@ -10,10 +11,13 @@ export class FactsheetSideMenu extends React.Component {
     }
 
     return (
-      <SideMenu width="23rem" isOpen>
+      <SideMenu width="28rem" isOpen>
         <FactsheetsNav
           deal={this.props.deal}
           isBackOffice={this.props.isBackOffice}
+          style={{
+            height: containerHeight
+          }}
         />
       </SideMenu>
     )

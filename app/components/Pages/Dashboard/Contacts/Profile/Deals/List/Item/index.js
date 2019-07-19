@@ -7,6 +7,8 @@ import _ from 'underscore'
 import { getContactUsers, getContactAttribute } from 'models/contacts/helpers'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 import { formatPhoneNumber } from 'utils/helpers'
+import Avatar from 'components/Avatar'
+import { normalizeDeal } from 'views/utils/association-normalizers'
 
 import {
   getField,
@@ -15,13 +17,11 @@ import {
   getAddress
 } from 'models/Deal/helpers/context'
 
+import { goTo } from 'utils/go-to'
+
 import { roleName } from '../../../../../Deals/utils/roles'
 
 import { Container, Price, Status, Address, Role } from './styled'
-
-function getPhoto(deal) {
-  return getField(deal, 'photo') || '/static/images/deals/home.png'
-}
 
 function getPrice(deal) {
   const price =
@@ -40,6 +40,12 @@ class Item extends React.Component {
   componentDidMount() {
     this.searchRoles()
   }
+
+  handleOnClickItem = () =>
+    goTo(
+      `/dashboard/deals/${this.props.item.id}`,
+      `Contact - ${this.props.contact.display_name}`
+    )
 
   searchRoles = async () => {
     const { item, contact, attributeDefs } = this.props
@@ -88,21 +94,20 @@ class Item extends React.Component {
     const { item } = this.props
     const { roles } = this.state
 
-    const status = getStatus(item) || 'Unknown'
     const clientTitle = ''
+    const status = getStatus(item)
     const address = getAddress(item)
+    const avatar = normalizeDeal(item, false).avatar
 
     const contactRoleName = roles.map(role => roleName(role.role)).join(', ')
 
     return (
-      <Container onClick={() => this.props.handleOnClickItem(item)}>
-        <div style={{ width: '48px', height: '48px', borderRadius: '50%' }}>
-          <img src={getPhoto(item)} alt="home" style={{ width: '100%' }} />
-        </div>
-        <div style={{ paddingLeft: '2rem' }}>
-          <Flex alignCenter style={{ marginBottom: '0.5em' }}>
+      <Container onClick={this.handleOnClickItem}>
+        <Avatar {...avatar} />
+        <div style={{ marginLeft: '1rem', width: 'calc(100% - 3rem)' }}>
+          <Flex alignCenter justifyBetween style={{ marginBottom: '0.5em' }}>
             <Price>{getPrice(item)}</Price>
-            <Status status={status}>{status}</Status>
+            {status && <Status color={avatar.statusColor}>{status}</Status>}
           </Flex>
           {clientTitle && (
             <div>

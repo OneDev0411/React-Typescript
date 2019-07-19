@@ -5,7 +5,7 @@ import { ShowMoreLessText, ArrowDown, ArrowUp } from './styled'
 
 export class ShowMoreLess extends Component {
   static defaultProps = {
-    isOpen: false,
+    defaultIsOpen: false,
     row: false,
     column: true,
     count: 7,
@@ -15,7 +15,7 @@ export class ShowMoreLess extends Component {
   }
 
   state = {
-    isOpen: this.props.isOpen
+    isOpen: this.props.defaultIsOpen
   }
 
   toggleState = () => {
@@ -25,14 +25,14 @@ export class ShowMoreLess extends Component {
   }
 
   renderShowMore = () => (
-    <ShowMoreLessText onClick={this.toggleState}>
+    <ShowMoreLessText data-test="show-more-button" onClick={this.toggleState}>
       {this.props.moreText}
       <ArrowDown />
     </ShowMoreLessText>
   )
 
   renderShowLess = () => (
-    <ShowMoreLessText onClick={this.toggleState}>
+    <ShowMoreLessText data-test="show-more-button" onClick={this.toggleState}>
       {this.props.lessText}
       <ArrowUp />
     </ShowMoreLessText>

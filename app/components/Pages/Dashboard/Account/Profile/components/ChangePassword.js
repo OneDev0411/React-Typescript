@@ -5,7 +5,8 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import { Field, reduxForm } from 'redux-form'
 
-import FormCard from './FormCard'
+import FormCard from 'components/FormCard'
+
 import SimpleField from './SimpleField'
 import changePassword from '../../../../../../models/user/change-password'
 import Button from '../../../../../../views/components/Button/ActionButton'
@@ -29,7 +30,6 @@ const ChangePasswordForm = ({
         onSubmit={handleSubmit(onSubmitHandler)}
       >
         <Field
-          autoComplete="off"
           component={SimpleField}
           label="Current Password"
           name="old_password"
@@ -41,7 +41,7 @@ const ChangePasswordForm = ({
           }}
         />
         <Field
-          autoComplete="off"
+          autoComplete="new-password"
           component={SimpleField}
           label="New Password"
           name="new_password"
@@ -53,7 +53,7 @@ const ChangePasswordForm = ({
           }}
         />
         <Field
-          autoComplete="off"
+          autoComplete="new-password"
           component={SimpleField}
           label="Confirm New Password"
           name="confirm_password"
@@ -99,13 +99,13 @@ const validate = values => {
     errors.new_password = 'Your password must be at least 6 characters.'
   } else if (values.old_password === values.new_password) {
     errors.new_password =
-      'Your new password can\'t be match with your old password!'
+      "Your new password can't be match with your old password!" // eslint-disable-line
   }
 
   if (!values.confirm_password) {
     errors.confirm_password = 'Required'
   } else if (values.confirm_password !== values.new_password) {
-    errors.confirm_password = "Your passwords don't match"
+    errors.confirm_password = "Your passwords don\'t match" // eslint-disable-line
   }
 
   return errors

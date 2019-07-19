@@ -95,12 +95,7 @@ export class AvatarUploader extends Component {
         {isUploading && this.renderUploading()}
         {!isUploading && (
           <Fragment>
-            <button
-              id="avatarImage"
-              className="c-avatar-uploader__input"
-              type="button"
-              onClick={this.openModal}
-            />
+            <button id="avatarImage" type="button" onClick={this.openModal} />
             {this.state.isOpen && this.renderUploader()}
           </Fragment>
         )}

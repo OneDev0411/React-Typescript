@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Configuration" pattern="file[web]:config//*||file:.editorconfig||file:.eslintignore||file:.eslintrc||file:jsconfig.json||file:jest.config.js||file:nodemon.config.json||file:tsconfig.json||file:webpack.config.babel.js||file[web]:webpack//*" />
+</component>

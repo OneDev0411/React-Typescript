@@ -377,7 +377,9 @@ export function isAddressField(key) {
 }
 
 export function getDefinitionId(brand_id, key) {
-  return _.find(getList(brand_id), { key }).id
+  const definition = _.find(getList(brand_id), { key })
+
+  return definition && definition.id
 }
 
 export function getChecklist(deal, fieldKey) {
@@ -419,6 +421,27 @@ export function getChecklist(deal, fieldKey) {
   )
 }
 
+export function createUpsertObject(deal, field, value, approved = false) {
+  const definition = getDefinitionId(deal.brand.id, field)
+
+  if (!definition) {
+    return null
+  }
+
+  return {
+    definition,
+    checklist: getChecklist(deal, field),
+    value,
+    approved
+  }
+}
+
+export function getStatusField(deal) {
+  return getField(deal, 'contract_status')
+    ? 'contract_status'
+    : 'listing_status'
+}
+
 function getFormattedValue(value) {
   if (!value) {
     return value
@@ -448,10 +471,12 @@ export default {
   getValue,
   getValueByContext,
   getDateValue,
+  getStatusField,
   parseDate,
   getDateFormatString,
   validate,
   validateDate,
   validateList,
-  isAddressField
+  isAddressField,
+  createUpsertObject
 }

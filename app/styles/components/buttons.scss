@@ -2,28 +2,11 @@
   -webkit-transition: background 90ms;
   transition: background 90ms;
 }
-.forgot__password-btn--cancel {
-  @media (max-width: 768px) {
-    margin-bottom: 10px;
-    padding-right: 0 !important;
-  }
-}
-.dashed {
-  border: 1px dashed $brand-primary !important;
-  color: $brand-primary !important;
-}
+
 .btn.disabled,
 .btn[disabled],
 fieldset[disabled] .btn {
   cursor: default !important;
-}
-
-.c-button--link {
-  display: inline-block;
-  vertical-align: middle;
-  font-size: inherit;
-  padding: 0.25rem 0.5rem;
-  margin-left: 1rem;
 }
 
 .c-button--shadow {
@@ -36,13 +19,5 @@ fieldset[disabled] .btn {
 
   &:focus {
     outline-width: 0;
-  }
-}
-
-.c-button--shadow--link {
-  @extend .c-button--shadow;
-
-  &:hover {
-    text-decoration: underline;
   }
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { addNotification } from 'reapop'
 
 import { getContactAddresses } from 'models/contacts/helpers/get-contact-addresses'
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
@@ -20,12 +21,26 @@ class Addresses extends React.Component {
       'Addresses'
     )
 
+    let defaultLabel = 'Other'
+    let defaultIsPrimary = false
     const addresses = getContactAddresses(props.contact)
+    const normalizedAddresses = getAddresses(addresses, addressAttributeDefs)
+
+    if (normalizedAddresses.length === 0) {
+      defaultLabel = 'Home'
+      defaultIsPrimary = true
+    }
 
     this.state = {
       addresses: [
-        ...getAddresses(addresses, addressAttributeDefs),
-        generateEmptyAddress(addressAttributeDefs, addresses)
+        ...normalizedAddresses,
+        generateEmptyAddress(
+          addressAttributeDefs,
+          addresses,
+          false,
+          defaultLabel,
+          defaultIsPrimary
+        )
       ]
     }
 
@@ -60,13 +75,33 @@ class Addresses extends React.Component {
           address => address.index !== addressIndex
         )
 
-        if (addresses.length > 0) {
+        if (addresses.length > 1) {
           return { addresses }
+        }
+
+        if (addresses.length === 1) {
+          const address = addresses[0]
+
+          return {
+            addresses: [
+              {
+                ...address,
+                label: address.id ? address.label : 'Home',
+                is_primary: address.id ? address.is_primary : true
+              }
+            ]
+          }
         }
 
         return {
           addresses: [
-            generateEmptyAddress(this.addressAttributeDefs, addresses)
+            generateEmptyAddress(
+              this.addressAttributeDefs,
+              addresses,
+              false,
+              'Home',
+              true
+            )
           ]
         }
       })
@@ -81,6 +116,11 @@ class Addresses extends React.Component {
       return removeAddressFromState()
     } catch (error) {
       console.error(error)
+      this.props.notify({
+        message:
+          'An error occurred while deleting the address. Please try again.',
+        status: 'error'
+      })
     }
   }
 
@@ -91,8 +131,8 @@ class Addresses extends React.Component {
         attributes,
         {
           associations: [
+            'contact.attributes',
             'contact.updated_by',
-            'contact.sub_contacts',
             'contact_attribute.attribute_def'
           ]
         }
@@ -105,6 +145,11 @@ class Addresses extends React.Component {
       })
     } catch (error) {
       console.error(error)
+      this.props.notify({
+        message:
+          'An error occurred while saving the address. Please try again.',
+        status: 'error'
+      })
     }
   }
 
@@ -132,4 +177,9 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(Addresses)
+// This is using for testing
+export { Addresses }
+export default connect(
+  mapStateToProps,
+  { notify: addNotification }
+)(Addresses)

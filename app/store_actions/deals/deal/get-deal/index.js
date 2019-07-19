@@ -1,14 +1,15 @@
 import { addNotification as notify } from 'reapop'
 
-import Deal from '../../../../models/Deal'
+import { getById } from '../../../../models/Deal/deal/get-by-id'
+
 import { updateDeal } from '../update-deal'
 
 export function getDeal(deal_id) {
   return async dispatch => {
     try {
-      const deal = await Deal.getById(deal_id)
+      const deal = await getById(deal_id)
 
-      return await dispatch(updateDeal(deal))
+      return dispatch(updateDeal(deal))
     } catch (e) {
       dispatch(
         notify({
@@ -18,6 +19,7 @@ export function getDeal(deal_id) {
           status: 'error'
         })
       )
+
       throw e
     }
   }

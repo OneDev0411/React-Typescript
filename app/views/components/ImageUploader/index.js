@@ -5,6 +5,7 @@ import { Modal, ModalHeader, ModalFooter } from '../Modal'
 import ImageEditor from './ImageEditor'
 import UploaderModal from './UploaderModal'
 import Footer from './Footer'
+import { ModalContentContainer } from './styled'
 
 const RESET_STATE = { isOpen: true, file: null, scale: 1, rotate: 0 }
 const DISMISS_STATE = { isOpen: false }
@@ -156,13 +157,7 @@ export class ImageUploader extends Component {
         }}
       >
         <ModalHeader title={modalTitle} closeHandler={this.onClose} />
-        <div
-          style={{
-            width: '100%',
-            height: 'calc(100% - 145px)',
-            display: 'flex'
-          }}
-        >
+        <ModalContentContainer>
           {hasImage ? (
             <ImageEditor
               editorRef={this.editor}
@@ -186,7 +181,7 @@ export class ImageUploader extends Component {
               showRules={this.props.showRules}
             />
           )}
-        </div>
+        </ModalContentContainer>
         <ModalFooter>
           {hasImage && (
             <Footer

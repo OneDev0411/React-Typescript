@@ -2,6 +2,8 @@ import React from 'react'
 import Flex from 'styled-flex-component'
 import styled, { css } from 'styled-components'
 
+import { grey } from 'views/utils/colors'
+
 import ToolTip from '../tooltip'
 import IconSelectedRadio from '../SvgIcons/Radio/SelectedRadio/IconSelectedRadio'
 import IconUnSelectedRadio from '../SvgIcons/Radio/UnSelectedRadio/IconUnSelectedRadio'
@@ -17,8 +19,8 @@ const RadioLabel = styled.div`
     `};
 `
 const Caption = styled.div`
-  color: #7f7f7f;
-  font-size: 0.875rem;
+  color: ${grey.A900};
+  font-size: 1rem;
 `
 
 export default ({
@@ -32,7 +34,7 @@ export default ({
 }) => (
   <Flex justifyStart style={style} onClick={onClick}>
     <ToolTip caption={tooltip}>
-      <Flex alignStart>
+      <Flex alignStart style={{ cursor: 'pointer' }}>
         {selected ? <IconSelectedRadio /> : <IconUnSelectedRadio />}
         <LabelContainer>
           <RadioLabel disabled={disabled}>{title}</RadioLabel>

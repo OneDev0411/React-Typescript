@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
 import IconButton from '../../../Button/IconButton'
+import { grey } from '../../../../utils/colors'
 
 export const DeleteButton = styled(IconButton)`
   margin-left: 6px;
@@ -34,9 +35,16 @@ export const Recipient = styled.span`
   }
 `
 
-export const Title = styled.span`
-  font-size: 16px;
+export const Title = styled.div`
+  font-size: 0.9rem;
   font-weight: 400;
+  line-height: 1.2;
+`
+
+export const Subtitle = styled.div`
+  font-size: 0.7rem;
+  color: ${grey.A900};
+  line-height: 1;
 `
 
 export const EmailItem = styled.div`

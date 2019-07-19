@@ -5,16 +5,13 @@ import { Uploader } from 'components/Uploader'
 
 import { AssetImage } from './AssetImage'
 
-import Fetch from '../../../../../services/fetch'
-
-import loadGrapes from '../../helpers/load-grapes'
-
-const CUSTOM_ASSET_UPLOAD_PATH = '/templates/assets'
+import { loadGrapesjs } from '../utils/load-grapes'
+import { uploadAsset } from './helpers'
 
 export const load = async () => {
-  const { Grapesjs, Backbone } = await loadGrapes()
+  const { Grapesjs, Backbone } = await loadGrapesjs()
 
-  Grapesjs.plugins.add('asset-blocks', editor => {
+  Grapesjs.plugins.add('asset-blocks', async editor => {
     let target
 
     const getStorageData = async key =>
@@ -22,13 +19,19 @@ export const load = async () => {
         editor.StorageManager.load(key, data => res(data))
       })
 
+    const { templateId } = await getStorageData('templateId')
+
     const AssetView = Backbone.View.extend({
       initialize({ model }) {
         this.model = model
       },
       render() {
         ReactDOM.render(
-          <AssetImage model={this.model} target={target} />,
+          <AssetImage
+            model={this.model}
+            target={target}
+            templateId={templateId}
+          />,
           this.el
         )
 
@@ -42,16 +45,9 @@ export const load = async () => {
           <Uploader
             accept="image/*"
             uploadHandler={async files => {
-              const { templateId } = await getStorageData('templateId')
-
               try {
                 const uploadResponses = await Promise.all(
-                  files.map(file =>
-                    new Fetch()
-                      .upload(CUSTOM_ASSET_UPLOAD_PATH)
-                      .attach('attachment', file, file.name)
-                      .field('template', templateId)
-                  )
+                  files.map(file => uploadAsset(file, templateId))
                 )
 
                 const uploadedAssets = uploadResponses.map(response => ({
@@ -61,6 +57,8 @@ export const load = async () => {
 
                 const uploadedAssetsCollection = uploadedAssets.map(asset => ({
                   image: asset.url,
+                  listing:
+                    target.attributes.attributes['rechat-listing'] || null,
                   userFile: true
                 }))
 
@@ -158,6 +156,10 @@ export const load = async () => {
       target = selected
       view.reset()
       view.$el.show()
+    })
+
+    editor.on('component:remove', () => {
+      view.$el.empty()
     })
   })
 }

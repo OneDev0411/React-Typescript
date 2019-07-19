@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import FactsheetSection from '../Factsheet'
 import Roles from '../../components/Roles'
-
+import DeleteDeal from '../DeleteDeal'
 import { Card } from './styled'
 import { FactsheetDivider } from '../Factsheet/styled'
 
@@ -11,11 +11,7 @@ function FactsheetsSideNav(props) {
   const { deal, isBackOffice } = props
 
   return (
-    <Card
-      style={{
-        padding: '1.5rem 0'
-      }}
-    >
+    <Card style={props.style}>
       <FactsheetSection
         showDivider={props.showCriticalDatesDivider}
         display={props.showCriticalDates}
@@ -51,6 +47,20 @@ function FactsheetsSideNav(props) {
         section="Listing"
         title="Listing Information"
       />
+
+      {props.showDeleteDeal && (
+        <Fragment>
+          <FactsheetDivider />
+
+          <div
+            style={{
+              margin: '0.5rem 1.5rem'
+            }}
+          >
+            <DeleteDeal deal={deal} isBackOffice={isBackOffice} />
+          </div>
+        </Fragment>
+      )}
     </Card>
   )
 }
@@ -60,7 +70,8 @@ FactsheetsSideNav.propTypes = {
   showCriticalDatesDivider: PropTypes.bool,
   showCDAInformation: PropTypes.bool,
   showListingInformation: PropTypes.bool,
-  showContacts: PropTypes.bool
+  showContacts: PropTypes.bool,
+  showDeleteDeal: PropTypes.bool
 }
 
 FactsheetsSideNav.defaultProps = {
@@ -68,7 +79,8 @@ FactsheetsSideNav.defaultProps = {
   showCriticalDatesDivider: true,
   showCDAInformation: true,
   showListingInformation: true,
-  showContacts: true
+  showContacts: true,
+  showDeleteDeal: true
 }
 
 export default FactsheetsSideNav

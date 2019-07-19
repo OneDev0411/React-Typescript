@@ -1,16 +1,19 @@
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
-import { grey } from 'views/utils/colors'
+import { grey, placeholderColor } from 'views/utils/colors'
 
 export const SearchInputContainer = styled.div`
   position: relative;
 
-  i {
+  & svg {
     position: absolute;
     left: ${props => props.textLength * 8.5}px;
-    top: 17px;
+    top: 11px;
     font-size: 10px;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-left: 0.25rem;
   }
 `
 
@@ -19,12 +22,15 @@ export const SearchInput = styled.input`
   height: 40px;
   border: none;
 
+  ::placeholder {
+    color: ${placeholderColor};
+  }
   :focus {
     outline: none;
   }
 `
 
-export const SearchResults = styled.div`
+export const SearchResultsContainer = styled.div`
   position: absolute;
   top: 40px;
   left: 0;
@@ -34,7 +40,7 @@ export const SearchResults = styled.div`
   border-radius: 6px;
   background-color: #fff;
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  z-index: 2;
 `
 
 export const RowContainer = styled(Flex)`
@@ -61,9 +67,17 @@ export const IconContainer = styled(Flex)`
 `
 
 export const Title = styled.div`
-  padding: 0.5em 1rem 0;
+  padding: 0.5em 1em 0.5em 1em;
   color: ${grey.A900};
   font-weight: 600;
+  display: flex;
+  align-items: center;
+
+  & svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-left: 0.25rem;
+  }
 `
 
 export const SectionSeparator = styled.div`

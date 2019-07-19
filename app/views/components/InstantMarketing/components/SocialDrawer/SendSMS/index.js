@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { addNotification as notify } from 'reapop'
+
 import { isValidPhoneNumber } from 'utils/helpers'
 
 import { formatPhoneNumber } from 'utils/format'
@@ -20,6 +21,16 @@ class SendSMS extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.init()
+  }
+
+  init = async () => {
+    const isValidPhone = await isValidPhoneNumber(this.props.user.phone_number)
+
+    this.setState({ isValidPhone })
+  }
+
   handleChangePhone = async e => {
     const phone = e.target.value
 
@@ -29,14 +40,6 @@ class SendSMS extends React.Component {
       phone,
       isValidPhone
     })
-  }
-
-  componentDidMount = async props => {
-    const { user } = this.props
-
-    const isValidPhone = await isValidPhoneNumber(user.phone_number)
-
-    this.setState({isValidPhone})
   }
 
   handleSend = async () => {
@@ -49,11 +52,7 @@ class SendSMS extends React.Component {
     try {
       console.log(`Sending SMS to ${phone}`)
 
-      await shareInstance(
-        this.props.instance.id,
-        [phone],
-        this.ShareText
-      )
+      await shareInstance(this.props.instance.id, [phone], this.ShareText)
 
       this.props.notify({
         message: 'Image link sent to the phone number.',

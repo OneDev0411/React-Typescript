@@ -12,6 +12,12 @@ import Tooltip from '../../../../../views/components/tooltip'
 const Item = styled(ListItem)`
   justify-content: flex-start;
 
+  > svg {
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-right: 0.875rem;
+  }
+
   .mls-nav-item--active > & {
     color: ${primary};
     font-weight: 500;
@@ -31,7 +37,7 @@ export function NavItem({ Icon, ...props }) {
         activeClassName="mls-nav-item--active"
       >
         <Item>
-          <Icon style={{ marginRight: props.marginRight || '0.875rem' }} />
+          <Icon />
           <ListItemName>{props.text}</ListItemName>
         </Item>
       </Link>

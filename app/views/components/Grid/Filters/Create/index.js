@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from 'styled-components'
 import React from 'react'
 import Downshift from 'downshift'
 import Flex from 'styled-flex-component'
@@ -30,13 +30,13 @@ export class AddFilter extends React.Component {
   }
 
   toggleMenu = () => {
-    if (this.props.hasMissingValue) {
+    if (this.props.disabled) {
       return false
     }
 
-    this.setState({
-      isMenuOpen: !this.state.isMenuOpen
-    })
+    this.setState(state => ({
+      isMenuOpen: !state.isMenuOpen
+    }))
   }
 
   onSelectFilter = item => {
@@ -51,7 +51,7 @@ export class AddFilter extends React.Component {
 
   render() {
     const { isMenuOpen } = this.state
-    const { config, hasMissingValue } = this.props
+    const { config, disabled } = this.props
 
     return (
       <Container>
@@ -64,11 +64,12 @@ export class AddFilter extends React.Component {
           {({ isOpen, getItemProps }) => (
             <div>
               <AddItem
+                data-test="add-filter"
                 appearance="link"
                 onClick={this.toggleMenu}
-                disabled={hasMissingValue}
+                disabled={disabled}
               >
-                <MissingValueToolTip enabled={hasMissingValue}>
+                <MissingValueToolTip enabled={disabled}>
                   <Flex alignCenter>
                     <IconAdd />
                     <span style={{ fontWight: 500 }}>Add Filter</span>
@@ -81,6 +82,7 @@ export class AddFilter extends React.Component {
                   {config.map((item, index) => (
                     <FilterItemToolTip key={index} item={item}>
                       <ListItem
+                        data-test={`add-filter-item-${item.label}`}
                         {...getItemProps({
                           index,
                           item

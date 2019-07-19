@@ -9,11 +9,11 @@ import { Container, CheckBoxContainer, DropButton, IconDrop } from './styled'
 
 export default class Item extends Component {
   state = {
-    checked: !!this.props.value
+    checked: this.props.value >= 0
   }
 
   componentDidUpdate(_prevProps, prevState) {
-    const checked = !!this.props.value
+    const checked = this.props.value >= 0
 
     if (checked !== prevState.checked) {
       this.handleComponentUpdate()
@@ -21,7 +21,7 @@ export default class Item extends Component {
   }
 
   handleComponentUpdate() {
-    this.setState({ checked: !!this.props.value })
+    this.setState({ checked: this.props.value >= 0 })
   }
 
   handleChange = value => {

@@ -4,6 +4,7 @@ import { batchActions } from 'redux-batched-actions'
 import { browserHistory } from 'react-router'
 import moment from 'moment'
 import _ from 'underscore'
+import { Helmet } from 'react-helmet'
 
 import { getStartRange, getEndRange, getSelectedDate } from 'reducers/calendar'
 
@@ -13,7 +14,7 @@ import {
   createDateRange,
   createPastRange,
   createFutureRange
-} from 'models/Calendar/helpers/create-date-range'
+} from 'models/calendar/helpers/create-date-range'
 
 import PageHeader from 'components/PageHeader'
 import DatePicker from 'components/DatePicker'
@@ -26,7 +27,7 @@ import { CrmEvents } from './CrmEvents'
 import {
   viewAs,
   getActiveTeamACL,
-  allMembersOfTeam,
+  getTeamAvailableMembers,
   getActiveTeam
 } from '../../../../utils/user-teams'
 
@@ -40,7 +41,7 @@ const LOADING_POSITIONS = {
   Middle: 2
 }
 
-const MENU_WIDTH = '18.75rem'
+const MENU_WIDTH = '19.5rem'
 
 class CalendarContainer extends React.Component {
   state = {
@@ -74,6 +75,16 @@ class CalendarContainer extends React.Component {
     ) {
       this.restartCalendar(this.selectedDate, nextProps.viewAsUsers)
     }
+  }
+
+  /**
+   * Web page (document) title
+   * @returns {String} Title
+   */
+  get documentTitle() {
+    return `Calendar: ${moment(this.props.selectedDate).format(
+      'MMM DD'
+    )} | Rechat`
   }
 
   getCalendar = async (
@@ -275,54 +286,62 @@ class CalendarContainer extends React.Component {
     const { selectedDate, isFetching } = this.props
 
     return (
-      <Container isOpen={isMenuOpen}>
-        <Menu isOpen={isMenuOpen} width={MENU_WIDTH}>
-          <MenuContainer>
-            <DatePicker
-              selectedDate={selectedDate}
-              onChange={this.handleDateChange}
-              // modifiers={this.SelectedRange}
-            />
+      <React.Fragment>
+        <Helmet>
+          <title>{this.documentTitle}</title>
+        </Helmet>
+        <Container isOpen={isMenuOpen}>
+          <Menu isOpen={isMenuOpen} width={MENU_WIDTH}>
+            <MenuContainer>
+              <DatePicker
+                selectedDate={selectedDate}
+                onChange={this.handleDateChange}
+                // modifiers={this.SelectedRange}
+              />
 
-            <Export />
-          </MenuContainer>
-        </Menu>
+              <Export />
+            </MenuContainer>
+          </Menu>
 
-        <Content menuWidth={MENU_WIDTH} isSideMenuOpen={isMenuOpen}>
-          <PageHeader>
-            <PageHeader.Title showBackButton={false}>
-              <Trigger isExpended={isMenuOpen} onClick={this.toggleSideMenu} />
-              <PageHeader.Heading>Calendar</PageHeader.Heading>
-            </PageHeader.Title>
+          <Content menuWidth={MENU_WIDTH} isSideMenuOpen={isMenuOpen}>
+            <PageHeader>
+              <PageHeader.Title showBackButton={false}>
+                <Trigger
+                  isExpended={isMenuOpen}
+                  onClick={this.toggleSideMenu}
+                />
+                <PageHeader.Heading>Calendar</PageHeader.Heading>
+              </PageHeader.Title>
 
-            <PageHeader.Menu>
-              <ActionButton onClick={this.openEventDrawer}>
-                Add Event
-              </ActionButton>
-            </PageHeader.Menu>
-          </PageHeader>
-          <TableContainer>
-            <CalendarTable
-              positions={LOADING_POSITIONS}
-              selectedDate={selectedDate}
-              isFetching={isFetching}
-              loadingPosition={loadingPosition}
-              onScrollTop={this.loadPreviousItems}
-              onScrollBottom={this.loadNextItems}
-              onSelectTask={this.onClickTask}
-              onRef={this.onTableRef}
-            />
-          </TableContainer>
-        </Content>
+              <PageHeader.Menu>
+                <ActionButton onClick={this.openEventDrawer}>
+                  Add Event
+                </ActionButton>
+              </PageHeader.Menu>
+            </PageHeader>
+            <TableContainer>
+              <CalendarTable
+                positions={LOADING_POSITIONS}
+                selectedDate={selectedDate}
+                isFetching={isFetching}
+                loadingPosition={loadingPosition}
+                onScrollTop={this.loadPreviousItems}
+                onScrollBottom={this.loadNextItems}
+                onSelectTask={this.onClickTask}
+                onRef={this.onTableRef}
+              />
+            </TableContainer>
+          </Content>
 
-        <CrmEvents
-          isOpenEventDrawer={this.state.isOpenEventDrawer}
-          selectedEvent={this.state.selectedEvent}
-          user={this.props.user}
-          onEventChange={this.handleEventChange}
-          onCloseEventDrawer={this.closeEventDrawer}
-        />
-      </Container>
+          <CrmEvents
+            isOpenEventDrawer={this.state.isOpenEventDrawer}
+            selectedEvent={this.state.selectedEvent}
+            user={this.props.user}
+            onEventChange={this.handleEventChange}
+            onCloseEventDrawer={this.closeEventDrawer}
+          />
+        </Container>
+      </React.Fragment>
     )
   }
 }
@@ -337,7 +356,7 @@ function mapStateToProps({ user, calendar }) {
     viewAsUsers: viewAs(user),
     startRange: getStartRange(calendar),
     endRange: getEndRange(calendar),
-    brandMembers: allMembersOfTeam(getActiveTeam(user))
+    brandMembers: getTeamAvailableMembers(getActiveTeam(user))
   }
 }
 

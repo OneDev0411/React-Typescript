@@ -24,6 +24,7 @@ import { H2 } from '../../../../../../views/components/Typography/headings'
 import IconClose from '../../../../../../views/components/SvgIcons/Close/CloseIcon'
 
 import FetchError from './FetchError'
+import MLSNote from './MLSNote'
 import Loading from '../../../../../Partials/Loading'
 import FavoriteHeart from '../../components/FavoriteHeart'
 import ListingMarker from '../../../Partials/ListingMarker'
@@ -100,7 +101,6 @@ const ListingDesktopView = ({
   container,
   isFetching,
   errorMessage,
-  onClickFollow,
   showShareModal,
   onHideShareModal,
   showModalGallery,
@@ -120,8 +120,8 @@ const ListingDesktopView = ({
   if (typeof window !== 'undefined') {
     viewer_width = window.innerWidth
 
-    if (user && !data.is_widget && container !== 'modal') {
-      viewer_width -= 80
+    if (!data.is_widget && container !== 'modal') {
+      viewer_width -= 56
     }
   }
 
@@ -392,7 +392,7 @@ const ListingDesktopView = ({
 
       if (brand_agent.phone_number) {
         phone_area = (
-          <div style={S('font-15 mb-5')}>
+          <div style={S('mb-5')}>
             M: {formatPhoneNumber(brand_agent.phone_number)}
           </div>
         )
@@ -419,7 +419,7 @@ const ListingDesktopView = ({
               <div className="clearfix" />
             </div>
             {phone_area}
-            <div style={S('font-15 mb-5')}>E: {brand_agent.email}</div>
+            <div style={S('mb-5')}>E: {brand_agent.email}</div>
           </div>
         </div>
       )
@@ -429,7 +429,7 @@ const ListingDesktopView = ({
 
     if (user && user.user_type === 'Agent') {
       const email_style = {
-        ...S('font-15 mb-20'),
+        ...S('mb-20'),
         wordWrap: 'break-word'
       }
 
@@ -438,7 +438,7 @@ const ListingDesktopView = ({
 
       if (listing.showing_instructions) {
         showing_instructions = (
-          <div style={S('font-15 mb-5')}>{showing_instructions}</div>
+          <div style={S('mb-5')}>{showing_instructions}</div>
         )
       }
 
@@ -455,10 +455,8 @@ const ListingDesktopView = ({
               {listing.list_agent_full_name}, Seller Agent
             </span>
           </div>
-          <div style={S('font-15 mb-5')}>
-            {listing.list_agent_direct_work_phone}
-          </div>
-          <div style={S('font-15 mb-5')}>{listing.list_office_name}</div>
+          <div style={S('mb-5')}>{listing.list_agent_direct_work_phone}</div>
+          <div style={S('mb-5')}>{listing.list_office_name}</div>
           {showing_instructions}
           <div style={email_style}>
             <a
@@ -603,7 +601,7 @@ const ListingDesktopView = ({
                     {listing_title}
                   </div>
                   <div style={S('mb-20')}>
-                    <div style={S('pull-left font-15 mb-10 mr-10')}>
+                    <div style={S('pull-left mb-10 mr-10')}>
                       {listing_status_indicator}
                     </div>
                   </div>
@@ -611,7 +609,7 @@ const ListingDesktopView = ({
                   <div style={S('font-18 color-b7bfc7 mb-10')}>
                     {listing_subtitle} {mls_link}
                   </div>
-                  <div style={S('font-15 color-4a4a4a mb-10')}>
+                  <div style={S('color-4a4a4a mb-10')}>
                     <span>{bedroom_count} Beds</span>
                     &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;
                     <span
@@ -629,69 +627,73 @@ const ListingDesktopView = ({
                 </Col>
                 <div className="clearfix" />
               </div>
-              <div style={S('mb-70 font-15')}>{description}</div>
-              <div style={S('pr-40 relative')}>
-                <div style={S('mb-30 font-15')}>
-                  <div style={S('w-33p pull-left pr-20')}>
-                    <div style={S('mb-30')}>
-                      <div style={S('fw-600 mb-10 font-18')}>
-                        Cost Breakdown
-                      </div>
-                      {renderFeatures('Price/sqt', `$${price_sq_foot}`)}
-                      {renderFeatures(
-                        'Unexempt Taxes',
-                        listing.unexempt_taxes
-                          ? `$${listing.unexempt_taxes}`
-                          : '0'
-                      )}
-                      {renderFeatures(
-                        'HOA Fee',
-                        listing.association_fee ? listing.association_fee : '0'
-                      )}
-                      {renderFeatures(
-                        'HOA Frequency',
-                        listing.association_fee_frequency
-                      )}
-                      {renderFeatures(
-                        'HOA Includes',
-                        listing.association_fee_includes
-                      )}
-                    </div>
-                  </div>
-                  <div style={S('w-33p pull-left pr-20')}>
-                    <div style={S('fw-600 mb-10 font-18')}>Key Facts</div>
-                    {renderFeatures('Year Built', property.year_built)}
+              <div style={S('mb-70')}>{description}</div>
+              <div
+                style={{
+                  width: '100%',
+                  marginBottom: '2rem',
+                  display: 'inline-flex'
+                }}
+              >
+                <div
+                  style={{ width: 'calc(33% - 1rem)', marginRight: '1.5rem' }}
+                >
+                  <div style={S('mb-30')}>
+                    <div style={S('fw-600 mb-10 font-18')}>Cost Breakdown</div>
+                    {renderFeatures('Price/sqt', `$${price_sq_foot}`)}
                     {renderFeatures(
-                      'Style of House',
-                      property.architectural_style
-                    )}
-                    {renderFeatures('Subdivition', property.subdivition_name)}
-                    {renderFeatures('Acres', property.lot_size_area)}
-                    {renderFeatures('Stories', property.number_of_stories)}
-                    {renderFeatures('MLS#', listing.mls_number)}
-                    {renderFeatures('Possession', listing.possession)}
-                    {renderFeatures(
-                      'Days On Market',
-                      listing_util.getDOM(listing.dom)
+                      'Unexempt Taxes',
+                      listing.unexempt_taxes
+                        ? `$${listing.unexempt_taxes}`
+                        : '0'
                     )}
                     {renderFeatures(
-                      'Current Days On Market',
-                      listing_util.getDOM(listing.cdom)
+                      'HOA Fee',
+                      listing.association_fee ? listing.association_fee : '0'
+                    )}
+                    {renderFeatures(
+                      'HOA Frequency',
+                      listing.association_fee_frequency
+                    )}
+                    {renderFeatures(
+                      'HOA Includes',
+                      listing.association_fee_includes
                     )}
                   </div>
-                  <div style={S('w-33p pull-left pr-20')}>
-                    <div style={S('fw-600 font-18 mb-10')}>
-                      Amenities & Utilities
-                    </div>
-                    {renderFeatures('Pool', property.pool_yn)}
-                    {renderFeatures('Pool Features', property.pool_features)}
-                    {renderFeatures('Handicap Amenities', property.handicap_yn)}
-                    {renderFeatures('Heating/Cooling', property.heating)}
-                    {renderFeatures('Others', property.utilities)}
-                  </div>
-                  <div className="clearfix" />
                 </div>
-                <div className="clearfix" />
+                <div
+                  style={{ width: 'calc(33% - 1rem)', marginRight: '1.5rem' }}
+                >
+                  <div style={S('fw-600 mb-10 font-18')}>Key Facts</div>
+                  {renderFeatures('Year Built', property.year_built)}
+                  {renderFeatures(
+                    'Style of House',
+                    property.architectural_style
+                  )}
+                  {renderFeatures('Subdivition', property.subdivition_name)}
+                  {renderFeatures('Acres', property.lot_size_area)}
+                  {renderFeatures('Stories', property.number_of_stories)}
+                  {renderFeatures('MLS#', listing.mls_number)}
+                  {renderFeatures('Possession', listing.possession)}
+                  {renderFeatures(
+                    'Days On Market',
+                    listing_util.getDOM(listing.dom)
+                  )}
+                  {renderFeatures(
+                    'Current Days On Market',
+                    listing_util.getDOM(listing.cdom)
+                  )}
+                </div>
+                <div style={{ width: 'calc(33% - 1rem)' }}>
+                  <div style={S('fw-600 font-18 mb-10')}>
+                    Amenities & Utilities
+                  </div>
+                  {renderFeatures('Pool', property.pool_yn)}
+                  {renderFeatures('Pool Features', property.pool_features)}
+                  {renderFeatures('Handicap Amenities', property.handicap_yn)}
+                  {renderFeatures('Heating/Cooling', property.heating)}
+                  {renderFeatures('Others', property.utilities)}
+                </div>
               </div>
             </Col>
             <div style={S('p-0 pull-right')}>
@@ -700,87 +702,81 @@ const ListingDesktopView = ({
             </div>
           </div>
           <div className="clearfix" />
-          <div style={S('pl-0 bg-f8f8f8 w-100p')}>
-            <Col sm={8} md={9} style={S('pl-0 bg-f8f8f8')}>
-              <div style={S('p-40')}>
-                <div style={S('mb-30 font-15')}>
-                  <div style={S('w-33p pull-left pr-20')}>
-                    <div style={S('mb-30')}>
-                      <div style={S('fw-600 font-18 mb-10')}>All Features</div>
-                      {renderFeatures(
-                        'Parking/Garage',
-                        property.parking_spaces_garage ? 'Yes' : 'No'
-                      )}
-                      {renderFeatures(
-                        'Garage Spaces',
-                        property.parking_spaces_covered_total
-                      )}
-                      {renderFeatures(
-                        'Interior Features',
-                        property.interior_features
-                      )}
-                      {renderFeatures(
-                        'Alarm/Security',
-                        property.security_features
-                      )}
-                      {renderFeatures('Flooring', property.flooring)}
-                    </div>
+          <div style={{ padding: '2.5rem 1.5rem', backgroundColor: '#f8f8f8' }}>
+            <Col sm={9} style={S('pl-0')}>
+              <div style={{ display: 'inline-flex', marginBottom: '2rem' }}>
+                <div
+                  style={{ width: 'calc(33% - 1rem)', marginRight: '1.5rem' }}
+                >
+                  <div>
+                    <div style={S('fw-600 font-18 mb-10')}>All Features</div>
+                    {renderFeatures(
+                      'Parking/Garage',
+                      property.parking_spaces_garage ? 'Yes' : 'No'
+                    )}
+                    {renderFeatures(
+                      'Parking Spaces',
+                      property.parking_spaces_covered_total
+                    )}
+                    {renderFeatures(
+                      'Interior Features',
+                      property.interior_features
+                    )}
+                    {renderFeatures(
+                      'Alarm/Security',
+                      property.security_features
+                    )}
+                    {renderFeatures('Flooring', property.flooring)}
                   </div>
-                  <div style={S('w-33p pull-left pr-20')}>
-                    <div style={S('h-35')} />
-                    {renderFeatures(
-                      'Exterior Features',
-                      property.exterior_features
-                    )}
-                    {renderFeatures(
-                      'Construction',
-                      property.construction_materials
-                    )}
-                    {renderFeatures('Foundation', property.foundation_details)}
-                    {renderFeatures('Roof', property.roof)}
-                  </div>
-                  <div style={S('w-33p pull-left pr-20')}>
-                    <div style={S('fw-600 font-18 mb-10')}>Schools</div>
-                    {renderFeatures(
-                      'School District',
-                      property.school_district
-                    )}
-                    {renderFeatures(
-                      'Elementary School',
-                      property.elementary_school_name
-                    )}
-                    {renderFeatures(
-                      'Middle School',
-                      property.middle_school_name
-                    )}
-                    {renderFeatures(
-                      'Junior High School',
-                      property.junior_high_school_name
-                    )}
-                    {renderFeatures(
-                      'Senior High School',
-                      property.senior_high_school_name
-                    )}
-                  </div>
-                  <div className="clearfix" />
-                  {agent_area_client}
+                </div>
+                <div
+                  style={{ width: 'calc(33% - 1rem)', marginRight: '1.5rem' }}
+                >
+                  <div style={S('h-35')} />
+                  {renderFeatures(
+                    'Exterior Features',
+                    property.exterior_features
+                  )}
+                  {renderFeatures(
+                    'Construction',
+                    property.construction_materials
+                  )}
+                  {renderFeatures('Foundation', property.foundation_details)}
+                  {renderFeatures('Roof', property.roof)}
+                </div>
+                <div style={{ width: 'calc(33% - 1rem)' }}>
+                  <div style={S('fw-600 font-18 mb-10')}>Schools</div>
+                  {renderFeatures('School District', property.school_district)}
+                  {renderFeatures(
+                    'Elementary School',
+                    property.elementary_school_name
+                  )}
+                  {renderFeatures('Middle School', property.middle_school_name)}
+                  {renderFeatures(
+                    'Junior High School',
+                    property.junior_high_school_name
+                  )}
+                  {renderFeatures(
+                    'Senior High School',
+                    property.senior_high_school_name
+                  )}
                 </div>
               </div>
-              <div className="clearfix" />
+              {agent_area_client}
+              <MLSNote />
             </Col>
             <div className="clearfix" />
           </div>
-          <div className="clearfix" />
         </div>
       </div>
     )
   }
 
   let viewer_wrap_style = S(
-    `absolute h-100p bg-fff t-0 l-0 z-10 ml-80 w-${viewer_width}`
+    `absolute h-100p bg-fff t-0 l-0 z-10 ml-56 w-${viewer_width}`
   )
 
-  if (!user || data.is_widget) {
+  if (data.is_widget) {
     viewer_wrap_style = {
       ...viewer_wrap_style,
       ...S('ml-0 w-100p')
@@ -857,7 +853,7 @@ const ListingDesktopView = ({
     justifyBetween: true,
     style: { height: '70px', padding: '0 1.5rem' }
   }
-  const Header = user ? (
+  const Header = (
     <Flex {...headerProps}>
       <TextIconButton
         appearance="outline"
@@ -865,37 +861,27 @@ const ListingDesktopView = ({
         iconLeft={IconClose}
         text="Close"
       />
-      <Flex alignCenter>
-        <div style={{ marginRight: '1em' }}>
-          <FavoriteHeart listing={listing} width="40px" height="40px" />
-        </div>
-        <ActionButton onClick={showShareModal} brandColor={brandColor}>
-          Share
-        </ActionButton>
-        {/* <Follow
-          dropdownStyle={{ right: '0px' }}
-          statuses={listingStatuses}
-          activeStatuses={
-            (listing.user_listing_notification_setting &&
-              listing.user_listing_notification_setting.status) ||
-            []
-          }
-          isFetching={isFetching}
-          onClick={onClickFollow}
-        /> */}
-      </Flex>
-    </Flex>
-  ) : (
-    <Flex {...headerProps}>
-      {brand_logo}
-      <LinkButton
-        appearance="primary"
-        to={`/signin?redirectTo=${encodeURIComponent(window.location.pathname)}
+      {user ? (
+        <Flex alignCenter>
+          <div style={{ marginRight: '1em' }}>
+            <FavoriteHeart listing={listing} width="40px" height="40px" />
+          </div>
+          <ActionButton onClick={showShareModal} brandColor={brandColor}>
+            Share
+          </ActionButton>
+        </Flex>
+      ) : (
+        <LinkButton
+          appearance="primary"
+          to={`/signin?redirectTo=${encodeURIComponent(
+            window.location.pathname
+          )}
         ${contact_info ? `&username=${contact_info}` : ''}
         ${window.location.search}`}
-      >
-        Login
-      </LinkButton>
+        >
+          Login
+        </LinkButton>
+      )}
     </Flex>
   )
 
@@ -955,7 +941,7 @@ const ListingDesktopView = ({
 
     if (brand_agent.phone_number) {
       phone_area = (
-        <div style={S('font-15 mb-5')}>
+        <div style={S('mb-5')}>
           M: {formatPhoneNumber(brand_agent.phone_number)}
         </div>
       )
@@ -984,7 +970,7 @@ const ListingDesktopView = ({
             <div className="clearfix" />
           </div>
           {phone_area}
-          <div style={S('font-15 mb-5')}>E: {brand_agent.email}</div>
+          <div style={S('mb-5')}>E: {brand_agent.email}</div>
         </div>
         <div style={S('font-32 color-fff')} className="lato">
           Love this home? I can help you.

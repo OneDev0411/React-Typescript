@@ -6,10 +6,6 @@ import { BasicDropdown } from 'components/BasicDropdown'
 export class SortablePlugin {
   constructor({ options, onRequestForceUpdate }) {
     this.options = {
-      defaultIndex: {
-        label: 'Sort by',
-        value: 'Sort by'
-      },
       ...options
     }
     this.onRequestForceUpdate = onRequestForceUpdate
@@ -96,8 +92,8 @@ export class SortablePlugin {
         return false
       }
 
-      const lowText = col.sortType === 'number' ? 'Lo' : 'A'
-      const highText = col.sortType === 'number' ? 'Hi' : 'Z'
+      const lowText = col.sortType === 'number' ? 'Low' : 'A'
+      const highText = col.sortType === 'number' ? 'High' : 'Z'
 
       list.push(
         {
@@ -118,23 +114,46 @@ export class SortablePlugin {
     return list
   }
 
-  render = (columns, isFetching) => (
-    <BasicDropdown
-      maxHeight={400}
-      noBorder
-      buttonStyle={{ fontWeight: 500, paddingRight: 0 }}
-      defaultSelectedItem={this.options.defaultIndex}
-      disabled={isFetching}
-      items={this.getSortableColumns(columns)}
-      itemToString={item => item.label}
-      onChange={item => {
-        if (this.options.onChange) {
-          return this.options.onChange(item)
-        }
+  render = (columns, isFetching) => {
+    const items = this.getSortableColumns(columns)
+    let defaultIndex
 
-        this.changeSort(item.column, item.ascending)
-      }}
-      menuStyle={{ right: 0, left: 'auto' }}
-    />
-  )
+    if (typeof this.options.defaultIndex === 'string') {
+      defaultIndex = items.find(
+        item => item.value === this.options.defaultIndex
+      )
+    } else if (
+      this.options.defaultIndex &&
+      typeof this.options.defaultIndex === 'object'
+    ) {
+      defaultIndex = this.options.defaultIndex
+    } else {
+      defaultIndex = {
+        label: 'Sort by',
+        value: 'Sort by'
+      }
+    }
+
+    return (
+      <BasicDropdown
+        maxHeight={400}
+        noBorder
+        buttonStyle={{ fontWeight: 500, paddingRight: 0 }}
+        defaultSelectedItem={defaultIndex}
+        disabled={isFetching}
+        items={items}
+        itemToString={item => item.label}
+        onChange={async item => {
+          if (this.options.onChange) {
+            this.options.onChange(item)
+          } else {
+            this.changeSort(item.column, item.ascending)
+          }
+
+          this.options.onPostChange && this.options.onPostChange(item)
+        }}
+        menuStyle={{ right: 0, left: 'auto' }}
+      />
+    )
+  }
 }

@@ -1,0 +1,432 @@
+[
+  {
+    "id": "7acb8ac5-4eef-493d-96e9-96ce2ccf5b59",
+    "created_at": 1551315533.00661,
+    "updated_at": 1551315533.00882,
+    "created_by": "3678ba3c-36ca-11e9-be91-0a95998482ac",
+    "updated_by": null,
+    "tag": "1",
+    "text": "1",
+    "type": "crm_tag"
+  },
+  {
+    "id": "1c31a97c-2333-41c5-8ed4-594dd9a61ef9",
+    "created_at": 1561060518.63074,
+    "updated_at": 1561060518.64365,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "100 Contacts",
+    "text": "100 Contacts",
+    "type": "crm_tag"
+  },
+  {
+    "id": "65e59605-f15d-41ab-aac2-7f7cce6bd99a",
+    "created_at": 1552496089.26114,
+    "updated_at": 1552496089.26114,
+    "created_by": "21c04d82-0e8d-11e8-b6c0-0ae785638eb4",
+    "updated_by": null,
+    "tag": "11",
+    "text": "11",
+    "type": "crm_tag"
+  },
+  {
+    "id": "d72d62c4-ca90-412e-8505-ebee018362ab",
+    "created_at": 1552496119.67583,
+    "updated_at": 1552496119.67583,
+    "created_by": "21c04d82-0e8d-11e8-b6c0-0ae785638eb4",
+    "updated_by": null,
+    "tag": "111",
+    "text": "111",
+    "type": "crm_tag"
+  },
+  {
+    "id": "15258be3-0489-442e-9088-9c9c44a17ff7",
+    "created_at": 1552496127.02338,
+    "updated_at": 1552496127.02338,
+    "created_by": "21c04d82-0e8d-11e8-b6c0-0ae785638eb4",
+    "updated_by": null,
+    "tag": "1111",
+    "text": "1111",
+    "type": "crm_tag"
+  },
+  {
+    "id": "d4cd3241-bf33-47ae-9d39-7ca75846ba51",
+    "created_at": 1552496137.7199,
+    "updated_at": 1552496137.7199,
+    "created_by": "21c04d82-0e8d-11e8-b6c0-0ae785638eb4",
+    "updated_by": null,
+    "tag": "12",
+    "text": "12",
+    "type": "crm_tag"
+  },
+  {
+    "id": "b2e759a2-a8ce-4992-b601-0e082c170bd1",
+    "created_at": 1561061150.91493,
+    "updated_at": 1561061150.95093,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "255 Test Contacts",
+    "text": "255 Test Contacts",
+    "type": "crm_tag"
+  },
+  {
+    "id": "d91e14f9-8a98-40b0-9254-6c6456d87360",
+    "created_at": 1561150530.74636,
+    "updated_at": 1561150531.59816,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "255 Test Contacts,100 Contacts",
+    "text": "255 Test Contacts,100 Contacts",
+    "type": "crm_tag"
+  },
+  {
+    "id": "fbd3abef-58f7-41cb-ad12-c9d11851e503",
+    "created_at": 1561150531.35387,
+    "updated_at": 1561150531.59823,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "255 Test Contacts,100 Contacts,Buyer",
+    "text": "255 Test Contacts,100 Contacts,Buyer",
+    "type": "crm_tag"
+  },
+  {
+    "id": "ac2e3186-f6dc-41e5-a9c9-1c555eb1b7c9",
+    "created_at": 1561150530.75438,
+    "updated_at": 1561150531.59825,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "255 Test Contacts,100 Contacts,Past Client",
+    "text": "255 Test Contacts,100 Contacts,Past Client",
+    "type": "crm_tag"
+  },
+  {
+    "id": "a416625f-2f1d-451f-8787-d838f2a5f228",
+    "created_at": 1551315547.84126,
+    "updated_at": 1551315547.84414,
+    "created_by": "3678ba3c-36ca-11e9-be91-0a95998482ac",
+    "updated_by": null,
+    "tag": "3",
+    "text": "3",
+    "type": "crm_tag"
+  },
+  {
+    "id": "f06fe747-6268-4d64-a056-462e98aaf654",
+    "created_at": 1551315567.79455,
+    "updated_at": 1551315567.79665,
+    "created_by": "3678ba3c-36ca-11e9-be91-0a95998482ac",
+    "updated_by": null,
+    "tag": "4",
+    "text": "4",
+    "type": "crm_tag"
+  },
+  {
+    "id": "a39b7780-5c27-4074-8468-c686348bc47f",
+    "created_at": 1551380252.87687,
+    "updated_at": 1551380253.50186,
+    "created_by": "21c04d82-0e8d-11e8-b6c0-0ae785638eb4",
+    "updated_by": null,
+    "tag": "4,3,2,1,mamal",
+    "text": "4,3,2,1,mamal",
+    "type": "crm_tag"
+  },
+  {
+    "id": "1bcfbeb8-09de-40ac-a9c0-08ebc8404afd",
+    "created_at": 1551315628.31844,
+    "updated_at": 1551315628.3204,
+    "created_by": "3678ba3c-36ca-11e9-be91-0a95998482ac",
+    "updated_by": null,
+    "tag": "5",
+    "text": "5",
+    "type": "crm_tag"
+  },
+  {
+    "id": "be6e9b44-05ea-4bb7-9843-6ac49fc2a48f",
+    "created_at": 1561401031.89837,
+    "updated_at": 1561401031.90337,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "Agent",
+    "text": "Agent",
+    "type": "crm_tag"
+  },
+  {
+    "id": "bd33eae7-601e-4ab9-a81d-3600102287b8",
+    "created_at": 1560532928.98069,
+    "updated_at": 1560532928.98565,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "'Bestfriends'",
+    "text": "'Bestfriends'",
+    "type": "crm_tag"
+  },
+  {
+    "id": "f675c6de-4fe6-4391-85fe-ba9aa3cb898c",
+    "created_at": 1561150082.89141,
+    "updated_at": 1561150082.9202,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "Buyer",
+    "text": "Buyer",
+    "type": "crm_tag"
+  },
+  {
+    "id": "ca3a4a57-6a93-405f-a1e2-1b829df08ff1",
+    "created_at": 1561564207.68268,
+    "updated_at": 1561564207.68371,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "BuyerAgent",
+    "text": "BuyerAgent",
+    "type": "crm_tag"
+  },
+  {
+    "id": "e61260d6-7e80-42b1-9954-a577bc493c33",
+    "created_at": 1561564202.76882,
+    "updated_at": 1561564202.77205,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "BuyerReferral",
+    "text": "BuyerReferral",
+    "type": "crm_tag"
+  },
+  {
+    "id": "9f945fc0-127e-467f-bcf9-a0d890b96346",
+    "created_at": 1561401031.89846,
+    "updated_at": 1561401031.90345,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "Closing Officer",
+    "text": "Closing Officer",
+    "type": "crm_tag"
+  },
+  {
+    "id": "2dd3fd74-bf65-4d3b-8494-a876e0fad536",
+    "created_at": 1561657158.70466,
+    "updated_at": 1561657158.70776,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "CoBuyerAgent",
+    "text": "CoBuyerAgent",
+    "type": "crm_tag"
+  },
+  {
+    "id": "da04d54b-d008-465a-9289-68ea4addb5a1",
+    "created_at": 1560532198.51682,
+    "updated_at": 1560532198.51967,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "College Friends",
+    "text": "College Friends",
+    "type": "crm_tag"
+  },
+  {
+    "id": "f17a7f7f-51b1-48f3-abc7-437f2f64edac",
+    "created_at": 1561401031.89902,
+    "updated_at": 1561401031.90348,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "Contractor",
+    "text": "Contractor",
+    "type": "crm_tag"
+  },
+  {
+    "id": "1e8f538e-7c5a-4b18-b4c6-41894f990b1c",
+    "created_at": 1560533544.09751,
+    "updated_at": 1560533544.10016,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "Contractual",
+    "text": "Contractual",
+    "type": "crm_tag"
+  },
+  {
+    "id": "fbaf4fe1-c8c0-4263-94ac-8370b6a2dc0f",
+    "created_at": 1561656261.62706,
+    "updated_at": 1561656261.63025,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "CoSellerAgent",
+    "text": "CoSellerAgent",
+    "type": "crm_tag"
+  },
+  {
+    "id": "6b993cbb-86dc-41fb-84f6-b0b2d2a0279e",
+    "created_at": 1557953516.13705,
+    "updated_at": 1557953516.14117,
+    "created_by": "21c04d82-0e8d-11e8-b6c0-0ae785638eb4",
+    "updated_by": null,
+    "tag": "default",
+    "text": "default",
+    "type": "crm_tag"
+  },
+  {
+    "id": "a9749c47-6473-4bab-ab8e-572e671752dd",
+    "created_at": 1560533555.89242,
+    "updated_at": 1560533555.89636,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "Endo",
+    "text": "Endo",
+    "type": "crm_tag"
+  },
+  {
+    "id": "bb76cf07-b76a-4323-8752-77e85ae4620c",
+    "created_at": 1560532167.93292,
+    "updated_at": 1560532167.93472,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "Future Client 1",
+    "text": "Future Client 1",
+    "type": "crm_tag"
+  },
+  {
+    "id": "8f065561-1327-4209-b402-582b17c40082",
+    "created_at": 1560531427.26284,
+    "updated_at": 1560531427.26553,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "Graham Deals",
+    "text": "Graham Deals",
+    "type": "crm_tag"
+  },
+  {
+    "id": "90f46029-a123-4044-8297-fa2258f8d41f",
+    "created_at": 1561401031.89974,
+    "updated_at": 1561401031.90351,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "Hot List",
+    "text": "Hot List",
+    "type": "crm_tag"
+  },
+  {
+    "id": "daf934db-2cb0-4cdd-a2f4-f6765ad5483b",
+    "created_at": 1560533875.86544,
+    "updated_at": 1560533875.86677,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "Hunters",
+    "text": "Hunters",
+    "type": "crm_tag"
+  },
+  {
+    "id": "fa28ae29-1569-48e5-a0e2-6858ad0d6a9a",
+    "created_at": 1552502849.57755,
+    "updated_at": 1552502849.5807,
+    "created_by": "21c04d82-0e8d-11e8-b6c0-0ae785638eb4",
+    "updated_by": null,
+    "tag": "Landlord",
+    "text": "Landlord",
+    "type": "crm_tag"
+  },
+  {
+    "id": "030d320f-e7e9-45d1-b3db-d0bd82bdf533",
+    "created_at": 1560531452.70906,
+    "updated_at": 1560531452.71479,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "Minestreet ",
+    "text": "Minestreet ",
+    "type": "crm_tag"
+  },
+  {
+    "id": "6a6b7806-3b17-4701-8ced-0a25f5330d17",
+    "created_at": 1559239131.34351,
+    "updated_at": 1559239131.34351,
+    "created_by": "21c04d82-0e8d-11e8-b6c0-0ae785638eb4",
+    "updated_by": null,
+    "tag": "Open House",
+    "text": "Open House",
+    "type": "crm_tag"
+  },
+  {
+    "id": "4b5f8934-6aaa-4fdd-a4e1-d52e4a1122cd",
+    "created_at": 1560531296.66655,
+    "updated_at": 1560531296.66864,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "Past Client",
+    "text": "Past Client",
+    "type": "crm_tag"
+  },
+  {
+    "id": "cf66a0d2-180f-45fc-8c74-3b2449c7d530",
+    "created_at": 1560533010.79863,
+    "updated_at": 1560533010.79863,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "Raptors Fan",
+    "text": "Raptors Fan",
+    "type": "crm_tag"
+  },
+  {
+    "id": "34c790f2-74b1-42d4-91f1-c36483c9fcbb",
+    "created_at": 1557953935.67635,
+    "updated_at": 1557953935.67853,
+    "created_by": "21c04d82-0e8d-11e8-b6c0-0ae785638eb4",
+    "updated_by": null,
+    "tag": "rechat testers",
+    "text": "rechat testers",
+    "type": "crm_tag"
+  },
+  {
+    "id": "afbb55b9-a5ae-49df-afe3-c5d7ca1b7de6",
+    "created_at": 1560533578.52734,
+    "updated_at": 1560533578.53166,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "Roi",
+    "text": "Roi",
+    "type": "crm_tag"
+  },
+  {
+    "id": "aa5f1379-6087-4b2b-8a96-776cc33de5b4",
+    "created_at": 1561401031.90049,
+    "updated_at": 1561401031.90354,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "Seller",
+    "text": "Seller",
+    "type": "crm_tag"
+  },
+  {
+    "id": "cd2bc739-1ce5-4250-bb98-b10bdf2cdb57",
+    "created_at": 1561652795.24053,
+    "updated_at": 1561652795.24341,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "SellerAgent",
+    "text": "SellerAgent",
+    "type": "crm_tag"
+  },
+  {
+    "id": "2cbcea78-0ab8-4238-a4d5-7adee9a06738",
+    "created_at": 1561564181.6624,
+    "updated_at": 1561564181.66417,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "Tenant",
+    "text": "Tenant",
+    "type": "crm_tag"
+  },
+  {
+    "id": "be9f186e-85e1-4040-a360-8db46b96a5ff",
+    "created_at": 1555598996.31726,
+    "updated_at": 1555598996.32121,
+    "created_by": "21c04d82-0e8d-11e8-b6c0-0ae785638eb4",
+    "updated_by": null,
+    "tag": "Testeeeeeeeeeeeer",
+    "text": "Testeeeeeeeeeeeer",
+    "type": "crm_tag"
+  },
+  {
+    "id": "9487d511-e77a-4bd1-ad9b-d46f782d2efd",
+    "created_at": 1561481554.76399,
+    "updated_at": 1561481554.76764,
+    "created_by": "8447aaf6-65c9-11e9-974f-0a95998482ac",
+    "updated_by": null,
+    "tag": "Warm List",
+    "text": "Warm List",
+    "type": "crm_tag"
+  }
+]

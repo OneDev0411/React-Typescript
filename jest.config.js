@@ -1,31 +1,32 @@
 // jest.config.js
 module.exports = {
-  // By default, Jest runs all tests and produces all errors into
-  // the console upon completion. The bail config option can be
-  // used here to have Jest stop running tests after the first failure.
-  bail: true,
-
-  notify: true,
-  verbose: true,
-  roots: ['<rootDir>/app/'],
+  roots: ['<rootDir>/app/', '<rootDir>/tests/unit'],
   moduleFileExtensions: ['js', 'jsx', 'json', 'ts', 'tsx'],
+  collectCoverageFrom: ['app/**/*.{js,jsx,ts,tsx}', '!**/node_modules/**'],
   testURL: 'http://localhost:8080',
-  // An array of regexp pattern strings that are matched against all
-  // test paths before executing the test.
-  // Default: ["/node_modules/"]
-  // testPathIgnorePatterns: ["<rootDir>/tests/E2E/", "<rootDir>/node_modules/"]
+  setupFilesAfterEnv: ['./setupTests.js'],
+  verbose: true,
   moduleNameMapper: {
     '^actions/(.*)': '<rootDir>/app/store_actions/$1',
     '^assets/(.*)': '<rootDir>/app/static/$1',
     '^components/(.*)': '<rootDir>/app/views/components/$1',
     '^constants/(.*)': '<rootDir>/app/constants/$1',
-    '^dashboard/(.*)': '<rootDir>/app/components/Dashboard/$1',
+    '^dashboard/(.*)': '<rootDir>/app/components/Pages/Dashboard/$1',
     '^models/(.*)': '<rootDir>/app/models/$1',
     '^reducers/(.*)': '<rootDir>/app/reducers/$1',
     '^routes/(.*)': '<rootDir>/app/routes/$1',
     '^partials/(.*)': '<rootDir>/app/components/Partials/$1',
     '^services/(.*)': '<rootDir>/app/services/$1',
     '^utils/(.*)': '<rootDir>/app/utils/$1',
-    '^views/(.*)': '<rootDir>/app/views/$1'
+    '^views/(.*)': '<rootDir>/app/views/$1',
+    '^deals/(.*)': '<rootDir>/app/components/Pages/Dashboard/Deals/$1',
+    '^store/(.*)': '<rootDir>/app/stores/$1',
+    '^config$': '<rootDir>/config/public',
+    '^fixtures/(.*)': '<rootDir>/tests/unit/fixtures/$1',
+    '^hooks/(.*)': '<rootDir>/app/hooks/$1',
+    '^animations/(.*)': '<rootDir>/app/animations/$1',
+    '^crm/(.*)': '<rootDir>/app/components/Pages/Dashboard/Contacts/$1',
+    '\\.(css|less|sass|scss)$': '<rootDir>/tests/unit/mocks/styles.js',
+    '\\.(gif|ttf|eot|svg)$': '<rootDir>/tests/unit/mocks/files.js'
   }
 }

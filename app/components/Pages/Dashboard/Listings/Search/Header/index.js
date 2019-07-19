@@ -8,7 +8,7 @@ import FilterButton from '../../../../../../views/components/Button/DropButton'
 import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
 
 import Filters from '../components/Filters'
-import SearchField from '../components/SearchToolbar/mls-autocomplete'
+import Autocomplete from '../components/Autocomplete'
 import { ViewSwitcher } from '../../components/ViewSwitcher'
 
 const Container = styled(Flex)`
@@ -33,22 +33,13 @@ export function Header(props) {
   return (
     <Container>
       <Flex alignCenter>
-        {!isWidget &&
-          (props.user ? (
-            <MenuTrigger
-              onClick={props.toggleSideMenu}
-              isExpended={isSideMenuOpen}
-            />
-          ) : (
-            <img
-              src="/static/images/logo.svg"
-              alt="Rechat"
-              width="98"
-              height="24"
-              style={{ marginRight: '1em' }}
-            />
-          ))}
-        <SearchField activeView={activeView} />
+        {!isWidget && props.user && (
+          <MenuTrigger
+            onClick={props.toggleSideMenu}
+            isExpended={isSideMenuOpen}
+          />
+        )}
+        <Autocomplete activeView={activeView} />
         <FilterButton
           style={{ marginLeft: '0.5em' }}
           onClick={onClickFilter}
@@ -64,17 +55,16 @@ export function Header(props) {
           isSideMenuOpen={isSideMenuOpen}
           handleClose={onClickFilter}
         />
-        {!isWidget &&
-          props.user && (
-            <Button
-              size="large"
-              disabled={isFetching}
-              onClick={props.saveSearchHandler}
-              style={{ marginLeft: '0.5em' }}
-            >
-              Save Search
-            </Button>
-          )}
+        {!isWidget && props.user && (
+          <Button
+            size="large"
+            disabled={isFetching}
+            onClick={props.saveSearchHandler}
+            style={{ marginLeft: '0.5em' }}
+          >
+            Save Search
+          </Button>
+        )}
       </Flex>
 
       {!isWidget && (

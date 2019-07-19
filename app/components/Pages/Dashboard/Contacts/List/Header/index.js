@@ -1,14 +1,19 @@
 import React from 'react'
-import { browserHistory } from 'react-router'
 
-import PageHeader from '../../../../../../views/components/PageHeader'
-import { CreateContact } from '../../../../../../views/components/CreateContact'
-import ActionButton from '../../../../../../views/components/Button/ActionButton'
+import PageHeader from 'components/PageHeader'
+import { CreateContact } from 'components/CreateContact'
+import { Trigger as MenuTrigger } from 'components/SlideMenu'
 
-import { Trigger as MenuTrigger } from '../../../../../../views/components/SlideMenu'
-import Tooltip from 'components/tooltip'
+import TouchReminder from '../TouchReminder'
+import ImportContactsButton from '../ImportContactsButton'
 
-export function Header({ title, isSideMenuOpen, onMenuTriggerChange }) {
+function Header({
+  title,
+  isSideMenuOpen,
+  onMenuTriggerChange,
+  activeSegment,
+  showActions
+}) {
   return (
     <PageHeader>
       <PageHeader.Title showBackButton={false}>
@@ -19,23 +24,17 @@ export function Header({ title, isSideMenuOpen, onMenuTriggerChange }) {
         <PageHeader.Heading>{title}</PageHeader.Heading>
       </PageHeader.Title>
 
-      <PageHeader.Menu>
-        {/* <Import userId={user.id} /> */}
+      {showActions && (
+        <PageHeader.Menu>
+          {activeSegment && activeSegment.is_editable && (
+            <TouchReminder activeSegment={activeSegment} />
+          )}
 
-        <Tooltip caption="From CSV Spreadsheet" placement="bottom">
-          <ActionButton
-            appearance="outline"
-            style={{ marginRight: '1em' }}
-            onClick={() =>
-              browserHistory.push('/dashboard/contacts/import/csv')
-            }
-          >
-            Import Contacts
-          </ActionButton>
-        </Tooltip>
+          <ImportContactsButton />
 
-        <CreateContact />
-      </PageHeader.Menu>
+          <CreateContact />
+        </PageHeader.Menu>
+      )}
     </PageHeader>
   )
 }

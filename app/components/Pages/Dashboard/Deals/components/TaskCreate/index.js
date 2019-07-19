@@ -1,14 +1,16 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
-import { getChecklistById } from 'reducers/deals/checklists'
+import { selectFormsByBrand } from 'reducers/deals/forms'
 import { createFormTask } from 'actions/deals'
 
-import Spinner from 'components/Spinner'
+import LoadingContainer from 'components/LoadingContainer'
 import Search from 'components/Grid/Search'
 import OverlayDrawer from 'components/OverlayDrawer'
 import TextIconButton from 'components/Button/TextIconButton'
 import AddIcon from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
+
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import CreateCustomTask from './CustomTask'
 import { ListItem } from './styled'
@@ -73,8 +75,6 @@ class TaskCreate extends React.Component {
     />
   )
 
-  getForms = () => this.props.forms || {}
-
   render() {
     return (
       <Fragment>
@@ -90,25 +90,27 @@ class TaskCreate extends React.Component {
             renderMenu={this.renderDrawerHeaderMenu}
           />
           <OverlayDrawer.Body>
-            {this.state.isSaving && <Spinner />}
-
-            {this.state.isSaving === false && (
+            {this.state.isSaving ? (
+              <LoadingContainer
+                style={{
+                  height: 'calc(100vh - 6em)'
+                }}
+              />
+            ) : (
               <Fragment>
-                {Object.values(this.getForms()).length > 5 && (
-                  <Search
-                    disableOnSearch={false}
-                    placeholder="Type in to search ..."
-                    debounceTime={0}
-                    minimumLength={1}
-                    onChange={this.handleChangeSearchFilter}
-                    onClearSearch={this.handleClearSearch}
-                    inputRef={ref => (this.searchInput = ref)}
-                    style={{ margin: '1rem 0' }}
-                  />
-                )}
+                <Search
+                  disableOnSearch={false}
+                  placeholder="Type in to search ..."
+                  debounceTime={0}
+                  minimumLength={1}
+                  onChange={this.handleChangeSearchFilter}
+                  onClearSearch={this.handleClearSearch}
+                  inputRef={ref => (this.searchInput = ref)}
+                  style={{ margin: '1rem 0' }}
+                />
 
                 {this.props.forms &&
-                  Object.values(this.getForms())
+                  Object.values(this.props.forms)
                     .filter(form =>
                       form.name
                         .toLowerCase()
@@ -120,7 +122,7 @@ class TaskCreate extends React.Component {
                         onClick={() => this.createTask(form)}
                         onDoubleClick={() => null}
                       >
-                        {form.name}
+                        <TextMiddleTruncate text={form.name} maxLength={70} />
                       </ListItem>
                     ))}
               </Fragment>
@@ -139,10 +141,8 @@ class TaskCreate extends React.Component {
 }
 
 function mapStateToProps({ deals }, ownProps) {
-  const checklist = getChecklistById(deals.checklists, ownProps.checklist.id)
-
   return {
-    forms: checklist && checklist.allowed_forms
+    forms: selectFormsByBrand(deals.forms, ownProps.deal.brand.id)
   }
 }
 

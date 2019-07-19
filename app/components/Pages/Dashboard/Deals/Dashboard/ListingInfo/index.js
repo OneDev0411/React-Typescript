@@ -1,142 +1,54 @@
 import React, { Fragment } from 'react'
 import Flex from 'styled-flex-component'
-
 import { Link } from 'react-router'
 
-import { H1 } from 'components/Typography/headings'
-
-import Deal from 'models/Deal'
-
-import Tooltip from 'components/tooltip'
-
-import { getSide } from 'models/Deal/helpers/context'
+import { getDealAddress } from 'deals/utils/get-deal-address'
 
 import { ListingImage } from './Image'
 import MlsConnect from './MlsConnect'
+import Side from './Side'
+import PropertyType from './PropertyType'
+import Address from './Address'
 
 import { Divider } from '../styled'
-import { TitleContainer } from './styled'
-import Address from '../../components/Address'
 
-export class ListingInfo extends React.Component {
-  state = {
-    isAddressDrawerOpen: false
-  }
+export function ListingInfo(props) {
 
-  handleCloseAddressDrawer = () => {
-    this.setState({
-      isAddressDrawerOpen: false
-    })
-  }
+  const address = getDealAddress(props.deal)
 
-  handleOpenAddressDrawer = () => {
-    if (this.props.deal.listing) {
-      return false
-    }
+  return (
+    <React.Fragment>
+      <Flex alignCenter>
+        <ListingImage deal={props.deal} />
 
-    this.setState({
-      isAddressDrawerOpen: true
-    })
-  }
+        <Flex column style={{ padding: '0.5em 1.5em' }}>
+          <Flex alignCenter>
+            <Address deal={props.deal} />
+          </Flex>
 
-  getTitle = deal => Deal.get.field(deal, 'street_address') || deal.title
+          <Flex alignCenter>
+            {address}
+            {address.length > 0 && <Divider small />}
 
-  getAddress = deal => {
-    const city = Deal.get.field(deal, 'city') || ''
-    const state = Deal.get.field(deal, 'state') || ''
-    const zipcode = Deal.get.field(deal, 'postal_code') || ''
+            <Side deal={props.deal} isBackOffice={props.isBackOffice} />
+            <Divider small />
 
-    if ([city, state, zipcode].join('').length === 0) {
-      return ''
-    }
+            <PropertyType deal={props.deal} isBackOffice={props.isBackOffice} />
+            <Divider small />
 
-    return `${city}, ${state} ${zipcode}`
-  }
+            <MlsConnect deal={props.deal} />
 
-  getSideName = deal => {
-    const enderType = Deal.get.field(deal, 'ender_type')
-    const dealType = deal.deal_type === 'Buying' ? 'Buying' : 'Listing'
-
-    if (enderType === 'AgentDoubleEnder') {
-      return 'Both'
-    }
-
-    if (enderType === 'OfficeDoubleEnder') {
-      return `${dealType} (Office DE)`
-    }
-
-    return dealType
-  }
-
-  render() {
-    const { props, state } = this
-    const address = this.getAddress(props.deal)
-
-    return (
-      <React.Fragment>
-        <Flex alignCenter>
-          <ListingImage deal={props.deal} />
-
-          <Flex column style={{ padding: '0.5em 1.5em' }}>
-            <Flex alignCenter>
-              <Tooltip
-                captionIsHTML
-                isCustom={false}
-                caption={
-                  props.deal.listing && (
-                    <React.Fragment>
-                      <img src="/static/images/deals/lock.svg" alt="locked" />
-                      <div>
-                        Listing information can only be changed on MLS. Once
-                        changed, the update will be reflected here.
-                      </div>
-                    </React.Fragment>
-                  )
-                }
-                placement="bottom"
-                multiline
-              >
-                <TitleContainer
-                  onClick={this.handleOpenAddressDrawer}
-                  editable={!props.deal.listing}
-                >
-                  <H1 style={{ lineHeight: 1.5 }}>
-                    {this.getTitle(props.deal)}
-                  </H1>
-                </TitleContainer>
-              </Tooltip>
-            </Flex>
-
-            <Flex alignCenter>
-              {address}
-              {address.length > 0 && <Divider small />}
-
-              <span>Side: {this.getSideName(props.deal)}</span>
-              <Divider small />
-
-              {props.deal.property_type}
-              <Divider small />
-
-              <MlsConnect deal={props.deal} />
-
-              {props.deal.listing && (
-                <Fragment>
-                  <Divider small />
-                  <Link to={`/dashboard/mls/${props.deal.listing}`}>
-                    View MLS Listing
-                  </Link>
-                </Fragment>
-              )}
-            </Flex>
+            {props.deal.listing && (
+              <Fragment>
+                <Divider small />
+                <Link to={`/dashboard/mls/${props.deal.listing}`}>
+                  View MLS
+                </Link>
+              </Fragment>
+            )}
           </Flex>
         </Flex>
-
-        <Address
-          deal={props.deal}
-          show={state.isAddressDrawerOpen}
-          onClose={this.handleCloseAddressDrawer}
-        />
-      </React.Fragment>
-    )
-  }
+      </Flex>
+    </React.Fragment>
+  )
 }

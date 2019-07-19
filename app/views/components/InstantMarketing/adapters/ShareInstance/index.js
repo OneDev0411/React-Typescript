@@ -1,14 +1,13 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
 
-import { sendContactsEmail } from 'models/email-compose/send-contacts-email'
-
-import EmailCompose from 'components/EmailCompose'
+import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import ActionButton from 'components/Button/ActionButton'
 
 import SocialDrawer from '../../components/SocialDrawer'
 import hasMarketingAccess from '../../helpers/has-marketing-access'
+
+import { getMedium } from './helpers'
 
 class ShareInstance extends React.Component {
   state = {
@@ -17,7 +16,7 @@ class ShareInstance extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const medium = props.instance && props.instance.template.medium
+    const medium = getMedium(props.instance)
 
     if (props.isTriggered && medium === 'Email' && !state.isComposeDrawerOpen) {
       return {
@@ -59,44 +58,18 @@ class ShareInstance extends React.Component {
   closeSocialDrawer = () =>
     this.setState({ isSocialDrawerOpen: false }, this.props.handleTrigger)
 
-  handleSendEmails = async (values, form) => {
-    this.setState({
-      isSendingEmail: true
-    })
+  getEmail = email => ({
+    ...email,
+    html: this.props.instance.html
+  })
 
-    const email = {
-      from: values.fromId,
-      to: values.recipients,
-      subject: values.subject,
-      html: this.props.instance.html
-    }
-
-    try {
-      await sendContactsEmail(email, this.props.user.id)
-
-      // reset form
-      if (form) {
-        form.reset()
-      }
-
-      this.props.notify({
-        status: 'success',
-        message: `${
-          values.recipients.length
-        } emails has been sent to your contacts`
-      })
-    } catch (e) {
-      console.log(e)
-      // todo
-    } finally {
-      this.setState(
-        {
-          isSendingEmail: false,
-          isComposeDrawerOpen: false
-        },
-        this.props.handleTrigger
-      )
-    }
+  onEmailSent = () => {
+    this.setState(
+      {
+        isComposeDrawerOpen: false
+      },
+      this.props.handleTrigger
+    )
   }
 
   activeFlow = () => {
@@ -129,13 +102,14 @@ class ShareInstance extends React.Component {
         )}
 
         {state.isComposeDrawerOpen && (
-          <EmailCompose
+          <BulkEmailComposeDrawer
             isOpen
+            hasStaticBody
             from={props.user}
+            body={props.instance.html}
+            getEmail={this.getEmail}
+            onSent={this.onEmailSent}
             onClose={this.toggleComposeEmail}
-            html={props.instance.html}
-            onClickSend={this.handleSendEmails}
-            isSubmitting={state.isSendingEmail}
           />
         )}
 
@@ -157,7 +131,4 @@ function mapStateToProps({ user, contacts }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { notify }
-)(ShareInstance)
+export default connect(mapStateToProps)(ShareInstance)

@@ -10,10 +10,10 @@ import { selectTaskById } from 'reducers/deals/tasks'
 
 import { isBackOffice } from 'utils/user-teams'
 
-import Spinner from 'components/Spinner'
+import LoadingContainer from 'components/LoadingContainer'
 
 import { getFileById } from '../utils/files/get-file-by-id'
-import { getTaskForm } from '../utils/get-task-form'
+import { getEnvelopeFileUrl } from '../utils/get-envelope-file-url'
 
 import TaskView from '../Dashboard/TaskView'
 
@@ -23,31 +23,12 @@ import { EnvelopeSideMenu } from './EnvelopeSideMenu'
 import { FileDisplay } from './FileDisplay'
 
 import { LayoutContainer, PageContainer } from './styled'
+import LoadDeal from '../components/LoadDeal'
 
 class FileViewer extends React.Component {
   state = {
-    deal: this.props.deal,
     isFactsheetOpen: false,
     isCommentsOpen: false
-  }
-
-  componentDidMount() {
-    this.init()
-  }
-
-  init = async () => {
-    if (this.state.deal && this.state.deal.checklists) {
-      return false
-    }
-
-    try {
-      // fetch deal by id
-      const deal = await this.props.getDeal(this.props.params.id)
-
-      this.setState({ deal })
-    } catch (e) {
-      console.log(e)
-    }
   }
 
   toggleShowFactsheet = () =>
@@ -91,7 +72,7 @@ class FileViewer extends React.Component {
 
   get AttachmentFile() {
     const file = getFileById(this.props.params.entityId, {
-      deal: this.state.deal,
+      deal: this.props.deal,
       tasks: this.props.tasks,
       taskId: this.props.params.taskId
     })
@@ -121,35 +102,15 @@ class FileViewer extends React.Component {
       return null
     }
 
-    // get document index
-    let document = null
+    const url = getEnvelopeFileUrl(envelope, this.props.task)
 
-    if (this.props.task.submission) {
-      document = envelope.documents.find(
-        doc => doc.submission === this.props.task.submission.id
-      )
-    }
-
-    // if couldn't find the file, try to find that in attachments
-    if (!document) {
-      document = envelope.documents.find(doc =>
-        this.props.task.room.attachments.find(file => file.id === doc.file)
-      )
-    }
-
-    if (!document) {
-      return null
-    }
-
-    let url
-
-    if (!document.pdf) {
+    if (!url) {
       this.props.notify({
         title: 'File not found',
         status: 'error'
       })
-    } else {
-      url = document.pdf.url
+
+      return false
     }
 
     return {
@@ -160,81 +121,90 @@ class FileViewer extends React.Component {
   }
 
   get DigitalForm() {
-    return getTaskForm(this.state.deal, this.props.task)
+    return {
+      type: 'pdf',
+      name: this.props.task.title,
+      url: this.props.task.pdf_url
+    }
   }
 
   get EntityType() {
     return this.props.params.entityType || 'digital-form'
   }
 
-  get ShowLoader() {
-    if (!this.state.deal) {
-      return true
+  handleBackButton = () => browserHistory.goBack()
+
+  normalizeName = name => {
+    try {
+      return decodeURIComponent(name).replace(/[_-]/g, ' ')
+    } catch (e) {
+      return name
     }
-
-    if (!this.props.task && this.props.params.taskId !== 'stash') {
-      return true
-    }
-
-    return false
   }
-
-  handleBackButton = () => {
-    browserHistory.goBack()
-    // browserHistory.push(`/dashboard/deals/${this.state.deal.id}`)
-  }
-
-  normalizeName = name => decodeURIComponent(name).replace(/[_-]/g, ' ')
 
   render() {
-    if (this.ShowLoader) {
-      return <Spinner />
-    }
-
-    const file = this.getFile()
-    const isEnvelopeView = this.EntityType === 'envelope'
+    const { state, props } = this
 
     return (
-      <LayoutContainer>
-        <Menu
-          title={this.normalizeName(file.name)}
-          file={file}
-          task={this.props.task}
-          deal={this.state.deal}
-          isEnvelopeView={isEnvelopeView}
-          isFactsheetOpen={this.state.isFactsheetOpen}
-          isCommentsOpen={this.state.isCommentsOpen}
-          onToggleFactsheet={this.toggleShowFactsheet}
-          onToggleComments={this.toggleShowComments}
-          onClickBackButton={this.handleBackButton}
-        />
+      <LoadDeal id={props.params.id} deal={props.deal}>
+        {({ isFetchingCompleted }) => {
+          if (!isFetchingCompleted) {
+            return (
+              <LoadingContainer
+                style={{
+                  height: 'calc(100vh - 6em)'
+                }}
+              />
+            )
+          }
 
-        <PageContainer>
-          <FactsheetSideMenu
-            isFactsheetOpen={this.state.isFactsheetOpen}
-            deal={this.state.deal}
-            isBackOffice={this.props.isBackOffice}
-          />
+          const file = this.getFile()
+          const isEnvelopeView = this.EntityType === 'envelope'
 
-          <FileDisplay file={file} />
+          return (
+            <LayoutContainer>
+              <Menu
+                title={this.normalizeName(file.name)}
+                file={file}
+                task={props.task}
+                deal={props.deal}
+                isEnvelopeView={isEnvelopeView}
+                isFactsheetOpen={state.isFactsheetOpen}
+                isCommentsOpen={state.isCommentsOpen}
+                onToggleFactsheet={this.toggleShowFactsheet}
+                onToggleComments={this.toggleShowComments}
+                onClickBackButton={this.handleBackButton}
+              />
 
-          {isEnvelopeView && (
-            <EnvelopeSideMenu
-              deal={this.state.deal}
-              file={file}
-              envelope={this.getEnvelope()}
-            />
-          )}
-        </PageContainer>
+              <PageContainer className="u-scrollbar--thinner">
+                <FactsheetSideMenu
+                  isFactsheetOpen={state.isFactsheetOpen}
+                  deal={props.deal}
+                  isBackOffice={this.props.isBackOffice}
+                />
 
-        <TaskView
-          deal={this.state.deal}
-          task={this.props.task}
-          isOpen={this.state.isCommentsOpen}
-          isBackOffice={this.props.isBackOffice}
-          onClose={this.toggleShowComments}
-        />
-      </LayoutContainer>
+                <FileDisplay file={file} />
+
+                {isEnvelopeView && !state.isFactsheetOpen && (
+                  <EnvelopeSideMenu
+                    deal={props.deal}
+                    file={file}
+                    envelope={this.getEnvelope()}
+                  />
+                )}
+              </PageContainer>
+
+              <TaskView
+                deal={props.deal}
+                task={this.props.task}
+                isOpen={state.isCommentsOpen}
+                isBackOffice={props.isBackOffice}
+                onClose={this.toggleShowComments}
+              />
+            </LayoutContainer>
+          )
+        }}
+      </LoadDeal>
     )
   }
 }

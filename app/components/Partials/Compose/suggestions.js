@@ -2,7 +2,8 @@ import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 import cn from 'classnames'
 import _ from 'underscore'
-import UserAvatar from '../UserAvatar'
+
+import UserAvatar from 'components/UserAvatar'
 
 export default ({
   dropDownBox,
@@ -17,7 +18,9 @@ export default ({
   function getSubTitle({ email, phone_number, display_name }) {
     if (email && email !== display_name) {
       return email
-    } else if (phone_number && phone_number !== display_name) {
+    }
+
+    if (phone_number && phone_number !== display_name) {
       return phone_number
     }
 

@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import { addNotification as notify } from 'reapop'
 import Downshift from 'downshift'
 
 import _ from 'underscore'
@@ -10,21 +9,17 @@ import _ from 'underscore'
 import {
   changeNeedsAttention,
   changeTaskStatus,
-  setSelectedTask,
-  voidEnvelope,
-  deleteTask,
-  asyncDeleteFile
+  renameTaskFile,
+  setSelectedTask
 } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 import { isBackOffice } from 'utils/user-teams'
 
-import Deal from 'models/Deal'
-
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 import Tooltip from 'components/tooltip'
-
-import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
+import TasksDrawer from 'components/SelectDealTasksDrawer'
+import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 
@@ -35,21 +30,32 @@ import { getFileUrl } from './helpers/get-file-url'
 import { getTaskEnvelopes } from '../../utils/get-task-envelopes'
 import { getDocumentEnvelopes } from '../../utils/get-document-envelopes'
 
-import Message from '../../../Chatroom/Util/message'
-
 import { SelectItemDrawer } from './components/SelectItemDrawer'
+
+import {
+  deleteFile,
+  renameFile,
+  deleteTask,
+  editForm,
+  voidEnvelope,
+  reviewEnvelope,
+  resendEnvelope,
+  approveTask,
+  declineTask,
+  createNeedsAttention,
+  removeTaskNotification
+} from './helpers/actions'
 
 import GetSignature from '../../Signature'
 import PdfSplitter from '../../PdfSplitter'
-import TasksDrawer from '../TasksDrawer'
 import UploadManager from '../../UploadManager'
 
 import {
   Container,
-  PrimaryAction,
   MenuButton,
   MenuContainer,
-  MenuItem
+  MenuItem,
+  PrimaryAction
 } from './styled'
 
 class ActionsButton extends React.Component {
@@ -61,27 +67,30 @@ class ActionsButton extends React.Component {
       isSignatureFormOpen: false,
       isPdfSplitterOpen: false,
       isTasksDrawerOpen: false,
+      isComposeEmailOpen: false,
       multipleItemsSelection: null
     }
 
     this.actions = {
       upload: this.handleUpload,
+      comments: this.handleShowComments,
       view: this.handleView,
       download: this.handleDownload,
-      comments: this.handleShowComments,
-      'delete-task': this.handleDeleteTask,
-      'delete-file': this.handleDeleteFile,
+      rename: renameFile,
+      'edit-form': editForm,
+      'delete-task': deleteTask,
+      'notify-task': createNeedsAttention,
+      'approve-task': approveTask,
+      'decline-task': declineTask,
+      'remove-task-notification': removeTaskNotification,
+      'resend-envelope': resendEnvelope,
+      'review-envelope': reviewEnvelope,
+      'delete-file': deleteFile,
+      'void-envelope': voidEnvelope,
       'move-file': this.toggleMoveFile,
       'split-pdf': this.handleToggleSplitPdf,
-      'review-envelope': this.handleReviewEnvelope,
       'get-signature': this.handleGetSignature,
-      'edit-form': this.handleEditForm,
-      'notify-task': this.handleNotifyOffice,
-      'approve-task': this.handleApproveTask,
-      'decline-task': this.handleDeclineTask,
-      'remove-task-notification': this.handleRemoveTaskNotification,
-      'resend-envelope': this.handleResendEnvelope,
-      'void-envelope': this.handleVoidEnvelope
+      'send-email': this.handleToggleComposeEmail
     }
 
     this.handleSelectAction = this.handleSelectAction.bind(this)
@@ -103,7 +112,7 @@ class ActionsButton extends React.Component {
       })
     }
 
-    this.actions[type] && this.actions[type]()
+    this.actions[type] && this.actions[type](this.props)
   }
 
   handleCloseMenu = () => this.setState({ isMenuOpen: false })
@@ -140,6 +149,8 @@ class ActionsButton extends React.Component {
 
     const isTask = this.props.document.type === 'task'
     const isFile = this.props.document.type === 'file'
+
+    // get all envelopes of the document
     const envelopes = getDocumentEnvelopes(
       this.props.envelopes,
       this.props.document
@@ -190,15 +201,36 @@ class ActionsButton extends React.Component {
     return envelopes[0].status
   }
 
+  getActiveEnvelopes = envelopes =>
+    envelopes.filter(
+      envelope => ['Voided', 'Declined'].includes(envelope.status) === false
+    )
+
   getSplitterFiles = () => {
     const files = getFileUrl({
       type: this.props.type,
       deal: this.props.deal,
       task: this.props.task,
-      document: this.props.document
+      document: this.props.document,
+      envelopes: this.props.envelopes
     })
 
     return files.filter(file => file.mime === 'application/pdf')
+  }
+
+  getEmailComposeFiles = () => {
+    return getFileUrl({
+      type: this.props.type,
+      deal: this.props.deal,
+      task: this.props.task,
+      document: this.props.document,
+      envelopes: this.props.envelopes
+    }).map(file => ({
+      type: 'document',
+      attachmentType: 'deal-file',
+      file,
+      task: this.props.task
+    }))
   }
 
   getPrimaryAction = actions =>
@@ -206,59 +238,6 @@ class ActionsButton extends React.Component {
 
   getSecondaryActions = actions =>
     _.filter(actions, properties => properties.primary !== true)
-
-  notifyOffice = async comment => {
-    if (comment) {
-      // send message
-      Message.postTaskComment(this.props.task, {
-        comment,
-        author: this.props.user.id,
-        room: this.props.task.room.id
-      })
-    }
-
-    await this.props.changeNeedsAttention(
-      this.props.deal.id,
-      this.props.task.id,
-      true
-    )
-
-    this.props.notify({
-      title: 'Admin notification is sent.',
-      status: 'success'
-    })
-  }
-
-  resendEnvelope = async () => {
-    const envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
-
-    await Deal.resendEnvelope(envelopes[0].id)
-
-    this.props.notify({
-      title: 'e-Signature is resent',
-      status: 'success'
-    })
-  }
-
-  voidEnvelope = async () => {
-    const envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
-
-    try {
-      await this.props.voidEnvelope(this.props.deal.id, envelopes[0].id)
-
-      this.props.notify({
-        title: 'e-Signature is voided',
-        status: 'success'
-      })
-    } catch (e) {
-      console.log(e)
-
-      this.props.notify({
-        message: 'Can not void this eSign',
-        status: 'error'
-      })
-    }
-  }
 
   /**
    *
@@ -268,89 +247,15 @@ class ActionsButton extends React.Component {
   /**
    *
    */
-  handleVoidEnvelope = () => {
-    this.props.confirmation({
-      message: 'Void Envelope?',
-      confirmLabel: 'Yes, Void',
-      onConfirm: this.voidEnvelope
-    })
-  }
+  handleShowComments = () => this.props.setSelectedTask(this.props.task)
 
   /**
    *
    */
-  handleNotifyOffice = () => {
-    this.props.confirmation({
-      message: 'Notify Office?',
-      confirmLabel: 'Notify Office',
-      needsUserEntry: true,
-      inputDefaultValue: '',
-      onConfirm: this.notifyOffice
-    })
-  }
-
-  /**
-   *
-   */
-  handleApproveTask = async () => {
-    await this.props.changeTaskStatus(this.props.task.id, 'Approved')
-
-    this.props.changeNeedsAttention(
-      this.props.deal.id,
-      this.props.task.id,
-      false
-    )
-  }
-
-  /**
-   *
-   */
-  handleDeclineTask = async () => {
-    await this.props.changeTaskStatus(this.props.task.id, 'Declined')
-
-    this.props.changeNeedsAttention(
-      this.props.deal.id,
-      this.props.task.id,
-      false
-    )
-  }
-
-  /**
-   *
-   */
-  handleRemoveTaskNotification = () => {
-    this.props.changeNeedsAttention(
-      this.props.deal.id,
-      this.props.task.id,
-      false
-    )
-  }
-
-  /**
-   *
-   */
-  handleShowComments = () => {
-    this.props.setSelectedTask(this.props.task)
-  }
-
-  /**
-   *
-   */
-  handleResendEnvelope = () => {
-    this.props.confirmation({
-      message: 'Resend Envelope?',
-      confirmLabel: 'Resend',
-      onConfirm: this.resendEnvelope
-    })
-  }
-
-  /**
-   *
-   */
-  handleEditForm = () =>
-    browserHistory.push(
-      `/dashboard/deals/${this.props.deal.id}/form-edit/${this.props.task.id}`
-    )
+  handleToggleComposeEmail = () =>
+    this.setState(state => ({
+      isComposeEmailOpen: !state.isComposeEmailOpen
+    }))
 
   /**
    *
@@ -404,7 +309,7 @@ class ActionsButton extends React.Component {
     })
 
     if (links.length === 1) {
-      return this.props.isBackOffice || links[0].blankTarget === false
+      return this.props.isBackOffice && links[0].openInNewTab !== true
         ? browserHistory.push(links[0].url)
         : window.open(links[0].url, '_blank')
     }
@@ -415,46 +320,10 @@ class ActionsButton extends React.Component {
         title: 'Select a file to view/print',
         actionTitle: 'View/Print',
         onSelect: item =>
-          this.props.isBackOffice || item.blankTarget === false
+          this.props.isBackOffice && item.openInNewTab !== true
             ? browserHistory.push(item.url)
             : window.open(item.url, '_blank')
       }
-    })
-  }
-
-  /**
-   *
-   */
-  handleDeleteTask = () => {
-    if (this.props.task.is_deletable === false && !this.props.isBackOffice) {
-      return this.props.confirmation({
-        message: 'Delete a required folder?',
-        description: 'Only your back office can delete this folder.',
-        confirmLabel: 'Notify Office',
-        needsUserEntry: true,
-        inputDefaultValue: 'Please remove from my folder.',
-        onConfirm: this.notifyOffice
-      })
-    }
-
-    this.props.confirmation({
-      message: 'Delete this folder?',
-      description: 'You cannot undo this action',
-      confirmLabel: 'Delete',
-      confirmButtonColor: 'danger',
-      onConfirm: () =>
-        this.props.deleteTask(this.props.task.checklist, this.props.task.id)
-    })
-  }
-
-  /**
-   *
-   */
-  handleDeleteFile = () => {
-    this.props.confirmation({
-      message: 'Are you sure you want delete this file?',
-      confirmLabel: 'Yes, Delete',
-      onConfirm: this.deleteFile
     })
   }
 
@@ -466,51 +335,10 @@ class ActionsButton extends React.Component {
   /**
    *
    */
-  handleReviewEnvelope = () => {
-    let envelopes = []
-
-    if (this.props.type === 'task') {
-      envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
-    }
-
-    if (this.props.type === 'document') {
-      envelopes = getDocumentEnvelopes(
-        this.props.envelopes,
-        this.props.document
-      )
-    }
-
-    if (envelopes.length === 0) {
-      return false
-    }
-
-    const link = getEnvelopeEditLink(
-      envelopes[0].id,
-      this.props.user.access_token
-    )
-
-    window.open(link, '_blank')
-  }
-
   toggleMoveFile = () =>
     this.setState(state => ({
       isTasksDrawerOpen: !state.isTasksDrawerOpen
     }))
-
-  deleteFile = async () => {
-    try {
-      await asyncDeleteFile(this.props.deal.id, {
-        [this.props.document.id]: this.props.task
-      })
-
-      this.props.notify({
-        title: 'File deleted',
-        status: 'success'
-      })
-    } catch (e) {
-      console.log(e)
-    }
-  }
 
   getButtonLabel = button => {
     if (typeof button.label === 'function') {
@@ -542,6 +370,7 @@ class ActionsButton extends React.Component {
             <div style={{ position: 'relative' }}>
               <Container>
                 <PrimaryAction
+                  hasSecondaryActions={secondaryActions.length > 0}
                   onClick={() => this.handleSelectAction(primaryAction)}
                 >
                   {this.getButtonLabel(primaryAction)}
@@ -615,9 +444,24 @@ class ActionsButton extends React.Component {
           <TasksDrawer
             isOpen
             deal={this.props.deal}
-            file={this.props.document}
+            file={{
+              ...this.props.document,
+              task: this.props.task ? this.props.task.id : null
+            }}
             onClose={this.toggleMoveFile}
             title="Move to Checklist"
+          />
+        )}
+
+        {this.state.isComposeEmailOpen && (
+          <SingleEmailComposeDrawer
+            isOpen
+            defaultAttachments={this.getEmailComposeFiles()}
+            from={this.props.user}
+            deal={this.props.deal}
+            onClose={this.handleToggleComposeEmail}
+            onSent={this.handleToggleComposeEmail}
+            hasDealsAttachments
           />
         )}
 
@@ -657,11 +501,8 @@ export default connect(
   {
     changeNeedsAttention,
     changeTaskStatus,
-    asyncDeleteFile,
     setSelectedTask,
-    voidEnvelope,
-    deleteTask,
-    confirmation,
-    notify
+    renameTaskFile,
+    confirmation
   }
 )(ActionsButton)

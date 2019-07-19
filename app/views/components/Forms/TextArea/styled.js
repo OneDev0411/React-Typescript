@@ -5,9 +5,9 @@ import { grey } from '../../../utils/colors'
 
 export const InputField = styled(AutoTextarea)`
   border: none;
-  font-size: 16px;
+  font-size: 1rem;
   width: 100%;
-  border-radius: 4px;
+  border-bottom: 1px solid ${grey.A300};
   resize: none;
 
   ::placeholder {

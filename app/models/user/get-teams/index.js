@@ -1,6 +1,7 @@
 import Fetch from '../../../services/fetch'
+import { BRAND_USERS_QUERY } from '../../brand/helpers/default-query'
 
-const getTeams = async (user = {}, fetchMembers = false) => {
+export async function getTeams(user = {}, fetchMembers = true) {
   const { access_token } = user
 
   try {
@@ -11,9 +12,7 @@ const getTeams = async (user = {}, fetchMembers = false) => {
     }
 
     if (fetchMembers) {
-      fetchTeams.query({
-        'associations[]': ['brand.roles', 'brand_role.members']
-      })
+      fetchTeams.query(BRAND_USERS_QUERY)
     }
 
     const response = await fetchTeams
@@ -23,5 +22,3 @@ const getTeams = async (user = {}, fetchMembers = false) => {
     throw e
   }
 }
-
-export default getTeams

@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import styled from 'styled-components'
+import { Helmet } from 'react-helmet'
 
 import Stepper from '../../../../Partials/Stepper'
 import Footer from './Footer'
@@ -54,6 +55,10 @@ class ImportCsv extends React.Component {
 
     return (
       <div className="contact__import-csv">
+        <Helmet>
+          <title>Import | Contacts | Rechat</title>
+        </Helmet>
+
         <FullPageHeader
           title="Import a CSV file"
           handleClose={this.goBack}

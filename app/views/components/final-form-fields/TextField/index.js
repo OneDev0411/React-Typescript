@@ -45,31 +45,32 @@ export function TextField(props) {
           <Container style={props.style}>
             <Label htmlFor={id} required={props.required}>
               {props.label}
-              {props.labelNote &&
-                !props.required && <LabelNote>{props.labelNote}</LabelNote>}
+              {props.labelNote && !props.required && (
+                <LabelNote>{props.labelNote}</LabelNote>
+              )}
             </Label>
             <Input
+              autoComplete="disabled"
               {...input}
               id={id}
               placeholder={props.placeholder}
+              data-test={`text-field-${props.name}`}
               type="text"
-              autoComplete="off"
             />
             {hasError && <ErrorMessage>{meta.error}</ErrorMessage>}
-            {meta.active &&
-              props.hint && (
-                <div
-                  style={{
-                    fontSize: '0.875rem',
-                    marginTop: '1rem',
-                    padding: '1rem',
-                    borderRadius: 3,
-                    backgroundColor: brandBackground
-                  }}
-                >
-                  {props.hint}
-                </div>
-              )}
+            {meta.active && props.hint && (
+              <div
+                style={{
+                  fontSize: '0.875rem',
+                  marginTop: '1rem',
+                  padding: '1rem',
+                  borderRadius: 3,
+                  backgroundColor: brandBackground
+                }}
+              >
+                {props.hint}
+              </div>
+            )}
           </Container>
         )
       }}
