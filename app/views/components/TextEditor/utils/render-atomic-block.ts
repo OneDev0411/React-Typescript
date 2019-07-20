@@ -33,13 +33,11 @@ function getSizeStyles(
 ): CSSProperties {
   const styles: CSSProperties = {}
 
-  if (typeof width === 'number') {
-    styles.width = `${width}%`
-  }
-
-  if (typeof height === 'number') {
-    styles.height = `${height}%`
-  }
+  // NOTE: we currently are using 'relative' positioning which is the default
+  // mode in resizable draftjs plugin. If we change that, we need to change
+  // here too
+  styles.width = `${width || 40}%`
+  styles.height = `${height || 40}%`
 
   return styles
 }
