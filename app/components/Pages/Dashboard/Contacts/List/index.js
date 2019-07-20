@@ -492,6 +492,7 @@ class ContactsList extends React.Component {
       props.filters.length === 0 &&
       props.flows.length === 0 &&
       props.crmTasks.length === 0 &&
+      !state.firstLetter &&
       !syncing &&
       !state.syncStatus &&
       !this.state.searchInputValue &&
