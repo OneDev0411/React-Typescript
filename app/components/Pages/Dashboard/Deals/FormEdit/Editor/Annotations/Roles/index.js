@@ -11,12 +11,11 @@ import { getAnnotationsByType } from 'deals/FormEdit/utils/get-annotations-by-ty
 import { AnnotationWrapper } from '../components/AnnotationWrapper'
 import { RoleField } from './RoleField'
 
-function Roles(props) {
+export function Roles(props) {
   const handleChangeRoles = form => {
     let fields = {}
 
     const list = getAnnotationsByType(props.annotations, 'roles')
-    const roles = [...props.roles.filter(role => role.id !== form.id), form]
 
     list.forEach(group => {
       if (
@@ -26,7 +25,12 @@ function Roles(props) {
         return false
       }
 
-      const roleText = getRoleText(roles, props.deal, group[0].role, group[0])
+      const roleText = getRoleText(
+        getAllRoles(props.roles, form),
+        props.deal,
+        group[0].role,
+        group[0]
+      )
 
       fields = {
         ...fields,
@@ -52,6 +56,20 @@ function Roles(props) {
       )}
     />
   )
+}
+
+function getAllRoles(roles, form) {
+  if (!Array.isArray(roles)) {
+    return []
+  }
+
+  const roleExists = roles.some(role => role.id === form.id)
+
+  if (roleExists) {
+    return roles.map(role => (role.id === form.id ? form : role))
+  }
+
+  return [...roles, form]
 }
 
 function mapStateToProps({ deals }, props) {
