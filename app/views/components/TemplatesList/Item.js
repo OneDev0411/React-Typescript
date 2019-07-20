@@ -10,7 +10,7 @@ import { getThumbnail, itemButtonText, itemDateText } from './helpers'
 
 function Item(props) {
   const [isDeleting, setDeleting] = useState(false)
-  const thumbnail = getThumbnail(props.template)
+  const thumbnail = getThumbnail(props.template, props.user)
   const isInstance = props.template.type === 'template_instance'
   const gridClassNames = ['grid-item']
 
@@ -91,6 +91,6 @@ function Item(props) {
 }
 
 export default connect(
-  null,
+  ({ user }) => ({ user }),
   { notify }
 )(Item)
