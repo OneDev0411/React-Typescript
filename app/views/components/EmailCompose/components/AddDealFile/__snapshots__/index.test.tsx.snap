@@ -12,6 +12,7 @@ Object {
         <svg
           class="IconAttachDeal__Image-er2e0y-0 gLBKT"
           sizes=""
+          style="width: 1.5rem; height: 1.5rem;"
           viewBox="0 0 24 24"
         >
           <path
@@ -29,6 +30,7 @@ Object {
       <svg
         class="IconAttachDeal__Image-er2e0y-0 gLBKT"
         sizes=""
+        style="width: 1.5rem; height: 1.5rem;"
         viewBox="0 0 24 24"
       >
         <path
