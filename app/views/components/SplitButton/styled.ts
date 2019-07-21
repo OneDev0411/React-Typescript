@@ -1,10 +1,12 @@
 import styled, { css } from 'styled-components'
 
+import { Theme } from '@material-ui/core'
+
 import { grey, primary } from 'views/utils/colors'
 
 export const PrimaryActionButton = styled.button`
   outline: none;
-  color: ${grey.A900};
+  color: ${({ theme }: { theme: Theme }) => theme.palette.common.black};
   background: ${grey.A250};
   border: 1px solid ${grey.A300};
   border-radius: 3px 0 0 3px;
@@ -49,7 +51,7 @@ export const SplitButtonMenu = styled.div`
   position: absolute;
   min-width: 100%;
   right: 0;
-  z-index: 1;
+  z-index: 2;
   overflow: hidden;
   display: flex;
   flex-direction: column;
