@@ -1,15 +1,18 @@
 import Koa from 'koa'
+import agent from 'superagent'
+
+import config from '../../../config/public'
 
 const router = require('koa-router')()
 const app = new Koa()
 
 const urlPattern = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi
 
-router.get('/deals/envelope/:id/edit', async (ctx, next) => {
+router.get('/deals/envelope/:id/edit', async ctx => {
   const { id } = ctx.params
 
   try {
-    await ctx.fetch(`/envelopes/${id}/edit`).redirects(0)
+    await agent.get(`${config.api_url}/envelopes/${id}/edit`).redirects(0)
 
     ctx.body = ''
   } catch (e) {
@@ -17,6 +20,11 @@ router.get('/deals/envelope/:id/edit', async (ctx, next) => {
       const link = e.response.text.match(urlPattern)
 
       ctx.redirect(link)
+    }
+
+    if (e.status === 401) {
+      ctx.body =
+        '<html lang="en"><body><h3>Access denied. This envelope was created by someone else. You cannot amend it.</h3></body></html>'
     }
   }
 })
