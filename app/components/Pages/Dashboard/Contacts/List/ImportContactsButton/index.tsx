@@ -24,13 +24,14 @@ import { putUserSetting } from 'models/user/put-user-setting'
 import Acl from 'components/Acl'
 import ActionButton from 'components/Button/ActionButton'
 
-import { CsvIcon, GoogleIcon } from './styled'
+import { CsvIcon, GoogleIcon, OutlookIcon } from './styled'
 import { ConnectedAccount } from './ConnectedAccount'
 import { IMPORT_TOOLTIP_VISITED_SETTINGS_KEY } from '../constants'
 import ConnectGoogleButton from './ConnectGoogleButton'
+import ConnectOutlookButton from './ConnectOutlookButton'
 
 interface Props {
-  accounts: IGoogleAccount[]
+  accounts: IOAuthAccount[]
   user: IUser
 }
 
@@ -78,6 +79,13 @@ export function ImportContactsButton({ accounts, user }: Props) {
             style={{ marginRight: '1rem' }}
             renderMenu={() => (
               <>
+                <ConnectOutlookButton>
+                  {({ connect, connecting }) => (
+                    <MenuItem noStyle onClick={connect}>
+                      <OutlookIcon /> Import Outlook contacts
+                    </MenuItem>
+                  )}
+                </ConnectOutlookButton>
                 <MenuItem
                   as={ALink}
                   noStyle
@@ -131,7 +139,7 @@ export function ImportContactsButton({ accounts, user }: Props) {
 
 function mapStateToProps(state: IAppState) {
   return {
-    accounts: state.contacts.googleAccounts,
+    accounts: Object.values(state.contacts.oAuthAccounts).flat(),
     user: state.user
   }
 }

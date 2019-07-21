@@ -11,6 +11,8 @@ declare interface StringMap<T> {
   [key: string]: T
 }
 
+declare type EnumMap<K, T> = { [key in K]: T }
+
 declare type Omit<T, K extends keyof any> = T extends any
   ? Pick<T, Exclude<keyof T, K>>
   : never

@@ -13,21 +13,21 @@ interface RenderProps {
   connect: (event: React.MouseEvent) => void
 }
 interface Props {
-  oAuthAccounts: StringMap<IGoogleAccount[]>
+  oAuthAccounts: EnumMap<OAuthProvider, IMicrosoftAccount[]>
   children: (renderProps: RenderProps) => ReactElement<any>
 }
 
 /**
- * A render prop component for adding google accounts.
+ * A render prop component for adding microsoft accounts.
  * If we were using latest versions of redux so that we could use redux hooks
  * this could be a simple hook with {connect, connecting} return value,
  * instead of a render prop component
  * @param props
  * @constructor
  */
-function ConnectGoogleButton(props: Props) {
+function ConnectOutlookButton(props: Props) {
   const { connect, connecting } = useConnectOAuthAccount(
-    OAuthProvider.Google,
+    OAuthProvider.Outlook,
     props.oAuthAccounts
   )
 
@@ -36,4 +36,4 @@ function ConnectGoogleButton(props: Props) {
 
 export default connect(({ contacts: { oAuthAccounts } }: IAppState) => ({
   oAuthAccounts
-}))(ConnectGoogleButton)
+}))(ConnectOutlookButton)

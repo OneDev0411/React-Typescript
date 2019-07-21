@@ -34,7 +34,7 @@ export const ORIGINS = [
   {
     label: 'Outlook',
     description: 'Imported from Outlook',
-    value: 'External/Outlook'
+    value: 'Microsoft'
   },
   {
     label: 'Open House',
@@ -47,8 +47,8 @@ export const ORIGINS = [
     value: 'CSV'
   },
   {
-    label: 'Google Contacts',
-    description: 'Imported from Google Contacts',
+    label: 'Google',
+    description: 'Imported from Google',
     value: 'Google'
   }
 ]

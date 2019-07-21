@@ -1,13 +1,13 @@
-import React, { CSSProperties, HTMLProps, ReactNode } from 'react'
+import React, { CSSProperties, ReactNode } from 'react'
 import Downshift from 'downshift'
 
 import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import IconKeyboardArrowUp from 'components/SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
 
 import {
-  SplitButtonMenu,
   ButtonsContainer,
   PrimaryActionButton,
+  SplitButtonMenu,
   ToggleActionsMenuButton
 } from './styled'
 
@@ -43,7 +43,11 @@ export default function SplitButton({
       {({ isOpen, getToggleButtonProps, closeMenu }) => (
         <div style={{ ...style, position: 'relative' }}>
           <ButtonsContainer>
-            <PrimaryActionButton disabled={disabled} onClick={onClick}>
+            <PrimaryActionButton
+              appearance="primary"
+              disabled={disabled}
+              onClick={onClick}
+            >
               {children}
             </PrimaryActionButton>
             <ToggleActionsMenuButton

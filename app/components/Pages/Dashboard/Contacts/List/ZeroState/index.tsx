@@ -8,7 +8,8 @@ import { Divider } from 'components/Divider'
 import { CreateContact } from 'components/CreateContact'
 
 import ConnectGoogleButton from '../ImportContactsButton/ConnectGoogleButton'
-import { GoogleIcon, ZeroStateContainer } from './styled'
+import ConnectOutlookButton from '../ImportContactsButton/ConnectOutlookButton'
+import { GoogleIcon, OutlookIcon, ZeroStateContainer } from './styled'
 
 export function ZeroState() {
   return (
@@ -33,6 +34,19 @@ export function ZeroState() {
             </ActionButton>
           )}
         </ConnectGoogleButton>
+
+        <ConnectOutlookButton>
+          {({ connecting, connect }) => (
+            <ActionButton
+              disabled={connecting}
+              onClick={connect}
+              appearance="primary"
+            >
+              <OutlookIcon />
+              Import Outlook Contacts
+            </ActionButton>
+          )}
+        </ConnectOutlookButton>
 
         <Divider text="OR" />
       </Acl>
