@@ -1,0 +1,256 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Deal Form: Roles Container renders the component 1`] = `
+Array [
+  <div
+    style="position:absolute;left:132.3529411764706px;top:278.11764705882354px;width:714px;height:16px;font-size:14px;font-family:Arial;color:rgb(0, 0, 128);font-weight:normal;min-width:15px;padding:0 3px;cursor:pointer;background-color:#d2e5f2"
+  >
+    <div
+      style="display:inline-block"
+    />
+    <span
+      class="styled__Container-sc-1fyjv7w-0 hAsrBp"
+    >
+      <svg
+        class="IconAddCircleOutline__Image-fo18hq-0 hSkVmB"
+        style="height:16px;fill:rgb(0, 0, 128)"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M0 0h24v24H0z"
+          fill="none"
+        />
+        <path
+          d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+        />
+      </svg>
+    </span>
+  </div>,
+  <div
+    style="position:absolute;left:132.3529411764706px;top:296.6470588235294px;width:714px;height:16px;font-size:14px;font-family:Arial;color:rgb(0, 0, 128);font-weight:normal;min-width:15px;padding:0 3px;cursor:pointer;background-color:#d2e5f2"
+  >
+    <div
+      style="display:inline-block"
+    />
+    <span
+      class="styled__Container-sc-1fyjv7w-0 hAsrBp"
+    >
+      <svg
+        class="IconAddCircleOutline__Image-fo18hq-0 hSkVmB"
+        style="height:16px;fill:rgb(0, 0, 128)"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M0 0h24v24H0z"
+          fill="none"
+        />
+        <path
+          d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+        />
+      </svg>
+    </span>
+  </div>,
+  <div
+    style="position:absolute;left:174.1764705882353px;top:315.3529411764706px;width:673px;height:16px;font-size:14px;font-family:Arial;color:rgb(0, 0, 128);font-weight:normal;min-width:15px;padding:0 3px;cursor:pointer;background-color:transparent"
+  >
+    <div
+      style="display:inline-block"
+    >
+      <span
+        class="styled__RoleItem-bgrt01-0 bdePoE"
+        style="font-size:14px"
+      />
+      <svg
+        class="EditIcon__Image-sc-142t31x-0 GTkYE"
+        style="height:16px;fill:rgb(0, 0, 128)"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+        />
+        <path
+          d="M0 0h24v24H0z"
+          fill="none"
+        />
+      </svg>
+    </div>
+  </div>,
+  <div
+    style="position:absolute;left:220.94117647058826px;top:333.88235294117635px;width:626px;height:16px;font-size:14px;font-family:Arial;color:rgb(0, 0, 128);font-weight:normal;min-width:15px;padding:0 3px;cursor:pointer;background-color:transparent"
+  >
+    <div
+      style="display:inline-block"
+    >
+      <span
+        class="styled__RoleItem-bgrt01-0 bdePoE"
+        style="font-size:14px"
+      />
+      <svg
+        class="EditIcon__Image-sc-142t31x-0 GTkYE"
+        style="height:16px;fill:rgb(0, 0, 128)"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+        />
+        <path
+          d="M0 0h24v24H0z"
+          fill="none"
+        />
+      </svg>
+    </div>
+  </div>,
+  <div
+    style="position:absolute;left:157.23529411764707px;top:352.58823529411757px;width:372px;height:16px;font-size:14px;font-family:Arial;color:rgb(0, 0, 128);font-weight:normal;min-width:15px;padding:0 3px;cursor:pointer;background-color:#d2e5f2"
+  >
+    <div
+      style="display:inline-block"
+    />
+    <span
+      class="styled__Container-sc-1fyjv7w-0 hAsrBp"
+    >
+      <svg
+        class="IconAddCircleOutline__Image-fo18hq-0 hSkVmB"
+        style="height:16px;fill:rgb(0, 0, 128)"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M0 0h24v24H0z"
+          fill="none"
+        />
+        <path
+          d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+        />
+      </svg>
+    </span>
+  </div>,
+  <div
+    style="position:absolute;left:160.76470588235296px;top:371.11764705882354px;width:686px;height:16px;font-size:14px;font-family:Arial;color:rgb(0, 0, 128);font-weight:normal;min-width:15px;padding:0 3px;cursor:pointer;background-color:#d2e5f2"
+  >
+    <div
+      style="display:inline-block"
+    />
+    <span
+      class="styled__Container-sc-1fyjv7w-0 hAsrBp"
+    >
+      <svg
+        class="IconAddCircleOutline__Image-fo18hq-0 hSkVmB"
+        style="height:16px;fill:rgb(0, 0, 128)"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M0 0h24v24H0z"
+          fill="none"
+        />
+        <path
+          d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+        />
+      </svg>
+    </span>
+  </div>,
+  <div
+    style="position:absolute;left:136.05882352941177px;top:405px;width:711px;height:16px;font-size:14px;font-family:Arial;color:rgb(0, 0, 128);font-weight:normal;min-width:15px;padding:0 3px;cursor:pointer;background-color:transparent"
+  >
+    <div
+      style="display:inline-block"
+    >
+      <span
+        class="styled__RoleItem-bgrt01-0 bdePoE"
+        style="font-size:14px"
+      >
+        Rechat
+      </span>
+    </div>
+  </div>,
+  <div
+    style="position:absolute;left:174.1764705882353px;top:423.52941176470586px;width:673px;height:16px;font-size:14px;font-family:Arial;color:rgb(0, 0, 128);font-weight:normal;min-width:15px;padding:0 3px;cursor:pointer;background-color:transparent"
+  >
+    <div
+      style="display:inline-block"
+    >
+      <span
+        class="styled__RoleItem-bgrt01-0 bdePoE"
+        style="font-size:14px"
+      >
+        Mckinney Avenue
+      </span>
+    </div>
+  </div>,
+  <div
+    style="position:absolute;left:220.94117647058826px;top:442.2352941176471px;width:626px;height:16px;font-size:14px;font-family:Arial;color:rgb(0, 0, 128);font-weight:normal;min-width:15px;padding:0 3px;cursor:pointer;background-color:transparent"
+  >
+    <div
+      style="display:inline-block"
+    >
+      <span
+        class="styled__RoleItem-bgrt01-0 bdePoE"
+        style="font-size:14px"
+      >
+        Dallas TX 75081
+      </span>
+    </div>
+  </div>,
+  <div
+    style="position:absolute;left:157.23529411764707px;top:460.7647058823529px;width:372px;height:16px;font-size:14px;font-family:Arial;color:rgb(0, 0, 128);font-weight:normal;min-width:15px;padding:0 3px;cursor:pointer;background-color:transparent"
+  >
+    <div
+      style="display:inline-block"
+    >
+      <span
+        class="styled__RoleItem-bgrt01-0 bdePoE"
+        style="font-size:14px"
+      >
+        (214) 999-9999
+      </span>
+    </div>
+  </div>,
+  <div
+    style="position:absolute;left:565.4117647058824px;top:460.7647058823529px;width:281px;height:16px;font-size:14px;font-family:Arial;color:rgb(0, 0, 128);font-weight:normal;min-width:15px;padding:0 3px;cursor:pointer;background-color:transparent"
+  >
+    <div
+      style="display:inline-block"
+    >
+      <span
+        class="styled__RoleItem-bgrt01-0 bdePoE"
+        style="font-size:14px"
+      >
+        (214) 570-0087
+      </span>
+    </div>
+  </div>,
+  <div
+    style="position:absolute;left:160.76470588235296px;top:479.2941176470588px;width:686px;height:16px;font-size:14px;font-family:Arial;color:rgb(0, 0, 128);font-weight:normal;min-width:15px;padding:0 3px;cursor:pointer;background-color:transparent"
+  >
+    <div
+      style="display:inline-block"
+    >
+      <span
+        class="styled__RoleItem-bgrt01-0 bdePoE"
+        style="font-size:14px"
+      >
+        trey+agent@rechat.com
+      </span>
+    </div>
+  </div>,
+  <div
+    style="position:absolute;left:50.16808823529412px;top:1108.4383823529413px;width:163px;height:29px;font-size:5px;font-family:Arial;color:rgb(0, 0, 0);font-weight:normal;min-width:15px;padding:0;cursor:pointer;background-color:transparent;border:none"
+  >
+    Rechat
+  </div>,
+  <div
+    style="position:absolute;left:212.50147058823532px;top:1108.4383823529413px;width:159px;height:29px;font-size:5px;font-family:Arial;color:rgb(0, 0, 0);font-weight:normal;min-width:15px;padding:0;cursor:pointer;background-color:transparent;border:none"
+  >
+    Mckinney Avenue
+  </div>,
+  <div
+    style="position:absolute;left:408.2779411764706px;top:1117.2801470588236px;width:135px;height:15px;font-size:5px;font-family:Arial;color:rgb(0, 0, 0);font-weight:normal;min-width:15px;padding:0;cursor:pointer;background-color:transparent;border:none"
+  >
+    (214) 999-9999
+  </div>,
+  <div
+    style="position:absolute;left:50.16808823529412px;top:1137.139705882353px;width:133px;height:14px;font-size:5px;font-family:Arial;color:rgb(0, 0, 0);font-weight:normal;min-width:15px;padding:0;cursor:pointer;background-color:transparent;border:none"
+  >
+    Trey Jones
+  </div>,
+]
+`;
