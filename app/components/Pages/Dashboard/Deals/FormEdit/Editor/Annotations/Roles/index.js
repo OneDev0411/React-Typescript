@@ -63,6 +63,10 @@ function getAllRoles(roles, form) {
     return []
   }
 
+  if (form.deleted) {
+    return roles.filter(role => role.id !== form.id)
+  }
+
   const roleExists = roles.some(role => role.id === form.id)
 
   if (roleExists) {

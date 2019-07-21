@@ -363,7 +363,7 @@ export class DealRole extends React.Component {
   handleDeleteRole = () => {
     this.props.onDeleteRole({
       ...this.formObject,
-      is_deleted: true
+      deleted: true
     })
 
     this.handleClose()
