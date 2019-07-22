@@ -11,9 +11,11 @@ import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingCo
 
 import NoSearchResults from '../../../../Partials/no-search-results'
 
+import InfoColumn from './InfoColumn'
 import { InsightContainer } from './styled'
 import useListData from './useListData'
-import InfoColumn from './InfoColumn'
+import useFilterList from './useFilterList'
+import { InsightFiltersType } from './types'
 
 const columns = [
   {
@@ -68,6 +70,11 @@ function List(props) {
   const [isSideMenuOpen, setSideMenuOpen] = useState(true)
   const [queue, setQueue] = useState(0)
   const { list, isLoading } = useListData(props.user, queue)
+  const isScheduled = props.route && props.route.path === 'scheduled'
+  const filterType = isScheduled
+    ? InsightFiltersType.SCHEDULED
+    : InsightFiltersType.SENT
+  const { filteredList, stats } = useFilterList(list, filterType)
   const tableClassName = ['insight-table-container']
 
   if (isLoading === false) {
@@ -75,10 +82,14 @@ function List(props) {
   }
 
   return (
-    <Layout isSideMenuOpen={isSideMenuOpen} sentBadge={list.length}>
+    <Layout
+      isSideMenuOpen={isSideMenuOpen}
+      sentCount={stats.sent}
+      scheduledCount={stats.scheduled}
+    >
       <InsightContainer>
         <Header
-          title="Sent Emails"
+          title={isScheduled ? 'Scheduled Emails' : 'Sent Emails'}
           isSideMenuOpen={isSideMenuOpen}
           onMenuTriggerChange={() => setSideMenuOpen(!isSideMenuOpen)}
           onSent={() => setQueue(queue + 1)}
@@ -87,8 +98,8 @@ function List(props) {
         {isLoading && <LoadingComponent />}
         <div className={tableClassName.join(' ')}>
           <Table
-            data={list}
-            columns={columns}
+            data={filteredList}
+            columns={isScheduled ? [columns[0]] : columns}
             EmptyState={() => (
               <NoSearchResults description='Try sending your first campaign using "Send New Email" button.' />
             )}
