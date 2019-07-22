@@ -13,15 +13,10 @@ function InfoColumn({ data }) {
   const isScheduled = !data.executed_at && isQueued
   const isInProgress = !data.executed_at && !isQueued
 
-  // This is a workaround and we don't acutually need to detect scheduled email here.
-  // In phase 2, we are going to have a separate table and page so this code will clean up in there.
   const title = (
     <div className="info-title">
       <div>{show_title(data.subject)}</div>
       <div>
-        {isScheduled && (
-          <StyledBadge appearance="primary">Scheduled</StyledBadge>
-        )}
         {isInProgress && (
           <StyledBadge appearance="warning">In Progress</StyledBadge>
         )}
