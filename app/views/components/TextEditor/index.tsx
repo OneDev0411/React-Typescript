@@ -20,6 +20,8 @@ import createFocusPlugin from 'draft-js-focus-plugin'
 
 import createResizeablePlugin from 'draft-js-resizeable-plugin'
 
+import createAnchorPlugin from 'draft-js-anchor-plugin'
+
 import createBlockDndPlugin from 'draft-js-drag-n-drop-plugin'
 import { stateToHTML } from 'draft-js-export-html'
 import { stateFromHTML } from 'draft-js-import-html'
@@ -31,7 +33,8 @@ import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 
 import { isImageFile } from 'utils/file-utils/is-image-file'
 
-import LinkIcon from 'components/SvgIcons/LinkIcon'
+import IconLink from 'components/SvgIcons/Link/IconLink'
+
 import { LinkEditorPopover } from './components/LinkEditorPopover'
 import IconButton from './buttons/IconButton'
 
@@ -44,6 +47,8 @@ import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
 import { replaceImage } from './utils/replace-image'
 import { withUploadingIndicator } from './block-decorators/with-uploading-indicator'
 import { renderAtomicBlockStyles } from './utils/render-atomic-block'
+import { InlineEntityPopover } from './components/InlineEntityPopover'
+import { LinkPreview } from './components/LinkPreview/LinkPreview'
 
 interface Props {
   defaultValue?: string
@@ -130,6 +135,7 @@ export const TextEditor = forwardRef(
       alignmentPlugin,
       blockDndPlugin,
       resizeablePlugin,
+      anchorPlugin,
       richButtonsPlugin
     } = useMemo(() => {
       const focusPlugin = createFocusPlugin({
@@ -140,6 +146,7 @@ export const TextEditor = forwardRef(
       const alignmentPlugin = createAlignmentPlugin()
       const { AlignmentTool } = alignmentPlugin
       const richButtonsPlugin = createRichButtonsPlugin()
+      const anchorPlugin = createAnchorPlugin()
 
       return {
         AlignmentTool,
@@ -148,6 +155,7 @@ export const TextEditor = forwardRef(
         resizeablePlugin,
         blockDndPlugin,
         alignmentPlugin,
+        anchorPlugin,
         imagePlugin: createImagePlugin({
           decorator: composeDecorators(
             withUploadingIndicator,
@@ -304,7 +312,7 @@ export const TextEditor = forwardRef(
         if (editorRef.current) {
           const latestState = editorRef.current.getEditorState()
 
-          setEditorState(
+          handleChange(
             replaceImage(imagePlugin, latestState, dataUrl, uploadedImageUrl)
           )
         }
@@ -316,7 +324,7 @@ export const TextEditor = forwardRef(
     }
 
     const defaultPlugins = [
-      ...(enableRichText ? [richButtonsPlugin] : []),
+      ...(enableRichText ? [richButtonsPlugin, anchorPlugin] : []),
       ...(enableImage
         ? [
             blockDndPlugin,
@@ -342,19 +350,21 @@ export const TextEditor = forwardRef(
       <Fragment>
         <Toolbar>
           {enableRichText && (
-            <RichTextButtons richButtonsPlugin={richButtonsPlugin} />
+            <>
+              <RichTextButtons richButtonsPlugin={richButtonsPlugin} />
+              <IconButton
+                onClick={event => {
+                  setLinkEditorOpen(true)
+                  event.preventDefault()
+                  event.stopPropagation()
+                }}
+              >
+                <IconLink />
+              </IconButton>
+            </>
           )}
 
           {enableImage && <AddImageButton onImageSelected={addImage} />}
-          <IconButton
-            onMouseDown={event => {
-              setLinkEditorOpen(true)
-              event.preventDefault()
-              event.stopPropagation()
-            }}
-          >
-            <LinkIcon />
-          </IconButton>
         </Toolbar>
 
         <EditorWrapper
@@ -382,10 +392,23 @@ export const TextEditor = forwardRef(
           <LinkEditorPopover
             editorState={editorState}
             editorElementRef={editorElementRef}
-            setEditorState={setEditorState}
+            setEditorState={handleChange}
             open={linkEditorOpen}
             onClose={() => setLinkEditorOpen(false)}
           />
+          {!linkEditorOpen && (
+            <InlineEntityPopover editorState={editorState} entityFilter="LINK">
+              {({ entity, close }) => (
+                <LinkPreview
+                  editorState={editorState}
+                  setEditorState={handleChange}
+                  onClose={close}
+                  url={entity.getData().url}
+                  onEdit={() => setLinkEditorOpen(true)}
+                />
+              )}
+            </InlineEntityPopover>
+          )}
         </EditorWrapper>
 
         {input && <FieldError name={input.name} />}

@@ -31,6 +31,10 @@ export const EditorWrapper = styled.div`
     z-index: 1; // This ensures images are selectable even when they are floated
   }
 
+  a:hover {
+    text-decoration: inherit;
+  }
+
   .focused,
   .unfocused:hover {
     cursor: default;

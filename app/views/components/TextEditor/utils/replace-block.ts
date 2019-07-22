@@ -1,4 +1,4 @@
-import { Modifier, EditorState, SelectionState } from 'draft-js'
+import { EditorState, Modifier, SelectionState } from 'draft-js'
 
 export function replaceBlock(editorState, blockKey, newType) {
   let content = editorState.getCurrentContent()

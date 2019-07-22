@@ -1,10 +1,15 @@
-import Draft, { EditorState } from 'draft-js'
-import { getSelectionText } from 'draftjs-utils'
-import { Box, Button, Grid, Popover, TextField } from '@material-ui/core'
+import { EditorState } from 'draft-js'
+import { ClickAwayListener, Popper, useTheme } from '@material-ui/core'
 import * as React from 'react'
-import { RefObject, useEffect, useRef, useState } from 'react'
-import { PopoverProps } from '@material-ui/core/Popover'
-import usePrevious from 'react-use/esm/usePrevious'
+import { RefObject, useState } from 'react'
+import { getSelectionText } from 'draftjs-utils'
+
+import { useEditorSelectionAnchor } from './hooks/use-editor-selection-anchor'
+import { useOnOpen } from './hooks/use-on-open'
+import { createLink } from '../../utils/create-link'
+import { getCurrentLinkUrl, stopPropagation } from './utils'
+import { LinkEditorForm } from './components/LinkEditorForm'
+import { getExpandedSelectionByEntityType } from '../../utils/get-expanded-selection-by-entity-type'
 
 interface Props {
   open: boolean
@@ -14,109 +19,99 @@ interface Props {
   setEditorState: (editorState: EditorState) => void
 }
 
+/**
+ * Challenges in positioning:
+ * - We want to position the overlay based on some selection which is not
+ * necessarily a DOM node and we can't simply get it's bounding client rect.
+ *  We can use selection client rect but as soon as focus is grabbed inside
+ *  an input inside the overlay, we lost the selection and it breaks the
+ *  positioning.
+ * - We need to make sure positioning works no matter the there is an scrollable
+ *   container or it's the window that scrolls.
+ * - We can make the overlay portal or not.
+ *   - Portal:
+ *     - It makes positioning harder because we need to explicitly pass the
+ *       scrollable container to ensure popover position is maintained
+ *       correctly as the container scrolls
+ *     - We have a jump on window scroll for some reason
+ *   - Non-portal
+ *     - We should watch out for issues like nested forms
+ *     - It doesn't work when there is a relative ancestor (which is the case
+ *       within the drawer)
+ */
 export function LinkEditorPopover({
   open,
   onClose,
   editorState,
+  setEditorState,
   editorElementRef
 }: Props) {
-  const lastSelectionRect = useRef(Draft.getVisibleSelectionRect(window))
-
-  const selectionRect = Draft.getVisibleSelectionRect(window)
-
   const [text, setText] = useState('')
-  const [link, setLink] = useState('')
+  const [url, setUrl] = useState('')
+  const theme = useTheme()
 
-  if (selectionRect) {
-    lastSelectionRect.current = selectionRect
-  }
+  const anchorEl = useEditorSelectionAnchor(
+    open,
+    editorState,
+    setEditorState,
+    editorElementRef
+  )
 
-  let anchorPosition: PopoverProps['anchorPosition'] | undefined
+  useOnOpen(open, () => {
+    const linkSelection = getExpandedSelectionByEntityType(editorState, 'LINK')
 
-  if (lastSelectionRect.current) {
-    anchorPosition = {
-      top: lastSelectionRect.current.top + lastSelectionRect.current.height,
-      left: lastSelectionRect.current.left + lastSelectionRect.current.width / 2
-    }
-  }
+    let newEditorState = editorState
 
-  const wasOpen = usePrevious(open)
+    if (linkSelection !== editorState.getSelection()) {
+      newEditorState = EditorState.forceSelection(editorState, linkSelection)
 
-  useEffect(() => {
-    if (open && !wasOpen) {
-      setText(getSelectionText(editorState))
-      setLink('') // TODO: set to selection text, if it's a valid link
-    }
-  }, [editorState, open, wasOpen])
-
-  const applyLink = event => {
-    if (link) {
-      // TODO
-      onClose()
+      // without timeout, editorState will be overridden due to losing focus
+      // to popover. There should be better ways, because this timeout is
+      // kind of a workaround for this and also takes focus back again
+      // from the popover which is not good.
+      setTimeout(() => {
+        setEditorState(newEditorState)
+      })
     }
 
-    event.stopPropagation()
+    setText(getSelectionText(newEditorState))
+    setUrl(getCurrentLinkUrl(editorState) || '')
+  })
+
+  const applyLink = (text, url) => {
+    setEditorState(createLink(editorState, text, url))
+    onClose()
   }
 
   return (
-    <Popover
-      open={open}
-      onClose={onClose}
-      onClick={stopPropagation} /* Popover closes without this */
-      anchorReference={anchorPosition ? 'anchorPosition' : 'anchorEl'}
-      anchorEl={editorElementRef.current}
-      anchorPosition={anchorPosition}
-    >
-      {/*
+    <ClickAwayListener onClickAway={onClose}>
+      <Popper
+        style={{ zIndex: theme.zIndex.modal }}
+        open={open && !!anchorEl}
+        onClick={stopPropagation} /* Popover closes without this */
+        anchorEl={anchorEl}
+        transition
+        // disablePortal
+        placement="bottom-start"
+      >
+        {/*
       After a couple of back and forth, I decided not to use final form here
       because:
         - Fairly simple validation logic which is not subject to change in future
         - Need for control over the values from outside the form which will be hacky with final form
         - Don't want to show validation status and message an fields.
       */}
-      <form onSubmit={applyLink} noValidate>
-        <Box p={2}>
-          <Grid container wrap="nowrap" alignItems="flex-end">
-            <Grid container direction="column">
-              <TextField
-                label="Text"
-                value={text}
-                onChange={event => setText(event.target.value)}
-                margin="dense"
-                variant="outlined"
-                InputLabelProps={{
-                  shrink: true
-                }}
-              />
-              <TextField
-                value={link}
-                onChange={event => setLink(event.target.value)}
-                autoFocus
-                placeholder="Paste a link"
-                InputLabelProps={{
-                  shrink: true
-                }}
-                required
-                label="Link"
-                margin="dense"
-                variant="outlined"
-              />
-            </Grid>
-            <Box marginLeft={2} marginBottom={0.6}>
-              <Button
-                type="submit"
-                color="primary"
-                variant="contained"
-                disabled={!link}
-              >
-                Apply
-              </Button>
-            </Box>
-          </Grid>
-        </Box>
-      </form>
-    </Popover>
+        <LinkEditorForm
+          onKeyUp={e => {
+            e.key === 'Escape' && onClose()
+          }}
+          onApply={applyLink}
+          text={text}
+          url={url}
+          setText={setText}
+          setUrl={setUrl}
+        />
+      </Popper>
+    </ClickAwayListener>
   )
 }
-
-const stopPropagation = event => event.stopPropagation()

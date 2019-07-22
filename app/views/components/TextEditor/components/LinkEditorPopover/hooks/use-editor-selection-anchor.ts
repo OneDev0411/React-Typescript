@@ -1,0 +1,94 @@
+import { useState } from 'react'
+import Draft, { EditorState } from 'draft-js'
+
+import { useOnOpen } from './use-on-open'
+import { ReferenceObject } from '../../../types'
+
+export function useEditorSelectionAnchor(
+  open,
+  editorState,
+  setEditorState,
+  editorElementRef
+): ReferenceObject | null {
+  const [anchorEl, setAnchorEl] = useState<ReferenceObject | null>(
+    getEditorStartAnchor(editorElementRef.current)
+  )
+
+  useOnOpen(open, () => {
+    const selection = editorState.getSelection()
+    const newEditorState = EditorState.forceSelection(editorState, selection)
+
+    setAnchorEl(null)
+    // Set selection back if focus is lost
+    setTimeout(() => {
+      setEditorState(newEditorState)
+
+      const visibleSelectionRect = Draft.getVisibleSelectionRect(window)
+      const selectionContainerElement = editorElementRef.current!.querySelector(
+        `[data-offset-key="${selection.getAnchorKey()}-0-0"]`
+      )
+
+      if (selectionContainerElement && visibleSelectionRect) {
+        const selectionContainerBBox = selectionContainerElement.getBoundingClientRect()
+        const leftOffset =
+          visibleSelectionRect.left - selectionContainerBBox.left
+        const left = selectionContainerBBox.left + leftOffset
+        const topOffset = visibleSelectionRect.top - selectionContainerBBox.top
+
+        setAnchorEl({
+          clientWidth: 10,
+          clientHeight: 10,
+          getBoundingClientRect: () => {
+            const selectionContainerBBox = selectionContainerElement.getBoundingClientRect()
+
+            const top = selectionContainerBBox.top + topOffset
+
+            return {
+              x: left,
+              y: top,
+              top,
+              left,
+              bottom: top + visibleSelectionRect.height,
+              right: left + visibleSelectionRect.width,
+              height: visibleSelectionRect.height,
+              width: visibleSelectionRect.width
+            }
+          }
+        })
+      } else {
+        setAnchorEl(getEditorStartAnchor(editorElementRef.current))
+      }
+    })
+  })
+
+  return anchorEl
+}
+
+function getEditorStartAnchor(
+  editorElement: HTMLElement | null
+): ReferenceObject | null {
+  if (editorElement) {
+    return {
+      clientHeight: 20,
+      clientWidth: 10,
+      getBoundingClientRect(): ClientRect {
+        const boundingClientRect = editorElement.getBoundingClientRect()
+        const left = boundingClientRect.left
+        const top = boundingClientRect.top
+        const height = 20
+        const width = 10
+
+        return {
+          width,
+          height,
+          left,
+          top,
+          right: left + width,
+          bottom: top + height
+        }
+      }
+    }
+  }
+
+  return null
+}
