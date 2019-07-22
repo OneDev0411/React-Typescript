@@ -476,6 +476,7 @@ export default (
 
       <Route path="/dashboard/insights">
         <IndexRoute component={AsyncMarketingInsightsList} />
+        <Route path="scheduled" component={AsyncMarketingInsightsList} />
         <Route path=":id" component={AsyncMarketingInsight} />
       </Route>
 

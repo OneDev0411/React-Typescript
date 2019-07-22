@@ -6,7 +6,7 @@ import cn from 'classnames'
 import { primary } from 'views/utils/colors'
 import { ListItemName } from 'components/SlideMenu/Menu/styled'
 
-const Item = styled(Link) `
+const Item = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -38,7 +38,8 @@ const Item = styled(Link) `
 export function ActiveItem(props) {
   const indexed = props.item.url === '/'
   const to = `${props.base}${props.item.url}`
-  const selected = window.location.pathname.includes(props.item.url)
+  const selected =
+    window.location.pathname === `/dashboard/insights${props.item.url}`
 
   return (
     <Item
@@ -54,8 +55,8 @@ export function ActiveItem(props) {
             <ListItemName>{props.item.title}</ListItemName>
           </React.Fragment>
         ) : (
-            props.item.title
-          )}
+          props.item.title
+        )}
       </span>
 
       {props.item.badge ? (
