@@ -6,7 +6,10 @@ import getFilterLabelByValue from './get-filter-label-by-value'
 import getFlowFilter from './get-flow-filter'
 import getOpenHouseFilter from './get-open-house-filter'
 
-const createFiltersFromSegment = (segment, activeFilters) => {
+const createFiltersFromSegment = (
+  segment: Partial<IContactList>,
+  activeFilters?
+) => {
   if (size(activeFilters) > 0) {
     return Object.values(activeFilters)
   }
@@ -26,12 +29,14 @@ const createFiltersFromSegment = (segment, activeFilters) => {
     }
   }))
 
-  const { flows, crm_tasks } = segment.args || {}
+  const { flows, crm_tasks } = segment.args || { flows: [], crm_tasks: [] }
 
   const flowFilters = (flows || []).map(flowId => ({
     id: FLOW_FILTER_ID,
     isActive: false,
-    values: [getFlowFilter(segment.flows.find(flow => flow.id === flowId))],
+    values: [
+      getFlowFilter((segment.flows || []).find(flow => flow.id === flowId))
+    ],
     operator: {
       name: 'is'
     }
@@ -42,7 +47,7 @@ const createFiltersFromSegment = (segment, activeFilters) => {
     isActive: false,
     values: [
       getOpenHouseFilter(
-        segment.crm_tasks.find(crmTask => crmTask.id === crmTaskId)
+        (segment.crm_tasks || []).find(crmTask => crmTask.id === crmTaskId)
       )
     ],
     operator: {

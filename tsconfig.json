@@ -54,6 +54,9 @@
       "reducers/*": [
         "app/reducers/*"
       ],
+      "reducers": [
+        "app/reducers"
+      ],
       "routes/*": [
         "app/routes/*"
       ],

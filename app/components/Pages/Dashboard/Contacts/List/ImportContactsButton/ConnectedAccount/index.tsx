@@ -9,7 +9,7 @@ import Avatar from 'components/Avatar/index'
 import { AccountInfoWrapper } from './styled'
 
 interface Props {
-  account: IGoogleAccount
+  account: IOAuthAccount
 }
 
 export function ConnectedAccount({ account }: Props) {

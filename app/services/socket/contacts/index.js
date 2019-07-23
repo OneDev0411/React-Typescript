@@ -9,7 +9,9 @@ import {
   setWorkerState
 } from '../../../store_actions/contacts'
 
-import { fetchGoogleAccounts } from '../../../store_actions/contacts/fetch-google-accounts'
+import { fetchOAuthAccounts } from '../../../store_actions/contacts/fetch-o-auth-accounts'
+
+import { OAuthProvider } from '../../../constants/contacts'
 
 export default class ContactSocket extends Socket {
   constructor(user) {
@@ -23,8 +25,12 @@ export default class ContactSocket extends Socket {
     const { socket } = window
 
     socket.on('Google.Contacts.Imported', () =>
-      fetchGoogleAccounts()(store.dispatch)
+      fetchOAuthAccounts(OAuthProvider.Google)(store.dispatch)
     )
+    socket.on('Microsoft.Contacts.Imported', () =>
+      fetchOAuthAccounts(OAuthProvider.Outlook)(store.dispatch)
+    )
+
     socket.on('importDone', () => store.dispatch(importDone()))
     socket.on('importSuccesfullLogin', () => store.dispatch(loginSuccessful()))
     socket.on('importFail', () => store.dispatch(importFail()))

@@ -1,3 +1,5 @@
+import { OAuthProvider } from 'constants/contacts'
+
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
@@ -37,7 +39,7 @@ import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
 
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 
-import { fetchGoogleAccounts } from 'actions/contacts/fetch-google-accounts'
+import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
 import { Callout } from 'components/Callout'
 
@@ -88,7 +90,8 @@ class ContactsList extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchGoogleAccounts()
+    this.props.fetchOAuthAccounts(OAuthProvider.Google)
+    this.props.fetchOAuthAccounts(OAuthProvider.Outlook)
     this.fetchContactsAndJumpToSelected()
 
     if (this.props.fetchTags) {
@@ -97,9 +100,11 @@ class ContactsList extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (!_.isEqual(nextProps.googleAccounts, this.props.googleAccounts)) {
-      this.updateSyncState(nextProps.googleAccounts)
-    }
+    Object.entries(this.props.oAuthAccounts).forEach(([provider, accounts]) => {
+      if (!_.isEqual(nextProps.oAuthAccounts[provider], accounts)) {
+        this.updateSyncState(provider, nextProps.oAuthAccounts)
+      }
+    })
 
     if (
       nextProps.viewAsUsers.length !== this.props.viewAsUsers.length ||
@@ -134,8 +139,9 @@ class ContactsList extends React.Component {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
   }
 
-  updateSyncState(googleAccounts = this.props.googleAccounts) {
-    const account = getNewConnectedGoogleAccount(googleAccounts)
+  updateSyncState(provider, oAuthAccounts = this.props.oAuthAccounts) {
+
+    const account = getNewConnectedGoogleAccount(provider, oAuthAccounts)
 
     if (account) {
       switch (account.sync_status) {
@@ -144,12 +150,15 @@ class ContactsList extends React.Component {
           this.setState({ syncStatus: 'pending' })
           break
         case 'success':
-          clearImportingGoogleContacts()
-          this.setState({ syncStatus: 'finished' })
+          clearImportingGoogleContacts(provider)
+          this.setState({
+            syncStatus: 'finished',
+            syncedAccountProvider: provider
+          })
           break
       }
     } else {
-      clearImportingGoogleContacts()
+      clearImportingGoogleContacts(provider)
     }
   }
 
@@ -482,9 +491,9 @@ class ContactsList extends React.Component {
     } = this.props
     const contacts = selectContacts(list)
 
-    const syncing = this.props.googleAccounts.some(
-      account => account.sync_status !== 'success'
-    )
+    const syncing = Object.values(this.props.oAuthAccounts)
+      .flat()
+      .some(account => account.sync_status !== 'success')
 
     const isZeroState =
       !isFetchingContacts &&
@@ -524,6 +533,7 @@ class ContactsList extends React.Component {
           )}
           {this.state.syncStatus === 'finished' && (
             <SyncSuccessfulModal
+              provider={this.state.syncedAccountProvider}
               close={() => {
                 this.setState({ syncStatus: null })
                 this.reloadContacts()
@@ -625,7 +635,7 @@ function mapStateToProps({ user, contacts, ...restOfState }) {
   )
 
   return {
-    googleAccounts: contacts.googleAccounts,
+    oAuthAccounts: contacts.oAuthAccounts,
     fetchTags,
     filters: normalizeAttributeFilters(attributeFilters),
     filterSegments,
@@ -650,7 +660,7 @@ export default withRouter(
     mapStateToProps,
     {
       getContacts,
-      fetchGoogleAccounts,
+      fetchOAuthAccounts,
       searchContacts,
       deleteContacts,
       confirmation,

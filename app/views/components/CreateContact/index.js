@@ -18,6 +18,7 @@ export class CreateContact extends React.Component {
       <Fragment>
         <ActionButton
           appearance="outline"
+          style={{ justifyContent: 'center' }}
           data-test="create-contact-button"
           onClick={this.handleOpen}
         >
