@@ -9,7 +9,7 @@ import { syncHistoryWithStore } from 'react-router-redux'
 import smoothscroll from 'smoothscroll-polyfill'
 
 import { hot } from 'react-hot-loader/root'
-import { ThemeProvider } from '@material-ui/styles'
+import { StylesProvider, ThemeProvider } from '@material-ui/styles'
 
 import ConfirmationModalProvider from 'components/ConfirmationModal/context/Provider'
 // This is our new confirmation modal. use this please.
@@ -42,24 +42,32 @@ if (typeof window !== 'undefined') {
 }
 
 const App = () => (
-  // Provide theme for material-ui built-in components like buttons
-  <ThemeProvider theme={theme}>
-    {/* Provide theme to be used for our own styled components */}
-    <StyledComponentsThemeProvider theme={theme}>
-      <Fragment>
-        <ConfirmationModalProvider>
-          <Router history={history} render={applyRouterMiddleware(useScroll())}>
-            {routes}
-          </Router>
-          <ConfirmationModal />
-        </ConfirmationModalProvider>
+  <>
+    {/* Enable overriding styles with styled(SomeCmp)`...`. See https://material-ui.com/guides/interoperability#controlling-priority */}
+    <StylesProvider injectFirst>
+      {/* Provide theme for material-ui built-in components like buttons */}
+      <ThemeProvider theme={theme}>
+        {/* Provide theme to be used for our own styled components */}
+        <StyledComponentsThemeProvider theme={theme}>
+          <Fragment>
+            <ConfirmationModalProvider>
+              <Router
+                history={history}
+                render={applyRouterMiddleware(useScroll())}
+              >
+                {routes}
+              </Router>
+              <ConfirmationModal />
+            </ConfirmationModalProvider>
 
-        <NotificationsSystem theme={notificationTheme} />
+            <NotificationsSystem theme={notificationTheme} />
 
-        <ReduxConfirmationModal />
-      </Fragment>
-    </StyledComponentsThemeProvider>
-  </ThemeProvider>
+            <ReduxConfirmationModal />
+          </Fragment>
+        </StyledComponentsThemeProvider>
+      </ThemeProvider>
+    </StylesProvider>
+  </>
 )
 
 export default hot(App)
