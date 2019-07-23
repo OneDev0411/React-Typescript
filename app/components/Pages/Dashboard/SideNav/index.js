@@ -90,7 +90,7 @@ function AppSideNav(props) {
 
           <Acl access={{ oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }}>
             <SideNavLinkItem
-              tooltip="Deals"
+              tooltip="Your Deals"
               to="/dashboard/deals"
               Icon={DealsIcon}
               ActiveIcon={DealsIconActive}
@@ -110,7 +110,7 @@ function AppSideNav(props) {
 
           <Acl.Marketing>
             <SideNavLinkItem
-              tooltip="Marketing Insights"
+              tooltip="Email Insights"
               to="/dashboard/insights"
               Icon={MarketingInsightsIcon}
               ActiveIcon={MarketingInsightsIconActive}
@@ -118,7 +118,7 @@ function AppSideNav(props) {
           </Acl.Marketing>
 
           <SideNavLinkItem
-            tooltip="Properties"
+            tooltip="All MLS® Properties"
             to="/dashboard/mls"
             Icon={PropertiesIcon}
             ActiveIcon={PropertiesIconActive}
