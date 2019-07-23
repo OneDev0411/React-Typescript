@@ -15,11 +15,7 @@ function GoToDashboard(props) {
     browserHistory.push(to)
   }, [to])
 
-  return (
-    <p>
-      Redirecting to <Link to={to}>dashboard</Link>
-    </p>
-  )
+  return null
 }
 
 export default connect(({ user }) => ({ user }))(GoToDashboard)
