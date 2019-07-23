@@ -69,7 +69,7 @@ function AppSideNav(props) {
       />
 
       <ScrollableArea style={{ flex: '1 1' }} hasThinnerScrollbar>
-        <SidenavList>
+        <SidenavList data-test="side-nav-list">
           <Acl.Crm>
             <SideNavLinkItem
               tooltip="Calendar"
@@ -78,19 +78,6 @@ function AppSideNav(props) {
               ActiveIcon={CalendarIconActive}
             />
           </Acl.Crm>
-
-          {user && (
-            <SideNavItem>
-              <Inbox />
-            </SideNavItem>
-          )}
-
-          <SideNavLinkItem
-            tooltip="Properties"
-            to="/dashboard/mls"
-            Icon={PropertiesIcon}
-            ActiveIcon={PropertiesIconActive}
-          />
 
           <Acl.Crm>
             <SideNavLinkItem
@@ -112,15 +99,6 @@ function AppSideNav(props) {
             </SideNavLinkItem>
           </Acl>
 
-          <Acl access={hasWebsitePermission}>
-            <SideNavLinkItem
-              tooltip="Store"
-              to="/dashboard/website"
-              Icon={StoreIcon}
-              ActiveIcon={StoreIconActive}
-            />
-          </Acl>
-
           <Acl.Marketing>
             <SideNavLinkItem
               tooltip="Marketing Center"
@@ -138,6 +116,28 @@ function AppSideNav(props) {
               ActiveIcon={MarketingInsightsIconActive}
             />
           </Acl.Marketing>
+
+          <SideNavLinkItem
+            tooltip="Properties"
+            to="/dashboard/mls"
+            Icon={PropertiesIcon}
+            ActiveIcon={PropertiesIconActive}
+          />
+
+          {user && (
+            <SideNavItem>
+              <Inbox />
+            </SideNavItem>
+          )}
+
+          <Acl access={hasWebsitePermission}>
+            <SideNavLinkItem
+              tooltip="Store"
+              to="/dashboard/website"
+              Icon={StoreIcon}
+              ActiveIcon={StoreIconActive}
+            />
+          </Acl>
         </SidenavList>
       </ScrollableArea>
       <SidenavList>
