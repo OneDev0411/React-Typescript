@@ -140,7 +140,6 @@ class ContactsList extends React.Component {
   }
 
   updateSyncState(provider, oAuthAccounts = this.props.oAuthAccounts) {
-    console.log('updating sync status for provider', provider)
 
     const account = getNewConnectedGoogleAccount(provider, oAuthAccounts)
 
