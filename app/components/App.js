@@ -163,7 +163,9 @@ class App extends Component {
     // google analytics
     this.initialGoogleAnalytics(data)
 
-    dispatch(checkBrowser())
+    if (process.env.NODE_ENV !== 'development') {
+      dispatch(checkBrowser())
+    }
 
     if (user) {
       dispatch(syncOpenHouseData(user.access_token))
