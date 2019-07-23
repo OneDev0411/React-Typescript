@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 
-import Popover from 'components/Popover'
+import Popper from '@material-ui/core/Popper'
+import Fade from '@material-ui/core/Fade'
+import Paper from '@material-ui/core/Paper'
 
 import MiniProfile from './MiniProfile'
 
@@ -13,14 +15,37 @@ interface MiniContactPropsType {
 }
 
 function MiniContact(props: MiniContactPropsType) {
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const isHovered = Boolean(anchorEl)
+  const id = isHovered ? 'simple-popper' : undefined
+  function handleHovered(event) {
+    setAnchorEl(anchorEl ? null : event.currentTarget)
+  }
+
   return (
-    <Popover
-      popoverClasses={['white--popover-noPadding']}
-      placement={'bottom'}
-      caption={<MiniProfile initData={props.data} type={props.type} />}
-    >
-      {props.children}
-    </Popover>
+    <>
+      <div onMouseEnter={handleHovered} onMouseLeave={() => setAnchorEl(null)}>
+        {props.children}
+        {
+          <Popper
+            id={id}
+            open={isHovered}
+            anchorEl={anchorEl}
+            transition
+            disablePortal
+            placement="top-start"
+          >
+            {({ TransitionProps }) => (
+              <Fade {...TransitionProps} timeout={350}>
+                <Paper>
+                  <MiniProfile initData={props.data} type={props.type} />
+                </Paper>
+              </Fade>
+            )}
+          </Popper>
+        }
+      </div>
+    </>
   )
 }
 
