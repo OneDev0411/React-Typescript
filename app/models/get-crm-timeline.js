@@ -1,4 +1,5 @@
-import getCalendar from 'models/calendar/get-calendar'
+import { getCalendar } from 'components/Calendar/models/get-calendar'
+
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 
 async function getCRMTimeline(query = {}, associations = []) {
@@ -14,9 +15,7 @@ async function getCRMTimeline(query = {}, associations = []) {
 
   try {
     const calendarData = await getCalendar(
-      low,
-      high,
-      [],
+      [low, high],
       {
         ...query,
         object_types: ['crm_association', 'email_campaign_recipient']

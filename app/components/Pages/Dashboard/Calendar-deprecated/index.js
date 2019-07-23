@@ -6,15 +6,15 @@ import moment from 'moment'
 import _ from 'underscore'
 import { Helmet } from 'react-helmet'
 
-import { getStartRange, getEndRange, getSelectedDate } from 'reducers/calendar'
-
-import { getCalendar, setDate, resetCalendar } from 'actions/calendar'
-
 import {
   createDateRange,
   createPastRange,
   createFutureRange
 } from 'models/calendar/helpers/create-date-range'
+
+import { getStartRange, getEndRange, getSelectedDate } from 'reducers/calendar'
+
+import { getCalendar, setDate, resetCalendar } from 'actions/calendar'
 
 import PageHeader from 'components/PageHeader'
 import DatePicker from 'components/DatePicker'
