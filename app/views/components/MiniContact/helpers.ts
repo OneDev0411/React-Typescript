@@ -2,6 +2,7 @@ import { getContact } from 'models/contacts/get-contact'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { getContactAttributesBySection } from 'models/contacts/helpers/get-contact-attributes-by-section'
 import { getAttributeFromSummary } from 'models/contacts/helpers/get-attribute-from-summary'
+
 import store from '../../../stores'
 import { selectDefsBySection } from '../../../reducers/contacts/attributeDefs'
 import { getAddresses } from '../../../components/Pages/Dashboard/Contacts/Profile/Addresses/helpers/get-addresses'
@@ -46,7 +47,9 @@ function contactFormatter(data): FormatterOutputType {
 export function get_name(data) {
   if (data.name) {
     return data.name
-  } else if (data.email) {
+  }
+
+  if (data.email) {
     return data.email.slice(0, 1)
   }
 
@@ -132,7 +135,8 @@ export async function get_contact_data(
     }
   } catch (e) {
     console.log(e)
-    //TODO: it should return the last information
+
+    // TODO: it should return the last information
     return {
       contact_status: 'failed',
       contact_id,

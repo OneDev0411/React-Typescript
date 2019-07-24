@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import TextIconButton from 'components/Button/TextIconButton'
 import Loading from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import IconCalendar from 'components/SvgIcons/Calendar2/IconCalendar'
+
 import { FormatterOutputType } from './useProfile'
 import { ActionSettingsType, ActionSettingsNamesType } from './types'
 

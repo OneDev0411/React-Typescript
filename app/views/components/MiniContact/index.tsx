@@ -3,6 +3,7 @@ import React from 'react'
 import Popper from '@material-ui/core/Popper'
 import Fade from '@material-ui/core/Fade'
 import Paper from '@material-ui/core/Paper'
+
 import { EventDrawer } from 'components/EventDrawer'
 
 import MiniProfile from './MiniProfile'
@@ -22,6 +23,7 @@ function MiniContact(props: MiniContactPropsType) {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const isHovered = Boolean(anchorEl)
   const id = isHovered ? 'mini-contact-popper' : undefined
+
   function handleHovered(event) {
     setAnchorEl(anchorEl ? null : event.currentTarget)
   }
@@ -55,7 +57,7 @@ function MiniContact(props: MiniContactPropsType) {
         }
       </div>
       {actionSettings.type === 'event' && (
-        <EventDrawer {...actionSettings.data} isOpen={true} />
+        <EventDrawer {...actionSettings.data} isOpen />
       )}
     </>
   )
