@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { formatter, get_contact_data, defaultOutput } from './helpers'
+import { formatter, get_contact_data } from './helpers'
 
 // Types
 export type ProfileDateType = {
@@ -23,6 +23,9 @@ export interface FormatterOutputType {
   contact_status: StatusType
   contact_id: string
   data: ProfileType
+  meta: {
+    association?: any
+  }
 }
 
 // Hook

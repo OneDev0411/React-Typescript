@@ -1,20 +1,20 @@
 import React from 'react'
 
 import Avatar from 'components/Avatar'
-// import TextIconButton from 'components/Button/TextIconButton'
-import IconCalendar from 'components/SvgIcons/Calendar2/IconCalendar'
-import Loading from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 import Show from './Show'
 import Activity from './Activity'
-import { MiniContactType } from './index'
+import { MiniContactType, ActionSettingsType } from './types'
 import { ProfileContainer } from './styled'
 import { get_name } from './helpers'
-import useProfile, { ProfileType } from './useProfile'
+import useProfile from './useProfile'
+import MiniContactActionButton from './MiniContactActionButton'
 
 interface MiniProfilePropsType {
   type: MiniContactType
   initData: {}
+  actionSettings: ActionSettingsType
+  setActionSettings: (items: ActionSettingsType) => void
 }
 
 function MiniProfile(props: MiniProfilePropsType) {
@@ -32,14 +32,12 @@ function MiniProfile(props: MiniProfilePropsType) {
         />
 
         <div className="actions">
-          {output.contact_status === 'loading' && <Loading />}
-          {/* <TextIconButton
-            appearance="outline"
-            iconLeft={IconCalendar}
-            onClick={() => {}}
-            size="small"
-            text="Add Event"
-          /> */}
+          <MiniContactActionButton
+            isLoading={output.contact_status === 'loading'}
+            data={output}
+            actionSettings={props.actionSettings}
+            setActionSettings={props.setActionSettings}
+          />
         </div>
       </div>
       <div className="details">

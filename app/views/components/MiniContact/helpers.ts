@@ -5,6 +5,7 @@ import { getAttributeFromSummary } from 'models/contacts/helpers/get-attribute-f
 import store from '../../../stores'
 import { selectDefsBySection } from '../../../reducers/contacts/attributeDefs'
 import { getAddresses } from '../../../components/Pages/Dashboard/Contacts/Profile/Addresses/helpers/get-addresses'
+import { normalizeContact as normalizeContactForAssociation } from '../../utils/association-normalizers'
 
 import { FormatterOutputType, ProfileType } from './useProfile'
 
@@ -18,7 +19,8 @@ function insightFormatter(data): FormatterOutputType {
       name: data.display_name,
       email: data.email_address,
       profile_image_url: data.profile_image_url
-    }
+    },
+    meta: {}
   }
 }
 
@@ -34,7 +36,8 @@ function contactFormatter(data): FormatterOutputType {
       profile_image_url:
         (data.summary && data.summary.profile_image_url) ||
         (data.avatar && data.avatar.image)
-    }
+    },
+    meta: {}
   }
 }
 
@@ -53,7 +56,8 @@ export function formatter(type, initData): FormatterOutputType {
   let formattedData: FormatterOutputType = {
     contact_status: 'not_started',
     contact_id: '',
-    data: {}
+    data: {},
+    meta: {}
   }
 
   // Extracting data from context (where the MiniContact is using)
@@ -91,7 +95,13 @@ export async function get_contact_data(
     const contact = normalizeContact(response.data)
     const dates = getContactAttributesBySection(contact, 'Dates')
     const addresses = getContactAttributesBySection(contact, 'Addresses')
-    const contactInfo = getContactAttributesBySection(contact, 'Contact Info')
+    const contact_association = normalizeContactForAssociation(response.data)
+    const association = {
+      association_type: 'contact',
+      contact: contact_association,
+      id: contact_association.id,
+      disableDefaultAssociationChecking: true
+    }
 
     const addressAttributeDefs = selectDefsBySection(
       reduxState.contacts.attributeDefs,
@@ -115,7 +125,10 @@ export async function get_contact_data(
     return {
       contact_status: 'finished',
       contact_id,
-      data: output_data
+      data: output_data,
+      meta: {
+        association
+      }
     }
   } catch (e) {
     console.log(e)
@@ -123,7 +136,8 @@ export async function get_contact_data(
     return {
       contact_status: 'failed',
       contact_id,
-      data: {}
+      data: {},
+      meta: {}
     }
   }
 }
