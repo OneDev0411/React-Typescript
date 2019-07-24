@@ -18,6 +18,7 @@ import { Owner } from './Owner'
 import { Emails } from './Emails'
 import { Phones } from './Phones'
 import { preSaveFormat, submitValidate, getDefaultOptions } from './helpers'
+import { generateInitialValues } from './helpers/generate-initial-values'
 
 const propTypes = {
   section: PropTypes.string,
@@ -27,16 +28,6 @@ const propTypes = {
 const defaultProps = {
   section: '',
   submitCallback() {}
-}
-
-const INITIAL_VALUES = {
-  first_name: '',
-  last_name: '',
-  middle_name: '',
-  source: '',
-  email: [{ label: { title: 'Personal', value: 'Personal' } }],
-  phone_number: [{ label: { title: 'Mobile', value: 'Mobile' } }],
-  title: { title: '-Select-', value: '-Select-' }
 }
 
 class NewContactDrawer extends React.Component {
@@ -99,11 +90,13 @@ class NewContactDrawer extends React.Component {
   }
 
   render() {
+    const initValues = generateInitialValues(this.props.initValues)
+
     return (
       <FinalFormDrawer
         formId="create-contact-form"
         initialValues={{
-          ...INITIAL_VALUES,
+          ...initValues,
           owner: this.props.user
         }}
         isOpen={this.props.isOpen}

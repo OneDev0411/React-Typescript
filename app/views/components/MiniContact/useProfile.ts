@@ -35,23 +35,21 @@ function useProfile(type, initData): FormatterOutputType {
   let data = formatter(type, initData)
   const [output, setOutput] = useState(data)
 
-  useEffect(
-    function useProfileEffect() {
-      if (data.contact_id) {
-        // Loading mode.
-        setOutput({
-          ...data,
-          contact_status: 'loading'
-        })
+  useEffect(function useProfileEffect() {
+    if (data.contact_id) {
+      // Loading mode.
+      setOutput({
+        ...data,
+        contact_status: 'loading'
+      })
 
-        // Getting contact from server and updating the state.
-        get_contact_data(data.contact_id).then(res => setOutput(res))
-      }
+      // Getting contact from server and updating the state.
+      get_contact_data(data.contact_id).then(res => setOutput(res))
+    }
 
-      return function cleanUpProfile() {}
-    },
-    [data]
-  )
+    return function cleanUpProfile() {}
+    // eslint-disable-next-line
+  }, [])
 
   return output
 }

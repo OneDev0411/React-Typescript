@@ -56,6 +56,7 @@ export function MultiField({
                 component={TextField}
                 placeholder={title}
                 validate={validate}
+                initialValue={fields.initial[index].initialValue}
               />
               <div
                 style={{

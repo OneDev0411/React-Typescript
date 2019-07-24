@@ -5,9 +5,14 @@ import Fade from '@material-ui/core/Fade'
 import Paper from '@material-ui/core/Paper'
 
 import { EventDrawer } from 'components/EventDrawer'
+import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
 
 import MiniProfile from './MiniProfile'
-import { ActionSettingsType, MiniContactType } from './types'
+import {
+  ActionSettingsType,
+  MiniContactType,
+  ActionSettingsNamesType
+} from './types'
 
 interface MiniContactPropsType {
   type: MiniContactType
@@ -32,7 +37,7 @@ function MiniContact(props: MiniContactPropsType) {
     <>
       <div onMouseEnter={handleHovered} onMouseLeave={() => setAnchorEl(null)}>
         {props.children}
-        {
+        {isHovered && (
           <Popper
             id={id}
             open={isHovered}
@@ -54,10 +59,13 @@ function MiniContact(props: MiniContactPropsType) {
               </Fade>
             )}
           </Popper>
-        }
+        )}
       </div>
-      {actionSettings.type === 'event' && (
+      {actionSettings.type === ActionSettingsNamesType.EVENT && (
         <EventDrawer {...actionSettings.data} isOpen />
+      )}
+      {actionSettings.type === ActionSettingsNamesType.CONTACT && (
+        <NewContactDrawer {...actionSettings.data} isOpen />
       )}
     </>
   )

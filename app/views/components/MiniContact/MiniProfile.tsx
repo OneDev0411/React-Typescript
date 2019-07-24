@@ -20,7 +20,6 @@ interface MiniProfilePropsType {
 function MiniProfile(props: MiniProfilePropsType) {
   const output = useProfile(props.type, props.initData)
   const data = output.data
-  // const isContact = !!output.contact_id
 
   return (
     <ProfileContainer>

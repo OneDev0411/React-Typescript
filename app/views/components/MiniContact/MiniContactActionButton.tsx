@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import TextIconButton from 'components/Button/TextIconButton'
+import ActionButton from 'components/Button/ActionButton'
 import Loading from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import IconCalendar from 'components/SvgIcons/Calendar2/IconCalendar'
 
@@ -21,18 +22,24 @@ function MiniContactActionButton(props: MiniContactActionButtonType) {
     return <Loading />
   }
 
-  const passedProps = {
-    type: ActionSettingsNamesType.EVENT,
-    data: {
-      user: props.user,
-      defaultAssociation: props.data.meta.association,
-      onClose: () => props.setActionSettings({}),
-      submitCallback: () => props.setActionSettings({})
-    }
+  const isContact = !!props.data.contact_id
+  const sharedProps = {
+    user: props.user,
+    onClose: () => props.setActionSettings({}),
+    submitCallback: () => props.setActionSettings({})
   }
 
-  return (
-    <>
+  // Contact
+  if (isContact) {
+    const passedProps = {
+      type: ActionSettingsNamesType.EVENT,
+      data: {
+        ...sharedProps,
+        defaultAssociation: props.data.meta.association
+      }
+    }
+
+    return (
       <TextIconButton
         appearance="outline"
         iconLeft={IconCalendar}
@@ -40,7 +47,27 @@ function MiniContactActionButton(props: MiniContactActionButtonType) {
         size="small"
         text="Add Event"
       />
-    </>
+    )
+  }
+
+  // User
+  const passedProps = {
+    type: ActionSettingsNamesType.CONTACT,
+    data: {
+      ...sharedProps,
+      initValues: {
+        // We are supporting email right now,
+        // other types of data should be added whenever needs like in Chat
+        //  which have name and last_name
+        email: props.data.data.email
+      }
+    }
+  }
+
+  return (
+    <ActionButton onClick={() => props.setActionSettings(passedProps)}>
+      Add to Contacts
+    </ActionButton>
   )
 }
 
