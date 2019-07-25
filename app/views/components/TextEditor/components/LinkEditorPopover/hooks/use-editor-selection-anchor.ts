@@ -1,17 +1,17 @@
-import { useState } from 'react'
-import Draft, { EditorState } from 'draft-js'
+import { RefObject, useState } from 'react'
+import Draft, { Editor, EditorState } from 'draft-js'
 
 import { useOnOpen } from './use-on-open'
 import { ReferenceObject } from '../../../types'
 
 export function useEditorSelectionAnchor(
-  open,
-  editorState,
-  setEditorState,
-  editorElementRef
+  open: boolean,
+  editorState: EditorState,
+  setEditorState: (editorState: EditorState) => void,
+  editorRef: RefObject<Editor>
 ): ReferenceObject | null {
   const [anchorEl, setAnchorEl] = useState<ReferenceObject | null>(
-    getEditorStartAnchor(editorElementRef.current)
+    getEditorStartAnchor(editorRef.current && editorRef.current.editor)
   )
 
   useOnOpen(open, () => {
@@ -24,7 +24,7 @@ export function useEditorSelectionAnchor(
       setEditorState(newEditorState)
 
       const visibleSelectionRect = Draft.getVisibleSelectionRect(window)
-      const selectionContainerElement = editorElementRef.current!.querySelector(
+      const selectionContainerElement = editorRef.current!.editor.querySelector(
         `[data-offset-key="${selection.getAnchorKey()}-0-0"]`
       )
 
@@ -56,7 +56,7 @@ export function useEditorSelectionAnchor(
           }
         })
       } else {
-        setAnchorEl(getEditorStartAnchor(editorElementRef.current))
+        setAnchorEl(getEditorStartAnchor(editorRef.current!.editor))
       }
     })
   })

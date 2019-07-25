@@ -6,8 +6,13 @@ import React, {
   useRef,
   useState
 } from 'react'
-import { ContentBlock, convertToRaw, EditorState } from 'draft-js'
-import Editor, { composeDecorators } from 'draft-js-plugins-editor'
+import {
+  ContentBlock,
+  convertToRaw,
+  EditorState,
+  Editor as DraftEditor
+} from 'draft-js'
+import PluginsEditor, { composeDecorators } from 'draft-js-plugins-editor'
 import createImagePlugin from 'draft-js-image-plugin'
 import 'draft-js-image-plugin/lib/plugin.css'
 
@@ -49,6 +54,7 @@ import { withUploadingIndicator } from './block-decorators/with-uploading-indica
 import { renderAtomicBlockStyles } from './utils/render-atomic-block'
 import { InlineEntityPopover } from './components/InlineEntityPopover'
 import { LinkPreview } from './components/LinkPreview/LinkPreview'
+import { linkKeyBinding } from './utils/link-key-binding'
 
 interface Props {
   defaultValue?: string
@@ -86,11 +92,6 @@ interface Props {
    * Enable/disable image insertion.
    */
   enableImage?: boolean
-}
-
-interface EditorComponent {
-  getEditorState: () => EditorState
-  focus: () => void
 }
 
 /**
@@ -148,6 +149,11 @@ export const TextEditor = forwardRef(
       const richButtonsPlugin = createRichButtonsPlugin()
       const anchorPlugin = createAnchorPlugin()
 
+      anchorPlugin.handleKeyCommand = command => {
+        command === 'link' && setLinkEditorOpen(true)
+      }
+      anchorPlugin.keyBindingFn = linkKeyBinding
+
       return {
         AlignmentTool,
         richButtonsPlugin,
@@ -168,8 +174,13 @@ export const TextEditor = forwardRef(
       }
     }, [])
 
-    const editorRef = useRef<EditorComponent>(null)
     const editorElementRef = useRef<HTMLDivElement>(null)
+    const editorRef = useRef<PluginsEditor>(null)
+    const originalEditorRef = useRef<DraftEditor | null>(null)
+
+    if (editorRef.current) {
+      originalEditorRef.current = editorRef.current.editor
+    }
 
     const [editorState, setEditorState] = useState(
       EditorState.createWithContent(stateFromHTML(defaultValue))
@@ -378,7 +389,7 @@ export const TextEditor = forwardRef(
           }}
           data-test="text-editor-wrapper"
         >
-          <Editor
+          <PluginsEditor
             spellCheck
             readOnly={disabled}
             editorState={editorState}
@@ -390,11 +401,16 @@ export const TextEditor = forwardRef(
           />
           <alignmentPlugin.AlignmentTool />
           <LinkEditorPopover
+            editorRef={originalEditorRef}
             editorState={editorState}
-            editorElementRef={editorElementRef}
             setEditorState={handleChange}
             open={linkEditorOpen}
-            onClose={() => setLinkEditorOpen(false)}
+            onClose={() => {
+              setLinkEditorOpen(false)
+              setTimeout(() => {
+                editorRef.current!.focus()
+              })
+            }}
           />
           {!linkEditorOpen && (
             <InlineEntityPopover editorState={editorState} entityFilter="LINK">

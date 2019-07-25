@@ -1,4 +1,4 @@
-import { EditorState } from 'draft-js'
+import { Editor, EditorState } from 'draft-js'
 import { ClickAwayListener, Popper, useTheme } from '@material-ui/core'
 import * as React from 'react'
 import { RefObject, useState } from 'react'
@@ -14,7 +14,7 @@ import { getExpandedSelectionByEntityType } from '../../utils/get-expanded-selec
 interface Props {
   open: boolean
   onClose: () => void
-  editorElementRef: RefObject<Element>
+  editorRef: RefObject<Editor>
   editorState: EditorState
   setEditorState: (editorState: EditorState) => void
 }
@@ -44,7 +44,7 @@ export function LinkEditorPopover({
   onClose,
   editorState,
   setEditorState,
-  editorElementRef
+  editorRef
 }: Props) {
   const [text, setText] = useState('')
   const [url, setUrl] = useState('')
@@ -54,7 +54,7 @@ export function LinkEditorPopover({
     open,
     editorState,
     setEditorState,
-    editorElementRef
+    editorRef
   )
 
   useOnOpen(open, () => {
