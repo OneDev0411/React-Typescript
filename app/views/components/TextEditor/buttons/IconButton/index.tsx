@@ -1,8 +1,8 @@
-import React, { ReactNode } from 'react'
+import React, { HTMLProps, ReactNode } from 'react'
 
 import { IconButton } from './styled'
 
-interface Props {
+interface Props extends HTMLProps<'button'> {
   isBlockButton?: boolean
   toggleBlockType?: (event: React.MouseEvent) => void
   toggleInlineStyle?: (event: React.MouseEvent) => void

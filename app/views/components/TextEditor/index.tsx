@@ -6,8 +6,13 @@ import React, {
   useRef,
   useState
 } from 'react'
-import { ContentBlock, convertToRaw, EditorState } from 'draft-js'
-import Editor, { composeDecorators } from 'draft-js-plugins-editor'
+import {
+  ContentBlock,
+  convertToRaw,
+  EditorState,
+  Editor as DraftEditor
+} from 'draft-js'
+import PluginsEditor, { composeDecorators } from 'draft-js-plugins-editor'
 import createImagePlugin from 'draft-js-image-plugin'
 import 'draft-js-image-plugin/lib/plugin.css'
 
@@ -20,6 +25,8 @@ import createFocusPlugin from 'draft-js-focus-plugin'
 
 import createResizeablePlugin from 'draft-js-resizeable-plugin'
 
+import createAnchorPlugin from 'draft-js-anchor-plugin'
+
 import createBlockDndPlugin from 'draft-js-drag-n-drop-plugin'
 import { stateToHTML } from 'draft-js-export-html'
 import { stateFromHTML } from 'draft-js-import-html'
@@ -31,15 +38,24 @@ import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 
 import { isImageFile } from 'utils/file-utils/is-image-file'
 
+import IconLink from 'components/SvgIcons/Link/IconLink'
+
+import { LinkEditorPopover } from './components/LinkEditorPopover'
+import IconButton from './buttons/IconButton'
+
 import { EditorWrapper, Toolbar } from './styled'
 import { FieldError } from '../final-form-fields/FieldError'
 import { AddImageButton } from './buttons/AddImageButton'
 import { RichTextButtons } from './buttons/RichTextButtons'
-import { createFilePlugin } from './plugins/handle-files'
+import { createFilePlugin } from './plugins/draft-js-handle-files-plugin'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
 import { replaceImage } from './utils/replace-image'
 import { withUploadingIndicator } from './block-decorators/with-uploading-indicator'
 import { renderAtomicBlockStyles } from './utils/render-atomic-block'
+import { InlineEntityPopover } from './components/InlineEntityPopover'
+import { LinkPreview } from './components/LinkPreview/LinkPreview'
+import { linkKeyBinding } from './utils/link-key-binding'
+import createPasteLinkPlugin from './plugins/draft-js-paste-link-plugin'
 
 interface Props {
   defaultValue?: string
@@ -77,11 +93,6 @@ interface Props {
    * Enable/disable image insertion.
    */
   enableImage?: boolean
-}
-
-interface EditorComponent {
-  getEditorState: () => EditorState
-  focus: () => void
 }
 
 /**
@@ -126,6 +137,7 @@ export const TextEditor = forwardRef(
       alignmentPlugin,
       blockDndPlugin,
       resizeablePlugin,
+      linkPlugins,
       richButtonsPlugin
     } = useMemo(() => {
       const focusPlugin = createFocusPlugin({
@@ -136,6 +148,15 @@ export const TextEditor = forwardRef(
       const alignmentPlugin = createAlignmentPlugin()
       const { AlignmentTool } = alignmentPlugin
       const richButtonsPlugin = createRichButtonsPlugin()
+      const anchorPlugin = createAnchorPlugin()
+
+      // Can be extracted into a separate plugin file
+      const linkShortcutsPlugin = {
+        handleKeyCommand: command => {
+          command === 'link' && setLinkEditorOpen(true)
+        },
+        keyBindingFn: linkKeyBinding
+      }
 
       return {
         AlignmentTool,
@@ -144,6 +165,11 @@ export const TextEditor = forwardRef(
         resizeablePlugin,
         blockDndPlugin,
         alignmentPlugin,
+        linkPlugins: [
+          anchorPlugin,
+          createPasteLinkPlugin(),
+          linkShortcutsPlugin
+        ],
         imagePlugin: createImagePlugin({
           decorator: composeDecorators(
             withUploadingIndicator,
@@ -156,11 +182,19 @@ export const TextEditor = forwardRef(
       }
     }, [])
 
-    const editorRef = useRef<EditorComponent>(null)
+    const editorElementRef = useRef<HTMLDivElement>(null)
+    const editorRef = useRef<PluginsEditor>(null)
+    const originalEditorRef = useRef<DraftEditor | null>(null)
+
+    if (editorRef.current) {
+      originalEditorRef.current = editorRef.current.editor
+    }
 
     const [editorState, setEditorState] = useState(
       EditorState.createWithContent(stateFromHTML(defaultValue))
     )
+
+    const [linkEditorOpen, setLinkEditorOpen] = useState(false)
 
     /**
      * Images are not rendered appropriately without this option.
@@ -297,7 +331,7 @@ export const TextEditor = forwardRef(
         if (editorRef.current) {
           const latestState = editorRef.current.getEditorState()
 
-          setEditorState(
+          handleChange(
             replaceImage(imagePlugin, latestState, dataUrl, uploadedImageUrl)
           )
         }
@@ -309,7 +343,7 @@ export const TextEditor = forwardRef(
     }
 
     const defaultPlugins = [
-      ...(enableRichText ? [richButtonsPlugin] : []),
+      ...(enableRichText ? [richButtonsPlugin, ...linkPlugins] : []),
       ...(enableImage
         ? [
             blockDndPlugin,
@@ -335,13 +369,25 @@ export const TextEditor = forwardRef(
       <Fragment>
         <Toolbar>
           {enableRichText && (
-            <RichTextButtons richButtonsPlugin={richButtonsPlugin} />
+            <>
+              <RichTextButtons richButtonsPlugin={richButtonsPlugin} />
+              <IconButton
+                onClick={event => {
+                  setLinkEditorOpen(true)
+                  event.preventDefault()
+                  event.stopPropagation()
+                }}
+              >
+                <IconLink />
+              </IconButton>
+            </>
           )}
 
           {enableImage && <AddImageButton onImageSelected={addImage} />}
         </Toolbar>
 
         <EditorWrapper
+          ref={editorElementRef}
           className={cn({
             'hide-placeholder': shouldHidePlaceholder(editorState)
           })}
@@ -351,7 +397,7 @@ export const TextEditor = forwardRef(
           }}
           data-test="text-editor-wrapper"
         >
-          <Editor
+          <PluginsEditor
             spellCheck
             readOnly={disabled}
             editorState={editorState}
@@ -362,6 +408,31 @@ export const TextEditor = forwardRef(
             {...settings}
           />
           <alignmentPlugin.AlignmentTool />
+          <LinkEditorPopover
+            editorRef={originalEditorRef}
+            editorState={editorState}
+            setEditorState={handleChange}
+            open={linkEditorOpen}
+            onClose={() => {
+              setLinkEditorOpen(false)
+              setTimeout(() => {
+                editorRef.current!.focus()
+              })
+            }}
+          />
+          {!linkEditorOpen && (
+            <InlineEntityPopover editorState={editorState} entityFilter="LINK">
+              {({ entity, close }) => (
+                <LinkPreview
+                  editorState={editorState}
+                  setEditorState={handleChange}
+                  onClose={close}
+                  url={entity.getData().url}
+                  onEdit={() => setLinkEditorOpen(true)}
+                />
+              )}
+            </InlineEntityPopover>
+          )}
         </EditorWrapper>
 
         {input && <FieldError name={input.name} />}

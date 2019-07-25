@@ -35,10 +35,10 @@ export function createFilePlugin({
     handleDroppedFiles: (
       selection: Draft.SelectionState,
       files: Array<File>
-    ): 'handled' | 'not-handled' => {
+    ): DraftHandleValue => {
       return handleFile(files[0])
     },
-    handlePastedFiles: (files: Array<File>): 'handled' | 'not-handled' => {
+    handlePastedFiles: (files: Array<File>): DraftHandleValue => {
       return handleFile(files[0])
     }
   }
