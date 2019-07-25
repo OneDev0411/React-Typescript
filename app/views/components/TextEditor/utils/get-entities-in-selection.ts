@@ -39,13 +39,15 @@ export function getEntitiesInSelection(
 
   getSelectedBlock(editorState).findEntityRanges(
     character => {
-      if (character.getEntity() !== null) {
-        const entity = content.getEntity(character.getEntity())
+      const entityKey = character.getEntity()
+
+      if (entityKey !== null) {
+        const entity = content.getEntity(entityKey)
 
         if (!entityType || (entityType && entity.getType() === entityType)) {
           selectedEntity = {
-            entityKey: character.getEntity(),
-            entity: content.getEntity(character.getEntity())
+            entityKey,
+            entity: content.getEntity(entityKey)
           }
 
           return true

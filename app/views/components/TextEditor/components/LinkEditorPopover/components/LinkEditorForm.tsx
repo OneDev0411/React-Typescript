@@ -32,7 +32,6 @@ export function LinkEditorForm({
         - Fairly simple validation logic which is not subject to change in future
         - Need for control over the values from outside the form which will be hacky with final form
         - Don't want to show validation status and message an fields.
-        https://google.com
       */
 
   const handleSubmit = event => {

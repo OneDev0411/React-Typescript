@@ -67,28 +67,28 @@ export function useEditorSelectionAnchor(
 function getEditorStartAnchor(
   editorElement: HTMLElement | null
 ): ReferenceObject | null {
-  if (editorElement) {
-    return {
-      clientHeight: 20,
-      clientWidth: 10,
-      getBoundingClientRect(): ClientRect {
-        const boundingClientRect = editorElement.getBoundingClientRect()
-        const left = boundingClientRect.left
-        const top = boundingClientRect.top
-        const height = 20
-        const width = 10
+  if (!editorElement) {
+    return null
+  }
 
-        return {
-          width,
-          height,
-          left,
-          top,
-          right: left + width,
-          bottom: top + height
-        }
+  return {
+    clientHeight: 20,
+    clientWidth: 10,
+    getBoundingClientRect(): ClientRect {
+      const boundingClientRect = editorElement.getBoundingClientRect()
+      const left = boundingClientRect.left
+      const top = boundingClientRect.top
+      const height = 20
+      const width = 10
+
+      return {
+        width,
+        height,
+        left,
+        top,
+        right: left + width,
+        bottom: top + height
       }
     }
   }
-
-  return null
 }

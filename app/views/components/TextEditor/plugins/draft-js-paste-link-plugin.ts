@@ -1,4 +1,6 @@
 import isURL from 'validator/lib/isURL'
+import isEmail from 'validator/lib/isEmail'
+
 import { DraftHandleValue, EditorState } from 'draft-js'
 import { PluginFunctions } from 'draft-js-plugins-editor'
 
@@ -13,9 +15,9 @@ export default function createPasteLinkPlugin() {
       editorState: EditorState,
       { setEditorState }: PluginFunctions
     ): DraftHandleValue => {
-      console.log(text, styles, editorState)
+      text = text.trim()
 
-      if (isURL(text)) {
+      if (isURL(text) || isEmail(text)) {
         const url = normalizeUrl(text)
 
         setEditorState(

@@ -10,19 +10,19 @@ export function useInViewportAutofocus(
 ) {
   useEffect(() => {
     let i = 0
+    let timeout
     const check = () => {
       const inViewPort = ref.current && !isElementOutViewport(ref.current)
 
       if (inViewPort) {
         ref.current!.focus()
       } else {
-        console.log('not in viewport!!!', ref.current)
         timeout = setTimeout(check, 1.1 ** i * 100)
         i++
       }
     }
 
-    let timeout = setTimeout(check, initialTimeout)
+    timeout = setTimeout(check, initialTimeout)
 
     return () => {
       clearTimeout(timeout)
@@ -31,7 +31,7 @@ export function useInViewportAutofocus(
 }
 
 function isElementOutViewport(el: Element) {
-  let rect = el.getBoundingClientRect()
+  const rect = el.getBoundingClientRect()
 
   return (
     rect.bottom < 0 ||

@@ -52,28 +52,30 @@ export function InlineEntityPopover({
     }
   }, [previousEditorState, editorState, closed])
 
-  if (entityKey !== undefined) {
-    const entity = editorState.getCurrentContent().getEntity(entityKey)
+  if (entityKey === undefined) {
+    return null
+  }
 
-    const anchorEl = getSelectionAnchorElement()
+  const entity = editorState.getCurrentContent().getEntity(entityKey)
 
-    const conditionFn =
-      typeof entityFilter === 'string'
-        ? (entity: Entity) => entity.getType() === entityFilter
-        : entityFilter
+  const anchorEl = getSelectionAnchorElement()
 
-    if (conditionFn(entity) && anchorEl) {
-      return (
-        <Popper
-          open={!closed}
-          anchorEl={anchorEl}
-          placement="bottom-start"
-          style={{ zIndex: theme.zIndex.modal }}
-        >
-          {children({ entity, close })}
-        </Popper>
-      )
-    }
+  const conditionFn =
+    typeof entityFilter === 'string'
+      ? (entity: Entity) => entity.getType() === entityFilter
+      : entityFilter
+
+  if (conditionFn(entity) && anchorEl) {
+    return (
+      <Popper
+        open={!closed}
+        anchorEl={anchorEl}
+        placement="bottom-start"
+        style={{ zIndex: theme.zIndex.modal }}
+      >
+        {children({ entity, close })}
+      </Popper>
+    )
   }
 
   return null

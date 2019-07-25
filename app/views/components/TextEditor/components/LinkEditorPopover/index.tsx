@@ -91,7 +91,6 @@ export function LinkEditorPopover({
         onClick={stopPropagation} /* Popover closes without this */
         anchorEl={anchorEl}
         transition
-        // disablePortal
         placement="bottom-start"
       >
         {/*
