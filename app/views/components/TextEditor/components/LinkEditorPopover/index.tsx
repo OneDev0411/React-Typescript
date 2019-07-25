@@ -79,7 +79,7 @@ export function LinkEditorPopover({
   })
 
   const applyLink = (text, url) => {
-    setEditorState(createLink(editorState, text, url))
+    setEditorState(createLink(editorState, url, text))
     onClose()
   }
 

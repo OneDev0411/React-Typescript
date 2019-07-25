@@ -1,6 +1,8 @@
 import { EditorState, Modifier, RichUtils, SelectionState } from 'draft-js'
 import PluginsUtils from 'draft-js-plugins-utils'
 
+import { getSelectionText } from 'draftjs-utils'
+
 import { collapseSelection } from './collapse-selection'
 
 /**
@@ -12,7 +14,12 @@ import { collapseSelection } from './collapse-selection'
  * @param underline: whether to apply underline inline style to the link or not
  * @returns new editor state
  */
-export function createLink(editorState, text, url, underline = true) {
+export function createLink(
+  editorState,
+  url,
+  text = getSelectionText(editorState),
+  underline = true
+) {
   // If something is selected, replace it with the provided `text`
   const newContentState = Modifier.replaceText(
     editorState.getCurrentContent(),

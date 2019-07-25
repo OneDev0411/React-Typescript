@@ -47,7 +47,7 @@ import { EditorWrapper, Toolbar } from './styled'
 import { FieldError } from '../final-form-fields/FieldError'
 import { AddImageButton } from './buttons/AddImageButton'
 import { RichTextButtons } from './buttons/RichTextButtons'
-import { createFilePlugin } from './plugins/handle-files'
+import { createFilePlugin } from './plugins/draft-js-handle-files-plugin'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
 import { replaceImage } from './utils/replace-image'
 import { withUploadingIndicator } from './block-decorators/with-uploading-indicator'
@@ -55,6 +55,7 @@ import { renderAtomicBlockStyles } from './utils/render-atomic-block'
 import { InlineEntityPopover } from './components/InlineEntityPopover'
 import { LinkPreview } from './components/LinkPreview/LinkPreview'
 import { linkKeyBinding } from './utils/link-key-binding'
+import createPasteLinkPlugin from './plugins/draft-js-paste-link-plugin'
 
 interface Props {
   defaultValue?: string
@@ -136,7 +137,7 @@ export const TextEditor = forwardRef(
       alignmentPlugin,
       blockDndPlugin,
       resizeablePlugin,
-      anchorPlugin,
+      linkPlugins,
       richButtonsPlugin
     } = useMemo(() => {
       const focusPlugin = createFocusPlugin({
@@ -149,10 +150,13 @@ export const TextEditor = forwardRef(
       const richButtonsPlugin = createRichButtonsPlugin()
       const anchorPlugin = createAnchorPlugin()
 
-      anchorPlugin.handleKeyCommand = command => {
-        command === 'link' && setLinkEditorOpen(true)
+      // Can be extracted into a separate plugin file
+      const linkShortcutsPlugin = {
+        handleKeyCommand: command => {
+          command === 'link' && setLinkEditorOpen(true)
+        },
+        keyBindingFn: linkKeyBinding
       }
-      anchorPlugin.keyBindingFn = linkKeyBinding
 
       return {
         AlignmentTool,
@@ -161,7 +165,11 @@ export const TextEditor = forwardRef(
         resizeablePlugin,
         blockDndPlugin,
         alignmentPlugin,
-        anchorPlugin,
+        linkPlugins: [
+          anchorPlugin,
+          createPasteLinkPlugin(),
+          linkShortcutsPlugin
+        ],
         imagePlugin: createImagePlugin({
           decorator: composeDecorators(
             withUploadingIndicator,
@@ -335,7 +343,7 @@ export const TextEditor = forwardRef(
     }
 
     const defaultPlugins = [
-      ...(enableRichText ? [richButtonsPlugin, anchorPlugin] : []),
+      ...(enableRichText ? [richButtonsPlugin, ...linkPlugins] : []),
       ...(enableImage
         ? [
             blockDndPlugin,
