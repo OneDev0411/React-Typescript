@@ -75,3 +75,5 @@ declare type MapFieldsToUuid<T, K extends keyof T> = PartiallyMappedFields<
   K,
   UUID
 >
+
+declare type DateRange = [number, number]

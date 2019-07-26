@@ -59,7 +59,6 @@ export function ContextField(props) {
           <Body>
             {context.current.data_type === 'Date' ? (
               <DatePicker
-                showTodayButton={false}
                 onChange={date => setFieldValue(formatDate(date))}
                 selectedDate={getDate()}
               />
