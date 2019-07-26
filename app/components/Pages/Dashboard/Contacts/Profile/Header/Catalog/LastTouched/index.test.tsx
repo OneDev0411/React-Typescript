@@ -4,9 +4,19 @@ import toJson from 'enzyme-to-json'
 
 import fullContact from 'fixtures/contacts/full-contact'
 
+import mockDate, { RealDate } from 'utils/test-utils/mock-date'
+
 import { LastTouched } from '.'
 
 describe('Contact profile last touched component', () => {
+  beforeEach(() => {
+    mockDate('2019-05-26T12:04:04Z')
+  })
+
+  afterEach(() => {
+    global.Date = RealDate
+  })
+
   it('renders', () => {
     const wrapper = render(<LastTouched contact={fullContact} />)
 
