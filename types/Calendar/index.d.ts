@@ -1,3 +1,5 @@
+declare type NumberRange = [number, number]
+
 declare interface CalendarEvent {
   id: UUID
   timestamp: number

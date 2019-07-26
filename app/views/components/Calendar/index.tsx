@@ -13,12 +13,12 @@ import { TodayButton } from './components/Table/TodayButton'
 import { Container, Sidebar, Header, Main, SideHeader, Title } from './styled'
 
 interface Ranges {
-  query: DateRange
-  calendar: DateRange
+  query: NumberRange
+  calendar: NumberRange
 }
 
 interface IProps {
-  range: DateRange
+  range: NumberRange
   children: React.ReactNode
 }
 
@@ -44,13 +44,13 @@ const Calendar: React.FC = (props: IProps) => {
     }
 
     // new range will be from end range of current calendar till next range
-    const query: DateRange = getDateRange(
+    const query: NumberRange = getDateRange(
       ranges.calendar[1] * 1000,
       Format.Next
     )
 
     // new range will be from start of calendar until end of new query range
-    const calendar: DateRange = [ranges.calendar[0], query[1]]
+    const calendar: NumberRange = [ranges.calendar[0], query[1]]
 
     // the loading indicator will be shown at the bottom of list
     setLoadingPosition(LoadingPosition.Bottom)
@@ -70,13 +70,13 @@ const Calendar: React.FC = (props: IProps) => {
     }
 
     // new range will be from start range of current calendar
-    const query: DateRange = getDateRange(
+    const query: NumberRange = getDateRange(
       ranges.calendar[0] * 1000,
       Format.Previous
     )
 
     // new range will be from start of new range until end of new calendar range
-    const calendar: DateRange = [query[0], ranges.calendar[1]]
+    const calendar: NumberRange = [query[0], ranges.calendar[1]]
 
     // the loading indicator will be shown at the top of list
     setLoadingPosition(LoadingPosition.Top)
