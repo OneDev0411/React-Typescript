@@ -4,7 +4,7 @@
  */
 export function getDayRange(
   timestamp: number = new Date().getTime()
-): DateRange {
+): NumberRange {
   const day = new Date(timestamp)
 
   const start =

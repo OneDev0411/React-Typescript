@@ -14,7 +14,7 @@ export enum Format {
 export function getDateRange(
   timestamp: number = new Date().getTime(),
   format: Format = Format.Middle
-): DateRange {
+): NumberRange {
   const day = new Date(timestamp)
 
   const start =

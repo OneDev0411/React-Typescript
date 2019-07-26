@@ -3,7 +3,7 @@
  * @param range
  * @param events
  */
-export function normalize(range: DateRange, events: CalendarEvent[]) {
+export function normalize(range: NumberRange, events: CalendarEvent[]) {
   const list = getEvents(range, events)
 
   return Object.entries(list).reduce((acc, [day, events]) => {
@@ -23,7 +23,7 @@ export function normalize(range: DateRange, events: CalendarEvent[]) {
  * @param range
  * @param events
  */
-function getEvents(range: DateRange, events: CalendarEvent[]) {
+function getEvents(range: NumberRange, events: CalendarEvent[]) {
   return events.reduce((acc: string[], event: CalendarEvent) => {
     const index = getEventIndex(event, range)
 
@@ -48,7 +48,7 @@ function isToday(day: string): boolean {
  * returns days ranges based on start and end dates
  * @param range
  */
-function getDaysInRange(range: DateRange) {
+function getDaysInRange(range: NumberRange) {
   const [start, end] = range
   const daysCount = Math.round(Math.abs(end - start) / 86400)
 
@@ -67,7 +67,7 @@ function getDaysInRange(range: DateRange) {
  * @param event
  * @param range
  */
-function getEventIndex(event: CalendarEvent, range: DateRange) {
+function getEventIndex(event: CalendarEvent, range: NumberRange) {
   const [start, end] = range
 
   const from = new Date(start * 1000)

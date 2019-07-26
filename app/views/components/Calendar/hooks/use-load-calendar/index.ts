@@ -7,7 +7,7 @@ import { normalize } from './normalize-events'
 import { sortEvents } from './sort-events'
 
 interface ApiOptions {
-  range: DateRange
+  range: NumberRange
   filter?: FilterQuery
   associations?: string[]
   users?: UUID[]
