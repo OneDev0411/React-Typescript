@@ -2,6 +2,7 @@ import React from 'react'
 
 import Avatar from 'components/Avatar'
 import Button from 'components/Button/LinkButton'
+import copy from 'utils/copy-text-to-clipboard'
 
 import Show from './Show'
 import Activity from './Activity'
@@ -50,14 +51,21 @@ function MiniProfile(props: MiniProfilePropsType) {
           </div>
         </Show>
         <Show if={!!data.phone}>
-          <div className="person-phone">{data.phone}</div>
+          <div className="person-phone">
+            {data.phone} <Button onClick={() => copy(data.phone)}>Copy</Button>
+          </div>
         </Show>
         <Show if={!!data.email}>
-          <div className="person-email">{data.email}</div>
+          <div className="person-email">
+            {data.email} <Button>Send Email</Button>
+          </div>
         </Show>
         <Show if={!!data.address}>
           <div className="person-more-info">
-            <div className="person-address">{data.address}</div>
+            <div className="person-address">
+              {data.address}{' '}
+              <Button onClick={() => copy(data.address)}>Copy</Button>
+            </div>
           </div>
         </Show>
       </div>
