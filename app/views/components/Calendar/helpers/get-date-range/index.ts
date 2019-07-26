@@ -1,9 +1,9 @@
-const DAY_RANGE = 200
+const DAY_RANGE = 100
 
 export enum Format {
-  TopRange,
-  MiddleRange,
-  BottomRange
+  Next,
+  Middle,
+  Previous
 }
 
 /**
@@ -13,34 +13,35 @@ export enum Format {
  */
 export function getDateRange(
   timestamp: number = new Date().getTime(),
-  format: Format = Format.MiddleRange
-): [number, number] {
+  format: Format = Format.Middle
+): DateRange {
   const day = new Date(timestamp)
 
-  const topRange = format === Format.BottomRange ? 0 : DAY_RANGE
-  const bottomRange = format === Format.TopRange ? 0 : DAY_RANGE
-
   const start =
-    Date.UTC(
-      day.getUTCFullYear(),
-      day.getUTCMonth() + 1,
-      day.getUTCDate() - bottomRange,
-      0,
-      0,
-      0,
-      0
-    ) / 1000
+    format === Format.Next
+      ? timestamp
+      : Date.UTC(
+          day.getUTCFullYear(),
+          day.getUTCMonth(),
+          day.getUTCDate() - DAY_RANGE,
+          0,
+          0,
+          0,
+          0
+        )
 
   const end =
-    Date.UTC(
-      day.getUTCFullYear(),
-      day.getUTCMonth() + 1,
-      day.getUTCDate() + topRange,
-      23,
-      59,
-      59,
-      999
-    ) / 1000
+    format === Format.Previous
+      ? timestamp
+      : Date.UTC(
+          day.getUTCFullYear(),
+          day.getUTCMonth(),
+          day.getUTCDate() + DAY_RANGE,
+          23,
+          59,
+          59,
+          999
+        )
 
-  return [start, end]
+  return [start / 1000, end / 1000]
 }
