@@ -3,20 +3,19 @@
  * @param range
  * @param events
  */
-export function normalize(range: [number, number], events: CalendarEvent[]) {
-  return Object.entries(getAllEvents(range, events)).reduce(
-    (acc, [day, events]) => {
-      if ((events as CalendarEvent[]).length === 0 && !isToday(day)) {
-        return acc
-      }
+export function normalize(range: DateRange, events: CalendarEvent[]) {
+  const list = getEvents(range, events)
 
-      return {
-        ...acc,
-        [day]: events
-      }
-    },
-    {}
-  ) as CalendarEventsList
+  return Object.entries(list).reduce((acc, [day, events]) => {
+    if ((events as CalendarEvent[]).length === 0 && !isToday(day)) {
+      return acc
+    }
+
+    return {
+      ...acc,
+      [day]: events
+    }
+  }, {}) as CalendarEventsList
 }
 
 /**
@@ -24,7 +23,7 @@ export function normalize(range: [number, number], events: CalendarEvent[]) {
  * @param range
  * @param events
  */
-function getAllEvents(range: [number, number], events: CalendarEvent[]) {
+function getEvents(range: DateRange, events: CalendarEvent[]) {
   return events.reduce((acc: string[], event: CalendarEvent) => {
     const index = getEventIndex(event, range)
 
@@ -49,7 +48,7 @@ function isToday(day: string): boolean {
  * returns days ranges based on start and end dates
  * @param range
  */
-function getDaysInRange(range: [number, number]) {
+function getDaysInRange(range: DateRange) {
   const [start, end] = range
   const daysCount = Math.round(Math.abs(end - start) / 86400)
 
@@ -68,7 +67,7 @@ function getDaysInRange(range: [number, number]) {
  * @param event
  * @param range
  */
-function getEventIndex(event: CalendarEvent, range: [number, number]) {
+function getEventIndex(event: CalendarEvent, range: DateRange) {
   const [start, end] = range
 
   const from = new Date(start * 1000)

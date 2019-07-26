@@ -15,7 +15,7 @@ export interface FilterQuery {
 }
 
 interface ApiOptions {
-  range: [number, number]
+  range: DateRange
   filter?: FilterQuery
   associations?: string[]
   users?: UUID[]

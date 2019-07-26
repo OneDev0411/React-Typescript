@@ -4,13 +4,13 @@
  */
 export function getDayRange(
   timestamp: number = new Date().getTime()
-): [number, number] {
+): DateRange {
   const day = new Date(timestamp)
 
   const start =
     Date.UTC(
       day.getUTCFullYear(),
-      day.getUTCMonth() + 1,
+      day.getUTCMonth(),
       day.getUTCDate(),
       0,
       0,
