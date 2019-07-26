@@ -80,23 +80,6 @@ class AddressField extends React.Component {
     }
   }
 
-  handleOutsideClick = () => {
-    if (this.state.isDisabled) {
-      return
-    }
-
-    if (diffAddressStateWithProp(this.props, this.state)) {
-      this.context.setConfirmationModal({
-        confirmLabel: 'Yes, I do',
-        message: 'Heads up!',
-        description: 'You have made changes, do you want to discard them?',
-        onConfirm: this.toggleMode
-      })
-    } else {
-      this.toggleMode()
-    }
-  }
-
   delete = async () => {
     const attributeIds = this.props.address.attributes
       .filter(attribute => attribute.id)
@@ -214,11 +197,9 @@ class AddressField extends React.Component {
   render() {
     return (
       <InlineEditableField
-        cancelOnOutsideClick
         handleAddNew={this.props.handleAddNew}
         handleCancel={this.cancel}
         handleDelete={this.handleDelete}
-        handleOutsideClick={this.handleOutsideClick}
         handleSave={this.onSubmit}
         isDisabled={this.state.isDisabled}
         isEditing={this.props.address.isActive}

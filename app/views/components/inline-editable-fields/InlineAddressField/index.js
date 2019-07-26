@@ -1,14 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import debounce from 'lodash/debounce'
-import ClickOutside from 'react-click-outside'
 import idx from 'idx'
+import Popover from '@material-ui/core/Popover'
 
 import { loadJS } from '../../../../utils/load-js'
 import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/Listings/mapOptions'
 
 import { Suggestions } from './Suggestions'
 import { InlineAddressForm } from './InlineAddressForm'
+
+const POP_OVER_PROPS = {
+  anchorOrigin: {
+    vertical: 'bottom',
+    horizontal: 'left'
+  },
+  transformOrigin: {
+    vertical: 'top',
+    horizontal: 'left'
+  }
+}
 
 const propTypes = {
   renderSearchField: PropTypes.func.isRequired,
@@ -41,7 +52,9 @@ export class InlineAddressField extends React.Component {
     address: '',
     isShowSuggestion: false,
     isDrity: false,
-    places: []
+    places: [],
+    anchorEl: null,
+    updateAddressFormPosition: false
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -95,8 +108,8 @@ export class InlineAddressField extends React.Component {
     })
   }
 
-  search = debounce(async input => {
-    if (input.length <= 3) {
+  search = debounce(async (anchorEl, value) => {
+    if (value.length <= 3) {
       return
     }
 
@@ -104,12 +117,14 @@ export class InlineAddressField extends React.Component {
       this.setState({
         isLoading: true,
         isShowForm: false,
+        anchorEl: null,
         isShowSuggestion: false
       })
 
-      const places = await this.autocompleteAddress(input)
+      const places = await this.autocompleteAddress(value)
 
       this.setState({
+        anchorEl,
         places,
         isLoading: false,
         isShowSuggestion: true
@@ -120,24 +135,25 @@ export class InlineAddressField extends React.Component {
     }
   }, 300)
 
-  handleChangeInput = e => {
-    const input = e.target.value
+  handleChangeInput = ({ target }) => {
+    const { value } = target
 
     this.setState(
       () => {
-        if (input.length === 0) {
+        if (value.length === 0) {
           return {
-            address: input,
+            address: value,
             isShowForm: false,
-            isShowSuggestion: false
+            isShowSuggestion: false,
+            anchorEl: null
           }
         }
 
-        return { address: input, isDrity: true }
+        return { address: value, isDrity: true }
       },
       () => {
-        this.props.handleInputChange(input)
-        this.search(input)
+        this.props.handleInputChange(value)
+        this.search(target, value)
       }
     )
   }
@@ -168,6 +184,7 @@ export class InlineAddressField extends React.Component {
 
       if (!this.props.needsAddressForm) {
         newState = {
+          anchorEl: null,
           isShowSuggestion: false,
           address: item.description
         }
@@ -181,67 +198,85 @@ export class InlineAddressField extends React.Component {
     })
   }
 
-  handleInputFocus = () => {
-    if (
-      this.state.address &&
-      !this.state.isShowSuggestion &&
-      this.state.address !== this.props.address
-    ) {
-      if (this.state.places.length > 0) {
-        this.setState({ isShowSuggestion: true })
-      } else {
-        this.search(this.state.address)
-      }
-    }
-  }
-
   onClickDefaultItem = () =>
     this.setState({
       isShowSuggestion: false,
       isShowForm: true
     })
 
-  onClickOutside = () => this.setState({ isShowSuggestion: false })
+  handleClose = () => this.setState({ anchorEl: null })
 
-  handleFormCancel = () => this.setState({ isShowForm: false })
+  handleAddressFormPosition = () =>
+    this.setState({ updateAddressFormPosition: true })
 
   render() {
-    const { address } = this.state
+    const { address, anchorEl } = this.state
+
+    const isOpen = Boolean(anchorEl)
+    const isOpenSuggestion = isOpen && this.state.isShowSuggestion
+    const isOpenForm =
+      isOpen && this.props.needsAddressForm && this.state.isShowForm
+    const formId = isOpenForm ? 'address-form-popover' : undefined
+    const suggestonsId = isOpenSuggestion
+      ? 'google-address-suggestons-popover'
+      : undefined
 
     return (
-      <ClickOutside onClickOutside={this.onClickOutside}>
-        <div style={{ position: 'relative', ...this.props.style }}>
-          {this.props.renderSearchField({
-            isLoading: this.state.isLoading,
-            onChange: this.handleChangeInput,
-            onFocus: this.handleInputFocus,
-            value: address,
-            autoComplete: 'disabled'
-          })}
-          {this.state.isShowSuggestion && (
-            <Suggestions
-              style={this.props.suggestionsStyle}
-              items={this.state.places}
-              searchText={address}
-              onClickDefaultItem={this.onClickDefaultItem}
-              onClickSuggestionItem={this.onClickSuggestionItem}
-            />
-          )}
-
-          {this.props.needsAddressForm && this.state.isShowForm && (
-            <InlineAddressForm
-              style={this.props.formStyle}
-              address={address}
-              handleCancel={this.handleFormCancel}
-              handleDelete={this.props.handleDelete}
-              handleSubmit={this.props.handleSubmit}
-              preSaveFormat={this.props.preSaveFormat}
-              postLoadFormat={this.props.postLoadFormat}
-              showDeleteButton={this.props.showDeleteButton}
-            />
-          )}
-        </div>
-      </ClickOutside>
+      <div style={this.props.style}>
+        {this.props.renderSearchField({
+          id: suggestonsId || formId,
+          isLoading: this.state.isLoading,
+          onChange: this.handleChangeInput,
+          value: address,
+          autoComplete: 'disabled'
+        })}
+        <Popover
+          id={suggestonsId}
+          open={isOpenSuggestion}
+          anchorEl={anchorEl}
+          onClose={this.handleClose}
+          {...POP_OVER_PROPS}
+        >
+          <Suggestions
+            style={this.props.suggestionsStyle}
+            items={this.state.places}
+            searchText={address}
+            onClickDefaultItem={this.onClickDefaultItem}
+            onClickSuggestionItem={this.onClickSuggestionItem}
+          />
+        </Popover>
+        <Popover
+          {...POP_OVER_PROPS}
+          id={formId}
+          open={isOpenForm}
+          anchorEl={anchorEl}
+          onClose={this.handleClose}
+          action={actions => {
+            if (
+              this.state.updateAddressFormPosition &&
+              actions &&
+              actions.updatePosition
+            ) {
+              this.setState(
+                { updateAddressFormPosition: false },
+                actions.updatePosition
+              )
+            }
+          }}
+        >
+          <InlineAddressForm
+            style={this.props.formStyle}
+            address={address}
+            handleCancel={this.handleClose}
+            handleDelete={this.props.handleDelete}
+            handleSubmit={this.props.handleSubmit}
+            preSaveFormat={this.props.preSaveFormat}
+            postLoadFormat={this.props.postLoadFormat}
+            showDeleteButton={this.props.showDeleteButton}
+            updatePosition={this.handleAddressFormPosition}
+          />
+        </Popover>
+      </div>
     )
   }
 }
