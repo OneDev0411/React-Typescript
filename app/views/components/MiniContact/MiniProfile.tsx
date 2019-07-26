@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Avatar from 'components/Avatar'
+import Button from 'components/Button/LinkButton'
 
 import Show from './Show'
 import Activity from './Activity'
@@ -41,7 +42,12 @@ function MiniProfile(props: MiniProfilePropsType) {
       </div>
       <div className="details">
         <Show if={!!data.name}>
-          <div className="person-name">{data.name}</div>
+          <div className="person-name">
+            {data.name}{' '}
+            <Button to={`/dashboard/contacts/${output.contact_id}`}>
+              View Profile
+            </Button>
+          </div>
         </Show>
         <Show if={!!data.phone}>
           <div className="person-phone">{data.phone}</div>

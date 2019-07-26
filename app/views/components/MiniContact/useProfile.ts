@@ -22,7 +22,7 @@ type StatusType = 'loading' | 'failed' | 'finished' | 'not_started'
 
 export interface FormatterOutputType {
   contact_status: StatusType
-  contact_id: string
+  contact_id: UUID
   data: ProfileType
   meta: {
     association?: any
