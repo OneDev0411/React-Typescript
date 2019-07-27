@@ -1,4 +1,10 @@
-import React, { useState } from 'react'
+import React, {
+  useState,
+  useRef,
+  useImperativeHandle,
+  forwardRef,
+  RefObject
+} from 'react'
 
 import debounce from 'lodash/debounce'
 import useDebouncedCallback from 'use-debounce/lib/callback'
@@ -8,7 +14,8 @@ import {
   ListOnItemsRenderedProps,
   ScrollDirection,
   ListOnScrollProps,
-  VariableSizeListProps
+  VariableSizeListProps,
+  Align
 } from 'react-window'
 
 import Spinner from 'components/Spinner'
@@ -21,6 +28,10 @@ export enum LoadingPosition {
   Bottom = 3
 }
 
+export interface VirtualListRef {
+  scrollToItem(index: number, alignment: Align): void
+}
+
 export interface IProps extends VariableSizeListProps {
   threshold?: number
   isLoading?: boolean
@@ -29,6 +40,7 @@ export interface IProps extends VariableSizeListProps {
   onReachEnd?(arg0: ListOnItemsRenderedProps): void
   onVisibleRowChange?(data: ListOnItemsRenderedProps): void
   children: any
+  virtualListRef?: RefObject<VirtualListRef>
 }
 
 const VirtualList: React.FC<IProps> = ({
@@ -41,10 +53,15 @@ const VirtualList: React.FC<IProps> = ({
   onVisibleRowChange = () => null,
   ...props
 }: IProps) => {
+  const listRef = useRef<List | null>(null)
   const [scroll, setScroll] = useState<ListOnScrollProps | null>(null)
 
   const [deboundedOnReachStart] = useDebouncedCallback(onReachStart, 200)
   const [debouncedOnReachEnd] = useDebouncedCallback(onReachEnd, 200)
+
+  useImperativeHandle(props.virtualListRef, () => ({
+    scrollToItem: listRef.current!.scrollToItem
+  }))
 
   /**
    * triggers when react-window renders new data in the scope
@@ -82,6 +99,7 @@ const VirtualList: React.FC<IProps> = ({
 
       <List
         {...props}
+        ref={listRef}
         onItemsRendered={debounce(onItemsRendered, 100)}
         onScroll={setScroll}
       >
@@ -130,4 +148,6 @@ function isReachedStart(
   return data.visibleStartIndex < threshold && scrollDirection === 'backward'
 }
 
-export default VirtualList
+export default forwardRef((props: IProps, ref: RefObject<VirtualListRef>) => (
+  <VirtualList {...props} virtualListRef={ref} />
+))
