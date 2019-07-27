@@ -1,14 +1,17 @@
+import fecha from 'fecha'
+
 export function createRows(events: CalendarEventsList) {
-  const rows: any = []
+  const today = fecha.format(new Date(), 'YYYY-MM-DD')
 
-  Object.entries(events).forEach(([day, events]) => {
-    rows.push({
-      is_header: true,
-      title: day
-    })
-
-    rows.push(...events)
-  })
-
-  return rows
+  return Object.entries(events).reduce((acc, [day, events]) => {
+    return [
+      ...acc,
+      {
+        is_header: true,
+        is_today: fecha.format(new Date(day), 'YYYY-MM-DD') === today,
+        title: day
+      },
+      ...events
+    ]
+  }, [])
 }
