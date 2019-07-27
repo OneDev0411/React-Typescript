@@ -7,8 +7,8 @@ import DatePicker from 'components/DatePicker'
 import { useLoadCalendar } from './hooks/use-load-calendar'
 import { getDateRange, Format } from './helpers/get-date-range'
 
-import CalendarTable from './components/Table'
-import { TodayButton } from './components/Table/TodayButton'
+import List from './components/List'
+import { TodayButton } from './components/TodayButton'
 
 import { Container, Sidebar, Header, Main, SideHeader, Title } from './styled'
 
@@ -102,8 +102,9 @@ const Calendar: React.FC = (props: IProps) => {
       <Main>
         <Header>---</Header>
 
-        <CalendarTable
+        <List
           events={events}
+          range={ranges.calendar}
           isLoading={isLoading}
           loadingPosition={loadingPosition}
           onReachEnd={handleLoadNextEvents}

@@ -15,24 +15,26 @@ export const Header = styled.div`
 `
 
 export const Sidebar = styled.div`
-  flex: 2;
-  background: #eee;
-  padding: 0.5rem;
+  width: 18rem;
+  background: #ebeff2;
+  padding: 1rem 0.5rem;
 `
 
 export const SideHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 0.9rem;
+  padding: 0 1rem;
   margin-bottom: 1rem;
 `
 
 export const Title = styled.div`
-  font-size: 1.3rem;
-  font-weight: 500;
+  font-weight: 900;
+  font-size: 1.2rem;
+  line-height: 2rem;
+  color: #1f2e4d;
 `
 
 export const Main = styled.div`
-  flex: 8;
+  width: calc(100% - 18rem);
 `
