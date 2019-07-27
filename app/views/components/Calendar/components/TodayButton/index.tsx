@@ -2,7 +2,7 @@ import React from 'react'
 
 import fecha from 'fecha'
 
-import ActionButton from 'components/Button/ActionButton'
+import { Button } from '@material-ui/core'
 
 interface IProps {
   onClick(): void
@@ -10,15 +10,15 @@ interface IProps {
 
 export function TodayButton(props: IProps) {
   return (
-    <ActionButton
+    <Button
       size="small"
-      appearance="outline"
+      variant="outlined"
+      color="secondary"
       onClick={props.onClick}
       data-balloon={fecha.format(new Date(), 'dddd, MMMM DD')}
       data-balloon-pos="down"
-      style={{ fontSize: '1rem' }}
     >
       Today
-    </ActionButton>
+    </Button>
   )
 }
