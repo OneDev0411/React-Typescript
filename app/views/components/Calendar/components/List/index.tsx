@@ -1,8 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  forwardRef,
+  RefObject
+} from 'react'
 import { ListOnItemsRenderedProps } from 'react-window'
 import useResizeObserver from 'use-resize-observer'
 
-import VirtualList, { LoadingPosition } from 'components/VirtualList'
+import VirtualList, {
+  LoadingPosition,
+  VirtualListRef
+} from 'components/VirtualList'
 
 import { createRows } from './helpers/create-rows'
 import { Container } from './styled'
@@ -14,6 +23,7 @@ interface IProps {
   isLoading: boolean
   loadingPosition: LoadingPosition
   range: NumberRange
+  listRef?: RefObject<VirtualListRef>
   onReachStart?(): void
   onReachEnd?(): void
   onChangeActiveDate(date: Date): void
@@ -26,13 +36,15 @@ const defaultProps = {
 }
 
 const CalendarList: React.FC<IProps> = props => {
+  const listRef = useRef<VirtualListRef>(null)
   const [activeDate, setActiveDate] = useState<Date | null>(null)
   const [rows, setRows] = useState([])
   const [containerRef, listWidth, listHeight] = useResizeObserver()
 
-  useEffect(() => {
-    setRows(createRows(props.events))
-  }, [props.events, props.range])
+  useEffect(() => setRows(createRows(props.events)), [
+    props.events,
+    props.range
+  ])
 
   const getInViewDate = (data: ListOnItemsRenderedProps) => {
     const index = new Array(data.visibleStopIndex - data.visibleStartIndex)
@@ -59,6 +71,7 @@ const CalendarList: React.FC<IProps> = props => {
         loadingPosition={props.loadingPosition}
         onVisibleRowChange={getInViewDate}
         itemSize={() => 50}
+        ref={listRef}
       >
         {({ index, style }) => (
           <>
@@ -80,4 +93,6 @@ const CalendarList: React.FC<IProps> = props => {
 
 CalendarList.defaultProps = defaultProps
 
-export default CalendarList
+export default forwardRef((props: IProps, ref: RefObject<VirtualListRef>) => (
+  <CalendarList {...props} listRef={ref} />
+))
