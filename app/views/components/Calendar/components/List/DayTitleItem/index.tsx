@@ -1,5 +1,6 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
+import fecha from 'fecha'
 
 import { Container } from './styled'
 
@@ -10,16 +11,38 @@ interface IProps {
 }
 
 export function DayTitleItem(props: IProps) {
-  const getHeaderBackground = (date: string) =>
-    props.activeDate &&
-    props.activeDate.toDateString() === new Date(date).toDateString()
-      ? '#E5EBFE'
-      : '#F5F8FA'
-
   return (
     <Flex alignCenter style={props.style}>
-      <Container backgroundColor={getHeaderBackground(props.item.title)}>
-        {new Date(props.item.title).toDateString()}
+      <Container
+        isActive={
+          props.activeDate &&
+          props.activeDate.toDateString() ===
+            new Date(props.item.title).toDateString()
+        }
+      >
+        <Flex
+          style={{
+            width: '8.5rem'
+          }}
+        >
+          <strong
+            style={{
+              marginRight: '1rem'
+            }}
+          >
+            {fecha.format(new Date(props.item.title), 'DD')}
+          </strong>
+
+          <span
+            style={{
+              textTransform: 'uppercase'
+            }}
+          >
+            {fecha.format(new Date(props.item.title), 'MMM, ddd')}
+          </span>
+        </Flex>
+
+        <Flex>{props.item.is_today && <strong>TODAY</strong>}</Flex>
       </Container>
     </Flex>
   )
