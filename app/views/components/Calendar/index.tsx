@@ -1,39 +1,49 @@
-import React, { useState } from 'react'
-import debounce from 'lodash/debounce'
+import React, { useState, useEffect, useRef } from 'react'
 
 import { LoadingPosition } from 'components/VirtualList'
-import DatePicker from 'components/DatePicker'
 
 import { useLoadCalendar } from './hooks/use-load-calendar'
 import { getDateRange, Format } from './helpers/get-date-range'
+import { createListRows } from './helpers/create-list-rows'
 
 import List from './components/List'
-import { TodayButton } from './components/TodayButton'
-
-import { Container, Sidebar, Header, Main, SideHeader, Title } from './styled'
 
 interface Ranges {
   query: NumberRange
   calendar: NumberRange
 }
 
-interface IProps {
+interface Props {
   range: NumberRange
   children: React.ReactNode
+  onChangeActiveDate: (activeDate: Date) => void
 }
 
-const Calendar: React.FC = (props: IProps) => {
-  const [activeDate, setActiveDate] = useState<Date>(new Date())
+const Calendar: React.FC = (props: Props) => {
+  // holds the reference to the Virtual List
+  const listRef = useRef(null)
+
+  // rows of Virtual List
+  const [rows, setRows] = useState([])
+
+  /*
+   * holds the required ranges of calendar:
+   * query: the range of latest query
+   * calendar: range of fetched calendar
+   */
   const [ranges, setRanges] = useState<Ranges>(getInitialRanges())
-  const [viewAsUsers, setViewAsUsers] = useState<UUID[]>([])
+
+  // latest loading position of calendar
   const [loadingPosition, setLoadingPosition] = useState<LoadingPosition>(
     LoadingPosition.Middle
   )
 
   const { events, isLoading } = useLoadCalendar({
-    range: ranges.query,
-    users: viewAsUsers
+    range: ranges.query
+    // users: viewAsUsers
   })
+
+  useEffect(() => setRows(createListRows(events)), [events, ranges.calendar])
 
   /**
    * handles updating ranges when user is trying to fetch future events
@@ -88,31 +98,15 @@ const Calendar: React.FC = (props: IProps) => {
   }
 
   return (
-    <Container>
-      <Sidebar>
-        <SideHeader>
-          <Title>Calendar</Title>
-
-          <TodayButton onClick={() => alert()} />
-        </SideHeader>
-
-        <DatePicker selectedDate={activeDate} onChange={() => {}} />
-      </Sidebar>
-
-      <Main>
-        <Header>---</Header>
-
-        <List
-          events={events}
-          range={ranges.calendar}
-          isLoading={isLoading}
-          loadingPosition={loadingPosition}
-          onReachEnd={handleLoadNextEvents}
-          onReachStart={handleLoadPreviousEvents}
-          onChangeActiveDate={debounce(setActiveDate, 100)}
-        />
-      </Main>
-    </Container>
+    <List
+      ref={listRef}
+      rows={rows}
+      isLoading={isLoading}
+      loadingPosition={loadingPosition}
+      onReachEnd={handleLoadNextEvents}
+      onReachStart={handleLoadPreviousEvents}
+      onChangeActiveDate={props.onChangeActiveDate}
+    />
   )
 }
 

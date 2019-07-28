@@ -1,6 +1,6 @@
 import fecha from 'fecha'
 
-export function createRows(events: CalendarEventsList) {
+export function createListRows(events: CalendarEventsList) {
   const today = fecha.format(new Date(), 'YYYY-MM-DD')
 
   return Object.entries(events).reduce((acc, [day, events]) => {

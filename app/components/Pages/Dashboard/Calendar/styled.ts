@@ -9,8 +9,10 @@ export const Container = styled.div`
 export const Header = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   height: 3rem;
-  border-bottom: 1px solid RebeccaPurple;
+  padding: 0 0.5rem;
+  border-bottom: 1px solid #eff1f2;
   margin-bottom: 1rem;
 `
 

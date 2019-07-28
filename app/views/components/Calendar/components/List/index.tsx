@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  forwardRef,
-  RefObject
-} from 'react'
+import React, { useState, useRef, forwardRef, RefObject } from 'react'
 import { ListOnItemsRenderedProps } from 'react-window'
 import useResizeObserver from 'use-resize-observer'
 
@@ -13,16 +7,14 @@ import VirtualList, {
   VirtualListRef
 } from 'components/VirtualList'
 
-import { createRows } from './helpers/create-rows'
 import { Container } from './styled'
 import { DayTitleItem } from './DayTitleItem'
 import { EventItem } from './EventItem'
 
 interface IProps {
-  events: CalendarEventsList
+  rows: any[]
   isLoading: boolean
   loadingPosition: LoadingPosition
-  range: NumberRange
   listRef?: RefObject<VirtualListRef>
   onReachStart?(): void
   onReachEnd?(): void
@@ -38,20 +30,16 @@ const defaultProps = {
 const CalendarList: React.FC<IProps> = props => {
   const listRef = useRef<VirtualListRef>(null)
   const [activeDate, setActiveDate] = useState<Date | null>(null)
-  const [rows, setRows] = useState([])
   const [containerRef, listWidth, listHeight] = useResizeObserver()
-
-  useEffect(() => setRows(createRows(props.events)), [
-    props.events,
-    props.range
-  ])
 
   const getInViewDate = (data: ListOnItemsRenderedProps) => {
     const index = new Array(data.visibleStopIndex - data.visibleStartIndex)
       .fill(null)
-      .findIndex((_, index) => rows[index + data.visibleStartIndex].is_header)
+      .findIndex(
+        (_, index) => props.rows[index + data.visibleStartIndex].is_header
+      )
 
-    const item = rows[index + data.visibleStartIndex]
+    const item = props.rows[index + data.visibleStartIndex]
     const date = new Date(item.title)
 
     setActiveDate(date)
@@ -63,7 +51,7 @@ const CalendarList: React.FC<IProps> = props => {
       <VirtualList
         width={listWidth}
         height={listHeight}
-        itemCount={rows.length}
+        itemCount={props.rows.length}
         onReachEnd={props.onReachEnd}
         onReachStart={props.onReachStart}
         threshold={2}
@@ -75,14 +63,14 @@ const CalendarList: React.FC<IProps> = props => {
       >
         {({ index, style }) => (
           <>
-            {rows[index].is_header ? (
+            {props.rows[index].is_header ? (
               <DayTitleItem
-                item={rows[index]}
+                item={props.rows[index]}
                 style={style}
                 activeDate={activeDate}
               />
             ) : (
-              <EventItem item={rows[index]} style={style} />
+              <EventItem item={props.rows[index]} style={style} />
             )}
           </>
         )}
