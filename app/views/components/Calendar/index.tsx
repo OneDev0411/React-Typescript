@@ -22,7 +22,7 @@ export default function Calendar(props: Props) {
   const listRef = useRef(null)
 
   // rows of Virtual List
-  const [rows, setRows] = useState([])
+  const [rows, setRows] = useState<any>([])
 
   /*
    * holds the required ranges of calendar:

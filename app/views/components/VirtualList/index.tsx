@@ -18,7 +18,7 @@ import {
   Align
 } from 'react-window'
 
-import Spinner from 'components/Spinner'
+import Spinner from 'components/LoadingContainer'
 
 import { Container, Loading } from './styled'
 
