@@ -14,12 +14,10 @@ interface Ranges {
 }
 
 interface Props {
-  range: NumberRange
-  children: React.ReactNode
   onChangeActiveDate: (activeDate: Date) => void
 }
 
-const Calendar: React.FC = (props: Props) => {
+export default function Calendar(props: Props) {
   // holds the reference to the Virtual List
   const listRef = useRef(null)
 
@@ -121,5 +119,3 @@ function getInitialRanges(): Ranges {
     calendar: date
   }
 }
-
-export default Calendar

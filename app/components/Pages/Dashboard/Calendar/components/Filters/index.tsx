@@ -1,19 +1,32 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 
-interface Props {}
+import Flex from 'styled-flex-component'
 
-const TAB_ITEMS = [
-  { label: 'All Events', value: 0, icon: '' },
-  { label: 'Calls', value: 1, icon: '' },
-  { label: 'Touches', value: 2, icon: '' },
-  { label: 'Celebrations', value: 3, icon: '' },
-  { label: 'Critical Dates', value: 4, icon: '' },
-  { label: 'Scheduled Emails', value: 5, icon: '' }
+import { eventTypesIcons, EventTypeIcon } from 'views/utils/event-types-icons'
+import { importantDatesIcons } from 'views/utils/important-dates-icons'
+
+interface TabItem {
+  label: string
+  value: number
+  Icon: EventTypeIcon | null
+}
+
+const TAB_ITEMS: TabItem[] = [
+  { label: 'All Events', value: 0, Icon: null },
+  { label: 'Calls', value: 1, Icon: eventTypesIcons.Call },
+  { label: 'Touches', value: 2, Icon: eventTypesIcons.ListingAppointment },
+  { label: 'Celebrations', value: 3, Icon: importantDatesIcons.Birthday },
+  { label: 'Critical Dates', value: 4, Icon: eventTypesIcons['Task Critical'] },
+  { label: 'Scheduled Emails', value: 5, Icon: eventTypesIcons.Email }
 ]
 
+interface Props {}
+
 export function Filters(props: Props) {
+  const [selectedTab, setSelectedTab] = useState(TAB_ITEMS[0].value)
+
   return (
     <div
       style={{
@@ -21,15 +34,29 @@ export function Filters(props: Props) {
       }}
     >
       <Tabs
-        value={1}
-        onChange={console.log}
+        value={selectedTab}
+        onChange={(e, value) => setSelectedTab(value)}
         indicatorColor="primary"
-        textColor="primary"
+        textColor="secondary"
         variant="scrollable"
         scrollButtons="auto"
       >
-        {TAB_ITEMS.map((item, index) => (
-          <Tab key={index} label={item.label} />
+        {TAB_ITEMS.map(({ label, value, Icon }, index: number) => (
+          <Tab
+            key={index}
+            value={value}
+            label={
+              <Flex alignCenter>
+                {Icon && (
+                  <Icon.icon
+                    fill="#3c4b6e"
+                    style={{ marginRight: '0.5rem', width: '1.2rem' }}
+                  />
+                )}
+                {label}
+              </Flex>
+            }
+          />
         ))}
       </Tabs>
     </div>

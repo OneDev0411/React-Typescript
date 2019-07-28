@@ -9,7 +9,7 @@ export function CreateEvent(props: IProps) {
       <Button
         color="primary"
         variant="contained"
-        size="small"
+        size="medium"
         onClick={() => {}}
       >
         Create Event
