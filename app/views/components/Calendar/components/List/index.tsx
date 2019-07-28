@@ -70,7 +70,11 @@ const CalendarList: React.FC<IProps> = props => {
                 activeDate={activeDate}
               />
             ) : (
-              <EventItem item={props.rows[index]} style={style} />
+              <EventItem
+                item={props.rows[index]}
+                nextItem={props.rows[index + 1]}
+                style={style}
+              />
             )}
           </>
         )}

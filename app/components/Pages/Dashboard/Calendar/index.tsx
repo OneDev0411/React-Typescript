@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import debounce from 'lodash/debounce'
 
-import Calendar from 'components/Calendar'
+import List from 'components/Calendar'
 import DatePicker from 'components/DatePicker'
 
 import { TodayButton } from './components/TodayButton'
@@ -42,7 +42,7 @@ const CalendarPage: React.FC = props => {
           <CreateEvent />
         </Header>
 
-        <Calendar onChangeActiveDate={debounce(setActiveDate, 100)} />
+        <List onChangeActiveDate={debounce(setActiveDate, 100)} />
       </Main>
     </Container>
   )

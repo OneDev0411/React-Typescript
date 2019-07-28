@@ -7,7 +7,7 @@ import IconWedding from 'components/SvgIcons/Wedding/IconWedding'
 import IconChild from 'components/SvgIcons/Child/IconChild'
 import IconPet from 'components/SvgIcons/Pet/IconPet'
 
-interface Icon {
+export interface ImportantDatesIcon {
   name: string
   color: string
   icon: React.FC<any>
@@ -59,4 +59,4 @@ export const importantDatesIcons = [
     ...acc,
     [icon.name]: icon
   }
-}, {}) as Record<string, Icon>
+}, {}) as Record<string, ImportantDatesIcon>

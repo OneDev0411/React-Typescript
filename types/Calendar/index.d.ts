@@ -5,6 +5,8 @@ declare interface CalendarEvent {
   timestamp: number
   recurring: boolean
   title: string
+  timestamp: number
+  object_type: string
 }
 
 interface CalendarEventsList {
