@@ -11,9 +11,16 @@ Suggestions.propTypes = {
   onClickSuggestionItem: PropTypes.func.isRequired
 }
 
-export function Suggestions({ items, ...props }) {
+export function Suggestions({ items, handleMouseOver, ...props }) {
+  const handleMouseEnter = () => handleMouseOver(true)
+  const handleMouseLeave = () => handleMouseOver(false)
+
   return (
-    <ListContainer style={props.style}>
+    <ListContainer
+      style={props.style}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <DefaultItem onClick={props.onClickDefaultItem}>
         {'Use "'}
         <span className="search-text">{props.searchText}</span>

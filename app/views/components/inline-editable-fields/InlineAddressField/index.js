@@ -55,7 +55,11 @@ export class InlineAddressField extends React.Component {
     isDrity: false,
     places: [],
     anchorEl: null,
-    updateAddressFormPosition: false
+    updateAddressFormPosition: false,
+    // Because the blur default action should be canceled when the mouse is over
+    // the suggestion area, and there is a possibility of selecting suggestion
+    // items.
+    isBlurDisabled: false
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -162,8 +166,9 @@ export class InlineAddressField extends React.Component {
   onClickSuggestionItem = item => {
     let newState = {
       address: item.description,
-      isShowSuggestion: false,
-      isShowForm: true
+      isBlurDisabled: false,
+      isShowForm: true,
+      isShowSuggestion: false
     }
 
     const request = {
@@ -186,7 +191,6 @@ export class InlineAddressField extends React.Component {
       if (!this.props.needsAddressForm) {
         newState = {
           anchorEl: null,
-          isShowSuggestion: false,
           address: item.description
         }
 
@@ -201,11 +205,25 @@ export class InlineAddressField extends React.Component {
 
   onClickDefaultItem = () =>
     this.setState({
-      isShowSuggestion: false,
-      isShowForm: true
+      isBlurDisabled: false,
+      isShowForm: true,
+      isShowSuggestion: false
     })
 
   handleClose = () => this.setState({ anchorEl: null })
+
+  handleInputBlur = () => {
+    if (this.state.isBlurDisabled) {
+      return
+    }
+
+    if (this.state.isShowSuggestion) {
+      this.setState({ isShowSuggestion: false })
+    }
+  }
+
+  handleMouseOverSuggestions = isBlurDisabled =>
+    this.setState({ isBlurDisabled })
 
   handleAddressFormPosition = () =>
     this.setState({ updateAddressFormPosition: true })
@@ -226,6 +244,7 @@ export class InlineAddressField extends React.Component {
           isLoading: this.state.isLoading,
           onChange: this.handleChangeInput,
           value: address,
+          onBlur: this.handleInputBlur,
           autoComplete: 'disabled'
         })}
         <Popper
@@ -239,6 +258,7 @@ export class InlineAddressField extends React.Component {
             style={this.props.suggestionsStyle}
             onClickDefaultItem={this.onClickDefaultItem}
             onClickSuggestionItem={this.onClickSuggestionItem}
+            handleMouseOver={this.handleMouseOverSuggestions}
           />
         </Popper>
         <Popover
