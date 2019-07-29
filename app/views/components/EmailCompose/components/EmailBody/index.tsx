@@ -20,14 +20,16 @@ interface Props {
   uploadImage: (file: File) => Promise<string>
   content?: string
   hasStaticBody?: boolean
+  hasSignatureByDefault?: boolean
   signature: string
-  editorRef: Ref<PluginsEditor>
+  editorRef?: Ref<PluginsEditor>
 }
 
 const EmailBody = ({
   content,
   uploadImage,
   signature,
+  hasSignatureByDefault,
   hasStaticBody = false,
   editorRef
 }: Props) => {
@@ -44,6 +46,7 @@ const EmailBody = ({
               enableImage
               uploadImage={uploadImage}
               enableSignature
+              hasSignatureByDefault={hasSignatureByDefault}
               onEditSignature={() => setSignatureEditorVisible(true)}
               signature={signature}
               input={input}

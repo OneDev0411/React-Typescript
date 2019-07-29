@@ -65,6 +65,7 @@ export const TextEditor = forwardRef(
       settings = {},
       uploadImage,
       signature,
+      hasSignatureByDefault = false,
       onEditSignature = () => {},
       enableImage = false,
       enableRichText = true,
@@ -86,14 +87,6 @@ export const TextEditor = forwardRef(
     const { stateToHtmlOptions, stateFromHtmlOptions } = useMemo(
       () => getHtmlConversionOptions(() => editorRef.current),
       []
-    )
-    const [editorState, setEditorState] = useState(() =>
-      EditorState.createWithContent(
-        stateFromHTML(
-          (input && input.value) || defaultValue,
-          stateFromHtmlOptions
-        )
-      )
     )
 
     signatureRef.current = signature
@@ -132,6 +125,18 @@ export const TextEditor = forwardRef(
     if (editorRef.current) {
       originalEditorRef.current = editorRef.current.editor
     }
+
+    const getInitialState = () => {
+      const initialValue = (input && input.value) || defaultValue
+      const initialState = EditorState.createWithContent(
+        stateFromHTML(initialValue, stateFromHtmlOptions)
+      )
+
+      return hasSignatureByDefault && signature
+        ? signaturePlugin.modifiers.appendSignature(initialState)
+        : initialState
+    }
+    const [editorState, setEditorState] = useState(getInitialState)
 
     useImperativeHandle(
       ref,

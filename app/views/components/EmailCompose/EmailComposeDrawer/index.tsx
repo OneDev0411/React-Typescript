@@ -35,6 +35,7 @@ interface Props {
   isSubmitDisabled?: boolean
   hasStaticBody?: boolean
   hasDealsAttachments?: boolean
+  hasSignatureByDefault?: boolean
 
   dispatch: any // Extending DispatchProps seems to have problems
   signature: string
@@ -254,6 +255,7 @@ class EmailComposeDrawer extends React.Component<Props, State> {
 
             <EmailBody
               ref={this.emailBodyRef}
+              hasSignatureByDefault={this.props.hasSignatureByDefault}
               hasStaticBody={this.props.hasStaticBody}
               uploadImage={this.uploadImage}
               content={this.props.body}

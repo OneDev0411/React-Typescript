@@ -39,6 +39,7 @@ export function SingleEmailComposeDrawer({
   return (
     <EmailComposeDrawer
       {...otherProps}
+      hasSignatureByDefault
       sendEmail={handleSendEmail}
       getSendEmailResultMessages={form =>
         getSendEmailResultMessages(1, form.due_at)
