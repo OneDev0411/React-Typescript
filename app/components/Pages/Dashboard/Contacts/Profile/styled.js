@@ -71,7 +71,7 @@ export const ThirdColumn = styled.div`
 `
 
 export const TabsContainer = styled.div`
-  margin-bottom: 2em;
+  margin-bottom: 1.5em;
   border-radius: 3px;
   background: #fff;
   border: 1px solid ${borderColor};
@@ -95,17 +95,17 @@ export const TabsContainer = styled.div`
 
     > span {
       position: relative;
-      height: 4rem;
+      height: 2.5rem;
       display: inline-flex;
       justify-content: center;
       align-items: center;
-      font-size: 1.25rem;
+      font-size: 1.125rem;
       line-height: 1;
 
       &:after {
         content: '';
         width: 100%;
-        height: 0.25rem;
+        height: 0.125rem;
         position: absolute;
         left: 0;
         bottom: -1px;
