@@ -1,10 +1,18 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React, { ReactElement } from 'react'
 import { Helmet } from 'react-helmet'
+
+import { connect } from 'react-redux'
+
+import { IAppState } from 'reducers/index'
 
 import { ProfileTabs } from './components/Tabs'
 
-const AccountLayout = ({ user, children }) => (
+interface Props {
+  user: IUser
+  children: ReactElement<any>
+}
+
+const AccountLayout = ({ user, children }: Props) => (
   <React.Fragment>
     <Helmet>
       <title>Account | Rechat</title>
@@ -21,4 +29,4 @@ const AccountLayout = ({ user, children }) => (
   </React.Fragment>
 )
 
-export default connect(({ user }) => ({ user }))(AccountLayout)
+export default connect(({ user }: IAppState) => ({ user }))(AccountLayout)

@@ -1,7 +1,6 @@
 declare module 'draft-js-plugins-editor' {
-  import { Editor as DraftEditor } from 'draft-js'
+  import { Editor as DraftEditor, EditorState } from 'draft-js'
   import * as React from 'react'
-  import EditorState = Draft.Model.ImmutableData.EditorState
   import { RefObject } from 'react'
 
   export default class Editor extends React.Component<DraftEditor['props']> {

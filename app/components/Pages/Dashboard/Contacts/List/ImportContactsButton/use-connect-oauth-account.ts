@@ -13,7 +13,8 @@ export function useConnectOAuthAccount(
   const [connecting, setConnecting] = useState(false)
 
   const connect = async () => {
-    const url = (await connectOAuthAccount(provider)).url
+    const redirectionInfo = await connectOAuthAccount(provider)
+    const url = redirectionInfo.url
 
     setConnecting(true)
 
