@@ -9,13 +9,9 @@ import Search from 'components/Grid/Search'
 import { searchDeals, getDeals } from 'actions/deals'
 import { viewAsEveryoneOnTeam, viewAs } from 'utils/user-teams'
 
-import {
-  PageContainer,
-  GridContainer,
-  SearchContainer
-} from '../styles/page-container/styled'
+import { PageContainer, GridContainer } from '../styles/page-container/styled'
 
-import Header from '../components/PageHeader'
+import PageHeader from '../components/PageHeader'
 import Grid from './Grid'
 import AgentFilters from './Filters'
 
@@ -81,7 +77,7 @@ class AgentTable extends React.Component {
         </Menu>
 
         <Content isSideMenuOpen={isSideMenuOpen}>
-          <Header
+          <PageHeader
             title={params.filter || 'All'}
             showBackButton={false}
             isSideMenuOpen={isSideMenuOpen}
@@ -89,19 +85,17 @@ class AgentTable extends React.Component {
           />
 
           <GridContainer>
-            <SearchContainer>
-              <Search
-                disableOnSearch
-                showLoadingOnSearch
-                defaultValue={persistentSearchInput}
-                isSearching={isFetchingDeals}
-                placeholder="Search deals by address, MLS # or agent name…"
-                onChange={this.handleSearch}
-                onClearSearch={this.handleSearch}
-                debounceTime={700}
-                minimumLength={4}
-              />
-            </SearchContainer>
+            <Search
+              disableOnSearch
+              showLoadingOnSearch
+              defaultValue={persistentSearchInput}
+              isSearching={isFetchingDeals}
+              placeholder="Search deals by address, MLS # or agent name…"
+              onChange={this.handleSearch}
+              onClearSearch={this.handleSearch}
+              debounceTime={700}
+              minimumLength={4}
+            />
 
             <Grid activeFilter={params.filter} />
           </GridContainer>

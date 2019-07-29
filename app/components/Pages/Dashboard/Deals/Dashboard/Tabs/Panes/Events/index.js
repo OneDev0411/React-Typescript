@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 
 import getCRMTimeline from 'models/get-crm-timeline'
-import NewTask from 'views/CRM/Tasks/components/NewTask'
+import NewTask from 'components/NewEvent'
 import { normalizeDeal } from 'views/utils/association-normalizers'
 
 import { Timeline } from '../../../../../Contacts/Profile/Timeline'

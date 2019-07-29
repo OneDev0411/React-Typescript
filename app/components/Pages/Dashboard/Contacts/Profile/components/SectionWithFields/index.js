@@ -384,7 +384,7 @@ class SectionWithFields extends React.Component {
           key={cuid()}
           iconLeft={AddIcon}
           onClick={this.openCustomAttributeDrawer}
-          style={{ marginBottom: '1em' }}
+          style={{ margin: '1em 0' }}
           text={`Add custom ${addCustomAttributeButtonText}`}
         />
       )
@@ -398,7 +398,7 @@ class SectionWithFields extends React.Component {
 
     return (
       <Section title={this.props.title || section}>
-        <div style={{ padding: '0 1.5rem', display: 'block' }}>
+        <div style={{ padding: '0 1rem', display: 'block' }}>
           {this.renderFields()}
         </div>
 
