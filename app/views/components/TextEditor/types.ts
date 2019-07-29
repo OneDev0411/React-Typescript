@@ -40,6 +40,11 @@ export interface TextEditorProps {
    */
   onEditSignature?: () => void
 
+  /**
+   * Whether to include signature by default or not
+   */
+  hasSignatureByDefault?: boolean
+
   onAttachmentDropped?: (file: File) => void
 
   /** ********
