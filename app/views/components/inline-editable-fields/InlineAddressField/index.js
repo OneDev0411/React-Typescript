@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import debounce from 'lodash/debounce'
 import idx from 'idx'
 import Popover from '@material-ui/core/Popover'
+import Popper from '@material-ui/core/Popper'
 
 import { loadJS } from '../../../../utils/load-js'
 import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/Listings/mapOptions'
@@ -217,34 +218,29 @@ export class InlineAddressField extends React.Component {
     const isOpenForm =
       isOpen && this.props.needsAddressForm && this.state.isShowForm
     const formId = isOpenForm ? 'address-form-popover' : undefined
-    const suggestonsId = isOpenSuggestion
-      ? 'google-address-suggestons-popover'
-      : undefined
 
     return (
       <div style={this.props.style}>
         {this.props.renderSearchField({
-          id: suggestonsId || formId,
+          id: formId,
           isLoading: this.state.isLoading,
           onChange: this.handleChangeInput,
           value: address,
           autoComplete: 'disabled'
         })}
-        <Popover
-          id={suggestonsId}
-          open={isOpenSuggestion}
+        <Popper
           anchorEl={anchorEl}
-          onClose={this.handleClose}
-          {...POP_OVER_PROPS}
+          open={isOpenSuggestion}
+          placement="bottom-start"
         >
           <Suggestions
-            style={this.props.suggestionsStyle}
             items={this.state.places}
             searchText={address}
+            style={this.props.suggestionsStyle}
             onClickDefaultItem={this.onClickDefaultItem}
             onClickSuggestionItem={this.onClickSuggestionItem}
           />
-        </Popover>
+        </Popper>
         <Popover
           {...POP_OVER_PROPS}
           id={formId}
@@ -265,8 +261,8 @@ export class InlineAddressField extends React.Component {
           }}
         >
           <InlineAddressForm
-            style={this.props.formStyle}
             address={address}
+            style={this.props.formStyle}
             handleCancel={this.handleClose}
             handleDelete={this.props.handleDelete}
             handleSubmit={this.props.handleSubmit}

@@ -1,8 +1,9 @@
 import styled from 'styled-components'
 
-import { primary, grey, borderColor } from '../../../../utils/colors'
+import Card from 'components/Card'
+import { primary, grey, borderColor } from 'views/utils/colors'
 
-export const ListContainer = styled.div`
+export const ListContainer = styled(Card)`
   z-index: 2;
 `
 
