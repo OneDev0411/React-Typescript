@@ -10,7 +10,10 @@ import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 
 // import deleteFlow from 'models/flows/delete-flow'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
-import { updateContactQuery } from 'models/contacts/helpers/default-query'
+import {
+  updateContactQuery,
+  defaultQuery
+} from 'models/contacts/helpers/default-query'
 import { getContact } from 'models/contacts/get-contact'
 import { deleteContacts } from 'models/contacts/delete-contact'
 import { updateContactSelf } from 'models/contacts/update-contact-self'
@@ -84,8 +87,8 @@ class ContactProfile extends React.Component {
     this.detectScreenSize()
     window.addEventListener('resize', this.detectScreenSize)
     this.initializeContact()
-    window.socket.on('crm_task:create', this.fetchTimeline)
-    window.socket.on('email_campaign:create', this.fetchTimeline)
+    window.socket.on('crm_task:create', this.handleSocket)
+    window.socket.on('email_campaign:create', this.handleSocket)
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -103,8 +106,8 @@ class ContactProfile extends React.Component {
 
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.detectScreenSize)
-    window.socket.off('crm_task:create', this.fetchTimeline)
-    window.socket.off('email_campaign:create', this.fetchTimeline)
+    window.socket.off('crm_task:create', this.handleSocket)
+    window.socket.off('email_campaign:create', this.handleSocket)
   }
 
   /**
@@ -124,6 +127,23 @@ class ContactProfile extends React.Component {
 
     if (window.innerWidth >= 1681 && !this.state.isDesktopScreen) {
       return this.setState({ isDesktopScreen: true })
+    }
+  }
+
+  handleSocket = () => {
+    this.fetchTimeline()
+    this.updateContact()
+  }
+
+  updateContact = async () => {
+    try {
+      const response = await getContact(this.props.params.id, {
+        associations: [...defaultQuery.associations, 'contact.user']
+      })
+
+      this.setState({ contact: normalizeContact(response.data) })
+    } catch (error) {
+      console.log(error)
     }
   }
 
