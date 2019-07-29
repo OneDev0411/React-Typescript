@@ -1,7 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router'
 
-const Tab = ({ to, text, disabled, indexed }) => (
+interface Props {
+  to: string
+  text: string
+  disabled?: boolean
+  indexed?: boolean
+}
+
+const Tab = ({ to, text, disabled, indexed }: Props) => (
   <li>
     <Link
       to={to}

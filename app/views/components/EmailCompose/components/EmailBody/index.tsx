@@ -1,20 +1,38 @@
 import { Field } from 'react-final-form'
 
-import React, { forwardRef, Fragment } from 'react'
+import React, {
+  ComponentProps,
+  forwardRef,
+  Fragment,
+  Ref,
+  useState
+} from 'react'
+import PluginsEditor from 'draft-js-plugins-editor'
+import { connect } from 'react-redux'
 
 import { TextEditor } from 'components/TextEditor'
 import Loading from 'components/LoadingContainer'
+import { IAppState } from 'reducers/index'
+
+import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
 
 interface Props {
   uploadImage: (file: File) => Promise<string>
   content?: string
   hasStaticBody?: boolean
+  signature: string
+  editorRef: Ref<PluginsEditor>
 }
 
-const EmailBody = (
-  { content, uploadImage, hasStaticBody = false }: Props,
-  ref
-) => {
+const EmailBody = ({
+  content,
+  uploadImage,
+  signature,
+  hasStaticBody = false,
+  editorRef
+}: Props) => {
+  const [signatureEditorVisible, setSignatureEditorVisible] = useState(false)
+
   return (
     <>
       {!hasStaticBody && (
@@ -25,8 +43,11 @@ const EmailBody = (
             <TextEditor
               enableImage
               uploadImage={uploadImage}
+              enableSignature
+              onEditSignature={() => setSignatureEditorVisible(true)}
+              signature={signature}
               input={input}
-              ref={ref}
+              ref={editorRef}
             />
           )}
         />
@@ -49,7 +70,25 @@ const EmailBody = (
           )}
         </Fragment>
       )}
+
+      {signatureEditorVisible && (
+        <EditEmailSignatureDrawer
+          isOpen
+          onClose={() => setSignatureEditorVisible(false)}
+        />
+      )}
     </>
   )
 }
-export default forwardRef(EmailBody)
+
+// TODO(after-redux-update): replace this workaround for forwarding ref
+// with { forwardRef: true } option in new react-redux
+const ConnectedBody = connect(({ user }: IAppState) => ({
+  signature: user.email_signature
+}))(EmailBody)
+
+export default forwardRef(
+  (props: ComponentProps<typeof ConnectedBody>, ref: Ref<PluginsEditor>) => {
+    return <ConnectedBody {...props} editorRef={ref} />
+  }
+)

@@ -253,6 +253,11 @@ const ReminderNotifications = Load({
     import('../components/Pages/Dashboard/Account/ReminderNotifications' /* webpackChunkName: "reminder_notifications" */)
 })
 
+const EmailSignature = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account/EmailSignature' /* webpackChunkName: "email_signature" */)
+})
+
 const AsyncUpgradeAccount = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Account/Upgrade' /* webpackChunkName: "upgrade" */)
@@ -479,6 +484,7 @@ export default (
           path="reminder-notifications"
           component={ReminderNotifications}
         />
+        <Route path="email-signature" component={EmailSignature} />
         <Route path="css" component={AsyncCSS} />
       </Route>
 

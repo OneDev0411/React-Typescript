@@ -2,9 +2,8 @@ import Fetch from '../../../services/fetch'
 
 /**
  * Update user info like first_name and last_name
- * @param {object}
  */
-const editUser = async params => {
+const editUser = async (params: IUserInput) => {
   try {
     const response = await new Fetch().put('/users/self').send(params)
 

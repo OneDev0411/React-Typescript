@@ -1,11 +1,6 @@
 import { CSSProperties } from 'react'
 
-interface AtomicBlockEntityData {
-  alignment?: 'left' | 'right' | 'center' | 'default' // comes from alignment plugin
-  width?: number // comes from block resizable plugin
-  height?: number // comes from block resizable plugin
-  src?: string // comes from image plugin
-}
+import { AtomicBlockEntityData } from '../types'
 
 /**
  * Creates style string based on entity data created by plugins used for
@@ -28,8 +23,8 @@ export function renderAtomicBlockStyles({
 }
 
 function getSizeStyles(
-  width: number | undefined,
-  height: number | undefined
+  width: string | undefined,
+  height: string | undefined
 ): CSSProperties {
   const styles: CSSProperties = {}
 
@@ -37,7 +32,10 @@ function getSizeStyles(
   // mode in resizable draftjs plugin. If we change that, we need to change
   // here too
   styles.width = `${width || 40}%`
-  styles.height = `${height || 40}%`
+
+  if (height) {
+    styles.height = `${height || 40}%`
+  }
 
   return styles
 }

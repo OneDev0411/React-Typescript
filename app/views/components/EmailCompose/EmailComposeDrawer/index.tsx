@@ -1,17 +1,12 @@
-import React, { Fragment } from 'react'
-import PropTypes from 'prop-types'
+import React, { Fragment, ReactElement } from 'react'
 
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
-
 import { Field } from 'react-final-form'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
 import EmailBody from 'components/EmailCompose/components/EmailBody'
-
 import { normalizeAttachments } from 'components/SelectDealFileDrawer/helpers/normalize-attachment'
-
 import { uploadEmailAttachment } from 'models/email-compose/upload-email-attachment'
 
 import { FinalFormDrawer } from '../../FinalFormDrawer'
@@ -20,31 +15,44 @@ import { AttachmentsList } from '../fields/Attachments'
 
 import { Footer } from '../Footer'
 
-const propTypes = {
-  deal: PropTypes.shape(),
-  from: PropTypes.object.isRequired,
-  recipients: PropTypes.array,
-  isSubmitDisabled: PropTypes.bool,
-  defaultAttachments: PropTypes.array,
-  hasStaticBody: PropTypes.bool,
-  body: PropTypes.string,
-  isOpen: PropTypes.bool.isRequired,
-  sendEmail: PropTypes.func,
-  onClose: PropTypes.func.isRequired,
-  onSent: PropTypes.func,
-  hasDealsAttachments: PropTypes.bool,
-  getSendEmailResultMessages: PropTypes.func.isRequired,
-  children: PropTypes.element
+interface Props {
+  from: {
+    id: string
+    display_name: string
+    email: string
+  }
+  sendEmail: (values: ComposeFormValues) => Promise<any>
+  isOpen: boolean
+  getSendEmailResultMessages: (
+    values: ComposeFormValues
+  ) => { successMessage: string; errorMessage: string }
+  onSent: () => void
+  onClose: () => void
+  deal?: IDeal
+  body?: string
+  recipients?: any[] // FIXME: replace any with proper type
+  defaultAttachments?: any[] // FIXME: replace any with proper type
+  isSubmitDisabled?: boolean
+  hasStaticBody?: boolean
+  hasDealsAttachments?: boolean
+
+  dispatch: any // Extending DispatchProps seems to have problems
+  signature: string
+  children: ReactElement<any>
 }
 
-const defaultProps = {
-  body: '',
-  recipients: [],
-  defaultAttachments: [],
-  isSubmitDisabled: false,
-  onSent: () => {},
-  hasStaticBody: false,
-  hasDealsAttachments: false
+interface State {
+  isSendingEmail: boolean
+}
+
+interface ComposeFormValues {
+  attachments: any
+  recipients: any[] | undefined
+  subject: string
+  from: string
+  due_at: string
+  body: string | undefined
+  fromId: any
 }
 
 /**
@@ -59,14 +67,28 @@ const defaultProps = {
  * These differences are abstracted away from EmailComposeDrawer
  * as props to be provided by concrete email compose drawer components.
  */
-class EmailComposeDrawer extends React.Component {
+class EmailComposeDrawer extends React.Component<Props, State> {
+  static defaultProps = {
+    body: '',
+    recipients: [],
+    defaultAttachments: [],
+    isSubmitDisabled: false,
+    onSent: () => {},
+    hasStaticBody: false,
+    hasDealsAttachments: false
+  }
+
   state = {
     isSendingEmail: false
   }
 
-  emailBodyRef = React.createRef()
+  emailBodyRef = React.createRef<any>()
 
   static contextType = ConfirmationModalContext
+
+  private formObject: ComposeFormValues
+
+  private initialAttachments: any[]
 
   get InitialValues() {
     if (
@@ -98,7 +120,7 @@ class EmailComposeDrawer extends React.Component {
     (this.props.recipients || []).length
 
   validate = values => {
-    const errors = {}
+    const errors: { [key in keyof ComposeFormValues]?: string } = {}
     const { recipients } = values
 
     if (!recipients || recipients.length === 0) {
@@ -183,7 +205,9 @@ class EmailComposeDrawer extends React.Component {
   }
 
   uploadImage = async file => {
-    return (await uploadEmailAttachment(file)).url
+    const uploadedFile = await uploadEmailAttachment(file)
+
+    return uploadedFile.url
   }
 
   render() {
@@ -218,14 +242,14 @@ class EmailComposeDrawer extends React.Component {
               placeholder="From"
               name="from"
               readOnly
-              component={TextInput}
+              component={TextInput as any}
             />
 
             <Field
               data-test="email-subject"
               placeholder="Subject"
               name="subject"
-              component={TextInput}
+              component={TextInput as any}
             />
 
             <EmailBody
@@ -242,8 +266,5 @@ class EmailComposeDrawer extends React.Component {
     )
   }
 }
-
-EmailComposeDrawer.propTypes = propTypes
-EmailComposeDrawer.defaultProps = defaultProps
 
 export default connect()(EmailComposeDrawer)
