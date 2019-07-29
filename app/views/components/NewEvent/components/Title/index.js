@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Field } from 'react-final-form'
 
-import { grey } from '../../../../../../utils/colors'
+import { grey } from 'views/utils/colors'
 
 const Input = styled.input`
   width: 100%;

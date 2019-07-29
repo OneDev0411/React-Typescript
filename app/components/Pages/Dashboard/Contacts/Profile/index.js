@@ -20,17 +20,17 @@ import { getNotes } from 'models/contacts/helpers/get-notes'
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
 
+import NewTask from 'components/NewEvent'
 import {
   selectDefinitionByName,
   isLoadedContactAttrDefs
-} from '../../../../../reducers/contacts/attributeDefs'
-import { selectContact } from '../../../../../reducers/contacts/list'
+} from 'reducers/contacts/attributeDefs'
+import { selectContact } from 'reducers/contacts/list'
 
-import { getContactsTags } from '../../../../../store_actions/contacts/get-contacts-tags'
-import { normalizeContact as associationNormalizer } from '../../../../../views/utils/association-normalizers'
+import { getContactsTags } from 'store_actions/contacts/get-contacts-tags'
+import { normalizeContact as associationNormalizer } from 'views/utils/association-normalizers'
 
 import Loading from '../../../../Partials/Loading'
-import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
 
 import { Container } from '../components/Container'
 // import Flows from './Flows'
@@ -40,7 +40,7 @@ import { Details } from './Details'
 import { Partner } from './Partner'
 import Tags from './Tags'
 import { ContactInfo } from './ContactInfo'
-import Addresses from './Addresses'
+import AddressesSection from './Addresses'
 import { AddNote } from './AddNote'
 import { Owner } from './Owner'
 import Delete from './Delete'
@@ -333,7 +333,7 @@ class ContactProfile extends React.Component {
 
                 <ContactInfo {..._props} />
 
-                <Addresses {..._props} />
+                <AddressesSection {..._props} />
 
                 <Details {..._props} />
 

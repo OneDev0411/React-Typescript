@@ -1,15 +1,15 @@
-import styled from "styled-components"
 import React from 'react'
+import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
-import { AddContactAssociation } from '../../../../../../components/AddContactAssociations'
-import { AddListingAssociation } from '../../../../../../components/AddListingAssociations'
-import { AddDealAssociation } from '../../../../../../components/AddDealAssociation'
-import Button from '../../../../../../components/Button/IconButton'
-import IconContact from '../../../../../../components/SvgIcons/Contacts/IconContacts'
-import IconListing from '../../../../../../components/SvgIcons/Properties/IconProperties'
-import IconDeal from '../../../../../../components/SvgIcons/Deals/IconDeal'
+import { AddContactAssociation } from 'components/AddContactAssociations'
+import { AddListingAssociation } from 'components/AddListingAssociations'
+import { AddDealAssociation } from 'components/AddDealAssociation'
+import Button from 'components/Button/IconButton'
+import IconContact from 'components/SvgIcons/Contacts/IconContacts'
+import IconListing from 'components/SvgIcons/Properties/IconProperties'
+import IconDeal from 'components/SvgIcons/Deals/IconDeal'
 
 const Container = styled(Flex)`
   > div > button {

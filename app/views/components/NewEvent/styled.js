@@ -1,17 +1,13 @@
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
-import LinkButton from '../../../../components/Button/LinkButton'
-import ArrowDropDown from '../../../../components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
-import { grey, primary } from '../../../../utils/colors'
+import { grey, primary } from 'views/utils/colors'
+import LinkButton from 'components/Button/LinkButton'
+import ArrowDropDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 export const FormContainer = styled.form`
   width: 100%;
   padding: 1.5em;
-
-  /* &:hover {
-    cursor: pointer;
-  } */
 `
 export const FieldContainer = styled(Flex)`
   height: 40px;

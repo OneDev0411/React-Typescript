@@ -1,13 +1,13 @@
-import styled from "styled-components"
 import React from 'react'
+import styled from 'styled-components'
 import { Field } from 'react-final-form'
 import Flex from 'styled-flex-component'
 
-import { Dropdown } from '../../../../../../components/Dropdown'
-import LinkButton from '../../../../../../components/Button/LinkButton'
-import { eventTypesIcons } from '../../../../../../utils/event-types-icons'
-import ArrowDropDown from '../../../../../../components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
-import { grey, primary } from '../../../../../../utils/colors'
+import { Dropdown } from 'components/Dropdown'
+import LinkButton from 'components/Button/LinkButton'
+import { eventTypesIcons } from 'components/../utils/event-types-icons'
+import ArrowDropDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import { grey, primary } from 'views/utils/colors'
 
 export const Button = styled(LinkButton)`
   min-width: 160px;
