@@ -18,7 +18,7 @@ export function Section(props) {
   return (
     <Container>
       <Header alignCenter justifyBetween>
-        <Title>{props.title}</Title>
+        <Title id={props.title}>{props.title}</Title>
         <Menu onEdit={props.onEdit} />
       </Header>
       <div style={props.style}>{props.children}</div>
