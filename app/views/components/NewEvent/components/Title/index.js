@@ -2,39 +2,61 @@ import React from 'react'
 import styled from 'styled-components'
 import { Field } from 'react-final-form'
 
-import { grey } from 'views/utils/colors'
+import { grey, red } from 'views/utils/colors'
 
-const Input = styled.input`
-  width: 100%;
-  padding: 0;
-  border-width: 0;
+const Container = styled.div`
+  margin-bottom: 1em;
 
-  margin-bottom: 2.5rem;
-  font-size: 1.5rem;
-  font-weight: 500;
+  > input {
+    width: 100%;
+    padding: 0;
+    border-width: 0;
+    font-size: 1.2rem;
+    font-weight: 500;
 
-  &:focus {
-    outline: none;
+    &:focus {
+      outline: none;
+    }
+
+    &::placeholder {
+      color: ${grey.A550};
+    }
   }
 
-  &::placeholder {
-    color: ${grey.A550};
+  > .error {
+    color: ${red.primary};
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
   }
 `
 
 export function Title() {
+  const validate = value => {
+    if (typeof value !== 'string' || value.trim().length === 0) {
+      return 'Title is required!'
+    }
+  }
+
   return (
     <Field
       name="title"
-      render={({ input }) => (
-        <Input
-          {...input}
-          type="text"
-          autoComplete="off"
-          data-test="add-task"
-          placeholder="Add a descriptive title…"
-        />
-      )}
+      validate={validate}
+      render={({ input, meta }) => {
+        const { error, touched } = meta
+
+        return (
+          <Container>
+            <input
+              {...input}
+              type="text"
+              autoComplete="off"
+              data-test="add-task"
+              placeholder="Add a title"
+            />
+            {error && touched && <div className="error">{error}</div>}
+          </Container>
+        )
+      }}
     />
   )
 }

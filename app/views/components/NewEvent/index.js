@@ -80,15 +80,6 @@ export default class Task extends Component {
 
             const submitting = props.submitting || props.validating
 
-            const hasTitle =
-              typeof values.title === 'string' && values.title.trim()
-
-            const isActive =
-              hasTitle ||
-              (defaultAssociation
-                ? values.associations.length > 1
-                : values.associations.length > 0)
-
             return (
               <React.Fragment>
                 <FormContainer onSubmit={props.handleSubmit}>
@@ -116,37 +107,33 @@ export default class Task extends Component {
                       }
                     }}
                   />
-                  <Title />
-                  {isActive && (
-                    <React.Fragment>
-                      <Flex
-                        alignCenter
-                        justifyBetween
-                        style={{ marginBottom: '1.5em' }}
-                      >
-                        <TaskType />
-                        <FieldContainer
-                          justifyBetween
-                          alignCenter
-                          style={{
-                            margin: '0 0 0 1em',
-                            flex: 2
-                          }}
-                        >
-                          <DateTimeField
-                            name="dueDate"
-                            selectedDate={values.dueDate}
-                          />
-                          <ReminderField dueDate={values.dueDate} />
-                        </FieldContainer>
-                      </Flex>
-                      <AssociationsList
-                        name="associations"
-                        associations={values.associations}
-                        defaultAssociation={defaultAssociation}
+                  <Flex
+                    alignCenter
+                    justifyBetween
+                    style={{ marginBottom: '1em' }}
+                  >
+                    <TaskType />
+                    <FieldContainer
+                      justifyBetween
+                      alignCenter
+                      style={{
+                        margin: '0 0 0 1em',
+                        flex: 2
+                      }}
+                    >
+                      <DateTimeField
+                        name="dueDate"
+                        selectedDate={values.dueDate}
                       />
-                    </React.Fragment>
-                  )}
+                      <ReminderField dueDate={values.dueDate} />
+                    </FieldContainer>
+                  </Flex>
+                  <Title />
+                  <AssociationsList
+                    name="associations"
+                    associations={values.associations}
+                    defaultAssociation={defaultAssociation}
+                  />
                   <Flex justifyBetween alignCenter>
                     <Field
                       name="associations"
@@ -158,26 +145,27 @@ export default class Task extends Component {
                         />
                       )}
                     />
-                    {isActive && (
-                      <Flex justifyBetween alignCenter>
-                        <ActionButton
-                          type="button"
-                          appearance="link"
-                          disabled={this.state.showDrawer}
-                          onClick={() => this.onClickMoreOptions(values)}
-                          style={{ fontWeight: 500 }}
-                        >
-                          More Options
-                        </ActionButton>
-                        <ActionButton
-                          type="submit"
-                          disabled={submitting || !hasTitle}
-                          data-test="save-task"
-                        >
-                          {submitting ? 'Saving...' : 'Save'}
-                        </ActionButton>
-                      </Flex>
-                    )}
+
+                    <Flex justifyBetween alignCenter>
+                      <ActionButton
+                        type="button"
+                        size="small"
+                        appearance="link"
+                        disabled={this.state.showDrawer}
+                        onClick={() => this.onClickMoreOptions(values)}
+                        style={{ fontWeight: 500 }}
+                      >
+                        More Options
+                      </ActionButton>
+                      <ActionButton
+                        type="submit"
+                        size="small"
+                        disabled={submitting}
+                        data-test="save-task"
+                      >
+                        {submitting ? 'Saving...' : 'Save'}
+                      </ActionButton>
+                    </Flex>
                   </Flex>
                 </FormContainer>
 
