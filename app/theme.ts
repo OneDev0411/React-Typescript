@@ -33,6 +33,11 @@ export const theme = createMuiTheme({
   shape: {
     borderRadius: 3
   },
+  typography: {
+    button: {
+      textTransform: 'none'
+    }
+  },
   props: {
     MuiButtonBase: {
       // Disable ink ripple for more consistency with our current UI components

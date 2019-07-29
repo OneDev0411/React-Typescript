@@ -24,6 +24,7 @@ import routes from './routes'
 // store
 import store from './stores'
 import { theme } from './theme'
+import { MaterialUiGlobalOverrides } from './material-ui-global-overrides'
 
 // history
 const history = syncHistoryWithStore(browserHistory, store)
@@ -63,6 +64,7 @@ const App = () => (
             <NotificationsSystem theme={notificationTheme} />
 
             <ReduxConfirmationModal />
+            <MaterialUiGlobalOverrides />
           </Fragment>
         </StyledComponentsThemeProvider>
       </ThemeProvider>
