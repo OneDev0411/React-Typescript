@@ -18,7 +18,7 @@ export const getPredefinedContactLists = (
     default: getDefaultList(name)
   }
 
-  const accounts = Object.values(state.contacts.oAuthAccounts)
+  const accounts = Object.values(state.contacts.oAuthAccounts.list)
     .flat()
     .filter(account => account.sync_status === 'success')
 

@@ -1,5 +1,3 @@
-import { OAuthProvider } from 'constants/contacts'
-
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
@@ -10,23 +8,19 @@ import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { deleteContacts, getContacts, searchContacts } from 'actions/contacts'
 import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-text-filter'
-
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import {
   selectContacts,
   selectContactsInfo,
   selectContactsListFetching
 } from 'reducers/contacts/list'
-
 import {
   getUserSettingsInActiveTeam,
   viewAs,
   viewAsEveryoneOnTeam
 } from 'utils/user-teams'
-
 import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
 import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
-
 import {
   Container as PageContainer,
   Content as PageContent,
@@ -34,19 +28,12 @@ import {
 } from 'components/SlideMenu'
 import SavedSegments from 'components/Grid/SavedSegments/List'
 import { resetGridSelectedItems } from 'components/Grid/Table/Plugins/Selectable'
-
 import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
-
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
-
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
-
 import { Callout } from 'components/Callout'
-
 import { AlphabetFilter } from 'components/AlphabetFilter'
-
 import { updateTeamSetting } from 'actions/user/update-team-setting'
-
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
 
 import Table from './Table'
@@ -57,9 +44,9 @@ import TagsList from './TagsList'
 
 import {
   FLOW_FILTER_ID,
-  SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY,
   OPEN_HOUSE_FILTER_ID,
   SORT_FIELD_SETTING_KEY,
+  SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY,
   SYNCED_CONTACTS_LIST_ID
 } from './constants'
 import { CalloutSpinner, Container, SearchWrapper } from './styled'
@@ -90,8 +77,7 @@ class ContactsList extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchOAuthAccounts(OAuthProvider.Google)
-    this.props.fetchOAuthAccounts(OAuthProvider.Outlook)
+    this.props.fetchOAuthAccounts()
     this.fetchContactsAndJumpToSelected()
 
     if (this.props.fetchTags) {
@@ -634,7 +620,7 @@ function mapStateToProps({ user, contacts, ...restOfState }) {
   )
 
   return {
-    oAuthAccounts: contacts.oAuthAccounts,
+    oAuthAccounts: contacts.oAuthAccounts.list,
     fetchTags,
     filters: normalizeAttributeFilters(attributeFilters),
     filterSegments,

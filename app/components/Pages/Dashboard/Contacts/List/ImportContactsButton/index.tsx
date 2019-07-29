@@ -1,26 +1,17 @@
 import React, { useEffect } from 'react'
-
 import { connect } from 'react-redux'
-
-import { browserHistory } from 'react-router'
+import { browserHistory, Link as RouterLink } from 'react-router'
+import { Link } from '@material-ui/core'
 
 import SplitButton from 'components/SplitButton'
-
 import { MenuItem } from 'components/Menu/MenuItem'
-
 import ALink from 'components/ALink'
-
 import { IAppState } from 'reducers/index'
-
 import { Divider } from 'components/Divider'
 import Tooltip from 'components/tooltip'
-
 import PopOver from 'components/Popover'
-
 import { getUserSettingsInActiveTeam } from 'utils/user-teams'
-
 import { putUserSetting } from 'models/user/put-user-setting'
-
 import Acl from 'components/Acl'
 import ActionButton from 'components/Button/ActionButton'
 
@@ -96,7 +87,14 @@ export function ImportContactsButton({ accounts, user }: Props) {
                 {accounts.length > 0 && <Divider />}
                 {accounts.map(account => (
                   <MenuItem key={account.id}>
-                    <ConnectedAccount account={account} />
+                    <Link
+                      component={RouterLink}
+                      to="/dashboard/account/connected-accounts"
+                      color="inherit"
+                      underline="none"
+                    >
+                      <ConnectedAccount account={account} />
+                    </Link>
                   </MenuItem>
                 ))}
               </>
@@ -139,7 +137,7 @@ export function ImportContactsButton({ accounts, user }: Props) {
 
 function mapStateToProps(state: IAppState) {
   return {
-    accounts: Object.values(state.contacts.oAuthAccounts).flat(),
+    accounts: Object.values(state.contacts.oAuthAccounts.list).flat(),
     user: state.user
   }
 }

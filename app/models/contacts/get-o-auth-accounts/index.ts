@@ -11,5 +11,7 @@ export async function getOAuthAccounts(
     )
     .send()
 
-  return response.body && response.body.data
+  const accounts: IOAuthAccount[] = (response.body && response.body.data) || []
+
+  return accounts.filter(account => !account.revoked)
 }
