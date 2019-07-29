@@ -221,7 +221,6 @@ export const TextEditor = forwardRef(
     const showNoSignatureModal = () => {
       confirmation!.setConfirmationModal({
         message:
-          // eslint-disable-next-line
           "You don't have an email signature. Would you like to set one?",
         confirmLabel: 'Set signature',
         onConfirm: onEditSignature
