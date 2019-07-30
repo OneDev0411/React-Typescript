@@ -1,4 +1,4 @@
-import { notDeleted } from 'utils/not-deleted'
+import { notDeleted } from '../../../utils/not-deleted'
 
 import Fetch from '../../../services/fetch'
 

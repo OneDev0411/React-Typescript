@@ -1,4 +1,4 @@
-import * as actionTypes from 'constants/contacts'
+import * as actionTypes from '../../constants/contacts'
 
 import { OAuthProvider } from '../../constants/contacts'
 
