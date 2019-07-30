@@ -8,15 +8,16 @@ import fecha from 'fecha'
 //   ImportantDatesIcon
 // } from 'views/utils/important-dates-icons'
 
-import { Container, Time, Title /* SubTitle */ } from './styled'
+import { EventItem } from './Item'
+import { Container, Time } from './styled'
 
-interface IProps {
+interface Props {
   style: React.CSSProperties
   item: CalendarEvent
   nextItem: any
 }
 
-export function EventItem({ item, nextItem, style }: IProps) {
+export function Event({ item, nextItem, style }: Props) {
   const date =
     item.object_type === 'crm_task'
       ? fecha.format(new Date(item.timestamp), 'hh:mm A')
@@ -27,10 +28,14 @@ export function EventItem({ item, nextItem, style }: IProps) {
       <Flex alignCenter>
         <Time>{date}</Time>
 
-        <div>
-          <Title>{item.title}</Title>
-          {/* <SubTitle>{item.title}</SubTitle> */}
-        </div>
+        <EventItem event={item} />
+
+        {/* <div>
+          <Title>
+            <EventTitle item={item} />
+          </Title>
+          <SubTitle>{item.title}</SubTitle>
+        </div> */}
       </Flex>
 
       <div>actions</div>

@@ -10,7 +10,7 @@ interface IProps {
   item: any
 }
 
-export function DayTitleItem(props: IProps) {
+export function DayHeader(props: IProps) {
   return (
     <Flex alignCenter style={props.style}>
       <Container

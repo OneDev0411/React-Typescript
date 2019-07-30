@@ -23,13 +23,3 @@ export const Time = styled.div`
   letter-spacing: 0.25px;
   color: #536280;
 `
-
-export const Title = styled.div``
-
-export const SubTitle = styled.div`
-  font-weight: 500;
-  font-size: 0.875rem;
-  letter-spacing: 0.25px;
-
-  color: #6a7589;
-`
