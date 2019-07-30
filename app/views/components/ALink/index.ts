@@ -10,27 +10,15 @@ interface Props {
   disabled?: boolean
 
   /**
-   * When true, the link is activated.
-   */
-  isActive?: boolean
-
-  /**
    * When true, default appearance of links is not applied.
    * Useful for wrapping link around arbitrary elements.
    */
   noStyle?: boolean
-
-  /**
-   * When true, the link width is 100%.
-   */
-  isBlock?: boolean
 }
 
 const defaultProps = {
   disabled: false,
-  isActive: false,
-  noStyle: false,
-  isBlock: false
+  noStyle: false
 }
 
 const ALink = styled.a<Props>`
