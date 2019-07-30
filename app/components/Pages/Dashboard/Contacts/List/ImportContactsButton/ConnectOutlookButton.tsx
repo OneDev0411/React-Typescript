@@ -35,5 +35,5 @@ function ConnectOutlookButton(props: Props) {
 }
 
 export default connect(({ contacts: { oAuthAccounts } }: IAppState) => ({
-  oAuthAccounts
+  oAuthAccounts: oAuthAccounts.list
 }))(ConnectOutlookButton)

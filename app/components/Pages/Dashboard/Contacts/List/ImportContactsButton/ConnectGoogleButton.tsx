@@ -35,5 +35,5 @@ function ConnectGoogleButton(props: Props) {
 }
 
 export default connect(({ contacts: { oAuthAccounts } }: IAppState) => ({
-  oAuthAccounts
+  oAuthAccounts: oAuthAccounts.list
 }))(ConnectGoogleButton)
