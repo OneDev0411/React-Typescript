@@ -17,5 +17,5 @@ export async function getOAuthAccounts(
 
   // The logic related to showing or not showing deleted accounts or revoked
   // may be subject to change in future.
-  return accounts.filter(notDeleted).filter(account => account.revoked)
+  return accounts.filter(notDeleted).filter(account => !account.revoked)
 }
