@@ -1,4 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  forwardRef,
+  RefObject,
+  ComponentProps
+} from 'react'
+import { connect } from 'react-redux'
+
+import { IAppState } from 'reducers'
+
+import { VirtualListRef } from 'components/VirtualList'
 
 import { LoadingPosition } from 'components/VirtualList'
 
@@ -14,10 +26,16 @@ interface Ranges {
 }
 
 interface Props {
-  onChangeActiveDate: (activeDate: Date) => void
+  user?: IUser
+  calendarRef?: RefObject<VirtualListRef>
+  onChangeActiveDate?: (activeDate: Date) => void
 }
 
-export default function Calendar(props: Props) {
+interface StateProps {
+  user: IUser
+}
+
+export function Calendar({ onChangeActiveDate = () => null }: Props) {
   // holds the reference to the Virtual List
   const listRef = useRef(null)
 
@@ -27,7 +45,7 @@ export default function Calendar(props: Props) {
   /*
    * holds the required ranges of calendar:
    * query: the range of latest query
-   * calendar: range of fetched calendar
+   * calendar: the range of current fetched calendar
    */
   const [ranges, setRanges] = useState<Ranges>(getInitialRanges())
 
@@ -103,7 +121,7 @@ export default function Calendar(props: Props) {
       loadingPosition={loadingPosition}
       onReachEnd={handleLoadNextEvents}
       onReachStart={handleLoadPreviousEvents}
-      onChangeActiveDate={props.onChangeActiveDate}
+      onChangeActiveDate={onChangeActiveDate}
     />
   )
 }
@@ -119,3 +137,21 @@ function getInitialRanges(): Ranges {
     calendar: date
   }
 }
+
+function mapStateToProps(state: IAppState) {
+  return {
+    user: state.user
+  }
+}
+
+// connect to redux
+const ConnectedCalendar = connect<StateProps, {}, Props>(mapStateToProps)(
+  Calendar
+)
+
+export default forwardRef(
+  (
+    props: ComponentProps<typeof ConnectedCalendar>,
+    ref: RefObject<VirtualListRef>
+  ) => <ConnectedCalendar {...props} calendarRef={ref} />
+)
