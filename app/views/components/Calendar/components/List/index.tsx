@@ -8,10 +8,10 @@ import VirtualList, {
 } from 'components/VirtualList'
 
 import { Container } from './styled'
-import { DayTitleItem } from './DayTitleItem'
-import { EventItem } from './EventItem'
+import { DayHeader } from './DayHeader'
+import { Event } from './Event'
 
-interface IProps {
+interface Props {
   rows: any[]
   isLoading: boolean
   loadingPosition: LoadingPosition
@@ -27,7 +27,7 @@ const defaultProps = {
   onVisibleRowChange: () => {}
 }
 
-const CalendarList: React.FC<IProps> = props => {
+const CalendarList: React.FC<Props> = props => {
   const listRef = useRef<VirtualListRef>(null)
   const [activeDate, setActiveDate] = useState<Date | null>(null)
   const [containerRef, listWidth, listHeight] = useResizeObserver()
@@ -41,6 +41,10 @@ const CalendarList: React.FC<IProps> = props => {
 
     const item = props.rows[index + data.visibleStartIndex]
     const date = new Date(item.title)
+
+    if (!(date instanceof Date)) {
+      return
+    }
 
     setActiveDate(date)
     props.onChangeActiveDate(date)
@@ -64,13 +68,13 @@ const CalendarList: React.FC<IProps> = props => {
         {({ index, style }) => (
           <>
             {props.rows[index].is_header ? (
-              <DayTitleItem
+              <DayHeader
                 item={props.rows[index]}
                 style={style}
                 activeDate={activeDate}
               />
             ) : (
-              <EventItem
+              <Event
                 item={props.rows[index]}
                 nextItem={props.rows[index + 1]}
                 style={style}
@@ -85,6 +89,6 @@ const CalendarList: React.FC<IProps> = props => {
 
 CalendarList.defaultProps = defaultProps
 
-export default forwardRef((props: IProps, ref: RefObject<VirtualListRef>) => (
+export default forwardRef((props: Props, ref: RefObject<VirtualListRef>) => (
   <CalendarList {...props} listRef={ref} />
 ))
