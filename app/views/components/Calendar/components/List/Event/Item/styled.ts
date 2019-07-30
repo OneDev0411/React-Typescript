@@ -10,9 +10,9 @@ export const Title = styled.div`
 `
 
 export const SubTitle = styled.div`
-  font-weight: 500;
+  font-weight: 400;
   font-size: 0.875rem;
   letter-spacing: 0.25px;
-
+  margin-left: 3rem;
   color: #6a7589;
 `

@@ -62,19 +62,21 @@ const CalendarList: React.FC<Props> = props => {
         isLoading={props.isLoading}
         loadingPosition={props.loadingPosition}
         onVisibleRowChange={getInViewDate}
-        itemSize={() => 50}
+        itemSize={() => 60}
         ref={listRef}
       >
         {({ index, style }) => (
           <>
             {props.rows[index].is_header ? (
               <DayHeader
+                key={props.rows[index].title}
                 item={props.rows[index]}
                 style={style}
                 activeDate={activeDate}
               />
             ) : (
               <Event
+                key={props.rows[index].index}
                 item={props.rows[index]}
                 nextItem={props.rows[index + 1]}
                 style={style}
