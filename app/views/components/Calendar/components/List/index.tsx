@@ -42,12 +42,10 @@ const CalendarList: React.FC<Props> = props => {
     const item = props.rows[index + data.visibleStartIndex]
     const date = new Date(item.title)
 
-    if (!(date instanceof Date)) {
-      return
+    if (date instanceof Date && !Number.isNaN(date.getTime())) {
+      setActiveDate(date)
+      props.onChangeActiveDate(date)
     }
-
-    setActiveDate(date)
-    props.onChangeActiveDate(date)
   }
 
   return (

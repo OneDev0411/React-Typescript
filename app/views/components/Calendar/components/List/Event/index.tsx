@@ -27,15 +27,7 @@ export function Event({ item, nextItem, style }: Props) {
     <Container style={style} hasBorder={nextItem && !nextItem.is_header}>
       <Flex alignCenter>
         <Time>{date}</Time>
-
         <EventItem event={item} />
-
-        {/* <div>
-          <Title>
-            <EventTitle item={item} />
-          </Title>
-          <SubTitle>{item.title}</SubTitle>
-        </div> */}
       </Flex>
 
       <div>actions</div>
