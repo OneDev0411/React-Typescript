@@ -1,3 +1,5 @@
+import { notDeleted } from 'utils/not-deleted'
+
 import Fetch from '../../../services/fetch'
 
 export async function getOAuthAccounts(
@@ -13,5 +15,7 @@ export async function getOAuthAccounts(
 
   const accounts: IOAuthAccount[] = (response.body && response.body.data) || []
 
-  return accounts.filter(account => !account.revoked)
+  // The logic related to showing or not showing deleted accounts or revoked
+  // may be subject to change in future.
+  return accounts.filter(notDeleted).filter(account => account.revoked)
 }

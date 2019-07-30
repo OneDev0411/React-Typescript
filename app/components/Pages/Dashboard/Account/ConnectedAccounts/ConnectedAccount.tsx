@@ -3,7 +3,6 @@ import { OAuthProvider } from 'constants/contacts'
 import * as React from 'react'
 import {
   Grid,
-  Link,
   ListItem,
   ListItemAvatar,
   ListItemSecondaryAction,
@@ -19,6 +18,7 @@ import { ConnectedAccountSyncStatus } from 'components/ConnectedAccountSyncStatu
 import { DangerButton } from 'components/Button/DangerButton'
 
 import { oAuthAccountTypeToProvider, oAuthAccountTypeToTitle } from './consants'
+import { SyncButton } from './SyncButton'
 
 interface Props {
   account: IOAuthAccount
@@ -32,20 +32,6 @@ const ConnectedAccountListItem = styled(ListItem)`
 `
 
 export function ConnectedAccount({ account, onSync, onDelete }: Props) {
-  const syncButton =
-    !account.sync_status || account.sync_status === 'pending' ? (
-      'Syncing ...'
-    ) : (
-      <Link
-        component="button"
-        onClick={() =>
-          onSync(oAuthAccountTypeToProvider[account.type], account.id)
-        }
-      >
-        Sync now
-      </Link>
-    )
-
   return (
     <ConnectedAccountListItem>
       <ListItemAvatar>
@@ -66,7 +52,7 @@ export function ConnectedAccount({ account, onSync, onDelete }: Props) {
         <Grid item xs={4}>
           <ListItemText
             primary={<ConnectedAccountSyncStatus account={account} />}
-            secondary={syncButton}
+            secondary={<SyncButton account={account} onSync={onSync} />}
           />
         </Grid>
         <ListItemSecondaryAction>
@@ -84,3 +70,5 @@ export function ConnectedAccount({ account, onSync, onDelete }: Props) {
     </ConnectedAccountListItem>
   )
 }
+
+

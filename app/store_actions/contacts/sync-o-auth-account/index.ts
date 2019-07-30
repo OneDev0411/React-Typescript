@@ -1,4 +1,5 @@
 import {
+  FETCH_OAUTH_ACCOUNT_SUCCESS,
   OAuthProvider,
   SYNC_OAUTH_ACCOUNT_FAILURE,
   SYNC_OAUTH_ACCOUNT_REQUEST,
@@ -7,10 +8,10 @@ import {
 
 import { Dispatch } from 'redux'
 
+import { batchActions } from 'redux-batched-actions'
+
 import { syncOAuthAccount as sync } from 'models/contacts/sync-o-auth-account'
 import { IOAuthAccountAction } from 'reducers/contacts/oAuthAccounts'
-
-import { fetchOAuthAccount } from '../fetch-o-auth-account'
 
 export function syncOAuthAccount(provider: OAuthProvider, accountId: string) {
   return async (dispatch: Dispatch<any>) => {
@@ -20,13 +21,19 @@ export function syncOAuthAccount(provider: OAuthProvider, accountId: string) {
     })
 
     try {
-      await sync(provider, accountId)
-      await fetchOAuthAccount(provider, accountId)(dispatch)
+      const updatedAccount = await sync(provider, accountId)
 
-      dispatch<IOAuthAccountAction>({
-        type: SYNC_OAUTH_ACCOUNT_SUCCESS,
-        accountId
-      })
+      batchActions([
+        dispatch({
+          type: SYNC_OAUTH_ACCOUNT_SUCCESS,
+          accountId
+        }),
+        dispatch({
+          account: updatedAccount,
+          provider,
+          type: FETCH_OAUTH_ACCOUNT_SUCCESS
+        })
+      ])
     } catch (error) {
       dispatch<IOAuthAccountAction>({
         type: SYNC_OAUTH_ACCOUNT_FAILURE,
