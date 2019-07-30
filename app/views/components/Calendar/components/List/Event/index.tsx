@@ -2,12 +2,6 @@ import React from 'react'
 import Flex from 'styled-flex-component'
 import fecha from 'fecha'
 
-// import { eventTypesIcons, EventTypeIcon } from 'views/utils/event-types-icons'
-// import {
-//   importantDatesIcons,
-//   ImportantDatesIcon
-// } from 'views/utils/important-dates-icons'
-
 import { EventItem } from './Item'
 import { Container, Time } from './styled'
 
