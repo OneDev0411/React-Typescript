@@ -2,7 +2,7 @@
 
 exports[`EventIcon component renders Birthday 1`] = `
 <IconBirthday
-  fill="#FF6F6F"
+  fill="#ff6f6f"
   style={
     Object {
       "marginRight": "1rem",
@@ -21,7 +21,7 @@ exports[`EventIcon component renders Birthday 1`] = `
 
 exports[`EventIcon component renders Call 1`] = `
 <IconCallOutline
-  fill="#04C6D9"
+  fill="#04c6d9"
   style={
     Object {
       "marginRight": "1rem",
@@ -57,7 +57,7 @@ exports[`EventIcon component renders Chat 1`] = `
 
 exports[`EventIcon component renders Child Birthday (Sam) 1`] = `
 <IconBirthday
-  fill="#FF6F6F"
+  fill="#ff6f6f"
   style={
     Object {
       "marginRight": "1rem",
@@ -76,7 +76,7 @@ exports[`EventIcon component renders Child Birthday (Sam) 1`] = `
 
 exports[`EventIcon component renders Email 1`] = `
 <IconEmailOutline
-  fill="#8F6CF0"
+  fill="#8f6cf0"
   fillColor={null}
   fillColorRule="&&& path, &&& use, &&& g"
   size={null}
@@ -102,7 +102,7 @@ exports[`EventIcon component renders Email 1`] = `
 
 exports[`EventIcon component renders Executed Date 1`] = `
 <IconTaskCritical
-  fill="#F5A623"
+  fill="#f5a623"
   style={
     Object {
       "marginRight": "1rem",
@@ -121,7 +121,7 @@ exports[`EventIcon component renders Executed Date 1`] = `
 
 exports[`EventIcon component renders In-Person Meeting 1`] = `
 <IconInPerson
-  fill="#F7A700"
+  fill="#f7a700"
   style={
     Object {
       "marginRight": "1rem",
@@ -139,7 +139,7 @@ exports[`EventIcon component renders In-Person Meeting 1`] = `
 
 exports[`EventIcon component renders Mail 1`] = `
 <IconMail
-  fill="#7ED321"
+  fill="#7ed321"
   fillColor={null}
   fillColorRule="&&& path, &&& use, &&& g"
   size={null}
@@ -165,7 +165,7 @@ exports[`EventIcon component renders Mail 1`] = `
 
 exports[`EventIcon component renders Other 1`] = `
 <IconMenuRounded
-  fill="#9013FE"
+  fill="#9013fe"
   style={
     Object {
       "marginRight": "1rem",
@@ -183,7 +183,7 @@ exports[`EventIcon component renders Other 1`] = `
 
 exports[`EventIcon component renders Spouse Birthday 1`] = `
 <IconBirthday
-  fill="#FF6F6F"
+  fill="#ff6f6f"
   style={
     Object {
       "marginRight": "1rem",
