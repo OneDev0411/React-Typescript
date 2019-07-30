@@ -140,7 +140,6 @@ class ContactsList extends React.Component {
   }
 
   updateSyncState(provider, oAuthAccounts = this.props.oAuthAccounts) {
-
     const account = getNewConnectedGoogleAccount(provider, oAuthAccounts)
 
     if (account) {
@@ -167,7 +166,7 @@ class ContactsList extends React.Component {
       isFetchingMoreContacts: true
     })
 
-    const start = parseInt(this.getQueryParam('s'), 10) || 0
+    const start = Math.max(parseInt(this.getQueryParam('s'), 10), 0) || 0
     const idSelector = `#grid-item-${this.getQueryParam('id')}`
 
     this.scrollToSelector(idSelector)
