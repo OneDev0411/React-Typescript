@@ -155,19 +155,23 @@ export const TextEditor = forwardRef(
 
       setEditorState(newState)
 
-      // We could have call onChange only of content state is changed to prevent
-      // unnecessary calls when only selection is changed. But it causes
-      // problems and sometimes it doesn't work for some reason.
-      const content = newState.getCurrentContent()
+      const newContent = newState.getCurrentContent()
+      /**
+       * We could have call onChange only of content state is changed to prevent
+       * unnecessary calls when only selection is changed. But it causes
+       * problems because {@link ContentState#mergeEntityData} (which is used
+       * in alignment plugin and other places) mutates contentState in place
+       * see this: https://github.com/facebook/draft-js/issues/940
+       * Note that this issue is closed at the time of writing this comment
+       * but it's without being fixed. At least in v0.10
+       */
 
-      if (content !== editorState.getCurrentContent()) {
-        const html =
-          content.getPlainText() === '' // isEmpty returns false if there is an empty paragraph
-            ? ''
-            : stateToHTML(content, stateToHtmlOptions)
+      const html =
+        newContent.getPlainText() === '' // isEmpty returns false if there is an empty paragraph
+          ? ''
+          : stateToHTML(newContent, stateToHtmlOptions)
 
-        setTimeout(() => (input ? input.onChange(html) : onChange(html)))
-      }
+      setTimeout(() => (input ? input.onChange(html) : onChange(html)))
     }
 
     /**
