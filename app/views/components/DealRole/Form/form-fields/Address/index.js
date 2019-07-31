@@ -27,7 +27,7 @@ export function Address(props) {
   }
 
   const onAddressSubmit = address => {
-    formRef.current.handleFormCancel()
+    formRef.current.handleClose()
 
     props.input.onChange(address)
   }
