@@ -1,5 +1,7 @@
 import { OAuthProvider } from 'constants/contacts'
 
+import { isDeletedOrRevoked } from 'reducers/contacts/oAuthAccounts'
+
 const KEY = 'oAuthImportRequestTime'
 /**
  * A helper for remembering oAuth contacts import in progress when user
@@ -20,6 +22,7 @@ export function getNewConnectedGoogleAccount(
   return (
     currentAccounts[provider].find(
       account =>
+        !isDeletedOrRevoked(account) &&
         new Date(account.created_at) > new Date(lastAccountCreationDate)
     ) || null
   )
