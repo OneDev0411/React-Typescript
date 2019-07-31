@@ -6,6 +6,7 @@ import Paper from '@material-ui/core/Paper'
 
 import { EventDrawer } from 'components/EventDrawer'
 import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
+import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 
 import MiniProfile from './MiniProfile'
 import {
@@ -66,6 +67,9 @@ function MiniContact(props: MiniContactPropsType) {
       )}
       {actionSettings.type === ActionSettingsNamesType.CONTACT && (
         <NewContactDrawer {...actionSettings.data} isOpen />
+      )}
+      {actionSettings.type === ActionSettingsNamesType.EMAIL && (
+        <SingleEmailComposeDrawer {...actionSettings.data} isOpen />
       )}
     </>
   )

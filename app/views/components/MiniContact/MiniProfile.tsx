@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 import Avatar from 'components/Avatar'
 import Button from 'components/Button/LinkButton'
@@ -6,7 +7,11 @@ import copy from 'utils/copy-text-to-clipboard'
 
 import Show from './Show'
 import Activity from './Activity'
-import { MiniContactType, ActionSettingsType } from './types'
+import {
+  MiniContactType,
+  ActionSettingsType,
+  ActionSettingsNamesType
+} from './types'
 import { ProfileContainer } from './styled'
 import { get_name } from './helpers'
 import useProfile from './useProfile'
@@ -17,11 +22,20 @@ interface MiniProfilePropsType {
   initData: {}
   actionSettings: ActionSettingsType
   setActionSettings: (items: ActionSettingsType) => void
+  user: any
 }
 
 function MiniProfile(props: MiniProfilePropsType) {
   const output = useProfile(props.type, props.initData)
   const data = output.data
+  const emailProps = {
+    type: ActionSettingsNamesType.EMAIL,
+    data: {
+      from: props.user,
+      onClose: () => props.setActionSettings({}),
+      onSent: () => props.setActionSettings({})
+    }
+  }
 
   return (
     <ProfileContainer>
@@ -38,6 +52,7 @@ function MiniProfile(props: MiniProfilePropsType) {
             data={output}
             actionSettings={props.actionSettings}
             setActionSettings={props.setActionSettings}
+            user={props.user}
           />
         </div>
       </div>
@@ -57,7 +72,10 @@ function MiniProfile(props: MiniProfilePropsType) {
         </Show>
         <Show if={!!data.email}>
           <div className="person-email">
-            {data.email} <Button>Send Email</Button>
+            {data.email}{' '}
+            <Button onClick={() => props.setActionSettings(emailProps)}>
+              Send Email
+            </Button>
           </div>
         </Show>
         <Show if={!!data.address}>
@@ -74,4 +92,10 @@ function MiniProfile(props: MiniProfilePropsType) {
   )
 }
 
-export default MiniProfile
+function reduxState(state) {
+  return {
+    user: state.user
+  }
+}
+
+export default connect(reduxState)(MiniProfile)

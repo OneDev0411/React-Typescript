@@ -2,7 +2,8 @@ export type MiniContactType = 'contact' | 'user' | 'insight'
 
 export enum ActionSettingsNamesType {
   EVENT = 'event',
-  CONTACT = 'contact'
+  CONTACT = 'contact',
+  EMAIL = 'email'
 }
 export interface ActionSettingsType {
   type?: ActionSettingsNamesType

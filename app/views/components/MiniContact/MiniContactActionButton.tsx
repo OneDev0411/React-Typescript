@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 import TextIconButton from 'components/Button/TextIconButton'
 import ActionButton from 'components/Button/ActionButton'
@@ -71,10 +70,4 @@ function MiniContactActionButton(props: MiniContactActionButtonType) {
   )
 }
 
-function reduxState(state) {
-  return {
-    user: state.user
-  }
-}
-
-export default connect(reduxState)(MiniContactActionButton)
+export default MiniContactActionButton
