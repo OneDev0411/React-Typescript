@@ -87,8 +87,9 @@ class ContactProfile extends React.Component {
     this.detectScreenSize()
     window.addEventListener('resize', this.detectScreenSize)
     this.initializeContact()
-    window.socket.on('crm_task:create', this.handleSocket)
-    window.socket.on('email_campaign:create', this.handleSocket)
+    window.socket.on('contact:touch', this.updateContact)
+    window.socket.on('crm_task:create', this.fetchTimeline)
+    window.socket.on('email_campaign:create', this.fetchTimeline)
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -106,6 +107,7 @@ class ContactProfile extends React.Component {
 
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.detectScreenSize)
+    window.socket.on('contact:touch', this.updateContact)
     window.socket.off('crm_task:create', this.handleSocket)
     window.socket.off('email_campaign:create', this.handleSocket)
   }
@@ -128,11 +130,6 @@ class ContactProfile extends React.Component {
     if (window.innerWidth >= 1681 && !this.state.isDesktopScreen) {
       return this.setState({ isDesktopScreen: true })
     }
-  }
-
-  handleSocket = () => {
-    this.fetchTimeline()
-    this.updateContact()
   }
 
   updateContact = async () => {
