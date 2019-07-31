@@ -102,11 +102,19 @@ class SectionWithFields extends React.Component {
       )
     }))
 
-  updateContact = async attribute_def => {
+  shouldUpdateContact = attribute_def => {
     if (
-      this.props.isPartner ||
-      !fieldsNeedUpdateContact.includes(attribute_def.name)
+      !this.props.isPartner &&
+      fieldsNeedUpdateContact.includes(attribute_def.name)
     ) {
+      return true
+    }
+
+    return false
+  }
+
+  updateContact = async attribute_def => {
+    if (!this.shouldUpdateContact(attribute_def)) {
       return
     }
 
@@ -310,7 +318,9 @@ class SectionWithFields extends React.Component {
               attribute.attribute_def.name} deleted.`
           })
 
-          this.props.submitCallback(normalizeContact(response.data))
+          if (this.shouldUpdateContact(attribute.attribute_def)) {
+            this.props.submitCallback(normalizeContact(response.data))
+          }
         } catch (error) {
           console.log(error)
           this.setState({ orderedAttributes: backupList })
