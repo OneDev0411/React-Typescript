@@ -1,6 +1,8 @@
 import { FieldProps } from 'react-final-form'
 import { ContentBlock, ContentState } from 'draft-js'
 
+import { ITemplateVariableSuggestionGroup } from '../TemplateVariablesButton/types'
+
 export interface ReferenceObject {
   clientHeight: number
   clientWidth: number
@@ -68,6 +70,9 @@ export interface TextEditorProps {
    * Enable/disable signature insertion.
    */
   enableSignature?: boolean
+
+  enableTemplateVariables?: boolean
+  templateVariableSuggestionGroups?: ITemplateVariableSuggestionGroup[]
 }
 
 export interface AtomicBlockEntityData {

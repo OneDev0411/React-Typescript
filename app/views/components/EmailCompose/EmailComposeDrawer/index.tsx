@@ -36,6 +36,7 @@ interface Props {
   hasStaticBody?: boolean
   hasDealsAttachments?: boolean
   hasSignatureByDefault?: boolean
+  hasTemplateVariables?: boolean
 
   dispatch: any // Extending DispatchProps seems to have problems
   signature: string
@@ -257,6 +258,7 @@ class EmailComposeDrawer extends React.Component<Props, State> {
               ref={this.emailBodyRef}
               hasSignatureByDefault={this.props.hasSignatureByDefault}
               hasStaticBody={this.props.hasStaticBody}
+              hasTemplateVariables={this.props.hasTemplateVariables}
               uploadImage={this.uploadImage}
               content={this.props.body}
             />
