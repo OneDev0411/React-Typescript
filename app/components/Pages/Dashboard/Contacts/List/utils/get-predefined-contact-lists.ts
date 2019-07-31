@@ -3,6 +3,8 @@ import { IAppState } from 'reducers/index'
 
 import { getActiveTeamSettings } from 'utils/user-teams'
 
+import { isDeletedOrRevoked } from 'reducers/contacts/oAuthAccounts'
+
 import { getOrganizeSyncedContactsList } from '../OrganizeSyncedContactsButton/helpers'
 import {
   SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY,
@@ -20,7 +22,10 @@ export const getPredefinedContactLists = (
 
   const accounts = Object.values(state.contacts.oAuthAccounts.list)
     .flat()
-    .filter(account => account.sync_status === 'success')
+    .filter(
+      account =>
+        isDeletedOrRevoked(account) || account.sync_status === 'success'
+    )
 
   const lastSeen = new Date(
     getActiveTeamSettings(state.user, SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY) ||

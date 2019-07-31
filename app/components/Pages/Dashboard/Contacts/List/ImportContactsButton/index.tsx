@@ -15,6 +15,8 @@ import { putUserSetting } from 'models/user/put-user-setting'
 import Acl from 'components/Acl'
 import ActionButton from 'components/Button/ActionButton'
 
+import { getAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+
 import { CsvIcon, GoogleIcon, OutlookIcon } from './styled'
 import { ConnectedAccount } from './ConnectedAccount'
 import { IMPORT_TOOLTIP_VISITED_SETTINGS_KEY } from '../constants'
@@ -137,7 +139,7 @@ export function ImportContactsButton({ accounts, user }: Props) {
 
 function mapStateToProps(state: IAppState) {
   return {
-    accounts: Object.values(state.contacts.oAuthAccounts.list).flat(),
+    accounts: getAllConnectedAccounts(state.contacts.oAuthAccounts),
     user: state.user
   }
 }
