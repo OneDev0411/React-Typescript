@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import Button from '@material-ui/core/Button'
+import { Link } from 'react-router'
 
 import Avatar from 'components/Avatar'
-import Button from 'components/Button/LinkButton'
 import copy from 'utils/copy-text-to-clipboard'
 
 import Show from './Show'
@@ -60,20 +61,26 @@ function MiniProfile(props: MiniProfilePropsType) {
         <Show if={!!data.name}>
           <div className="person-name">
             {data.name}{' '}
-            <Button to={`/dashboard/contacts/${output.contact_id}`}>
-              View Profile
-            </Button>
+            <Link to={`/dashboard/contacts/${output.contact_id}`}>
+              <Button color="primary">View Profile</Button>
+            </Link>
           </div>
         </Show>
         <Show if={!!data.phone}>
           <div className="person-phone">
-            {data.phone} <Button onClick={() => copy(data.phone)}>Copy</Button>
+            {data.phone}{' '}
+            <Button color="primary" onClick={() => copy(data.phone)}>
+              Copy
+            </Button>
           </div>
         </Show>
         <Show if={!!data.email}>
           <div className="person-email">
             {data.email}{' '}
-            <Button onClick={() => props.setActionSettings(emailProps)}>
+            <Button
+              color="primary"
+              onClick={() => props.setActionSettings(emailProps)}
+            >
               Send Email
             </Button>
           </div>
@@ -82,7 +89,9 @@ function MiniProfile(props: MiniProfilePropsType) {
           <div className="person-more-info">
             <div className="person-address">
               {data.address}{' '}
-              <Button onClick={() => copy(data.address)}>Copy</Button>
+              <Button color="primary" onClick={() => copy(data.address)}>
+                Copy
+              </Button>
             </div>
           </div>
         </Show>
