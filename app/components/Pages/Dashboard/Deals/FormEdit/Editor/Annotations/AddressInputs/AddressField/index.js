@@ -33,7 +33,7 @@ export function AddressField({
     onAddressUpdate(address)
 
     // close form
-    formRef.current.handleFormCancel()
+    formRef.current.handleClose()
   }
 
   if (deal.listing) {
