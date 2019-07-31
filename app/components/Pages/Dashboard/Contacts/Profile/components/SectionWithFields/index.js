@@ -102,11 +102,19 @@ class SectionWithFields extends React.Component {
       )
     }))
 
-  updateContact = async attribute_def => {
+  shouldUpdateContact = attribute_def => {
     if (
-      this.props.isPartner ||
-      !fieldsNeedUpdateContact.includes(attribute_def.name)
+      !this.props.isPartner &&
+      fieldsNeedUpdateContact.includes(attribute_def.name)
     ) {
+      return true
+    }
+
+    return false
+  }
+
+  updateContact = async attribute_def => {
+    if (!this.shouldUpdateContact(attribute_def)) {
       return
     }
 
@@ -301,7 +309,8 @@ class SectionWithFields extends React.Component {
       async () => {
         try {
           const { contact } = this.props
-          const response = await deleteAttribute(contact.id, attribute.id)
+
+          await deleteAttribute(contact.id, attribute.id)
 
           this.props.notify({
             status: 'success',
@@ -310,7 +319,7 @@ class SectionWithFields extends React.Component {
               attribute.attribute_def.name} deleted.`
           })
 
-          this.props.submitCallback(normalizeContact(response.data))
+          this.updateContact(attribute.attribute_def)
         } catch (error) {
           console.log(error)
           this.setState({ orderedAttributes: backupList })
