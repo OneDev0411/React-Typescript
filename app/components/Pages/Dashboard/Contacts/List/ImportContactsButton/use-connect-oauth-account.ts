@@ -18,7 +18,7 @@ export function useConnectOAuthAccount(
 
     setConnecting(true)
 
-    startImportingOAuthContacts(provider, accountsMap[provider])
+    startImportingOAuthContacts(provider)
 
     window.location.href = url
   }
