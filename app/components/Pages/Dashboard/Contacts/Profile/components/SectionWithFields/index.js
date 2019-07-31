@@ -309,7 +309,8 @@ class SectionWithFields extends React.Component {
       async () => {
         try {
           const { contact } = this.props
-          const response = await deleteAttribute(contact.id, attribute.id)
+
+          await deleteAttribute(contact.id, attribute.id)
 
           this.props.notify({
             status: 'success',
@@ -318,9 +319,7 @@ class SectionWithFields extends React.Component {
               attribute.attribute_def.name} deleted.`
           })
 
-          if (this.shouldUpdateContact(attribute.attribute_def)) {
-            this.props.submitCallback(normalizeContact(response.data))
-          }
+          this.updateContact(attribute.attribute_def)
         } catch (error) {
           console.log(error)
           this.setState({ orderedAttributes: backupList })
