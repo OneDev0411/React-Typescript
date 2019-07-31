@@ -15,7 +15,14 @@ import { putUserSetting } from 'models/user/put-user-setting'
 import Acl from 'components/Acl'
 import ActionButton from 'components/Button/ActionButton'
 
-import { CsvIcon, GoogleIcon, OutlookIcon } from './styled'
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+
+import {
+  CsvIcon,
+  GoogleIcon,
+  GoogleIconWithWhiteBg,
+  OutlookIcon
+} from './styled'
 import { ConnectedAccount } from './ConnectedAccount'
 import { IMPORT_TOOLTIP_VISITED_SETTINGS_KEY } from '../constants'
 import ConnectGoogleButton from './ConnectGoogleButton'
@@ -65,6 +72,7 @@ export function ImportContactsButton({ accounts, user }: Props) {
       <ConnectGoogleButton>
         {({ connecting, connect }) => (
           <SplitButton
+            appearance="primary"
             disabled={connecting || syncing}
             onClick={connect}
             style={{ marginRight: '1rem' }}
@@ -124,8 +132,8 @@ export function ImportContactsButton({ accounts, user }: Props) {
               }
             >
               <div>
-                <GoogleIcon size={{ width: 16, height: 16 }} /> Import Google
-                Contacts
+                <GoogleIconWithWhiteBg size={{ width: 16, height: 16 }} />{' '}
+                Import Google Contacts
               </div>
             </PopOver>
           </SplitButton>
@@ -137,7 +145,7 @@ export function ImportContactsButton({ accounts, user }: Props) {
 
 function mapStateToProps(state: IAppState) {
   return {
-    accounts: Object.values(state.contacts.oAuthAccounts.list).flat(),
+    accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts),
     user: state.user
   }
 }
