@@ -75,6 +75,7 @@ export function AddressField({
         ...calculateFormPosition(inputProps.rect)
       }}
       style={{
+        position: 'absolute',
         top: inputProps.style.top,
         left: inputProps.style.left,
         width: Math.max(inputProps.rect.width, 300)
