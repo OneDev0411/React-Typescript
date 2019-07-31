@@ -27,7 +27,7 @@ const Avatar: React.FunctionComponent<AvatarProps> = ({
   showStatus = false,
   statusColor = '#35b863',
   backgroundColor,
-  initials
+  initials = ''
 }) => {
   let imageSrc = ''
 
