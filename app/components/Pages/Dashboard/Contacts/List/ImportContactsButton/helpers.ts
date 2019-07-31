@@ -43,7 +43,7 @@ export function getNewConnectedGoogleAccount(
  * in contacts page
  */
 export function startImportingOAuthContacts(provider: OAuthProvider) {
-  localStorage.setItem(`${KEY}_${provider}`, new Date(0).toISOString())
+  localStorage.setItem(`${KEY}_${provider}`, new Date().toISOString())
 }
 
 export function clearImportingGoogleContacts(provider: OAuthProvider) {
