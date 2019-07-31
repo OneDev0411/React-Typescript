@@ -60,7 +60,7 @@ export function isDeletedOrRevoked(account: IOAuthAccount) {
   return !notDeleted(account) || account.revoked
 }
 
-export function getAllConnectedAccounts(state: IOauthAccountsState) {
+export function selectAllConnectedAccounts(state: IOauthAccountsState) {
   return Object.values(state.list)
     .flat()
     .filter(negate(isDeletedOrRevoked))

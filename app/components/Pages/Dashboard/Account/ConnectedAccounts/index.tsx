@@ -26,7 +26,7 @@ import { syncOAuthAccount } from 'actions/contacts/sync-o-auth-account'
 
 import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
 
-import { getAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { ConnectedAccount } from './ConnectedAccount'
 
@@ -122,7 +122,7 @@ function ConnectedAccounts({
 }
 
 const mapStateToProps = (state: IAppState) => ({
-  accounts: getAllConnectedAccounts(state.contacts.oAuthAccounts),
+  accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts),
   loading: Object.values(state.contacts.oAuthAccounts.loading).some(i => i)
 })
 
