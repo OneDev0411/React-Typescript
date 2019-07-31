@@ -2,25 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import debounce from 'lodash/debounce'
 import idx from 'idx'
-import Popover from '@material-ui/core/Popover'
-import Popper from '@material-ui/core/Popper'
+import { Popover, Popper } from '@material-ui/core'
 
 import { loadJS } from '../../../../utils/load-js'
 import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/Listings/mapOptions'
 
 import { Suggestions } from './Suggestions'
 import { InlineAddressForm } from './InlineAddressForm'
-
-const POP_OVER_PROPS = {
-  anchorOrigin: {
-    vertical: 'bottom',
-    horizontal: 'left'
-  },
-  transformOrigin: {
-    vertical: 'top',
-    horizontal: 'left'
-  }
-}
 
 const propTypes = {
   renderSearchField: PropTypes.func.isRequired,
@@ -251,6 +239,7 @@ export class InlineAddressField extends React.Component {
           anchorEl={anchorEl}
           open={isOpenSuggestion}
           placement="bottom-start"
+          style={{ zIndex: 1002 }}
         >
           <Suggestions
             items={this.state.places}
@@ -262,11 +251,19 @@ export class InlineAddressField extends React.Component {
           />
         </Popper>
         <Popover
-          {...POP_OVER_PROPS}
           id={formId}
           open={isOpenForm}
           anchorEl={anchorEl}
           onClose={this.handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left'
+          }}
+          style={{ zIndex: 1002 }}
           action={actions => {
             if (
               this.state.updateAddressFormPosition &&

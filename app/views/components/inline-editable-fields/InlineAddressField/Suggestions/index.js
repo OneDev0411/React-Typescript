@@ -1,14 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { ListContainer, DefaultItem } from './styled'
+import Card from 'components/Card'
+
+import { DefaultItem } from './styled'
 import { SuggestionItem } from './SuggestionItem'
 
 Suggestions.propTypes = {
   searchText: PropTypes.string.isRequired,
   items: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   onClickDefaultItem: PropTypes.func.isRequired,
-  onClickSuggestionItem: PropTypes.func.isRequired
+  onClickSuggestionItem: PropTypes.func.isRequired,
+  style: PropTypes.shape()
+}
+
+Suggestions.defaultProps = {
+  style: {}
 }
 
 export function Suggestions({ items, handleMouseOver, ...props }) {
@@ -16,7 +23,7 @@ export function Suggestions({ items, handleMouseOver, ...props }) {
   const handleMouseLeave = () => handleMouseOver(false)
 
   return (
-    <ListContainer
+    <Card
       style={props.style}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -34,6 +41,6 @@ export function Suggestions({ items, handleMouseOver, ...props }) {
             onClick={() => props.onClickSuggestionItem(item)}
           />
         ))}
-    </ListContainer>
+    </Card>
   )
 }

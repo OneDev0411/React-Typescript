@@ -1,11 +1,6 @@
 import styled from 'styled-components'
 
-import Card from 'components/Card'
 import { primary, grey, borderColor } from 'views/utils/colors'
-
-export const ListContainer = styled(Card)`
-  z-index: 2;
-`
 
 export const Item = styled.div`
   cursor: default;

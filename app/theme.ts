@@ -56,5 +56,8 @@ export const theme = createMuiTheme({
       // at least until full adoption
       disableRipple: true
     }
+  },
+  zIndex: {
+    modal: 1001
   }
 })

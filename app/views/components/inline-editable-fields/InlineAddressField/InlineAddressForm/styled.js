@@ -4,8 +4,6 @@ import Card from 'components/Card'
 import { grey } from 'views/utils/colors'
 
 export const Container = styled(Card)`
-  z-index: 2;
-
   @media screen and (min-width: 48em) {
     width: 36rem;
   }
