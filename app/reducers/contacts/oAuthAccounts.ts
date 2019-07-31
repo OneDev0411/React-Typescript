@@ -1,6 +1,6 @@
 import { negate } from 'lodash'
 
-import { notDeleted } from 'utils/not-deleted'
+import { notDeleted } from '../../utils/not-deleted'
 
 import * as actionTypes from '../../constants/contacts'
 
