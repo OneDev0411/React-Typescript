@@ -11,11 +11,13 @@ const provider2Origin: EnumMap<OAuthProvider, string> = {
 }
 export function getOrganizeSyncedContactsList(
   attributeDefs: IAttributeDefsState,
-  provider?: OAuthProvider
+  provider?: OAuthProvider | OAuthProvider[]
 ): Partial<IContactList> {
   const sourceDefinition = selectDefinitionByName(attributeDefs, 'source_type')
 
-  const providers = provider ? [provider] : Object.values(OAuthProvider)
+  const providers = provider
+    ? ([] as OAuthProvider[]).concat(provider)
+    : Object.values(OAuthProvider)
 
   if (sourceDefinition) {
     const list: Partial<IContactList> = {

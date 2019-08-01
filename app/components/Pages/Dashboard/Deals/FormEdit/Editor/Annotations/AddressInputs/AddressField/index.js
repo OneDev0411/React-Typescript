@@ -33,7 +33,7 @@ export function AddressField({
     onAddressUpdate(address)
 
     // close form
-    formRef.current.handleFormCancel()
+    formRef.current.handleClose()
   }
 
   if (deal.listing) {
@@ -75,6 +75,7 @@ export function AddressField({
         ...calculateFormPosition(inputProps.rect)
       }}
       style={{
+        position: 'absolute',
         top: inputProps.style.top,
         left: inputProps.style.left,
         width: Math.max(inputProps.rect.width, 300)

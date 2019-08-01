@@ -26,6 +26,8 @@ import { syncOAuthAccount } from 'actions/contacts/sync-o-auth-account'
 
 import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
 
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+
 import { ConnectedAccount } from './ConnectedAccount'
 
 interface Props {
@@ -120,7 +122,7 @@ function ConnectedAccounts({
 }
 
 const mapStateToProps = (state: IAppState) => ({
-  accounts: Object.values(state.contacts.oAuthAccounts.list).flat(),
+  accounts: selectAllConnectedAccounts(state.contacts.oAuthAccounts),
   loading: Object.values(state.contacts.oAuthAccounts.loading).some(i => i)
 })
 

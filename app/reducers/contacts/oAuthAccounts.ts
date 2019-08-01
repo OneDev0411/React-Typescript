@@ -1,55 +1,10 @@
+import { negate } from 'lodash'
+
+import { notDeleted } from '../../utils/not-deleted'
+
 import * as actionTypes from '../../constants/contacts'
 
 import { OAuthProvider } from '../../constants/contacts'
-
-export interface IOauthAccountsState {
-  list: StringMap<IOAuthAccount[]>
-  loading: StringMap<boolean>
-}
-
-export type IOAuthAccountAction =
-  | {
-      type: typeof actionTypes.FETCH_OAUTH_ACCOUNTS_REQUEST
-      provider: OAuthProvider
-    }
-  | {
-      type: typeof actionTypes.FETCH_OAUTH_ACCOUNTS_FAILURE
-      provider: OAuthProvider
-    }
-  | {
-      type: typeof actionTypes.FETCH_OAUTH_ACCOUNTS_SUCCESS
-      provider: OAuthProvider
-      accounts: IOAuthAccount[]
-    }
-  | {
-      type: typeof actionTypes.FETCH_OAUTH_ACCOUNT_REQUEST
-      provider: OAuthProvider
-      accountId: string
-    }
-  | {
-      type: typeof actionTypes.FETCH_OAUTH_ACCOUNT_FAILURE
-      provider: OAuthProvider
-      accountId: string
-      error: any
-    }
-  | {
-      type: typeof actionTypes.FETCH_OAUTH_ACCOUNT_SUCCESS
-      provider: OAuthProvider
-      account: IOAuthAccount
-    }
-  | {
-      type: typeof actionTypes.SYNC_OAUTH_ACCOUNT_REQUEST
-      accountId: string
-    }
-  | {
-      type: typeof actionTypes.SYNC_OAUTH_ACCOUNT_SUCCESS
-      accountId: string
-    }
-  | {
-      type: typeof actionTypes.SYNC_OAUTH_ACCOUNT_FAILURE
-      accountId: string
-      error: any
-    }
 
 export function oAuthAccounts(
   state: IOauthAccountsState = {
@@ -100,3 +55,62 @@ export function oAuthAccounts(
       return state
   }
 }
+
+export function isDeletedOrRevoked(account: IOAuthAccount) {
+  return !notDeleted(account) || account.revoked
+}
+
+export function selectAllConnectedAccounts(state: IOauthAccountsState) {
+  return Object.values(state.list)
+    .flat()
+    .filter(negate(isDeletedOrRevoked))
+}
+
+export interface IOauthAccountsState {
+  list: StringMap<IOAuthAccount[]>
+  loading: StringMap<boolean>
+}
+
+export type IOAuthAccountAction =
+  | {
+      type: typeof actionTypes.FETCH_OAUTH_ACCOUNTS_REQUEST
+      provider: OAuthProvider
+    }
+  | {
+      type: typeof actionTypes.FETCH_OAUTH_ACCOUNTS_FAILURE
+      provider: OAuthProvider
+    }
+  | {
+      type: typeof actionTypes.FETCH_OAUTH_ACCOUNTS_SUCCESS
+      provider: OAuthProvider
+      accounts: IOAuthAccount[]
+    }
+  | {
+      type: typeof actionTypes.FETCH_OAUTH_ACCOUNT_REQUEST
+      provider: OAuthProvider
+      accountId: string
+    }
+  | {
+      type: typeof actionTypes.FETCH_OAUTH_ACCOUNT_FAILURE
+      provider: OAuthProvider
+      accountId: string
+      error: any
+    }
+  | {
+      type: typeof actionTypes.FETCH_OAUTH_ACCOUNT_SUCCESS
+      provider: OAuthProvider
+      account: IOAuthAccount
+    }
+  | {
+      type: typeof actionTypes.SYNC_OAUTH_ACCOUNT_REQUEST
+      accountId: string
+    }
+  | {
+      type: typeof actionTypes.SYNC_OAUTH_ACCOUNT_SUCCESS
+      accountId: string
+    }
+  | {
+      type: typeof actionTypes.SYNC_OAUTH_ACCOUNT_FAILURE
+      accountId: string
+      error: any
+    }
