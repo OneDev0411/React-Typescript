@@ -84,6 +84,7 @@ class ContactProfile extends React.Component {
     this.detectScreenSize()
     window.addEventListener('resize', this.detectScreenSize)
     this.initializeContact()
+    window.socket.on('contact:touch', this.updateContact)
     window.socket.on('crm_task:create', this.fetchTimeline)
     window.socket.on('email_campaign:create', this.fetchTimeline)
   }
@@ -103,8 +104,9 @@ class ContactProfile extends React.Component {
 
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.detectScreenSize)
-    window.socket.off('crm_task:create', this.fetchTimeline)
-    window.socket.off('email_campaign:create', this.fetchTimeline)
+    window.socket.on('contact:touch', this.updateContact)
+    window.socket.off('crm_task:create', this.handleSocket)
+    window.socket.off('email_campaign:create', this.handleSocket)
   }
 
   /**
@@ -124,6 +126,24 @@ class ContactProfile extends React.Component {
 
     if (window.innerWidth >= 1681 && !this.state.isDesktopScreen) {
       return this.setState({ isDesktopScreen: true })
+    }
+  }
+
+  updateContact = async () => {
+    try {
+      const response = await getContact(
+        this.props.params.id,
+        updateContactQuery
+      )
+
+      this.setState(state => ({
+        contact: {
+          ...normalizeContact(response.data),
+          deals: state.contact.deals
+        }
+      }))
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -175,7 +195,7 @@ class ContactProfile extends React.Component {
 
   setContact = (newContact, fallback) =>
     this.setState(
-      contact => ({ contact: { ...contact, ...newContact } }),
+      state => ({ contact: { ...state.contact, ...newContact } }),
       fallback
     )
 

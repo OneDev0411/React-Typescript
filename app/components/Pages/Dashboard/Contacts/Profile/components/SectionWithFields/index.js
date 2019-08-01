@@ -123,7 +123,10 @@ class SectionWithFields extends React.Component {
     try {
       const response = await getContact(contact.id)
 
-      this.props.submitCallback(normalizeContact(response.data))
+      this.props.submitCallback({
+        ...normalizeContact(response.data),
+        deals: contact.deals
+      })
     } catch (error) {
       console.log(error)
     }
