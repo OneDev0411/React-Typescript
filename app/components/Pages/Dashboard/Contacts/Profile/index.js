@@ -10,10 +10,7 @@ import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 
 // import deleteFlow from 'models/flows/delete-flow'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
-import {
-  updateContactQuery,
-  defaultQuery
-} from 'models/contacts/helpers/default-query'
+import { updateContactQuery } from 'models/contacts/helpers/default-query'
 import { getContact } from 'models/contacts/get-contact'
 import { deleteContacts } from 'models/contacts/delete-contact'
 import { updateContactSelf } from 'models/contacts/update-contact-self'
@@ -134,13 +131,19 @@ class ContactProfile extends React.Component {
 
   updateContact = async () => {
     try {
-      const response = await getContact(this.props.params.id, {
-        associations: [...defaultQuery.associations, 'contact.user']
-      })
+      const response = await getContact(
+        this.props.params.id,
+        updateContactQuery
+      )
 
-      this.setState({ contact: normalizeContact(response.data) })
+      this.setState(state => ({
+        contact: {
+          ...normalizeContact(response.data),
+          deals: state.contact.deals
+        }
+      }))
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
@@ -192,7 +195,7 @@ class ContactProfile extends React.Component {
 
   setContact = (newContact, fallback) =>
     this.setState(
-      contact => ({ contact: { ...contact, ...newContact } }),
+      state => ({ contact: { ...state.contact, ...newContact } }),
       fallback
     )
 
