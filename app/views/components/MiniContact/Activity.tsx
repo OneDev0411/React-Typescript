@@ -2,11 +2,13 @@ import React from 'react'
 import fecha from 'fecha'
 
 import IconCalendar from 'components/SvgIcons/Calendar2/IconCalendar'
+import { RelativeTime } from 'components/RelativeTime'
 
 import { ProfileDateType } from './useProfile'
 
 interface ActivityPropsType {
   dates?: ProfileDateType[]
+  last_touch?: number
 }
 
 function Activity(props: ActivityPropsType) {
@@ -17,6 +19,16 @@ function Activity(props: ActivityPropsType) {
   return (
     <div className="activity">
       <ul>
+        {props.last_touch && (
+          <li>
+            <div className="icon">
+              <IconCalendar style={{ width: '1em', height: '1em' }} />
+            </div>
+            <div className="text">
+              Last Touched <RelativeTime time={props.last_touch * 1000} />
+            </div>
+          </li>
+        )}
         {props.dates.map((item, i) => {
           return (
             <li key={i}>

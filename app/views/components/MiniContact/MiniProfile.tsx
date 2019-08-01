@@ -96,7 +96,7 @@ function MiniProfile(props: MiniProfilePropsType) {
           </div>
         </Show>
       </div>
-      <Activity dates={data.dates} />
+      <Activity dates={data.dates} last_touch={data.last_touch} />
     </ProfileContainer>
   )
 }
