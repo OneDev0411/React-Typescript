@@ -249,7 +249,10 @@ class SendMlsListingCard extends React.Component {
 
     if (this.state.listings && Array.isArray(this.state.listings)) {
       this.state.listings.forEach(listing => {
-        if (listing.gallery_image_urls && Array.isArray(this.state.listings)) {
+        if (
+          listing.gallery_image_urls &&
+          Array.isArray(listing.gallery_image_urls)
+        ) {
           listing.gallery_image_urls.forEach(image => {
             assets.push({
               listing: listing.id,
