@@ -10,13 +10,11 @@ import {
   useTheme
 } from '@material-ui/core'
 
-import IconArrowDropDown from 'components/SvgIcons/ArrowDropDown/IconArrowDropDown'
-
 import {
   ITemplateVariableSuggestion,
   ITemplateVariableSuggestionGroup
 } from './types'
-import { DropdownButton } from './styled'
+import { DropdownToggleButton } from '../DropdownToggleButton'
 
 interface Props {
   suggestions: ITemplateVariableSuggestionGroup[]
@@ -40,20 +38,21 @@ export function TemplateVariablesButton({
 
   return (
     <>
-      <DropdownButton
+      <DropdownToggleButton
+        isActive={open}
         ref={anchorRef}
         aria-controls="menu-list-grow"
         aria-haspopup="true"
         onClick={toggle}
       >
         Variable Text
-        <IconArrowDropDown />
-      </DropdownButton>
+      </DropdownToggleButton>
       <Popper
         open={open}
         anchorEl={anchorRef.current}
         transition
         style={{ zIndex: theme.zIndex.modal }}
+        placement="bottom-start"
       >
         <Paper>
           <ClickAwayListener onClickAway={close}>
