@@ -9,10 +9,21 @@ const app = new Koa()
 const urlPattern = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi
 
 router.get('/deals/envelope/:id/edit', async ctx => {
+  const { user } = ctx.session
   const { id } = ctx.params
 
+  if (!user) {
+    ctx.status = 401
+    ctx.body = 'Unauthorized'
+
+    return
+  }
+
   try {
-    await agent.get(`${config.api_url}/envelopes/${id}/edit`).redirects(0)
+    await agent
+      .get(`${config.api_url}/envelopes/${id}/edit`)
+      .set('Authorization', `Bearer ${user.access_token}`)
+      .redirects(0)
 
     ctx.body = ''
   } catch (e) {
