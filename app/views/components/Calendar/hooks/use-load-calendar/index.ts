@@ -13,7 +13,11 @@ interface ApiOptions {
   users?: UUID[]
 }
 
-export function useLoadCalendar(apiOptions: ApiOptions) {
+interface Options {
+  reset: boolean
+}
+
+export function useLoadCalendar(apiOptions: ApiOptions, options: Options) {
   const [events, setEvents] = useState<CalendarEventsList>({})
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -42,12 +46,14 @@ export function useLoadCalendar(apiOptions: ApiOptions) {
         const newEvents = await getCalendar(apiOptions)
 
         // concat newEvents and current events
-        const list = sortEvents({
-          ...events,
-          ...normalize(apiOptions.range, newEvents)
-        })
+        const list = options.reset
+          ? normalize(apiOptions.range, newEvents)
+          : {
+              ...events,
+              ...normalize(apiOptions.range, newEvents)
+            }
 
-        setEvents(list)
+        setEvents(sortEvents(list))
       } catch (e) {
         console.log(e)
         setError(e)

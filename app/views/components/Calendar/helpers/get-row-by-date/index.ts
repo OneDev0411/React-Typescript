@@ -4,11 +4,13 @@ export function getRowIdByDate(
   date: Date,
   rows: any[],
   eventKeys: string[],
-  calendarRange: [number, number]
+  calendarRange: [number, number],
+  allowSeeking: boolean = true
 ) {
   let dayId = format(date)
 
   while (
+    allowSeeking &&
     eventKeys.indexOf(dayId) === -1 &&
     isDayInRange(dayId, calendarRange)
   ) {

@@ -9,7 +9,7 @@ import { EventIcon } from '../Icon'
 import { CrmEvents } from '../../../../CrmEvents'
 
 import { Title, SubTitle } from '../styled'
-import { Assignee } from './styled'
+import { Association } from './styled'
 
 interface StateProps {
   user: IUser
@@ -37,10 +37,15 @@ export function CrmEvent(props: Props) {
     const users = new Array(Math.min(2, contacts.length))
       .fill(null)
       .map((_, index) => [
-        <Assignee key={index} onClick={() => setShowEventsDrawer(true)}>
+        <Association
+          key={`Association_${index}`}
+          onClick={() => setShowEventsDrawer(true)}
+        >
           {contacts[index].contact!.display_name}
-        </Assignee>,
-        contacts.length > 1 && index === 0 && <span>, </span>
+        </Association>,
+        contacts.length > 1 && index === 0 && (
+          <span key={`Separator_${index}`}>, </span>
+        )
       ])
 
     return contacts.length <= 2
@@ -50,9 +55,9 @@ export function CrmEvent(props: Props) {
           <>
             {' '}
             and{' '}
-            <Assignee onClick={() => setShowEventsDrawer(true)}>
+            <Association onClick={() => setShowEventsDrawer(true)}>
               {contacts.length - 2} other{contacts.length - 2 > 1 ? 's' : ''}
-            </Assignee>
+            </Association>
           </>
         ]
   }

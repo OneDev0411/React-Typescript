@@ -1,6 +1,7 @@
 import React, { useState, forwardRef, RefObject } from 'react'
 import { ListOnItemsRenderedProps } from 'react-window'
 import useResizeObserver from 'use-resize-observer'
+import debounce from 'lodash/debounce'
 
 import VirtualList, {
   LoadingPosition,
@@ -63,7 +64,7 @@ const CalendarList: React.FC<Props> = props => {
         threshold={2}
         isLoading={props.isLoading}
         loadingPosition={props.loadingPosition}
-        onVisibleRowChange={getInViewDate}
+        onVisibleRowChange={debounce(getInViewDate, 50)}
         itemSize={() => 60}
         ref={props.listRef}
       >

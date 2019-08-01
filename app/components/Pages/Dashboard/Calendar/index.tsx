@@ -1,9 +1,7 @@
 import React, { useState, useRef } from 'react'
 import debounce from 'lodash/debounce'
 
-import { VirtualListRef } from 'components/VirtualList'
-
-import List from 'components/Calendar'
+import List, { CalendarRef } from 'components/Calendar'
 import DatePicker from 'components/DatePicker'
 
 import { TodayButton } from './components/TodayButton'
@@ -13,7 +11,7 @@ import CreateEvent from './components/CreateEvent'
 import { Container, Sidebar, Header, Main, SideHeader, Title } from './styled'
 
 const CalendarPage: React.FC = props => {
-  const calendarRef = useRef<VirtualListRef | null>(null)
+  const calendarRef = useRef<CalendarRef>(null)
 
   /*
    * current active date of Calendar. the first visible day of day in
@@ -22,7 +20,7 @@ const CalendarPage: React.FC = props => {
   const [activeDate, setActiveDate] = useState<Date>(new Date())
 
   const handleDatePickerChange = (date: Date) => {
-    console.log(date)
+    calendarRef.current!.jumpToDate(date)
   }
 
   return (
@@ -47,7 +45,7 @@ const CalendarPage: React.FC = props => {
         </Header>
 
         <List
-          calendarRef={calendarRef}
+          ref={calendarRef}
           onChangeActiveDate={debounce(setActiveDate, 100)}
         />
       </Main>

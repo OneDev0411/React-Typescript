@@ -8,6 +8,7 @@ import React, {
   useImperativeHandle
 } from 'react'
 import { connect } from 'react-redux'
+import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import { IAppState } from 'reducers'
 
@@ -27,6 +28,7 @@ export interface CalendarRef {
 interface Ranges {
   query: NumberRange
   calendar: NumberRange
+  format: Format
 }
 
 interface Props {
@@ -46,6 +48,10 @@ export function Calendar({
   // holds a reference to the Virtual List
   const listRef = useRef<VirtualListRef>(null)
 
+  // holds current active date
+  const [activeDate, setActiveDate] = useState<Date>(new Date())
+  const [debouncedSetActiveDate] = useDebouncedCallback(setActiveDate, 500)
+
   // rows of Virtual List
   const [rows, setRows] = useState<any>([])
 
@@ -61,31 +67,51 @@ export function Calendar({
     LoadingPosition.Middle
   )
 
-  const { events, isLoading } = useLoadCalendar({
-    range: ranges.query
-    // users: viewAsUsers
-  })
+  const { events, isLoading } = useLoadCalendar(
+    {
+      range: ranges.query
+      // users: viewAsUsers
+    },
+    {
+      reset: ranges.format === Format.Middle
+    }
+  )
 
-  useEffect(() => setRows(createListRows(events)), [events, ranges.calendar])
-
-  const jumpToDate = (date: Date): void => {
+  /**
+   * jumps to the given date.
+   * @param date
+   */
+  const jumpToDate = (date: Date, allowSeeking: boolean = true): void => {
     const rowId = getRowIdByDate(
       date,
       rows,
       Object.keys(events),
-      ranges.calendar
+      ranges.calendar,
+      allowSeeking
     )
 
     if (rowId === -1) {
-      // todo
+      allowSeeking && handleLoadDate(date)
+
       return
     }
 
     listRef.current!.scrollToItem(rowId, 'start')
 
     // change active date
-    onChangeActiveDate(new Date(rows[rowId].title))
+    handleChangeActiveDate(new Date(rows[rowId].title))
   }
+
+  /**
+   * triggers when updating rows
+   */
+  const onUpdateRows = () => jumpToDate(activeDate, false)
+
+  // triggers when new events loading or range of calendar changes
+  useEffect(() => setRows(createListRows(events)), [events, ranges.calendar])
+
+  // triggers when updating rows
+  useEffect(onUpdateRows, [rows])
 
   /**
    * exposes below methods to be accessible outside of the component
@@ -116,7 +142,8 @@ export function Calendar({
 
     setRanges({
       query,
-      calendar
+      calendar,
+      format: Format.Next
     })
   }
 
@@ -142,8 +169,29 @@ export function Calendar({
 
     setRanges({
       query,
-      calendar
+      calendar,
+      format: Format.Previous
     })
+  }
+
+  /**
+   * handles updating ranges when given date is outside of current
+   * calendar range
+   * @param date
+   */
+  const handleLoadDate = (date: Date) => {
+    const query: NumberRange = getDateRange(date.getTime(), Format.Middle)
+
+    setRanges({
+      query,
+      calendar: query,
+      format: Format.Middle
+    })
+  }
+
+  const handleChangeActiveDate = (date: Date) => {
+    debouncedSetActiveDate(date)
+    onChangeActiveDate(date)
   }
 
   return (
@@ -154,7 +202,7 @@ export function Calendar({
       loadingPosition={loadingPosition}
       onReachEnd={handleLoadNextEvents}
       onReachStart={handleLoadPreviousEvents}
-      onChangeActiveDate={onChangeActiveDate}
+      onChangeActiveDate={handleChangeActiveDate}
     />
   )
 }
@@ -167,7 +215,8 @@ function getInitialRanges(): Ranges {
 
   return {
     query: date,
-    calendar: date
+    calendar: date,
+    format: Format.Middle
   }
 }
 
