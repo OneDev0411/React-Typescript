@@ -282,7 +282,7 @@ class SendMlsListingCard extends React.Component {
     if (this.props.isEdit && !this.state.isInstantMarketingBuilderOpen) {
       this.setState({
         isInstantMarketingBuilderOpen: true,
-        listings: this.props.selectedTemplate.listings
+        listings: this.props.selectedTemplate.listings || []
       })
     }
   }
