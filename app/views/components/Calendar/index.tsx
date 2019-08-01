@@ -4,21 +4,25 @@ import React, {
   useRef,
   forwardRef,
   RefObject,
-  ComponentProps
+  ComponentProps,
+  useImperativeHandle
 } from 'react'
 import { connect } from 'react-redux'
 
 import { IAppState } from 'reducers'
 
-import { VirtualListRef } from 'components/VirtualList'
-
-import { LoadingPosition } from 'components/VirtualList'
+import { LoadingPosition, VirtualListRef } from 'components/VirtualList'
 
 import { useLoadCalendar } from './hooks/use-load-calendar'
 import { getDateRange, Format } from './helpers/get-date-range'
 import { createListRows } from './helpers/create-list-rows'
 
 import List from './components/List'
+import { getRowIdByDate } from './helpers/get-row-by-date'
+
+export interface CalendarRef {
+  jumpToDate(date: Date): void
+}
 
 interface Ranges {
   query: NumberRange
@@ -27,7 +31,7 @@ interface Ranges {
 
 interface Props {
   user?: IUser
-  calendarRef?: RefObject<VirtualListRef>
+  calendarRef?: RefObject<CalendarRef>
   onChangeActiveDate?: (activeDate: Date) => void
 }
 
@@ -35,9 +39,12 @@ interface StateProps {
   user: IUser
 }
 
-export function Calendar({ onChangeActiveDate = () => null }: Props) {
-  // holds the reference to the Virtual List
-  const listRef = useRef(null)
+export function Calendar({
+  calendarRef,
+  onChangeActiveDate = () => null
+}: Props) {
+  // holds a reference to the Virtual List
+  const listRef = useRef<VirtualListRef>(null)
 
   // rows of Virtual List
   const [rows, setRows] = useState<any>([])
@@ -60,6 +67,32 @@ export function Calendar({ onChangeActiveDate = () => null }: Props) {
   })
 
   useEffect(() => setRows(createListRows(events)), [events, ranges.calendar])
+
+  const jumpToDate = (date: Date): void => {
+    const rowId = getRowIdByDate(
+      date,
+      rows,
+      Object.keys(events),
+      ranges.calendar
+    )
+
+    if (rowId === -1) {
+      // todo
+      return
+    }
+
+    listRef.current!.scrollToItem(rowId, 'start')
+
+    // change active date
+    onChangeActiveDate(new Date(rows[rowId].title))
+  }
+
+  /**
+   * exposes below methods to be accessible outside of the component
+   */
+  useImperativeHandle(calendarRef, () => ({
+    jumpToDate
+  }))
 
   /**
    * handles updating ranges when user is trying to fetch future events
@@ -144,7 +177,6 @@ function mapStateToProps(state: IAppState) {
   }
 }
 
-// connect to redux
 const ConnectedCalendar = connect<StateProps, {}, Props>(mapStateToProps)(
   Calendar
 )
@@ -152,6 +184,6 @@ const ConnectedCalendar = connect<StateProps, {}, Props>(mapStateToProps)(
 export default forwardRef(
   (
     props: ComponentProps<typeof ConnectedCalendar>,
-    ref: RefObject<VirtualListRef>
+    ref: RefObject<CalendarRef>
   ) => <ConnectedCalendar {...props} calendarRef={ref} />
 )

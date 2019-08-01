@@ -13,5 +13,5 @@ export const Container = styled.div<IContainer>`
   background-color: #${props => (props.isActive ? 'e5ebfe' : 'f5f8fa')};
   color: #${props => (props.isActive ? '3050f2' : '000')};
   width: 100%;
-  height: 32px;
+  height: 36px;
 `

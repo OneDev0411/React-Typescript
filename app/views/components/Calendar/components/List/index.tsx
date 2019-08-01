@@ -1,4 +1,4 @@
-import React, { useState, useRef, forwardRef, RefObject } from 'react'
+import React, { useState, forwardRef, RefObject } from 'react'
 import { ListOnItemsRenderedProps } from 'react-window'
 import useResizeObserver from 'use-resize-observer'
 
@@ -28,7 +28,6 @@ const defaultProps = {
 }
 
 const CalendarList: React.FC<Props> = props => {
-  const listRef = useRef<VirtualListRef>(null)
   const [activeDate, setActiveDate] = useState<Date | null>(null)
   const [containerRef, listWidth, listHeight] = useResizeObserver()
 
@@ -40,6 +39,11 @@ const CalendarList: React.FC<Props> = props => {
       )
 
     const item = props.rows[index + data.visibleStartIndex]
+
+    if (!item) {
+      return
+    }
+
     const date = new Date(item.title)
 
     if (date instanceof Date && !Number.isNaN(date.getTime())) {
@@ -61,7 +65,7 @@ const CalendarList: React.FC<Props> = props => {
         loadingPosition={props.loadingPosition}
         onVisibleRowChange={getInViewDate}
         itemSize={() => 60}
-        ref={listRef}
+        ref={props.listRef}
       >
         {({ index, style }) => (
           <>

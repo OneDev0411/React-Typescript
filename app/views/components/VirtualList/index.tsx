@@ -29,7 +29,7 @@ export enum LoadingPosition {
 }
 
 export interface VirtualListRef {
-  scrollToItem(index: number, alignment: Align): void
+  scrollToItem(index: number, alignment?: Align): void
 }
 
 export interface IProps extends VariableSizeListProps {
@@ -60,7 +60,8 @@ const VirtualList: React.FC<IProps> = ({
   const [debouncedOnReachEnd] = useDebouncedCallback(onReachEnd, 200)
 
   useImperativeHandle(props.virtualListRef, () => ({
-    scrollToItem: listRef.current!.scrollToItem
+    scrollToItem: (index: number, alignment?: Align) =>
+      listRef.current!.scrollToItem(index, alignment)
   }))
 
   /**
