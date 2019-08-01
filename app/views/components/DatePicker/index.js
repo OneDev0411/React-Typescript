@@ -1,12 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import fecha from 'fecha'
 
 import DayPicker, { DateUtils } from 'react-day-picker'
 
 import Toolbar from './Toolbar'
 
-import ActionButton from '../Button/ActionButton'
 import { Container } from './styled'
 
 const initialState = {
@@ -37,6 +35,8 @@ export default class DatePicker extends React.Component {
     this.setDate(nextProps)
   }
 
+  dayPickerRef = React.createRef()
+
   handleDateChange = (name, value) => {
     const date = {
       year: this.Date.getFullYear(),
@@ -57,9 +57,12 @@ export default class DatePicker extends React.Component {
     const { currentDate } = this.state
 
     if (selectedDate && selectedDate.toString() !== currentDate.toString()) {
-      this.setState({
-        currentDate: selectedDate
-      })
+      this.setState(
+        {
+          currentDate: selectedDate
+        },
+        () => (this.dayPickerRef.current.state.currentMonth = selectedDate)
+      )
     }
   }
 
@@ -98,9 +101,10 @@ export default class DatePicker extends React.Component {
           month={this.Date}
           selectedDays={this.Date}
           onDayClick={this.handleDayClick}
-          fixedWeeks={false}
+          fixedWeeks={this.props.fixedWeeks}
           canChangeMonth={false}
           modifiers={this.props.modifiers}
+          ref={this.dayPickerRef}
           captionElement={({ date, localeUtils }) => (
             <Toolbar
               date={date}

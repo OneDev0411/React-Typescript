@@ -166,7 +166,7 @@
     "react-click-outside": "github:tj/react-click-outside#a833ddc5be47490307f9fcc6ed09d8c353108510",
     "react-color": "^2.17.0",
     "react-content-loader": "^3.4.1",
-    "react-day-picker": "^7.1.9",
+    "react-day-picker": "^7.3.0",
     "react-dnd": "^7.0.2",
     "react-dnd-html5-backend": "^7.0.2",
     "react-dom": "^16.8.1",
