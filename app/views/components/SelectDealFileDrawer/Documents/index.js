@@ -34,7 +34,7 @@ import {
   ViewDocument
 } from './styled'
 
-class DocumentRow extends React.Component {
+export class DocumentRow extends React.Component {
   state = {
     searchFilter: '',
     selectedStashFile: null
@@ -133,8 +133,8 @@ class DocumentRow extends React.Component {
         const files = getFileUrl({
           type: 'task',
           deal: this.props.deal,
-          task,
-          envelopes: this.props.envelopes
+          envelopes: this.props.envelopes,
+          task
         }).map(() =>
           normalizeAttachment({
             type: 'form',
@@ -150,12 +150,12 @@ class DocumentRow extends React.Component {
         task.room.attachments
           .filter(file => file.mime === 'application/pdf')
           .forEach(file => {
-            const docs = getFileUrl({
+            const files = getFileUrl({
               type: 'document',
               deal: this.props.deal,
-              task,
               document: file,
-              envelopes: this.props.envelopes
+              envelopes: this.props.envelopes,
+              task
             }).map(({ originalFile, url }) =>
               normalizeAttachment({
                 type: 'file',
@@ -167,7 +167,7 @@ class DocumentRow extends React.Component {
               })
             )
 
-            attachments = [...attachments, ...docs]
+            attachments = [...attachments, ...files]
           })
       }
     })

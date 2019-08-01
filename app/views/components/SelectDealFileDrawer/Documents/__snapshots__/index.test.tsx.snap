@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Select Deal File Drawer should render the component 1`] = `
+<div
+  class="styled__Container-sc-11vmj4-0 cJZQCi"
+>
+  <div
+    class="styled__Container-sc-1q9zmr1-0 hEaBVi"
+    style="margin:1rem 0"
+  >
+    <div
+      class="styled__Icon-sc-1q9zmr1-3 coPcPb"
+    >
+      <svg
+        class="IconSearch__Image-iu3zjn-0 styled__IconSearch-sc-1q9zmr1-2 fRtlCr"
+        viewBox="0 0 16 16"
+      >
+        <path
+          d="M6.669.19C3.105.19.189 3.1.189 6.663c0 3.563 2.917 6.48 6.48 6.48 1.37 0 2.639-.44 3.685-1.168l3.503 3.496a1.136 1.136 0 0 0 1.62 0 1.14 1.14 0 0 0 0-1.613l-3.504-3.503a6.416 6.416 0 0 0 1.168-3.692C13.14 3.099 10.225.19 6.668.19h.001zm0 2.282a4.173 4.173 0 0 1 4.185 4.191 4.173 4.173 0 0 1-4.185 4.191 4.174 4.174 0 0 1-4.191-4.191 4.174 4.174 0 0 1 4.191-4.191z"
+        />
+      </svg>
+    </div>
+    <input
+      class="styled__TextInput-sc-1q9zmr1-1 eHelUq"
+      placeholder="Search"
+      value=""
+    />
+  </div>
+</div>
+`;
