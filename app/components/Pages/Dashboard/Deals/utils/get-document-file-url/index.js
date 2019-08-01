@@ -1,5 +1,5 @@
-import { getDocumentEnvelopes } from '../../../../utils/get-document-envelopes'
-import { getEnvelopeFileUrl } from '../../../../utils/get-envelope-file-url'
+import { getDocumentEnvelopes } from '../get-document-envelopes'
+import { getEnvelopeFileUrl } from '../get-envelope-file-url'
 
 /**
  *
@@ -25,7 +25,8 @@ function normalizeFile(file) {
     name: file.name,
     mime: file.mime,
     url: file.url,
-    date: file.created_at
+    date: file.created_at,
+    originalFile: file
   }
 }
 

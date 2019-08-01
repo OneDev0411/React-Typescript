@@ -11,7 +11,10 @@ import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import Search from 'components/Grid/Search'
 
 import { selectDealTasks } from 'reducers/deals/tasks'
+import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 import { getChecklistById } from 'reducers/deals/checklists'
+
+import { getFileUrl } from 'deals/utils/get-document-file-url'
 
 import { moveTaskFile } from 'actions/deals'
 
@@ -122,18 +125,24 @@ class DocumentRow extends React.Component {
       )
 
   getDocuments = () => {
-    const attachments = []
-    const submissions = []
+    let attachments = []
+    let submissions = []
 
     this.props.tasks.forEach(task => {
-      // get submission
       if (task.submission) {
-        submissions.push(
+        const files = getFileUrl({
+          type: 'task',
+          deal: this.props.deal,
+          task,
+          envelopes: this.props.envelopes
+        }).map(() =>
           normalizeAttachment({
             type: 'form',
             task
           })
         )
+
+        submissions = [...submissions, ...files]
       }
 
       // get attachments of task
@@ -141,13 +150,24 @@ class DocumentRow extends React.Component {
         task.room.attachments
           .filter(file => file.mime === 'application/pdf')
           .forEach(file => {
-            attachments.push(
+            const docs = getFileUrl({
+              type: 'document',
+              deal: this.props.deal,
+              task,
+              document: file,
+              envelopes: this.props.envelopes
+            }).map(({ originalFile, url }) =>
               normalizeAttachment({
                 type: 'file',
                 task,
-                file
+                file: {
+                  ...originalFile,
+                  url
+                }
               })
             )
+
+            attachments = [...attachments, ...docs]
           })
       }
     })
@@ -264,7 +284,8 @@ function mapStateToProps({ deals, user }, props) {
   return {
     user,
     checklists: deals.checklists,
-    tasks: selectDealTasks(props.deal, deals.checklists, deals.tasks)
+    tasks: selectDealTasks(props.deal, deals.checklists, deals.tasks),
+    envelopes: selectDealEnvelopes(props.deal, deals.envelopes)
   }
 }
 
