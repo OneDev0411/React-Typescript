@@ -17,7 +17,8 @@ import { getBrandStyles } from 'utils/marketing-center/templates'
 import nunjucks from '../helpers/nunjucks'
 import {
   getAsset as getBrandAsset,
-  getListingUrl
+  getListingUrl,
+  getColor
 } from '../helpers/nunjucks-functions'
 
 import { loadGrapesjs } from './utils/load-grapes'
@@ -263,7 +264,8 @@ class Builder extends React.Component {
       ...data,
       palette,
       getAsset: getBrandAsset.bind(null, brand),
-      getListingUrl: getListingUrl.bind(null, brand)
+      getListingUrl: getListingUrl.bind(null, brand),
+      getColor: getColor.bind(null, brand)
     })
   }
 

@@ -13,3 +13,13 @@ export function getListingUrl(activeBrand, listing) {
     ? listing_url.replace('%1', listing.mls_number)
     : `${config.app.url}/dashboard/mls/${listing.id}`
 }
+
+export function getColor(activeBrand, color) {
+  const brand = flattenBrand(activeBrand)
+
+  if (brand && brand.palette && brand.palette.marketing) {
+    return brand.palette.marketing[color]
+  }
+
+  return ''
+}
