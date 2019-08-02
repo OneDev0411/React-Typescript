@@ -16,7 +16,7 @@ import { Event } from './Event'
 import { Container } from './styled'
 
 interface Props {
-  user: IUser
+  user?: IUser
   rows: ICalendarListRow[]
   isLoading: boolean
   loadingPosition: LoadingPosition
@@ -95,7 +95,7 @@ const CalendarList: React.FC<Props> = props => {
             {props.rows[index].hasOwnProperty('is_day_header') ? (
               <DayHeader
                 key={props.rows[index].date}
-                item={props.rows[index]}
+                item={props.rows[index] as ICalendarDayRow}
                 style={style}
                 activeDate={activeDate}
               />
