@@ -7,7 +7,7 @@ import { Container } from './styled'
 interface IProps {
   activeDate: Date | null
   style: React.CSSProperties
-  item: any
+  item: ICalendarListRow
 }
 
 export function DayHeader(props: IProps) {

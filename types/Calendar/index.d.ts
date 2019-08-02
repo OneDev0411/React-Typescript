@@ -37,7 +37,7 @@ declare interface ICalendarEvent {
 declare interface ICalendarDayRow {
   is_day_header: boolean
   is_today: boolean
-  date: Date
+  date: string
 }
 
 declare type ICalendarListRow = ICalendarEvent | ICalendarDayRow

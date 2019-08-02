@@ -13,5 +13,5 @@ export function createListRows(events: CalendarEventsList) {
       },
       ...eventsList
     ]
-  }, [])
+  }, []) as ICalendarListRow[]
 }

@@ -2,7 +2,7 @@ import fecha from 'fecha'
 
 export function getRowIdByDate(
   date: Date,
-  rows: any[],
+  rows: ICalendarListRow[],
   eventKeys: string[],
   calendarRange: [number, number],
   allowSeeking: boolean = true

@@ -1,31 +1,53 @@
 import React from 'react'
-import Flex from 'styled-flex-component'
 import fecha from 'fecha'
 
 import { EventItem } from './Item'
-import { Container, Time } from './styled'
+import { ContainerStyle, TimeStyle } from './styled'
 
 interface Props {
   style: React.CSSProperties
   item: ICalendarEvent
-  nextItem: any
-  onCrmEventChange: (event: IEvent, type: string) => void
+  nextItem: ICalendarListRow
+  onClickCrmEventAssociations: (event: ICalendarEvent) => void
 }
 
-export function Event({ item, nextItem, style, onCrmEventChange }: Props) {
+export function Event({
+  item,
+  nextItem,
+  style,
+  onClickCrmEventAssociations
+}: Props) {
   const date =
     item.object_type === 'crm_task'
       ? fecha.format(new Date(item.timestamp * 1000), 'hh:mm A')
       : 'All day'
 
   return (
-    <Container style={style} hasBorder={nextItem && !nextItem.is_day_header}>
-      <Flex alignCenter>
-        <Time>{date}</Time>
-        <EventItem event={item} onCrmEventChange={onCrmEventChange} />
-      </Flex>
+    <div
+      style={{
+        ...style,
+        ...ContainerStyle,
+        borderBottom:
+          nextItem && !nextItem.hasOwnProperty('is_day_header')
+            ? '1px solid #dbe6fd'
+            : 'none'
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center'
+        }}
+      >
+        <div style={TimeStyle}>{date}</div>
+
+        <EventItem
+          event={item}
+          onClickCrmEventAssociations={onClickCrmEventAssociations}
+        />
+      </div>
 
       <div />
-    </Container>
+    </div>
   )
 }

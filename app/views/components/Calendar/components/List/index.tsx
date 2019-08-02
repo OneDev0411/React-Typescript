@@ -8,12 +8,16 @@ import VirtualList, {
   VirtualListRef
 } from 'components/VirtualList'
 
-import { Container } from './styled'
+import { CrmEvents } from '../CrmEvents'
+
 import { DayHeader } from './DayHeader'
 import { Event } from './Event'
 
+import { Container } from './styled'
+
 interface Props {
-  rows: any[]
+  user: IUser
+  rows: ICalendarListRow[]
   isLoading: boolean
   loadingPosition: LoadingPosition
   listRef?: RefObject<VirtualListRef>
@@ -30,14 +34,26 @@ const defaultProps = {
 }
 
 const CalendarList: React.FC<Props> = props => {
-  const [activeDate, setActiveDate] = useState<Date | null>(null)
   const [containerRef, listWidth, listHeight] = useResizeObserver()
+  const [activeDate, setActiveDate] = useState<Date | null>(null)
+  const [
+    selectedCrmEvent,
+    setSelectedCrmEvent
+  ] = useState<ICalendarEvent | null>(null)
+
+  const handleEventChange = (event: IEvent, type: string) => {
+    setSelectedCrmEvent(null)
+
+    props.onCrmEventChange(event, type)
+  }
 
   const getInViewDate = (data: ListOnItemsRenderedProps) => {
     const index = new Array(data.visibleStopIndex - data.visibleStartIndex)
       .fill(null)
-      .findIndex(
-        (_, index) => props.rows[index + data.visibleStartIndex].is_day_header
+      .findIndex((_, index) =>
+        props.rows[index + data.visibleStartIndex].hasOwnProperty(
+          'is_day_header'
+        )
       )
 
     const item = props.rows[index + data.visibleStartIndex]
@@ -47,6 +63,11 @@ const CalendarList: React.FC<Props> = props => {
     }
 
     const date = new Date(item.date)
+
+    // don't update active date if isn't changed
+    if (activeDate && date.toDateString() === activeDate.toDateString()) {
+      return
+    }
 
     if (date instanceof Date && !Number.isNaN(date.getTime())) {
       setActiveDate(date)
@@ -71,7 +92,7 @@ const CalendarList: React.FC<Props> = props => {
       >
         {({ index, style }) => (
           <>
-            {props.rows[index].is_day_header ? (
+            {props.rows[index].hasOwnProperty('is_day_header') ? (
               <DayHeader
                 key={props.rows[index].date}
                 item={props.rows[index]}
@@ -80,16 +101,26 @@ const CalendarList: React.FC<Props> = props => {
               />
             ) : (
               <Event
-                key={props.rows[index].index}
-                item={props.rows[index]}
+                key={index}
+                item={props.rows[index] as ICalendarEvent}
                 nextItem={props.rows[index + 1]}
                 style={style}
-                onCrmEventChange={props.onCrmEventChange}
+                onClickCrmEventAssociations={setSelectedCrmEvent}
               />
             )}
           </>
         )}
       </VirtualList>
+
+      {selectedCrmEvent && (
+        <CrmEvents
+          isOpenEventDrawer
+          event={selectedCrmEvent}
+          user={props.user as IUser}
+          onEventChange={handleEventChange}
+          onCloseEventDrawer={() => setSelectedCrmEvent(null)}
+        />
+      )}
     </Container>
   )
 }

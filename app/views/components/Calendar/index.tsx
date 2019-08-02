@@ -65,7 +65,7 @@ export function Calendar({
   const [debouncedSetActiveDate] = useDebouncedCallback(setActiveDate, 500)
 
   // rows of Virtual List
-  const [rows, setRows] = useState<any>([])
+  const [rows, setRows] = useState<ICalendarListRow[]>([])
 
   /*
    * the required ranges of calendar:
@@ -236,7 +236,7 @@ export function Calendar({
       loadingPosition={loadingPosition}
       onReachEnd={handleLoadNextEvents}
       onReachStart={handleLoadPreviousEvents}
-      onChangeActiveDate={handleChangeActiveDate}
+      onChangeActiveDate={() => {}} // handleChangeActiveDate
       onCrmEventChange={handleCrmEventChange}
     />
   )
