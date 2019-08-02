@@ -22,7 +22,7 @@ export function upsertCrmEvents(
     return {
       ...events,
       [dayId]: events[dayId].filter(
-        (item: CalendarEvent) => item.id !== event.id
+        (item: ICalendarEvent) => item.id !== event.id
       )
     }
   }

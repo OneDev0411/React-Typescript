@@ -5,11 +5,11 @@ import { createDayId } from '../create-day-id'
  * @param range
  * @param events
  */
-export function normalizeEvents(range: NumberRange, events: CalendarEvent[]) {
+export function normalizeEvents(range: NumberRange, events: ICalendarEvent[]) {
   const list = getEvents(range, events)
 
   return Object.entries(list).reduce((acc, [day, events]) => {
-    if ((events as CalendarEvent[]).length === 0 && !isToday(day)) {
+    if ((events as ICalendarEvent[]).length === 0 && !isToday(day)) {
       return acc
     }
 
@@ -25,8 +25,8 @@ export function normalizeEvents(range: NumberRange, events: CalendarEvent[]) {
  * @param range
  * @param events
  */
-function getEvents(range: NumberRange, events: CalendarEvent[]) {
-  return events.reduce((acc: string[], event: CalendarEvent) => {
+function getEvents(range: NumberRange, events: ICalendarEvent[]) {
+  return events.reduce((acc: string[], event: ICalendarEvent) => {
     const index = getEventIndex(event, range)
 
     return {
@@ -69,7 +69,7 @@ function getDaysInRange(range: NumberRange) {
  * @param event
  * @param range
  */
-function getEventIndex(event: CalendarEvent, range: NumberRange) {
+function getEventIndex(event: ICalendarEvent, range: NumberRange) {
   const [start, end] = range
 
   const from = new Date(start * 1000)

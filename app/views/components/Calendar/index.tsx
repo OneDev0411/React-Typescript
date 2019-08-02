@@ -43,14 +43,12 @@ interface Ranges {
 }
 
 interface Props {
-  user?: IUser
-  viewAsUsers: UUID[]
+  viewAsUsers?: UUID[]
   calendarRef?: RefObject<CalendarRef>
   onChangeActiveDate?: (activeDate: Date) => void
 }
 
 interface StateProps {
-  user: IUser
   viewAsUsers: UUID[]
 }
 
@@ -59,8 +57,6 @@ export function Calendar({
   viewAsUsers,
   onChangeActiveDate = () => null
 }: Props) {
-  console.log(viewAsUsers)
-
   // reference to the Virtual List
   const listRef = useRef<VirtualListRef>(null)
 
@@ -116,7 +112,7 @@ export function Calendar({
     listRef.current!.scrollToItem(rowId, 'start')
 
     // change active date
-    handleChangeActiveDate(new Date(rows[rowId].title))
+    handleChangeActiveDate(new Date(rows[rowId].date))
   }
 
   /**
@@ -264,7 +260,6 @@ function mapStateToProps({ user }: IAppState) {
   const viewAsUsers = viewAs(user)
 
   return {
-    user,
     viewAsUsers: viewAsUsers.length === teamMembers.length ? [] : viewAsUsers
   }
 }

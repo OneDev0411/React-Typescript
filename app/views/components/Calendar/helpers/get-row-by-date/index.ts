@@ -20,7 +20,7 @@ export function getRowIdByDate(
     dayId = format(nextDay)
   }
 
-  return rows.findIndex(row => row.is_header && row.title === dayId)
+  return rows.findIndex(row => row.is_day_header && row.date === dayId)
 }
 
 /**

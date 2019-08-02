@@ -18,10 +18,10 @@ interface StateProps {
 interface Props {
   user?: IUser
   onCrmEventChange: (event: IEvent, type: string) => void
-  event: CalendarEvent
+  event: ICalendarEvent
 }
 
-export function CrmEvent(props: Props) {
+export const CrmEvent = (props: Props) => {
   const [showEventDrawer, setShowEventDrawer] = useState(false)
 
   const handleEventChange = (event: IEvent, type: string) => {

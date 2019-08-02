@@ -7,7 +7,7 @@ import { Container, Time } from './styled'
 
 interface Props {
   style: React.CSSProperties
-  item: CalendarEvent
+  item: ICalendarEvent
   nextItem: any
   onCrmEventChange: (event: IEvent, type: string) => void
 }
@@ -15,11 +15,11 @@ interface Props {
 export function Event({ item, nextItem, style, onCrmEventChange }: Props) {
   const date =
     item.object_type === 'crm_task'
-      ? fecha.format(new Date(item.timestamp), 'hh:mm A')
+      ? fecha.format(new Date(item.timestamp * 1000), 'hh:mm A')
       : 'All day'
 
   return (
-    <Container style={style} hasBorder={nextItem && !nextItem.is_header}>
+    <Container style={style} hasBorder={nextItem && !nextItem.is_day_header}>
       <Flex alignCenter>
         <Time>{date}</Time>
         <EventItem event={item} onCrmEventChange={onCrmEventChange} />

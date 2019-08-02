@@ -9,7 +9,7 @@ import { EventIcon } from './Icon'
 import { Title } from './styled'
 
 interface Props {
-  event: CalendarEvent
+  event: ICalendarEvent
   onCrmEventChange: (event: IEvent, type: string) => void
 }
 

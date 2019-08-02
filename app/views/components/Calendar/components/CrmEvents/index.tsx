@@ -6,7 +6,7 @@ import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
 interface Props {
   isOpenEventDrawer: boolean
-  event?: CalendarEvent
+  event?: ICalendarEvent
   user: IUser
   onEventChange(event: IEvent, type: string): void
   onCloseEventDrawer(): void

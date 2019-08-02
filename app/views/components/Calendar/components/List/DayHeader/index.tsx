@@ -11,7 +11,7 @@ interface IProps {
 }
 
 export function DayHeader(props: IProps) {
-  const date = new Date(props.item.title)
+  const date = new Date(props.item.date)
 
   return (
     <Flex alignCenter style={props.style}>
@@ -19,7 +19,7 @@ export function DayHeader(props: IProps) {
         isActive={
           props.activeDate &&
           props.activeDate.toDateString() ===
-            new Date(props.item.title).toDateString()
+            new Date(props.item.date).toDateString()
         }
       >
         <Flex

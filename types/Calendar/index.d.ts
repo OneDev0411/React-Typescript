@@ -1,6 +1,6 @@
 declare type NumberRange = [number, number]
 
-declare interface CalendarEvent {
+declare interface ICalendarEvent {
   id: UUID
   timestamp: number
   recurring: boolean
@@ -34,6 +34,14 @@ declare interface CalendarEvent {
   }
 }
 
+declare interface ICalendarDayRow {
+  is_day_header: boolean
+  is_today: boolean
+  date: Date
+}
+
+declare type ICalendarListRow = ICalendarEvent | ICalendarDayRow
+
 interface CalendarEventsList {
-  [key: string]: CalendarEvent[] | []
+  [key: string]: ICalendarEvent[] | []
 }

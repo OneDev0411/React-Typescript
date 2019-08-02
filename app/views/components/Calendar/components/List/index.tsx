@@ -37,7 +37,7 @@ const CalendarList: React.FC<Props> = props => {
     const index = new Array(data.visibleStopIndex - data.visibleStartIndex)
       .fill(null)
       .findIndex(
-        (_, index) => props.rows[index + data.visibleStartIndex].is_header
+        (_, index) => props.rows[index + data.visibleStartIndex].is_day_header
       )
 
     const item = props.rows[index + data.visibleStartIndex]
@@ -46,7 +46,7 @@ const CalendarList: React.FC<Props> = props => {
       return
     }
 
-    const date = new Date(item.title)
+    const date = new Date(item.date)
 
     if (date instanceof Date && !Number.isNaN(date.getTime())) {
       setActiveDate(date)
@@ -65,15 +65,15 @@ const CalendarList: React.FC<Props> = props => {
         threshold={2}
         isLoading={props.isLoading}
         loadingPosition={props.loadingPosition}
-        onVisibleRowChange={debounce(getInViewDate, 100)}
+        onVisibleRowChange={debounce(getInViewDate, 50)}
         itemSize={() => 60}
         ref={props.listRef}
       >
         {({ index, style }) => (
           <>
-            {props.rows[index].is_header ? (
+            {props.rows[index].is_day_header ? (
               <DayHeader
-                key={props.rows[index].title}
+                key={props.rows[index].date}
                 item={props.rows[index]}
                 style={style}
                 activeDate={activeDate}

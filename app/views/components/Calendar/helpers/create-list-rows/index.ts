@@ -7,9 +7,9 @@ export function createListRows(events: CalendarEventsList) {
     return [
       ...acc,
       {
-        is_header: true,
+        is_day_header: true,
         is_today: fecha.format(new Date(day), 'YYYY-MM-DD') === today,
-        title: day
+        date: day
       },
       ...eventsList
     ]

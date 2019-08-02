@@ -33,7 +33,7 @@ const CalendarPage: React.FC = props => {
         <SideHeader>
           <Title>Calendar</Title>
 
-          <TodayButton onClick={handleDatePickerChange} />
+          <TodayButton onClick={() => handleDatePickerChange()} />
         </SideHeader>
 
         <DatePicker

@@ -18,7 +18,7 @@ export const Container = styled.div<ContainerProps>`
 
 export const Time = styled.div`
   width: 9rem;
-  font-size: 0.875rem;
+  font-size: 1rem;
   letter-spacing: 0.25px;
   color: #536280;
 `
