@@ -46,8 +46,6 @@ export function EventItem(props: Props) {
             {event.title}
           </a>
         </div>
-
-        <div>---</div>
       </div>
     )
   }
