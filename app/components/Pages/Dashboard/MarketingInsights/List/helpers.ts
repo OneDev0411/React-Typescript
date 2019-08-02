@@ -38,11 +38,23 @@ export function show_title(title) {
   return title ? title.trim() : 'No Title'
 }
 
+export function isEmailQueued(item) {
+  const now = new Date().getTime()
+  return item.due_at * 1000 > now
+}
+
+export function isEmailScheduled(item) {
+  return !item.executed_at && isEmailQueued(item)
+}
+
+export function isEmailInProgress(item) {
+  return !item.executed_at && !isEmailQueued(item)
+}
+
 export function doFilterOnInsightList(
   list,
   type: InsightFiltersType = InsightFiltersType.SENT
 ) {
-  const now = new Date().getTime()
   // Defining a muatable const :D
   const output = {
     list: [],
@@ -55,11 +67,7 @@ export function doFilterOnInsightList(
   // Filtering based on types
   if (type === InsightFiltersType.SCHEDULED) {
     output.list = list.filter(function filterInsightList(item) {
-      // due_at is when we are going to send email. (set by client)
-      const isQueued = item.due_at * 1000 > now
-      const isScheduled = !item.executed_at && isQueued
-
-      return isScheduled
+      return isEmailScheduled(item)
     })
 
     output.stats = {
@@ -70,11 +78,7 @@ export function doFilterOnInsightList(
 
   if (type === InsightFiltersType.SENT) {
     output.list = list.filter(function filterInsightList(item) {
-      // due_at is when we are going to send email. (set by client)
-      const isQueued = item.due_at * 1000 > now
-      const isScheduled = !item.executed_at && isQueued
-
-      return !isScheduled
+      return !isEmailScheduled(item)
     })
 
     output.stats = {
