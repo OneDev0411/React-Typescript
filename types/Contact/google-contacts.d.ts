@@ -1,10 +1,10 @@
-declare interface IGoogleContactsImport {
+declare interface IOAuthAccountImport {
   redirect: string
   url: string
   type: string
 }
 
-declare interface IGoogleAccount {
+declare interface IOAuthAccount {
   brand: UUID
   contacts_last_sync_at: string
   created_at: string
@@ -32,6 +32,9 @@ declare interface IGoogleAccount {
   user: UUID
 }
 
+declare interface IGoogleAccount extends IOAuthAccount {}
+declare interface IMicrosoftAccount extends IOAuthAccount {}
+
 declare interface IGoogleSyncHistory {
   brand: string
   contacts_total: number
@@ -48,6 +51,7 @@ declare interface IGoogleSyncHistory {
   synced_messages_num: number
   synced_threads_num: number
   threads_total: number
+  extract_contacts_error: null | string
   type: 'google_sync_history'
   updated_at: string
   user: UUID

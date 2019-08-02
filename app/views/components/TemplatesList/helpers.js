@@ -118,3 +118,39 @@ export function itemDateText(time, isLoading) {
 
   return `Created ${createdAt(time)}`
 }
+
+export function getTemplateType(initType, template) {
+  if (template && template.template && template.template.template_type) {
+    return template.template.template_type
+  }
+
+  return initType
+}
+
+export function getMedium(props) {
+  if (
+    props.selectedTemplate &&
+    props.selectedTemplate.template &&
+    props.selectedTemplate.template.medium
+  ) {
+    return props.selectedTemplate.template.medium
+  }
+
+  return props.medium
+}
+
+export function convertToTemplate(template) {
+  if (template && template.html) {
+    return {
+      ...template.template,
+      template: template.html,
+      file: template.file,
+      listings: template.listings,
+      deals: template.deals,
+      branch: template.branch,
+      contacts: template.contacts
+    }
+  }
+
+  return template
+}

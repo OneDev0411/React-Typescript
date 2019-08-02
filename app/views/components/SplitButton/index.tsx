@@ -1,13 +1,13 @@
-import React, { CSSProperties, HTMLProps, ReactNode } from 'react'
+import React, { CSSProperties, ReactNode } from 'react'
 import Downshift from 'downshift'
 
 import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import IconKeyboardArrowUp from 'components/SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
 
 import {
-  SplitButtonMenu,
   ButtonsContainer,
   PrimaryActionButton,
+  SplitButtonMenu,
   ToggleActionsMenuButton
 } from './styled'
 
@@ -25,17 +25,21 @@ interface Props {
   children: ReactNode
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
   style: CSSProperties
-  disabled: boolean
+  appearance?: 'primary' | 'default'
+  disabled?: boolean
 }
 
 /**
- * This component can be used to render an action button with a list of dropdown actions
+ * NOTE: this component should be rewritten with material ui components
+ * there is also a third-party library that we might want to use instead:
+ * https://www.npmjs.com/package/material-ui-split-button
  */
 export default function SplitButton({
   children,
   renderMenu,
   onClick,
   disabled,
+  appearance = 'default',
   style = {}
 }: Props) {
   return (
@@ -43,10 +47,15 @@ export default function SplitButton({
       {({ isOpen, getToggleButtonProps, closeMenu }) => (
         <div style={{ ...style, position: 'relative' }}>
           <ButtonsContainer>
-            <PrimaryActionButton disabled={disabled} onClick={onClick}>
+            <PrimaryActionButton
+              appearance={appearance}
+              disabled={disabled}
+              onClick={onClick}
+            >
               {children}
             </PrimaryActionButton>
             <ToggleActionsMenuButton
+              appearance={appearance}
               disabled={disabled}
               type="button"
               isActive={isOpen}

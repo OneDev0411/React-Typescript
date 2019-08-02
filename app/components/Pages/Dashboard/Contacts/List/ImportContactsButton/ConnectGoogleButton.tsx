@@ -1,19 +1,19 @@
+import { OAuthProvider } from 'constants/contacts'
+
 import * as React from 'react'
-import { ReactElement, useState } from 'react'
+import { ReactElement } from 'react'
 import { connect } from 'react-redux'
 
 import { IAppState } from 'reducers'
 
-import { importGoogleContacts } from 'models/contacts/import-google-contacts'
-
-import { startImportingGoogleContacts } from './helpers'
+import { useConnectOAuthAccount } from './use-connect-oauth-account'
 
 interface RenderProps {
   connecting: boolean
   connect: (event: React.MouseEvent) => void
 }
 interface Props {
-  googleAccounts: IGoogleAccount[]
+  oAuthAccounts: StringMap<IGoogleAccount[]>
   children: (renderProps: RenderProps) => ReactElement<any>
 }
 
@@ -26,21 +26,14 @@ interface Props {
  * @constructor
  */
 function ConnectGoogleButton(props: Props) {
-  const [connecting, setConnecting] = useState(false)
-
-  const connect = async () => {
-    const url = (await importGoogleContacts()).url
-
-    setConnecting(true)
-
-    startImportingGoogleContacts(props.googleAccounts)
-
-    window.location.href = url
-  }
+  const { connect, connecting } = useConnectOAuthAccount(
+    OAuthProvider.Google,
+    props.oAuthAccounts
+  )
 
   return props.children({ connecting, connect })
 }
 
-export default connect(({ contacts: { googleAccounts } }: IAppState) => ({
-  googleAccounts
+export default connect(({ contacts: { oAuthAccounts } }: IAppState) => ({
+  oAuthAccounts: oAuthAccounts.list
 }))(ConnectGoogleButton)

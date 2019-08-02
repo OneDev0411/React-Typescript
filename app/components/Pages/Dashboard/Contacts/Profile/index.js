@@ -20,17 +20,17 @@ import { getNotes } from 'models/contacts/helpers/get-notes'
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
 
+import NewTask from 'components/NewEvent'
 import {
   selectDefinitionByName,
   isLoadedContactAttrDefs
-} from '../../../../../reducers/contacts/attributeDefs'
-import { selectContact } from '../../../../../reducers/contacts/list'
+} from 'reducers/contacts/attributeDefs'
+import { selectContact } from 'reducers/contacts/list'
 
-import { getContactsTags } from '../../../../../store_actions/contacts/get-contacts-tags'
-import { normalizeContact as associationNormalizer } from '../../../../../views/utils/association-normalizers'
+import { getContactsTags } from 'store_actions/contacts/get-contacts-tags'
+import { normalizeContact as associationNormalizer } from 'views/utils/association-normalizers'
 
 import Loading from '../../../../Partials/Loading'
-import NewTask from '../../../../../views/CRM/Tasks/components/NewTask'
 
 import { Container } from '../components/Container'
 // import Flows from './Flows'
@@ -40,7 +40,7 @@ import { Details } from './Details'
 import { Partner } from './Partner'
 import Tags from './Tags'
 import { ContactInfo } from './ContactInfo'
-import Addresses from './Addresses'
+import AddressesSection from './Addresses'
 import { AddNote } from './AddNote'
 import { Owner } from './Owner'
 import Delete from './Delete'
@@ -84,6 +84,7 @@ class ContactProfile extends React.Component {
     this.detectScreenSize()
     window.addEventListener('resize', this.detectScreenSize)
     this.initializeContact()
+    window.socket.on('contact:touch', this.updateContact)
     window.socket.on('crm_task:create', this.fetchTimeline)
     window.socket.on('email_campaign:create', this.fetchTimeline)
   }
@@ -103,8 +104,9 @@ class ContactProfile extends React.Component {
 
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.detectScreenSize)
-    window.socket.off('crm_task:create', this.fetchTimeline)
-    window.socket.off('email_campaign:create', this.fetchTimeline)
+    window.socket.on('contact:touch', this.updateContact)
+    window.socket.off('crm_task:create', this.handleSocket)
+    window.socket.off('email_campaign:create', this.handleSocket)
   }
 
   /**
@@ -124,6 +126,24 @@ class ContactProfile extends React.Component {
 
     if (window.innerWidth >= 1681 && !this.state.isDesktopScreen) {
       return this.setState({ isDesktopScreen: true })
+    }
+  }
+
+  updateContact = async () => {
+    try {
+      const response = await getContact(
+        this.props.params.id,
+        updateContactQuery
+      )
+
+      this.setState(state => ({
+        contact: {
+          ...normalizeContact(response.data),
+          deals: state.contact.deals
+        }
+      }))
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -175,7 +195,7 @@ class ContactProfile extends React.Component {
 
   setContact = (newContact, fallback) =>
     this.setState(
-      contact => ({ contact: { ...contact, ...newContact } }),
+      state => ({ contact: { ...state.contact, ...newContact } }),
       fallback
     )
 
@@ -333,7 +353,7 @@ class ContactProfile extends React.Component {
 
                 <ContactInfo {..._props} />
 
-                <Addresses {..._props} />
+                <AddressesSection {..._props} />
 
                 <Details {..._props} />
 

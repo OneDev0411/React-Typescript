@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router'
 
 import AbstractCard from 'components/Card'
-import { borderColor } from 'views/utils/colors'
+import { borderColor, primary } from 'views/utils/colors'
 
 export const Container = styled.div`
   padding: 0 2.5rem;
@@ -15,7 +15,7 @@ export const TabContent = styled.div`
 
 export const Card = styled(AbstractCard)`
   border-radius: 3px;
-  background-color: #ffffff;
+  background-color: #fff;
   border: solid 1px ${borderColor};
   box-shadow: none;
 `
@@ -35,8 +35,8 @@ export const NavBar = styled.div`
   justify-content: center;
   border-radius: 3px;
   background-color: #fff;
-  border: solid 1px #d4d4d4;
-  margin: 1.5rem 0;
+  border: solid 1px ${borderColor};
+  margin-bottom: 1.5rem;
 `
 
 export const NavItem = styled(Link)`
@@ -57,8 +57,8 @@ export const NavItem = styled(Link)`
     props.isActive &&
     `
   
-    color: #003bdf;
+    color: ${primary};
     font-weight: bold;
-    border-bottom-color: #003bdf;
+    border-bottom-color: ${primary};
   `};
 `

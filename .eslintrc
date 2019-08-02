@@ -108,7 +108,10 @@
     "eol-last": 0,
     "quotes": [
       2,
-      "single"
+      "single",
+      {
+        "avoidEscape": true
+      }
     ],
     "eqeqeq": 0,
     "no-nested-ternary": 0,

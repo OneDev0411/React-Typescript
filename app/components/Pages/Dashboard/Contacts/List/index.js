@@ -8,23 +8,19 @@ import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { deleteContacts, getContacts, searchContacts } from 'actions/contacts'
 import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-text-filter'
-
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import {
   selectContacts,
   selectContactsInfo,
   selectContactsListFetching
 } from 'reducers/contacts/list'
-
 import {
   getUserSettingsInActiveTeam,
   viewAs,
   viewAsEveryoneOnTeam
 } from 'utils/user-teams'
-
 import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
 import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
-
 import {
   Container as PageContainer,
   Content as PageContent,
@@ -32,19 +28,12 @@ import {
 } from 'components/SlideMenu'
 import SavedSegments from 'components/Grid/SavedSegments/List'
 import { resetGridSelectedItems } from 'components/Grid/Table/Plugins/Selectable'
-
 import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
-
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
-
-import { fetchGoogleAccounts } from 'actions/contacts/fetch-google-accounts'
-
+import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { Callout } from 'components/Callout'
-
 import { AlphabetFilter } from 'components/AlphabetFilter'
-
 import { updateTeamSetting } from 'actions/user/update-team-setting'
-
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
 
 import Table from './Table'
@@ -55,9 +44,9 @@ import TagsList from './TagsList'
 
 import {
   FLOW_FILTER_ID,
-  SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY,
   OPEN_HOUSE_FILTER_ID,
   SORT_FIELD_SETTING_KEY,
+  SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY,
   SYNCED_CONTACTS_LIST_ID
 } from './constants'
 import { CalloutSpinner, Container, SearchWrapper } from './styled'
@@ -88,7 +77,7 @@ class ContactsList extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchGoogleAccounts()
+    this.props.fetchOAuthAccounts()
     this.fetchContactsAndJumpToSelected()
 
     if (this.props.fetchTags) {
@@ -97,9 +86,11 @@ class ContactsList extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (!_.isEqual(nextProps.googleAccounts, this.props.googleAccounts)) {
-      this.updateSyncState(nextProps.googleAccounts)
-    }
+    Object.entries(this.props.oAuthAccounts).forEach(([provider, accounts]) => {
+      if (!_.isEqual(nextProps.oAuthAccounts[provider], accounts)) {
+        this.updateSyncState(provider, nextProps.oAuthAccounts)
+      }
+    })
 
     if (
       nextProps.viewAsUsers.length !== this.props.viewAsUsers.length ||
@@ -134,8 +125,8 @@ class ContactsList extends React.Component {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
   }
 
-  updateSyncState(googleAccounts = this.props.googleAccounts) {
-    const account = getNewConnectedGoogleAccount(googleAccounts)
+  updateSyncState(provider, oAuthAccounts = this.props.oAuthAccounts) {
+    const account = getNewConnectedGoogleAccount(provider, oAuthAccounts)
 
     if (account) {
       switch (account.sync_status) {
@@ -144,12 +135,15 @@ class ContactsList extends React.Component {
           this.setState({ syncStatus: 'pending' })
           break
         case 'success':
-          clearImportingGoogleContacts()
-          this.setState({ syncStatus: 'finished' })
+          clearImportingGoogleContacts(provider)
+          this.setState({
+            syncStatus: 'finished',
+            syncedAccountProvider: provider
+          })
           break
       }
     } else {
-      clearImportingGoogleContacts()
+      clearImportingGoogleContacts(provider)
     }
   }
 
@@ -158,7 +152,7 @@ class ContactsList extends React.Component {
       isFetchingMoreContacts: true
     })
 
-    const start = parseInt(this.getQueryParam('s'), 10) || 0
+    const start = Math.max(parseInt(this.getQueryParam('s'), 10), 0) || 0
     const idSelector = `#grid-item-${this.getQueryParam('id')}`
 
     this.scrollToSelector(idSelector)
@@ -482,9 +476,9 @@ class ContactsList extends React.Component {
     } = this.props
     const contacts = selectContacts(list)
 
-    const syncing = this.props.googleAccounts.some(
-      account => account.sync_status !== 'success'
-    )
+    const syncing = Object.values(this.props.oAuthAccounts)
+      .flat()
+      .some(account => account.sync_status !== 'success')
 
     const isZeroState =
       !isFetchingContacts &&
@@ -518,12 +512,13 @@ class ContactsList extends React.Component {
           {this.state.syncStatus === 'pending' && (
             <Callout onClose={() => this.setState({ syncStatus: null })}>
               <CalloutSpinner viewBox="20 20 60 60" />
-              Doing Science! wait a moment till you can see how really Rechat
-              works with contacts and emails
+              Doing Science! Just a moment for Rechat to complete establishing
+              connections and importing your contacts.
             </Callout>
           )}
           {this.state.syncStatus === 'finished' && (
             <SyncSuccessfulModal
+              provider={this.state.syncedAccountProvider}
               close={() => {
                 this.setState({ syncStatus: null })
                 this.reloadContacts()
@@ -625,7 +620,7 @@ function mapStateToProps({ user, contacts, ...restOfState }) {
   )
 
   return {
-    googleAccounts: contacts.googleAccounts,
+    oAuthAccounts: contacts.oAuthAccounts.list,
     fetchTags,
     filters: normalizeAttributeFilters(attributeFilters),
     filterSegments,
@@ -650,7 +645,7 @@ export default withRouter(
     mapStateToProps,
     {
       getContacts,
-      fetchGoogleAccounts,
+      fetchOAuthAccounts,
       searchContacts,
       deleteContacts,
       confirmation,

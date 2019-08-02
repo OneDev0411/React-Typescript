@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
 import ReactGA from 'react-ga'
 import { Helmet } from 'react-helmet'
 
@@ -53,6 +54,7 @@ import { inactiveIntercom, activeIntercom } from '../store_actions/intercom'
 import { getAllNotifications } from '../store_actions/notifications'
 
 import { checkBrowser } from './helpers/check-browser'
+import { isListingPage } from './helpers/is-listing-page'
 
 class App extends Component {
   componentWillMount() {
@@ -98,8 +100,9 @@ class App extends Component {
   }
 
   async initializeApp() {
-    const { data, deals, dispatch } = this.props
-    let { user } = this.props
+    const { props } = this
+    let { user } = props
+    const { data, deals, dispatch } = props
 
     if (user) {
       if (!user.teams || !user.teams[0].brand.roles) {
@@ -121,7 +124,7 @@ class App extends Component {
       if (
         this.hasDealsAccess &&
         Object.keys(deals).length === 0 &&
-        !this.props.isFetchingDeals
+        !props.isFetchingDeals
       ) {
         if (isBackOffice || viewAsEveryoneOnTeam(user)) {
           dispatch(getDeals(user))
@@ -133,7 +136,7 @@ class App extends Component {
       // load contacts
       if (
         (this.hasCrmAccess || this.hasDealsAccess) &&
-        !isLoadedContactAttrDefs(this.props.contactsAttributeDefs)
+        !isLoadedContactAttrDefs(props.contactsAttributeDefs)
       ) {
         dispatch(getAttributeDefs())
       }
@@ -163,7 +166,12 @@ class App extends Component {
     // google analytics
     this.initialGoogleAnalytics(data)
 
-    dispatch(checkBrowser())
+    if (
+      !isListingPage(props.params.id) &&
+      process.env.NODE_ENV !== 'development'
+    ) {
+      dispatch(checkBrowser())
+    }
 
     if (user) {
       dispatch(syncOpenHouseData(user.access_token))
@@ -358,4 +366,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(App)
+export default withRouter(connect(mapStateToProps)(App))

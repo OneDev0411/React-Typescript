@@ -342,9 +342,7 @@ export class DealRole extends React.Component {
     changeValue(state, 'agent', () => (user.mlsid ? user.id : null))
     changeValue(state, 'future_address', () => user.future_address || {})
     changeValue(state, 'current_address', () => user.current_address || {})
-    changeValue(state, 'legal_prefix', () =>
-      user.title ? user.title.replace('.', '') : ''
-    )
+    changeValue(state, 'legal_prefix', () => user.title || null)
     changeValue(
       state,
       'phone_number',
@@ -365,7 +363,7 @@ export class DealRole extends React.Component {
   handleDeleteRole = () => {
     this.props.onDeleteRole({
       ...this.formObject,
-      is_deleted: true
+      deleted: true
     })
 
     this.handleClose()

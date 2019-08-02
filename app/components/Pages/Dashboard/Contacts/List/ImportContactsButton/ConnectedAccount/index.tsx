@@ -1,15 +1,15 @@
-import timeago from 'timeago.js'
-
 import React from 'react'
 import Flex from 'styled-flex-component'
 
 import ALink from 'components/ALink'
 import Avatar from 'components/Avatar/index'
 
+import { ConnectedAccountSyncStatus } from 'components/ConnectedAccountSyncStatus'
+
 import { AccountInfoWrapper } from './styled'
 
 interface Props {
-  account: IGoogleAccount
+  account: IOAuthAccount
 }
 
 export function ConnectedAccount({ account }: Props) {
@@ -26,7 +26,7 @@ export function ConnectedAccount({ account }: Props) {
       <AccountInfoWrapper>
         <div className="header">{account.email}</div>
         <div className="secondary">
-          Synced {timeago().format(account.last_sync_at)}{' '}
+          <ConnectedAccountSyncStatus account={account} />{' '}
           <span className="dot">.</span>
           <ALink>Settings</ALink>
         </div>

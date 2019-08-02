@@ -45,7 +45,8 @@ class Builder extends React.Component {
       originalTemplate: null,
       selectedTemplate: props.defaultTemplate,
       owner: props.templateData.user,
-      isLoading: true
+      isLoading: true,
+      isEditorLoaded: false
     }
 
     this.keyframe = 0
@@ -81,12 +82,16 @@ class Builder extends React.Component {
   }
 
   componentWillUnmount() {
-    const iframe = this.editor.Canvas.getBody()
+    if (this.editor) {
+      const iframe = this.editor.Canvas.getBody()
 
-    iframe.removeEventListener('paste', this.iframePasteHandler)
+      iframe.removeEventListener('paste', this.iframePasteHandler)
+    }
   }
 
   setupGrapesJs = () => {
+    this.setState({ isEditorLoaded: true })
+
     this.lockIn()
     this.disableResize()
     this.singleClickTextEditing()
@@ -399,7 +404,7 @@ class Builder extends React.Component {
             <h1>{this.props.headerTitle}</h1>
 
             <Actions>
-              {this.state.selectedTemplate && (
+              {this.state.selectedTemplate && !this.props.isEdit && (
                 <TeamContactSelect
                   fullHeight
                   pullTo="right"
@@ -413,7 +418,7 @@ class Builder extends React.Component {
                 />
               )}
 
-              {this.ShowEditListingsButton && (
+              {this.ShowEditListingsButton && !this.props.isEdit && (
                 <ActionButton
                   style={{ marginLeft: '0.5rem' }}
                   appearance="outline"
@@ -455,12 +460,15 @@ class Builder extends React.Component {
             <TemplatesContainer
               isInvisible={this.props.showTemplatesColumn === false}
             >
-              <Templates
-                defaultTemplate={this.props.defaultTemplate}
-                medium={this.props.mediums}
-                onTemplateSelect={this.handleSelectTemplate}
-                templateTypes={this.props.templateTypes}
-              />
+              {this.state.isEditorLoaded && (
+                <Templates
+                  defaultTemplate={this.props.defaultTemplate}
+                  medium={this.props.mediums}
+                  onTemplateSelect={this.handleSelectTemplate}
+                  templateTypes={this.props.templateTypes}
+                  isEdit={this.props.isEdit}
+                />
+              )}
             </TemplatesContainer>
 
             <div

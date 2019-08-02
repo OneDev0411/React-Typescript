@@ -5,7 +5,7 @@ exports[`Contacts list last touched component renders for contacts with last tou
   <span>
     Last Touch was 
     <b>
-      3 months ago
+      just now
     </b>
   </span>
 </div>

@@ -7,10 +7,10 @@ import spinner from './spinner'
 import importOutlook from './importOutlook'
 import importCsv from './importCsv'
 import { contactsFilterSegments } from '../filter-segments'
-import { googleAccounts } from './googleAccounts'
+import { IOauthAccountsState, oAuthAccounts } from './oAuthAccounts'
 
 export interface IContactReduxState {
-  googleAccounts: IGoogleAccount[]
+  oAuthAccounts: IOauthAccountsState
   attributeDefs: IAttributeDefsState
   list: IContactReduxListState
   filterSegments: IContactReduxFilterSegmentState
@@ -23,6 +23,6 @@ export default combineReducers<IContactReduxState>({
   spinner,
   importOutlook,
   importCsv,
-  googleAccounts,
+  oAuthAccounts,
   filterSegments: contactsFilterSegments
 })

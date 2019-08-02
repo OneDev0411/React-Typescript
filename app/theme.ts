@@ -31,7 +31,24 @@ export const theme = createMuiTheme({
     }
   },
   shape: {
-    borderRadius: 3
+    borderRadius: 4
+  },
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      'Barlow',
+      '"Segoe UI"',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"'
+    ].join(','),
+    button: {
+      textTransform: 'none'
+    }
   },
   props: {
     MuiButtonBase: {
@@ -39,5 +56,8 @@ export const theme = createMuiTheme({
       // at least until full adoption
       disableRipple: true
     }
+  },
+  zIndex: {
+    modal: 1001
   }
 })

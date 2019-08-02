@@ -1,3 +1,5 @@
+import { OAuthProvider } from 'constants/contacts'
+
 import React from 'react'
 
 import BareModal from 'components/BareModal'
@@ -8,10 +10,15 @@ import OrganizeSyncedContactsButton from '../OrganizeSyncedContactsButton'
 
 interface Props {
   close: () => void
+  provider: OAuthProvider
   handleFilterChange: (filters: IContactAttributeFilter[]) => void
 }
 
-export function SyncSuccessfulModal({ close, handleFilterChange }: Props) {
+export function SyncSuccessfulModal({
+  close,
+  handleFilterChange,
+  provider
+}: Props) {
   return (
     <BareModal isOpen autoHeight onRequestClose={close}>
       <div style={{ padding: '2rem', textAlign: 'center' }}>
@@ -22,7 +29,7 @@ export function SyncSuccessfulModal({ close, handleFilterChange }: Props) {
           a flow and let Rechat do the rest for you.
         </p>
         <br />
-        <OrganizeSyncedContactsButton>
+        <OrganizeSyncedContactsButton provider={provider}>
           {({ applyFilters }) => (
             <ActionButton
               onClick={() => {

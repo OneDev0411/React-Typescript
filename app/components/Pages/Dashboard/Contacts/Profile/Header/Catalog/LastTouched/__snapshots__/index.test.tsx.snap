@@ -5,7 +5,7 @@ exports[`Contact profile last touched component renders 1`] = `
   <span>
     Last Touch was 
     <b>
-      3 months ago
+      just now
     </b>
   </span>
   <span>

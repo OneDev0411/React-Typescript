@@ -1,4 +1,30 @@
-export const initialConfirmationModal = {
+export interface ConfirmationModalConfig {
+  isShow?: boolean
+  appearance?: 'normal' | 'danger'
+
+  // Default Interface
+  message: string
+  description?: string
+
+  // User Entry
+  multilineEntry?: boolean
+  needsUserEntry?: boolean
+  inputDefaultValue?: string
+  inputPlaceholder?: string
+
+  // Cancel Button
+  onCancel?: null | (() => any)
+  cancelLabel?: string
+  needsCancel?: boolean
+
+  // Confirm Button
+  onConfirm?: null | (() => any)
+  confirmLabel?: string
+  needsConfirm?: boolean
+}
+export const initialConfirmationModal: ConfirmationModalConfig & {
+  setConfirmationModal: (config: ConfirmationModalConfig) => any
+} = {
   // Visibility
   isShow: false,
   appearance: 'normal', // normal, danger
@@ -24,5 +50,5 @@ export const initialConfirmationModal = {
   needsConfirm: true,
 
   // Methods
-  setConfirmationModal: (config: typeof initialConfirmationModal) => {}
+  setConfirmationModal: (config: ConfirmationModalConfig) => {}
 }

@@ -1,88 +1,41 @@
 import React, {
   forwardRef,
-  Fragment,
+  useContext,
   useImperativeHandle,
   useMemo,
   useRef,
   useState
 } from 'react'
-import { ContentBlock, convertToRaw, EditorState } from 'draft-js'
-import Editor, { composeDecorators } from 'draft-js-plugins-editor'
-import createImagePlugin from 'draft-js-image-plugin'
+import { Editor as DraftEditor, EditorState } from 'draft-js'
+import PluginsEditor from 'draft-js-plugins-editor'
 import 'draft-js-image-plugin/lib/plugin.css'
-
-import createRichButtonsPlugin from 'draft-js-richbuttons-plugin'
-
-import createAlignmentPlugin from 'draft-js-alignment-plugin'
 import 'draft-js-alignment-plugin/lib/plugin.css'
-
-import createFocusPlugin from 'draft-js-focus-plugin'
-
-import createResizeablePlugin from 'draft-js-resizeable-plugin'
-
-import createBlockDndPlugin from 'draft-js-drag-n-drop-plugin'
 import { stateToHTML } from 'draft-js-export-html'
 import { stateFromHTML } from 'draft-js-import-html'
 import cn from 'classnames'
 
-import { FieldProps } from 'react-final-form'
-
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
-
 import { isImageFile } from 'utils/file-utils/is-image-file'
+import IconLink from 'components/SvgIcons/Link/IconLink'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
-import { EditorWrapper, Toolbar } from './styled'
+import { LinkEditorPopover } from './components/LinkEditorPopover'
+import IconButton from './buttons/IconButton'
+
+import { EditorWrapper, Separator, Toolbar } from './styled'
 import { FieldError } from '../final-form-fields/FieldError'
 import { AddImageButton } from './buttons/AddImageButton'
 import { RichTextButtons } from './buttons/RichTextButtons'
-import { createFilePlugin } from './plugins/handle-files'
+import { createFilePlugin } from './plugins/draft-js-handle-files-plugin'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
 import { replaceImage } from './utils/replace-image'
-import { withUploadingIndicator } from './block-decorators/with-uploading-indicator'
-import { renderAtomicBlockStyles } from './utils/render-atomic-block'
-
-interface Props {
-  defaultValue?: string
-  input?: FieldProps<any>['input']
-  onChange?: (value: string) => void
-  disabled?: boolean
-  placeholder?: string
-  plugins?: any[]
-  settings?: any
-  /**
-   * an optional function to be used when enableImage is true and an image is
-   * added to the editor. It should upload the image and return the promise
-   * of the uploaded image url. The src of the image in the editor will be
-   * uploaded to that uploaded image url.
-   * @param file
-   */
-  uploadImage?: (file: File) => Promise<string>
-
-  onAttachmentDropped?: (file: File) => void
-
-  /** ********
-   * The following props are feature enabler flags.
-   *
-   * NOTE 1: They are meant to be constant props. You can't count on
-   * changing them. and toggle features dynamically, on a mounted component
-   *
-   * NOTE 2: default value varies from one flag to another.
-   ********* */
-
-  /**
-   * Enable/disable rich text editing features like bold, italic, lists, etc.
-   */
-  enableRichText?: boolean
-  /**
-   * Enable/disable image insertion.
-   */
-  enableImage?: boolean
-}
-
-interface EditorComponent {
-  getEditorState: () => EditorState
-  focus: () => void
-}
+import { InlineEntityPopover } from './components/InlineEntityPopover'
+import { LinkPreview } from './components/LinkPreview/LinkPreview'
+import { Checkbox } from '../Checkbox'
+import { TextEditorProps } from './types'
+import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
+import { createEditorRef } from './create-editor-ref'
+import { createPlugins } from './create-plugins'
 
 /**
  * Html wysiwyg editor.
@@ -90,10 +43,19 @@ interface EditorComponent {
  * NOTE: this is an uncontrolled (stateful) component, and `onChange`
  * prop is only for being notified of changes. However it's possible
  * to reset html content imperatively via ref.
+ *
+ * NOTE: this component is growing and needs some structural refactorings
+ * for better encapsulation of different features like image, link,
+ * signature, etc.
+ *
+ * This refactoring is intentionally delayed to get more insight about
+ * how it should be done, as these features are added.
+ * So please don't panic if you see this large component!
  */
 export const TextEditor = forwardRef(
   (
     {
+      className = '',
       defaultValue = '',
       disabled = false,
       input = null,
@@ -102,12 +64,33 @@ export const TextEditor = forwardRef(
       plugins = [],
       settings = {},
       uploadImage,
+      signature,
+      hasSignatureByDefault = false,
+      onEditSignature = () => {},
       enableImage = false,
       enableRichText = true,
+      enableSignature = false,
       onAttachmentDropped
-    }: Props,
+    }: TextEditorProps,
     ref
   ) => {
+    const signatureRef = useRef<TextEditorProps['signature']>(undefined)
+    const editorElementRef = useRef<HTMLDivElement>(null)
+    const editorRef = useRef<PluginsEditor>(null)
+    const originalEditorRef = useRef<DraftEditor | null>(null)
+    const [linkEditorOpen, setLinkEditorOpen] = useState(false)
+    const confirmation = useContext(ConfirmationModalContext)
+
+    /**
+     * Images are not rendered appropriately without this option.
+     */
+    const { stateToHtmlOptions, stateFromHtmlOptions } = useMemo(
+      () => getHtmlConversionOptions(() => editorRef.current),
+      []
+    )
+
+    signatureRef.current = signature
+
     /**
      * NOTE 1: We don't use top level plugin definition to prevent bugs when
      * more than one instance of Editor is rendered simultaneously
@@ -126,116 +109,41 @@ export const TextEditor = forwardRef(
       alignmentPlugin,
       blockDndPlugin,
       resizeablePlugin,
+      linkPlugins,
+      signaturePlugin,
       richButtonsPlugin
-    } = useMemo(() => {
-      const focusPlugin = createFocusPlugin({
-        theme: { focused: 'focused', unfocused: 'unfocused' }
-      })
-      const resizeablePlugin = createResizeablePlugin()
-      const blockDndPlugin = createBlockDndPlugin()
-      const alignmentPlugin = createAlignmentPlugin()
-      const { AlignmentTool } = alignmentPlugin
-      const richButtonsPlugin = createRichButtonsPlugin()
-
-      return {
-        AlignmentTool,
-        richButtonsPlugin,
-        focusPlugin,
-        resizeablePlugin,
-        blockDndPlugin,
-        alignmentPlugin,
-        imagePlugin: createImagePlugin({
-          decorator: composeDecorators(
-            withUploadingIndicator,
-            resizeablePlugin.decorator,
-            alignmentPlugin.decorator,
-            focusPlugin.decorator,
-            blockDndPlugin.decorator
-          )
-        })
-      }
-    }, [])
-
-    const editorRef = useRef<EditorComponent>(null)
-
-    const [editorState, setEditorState] = useState(
-      EditorState.createWithContent(stateFromHTML(defaultValue))
+    } = useMemo(
+      () =>
+        createPlugins(
+          setLinkEditorOpen,
+          () => signatureRef.current || '',
+          stateFromHtmlOptions
+        ),
+      [stateFromHtmlOptions]
     )
 
-    /**
-     * Images are not rendered appropriately without this option.
-     */
-    const stateToHtmlOptions = useMemo(
-      () => ({
-        blockRenderers: {
-          atomic: (block: ContentBlock) => {
-            const entityKey = block.getEntityAt(0)
+    if (editorRef.current) {
+      originalEditorRef.current = editorRef.current.editor
+    }
 
-            if (entityKey && editorRef.current) {
-              const entity = editorRef.current
-                .getEditorState()
-                .getCurrentContent()
-                .getEntity(entityKey)
+    const getInitialState = () => {
+      const initialValue = (input && input.value) || defaultValue
+      const initialState = EditorState.createWithContent(
+        stateFromHTML(initialValue, stateFromHtmlOptions)
+      )
 
-              if (entity.getType().toLocaleLowerCase() === 'image') {
-                const data = entity.getData()
-                const style = renderAtomicBlockStyles(data)
-
-                return `<img src="${data.src}" style="${style}" />`
-              }
-            }
-
-            return undefined as any // typing is wrong, it should accept undefined too
-          }
-        }
-      }),
-      []
-    )
+      return hasSignatureByDefault && signature
+        ? signaturePlugin.modifiers.appendSignature(initialState)
+        : initialState
+    }
+    const [editorState, setEditorState] = useState(getInitialState)
 
     useImperativeHandle(
       ref,
-      () => ({
-        // convenient method for resetting editor html content
-        reset: (html = '') => {
-          setEditorState(EditorState.createWithContent(stateFromHTML(html)))
-        },
-        // convenient method for getting plain text of the editor content
-        getPlainText: () => {
-          if (editorRef.current) {
-            return editorRef.current
-              .getEditorState()
-              .getCurrentContent()
-              .getPlainText()
-          }
-
-          return ''
-        },
-        // convenient method for getting html content of the editor
-        getHtml: () => {
-          if (editorRef.current) {
-            return stateToHTML(
-              editorRef.current.getEditorState().getCurrentContent(),
-              stateToHtmlOptions
-            )
-          }
-        },
-        /**
-         * returns true if the content includes an image which is being uploaded
-         */
-        hasUploadingImage: () => {
-          if (editorRef.current) {
-            const entities = Object.values(
-              convertToRaw(
-                editorRef.current.getEditorState().getCurrentContent()
-              ).entityMap
-            )
-
-            return entities.some(
-              entity => entity.type === 'IMAGE' && entity.data.uploading
-            )
-          }
-        },
-        editorRef
+      createEditorRef({
+        editorRef,
+        setEditorState,
+        stateToHtmlOptions
       }),
       [stateToHtmlOptions]
     )
@@ -245,12 +153,23 @@ export const TextEditor = forwardRef(
         return false
       }
 
-      // We could have call onChange only of content state is changed to prevent
-      // unnecessary calls when only selection is changed. But it causes
-      // problems and sometimes it doesn't work for some reason.
       setEditorState(newState)
 
-      const html = stateToHTML(newState.getCurrentContent(), stateToHtmlOptions)
+      const newContent = newState.getCurrentContent()
+      /**
+       * We could have call onChange only of content state is changed to prevent
+       * unnecessary calls when only selection is changed. But it causes
+       * problems because {@link ContentState#mergeEntityData} (which is used
+       * in alignment plugin and other places) mutates contentState in place
+       * see this: https://github.com/facebook/draft-js/issues/940
+       * Note that this issue is closed at the time of writing this comment
+       * but it's without being fixed. At least in v0.10
+       */
+
+      const html =
+        newContent.getPlainText() === '' // isEmpty returns false if there is an empty paragraph
+          ? ''
+          : stateToHTML(newContent, stateToHtmlOptions)
 
       setTimeout(() => (input ? input.onChange(html) : onChange(html)))
     }
@@ -297,7 +216,7 @@ export const TextEditor = forwardRef(
         if (editorRef.current) {
           const latestState = editorRef.current.getEditorState()
 
-          setEditorState(
+          handleChange(
             replaceImage(imagePlugin, latestState, dataUrl, uploadedImageUrl)
           )
         }
@@ -308,8 +227,17 @@ export const TextEditor = forwardRef(
       }
     }
 
+    const showNoSignatureModal = () => {
+      confirmation!.setConfirmationModal({
+        message:
+          "You don't have an email signature. Would you like to set one?",
+        confirmLabel: 'Set signature',
+        onConfirm: onEditSignature
+      })
+    }
+
     const defaultPlugins = [
-      ...(enableRichText ? [richButtonsPlugin] : []),
+      ...(enableRichText ? [richButtonsPlugin, ...linkPlugins] : []),
       ...(enableImage
         ? [
             blockDndPlugin,
@@ -326,22 +254,50 @@ export const TextEditor = forwardRef(
               handleOtherFiles: onAttachmentDropped
             })
           ]
-        : [])
+        : []),
+      ...(enableSignature ? [signaturePlugin] : [])
     ]
 
     const allPlugins = [...defaultPlugins, ...plugins]
 
     return (
-      <Fragment>
+      <div className={className}>
         <Toolbar>
           {enableRichText && (
-            <RichTextButtons richButtonsPlugin={richButtonsPlugin} />
+            <>
+              <RichTextButtons richButtonsPlugin={richButtonsPlugin} />
+              <IconButton
+                onClick={event => {
+                  setLinkEditorOpen(true)
+                  event.preventDefault()
+                  event.stopPropagation()
+                }}
+              >
+                <IconLink />
+              </IconButton>
+            </>
           )}
 
           {enableImage && <AddImageButton onImageSelected={addImage} />}
+          {enableSignature && (
+            <>
+              <Separator />
+              <Checkbox
+                checked={signaturePlugin.hasSignature()}
+                onChange={() =>
+                  signature
+                    ? signaturePlugin.toggleSignature()
+                    : showNoSignatureModal()
+                }
+              >
+                Signature
+              </Checkbox>
+            </>
+          )}
         </Toolbar>
 
         <EditorWrapper
+          ref={editorElementRef}
           className={cn({
             'hide-placeholder': shouldHidePlaceholder(editorState)
           })}
@@ -351,7 +307,7 @@ export const TextEditor = forwardRef(
           }}
           data-test="text-editor-wrapper"
         >
-          <Editor
+          <PluginsEditor
             spellCheck
             readOnly={disabled}
             editorState={editorState}
@@ -362,10 +318,35 @@ export const TextEditor = forwardRef(
             {...settings}
           />
           <alignmentPlugin.AlignmentTool />
+          <LinkEditorPopover
+            editorRef={originalEditorRef}
+            editorState={editorState}
+            setEditorState={handleChange}
+            open={linkEditorOpen}
+            onClose={() => {
+              setLinkEditorOpen(false)
+              setTimeout(() => {
+                editorRef.current!.focus()
+              })
+            }}
+          />
+          {!linkEditorOpen && (
+            <InlineEntityPopover editorState={editorState} entityFilter="LINK">
+              {({ entity, close }) => (
+                <LinkPreview
+                  editorState={editorState}
+                  setEditorState={handleChange}
+                  onClose={close}
+                  url={entity.getData().url}
+                  onEdit={() => setLinkEditorOpen(true)}
+                />
+              )}
+            </InlineEntityPopover>
+          )}
         </EditorWrapper>
 
         {input && <FieldError name={input.name} />}
-      </Fragment>
+      </div>
     )
   }
 )

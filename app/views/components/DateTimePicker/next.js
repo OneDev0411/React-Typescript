@@ -59,7 +59,6 @@ function DateTimePicker(props) {
     if (isPopUpOpen && props.initialSelectedDate !== selectedDate) {
       modal.setConfirmationModal({
         message: 'Heads up!',
-        // eslint-disable-next-line
         description: "You didn't save your selected date. Are you sure?",
         onConfirm: () => {
           setOpen(!isPopUpOpen)

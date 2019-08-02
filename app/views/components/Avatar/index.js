@@ -13,6 +13,7 @@ const propTypes = {
   title: PropTypes.string,
   image: PropTypes.string,
   borderRadius: PropTypes.number,
+  initials: PropTypes.string,
   placeHolderImage: PropTypes.string
 }
 
@@ -20,19 +21,17 @@ const defaultProps = {
   size: 40,
   image: '',
   title: '',
-  placeHolderImage: '',
   borderRadius: 100,
-  isOnline: false,
   showStatus: false,
   statusColor: '#35b863'
 }
 
 const Avatar = ({
   image,
-  placeHolderImage,
-  initials,
+  placeHolderImage = '',
+  initials = '',
   title,
-  isOnline,
+  isOnline = false,
   ...props
 }) => {
   let imageSrc = ''

@@ -3,11 +3,10 @@ import Koa from 'koa'
 import config from '../../../../../config/public'
 import listing_util from '../../../../../app/utils/listing'
 import getListing from '../../../../../app/models/listings/listing/get-listing'
+import { isUUID } from '../../../../../app/utils/validations/is-uuid/is-uuid.ts'
 
 const router = require('koa-router')()
 const app = new Koa()
-
-const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
 /**
  * route for /mls/:id
@@ -15,14 +14,12 @@ const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}
 router.get('/dashboard/mls/:id', async (ctx, next) => {
   const { id } = ctx.params
 
-  if (!id || uuidPattern.test(id) === false) {
+  if (!id || !isUUID(id)) {
     return next()
   }
 
   try {
     const listing = await getListing(id)
-
-    console.log(config.fb.app_id)
 
     ctx.state.openGraph = {
       has_og: true,

@@ -14,6 +14,7 @@ function TemplatesList(props) {
   const [isPreviewModalOpen, setPreviewModalOpen] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState(null)
   const [isActionTriggered, setActionTriggered] = useState(false)
+  const [isEditActionTriggered, setEditActionTriggered] = useState(false)
   const modal = useContext(ConfirmationModalContext)
   const handleDelete = props.onDelete
     ? ({ template, onFailed, onCancel }) => {
@@ -65,9 +66,15 @@ function TemplatesList(props) {
               }}
               handleCustomize={selectedTemplate => {
                 setActionTriggered(true)
+                setEditActionTriggered(false)
                 setSelectedTemplate(selectedTemplate)
               }}
               handleDelete={handleDelete}
+              handleEdit={selectedTemplate => {
+                setActionTriggered(true)
+                setEditActionTriggered(true)
+                setSelectedTemplate(selectedTemplate)
+              }}
             />
           ))}
         </Masonry>
@@ -87,8 +94,10 @@ function TemplatesList(props) {
       <TemplateAction
         type={props.type}
         medium={props.medium}
+        isEdit={isEditActionTriggered}
         isTriggered={isActionTriggered}
         setTriggered={setActionTriggered}
+        setEditActionTriggered={setEditActionTriggered}
         selectedTemplate={selectedTemplate}
       />
     </TemplatesContainer>

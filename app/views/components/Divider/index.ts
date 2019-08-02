@@ -15,9 +15,16 @@ interface Props {
   margin?: CSSProperties['margin']
 }
 
+const getHeight = ({ height, vertical }: Props) =>
+  height || (vertical ? '100%' : '1px')
+
+const getWidth = ({ width, vertical }: Props) =>
+  width || (vertical ? '1px' : '100%')
 export const Divider = styled.div<Props>`
-  width: ${({ width, vertical }) => width || (vertical ? '1px' : '100%')};
-  height: ${({ height, vertical }) => height || (vertical ? '100%' : '1px')};
+  width: ${getWidth};
+  min-width: ${getWidth};
+  height: ${getHeight};
+  min-height: ${getHeight};
   margin: ${props => (props.margin ? props.margin : 0)};
   background-color: ${borderColor};
   position: relative;

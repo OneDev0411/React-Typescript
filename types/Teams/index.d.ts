@@ -5,6 +5,7 @@ declare type IPermission =
   | 'Admin'
   | 'Marketing'
   | 'CRM'
+  | 'BetaFeatures'
 
 declare interface IBrand {
   assets: any | null

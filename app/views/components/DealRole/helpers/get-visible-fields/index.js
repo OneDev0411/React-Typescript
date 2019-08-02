@@ -42,7 +42,7 @@ export default function getVisibleFields(args) {
     list.push('mls_id')
   }
 
-  if (['Seller', 'Buyer'].includes(args.role)) {
+  if (['Seller', 'Buyer', 'Landlord'].includes(args.role)) {
     list.push('current_address', 'future_address')
   }
 

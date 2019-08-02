@@ -26,7 +26,7 @@ function Item(props) {
         data-test="marketing-template"
       >
         <div className="action-bar">
-          {props.handleDelete && (
+          {isInstance && props.handleDelete && (
             <IconButton
               onClick={e => {
                 e.stopPropagation()
@@ -53,6 +53,20 @@ function Item(props) {
               <DeleteIcon />
             </IconButton>
           )}
+
+          {isInstance && props.handleEdit && (
+            <ActionButton
+              onClick={e => {
+                e.stopPropagation()
+
+                props.handleEdit(props.template)
+              }}
+              isBlock
+            >
+              Edit
+            </ActionButton>
+          )}
+
           <ActionButton
             onClick={e => {
               e.stopPropagation()
