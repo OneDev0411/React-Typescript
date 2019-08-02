@@ -10,13 +10,14 @@ import { Title } from './styled'
 
 interface Props {
   event: CalendarEvent
+  onCrmEventChange: (event: IEvent, type: string) => void
 }
 
 export function EventItem(props: Props) {
   const { event } = props
 
   if (event.object_type === 'crm_task') {
-    return <CrmEvent event={event} />
+    return <CrmEvent event={event} onCrmEventChange={props.onCrmEventChange} />
   }
 
   if (event.object_type === 'contact_attribute') {

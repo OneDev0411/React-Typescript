@@ -1,22 +1,5 @@
 declare type NumberRange = [number, number]
 
-interface FullCrmTaskAssociations {
-  id: string
-  association_type: 'contact' | 'deal' | 'listing'
-  brand: string
-  contact?: IContact
-  deal?: IDeal
-  listing?: any
-  created_at: string
-  created_by: string
-  crm_task: string
-  deleted_at: string | null
-  index: number | null
-  metadata: any
-  type: string
-  updated_at: number
-}
-
 declare interface CalendarEvent {
   id: UUID
   timestamp: number
@@ -47,7 +30,7 @@ declare interface CalendarEvent {
   full_deal?: IDeal
   full_crm_task?: {
     assignees: IUser[]
-    associations: FullCrmTaskAssociations[]
+    associations: TaskAssociations[]
   }
 }
 

@@ -3,8 +3,8 @@ import useEffect from 'use-deep-compare-effect'
 
 import { getCalendar, FilterQuery } from '../../models/get-calendar'
 
-import { normalize } from './normalize-events'
-import { sortEvents } from './sort-events'
+import { normalizeEvents } from '../../helpers/normalize-events'
+import { sortEvents } from '../../helpers/sort-events'
 
 interface ApiOptions {
   range: NumberRange
@@ -47,10 +47,10 @@ export function useLoadCalendar(apiOptions: ApiOptions, options: Options) {
 
         // concat newEvents and current events
         const list = options.reset
-          ? normalize(apiOptions.range, newEvents)
+          ? normalizeEvents(apiOptions.range, newEvents)
           : {
               ...events,
-              ...normalize(apiOptions.range, newEvents)
+              ...normalizeEvents(apiOptions.range, newEvents)
             }
 
         setEvents(sortEvents(list))
@@ -66,11 +66,12 @@ export function useLoadCalendar(apiOptions: ApiOptions, options: Options) {
     getCalendarEvents()
 
     // eslint-disable-next-line
-  }, [apiOptions])
+  }, [apiOptions, options])
 
   return {
     events,
     error,
-    isLoading
+    isLoading,
+    updateEvents: (events: CalendarEventsList) => setEvents(sortEvents(events))
   }
 }

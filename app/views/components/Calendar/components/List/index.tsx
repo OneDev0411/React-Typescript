@@ -20,6 +20,7 @@ interface Props {
   onReachStart?(): void
   onReachEnd?(): void
   onChangeActiveDate(date: Date): void
+  onCrmEventChange: (event: IEvent, type: string) => void
 }
 
 const defaultProps = {
@@ -64,7 +65,7 @@ const CalendarList: React.FC<Props> = props => {
         threshold={2}
         isLoading={props.isLoading}
         loadingPosition={props.loadingPosition}
-        onVisibleRowChange={debounce(getInViewDate, 50)}
+        onVisibleRowChange={debounce(getInViewDate, 100)}
         itemSize={() => 60}
         ref={props.listRef}
       >
@@ -83,6 +84,7 @@ const CalendarList: React.FC<Props> = props => {
                 item={props.rows[index]}
                 nextItem={props.rows[index + 1]}
                 style={style}
+                onCrmEventChange={props.onCrmEventChange}
               />
             )}
           </>

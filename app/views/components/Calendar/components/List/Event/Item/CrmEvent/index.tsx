@@ -17,11 +17,20 @@ interface StateProps {
 
 interface Props {
   user?: IUser
+  onCrmEventChange: (event: IEvent, type: string) => void
   event: CalendarEvent
 }
 
 export function CrmEvent(props: Props) {
-  const [showEventsDrawer, setShowEventsDrawer] = useState(false)
+  const [showEventDrawer, setShowEventDrawer] = useState(false)
+
+  const handleEventChange = (event: IEvent, type: string) => {
+    setShowEventDrawer(false)
+
+    props.onCrmEventChange(event, type)
+  }
+
+  const handleShowEventDrawer = () => setShowEventDrawer(true)
 
   const associationsList = () => {
     const associations = props.event.full_crm_task!.associations
@@ -31,7 +40,7 @@ export function CrmEvent(props: Props) {
     )
 
     if (contacts.length === 0) {
-      return 'no body'
+      return <Association onClick={handleShowEventDrawer}>no body</Association>
     }
 
     const users = new Array(Math.min(2, contacts.length))
@@ -39,7 +48,7 @@ export function CrmEvent(props: Props) {
       .map((_, index) => [
         <Association
           key={`Association_${index}`}
-          onClick={() => setShowEventsDrawer(true)}
+          onClick={handleShowEventDrawer}
         >
           {contacts[index].contact!.display_name}
         </Association>,
@@ -55,7 +64,7 @@ export function CrmEvent(props: Props) {
           <>
             {' '}
             and{' '}
-            <Association onClick={() => setShowEventsDrawer(true)}>
+            <Association onClick={handleShowEventDrawer}>
               {contacts.length - 2} other{contacts.length - 2 > 1 ? 's' : ''}
             </Association>
           </>
@@ -80,13 +89,13 @@ export function CrmEvent(props: Props) {
         )}
       </div>
 
-      {showEventsDrawer && (
+      {showEventDrawer && (
         <CrmEvents
           isOpenEventDrawer
           event={props.event}
           user={props.user as IUser}
-          onEventChange={() => {}}
-          onCloseEventDrawer={() => setShowEventsDrawer(false)}
+          onEventChange={handleEventChange}
+          onCloseEventDrawer={() => setShowEventDrawer(false)}
         />
       )}
     </>

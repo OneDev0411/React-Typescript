@@ -8,7 +8,7 @@ interface Props {
   isOpenEventDrawer: boolean
   event?: CalendarEvent
   user: IUser
-  onEventChange(): void
+  onEventChange(event: IEvent, type: string): void
   onCloseEventDrawer(): void
 }
 
@@ -19,7 +19,7 @@ export function CrmEvents(props: Props) {
 
   const sharedProps = {
     isOpen: true,
-    deleteCallback: props.onEventChange,
+    deleteCallback: (event: IEvent) => props.onEventChange(event, 'deleted'),
     onClose: props.onCloseEventDrawer,
     submitCallback: props.onEventChange,
     user: props.user

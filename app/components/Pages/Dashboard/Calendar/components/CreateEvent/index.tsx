@@ -13,10 +13,16 @@ interface StateProps {
 
 interface Props {
   user?: IUser
+  onEventChange: (event: IEvent, type: string) => void
 }
 
 export function CreateEvent(props: Props) {
   const [showEventDrawer, setShowEventDrawer] = useState(false)
+
+  const handleEventChange = (event: IEvent, type: string) => {
+    setShowEventDrawer(false)
+    props.onEventChange(event, type)
+  }
 
   return (
     <div>
@@ -32,7 +38,7 @@ export function CreateEvent(props: Props) {
       <CrmEvents
         isOpenEventDrawer={showEventDrawer}
         user={props.user as IUser}
-        onEventChange={() => {}}
+        onEventChange={handleEventChange}
         onCloseEventDrawer={() => setShowEventDrawer(false)}
       />
     </div>

@@ -19,8 +19,12 @@ const CalendarPage: React.FC = props => {
    */
   const [activeDate, setActiveDate] = useState<Date>(new Date())
 
-  const handleDatePickerChange = (date: Date) => {
+  const handleDatePickerChange = (date: Date = new Date()) => {
     calendarRef.current!.jumpToDate(date)
+  }
+
+  const handleEventChange = (event: IEvent, type: string) => {
+    calendarRef.current!.updateCrmEvents(event, type)
   }
 
   return (
@@ -29,7 +33,7 @@ const CalendarPage: React.FC = props => {
         <SideHeader>
           <Title>Calendar</Title>
 
-          <TodayButton onClick={() => handleDatePickerChange(new Date())} />
+          <TodayButton onClick={handleDatePickerChange} />
         </SideHeader>
 
         <DatePicker
@@ -41,7 +45,7 @@ const CalendarPage: React.FC = props => {
       <Main>
         <Header>
           <Filters />
-          <CreateEvent />
+          <CreateEvent onEventChange={handleEventChange} />
         </Header>
 
         <List

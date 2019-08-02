@@ -9,9 +9,10 @@ interface Props {
   style: React.CSSProperties
   item: CalendarEvent
   nextItem: any
+  onCrmEventChange: (event: IEvent, type: string) => void
 }
 
-export function Event({ item, nextItem, style }: Props) {
+export function Event({ item, nextItem, style, onCrmEventChange }: Props) {
   const date =
     item.object_type === 'crm_task'
       ? fecha.format(new Date(item.timestamp), 'hh:mm A')
@@ -21,10 +22,10 @@ export function Event({ item, nextItem, style }: Props) {
     <Container style={style} hasBorder={nextItem && !nextItem.is_header}>
       <Flex alignCenter>
         <Time>{date}</Time>
-        <EventItem event={item} />
+        <EventItem event={item} onCrmEventChange={onCrmEventChange} />
       </Flex>
 
-      <div>actions</div>
+      <div />
     </Container>
   )
 }

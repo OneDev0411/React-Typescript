@@ -1,9 +1,11 @@
+import { createDayId } from '../create-day-id'
+
 /**
  * returns list of days including their events
  * @param range
  * @param events
  */
-export function normalize(range: NumberRange, events: CalendarEvent[]) {
+export function normalizeEvents(range: NumberRange, events: CalendarEvent[]) {
   const list = getEvents(range, events)
 
   return Object.entries(list).reduce((acc, [day, events]) => {
@@ -41,7 +43,7 @@ function getEvents(range: NumberRange, events: CalendarEvent[]) {
 function isToday(day: string): boolean {
   const now = new Date()
 
-  return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}` === day
+  return createDayId(now, false) === day
 }
 
 /**
@@ -53,7 +55,7 @@ function getDaysInRange(range: NumberRange) {
   const daysCount = Math.round(Math.abs(end - start) / 86400)
 
   return new Array(daysCount).fill(null).reduce((acc, _, index) => {
-    const day = getUTCDate(new Date(start * 1000 + index * 86400000))
+    const day = createDayId(new Date(start * 1000 + index * 86400000))
 
     return {
       ...acc,
@@ -75,7 +77,7 @@ function getEventIndex(event: CalendarEvent, range: NumberRange) {
   const eventTime = new Date(event.timestamp * 1000)
 
   if (!event.recurring) {
-    return getUTCDate(eventTime)
+    return createDayId(eventTime)
   }
 
   const year =
@@ -85,13 +87,4 @@ function getEventIndex(event: CalendarEvent, range: NumberRange) {
       : to.getUTCFullYear()
 
   return `${year}-${eventTime.getUTCMonth() + 1}-${eventTime.getUTCDate()}`
-}
-
-/**
- * return utc format of given date
- * @param date
- */
-function getUTCDate(date: Date) {
-  return `${date.getUTCFullYear()}-${date.getUTCMonth() +
-    1}-${date.getUTCDate()}`
 }

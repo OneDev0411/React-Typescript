@@ -5,24 +5,35 @@ import React, {
   forwardRef,
   RefObject,
   ComponentProps,
-  useImperativeHandle
+  useImperativeHandle,
+  useCallback
 } from 'react'
 import { connect } from 'react-redux'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import { IAppState } from 'reducers'
 
+import {
+  viewAs,
+  // getActiveTeamACL,
+  getTeamAvailableMembers,
+  getActiveTeam
+} from 'utils/user-teams'
+
 import { LoadingPosition, VirtualListRef } from 'components/VirtualList'
 
 import { useLoadCalendar } from './hooks/use-load-calendar'
 import { getDateRange, Format } from './helpers/get-date-range'
 import { createListRows } from './helpers/create-list-rows'
+import { upsertCrmEvents } from './helpers/upsert-crm-events'
 
 import List from './components/List'
 import { getRowIdByDate } from './helpers/get-row-by-date'
 
 export interface CalendarRef {
   jumpToDate(date: Date): void
+  refresh(date: Date): void
+  updateCrmEvents(event: IEvent, type: string): void
 }
 
 interface Ranges {
@@ -33,19 +44,24 @@ interface Ranges {
 
 interface Props {
   user?: IUser
+  viewAsUsers: UUID[]
   calendarRef?: RefObject<CalendarRef>
   onChangeActiveDate?: (activeDate: Date) => void
 }
 
 interface StateProps {
   user: IUser
+  viewAsUsers: UUID[]
 }
 
 export function Calendar({
   calendarRef,
+  viewAsUsers,
   onChangeActiveDate = () => null
 }: Props) {
-  // holds a reference to the Virtual List
+  console.log(viewAsUsers)
+
+  // reference to the Virtual List
   const listRef = useRef<VirtualListRef>(null)
 
   // holds current active date
@@ -56,7 +72,7 @@ export function Calendar({
   const [rows, setRows] = useState<any>([])
 
   /*
-   * holds the required ranges of calendar:
+   * the required ranges of calendar:
    * query: the range of latest query
    * calendar: the range of current fetched calendar
    */
@@ -67,10 +83,10 @@ export function Calendar({
     LoadingPosition.Middle
   )
 
-  const { events, isLoading } = useLoadCalendar(
+  const { events, isLoading, updateEvents } = useLoadCalendar(
     {
-      range: ranges.query
-      // users: viewAsUsers
+      range: ranges.query,
+      users: viewAsUsers
     },
     {
       reset: ranges.format === Format.Middle
@@ -91,7 +107,8 @@ export function Calendar({
     )
 
     if (rowId === -1) {
-      allowSeeking && handleLoadDate(date)
+      // try to jump to the date by fetching more data from server
+      allowSeeking && handleLoadEvents(date)
 
       return
     }
@@ -108,7 +125,9 @@ export function Calendar({
   const onUpdateRows = () => jumpToDate(activeDate, false)
 
   // triggers when new events loading or range of calendar changes
-  useEffect(() => setRows(createListRows(events)), [events, ranges.calendar])
+  useEffect(() => {
+    setRows(createListRows(events))
+  }, [events, ranges.calendar])
 
   // triggers when updating rows
   useEffect(onUpdateRows, [rows])
@@ -117,13 +136,15 @@ export function Calendar({
    * exposes below methods to be accessible outside of the component
    */
   useImperativeHandle(calendarRef, () => ({
-    jumpToDate
+    jumpToDate,
+    refresh: handleLoadEvents,
+    updateCrmEvents: handleCrmEventChange
   }))
 
   /**
    * handles updating ranges when user is trying to fetch future events
    */
-  const handleLoadNextEvents = (): void => {
+  const handleLoadNextEvents = useCallback((): void => {
     if (isLoading) {
       return
     }
@@ -145,12 +166,12 @@ export function Calendar({
       calendar,
       format: Format.Next
     })
-  }
+  }, [isLoading, ranges.calendar])
 
   /**
    * handles updating ranges when user is trying to fetch past events
    */
-  const handleLoadPreviousEvents = (): void => {
+  const handleLoadPreviousEvents = useCallback((): void => {
     if (isLoading) {
       return
     }
@@ -172,15 +193,17 @@ export function Calendar({
       calendar,
       format: Format.Previous
     })
-  }
+  }, [isLoading, ranges.calendar])
 
   /**
    * handles updating ranges when given date is outside of current
    * calendar range
    * @param date
    */
-  const handleLoadDate = (date: Date) => {
+  const handleLoadEvents = (date: Date = new Date()) => {
     const query: NumberRange = getDateRange(date.getTime(), Format.Middle)
+
+    setActiveDate(date)
 
     setRanges({
       query,
@@ -189,10 +212,25 @@ export function Calendar({
     })
   }
 
-  const handleChangeActiveDate = (date: Date) => {
-    debouncedSetActiveDate(date)
-    onChangeActiveDate(date)
-  }
+  /**
+   * triggers when active date changes in virtual list
+   */
+  const handleChangeActiveDate = useCallback(
+    (date: Date) => {
+      debouncedSetActiveDate(date)
+      onChangeActiveDate(date)
+    },
+    [debouncedSetActiveDate, onChangeActiveDate]
+  )
+
+  /**
+   * triggers when a crm events update or delete
+   */
+  const handleCrmEventChange = useCallback(
+    (event: IEvent, type: string) =>
+      updateEvents(upsertCrmEvents(events, event, type) as CalendarEventsList),
+    [events, updateEvents]
+  )
 
   return (
     <List
@@ -203,6 +241,7 @@ export function Calendar({
       onReachEnd={handleLoadNextEvents}
       onReachStart={handleLoadPreviousEvents}
       onChangeActiveDate={handleChangeActiveDate}
+      onCrmEventChange={handleCrmEventChange}
     />
   )
 }
@@ -220,9 +259,13 @@ function getInitialRanges(): Ranges {
   }
 }
 
-function mapStateToProps(state: IAppState) {
+function mapStateToProps({ user }: IAppState) {
+  const teamMembers = getTeamAvailableMembers(getActiveTeam(user))
+  const viewAsUsers = viewAs(user)
+
   return {
-    user: state.user
+    user,
+    viewAsUsers: viewAsUsers.length === teamMembers.length ? [] : viewAsUsers
   }
 }
 

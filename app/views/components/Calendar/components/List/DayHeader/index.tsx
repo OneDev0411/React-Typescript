@@ -11,6 +11,8 @@ interface IProps {
 }
 
 export function DayHeader(props: IProps) {
+  const date = new Date(props.item.title)
+
   return (
     <Flex alignCenter style={props.style}>
       <Container
@@ -22,7 +24,7 @@ export function DayHeader(props: IProps) {
       >
         <Flex
           style={{
-            width: '8.5rem'
+            width: '9rem'
           }}
         >
           <strong
@@ -30,15 +32,19 @@ export function DayHeader(props: IProps) {
               marginRight: '1rem'
             }}
           >
-            {fecha.format(new Date(props.item.title), 'DD')}
+            {fecha.format(date, 'DD')}
           </strong>
+
+          {date.getFullYear() !== new Date().getFullYear() && (
+            <span>{date.getFullYear()}&nbsp;</span>
+          )}
 
           <span
             style={{
               textTransform: 'uppercase'
             }}
           >
-            {fecha.format(new Date(props.item.title), 'MMM, ddd')}
+            {fecha.format(date, 'MMM, ddd')}
           </span>
         </Flex>
 

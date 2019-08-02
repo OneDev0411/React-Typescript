@@ -30,7 +30,6 @@ export async function getCalendar(options: ApiOptions) {
       high: range[1],
       'associations[]': [
         'crm_task.associations',
-        'crm_task.assignees',
         'calendar_event.full_crm_task',
         'crm_association.contact',
         'calendar_event.full_contact',
