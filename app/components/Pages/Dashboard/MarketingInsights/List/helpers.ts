@@ -40,6 +40,7 @@ export function show_title(title) {
 
 export function isEmailQueued(item) {
   const now = new Date().getTime()
+
   return item.due_at * 1000 > now
 }
 
