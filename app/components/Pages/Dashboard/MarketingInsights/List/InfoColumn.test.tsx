@@ -55,16 +55,6 @@ describe('Marketing Insights: InfoColumn tests', function() {
   })
 
   // Related Issue: 2717
-  it('should render scheduled email correctly', function() {
-    mockDate('2010-01-01T12:34:56z')
-
-    const item = baseItem
-    const { queryByText } = render(<InfoColumn data={item} />)
-
-    expect(queryByText('Scheduled')).not.toBeNull()
-  })
-
-  // Related Issue: 2717
   it('should render in progress email correctly', function() {
     mockDate('2027-01-01T12:34:56z')
 
