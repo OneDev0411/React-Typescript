@@ -1,4 +1,5 @@
 import { createDayId } from '../create-day-id'
+import { sortEvents } from '../sort-events'
 import { convertTaskToCalendarEvent } from '../convert-task-to-calendar'
 
 export function upsertCrmEvents(
@@ -10,12 +11,12 @@ export function upsertCrmEvents(
   const calendarEvent = convertTaskToCalendarEvent(event)
 
   if (type === 'created') {
-    return {
+    return sortEvents({
       ...events,
       [dayId]: events[dayId]
         ? [...events[dayId], calendarEvent]
         : [calendarEvent]
-    }
+    } as CalendarEventsList)
   }
 
   if (type === 'deleted') {
@@ -37,7 +38,9 @@ export function upsertCrmEvents(
 
     return {
       ...nextEvents,
-      [dayId]: [...(nextEvents[dayId] || []), calendarEvent]
+      [dayId]: [...(nextEvents[dayId] || []), calendarEvent].sort(
+        (a: ICalendarEvent, b: ICalendarEvent) => a.timestamp - b.timestamp
+      )
     }
   }
 
