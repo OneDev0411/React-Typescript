@@ -131,11 +131,14 @@ export function Calendar({
               ...normalizeEvents(apiOptions.range, fetchedEvents)
             }
 
+        // sort events based on date
+        const sortedEvents = sortEvents(nextEvents)
+
         // update events list
-        setEvents(sortEvents(nextEvents))
+        setEvents(sortedEvents)
 
         // updates virtual list rows
-        setListRows(createListRows(nextEvents))
+        setListRows(createListRows(sortedEvents))
       } catch (e) {
         console.log(e)
       } finally {
