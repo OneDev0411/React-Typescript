@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 
-import { EventIcon } from '../Icon'
+import { EventIcon } from '../EventIcon'
 
 import { ContainerStyle, TitleStyle, SubTitleStyle } from '../styled'
 import { AssociationStyle } from './styled'
