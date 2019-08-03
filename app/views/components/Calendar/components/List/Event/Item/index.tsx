@@ -1,7 +1,7 @@
 import React from 'react'
 
 import CrmEvent from './CrmEvent'
-import { EventIcon } from './Icon'
+import { EventIcon } from './EventIcon'
 
 import { ContainerStyle, TitleStyle } from './styled'
 
