@@ -47,7 +47,7 @@ export function Event({
         />
       </div>
 
-      <div>----</div>
+      <div>&nbsp;</div>
     </div>
   )
 }

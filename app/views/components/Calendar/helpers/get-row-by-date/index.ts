@@ -4,13 +4,15 @@ export function getRowIdByDate(
   date: Date,
   rows: ICalendarListRow[],
   eventKeys: string[],
-  calendarRange: [number, number],
-  allowSeeking: boolean = true
+  calendarRange: [number, number]
 ) {
+  if (eventKeys.length === 0) {
+    return -1
+  }
+
   let dayId = format(date)
 
   while (
-    allowSeeking &&
     eventKeys.indexOf(dayId) === -1 &&
     isDayInRange(dayId, calendarRange)
   ) {
@@ -20,7 +22,9 @@ export function getRowIdByDate(
     dayId = format(nextDay)
   }
 
-  return rows.findIndex(row => row.is_day_header && row.date === dayId)
+  return rows.findIndex(
+    row => row.hasOwnProperty('is_day_header') && row.date === dayId
+  )
 }
 
 /**

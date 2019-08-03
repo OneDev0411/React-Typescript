@@ -56,8 +56,8 @@ const VirtualList: React.FC<IProps> = ({
   const listRef = useRef<List | null>(null)
   const [scroll, setScroll] = useState<ListOnScrollProps | null>(null)
 
-  const [deboundedOnReachStart] = useDebouncedCallback(onReachStart, 200)
-  const [debouncedOnReachEnd] = useDebouncedCallback(onReachEnd, 200)
+  const [deboundedOnReachStart] = useDebouncedCallback(onReachStart, 300)
+  const [debouncedOnReachEnd] = useDebouncedCallback(onReachEnd, 300)
 
   useImperativeHandle(props.virtualListRef, () => ({
     scrollToItem: (index: number, alignment?: Align) =>
