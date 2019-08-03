@@ -37,6 +37,7 @@ export const ProfileTabs = ({ user }: Props) => (
       />
     </Acl>
     <Tab text="Email Signature" to="/dashboard/account/email-signature" />
+    <Tab text="Connected Accounts" to="/dashboard/account/connected-accounts" />
     {/* TODO: Unhide CSS (Centralized Showing Service) from users */}
     {/* Note that there are some imports commented at top which needs to be uncommented too */}
     {/* <Acl access={{ oneOf: [ACL.CRM, ACL.DEALS] }}>

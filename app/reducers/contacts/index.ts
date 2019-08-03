@@ -7,10 +7,10 @@ import spinner from './spinner'
 import importOutlook from './importOutlook'
 import importCsv from './importCsv'
 import { contactsFilterSegments } from '../filter-segments'
-import { oAuthAccounts } from './oAuthAccounts'
+import { IOauthAccountsState, oAuthAccounts } from './oAuthAccounts'
 
 export interface IContactReduxState {
-  oAuthAccounts: StringMap<IOAuthAccount[]>
+  oAuthAccounts: IOauthAccountsState
   attributeDefs: IAttributeDefsState
   list: IContactReduxListState
   filterSegments: IContactReduxFilterSegmentState

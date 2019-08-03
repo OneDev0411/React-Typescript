@@ -15,7 +15,12 @@ function InsightsLayout(props) {
     {
       title: 'Sent',
       url: '/',
-      badge: props.sentBadge
+      badge: props.sentCount
+    },
+    {
+      title: 'Scheduled',
+      url: '/scheduled',
+      badge: props.scheduledCount
     }
   ]
 

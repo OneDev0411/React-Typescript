@@ -3,25 +3,17 @@ import React from 'react'
 import { formatDate } from 'components/DateTimePicker/helpers'
 
 import Recipients from './Recipients'
-import { show_title } from './helpers'
+import { show_title, isEmailScheduled, isEmailInProgress } from './helpers'
 import { Link, Info, StyledBadge } from './styled'
 
 function InfoColumn({ data }) {
-  // due_at is when we are going to send email. (set by client)
-  const now = new Date().getTime()
-  const isQueued = data.due_at * 1000 > now
-  const isScheduled = !data.executed_at && isQueued
-  const isInProgress = !data.executed_at && !isQueued
+  const isScheduled = isEmailScheduled(data)
+  const isInProgress = isEmailInProgress(data)
 
-  // This is a workaround and we don't acutually need to detect scheduled email here.
-  // In phase 2, we are going to have a separate table and page so this code will clean up in there.
   const title = (
     <div className="info-title">
       <div>{show_title(data.subject)}</div>
       <div>
-        {isScheduled && (
-          <StyledBadge appearance="primary">Scheduled</StyledBadge>
-        )}
         {isInProgress && (
           <StyledBadge appearance="warning">In Progress</StyledBadge>
         )}

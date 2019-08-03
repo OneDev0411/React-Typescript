@@ -51,6 +51,7 @@ declare interface IGoogleSyncHistory {
   synced_messages_num: number
   synced_threads_num: number
   threads_total: number
+  extract_contacts_error: null | string
   type: 'google_sync_history'
   updated_at: string
   user: UUID

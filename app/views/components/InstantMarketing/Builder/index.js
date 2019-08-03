@@ -82,9 +82,11 @@ class Builder extends React.Component {
   }
 
   componentWillUnmount() {
-    const iframe = this.editor.Canvas.getBody()
+    if (this.editor) {
+      const iframe = this.editor.Canvas.getBody()
 
-    iframe.removeEventListener('paste', this.iframePasteHandler)
+      iframe.removeEventListener('paste', this.iframePasteHandler)
+    }
   }
 
   setupGrapesJs = () => {

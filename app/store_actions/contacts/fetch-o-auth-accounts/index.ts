@@ -1,19 +1,20 @@
+import { batchActions } from 'redux-batched-actions'
+
 import { getOAuthAccounts } from '../../../models/contacts/get-o-auth-accounts'
 
 import * as actionTypes from '../../../constants/contacts'
 import { OAuthProvider } from '../../../constants/contacts'
 
-export type IOAuthAccountAction =
-  | {
-      type: typeof actionTypes.FETCH_OAUTH_ACCOUNTS_REQUEST
-      provider: OAuthProvider
+export function fetchOAuthAccounts(provider?: OAuthProvider) {
+  if (!provider) {
+    return async dispatch => {
+      return batchActions([
+        await dispatch(fetchOAuthAccounts(OAuthProvider.Outlook)),
+        await dispatch(fetchOAuthAccounts(OAuthProvider.Google))
+      ])
     }
-  | {
-      type: typeof actionTypes.FETCH_OAUTH_ACCOUNTS_SUCCESS
-      provider: OAuthProvider
-      accounts: IOAuthAccount[]
-    }
-export function fetchOAuthAccounts(provider: OAuthProvider) {
+  }
+
   return async dispatch => {
     try {
       dispatch({

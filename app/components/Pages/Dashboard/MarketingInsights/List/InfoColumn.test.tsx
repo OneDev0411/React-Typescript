@@ -2,6 +2,7 @@ import React from 'react'
 import { render, cleanup } from '@testing-library/react'
 
 import mockDate, { RealDate } from 'utils/test-utils/mock-date'
+
 import InfoColumn from './InfoColumn'
 
 describe('Marketing Insights: InfoColumn tests', function() {
@@ -52,16 +53,6 @@ describe('Marketing Insights: InfoColumn tests', function() {
   afterEach(() => {
     global.Date = RealDate
     cleanup()
-  })
-
-  // Related Issue: 2717
-  it('should render scheduled email correctly', function() {
-    mockDate('2010-01-01T12:34:56z')
-
-    const item = baseItem
-    const { queryByText } = render(<InfoColumn data={item} />)
-
-    expect(queryByText('Scheduled')).not.toBeNull()
   })
 
   // Related Issue: 2717

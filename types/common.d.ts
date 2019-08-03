@@ -75,3 +75,7 @@ declare type MapFieldsToUuid<T, K extends keyof T> = PartiallyMappedFields<
   K,
   UUID
 >
+
+type IAsyncActionProp<
+  T extends (...args: any[]) => (dispatch) => Promise<any>
+> = (...args: Parameters<T>) => ReturnType<ReturnType<T>>

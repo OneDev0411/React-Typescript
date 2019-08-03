@@ -31,7 +31,7 @@ export const theme = createMuiTheme({
     }
   },
   shape: {
-    borderRadius: 3
+    borderRadius: 4
   },
   typography: {
     fontFamily: [
@@ -56,5 +56,8 @@ export const theme = createMuiTheme({
       // at least until full adoption
       disableRipple: true
     }
+  },
+  zIndex: {
+    modal: 1001
   }
 })
