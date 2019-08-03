@@ -7,7 +7,7 @@ export function upsertCrmEvents(
   event: IEvent,
   type: string
 ) {
-  const dayId = createDayId(event.due_date * 1000)
+  const dayId = createDayId(event.due_date * 1000, false)
   const calendarEvent = convertTaskToCalendarEvent(event)
 
   if (type === 'created') {
