@@ -62,7 +62,7 @@ export class EditNoteDrawer extends React.Component {
     const { isSaving } = this.state
 
     return (
-      <Drawer isOpen={this.props.isOpen} onClose={this.props.onClose}>
+      <Drawer open={this.props.isOpen} onClose={this.props.onClose}>
         <Drawer.Header title="Edit Note" />
         <Drawer.Body style={{ overflow: 'hidden' }}>
           <Container>

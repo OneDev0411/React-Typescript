@@ -8,19 +8,18 @@ const propTypes = {
   ...Drawer.propTypes,
   defaultSearchFilter: PropTypes.string,
   onSelect: PropTypes.func.isRequired,
-  renderHeaderMenu: PropTypes.func
+  headerMenu: PropTypes.element
 }
 
 const defaultProps = {
   ...Drawer.defaultProps,
-  defaultSearchFilter: '',
-  renderHeaderMenu() {}
+  defaultSearchFilter: ''
 }
 
 export function SearchContactDrawer(props) {
   return (
-    <Drawer isOpen={props.isOpen} onClose={props.onClose} showFooter={false}>
-      <Drawer.Header title={props.title} renderMenu={props.renderHeaderMenu} />
+    <Drawer open={props.isOpen} onClose={props.onClose}>
+      <Drawer.Header title={props.title} menu={props.headerMenu} />
       <Drawer.Body>
         <Body
           isDrawer

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import Downshift from 'downshift'
 
@@ -118,10 +118,6 @@ class SearchDrawer extends React.Component {
     })
   }
 
-  get ShowFooter() {
-    return this.props.multipleSelection
-  }
-
   get DefaultList() {
     return this.props.defaultList.filter(item => {
       const normalized = this.props.normalizeSelectedItem(item)
@@ -141,11 +137,7 @@ class SearchDrawer extends React.Component {
     const { showLoadingIndicator } = this.props
 
     return (
-      <Drawer
-        isOpen={this.props.isOpen}
-        showFooter={this.ShowFooter}
-        onClose={this.handleClose}
-      >
+      <Drawer open={this.props.isOpen} onClose={this.handleClose}>
         <Drawer.Header title={this.props.title} />
         <Drawer.Body style={{ overflow: 'auto' }}>
           <Downshift
@@ -200,25 +192,27 @@ class SearchDrawer extends React.Component {
           />
         </Drawer.Body>
 
-        <Drawer.Footer
-          style={{
-            flexDirection: 'row-reverse'
-          }}
-        >
-          {this.props.renderAction ? (
-            this.props.renderAction({
-              selectedItems: this.state.selectedItems,
-              onClick: this.handleSelectMultipleItems
-            })
-          ) : (
-            <ActionButton
-              disabled={_.size(this.state.selectedItems) === 0}
-              onClick={this.handleSelectMultipleItems}
-            >
-              {_.size(this.state.selectedItems)} Items Selected
-            </ActionButton>
-          )}
-        </Drawer.Footer>
+        {this.props.multipleSelection && (
+          <Drawer.Footer
+            style={{
+              flexDirection: 'row-reverse'
+            }}
+          >
+            {this.props.renderAction ? (
+              this.props.renderAction({
+                selectedItems: this.state.selectedItems,
+                onClick: this.handleSelectMultipleItems
+              })
+            ) : (
+              <ActionButton
+                disabled={_.size(this.state.selectedItems) === 0}
+                onClick={this.handleSelectMultipleItems}
+              >
+                {_.size(this.state.selectedItems)} Items Selected
+              </ActionButton>
+            )}
+          </Drawer.Footer>
+        )}
       </Drawer>
     )
   }

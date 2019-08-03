@@ -51,7 +51,7 @@ class CustomTask extends React.Component {
   render() {
     return (
       <Fragment>
-        <OverlayDrawer isOpen={this.props.isOpen} onClose={this.props.onClose}>
+        <OverlayDrawer open={this.props.isOpen} onClose={this.props.onClose}>
           <OverlayDrawer.Header title="Create New Folder" />
           <OverlayDrawer.Body>
             <Label>Title</Label>

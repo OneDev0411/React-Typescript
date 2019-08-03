@@ -13,7 +13,7 @@ AssociationsDrawer.defaultProps = Drawer.defaultProps
 
 export default function AssociationsDrawer(props) {
   return (
-    <Drawer isOpen={props.isOpen} onClose={props.onClose} showFooter={false}>
+    <Drawer open={props.isOpen} onClose={props.onClose}>
       <Drawer.Header title="All Associations" />
       <Drawer.Body style={{ padding: '6.5rem 1rem 1.5rem 1.5rem' }}>
         {props.associations.map(association => (

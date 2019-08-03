@@ -62,7 +62,6 @@ const EmailBody = ({
           )}
         />
       )}
-
       {hasStaticBody && (
         <Fragment>
           {content ? (
@@ -80,13 +79,10 @@ const EmailBody = ({
           )}
         </Fragment>
       )}
-
-      {signatureEditorVisible && (
-        <EditEmailSignatureDrawer
-          isOpen
-          onClose={() => setSignatureEditorVisible(false)}
-        />
-      )}
+      <EditEmailSignatureDrawer
+        isOpen={signatureEditorVisible}
+        onClose={() => setSignatureEditorVisible(false)}
+      />{' '}
     </>
   )
 }

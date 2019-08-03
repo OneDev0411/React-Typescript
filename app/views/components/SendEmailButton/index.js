@@ -31,23 +31,20 @@ function SendEmailButton(props) {
       >
         {props.title}
       </ActionButton>
-
-      {isOpen && (
-        <SingleEmailComposeDrawer
-          isOpen
-          defaultAttachments={[]}
-          recipients={props.recipients}
-          from={props.user}
-          deal={deal}
-          onClose={toggleOpenDrawer}
-          onSent={() => {
-            toggleOpenDrawer()
-            props.onSent()
-          }}
-          hasDealsAttachments
-          getEmail={getEmail}
-        />
-      )}
+      <SingleEmailComposeDrawer
+        isOpen={isOpen}
+        defaultAttachments={[]}
+        recipients={props.recipients}
+        from={props.user}
+        deal={deal}
+        onClose={toggleOpenDrawer}
+        onSent={() => {
+          toggleOpenDrawer()
+          props.onSent()
+        }}
+        hasDealsAttachments
+        getEmail={getEmail}
+      />{' '}
     </Fragment>
   )
 }
