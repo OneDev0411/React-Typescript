@@ -1,5 +1,15 @@
 import fecha from 'fecha'
 
+/**
+ * returns the rowId of virtual list based on the given date.
+ * the function tries to find next available date if the current given
+ * date has no events in there (since the calendar only shows the days
+ * that have events)
+ * @param date - the given date to find its row id
+ * @param rows - list of virtual list rows
+ * @param eventKeys - list of events (by key)
+ * @param calendarRange - the current calendar range
+ */
 export function getRowIdByDate(
   date: Date,
   rows: ICalendarListRow[],

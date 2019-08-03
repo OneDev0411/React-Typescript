@@ -11,6 +11,9 @@ interface Props {
   onClickCrmEventAssociations: (event: ICalendarEvent) => void
 }
 
+/**
+ * renders the given calendar event
+ */
 export function Event({
   item,
   nextItem,

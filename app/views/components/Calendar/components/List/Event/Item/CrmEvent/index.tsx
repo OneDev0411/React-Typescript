@@ -18,6 +18,10 @@ interface Props {
 const CrmEvent = memo((props: Props) => {
   const handleSelectEvent = () => props.onClickCrmEventAssociations(props.event)
 
+  /**
+   * returns list of associations with this format:
+   * assoc1, assoc2 <and (assocLength - 2) others>
+   */
   const associationsList = () => {
     const associations = props.event.full_crm_task!.associations
 

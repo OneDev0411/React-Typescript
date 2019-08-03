@@ -12,6 +12,7 @@ import { CrmEvents } from '../CrmEvents'
 
 import { DayHeader } from './DayHeader'
 import { Event } from './Event'
+import { EmptyState } from './EmptyState'
 
 import { Container } from './styled'
 
@@ -47,6 +48,10 @@ const CalendarList: React.FC<Props> = props => {
     props.onCrmEventChange(event, type)
   }
 
+  /**
+   * finds and the returns the first day header which is in view
+   * @param data - list data, see [[ ListOnItemsRenderedProps ]]
+   */
   const getInViewDate = (data: ListOnItemsRenderedProps) => {
     const index = new Array(data.visibleStopIndex - data.visibleStartIndex)
       .fill(null)
@@ -64,7 +69,6 @@ const CalendarList: React.FC<Props> = props => {
 
     const date = new Date(item.date)
 
-    // don't update active date if isn't changed
     if (activeDate && date.toDateString() === activeDate.toDateString()) {
       return
     }
@@ -76,7 +80,9 @@ const CalendarList: React.FC<Props> = props => {
   }
 
   return (
-    <Container ref={containerRef}>
+    <Container ref={containerRef} className="abcded">
+      {props.rows.length === 0 && !props.isLoading && <EmptyState />}
+
       <VirtualList
         width={listWidth}
         height={listHeight}

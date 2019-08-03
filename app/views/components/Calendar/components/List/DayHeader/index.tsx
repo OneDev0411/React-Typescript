@@ -9,6 +9,10 @@ interface IProps {
   item: ICalendarDayRow
 }
 
+/**
+ * renders the day header
+ * @param props
+ */
 export function DayHeader(props: IProps) {
   const date = new Date(props.item.date)
   const isActive =

@@ -50,5 +50,7 @@ export function EventItem(props: Props) {
     )
   }
 
+  console.warn(`Could not render ${event}`)
+
   return null
 }

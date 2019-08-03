@@ -6,6 +6,10 @@ import { createDayId } from '../create-day-id'
  * @param events
  */
 export function normalizeEvents(range: NumberRange, events: ICalendarEvent[]) {
+  if (events.length === 0) {
+    return {}
+  }
+
   const list = getEvents(range, events)
 
   return Object.entries(list).reduce((acc, [day, events]) => {
