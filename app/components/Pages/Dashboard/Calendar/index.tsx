@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react'
 import debounce from 'lodash/debounce'
 
-import List, { CalendarRef } from 'components/Calendar'
+import List from 'components/Calendar'
+import { CalendarRef } from 'components/Calendar/types'
+
 import DatePicker from 'components/DatePicker'
 
 import { TodayButton } from './components/TodayButton'
@@ -18,6 +20,11 @@ const CalendarPage: React.FC = props => {
    * list will be active date
    */
   const [activeDate, setActiveDate] = useState<Date>(new Date())
+
+  /**
+   * current filters
+   */
+  const [filter, setFilter] = useState<object>({})
 
   const handleDatePickerChange = (date: Date = new Date()) => {
     calendarRef.current!.jumpToDate(date)
@@ -44,12 +51,13 @@ const CalendarPage: React.FC = props => {
 
       <Main>
         <Header>
-          <Filters />
+          <Filters onChange={setFilter} />
           <CreateEvent onEventChange={handleEventChange} />
         </Header>
 
         <List
           ref={calendarRef}
+          filter={filter}
           onChangeActiveDate={debounce(setActiveDate, 100)}
         />
       </Main>

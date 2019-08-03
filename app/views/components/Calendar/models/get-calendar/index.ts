@@ -25,19 +25,21 @@ export async function getCalendar(options: ApiOptions) {
   const { range, filter = {}, associations = [], users = [] } = options
 
   try {
-    const response = await new Fetch().get('/calendar').query({
-      low: range[0],
-      high: range[1],
-      'associations[]': [
-        'crm_task.associations',
-        'calendar_event.full_crm_task',
-        'crm_association.contact',
-        'calendar_event.full_contact',
-        ...associations
-      ],
-      'users[]': users,
-      ...filter
-    })
+    const response = await new Fetch()
+      .get('/calendar')
+      .query({
+        low: range[0],
+        high: range[1],
+        'associations[]': [
+          'crm_task.associations',
+          'calendar_event.full_crm_task',
+          'crm_association.contact',
+          'calendar_event.full_contact',
+          ...associations
+        ],
+        'users[]': users
+      })
+      .query(filter)
 
     return response.body.data
   } catch (e) {
