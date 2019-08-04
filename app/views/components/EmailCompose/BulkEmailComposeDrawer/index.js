@@ -11,7 +11,8 @@ import { getSendEmailResultMessages } from 'components/EmailCompose/helpers/emai
 
 import { sendBulkEmail } from 'models/email-compose/send-bulk-email'
 import IconLock from 'components/SvgIcons/Lock/IconLock'
-import { normalizeRecipients } from 'components/EmailCompose/helpers/normalize-recepients'
+
+import { normalizeRecipients } from '../helpers/normalize-recepients'
 
 const LockIcon = styled(IconLock)`
   vertical-align: text-bottom;

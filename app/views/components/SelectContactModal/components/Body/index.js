@@ -4,12 +4,15 @@ import PropTypes from 'prop-types'
 import Downshift from 'downshift'
 import _ from 'underscore'
 
+import { searchContacts } from 'models/contacts/search-contacts'
+
+import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
+
 import SearchInput from '../SearchInput'
 import ContactItem from '../ContactItem'
 import { viewAs } from '../../../../../utils/user-teams'
 import Loading from '../../../../../components/Partials/Loading'
-import { searchContacts } from '../../../../../models/contacts/search-contacts'
-import { normalizeContactAttribute } from '../../../../../store_actions/contacts/helpers/normalize-contacts'
+
 import Alert from '../../../../../components/Pages/Dashboard/Partials/Alert'
 
 import { ListContainer, List } from './styled'

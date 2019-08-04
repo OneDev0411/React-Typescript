@@ -4,12 +4,15 @@ import PropTypes from 'prop-types'
 import validator from 'validator'
 import _ from 'underscore'
 
+import { searchContacts } from 'models/contacts/search-contacts'
+
+import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
+
 import Fetch from '../../../services/fetch'
 import Recipients from './recipients'
 import Suggestions from './suggestions'
 import { selectDefinitionByName } from '../../../reducers/contacts/attributeDefs'
-import { searchContacts } from '../../../models/contacts/search-contacts'
-import { normalizeContactAttribute } from '../../../store_actions/contacts/helpers/normalize-contacts'
+
 import { isValidPhoneNumber, formatPhoneNumber } from '../../../utils/helpers'
 import {
   getContactUsers,
@@ -296,12 +299,15 @@ class Compose extends React.Component {
    * on add new recipient
    */
   onAdd(recipient) {
-    const recipients = {
-      ...this.state.recipients,
-      ...{ [recipient.id]: recipient }
-    }
-
-    this.setState({ recipients, viewList: {} }, this.onChangeRecipients)
+    this.setState(state => {
+      return {
+        recipients: {
+          ...state.recipients,
+          ...{ [recipient.id]: recipient }
+        },
+        viewList: {}
+      }
+    }, this.onChangeRecipients)
 
     // reset search input text
     this.searchInput.value = ''
@@ -314,13 +320,15 @@ class Compose extends React.Component {
    * on remove recipient
    */
   onRemove(recipient) {
-    // remove selected recipient
-    const recipients = _.omit(
-      this.state.recipients,
-      (item, id) => id === recipient.id
-    )
+    this.setState(state => {
+      // remove selected recipient
+      const recipients = _.omit(
+        state.recipients,
+        (item, id) => id === recipient.id
+      )
 
-    this.setState({ recipients }, this.onChangeRecipients)
+      return { recipients }
+    }, this.onChangeRecipients)
 
     // set focus on search
     this.searchInput.focus()

@@ -43,7 +43,9 @@ declare module 'styled-flex-component' {
   > {}
 
   // this can be improved. maybe StyledComponent can be used
-  class Flex extends React.Component<FlexProps & HTMLProps<'div'>> {}
+  class Flex extends React.Component<
+    FlexProps & Omit<HTMLProps<'div'>, 'wrap'>
+  > {}
 
   export default Flex
 }

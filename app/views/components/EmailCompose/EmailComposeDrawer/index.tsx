@@ -4,13 +4,18 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { Field } from 'react-final-form'
 
+import { FormLabel } from '@material-ui/core'
+
+import { TextField } from 'final-form-material-ui'
+
+import { InputProps } from '@material-ui/core/Input'
+
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import EmailBody from 'components/EmailCompose/components/EmailBody'
 import { normalizeAttachments } from 'components/SelectDealFileDrawer/helpers/normalize-attachment'
 import { uploadEmailAttachment } from 'models/email-compose/upload-email-attachment'
 
 import { FinalFormDrawer } from '../../FinalFormDrawer'
-import { TextInput } from '../../Forms/TextInput'
 import { AttachmentsList } from '../fields/Attachments'
 
 import { Footer } from '../Footer'
@@ -238,20 +243,31 @@ class EmailComposeDrawer extends React.Component<Props, State> {
         )}
         render={() => (
           <Fragment>
-            {this.props.children}
-
             <Field
-              placeholder="From"
+              component={TextField}
+              InputProps={
+                {
+                  startAdornment: (
+                    <FormLabel style={{ marginRight: '1rem' }}>From</FormLabel>
+                  ),
+                  disableUnderline: true,
+                  readOnly: true
+                } as InputProps
+              }
+              fullWidth
+              margin="dense"
               name="from"
-              readOnly
-              component={TextInput as any}
             />
+
+            {this.props.children}
 
             <Field
               data-test="email-subject"
               placeholder="Subject"
               name="subject"
-              component={TextInput as any}
+              margin="normal"
+              fullWidth
+              component={TextField}
             />
 
             <EmailBody

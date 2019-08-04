@@ -83,6 +83,10 @@ declare interface IContact extends IContactBase {
   updated_by?: IUser
 }
 
+declare interface INormalizedContact extends IContact {
+  sub_contacts: ISubContact[]
+}
+
 declare interface IContactAttribute {
   id: UUID
   created_at: number
@@ -236,6 +240,7 @@ declare interface IContactTag {
   text: string
   created_at: number
   updated_at: number
+  type: 'crm_tag'
 }
 
 type TContactAssociation =

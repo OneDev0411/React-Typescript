@@ -1,6 +1,4 @@
-export {
-  SingleEmailComposeDrawer
-} from 'components/EmailCompose/SingleEmailComposeDrawer'
+export { SingleEmailComposeDrawer } from './SingleEmailComposeDrawer'
 export {
   BulkEmailComposeDrawer
 } from 'components/EmailCompose/BulkEmailComposeDrawer'
