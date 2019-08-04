@@ -1,6 +1,6 @@
 import merge from 'merge'
 
-export default function flattenBrand(brand) {
+export default function flattenBrand(brand: IBrand): IBrand | null {
   if (!brand) {
     return null
   }
@@ -20,5 +20,5 @@ export default function flattenBrand(brand) {
     merge.recursive(merged, { ...brand_loop, parent: undefined })
   })
 
-  return merged
+  return merged as IBrand
 }
