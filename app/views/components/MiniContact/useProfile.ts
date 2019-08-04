@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { formatter, get_contact_data } from './helpers'
+import { formatter, get_contact_data, find_contact } from './helpers'
 
 // Types
 export type ProfileDateType = {
@@ -36,6 +36,7 @@ function useProfile(type, initData): FormatterOutputType {
   const [output, setOutput] = useState(data)
 
   useEffect(function useProfileEffect() {
+    // If it has a contact id, we should get the contact from server.
     if (data.contact_id) {
       // Loading mode.
       setOutput({
@@ -45,6 +46,18 @@ function useProfile(type, initData): FormatterOutputType {
 
       // Getting contact from server and updating the state.
       get_contact_data(data.contact_id).then(res => setOutput(res))
+    } else if (data.data.email) {
+      // If it's not a contact, we are trying to find it in contacts.
+
+      // Loading mode.
+      setOutput({
+        ...data,
+        contact_status: 'loading'
+      })
+
+      // Trying to find the contact, if it's not exsits, we are returning the `data`
+      // if it is, we will return the contact.
+      find_contact(data.data.email, data).then(res => setOutput(res))
     }
 
     return function cleanUpProfile() {}

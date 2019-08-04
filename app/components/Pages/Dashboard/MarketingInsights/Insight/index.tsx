@@ -75,8 +75,6 @@ function Insight(props: InsightPropsType) {
 
   const { subject } = item
 
-  // console.log({ item })
-
   return (
     <PageWrapper>
       <Helmet>

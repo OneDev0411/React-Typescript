@@ -1,4 +1,5 @@
 import { getContact } from 'models/contacts/get-contact'
+import { searchContacts } from 'models/contacts/search-contacts'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { getContactAttributesBySection } from 'models/contacts/helpers/get-contact-attributes-by-section'
 import { getAttributeFromSummary } from 'models/contacts/helpers/get-attribute-from-summary'
@@ -87,17 +88,38 @@ function select_address(address): string {
   return ''
 }
 
+function extract_required_data_from_contact(contactResponse): ProfileType {
+  const reduxState = store.getState()
+  const contact = normalizeContact(contactResponse)
+  const dates = getContactAttributesBySection(contact, 'Dates')
+  const addresses = getContactAttributesBySection(contact, 'Addresses')
+
+  const addressAttributeDefs = selectDefsBySection(
+    reduxState.contacts.attributeDefs,
+    'Addresses'
+  )
+  const address = getAddresses(addresses, addressAttributeDefs)
+
+  return {
+    name: getAttributeFromSummary(contact, 'display_name'),
+    email: getAttributeFromSummary(contact, 'email'),
+    phone: getAttributeFromSummary(contact, 'phone_number'),
+    profile_image_url: getAttributeFromSummary(contact, 'profile_image_url'),
+    last_touch: contact.last_touch,
+    address: select_address(address),
+    dates: dates.map(item => ({
+      title: item.attribute_def.label,
+      date: item.date
+    }))
+  }
+}
 // Getting contact from server and fill the predefined object
 export async function get_contact_data(
   contact_id
 ): Promise<FormatterOutputType> {
   try {
     const response = await getContact(contact_id)
-    const reduxState = store.getState()
 
-    const contact = normalizeContact(response.data)
-    const dates = getContactAttributesBySection(contact, 'Dates')
-    const addresses = getContactAttributesBySection(contact, 'Addresses')
     const contact_association = normalizeContactForAssociation(response.data)
     const association = {
       association_type: 'contact',
@@ -106,24 +128,9 @@ export async function get_contact_data(
       disableDefaultAssociationChecking: true
     }
 
-    const addressAttributeDefs = selectDefsBySection(
-      reduxState.contacts.attributeDefs,
-      'Addresses'
+    const output_data: ProfileType = extract_required_data_from_contact(
+      response.data
     )
-    const address = getAddresses(addresses, addressAttributeDefs)
-
-    const output_data: ProfileType = {
-      name: getAttributeFromSummary(contact, 'display_name'),
-      email: getAttributeFromSummary(contact, 'email'),
-      phone: getAttributeFromSummary(contact, 'phone_number'),
-      profile_image_url: getAttributeFromSummary(contact, 'profile_image_url'),
-      last_touch: contact.last_touch,
-      address: select_address(address),
-      dates: dates.map(item => ({
-        title: item.attribute_def.label,
-        date: item.date
-      }))
-    }
 
     return {
       contact_status: 'finished',
@@ -142,6 +149,32 @@ export async function get_contact_data(
       contact_id,
       data: {},
       meta: {}
+    }
+  }
+}
+
+export async function find_contact(email: string, base_output) {
+  try {
+    const res = await searchContacts('hi@mojtabast.com')
+
+    if (res.data.length > 0) {
+      return {
+        ...base_output,
+        contact_status: 'finished',
+        data: extract_required_data_from_contact(res.data[0])
+      }
+    }
+
+    return {
+      ...base_output,
+      contact_status: 'finished'
+    }
+  } catch (e) {
+    console.log(e)
+
+    return {
+      ...base_output,
+      contact_status: 'finished'
     }
   }
 }
