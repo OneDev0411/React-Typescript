@@ -19,7 +19,7 @@ declare interface IBrand {
   messages: IBrandMessage
   name: string
   offices: string[]
-  palette: { primary: string; type: string }
+  palette: { primary: string; type: string; marketing: any }
   parent: IBrand | null
   roles?: IBrandRole[]
   training: boolean
