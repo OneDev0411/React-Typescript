@@ -90,5 +90,5 @@ function getEventIndex(event: ICalendarEvent, range: NumberRange) {
       ? from.getUTCFullYear()
       : to.getUTCFullYear()
 
-  return `${year}-${eventTime.getUTCMonth() + 1}-${eventTime.getUTCDate()}`
+  return `${year}/${eventTime.getUTCMonth() + 1}/${eventTime.getUTCDate()}`
 }

@@ -56,5 +56,5 @@ function isDayInRange(day: string, calendarRange: [number, number]): boolean {
  * @param date
  */
 function format(date: Date | number) {
-  return fecha.format(new Date(date), 'YYYY-M-D')
+  return fecha.format(new Date(date), 'YYYY/M/D')
 }

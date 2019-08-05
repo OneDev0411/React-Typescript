@@ -5,5 +5,5 @@ export function createDayId(time: Date | number, utc: boolean = true) {
   const month = utc ? date.getUTCMonth() + 1 : date.getMonth() + 1
   const day = utc ? date.getUTCDate() : date.getDate()
 
-  return `${year}-${month}-${day}`
+  return `${year}/${month}/${day}`
 }
