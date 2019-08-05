@@ -1,8 +1,12 @@
-import { useEffect } from 'react'
+import { RefObject, useEffect } from 'react'
 
 import { useResizeObserver } from './use-resize-observer'
 
-export function usePopoverResize(open, contentElRef, updatePosition) {
+export function usePopoverResize(
+  open: boolean,
+  contentElRef: RefObject<HTMLElement>,
+  updatePosition: () => void
+) {
   const { disconnect, observe } = useResizeObserver(updatePosition)
 
   useEffect(() => {
