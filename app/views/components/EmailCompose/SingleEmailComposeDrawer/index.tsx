@@ -2,6 +2,10 @@ import { Field } from 'react-final-form'
 
 import React, { useState } from 'react'
 
+import { InputProps } from '@material-ui/core/Input'
+
+import { TextFieldProps } from '@material-ui/core/TextField'
+
 import EmailComposeDrawer from 'components/EmailCompose/EmailComposeDrawer'
 
 import { getSendEmailResultMessages } from 'components/EmailCompose/helpers/email-result-messages'
@@ -11,12 +15,20 @@ import { sendEmail } from 'models/email-compose/send-email'
 import ContactsChipsInput from 'components/ContactsChipsInput'
 
 import { normalizeRecipients } from '../helpers/normalize-recepients'
+import { From } from '../fields/From'
+import { EmailComposeDrawerProps } from '../types'
+import { CcBccButtons } from '../fields/CcBccButtons'
+
+interface Props extends EmailComposeDrawerProps {
+  getEmail?: (values: IEmailCampaignInput) => IEmailCampaignInput
+  disableAddNewRecipient?: boolean
+}
 
 export function SingleEmailComposeDrawer({
   getEmail = email => email,
   disableAddNewRecipient = false,
   ...otherProps
-}) {
+}: Props) {
   const [hasCc, setCc] = useState(false)
   const [hasBcc, setBcc] = useState(false)
 
@@ -35,7 +47,6 @@ export function SingleEmailComposeDrawer({
     )
 
   return (
-    // @ts-ignore FIXME
     <EmailComposeDrawer
       {...otherProps}
       hasSignatureByDefault
@@ -46,18 +57,45 @@ export function SingleEmailComposeDrawer({
       }
     >
       <Field
+        component={From}
+        name="from"
+        InputProps={
+          {
+            endAdornment: disableAddNewRecipient ? null : (
+              <CcBccButtons
+                showCc={!hasCc}
+                showBcc={!hasBcc}
+                onCcAdded={() => setCc(true)}
+                onBccAdded={() => setBcc(true)}
+              />
+            )
+          } as InputProps
+        }
+      />
+
+      <Field
         label="To"
         name="recipients"
         component={ContactsChipsInput as any}
-        disableAddNewRecipient={disableAddNewRecipient}
-        showCc={!hasCc}
-        showBcc={!hasBcc}
-        onCcAdded={() => setCc(true)}
-        onBccAdded={() => setBcc(true)}
+        readOnly={disableAddNewRecipient}
+        TextFieldProps={
+          {
+            InputProps: {
+              onBlur: () => {
+                console.log('blur')
+              },
+              inputProps: {
+                autoFocus: true
+              }
+            } as InputProps
+          } as TextFieldProps
+        }
       />
-      {hasCc && <Field label="Cc" name="cc" component={ContactsChipsInput} />}
+      {hasCc && (
+        <Field label="Cc" name="cc" component={ContactsChipsInput as any} />
+      )}
       {hasBcc && (
-        <Field label="Bcc" name="bcc" component={ContactsChipsInput} />
+        <Field label="Bcc" name="bcc" component={ContactsChipsInput as any} />
       )}
     </EmailComposeDrawer>
   )

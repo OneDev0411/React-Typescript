@@ -38,8 +38,6 @@ declare interface IEmailRecipient {
 declare interface IEmailCampaignInput {
   id?: UUID
   due_at: string | null
-  created_by: UUID
-  brand: UUID
   from: UUID
   to: IEmailRecipientInput[]
   cc?: IEmailRecipientInput[]

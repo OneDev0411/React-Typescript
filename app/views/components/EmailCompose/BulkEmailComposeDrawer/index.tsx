@@ -4,7 +4,6 @@ import { Field } from 'react-final-form'
 import styled from 'styled-components'
 
 import Tooltip from 'components/tooltip'
-import { MultipleContactsSelect } from 'components/Forms/MultipleContactsSelect'
 
 import EmailComposeDrawer from 'components/EmailCompose/EmailComposeDrawer'
 import { getSendEmailResultMessages } from 'components/EmailCompose/helpers/email-result-messages'
@@ -12,25 +11,34 @@ import { getSendEmailResultMessages } from 'components/EmailCompose/helpers/emai
 import { sendBulkEmail } from 'models/email-compose/send-bulk-email'
 import IconLock from 'components/SvgIcons/Lock/IconLock'
 
+import ContactsChipsInput from 'components/ContactsChipsInput'
+
 import { normalizeRecipients } from '../helpers/normalize-recepients'
+import { From } from '../fields/From'
+import { EmailComposeDrawerProps, EmailFormValues } from '../types'
 
 const LockIcon = styled(IconLock)`
   vertical-align: text-bottom;
   margin: 0 0.5rem;
 `
 
+interface Props extends EmailComposeDrawerProps {
+  getEmail?: (values: IEmailCampaignInput) => IEmailCampaignInput
+  disableAddNewRecipient?: boolean
+}
+
 export function BulkEmailComposeDrawer({
   getEmail = email => email,
   disableAddNewRecipient = false,
   ...otherProps
-}) {
-  const sendEmail = formValue =>
+}: Props) {
+  const sendEmail = (formValue: EmailFormValues) =>
     sendBulkEmail(
       getEmail({
         from: formValue.fromId,
-        to: normalizeRecipients(formValue.recipients),
+        to: normalizeRecipients(formValue.recipients || []),
         subject: (formValue.subject || '').trim(),
-        html: formValue.body,
+        html: formValue.body || '',
         attachments: formValue.attachments.map(item => item.file_id),
         due_at: formValue.due_at
       })
@@ -41,9 +49,14 @@ export function BulkEmailComposeDrawer({
       {...otherProps}
       sendEmail={sendEmail}
       getSendEmailResultMessages={form =>
-        getSendEmailResultMessages(form.recipients.length, form.due_at)
+        getSendEmailResultMessages(
+          (form.recipients || []).length,
+          !!form.due_at
+        )
       }
     >
+      <Field component={From} name="from" />
+
       <Field
         labelText={
           <>
@@ -53,9 +66,9 @@ export function BulkEmailComposeDrawer({
             </Tooltip>
           </>
         }
+        readOnly={disableAddNewRecipient}
         name="recipients"
-        disableAddNewRecipient={disableAddNewRecipient}
-        component={MultipleContactsSelect}
+        component={ContactsChipsInput as any}
       />
     </EmailComposeDrawer>
   )

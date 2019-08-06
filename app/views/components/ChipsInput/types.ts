@@ -41,6 +41,8 @@ export interface ChipsInputProps<T> {
 
   allowAddOnBlur?: boolean
 
+  readOnly?: boolean
+
   searchDebounce?: number
 
   /**

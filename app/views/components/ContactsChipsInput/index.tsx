@@ -31,8 +31,20 @@ import {
   recipientToChip,
   recipientToSuggestion
 } from './helpers'
+import { ChipsInputProps } from '../ChipsInput/types'
 
-interface Props extends Partial<FieldRenderProps<HTMLInputElement>> {
+type BaseProps = Partial<FieldRenderProps<HTMLInputElement>> &
+  Omit<
+    ChipsInputProps<Recipient>,
+    | 'items'
+    | 'onChange'
+    | 'itemToChip'
+    | 'itemToSuggestion'
+    | 'getSuggestions'
+    | 'createFromString'
+  >
+
+interface Props extends BaseProps {
   tags: IContactTag[]
   lists: IContactList[]
 
@@ -63,8 +75,10 @@ function ContactsChipsInput({
   lists,
   label,
   input,
+  meta,
   value,
-  onChange
+  onChange,
+  ...chipsInputProps
 }: Props) {
   const [recipients, setRecipients] = useControllableState<Recipient[]>(
     input ? input.value : value,
@@ -106,20 +120,26 @@ function ContactsChipsInput({
     )
   }
 
+  const { InputProps = {}, ...TextFieldProps } =
+    chipsInputProps.TextFieldProps || {}
+
   return (
     <ChipsInput
-      items={recipients}
+      {...chipsInputProps}
+      items={recipients || []}
       onChange={setRecipients}
       itemToChip={recipientToChip}
       itemToSuggestion={recipientToSuggestion}
       getSuggestions={getSuggestions}
+      createFromString={value => ({ email: value })}
       TextFieldProps={{
         margin: 'dense',
         InputProps: {
-          startAdornment: <InlineInputLabel>{label}</InlineInputLabel>
-        }
+          startAdornment: <InlineInputLabel>{label}</InlineInputLabel>,
+          ...InputProps
+        },
+        ...TextFieldProps
       }}
-      createFromString={value => ({ email: value })}
     />
   )
 }

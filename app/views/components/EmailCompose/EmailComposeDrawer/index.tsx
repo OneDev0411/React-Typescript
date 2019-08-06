@@ -1,14 +1,9 @@
-import React, { Fragment, ReactElement } from 'react'
+import React, { Fragment } from 'react'
 
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { Field } from 'react-final-form'
-
-import { FormLabel } from '@material-ui/core'
-
 import { TextField } from 'final-form-material-ui'
-
-import { InputProps } from '@material-ui/core/Input'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import EmailBody from 'components/EmailCompose/components/EmailBody'
@@ -17,49 +12,11 @@ import { uploadEmailAttachment } from 'models/email-compose/upload-email-attachm
 
 import { FinalFormDrawer } from '../../FinalFormDrawer'
 import { AttachmentsList } from '../fields/Attachments'
-
 import { Footer } from '../Footer'
-
-interface Props {
-  from: {
-    id: string
-    display_name: string
-    email: string
-  }
-  sendEmail: (values: ComposeFormValues) => Promise<any>
-  isOpen: boolean
-  getSendEmailResultMessages: (
-    values: ComposeFormValues
-  ) => { successMessage: string; errorMessage: string }
-  onSent: () => void
-  onClose: () => void
-  deal?: IDeal
-  body?: string
-  recipients?: any[] // FIXME: replace any with proper type
-  defaultAttachments?: any[] // FIXME: replace any with proper type
-  isSubmitDisabled?: boolean
-  hasStaticBody?: boolean
-  hasDealsAttachments?: boolean
-  hasSignatureByDefault?: boolean
-  hasTemplateVariables?: boolean
-
-  dispatch: any // Extending DispatchProps seems to have problems
-  signature: string
-  children: ReactElement<any>
-}
+import { EmailComposeDrawerProps, EmailFormValues } from '../types'
 
 interface State {
   isSendingEmail: boolean
-}
-
-interface ComposeFormValues {
-  attachments: any
-  recipients: any[] | undefined
-  subject: string
-  from: string
-  due_at: string
-  body: string | undefined
-  fromId: any
 }
 
 /**
@@ -74,7 +31,10 @@ interface ComposeFormValues {
  * These differences are abstracted away from EmailComposeDrawer
  * as props to be provided by concrete email compose drawer components.
  */
-class EmailComposeDrawer extends React.Component<Props, State> {
+class EmailComposeDrawer extends React.Component<
+  EmailComposeDrawerProps,
+  State
+> {
   static defaultProps = {
     body: '',
     recipients: [],
@@ -93,7 +53,7 @@ class EmailComposeDrawer extends React.Component<Props, State> {
 
   static contextType = ConfirmationModalContext
 
-  private formObject: ComposeFormValues
+  private formObject: EmailFormValues
 
   private initialAttachments: any[]
 
@@ -127,7 +87,7 @@ class EmailComposeDrawer extends React.Component<Props, State> {
     (this.props.recipients || []).length
 
   validate = values => {
-    const errors: { [key in keyof ComposeFormValues]?: string } = {}
+    const errors: { [key in keyof EmailFormValues]?: string } = {}
     const { recipients } = values
 
     if (!recipients || recipients.length === 0) {
@@ -243,22 +203,6 @@ class EmailComposeDrawer extends React.Component<Props, State> {
         )}
         render={() => (
           <Fragment>
-            <Field
-              component={TextField}
-              InputProps={
-                {
-                  startAdornment: (
-                    <FormLabel style={{ marginRight: '1rem' }}>From</FormLabel>
-                  ),
-                  disableUnderline: true,
-                  readOnly: true
-                } as InputProps
-              }
-              fullWidth
-              margin="dense"
-              name="from"
-            />
-
             {this.props.children}
 
             <Field

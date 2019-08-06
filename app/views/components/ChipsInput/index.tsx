@@ -20,6 +20,8 @@ import useObservable from 'react-use/lib/useObservable'
 import { of } from 'rxjs/observable/of'
 import { useDebounce } from 'use-debounce'
 
+import { InputProps } from '@material-ui/core/Input'
+
 import { ChipsInputProps } from './types'
 import Avatar from '../Avatar'
 import { InputWithStartAdornment } from './InputWithStartAdornment'
@@ -63,6 +65,7 @@ export function ChipsInput<T>({
   createFromString = () => undefined,
   allowAddOnEnter = true,
   allowAddOnBlur = true,
+  readOnly = false,
   itemToChip,
   itemToSuggestion,
   searchDebounce = 500,
@@ -121,7 +124,7 @@ export function ChipsInput<T>({
         size="small"
         {...ChipProps}
         label={chip.text}
-        onDelete={() => deleteChip(item)}
+        onDelete={readOnly ? undefined : () => deleteChip(item)}
       />
     )
   })
@@ -147,8 +150,9 @@ export function ChipsInput<T>({
       }, [getSuggestions, debouncedInputValue])
     ) || []
 
-  const inputProps = {
+  const TextFieldInputProps: InputProps = {
     ...(TextFieldProps.InputProps || {}),
+    readOnly,
     onKeyDown,
     onBlur,
     onChange: onInputChange
@@ -191,9 +195,10 @@ export function ChipsInput<T>({
               fullWidth
               {...TextFieldProps}
               InputProps={{
-                ...getInputProps(inputProps as any),
+                ...getInputProps(TextFieldInputProps as any),
                 inputComponent: InputWithStartAdornment,
                 inputProps: {
+                  ...(TextFieldInputProps.inputProps || {}),
                   adornment: renderedChips
                 },
                 classes: {
@@ -214,6 +219,10 @@ export function ChipsInput<T>({
               <Paper square className={classes.suggestionList}>
                 {suggestedItems.map((suggestedItem, index) => {
                   const suggestion = itemToSuggestion(suggestedItem)
+
+                  if (suggestion.avatar) {
+                    console.log('suggestion.avatar', suggestion.avatar)
+                  }
 
                   return (
                     <ListItem
