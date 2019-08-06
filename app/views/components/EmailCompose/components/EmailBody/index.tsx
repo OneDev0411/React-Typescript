@@ -15,12 +15,14 @@ import Loading from 'components/LoadingContainer'
 import { IAppState } from 'reducers/index'
 
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
+import { defaultTemplateVariableSuggestions } from '../../EmailComposeDrawer/default-template-variable-suggestions'
 
 interface Props {
   uploadImage: (file: File) => Promise<string>
   content?: string
   hasStaticBody?: boolean
   hasSignatureByDefault?: boolean
+  hasTemplateVariables?: boolean
   signature: string
   editorRef?: Ref<PluginsEditor>
 }
@@ -30,6 +32,7 @@ const EmailBody = ({
   uploadImage,
   signature,
   hasSignatureByDefault,
+  hasTemplateVariables,
   hasStaticBody = false,
   editorRef
 }: Props) => {
@@ -47,6 +50,10 @@ const EmailBody = ({
               uploadImage={uploadImage}
               enableSignature
               hasSignatureByDefault={hasSignatureByDefault}
+              enableTemplateVariables={hasTemplateVariables}
+              templateVariableSuggestionGroups={
+                defaultTemplateVariableSuggestions
+              }
               onEditSignature={() => setSignatureEditorVisible(true)}
               signature={signature}
               input={input}

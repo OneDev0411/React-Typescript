@@ -14,6 +14,8 @@ import { stateToHTML } from 'draft-js-export-html'
 import { stateFromHTML } from 'draft-js-import-html'
 import cn from 'classnames'
 
+import { Box } from '@material-ui/core'
+
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 import { isImageFile } from 'utils/file-utils/is-image-file'
 import IconLink from 'components/SvgIcons/Link/IconLink'
@@ -36,6 +38,9 @@ import { TextEditorProps } from './types'
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 import { createEditorRef } from './create-editor-ref'
 import { createPlugins } from './create-plugins'
+import { TemplateVariablesButton } from '../TemplateVariablesButton'
+import { ITemplateVariableSuggestion } from '../TemplateVariablesButton/types'
+import { insertTemplateVariable } from './modifiers/insert-template-expression'
 
 /**
  * Html wysiwyg editor.
@@ -70,6 +75,8 @@ export const TextEditor = forwardRef(
       enableImage = false,
       enableRichText = true,
       enableSignature = false,
+      enableTemplateVariables = false,
+      templateVariableSuggestionGroups,
       onAttachmentDropped
     }: TextEditorProps,
     ref
@@ -260,6 +267,16 @@ export const TextEditor = forwardRef(
 
     const allPlugins = [...defaultPlugins, ...plugins]
 
+    const insertVariable = (suggestion: ITemplateVariableSuggestion) => {
+      setEditorState(
+        insertTemplateVariable(
+          editorState,
+          suggestion.expression,
+          suggestion.defaultFallback
+        )
+      )
+    }
+
     return (
       <div className={className}>
         <Toolbar>
@@ -275,13 +292,28 @@ export const TextEditor = forwardRef(
               >
                 <IconLink />
               </IconButton>
+              <Separator />
             </>
           )}
 
           {enableImage && <AddImageButton onImageSelected={addImage} />}
+
+          {enableTemplateVariables && (
+            <>
+              <Box pr={1}>
+                <TemplateVariablesButton
+                  suggestions={templateVariableSuggestionGroups || []}
+                  onSuggestionSelected={suggestion =>
+                    insertVariable(suggestion)
+                  }
+                />
+              </Box>
+              <Separator />
+            </>
+          )}
+
           {enableSignature && (
             <>
-              <Separator />
               <Checkbox
                 checked={signaturePlugin.hasSignature()}
                 onChange={() =>
