@@ -5,7 +5,7 @@ import classNames from 'classnames'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      overflow: 'hidden',
+      overflow: 'auto',
       padding: theme.spacing(0, 3, 0),
       flex: '1'
     }
