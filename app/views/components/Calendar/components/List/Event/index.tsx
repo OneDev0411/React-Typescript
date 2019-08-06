@@ -2,7 +2,7 @@ import React from 'react'
 import fecha from 'fecha'
 
 import { EventItem } from './Item'
-import { ContainerStyle, TimeStyle } from './styles'
+import useStyles from './styles'
 
 interface Props {
   style: React.CSSProperties
@@ -25,24 +25,19 @@ export function Event({
       ? fecha.format(new Date(item.timestamp * 1000), 'hh:mm A')
       : 'All day'
 
+  const classes = useStyles({
+    hasBorderBottom: nextItem && !nextItem.hasOwnProperty('is_day_header')
+  })
+
   return (
-    <div
-      style={{
-        ...style,
-        ...ContainerStyle,
-        borderBottom:
-          nextItem && !nextItem.hasOwnProperty('is_day_header')
-            ? '1px solid #dbe6fd'
-            : 'none'
-      }}
-    >
+    <div style={style} className={classes.container}>
       <div
         style={{
           display: 'flex',
           alignItems: 'center'
         }}
       >
-        <div style={TimeStyle}>{date}</div>
+        <div className={classes.time}>{date}</div>
 
         <EventItem
           event={item}

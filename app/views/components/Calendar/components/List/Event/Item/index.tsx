@@ -3,7 +3,7 @@ import React from 'react'
 import CrmEvent from './CrmEvent'
 import { EventIcon } from './EventIcon'
 
-import { ContainerStyle, TitleStyle } from './styles'
+import styles from './styles'
 
 interface Props {
   event: ICalendarEvent
@@ -24,9 +24,9 @@ export function EventItem(props: Props) {
 
   if (event.object_type === 'contact_attribute') {
     return (
-      <div style={ContainerStyle}>
+      <div style={styles.container}>
         <EventIcon event={event} />
-        <div style={TitleStyle}>
+        <div style={styles.title}>
           <a href={`/dashboard/contacts/${event.contact}`} target="_blank">
             {event.full_contact!.display_name}
           </a>
@@ -38,9 +38,9 @@ export function EventItem(props: Props) {
 
   if (event.object_type === 'deal_context') {
     return (
-      <div style={ContainerStyle}>
+      <div style={styles.container}>
         <EventIcon event={event} />
-        <div style={TitleStyle}>
+        <div style={styles.title}>
           {event.type_label} for{' '}
           <a href={`/dashboard/deals/${event.deal}`} target="_blank">
             {event.title}

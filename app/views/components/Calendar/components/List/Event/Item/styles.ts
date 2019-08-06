@@ -1,17 +1,17 @@
-export const ContainerStyle = {
-  display: 'flex',
-  alignItems: 'center'
-}
-
-export const TitleStyle = {
-  fontSize: '1rem',
-  fontWeight: 500
-}
-
-export const SubTitleStyle = {
-  fontWeight: 400,
-  fontSize: '0.875rem',
-  letterSpacing: '0.25px',
-  marginLeft: '3rem',
-  color: '#6a7589'
+export default {
+  container: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  title: {
+    fontSize: '1rem',
+    fontWeight: 500
+  },
+  subtitle: {
+    fontSize: '1rem',
+    fontWeight: 400,
+    letterSpacing: '0.25px',
+    marginLeft: '3rem',
+    color: '#6a7589'
+  }
 }

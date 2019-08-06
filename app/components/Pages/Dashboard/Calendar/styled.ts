@@ -10,8 +10,8 @@ export const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 3rem;
-  padding: 0 1rem 0 0;
+  height: 3.5rem;
+  padding: 0 1.5rem 0 0;
   border-bottom: 1px solid #eff1f2;
   margin-bottom: 1rem;
 `

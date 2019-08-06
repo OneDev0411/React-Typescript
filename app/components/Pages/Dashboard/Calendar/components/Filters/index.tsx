@@ -6,6 +6,8 @@ import Flex from 'styled-flex-component'
 import { eventTypesIcons, EventTypeIcon } from 'views/utils/event-types-icons'
 import { importantDatesIcons } from 'views/utils/important-dates-icons'
 
+import { Container } from './styled'
+
 interface TabItem {
   label: string
   value: number
@@ -83,16 +85,12 @@ export function Filters({ onChange }: Props) {
   )
 
   return (
-    <div
-      style={{
-        width: '85%'
-      }}
-    >
+    <Container>
       <Tabs
         value={selectedTab}
         onChange={handleFilterChange}
         indicatorColor="primary"
-        textColor="secondary"
+        textColor="primary"
         variant="scrollable"
         scrollButtons="auto"
       >
@@ -114,6 +112,6 @@ export function Filters({ onChange }: Props) {
           />
         ))}
       </Tabs>
-    </div>
+    </Container>
   )
 }

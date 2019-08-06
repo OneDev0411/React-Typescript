@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-  margin: 0 1.5rem;
-  height: calc(100vh - 4rem);
+  display: flex;
+  width: 85%;
+  height: 100%;
+  align-items: flex-end;
 `

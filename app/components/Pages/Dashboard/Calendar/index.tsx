@@ -44,6 +44,7 @@ const CalendarPage: React.FC = props => {
         </SideHeader>
 
         <DatePicker
+          fixedWeeks
           selectedDate={activeDate}
           onChange={handleDatePickerChange}
         />

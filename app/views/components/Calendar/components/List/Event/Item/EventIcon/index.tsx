@@ -3,7 +3,9 @@ import React from 'react'
 import { eventTypesIcons } from 'views/utils/event-types-icons'
 import { importantDatesIcons } from 'views/utils/important-dates-icons'
 
-import { Container } from './styled'
+import { hexToRgb } from 'utils/hex-to-rgb'
+
+import styles from './styles'
 
 interface Props {
   event: ICalendarEvent
@@ -21,9 +23,17 @@ export function EventIcon(props: Props) {
   }
 
   return (
-    <Container backgroundColor={Icon.color}>
+    <div
+      style={{
+        ...styles.container,
+        backgroundColor: `rgba(
+        ${hexToRgb(Icon.color).join(', ')},
+        0.2
+      )`
+      }}
+    >
       <Icon.icon fill={Icon.color} style={{ width: '1rem', height: '1rem' }} />
-    </Container>
+    </div>
   )
 }
 

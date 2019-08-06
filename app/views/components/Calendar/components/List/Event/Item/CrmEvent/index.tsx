@@ -1,9 +1,9 @@
-import React, { memo } from 'react'
+import React, { MouseEvent, memo } from 'react'
 
 import { EventIcon } from '../EventIcon'
 
-import { ContainerStyle, TitleStyle, SubTitleStyle } from '../styles'
-import { AssociationStyle } from './styles'
+import styles from '../styles'
+import { Associations } from './Associations'
 
 interface StateProps {
   user: IUser
@@ -16,70 +16,26 @@ interface Props {
 }
 
 const CrmEvent = memo((props: Props) => {
-  const handleSelectEvent = () => props.onClickCrmEventAssociations(props.event)
-
-  /**
-   * returns list of associations with this format:
-   * assoc1, assoc2 <and (assocLength - 2) others>
-   */
-  const associationsList = () => {
-    const associations = props.event.full_crm_task!.associations
-
-    const contacts = (associations || []).filter(
-      association => association.association_type === 'contact'
-    )
-
-    if (contacts.length === 0) {
-      return (
-        <span style={AssociationStyle} onClick={handleSelectEvent}>
-          no body
-        </span>
-      )
-    }
-
-    const users = new Array(Math.min(2, contacts.length))
-      .fill(null)
-      .map((_, index) => [
-        <span
-          key={`Association_${index}`}
-          style={AssociationStyle}
-          onClick={handleSelectEvent}
-        >
-          {contacts[index].contact!.display_name}
-        </span>,
-        contacts.length > 1 && index === 0 && (
-          <span key={`Separator_${index}`}>, </span>
-        )
-      ])
-
-    return contacts.length <= 2
-      ? users
-      : [
-          ...users,
-          <>
-            {' '}
-            and{' '}
-            <span style={AssociationStyle} onClick={handleSelectEvent}>
-              {contacts.length - 2} other{contacts.length - 2 > 1 ? 's' : ''}
-            </span>
-          </>
-        ]
-  }
+  const handleSelectEvent = (e: MouseEvent<HTMLElement>) =>
+    props.onClickCrmEventAssociations(props.event)
 
   return (
-    <div>
-      <div style={ContainerStyle}>
+    <div onClick={handleSelectEvent}>
+      <div style={styles.container}>
         <EventIcon event={props.event} />
 
-        <div style={TitleStyle}>
+        <div style={styles.title}>
           {props.event.event_type}{' '}
           {getCrmEventTypePreposition(props.event.event_type)}{' '}
-          {associationsList()}
+          <Associations
+            event={props.event}
+            onClickAssociation={handleSelectEvent}
+          />
         </div>
       </div>
 
       {props.event.event_type === 'Email' && (
-        <div style={SubTitleStyle}>{props.event.title}</div>
+        <div style={styles.subtitle}>{props.event.title}</div>
       )}
     </div>
   )

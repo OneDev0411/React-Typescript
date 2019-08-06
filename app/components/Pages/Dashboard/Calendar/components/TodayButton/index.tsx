@@ -13,7 +13,7 @@ export function TodayButton(props: Props) {
     <Button
       size="small"
       variant="outlined"
-      color="secondary"
+      color="primary"
       onClick={props.onClick}
       data-balloon={fecha.format(new Date(), 'dddd, MMMM DD')}
       data-balloon-pos="down"
