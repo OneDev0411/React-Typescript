@@ -46,7 +46,7 @@ const MENU_WIDTH = '19.5rem'
 class CalendarContainer extends React.Component {
   state = {
     isMenuOpen: true,
-    isOpenEventDrawer: false,
+    isEventDrawerOpen: false,
     selectedEvent: null,
     loadingPosition: LOADING_POSITIONS.Middle
   }
@@ -110,14 +110,14 @@ class CalendarContainer extends React.Component {
   /**
    * open create task menu
    */
-  openEventDrawer = () => this.setState({ isOpenEventDrawer: true })
+  openEventDrawer = () => this.setState({ isEventDrawerOpen: true })
 
   /**
    * close create task menu
    */
   closeEventDrawer = () =>
     this.setState({
-      isOpenEventDrawer: false,
+      isEventDrawerOpen: false,
       selectedEvent: null
     })
 
@@ -334,7 +334,7 @@ class CalendarContainer extends React.Component {
           </Content>
 
           <CrmEvents
-            isOpenEventDrawer={this.state.isOpenEventDrawer}
+            isEventDrawerOpen={this.state.isEventDrawerOpen}
             selectedEvent={this.state.selectedEvent}
             user={this.props.user}
             onEventChange={this.handleEventChange}

@@ -5,7 +5,7 @@ import { EventDrawer } from 'components/EventDrawer'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
 interface Props {
-  isOpenEventDrawer: boolean
+  isEventDrawerOpen: boolean
   event?: ICalendarEvent
   user: IUser
   onEventChange(event: IEvent, type: string): void
@@ -13,12 +13,8 @@ interface Props {
 }
 
 export function CrmEvents(props: Props) {
-  if (!props.isOpenEventDrawer) {
-    return null
-  }
-
   const sharedProps = {
-    isOpen: true,
+    isOpen: props.isEventDrawerOpen,
     deleteCallback: (event: IEvent) => props.onEventChange(event, 'deleted'),
     onClose: props.onCloseEventDrawer,
     submitCallback: props.onEventChange,

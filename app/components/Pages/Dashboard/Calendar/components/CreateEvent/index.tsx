@@ -36,7 +36,7 @@ export function CreateEvent(props: Props) {
       </Button>
 
       <CrmEvents
-        isOpenEventDrawer={showEventDrawer}
+        isEventDrawerOpen={showEventDrawer}
         user={props.user as IUser}
         onEventChange={handleEventChange}
         onCloseEventDrawer={() => setShowEventDrawer(false)}

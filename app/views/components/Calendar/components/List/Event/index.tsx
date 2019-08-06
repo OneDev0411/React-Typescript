@@ -2,7 +2,7 @@ import React from 'react'
 import fecha from 'fecha'
 
 import { EventItem } from './Item'
-import { ContainerStyle, TimeStyle } from './styled'
+import { ContainerStyle, TimeStyle } from './styles'
 
 interface Props {
   style: React.CSSProperties

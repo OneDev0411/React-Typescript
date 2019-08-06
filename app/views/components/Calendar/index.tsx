@@ -14,6 +14,7 @@ import { connect } from 'react-redux'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import usePrevious from 'react-use/lib/usePrevious'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { IAppState } from 'reducers'
 
@@ -23,8 +24,6 @@ import {
   getTeamAvailableMembers,
   getActiveTeam
 } from 'utils/user-teams'
-
-import { useEffectOnce } from 'hooks/use-effect-once'
 
 import { LoadingPosition, VirtualListRef } from 'components/VirtualList'
 
@@ -333,7 +332,7 @@ export function Calendar({
     <List
       ref={listRef}
       rows={listRows}
-      user={user}
+      user={user as IUser}
       isLoading={isLoading}
       loadingPosition={loadingPosition}
       onReachEnd={handleLoadNextEvents}

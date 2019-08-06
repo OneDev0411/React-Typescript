@@ -17,7 +17,7 @@ import { EmptyState } from './EmptyState'
 import { Container } from './styled'
 
 interface Props {
-  user?: IUser
+  user: IUser
   rows: ICalendarListRow[]
   isLoading: boolean
   loadingPosition: LoadingPosition
@@ -69,7 +69,7 @@ const CalendarList: React.FC<Props> = props => {
 
     const date = new Date(item.date)
 
-    if (activeDate && date.toDateString() === activeDate.toDateString()) {
+    if (activeDate && date.getTime() === activeDate.getTime()) {
       return
     }
 
@@ -121,9 +121,9 @@ const CalendarList: React.FC<Props> = props => {
 
       {selectedCrmEvent && (
         <CrmEvents
-          isOpenEventDrawer
+          isEventDrawerOpen
           event={selectedCrmEvent}
-          user={props.user as IUser}
+          user={props.user}
           onEventChange={handleEventChange}
           onCloseEventDrawer={() => setSelectedCrmEvent(null)}
         />

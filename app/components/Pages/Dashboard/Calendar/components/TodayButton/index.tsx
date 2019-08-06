@@ -4,11 +4,11 @@ import fecha from 'fecha'
 
 import { Button } from '@material-ui/core'
 
-interface IProps {
+interface Props {
   onClick(): void
 }
 
-export function TodayButton(props: IProps) {
+export function TodayButton(props: Props) {
   return (
     <Button
       size="small"

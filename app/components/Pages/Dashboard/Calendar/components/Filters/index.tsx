@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
+import React, { useState, ChangeEvent, useCallback } from 'react'
+import { Tabs, Tab } from '@material-ui/core'
 
 import Flex from 'styled-flex-component'
 
@@ -67,18 +66,21 @@ interface Props {
   onChange(filter: object): void
 }
 
-export function Filters(props: Props) {
+export function Filters({ onChange }: Props) {
   const [selectedTab, setSelectedTab] = useState(TAB_ITEMS[0].value)
 
-  const handleFilterChange = (e: MouseEvent, value: number) => {
-    setSelectedTab(value)
+  const handleFilterChange = useCallback(
+    (e: ChangeEvent<{}>, value: number) => {
+      setSelectedTab(value)
 
-    const tab = TAB_ITEMS.find(tab => tab.value === value)
+      const tab = TAB_ITEMS.find(tab => tab.value === value)
 
-    if (tab) {
-      props.onChange(tab.filter)
-    }
-  }
+      if (tab) {
+        onChange(tab.filter)
+      }
+    },
+    [onChange]
+  )
 
   return (
     <div

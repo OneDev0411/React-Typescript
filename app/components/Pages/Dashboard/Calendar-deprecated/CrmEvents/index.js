@@ -5,9 +5,9 @@ import { EventDrawer } from 'components/EventDrawer'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
 export function CrmEvents(props) {
-  const { selectedEvent, isOpenEventDrawer } = props
+  const { selectedEvent, isEventDrawerOpen } = props
 
-  if (!isOpenEventDrawer) {
+  if (!isEventDrawerOpen) {
     return null
   }
 

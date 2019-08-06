@@ -1,7 +1,7 @@
 import React from 'react'
 import fecha from 'fecha'
 
-import { ContainerStyle, FlexStyle } from './styled'
+import { ContainerStyle, FlexStyle } from './styles'
 
 interface IProps {
   activeDate: Date | null

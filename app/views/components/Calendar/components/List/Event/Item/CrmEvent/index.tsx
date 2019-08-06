@@ -2,8 +2,8 @@ import React, { memo } from 'react'
 
 import { EventIcon } from '../EventIcon'
 
-import { ContainerStyle, TitleStyle, SubTitleStyle } from '../styled'
-import { AssociationStyle } from './styled'
+import { ContainerStyle, TitleStyle, SubTitleStyle } from '../styles'
+import { AssociationStyle } from './styles'
 
 interface StateProps {
   user: IUser

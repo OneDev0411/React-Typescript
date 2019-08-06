@@ -3,7 +3,7 @@ import React from 'react'
 import CrmEvent from './CrmEvent'
 import { EventIcon } from './EventIcon'
 
-import { ContainerStyle, TitleStyle } from './styled'
+import { ContainerStyle, TitleStyle } from './styles'
 
 interface Props {
   event: ICalendarEvent
