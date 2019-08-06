@@ -272,11 +272,25 @@ class Builder extends React.Component {
 
   refreshEditor = selectedTemplate => {
     const components = this.editor.DomComponents
+    let html = selectedTemplate.template
+
+    // GrapeJS doesn't support for inline style for body tag, we are making our styles
+    // Inline using juice. so we need to extract them and put them in <head>
+    // Note: this is only useful for EDIT mode.
+    const regex = /<body.*?(style="(.*?)")+?.*?>/g
+    const searchInTemplates = regex.exec(html)
+
+    if (Array.isArray(searchInTemplates) && searchInTemplates.length === 3) {
+      html = html.replace(
+        '<head>',
+        `<head><style>body{${searchInTemplates[2]}}</style>`
+      )
+    }
 
     components.clear()
     this.editor.setStyle('')
     this.setEditorTemplateId(selectedTemplate.id)
-    this.editor.setComponents(selectedTemplate.template)
+    this.editor.setComponents(html)
     this.lockIn()
   }
 
