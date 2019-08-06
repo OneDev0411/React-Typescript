@@ -1,8 +1,8 @@
 import { setTextEditorData } from './fields'
 import { getTestSelector } from './page'
 
-export function submitDrawerForm() {
-  return cy.getByTestSelector('open-drawer-content').within(() => {
+export function submitDrawerForm(level = 1) {
+  return cy.getByTestSelector(`drawer-${level}`).within(() => {
     cy.get('button[type=submit]').click()
   })
 }
@@ -14,6 +14,6 @@ export function fillEmailComposeDrawer(subject: string, content: string) {
   setTextEditorData(content)
 }
 
-export function waitForDrawerToClose() {
-  return cy.waitForRemove(getTestSelector('open-drawer-content'))
+export function waitForDrawerToClose(level = 1) {
+  return cy.waitForRemove(getTestSelector(`drawer-${level}`))
 }

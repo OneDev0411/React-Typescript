@@ -338,9 +338,8 @@ class OpenHouseDrawerInternal extends React.Component {
     return (
       <Fragment>
         <Drawer
-          isOpen={this.props.isOpen && !this.state.isTemplateBuilderOpen}
+          open={this.props.isOpen && !this.state.isTemplateBuilderOpen}
           onClose={this.props.onClose}
-          showFooter={false}
         >
           <Drawer.Header title={`${this.isNew ? 'New' : 'Edit'} Open House`} />
           <Drawer.Body>

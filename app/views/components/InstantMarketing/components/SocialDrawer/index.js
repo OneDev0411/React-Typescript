@@ -58,7 +58,7 @@ class SocialDrawer extends React.Component {
 
   render() {
     return (
-      <Drawer isOpen onClose={this.props.onClose} showFooter={false}>
+      <Drawer open onClose={this.props.onClose}>
         <Drawer.Header title="How would you like to share?" />
         <Drawer.Body>
           <PreviewFile

@@ -125,9 +125,8 @@ class TasksDrawer extends React.Component {
     return (
       <OverlayDrawer
         {...this.props.drawerOptions}
-        isOpen={this.props.isOpen}
+        open={this.props.isOpen}
         onClose={this.handleClose}
-        showFooter={false}
       >
         <OverlayDrawer.Header title={this.props.title} />
         <OverlayDrawer.Body>

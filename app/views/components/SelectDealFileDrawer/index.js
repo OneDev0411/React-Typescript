@@ -64,7 +64,7 @@ class SelectDealFileDrawer extends React.Component {
 
     return (
       <Drawer
-        isOpen={props.isOpen}
+        open={props.isOpen}
         onClose={props.onClose}
         {...props.drawerOptions}
       >

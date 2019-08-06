@@ -1,16 +1,14 @@
-import styled from 'styled-components'
+import styled, { ThemeProps } from 'styled-components'
+
+import { Theme } from '@material-ui/core'
 
 import { merriweatherFamilyStyle } from '../../Typography/styles'
-import { borderColor } from '../../../utils/colors'
 
 export const Container = styled.div`
   height: 4.5rem;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 0 1.5rem;
-  background-color: #fff;
+  padding: ${({ theme }: ThemeProps<Theme>) => theme.spacing(0, 3)};
+  background-color: ${({ theme }: ThemeProps<Theme>) =>
+    theme.palette.common.white};
   z-index: 2;
 
   & .header-row {
@@ -22,7 +20,8 @@ export const Container = styled.div`
   }
 
   &:after {
-    border-bottom: 1px solid ${borderColor};
+    border-bottom: 1px solid
+      ${({ theme }: ThemeProps<Theme>) => theme.palette.divider};
     display: block;
     content: '';
   }
