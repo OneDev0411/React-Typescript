@@ -17,7 +17,7 @@ export function DayHeader(props: IProps) {
   const date = new Date(props.item.date)
   const isActive =
     props.activeDate &&
-    props.activeDate.toDateString() === new Date(props.item.date).toDateString()
+    props.activeDate.getTime() === new Date(props.item.date).getTime()
 
   return (
     <div style={{ ...props.style, ...FlexStyle }}>
