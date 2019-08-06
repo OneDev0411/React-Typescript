@@ -6,7 +6,7 @@ const BRAND_STYLES_TEMPLATE = `<style>
   background: {{ brand.palette.marketing.alpha.bg }};
 }
 
-.alpha-text-a {
+.alpha-ta {
   color: {{ brand.palette.marketing.alpha.ta }};
 }
 
@@ -14,11 +14,11 @@ const BRAND_STYLES_TEMPLATE = `<style>
   background: {{ brand.palette.marketing.beta.bg }};
 }
 
-.beta-text-a {
+.beta-ta {
   color: {{ brand.palette.marketing.beta.ta }};
 }
 
-.beta-text-b {
+.beta-tb {
   color: {{ brand.palette.marketing.beta.tb }};
 }
 
@@ -26,11 +26,11 @@ const BRAND_STYLES_TEMPLATE = `<style>
   background: {{ brand.palette.marketing.theta.bg }};
 }
 
-.theta-text-a {
+.theta-ta {
   color: {{ brand.palette.marketing.theta.ta }};
 }
 
-.theta-text-b {
+.theta-tb {
   color: {{ brand.palette.marketing.theta.tb }};
 }
 
