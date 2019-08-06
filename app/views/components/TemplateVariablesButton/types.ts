@@ -11,7 +11,7 @@ export interface ITemplateVariableSuggestion {
   /**
    * Default value to be set as fallback when this suggestion is used
    */
-  defaultFallback: string
+  defaultFallback?: string
 
   /**
    * A hint/description for the template variable. Not used in current design

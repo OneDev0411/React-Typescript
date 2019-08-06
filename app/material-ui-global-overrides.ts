@@ -11,6 +11,9 @@ export const MaterialUiGlobalOverrides = withStyles({
     // override our default styles
     '.MuiLink-underlineNone': {
       textDecoration: 'none!important'
+    },
+    '.MuiListSubheader-root': {
+      textTransform: 'uppercase'
     }
   }
 })(() => null)

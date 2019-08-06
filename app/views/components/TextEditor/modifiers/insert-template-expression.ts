@@ -23,7 +23,7 @@ export function insertTemplateVariableAtSelection(
   expression: string,
   fallback: string = ''
 ) {
-  return Modifier.insertText(
+  return Modifier.replaceText(
     contentState,
     selection,
     createTemplateExpression(expression, fallback)

@@ -7,7 +7,8 @@ import {
   ListSubheader,
   Paper,
   Popper,
-  useTheme
+  useTheme,
+  Divider
 } from '@material-ui/core'
 
 import {
@@ -75,6 +76,7 @@ export function TemplateVariablesButton({
                       {suggestion.title}
                     </ListItem>
                   ))}
+                  <Divider />
                 </React.Fragment>
               ))}
             </List>
