@@ -1,12 +1,12 @@
 import React from 'react'
 
-import Popper from '@material-ui/core/Popper'
-import Fade from '@material-ui/core/Fade'
+// import Fade from '@material-ui/core/Fade'
 import Paper from '@material-ui/core/Paper'
 
 import { EventDrawer } from 'components/EventDrawer'
 import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
+import ContentSizeAwarePopper from 'components/ContentSizeAwarePopper'
 
 import MiniProfile from './MiniProfile'
 import {
@@ -39,27 +39,29 @@ function MiniContact(props: MiniContactPropsType) {
       <div onMouseEnter={handleHovered} onMouseLeave={() => setAnchorEl(null)}>
         {props.children}
         {isHovered && (
-          <Popper
+          <ContentSizeAwarePopper
             id={id}
             open={isHovered}
             anchorEl={anchorEl}
             transition
-            disablePortal
+            // disablePortal
             placement="top-start"
+            style={{ zIndex: 2019 }}
           >
-            {({ TransitionProps }) => (
-              <Fade {...TransitionProps} timeout={350}>
-                <Paper>
-                  <MiniProfile
-                    initData={props.data}
-                    type={props.type}
-                    actionSettings={actionSettings}
-                    setActionSettings={setActionSettings}
-                  />
-                </Paper>
-              </Fade>
-            )}
-          </Popper>
+            {/* Disable the animation temporarily  */}
+            {/* {({ TransitionProps }) => (
+              <Fade {...TransitionProps} timeout={350}> */}
+            <Paper>
+              <MiniProfile
+                initData={props.data}
+                type={props.type}
+                actionSettings={actionSettings}
+                setActionSettings={setActionSettings}
+              />
+            </Paper>
+            {/* </Fade>
+            )} */}
+          </ContentSizeAwarePopper>
         )}
       </div>
       {actionSettings.type === ActionSettingsNamesType.EVENT && (

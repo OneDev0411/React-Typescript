@@ -15,7 +15,7 @@ import { usePopoverResize } from 'hooks/use-popover-resize'
  * we can upgrade this to that. Or maybe even MUI Popover and Popper use it
  * internally and we can remove this wrapping layer.
  */
-export function ContentSizeAwarePopper({
+function ContentSizeAwarePopper({
   children,
   open,
   popperRef: externalPopperRef,
@@ -49,3 +49,5 @@ export function ContentSizeAwarePopper({
     </Popper>
   )
 }
+
+export default ContentSizeAwarePopper
