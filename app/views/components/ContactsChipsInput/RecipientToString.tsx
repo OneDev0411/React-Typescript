@@ -35,7 +35,7 @@ export const RecipientToString = connect(
     }
 
     // We have a contact here which has a display name.
-    // if it has multiple emails, show email in prances. Otherwise, only name
+    // if it has multiple emails, show email in parentheses. Otherwise, only name
     let emails: string[] = []
 
     try {

@@ -1,12 +1,12 @@
 import React from 'react'
+import { Tooltip } from '@material-ui/core'
 
 import IconButton from 'components/Button/IconButton'
 import TimeIcon from 'components/SvgIcons/Time/IconTime'
-import Tooltip from 'components/tooltip'
 
 function SchedulerButton(props) {
   return (
-    <Tooltip caption={props.isScheduled ? 'Edit Schedule' : 'Schedule Email'}>
+    <Tooltip title={props.isScheduled ? 'Edit Schedule' : 'Schedule Email'}>
       <IconButton
         data-test="compose-schedule-email"
         inverse

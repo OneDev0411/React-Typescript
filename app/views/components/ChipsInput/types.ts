@@ -70,10 +70,4 @@ export interface ChipsInputProps<T> {
    * - {@link TextFieldProps#startAdornment startAdornment}
    */
   TextFieldProps?: TextFieldProps // TODO update type to take out excluded props
-
-  /**
-   * Label to be used **before** the input. If you want normal TextField labels
-   * provide it in {@link ChipsInputProps#TextFieldProps}.
-   */
-  label?: string
 }
