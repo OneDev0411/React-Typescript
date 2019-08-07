@@ -89,12 +89,12 @@ export function ImportContactsButton({ accounts, user }: Props) {
           <PopOver
             placement="bottom"
             show={isTooltipOpen}
-            dark
             popoverStyles={{ width: '350px', marginTop: '1.5rem' }}
             caption={
               <div>
                 <div style={{ marginTop: '0.5rem' }}>
                   <GoogleIcon style={{ margin: '0 1rem 0 0' }} />
+                  <OutlookIcon style={{ margin: '0 1rem 0 0' }} />
                   <CsvIcon />
                 </div>
                 <div>
