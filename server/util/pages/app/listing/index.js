@@ -4,6 +4,7 @@ import config from '../../../../../config/public'
 import listing_util from '../../../../../app/utils/listing'
 import getListing from '../../../../../app/models/listings/listing/get-listing'
 import { isUUID } from '../../../../../app/utils/validations/is-uuid/is-uuid.ts'
+import { getBrandByHostname } from '../../../../../app/models/brand/get-brand-by-hostname'
 
 const router = require('koa-router')()
 const app = new Koa()
@@ -19,7 +20,9 @@ router.get('/dashboard/mls/:id', async (ctx, next) => {
   }
 
   try {
-    const listing = await getListing(id)
+    const brand = await getBrandByHostname(ctx.hostname)
+
+    const listing = await getListing(id, brand && brand.id)
 
     ctx.state.openGraph = {
       has_og: true,
@@ -36,7 +39,7 @@ router.get('/dashboard/mls/:id', async (ctx, next) => {
       ctx.session = null
     }
   } catch (error) {
-    console.log('Listing Not Found!')
+    console.log('Listing Not Found!', error)
   }
 
   return next()
