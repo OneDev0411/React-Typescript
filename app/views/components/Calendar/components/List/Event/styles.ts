@@ -1,28 +1,23 @@
-import { makeStyles } from '@material-ui/styles'
-
-interface Props {
-  hasBorderBottom: boolean | null
-}
-
-export default makeStyles({
-  container: {
+export default {
+  centeredContainer: {
     display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '0 1rem',
-    transition: '0.1s ease-in background-color',
-    borderBottom: (props: Props) =>
-      props.hasBorderBottom ? '1px solid #dbe6fd' : 'none',
-    '&:hover': {
-      borderRadius: '2px',
-      backgroundColor: '#f6f6f6',
-      cursor: 'pointer'
-    }
+    alignItems: 'center'
+  },
+  title: {
+    fontSize: '1rem',
+    fontWeight: 500
+  },
+  subtitle: {
+    fontSize: '1rem',
+    fontWeight: 400,
+    letterSpacing: '0.25px',
+    paddingLeft: '10.5rem',
+    color: '#6a7589'
   },
   time: {
-    width: '9rem',
+    width: '6.5rem',
     fontSize: '1rem',
     letterSpacing: '0.25px',
     color: '#536280'
   }
-})
+}

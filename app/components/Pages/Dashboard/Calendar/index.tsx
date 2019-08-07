@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react'
 import debounce from 'lodash/debounce'
+import fecha from 'fecha'
 
 import List from 'components/Calendar'
 import { CalendarRef } from 'components/Calendar/types'
@@ -10,7 +11,15 @@ import { TodayButton } from './components/TodayButton'
 import { Filters } from './components/Filters'
 import CreateEvent from './components/CreateEvent'
 
-import { Container, Sidebar, Header, Main, SideHeader, Title } from './styled'
+import {
+  Container,
+  ListContainer,
+  Sidebar,
+  Header,
+  Main,
+  SideHeader,
+  Title
+} from './styled'
 
 const CalendarPage: React.FC = props => {
   const calendarRef = useRef<CalendarRef>(null)
@@ -20,6 +29,11 @@ const CalendarPage: React.FC = props => {
    * list will be active date
    */
   const [activeDate, setActiveDate] = useState<Date>(new Date())
+
+  /**
+   * keeps list of fetched days
+   */
+  const [fetchedDays, setFetchedDays] = useState<string[]>([])
 
   /**
    * current filters
@@ -34,6 +48,13 @@ const CalendarPage: React.FC = props => {
     calendarRef.current!.updateCrmEvents(event, type)
   }
 
+  const handleOnLoadEvents = (events: CalendarEventsList) =>
+    setFetchedDays(Object.keys(events))
+
+  const getEmptyDays = (day: Date) => {
+    return !fetchedDays.includes(fecha.format(day, 'YYYY/M/D'))
+  }
+
   return (
     <Container>
       <Sidebar>
@@ -45,6 +66,7 @@ const CalendarPage: React.FC = props => {
 
         <DatePicker
           fixedWeeks
+          modifiers={{ empty: getEmptyDays }}
           selectedDate={activeDate}
           onChange={handleDatePickerChange}
         />
@@ -53,14 +75,20 @@ const CalendarPage: React.FC = props => {
       <Main>
         <Header>
           <Filters onChange={setFilter} />
-          <CreateEvent onEventChange={handleEventChange} />
+          <CreateEvent
+            onEventChange={handleEventChange}
+            activeDate={activeDate}
+          />
         </Header>
 
-        <List
-          ref={calendarRef}
-          filter={filter}
-          onChangeActiveDate={debounce(setActiveDate, 100)}
-        />
+        <ListContainer className="u-scrollbar--thinner">
+          <List
+            ref={calendarRef}
+            filter={filter}
+            onChangeActiveDate={debounce(setActiveDate, 100)}
+            onLoadEvents={handleOnLoadEvents}
+          />
+        </ListContainer>
       </Main>
     </Container>
   )

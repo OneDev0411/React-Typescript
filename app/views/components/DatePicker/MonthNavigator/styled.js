@@ -14,7 +14,7 @@ export const Button = styled.span`
   cursor: pointer;
   display: flex;
   background-color: #d5dffe;
-  margin-left: 0.5rem;
+  margin-left: 0.25rem;
   border-radius: 100%;
 
   svg {

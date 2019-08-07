@@ -40,3 +40,7 @@ export const Title = styled.div`
 export const Main = styled.div`
   width: calc(100% - 18rem);
 `
+
+export const ListContainer = styled.div`
+  margin: 0 1.5rem;
+`

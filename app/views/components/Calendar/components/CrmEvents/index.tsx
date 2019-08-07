@@ -8,17 +8,23 @@ interface Props {
   isEventDrawerOpen: boolean
   event?: ICalendarEvent
   user: IUser
+  selectedDate?: Date | null
   onEventChange(event: IEvent, type: string): void
   onCloseEventDrawer(): void
 }
 
 export function CrmEvents(props: Props) {
+  if (!props.isEventDrawerOpen) {
+    return null
+  }
+
   const sharedProps = {
-    isOpen: props.isEventDrawerOpen,
+    isOpen: true,
     deleteCallback: (event: IEvent) => props.onEventChange(event, 'deleted'),
     onClose: props.onCloseEventDrawer,
     submitCallback: props.onEventChange,
-    user: props.user
+    user: props.user,
+    defaultSelectedDate: props.selectedDate
   }
 
   if (!props.event) {

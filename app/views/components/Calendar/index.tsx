@@ -20,7 +20,6 @@ import { IAppState } from 'reducers'
 
 import {
   viewAs,
-  // getActiveTeamACL, TODO: Add ACL
   getTeamAvailableMembers,
   getActiveTeam
 } from 'utils/user-teams'
@@ -46,6 +45,7 @@ interface Props {
   calendarRef?: RefObject<CalendarRef>
   user?: IUser
   onChangeActiveDate?: (activeDate: Date) => void
+  onLoadEvents?: (events: CalendarEventsList, range: NumberRange) => void
 }
 
 interface StateProps {
@@ -58,6 +58,7 @@ export function Calendar({
   viewAsUsers,
   filter = {},
   user,
+  onLoadEvents = () => null,
   onChangeActiveDate = () => null
 }: Props) {
   const previousProps = usePrevious<Partial<Props>>({ viewAsUsers, filter })
@@ -138,13 +139,15 @@ export function Calendar({
 
         // updates virtual list rows
         setListRows(createListRows(sortedEvents))
+
+        onLoadEvents(sortedEvents, apiOptions.range)
       } catch (e) {
         console.log(e)
       } finally {
         setIsLoading(false)
       }
     },
-    [events, filter, isLoading, viewAsUsers]
+    [events, filter, isLoading, onLoadEvents, viewAsUsers]
   )
 
   /**

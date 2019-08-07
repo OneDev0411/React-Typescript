@@ -116,6 +116,10 @@
   background-color: #eff1f1;
 }
 
+.DayPicker-Day--empty {
+  color: #ccc;
+}
+
 .DayPicker-Day--outside {
   cursor: default;
   color: #dce0e0;

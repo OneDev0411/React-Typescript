@@ -109,7 +109,7 @@ const CalendarList: React.FC<Props> = props => {
             ) : (
               <Event
                 key={index}
-                item={props.rows[index] as ICalendarEvent}
+                event={props.rows[index] as ICalendarEvent}
                 nextItem={props.rows[index + 1]}
                 style={style}
                 onClickCrmEventAssociations={setSelectedCrmEvent}

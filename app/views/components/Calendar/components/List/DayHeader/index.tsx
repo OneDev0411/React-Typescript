@@ -42,16 +42,14 @@ export function DayHeader(props: IProps) {
             {fecha.format(date, 'DD')}
           </strong>
 
-          {date.getFullYear() !== new Date().getFullYear() && (
-            <span>{date.getFullYear()}&nbsp;</span>
-          )}
-
           <span
             style={{
               textTransform: 'uppercase'
             }}
           >
-            {fecha.format(date, 'MMM, ddd')}
+            {date.getFullYear() !== new Date().getFullYear()
+              ? fecha.format(date, 'MMM YYYY, ddd')
+              : fecha.format(date, 'MMM, ddd')}
           </span>
         </div>
 
