@@ -1,4 +1,4 @@
 export type Recipient =
-  | { email: string; contact?: IContact }
+  | { email: string; contact?: INormalizedContact }
   | IContactList
   | IContactTag

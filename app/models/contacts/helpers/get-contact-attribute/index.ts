@@ -1,4 +1,10 @@
-export function getContactAttribute(contact, attributeDef, filter) {
+import { sortBy } from 'lodash'
+
+export function getContactAttribute(
+  contact: INormalizedContact | null,
+  attributeDef: IContactAttributeDef | null,
+  filter?
+) {
   if (!contact) {
     throw new Error('Contact object is required!')
   }
@@ -7,7 +13,7 @@ export function getContactAttribute(contact, attributeDef, filter) {
     throw new Error('Attribute definition is required!')
   }
 
-  let result = []
+  let result: ISubContact['attributes'][UUID] = []
 
   if (attributeDef.singular) {
     let attributes = contact.sub_contacts[0].attributes[attributeDef.id]
@@ -17,11 +23,9 @@ export function getContactAttribute(contact, attributeDef, filter) {
         attributes = attributes.filter(filter)
       }
 
-      const sortedByUpdatedAt = attributes.sort(
-        (a, b) => a.updated_at < b.updated_at
-      )
+      const sortedByUpdatedAt = sortBy(attributes, 'updated_at')
 
-      result = [sortedByUpdatedAt[0]]
+      result = [sortedByUpdatedAt.pop()!]
     }
   } else {
     contact.sub_contacts.forEach(subContact => {

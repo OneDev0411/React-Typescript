@@ -4,7 +4,7 @@ import { TextFieldProps } from '@material-ui/core/TextField'
 import { Observable } from 'rxjs'
 
 export interface ChipInputItem {
-  text: string
+  label: ReactNode | string
   hasError?: boolean
   avatar?: ReactNode | string
 }

@@ -17,6 +17,7 @@ import { EmailComposeDrawerProps, EmailFormValues } from '../types'
 
 interface State {
   isSendingEmail: boolean
+  topFieldsCollapsed: boolean
 }
 
 /**
@@ -46,6 +47,7 @@ class EmailComposeDrawer extends React.Component<
   }
 
   state = {
+    topFieldsCollapsed: false,
     isSendingEmail: false
   }
 
@@ -177,6 +179,10 @@ class EmailComposeDrawer extends React.Component<
     return uploadedFile.url
   }
 
+  collapseTopFields = () => this.setState({ topFieldsCollapsed: true })
+
+  expandTopFields = () => this.setState({ topFieldsCollapsed: false })
+
   render() {
     return (
       <FinalFormDrawer
@@ -201,21 +207,34 @@ class EmailComposeDrawer extends React.Component<
             hasDealsAttachments={this.props.hasDealsAttachments}
           />
         )}
-        render={() => (
+        render={({ values }) => (
           <Fragment>
-            {this.props.children}
+            {this.state.topFieldsCollapsed ? (
+              <div onClick={this.expandTopFields}>
+                {this.props.renderCollapsedFields(values)}
+              </div>
+            ) : (
+              this.props.renderFields(values)
+            )}
 
             <Field
-              data-test="email-subject"
               placeholder="Subject"
               name="subject"
               margin="normal"
+              InputProps={{
+                onFocus: this.collapseTopFields,
+                inputProps: {
+                  autoFocus: (values.recipients || []).length > 0,
+                  'data-test': 'email-subject'
+                }
+              }}
               fullWidth
               component={TextField}
             />
 
             <EmailBody
               ref={this.emailBodyRef}
+              DraftEditorProps={{ onFocus: this.collapseTopFields }}
               hasSignatureByDefault={this.props.hasSignatureByDefault}
               hasStaticBody={this.props.hasStaticBody}
               hasTemplateVariables={this.props.hasTemplateVariables}

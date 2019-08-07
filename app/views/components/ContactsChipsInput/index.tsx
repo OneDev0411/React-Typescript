@@ -5,7 +5,7 @@ import { Observable } from 'rxjs'
 import { of } from 'rxjs/observable/of'
 import { combineLatest } from 'rxjs/observable/combineLatest'
 import { fromPromise } from 'rxjs/observable/fromPromise'
-import { startWith } from 'rxjs/operators'
+import { map, startWith } from 'rxjs/operators'
 
 import { useControllableState } from 'react-use-controllable-state/dist'
 
@@ -104,16 +104,20 @@ function ContactsChipsInput({
       ...[
         of(filterTags(tags, searchTerm)),
         of(filterLists(lists, searchTerm)),
-        fromPromise(searchContacts(searchTerm)).map(result => {
-          const contacts = normalizeContactAttribute(result)
+        searchTerm
+          ? fromPromise(searchContacts(searchTerm)).pipe(
+              map(result => {
+                const contacts = normalizeContactAttribute(result)
 
-          return contacts
-            .filter(contact => contact.summary!.email)
-            .map(contact => ({
-              contact,
-              email: contact.summary!.email
-            }))
-        })
+                return contacts
+                  .filter(contact => contact.summary!.email)
+                  .map(contact => ({
+                    contact,
+                    email: contact.summary!.email
+                  }))
+              })
+            )
+          : of([])
         // @ts-ignore something is wrong with pipe typing
       ].map(observable => observable.pipe(startWith([]))),
       (...values) => values.flat()

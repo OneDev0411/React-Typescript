@@ -17,6 +17,11 @@ export const MaterialUiGlobalOverrides = withStyles({
     },
     '.MuiTab-root': {
       minWidth: '8rem'
+    },
+    '.MuiAvatar-root': {
+      background: '#000',
+      color: '#fff',
+      fill: '#fff'
     }
   }
 })(() => null)

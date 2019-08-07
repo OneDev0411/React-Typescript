@@ -20,8 +20,6 @@ import useObservable from 'react-use/lib/useObservable'
 import { of } from 'rxjs/observable/of'
 import { useDebounce } from 'use-debounce'
 
-import { InputProps } from '@material-ui/core/Input'
-
 import { ChipsInputProps } from './types'
 import Avatar from '../Avatar'
 import { InputWithStartAdornment } from './InputWithStartAdornment'
@@ -29,14 +27,15 @@ import { InputWithStartAdornment } from './InputWithStartAdornment'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     chip: {
-      margin: theme.spacing(0.5, 0.25)
+      margin: theme.spacing(0.75, 0.25)
     },
     inputRoot: {
       alignItems: 'baseline'
     },
     inputInput: {
       width: 'auto',
-      flexGrow: 1
+      flexGrow: 1,
+      paddingBottom: `${theme.spacing(1.1)}px`
     },
     suggestionList: {
       minWidth: '20rem',
@@ -108,7 +107,13 @@ export function ChipsInput<T>({
       createFromStringAndClearInput()
     }
   }
-  const onBlur = () => {
+  const handleFocus = (
+    event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    if (TextFieldProps.inputProps && TextFieldProps.inputProps.onBlur) {
+      TextFieldProps.inputProps.onBlur(event)
+    }
+
     if (inputValue && allowAddOnBlur) {
       createFromStringAndClearInput()
     }
@@ -119,17 +124,17 @@ export function ChipsInput<T>({
 
     return (
       <Chip
-        key={`${index}-${chip.text}`}
+        key={`${index}-${chip.label}`}
         className={classNames(classes.chip, ChipProps.className)}
         size="small"
         {...ChipProps}
-        label={chip.text}
+        label={chip.label}
         onDelete={readOnly ? undefined : () => deleteChip(item)}
       />
     )
   })
 
-  const onInputChange = (event: React.ChangeEvent<{ value: string }>) => {
+  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value)
   }
 
@@ -149,14 +154,6 @@ export function ChipsInput<T>({
         return getSuggestions(debouncedInputValue)
       }, [getSuggestions, debouncedInputValue])
     ) || []
-
-  const TextFieldInputProps: InputProps = {
-    ...(TextFieldProps.InputProps || {}),
-    readOnly,
-    onKeyDown,
-    onBlur,
-    onChange: onInputChange
-  }
 
   function createFromStringAndClearInput() {
     const newItem = createFromString(inputValue)
@@ -181,26 +178,31 @@ export function ChipsInput<T>({
         highlightedIndexRef.current =
           suggestedItems.length > 0 && isOpen ? highlightedIndex : null
 
+        const { onBlur, onChange, onFocus, ...inputProps } = getInputProps({
+          ...(TextFieldProps.inputProps || {}),
+          onKeyDown,
+          onBlur: handleFocus,
+          onChange: onInputChange
+        })
+
         return (
           <div className={classes.container}>
-            {/*
-            {label && (
-              <FormLabel className={classes.label} {...getLabelProps()}>
-                {label}
-              </FormLabel>
-            )}
-*/}
             <TextField
               inputRef={inputRef}
               fullWidth
               {...TextFieldProps}
+              // eslint-disable-next-line react/jsx-no-duplicate-props
               InputProps={{
-                ...getInputProps(TextFieldInputProps as any),
+                ...(TextFieldProps.InputProps || {}),
+                onBlur,
+                onChange,
+                onFocus,
                 inputComponent: InputWithStartAdornment,
                 inputProps: {
-                  ...(TextFieldInputProps.inputProps || {}),
+                  ...inputProps,
                   adornment: renderedChips
                 },
+                readOnly,
                 classes: {
                   root: classes.inputRoot,
                   input: classes.inputInput
@@ -210,7 +212,7 @@ export function ChipsInput<T>({
               }}
             />
             <Popper
-              open={isOpen}
+              open
               anchorEl={inputRef.current}
               popperRef={popperRef}
               placement="bottom-start"
@@ -219,10 +221,6 @@ export function ChipsInput<T>({
               <Paper square className={classes.suggestionList}>
                 {suggestedItems.map((suggestedItem, index) => {
                   const suggestion = itemToSuggestion(suggestedItem)
-
-                  if (suggestion.avatar) {
-                    console.log('suggestion.avatar', suggestion.avatar)
-                  }
 
                   return (
                     <ListItem

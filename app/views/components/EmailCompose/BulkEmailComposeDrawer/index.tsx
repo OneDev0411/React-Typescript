@@ -16,6 +16,7 @@ import ContactsChipsInput from 'components/ContactsChipsInput'
 import { normalizeRecipients } from '../helpers/normalize-recepients'
 import { From } from '../fields/From'
 import { EmailComposeDrawerProps, EmailFormValues } from '../types'
+import { CollapsedRecipients } from '../components/CollapsedRecipients'
 
 const LockIcon = styled(IconLock)`
   vertical-align: text-bottom;
@@ -44,21 +45,12 @@ export function BulkEmailComposeDrawer({
       })
     )
 
-  return (
-    <EmailComposeDrawer
-      {...otherProps}
-      sendEmail={sendEmail}
-      getSendEmailResultMessages={form =>
-        getSendEmailResultMessages(
-          (form.recipients || []).length,
-          !!form.due_at
-        )
-      }
-    >
+  const renderFields = () => (
+    <>
       <Field component={From} name="from" />
 
       <Field
-        labelText={
+        label={
           <>
             Recipients
             <Tooltip caption="Emails will be sent individually">
@@ -70,6 +62,27 @@ export function BulkEmailComposeDrawer({
         name="recipients"
         component={ContactsChipsInput as any}
       />
-    </EmailComposeDrawer>
+    </>
+  )
+  const renderCollapsedFields = (values: EmailFormValues) => (
+    <CollapsedRecipients
+      recipients={values.recipients || []}
+      label="Recipients"
+    />
+  )
+
+  return (
+    <EmailComposeDrawer
+      {...otherProps}
+      sendEmail={sendEmail}
+      getSendEmailResultMessages={form =>
+        getSendEmailResultMessages(
+          (form.recipients || []).length,
+          !!form.due_at
+        )
+      }
+      renderCollapsedFields={renderCollapsedFields}
+      renderFields={renderFields}
+    />
   )
 }

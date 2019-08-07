@@ -11,6 +11,7 @@ import { idIsUUID } from '../Forms/MultipleContactsSelect/AddRecipient/helpers'
 import ListIcon from '../SvgIcons/List/ListIcon'
 
 import TagIcon from '../SvgIcons/Tag/TagIcon'
+import { RecipientToString } from './RecipientToString'
 
 export function isContactList(input: any): input is IContactList {
   return input.type === 'contact_list'
@@ -56,19 +57,18 @@ export function recipientToSuggestion(recipient: Recipient): Suggestion {
 export function recipientToChip(recipient: Recipient): ChipInputItem {
   if (isContactList(recipient)) {
     return {
-      text: recipient.name
+      label: recipient.name
     }
   }
 
   if (isContactTag(recipient)) {
     return {
-      text: recipient.text
+      label: recipient.text
     }
   }
 
-  // TODO handle logic chip text, based on gmail
   return {
-    text: recipient.email
+    label: <RecipientToString recipient={recipient} />
   }
 }
 

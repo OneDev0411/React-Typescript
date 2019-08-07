@@ -8,7 +8,7 @@ import { Button } from '@material-ui/core'
 import { getContact } from 'models/contacts/get-contact'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
-import normalizeContactForEmailCompose from 'models/email-compose/helpers/normalize-contact'
+import { normalizeContactForEmailCompose } from 'models/email-compose/helpers/normalize-contact'
 
 import { confirmation } from 'actions/confirmation'
 
@@ -205,13 +205,7 @@ class SendContactCard extends React.Component {
   }
 
   get Recipients() {
-    return normalizeContactForEmailCompose(
-      this.state.contact,
-      this.props.attributeDefs,
-      {
-        readOnly: true
-      }
-    )
+    return normalizeContactForEmailCompose(this.state.contact)
   }
 
   closeSocialDrawer = () =>
@@ -299,10 +293,9 @@ class SendContactCard extends React.Component {
   }
 }
 
-function mapStateToProps({ user, contacts }) {
+function mapStateToProps({ user }) {
   return {
-    user,
-    attributeDefs: contacts.attributeDefs
+    user
   }
 }
 

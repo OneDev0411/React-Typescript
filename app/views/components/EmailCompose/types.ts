@@ -2,6 +2,13 @@ import { ReactNode } from 'react'
 
 import { Recipient } from '../ContactsChipsInput/types'
 
+export interface EmailComposeRenderProps {
+  /**
+   * whether to show in minimized mode or not. When subject or body
+   * are focused, top fields go to minimized mode
+   */
+  minimized: boolean
+}
 export interface EmailFormValues {
   attachments: any
   recipients: Recipient[] | undefined
@@ -37,5 +44,6 @@ export interface EmailComposeDrawerProps {
 
   dispatch: any // Extending DispatchProps seems to have problems
   signature: string
-  children: ReactNode
+  renderCollapsedFields: (values: EmailFormValues) => ReactNode
+  renderFields: (values: EmailFormValues) => ReactNode
 }

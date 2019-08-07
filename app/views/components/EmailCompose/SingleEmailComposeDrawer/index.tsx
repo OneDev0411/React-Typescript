@@ -1,6 +1,6 @@
 import { Field } from 'react-final-form'
 
-import React, { useState } from 'react'
+import React, { HTMLProps, useState } from 'react'
 
 import { InputProps } from '@material-ui/core/Input'
 
@@ -16,8 +16,9 @@ import ContactsChipsInput from 'components/ContactsChipsInput'
 
 import { normalizeRecipients } from '../helpers/normalize-recepients'
 import { From } from '../fields/From'
-import { EmailComposeDrawerProps } from '../types'
+import { EmailComposeDrawerProps, EmailFormValues } from '../types'
 import { CcBccButtons } from '../fields/CcBccButtons'
+import { CollapsedRecipients } from '../components/CollapsedRecipients'
 
 interface Props extends EmailComposeDrawerProps {
   getEmail?: (values: IEmailCampaignInput) => IEmailCampaignInput
@@ -46,16 +47,8 @@ export function SingleEmailComposeDrawer({
       })
     )
 
-  return (
-    <EmailComposeDrawer
-      {...otherProps}
-      hasSignatureByDefault
-      hasTemplateVariables
-      sendEmail={handleSendEmail}
-      getSendEmailResultMessages={form =>
-        getSendEmailResultMessages(1, !!form.due_at)
-      }
-    >
+  const renderFields = (values: EmailFormValues) => (
+    <>
       <Field
         component={From}
         name="from"
@@ -80,14 +73,9 @@ export function SingleEmailComposeDrawer({
         readOnly={disableAddNewRecipient}
         TextFieldProps={
           {
-            InputProps: {
-              onBlur: () => {
-                console.log('blur')
-              },
-              inputProps: {
-                autoFocus: true
-              }
-            } as InputProps
+            inputProps: {
+              autoFocus: true
+            } as HTMLProps<HTMLInputElement>
           } as TextFieldProps
         }
       />
@@ -97,6 +85,23 @@ export function SingleEmailComposeDrawer({
       {hasBcc && (
         <Field label="Bcc" name="bcc" component={ContactsChipsInput as any} />
       )}
-    </EmailComposeDrawer>
+    </>
+  )
+  const renderCollapsedFields = (values: EmailFormValues) => (
+    <CollapsedRecipients recipients={values.recipients || []} label="To" />
+  )
+
+  return (
+    <EmailComposeDrawer
+      {...otherProps}
+      hasSignatureByDefault
+      hasTemplateVariables
+      sendEmail={handleSendEmail}
+      getSendEmailResultMessages={form =>
+        getSendEmailResultMessages(1, !!form.due_at)
+      }
+      renderCollapsedFields={renderCollapsedFields}
+      renderFields={renderFields}
+    />
   )
 }
