@@ -95,7 +95,11 @@ function select_address(address): string {
 
 function socialMediasInContact(contact): SocialMediasType[] {
   const types = Object.keys(SocialMediasEnum)
-  if (!contact.attributes) return []
+
+  if (!contact.attributes) {
+    return []
+  }
+
   return contact.attributes
     .filter(attr => types.includes(attr.attribute_type))
     .map(social => ({ type: social.attribute_type, url: social.text }))
@@ -127,6 +131,7 @@ function extract_required_data_from_contact(contactResponse): ProfileType {
     }))
   }
 }
+
 // Getting contact from server and fill the predefined object
 export async function get_contact_data(
   contact_id

@@ -3,6 +3,7 @@ import React from 'react'
 import IconFacebook from 'components/SvgIcons/Facebook/IconFacebook'
 import IconLinkedIn from 'components/SvgIcons/LinkedIn/IconLinkedIn'
 import IconInstagram from 'components/SvgIcons/Instagram/IconInstagram'
+
 import { SocialMediasType } from './useProfile'
 import { SocialMediasEnum } from './types'
 
@@ -16,7 +17,7 @@ function MiniContactIcons(props: MiniContactIconsType) {
   }
 
   return (
-    <div class="person-socials">
+    <div className="person-socials">
       {props.socials.map(social => {
         switch (social.type) {
           case SocialMediasEnum.facebook:
