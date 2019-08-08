@@ -12,12 +12,12 @@ interface StateProps {
 }
 
 interface Props {
-  user?: IUser
+  user: IUser
   activeDate: Date | null
   onEventChange: (event: IEvent, type: string) => void
 }
 
-export function CreateEvent(props: Props) {
+export function CreateEvent(props: Props & StateProps) {
   const [showEventDrawer, setShowEventDrawer] = useState(false)
 
   const handleEventChange = (event: IEvent, type: string) => {
