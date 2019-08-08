@@ -15,7 +15,7 @@ export function EventActions({ event }: Props) {
           size: 'small'
         }}
       >
-        Send a Card
+        Send Gift Card
       </SendContactCard>
     )
   }
