@@ -74,8 +74,12 @@ export const TemplatesListContainer = styled.div`
         }
       }
 
-      & button:nth-child(2) {
-        margin-left: 1rem;
+      & button {
+        margin-right: 1rem;
+      }
+
+      & button:last-child {
+        margin-right: 0;
       }
     }
 

@@ -9,11 +9,7 @@ import { Container, NameContainer, Title, DateTime } from './styled'
 
 export function SelectItemDrawer(props) {
   return (
-    <OverlayDrawer
-      isOpen={props.isOpen}
-      onClose={props.onClose}
-      showFooter={false}
-    >
+    <OverlayDrawer open={props.isOpen} onClose={props.onClose}>
       <OverlayDrawer.Header title={props.title} />
       <OverlayDrawer.Body>
         {props.items.map(item => (

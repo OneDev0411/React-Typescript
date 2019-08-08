@@ -142,7 +142,7 @@ class TagsOverlay extends React.Component {
     if (/\S/.test(newTagValue)) {
       return this.props.confirmation({
         description:
-          "We noticed you have un-added tag. Please select the 'Add' button before saving", // eslint-disable-line
+          "We noticed you have un-added tag. Please select the 'Add' button before saving",
         hideCancelButton: true,
         confirmLabel: 'OK'
       })
@@ -401,10 +401,10 @@ class TagsOverlay extends React.Component {
     const drawerHeader = this.getDrawerHeader()
 
     return (
-      <OverlayDrawer isOpen={isOpen} width={50}>
-        <OverlayDrawer.Header
-          render={() => <Header title={drawerHeader} onClose={closeOverlay} />}
-        />
+      <OverlayDrawer open={isOpen} width={50}>
+        <OverlayDrawer.Header>
+          <Header title={drawerHeader} onClose={closeOverlay} />
+        </OverlayDrawer.Header>
 
         <OverlayDrawer.Body>
           <SubHeaderContainer>

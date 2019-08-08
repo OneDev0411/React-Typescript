@@ -98,7 +98,7 @@ class CustomAttributeDrawer extends React.Component {
                   title: 'Number',
                   value: 'number',
                   hint:
-                    'For custom fields that are ONLY number based like \'Age\' or \'Years retired\''
+                    "For custom fields that are ONLY number based like 'Age' or 'Years retired'"
                 },
                 {
                   title: 'Text',

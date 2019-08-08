@@ -102,9 +102,8 @@ export class FinalFormDrawer extends React.Component {
               onKeyPress={this.handleKeyPress}
             >
               <Drawer
-                isOpen={this.props.isOpen}
+                open={this.props.isOpen}
                 onClose={e => this.handleOnClose(e, formProps)}
-                showFooter={this.props.showFooter}
                 closeOnBackdropClick={this.props.closeDrawerOnBackdropClick}
               >
                 <Drawer.Header title={this.props.title} />
@@ -114,28 +113,30 @@ export class FinalFormDrawer extends React.Component {
                     : this.props.children}
                 </Drawer.Body>
 
-                <Drawer.Footer rowReverse>
-                  {this.props.footerRenderer ? (
-                    this.props.footerRenderer({
-                      isSubmitDisabled,
-                      formProps,
-                      submitting,
-                      handleSubmit: this.handleSubmit
-                    })
-                  ) : (
-                    <ActionButton
-                      type="submit"
-                      isSubmitDisabled={
-                        isSubmitDisabled || submitting || formProps.validating
-                      }
-                      onClick={this.handleSubmit}
-                    >
-                      {submitting
-                        ? this.props.submittingButtonLabel
-                        : this.props.submitButtonLabel}
-                    </ActionButton>
-                  )}
-                </Drawer.Footer>
+                {this.props.showFooter && (
+                  <Drawer.Footer rowReverse>
+                    {this.props.footerRenderer ? (
+                      this.props.footerRenderer({
+                        isSubmitDisabled,
+                        formProps,
+                        submitting,
+                        handleSubmit: this.handleSubmit
+                      })
+                    ) : (
+                      <ActionButton
+                        type="submit"
+                        isSubmitDisabled={
+                          isSubmitDisabled || submitting || formProps.validating
+                        }
+                        onClick={this.handleSubmit}
+                      >
+                        {submitting
+                          ? this.props.submittingButtonLabel
+                          : this.props.submitButtonLabel}
+                      </ActionButton>
+                    )}
+                  </Drawer.Footer>
+                )}
               </Drawer>
             </form>
           )

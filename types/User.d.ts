@@ -9,8 +9,9 @@ declare interface IUserBase {
   profile_image_url: string | null
   cover_image_url: string | null
   password: string
+  email_signature: string | null
 }
-declare interface IUserInput extends IUserBase {
+declare interface IUserInput extends Partial<IUserBase> {
   agent?: UUID
   brand?: UUID | null
   skip_confirmation?: boolean
@@ -35,6 +36,8 @@ declare interface IUser extends IUserBase {
   teams: IUserTeam[]
 
   agent?: IAgent
+
+  user_type: 'Agent' | 'Client' | 'Admin'
 }
 
 declare type TUserLogicalType =
@@ -62,4 +65,5 @@ declare interface IUserTeam {
   acl: IPermission[]
   type: 'user_role'
   settings: StringMap<any>
+  brand_settings: StringMap<any> | null
 }

@@ -92,7 +92,9 @@ export const load = async () => {
       }
 
       if (!fontSizePickerOptions.disabled) {
-        ReactDOM.unmountComponentAtNode(fontSizePickerContainer)
+        if (fontSizePickerContainer) {
+          ReactDOM.unmountComponentAtNode(fontSizePickerContainer)
+        }
 
         if (isElementAllowed(selected, fontSizePickerOptions.conditions)) {
           ReactDOM.render(

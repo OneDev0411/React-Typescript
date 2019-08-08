@@ -102,11 +102,19 @@ class SectionWithFields extends React.Component {
       )
     }))
 
-  updateContact = async attribute_def => {
+  shouldUpdateContact = attribute_def => {
     if (
-      this.props.isPartner ||
-      !fieldsNeedUpdateContact.includes(attribute_def.name)
+      !this.props.isPartner &&
+      fieldsNeedUpdateContact.includes(attribute_def.name)
     ) {
+      return true
+    }
+
+    return false
+  }
+
+  updateContact = async attribute_def => {
+    if (!this.shouldUpdateContact(attribute_def)) {
       return
     }
 
@@ -115,7 +123,10 @@ class SectionWithFields extends React.Component {
     try {
       const response = await getContact(contact.id)
 
-      this.props.submitCallback(normalizeContact(response.data))
+      this.props.submitCallback({
+        ...normalizeContact(response.data),
+        deals: contact.deals
+      })
     } catch (error) {
       console.log(error)
     }
@@ -226,7 +237,7 @@ class SectionWithFields extends React.Component {
     }
   }
 
-  save = (attribute_def, { id, cuid, ...data }) => {
+  save = (attribute, { id, cuid, ...data }) => {
     if (id == null && cuid == null) {
       return
     }
@@ -235,8 +246,15 @@ class SectionWithFields extends React.Component {
       data = { ...data, is_partner: true }
     }
 
+    const { attribute_def } = attribute
+
     if (id) {
-      this.update(id, data, attribute_def)
+      // API doesnt like emtpy string https://gitlab.com/rechat/web/issues/2932
+      if (data[attribute_def.data_type] === '') {
+        this.deleteFromApi(attribute)
+      } else {
+        this.update(id, data, attribute_def)
+      }
     } else {
       this.insert(cuid, data, attribute_def)
     }
@@ -284,31 +302,33 @@ class SectionWithFields extends React.Component {
     }
   }
 
-  deleteFromApi = async attribute => {
-    let backupList
+  deleteFromApi = attribute => {
+    let backupList = this.state.orderedAttributes
 
-    this.setState(state => {
-      backupList = state.orderedAttributes
+    this.setState(
+      state => {
+        return this.deleteFromState(state, attribute)
+      },
+      async () => {
+        try {
+          const { contact } = this.props
 
-      return this.deleteFromState(state, attribute)
-    })
+          await deleteAttribute(contact.id, attribute.id)
 
-    try {
-      const { contact } = this.props
-      const response = await deleteAttribute(contact.id, attribute.id)
+          this.props.notify({
+            status: 'success',
+            dismissAfter: 4000,
+            message: `${attribute.attribute_def.label ||
+              attribute.attribute_def.name} deleted.`
+          })
 
-      this.props.notify({
-        status: 'success',
-        dismissAfter: 4000,
-        message: `${attribute.attribute_def.label ||
-          attribute.attribute_def.name} deleted.`
-      })
-
-      this.props.submitCallback(normalizeContact(response.data))
-    } catch (error) {
-      console.log(error)
-      this.setState({ orderedAttributes: backupList })
-    }
+          this.updateContact(attribute.attribute_def)
+        } catch (error) {
+          console.log(error)
+          this.setState({ orderedAttributes: backupList })
+        }
+      }
+    )
   }
 
   deleteHandler = attribute => {
@@ -376,7 +396,7 @@ class SectionWithFields extends React.Component {
           key={cuid()}
           iconLeft={AddIcon}
           onClick={this.openCustomAttributeDrawer}
-          style={{ marginBottom: '1em' }}
+          style={{ margin: '1em 0' }}
           text={`Add custom ${addCustomAttributeButtonText}`}
         />
       )
@@ -390,7 +410,7 @@ class SectionWithFields extends React.Component {
 
     return (
       <Section title={this.props.title || section}>
-        <div style={{ padding: '0 1.5rem', display: 'block' }}>
+        <div style={{ padding: '0 1rem', display: 'block' }}>
           {this.renderFields()}
         </div>
 

@@ -79,15 +79,12 @@ class TaskCreate extends React.Component {
     return (
       <Fragment>
         <OverlayDrawer
-          isOpen={
-            this.props.isOpen && this.state.showCustomTaskDrawer === false
-          }
+          open={this.props.isOpen && this.state.showCustomTaskDrawer === false}
           onClose={this.handleClose}
-          showFooter={false}
         >
           <OverlayDrawer.Header
             title="Add a folder"
-            renderMenu={this.renderDrawerHeaderMenu}
+            menu={this.renderDrawerHeaderMenu()}
           />
           <OverlayDrawer.Body>
             {this.state.isSaving ? (

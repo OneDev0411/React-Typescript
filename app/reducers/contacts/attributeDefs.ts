@@ -3,25 +3,25 @@ import { combineReducers } from 'redux'
 
 import * as actionTypes from '../../constants/contacts'
 
-interface ByIdState {
+interface IByIdState {
   [attributeId: string]: IContactAttributeDef
 }
 
-interface ByNameState {
+interface IByNameState {
   [attributeName: string]: UUID
 }
 
-interface BySectionState {
+interface IBySectionState {
   [sectionName: string]: UUID[]
 }
 
-export interface AttributeDefsState {
-  byId: ByIdState
-  byName: ByNameState
-  bySection: BySectionState
+export interface IAttributeDefsState {
+  byId: IByIdState
+  byName: IByNameState
+  bySection: IBySectionState
 }
 
-function byId(state: ByIdState = {}, action): ByIdState {
+function byId(state: IByIdState = {}, action): IByIdState {
   switch (action.type) {
     case actionTypes.FETCH_CONTACT_ATTR_DEFS_SUCCESS:
     case actionTypes.CREATE_CONTACT_ATTR_DEF_SUCCESS:
@@ -32,7 +32,7 @@ function byId(state: ByIdState = {}, action): ByIdState {
   }
 }
 
-function byName(state: ByNameState = {}, action): ByNameState {
+function byName(state: IByNameState = {}, action): IByNameState {
   switch (action.type) {
     case actionTypes.FETCH_CONTACT_ATTR_DEFS_SUCCESS:
       const names = {}
@@ -50,7 +50,7 @@ function byName(state: ByNameState = {}, action): ByNameState {
   }
 }
 
-function bySection(state: BySectionState = {}, action): BySectionState {
+function bySection(state: IBySectionState = {}, action): IBySectionState {
   switch (action.type) {
     case actionTypes.FETCH_CONTACT_ATTR_DEFS_SUCCESS:
     case actionTypes.CREATE_CONTACT_ATTR_DEF_SUCCESS:
@@ -71,7 +71,7 @@ function bySection(state: BySectionState = {}, action): BySectionState {
   }
 }
 
-export const attributeDefs = combineReducers({
+export const attributeDefs = combineReducers<IAttributeDefsState>({
   byId,
   byName,
   bySection
@@ -85,7 +85,7 @@ export function selectDefinitions(state) {
   return Object.values(state.byId)
 }
 
-export function selectDefinitionByName(state, name) {
+export function selectDefinitionByName(state: IAttributeDefsState, name) {
   const id = state.byName[name]
 
   return id ? state.byId[id] : null

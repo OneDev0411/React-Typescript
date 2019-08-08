@@ -103,13 +103,13 @@ const validate = values => {
     errors.new_password = 'Your password must be at least 6 characters.'
   } else if (values.old_password === values.new_password) {
     errors.new_password =
-      "Your new password can't be match with your old password!" // eslint-disable-line
+      "Your new password can't be match with your old password!"
   }
 
   if (!values.confirm_password) {
     errors.confirm_password = 'Required'
   } else if (values.confirm_password !== values.new_password) {
-    errors.confirm_password = "Your passwords don\'t match" // eslint-disable-line
+    errors.confirm_password = "Your passwords don't match"
   }
 
   return errors

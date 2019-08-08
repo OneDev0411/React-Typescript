@@ -2,20 +2,21 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import {
-  getSavedSegments,
+  // eslint-disable-next-line import/named
+  changeActiveFilterSegment,
   deleteFilterSegment,
-  changeActiveFilterSegment
+  getSavedSegments
 } from 'actions/filter-segments'
 
 import {
-  isListFetched,
-  selectActiveSavedSegment,
+  getDefaultList,
   getSegments,
-  getDefaultList
+  isListFetched,
+  selectActiveSavedSegment
 } from 'reducers/filter-segments'
 
 import LoadingIcon from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-import { ListTitle, ListItem } from 'components/SlideMenu/Menu/styled'
+import { ListItem, ListTitle } from 'components/SlideMenu/Menu/styled'
 import { ShowMoreLess } from 'components/ShowMoreLess'
 
 import Item from './Item'
@@ -113,15 +114,13 @@ class SegmentsList extends React.Component {
 function mapStateToProps(state, { name, getPredefinedLists }) {
   const { filterSegments } = state[name]
 
+  const predefinedLists = getPredefinedLists(name, state)
+
   return {
     isListFetched: isListFetched(filterSegments),
     isFetching: filterSegments.isFetching,
-    list: getSegments(filterSegments, name, getPredefinedLists),
-    activeItem: selectActiveSavedSegment(
-      filterSegments,
-      name,
-      getPredefinedLists
-    )
+    list: getSegments(filterSegments, name, predefinedLists),
+    activeItem: selectActiveSavedSegment(filterSegments, name, predefinedLists)
   }
 }
 

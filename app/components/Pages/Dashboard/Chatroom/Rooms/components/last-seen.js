@@ -1,27 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import moment from 'moment'
+
+import { RelativeTime } from 'components/RelativeTime'
 
 class LastSeen extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      counter: 0
-    }
-  }
-
-  componentDidMount() {
-    this.interval = setInterval(this.tick.bind(this), 60 * 1000)
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.interval)
-  }
-
-  tick() {
-    const { counter } = this.state
-
-    this.setState({ counter: counter + 1 })
   }
 
   getLastSeenAt(states, user) {
@@ -35,7 +19,7 @@ class LastSeen extends React.Component {
       return 'Offline'
     }
 
-    return this.agoTime(user.last_seen_at)
+    return <RelativeTime time={user.last_seen_at} />
   }
 
   getIcon(user) {
@@ -52,10 +36,6 @@ class LastSeen extends React.Component {
         style={{ fontSize: '16px', marginRight: '5px' }}
       />
     )
-  }
-
-  agoTime(time) {
-    return moment.unix(time).fromNow()
   }
 
   render() {

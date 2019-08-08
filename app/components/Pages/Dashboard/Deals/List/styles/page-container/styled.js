@@ -10,7 +10,3 @@ export const GridContainer = styled.div`
   overflow: auto;
   padding: 0 1.5rem;
 `
-
-export const SearchContainer = styled.div`
-  margin-bottom: 3rem;
-`

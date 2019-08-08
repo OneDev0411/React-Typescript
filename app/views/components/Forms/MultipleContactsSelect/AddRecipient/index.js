@@ -195,6 +195,10 @@ class AddRecipient extends React.Component {
 
     // Segments result
     const filteredList = new Fuse(
+      /**
+       * This is no longer needed, considering the latest changes to
+       * {@link getSegments}. Predefined lists are not included in segmentsList
+       */
       this.props.segmentsList.filter(idIsUUID),
       segmentsFuseOptions
     )

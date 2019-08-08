@@ -5,7 +5,7 @@ import Modal from '../BareModal'
 import ActionBar from './ActionBar'
 import UserEntry from './UserEntry'
 import ConfirmationModalContext from './context'
-import { initialConfimationModal } from './context/Provider'
+import { initialConfirmationModal } from './context/initial-confirmation-modal'
 /*
  *
  * This is redux-free confirmation modal.
@@ -26,7 +26,7 @@ function ConfirmationModal() {
     }
 
     // reset context values
-    confirmation.setConfirmationModal(initialConfimationModal)
+    confirmation.setConfirmationModal(initialConfirmationModal)
   }
 
   const handleConfirm = () => {
@@ -37,7 +37,7 @@ function ConfirmationModal() {
     }
 
     // reset context values
-    confirmation.setConfirmationModal(initialConfimationModal)
+    confirmation.setConfirmationModal(initialConfirmationModal)
   }
 
   return (
@@ -48,30 +48,40 @@ function ConfirmationModal() {
       onRequestClose={handleCancel}
       noFooter
     >
-      <div
-        className="confirmation-title"
-        dangerouslySetInnerHTML={{
-          __html: confirmation.message
-        }}
-      />
+      {confirmation.isShow && (
+        <>
+          <div
+            className="confirmation-title"
+            dangerouslySetInnerHTML={{
+              __html: confirmation.message
+            }}
+            data-test="confirmation-modal-title"
+          />
 
-      {confirmation.description && (
-        <div className="confirmation-descr">{confirmation.description}</div>
+          {confirmation.description && (
+            <div
+              className="confirmation-descr"
+              data-test="confirmation-modal-description"
+            >
+              {confirmation.description}
+            </div>
+          )}
+
+          <UserEntry
+            isShow={confirmation.needsUserEntry}
+            inputDefaultValue={confirmation.inputDefaultValue}
+            inputPlaceholder={confirmation.inputPlaceholder}
+            multilineEntry={confirmation.multilineEntry}
+            ref={entryInputRef}
+          />
+
+          <ActionBar
+            confirmation={confirmation}
+            onCancel={handleCancel}
+            onConfirm={handleConfirm}
+          />
+        </>
       )}
-
-      <UserEntry
-        isShow={confirmation.needsUserEntry}
-        inputDefaultValue={confirmation.inputDefaultValue}
-        inputPlaceholder={confirmation.inputPlaceholder}
-        multilineEntry={confirmation.multilineEntry}
-        ref={entryInputRef}
-      />
-
-      <ActionBar
-        confirmation={confirmation}
-        onCancel={handleCancel}
-        onConfirm={handleConfirm}
-      />
     </Modal>
   )
 }

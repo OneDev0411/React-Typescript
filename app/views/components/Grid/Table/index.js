@@ -101,32 +101,38 @@ class Grid extends React.Component {
 
     return (
       <div>
-        <ToolbarContainer isToolbarSticky={this.props.isToolbarSticky}>
-          <TableSummary
-            Component={this.props.summary.render}
-            entityName={this.props.summary.entityName}
-            style={this.props.summary.style}
-            totalRowsCount={this.props.summary.total || this.props.data.length}
-            selectedRowsCount={
-              this.props.summary.selectedRowsCount ||
-              (this.selectablePlugin ? this.selectablePlugin.SelectedCount : 0)
-            }
-          />
+        {this.props.showToolbar && (
+          <ToolbarContainer isToolbarSticky={this.props.isToolbarSticky}>
+            <TableSummary
+              Component={this.props.summary.render}
+              entityName={this.props.summary.entityName}
+              style={this.props.summary.style}
+              totalRowsCount={
+                this.props.summary.total || this.props.data.length
+              }
+              selectedRowsCount={
+                this.props.summary.selectedRowsCount ||
+                (this.selectablePlugin
+                  ? this.selectablePlugin.SelectedCount
+                  : 0)
+              }
+            />
 
-          <ActionsBar>
-            {this.actionablePlugin && this.actionablePlugin.render()}
-          </ActionsBar>
+            <ActionsBar>
+              {this.actionablePlugin && this.actionablePlugin.render()}
+            </ActionsBar>
 
-          <SortableContainer>
-            {this.sortablePlugin &&
-              this.sortablePlugin.render(
-                this.Columns,
-                this.props.isFetching ||
-                  this.props.isFetchingMore ||
-                  this.props.isFetchingMoreBefore
-              )}
-          </SortableContainer>
-        </ToolbarContainer>
+            <SortableContainer>
+              {this.sortablePlugin &&
+                this.sortablePlugin.render(
+                  this.Columns,
+                  this.props.isFetching ||
+                    this.props.isFetchingMore ||
+                    this.props.isFetchingMoreBefore
+                )}
+            </SortableContainer>
+          </ToolbarContainer>
+        )}
 
         {multiple ? (
           <MultipleTable
@@ -160,6 +166,7 @@ Grid.propTypes = {
   isFetchingMoreBefore: PropTypes.bool,
   isToolbarSticky: PropTypes.bool,
   showTableHeader: PropTypes.bool,
+  showToolbar: PropTypes.bool,
   getTrProps: PropTypes.func,
   getTdProps: PropTypes.func,
   getBodyProps: PropTypes.func,
@@ -177,6 +184,7 @@ Grid.defaultProps = {
   isFetchingMore: false,
   isFetchingMoreBefore: false,
   showTableHeader: true,
+  showToolbar: true,
   isToolbarSticky: true,
   getBodyProps: () => {},
   getTrProps: () => {},

@@ -189,11 +189,7 @@ export class EventDrawer extends Component {
     }
 
     return (
-      <Drawer
-        isOpen={this.props.isOpen}
-        onClose={this.props.onClose}
-        showFooter={false}
-      >
+      <Drawer open={this.props.isOpen} onClose={this.props.onClose}>
         <Drawer.Header title={`${this.isNew ? 'Add' : 'Edit'} Event`} />
         <Drawer.Body>
           {error && error.status === 404 ? (

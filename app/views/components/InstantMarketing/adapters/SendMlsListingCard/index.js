@@ -51,7 +51,8 @@ class SendMlsListingCard extends React.Component {
       if (
         props.isTriggered &&
         !state.isListingsModalOpen &&
-        !state.isInstantMarketingBuilderOpen
+        !state.isInstantMarketingBuilderOpen &&
+        !props.isEdit
       ) {
         return {
           isListingsModalOpen: true
@@ -193,10 +194,13 @@ class SendMlsListingCard extends React.Component {
   }
 
   closeMarketing = () =>
-    this.setState({
-      isInstantMarketingBuilderOpen: false,
-      isComposeEmailOpen: false
-    })
+    this.setState(
+      {
+        isInstantMarketingBuilderOpen: false,
+        isComposeEmailOpen: false
+      },
+      this.props.handleTrigger
+    )
 
   closeSocialDrawer = () =>
     this.setState({
@@ -243,14 +247,21 @@ class SendMlsListingCard extends React.Component {
   get Assets() {
     const assets = []
 
-    this.state.listings.forEach(listing => {
-      listing.gallery_image_urls.forEach(image => {
-        assets.push({
-          listing: listing.id,
-          image
-        })
+    if (this.state.listings && Array.isArray(this.state.listings)) {
+      this.state.listings.forEach(listing => {
+        if (
+          listing.gallery_image_urls &&
+          Array.isArray(listing.gallery_image_urls)
+        ) {
+          listing.gallery_image_urls.forEach(image => {
+            assets.push({
+              listing: listing.id,
+              image
+            })
+          })
+        }
       })
-    })
+    }
 
     return assets
   }
@@ -265,6 +276,15 @@ class SendMlsListingCard extends React.Component {
     }
 
     return data
+  }
+
+  componentDidMount() {
+    if (this.props.isEdit && !this.state.isInstantMarketingBuilderOpen) {
+      this.setState({
+        isInstantMarketingBuilderOpen: true,
+        listings: this.props.selectedTemplate.listings || []
+      })
+    }
   }
 
   render() {
@@ -290,7 +310,8 @@ class SendMlsListingCard extends React.Component {
         <SearchListingDrawer
           mockListings
           isOpen={
-            this.state.isListingsModalOpen || this.state.isEditingListings
+            (this.state.isListingsModalOpen || this.state.isEditingListings) &&
+            !this.props.isEdit
           }
           title={this.IsMultiListing ? 'Select Listings' : 'Select a Listing'}
           searchPlaceholder="Enter MLS# or an address"
@@ -324,6 +345,7 @@ class SendMlsListingCard extends React.Component {
           mediums={this.props.mediums}
           defaultTemplate={this.props.selectedTemplate}
           onShowEditListings={this.handleEditListings}
+          isEdit={this.props.isEdit}
         />
 
         {this.state.isComposeEmailOpen && (

@@ -1,5 +1,6 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
+import fecha from 'fecha'
 
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
@@ -8,7 +9,7 @@ import ActionsButton from '../../../../../components/ActionsButton'
 
 import FileLink from './FileLink'
 
-import { FileContainer, FileRow, FileTitle } from '../styled'
+import { FileContainer, FileRow, FileTitle, FileDate } from '../styled'
 
 class Attachments extends React.Component {
   state = {
@@ -22,16 +23,26 @@ class Attachments extends React.Component {
       <FileContainer key={props.file.id} isBlur={state.isDeleting}>
         <FileRow>
           <Flex alignCenter justifyBetween>
-            <FileTitle>
-              <FileLink
-                file={props.file}
-                deal={props.deal}
-                taskId={props.task.id}
-                isBackOffice={props.isBackOffice}
-              >
-                <TextMiddleTruncate text={props.file.name} maxLength={75} />
-              </FileLink>
-            </FileTitle>
+            <Flex column>
+              <FileTitle>
+                <FileLink
+                  file={props.file}
+                  deal={props.deal}
+                  taskId={props.task.id}
+                  isBackOffice={props.isBackOffice}
+                >
+                  <TextMiddleTruncate text={props.file.name} maxLength={75} />
+                </FileLink>
+              </FileTitle>
+
+              <FileDate>
+                Uploaded at{' '}
+                {fecha.format(
+                  new Date(props.file.created_at * 1000),
+                  'MMM DD YYYY, h:mm A'
+                )}
+              </FileDate>
+            </Flex>
 
             <ActionsButton
               type="document"

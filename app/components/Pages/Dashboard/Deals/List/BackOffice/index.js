@@ -7,13 +7,9 @@ import { searchDeals, getDeals } from 'actions/deals'
 
 import Search from 'components/Grid/Search'
 
-import {
-  PageContainer,
-  GridContainer,
-  SearchContainer
-} from '../styles/page-container/styled'
+import { PageContainer, GridContainer } from '../styles/page-container/styled'
 
-import Header from '../components/PageHeader'
+import PageHeader from '../components/PageHeader'
 import Grid from './Grid'
 import BackofficeFilters from './Filters'
 
@@ -63,26 +59,24 @@ class BackofficeTable extends React.Component {
         </Menu>
 
         <Content isSideMenuOpen={isSideMenuOpen}>
-          <Header
+          <PageHeader
             title={params.filter}
             isSideMenuOpen={isSideMenuOpen}
             onMenuTriggerChange={this.toggleSideMenu}
           />
 
           <GridContainer>
-            <SearchContainer>
-              <Search
-                disableOnSearch
-                showLoadingOnSearch
-                defaultValue={persistentSearchInput}
-                isSearching={isFetchingDeals}
-                placeholder="Search deals by address, MLS # or agent name…"
-                onChange={this.handleSearch}
-                onClearSearch={this.handleSearch}
-                debounceTime={700}
-                minimumLength={4}
-              />
-            </SearchContainer>
+            <Search
+              disableOnSearch
+              showLoadingOnSearch
+              defaultValue={persistentSearchInput}
+              isSearching={isFetchingDeals}
+              placeholder="Search deals by address, MLS # or agent name…"
+              onChange={this.handleSearch}
+              onClearSearch={this.handleSearch}
+              debounceTime={700}
+              minimumLength={4}
+            />
 
             <Grid
               activeFilter={params.filter}

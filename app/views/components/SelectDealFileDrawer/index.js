@@ -2,8 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import _ from 'underscore'
-
 import { getDeal } from 'actions/deals'
 
 import Drawer from 'components/OverlayDrawer'
@@ -16,7 +14,7 @@ class SelectDealFileDrawer extends React.Component {
   state = {
     deal: this.props.deal,
     isLoadingDeal: false,
-    selectedItems: this.props.defaultSelectedItems || {}
+    selectedItems: this.props.defaultSelectedItems || []
   }
 
   componentDidMount() {
@@ -45,18 +43,15 @@ class SelectDealFileDrawer extends React.Component {
       return false
     }
 
-    let newState = {}
+    const isExists =
+      Array.isArray(this.state.selectedItems) &&
+      this.state.selectedItems.some(row => row.id === document.id)
 
-    if (this.state.selectedItems[document.id]) {
-      newState = _.omit(this.state.selectedItems, row => row.id === document.id)
-    } else {
-      newState = {
-        ...this.state.selectedItems,
-        [document.id]: document
-      }
-    }
-
-    this.setState({ selectedItems: newState })
+    this.setState(state => ({
+      selectedItems: isExists
+        ? state.selectedItems.filter(row => row.id !== document.id)
+        : [...state.selectedItems, document]
+    }))
   }
 
   handleApply = () =>
@@ -69,7 +64,7 @@ class SelectDealFileDrawer extends React.Component {
 
     return (
       <Drawer
-        isOpen={props.isOpen}
+        open={props.isOpen}
         onClose={props.onClose}
         {...props.drawerOptions}
       >
@@ -88,7 +83,7 @@ class SelectDealFileDrawer extends React.Component {
 
         <Drawer.Footer style={{ flexDirection: 'row-reverse' }}>
           <ActionButton
-            disabled={_.size(this.state.selectedItems) === 0}
+            disabled={this.state.selectedItems.length === 0}
             type="button"
             onClick={this.handleApply}
           >

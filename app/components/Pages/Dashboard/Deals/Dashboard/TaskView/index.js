@@ -22,17 +22,16 @@ function TaskView(props) {
   }
 
   return (
-    <Drawer isOpen={props.isOpen} onClose={onClose} noFooter>
+    <Drawer open={props.isOpen} onClose={onClose} noFooter>
       <Drawer.Header
         style={{
           flexDirection: 'column',
           padding: '1rem 0 0 0',
           height: headerHeight
         }}
-        render={() => (
-          <Header task={task} deal={props.deal} onClose={onClose} />
-        )}
-      />
+      >
+        <Header task={task} deal={props.deal} onClose={onClose} />
+      </Drawer.Header>
 
       <Drawer.Body
         style={{

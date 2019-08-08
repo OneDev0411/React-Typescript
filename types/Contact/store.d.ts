@@ -22,9 +22,3 @@ declare interface IContactReduxListState {
 declare type IContactReduxFilterSegmentState = IReduxFilterSegmentState<
   IContactList
 >
-
-declare interface IContactReduxState {
-  attributeDefs: IContactAttributeDef[]
-  list: IContactReduxListState
-  filterSegments: IContactReduxFilterSegmentState
-}

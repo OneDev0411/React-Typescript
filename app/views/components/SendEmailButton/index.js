@@ -31,10 +31,16 @@ function SendEmailButton(props) {
       >
         {props.title}
       </ActionButton>
-
+      {/*
+       We conditionally render, beacause of this comment:
+       https://gitlab.com/rechat/web/merge_requests/376#note_200055872
+       We can either change email compose component to eliminate this
+       limitation, or set drawerIsOpen asynchronously in order to
+       enable animation
+      */}
       {isOpen && (
         <SingleEmailComposeDrawer
-          isOpen
+          isOpen={isOpen}
           defaultAttachments={[]}
           recipients={props.recipients}
           from={props.user}

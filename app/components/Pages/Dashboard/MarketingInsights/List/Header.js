@@ -10,7 +10,7 @@ import ActionButton from '../../../../../views/components/Button/ActionButton'
 
 import { Trigger as MenuTrigger } from '../../../../../views/components/SlideMenu'
 
-export function Header(props) {
+function Header(props) {
   return (
     <PageHeader>
       <PageHeader.Title showBackButton={false}>

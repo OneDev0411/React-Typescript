@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import debounce from 'lodash/debounce'
-import ClickOutside from 'react-click-outside'
 import idx from 'idx'
+import { Popover, Popper } from '@material-ui/core'
 
 import { loadJS } from '../../../../utils/load-js'
 import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/Listings/mapOptions'
@@ -41,7 +41,13 @@ export class InlineAddressField extends React.Component {
     address: '',
     isShowSuggestion: false,
     isDrity: false,
-    places: []
+    places: [],
+    anchorEl: null,
+    updateAddressFormPosition: false,
+    // Because the blur default action should be canceled when the mouse is over
+    // the suggestion area, and there is a possibility of selecting suggestion
+    // items.
+    isBlurDisabled: false
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -95,8 +101,8 @@ export class InlineAddressField extends React.Component {
     })
   }
 
-  search = debounce(async input => {
-    if (input.length <= 3) {
+  search = debounce(async (anchorEl, value) => {
+    if (value.length <= 3) {
       return
     }
 
@@ -104,12 +110,14 @@ export class InlineAddressField extends React.Component {
       this.setState({
         isLoading: true,
         isShowForm: false,
+        anchorEl: null,
         isShowSuggestion: false
       })
 
-      const places = await this.autocompleteAddress(input)
+      const places = await this.autocompleteAddress(value)
 
       this.setState({
+        anchorEl,
         places,
         isLoading: false,
         isShowSuggestion: true
@@ -120,24 +128,25 @@ export class InlineAddressField extends React.Component {
     }
   }, 300)
 
-  handleChangeInput = e => {
-    const input = e.target.value
+  handleChangeInput = ({ target }) => {
+    const { value } = target
 
     this.setState(
       () => {
-        if (input.length === 0) {
+        if (value.length === 0) {
           return {
-            address: input,
+            address: value,
             isShowForm: false,
-            isShowSuggestion: false
+            isShowSuggestion: false,
+            anchorEl: null
           }
         }
 
-        return { address: input, isDrity: true }
+        return { address: value, isDrity: true }
       },
       () => {
-        this.props.handleInputChange(input)
-        this.search(input)
+        this.props.handleInputChange(value)
+        this.search(target, value)
       }
     )
   }
@@ -145,8 +154,9 @@ export class InlineAddressField extends React.Component {
   onClickSuggestionItem = item => {
     let newState = {
       address: item.description,
-      isShowSuggestion: false,
-      isShowForm: true
+      isBlurDisabled: false,
+      isShowForm: true,
+      isShowSuggestion: false
     }
 
     const request = {
@@ -168,7 +178,7 @@ export class InlineAddressField extends React.Component {
 
       if (!this.props.needsAddressForm) {
         newState = {
-          isShowSuggestion: false,
+          anchorEl: null,
           address: item.description
         }
 
@@ -181,67 +191,105 @@ export class InlineAddressField extends React.Component {
     })
   }
 
-  handleInputFocus = () => {
-    if (
-      this.state.address &&
-      !this.state.isShowSuggestion &&
-      this.state.address !== this.props.address
-    ) {
-      if (this.state.places.length > 0) {
-        this.setState({ isShowSuggestion: true })
-      } else {
-        this.search(this.state.address)
-      }
+  onClickDefaultItem = () =>
+    this.setState({
+      isBlurDisabled: false,
+      isShowForm: true,
+      isShowSuggestion: false
+    })
+
+  handleClose = () => this.setState({ anchorEl: null })
+
+  handleInputBlur = () => {
+    if (this.state.isBlurDisabled) {
+      return
+    }
+
+    if (this.state.isShowSuggestion) {
+      this.setState({ isShowSuggestion: false })
     }
   }
 
-  onClickDefaultItem = () =>
-    this.setState({
-      isShowSuggestion: false,
-      isShowForm: true
-    })
+  handleMouseOverSuggestions = isBlurDisabled =>
+    this.setState({ isBlurDisabled })
 
-  onClickOutside = () => this.setState({ isShowSuggestion: false })
-
-  handleFormCancel = () => this.setState({ isShowForm: false })
+  handleAddressFormPosition = () =>
+    this.setState({ updateAddressFormPosition: true })
 
   render() {
-    const { address } = this.state
+    const { address, anchorEl } = this.state
+
+    const isOpen = Boolean(anchorEl)
+    const isOpenSuggestion = isOpen && this.state.isShowSuggestion
+    const isOpenForm =
+      isOpen && this.props.needsAddressForm && this.state.isShowForm
+    const formId = isOpenForm ? 'address-form-popover' : undefined
 
     return (
-      <ClickOutside onClickOutside={this.onClickOutside}>
-        <div style={{ position: 'relative', ...this.props.style }}>
-          {this.props.renderSearchField({
-            isLoading: this.state.isLoading,
-            onChange: this.handleChangeInput,
-            onFocus: this.handleInputFocus,
-            value: address,
-            autoComplete: 'disabled'
-          })}
-          {this.state.isShowSuggestion && (
-            <Suggestions
-              style={this.props.suggestionsStyle}
-              items={this.state.places}
-              searchText={address}
-              onClickDefaultItem={this.onClickDefaultItem}
-              onClickSuggestionItem={this.onClickSuggestionItem}
-            />
-          )}
-
-          {this.props.needsAddressForm && this.state.isShowForm && (
-            <InlineAddressForm
-              style={this.props.formStyle}
-              address={address}
-              handleCancel={this.handleFormCancel}
-              handleDelete={this.props.handleDelete}
-              handleSubmit={this.props.handleSubmit}
-              preSaveFormat={this.props.preSaveFormat}
-              postLoadFormat={this.props.postLoadFormat}
-              showDeleteButton={this.props.showDeleteButton}
-            />
-          )}
-        </div>
-      </ClickOutside>
+      <div style={this.props.style}>
+        {this.props.renderSearchField({
+          id: formId,
+          isLoading: this.state.isLoading,
+          onChange: this.handleChangeInput,
+          value: address,
+          onBlur: this.handleInputBlur,
+          autoComplete: 'disabled'
+        })}
+        <Popper
+          anchorEl={anchorEl}
+          open={isOpenSuggestion}
+          placement="bottom-start"
+          style={{ zIndex: 1002 }}
+        >
+          <Suggestions
+            items={this.state.places}
+            searchText={address}
+            style={this.props.suggestionsStyle}
+            onClickDefaultItem={this.onClickDefaultItem}
+            onClickSuggestionItem={this.onClickSuggestionItem}
+            handleMouseOver={this.handleMouseOverSuggestions}
+          />
+        </Popper>
+        <Popover
+          id={formId}
+          open={isOpenForm}
+          anchorEl={anchorEl}
+          onClose={this.handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left'
+          }}
+          style={{ zIndex: 1002 }}
+          action={actions => {
+            if (
+              this.state.updateAddressFormPosition &&
+              actions &&
+              actions.updatePosition
+            ) {
+              this.setState(
+                { updateAddressFormPosition: false },
+                actions.updatePosition
+              )
+            }
+          }}
+        >
+          <InlineAddressForm
+            address={address}
+            style={this.props.formStyle}
+            handleCancel={this.handleClose}
+            handleDelete={this.props.handleDelete}
+            handleSubmit={this.props.handleSubmit}
+            preSaveFormat={this.props.preSaveFormat}
+            postLoadFormat={this.props.postLoadFormat}
+            showDeleteButton={this.props.showDeleteButton}
+            updatePosition={this.handleAddressFormPosition}
+          />
+        </Popover>
+      </div>
     )
   }
 }

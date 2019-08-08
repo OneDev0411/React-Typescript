@@ -11,7 +11,7 @@ const propTypes = {
 
 export function ListingsListViewDrawer(props) {
   return (
-    <Drawer isOpen={props.isOpen} onClose={props.onClose} showFooter={false}>
+    <Drawer open={props.isOpen} onClose={props.onClose}>
       <Drawer.Header title={props.title} />
       <Drawer.Body>
         <div style={{ padding: '1.5em 0' }}>
