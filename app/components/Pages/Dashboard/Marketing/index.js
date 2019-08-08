@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react'
-import { withRouter, browserHistory } from 'react-router'
+import { withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
 
 import Onboarding from 'components/Onboarding'

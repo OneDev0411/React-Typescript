@@ -21,7 +21,7 @@ import {
 } from 'models/tasks'
 import getListing from 'models/listings/listing/get-listing'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
-import { isSoloActiveTeam } from 'utils/user-teams'
+import { isSoloActiveTeam, getActiveTeamId } from 'utils/user-teams'
 
 import Alert from '../../../../components/Pages/Dashboard/Partials/Alert'
 
@@ -105,7 +105,8 @@ class OpenHouseDrawerInternal extends React.Component {
 
     if (this.isNew) {
       try {
-        const list = await getTemplates(['CrmOpenHouse'])
+        const activeTeamId = getActiveTeamId(this.props.user)
+        const list = await getTemplates(activeTeamId, ['CrmOpenHouse'])
         const templateItem = list[0]
 
         const rawTemplate = await loadTemplateHtml(
@@ -301,12 +302,14 @@ class OpenHouseDrawerInternal extends React.Component {
       return this.toggleTemplateBuilder()
     }
 
-    this.props.confirmation({
-      message:
-        'Redesigning registration page will delete your previous design.',
-      confirmLabel: 'Okay, Continue',
-      onConfirm: this.toggleTemplateBuilder
-    })
+    this.props.dispatch(
+      confirmation({
+        message:
+          'Redesigning registration page will delete your previous design.',
+        confirmLabel: 'Okay, Continue',
+        onConfirm: this.toggleTemplateBuilder
+      })
+    )
   }
 
   toggleTemplateBuilder = () =>
@@ -517,9 +520,4 @@ class OpenHouseDrawerInternal extends React.Component {
 OpenHouseDrawerInternal.propTypes = propTypes
 OpenHouseDrawerInternal.defaultProps = defaultProps
 
-export const OpenHouseDrawer = connect(
-  null,
-  {
-    confirmation
-  }
-)(OpenHouseDrawerInternal)
+export const OpenHouseDrawer = connect()(OpenHouseDrawerInternal)

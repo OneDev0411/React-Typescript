@@ -1,14 +1,16 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import Spinner from 'components/Spinner'
 
 import { Container, TemplateItem, Video, Image } from './styled'
 
-export default class Templates extends React.Component {
+class Templates extends React.Component {
   state = {
     isLoading: true,
     selectedTemplate: null,
@@ -33,9 +35,14 @@ export default class Templates extends React.Component {
 
   getTemplatesList = async () => {
     const { medium, defaultTemplate, templateTypes: types } = this.props
+    const activeTeamBrandId = getActiveTeamId(this.props.user)
 
     try {
-      let templates = await getTemplates(types, medium ? [medium] : [])
+      let templates = await getTemplates(
+        activeTeamBrandId,
+        types,
+        medium ? [medium] : []
+      )
 
       if (templates.length > 0) {
         // sort template based on their types
@@ -133,3 +140,5 @@ export default class Templates extends React.Component {
     )
   }
 }
+
+export default connect(state => ({ user: state.user }))(Templates)

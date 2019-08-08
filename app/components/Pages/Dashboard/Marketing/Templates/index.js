@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { browserHistory } from 'react-router'
 
+import { getActiveTeamId } from 'utils/user-teams'
 import TemplatesList from 'components/TemplatesList'
 import { getSelectedMediumTemplates } from 'components/TemplatesList/helpers'
 
@@ -19,7 +21,8 @@ const mediumsCollection = {
 
 function Templates(props) {
   const selectedType = headers[props.types]
-  const [templates, isLoading] = useTemplatesList(props.types)
+  const activeTeamId = getActiveTeamId(props.user)
+  const [templates, isLoading] = useTemplatesList(activeTeamId, props.types)
   const tabs = getMediums(templates)
   const selectedMedium = getTabName(props.medium, tabs)
   const availableTemplates = getSelectedMediumTemplates(
@@ -75,4 +78,6 @@ function Templates(props) {
   )
 }
 
-export default Templates
+export default connect(state => ({
+  user: state.user
+}))(Templates)
