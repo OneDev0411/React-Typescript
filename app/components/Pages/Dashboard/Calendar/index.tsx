@@ -9,6 +9,7 @@ import DatePicker from 'components/DatePicker'
 
 import { TodayButton } from './components/TodayButton'
 import { Filters } from './components/Filters'
+import { Export } from './components/Export'
 import CreateEvent from './components/CreateEvent'
 
 import {
@@ -58,18 +59,22 @@ const CalendarPage: React.FC = props => {
   return (
     <Container>
       <Sidebar>
-        <SideHeader>
-          <Title>Calendar</Title>
+        <div>
+          <SideHeader>
+            <Title>Calendar</Title>
 
-          <TodayButton onClick={() => handleDatePickerChange()} />
-        </SideHeader>
+            <TodayButton onClick={() => handleDatePickerChange()} />
+          </SideHeader>
 
-        <DatePicker
-          fixedWeeks
-          modifiers={{ empty: getEmptyDays }}
-          selectedDate={activeDate}
-          onChange={handleDatePickerChange}
-        />
+          <DatePicker
+            fixedWeeks
+            modifiers={{ empty: getEmptyDays }}
+            selectedDate={activeDate}
+            onChange={handleDatePickerChange}
+          />
+        </div>
+
+        <Export />
       </Sidebar>
 
       <Main>

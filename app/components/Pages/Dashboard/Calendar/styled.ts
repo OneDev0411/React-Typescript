@@ -17,6 +17,9 @@ export const Header = styled.div`
 `
 
 export const Sidebar = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 18rem;
   background: #ebeff2;
   padding: 1rem 0.5rem;
