@@ -11,6 +11,10 @@ export const MaterialUiGlobalOverrides = withStyles({
     // override our default styles
     '.MuiLink-underlineNone': {
       textDecoration: 'none!important'
+    },
+
+    '.MuiTab-root': {
+      minWidth: '8rem'
     }
   }
 })(() => null)

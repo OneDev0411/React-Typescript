@@ -5,4 +5,5 @@ export const Container = styled.div`
   width: 85%;
   height: 100%;
   align-items: flex-end;
+  margin-left: 1.5rem;
 `
