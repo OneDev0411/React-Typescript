@@ -14,7 +14,10 @@ declare interface ICalendarEvent {
   date: string
   deal: UUID | null
   event_type: string
-  metadata: { status: string }
+  metadata: {
+    status: string
+    is_partner: boolean
+  }
   next_occurence: string
   object_type: string
   recurring: boolean

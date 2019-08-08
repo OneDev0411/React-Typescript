@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/styles'
 
 import { EventIcon } from './EventIcon'
 import { EventTitle } from './Title'
+import { EventActions } from './Actions'
 
 import styles from './styles'
 
@@ -74,7 +75,9 @@ export function Event({
             </div>
           </div>
 
-          <div>aa</div>
+          <div>
+            <EventActions event={event} />
+          </div>
         </div>
 
         <div style={styles.row}>
