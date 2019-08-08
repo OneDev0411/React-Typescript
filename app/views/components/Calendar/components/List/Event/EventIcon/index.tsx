@@ -32,7 +32,10 @@ export function EventIcon(props: Props) {
       )`
       }}
     >
-      <Icon.icon fill={Icon.color} style={{ width: '1rem', height: '1rem' }} />
+      <Icon.icon
+        fill={Icon.color}
+        style={{ width: '1.2rem', height: '1.2rem' }}
+      />
     </div>
   )
 }

@@ -1,5 +1,13 @@
 export default {
-  centeredContainer: {
+  row: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '0 1rem',
+    transition: '0.1s ease-in background-color',
+    width: '100%'
+  },
+  container: {
     display: 'flex',
     alignItems: 'center'
   },
@@ -11,7 +19,7 @@ export default {
     fontSize: '1rem',
     fontWeight: 400,
     letterSpacing: '0.25px',
-    paddingLeft: '10.5rem',
+    paddingLeft: '9.5rem',
     color: '#6a7589'
   },
   time: {

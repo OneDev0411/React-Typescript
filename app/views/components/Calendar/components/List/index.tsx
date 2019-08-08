@@ -93,7 +93,7 @@ const CalendarList: React.FC<Props> = props => {
         isLoading={props.isLoading}
         loadingPosition={props.loadingPosition}
         onVisibleRowChange={debounce(getInViewDate, 50)}
-        itemSize={() => 60}
+        itemSize={() => 65}
         overscanCount={3}
         ref={props.listRef}
       >
