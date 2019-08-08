@@ -26,6 +26,12 @@ export const ProfileContainer = styled.div`
     .person-more-info {
       margin-top: 1rem;
     }
+
+    .person-socials {
+      & > a {
+        display: inline-block;
+      }
+    }
   }
 
   .activity {

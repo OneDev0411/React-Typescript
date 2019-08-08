@@ -9,3 +9,9 @@ export interface ActionSettingsType {
   type?: ActionSettingsNamesType
   data?: any
 }
+
+export enum SocialMediasEnum {
+  instagram = 'instagram',
+  facebook = 'facebook',
+  linkedin = 'linkedin'
+}

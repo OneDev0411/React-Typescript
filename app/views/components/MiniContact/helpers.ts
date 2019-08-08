@@ -9,7 +9,12 @@ import { selectDefsBySection } from '../../../reducers/contacts/attributeDefs'
 import { getAddresses } from '../../../components/Pages/Dashboard/Contacts/Profile/Addresses/helpers/get-addresses'
 import { normalizeContact as normalizeContactForAssociation } from '../../utils/association-normalizers'
 
-import { FormatterOutputType, ProfileType } from './useProfile'
+import {
+  FormatterOutputType,
+  ProfileType,
+  SocialMediasType
+} from './useProfile'
+import { SocialMediasEnum } from './types'
 
 // Formatters
 
@@ -88,6 +93,14 @@ function select_address(address): string {
   return ''
 }
 
+function socialMediasInContact(contact): SocialMediasType[] {
+  const types = Object.keys(SocialMediasEnum)
+  if (!contact.attributes) return []
+  return contact.attributes
+    .filter(attr => types.includes(attr.attribute_type))
+    .map(social => ({ type: social.attribute_type, url: social.text }))
+}
+
 function extract_required_data_from_contact(contactResponse): ProfileType {
   const reduxState = store.getState()
   const contact = normalizeContact(contactResponse)
@@ -107,6 +120,7 @@ function extract_required_data_from_contact(contactResponse): ProfileType {
     profile_image_url: getAttributeFromSummary(contact, 'profile_image_url'),
     last_touch: contact.last_touch,
     address: select_address(address),
+    socials: socialMediasInContact(contact),
     dates: dates.map(item => ({
       title: item.attribute_def.label,
       date: item.date

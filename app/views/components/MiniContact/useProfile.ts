@@ -16,6 +16,7 @@ export interface ProfileType {
   profile_image_url?: string
   last_touch?: number
   dates?: ProfileDateType[]
+  socials?: SocialMediasType[]
 }
 
 type StatusType = 'loading' | 'failed' | 'finished' | 'not_started'
@@ -27,6 +28,11 @@ export interface FormatterOutputType {
   meta: {
     association?: any
   }
+}
+
+export interface SocialMediasType {
+  type: string
+  url: string
 }
 
 // Hook
