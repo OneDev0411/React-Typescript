@@ -49,6 +49,7 @@ const propTypes = {
   initialValues: PropTypes.shape(),
   submitCallback: PropTypes.func,
   deleteCallback: PropTypes.func,
+  defaultSelectedDate: PropTypes.instanceOf(Date),
   user: PropTypes.shape().isRequired
 }
 
@@ -57,6 +58,7 @@ const defaultProps = {
   event: null,
   eventId: undefined,
   initialValues: {},
+  defaultSelectedDate: new Date(),
   submitCallback: () => {},
   deleteCallback: () => {}
 }
@@ -199,7 +201,12 @@ export class EventDrawer extends Component {
               initialValues={this.props.initialValues}
               load={this.load}
               postLoadFormat={event =>
-                postLoadFormat(event, user, defaultAssociation)
+                postLoadFormat(
+                  event,
+                  user,
+                  defaultAssociation,
+                  this.props.defaultSelectedDate
+                )
               }
               preSaveFormat={(values, originalValues) =>
                 preSaveFormat(values, originalValues, user)

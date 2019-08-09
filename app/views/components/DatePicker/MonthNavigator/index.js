@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Container, Button } from './styled'
 import Tooltip from '../../tooltip'
 import IconKeyboardArrowLeft from '../../SvgIcons/KeyboardArrowLeft/IconKeyboardArrowLeft'
@@ -11,6 +12,7 @@ const Navbar = ({ onPreviousClick, onNextClick }) => (
         <IconKeyboardArrowLeft />
       </Button>
     </Tooltip>
+
     <Tooltip caption="Next Month" placement="left">
       <Button onClick={() => onNextClick()}>
         <IconKeyboardArrowRight />

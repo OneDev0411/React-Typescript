@@ -70,5 +70,3 @@ export function ConnectedAccount({ account, onSync, onDelete }: Props) {
     </ConnectedAccountListItem>
   )
 }
-
-

@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import idx from 'idx'
 
+import { Button } from '@material-ui/core'
+
 import { getContact } from 'models/contacts/get-contact'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
@@ -11,7 +13,6 @@ import normalizeContactForEmailCompose from 'models/email-compose/helpers/normal
 import { confirmation } from 'actions/confirmation'
 
 import InstantMarketing from 'components/InstantMarketing'
-import ActionButton from 'components/Button/ActionButton'
 
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
@@ -65,6 +66,12 @@ class SendContactCard extends React.Component {
     }
 
     return state
+  }
+
+  componentDidMount() {
+    if (this.props.isEdit && !this.state.isBuilderOpen) {
+      this.setState({ isBuilderOpen: true })
+    }
   }
 
   showBuilder = async () => {
@@ -212,12 +219,6 @@ class SendContactCard extends React.Component {
       isSocialDrawerOpen: false
     })
 
-  componentDidMount() {
-    if (this.props.isEdit && !this.state.isBuilderOpen) {
-      this.setState({ isBuilderOpen: true })
-    }
-  }
-
   render() {
     if (hasMarketingAccess(this.props.user) === false) {
       return null
@@ -231,14 +232,15 @@ class SendContactCard extends React.Component {
           onClose={this.closeMissingEmailDialog}
         />
         {this.props.contact || this.props.contactId ? (
-          <ActionButton
-            appearance="outline"
+          <Button
+            variant="outlined"
+            color="secondary"
             onClick={this.showBuilder}
             disabled={this.state.isFetchingContact}
-            {...this.props.buttonStyle}
+            {...this.props.buttonStyle} // TODO: buttonStyle -> buttonProps
           >
             {this.props.children}
-          </ActionButton>
+          </Button>
         ) : (
           <SearchContactDrawer
             title="Select a Contact"

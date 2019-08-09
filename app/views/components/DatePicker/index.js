@@ -1,12 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import fecha from 'fecha'
 
 import DayPicker, { DateUtils } from 'react-day-picker'
 
 import Toolbar from './Toolbar'
 
-import ActionButton from '../Button/ActionButton'
 import { Container } from './styled'
 
 const initialState = {
@@ -18,15 +16,13 @@ export default class DatePicker extends React.Component {
     onChange: PropTypes.func.isRequired,
     fixedWeeks: PropTypes.bool,
     modifiers: PropTypes.object,
-    selectedDate: PropTypes.any,
-    showTodayButton: PropTypes.bool
+    selectedDate: PropTypes.any
   }
 
   static defaultProps = {
     fixedWeeks: false,
     modifiers: {},
-    selectedDate: null,
-    showTodayButton: true
+    selectedDate: null
   }
 
   state = initialState
@@ -38,6 +34,8 @@ export default class DatePicker extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.setDate(nextProps)
   }
+
+  dayPickerRef = React.createRef()
 
   handleDateChange = (name, value) => {
     const date = {
@@ -59,9 +57,12 @@ export default class DatePicker extends React.Component {
     const { currentDate } = this.state
 
     if (selectedDate && selectedDate.toString() !== currentDate.toString()) {
-      this.setState({
-        currentDate: selectedDate
-      })
+      this.setState(
+        {
+          currentDate: selectedDate
+        },
+        () => (this.dayPickerRef.current.state.currentMonth = selectedDate)
+      )
     }
   }
 
@@ -100,9 +101,10 @@ export default class DatePicker extends React.Component {
           month={this.Date}
           selectedDays={this.Date}
           onDayClick={this.handleDayClick}
-          fixedWeeks={false}
+          fixedWeeks={this.props.fixedWeeks}
           canChangeMonth={false}
           modifiers={this.props.modifiers}
+          ref={this.dayPickerRef}
           captionElement={({ date, localeUtils }) => (
             <Toolbar
               date={date}
@@ -115,19 +117,6 @@ export default class DatePicker extends React.Component {
             />
           )}
         />
-        {this.props.showTodayButton && (
-          <ActionButton
-            size="small"
-            isBlock
-            appearance="outline"
-            onClick={this.handleToday}
-            data-balloon={fecha.format(new Date(), 'dddd, MMMM DD')}
-            data-balloon-pos="down"
-            style={{ fontSize: '1rem' }}
-          >
-            Today
-          </ActionButton>
-        )}
       </Container>
     )
   }

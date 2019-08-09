@@ -2,6 +2,7 @@ import React from 'react'
 import { render, cleanup } from '@testing-library/react'
 
 import mockDate, { RealDate } from 'utils/test-utils/mock-date'
+
 import InfoColumn from './InfoColumn'
 
 describe('Marketing Insights: InfoColumn tests', function() {

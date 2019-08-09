@@ -54,7 +54,9 @@ export function normalizeByDays(fromUnix, toUnix, calendar) {
     const sortedCalendar = calendar.sort((a, b) => {
       if (a.object_type !== 'crm_task' && b.object_type === 'crm_task') {
         return -1
-      } else if (a.object_type === 'crm_task' && b.object_type !== 'crm_task') {
+      }
+
+      if (a.object_type === 'crm_task' && b.object_type !== 'crm_task') {
         return 1
       }
 

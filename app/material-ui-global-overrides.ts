@@ -14,6 +14,9 @@ export const MaterialUiGlobalOverrides = withStyles({
     },
     '.MuiListSubheader-root': {
       textTransform: 'uppercase'
+    },
+    '.MuiTab-root': {
+      minWidth: '8rem'
     }
   }
 })(() => null)
