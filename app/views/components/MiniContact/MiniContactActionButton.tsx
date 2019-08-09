@@ -5,8 +5,7 @@ import ActionButton from 'components/Button/ActionButton'
 import Loading from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import IconCalendar from 'components/SvgIcons/Calendar2/IconCalendar'
 
-import { FormatterOutputType } from './useProfile'
-import { ActionSettingsType, ActionSettingsNamesType } from './types'
+import { ActionSettingsType, ActionSettingsNamesType, FormatterOutputType } from './types'
 
 interface MiniContactActionButtonType {
   isLoading: boolean

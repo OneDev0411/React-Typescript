@@ -12,41 +12,9 @@ import { normalizeContact as normalizeContactForAssociation } from '../../utils/
 import {
   FormatterOutputType,
   ProfileType,
-  SocialMediasType
-} from './useProfile'
-import { SocialMediasEnum } from './types'
-
-// Formatters
-
-function insightFormatter(data): FormatterOutputType {
-  return {
-    contact_status: 'not_started',
-    contact_id: data.contact,
-    data: {
-      name: data.display_name,
-      email: data.email_address,
-      profile_image_url: data.profile_image_url
-    },
-    meta: {}
-  }
-}
-
-function contactFormatter(data): FormatterOutputType {
-  // data.suumary is for regular contact
-  // data.title & data.details is for association contacts (app/views/components/AssocationItem/index.js)
-  return {
-    contact_status: 'not_started',
-    contact_id: data.id,
-    data: {
-      name: (data.summary && data.summary.display_name) || data.title,
-      email: (data.summary && data.summary.email) || data.details,
-      profile_image_url:
-        (data.summary && data.summary.profile_image_url) ||
-        (data.avatar && data.avatar.image)
-    },
-    meta: {}
-  }
-}
+  SocialMediasType,
+  SocialMediasEnum
+} from './types'
 
 // Helpers
 
@@ -60,26 +28,6 @@ export function getName(data) {
   }
 
   return '*'
-}
-export function formatter(type, initData): FormatterOutputType {
-  let formattedData: FormatterOutputType = {
-    contact_status: 'not_started',
-    contact_id: '',
-    data: {},
-    meta: {}
-  }
-
-  // Extracting data from context (where the MiniContact is using)
-  // based on type using formatters
-  if (type == 'insight') {
-    formattedData = insightFormatter(initData)
-  }
-
-  if (type == 'contact') {
-    formattedData = contactFormatter(initData)
-  }
-
-  return formattedData
 }
 
 // `address` is an array of addresses that we need to
@@ -105,14 +53,14 @@ function socialMediasInContact(contact): SocialMediasType[] {
     .map(social => ({ type: social.attribute_type, url: social.text }))
 }
 
-function extract_required_data_from_contact(contactResponse): ProfileType {
+function extractRequiredDataFromContact(contactResponse): ProfileType {
   const reduxState = store.getState()
   const contact = normalizeContact(contactResponse)
   const dates = getContactAttributesBySection(contact, 'Dates')
   const addresses = getContactAttributesBySection(contact, 'Addresses')
 
   const addressAttributeDefs = selectDefsBySection(
-    reduxState.contacts.attributeDefs,
+    (reduxState as any).contacts.attributeDefs,
     'Addresses'
   )
   const address = getAddresses(addresses, addressAttributeDefs)
@@ -145,7 +93,7 @@ export async function getContactData(contact_id): Promise<FormatterOutputType> {
       disableDefaultAssociationChecking: true
     }
 
-    const outputData: ProfileType = extract_required_data_from_contact(
+    const outputData: ProfileType = extractRequiredDataFromContact(
       response.data
     )
 
@@ -175,10 +123,14 @@ export async function findContact(email: string, base_output) {
     const res = await searchContacts('hi@mojtabast.com')
 
     if (res.data.length > 0) {
+
+      const foundContact = res.data[0];
+
       return {
         ...base_output,
+        contact_id: foundContact.id,
         contact_status: 'finished',
-        data: extract_required_data_from_contact(res.data[0])
+        data: extractRequiredDataFromContact(foundContact)
       }
     }
 

@@ -17,7 +17,7 @@ import { ProfileContainer } from './styled'
 import { getName } from './helpers'
 import useProfile from './useProfile'
 import MiniContactActionButton from './MiniContactActionButton'
-import MiniContactIcons from './MiniContactIcons'
+import MiniContactSocialMedias from './MiniContactSocialMedias'
 
 interface MiniProfilePropsType {
   type: MiniContactType
@@ -96,7 +96,7 @@ function MiniProfile(props: MiniProfilePropsType) {
             </div>
           </div>
         </Show>
-        <MiniContactIcons socials={data.socials} />
+        <MiniContactSocialMedias socials={data.socials} />
       </div>
       <Activity dates={data.dates} last_touch={data.last_touch} />
     </ProfileContainer>

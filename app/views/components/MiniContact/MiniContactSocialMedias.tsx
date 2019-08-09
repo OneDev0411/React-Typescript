@@ -4,8 +4,7 @@ import IconFacebook from 'components/SvgIcons/Facebook/IconFacebook'
 import IconLinkedIn from 'components/SvgIcons/LinkedIn/IconLinkedIn'
 import IconInstagram from 'components/SvgIcons/Instagram/IconInstagram'
 
-import { SocialMediasType } from './useProfile'
-import { SocialMediasEnum } from './types'
+import { SocialMediasType, SocialMediasEnum } from './types'
 
 interface MiniContactIconsType {
   socials?: SocialMediasType[]

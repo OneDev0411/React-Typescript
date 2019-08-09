@@ -1,4 +1,5 @@
 import React from 'react'
+
 import MiniContact from '../MiniContact'
 
 export function renderWithMiniContact(WrappedComponent) {
@@ -8,7 +9,7 @@ export function renderWithMiniContact(WrappedComponent) {
         <WrappedComponent {...props} />
       </MiniContact>
     ) : (
-      <WrappedComponent {...props} />
-    )
+        <WrappedComponent {...props} />
+      )
   }
 }

@@ -1,47 +1,25 @@
 import { useEffect, useState } from 'react'
 
-import { formatter, getContactData, findContact } from './helpers'
-
-// Types
-export type ProfileDateType = {
-  title: string
-  date: number
-}
-
-export interface ProfileType {
-  name?: string
-  email?: string
-  phone?: string
-  address?: string
-  profile_image_url?: string
-  last_touch?: number
-  dates?: ProfileDateType[]
-  socials?: SocialMediasType[]
-}
-
-type StatusType = 'loading' | 'failed' | 'finished' | 'not_started'
-
-export interface FormatterOutputType {
-  contact_status: StatusType
-  contact_id: UUID
-  data: ProfileType
-  meta: {
-    association?: any
-  }
-}
-
-export interface SocialMediasType {
-  type: string
-  url: string
-}
-
-// Hook
+import {FormatterOutputType} from './types'
+import { findContact } from './helpers'
+import { formatter } from './MiniContact-formatters'
 
 function useProfile(type, initData): FormatterOutputType {
   let data = formatter(type, initData)
   const [output, setOutput] = useState(data)
 
   useEffect(function useProfileEffect() {
+    let cancelRequest = false;
+
+    async function fetchContact(searchFor){
+      
+      const res = await findContact(searchFor, data)
+
+      if(!cancelRequest){
+        setOutput(res)
+      }
+    }
+
     // If it has a contact id, we should get the contact from server.
     if (data.contact_id) {
       // Loading mode.
@@ -51,7 +29,7 @@ function useProfile(type, initData): FormatterOutputType {
       })
 
       // Getting contact from server and updating the state.
-      getContactData(data.contact_id).then(res => setOutput(res))
+      fetchContact(data.contact_id)
     } else if (data.data.email) {
       // If it's not a contact, we are trying to find it in contacts.
 
@@ -63,10 +41,12 @@ function useProfile(type, initData): FormatterOutputType {
 
       // Trying to find the contact, if it's not exsits, we are returning the `data`
       // if it is, we will return the contact.
-      findContact(data.data.email, data).then(res => setOutput(res))
+      fetchContact(data.data.email)
     }
 
-    return function cleanUpProfile() {}
+    return function cleanUpProfile() {
+      cancelRequest = true
+    }
     // eslint-disable-next-line
   }, [])
 

@@ -4,7 +4,7 @@ import fecha from 'fecha'
 import IconCalendar from 'components/SvgIcons/Calendar2/IconCalendar'
 import { RelativeTime } from 'components/RelativeTime'
 
-import { ProfileDateType } from './useProfile'
+import { ProfileDateType } from './types'
 
 interface ActivityPropsType {
   dates?: ProfileDateType[]
