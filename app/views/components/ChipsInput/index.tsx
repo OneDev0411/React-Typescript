@@ -79,8 +79,13 @@ export function ChipsInput<T>({
 
   const [inputValue, setInputValue] = React.useState('')
 
-  const deleteChip = (item: T) =>
-    onChange(items.filter(anItem => anItem !== item))
+  const deleteChipAtIndex = index => {
+    const result = [...items]
+
+    result.splice(index, 1)
+
+    onChange(result)
+  }
 
   const selectSuggestedItem = (suggestedItem: T) => {
     onChange([...items, suggestedItem])
@@ -95,7 +100,7 @@ export function ChipsInput<T>({
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (items.length && !inputValue.length && event.key === 'Backspace') {
-      deleteChip(items[items.length - 1])
+      deleteChipAtIndex(items.length - 1)
     }
 
     if (
@@ -129,7 +134,7 @@ export function ChipsInput<T>({
         size="small"
         {...ChipProps}
         label={chip.label}
-        onDelete={readOnly ? undefined : () => deleteChip(item)}
+        onDelete={readOnly ? undefined : () => deleteChipAtIndex(index)}
       />
     )
   })
@@ -212,7 +217,7 @@ export function ChipsInput<T>({
               }}
             />
             <Popper
-              open
+              open={isOpen}
               anchorEl={inputRef.current}
               popperRef={popperRef}
               placement="bottom-start"
@@ -230,8 +235,7 @@ export function ChipsInput<T>({
                       selected={highlightedIndex === index}
                       button
                     >
-                      {suggestion.avatar &&
-                      typeof suggestion.avatar === 'string' ? (
+                      {typeof suggestion.avatar === 'string' ? (
                         <ListItemAvatar>
                           <Avatar
                             title={suggestion.subtitle}
@@ -239,7 +243,9 @@ export function ChipsInput<T>({
                           />
                         </ListItemAvatar>
                       ) : (
-                        <ListItemAvatar>{suggestion.avatar}</ListItemAvatar>
+                        <ListItemAvatar>
+                          {suggestion.avatar || <Avatar title="" image="" />}
+                        </ListItemAvatar>
                       )}
                       <ListItemText
                         primary={suggestion.title}

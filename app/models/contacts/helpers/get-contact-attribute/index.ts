@@ -3,7 +3,7 @@ import { sortBy } from 'lodash'
 export function getContactAttribute(
   contact: INormalizedContact | null,
   attributeDef: IContactAttributeDef | null,
-  filter?
+  filter?: (attributeDef: IContactAttributeWithDef) => boolean
 ) {
   if (!contact) {
     throw new Error('Contact object is required!')
@@ -13,7 +13,7 @@ export function getContactAttribute(
     throw new Error('Attribute definition is required!')
   }
 
-  let result: ISubContact['attributes'][UUID] = []
+  let result: IContactAttributeWithDef[] = []
 
   if (attributeDef.singular) {
     let attributes = contact.sub_contacts[0].attributes[attributeDef.id]

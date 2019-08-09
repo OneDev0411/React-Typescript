@@ -3,6 +3,8 @@ import { Chip, createStyles, Input, makeStyles, Theme } from '@material-ui/core'
 
 import Flex from 'styled-flex-component'
 
+import { Fragment } from 'react'
+
 import { Recipient } from '../../../ContactsChipsInput/types'
 import { InlineInputLabel } from '../../../InlineInputLabel'
 import { RecipientToString } from '../../../ContactsChipsInput/RecipientToString'
@@ -54,9 +56,9 @@ function RecipientList({ recipients }: RecipientListProps) {
   return (
     <Flex alignCenter>
       {recipientStrings.map((recipientString, index) => (
-        <>
+        <Fragment key={`${index}-${recipientString}`}>
           {recipientString} {index < recipientStrings.length - 1 ? ', ' : ''}
-        </>
+        </Fragment>
       ))}
       {remaining > 0 && (
         <>

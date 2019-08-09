@@ -29,23 +29,17 @@ declare interface IContactAttributeDef {
   brand?: UUID
 }
 
+type IContactAttributeWithDef = IContactAttribute & {
+  attribute_def: IContactAttributeDef
+}
+
 declare interface ISubContact {
   id: UUID
   brand: UUID
   created_at: number
   type: 'sub_contact'
-  sections: Record<
-    UUID,
-    (IContactAttribute & {
-      attribute_def: IContactAttributeDef
-    })[]
-  >
-  attributes: Record<
-    UUID,
-    (IContactAttribute & {
-      attribute_def: IContactAttributeDef
-    })[]
-  >
+  sections: Record<UUID, (IContactAttributeWithDef)[]>
+  attributes: Record<UUID, (IContactAttributeWithDef)[]>
 }
 
 declare interface IContactBase {
