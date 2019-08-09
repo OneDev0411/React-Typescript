@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import {FormatterOutputType} from './types'
+import { FormatterOutputType } from './types'
 import { findContact } from './helpers'
 import { formatter } from './MiniContact-formatters'
 
@@ -9,13 +9,12 @@ function useProfile(type, initData): FormatterOutputType {
   const [output, setOutput] = useState(data)
 
   useEffect(function useProfileEffect() {
-    let cancelRequest = false;
+    let cancelRequest = false
 
-    async function fetchContact(searchFor){
-      
+    async function fetchContact(searchFor) {
       const res = await findContact(searchFor, data)
 
-      if(!cancelRequest){
+      if (!cancelRequest) {
         setOutput(res)
       }
     }

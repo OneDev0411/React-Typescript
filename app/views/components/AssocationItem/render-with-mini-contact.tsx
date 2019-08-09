@@ -9,7 +9,7 @@ export function renderWithMiniContact(WrappedComponent) {
         <WrappedComponent {...props} />
       </MiniContact>
     ) : (
-        <WrappedComponent {...props} />
-      )
+      <WrappedComponent {...props} />
+    )
   }
 }

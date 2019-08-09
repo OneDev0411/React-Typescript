@@ -1,1 +1,1 @@
-export { default } from './MiniContactProfile' 
+export { default } from './MiniContactProfile'

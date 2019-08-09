@@ -123,8 +123,7 @@ export async function findContact(email: string, base_output) {
     const res = await searchContacts('hi@mojtabast.com')
 
     if (res.data.length > 0) {
-
-      const foundContact = res.data[0];
+      const foundContact = res.data[0]
 
       return {
         ...base_output,
