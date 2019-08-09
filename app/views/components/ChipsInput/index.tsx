@@ -23,6 +23,7 @@ import { useDebounce } from 'use-debounce'
 import { ChipsInputProps } from './types'
 import Avatar from '../Avatar'
 import { InputWithStartAdornment } from './InputWithStartAdornment'
+import { useChipStyles } from '../../../styles/chip.style'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -57,6 +58,7 @@ const emptySuggestion$ = of([])
  * We can consider replacing this with that when it's out.
  */
 export function ChipsInput<T>({
+  TextFieldComponent = TextField,
   TextFieldProps = {},
   ChipProps = {},
   items,
@@ -71,6 +73,7 @@ export function ChipsInput<T>({
   getSuggestions = () => emptySuggestion$
 }: ChipsInputProps<T>) {
   const classes = useStyles()
+  const chipClasses = useChipStyles()
 
   const theme = useTheme()
 
@@ -124,13 +127,15 @@ export function ChipsInput<T>({
     }
   }
 
-  const renderedChips = items.map((item, index) => {
+  const chips = items.map((item, index) => {
     const chip = itemToChip(item)
 
     return (
       <Chip
         key={`${index}-${chip.label}`}
-        className={classNames(classes.chip, ChipProps.className)}
+        className={classNames(classes.chip, ChipProps.className, {
+          [chipClasses.error]: chip.hasError
+        })}
         size="small"
         {...ChipProps}
         label={chip.label}
@@ -192,7 +197,7 @@ export function ChipsInput<T>({
 
         return (
           <div className={classes.container}>
-            <TextField
+            <TextFieldComponent
               inputRef={inputRef}
               fullWidth
               {...TextFieldProps}
@@ -205,15 +210,14 @@ export function ChipsInput<T>({
                 inputComponent: InputWithStartAdornment,
                 inputProps: {
                   ...inputProps,
-                  adornment: renderedChips
+                  adornment: chips
                 },
                 readOnly,
                 classes: {
                   root: classes.inputRoot,
                   input: classes.inputInput
                 },
-                // interestingly, other values don't work and off works here!
-                autoComplete: 'off'
+                autoComplete: 'disabled'
               }}
             />
             <Popper

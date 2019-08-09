@@ -21,6 +21,7 @@ export class FinalFormDrawer extends React.Component {
     disableSubmitByEnter: PropTypes.bool,
     validate: PropTypes.func,
     formId: PropTypes.string.isRequired,
+    decorators: PropTypes.array,
     footerRenderer: PropTypes.func
   }
 
@@ -32,6 +33,7 @@ export class FinalFormDrawer extends React.Component {
     submitButtonLabel: 'Save',
     submittingButtonLabel: 'Saving ...',
     closeDrawerOnBackdropClick: false,
+    decorators: [],
     validate: () => ({})
   }
 
@@ -90,6 +92,7 @@ export class FinalFormDrawer extends React.Component {
       <Form
         validate={this.props.validate}
         onSubmit={this.onSubmit}
+        decorators={this.props.decorators}
         mutators={{ ...arrayMutators }}
         initialValues={this.props.initialValues}
         render={formProps => {

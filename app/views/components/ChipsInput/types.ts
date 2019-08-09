@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 import { ChipProps } from '@material-ui/core/Chip'
 import { TextFieldProps } from '@material-ui/core/TextField'
 import { Observable } from 'rxjs'
+import { TextField } from '@material-ui/core'
 
 export interface ChipInputItem {
   label: ReactNode | string
@@ -69,5 +70,7 @@ export interface ChipsInputProps<T> {
    * The following props are controlled and may not be overridden:
    * - {@link TextFieldProps#startAdornment startAdornment}
    */
-  TextFieldProps?: TextFieldProps // TODO update type to take out excluded props
+  TextFieldProps?: TextFieldProps | any // TODO update type to take out excluded props
+
+  TextFieldComponent?: typeof TextField
 }

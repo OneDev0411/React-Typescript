@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { Field } from 'react-final-form'
 import { TextField } from 'final-form-material-ui'
+import createDecorator from 'final-form-focus'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import EmailBody from 'components/EmailCompose/components/EmailBody'
@@ -14,6 +15,7 @@ import { FinalFormDrawer } from '../../FinalFormDrawer'
 import { AttachmentsList } from '../fields/Attachments'
 import { Footer } from '../Footer'
 import { EmailComposeDrawerProps, EmailFormValues } from '../types'
+import { validateRecipient } from '../../ContactsChipsInput/helpers/validate-recipient'
 
 interface State {
   isSendingEmail: boolean
@@ -50,6 +52,19 @@ class EmailComposeDrawer extends React.Component<
     topFieldsCollapsed: false,
     isSendingEmail: false
   }
+
+  focusOnErrors = createDecorator(() => {
+    return [
+      {
+        // we use this decorator to expand recipients if form is submitted
+        // while it has error
+        name: 'recipients',
+        focus: () => {
+          this.expandTopFields()
+        }
+      }
+    ]
+  })
 
   emailBodyRef = React.createRef<any>()
 
@@ -88,12 +103,18 @@ class EmailComposeDrawer extends React.Component<
     (this.formObject.recipients || []).length !==
     (this.props.recipients || []).length
 
-  validate = values => {
+  validate = (values: EmailFormValues) => {
     const errors: { [key in keyof EmailFormValues]?: string } = {}
     const { recipients } = values
 
     if (!recipients || recipients.length === 0) {
       errors.recipients = 'You should select one recipient at least'
+    } else {
+      const recipientErrors = recipients.map(validateRecipient).filter(i => i)
+
+      if (recipientErrors.length > 0) {
+        errors.recipients = recipientErrors[0]
+      }
     }
 
     return errors
@@ -193,6 +214,7 @@ class EmailComposeDrawer extends React.Component<
         onClose={this.props.onClose}
         onSubmit={this.handleSubmit}
         validate={this.validate}
+        decorators={[this.focusOnErrors]}
         submitting={this.state.isSendingEmail}
         closeDrawerOnBackdropClick={false}
         submitButtonLabel="Send"

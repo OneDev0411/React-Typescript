@@ -23,6 +23,7 @@ declare interface IContactList extends ISavedSegment<IContactAttributeFilter> {
 
   member_count: number
 
+  type: 'contact_list'
   created_by: UUID
   brand: UUID
 }

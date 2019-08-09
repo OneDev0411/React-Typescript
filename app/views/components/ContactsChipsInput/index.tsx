@@ -11,6 +11,8 @@ import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import Fuse from 'fuse.js'
 
+import { TextField } from 'final-form-material-ui'
+
 import { searchContacts } from 'models/contacts/search-contacts'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { getSavedSegments } from 'actions/filter-segments/get-saved-segment'
@@ -153,12 +155,15 @@ function ContactsChipsInput({
       itemToSuggestion={recipientToSuggestion}
       getSuggestions={getSuggestions}
       createFromString={value => ({ email: value })}
+      TextFieldComponent={TextField}
       TextFieldProps={{
         margin: 'dense',
         InputProps: {
           startAdornment: <InlineInputLabel>{label}</InlineInputLabel>,
           ...InputProps
         },
+        input,
+        meta,
         ...TextFieldProps
       }}
     />
@@ -185,6 +190,7 @@ const mapStateToProps = ({ contacts }: IAppState) => {
     areListsFetched: isListFetched(contacts.filterSegments)
   }
 }
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps

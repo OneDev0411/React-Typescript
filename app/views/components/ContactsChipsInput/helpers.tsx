@@ -6,7 +6,7 @@ import React from 'react'
 
 import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 
-import { Recipient } from './types'
+import { EmailRecipient, Recipient } from './types'
 import { ChipInputItem, Suggestion } from '../ChipsInput/types'
 import { idIsUUID } from '../Forms/MultipleContactsSelect/AddRecipient/helpers'
 
@@ -14,13 +14,18 @@ import ListIcon from '../SvgIcons/List/ListIcon'
 
 import TagIcon from '../SvgIcons/Tag/TagIcon'
 import { RecipientToString } from './RecipientToString'
+import { validateRecipient } from './helpers/validate-recipient'
 
 export function isContactList(input: any): input is IContactList {
-  return input.type === 'contact_list'
+  return (input as IContactList).type === 'contact_list'
 }
 
-export function isContactTag(input: any): input is IContactTag {
-  return input.type === 'crm_tag'
+export function isContactTag(input: Recipient): input is IContactTag {
+  return (input as IContactTag).type === 'crm_tag'
+}
+
+export function isEmailRecipient(input: Recipient): input is EmailRecipient {
+  return !!(input as EmailRecipient).email
 }
 
 const tagsFuseOptions: FuseOptions<IContactTag> = {
@@ -57,20 +62,25 @@ export function recipientToSuggestion(recipient: Recipient): Suggestion {
 }
 
 export function recipientToChip(recipient: Recipient): ChipInputItem {
+  const hasError = !!validateRecipient(recipient)
+
   if (isContactList(recipient)) {
     return {
-      label: recipient.name
+      label: recipient.name,
+      hasError
     }
   }
 
   if (isContactTag(recipient)) {
     return {
-      label: recipient.text
+      label: recipient.text,
+      hasError
     }
   }
 
   return {
-    label: <RecipientToString recipient={recipient} />
+    label: <RecipientToString recipient={recipient} />,
+    hasError
   }
 }
 
@@ -79,11 +89,11 @@ export function recipientToString(
   emailAttributeDef: IContactAttributeDef
 ): string {
   if (isContactList(recipient)) {
-    return `${recipient.name}(List)`
+    return `${recipient.name} (List)`
   }
 
   if (isContactTag(recipient)) {
-    return `${recipient.text}(Tag)`
+    return `${recipient.text} (Tag)`
   }
 
   if (recipient.email) {
