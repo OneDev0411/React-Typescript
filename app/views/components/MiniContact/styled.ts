@@ -13,6 +13,16 @@ export const ProfileContainer = styled.div`
   .details {
     padding: 0 1.5rem 1rem 1.5rem;
 
+    & > div,
+    & .person-more-info > div {
+      display: flex;
+
+      & button {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+    }
+
     & > div:first-child {
       font-size: 1.375rem;
       font-weight: bold;
@@ -28,14 +38,17 @@ export const ProfileContainer = styled.div`
     }
 
     .person-socials {
+      margin-top: 0.065rem;
+
       & > a {
-        display: inline-block;
+        display: flex;
+        margin-right: 0.5rem;
       }
     }
   }
 
   .activity {
-    padding: 1.5rem;
+    padding: 0.75rem 1.5rem;
     background: #f2f2f2;
 
     ul {
@@ -50,6 +63,7 @@ export const ProfileContainer = styled.div`
 
         & .icon {
           margin-right: 0.5rem;
+          display: flex;
         }
       }
     }
