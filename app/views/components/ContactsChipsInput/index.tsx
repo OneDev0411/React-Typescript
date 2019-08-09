@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { FieldRenderProps } from 'react-final-form'
 import { Observable } from 'rxjs'
@@ -6,12 +6,10 @@ import { of } from 'rxjs/observable/of'
 import { combineLatest } from 'rxjs/observable/combineLatest'
 import { fromPromise } from 'rxjs/observable/fromPromise'
 import { map, startWith } from 'rxjs/operators'
-
 import { useControllableState } from 'react-use-controllable-state/dist'
-
 import { ThunkDispatch } from 'redux-thunk'
-
 import { AnyAction } from 'redux'
+import Fuse from 'fuse.js'
 
 import { searchContacts } from 'models/contacts/search-contacts'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
@@ -19,8 +17,12 @@ import { getSavedSegments } from 'actions/filter-segments/get-saved-segment'
 import { IAppState } from 'reducers/index'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import { getSegments, isListFetched } from 'reducers/filter-segments'
-
 import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
+import {
+  IAttributeDefsState,
+  selectDefinitionByName
+} from 'reducers/contacts/attributeDefs'
+import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 
 import { ChipsInput } from '../ChipsInput'
 import { InlineInputLabel } from '../InlineInputLabel'
@@ -60,6 +62,7 @@ interface Props extends BaseProps {
   value?: Recipient[]
   getContactsTags: IAsyncActionProp<typeof getContactsTags>
   getSavedSegments: IAsyncActionProp<typeof getSavedSegments>
+  attributeDefs: IAttributeDefsState
 }
 
 /**
@@ -71,6 +74,7 @@ function ContactsChipsInput({
   getSavedSegments,
   isLoadingTags,
   areListsFetched,
+  attributeDefs,
   tags,
   lists,
   label,
@@ -97,6 +101,10 @@ function ContactsChipsInput({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const emailAttributeDef = useMemo(
+    () => selectDefinitionByName(attributeDefs, 'email')!,
+    [attributeDefs]
+  )
   const getSuggestions: (searchTerm: string) => Observable<Recipient[]> = (
     searchTerm: string
   ) => {
@@ -109,12 +117,21 @@ function ContactsChipsInput({
               map(result => {
                 const contacts = normalizeContactAttribute(result)
 
-                return contacts
-                  .filter(contact => contact.summary!.email)
-                  .map(contact => ({
-                    contact,
-                    email: contact.summary!.email
-                  }))
+                return new Fuse(
+                  contacts
+                    .map(contact => {
+                      const emails: string[] = (
+                        getContactAttribute(contact, emailAttributeDef) || []
+                      ).map(attr => attr.text)
+
+                      return emails.map(email => ({
+                        contact,
+                        email
+                      }))
+                    })
+                    .flat(),
+                  { keys: ['email', 'contact.summary.display_name'] }
+                ).search(searchTerm)
               })
             )
           : of([])
@@ -161,6 +178,7 @@ const mapStateToProps = ({ contacts }: IAppState) => {
   const isLoadingTags = isFetchingTags(contacts.tags)
 
   return {
+    attributeDefs: contacts.attributeDefs,
     tags,
     lists,
     isLoadingTags,
