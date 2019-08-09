@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import deal from 'fixtures/deal/live-seller'
 
 import { getFileUrl } from '.'
@@ -20,5 +21,28 @@ describe('Test deal actions get-file-url', () => {
     })
 
     expect(links).toHaveLength(0)
+  })
+
+  it('Should always return original file', () => {
+    const task = {
+      ...deal.checklists[0].tasks[1],
+      submission: {
+        file: {
+          id: '123456',
+          url: 'file.url'
+        }
+      }
+    }
+
+    const links = getFileUrl({
+      type: 'task',
+      deal,
+      task,
+      envelopes: [],
+      isBackOffice: false
+    })
+
+    expect(links).toHaveLength(1)
+    expect(links[0]).toHaveProperty('originalFile')
   })
 })

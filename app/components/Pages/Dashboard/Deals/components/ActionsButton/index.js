@@ -25,10 +25,10 @@ import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 
 import { selectActions } from './helpers/select-actions'
 import { getEsignAttachments } from './helpers/get-esign-attachments'
-import { getFileUrl } from './helpers/get-file-url'
 
 import { getTaskEnvelopes } from '../../utils/get-task-envelopes'
 import { getDocumentEnvelopes } from '../../utils/get-document-envelopes'
+import { getFileUrl } from '../../utils/get-document-file-url'
 
 import { SelectItemDrawer } from './components/SelectItemDrawer'
 
