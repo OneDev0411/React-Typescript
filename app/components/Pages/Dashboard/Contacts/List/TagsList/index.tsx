@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import _ from 'underscore'
 
 import {
-  addActiveFilter,
   removeActiveFilter,
   updateActiveFilter
 } from 'actions/filter-segments/active-filters'
@@ -122,7 +121,7 @@ export class TagsList extends React.Component<Props> {
     const { existingTags, isFetching } = this.props
 
     return (
-      <div style={{ marginTop: '2rem' }} data-test="tags-list">
+      <div style={{ marginTop: '1rem' }} data-test="tags-list">
         <ListTitle>
           <span>Tags</span>
           <Link to="/dashboard/account/manage-tags">
@@ -197,7 +196,6 @@ function mapStateToProps(state: {
 export default connect(
   mapStateToProps,
   {
-    addActiveFilter,
     removeActiveFilter,
     updateActiveFilter
   }

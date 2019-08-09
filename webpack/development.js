@@ -54,6 +54,13 @@ webpackConfig.plugins.push(
         // TODO: Get rid of these too if it's possible
         'app/styles/vendor/**',
 
+        'app/models/contacts/get-contacts-job/index.js',
+        'app/models/contacts/get-duplicates-contacts/index.js',
+        'app/models/contacts/merge-multiple-contatcs/index.js',
+        'app/models/contacts/get-conact-cluster-duplicates/index.js',
+        'app/components/Pages/Dashboard/Contacts/DuplicateContacts/**',
+        'app/components/Pages/Dashboard/Contacts/components/DuplicateContacts/index.js',
+
         // Flows stuff
         // TODO: remove them from here when we enabled flows
         'app/models/flows/**',

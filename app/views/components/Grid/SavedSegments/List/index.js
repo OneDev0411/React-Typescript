@@ -15,11 +15,11 @@ import {
   selectActiveSavedSegment
 } from 'reducers/filter-segments'
 
-import LoadingIcon from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-import { ListItem, ListTitle } from 'components/SlideMenu/Menu/styled'
 import { ShowMoreLess } from 'components/ShowMoreLess'
+import LoadingIcon from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 import Item from './Item'
+import { ListTitle, ListItem } from './styled'
 
 class SegmentsList extends React.Component {
   state = {
@@ -77,14 +77,10 @@ class SegmentsList extends React.Component {
     const { props } = this
 
     return (
-      <div data-test="lists-list">
+      <div data-test="lists-list" style={{ marginBottom: '2rem' }}>
         <ListTitle>Lists</ListTitle>
 
-        <ShowMoreLess
-          moreText="More lists"
-          lessText="Less lists"
-          style={{ marginBottom: '1rem' }}
-        >
+        <ShowMoreLess moreText="More lists" lessText="Less lists">
           {props.list.map(item => {
             const { id } = item
 

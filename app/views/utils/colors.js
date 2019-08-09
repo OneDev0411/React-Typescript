@@ -8,12 +8,12 @@ export const yellow = {
   A100: '#F8A700'
 }
 
+export const green = {
+  A100: '#32b863',
+  primary: '#5cb85c'
+}
 export const orange = {
   primary: '#f6a623'
-}
-
-export const green = {
-  primary: '#5cb85c'
 }
 
 export const blue = {

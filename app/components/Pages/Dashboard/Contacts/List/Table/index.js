@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-
 import { connect } from 'react-redux'
 
 import { getAttributeFromSummary } from 'models/contacts/helpers'
@@ -22,6 +21,7 @@ import MergeContacts from '../Actions/MergeContacts'
 import ExportContacts from '../Actions/ExportContactsButton'
 import TagContacts from '../Actions/TagContacts'
 import CreateEvent from '../Actions/CreateEvent'
+import AddToFlowAction from '../Actions/AddToFlow'
 
 import { ActionWrapper } from './components/ActionWrapper'
 import { LoadingComponent } from './components/LoadingComponent'
@@ -29,6 +29,7 @@ import { LoadingComponent } from './components/LoadingComponent'
 import Menu from './columns/Menu'
 import Name from './columns/Name'
 import TagsString from './columns/Tags'
+import FlowCell from './columns/Flows'
 import { Contact } from './columns/Contact'
 import LastTouched from './columns/LastTouched'
 
@@ -68,6 +69,16 @@ class ContactsList extends React.Component {
       render: ({ rowData: contact }) => <Contact contact={contact} />
     },
     {
+      header: 'Tags',
+      id: 'tag',
+      render: ({ rowData: contact }) => (
+        <TagsString
+          contact={contact}
+          onSelectTagContact={this.onSelectTagContact}
+        />
+      )
+    },
+    {
       header: () => (
         <React.Fragment>
           Last Touch
@@ -84,12 +95,16 @@ class ContactsList extends React.Component {
       render: ({ rowData: contact }) => <LastTouched contact={contact} />
     },
     {
-      header: 'Tags',
-      id: 'tag',
+      header: 'Flows',
+      id: 'flows',
+      sortable: false,
       render: ({ rowData: contact }) => (
-        <TagsString
-          contact={contact}
-          onSelectTagContact={this.onSelectTagContact}
+        <FlowCell
+          callback={async () => {
+            await this.props.reloadContacts()
+          }}
+          contactId={contact.id}
+          flowsCount={Array.isArray(contact.flows) ? contact.flows.length : 0}
         />
       )
     },
@@ -120,6 +135,7 @@ class ContactsList extends React.Component {
             excludedRows={excludedRows}
             exportIds={selectedRows}
             filters={filters.attributeFilters}
+            flows={filters.flows}
             crmTasks={filters.crm_tasks}
             searchText={filters.text}
             conditionOperator={filters.filter_type}
@@ -199,6 +215,23 @@ class ContactsList extends React.Component {
           </ActionWrapper>
         )
       }
+    },
+    {
+      render: ({
+        entireMode,
+        selectedRows,
+        excludedRows,
+        resetSelectedRows
+      }) => (
+        <AddToFlowAction
+          entireMode={entireMode}
+          excludedRows={excludedRows}
+          selectedRows={selectedRows}
+          filters={this.props.filters}
+          resetSelectedRows={resetSelectedRows}
+          reloadContacts={this.props.reloadContacts}
+        />
+      )
     },
     {
       render: ({ entireMode, selectedRows, resetSelectedRows }) => {

@@ -22,7 +22,7 @@ function FlowsList({ flows, onStop }) {
         <List items={flows} onStop={onStop} />
       ) : (
         <div style={{ color: grey.A900 }}>
-          No flows connected to this contact.
+          No flow. Didn't add to any flow yet!
         </div>
       )}
     </Section>

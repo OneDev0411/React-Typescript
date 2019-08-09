@@ -47,21 +47,23 @@ interface ILabelValue {
   value: string
 }
 
-declare interface ApiResponse<T> {
-  body: {
-    data: T
-    references: T
-  }
+declare interface ApiResponseBody<T> {
+  data: T
+  references: T
   code: string
-  status: number
-  statusCode: number
-  statusText: number
-  info:
+  info?:
     | boolean
     | {
         count: number
         total: number
       }
+}
+
+declare interface ApiResponse<T> {
+  body: ApiResponseBody<T>
+  status: number
+  statusCode: number
+  statusText: number
 }
 
 declare type ApiPromise<T> = Promise<ApiResponse<T>>

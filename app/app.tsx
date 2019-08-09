@@ -34,7 +34,7 @@ const history = syncHistoryWithStore(browserHistory, store)
  * {@link Cypress.Chainable.navigate navigate command}
  */
 if ((window as any).Cypress) {
-  ;(window as any).__history = history
+  ; (window as any).__history = history
 }
 
 // smooth scroll polyfill

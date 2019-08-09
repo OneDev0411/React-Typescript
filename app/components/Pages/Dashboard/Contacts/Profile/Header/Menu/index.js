@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
-import { AddToFlow } from 'components/AddToFlow'
+import AddToFlowButton from 'components/AddToFlowButton'
 import SendEmailButton from 'components/SendEmailButton'
 import { CloseButton } from 'components/Button/CloseButton'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
@@ -24,12 +24,16 @@ Menu.defaultProps = {
 
 function Menu(props) {
   const { contact, closeButtonQuery, backUrl } = props
+  let { flows } = contact
 
   return (
     <Flex alignCenter style={{ padding: '1.5em 0' }}>
-      <AddToFlow
-        associations={{ contacts: [contact.id] }}
+      <AddToFlowButton
+        activeFlows={Array.isArray(flows) ? flows.map(f => f.origin_id) : []}
         callback={props.addToFlowCallback}
+        contacts={{
+          ids: [contact.id]
+        }}
       />
 
       <SendEmailButton

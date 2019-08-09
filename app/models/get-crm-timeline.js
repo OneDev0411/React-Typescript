@@ -14,18 +14,18 @@ async function getCRMTimeline(query = {}, associations = []) {
   ]
 
   try {
-    const calendarData = await getCalendar(
-      [low, high],
-      {
+    const calendarData = await getCalendar({
+      range: [low, high],
+      filter: {
         ...query,
         object_types: ['crm_association', 'email_campaign_recipient']
       },
-      [
+      associations: [
         ...CRM_TASKS_QUERY.associations,
         ...calenderAssociations,
         ...associations
       ]
-    )
+    })
 
     return normalizeData(calendarData)
   } catch (error) {

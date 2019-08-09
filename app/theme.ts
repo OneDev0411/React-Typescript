@@ -28,10 +28,13 @@ export const theme = createMuiTheme({
       main: red.A200,
       light: red.A100,
       dark: red.primary
+    },
+    text: {
+      secondary: disabledColor
     }
   },
   shape: {
-    borderRadius: 4
+    borderRadius: 3
   },
   typography: {
     fontFamily: [
@@ -48,6 +51,9 @@ export const theme = createMuiTheme({
     ].join(','),
     button: {
       textTransform: 'none'
+    },
+    h5: {
+      fontFamily: 'Merriweather'
     }
   },
   props: {

@@ -22,7 +22,7 @@ const Container = styled.div`
   }
 
   .status {
-    width: 1.5em;
+    width: 1em;
     height: 1.5em;
     margin-right: 0.5em;
 
@@ -54,6 +54,16 @@ const Container = styled.div`
   .small-text {
     font-size: 0.875rem;
     line-height: 1.71;
+  }
+
+  .next-step__icon {
+    width: 1em;
+    height: 1em;
+    margin-right: 0.5em;
+  }
+
+  .next-step__detail {
+    width: calc(100% - 1.5em);
   }
 `
 

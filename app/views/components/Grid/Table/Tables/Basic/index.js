@@ -84,7 +84,7 @@ class BasicTable extends React.Component {
           />
         )}
 
-        <TBody {...getBodyProps()}>
+        <TBody {...getBodyProps()} data-test="grid-body">
           {isFetching && !isFetchingMore && <LoadingState />}
           {SubComponent && <SubComponent data={data} columns={columns} />}
 

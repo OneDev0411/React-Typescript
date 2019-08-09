@@ -22,6 +22,8 @@ import PropertiesIcon from '../../../../views/components/SvgIcons/Properties/Ico
 import PropertiesIconActive from '../../../../views/components/SvgIcons/Properties/IconPropertiesActive'
 import CalendarIcon from '../../../../views/components/SvgIcons/Calendar2/IconCalendar'
 import CalendarIconActive from '../../../../views/components/SvgIcons/Calendar2/IconCalendarActive'
+import FlowIcon from '../../../../views/components/SvgIcons/Flow/IconFlow'
+import FlowIconActive from '../../../../views/components/SvgIcons/Flow/IconFlowActive'
 import DealsNotifications from '../Deals/components/SideNavBadge'
 
 import { selectNotificationNewCount } from '../../../../reducers/notifications'
@@ -85,6 +87,15 @@ function AppSideNav(props) {
               to="/dashboard/contacts"
               Icon={ContactsIcon}
               ActiveIcon={ContactsIconActive}
+            />
+          </Acl.Crm>
+
+          <Acl.Crm>
+            <SideNavLinkItem
+              tooltip="Flows"
+              to="/dashboard/flows"
+              Icon={FlowIcon}
+              ActiveIcon={FlowIconActive}
             />
           </Acl.Crm>
 

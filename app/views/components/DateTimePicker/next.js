@@ -85,6 +85,11 @@ function DateTimePicker(props) {
     if (!props.hasTime || !props.hasDone) {
       // Close PopUp
       setOpen(false)
+
+      // Trigger onDone when there is no Done button.
+      if (!props.hasDone) {
+        props.onDone(date)
+      }
     }
   }
 

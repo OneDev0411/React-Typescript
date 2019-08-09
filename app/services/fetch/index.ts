@@ -47,8 +47,8 @@ export default class Fetch {
     this._startTime = null
   }
 
-  _create(method, endpoint) {
-    const { user, brand } = store.getState()
+  _create(method, endpoint): SuperAgent.SuperAgentRequest {
+    const { user, brand } = store.getState() as any
 
     let brandId
 
@@ -66,7 +66,7 @@ export default class Fetch {
 
     this._startTime = Date.now()
 
-    let agent
+    let agent: SuperAgent.SuperAgentRequest
 
     if (useProxy) {
       agent = SuperAgent.post(this._proxyUrl)

@@ -14,6 +14,7 @@ class ExportContacts extends React.Component {
       excludedRows,
       exportIds,
       filters,
+      flows,
       crmTasks,
       user,
       users,
@@ -55,6 +56,10 @@ class ExportContacts extends React.Component {
 
       if (Array.isArray(crmTasks) && crmTasks.length > 0) {
         params.crm_tasks = crmTasks
+      }
+
+      if (Array.isArray(flows) && flows.length > 0) {
+        params.flows = flows
       }
     }
 

@@ -94,7 +94,9 @@ export const ButtonAppearances = {
     color: ${props => (props.isOpen ? primary : '#000')};
     background-color: ${props => (props.isActive ? grey.A100 : 'transparent')};
 
+    &.ghost,
     &[disabled] {
+      color: ${grey.A550};
       border-color: ${grey.A550};
 
       svg {

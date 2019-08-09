@@ -21,7 +21,13 @@ function handleIds(ids) {
   return {}
 }
 
-function handleFilters(filters, crmTasks, excludes = [], searchText = '') {
+function handleFilters(
+  filters,
+  flows,
+  crmTasks,
+  excludes = [],
+  searchText = ''
+) {
   const resultFilters = {}
 
   if (Array.isArray(filters) && filters.length > 0) {
@@ -34,6 +40,10 @@ function handleFilters(filters, crmTasks, excludes = [], searchText = '') {
 
   if (Array.isArray(crmTasks) && crmTasks.length > 0) {
     resultFilters.crm_tasks = crmTasks
+  }
+
+  if (Array.isArray(flows) && flows.length > 0) {
+    resultFilters.flows = flows
   }
 
   if (searchText.length > 0) {
@@ -57,6 +67,7 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
     const {
       ids,
       filters,
+      flows,
       crm_tasks,
       excludes,
       users,
@@ -72,7 +83,7 @@ router.post('/contacts/export/outlook/:brand', bodyParser(), async ctx => {
     if (ids) {
       data = handleIds(ids)
     } else {
-      data = handleFilters(filters, crm_tasks, excludes, searchText)
+      data = handleFilters(filters, flows, crm_tasks, excludes, searchText)
     }
 
     if (typeof users === 'string') {

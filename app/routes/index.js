@@ -166,10 +166,21 @@ const AsyncContactsImportCsv = Load({
     import('../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */)
 })
 
-const AsyncContactsDuplicateContacts = Load({
+
+/* ==================================== */
+//  CRM FLOWS
+/* ==================================== */
+
+const AsyncFlowsList = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Contacts/DuplicateContacts' /* webpackChunkName: "duplicate-contacts" */)
+    import('../components/Pages/Dashboard/Flows/List' /* webpackChunkName: "flow_list" */)
 })
+
+const AsyncFlowEdit = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Flows/Edit' /* webpackChunkName: "flow_edit" */)
+})
+
 
 /* ==================================== */
 //  Marketing Center
@@ -405,6 +416,8 @@ export default (
       <Route path="/branch" component={AsyncBranch} />
       <Route path="/share" component={AsyncShare} />
 
+      <Route path="/dashboard/calendar" component={AsyncCalendar} />
+
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />
 
@@ -416,17 +429,14 @@ export default (
       <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
 
       <Route component={AsyncContacts} path="/dashboard/contacts" />
-      <Route
-        path="/dashboard/contacts/duplicate-contacts"
-        component={AsyncContactsDuplicateContacts}
-      />
       <Route path="/dashboard/contacts/:id" component={AsyncContactProfile} />
       <Route
         path="/dashboard/contacts/import/csv"
         component={AsyncContactsImportCsv}
       />
 
-      <Route path="/dashboard/calendar" component={AsyncCalendar} />
+      <Route path="/dashboard/flows" component={AsyncFlowsList} />
+      <Route path="/dashboard/flows/:id" component={AsyncFlowEdit} />
 
       <Route
         path="/dashboard/deals(/filter/:filter)"

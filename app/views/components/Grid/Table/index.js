@@ -176,7 +176,8 @@ Grid.propTypes = {
   getSubTableProps: PropTypes.func,
   columns: PropTypes.array.isRequired,
   data: PropTypes.array,
-  summary: PropTypes.object
+  summary: PropTypes.object,
+  showToolbar: PropTypes.bool
 }
 
 Grid.defaultProps = {
@@ -195,7 +196,8 @@ Grid.defaultProps = {
   getSubTableProps: () => {},
   plugins: {},
   data: [],
-  summary: {}
+  summary: {},
+  showToolbar: true
 }
 
 export default Grid

@@ -69,9 +69,11 @@ function Item({ item, onStop }) {
       <div className="upcoming small-text">Upcoming</div>
       <Flex alignCenter>
         {Icon && <Icon className="next-step__icon" />}
-        {nextStepDetail.type}
-        {' on '}
-        {fecha.format(new Date(nextStepDetail.at * 1000), 'MMM DD, hh:mm A')}
+        <div className="next-step__detail">
+          {nextStepDetail.type}
+          {' on '}
+          {fecha.format(new Date(nextStepDetail.at * 1000), 'MMM DD, hh:mm A')}
+        </div>
       </Flex>
       {missedStepsCount > 0 && (
         <div className="missed-steps small-text">{`${missedStepsCount} Missed Steps`}</div>

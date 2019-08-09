@@ -22,7 +22,16 @@ export function addOpenHouseFilter(index: number = 0) {
     .click()
 }
 
-function openNewFilterDropdown(filterType: 'Tag' | 'Open House' | 'Origin') {
+export function addFlowFilter(index: number = 0) {
+  openNewFilterDropdown('Flows')
+
+  return cy
+    .getByTestSelector('filter-item')
+    .eq(index)
+    .click()
+}
+
+function openNewFilterDropdown(filterType: 'Tag' | 'Open House' | 'Flows' | 'Origin') {
   cy.getByTestSelector('add-filter').click()
 
   return cy.getByTestSelector(`add-filter-item-${filterType}`).click()

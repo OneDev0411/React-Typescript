@@ -8,7 +8,7 @@ import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs'
 import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 
-import deleteFlow from 'models/flows/delete-flow'
+import { stopFlow } from 'models/flows/stop-flow'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { updateContactQuery } from 'models/contacts/helpers/default-query'
 import { getContact } from 'models/contacts/get-contact'
@@ -281,8 +281,9 @@ class ContactProfile extends React.Component {
 
   stopFlow = async id => {
     try {
-      await deleteFlow(id)
+      await stopFlow(id)
       this.fetchContact()
+      this.fetchTimeline()
     } catch (error) {
       console.log(error)
     }
@@ -312,13 +313,7 @@ class ContactProfile extends React.Component {
 
     const thirdColumnSections = [
       <Dates contact={contact} key="s1" />,
-      <Flows
-        key="s2"
-        contactId={contact.id}
-        flows={contact.flows}
-        user={user}
-      />,
-      <Deals contact={contact} key="s3" />
+      <Deals contact={contact} key="s2" />
     ]
 
     const _props = {
@@ -345,6 +340,11 @@ class ContactProfile extends React.Component {
 
           <ColumnsContainer>
             <SideColumnWrapper>
+              {!this.state.isDesktopScreen && (
+                <Card>
+                  <Flows flows={contact.flows} onStop={this.stopFlow} />
+                </Card>
+              )}
               <Card>
                 <Tags contact={contact} />
               </Card>
@@ -358,15 +358,6 @@ class ContactProfile extends React.Component {
                 <Details {..._props} />
 
                 <Partner {..._props} />
-
-                {!this.state.isDesktopScreen && (
-                  <Flows
-                    contactId={contact.id}
-                    flows={contact.flows}
-                    user={user}
-                    onStop={this.stopFlow}
-                  />
-                )}
 
                 {!this.state.isDesktopScreen && <Deals contact={contact} />}
 
@@ -429,6 +420,9 @@ class ContactProfile extends React.Component {
 
             {this.state.isDesktopScreen && (
               <ThirdColumn>
+                <Card>
+                  <Flows flows={contact.flows} onStop={this.stopFlow} />
+                </Card>
                 <Card>{thirdColumnSections}</Card>
               </ThirdColumn>
             )}

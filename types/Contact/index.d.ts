@@ -171,6 +171,8 @@ declare type TContactFilterOperator =
   | 'any'
   | 'all'
 
+declare type TContactFilterType = 'and' | 'or'
+
 declare interface IContactAttributeFilter {
   attribute_def?: UUID
   attribute_type?: string
@@ -199,7 +201,7 @@ declare interface IContactFilterOptions {
   list?: UUID
   lists?: UUID[]
   users?: UUID[]
-  filter_type?: 'and' | 'or'
+  filter_type?: TContactFilterType
 }
 
 declare interface ICSVImporterMappingDef {
@@ -272,7 +274,9 @@ type TContactAssociationMap<T extends string> = T extends 'contact.attributes'
   : never
 
 declare interface IFetchContactQuery {
-  associations: string[]
+  associations?: string[] // TODO: use TContactAssociation[]
+  order?: string
+  filter_type: TContactFilterType
 }
 
 declare interface TGetContactFunc<A extends string> {
