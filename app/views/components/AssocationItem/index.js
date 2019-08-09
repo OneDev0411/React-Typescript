@@ -6,7 +6,7 @@ import { ShadowLink } from '../ShadowLink'
 import CloseIcon from '../SvgIcons/Close/CloseIcon'
 
 import { Container, Title, Details, RemoveButton } from './styled'
-import { renderWithMiniContact } from './helpers'
+import { renderWithMiniContact } from './render-with-mini-contact'
 
 class AssociationItemBase extends Component {
   static propTypes = {

@@ -14,7 +14,7 @@ import {
   ActionSettingsNamesType
 } from './types'
 import { ProfileContainer } from './styled'
-import { get_name } from './helpers'
+import { getName } from './helpers'
 import useProfile from './useProfile'
 import MiniContactActionButton from './MiniContactActionButton'
 import MiniContactIcons from './MiniContactIcons'
@@ -43,7 +43,7 @@ function MiniProfile(props: MiniProfilePropsType) {
     <ProfileContainer>
       <div className="head">
         <Avatar
-          title={get_name(data)}
+          title={getName(data)}
           image={data.profile_image_url}
           size={72}
         />

@@ -50,7 +50,7 @@ function contactFormatter(data): FormatterOutputType {
 
 // Helpers
 
-export function get_name(data) {
+export function getName(data) {
   if (data.name) {
     return data.name
   }
@@ -84,7 +84,7 @@ export function formatter(type, initData): FormatterOutputType {
 
 // `address` is an array of addresses that we need to
 // select the main one.
-function select_address(address): string {
+function selectAddress(address): string {
   if (address.length > 0) {
     // TODO: Ask product to tell which address should select as main address.
     return address[0].full_address
@@ -123,7 +123,7 @@ function extract_required_data_from_contact(contactResponse): ProfileType {
     phone: getAttributeFromSummary(contact, 'phone_number'),
     profile_image_url: getAttributeFromSummary(contact, 'profile_image_url'),
     last_touch: contact.last_touch,
-    address: select_address(address),
+    address: selectAddress(address),
     socials: socialMediasInContact(contact),
     dates: dates.map(item => ({
       title: item.attribute_def.label,
@@ -133,9 +133,7 @@ function extract_required_data_from_contact(contactResponse): ProfileType {
 }
 
 // Getting contact from server and fill the predefined object
-export async function get_contact_data(
-  contact_id
-): Promise<FormatterOutputType> {
+export async function getContactData(contact_id): Promise<FormatterOutputType> {
   try {
     const response = await getContact(contact_id)
 
@@ -147,14 +145,14 @@ export async function get_contact_data(
       disableDefaultAssociationChecking: true
     }
 
-    const output_data: ProfileType = extract_required_data_from_contact(
+    const outputData: ProfileType = extract_required_data_from_contact(
       response.data
     )
 
     return {
       contact_status: 'finished',
       contact_id,
-      data: output_data,
+      data: outputData,
       meta: {
         association
       }
@@ -172,7 +170,7 @@ export async function get_contact_data(
   }
 }
 
-export async function find_contact(email: string, base_output) {
+export async function findContact(email: string, base_output) {
   try {
     const res = await searchContacts('hi@mojtabast.com')
 

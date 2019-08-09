@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { formatter, get_contact_data, find_contact } from './helpers'
+import { formatter, getContactData, findContact } from './helpers'
 
 // Types
 export type ProfileDateType = {
@@ -51,7 +51,7 @@ function useProfile(type, initData): FormatterOutputType {
       })
 
       // Getting contact from server and updating the state.
-      get_contact_data(data.contact_id).then(res => setOutput(res))
+      getContactData(data.contact_id).then(res => setOutput(res))
     } else if (data.data.email) {
       // If it's not a contact, we are trying to find it in contacts.
 
@@ -63,7 +63,7 @@ function useProfile(type, initData): FormatterOutputType {
 
       // Trying to find the contact, if it's not exsits, we are returning the `data`
       // if it is, we will return the contact.
-      find_contact(data.data.email, data).then(res => setOutput(res))
+      findContact(data.data.email, data).then(res => setOutput(res))
     }
 
     return function cleanUpProfile() {}
