@@ -64,6 +64,7 @@
     "@material-ui/styles": "^4.2.0",
     "@mikeljames/draft-js-drag-n-drop-upload-plugin": "^2.0.1",
     "@reach/tabs": "^0.1.5",
+    "@types/react-window": "^1.8.0",
     "autoprefixer": "^7.2.3",
     "babel-loader": "^8.0.5",
     "balloon-css": "^0.5.0",
@@ -165,7 +166,7 @@
     "react-click-outside": "github:tj/react-click-outside#a833ddc5be47490307f9fcc6ed09d8c353108510",
     "react-color": "^2.17.0",
     "react-content-loader": "^3.4.1",
-    "react-day-picker": "^7.1.9",
+    "react-day-picker": "^7.3.0",
     "react-dnd": "^7.0.2",
     "react-dnd-html5-backend": "^7.0.2",
     "react-dom": "^16.8.1",
@@ -202,6 +203,7 @@
     "react-use": "^9.3.0",
     "react-use-controllable-state": "0.0.7",
     "react-use-promise": "^0.2.0",
+    "react-window": "^1.8.5",
     "reapop": "^1.1.4",
     "reapop-theme-wybo": "^0.4.1",
     "recompose": "^0.30.0",
@@ -232,6 +234,8 @@
     "universal-cookie": "^2.2.0",
     "unused-files-webpack-plugin": "^3.4.0",
     "use-debounce": "^2.0.1",
+    "use-deep-compare-effect": "^1.2.0",
+    "use-resize-observer": "^4.0.0",
     "validator": "^9.2.0",
     "webpack": "^4.28.4",
     "webpack-bundle-analyzer": "^2.13.1",
@@ -339,7 +343,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "eslint --fix `git diff --diff-filter=d --staged --name-only` && ./githooks/pre-commit.sh",
+      "pre-commit": "./githooks/pre-commit.sh",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && ./githooks/commit-msg.js $HUSKY_GIT_PARAMS `git rev-parse --abbrev-ref HEAD`",
       "pre-push": "npm run test:unit"
     }

@@ -8,7 +8,12 @@ import { normalizeAssociations } from 'views/utils/association-normalizers'
  * @param {object} defaultAssociation The default association(s)
  * @returns {Promise} a formated Task
  */
-export async function postLoadFormat(task, owner, defaultAssociation) {
+export async function postLoadFormat(
+  task,
+  owner,
+  defaultAssociation,
+  defaultSelectedDate = new Date()
+) {
   let reminder = {
     title: 'None',
     value: -1
@@ -28,7 +33,7 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
     return {
       assignees: [owner],
       associations,
-      dueDate: new Date(),
+      dueDate: new Date(defaultSelectedDate),
       reminder,
       task_type: { title: 'Call', value: 'Call' }
     }
