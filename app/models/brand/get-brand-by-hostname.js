@@ -15,7 +15,8 @@ export async function getBrandByHostname(hostname, query = DEFAULT_QUERY) {
 
   try {
     const response = await new Fetch()
-      .get(`/brands/search?hostname=${hostname}`)
+      .get('/brands/search')
+      .query({ hostname })
       .query(query)
 
     return response.body.data
