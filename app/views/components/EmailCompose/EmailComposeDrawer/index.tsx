@@ -108,7 +108,7 @@ class EmailComposeDrawer extends React.Component<
     const { recipients } = values
 
     if (!recipients || recipients.length === 0) {
-      errors.recipients = 'You should select one recipient at least'
+      errors.recipients = 'You should provide at least one recipient'
     } else {
       const recipientErrors = recipients.map(validateRecipient).filter(i => i)
 
