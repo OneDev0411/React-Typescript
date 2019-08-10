@@ -167,7 +167,8 @@ export default function EventForm({
               <Grid container item alignItems="flex-start" xs={6}>
                 <Box mb={2} pt={2} pl={1}>
                   <Typography variant="subtitle2" color="textSecondary">
-                    days after previous step
+                    days after{' '}
+                    {startFrom === 0 ? 'Flow start' : 'previous step'}
                   </Typography>
                 </Box>
               </Grid>
