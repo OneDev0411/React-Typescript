@@ -28,6 +28,7 @@ export const EditorWrapper = styled.div`
       display: none;
     }
   }
+  padding-top: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(0.5)}px`};
   overflow: hidden; // Allows float styles on images, without collapsing editor height
   img {
     z-index: 1; // This ensures images are selectable even when they are floated

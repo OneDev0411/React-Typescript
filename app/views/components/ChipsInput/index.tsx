@@ -210,14 +210,14 @@ export function ChipsInput<T>({
                 inputComponent: InputWithStartAdornment,
                 inputProps: {
                   ...inputProps,
-                  adornment: chips
+                  adornment: chips,
+                  autoComplete: 'disabled'
                 },
                 readOnly,
                 classes: {
                   root: classes.inputRoot,
                   input: classes.inputInput
-                },
-                autoComplete: 'disabled'
+                }
               }}
             />
             <Popper

@@ -1,18 +1,25 @@
 import { TextField } from 'final-form-material-ui'
 import { FieldRenderProps } from 'react-final-form'
 import * as React from 'react'
-import { FormLabel } from '@material-ui/core'
 import { TextFieldProps } from '@material-ui/core/TextField'
+
+import { useTheme } from '@material-ui/core'
+
+import { InlineInputLabel } from '../../../InlineInputLabel'
 
 export function From({
   InputProps,
   ...props
 }: FieldRenderProps<any> & TextFieldProps) {
+  const theme = useTheme()
+
   return (
     <TextField
       InputProps={{
         startAdornment: (
-          <FormLabel style={{ marginRight: '1rem' }}>From</FormLabel>
+          <InlineInputLabel style={{ marginBottom: `${theme.spacing(1)}px` }}>
+            From
+          </InlineInputLabel>
         ),
         disableUnderline: true,
         readOnly: true,

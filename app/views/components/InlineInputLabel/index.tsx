@@ -10,7 +10,7 @@ const useStyles = makeStyles(
         marginRight: `${theme.spacing(2)}px`
       }
     }),
-  { name: '' }
+  { name: 'InlineInputLabel' }
 )
 /**
  * Form label to be used beside MUI inputs (normally as startAdornment)
