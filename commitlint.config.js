@@ -20,8 +20,8 @@ module.exports = {
 
         // Custom
         'bic',
-        'wip-feat',
-        'wip-fix'
+        'wip_feat',
+        'wip_fix'
       ]
     ]
   }

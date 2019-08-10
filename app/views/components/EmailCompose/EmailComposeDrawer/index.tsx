@@ -1,8 +1,10 @@
-import React, { Fragment, ReactElement } from 'react'
+import React, { Fragment } from 'react'
 
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { Field } from 'react-final-form'
+import { TextField } from 'final-form-material-ui'
+import createDecorator from 'final-form-focus'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import EmailBody from 'components/EmailCompose/components/EmailBody'
@@ -10,51 +12,14 @@ import { normalizeAttachments } from 'components/SelectDealFileDrawer/helpers/no
 import { uploadEmailAttachment } from 'models/email-compose/upload-email-attachment'
 
 import { FinalFormDrawer } from '../../FinalFormDrawer'
-import { TextInput } from '../../Forms/TextInput'
 import { AttachmentsList } from '../fields/Attachments'
-
 import { Footer } from '../Footer'
-
-interface Props {
-  from: {
-    id: string
-    display_name: string
-    email: string
-  }
-  sendEmail: (values: ComposeFormValues) => Promise<any>
-  isOpen: boolean
-  getSendEmailResultMessages: (
-    values: ComposeFormValues
-  ) => { successMessage: string; errorMessage: string }
-  onSent: () => void
-  onClose: () => void
-  deal?: IDeal
-  body?: string
-  recipients?: any[] // FIXME: replace any with proper type
-  defaultAttachments?: any[] // FIXME: replace any with proper type
-  isSubmitDisabled?: boolean
-  hasStaticBody?: boolean
-  hasDealsAttachments?: boolean
-  hasSignatureByDefault?: boolean
-  hasTemplateVariables?: boolean
-
-  dispatch: any // Extending DispatchProps seems to have problems
-  signature: string
-  children: ReactElement<any>
-}
+import { EmailComposeDrawerProps, EmailFormValues } from '../types'
+import { validateRecipient } from '../../ContactsChipsInput/helpers/validate-recipient'
 
 interface State {
   isSendingEmail: boolean
-}
-
-interface ComposeFormValues {
-  attachments: any
-  recipients: any[] | undefined
-  subject: string
-  from: string
-  due_at: string
-  body: string | undefined
-  fromId: any
+  topFieldsCollapsed: boolean
 }
 
 /**
@@ -69,7 +34,10 @@ interface ComposeFormValues {
  * These differences are abstracted away from EmailComposeDrawer
  * as props to be provided by concrete email compose drawer components.
  */
-class EmailComposeDrawer extends React.Component<Props, State> {
+class EmailComposeDrawer extends React.Component<
+  EmailComposeDrawerProps,
+  State
+> {
   static defaultProps = {
     body: '',
     recipients: [],
@@ -81,14 +49,28 @@ class EmailComposeDrawer extends React.Component<Props, State> {
   }
 
   state = {
+    topFieldsCollapsed: false,
     isSendingEmail: false
   }
+
+  focusOnErrors = createDecorator(() => {
+    return [
+      {
+        // we use this decorator to expand recipients if form is submitted
+        // while it has error
+        name: 'recipients',
+        focus: () => {
+          this.expandTopFields()
+        }
+      }
+    ]
+  })
 
   emailBodyRef = React.createRef<any>()
 
   static contextType = ConfirmationModalContext
 
-  private formObject: ComposeFormValues
+  private formObject: EmailFormValues
 
   private initialAttachments: any[]
 
@@ -121,12 +103,18 @@ class EmailComposeDrawer extends React.Component<Props, State> {
     (this.formObject.recipients || []).length !==
     (this.props.recipients || []).length
 
-  validate = values => {
-    const errors: { [key in keyof ComposeFormValues]?: string } = {}
+  validate = (values: EmailFormValues) => {
+    const errors: { [key in keyof EmailFormValues]?: string } = {}
     const { recipients } = values
 
     if (!recipients || recipients.length === 0) {
-      errors.recipients = 'You should select one recipient at least'
+      errors.recipients = 'You should provide at least one recipient'
+    } else {
+      const recipientErrors = recipients.map(validateRecipient).filter(i => i)
+
+      if (recipientErrors.length > 0) {
+        errors.recipients = recipientErrors[0]
+      }
     }
 
     return errors
@@ -212,6 +200,10 @@ class EmailComposeDrawer extends React.Component<Props, State> {
     return uploadedFile.url
   }
 
+  collapseTopFields = () => this.setState({ topFieldsCollapsed: true })
+
+  expandTopFields = () => this.setState({ topFieldsCollapsed: false })
+
   render() {
     return (
       <FinalFormDrawer
@@ -222,6 +214,7 @@ class EmailComposeDrawer extends React.Component<Props, State> {
         onClose={this.props.onClose}
         onSubmit={this.handleSubmit}
         validate={this.validate}
+        decorators={[this.focusOnErrors]}
         submitting={this.state.isSendingEmail}
         closeDrawerOnBackdropClick={false}
         submitButtonLabel="Send"
@@ -236,26 +229,34 @@ class EmailComposeDrawer extends React.Component<Props, State> {
             hasDealsAttachments={this.props.hasDealsAttachments}
           />
         )}
-        render={() => (
+        render={({ values }) => (
           <Fragment>
-            {this.props.children}
+            {this.state.topFieldsCollapsed ? (
+              <div onClick={this.expandTopFields}>
+                {this.props.renderCollapsedFields(values)}
+              </div>
+            ) : (
+              this.props.renderFields(values)
+            )}
 
             <Field
-              placeholder="From"
-              name="from"
-              readOnly
-              component={TextInput as any}
-            />
-
-            <Field
-              data-test="email-subject"
               placeholder="Subject"
               name="subject"
-              component={TextInput as any}
+              margin="normal"
+              InputProps={{
+                onFocus: this.collapseTopFields,
+                inputProps: {
+                  autoFocus: (values.recipients || []).length > 0,
+                  'data-test': 'email-subject'
+                }
+              }}
+              fullWidth
+              component={TextField}
             />
 
             <EmailBody
               ref={this.emailBodyRef}
+              DraftEditorProps={{ onFocus: this.collapseTopFields }}
               hasSignatureByDefault={this.props.hasSignatureByDefault}
               hasStaticBody={this.props.hasStaticBody}
               hasTemplateVariables={this.props.hasTemplateVariables}

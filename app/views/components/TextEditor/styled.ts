@@ -1,14 +1,16 @@
-import styled from 'styled-components'
+import styled, { ThemeProps } from 'styled-components'
 
 import 'draft-js/dist/Draft.css'
+import { Theme } from '@material-ui/core'
+
 import { primary, primaryDark } from '../../utils/colors'
 
 export const Toolbar = styled.div`
   display: flex;
   align-items: center;
-  margin: 1rem 0;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 1rem;
+  margin: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+  padding: ${({ theme }: ThemeProps<Theme>) => theme.spacing(1, 0)};
   display: flex;
   align-items: center;
 `
@@ -26,6 +28,7 @@ export const EditorWrapper = styled.div`
       display: none;
     }
   }
+  padding-top: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(0.5)}px`};
   overflow: hidden; // Allows float styles on images, without collapsing editor height
   img {
     z-index: 1; // This ensures images are selectable even when they are floated

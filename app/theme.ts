@@ -34,7 +34,7 @@ export const theme = createMuiTheme({
     }
   },
   shape: {
-    borderRadius: 3
+    borderRadius: 4
   },
   typography: {
     fontFamily: [
@@ -67,3 +67,7 @@ export const theme = createMuiTheme({
     modal: 1001
   }
 })
+
+if (process.env.NODE_ENV === 'development') {
+  ;(window as any).theme = theme
+}

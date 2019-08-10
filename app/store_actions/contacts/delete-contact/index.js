@@ -1,9 +1,10 @@
 import * as actionTypes from '../../../constants/contacts'
 import {
-  selectContactsInfo,
-  selectContacts
+  selectContacts,
+  selectContactsInfo
 } from '../../../reducers/contacts/list'
-import { getContacts, searchContacts } from '../index.js'
+import { searchContacts } from '../search-contacts'
+import { getContacts } from '../get-contacts'
 import { deleteContacts as removeContacts } from '../../../models/contacts/delete-contact'
 import { viewAs } from '../../../utils/user-teams'
 

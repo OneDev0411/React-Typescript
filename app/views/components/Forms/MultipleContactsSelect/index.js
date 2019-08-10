@@ -9,6 +9,21 @@ import AddRecipient from './AddRecipient'
 import { RecipientItem } from './RecipientItem'
 import { FieldError } from '../../final-form-fields/FieldError'
 
+/**
+ * @deprecated in favor of {@link ContactsChipsInput}
+ * @param input
+ * @param hasLabel
+ * @param showError
+ * @param disableAddNewRecipient
+ * @param suggestTagsAndLists
+ * @param meta
+ * @param isRequired
+ * @param placeholder
+ * @param labelText
+ * @param labelExtra
+ * @return {*}
+ * @constructor
+ */
 export const MultipleContactsSelect = ({
   input,
   hasLabel = true,

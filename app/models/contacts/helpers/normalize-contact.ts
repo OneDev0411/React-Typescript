@@ -1,13 +1,13 @@
 import _ from 'underscore'
 
-export function normalizeContact(contact) {
+export function normalizeContact(contact: IContact): INormalizedContact {
   const groupByAttributeDef = _.groupBy(
-    contact.attributes,
+    contact.attributes || [],
     attribute => attribute.attribute_def.id
   )
 
   const groupBySections = _.groupBy(
-    contact.attributes,
+    contact.attributes || [],
     attribute => attribute.attribute_def.section
   )
 

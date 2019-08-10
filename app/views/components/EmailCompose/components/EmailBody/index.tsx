@@ -16,6 +16,7 @@ import { IAppState } from 'reducers/index'
 
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
 import { defaultTemplateVariableSuggestions } from '../../EmailComposeDrawer/default-template-variable-suggestions'
+import { TextEditorProps } from '../../../TextEditor/types'
 
 interface Props {
   uploadImage: (file: File) => Promise<string>
@@ -24,6 +25,7 @@ interface Props {
   hasSignatureByDefault?: boolean
   hasTemplateVariables?: boolean
   signature: string
+  DraftEditorProps?: TextEditorProps['DraftEditorProps']
   editorRef?: Ref<PluginsEditor>
 }
 
@@ -34,6 +36,7 @@ const EmailBody = ({
   hasSignatureByDefault,
   hasTemplateVariables,
   hasStaticBody = false,
+  DraftEditorProps = {},
   editorRef
 }: Props) => {
   const [signatureEditorVisible, setSignatureEditorVisible] = useState(false)
@@ -49,6 +52,7 @@ const EmailBody = ({
               enableImage
               uploadImage={uploadImage}
               enableSignature
+              DraftEditorProps={DraftEditorProps}
               hasSignatureByDefault={hasSignatureByDefault}
               enableTemplateVariables={hasTemplateVariables}
               templateVariableSuggestionGroups={

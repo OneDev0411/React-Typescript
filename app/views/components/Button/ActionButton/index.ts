@@ -42,6 +42,8 @@ export interface ActionButtonProps {
 
   noBorder?: boolean
   isOpen?: boolean
+
+  rightRounded?: boolean // !
 }
 
 export const defaultProps: ActionButtonProps = {

@@ -67,7 +67,7 @@ export const TextEditor = forwardRef(
       onChange = () => {},
       placeholder = 'Type something…',
       plugins = [],
-      settings = {},
+      DraftEditorProps = {},
       uploadImage,
       signature,
       hasSignatureByDefault = false,
@@ -347,7 +347,7 @@ export const TextEditor = forwardRef(
             plugins={allPlugins}
             placeholder={placeholder}
             ref={editorRef}
-            {...settings}
+            {...DraftEditorProps}
           />
           <alignmentPlugin.AlignmentTool />
           <LinkEditorPopover

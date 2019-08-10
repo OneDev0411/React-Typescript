@@ -1,9 +1,13 @@
 declare module 'draft-js-plugins-editor' {
-  import { Editor as DraftEditor, EditorState } from 'draft-js'
+  import Draft, {
+    Editor as DraftEditor,
+    EditorState,
+    DraftEditorProps
+  } from 'draft-js'
   import * as React from 'react'
   import { RefObject } from 'react'
 
-  export default class Editor extends React.Component<DraftEditor['props']> {
+  export default class Editor extends React.Component<DraftEditorProps> {
     getEditorState(): EditorState
 
     editor: DraftEditor

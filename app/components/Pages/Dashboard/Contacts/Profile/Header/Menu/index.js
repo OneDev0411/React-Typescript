@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
 import AddToFlowButton from 'components/AddToFlowButton'
@@ -8,7 +7,7 @@ import SendEmailButton from 'components/SendEmailButton'
 import { CloseButton } from 'components/Button/CloseButton'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 
-import normalizeContactForEmailCompose from 'models/email-compose/helpers/normalize-contact'
+import { normalizeContactForEmailCompose } from 'models/email-compose/helpers/normalize-contact'
 
 import Chat from './ChatButton'
 import { Divider } from './Divider'
@@ -37,10 +36,7 @@ function Menu(props) {
       />
 
       <SendEmailButton
-        recipients={normalizeContactForEmailCompose(
-          contact,
-          props.attributeDefs
-        )}
+        recipients={normalizeContactForEmailCompose(contact)}
         style={{ marginLeft: '1rem' }}
       />
 
@@ -66,10 +62,4 @@ function Menu(props) {
   )
 }
 
-function mapStateToProps({ contacts }) {
-  return {
-    attributeDefs: contacts.attributeDefs
-  }
-}
-
-export default connect(mapStateToProps)(Menu)
+export default Menu

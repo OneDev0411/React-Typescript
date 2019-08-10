@@ -1,5 +1,5 @@
 import { FieldProps } from 'react-final-form'
-import { ContentBlock, ContentState } from 'draft-js'
+import { ContentBlock, ContentState, EditorProps } from 'draft-js'
 
 import { ITemplateVariableSuggestionGroup } from '../TemplateVariablesButton/types'
 
@@ -20,7 +20,7 @@ export interface TextEditorProps {
   disabled?: boolean
   placeholder?: string
   plugins?: any[]
-  settings?: any
+  DraftEditorProps?: Omit<EditorProps, 'editorState' | 'onChange'>
   /**
    * an optional function to be used when enableImage is true and an image is
    * added to the editor. It should upload the image and return the promise
