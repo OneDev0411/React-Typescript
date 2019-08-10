@@ -46,7 +46,9 @@ export default function New({ flow, onClose, onSubmit }: Props) {
             flow
               ? {
                   name: `Copy of ${flow.name}`,
-                  description: `Copy of ${flow.description}`
+                  description: flow.description
+                    ? `Copy of ${flow.description}`
+                    : ''
                 }
               : {}
           }
