@@ -1,30 +1,39 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Form } from 'react-final-form'
+import React, { ReactNode } from 'react'
+import { Form, FormRenderProps } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
+
+import { FormApi } from 'final-form'
 
 import Drawer from '../OverlayDrawer'
 import ActionButton from '../Button/ActionButton'
 
-export class FinalFormDrawer extends React.Component {
-  static propTypes = {
-    isSubmitDisabled: PropTypes.bool,
-    initialValues: PropTypes.shape(),
-    isOpen: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired,
-    onSubmit: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired,
-    submitButtonLabel: PropTypes.string,
-    submittingButtonLabel: PropTypes.string,
-    showFooter: PropTypes.bool,
-    closeDrawerOnBackdropClick: PropTypes.bool,
-    disableSubmitByEnter: PropTypes.bool,
-    validate: PropTypes.func,
-    formId: PropTypes.string.isRequired,
-    decorators: PropTypes.array,
-    footerRenderer: PropTypes.func
-  }
+interface FooterRenderProps {
+  isSubmitDisabled: boolean
+  formProps: FormRenderProps
+  submitting: boolean
+  handleSubmit: () => void
+}
 
+interface Props<T> {
+  isSubmitDisabled?: boolean
+  initialValues?: any
+  isOpen: boolean
+  onClose: () => void
+  onSubmit: (values: T, form: FormApi) => Promise<any>
+  title: string
+  submitButtonLabel?: ReactNode
+  submittingButtonLabel?: ReactNode
+  showFooter?: boolean
+  closeDrawerOnBackdropClick?: boolean
+  disableSubmitByEnter?: boolean
+  validate?: (data: any) => any
+  formId: string
+  decorators?: any[]
+  footerRenderer?: (footerRendererProps: FooterRenderProps) => ReactNode
+  render?: (formProps: FormRenderProps & { values: T }) => ReactNode
+}
+
+export class FinalFormDrawer<T> extends React.Component<Props<T>> {
   static defaultProps = {
     isSubmitDisabled: false,
     initialValues: {},
@@ -62,7 +71,7 @@ export class FinalFormDrawer extends React.Component {
       event.initEvent('submit', true, true)
     }
 
-    document.getElementById(this.props.formId).dispatchEvent(event)
+    document.getElementById(this.props.formId)!.dispatchEvent(event)
   }
 
   onSubmit = async (values, form) => {
@@ -86,7 +95,7 @@ export class FinalFormDrawer extends React.Component {
   }
 
   render() {
-    const { isSubmitDisabled } = this.props
+    const { isSubmitDisabled = false } = this.props
 
     return (
       <Form
@@ -107,12 +116,13 @@ export class FinalFormDrawer extends React.Component {
               <Drawer
                 open={this.props.isOpen}
                 onClose={e => this.handleOnClose(e, formProps)}
+                // Better to accept DrawerProps instead
                 closeOnBackdropClick={this.props.closeDrawerOnBackdropClick}
               >
                 <Drawer.Header title={this.props.title} />
                 <Drawer.Body>
                   {typeof this.props.render === 'function'
-                    ? this.props.render(formProps)
+                    ? this.props.render(formProps as any)
                     : this.props.children}
                 </Drawer.Body>
 
@@ -128,7 +138,7 @@ export class FinalFormDrawer extends React.Component {
                     ) : (
                       <ActionButton
                         type="submit"
-                        isSubmitDisabled={
+                        disabled={
                           isSubmitDisabled || submitting || formProps.validating
                         }
                         onClick={this.handleSubmit}
