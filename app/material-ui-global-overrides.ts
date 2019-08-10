@@ -17,6 +17,9 @@ export const MaterialUiGlobalOverrides = withStyles({
     },
     '.MuiTab-root': {
       minWidth: '8rem'
+    },
+    '.MuiOutlinedInput-notchedOutline legend': {
+      border: 'none'
     }
   }
 })(() => null)
