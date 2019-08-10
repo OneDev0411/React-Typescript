@@ -26,6 +26,10 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
       background: theme.palette.common.black,
       color: theme.palette.common.white,
       fill: theme.palette.common.white
+    },
+    '.MuiOutlinedInput-notchedOutline legend': {
+      // neutralize bootstrap styles!
+      border: 'none'
     }
   }
 }))(() => null)
