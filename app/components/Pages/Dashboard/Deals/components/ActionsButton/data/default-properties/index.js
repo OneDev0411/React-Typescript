@@ -16,7 +16,8 @@ import {
   REVIEW_ENVELOPE_BUTTON,
   SPLIT_PDF_BUTTON,
   APPROVE_TASK_BUTTON,
-  DECLINE_TASK_BUTTON
+  DECLINE_TASK_BUTTON,
+  TASK_REQUIRED
 } from '../action-buttons'
 
 export const actionsDefaultProperties = {
@@ -112,5 +113,11 @@ export const actionsDefaultProperties = {
 
       return true
     }
+  },
+  [TASK_REQUIRED]: {
+    label: ({ task }) =>
+      task.required ? 'Mark as Optional' : 'Mark as Required',
+    type: 'change-task-required',
+    condition: ({ is_backoffice }) => is_backoffice
   }
 }

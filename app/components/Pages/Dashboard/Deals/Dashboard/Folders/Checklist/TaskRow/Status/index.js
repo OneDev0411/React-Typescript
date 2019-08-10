@@ -1,6 +1,8 @@
 import React from 'react'
 import moment from 'moment'
 
+import Flex from 'styled-flex-component'
+
 import PendingIcon from 'components/SvgIcons/DealTaskPending/IconPending'
 import DeclinedIcon from 'components/SvgIcons/DealTaskDeclined/IconDeclined'
 import ApprovedIcon from 'components/SvgIcons/DealTaskApproved/IconApproved'
@@ -61,15 +63,17 @@ export default function TaskStatus(props) {
     status = props.isDraftDeal ? 'Pending' : 'Notified'
   }
 
-  if (!status) {
-    return false
-  }
-
   return (
-    <ToolTip caption={props.noTip !== true && tooltip} placement="bottom">
-      <Label className={status}>
-        {getIcon(status)} {status}
-      </Label>
-    </ToolTip>
+    <Flex>
+      {status !== 'Approved' && props.task.required && (
+        <Label className="Required">Required</Label>
+      )}
+
+      <ToolTip caption={props.noTip !== true && tooltip} placement="bottom">
+        <Label className={status}>
+          {getIcon(status)} {status}
+        </Label>
+      </ToolTip>
+    </Flex>
   )
 }

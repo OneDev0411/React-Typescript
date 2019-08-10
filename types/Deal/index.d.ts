@@ -5,7 +5,13 @@ declare interface IDeal {
   }
   deal_type: 'Selling' | 'Buying'
   checklists: any[]
+  tasks: IDealTask[]
   roles: IDealRole[]
+}
+
+declare interface IDealTask {
+  id: UUID
+  required: boolean
 }
 
 declare interface IDealRole {
