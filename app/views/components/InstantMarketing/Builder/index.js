@@ -10,6 +10,7 @@ import DropButton from 'components/Button/DropButton'
 import ActionButton from 'components/Button/ActionButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import { getActiveTeam } from 'utils/user-teams'
 
@@ -46,7 +47,8 @@ class Builder extends React.Component {
       selectedTemplate: props.defaultTemplate,
       owner: props.templateData.user,
       isLoading: true,
-      isEditorLoaded: false
+      isEditorLoaded: false,
+      templateHtmlCss: ''
     }
 
     this.keyframe = 0
@@ -88,6 +90,8 @@ class Builder extends React.Component {
       iframe.removeEventListener('paste', this.iframePasteHandler)
     }
   }
+
+  static contextType = ConfirmationModalContext
 
   setupGrapesJs = () => {
     this.setState({ isEditorLoaded: true })
@@ -292,6 +296,17 @@ class Builder extends React.Component {
     this.setEditorTemplateId(selectedTemplate.id)
     this.editor.setComponents(html)
     this.lockIn()
+    this.setState({
+      templateHtmlCss: this.getTemplateHtmlCss()
+    })
+  }
+
+  getTemplateHtmlCss = () => {
+    return `${this.editor.getCss()}${this.editor.getHtml()}`
+  }
+
+  isTemplateChanged = () => {
+    return this.getTemplateHtmlCss() !== this.state.templateHtmlCss
   }
 
   handleSelectTemplate = templateItem => {
@@ -309,12 +324,32 @@ class Builder extends React.Component {
   }
 
   handleOwnerChange = ({ value: owner }) => {
-    this.setState({
-      owner
-    })
+    if (!this.isTemplateChanged()) {
+      this.setState({
+        owner
+      })
 
-    this.regenerateTemplate({
-      user: owner
+      this.regenerateTemplate({
+        user: owner
+      })
+
+      return
+    }
+
+    this.context.setConfirmationModal({
+      message: 'Change sender?',
+      description:
+        "All the changes you've made to the template will be lost. Are you sure?",
+      confirmLabel: 'Yes, I am sure',
+      onConfirm: () => {
+        this.setState({
+          owner
+        })
+
+        this.regenerateTemplate({
+          user: owner
+        })
+      }
     })
   }
 
