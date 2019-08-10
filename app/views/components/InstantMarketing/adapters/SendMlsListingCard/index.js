@@ -312,14 +312,10 @@ class SendMlsListingCard extends React.Component {
           onSelectListings={this.handleSelectListings}
           multipleSelection={this.IsMultiListing}
           renderAction={props => (
-            <ActionButton onClick={props.onClick}>
-              {this.state.isEditingListings ? (
-                'Apply Changes'
-              ) : (
-                <Fragment>
-                  Next ({_.size(props.selectedItems)} Listings Selected)
-                </Fragment>
-              )}
+            <ActionButton {...props.buttonProps}>
+              {this.state.isEditingListings
+                ? 'Apply Changes'
+                : `Next (${props.selectedItemsCount} Listings Selected)`}
             </ActionButton>
           )}
         />
