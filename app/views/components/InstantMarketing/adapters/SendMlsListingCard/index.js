@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import _ from 'underscore'
 
+import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 import { selectContact } from 'reducers/contacts/list'
 import SearchListingDrawer from 'components/SearchListingDrawer'
