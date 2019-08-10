@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 
 import DealRole from 'components/DealRole'
@@ -74,14 +74,15 @@ export class RoleAgentIntegration extends React.Component {
     /**
      * https://gitlab.com/rechat/web/issues/1668#note_97457381
      */
-    if (dealSide === 'Buying' && role === 'BuyerAgent') {
+    if (
+      dealSide === 'Buying' &&
+      role === 'BuyerAgent' &&
+      this.props.dealEnderType !== 'OfficeDoubleEnder'
+    ) {
       return true
     }
 
-    return (
-      this.props.isPrimaryAgent &&
-      this.props.dealEnderType !== 'OfficeDoubleEnder'
-    )
+    return this.props.isPrimaryAgent
   }
 
   onSelectAgent = (user, relatedContacts = []) => {
