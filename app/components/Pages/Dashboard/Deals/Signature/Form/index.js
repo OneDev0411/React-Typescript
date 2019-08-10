@@ -94,7 +94,7 @@ export default class SignatureComposeDrawer extends React.Component {
     return (
       <FinalFormDrawer
         formId="signature-compose-form"
-        isOpen={this.props.isOpen && !this.state.isAttachmentDrawerOpen}
+        isOpen={this.props.isOpen || this.state.isAttachmentDrawerOpen}
         initialValues={this.InitialValues}
         onClose={this.props.onClose}
         onSubmit={this.handleSubmit}
