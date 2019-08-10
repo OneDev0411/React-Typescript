@@ -18,7 +18,9 @@ const STYLE_MANAGER_TEXT_TAGS = [
   'h4',
   'h5',
   'h6',
-  'address'
+  'address',
+  'q',
+  'label'
 ]
 
 export function createGrapesInstance(Grapesjs, { assets }) {
