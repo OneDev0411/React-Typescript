@@ -25,6 +25,8 @@ export function ContextField(props) {
     Object.values(props.values).join(' ')
   )
 
+  const isValueSet = fieldValue || fieldValue === 0
+
   const getDate = () => {
     const date = new Date(fieldValue)
 
@@ -86,6 +88,7 @@ export function ContextField(props) {
 
             <ActionButton
               size="small"
+              disabled={!isValueSet}
               onClick={() => handleSaveValue(fieldValue)}
             >
               Save
