@@ -33,7 +33,7 @@ router.get('/deals/envelope/:id/edit', async ctx => {
       ctx.redirect(link)
     }
 
-    if (e.status === 401) {
+    if (e.status === 400 || e.status === 401) {
       ctx.body =
         '<html lang="en"><body><h3>Access denied. This envelope was created by someone else. You cannot amend it.</h3></body></html>'
     }
