@@ -4,6 +4,7 @@ import { Grid, Box, Button, Divider, Typography } from '@material-ui/core'
 import { TextField } from 'final-form-material-ui'
 
 import { TaskType } from 'components/NewEvent/components/TaskType'
+import { DangerButton } from 'components/Button/DangerButton'
 
 import {
   timeToSeconds,
@@ -194,9 +195,8 @@ export default function EventForm({
             <Grid container item xs={12} style={{ marginTop: '1rem' }}>
               <Grid container item xs={6} justify="flex-start">
                 {step && onDelete && (
-                  <Button
+                  <DangerButton
                     variant="text"
-                    color="secondary"
                     disabled={submitting}
                     onClick={async event => {
                       event.stopPropagation()
@@ -204,7 +204,7 @@ export default function EventForm({
                     }}
                   >
                     Delete
-                  </Button>
+                  </DangerButton>
                 )}
               </Grid>
               <Grid container item xs={6} justify="flex-end">
