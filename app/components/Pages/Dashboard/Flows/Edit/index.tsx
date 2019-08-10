@@ -225,7 +225,8 @@ function Edit(props: Props & WithRouterProps) {
       }
 
       data.name = data.name || flow.name
-      data.description = data.description || flow.description
+      data.description =
+        data.description === undefined ? flow.description : data.description
 
       await editBrandFlow(brand, flow.id, data)
       setFlow({
