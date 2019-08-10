@@ -30,7 +30,6 @@ function contactFormatter(data): FormatterOutputType {
   }
 }
 
-
 function userFormatter(data): FormatterOutputType {
   return {
     contact_status: 'not_started',
@@ -46,41 +45,40 @@ function userFormatter(data): FormatterOutputType {
 }
 
 // In unexpected situations, We are trying to guess some minimum information.
-function fallbackFormatter(data: any) :FormatterOutputType {
-  const output : FormatterOutputType = {
+function fallbackFormatter(data: any): FormatterOutputType {
+  const output: FormatterOutputType = {
     contact_status: 'not_started',
     contact_id: '',
     data: {},
     meta: {}
   }
 
-  if(!data){
-
+  if (!data) {
     return output
   }
 
   // Guessing name
-  if(data.display_name){
+  if (data.display_name) {
     output.data.name = data.display_name
-  }
-  else if(data.name || data.first_name || data.last_name){
-    const name = data.name || data.first_name;
-    const lastname =  data.last_name;
+  } else if (data.name || data.first_name || data.last_name) {
+    const name = data.name || data.first_name
+    const lastname = data.last_name
 
     output.data.name = `${name} ${lastname}`.trim()
   }
 
   // Guessing email
-  if(data.email){
-
+  if (data.email) {
     output.data.email = data.email
   }
-
 
   return output
 }
 
-export function formatter(type : MiniContactType, initData: any): FormatterOutputType {
+export function formatter(
+  type: MiniContactType,
+  initData: any
+): FormatterOutputType {
   // Extracting data from context (where the MiniContact is using)
   // based on type using formatters
   if (type == 'insight') {
