@@ -1,10 +1,15 @@
 import { createMuiTheme } from '@material-ui/core'
 
-import { borderColor, disabledBgColor, disabledColor } from 'views/utils/colors'
+import {
+  borderColor,
+  disabledBgColor,
+  disabledColor,
+  orange
+} from 'views/utils/colors'
 
 const white = '#fff'
 
-export const theme = createMuiTheme({
+const theme = createMuiTheme({
   // Temporary theme based on our current colors, until design team provides the theme values
   palette: {
     type: 'light',
@@ -59,6 +64,15 @@ export const theme = createMuiTheme({
   }
 })
 
+// For extending theme, you need to add the typings in `/types/@material-ui/core.d.ts`
+theme.palette.warning = {
+  main: orange.primary,
+  dark: orange.dark,
+  light: orange.light
+}
+
 if (process.env.NODE_ENV === 'development') {
   ;(window as any).theme = theme
 }
+
+export { theme }
