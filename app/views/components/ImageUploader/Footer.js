@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import Slider from 'rc-slider/lib/Slider'
 import 'rc-slider/assets/index.css'
 
@@ -14,6 +14,8 @@ export default function Footer({
   onChange,
   onSave
 }) {
+  const [isSaving, setIsSaving] = useState(false)
+
   return (
     <Fragment>
       <div
@@ -86,6 +88,7 @@ export default function Footer({
       <div>
         {disableChangePhoto || (
           <ActionButton
+            disabled={isSaving}
             style={{ marginRight: '10px', width: '120px', paddingLeft: '11px' }}
             appearance="outline"
             onClick={onChange}
@@ -94,11 +97,16 @@ export default function Footer({
           </ActionButton>
         )}
         <ActionButton
+          disabled={isSaving}
           data-test="image-uploader-modal-save-button"
           style={{ width: '120px', paddingLeft: '22px' }}
-          onClick={async () => onSave()}
+          onClick={async () => {
+            setIsSaving(true)
+            await onSave()
+            setIsSaving(false)
+          }}
         >
-          Save Photo
+          {isSaving ? 'Saving' : 'Save Photo'}
         </ActionButton>
       </div>
     </Fragment>
