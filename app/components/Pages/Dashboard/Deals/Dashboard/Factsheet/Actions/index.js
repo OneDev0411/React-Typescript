@@ -5,13 +5,16 @@ import CloseIcon from 'components/SvgIcons/RemoveCircleOutline/IconRemoveCircleO
 import { ItemActions, ActionButton, DeleteButton } from '../styled'
 
 export default function Actions(props) {
+  const hasValue = props.value || props.value === 0
+  const isFieldRequired = props.field.mandatory && !props.deal.is_draft
+
   return (
     <ItemActions>
       <ActionButton onClick={() => props.onClickEditContext(props.field)}>
         Edit
       </ActionButton>
 
-      {!props.field.mandatory && (
+      {!isFieldRequired && hasValue && (
         <DeleteButton
           iconSize="large"
           isFit

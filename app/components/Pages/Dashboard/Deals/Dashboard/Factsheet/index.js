@@ -218,6 +218,8 @@ class Factsheet extends React.Component {
 
                       <Actions
                         field={field}
+                        value={value}
+                        deal={this.props.deal}
                         onClickEditContext={this.handleStartEditContext}
                         onClickRemoveContext={this.handleRemoveContext}
                       />
