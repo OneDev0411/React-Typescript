@@ -1,16 +1,16 @@
 import { getDocumentEnvelopes } from '../get-document-envelopes'
-import { getEnvelopeFileUrl } from '../get-envelope-file-url'
+import { getEnvelopeFile } from '../get-envelope-file'
 
 /**
  *
  */
-export function getFileUrl({ type, ...data }) {
+export function getDocumentLastState({ type, ...data }) {
   if (type === 'task') {
-    return getTaskUrls(data)
+    return getTasks(data)
   }
 
   if (type === 'document') {
-    return getDocumentUrls(data)
+    return getDocuments(data)
   }
 
   return []
@@ -30,26 +30,30 @@ function normalizeFile(file) {
   }
 }
 
-function normalizeSubmissionFile(task) {
-  const file = task.submission
-    ? task.submission.file
+function normalizeSubmissionFile(document) {
+  if (document.type === 'file') {
+    return normalizeFile(document)
+  }
+
+  const file = document.submission
+    ? document.submission.file
     : {
-        id: task.id,
-        name: task.title,
+        id: document.id,
+        name: document.title,
         mime: 'application/pdf',
-        date: task.created_at
+        date: document.created_at
       }
 
   return normalizeFile({
     ...file,
-    url: task.pdf_url
+    url: document.pdf_url
   })
 }
 
 /**
  *
  */
-function getSubmissionUrl(data) {
+function getSubmission(data) {
   let url = `/dashboard/deals/${data.deal.id}/view/${data.task.id}`
   const submissionEnvelopes = getDocumentEnvelopes(
     data.envelopes,
@@ -58,9 +62,8 @@ function getSubmissionUrl(data) {
 
   if (submissionEnvelopes.length > 0) {
     return submissionEnvelopes.map(envelope => ({
-      ...normalizeSubmissionFile(data.task),
+      ...normalizeSubmissionFile(getEnvelopeFile(envelope, data.task)),
       name: `Docusign: ${envelope.title}`,
-      url: getEnvelopeFileUrl(envelope, data.task),
       openInNewTab: true
     }))
   }
@@ -93,8 +96,7 @@ function getDocumentUrl(data) {
 
   if (documentEnvelopes.length > 0) {
     return {
-      ...normalizeFile(data.document),
-      url: getEnvelopeFileUrl(documentEnvelopes[0], data.task),
+      ...normalizeFile(getEnvelopeFile(documentEnvelopes[0], data.task)),
       openInNewTab: true
     }
   }
@@ -110,9 +112,9 @@ function getDocumentUrl(data) {
 /**
  *
  */
-function getDocumentUrls(data) {
+function getDocuments(data) {
   if (data.document.type === 'task' && data.document.submission) {
-    return getSubmissionUrl(data)
+    return getSubmission(data)
   }
 
   return [getDocumentUrl(data)]
@@ -121,11 +123,11 @@ function getDocumentUrls(data) {
 /**
  *
  */
-function getTaskUrls(data) {
-  const submissionUrl = getSubmissionUrl(data)
+function getTasks(data) {
+  const submission = getSubmission(data)
 
-  if (submissionUrl.length === 1) {
-    return submissionUrl
+  if (submission.length === 1) {
+    return submission
   }
 
   const attachments = Array.isArray(data.task.room.attachments)
@@ -133,7 +135,7 @@ function getTaskUrls(data) {
     : []
 
   return [
-    ...submissionUrl,
+    ...submission,
     ...attachments.map(document =>
       getDocumentUrl({
         ...data,

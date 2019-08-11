@@ -28,7 +28,7 @@ import { getEsignAttachments } from './helpers/get-esign-attachments'
 
 import { getTaskEnvelopes } from '../../utils/get-task-envelopes'
 import { getDocumentEnvelopes } from '../../utils/get-document-envelopes'
-import { getFileUrl } from '../../utils/get-document-file-url'
+import { getDocumentLastState } from '../../utils/get-document-last-state'
 
 import { SelectItemDrawer } from './components/SelectItemDrawer'
 
@@ -207,7 +207,7 @@ class ActionsButton extends React.Component {
     )
 
   getSplitterFiles = () => {
-    const files = getFileUrl({
+    const files = getDocumentLastState({
       type: this.props.type,
       deal: this.props.deal,
       task: this.props.task,
@@ -219,7 +219,7 @@ class ActionsButton extends React.Component {
   }
 
   getEmailComposeFiles = () => {
-    return getFileUrl({
+    return getDocumentLastState({
       type: this.props.type,
       deal: this.props.deal,
       task: this.props.task,
@@ -270,7 +270,7 @@ class ActionsButton extends React.Component {
    *
    */
   handleDownload = () => {
-    const links = getFileUrl({
+    const links = getDocumentLastState({
       type: this.props.type,
       deal: this.props.deal,
       task: this.props.task,
@@ -299,7 +299,7 @@ class ActionsButton extends React.Component {
    *
    */
   handleView = () => {
-    const links = getFileUrl({
+    const links = getDocumentLastState({
       type: this.props.type,
       deal: this.props.deal,
       task: this.props.task,

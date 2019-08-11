@@ -1,4 +1,4 @@
-export function getEnvelopeFileUrl(envelope, task) {
+export function getEnvelopeFile(envelope, task) {
   // get document index
   let document = null
 
@@ -19,5 +19,5 @@ export function getEnvelopeFileUrl(envelope, task) {
     return null
   }
 
-  return document.pdf.url
+  return document.pdf
 }
