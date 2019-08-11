@@ -34,10 +34,10 @@ export function normalizeSubmissionForm(task, file) {
     type: 'form',
     id: `task_${task.id}`,
     task_id: task.id,
-    file_id: file.id,
+    file_id: file ? file.id : task.submission.file.id,
     checklist: task.checklist,
     title: `${task.title}.pdf`,
-    url: file.url || task.pdf_url,
+    url: file ? file.url : task.pdf_url,
     date: normalizeDate(task.created_at)
   }
 }
