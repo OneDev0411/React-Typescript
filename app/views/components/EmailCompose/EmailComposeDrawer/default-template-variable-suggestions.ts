@@ -2,57 +2,57 @@ import { ITemplateVariableSuggestionGroup } from '../../TemplateVariablesButton/
 
 export const defaultTemplateVariableSuggestions: ITemplateVariableSuggestionGroup[] = [
   {
-    title: 'Contact Attributes',
+    title: 'Recipient Attributes',
     suggestions: [
       {
         title: 'Full Name',
-        expression: 'contact.fullName'
+        expression: 'contact.display_name'
       },
       {
         title: 'First Name',
-        expression: 'contact.firstName'
+        expression: 'contact.first_name'
       },
       {
         title: 'Last Name',
-        expression: 'contact.lastName'
+        expression: 'contact.last_name'
+      },
+      {
+        title: 'Nickname',
+        expression: 'contact.nickname'
+      },
+      {
+        title: 'Title',
+        expression: 'contact.title'
+      },
+      {
+        title: 'Job Title',
+        expression: 'contact.job_title'
       },
       {
         title: 'Email',
         expression: 'contact.email'
+      },
+      {
+        title: 'Company',
+        expression: 'contact.company'
       }
     ]
   },
   {
-    title: 'Agent Attributes',
+    title: 'Sender Attributes',
     suggestions: [
       {
         title: 'Full Name',
-        expression: 'user.fullName'
+        expression: 'user.display_name'
       },
       {
         title: 'First Name',
-        expression: 'user.firstName'
+        expression: 'user.first_name'
       },
       {
         title: 'Last Name',
-        expression: 'user.lastName'
+        expression: 'user.last_name'
       },
-      {
-        title: 'Email',
-        expression: 'user.email'
-      },
-      {
-        title: 'First Name',
-        expression: 'user.fidsarstName'
-      },
-      {
-        title: 'Last Name',
-        expression: 'user.lastdasame'
-      },
-      {
-        title: 'Email',
-        expression: 'user.emadsl'
-      }
     ]
   }
 ]
