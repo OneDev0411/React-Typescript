@@ -14,7 +14,7 @@ import { selectDealTasks } from 'reducers/deals/tasks'
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 import { getChecklistById } from 'reducers/deals/checklists'
 
-import { getFileUrl } from 'deals/utils/get-document-file-url'
+import { getDocumentLastState } from 'deals/utils/get-document-last-state'
 
 import { moveTaskFile } from 'actions/deals'
 
@@ -130,14 +130,15 @@ export class DocumentRow extends React.Component {
 
     this.props.tasks.forEach(task => {
       if (task.submission) {
-        const files = getFileUrl({
+        const files = getDocumentLastState({
           type: 'task',
           deal: this.props.deal,
           envelopes: this.props.envelopes,
           task
-        }).map(() =>
+        }).map(({ originalFile: file }) =>
           normalizeAttachment({
             type: 'form',
+            file,
             task
           })
         )
@@ -150,20 +151,17 @@ export class DocumentRow extends React.Component {
         task.room.attachments
           .filter(file => file.mime === 'application/pdf')
           .forEach(file => {
-            const files = getFileUrl({
+            const files = getDocumentLastState({
               type: 'document',
               deal: this.props.deal,
               document: file,
               envelopes: this.props.envelopes,
               task
-            }).map(({ originalFile, url }) =>
+            }).map(({ originalFile: file }) =>
               normalizeAttachment({
                 type: 'file',
                 task,
-                file: {
-                  ...originalFile,
-                  url
-                }
+                file
               })
             )
 

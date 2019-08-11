@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 import deal from 'fixtures/deal/live-seller'
 
-import { getFileUrl } from '.'
+import { getDocumentLastState } from '.'
 
 describe('Test deal actions get-file-url', () => {
   it('Should return nothing when task is generic and has no attachment', () => {
@@ -12,7 +12,7 @@ describe('Test deal actions get-file-url', () => {
       }
     }
 
-    const links = getFileUrl({
+    const links = getDocumentLastState({
       type: 'task',
       deal,
       task,
@@ -34,7 +34,7 @@ describe('Test deal actions get-file-url', () => {
       }
     }
 
-    const links = getFileUrl({
+    const links = getDocumentLastState({
       type: 'task',
       deal,
       task,

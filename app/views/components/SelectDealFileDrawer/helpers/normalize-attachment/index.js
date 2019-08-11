@@ -1,6 +1,6 @@
 export function normalizeAttachment({ type, task, file }) {
   return type === 'form'
-    ? normalizeSubmissionForm(task)
+    ? normalizeSubmissionForm(task, file)
     : normalizeFile(task, file)
 }
 
@@ -29,15 +29,15 @@ export function normalizeFile(task, file) {
   }
 }
 
-export function normalizeSubmissionForm(task) {
+export function normalizeSubmissionForm(task, file) {
   return {
     type: 'form',
     id: `task_${task.id}`,
     task_id: task.id,
-    file_id: task.submission.file.id,
+    file_id: file.id,
     checklist: task.checklist,
     title: `${task.title}.pdf`,
-    url: task.pdf_url,
+    url: file.url || task.pdf_url,
     date: normalizeDate(task.created_at)
   }
 }
