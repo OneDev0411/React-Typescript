@@ -4,7 +4,6 @@ import {
   Tooltip,
   Avatar,
   Typography,
-  Button,
   TableCell,
   TableRow
 } from '@material-ui/core'
@@ -12,6 +11,7 @@ import {
 import { getUserInitials } from 'models/user/helpers/get-user-initials'
 
 import ALink from 'components/ALink'
+import { DangerButton } from 'components/Button/DangerButton'
 
 interface Props {
   contact: IContact
@@ -48,9 +48,8 @@ export default function Item({ contact, onStop, onClick }: Props) {
       </TableCell>
       <TableCell align="right">
         <Tooltip title="Stop flow for this contact">
-          <Button
+          <DangerButton
             variant="outlined"
-            color="secondary"
             size="small"
             onClick={event => {
               event.stopPropagation()
@@ -58,7 +57,7 @@ export default function Item({ contact, onStop, onClick }: Props) {
             }}
           >
             Stop
-          </Button>
+          </DangerButton>
         </Tooltip>
       </TableCell>
     </TableRow>

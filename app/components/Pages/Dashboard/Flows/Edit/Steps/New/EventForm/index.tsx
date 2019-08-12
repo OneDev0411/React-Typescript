@@ -4,6 +4,9 @@ import { Grid, Box, Button, Divider, Typography } from '@material-ui/core'
 import { TextField } from 'final-form-material-ui'
 
 import { TaskType } from 'components/NewEvent/components/TaskType'
+import { DangerButton } from 'components/Button/DangerButton'
+
+import { MAX_STEP_TITLE_LENGTH } from '../../../../constants'
 
 import {
   timeToSeconds,
@@ -110,7 +113,13 @@ export default function EventForm({
               <Box mb={2}>
                 <Field
                   autoFocus
-                  validate={value => validateStringInput(value, 'event title')}
+                  validate={value =>
+                    validateStringInput(
+                      value,
+                      'event title',
+                      MAX_STEP_TITLE_LENGTH
+                    )
+                  }
                   name="title"
                   label="Title"
                   variant="outlined"
@@ -167,7 +176,8 @@ export default function EventForm({
               <Grid container item alignItems="flex-start" xs={6}>
                 <Box mb={2} pt={2} pl={1}>
                   <Typography variant="subtitle2" color="textSecondary">
-                    days after previous step
+                    days after{' '}
+                    {startFrom === 0 ? 'Flow start' : 'previous step'}
                   </Typography>
                 </Box>
               </Grid>
@@ -193,9 +203,8 @@ export default function EventForm({
             <Grid container item xs={12} style={{ marginTop: '1rem' }}>
               <Grid container item xs={6} justify="flex-start">
                 {step && onDelete && (
-                  <Button
+                  <DangerButton
                     variant="text"
-                    color="secondary"
                     disabled={submitting}
                     onClick={async event => {
                       event.stopPropagation()
@@ -203,7 +212,7 @@ export default function EventForm({
                     }}
                   >
                     Delete
-                  </Button>
+                  </DangerButton>
                 )}
               </Grid>
               <Grid container item xs={6} justify="flex-end">

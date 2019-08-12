@@ -107,11 +107,11 @@ function Edit(props: Props & WithRouterProps) {
 
       if (!flowData.is_editable) {
         setWarning(
-          "This Flow is not editable, because it doesn't belong to your brand.You can make a duplicate of this and edit it." // eslint-disable-line
+          "This Flow is not editable, because it doesn't belong to your team. You can make a duplicate of this and edit it." // eslint-disable-line
         )
       } else if (flowData.active_flows > 0) {
         setWarning(
-          'This flow is in use! All of your changes will happen to the future steps and contacts.'
+          'This Flow is in use! All of your changes will happen to the future steps and contacts.'
         )
       }
 
@@ -225,7 +225,8 @@ function Edit(props: Props & WithRouterProps) {
       }
 
       data.name = data.name || flow.name
-      data.description = data.description || flow.description
+      data.description =
+        data.description === undefined ? flow.description : data.description
 
       await editBrandFlow(brand, flow.id, data)
       setFlow({

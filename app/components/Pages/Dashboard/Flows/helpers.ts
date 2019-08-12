@@ -42,9 +42,14 @@ export async function getEnrolledContacts(flow: UUID): Promise<IContact[]> {
 
 export function validateStringInput(
   value: string = '',
-  name: string
+  name: string,
+  maxLength
 ): string | null {
-  return validateInput(value, name, v => v.trim() !== '')
+  return validateInput(
+    value,
+    name,
+    v => v.trim() !== '' && v.trim().length < maxLength
+  )
 }
 
 export function validateInput(

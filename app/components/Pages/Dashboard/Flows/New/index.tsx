@@ -6,6 +6,7 @@ import { TextField } from 'final-form-material-ui'
 import { Modal, ModalHeader } from 'components/Modal'
 
 import { validateStringInput } from '../helpers'
+import { MAX_FLOW_NAME_LENGTH, MAX_FLOW_DESCRIPTION_LENGTH } from '../constants'
 
 import { ContentContainer } from './styled'
 
@@ -46,7 +47,9 @@ export default function New({ flow, onClose, onSubmit }: Props) {
             flow
               ? {
                   name: `Copy of ${flow.name}`,
-                  description: `Copy of ${flow.description}`
+                  description: flow.description
+                    ? `Copy of ${flow.description}`
+                    : ''
                 }
               : {}
           }
@@ -59,7 +62,11 @@ export default function New({ flow, onClose, onSubmit }: Props) {
                       <Field
                         autoFocus
                         validate={value =>
-                          validateStringInput(value, 'Flow name')
+                          validateStringInput(
+                            value,
+                            'Flow name',
+                            MAX_FLOW_NAME_LENGTH
+                          )
                         }
                         name="name"
                         label="Name"
@@ -73,6 +80,11 @@ export default function New({ flow, onClose, onSubmit }: Props) {
                   <Grid item xs={12}>
                     <Box mb={3}>
                       <Field
+                        validate={value => {
+                          if (value.length > MAX_FLOW_DESCRIPTION_LENGTH) {
+                            return 'Invalid Flow description'
+                          }
+                        }}
                         name="description"
                         label="Description"
                         autoComplete="off"
