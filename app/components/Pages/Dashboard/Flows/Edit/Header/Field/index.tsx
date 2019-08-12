@@ -10,6 +10,7 @@ import EditMode from './EditMode'
 interface Props {
   value?: string
   disabled?: boolean
+  validator: (value: string) => boolean
   variant: ThemeStyle
   name: 'name' | 'description'
   onChange: (value: string) => Promise<any>
@@ -19,6 +20,7 @@ export default function Field(props: Props) {
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [value, setValue] = useState(props.value || '')
+  const [error, setError] = useState('')
 
   function onToggleEdit() {
     setIsEditing(!isEditing)
@@ -30,17 +32,29 @@ export default function Field(props: Props) {
   }
 
   async function onSave() {
-    if (value === props.value) {
+    const trimmedValue = value.trim()
+
+    if (!props.validator(trimmedValue)) {
+      setError(`${props.name} is too long`)
+
+      return
+    }
+
+    setError('')
+
+    if (trimmedValue === props.value) {
       setIsEditing(false)
+      setValue(props.value || '')
 
       return
     }
 
     setIsLoading(true)
 
-    await props.onChange(value)
+    await props.onChange(trimmedValue)
 
     setIsEditing(false)
+    setValue(trimmedValue)
     setIsLoading(false)
   }
 
@@ -63,7 +77,7 @@ export default function Field(props: Props) {
     )
   }
 
-  function renderEditMode() {
+  function renderEditMode({ error }) {
     return (
       <EditMode
         value={value}
@@ -74,6 +88,7 @@ export default function Field(props: Props) {
             : {}
         }
         onChange={setValue}
+        error={error}
       />
     )
   }
@@ -86,6 +101,7 @@ export default function Field(props: Props) {
     <InlineEditableField
       cancelOnOutsideClick
       isEditModeStatic
+      error={error}
       isDisabled={isLoading}
       handleCancel={onCancel}
       handleSave={onSave}
