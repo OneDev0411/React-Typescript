@@ -67,7 +67,7 @@ function FlowsList(props: Props) {
           <Loader />
         </ListItem>
       ) : (
-        <ShowMoreLess moreText="More tags" lessText="Less tags">
+        <ShowMoreLess moreText="More Flows" lessText="Less Flows">
           {brandFlows.map(flow => {
             let selectedFlow
             const { name, id } = flow
