@@ -65,7 +65,7 @@
 
   .saving-title {
     i {
-      color: #003bdf;
+      color: #0945eb;
       font-size: 15px;
     }
   }
@@ -93,11 +93,11 @@
 
     .cta {
       cursor: pointer;
-      color: #003bdf;
+      color: #0945eb;
       font-size: 13px;
 
       .save {
-        border: 1px solid #003bdf;
+        border: 1px solid #0945eb;
         padding: 3px;
         border-radius: 4px;
       }
@@ -110,7 +110,7 @@
     &.isEditingTitle,
     &:hover {
       padding: 0 20px 0 0;
-      border: dashed 1px #003bdf;
+      border: dashed 1px #0945eb;
       border-radius: 4px;
     }
   }

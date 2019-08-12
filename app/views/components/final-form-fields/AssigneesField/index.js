@@ -38,7 +38,7 @@ class DummyAssignees extends React.Component {
           onRemoveHandler={this.onRemoveHandler}
         />
         {error && touched && (
-          <div style={{ color: 'red', marginTop: '0.5rem' }}>{error}</div>
+          <div style={{ color: '#F43B38', marginTop: '0.5rem' }}>{error}</div>
         )}
       </div>
     )

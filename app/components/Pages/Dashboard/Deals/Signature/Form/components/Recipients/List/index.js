@@ -7,8 +7,6 @@ import UserAvatar from 'components/Avatar'
 import IconButton from 'components/Button/IconButton'
 import IconClose from 'components/SvgIcons/Close/CloseIcon'
 
-import { red } from 'views/utils/colors'
-
 import { MenuButton } from './components/MenuButton'
 
 import {

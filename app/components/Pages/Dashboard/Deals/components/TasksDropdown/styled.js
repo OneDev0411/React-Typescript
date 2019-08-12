@@ -95,7 +95,7 @@ export const ChecklistNewItemCancel = styled.span`
   right: 10px;
   top: 5px;
   font-weight: 400;
-  color: #003bdf;
+  color: #0945eb;
 `
 
 export const ChecklistNewItemSave = styled.span`
@@ -103,5 +103,5 @@ export const ChecklistNewItemSave = styled.span`
   right: 25px;
   top: 5px;
   font-weight: 400;
-  color: #003bdf;
+  color: #0945eb;
 `

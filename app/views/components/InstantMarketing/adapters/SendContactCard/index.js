@@ -3,8 +3,6 @@ import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import idx from 'idx'
 
-import { Button } from '@material-ui/core'
-
 import { getContact } from 'models/contacts/get-contact'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
@@ -13,7 +11,7 @@ import { normalizeContactForEmailCompose } from 'models/email-compose/helpers/no
 import { confirmation } from 'actions/confirmation'
 
 import InstantMarketing from 'components/InstantMarketing'
-
+import Button from 'components/Button/ActionButton'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
@@ -227,8 +225,7 @@ class SendContactCard extends React.Component {
         />
         {this.props.contact || this.props.contactId ? (
           <Button
-            variant="outlined"
-            color="secondary"
+            appearance="outline"
             onClick={this.showBuilder}
             disabled={this.state.isFetchingContact}
             {...this.props.buttonStyle} // TODO: buttonStyle -> buttonProps

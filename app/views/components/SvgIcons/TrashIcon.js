@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 const defaultProps = {
   size: 16,
-  color: '#003BDF'
+  color: '#0945eb'
 }
 
 const propTypes = {

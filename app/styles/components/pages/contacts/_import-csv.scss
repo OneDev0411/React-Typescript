@@ -76,7 +76,7 @@
       position: relative;
       .isInvalid {
         border-radius: 3px;
-        border: 1px solid red;
+        border: 1px solid #F43B38;
       }
       .required {
         color: #fff;
@@ -85,7 +85,7 @@
         top: 0;
         border-radius: 0 3px 0 3px;
         padding: 0.25rem;
-        background-color: red;
+        background-color: #F43B38;
       }
     }
   }
@@ -112,7 +112,7 @@
   }
 
   .error-message {
-    color: red;
+    color: #F43B38;
 
     .description {
       margin: 0.5rem 0 1rem 0;

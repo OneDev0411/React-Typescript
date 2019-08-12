@@ -4,20 +4,25 @@ import {
   borderColor,
   disabledBgColor,
   disabledColor,
-  primary,
-  primaryDark,
-  red
 } from 'views/utils/colors'
+
+const white = '#fff'
 
 export const theme = createMuiTheme({
   // Temporary theme based on our current colors, until design team provides the theme values
   palette: {
     type: 'light',
     primary: {
-      light: '#6566ff', // Temporarily from here: https://material.io/tools/color/#!/?view.left=0&view.right=1&primary.color=003bdf
-      main: primary,
-      dark: primaryDark,
-      contrastText: '#fff'
+      main: '#0945eb',
+      light: '#6971ff',
+      dark: '#001eb7',
+      contrastText: white
+    },
+    secondary: {
+      main: '#01040D',
+      light: '#0F121A',
+      dark: '#000000',
+      contrastText: white
     },
     action: {
       disabled: disabledColor,
@@ -25,9 +30,10 @@ export const theme = createMuiTheme({
     },
     divider: borderColor,
     error: {
-      main: red.A200,
-      light: red.A100,
-      dark: red.primary
+      light: '#ff7363',
+      main: '#F43B38',
+      dark: '#b90010',
+      contrastText: white
     },
     text: {
       secondary: disabledColor
@@ -37,18 +43,7 @@ export const theme = createMuiTheme({
     borderRadius: 4
   },
   typography: {
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      'Barlow',
-      '"Segoe UI"',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"'
-    ].join(','),
+    fontFamily: ['Barlow'].join(','),
     button: {
       textTransform: 'none'
     },
@@ -69,5 +64,5 @@ export const theme = createMuiTheme({
 })
 
 if (process.env.NODE_ENV === 'development') {
-  ;(window as any).theme = theme
+  ; (window as any).theme = theme
 }

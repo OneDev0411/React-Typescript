@@ -26,7 +26,7 @@ const defaultProps = {
       cx="12"
       cy="12"
       r="8"
-      fill="#003BDF"
+      fill="#0945eb"
     />,
     <circle
       key="IconSelectedRadio-circle-2"

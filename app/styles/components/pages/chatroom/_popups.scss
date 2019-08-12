@@ -61,7 +61,7 @@
     }
 
     &.isActive {
-      background-color:#003bdf;
+      background-color:#0945eb;
       .icon {
         svg g,
         svg path {
@@ -257,7 +257,7 @@
 
 %blinker {
   background-color: #ed8bb4;
-  background: linear-gradient(270deg, #f6f7f9, #003bdf);
+  background: linear-gradient(270deg, #f6f7f9, #0945eb);
   background-size: 400% 400%;
   -webkit-animation: blinkerAnimation 2s ease infinite;
   -moz-animation: blinkerAnimation 2s ease infinite;
