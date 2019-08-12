@@ -35,7 +35,7 @@ export default function Field(props: Props) {
     const trimmedValue = value.trim()
 
     if (!props.validate(trimmedValue)) {
-      setError(`${props.name} is too long`)
+      setError(`Invalid ${props.name}`)
 
       return
     }
