@@ -74,6 +74,15 @@ export default (state = null, action) => {
         }
       }
 
+    case actionTypes.CHANGE_TASK_REQUIREMENT:
+      return {
+        ...state,
+        [action.taskId]: {
+          ...state[action.taskId],
+          required: action.required
+        }
+      }
+
     case actionTypes.ADD_TASK_FILE:
       return {
         ...state,

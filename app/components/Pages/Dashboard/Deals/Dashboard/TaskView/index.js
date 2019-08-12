@@ -11,7 +11,6 @@ import DraftBanner from './DraftBanner'
 
 function TaskView(props) {
   const { task } = props
-  const headerHeight = '7.3rem'
 
   const onClose = () => {
     if (props.onClose) {
@@ -26,8 +25,7 @@ function TaskView(props) {
       <Drawer.Header
         style={{
           flexDirection: 'column',
-          padding: '1rem 0 0 0',
-          height: headerHeight
+          padding: '1rem 0 0 0'
         }}
       >
         <Header task={task} deal={props.deal} onClose={onClose} />
@@ -35,8 +33,7 @@ function TaskView(props) {
 
       <Drawer.Body
         style={{
-          paddingTop: headerHeight,
-          paddingRight: '1.5rem'
+          padding: '2rem 1.5rem'
         }}
       >
         <DraftBanner isDraftDeal={props.deal.is_draft} />

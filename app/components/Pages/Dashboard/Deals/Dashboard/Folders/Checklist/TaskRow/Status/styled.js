@@ -39,4 +39,8 @@ export const Label = styled.div`
   &.Approved {
     background-color: #35b863;
   }
+
+  &.Required {
+    background-color: #262626;
+  }
 `

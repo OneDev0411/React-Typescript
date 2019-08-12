@@ -16,7 +16,8 @@ import {
   SHOW_COMMENTS_BUTTON,
   APPROVE_TASK_BUTTON,
   DECLINE_TASK_BUTTON,
-  EMAIL_BUTTON
+  EMAIL_BUTTON,
+  TASK_REQUIRED
 } from '../../action-buttons'
 
 import {
@@ -39,6 +40,7 @@ function evaluateCondition(data, conditions) {
 const sharedActions = {
   [APPROVE_TASK_BUTTON]: {},
   [DECLINE_TASK_BUTTON]: {},
+  [TASK_REQUIRED]: {},
   [SHOW_COMMENTS_BUTTON]: {},
   [DELETE_TASK_BUTTON]: {}
 }

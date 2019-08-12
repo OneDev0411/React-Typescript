@@ -42,6 +42,7 @@ import {
   resendEnvelope,
   approveTask,
   declineTask,
+  changeTaskRequired,
   createNeedsAttention,
   removeTaskNotification
 } from './helpers/actions'
@@ -90,7 +91,8 @@ class ActionsButton extends React.Component {
       'move-file': this.toggleMoveFile,
       'split-pdf': this.handleToggleSplitPdf,
       'get-signature': this.handleGetSignature,
-      'send-email': this.handleToggleComposeEmail
+      'send-email': this.handleToggleComposeEmail,
+      'change-task-required': changeTaskRequired
     }
 
     this.handleSelectAction = this.handleSelectAction.bind(this)
