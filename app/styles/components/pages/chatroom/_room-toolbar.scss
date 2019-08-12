@@ -29,7 +29,7 @@ $room-toolbar-height: 69px;
     svg {
       cursor: pointer;
       &:hover g {
-        fill: #003bdf;
+        fill: #0945eb;
       }
     }
 
@@ -48,7 +48,7 @@ $room-toolbar-height: 69px;
         margin: -4px auto;
       }
       &:hover {
-        background: #003bdf;
+        background: #0945eb;
       }
       &:hover svg > g {
         fill: #fff;

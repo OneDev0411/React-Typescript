@@ -129,7 +129,7 @@ export const RowTitle = styled(H4)`
     css`
       :hover {
         cursor: pointer;
-        color: #003bdf;
+        color: #0945eb;
       }
     `}
 `

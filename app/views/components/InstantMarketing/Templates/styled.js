@@ -25,10 +25,10 @@ export const TemplateItem = styled.div`
   width: 292px;
   text-align: center;
 
-  border: 4px solid ${props => (props.isSelected ? '#003bdf' : 'transparent')};
+  border: 4px solid ${props => (props.isSelected ? '#0945eb' : 'transparent')};
 
   :hover {
-    border: 4px solid #003bdf;
+    border: 4px solid #0945eb;
   }
 `
 

@@ -53,6 +53,6 @@ export const FileRow = styled.div`
   padding-left: 3rem;
 
   :hover a.file-link {
-    color: #003bdf !important;
+    color: #0945eb !important;
   }
 `

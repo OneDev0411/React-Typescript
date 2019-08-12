@@ -33,7 +33,7 @@
 }
 
 %room-new {
-  background-color:#003bdf;
+  background-color:#0945eb;
   position: absolute;
   width: 290px;
   height: 40px;
@@ -98,7 +98,7 @@
       }
     }
     &:hover {
-      background-color: #003bdf;
+      background-color: #0945eb;
       .btn-tgl {
         color: #ffffff;
       }
@@ -151,7 +151,7 @@
       opacity: 1;
       span {
         font-weight: bold;
-        color: #003bdf;
+        color: #0945eb;
       }
     }
     .message-typing {
@@ -174,13 +174,13 @@
       font-size: 11px;
       min-width: 30px;
       display: inline-block;
-      background-color: #003bdf;
+      background-color: #0945eb;
     }
   }
   &:hover {
     background-color: #f2f2f2;
     .title{
-      color: #003bdf;
+      color: #0945eb;
     }
   }
   &.active {
@@ -204,6 +204,6 @@
   }
 
   &:hover svg > g {
-    fill: #003bdf;
+    fill: #0945eb;
   }
 }

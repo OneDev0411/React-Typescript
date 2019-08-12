@@ -60,7 +60,7 @@ export class CreateTaskForm extends React.Component {
     if (isSaving) {
       return (
         <ChecklistItemContainer onClick={e => e.stopPropagation()}>
-          <ChecklistItemTitle color="#003bdf" bold>
+          <ChecklistItemTitle color="#0945eb" bold>
             Creating task ...
           </ChecklistItemTitle>
         </ChecklistItemContainer>

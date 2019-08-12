@@ -5,11 +5,11 @@ export default {
   }
 
   .gjs-comp-selected {
-    outline-color: #003bdf !important;
+    outline-color: #0945eb !important;
   }
 
   .gjs-hovered {
-    outline: 2px dashed #003bdf !important;
+    outline: 2px dashed #0945eb !important;
     cursor: pointer;
     outline-offset: 1px;
   }

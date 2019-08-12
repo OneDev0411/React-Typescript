@@ -58,7 +58,7 @@
 
   &.isFocused{
     background-color:  #ffffff ;
-    border-color: #003bdf;
+    border-color: #0945eb;
     input::placeholder {
       color: #000000;
     }
@@ -100,7 +100,7 @@
       transition: 0.3s ease-in all;
       color: #9a9b9a;
       &:hover {
-        color: #003bdf;
+        color: #0945eb;
       }
     }
   }
@@ -110,7 +110,7 @@
     margin: 0 0 0 5px;
     background-color: transparent;
     border: none;
-    caret-color: #003bdf;
+    caret-color: #0945eb;
     &:focus {
       outline: 0;
     }
@@ -141,7 +141,7 @@
     }
     &:hover {
       background-color: #fafafa;
-      color: #003bdf;
+      color: #0945eb;
       
     }
   }
