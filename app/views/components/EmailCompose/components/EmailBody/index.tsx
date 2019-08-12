@@ -1,25 +1,25 @@
-import { Field } from 'react-final-form'
-
 import React, {
   ComponentProps,
   forwardRef,
   Fragment,
   Ref,
+  useCallback,
   useState
 } from 'react'
+import { Field } from 'react-final-form'
 import PluginsEditor from 'draft-js-plugins-editor'
 import { connect } from 'react-redux'
 
 import { TextEditor } from 'components/TextEditor'
 import Loading from 'components/LoadingContainer'
 import { IAppState } from 'reducers/index'
+import { uploadEmailAttachment } from 'models/email-compose/upload-email-attachment'
 
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
 import { defaultTemplateVariableSuggestions } from '../../EmailComposeDrawer/default-template-variable-suggestions'
 import { TextEditorProps } from '../../../TextEditor/types'
 
 interface Props {
-  uploadImage: (file: File) => Promise<string>
   content?: string
   hasStaticBody?: boolean
   hasSignatureByDefault?: boolean
@@ -31,7 +31,6 @@ interface Props {
 
 const EmailBody = ({
   content,
-  uploadImage,
   signature,
   hasSignatureByDefault,
   hasTemplateVariables,
@@ -40,6 +39,12 @@ const EmailBody = ({
   editorRef
 }: Props) => {
   const [signatureEditorVisible, setSignatureEditorVisible] = useState(false)
+
+  const uploadImage = useCallback(async file => {
+    const uploadedFile = await uploadEmailAttachment(file)
+
+    return uploadedFile.url
+  }, [])
 
   return (
     <>

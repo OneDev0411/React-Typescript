@@ -20,6 +20,8 @@ import confirmation from './confirmation'
 import { intercom } from './intercom'
 import { tasks } from './tasks'
 import { notifications as globalNotifications } from './notifications'
+import { emailTemplates } from './email-templates'
+import { IEmailTemplatesState } from './email-templates/types'
 
 const appReducer = combineReducers({
   socket,
@@ -29,6 +31,7 @@ const appReducer = combineReducers({
   brand,
   tasks,
   contacts,
+  emailTemplates,
   chatroom,
   widgets,
   intercom,
@@ -65,6 +68,7 @@ const appReducer = combineReducers({
 export type IAppState = {
   contacts: IContactReduxState
   user: IUser
+  emailTemplates: IEmailTemplatesState
 }
 
 export default (state, action) => appReducer(state, action)

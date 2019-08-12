@@ -9,7 +9,6 @@ import createDecorator from 'final-form-focus'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import EmailBody from 'components/EmailCompose/components/EmailBody'
 import { normalizeAttachments } from 'components/SelectDealFileDrawer/helpers/normalize-attachment'
-import { uploadEmailAttachment } from 'models/email-compose/upload-email-attachment'
 
 import { FinalFormDrawer } from '../../FinalFormDrawer'
 import { AttachmentsList } from '../fields/Attachments'
@@ -194,12 +193,6 @@ class EmailComposeDrawer extends React.Component<
     this.props.onSent()
   }
 
-  uploadImage = async file => {
-    const uploadedFile = await uploadEmailAttachment(file)
-
-    return uploadedFile.url
-  }
-
   collapseTopFields = () => this.setState({ topFieldsCollapsed: true })
 
   expandTopFields = () => this.setState({ topFieldsCollapsed: false })
@@ -215,7 +208,6 @@ class EmailComposeDrawer extends React.Component<
         onSubmit={this.handleSubmit}
         validate={this.validate}
         decorators={[this.focusOnErrors]}
-        submitting={this.state.isSendingEmail}
         closeDrawerOnBackdropClick={false}
         submitButtonLabel="Send"
         submittingButtonLabel="Sending ..."
@@ -260,7 +252,6 @@ class EmailComposeDrawer extends React.Component<
               hasSignatureByDefault={this.props.hasSignatureByDefault}
               hasStaticBody={this.props.hasStaticBody}
               hasTemplateVariables={this.props.hasTemplateVariables}
-              uploadImage={this.uploadImage}
               content={this.props.body}
             />
 
