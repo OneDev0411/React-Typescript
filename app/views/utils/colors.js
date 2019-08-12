@@ -19,8 +19,8 @@ export const orange = {
 }
 
 export const blue = {
-  A100: '#003bdf',
-  A200: '#022ca0'
+  A100: '#0945eb',
+  A200: '#001eb7'
 }
 
 export const grey = {

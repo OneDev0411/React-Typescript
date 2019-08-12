@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Field } from 'react-final-form'
 
-import { grey, red } from 'views/utils/colors'
+import { grey } from 'views/utils/colors'
 
 const Container = styled.div`
   margin-bottom: 1em;
@@ -24,9 +24,9 @@ const Container = styled.div`
   }
 
   > .error {
-    color: ${red.primary};
     font-size: 0.875rem;
     margin-top: 0.5rem;
+    color: ${props => props.theme.palette.error.main};
   }
 `
 
