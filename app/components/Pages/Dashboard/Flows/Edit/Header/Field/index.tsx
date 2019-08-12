@@ -10,7 +10,7 @@ import EditMode from './EditMode'
 interface Props {
   value?: string
   disabled?: boolean
-  validator: (value: string) => boolean
+  validate: (value: string) => boolean
   variant: ThemeStyle
   name: 'name' | 'description'
   onChange: (value: string) => Promise<any>
@@ -34,7 +34,7 @@ export default function Field(props: Props) {
   async function onSave() {
     const trimmedValue = value.trim()
 
-    if (!props.validator(trimmedValue)) {
+    if (!props.validate(trimmedValue)) {
       setError(`${props.name} is too long`)
 
       return
