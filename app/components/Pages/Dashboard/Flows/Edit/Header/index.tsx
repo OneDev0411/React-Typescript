@@ -49,7 +49,7 @@ export default function Header({
             value={name}
             disabled={disableEdit}
             validate={value => {
-              return value.length < MAX_FLOW_NAME_LENGTH
+              return value.length > 0 && value.length < MAX_FLOW_NAME_LENGTH
             }}
             onChange={value => onChange({ name: value })}
           />

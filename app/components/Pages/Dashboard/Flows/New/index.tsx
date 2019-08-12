@@ -81,7 +81,10 @@ export default function New({ flow, onClose, onSubmit }: Props) {
                     <Box mb={3}>
                       <Field
                         validate={value => {
-                          if (value.length > MAX_FLOW_DESCRIPTION_LENGTH) {
+                          if (
+                            value &&
+                            value.length > MAX_FLOW_DESCRIPTION_LENGTH
+                          ) {
                             return 'Invalid Flow description'
                           }
                         }}
