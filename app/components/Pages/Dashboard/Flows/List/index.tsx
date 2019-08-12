@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { addNotification as notify } from 'reapop'
@@ -6,10 +6,13 @@ import { Button } from '@material-ui/core'
 
 import Table from 'components/Grid/Table'
 import PageHeader from 'components/PageHeader'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import { getActiveTeamId } from 'utils/user-teams'
 import { goTo } from 'utils/go-to'
 import { useGetBrandFlows } from 'hooks/use-get-brand-flows'
+
+import { deleteBrandFlow } from 'models/flows/delete-brand-flow'
 
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
@@ -33,7 +36,8 @@ function List(props: Props) {
   const brand = getActiveTeamId(props.user)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedFlow, setSelectedFlow] = useState<IBrandFlow | null>(null)
-  const { flows, isFetching, error } = useGetBrandFlows(brand)
+  const { flows, reloadFlows, isFetching, error } = useGetBrandFlows(brand)
+  const confirmation = useContext(ConfirmationModalContext)
 
   async function newFlowSubmitHandler(flowData: IBrandFlowInput) {
     try {
@@ -95,8 +99,8 @@ function List(props: Props) {
       header: '',
       id: 'actions',
       verticalAlign: 'center',
-      render: (props: { rowData: IBrandFlow }) => {
-        const actions = getFlowActions(props.rowData)
+      render: (renderProps: { rowData: IBrandFlow }) => {
+        const actions = getFlowActions(renderProps.rowData)
 
         return (
           <Actions
@@ -104,13 +108,34 @@ function List(props: Props) {
             onSelect={action => {
               switch (action.value) {
                 case 'duplicate':
-                  setSelectedFlow(props.rowData)
+                  setSelectedFlow(renderProps.rowData)
                   setIsModalOpen(true)
+
+                  return
+                case 'delete':
+                  setSelectedFlow(renderProps.rowData)
+                  confirmation.setConfirmationModal({
+                    message: `Delete "${renderProps.rowData.name}" Flow?`,
+                    description:
+                      'This Flow will be deleted and you can not use it anymore. Are you sure?',
+                    onConfirm: async () => {
+                      if (!brand) {
+                        return
+                      }
+
+                      await deleteBrandFlow(brand, renderProps.rowData.id)
+                      await reloadFlows()
+                      props.notify({
+                        message: `"${renderProps.rowData.name}" Flow deleted.`,
+                        status: 'success'
+                      })
+                    }
+                  })
 
                   return
                 case 'edit':
                 case 'view':
-                  goTo(getFlowEditUrl(props.rowData.id))
+                  goTo(getFlowEditUrl(renderProps.rowData.id))
               }
             }}
           />
