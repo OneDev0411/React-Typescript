@@ -56,7 +56,7 @@ function AddToFlow(props) {
       buttonRenderer={buttonProps => (
         <ActionWrapper
           bulkMode={entireMode}
-          action="add to flow"
+          action="add to Flow"
           disabled={disabled}
         >
           <TextIconButton
