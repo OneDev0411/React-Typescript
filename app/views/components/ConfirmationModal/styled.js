@@ -1,14 +1,12 @@
 import styled, { css } from 'styled-components'
 
-import { red } from '../../utils/colors'
-
 function isDanger(props) {
   if (props.appearance === 'danger') {
     return css`
-      background: ${red.primary};
+      background: ${props => props.theme.palette.error.main};
 
       &:hover {
-        background: ${red.A100};
+        background: ${props => props.theme.palette.error.dark};
       }
     `
   }

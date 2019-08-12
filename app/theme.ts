@@ -25,9 +25,10 @@ export const theme = createMuiTheme({
     },
     divider: borderColor,
     error: {
-      main: red.A200,
-      light: red.A100,
-      dark: red.primary
+      light: '#ff7363',
+      main: '#F43B38',
+      dark: '#b90010',
+      contrastText: white
     },
     text: {
       secondary: disabledColor
