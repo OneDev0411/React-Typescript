@@ -1,4 +1,4 @@
 export interface FlowAction {
   label: string
-  value: 'view' | 'edit' | 'duplicate'
+  value: 'view' | 'edit' | 'delete' | 'duplicate'
 }

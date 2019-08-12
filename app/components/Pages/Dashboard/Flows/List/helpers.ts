@@ -15,6 +15,13 @@ export function getFlowActions(flow: IBrandFlow): FlowAction[] {
     })
   }
 
+  if (flow.is_editable && flow.active_flows === 0) {
+    actions.push({
+      value: 'delete',
+      label: 'Delete'
+    })
+  }
+
   actions.push({
     value: 'duplicate',
     label: 'Duplicate'
