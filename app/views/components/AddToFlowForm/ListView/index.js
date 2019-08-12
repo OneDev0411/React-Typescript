@@ -25,7 +25,7 @@ export default function ListView(props) {
 
   if (props.error) {
     return (
-      <EmptyContainer style={{ color: 'red' }}>{props.error}</EmptyContainer>
+      <EmptyContainer style={{ color: '#F43B38' }}>{props.error}</EmptyContainer>
     )
   }
 

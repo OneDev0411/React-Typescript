@@ -40,7 +40,7 @@ export const EditButton = styled(ActionButton)`
 export const EditModeContainer = styled.div`
   position: relative;
   padding: 0.5em;
-  border: 1px dashed ${props => (props.hasError ? 'red' : primary)};
+  border: 1px dashed ${props => (props.hasError ? props.theme.palette.error.main : primary)};
   border-radius: ${props => (props.isStatic ? '3px' : '3px 3px 0 0')};
   background: ${props =>
     props.hasError ? 'rgba(208, 2, 27, 0.05)' : grey.A150};

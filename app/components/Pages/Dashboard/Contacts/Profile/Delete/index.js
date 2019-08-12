@@ -32,7 +32,7 @@ class Delete extends React.Component {
             top: 0,
             left: 0,
             zIndex: 10000,
-            color: 'red',
+            color: '#F43B38',
             fontSize: '4rem',
             fontWeight: 'bold',
             opacity: 0.8,

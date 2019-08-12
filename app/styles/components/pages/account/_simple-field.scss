@@ -31,9 +31,9 @@
 
   &.has-error {
     border-radius: 3px;
-    border-color: red;
-    outline-color: red;
-    background: rgba(red, 0.1);
+    border-color: #F43B38;
+    outline-color: #F43B38;
+    background: rgba(#F43B38, 0.1);
 
     &:focus {
       outline-width: 0;
