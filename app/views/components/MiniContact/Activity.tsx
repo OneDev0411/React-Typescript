@@ -14,7 +14,7 @@ interface ActivityPropsType {
 }
 
 function Activity(props: ActivityPropsType) {
-  if (!props.dates || props.dates.length == 0) {
+  if ((!props.dates || props.dates.length == 0) && !props.last_touch) {
     return null
   }
 
