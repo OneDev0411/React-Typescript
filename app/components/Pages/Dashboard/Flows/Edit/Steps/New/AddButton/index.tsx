@@ -14,7 +14,7 @@ export default function AddButton({
   return (
     <ButtonGroup>
       <Button onClick={onNewEventClick}>Add an event</Button>
-      <Button onClick={onNewScheduledEmailClick}>Add a sheduled email</Button>
+      <Button onClick={onNewScheduledEmailClick}>Add a scheduled email</Button>
     </ButtonGroup>
   )
 }
