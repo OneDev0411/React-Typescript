@@ -6,6 +6,8 @@ import { TextField } from 'final-form-material-ui'
 import { TaskType } from 'components/NewEvent/components/TaskType'
 import { DangerButton } from 'components/Button/DangerButton'
 
+import { MAX_STEP_TITLE_LENGTH } from '../../../../constants'
+
 import {
   timeToSeconds,
   ONE_DAY_IN_SECONDS,
@@ -111,7 +113,13 @@ export default function EventForm({
               <Box mb={2}>
                 <Field
                   autoFocus
-                  validate={value => validateStringInput(value, 'event title')}
+                  validate={value =>
+                    validateStringInput(
+                      value,
+                      'event title',
+                      MAX_STEP_TITLE_LENGTH
+                    )
+                  }
                   name="title"
                   label="Title"
                   variant="outlined"
