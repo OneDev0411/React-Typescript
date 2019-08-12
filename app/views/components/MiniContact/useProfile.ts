@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { FormatterOutputType } from './types'
-import { findContact } from './helpers'
+import { findContact, getContactData } from './helpers'
 import { formatter } from './MiniContact-formatters'
 
 function useProfile(type, initData): FormatterOutputType {
@@ -11,8 +11,13 @@ function useProfile(type, initData): FormatterOutputType {
   useEffect(function useProfileEffect() {
     let cancelRequest = false
 
-    async function fetchContact(searchFor) {
-      const res = await findContact(searchFor, data)
+    async function fetchContact(searchFor, type: 'get' | 'find') {
+      let res
+      if (type === 'find') {
+        res = await findContact(searchFor, data)
+      } else {
+        res = await getContactData(searchFor)
+      }
 
       if (!cancelRequest) {
         setOutput(res)
@@ -28,7 +33,7 @@ function useProfile(type, initData): FormatterOutputType {
       })
 
       // Getting contact from server and updating the state.
-      fetchContact(data.contact_id)
+      fetchContact(data.contact_id, 'get')
     } else if (data.data.email) {
       // If it's not a contact, we are trying to find it in contacts.
 
@@ -40,7 +45,7 @@ function useProfile(type, initData): FormatterOutputType {
 
       // Trying to find the contact, if it's not exsits, we are returning the `data`
       // if it is, we will return the contact.
-      fetchContact(data.data.email)
+      fetchContact(data.data.email, 'find')
     }
 
     return function cleanUpProfile() {

@@ -120,7 +120,7 @@ export async function getContactData(contact_id): Promise<FormatterOutputType> {
 
 export async function findContact(email: string, base_output) {
   try {
-    const res = await searchContacts('hi@mojtabast.com')
+    const res = await searchContacts(email)
 
     if (res.data.length > 0) {
       const foundContact = res.data[0]
