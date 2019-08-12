@@ -38,18 +38,7 @@ export const theme = createMuiTheme({
     borderRadius: 4
   },
   typography: {
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      'Barlow',
-      '"Segoe UI"',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"'
-    ].join(','),
+    fontFamily: ['Barlow'].join(','),
     button: {
       textTransform: 'none'
     },
