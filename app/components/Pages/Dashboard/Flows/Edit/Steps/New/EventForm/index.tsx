@@ -192,6 +192,7 @@ export default function EventForm({
                     type="time"
                     variant="outlined"
                     required
+                    InputLabelProps={{ shrink: true }}
                     component={TextField}
                   />
                 </Box>
