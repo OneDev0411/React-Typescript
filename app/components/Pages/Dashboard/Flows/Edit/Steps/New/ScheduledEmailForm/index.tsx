@@ -190,6 +190,7 @@ export default function ScheduledEmailForm({
                     type="time"
                     variant="outlined"
                     required
+                    InputLabelProps={{ shrink: true }}
                     component={TextField}
                   />
                 </Box>
