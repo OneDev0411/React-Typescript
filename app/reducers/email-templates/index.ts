@@ -9,20 +9,51 @@ export function emailTemplates(
   state: IEmailTemplatesState = initialState,
   action: EmailTemplateAction
 ) {
+  const brand = action.brandId
+  const brandState = state[brand] || {}
+
   if (action.type === actionTypes.UPDATE_EMAIL_TEMPLATE) {
     return {
       ...state,
-      [action.brandId]: {
-        ...(state[action.brandId] || {}),
-        [action.template.id]: action.template
+      [brand]: {
+        ...brandState,
+        templates: {
+          ...brandState.templates,
+          [action.template.id]: action.template
+        }
       }
     }
   }
 
-  if (action.type === actionTypes.UPDATE_EMAIL_TEMPLATES) {
+  if (action.type === actionTypes.FETCH_EMAIL_TEMPLATES_REQUEST) {
     return {
       ...state,
-      [action.brandId]: keyBy(action.templates, 'id')
+      [brand]: {
+        ...brandState,
+        isFetching: true
+      }
+    }
+  }
+
+  if (action.type === actionTypes.FETCH_EMAIL_TEMPLATES_SUCCESS) {
+    return {
+      ...state,
+      [brand]: {
+        error: '',
+        isFetching: false,
+        templates: keyBy(action.templates, 'id')
+      }
+    }
+  }
+
+  if (action.type === actionTypes.FETCH_EMAIL_TEMPLATES_FAILURE) {
+    return {
+      ...state,
+      [brand]: {
+        ...brandState,
+        isFetching: false,
+        error: action.errorMessage
+      }
     }
   }
 
@@ -33,5 +64,31 @@ export function selectEmailTemplates(
   state: IEmailTemplatesState,
   brandId: string
 ) {
-  return Object.values(state[brandId] || {})
+  if (!state[brandId]) {
+    return []
+  }
+
+  return Object.values(state[brandId].templates || {})
+}
+
+export function selectEmailTemplatesIsFetching(
+  state: IEmailTemplatesState,
+  brandId: string
+) {
+  if (!state[brandId]) {
+    return false
+  }
+
+  return state[brandId].isFetching || false
+}
+
+export function selectEmailTemplatesError(
+  state: IEmailTemplatesState,
+  brandId: string
+) {
+  if (!state[brandId]) {
+    return ''
+  }
+
+  return state[brandId].error || ''
 }
