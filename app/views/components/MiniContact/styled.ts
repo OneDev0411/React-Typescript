@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const ProfileContainer = styled.div`
-  min-width: 480px;
+  width: 480px;
 
   .head {
     display: flex;

@@ -35,7 +35,8 @@ function MiniProfile(props: MiniProfilePropsType) {
     data: {
       from: props.user,
       onClose: () => props.setActionSettings({}),
-      onSent: () => props.setActionSettings({})
+      onSent: () => props.setActionSettings({}),
+      recipients: [{ email: data.email }]
     }
   }
 
