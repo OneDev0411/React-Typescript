@@ -22,10 +22,14 @@ export type EmailTemplateAction =
     type: typeof actionTypes.FETCH_EMAIL_TEMPLATES_SUCCESS
     brandId: UUID
     templates: IBrandEmailTemplate[]
-  } | {
+  }
+  | {
     type: typeof actionTypes.FETCH_EMAIL_TEMPLATES_FAILURE
     brandId: UUID
     errorMessage: string
   }
-
-
+  | {
+    type: typeof actionTypes.DELETE_EMAIL_TEMPLATE
+    brandId: UUID
+    templateId: UUID
+  }

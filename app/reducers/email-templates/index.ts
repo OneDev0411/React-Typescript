@@ -1,3 +1,4 @@
+import omit from 'lodash/omit'
 import keyBy from 'lodash/keyBy'
 
 import * as actionTypes from '../../constants/email-templates'
@@ -53,6 +54,16 @@ export function emailTemplates(
         ...brandState,
         isFetching: false,
         error: action.errorMessage
+      }
+    }
+  }
+
+  if (action.type === actionTypes.DELETE_EMAIL_TEMPLATE) {
+    return {
+      ...state,
+      [brand]: {
+        ...brandState,
+        templates: omit(brandState.templates, action.templateId)
       }
     }
   }

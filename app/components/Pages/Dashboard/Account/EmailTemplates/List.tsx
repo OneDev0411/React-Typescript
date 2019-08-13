@@ -1,19 +1,21 @@
 import * as React from 'react'
-import { useEffect } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import { Typography, makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import { IAppState } from 'reducers/index'
-import { selectEmailTemplates, selectEmailTemplatesIsFetching, selectEmailTemplatesError } from 'reducers/email-templates'
+import { selectEmailTemplates, selectEmailTemplatesIsFetching } from 'reducers/email-templates'
 
 import { fetchEmailTemplates } from 'actions/email-templates/fetch-email-templates'
+import { deleteEmailTemplate } from 'actions/email-templates/delete-email-template'
 
 import { getActiveTeamId } from 'utils/user-teams'
 
 import Table from 'components/Grid/Table'
 import LoadingContainer from 'components/LoadingContainer'
+import { DangerButton } from 'components/Button/DangerButton'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,7 +29,8 @@ interface Props {
   brand: UUID
   isFetching: boolean
   templates: IBrandEmailTemplate[]
-  handleOnClickRow: (IBrandEmailTemplate) => void
+  handleOnClickRow: (IBrandEmailTemplate) => void,
+  deleteEmailTemplate: IAsyncActionProp<typeof deleteEmailTemplate>
   fetchEmailTemplates: IAsyncActionProp<typeof fetchEmailTemplates>
 }
 
@@ -36,9 +39,29 @@ function EmailTemplatesList({
   isFetching,
   templates,
   handleOnClickRow,
-  fetchEmailTemplates
+  deleteEmailTemplate,
+  fetchEmailTemplates,
 }: Props) {
   const classes = useStyles();
+  const [deletingItems, setDeletingItems] = useState([''])
+
+  const isDeleting = (id: UUID): boolean => deletingItems.includes(id)
+  const removeFromDeletingItems = (id: UUID): void =>
+    setDeletingItems(deletingItems.filter(item => item !== id))
+  const addToDeletingItems = (id: UUID): void => setDeletingItems([
+    ...deletingItems,
+    id
+  ])
+
+  const handleDelete = useCallback(async (id: UUID): Promise<void> => {
+    try {
+      addToDeletingItems(id)
+      await deleteEmailTemplate(brand, id)
+      removeFromDeletingItems(id)
+    } catch (error) {
+      removeFromDeletingItems(id)
+    }
+  }, [brand, addToDeletingItems, deleteEmailTemplate, removeFromDeletingItems])
 
   useEffect(() => {
     fetchEmailTemplates(brand)
@@ -82,20 +105,45 @@ function EmailTemplatesList({
           </Typography>
         </div>
       )
+    },
+    {
+      id: 'delete',
+      sortable: false,
+      render: ({ rowData: { id } }) => (
+        <div style={{ textAlign: 'right' }}>
+          <DangerButton
+            size="small"
+            variant="outlined"
+            onClick={(e) => {
+              handleDelete(id)
+              e.preventDefault()
+              e.stopPropagation()
+            }}
+          >
+            {isDeleting(id) ? 'Deleting...' : 'Delete'}
+          </DangerButton>
+        </div>
+      )
     }
   ]
 
   return (
     <Table
-      columns={columns}
       data={templates}
-      plugins={{ sortable: {} }}
+      columns={columns}
       isFetching={isFetching}
+      plugins={{ sortable: {} }}
       LoadingState={() => <LoadingContainer style={{ padding: '20% 0' }} />}
-      getTrProps={(index, { original: template }) => ({
-        onClick: () => handleOnClickRow(template),
-        style: { cursor: 'pointer' }
-      })}
+      getTrProps={(index, { original: template }) => {
+        const _isDeleting = isDeleting(template.id)
+        return {
+          onClick: _isDeleting ? () => { } : () => handleOnClickRow(template),
+          style: {
+            cursor: 'pointer',
+            pointerEvents: _isDeleting ? 'none' : 'initial'
+          }
+        }
+      }}
     />
   )
 }
@@ -114,7 +162,9 @@ const mapStateToProps = (state: IAppState) => {
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   return {
     fetchEmailTemplates: (...args: Parameters<typeof fetchEmailTemplates>) =>
-      dispatch(fetchEmailTemplates(...args))
+      dispatch(fetchEmailTemplates(...args)),
+    deleteEmailTemplate: (...args: Parameters<typeof deleteEmailTemplate>) =>
+      dispatch(deleteEmailTemplate(...args))
   }
 }
 
