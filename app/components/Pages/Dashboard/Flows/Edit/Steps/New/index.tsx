@@ -67,7 +67,7 @@ export default function New({
 
   function renderNewScheduledEmailForm() {
     return (
-      <Grid item xs={12}>
+      <Grid item xs={12} style={{ position: 'relative' }}>
         <StepIndex>{index}</StepIndex>
         <Box m={2}>
           <Card>
