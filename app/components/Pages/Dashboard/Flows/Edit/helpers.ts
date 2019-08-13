@@ -118,19 +118,21 @@ export function shouldUpdateNextSteps(
   ]
 }
 
-export async function updateStepsDue(
+export function updateStepsDue(
   brand: UUID,
   flowId: UUID,
   steps: IBrandFlowStep[],
   dueDiff: number
 ): Promise<any> {
-  return steps.map(step => {
-    const newStep = convertStepToStepInput(step)
+  return Promise.all(
+    steps.map(step => {
+      const newStep = convertStepToStepInput(step)
 
-    newStep.due_in += dueDiff
+      newStep.due_in += dueDiff
 
-    return editBrandFlowStep(brand, flowId, step.id, newStep)
-  })
+      return editBrandFlowStep(brand, flowId, step.id, newStep)
+    })
+  )
 }
 
 export function getMovingStepDue(
