@@ -113,7 +113,12 @@ export default function Item({
   return (
     <Grid item xs={12} style={{ position: 'relative' }}>
       <StepIndex>{index + 1}</StepIndex>
-      <Draggable key={step.id} draggableId={step.id} index={index}>
+      <Draggable
+        isDragDisabled={disableEdit}
+        key={step.id}
+        draggableId={step.id}
+        index={index}
+      >
         {(draggableProvided, draggableSnapshot) => (
           <div
             ref={draggableProvided.innerRef}
@@ -148,6 +153,7 @@ export default function Item({
                       <Tooltip
                         title="Drag step to reorder"
                         aria-label="drag to reorder step"
+                        hidden={disableEdit}
                       >
                         <IconDragHandle />
                       </Tooltip>
