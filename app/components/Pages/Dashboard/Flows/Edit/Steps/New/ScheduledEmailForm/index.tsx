@@ -171,7 +171,7 @@ export default function ScheduledEmailForm({
                 </Box>
               </Grid>
 
-              <Grid container item alignItems="flex-start" xs={6}>
+              <Grid container item alignItems="flex-start" xs={5}>
                 <Box mb={2} pt={2} pl={1}>
                   <Typography variant="subtitle2" color="textSecondary">
                     days after{' '}
@@ -180,7 +180,7 @@ export default function ScheduledEmailForm({
                 </Box>
               </Grid>
 
-              <Grid container item xs={3} justify="flex-end">
+              <Grid container item xs={4} justify="flex-end">
                 <Box mb={2}>
                   <Field
                     name="at"
