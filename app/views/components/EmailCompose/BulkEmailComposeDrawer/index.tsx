@@ -76,10 +76,7 @@ export function BulkEmailComposeDrawer({
       {...otherProps}
       sendEmail={sendEmail}
       getSendEmailResultMessages={form =>
-        getSendEmailResultMessages(
-          (form.recipients || []).length,
-          !!form.due_at
-        )
+        getSendEmailResultMessages(!!form.due_at)
       }
       renderCollapsedFields={renderCollapsedFields}
       renderFields={renderFields}
