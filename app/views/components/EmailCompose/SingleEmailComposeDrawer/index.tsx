@@ -97,7 +97,7 @@ export function SingleEmailComposeDrawer({
       hasSignatureByDefault
       sendEmail={handleSendEmail}
       getSendEmailResultMessages={form =>
-        getSendEmailResultMessages(1, !!form.due_at)
+        getSendEmailResultMessages(!!form.due_at)
       }
       renderCollapsedFields={renderCollapsedFields}
       renderFields={renderFields}
