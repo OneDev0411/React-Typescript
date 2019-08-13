@@ -164,6 +164,7 @@ Grid.propTypes = {
   isFetching: PropTypes.bool,
   isFetchingMore: PropTypes.bool,
   isFetchingMoreBefore: PropTypes.bool,
+  isHeaderSticky: PropTypes.bool,
   isToolbarSticky: PropTypes.bool,
   showTableHeader: PropTypes.bool,
   showToolbar: PropTypes.bool,
@@ -176,11 +177,11 @@ Grid.propTypes = {
   getSubTableProps: PropTypes.func,
   columns: PropTypes.array.isRequired,
   data: PropTypes.array,
-  summary: PropTypes.object,
-  showToolbar: PropTypes.bool
+  summary: PropTypes.object
 }
 
 Grid.defaultProps = {
+  isHeaderSticky: false,
   isFetching: false,
   isFetchingMore: false,
   isFetchingMoreBefore: false,
@@ -196,8 +197,7 @@ Grid.defaultProps = {
   getSubTableProps: () => {},
   plugins: {},
   data: [],
-  summary: {},
-  showToolbar: true
+  summary: {}
 }
 
 export default Grid

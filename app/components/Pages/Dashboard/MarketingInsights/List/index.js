@@ -113,6 +113,8 @@ function List(props) {
             )}
             isFetching={isLoading}
             LoadingState={LoadingComponent}
+            showToolbar={false}
+            isHeaderSticky
           />
         </div>
       </InsightContainer>
