@@ -26,6 +26,13 @@ export function EventIcon(props: Props) {
     Icon = eventTypesIcons.Email
   }
 
+  if (
+    props.event.object_type === 'contact' &&
+    props.event.event_type === 'next_touch'
+  ) {
+    Icon = eventTypesIcons.TouchDate
+  }
+
   return (
     <div
       style={{
