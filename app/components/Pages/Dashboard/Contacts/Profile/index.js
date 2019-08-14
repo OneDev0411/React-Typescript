@@ -204,23 +204,17 @@ class ContactProfile extends React.Component {
     state.timeline.filter(item => item.id !== id)
 
   editEvent = updatedEvent =>
-    this.setState(
-      state => ({
-        timeline: [
-          ...this.filterTimelineById(state, updatedEvent.id),
-          updatedEvent
-        ]
-      }),
-      this.fetchContact
-    )
+    this.setState(state => ({
+      timeline: [
+        ...this.filterTimelineById(state, updatedEvent.id),
+        updatedEvent
+      ]
+    }))
 
   deleteEvent = id =>
-    this.setState(
-      state => ({
-        timeline: this.filterTimelineById(state, id)
-      }),
-      this.fetchContact
-    )
+    this.setState(state => ({
+      timeline: this.filterTimelineById(state, id)
+    }))
 
   handleAddNote = async text => {
     const contact = await upsertContactAttributes(this.state.contact.id, [
