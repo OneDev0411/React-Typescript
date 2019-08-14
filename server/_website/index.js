@@ -83,6 +83,15 @@ router.get('/privacy', async ctx =>
   })
 )
 
+// TODO: creating routing dynamically for job board.
+// We only have one open position so it works for now.
+router.get('/about/outbound-sales-development-representative', async ctx =>
+  ctx.render(template_path('jobs-sales.ejs'), {
+    title: 'Outbound Sales Development Representative',
+    isLoggedIn: isLoggedIn(ctx)
+  })
+)
+
 router.post('/contact', bodyParser(), async ctx => {
   const {
     first_name,
