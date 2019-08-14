@@ -9,6 +9,8 @@ import { EventTitle } from './Title'
 import { EventSubTitle } from './Subtitle'
 import { EventActions } from './Actions'
 
+import { TodayEmptyState } from './TodayEmptyState'
+
 import styles from './styles'
 
 interface Props {
@@ -59,6 +61,10 @@ export function Event({
   const classes = useStyles({
     hasBorderBottom
   })
+
+  if (event.event_type === 'today-empty-state') {
+    return <TodayEmptyState style={style} />
+  }
 
   return (
     <div style={style}>

@@ -140,7 +140,8 @@ function getRowHeight(row: ICalendarListRow): number {
 
   const event = row as ICalendarEvent
 
-  return event.object_type === 'crm_task' || event.event_type === 'next_touch'
+  return event.object_type === 'crm_task' ||
+    ['next_touch', 'today-empty-state'].includes(event.event_type)
     ? 72
     : 55
 }
