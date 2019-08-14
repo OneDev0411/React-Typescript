@@ -1,6 +1,6 @@
 import * as actionTypes from '../../../constants/contacts'
 import { searchContacts as search } from '../../../models/contacts/search-contacts'
-import { defaultQuery } from '../../../models/contacts/helpers'
+import { associations as defaultAssociations } from '../../../models/contacts/helpers'
 
 import { normalizeContacts } from '../helpers/normalize-contacts'
 import { selectContacts } from '../../../reducers/contacts/list'
@@ -36,12 +36,12 @@ export function searchContacts(
         searchInputValue,
         attributeFilters,
         {
-          ...defaultQuery,
           start,
           limit,
           order,
           alphabet,
-          filter_type: conditionOperator
+          filter_type: conditionOperator,
+          associations: [...defaultAssociations, 'contact.flows']
         },
         users,
         flows,

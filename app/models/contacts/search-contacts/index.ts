@@ -1,7 +1,7 @@
 import preSearchFormat from '../helpers/pre-search-format'
 
 import Fetch from '../../../services/fetch'
-import { defaultQuery } from '../helpers/default-query'
+import { associations as defaultAssociations } from '../helpers/default-query'
 
 // TODO: refactor contacts models
 
@@ -9,7 +9,10 @@ export async function searchContacts(
   text: string = '',
   attributeFilters?: IContactAttributeFilter[],
   queryParams: IFetchContactQuery = {
-    ...defaultQuery,
+    associations: [
+      ...defaultAssociations,
+      'contact.flows'
+    ],
     order: '-created_at',
     filter_type: 'and'
   },
