@@ -135,90 +135,96 @@ export function updateStepsDue(
   )
 }
 
-export function getMovingStepDue(
+export function getUpdatedStepsOnMove(
   steps: IBrandFlowStep[],
-  sourceStepIndex: number,
-  targetStepIndex: number
-): number {
-  const [neededWaitDays] = secondsToDays(
-    steps[sourceStepIndex].due_in -
-      (sourceStepIndex > 0 ? steps[sourceStepIndex - 1].due_in : 0)
-  )
-  const [, neededSeconds] = secondsToDays(steps[sourceStepIndex].due_in)
-
-  const [targetWaitDays] = secondsToDays(
-    targetStepIndex > 0 ? steps[targetStepIndex - 1].due_in : 0
-  )
-
-  return (
-    targetWaitDays * ONE_DAY_IN_SECONDS +
-    neededWaitDays * ONE_DAY_IN_SECONDS +
-    neededSeconds
-  )
-}
-
-function getStepWaitDays(step: IBrandFlowStep, prevStep?: IBrandFlowStep) {
-  if (!prevStep) {
-    return secondsToDays(step.due_in)[0]
+  source: number,
+  destination: number
+): [UUID, IBrandFlowStepInput][] {
+  // No need to update anything
+  if (source === destination) {
+    return []
   }
 
-  return secondsToDays(step.due_in - prevStep.due_in)[0]
-}
+  const result: [UUID, IBrandFlowStepInput][] = []
 
-export async function moveStep(
-  brand: UUID,
-  flow: IBrandFlow,
-  sourceStepIndex: number,
-  targetStepIndex: number
-): Promise<any> {
-  // If there are no steps in Flow (which is odd but it's optional in Flow)
-  // or the steps count are less than 1 or it's the same which doesn't make any sense to move
-  if (
-    !flow.steps ||
-    flow.steps.length <= 1 ||
-    sourceStepIndex === targetStepIndex
-  ) {
-    return Promise.resolve()
+  const waitDiffInSeconds =
+    source === 0
+      ? secondsToDays(steps[source].due_in)[0] * ONE_DAY_IN_SECONDS
+      : (secondsToDays(steps[source].due_in)[0] -
+          secondsToDays(steps[source - 1].due_in)[0]) *
+        ONE_DAY_IN_SECONDS
+
+  // Move down
+  // Example: from 1 (source) to 3 (destination)
+  if (source < destination) {
+    result.push(
+      ...steps.slice(source + 1, destination + 1).map(step => {
+        return [
+          step.id,
+          {
+            ...convertStepToStepInput(step),
+            due_in: step.due_in + waitDiffInSeconds * -1
+          }
+        ] as [UUID, IBrandFlowStepInput]
+      })
+    )
+
+    const neededWaitDays = secondsToDays(steps[source].due_in)[0]
+
+    const neededSeconds = secondsToDays(steps[source].due_in)[1]
+
+    const destinationWaitDays = secondsToDays(
+      steps[destination].due_in - steps[source].due_in
+    )[0]
+
+    result.push([
+      steps[source].id,
+      {
+        ...convertStepToStepInput(steps[source]),
+        due_in:
+          destinationWaitDays * ONE_DAY_IN_SECONDS +
+          neededWaitDays * ONE_DAY_IN_SECONDS +
+          neededSeconds
+      }
+    ])
   }
 
-  const movingStepDue = getMovingStepDue(
-    flow.steps,
-    sourceStepIndex,
-    targetStepIndex
-  )
+  // Move up
+  // Example: from 3 (source) to 1 (destination)
+  if (source > destination) {
+    result.push(
+      ...steps.slice(destination, source).map(step => {
+        return [
+          step.id,
+          {
+            ...convertStepToStepInput(step),
+            due_in: step.due_in + waitDiffInSeconds
+          }
+        ] as [UUID, IBrandFlowStepInput]
+      })
+    )
 
-  const relativeWaitDays = getStepWaitDays(
-    flow.steps[sourceStepIndex],
-    sourceStepIndex > 0 ? flow.steps[sourceStepIndex - 1] : undefined
-  )
+    const neededWaitDays =
+      secondsToDays(steps[source].due_in)[0] -
+      secondsToDays(steps[source - 1].due_in)[0]
 
-  // Drag down
-  const stepsToRemoveDue =
-    sourceStepIndex < targetStepIndex
-      ? flow.steps.slice(sourceStepIndex + 1, targetStepIndex + 1)
-      : []
+    const neededSeconds = secondsToDays(steps[source].due_in)[1]
 
-  // Drag up
-  const stepsToAddDue =
-    sourceStepIndex > targetStepIndex
-      ? flow.steps.slice(targetStepIndex, sourceStepIndex)
-      : []
+    const destinationWaitDays = secondsToDays(
+      destination > 0 ? steps[destination - 1].due_in : 0
+    )[0]
 
-  await updateStepsDue(
-    brand,
-    flow.id,
-    stepsToRemoveDue,
-    -1 * relativeWaitDays * ONE_DAY_IN_SECONDS
-  )
-  await updateStepsDue(
-    brand,
-    flow.id,
-    stepsToAddDue,
-    relativeWaitDays * ONE_DAY_IN_SECONDS
-  )
+    result.push([
+      steps[source].id,
+      {
+        ...convertStepToStepInput(steps[source]),
+        due_in:
+          destinationWaitDays * ONE_DAY_IN_SECONDS +
+          neededWaitDays * ONE_DAY_IN_SECONDS +
+          neededSeconds
+      }
+    ])
+  }
 
-  return editBrandFlowStep(brand, flow.id, flow.steps![sourceStepIndex].id, {
-    ...convertStepToStepInput(flow.steps![sourceStepIndex]),
-    due_in: movingStepDue
-  })
+  return result
 }
