@@ -114,7 +114,7 @@ class ContactProfile extends React.Component {
    * @returns {String} Title
    */
   get documentTitle() {
-    let title = this.state.contact.summary.display_name || ''
+    let title = this.state.contact.display_name || ''
 
     return title ? `${title} | Contacts | Rechat` : 'Contact | Rechat'
   }
