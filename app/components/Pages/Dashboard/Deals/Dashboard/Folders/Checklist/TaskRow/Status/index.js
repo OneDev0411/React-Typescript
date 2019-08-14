@@ -63,11 +63,15 @@ export default function TaskStatus(props) {
     status = props.isDraftDeal ? 'Pending' : 'Notified'
   }
 
+  const isRequired = status !== 'Approved' && props.task.required
+
+  if (!status && !isRequired) {
+    return null
+  }
+
   return (
     <Flex>
-      {status !== 'Approved' && props.task.required && (
-        <Label className="Required">Required</Label>
-      )}
+      {isRequired && <Label className="Required">Required</Label>}
 
       <ToolTip caption={props.noTip !== true && tooltip} placement="bottom">
         <Label className={status}>

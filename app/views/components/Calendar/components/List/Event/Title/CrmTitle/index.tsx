@@ -25,28 +25,9 @@ const CrmEvent = memo(({ event, onClickCrmEventAssociations }: Props) => {
       >
         {event.event_type}
       </a>{' '}
-      {getCrmEventTypePreposition(event.event_type)}{' '}
       <Associations event={event} onClickAssociation={handleSelectEvent} />
     </div>
   )
 })
-
-function getCrmEventTypePreposition(eventType: string): string {
-  switch (eventType) {
-    case 'Chat':
-    case 'Call':
-    case 'In-Person Meeting':
-    case 'Other':
-      return 'with'
-
-    case 'Mail':
-    case 'Email':
-    case 'Text':
-      return 'to'
-
-    default:
-      return ''
-  }
-}
 
 export default CrmEvent

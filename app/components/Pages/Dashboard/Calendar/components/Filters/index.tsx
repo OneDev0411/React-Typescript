@@ -1,12 +1,10 @@
 import React, { useState, ChangeEvent, useCallback } from 'react'
 import { Tabs, Tab } from '@material-ui/core'
 
-import Flex from 'styled-flex-component'
-
 import { eventTypesIcons, EventTypeIcon } from 'views/utils/event-types-icons'
 import { importantDatesIcons } from 'views/utils/important-dates-icons'
 
-import { Container } from './styled'
+import { Container, TabTitle, TabItem } from './styled'
 
 interface TabItem {
   label: string
@@ -23,19 +21,19 @@ const TAB_ITEMS: TabItem[] = [
     filter: {}
   },
   {
-    label: 'Calls',
-    value: 1,
-    Icon: eventTypesIcons.Call,
-    filter: {
-      'event_types[]': ['Call']
-    }
-  },
-  {
     label: 'Touches',
     value: 2,
     Icon: eventTypesIcons.ListingAppointment,
     filter: {
       'object_types[]': ['contact']
+    }
+  },
+  {
+    label: 'Calls',
+    value: 1,
+    Icon: eventTypesIcons.Call,
+    filter: {
+      'event_types[]': ['Call']
     }
   },
   {
@@ -99,15 +97,15 @@ export function Filters({ onChange }: Props) {
             key={index}
             value={value}
             label={
-              <Flex alignCenter>
+              <TabItem>
                 {Icon && (
                   <Icon.icon
-                    fill="#3c4b6e"
-                    style={{ marginRight: '0.5rem', width: '1.2rem' }}
+                    fill={selectedTab === index ? Icon.color : '#3c4b6e'}
+                    style={{ width: '1.2rem' }}
                   />
                 )}
-                {label}
-              </Flex>
+                <TabTitle>{label}</TabTitle>
+              </TabItem>
             }
           />
         ))}

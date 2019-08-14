@@ -6,7 +6,11 @@ export function validate(values) {
   }
 
   if (values.assignees.length === 0) {
-    errors.assignees = 'Each event must have at least one assignee.'
+    errors.assignees = 'Each event must have one assignee at least.'
+  }
+
+  if (values.associations.length === 0) {
+    errors.assignees = 'Each event must have one client at least.'
   }
 
   return errors

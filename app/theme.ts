@@ -1,10 +1,6 @@
 import { createMuiTheme } from '@material-ui/core'
 
-import {
-  borderColor,
-  disabledBgColor,
-  disabledColor,
-} from 'views/utils/colors'
+import { borderColor, disabledBgColor, disabledColor } from 'views/utils/colors'
 
 const white = '#fff'
 
@@ -64,5 +60,5 @@ export const theme = createMuiTheme({
 })
 
 if (process.env.NODE_ENV === 'development') {
-  ; (window as any).theme = theme
+  ;(window as any).theme = theme
 }

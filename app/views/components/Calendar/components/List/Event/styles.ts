@@ -20,7 +20,10 @@ export default {
     fontWeight: 400,
     letterSpacing: '0.25px',
     paddingLeft: '9.5rem',
-    color: '#6a7589'
+    color: '#6a7589',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap' as 'nowrap',
+    textOverflow: 'ellipsis'
   },
   time: {
     width: '6.5rem',

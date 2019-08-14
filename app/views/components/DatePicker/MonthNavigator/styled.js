@@ -13,17 +13,13 @@ export const Container = styled.div`
 export const Button = styled.span`
   cursor: pointer;
   display: flex;
-  background-color: #d5dffe;
   margin-left: 0.25rem;
   border-radius: 100%;
+  border: 1px solid #b8c4cc;
 
   svg {
     width: 1.5rem;
     height: 1.5rem;
-  }
-
-  svg > path {
-    fill: #3050f2;
   }
 
   &:hover {

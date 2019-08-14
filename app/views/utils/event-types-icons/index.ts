@@ -11,6 +11,7 @@ import Closing from 'components/SvgIcons/Closing/IconClosing'
 import IconInPerson from 'components/SvgIcons/InPerson/IconInPerson'
 import IconTodo from 'components/SvgIcons/Todo/IconTodo'
 import IconListingAppointment from 'components/SvgIcons/ListingAppointment/IconListingAppointment'
+import TouchDate from 'components/SvgIcons/Time/IconTime'
 import IconTaskCritical from 'components/SvgIcons/TaskCritical/IconTaskCritical'
 
 export interface EventTypeIcon {
@@ -59,6 +60,11 @@ export const eventTypesIcons = [
     name: 'Tour',
     icon: Tour,
     color: '#bd10e0'
+  },
+  {
+    name: 'TouchDate',
+    icon: TouchDate,
+    color: '#f7a700'
   },
   {
     name: 'Closing',

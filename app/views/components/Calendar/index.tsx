@@ -319,6 +319,16 @@ export function Calendar({
   useEffect(() => {
     jumpToDate(activeDate, false)
 
+    /*
+     * VariableSizeList caches offsets and measurements for each index
+     * for performance purposes. This method clears that cached data for
+     * all items after (and including) the specified index. It should
+     * be called whenever a item's size changes
+     * for calendar, this is necessary because height of rows aren't equal and
+     * also it's loading the data bidirectionally
+     */
+    listRef.current!.resetAfterIndex(0)
+
     // eslint-disable-next-line
   }, [listRows])
 

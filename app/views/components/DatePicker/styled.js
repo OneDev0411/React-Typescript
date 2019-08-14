@@ -60,6 +60,6 @@ export const Container = styled.div`
   .DayPicker:not(.DayPicker--interactionDisabled)
     .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
     color: #fff !important;
-    background-color: ${primary} !important;
+    background-color: ${primary};
   }
 `

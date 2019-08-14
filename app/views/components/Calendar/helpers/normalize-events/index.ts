@@ -13,8 +13,17 @@ export function normalizeEvents(range: NumberRange, events: ICalendarEvent[]) {
   const list = getEvents(range, events)
 
   return Object.entries(list).reduce((acc, [day, events]) => {
-    if ((events as ICalendarEvent[]).length === 0 && !isToday(day)) {
-      return acc
+    if ((events as ICalendarEvent[]).length === 0) {
+      return !isToday(day)
+        ? acc
+        : {
+            ...acc,
+            [day]: [
+              {
+                event_type: 'today-empty-state'
+              }
+            ]
+          }
     }
 
     return {
