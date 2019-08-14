@@ -39,8 +39,8 @@ export function DayHeader(props: IProps) {
               alignItems: 'center',
               justifyContent: 'center',
               marginRight: '1rem',
-              width: '33px',
-              height: '33px',
+              width: '35px',
+              height: '35px',
               zIndex: 1,
               borderRadius: '50%',
               ...getColors(props.item.is_today, isActive)
