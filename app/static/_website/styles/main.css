@@ -735,6 +735,27 @@ footer{
 }
 
 
+/* Job Description */
+
+
+.job{
+  padding-top: var(--sectionPadding);
+  padding-bottom: var(--sectionPadding);
+}
+
+.job h3{
+
+  font-size: var(--big-size);
+  margin-bottom: 1.5rem;
+}
+.job h4{
+
+  font-size: var(--medium-size);
+  margin-bottom: 0.25rem;
+  margin-top: 4rem;
+}
+
+
 /* About */
 
 .about .welcome{
