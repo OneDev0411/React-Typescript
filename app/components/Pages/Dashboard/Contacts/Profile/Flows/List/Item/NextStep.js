@@ -5,6 +5,8 @@ import fecha from 'fecha'
 
 import { eventTypesIcons } from 'views/utils/event-types-icons'
 
+import { NextStepContainer } from './styled'
+
 NextStep.propTypes = {
   flow: PropTypes.shape().isRequired
 }
@@ -48,7 +50,7 @@ function NextStep({ flow }) {
   ).length
 
   return (
-    <>
+    <NextStepContainer>
       <div className="upcoming small-text">Upcoming</div>
       <Flex alignCenter>
         {Icon && <Icon className="next-step__icon" />}
@@ -61,7 +63,7 @@ function NextStep({ flow }) {
       {missedStepsCount > 0 && (
         <div className="missed-steps small-text">{`${missedStepsCount} Missed Steps`}</div>
       )}
-    </>
+    </NextStepContainer>
   )
 }
 

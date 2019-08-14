@@ -6,12 +6,12 @@ import { CheckMark, CheckMarkBox, Input, Label } from './styled'
 
 interface Props {
   size?: number
-  inputProps: any
+  inputProps?: any
   id?: string
   checked: boolean
   onChange?: (event: Event) => void
-  checkboxStyle: CSSProperties
-  containerStyle: CSSProperties
+  checkboxStyle?: CSSProperties
+  containerStyle?: CSSProperties
   children?: ReactNode
 }
 
@@ -40,7 +40,7 @@ export function Checkbox(props: Props) {
       </CheckMarkBox>
 
       <div style={{
-        width: `calc(100% - ${size / 16}rem - ${checkboxStyle.marginRight})`
+        width: `calc(100% - ${size / 16}rem - ${checkboxStyle && checkboxStyle.marginRight})`
       }}>{props.children}</div>
     </Label>
   )

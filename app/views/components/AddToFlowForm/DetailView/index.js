@@ -67,7 +67,7 @@ export default class DetailView extends React.Component {
       return <ActiveMode />
     }
 
-    if (!Array.isArray(flow.steps)) {
+    if (!Array.isArray(flow.steps) || flow.steps.length === 0) {
       return <WithoutStep flowId={flow.id} />
     }
 

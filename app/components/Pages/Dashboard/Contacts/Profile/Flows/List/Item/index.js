@@ -7,7 +7,7 @@ import IconButton from 'components/Button/IconButton'
 import StopIcon from 'components/SvgIcons/CircleStop/IconCircleStop'
 
 import NextStep from './NextStep'
-import Container from './styled'
+import { ItemContainer } from './styled'
 
 Item.propTypes = {
   flow: PropTypes.shape().isRequired,
@@ -16,20 +16,20 @@ Item.propTypes = {
 
 function Item({ flow, onStop }) {
   return (
-    <Container>
+    <ItemContainer>
       <Flex justifyBetween>
         <Flex style={{ width: 'calc(100% - 2.5rem)' }}>
           <Flex center className="status" />
           <div className="title">{flow.name}</div>
         </Flex>
-        <Tooltip caption="Stop this flow" size="small">
+        <Tooltip caption="Stop this Flow" size="small">
           <IconButton isFit inverse onClick={() => onStop(flow.id)}>
             <StopIcon />
           </IconButton>
         </Tooltip>
       </Flex>
       <NextStep flow={flow} />
-    </Container>
+    </ItemContainer>
   )
 }
 

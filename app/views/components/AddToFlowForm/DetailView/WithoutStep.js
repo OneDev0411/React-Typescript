@@ -13,9 +13,9 @@ export default function WithoutStep({ flowId }) {
     <Container center>
       <Flex center column>
         <ThunderboltIcon style={{ fill: grey.A900, marginBottom: '1em' }} />
-        <div>Didn't add any steps into this Flow yet!</div>
+        <div>This Flow has no steps yet!</div>
         <div>
-          You can add some steps from{' '}
+          You can add some{' '}
           <ALink
             style={{ color: primary, fontWeight: 'bold' }}
             to={`/dashboard/account/flows/${flowId}`}
