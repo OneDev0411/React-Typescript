@@ -8,10 +8,10 @@ Steps.propTypes = {
   steps: PropTypes.arrayOf(PropTypes.shape()).isRequired
 }
 
-export default function Steps(props) {
+export default function Steps({ steps }) {
   return (
     <StepsContainer className="u-scrollbar--thinner--self">
-      {props.steps.map((step, index) => (
+      {steps.map((step, index) => (
         <Step index={index} key={step.id} step={step} />
       ))}
     </StepsContainer>
