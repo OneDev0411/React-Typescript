@@ -17,61 +17,7 @@
     <section class="faq container faq-container">
       <h3>FAQ</h3>
 
-      <ul>
-        <li>
-          <h4>How much does Rechat cost?</h4>
-          <p>
-            Choose the tools and features you need, you can always add more
-            later. Rechat's pricing adapts to fit your needs.
-          </p>
-        </li>
-        <li>
-          <h4>Can I use Rechat as an individual?</h4>
-          <p>
-            Yes. Rechat is designed to accommodate the needs of individual
-            agents as well as brokerages of all sizes.
-          </p>
-        </li>
-        <li>
-          <h4>What if I have feedback for Rechat?</h4>
-          <p>
-            If you have feature requests or identify software issues with the
-            platform, use our 24/7 support channel to start a new conversation
-            and send us a message via the support window.
-          </p>
-        </li>
-        <li>
-          <h4>Who owns my contacts?</h4>
-          <p>
-            You do. Rechat will never use or share your contacts. We've also
-            made it easy to import, export and delete contacts as needed.
-          </p>
-        </li>
-        <li>
-          <h4>Is Rechat compatible with other technologies?</h4>
-          <p>
-            Yes. Our API leverages Google, Docusign, Outlook, MLS, LoneWolf
-            Technologies, Rezora, Mailchimp and Xpressdocs just to name a few.
-          </p>
-        </li>
-        <li>
-          <h4>Can I just use Rechat for contact relationship management?</h4>
-          <p>
-            Yes you can. Rechat offers a rich CRM experience with tools that can
-            help you stay engaged with your contacts - Tags, list management,
-            email & social marketing, Instagram stories and event logging with
-            historical tracking for instance.
-          </p>
-        </li>
-        <li>
-          <h4>Is Rechat secure?</h4>
-          <p>
-            Securing customer’s data is our top priority. All data is
-            continuously backed up and kept safe using industry standard 256-bit
-            SSL encryption.
-          </p>
-        </li>
-      </ul>
+      <ul id="FAQ"></ul>
     </section>
 
     <!-- Hero -->
@@ -125,5 +71,91 @@
   </section> -->
 
     <%- include('components/footer.ejs') %>
+
+    <script>
+      const faqData = [
+        {
+          question: 'What is Rechat?',
+          answer:
+            'Rechat is an intuitive CRM, marketing, and transaction platform, specifically developed for real estate professionals to grow relationships, one conversation at a time. We help streamline the buying and selling process for clients, agents, and brokers, for a truly integrated and efficient experience.'
+        },
+        {
+          question: 'What is a CRM and how can it help me?',
+          answer:
+            ' A customer relationship management tool, or CRM, leverages technology and automation to better manage relationships and interactions with customers and potential customers. We simplify the process by bringing all the necessary tools under one roof.'
+        },
+        {
+          question: 'How does Rechat work? Is it difficult to use?',
+          answer:
+            'Rechat offers a rich CRM experience with features that can help you stay more easily engaged with your contacts - Tags, list management, email & social marketing, Instagram stories and event logging with historical tracking for instance. With additional marketing and transaction tools, agents using Rechat can manage their work more effectively, all in one platform.'
+        },
+        {
+          question: 'Who owns my contacts?',
+          answer:
+            "You do. Rechat will never use or share your contacts. We've also made it easy to import, export and delete contacts as needed."
+        },
+        {
+          question: 'Is Rechat compatible with other technologies?',
+          answer:
+            'Yes, our API leverages Google, Docusign, Outlook, MLS, LoneWolf Technologies, Rezora, Mailchimp and Xpressdocs just to name a few. We believe in open development and want to integrate your systems where it makes sense.'
+        },
+        {
+          question: 'How much does Rechat cost?',
+          answer:
+            "Rechat's pricing adapts to fit your business needs and is based per user, per month."
+        },
+        {
+          question: 'Is Rechat secure?',
+          answer:
+            'Securing customer’s data is our top priority. All data is continuously backed up and kept safe using industry standard 256-bit SSL encryption.'
+        },
+        {
+          question: 'What if I need help or have feedback for Rechat?',
+          answer:
+            'If you have feature requests or identify software issues with the platform, use our 24/7 support channel to start a new conversation and send us a message via the support window.'
+        }
+      ]
+
+      function renderFAQ() {
+        const el = document.body.querySelector('#FAQ')
+
+        faqData.forEach(function renderRow(faq) {
+          const rowEl = document.createElement('li')
+          const questionEl = document.createElement('h4')
+          questionEl.textContent = faq.question
+          const answerEl = document.createElement('p')
+          answerEl.textContent = faq.answer
+
+          rowEl.appendChild(questionEl)
+          rowEl.appendChild(answerEl)
+          el.append(rowEl)
+        })
+      }
+
+      function generateFAQJsonLD() {
+        const output = {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: faqData.map(function generateJsonRow(faq) {
+            return {
+              '@type': 'Question',
+              name: faq.question,
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: faq.answer
+              }
+            }
+          })
+        }
+
+        const script = document.createElement('script')
+        script.type = 'application/ld+json'
+        script.innerText = JSON.stringify(output)
+        document.body.append(script)
+      }
+
+      renderFAQ()
+      generateFAQJsonLD()
+    </script>
   </body>
 </html>
