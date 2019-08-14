@@ -8,10 +8,9 @@ import { Divider } from 'components/Divider'
 import { brandBackground } from 'views/utils/colors'
 
 import {
-  MAX_FLOW_NAME_LENGTH,
-  MAX_FLOW_DESCRIPTION_LENGTH
-} from '../../constants'
-
+  nameValidate,
+  descriptionValidate
+} from './helpers'
 import Field from './Field'
 import { Container } from './styled'
 
@@ -48,9 +47,7 @@ export default function Header({
             name="name"
             value={name}
             disabled={disableEdit}
-            validate={value => {
-              return value.length > 0 && value.length < MAX_FLOW_NAME_LENGTH
-            }}
+            validate={nameValidate}
             onChange={value => onChange({ name: value })}
           />
           <Field
@@ -58,9 +55,7 @@ export default function Header({
             name="description"
             value={description}
             disabled={disableEdit}
-            validate={value => {
-              return value.length < MAX_FLOW_DESCRIPTION_LENGTH
-            }}
+            validate={descriptionValidate}
             onChange={value => onChange({ description: value })}
           />
         </Container>
