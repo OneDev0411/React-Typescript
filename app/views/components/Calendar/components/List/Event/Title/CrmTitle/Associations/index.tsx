@@ -62,6 +62,9 @@ function getCrmEventTypePreposition(eventType: string): string {
     case 'Text':
       return 'to'
 
+    case 'Open House':
+      return 'for'
+
     default:
       return ''
   }

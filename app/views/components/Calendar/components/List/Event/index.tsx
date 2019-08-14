@@ -14,6 +14,7 @@ import styles from './styles'
 interface Props {
   style: React.CSSProperties
   event: ICalendarEvent
+  user: IUser
   nextItem: ICalendarListRow
   onClickCrmEventAssociations: (event: ICalendarEvent) => void
 }
@@ -43,6 +44,7 @@ const useStyles = makeStyles({
  */
 export function Event({
   event,
+  user,
   nextItem,
   style,
   onClickCrmEventAssociations
@@ -79,7 +81,7 @@ export function Event({
           </div>
 
           <div>
-            <EventActions event={event} />
+            <EventActions event={event} user={user} />
           </div>
         </div>
 

@@ -8,7 +8,7 @@ interface Props {
 
 export function EventSubTitle({ event }: Props) {
   if (event.object_type === 'crm_task') {
-    return event.title
+    return <span>event.title</span>
   }
 
   if (event.object_type === 'contact' && event.event_type === 'next_touch') {
