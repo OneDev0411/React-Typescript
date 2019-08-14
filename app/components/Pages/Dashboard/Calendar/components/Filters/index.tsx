@@ -1,12 +1,10 @@
 import React, { useState, ChangeEvent, useCallback } from 'react'
 import { Tabs, Tab } from '@material-ui/core'
 
-import Flex from 'styled-flex-component'
-
 import { eventTypesIcons, EventTypeIcon } from 'views/utils/event-types-icons'
 import { importantDatesIcons } from 'views/utils/important-dates-icons'
 
-import { Container, TabTitle } from './styled'
+import { Container, TabTitle, TabItem } from './styled'
 
 interface TabItem {
   label: string
@@ -99,12 +97,15 @@ export function Filters({ onChange }: Props) {
             key={index}
             value={value}
             label={
-              <Flex alignCenter>
+              <TabItem>
                 {Icon && (
-                  <Icon.icon fill="#3c4b6e" style={{ width: '1.2rem' }} />
+                  <Icon.icon
+                    fill={selectedTab === index ? Icon.color : '#3c4b6e'}
+                    style={{ width: '1.2rem' }}
+                  />
                 )}
                 <TabTitle>{label}</TabTitle>
-              </Flex>
+              </TabItem>
             }
           />
         ))}
