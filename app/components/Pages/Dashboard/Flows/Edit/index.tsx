@@ -32,7 +32,11 @@ import Header from './Header'
 import Steps from './Steps'
 import Contacts from './Contacts'
 
-import { shouldUpdateNextSteps, updateStepsDue, moveStep } from './helpers'
+import {
+  shouldUpdateNextSteps,
+  updateStepsDue,
+  getUpdatedStepsOnMove
+} from './helpers'
 import { PageContainer, TabPanel } from './styled'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -183,7 +187,7 @@ function Edit(props: Props & WithRouterProps) {
   )
 
   const stepUpdateHandler = useCallback(
-    async (step: IBrandFlowStepInput, stepId: UUID) => {
+    async (step: IBrandFlowStepInput, stepId: UUID, reloadFlows = true) => {
       if (!flow || !brand) {
         return
       }
@@ -200,22 +204,36 @@ function Edit(props: Props & WithRouterProps) {
 
       await editBrandFlowStep(brand, flow.id, stepId, step)
 
-      loadFlowData(true)
+      if (reloadFlows) {
+        loadFlowData(true)
+      }
     },
     [brand, flow, loadFlowData]
   )
 
   const stepMoveHandler = useCallback(
-    async (sourceStepIndex: number, targetStepIndex) => {
-      if (!flow || !brand) {
+    async (source: number, destination) => {
+      if (!flow || !brand || !flow.steps) {
         return
       }
 
-      await moveStep(brand, flow, sourceStepIndex, targetStepIndex)
+      const newSteps = await getUpdatedStepsOnMove(
+        flow.steps,
+        source,
+        destination
+      )
+
+      setIsLoading(true)
+
+      await Promise.all(
+        newSteps.map(([stepId, step]) => {
+          return stepUpdateHandler(step, stepId, false)
+        })
+      )
 
       loadFlowData(true)
     },
-    [brand, flow, loadFlowData]
+    [brand, flow, loadFlowData, stepUpdateHandler]
   )
 
   const flowUpdateHandler = useCallback(
