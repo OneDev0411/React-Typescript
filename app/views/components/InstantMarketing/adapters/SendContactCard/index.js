@@ -198,7 +198,7 @@ class SendContactCard extends React.Component {
 
   get TemplateInstanceData() {
     return {
-      contacts: this.Recipients.map(r => r.contactId)
+      contacts: this.Recipients.map(r => r.contact.id)
     }
   }
 
