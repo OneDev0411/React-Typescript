@@ -155,6 +155,7 @@ export default function EventForm({
                     label="Wait for"
                     type="number"
                     min="1"
+                    max="365"
                     variant="outlined"
                     margin="dense"
                     autoComplete="off"
@@ -164,7 +165,9 @@ export default function EventForm({
                         const numericValue = parseInt(input, 10)
 
                         return (
-                          numericValue.toString() === input && numericValue >= 0
+                          numericValue.toString() === input &&
+                          numericValue >= 0 &&
+                          numericValue <= 365
                         )
                       })
                     }
