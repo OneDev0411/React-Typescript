@@ -30,6 +30,9 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
     '.MuiOutlinedInput-notchedOutline legend': {
       // neutralize bootstrap styles!
       border: 'none'
+    },
+    '.MuiOutlinedInput-input[type="time"]': {
+      minWidth: '7rem'
     }
   }
 }))(() => null)
