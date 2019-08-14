@@ -6,11 +6,11 @@ import moment from 'moment'
 import _ from 'underscore'
 import { Helmet } from 'react-helmet'
 
-import {
-  createDateRange,
-  createPastRange,
-  createFutureRange
-} from 'models/calendar/helpers/create-date-range'
+// import {
+//   createDateRange,
+//   createPastRange,
+//   createFutureRange
+// } from 'models/calendar/helpers/create-date-range'
 
 import { getStartRange, getEndRange, getSelectedDate } from 'reducers/calendar'
 

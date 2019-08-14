@@ -22,6 +22,10 @@ export function EventIcon(props: Props) {
     Icon = getImportantDateIcon(props.event)
   }
 
+  if (props.event.object_type === 'email_campaign') {
+    Icon = eventTypesIcons.Email
+  }
+
   return (
     <div
       style={{

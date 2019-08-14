@@ -5,7 +5,7 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
 import Flex from 'styled-flex-component'
 
-import { Title, PopoverImage } from './styled'
+import { Container, Title, PopoverImage } from './styled'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,7 +33,7 @@ export function Export() {
   const id = anchorEl ? 'export-popover' : undefined
 
   return (
-    <div>
+    <Container>
       <Button
         fullWidth
         variant="outlined"
@@ -79,6 +79,6 @@ export function Export() {
           </Flex>
         </>
       </Popover>
-    </div>
+    </Container>
   )
 }

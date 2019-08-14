@@ -1,9 +1,33 @@
 import styled from 'styled-components'
 
+import { hexToRgb } from 'utils/hex-to-rgb'
+import { primary } from 'views/utils/colors'
+
 export const Container = styled.div`
   display: flex;
   height: 100vh;
   overflow: hidden;
+
+  .DayPicker-Day--today {
+    color: #fff;
+    background-color: ${primary};
+    font-weight: 500;
+  }
+
+  .DayPicker-Day--selected {
+    color: ${primary} !important;
+    background-color: rgba(${hexToRgb(primary).join(',')}, 0.14) !important;
+  }
+
+  .DayPicker:not(.DayPicker--interactionDisabled)
+    .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):not(.DayPicker-Day--empty):hover {
+    color: #262626;
+    background-color: rgba(${hexToRgb(primary).join(',')}, 0.8) !important;
+  }
+
+  .DayPicker-Day--empty {
+    color: #ccc;
+  }
 `
 
 export const Header = styled.div`

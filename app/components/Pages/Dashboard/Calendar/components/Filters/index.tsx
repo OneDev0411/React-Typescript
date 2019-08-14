@@ -6,7 +6,7 @@ import Flex from 'styled-flex-component'
 import { eventTypesIcons, EventTypeIcon } from 'views/utils/event-types-icons'
 import { importantDatesIcons } from 'views/utils/important-dates-icons'
 
-import { Container } from './styled'
+import { Container, TabTitle } from './styled'
 
 interface TabItem {
   label: string
@@ -23,19 +23,19 @@ const TAB_ITEMS: TabItem[] = [
     filter: {}
   },
   {
-    label: 'Calls',
-    value: 1,
-    Icon: eventTypesIcons.Call,
-    filter: {
-      'event_types[]': ['Call']
-    }
-  },
-  {
     label: 'Touches',
     value: 2,
     Icon: eventTypesIcons.ListingAppointment,
     filter: {
       'object_types[]': ['contact']
+    }
+  },
+  {
+    label: 'Calls',
+    value: 1,
+    Icon: eventTypesIcons.Call,
+    filter: {
+      'event_types[]': ['Call']
     }
   },
   {
@@ -101,12 +101,9 @@ export function Filters({ onChange }: Props) {
             label={
               <Flex alignCenter>
                 {Icon && (
-                  <Icon.icon
-                    fill="#3c4b6e"
-                    style={{ marginRight: '0.5rem', width: '1.2rem' }}
-                  />
+                  <Icon.icon fill="#3c4b6e" style={{ width: '1.2rem' }} />
                 )}
-                {label}
+                <TabTitle>{label}</TabTitle>
               </Flex>
             }
           />

@@ -80,7 +80,7 @@ const CalendarList: React.FC<Props> = props => {
   }
 
   return (
-    <Container ref={containerRef} className="abcded">
+    <Container ref={containerRef}>
       {props.rows.length === 0 && !props.isLoading && <EmptyState />}
 
       <VirtualList
@@ -93,7 +93,7 @@ const CalendarList: React.FC<Props> = props => {
         isLoading={props.isLoading}
         loadingPosition={props.loadingPosition}
         onVisibleRowChange={debounce(getInViewDate, 50)}
-        itemSize={() => 65}
+        itemSize={index => getRowHeight(props.rows[index])}
         overscanCount={3}
         ref={props.listRef}
       >
@@ -130,6 +130,18 @@ const CalendarList: React.FC<Props> = props => {
       )}
     </Container>
   )
+}
+
+function getRowHeight(row: ICalendarListRow): number {
+  if (row.hasOwnProperty('is_day_header')) {
+    return 30
+  }
+
+  const event = row as ICalendarEvent
+
+  return event.object_type === 'crm_task' || event.event_type === 'next_touch'
+    ? 72
+    : 55
 }
 
 CalendarList.defaultProps = defaultProps

@@ -42,6 +42,17 @@ export function EventTitle(props: Props) {
     )
   }
 
+  if (event.object_type === 'contact' && event.event_type === 'next_touch') {
+    return (
+      <div style={styles.title}>
+        Contact{' '}
+        <a href={`/dashboard/contacts/${event.contact}`} target="_blank">
+          {event.full_contact!.display_name}
+        </a>
+      </div>
+    )
+  }
+
   console.warn(`Could not render ${event}`)
 
   return null

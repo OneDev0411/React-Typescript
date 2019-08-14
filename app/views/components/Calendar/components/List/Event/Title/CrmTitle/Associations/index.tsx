@@ -15,12 +15,10 @@ export function Associations(props: Props) {
   )
 
   if (contacts.length === 0) {
-    return (
-      <span style={styles.association} onClick={props.onClickAssociation}>
-        no body
-      </span>
-    )
+    return null
   }
+
+  const preposition = getCrmEventTypePreposition(props.event.event_type)
 
   const users = new Array(Math.min(2, contacts.length))
     .fill(null)
@@ -37,21 +35,34 @@ export function Associations(props: Props) {
     ])
 
   return (
-    <>
-      {contacts.length <= 2
-        ? users
-        : [
-            ...users,
-            <>
-              {' and '}
-              <span
-                style={styles.association}
-                onClick={props.onClickAssociation}
-              >
-                {contacts.length - 2} other{contacts.length - 2 > 1 ? 's' : ''}
-              </span>
-            </>
-          ]}
-    </>
+    <span>
+      {preposition} {users}{' '}
+      {contacts.length > 2 && (
+        <>
+          {' and '}
+          <span style={styles.association} onClick={props.onClickAssociation}>
+            {contacts.length - 2} other{contacts.length - 2 > 1 ? 's' : ''}
+          </span>
+        </>
+      )}
+    </span>
   )
+}
+
+function getCrmEventTypePreposition(eventType: string): string {
+  switch (eventType) {
+    case 'Chat':
+    case 'Call':
+    case 'In-Person Meeting':
+    case 'Other':
+      return 'with'
+
+    case 'Mail':
+    case 'Email':
+    case 'Text':
+      return 'to'
+
+    default:
+      return ''
+  }
 }

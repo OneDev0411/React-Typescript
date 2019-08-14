@@ -7,3 +7,8 @@ export const Container = styled.div`
   align-items: flex-end;
   margin-left: 1.5rem;
 `
+
+export const TabTitle = styled.span`
+  font-size: 1rem;
+  margin-left: 0.5rem;
+`

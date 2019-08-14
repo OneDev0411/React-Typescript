@@ -1,6 +1,6 @@
 import * as actionTypes from 'constants/calendar'
 
-import fetchCalendar from 'models/calendar/get-calendar'
+// import fetchCalendar from 'models/calendar/get-calendar'
 
 import { normalizeByDays } from '../normalize-calendar'
 

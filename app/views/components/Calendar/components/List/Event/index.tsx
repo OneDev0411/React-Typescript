@@ -2,8 +2,11 @@ import React from 'react'
 import fecha from 'fecha'
 import { makeStyles } from '@material-ui/styles'
 
+import { hexToRgb } from 'utils/hex-to-rgb'
+
 import { EventIcon } from './EventIcon'
 import { EventTitle } from './Title'
+import { EventSubTitle } from './Subtitle'
 import { EventActions } from './Actions'
 
 import styles from './styles'
@@ -29,8 +32,8 @@ const useStyles = makeStyles({
     borderBottom: (props: StyleProps) =>
       props.hasBorderBottom ? '1px solid rgba(219, 230, 253, 0.5)' : 'none',
     '&:hover': {
-      borderRadius: '2px',
-      backgroundColor: '#f7f9fe'
+      transition: '0.2s ease-in background-color',
+      backgroundColor: `rgba(${hexToRgb('#0c43db')}, 0.05)`
     }
   }
 })
@@ -81,17 +84,11 @@ export function Event({
         </div>
 
         <div style={styles.row}>
-          <div style={styles.subtitle}>{getSubtitle(event)}</div>
+          <div style={styles.subtitle}>
+            <EventSubTitle event={event} />
+          </div>
         </div>
       </div>
     </div>
   )
-}
-
-function getSubtitle(event: ICalendarEvent) {
-  if (event.object_type === 'crm_task' && event.event_type === 'Email') {
-    return event.title
-  }
-
-  return ''
 }
