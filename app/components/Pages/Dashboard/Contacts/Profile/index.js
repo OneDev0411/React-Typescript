@@ -105,8 +105,8 @@ class ContactProfile extends React.Component {
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.detectScreenSize)
     window.socket.on('contact:touch', this.updateContact)
-    window.socket.off('crm_task:create', this.handleSocket)
-    window.socket.off('email_campaign:create', this.handleSocket)
+    window.socket.off('crm_task:create', this.fetchTimeline)
+    window.socket.off('email_campaign:create', this.fetchTimeline)
   }
 
   /**
