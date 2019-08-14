@@ -27,7 +27,7 @@ AddToFlowButton.defaultProps = {
   buttonRenderer: noop,
   callback: noop,
   anchorOrigin: {
-    vertical: 'bottom',
+    vertical: 'top',
     horizontal: 'right'
   },
   transformOrigin: {
@@ -49,39 +49,29 @@ export default function AddToFlowButton(props) {
     setAnchorEl(null)
   }
 
-  function onEntered() {
-    anchorEl.classList.remove('ghost')
-  }
-
-  function onExited() {
-    anchorEl.classList.add('ghost')
-  }
-
   return (
     <React.Fragment>
       <Button
         id={id}
-        onClick={handleClick}
         isOpen={isOpen}
+        onClick={handleClick}
         render={props.buttonRenderer}
       />
       <Popover
         id={id}
         open={isOpen}
         anchorEl={anchorEl}
-        onEntered={onEntered}
-        onExited={onExited}
         onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right'
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
-        }}
+        anchorOrigin={props.anchorOrigin}
+        transformOrigin={props.transformOrigin}
       >
-        <AddToFlowForm isOpen handleClose={handleClose} {...props} />
+        <AddToFlowForm
+          isOpen
+          callback={props.callback}
+          contacts={props.contacts}
+          handleClose={handleClose}
+          activeFlows={props.activeFlows}
+        />
       </Popover>
     </React.Fragment>
   )
