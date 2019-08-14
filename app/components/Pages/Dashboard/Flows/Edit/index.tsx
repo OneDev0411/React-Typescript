@@ -13,6 +13,7 @@ import {
 import { getBrandFlow } from 'models/flows/get-brand-flow'
 import { deleteBrandFlowStep } from 'models/flows/delete-brand-flow-step'
 import { editBrandFlowStep } from 'models/flows/edit-brand-flow-step'
+import { editBrandFlowSteps } from 'models/flows/edit-brand-flow-steps'
 import { createStep } from 'models/flows/create-step'
 import { editBrandFlow } from 'models/flows/edit-brand-flow'
 import { stopFlow } from 'models/flows/stop-flow'
@@ -217,23 +218,19 @@ function Edit(props: Props & WithRouterProps) {
         return
       }
 
-      const newSteps = await getUpdatedStepsOnMove(
-        flow.steps,
-        source,
-        destination
+      const newSteps: (IBrandFlowStepInput & {
+        id: UUID
+      })[] = await getUpdatedStepsOnMove(flow.steps, source, destination).map(
+        ([id, step]) => ({ id, ...step })
       )
 
       setIsLoading(true)
 
-      await Promise.all(
-        newSteps.map(([stepId, step]) => {
-          return stepUpdateHandler(step, stepId, false)
-        })
-      )
+      await editBrandFlowSteps(brand, flow.id, newSteps)
 
       loadFlowData(true)
     },
-    [brand, flow, loadFlowData, stepUpdateHandler]
+    [brand, flow, loadFlowData]
   )
 
   const flowUpdateHandler = useCallback(

@@ -1,4 +1,4 @@
-import { editBrandFlowStep } from 'models/flows/edit-brand-flow-step'
+import { editBrandFlowSteps } from 'models/flows/edit-brand-flow-steps'
 
 import { convertStepToStepInput } from '../helpers'
 
@@ -124,15 +124,15 @@ export function updateStepsDue(
   steps: IBrandFlowStep[],
   dueDiff: number
 ): Promise<any> {
-  return Promise.all(
-    steps.map(step => {
-      const newStep = convertStepToStepInput(step)
+  const stepsData: (IBrandFlowStepInput & { id: UUID })[] = steps.map(step => {
+    return {
+      ...convertStepToStepInput(step),
+      id: step.id,
+      due_in: step.due_in + dueDiff
+    }
+  })
 
-      newStep.due_in += dueDiff
-
-      return editBrandFlowStep(brand, flowId, step.id, newStep)
-    })
-  )
+  return editBrandFlowSteps(brand, flowId, stepsData)
 }
 
 export function getUpdatedStepsOnMove(
