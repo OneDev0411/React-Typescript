@@ -10,6 +10,6 @@ List.propTypes = {
 
 export function List(props) {
   return props.items.map(item => (
-    <Item key={item.id} item={item} onStop={props.onStop} />
+    <Item key={item.id} flow={item} onStop={props.onStop} />
   ))
 }

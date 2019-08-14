@@ -435,9 +435,6 @@ export default (
         component={AsyncContactsImportCsv}
       />
 
-      <Route path="/dashboard/flows" component={AsyncFlowsList} />
-      <Route path="/dashboard/flows/:id" component={AsyncFlowEdit} />
-
       <Route
         path="/dashboard/deals(/filter/:filter)"
         component={AsyncDealsLayout}
@@ -503,6 +500,9 @@ export default (
         <Route path="email-signature" component={EmailSignature} />
         <Route path="connected-accounts" component={ConnectedAccounts} />
         <Route path="css" component={AsyncCSS} />
+
+        <Route path="flows" component={AsyncFlowsList} />
+        <Route path="flows/:id" component={AsyncFlowEdit} />
       </Route>
 
       <Route path="/dashboard/teams(/:id)">

@@ -9,6 +9,7 @@ import Footer from './Footer'
 import MetaData from './MetaData'
 import ActiveMode from './ActiveMode'
 import DefaultView from './DefaultView'
+import WithoutStep from './WithoutStep'
 import { Container } from './styled'
 
 function getInitialState(flow) {
@@ -64,6 +65,10 @@ export default class DetailView extends React.Component {
 
     if (flow.isActive) {
       return <ActiveMode />
+    }
+
+    if (!Array.isArray(flow.steps) || flow.steps.length === 0) {
+      return <WithoutStep flowId={flow.id} />
     }
 
     return (

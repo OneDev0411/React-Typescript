@@ -29,6 +29,9 @@ export const ProfileTabs = ({ user }: Props) => (
     <Acl.Crm>
       <Tab indexed text="Manage Tags" to="/dashboard/account/manage-tags" />
     </Acl.Crm>
+    <Acl.Crm>
+      <Tab text="Flows" to="/dashboard/account/flows" />
+    </Acl.Crm>
     <Acl access={[ACL.CRM, ACL.DEALS]}>
       <Tab
         indexed

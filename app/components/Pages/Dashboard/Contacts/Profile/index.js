@@ -105,8 +105,8 @@ class ContactProfile extends React.Component {
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.detectScreenSize)
     window.socket.on('contact:touch', this.updateContact)
-    window.socket.off('crm_task:create', this.handleSocket)
-    window.socket.off('email_campaign:create', this.handleSocket)
+    window.socket.off('crm_task:create', this.fetchTimeline)
+    window.socket.off('email_campaign:create', this.fetchTimeline)
   }
 
   /**
@@ -114,7 +114,7 @@ class ContactProfile extends React.Component {
    * @returns {String} Title
    */
   get documentTitle() {
-    let title = this.state.contact.summary.display_name || ''
+    const title = this.state.contact.display_name || ''
 
     return title ? `${title} | Contacts | Rechat` : 'Contact | Rechat'
   }
@@ -139,7 +139,8 @@ class ContactProfile extends React.Component {
       this.setState(state => ({
         contact: {
           ...normalizeContact(response.data),
-          deals: state.contact.deals
+          deals: state.contact.deals,
+          flows: state.contact.flows
         }
       }))
     } catch (error) {
@@ -203,23 +204,17 @@ class ContactProfile extends React.Component {
     state.timeline.filter(item => item.id !== id)
 
   editEvent = updatedEvent =>
-    this.setState(
-      state => ({
-        timeline: [
-          ...this.filterTimelineById(state, updatedEvent.id),
-          updatedEvent
-        ]
-      }),
-      this.fetchContact
-    )
+    this.setState(state => ({
+      timeline: [
+        ...this.filterTimelineById(state, updatedEvent.id),
+        updatedEvent
+      ]
+    }))
 
   deleteEvent = id =>
-    this.setState(
-      state => ({
-        timeline: this.filterTimelineById(state, id)
-      }),
-      this.fetchContact
-    )
+    this.setState(state => ({
+      timeline: this.filterTimelineById(state, id)
+    }))
 
   handleAddNote = async text => {
     const contact = await upsertContactAttributes(this.state.contact.id, [

@@ -12,7 +12,7 @@ export default function Name({ id, name, description }: Props) {
   return (
     <>
       <div>
-        <Link to={`/dashboard/flows/${id}`} style={{ fontWeight: 'bold' }}>
+        <Link to={`/dashboard/account/flows/${id}`} style={{ fontWeight: 'bold' }}>
           {name}
         </Link>
       </div>

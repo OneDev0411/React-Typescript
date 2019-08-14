@@ -17,13 +17,13 @@ interface Props {
 
 Checkbox.defaultProps = {
   inputProps: {},
-  checkboxStyle: { marginRight: '0.5em' },
+  checkboxStyle: { marginRight: '0.5rem' },
   containerStyle: {}
 }
 
 export function Checkbox(props: Props) {
   const cuid = useCuid()
-
+  const { checkboxStyle } = props
   const { id = cuid, size = 16, checked } = props
 
   return (
@@ -35,11 +35,13 @@ export function Checkbox(props: Props) {
         onChange={props.onChange}
       />
 
-      <CheckMarkBox size={size} checked={checked} style={props.checkboxStyle}>
+      <CheckMarkBox size={size} checked={checked} style={checkboxStyle}>
         {checked && <CheckMark />}
       </CheckMarkBox>
 
-      {props.children}
+      <div style={{
+        width: `calc(100% - ${size / 16}rem - ${checkboxStyle && checkboxStyle.marginRight})`
+      }}>{props.children}</div>
     </Label>
   )
 }
