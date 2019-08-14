@@ -139,7 +139,8 @@ class ContactProfile extends React.Component {
       this.setState(state => ({
         contact: {
           ...normalizeContact(response.data),
-          deals: state.contact.deals
+          deals: state.contact.deals,
+          flows: state.contact.flows
         }
       }))
     } catch (error) {

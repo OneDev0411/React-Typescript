@@ -2,7 +2,6 @@ const associations = [
   'contact.attributes',
   'contact.summary',
   'contact.users',
-  'contact.flows',
   'contact_attribute.attribute_def'
 ]
 
