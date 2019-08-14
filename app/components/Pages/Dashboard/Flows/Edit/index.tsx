@@ -188,7 +188,7 @@ function Edit(props: Props & WithRouterProps) {
   )
 
   const stepUpdateHandler = useCallback(
-    async (step: IBrandFlowStepInput, stepId: UUID, reloadFlows = true) => {
+    async (step: IBrandFlowStepInput, stepId: UUID) => {
       if (!flow || !brand) {
         return
       }
@@ -205,9 +205,7 @@ function Edit(props: Props & WithRouterProps) {
 
       await editBrandFlowStep(brand, flow.id, stepId, step)
 
-      if (reloadFlows) {
-        loadFlowData(true)
-      }
+      loadFlowData(true)
     },
     [brand, flow, loadFlowData]
   )
@@ -220,7 +218,7 @@ function Edit(props: Props & WithRouterProps) {
 
       const newSteps: (IBrandFlowStepInput & {
         id: UUID
-      })[] = await getUpdatedStepsOnMove(flow.steps, source, destination).map(
+      })[] = getUpdatedStepsOnMove(flow.steps, source, destination).map(
         ([id, step]) => ({ id, ...step })
       )
 
