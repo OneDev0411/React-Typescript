@@ -76,7 +76,7 @@ export default function Header({
           isFit
           iconSize="large"
           inverse
-          defaultBackUrl="/dashboard/flows"
+          defaultBackUrl="/dashboard/account/flows"
         />
       </PageHeader.Menu>
     </PageHeader>
