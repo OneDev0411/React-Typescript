@@ -108,6 +108,7 @@ function Edit(props: Props & WithRouterProps) {
 
       const flowData = await getFlow(brand, props.params.id, reload)
 
+      console.log(JSON.stringify(flowData))
       setFlow(flowData)
 
       if (!flowData.is_editable) {

@@ -1,0 +1,69 @@
+{
+  "id": "e43f89d3-83c4-4203-b75b-cd39b94695e2",
+  "created_at": 1564924676.7636,
+  "updated_at": 1565451829.90673,
+  "created_by": "4921e8cc-f25d-11e8-974e-0a95998482ac",
+  "updated_by": "4921e8cc-f25d-11e8-974e-0a95998482ac",
+  "brand": "7245fe86-f25e-11e8-bfe0-0a95998482ac",
+  "name": "Mamal test flow. :D",
+  "description": "",
+  "steps": [
+    {
+      "id": "9b511c0d-cf31-4540-ae12-4477f31750e5",
+      "created_at": 1565874751.48502,
+      "updated_at": 1565876387.59083,
+      "created_by": "4921e8cc-f25d-11e8-974e-0a95998482ac",
+      "updated_by": "4921e8cc-f25d-11e8-974e-0a95998482ac",
+      "flow": "e43f89d3-83c4-4203-b75b-cd39b94695e2",
+      "is_automated": false,
+      "title": "2 Days",
+      "description": null,
+      "due_in": 205200,
+      "event": {
+        "id": "9c0481a6-5396-4509-b6ad-2c1fe1099f69",
+        "created_at": 1565874751.48502,
+        "updated_at": 1565876387.59083,
+        "created_by": "4921e8cc-f25d-11e8-974e-0a95998482ac",
+        "updated_by": "4921e8cc-f25d-11e8-974e-0a95998482ac",
+        "brand": "7245fe86-f25e-11e8-bfe0-0a95998482ac",
+        "title": "2 Days",
+        "description": null,
+        "task_type": "Call",
+        "reminder": null,
+        "type": "brand_event"
+      },
+      "email": null,
+      "type": "brand_flow_step"
+    },
+    {
+      "id": "4a3b1b51-3025-4335-b9e4-c96c327ef935",
+      "created_at": 1565874723.46765,
+      "updated_at": 1565876387.59083,
+      "created_by": "4921e8cc-f25d-11e8-974e-0a95998482ac",
+      "updated_by": "4921e8cc-f25d-11e8-974e-0a95998482ac",
+      "flow": "e43f89d3-83c4-4203-b75b-cd39b94695e2",
+      "is_automated": false,
+      "title": "1 Day",
+      "description": null,
+      "due_in": 288000,
+      "event": {
+        "id": "504fb139-8fa4-4afd-b89f-062d3bf38465",
+        "created_at": 1565874723.46765,
+        "updated_at": 1565876387.59083,
+        "created_by": "4921e8cc-f25d-11e8-974e-0a95998482ac",
+        "updated_by": "4921e8cc-f25d-11e8-974e-0a95998482ac",
+        "brand": "7245fe86-f25e-11e8-bfe0-0a95998482ac",
+        "title": "1 Day",
+        "description": null,
+        "task_type": "Call",
+        "reminder": null,
+        "type": "brand_event"
+      },
+      "email": null,
+      "type": "brand_flow_step"
+    }
+  ],
+  "active_flows": 44,
+  "type": "brand_flow",
+  "is_editable": true
+}

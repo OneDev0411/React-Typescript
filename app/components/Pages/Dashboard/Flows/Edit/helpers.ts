@@ -173,9 +173,9 @@ export function getUpdatedStepsOnMove(
 
     const neededSeconds = secondsToDays(steps[source].due_in)[1]
 
-    const destinationWaitDays = secondsToDays(
-      steps[destination].due_in - steps[source].due_in
-    )[0]
+    const destinationWaitDays =
+      secondsToDays(steps[destination].due_in)[0] -
+      secondsToDays(steps[source].due_in)[0]
 
     result.push([
       steps[source].id,
