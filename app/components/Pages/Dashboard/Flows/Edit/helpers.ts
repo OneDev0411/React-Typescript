@@ -169,13 +169,17 @@ export function getUpdatedStepsOnMove(
       })
     )
 
+    // const neededWaitDays =
+    //   secondsToDays(steps[source].due_in)[0] -
+    //   (source === 0 ? 0 : secondsToDays(steps[source - 1].due_in)[0])
+
     const neededWaitDays = secondsToDays(steps[source].due_in)[0]
 
     const neededSeconds = secondsToDays(steps[source].due_in)[1]
 
     const destinationWaitDays =
       secondsToDays(steps[destination].due_in)[0] -
-      secondsToDays(steps[source].due_in)[0]
+      secondsToDays(steps[destination - 1].due_in)[0]
 
     result.push([
       steps[source].id,

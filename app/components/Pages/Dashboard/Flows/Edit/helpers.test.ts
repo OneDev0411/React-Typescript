@@ -110,7 +110,7 @@ describe('Flows edit helpers', () => {
         steps[0].id,
         {
           ...convertStepToStepInput(steps[0]),
-          due_in: steps[0].due_in + ONE_DAY_IN_SECONDS * 3
+          due_in: steps[0].due_in + ONE_DAY_IN_SECONDS * 1
         }
       ]
     ])
