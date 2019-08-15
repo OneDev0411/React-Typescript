@@ -166,7 +166,6 @@ const AsyncContactsImportCsv = Load({
     import('../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */)
 })
 
-
 /* ==================================== */
 //  CRM FLOWS
 /* ==================================== */
@@ -180,7 +179,6 @@ const AsyncFlowEdit = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Flows/Edit' /* webpackChunkName: "flow_edit" */)
 })
-
 
 /* ==================================== */
 //  Marketing Center
@@ -267,6 +265,11 @@ const ReminderNotifications = Load({
 const EmailSignature = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Account/EmailSignature' /* webpackChunkName: "email_signature" */)
+})
+
+const EmailTemplatesSettings = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Account/EmailTemplates/EmailTemplatesSettings' /* webpackChunkName: "email_templates" */)
 })
 
 const ConnectedAccounts = Load({
@@ -498,6 +501,7 @@ export default (
           component={ReminderNotifications}
         />
         <Route path="email-signature" component={EmailSignature} />
+        <Route path="email-templates" component={EmailTemplatesSettings} />
         <Route path="connected-accounts" component={ConnectedAccounts} />
         <Route path="css" component={AsyncCSS} />
 

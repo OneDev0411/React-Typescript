@@ -27,7 +27,7 @@ export function getActiveTeam(user: Partial<IUser> = {}): IUserTeam | null {
   return activeTeam || null
 }
 
-export function getActiveTeamId(user: IUser): string | null {
+export function getActiveTeamId(user: IUser): UUID | null {
   if (user.active_brand) {
     return user.active_brand
   }
