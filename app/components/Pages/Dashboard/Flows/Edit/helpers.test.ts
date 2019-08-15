@@ -1,5 +1,9 @@
 // @ts-ignore
 import flowData from 'fixtures/flows/flow' // eslint-disable-line
+// @ts-ignore
+import flowData2 from 'fixtures/flows/flow2' // eslint-disable-line
+// @ts-ignore
+import flowData3 from 'fixtures/flows/flow3' // eslint-disable-line
 
 import {
   humanizeSeconds,
@@ -11,6 +15,8 @@ import {
 import { convertStepToStepInput } from '../helpers'
 
 const flow: IBrandFlow = flowData
+const flow2: IBrandFlow = flowData2
+const flow3: IBrandFlow = flowData3
 
 describe('Flows edit helpers', () => {
   it('humanizeSeconds', () => {
@@ -62,6 +68,8 @@ describe('Flows edit helpers', () => {
 
   it('getUpdatedStepsOnMove', () => {
     const steps = flow.steps!
+    const steps2 = flow2.steps!
+    const steps3 = flow3.steps!
 
     expect(getUpdatedStepsOnMove(steps, 0, 0)).toEqual([])
     expect(getUpdatedStepsOnMove(steps, 1, 1)).toEqual([])
@@ -102,7 +110,7 @@ describe('Flows edit helpers', () => {
         steps[0].id,
         {
           ...convertStepToStepInput(steps[0]),
-          due_in: steps[0].due_in + ONE_DAY_IN_SECONDS * 3
+          due_in: steps[0].due_in + ONE_DAY_IN_SECONDS * 1
         }
       ]
     ])
@@ -174,6 +182,40 @@ describe('Flows edit helpers', () => {
         {
           ...convertStepToStepInput(steps[2]),
           due_in: steps[2].due_in - ONE_DAY_IN_SECONDS * 2
+        }
+      ]
+    ])
+
+    expect(getUpdatedStepsOnMove(steps2, 0, 1)).toEqual([
+      [
+        steps2[1].id,
+        {
+          ...convertStepToStepInput(steps2[1]),
+          due_in: steps2[1].due_in - ONE_DAY_IN_SECONDS * 1
+        }
+      ],
+      [
+        steps2[0].id,
+        {
+          ...convertStepToStepInput(steps2[0]),
+          due_in: steps2[0].due_in + ONE_DAY_IN_SECONDS * 2
+        }
+      ]
+    ])
+
+    expect(getUpdatedStepsOnMove(steps3, 0, 1)).toEqual([
+      [
+        steps3[1].id,
+        {
+          ...convertStepToStepInput(steps3[1]),
+          due_in: steps3[1].due_in - ONE_DAY_IN_SECONDS * 2
+        }
+      ],
+      [
+        steps3[0].id,
+        {
+          ...convertStepToStepInput(steps3[0]),
+          due_in: steps3[0].due_in + ONE_DAY_IN_SECONDS * 1
         }
       ]
     ])
