@@ -1,7 +1,7 @@
 import omit from 'lodash/omit'
 import keyBy from 'lodash/keyBy'
 
-import * as actionTypes from '../../constants/email-templates'
+import * as actionTypes from 'constants/email-templates'
 import { EmailTemplateAction, IEmailTemplatesState } from './types'
 
 const initialState: IEmailTemplatesState = {}

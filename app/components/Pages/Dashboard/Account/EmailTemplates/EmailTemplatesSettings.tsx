@@ -8,7 +8,8 @@ import Drawer from 'components/AddOrEditEmailTemplateDrawer'
 
 function EmailTemplatesSettings() {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedTemplate, setSelectedTemplate] = useState(undefined)
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<IBrandEmailTemplate | null>(null)
 
   return (
     <>
@@ -18,8 +19,8 @@ function EmailTemplatesSettings() {
       <Header handleCreateTemplate={() => setIsOpen(true)} />
       <div style={{ padding: '0 1.5rem 1.5rem' }}>
         <List
-          handleOnClickRow={
-            template => {
+          onItemClick={
+            (template: IBrandEmailTemplate) => {
               setSelectedTemplate(template)
               setIsOpen(true)
             }}

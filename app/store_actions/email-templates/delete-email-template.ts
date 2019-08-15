@@ -17,8 +17,6 @@ export const deleteEmailTemplate = (
       brandId,
       templateId
     })
-
-    return
   } catch (error) {
     throw error
   }

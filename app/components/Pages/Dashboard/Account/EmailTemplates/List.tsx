@@ -17,10 +17,21 @@ import Table from 'components/Grid/Table'
 import LoadingContainer from 'components/LoadingContainer'
 import { DangerButton } from 'components/Button/DangerButton'
 
+interface CellProps {
+  rowData: IBrandEmailTemplate
+}
+
+interface GetTrProps {
+  original: IBrandEmailTemplate
+}
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     body2: {
       color: theme.palette.grey['500']
+    },
+    deleteButtonWrapper: {
+      textAlign: 'right'
     }
   })
 )
@@ -29,7 +40,7 @@ interface Props {
   brand: UUID
   isFetching: boolean
   templates: IBrandEmailTemplate[]
-  handleOnClickRow: (IBrandEmailTemplate) => void,
+  onItemClick: (IBrandEmailTemplate) => void,
   deleteEmailTemplate: IAsyncActionProp<typeof deleteEmailTemplate>
   fetchEmailTemplates: IAsyncActionProp<typeof fetchEmailTemplates>
 }
@@ -38,14 +49,14 @@ function EmailTemplatesList({
   brand,
   isFetching,
   templates,
-  handleOnClickRow,
+  onItemClick,
   deleteEmailTemplate,
   fetchEmailTemplates,
 }: Props) {
-  const classes = useStyles();
-  const [deletingItems, setDeletingItems] = useState([''])
+  const classes = useStyles()
+  const [deletingItems, setDeletingItems] = useState<string[]>([])
 
-  const isDeleting = (id: UUID): boolean => deletingItems.includes(id)
+  const isTemplateDeleting = (id: UUID): boolean => deletingItems.includes(id)
   const removeFromDeletingItems = (id: UUID): void =>
     setDeletingItems(deletingItems.filter(item => item !== id))
   const addToDeletingItems = (id: UUID): void => setDeletingItems([
@@ -53,7 +64,7 @@ function EmailTemplatesList({
     id
   ])
 
-  const handleDelete = useCallback(async (id: UUID): Promise<void> => {
+  const handleDelete = async (id: UUID): Promise<void> => {
     try {
       addToDeletingItems(id)
       await deleteEmailTemplate(brand, id)
@@ -61,7 +72,7 @@ function EmailTemplatesList({
     } catch (error) {
       removeFromDeletingItems(id)
     }
-  }, [brand, addToDeletingItems, deleteEmailTemplate, removeFromDeletingItems])
+  }
 
   useEffect(() => {
     fetchEmailTemplates(brand)
@@ -72,8 +83,8 @@ function EmailTemplatesList({
       header: 'Name',
       id: 'name',
       width: '35%',
-      accessor: template => template.name,
-      render: ({ rowData }) =>
+      accessor: (template: IBrandEmailTemplate) => template.name,
+      render: ({ rowData }: CellProps) =>
         <Typography
           noWrap
           component="div"
@@ -86,7 +97,7 @@ function EmailTemplatesList({
       header: 'Content',
       id: 'content',
       sortable: false,
-      render: ({ rowData }) => (
+      render: ({ rowData }: CellProps) => (
         <div>
           <Typography
             noWrap
@@ -109,8 +120,8 @@ function EmailTemplatesList({
     {
       id: 'delete',
       sortable: false,
-      render: ({ rowData: { id } }) => (
-        <div style={{ textAlign: 'right' }}>
+      render: ({ rowData: { id } }: CellProps) => (
+        <div className={classes.deleteButtonWrapper}>
           <DangerButton
             size="small"
             variant="outlined"
@@ -120,7 +131,7 @@ function EmailTemplatesList({
               e.stopPropagation()
             }}
           >
-            {isDeleting(id) ? 'Deleting...' : 'Delete'}
+            {isTemplateDeleting(id) ? 'Deleting...' : 'Delete'}
           </DangerButton>
         </div>
       )
@@ -134,13 +145,13 @@ function EmailTemplatesList({
       isFetching={isFetching}
       plugins={{ sortable: {} }}
       LoadingState={() => <LoadingContainer style={{ padding: '20% 0' }} />}
-      getTrProps={(index, { original: template }) => {
-        const _isDeleting = isDeleting(template.id)
+      getTrProps={(index: number, { original: template }: GetTrProps) => {
+        const isDeleting = isTemplateDeleting(template.id)
         return {
-          onClick: _isDeleting ? () => { } : () => handleOnClickRow(template),
+          onClick: isDeleting ? () => { } : () => onItemClick(template),
           style: {
             cursor: 'pointer',
-            pointerEvents: _isDeleting ? 'none' : 'initial'
+            pointerEvents: isDeleting ? 'none' : 'initial'
           }
         }
       }}

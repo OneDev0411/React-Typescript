@@ -1,9 +1,11 @@
+import { SuperAgentRequest } from 'superagent'
+
 import Fetch from '../../services/fetch'
 
-export async function deleteEmailTemplate(
+export function deleteEmailTemplate(
   brand: UUID,
   template: UUID
-): Promise<any> {
+): SuperAgentRequest {
   try {
     return new Fetch()
       .delete(`/brands/${brand}/emails/templates/${template}`)

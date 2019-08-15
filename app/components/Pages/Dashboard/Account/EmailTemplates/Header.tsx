@@ -17,7 +17,7 @@ function Header(props: {
           variant="contained"
           onClick={props.handleCreateTemplate}
         >
-          Create a template
+          Create New Template
         </Button>
       </PageHeader.Menu>
     </PageHeader>

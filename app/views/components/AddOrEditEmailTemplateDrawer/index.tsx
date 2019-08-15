@@ -24,7 +24,7 @@ interface Props {
   /**
    * If not provided, It in "Add" mode.
    */
-  emailTemplate?: IBrandEmailTemplate
+  emailTemplate?: IBrandEmailTemplate | null
   updateEmailTemplate: IAsyncActionProp<typeof updateEmailTemplate>
   createEmailTemplate: IAsyncActionProp<typeof createEmailTemplate>
   addNotification: typeof addNotification
@@ -78,7 +78,7 @@ function AddOrEditEmailTemplateDrawer({
     }
   }
 
-  const validate = () => {}
+  const validate = () => { }
 
   return (
     <FinalFormDrawer
