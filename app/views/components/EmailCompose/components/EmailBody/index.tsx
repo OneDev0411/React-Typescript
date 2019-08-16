@@ -6,7 +6,7 @@ import React, {
   useCallback,
   useState
 } from 'react'
-import { Field } from 'react-final-form'
+import { Field, FieldProps } from 'react-final-form'
 import PluginsEditor from 'draft-js-plugins-editor'
 import { connect } from 'react-redux'
 
@@ -24,6 +24,7 @@ interface Props {
   hasStaticBody?: boolean
   hasSignatureByDefault?: boolean
   hasTemplateVariables?: boolean
+  FieldProps: Partial<FieldProps<any>>
   signature: string
   DraftEditorProps?: TextEditorProps['DraftEditorProps']
   editorRef?: Ref<PluginsEditor>
@@ -35,6 +36,7 @@ const EmailBody = ({
   hasSignatureByDefault,
   hasTemplateVariables,
   hasStaticBody = false,
+  FieldProps,
   DraftEditorProps = {},
   editorRef
 }: Props) => {
@@ -52,6 +54,7 @@ const EmailBody = ({
         <Field
           name="body"
           defaultValue={content}
+          {...FieldProps || {}}
           render={({ input, meta }) => (
             <TextEditor
               enableImage
