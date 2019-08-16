@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import styled from 'styled-components'
-import _ from 'underscore'
 
 import {
   removeActiveFilter,
@@ -63,7 +62,7 @@ export class TagsList extends React.Component<Props> {
 
   onSelectList = item => {
     const { activeFilters } = this.props
-    let nextFilters
+    let nextFilters: StringMap<IActiveFilter> = {}
 
     const filterId = Object.keys(activeFilters).find(id => {
       const filter = activeFilters[id]
@@ -76,16 +75,12 @@ export class TagsList extends React.Component<Props> {
 
     if (filterId) {
       this.props.removeActiveFilter('contacts', filterId)
-
-      nextFilters = _.filter(
-        activeFilters,
-        filter =>
-          filter.id !== this.tagDefinitionId ||
-          !filter.values.some(({ value }) => value === item.text)
-      )
-    }
-
-    if (!this.isSelected(item.text)) {
+      Object.keys(activeFilters)
+        .filter(key => key !== filterId)
+        .forEach(key => {
+          nextFilters[key] = activeFilters[key]
+        })
+    } else if (!this.isSelected(item.text)) {
       const filter = {
         id: this.tagDefinitionId,
         values: [{ value: item.text, label: item.text }],
@@ -97,7 +92,7 @@ export class TagsList extends React.Component<Props> {
 
       this.props.updateActiveFilter('contacts', item.id, filter)
       nextFilters = {
-        ...nextFilters,
+        ...activeFilters,
         [item.id]: filter
       }
     }
@@ -108,8 +103,7 @@ export class TagsList extends React.Component<Props> {
   }
 
   isSelected = text =>
-    _.some(
-      this.props.activeFilters,
+    Object.values(this.props.activeFilters).some(
       filter =>
         filter.id === this.tagDefinitionId &&
         filter.values &&
