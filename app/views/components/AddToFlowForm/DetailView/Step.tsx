@@ -7,10 +7,9 @@ import { StepContainer } from './styled'
 
 interface Props {
   step: IBrandFlowStep
-  waitDays: number
 }
 
-export default function Step({ step, waitDays }: Props) {
+export default function Step({ step }: Props) {
   return (
     <StepContainer alignCenter justifyBetween>
       <Flex alignCenter>
@@ -18,10 +17,10 @@ export default function Step({ step, waitDays }: Props) {
         <div>{step.title}</div>
       </Flex>
       <div>
-        {waitDays === 0 && 'The same day'}
-        {waitDays > 0 && `Wait for ${waitDays} `}
-        {waitDays === 1 && 'day'}
-        {waitDays > 1 && 'days'}
+        {step.wait_days === 0 && 'The same day'}
+        {step.wait_days > 0 && `Wait for ${step.wait_days} `}
+        {step.wait_days === 1 && 'day'}
+        {step.wait_days > 1 && 'days'}
       </div>
     </StepContainer>
   )
