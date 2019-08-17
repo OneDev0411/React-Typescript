@@ -72,7 +72,7 @@ export default function Field(props: Props) {
             variant="subtitle2"
             color="primary"
           >
-            {props.value ? 'Edit' : 'Add'}
+            {props.value ? 'Edit' : `Add ${props.name}`}
           </Typography>
         )}
       </Container>

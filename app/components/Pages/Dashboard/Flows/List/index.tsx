@@ -113,7 +113,6 @@ function List(props: Props) {
 
                   return
                 case 'delete':
-                  setSelectedFlow(renderProps.rowData)
                   confirmation.setConfirmationModal({
                     message: `Delete "${renderProps.rowData.name}" Flow?`,
                     description:
