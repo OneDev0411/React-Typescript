@@ -47,7 +47,7 @@ export default function Item({ contact, onStop, onClick }: Props) {
         </Typography>
       </TableCell>
       <TableCell align="right">
-        <Tooltip title="Stop flow for this contact">
+        <Tooltip title="Stop Flow for this contact">
           <DangerButton
             variant="outlined"
             size="small"
