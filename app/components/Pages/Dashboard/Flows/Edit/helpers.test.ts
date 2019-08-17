@@ -76,148 +76,112 @@ describe('Flows edit helpers', () => {
     expect(getUpdatedStepsOnMove(steps, 2, 2)).toEqual([])
 
     expect(getUpdatedStepsOnMove(steps, 0, 1)).toEqual([
-      [
-        steps[1].id,
-        {
-          ...convertStepToStepInput(steps[1]),
-          due_in: steps[1].due_in - ONE_DAY_IN_SECONDS * 1
-        }
-      ],
-      [
-        steps[0].id,
-        {
-          ...convertStepToStepInput(steps[0]),
-          due_in: steps[0].due_in + ONE_DAY_IN_SECONDS * 2
-        }
-      ]
+      {
+        ...convertStepToStepInput(steps[0]),
+        id: steps[0].id,
+        due_in: steps[0].due_in - ONE_DAY_IN_SECONDS * 1
+      },
+      {
+        ...convertStepToStepInput(steps[1]),
+        id: steps[1].id,
+        due_in: steps[1].due_in + ONE_DAY_IN_SECONDS * 2
+      }
     ])
     expect(getUpdatedStepsOnMove(steps, 0, 2)).toEqual([
-      [
-        steps[1].id,
-        {
-          ...convertStepToStepInput(steps[1]),
-          due_in: steps[1].due_in - ONE_DAY_IN_SECONDS * 1
-        }
-      ],
-      [
-        steps[2].id,
-        {
-          ...convertStepToStepInput(steps[2]),
-          due_in: steps[2].due_in - ONE_DAY_IN_SECONDS * 1
-        }
-      ],
-      [
-        steps[0].id,
-        {
-          ...convertStepToStepInput(steps[0]),
-          due_in: steps[0].due_in + ONE_DAY_IN_SECONDS * 1
-        }
-      ]
+      {
+        ...convertStepToStepInput(steps[0]),
+        id: steps[0].id,
+        due_in: steps[0].due_in + ONE_DAY_IN_SECONDS * 1
+      },
+      {
+        ...convertStepToStepInput(steps[1]),
+        id: steps[1].id,
+        due_in: steps[1].due_in - ONE_DAY_IN_SECONDS * 1
+      },
+      {
+        ...convertStepToStepInput(steps[2]),
+        id: steps[2].id,
+        due_in: steps[2].due_in - ONE_DAY_IN_SECONDS * 1
+      }
     ])
     expect(getUpdatedStepsOnMove(steps, 1, 0)).toEqual([
-      [
-        steps[0].id,
-        {
-          ...convertStepToStepInput(steps[0]),
-          due_in: steps[0].due_in + ONE_DAY_IN_SECONDS * 2
-        }
-      ],
-      [
-        steps[1].id,
-        {
-          ...convertStepToStepInput(steps[1]),
-          due_in: steps[1].due_in - ONE_DAY_IN_SECONDS * 1
-        }
-      ]
+      {
+        ...convertStepToStepInput(steps[0]),
+        id: steps[0].id,
+        due_in: steps[0].due_in + ONE_DAY_IN_SECONDS * 2
+      },
+      {
+        ...convertStepToStepInput(steps[1]),
+        id: steps[1].id,
+        due_in: steps[1].due_in - ONE_DAY_IN_SECONDS * 1
+      }
     ])
     expect(getUpdatedStepsOnMove(steps, 1, 2)).toEqual([
-      [
-        steps[2].id,
-        {
-          ...convertStepToStepInput(steps[2]),
-          due_in: steps[2].due_in - ONE_DAY_IN_SECONDS * 2
-        }
-      ],
-      [
-        steps[1].id,
-        {
-          ...convertStepToStepInput(steps[1]),
-          due_in: steps[1].due_in + ONE_DAY_IN_SECONDS * 1
-        }
-      ]
+      {
+        ...convertStepToStepInput(steps[1]),
+        id: steps[1].id,
+        due_in: steps[1].due_in + ONE_DAY_IN_SECONDS * 1
+      },
+      {
+        ...convertStepToStepInput(steps[2]),
+        id: steps[2].id,
+        due_in: steps[2].due_in - ONE_DAY_IN_SECONDS * 2
+      }
     ])
     expect(getUpdatedStepsOnMove(steps, 2, 0)).toEqual([
-      [
-        steps[0].id,
-        {
-          ...convertStepToStepInput(steps[0]),
-          due_in: steps[0].due_in + ONE_DAY_IN_SECONDS * 1
-        }
-      ],
-      [
-        steps[1].id,
-        {
-          ...convertStepToStepInput(steps[1]),
-          due_in: steps[1].due_in + ONE_DAY_IN_SECONDS * 1
-        }
-      ],
-      [
-        steps[2].id,
-        {
-          ...convertStepToStepInput(steps[2]),
-          due_in: steps[2].due_in - ONE_DAY_IN_SECONDS * 3
-        }
-      ]
+      {
+        id: steps[0].id,
+        ...convertStepToStepInput(steps[0]),
+        due_in: steps[0].due_in + ONE_DAY_IN_SECONDS * 1
+      },
+      {
+        ...convertStepToStepInput(steps[1]),
+        id: steps[1].id,
+        due_in: steps[1].due_in + ONE_DAY_IN_SECONDS * 1
+      },
+      {
+        ...convertStepToStepInput(steps[2]),
+        id: steps[2].id,
+        due_in: steps[2].due_in - ONE_DAY_IN_SECONDS * 3
+      }
     ])
     expect(getUpdatedStepsOnMove(steps, 2, 1)).toEqual([
-      [
-        steps[1].id,
-        {
-          ...convertStepToStepInput(steps[1]),
-          due_in: steps[1].due_in + ONE_DAY_IN_SECONDS * 1
-        }
-      ],
-      [
-        steps[2].id,
-        {
-          ...convertStepToStepInput(steps[2]),
-          due_in: steps[2].due_in - ONE_DAY_IN_SECONDS * 2
-        }
-      ]
+      {
+        ...convertStepToStepInput(steps[1]),
+        id: steps[1].id,
+        due_in: steps[1].due_in + ONE_DAY_IN_SECONDS * 1
+      },
+      {
+        ...convertStepToStepInput(steps[2]),
+        id: steps[2].id,
+        due_in: steps[2].due_in - ONE_DAY_IN_SECONDS * 2
+      }
     ])
 
     expect(getUpdatedStepsOnMove(steps2, 0, 1)).toEqual([
-      [
-        steps2[1].id,
-        {
-          ...convertStepToStepInput(steps2[1]),
-          due_in: steps2[1].due_in - ONE_DAY_IN_SECONDS * 1
-        }
-      ],
-      [
-        steps2[0].id,
-        {
-          ...convertStepToStepInput(steps2[0]),
-          due_in: steps2[0].due_in + ONE_DAY_IN_SECONDS * 2
-        }
-      ]
+      {
+        ...convertStepToStepInput(steps2[0]),
+        id: steps2[0].id,
+        due_in: steps2[0].due_in + ONE_DAY_IN_SECONDS * 2
+      },
+      {
+        ...convertStepToStepInput(steps2[1]),
+        id: steps2[1].id,
+        due_in: steps2[1].due_in - ONE_DAY_IN_SECONDS * 1
+      }
     ])
 
     expect(getUpdatedStepsOnMove(steps3, 0, 1)).toEqual([
-      [
-        steps3[1].id,
-        {
-          ...convertStepToStepInput(steps3[1]),
-          due_in: steps3[1].due_in - ONE_DAY_IN_SECONDS * 2
-        }
-      ],
-      [
-        steps3[0].id,
-        {
-          ...convertStepToStepInput(steps3[0]),
-          due_in: steps3[0].due_in + ONE_DAY_IN_SECONDS * 1
-        }
-      ]
+      {
+        ...convertStepToStepInput(steps3[0]),
+        id: steps3[0].id,
+        due_in: steps3[0].due_in + ONE_DAY_IN_SECONDS * 1
+      },
+      {
+        ...convertStepToStepInput(steps3[1]),
+        id: steps3[1].id,
+        due_in: steps3[1].due_in - ONE_DAY_IN_SECONDS * 2
+      }
     ])
   })
 })
