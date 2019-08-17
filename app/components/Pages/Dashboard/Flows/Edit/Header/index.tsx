@@ -7,10 +7,7 @@ import { Divider } from 'components/Divider'
 
 import { brandBackground } from 'views/utils/colors'
 
-import {
-  nameValidate,
-  descriptionValidate
-} from './helpers'
+import { nameValidate, descriptionValidate } from './helpers'
 import Field from './Field'
 import { Container } from './styled'
 
