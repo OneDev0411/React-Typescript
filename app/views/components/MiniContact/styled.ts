@@ -41,7 +41,6 @@ export const ProfileContainer = styled.div`
       margin-top: 0.065rem;
 
       & > a {
-        display: flex;
         margin-right: 0.5rem;
       }
     }

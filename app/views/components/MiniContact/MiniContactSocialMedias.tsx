@@ -1,4 +1,5 @@
 import React from 'react'
+import { IconButton } from '@material-ui/core'
 
 import IconFacebook from 'components/SvgIcons/Facebook/IconFacebook'
 import IconLinkedIn from 'components/SvgIcons/LinkedIn/IconLinkedIn'
@@ -21,21 +22,36 @@ function MiniContactIcons(props: MiniContactIconsType) {
         switch (social.type) {
           case SocialMediasEnum.facebook:
             return (
-              <a href={social.url} target="_blank" key={social.type}>
+              <IconButton
+                href={social.url}
+                target="_blank"
+                key={social.type}
+                size="small"
+              >
                 <IconFacebook width={24} height={24} />
-              </a>
+              </IconButton>
             )
           case SocialMediasEnum.instagram:
             return (
-              <a href={social.url} target="_blank" key={social.type}>
+              <IconButton
+                href={social.url}
+                target="_blank"
+                key={social.type}
+                size="small"
+              >
                 <IconInstagram width={24} height={24} />
-              </a>
+              </IconButton>
             )
           case SocialMediasEnum.linkedin:
             return (
-              <a href={social.url} target="_blank" key={social.type}>
+              <IconButton
+                href={social.url}
+                target="_blank"
+                key={social.type}
+                size="small"
+              >
                 <IconLinkedIn width={24} height={24} />
-              </a>
+              </IconButton>
             )
         }
       })}

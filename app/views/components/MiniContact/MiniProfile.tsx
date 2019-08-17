@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button'
 import { Link } from 'react-router'
 
 import Avatar from 'components/Avatar'
-import copy from 'utils/copy-text-to-clipboard'
+import CopyButton from 'components/CopyButton'
 
 import Show from './Show'
 import Activity from './Activity'
@@ -70,10 +70,7 @@ function MiniProfile(props: MiniProfilePropsType) {
         </Show>
         <Show if={!!data.phone}>
           <div className="person-phone">
-            {data.phone}{' '}
-            <Button color="primary" onClick={() => copy(data.phone)}>
-              Copy
-            </Button>
+            {data.phone} <CopyButton text={data.phone} />
           </div>
         </Show>
         <Show if={!!data.email}>
@@ -90,10 +87,7 @@ function MiniProfile(props: MiniProfilePropsType) {
         <Show if={!!data.address}>
           <div className="person-more-info">
             <div className="person-address">
-              {data.address}{' '}
-              <Button color="primary" onClick={() => copy(data.address)}>
-                Copy
-              </Button>
+              {data.address} <CopyButton text={data.address} />
             </div>
           </div>
         </Show>
