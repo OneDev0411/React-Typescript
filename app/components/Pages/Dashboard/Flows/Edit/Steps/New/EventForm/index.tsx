@@ -54,10 +54,7 @@ export default function EventForm({
       }
     }
 
-    const { days } = humanizeSeconds(stepData.due_in - startFrom)
-    const { hours, minutes } = humanizeSeconds(
-      stepData.due_in - days * ONE_DAY_IN_SECONDS
-    )
+    const { hours, minutes } = humanizeSeconds(stepData.due_in)
     const at = `${formatTimeDigits(hours)}:${formatTimeDigits(minutes)}`
 
     return {
@@ -67,7 +64,7 @@ export default function EventForm({
       },
       title: stepData.title,
       description: stepData.description,
-      wait_for: days.toString(),
+      wait_for: stepData.wait_days.toString(),
       at
     }
   }

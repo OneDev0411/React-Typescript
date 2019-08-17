@@ -7,6 +7,8 @@ declare interface IBrandFlowStep extends IModel {
   email: IBrandEmailTemplate | null
   is_automated: boolean
   type: 'brand_flow_step'
+  // virtual (calculated) fields
+  wait_days: number
 }
 
 declare interface IBrandFlowStepInput {

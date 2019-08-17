@@ -216,11 +216,7 @@ function Edit(props: Props & WithRouterProps) {
         return
       }
 
-      const newSteps: (IBrandFlowStepInput & {
-        id: UUID
-      })[] = getUpdatedStepsOnMove(flow.steps, source, destination).map(
-        ([id, step]) => ({ id, ...step })
-      )
+      const newSteps = getUpdatedStepsOnMove(flow.steps, source, destination)
 
       setIsLoading(true)
 

@@ -139,96 +139,35 @@ export function getUpdatedStepsOnMove(
   steps: IBrandFlowStep[],
   source: number,
   destination: number
-): [UUID, IBrandFlowStepInput][] {
+): (IBrandFlowStepInput & { id: UUID })[] {
   // No need to update anything
   if (source === destination) {
     return []
   }
 
-  const result: [UUID, IBrandFlowStepInput][] = []
+  const [deletedItem] = steps.splice(source, 1)
 
-  const waitDiffInSeconds =
-    source === 0
-      ? secondsToDays(steps[source].due_in)[0] * ONE_DAY_IN_SECONDS
-      : (secondsToDays(steps[source].due_in)[0] -
-          secondsToDays(steps[source - 1].due_in)[0]) *
-        ONE_DAY_IN_SECONDS
+  steps.splice(destination, 0, deletedItem)
 
-  // Move down
-  // Example: from 1 (source) to 3 (destination)
-  if (source < destination) {
-    result.push(
-      ...steps.slice(source + 1, destination + 1).map(step => {
-        return [
-          step.id,
-          {
-            ...convertStepToStepInput(step),
-            due_in: step.due_in + waitDiffInSeconds * -1
-          }
-        ] as [UUID, IBrandFlowStepInput]
-      })
-    )
+  const startIndexToUpdate = Math.min(source, destination)
+  const endIndexToUpdate = Math.max(source, destination)
 
-    // const neededWaitDays =
-    //   secondsToDays(steps[source].due_in)[0] -
-    //   (source === 0 ? 0 : secondsToDays(steps[source - 1].due_in)[0])
+  for (let index = startIndexToUpdate; index <= endIndexToUpdate; index++) {
+    const step = steps[index]
+    const stepSecondsOfDay = secondsToDays(step.due_in)[1]
+    const previousStepsWaitDays =
+      index === 0 ? 0 : secondsToDays(steps[index - 1].due_in)[0]
 
-    const neededWaitDays = secondsToDays(steps[source].due_in)[0]
-
-    const neededSeconds = secondsToDays(steps[source].due_in)[1]
-
-    const destinationWaitDays =
-      secondsToDays(steps[destination].due_in)[0] -
-      secondsToDays(steps[destination - 1].due_in)[0]
-
-    result.push([
-      steps[source].id,
-      {
-        ...convertStepToStepInput(steps[source]),
-        due_in:
-          destinationWaitDays * ONE_DAY_IN_SECONDS +
-          neededWaitDays * ONE_DAY_IN_SECONDS +
-          neededSeconds
-      }
-    ])
+    step.due_in =
+      previousStepsWaitDays * ONE_DAY_IN_SECONDS +
+      step.wait_days * ONE_DAY_IN_SECONDS +
+      stepSecondsOfDay
   }
 
-  // Move up
-  // Example: from 3 (source) to 1 (destination)
-  if (source > destination) {
-    result.push(
-      ...steps.slice(destination, source).map(step => {
-        return [
-          step.id,
-          {
-            ...convertStepToStepInput(step),
-            due_in: step.due_in + waitDiffInSeconds
-          }
-        ] as [UUID, IBrandFlowStepInput]
-      })
-    )
-
-    const neededWaitDays =
-      secondsToDays(steps[source].due_in)[0] -
-      secondsToDays(steps[source - 1].due_in)[0]
-
-    const neededSeconds = secondsToDays(steps[source].due_in)[1]
-
-    const destinationWaitDays = secondsToDays(
-      destination > 0 ? steps[destination - 1].due_in : 0
-    )[0]
-
-    result.push([
-      steps[source].id,
-      {
-        ...convertStepToStepInput(steps[source]),
-        due_in:
-          destinationWaitDays * ONE_DAY_IN_SECONDS +
-          neededWaitDays * ONE_DAY_IN_SECONDS +
-          neededSeconds
-      }
-    ])
-  }
-
-  return result
+  return steps.slice(startIndexToUpdate, endIndexToUpdate + 1).map(step => {
+    return {
+      id: step.id,
+      ...convertStepToStepInput(step)
+    }
+  })
 }

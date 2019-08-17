@@ -1,6 +1,7 @@
 import Fetch from '../../services/fetch'
 
 import { DEFAULT_QUERY } from './contants'
+import { getStepsWithWaitDays } from './helpers'
 
 export async function getBrandFlow(
   brand: UUID,
@@ -12,7 +13,17 @@ export async function getBrandFlow(
       .get(`/brands/${brand}/flows/${flow}`)
       .query(query)
 
-    return response.body.data
+    const flowData: IBrandFlow = response.body.data
+
+    if (!flowData.steps) {
+      return flowData
+    }
+
+    // Calculate steps wait_days and inject it
+    return {
+      ...flowData,
+      steps: getStepsWithWaitDays(flowData.steps)
+    }
   } catch (error) {
     throw error
   }
