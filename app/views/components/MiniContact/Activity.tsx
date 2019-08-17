@@ -18,6 +18,8 @@ function Activity(props: ActivityPropsType) {
     return null
   }
 
+  console.log({ props })
+
   return (
     <div className="activity">
       <ul>
@@ -36,7 +38,7 @@ function Activity(props: ActivityPropsType) {
             return (
               <li key={i}>
                 <div className="icon">
-                  {item.title === 'Birthday' ? (
+                  {item.title.includes('Birthday') ? (
                     <IconBirthday
                       style={{ width: '1em', height: '1em', fill: '#FF6F6F' }}
                     />
