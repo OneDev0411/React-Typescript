@@ -6,7 +6,7 @@ import idx from 'idx'
 import { getContact } from 'models/contacts/get-contact'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
-import { normalizeContactForEmailCompose } from 'models/email-compose/helpers/normalize-contact'
+import { normalizeContactForEmailCompose } from 'models/email/helpers/normalize-contact'
 
 import { confirmation } from 'actions/confirmation'
 
@@ -258,9 +258,11 @@ class SendContactCard extends React.Component {
             isOpen
             hasStaticBody
             disableAddNewRecipient
-            from={this.state.owner}
-            recipients={this.Recipients}
-            body={this.state.emailBody}
+            initialValues={{
+              from: this.state.owner,
+              to: this.Recipients,
+              body: this.state.emailBody
+            }}
             onSent={this.closeBuilder}
             onClose={this.toggleComposeEmail}
             getEmail={this.getEmail}

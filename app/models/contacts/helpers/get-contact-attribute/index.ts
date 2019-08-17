@@ -28,8 +28,8 @@ export function getContactAttribute(
       result = [sortedByUpdatedAt.pop()!]
     }
   } else {
-    contact.sub_contacts.forEach(subContact => {
-      let attributes = subContact.attributes[attributeDef.id]
+    ;(contact.sub_contacts || []).forEach(subContact => {
+      let attributes = (subContact.attributes || {})[attributeDef.id]
 
       if (!isEmpty(attributes)) {
         if (typeof filter === 'function') {

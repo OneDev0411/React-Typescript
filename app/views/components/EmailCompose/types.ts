@@ -2,48 +2,39 @@ import { ReactNode } from 'react'
 
 import { Recipient } from '../ContactsChipsInput/types'
 
-export interface EmailComposeRenderProps {
-  /**
-   * whether to show in minimized mode or not. When subject or body
-   * are focused, top fields go to minimized mode
-   */
-  minimized: boolean
-}
 export interface EmailFormValues {
-  attachments: any
-  recipients: Recipient[] | undefined
+  attachments: any[]
+  to: Recipient[] | undefined
+  cc?: Recipient[] | undefined
+  bcc?: Recipient[] | undefined
   subject: string
-  from: string
-  due_at: string
+  from: IUser
+  due_at: Date | null
   body: string | undefined
-  fromId: any
 }
 
 export interface EmailComposeDrawerProps {
-  from: {
-    id: string
-    display_name: string
-    email: string
-  }
+  initialValues?: Partial<EmailFormValues>
   sendEmail: (values: EmailFormValues) => Promise<any>
   isOpen: boolean
   getSendEmailResultMessages: (
     values: EmailFormValues
   ) => { successMessage: string; errorMessage: string }
-  onSent: () => void
-  onClose: () => void
+  onSent?: () => void
+  onClose?: () => void
+  title?: string
+  /**
+   * A deal to suggest attachments from it
+   */
   deal?: IDeal
-  body?: string
-  recipients?: any[] // FIXME: replace any with proper type
-  defaultAttachments?: any[] // FIXME: replace any with proper type
   isSubmitDisabled?: boolean
   hasStaticBody?: boolean
   hasDealsAttachments?: boolean
   hasSignatureByDefault?: boolean
   hasTemplateVariables?: boolean
 
-  dispatch: any // Extending DispatchProps seems to have problems
-  signature: string
   renderCollapsedFields: (values: EmailFormValues) => ReactNode
   renderFields: (values: EmailFormValues) => ReactNode
+
+  dispatch: any // Extending DispatchProps seems to have problems
 }

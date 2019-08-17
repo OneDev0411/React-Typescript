@@ -5,10 +5,10 @@ import { addNotification as notify } from 'reapop'
 import { Field } from 'react-final-form'
 import { TextField } from 'final-form-material-ui'
 import createDecorator from 'final-form-focus'
+import { isEqual } from 'lodash'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import EmailBody from 'components/EmailCompose/components/EmailBody'
-import { normalizeAttachments } from 'components/SelectDealFileDrawer/helpers/normalize-attachment'
 
 import { FinalFormDrawer } from '../../FinalFormDrawer'
 import { AttachmentsList } from '../fields/Attachments'
@@ -17,7 +17,6 @@ import { EmailComposeDrawerProps, EmailFormValues } from '../types'
 import { validateRecipient } from '../../ContactsChipsInput/helpers/validate-recipient'
 
 interface State {
-  isSendingEmail: boolean
   topFieldsCollapsed: boolean
 }
 
@@ -37,27 +36,32 @@ class EmailComposeDrawer extends React.Component<
   EmailComposeDrawerProps,
   State
 > {
-  static defaultProps = {
-    body: '',
-    recipients: [],
-    defaultAttachments: [],
+  static defaultProps: Partial<EmailComposeDrawerProps> = {
+    initialValues: {
+      to: [],
+      cc: [],
+      bcc: [],
+      body: '',
+      attachments: []
+    },
+    title: 'New Email',
     isSubmitDisabled: false,
     onSent: () => {},
+    onClose: () => {},
     hasStaticBody: false,
     hasDealsAttachments: false
   }
 
   state = {
-    topFieldsCollapsed: false,
-    isSendingEmail: false
+    topFieldsCollapsed: false
   }
 
   focusOnErrors = createDecorator(() => {
     return [
       {
-        // we use this decorator to expand recipients if form is submitted
+        // we use this decorator to expand to if form is submitted
         // while it has error
-        name: 'recipients',
+        name: 'to',
         focus: () => {
           this.expandTopFields()
         }
@@ -69,50 +73,17 @@ class EmailComposeDrawer extends React.Component<
 
   static contextType = ConfirmationModalContext
 
-  private formObject: EmailFormValues
-
-  private initialAttachments: any[]
-
-  get InitialValues() {
-    if (
-      (this.formObject && !this.isRecipientsChanged()) ||
-      this.state.isSendingEmail
-    ) {
-      return this.formObject
-    }
-
-    this.initialAttachments = normalizeAttachments(
-      this.props.defaultAttachments
-    )
-
-    this.formObject = {
-      fromId: this.props.from.id,
-      from: `${this.props.from.display_name} <${this.props.from.email}>`,
-      recipients: this.props.recipients,
-      subject: '',
-      body: this.props.hasStaticBody ? '' : this.props.body,
-      attachments: this.initialAttachments,
-      due_at: ''
-    }
-
-    return this.formObject
-  }
-
-  isRecipientsChanged = () =>
-    (this.formObject.recipients || []).length !==
-    (this.props.recipients || []).length
-
   validate = (values: EmailFormValues) => {
     const errors: { [key in keyof EmailFormValues]?: string } = {}
-    const { recipients } = values
+    const { to } = values
 
-    if (!recipients || recipients.length === 0) {
-      errors.recipients = 'You should provide at least one recipient'
+    if (!to || to.length === 0) {
+      errors.to = 'You should provide at least one recipient'
     } else {
-      const recipientErrors = recipients.map(validateRecipient).filter(i => i)
+      const recipientErrors = to.map(validateRecipient).filter(i => i)
 
       if (recipientErrors.length > 0) {
-        errors.recipients = recipientErrors[0]
+        errors.to = recipientErrors[0]
       }
     }
 
@@ -164,9 +135,6 @@ class EmailComposeDrawer extends React.Component<
     } = this.props.getSendEmailResultMessages(form)
 
     try {
-      this.setState({
-        isSendingEmail: true
-      })
       await this.props.sendEmail(form)
     } catch (e) {
       console.error('error in sending email', e)
@@ -177,10 +145,6 @@ class EmailComposeDrawer extends React.Component<
           message: errorMessage
         })
       )
-    } finally {
-      this.setState({
-        isSendingEmail: false
-      })
     }
 
     dispatch(
@@ -190,7 +154,7 @@ class EmailComposeDrawer extends React.Component<
       })
     )
 
-    this.props.onSent()
+    this.props.onSent!()
   }
 
   collapseTopFields = () => this.setState({ topFieldsCollapsed: true })
@@ -203,20 +167,21 @@ class EmailComposeDrawer extends React.Component<
         formId="email-compose-form"
         disableSubmitByEnter
         isOpen={this.props.isOpen}
-        initialValues={this.InitialValues}
-        onClose={this.props.onClose}
+        initialValues={this.props.initialValues}
+        initialValuesEqual={isEqual}
+        onClose={this.props.onClose!}
         onSubmit={this.handleSubmit}
         validate={this.validate}
         decorators={[this.focusOnErrors]}
         closeDrawerOnBackdropClick={false}
         submitButtonLabel="Send"
         submittingButtonLabel="Sending ..."
-        title="New Email"
+        title={this.props.title!}
         isSubmitDisabled={this.props.isSubmitDisabled}
         footerRenderer={data => (
           <Footer
             {...data}
-            initialAttachments={this.initialAttachments}
+            initialAttachments={this.props.initialValues!.attachments || []}
             deal={this.props.deal}
             hasDealsAttachments={this.props.hasDealsAttachments}
           />
@@ -238,7 +203,7 @@ class EmailComposeDrawer extends React.Component<
               InputProps={{
                 onFocus: this.collapseTopFields,
                 inputProps: {
-                  autoFocus: (values.recipients || []).length > 0,
+                  autoFocus: (values.to || []).length > 0,
                   'data-test': 'email-subject'
                 }
               }}
@@ -252,7 +217,7 @@ class EmailComposeDrawer extends React.Component<
               hasSignatureByDefault={this.props.hasSignatureByDefault}
               hasStaticBody={this.props.hasStaticBody}
               hasTemplateVariables={this.props.hasTemplateVariables}
-              content={this.props.body}
+              content={this.props.initialValues!.body || ''}
             />
 
             <Field name="attachments" component={AttachmentsList} />

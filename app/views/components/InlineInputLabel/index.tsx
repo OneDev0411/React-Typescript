@@ -7,13 +7,7 @@ const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
       root: {
-        marginRight: `${theme.spacing(2)}px`,
-        /*
-         a cheap way to make clicking label focus the input if htmlFor is
-         not provided. It works because the label is to be rendered as an
-         start adornment
-        */
-        pointerEvents: 'none'
+        marginRight: `${theme.spacing(2)}px`
       }
     }),
   { name: 'InlineInputLabel' }

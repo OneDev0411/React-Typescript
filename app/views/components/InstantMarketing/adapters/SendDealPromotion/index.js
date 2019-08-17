@@ -201,9 +201,11 @@ class SendDealPromotion extends React.Component {
           <BulkEmailComposeDrawer
             isOpen
             hasStaticBody
-            from={this.state.owner}
-            recipients={this.props.recipients}
-            body={this.state.emailBody}
+            initialValues={{
+              from: this.state.owner,
+              to: this.props.recipients,
+              body: this.state.emailBody
+            }}
             getEmail={this.getEmail}
             onSent={this.onEmailSent}
             onClose={this.toggleComposeEmail}

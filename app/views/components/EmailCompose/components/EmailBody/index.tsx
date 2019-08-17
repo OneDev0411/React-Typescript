@@ -13,7 +13,7 @@ import { connect } from 'react-redux'
 import { TextEditor } from 'components/TextEditor'
 import Loading from 'components/LoadingContainer'
 import { IAppState } from 'reducers/index'
-import { uploadEmailAttachment } from 'models/email-compose/upload-email-attachment'
+import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
 import { defaultTemplateVariableSuggestions } from '../../EmailComposeDrawer/default-template-variable-suggestions'
@@ -24,7 +24,7 @@ interface Props {
   hasStaticBody?: boolean
   hasSignatureByDefault?: boolean
   hasTemplateVariables?: boolean
-  FieldProps: Partial<FieldProps<any>>
+  FieldProps?: Partial<FieldProps<any>>
   signature: string
   DraftEditorProps?: TextEditorProps['DraftEditorProps']
   editorRef?: Ref<PluginsEditor>

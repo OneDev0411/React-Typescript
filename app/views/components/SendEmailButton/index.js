@@ -41,9 +41,11 @@ function SendEmailButton(props) {
       {isOpen && (
         <SingleEmailComposeDrawer
           isOpen={isOpen}
-          defaultAttachments={[]}
-          recipients={props.recipients}
-          from={props.user}
+          initialValues={{
+            attachments: [],
+            to: props.recipients,
+            from: props.user
+          }}
           deal={deal}
           onClose={toggleOpenDrawer}
           onSent={() => {

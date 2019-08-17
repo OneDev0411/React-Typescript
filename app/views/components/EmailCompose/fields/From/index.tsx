@@ -9,9 +9,14 @@ import { InlineInputLabel } from '../../../InlineInputLabel'
 
 export function From({
   InputProps,
+  input,
   ...props
 }: FieldRenderProps<any> & TextFieldProps) {
   const theme = useTheme()
+
+  const value = input.value
+    ? `${input.value.display_name} <${input.value.email}>`
+    : ' - '
 
   return (
     <TextField
@@ -27,6 +32,10 @@ export function From({
       }}
       fullWidth
       margin="dense"
+      input={{
+        ...input,
+        value
+      }}
       {...props}
     />
   )

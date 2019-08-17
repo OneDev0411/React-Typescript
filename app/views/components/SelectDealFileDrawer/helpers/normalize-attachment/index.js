@@ -21,8 +21,8 @@ export function normalizeFile(task, file) {
     type: 'file',
     id: `file_${file.id}`,
     task_id: task ? task.id : null,
-    checklist: task ? task.checklist : null,
     file_id: file.id,
+    checklist: task ? task.checklist : null,
     title: file.name,
     url: file.url,
     date: normalizeDate(file.created_at || file.date)

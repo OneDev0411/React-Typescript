@@ -56,11 +56,11 @@ declare interface ApiResponseBody<T> {
   references: T
   code: string
   info?:
-  | boolean
-  | {
-    count: number
-    total: number
-  }
+    | boolean
+    | {
+        count: number
+        total: number
+      }
 }
 
 declare interface ApiResponse<T> {
@@ -84,4 +84,10 @@ declare type MapFieldsToUuid<T, K extends keyof T> = PartiallyMappedFields<
 
 type IAsyncActionProp<
   T extends (...args: any[]) => (dispatch, getState) => Promise<any>
-  > = (...args: Parameters<T>) => ReturnType<ReturnType<T>>
+> = (...args: Parameters<T>) => ReturnType<ReturnType<T>>
+
+declare type Association<
+  Association,
+  Value,
+  Associations
+> = Association extends Associations ? { [key in Association]: Value } : {}
