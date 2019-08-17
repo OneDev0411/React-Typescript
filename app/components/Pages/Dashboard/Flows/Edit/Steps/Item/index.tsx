@@ -16,8 +16,7 @@ import useRaisedMuiCard from 'hooks/use-raised-mui-card'
 import {
   humanizeSeconds,
   formatTimeDigits,
-  getNextStepStartFrom,
-  ONE_DAY_IN_SECONDS
+  getNextStepStartFrom
 } from '../../helpers'
 import EventForm from '../New/EventForm'
 
@@ -60,13 +59,7 @@ export default function Item({
   const { isRaised, raise, stopRaise } = useRaisedMuiCard()
   const [isEditing, setIsEditing] = useState(false)
 
-  const previousStepSecondsDiff = prevStep
-    ? humanizeSeconds(prevStep.due_in).days * ONE_DAY_IN_SECONDS
-    : 0
-
-  const secondsDiff = step.due_in - previousStepSecondsDiff
-
-  const humanizedDiff = humanizeSeconds(secondsDiff)
+  const humanizedDiff = humanizeSeconds(step.due_in)
 
   const hours =
     humanizedDiff.hours >= 12
@@ -168,11 +161,10 @@ export default function Item({
                         xs={4}
                       >
                         <Typography variant="subtitle1" color="textSecondary">
-                          {humanizedDiff.days === 0 && 'The same day'}
-                          {humanizedDiff.days > 0 &&
-                            `Wait for ${humanizedDiff.days} `}
-                          {humanizedDiff.days === 1 && 'day'}
-                          {humanizedDiff.days > 1 && 'days'}
+                          {step.wait_days === 0 && 'The same day'}
+                          {step.wait_days > 0 && `Wait for ${step.wait_days} `}
+                          {step.wait_days === 1 && 'day'}
+                          {step.wait_days > 1 && 'days'}
                         </Typography>
                         <Typography variant="subtitle1" color="textSecondary">
                           {hours}:{minutes} {amPm}
