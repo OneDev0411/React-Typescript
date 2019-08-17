@@ -1,6 +1,7 @@
 import Fetch from '../../services/fetch'
 
 import { DEFAULT_QUERY } from './contants'
+import { getStepsWithWaitDays } from './helpers'
 
 /**
  * Creates a new Flow template
@@ -17,7 +18,17 @@ export async function createFlow(
       .query(query)
       .send(data)
 
-    return response.body.data
+    const flow: IBrandFlow = response.body.data
+
+    if (!flow.steps) {
+      return flow
+    }
+
+    // Calculate steps wait_days and inject it
+    return {
+      ...flow,
+      steps: getStepsWithWaitDays(flow.steps)
+    }
   } catch (error) {
     throw error
   }
