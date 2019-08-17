@@ -58,10 +58,9 @@ function MiniContactActionButton(props: MiniContactActionButtonType) {
     data: {
       ...sharedProps,
       initValues: {
-        // We are supporting email right now,
-        // other types of data should be added whenever needs like in Chat
-        //  which have name and last_name
-        email: props.data.data.email
+        email: props.data.data.email,
+        first_name: props.data.meta.first_name,
+        last_name: props.data.meta.last_name
       }
     }
   }

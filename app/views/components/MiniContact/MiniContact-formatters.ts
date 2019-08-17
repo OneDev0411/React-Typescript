@@ -40,7 +40,10 @@ function userFormatter(data): FormatterOutputType {
       profile_image_url: data.profile_image_url,
       phone: data.phone_number
     },
-    meta: {}
+    meta: {
+      first_name: data.first_name,
+      last_name: data.last_name
+    }
   }
 }
 
