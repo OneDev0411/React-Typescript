@@ -63,12 +63,12 @@ export default function Field(props: Props) {
   function renderViewMode() {
     return (
       <Container>
-        <Typography variant={props.variant}>
-          {props.value ? props.value : `No ${props.name}`}
-        </Typography>
+        {props.value && (
+          <Typography variant={props.variant}>{props.value}</Typography>
+        )}
         {!props.disabled && (
           <Typography
-            style={{ marginLeft: '1rem' }}
+            style={props.value ? { marginLeft: '1rem' } : {}}
             variant="subtitle2"
             color="primary"
           >
