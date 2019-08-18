@@ -48,7 +48,8 @@ export function getHtmlConversionOptions(
 
           return undefined as any // typing is wrong, it should accept undefined too
         }
-      }
+      },
+      defaultBlockTag: 'div'
     },
     stateFromHtmlOptions: {
       customBlockFn: signatureCustomBlockFn('rechat-signature'),
