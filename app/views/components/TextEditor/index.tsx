@@ -30,7 +30,7 @@ import { AddImageButton } from './buttons/AddImageButton'
 import { RichTextButtons } from './buttons/RichTextButtons'
 import { createFilePlugin } from './plugins/draft-js-handle-files-plugin'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
-import { replaceImage } from './utils/replace-image'
+import { updateEntityData } from './modifiers/update-entity-data'
 import { InlineEntityPopover } from './components/InlineEntityPopover'
 import { LinkPreview } from './components/LinkPreview/LinkPreview'
 import { Checkbox } from '../Checkbox'
@@ -226,7 +226,12 @@ export const TextEditor = forwardRef(
           const latestState = editorRef.current.getEditorState()
 
           handleChange(
-            replaceImage(imagePlugin, latestState, dataUrl, uploadedImageUrl)
+            updateEntityData(
+              imagePlugin,
+              latestState,
+              data => data.src === dataUrl,
+              { src: uploadedImageUrl, uploading: false }
+            )
           )
         }
       } else {
