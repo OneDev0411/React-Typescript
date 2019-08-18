@@ -41,6 +41,7 @@ import { createPlugins } from './create-plugins'
 import { TemplateVariablesButton } from '../TemplateVariablesButton'
 import { ITemplateVariableSuggestion } from '../TemplateVariablesButton/types'
 import { insertTemplateVariable } from './modifiers/insert-template-expression'
+import { removeUnwantedEmptyLineBeforeAtomic } from './modifiers/remove-unwanted-empty-block-before-atomic'
 
 /**
  * Html wysiwyg editor.
@@ -208,10 +209,12 @@ export const TextEditor = forwardRef(
       const dataUrl = await readFileAsDataUrl(file)
 
       handleChange(
-        imagePlugin.addImage(
-          editorState,
-          dataUrl,
-          uploadImage ? { uploading: true } : {}
+        removeUnwantedEmptyLineBeforeAtomic(
+          imagePlugin.addImage(
+            editorState,
+            dataUrl,
+            uploadImage ? { uploading: true } : {}
+          )
         )
       )
 
