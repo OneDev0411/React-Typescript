@@ -60,6 +60,8 @@ const OverlayDrawer = ({
 
   return (
     <Drawer
+      /* It causes problems in focusing poppers (and possibly other kind of modals). We can check this after fully migrating to MUI  */
+      disableEnforceFocus
       {...rest}
       open={open}
       onClose={handleOnClose}
