@@ -1,9 +1,16 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { Row, Cell } from '../styled'
 
 export const Header = styled.div`
-  ${stickyStyle}
+  ${props =>
+    props.isHeaderSticky &&
+    css`
+      position: sticky;
+      background: #fff;
+      top: 0;
+    `}
+
   font-weight: 600;
   margin-bottom: 24px;
 `
@@ -22,11 +29,3 @@ export const HeaderCell = styled(Cell)`
   align-self: center;
   align-items: center;
 `
-
-function stickyStyle(props) {
-  if (props.isHeaderSticky) {
-    return 'position: sticky; background: #fff;top: 0;'
-  }
-
-  return ''
-}
