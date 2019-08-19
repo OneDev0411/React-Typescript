@@ -1,8 +1,7 @@
 import React from 'react'
 import fecha from 'fecha'
 import { makeStyles } from '@material-ui/styles'
-
-import { hexToRgb } from 'utils/hex-to-rgb'
+import { Theme } from '@material-ui/core/styles'
 
 import { EventIcon } from './EventIcon'
 import { EventTitle } from './Title'
@@ -25,7 +24,7 @@ interface StyleProps {
   hasBorderBottom: boolean | null
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
@@ -34,12 +33,20 @@ const useStyles = makeStyles({
     height: '100%',
     borderBottom: (props: StyleProps) =>
       props.hasBorderBottom ? '1px solid rgba(219, 230, 253, 0.5)' : 'none',
+    '& button': {
+      borderColor: '#eee',
+      color: '#eee'
+    },
     '&:hover': {
       transition: '0.2s ease-in background-color',
-      backgroundColor: `rgba(${hexToRgb('#0c43db')}, 0.05)`
+      backgroundColor: theme.palette.action.hover,
+      '& button': {
+        borderColor: 'inherit',
+        color: 'inherit'
+      }
     }
   }
-})
+}))
 
 /**
  * renders the given calendar event
