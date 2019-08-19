@@ -8,40 +8,44 @@
 
 
 <url>
-  <loc>http://rechat.com/</loc>
+  <loc>https://rechat.com/</loc>
   <lastmod>2019-08-13T12:34:05+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>http://rechat.com/about</loc>
+  <loc>https://rechat.com/about</loc>
   <lastmod>2019-08-13T12:34:05+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>http://rechat.com/faq</loc>
+  <loc>https://rechat.com/faq</loc>
   <lastmod>2019-08-13T12:34:05+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>http://rechat.com/contact</loc>
+  <loc>https://rechat.com/contact</loc>
   <lastmod>2019-08-13T12:34:05+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>http://rechat.com/terms</loc>
+  <loc>https://rechat.com/terms</loc>
   <lastmod>2019-08-13T12:34:05+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>http://rechat.com/terms/mls</loc>
+  <loc>https://rechat.com/terms/mls</loc>
   <lastmod>2019-08-13T12:34:05+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>http://rechat.com/privacy</loc>
+  <loc>https://rechat.com/privacy</loc>
   <lastmod>2019-08-13T12:34:05+00:00</lastmod>
   <priority>0.80</priority>
 </url>
-
+<url>
+  <loc>https://rechat.com/about/outbound-sales-development-representative</loc>
+  <lastmod>2019-08-13T12:34:05+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
 
 </urlset>
