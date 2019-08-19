@@ -1,11 +1,10 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
-import _ from 'underscore'
+import omit from 'lodash/omit'
 import { Helmet } from 'react-helmet'
 
 import PageHeader from 'components/PageHeader'
-import { getUserTeams } from 'store_actions/user/teams'
 import getCalenderFeedSetting from 'models/user/calendar-feed-setting'
 import { getTeamAvailableMembers } from 'utils/user-teams'
 
@@ -35,43 +34,50 @@ class DealTemplates extends React.Component {
     const { teams } = user
 
     try {
-      const promiseSetting = getCalenderFeedSetting()
+      const feed = await getCalenderFeedSetting()
+      const hasFeed = feed && Object.keys(feed).length > 0
 
-      await dispatch(getUserTeams(user))
+      let selectedMembers = {}
 
-      const setting = await promiseSetting
-
-      let normalizedSetting = {}
-
-      if (setting.filter && setting.filter.length > 0) {
-        setting.filter.forEach(filter => {
+      if (hasFeed && Array.isArray(feed.filter)) {
+        feed.filter.forEach(filter => {
           if (filter.users && filter.users.length > 1) {
-            normalizedSetting[filter.brand] = filter.users
+            selectedMembers[filter.brand] = filter.users
           } else {
             const filterTeam = teams.filter(
               ({ brand }) => brand.id === filter.brand
             )[0]
 
-            normalizedSetting[filter.brand] = filterTeam
+            selectedMembers[filter.brand] = filterTeam
               ? getTeamAvailableMembers(filterTeam).map(({ id }) => id)
               : []
           }
         })
       } else {
         teams.forEach(team => {
-          normalizedSetting[team.brand.id] = getTeamAvailableMembers(team).map(
+          selectedMembers[team.brand.id] = getTeamAvailableMembers(team).map(
             ({ id }) => id
           )
         })
       }
 
-      this.setState({
-        selectedTypes:
-          (setting &&
-            setting.selected_types.filter(type => type.trim().length)) ||
-          [],
-        selectedMembers: (setting && normalizedSetting) || {},
-        feedURl: (setting && setting.url) || ''
+      this.setState(() => {
+        if (!hasFeed) {
+          return {
+            feedURl: '',
+            selectedMembers,
+            selectedTypes: []
+          }
+        }
+
+        return {
+          feedURl: feed.url || '',
+          selectedMembers,
+          selectedTypes:
+            (Array.isArray(feed.selected_types) &&
+              feed.selected_types.filter(type => type.trim().length)) ||
+            []
+        }
       })
     } catch (e) {
       console.log(e)
@@ -130,7 +136,7 @@ class DealTemplates extends React.Component {
 
   onRemoveTeam = removedTeam => {
     this.setState(state => ({
-      selectedMembers: _.omit(state.selectedMembers, removedTeam)
+      selectedMembers: omit(state.selectedMembers, removedTeam)
     }))
   }
 
@@ -150,7 +156,7 @@ class DealTemplates extends React.Component {
           })
         } else {
           this.setState({
-            selectedMembers: _.omit(selectedMembers, brandId)
+            selectedMembers: omit(selectedMembers, brandId)
           })
         }
       } else {
