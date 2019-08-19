@@ -1,4 +1,4 @@
-const DAY_RANGE = 100
+const DAY_RANGE = 90
 
 export enum Format {
   Next,

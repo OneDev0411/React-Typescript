@@ -34,7 +34,7 @@ export function EventActions({ event, user }: Props) {
         href={`/openhouse/${event.id}/${getActiveTeamId(user)}/register`}
         target="_blank"
       >
-        Registration Page
+        Guest Registration Page
       </Button>
     )
   }

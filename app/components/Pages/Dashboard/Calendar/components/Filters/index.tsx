@@ -64,9 +64,10 @@ const TAB_ITEMS: TabItem[] = [
 
 interface Props {
   onChange(filter: object): void
+  isLoadingFilters: boolean
 }
 
-export function Filters({ onChange }: Props) {
+export function Filters({ onChange, isLoadingFilters }: Props) {
   const [selectedTab, setSelectedTab] = useState(TAB_ITEMS[0].value)
 
   const handleFilterChange = useCallback(
@@ -96,6 +97,7 @@ export function Filters({ onChange }: Props) {
           <Tab
             key={index}
             value={value}
+            disabled={isLoadingFilters}
             label={
               <TabItem>
                 {Icon && (

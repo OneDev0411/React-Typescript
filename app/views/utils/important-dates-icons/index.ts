@@ -20,32 +20,32 @@ export const importantDatesIcons = [
     color: '#ff6f6f'
   },
   {
-    name: 'GraduationAnniversary',
+    name: 'graduation anniversary',
     icon: IconGraduation,
     color: '#702283'
   },
   {
-    name: 'NewHome',
+    name: 'New Home',
     icon: IconHome,
     color: '#64d9ff'
   },
   {
-    name: 'HomeAnniversary',
+    name: 'Home Anniversary',
     icon: IconHomeAnniversary,
     color: '#ef3f61'
   },
   {
-    name: 'WorkAnniversary',
+    name: 'Work Anniversary',
     icon: IconWork,
     color: '#804205'
   },
   {
-    name: 'WeddingAnniversary',
+    name: 'Wedding Anniversary',
     icon: IconWedding,
     color: '#ef3F61'
   },
   {
-    name: 'ChildBirthday',
+    name: 'Child birthday',
     icon: IconChild,
     color: '#ffb7b9'
   },

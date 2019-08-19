@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 
-import { Button } from '@material-ui/core'
+import { Button, Typography } from '@material-ui/core'
 
 import { IAppState } from 'reducers'
 
@@ -32,7 +32,9 @@ export function CreateEvent(props: Props & StateProps) {
         size="medium"
         onClick={() => setShowEventDrawer(true)}
       >
-        Create Event
+        <Typography variant="button" noWrap>
+          Create Event
+        </Typography>
       </Button>
 
       <CrmEvents

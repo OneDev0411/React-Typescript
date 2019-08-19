@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import { hexToRgb } from 'utils/hex-to-rgb'
-import { primary } from 'views/utils/colors'
+import { primary, grey } from 'views/utils/colors'
 
 export const Container = styled.div`
   display: flex;
@@ -9,14 +9,18 @@ export const Container = styled.div`
   overflow: hidden;
 
   .DayPicker-Day--today {
-    color: #fff;
-    background-color: ${primary};
-    font-weight: 500;
+    color: #fff !important;
+    background-color: ${primary} !important;
+    font-weight: 500 !important;
   }
 
   .DayPicker-Day--selected {
     color: ${primary} !important;
     background-color: rgba(${hexToRgb(primary).join(',')}, 0.14) !important;
+
+    :hover {
+      color: #fff !important;
+    }
   }
 
   .DayPicker:not(.DayPicker--interactionDisabled)
@@ -45,7 +49,7 @@ export const Sidebar = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 18rem;
-  background: #ebeff2;
+  background: ${grey.A100};
   padding: 1rem 0.5rem;
 `
 
