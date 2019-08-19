@@ -15,7 +15,7 @@ export function EmptyState() {
           height: '5rem'
         }}
       />
-      <Title>There is no event</Title>
+      <Title>No events</Title>
     </Container>
   )
 }
