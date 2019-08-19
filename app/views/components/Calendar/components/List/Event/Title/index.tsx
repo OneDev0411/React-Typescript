@@ -26,7 +26,7 @@ export function EventTitle(props: Props) {
         <a href={`/dashboard/contacts/${event.contact}`} target="_blank">
           {event.full_contact!.display_name}
         </a>
-        's {event.event_type}
+        's {event.type_label}
       </div>
     )
   }
@@ -51,6 +51,13 @@ export function EventTitle(props: Props) {
         </a>
       </div>
     )
+  }
+
+  if (
+    event.object_type === 'email_campaign' &&
+    event.event_type === 'scheduled_email'
+  ) {
+    return <div style={styles.title}>{event.title}</div>
   }
 
   console.warn(`Could not render ${event}`)
