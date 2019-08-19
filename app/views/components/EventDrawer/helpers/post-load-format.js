@@ -33,7 +33,7 @@ export async function postLoadFormat(
     return {
       assignees: [owner],
       associations,
-      dueDate: new Date(defaultSelectedDate),
+      dueDate: createDueDate(defaultSelectedDate),
       reminder,
       task_type: { title: 'Call', value: 'Call' }
     }
@@ -69,4 +69,18 @@ export async function postLoadFormat(
     reminder,
     dueDate: new Date(dueDate)
   }
+}
+
+/**
+ * creates a date with current time based on given date
+ * @param {Date} defaultSelectedDate - default selected date
+ */
+function createDueDate(defaultSelectedDate) {
+  const now = new Date()
+  const date = new Date(defaultSelectedDate)
+
+  date.setHours(now.getHours())
+  date.setMinutes(now.getMinutes())
+
+  return date
 }
