@@ -146,3 +146,25 @@ export async function findContact(email: string, base_output) {
     }
   }
 }
+
+export function isNearDate(date: number) {
+  return new Date(date * 1000).getMonth() === new Date().getMonth()
+}
+
+export function activitiesFormatter(activities) {
+  if (!activities) {
+    return []
+  }
+
+  const output = activities.sort(function activitySort(a, b) {
+    if (a.title.includes('Birthday')) {
+      return -1
+    }
+    if (b.title.includes('Birthday')) {
+      return 1
+    }
+    return 0
+  })
+
+  return output.slice(0, 5)
+}

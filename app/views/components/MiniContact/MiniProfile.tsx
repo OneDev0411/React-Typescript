@@ -93,7 +93,11 @@ function MiniProfile(props: MiniProfilePropsType) {
         </Show>
         <MiniContactSocialMedias socials={data.socials} />
       </div>
-      <Activity dates={data.dates} last_touch={data.last_touch} />
+      <Activity
+        dates={data.dates}
+        last_touch={data.last_touch}
+        contactId={output.contact_id}
+      />
     </ProfileContainer>
   )
 }

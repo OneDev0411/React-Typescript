@@ -30,6 +30,7 @@ function MiniContact(props: MiniContactPropsType) {
 
   const isHovered = Boolean(anchorEl)
   const id = isHovered ? 'mini-contact-popper' : undefined
+  const closeMiniContact = () => setAnchorEl(null)
 
   function handleHovered(event) {
     setAnchorEl(anchorEl ? null : event.currentTarget)
@@ -37,7 +38,7 @@ function MiniContact(props: MiniContactPropsType) {
 
   return (
     <>
-      <div onMouseEnter={handleHovered} onMouseLeave={() => setAnchorEl(null)}>
+      <div onMouseEnter={handleHovered} onMouseLeave={closeMiniContact}>
         {props.children}
         {isHovered && (
           <ContentSizeAwarePopper
@@ -46,7 +47,7 @@ function MiniContact(props: MiniContactPropsType) {
             anchorEl={anchorEl}
             transition
             placement="bottom-start"
-            style={{ zIndex: 2019 }}
+            style={{ zIndex: 99 }}
           >
             {/* Disable the animation temporarily  */}
             {/* {({ TransitionProps }) => (
