@@ -17,6 +17,7 @@ export default function AutoEmailItem({ email, onUpdate }) {
     <Container style={{ backgroundColor: brandBackground }}>
       <MetaInfo scheduledFor={email.due_date} />
       <ButtonBase
+        style={{ width: '100%', textAlign: 'initial' }}
         disableRipple={false}
         onClick={() => {
           setEmailOpen(true)
