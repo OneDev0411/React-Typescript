@@ -28,8 +28,8 @@ export function DayHeader(props: IProps) {
       <div
         style={{
           ...ContainerStyle,
-          backgroundColor: isActive ? '#e5ebfe' : '#f5f8fa',
-          color: isActive ? '#3050f2' : '#000'
+          backgroundColor: '#f5f8fa',
+          color: '#000'
         }}
       >
         <div style={FlexStyle}>
@@ -39,8 +39,8 @@ export function DayHeader(props: IProps) {
               alignItems: 'center',
               justifyContent: 'center',
               marginRight: '1rem',
-              width: '35px',
-              height: '35px',
+              width: '30px',
+              height: '30px',
               zIndex: 1,
               borderRadius: '50%',
               ...getColors(props.item.is_today, isActive)
