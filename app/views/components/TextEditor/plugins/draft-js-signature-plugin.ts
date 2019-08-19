@@ -1,7 +1,13 @@
 import { ContentBlock, ContentState, EditorState } from 'draft-js'
 import { PluginFunctions } from 'draft-js-plugins-editor'
 
-import { Options as ImportOptions, stateFromHTML } from 'draft-js-import-html'
+import {
+  CustomBlockFn,
+  Options as ImportOptions,
+  stateFromHTML
+} from 'draft-js-import-html'
+
+import { BlockStyleFn } from 'draft-js-export-html'
 
 import { appendBlocks } from '../utils/append-blocks'
 
@@ -46,15 +52,11 @@ export default function createSignaturePlugin({
   /**
    * Returns weather signature exists in the editor or not.
    */
-  const hasSignature = () => {
-    return (
-      pluginFns &&
-      pluginFns
-        .getEditorState()
-        .getCurrentContent()
-        .getBlocksAsArray()
-        .some(isSignatureBlock)
-    )
+  const hasSignature = (editorState: EditorState) => {
+    return editorState
+      .getCurrentContent()
+      .getBlocksAsArray()
+      .some(isSignatureBlock)
   }
 
   /**
@@ -74,10 +76,10 @@ export default function createSignaturePlugin({
 
     const editorState = pluginFns.getEditorState()
 
-    if (!hasSignature() && enabled !== false) {
+    if (!hasSignature(editorState) && enabled !== false) {
       // add signature
       pluginFns.setEditorState(appendSignature(editorState))
-    } else if (hasSignature() && enabled !== true) {
+    } else if (hasSignature(editorState) && enabled !== true) {
       // remove signature
       const blocks = editorState
         .getCurrentContent()
@@ -109,10 +111,53 @@ export default function createSignaturePlugin({
 
   return {
     initialize,
-    hasSignature,
+    hasSignature: (editorState = pluginFns && pluginFns.getEditorState()) => {
+      if (editorState) {
+        return hasSignature(editorState)
+      }
+
+      return false
+    },
     toggleSignature,
     modifiers: {
-      appendSignature
+      appendSignature: (editorState: EditorState) => {
+        if (!hasSignature(editorState)) {
+          return appendSignature(editorState)
+        }
+
+        return editorState
+      }
+    }
+  }
+}
+
+type SignatureBlockStyleFn = (className: string) => BlockStyleFn
+type SignatureCustomBlockFn = (className: string) => CustomBlockFn
+
+/**
+ * A helper function to be used in stateToHtml options in order to
+ * add a css class to signature blocks
+ */
+export const signatureBlockStyleFn: SignatureBlockStyleFn = (
+  className = 'signature'
+) => block => {
+  if (block.getData().get('isSignature')) {
+    return {
+      attributes: {
+        class: className
+      }
+    }
+  }
+}
+
+export const signatureCustomBlockFn: SignatureCustomBlockFn = (
+  className = 'signature'
+) => (element: HTMLElement) => {
+  if (element.classList.contains(className)) {
+    return {
+      data: {
+        isSignature: true
+      }
     }
   }
 }

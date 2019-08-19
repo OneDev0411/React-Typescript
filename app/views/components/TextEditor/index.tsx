@@ -139,7 +139,9 @@ export const TextEditor = forwardRef(
         stateFromHTML(initialValue, stateFromHtmlOptions)
       )
 
-      return hasSignatureByDefault && signature
+      return hasSignatureByDefault &&
+      !initialValue /* If there is some initial value, we don't want to mess with it */ &&
+        signature
         ? signaturePlugin.modifiers.appendSignature(initialState)
         : initialState
     }

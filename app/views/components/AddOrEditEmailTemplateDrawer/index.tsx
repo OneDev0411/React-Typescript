@@ -49,15 +49,15 @@ function AddOrEditEmailTemplateDrawer({
   })
 
   useDeepCompareEffect(() => {
-    if (emailTemplate) {
-      setFormData({
-        subject: emailTemplate.subject,
-        name: emailTemplate.name,
-        include_signature: emailTemplate.include_signature,
-        goal: emailTemplate.goal,
-        body: emailTemplate.body
-      })
-    }
+    const template: Partial<IBrandEmailTemplateInput> = emailTemplate || {}
+
+    setFormData({
+      subject: template.subject || '',
+      name: template.name || '',
+      include_signature: template.include_signature || false,
+      goal: template.goal || '',
+      body: template.body || ''
+    })
   }, [emailTemplate])
 
   const handleSubmit = async (values: IBrandEmailTemplateInput) => {
@@ -78,8 +78,6 @@ function AddOrEditEmailTemplateDrawer({
     }
   }
 
-  const validate = () => { }
-
   return (
     <FinalFormDrawer
       formId="email-template-form"
@@ -88,7 +86,6 @@ function AddOrEditEmailTemplateDrawer({
       initialValues={formData}
       onClose={onClose}
       onSubmit={handleSubmit}
-      validate={validate}
       closeDrawerOnBackdropClick={false}
       submitButtonLabel="Save"
       submittingButtonLabel="Saving ..."
@@ -99,6 +96,8 @@ function AddOrEditEmailTemplateDrawer({
             name="name"
             component={TextField}
             margin="normal"
+            validate={value => !value && 'Template name is required'}
+            required
             fullWidth
             InputProps={{
               startAdornment: <InlineInputLabel>Name</InlineInputLabel>
@@ -117,6 +116,9 @@ function AddOrEditEmailTemplateDrawer({
             ref={emailBodyRef}
             hasSignatureByDefault
             hasTemplateVariables
+            FieldProps={{
+              validate: value => !value && 'Email content is required'
+            }}
             content={emailTemplate ? emailTemplate.body : ''}
           />
         </div>

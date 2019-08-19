@@ -23,6 +23,8 @@ import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 
+import { normalizeAttachment } from 'components/SelectDealFileDrawer/helpers/normalize-attachment'
+
 import { selectActions } from './helpers/select-actions'
 import { getEsignAttachments } from './helpers/get-esign-attachments'
 
@@ -33,18 +35,18 @@ import { getDocumentLastState } from '../../utils/get-document-last-state'
 import { SelectItemDrawer } from './components/SelectItemDrawer'
 
 import {
-  deleteFile,
-  renameFile,
-  deleteTask,
-  editForm,
-  voidEnvelope,
-  reviewEnvelope,
-  resendEnvelope,
   approveTask,
-  declineTask,
   changeTaskRequired,
   createNeedsAttention,
-  removeTaskNotification
+  declineTask,
+  deleteFile,
+  deleteTask,
+  editForm,
+  removeTaskNotification,
+  renameFile,
+  resendEnvelope,
+  reviewEnvelope,
+  voidEnvelope
 } from './helpers/actions'
 
 import GetSignature from '../../Signature'
@@ -227,12 +229,14 @@ class ActionsButton extends React.Component {
       task: this.props.task,
       document: this.props.document,
       envelopes: this.props.envelopes
-    }).map(file => ({
-      type: 'document',
-      attachmentType: 'deal-file',
-      file,
-      task: this.props.task
-    }))
+    }).map(file =>
+      normalizeAttachment({
+        type: 'document',
+        attachmentType: 'deal-file',
+        file,
+        task: this.props.task
+      })
+    )
   }
 
   getPrimaryAction = actions =>
@@ -458,8 +462,10 @@ class ActionsButton extends React.Component {
         {this.state.isComposeEmailOpen && (
           <SingleEmailComposeDrawer
             isOpen
-            defaultAttachments={this.getEmailComposeFiles()}
-            from={this.props.user}
+            initialValues={{
+              from: this.props.user,
+              attachments: this.getEmailComposeFiles()
+            }}
             deal={this.props.deal}
             onClose={this.handleToggleComposeEmail}
             onSent={this.handleToggleComposeEmail}

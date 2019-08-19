@@ -6,6 +6,10 @@ import { Options as ImportOptions } from 'draft-js-import-html'
 
 import { renderAtomicBlockStyles } from './render-atomic-block'
 import { getAtomicBlockEntityData } from './get-atomic-block-entity-data'
+import {
+  signatureBlockStyleFn,
+  signatureCustomBlockFn
+} from '../plugins/draft-js-signature-plugin'
 
 interface HtmlConversionOptions {
   stateToHtmlOptions: ExportOptions
@@ -17,6 +21,7 @@ export function getHtmlConversionOptions(
 ): HtmlConversionOptions {
   return {
     stateToHtmlOptions: {
+      blockStyleFn: signatureBlockStyleFn('rechat-signature'),
       blockRenderers: {
         atomic: (block: ContentBlock) => {
           const entityKey = block.getEntityAt(0)
@@ -45,6 +50,7 @@ export function getHtmlConversionOptions(
       }
     },
     stateFromHtmlOptions: {
+      customBlockFn: signatureCustomBlockFn('rechat-signature'),
       customInlineFn: (element, inlineCreators) => {
         if (element instanceof HTMLImageElement) {
           const data = getAtomicBlockEntityData(element)

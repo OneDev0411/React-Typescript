@@ -1,13 +1,15 @@
 import * as React from 'react'
 import { createStyles, Input, makeStyles, Theme } from '@material-ui/core'
 
+import { ReactNode } from 'react'
+
 import { Recipient } from '../../../ContactsChipsInput/types'
 import { InlineInputLabel } from '../../../InlineInputLabel'
 import { RecipientList } from './RecipientsList'
 
 interface Props {
   recipients: Recipient[]
-  label: string
+  label: ReactNode
 }
 
 const useStyles = makeStyles((theme: Theme) =>

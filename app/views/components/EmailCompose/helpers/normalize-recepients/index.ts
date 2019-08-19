@@ -5,32 +5,33 @@ import {
 } from '../../../ContactsChipsInput/helpers'
 
 export function normalizeRecipients(
-  recipients: Recipient[]
+  recipients: Recipient[] | undefined
 ): IEmailRecipientInput[] {
   return (
-    recipients &&
-    recipients.map(recipient => {
-      if (isContactTag(recipient)) {
-        return {
-          tag: recipient.text
+    (recipients &&
+      recipients.map(recipient => {
+        if (isContactTag(recipient)) {
+          return {
+            tag: recipient.text
+          }
         }
-      }
 
-      if (isContactList(recipient)) {
-        return {
-          list: recipient.id
+        if (isContactList(recipient)) {
+          return {
+            list: recipient.id
+          }
         }
-      }
 
-      const result: IEmailRecipientEmailInput = {
-        email: recipient.email
-      }
+        const result: IEmailRecipientEmailInput = {
+          email: recipient.email
+        }
 
-      if (recipient.contact) {
-        result.contact = recipient.contact.id
-      }
+        if (recipient.contact) {
+          result.contact = recipient.contact.id
+        }
 
-      return result
-    })
+        return result
+      })) ||
+    []
   )
 }

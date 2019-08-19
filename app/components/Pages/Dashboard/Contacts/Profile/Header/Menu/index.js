@@ -7,7 +7,7 @@ import SendEmailButton from 'components/SendEmailButton'
 import { CloseButton } from 'components/Button/CloseButton'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 
-import { normalizeContactForEmailCompose } from 'models/email-compose/helpers/normalize-contact'
+import { normalizeContactForEmailCompose } from 'models/email/helpers/normalize-contact'
 
 import Chat from './ChatButton'
 import { Divider } from './Divider'

@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { Form, FormRenderProps } from 'react-final-form'
+import { Form, FormProps, FormRenderProps } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 
 import { FormApi } from 'final-form'
@@ -17,6 +17,7 @@ interface FooterRenderProps {
 interface Props<T> {
   isSubmitDisabled?: boolean
   initialValues?: any
+  initialValuesEqual?: FormProps['initialValuesEqual']
   isOpen: boolean
   onClose: () => void
   onSubmit: (values: T, form: FormApi) => Promise<any>
@@ -104,6 +105,7 @@ export class FinalFormDrawer<T> extends React.Component<Props<T>> {
         decorators={this.props.decorators}
         mutators={{ ...arrayMutators }}
         initialValues={this.props.initialValues}
+        initialValuesEqual={this.props.initialValuesEqual}
         render={formProps => {
           const { submitting } = formProps
 

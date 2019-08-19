@@ -81,6 +81,15 @@ class SendMlsListingCard extends React.Component {
     return state
   }
 
+  componentDidMount() {
+    if (this.props.isEdit && !this.state.isInstantMarketingBuilderOpen) {
+      this.setState({
+        isInstantMarketingBuilderOpen: true,
+        listings: this.props.selectedTemplate.listings || []
+      })
+    }
+  }
+
   handleLoadInstantMarketing = ({ regenerateTemplate }) => {
     this.regenerateTemplate = regenerateTemplate
   }
@@ -278,15 +287,6 @@ class SendMlsListingCard extends React.Component {
     return data
   }
 
-  componentDidMount() {
-    if (this.props.isEdit && !this.state.isInstantMarketingBuilderOpen) {
-      this.setState({
-        isInstantMarketingBuilderOpen: true,
-        listings: this.props.selectedTemplate.listings || []
-      })
-    }
-  }
-
   render() {
     const { user, disabled } = this.props
 
@@ -352,9 +352,11 @@ class SendMlsListingCard extends React.Component {
           <BulkEmailComposeDrawer
             isOpen
             hasStaticBody
-            from={this.state.owner}
-            recipients={this.Recipients}
-            body={this.state.emailBody}
+            initialValues={{
+              from: this.state.owner,
+              to: this.Recipients,
+              body: this.state.emailBody
+            }}
             getEmail={this.getEmail}
             onClose={this.toggleComposeEmail}
             onSent={this.closeMarketing}

@@ -1,6 +1,8 @@
 import Fetch from 'services/fetch'
 
-export async function sendBulkEmail(email) {
+export async function createBulkEmailCampaign(
+  email: IIndividualEmailCampaignInput
+) {
   try {
     const data = {
       ...email,
