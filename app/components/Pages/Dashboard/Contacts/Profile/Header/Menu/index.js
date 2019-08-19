@@ -42,6 +42,7 @@ function Menu(props) {
 
       <SendContactCard
         contact={contact}
+        mediums="Email"
         buttonStyle={{ style: { marginLeft: '1rem' } }}
       >
         Send a Card
