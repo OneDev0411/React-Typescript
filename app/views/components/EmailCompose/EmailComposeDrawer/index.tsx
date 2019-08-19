@@ -134,8 +134,10 @@ class EmailComposeDrawer extends React.Component<
       errorMessage
     } = this.props.getSendEmailResultMessages(form)
 
+    let result: IEmailCampaign
+
     try {
-      await this.props.sendEmail(form)
+      result = await this.props.sendEmail(form)
     } catch (e) {
       console.error('error in sending email', e)
 
@@ -154,7 +156,7 @@ class EmailComposeDrawer extends React.Component<
       })
     )
 
-    this.props.onSent!()
+    this.props.onSent!(result)
   }
 
   collapseTopFields = () => this.setState({ topFieldsCollapsed: true })

@@ -69,7 +69,7 @@ declare interface IEmailCampaignInput extends IEmailCampaignInputBase {
 }
 
 declare type IEmailCampaign<
-  Associations extends 'from' | 'recipients' = '',
+  Associations extends 'from' | 'recipients' | 'template' | 'emails' = '',
   RecipientAssociations extends 'list' | 'contact' = ''
 > = {
   id: UUID
@@ -101,7 +101,9 @@ declare type IEmailCampaign<
   IEmailRecipient<RecipientAssociations>[],
   Associations
 > &
-  Association<'from', IUser, Associations>
+  Association<'from', IUser, Associations> &
+  Association<'template', IMarketingTemplateInstance, Associations> &
+  Association<'emails', any[], Associations>
 
 declare interface IEmail {
   domain?: string
