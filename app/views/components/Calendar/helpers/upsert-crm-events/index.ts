@@ -8,9 +8,21 @@ export function upsertCrmEvents(
   type: string
 ) {
   const dayId = createDayId(event.due_date * 1000, false)
+  const todayId = createDayId(new Date(), false)
+
   const calendarEvent = convertTaskToCalendarEvent(event)
 
   if (type === 'created') {
+    // remove today empty state if created event is for today
+    if (dayId === todayId) {
+      events = {
+        ...events,
+        [dayId]: events[dayId].filter(
+          event => event.event_type !== 'today-empty-state'
+        )
+      }
+    }
+
     return sortEvents({
       ...events,
       [dayId]: events[dayId]
