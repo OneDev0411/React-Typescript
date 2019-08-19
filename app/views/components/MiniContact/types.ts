@@ -1,4 +1,4 @@
-export type MiniContactType = 'contact' | 'user' | 'insight'
+export type MiniContactType = 'contact' | 'user' | 'insight' | 'event'
 
 export type ProfileDateType = {
   title: string

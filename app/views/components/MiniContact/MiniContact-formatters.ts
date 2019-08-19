@@ -47,6 +47,19 @@ function userFormatter(data): FormatterOutputType {
   }
 }
 
+function eventFormatter(data: IContact): FormatterOutputType {
+  return {
+    contact_status: 'not_started',
+    contact_id: data.id,
+    data: {
+      name: data.display_name,
+      email: data.email,
+      phone: data.phone_number
+    },
+    meta: {}
+  }
+}
+
 // In unexpected situations, We are trying to guess some minimum information.
 function fallbackFormatter(data: any): FormatterOutputType {
   const output: FormatterOutputType = {
@@ -94,6 +107,10 @@ export function formatter(
 
   if (type == 'user') {
     return userFormatter(initData)
+  }
+
+  if (type == 'event') {
+    return eventFormatter(initData)
   }
 
   return fallbackFormatter(initData)

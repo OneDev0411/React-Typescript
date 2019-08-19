@@ -9,6 +9,7 @@ import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import ContentSizeAwarePopper from 'components/ContentSizeAwarePopper'
 
 import MiniProfile from './MiniProfile'
+import ComponentRenderer from './MiniContactComponenetRenderer'
 import {
   ActionSettingsType,
   MiniContactType,
@@ -19,6 +20,7 @@ interface MiniContactPropsType {
   type: MiniContactType
   data: {}
   children: React.ReactNode
+  as: string
 }
 
 function MiniContact(props: MiniContactPropsType) {
@@ -38,7 +40,11 @@ function MiniContact(props: MiniContactPropsType) {
 
   return (
     <>
-      <div onMouseEnter={handleHovered} onMouseLeave={closeMiniContact}>
+      <ComponentRenderer
+        as={props.as}
+        onMouseEnter={handleHovered}
+        onMouseLeave={closeMiniContact}
+      >
         {props.children}
         {isHovered && (
           <ContentSizeAwarePopper
@@ -64,7 +70,7 @@ function MiniContact(props: MiniContactPropsType) {
             )} */}
           </ContentSizeAwarePopper>
         )}
-      </div>
+      </ComponentRenderer>
       {actionSettings.type === ActionSettingsNamesType.EVENT && (
         <EventDrawer {...actionSettings.data} isOpen />
       )}
@@ -76,6 +82,10 @@ function MiniContact(props: MiniContactPropsType) {
       )}
     </>
   )
+}
+
+MiniContact.defaultProps = {
+  as: 'div'
 }
 
 export default MiniContact
