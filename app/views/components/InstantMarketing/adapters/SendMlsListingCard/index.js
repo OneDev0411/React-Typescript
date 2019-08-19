@@ -1,21 +1,17 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-
 import _ from 'underscore'
 
-import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
-
-import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 import { selectContact } from 'reducers/contacts/list'
-
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import ActionButton from 'components/Button/ActionButton'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
+import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 
 import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-deals'
 import { getTemplateTypes } from '../../helpers/get-template-types'
@@ -94,28 +90,23 @@ class SendMlsListingCard extends React.Component {
     this.regenerateTemplate = regenerateTemplate
   }
 
+  /**
+   *
+   * @return {Recipient[]}
+   */
   get Recipients() {
     return this.props.selectedRows
       ? this.props.selectedRows
           .map(id => {
             const contact = selectContact(this.props.contacts, id)
 
-            if (!contact || !contact.summary.email) {
+            if (!contact || !contact.email) {
               return null
             }
 
-            const emails = getContactAttribute(
-              contact,
-              selectDefinitionByName(this.props.attributeDefs, 'email')
-            )
-
             return {
-              data_type: 'contact',
-              contactId: contact.id,
-              name: contact.summary.display_name,
-              avatar: contact.summary.profile_image_url,
-              email: contact.summary.email,
-              emails: emails.map(email => email.text)
+              email: contact.email,
+              contact: normalizeContact(contact)
             }
           })
           .filter(recipient => recipient !== null)
