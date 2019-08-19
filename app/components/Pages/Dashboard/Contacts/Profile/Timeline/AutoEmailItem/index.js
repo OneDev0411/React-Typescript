@@ -10,7 +10,7 @@ import { EditEmailDrawer } from 'components/EmailCompose'
 import { MetaInfo } from './MetaInfo'
 import { Container } from '../CRMTaskItem/styled'
 
-export default function AutoEmailItem({ email }) {
+export default function AutoEmailItem({ email, onUpdate }) {
   const [isEmailOpen, setEmailOpen] = useState(false)
 
   return (
@@ -30,6 +30,12 @@ export default function AutoEmailItem({ email }) {
         <EditEmailDrawer
           isOpen
           onClose={() => setEmailOpen(false)}
+          onEdited={emailCampaign =>
+            onUpdate({
+              ...emailCampaign,
+              due_date: emailCampaign.due_at
+            })
+          }
           email={email}
         />
       )}

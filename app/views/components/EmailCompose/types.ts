@@ -15,12 +15,12 @@ export interface EmailFormValues {
 
 export interface EmailComposeDrawerProps {
   initialValues?: Partial<EmailFormValues>
-  sendEmail: (values: EmailFormValues) => Promise<any>
+  sendEmail: (values: EmailFormValues) => Promise<IEmailCampaign>
   isOpen: boolean
   getSendEmailResultMessages: (
     values: EmailFormValues
   ) => { successMessage: string; errorMessage: string }
-  onSent?: () => void
+  onSent?: (result: IEmailCampaign) => void
   onClose?: () => void
   title?: string
   /**

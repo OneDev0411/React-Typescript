@@ -13,14 +13,15 @@ import { EmailRecipient, Recipient } from '../../ContactsChipsInput/types'
 import { EmailFormValues } from '../types'
 
 interface Props {
-  email: IEmailCampaign
+  email: IEmailCampaign<'template' | 'emails'>
   isOpen: boolean
   onClose: () => void
+  onEdited: (email: IEmailCampaign) => void
 }
 
-export function EditEmailDrawer({ email, isOpen, onClose }: Props) {
+export function EditEmailDrawer({ email, isOpen, onClose, onEdited }: Props) {
   const [data, setData] = useState<IEmailCampaign<
-    'from' | 'recipients',
+    'from' | 'recipients' | 'template' | 'emails',
     'contact' | 'list'
   > | null>(null)
 
@@ -65,9 +66,13 @@ export function EditEmailDrawer({ email, isOpen, onClose }: Props) {
       ComponentProps<typeof SingleEmailComposeDrawer> = {
       initialValues,
       emailId: data.id,
+      hasStaticBody: !!email.template,
       isOpen,
       onClose,
-      onSent: onClose
+      onSent: email => {
+        onClose()
+        onEdited(email)
+      }
     }
 
     return data.individual ? (
