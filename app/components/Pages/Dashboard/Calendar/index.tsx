@@ -37,21 +37,54 @@ const CalendarPage: React.FC = props => {
   const [fetchedDays, setFetchedDays] = useState<string[]>([])
 
   /**
+   * keeps list of fetched days
+   */
+  const [isLoadingFilters, setIsLoadingFilters] = useState<boolean>(true)
+
+  /**
    * current filters
    */
   const [filter, setFilter] = useState<object>({})
 
+  /**
+   * triggers when user clicks on a date in datepicker of left side
+   * @param date
+   */
   const handleDatePickerChange = (date: Date = new Date()) => {
     calendarRef.current!.jumpToDate(date)
   }
 
+  /**
+   * triggers when user creates a new event
+   * @param event
+   * @param type
+   */
   const handleEventChange = (event: IEvent, type: string) => {
     calendarRef.current!.updateCrmEvents(event, type)
   }
 
-  const handleOnLoadEvents = (events: CalendarEventsList) =>
+  /**
+   * triggers when new data is fetched by calendar
+   * @param events
+   */
+  const handleOnLoadEvents = (events: CalendarEventsList) => {
     setFetchedDays(Object.keys(events))
+    setIsLoadingFilters(false)
+  }
 
+  /**
+   * triggers when user changes the calendar filter
+   * @param filter
+   */
+  const handleChangeFilter = (filter: object) => {
+    setFilter(filter)
+    setIsLoadingFilters(true)
+  }
+
+  /**
+   * returns list of empty date in the fetched range of calendar
+   * @param day
+   */
   const getEmptyDays = (day: Date) => {
     return !fetchedDays.includes(fecha.format(day, 'YYYY/M/D'))
   }
@@ -79,7 +112,10 @@ const CalendarPage: React.FC = props => {
 
       <Main>
         <Header>
-          <Filters onChange={setFilter} />
+          <Filters
+            onChange={handleChangeFilter}
+            isLoadingFilters={isLoadingFilters}
+          />
           <CreateEvent
             onEventChange={handleEventChange}
             activeDate={activeDate}
