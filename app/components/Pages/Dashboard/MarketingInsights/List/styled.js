@@ -41,13 +41,14 @@ export const Info = styled.div`
   }
 `
 
-export const Link = styled(ALink)`
+export const StyledLink = styled(ALink)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
   font-weight: 500;
   margin-top: -4px;
+  cursor: default;
 `
 
 export const StyledBadge = styled(Badge)`

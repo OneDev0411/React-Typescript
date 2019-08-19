@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { connect } from 'react-redux'
 
 import Table from 'components/Grid/Table'
@@ -17,55 +17,6 @@ import useListData from './useListData'
 import useFilterList from './useFilterList'
 import { InsightFiltersType } from './types'
 
-const columns = [
-  {
-    header: 'Details',
-    id: 'details',
-    width: '50%',
-    verticalAlign: 'center',
-    render: props => <InfoColumn data={props.rowData} />
-  },
-  {
-    header: 'Delivered',
-    id: 'delivered',
-    verticalAlign: 'center',
-    render: props => (
-      <StatColumn
-        content={`${percent(props.rowData.delivered, props.rowData.sent)}%`}
-        tooltipTitle={`${percent(
-          props.rowData.failed,
-          props.rowData.sent
-        )}% Bounced`}
-        isVisibile={!!props.rowData.executed_at}
-      />
-    )
-  },
-  {
-    header: 'Open Rate',
-    id: 'open-rate',
-    verticalAlign: 'center',
-    render: props => (
-      <StatColumn
-        content={`${percent(props.rowData.opened, props.rowData.sent)}%`}
-        tooltipTitle={`${props.rowData.opened} Recipients`}
-        isVisibile={!!props.rowData.executed_at}
-      />
-    )
-  },
-  {
-    header: 'Click Rate',
-    id: 'click-rate',
-    verticalAlign: 'center',
-    render: props => (
-      <StatColumn
-        content={`${percent(props.rowData.clicked, props.rowData.sent)}%`}
-        tooltipTitle={`${props.rowData.clicked} Times`}
-        isVisibile={!!props.rowData.executed_at}
-      />
-    )
-  }
-]
-
 function List(props) {
   const [isSideMenuOpen, setSideMenuOpen] = useState(true)
   const [queue, setQueue] = useState(0)
@@ -81,6 +32,63 @@ function List(props) {
     tableClassName.push('show')
   }
 
+  const columns = useMemo(
+    () => [
+      {
+        header: 'Details',
+        id: 'details',
+        width: '50%',
+        verticalAlign: 'center',
+        render: props => (
+          <InfoColumn
+            data={props.rowData}
+            reload={() => setQueue(queue => queue + 1)}
+          />
+        )
+      },
+      {
+        header: 'Delivered',
+        id: 'delivered',
+        verticalAlign: 'center',
+        render: props => (
+          <StatColumn
+            content={`${percent(props.rowData.delivered, props.rowData.sent)}%`}
+            tooltipTitle={`${percent(
+              props.rowData.failed,
+              props.rowData.sent
+            )}% Bounced`}
+            isVisibile={!!props.rowData.executed_at}
+          />
+        )
+      },
+      {
+        header: 'Open Rate',
+        id: 'open-rate',
+        verticalAlign: 'center',
+        render: props => (
+          <StatColumn
+            content={`${percent(props.rowData.opened, props.rowData.sent)}%`}
+            tooltipTitle={`${props.rowData.opened} Recipients`}
+            isVisibile={!!props.rowData.executed_at}
+          />
+        )
+      },
+      {
+        header: 'Click Rate',
+        id: 'click-rate',
+        verticalAlign: 'center',
+        render: props => (
+          <StatColumn
+            content={`${percent(props.rowData.clicked, props.rowData.sent)}%`}
+            tooltipTitle={`${props.rowData.clicked} Times`}
+            isVisibile={!!props.rowData.executed_at}
+          />
+        )
+      }
+    ],
+    []
+  )
+
   return (
     <Layout
       isSideMenuOpen={isSideMenuOpen}
@@ -92,7 +100,7 @@ function List(props) {
           title={isScheduled ? 'Scheduled Emails' : 'Sent Emails'}
           isSideMenuOpen={isSideMenuOpen}
           onMenuTriggerChange={() => setSideMenuOpen(!isSideMenuOpen)}
-          onSent={() => setQueue(queue + 1)}
+          onSent={() => setQueue(queue => queue + 1)}
         />
 
         {isLoading && <LoadingComponent />}

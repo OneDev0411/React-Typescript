@@ -12,7 +12,11 @@ interface RenderProps {
   onClick: (event: React.MouseEvent) => void
 }
 
-export function EditEmailButton({ children, emailId, onEmailUpdated }: Props) {
+export function EditEmailButton({
+  children,
+  emailId,
+  onEmailUpdated = () => {}
+}: Props) {
   const [isEmailOpen, setEmailOpen] = useState(false)
 
   return (

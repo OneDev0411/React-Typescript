@@ -2,11 +2,13 @@ import React from 'react'
 
 import { formatDate } from 'components/DateTimePicker/helpers'
 
-import Recipients from './Recipients'
-import { show_title, isEmailScheduled, isEmailInProgress } from './helpers'
-import { Link, Info, StyledBadge } from './styled'
+import { EditEmailButton } from 'components/EditEmailButton'
 
-function InfoColumn({ data }) {
+import Recipients from './Recipients'
+import { isEmailInProgress, isEmailScheduled, show_title } from './helpers'
+import { Info, StyledBadge, StyledLink } from './styled'
+
+function InfoColumn({ data, reload }) {
   const isScheduled = isEmailScheduled(data)
   const isInProgress = isEmailInProgress(data)
 
@@ -27,13 +29,17 @@ function InfoColumn({ data }) {
     const date = formatDate(new Date(data.due_at * 1000))
 
     subTitle = isScheduled ? `Scheduled for ${date}` : date
-    titleRenderer = title
+    titleRenderer = (
+      <EditEmailButton emailId={data.id} onEmailUpdated={reload}>
+        {({ onClick }) => <StyledLink onClick={onClick}>{title}</StyledLink>}
+      </EditEmailButton>
+    )
   } else {
     subTitle = formatDate(new Date(data.executed_at * 1000))
     titleRenderer = (
-      <Link to={isScheduled ? '' : `/dashboard/insights/${data.id}`}>
+      <StyledLink to={isScheduled ? '' : `/dashboard/insights/${data.id}`}>
         {title}
-      </Link>
+      </StyledLink>
     )
   }
 
