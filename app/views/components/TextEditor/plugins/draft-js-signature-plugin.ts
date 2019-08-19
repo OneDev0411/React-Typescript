@@ -89,9 +89,11 @@ export default function createSignaturePlugin({
       const selection = editorState.getSelection()
       const newContent = ContentState.createFromBlockArray(blocks)
 
-      const newEditorState = EditorState.set(editorState, {
-        currentContent: newContent
-      })
+      const newEditorState = EditorState.push(
+        editorState,
+        newContent,
+        'remove-range'
+      )
 
       const newSelection = isValidSelection(newContent, selection)
         ? selection
