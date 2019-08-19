@@ -41,7 +41,6 @@ export function getHtmlConversionOptions(
 
               const img = `<img src="${data.src}" style="${style}" />`
 
-              // TODO: move to blockStyleFn when MR!428 is merged
               return `<figure style="margin: 0">${img}</figure>`
             }
           }
