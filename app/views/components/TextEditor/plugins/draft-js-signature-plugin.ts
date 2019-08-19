@@ -10,6 +10,7 @@ import {
 import { BlockStyleFn } from 'draft-js-export-html'
 
 import { appendBlocks } from '../utils/append-blocks'
+import { isValidSelection } from '../utils/is-valid-selection'
 
 type SignatureContentType = ContentBlock[] | string
 
@@ -63,9 +64,8 @@ export default function createSignaturePlugin({
    * Toggles signature. If called with no argument, toggles. if a boolean
    * argument is passed, it enforces weather the signature should be shown
    * or not
-   * @param enabled
    */
-  const toggleSignature = (enabled?: boolean) => {
+  const toggleSignature = (enabled?: boolean, focus = true) => {
     if (!pluginFns) {
       console.error(
         'toggleSignature cannot be called before editor initialization'
@@ -78,7 +78,7 @@ export default function createSignaturePlugin({
 
     if (!hasSignature(editorState) && enabled !== false) {
       // add signature
-      pluginFns.setEditorState(appendSignature(editorState))
+      pluginFns.setEditorState(appendSignature(editorState, focus))
     } else if (hasSignature(editorState) && enabled !== true) {
       // remove signature
       const blocks = editorState
@@ -86,12 +86,23 @@ export default function createSignaturePlugin({
         .getBlocksAsArray()
         .filter(block => !isSignatureBlock(block))
 
+      const selection = editorState.getSelection()
+      const newContent = ContentState.createFromBlockArray(blocks)
+
+      const newEditorState = EditorState.push(
+        editorState,
+        newContent,
+        'remove-range'
+      )
+
+      const newSelection = isValidSelection(newContent, selection)
+        ? selection
+        : EditorState.moveSelectionToEnd(newEditorState).getSelection()
+
       pluginFns.setEditorState(
-        EditorState.push(
-          editorState,
-          ContentState.createFromBlockArray(blocks),
-          'remove-range'
-        )
+        focus
+          ? EditorState.forceSelection(newEditorState, newSelection)
+          : EditorState.acceptSelection(newEditorState, newSelection)
       )
     }
   }
@@ -99,14 +110,22 @@ export default function createSignaturePlugin({
     pluginFns = fns
   }
 
-  const appendSignature = (editorState: EditorState) => {
-    return appendBlocks(editorState, [
+  const appendSignature = (editorState: EditorState, focus = false) => {
+    const newEditorState = appendBlocks(editorState, [
       ...stateFromHTML('<br/>').getBlocksAsArray(),
       ...(prependSignatureWithSeparator ? getSignatureSeparator() : []),
       ...getSignatureBlocks(signatureContent, stateFromHtmlOptions).map(
         convertToSignatureBlock
       )
     ])
+
+    const selection = editorState.getSelection()
+
+    if (focus) {
+      return EditorState.forceSelection(newEditorState, selection)
+    }
+
+    return EditorState.acceptSelection(newEditorState, selection)
   }
 
   return {

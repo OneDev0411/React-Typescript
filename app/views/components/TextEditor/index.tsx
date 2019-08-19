@@ -30,7 +30,7 @@ import { AddImageButton } from './buttons/AddImageButton'
 import { RichTextButtons } from './buttons/RichTextButtons'
 import { createFilePlugin } from './plugins/draft-js-handle-files-plugin'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
-import { replaceImage } from './utils/replace-image'
+import { updateEntityData } from './modifiers/update-entity-data'
 import { InlineEntityPopover } from './components/InlineEntityPopover'
 import { LinkPreview } from './components/LinkPreview/LinkPreview'
 import { Checkbox } from '../Checkbox'
@@ -41,6 +41,7 @@ import { createPlugins } from './create-plugins'
 import { TemplateVariablesButton } from '../TemplateVariablesButton'
 import { ITemplateVariableSuggestion } from '../TemplateVariablesButton/types'
 import { insertTemplateVariable } from './modifiers/insert-template-expression'
+import { removeUnwantedEmptyLineBeforeAtomic } from './modifiers/remove-unwanted-empty-block-before-atomic'
 
 /**
  * Html wysiwyg editor.
@@ -208,10 +209,12 @@ export const TextEditor = forwardRef(
       const dataUrl = await readFileAsDataUrl(file)
 
       handleChange(
-        imagePlugin.addImage(
-          editorState,
-          dataUrl,
-          uploadImage ? { uploading: true } : {}
+        removeUnwantedEmptyLineBeforeAtomic(
+          imagePlugin.addImage(
+            editorState,
+            dataUrl,
+            uploadImage ? { uploading: true } : {}
+          )
         )
       )
 
@@ -226,7 +229,12 @@ export const TextEditor = forwardRef(
           const latestState = editorRef.current.getEditorState()
 
           handleChange(
-            replaceImage(imagePlugin, latestState, dataUrl, uploadedImageUrl)
+            updateEntityData(
+              imagePlugin,
+              latestState,
+              data => data.src === dataUrl,
+              { src: uploadedImageUrl, uploading: false }
+            )
           )
         }
       } else {

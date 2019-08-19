@@ -41,13 +41,14 @@ export function getHtmlConversionOptions(
 
               const img = `<img src="${data.src}" style="${style}" />`
 
-              return `<figure>${img}</figure>`
+              return `<figure style="margin: 0">${img}</figure>`
             }
           }
 
           return undefined as any // typing is wrong, it should accept undefined too
         }
-      }
+      },
+      defaultBlockTag: 'div'
     },
     stateFromHtmlOptions: {
       customBlockFn: signatureCustomBlockFn('rechat-signature'),
