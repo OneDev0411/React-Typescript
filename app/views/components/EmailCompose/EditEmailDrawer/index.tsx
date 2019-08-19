@@ -5,6 +5,8 @@ import { getEmail } from 'models/email/get-email'
 
 import { notUndefined } from 'utils/ts-utils'
 
+import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
+
 import { BulkEmailComposeDrawer } from '../BulkEmailComposeDrawer'
 import { SingleEmailComposeDrawer } from '../SingleEmailComposeDrawer'
 import { EmailRecipient, Recipient } from '../../ContactsChipsInput/types'
@@ -99,7 +101,7 @@ function getRecipientsFromRecipientsEntity(
       if (recipient.email) {
         return {
           email: recipient.email,
-          contact: recipient.contact as INormalizedContact | undefined
+          contact: normalizeContact(recipient.contact)
         } as EmailRecipient
       }
     })
