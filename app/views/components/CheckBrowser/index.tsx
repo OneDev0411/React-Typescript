@@ -14,13 +14,13 @@ const useStyles = makeStyles(theme => {
   return {
     snackbar: {
       backgroundColor: theme.palette.warning.light,
-      minWidth: '40rem',
-      margin: theme.spacing(1),
+      width: '100%',
       zIndex: 2019,
       position: 'fixed',
-      left: '50%',
-      transform: 'translateX(-50%)',
       color: theme.palette.warning.dark
+    },
+    message: {
+      verticalAlign: 'middle'
     }
   }
 })
@@ -49,16 +49,20 @@ function CheckBrowser(props: CheckBrowserPropsType) {
         <SnackbarContent
           elevation={0}
           className={classes.snackbar}
-          message={message.text}
+          message={
+            <>
+              <span className={classes.message}>{message.text}</span>{' '}
+              <Button
+                key={message.actionText}
+                aria-label={message.actionText}
+                color="primary"
+                onClick={() => window.open(message.actionLink, '_blank')}
+              >
+                {message.actionText}
+              </Button>
+            </>
+          }
           action={[
-            <Button
-              key={message.actionText}
-              aria-label={message.actionText}
-              color="inherit"
-              onClick={() => window.open(message.actionLink, '_blank')}
-            >
-              {message.actionText}
-            </Button>,
             <IconButton
               key="close"
               aria-label="close"
