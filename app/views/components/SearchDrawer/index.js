@@ -4,8 +4,6 @@ import Downshift from 'downshift'
 
 import _ from 'underscore'
 
-import ActionButton from 'components/Button/ActionButton'
-
 import Drawer from '../OverlayDrawer'
 import Search from '../Grid/Search'
 import Loading from '../../../components/Partials/Loading'
@@ -14,6 +12,7 @@ import { SelectedItems } from './SelectedItems'
 import { SearchResultList } from './SearchResult'
 
 import { DefaultItems } from './DefaultItems'
+import Footer from './components/Footer'
 
 const initialState = {
   isSearching: false,
@@ -135,6 +134,7 @@ class SearchDrawer extends React.Component {
   render() {
     const { isSearching } = this.state
     const { showLoadingIndicator } = this.props
+    const selectedItemsCount = Object.keys(this.state.selectedItems).length
 
     return (
       <Drawer open={this.props.isOpen} onClose={this.handleClose}>
@@ -192,27 +192,12 @@ class SearchDrawer extends React.Component {
           />
         </Drawer.Body>
 
-        {this.props.multipleSelection && (
-          <Drawer.Footer
-            style={{
-              flexDirection: 'row-reverse'
-            }}
-          >
-            {this.props.renderAction ? (
-              this.props.renderAction({
-                selectedItems: this.state.selectedItems,
-                onClick: this.handleSelectMultipleItems
-              })
-            ) : (
-              <ActionButton
-                disabled={_.size(this.state.selectedItems) === 0}
-                onClick={this.handleSelectMultipleItems}
-              >
-                {_.size(this.state.selectedItems)} Items Selected
-              </ActionButton>
-            )}
-          </Drawer.Footer>
-        )}
+        <Footer
+          multipleSelection={this.props.multipleSelection}
+          selectedItemsCount={selectedItemsCount}
+          renderAction={this.props.renderAction}
+          handleSelectMultipleItems={this.handleSelectMultipleItems}
+        />
       </Drawer>
     )
   }
