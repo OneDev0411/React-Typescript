@@ -217,6 +217,10 @@ function Edit({
         return
       }
 
+      if (source === destination) {
+        return
+      }
+
       const newSteps = getUpdatedStepsOnMove(flow.steps, source, destination)
 
       setIsLoading(true)
