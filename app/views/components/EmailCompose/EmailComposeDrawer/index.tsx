@@ -209,6 +209,7 @@ class EmailComposeDrawer extends React.Component<
                   'data-test': 'email-subject'
                 }
               }}
+              style={{ marginBottom: 0 }}
               fullWidth
               component={TextField}
             />
