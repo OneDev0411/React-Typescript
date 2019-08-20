@@ -255,7 +255,7 @@ export const TextEditor = forwardRef(
     const showNoSignatureModal = () => {
       confirmation!.setConfirmationModal({
         message:
-          "You don't have an email signature. Would you like to set one?",
+          'You don’t have an email signature yet. Would you like to create one?',
         confirmLabel: 'Set signature',
         onConfirm: onEditSignature
       })
