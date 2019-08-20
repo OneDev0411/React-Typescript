@@ -153,7 +153,7 @@ export function tagToSuggestion(tag: IContactTag) {
 export function listToSuggestion(list: IContactList) {
   return {
     title: list.name,
-    subtitle: 'Tag',
+    subtitle: 'List',
     avatar: (
       <Avatar>
         <ListIcon color="currentColor" />
