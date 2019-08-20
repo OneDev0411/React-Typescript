@@ -7,7 +7,9 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       overflow: 'auto',
       padding: theme.spacing(0, 3, 0),
-      flex: '1'
+      flex: '1',
+      display: 'flex',
+      flexDirection: 'column'
     }
   })
 )

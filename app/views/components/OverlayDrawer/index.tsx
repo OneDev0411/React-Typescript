@@ -12,6 +12,7 @@ export { useDrawerContext } from './drawer-context'
 
 const useStyles = makeStyles({
   root: {
+    width: '100%', // fullwidth on small devices
     '@media (min-width: 48em)': {
       width: '37rem'
     }

@@ -83,7 +83,7 @@ const EmailBody = ({
               srcDoc={content}
               style={{
                 border: '0',
-                height: '50vh'
+                flex: '1'
               }}
             />
           ) : (
