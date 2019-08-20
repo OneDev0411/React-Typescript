@@ -102,7 +102,12 @@ export function ChipsInput<T>({
   const highlightedIndexRef = useRef<number | null>(null)
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (items.length && !inputValue.length && event.key === 'Backspace') {
+    if (
+      items.length &&
+      !inputValue.length &&
+      event.key === 'Backspace' &&
+      !readOnly
+    ) {
       deleteChipAtIndex(items.length - 1)
     }
 
