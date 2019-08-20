@@ -10,7 +10,6 @@ import { useControllableState } from 'react-use-controllable-state/dist'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import Fuse from 'fuse.js'
-
 import { TextField } from 'final-form-material-ui'
 
 import { searchContacts } from 'models/contacts/search-contacts'
@@ -101,7 +100,12 @@ function ContactsChipsInput({
         of(filterTags(tags, searchTerm)),
         of(filterLists(lists, searchTerm)),
         searchTerm
-          ? fromPromise(searchContacts(searchTerm)).pipe(
+          ? fromPromise(
+              searchContacts(searchTerm, undefined, {
+                associations: [],
+                order: '-created_at'
+              })
+            ).pipe(
               map(result => {
                 return new Fuse(
                   result.data
@@ -148,6 +152,7 @@ function ContactsChipsInput({
         meta,
         ...TextFieldProps
       }}
+      searchDebounce={300}
     />
   )
 }

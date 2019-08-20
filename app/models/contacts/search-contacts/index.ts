@@ -9,10 +9,7 @@ export async function searchContacts(
   text: string = '',
   attributeFilters?: IContactAttributeFilter[],
   queryParams: IFetchContactQuery = {
-    associations: [
-      ...defaultAssociations,
-      'contact.flows'
-    ],
+    associations: [...defaultAssociations, 'contact.flows'],
     order: '-created_at',
     filter_type: 'and'
   },

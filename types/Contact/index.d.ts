@@ -279,7 +279,7 @@ type TContactAssociationMap<T extends string> = T extends 'contact.attributes'
 declare interface IFetchContactQuery {
   associations?: string[] // TODO: use TContactAssociation[]
   order?: string
-  filter_type: TContactFilterType
+  filter_type?: TContactFilterType
 }
 
 declare interface TGetContactFunc<A extends string> {
