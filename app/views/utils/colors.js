@@ -15,7 +15,9 @@ export const green = {
   primary: '#5cb85c'
 }
 export const orange = {
-  primary: '#f6a623'
+  light: '#F8EAB3',
+  primary: '#f6a623',
+  dark: '#7A5C02'
 }
 
 export const blue = {

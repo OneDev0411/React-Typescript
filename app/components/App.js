@@ -53,8 +53,7 @@ import Intercom from './Pages/Dashboard/Partials/Intercom'
 import { inactiveIntercom, activeIntercom } from '../store_actions/intercom'
 import { getAllNotifications } from '../store_actions/notifications'
 
-import { checkBrowser } from './helpers/check-browser'
-import { isListingPage } from './helpers/is-listing-page'
+import CheckBrowser from '../views/components/CheckBrowser'
 
 class App extends Component {
   componentWillMount() {
@@ -165,13 +164,6 @@ class App extends Component {
 
     // google analytics
     this.initialGoogleAnalytics(data)
-
-    if (
-      !isListingPage(props.params.id) &&
-      process.env.NODE_ENV !== 'development'
-    ) {
-      dispatch(checkBrowser())
-    }
 
     if (user) {
       dispatch(syncOpenHouseData(user.access_token))
@@ -332,7 +324,7 @@ class App extends Component {
     })
 
     return (
-      <React.Fragment>
+      <CheckBrowser id={this.props.params.id}>
         <Helmet>
           <title>Rechat</title>
         </Helmet>
@@ -349,7 +341,7 @@ class App extends Component {
 
           <Intercom />
         </div>
-      </React.Fragment>
+      </CheckBrowser>
     )
   }
 }
