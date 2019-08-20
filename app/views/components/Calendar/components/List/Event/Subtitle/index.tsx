@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { LastTouched } from 'components/LastTouched'
+import { TouchDate } from './TouchDate'
 
 interface Props {
   event: ICalendarEvent
@@ -12,7 +12,7 @@ export function EventSubTitle({ event }: Props) {
   }
 
   if (event.object_type === 'contact' && event.event_type === 'next_touch') {
-    return <LastTouched contact={event.full_contact as IContact} />
+    return <TouchDate event={event} />
   }
 
   return null
