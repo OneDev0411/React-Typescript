@@ -239,14 +239,6 @@ function Edit({
     [brand, flow]
   )
 
-  const duplicateClickHandler = useCallback(() => {
-    if (!brand || !flow) {
-      return
-    }
-
-    setIsDuplicateModalOpen(true)
-  }, [brand, flow])
-
   const flowStopHandler = useCallback(
     async (flowInstanceId: UUID) => {
       await stopFlow(flowInstanceId)
@@ -299,7 +291,9 @@ function Edit({
       {flow && (
         <Header
           name={flow.name}
-          onDuplicateClick={duplicateClickHandler}
+          onDuplicateClick={() => {
+            setIsDuplicateModalOpen(true)
+          }}
           description={flow.description}
           onChange={flowUpdateHandler}
           disableEdit={!flow.is_editable}
