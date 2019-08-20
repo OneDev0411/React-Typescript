@@ -26,6 +26,11 @@ export function recipientToChip(recipient: Recipient): ChipInputItem {
 
   return {
     label,
-    hasError
+    hasError,
+    /**
+     * If for whatever logic, we are not showing the full email address,
+     * show it as a tooltip.
+     */
+    tooltip: label.includes(recipient.email) ? undefined : recipient.email
   }
 }
