@@ -1,12 +1,15 @@
 import * as React from 'react'
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import { Typography, makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import { IAppState } from 'reducers/index'
-import { selectEmailTemplates, selectEmailTemplatesIsFetching } from 'reducers/email-templates'
+import {
+  selectEmailTemplates,
+  selectEmailTemplatesIsFetching
+} from 'reducers/email-templates'
 
 import { fetchEmailTemplates } from 'actions/email-templates/fetch-email-templates'
 import { deleteEmailTemplate } from 'actions/email-templates/delete-email-template'
@@ -40,7 +43,7 @@ interface Props {
   brand: UUID
   isFetching: boolean
   templates: IBrandEmailTemplate[]
-  onItemClick: (IBrandEmailTemplate) => void,
+  onItemClick: (IBrandEmailTemplate) => void
   deleteEmailTemplate: IAsyncActionProp<typeof deleteEmailTemplate>
   fetchEmailTemplates: IAsyncActionProp<typeof fetchEmailTemplates>
 }
@@ -51,7 +54,7 @@ function EmailTemplatesList({
   templates,
   onItemClick,
   deleteEmailTemplate,
-  fetchEmailTemplates,
+  fetchEmailTemplates
 }: Props) {
   const classes = useStyles()
   const [deletingItems, setDeletingItems] = useState<string[]>([])
@@ -59,10 +62,8 @@ function EmailTemplatesList({
   const isTemplateDeleting = (id: UUID): boolean => deletingItems.includes(id)
   const removeFromDeletingItems = (id: UUID): void =>
     setDeletingItems(deletingItems.filter(item => item !== id))
-  const addToDeletingItems = (id: UUID): void => setDeletingItems([
-    ...deletingItems,
-    id
-  ])
+  const addToDeletingItems = (id: UUID): void =>
+    setDeletingItems([...deletingItems, id])
 
   const handleDelete = async (id: UUID): Promise<void> => {
     try {
@@ -84,14 +85,11 @@ function EmailTemplatesList({
       id: 'name',
       width: '35%',
       accessor: (template: IBrandEmailTemplate) => template.name,
-      render: ({ rowData }: CellProps) =>
-        <Typography
-          noWrap
-          component="div"
-          variant="body1"
-        >
+      render: ({ rowData }: CellProps) => (
+        <Typography noWrap component="div" variant="body1">
           {rowData.name}
         </Typography>
+      )
     },
     {
       header: 'Content',
@@ -99,11 +97,7 @@ function EmailTemplatesList({
       sortable: false,
       render: ({ rowData }: CellProps) => (
         <div>
-          <Typography
-            noWrap
-            component="div"
-            variant="body1"
-          >
+          <Typography noWrap component="div" variant="body1">
             {rowData.subject}
           </Typography>
           <Typography
@@ -125,7 +119,7 @@ function EmailTemplatesList({
           <DangerButton
             size="small"
             variant="outlined"
-            onClick={(e) => {
+            onClick={e => {
               handleDelete(id)
               e.preventDefault()
               e.stopPropagation()
@@ -147,8 +141,9 @@ function EmailTemplatesList({
       LoadingState={() => <LoadingContainer style={{ padding: '20% 0' }} />}
       getTrProps={(index: number, { original: template }: GetTrProps) => {
         const isDeleting = isTemplateDeleting(template.id)
+
         return {
-          onClick: isDeleting ? () => { } : () => onItemClick(template),
+          onClick: isDeleting ? () => {} : () => onItemClick(template),
           style: {
             cursor: 'pointer',
             pointerEvents: isDeleting ? 'none' : 'initial'
