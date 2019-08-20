@@ -3,6 +3,7 @@ import { CSSProperties } from 'react'
 import { AtomicBlockEntityData } from '../types'
 import { resizablePluginOptions } from '../config'
 import { getAlignmentStyles } from './get-alignment-styles'
+import { stylesToString } from './styles-to-string'
 
 /**
  * Creates style string based on entity data created by plugins used for
@@ -18,7 +19,7 @@ export function renderAtomicBlockStyles({
   width,
   height
 }: AtomicBlockEntityData) {
-  return styleString({
+  return stylesToString({
     ...getAlignmentStyles(alignment),
     ...getSizeStyles(width, height)
   })
@@ -44,13 +45,5 @@ function getSizeStyles(
 
   return styles
 }
-
-const styleString = (style: CSSProperties) =>
-  Object.entries(style).reduce((styleString, [propName, propValue]) => {
-    return `${styleString}${normalizePropName(propName)}:${propValue};`
-  }, '')
-
-const normalizePropName = propName =>
-  propName.replace(/([A-Z])/g, matches => `-${matches[0].toLowerCase()}`)
 
 const resizeTypeToUnit = type => (type === 'absolute' ? 'px' : '%')

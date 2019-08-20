@@ -85,6 +85,7 @@ export const TextEditor = forwardRef(
     const signatureRef = useRef<TextEditorProps['signature']>(undefined)
     const editorElementRef = useRef<HTMLDivElement>(null)
     const editorRef = useRef<PluginsEditor>(null)
+    const editorStateRef = useRef<EditorState | null>(null)
     const originalEditorRef = useRef<DraftEditor | null>(null)
     const [linkEditorOpen, setLinkEditorOpen] = useState(false)
     const confirmation = useContext(ConfirmationModalContext)
@@ -93,7 +94,12 @@ export const TextEditor = forwardRef(
      * Images are not rendered appropriately without this option.
      */
     const { stateToHtmlOptions, stateFromHtmlOptions } = useMemo(
-      () => getHtmlConversionOptions(() => editorRef.current),
+      () =>
+        getHtmlConversionOptions(() =>
+          editorRef.current // editorRef is null in first render
+            ? editorRef.current.getEditorState()
+            : editorStateRef.current
+        ),
       []
     )
 
@@ -147,6 +153,8 @@ export const TextEditor = forwardRef(
         : initialState
     }
     const [editorState, setEditorState] = useState(getInitialState)
+
+    editorStateRef.current = editorState
 
     useImperativeHandle(
       ref,
@@ -247,7 +255,7 @@ export const TextEditor = forwardRef(
     const showNoSignatureModal = () => {
       confirmation!.setConfirmationModal({
         message:
-          "You don't have an email signature. Would you like to set one?",
+          'You don’t have an email signature yet. Would you like to create one?',
         confirmLabel: 'Set signature',
         onConfirm: onEditSignature
       })
