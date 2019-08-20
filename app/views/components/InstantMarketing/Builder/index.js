@@ -13,11 +13,13 @@ import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import { getActiveTeam } from 'utils/user-teams'
+import { getBrandStyles } from 'utils/marketing-center/templates'
 
 import nunjucks from '../helpers/nunjucks'
 import {
   getAsset as getBrandAsset,
-  getListingUrl
+  getListingUrl,
+  getColor
 } from '../helpers/nunjucks-functions'
 
 import { loadGrapesjs } from './utils/load-grapes'
@@ -260,11 +262,16 @@ class Builder extends React.Component {
 
   generateBrandedTemplate = (template, data) => {
     const { brand } = getActiveTeam(this.props.user)
+    const palette = getBrandStyles(brand)
+
+    console.log('PALETTE', palette)
 
     return nunjucks.renderString(template, {
       ...data,
+      palette,
       getAsset: getBrandAsset.bind(null, brand),
-      getListingUrl: getListingUrl.bind(null, brand)
+      getListingUrl: getListingUrl.bind(null, brand),
+      getColor: getColor.bind(null, brand)
     })
   }
 

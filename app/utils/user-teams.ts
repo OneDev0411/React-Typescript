@@ -159,3 +159,20 @@ export function getUserRoles(team: IBrand, userId: string) {
       )
   )
 }
+
+export function getBrandByType(user, type) {
+  const team = getActiveTeam(user)
+  if (team === null) {
+    return null
+  }
+
+  let brand: IBrand | null = team.brand
+
+  do {
+    if (brand.brand_type === type) {
+      return brand
+    }
+
+    brand = brand.parent
+  } while (brand)
+}

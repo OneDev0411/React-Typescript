@@ -1,5 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
+
 import SearchIcon from '../../Pages/Dashboard/Partials/Svgs/SearchIcon'
 
 export default class SearchInput extends React.Component {

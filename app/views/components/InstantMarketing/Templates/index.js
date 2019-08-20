@@ -8,6 +8,8 @@ import { getActiveTeamId } from 'utils/user-teams'
 
 import Spinner from 'components/Spinner'
 
+import { getBrandByType } from 'utils/user-teams'
+
 import { Container, TemplateItem, Video, Image } from './styled'
 
 class Templates extends React.Component {
@@ -99,6 +101,8 @@ class Templates extends React.Component {
     }))
 
   render() {
+    const brokerageBrand = getBrandByType(this.props.user, 'Brokerage')
+
     return (
       <Container>
         {this.state.isLoading && <Spinner />}
@@ -106,7 +110,7 @@ class Templates extends React.Component {
         {this.state.templates.map(template => {
           const preview_url = template.file
             ? template.file.preview_url
-            : `${template.url}/thumbnail.png`
+            : `${template.url}/${brokerageBrand.id}/thumbnail.png`
 
           return (
             <TemplateItem
