@@ -1,10 +1,11 @@
 import React, { FunctionComponent } from 'react'
 import { Form, Field } from 'react-final-form'
-import { Grid, Box, Button, Divider, Typography } from '@material-ui/core'
+import { Grid, Box, Button, Typography, Tooltip } from '@material-ui/core'
 import { TextField } from 'final-form-material-ui'
 
 import { SelectInput } from 'components/Forms/SelectInput'
 import { DangerButton } from 'components/Button/DangerButton'
+import { Divider } from 'components/Divider'
 
 import { MAX_STEP_TITLE_LENGTH } from '../../../../constants'
 
@@ -31,26 +32,33 @@ interface FormData {
 interface Props {
   startFrom?: number
   step?: IBrandFlowStep
+  defaultSelectedTemplate?: UUID
   templates: IBrandEmailTemplate[]
   onDelete?: (data: IBrandFlowStep) => Promise<any>
   onSubmit: (data: IBrandFlowStepInput, stepId?: UUID) => Promise<any>
   onCancel: () => void
-  onTemplateReviewClick: (template: IBrandEmailTemplate) => void
+  onNewTemplateClick: () => void
+  onReviewTemplateClick: (template: IBrandEmailTemplate) => void
 }
 
 export default function ScheduledEmailForm({
   startFrom = 0,
   step,
   templates,
+  defaultSelectedTemplate,
   onSubmit,
   onCancel,
   onDelete,
-  onTemplateReviewClick
+  onNewTemplateClick,
+  onReviewTemplateClick
 }: Props) {
   function getInitialValues(stepData?: IBrandFlowStep) {
     if (!stepData || !stepData.email) {
       return {
-        email_template: templates[0].id,
+        email_template: (
+          templates.find(({ id }) => id === defaultSelectedTemplate) ||
+          templates[0]
+        ).id,
         wait_for: '1',
         at: '08:00'
       }
@@ -63,7 +71,9 @@ export default function ScheduledEmailForm({
     const at = `${formatTimeDigits(hours)}:${formatTimeDigits(minutes)}`
 
     return {
-      email_template: stepData.email.id,
+      email_template:
+        (templates.find(({ id }) => id === defaultSelectedTemplate) || {}).id ||
+        stepData.email.id,
       title: stepData.title,
       description: stepData.description,
       wait_for: days.toString(),
@@ -113,28 +123,45 @@ export default function ScheduledEmailForm({
                   component={SelectInput as FunctionComponent}
                 />
               </Grid>
-              <Grid item xs={3}>
-                <Button
-                  variant="text"
-                  color="primary"
-                  disabled={submitting}
-                  style={{ marginLeft: '1rem' }}
-                  onClick={event => {
-                    event.stopPropagation()
+              <Grid container item xs={6} style={{ paddingLeft: '1rem' }}>
+                <Tooltip title="Review or edit selected email template">
+                  <Button
+                    variant="text"
+                    color="primary"
+                    disabled={submitting}
+                    onClick={event => {
+                      event.stopPropagation()
 
-                    const selectedTemplate = templates.find(
-                      ({ id }) => id === values.email_template
-                    )
+                      const selectedTemplate = templates.find(
+                        ({ id }) => id === values.email_template
+                      )
 
-                    if (!selectedTemplate) {
-                      return
-                    }
+                      if (!selectedTemplate) {
+                        return
+                      }
 
-                    onTemplateReviewClick(selectedTemplate)
-                  }}
-                >
-                  Review
-                </Button>
+                      onReviewTemplateClick(selectedTemplate)
+                    }}
+                  >
+                    Review
+                  </Button>
+                </Tooltip>
+
+                <Divider vertical height="auto" margin="0.5rem" />
+
+                <Tooltip title="Create a new email template">
+                  <Button
+                    variant="text"
+                    color="primary"
+                    disabled={submitting}
+                    onClick={event => {
+                      event.stopPropagation()
+                      onNewTemplateClick()
+                    }}
+                  >
+                    New
+                  </Button>
+                </Tooltip>
               </Grid>
             </Grid>
 

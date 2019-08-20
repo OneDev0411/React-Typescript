@@ -85,9 +85,12 @@ function Edit({
   const [
     selectedEmailTemplate,
     setSelectedEmailTemplate
-  ] = useState<null | IBrandEmailTemplate>(null)
+  ] = useState<IBrandEmailTemplate | null>(null)
+  const [isEmailTemplateDrawerOpen, setIsEmailTemplateDrawerOpen] = useState(
+    false
+  )
   const [selectedTabIndex, setSelectedTabIndex] = useState(0)
-  const [warning, setWarning] = useState<null | string>(null)
+  const [warning, setWarning] = useState<string | null>(null)
   const modal = useContext(ConfirmationModalContext)
 
   const getFlow = useCallback(
@@ -214,6 +217,10 @@ function Edit({
         return
       }
 
+      if (source === destination) {
+        return
+      }
+
       const newSteps = getUpdatedStepsOnMove(flow.steps, source, destination)
 
       setIsLoading(true)
@@ -273,16 +280,26 @@ function Edit({
     [brand, flow]
   )
 
-  const emailTemplateReviewClickHandler = useCallback(
+  const reviewEmailTemplateClickHandler = useCallback(
     (emailTemplate: IBrandEmailTemplate) => {
       if (!brand || !flow) {
         return
       }
 
       setSelectedEmailTemplate(emailTemplate)
+      setIsEmailTemplateDrawerOpen(true)
     },
     [brand, flow]
   )
+
+  const newEmailTemplateClickHandler = useCallback(() => {
+    if (!brand || !flow) {
+      return
+    }
+
+    setSelectedEmailTemplate(null)
+    setIsEmailTemplateDrawerOpen(true)
+  }, [brand, flow])
 
   if (error) {
     return <PageContainer>{error && <Paper>{error}</Paper>}</PageContainer>
@@ -364,9 +381,13 @@ function Edit({
                 onStepDelete={stepDeleteHandler}
                 onStepUpdate={stepUpdateHandler}
                 onStepMove={stepMoveHandler}
-                onEmailTemplateReviewClick={emailTemplateReviewClickHandler}
+                onNewEmailTemplateClick={newEmailTemplateClickHandler}
+                onReviewEmailTemplateClick={reviewEmailTemplateClickHandler}
                 items={flow.steps || []}
                 emailTemplates={props.emailTemplates}
+                defaultSelectedEmailTemplate={
+                  selectedEmailTemplate ? selectedEmailTemplate.id : undefined
+                }
               />
             )}
             {!isLoading && flow && selectedTabIndex === 1 && (
@@ -382,8 +403,13 @@ function Edit({
         </Box>
       </PageContainer>
       <EmailTemplateDrawer
-        isOpen={selectedEmailTemplate !== null}
-        onClose={() => setSelectedEmailTemplate(null)}
+        isOpen={isEmailTemplateDrawerOpen}
+        onClose={() => {
+          setIsEmailTemplateDrawerOpen(false)
+        }}
+        submitCallback={emailTemplate => {
+          setSelectedEmailTemplate(emailTemplate)
+        }}
         emailTemplate={selectedEmailTemplate}
       />
     </>

@@ -19,7 +19,7 @@ export const updateEmailTemplate = (
       template
     })
 
-    return
+    return template
   } catch (error) {
     throw error
   }

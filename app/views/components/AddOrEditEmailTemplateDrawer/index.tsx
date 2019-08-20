@@ -20,9 +20,10 @@ import { FinalFormDrawer } from '../FinalFormDrawer'
 interface Props {
   isOpen: boolean
   onClose: () => void
+  submitCallback?: (emailTemplate: IBrandEmailTemplate) => void
   activeTeamId: string
   /**
-   * If not provided, It in "Add" mode.
+   * If not provided, It is in "Add" mode.
    */
   emailTemplate?: IBrandEmailTemplate | null
   updateEmailTemplate: IAsyncActionProp<typeof updateEmailTemplate>
@@ -33,6 +34,7 @@ interface Props {
 function AddOrEditEmailTemplateDrawer({
   isOpen,
   onClose,
+  submitCallback,
   emailTemplate,
   updateEmailTemplate,
   createEmailTemplate,
@@ -62,10 +64,16 @@ function AddOrEditEmailTemplateDrawer({
 
   const handleSubmit = async (values: IBrandEmailTemplateInput) => {
     try {
-      if (emailTemplate) {
-        await updateEmailTemplate(emailTemplate.brand, emailTemplate.id, values)
-      } else {
-        await createEmailTemplate(activeTeamId, values)
+      const resultEmailTemplate = emailTemplate
+        ? await updateEmailTemplate(
+            emailTemplate.brand,
+            emailTemplate.id,
+            values
+          )
+        : await createEmailTemplate(activeTeamId, values)
+
+      if (submitCallback) {
+        submitCallback(resultEmailTemplate)
       }
 
       onClose()
