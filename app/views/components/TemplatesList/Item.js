@@ -79,7 +79,11 @@ function Item(props) {
             {itemButtonText(props.template)}
           </ActionButton>
         </div>
-        <img alt={props.template.name} src={thumbnail} />
+        {props.template.video ? (
+          <video src={thumbnail} muted autoPlay />
+        ) : (
+          <img alt={props.template.name} src={thumbnail} />
+        )}
       </div>
       {isInstance && (
         <div className="template_date">

@@ -5,7 +5,9 @@ export function getThumbnail(template) {
     return template.file.preview_url
   }
 
-  return `${template.url}/thumbnail.png`
+  const format = template.video ? 'mp4' : 'png'
+
+  return `${template.url}/thumbnail.${format}`
 }
 
 export function createdAt(date) {
