@@ -1,42 +1,42 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Flex from 'styled-flex-component'
+import { Box } from '@material-ui/core'
+import styled from 'styled-components'
 
 import { Trigger as MenuTrigger } from 'components/SlideMenu'
-import PageHeader from 'components/PageHeader'
+import { merriweatherFamilyStyle } from 'components/Typography/styles'
+
+export const Title = styled.h1`
+  ${merriweatherFamilyStyle}
+  font-size: 1rem;
+  font-weight: 900;
+  margin: 0;
+`
 
 Header.propTypes = {
   title: PropTypes.string.isRequired,
-  showMenu: PropTypes.bool,
-  style: PropTypes.shape()
+  showMenu: PropTypes.bool
 }
 
 Header.defaultProps = {
-  showMenu: true,
-  style: {}
+  showMenu: true
 }
 
 export function Header(props) {
   return (
-    <PageHeader
-      style={{
-        margin: 0,
-        width: '100%',
-        minHeight: '6rem',
-        borderBottom: '1px solid #d4d4d4',
-        ...props.style
-      }}
+    <Box
+      paddingY={2}
+      paddingX={3}
+      display="flex"
+      alignItems="center"
+      isSideMenuOpen={props.isSideMenuOpen}
+      data-test="mc-store-page-header"
     >
-      <Flex alignCenter>
-        <MenuTrigger
-          onClick={props.toggleSideMenu}
-          isExpended={props.isSideMenuOpen}
-          style={{ width: '1.5em', height: '1.5em', marginRight: '0.5em' }}
-        />
-        <Flex column>
-          <PageHeader.Heading>{props.title}</PageHeader.Heading>
-        </Flex>
-      </Flex>
-    </PageHeader>
+      <MenuTrigger
+        onClick={props.toggleSideMenu}
+        isExpended={props.isSideMenuOpen}
+      />
+      <Title>{props.title}</Title>
+    </Box>
   )
 }

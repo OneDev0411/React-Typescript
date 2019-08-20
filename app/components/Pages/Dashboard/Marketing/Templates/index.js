@@ -7,8 +7,9 @@ import { getActiveTeamId } from 'utils/user-teams'
 import TemplatesList from 'components/TemplatesList'
 import { getSelectedMediumTemplates } from 'components/TemplatesList/helpers'
 
-import { Header } from './Header'
-import { headers } from './Header/data'
+import { Header } from '../components/PageHeader'
+
+import { TYPES_TITLE } from './constants'
 import useTemplatesList from './useTemplatesList'
 import { getMediums, getTabName } from './helpers'
 import { Tab, ListView } from './styled'
@@ -20,7 +21,7 @@ const mediumsCollection = {
 }
 
 function Templates(props) {
-  const selectedType = headers[props.types]
+  const title = TYPES_TITLE[props.types]
   const activeTeamId = getActiveTeamId(props.user)
   const [templates, isLoading] = useTemplatesList(activeTeamId, props.types)
   const tabs = getMediums(templates)
@@ -41,14 +42,14 @@ function Templates(props) {
   return (
     <React.Fragment>
       <Helmet>
-        <title>{selectedType.title} | Marketing | Rechat</title>
+        <title>{title} | Marketing | Rechat</title>
       </Helmet>
 
       <Header
-        data={selectedType}
+        title={title}
+        types={props.types}
         isSideMenuOpen={props.isSideMenuOpen}
         toggleSideMenu={props.toggleSideMenu}
-        types={props.types}
       />
 
       <ListView>
