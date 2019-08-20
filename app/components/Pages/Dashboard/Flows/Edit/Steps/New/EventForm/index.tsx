@@ -14,7 +14,11 @@ import {
   humanizeSeconds,
   formatTimeDigits
 } from '../../../helpers'
-import { validateStringInput, validateInput } from '../../../../helpers'
+import {
+  validateStringInput,
+  validateInput,
+  validateTimeInput
+} from '../../../../helpers'
 
 interface FormData {
   task_type: {
@@ -193,6 +197,7 @@ export default function EventForm({
                     variant="outlined"
                     required
                     InputLabelProps={{ shrink: true }}
+                    validate={validateTimeInput}
                     component={TextField}
                   />
                 </Box>

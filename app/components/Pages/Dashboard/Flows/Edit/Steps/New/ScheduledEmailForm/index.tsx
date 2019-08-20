@@ -14,7 +14,11 @@ import {
   humanizeSeconds,
   formatTimeDigits
 } from '../../../helpers'
-import { validateStringInput, validateInput } from '../../../../helpers'
+import {
+  validateStringInput,
+  validateInput,
+  validateTimeInput
+} from '../../../../helpers'
 
 interface FormData {
   email_template: UUID
@@ -194,6 +198,7 @@ export default function ScheduledEmailForm({
                     variant="outlined"
                     required
                     InputLabelProps={{ shrink: true }}
+                    validate={validateTimeInput}
                     component={TextField}
                   />
                 </Box>
