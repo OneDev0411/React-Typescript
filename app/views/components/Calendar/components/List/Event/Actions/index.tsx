@@ -16,6 +16,7 @@ export function EventActions({ event, user }: Props) {
     return (
       <SendContactCard
         contactId={event.contact}
+        mediums="Email"
         buttonStyle={{
           size: 'small'
         }}
