@@ -10,22 +10,26 @@ interface Props {
   disableEdit: boolean
   items: IBrandFlowStep[]
   emailTemplates: IBrandEmailTemplate[]
+  defaultSelectedEmailTemplate?: UUID
   onNewStepSubmit: (data: IBrandFlowStepInput) => Promise<any>
   onStepDelete: (step: IBrandFlowStep) => Promise<any>
   onStepUpdate: (step: IBrandFlowStepInput, stepId: UUID) => Promise<any>
   onStepMove: (sourceIndex: number, destinationIndex: number) => Promise<any>
-  onEmailTemplateReviewClick: (template: IBrandEmailTemplate) => void
+  onNewEmailTemplateClick: () => void
+  onReviewEmailTemplateClick: (template: IBrandEmailTemplate) => void
 }
 
 export default function Steps({
   disableEdit,
   items,
   emailTemplates,
+  defaultSelectedEmailTemplate,
   onNewStepSubmit,
   onStepDelete,
   onStepUpdate,
   onStepMove,
-  onEmailTemplateReviewClick
+  onNewEmailTemplateClick,
+  onReviewEmailTemplateClick
 }: Props) {
   const startFromSeconds = items.length
     ? getNextStepStartFrom(items[items.length - 1])
@@ -57,7 +61,9 @@ export default function Steps({
                     step={item}
                     prevStep={prevStep}
                     emailTemplates={emailTemplates}
-                    onEmailTemplateReviewClick={onEmailTemplateReviewClick}
+                    defaultSelectedEmailTemplate={defaultSelectedEmailTemplate}
+                    onNewEmailTemplateClick={onNewEmailTemplateClick}
+                    onReviewEmailTemplateClick={onReviewEmailTemplateClick}
                   />
                 )
               })}
@@ -69,9 +75,11 @@ export default function Steps({
             index={items.length + 1}
             startFrom={startFromSeconds}
             emailTemplates={emailTemplates}
+            defaultSelectedEmailTemplate={defaultSelectedEmailTemplate}
             onSubmit={onNewStepSubmit}
             isNewEventFormOpen={items.length === 0}
-            onEmailTemplateReviewClick={onEmailTemplateReviewClick}
+            onNewEmailTemplateClick={onNewEmailTemplateClick}
+            onReviewEmailTemplateClick={onReviewEmailTemplateClick}
           />
         )}
       </Grid>

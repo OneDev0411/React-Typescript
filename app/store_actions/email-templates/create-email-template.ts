@@ -18,7 +18,7 @@ export const createEmailTemplate = (
       template
     })
 
-    return
+    return template
   } catch (error) {
     throw error
   }

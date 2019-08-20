@@ -10,9 +10,11 @@ interface Props {
   index: number
   startFrom: number
   emailTemplates: IBrandEmailTemplate[]
+  defaultSelectedEmailTemplate?: UUID
   isNewEventFormOpen?: boolean
   onSubmit: (data: IBrandFlowStepInput) => Promise<any>
-  onEmailTemplateReviewClick: (template: IBrandEmailTemplate) => void
+  onNewEmailTemplateClick: () => void
+  onReviewEmailTemplateClick: (template: IBrandEmailTemplate) => void
 }
 
 export default function New({
@@ -20,8 +22,10 @@ export default function New({
   index,
   startFrom,
   emailTemplates,
+  defaultSelectedEmailTemplate,
   onSubmit,
-  onEmailTemplateReviewClick
+  onNewEmailTemplateClick,
+  onReviewEmailTemplateClick
 }: Props) {
   const [isNewEventFormOpen, setIsNewEventFormOpen] = useState(
     passedIsNewEventFormOpen || false
@@ -78,9 +82,11 @@ export default function New({
                 <ScheduledEmailForm
                   startFrom={startFrom}
                   templates={emailTemplates}
+                  defaultSelectedTemplate={defaultSelectedEmailTemplate}
                   onCancel={cancelHandler}
                   onSubmit={submitHandler}
-                  onTemplateReviewClick={onEmailTemplateReviewClick}
+                  onNewTemplateClick={onNewEmailTemplateClick}
+                  onReviewTemplateClick={onReviewEmailTemplateClick}
                 />
               </Grid>
             </CardContent>
