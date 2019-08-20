@@ -409,8 +409,6 @@ function Edit({
         }}
         submitCallback={emailTemplate => {
           setSelectedEmailTemplate(emailTemplate)
-
-          console.log('emailTemplate', emailTemplate)
         }}
         emailTemplate={selectedEmailTemplate}
       />
