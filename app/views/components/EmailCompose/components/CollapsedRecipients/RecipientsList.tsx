@@ -1,13 +1,13 @@
 import * as React from 'react'
-import Flex from 'styled-flex-component'
 import { Fragment } from 'react'
+import Flex from 'styled-flex-component'
 import { Chip, createStyles, makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
 
-import { RecipientToString } from '../../../ContactsChipsInput/RecipientToString'
 import { Recipient } from '../../../ContactsChipsInput/types'
 import { validateRecipient } from '../../../ContactsChipsInput/helpers/validate-recipient'
 import { useChipStyles } from '../../../../../styles/chip.style'
+import { recipientToString } from '../../../ContactsChipsInput/helpers/recipient-to-string'
 
 interface RecipientListProps {
   recipients: Recipient[]
@@ -27,16 +27,10 @@ export function RecipientList({ recipients }: RecipientListProps) {
   const chipClasses = useChipStyles()
   const renderedRecipients = recipients
     .slice(0, 1)
-    .map((recipient, index) =>
-      // TODO(redux): when redux is upgraded, we can replace RecipientToString
-      // component with a hook (useRecipientToString) and get strings here
-      // instead of react nodes. We can then change the logic here to
-      // roughly compute the number of items that fit in.
-      ({
-        toString: <RecipientToString key={index} recipient={recipient} />,
-        recipient
-      })
-    )
+    .map(recipient => ({
+      label: recipientToString(recipient),
+      recipient
+    }))
     .filter(i => i)
 
   const remaining = recipients.length - renderedRecipients.length
@@ -44,13 +38,13 @@ export function RecipientList({ recipients }: RecipientListProps) {
   return (
     <Flex alignCenter>
       {renderedRecipients.map((item, index) => (
-        <Fragment key={`${index}-${item.toString}`}>
+        <Fragment key={`${index}-${item.label}`}>
           <span
             className={classNames({
               [classes.errorUnderline]: !!validateRecipient(item.recipient)
             })}
           >
-            {item.toString}
+            {item.label}
           </span>
           {index < renderedRecipients.length - 1 ? ', ' : ''}
         </Fragment>

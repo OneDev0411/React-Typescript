@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { FieldRenderProps } from 'react-final-form'
 import { Observable } from 'rxjs'
@@ -19,12 +19,6 @@ import { getSavedSegments } from 'actions/filter-segments/get-saved-segment'
 import { IAppState } from 'reducers/index'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import { getSegments, isListFetched } from 'reducers/filter-segments'
-import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
-import {
-  IAttributeDefsState,
-  selectDefinitionByName
-} from 'reducers/contacts/attributeDefs'
-import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 
 import { ChipsInput } from '../ChipsInput'
 import { InlineInputLabel } from '../InlineInputLabel'
@@ -62,7 +56,6 @@ interface Props extends BaseProps {
   value?: Recipient[]
   getContactsTags: IAsyncActionProp<typeof getContactsTags>
   getSavedSegments: IAsyncActionProp<typeof getSavedSegments>
-  attributeDefs: IAttributeDefsState
 }
 
 /**
@@ -74,7 +67,6 @@ function ContactsChipsInput({
   getSavedSegments,
   isLoadingTags,
   areListsFetched,
-  attributeDefs,
   tags,
   lists,
   label,
@@ -101,10 +93,6 @@ function ContactsChipsInput({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const emailAttributeDef = useMemo(
-    () => selectDefinitionByName(attributeDefs, 'email')!,
-    [attributeDefs]
-  )
   const getSuggestions: (searchTerm: string) => Observable<Recipient[]> = (
     searchTerm: string
   ) => {
@@ -115,14 +103,10 @@ function ContactsChipsInput({
         searchTerm
           ? fromPromise(searchContacts(searchTerm)).pipe(
               map(result => {
-                const contacts = normalizeContactAttribute(result)
-
                 return new Fuse(
-                  contacts
+                  result.data
                     .map(contact => {
-                      const emails: string[] = (
-                        getContactAttribute(contact, emailAttributeDef) || []
-                      ).map(attr => attr.text)
+                      const emails: string[] = contact.emails || []
 
                       return emails.map(email => ({
                         contact,
@@ -130,7 +114,7 @@ function ContactsChipsInput({
                       }))
                     })
                     .flat(),
-                  { keys: ['email', 'contact.summary.display_name'] }
+                  { keys: ['email', 'contact.display_name'] }
                 ).search(searchTerm)
               })
             )
@@ -181,7 +165,6 @@ const mapStateToProps = ({ contacts }: IAppState) => {
   const isLoadingTags = isFetchingTags(contacts.tags)
 
   return {
-    attributeDefs: contacts.attributeDefs,
     tags,
     lists,
     isLoadingTags,

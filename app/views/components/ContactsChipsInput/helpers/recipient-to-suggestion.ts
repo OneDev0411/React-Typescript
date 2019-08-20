@@ -14,17 +14,11 @@ export function recipientToSuggestion(recipient: Recipient): Suggestion {
     return tagToSuggestion(recipient)
   }
 
-  const displayName =
-    recipient.contact &&
-    recipient.contact.summary &&
-    recipient.contact.summary.display_name
+  const displayName = recipient.contact && recipient.contact.display_name
 
   return {
     title: displayName || recipient.email,
-    subtitle: displayName ? recipient.email : '',
-    avatar:
-      recipient.contact && recipient.contact.summary
-        ? recipient.contact.summary!.profile_image_url
-        : undefined
+    subtitle: displayName !== recipient.email ? recipient.email : '',
+    avatar: recipient.contact ? recipient.contact!.profile_image_url : undefined
   }
 }

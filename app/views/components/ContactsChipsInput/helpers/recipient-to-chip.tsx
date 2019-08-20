@@ -1,31 +1,31 @@
-import React from 'react'
-
 import { Recipient } from '../types'
 import { ChipInputItem } from '../../ChipsInput/types'
 import { validateRecipient } from './validate-recipient'
-import { RecipientToString } from '../RecipientToString'
 import { isContactList } from './is-contact-list'
 import { isContactTag } from './is-contact-tag'
+import { recipientToString } from './recipient-to-string'
 
 export function recipientToChip(recipient: Recipient): ChipInputItem {
   const hasError = !!validateRecipient(recipient)
 
+  const label = recipientToString(recipient)
+
   if (isContactList(recipient)) {
     return {
-      label: recipient.name,
+      label,
       hasError
     }
   }
 
   if (isContactTag(recipient)) {
     return {
-      label: recipient.text,
+      label,
       hasError
     }
   }
 
   return {
-    label: <RecipientToString recipient={recipient} />,
+    label,
     hasError
   }
 }

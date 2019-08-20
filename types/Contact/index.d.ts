@@ -63,9 +63,13 @@ declare interface IContact extends IContactBase {
   brand: UUID
 
   display_name: string
+  profile_image_url: string | null
   partner_name?: string
   last_touch?: number
   next_touch?: number
+
+  email: string | null
+  emails: string[] | null
 
   attributes?: IContactAttribute[]
   users?: IUser[]

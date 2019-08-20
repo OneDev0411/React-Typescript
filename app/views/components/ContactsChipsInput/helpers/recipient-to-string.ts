@@ -1,13 +1,8 @@
-import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
-
 import { Recipient } from '../types'
 import { isContactList } from './is-contact-list'
 import { isContactTag } from './is-contact-tag'
 
-export function recipientToString(
-  recipient: Recipient,
-  emailAttributeDef: IContactAttributeDef
-): string {
+export function recipientToString(recipient: Recipient): string {
   if (isContactList(recipient)) {
     return `${recipient.name} (List)`
   }
@@ -23,17 +18,10 @@ export function recipientToString(
 
     // We have a contact here which has a display name.
     // if it has multiple emails, show email in parentheses. Otherwise, only name
-    let emails: string[] = []
+    let emails: string[] = recipient.contact.emails || []
 
-    try {
-      emails = getContactAttribute(recipient.contact, emailAttributeDef).map(
-        attr => attr.text
-      )
-    } catch (e) {
-      console.error('[RecipientToString]: ', e)
-    }
-
-    const showEmail = emails.length > 1
+    const showEmail =
+      emails.length > 1 && recipient.contact.display_name !== recipient.email
 
     // if all other emails are for different domains, then it's sufficient
     // to show the domain only, like Gmail
