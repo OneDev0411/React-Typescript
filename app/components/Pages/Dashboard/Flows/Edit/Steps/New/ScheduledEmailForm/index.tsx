@@ -35,6 +35,7 @@ interface Props {
   onDelete?: (data: IBrandFlowStep) => Promise<any>
   onSubmit: (data: IBrandFlowStepInput, stepId?: UUID) => Promise<any>
   onCancel: () => void
+  onTemplateReviewClick: (template: IBrandEmailTemplate) => void
 }
 
 export default function ScheduledEmailForm({
@@ -43,7 +44,8 @@ export default function ScheduledEmailForm({
   templates,
   onSubmit,
   onCancel,
-  onDelete
+  onDelete,
+  onTemplateReviewClick
 }: Props) {
   function getInitialValues(stepData?: IBrandFlowStep) {
     if (!stepData || !stepData.email) {
@@ -93,22 +95,47 @@ export default function ScheduledEmailForm({
         return onSubmit(newStep)
       }}
       initialValues={getInitialValues(step)}
-      render={({ handleSubmit, submitting }) => {
+      render={({ handleSubmit, submitting, values }) => {
         return (
           <form style={{ width: '100%' }} onSubmit={handleSubmit} noValidate>
-            <Grid item xs={12}>
-              <Field
-                name="email_template"
-                label="Email Template"
-                items={templates.map(template => ({
-                  label: template.name,
-                  value: template.id
-                }))}
-                dropdownOptions={{
-                  fullWidth: true
-                }}
-                component={SelectInput as FunctionComponent}
-              />
+            <Grid container item xs={12} alignItems="center">
+              <Grid item xs={6}>
+                <Field
+                  name="email_template"
+                  label="Email Template"
+                  items={templates.map(template => ({
+                    label: template.name,
+                    value: template.id
+                  }))}
+                  dropdownOptions={{
+                    fullWidth: true
+                  }}
+                  component={SelectInput as FunctionComponent}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <Button
+                  variant="text"
+                  color="primary"
+                  disabled={submitting}
+                  style={{ marginLeft: '1rem' }}
+                  onClick={event => {
+                    event.stopPropagation()
+
+                    const selectedTemplate = templates.find(
+                      ({ id }) => id === values.email_template
+                    )
+
+                    if (!selectedTemplate) {
+                      return
+                    }
+
+                    onTemplateReviewClick(selectedTemplate)
+                  }}
+                >
+                  Review
+                </Button>
+              </Grid>
             </Grid>
 
             <Grid item xs={12}>

@@ -14,6 +14,7 @@ interface Props {
   onStepDelete: (step: IBrandFlowStep) => Promise<any>
   onStepUpdate: (step: IBrandFlowStepInput, stepId: UUID) => Promise<any>
   onStepMove: (sourceIndex: number, destinationIndex: number) => Promise<any>
+  onEmailTemplateReviewClick: (template: IBrandEmailTemplate) => void
 }
 
 export default function Steps({
@@ -23,7 +24,8 @@ export default function Steps({
   onNewStepSubmit,
   onStepDelete,
   onStepUpdate,
-  onStepMove
+  onStepMove,
+  onEmailTemplateReviewClick
 }: Props) {
   const startFromSeconds = items.length
     ? getNextStepStartFrom(items[items.length - 1])
@@ -55,6 +57,7 @@ export default function Steps({
                     step={item}
                     prevStep={prevStep}
                     emailTemplates={emailTemplates}
+                    onEmailTemplateReviewClick={onEmailTemplateReviewClick}
                   />
                 )
               })}
@@ -68,6 +71,7 @@ export default function Steps({
             emailTemplates={emailTemplates}
             onSubmit={onNewStepSubmit}
             isNewEventFormOpen={items.length === 0}
+            onEmailTemplateReviewClick={onEmailTemplateReviewClick}
           />
         )}
       </Grid>

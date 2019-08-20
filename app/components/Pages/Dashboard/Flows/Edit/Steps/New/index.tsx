@@ -12,6 +12,7 @@ interface Props {
   emailTemplates: IBrandEmailTemplate[]
   isNewEventFormOpen?: boolean
   onSubmit: (data: IBrandFlowStepInput) => Promise<any>
+  onEmailTemplateReviewClick: (template: IBrandEmailTemplate) => void
 }
 
 export default function New({
@@ -19,7 +20,8 @@ export default function New({
   index,
   startFrom,
   emailTemplates,
-  onSubmit
+  onSubmit,
+  onEmailTemplateReviewClick
 }: Props) {
   const [isNewEventFormOpen, setIsNewEventFormOpen] = useState(
     passedIsNewEventFormOpen || false
@@ -78,6 +80,7 @@ export default function New({
                   templates={emailTemplates}
                   onCancel={cancelHandler}
                   onSubmit={submitHandler}
+                  onTemplateReviewClick={onEmailTemplateReviewClick}
                 />
               </Grid>
             </CardContent>

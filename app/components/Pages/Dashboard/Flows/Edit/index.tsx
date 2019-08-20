@@ -30,6 +30,7 @@ import { goTo } from 'utils/go-to'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { Callout } from 'components/Callout'
 import LoadingContainer from 'components/LoadingContainer'
+import EmailTemplateDrawer from 'components/AddOrEditEmailTemplateDrawer'
 
 import { getFlowEditUrl, createFlow } from '../helpers'
 import New from '../New'
@@ -81,6 +82,10 @@ function Edit({
   const [flow, setFlow] = useState<IBrandFlow | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isDuplicateModalOpen, setIsDuplicateModalOpen] = useState(false)
+  const [
+    selectedEmailTemplate,
+    setSelectedEmailTemplate
+  ] = useState<null | IBrandEmailTemplate>(null)
   const [selectedTabIndex, setSelectedTabIndex] = useState(0)
   const [warning, setWarning] = useState<null | string>(null)
   const modal = useContext(ConfirmationModalContext)
@@ -268,6 +273,17 @@ function Edit({
     [brand, flow]
   )
 
+  const emailTemplateReviewClickHandler = useCallback(
+    (emailTemplate: IBrandEmailTemplate) => {
+      if (!brand || !flow) {
+        return
+      }
+
+      setSelectedEmailTemplate(emailTemplate)
+    },
+    [brand, flow]
+  )
+
   if (error) {
     return <PageContainer>{error && <Paper>{error}</Paper>}</PageContainer>
   }
@@ -348,6 +364,7 @@ function Edit({
                 onStepDelete={stepDeleteHandler}
                 onStepUpdate={stepUpdateHandler}
                 onStepMove={stepMoveHandler}
+                onEmailTemplateReviewClick={emailTemplateReviewClickHandler}
                 items={flow.steps || []}
                 emailTemplates={props.emailTemplates}
               />
@@ -364,6 +381,11 @@ function Edit({
           </TabPanel>
         </Box>
       </PageContainer>
+      <EmailTemplateDrawer
+        isOpen={selectedEmailTemplate !== null}
+        onClose={() => setSelectedEmailTemplate(null)}
+        emailTemplate={selectedEmailTemplate}
+      />
     </>
   )
 }
