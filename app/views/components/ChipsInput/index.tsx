@@ -262,7 +262,9 @@ export function ChipsInput<T>({
                         </ListItemAvatar>
                       ) : (
                         <ListItemAvatar>
-                          {suggestion.avatar || <Avatar title="" image="" />}
+                          {suggestion.avatar || (
+                            <Avatar title={suggestion.title} />
+                          )}
                         </ListItemAvatar>
                       )}
                       <ListItemText

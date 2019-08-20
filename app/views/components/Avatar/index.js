@@ -27,7 +27,7 @@ const defaultProps = {
 }
 
 const Avatar = ({
-  image,
+  image = '',
   placeHolderImage = '',
   initials = '',
   title,
