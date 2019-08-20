@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect, useCallback } from 'react'
 import { connect } from 'react-redux'
+import { ThunkDispatch } from 'redux-thunk'
+import { AnyAction } from 'redux'
 import { Helmet } from 'react-helmet'
 import { withRouter, WithRouterProps } from 'react-router'
 import { Grid, Box, Paper, Tab, Tabs as MUITabs, Chip } from '@material-ui/core'
@@ -17,7 +19,10 @@ import { editBrandFlowSteps } from 'models/flows/edit-brand-flow-steps'
 import { createStep } from 'models/flows/create-step'
 import { editBrandFlow } from 'models/flows/edit-brand-flow'
 import { stopFlow } from 'models/flows/stop-flow'
-import { getEmailTemplates } from 'models/email-templates/get-email-templates'
+
+import { IAppState } from 'reducers'
+import { fetchEmailTemplates } from 'actions/email-templates/fetch-email-templates'
+import { selectEmailTemplates } from 'reducers/email-templates'
 
 import { getActiveTeamId } from 'utils/user-teams'
 import { goTo } from 'utils/go-to'
@@ -25,6 +30,7 @@ import { goTo } from 'utils/go-to'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { Callout } from 'components/Callout'
 import LoadingContainer from 'components/LoadingContainer'
+import EmailTemplateDrawer from 'components/AddOrEditEmailTemplateDrawer'
 
 import { getFlowEditUrl, createFlow } from '../helpers'
 import New from '../New'
@@ -61,24 +67,28 @@ const Tabs = withStyles({
 })(MUITabs)
 
 interface Props {
-  user: IUser
-  viewAsUsers: UUID[]
+  brand: UUID
+  emailTemplates: IBrandEmailTemplate[]
+  fetchEmailTemplates: IAsyncActionProp<typeof fetchEmailTemplates>
 }
 
-function Edit(props: Props & WithRouterProps) {
+function Edit({
+  brand,
+  fetchEmailTemplates,
+  ...props
+}: WithRouterProps & Props) {
   const classes = useStyles()
   const [error, setError] = useState('')
   const [flow, setFlow] = useState<IBrandFlow | null>(null)
-  const [emailTemplates, setEmailTemplates] = useState<IBrandEmailTemplate[]>(
-    []
-  )
   const [isLoading, setIsLoading] = useState(true)
   const [isDuplicateModalOpen, setIsDuplicateModalOpen] = useState(false)
+  const [
+    selectedEmailTemplate,
+    setSelectedEmailTemplate
+  ] = useState<null | IBrandEmailTemplate>(null)
   const [selectedTabIndex, setSelectedTabIndex] = useState(0)
   const [warning, setWarning] = useState<null | string>(null)
   const modal = useContext(ConfirmationModalContext)
-
-  const brand = getActiveTeamId(props.user)
 
   const getFlow = useCallback(
     async (brand: string, flowId: UUID, reload): Promise<IBrandFlow> => {
@@ -99,7 +109,7 @@ function Edit(props: Props & WithRouterProps) {
   const loadFlowData = useCallback(
     async (reload = false) => {
       if (!brand) {
-        setError('You need to be in a team in order to get this flow')
+        setError('You need to be in a team in order to get this Flow')
 
         return
       }
@@ -129,21 +139,9 @@ function Edit(props: Props & WithRouterProps) {
     loadFlowData()
   }, [brand, getFlow, loadFlowData, props.location.state, props.params.id])
 
-  const loadEmailTemplates = useCallback(async () => {
-    if (!brand) {
-      setError('You need to be in a team in order to get this flow')
-
-      return
-    }
-
-    const templates = await getEmailTemplates(brand)
-
-    setEmailTemplates(templates)
-  }, [brand])
-
   useEffect(() => {
-    loadEmailTemplates()
-  }, [loadEmailTemplates])
+    fetchEmailTemplates(brand)
+  }, [brand, fetchEmailTemplates])
 
   const newStepSubmitHandler = useCallback(
     async (step: IBrandFlowStepInput) => {
@@ -246,14 +244,6 @@ function Edit(props: Props & WithRouterProps) {
     [brand, flow]
   )
 
-  const duplicateClickHandler = useCallback(() => {
-    if (!brand || !flow) {
-      return
-    }
-
-    setIsDuplicateModalOpen(true)
-  }, [brand, flow])
-
   const flowStopHandler = useCallback(
     async (flowInstanceId: UUID) => {
       await stopFlow(flowInstanceId)
@@ -283,6 +273,17 @@ function Edit(props: Props & WithRouterProps) {
     [brand, flow]
   )
 
+  const emailTemplateReviewClickHandler = useCallback(
+    (emailTemplate: IBrandEmailTemplate) => {
+      if (!brand || !flow) {
+        return
+      }
+
+      setSelectedEmailTemplate(emailTemplate)
+    },
+    [brand, flow]
+  )
+
   if (error) {
     return <PageContainer>{error && <Paper>{error}</Paper>}</PageContainer>
   }
@@ -306,7 +307,9 @@ function Edit(props: Props & WithRouterProps) {
       {flow && (
         <Header
           name={flow.name}
-          onDuplicateClick={duplicateClickHandler}
+          onDuplicateClick={() => {
+            setIsDuplicateModalOpen(true)
+          }}
           description={flow.description}
           onChange={flowUpdateHandler}
           disableEdit={!flow.is_editable}
@@ -361,8 +364,9 @@ function Edit(props: Props & WithRouterProps) {
                 onStepDelete={stepDeleteHandler}
                 onStepUpdate={stepUpdateHandler}
                 onStepMove={stepMoveHandler}
+                onEmailTemplateReviewClick={emailTemplateReviewClickHandler}
                 items={flow.steps || []}
-                emailTemplates={emailTemplates}
+                emailTemplates={props.emailTemplates}
               />
             )}
             {!isLoading && flow && selectedTabIndex === 1 && (
@@ -377,12 +381,35 @@ function Edit(props: Props & WithRouterProps) {
           </TabPanel>
         </Box>
       </PageContainer>
+      <EmailTemplateDrawer
+        isOpen={selectedEmailTemplate !== null}
+        onClose={() => setSelectedEmailTemplate(null)}
+        emailTemplate={selectedEmailTemplate}
+      />
     </>
   )
 }
 
-const mapStateToProps = ({ user }) => ({
-  user
-})
+const mapStateToProps = (state: IAppState) => {
+  const brand = getActiveTeamId(state.user) || ''
+  const { emailTemplates } = state
 
-export default withRouter(connect(mapStateToProps)(Edit))
+  return {
+    brand,
+    emailTemplates: selectEmailTemplates(emailTemplates, brand)
+  }
+}
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+  return {
+    fetchEmailTemplates: (...args: Parameters<typeof fetchEmailTemplates>) =>
+      dispatch(fetchEmailTemplates(...args))
+  }
+}
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Edit)
+)

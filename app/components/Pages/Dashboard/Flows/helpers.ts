@@ -65,6 +65,14 @@ export function validateInput(
   return error || `Invalid ${name}`
 }
 
+export function validateTimeInput(value?: string) {
+  if (value === undefined) {
+    return 'Invalid time'
+  }
+
+  return null
+}
+
 export function convertStepToStepInput(
   step: IBrandFlowStep
 ): IBrandFlowStepInput {

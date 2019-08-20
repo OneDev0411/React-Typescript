@@ -44,6 +44,7 @@ interface Props {
   emailTemplates: IBrandEmailTemplate[]
   onDelete: (step: IBrandFlowStep) => Promise<any>
   onUpdate: (step: IBrandFlowStepInput, stepId: UUID) => Promise<any>
+  onEmailTemplateReviewClick: (template: IBrandEmailTemplate) => void
 }
 
 export default function Item({
@@ -53,7 +54,8 @@ export default function Item({
   prevStep,
   emailTemplates,
   onDelete,
-  onUpdate
+  onUpdate,
+  onEmailTemplateReviewClick
 }: Props) {
   const classes = useStyles()
   const { isRaised, raise, stopRaise } = useRaisedMuiCard()
@@ -93,6 +95,7 @@ export default function Item({
                     step={step}
                     templates={emailTemplates}
                     startFrom={getNextStepStartFrom(prevStep)}
+                    onTemplateReviewClick={onEmailTemplateReviewClick}
                   />
                 )}
               </Grid>
