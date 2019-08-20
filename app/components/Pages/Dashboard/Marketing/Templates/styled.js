@@ -1,36 +1,30 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
-import Button from 'components/Button/LinkButton'
-import { primary } from 'views/utils/colors'
+import { primary, borderColor, grey } from 'views/utils/colors'
 
-export const Tab = styled(Button)`
-  margin-right: 3rem;
-  font-weight: 600;
-  padding: 0;
+export const Tabs = styled.div`
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  list-style: none;
+  padding: 0 1.5rem;
+  background-color: #fff;
 
-  ${props =>
-    props.selected
-      ? css`
-          color: ${primary};
-
-          &:after {
-            content: '';
-            height: 2px;
-            width: 100%;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            background-color: ${primary};
-          }
-        `
-      : ''};
+  .tabs-inneer {
+    width: 100%;
+    display: flex;
+    border-bottom: 1px solid ${borderColor};
+  }
 `
 
-export const ListView = styled.div`
-  & .tabs {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
+export const Tab = styled.div`
+  width: 9.6rem; /* 152px */
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+  border-bottom: ${props => (props.selected ? `2px solid ${primary}` : 'none')};
+
+  > a {
+    color: ${props => (props.selected ? primary : grey.A900)};
   }
 `

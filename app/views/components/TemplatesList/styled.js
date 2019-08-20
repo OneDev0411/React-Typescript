@@ -5,16 +5,14 @@ export const FallbackContainer = styled.div`
 `
 
 export const TemplatesContainer = styled.div`
-  padding: 0 1.5rem;
-
   & .templates-title {
-    margin: 1.5rem 0 1rem;
     font-weight: 500;
+    margin: 1.5rem;
   }
 `
 
 export const TemplatesListContainer = styled.div`
-  margin: 2rem 0;
+  padding: 1.5rem;
 
   & .grid-item {
     display: flex;

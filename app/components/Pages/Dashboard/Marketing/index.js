@@ -55,10 +55,7 @@ class Marketing extends Component {
             <Menu />
           </SideMenu>
 
-          <PageContent
-            isSideMenuOpen={isSideMenuOpen}
-            style={{ background: '#f2f2f2' }}
-          >
+          <PageContent isSideMenuOpen={isSideMenuOpen}>
             {React.Children.map(this.props.children, child =>
               React.cloneElement(child, {
                 ...this.props.params,
