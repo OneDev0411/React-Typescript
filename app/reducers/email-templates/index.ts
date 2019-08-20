@@ -74,7 +74,7 @@ export function emailTemplates(
 export function selectEmailTemplates(
   state: IEmailTemplatesState,
   brandId: string
-) {
+): IBrandEmailTemplate[] {
   if (!state[brandId]) {
     return []
   }
@@ -85,7 +85,7 @@ export function selectEmailTemplates(
 export function selectEmailTemplatesIsFetching(
   state: IEmailTemplatesState,
   brandId: string
-) {
+): boolean {
   if (!state[brandId]) {
     return false
   }
@@ -96,7 +96,7 @@ export function selectEmailTemplatesIsFetching(
 export function selectEmailTemplatesError(
   state: IEmailTemplatesState,
   brandId: string
-) {
+): string {
   if (!state[brandId]) {
     return ''
   }
