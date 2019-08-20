@@ -3,11 +3,14 @@ import { Typography, MenuItem } from '@material-ui/core'
 import { browserHistory } from 'react-router'
 
 import { SideNavContainer } from './styled'
+import { isOnThisUrl } from './SideNav-helpers'
 
 interface SideNav {
   sections: {
     title?: string
     items: {
+      // Without this, it's really hard to detect whether user is on a url or not.
+      isIndex: boolean
       icon?: string
       title: string
       link: string
@@ -15,8 +18,6 @@ interface SideNav {
     }[]
   }[]
 }
-
-const isOnThisUrl = url => window.location.pathname.includes(url)
 
 function SideNav(props: SideNav) {
   return (
@@ -31,8 +32,10 @@ function SideNav(props: SideNav) {
               return (
                 <MenuItem
                   className="section-item"
-                  onClick={() => browserHistory.push(item.link)}
-                  selected={isOnThisUrl(item.link)}
+                  onClick={() => {
+                    browserHistory.push(item.link)
+                  }}
+                  selected={isOnThisUrl(item.link, item.isIndex)}
                   key={`sec-menu-${index}`}
                 >
                   <Typography variant="body2" component="span">
