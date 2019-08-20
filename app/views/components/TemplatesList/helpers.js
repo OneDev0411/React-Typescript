@@ -11,7 +11,7 @@ export function getThumbnail(template, user) {
 
   return `${template.url}${
     brokerageBrand ? `/${brokerageBrand.id}` : ''
-  }/thumbnail.png`
+  }/thumbnail.${template.video ? 'mp4' : 'png'}`
 }
 
 export function createdAt(date) {
