@@ -1,6 +1,6 @@
 import { createMuiTheme } from '@material-ui/core'
 
-import { borderColor, disabledBgColor, disabledColor } from 'views/utils/colors'
+import { borderColor, disabledColor } from 'views/utils/colors'
 
 const white = '#fff'
 
@@ -21,8 +21,12 @@ export const theme = createMuiTheme({
       contrastText: white
     },
     action: {
-      disabled: disabledColor,
-      disabledBackground: disabledBgColor
+      active: 'rgba(0, 0, 0, 0.54)',
+      hover: 'rgba(0, 0, 0, 0.08)',
+      hoverOpacity: 0.08,
+      selected: 'rgba(0, 0, 0, 0.14)',
+      disabled: 'rgba(0, 0, 0, 0.26)',
+      disabledBackground: 'rgba(0, 0, 0, 0.12)'
     },
     divider: borderColor,
     error: {
@@ -60,5 +64,6 @@ export const theme = createMuiTheme({
 })
 
 if (process.env.NODE_ENV === 'development') {
-  ;(window as any).theme = theme
+  // eslint-disable-next-line
+  ; (window as any).theme = theme
 }
