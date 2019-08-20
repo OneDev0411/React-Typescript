@@ -65,6 +65,7 @@ export function ChipsInput<T>({
   onChange = () => {},
   createFromString = () => undefined,
   allowAddOnEnter = true,
+  allowAddOnComma = true,
   allowAddOnBlur = true,
   readOnly = false,
   itemToChip,
@@ -113,11 +114,12 @@ export function ChipsInput<T>({
 
     if (
       inputValue &&
-      event.key === 'Enter' &&
-      allowAddOnEnter &&
+      ((event.key === 'Enter' && allowAddOnEnter) ||
+        (event.key === ',' && allowAddOnComma)) &&
       highlightedIndexRef.current === null
     ) {
       createFromStringAndClearInput()
+      event.preventDefault()
     }
   }
   const handleFocus = (
