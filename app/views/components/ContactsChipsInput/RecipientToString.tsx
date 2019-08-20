@@ -9,7 +9,7 @@ import {
 } from 'reducers/contacts/attributeDefs'
 
 import { Recipient } from './types'
-import { recipientToString } from './helpers'
+import { recipientToString } from './helpers/recipient-to-string'
 
 interface Props {
   attributeDefs: IAttributeDefsState

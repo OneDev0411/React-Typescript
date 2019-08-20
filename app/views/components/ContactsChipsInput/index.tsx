@@ -29,13 +29,11 @@ import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribu
 import { ChipsInput } from '../ChipsInput'
 import { InlineInputLabel } from '../InlineInputLabel'
 import { Recipient } from './types'
-import {
-  filterLists,
-  filterTags,
-  recipientToChip,
-  recipientToSuggestion
-} from './helpers'
 import { ChipsInputProps } from '../ChipsInput/types'
+import { recipientToChip } from './helpers/recipient-to-chip'
+import { recipientToSuggestion } from './helpers/recipient-to-suggestion'
+import { filterTags } from './helpers/filter-tags'
+import { filterLists } from './helpers/filter-lists'
 
 type BaseProps = Partial<FieldRenderProps<HTMLInputElement>> &
   Omit<
