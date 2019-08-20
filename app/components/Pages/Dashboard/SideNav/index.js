@@ -22,6 +22,8 @@ import PropertiesIcon from '../../../../views/components/SvgIcons/Properties/Ico
 import PropertiesIconActive from '../../../../views/components/SvgIcons/Properties/IconPropertiesActive'
 import CalendarIcon from '../../../../views/components/SvgIcons/Calendar2/IconCalendar'
 import CalendarIconActive from '../../../../views/components/SvgIcons/Calendar2/IconCalendarActive'
+import IconCog from '../../../../views/components/SvgIcons/Cog/IconCog'
+import IconCogActive from '../../../../views/components/SvgIcons/Cog/IconCogActive'
 import DealsNotifications from '../Deals/components/SideNavBadge'
 
 import { selectNotificationNewCount } from '../../../../reducers/notifications'
@@ -141,6 +143,15 @@ function AppSideNav(props) {
         </SidenavList>
       </ScrollableArea>
       <SidenavList>
+        {user && (
+          <SideNavLinkItem
+            tooltip="Account Settings"
+            to="/dashboard/account"
+            Icon={IconCog}
+            ActiveIcon={IconCogActive}
+          />
+        )}
+
         {user && (
           <SideNavLinkItem
             tooltip="Notifications"
