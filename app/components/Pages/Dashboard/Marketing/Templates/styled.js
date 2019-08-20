@@ -18,10 +18,9 @@ export const Tabs = styled.div`
 `
 
 export const Tab = styled.div`
-  width: 9.6rem; /* 152px */
   display: flex;
   justify-content: center;
-  padding: 1rem 0;
+  padding: 1rem;
   border-bottom: ${props => (props.selected ? `2px solid ${primary}` : 'none')};
 
   > a {
