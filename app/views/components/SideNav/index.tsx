@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, MenuItem } from '@material-ui/core'
+import { Typography, MenuItem, Box } from '@material-ui/core'
 import { browserHistory } from 'react-router'
 
 import { SideNavContainer } from './styled'
@@ -39,9 +39,16 @@ function SideNav(props: SideNav) {
                   selected={isOnThisUrl(item.link, item.isIndex)}
                   key={`sec-menu-${index}`}
                 >
-                  <Typography variant="body2" component="span">
-                    {item.title}
-                  </Typography>
+                  <Box display="flex" alignItems="center">
+                    {item.icon && (
+                      <Box mr={1} lineHeight={1} className="section-item__icon">
+                        <item.icon />
+                      </Box>
+                    )}
+                    <Typography variant="body2" component="span">
+                      {item.title}
+                    </Typography>
+                  </Box>
                   <Typography variant="body2" component="span">
                     {item.badge}
                   </Typography>

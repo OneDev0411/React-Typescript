@@ -22,7 +22,7 @@ export const SideNavContainer = styled.div`
     border-radius: 1.25rem 0 0 1.25rem;
     cursor: pointer;
     display: flex;
-    alig-items: center;
+    align-items: center;
     justify-content: space-between;
     min-height: unset;
     height: ${props => props.theme.spacing(5)}px;
@@ -38,6 +38,10 @@ export const SideNavContainer = styled.div`
 
     &:hover {
       background: rgba(9, 69, 235, 0.12);
+    }
+
+    .section-item__icon > svg {
+      fill: ${props => props.theme.palette.primary.main};
     }
   }
 
