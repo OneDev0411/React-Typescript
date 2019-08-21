@@ -5,22 +5,18 @@ import { browserHistory } from 'react-router'
 
 import { getActiveTeamId } from 'utils/user-teams'
 import TemplatesList from 'components/TemplatesList'
+import LinkButton from 'components/Button/LinkButton'
 import { getSelectedMediumTemplates } from 'components/TemplatesList/helpers'
 
-import { Header } from './Header'
-import { headers } from './Header/data'
+import { Header } from '../components/PageHeader'
+
+import { TYPES_TITLE, MEDIUMS_COLLECTION } from './constants'
 import useTemplatesList from './useTemplatesList'
 import { getMediums, getTabName } from './helpers'
-import { Tab, ListView } from './styled'
-
-const mediumsCollection = {
-  FacebookCover: 'Facebook Covers',
-  InstagramStory: 'Instagram Stories',
-  LinkedInCover: 'LinkedIn Covers'
-}
+import { Tab, Tabs } from './styled'
 
 function Templates(props) {
-  const selectedType = headers[props.types]
+  const title = TYPES_TITLE[props.types]
   const activeTeamId = getActiveTeamId(props.user)
   const [templates, isLoading] = useTemplatesList(activeTeamId, props.types)
   const tabs = getMediums(templates)
@@ -41,39 +37,39 @@ function Templates(props) {
   return (
     <React.Fragment>
       <Helmet>
-        <title>{selectedType.title} | Marketing | Rechat</title>
+        <title>{title} | Marketing | Rechat</title>
       </Helmet>
 
       <Header
-        data={selectedType}
+        title={title}
+        types={props.types}
         isSideMenuOpen={props.isSideMenuOpen}
         toggleSideMenu={props.toggleSideMenu}
-        types={props.types}
       />
 
-      <ListView>
-        <TemplatesList
-          items={availableTemplates}
-          isLoading={isLoading}
-          type={props.types}
-          medium={selectedMedium}
-          titleRenderer={() => (
-            <ul className="tabs">
+      <TemplatesList
+        items={availableTemplates}
+        isLoading={isLoading}
+        type={props.types}
+        medium={selectedMedium}
+        titleRenderer={() => (
+          <Tabs className="tabs">
+            <div className="tabs-inneer">
               {tabs.map((medium, index) => (
-                <li key={index}>
-                  <Tab
+                <Tab key={index} selected={selectedMedium === medium}>
+                  <LinkButton
                     inverse
+                    style={{ fontWeight: 600 }}
                     to={`/dashboard/marketing/${props.types}/${medium}`}
-                    selected={selectedMedium === medium}
                   >
-                    {mediumsCollection[medium] || medium}
-                  </Tab>
-                </li>
+                    {MEDIUMS_COLLECTION[medium] || medium}
+                  </LinkButton>
+                </Tab>
               ))}
-            </ul>
-          )}
-        />
-      </ListView>
+            </div>
+          </Tabs>
+        )}
+      />
     </React.Fragment>
   )
 }

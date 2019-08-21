@@ -1,20 +1,20 @@
 import styled from 'styled-components'
 
+import { grey } from 'views/utils/colors'
+
 export const FallbackContainer = styled.div`
   height: 100vh;
 `
 
 export const TemplatesContainer = styled.div`
-  padding: 0 1.5rem;
-
   & .templates-title {
-    margin: 1.5rem 0 1rem;
     font-weight: 500;
+    margin: 1.5rem;
   }
 `
 
 export const TemplatesListContainer = styled.div`
-  margin: 2rem 0;
+  padding: 1.5rem;
 
   & .grid-item {
     display: flex;
@@ -24,9 +24,11 @@ export const TemplatesListContainer = styled.div`
     box-shadow: 0px 2px 15px -5px rgba(0, 0, 0, 0.5);
     transition: 0.3s;
     min-height: 15.8rem;
-    background: #eee;
+    background: ${grey.A200};
     overflow: hidden;
     cursor: zoom-in;
+    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2), 0px 3px 4px rgba(0, 0, 0, 0.12),
+      0px 2px 0px rgba(0, 0, 0, 0.14);
 
     &:after {
       position: absolute;
@@ -34,7 +36,7 @@ export const TemplatesListContainer = styled.div`
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.2);
       opacity: 0;
       z-index: 1;
       transition: all 0.5s;
@@ -50,35 +52,37 @@ export const TemplatesListContainer = styled.div`
       justify-content: space-between;
       width: 100%;
       position: absolute;
-      top: 0;
+      bottom: 0;
       left: 0;
-      padding: 1rem;
+      padding: 0.5rem;
       z-index: 2;
       opacity: 0;
-      transform: translateY(0.5rem);
+      transform: translateY(-0.5rem);
       transition: all 0.35s;
 
-      .actionbar-delete {
-        background: #000;
+      .action-bar__right {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .action-bar__icon-button {
+        padding: 0 0.5rem;
+        background: rgba(0, 0, 0, 0.55);
 
         & svg {
           fill: #fff;
         }
 
         &:hover {
-          background: #fff;
-
-          & svg {
-            fill: #000;
-          }
+          background: #000;
         }
       }
 
-      & button {
-        margin-right: 1rem;
+      button {
+        margin-right: 0.5rem;
       }
 
-      & button:last-child {
+      button:last-child {
         margin-right: 0;
       }
     }
@@ -106,38 +110,48 @@ export const TemplatesListContainer = styled.div`
     }
   }
 
-  & .template_date {
+  & .template-date {
     margin-top: 0.5rem;
-    color: #7f7f7f;
     position: absolute;
-    bottom: -2rem;
+    bottom: -3rem;
     opacity: 0;
     transform: translateY(0.5rem);
     transition: all 0.35s;
+
+    .caption {
+      font-size: 0.75rem;
+      letter-spacing: 1.5px;
+      font-size: 600;
+      color: ${grey.A900};
+    }
   }
 
-  .grid-item:hover + .template_date {
+  .grid-item:hover + .template-date {
     opacity: 1;
     transform: translateY(0);
   }
 
-  .grid-item.loading + .template_date {
+  .grid-item.loading + .template-date {
     opacity: 1;
     transform: translateY(0);
   }
 
   .templates-masonry-grid {
     display: flex;
-    margin-left: -3rem; /* gutter size offset */
+    margin-left: -2rem; /* gutter size offset */
     width: auto;
   }
   .templates-masonry-grid_column {
-    padding-left: 3rem; /* gutter size */
+    padding-left: 2rem; /* gutter size */
     background-clip: padding-box;
   }
 
   .templates-masonry-grid_column > div {
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
     position: relative;
+  }
+
+  .templates-masonry-grid_column.is-instance > div {
+    margin-bottom: 5rem;
   }
 `

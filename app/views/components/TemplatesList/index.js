@@ -48,13 +48,16 @@ function TemplatesList(props) {
       <TemplatesListContainer>
         <Masonry
           breakpointCols={{
-            default: 4,
-            1440: 3,
-            768: 2,
+            default: 5,
+            1600: 4,
+            1200: 3,
+            960: 2,
             568: 1
           }}
           className="templates-masonry-grid"
-          columnClassName="templates-masonry-grid_column"
+          columnClassName={`templates-masonry-grid_column ${
+            props.type === 'history' ? 'is-instance' : ''
+          }`}
         >
           {props.items.map(template => (
             <Item

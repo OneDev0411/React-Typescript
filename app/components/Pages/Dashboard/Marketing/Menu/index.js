@@ -3,7 +3,6 @@ import React from 'react'
 import { items } from './data'
 import { ActiveItem } from './ActiveItem'
 import { ComingSoonItem } from './ComingSoonItem'
-import IconAllDesigns from '../components/IconAllDesigns/IconAllDesigns'
 import IconMyDesigns from '../components/IconMyDesigns/IconMyDesigns'
 
 export function Menu() {
@@ -12,15 +11,9 @@ export function Menu() {
       <div style={{ marginBottom: '2.5em' }}>
         <ActiveItem
           indexed
-          text="All Designs"
-          Icon={IconAllDesigns}
-          to="/dashboard/marketing"
-          className="onboarding--all-designs"
-        />
-        <ActiveItem
           text="My Designs"
           Icon={IconMyDesigns}
-          to="/dashboard/marketing/history"
+          to="/dashboard/marketing"
           className="onboarding--my-designs"
         />
       </div>
