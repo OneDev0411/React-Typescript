@@ -1,4 +1,5 @@
 import { Theme, withStyles } from '@material-ui/core'
+import cssTriangle from 'css-triangle'
 
 export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
   // @global is handled by jss-plugin-global.
@@ -37,6 +38,70 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
     },
     '.MuiOutlinedInput-input[type="time"]': {
       minWidth: '7rem'
+    },
+
+    '.MuiTooltip-tooltip': {
+      background: theme.palette.common.black,
+      fontSize: theme.typography.body1.fontSize,
+      fontWeight: theme.typography.body1.fontWeight,
+      padding: theme.spacing(1, 1.5),
+      position: 'relative',
+      '&::before': {
+        content: '""',
+        position: 'absolute'
+      },
+      '&.MuiTooltip-tooltipPlacementBottom::before': {
+        top: -8,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        ...cssTriangle.generate({
+          ...{
+            width: 16,
+            height: 8,
+            color: theme.palette.common.black
+          },
+          direction: 'top'
+        })
+      },
+      '&.MuiTooltip-tooltipPlacementTop::before': {
+        bottom: -8,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        ...cssTriangle.generate({
+          ...{
+            width: 16,
+            height: 8,
+            color: theme.palette.common.black
+          },
+          direction: 'bottom'
+        })
+      },
+      '&.MuiTooltip-tooltipPlacementLeft::before': {
+        right: -8,
+        top: '50%',
+        transform: 'translateY(-50%)',
+        ...cssTriangle.generate({
+          ...{
+            width: 8,
+            height: 16,
+            color: theme.palette.common.black
+          },
+          direction: 'right'
+        })
+      },
+      '&.MuiTooltip-tooltipPlacementRight::before': {
+        left: -8,
+        top: '50%',
+        transform: 'translateY(-50%)',
+        ...cssTriangle.generate({
+          ...{
+            width: 8,
+            height: 16,
+            color: theme.palette.common.black
+          },
+          direction: 'left'
+        })
+      }
     }
   }
 }))(() => null)

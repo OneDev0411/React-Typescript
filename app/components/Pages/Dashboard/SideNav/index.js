@@ -170,7 +170,7 @@ function AppSideNav(props) {
         <IntercomTrigger
           render={({ activeIntercom, intercomIsActive }) => (
             <SideNavItem>
-              <SideNavTooltip caption="Support">
+              <SideNavTooltip title="Support">
                 <SidenavIconButton
                   inverse
                   onClick={!intercomIsActive ? activeIntercom : () => false}
@@ -184,7 +184,7 @@ function AppSideNav(props) {
 
         {!user && (
           <SideNavItem>
-            <SideNavTooltip caption="Login">
+            <SideNavTooltip title="Login">
               <SidenavLink
                 inverse
                 to={`/signin?redirectTo=${encodeURIComponent(

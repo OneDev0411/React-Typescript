@@ -81,6 +81,7 @@
     "compression-webpack-plugin": "^2.0.0",
     "core-js": "^3.0.0",
     "css-loader": "^0.28.11",
+    "css-triangle": "0.0.1",
     "cuid": "^2.1.6",
     "downshift": "^1.31.16",
     "draft-js": "^0.10.5",

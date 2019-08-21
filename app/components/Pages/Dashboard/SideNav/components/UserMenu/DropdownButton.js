@@ -21,7 +21,7 @@ export class DropdownButton extends Component {
 
   render() {
     return (
-      <SideNavTooltip caption="Settings">
+      <SideNavTooltip title="Settings">
         <IconButton
           iconSize="large"
           inverse
