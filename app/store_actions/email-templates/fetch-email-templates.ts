@@ -12,7 +12,6 @@ export const fetchEmailTemplates = (brandId: UUID) => async (
   dispatch: ThunkDispatch<any, any, EmailTemplateAction>,
   getState: () => IAppState
 ) => {
-
   if (selectEmailTemplatesIsFetching(getState().emailTemplates, brandId)) {
     return Promise.resolve()
   }
@@ -28,7 +27,10 @@ export const fetchEmailTemplates = (brandId: UUID) => async (
     dispatch({
       type: actionTypes.FETCH_EMAIL_TEMPLATES_SUCCESS,
       brandId,
-      templates
+      templates: templates.map(template => ({
+        ...template,
+        editable: template.brand === brandId
+      }))
     })
 
     return

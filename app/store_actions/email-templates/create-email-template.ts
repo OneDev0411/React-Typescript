@@ -15,7 +15,10 @@ export const createEmailTemplate = (
     dispatch({
       type: actionTypes.UPDATE_EMAIL_TEMPLATE,
       brandId,
-      template
+      template: {
+        ...template,
+        editable: true
+      }
     })
 
     return template
