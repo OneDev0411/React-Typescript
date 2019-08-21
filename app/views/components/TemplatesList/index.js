@@ -48,9 +48,10 @@ function TemplatesList(props) {
       <TemplatesListContainer>
         <Masonry
           breakpointCols={{
-            default: 4,
-            1440: 3,
-            768: 2,
+            default: 5,
+            1600: 4,
+            1200: 3,
+            960: 2,
             568: 1
           }}
           className="templates-masonry-grid"
