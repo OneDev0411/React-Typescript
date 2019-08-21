@@ -3,24 +3,29 @@ import { Helmet } from 'react-helmet'
 
 import {
   Container as PageContainer,
-  Menu as SideMenu,
   Content as PageContent
 } from 'components/SlideMenu'
-import { ListTitle } from 'components/SlideMenu/Menu/styled'
+import PageSideNav from 'components/PageSideNav'
 
-import Menu from './Menu'
+const urlGenerator = url => `/dashboard/insights${url && `/${url}`}`
 
 function InsightsLayout(props) {
-  const items = [
+  const sections = [
     {
-      title: 'Sent',
-      url: '/',
-      badge: props.sentCount
-    },
-    {
-      title: 'Scheduled',
-      url: '/scheduled',
-      badge: props.scheduledCount
+      title: 'Email Insight',
+      items: [
+        {
+          title: 'Sent',
+          isIndex: true,
+          link: urlGenerator(''),
+          badge: props.sentCount
+        },
+        {
+          title: 'Scheduled',
+          link: urlGenerator('scheduled'),
+          badge: props.scheduledCount
+        }
+      ]
     }
   ]
 
@@ -29,12 +34,7 @@ function InsightsLayout(props) {
       <Helmet>
         <title>Insights | Rechat</title>
       </Helmet>
-
-      <SideMenu isOpen={props.isSideMenuOpen}>
-        <ListTitle className="onboarding--intro">Email Insight</ListTitle>
-        <Menu items={items} />
-      </SideMenu>
-
+      <PageSideNav sections={sections} />
       <PageContent isSideMenuOpen={props.isSideMenuOpen}>
         {props.children}
       </PageContent>
