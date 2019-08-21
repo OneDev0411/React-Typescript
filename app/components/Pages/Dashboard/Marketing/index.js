@@ -19,8 +19,9 @@ const sections = [
     title: 'Marketing',
     items: [
       {
+        isIndex: true,
         title: 'My Designs',
-        link: urlGenerator('history'),
+        link: urlGenerator(''),
         icon: MyDesignsIcon
       }
     ]
