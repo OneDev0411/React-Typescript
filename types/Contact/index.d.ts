@@ -63,9 +63,13 @@ declare interface IContact extends IContactBase {
   brand: UUID
 
   display_name: string
+  profile_image_url: string | null
   partner_name?: string
   last_touch?: number
   next_touch?: number
+
+  email: string | null
+  emails: string[] | null
 
   attributes?: IContactAttribute[]
   users?: IUser[]
@@ -275,7 +279,7 @@ type TContactAssociationMap<T extends string> = T extends 'contact.attributes'
 declare interface IFetchContactQuery {
   associations?: string[] // TODO: use TContactAssociation[]
   order?: string
-  filter_type: TContactFilterType
+  filter_type?: TContactFilterType
 }
 
 declare interface TGetContactFunc<A extends string> {

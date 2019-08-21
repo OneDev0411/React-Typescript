@@ -14,15 +14,18 @@ import { stateToHTML } from 'draft-js-export-html'
 import { stateFromHTML } from 'draft-js-import-html'
 import cn from 'classnames'
 
-import { Box } from '@material-ui/core'
+import { Box, Tooltip } from '@material-ui/core'
+
+import Flex from 'styled-flex-component'
 
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 import { isImageFile } from 'utils/file-utils/is-image-file'
 import IconLink from 'components/SvgIcons/Link/IconLink'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
+import { getShortcutTooltip } from 'utils/get-shortcut-tooltip'
+
 import { LinkEditorPopover } from './components/LinkEditorPopover'
-import IconButton from './buttons/IconButton'
 
 import { EditorWrapper, Separator, Toolbar } from './styled'
 import { FieldError } from '../final-form-fields/FieldError'
@@ -42,6 +45,7 @@ import { TemplateVariablesButton } from '../TemplateVariablesButton'
 import { ITemplateVariableSuggestion } from '../TemplateVariablesButton/types'
 import { insertTemplateVariable } from './modifiers/insert-template-expression'
 import { removeUnwantedEmptyLineBeforeAtomic } from './modifiers/remove-unwanted-empty-block-before-atomic'
+import { ToolbarIconButton } from './buttons/ToolbarIconButton'
 
 /**
  * Html wysiwyg editor.
@@ -296,56 +300,7 @@ export const TextEditor = forwardRef(
     }
 
     return (
-      <div className={className}>
-        <Toolbar>
-          {enableRichText && (
-            <>
-              <RichTextButtons richButtonsPlugin={richButtonsPlugin} />
-              <IconButton
-                onClick={event => {
-                  setLinkEditorOpen(true)
-                  event.preventDefault()
-                  event.stopPropagation()
-                }}
-              >
-                <IconLink />
-              </IconButton>
-              <Separator />
-            </>
-          )}
-
-          {enableImage && <AddImageButton onImageSelected={addImage} />}
-
-          {enableTemplateVariables && (
-            <>
-              <Box pr={1}>
-                <TemplateVariablesButton
-                  suggestions={templateVariableSuggestionGroups || []}
-                  onSuggestionSelected={suggestion =>
-                    insertVariable(suggestion)
-                  }
-                />
-              </Box>
-              <Separator />
-            </>
-          )}
-
-          {enableSignature && (
-            <>
-              <Checkbox
-                checked={signaturePlugin.hasSignature()}
-                onChange={() =>
-                  signature
-                    ? signaturePlugin.toggleSignature()
-                    : showNoSignatureModal()
-                }
-              >
-                Signature
-              </Checkbox>
-            </>
-          )}
-        </Toolbar>
-
+      <Flex column className={className}>
         <EditorWrapper
           ref={editorElementRef}
           className={cn({
@@ -367,7 +322,6 @@ export const TextEditor = forwardRef(
             ref={editorRef}
             {...DraftEditorProps}
           />
-          <alignmentPlugin.AlignmentTool />
           <LinkEditorPopover
             editorRef={originalEditorRef}
             editorState={editorState}
@@ -394,9 +348,61 @@ export const TextEditor = forwardRef(
             </InlineEntityPopover>
           )}
         </EditorWrapper>
+        <Toolbar>
+          {enableRichText && (
+            <>
+              <RichTextButtons richButtonsPlugin={richButtonsPlugin} />
+              <Tooltip title={getShortcutTooltip('Insert Link', 'K')}>
+                <ToolbarIconButton
+                  onClick={event => {
+                    setLinkEditorOpen(true)
+                    event.preventDefault()
+                    event.stopPropagation()
+                  }}
+                >
+                  <IconLink />
+                </ToolbarIconButton>
+              </Tooltip>
+              <Separator />
+            </>
+          )}
 
+          {enableImage && (
+            <>
+              <AddImageButton onImageSelected={addImage} />
+              <Separator />
+            </>
+          )}
+
+          {enableTemplateVariables && (
+            <>
+              <TemplateVariablesButton
+                suggestions={templateVariableSuggestionGroups || []}
+                onSuggestionSelected={suggestion => insertVariable(suggestion)}
+              />
+              <Separator />
+            </>
+          )}
+
+          {enableSignature && (
+            <Box pl={0.5}>
+              <Checkbox
+                inputProps={{ tabIndex: 1 }}
+                checked={signaturePlugin.hasSignature()}
+                onChange={() =>
+                  signature
+                    ? signaturePlugin.toggleSignature()
+                    : showNoSignatureModal()
+                }
+              >
+                Signature
+              </Checkbox>
+            </Box>
+          )}
+        </Toolbar>
+        <alignmentPlugin.AlignmentTool />
         {input && <FieldError name={input.name} />}
-      </div>
+      </Flex>
     )
   }
 )

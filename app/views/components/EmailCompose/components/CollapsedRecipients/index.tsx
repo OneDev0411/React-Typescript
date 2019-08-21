@@ -15,8 +15,7 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      height: '2rem',
-      marginTop: `${theme.spacing(2)}px`
+      height: '2rem'
     }
   })
 )

@@ -11,6 +11,7 @@ import {
   Popper,
   TextField,
   Theme,
+  Tooltip,
   useTheme
 } from '@material-ui/core'
 import classNames from 'classnames'
@@ -65,6 +66,7 @@ export function ChipsInput<T>({
   onChange = () => {},
   createFromString = () => undefined,
   allowAddOnEnter = true,
+  allowAddOnComma = true,
   allowAddOnBlur = true,
   readOnly = false,
   itemToChip,
@@ -102,17 +104,23 @@ export function ChipsInput<T>({
   const highlightedIndexRef = useRef<number | null>(null)
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (items.length && !inputValue.length && event.key === 'Backspace') {
+    if (
+      items.length &&
+      !inputValue.length &&
+      event.key === 'Backspace' &&
+      !readOnly
+    ) {
       deleteChipAtIndex(items.length - 1)
     }
 
     if (
       inputValue &&
-      event.key === 'Enter' &&
-      allowAddOnEnter &&
+      ((event.key === 'Enter' && allowAddOnEnter) ||
+        (event.key === ',' && allowAddOnComma)) &&
       highlightedIndexRef.current === null
     ) {
       createFromStringAndClearInput()
+      event.preventDefault()
     }
   }
   const handleFocus = (
@@ -128,19 +136,25 @@ export function ChipsInput<T>({
   }
 
   const chips = items.map((item, index) => {
-    const chip = itemToChip(item)
+    const chipData = itemToChip(item)
 
-    return (
+    const chip = (
       <Chip
-        key={`${index}-${chip.label}`}
+        key={`${index}-${chipData.label}`}
         className={classNames(classes.chip, ChipProps.className, {
-          [chipClasses.error]: chip.hasError
+          [chipClasses.error]: chipData.hasError
         })}
         size="small"
         {...ChipProps}
-        label={chip.label}
+        label={chipData.label}
         onDelete={readOnly ? undefined : () => deleteChipAtIndex(index)}
       />
+    )
+
+    return chipData.tooltip ? (
+      <Tooltip title={chipData.tooltip}>{chip}</Tooltip>
+    ) : (
+      chip
     )
   })
 
@@ -248,7 +262,9 @@ export function ChipsInput<T>({
                         </ListItemAvatar>
                       ) : (
                         <ListItemAvatar>
-                          {suggestion.avatar || <Avatar title="" image="" />}
+                          {suggestion.avatar || (
+                            <Avatar title={suggestion.title} />
+                          )}
                         </ListItemAvatar>
                       )}
                       <ListItemText

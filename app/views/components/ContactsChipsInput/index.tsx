@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { FieldRenderProps } from 'react-final-form'
 import { Observable } from 'rxjs'
@@ -10,7 +10,6 @@ import { useControllableState } from 'react-use-controllable-state/dist'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import Fuse from 'fuse.js'
-
 import { TextField } from 'final-form-material-ui'
 
 import { searchContacts } from 'models/contacts/search-contacts'
@@ -19,23 +18,14 @@ import { getSavedSegments } from 'actions/filter-segments/get-saved-segment'
 import { IAppState } from 'reducers/index'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import { getSegments, isListFetched } from 'reducers/filter-segments'
-import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
-import {
-  IAttributeDefsState,
-  selectDefinitionByName
-} from 'reducers/contacts/attributeDefs'
-import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 
 import { ChipsInput } from '../ChipsInput'
 import { InlineInputLabel } from '../InlineInputLabel'
 import { Recipient } from './types'
-import {
-  filterLists,
-  filterTags,
-  recipientToChip,
-  recipientToSuggestion
-} from './helpers'
 import { ChipsInputProps } from '../ChipsInput/types'
+import { recipientToChip } from './helpers/recipient-to-chip'
+import { recipientToSuggestion } from './helpers/recipient-to-suggestion'
+import { filterEntities } from './helpers/filter-entities'
 
 type BaseProps = Partial<FieldRenderProps<HTMLInputElement>> &
   Omit<
@@ -64,7 +54,6 @@ interface Props extends BaseProps {
   value?: Recipient[]
   getContactsTags: IAsyncActionProp<typeof getContactsTags>
   getSavedSegments: IAsyncActionProp<typeof getSavedSegments>
-  attributeDefs: IAttributeDefsState
 }
 
 /**
@@ -76,7 +65,6 @@ function ContactsChipsInput({
   getSavedSegments,
   isLoadingTags,
   areListsFetched,
-  attributeDefs,
   tags,
   lists,
   label,
@@ -103,28 +91,25 @@ function ContactsChipsInput({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const emailAttributeDef = useMemo(
-    () => selectDefinitionByName(attributeDefs, 'email')!,
-    [attributeDefs]
-  )
   const getSuggestions: (searchTerm: string) => Observable<Recipient[]> = (
     searchTerm: string
   ) => {
     return combineLatest(
       ...[
-        of(filterTags(tags, searchTerm)),
-        of(filterLists(lists, searchTerm)),
+        of(filterEntities(tags, searchTerm, ['text'])),
+        of(filterEntities(lists, searchTerm, ['name'])),
         searchTerm
-          ? fromPromise(searchContacts(searchTerm)).pipe(
+          ? fromPromise(
+              searchContacts(searchTerm, undefined, {
+                associations: [],
+                order: '-created_at'
+              })
+            ).pipe(
               map(result => {
-                const contacts = normalizeContactAttribute(result)
-
                 return new Fuse(
-                  contacts
+                  result.data
                     .map(contact => {
-                      const emails: string[] = (
-                        getContactAttribute(contact, emailAttributeDef) || []
-                      ).map(attr => attr.text)
+                      const emails: string[] = contact.emails || []
 
                       return emails.map(email => ({
                         contact,
@@ -132,7 +117,7 @@ function ContactsChipsInput({
                       }))
                     })
                     .flat(),
-                  { keys: ['email', 'contact.summary.display_name'] }
+                  { keys: ['email', 'contact.display_name'] }
                 ).search(searchTerm)
               })
             )
@@ -157,7 +142,6 @@ function ContactsChipsInput({
       createFromString={value => ({ email: value })}
       TextFieldComponent={TextField}
       TextFieldProps={{
-        margin: 'dense',
         InputProps: {
           startAdornment: <InlineInputLabel>{label}</InlineInputLabel>,
           ...InputProps
@@ -166,6 +150,7 @@ function ContactsChipsInput({
         meta,
         ...TextFieldProps
       }}
+      searchDebounce={300}
     />
   )
 }
@@ -183,7 +168,6 @@ const mapStateToProps = ({ contacts }: IAppState) => {
   const isLoadingTags = isFetchingTags(contacts.tags)
 
   return {
-    attributeDefs: contacts.attributeDefs,
     tags,
     lists,
     isLoadingTags,

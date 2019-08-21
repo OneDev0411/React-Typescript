@@ -201,7 +201,6 @@ class EmailComposeDrawer extends React.Component<
             <Field
               placeholder="Subject"
               name="subject"
-              margin="normal"
               InputProps={{
                 onFocus: this.collapseTopFields,
                 inputProps: {

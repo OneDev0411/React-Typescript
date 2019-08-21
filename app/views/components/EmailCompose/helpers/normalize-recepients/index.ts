@@ -1,8 +1,6 @@
 import { Recipient } from '../../../ContactsChipsInput/types'
-import {
-  isContactList,
-  isContactTag
-} from '../../../ContactsChipsInput/helpers'
+import { isContactList } from '../../../ContactsChipsInput/helpers/is-contact-list'
+import { isContactTag } from '../../../ContactsChipsInput/helpers/is-contact-tag'
 
 export function normalizeRecipients(
   recipients: Recipient[] | undefined

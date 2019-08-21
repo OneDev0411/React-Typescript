@@ -4,16 +4,22 @@ import { TextFieldProps } from '@material-ui/core/TextField'
 import { Observable } from 'rxjs'
 import { TextField } from '@material-ui/core'
 
+/**
+ * Used in {@link ChipsInputProps#itemToChip}. See description there.
+ */
 export interface ChipInputItem {
-  label: ReactNode | string
+  label: ReactNode
   hasError?: boolean
-  avatar?: ReactNode | string
+  avatar?: ReactNode
+  tooltip?: ReactNode
 }
+
 export interface Suggestion<T = any> {
   title: ReactNode
   subtitle?: ReactNode
   avatar?: ReactNode
 }
+
 export interface ChipsInputProps<T> {
   /**
    * The list of chip items to be shown before the input
@@ -27,6 +33,15 @@ export interface ChipsInputProps<T> {
    */
   onChange?: (items: T[]) => void
 
+  /**
+   * Right now, we have parameterized the UI for each item, and we render
+   * {@link Chip MUI Chip} component for each item. This now addresses our
+   * current requirements, but we may end up changing this approach and
+   * accepting a renderItem prop instead of itemToChip prop that maps each
+   * to a data structure suitable with this abstraction.
+   * This `renderItem` is for sure more general and flexible but it maybe
+   * overkill if current abstraction is enough.
+   */
   itemToChip: (item: T) => ChipInputItem
 
   itemToSuggestion: (item: T) => Suggestion
@@ -41,6 +56,8 @@ export interface ChipsInputProps<T> {
   allowAddOnEnter?: boolean
 
   allowAddOnBlur?: boolean
+
+  allowAddOnComma?: boolean
 
   readOnly?: boolean
 
