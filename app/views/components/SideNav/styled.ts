@@ -21,6 +21,11 @@ export const SideNavContainer = styled.div`
   .section-item {
     border-radius: 1.25rem 0 0 1.25rem;
     cursor: pointer;
+    display: flex;
+    alig-items: center;
+    justify-content: space-between;
+    min-height: unset;
+    height: ${props => props.theme.spacing(5)}px;
   }
 
   .Mui-selected {

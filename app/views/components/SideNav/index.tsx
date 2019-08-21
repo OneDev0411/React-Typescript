@@ -41,6 +41,9 @@ function SideNav(props: SideNav) {
                   <Typography variant="body2" component="span">
                     {item.title}
                   </Typography>
+                  <Typography variant="body2" component="span">
+                    {item.badge}
+                  </Typography>
                 </MenuItem>
               )
             })}
