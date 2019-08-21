@@ -57,7 +57,7 @@ export const TemplatesListContainer = styled.div`
       padding: 0.5rem;
       z-index: 2;
       opacity: 0;
-      transform: translateY(-0.5rem);
+      transform: translateY(0.5rem);
       transition: all 0.35s;
 
       .action-bar__right {
