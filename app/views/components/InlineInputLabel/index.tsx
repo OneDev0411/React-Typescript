@@ -7,7 +7,9 @@ const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
       root: {
-        marginRight: `${theme.spacing(2)}px`
+        marginRight: `${theme.spacing(2)}px`,
+        // without this, required asterisk falls down in Chrome on windows :|
+        minWidth: 'fit-content'
       }
     }),
   { name: 'InlineInputLabel' }
