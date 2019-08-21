@@ -1,6 +1,7 @@
 import { createDayId } from '../create-day-id'
 import { sortEvents } from '../sort-events'
 import { convertTaskToCalendarEvent } from '../convert-task-to-calendar'
+import eventEmptyState from '../get-event-empty-state'
 
 export function upsertCrmEvents(
   events: CalendarEventsList,
@@ -8,19 +9,16 @@ export function upsertCrmEvents(
   type: string
 ) {
   const dayId = createDayId(event.due_date * 1000, false)
-  const todayId = createDayId(new Date(), false)
 
   const calendarEvent = convertTaskToCalendarEvent(event)
 
   if (type === 'created') {
-    // remove today empty state if created event is for today
-    if (dayId === todayId) {
-      events = {
-        ...events,
-        [dayId]: events[dayId].filter(
-          event => event.event_type !== 'today-empty-state'
-        )
-      }
+    // remove empty state if exists
+    events = {
+      ...events,
+      [dayId]: events[dayId].filter(
+        event => event.event_type !== 'today-empty-state'
+      )
     }
 
     return sortEvents({
@@ -32,11 +30,17 @@ export function upsertCrmEvents(
   }
 
   if (type === 'deleted') {
-    return {
+    const nextEvents = {
       ...events,
       [dayId]: events[dayId].filter(
         (item: ICalendarEvent) => item.id !== event.id
       )
+    }
+
+    return {
+      ...nextEvents,
+      [dayId]:
+        nextEvents[dayId].length > 0 ? nextEvents[dayId] : [eventEmptyState]
     }
   }
 

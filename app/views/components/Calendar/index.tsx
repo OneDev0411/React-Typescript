@@ -36,6 +36,7 @@ import { upsertCrmEvents } from './helpers/upsert-crm-events'
 import { normalizeEvents } from './helpers/normalize-events'
 import { sortEvents } from './helpers/sort-events'
 import { getRowIdByDate } from './helpers/get-row-by-date'
+import { appendDayToEvents } from './helpers/append-day-to-events'
 
 import List from './components/List'
 
@@ -125,10 +126,10 @@ export function Calendar({
 
         // concat new events and existing events
         const nextEvents = options.reset
-          ? normalizeEvents(apiOptions.range, fetchedEvents)
+          ? normalizeEvents(apiOptions.range, fetchedEvents, activeDate)
           : {
               ...events,
-              ...normalizeEvents(apiOptions.range, fetchedEvents)
+              ...normalizeEvents(apiOptions.range, fetchedEvents, activeDate)
             }
 
         // sort events based on date
@@ -147,7 +148,7 @@ export function Calendar({
         setIsLoading(false)
       }
     },
-    [events, filter, isLoading, onLoadEvents, viewAsUsers]
+    [activeDate, events, filter, isLoading, onLoadEvents, viewAsUsers]
   )
 
   /**
@@ -166,16 +167,30 @@ export function Calendar({
    * @param date
    */
   const jumpToDate = (date: Date, allowSeeking: boolean = true): void => {
-    const rowId = getRowIdByDate(
-      date,
-      listRows,
-      Object.keys(events),
-      calendarRange
-    )
+    let rowId = getRowIdByDate(date, listRows, events, calendarRange)
 
     if (rowId === -1) {
       // try to jump to the date by fetching more data from server
       allowSeeking && handleLoadEvents(date)
+
+      return
+    }
+
+    /**
+     * https://gitlab.com/rechat/web/issues/3171
+     * if user selects a day on left side calendar that has no events,
+     * show the day on the right side, under it put No events, make one
+     * and make, make one to be in our blue link color and tapping on it
+     * should open the event dialog with the day set on it
+     */
+    if (rowId === null) {
+      const nextEvents = appendDayToEvents(date, events)
+      const nextRows = createListRows(nextEvents)
+
+      setEvents(nextEvents)
+      setActiveDate(date)
+
+      setListRows(nextRows)
 
       return
     }

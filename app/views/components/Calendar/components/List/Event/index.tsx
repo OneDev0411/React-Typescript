@@ -10,6 +10,8 @@ import { EventActions } from './Actions'
 
 import { TodayEmptyState } from './TodayEmptyState'
 
+import emptyStateEvent from '../../../helpers/get-event-empty-state'
+
 import styles from './styles'
 
 interface Props {
@@ -33,14 +35,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: '100%',
     borderBottom: (props: StyleProps) =>
       props.hasBorderBottom ? '1px solid rgba(219, 230, 253, 0.5)' : 'none',
-    '& button': {
+    '& button, a.MuiButtonBase-root': {
       borderColor: '#eee',
       color: '#eee'
     },
     '&:hover': {
       transition: '0.2s ease-in background-color',
       backgroundColor: theme.palette.action.hover,
-      '& button': {
+      '& button, a.MuiButtonBase-root': {
         borderColor: 'inherit',
         color: 'inherit'
       }
@@ -69,7 +71,7 @@ export function Event({
     hasBorderBottom
   })
 
-  if (event.event_type === 'today-empty-state') {
+  if (event.event_type === emptyStateEvent.event_type) {
     return <TodayEmptyState style={style} />
   }
 

@@ -51,7 +51,9 @@ const CalendarPage: React.FC = props => {
    * @param date
    */
   const handleDatePickerChange = (date: Date = new Date()) => {
-    calendarRef.current!.jumpToDate(date)
+    if (calendarRef.current) {
+      calendarRef.current.jumpToDate(date)
+    }
   }
 
   /**

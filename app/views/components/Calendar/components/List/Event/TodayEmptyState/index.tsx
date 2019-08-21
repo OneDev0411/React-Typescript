@@ -14,15 +14,17 @@ const emptyRowStyles = {
 
 export function TodayEmptyState({ style }: Props) {
   return (
-    <div style={style}>
-      <div
-        style={{
-          ...styles.row,
-          ...emptyRowStyles
-        }}
-      >
-        <div style={styles.container}>No event set for today!</div>
+    <>
+      <div style={style}>
+        <div
+          style={{
+            ...styles.row,
+            ...emptyRowStyles
+          }}
+        >
+          <div style={styles.container}>No event set for this day!</div>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
