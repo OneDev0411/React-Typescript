@@ -30,6 +30,8 @@ export interface CreateSignaturePluginOptions {
    */
   prependSignatureWithSeparator?: boolean
 
+  numOfEmptyLinesBeforeSignature?: number
+
   stateFromHtmlOptions?: ImportOptions
 }
 
@@ -46,6 +48,7 @@ export interface CreateSignaturePluginOptions {
 export default function createSignaturePlugin({
   signatureContent,
   prependSignatureWithSeparator = true,
+  numOfEmptyLinesBeforeSignature = 2,
   stateFromHtmlOptions
 }: CreateSignaturePluginOptions) {
   let pluginFns: PluginFunctions
@@ -81,13 +84,23 @@ export default function createSignaturePlugin({
       pluginFns.setEditorState(appendSignature(editorState, focus))
     } else if (hasSignature(editorState) && enabled !== true) {
       // remove signature
-      const blocks = editorState
-        .getCurrentContent()
-        .getBlocksAsArray()
-        .filter(block => !isSignatureBlock(block))
+      const blocks = editorState.getCurrentContent().getBlocksAsArray()
+      const firstSignatureBlockIndex = blocks.findIndex(isSignatureBlock)
+      const isEmptyBlockBeforeSignature = (index, block) =>
+        index === firstSignatureBlockIndex - 1 && block.getText().trim() === ''
+
+      const newBlocks = blocks.filter((block, index) => {
+        return (
+          !isSignatureBlock(block) && !isEmptyBlockBeforeSignature(index, block)
+        )
+      })
 
       const selection = editorState.getSelection()
-      const newContent = ContentState.createFromBlockArray(blocks)
+      const newContent = ContentState.createFromBlockArray(
+        newBlocks.length > 0
+          ? newBlocks
+          : ContentState.createFromText('').getBlocksAsArray()
+      )
 
       const newEditorState = EditorState.push(
         editorState,
@@ -111,8 +124,24 @@ export default function createSignaturePlugin({
   }
 
   const appendSignature = (editorState: EditorState, focus = false) => {
+    const lastBlock = editorState
+      .getCurrentContent()
+      .getBlocksAsArray()
+      .slice(-1)[0]
+
     const newEditorState = appendBlocks(editorState, [
-      ...stateFromHTML('<br/>').getBlocksAsArray(),
+      ...stateFromHTML(
+        Array(
+          Math.max(
+            numOfEmptyLinesBeforeSignature -
+              getNumberOfTrailingEmptyLines(lastBlock),
+            0
+          )
+        )
+          .fill(null)
+          .map(() => '<br />')
+          .join('')
+      ).getBlocksAsArray(),
       ...(prependSignatureWithSeparator ? getSignatureSeparator() : []),
       ...getSignatureBlocks(signatureContent, stateFromHtmlOptions).map(
         convertToSignatureBlock
@@ -209,4 +238,11 @@ function getSignatureBlocks(
 
 function isSignatureBlock(block: ContentBlock) {
   return block.getData().get('isSignature')
+}
+
+function getNumberOfTrailingEmptyLines(lastBlock) {
+  return `a${lastBlock.getText()}`
+    .split('')
+    .reverse()
+    .findIndex(char => char !== '\n')
 }
