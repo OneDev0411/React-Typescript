@@ -6,11 +6,12 @@ import Table from 'components/Grid/Table'
 import Header from './Header'
 import Layout from './Layout'
 import StatColumn from './StatColumn'
-import { percent } from './helpers'
+import { percent, doFilterOnColumns } from './helpers'
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
 import NoSearchResults from '../../../../Partials/no-search-results'
 
+import Actions from './MarketingInsightsActions'
 import InfoColumn from './InfoColumn'
 import { InsightContainer } from './styled'
 import useListData from './useListData'
@@ -42,7 +43,7 @@ function List(props) {
         render: props => (
           <InfoColumn
             data={props.rowData}
-            reload={() => setQueue(queue => queue + 1)}
+            reloadList={() => setQueue(queue => queue + 1)}
           />
         )
       },
@@ -50,40 +51,56 @@ function List(props) {
         header: 'Delivered',
         id: 'delivered',
         verticalAlign: 'center',
-        render: props => (
-          <StatColumn
-            content={`${percent(props.rowData.delivered, props.rowData.sent)}%`}
-            tooltipTitle={`${percent(
-              props.rowData.failed,
-              props.rowData.sent
-            )}% Bounced`}
-            isVisibile={!!props.rowData.executed_at}
-          />
-        )
+        render: props =>
+          props.rowData.executed_at ? (
+            <StatColumn
+              content={`${percent(
+                props.rowData.delivered,
+                props.rowData.sent
+              )}%`}
+              tooltipTitle={`${percent(
+                props.rowData.failed,
+                props.rowData.sent
+              )}% Bounced`}
+            />
+          ) : null
       },
       {
         header: 'Open Rate',
         id: 'open-rate',
         verticalAlign: 'center',
-        render: props => (
-          <StatColumn
-            content={`${percent(props.rowData.opened, props.rowData.sent)}%`}
-            tooltipTitle={`${props.rowData.opened} Recipients`}
-            isVisibile={!!props.rowData.executed_at}
-          />
-        )
+        render: props =>
+          props.rowData.executed_at ? (
+            <StatColumn
+              content={`${percent(props.rowData.opened, props.rowData.sent)}%`}
+              tooltipTitle={`${props.rowData.opened} Recipients`}
+            />
+          ) : null
       },
       {
         header: 'Click Rate',
         id: 'click-rate',
         verticalAlign: 'center',
-        render: props => (
-          <StatColumn
-            content={`${percent(props.rowData.clicked, props.rowData.sent)}%`}
-            tooltipTitle={`${props.rowData.clicked} Times`}
-            isVisibile={!!props.rowData.executed_at}
-          />
-        )
+        render: props =>
+          props.rowData.executed_at ? (
+            <StatColumn
+              content={`${percent(props.rowData.clicked, props.rowData.sent)}%`}
+              tooltipTitle={`${props.rowData.clicked} Times`}
+            />
+          ) : null
+      },
+      {
+        header: '',
+        id: 'actions-th',
+        verticalAlign: 'center',
+        width: '2rem',
+        render: props =>
+          !props.rowData.executed_at ? (
+            <Actions
+              data={props.rowData}
+              reloadList={() => setQueue(queue => queue + 1)}
+            />
+          ) : null
       }
     ],
     []
@@ -107,7 +124,7 @@ function List(props) {
         <div className={tableClassName.join(' ')}>
           <Table
             data={filteredList}
-            columns={isScheduled ? [columns[0]] : columns}
+            columns={doFilterOnColumns(columns, filterType)}
             EmptyState={() => (
               <NoSearchResults description='Try sending your first campaign using "Send New Email" button.' />
             )}
