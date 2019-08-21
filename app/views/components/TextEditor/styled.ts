@@ -10,16 +10,17 @@ export const Toolbar = styled.div`
   align-items: center;
   margin: 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.42);
-  padding: ${({ theme }: ThemeProps<Theme>) => theme.spacing(1, 0)};
+  padding: ${({ theme }: ThemeProps<Theme>) => theme.spacing(0.25, 0.5)};
   display: flex;
   align-items: center;
+  order: -1;
 `
 
 export const Separator = styled.span`
   height: 1rem;
   width: 2px;
-  background-color: #ccc;
-  margin-right: 1rem;
+  background-color: ${({ theme }: ThemeProps<Theme>) => theme.palette.divider};
+  margin: ${({ theme }: ThemeProps<Theme>) => theme.spacing(0, 0.5)};
 `
 
 export const EditorWrapper = styled.div`

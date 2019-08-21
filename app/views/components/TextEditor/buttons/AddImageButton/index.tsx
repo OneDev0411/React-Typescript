@@ -1,10 +1,12 @@
 import * as React from 'react'
 import { useState } from 'react'
 
+import { Tooltip } from '@material-ui/core'
+
 import ImageFileIcon from 'components/SvgIcons/ImageFile/ImageFileIcon'
 
-import { IconButton } from '../IconButton/styled'
 import { ImagePickerModal } from './ImagePickerModal'
+import { ToolbarIconButton } from '../ToolbarIconButton'
 
 interface Props {
   onImageSelected: (file: File) => void
@@ -36,9 +38,11 @@ export function AddImageButton(props: Props) {
 
   return (
     <>
-      <IconButton onClick={handleClick} data-test="add-image-button">
-        <ImageFileIcon />
-      </IconButton>
+      <Tooltip title="Insert Image">
+        <ToolbarIconButton onClick={handleClick} data-test="add-image-button">
+          <ImageFileIcon />
+        </ToolbarIconButton>
+      </Tooltip>
       <ImagePickerModal
         isOpen={open}
         onFileSelected={selectImage}

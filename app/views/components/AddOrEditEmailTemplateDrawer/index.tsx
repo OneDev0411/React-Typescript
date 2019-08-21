@@ -103,7 +103,7 @@ function AddOrEditEmailTemplateDrawer({
           <Field
             name="name"
             component={TextField}
-            margin="normal"
+            margin="dense"
             validate={value => !value && 'Template name is required'}
             required
             fullWidth
@@ -114,7 +114,6 @@ function AddOrEditEmailTemplateDrawer({
           <Field
             name="subject"
             component={TextField}
-            margin="normal"
             fullWidth
             InputProps={{
               startAdornment: <InlineInputLabel>Subject</InlineInputLabel>

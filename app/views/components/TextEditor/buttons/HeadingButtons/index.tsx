@@ -1,9 +1,12 @@
 import React from 'react'
 
+import { Tooltip } from '@material-ui/core'
+
 import { BasicDropdown } from 'components/BasicDropdown'
 import IconTextSize from 'components/SvgIcons/TextSize/IconTextSize'
 
 import { TextButton } from './TextButton'
+import { ToolbarIconButton } from '../ToolbarIconButton'
 
 interface HeadingButtonOption {
   title: string
@@ -21,16 +24,11 @@ export default function HeadingButtons(props: Props) {
         Component: item.component
       }))}
       buttonRenderer={props => (
-        <div
-          {...props}
-          style={{
-            width: '1.5rem',
-            heigt: '1.5rem',
-            marginRight: '0.5rem'
-          }}
-        >
-          <IconTextSize />
-        </div>
+        <Tooltip title="Size">
+          <ToolbarIconButton {...props}>
+            <IconTextSize />
+          </ToolbarIconButton>
+        </Tooltip>
       )}
       itemRenderer={(props, index) => {
         const { Component, label } = props.item

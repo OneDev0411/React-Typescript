@@ -143,7 +143,6 @@ function ContactsChipsInput({
       createFromString={value => ({ email: value })}
       TextFieldComponent={TextField}
       TextFieldProps={{
-        margin: 'dense',
         InputProps: {
           startAdornment: <InlineInputLabel>{label}</InlineInputLabel>,
           ...InputProps

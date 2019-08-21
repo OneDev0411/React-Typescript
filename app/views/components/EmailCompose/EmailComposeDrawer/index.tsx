@@ -201,7 +201,6 @@ class EmailComposeDrawer extends React.Component<
             <Field
               placeholder="Subject"
               name="subject"
-              margin="normal"
               InputProps={{
                 onFocus: this.collapseTopFields,
                 inputProps: {
@@ -209,7 +208,6 @@ class EmailComposeDrawer extends React.Component<
                   'data-test': 'email-subject'
                 }
               }}
-              style={{ marginBottom: 0 }}
               fullWidth
               component={TextField}
             />

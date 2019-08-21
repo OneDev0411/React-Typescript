@@ -4,8 +4,12 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
   // @global is handled by jss-plugin-global.
   '@global': {
     // You should target [class*="MuiButton-root"] instead if you nest themes.
-    '.MuiButton-root': {
-      boxShadow: 'none'
+    '.MuiButtonBase-root': {
+      boxShadow: 'none',
+      // because of disabling ripple globally
+      '&.Mui-focusVisible': {
+        background: theme.palette.action.selected
+      }
     },
 
     // override our default styles
