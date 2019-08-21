@@ -10,6 +10,8 @@ import {
   Content as PageContent
 } from 'components/SlideMenu'
 
+import MyDesignsIcon from './components/IconMyDesigns/IconMyDesigns'
+
 const urlGenerator = url => `/dashboard/marketing/${url}`
 
 const sections = [
@@ -18,7 +20,8 @@ const sections = [
     items: [
       {
         title: 'My Designs',
-        link: urlGenerator('history')
+        link: urlGenerator('history'),
+        icon: MyDesignsIcon
       }
     ]
   },
