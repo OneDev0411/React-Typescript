@@ -4,6 +4,7 @@ import VerticalDotsIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
 import { BasicDropdown } from 'components/BasicDropdown'
 import { EditEmailDrawer } from 'components/EmailCompose/EditEmailDrawer'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import { deleteEmailCampaign } from 'models/email/delete-email-campaign'
 
 enum InsightActionsEnum {
   DELETE = 'delete',
@@ -49,10 +50,14 @@ function Actions(props: ActionsPropsType) {
         }) => {
           if (selectedItem.value === InsightActionsEnum.DELETE) {
             confirmation.setConfirmationModal({
+              appearance: 'danger',
               message: 'Do you want to delete this scheduled email?',
-              description: `The email will be deleted and you don't have access to it anymore. Are you sure?`,
+              description:
+                "The email will be deleted and you don't have access to it anymore. Are you sure?",
               onConfirm: async () => {
-                console.log('Confirmed')
+                deleteEmailCampaign(props.data.id).then(() =>
+                  props.reloadList()
+                )
               }
             })
           } else if (selectedItem.value === InsightActionsEnum.EDIT) {
