@@ -7,7 +7,8 @@ import { Container, Header, Title } from './styled'
 Section.propTypes = {
   onEdit: PropTypes.func,
   style: PropTypes.shape(),
-  title: PropTypes.string
+  title: PropTypes.string,
+  children: PropTypes.node
 }
 
 Section.defaultProps = {
