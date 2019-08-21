@@ -7,7 +7,7 @@ import {
 } from 'components/SlideMenu'
 import PageSideNav from 'components/PageSideNav'
 
-const urlGenerator = url => `/dashboard/insights${url && `/${url}`}`
+const urlGenerator = url => `/dashboard/insights${url}`
 
 function InsightsLayout(props) {
   const sections = [
@@ -17,12 +17,12 @@ function InsightsLayout(props) {
         {
           title: 'Sent',
           isIndex: true,
-          link: urlGenerator(''),
+          link: urlGenerator('/'),
           badge: props.sentCount
         },
         {
           title: 'Scheduled',
-          link: urlGenerator('scheduled'),
+          link: urlGenerator('/scheduled'),
           badge: props.scheduledCount
         }
       ]

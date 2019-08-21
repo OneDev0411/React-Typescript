@@ -10,83 +10,7 @@ import {
   Content as PageContent
 } from 'components/SlideMenu'
 
-import MyDesignsIcon from './components/IconMyDesigns/IconMyDesigns'
-
-const urlGenerator = url => `/dashboard/marketing/${url}`
-
-const sections = [
-  {
-    title: 'Marketing',
-    items: [
-      {
-        isIndex: true,
-        title: 'My Designs',
-        link: urlGenerator(''),
-        icon: MyDesignsIcon
-      }
-    ]
-  },
-  {
-    title: 'Celebrations',
-    items: [
-      {
-        title: 'Birthday',
-        link: urlGenerator('Birthday')
-      },
-      {
-        title: 'Brand Campaigns',
-        link: urlGenerator('Brand')
-      },
-      {
-        title: 'Holiday',
-        link: urlGenerator(
-          'Christmas,NewYear,Valentines,StPatrick,Easter,OtherHoliday'
-        )
-      },
-      {
-        title: 'New Agent',
-        link: urlGenerator('NewAgent')
-      }
-    ]
-  },
-  {
-    title: 'Listings',
-    items: [
-      {
-        title: 'As Seen In',
-        link: urlGenerator('AsSeenIn')
-      },
-      {
-        title: 'Coming Soon',
-        link: urlGenerator('Coming Soon')
-      },
-      {
-        title: 'Just Listed',
-        link: urlGenerator('JustListed')
-      },
-      {
-        title: 'Under Contract',
-        link: urlGenerator('UnderContract')
-      },
-      {
-        title: 'Just Sold',
-        link: urlGenerator('JustSold')
-      },
-      {
-        title: 'Multi Listings',
-        link: urlGenerator('Listings')
-      },
-      {
-        title: 'New Price',
-        link: urlGenerator('PriceImprovement')
-      },
-      {
-        title: 'Open House',
-        link: urlGenerator('OpenHouse')
-      }
-    ]
-  }
-]
+import { SECTIONS } from './helpers/sections'
 
 class Marketing extends Component {
   state = {
@@ -114,7 +38,7 @@ class Marketing extends Component {
             <title>Marketing | Rechat</title>
           </Helmet>
 
-          <PageSideNav sections={sections} />
+          <PageSideNav sections={SECTIONS} />
 
           <PageContent isSideMenuOpen={isSideMenuOpen}>
             {React.Children.map(this.props.children, child =>

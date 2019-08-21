@@ -26,9 +26,14 @@ export const SideNavContainer = styled.div`
     justify-content: space-between;
     min-height: unset;
     height: ${props => props.theme.spacing(5)}px;
+    text-decoration: none;
+
+    &:focus {
+      outline: none;
+    }
   }
 
-  .Mui-selected {
+  .section-item.is-selected {
     background: rgba(9, 69, 235, 0.12);
     color: ${props => props.theme.palette.primary.main};
 
