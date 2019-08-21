@@ -4,7 +4,7 @@ const urlGenerator = (url: string): string => `/dashboard/marketing${url}`
 
 export const SECTIONS = [
   {
-    title: 'Marketing',
+    title: 'Marketing Center',
     items: [
       {
         isIndex: true,
@@ -45,12 +45,20 @@ export const SECTIONS = [
         link: urlGenerator('/AsSeenIn')
       },
       {
+        title: 'Open House',
+        link: urlGenerator('/OpenHouse')
+      },
+      {
         title: 'Coming Soon',
-        link: urlGenerator('/Coming Soon')
+        link: urlGenerator('/ComingSoon')
       },
       {
         title: 'Just Listed',
         link: urlGenerator('/JustListed')
+      },
+      {
+        title: 'New Price',
+        link: urlGenerator('/PriceImprovement')
       },
       {
         title: 'Under Contract',
@@ -63,14 +71,6 @@ export const SECTIONS = [
       {
         title: 'Multi Listings',
         link: urlGenerator('/Listings')
-      },
-      {
-        title: 'New Price',
-        link: urlGenerator('/PriceImprovement')
-      },
-      {
-        title: 'Open House',
-        link: urlGenerator('/OpenHouse')
       }
     ]
   }

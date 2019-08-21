@@ -1,12 +1,22 @@
+import { CSSProperties } from 'react'
 import styled from 'styled-components'
 
-export const SideNavContainer = styled.div`
-  width: 13rem;
+interface SideNavContainer {
+  isOpen?: boolean
+  width?: CSSProperties['width']
+}
+
+const defaultProps = {
+  width: '11rem'
+}
+
+export const SideNavContainer = styled.div<SideNavContainer>`
+  width: ${props => (props.isOpen ? props.width : '0')};
   background-color: ${props => props.theme.palette.grey[100]};
   padding-left: ${props => props.theme.spacing(1)}px;
   padding-top: ${props => props.theme.spacing(2)}px;
   padding-bottom: ${props => props.theme.spacing(2)}px;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   h6 {
     padding-left: ${props => props.theme.spacing(2)}px;
@@ -54,3 +64,5 @@ export const SideNavContainer = styled.div`
     padding: 0 ${props => props.theme.spacing(2)}px;
   }
 `
+
+SideNavContainer.defaultProps = defaultProps

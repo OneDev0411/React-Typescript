@@ -7,6 +7,7 @@ import { isOnThisUrl } from './helpers'
 import { SideNavContainer } from './styled'
 
 interface PageSideNav {
+  isOpen: boolean
   sections: {
     title?: string
     items: {
@@ -21,9 +22,13 @@ interface PageSideNav {
   children?: React.ReactNode
 }
 
+PageSideNav.defaultProps = {
+  isOpen: true
+}
+
 function PageSideNav(props: PageSideNav) {
   return (
-    <SideNavContainer>
+    <SideNavContainer isOpen={props.isOpen}>
       {props.sections.map((section, secIndex) => {
         return (
           <section key={`sec-${secIndex}`}>

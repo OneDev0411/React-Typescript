@@ -38,7 +38,7 @@ class Marketing extends Component {
             <title>Marketing | Rechat</title>
           </Helmet>
 
-          <PageSideNav sections={SECTIONS} />
+          <PageSideNav isOpen={isSideMenuOpen} sections={SECTIONS} />
 
           <PageContent isSideMenuOpen={isSideMenuOpen}>
             {React.Children.map(this.props.children, child =>

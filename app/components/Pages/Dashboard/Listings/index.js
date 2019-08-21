@@ -53,7 +53,7 @@ class Listings extends Component {
           className={`l-listings ${user ? 'l-listings--logged' : ''}`}
         >
           {user && (
-            <PageSideNav sections={sideNavSections}>
+            <PageSideNav isOpen={isSideMenuOpen} sections={sideNavSections}>
               <SavedSearchesList />
             </PageSideNav>
           )}
