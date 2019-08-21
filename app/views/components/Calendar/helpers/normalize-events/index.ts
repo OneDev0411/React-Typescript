@@ -1,29 +1,34 @@
 import { createDayId } from '../create-day-id'
+import eventEmptyState from '../get-event-empty-state'
 
 /**
  * returns list of days including their events
  * @param range
  * @param events
  */
-export function normalizeEvents(range: NumberRange, events: ICalendarEvent[]) {
+export function normalizeEvents(
+  range: NumberRange,
+  events: ICalendarEvent[],
+  activeDate: Date
+) {
   if (events.length === 0) {
     return {}
   }
 
+  // get list of all fetched events
   const list = getEvents(range, events)
+
+  // convert activeDate to yyyy/mm/dd format
+  const activeDayId = createDayId(activeDate)
 
   return Object.entries(list).reduce((acc, [day, events]) => {
     if ((events as ICalendarEvent[]).length === 0) {
-      return !isToday(day)
-        ? acc
-        : {
+      return isToday(day) || day === activeDayId
+        ? {
             ...acc,
-            [day]: [
-              {
-                event_type: 'today-empty-state'
-              }
-            ]
+            [day]: [eventEmptyState]
           }
+        : acc
     }
 
     return {

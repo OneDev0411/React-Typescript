@@ -10,6 +10,8 @@ import { EventActions } from './Actions'
 
 import { TodayEmptyState } from './TodayEmptyState'
 
+import emptyStateEvent from '../../../helpers/get-event-empty-state'
+
 import styles from './styles'
 
 interface Props {
@@ -69,7 +71,7 @@ export function Event({
     hasBorderBottom
   })
 
-  if (event.event_type === 'today-empty-state') {
+  if (event.event_type === emptyStateEvent.event_type) {
     return <TodayEmptyState style={style} />
   }
 

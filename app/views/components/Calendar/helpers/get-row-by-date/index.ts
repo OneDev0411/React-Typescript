@@ -13,23 +13,17 @@ import fecha from 'fecha'
 export function getRowIdByDate(
   date: Date,
   rows: ICalendarListRow[],
-  eventKeys: string[],
+  events: CalendarEventsList,
   calendarRange: [number, number]
 ) {
-  if (eventKeys.length === 0) {
+  const dayId = format(date)
+
+  if (!isDayInRange(dayId, calendarRange)) {
     return -1
   }
 
-  let dayId = format(date)
-
-  while (
-    eventKeys.indexOf(dayId) === -1 &&
-    isDayInRange(dayId, calendarRange)
-  ) {
-    const nextDay = date.setDate(date.getDate() + 1)
-
-    // format next day
-    dayId = format(nextDay)
+  if (!events[dayId]) {
+    return null
   }
 
   return rows.findIndex(
