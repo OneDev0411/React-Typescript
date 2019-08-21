@@ -48,11 +48,11 @@ function ContactFilters(props) {
       },
       {
         id: FLOW_FILTER_ID,
-        label: 'Flows',
+        label: 'Flow',
         renderer: props => (
           <SimpleList {...props} getOptions={() => getFlows(user)} />
         ),
-        tooltip: 'Contacts who are active in a specific flow'
+        tooltip: 'Contacts who are active in a specific Flow'
       },
       {
         id: sourceDefinition.id,
