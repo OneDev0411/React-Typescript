@@ -56,9 +56,8 @@ function Item(props) {
                     iconSize="large"
                     className="action-bar__icon-button"
                     onClick={e => {
-                      e.stopPropagation()
-
                       props.handleEdit(props.template)
+                      e.stopPropagation()
                     }}
                   >
                     <EditIcon />
@@ -71,9 +70,7 @@ function Item(props) {
                     iconSize="large"
                     className="action-bar__icon-button"
                     onClick={e => {
-                      e.stopPropagation()
                       setDeleting(true)
-
                       props.handleDelete({
                         template: props.template,
                         onCancel: () => {
@@ -89,6 +86,7 @@ function Item(props) {
                           })
                         }
                       })
+                      e.stopPropagation()
                     }}
                   >
                     <DeleteIcon />
