@@ -32,10 +32,6 @@ function Actions(props: ActionsPropsType) {
   const [isEditComposeOpen, setIsEditComposeOpen] = React.useState(false)
   const confirmation = React.useContext(ConfirmationModalContext)
 
-  if (!props.isVisibile) {
-    return null
-  }
-
   return (
     <>
       <BasicDropdown
@@ -54,6 +50,7 @@ function Actions(props: ActionsPropsType) {
               message: 'Do you want to delete this scheduled email?',
               description:
                 "The email will be deleted and you don't have access to it anymore. Are you sure?",
+              confirmLabel: 'Yes, Remove it',
               onConfirm: async () => {
                 deleteEmailCampaign(props.data.id).then(() =>
                   props.reloadList()
@@ -69,10 +66,7 @@ function Actions(props: ActionsPropsType) {
         <EditEmailDrawer
           isOpen
           onClose={() => setIsEditComposeOpen(false)}
-          onEdited={() => {
-            setIsEditComposeOpen(false)
-            props.reloadList()
-          }}
+          onEdited={() => props.reloadList()}
           emailId={props.data.id}
         />
       )}

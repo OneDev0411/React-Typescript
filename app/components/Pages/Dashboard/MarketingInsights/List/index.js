@@ -51,53 +51,56 @@ function List(props) {
         header: 'Delivered',
         id: 'delivered',
         verticalAlign: 'center',
-        render: props => (
-          <StatColumn
-            content={`${percent(props.rowData.delivered, props.rowData.sent)}%`}
-            tooltipTitle={`${percent(
-              props.rowData.failed,
-              props.rowData.sent
-            )}% Bounced`}
-            isVisibile={!!props.rowData.executed_at}
-          />
-        )
+        render: props =>
+          props.rowData.executed_at ? (
+            <StatColumn
+              content={`${percent(
+                props.rowData.delivered,
+                props.rowData.sent
+              )}%`}
+              tooltipTitle={`${percent(
+                props.rowData.failed,
+                props.rowData.sent
+              )}% Bounced`}
+            />
+          ) : null
       },
       {
         header: 'Open Rate',
         id: 'open-rate',
         verticalAlign: 'center',
-        render: props => (
-          <StatColumn
-            content={`${percent(props.rowData.opened, props.rowData.sent)}%`}
-            tooltipTitle={`${props.rowData.opened} Recipients`}
-            isVisibile={!!props.rowData.executed_at}
-          />
-        )
+        render: props =>
+          props.rowData.executed_at ? (
+            <StatColumn
+              content={`${percent(props.rowData.opened, props.rowData.sent)}%`}
+              tooltipTitle={`${props.rowData.opened} Recipients`}
+            />
+          ) : null
       },
       {
         header: 'Click Rate',
         id: 'click-rate',
         verticalAlign: 'center',
-        render: props => (
-          <StatColumn
-            content={`${percent(props.rowData.clicked, props.rowData.sent)}%`}
-            tooltipTitle={`${props.rowData.clicked} Times`}
-            isVisibile={!!props.rowData.executed_at}
-          />
-        )
+        render: props =>
+          props.rowData.executed_at ? (
+            <StatColumn
+              content={`${percent(props.rowData.clicked, props.rowData.sent)}%`}
+              tooltipTitle={`${props.rowData.clicked} Times`}
+            />
+          ) : null
       },
       {
         header: '',
         id: 'actions-th',
         verticalAlign: 'center',
         width: '2rem',
-        render: props => (
-          <Actions
-            data={props.rowData}
-            reloadList={() => setQueue(queue => queue + 1)}
-            isVisibile={!props.rowData.executed_at}
-          />
-        )
+        render: props =>
+          !props.rowData.executed_at ? (
+            <Actions
+              data={props.rowData}
+              reloadList={() => setQueue(queue => queue + 1)}
+            />
+          ) : null
       }
     ],
     []
