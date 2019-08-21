@@ -15,7 +15,7 @@ export function getThumbnail(template, user) {
 }
 
 export function createdAt(date) {
-  return fecha.format(new Date(date * 1000), '[on] MMMM DD, YYYY [at] hh:mm A')
+  return fecha.format(new Date(date * 1000), 'MMM DD, YYYY - hh:mm A')
 }
 
 export function plural(word, isPlural) {
@@ -111,18 +111,14 @@ export function itemButtonText(item) {
   }
 
   if (isInstance) {
-    text = isEmail ? 'Compose' : 'Share'
+    text = isEmail ? 'Send' : 'Share'
   }
 
   return text
 }
 
-export function itemDateText(time, isLoading) {
-  if (isLoading) {
-    return 'Deleting...'
-  }
-
-  return `Created ${createdAt(time)}`
+export function itemDateText(time) {
+  return createdAt(time)
 }
 
 export function getTemplateType(initType, template) {

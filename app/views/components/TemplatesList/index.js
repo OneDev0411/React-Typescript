@@ -54,7 +54,9 @@ function TemplatesList(props) {
             568: 1
           }}
           className="templates-masonry-grid"
-          columnClassName="templates-masonry-grid_column"
+          columnClassName={`templates-masonry-grid_column ${
+            props.type === 'history' ? 'is-instance' : ''
+          }`}
         >
           {props.items.map(template => (
             <Item
