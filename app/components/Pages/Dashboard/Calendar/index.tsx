@@ -8,7 +8,7 @@ import { CalendarRef } from 'components/Calendar/types'
 import DatePicker from 'components/DatePicker'
 
 import { TodayButton } from './components/TodayButton'
-import { Filters } from './components/Filters'
+import Filters, { FiltersRef } from './components/Filters'
 import { Export } from './components/Export'
 import CreateEvent from './components/CreateEvent'
 
@@ -24,6 +24,7 @@ import {
 
 const CalendarPage: React.FC = props => {
   const calendarRef = useRef<CalendarRef>(null)
+  const filtersRef = useRef<FiltersRef>(null)
 
   /*
    * current active date of Calendar. the first visible day of day in
@@ -61,7 +62,12 @@ const CalendarPage: React.FC = props => {
    * @param event
    * @param type
    */
-  const handleEventChange = (event: IEvent, type: string) => {
+  const handleEventChange = (event: IEvent, type: string): void => {
+    // set filters to All Events when creating a new event
+    if (type === 'created') {
+      filtersRef.current!.changeFilter(0)
+    }
+
     calendarRef.current!.updateCrmEvents(event, type)
   }
 
@@ -115,6 +121,7 @@ const CalendarPage: React.FC = props => {
       <Main>
         <Header>
           <Filters
+            ref={filtersRef}
             onChange={handleChangeFilter}
             isLoadingFilters={isLoadingFilters}
           />
