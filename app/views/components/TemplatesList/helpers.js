@@ -111,7 +111,7 @@ export function itemButtonText(item) {
   }
 
   if (isInstance) {
-    text = isEmail ? 'Send' : 'Share'
+    text = isEmail ? 'Send to' : 'Share'
   }
 
   return text

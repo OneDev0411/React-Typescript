@@ -1,11 +1,13 @@
 import React from 'react'
+import cn from 'classnames'
+import { Link } from 'react-router'
 import { Typography, MenuItem, Box } from '@material-ui/core'
-import { browserHistory } from 'react-router'
 
 import { isOnThisUrl } from './helpers'
 import { SideNavContainer } from './styled'
 
 interface PageSideNav {
+  isOpen: boolean
   sections: {
     title?: string
     items: {
@@ -20,9 +22,13 @@ interface PageSideNav {
   children?: React.ReactNode
 }
 
+PageSideNav.defaultProps = {
+  isOpen: true
+}
+
 function PageSideNav(props: PageSideNav) {
   return (
-    <SideNavContainer>
+    <SideNavContainer isOpen={props.isOpen}>
       {props.sections.map((section, secIndex) => {
         return (
           <section key={`sec-${secIndex}`}>
@@ -32,12 +38,14 @@ function PageSideNav(props: PageSideNav) {
             {section.items.map((item, index) => {
               return (
                 <MenuItem
-                  className="section-item"
-                  onClick={() => {
-                    browserHistory.push(item.link)
-                  }}
-                  selected={isOnThisUrl(item.link, item.isIndex)}
+                  to={item.link}
+                  component={Link}
                   key={`sec-menu-${index}`}
+                  activeClassName="is-selected"
+                  onlyActiveOnIndex={item.isIndex}
+                  className={cn('section-item', {
+                    'is-selected': isOnThisUrl(item.link, item.isIndex)
+                  })}
                 >
                   <Box display="flex" alignItems="center">
                     {item.icon && (
