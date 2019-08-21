@@ -34,7 +34,7 @@ function createTemplateExpression(
   expression: string,
   fallbackValue: string = ''
 ) {
-  return `{{ ${expression} | fallback:"${escapeDoubleQuotes(fallbackValue)}" }}`
+  return `{{ ${expression} or "${escapeDoubleQuotes(fallbackValue)}" }}`
 }
 
 function escapeDoubleQuotes(input: string) {
