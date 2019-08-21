@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
-import SideNav from 'components/SideNav'
+import PageSideNav from 'components/PageSideNav'
 
 import {
   Container as PageContainer,
@@ -53,9 +53,9 @@ class Listings extends Component {
           className={`l-listings ${user ? 'l-listings--logged' : ''}`}
         >
           {user && (
-            <SideNav sections={sideNavSections}>
+            <PageSideNav sections={sideNavSections}>
               <SavedSearchesList />
-            </SideNav>
+            </PageSideNav>
           )}
 
           <PageContent isSideMenuOpen={isSideMenuOpen} style={{ padding: 0 }}>

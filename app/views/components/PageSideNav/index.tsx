@@ -2,10 +2,10 @@ import React from 'react'
 import { Typography, MenuItem, Box } from '@material-ui/core'
 import { browserHistory } from 'react-router'
 
+import { isOnThisUrl } from './helpers'
 import { SideNavContainer } from './styled'
-import { isOnThisUrl } from './SideNav-helpers'
 
-interface SideNav {
+interface PageSideNav {
   sections: {
     title?: string
     items: {
@@ -20,7 +20,7 @@ interface SideNav {
   children?: React.ReactNode
 }
 
-function SideNav(props: SideNav) {
+function PageSideNav(props: PageSideNav) {
   return (
     <SideNavContainer>
       {props.sections.map((section, secIndex) => {
@@ -65,4 +65,4 @@ function SideNav(props: SideNav) {
   )
 }
 
-export default SideNav
+export default PageSideNav

@@ -5,7 +5,7 @@ import {
   Container as PageContainer,
   Content as PageContent
 } from 'components/SlideMenu'
-import SideNav from 'components/SideNav'
+import PageSideNav from 'components/PageSideNav'
 
 const urlGenerator = url => `/dashboard/insights${url && `/${url}`}`
 
@@ -34,7 +34,7 @@ function InsightsLayout(props) {
       <Helmet>
         <title>Insights | Rechat</title>
       </Helmet>
-      <SideNav sections={sections} />
+      <PageSideNav sections={sections} />
       <PageContent isSideMenuOpen={props.isSideMenuOpen}>
         {props.children}
       </PageContent>

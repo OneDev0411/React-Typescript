@@ -3,7 +3,7 @@ import { withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
 
 import Acl from 'components/Acl'
-import SideNav from 'components/SideNav'
+import PageSideNav from 'components/PageSideNav'
 
 import {
   Container as PageContainer,
@@ -113,7 +113,7 @@ class Marketing extends Component {
             <title>Marketing | Rechat</title>
           </Helmet>
 
-          <SideNav sections={sections} />
+          <PageSideNav sections={sections} />
 
           <PageContent isSideMenuOpen={isSideMenuOpen}>
             {React.Children.map(this.props.children, child =>
