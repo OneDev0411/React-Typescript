@@ -40,4 +40,8 @@ export const SideNavContainer = styled.div`
       background: rgba(9, 69, 235, 0.12);
     }
   }
+
+  .SideNav-direct-child {
+    padding: 0 ${props => props.theme.spacing(2)}px;
+  }
 `

@@ -17,6 +17,7 @@ interface SideNav {
       badge: number
     }[]
   }[]
+  children?: React.ReactNode
 }
 
 function SideNav(props: SideNav) {
@@ -50,6 +51,9 @@ function SideNav(props: SideNav) {
           </section>
         )
       })}
+      {props.children && (
+        <div className="SideNav-direct-child">{props.children}</div>
+      )}
     </SideNavContainer>
   )
 }
