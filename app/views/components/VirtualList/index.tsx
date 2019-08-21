@@ -33,7 +33,7 @@ export interface VirtualListRef {
   resetAfterIndex(index: number, shouldForceUpdate?: boolean): void
 }
 
-export interface IProps extends VariableSizeListProps {
+export interface Props extends VariableSizeListProps {
   threshold?: number
   isLoading?: boolean
   loadingPosition?: LoadingPosition
@@ -44,7 +44,7 @@ export interface IProps extends VariableSizeListProps {
   virtualListRef?: RefObject<VirtualListRef>
 }
 
-const VirtualList: React.FC<IProps> = ({
+const VirtualList: React.FC<Props> = ({
   children,
   threshold = 5,
   loadingPosition = LoadingPosition.Middle,
@@ -53,7 +53,7 @@ const VirtualList: React.FC<IProps> = ({
   onReachStart = () => null,
   onVisibleRowChange = () => null,
   ...props
-}: IProps) => {
+}: Props) => {
   const listRef = useRef<List | null>(null)
   const [scroll, setScroll] = useState<ListOnScrollProps | null>(null)
 
@@ -152,6 +152,6 @@ function isReachedStart(
   return data.visibleStartIndex < threshold && scrollDirection === 'backward'
 }
 
-export default forwardRef((props: IProps, ref: RefObject<VirtualListRef>) => (
+export default forwardRef((props: Props, ref: RefObject<VirtualListRef>) => (
   <VirtualList {...props} virtualListRef={ref} />
 ))
