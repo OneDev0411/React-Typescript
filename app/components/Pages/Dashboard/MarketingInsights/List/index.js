@@ -6,11 +6,12 @@ import Table from 'components/Grid/Table'
 import Header from './Header'
 import Layout from './Layout'
 import StatColumn from './StatColumn'
-import { percent } from './helpers'
+import { percent, doFilterOnColumns } from './helpers'
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
 import NoSearchResults from '../../../../Partials/no-search-results'
 
+import Actions from './MarketingInsightsActions'
 import InfoColumn from './InfoColumn'
 import { InsightContainer } from './styled'
 import useListData from './useListData'
@@ -42,7 +43,7 @@ function List(props) {
         render: props => (
           <InfoColumn
             data={props.rowData}
-            reload={() => setQueue(queue => queue + 1)}
+            reloadList={() => setQueue(queue => queue + 1)}
           />
         )
       },
@@ -84,6 +85,19 @@ function List(props) {
             isVisibile={!!props.rowData.executed_at}
           />
         )
+      },
+      {
+        header: '',
+        id: 'actions-th',
+        verticalAlign: 'center',
+        width: '2rem',
+        render: props => (
+          <Actions
+            data={props.rowData}
+            reloadList={() => setQueue(queue => queue + 1)}
+            isVisibile={!props.rowData.executed_at}
+          />
+        )
       }
     ],
     []
@@ -107,7 +121,7 @@ function List(props) {
         <div className={tableClassName.join(' ')}>
           <Table
             data={filteredList}
-            columns={isScheduled ? [columns[0]] : columns}
+            columns={doFilterOnColumns(columns, filterType)}
             EmptyState={() => (
               <NoSearchResults description='Try sending your first campaign using "Send New Email" button.' />
             )}
