@@ -6,6 +6,8 @@ declare interface IBrandEmailTemplate extends IModel {
   include_signature: boolean
   body: string
   type: 'brand_email'
+  text: string
+  editable: boolean
 }
 
 declare interface IBrandEmailTemplateInput {
