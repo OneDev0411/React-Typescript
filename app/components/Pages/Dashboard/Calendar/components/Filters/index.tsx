@@ -1,4 +1,11 @@
-import React, { useState, ChangeEvent, useCallback } from 'react'
+import React, {
+  useState,
+  ChangeEvent,
+  useCallback,
+  forwardRef,
+  RefObject,
+  useImperativeHandle
+} from 'react'
 import { Tabs, Tab } from '@material-ui/core'
 
 import { eventTypesIcons, EventTypeIcon } from 'views/utils/event-types-icons'
@@ -62,16 +69,21 @@ const TAB_ITEMS: TabItem[] = [
   }
 ]
 
+export interface FiltersRef {
+  changeFilter(tabId: number): void
+}
+
 interface Props {
   onChange(filter: object): void
   isLoadingFilters: boolean
+  filterRef?: RefObject<FiltersRef>
 }
 
-export function Filters({ onChange, isLoadingFilters }: Props) {
+function Filters({ filterRef, onChange, isLoadingFilters }: Props) {
   const [selectedTab, setSelectedTab] = useState(TAB_ITEMS[0].value)
 
   const handleFilterChange = useCallback(
-    (e: ChangeEvent<{}>, value: number) => {
+    (e: ChangeEvent<{}> | null, value: number) => {
       setSelectedTab(value)
 
       const tab = TAB_ITEMS.find(tab => tab.value === value)
@@ -82,6 +94,10 @@ export function Filters({ onChange, isLoadingFilters }: Props) {
     },
     [onChange]
   )
+
+  useImperativeHandle(filterRef, () => ({
+    changeFilter: (tabId: number) => handleFilterChange(null, tabId)
+  }))
 
   return (
     <Container>
@@ -115,3 +131,7 @@ export function Filters({ onChange, isLoadingFilters }: Props) {
     </Container>
   )
 }
+
+export default forwardRef((props: Props, ref: RefObject<Filters>) => (
+  <Filters {...props} filterRef={ref} />
+))

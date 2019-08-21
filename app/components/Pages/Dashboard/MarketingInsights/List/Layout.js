@@ -7,9 +7,10 @@ import {
 } from 'components/SlideMenu'
 import PageSideNav from 'components/PageSideNav'
 
-const urlGenerator = url => `/dashboard/insights${url && `/${url}`}`
+const urlGenerator = url => `/dashboard/insights${url}`
 
 function InsightsLayout(props) {
+  const { isSideMenuOpen } = props
   const sections = [
     {
       title: 'Email Insight',
@@ -17,12 +18,12 @@ function InsightsLayout(props) {
         {
           title: 'Sent',
           isIndex: true,
-          link: urlGenerator(''),
+          link: urlGenerator('/'),
           badge: props.sentCount
         },
         {
           title: 'Scheduled',
-          link: urlGenerator('scheduled'),
+          link: urlGenerator('/scheduled'),
           badge: props.scheduledCount
         }
       ]
@@ -30,12 +31,12 @@ function InsightsLayout(props) {
   ]
 
   return (
-    <PageContainer isOpen={props.isSideMenuOpen}>
+    <PageContainer isOpen={isSideMenuOpen}>
       <Helmet>
         <title>Insights | Rechat</title>
       </Helmet>
-      <PageSideNav sections={sections} />
-      <PageContent isSideMenuOpen={props.isSideMenuOpen}>
+      <PageSideNav isOpen={isSideMenuOpen} sections={sections} />
+      <PageContent isSideMenuOpen={isSideMenuOpen}>
         {props.children}
       </PageContent>
     </PageContainer>

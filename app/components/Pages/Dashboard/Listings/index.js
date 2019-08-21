@@ -10,7 +10,7 @@ import {
 } from '../../../../views/components/SlideMenu'
 import SavedSearchesList from './SavedSearchesList'
 
-const urlGenerator = url => `/dashboard/mls${url && `/${url}`}`
+const urlGenerator = url => `/dashboard/mls${url}`
 
 const sideNavSections = [
   {
@@ -19,11 +19,11 @@ const sideNavSections = [
       {
         isIndex: true,
         title: 'Search',
-        link: urlGenerator('')
+        link: urlGenerator('/')
       },
       {
         title: 'Following',
-        link: urlGenerator('following')
+        link: urlGenerator('/following')
       }
     ]
   }
@@ -53,7 +53,7 @@ class Listings extends Component {
           className={`l-listings ${user ? 'l-listings--logged' : ''}`}
         >
           {user && (
-            <PageSideNav sections={sideNavSections}>
+            <PageSideNav isOpen={isSideMenuOpen} sections={sideNavSections}>
               <SavedSearchesList />
             </PageSideNav>
           )}
