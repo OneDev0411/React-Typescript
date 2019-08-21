@@ -264,8 +264,6 @@ class Builder extends React.Component {
     const { brand } = getActiveTeam(this.props.user)
     const palette = getBrandStyles(brand)
 
-    console.log('PALETTE', palette)
-
     return nunjucks.renderString(template, {
       ...data,
       palette,
