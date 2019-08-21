@@ -18,7 +18,7 @@ export function recipientToString(recipient: Recipient): string {
 
     // We have a contact here which has a display name.
     // if it has multiple emails, show email in parentheses. Otherwise, only name
-    let emails: string[] = recipient.contact.emails || []
+    const emails: string[] = recipient.contact.emails || []
 
     const showEmail =
       emails.length > 1 && recipient.contact.display_name !== recipient.email
@@ -45,6 +45,6 @@ export function recipientToString(recipient: Recipient): string {
   return ''
 }
 
-function getEmailDomain(email) {
+function getEmailDomain(email: string) {
   return email.split('@')[1]
 }

@@ -25,8 +25,7 @@ import { Recipient } from './types'
 import { ChipsInputProps } from '../ChipsInput/types'
 import { recipientToChip } from './helpers/recipient-to-chip'
 import { recipientToSuggestion } from './helpers/recipient-to-suggestion'
-import { filterTags } from './helpers/filter-tags'
-import { filterLists } from './helpers/filter-lists'
+import { filterEntities } from './helpers/filter-entities'
 
 type BaseProps = Partial<FieldRenderProps<HTMLInputElement>> &
   Omit<
@@ -97,8 +96,8 @@ function ContactsChipsInput({
   ) => {
     return combineLatest(
       ...[
-        of(filterTags(tags, searchTerm)),
-        of(filterLists(lists, searchTerm)),
+        of(filterEntities(tags, searchTerm, ['text'])),
+        of(filterEntities(lists, searchTerm, ['name'])),
         searchTerm
           ? fromPromise(
               searchContacts(searchTerm, undefined, {
