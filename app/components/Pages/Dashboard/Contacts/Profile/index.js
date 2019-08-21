@@ -337,7 +337,12 @@ class ContactProfile extends React.Component {
             <SideColumnWrapper>
               {!this.state.isDesktopScreen && (
                 <Card>
-                  <Flows flows={contact.flows} onStop={this.stopFlow} />
+                  <Flows
+                    flows={contact.flows}
+                    contactId={contact.id}
+                    onStop={this.stopFlow}
+                    addCallback={this.addToFlowCallback}
+                  />
                 </Card>
               )}
               <Card>
@@ -416,7 +421,11 @@ class ContactProfile extends React.Component {
             {this.state.isDesktopScreen && (
               <ThirdColumn>
                 <Card>
-                  <Flows flows={contact.flows} onStop={this.stopFlow} />
+                  <Flows
+                    flows={contact.flows}
+                    contactId={contact.id}
+                    onStop={this.stopFlow}
+                  />
                 </Card>
                 <Card>{thirdColumnSections}</Card>
               </ThirdColumn>
