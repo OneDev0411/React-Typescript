@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import { Form, FormProps, FormRenderProps } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
+import { Tooltip } from '@material-ui/core'
 
 import { FormApi } from 'final-form'
 
@@ -23,6 +24,7 @@ interface Props<T> {
   onSubmit: (values: T, form: FormApi) => Promise<any>
   title: string
   submitButtonLabel?: ReactNode
+  submitButtonTooltip?: string
   submittingButtonLabel?: ReactNode
   showFooter?: boolean
   closeDrawerOnBackdropClick?: boolean
@@ -138,18 +140,20 @@ export class FinalFormDrawer<T> extends React.Component<Props<T>> {
                         handleSubmit: this.handleSubmit
                       })
                     ) : (
-                      <ActionButton
-                        type="submit"
-                        disabled={
-                          isSubmitDisabled || submitting || formProps.validating
-                        }
-                        onClick={this.handleSubmit}
-                      >
-                        {submitting
-                          ? this.props.submittingButtonLabel
-                          : this.props.submitButtonLabel}
-                      </ActionButton>
-                    )}
+                        <Tooltip title={this.props.submitButtonTooltip}>
+                          <ActionButton
+                            type="submit"
+                            disabled={
+                              isSubmitDisabled || submitting || formProps.validating
+                            }
+                            onClick={this.handleSubmit}
+                          >
+                            {submitting
+                              ? this.props.submittingButtonLabel
+                              : this.props.submitButtonLabel}
+                          </ActionButton>
+                        </Tooltip>
+                      )}
                   </Drawer.Footer>
                 )}
               </Drawer>

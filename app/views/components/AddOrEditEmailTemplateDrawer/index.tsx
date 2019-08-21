@@ -16,6 +16,7 @@ import { getActiveTeamId } from 'utils/user-teams'
 import { InlineInputLabel } from '../InlineInputLabel'
 import EmailBody from '../EmailCompose/components/EmailBody'
 import { FinalFormDrawer } from '../FinalFormDrawer'
+import { getTitle } from 'dashboard/Contacts/Profile/components/ContactAttributeInlineEditableField/helpers';
 
 interface Props {
   isOpen: boolean
@@ -66,10 +67,10 @@ function AddOrEditEmailTemplateDrawer({
     try {
       const resultEmailTemplate = emailTemplate
         ? await updateEmailTemplate(
-            emailTemplate.brand,
-            emailTemplate.id,
-            values
-          )
+          emailTemplate.brand,
+          emailTemplate.id,
+          values
+        )
         : await createEmailTemplate(activeTeamId, values)
 
       if (submitCallback) {
@@ -86,6 +87,18 @@ function AddOrEditEmailTemplateDrawer({
     }
   }
 
+  const getTitle = () => {
+    const title = 'Email Template'
+
+    if (emailTemplate) {
+      return emailTemplate.editable ? `Edit ${title}` : title;
+    }
+
+    return `New ${title}`
+  }
+
+  const isSubmitDisabled = !!(emailTemplate && !emailTemplate.editable)
+
   return (
     <FinalFormDrawer
       formId="email-template-form"
@@ -97,7 +110,11 @@ function AddOrEditEmailTemplateDrawer({
       closeDrawerOnBackdropClick={false}
       submitButtonLabel="Save"
       submittingButtonLabel="Saving ..."
-      title={emailTemplate ? 'Edit Email Template' : 'New Email Template'}
+      title={getTitle()}
+      isSubmitDisabled={isSubmitDisabled}
+      submitButtonTooltip={
+        isSubmitDisabled ? 'Template isn\'t editable!' : 'Save'
+      }
       render={() => (
         <div>
           <Field

@@ -20,6 +20,7 @@ import Table from 'components/Grid/Table'
 import LoadingContainer from 'components/LoadingContainer'
 import { DangerButton } from 'components/Button/DangerButton'
 
+
 interface CellProps {
   rowData: IBrandEmailTemplate
 }
@@ -106,7 +107,7 @@ function EmailTemplatesList({
             variant="body2"
             className={classes.body2}
           >
-            {rowData.body}
+            {rowData.text}
           </Typography>
         </div>
       )
@@ -114,11 +115,12 @@ function EmailTemplatesList({
     {
       id: 'delete',
       sortable: false,
-      render: ({ rowData: { id } }: CellProps) => (
+      render: ({ rowData: { id, editable } }: CellProps) => editable ? (
         <div className={classes.deleteButtonWrapper}>
           <DangerButton
             size="small"
             variant="outlined"
+            disabled={!editable}
             onClick={e => {
               handleDelete(id)
               e.preventDefault()
@@ -128,7 +130,7 @@ function EmailTemplatesList({
             {isTemplateDeleting(id) ? 'Deleting...' : 'Delete'}
           </DangerButton>
         </div>
-      )
+      ) : null
     }
   ]
 
@@ -143,7 +145,7 @@ function EmailTemplatesList({
         const isDeleting = isTemplateDeleting(template.id)
 
         return {
-          onClick: isDeleting ? () => {} : () => onItemClick(template),
+          onClick: isDeleting ? () => { } : () => onItemClick(template),
           style: {
             cursor: 'pointer',
             pointerEvents: isDeleting ? 'none' : 'initial'
@@ -156,12 +158,11 @@ function EmailTemplatesList({
 
 const mapStateToProps = (state: IAppState) => {
   const brand = getActiveTeamId(state.user) || ''
-  const { emailTemplates } = state
 
   return {
     brand,
-    templates: selectEmailTemplates(emailTemplates, brand),
-    isFetching: selectEmailTemplatesIsFetching(emailTemplates, brand)
+    templates: selectEmailTemplates(state.emailTemplates, brand),
+    isFetching: selectEmailTemplatesIsFetching(state.emailTemplates, brand)
   }
 }
 
