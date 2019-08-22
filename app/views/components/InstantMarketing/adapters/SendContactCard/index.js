@@ -112,10 +112,13 @@ class SendContactCard extends React.Component {
   }
 
   closeBuilder = () => {
-    this.setState({
-      isBuilderOpen: false,
-      isComposeEmailOpen: false
-    })
+    this.setState(
+      {
+        isBuilderOpen: false,
+        isComposeEmailOpen: false
+      },
+      this.props.handleTrigger
+    )
   }
 
   toggleComposeEmail = () =>
