@@ -10,17 +10,20 @@ export function normalizeRecipients(
       recipients.map(recipient => {
         if (isContactTag(recipient)) {
           return {
+            recipient_type: 'Tag',
             tag: recipient.text
           }
         }
 
         if (isContactList(recipient)) {
           return {
+            recipient_type: 'List',
             list: recipient.id
           }
         }
 
         const result: IEmailRecipientEmailInput = {
+          recipient_type: 'Email',
           email: recipient.email
         }
 

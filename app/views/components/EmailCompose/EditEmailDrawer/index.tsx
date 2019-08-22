@@ -89,24 +89,24 @@ export function EditEmailDrawer({ emailId, isOpen, onClose, onEdited }: Props) {
 }
 
 function getRecipientsFromRecipientsEntity(
-  recipientType: IEmailRecipient['recipient_type'],
+  sendType: IEmailRecipient['send_type'],
   recipients: IEmailRecipient<'list' | 'contact'>[]
 ): Recipient[] {
   return recipients
-    .filter(recipient => recipient.recipient_type === recipientType)
+    .filter(recipient => recipient.send_type === sendType)
     .map(recipient => {
-      if (recipient.tag) {
+      if (recipient.recipient_type === 'Tag') {
         return {
           type: 'crm_tag',
           text: recipient.tag
         } as IContactTag
       }
 
-      if (recipient.list) {
+      if (recipient.recipient_type === 'List') {
         return recipient.list
       }
 
-      if (recipient.email) {
+      if (recipient.recipient_type === 'Email') {
         return {
           email: recipient.email,
           contact: normalizeContact(recipient.contact)

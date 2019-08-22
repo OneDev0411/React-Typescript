@@ -1,10 +1,23 @@
-declare interface IEmailRecipientListInput {
+declare type IEmailRecipientType =
+  | 'Tag'
+  | 'List'
+  | 'Email'
+  | 'Brand'
+  | 'All Contacts'
+
+declare interface IEmailRecipientInputBase<T extends IEmailRecipientType> {
+  recipient_type: T
+}
+declare interface IEmailRecipientListInput
+  extends IEmailRecipientInputBase<'List'> {
   list: UUID
 }
-declare interface IEmailRecipientTagInput {
+declare interface IEmailRecipientTagInput
+  extends IEmailRecipientInputBase<'Tag'> {
   tag: string
 }
-declare interface IEmailRecipientEmailInput {
+declare interface IEmailRecipientEmailInput
+  extends IEmailRecipientInputBase<'Email'> {
   email: string
   contact?: UUID
 }
@@ -29,7 +42,6 @@ declare type TIsEmailPresent = TIsPropertyPresent<
   IEmailRecipientEmailInput,
   'email'
 >
-
 declare type EmailCampaignRecipientAssociation = 'contact' | 'list'
 
 declare type IEmailRecipient<
@@ -42,7 +54,8 @@ declare type IEmailRecipient<
   email: null | string
   id: UUID
   ord: string
-  recipient_type: 'CC' | 'BCC' | 'To'
+  send_type: 'CC' | 'BCC' | 'To'
+  recipient_type: IEmailRecipientType
   tag: string
   type: 'email_campaign_recipient'
   updated_at: null | string
