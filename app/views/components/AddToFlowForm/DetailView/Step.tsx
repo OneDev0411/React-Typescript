@@ -1,21 +1,36 @@
 import React from 'react'
-import Flex from 'styled-flex-component'
+import { Box, Typography, makeStyles } from '@material-ui/core'
 
 import Icon from '../../../../components/Pages/Dashboard/Flows/Edit/Steps/Item/Icon'
 
 import { StepContainer } from './styled'
+
+const useStyles = makeStyles({
+  title: {
+    width: 'calc(100% - 1rem)'
+  }
+})
 
 interface Props {
   step: IBrandFlowStep
 }
 
 export default function Step({ step }: Props) {
+  const classes = useStyles()
+
   return (
     <StepContainer alignCenter justifyBetween>
-      <Flex alignCenter>
+      <Box display="flex" alignItems="center" width="70%">
         <Icon type={step.event ? step.event.task_type : 'Email'} />
-        <div>{step.title}</div>
-      </Flex>
+        <Typography
+          noWrap
+          variant="body2"
+          title={step.title}
+          className={classes.title}
+        >
+          {step.title}
+        </Typography>
+      </Box>
       <div>
         {step.wait_days === 0 && 'The same day'}
         {step.wait_days > 0 && `Wait for ${step.wait_days} `}

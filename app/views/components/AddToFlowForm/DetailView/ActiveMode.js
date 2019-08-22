@@ -12,7 +12,7 @@ export default function ActiveMode() {
     <Container center>
       <Flex center column>
         <ThunderboltIcon style={{ fill: green.A100, marginBottom: '1em' }} />
-        <div>The contact already added to this flow!</div>
+        <div>This contact is already in this flow.</div>
       </Flex>
     </Container>
   )

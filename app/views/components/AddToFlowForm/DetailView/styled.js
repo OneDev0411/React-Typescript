@@ -5,7 +5,7 @@ import Card from 'components/Card'
 import { grey, borderColor } from 'views/utils/colors'
 
 export const Container = styled(Flex)`
-  width: 50%;
+  width: 60%;
   padding: 1em 1.5em;
 `
 
