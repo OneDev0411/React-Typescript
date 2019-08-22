@@ -62,12 +62,20 @@ class Builder extends React.Component {
           label: 'Link',
           name: 'href'
         }
+      ],
+
+      'mj-button': [
+        {
+          type: 'text',
+          label: 'Link',
+          name: 'href'
+        }
       ]
     }
   }
 
   async componentDidMount() {
-    const { Grapesjs } = await loadGrapesjs()
+    const { Grapesjs, GrapesjsMjml } = await loadGrapesjs()
 
     const { load: loadAssetManagerPlugin } = await import('./AssetManager')
     const { load: loadStyleManagerPlugin } = await import('./StyleManager')
@@ -79,7 +87,8 @@ class Builder extends React.Component {
     })
 
     this.editor = createGrapesInstance(Grapesjs, {
-      assets: [...this.props.assets, ...this.UserAssets]
+      assets: [...this.props.assets, ...this.UserAssets],
+      plugins: [GrapesjsMjml]
     })
 
     this.editor.on('load', this.setupGrapesJs)
@@ -102,6 +111,7 @@ class Builder extends React.Component {
     this.disableResize()
     this.singleClickTextEditing()
     this.disableAssetManager()
+    this.disableDeviceManager()
     this.makeTemplateCentered()
     this.removeTextStylesOnPaste()
 
@@ -118,9 +128,14 @@ class Builder extends React.Component {
     this.editor.on('run:open-assets', () => this.editor.Modal.close())
   }
 
+  disableDeviceManager = () => {
+    this.editor.Panels.removePanel('devices-c')
+  }
+
   singleClickTextEditing = () => {
     this.editor.on('component:selected', selected => {
-      const isImageAsset = selected.get('type') === 'image'
+      const isImageAsset =
+        selected.get('type') === 'image' || selected.get('type') === 'mj-image'
 
       if (!selected.view.onActive || isImageAsset) {
         return
@@ -195,11 +210,11 @@ class Builder extends React.Component {
     let shouldSelectImage = true
 
     const updateAll = model => {
-      const editable =
-        model && model.view && model.view.$el.attr('rechat-editable')
+      const attributes = model.get('attributes')
 
-      const isRechatAsset =
-        model && model.view && model.view.$el.attr('rechat-assets')
+      const editable = attributes.hasOwnProperty('rechat-editable')
+
+      const isRechatAsset = attributes.hasOwnProperty('rechat-assets')
 
       if (!editable) {
         model.set({
@@ -217,7 +232,7 @@ class Builder extends React.Component {
 
       if (
         shouldSelectImage &&
-        model.view.$el.attr('rechat-assets') === 'listing-image'
+        attributes['rechat-assets'] === 'listing-image'
       ) {
         shouldSelectImage = false
         this.editor.select(model)
@@ -232,6 +247,23 @@ class Builder extends React.Component {
   }
 
   getSavedTemplate() {
+    if (this.state.selectedTemplate.mjml) {
+      return this.getMjmlTemplate()
+    }
+
+    return this.getHtmlTemplate()
+  }
+
+  getMjmlTemplate() {
+    const result = this.editor.getHtml()
+
+    return {
+      ...this.state.selectedTemplate,
+      result
+    }
+  }
+
+  getHtmlTemplate() {
     const css = this.editor.getCss()
     const html = this.editor.getHtml()
 
@@ -420,8 +452,6 @@ class Builder extends React.Component {
   )
 
   regenerateTemplate = newData => {
-    console.log('[ + ] Regenerate template')
-
     this.setState(
       state => ({
         selectedTemplate: {

@@ -20,10 +20,12 @@ const STYLE_MANAGER_TEXT_TAGS = [
   'h6',
   'address',
   'q',
-  'label'
+  'label',
+  'mj-text',
+  'mj-button'
 ]
 
-export function createGrapesInstance(Grapesjs, { assets }) {
+export function createGrapesInstance(Grapesjs, { assets, plugins }) {
   return Grapesjs.init({
     ...config,
     avoidInlineStyle: false,
@@ -41,7 +43,7 @@ export function createGrapesInstance(Grapesjs, { assets }) {
       }
     },
     showDevices: false,
-    plugins: ['asset-blocks', 'style-manager'],
+    plugins: ['asset-blocks', 'style-manager', ...plugins],
     pluginsOpts: {
       'style-manager': {
         fontSizePicker: {
