@@ -30,5 +30,8 @@ export default {
     fontSize: '1rem',
     letterSpacing: '0.25px',
     color: '#536280'
+  },
+  link: {
+    cursor: 'pointer'
   }
 }

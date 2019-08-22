@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { ButtonBase } from '@material-ui/core'
-
 import CrmTitle from './CrmTitle'
 import styles from '../styles'
 
@@ -62,9 +60,15 @@ export function EventTitle(props: Props) {
   ) {
     return (
       <div style={styles.title}>
-        <ButtonBase onClick={() => props.onClickScheduledEmail(event)}>
+        <a
+          style={styles.link}
+          onClick={e => {
+            e.preventDefault()
+            props.onClickScheduledEmail(event)
+          }}
+        >
           {event.title}
-        </ButtonBase>
+        </a>
       </div>
     )
   }
