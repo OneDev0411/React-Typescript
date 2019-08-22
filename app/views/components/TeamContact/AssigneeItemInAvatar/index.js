@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from 'styled-components'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
@@ -63,7 +63,7 @@ export class AssigneeItemInAvatar extends Component {
 
     return (
       <Tooltip placeme="top" caption={title}>
-        <Button isFit onClick={this.onRemove}>
+        <Button isFit onClick={this.onRemove} type="button">
           <Avatar image={user.profile_image_url} title={title} size={32} />
           <Icon />
         </Button>

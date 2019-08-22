@@ -89,6 +89,7 @@ export class Assignees extends React.Component {
               text={this.props.buttonText}
               appearance="link"
               size="medium"
+              type="button"
               style={{
                 height: 'auto',
                 padding: '0',
