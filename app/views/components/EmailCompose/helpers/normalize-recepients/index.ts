@@ -1,9 +1,8 @@
-import { Recipient } from '../../../ContactsChipsInput/types'
-import { isContactList } from '../../../ContactsChipsInput/helpers/is-contact-list'
-import { isContactTag } from '../../../ContactsChipsInput/helpers/is-contact-tag'
+import { isContactList } from '../../../EmailRecipientsChipsInput/helpers/is-contact-list'
+import { isContactTag } from '../../../EmailRecipientsChipsInput/helpers/is-contact-tag'
 
 export function normalizeRecipients(
-  recipients: Recipient[] | undefined
+  recipients: IDenormalizedEmailRecipientInput[] | undefined
 ): IEmailRecipientInput[] {
   return (
     (recipients &&
@@ -11,14 +10,14 @@ export function normalizeRecipients(
         if (isContactTag(recipient)) {
           return {
             recipient_type: 'Tag',
-            tag: recipient.text
+            tag: recipient.tag.text
           }
         }
 
         if (isContactList(recipient)) {
           return {
             recipient_type: 'List',
-            list: recipient.id
+            list: recipient.list.id
           }
         }
 

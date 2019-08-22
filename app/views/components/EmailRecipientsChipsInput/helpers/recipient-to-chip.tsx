@@ -1,11 +1,12 @@
-import { Recipient } from '../types'
 import { ChipInputItem } from '../../ChipsInput/types'
 import { validateRecipient } from './validate-recipient'
 import { isContactList } from './is-contact-list'
 import { isContactTag } from './is-contact-tag'
 import { recipientToString } from './recipient-to-string'
 
-export function recipientToChip(recipient: Recipient): ChipInputItem {
+export function recipientToChip(
+  recipient: IDenormalizedEmailRecipientInput
+): ChipInputItem {
   const hasError = !!validateRecipient(recipient)
 
   const label = recipientToString(recipient)

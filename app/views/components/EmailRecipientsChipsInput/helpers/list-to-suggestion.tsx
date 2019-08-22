@@ -3,16 +3,18 @@ import { Avatar } from '@material-ui/core'
 import React from 'react'
 
 import ListIcon from '../../SvgIcons/List/ListIcon'
+import { Suggestion } from '../../ChipsInput/types'
 
-export function listToSuggestion(list: IContactList) {
+export function listToSuggestion(
+  recipient: IDenormalizedEmailRecipientListInput
+): Suggestion {
   return {
-    title: list.name,
+    title: recipient.list.name,
     subtitle: 'List',
     avatar: (
       <Avatar>
         <ListIcon color="currentColor" />
       </Avatar>
-    ),
-    data: list
+    )
   }
 }

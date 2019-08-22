@@ -1,14 +1,15 @@
-import { Recipient } from '../types'
 import { isContactList } from './is-contact-list'
 import { isContactTag } from './is-contact-tag'
 
-export function recipientToString(recipient: Recipient): string {
+export function recipientToString(
+  recipient: IDenormalizedEmailRecipientInput
+): string {
   if (isContactList(recipient)) {
-    return `${recipient.name} (List)`
+    return `${recipient.list.name} (List)`
   }
 
   if (isContactTag(recipient)) {
-    return `${recipient.text} (Tag)`
+    return `${recipient.tag.text} (Tag)`
   }
 
   if (recipient.email) {

@@ -13,7 +13,7 @@ import { getSendEmailResultMessages } from 'components/EmailCompose/helpers/emai
 import { createBulkEmailCampaign } from 'models/email/create-bulk-email-campaign'
 import IconLock from 'components/SvgIcons/Lock/IconLock'
 
-import ContactsChipsInput from 'components/ContactsChipsInput'
+import EmailRecipientsChipsInput from 'components/EmailRecipientsChipsInput'
 
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
 
@@ -80,7 +80,7 @@ export function BulkEmailComposeDrawer({
         label={label}
         readOnly={disableAddNewRecipient}
         name="to"
-        component={ContactsChipsInput as any}
+        component={EmailRecipientsChipsInput as any}
         TextFieldProps={
           {
             inputProps: {

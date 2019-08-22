@@ -140,3 +140,27 @@ declare interface IEmail {
   text?: string
   headers?: any
 }
+
+/**
+ * This is corresponding to {@link IEmailRecipientInput}, but fields like
+ * list, tag and contact are objects instead of UUIDs
+ */
+declare type IDenormalizedEmailRecipientInput =
+  | IDenormalizedEmailRecipientEmailInput
+  | IDenormalizedEmailRecipientListInput
+  | IDenormalizedEmailRecipientTagInput
+
+declare interface IDenormalizedEmailRecipientEmailInput
+  extends Omit<IEmailRecipientEmailInput, 'contact'> {
+  contact?: IContact
+}
+
+declare interface IDenormalizedEmailRecipientListInput
+  extends Omit<IEmailRecipientListInput, 'list'> {
+  list: IContactList
+}
+
+declare interface IDenormalizedEmailRecipientTagInput
+  extends Omit<IEmailRecipientTagInput, 'tag'> {
+  tag: IContactTag
+}

@@ -10,7 +10,7 @@ import { RecipientItem } from './RecipientItem'
 import { FieldError } from '../../final-form-fields/FieldError'
 
 /**
- * @deprecated in favor of {@link ContactsChipsInput}
+ * @deprecated in favor of {@link EmailRecipientsChipsInput}
  * @param input
  * @param hasLabel
  * @param showError

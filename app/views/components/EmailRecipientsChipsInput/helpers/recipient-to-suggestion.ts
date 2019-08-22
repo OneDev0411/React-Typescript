@@ -1,13 +1,17 @@
-import { Recipient } from '../types'
 import { Suggestion } from '../../ChipsInput/types'
 import { listToSuggestion } from './list-to-suggestion'
 import { tagToSuggestion } from './tag-to-suggestion'
 import { isContactList } from './is-contact-list'
 import { isContactTag } from './is-contact-tag'
 
-export function recipientToSuggestion(recipient: Recipient): Suggestion {
+export function recipientToSuggestion(
+  recipient: IDenormalizedEmailRecipientInput
+): Suggestion {
   if (isContactList(recipient)) {
-    return listToSuggestion(recipient)
+    return listToSuggestion({
+      recipient_type: 'List',
+      list: recipient.list
+    })
   }
 
   if (isContactTag(recipient)) {

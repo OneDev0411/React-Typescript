@@ -14,7 +14,7 @@ export interface ChipInputItem {
   tooltip?: ReactNode
 }
 
-export interface Suggestion<T = any> {
+export interface Suggestion {
   title: ReactNode
   subtitle?: ReactNode
   avatar?: ReactNode

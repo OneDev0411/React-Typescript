@@ -4,15 +4,17 @@ import React from 'react'
 
 import TagIcon from '../../SvgIcons/Tag/TagIcon'
 
-export function tagToSuggestion(tag: IContactTag) {
+export function tagToSuggestion(
+  recipient: IDenormalizedEmailRecipientTagInput
+) {
   return {
-    title: tag.text,
+    title: recipient.tag.text,
     subtitle: 'Tag',
     avatar: (
       <Avatar>
         <TagIcon />
       </Avatar>
     ),
-    data: tag
+    data: recipient
   }
 }
