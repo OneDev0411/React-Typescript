@@ -93,10 +93,11 @@ function getEventIndex(event: ICalendarEvent, range: NumberRange) {
   const from = new Date(start * 1000)
   const to = new Date(end * 1000)
   const eventTime = new Date(event.timestamp * 1000)
-  const isCrmTask = event.object_type === 'crm_task'
+  const convertToUTC =
+    event.object_type !== 'crm_task' && event.object_type !== 'email_campaign'
 
   if (!event.recurring) {
-    return createDayId(eventTime, !isCrmTask)
+    return createDayId(eventTime, convertToUTC)
   }
 
   const year =

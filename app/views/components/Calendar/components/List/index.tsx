@@ -8,6 +8,8 @@ import VirtualList, {
   VirtualListRef
 } from 'components/VirtualList'
 
+import { EditEmailDrawer } from 'components/EmailCompose/EditEmailDrawer'
+
 import { CrmEvents } from '../CrmEvents'
 
 import { DayHeader } from './DayHeader'
@@ -26,6 +28,10 @@ interface Props {
   onReachEnd?(): void
   onChangeActiveDate(date: Date): void
   onCrmEventChange: (event: IEvent, type: string) => void
+  onScheduledEmailChange: (
+    event: ICalendarEvent,
+    emailCampaign: IEmailCampaign
+  ) => void
 }
 
 const defaultProps = {
@@ -37,15 +43,33 @@ const defaultProps = {
 const CalendarList: React.FC<Props> = props => {
   const [containerRef, listWidth, listHeight] = useResizeObserver()
   const [activeDate, setActiveDate] = useState<Date | null>(null)
-  const [
-    selectedCrmEvent,
-    setSelectedCrmEvent
-  ] = useState<ICalendarEvent | null>(null)
+  const [selectedEvent, setSelectedEvent] = useState<ICalendarEvent | null>(
+    null
+  )
 
+  /**
+   * triggers when an event updates or deletes
+   * @param event - the event
+   * @param type - type of action
+   */
   const handleEventChange = (event: IEvent, type: string) => {
-    setSelectedCrmEvent(null)
+    setSelectedEvent(null)
 
     props.onCrmEventChange(event, type)
+  }
+
+  /**
+   * triggers when an email campaign updates
+   * @param event - the event
+   * @param emailCampaign - the updated email camapign
+   */
+  const handleScheduledEmailChange = (
+    event: ICalendarEvent,
+    emailCampaign: IEmailCampaign
+  ) => {
+    setSelectedEvent(null)
+
+    props.onScheduledEmailChange(event, emailCampaign)
   }
 
   /**
@@ -113,20 +137,31 @@ const CalendarList: React.FC<Props> = props => {
                 user={props.user}
                 nextItem={props.rows[index + 1]}
                 style={style}
-                onClickCrmEventAssociations={setSelectedCrmEvent}
+                onSelectEvent={setSelectedEvent}
               />
             )}
           </>
         )}
       </VirtualList>
 
-      {selectedCrmEvent && (
+      {selectedEvent && selectedEvent.event_type === 'crm_task' && (
         <CrmEvents
           isEventDrawerOpen
-          event={selectedCrmEvent}
+          event={selectedEvent}
           user={props.user}
           onEventChange={handleEventChange}
-          onCloseEventDrawer={() => setSelectedCrmEvent(null)}
+          onCloseEventDrawer={() => setSelectedEvent(null)}
+        />
+      )}
+
+      {selectedEvent && selectedEvent.event_type === 'scheduled_email' && (
+        <EditEmailDrawer
+          isOpen
+          onClose={() => setSelectedEvent(null)}
+          onEdited={emailCampaign =>
+            handleScheduledEmailChange(selectedEvent, emailCampaign)
+          }
+          emailId={selectedEvent.campaign as UUID}
         />
       )}
     </Container>

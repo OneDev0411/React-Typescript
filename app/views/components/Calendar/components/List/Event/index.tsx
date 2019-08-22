@@ -19,7 +19,7 @@ interface Props {
   event: ICalendarEvent
   user: IUser
   nextItem: ICalendarListRow
-  onClickCrmEventAssociations: (event: ICalendarEvent) => void
+  onSelectEvent: (event: ICalendarEvent) => void
 }
 
 interface StyleProps {
@@ -35,14 +35,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: '100%',
     borderBottom: (props: StyleProps) =>
       props.hasBorderBottom ? '1px solid rgba(219, 230, 253, 0.5)' : 'none',
-    '& button, a.MuiButtonBase-root': {
+    '& button.calendar-action, a.MuiButtonBase-root': {
       borderColor: '#eee',
       color: '#eee'
     },
     '&:hover': {
       transition: '0.2s ease-in background-color',
       backgroundColor: theme.palette.action.hover,
-      '& button, a.MuiButtonBase-root': {
+      '& button.calendar-action, a.MuiButtonBase-root': {
         borderColor: 'inherit',
         color: 'inherit'
       }
@@ -53,13 +53,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 /**
  * renders the given calendar event
  */
-export function Event({
-  event,
-  user,
-  nextItem,
-  style,
-  onClickCrmEventAssociations
-}: Props) {
+export function Event({ event, user, nextItem, style, onSelectEvent }: Props) {
   const date =
     event.object_type === 'crm_task'
       ? fecha.format(new Date(event.timestamp * 1000), 'hh:mm A')
@@ -90,7 +84,8 @@ export function Event({
               <EventIcon event={event} />
               <EventTitle
                 event={event}
-                onClickCrmEventAssociations={onClickCrmEventAssociations}
+                onClickCrmEventAssociations={onSelectEvent}
+                onClickScheduledEmail={onSelectEvent}
               />
             </div>
           </div>

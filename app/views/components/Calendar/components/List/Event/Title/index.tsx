@@ -1,11 +1,14 @@
 import React from 'react'
 
+import { ButtonBase } from '@material-ui/core'
+
 import CrmTitle from './CrmTitle'
 import styles from '../styles'
 
 interface Props {
   event: ICalendarEvent
-  onClickCrmEventAssociations: (event: ICalendarEvent) => void
+  onClickScheduledEmail(event: ICalendarEvent): void
+  onClickCrmEventAssociations(event: ICalendarEvent): void
 }
 
 export function EventTitle(props: Props) {
@@ -57,7 +60,13 @@ export function EventTitle(props: Props) {
     event.object_type === 'email_campaign' &&
     event.event_type === 'scheduled_email'
   ) {
-    return <div style={styles.title}>{event.title}</div>
+    return (
+      <div style={styles.title}>
+        <ButtonBase onClick={() => props.onClickScheduledEmail(event)}>
+          {event.title}
+        </ButtonBase>
+      </div>
+    )
   }
 
   console.warn(`Could not render ${event}`)

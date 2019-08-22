@@ -33,6 +33,7 @@ import { getCalendar } from './models/get-calendar'
 import { getDateRange, Format } from './helpers/get-date-range'
 import { createListRows } from './helpers/create-list-rows'
 import { upsertCrmEvents } from './helpers/upsert-crm-events'
+import { updateEmailCampaign } from './helpers/update-email-campaign'
 import { normalizeEvents } from './helpers/normalize-events'
 import { sortEvents } from './helpers/sort-events'
 import { getRowIdByDate } from './helpers/get-row-by-date'
@@ -296,6 +297,23 @@ export function Calendar({
   )
 
   /**
+   * triggers when an email campaign updates
+   */
+  const handleScheduledEmailChange = useCallback(
+    (event: ICalendarEvent, emailCampaign: IEmailCampaign) => {
+      const nextEvents = updateEmailCampaign(
+        events,
+        event,
+        emailCampaign
+      ) as CalendarEventsList
+
+      setEvents(nextEvents)
+      setListRows(createListRows(nextEvents))
+    },
+    [events]
+  )
+
+  /**
    * behaves as componentDidMount
    */
   useEffectOnce(() => {
@@ -367,6 +385,7 @@ export function Calendar({
       onReachStart={handleLoadPreviousEvents}
       onChangeActiveDate={handleChangeActiveDate}
       onCrmEventChange={handleCrmEventChange}
+      onScheduledEmailChange={handleScheduledEmailChange}
     />
   )
 }
