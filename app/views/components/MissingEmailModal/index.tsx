@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { withRouter } from 'react-router'
+import { withRouter, WithRouterProps } from 'react-router'
 
 import Button from 'components/Button/ActionButton'
 import LinkButton from 'components/Button/LinkButton'
@@ -19,21 +19,36 @@ const ModalContant = styled.div`
   }
 `
 
-function MissingEmailModal({ contact, isOpen, onClose, ...props }) {
+interface Props {
+  contactId?: UUID
+  isOpen: boolean
+  action: string
+  onClose: () => void
+}
+
+function MissingEmailModal({
+  contactId,
+  isOpen,
+  onClose,
+  action,
+  location
+}: Props & WithRouterProps) {
   return (
     <BareModal isOpen={isOpen} onRequestClose={onClose} autoHeight>
       <ModalContant>
         <p>
-          You should provide an email address for this contact to be able to
-          send a card.
+          You should provide an email address for this contact to be able to{' '}
+          {action}.
         </p>
-        <Button onClick={onClose} appearance="outline">Cancel</Button>
-        {contact && !isContactPagePath(props.location.pathname, contact) && (
+        <Button onClick={onClose} appearance="outline">
+          Cancel
+        </Button>
+        {contactId && !isContactPagePath(location.pathname, contactId) && (
           <LinkButton
             appearance="primary"
             onClick={onClose}
             target="_blank"
-            to={`/dashboard/contacts/${contact.id}`}
+            to={`/dashboard/contacts/${contactId}`}
           >
             Edit Contact
           </LinkButton>
@@ -45,6 +60,6 @@ function MissingEmailModal({ contact, isOpen, onClose, ...props }) {
 
 export default withRouter(MissingEmailModal)
 
-function isContactPagePath(pathname, contact) {
-  return pathname.indexOf(`/dashboard/contacts/${contact.id}`) === 0
+function isContactPagePath(path: string, contactId: UUID) {
+  return path.indexOf(`/dashboard/contacts/${contactId}`) === 0
 }
