@@ -33,7 +33,7 @@ export function updateEmailCampaign(
         event => event.campaign !== emailCampaign.id
       ),
       // remove empty state from target day since we want put an event there
-      [newDayId]: events[currentDayId].filter(
+      [newDayId]: (events[newDayId] || []).filter(
         event => event.event_type !== eventEmptyState.event_type
       )
     }
