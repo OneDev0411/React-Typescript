@@ -32,7 +32,9 @@ export default function FlowItem(props) {
         {item.isActive && <div className="active-status" />}
         <Name>{item.name}</Name>
       </Flex>
-      <div style={{ fontSize: '0.875' }}>{item.description}</div>
+      <div style={{ fontSize: '0.875', wordBreak: 'break-word' }}>
+        {item.description}
+      </div>
     </Container>
   )
 }

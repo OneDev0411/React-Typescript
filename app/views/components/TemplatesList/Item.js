@@ -57,7 +57,6 @@ function Item(props) {
                     className="action-bar__icon-button"
                     onClick={e => {
                       e.stopPropagation()
-
                       props.handleEdit(props.template)
                     }}
                   >
@@ -73,7 +72,6 @@ function Item(props) {
                     onClick={e => {
                       e.stopPropagation()
                       setDeleting(true)
-
                       props.handleDelete({
                         template: props.template,
                         onCancel: () => {
