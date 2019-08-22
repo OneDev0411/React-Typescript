@@ -13,4 +13,5 @@ export const Container = styled(Card)`
 export const Name = styled.div`
   font-weight: 600;
   margin-bottom: 0.5rem;
+  word-break: break-word;
 `
