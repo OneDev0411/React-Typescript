@@ -132,7 +132,7 @@ function Edit({
           'This Flow is in use! All of your changes will happen to the future steps and contacts.'
         )
       } else if (flowData.active_flows === 0) {
-        setWarning('')
+        setWarning(null)
       }
 
       setIsLoading(false)
