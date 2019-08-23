@@ -1,17 +1,23 @@
 import fecha from 'fecha'
 
-import { getBrandByType } from 'utils/user-teams'
-
-export function getThumbnail(template, user) {
-  const brokerageBrand = getBrandByType(user, 'Brokerage')
-
+export function getTemplateImage(template, brokerageBrand) {
   if (template.file) {
-    return template.file.preview_url
+    const URL = template.file.preview_url
+
+    return {
+      original: URL,
+      thumbnail: URL
+    }
   }
 
-  return `${template.url}${
-    brokerageBrand ? `/${brokerageBrand.id}` : ''
-  }/thumbnail.${template.video ? 'mp4' : 'png'}`
+  const brandId = brokerageBrand ? `/${brokerageBrand.id}` : ''
+  const generateURL = type =>
+    `${template.url}${brandId}/${type}.${template.video ? 'mp4' : 'png'}`
+
+  return {
+    original: generateURL('preview'),
+    thumbnail: generateURL('thumbnail')
+  }
 }
 
 export function createdAt(date) {
