@@ -19,6 +19,7 @@ interface Props<T> {
   isSubmitDisabled?: boolean
   initialValues?: any
   initialValuesEqual?: FormProps['initialValuesEqual']
+  keepDirtyOnReinitialize?: FormProps['keepDirtyOnReinitialize']
   isOpen: boolean
   onClose: () => void
   onSubmit: (values: T, form: FormApi) => Promise<any>
@@ -100,6 +101,12 @@ export class FinalFormDrawer<T> extends React.Component<Props<T>> {
   render() {
     const { isSubmitDisabled = false } = this.props
 
+    // TODO: we can render form inside drawer in order to enable drawer animations
+    // We can also render form only if this.props.isOpen is true to
+    // enforce form rerender and ensure form is reinitialized
+    // when the drawer is opened (even if keepDirtyOnReinitialize is passed)
+    // this eliminates the necessity for conditional rendering of
+    // FinalFormDrawer.
     return (
       <Form
         validate={this.props.validate}
@@ -108,6 +115,7 @@ export class FinalFormDrawer<T> extends React.Component<Props<T>> {
         mutators={{ ...arrayMutators }}
         initialValues={this.props.initialValues}
         initialValuesEqual={this.props.initialValuesEqual}
+        keepDirtyOnReinitialize={this.props.keepDirtyOnReinitialize}
         render={formProps => {
           const { submitting } = formProps
 
@@ -140,20 +148,22 @@ export class FinalFormDrawer<T> extends React.Component<Props<T>> {
                         handleSubmit: this.handleSubmit
                       })
                     ) : (
-                        <Tooltip title={this.props.submitButtonTooltip}>
-                          <ActionButton
-                            type="submit"
-                            disabled={
-                              isSubmitDisabled || submitting || formProps.validating
-                            }
-                            onClick={this.handleSubmit}
-                          >
-                            {submitting
-                              ? this.props.submittingButtonLabel
-                              : this.props.submitButtonLabel}
-                          </ActionButton>
-                        </Tooltip>
-                      )}
+                      <Tooltip title={this.props.submitButtonTooltip}>
+                        <ActionButton
+                          type="submit"
+                          disabled={
+                            isSubmitDisabled ||
+                            submitting ||
+                            formProps.validating
+                          }
+                          onClick={this.handleSubmit}
+                        >
+                          {submitting
+                            ? this.props.submittingButtonLabel
+                            : this.props.submitButtonLabel}
+                        </ActionButton>
+                      </Tooltip>
+                    )}
                   </Drawer.Footer>
                 )}
               </Drawer>

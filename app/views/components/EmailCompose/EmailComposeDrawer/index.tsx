@@ -41,6 +41,7 @@ class EmailComposeDrawer extends React.Component<
       to: [],
       cc: [],
       bcc: [],
+      subject: '',
       body: '',
       attachments: []
     },
@@ -170,6 +171,7 @@ class EmailComposeDrawer extends React.Component<
         disableSubmitByEnter
         isOpen={this.props.isOpen}
         initialValues={this.props.initialValues}
+        keepDirtyOnReinitialize
         initialValuesEqual={isEqual}
         onClose={this.props.onClose!}
         onSubmit={this.handleSubmit}
