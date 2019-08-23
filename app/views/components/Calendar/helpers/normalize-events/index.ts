@@ -1,4 +1,5 @@
 import { createDayId } from '../create-day-id'
+import { sortEvents } from '../sort-events'
 import eventEmptyState from '../get-event-empty-state'
 
 /**
@@ -7,21 +8,23 @@ import eventEmptyState from '../get-event-empty-state'
  * @param events
  */
 export function normalizeEvents(
-  range: NumberRange,
   events: ICalendarEvent[],
+  range: NumberRange,
   activeDate: Date
 ) {
+  // convert activeDate to yyyy/mm/dd format
+  const activeDayId = createDayId(activeDate, false)
+
   if (events.length === 0) {
-    return {}
+    return {
+      [activeDayId]: [eventEmptyState]
+    }
   }
 
   // get list of all fetched events
   const list = getEvents(range, events)
 
-  // convert activeDate to yyyy/mm/dd format
-  const activeDayId = createDayId(activeDate)
-
-  return Object.entries(list).reduce((acc, [day, events]) => {
+  const normalizedEvents = Object.entries(list).reduce((acc, [day, events]) => {
     if ((events as ICalendarEvent[]).length === 0) {
       return isToday(day) || day === activeDayId
         ? {
@@ -35,7 +38,9 @@ export function normalizeEvents(
       ...acc,
       [day]: events
     }
-  }, {}) as CalendarEventsList
+  }, {})
+
+  return sortEvents(normalizedEvents)
 }
 
 /**
@@ -93,10 +98,11 @@ function getEventIndex(event: ICalendarEvent, range: NumberRange) {
   const from = new Date(start * 1000)
   const to = new Date(end * 1000)
   const eventTime = new Date(event.timestamp * 1000)
-  const isCrmTask = event.object_type === 'crm_task'
+  const convertToUTC =
+    event.object_type !== 'crm_task' && event.object_type !== 'email_campaign'
 
   if (!event.recurring) {
-    return createDayId(eventTime, !isCrmTask)
+    return createDayId(eventTime, convertToUTC)
   }
 
   const year =

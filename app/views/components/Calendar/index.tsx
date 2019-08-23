@@ -33,10 +33,9 @@ import { getCalendar } from './models/get-calendar'
 import { getDateRange, Format } from './helpers/get-date-range'
 import { createListRows } from './helpers/create-list-rows'
 import { upsertCrmEvents } from './helpers/upsert-crm-events'
+import { updateEmailCampaign } from './helpers/update-email-campaign'
 import { normalizeEvents } from './helpers/normalize-events'
-import { sortEvents } from './helpers/sort-events'
 import { getRowIdByDate } from './helpers/get-row-by-date'
-import { appendDayToEvents } from './helpers/append-day-to-events'
 
 import List from './components/List'
 
@@ -68,7 +67,7 @@ export function Calendar({
   const listRef = useRef<VirtualListRef>(null)
 
   // fetches events so far
-  const [events, setEvents] = useState<CalendarEventsList>({})
+  const [events, setEvents] = useState<ICalendarEvent[]>([])
 
   // rows of Virtual List
   const [listRows, setListRows] = useState<ICalendarListRow[]>([])
@@ -124,24 +123,23 @@ export function Calendar({
           ...apiOptions
         })
 
-        // concat new events and existing events
-        const nextEvents = options.reset
-          ? normalizeEvents(apiOptions.range, fetchedEvents, activeDate)
-          : {
-              ...events,
-              ...normalizeEvents(apiOptions.range, fetchedEvents, activeDate)
-            }
-
-        // sort events based on date
-        const sortedEvents = sortEvents(nextEvents)
+        const nextEvents: ICalendarEvent[] = options.reset
+          ? fetchedEvents
+          : fetchedEvents.concat(events)
 
         // update events list
-        setEvents(sortedEvents)
+        setEvents(nextEvents)
+
+        const normalizedEvents = normalizeEvents(
+          nextEvents,
+          apiOptions.range,
+          activeDate
+        )
 
         // updates virtual list rows
-        setListRows(createListRows(sortedEvents))
+        setListRows(createListRows(normalizedEvents))
 
-        onLoadEvents(sortedEvents, apiOptions.range)
+        onLoadEvents(normalizedEvents, apiOptions.range)
       } catch (e) {
         console.log(e)
       } finally {
@@ -166,12 +164,12 @@ export function Calendar({
    * jumps to the given date.
    * @param date
    */
-  const jumpToDate = (date: Date, allowSeeking: boolean = true): void => {
-    let rowId = getRowIdByDate(date, listRows, events, calendarRange)
+  const jumpToDate = (date: Date, recursive = true): void => {
+    const rowId = getRowIdByDate(date, listRows, calendarRange)
 
-    if (rowId === -1) {
+    if (rowId === null && recursive) {
       // try to jump to the date by fetching more data from server
-      allowSeeking && handleLoadEvents(date)
+      handleLoadEvents(date)
 
       return
     }
@@ -183,22 +181,24 @@ export function Calendar({
      * and make, make one to be in our blue link color and tapping on it
      * should open the event dialog with the day set on it
      */
-    if (rowId === null) {
-      const nextEvents = appendDayToEvents(date, events)
+    if (rowId === -1) {
+      const nextEvents = normalizeEvents(events, calendarRange, date)
       const nextRows = createListRows(nextEvents)
 
-      setEvents(nextEvents)
       setActiveDate(date)
-
       setListRows(nextRows)
 
+      return
+    }
+
+    if (!rowId || rowId === -1) {
       return
     }
 
     listRef.current!.scrollToItem(rowId, 'start')
 
     // change active date
-    handleChangeActiveDate(new Date(listRows[rowId].date))
+    handleChangeActiveDate(date)
   }
 
   /**
@@ -279,20 +279,45 @@ export function Calendar({
   }, [calendarRange, fetchEvents, isLoading])
 
   /**
+   * creates the list of virtual list rows based on given events
+   * @param events
+   */
+  const createListFromEvents = useCallback(
+    (events: ICalendarEvent[]) => {
+      const normalizedEvents = normalizeEvents(
+        events,
+        calendarRange,
+        activeDate
+      )
+
+      setEvents(events)
+      setListRows(createListRows(normalizedEvents))
+    },
+    [activeDate, calendarRange]
+  )
+
+  /**
    * triggers when a crm events update or delete
    */
   const handleCrmEventChange = useCallback(
     (event: IEvent, type: string) => {
-      const nextEvents = upsertCrmEvents(
-        events,
-        event,
-        type
-      ) as CalendarEventsList
+      const nextEvents = upsertCrmEvents(events, event, type)
 
-      setEvents(nextEvents)
-      setListRows(createListRows(nextEvents))
+      createListFromEvents(nextEvents)
     },
-    [events]
+    [createListFromEvents, events]
+  )
+
+  /**
+   * triggers when an email campaign updates
+   */
+  const handleScheduledEmailChange = useCallback(
+    (event: ICalendarEvent, emailCampaign: IEmailCampaign) => {
+      const nextEvents = updateEmailCampaign(events, event, emailCampaign)
+
+      createListFromEvents(nextEvents)
+    },
+    [createListFromEvents, events]
   )
 
   /**
@@ -332,7 +357,9 @@ export function Calendar({
    * calls when listRows changes
    */
   useEffect(() => {
-    jumpToDate(activeDate, false)
+    if (listRows.length === 0) {
+      return
+    }
 
     /*
      * VariableSizeList caches offsets and measurements for each index
@@ -343,6 +370,9 @@ export function Calendar({
      * also it's loading the data bidirectionally
      */
     listRef.current!.resetAfterIndex(0)
+
+    // go to active date
+    jumpToDate(activeDate, false)
 
     // eslint-disable-next-line
   }, [listRows])
@@ -367,6 +397,7 @@ export function Calendar({
       onReachStart={handleLoadPreviousEvents}
       onChangeActiveDate={handleChangeActiveDate}
       onCrmEventChange={handleCrmEventChange}
+      onScheduledEmailChange={handleScheduledEmailChange}
     />
   )
 }

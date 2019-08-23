@@ -20,6 +20,16 @@ interface TabItem {
   filter: object
 }
 
+export interface FiltersRef {
+  changeFilter(tabId: number): void
+}
+
+interface Props {
+  onChange(filter: object): void
+  isLoadingFilters: boolean
+  filterRef?: RefObject<FiltersRef>
+}
+
 const TAB_ITEMS: TabItem[] = [
   {
     label: 'All Events',
@@ -68,16 +78,6 @@ const TAB_ITEMS: TabItem[] = [
     }
   }
 ]
-
-export interface FiltersRef {
-  changeFilter(tabId: number): void
-}
-
-interface Props {
-  onChange(filter: object): void
-  isLoadingFilters: boolean
-  filterRef?: RefObject<FiltersRef>
-}
 
 function Filters({ filterRef, onChange, isLoadingFilters }: Props) {
   const [selectedTab, setSelectedTab] = useState(TAB_ITEMS[0].value)
@@ -132,6 +132,6 @@ function Filters({ filterRef, onChange, isLoadingFilters }: Props) {
   )
 }
 
-export default forwardRef((props: Props, ref: RefObject<Filters>) => (
+export default forwardRef((props: Props, ref: RefObject<FiltersRef>) => (
   <Filters {...props} filterRef={ref} />
 ))
