@@ -2,35 +2,45 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
+import { getBrandByType } from 'utils/user-teams'
+
 import IconButton from 'components/Button/IconButton'
 import ActionButton from 'components/Button/ActionButton'
 import DeleteIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
 import EditIcon from 'components/SvgIcons/Edit/EditIcon'
 import Tooltip from 'components/tooltip'
 
-import { getThumbnail, itemButtonText, itemDateText } from './helpers'
+import { getTemplateImage, itemButtonText, itemDateText } from './helpers'
 
 function Item(props) {
+  const { template } = props
   const [isDeleting, setDeleting] = useState(false)
-  const thumbnail = getThumbnail(props.template, props.user)
-  const isInstance = props.template.type === 'template_instance'
+  const brokerageBrand = getBrandByType(props.user, 'Brokerage')
+  const { thumbnail } = getTemplateImage(template, brokerageBrand)
+  const isInstance = template.type === 'template_instance'
   const gridClassNames = ['grid-item']
+  let handleOnPreview = () => props.handlePreview(template)
 
   if (isDeleting) {
     gridClassNames.push('loading')
   }
 
+  if (template.video) {
+    gridClassNames.push('is-video')
+    handleOnPreview = () => false
+  }
+
   return (
-    <div key={props.template.id}>
+    <div key={template.id}>
       <div
         className={gridClassNames.join(' ')}
-        onClick={() => props.handlePreview(props.template)}
+        onClick={handleOnPreview}
         data-test="marketing-template"
       >
-        {props.template.video ? (
+        {template.video ? (
           <video src={thumbnail} muted autoPlay />
         ) : (
-          <img alt={props.template.name} src={thumbnail} />
+          <img alt={template.name} src={thumbnail} />
         )}
 
         <div className="action-bar">
@@ -39,12 +49,12 @@ function Item(props) {
               onClick={e => {
                 e.stopPropagation()
 
-                props.handleCustomize(props.template)
+                props.handleCustomize(template)
               }}
               isBlock
               data-test="marketing-customize-button"
             >
-              {itemButtonText(props.template)}
+              {itemButtonText(template)}
             </ActionButton>
           </div>
 
@@ -57,7 +67,7 @@ function Item(props) {
                     className="action-bar__icon-button"
                     onClick={e => {
                       e.stopPropagation()
-                      props.handleEdit(props.template)
+                      props.handleEdit(template)
                     }}
                   >
                     <EditIcon />
@@ -73,7 +83,7 @@ function Item(props) {
                       e.stopPropagation()
                       setDeleting(true)
                       props.handleDelete({
-                        template: props.template,
+                        template,
                         onCancel: () => {
                           setDeleting(false)
                         },
@@ -104,7 +114,7 @@ function Item(props) {
           ) : (
             <>
               <div className="caption">CREATED AT</div>
-              {itemDateText(props.template.created_at)}
+              {itemDateText(template.created_at)}
             </>
           )}
         </div>
