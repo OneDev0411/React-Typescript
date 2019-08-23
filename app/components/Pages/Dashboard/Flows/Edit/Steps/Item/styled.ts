@@ -11,9 +11,4 @@ export const DescriptionColumn = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   overflow: hidden;
-
-  svg {
-    margin-top: 0.1875rem !important;
-    margin-right: 1rem !important;
-  }
 `
