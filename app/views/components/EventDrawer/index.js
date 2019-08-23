@@ -26,7 +26,8 @@ import {
   AssigneesField,
   AssociationsList,
   ReminderField,
-  WhenFieldChanges
+  WhenFieldChanges,
+  FieldError
 } from '../final-form-fields'
 import Tooltip from '../tooltip'
 import { AddAssociationButton } from '../AddAssociationButton'
@@ -306,6 +307,11 @@ export class EventDrawer extends Component {
                         associations={values.associations}
                         defaultAssociation={defaultAssociation}
                         handleDelete={this.handleDeleteAssociation}
+                      />
+
+                      <FieldError
+                        name="associations"
+                        style={{ fontSize: '1rem' }}
                       />
 
                       <ItemChangelog
