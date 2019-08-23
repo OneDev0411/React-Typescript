@@ -40,7 +40,7 @@ export function normalizeEvents(
     }
   }, {})
 
-  return sortEvents(normalizedEvents) as CalendarEventsList
+  return sortEvents(normalizedEvents)
 }
 
 /**
