@@ -114,7 +114,6 @@ export default function Item({
 
   return (
     <Grid item xs={12} style={{ position: 'relative' }}>
-      <StepIndex>{index + 1}</StepIndex>
       <Draggable
         isDragDisabled={disableEdit}
         key={step.id}
@@ -126,6 +125,7 @@ export default function Item({
             ref={draggableProvided.innerRef}
             {...draggableProvided.draggableProps}
           >
+            <StepIndex>{index + 1}</StepIndex>
             <Box m={2} style={{ cursor: 'pointer' }}>
               <Card
                 onMouseOver={raise}
