@@ -55,6 +55,9 @@ export function Footer(props) {
                   isScheduled={isScheduled}
                 />
               )}
+              disabledDays={{
+                before: new Date()
+              }}
               popUpPosition="top-right"
               saveButtonText="Schedule"
               initialSelectedDate={fieldProps.input.value}
