@@ -1,4 +1,4 @@
-export function convertTaskToCalendarEvent(event: IEvent) {
+export function convertTaskToCalendarEvent(event: IEvent): ICalendarEvent {
   return {
     ...event,
     event_type: event.task_type,

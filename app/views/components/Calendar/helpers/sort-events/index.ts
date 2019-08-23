@@ -2,7 +2,7 @@
  * returns sorted version of events
  * @param events
  */
-export function sortEvents(events: CalendarEventsList) {
+export function sortEvents(events: CalendarEventsList): CalendarEventsList {
   return Object.keys(events)
     .sort(
       (a: string, b: string) => new Date(a).getTime() - new Date(b).getTime()

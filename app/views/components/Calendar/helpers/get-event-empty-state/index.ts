@@ -1,3 +1,3 @@
 export default {
-  event_type: 'today-empty-state'
+  event_type: 'day-empty-state'
 } as ICalendarEvent
