@@ -3,6 +3,7 @@ import { Theme } from '@material-ui/core/styles'
 
 export const ButtonGroup = styled.div`
   display: flex;
+  background: #fff;
 `
 
 export const Button = styled.button`
@@ -14,6 +15,7 @@ export const Button = styled.button`
   font-weight: ${(props: ThemeProps<Theme>) =>
     props.theme.typography.fontWeightMedium};
   outline: none;
+  background: transparent;
 
   &:first-child {
     border-top-left-radius: 8px;
