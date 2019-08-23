@@ -53,6 +53,8 @@ const CalendarPage: React.FC = props => {
    */
   const handleDatePickerChange = (date: Date = new Date()) => {
     if (calendarRef.current) {
+      setActiveDate(date)
+
       calendarRef.current.jumpToDate(date)
     }
   }
