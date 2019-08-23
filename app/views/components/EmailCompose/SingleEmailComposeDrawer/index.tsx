@@ -93,6 +93,7 @@ export function SingleEmailComposeDrawer({
           name="to"
           component={EmailRecipientsChipsInput as any}
           readOnly={disableAddNewRecipient}
+          includeSuggestions
           TextFieldProps={
             {
               inputProps: {

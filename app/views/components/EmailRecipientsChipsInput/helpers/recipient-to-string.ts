@@ -45,7 +45,7 @@ export function recipientToString(
   }
 
   if (recipient.recipient_type === 'Brand') {
-    return `All Agents (${recipient.brand.name})`
+    return `All Agents (${recipient.brand.name.trim()})`
   }
 
   return ''

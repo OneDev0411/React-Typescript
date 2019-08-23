@@ -12,6 +12,8 @@ import { AnyAction } from 'redux'
 import Fuse from 'fuse.js'
 import { TextField } from 'final-form-material-ui'
 
+import { createStyles, makeStyles, Theme } from '@material-ui/core'
+
 import { searchContacts } from 'models/contacts/search-contacts'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { getSavedSegments } from 'actions/filter-segments/get-saved-segment'
@@ -25,6 +27,7 @@ import { ChipsInputProps } from '../ChipsInput/types'
 import { recipientToChip } from './helpers/recipient-to-chip'
 import { recipientToSuggestion } from './helpers/recipient-to-suggestion'
 import { filterEntities } from './helpers/filter-entities'
+import { RecipientSuggestions } from './RecipientSuggestions'
 
 type BaseProps = Partial<FieldRenderProps<HTMLInputElement>> &
   Omit<
@@ -46,6 +49,8 @@ interface Props extends BaseProps {
   isLoadingTags?: boolean
   areListsFetched?: boolean
 
+  includeSuggestions?: boolean
+
   /**
    * Optional control props
    */
@@ -55,15 +60,34 @@ interface Props extends BaseProps {
   getSavedSegments: IAsyncActionProp<typeof getSavedSegments>
 }
 
+const useEmailRecipientsChipsInputStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      Input: {
+        flexWrap: 'wrap'
+      },
+      inputWrapper: {
+        flexBasis: '93%'
+      }
+    }),
+  { name: 'EmailRecipientsChipsInput' }
+)
+
 /**
  * A component for getting a list of tags, lists, contacts&email or contact&phone
  * can be controlled via `value` and `onChange` or Final Form input
+ *
+ * NOTE: we can pull this suggestions feature up into ChipsInput, but
+ * right now, there is a styling issue which is not resolved generally,
+ * and it's fixed by a workaround. This workaround is dependent on the
+ * label width!
  */
 function EmailRecipientsChipsInput({
   getContactsTags,
   getSavedSegments,
   isLoadingTags,
   areListsFetched,
+  includeSuggestions,
   tags,
   lists,
   label,
@@ -76,6 +100,8 @@ function EmailRecipientsChipsInput({
   const [recipients, setRecipients] = useControllableState<
     IDenormalizedEmailRecipientInput[]
   >(input ? input.value : value, input ? (input.onChange as any) : onChange, [])
+
+  const classes = useEmailRecipientsChipsInputStyles()
 
   useEffect(() => {
     if (!isLoadingTags) {
@@ -145,7 +171,7 @@ function EmailRecipientsChipsInput({
     )
   }
 
-  const { InputProps = {}, ...TextFieldProps } =
+  const { InputProps = {}, inputProps = {}, ...TextFieldProps } =
     chipsInputProps.TextFieldProps || {}
 
   const createEmailRecipient: (
@@ -154,6 +180,10 @@ function EmailRecipientsChipsInput({
     recipient_type: 'Email',
     email: value
   })
+
+  const acceptSuggestion = recipient => {
+    return setRecipients([...recipients, recipient])
+  }
 
   return (
     <ChipsInput
@@ -168,7 +198,18 @@ function EmailRecipientsChipsInput({
       TextFieldProps={{
         InputProps: {
           startAdornment: <InlineInputLabel>{label}</InlineInputLabel>,
+          endAdornment: includeSuggestions ? (
+            <RecipientSuggestions
+              currentRecipients={recipients}
+              onSelect={acceptSuggestion}
+            />
+          ) : null,
+          className: classes.Input,
           ...InputProps
+        },
+        inputProps: {
+          ...inputProps,
+          inputWrapperClassName: classes.inputWrapper
         },
         input,
         meta,
