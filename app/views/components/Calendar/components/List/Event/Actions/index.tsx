@@ -18,7 +18,6 @@ export function EventActions({ event, user }: Props) {
         contactId={event.contact}
         mediums="Email"
         buttonStyle={{
-          className: 'calendar-action',
           size: 'small'
         }}
       >
@@ -33,7 +32,6 @@ export function EventActions({ event, user }: Props) {
         variant="outlined"
         color="secondary"
         size="small"
-        className="calendar-action"
         href={`/openhouse/${event.id}/${getActiveTeamId(user)}/register`}
         target="_blank"
       >
