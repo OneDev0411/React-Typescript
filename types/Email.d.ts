@@ -3,7 +3,7 @@ declare type IEmailRecipientType =
   | 'List'
   | 'Email'
   | 'Brand'
-  | 'All Contacts'
+  | 'AllContacts'
 
 declare interface IEmailRecipientInputBase<T extends IEmailRecipientType> {
   recipient_type: T
@@ -21,27 +21,20 @@ declare interface IEmailRecipientEmailInput
   email: string
   contact?: UUID
 }
+declare interface IEmailRecipientBrandInput
+  extends IEmailRecipientInputBase<'Brand'> {
+  brand: UUID
+}
+declare interface IEmailRecipientAllContactsInput
+  extends IEmailRecipientInputBase<'AllContacts'> {}
 
 declare type IEmailRecipientInput =
   | IEmailRecipientEmailInput
   | IEmailRecipientListInput
   | IEmailRecipientTagInput
+  | IEmailRecipientAllContactsInput
+  | IEmailRecipientBrandInput
 
-declare type TIsTagPresent = TIsPropertyPresent<
-  IEmailRecipientInput,
-  IEmailRecipientTagInput,
-  'tag'
->
-declare type TIsListPresent = TIsPropertyPresent<
-  IEmailRecipientInput,
-  IEmailRecipientListInput,
-  'list'
->
-declare type TIsEmailPresent = TIsPropertyPresent<
-  IEmailRecipientInput,
-  IEmailRecipientEmailInput,
-  'email'
->
 declare type EmailCampaignRecipientAssociation = 'contact' | 'list'
 
 declare type IEmailRecipient<
@@ -149,6 +142,8 @@ declare type IDenormalizedEmailRecipientInput =
   | IDenormalizedEmailRecipientEmailInput
   | IDenormalizedEmailRecipientListInput
   | IDenormalizedEmailRecipientTagInput
+  | IEmailRecipientAllContactsInput
+  | IDenormalizedEmailRecipientBrandInput
 
 declare interface IDenormalizedEmailRecipientEmailInput
   extends Omit<IEmailRecipientEmailInput, 'contact'> {
@@ -163,4 +158,9 @@ declare interface IDenormalizedEmailRecipientListInput
 declare interface IDenormalizedEmailRecipientTagInput
   extends Omit<IEmailRecipientTagInput, 'tag'> {
   tag: IContactTag
+}
+
+declare interface IDenormalizedEmailRecipientBrandInput
+  extends Omit<IEmailRecipientBrandInput, 'brand'> {
+  brand: IBrand
 }

@@ -1,18 +1,15 @@
-import { isContactList } from './is-contact-list'
-import { isContactTag } from './is-contact-tag'
-
 export function recipientToString(
   recipient: IDenormalizedEmailRecipientInput
 ): string {
-  if (isContactList(recipient)) {
+  if (recipient.recipient_type === 'List') {
     return `${recipient.list.name} (List)`
   }
 
-  if (isContactTag(recipient)) {
+  if (recipient.recipient_type === 'Tag') {
     return `${recipient.tag.text} (Tag)`
   }
 
-  if (recipient.email) {
+  if (recipient.recipient_type === 'Email' && recipient.email) {
     if (!recipient.contact || !recipient.contact.display_name) {
       return recipient.email
     }
@@ -41,6 +38,14 @@ export function recipientToString(
             .join('@')})`
         : '')
     )
+  }
+
+  if (recipient.recipient_type === 'AllContacts') {
+    return 'All Contacts'
+  }
+
+  if (recipient.recipient_type === 'Brand') {
+    return `All Agents (${recipient.brand.name})`
   }
 
   return ''

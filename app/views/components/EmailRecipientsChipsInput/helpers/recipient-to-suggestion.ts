@@ -1,28 +1,30 @@
 import { Suggestion } from '../../ChipsInput/types'
 import { listToSuggestion } from './list-to-suggestion'
 import { tagToSuggestion } from './tag-to-suggestion'
-import { isContactList } from './is-contact-list'
-import { isContactTag } from './is-contact-tag'
 
 export function recipientToSuggestion(
   recipient: IDenormalizedEmailRecipientInput
-): Suggestion {
-  if (isContactList(recipient)) {
+): Suggestion | undefined {
+  if (recipient.recipient_type === 'List') {
     return listToSuggestion({
       recipient_type: 'List',
       list: recipient.list
     })
   }
 
-  if (isContactTag(recipient)) {
+  if (recipient.recipient_type === 'Tag') {
     return tagToSuggestion(recipient)
   }
 
-  const displayName = recipient.contact && recipient.contact.display_name
+  if (recipient.recipient_type === 'Email') {
+    const displayName = recipient.contact && recipient.contact.display_name
 
-  return {
-    title: displayName || recipient.email,
-    subtitle: displayName !== recipient.email ? recipient.email : '',
-    avatar: recipient.contact ? recipient.contact!.profile_image_url : undefined
+    return {
+      title: displayName || recipient.email,
+      subtitle: displayName !== recipient.email ? recipient.email : '',
+      avatar: recipient.contact
+        ? recipient.contact!.profile_image_url
+        : undefined
+    }
   }
 }

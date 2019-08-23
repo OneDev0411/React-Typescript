@@ -44,7 +44,7 @@ export interface ChipsInputProps<T> {
    */
   itemToChip: (item: T) => ChipInputItem
 
-  itemToSuggestion: (item: T) => Suggestion
+  itemToSuggestion: (item: T) => Suggestion | undefined
 
   /**
    * Called when user has entered some text and hits enter
