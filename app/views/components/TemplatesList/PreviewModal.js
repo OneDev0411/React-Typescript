@@ -20,7 +20,7 @@ function PreviewModal(props) {
   }
 
   const brokerageBrand = getBrandByType(props.user, 'Brokerage')
-  const { imgSrcTiny, original: imgSrc } = getTemplateImage(
+  const { thumbnail: imgSrcTiny, original: imgSrc } = getTemplateImage(
     selectedTemplate,
     brokerageBrand
   )
