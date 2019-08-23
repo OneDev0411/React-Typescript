@@ -44,7 +44,7 @@ export default function Steps({
         )
       }
     >
-      <Grid container item justify="center" xs={11} md={6}>
+      <Grid container item justify="center" xs={11} md={8}>
         <Droppable droppableId="flow-steps-droppable">
           {droppableProvided => (
             <div style={{ width: '100%' }} ref={droppableProvided.innerRef}>
