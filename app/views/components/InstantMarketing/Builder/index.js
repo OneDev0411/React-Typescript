@@ -246,7 +246,9 @@ class Builder extends React.Component {
         </body>
       </html>`
 
-    const result = juice(assembled)
+    const result = juice(assembled, {
+      inlinePseudoElements: true
+    })
 
     return {
       ...this.state.selectedTemplate,
