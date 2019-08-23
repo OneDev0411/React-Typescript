@@ -1,4 +1,5 @@
 import { createDayId } from '../create-day-id'
+import { sortEvents } from '../sort-events'
 import eventEmptyState from '../get-event-empty-state'
 
 /**
@@ -7,8 +8,8 @@ import eventEmptyState from '../get-event-empty-state'
  * @param events
  */
 export function normalizeEvents(
-  range: NumberRange,
   events: ICalendarEvent[],
+  range: NumberRange,
   activeDate: Date
 ) {
   if (events.length === 0) {
@@ -19,9 +20,9 @@ export function normalizeEvents(
   const list = getEvents(range, events)
 
   // convert activeDate to yyyy/mm/dd format
-  const activeDayId = createDayId(activeDate)
+  const activeDayId = createDayId(activeDate, false)
 
-  return Object.entries(list).reduce((acc, [day, events]) => {
+  const normalizedEvents = Object.entries(list).reduce((acc, [day, events]) => {
     if ((events as ICalendarEvent[]).length === 0) {
       return isToday(day) || day === activeDayId
         ? {
@@ -35,7 +36,9 @@ export function normalizeEvents(
       ...acc,
       [day]: events
     }
-  }, {}) as CalendarEventsList
+  }, {})
+
+  return sortEvents(normalizedEvents) as CalendarEventsList
 }
 
 /**

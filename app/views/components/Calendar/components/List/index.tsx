@@ -144,7 +144,7 @@ const CalendarList: React.FC<Props> = props => {
         )}
       </VirtualList>
 
-      {selectedEvent && selectedEvent.event_type === 'crm_task' && (
+      {selectedEvent && selectedEvent.object_type === 'crm_task' && (
         <CrmEvents
           isEventDrawerOpen
           event={selectedEvent}
@@ -154,7 +154,7 @@ const CalendarList: React.FC<Props> = props => {
         />
       )}
 
-      {selectedEvent && selectedEvent.event_type === 'scheduled_email' && (
+      {selectedEvent && selectedEvent.object_type === 'email_campaign' && (
         <EditEmailDrawer
           isOpen
           onClose={() => setSelectedEvent(null)}
@@ -176,7 +176,7 @@ function getRowHeight(row: ICalendarListRow): number {
   const event = row as ICalendarEvent
 
   return event.object_type === 'crm_task' ||
-    ['next_touch', 'today-empty-state'].includes(event.event_type)
+    ['next_touch', 'day-empty-state'].includes(event.event_type)
     ? 72
     : 55
 }
