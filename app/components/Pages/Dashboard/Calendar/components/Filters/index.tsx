@@ -118,7 +118,7 @@ function Filters({ filterRef, onChange, isLoadingFilters }: Props) {
               <TabItem>
                 {Icon && (
                   <Icon.icon
-                    fill={selectedTab === index ? Icon.color : '#3c4b6e'}
+                    fill={selectedTab === value ? Icon.color : '#3c4b6e'}
                     style={{ width: '1.2rem' }}
                   />
                 )}
