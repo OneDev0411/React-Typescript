@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
@@ -330,36 +330,39 @@ class OpenHouseDrawerInternal extends React.Component {
     const { isDisabled, openHouse, error } = this.state
 
     return (
-      <Fragment>
-        <Drawer
-          open={this.props.isOpen && !this.state.isTemplateBuilderOpen}
-          onClose={this.props.onClose}
-        >
-          <Drawer.Header title={`${this.isNew ? 'New' : 'Edit'} Open House`} />
-          <Drawer.Body>
-            {error && error.status === 404 ? (
-              <Alert message={error.response.body.message} type="error" />
-            ) : (
-              <LoadSaveReinitializeForm
-                initialValues={this.props.initialValues}
-                load={this.load}
-                postLoadFormat={openHouse =>
-                  postLoadFormat(openHouse, user, this.state.listing)
-                }
-                preSaveFormat={(values, originalValues) =>
-                  preSaveFormat(
-                    values,
-                    originalValues,
-                    this.props.deal,
-                    this.state.template
-                  )
-                }
-                save={this.save}
-                validate={validate}
-                render={formProps => {
-                  const { values } = formProps
+      <LoadSaveReinitializeForm
+        loading={null}
+        initialValues={this.props.initialValues}
+        load={this.load}
+        postLoadFormat={openHouse =>
+          postLoadFormat(openHouse, user, this.state.listing)
+        }
+        preSaveFormat={(values, originalValues) =>
+          preSaveFormat(
+            values,
+            originalValues,
+            this.props.deal,
+            this.state.template
+          )
+        }
+        save={this.save}
+        validate={validate}
+        render={formProps => {
+          const { values } = formProps
 
-                  return (
+          return (
+            <>
+              <Drawer
+                open={this.props.isOpen && !this.state.isTemplateBuilderOpen}
+                onClose={this.props.onClose}
+              >
+                <Drawer.Header
+                  title={`${this.isNew ? 'New' : 'Edit'} Open House`}
+                />
+                <Drawer.Body>
+                  {error && error.status === 404 ? (
+                    <Alert message={error.response.body.message} type="error" />
+                  ) : (
                     <div>
                       <FormContainer
                         id="open-house-drawer-form"
@@ -474,36 +477,36 @@ class OpenHouseDrawerInternal extends React.Component {
                           )}
                         </Flex>
                       </Footer>
-
-                      {this.state.isTemplateBuilderOpen && (
-                        <InstantMarketing
-                          isOpen
-                          headerTitle="Edit Guest Registration Page"
-                          closeConfirmation={false}
-                          showTemplatesColumn={false}
-                          saveButtonLabel="Save"
-                          onClose={this.toggleTemplateBuilder}
-                          handleSave={this.handleSaveTemplate}
-                          assets={this.getTemplateAssets()}
-                          templateData={{
-                            user: this.props.user,
-                            listing: this.state.listing,
-                            crmopenhouse: {
-                              title: values.title,
-                              due_date: values.dueDate
-                            }
-                          }}
-                          templateTypes={['CrmOpenHouse']}
-                        />
-                      )}
                     </div>
-                  )
-                }}
-              />
-            )}
-          </Drawer.Body>
-        </Drawer>
-      </Fragment>
+                  )}
+                </Drawer.Body>
+              </Drawer>
+
+              {this.state.isTemplateBuilderOpen && (
+                <InstantMarketing
+                  isOpen
+                  headerTitle="Edit Guest Registration Page"
+                  closeConfirmation={false}
+                  showTemplatesColumn={false}
+                  saveButtonLabel="Save"
+                  onClose={this.toggleTemplateBuilder}
+                  handleSave={this.handleSaveTemplate}
+                  assets={this.getTemplateAssets()}
+                  templateData={{
+                    user: this.props.user,
+                    listing: this.state.listing,
+                    crmopenhouse: {
+                      title: values.title,
+                      due_date: values.dueDate
+                    }
+                  }}
+                  templateTypes={['CrmOpenHouse']}
+                />
+              )}
+            </>
+          )
+        }}
+      />
     )
   }
 }
