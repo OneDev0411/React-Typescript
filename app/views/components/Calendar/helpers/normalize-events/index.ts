@@ -12,15 +12,17 @@ export function normalizeEvents(
   range: NumberRange,
   activeDate: Date
 ) {
+  // convert activeDate to yyyy/mm/dd format
+  const activeDayId = createDayId(activeDate, false)
+
   if (events.length === 0) {
-    return {}
+    return {
+      [activeDayId]: [eventEmptyState]
+    }
   }
 
   // get list of all fetched events
   const list = getEvents(range, events)
-
-  // convert activeDate to yyyy/mm/dd format
-  const activeDayId = createDayId(activeDate, false)
 
   const normalizedEvents = Object.entries(list).reduce((acc, [day, events]) => {
     if ((events as ICalendarEvent[]).length === 0) {
