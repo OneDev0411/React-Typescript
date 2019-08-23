@@ -26,9 +26,12 @@ export const TemplatesListContainer = styled.div`
     min-height: 15.8rem;
     background: ${grey.A200};
     overflow: hidden;
-    cursor: zoom-in;
     box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2), 0px 3px 4px rgba(0, 0, 0, 0.12),
       0px 2px 0px rgba(0, 0, 0, 0.14);
+
+    &:not(.is-video) {
+      cursor: zoom-in;
+    }
 
     &:after {
       position: absolute;

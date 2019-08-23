@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
@@ -35,7 +35,6 @@ import { Title } from '../../EventDrawer/components/Title'
 import { UpdateReminder } from '../../EventDrawer/components/UpdateReminder'
 import { Description } from '../../EventDrawer/components/Description'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
-import { validate } from '../../EventDrawer/helpers/validate'
 import { DateTimeField, AssigneesField } from '../../final-form-fields'
 import { AddAssociationButton } from '../../AddAssociationButton'
 import { AssociationsList, ReminderField } from '../../final-form-fields'
@@ -43,6 +42,7 @@ import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
 import { Section } from '../../tour/TourDrawer/components/Section'
 
+import { validate } from './helpers/validate'
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
@@ -101,10 +101,10 @@ class OpenHouseDrawerInternal extends React.Component {
   }
 
   load = async () => {
-    this.setState({ isDisabled: true })
+    try {
+      this.setState({ isDisabled: true })
 
-    if (this.isNew) {
-      try {
+      if (this.isNew) {
         const activeTeamId = getActiveTeamId(this.props.user)
         const list = await getTemplates(activeTeamId, ['CrmOpenHouse'])
         const templateItem = list[0]
@@ -114,32 +114,23 @@ class OpenHouseDrawerInternal extends React.Component {
         )
 
         this.setState({ rawTemplate })
-      } catch (error) {
-        this.setState({ error })
       }
-    }
 
-    const { deal } = this.props
+      const { deal } = this.props
 
-    if (deal && deal.listing) {
-      try {
+      if (deal && deal.listing) {
         const listing = await getListing(deal.listing)
 
         this.setState({ listing })
-      } catch (error) {
-        console.log(error)
-        this.setState({ error })
       }
-    }
 
-    if (this.props.openHouse) {
-      this.setState({ isDisabled: false })
+      if (this.props.openHouse) {
+        this.setState({ isDisabled: false })
 
-      return this.props.openHouse
-    }
+        return this.props.openHouse
+      }
 
-    if (this.props.openHouseId) {
-      try {
+      if (this.props.openHouseId) {
         const openHouse = await getTask(this.props.openHouseId, CRM_TASKS_QUERY)
 
         // get template if exists
@@ -158,19 +149,19 @@ class OpenHouseDrawerInternal extends React.Component {
         this.setState(newState)
 
         return openHouse
-      } catch (error) {
-        console.log(error)
-        this.setState({ error })
       }
+
+      if (this.state.error == null) {
+        this.setState({ isDisabled: false })
+
+        this.loadRegistrationTemplate()
+      }
+
+      return null
+    } catch (error) {
+      console.log(error)
+      this.setState({ error })
     }
-
-    if (this.state.error == null) {
-      this.setState({ isDisabled: false })
-
-      this.loadRegistrationTemplate()
-    }
-
-    return null
   }
 
   renderTemplate(rawTemplate, openHouse) {
@@ -339,36 +330,39 @@ class OpenHouseDrawerInternal extends React.Component {
     const { isDisabled, openHouse, error } = this.state
 
     return (
-      <Fragment>
-        <Drawer
-          open={this.props.isOpen && !this.state.isTemplateBuilderOpen}
-          onClose={this.props.onClose}
-        >
-          <Drawer.Header title={`${this.isNew ? 'New' : 'Edit'} Open House`} />
-          <Drawer.Body>
-            {error && error.status === 404 ? (
-              <Alert message={error.response.body.message} type="error" />
-            ) : (
-              <LoadSaveReinitializeForm
-                initialValues={this.props.initialValues}
-                load={this.load}
-                postLoadFormat={openHouse =>
-                  postLoadFormat(openHouse, user, this.state.listing)
-                }
-                preSaveFormat={(values, originalValues) =>
-                  preSaveFormat(
-                    values,
-                    originalValues,
-                    this.props.deal,
-                    this.state.template
-                  )
-                }
-                save={this.save}
-                validate={validate}
-                render={formProps => {
-                  const { values } = formProps
+      <LoadSaveReinitializeForm
+        loading={null}
+        initialValues={this.props.initialValues}
+        load={this.load}
+        postLoadFormat={openHouse =>
+          postLoadFormat(openHouse, user, this.state.listing)
+        }
+        preSaveFormat={(values, originalValues) =>
+          preSaveFormat(
+            values,
+            originalValues,
+            this.props.deal,
+            this.state.template
+          )
+        }
+        save={this.save}
+        validate={validate}
+        render={formProps => {
+          const { values } = formProps
 
-                  return (
+          return (
+            <>
+              <Drawer
+                open={this.props.isOpen && !this.state.isTemplateBuilderOpen}
+                onClose={this.props.onClose}
+              >
+                <Drawer.Header
+                  title={`${this.isNew ? 'New' : 'Edit'} Open House`}
+                />
+                <Drawer.Body>
+                  {error && error.status === 404 ? (
+                    <Alert message={error.response.body.message} type="error" />
+                  ) : (
                     <div>
                       <FormContainer
                         id="open-house-drawer-form"
@@ -483,36 +477,36 @@ class OpenHouseDrawerInternal extends React.Component {
                           )}
                         </Flex>
                       </Footer>
-
-                      {this.state.isTemplateBuilderOpen && (
-                        <InstantMarketing
-                          isOpen
-                          headerTitle="Edit Guest Registration Page"
-                          closeConfirmation={false}
-                          showTemplatesColumn={false}
-                          saveButtonLabel="Save"
-                          onClose={this.toggleTemplateBuilder}
-                          handleSave={this.handleSaveTemplate}
-                          assets={this.getTemplateAssets()}
-                          templateData={{
-                            user: this.props.user,
-                            listing: this.state.listing,
-                            crmopenhouse: {
-                              title: values.title,
-                              due_date: values.dueDate
-                            }
-                          }}
-                          templateTypes={['CrmOpenHouse']}
-                        />
-                      )}
                     </div>
-                  )
-                }}
-              />
-            )}
-          </Drawer.Body>
-        </Drawer>
-      </Fragment>
+                  )}
+                </Drawer.Body>
+              </Drawer>
+
+              {this.state.isTemplateBuilderOpen && (
+                <InstantMarketing
+                  isOpen
+                  headerTitle="Edit Guest Registration Page"
+                  closeConfirmation={false}
+                  showTemplatesColumn={false}
+                  saveButtonLabel="Save"
+                  onClose={this.toggleTemplateBuilder}
+                  handleSave={this.handleSaveTemplate}
+                  assets={this.getTemplateAssets()}
+                  templateData={{
+                    user: this.props.user,
+                    listing: this.state.listing,
+                    crmopenhouse: {
+                      title: values.title,
+                      due_date: values.dueDate
+                    }
+                  }}
+                  templateTypes={['CrmOpenHouse']}
+                />
+              )}
+            </>
+          )
+        }}
+      />
     )
   }
 }

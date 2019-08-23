@@ -13,13 +13,16 @@ const propTypes = {
   needsReinitialize: PropTypes.bool,
   postLoadFormat: PropTypes.func,
   preSaveFormat: PropTypes.func,
-  save: PropTypes.func.isRequired
+  render: PropTypes.func.isRequired,
+  save: PropTypes.func.isRequired,
+  validate: PropTypes.func
 }
 
 const defaultProps = {
   loading: <Loading />,
   initialValues: {},
-  needsReinitialize: false
+  needsReinitialize: false,
+  validate: () => {}
 }
 
 class LoadSaveReinitializeForm extends React.Component {
@@ -85,20 +88,19 @@ class LoadSaveReinitializeForm extends React.Component {
   }
 
   render() {
-    const {
-      load,
-      loading,
-      postLoadFormat,
-      preSaveFormat,
-      save,
-      ...rest
-    } = this.props
+    const { props } = this
+    const { loading } = props
     const { isLoading, initialValues } = this.state
 
     return isLoading || Object.keys(initialValues).length === 0 ? (
       loading
     ) : (
-      <Form {...rest} initialValues={initialValues} onSubmit={this.save} />
+      <Form
+        initialValues={initialValues}
+        onSubmit={this.save}
+        render={props.render}
+        validate={props.validate}
+      />
     )
   }
 }
