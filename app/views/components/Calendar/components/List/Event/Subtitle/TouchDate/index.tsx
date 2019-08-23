@@ -10,9 +10,12 @@ export function TouchDate({ event }: Props) {
     return null
   }
 
-  const contact = event.full_contact as IContact & { next_touch: number }
+  const now = Date.now()
 
-  const { next_touch: nextTouch, last_touch: lastTouch } = contact
+  const {
+    next_touch: nextTouch,
+    last_touch: lastTouch
+  } = event.full_contact as IContact & { next_touch: number }
 
   if (!lastTouch) {
     return null
@@ -20,10 +23,14 @@ export function TouchDate({ event }: Props) {
 
   const lastTouchTime = timeago().format(lastTouch * 1000)
 
+  if (now < nextTouch * 1000) {
+    return <span>You were in touch {lastTouchTime}.</span>
+  }
+
   return (
     <span>
-      Your last touch was ${lastTouchTime} days ago, you wanted to be in touch
-      every ${Math.round((nextTouch - lastTouch) / 86400)} days.
+      Your last touch was {lastTouchTime}, you wanted to be in touch every{' '}
+      {Math.round((nextTouch - lastTouch) / 86400)} days.
     </span>
   )
 }
