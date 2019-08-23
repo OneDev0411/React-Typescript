@@ -12,7 +12,7 @@ interface StateProps {
 }
 
 interface Props {
-  activeDate: Date | null
+  activeDate: Date
   onEventChange: (event: IEvent, type: string) => void
 }
 

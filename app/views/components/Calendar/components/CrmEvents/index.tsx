@@ -1,14 +1,15 @@
 import React from 'react'
 
-import { TourDrawer } from 'components/tour/TourDrawer'
 import { EventDrawer } from 'components/EventDrawer'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
+
+import { createDueDate } from './helpers'
 
 interface Props {
   isEventDrawerOpen: boolean
   event?: ICalendarEvent
   user: IUser
-  selectedDate?: Date | null
+  selectedDate: Date
   onEventChange(event: IEvent, type: string): void
   onCloseEventDrawer(): void
 }
@@ -23,16 +24,22 @@ export function CrmEvents(props: Props) {
     deleteCallback: (event: IEvent) => props.onEventChange(event, 'deleted'),
     onClose: props.onCloseEventDrawer,
     submitCallback: props.onEventChange,
-    user: props.user,
-    defaultSelectedDate: props.selectedDate
+    user: props.user
   }
 
   if (!props.event) {
-    return <EventDrawer {...sharedProps} />
-  }
+    const initialValues = {
+      assignees: [props.user],
+      associations: [],
+      dueDate: createDueDate(props.selectedDate),
+      reminder: {
+        title: 'None',
+        value: -1
+      },
+      task_type: { title: 'Call', value: 'Call' }
+    }
 
-  if (props.event.type === 'Tour') {
-    return <TourDrawer {...sharedProps} tourId={props.event.id} />
+    return <EventDrawer {...sharedProps} initialValues={initialValues} />
   }
 
   if (props.event.type === 'Open House') {
