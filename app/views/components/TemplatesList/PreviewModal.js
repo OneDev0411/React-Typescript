@@ -48,7 +48,9 @@ function PreviewModal(props) {
     modalProps = {
       ...modalProps,
       showPreviousButton: true,
-      onPreviousButtonClick: () => {
+      onPreviousButtonClick: e => {
+        e.stopPropagation()
+
         const previous = selectPreviousTemplate(
           templates,
           selectedTemplate,
@@ -60,26 +62,33 @@ function PreviewModal(props) {
         }
       },
       showNextButton: true,
-      onNextButtonClick: () => {
+      onNextButtonClick: e => {
+        e.stopPropagation()
+
         const next = selectNextTemplate(templates, selectedTemplate, medium)
 
         if (next) {
           props.setSelectedTemplate(next)
         }
       },
-      handleKeyDown: e =>
-        navigateBetweenTemplatesUsingKeyboard(
+      handleKeyDown: e => {
+        const nextTemplate = navigateBetweenTemplatesUsingKeyboard(
           e.key,
           templates,
           selectedTemplate,
           medium
-        ),
+        )
+
+        if (nextTemplate) {
+          props.setSelectedTemplate(nextTemplate)
+        }
+      },
       imgSrc,
       imgSrcTiny
     }
   }
 
-  return <ImagePreviewModal {...modalProps} />
+  return props.isPreviewModalOpen && <ImagePreviewModal {...modalProps} />
 }
 
 export default connect(({ user }) => ({ user }))(PreviewModal)
