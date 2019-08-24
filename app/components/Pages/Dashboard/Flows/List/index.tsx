@@ -158,7 +158,7 @@ function List(props: Props) {
           flow={selectedFlow}
         />
       )}
-      <PageHeader isFlat>
+      <PageHeader style={{ marginBottom: 0, marginTop: '1.5rem' }}>
         <PageHeader.Title showBackButton={false}>
           <PageHeader.Heading>Flows</PageHeader.Heading>
         </PageHeader.Title>

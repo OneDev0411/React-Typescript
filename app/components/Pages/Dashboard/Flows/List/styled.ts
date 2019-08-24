@@ -12,4 +12,5 @@ export const ModalContentContainer = styled.div`
 
 export const PageContainer = styled.div`
   padding: ${(props: ThemeProps<Theme>) => props.theme.spacing(0, 3, 9)};
+  margin-top: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(5)}px`};
 `
