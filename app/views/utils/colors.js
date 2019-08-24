@@ -3,7 +3,8 @@ const newRed = '#F43B38'
 export const red = {
   A100: newRed,
   A200: newRed,
-  primary: newRed
+  primary: newRed,
+  dark: '#b90010'
 }
 
 export const yellow = {
