@@ -15,6 +15,6 @@ export function updateEmailCampaign(
           timestamp: emailCampaign.due_at,
           title: emailCampaign.subject
         }
-      : event
+      : item
   )
 }
