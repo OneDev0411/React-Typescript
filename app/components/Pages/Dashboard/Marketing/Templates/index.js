@@ -5,7 +5,6 @@ import { browserHistory } from 'react-router'
 
 import { getActiveTeamId } from 'utils/user-teams'
 import TemplatesList from 'components/TemplatesList'
-import LinkButton from 'components/Button/LinkButton'
 import { getSelectedMediumTemplates } from 'components/TemplatesList/helpers'
 
 import { Header } from '../components/PageHeader'
@@ -56,14 +55,13 @@ function Templates(props) {
           <Tabs className="tabs">
             <div className="tabs-inneer">
               {tabs.map((medium, index) => (
-                <Tab key={index} selected={selectedMedium === medium}>
-                  <LinkButton
-                    inverse
-                    style={{ fontWeight: 600 }}
-                    to={`/dashboard/marketing/${props.types}/${medium}`}
-                  >
-                    {MEDIUMS_COLLECTION[medium] || medium}
-                  </LinkButton>
+                <Tab
+                  noStyle
+                  key={index}
+                  selected={selectedMedium === medium}
+                  to={`/dashboard/marketing/${props.types}/${medium}`}
+                >
+                  {MEDIUMS_COLLECTION[medium] || medium}
                 </Tab>
               ))}
             </div>
