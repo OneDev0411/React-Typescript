@@ -22,8 +22,8 @@ import PropertiesIcon from '../../../../views/components/SvgIcons/Properties/Ico
 import PropertiesIconActive from '../../../../views/components/SvgIcons/Properties/IconPropertiesActive'
 import CalendarIcon from '../../../../views/components/SvgIcons/Calendar2/IconCalendar'
 import CalendarIconActive from '../../../../views/components/SvgIcons/Calendar2/IconCalendarActive'
-import IconCog from '../../../../views/components/SvgIcons/Cog/IconCog'
-import IconCogActive from '../../../../views/components/SvgIcons/Cog/IconCogActive'
+import IconCog from '../../../../views/components/SvgIcons/CogOutline/IconCogOutline'
+import IconCogActive from '../../../../views/components/SvgIcons/Cog/IconCog'
 import DealsNotifications from '../Deals/components/SideNavBadge'
 
 import { selectNotificationNewCount } from '../../../../reducers/notifications'
