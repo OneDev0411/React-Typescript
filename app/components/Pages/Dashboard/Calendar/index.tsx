@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import debounce from 'lodash/debounce'
 import fecha from 'fecha'
+import isEqual from 'lodash/isEqual'
 
 import List from 'components/Calendar'
 import { CalendarRef } from 'components/Calendar/types'
@@ -86,8 +87,13 @@ const CalendarPage: React.FC = props => {
    * triggers when user changes the calendar filter
    * @param filter
    */
-  const handleChangeFilter = (filter: object) => {
-    setFilter(filter)
+  const handleChangeFilter = (selectedFilter: object): void => {
+    if (isEqual(filter, selectedFilter)) {
+      return
+    }
+
+    setFilter(selectedFilter)
+
     setIsLoadingFilters(true)
   }
 
