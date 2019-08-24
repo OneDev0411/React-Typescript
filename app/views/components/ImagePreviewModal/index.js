@@ -44,7 +44,7 @@ export class ImagePreviewModal extends Component {
       return
     }
 
-    document.addEventListener('keydown', this.props.handleKeyDown)
+    document.addEventListener('keydown', this.onKeyDown)
   }
 
   componentWillUnmount() {
@@ -52,7 +52,11 @@ export class ImagePreviewModal extends Component {
       return
     }
 
-    document.removeEventListener('keydown', this.props.handleKeyDown)
+    document.removeEventListener('keydown', this.onKeyDown)
+  }
+
+  onKeyDown = e => {
+    this.props.handleKeyDown(e)
   }
 
   render() {
