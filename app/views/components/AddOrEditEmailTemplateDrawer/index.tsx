@@ -16,7 +16,6 @@ import { getActiveTeamId } from 'utils/user-teams'
 import { InlineInputLabel } from '../InlineInputLabel'
 import EmailBody from '../EmailCompose/components/EmailBody'
 import { FinalFormDrawer } from '../FinalFormDrawer'
-import { getTitle } from 'dashboard/Contacts/Profile/components/ContactAttributeInlineEditableField/helpers';
 
 interface Props {
   isOpen: boolean
@@ -67,10 +66,10 @@ function AddOrEditEmailTemplateDrawer({
     try {
       const resultEmailTemplate = emailTemplate
         ? await updateEmailTemplate(
-          emailTemplate.brand,
-          emailTemplate.id,
-          values
-        )
+            emailTemplate.brand,
+            emailTemplate.id,
+            values
+          )
         : await createEmailTemplate(activeTeamId, values)
 
       if (submitCallback) {
@@ -91,13 +90,13 @@ function AddOrEditEmailTemplateDrawer({
     const title = 'Email Template'
 
     if (emailTemplate) {
-      return emailTemplate.editable ? `Edit ${title}` : title;
+      return emailTemplate.editable ? `Edit ${title}` : title
     }
 
     return `New ${title}`
   }
 
-  const isSubmitDisabled = !!(emailTemplate && !emailTemplate.editable)
+  const editable = !emailTemplate || emailTemplate.editable
 
   return (
     <FinalFormDrawer
@@ -111,10 +110,8 @@ function AddOrEditEmailTemplateDrawer({
       submitButtonLabel="Save"
       submittingButtonLabel="Saving ..."
       title={getTitle()}
-      isSubmitDisabled={isSubmitDisabled}
-      submitButtonTooltip={
-        isSubmitDisabled ? 'Template isn\'t editable!' : 'Save'
-      }
+      isSubmitDisabled={!editable}
+      submitButtonTooltip={!editable ? "Template isn't editable!" : 'Save'}
       render={() => (
         <div>
           <Field
@@ -124,22 +121,27 @@ function AddOrEditEmailTemplateDrawer({
             validate={value => !value && 'Template name is required'}
             required
             fullWidth
+            disabled={!editable}
             InputProps={{
-              startAdornment: <InlineInputLabel>Name</InlineInputLabel>
+              startAdornment: <InlineInputLabel>Name</InlineInputLabel>,
+              inputProps: {}
             }}
           />
           <Field
             name="subject"
             component={TextField}
             fullWidth
+            disabled={!editable}
             InputProps={{
-              startAdornment: <InlineInputLabel>Subject</InlineInputLabel>
+              startAdornment: <InlineInputLabel>Subject</InlineInputLabel>,
+              inputProps: {}
             }}
           />
           <EmailBody
             ref={emailBodyRef}
             hasSignatureByDefault
             hasTemplateVariables
+            hasStaticBody={!editable}
             FieldProps={{
               validate: value => !value && 'Email content is required'
             }}
