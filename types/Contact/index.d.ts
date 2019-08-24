@@ -71,6 +71,11 @@ declare interface IContact extends IContactBase {
   email: string | null
   emails: string[] | null
 
+  partner_email: string | null
+  partner_first_name: string | null
+  partner_last_name: string | null
+  partner_name: string | null
+
   attributes?: IContactAttribute[]
   users?: IUser[]
   deals?: IDeal[]

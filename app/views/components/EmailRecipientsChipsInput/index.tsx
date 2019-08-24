@@ -143,7 +143,9 @@ function EmailRecipientsChipsInput({
               return new Fuse(
                 result.data
                   .map(contact => {
-                    const emails: string[] = contact.emails || []
+                    const emails: string[] = (contact.emails || []).concat(
+                        contact.partner_email || []
+                      )
 
                     return emails.map<IDenormalizedEmailRecipientEmailInput>(
                       email => ({

@@ -1,6 +1,7 @@
 import { Suggestion } from '../../ChipsInput/types'
 import { listToSuggestion } from './list-to-suggestion'
 import { tagToSuggestion } from './tag-to-suggestion'
+import { getDisplayNameForContactEmail } from './get-display-name-for-contact-email'
 
 export function recipientToSuggestion(
   recipient: IDenormalizedEmailRecipientInput
@@ -17,7 +18,9 @@ export function recipientToSuggestion(
   }
 
   if (recipient.recipient_type === 'Email') {
-    const displayName = recipient.contact && recipient.contact.display_name
+    const displayName =
+      recipient.contact &&
+      getDisplayNameForContactEmail(recipient.email, recipient.contact)
 
     return {
       title: displayName || recipient.email,

@@ -1,3 +1,5 @@
+import { getDisplayNameForContactEmail } from './get-display-name-for-contact-email'
+
 export function recipientToString(
   recipient: IDenormalizedEmailRecipientInput
 ): string {
@@ -30,7 +32,7 @@ export function recipientToString(
     )
 
     return (
-      recipient.contact.display_name +
+      getDisplayNameForContactEmail(recipient.email, recipient.contact) +
       (showEmail
         ? ` (${recipient.email
             .split('@')
