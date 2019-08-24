@@ -1,5 +1,7 @@
 import React from 'react'
-import { StyledComponent } from 'styled-components'
+import styled, { StyledComponent } from 'styled-components'
+
+import { fade } from '@material-ui/core/styles'
 
 import Email from 'components/SvgIcons/EmailOutline/IconEmailOutline'
 import IconCall from 'components/SvgIcons/CallOutline/IconCallOutline'
@@ -8,6 +10,16 @@ import Chat from 'components/SvgIcons/Chat/IconChat'
 import IconMessage from 'components/SvgIcons/Mail/IconMail'
 import Other from 'components/SvgIcons/MenuRounded/IconMenuRounded'
 import IconInPerson from 'components/SvgIcons/InPerson/IconInPerson'
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 100%;
+  margin-right: 1rem;
+`
 
 interface EventIcon {
   type: TTaskType
@@ -62,5 +74,13 @@ interface Props {
 export default function Icon({ type }: Props) {
   const icon = EVENT_ICONS.find(item => item.type === type) || DEFAULT_ICON
 
-  return <icon.icon fill={icon.color} />
+  return (
+    <Container
+      style={{
+        backgroundColor: fade(icon.color, 0.2)
+      }}
+    >
+      <icon.icon fill={icon.color} />
+    </Container>
+  )
 }
