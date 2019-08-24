@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 import { Field } from 'react-final-form'
 import cn from 'classnames'
 
@@ -25,9 +25,11 @@ interface Props {
    * into undesired layout jumps as errors come and go. So the default is true.
    */
   preserveSpace?: boolean
+
+  style?: CSSProperties
 }
 
-export function FieldError({ name, className = '', visible }: Props) {
+export function FieldError({ name, className = '', visible, style }: Props) {
   if (!name) {
     // for now there are some usages in js so that we cannot count on
     // strict null check.
@@ -47,7 +49,7 @@ export function FieldError({ name, className = '', visible }: Props) {
         })
 
         return (
-          <ErrorContainer className={classNames}>
+          <ErrorContainer className={classNames} style={style}>
             {hasError && meta.error}
           </ErrorContainer>
         )

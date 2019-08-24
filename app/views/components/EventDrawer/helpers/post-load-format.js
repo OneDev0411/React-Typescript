@@ -8,12 +8,7 @@ import { normalizeAssociations } from 'views/utils/association-normalizers'
  * @param {object} defaultAssociation The default association(s)
  * @returns {Promise} a formated Task
  */
-export async function postLoadFormat(
-  task,
-  owner,
-  defaultAssociation,
-  defaultSelectedDate = new Date()
-) {
+export async function postLoadFormat(task, owner, defaultAssociation) {
   let reminder = {
     title: 'None',
     value: -1
@@ -33,7 +28,7 @@ export async function postLoadFormat(
     return {
       assignees: [owner],
       associations,
-      dueDate: createDueDate(defaultSelectedDate),
+      dueDate: new Date(),
       reminder,
       task_type: { title: 'Call', value: 'Call' }
     }
@@ -69,18 +64,4 @@ export async function postLoadFormat(
     reminder,
     dueDate: new Date(dueDate)
   }
-}
-
-/**
- * creates a date with current time based on given date
- * @param {Date} defaultSelectedDate - default selected date
- */
-function createDueDate(defaultSelectedDate) {
-  const now = new Date()
-  const date = new Date(defaultSelectedDate)
-
-  date.setHours(now.getHours())
-  date.setMinutes(now.getMinutes())
-
-  return date
 }
