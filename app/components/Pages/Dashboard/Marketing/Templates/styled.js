@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 
+import ALink from 'components/ALink'
 import { primary, borderColor, grey } from 'views/utils/colors'
 
 export const Tabs = styled.div`
@@ -17,13 +18,14 @@ export const Tabs = styled.div`
   }
 `
 
-export const Tab = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 1rem;
+export const Tab = styled(ALink)`
+  padding: 1.5rem 2rem;
+  line-height: 1;
+  font-weight: 600;
+  color: ${props => (props.selected ? primary : grey.A900)};
   border-bottom: ${props => (props.selected ? `2px solid ${primary}` : 'none')};
 
-  > a {
-    color: ${props => (props.selected ? primary : grey.A900)};
+  &:focus {
+    outline: none;
   }
 `
