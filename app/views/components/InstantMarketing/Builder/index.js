@@ -246,9 +246,21 @@ class Builder extends React.Component {
         </body>
       </html>`
 
-    const result = juice(assembled, {
-      inlinePseudoElements: true
-    })
+    /*
+     * Email clients are far better at rendering inline css.
+     * Therefore, we use Juice to inline them.
+     *
+     * However, inlining has some issues. Pseudo elements, media queries
+     * and such are not really inline-able.
+     *
+     * Therefore, we do the inlining when necessary: Only on Emails.
+     *
+     * There's no reason to go through that fragile process on social templates
+     */
+
+    const shouldInline = this.state.selectedTemplate.medium === 'Email'
+
+    const result = shouldInline ? juice(assembled) : assembled
 
     return {
       ...this.state.selectedTemplate,
