@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
@@ -20,6 +20,7 @@ import Table from 'components/Grid/Table'
 import Tooltip from 'components/tooltip'
 import ActionButton from 'components/Button/ActionButton'
 import LoadingContainer from 'components/LoadingContainer'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 interface CellProps {
   rowData: IBrandEmailTemplate
@@ -59,6 +60,7 @@ function EmailTemplatesList({
 }: Props) {
   const classes = useStyles()
   const [deletingItems, setDeletingItems] = useState<string[]>([])
+  const modal = useContext(ConfirmationModalContext)
 
   const isTemplateDeleting = (id: UUID): boolean => deletingItems.includes(id)
   const removeFromDeletingItems = (id: UUID): void =>
@@ -115,7 +117,7 @@ function EmailTemplatesList({
     {
       id: 'delete',
       sortable: false,
-      render: ({ rowData: { id, editable } }: CellProps) => (
+      render: ({ rowData: { id, editable, name } }: CellProps) => (
         <div className={classes.deleteButtonWrapper}>
           <Tooltip
             caption={
@@ -130,7 +132,13 @@ function EmailTemplatesList({
               disabled={!editable}
               onClick={e => {
                 e.stopPropagation()
-                handleDelete(id)
+
+                modal.setConfirmationModal({
+                  message: 'Delete Email Template!',
+                  description: `Are you sure about deleting "${name}" template?`,
+                  confirmLabel: 'Yes, I am sure',
+                  onConfirm: () => handleDelete(id)
+                })
               }}
             >
               {isTemplateDeleting(id) ? 'Deleting...' : 'Delete'}
@@ -149,14 +157,11 @@ function EmailTemplatesList({
       plugins={{ sortable: {} }}
       LoadingState={() => <LoadingContainer style={{ padding: '20% 0' }} />}
       getTrProps={(index: number, { original: template }: GetTrProps) => {
-        const isDeleting = isTemplateDeleting(template.id)
-
         return {
-          onClick: isDeleting ? () => {} : () => onItemClick(template),
-          style: {
-            cursor: 'pointer',
-            pointerEvents: isDeleting ? 'none' : 'initial'
-          }
+          onClick: isTemplateDeleting(template.id)
+            ? () => {}
+            : () => onItemClick(template),
+          style: { cursor: 'pointer' }
         }
       }}
     />
