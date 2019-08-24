@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react'
 
-import AttachDealIcon from 'components/SvgIcons/AttachDeal/IconAttachDeal'
+import { Button } from '@material-ui/core'
+
 import SearchDealDrawer from 'components/SearchDealDrawer'
 import SelectDealFileDrawer from 'components/SelectDealFileDrawer'
 
-import { FooterAction } from '../FooterAction'
 import { DealRow } from './DealRow'
+import IconDealFilled from '../../../SvgIcons/Deals/IconDealFilled'
 
 export class AddDealFile extends React.Component {
   state = {
@@ -68,15 +69,10 @@ export class AddDealFile extends React.Component {
   render() {
     return (
       <Fragment>
-        <FooterAction tooltipCaption="Deal Files" onClick={this.handleClick}>
-          <AttachDealIcon
-            style={{
-              width: '1.5rem',
-              height: '1.5rem'
-            }}
-            fillColor="#000"
-          />
-        </FooterAction>
+        <Button onClick={this.handleClick}>
+          <IconDealFilled style={{ marginRight: '0.5rem' }} />
+          Attach from deals
+        </Button>
 
         {this.state.isDealsListOpen && (
           <SearchDealDrawer

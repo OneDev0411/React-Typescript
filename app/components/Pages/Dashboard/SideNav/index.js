@@ -6,7 +6,7 @@ import { ScrollableArea } from '../../../../views/components/ScrollableArea'
 import { ACL } from '../../../../constants/acl'
 import LoginIcon from '../../../../views/components/SvgIcons/Login/LoginIcon'
 import DealsIcon from '../../../../views/components/SvgIcons/Deals/IconDeal'
-import DealsIconActive from '../../../../views/components/SvgIcons/Deals/IconDealActive'
+import IconDealFilled from '../../../../views/components/SvgIcons/Deals/IconDealFilled'
 import StoreIcon from '../../../../views/components/SvgIcons/Marketing/IconMarketing'
 import StoreIconActive from '../../../../views/components/SvgIcons/Marketing/IconMarketingActive'
 import MarketingIcon from '../../../../views/components/SvgIcons/PencilRuler/IconPencilRuler'
@@ -95,7 +95,7 @@ function AppSideNav(props) {
               tooltip="Your Deals"
               to="/dashboard/deals"
               Icon={DealsIcon}
-              ActiveIcon={DealsIconActive}
+              ActiveIcon={IconDealFilled}
             >
               <DealsNotifications />
             </SideNavLinkItem>
