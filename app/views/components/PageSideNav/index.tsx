@@ -13,7 +13,7 @@ interface PageSideNav {
     items: {
       // Without this, it's really hard to detect whether user is on a url or not.
       isIndex: boolean
-      icon?: any
+      icon?: React.FC<any>
       title: string
       link: string
       badge: number
