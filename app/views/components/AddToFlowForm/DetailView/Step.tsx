@@ -21,7 +21,11 @@ export default function Step({ step }: Props) {
   return (
     <StepContainer alignCenter justifyBetween>
       <Box display="flex" alignItems="center" width="70%">
-        <Icon type={step.event ? step.event.task_type : 'Email'} />
+        <Icon
+          hasBackground={false}
+          containerStyle={{ width: 'auto', height: 'auto', margin: 0 }}
+          type={step.event ? step.event.task_type : 'Email'}
+        />
         <Typography
           noWrap
           variant="body2"
