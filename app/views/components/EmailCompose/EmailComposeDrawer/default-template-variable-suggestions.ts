@@ -6,35 +6,35 @@ export const defaultTemplateVariableSuggestions: ITemplateVariableSuggestionGrou
     suggestions: [
       {
         title: 'Full Name',
-        expression: 'contact.display_name'
+        expression: 'recipient.display_name'
       },
       {
         title: 'First Name',
-        expression: 'contact.first_name'
+        expression: 'recipient.first  _name'
       },
       {
         title: 'Last Name',
-        expression: 'contact.last_name'
+        expression: 'recipient.last_name'
       },
       {
         title: 'Nickname',
-        expression: 'contact.nickname'
+        expression: 'recipient.nickname'
       },
       {
         title: 'Title',
-        expression: 'contact.title'
+        expression: 'recipient.title'
       },
       {
         title: 'Job Title',
-        expression: 'contact.job_title'
+        expression: 'recipient.job_title'
       },
       {
         title: 'Email',
-        expression: 'contact.email'
+        expression: 'recipient.email'
       },
       {
         title: 'Company',
-        expression: 'contact.company'
+        expression: 'recipient.company'
       }
     ]
   },
