@@ -10,7 +10,7 @@ export const defaultTemplateVariableSuggestions: ITemplateVariableSuggestionGrou
       },
       {
         title: 'First Name',
-        expression: 'recipient.first  _name'
+        expression: 'recipient.first_name'
       },
       {
         title: 'Last Name',
