@@ -1,39 +1,52 @@
-import { Field } from 'react-final-form'
-
 import React, {
   ComponentProps,
   forwardRef,
   Fragment,
   Ref,
+  useCallback,
   useState
 } from 'react'
+import { Field, FieldProps } from 'react-final-form'
 import PluginsEditor from 'draft-js-plugins-editor'
 import { connect } from 'react-redux'
 
 import { TextEditor } from 'components/TextEditor'
 import Loading from 'components/LoadingContainer'
 import { IAppState } from 'reducers/index'
+import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
+import { defaultTemplateVariableSuggestions } from '../../EmailComposeDrawer/default-template-variable-suggestions'
+import { TextEditorProps } from '../../../TextEditor/types'
 
 interface Props {
-  uploadImage: (file: File) => Promise<string>
   content?: string
   hasStaticBody?: boolean
   hasSignatureByDefault?: boolean
+  hasTemplateVariables?: boolean
+  FieldProps?: Partial<FieldProps<any>>
   signature: string
+  DraftEditorProps?: TextEditorProps['DraftEditorProps']
   editorRef?: Ref<PluginsEditor>
 }
 
 const EmailBody = ({
   content,
-  uploadImage,
   signature,
   hasSignatureByDefault,
+  hasTemplateVariables,
   hasStaticBody = false,
+  FieldProps,
+  DraftEditorProps = {},
   editorRef
 }: Props) => {
   const [signatureEditorVisible, setSignatureEditorVisible] = useState(false)
+
+  const uploadImage = useCallback(async file => {
+    const uploadedFile = await uploadEmailAttachment(file)
+
+    return uploadedFile.url
+  }, [])
 
   return (
     <>
@@ -41,12 +54,18 @@ const EmailBody = ({
         <Field
           name="body"
           defaultValue={content}
+          {...FieldProps || {}}
           render={({ input, meta }) => (
             <TextEditor
               enableImage
               uploadImage={uploadImage}
               enableSignature
+              DraftEditorProps={DraftEditorProps}
               hasSignatureByDefault={hasSignatureByDefault}
+              enableTemplateVariables={hasTemplateVariables}
+              templateVariableSuggestionGroups={
+                defaultTemplateVariableSuggestions
+              }
               onEditSignature={() => setSignatureEditorVisible(true)}
               signature={signature}
               input={input}
@@ -55,7 +74,6 @@ const EmailBody = ({
           )}
         />
       )}
-
       {hasStaticBody && (
         <Fragment>
           {content ? (
@@ -65,7 +83,7 @@ const EmailBody = ({
               srcDoc={content}
               style={{
                 border: '0',
-                height: '50vh'
+                flex: '1'
               }}
             />
           ) : (
@@ -73,13 +91,10 @@ const EmailBody = ({
           )}
         </Fragment>
       )}
-
-      {signatureEditorVisible && (
-        <EditEmailSignatureDrawer
-          isOpen
-          onClose={() => setSignatureEditorVisible(false)}
-        />
-      )}
+      <EditEmailSignatureDrawer
+        isOpen={signatureEditorVisible}
+        onClose={() => setSignatureEditorVisible(false)}
+      />{' '}
     </>
   )
 }

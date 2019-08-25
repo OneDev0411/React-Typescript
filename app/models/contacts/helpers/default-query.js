@@ -1,4 +1,4 @@
-const associations = [
+export const associations = [
   'contact.attributes',
   'contact.summary',
   'contact.users',

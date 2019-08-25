@@ -51,7 +51,7 @@ export function Title(props) {
             placeholder={props.placeholder}
           />
           {meta.error &&
-            meta.touched && <div style={{ color: 'red' }}>{meta.error}</div>}
+            meta.touched && <div style={{ color: '#F43B38' }}>{meta.error}</div>}
         </div>
       )}
     />

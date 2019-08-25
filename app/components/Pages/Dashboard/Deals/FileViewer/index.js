@@ -13,7 +13,7 @@ import { isBackOffice } from 'utils/user-teams'
 import LoadingContainer from 'components/LoadingContainer'
 
 import { getFileById } from '../utils/files/get-file-by-id'
-import { getEnvelopeFileUrl } from '../utils/get-envelope-file-url'
+import { getEnvelopeFile } from '../utils/get-envelope-file'
 
 import TaskView from '../Dashboard/TaskView'
 
@@ -102,9 +102,9 @@ class FileViewer extends React.Component {
       return null
     }
 
-    const url = getEnvelopeFileUrl(envelope, this.props.task)
+    const file = getEnvelopeFile(envelope, this.props.task)
 
-    if (!url) {
+    if (!file) {
       this.props.notify({
         title: 'File not found',
         status: 'error'
@@ -116,7 +116,7 @@ class FileViewer extends React.Component {
     return {
       name: envelope.title,
       type: 'pdf',
-      url
+      url: file.url
     }
   }
 

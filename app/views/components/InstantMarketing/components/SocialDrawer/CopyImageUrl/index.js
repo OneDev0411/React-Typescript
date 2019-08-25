@@ -10,7 +10,7 @@ import copy from 'utils/copy-text-to-clipboard'
 
 import { Section } from '../components/Section'
 
-function getFileUrl(instance) {
+function getDocumentLastState(instance) {
   return instance && truncateTextFromMiddle(instance.branch, 50)
 }
 
@@ -33,7 +33,7 @@ function DownloadImage(props) {
       }}
       onButtonClick={() => handleCopyUrl(props)}
     >
-      <LinkIcon /> {getFileUrl(props.instance)}
+      <LinkIcon /> {getDocumentLastState(props.instance)}
     </Section>
   )
 }

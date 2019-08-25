@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import { grey, brandBackground } from 'views/utils/colors'
 
-const Container = styled.div`
+export const ItemContainer = styled.div`
   margin: 0 -0.5em 0.5em;
   padding: 0.5em;
 
@@ -22,7 +22,7 @@ const Container = styled.div`
   }
 
   .status {
-    width: 1.5em;
+    width: 1em;
     height: 1.5em;
     margin-right: 0.5em;
 
@@ -34,7 +34,9 @@ const Container = styled.div`
       background-color: #00ae22;
     }
   }
+`
 
+export const NextStepContainer = styled.div`
   .next-step-icon {
     fill: ${grey.A900};
     margin-right: 0.25em;
@@ -55,6 +57,14 @@ const Container = styled.div`
     font-size: 0.875rem;
     line-height: 1.71;
   }
-`
 
-export default Container
+  .next-step__icon {
+    width: 1em;
+    height: 1em;
+    margin-right: 0.5em;
+  }
+
+  .next-step__detail {
+    width: calc(100% - 1.5em);
+  }
+`

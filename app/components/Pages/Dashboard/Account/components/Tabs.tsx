@@ -21,14 +21,15 @@ export const ProfileTabs = ({ user }: Props) => (
       to="/dashboard/account/upgrade"
       disabled={user.user_type === 'Agent'}
     />
-    <Tab
-      indexed
-      text="Calendar Export"
-      to="/dashboard/account/exportCalendar"
-    />
     <Acl.Crm>
       <Tab indexed text="Manage Tags" to="/dashboard/account/manage-tags" />
     </Acl.Crm>
+    <Tab text="Email Signature" to="/dashboard/account/email-signature" />
+    <Tab text="Connected Accounts" to="/dashboard/account/connected-accounts" />
+    <Acl.Crm>
+      <Tab text="Flows" to="/dashboard/account/flows" />
+    </Acl.Crm>
+    <Tab text="Email Templates" to="/dashboard/account/email-templates" />
     <Acl access={[ACL.CRM, ACL.DEALS]}>
       <Tab
         indexed
@@ -36,8 +37,13 @@ export const ProfileTabs = ({ user }: Props) => (
         to="/dashboard/account/reminder-notifications"
       />
     </Acl>
-    <Tab text="Email Signature" to="/dashboard/account/email-signature" />
-    <Tab text="Connected Accounts" to="/dashboard/account/connected-accounts" />
+    <Acl.Crm>
+      <Tab
+        indexed
+        text="Calendar Export"
+        to="/dashboard/account/exportCalendar"
+      />
+    </Acl.Crm>
     {/* TODO: Unhide CSS (Centralized Showing Service) from users */}
     {/* Note that there are some imports commented at top which needs to be uncommented too */}
     {/* <Acl access={{ oneOf: [ACL.CRM, ACL.DEALS] }}>

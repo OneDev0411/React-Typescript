@@ -105,8 +105,10 @@ class ShareInstance extends React.Component {
           <BulkEmailComposeDrawer
             isOpen
             hasStaticBody
-            from={props.user}
-            body={props.instance.html}
+            initialValues={{
+              from: props.user,
+              body: props.instance.html
+            }}
             getEmail={this.getEmail}
             onSent={this.onEmailSent}
             onClose={this.toggleComposeEmail}

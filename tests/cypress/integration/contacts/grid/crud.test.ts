@@ -10,7 +10,7 @@ describe('Contacts grid', () => {
   it('User can create contact', () => {
     createContact({ firstName: 'Paul', lastName: 'Scholes' })
     cy.visit('/dashboard/contacts')
-    // TODO: check if contact exists
+    cy.pageShouldContain('Paul Scholes')
   })
 
   it('User can remove a selected contact and selection should correctly get updated', () => {

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 
 import { getTemplates } from 'models/instant-marketing/get-templates'
 
-function useTemplatesList(types) {
+function useTemplatesList(brandId, types) {
   const [templates, setTemplates] = useState([])
   const [isLoading, setLoading] = useState(false)
 
@@ -10,11 +10,15 @@ function useTemplatesList(types) {
     let didCancel = false
 
     async function loadData() {
+      if (brandId == null) {
+        return
+      }
+
       try {
         setLoading(true)
 
         // get templates
-        const templates = await getTemplates(types.split(','), [
+        const templates = await getTemplates(brandId, types.split(','), [
           'Email',
           'Social',
           'LinkedInCover',
@@ -40,7 +44,7 @@ function useTemplatesList(types) {
     return () => {
       didCancel = true
     }
-  }, [types])
+  }, [brandId, types])
 
   return [templates, isLoading]
 }

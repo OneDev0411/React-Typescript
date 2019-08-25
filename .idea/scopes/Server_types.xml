@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Server types" pattern="file[server]:types//*" />
+</component>

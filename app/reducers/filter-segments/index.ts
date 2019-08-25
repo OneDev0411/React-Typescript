@@ -178,7 +178,7 @@ export const getSegments = <T = any>(
   listName: string,
   predefinedLists: StringMap<T> = {}
 ) =>
-  ([] as any[]).concat(
+  ([] as T[]).concat(
     Object.values(predefinedLists),
     Object.values(state.list || {})
   )

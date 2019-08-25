@@ -15,7 +15,7 @@ export const SideNavLinkItem = withRouter(props => {
 
   return (
     <SideNavItem>
-      <SideNavTooltip caption={props.tooltip}>
+      <SideNavTooltip title={props.tooltip}>
         <SidenavLink inverse active={active} to={props.to}>
           <Icon style={{ pointerEvents: 'none' }} />
           {props.children || null}

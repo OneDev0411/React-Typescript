@@ -1,6 +1,8 @@
 import React from 'react'
 
-import IconButton from './IconButton'
+import { getShortcutTooltip } from 'utils/get-shortcut-tooltip'
+
+import { ToolbarToggleButton } from './ToolbarToggleButton'
 import IconBold from '../../SvgIcons/Bold/IconBold'
 import IconItalic from '../../SvgIcons/Italic/IconItalic'
 import IconUnderline from '../../SvgIcons/Underline/IconUnderline'
@@ -25,35 +27,38 @@ export function RichTextButtons({ richButtonsPlugin }) {
   return (
     <>
       <BoldButton>
-        <IconButton>
+        <ToolbarToggleButton
+          tooltip={getShortcutTooltip('Bold', 'B')}
+          edge="start"
+        >
           <IconBold />
-        </IconButton>
+        </ToolbarToggleButton>
       </BoldButton>
 
       <ItalicButton>
-        <IconButton>
+        <ToolbarToggleButton tooltip={getShortcutTooltip('Italic', 'I')}>
           <IconItalic />
-        </IconButton>
+        </ToolbarToggleButton>
       </ItalicButton>
 
       <UnderlineButton>
-        <IconButton>
+        <ToolbarToggleButton tooltip={getShortcutTooltip('Underline', 'U')}>
           <IconUnderline />
-        </IconButton>
+        </ToolbarToggleButton>
       </UnderlineButton>
 
       <Separator />
 
       <ULButton>
-        <IconButton isBlockButton>
-          <IconList />
-        </IconButton>
+        <ToolbarToggleButton tooltip="Bulleted List" isBlockButton>
+          <IconList color="inherit" size={{ width: 16, height: 16 }} />
+        </ToolbarToggleButton>
       </ULButton>
 
       <OLButton>
-        <IconButton isBlockButton>
+        <ToolbarToggleButton tooltip="Numbered List" isBlockButton>
           <IconNumberedList />
-        </IconButton>
+        </ToolbarToggleButton>
       </OLButton>
 
       <Separator />

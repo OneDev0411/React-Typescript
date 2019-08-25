@@ -12,7 +12,7 @@ interface Props {
 
 export function EditEmailSignatureDrawer({ isOpen, onClose }: Props) {
   return (
-    <Drawer isOpen={isOpen} onClose={onClose}>
+    <Drawer open={isOpen} onClose={onClose}>
       <Drawer.Header title="Edit Email Signature" />
       <Drawer.Body style={{ overflow: 'hidden' }}>
         <EditEmailSignature

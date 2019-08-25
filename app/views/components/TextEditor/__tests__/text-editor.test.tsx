@@ -1,13 +1,15 @@
-import { render, fireEvent } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react'
 
 import { TextEditor } from '..'
 
 import * as React from 'react'
 
+import { renderWithTheme } from '../../../../../tests/unit/utils/render-with-theme'
+
 // https://gitlab.com/rechat/web/issues/2948
 describe('TextEditor', () => {
   it('should render', () => {
-    render(<TextEditor />)
+    renderWithTheme(<TextEditor />)
   })
 
   // js-dom seems to have problem with selection API. These mocks are still not
@@ -38,14 +40,9 @@ describe('TextEditor', () => {
   })
 
   it('should show image picker button if enableImage is true, and it should open image picker dialog', done => {
-    const {
-      queryByTestId,
-      getByTestId,
-      queryByText,
-      baseElement,
-      debug,
-      container
-    } = render(<TextEditor enableImage />)
+    const { getByTestId, queryByText, container } = renderWithTheme(
+      <TextEditor enableImage />
+    )
 
     fireEvent.click(getByTestId('add-image-button'))
     expect(queryByText('Add an image')).not.toBeNull()
@@ -83,7 +80,7 @@ describe('TextEditor', () => {
   })
 
   it('should not show image picker button if enableImage is false', () => {
-    const { queryByTestId } = render(<TextEditor />)
+    const { queryByTestId } = renderWithTheme(<TextEditor />)
 
     expect(queryByTestId('add-image-button')).toBeNull()
   })

@@ -157,10 +157,12 @@ class General extends React.Component {
           <BulkEmailComposeDrawer
             isOpen
             hasStaticBody
-            from={this.state.owner}
-            body={this.state.emailBody}
+            initialValues={{
+              from: this.state.owner,
+              body: this.state.emailBody
+            }}
             onClose={this.toggleComposeEmail}
-            onSent={this.toggleComposeEmail}
+            onSent={this.closeBuilder}
             getEmail={this.getEmail}
             isSubmitDisabled={this.state.isGettingTemplateInstance}
           />

@@ -29,23 +29,17 @@ declare interface IContactAttributeDef {
   brand?: UUID
 }
 
+type IContactAttributeWithDef = IContactAttribute & {
+  attribute_def: IContactAttributeDef
+}
+
 declare interface ISubContact {
   id: UUID
   brand: UUID
   created_at: number
   type: 'sub_contact'
-  sections: Record<
-    UUID,
-    (IContactAttribute & {
-      attribute_def: IContactAttributeDef
-    })[]
-  >
-  attributes: Record<
-    UUID,
-    (IContactAttribute & {
-      attribute_def: IContactAttributeDef
-    })[]
-  >
+  sections: Record<UUID, (IContactAttributeWithDef)[]>
+  attributes: Record<UUID, (IContactAttributeWithDef)[]>
 }
 
 declare interface IContactBase {
@@ -69,9 +63,13 @@ declare interface IContact extends IContactBase {
   brand: UUID
 
   display_name: string
+  profile_image_url: string | null
   partner_name?: string
   last_touch?: number
   next_touch?: number
+
+  email: string | null
+  emails: string[] | null
 
   attributes?: IContactAttribute[]
   users?: IUser[]
@@ -81,6 +79,10 @@ declare interface IContact extends IContactBase {
   summary?: IContactSummary
   created_by?: IUser
   updated_by?: IUser
+}
+
+declare interface INormalizedContact extends IContact {
+  sub_contacts: ISubContact[]
 }
 
 declare interface IContactAttribute {
@@ -171,6 +173,8 @@ declare type TContactFilterOperator =
   | 'any'
   | 'all'
 
+declare type TContactFilterType = 'and' | 'or'
+
 declare interface IContactAttributeFilter {
   attribute_def?: UUID
   attribute_type?: string
@@ -199,7 +203,7 @@ declare interface IContactFilterOptions {
   list?: UUID
   lists?: UUID[]
   users?: UUID[]
-  filter_type?: 'and' | 'or'
+  filter_type?: TContactFilterType
 }
 
 declare interface ICSVImporterMappingDef {
@@ -234,6 +238,7 @@ declare interface IContactTag {
   text: string
   created_at: number
   updated_at: number
+  type: 'crm_tag'
 }
 
 type TContactAssociation =
@@ -272,7 +277,9 @@ type TContactAssociationMap<T extends string> = T extends 'contact.attributes'
   : never
 
 declare interface IFetchContactQuery {
-  associations: string[]
+  associations?: string[] // TODO: use TContactAssociation[]
+  order?: string
+  filter_type?: TContactFilterType
 }
 
 declare interface TGetContactFunc<A extends string> {

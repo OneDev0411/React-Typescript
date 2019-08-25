@@ -37,7 +37,7 @@ export const FilterItem = props => {
       <Downshift isOpen={isActive} onOuterClick={onToggleFilterActive}>
         {({ isOpen }) => (
           <div>
-            <TitleContainer>
+            <TitleContainer data-test="filter-item">
               <ItemTitle onClick={onToggleFilterActive}>
                 <span style={{ fontWeight: 600 }}>{filterConfig.label} </span>
                 {operator && operator.name}&nbsp;

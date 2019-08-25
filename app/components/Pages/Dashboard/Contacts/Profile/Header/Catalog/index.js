@@ -4,8 +4,9 @@ import Flex from 'styled-flex-component'
 
 import { H1 } from 'components/Typography/headings'
 
+import { LastTouched } from 'components/LastTouched'
+
 import Avatar from './Avatar'
-import { LastTouched } from './LastTouched'
 
 const Title = styled(H1)`
   line-height: 1.5;

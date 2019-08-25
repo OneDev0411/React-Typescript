@@ -2,88 +2,121 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
+import { getBrandByType } from 'utils/user-teams'
+
 import IconButton from 'components/Button/IconButton'
 import ActionButton from 'components/Button/ActionButton'
 import DeleteIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
+import EditIcon from 'components/SvgIcons/Edit/EditIcon'
+import Tooltip from 'components/tooltip'
 
-import { getThumbnail, itemButtonText, itemDateText } from './helpers'
+import { getTemplateImage, itemButtonText, itemDateText } from './helpers'
 
 function Item(props) {
+  const { template } = props
   const [isDeleting, setDeleting] = useState(false)
-  const thumbnail = getThumbnail(props.template)
-  const isInstance = props.template.type === 'template_instance'
+  const brokerageBrand = getBrandByType(props.user, 'Brokerage')
+  const { thumbnail } = getTemplateImage(template, brokerageBrand)
+  const isInstance = template.type === 'template_instance'
   const gridClassNames = ['grid-item']
+  let handleOnPreview = () => props.handlePreview(template)
 
   if (isDeleting) {
     gridClassNames.push('loading')
   }
 
+  if (template.video) {
+    gridClassNames.push('is-video')
+    handleOnPreview = () => false
+  }
+
   return (
-    <div key={props.template.id}>
+    <div key={template.id}>
       <div
         className={gridClassNames.join(' ')}
-        onClick={() => props.handlePreview(props.template)}
+        onClick={handleOnPreview}
         data-test="marketing-template"
       >
+        {template.video ? (
+          <video src={thumbnail} muted autoPlay />
+        ) : (
+          <img alt={template.name} src={thumbnail} />
+        )}
+
         <div className="action-bar">
-          {isInstance && props.handleDelete && (
-            <IconButton
-              onClick={e => {
-                e.stopPropagation()
-                setDeleting(true)
-
-                props.handleDelete({
-                  template: props.template,
-                  onCancel: () => {
-                    setDeleting(false)
-                  },
-                  onFailed: () => {
-                    setDeleting(false)
-                    props.notify({
-                      title:
-                        'There is a problem for deleting the template. Please try again.',
-                      status: 'error',
-                      dismissible: true
-                    })
-                  }
-                })
-              }}
-              className="actionbar-delete"
-            >
-              <DeleteIcon />
-            </IconButton>
-          )}
-
-          {isInstance && props.handleEdit && (
+          <div style={{ width: isInstance ? 'auto' : '100%' }}>
             <ActionButton
               onClick={e => {
                 e.stopPropagation()
 
-                props.handleEdit(props.template)
+                props.handleCustomize(template)
               }}
               isBlock
+              data-test="marketing-customize-button"
             >
-              Edit
+              {itemButtonText(template)}
             </ActionButton>
+          </div>
+
+          {isInstance && (
+            <div className="action-bar__right">
+              {props.handleEdit && (
+                <Tooltip caption="Edit">
+                  <IconButton
+                    iconSize="large"
+                    className="action-bar__icon-button"
+                    onClick={e => {
+                      e.stopPropagation()
+                      props.handleEdit(template)
+                    }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
+              {props.handleDelete && (
+                <Tooltip caption="Delete">
+                  <IconButton
+                    iconSize="large"
+                    className="action-bar__icon-button"
+                    onClick={e => {
+                      e.stopPropagation()
+                      setDeleting(true)
+                      props.handleDelete({
+                        template,
+                        onCancel: () => {
+                          setDeleting(false)
+                        },
+                        onFailed: () => {
+                          setDeleting(false)
+                          props.notify({
+                            title:
+                              'There is a problem for deleting the template. Please try again.',
+                            status: 'error',
+                            dismissible: true
+                          })
+                        }
+                      })
+                    }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
+            </div>
           )}
-
-          <ActionButton
-            onClick={e => {
-              e.stopPropagation()
-
-              props.handleCustomize(props.template)
-            }}
-            isBlock
-            data-test="marketing-customize-button"
-          >
-            {itemButtonText(props.template)}
-          </ActionButton>
         </div>
-        <img alt={props.template.name} src={thumbnail} />
       </div>
       {isInstance && (
-        <div className="template_date">
-          {itemDateText(props.template.created_at, isDeleting)}
+        <div className="template-date">
+          {isDeleting ? (
+            'Deleting...'
+          ) : (
+            <>
+              <div className="caption">CREATED AT</div>
+              {itemDateText(template.created_at)}
+            </>
+          )}
         </div>
       )}
     </div>
@@ -91,6 +124,6 @@ function Item(props) {
 }
 
 export default connect(
-  null,
+  ({ user }) => ({ user }),
   { notify }
 )(Item)

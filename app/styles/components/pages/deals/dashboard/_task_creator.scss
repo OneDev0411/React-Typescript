@@ -42,7 +42,7 @@
       }
 
       &.upload {
-        color: #003bdf;
+        color: #0945eb;
         border-bottom: none;
         position: relative;
         i {
@@ -62,7 +62,7 @@
       &:hover {
         background-color: #fafafa;
         text-decoration: underline;
-        color: #003bdf;
+        color: #0945eb;
       }
 
       &.disabled {
@@ -105,7 +105,7 @@
       -webkit-backdrop-filter: blur(10px);
       backdrop-filter: blur(10px);
       background-color: rgba(255, 255, 255, 0.9);
-      border: solid 1px #003bdf;
+      border: solid 1px #0945eb;
       margin-bottom: 5px;
       padding: 5px 10px;
       &:focus {

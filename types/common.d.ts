@@ -11,6 +11,10 @@ declare interface StringMap<T> {
   [key: string]: T
 }
 
+declare interface UuidMap<T> {
+  [key: UUID]: T
+}
+
 declare type EnumMap<K, T> = { [key in K]: T }
 
 declare type Omit<T, K extends keyof any> = T extends any
@@ -47,21 +51,23 @@ interface ILabelValue {
   value: string
 }
 
-declare interface ApiResponse<T> {
-  body: {
-    data: T
-    references: T
-  }
+declare interface ApiResponseBody<T> {
+  data: T
+  references: T
   code: string
-  status: number
-  statusCode: number
-  statusText: number
-  info:
+  info?:
     | boolean
     | {
         count: number
         total: number
       }
+}
+
+declare interface ApiResponse<T> {
+  body: ApiResponseBody<T>
+  status: number
+  statusCode: number
+  statusText: number
 }
 
 declare type ApiPromise<T> = Promise<ApiResponse<T>>
@@ -77,5 +83,11 @@ declare type MapFieldsToUuid<T, K extends keyof T> = PartiallyMappedFields<
 >
 
 type IAsyncActionProp<
-  T extends (...args: any[]) => (dispatch) => Promise<any>
+  T extends (...args: any[]) => (dispatch, getState) => Promise<any>
 > = (...args: Parameters<T>) => ReturnType<ReturnType<T>>
+
+declare type Association<
+  Association,
+  Value,
+  Associations
+> = Association extends Associations ? { [key in Association]: Value } : {}

@@ -77,7 +77,11 @@ const ChangePasswordForm = ({
           </div>
         )}
         <div style={{ textAlign: 'right' }}>
-          <Button type="submit" disabled={isDisabled}>
+          <Button
+            data-test="change-password-form-submit-button"
+            type="submit"
+            disabled={isDisabled}
+          >
             {isSubmitting ? 'Updating...' : 'Update'}
           </Button>
         </div>

@@ -1,25 +1,36 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
+import { getBrandByType } from 'utils/user-teams'
 import { ImagePreviewModal } from 'components/ImagePreviewModal'
 
 import PreviewModalMenu from './PreviewModalMenu'
 import {
+  getTemplateImage,
   selectPreviousTemplate,
   selectNextTemplate,
   navigateBetweenTemplatesUsingKeyboard
 } from './helpers'
 
 function PreviewModal(props) {
-  if (!props.selectedTemplate) {
+  const { selectedTemplate, templates, medium } = props
+
+  if (!selectedTemplate) {
     return null
   }
+
+  const brokerageBrand = getBrandByType(props.user, 'Brokerage')
+  const { thumbnail: imgSrcTiny, original: imgSrc } = getTemplateImage(
+    selectedTemplate,
+    brokerageBrand
+  )
 
   let modalProps = {
     isOpen: props.isPreviewModalOpen,
     handleClose: () => props.setPreviewModalOpen(false),
     menuRenderer: () => (
       <PreviewModalMenu
-        selectedTemplate={props.selectedTemplate}
+        selectedTemplate={selectedTemplate}
         handlePreviewShare={() => {
           props.setPreviewModalOpen(false)
           props.setActionTriggered(true)
@@ -31,17 +42,19 @@ function PreviewModal(props) {
   if (props.type === 'history') {
     modalProps = {
       ...modalProps,
-      imgSrc: props.selectedTemplate.file.preview_url
+      imgSrc
     }
   } else {
     modalProps = {
       ...modalProps,
       showPreviousButton: true,
-      onPreviousButtonClick: () => {
+      onPreviousButtonClick: e => {
+        e.stopPropagation()
+
         const previous = selectPreviousTemplate(
-          props.templates,
-          props.selectedTemplate,
-          props.medium
+          templates,
+          selectedTemplate,
+          medium
         )
 
         if (previous) {
@@ -49,30 +62,33 @@ function PreviewModal(props) {
         }
       },
       showNextButton: true,
-      onNextButtonClick: () => {
-        const next = selectNextTemplate(
-          props.templates,
-          props.selectedTemplate,
-          props.medium
-        )
+      onNextButtonClick: e => {
+        e.stopPropagation()
+
+        const next = selectNextTemplate(templates, selectedTemplate, medium)
 
         if (next) {
           props.setSelectedTemplate(next)
         }
       },
-      handleKeyDown: e =>
-        navigateBetweenTemplatesUsingKeyboard(
+      handleKeyDown: e => {
+        const nextTemplate = navigateBetweenTemplatesUsingKeyboard(
           e.key,
-          props.templates,
-          props.selectedTemplate,
-          props.medium
-        ),
-      imgSrc: `${props.selectedTemplate.url}/preview.png`,
-      imgSrcTiny: `${props.selectedTemplate.url}/thumbnail.png`
+          templates,
+          selectedTemplate,
+          medium
+        )
+
+        if (nextTemplate) {
+          props.setSelectedTemplate(nextTemplate)
+        }
+      },
+      imgSrc,
+      imgSrcTiny
     }
   }
 
-  return <ImagePreviewModal {...modalProps} />
+  return props.isPreviewModalOpen && <ImagePreviewModal {...modalProps} />
 }
 
-export default PreviewModal
+export default connect(({ user }) => ({ user }))(PreviewModal)

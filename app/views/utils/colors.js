@@ -1,24 +1,29 @@
+const newRed = '#F43B38'
+
 export const red = {
-  A100: '#fe3824',
-  A200: '#f00',
-  primary: '#e60000'
+  A100: newRed,
+  A200: newRed,
+  primary: newRed,
+  dark: '#b90010'
 }
 
 export const yellow = {
   A100: '#F8A700'
 }
 
-export const orange = {
-  primary: '#f6a623'
-}
-
 export const green = {
+  A100: '#32b863',
   primary: '#5cb85c'
+}
+export const orange = {
+  light: '#F8EAB3',
+  primary: '#f6a623',
+  dark: '#7A5C02'
 }
 
 export const blue = {
-  A100: '#003bdf',
-  A200: '#022ca0'
+  A100: '#0945eb',
+  A200: '#001eb7'
 }
 
 export const grey = {

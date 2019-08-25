@@ -1,23 +1,16 @@
 import React, { Component, createRef } from 'react'
-import { withRouter, browserHistory } from 'react-router'
+import { withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
 
-import Onboarding from 'components/Onboarding'
 import Acl from 'components/Acl'
-
-import IconButton from 'components/Button/IconButton'
-import IconInfo from 'components/SvgIcons/InfoOutline/IconInfoOutline'
+import PageSideNav from 'components/PageSideNav'
 
 import {
   Container as PageContainer,
-  Menu as SideMenu,
   Content as PageContent
 } from 'components/SlideMenu'
-import { ListTitle } from 'components/SlideMenu/Menu/styled'
 
-import { OnboardingSteps } from './helpers/onboarding'
-
-import { Menu } from './Menu'
+import { SECTIONS } from './helpers/sections'
 
 class Marketing extends Component {
   state = {
@@ -45,20 +38,9 @@ class Marketing extends Component {
             <title>Marketing | Rechat</title>
           </Helmet>
 
-          <SideMenu isOpen={isSideMenuOpen}>
-            <ListTitle className="onboarding--intro">
-              Marketing
-              <IconButton isFit iconSize="large" onClick={this.handleShowIntro}>
-                <IconInfo />
-              </IconButton>
-            </ListTitle>
-            <Menu />
-          </SideMenu>
+          <PageSideNav isOpen={isSideMenuOpen} sections={SECTIONS} />
 
-          <PageContent
-            isSideMenuOpen={isSideMenuOpen}
-            style={{ background: '#f2f2f2' }}
-          >
+          <PageContent isSideMenuOpen={isSideMenuOpen}>
             {React.Children.map(this.props.children, child =>
               React.cloneElement(child, {
                 ...this.props.params,
@@ -67,12 +49,6 @@ class Marketing extends Component {
               })
             )}
           </PageContent>
-
-          <Onboarding
-            ref={this.onboardingRef}
-            steps={OnboardingSteps}
-            tourId="marketing-center"
-          />
         </PageContainer>
       </Acl.Marketing>
     )

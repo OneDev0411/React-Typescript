@@ -1,5 +1,4 @@
 import { withProps } from 'recompose'
+import { Tooltip } from '@material-ui/core'
 
-import ToolTip from '../../../../../views/components/tooltip'
-
-export const SideNavTooltip = withProps({ placement: 'right' })(ToolTip)
+export const SideNavTooltip = withProps({ placement: 'right' })(Tooltip)

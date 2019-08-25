@@ -8,7 +8,7 @@ import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs'
 import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 
-// import deleteFlow from 'models/flows/delete-flow'
+import { stopFlow } from 'models/flows/stop-flow'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { updateContactQuery } from 'models/contacts/helpers/default-query'
 import { getContact } from 'models/contacts/get-contact'
@@ -33,7 +33,7 @@ import { normalizeContact as associationNormalizer } from 'views/utils/associati
 import Loading from '../../../../Partials/Loading'
 
 import { Container } from '../components/Container'
-// import Flows from './Flows'
+import Flows from './Flows'
 import { Dates } from './Dates'
 import Deals from './Deals'
 import { Details } from './Details'
@@ -105,8 +105,8 @@ class ContactProfile extends React.Component {
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.detectScreenSize)
     window.socket.on('contact:touch', this.updateContact)
-    window.socket.off('crm_task:create', this.handleSocket)
-    window.socket.off('email_campaign:create', this.handleSocket)
+    window.socket.off('crm_task:create', this.fetchTimeline)
+    window.socket.off('email_campaign:create', this.fetchTimeline)
   }
 
   /**
@@ -114,7 +114,7 @@ class ContactProfile extends React.Component {
    * @returns {String} Title
    */
   get documentTitle() {
-    let title = this.state.contact.summary.display_name || ''
+    const title = this.state.contact.display_name || ''
 
     return title ? `${title} | Contacts | Rechat` : 'Contact | Rechat'
   }
@@ -139,7 +139,8 @@ class ContactProfile extends React.Component {
       this.setState(state => ({
         contact: {
           ...normalizeContact(response.data),
-          deals: state.contact.deals
+          deals: state.contact.deals,
+          flows: state.contact.flows
         }
       }))
     } catch (error) {
@@ -152,10 +153,10 @@ class ContactProfile extends React.Component {
       const response = await getContact(this.props.params.id, {
         associations: [
           ...updateContactQuery.associations,
-          'contact.deals'
-          // 'contact.flows',
-          // 'flow_step.email',
-          // 'flow_step.crm_task'
+          'contact.deals',
+          'contact.flows',
+          'flow_step.email',
+          'flow_step.crm_task'
         ]
       })
 
@@ -203,23 +204,17 @@ class ContactProfile extends React.Component {
     state.timeline.filter(item => item.id !== id)
 
   editEvent = updatedEvent =>
-    this.setState(
-      state => ({
-        timeline: [
-          ...this.filterTimelineById(state, updatedEvent.id),
-          updatedEvent
-        ]
-      }),
-      this.fetchContact
-    )
+    this.setState(state => ({
+      timeline: [
+        ...this.filterTimelineById(state, updatedEvent.id),
+        updatedEvent
+      ]
+    }))
 
   deleteEvent = id =>
-    this.setState(
-      state => ({
-        timeline: this.filterTimelineById(state, id)
-      }),
-      this.fetchContact
-    )
+    this.setState(state => ({
+      timeline: this.filterTimelineById(state, id)
+    }))
 
   handleAddNote = async text => {
     const contact = await upsertContactAttributes(this.state.contact.id, [
@@ -279,19 +274,20 @@ class ContactProfile extends React.Component {
     }
   }
 
-  // stopFlow = async id => {
-  //   try {
-  //     await deleteFlow(id)
-  //     this.fetchContact()
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
+  stopFlow = async id => {
+    try {
+      await stopFlow(id)
+      this.fetchContact()
+      this.fetchTimeline()
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
-  // addToFlowCallback = () => {
-  //   this.fetchContact()
-  //   this.fetchTimeline()
-  // }
+  addToFlowCallback = () => {
+    this.fetchContact()
+    this.fetchTimeline()
+  }
 
   render() {
     const { contact } = this.state
@@ -312,13 +308,7 @@ class ContactProfile extends React.Component {
 
     const thirdColumnSections = [
       <Dates contact={contact} key="s1" />,
-      // <Flows
-      //   key="s2"
-      //   contactId={contact.id}
-      //   flows={contact.flows}
-      //   user={user}
-      // />,
-      <Deals contact={contact} key="s3" />
+      <Deals contact={contact} key="s2" />
     ]
 
     const _props = {
@@ -340,11 +330,21 @@ class ContactProfile extends React.Component {
                 : null
             }
             closeButtonQuery={this.props.location.state}
-            // addToFlowCallback={this.addToFlowCallback}
+            addToFlowCallback={this.addToFlowCallback}
           />
 
           <ColumnsContainer>
             <SideColumnWrapper>
+              {!this.state.isDesktopScreen && (
+                <Card>
+                  <Flows
+                    flows={contact.flows}
+                    contactId={contact.id}
+                    onStop={this.stopFlow}
+                    addCallback={this.addToFlowCallback}
+                  />
+                </Card>
+              )}
               <Card>
                 <Tags contact={contact} />
               </Card>
@@ -358,15 +358,6 @@ class ContactProfile extends React.Component {
                 <Details {..._props} />
 
                 <Partner {..._props} />
-
-                {/* {!this.state.isDesktopScreen && (
-                  <Flows
-                    contactId={contact.id}
-                    flows={contact.flows}
-                    user={user}
-                    onStop={this.stopFlow}
-                  />
-                )} */}
 
                 {!this.state.isDesktopScreen && <Deals contact={contact} />}
 
@@ -429,6 +420,13 @@ class ContactProfile extends React.Component {
 
             {this.state.isDesktopScreen && (
               <ThirdColumn>
+                <Card>
+                  <Flows
+                    flows={contact.flows}
+                    contactId={contact.id}
+                    onStop={this.stopFlow}
+                  />
+                </Card>
                 <Card>{thirdColumnSections}</Card>
               </ThirdColumn>
             )}

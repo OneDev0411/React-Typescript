@@ -203,11 +203,7 @@ export class TourDrawer extends React.Component {
     const { isDisabled } = this.state
 
     return (
-      <Drawer
-        isOpen={this.props.isOpen}
-        onClose={this.props.onClose}
-        showFooter={false}
-      >
+      <Drawer open={this.props.isOpen} onClose={this.props.onClose}>
         <Drawer.Header title={`${this.isNew ? 'New' : 'Edit'} Tour`} />
         <Drawer.Body>
           <LoadSaveReinitializeForm

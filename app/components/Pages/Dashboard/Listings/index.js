@@ -2,15 +2,36 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
+import PageSideNav from 'components/PageSideNav'
+import IconSearch from 'components/SvgIcons/Search/IconSearch'
+import IconNotification from 'components/SvgIcons/Notifications/IconNotifications'
 import {
   Container as PageContainer,
-  Menu as SideMenu,
   Content as PageContent
-} from '../../../../views/components/SlideMenu'
-import { ListTitle } from '../../../../views/components/SlideMenu/Menu/styled'
+} from 'components/SlideMenu'
 
-import { MainNav } from './MainNav'
 import SavedSearchesList from './SavedSearchesList'
+
+const urlGenerator = url => `/dashboard/mls${url}`
+
+const sideNavSections = [
+  {
+    title: 'Properties',
+    items: [
+      {
+        isIndex: true,
+        title: 'Search',
+        icon: IconSearch,
+        link: urlGenerator('/')
+      },
+      {
+        title: 'Following',
+        icon: IconNotification,
+        link: urlGenerator('/following')
+      }
+    ]
+  }
+]
 
 class Listings extends Component {
   state = {
@@ -36,12 +57,9 @@ class Listings extends Component {
           className={`l-listings ${user ? 'l-listings--logged' : ''}`}
         >
           {user && (
-            <SideMenu isOpen={isSideMenuOpen}>
-              <ListTitle>Properties</ListTitle>
-              <MainNav />
-
+            <PageSideNav isOpen={isSideMenuOpen} sections={sideNavSections}>
               <SavedSearchesList />
-            </SideMenu>
+            </PageSideNav>
           )}
 
           <PageContent isSideMenuOpen={isSideMenuOpen} style={{ padding: 0 }}>

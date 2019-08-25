@@ -27,7 +27,7 @@ export function getActiveTeam(user: Partial<IUser> = {}): IUserTeam | null {
   return activeTeam || null
 }
 
-export function getActiveTeamId(user: IUser): string | null {
+export function getActiveTeamId(user: IUser): UUID | null {
   if (user.active_brand) {
     return user.active_brand
   }
@@ -158,4 +158,21 @@ export function getUserRoles(team: IBrand, userId: string) {
         roleUser => notDeleted(roleUser) && roleUser.user.id === userId
       )
   )
+}
+
+export function getBrandByType(user, type) {
+  const team = getActiveTeam(user)
+  if (team === null) {
+    return null
+  }
+
+  let brand: IBrand | null = team.brand
+
+  do {
+    if (brand.brand_type === type) {
+      return brand
+    }
+
+    brand = brand.parent
+  } while (brand)
 }

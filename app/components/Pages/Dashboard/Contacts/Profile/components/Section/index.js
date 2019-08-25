@@ -7,7 +7,9 @@ import { Container, Header, Title } from './styled'
 Section.propTypes = {
   onEdit: PropTypes.func,
   style: PropTypes.shape(),
-  title: PropTypes.string
+  title: PropTypes.string,
+  titleRenderer: PropTypes.func,
+  children: PropTypes.node
 }
 
 Section.defaultProps = {
@@ -18,7 +20,11 @@ export function Section(props) {
   return (
     <Container>
       <Header alignCenter justifyBetween>
-        <Title id={props.title}>{props.title}</Title>
+        {props.titleRenderer ? (
+          props.titleRenderer()
+        ) : (
+          <Title id={props.title}>{props.title}</Title>
+        )}
         <Menu onEdit={props.onEdit} />
       </Header>
       <div style={props.style}>{props.children}</div>

@@ -11,7 +11,10 @@ import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import Search from 'components/Grid/Search'
 
 import { selectDealTasks } from 'reducers/deals/tasks'
+import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 import { getChecklistById } from 'reducers/deals/checklists'
+
+import { getDocumentLastState } from 'deals/utils/get-document-last-state'
 
 import { moveTaskFile } from 'actions/deals'
 
@@ -31,7 +34,7 @@ import {
   ViewDocument
 } from './styled'
 
-class DocumentRow extends React.Component {
+export class DocumentRow extends React.Component {
   state = {
     searchFilter: '',
     selectedStashFile: null
@@ -122,18 +125,25 @@ class DocumentRow extends React.Component {
       )
 
   getDocuments = () => {
-    const attachments = []
-    const submissions = []
+    let attachments = []
+    let submissions = []
 
     this.props.tasks.forEach(task => {
-      // get submission
       if (task.submission) {
-        submissions.push(
+        const files = getDocumentLastState({
+          type: 'task',
+          deal: this.props.deal,
+          envelopes: this.props.envelopes,
+          task
+        }).map(({ originalFile: file }) =>
           normalizeAttachment({
             type: 'form',
+            file,
             task
           })
         )
+
+        submissions = [...submissions, ...files]
       }
 
       // get attachments of task
@@ -141,13 +151,21 @@ class DocumentRow extends React.Component {
         task.room.attachments
           .filter(file => file.mime === 'application/pdf')
           .forEach(file => {
-            attachments.push(
+            const files = getDocumentLastState({
+              type: 'document',
+              deal: this.props.deal,
+              document: file,
+              envelopes: this.props.envelopes,
+              task
+            }).map(({ originalFile: file }) =>
               normalizeAttachment({
                 type: 'file',
                 task,
                 file
               })
             )
+
+            attachments = [...attachments, ...files]
           })
       }
     })
@@ -264,7 +282,8 @@ function mapStateToProps({ deals, user }, props) {
   return {
     user,
     checklists: deals.checklists,
-    tasks: selectDealTasks(props.deal, deals.checklists, deals.tasks)
+    tasks: selectDealTasks(props.deal, deals.checklists, deals.tasks),
+    envelopes: selectDealEnvelopes(props.deal, deals.envelopes)
   }
 }
 

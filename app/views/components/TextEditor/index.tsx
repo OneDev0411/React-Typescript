@@ -14,13 +14,18 @@ import { stateToHTML } from 'draft-js-export-html'
 import { stateFromHTML } from 'draft-js-import-html'
 import cn from 'classnames'
 
+import { Box, Tooltip } from '@material-ui/core'
+
+import Flex from 'styled-flex-component'
+
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 import { isImageFile } from 'utils/file-utils/is-image-file'
 import IconLink from 'components/SvgIcons/Link/IconLink'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
+import { getShortcutTooltip } from 'utils/get-shortcut-tooltip'
+
 import { LinkEditorPopover } from './components/LinkEditorPopover'
-import IconButton from './buttons/IconButton'
 
 import { EditorWrapper, Separator, Toolbar } from './styled'
 import { FieldError } from '../final-form-fields/FieldError'
@@ -28,7 +33,7 @@ import { AddImageButton } from './buttons/AddImageButton'
 import { RichTextButtons } from './buttons/RichTextButtons'
 import { createFilePlugin } from './plugins/draft-js-handle-files-plugin'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
-import { replaceImage } from './utils/replace-image'
+import { updateEntityData } from './modifiers/update-entity-data'
 import { InlineEntityPopover } from './components/InlineEntityPopover'
 import { LinkPreview } from './components/LinkPreview/LinkPreview'
 import { Checkbox } from '../Checkbox'
@@ -36,6 +41,11 @@ import { TextEditorProps } from './types'
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 import { createEditorRef } from './create-editor-ref'
 import { createPlugins } from './create-plugins'
+import { TemplateVariablesButton } from '../TemplateVariablesButton'
+import { ITemplateVariableSuggestion } from '../TemplateVariablesButton/types'
+import { insertTemplateVariable } from './modifiers/insert-template-expression'
+import { removeUnwantedEmptyLineBeforeAtomic } from './modifiers/remove-unwanted-empty-block-before-atomic'
+import { ToolbarIconButton } from './buttons/ToolbarIconButton'
 
 /**
  * Html wysiwyg editor.
@@ -62,7 +72,7 @@ export const TextEditor = forwardRef(
       onChange = () => {},
       placeholder = 'Type something…',
       plugins = [],
-      settings = {},
+      DraftEditorProps = {},
       uploadImage,
       signature,
       hasSignatureByDefault = false,
@@ -70,6 +80,8 @@ export const TextEditor = forwardRef(
       enableImage = false,
       enableRichText = true,
       enableSignature = false,
+      enableTemplateVariables = false,
+      templateVariableSuggestionGroups,
       onAttachmentDropped
     }: TextEditorProps,
     ref
@@ -77,6 +89,7 @@ export const TextEditor = forwardRef(
     const signatureRef = useRef<TextEditorProps['signature']>(undefined)
     const editorElementRef = useRef<HTMLDivElement>(null)
     const editorRef = useRef<PluginsEditor>(null)
+    const editorStateRef = useRef<EditorState | null>(null)
     const originalEditorRef = useRef<DraftEditor | null>(null)
     const [linkEditorOpen, setLinkEditorOpen] = useState(false)
     const confirmation = useContext(ConfirmationModalContext)
@@ -85,7 +98,12 @@ export const TextEditor = forwardRef(
      * Images are not rendered appropriately without this option.
      */
     const { stateToHtmlOptions, stateFromHtmlOptions } = useMemo(
-      () => getHtmlConversionOptions(() => editorRef.current),
+      () =>
+        getHtmlConversionOptions(() =>
+          editorRef.current // editorRef is null in first render
+            ? editorRef.current.getEditorState()
+            : editorStateRef.current
+        ),
       []
     )
 
@@ -132,11 +150,15 @@ export const TextEditor = forwardRef(
         stateFromHTML(initialValue, stateFromHtmlOptions)
       )
 
-      return hasSignatureByDefault && signature
+      return hasSignatureByDefault &&
+      !initialValue /* If there is some initial value, we don't want to mess with it */ &&
+        signature
         ? signaturePlugin.modifiers.appendSignature(initialState)
         : initialState
     }
     const [editorState, setEditorState] = useState(getInitialState)
+
+    editorStateRef.current = editorState
 
     useImperativeHandle(
       ref,
@@ -199,10 +221,12 @@ export const TextEditor = forwardRef(
       const dataUrl = await readFileAsDataUrl(file)
 
       handleChange(
-        imagePlugin.addImage(
-          editorState,
-          dataUrl,
-          uploadImage ? { uploading: true } : {}
+        removeUnwantedEmptyLineBeforeAtomic(
+          imagePlugin.addImage(
+            editorState,
+            dataUrl,
+            uploadImage ? { uploading: true } : {}
+          )
         )
       )
 
@@ -217,7 +241,12 @@ export const TextEditor = forwardRef(
           const latestState = editorRef.current.getEditorState()
 
           handleChange(
-            replaceImage(imagePlugin, latestState, dataUrl, uploadedImageUrl)
+            updateEntityData(
+              imagePlugin,
+              latestState,
+              data => data.src === dataUrl,
+              { src: uploadedImageUrl, uploading: false }
+            )
           )
         }
       } else {
@@ -230,7 +259,7 @@ export const TextEditor = forwardRef(
     const showNoSignatureModal = () => {
       confirmation!.setConfirmationModal({
         message:
-          "You don't have an email signature. Would you like to set one?",
+          'You don’t have an email signature yet. Would you like to create one?',
         confirmLabel: 'Set signature',
         onConfirm: onEditSignature
       })
@@ -260,42 +289,18 @@ export const TextEditor = forwardRef(
 
     const allPlugins = [...defaultPlugins, ...plugins]
 
+    const insertVariable = (suggestion: ITemplateVariableSuggestion) => {
+      setEditorState(
+        insertTemplateVariable(
+          editorState,
+          suggestion.expression,
+          suggestion.defaultFallback
+        )
+      )
+    }
+
     return (
-      <div className={className}>
-        <Toolbar>
-          {enableRichText && (
-            <>
-              <RichTextButtons richButtonsPlugin={richButtonsPlugin} />
-              <IconButton
-                onClick={event => {
-                  setLinkEditorOpen(true)
-                  event.preventDefault()
-                  event.stopPropagation()
-                }}
-              >
-                <IconLink />
-              </IconButton>
-            </>
-          )}
-
-          {enableImage && <AddImageButton onImageSelected={addImage} />}
-          {enableSignature && (
-            <>
-              <Separator />
-              <Checkbox
-                checked={signaturePlugin.hasSignature()}
-                onChange={() =>
-                  signature
-                    ? signaturePlugin.toggleSignature()
-                    : showNoSignatureModal()
-                }
-              >
-                Signature
-              </Checkbox>
-            </>
-          )}
-        </Toolbar>
-
+      <Flex column className={className}>
         <EditorWrapper
           ref={editorElementRef}
           className={cn({
@@ -315,9 +320,8 @@ export const TextEditor = forwardRef(
             plugins={allPlugins}
             placeholder={placeholder}
             ref={editorRef}
-            {...settings}
+            {...DraftEditorProps}
           />
-          <alignmentPlugin.AlignmentTool />
           <LinkEditorPopover
             editorRef={originalEditorRef}
             editorState={editorState}
@@ -344,9 +348,61 @@ export const TextEditor = forwardRef(
             </InlineEntityPopover>
           )}
         </EditorWrapper>
+        <Toolbar>
+          {enableRichText && (
+            <>
+              <RichTextButtons richButtonsPlugin={richButtonsPlugin} />
+              <Tooltip title={getShortcutTooltip('Insert Link', 'K')}>
+                <ToolbarIconButton
+                  onClick={event => {
+                    setLinkEditorOpen(true)
+                    event.preventDefault()
+                    event.stopPropagation()
+                  }}
+                >
+                  <IconLink />
+                </ToolbarIconButton>
+              </Tooltip>
+              <Separator />
+            </>
+          )}
 
+          {enableImage && (
+            <>
+              <AddImageButton onImageSelected={addImage} />
+              <Separator />
+            </>
+          )}
+
+          {enableTemplateVariables && (
+            <>
+              <TemplateVariablesButton
+                suggestions={templateVariableSuggestionGroups || []}
+                onSuggestionSelected={suggestion => insertVariable(suggestion)}
+              />
+              <Separator />
+            </>
+          )}
+
+          {enableSignature && (
+            <Box pl={0.5}>
+              <Checkbox
+                inputProps={{ tabIndex: 1 }}
+                checked={signaturePlugin.hasSignature()}
+                onChange={() =>
+                  signature
+                    ? signaturePlugin.toggleSignature()
+                    : showNoSignatureModal()
+                }
+              >
+                Signature
+              </Checkbox>
+            </Box>
+          )}
+        </Toolbar>
+        <alignmentPlugin.AlignmentTool />
         {input && <FieldError name={input.name} />}
-      </div>
+      </Flex>
     )
   }
 )

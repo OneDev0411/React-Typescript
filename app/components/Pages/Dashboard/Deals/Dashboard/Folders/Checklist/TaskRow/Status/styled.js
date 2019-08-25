@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import { red } from 'views/utils/colors'
+
 export const Label = styled.div`
   display: flex;
   align-items: center;
@@ -38,5 +40,9 @@ export const Label = styled.div`
 
   &.Approved {
     background-color: #35b863;
+  }
+
+  &.Required {
+    background-color: ${red.A100};
   }
 `

@@ -1,7 +1,6 @@
 import React from 'react'
 
-import Search from '../../../../../../views/components/Grid/Search'
-
+import Search from 'components/Grid/Search'
 
 let persistentSearchInput = ''
 export class SearchContacts extends React.Component {
@@ -13,7 +12,7 @@ export class SearchContacts extends React.Component {
 
   render() {
     return (
-      <div>
+      <div data-test="contacts-list-search">
         <Search
           disableOnSearch={false}
           isSearching={this.props.isSearching}

@@ -164,6 +164,7 @@ Grid.propTypes = {
   isFetching: PropTypes.bool,
   isFetchingMore: PropTypes.bool,
   isFetchingMoreBefore: PropTypes.bool,
+  isHeaderSticky: PropTypes.bool,
   isToolbarSticky: PropTypes.bool,
   showTableHeader: PropTypes.bool,
   showToolbar: PropTypes.bool,
@@ -180,6 +181,7 @@ Grid.propTypes = {
 }
 
 Grid.defaultProps = {
+  isHeaderSticky: false,
   isFetching: false,
   isFetchingMore: false,
   isFetchingMoreBefore: false,

@@ -17,6 +17,9 @@ export async function createTask(task, query = {}) {
       .post('/crm/tasks')
       .send(task)
       .query(query)
+      .query({
+        'associations[]': ['crm_task.associations', 'crm_association.contact']
+      })
 
     return response.body.data
   } catch (error) {

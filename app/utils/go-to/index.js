@@ -16,13 +16,15 @@ export function goTo(url, pageTitle = null, query = {}, state = {}) {
     }
   } : {}
 
-  const search = Object.keys(query).reduce((acc, curr, index) => {
-    const mark = index === 0 ? '?' : '&'
+  const [pathname, embeddedSearch] = url.split('?');
+
+  const search = Object.keys(query).reduce((acc, curr) => {
+    const mark = !acc ? '?' : '&'
     return `${acc}${mark}${curr}=${query[curr]}`
-  }, '')
+  }, embeddedSearch ? `?${embeddedSearch}` : '')
 
   browserHistory.push({
-    pathname: url,
+    pathname,
     search,
     state: {
       ...state,

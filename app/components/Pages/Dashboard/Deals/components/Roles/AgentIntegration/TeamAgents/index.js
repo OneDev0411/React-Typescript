@@ -121,7 +121,7 @@ class TeamAgents extends React.Component {
     }
 
     return (
-      <Drawer isOpen onClose={props.onClose} showFooter={false}>
+      <Drawer open onClose={props.onClose}>
         <Drawer.Header title={props.title || 'Team Agents'} />
 
         <Drawer.Body>

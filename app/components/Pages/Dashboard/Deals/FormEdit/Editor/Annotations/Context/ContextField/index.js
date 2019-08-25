@@ -25,6 +25,8 @@ export function ContextField(props) {
     Object.values(props.values).join(' ')
   )
 
+  const isValueSet = fieldValue || fieldValue === 0
+
   const getDate = () => {
     const date = new Date(fieldValue)
 
@@ -59,7 +61,6 @@ export function ContextField(props) {
           <Body>
             {context.current.data_type === 'Date' ? (
               <DatePicker
-                showTodayButton={false}
                 onChange={date => setFieldValue(formatDate(date))}
                 selectedDate={getDate()}
               />
@@ -87,6 +88,7 @@ export function ContextField(props) {
 
             <ActionButton
               size="small"
+              disabled={!isValueSet}
               onClick={() => handleSaveValue(fieldValue)}
             >
               Save

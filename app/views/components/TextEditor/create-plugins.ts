@@ -23,6 +23,7 @@ import createPasteLinkPlugin from './plugins/draft-js-paste-link-plugin'
 import { linkKeyBinding } from './utils/link-key-binding'
 
 import { withUploadingIndicator } from './block-decorators/with-uploading-indicator'
+import { resizablePluginOptions } from './config'
 
 export function createPlugins(
   setLinkEditorOpen: (open: boolean) => void,
@@ -32,7 +33,7 @@ export function createPlugins(
   const focusPlugin = createFocusPlugin({
     theme: { focused: 'focused', unfocused: 'unfocused' }
   })
-  const resizeablePlugin = createResizeablePlugin()
+  const resizeablePlugin = createResizeablePlugin(resizablePluginOptions)
   const blockDndPlugin = createBlockDndPlugin()
   const alignmentPlugin = createAlignmentPlugin()
   const { AlignmentTool } = alignmentPlugin

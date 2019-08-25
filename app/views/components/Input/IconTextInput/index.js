@@ -51,6 +51,7 @@ class IconTextInput extends React.Component {
       <Container style={style} isFocused={this.state.isFocused}>
         {prefixElementRenderer()}
         <TextInput
+          data-test="icon-text-input"
           value={value}
           placeholder={placeholder}
           onChange={this.handleChange}

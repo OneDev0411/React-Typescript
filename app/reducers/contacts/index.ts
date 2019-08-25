@@ -12,6 +12,7 @@ import { IOauthAccountsState, oAuthAccounts } from './oAuthAccounts'
 export interface IContactReduxState {
   oAuthAccounts: IOauthAccountsState
   attributeDefs: IAttributeDefsState
+  tags: any // TODO(type): add type definitions
   list: IContactReduxListState
   filterSegments: IContactReduxFilterSegmentState
 }

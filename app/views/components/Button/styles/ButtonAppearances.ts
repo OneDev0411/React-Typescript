@@ -3,7 +3,7 @@ import Chromath from 'chromath'
 
 import { ActionButtonProps } from 'components/Button/ActionButton'
 
-import { grey, primary, primaryDark } from '../../../utils/colors'
+import { grey, red, primary, primaryDark } from '../../../utils/colors'
 
 function checkRoundedDirection(props) {
   if (props.rightRounded) {
@@ -94,7 +94,9 @@ export const ButtonAppearances = {
     color: ${props => (props.isOpen ? primary : '#000')};
     background-color: ${props => (props.isActive ? grey.A100 : 'transparent')};
 
+    &.ghost,
     &[disabled] {
+      color: ${grey.A550};
       border-color: ${grey.A550};
 
       svg {
@@ -109,6 +111,18 @@ export const ButtonAppearances = {
 
       svg {
         fill: ${props => props.brandColor || primary};
+      }
+    }
+
+    &.danger:not([disabled]) {
+      color: ${red.primary};
+      border-color: ${red.primary};
+
+      &:hover,
+      &:focus {
+        color: ${red.dark};
+        border-color: ${red.dark};
+        background-color: rgba(244, 59, 56, 0.05);
       }
     }
 

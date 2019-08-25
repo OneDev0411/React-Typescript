@@ -1,53 +1,54 @@
 import { createMuiTheme } from '@material-ui/core'
 
-import {
-  borderColor,
-  disabledBgColor,
-  disabledColor,
-  primary,
-  primaryDark,
-  red
-} from 'views/utils/colors'
+import { borderColor, disabledColor, orange } from 'views/utils/colors'
 
-export const theme = createMuiTheme({
+const white = '#fff'
+
+const theme = createMuiTheme({
   // Temporary theme based on our current colors, until design team provides the theme values
   palette: {
     type: 'light',
     primary: {
-      light: '#6566ff', // Temporarily from here: https://material.io/tools/color/#!/?view.left=0&view.right=1&primary.color=003bdf
-      main: primary,
-      dark: primaryDark,
-      contrastText: '#fff'
+      main: '#0945eb',
+      light: '#6971ff',
+      dark: '#001eb7',
+      contrastText: white
+    },
+    secondary: {
+      main: '#01040D',
+      light: '#0F121A',
+      dark: '#000000',
+      contrastText: white
     },
     action: {
-      disabled: disabledColor,
-      disabledBackground: disabledBgColor
+      active: 'rgba(0, 0, 0, 0.54)',
+      hover: 'rgba(0, 0, 0, 0.08)',
+      hoverOpacity: 0.08,
+      selected: 'rgba(0, 0, 0, 0.14)',
+      disabled: 'rgba(0, 0, 0, 0.26)',
+      disabledBackground: 'rgba(0, 0, 0, 0.12)'
     },
     divider: borderColor,
     error: {
-      main: red.A200,
-      light: red.A100,
-      dark: red.primary
+      light: '#ff7363',
+      main: '#F43B38',
+      dark: '#b90010',
+      contrastText: white
+    },
+    text: {
+      secondary: disabledColor
     }
   },
   shape: {
     borderRadius: 4
   },
   typography: {
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      'Barlow',
-      '"Segoe UI"',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"'
-    ].join(','),
+    fontFamily: ['Barlow'].join(','),
     button: {
       textTransform: 'none'
+    },
+    h5: {
+      fontFamily: 'Merriweather'
     }
   },
   props: {
@@ -61,3 +62,17 @@ export const theme = createMuiTheme({
     modal: 1001
   }
 })
+
+// For extending theme, you need to add the typings in `/types/@material-ui/core.d.ts`
+theme.palette.warning = {
+  main: orange.primary,
+  dark: orange.dark,
+  light: orange.light
+}
+
+if (process.env.NODE_ENV === 'development') {
+  // eslint-disable-next-line
+  ; (window as any).theme = theme
+}
+
+export { theme }

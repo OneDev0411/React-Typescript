@@ -41,6 +41,7 @@ import { SearchContacts } from './Search'
 import Header from './Header'
 import ContactFilters from './Filters'
 import TagsList from './TagsList'
+import FlowsList from './FlowsList'
 
 import {
   FLOW_FILTER_ID,
@@ -502,6 +503,9 @@ class ContactsList extends React.Component {
             associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
             getPredefinedLists={getPredefinedContactLists}
             onChange={this.handleChangeSavedSegment}
+          />
+          <FlowsList
+            onChange={_.debounce(() => this.handleFilterChange({}, true), 300)}
           />
           <TagsList
             onFilterChange={filters => this.handleFilterChange(filters, true)}

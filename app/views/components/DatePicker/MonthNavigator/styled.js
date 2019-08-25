@@ -7,14 +7,21 @@ export const Container = styled.div`
   right: 0rem;
   top: 0.3rem;
   display: flex;
+  align-items: center;
 `
 
 export const Button = styled.span`
   cursor: pointer;
   display: flex;
-  svg > path {
-    fill: #000000;
+  margin-left: 0.25rem;
+  border-radius: 100%;
+  border: 1px solid #b8c4cc;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
   }
+
   &:hover {
     svg > path {
       fill: ${primary};

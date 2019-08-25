@@ -36,7 +36,7 @@ export const CheckMarkBox = styled.div<CheckMarkBoxProps>`
   justify-content: center;
   border-radius: 3px;
   background-color: ${props => (props.checked ? primary : '#fff')};
-  border: solid 1px ${props => (props.checked ? primary : grey.A550)};
+  border: solid 1px ${props => (props.checked ? primary : '#000')};
 
   &:hover {
     background-color: ${props => (props.checked ? primary : grey.A100)};

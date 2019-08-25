@@ -26,7 +26,7 @@ export function SyncSuccessfulModal({
         <h2>You’re all set!</h2>
         <p>
           Your Contacts imported successfuly, start tagging them or add them to
-          a flow and let Rechat do the rest for you.
+          a Flow and let Rechat do the rest for you.
         </p>
         <br />
         <OrganizeSyncedContactsButton provider={provider}>

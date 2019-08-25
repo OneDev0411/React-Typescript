@@ -908,7 +908,7 @@ const ListingDesktopView = ({
         <Link
           style={{
             padding: '1rem',
-            color: '#003bdf',
+            color: '#0945eb',
             textDecoration: 'none',
             backgroundColor: '#fff'
           }}

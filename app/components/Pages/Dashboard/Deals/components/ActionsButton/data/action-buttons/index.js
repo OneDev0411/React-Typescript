@@ -16,3 +16,4 @@ export const REVIEW_ENVELOPE_BUTTON = 14
 export const SPLIT_PDF_BUTTON = 15
 export const APPROVE_TASK_BUTTON = 16
 export const DECLINE_TASK_BUTTON = 17
+export const TASK_REQUIRED = 18

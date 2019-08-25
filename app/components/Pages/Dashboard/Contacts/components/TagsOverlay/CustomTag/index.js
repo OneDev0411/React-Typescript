@@ -7,7 +7,7 @@ import TagIcon from '../../../../../../../views/components/SvgIcons/Tag/TagIcon'
 
 const borderColor = (inputFocused, error) => {
   if (error) {
-    return 'red'
+    return '#F43B38'
   }
 
   if (inputFocused) {

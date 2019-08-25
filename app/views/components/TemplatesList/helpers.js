@@ -1,15 +1,27 @@
 import fecha from 'fecha'
 
-export function getThumbnail(template) {
+export function getTemplateImage(template, brokerageBrand) {
   if (template.file) {
-    return template.file.preview_url
+    const URL = template.file.preview_url
+
+    return {
+      original: URL,
+      thumbnail: URL
+    }
   }
 
-  return `${template.url}/thumbnail.png`
+  const brandId = brokerageBrand ? `/${brokerageBrand.id}` : ''
+  const generateURL = type =>
+    `${template.url}${brandId}/${type}.${template.video ? 'mp4' : 'png'}`
+
+  return {
+    original: generateURL('preview'),
+    thumbnail: generateURL('thumbnail')
+  }
 }
 
 export function createdAt(date) {
-  return fecha.format(new Date(date * 1000), '[on] MMMM DD, YYYY [at] hh:mm A')
+  return fecha.format(new Date(date * 1000), 'MMM DD, YYYY - hh:mm A')
 }
 
 export function plural(word, isPlural) {
@@ -105,18 +117,14 @@ export function itemButtonText(item) {
   }
 
   if (isInstance) {
-    text = isEmail ? 'Compose' : 'Share'
+    text = isEmail ? 'Send to' : 'Share'
   }
 
   return text
 }
 
-export function itemDateText(time, isLoading) {
-  if (isLoading) {
-    return 'Deleting...'
-  }
-
-  return `Created ${createdAt(time)}`
+export function itemDateText(time) {
+  return createdAt(time)
 }
 
 export function getTemplateType(initType, template) {

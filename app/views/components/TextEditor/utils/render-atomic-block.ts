@@ -1,6 +1,9 @@
 import { CSSProperties } from 'react'
 
 import { AtomicBlockEntityData } from '../types'
+import { resizablePluginOptions } from '../config'
+import { getAlignmentStyles } from './get-alignment-styles'
+import { stylesToString } from './styles-to-string'
 
 /**
  * Creates style string based on entity data created by plugins used for
@@ -16,7 +19,7 @@ export function renderAtomicBlockStyles({
   width,
   height
 }: AtomicBlockEntityData) {
-  return styleString({
+  return stylesToString({
     ...getAlignmentStyles(alignment),
     ...getSizeStyles(width, height)
   })
@@ -31,38 +34,16 @@ function getSizeStyles(
   // NOTE: we currently are using 'relative' positioning which is the default
   // mode in resizable draftjs plugin. If we change that, we need to change
   // here too
-  styles.width = `${width || 40}%`
+  const horizontalUnit = resizeTypeToUnit(resizablePluginOptions.horizontal)
+  const verticalUnit = resizeTypeToUnit(resizablePluginOptions.vertical)
+
+  styles.width = `${width || 40}${horizontalUnit}`
 
   if (height) {
-    styles.height = `${height || 40}%`
+    styles.height = `${height || 40}${verticalUnit}`
   }
 
   return styles
 }
-function getAlignmentStyles(
-  alignment: AtomicBlockEntityData['alignment']
-): CSSProperties {
-  switch (alignment) {
-    case 'center':
-      return {
-        display: 'block',
-        marginLeft: 'auto',
-        marginRight: 'auto'
-      }
-    case 'left':
-    case 'right':
-      return {
-        float: alignment
-      }
-    default:
-      return {}
-  }
-}
 
-const styleString = (style: CSSProperties) =>
-  Object.entries(style).reduce((styleString, [propName, propValue]) => {
-    return `${styleString}${normalizePropName(propName)}:${propValue};`
-  }, '')
-
-const normalizePropName = propName =>
-  propName.replace(/([A-Z])/g, matches => `-${matches[0].toLowerCase()}`)
+const resizeTypeToUnit = type => (type === 'absolute' ? 'px' : '%')

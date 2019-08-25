@@ -313,6 +313,9 @@
         "**/*.d.ts"
       ],
       "rules": {
+        /* seems it doesn't work!*/
+        "react/jsx-no-duplicate-props": [2, { "ignoreCase": false }],
+
         "react/no-multi-comp": [
           "off"
         ]

@@ -49,6 +49,11 @@ export const Row = styled.div`
               a,
               .primaryHover {
                 color: ${primary};
+                border-color: ${primary};
+
+                svg {
+                  fill: ${primary};
+                }
               }
               .hover-color--black {
                 color: ${importantBlack};

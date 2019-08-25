@@ -6,13 +6,12 @@ import idx from 'idx'
 import { getContact } from 'models/contacts/get-contact'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
-import normalizeContactForEmailCompose from 'models/email-compose/helpers/normalize-contact'
+import { normalizeContactForEmailCompose } from 'models/email/helpers/normalize-contact'
 
 import { confirmation } from 'actions/confirmation'
 
 import InstantMarketing from 'components/InstantMarketing'
-import ActionButton from 'components/Button/ActionButton'
-
+import Button from 'components/Button/ActionButton'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
@@ -67,6 +66,12 @@ class SendContactCard extends React.Component {
     return state
   }
 
+  componentDidMount() {
+    if (this.props.isEdit && !this.state.isBuilderOpen) {
+      this.setState({ isBuilderOpen: true })
+    }
+  }
+
   showBuilder = async () => {
     if (this.state.contact) {
       return this.openBuilder()
@@ -107,10 +112,13 @@ class SendContactCard extends React.Component {
   }
 
   closeBuilder = () => {
-    this.setState({
-      isBuilderOpen: false,
-      isComposeEmailOpen: false
-    })
+    this.setState(
+      {
+        isBuilderOpen: false,
+        isComposeEmailOpen: false
+      },
+      this.props.handleTrigger
+    )
   }
 
   toggleComposeEmail = () =>
@@ -193,30 +201,18 @@ class SendContactCard extends React.Component {
 
   get TemplateInstanceData() {
     return {
-      contacts: this.Recipients.map(r => r.contactId)
+      contacts: this.Recipients.map(r => r.contact.id)
     }
   }
 
   get Recipients() {
-    return normalizeContactForEmailCompose(
-      this.state.contact,
-      this.props.attributeDefs,
-      {
-        readOnly: true
-      }
-    )
+    return normalizeContactForEmailCompose(this.state.contact)
   }
 
   closeSocialDrawer = () =>
     this.setState({
       isSocialDrawerOpen: false
     })
-
-  componentDidMount() {
-    if (this.props.isEdit && !this.state.isBuilderOpen) {
-      this.setState({ isBuilderOpen: true })
-    }
-  }
 
   render() {
     if (hasMarketingAccess(this.props.user) === false) {
@@ -231,14 +227,14 @@ class SendContactCard extends React.Component {
           onClose={this.closeMissingEmailDialog}
         />
         {this.props.contact || this.props.contactId ? (
-          <ActionButton
+          <Button
             appearance="outline"
             onClick={this.showBuilder}
             disabled={this.state.isFetchingContact}
-            {...this.props.buttonStyle}
+            {...this.props.buttonStyle} // TODO: buttonStyle -> buttonProps
           >
             {this.props.children}
-          </ActionButton>
+          </Button>
         ) : (
           <SearchContactDrawer
             title="Select a Contact"
@@ -265,9 +261,11 @@ class SendContactCard extends React.Component {
             isOpen
             hasStaticBody
             disableAddNewRecipient
-            from={this.state.owner}
-            recipients={this.Recipients}
-            body={this.state.emailBody}
+            initialValues={{
+              from: this.state.owner,
+              to: this.Recipients,
+              body: this.state.emailBody
+            }}
             onSent={this.closeBuilder}
             onClose={this.toggleComposeEmail}
             getEmail={this.getEmail}
@@ -297,10 +295,9 @@ class SendContactCard extends React.Component {
   }
 }
 
-function mapStateToProps({ user, contacts }) {
+function mapStateToProps({ user }) {
   return {
-    user,
-    attributeDefs: contacts.attributeDefs
+    user
   }
 }
 

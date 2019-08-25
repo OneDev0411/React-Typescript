@@ -10,9 +10,10 @@ const TableHeader = ({
   sizes,
   getHeaderProps,
   getHeaderRowProps,
-  sortablePlugin
+  sortablePlugin,
+  isHeaderSticky
 }) => (
-  <Header {...getHeaderProps()}>
+  <Header isHeaderSticky={isHeaderSticky} {...getHeaderProps()}>
     <HeaderRow {...getHeaderRowProps()}>
       {columns &&
         columns

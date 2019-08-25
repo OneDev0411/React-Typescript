@@ -81,10 +81,11 @@ class BasicTable extends React.Component {
             getHeaderRowProps={getHeaderRowProps}
             selectablePlugin={this.props.selectablePlugin}
             sortablePlugin={this.props.sortablePlugin}
+            isHeaderSticky={this.props.isHeaderSticky}
           />
         )}
 
-        <TBody {...getBodyProps()}>
+        <TBody {...getBodyProps()} data-test="grid-body">
           {isFetching && !isFetchingMore && <LoadingState />}
           {SubComponent && <SubComponent data={data} columns={columns} />}
 

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 
 import DealRole from 'components/DealRole'
@@ -46,19 +46,20 @@ export class RoleAgentIntegration extends React.Component {
   }
 
   getShouldSelectRoleFromAgentsList() {
-    const { deal, allowedRoles } = this.props
+    const { deal, role, allowedRoles, isDoubleEnded } = this.props
     const dealSide = deal ? deal.deal_type : this.props.dealSide
-    const role = allowedRoles && allowedRoles[0]
+    const selectedRole = allowedRoles && allowedRoles[0]
 
-    if (!role || !AGENT_ROLES.includes(role)) {
+    if (role || !selectedRole || !AGENT_ROLES.includes(selectedRole)) {
       return false
     }
 
     if (
-      this.props.isDoubleEnded ||
+      isDoubleEnded ||
       (dealSide === 'Selling' &&
-        ['SellerAgent', 'CoSellerAgent'].includes(role)) ||
-      (dealSide === 'Buying' && ['BuyerAgent', 'CoBuyerAgent'].includes(role))
+        ['SellerAgent', 'CoSellerAgent'].includes(selectedRole)) ||
+      (dealSide === 'Buying' &&
+        ['BuyerAgent', 'CoBuyerAgent'].includes(selectedRole))
     ) {
       return true
     }
@@ -74,14 +75,15 @@ export class RoleAgentIntegration extends React.Component {
     /**
      * https://gitlab.com/rechat/web/issues/1668#note_97457381
      */
-    if (dealSide === 'Buying' && role === 'BuyerAgent') {
+    if (
+      dealSide === 'Buying' &&
+      role === 'BuyerAgent' &&
+      this.props.dealEnderType !== 'OfficeDoubleEnder'
+    ) {
       return true
     }
 
-    return (
-      this.props.isPrimaryAgent &&
-      this.props.dealEnderType !== 'OfficeDoubleEnder'
-    )
+    return this.props.isPrimaryAgent
   }
 
   onSelectAgent = (user, relatedContacts = []) => {

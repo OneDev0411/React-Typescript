@@ -100,7 +100,7 @@ class Rooms extends React.Component {
         image={User.profile_image_url}
         size={size}
         color={color}
-        borderColor={room.id === activeRoom ? '#003bdf' : '#303E4D'}
+        borderColor={room.id === activeRoom ? '#0945eb' : '#303E4D'}
         textSizeRatio={textSizeRatio}
         fgColor={fgColor}
       />

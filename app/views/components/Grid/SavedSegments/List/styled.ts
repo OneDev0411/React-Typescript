@@ -4,13 +4,13 @@ import { blue, primary } from '../../../../utils/colors'
 import IconButton from '../../../Button/IconButton'
 
 export const Container = styled.div`
-  padding: 1.5rem 1rem;
+  padding: 1rem;
 `
 
 export const ListTitle = styled.div`
-  font-size: 21px;
-  margin-bottom: 1.5rem;
   font-weight: 500;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -54,5 +54,9 @@ export const ListItem = styled.div<{ isSelected?: boolean }>`
       opacity: 1;
       visibility: visible;
     }
+  }
+
+  &:last-child {
+    margin-bottom: 0;
   }
 `

@@ -1,6 +1,7 @@
 module.exports = {
   extends: ['@commitlint/config-conventional'],
   rules: {
+    'header-case': [0],
     'type-enum': [
       2,
       'always',
@@ -20,8 +21,8 @@ module.exports = {
 
         // Custom
         'bic',
-        'wip-feat',
-        'wip-fix'
+        'wip_feat',
+        'wip_fix'
       ]
     ]
   }

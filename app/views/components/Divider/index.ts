@@ -11,8 +11,9 @@ interface Props {
    */
   text?: string
   width?: CSSProperties['width']
-  height?: CSSProperties['width']
+  height?: CSSProperties['height']
   margin?: CSSProperties['margin']
+  color?: CSSProperties['backgroundColor']
 }
 
 const getHeight = ({ height, vertical }: Props) =>
@@ -26,7 +27,7 @@ export const Divider = styled.div<Props>`
   height: ${getHeight};
   min-height: ${getHeight};
   margin: ${props => (props.margin ? props.margin : 0)};
-  background-color: ${borderColor};
+  background-color: ${props => (props.color ? props.color : borderColor)};
   position: relative;
   ${(props: Props) =>
     props.text &&

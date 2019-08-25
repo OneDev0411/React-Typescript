@@ -1,9 +1,9 @@
 import Fetch from '../../../services/fetch'
 
-export async function getTemplates(types, mediums) {
+export async function getTemplates(brandId, types, mediums) {
   try {
     const response = await new Fetch()
-      .get('/templates')
+      .get(`/brands/${brandId}/templates`)
       .query({ 'mediums[]': mediums, 'types[]': types })
 
     return response.body.data

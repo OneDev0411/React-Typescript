@@ -6,7 +6,7 @@ import { ScrollableArea } from '../../../../views/components/ScrollableArea'
 import { ACL } from '../../../../constants/acl'
 import LoginIcon from '../../../../views/components/SvgIcons/Login/LoginIcon'
 import DealsIcon from '../../../../views/components/SvgIcons/Deals/IconDeal'
-import DealsIconActive from '../../../../views/components/SvgIcons/Deals/IconDealActive'
+import IconDealFilled from '../../../../views/components/SvgIcons/Deals/IconDealFilled'
 import StoreIcon from '../../../../views/components/SvgIcons/Marketing/IconMarketing'
 import StoreIconActive from '../../../../views/components/SvgIcons/Marketing/IconMarketingActive'
 import MarketingIcon from '../../../../views/components/SvgIcons/PencilRuler/IconPencilRuler'
@@ -22,6 +22,8 @@ import PropertiesIcon from '../../../../views/components/SvgIcons/Properties/Ico
 import PropertiesIconActive from '../../../../views/components/SvgIcons/Properties/IconPropertiesActive'
 import CalendarIcon from '../../../../views/components/SvgIcons/Calendar2/IconCalendar'
 import CalendarIconActive from '../../../../views/components/SvgIcons/Calendar2/IconCalendarActive'
+import IconCog from '../../../../views/components/SvgIcons/CogOutline/IconCogOutline'
+import IconCogActive from '../../../../views/components/SvgIcons/Cog/IconCog'
 import DealsNotifications from '../Deals/components/SideNavBadge'
 
 import { selectNotificationNewCount } from '../../../../reducers/notifications'
@@ -93,7 +95,7 @@ function AppSideNav(props) {
               tooltip="Your Deals"
               to="/dashboard/deals"
               Icon={DealsIcon}
-              ActiveIcon={DealsIconActive}
+              ActiveIcon={IconDealFilled}
             >
               <DealsNotifications />
             </SideNavLinkItem>
@@ -143,6 +145,15 @@ function AppSideNav(props) {
       <SidenavList>
         {user && (
           <SideNavLinkItem
+            tooltip="Account Settings"
+            to="/dashboard/account"
+            Icon={IconCog}
+            ActiveIcon={IconCogActive}
+          />
+        )}
+
+        {user && (
+          <SideNavLinkItem
             tooltip="Notifications"
             to="/dashboard/notifications"
             Icon={NotificationsIcon}
@@ -159,7 +170,7 @@ function AppSideNav(props) {
         <IntercomTrigger
           render={({ activeIntercom, intercomIsActive }) => (
             <SideNavItem>
-              <SideNavTooltip caption="Support">
+              <SideNavTooltip title="Support">
                 <SidenavIconButton
                   inverse
                   onClick={!intercomIsActive ? activeIntercom : () => false}
@@ -173,7 +184,7 @@ function AppSideNav(props) {
 
         {!user && (
           <SideNavItem>
-            <SideNavTooltip caption="Login">
+            <SideNavTooltip title="Login">
               <SidenavLink
                 inverse
                 to={`/signin?redirectTo=${encodeURIComponent(

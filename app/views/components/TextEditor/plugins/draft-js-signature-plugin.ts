@@ -1,9 +1,16 @@
 import { ContentBlock, ContentState, EditorState } from 'draft-js'
 import { PluginFunctions } from 'draft-js-plugins-editor'
 
-import { Options as ImportOptions, stateFromHTML } from 'draft-js-import-html'
+import {
+  CustomBlockFn,
+  Options as ImportOptions,
+  stateFromHTML
+} from 'draft-js-import-html'
+
+import { BlockStyleFn } from 'draft-js-export-html'
 
 import { appendBlocks } from '../utils/append-blocks'
+import { isValidSelection } from '../utils/is-valid-selection'
 
 type SignatureContentType = ContentBlock[] | string
 
@@ -23,6 +30,8 @@ export interface CreateSignaturePluginOptions {
    */
   prependSignatureWithSeparator?: boolean
 
+  numOfEmptyLinesBeforeSignature?: number
+
   stateFromHtmlOptions?: ImportOptions
 }
 
@@ -39,6 +48,7 @@ export interface CreateSignaturePluginOptions {
 export default function createSignaturePlugin({
   signatureContent,
   prependSignatureWithSeparator = true,
+  numOfEmptyLinesBeforeSignature = 2,
   stateFromHtmlOptions
 }: CreateSignaturePluginOptions) {
   let pluginFns: PluginFunctions
@@ -46,24 +56,19 @@ export default function createSignaturePlugin({
   /**
    * Returns weather signature exists in the editor or not.
    */
-  const hasSignature = () => {
-    return (
-      pluginFns &&
-      pluginFns
-        .getEditorState()
-        .getCurrentContent()
-        .getBlocksAsArray()
-        .some(isSignatureBlock)
-    )
+  const hasSignature = (editorState: EditorState) => {
+    return editorState
+      .getCurrentContent()
+      .getBlocksAsArray()
+      .some(isSignatureBlock)
   }
 
   /**
    * Toggles signature. If called with no argument, toggles. if a boolean
    * argument is passed, it enforces weather the signature should be shown
    * or not
-   * @param enabled
    */
-  const toggleSignature = (enabled?: boolean) => {
+  const toggleSignature = (enabled?: boolean, focus = true) => {
     if (!pluginFns) {
       console.error(
         'toggleSignature cannot be called before editor initialization'
@@ -74,22 +79,43 @@ export default function createSignaturePlugin({
 
     const editorState = pluginFns.getEditorState()
 
-    if (!hasSignature() && enabled !== false) {
+    if (!hasSignature(editorState) && enabled !== false) {
       // add signature
-      pluginFns.setEditorState(appendSignature(editorState))
-    } else if (hasSignature() && enabled !== true) {
+      pluginFns.setEditorState(appendSignature(editorState, focus))
+    } else if (hasSignature(editorState) && enabled !== true) {
       // remove signature
-      const blocks = editorState
-        .getCurrentContent()
-        .getBlocksAsArray()
-        .filter(block => !isSignatureBlock(block))
+      const blocks = editorState.getCurrentContent().getBlocksAsArray()
+      const firstSignatureBlockIndex = blocks.findIndex(isSignatureBlock)
+      const isEmptyBlockBeforeSignature = (index, block) =>
+        index === firstSignatureBlockIndex - 1 && block.getText().trim() === ''
+
+      const newBlocks = blocks.filter((block, index) => {
+        return (
+          !isSignatureBlock(block) && !isEmptyBlockBeforeSignature(index, block)
+        )
+      })
+
+      const selection = editorState.getSelection()
+      const newContent = ContentState.createFromBlockArray(
+        newBlocks.length > 0
+          ? newBlocks
+          : ContentState.createFromText('').getBlocksAsArray()
+      )
+
+      const newEditorState = EditorState.push(
+        editorState,
+        newContent,
+        'remove-range'
+      )
+
+      const newSelection = isValidSelection(newContent, selection)
+        ? selection
+        : EditorState.moveSelectionToEnd(newEditorState).getSelection()
 
       pluginFns.setEditorState(
-        EditorState.push(
-          editorState,
-          ContentState.createFromBlockArray(blocks),
-          'remove-range'
-        )
+        focus
+          ? EditorState.forceSelection(newEditorState, newSelection)
+          : EditorState.acceptSelection(newEditorState, newSelection)
       )
     }
   }
@@ -97,22 +123,89 @@ export default function createSignaturePlugin({
     pluginFns = fns
   }
 
-  const appendSignature = (editorState: EditorState) => {
-    return appendBlocks(editorState, [
-      ...stateFromHTML('<br/>').getBlocksAsArray(),
+  const appendSignature = (editorState: EditorState, focus = false) => {
+    const lastBlock = editorState
+      .getCurrentContent()
+      .getBlocksAsArray()
+      .slice(-1)[0]
+
+    const newEditorState = appendBlocks(editorState, [
+      ...stateFromHTML(
+        Array(
+          Math.max(
+            numOfEmptyLinesBeforeSignature -
+              getNumberOfTrailingEmptyLines(lastBlock),
+            0
+          )
+        )
+          .fill(null)
+          .map(() => '<br />')
+          .join('')
+      ).getBlocksAsArray(),
       ...(prependSignatureWithSeparator ? getSignatureSeparator() : []),
       ...getSignatureBlocks(signatureContent, stateFromHtmlOptions).map(
         convertToSignatureBlock
       )
     ])
+
+    const selection = editorState.getSelection()
+
+    if (focus) {
+      return EditorState.forceSelection(newEditorState, selection)
+    }
+
+    return EditorState.acceptSelection(newEditorState, selection)
   }
 
   return {
     initialize,
-    hasSignature,
+    hasSignature: (editorState = pluginFns && pluginFns.getEditorState()) => {
+      if (editorState) {
+        return hasSignature(editorState)
+      }
+
+      return false
+    },
     toggleSignature,
     modifiers: {
-      appendSignature
+      appendSignature: (editorState: EditorState) => {
+        if (!hasSignature(editorState)) {
+          return appendSignature(editorState)
+        }
+
+        return editorState
+      }
+    }
+  }
+}
+
+type SignatureBlockStyleFn = (className: string) => BlockStyleFn
+type SignatureCustomBlockFn = (className: string) => CustomBlockFn
+
+/**
+ * A helper function to be used in stateToHtml options in order to
+ * add a css class to signature blocks
+ */
+export const signatureBlockStyleFn: SignatureBlockStyleFn = (
+  className = 'signature'
+) => block => {
+  if (block.getData().get('isSignature')) {
+    return {
+      attributes: {
+        class: className
+      }
+    }
+  }
+}
+
+export const signatureCustomBlockFn: SignatureCustomBlockFn = (
+  className = 'signature'
+) => (element: HTMLElement) => {
+  if (element.classList.contains(className)) {
+    return {
+      data: {
+        isSignature: true
+      }
     }
   }
 }
@@ -145,4 +238,11 @@ function getSignatureBlocks(
 
 function isSignatureBlock(block: ContentBlock) {
   return block.getData().get('isSignature')
+}
+
+function getNumberOfTrailingEmptyLines(lastBlock) {
+  return `a${lastBlock.getText()}`
+    .split('')
+    .reverse()
+    .findIndex(char => char !== '\n')
 }

@@ -26,7 +26,8 @@ import {
   AssigneesField,
   AssociationsList,
   ReminderField,
-  WhenFieldChanges
+  WhenFieldChanges,
+  FieldError
 } from '../final-form-fields'
 import Tooltip from '../tooltip'
 import { AddAssociationButton } from '../AddAssociationButton'
@@ -57,6 +58,7 @@ const defaultProps = {
   event: null,
   eventId: undefined,
   initialValues: {},
+  defaultSelectedDate: new Date(),
   submitCallback: () => {},
   deleteCallback: () => {}
 }
@@ -189,11 +191,7 @@ export class EventDrawer extends Component {
     }
 
     return (
-      <Drawer
-        isOpen={this.props.isOpen}
-        onClose={this.props.onClose}
-        showFooter={false}
-      >
+      <Drawer open={this.props.isOpen} onClose={this.props.onClose}>
         <Drawer.Header title={`${this.isNew ? 'Add' : 'Edit'} Event`} />
         <Drawer.Body>
           {error && error.status === 404 ? (
@@ -303,6 +301,11 @@ export class EventDrawer extends Component {
                         associations={values.associations}
                         defaultAssociation={defaultAssociation}
                         handleDelete={this.handleDeleteAssociation}
+                      />
+
+                      <FieldError
+                        name="associations"
+                        style={{ fontSize: '1rem' }}
                       />
 
                       <ItemChangelog

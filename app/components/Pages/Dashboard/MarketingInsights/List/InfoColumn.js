@@ -2,26 +2,20 @@ import React from 'react'
 
 import { formatDate } from 'components/DateTimePicker/helpers'
 
+import { EditEmailButton } from 'components/EditEmailButton'
+
 import Recipients from './Recipients'
-import { show_title } from './helpers'
-import { Link, Info, StyledBadge } from './styled'
+import { isEmailInProgress, isEmailScheduled, show_title } from './helpers'
+import { Info, StyledBadge, StyledLink } from './styled'
 
-function InfoColumn({ data }) {
-  // due_at is when we are going to send email. (set by client)
-  const now = new Date().getTime()
-  const isQueued = data.due_at * 1000 > now
-  const isScheduled = !data.executed_at && isQueued
-  const isInProgress = !data.executed_at && !isQueued
+function InfoColumn({ data, reloadList }) {
+  const isScheduled = isEmailScheduled(data)
+  const isInProgress = isEmailInProgress(data)
 
-  // This is a workaround and we don't acutually need to detect scheduled email here.
-  // In phase 2, we are going to have a separate table and page so this code will clean up in there.
   const title = (
     <div className="info-title">
       <div>{show_title(data.subject)}</div>
       <div>
-        {isScheduled && (
-          <StyledBadge appearance="primary">Scheduled</StyledBadge>
-        )}
         {isInProgress && (
           <StyledBadge appearance="warning">In Progress</StyledBadge>
         )}
@@ -35,13 +29,17 @@ function InfoColumn({ data }) {
     const date = formatDate(new Date(data.due_at * 1000))
 
     subTitle = isScheduled ? `Scheduled for ${date}` : date
-    titleRenderer = title
+    titleRenderer = (
+      <EditEmailButton emailId={data.id} onEmailUpdated={reloadList}>
+        {({ onClick }) => <StyledLink onClick={onClick}>{title}</StyledLink>}
+      </EditEmailButton>
+    )
   } else {
     subTitle = formatDate(new Date(data.executed_at * 1000))
     titleRenderer = (
-      <Link to={isScheduled ? '' : `/dashboard/insights/${data.id}`}>
+      <StyledLink to={isScheduled ? '' : `/dashboard/insights/${data.id}`}>
         {title}
-      </Link>
+      </StyledLink>
     )
   }
 
