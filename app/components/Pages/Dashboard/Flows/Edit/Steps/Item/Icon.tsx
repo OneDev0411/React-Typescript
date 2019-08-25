@@ -69,15 +69,22 @@ const DEFAULT_ICON = EVENT_ICONS[EVENT_ICONS.length - 1]
 
 interface Props {
   type: TTaskType
+  hasBackground?: boolean
+  containerStyle?: React.CSSProperties
 }
 
-export default function Icon({ type }: Props) {
+export default function Icon({
+  type,
+  hasBackground = true,
+  containerStyle = {}
+}: Props) {
   const icon = EVENT_ICONS.find(item => item.type === type) || DEFAULT_ICON
 
   return (
     <Container
       style={{
-        backgroundColor: fade(icon.color, 0.2)
+        backgroundColor: hasBackground ? fade(icon.color, 0.2) : 'transparent',
+        ...containerStyle
       }}
     >
       <icon.icon fill={icon.color} />
