@@ -43,16 +43,16 @@ export const defaultTemplateVariableSuggestions: ITemplateVariableSuggestionGrou
     suggestions: [
       {
         title: 'Full Name',
-        expression: 'user.display_name'
+        expression: 'sender.display_name'
       },
       {
         title: 'First Name',
-        expression: 'user.first_name'
+        expression: 'sender.first_name'
       },
       {
         title: 'Last Name',
-        expression: 'user.last_name'
-      },
+        expression: 'sender.last_name'
+      }
     ]
   }
 ]
