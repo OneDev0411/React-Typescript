@@ -13,7 +13,7 @@ interface PageSideNav {
     items: {
       // Without this, it's really hard to detect whether user is on a url or not.
       isIndex: boolean
-      icon?: string
+      icon?: any
       title: string
       link: string
       badge: number
@@ -50,7 +50,7 @@ function PageSideNav(props: PageSideNav) {
                   <Box display="flex" alignItems="center">
                     {item.icon && (
                       <Box mr={1} lineHeight={1} className="section-item__icon">
-                        <item.icon />
+                        <item.icon style={{ width: '1em', height: '1em' }} />
                       </Box>
                     )}
                     <Typography variant="body2" component="span">

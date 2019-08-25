@@ -3,11 +3,13 @@ import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
 import PageSideNav from 'components/PageSideNav'
-
+import IconSearch from 'components/SvgIcons/Search/IconSearch'
+import IconNotification from 'components/SvgIcons/Notifications/IconNotifications'
 import {
   Container as PageContainer,
   Content as PageContent
-} from '../../../../views/components/SlideMenu'
+} from 'components/SlideMenu'
+
 import SavedSearchesList from './SavedSearchesList'
 
 const urlGenerator = url => `/dashboard/mls${url}`
@@ -19,10 +21,12 @@ const sideNavSections = [
       {
         isIndex: true,
         title: 'Search',
+        icon: IconSearch,
         link: urlGenerator('/')
       },
       {
         title: 'Following',
+        icon: IconNotification,
         link: urlGenerator('/following')
       }
     ]
