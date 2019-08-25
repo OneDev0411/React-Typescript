@@ -1,14 +1,20 @@
 import Fetch from '../../../services/fetch'
 
-const getListing = async id => {
-  if (!id) {
+const getListing = async (listingId, brandId) => {
+  if (!listingId) {
     return
   }
 
   try {
-    const response = await new Fetch().get(
-      `/listings/${id}/?associations=listing.proposed_agent`
-    )
+    const req = new Fetch().get(`/listings/${listingId}/`).query({
+      associations: 'listing.proposed_agent'
+    })
+
+    if (brandId) {
+      req.set('X-RECHAT-BRAND', brandId)
+    }
+
+    const response = await req
 
     return response.body.data
   } catch (err) {
