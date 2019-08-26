@@ -43,6 +43,7 @@ export class AssetImage extends React.Component {
 
     const setters = {
       image: setSrc,
+      'mj-image': setSrc,
       cell: setBg,
       text: setBg,
       '': setBg
