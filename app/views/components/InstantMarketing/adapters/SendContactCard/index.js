@@ -256,22 +256,20 @@ class SendContactCard extends React.Component {
           isEdit={this.props.isEdit}
         />
 
-        {this.state.isComposeEmailOpen && (
-          <SingleEmailComposeDrawer
-            isOpen
-            hasStaticBody
-            disableAddNewRecipient
-            initialValues={{
-              from: this.state.owner,
-              to: this.Recipients,
-              body: this.state.emailBody
-            }}
-            onSent={this.closeBuilder}
-            onClose={this.toggleComposeEmail}
-            getEmail={this.getEmail}
-            isSubmitDisabled={this.state.isGettingTemplateInstance}
-          />
-        )}
+        <SingleEmailComposeDrawer
+          isOpen={this.state.isComposeEmailOpen}
+          hasStaticBody
+          disableAddNewRecipient
+          initialValues={{
+            from: this.state.owner,
+            to: this.Recipients,
+            body: this.state.emailBody
+          }}
+          onSent={this.closeBuilder}
+          onClose={this.toggleComposeEmail}
+          getEmail={this.getEmail}
+          isSubmitDisabled={this.state.isGettingTemplateInstance}
+        />
 
         {this.state.isSocialDrawerOpen && (
           <SocialDrawer
