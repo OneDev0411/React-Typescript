@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ComponentProps, useEffect, useState } from 'react'
 
-import { getEmail } from 'models/email/get-email'
+import { getEmailCampaign } from 'models/email/get-email-campaign'
 
 import { notUndefined } from 'utils/ts-utils'
 
@@ -30,7 +30,7 @@ export function EditEmailDrawer({ emailId, isOpen, onClose, onEdited }: Props) {
 
     if (isOpen) {
       setData(null)
-      getEmail(emailId).then(fullEmailObject => {
+      getEmailCampaign(emailId).then(fullEmailObject => {
         if (!canceled) {
           setData(fullEmailObject)
         }

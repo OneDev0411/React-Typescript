@@ -30,7 +30,11 @@ declare type TIsEmailPresent = TIsPropertyPresent<
   'email'
 >
 
-declare type IEmailRecipient<Associations extends 'contact' | 'list' = ''> = {
+declare type EmailCampaignRecipientAssociation = 'contact' | 'list'
+
+declare type IEmailRecipient<
+  Associations extends EmailCampaignRecipientAssociation = ''
+> = {
   campaign: UUID
   created_at: string
   deleted_at: null | string
@@ -68,9 +72,15 @@ declare interface IEmailCampaignInput extends IEmailCampaignInputBase {
   bcc?: IEmailRecipientInput[]
 }
 
+declare type EmailCampaignAssociation =
+  | 'emails'
+  | 'template'
+  | 'from'
+  | 'recipients'
+
 declare type IEmailCampaign<
-  Associations extends 'from' | 'recipients' | 'template' | 'emails' = '',
-  RecipientAssociations extends 'list' | 'contact' = ''
+  Associations extends EmailCampaignAssociation = '',
+  RecipientAssociations extends EmailCampaignRecipientAssociation = ''
 > = {
   id: UUID
   created_at: number
@@ -102,6 +112,7 @@ declare type IEmailCampaign<
   Associations
 > &
   Association<'from', IUser, Associations> &
+  Association<'list', IContactList, Associations> &
   Association<'template', IMarketingTemplateInstance, Associations> &
   Association<'emails', any[], Associations>
 
