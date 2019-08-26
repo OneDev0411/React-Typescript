@@ -6,14 +6,9 @@ Object {
   "baseElement": <body>
     <div>
       <button
-<<<<<<< HEAD
         class="MuiButtonBase-root MuiButton-root MuiButton-text"
         tabindex="0"
         type="button"
-=======
-        class="ActionButton__Button-sc-14we8cp-0 IconButton-cifg0b-0 cqiiYc"
-        style="margin-right: 0.5rem;"
->>>>>>> #3193 test(mc): updated snapshot
       >
         <span
           class="MuiButton-label"
@@ -38,14 +33,9 @@ Object {
   </body>,
   "container": <div>
     <button
-<<<<<<< HEAD
       class="MuiButtonBase-root MuiButton-root MuiButton-text"
       tabindex="0"
       type="button"
-=======
-      class="ActionButton__Button-sc-14we8cp-0 IconButton-cifg0b-0 cqiiYc"
-      style="margin-right: 0.5rem;"
->>>>>>> #3193 test(mc): updated snapshot
     >
       <span
         class="MuiButton-label"

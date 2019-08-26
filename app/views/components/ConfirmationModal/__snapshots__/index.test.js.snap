@@ -23,17 +23,13 @@ exports[`ConfirmationModal component should render modal properly 1`] = `
     class="cta styled__ActionBarContainer-sc-1gtjo7x-0 VcSfg"
   >
     <button
-<<<<<<< HEAD
       class="ActionButton__Button-sc-14we8cp-0 evhtdt"
-=======
-      class="ActionButton__Button-sc-14we8cp-0 gxKGxn"
->>>>>>> #3193 test(mc): updated snapshot
       data-test="confirmation-modal-cancel-button"
     >
       Cancel
     </button>
     <button
-      class="modal-confirm ActionButton__Button-sc-14we8cp-0 ixJYrt"
+      class="modal-confirm ActionButton__Button-sc-14we8cp-0 gdLiWq"
       data-test="confirmation-modal-confirm-button"
       style="margin-left: 1em;"
     >
