@@ -1,9 +1,12 @@
+import { SectionsEnum } from 'components/PageSideNav/types'
+
 import MyDesignsIcon from '../components/IconMyDesigns/IconMyDesigns'
 
 const urlGenerator = (url: string): string => `/dashboard/marketing${url}`
 
 export const SECTIONS = [
   {
+    type: SectionsEnum.LINK,
     title: 'Marketing Center',
     items: [
       {
