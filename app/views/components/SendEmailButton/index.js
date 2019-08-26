@@ -38,24 +38,22 @@ function SendEmailButton(props) {
        limitation, or set drawerIsOpen asynchronously in order to
        enable animation
       */}
-      {isOpen && (
-        <SingleEmailComposeDrawer
-          isOpen={isOpen}
-          initialValues={{
-            attachments: [],
-            to: props.recipients,
-            from: props.user
-          }}
-          deal={deal}
-          onClose={toggleOpenDrawer}
-          onSent={() => {
-            toggleOpenDrawer()
-            props.onSent()
-          }}
-          hasDealsAttachments
-          getEmail={getEmail}
-        />
-      )}
+      <SingleEmailComposeDrawer
+        isOpen={isOpen}
+        initialValues={{
+          attachments: [],
+          to: props.recipients,
+          from: props.user
+        }}
+        deal={deal}
+        onClose={toggleOpenDrawer}
+        onSent={() => {
+          toggleOpenDrawer()
+          props.onSent()
+        }}
+        hasDealsAttachments
+        getEmail={getEmail}
+      />
     </Fragment>
   )
 }

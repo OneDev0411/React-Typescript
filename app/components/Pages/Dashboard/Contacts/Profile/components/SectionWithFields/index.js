@@ -414,14 +414,12 @@ class SectionWithFields extends React.Component {
           {this.renderFields()}
         </div>
 
-        {this.state.isOpenCustomAttributeDrawer && (
-          <CustomAttributeDrawer
-            isOpen
-            onClose={this.closeNewAttributeDrawer}
-            section={Array.isArray(section) ? undefined : section}
-            submitCallback={this.AddCustomAttributeCallback}
-          />
-        )}
+        <CustomAttributeDrawer
+          isOpen={this.state.isOpenCustomAttributeDrawer}
+          onClose={this.closeNewAttributeDrawer}
+          section={Array.isArray(section) ? undefined : section}
+          submitCallback={this.AddCustomAttributeCallback}
+        />
       </Section>
     )
   }

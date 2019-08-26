@@ -459,19 +459,17 @@ class ActionsButton extends React.Component {
           />
         )}
 
-        {this.state.isComposeEmailOpen && (
-          <SingleEmailComposeDrawer
-            isOpen
-            initialValues={{
-              from: this.props.user,
-              attachments: this.getEmailComposeFiles()
-            }}
-            deal={this.props.deal}
-            onClose={this.handleToggleComposeEmail}
-            onSent={this.handleToggleComposeEmail}
-            hasDealsAttachments
-          />
-        )}
+        <SingleEmailComposeDrawer
+          isOpen={this.state.isComposeEmailOpen}
+          initialValues={{
+            from: this.props.user,
+            attachments: this.getEmailComposeFiles()
+          }}
+          deal={this.props.deal}
+          onClose={this.handleToggleComposeEmail}
+          onSent={this.handleToggleComposeEmail}
+          hasDealsAttachments
+        />
 
         {this.state.multipleItemsSelection && (
           <SelectItemDrawer

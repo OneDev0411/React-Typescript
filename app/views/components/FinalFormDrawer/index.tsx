@@ -98,6 +98,8 @@ export class FinalFormDrawer<T> extends React.Component<Props<T>> {
     return true
   }
 
+  private formProps: FormRenderProps
+
   render() {
     const { isSubmitDisabled = false } = this.props
 
@@ -108,69 +110,78 @@ export class FinalFormDrawer<T> extends React.Component<Props<T>> {
     // this eliminates the necessity for conditional rendering of
     // FinalFormDrawer.
     return (
-      <Form
-        validate={this.props.validate}
-        onSubmit={this.onSubmit}
-        decorators={this.props.decorators}
-        mutators={{ ...arrayMutators }}
-        initialValues={this.props.initialValues}
-        initialValuesEqual={this.props.initialValuesEqual}
-        keepDirtyOnReinitialize={this.props.keepDirtyOnReinitialize}
-        render={formProps => {
-          const { submitting } = formProps
+      <Drawer
+        open={this.props.isOpen}
+        onClose={e => this.handleOnClose(e, this.formProps)}
+        // Better to accept DrawerProps instead
+        closeOnBackdropClick={this.props.closeDrawerOnBackdropClick}
+      >
+        {this.props.isOpen ? (
+          <Form
+            validate={this.props.validate}
+            onSubmit={this.onSubmit}
+            decorators={this.props.decorators}
+            mutators={{ ...arrayMutators }}
+            initialValues={this.props.initialValues}
+            initialValuesEqual={this.props.initialValuesEqual}
+            keepDirtyOnReinitialize={this.props.keepDirtyOnReinitialize}
+            render={formProps => {
+              this.formProps = formProps
 
-          return (
-            <form
-              id={this.props.formId}
-              onSubmit={formProps.handleSubmit}
-              onKeyPress={this.handleKeyPress}
-            >
-              <Drawer
-                open={this.props.isOpen}
-                onClose={e => this.handleOnClose(e, formProps)}
-                // Better to accept DrawerProps instead
-                closeOnBackdropClick={this.props.closeDrawerOnBackdropClick}
-              >
-                <Drawer.Header title={this.props.title} />
-                <Drawer.Body>
-                  {typeof this.props.render === 'function'
-                    ? this.props.render(formProps as any)
-                    : this.props.children}
-                </Drawer.Body>
+              const { submitting } = formProps
 
-                {this.props.showFooter && (
-                  <Drawer.Footer rowReverse>
-                    {this.props.footerRenderer ? (
-                      this.props.footerRenderer({
-                        isSubmitDisabled,
-                        formProps,
-                        submitting,
-                        handleSubmit: this.handleSubmit
-                      })
-                    ) : (
-                      <Tooltip title={this.props.submitButtonTooltip}>
-                        <ActionButton
-                          type="submit"
-                          disabled={
-                            isSubmitDisabled ||
-                            submitting ||
-                            formProps.validating
-                          }
-                          onClick={this.handleSubmit}
-                        >
-                          {submitting
-                            ? this.props.submittingButtonLabel
-                            : this.props.submitButtonLabel}
-                        </ActionButton>
-                      </Tooltip>
-                    )}
-                  </Drawer.Footer>
-                )}
-              </Drawer>
-            </form>
-          )
-        }}
-      />
+              return (
+                <form
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    flexBasis: '100%'
+                  }}
+                  id={this.props.formId}
+                  onSubmit={formProps.handleSubmit}
+                  onKeyPress={this.handleKeyPress}
+                >
+                  <Drawer.Header title={this.props.title} />
+                  <Drawer.Body>
+                    {typeof this.props.render === 'function'
+                      ? this.props.render(formProps as any)
+                      : this.props.children}
+                  </Drawer.Body>
+
+                  {this.props.showFooter && (
+                    <Drawer.Footer rowReverse>
+                      {this.props.footerRenderer ? (
+                        this.props.footerRenderer({
+                          isSubmitDisabled,
+                          formProps,
+                          submitting,
+                          handleSubmit: this.handleSubmit
+                        })
+                      ) : (
+                        <Tooltip title={this.props.submitButtonTooltip}>
+                          <ActionButton
+                            type="submit"
+                            disabled={
+                              isSubmitDisabled ||
+                              submitting ||
+                              formProps.validating
+                            }
+                            onClick={this.handleSubmit}
+                          >
+                            {submitting
+                              ? this.props.submittingButtonLabel
+                              : this.props.submitButtonLabel}
+                          </ActionButton>
+                        </Tooltip>
+                      )}
+                    </Drawer.Footer>
+                  )}
+                </form>
+              )
+            }}
+          />
+        ) : null}
+      </Drawer>
     )
   }
 }
