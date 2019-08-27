@@ -121,6 +121,7 @@ export default function ScheduledEmailForm({
             <Grid container item xs={12} alignItems="center">
               <Grid item xs={6}>
                 <Field
+                  isRequired
                   name="email_template"
                   label="Email Template"
                   text="Select an email template"
