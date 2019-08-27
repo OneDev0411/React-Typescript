@@ -87,7 +87,9 @@ type IAsyncActionProp<
 > = (...args: Parameters<T>) => ReturnType<ReturnType<T>>
 
 declare type Association<
-  Association,
+  Field,
   Value,
   Associations
-> = Association extends Associations ? { [key in Association]: Value } : {}
+> = Field extends Associations
+  ? { [key in Field]: Value }
+  : Record<never, never>
