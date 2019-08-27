@@ -2,8 +2,15 @@ import { ReactNode } from 'react'
 
 import { Recipient } from '../ContactsChipsInput/types'
 
+// TODO: we can remove this and directly work with file objects.
+interface EmailComposeAttachment {
+  title: string
+  date: Date
+  url: string
+}
+
 export interface EmailFormValues {
-  attachments: any[]
+  attachments: EmailComposeAttachment[]
   to: Recipient[] | undefined
   cc?: Recipient[] | undefined
   bcc?: Recipient[] | undefined
