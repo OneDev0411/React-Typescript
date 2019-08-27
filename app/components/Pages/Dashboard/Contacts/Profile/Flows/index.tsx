@@ -25,7 +25,7 @@ function FlowsList({ flows = [], contactId, onStop, addCallback }: Props) {
       titleRenderer={() => (
         <>
           <H3 style={{ margin: 0 }}>Flows</H3>
-          <Tooltip placement="left" title="Flows Settings">
+          <Tooltip placement="left" title="Manage Flows">
             <a
               href="/dashboard/account/flows"
               style={{
