@@ -1,9 +1,12 @@
 import styled, { css } from 'styled-components'
 
+import { HTMLProps } from 'react'
+
 import { isOutline } from '../helpers'
 import { ButtonAppearances } from '../styles/ButtonAppearances'
 
-export interface ActionButtonProps {
+export interface ActionButtonProps
+  extends Omit<HTMLProps<HTMLButtonElement>, 'size' | 'ref'> {
   /**
    * The appearance of the button.  {primary, outline, icon, link}
    */
@@ -46,7 +49,8 @@ export interface ActionButtonProps {
   rightRounded?: boolean // !
 }
 
-export const defaultProps: ActionButtonProps = {
+export const defaultProps: Partial<ActionButtonProps> = {
+  type: 'button',
   appearance: 'primary',
   disabled: false,
   isActive: false,

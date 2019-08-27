@@ -25,6 +25,7 @@ exports[`ConfirmationModal component should render modal properly 1`] = `
     <button
       class="ActionButton__Button-sc-14we8cp-0 evhtdt"
       data-test="confirmation-modal-cancel-button"
+      type="button"
     >
       Cancel
     </button>
@@ -32,6 +33,7 @@ exports[`ConfirmationModal component should render modal properly 1`] = `
       class="modal-confirm ActionButton__Button-sc-14we8cp-0 gdLiWq"
       data-test="confirmation-modal-confirm-button"
       style="margin-left: 1em;"
+      type="button"
     >
       Confirm
     </button>
