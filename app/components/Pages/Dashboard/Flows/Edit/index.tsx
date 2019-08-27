@@ -299,7 +299,6 @@ function Edit({
       return
     }
 
-    setSelectedEmailTemplate(null)
     setIsEmailTemplateDrawerOpen(true)
   }, [brand, flow])
 
