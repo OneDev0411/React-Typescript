@@ -15,6 +15,7 @@ class YearMonthList extends React.Component {
       month => month.value === props.month
     )
   }
+
   get Months() {
     return this.props.localeUtils.getMonths().map((name, index) => ({
       value: index,
