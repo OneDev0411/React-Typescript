@@ -37,14 +37,22 @@ declare interface ICalendarEvent {
   }
 }
 
-declare interface ICalendarDayRow {
-  is_day_header: boolean
-  is_today: boolean
+declare interface ICalendarEventHeader {
   date: string
+  header_type: string
+  is_today: boolean
+  is_event_header: boolean
+  title: string
 }
 
-declare type ICalendarListRow = ICalendarEvent | ICalendarDayRow
+declare type ICalendarListRow = ICalendarEvent | ICalendarEventHeader
 
-interface CalendarEventsList {
+interface ICalendarEventsList {
+  [key: string]: {
+    ICalendarMonthEvents
+  }
+}
+
+interface ICalendarMonthEvents {
   [key: string]: ICalendarEvent[] | []
 }
