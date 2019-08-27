@@ -1,4 +1,4 @@
-import 'grapesjs/dist/css/grapes.min.css'
+import 'grapesjs/src/styles/scss/main.scss'
 import '../../../../../../../styles/components/modules/template-builder.scss'
 
 import Grapesjs from 'grapesjs'
