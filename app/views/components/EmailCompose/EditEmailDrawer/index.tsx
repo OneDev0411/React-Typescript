@@ -21,7 +21,7 @@ interface Props {
 
 export function EditEmailDrawer({ emailId, isOpen, onClose, onEdited }: Props) {
   const [data, setData] = useState<IEmailCampaign<
-    'from' | 'recipients' | 'template' | 'emails',
+    'from' | 'recipients' | 'template' | 'emails' | 'attachments',
     'contact' | 'list'
   > | null>(null)
 
@@ -44,6 +44,9 @@ export function EditEmailDrawer({ emailId, isOpen, onClose, onEdited }: Props) {
 
   if (data) {
     const initialValues: Partial<EmailFormValues> = {
+      attachments: (data.attachments || []).map(normalizeAttachment),
+      // TODO: we can update attachment item to remove the need for unnecessary
+      //  normalization of attachments.
       from: data.from,
       subject: data.subject,
       body: data.html,
@@ -112,3 +115,13 @@ function getRecipientsFromRecipientsEntity(
     })
     .filter(notUndefined)
 }
+
+/**
+ * We have another normalizeAttachment which seems to be different!
+ * @param item
+ */
+const normalizeAttachment = item => ({
+  title: decodeURI(item.name),
+  url: item.url,
+  date: new Date(item.created_at * 1000)
+})

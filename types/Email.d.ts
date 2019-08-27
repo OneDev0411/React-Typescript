@@ -77,6 +77,7 @@ declare type EmailCampaignAssociation =
   | 'template'
   | 'from'
   | 'recipients'
+  | 'attachments'
 
 declare type IEmailCampaign<
   Associations extends EmailCampaignAssociation = '',
@@ -114,7 +115,8 @@ declare type IEmailCampaign<
   Association<'from', IUser, Associations> &
   Association<'list', IContactList, Associations> &
   Association<'template', IMarketingTemplateInstance, Associations> &
-  Association<'emails', any[], Associations>
+  Association<'emails', any[], Associations> &
+  Association<'attachments', IFile[], Associations>
 
 declare interface IEmail {
   domain?: string
