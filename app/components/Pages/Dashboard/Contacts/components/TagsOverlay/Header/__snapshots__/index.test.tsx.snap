@@ -29,7 +29,7 @@ exports[`TagsOverlay header renders 1`] = `
       to="/dashboard/account/manage-tags"
     >
       <_default
-        caption="Manage your tags"
+        caption="Manage tags"
         placement="bottom"
       >
         <IconCog
