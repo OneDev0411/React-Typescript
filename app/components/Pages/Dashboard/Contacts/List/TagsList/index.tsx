@@ -119,7 +119,7 @@ export class TagsList extends React.Component<Props> {
         <ListTitle>
           <span>Tags</span>
           <Link to="/dashboard/account/manage-tags">
-            <ToolTip caption="Manage your tags">
+            <ToolTip caption="Manage tags">
               <IconCog />
             </ToolTip>
           </Link>
