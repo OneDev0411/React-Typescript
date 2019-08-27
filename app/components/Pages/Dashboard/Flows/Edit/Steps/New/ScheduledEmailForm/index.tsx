@@ -55,10 +55,9 @@ export default function ScheduledEmailForm({
   function getInitialValues(stepData?: IBrandFlowStep) {
     if (!stepData || !stepData.email) {
       return {
-        email_template: (
-          templates.find(({ id }) => id === defaultSelectedTemplate) ||
-          templates[0]
-        ).id,
+        email_template:
+          (templates.find(({ id }) => id === defaultSelectedTemplate) || {})
+            .id || null,
         wait_for: '1',
         at: '08:00'
       }
@@ -80,6 +79,17 @@ export default function ScheduledEmailForm({
       at
     }
   }
+
+  const emailTemplatesDropdownItems = [
+    {
+      label: 'Select a template',
+      value: null
+    },
+    ...templates.map(template => ({
+      label: template.name,
+      value: template.id
+    }))
+  ]
 
   return (
     <Form
@@ -113,41 +123,50 @@ export default function ScheduledEmailForm({
                 <Field
                   name="email_template"
                   label="Email Template"
-                  items={templates.map(template => ({
-                    label: template.name,
-                    value: template.id
-                  }))}
+                  text="Select an email template"
+                  items={emailTemplatesDropdownItems}
                   dropdownOptions={{
                     fullWidth: true
+                  }}
+                  validate={value => {
+                    if (value) {
+                      return
+                    }
+
+                    return 'No email template selected'
                   }}
                   component={SelectInput as FunctionComponent}
                 />
               </Grid>
               <Grid container item xs={6} style={{ paddingLeft: '1rem' }}>
-                <Tooltip title="Review or edit selected email template">
-                  <Button
-                    variant="text"
-                    color="primary"
-                    disabled={submitting}
-                    onClick={event => {
-                      event.stopPropagation()
+                {values.email_template && (
+                  <>
+                    <Tooltip title="Review or edit selected email template">
+                      <Button
+                        variant="text"
+                        color="primary"
+                        disabled={submitting}
+                        onClick={event => {
+                          event.stopPropagation()
 
-                      const selectedTemplate = templates.find(
-                        ({ id }) => id === values.email_template
-                      )
+                          const selectedTemplate = templates.find(
+                            ({ id }) => id === values.email_template
+                          )
 
-                      if (!selectedTemplate) {
-                        return
-                      }
+                          if (!selectedTemplate) {
+                            return
+                          }
 
-                      onReviewTemplateClick(selectedTemplate)
-                    }}
-                  >
-                    Review
-                  </Button>
-                </Tooltip>
+                          onReviewTemplateClick(selectedTemplate)
+                        }}
+                      >
+                        Review
+                      </Button>
+                    </Tooltip>
 
-                <Divider vertical height="auto" margin="0.5rem" />
+                    <Divider vertical height="auto" margin="0.5rem" />
+                  </>
+                )}
 
                 <Tooltip title="Create a new email template">
                   <Button
