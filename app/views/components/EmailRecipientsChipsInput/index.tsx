@@ -119,8 +119,6 @@ function EmailRecipientsChipsInput({
   ) => Observable<IDenormalizedEmailRecipientInput[]> = (
     searchTerm: string
   ) => {
-    // @ts-ignore
-    // @ts-ignore
     const suggestionList$: Observable<IDenormalizedEmailRecipientInput[]>[] = [
       of(
         filterEntities(tags, searchTerm, ['text']).map(tag => ({
