@@ -1,23 +1,11 @@
 import React from 'react'
-import styled from 'styled-components'
-
+import { Link } from 'react-router'
 import { withRouter, WithRouterProps } from 'react-router'
+import { Typography, Button } from '@material-ui/core'
 
-import Button from 'components/Button/ActionButton'
-import LinkButton from 'components/Button/LinkButton'
 import BareModal from 'components/BareModal'
 
-const ModalContant = styled.div`
-  font-size: 1.7rem;
-  padding: 2.5rem;
-  text-align: center;
-  p {
-    margin-bottom: 2rem;
-  }
-  button {
-    margin-right: 1rem;
-  }
-`
+import { ModalContent, ButtonsContainer } from './styled'
 
 interface Props {
   contactId?: UUID
@@ -35,25 +23,24 @@ function MissingEmailModal({
 }: Props & WithRouterProps) {
   return (
     <BareModal isOpen={isOpen} onRequestClose={onClose} autoHeight>
-      <ModalContant>
-        <p>
+      <ModalContent>
+        <Typography variant="body1" style={{ marginBottom: '2rem' }}>
           You should provide an email address for this contact to be able to{' '}
           {action}.
-        </p>
-        <Button onClick={onClose} appearance="outline">
-          Cancel
-        </Button>
-        {contactId && !isContactPagePath(location.pathname, contactId) && (
-          <LinkButton
-            appearance="primary"
-            onClick={onClose}
-            target="_blank"
-            to={`/dashboard/contacts/${contactId}`}
-          >
-            Edit Contact
-          </LinkButton>
-        )}
-      </ModalContant>
+        </Typography>
+        <ButtonsContainer>
+          <Button onClick={onClose} variant="outlined">
+            Cancel
+          </Button>
+          {contactId && !isContactPagePath(location.pathname, contactId) && (
+            <Link target="_blank" to={`/dashboard/contacts/${contactId}`}>
+              <Button onClick={onClose} variant="contained" color="primary">
+                Edit Contact
+              </Button>
+            </Link>
+          )}
+        </ButtonsContainer>
+      </ModalContent>
     </BareModal>
   )
 }
