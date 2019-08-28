@@ -181,6 +181,15 @@ const AsyncFlowEdit = Load({
 })
 
 /* ==================================== */
+//  CRM Open Houses
+/* ==================================== */
+
+const AsyncOpenHousesList = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/OpenHouse/List' /* webpackChunkName: "oh_list" */)
+})
+
+/* ==================================== */
 //  Marketing Center
 /* ==================================== */
 
@@ -472,6 +481,8 @@ export default (
         path="/dashboard/notifications(/:type/:id)"
         component={AsyncNotificationsPage}
       />
+
+      <Route path="/dashboard/open-houses" component={AsyncOpenHousesList} />
 
       <Route path="/dashboard/marketing" component={AsyncMarketing}>
         <IndexRoute component={AsyncMarketingHistory} />
