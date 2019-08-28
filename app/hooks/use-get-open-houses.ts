@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 
 import { getTasks } from 'models/tasks/get-tasks'
+import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 
 interface GetOpenHouses {
   error: string
@@ -22,7 +23,8 @@ export function useGetOpenHouses(): GetOpenHouses {
       setIsFetching(true)
 
       const response = await getTasks({
-        task_type: 'Open House'
+        task_type: 'Open House',
+        associations: CRM_TASKS_QUERY.associations
       })
 
       setList(response.data)

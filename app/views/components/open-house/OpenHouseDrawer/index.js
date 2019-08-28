@@ -127,6 +127,16 @@ class OpenHouseDrawerInternal extends React.Component {
       if (this.props.openHouse) {
         this.setState({ isDisabled: false })
 
+        const template = this.props.openHouse.metadata
+          ? this.props.openHouse.metadata.template
+          : null
+
+        this.setState({
+          isDisabled: false,
+          openHouse: this.props.openHouse,
+          template
+        })
+
         return this.props.openHouse
       }
 
@@ -514,4 +524,6 @@ class OpenHouseDrawerInternal extends React.Component {
 OpenHouseDrawerInternal.propTypes = propTypes
 OpenHouseDrawerInternal.defaultProps = defaultProps
 
-export const OpenHouseDrawer = connect()(OpenHouseDrawerInternal)
+export const OpenHouseDrawer = connect(state => ({ user: state.user }))(
+  OpenHouseDrawerInternal
+)

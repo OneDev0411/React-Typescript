@@ -1,20 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Button } from '@material-ui/core'
 
-import Table from 'components/Grid/Table'
-import PageHeader from 'components/PageHeader'
-
 import { useGetOpenHouses } from 'hooks/use-get-open-houses'
 
-import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
+import Table from 'components/Grid/Table'
+import PageHeader from 'components/PageHeader'
+import LoadingContainer from 'components/LoadingContainer'
+import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
 import Name from './columns/Name'
-
 import { PageContainer } from './styled'
 
 function OHList() {
-  const { list, isFetching, error } = useGetOpenHouses()
+  const { list, isFetching, error, reloadList } = useGetOpenHouses()
+  const [isOpenOHDrawer, setIsOpenOHDrawer] = useState(false)
+  const [selectedOH, setSelectedOH] = useState<IEvent | null>(null)
 
   const columns = [
     {
@@ -24,13 +25,26 @@ function OHList() {
       verticalAlign: 'center',
       render: (props: { rowData: IEvent }) => (
         <Name
-          id={props.rowData.id}
           name={props.rowData.title}
           description={props.rowData.description}
+          onClick={() => {
+            setIsOpenOHDrawer(true)
+            setSelectedOH(props.rowData)
+          }}
         />
       )
     }
   ]
+
+  const onCloseOHDrawer = () => {
+    setSelectedOH(null)
+    setIsOpenOHDrawer(false)
+  }
+
+  const drawerCallback = () => {
+    onCloseOHDrawer()
+    reloadList()
+  }
 
   return (
     <>
@@ -51,18 +65,30 @@ function OHList() {
       </PageHeader>
 
       <PageContainer>
-        {isFetching && !error && <LoadingComponent />}
+        {isFetching && !error && (
+          <LoadingContainer style={{ padding: '30% 0' }} />
+        )}
         {!isFetching && !error && (
           <Table
             data={list}
             columns={columns}
             showToolbar={false}
             isFetching={isFetching}
-            LoadingState={LoadingComponent}
+            LoadingState={LoadingContainer}
           />
         )}
         {error && <h4>{error}</h4>}
       </PageContainer>
+
+      {isOpenOHDrawer && (
+        <OpenHouseDrawer
+          deleteCallback={drawerCallback}
+          isOpen
+          onClose={onCloseOHDrawer}
+          openHouse={selectedOH}
+          submitCallback={drawerCallback}
+        />
+      )}
     </>
   )
 }

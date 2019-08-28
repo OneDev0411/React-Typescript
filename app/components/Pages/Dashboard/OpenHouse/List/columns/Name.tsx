@@ -1,26 +1,32 @@
 import React from 'react'
+import { Typography } from '@material-ui/core'
 
 import ActionButton from 'components/Button/ActionButton'
 
 interface Props {
-  id: UUID
   name: string
   description: string
+  onClick: () => void
 }
 
-export default function Name({ id, name, description }: Props) {
+export default function Name({ name, description, onClick }: Props) {
   return (
     <>
-      <div>
-        <ActionButton
-          appearance="link"
-          style={{ height: 'auto', padding: 0, fontWeight: 'bold' }}
-          onClick={() => console.log(id)}
-        >
-          {name}
-        </ActionButton>
-      </div>
-      <div>{description}</div>
+      <ActionButton
+        appearance="link"
+        onClick={onClick}
+        style={{
+          height: 'auto',
+          padding: 0,
+          fontWeight: 'bold',
+          lineHeight: 1
+        }}
+      >
+        {name}
+      </ActionButton>
+      <Typography variant="body2" color="textSecondary">
+        {description}
+      </Typography>
     </>
   )
 }
