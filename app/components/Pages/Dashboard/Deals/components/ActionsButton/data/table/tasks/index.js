@@ -214,6 +214,9 @@ export default normalizeConditions([
         primary: true
       },
       ...sharedActions,
+      [EDIT_BUTTON]: {
+        disabled: true
+      },
       [TASK_NOTIFICATION_BUTTON]: {},
       [VOID_BUTTON]: {},
       [UPLOAD_BUTTON]: {},
