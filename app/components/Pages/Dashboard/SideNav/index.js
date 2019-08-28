@@ -24,6 +24,7 @@ import CalendarIcon from '../../../../views/components/SvgIcons/Calendar2/IconCa
 import CalendarIconActive from '../../../../views/components/SvgIcons/Calendar2/IconCalendarActive'
 import IconCog from '../../../../views/components/SvgIcons/CogOutline/IconCogOutline'
 import IconCogActive from '../../../../views/components/SvgIcons/Cog/IconCog'
+import IconOpenHouse from '../../../../views/components/SvgIcons/OpenHouse/IconOpenHouse'
 import DealsNotifications from '../Deals/components/SideNavBadge'
 
 import { selectNotificationNewCount } from '../../../../reducers/notifications'
@@ -96,6 +97,17 @@ function AppSideNav(props) {
               to="/dashboard/deals"
               Icon={DealsIcon}
               ActiveIcon={IconDealFilled}
+            >
+              <DealsNotifications />
+            </SideNavLinkItem>
+          </Acl>
+
+          <Acl access={[ACL.DEALS, ACL.CRM, ACL.MARKETING]}>
+            <SideNavLinkItem
+              tooltip="Your Open Houses"
+              to="/dashboard/open-houses"
+              Icon={IconOpenHouse}
+              ActiveIcon={IconOpenHouse}
             >
               <DealsNotifications />
             </SideNavLinkItem>
