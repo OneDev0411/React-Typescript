@@ -425,6 +425,7 @@ class ContactProfile extends React.Component {
                     flows={contact.flows}
                     contactId={contact.id}
                     onStop={this.stopFlow}
+                    addCallback={this.addToFlowCallback}
                   />
                 </Card>
                 <Card>{thirdColumnSections}</Card>
