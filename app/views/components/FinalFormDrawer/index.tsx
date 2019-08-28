@@ -135,7 +135,8 @@ export class FinalFormDrawer<T> extends React.Component<Props<T>> {
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    flexBasis: '100%'
+                    flexBasis: '100%',
+                    maxHeight: '100%'
                   }}
                   id={this.props.formId}
                   onSubmit={formProps.handleSubmit}

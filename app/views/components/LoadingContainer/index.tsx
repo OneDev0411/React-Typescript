@@ -9,7 +9,7 @@ LoadingContainer.defaultProps = {
   color: primary,
   size: '6em',
   title: '',
-  style: { padding: '50% 0' }
+  style: { padding: 'calc(50% - 1px) 0' }
 }
 
 interface Props {
@@ -24,7 +24,7 @@ export default function LoadingContainer({
   color = primary,
   size = '6em',
   title = '',
-  style = { padding: '50% 0' },
+  style = { padding: 'calc(50% - 1px) 0' },
   className = ''
 }: Props) {
   return (
