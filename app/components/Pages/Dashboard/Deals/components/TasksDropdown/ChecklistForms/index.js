@@ -1,9 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import _ from 'underscore'
-
-import { selectFormsByBrand } from 'reducers/deals/forms'
+import { selectForms } from 'reducers/deals/forms'
 
 import { ChecklistItem } from '../ChecklistItem'
 
@@ -45,7 +43,7 @@ const Forms = ({
 
 function mapStateToProps({ deals }, ownProps) {
   return {
-    forms: selectFormsByBrand(deals.forms, ownProps.deal.brand.id)
+    forms: selectForms(deals.forms, ownProps.deal.id)
   }
 }
 

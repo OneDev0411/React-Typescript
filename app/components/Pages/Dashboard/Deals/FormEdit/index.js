@@ -259,8 +259,7 @@ class EditDigitalForm extends React.Component {
 function mapStateToProps({ deals, user }, props) {
   const deal = selectDealById(deals.list, props.params.id)
   const task = selectTaskById(deals.tasks, props.params.taskId)
-  const form =
-    deal && task && selectFormById(deals.forms, deal.brand.id, task.form)
+  const form = deal && task && selectFormById(deals.forms, deal.id, task.form)
 
   return {
     user,

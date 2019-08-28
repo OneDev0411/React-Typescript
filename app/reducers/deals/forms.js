@@ -5,7 +5,7 @@ export default (state = {}, action) => {
     case actionTypes.GET_FORMS:
       return {
         ...state,
-        [action.brandId]: action.forms
+        [action.dealId]: action.forms
       }
 
     default:
@@ -13,8 +13,8 @@ export default (state = {}, action) => {
   }
 }
 
-export const selectFormsByBrand = (state, brand) =>
-  state && brand ? state[brand] : {}
+export const selectForms = (state, dealId) =>
+  state && dealId ? state[dealId] : {}
 
-export const selectFormById = (state, brand, id) =>
-  state && brand && id && state[brand] ? state[brand][id] : null
+export const selectFormById = (state, dealId, id) =>
+  state && dealId && id && state[dealId] ? state[dealId][id] : null
