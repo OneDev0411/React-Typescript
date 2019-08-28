@@ -15,7 +15,6 @@ interface Props extends ButtonProps {
 }
 
 const useStyles = makeStyles((theme: Theme) => {
-
   return createStyles({
     button: {
       whiteSpace: 'nowrap'
