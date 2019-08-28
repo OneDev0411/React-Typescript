@@ -36,7 +36,7 @@ export default function Header({ title, onClose }: Props) {
           }}
           to="/dashboard/account/manage-tags"
         >
-          <ToolTip caption="Manage your tags" placement="bottom">
+          <ToolTip caption="Manage tags" placement="bottom">
             <IconCog />
           </ToolTip>
         </Link>
