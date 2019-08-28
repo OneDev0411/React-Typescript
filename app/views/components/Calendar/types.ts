@@ -15,4 +15,5 @@ export interface ApiOptions {
 
 export interface FetchOptions {
   reset?: boolean
+  calendarRange?: NumberRange
 }
