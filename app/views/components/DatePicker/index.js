@@ -74,11 +74,7 @@ export default class DatePicker extends React.Component {
 
   handleNextMonth = () => this.addMonths(1)
 
-  onChange = (type = 'day') => {
-    console.log(type)
-
-    this.props.onChange(this.Date, type)
-  }
+  onChange = (type = 'day') => this.props.onChange(this.Date, type)
 
   handleDayClick = currentDate =>
     this.setState(
