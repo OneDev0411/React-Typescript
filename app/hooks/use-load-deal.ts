@@ -5,12 +5,17 @@ import { getDeal, getContexts, getForms } from 'actions/deals'
 
 import store from '../stores'
 
-export function useLoadDeal(id: string, deal: IDeal) {
-  const [dealWithChecklists, setDeal] = useState(deal)
-  const [isFetchingDeal, setIsFetchingDeal] = useState(false)
-  const [isFetchingContexts, setIsFetchingContexts] = useState(false)
-  const [isFetchingForms, setIsFetchingForms] = useState(false)
-  const [isFetchingCompleted, setIsFetchingCompleted] = useState(false)
+/**
+ * returns full dump of deal inclduing its forms and contexts
+ * @param id - the deal id
+ * @param deal - the minimal version of the deal
+ */
+export function useLoadFullDeal(id: string, deal: IDeal) {
+  const [dealWithChecklists, setDeal] = useState<IDeal>(deal)
+  const [isFetchingDeal, setIsFetchingDeal] = useState<boolean>(false)
+  const [isFetchingContexts, setIsFetchingContexts] = useState<boolean>(false)
+  const [isFetchingForms, setIsFetchingForms] = useState<boolean>(false)
+  const [isFetchingCompleted, setIsFetchingCompleted] = useState<boolean>(false)
 
   const { contexts, forms } = useMemo(() => {
     const deals = store.getState().deals

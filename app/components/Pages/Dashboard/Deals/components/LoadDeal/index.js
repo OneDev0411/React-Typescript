@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import PropTypes from 'prop-types'
 
-import { useLoadDeal } from 'hooks/use-load-deal'
+import { useLoadFullDeal } from 'hooks/use-load-deal'
 
 LoadDeal.propTypes = {
   id: PropTypes.string.isRequired,
@@ -16,7 +16,7 @@ LoadDeal.defaultProps = {
 }
 
 function LoadDeal({ onLoad, ...props }) {
-  const { isFetchingCompleted, ...data } = useLoadDeal(props.id, props.deal)
+  const { isFetchingCompleted, ...data } = useLoadFullDeal(props.id, props.deal)
 
   useEffect(() => {
     if (isFetchingCompleted) {

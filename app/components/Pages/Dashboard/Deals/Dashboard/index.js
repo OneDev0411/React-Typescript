@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
-import { useLoadDeal } from 'hooks/use-load-deal'
+import { useLoadFullDeal } from 'hooks/use-load-deal'
 
 import { isBackOffice } from 'utils/user-teams'
 import { selectDealById } from 'reducers/deals/list'
@@ -20,7 +20,7 @@ import { DealContainer, PageWrapper } from './styled'
 
 function DealDetails(props) {
   const [activeTab, setActiveTab] = useState(props.params.tab || 'checklists')
-  const { isFetchingDeal, isFetchingContexts } = useLoadDeal(
+  const { isFetchingDeal, isFetchingContexts } = useLoadFullDeal(
     props.params.id,
     props.deal
   )
