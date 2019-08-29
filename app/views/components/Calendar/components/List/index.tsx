@@ -12,7 +12,7 @@ import { EditEmailDrawer } from 'components/EmailCompose/EditEmailDrawer'
 
 import { CrmEvents } from '../CrmEvents'
 
-import { DayHeader } from './DayHeader'
+import { EventHeader } from './EventHeader'
 import { Event } from './Event'
 import { EmptyState } from './EmptyState'
 
@@ -81,7 +81,7 @@ const CalendarList: React.FC<Props> = props => {
       .fill(null)
       .findIndex((_, index) =>
         props.rows[index + data.visibleStartIndex].hasOwnProperty(
-          'is_day_header'
+          'isEventHeader'
         )
       )
 
@@ -123,10 +123,10 @@ const CalendarList: React.FC<Props> = props => {
       >
         {({ index, style }) => (
           <>
-            {props.rows[index].hasOwnProperty('is_day_header') ? (
-              <DayHeader
+            {props.rows[index].hasOwnProperty('isEventHeader') ? (
+              <EventHeader
                 key={props.rows[index].date}
-                item={props.rows[index] as ICalendarDayRow}
+                item={props.rows[index] as ICalendarEventHeader}
                 style={style}
                 activeDate={activeDate}
               />
@@ -169,7 +169,7 @@ const CalendarList: React.FC<Props> = props => {
 }
 
 function getRowHeight(row: ICalendarListRow): number {
-  if (row.hasOwnProperty('is_day_header')) {
+  if (row.hasOwnProperty('isEventHeader')) {
     return 30
   }
 

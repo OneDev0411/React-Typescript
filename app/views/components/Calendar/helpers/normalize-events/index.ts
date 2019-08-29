@@ -1,46 +1,20 @@
 import { createDayId } from '../create-day-id'
 import { sortEvents } from '../sort-events'
-import eventEmptyState from '../get-event-empty-state'
 
 /**
  * returns list of days including their events
  * @param range
  * @param events
  */
-export function normalizeEvents(
-  events: ICalendarEvent[],
-  range: NumberRange,
-  activeDate: Date
-) {
-  // convert activeDate to yyyy/mm/dd format
-  const activeDayId = createDayId(activeDate, false)
-
-  if (events.length === 0) {
-    return {
-      [activeDayId]: [eventEmptyState]
-    }
-  }
-
-  // get list of all fetched events
+export function normalizeEvents(events: ICalendarEvent[], range: NumberRange) {
   const list = getEvents(range, events)
 
-  const normalizedEvents = Object.entries(list).reduce((acc, [day, events]) => {
-    if ((events as ICalendarEvent[]).length === 0) {
-      return isToday(day) || day === activeDayId
-        ? {
-            ...acc,
-            [day]: [eventEmptyState]
-          }
-        : acc
-    }
-
+  return Object.entries(list).reduce((acc, [month, daysOfMonth]) => {
     return {
       ...acc,
-      [day]: events
+      [month]: getSortedEvents(daysOfMonth)
     }
   }, {})
-
-  return sortEvents(normalizedEvents)
 }
 
 /**
@@ -48,25 +22,41 @@ export function normalizeEvents(
  * @param range
  * @param events
  */
-function getEvents(range: NumberRange, events: ICalendarEvent[]) {
+function getEvents(
+  range: NumberRange,
+  events: ICalendarEvent[]
+): ICalendarEventsList {
   return events.reduce((acc: string[], event: ICalendarEvent) => {
     const index = getEventIndex(event, range)
 
+    const [year, month, day] = index.split('/')
+    const monthId = `${year}/${month}`
+    const dayId = `${year}/${month}/${day}`
+
+    const dayEvents =
+      acc[monthId] && acc[monthId][dayId] ? acc[monthId][dayId] : []
+
     return {
       ...acc,
-      [index]: [...(acc[index] || []), event]
+      [monthId]: {
+        ...acc[monthId],
+        [dayId]: [...dayEvents, event]
+      }
     }
   }, getDaysInRange(range))
 }
 
 /**
- * checks the given day is equal to today or not
- * @param day
+ * returns sorted list of days events in a month
+ * @param daysEvents
  */
-function isToday(day: string): boolean {
-  const now = new Date()
-
-  return createDayId(now, false) === day
+function getSortedEvents(events: ICalendarMonthEvents) {
+  return Object.entries(events).reduce((acc, [day, events]) => {
+    return {
+      ...acc,
+      [day]: sortEvents(events)
+    }
+  }, {})
 }
 
 /**
@@ -78,11 +68,20 @@ function getDaysInRange(range: NumberRange) {
   const daysCount = Math.round(Math.abs(end - start) / 86400)
 
   return new Array(daysCount).fill(null).reduce((acc, _, index) => {
-    const day = createDayId(new Date(start * 1000 + index * 86400000))
+    const date = new Date(start * 1000 + index * 86400000)
+    const year = date.getUTCFullYear()
+    const month = date.getUTCMonth() + 1
+    const day = date.getUTCDate()
+
+    const byMonth = `${year}/${month}`
+    const byId = `${year}/${month}/${day}`
 
     return {
       ...acc,
-      [day]: []
+      [byMonth]: {
+        ...(acc[byMonth] || {}),
+        [byId]: []
+      }
     }
   }, {})
 }

@@ -45,7 +45,7 @@ interface Props {
   calendarRef?: RefObject<CalendarRef>
   user?: IUser
   onChangeActiveDate?: (activeDate: Date) => void
-  onLoadEvents?: (events: CalendarEventsList, range: NumberRange) => void
+  onLoadEvents?: (events: ICalendarEventsList, range: NumberRange) => void
 }
 
 interface StateProps {
@@ -127,19 +127,18 @@ export function Calendar({
           ? fetchedEvents
           : fetchedEvents.concat(events)
 
+        // get current range of fetched calendar
+        const range = options.calendarRange || apiOptions.range
+
+        const normalizedEvents = normalizeEvents(nextEvents, range)
+
         // update events list
         setEvents(nextEvents)
 
-        const normalizedEvents = normalizeEvents(
-          nextEvents,
-          apiOptions.range,
-          activeDate
-        )
-
         // updates virtual list rows
-        setListRows(createListRows(normalizedEvents))
+        setListRows(createListRows(normalizedEvents, activeDate))
 
-        onLoadEvents(normalizedEvents, apiOptions.range)
+        onLoadEvents(normalizedEvents, range)
       } catch (e) {
         console.log(e)
       } finally {
@@ -170,8 +169,6 @@ export function Calendar({
     if (rowId === null && recursive) {
       // try to jump to the date by fetching more data from server
       handleLoadEvents(date)
-
-      return
     }
 
     /**
@@ -182,13 +179,11 @@ export function Calendar({
      * should open the event dialog with the day set on it
      */
     if (rowId === -1) {
-      const nextEvents = normalizeEvents(events, calendarRange, date)
-      const nextRows = createListRows(nextEvents)
+      const nextEvents = normalizeEvents(events, calendarRange)
+      const nextRows = createListRows(nextEvents, date)
 
       setActiveDate(date)
       setListRows(nextRows)
-
-      return
     }
 
     if (!rowId || rowId === -1) {
@@ -243,14 +238,21 @@ export function Calendar({
     )
 
     // new range will be from start of calendar until end of new query range
-    setCalendarRange([calendarRange[0], query[1]])
+    const nextCalendarRange: NumberRange = [calendarRange[0], query[1]]
+
+    setCalendarRange(nextCalendarRange)
 
     // the loading indicator will be shown at the bottom of list
     setLoadingPosition(LoadingPosition.Bottom)
 
-    fetchEvents({
-      range: query
-    })
+    fetchEvents(
+      {
+        range: query
+      },
+      {
+        calendarRange: nextCalendarRange
+      }
+    )
   }, [calendarRange, fetchEvents, isLoading])
 
   /**
@@ -268,14 +270,21 @@ export function Calendar({
     )
 
     // new range will be from start of new range until end of new calendar range
-    setCalendarRange([query[0], calendarRange[1]])
+    const nextCalendarRange: NumberRange = [query[0], calendarRange[1]]
+
+    setCalendarRange(nextCalendarRange)
 
     // the loading indicator will be shown at the top of list
     setLoadingPosition(LoadingPosition.Top)
 
-    fetchEvents({
-      range: query
-    })
+    fetchEvents(
+      {
+        range: query
+      },
+      {
+        calendarRange: nextCalendarRange
+      }
+    )
   }, [calendarRange, fetchEvents, isLoading])
 
   /**
@@ -284,14 +293,10 @@ export function Calendar({
    */
   const createListFromEvents = useCallback(
     (events: ICalendarEvent[]) => {
-      const normalizedEvents = normalizeEvents(
-        events,
-        calendarRange,
-        activeDate
-      )
+      const normalizedEvents = normalizeEvents(events, calendarRange)
 
       setEvents(events)
-      setListRows(createListRows(normalizedEvents))
+      setListRows(createListRows(normalizedEvents, activeDate))
     },
     [activeDate, calendarRange]
   )

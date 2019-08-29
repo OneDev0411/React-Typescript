@@ -3,6 +3,7 @@ import React from 'react'
 import styles from '../styles'
 
 interface Props {
+  event: ICalendarEvent
   style: React.CSSProperties
 }
 
@@ -12,7 +13,7 @@ const emptyRowStyles = {
   color: '#536280'
 }
 
-export function TodayEmptyState({ style }: Props) {
+export function EventEmptyState({ event, style }: Props) {
   return (
     <>
       <div style={style}>
@@ -22,7 +23,9 @@ export function TodayEmptyState({ style }: Props) {
             ...emptyRowStyles
           }}
         >
-          <div style={styles.container}>No event set for this day!</div>
+          <div style={styles.container}>
+            No event set for this {event.type}!
+          </div>
         </div>
       </div>
     </>

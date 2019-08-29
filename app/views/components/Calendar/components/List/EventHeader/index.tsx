@@ -9,14 +9,14 @@ import { ContainerStyle, FlexStyle } from './styles'
 interface IProps {
   activeDate: Date | null
   style: React.CSSProperties
-  item: ICalendarDayRow
+  item: ICalendarEventHeader
 }
 
 /**
  * renders the day header
  * @param props
  */
-export function DayHeader(props: IProps) {
+export function EventHeader(props: IProps) {
   const date = new Date(props.item.date)
 
   const isActive =
@@ -39,14 +39,13 @@ export function DayHeader(props: IProps) {
               alignItems: 'center',
               justifyContent: 'center',
               marginRight: '1rem',
-              width: '30px',
-              height: '30px',
               zIndex: 1,
               borderRadius: '50%',
-              ...getColors(props.item.is_today, isActive)
+              ...getBoxSize(props.item),
+              ...getColors(props.item, isActive)
             }}
           >
-            {fecha.format(date, 'DD')}
+            {props.item.title}
           </strong>
 
           <span
@@ -54,9 +53,7 @@ export function DayHeader(props: IProps) {
               textTransform: 'uppercase'
             }}
           >
-            {date.getFullYear() !== new Date().getFullYear()
-              ? fecha.format(date, 'MMM YYYY, ddd')
-              : fecha.format(date, 'MMM, ddd')}
+            {getSecondaryText(props.item, date)}
           </span>
         </div>
       </div>
@@ -64,11 +61,33 @@ export function DayHeader(props: IProps) {
   )
 }
 
+/**
+ * returns secondary text of the header
+ * @param item
+ * @param date
+ */
+function getSecondaryText(item: ICalendarEventHeader, date: Date) {
+  if (item.headerType === 'day-header') {
+    return date.getFullYear() !== new Date().getFullYear()
+      ? fecha.format(date, 'MMM YYYY, ddd')
+      : fecha.format(date, 'MMM, ddd')
+  }
+
+  return date.getFullYear() !== new Date().getFullYear()
+    ? fecha.format(date, 'MMMM YYYY')
+    : fecha.format(date, 'MMMM')
+}
+
+/**
+ *
+ * @param isToday
+ * @param isActiveDay
+ */
 function getColors(
-  isToday: boolean,
+  item: ICalendarEventHeader,
   isActiveDay: boolean | null
 ): React.CSSProperties {
-  if (isToday) {
+  if (item.isToday) {
     return {
       color: '#fff',
       backgroundColor: primary
@@ -78,11 +97,23 @@ function getColors(
   if (isActiveDay) {
     return {
       color: primary,
-      backgroundColor: `rgba(${hexToRgb(primary)}, 0.14)`
+      backgroundColor:
+        item.headerType === 'day-header'
+          ? `rgba(${hexToRgb(primary)}, 0.14)`
+          : 'transparent'
     }
   }
 
   return {
     color: '#000'
+  }
+}
+
+function getBoxSize(item: ICalendarEventHeader) {
+  const size = item.headerType === 'day-header' ? '30px' : 'auto'
+
+  return {
+    width: size,
+    height: size
   }
 }

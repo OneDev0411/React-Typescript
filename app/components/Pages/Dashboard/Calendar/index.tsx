@@ -36,7 +36,7 @@ const CalendarPage: React.FC = props => {
   /**
    * keeps list of fetched days
    */
-  const [fetchedDays, setFetchedDays] = useState<string[]>([])
+  const [fetchedDays, setFetchedDays] = useState<{ [key: string]: number }>([])
 
   /**
    * keeps list of fetched days
@@ -52,7 +52,10 @@ const CalendarPage: React.FC = props => {
    * triggers when user clicks on a date in datepicker of left side
    * @param date
    */
-  const handleDatePickerChange = (date: Date = new Date()) => {
+  const handleDatePickerChange = (
+    date: Date = new Date(),
+    changeType: 'day' | 'month' | 'year'
+  ) => {
     if (calendarRef.current) {
       setActiveDate(date)
 
@@ -78,8 +81,9 @@ const CalendarPage: React.FC = props => {
    * triggers when new data is fetched by calendar
    * @param events
    */
-  const handleOnLoadEvents = (events: CalendarEventsList) => {
-    setFetchedDays(Object.keys(events))
+  const handleOnLoadEvents = (events: ICalendarEventsList) => {
+    setFetchedDays(getDaysWithEvent(events))
+
     setIsLoadingFilters(false)
   }
 
@@ -102,7 +106,7 @@ const CalendarPage: React.FC = props => {
    * @param day
    */
   const getEmptyDays = (day: Date) => {
-    return !fetchedDays.includes(fecha.format(day, 'YYYY/M/D'))
+    return !fetchedDays[fecha.format(day, 'YYYY/M/D')]
   }
 
   return (
@@ -149,6 +153,34 @@ const CalendarPage: React.FC = props => {
       </Main>
     </Container>
   )
+}
+
+/**
+ * returns flatted list of days that have at least one event
+ * @param events
+ */
+function getDaysWithEvent(events: ICalendarEventsList) {
+  return Object.values(events).reduce((acc, daysOfMonth) => {
+    // finds list of days with more than one event
+    const filterByDays = Object.entries(daysOfMonth).reduce(
+      (acc, [dayId, dayEvents]) => {
+        if (dayEvents.length === 0) {
+          return acc
+        }
+
+        return {
+          ...acc,
+          [dayId]: dayEvents.length
+        }
+      },
+      {}
+    )
+
+    return {
+      ...acc,
+      ...filterByDays
+    }
+  }, {})
 }
 
 export default CalendarPage
