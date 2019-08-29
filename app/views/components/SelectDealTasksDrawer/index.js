@@ -83,7 +83,11 @@ class TasksDrawer extends React.Component {
       if (selectedItem.type === 'task') {
         task = selectTaskById(this.props.tasks, selectedItem.id)
       } else {
-        const form = selectFormById(this.props.forms, selectedItem.id)
+        const form = selectFormById(
+          this.props.forms,
+          this.props.deal.id,
+          selectedItem.id
+        )
 
         task = await this.props.createFormTask(
           this.props.deal.id,
