@@ -81,7 +81,7 @@ const CalendarList: React.FC<Props> = props => {
       .fill(null)
       .findIndex((_, index) =>
         props.rows[index + data.visibleStartIndex].hasOwnProperty(
-          'is_event_header'
+          'isEventHeader'
         )
       )
 
@@ -123,7 +123,7 @@ const CalendarList: React.FC<Props> = props => {
       >
         {({ index, style }) => (
           <>
-            {props.rows[index].hasOwnProperty('is_event_header') ? (
+            {props.rows[index].hasOwnProperty('isEventHeader') ? (
               <EventHeader
                 key={props.rows[index].date}
                 item={props.rows[index] as ICalendarEventHeader}
@@ -169,7 +169,7 @@ const CalendarList: React.FC<Props> = props => {
 }
 
 function getRowHeight(row: ICalendarListRow): number {
-  if (row.hasOwnProperty('is_event_header')) {
+  if (row.hasOwnProperty('isEventHeader')) {
     return 30
   }
 

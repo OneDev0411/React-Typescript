@@ -22,7 +22,7 @@ export function getRowIdByDate(
   }
 
   return rows.findIndex(row => {
-    return row.hasOwnProperty('is_event_header') && row.date === dayId
+    return row.hasOwnProperty('isEventHeader') && row.date === dayId
   })
 }
 

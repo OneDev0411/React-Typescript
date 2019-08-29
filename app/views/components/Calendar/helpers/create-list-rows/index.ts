@@ -14,9 +14,9 @@ export function createListRows(
     if (isEmptyMonth(month, daysOfMonth, activeDate)) {
       return [
         {
-          is_event_header: true,
-          header_type: 'month-header',
-          is_today: false,
+          isEventHeader: true,
+          headerType: 'month-header',
+          isToday: false,
           title: `01-${getLastDayOfMonth(daysOfMonth)}`,
           date: month
         },
@@ -52,9 +52,9 @@ function getMonthEvents(
     .flatMap(([day, events]) => {
       return [
         {
-          is_event_header: true,
-          header_type: 'day-header',
-          is_today: fecha.format(new Date(day), 'YYYY-MM-DD') === today,
+          isEventHeader: true,
+          headerType: 'day-header',
+          isToday: fecha.format(new Date(day), 'YYYY-MM-DD') === today,
           title: fecha.format(new Date(day), 'DD'),
           date: day
         },

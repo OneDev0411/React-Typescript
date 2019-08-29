@@ -39,9 +39,9 @@ declare interface ICalendarEvent {
 
 declare interface ICalendarEventHeader {
   date: string
-  header_type: string
-  is_today: boolean
-  is_event_header: boolean
+  headerType: string
+  isToday: boolean
+  isEventHeader: boolean
   title: string
 }
 

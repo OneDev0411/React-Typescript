@@ -67,7 +67,7 @@ export function EventHeader(props: IProps) {
  * @param date
  */
 function getSecondaryText(item: ICalendarEventHeader, date: Date) {
-  if (item.header_type === 'day-header') {
+  if (item.headerType === 'day-header') {
     return date.getFullYear() !== new Date().getFullYear()
       ? fecha.format(date, 'MMM YYYY, ddd')
       : fecha.format(date, 'MMM, ddd')
@@ -87,7 +87,7 @@ function getColors(
   item: ICalendarEventHeader,
   isActiveDay: boolean | null
 ): React.CSSProperties {
-  if (item.is_today) {
+  if (item.isToday) {
     return {
       color: '#fff',
       backgroundColor: primary
@@ -98,7 +98,7 @@ function getColors(
     return {
       color: primary,
       backgroundColor:
-        item.header_type === 'day-header'
+        item.headerType === 'day-header'
           ? `rgba(${hexToRgb(primary)}, 0.14)`
           : 'transparent'
     }
@@ -110,7 +110,7 @@ function getColors(
 }
 
 function getBoxSize(item: ICalendarEventHeader) {
-  const size = item.header_type === 'day-header' ? '30px' : 'auto'
+  const size = item.headerType === 'day-header' ? '30px' : 'auto'
 
   return {
     width: size,

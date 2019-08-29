@@ -59,8 +59,7 @@ export function Event({ event, user, nextItem, style, onSelectEvent }: Props) {
       ? fecha.format(new Date(event.timestamp * 1000), 'hh:mm A')
       : 'All day'
 
-  const hasBorderBottom =
-    nextItem && !nextItem.hasOwnProperty('is_event_header')
+  const hasBorderBottom = nextItem && !nextItem.hasOwnProperty('isEventHeader')
 
   const classes = useStyles({
     hasBorderBottom
