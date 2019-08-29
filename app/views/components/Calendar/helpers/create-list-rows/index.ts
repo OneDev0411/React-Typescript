@@ -11,7 +11,7 @@ export function createListRows(
   const activeDayId = createDayId(activeDate, false)
 
   return Object.entries(events).flatMap(([month, daysOfMonth]) => {
-    if (getIsEmptyMonth(month, daysOfMonth, activeDate)) {
+    if (isEmptyMonth(month, daysOfMonth, activeDate)) {
       return [
         {
           is_event_header: true,
@@ -35,7 +35,10 @@ export function createListRows(
  * returns month's events
  * @param days
  */
-function getMonthEvents(days: ICalendarMonthEvents, activeDayId: string) {
+function getMonthEvents(
+  days: ICalendarMonthEvents,
+  activeDayId: string
+): ICalendarListRow[] {
   const today = fecha.format(new Date(), 'YYYY-MM-DD')
 
   return Object.entries(days)
@@ -81,7 +84,7 @@ function isToday(day: string): boolean {
  * returns last day of given month
  * @param days
  */
-function getLastDayOfMonth(days: ICalendarMonthEvents) {
+function getLastDayOfMonth(days: ICalendarMonthEvents): number {
   const daysOfMonth = Object.keys(days)
 
   return new Date(daysOfMonth[daysOfMonth.length - 1]).getDate()
@@ -93,11 +96,11 @@ function getLastDayOfMonth(days: ICalendarMonthEvents) {
  * @param days
  * @param activeDate
  */
-function getIsEmptyMonth(
+function isEmptyMonth(
   month: string,
   days: ICalendarMonthEvents,
   activeDate: Date
-) {
+): boolean {
   const date = new Date(month)
 
   if (
