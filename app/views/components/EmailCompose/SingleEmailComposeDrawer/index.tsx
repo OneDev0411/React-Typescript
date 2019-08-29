@@ -12,7 +12,7 @@ import { getSendEmailResultMessages } from 'components/EmailCompose/helpers/emai
 
 import { createEmailCampaign } from 'models/email/create-email-campaign'
 
-import ContactsChipsInput from 'components/ContactsChipsInput'
+import EmailRecipientsChipsInput from 'components/EmailRecipientsChipsInput'
 
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
 
@@ -91,8 +91,9 @@ export function SingleEmailComposeDrawer({
         <Field
           label="To"
           name="to"
-          component={ContactsChipsInput as any}
+          component={EmailRecipientsChipsInput as any}
           readOnly={disableAddNewRecipient}
+          includeSuggestions
           TextFieldProps={
             {
               inputProps: {
@@ -102,10 +103,18 @@ export function SingleEmailComposeDrawer({
           }
         />
         {isCcShown && (
-          <Field label="Cc" name="cc" component={ContactsChipsInput as any} />
+          <Field
+            label="Cc"
+            name="cc"
+            component={EmailRecipientsChipsInput as any}
+          />
         )}
         {isBccShown && (
-          <Field label="Bcc" name="bcc" component={ContactsChipsInput as any} />
+          <Field
+            label="Bcc"
+            name="bcc"
+            component={EmailRecipientsChipsInput as any}
+          />
         )}
       </>
     )

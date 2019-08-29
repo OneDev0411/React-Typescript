@@ -245,6 +245,10 @@ export function ChipsInput<T>({
                 {suggestedItems.map((suggestedItem, index) => {
                   const suggestion = itemToSuggestion(suggestedItem)
 
+                  if (!suggestion) {
+                    return null
+                  }
+
                   return (
                     <ListItem
                       dense

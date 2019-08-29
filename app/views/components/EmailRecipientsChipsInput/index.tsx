@@ -12,6 +12,8 @@ import { AnyAction } from 'redux'
 import Fuse from 'fuse.js'
 import { TextField } from 'final-form-material-ui'
 
+import { createStyles, makeStyles, Theme } from '@material-ui/core'
+
 import { searchContacts } from 'models/contacts/search-contacts'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { getSavedSegments } from 'actions/filter-segments/get-saved-segment'
@@ -21,15 +23,15 @@ import { getSegments, isListFetched } from 'reducers/filter-segments'
 
 import { ChipsInput } from '../ChipsInput'
 import { InlineInputLabel } from '../InlineInputLabel'
-import { Recipient } from './types'
 import { ChipsInputProps } from '../ChipsInput/types'
 import { recipientToChip } from './helpers/recipient-to-chip'
 import { recipientToSuggestion } from './helpers/recipient-to-suggestion'
 import { filterEntities } from './helpers/filter-entities'
+import { RecipientSuggestions } from './RecipientSuggestions'
 
 type BaseProps = Partial<FieldRenderProps<HTMLInputElement>> &
   Omit<
-    ChipsInputProps<Recipient>,
+    ChipsInputProps<IDenormalizedEmailRecipientInput>,
     | 'items'
     | 'onChange'
     | 'itemToChip'
@@ -47,24 +49,45 @@ interface Props extends BaseProps {
   isLoadingTags?: boolean
   areListsFetched?: boolean
 
+  includeSuggestions?: boolean
+
   /**
    * Optional control props
    */
-  onChange?: (value: Recipient[]) => void
-  value?: Recipient[]
+  onChange?: (value: IDenormalizedEmailRecipientInput[]) => void
+  value?: IDenormalizedEmailRecipientInput[]
   getContactsTags: IAsyncActionProp<typeof getContactsTags>
   getSavedSegments: IAsyncActionProp<typeof getSavedSegments>
 }
 
+const useEmailRecipientsChipsInputStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      Input: {
+        flexWrap: 'wrap'
+      },
+      inputWrapper: {
+        flexBasis: '93%'
+      }
+    }),
+  { name: 'EmailRecipientsChipsInput' }
+)
+
 /**
  * A component for getting a list of tags, lists, contacts&email or contact&phone
  * can be controlled via `value` and `onChange` or Final Form input
+ *
+ * NOTE: we can pull this suggestions feature up into ChipsInput, but
+ * right now, there is a styling issue which is not resolved generally,
+ * and it's fixed by a workaround. This workaround is dependent on the
+ * label width!
  */
-function ContactsChipsInput({
+function EmailRecipientsChipsInput({
   getContactsTags,
   getSavedSegments,
   isLoadingTags,
   areListsFetched,
+  includeSuggestions,
   tags,
   lists,
   label,
@@ -74,11 +97,11 @@ function ContactsChipsInput({
   onChange,
   ...chipsInputProps
 }: Props) {
-  const [recipients, setRecipients] = useControllableState<Recipient[]>(
-    input ? input.value : value,
-    input ? (input.onChange as any) : onChange,
-    []
-  )
+  const [recipients, setRecipients] = useControllableState<
+    IDenormalizedEmailRecipientInput[]
+  >(input ? input.value : value, input ? (input.onChange as any) : onChange, [])
+
+  const classes = useEmailRecipientsChipsInputStyles()
 
   useEffect(() => {
     if (!isLoadingTags) {
@@ -91,45 +114,74 @@ function ContactsChipsInput({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const getSuggestions: (searchTerm: string) => Observable<Recipient[]> = (
+  const getSuggestions: (
+    searchTerm: string
+  ) => Observable<IDenormalizedEmailRecipientInput[]> = (
     searchTerm: string
   ) => {
-    return combineLatest(
-      ...[
-        of(filterEntities(tags, searchTerm, ['text'])),
-        of(filterEntities(lists, searchTerm, ['name'])),
-        searchTerm
-          ? fromPromise(
-              searchContacts(searchTerm, undefined, {
-                associations: [],
-                order: '-created_at'
-              })
-            ).pipe(
-              map(result => {
-                return new Fuse(
-                  result.data
-                    .map(contact => {
-                      const emails: string[] = contact.emails || []
+    const suggestionList$: Observable<IDenormalizedEmailRecipientInput[]>[] = [
+      of(
+        filterEntities(tags, searchTerm, ['text']).map(tag => ({
+          recipient_type: 'Tag',
+          tag
+        }))
+      ),
+      of(
+        filterEntities(lists, searchTerm, ['name']).map(list => ({
+          recipient_type: 'List',
+          list
+        }))
+      ),
+      searchTerm
+        ? fromPromise(
+            searchContacts(searchTerm, undefined, {
+              associations: [],
+              order: '-created_at'
+            })
+          ).pipe(
+            map(result => {
+              return new Fuse(
+                result.data
+                  .map(contact => {
+                    const emails: string[] = contact.emails || []
 
-                      return emails.map(email => ({
+                    return emails.map<IDenormalizedEmailRecipientEmailInput>(
+                      email => ({
+                        recipient_type: 'Email',
                         contact,
                         email
-                      }))
-                    })
-                    .flat(),
-                  { keys: ['email', 'contact.display_name'] }
-                ).search(searchTerm)
-              })
-            )
-          : of([])
-        // @ts-ignore something is wrong with pipe typing
-      ].map(observable => observable.pipe(startWith([]))),
+                      })
+                    )
+                  })
+                  .flat(),
+                {
+                  keys: ['email', 'contact.display_name']
+                }
+              ).search(searchTerm)
+            })
+          )
+        : of([])
+    ]
+
+    return combineLatest(
+      ...suggestionList$.map(observable => observable.pipe(startWith([]))),
       (...values) => values.flat()
     )
   }
 
-  const { InputProps = {}, ...TextFieldProps } =
+  const { InputProps = {}, inputProps = {}, ...TextFieldProps } =
     chipsInputProps.TextFieldProps || {}
+
+  const createEmailRecipient: (
+    email: string
+  ) => IDenormalizedEmailRecipientEmailInput = value => ({
+    recipient_type: 'Email',
+    email: value
+  })
+
+  const acceptSuggestion = recipient => {
+    return setRecipients([...recipients, recipient])
+  }
 
   return (
     <ChipsInput
@@ -139,12 +191,23 @@ function ContactsChipsInput({
       itemToChip={recipientToChip}
       itemToSuggestion={recipientToSuggestion}
       getSuggestions={getSuggestions}
-      createFromString={value => ({ email: value })}
+      createFromString={createEmailRecipient}
       TextFieldComponent={TextField}
       TextFieldProps={{
         InputProps: {
           startAdornment: <InlineInputLabel>{label}</InlineInputLabel>,
+          endAdornment: includeSuggestions ? (
+            <RecipientSuggestions
+              currentRecipients={recipients}
+              onSelect={acceptSuggestion}
+            />
+          ) : null,
+          className: classes.Input,
           ...InputProps
+        },
+        inputProps: {
+          ...inputProps,
+          inputWrapperClassName: classes.inputWrapper
         },
         input,
         meta,
@@ -178,4 +241,4 @@ const mapStateToProps = ({ contacts }: IAppState) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ContactsChipsInput)
+)(EmailRecipientsChipsInput)

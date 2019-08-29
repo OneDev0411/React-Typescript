@@ -5,11 +5,8 @@ import { getEmailCampaign } from 'models/email/get-email-campaign'
 
 import { notUndefined } from 'utils/ts-utils'
 
-import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
-
 import { BulkEmailComposeDrawer } from '../BulkEmailComposeDrawer'
 import { SingleEmailComposeDrawer } from '../SingleEmailComposeDrawer'
-import { EmailRecipient, Recipient } from '../../ContactsChipsInput/types'
 import { EmailFormValues } from '../types'
 
 interface Props {
@@ -89,28 +86,35 @@ export function EditEmailDrawer({ emailId, isOpen, onClose, onEdited }: Props) {
 }
 
 function getRecipientsFromRecipientsEntity(
-  recipientType: IEmailRecipient['recipient_type'],
+  sendType: IEmailRecipient['send_type'],
   recipients: IEmailRecipient<'list' | 'contact'>[]
-): Recipient[] {
+): IDenormalizedEmailRecipientInput[] {
   return recipients
-    .filter(recipient => recipient.recipient_type === recipientType)
-    .map(recipient => {
-      if (recipient.tag) {
+    .filter(recipient => recipient.send_type === sendType)
+    .map<IDenormalizedEmailRecipientInput | undefined>(recipient => {
+      if (recipient.recipient_type === 'Tag') {
         return {
-          type: 'crm_tag',
-          text: recipient.tag
-        } as IContactTag
+          recipient_type: 'Tag',
+          tag: {
+            type: 'crm_tag',
+            text: recipient.tag
+          } as IContactTag
+        }
       }
 
-      if (recipient.list) {
-        return recipient.list
+      if (recipient.recipient_type === 'List') {
+        return {
+          recipient_type: 'List',
+          list: recipient.list
+        }
       }
 
-      if (recipient.email) {
+      if (recipient.recipient_type === 'Email' && recipient.email) {
         return {
+          recipient_type: 'Email',
           email: recipient.email,
-          contact: normalizeContact(recipient.contact)
-        } as EmailRecipient
+          contact: recipient.contact
+        }
       }
     })
     .filter(notUndefined)

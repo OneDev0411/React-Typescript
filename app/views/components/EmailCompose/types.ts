@@ -1,7 +1,5 @@
 import { ReactNode } from 'react'
 
-import { Recipient } from '../ContactsChipsInput/types'
-
 // TODO: we can remove this and directly work with file objects.
 interface EmailComposeAttachment {
   title: string
@@ -11,9 +9,9 @@ interface EmailComposeAttachment {
 
 export interface EmailFormValues {
   attachments: EmailComposeAttachment[]
-  to: Recipient[] | undefined
-  cc?: Recipient[] | undefined
-  bcc?: Recipient[] | undefined
+  to: IDenormalizedEmailRecipientInput[] | undefined
+  cc?: IDenormalizedEmailRecipientInput[] | undefined
+  bcc?: IDenormalizedEmailRecipientInput[] | undefined
   subject: string
   from: IUser
   due_at: Date | null

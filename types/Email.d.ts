@@ -1,34 +1,39 @@
-declare interface IEmailRecipientListInput {
+declare type IEmailRecipientType =
+  | 'Tag'
+  | 'List'
+  | 'Email'
+  | 'Brand'
+  | 'AllContacts'
+
+declare interface IEmailRecipientInputBase<T extends IEmailRecipientType> {
+  recipient_type: T
+}
+declare interface IEmailRecipientListInput
+  extends IEmailRecipientInputBase<'List'> {
   list: UUID
 }
-declare interface IEmailRecipientTagInput {
+declare interface IEmailRecipientTagInput
+  extends IEmailRecipientInputBase<'Tag'> {
   tag: string
 }
-declare interface IEmailRecipientEmailInput {
+declare interface IEmailRecipientEmailInput
+  extends IEmailRecipientInputBase<'Email'> {
   email: string
   contact?: UUID
 }
+declare interface IEmailRecipientBrandInput
+  extends IEmailRecipientInputBase<'Brand'> {
+  brand: UUID
+}
+declare interface IEmailRecipientAllContactsInput
+  extends IEmailRecipientInputBase<'AllContacts'> {}
 
 declare type IEmailRecipientInput =
   | IEmailRecipientEmailInput
   | IEmailRecipientListInput
   | IEmailRecipientTagInput
-
-declare type TIsTagPresent = TIsPropertyPresent<
-  IEmailRecipientInput,
-  IEmailRecipientTagInput,
-  'tag'
->
-declare type TIsListPresent = TIsPropertyPresent<
-  IEmailRecipientInput,
-  IEmailRecipientListInput,
-  'list'
->
-declare type TIsEmailPresent = TIsPropertyPresent<
-  IEmailRecipientInput,
-  IEmailRecipientEmailInput,
-  'email'
->
+  | IEmailRecipientAllContactsInput
+  | IEmailRecipientBrandInput
 
 declare type EmailCampaignRecipientAssociation = 'contact' | 'list'
 
@@ -42,7 +47,8 @@ declare type IEmailRecipient<
   email: null | string
   id: UUID
   ord: string
-  recipient_type: 'CC' | 'BCC' | 'To'
+  send_type: 'CC' | 'BCC' | 'To'
+  recipient_type: IEmailRecipientType
   tag: string
   type: 'email_campaign_recipient'
   updated_at: null | string
@@ -126,4 +132,35 @@ declare interface IEmail {
   html: string
   text?: string
   headers?: any
+}
+
+/**
+ * This is corresponding to {@link IEmailRecipientInput}, but fields like
+ * list, tag and contact are objects instead of UUIDs
+ */
+declare type IDenormalizedEmailRecipientInput =
+  | IDenormalizedEmailRecipientEmailInput
+  | IDenormalizedEmailRecipientListInput
+  | IDenormalizedEmailRecipientTagInput
+  | IEmailRecipientAllContactsInput
+  | IDenormalizedEmailRecipientBrandInput
+
+declare interface IDenormalizedEmailRecipientEmailInput
+  extends Omit<IEmailRecipientEmailInput, 'contact'> {
+  contact?: IContact
+}
+
+declare interface IDenormalizedEmailRecipientListInput
+  extends Omit<IEmailRecipientListInput, 'list'> {
+  list: IContactList
+}
+
+declare interface IDenormalizedEmailRecipientTagInput
+  extends Omit<IEmailRecipientTagInput, 'tag'> {
+  tag: IContactTag
+}
+
+declare interface IDenormalizedEmailRecipientBrandInput
+  extends Omit<IEmailRecipientBrandInput, 'brand'> {
+  brand: IBrand
 }

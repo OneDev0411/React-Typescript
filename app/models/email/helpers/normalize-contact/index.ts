@@ -1,15 +1,14 @@
-import { Recipient } from 'components/ContactsChipsInput/types'
-
 export function normalizeContactForEmailCompose(
   contact: INormalizedContact
-): Recipient[] {
-  if (!contact || !contact.summary || !contact.summary.email) {
+): IDenormalizedEmailRecipientInput[] {
+  if (!contact || !contact.email) {
     return []
   }
 
   return [
     {
-      email: contact.summary.email,
+      recipient_type: 'Email',
+      email: contact.email,
       contact
     }
   ]
