@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from 'react'
 import { Form, Field } from 'react-final-form'
 import { Grid, Box, Button, Typography, Tooltip } from '@material-ui/core'
-import { TextField } from 'final-form-material-ui'
 
 import { SelectInput } from 'components/Forms/SelectInput'
+import { MUITextInput } from 'components/Forms/MUITextInput'
 import { DangerButton } from 'components/Button/DangerButton'
 import { Divider } from 'components/Divider'
 
@@ -203,7 +203,7 @@ export default function ScheduledEmailForm({
                   autoComplete="off"
                   fullWidth
                   required
-                  component={TextField}
+                  component={MUITextInput}
                 />
               </Box>
             </Grid>
@@ -218,7 +218,7 @@ export default function ScheduledEmailForm({
                   autoComplete="off"
                   fullWidth
                   multiline
-                  component={TextField}
+                  component={MUITextInput}
                 />
               </Box>
             </Grid>
@@ -247,7 +247,7 @@ export default function ScheduledEmailForm({
                         )
                       })
                     }
-                    component={TextField}
+                    component={MUITextInput}
                   />
                 </Box>
               </Grid>
@@ -273,7 +273,7 @@ export default function ScheduledEmailForm({
                     required
                     InputLabelProps={{ shrink: true }}
                     validate={validateTimeInput}
-                    component={TextField}
+                    component={MUITextInput}
                   />
                 </Box>
               </Grid>

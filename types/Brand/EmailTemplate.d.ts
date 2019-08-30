@@ -1,11 +1,10 @@
-declare interface IBrandEmailTemplate extends IModel {
+declare interface IBrandEmailTemplate extends IModel<'brand_email'> {
   brand: UUID
   name: string
   goal: string
   subject: string
   include_signature: boolean
   body: string
-  type: 'brand_email'
   text: string
   editable: boolean
 }
