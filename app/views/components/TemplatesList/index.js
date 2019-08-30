@@ -34,7 +34,13 @@ function TemplatesList(props) {
   const isEmpty = props.items.length == 0
 
   if (props.isLoading || isEmpty) {
-    return <Fallback isEmpty={isEmpty} isLoading={props.isLoading} />
+    return (
+      <Fallback
+        isEmpty={isEmpty}
+        isLoading={props.isLoading}
+        component={props.emptyState}
+      />
+    )
   }
 
   return (

@@ -47,6 +47,9 @@ const theme = createMuiTheme({
     button: {
       textTransform: 'none'
     },
+    h1: {
+      fontFamily: 'Merriweather'
+    },
     h5: {
       fontFamily: 'Merriweather'
     }
