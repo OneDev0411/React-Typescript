@@ -75,15 +75,14 @@ export class RoleAgentIntegration extends React.Component {
     /**
      * https://gitlab.com/rechat/web/issues/1668#note_97457381
      */
-    if (
-      dealSide === 'Buying' &&
-      role === 'BuyerAgent' &&
-      this.props.dealEnderType !== 'OfficeDoubleEnder'
-    ) {
+    if (dealSide === 'Buying' && role === 'BuyerAgent') {
       return true
     }
 
-    return this.props.isPrimaryAgent
+    return (
+      this.props.isPrimaryAgent &&
+      this.props.dealEnderType !== 'OfficeDoubleEnder'
+    )
   }
 
   onSelectAgent = (user, relatedContacts = []) => {
@@ -101,7 +100,7 @@ export class RoleAgentIntegration extends React.Component {
         role: {
           agent,
           email,
-          brand: user.brand_id,
+          brand: this.isOfficeDoubleEnded ? null : user.brand_id,
           legal_last_name: last_name,
           legal_first_name: first_name,
           phone_number: phone_number || work_phone,
@@ -114,7 +113,7 @@ export class RoleAgentIntegration extends React.Component {
     if (relatedContacts.length > 0) {
       let role = {
         ...convertContactToRole(relatedContacts[0], this.props.attributeDefs),
-        brand: user.brand_id,
+        brand: this.isOfficeDoubleEnded ? null : user.brand_id,
         phone_number: phone_number || work_phone,
         company_title: office ? office.name : ''
       }
@@ -141,6 +140,10 @@ export class RoleAgentIntegration extends React.Component {
     })
   }
 
+  get isOfficeDoubleEnded() {
+    return this.props.dealEnderType === 'OfficeDoubleEnder'
+  }
+
   render() {
     return (
       <>
@@ -148,6 +151,7 @@ export class RoleAgentIntegration extends React.Component {
           <TeamAgents
             title={this.props.modalTitle}
             isPrimaryAgent={this.getIsPrimaryAgent()}
+            isOfficeDoubleEnded={this.isOfficeDoubleEnded}
             onClose={this.props.onClose}
             onSelectAgent={this.onSelectAgent}
           />
