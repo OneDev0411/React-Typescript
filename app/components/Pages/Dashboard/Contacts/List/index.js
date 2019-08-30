@@ -498,17 +498,17 @@ class ContactsList extends React.Component {
     return (
       <PageContainer isOpen={isSideMenuOpen}>
         <SideMenu isOpen={isSideMenuOpen} width="13rem">
+          <TagsList
+            onFilterChange={filters => this.handleFilterChange(filters, true)}
+          />
+          <FlowsList
+            onChange={_.debounce(() => this.handleFilterChange({}, true), 300)}
+          />
           <SavedSegments
             name={CONTACTS_SEGMENT_NAME}
             associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
             getPredefinedLists={getPredefinedContactLists}
             onChange={this.handleChangeSavedSegment}
-          />
-          <FlowsList
-            onChange={_.debounce(() => this.handleFilterChange({}, true), 300)}
-          />
-          <TagsList
-            onFilterChange={filters => this.handleFilterChange(filters, true)}
           />
         </SideMenu>
 
