@@ -1,7 +1,8 @@
 import React from 'react'
 import { Form, Field } from 'react-final-form'
 import { Grid, Box, Button, Divider, Typography } from '@material-ui/core'
-import { TextField } from 'final-form-material-ui'
+
+import { MUITextInput } from 'components/Forms/MUITextInput'
 
 import { TaskType } from 'components/NewEvent/components/TaskType'
 import { DangerButton } from 'components/Button/DangerButton'
@@ -128,7 +129,7 @@ export default function EventForm({
                   autoComplete="off"
                   fullWidth
                   required
-                  component={TextField}
+                  component={MUITextInput}
                 />
               </Box>
             </Grid>
@@ -143,7 +144,7 @@ export default function EventForm({
                   autoComplete="off"
                   fullWidth
                   multiline
-                  component={TextField}
+                  component={MUITextInput}
                 />
               </Box>
             </Grid>
@@ -172,7 +173,7 @@ export default function EventForm({
                         )
                       })
                     }
-                    component={TextField}
+                    component={MUITextInput}
                   />
                 </Box>
               </Grid>
@@ -198,7 +199,7 @@ export default function EventForm({
                     required
                     InputLabelProps={{ shrink: true }}
                     validate={validateTimeInput}
-                    component={TextField}
+                    component={MUITextInput}
                   />
                 </Box>
               </Grid>
