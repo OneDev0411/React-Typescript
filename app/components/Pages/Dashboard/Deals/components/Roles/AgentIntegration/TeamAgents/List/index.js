@@ -3,6 +3,7 @@ import memoize from 'lodash/memoize'
 import PropTypes from 'prop-types'
 import Fuse from 'fuse.js'
 import useDebouncedCallback from 'use-debounce/lib/callback'
+import uniqBy from 'lodash/uniqBy'
 
 import Avatar from 'components/Avatar'
 import { TextWithHighlights } from 'components/TextWithHighlights'
@@ -33,7 +34,16 @@ export function AgentsList(props) {
   const [searchTerm, setSearchTerm] = useState('')
   const [debouncedSetSearchTerm] = useDebouncedCallback(setSearchTerm, 500)
 
-  const teams = normalizeTeams(props.user, props.teams, searchTerm)
+  let teams = normalizeTeams(props.user, props.teams, searchTerm)
+
+  // merge all teams into one and show them flattened
+  if (props.isOfficeDoubleEnded) {
+    teams = [
+      {
+        users: uniqBy(teams.flatMap(team => team.users), user => user.id)
+      }
+    ]
+  }
 
   return (
     <div>
@@ -49,20 +59,22 @@ export function AgentsList(props) {
       )}
 
       {teams.map((office, officeIndex) => {
-        if (!office.users.length) {
+        if (office.users.length === 0) {
           return false
         }
 
         return (
           <Card key={officeIndex}>
-            <Header>
-              <Title>
-                <TextWithHighlights search={searchTerm}>
-                  {office.name}
-                </TextWithHighlights>
-              </Title>
-              <SubTitle>{office.subtitle}</SubTitle>
-            </Header>
+            {office.name && (
+              <Header>
+                <Title>
+                  <TextWithHighlights search={searchTerm}>
+                    {office.name}
+                  </TextWithHighlights>
+                </Title>
+                <SubTitle>{office.subtitle}</SubTitle>
+              </Header>
+            )}
 
             {office.users.map((user, userIndex) => (
               <RowItem
