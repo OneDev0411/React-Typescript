@@ -93,13 +93,17 @@ class SearchListingDrawer extends React.Component {
 SearchListingDrawer.propTypes = {
   searchPlaceholder: PropTypes.string,
   mockListings: PropTypes.bool,
-  allowedStatuses: PropTypes.array
+  allowedStatuses: PropTypes.array,
+  title: PropTypes.string,
+  defaultListTitle: PropTypes.string
 }
 
 SearchListingDrawer.defaultProps = {
   searchPlaceholder: 'Enter MLS # or address',
   mockListings: false,
-  allowedStatuses: []
+  allowedStatuses: [],
+  title: 'Select a Listing',
+  defaultListTitle: 'Add from your deals'
 }
 
 export default SearchListingDrawer
