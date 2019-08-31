@@ -1,28 +1,30 @@
 import curry from 'lodash/curry'
 
+import { SuperAgentRequest } from 'superagent'
+
 import Fetch from 'services/fetch'
 
-function isUrlFileInput(
-  attachment: File | IUrlFileInput
-): attachment is IUrlFileInput {
-  return !(attachment instanceof File) && !!attachment.url
+function isExistingFile(attachment: File | IFile): attachment is IFile {
+  return !(attachment instanceof File) && !!attachment.id
 }
 
-export const upload = curry(async function upload(
+/**
+ * The request object is intentionally returned to give access to
+ * progress as well as aborting request, which is useful for file uploading
+ */
+export const upload = curry(function upload(
   path: string,
-  attachment: File | IUrlFileInput
-): Promise<IFile> {
+  attachment: File | IFile
+): SuperAgentRequest {
   const request = new Fetch().post(path)
 
-  if (isUrlFileInput(attachment)) {
-    request.send(attachment)
+  if (isExistingFile(attachment)) {
+    request.send({ file: attachment.id })
   }
 
   if (attachment instanceof File) {
     request.attach('file', attachment)
   }
 
-  const response = await request
-
-  return response.body.data
+  return request
 })

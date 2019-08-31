@@ -51,7 +51,8 @@ function EditEmailSignature({
   }
 
   const uploadImage = async file => {
-    const uploadedFile = await uploadEmailSignatureAttachment(file)
+    const response = await uploadEmailSignatureAttachment(file)
+    const uploadedFile: IFile = response.body.data
 
     return uploadedFile.url
   }

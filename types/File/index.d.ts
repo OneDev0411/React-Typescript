@@ -12,8 +12,3 @@ declare interface IFile {
   updated_at: number
   url: string
 }
-
-declare interface IUrlFileInput {
-  // Emil said it's like this. It's not tested yet.
-  url: string
-}
