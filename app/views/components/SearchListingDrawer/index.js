@@ -17,6 +17,12 @@ class SearchListingDrawer extends React.Component {
   }
 
   handleSelectListings = async items => {
+    const { onSelect } = this.props
+
+    if (onSelect) {
+      return onSelect(Object.values(items))
+    }
+
     const { mockListings } = this.props
 
     this.setState({
