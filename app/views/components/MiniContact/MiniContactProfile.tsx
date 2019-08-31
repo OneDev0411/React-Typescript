@@ -18,7 +18,7 @@ import {
 
 interface MiniContactPropsType {
   type: MiniContactType
-  data: {}
+  data: object
   children: React.ReactNode
   as: string
 }

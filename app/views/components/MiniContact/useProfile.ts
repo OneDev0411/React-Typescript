@@ -5,21 +5,22 @@ import { findContact, getContactData } from './helpers'
 import { formatter } from './MiniContact-formatters'
 
 function useProfile(type, initData): FormatterOutputType {
-  let data = formatter(type, initData)
+  const data = formatter(type, initData)
   const [output, setOutput] = useState(data)
 
   useEffect(function useProfileEffect() {
-    let cancelRequest = false
+    let requestCanceled = false
 
     async function fetchContact(searchFor, type: 'get' | 'find') {
       let res
+
       if (type === 'find') {
         res = await findContact(searchFor, data)
       } else {
         res = await getContactData(searchFor)
       }
 
-      if (!cancelRequest) {
+      if (!requestCanceled) {
         setOutput(res)
       }
     }
@@ -49,7 +50,7 @@ function useProfile(type, initData): FormatterOutputType {
     }
 
     return function cleanUpProfile() {
-      cancelRequest = true
+      requestCanceled = true
     }
     // eslint-disable-next-line
   }, [])

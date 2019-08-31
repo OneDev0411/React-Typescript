@@ -1,6 +1,6 @@
-import { ContactStatType, ContactsListType } from './types'
+import { EmailStatType, ContactsListType } from './types'
 
-export function getContactStat(email: IInsightEmail): ContactStatType {
+export function getContactStat(email: IInsightEmail): EmailStatType {
   return {
     unsubscribed: email.unsubscribed,
     failed: email.failed,
@@ -46,15 +46,22 @@ export function doSort(list: ContactsListType[], sort_value: SortValues) {
       const bName = b.display_name
 
       // Sorry, aName === null part is for satisfying TS :(
-      if (aName === null || !aName) return 1
-      if (bName === null || !bName) return -1
+      if (aName === null || !aName) {
+        return 1
+      }
+
+      if (bName === null || !bName) {
+        return -1
+      }
 
       if (aName < bName) {
         return -1
       }
+
       if (aName > bName) {
         return 1
       }
+
       return 0
     })
   }

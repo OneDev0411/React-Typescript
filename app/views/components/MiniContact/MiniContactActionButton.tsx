@@ -33,7 +33,7 @@ function MiniContactActionButton(props: MiniContactActionButtonType) {
 
   // Contact
   if (isContact) {
-    const passedProps = {
+    const actionSettings = {
       type: ActionSettingsNamesType.EVENT,
       data: {
         ...sharedProps,
@@ -45,7 +45,7 @@ function MiniContactActionButton(props: MiniContactActionButtonType) {
       <TextIconButton
         appearance="outline"
         iconLeft={IconCalendar}
-        onClick={() => props.setActionSettings(passedProps)}
+        onClick={() => props.setActionSettings(actionSettings)}
         size="small"
         text="Add Event"
       />
@@ -53,7 +53,7 @@ function MiniContactActionButton(props: MiniContactActionButtonType) {
   }
 
   // User
-  const passedProps = {
+  const actionSettings = {
     type: ActionSettingsNamesType.CONTACT,
     data: {
       ...sharedProps,
@@ -66,7 +66,7 @@ function MiniContactActionButton(props: MiniContactActionButtonType) {
   }
 
   return (
-    <ActionButton onClick={() => props.setActionSettings(passedProps)}>
+    <ActionButton onClick={() => props.setActionSettings(actionSettings)}>
       Add to Contacts
     </ActionButton>
   )

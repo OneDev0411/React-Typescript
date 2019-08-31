@@ -1,5 +1,6 @@
 import React from 'react'
 import pure from 'recompose/pure'
+import { CSSProperties } from '@material-ui/styles'
 
 import { getNameInitials } from '../../../utils/helpers'
 import { Container, Image, Status, Initials } from './styled'
@@ -15,6 +16,7 @@ interface AvatarProps {
   placeHolderImage?: string
   initials?: string
   backgroundColor?: string
+  style?: CSSProperties
 }
 
 const Avatar: React.FunctionComponent<AvatarProps> = ({
@@ -27,7 +29,8 @@ const Avatar: React.FunctionComponent<AvatarProps> = ({
   showStatus = false,
   statusColor = '#35b863',
   backgroundColor,
-  initials = ''
+  initials = '',
+  style
 }) => {
   let imageSrc = ''
 
@@ -43,6 +46,7 @@ const Avatar: React.FunctionComponent<AvatarProps> = ({
       size={size}
       borderRadius={borderRadius}
       backgroundColor={backgroundColor}
+      style={style}
     >
       {imageSrc ? (
         <Image alt="rechat avatar" src={imageSrc} />

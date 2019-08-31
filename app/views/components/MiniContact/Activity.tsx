@@ -1,8 +1,8 @@
 import React from 'react'
 import fecha from 'fecha'
 import { Button } from '@material-ui/core'
-import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 
+import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 import IconCalendar from 'components/SvgIcons/Calendar2/IconCalendar'
 import IconTime from 'components/SvgIcons/Time/IconTime'
 import IconBirthday from 'components/SvgIcons/Birthday/IconBirthday'
@@ -21,8 +21,6 @@ function Activity(props: ActivityPropsType) {
   if ((!props.dates || props.dates.length == 0) && !props.last_touch) {
     return null
   }
-
-  console.log({ props })
 
   return (
     <div className="activity">

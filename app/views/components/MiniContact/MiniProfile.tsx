@@ -5,8 +5,8 @@ import { Link } from 'react-router'
 
 import Avatar from 'components/Avatar'
 import CopyButton from 'components/CopyButton'
+import { IAppState } from 'reducers/index'
 
-import Show from './Show'
 import Activity from './Activity'
 import {
   MiniContactType,
@@ -24,7 +24,7 @@ interface MiniProfilePropsType {
   initData: {}
   actionSettings: ActionSettingsType
   setActionSettings: (items: ActionSettingsType) => void
-  user: any
+  user: IUser
 }
 
 function MiniProfile(props: MiniProfilePropsType) {
@@ -60,20 +60,20 @@ function MiniProfile(props: MiniProfilePropsType) {
         </div>
       </div>
       <div className="details">
-        <Show if={!!data.name}>
+        {!!data.name && (
           <div className="person-name">
             {data.name}{' '}
             <Link to={`/dashboard/contacts/${output.contact_id}`}>
               <Button color="primary">View Profile</Button>
             </Link>
           </div>
-        </Show>
-        <Show if={!!data.phone}>
+        )}
+        {data.phone && (
           <div className="person-phone">
             {data.phone} <CopyButton text={data.phone} />
           </div>
-        </Show>
-        <Show if={!!data.email}>
+        )}
+        {!!data.email && (
           <div className="person-email">
             {data.email}{' '}
             <Button
@@ -83,14 +83,14 @@ function MiniProfile(props: MiniProfilePropsType) {
               Send Email
             </Button>
           </div>
-        </Show>
-        <Show if={!!data.address}>
+        )}
+        {!!data.address && (
           <div className="person-more-info">
             <div className="person-address">
               {data.address} <CopyButton text={data.address} />
             </div>
           </div>
-        </Show>
+        )}
         <MiniContactSocialMedias socials={data.socials} />
       </div>
       <Activity
@@ -102,10 +102,10 @@ function MiniProfile(props: MiniProfilePropsType) {
   )
 }
 
-function reduxState(state) {
+function mapStateToProps(state: IAppState) {
   return {
     user: state.user
   }
 }
 
-export default connect(reduxState)(MiniProfile)
+export default connect(mapStateToProps)(MiniProfile)

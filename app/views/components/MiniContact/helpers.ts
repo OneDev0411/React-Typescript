@@ -18,7 +18,7 @@ import {
 
 // Helpers
 
-export function getName(data) {
+export function getName(data: ProfileType) {
   if (data.name) {
     return data.name
   }
@@ -41,7 +41,7 @@ function selectAddress(address): string {
   return ''
 }
 
-function socialMediasInContact(contact): SocialMediasType[] {
+function socialMediasInContact(contact: IContact): SocialMediasType[] {
   const types = Object.keys(SocialMediasEnum)
 
   if (!contact.attributes) {
@@ -160,9 +160,11 @@ export function activitiesFormatter(activities) {
     if (a.title.includes('Birthday')) {
       return -1
     }
+
     if (b.title.includes('Birthday')) {
       return 1
     }
+
     return 0
   })
 
