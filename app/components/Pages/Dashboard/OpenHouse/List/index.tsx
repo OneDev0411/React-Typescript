@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { Button } from '@material-ui/core'
 
 import { useGetOpenHouses } from 'hooks/use-get-open-houses'
 
@@ -9,13 +8,20 @@ import PageHeader from 'components/PageHeader'
 import LoadingContainer from 'components/LoadingContainer'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
+import CreateNewOH from './CreateNewOH'
 import Name from './columns/Name'
 import { PageContainer } from './styled'
+
+interface Associations {
+  deal?: IDeal
+  listing?: ICompactListing
+}
 
 function OHList() {
   const { list, isFetching, error, reloadList } = useGetOpenHouses()
   const [isOpenOHDrawer, setIsOpenOHDrawer] = useState(false)
   const [selectedOH, setSelectedOH] = useState<IEvent | null>(null)
+  const [associations, setAssociations] = useState<Associations | null>(null)
 
   const columns = [
     {
@@ -35,6 +41,19 @@ function OHList() {
       )
     }
   ]
+
+  const onOpenOHDrawer = async (item: ICompactListing | IDeal) => {
+    const associations: Associations = {}
+
+    if (item.type === 'compact_listing') {
+      associations.listing = item
+    } else if (item.type === 'deal') {
+      associations.deal = item
+    }
+
+    setAssociations(associations)
+    setIsOpenOHDrawer(true)
+  }
 
   const onCloseOHDrawer = () => {
     setSelectedOH(null)
@@ -58,9 +77,7 @@ function OHList() {
         </PageHeader.Title>
 
         <PageHeader.Menu>
-          <Button variant="contained" color="primary">
-            Create an Open House
-          </Button>
+          <CreateNewOH onOpenOHDrawer={onOpenOHDrawer} />
         </PageHeader.Menu>
       </PageHeader>
 
@@ -87,6 +104,7 @@ function OHList() {
           onClose={onCloseOHDrawer}
           openHouse={selectedOH}
           submitCallback={drawerCallback}
+          associations={associations}
         />
       )}
     </>
