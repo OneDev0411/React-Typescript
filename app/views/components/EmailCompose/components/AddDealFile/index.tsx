@@ -24,7 +24,6 @@ import { notUndefined } from 'utils/ts-utils'
 import { DealRow } from './DealRow'
 import IconDealFilled from '../../../SvgIcons/Deals/IconDealFilled'
 import { iconSizes } from '../../../SvgIcons/icon-sizes'
-import { EmailComposeDrawerProps } from '../../types'
 import { getAllDealDocuments } from '../../../SelectDealFileDrawer/helpers/get-all-deal-documents'
 
 /**
@@ -46,9 +45,7 @@ interface Props extends FieldRenderProps<any> {
   getDeal: (id: string) => any
   deal?: IDeal
   onClick?: MouseEventHandler
-  initialAttachments: Required<
-    EmailComposeDrawerProps
-  >['initialValues']['attachments']
+  initialAttachments: IFile[]
 }
 
 interface State {

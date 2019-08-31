@@ -58,6 +58,10 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
     },
     // ///////////////////////
 
+    '.MuiLinearProgress-root': {
+      height: '1rem',
+      borderRadius: theme.shape.borderRadius
+    },
     '.MuiTooltip-tooltip': {
       background: theme.palette.common.black,
       fontSize: theme.typography.body1.fontSize,

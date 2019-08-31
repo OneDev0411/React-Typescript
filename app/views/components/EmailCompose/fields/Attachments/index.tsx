@@ -1,10 +1,11 @@
 import React from 'react'
 
-import { FieldRenderProps } from 'react-final-form'
+import { Field, FieldRenderProps } from 'react-final-form'
 
 import { Box } from '@material-ui/core'
 
 import { FileAttachment } from '../../components/Attachment/FileAttachment'
+import { UploadingAttachmentsList } from '../UploadingAttachments'
 
 export function AttachmentsList(props: FieldRenderProps<any>) {
   const handleRemove = (file: IFile) => {
@@ -16,7 +17,7 @@ export function AttachmentsList(props: FieldRenderProps<any>) {
   }
 
   return (
-    <Box my={2}>
+    <Box mt={2}>
       {Array.isArray(props.input.value) &&
         (props.input.value as IFile[]).map(file => (
           <FileAttachment
@@ -25,6 +26,16 @@ export function AttachmentsList(props: FieldRenderProps<any>) {
             onDelete={() => handleRemove(file)}
           />
         ))}
+      <Field
+        name="uploadingAttachments"
+        onFinish={(file: IFile) => {
+          props.input.onChange(([
+            ...(props.input.value || []),
+            file
+          ] as IFile[]) as any)
+        }}
+        component={UploadingAttachmentsList}
+      />
     </Box>
   )
 }

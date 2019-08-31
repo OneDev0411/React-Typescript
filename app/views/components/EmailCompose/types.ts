@@ -1,8 +1,9 @@
 import { ReactNode } from 'react'
+import { SuperAgentRequest } from 'superagent'
 
-export interface UploadingAttachment {
-  progress: number
-  title: string
+export interface IUploadingAttachment {
+  file: File
+  request: SuperAgentRequest
 }
 
 export interface EmailFormValues {

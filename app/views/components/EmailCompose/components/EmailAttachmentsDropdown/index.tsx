@@ -4,34 +4,36 @@ import * as React from 'react'
 import { Field } from 'react-final-form'
 
 import IconUpload from 'components/SvgIcons/Upload/IconUpload'
+import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
 
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
-import { useIconStyles } from '../../../../../styles/icon.styles'
+import { useIconStyles } from '../../../../../styles/use-icon-styles'
 import { BaseDropdown } from '../../../BaseDropdown'
 import { FilePicker } from '../../../FilePicker'
 import AddDealFile from '../AddDealFile'
-import { EmailComposeDrawerProps } from '../../types'
+import { IUploadingAttachment } from '../../types'
 import { iconSizes } from '../../../SvgIcons/icon-sizes'
 
 interface Props {
   deal: IDeal
-  initialAttachments: Required<
-    EmailComposeDrawerProps
-  >['initialValues']['attachments']
+  initialAttachments: IFile[]
 }
 
 export function EmailAttachmentsDropdown({ deal, initialAttachments }: Props) {
   const iconClasses = useIconStyles()
 
-  const uploadFromYourComputer = (files: FileList) => {
-    console.log('files', files)
-    uploadEmailAttachment(files[0])
-  }
-
   return (
     <BaseDropdown
-      buttonLabel="Attachments"
+      buttonLabel={
+        <>
+          <IconAttachment
+            size={iconSizes.small}
+            className={iconClasses.rightMargin}
+          />{' '}
+          Attachments
+        </>
+      }
       PopperProps={{ keepMounted: true }}
       renderMenu={({ close }) => (
         <List>
@@ -42,23 +44,44 @@ export function EmailAttachmentsDropdown({ deal, initialAttachments }: Props) {
             component={AddDealFile}
             onClick={close}
           />
-          <FilePicker onFilePicked={uploadFromYourComputer}>
-            {({ pickFiles }) => (
-              <ListItem
-                button
-                onClick={() => {
-                  pickFiles()
-                  close()
-                }}
-              >
-                <IconUpload
-                  size={iconSizes.small}
-                  className={iconClasses.rightMargin}
-                />
-                Attach from your computer
-              </ListItem>
-            )}
-          </FilePicker>
+          <Field
+            name="uploadingAttachments"
+            render={({ input }) => {
+              const uploadFromYourComputer = (files: FileList) => {
+                const file = files[0]
+
+                if (file) {
+                  input.onChange(([
+                    ...(input.value || []),
+                    {
+                      file,
+                      request: uploadEmailAttachment(file)
+                    }
+                  ] as IUploadingAttachment[]) as any)
+                }
+              }
+
+              return (
+                <FilePicker onFilePicked={uploadFromYourComputer}>
+                  {({ pickFiles }) => (
+                    <ListItem
+                      button
+                      onClick={() => {
+                        pickFiles()
+                        close()
+                      }}
+                    >
+                      <IconUpload
+                        size={iconSizes.small}
+                        className={iconClasses.rightMargin}
+                      />
+                      Attach from your computer
+                    </ListItem>
+                  )}
+                </FilePicker>
+              )
+            }}
+          />
         </List>
       )}
     />

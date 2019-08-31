@@ -10,7 +10,13 @@ import {
 
 import { fade } from '@material-ui/core/styles'
 
+import classNames from 'classnames'
+
 import IconCircleClose from 'components/SvgIcons/CircleClose/IconCircleClose'
+import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
+
+import { useIconStyles } from '../../../../../styles/use-icon-styles'
+import { useTextStyles } from '../../../../../styles/use-text-styles'
 
 interface Props {
   children: ReactNode
@@ -31,10 +37,17 @@ const useAttachmentStyles = makeStyles(
 
 export function Attachment({ children, onDelete }: Props) {
   const classes = useAttachmentStyles()
+  const iconClasses = useIconStyles()
+  const textClasses = useTextStyles()
 
   return (
     <Box mb={1} display="flex" alignItems="center" className={classes.root}>
-      <Box flexGrow={1}>{children}</Box>
+      <IconAttachment
+        className={classNames(iconClasses.rightMargin, iconClasses.small)}
+      />
+      <Box flexGrow={1} className={textClasses.noWrap}>
+        {children}
+      </Box>
       {onDelete && (
         <IconButton size="small" onClick={onDelete}>
           <IconCircleClose />
