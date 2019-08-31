@@ -143,7 +143,7 @@ export default function DealAddress(props) {
         title="Address"
         searchPlaceholder="Enter MLS# or an address"
         allowedStatuses={['Pending', 'Leased', 'Active']}
-        onSelectListings={handleSelectListing}
+        onSelectListingsCallback={handleSelectListing}
         onClose={toggleMlsDrawer}
       />
     </div>

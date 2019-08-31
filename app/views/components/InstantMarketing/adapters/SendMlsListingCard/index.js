@@ -2,7 +2,6 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 import { selectContact } from 'reducers/contacts/list'
 import SearchListingDrawer from 'components/SearchListingDrawer'
@@ -309,7 +308,7 @@ class SendMlsListingCard extends React.Component {
           defaultList={this.DefaultList}
           defaultListTitle="Add from your deals"
           onClose={this.closeListingModal}
-          onSelectListings={this.handleSelectListings}
+          onSelectListingsCallback={this.handleSelectListings}
           multipleSelection={this.IsMultiListing}
           renderAction={props => (
             <ActionButton {...props.buttonProps}>
