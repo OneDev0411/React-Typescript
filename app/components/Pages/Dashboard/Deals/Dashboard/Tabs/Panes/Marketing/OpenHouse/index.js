@@ -53,11 +53,12 @@ class OpenHouse extends React.Component {
     })
 
   onUpdateEvent = updatedEvent => {
-    const events = this.state.events.map(event =>
-      event.id === updatedEvent.id ? updatedEvent : event
-    )
-
-    this.setState({ events, selectedEvent: null })
+    this.setState(state => ({
+      selectedEvent: null,
+      events: state.events.map(event =>
+        event.id === updatedEvent.id ? updatedEvent : event
+      )
+    }))
 
     this.props.notify({
       title: 'Open house updated',
@@ -67,11 +68,9 @@ class OpenHouse extends React.Component {
   }
 
   onCreateEvent = event => {
-    const events = [event, ...this.state.events]
-
-    this.setState({
-      events
-    })
+    this.setState(state => ({
+      events: [event, ...state.events]
+    }))
 
     this.props.notify({
       title: 'Open house created',
@@ -94,11 +93,10 @@ class OpenHouse extends React.Component {
   }
 
   onDeleteEvent = deletedEvent => {
-    const events = this.state.events.filter(
-      event => event.id !== deletedEvent.id
-    )
-
-    this.setState({ events, selectedEvent: null })
+    this.setState(state => ({
+      selectedEvent: null,
+      events: state.events.filter(event => event.id !== deletedEvent.id)
+    }))
 
     this.props.notify({
       title: 'Open house deleted',
@@ -115,9 +113,9 @@ class OpenHouse extends React.Component {
             <Description>Customize your open house registration.</Description>
 
             <CreateOpenHouse
-              deal={this.props.deal}
               user={this.props.user}
               submitCallback={this.onCreateEvent}
+              associations={{ deal: this.props.deal }}
             >
               <ActionButton>Create Open House</ActionButton>
             </CreateOpenHouse>
@@ -144,7 +142,7 @@ class OpenHouse extends React.Component {
             isOpen
             openHouseId={this.state.selectedEvent.id}
             user={this.props.user}
-            deal={this.props.deal}
+            association={{ deal: this.props.deal }}
             onClose={this.handleCloseDrawer}
             submitCallback={this.onUpdateEvent}
             deleteCallback={this.onDeleteEvent}
