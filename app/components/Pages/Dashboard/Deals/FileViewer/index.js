@@ -74,7 +74,7 @@ class FileViewer extends React.Component {
     const file = getFileById(this.props.params.entityId, {
       deal: this.props.deal,
       tasks: this.props.tasks,
-      taskId: this.props.params.taskId
+      checklists: this.props.checklists
     })
 
     if (!file) {
@@ -213,6 +213,7 @@ function mapStateToProps({ deals, user }, props) {
   return {
     deal: selectDealById(deals.list, props.params.id),
     tasks: deals.tasks,
+    checklists: deals.checklists,
     envelopes: deals.envelopes,
     task: selectTaskById(deals.tasks, props.params.taskId),
     isBackOffice: isBackOffice(user)

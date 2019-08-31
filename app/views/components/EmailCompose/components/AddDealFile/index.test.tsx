@@ -6,7 +6,7 @@ import { AddDealFile } from '.'
 describe('AddDealFile component', () => {
   // https://gitlab.com/rechat/web/issues/2963
   it('renders', () => {
-    const container = render(<AddDealFile />)
+    const container = render(<AddDealFile input={{ value: [] }} />)
 
     expect(container).toMatchSnapshot()
   })

@@ -1,6 +1,12 @@
 import * as React from 'react'
 import { ReactNode, RefObject, useRef } from 'react'
-import { ClickAwayListener, Paper, Popper, useTheme } from '@material-ui/core'
+import {
+  ClickAwayListener,
+  Fade,
+  Paper,
+  Popper,
+  useTheme
+} from '@material-ui/core'
 
 import { useControllableState } from 'react-use-controllable-state/dist'
 
@@ -28,7 +34,7 @@ interface Props {
   /**
    * menu content.
    */
-  renderMenu: (renderProps: { toggle: (value?: boolean) => void }) => ReactNode
+  renderMenu: (renderProps: { close: () => void }) => ReactNode
   buttonLabel: ReactNode
   /**
    * props to be passed to DropdownToggleButton if no renderDropdownButton
@@ -62,7 +68,7 @@ export function BaseDropdown({
   const [open, setOpen] = useControllableState(isOpen, onIsOpenChange, false)
   const theme = useTheme()
 
-  const toggle = (value?) =>
+  const toggle = (value?: boolean) =>
     setOpen(value !== undefined ? value : open => !open)
 
   const buttonProps: RenderToggleButtonProps = {
@@ -73,7 +79,11 @@ export function BaseDropdown({
     'aria-haspopup': 'true'
   }
 
+  const menu = renderMenu({ close: () => setOpen(false) })
+
   return (
+    // we use ClickAwayListener on the whole stuff to prevent issues
+    // when keepMounted is true on the popper
     <>
       {renderDropdownButton ? (
         renderDropdownButton(buttonProps)
@@ -90,11 +100,32 @@ export function BaseDropdown({
         placement="bottom-start"
         {...PopperProps}
       >
-        <Paper>
-          <ClickAwayListener onClickAway={() => setOpen(false)}>
-            {renderMenu({ toggle })}
-          </ClickAwayListener>
-        </Paper>
+        {({ TransitionProps, placement }) => (
+          <Fade
+            {...TransitionProps}
+            style={{
+              transformOrigin:
+                placement === 'bottom' ? 'center top' : 'center bottom'
+            }}
+          >
+            <Paper>
+              <ClickAwayListener
+                onClickAway={event => {
+                  if (
+                    anchorRef.current &&
+                    anchorRef.current.contains(event.target as HTMLElement)
+                  ) {
+                    return
+                  }
+
+                  return setOpen(false)
+                }}
+              >
+                {menu}
+              </ClickAwayListener>
+            </Paper>
+          </Fade>
+        )}
       </Popper>
     </>
   )

@@ -1,73 +1,66 @@
 import { List, ListItem } from '@material-ui/core'
 import * as React from 'react'
 
-import IconDealFilled from 'components/SvgIcons/Deals/IconDealFilled'
-import IconDropbox from 'components/SvgIcons/Dropbox/IconDropbox'
+import { Field } from 'react-final-form'
+
 import IconUpload from 'components/SvgIcons/Upload/IconUpload'
+
+import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
 import { useIconStyles } from '../../../../../styles/icon.styles'
 import { BaseDropdown } from '../../../BaseDropdown'
+import { FilePicker } from '../../../FilePicker'
+import AddDealFile from '../AddDealFile'
+import { EmailComposeDrawerProps } from '../../types'
+import { iconSizes } from '../../../SvgIcons/icon-sizes'
 
-const iconSize = { width: 16, height: 16 }
+interface Props {
+  deal: IDeal
+  initialAttachments: Required<
+    EmailComposeDrawerProps
+  >['initialValues']['attachments']
+}
 
-export function EmailAttachmentsDropdown() {
+export function EmailAttachmentsDropdown({ deal, initialAttachments }: Props) {
   const iconClasses = useIconStyles()
 
-  const addDealFile = () => {}
-  const attachFromDropbox = () => {}
-  const uploadFromYourComputer = () => {}
+  const uploadFromYourComputer = (files: FileList) => {
+    console.log('files', files)
+    uploadEmailAttachment(files[0])
+  }
 
   return (
-    <>
-      <BaseDropdown
-        buttonLabel="Attachments"
-        renderMenu={({ toggle }) => (
-          <List
-            style={{
-              minWidth: '15rem',
-              maxHeight: '25rem',
-              overflow: 'auto'
-            }}
-          >
-            <ListItem
-              button
-              onClick={() => {
-                addDealFile()
-                toggle()
-              }}
-            >
-              <IconDealFilled
-                size={iconSize}
-                className={iconClasses.rightMargin}
-              />
-              Add from Deals
-            </ListItem>
-            <ListItem
-              button
-              onClick={() => {
-                attachFromDropbox()
-                toggle()
-              }}
-            >
-              <IconDropbox
-                size={iconSize}
-                className={iconClasses.rightMargin}
-              />
-              Attach from Dropbox
-            </ListItem>
-            <ListItem
-              button
-              onClick={() => {
-                uploadFromYourComputer()
-                toggle()
-              }}
-            >
-              <IconUpload size={iconSize} className={iconClasses.rightMargin} />
-              Attach from your computer
-            </ListItem>
-          </List>
-        )}
-      />
-    </>
+    <BaseDropdown
+      buttonLabel="Attachments"
+      PopperProps={{ keepMounted: true }}
+      renderMenu={({ close }) => (
+        <List>
+          <Field
+            name="attachments"
+            deal={deal}
+            initialAttachments={initialAttachments}
+            component={AddDealFile}
+            onClick={close}
+          />
+          <FilePicker onFilePicked={uploadFromYourComputer}>
+            {({ pickFiles }) => (
+              <ListItem
+                button
+                onClick={() => {
+                  pickFiles()
+                  close()
+                }}
+              >
+                <IconUpload
+                  size={iconSizes.small}
+                  className={iconClasses.rightMargin}
+                />
+                Attach from your computer
+              </ListItem>
+            )}
+          </FilePicker>
+        </List>
+      )}
+    />
   )
 }

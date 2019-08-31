@@ -1,14 +1,12 @@
 import { ReactNode } from 'react'
 
-// TODO: we can remove this and directly work with file objects.
-interface EmailComposeAttachment {
+export interface UploadingAttachment {
+  progress: number
   title: string
-  date: Date
-  url: string
 }
 
 export interface EmailFormValues {
-  attachments: EmailComposeAttachment[]
+  attachments: IFile[]
   to: IDenormalizedEmailRecipientInput[] | undefined
   cc?: IDenormalizedEmailRecipientInput[] | undefined
   bcc?: IDenormalizedEmailRecipientInput[] | undefined

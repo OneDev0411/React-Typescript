@@ -56,7 +56,7 @@ export function SingleEmailComposeDrawer({
       bcc: normalizeRecipients(formValue.bcc),
       subject: (formValue.subject || '').trim(),
       html: formValue.body || '',
-      attachments: (formValue.attachments || []).map(item => item.file_id),
+      attachments: (formValue.attachments || []).map(item => item.id),
       due_at: formValue.due_at
     })
 

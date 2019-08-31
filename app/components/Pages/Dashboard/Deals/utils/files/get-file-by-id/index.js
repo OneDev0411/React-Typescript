@@ -1,15 +1,14 @@
-import _ from 'underscore'
+import { selectDealTasks } from 'reducers/deals/tasks'
 
-export function getFileById(fileId, { deal, tasks, taskId }) {
-  let file
+// NOTE: this is actually written by Ramin
+export function getFileById(id, { deal, checklists, tasks }) {
+  const dealTasks = selectDealTasks(deal, checklists, tasks)
 
-  if (taskId === 'stash') {
-    file = _.find(deal.files, { id: fileId })
-  } else {
-    const { attachments } = tasks[taskId].room
+  const files = (dealTasks || []).flatMap(task => {
+    return (task.room.attachments || []).concat(
+      (task.submission && task.submission.file) || []
+    )
+  })
 
-    file = attachments && _.find(attachments, { id: fileId })
-  }
-
-  return file || null
+  return files.concat(deal.files || []).find(file => file.id === id)
 }
