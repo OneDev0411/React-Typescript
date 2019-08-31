@@ -10,6 +10,7 @@ import { normalizeContactForEmailCompose } from 'models/email/helpers/normalize-
 
 import { confirmation } from 'actions/confirmation'
 
+import MissingEmailModal from 'components/MissingEmailModal'
 import InstantMarketing from 'components/InstantMarketing'
 import Button from 'components/Button/ActionButton'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
@@ -18,7 +19,6 @@ import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
 import SocialDrawer from '../../components/SocialDrawer'
-import MissingEmailModal from './MissingEmailModal'
 
 class SendContactCard extends React.Component {
   state = {
@@ -223,8 +223,9 @@ class SendContactCard extends React.Component {
       <Fragment>
         <MissingEmailModal
           isOpen={this.state.isMissingEmailModalOpen}
-          contact={this.state.contact}
+          contact={this.state.contact.id}
           onClose={this.closeMissingEmailDialog}
+          action="send a card"
         />
         {this.props.contact || this.props.contactId ? (
           <Button
