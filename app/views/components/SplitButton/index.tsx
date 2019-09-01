@@ -7,6 +7,7 @@ import {
   Paper,
   Popper
 } from '@material-ui/core'
+import { PopperPlacementType } from '@material-ui/core/Popper'
 
 import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
@@ -20,6 +21,7 @@ interface Props {
   disabled?: boolean
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
   renderMenu: (props: RenderMenuProps) => ReactNode
+  popperPlacement: PopperPlacementType
   size?: 'small' | 'medium' | 'large'
   style: React.CSSProperties
   variant?: 'contained' | 'outlined' | undefined
@@ -65,7 +67,13 @@ export default function SplitButton(props: Props) {
           />
         </Button>
       </ButtonGroup>
-      <Popper anchorEl={anchorRef.current} disablePortal open={open} transition>
+      <Popper
+        anchorEl={anchorRef.current}
+        disablePortal
+        open={open}
+        placement={props.popperPlacement}
+        transition
+      >
         {({ TransitionProps, placement }) => (
           <Grow
             {...TransitionProps}
