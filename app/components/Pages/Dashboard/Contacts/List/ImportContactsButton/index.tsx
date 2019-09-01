@@ -55,9 +55,10 @@ export function ImportContactsButton({ accounts, user }: Props) {
         <SplitButton
           color="primary"
           variant="contained"
+          popperPlacement="bottom-end"
           disabled={connecting || syncing}
           onClick={connect}
-          style={{ marginRight: '1rem' }}
+          style={{ marginRight: '1rem', zIndex: 2 }}
           renderMenu={() => (
             <>
               <ConnectOutlookButton>
