@@ -41,7 +41,8 @@ function normalizeSubmissionFile(document) {
         id: document.id,
         name: document.title,
         mime: 'application/pdf',
-        date: document.created_at
+        date: document.created_at,
+        created_at: document.created_at
       }
 
   return normalizeFile({
