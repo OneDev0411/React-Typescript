@@ -1,80 +1,87 @@
-import React, { CSSProperties, ReactNode } from 'react'
-import Downshift from 'downshift'
+import React, { ReactNode } from 'react'
+import {
+  Button,
+  ButtonGroup,
+  ClickAwayListener,
+  Grow,
+  Paper,
+  Popper
+} from '@material-ui/core'
 
 import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
-import IconKeyboardArrowUp from 'components/SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
-
-import {
-  ButtonsContainer,
-  PrimaryActionButton,
-  SplitButtonMenu,
-  ToggleActionsMenuButton
-} from './styled'
-
-const ARROW_ICON_STYLE = {
-  display: 'block',
-  height: '1.8rem'
-}
 
 interface RenderMenuProps {
-  closeMenu: () => void
+  closeMenu: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 interface Props {
-  renderMenu: (props: RenderMenuProps) => ReactNode
+  color?: 'inherit' | 'primary' | 'secondary' | 'default'
   children: ReactNode
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
-  style: CSSProperties
-  appearance?: 'primary' | 'default'
   disabled?: boolean
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
+  renderMenu: (props: RenderMenuProps) => ReactNode
+  size?: 'small' | 'medium' | 'large'
+  style: React.CSSProperties
+  variant?: 'contained' | 'outlined' | undefined
 }
 
-/**
- * NOTE: this component should be rewritten with material ui components
- * there is also a third-party library that we might want to use instead:
- * https://www.npmjs.com/package/material-ui-split-button
- */
-export default function SplitButton({
-  children,
-  renderMenu,
-  onClick,
-  disabled,
-  appearance = 'default',
-  style = {}
-}: Props) {
+export default function SplitButton(props: Props) {
+  const [open, setOpen] = React.useState(false)
+  const anchorRef = React.useRef<HTMLDivElement>(null)
+
+  function handleToggle() {
+    setOpen(prevOpen => !prevOpen)
+  }
+
+  function handleClose(event) {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return
+    }
+
+    setOpen(false)
+  }
+
   return (
-    <Downshift>
-      {({ isOpen, getToggleButtonProps, closeMenu }) => (
-        <div style={{ ...style, position: 'relative' }}>
-          <ButtonsContainer>
-            <PrimaryActionButton
-              appearance={appearance}
-              disabled={disabled}
-              onClick={onClick}
-            >
-              {children}
-            </PrimaryActionButton>
-            <ToggleActionsMenuButton
-              appearance={appearance}
-              disabled={disabled}
-              type="button"
-              isActive={isOpen}
-              {...getToggleButtonProps()}
-            >
-              {isOpen ? (
-                <IconKeyboardArrowUp style={ARROW_ICON_STYLE} />
-              ) : (
-                <IconKeyboardArrowDown style={ARROW_ICON_STYLE} />
-              )}
-            </ToggleActionsMenuButton>
-          </ButtonsContainer>
-          <>
-            {isOpen && (
-              <SplitButtonMenu>{renderMenu({ closeMenu })}</SplitButtonMenu>
-            )}
-          </>
-        </div>
-      )}
-    </Downshift>
+    <div style={props.style}>
+      <ButtonGroup
+        aria-label="split button"
+        color={props.color}
+        disabled={props.disabled}
+        size={props.size}
+        ref={anchorRef}
+        variant={props.variant}
+      >
+        <Button onClick={props.onClick}>{props.children}</Button>
+        <Button
+          aria-owns={open ? 'menu-list-grow' : undefined}
+          aria-haspopup="true"
+          onClick={handleToggle}
+          size="small"
+        >
+          <IconKeyboardArrowDown
+            style={{
+              fill: props.variant === 'contained' ? '#fff' : '#000'
+            }}
+          />
+        </Button>
+      </ButtonGroup>
+      <Popper anchorEl={anchorRef.current} disablePortal open={open} transition>
+        {({ TransitionProps, placement }) => (
+          <Grow
+            {...TransitionProps}
+            style={{
+              transformOrigin:
+                placement === 'bottom' ? 'center top' : 'center bottom'
+            }}
+          >
+            <ClickAwayListener onClickAway={handleClose}>
+              <Paper id="menu-list-grow">
+                {props.renderMenu({ closeMenu: handleClose })}
+              </Paper>
+            </ClickAwayListener>
+          </Grow>
+        )}
+      </Popper>
+    </div>
   )
 }
