@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
+import { Theme } from '@material-ui/core/styles'
+import { useTheme } from '@material-ui/styles'
 
 import { useGetOpenHouses } from 'hooks/use-get-open-houses'
 import { getActiveTeamId } from 'utils/user-teams'
@@ -15,7 +17,6 @@ import CreateNewOpenHouse from './CreateNewOpenHouse'
 import Info from './columns/Info'
 import Actions from './columns/Actions'
 import Registrants from './columns/Registrants'
-import { PageContainer } from './styled'
 
 interface Associations {
   deal?: IDeal
@@ -27,6 +28,7 @@ interface Props {
 }
 
 function OpenHousesList(props: Props) {
+  const theme = useTheme<Theme>()
   const { list, isFetching, error, reloadList } = useGetOpenHouses()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [selectedOH, setSelectedOH] = useState<ICRMTask<
@@ -153,7 +155,7 @@ function OpenHousesList(props: Props) {
         </PageHeader.Menu>
       </PageHeader>
 
-      <PageContainer>{renderContent()}</PageContainer>
+      <div style={{ padding: theme.spacing(0, 3, 9) }}>{renderContent()}</div>
 
       {isDrawerOpen && (
         <OpenHouseDrawer
