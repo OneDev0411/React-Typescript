@@ -11,7 +11,6 @@ const propTypes = {
     listing: PropTypes.shape()
   }).isRequired,
   style: PropTypes.shape(),
-  user: PropTypes.shape().isRequired,
   children: PropTypes.object
 }
 
@@ -56,7 +55,6 @@ export class CreateOpenHouse extends React.Component {
         {this.state.isOpen && (
           <OpenHouseDrawer
             isOpen
-            user={this.props.user}
             onClose={this.handleClose}
             associations={this.props.associations}
             submitCallback={this.handleSubmitCallback}

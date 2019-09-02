@@ -10,6 +10,7 @@ import PageHeader from 'components/PageHeader'
 import LoadingContainer from 'components/LoadingContainer'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
+import EmptyState from './EmptyState'
 import CreateNewOpenHouse from './CreateNewOpenHouse'
 import Info from './columns/Info'
 import Actions from './columns/Actions'
@@ -112,6 +113,30 @@ function OpenHousesList(props: Props) {
     reloadList()
   }
 
+  const renderContent = () => {
+    if (isFetching) {
+      return <LoadingContainer style={{ padding: '30% 0' }} />
+    }
+
+    if (error) {
+      return <h4>{error}</h4>
+    }
+
+    if (list.length === 0) {
+      return <EmptyState onOpenDrawer={onOpenOHDrawer} />
+    }
+
+    return (
+      <Table
+        columns={columns}
+        data={list}
+        isFetching={isFetching}
+        LoadingState={LoadingContainer}
+        showToolbar={false}
+      />
+    )
+  }
+
   return (
     <>
       <Helmet>
@@ -128,21 +153,7 @@ function OpenHousesList(props: Props) {
         </PageHeader.Menu>
       </PageHeader>
 
-      <PageContainer>
-        {isFetching && !error && (
-          <LoadingContainer style={{ padding: '30% 0' }} />
-        )}
-        {!isFetching && !error && (
-          <Table
-            columns={columns}
-            data={list}
-            isFetching={isFetching}
-            LoadingState={LoadingContainer}
-            showToolbar={false}
-          />
-        )}
-        {error && <h4>{error}</h4>}
-      </PageContainer>
+      <PageContainer>{renderContent()}</PageContainer>
 
       {isDrawerOpen && (
         <OpenHouseDrawer
