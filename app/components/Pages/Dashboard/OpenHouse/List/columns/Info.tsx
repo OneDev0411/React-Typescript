@@ -14,7 +14,7 @@ interface Props {
 export default function Info({ name, description, dueDate, onClick }: Props) {
   const date = fecha.format(
     new Date(dueDate * 1000),
-    'dddd, MM DD YYYY hh:mm A'
+    'dddd, MMM DD YYYY hh:mm A'
   )
 
   return (

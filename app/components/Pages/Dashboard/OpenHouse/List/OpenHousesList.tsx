@@ -36,8 +36,8 @@ function OpenHousesList(props: Props) {
 
   const columns = [
     {
-      header: 'Name',
-      id: 'name',
+      header: 'Info',
+      id: 'info',
       width: '50%',
       verticalAlign: 'center',
       render: (props: {
