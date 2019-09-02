@@ -6,7 +6,7 @@ import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 interface GetOpenHouses {
   error: string
   isFetching: boolean
-  list: IEvent[]
+  list: ICRMTask[]
   reloadList: () => Promise<void>
 }
 
@@ -14,7 +14,9 @@ interface GetOpenHouses {
  * Fetch all open houses event
  */
 export function useGetOpenHouses(): GetOpenHouses {
-  const [list, setList] = useState<IEvent[]>([])
+  const [list, setList] = useState<
+    ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>[]
+  >([])
   const [error, setError] = useState('')
   const [isFetching, setIsFetching] = useState(false)
 

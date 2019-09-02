@@ -20,7 +20,7 @@ interface Associations {
 function OHList() {
   const { list, isFetching, error, reloadList } = useGetOpenHouses()
   const [isOpenOHDrawer, setIsOpenOHDrawer] = useState(false)
-  const [selectedOH, setSelectedOH] = useState<IEvent | null>(null)
+  const [selectedOH, setSelectedOH] = useState<ICRMTask<CRMTaskAssociation, CRMTaskAssociationType> | null>(null)
   const [associations, setAssociations] = useState<Associations | null>(null)
 
   const columns = [
@@ -29,7 +29,7 @@ function OHList() {
       id: 'name',
       width: '70%',
       verticalAlign: 'center',
-      render: (props: { rowData: IEvent }) => (
+      render: (props: { rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType> }) => (
         <Name
           name={props.rowData.title}
           description={props.rowData.description}
