@@ -69,7 +69,6 @@ export default function SplitButton(props: Props) {
       </ButtonGroup>
       <Popper
         anchorEl={anchorRef.current}
-        disablePortal
         open={open}
         placement={props.popperPlacement}
         transition
