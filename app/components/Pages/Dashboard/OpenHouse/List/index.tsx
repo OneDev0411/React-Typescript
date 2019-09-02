@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
 import { useGetOpenHouses } from 'hooks/use-get-open-houses'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import Table from 'components/Grid/Table'
 import PageHeader from 'components/PageHeader'
@@ -10,6 +12,7 @@ import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
 import CreateNewOH from './CreateNewOH'
 import Name from './columns/Name'
+import Actions from './columns/Actions'
 import Registerants from './columns/Registerants'
 import { PageContainer } from './styled'
 
@@ -18,7 +21,11 @@ interface Associations {
   listing?: ICompactListing
 }
 
-function OHList() {
+interface Props {
+  activeBrandId: UUID
+}
+
+function OHList(props: Props) {
   const { list, isFetching, error, reloadList } = useGetOpenHouses()
   const [isOpenOHDrawer, setIsOpenOHDrawer] = useState(false)
   const [selectedOH, setSelectedOH] = useState<ICRMTask<
@@ -31,7 +38,7 @@ function OHList() {
     {
       header: 'Name',
       id: 'name',
-      width: '70%',
+      width: '50%',
       verticalAlign: 'center',
       render: (props: {
         rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
@@ -62,6 +69,20 @@ function OHList() {
                 )
               : []
           }
+        />
+      )
+    },
+    {
+      id: 'actions',
+      width: '40%',
+      verticalAlign: 'center',
+      render: (rowProps: {
+        rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+      }) => (
+        <Actions
+          openHouse={rowProps.rowData}
+          activeBrandId={props.activeBrandId}
+          reloadList={reloadList}
         />
       )
     }
@@ -112,11 +133,11 @@ function OHList() {
         )}
         {!isFetching && !error && (
           <Table
-            data={list}
             columns={columns}
-            showToolbar={false}
+            data={list}
             isFetching={isFetching}
             LoadingState={LoadingContainer}
+            showToolbar={false}
           />
         )}
         {error && <h4>{error}</h4>}
@@ -136,4 +157,6 @@ function OHList() {
   )
 }
 
-export default OHList
+export default connect((state: { user: IUser }) => ({
+  activeBrandId: getActiveTeamId(state.user)
+}))(OHList)

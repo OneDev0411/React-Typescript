@@ -21,9 +21,9 @@ interface Props {
   disabled?: boolean
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
   renderMenu: (props: RenderMenuProps) => ReactNode
-  popperPlacement: PopperPlacementType
+  popperPlacement?: PopperPlacementType
   size?: 'small' | 'medium' | 'large'
-  style: React.CSSProperties
+  style?: React.CSSProperties
   variant?: 'contained' | 'outlined' | undefined
 }
 
