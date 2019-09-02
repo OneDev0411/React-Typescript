@@ -99,7 +99,11 @@ function EmailRecipientsChipsInput({
 }: Props) {
   const [recipients, setRecipients] = useControllableState<
     IDenormalizedEmailRecipientInput[]
-  >(input ? input.value : value, input ? (input.onChange as any) : onChange, [])
+  >(
+    input ? (Array.isArray(input.value) ? input.value : []) : value,
+    input ? (input.onChange as any) : onChange,
+    []
+  )
 
   const classes = useEmailRecipientsChipsInputStyles()
 
@@ -144,8 +148,8 @@ function EmailRecipientsChipsInput({
                 result.data
                   .map(contact => {
                     const emails: string[] = (contact.emails || []).concat(
-                        contact.partner_email || []
-                      )
+                      contact.partner_email || []
+                    )
 
                     return emails.map<IDenormalizedEmailRecipientEmailInput>(
                       email => ({
