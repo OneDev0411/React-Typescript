@@ -16,6 +16,7 @@ export default function Registrants({ registerants }: Props) {
   return (
     <>
       <Button
+        color="primary"
         disabled={count === 0}
         onClick={() => setIsDrawerOpen(true)}
         size="small"
