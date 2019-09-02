@@ -25,6 +25,7 @@ export function useGetOpenHouses(): GetOpenHouses {
       setIsFetching(true)
 
       const response = await getTasks({
+        order: 'due_date',
         task_type: 'Open House',
         associations: CRM_TASKS_QUERY.associations
       })
