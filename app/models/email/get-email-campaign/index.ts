@@ -1,7 +1,7 @@
 import Fetch from 'services/fetch'
 import { toEntityAssociation } from 'utils/association-utils'
 
-const DEFAULT_EMAIL_ASSOCIATIONS: EmailCampaignAssociation[] = [
+const DEFAULT_EMAIL_ASSOCIATIONS: IEmailCampaignAssociation[] = [
   'emails',
   'template',
   'from',
@@ -9,14 +9,15 @@ const DEFAULT_EMAIL_ASSOCIATIONS: EmailCampaignAssociation[] = [
   'attachments'
 ]
 
-const DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS: EmailCampaignRecipientAssociation[] = [
+const DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS: IEmailCampaignRecipientAssociation[] = [
   'contact',
-  'list'
+  'list',
+  'brand'
 ]
 
 export async function getEmailCampaign<
-  A1 extends EmailCampaignAssociation,
-  A2 extends EmailCampaignRecipientAssociation
+  A1 extends IEmailCampaignAssociation,
+  A2 extends IEmailCampaignRecipientAssociation
 >(
   id,
   associations: A1[] = DEFAULT_EMAIL_ASSOCIATIONS as A1[],
