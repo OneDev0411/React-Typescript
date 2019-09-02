@@ -16,7 +16,6 @@ export const ListTitle = styled.div<{ isSelected?: boolean }>`
   justify-content: space-between;
 
   color: ${props => (props.isSelected ? blue.A100 : '#000')};
-  font-weight: ${props => (props.isSelected ? 500 : 400)};
   cursor: ${props => (props.isSelected ? 'initial' : 'pointer')};
 
   svg {
