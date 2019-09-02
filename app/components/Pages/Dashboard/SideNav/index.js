@@ -108,9 +108,7 @@ function AppSideNav(props) {
               to="/dashboard/open-houses"
               Icon={IconOpenHouse}
               ActiveIcon={IconOpenHouse}
-            >
-              <DealsNotifications />
-            </SideNavLinkItem>
+            />
           </Acl>
 
           <Acl.Marketing>
