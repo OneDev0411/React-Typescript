@@ -10,10 +10,10 @@ import PageHeader from 'components/PageHeader'
 import LoadingContainer from 'components/LoadingContainer'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
-import CreateNewOH from './CreateNewOH'
+import CreateNewOpenHouse from './CreateNewOpenHouse'
 import Info from './columns/Info'
 import Actions from './columns/Actions'
-import Registerants from './columns/Registerants'
+import Registrants from './columns/Registrants'
 import { PageContainer } from './styled'
 
 interface Associations {
@@ -25,9 +25,9 @@ interface Props {
   activeBrandId: UUID
 }
 
-function OHList(props: Props) {
+function OpenHousesList(props: Props) {
   const { list, isFetching, error, reloadList } = useGetOpenHouses()
-  const [isOpenOHDrawer, setIsOpenOHDrawer] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [selectedOH, setSelectedOH] = useState<ICRMTask<
     CRMTaskAssociation,
     CRMTaskAssociationType
@@ -48,21 +48,21 @@ function OHList(props: Props) {
           dueDate={props.rowData.due_date}
           description={props.rowData.description}
           onClick={() => {
-            setIsOpenOHDrawer(true)
+            setIsDrawerOpen(true)
             setSelectedOH(props.rowData)
           }}
         />
       )
     },
     {
-      header: 'Registerants',
-      id: 'registerants',
+      header: 'Registrants',
+      id: 'registrants',
       width: '10%',
       verticalAlign: 'center',
       render: (props: {
         rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
       }) => (
-        <Registerants
+        <Registrants
           registerants={
             props.rowData.associations
               ? props.rowData.associations.filter(
@@ -99,12 +99,12 @@ function OHList(props: Props) {
     }
 
     setAssociations(associations)
-    setIsOpenOHDrawer(true)
+    setIsDrawerOpen(true)
   }
 
   const onCloseOHDrawer = () => {
     setSelectedOH(null)
-    setIsOpenOHDrawer(false)
+    setIsDrawerOpen(false)
   }
 
   const drawerCallback = () => {
@@ -124,7 +124,7 @@ function OHList(props: Props) {
         </PageHeader.Title>
 
         <PageHeader.Menu>
-          <CreateNewOH onOpenOHDrawer={onOpenOHDrawer} />
+          <CreateNewOpenHouse onOpenDrawer={onOpenOHDrawer} />
         </PageHeader.Menu>
       </PageHeader>
 
@@ -144,7 +144,7 @@ function OHList(props: Props) {
         {error && <h4>{error}</h4>}
       </PageContainer>
 
-      {isOpenOHDrawer && (
+      {isDrawerOpen && (
         <OpenHouseDrawer
           deleteCallback={drawerCallback}
           isOpen
@@ -160,4 +160,4 @@ function OHList(props: Props) {
 
 export default connect((state: { user: IUser }) => ({
   activeBrandId: getActiveTeamId(state.user)
-}))(OHList)
+}))(OpenHousesList)

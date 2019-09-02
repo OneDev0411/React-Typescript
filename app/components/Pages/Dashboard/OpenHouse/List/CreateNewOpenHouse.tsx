@@ -7,30 +7,30 @@ import { getMlsDrawerInitialDeals } from 'components/InstantMarketing/helpers/ge
 
 interface Props {
   deals: UuidMap<IDeal>
-  onOpenOHDrawer: (item: IDeal | ICompactListing) => void
+  onOpenDrawer: (item: IDeal | ICompactListing) => void
 }
 
-function CreateNewOH(props: Props) {
-  const [isOpenSearchDrawer, setIsOpenSearchDrawer] = useState(false)
+function CreateNewOpenHouse(props: Props) {
+  const [isSearchDrawerOpen, setIsSearchDrawerOpen] = useState(false)
 
   return (
     <>
       <Button
         color="primary"
         variant="contained"
-        onClick={() => setIsOpenSearchDrawer(true)}
+        onClick={() => setIsSearchDrawerOpen(true)}
       >
         Create an Open House
       </Button>
 
       <SearchListingDrawer
         mockListings
-        isOpen={isOpenSearchDrawer}
+        isOpen={isSearchDrawerOpen}
         defaultList={getMlsDrawerInitialDeals(props.deals)}
-        onClose={() => setIsOpenSearchDrawer(false)}
+        onClose={() => setIsSearchDrawerOpen(false)}
         onSelect={(items: ICompactListing[] | IDeal[]) => {
-          setIsOpenSearchDrawer(false)
-          props.onOpenOHDrawer(items[0])
+          setIsSearchDrawerOpen(false)
+          props.onOpenDrawer(items[0])
         }}
       />
     </>
@@ -43,4 +43,4 @@ function mapStateToProps({ deals }) {
   }
 }
 
-export default connect(mapStateToProps)(CreateNewOH)
+export default connect(mapStateToProps)(CreateNewOpenHouse)

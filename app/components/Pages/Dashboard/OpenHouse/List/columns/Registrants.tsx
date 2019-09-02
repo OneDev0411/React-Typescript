@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from '@material-ui/core'
 
 import AssociationsDrawer from 'components/AssociationsDrawer'
@@ -8,8 +8,8 @@ interface Props {
   registerants: ICRMTaskAssociation<CRMTaskAssociationType>[]
 }
 
-export default function Registerants({ registerants }: Props) {
-  const [isOpenDrawer, setIsOpenDrawer] = React.useState(false)
+export default function Registrants({ registerants }: Props) {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   const count = registerants.length
 
@@ -17,7 +17,7 @@ export default function Registerants({ registerants }: Props) {
     <>
       <Button
         disabled={count === 0}
-        onClick={() => setIsOpenDrawer(true)}
+        onClick={() => setIsDrawerOpen(true)}
         size="small"
       >
         {count}
@@ -25,8 +25,8 @@ export default function Registerants({ registerants }: Props) {
       {count > 0 && (
         <AssociationsDrawer
           associations={normalizeAssociations(registerants)}
-          isOpen={isOpenDrawer}
-          onClose={() => setIsOpenDrawer(false)}
+          isOpen={isDrawerOpen}
+          onClose={() => setIsDrawerOpen(false)}
           title="Registerants"
         />
       )}

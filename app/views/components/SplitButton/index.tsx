@@ -28,11 +28,11 @@ interface Props {
 }
 
 export default function SplitButton(props: Props) {
-  const [open, setOpen] = React.useState(false)
+  const [isOpen, setIsOpen] = React.useState(false)
   const anchorRef = React.useRef<HTMLDivElement>(null)
 
   function handleToggle() {
-    setOpen(prevOpen => !prevOpen)
+    setIsOpen(prevOpen => !prevOpen)
   }
 
   function handleClose(event) {
@@ -40,7 +40,7 @@ export default function SplitButton(props: Props) {
       return
     }
 
-    setOpen(false)
+    setIsOpen(false)
   }
 
   return (
@@ -55,7 +55,7 @@ export default function SplitButton(props: Props) {
       >
         <Button onClick={props.onClick}>{props.children}</Button>
         <Button
-          aria-owns={open ? 'menu-list-grow' : undefined}
+          aria-owns={isOpen ? 'menu-list-grow' : undefined}
           aria-haspopup="true"
           onClick={handleToggle}
           size="small"
@@ -69,7 +69,7 @@ export default function SplitButton(props: Props) {
       </ButtonGroup>
       <Popper
         anchorEl={anchorRef.current}
-        open={open}
+        open={isOpen}
         placement={props.popperPlacement}
         transition
       >

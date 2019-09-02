@@ -47,13 +47,9 @@ export default function Actions({
       popperPlacement="bottom-end"
       style={{ display: 'flex', justifyContent: 'flex-end' }}
       onClick={() => window.open(registerPageURL)}
-      renderMenu={() => (
-        <>
-          <Button onClick={onDelete}>Delete</Button>
-        </>
-      )}
+      renderMenu={() => <Button onClick={onDelete}>Delete</Button>}
     >
-      Guest Registrants Page
+      Guest Registration Page
     </SplitButton>
   )
 }

@@ -186,7 +186,7 @@ const AsyncFlowEdit = Load({
 
 const AsyncOpenHousesList = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/OpenHouse/List' /* webpackChunkName: "oh_list" */)
+    import('../components/Pages/Dashboard/OpenHouse/List/OpenHousesList' /* webpackChunkName: "oh_list" */)
 })
 
 /* ==================================== */
