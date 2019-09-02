@@ -2,16 +2,13 @@ import React from 'react'
 import fecha from 'fecha'
 import { Typography } from '@material-ui/core'
 
-import ActionButton from 'components/Button/ActionButton'
-
 interface Props {
-  name: string
+  title: string
   description: string
   dueDate: number
-  onClick: () => void
 }
 
-export default function Info({ name, description, dueDate, onClick }: Props) {
+export default function Info({ title, description, dueDate }: Props) {
   const date = fecha.format(
     new Date(dueDate * 1000),
     'dddd, MMM DD YYYY hh:mm A'
@@ -19,21 +16,16 @@ export default function Info({ name, description, dueDate, onClick }: Props) {
 
   return (
     <>
-      <ActionButton
-        appearance="link"
-        inverse
-        onClick={onClick}
-        style={{
-          height: 'auto',
-          padding: 0,
-          fontWeight: 'bold',
-          lineHeight: 1
-        }}
-      >
-        {name}
-      </ActionButton>
-      <Typography variant="body2" color="textSecondary">
-        {date}&nbsp;&nbsp;|&nbsp;&nbsp;{description}
+      <Typography variant="button" noWrap>
+        {title}
+      </Typography>
+      <Typography variant="body2" color="textSecondary" noWrap>
+        {date}
+        {description && (
+          <Typography variant="inherit" color="inherit">
+            &nbsp;&nbsp;|&nbsp;&nbsp;{description}
+          </Typography>
+        )}
       </Typography>
     </>
   )

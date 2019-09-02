@@ -10,12 +10,14 @@ import config from '../../../../../../../config/public'
 
 interface Props {
   activeBrandId: UUID
-  reloadList: () => void
+  onEdit: () => void
   openHouse: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  reloadList: () => void
 }
 
 export default function Actions({
   activeBrandId,
+  onEdit,
   openHouse,
   reloadList
 }: Props) {
@@ -51,9 +53,14 @@ export default function Actions({
       style={{ display: 'flex', justifyContent: 'flex-end' }}
       onClick={() => window.open(registerPageURL)}
       renderMenu={() => (
-        <Button disabled={isDeleting} onClick={onDelete}>
-          Delete
-        </Button>
+        <>
+          <Button fullWidth onClick={onEdit}>
+            Edit
+          </Button>
+          <Button disabled={isDeleting} fullWidth onClick={onDelete}>
+            Delete
+          </Button>
+        </>
       )}
     >
       Guest Registration Page

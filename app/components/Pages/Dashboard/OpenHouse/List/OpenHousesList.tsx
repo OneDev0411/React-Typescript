@@ -44,13 +44,9 @@ function OpenHousesList(props: Props) {
         rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
       }) => (
         <Info
-          name={props.rowData.title}
+          title={props.rowData.title}
           dueDate={props.rowData.due_date}
           description={props.rowData.description}
-          onClick={() => {
-            setIsDrawerOpen(true)
-            setSelectedOH(props.rowData)
-          }}
         />
       )
     },
@@ -81,8 +77,12 @@ function OpenHousesList(props: Props) {
         rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
       }) => (
         <Actions
-          openHouse={rowProps.rowData}
           activeBrandId={props.activeBrandId}
+          openHouse={rowProps.rowData}
+          onEdit={() => {
+            setSelectedOH(rowProps.rowData)
+            setIsDrawerOpen(true)
+          }}
           reloadList={reloadList}
         />
       )
