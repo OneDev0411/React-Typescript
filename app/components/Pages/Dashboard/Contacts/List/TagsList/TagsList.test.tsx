@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/react'
-import attributeDefs from 'fixtures/contacts/attribute-defs'
-import tags from 'fixtures/contacts/tags'
+import attributeDefs from 'fixtures/contacts/attribute-defs' // eslint-disable-line
+import tags from 'fixtures/contacts/tags' // eslint-disable-line
 import * as React from 'react'
 
 import { TagsList } from './index'
@@ -11,7 +11,7 @@ describe('tagsList', () => {
       <TagsList
         attributeDefs={attributeDefs}
         activeFilters={{}}
-        removeActiveFilter={() => {}}
+        resetActiveFilters={() => {}}
         onFilterChange={() => {}}
         existingTags={tags}
         isFetching={false}
@@ -23,7 +23,7 @@ describe('tagsList', () => {
   it('should call onFilterChange with correct value (#2894)', () => {
     const onFilterChange = jest.fn()
 
-    let activeFilters = {
+    const activeFilters = {
       'df5a82fb-b163-4193-880d-bb85bb14d5f2-1': {
         id: 'df5a82fb-b163-4193-880d-bb85bb14d5f2',
         isActive: false,
@@ -56,7 +56,7 @@ describe('tagsList', () => {
       <TagsList
         attributeDefs={attributeDefs}
         activeFilters={activeFilters}
-        removeActiveFilter={() => {}}
+        resetActiveFilters={() => {}}
         onFilterChange={onFilterChange}
         existingTags={tags}
         isFetching={false}
@@ -66,7 +66,13 @@ describe('tagsList', () => {
 
     fireEvent.click(getByText('100 Contacts'))
     expect(onFilterChange).toBeCalledWith({
-      filters: []
+      filters: [
+        {
+          value: '100 Contacts',
+          invert: false,
+          attribute_def: 'df5a82fb-b163-4193-880d-bb85bb14d5f2'
+        }
+      ]
     })
   })
 })
