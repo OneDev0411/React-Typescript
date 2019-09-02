@@ -27,7 +27,7 @@ import { ChipsInputProps } from '../ChipsInput/types'
 import { recipientToChip } from './helpers/recipient-to-chip'
 import { recipientToSuggestion } from './helpers/recipient-to-suggestion'
 import { filterEntities } from './helpers/filter-entities'
-import { RecipientSuggestions } from './RecipientSuggestions'
+import { RecipientQuickSuggestions } from './RecipientQuickSuggestions'
 
 type BaseProps = Partial<FieldRenderProps<HTMLInputElement>> &
   Omit<
@@ -49,8 +49,16 @@ interface Props extends BaseProps {
   isLoadingTags?: boolean
   areListsFetched?: boolean
 
-  includeSuggestions?: boolean
-
+  includeQuickSuggestions?: boolean
+  /**
+   * Optional callback for handling suggestion selection. If not provided
+   * it will add to current list of recipients by default
+   * @param suggestion
+   */
+  onQuickSuggestionSelected?: (
+    suggestion: IDenormalizedEmailRecipientInput
+  ) => void
+  currentlyUsedQuickSuggestions?: IDenormalizedEmailRecipientInput[] | undefined
   /**
    * Optional control props
    */
@@ -67,7 +75,7 @@ const useEmailRecipientsChipsInputStyles = makeStyles(
         flexWrap: 'wrap'
       },
       inputWrapper: {
-        flexBasis: '93%'
+        flexBasis: '92%'
       }
     }),
   { name: 'EmailRecipientsChipsInput' }
@@ -87,7 +95,9 @@ function EmailRecipientsChipsInput({
   getSavedSegments,
   isLoadingTags,
   areListsFetched,
-  includeSuggestions,
+  includeQuickSuggestions,
+  onQuickSuggestionSelected,
+  currentlyUsedQuickSuggestions,
   tags,
   lists,
   label,
@@ -186,7 +196,9 @@ function EmailRecipientsChipsInput({
   })
 
   const acceptSuggestion = recipient => {
-    return setRecipients([...recipients, recipient])
+    return onQuickSuggestionSelected
+      ? onQuickSuggestionSelected(recipient)
+      : setRecipients([...recipients, recipient])
   }
 
   return (
@@ -202,9 +214,9 @@ function EmailRecipientsChipsInput({
       TextFieldProps={{
         InputProps: {
           startAdornment: <InlineInputLabel>{label}</InlineInputLabel>,
-          endAdornment: includeSuggestions ? (
-            <RecipientSuggestions
-              currentRecipients={recipients}
+          endAdornment: includeQuickSuggestions ? (
+            <RecipientQuickSuggestions
+              currentRecipients={currentlyUsedQuickSuggestions || recipients}
               onSelect={acceptSuggestion}
             />
           ) : null,

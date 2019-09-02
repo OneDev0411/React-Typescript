@@ -89,18 +89,33 @@ export function SingleEmailComposeDrawer({
         />
 
         <Field
-          label="To"
-          name="to"
-          component={EmailRecipientsChipsInput as any}
-          readOnly={disableAddNewRecipient}
-          includeSuggestions
-          TextFieldProps={
-            {
-              inputProps: {
-                autoFocus: true
-              } as HTMLProps<HTMLInputElement>
-            } as TextFieldProps
-          }
+          name="bcc"
+          render={bccInputProps => (
+            <Field
+              label="To"
+              name="to"
+              component={EmailRecipientsChipsInput as any}
+              readOnly={disableAddNewRecipient}
+              includeQuickSuggestions
+              // we need to do this weird stuff because of the weird UX
+              // which is to show suggestions under too but add them to bcc!
+              // Hopefully we revise it and remove such weirdness
+              currentlyUsedQuickSuggestions={bccInputProps.input.value}
+              onQuickSuggestionSelected={recipient =>
+                bccInputProps.input.onChange([
+                  ...(bccInputProps.input.value || []),
+                  recipient
+                ] as any)
+              }
+              TextFieldProps={
+                {
+                  inputProps: {
+                    autoFocus: true
+                  } as HTMLProps<HTMLInputElement>
+                } as TextFieldProps
+              }
+            />
+          )}
         />
         {isCcShown && (
           <Field
