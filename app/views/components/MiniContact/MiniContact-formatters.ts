@@ -20,11 +20,10 @@ function contactFormatter(data): FormatterOutputType {
     contact_status: 'not_started',
     contact_id: data.id,
     data: {
-      name: (data.summary && data.summary.display_name) || data.title,
-      email: (data.summary && data.summary.email) || data.details,
+      name: data.display_name || data.title,
+      email: data.email || data.details,
       profile_image_url:
-        (data.summary && data.summary.profile_image_url) ||
-        (data.avatar && data.avatar.image)
+        data.profile_image_url || (data.avatar && data.avatar.image)
     },
     meta: {}
   }

@@ -4,11 +4,12 @@ import { FormatterOutputType } from './types'
 import { findContact, getContactData } from './helpers'
 import { formatter } from './MiniContact-formatters'
 
-function useProfile(type, initData): FormatterOutputType {
+// TODO: attributeDefs can be removed whenever we upgraded redux
+function useProfile(type, initData, attributeDefs): FormatterOutputType {
   const data = formatter(type, initData)
   const [output, setOutput] = useState(data)
 
-  useEffect(function useProfileEffect() {
+  useEffect(function profileEffectCb() {
     let requestCanceled = false
 
     async function fetchContact(searchFor, type: 'get' | 'find') {
@@ -17,7 +18,7 @@ function useProfile(type, initData): FormatterOutputType {
       if (type === 'find') {
         res = await findContact(searchFor, data)
       } else {
-        res = await getContactData(searchFor)
+        res = await getContactData(searchFor, attributeDefs)
       }
 
       if (!requestCanceled) {

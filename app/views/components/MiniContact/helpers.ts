@@ -4,7 +4,6 @@ import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { getContactAttributesBySection } from 'models/contacts/helpers/get-contact-attributes-by-section'
 import { getAttributeFromSummary } from 'models/contacts/helpers/get-attribute-from-summary'
 
-import store from '../../../stores'
 import { selectDefsBySection } from '../../../reducers/contacts/attributeDefs'
 import { getAddresses } from '../../../components/Pages/Dashboard/Contacts/Profile/Addresses/helpers/get-addresses'
 import { normalizeContact as normalizeContactForAssociation } from '../../utils/association-normalizers'
@@ -13,7 +12,8 @@ import {
   FormatterOutputType,
   ProfileType,
   SocialMediasType,
-  SocialMediasEnum
+  SocialMediasEnum,
+  ProfileDateType
 } from './types'
 
 // Helpers
@@ -53,16 +53,15 @@ function socialMediasInContact(contact: IContact): SocialMediasType[] {
     .map(social => ({ type: social.attribute_type, url: social.text }))
 }
 
-function extractRequiredDataFromContact(contactResponse): ProfileType {
-  const reduxState = store.getState()
+function extractRequiredDataFromContact(
+  contactResponse,
+  attributeDefs
+): ProfileType {
   const contact = normalizeContact(contactResponse)
   const dates = getContactAttributesBySection(contact, 'Dates')
   const addresses = getContactAttributesBySection(contact, 'Addresses')
 
-  const addressAttributeDefs = selectDefsBySection(
-    (reduxState as any).contacts.attributeDefs,
-    'Addresses'
-  )
+  const addressAttributeDefs = selectDefsBySection(attributeDefs, 'Addresses')
   const address = getAddresses(addresses, addressAttributeDefs)
 
   return {
@@ -81,7 +80,10 @@ function extractRequiredDataFromContact(contactResponse): ProfileType {
 }
 
 // Getting contact from server and fill the predefined object
-export async function getContactData(contact_id): Promise<FormatterOutputType> {
+export async function getContactData(
+  contact_id,
+  attributeDefs
+): Promise<FormatterOutputType> {
   try {
     const response = await getContact(contact_id)
 
@@ -94,7 +96,8 @@ export async function getContactData(contact_id): Promise<FormatterOutputType> {
     }
 
     const outputData: ProfileType = extractRequiredDataFromContact(
-      response.data
+      response.data,
+      attributeDefs
     )
 
     return {
@@ -151,7 +154,7 @@ export function isNearDate(date: number) {
   return new Date(date * 1000).getMonth() === new Date().getMonth()
 }
 
-export function activitiesFormatter(activities) {
+export function activitiesFormatter(activities?: ProfileDateType[]) {
   if (!activities) {
     return []
   }

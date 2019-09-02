@@ -5,7 +5,9 @@ import { Link } from 'react-router'
 
 import Avatar from 'components/Avatar'
 import CopyButton from 'components/CopyButton'
+import { EmailComposeDrawerProps } from 'components/EmailCompose/types'
 import { IAppState } from 'reducers/index'
+import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
 
 import Activity from './Activity'
 import {
@@ -25,19 +27,27 @@ interface MiniProfilePropsType {
   actionSettings: ActionSettingsType
   setActionSettings: (items: ActionSettingsType) => void
   user: IUser
+  attributeDefs: IAttributeDefsState
 }
 
 function MiniProfile(props: MiniProfilePropsType) {
-  const output = useProfile(props.type, props.initData)
+  const output = useProfile(props.type, props.initData, props.attributeDefs)
   const data = output.data
   const emailProps = {
     type: ActionSettingsNamesType.EMAIL,
     data: {
-      from: props.user,
+      initialValues: {
+        from: props.user,
+        to: [
+          {
+            recipient_type: 'Email',
+            email: data.email
+          }
+        ]
+      },
       onClose: () => props.setActionSettings({}),
-      onSent: () => props.setActionSettings({}),
-      recipients: [{ email: data.email }]
-    }
+      onSent: () => props.setActionSettings({})
+    } as Partial<EmailComposeDrawerProps>
   }
 
   return (
@@ -104,7 +114,8 @@ function MiniProfile(props: MiniProfilePropsType) {
 
 function mapStateToProps(state: IAppState) {
   return {
-    user: state.user
+    user: state.user,
+    attributeDefs: state.contacts.attributeDefs
   }
 }
 
