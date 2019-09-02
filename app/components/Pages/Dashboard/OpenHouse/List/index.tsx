@@ -10,6 +10,7 @@ import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
 import CreateNewOH from './CreateNewOH'
 import Name from './columns/Name'
+import Registerants from './columns/Registerants'
 import { PageContainer } from './styled'
 
 interface Associations {
@@ -20,7 +21,10 @@ interface Associations {
 function OHList() {
   const { list, isFetching, error, reloadList } = useGetOpenHouses()
   const [isOpenOHDrawer, setIsOpenOHDrawer] = useState(false)
-  const [selectedOH, setSelectedOH] = useState<ICRMTask<CRMTaskAssociation, CRMTaskAssociationType> | null>(null)
+  const [selectedOH, setSelectedOH] = useState<ICRMTask<
+    CRMTaskAssociation,
+    CRMTaskAssociationType
+  > | null>(null)
   const [associations, setAssociations] = useState<Associations | null>(null)
 
   const columns = [
@@ -29,7 +33,9 @@ function OHList() {
       id: 'name',
       width: '70%',
       verticalAlign: 'center',
-      render: (props: { rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType> }) => (
+      render: (props: {
+        rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+      }) => (
         <Name
           name={props.rowData.title}
           description={props.rowData.description}
@@ -37,6 +43,25 @@ function OHList() {
             setIsOpenOHDrawer(true)
             setSelectedOH(props.rowData)
           }}
+        />
+      )
+    },
+    {
+      header: 'Registerants',
+      id: 'registerants',
+      width: '10%',
+      verticalAlign: 'center',
+      render: (props: {
+        rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+      }) => (
+        <Registerants
+          registerants={
+            props.rowData.associations
+              ? props.rowData.associations.filter(
+                  a => a.association_type === 'contact'
+                )
+              : []
+          }
         />
       )
     }
