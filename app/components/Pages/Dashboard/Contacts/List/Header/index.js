@@ -14,6 +14,8 @@ function Header({
   activeSegment,
   showActions
 }) {
+  console.log('TITLE', title)
+
   return (
     <PageHeader>
       <PageHeader.Title showBackButton={false}>

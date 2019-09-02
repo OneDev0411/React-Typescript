@@ -2,7 +2,9 @@ export interface FlowFilter extends IActiveFilter {
   key: string
 }
 
-export function getFilteredFlows(activeFilters: StringMap<IActiveFilter>): FlowFilter[] {
+export function getFilteredFlows(
+  activeFilters: StringMap<IActiveFilter>
+): FlowFilter[] {
   let result: FlowFilter[] = []
 
   if (Object.keys(activeFilters).length > 0) {
@@ -12,7 +14,7 @@ export function getFilteredFlows(activeFilters: StringMap<IActiveFilter>): FlowF
       if (filter.id && filter.id === 'flow' && filter.values) {
         result.push({
           key,
-          ...filter,
+          ...filter
         })
       }
     })

@@ -41,6 +41,7 @@ import { SearchContacts } from './Search'
 import Header from './Header'
 import ContactFilters from './Filters'
 import TagsList from './TagsList'
+import AllContactsList from './AllContactsList'
 import FlowsList from './FlowsList'
 
 import {
@@ -124,6 +125,24 @@ class ContactsList extends React.Component {
 
   componentWillUnmount() {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
+  }
+
+  getHeaderTitle() {
+    const { activeFilters, activeSegment, filters, flows } = this.props
+
+    if (activeSegment && activeSegment.name && activeSegment.id !== 'default') {
+      return activeSegment.name
+    }
+
+    if (filters && filters.length === 1) {
+      return `Tag: ${filters[0].value}`
+    }
+
+    if (flows && flows.length === 1) {
+      return `Flow: ${activeFilters[0].values[0].label}`
+    }
+
+    return 'All Contacts'
   }
 
   updateSyncState(provider, oAuthAccounts = this.props.oAuthAccounts) {
@@ -495,9 +514,14 @@ class ContactsList extends React.Component {
         !activeSegment.filters ||
         activeSegment.filters.length === 0)
 
+    const title = this.getHeaderTitle()
+
     return (
       <PageContainer isOpen={isSideMenuOpen}>
         <SideMenu isOpen={isSideMenuOpen} width="13rem">
+          <AllContactsList
+            onFilterChange={filters => this.handleFilterChange(filters, true)}
+          />
           <TagsList
             onFilterChange={filters => this.handleFilterChange(filters, true)}
           />
@@ -537,7 +561,7 @@ class ContactsList extends React.Component {
             />
           )}
           <Header
-            title={(activeSegment && activeSegment.name) || 'All Contacts'}
+            title={title}
             activeSegment={activeSegment}
             isSideMenuOpen={state.isSideMenuOpen}
             user={user}
@@ -626,6 +650,7 @@ function mapStateToProps({ user, contacts, ...restOfState }) {
   return {
     oAuthAccounts: contacts.oAuthAccounts.list,
     fetchTags,
+    activeFilters,
     filters: normalizeAttributeFilters(attributeFilters),
     filterSegments,
     conditionOperator: filterSegments.conditionOperator,
