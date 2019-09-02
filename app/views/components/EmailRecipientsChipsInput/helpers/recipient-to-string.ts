@@ -43,7 +43,7 @@ export function recipientToString(
   }
 
   if (recipient.recipient_type === 'AllContacts') {
-    return 'All Contacts'
+    return 'All My Contacts'
   }
 
   if (recipient.recipient_type === 'Brand') {
