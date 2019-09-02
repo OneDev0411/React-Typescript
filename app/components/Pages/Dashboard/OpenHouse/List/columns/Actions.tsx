@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button } from '@material-ui/core'
 
 import { deleteTask } from 'models/tasks/delete-task'
@@ -19,13 +19,16 @@ export default function Actions({
   openHouse,
   reloadList
 }: Props) {
+  const [isDeleting, setIsDeleting] = useState(false)
   const confirmation = useContext(ConfirmationModalContext)
   const registerPageURL = `${config.app.url}/openhouse/${
     openHouse.id
   }/${activeBrandId}/register`
 
   const handleDelete = async () => {
+    setIsDeleting(true)
     await deleteTask(openHouse.id)
+    setIsDeleting(false)
     reloadList()
   }
 
@@ -47,7 +50,11 @@ export default function Actions({
       popperPlacement="bottom-end"
       style={{ display: 'flex', justifyContent: 'flex-end' }}
       onClick={() => window.open(registerPageURL)}
-      renderMenu={() => <Button onClick={onDelete}>Delete</Button>}
+      renderMenu={() => (
+        <Button disabled={isDeleting} onClick={onDelete}>
+          Delete
+        </Button>
+      )}
     >
       Guest Registration Page
     </SplitButton>
