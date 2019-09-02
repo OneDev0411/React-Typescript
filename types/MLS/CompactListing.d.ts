@@ -34,12 +34,12 @@ declare interface ICompactProperty {
   type: 'compact_property'
 }
 
-declare interface ICompactListing extends IModel {
-  close_date?: number
+declare interface ICompactListing extends IModel<'compact_listing'> {
+  close_date: number | null
   price: number
-  close_price?: number
+  close_price: number | null
   status: TListingStatus
-  mls_number: number
+  mls_number: string
   buyers_agency_commission: string
   sub_agency_commission: string
   list_office_name: string
@@ -58,9 +58,8 @@ declare interface ICompactListing extends IModel {
   location: ILocation
   cover_image_url: string
   address: ICompactAddress
-  open_houses?: boolean | null
+  open_houses: boolean | null
   compact_property: ICompactProperty
   user_listing_notification_setting: null
   dom: null
-  type: 'compact_listing'
 }
