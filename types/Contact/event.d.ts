@@ -15,7 +15,7 @@ interface TaskAssociations {
   updated_at: number
 }
 
-declare interface IEvent extends IModel {
+declare interface IEvent extends IModel<'crm_task'> {
   associations: TaskAssociations
   due_date: number
   task_type: string
