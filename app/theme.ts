@@ -59,6 +59,9 @@ const theme = createMuiTheme({
       // Disable ink ripple for more consistency with our current UI components
       // at least until full adoption
       disableRipple: true
+    },
+    MuiButtonGroup: {
+      disableRipple: true
     }
   },
   zIndex: {
