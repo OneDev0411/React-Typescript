@@ -81,6 +81,7 @@ export function BulkEmailComposeDrawer({
         readOnly={disableAddNewRecipient}
         name="to"
         component={EmailRecipientsChipsInput as any}
+        includeQuickSuggestions
         TextFieldProps={
           {
             inputProps: {
