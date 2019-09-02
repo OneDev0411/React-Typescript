@@ -3,8 +3,6 @@ import { ComponentProps, useEffect, useState } from 'react'
 
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 
-import { notUndefined } from 'utils/ts-utils'
-
 import { BulkEmailComposeDrawer } from '../BulkEmailComposeDrawer'
 import { SingleEmailComposeDrawer } from '../SingleEmailComposeDrawer'
 import { EmailFormValues } from '../types'
@@ -18,8 +16,8 @@ interface Props {
 
 export function EditEmailDrawer({ emailId, isOpen, onClose, onEdited }: Props) {
   const [data, setData] = useState<IEmailCampaign<
-    'from' | 'recipients' | 'template' | 'emails' | 'attachments',
-    'contact' | 'list'
+    IEmailCampaignAssociation,
+    IEmailCampaignRecipientAssociation
   > | null>(null)
 
   useEffect(() => {
@@ -87,37 +85,44 @@ export function EditEmailDrawer({ emailId, isOpen, onClose, onEdited }: Props) {
 
 function getRecipientsFromRecipientsEntity(
   sendType: IEmailRecipient['send_type'],
-  recipients: IEmailRecipient<'list' | 'contact'>[]
+  recipients: IEmailRecipient<IEmailCampaignRecipientAssociation>[]
 ): IDenormalizedEmailRecipientInput[] {
   return recipients
     .filter(recipient => recipient.send_type === sendType)
-    .map<IDenormalizedEmailRecipientInput | undefined>(recipient => {
-      if (recipient.recipient_type === 'Tag') {
-        return {
-          recipient_type: 'Tag',
-          tag: {
-            type: 'crm_tag',
-            text: recipient.tag
-          } as IContactTag
-        }
-      }
-
-      if (recipient.recipient_type === 'List') {
-        return {
-          recipient_type: 'List',
-          list: recipient.list
-        }
-      }
-
-      if (recipient.recipient_type === 'Email' && recipient.email) {
-        return {
-          recipient_type: 'Email',
-          email: recipient.email,
-          contact: recipient.contact
-        }
+    .map<IDenormalizedEmailRecipientInput>(recipient => {
+      // With this switch case, if new type of recipients are added ever,
+      // we get a ts error here and we need to fix it.
+      switch (recipient.recipient_type) {
+        case 'Tag':
+          return {
+            recipient_type: 'Tag',
+            tag: {
+              type: 'crm_tag',
+              text: recipient.tag
+            } as IContactTag
+          }
+        case 'List':
+          return {
+            recipient_type: 'List',
+            list: recipient.list
+          }
+        case 'Email':
+          return {
+            recipient_type: 'Email',
+            email: recipient.email!,
+            contact: recipient.contact
+          }
+        case 'AllContacts':
+          return {
+            recipient_type: 'AllContacts'
+          }
+        case 'Brand':
+          return {
+            recipient_type: 'Brand',
+            brand: recipient.brand
+          }
       }
     })
-    .filter(notUndefined)
 }
 
 /**

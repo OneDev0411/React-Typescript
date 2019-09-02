@@ -35,10 +35,10 @@ declare type IEmailRecipientInput =
   | IEmailRecipientAllContactsInput
   | IEmailRecipientBrandInput
 
-declare type EmailCampaignRecipientAssociation = 'contact' | 'list'
+declare type IEmailCampaignRecipientAssociation = 'contact' | 'list' | 'brand'
 
 declare type IEmailRecipient<
-  Associations extends EmailCampaignRecipientAssociation = ''
+  Associations extends IEmailCampaignRecipientAssociation = ''
 > = {
   campaign: UUID
   created_at: string
@@ -53,7 +53,8 @@ declare type IEmailRecipient<
   type: 'email_campaign_recipient'
   updated_at: null | string
 } & Association<'contact', IContact, Associations> &
-  Association<'list', IContactList, Associations>
+  Association<'list', IContactList, Associations> &
+  Association<'brand', IBrand, Associations>
 
 declare interface IEmailCampaignInputBase {
   due_at: Date | null
@@ -78,7 +79,7 @@ declare interface IEmailCampaignInput extends IEmailCampaignInputBase {
   bcc?: IEmailRecipientInput[]
 }
 
-declare type EmailCampaignAssociation =
+declare type IEmailCampaignAssociation =
   | 'emails'
   | 'template'
   | 'from'
@@ -86,8 +87,8 @@ declare type EmailCampaignAssociation =
   | 'attachments'
 
 declare type IEmailCampaign<
-  Associations extends EmailCampaignAssociation = '',
-  RecipientAssociations extends EmailCampaignRecipientAssociation = ''
+  Associations extends IEmailCampaignAssociation = '',
+  RecipientAssociations extends IEmailCampaignRecipientAssociation = ''
 > = {
   id: UUID
   created_at: number
@@ -119,10 +120,9 @@ declare type IEmailCampaign<
   Associations
 > &
   Association<'from', IUser, Associations> &
-  Association<'list', IContactList, Associations> &
-  Association<'template', IMarketingTemplateInstance, Associations> &
-  Association<'emails', any[], Associations> &
-  Association<'attachments', IFile[], Associations>
+  Association<'template', IMarketingTemplateInstance | null, Associations> &
+  Association<'emails', any[] | null, Associations> &
+  Association<'attachments', IFile[] | null, Associations>
 
 declare interface IEmail {
   domain?: string

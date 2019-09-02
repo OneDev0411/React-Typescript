@@ -8,7 +8,7 @@ interface Props {
   onSelect: (suggestion: IDenormalizedEmailRecipientInput) => void
 }
 
-export function RecipientSuggestion({ recipient, onSelect }: Props) {
+export function RecipientQuickSuggestion({ recipient, onSelect }: Props) {
   const onClick = (event: React.MouseEvent) => {
     event.preventDefault()
 

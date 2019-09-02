@@ -3,12 +3,12 @@ import { connect } from 'react-redux'
 
 import { Box } from '@material-ui/core'
 
-import { isEqual } from 'lodash'
+import { curry, isEqual } from 'lodash'
 
 import { IAppState } from 'reducers/index'
 import { getActiveTeam } from 'utils/user-teams'
 
-import { RecipientSuggestion } from '../RecipientSuggestion'
+import { RecipientQuickSuggestion } from '../RecipientQuickSuggestion'
 
 interface Props {
   user: IUser
@@ -16,7 +16,7 @@ interface Props {
   onSelect: (recipient: IDenormalizedEmailRecipientInput) => void
 }
 
-export const RecipientSuggestions = connect(({ user }: IAppState) => ({
+export const RecipientQuickSuggestions = connect(({ user }: IAppState) => ({
   user
 }))(function RecipientSuggestions({
   user,
@@ -43,10 +43,7 @@ export const RecipientSuggestions = connect(({ user }: IAppState) => ({
   }
 
   const unusedSuggestions = suggestions.filter(
-    suggestion =>
-      !currentRecipients.find(someRecipient =>
-        isEqual(someRecipient, suggestion)
-      )
+    suggestion => !currentRecipients.find(areRecipientsEqual(suggestion))
   )
 
   return unusedSuggestions.length > 0 ? (
@@ -56,10 +53,33 @@ export const RecipientSuggestions = connect(({ user }: IAppState) => ({
       </Box>
       {unusedSuggestions.map((suggestion, index) => (
         <React.Fragment key={index}>
-          <RecipientSuggestion recipient={suggestion} onSelect={onSelect} />
+          <RecipientQuickSuggestion
+            recipient={suggestion}
+            onSelect={onSelect}
+          />
           <>{index < unusedSuggestions.length - 1 ? ', ' : ''}</>
         </React.Fragment>
       ))}
     </Box>
   ) : null
 })
+
+const areRecipientsEqual = curry(
+  (
+    recipient1: IDenormalizedEmailRecipientInput,
+    recipient2: IDenormalizedEmailRecipientInput
+  ) => {
+    if (recipient1.recipient_type !== recipient2.recipient_type) {
+      return false
+    }
+
+    if (recipient1.recipient_type === 'Brand') {
+      return (
+        recipient1.brand.id ===
+        (recipient2 as IDenormalizedEmailRecipientBrandInput).brand.id
+      )
+    }
+
+    return isEqual(recipient1, recipient2)
+  }
+)
