@@ -223,10 +223,11 @@ class SendContactCard extends React.Component {
       <Fragment>
         <MissingEmailModal
           isOpen={this.state.isMissingEmailModalOpen}
-          contact={this.state.contact.id}
+          contactId={this.state.contact && this.state.contact.id}
           onClose={this.closeMissingEmailDialog}
           action="send a card"
         />
+
         {this.props.contact || this.props.contactId ? (
           <Button
             appearance="outline"
