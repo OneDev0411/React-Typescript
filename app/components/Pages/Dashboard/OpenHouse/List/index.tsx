@@ -11,7 +11,7 @@ import LoadingContainer from 'components/LoadingContainer'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
 import CreateNewOH from './CreateNewOH'
-import Name from './columns/Name'
+import Info from './columns/Info'
 import Actions from './columns/Actions'
 import Registerants from './columns/Registerants'
 import { PageContainer } from './styled'
@@ -43,8 +43,9 @@ function OHList(props: Props) {
       render: (props: {
         rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
       }) => (
-        <Name
+        <Info
           name={props.rowData.title}
+          dueDate={props.rowData.due_date}
           description={props.rowData.description}
           onClick={() => {
             setIsOpenOHDrawer(true)
