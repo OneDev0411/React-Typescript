@@ -12,7 +12,7 @@ import { RecipientSuggestion } from '../RecipientSuggestion'
 
 interface Props {
   user: IUser
-  currentRecipients: IDenormalizedEmailRecipientInput[]
+  currentRecipients?: IDenormalizedEmailRecipientInput[]
   onSelect: (recipient: IDenormalizedEmailRecipientInput) => void
 }
 
@@ -21,7 +21,7 @@ export const RecipientSuggestions = connect(({ user }: IAppState) => ({
 }))(function RecipientSuggestions({
   user,
   onSelect,
-  currentRecipients
+  currentRecipients = []
 }: Props) {
   const activeTeam = getActiveTeam(user)
 
