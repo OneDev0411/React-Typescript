@@ -178,3 +178,18 @@ export function getBrandByType(user: IUser, type: IBrandType): IBrand | null {
 
   return null
 }
+
+export function getRootBrand(user: IUser) {
+  const team = getActiveTeam(user)
+  if (team === null) {
+    return null
+  }
+
+  let brand: IBrand | null = team.brand
+
+  while(brand && brand.parent) {
+    brand = brand.parent
+  }
+  return brand
+
+}

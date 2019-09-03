@@ -10,9 +10,18 @@ declare interface IDeal extends IModel<'deal'> {
   listing: UUID
 }
 
+declare interface IDealForm {}
+
+declare type IDealTaskType = 'Form' | 'GeneralComments' | 'Generic'
+
 declare interface IDealTask {
   id: UUID
   required: boolean
+  checklist: UUID
+  form: null | IDealForm
+  order: number
+  task_type: IDealTaskType
+  title: string
 }
 
 declare interface IDealRole {

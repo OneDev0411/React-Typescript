@@ -13,6 +13,10 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
       }
     },
 
+    '.MuiTableHead-root': {
+      textTransform: 'uppercase'
+    },
+
     // override our default styles
     '.MuiLink-underlineNone': {
       textDecoration: 'none!important'
