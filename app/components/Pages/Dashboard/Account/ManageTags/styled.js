@@ -32,6 +32,7 @@ export const ItemsContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-items: center;
 
   > div {
     padding: 0;

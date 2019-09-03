@@ -2,6 +2,9 @@ import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { Helmet } from 'react-helmet'
+import { uniqBy } from 'lodash'
+
+import { defaultTags } from 'utils/default-tags'
 
 import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'models/contacts/get-contacts-tags'
@@ -16,6 +19,11 @@ import Loading from '../../../../Partials/Loading'
 import Row from './Row'
 import { Input } from './Input'
 import { Container, Description } from './styled'
+
+const DEFAULT_TAGS = defaultTags.map(tag => ({
+  text: tag,
+  type: 'default_tag'
+}))
 
 const HIGHLIGHT_SECONDS = 4
 
@@ -35,9 +43,13 @@ class ManageTags extends Component {
     try {
       const response = await await getContactsTags()
 
+      const rawTags = uniqBy([...DEFAULT_TAGS, ...response.data], 'text').map(
+        ({ text, type }) => ({ text, highlight: false, type })
+      )
+
       this.setState({
         loading: false,
-        rawTags: response.data.map(({ text }) => ({ text, highlight: false }))
+        rawTags
       })
     } catch (error) {
       this.setState({ loading: false })
@@ -78,7 +90,9 @@ class ManageTags extends Component {
     setTimeout(() => {
       this.setState(prevState => ({
         rawTags: [
-          ...prevState.rawTags.filter(item => item.text !== tag.text),
+          ...prevState.rawTags.filter(
+            item => item.text.toLowerCase() !== tag.text.toLowerCase()
+          ),
           {
             ...tag,
             highlight
@@ -88,13 +102,13 @@ class ManageTags extends Component {
     }, delay)
   }
 
-  handleDuplicateTagCreate = text => {
+  handleDuplicateTagCreate = tag => {
     this.props.notify({
       status: 'info',
-      message: `"${text}" already exists.`
+      message: `"${tag.text}" already exists.`
     })
-    this.highlightTag({ text })
-    this.highlightTag({ text }, false, HIGHLIGHT_SECONDS * 1000)
+    this.highlightTag(tag)
+    this.highlightTag(tag, false, HIGHLIGHT_SECONDS * 1000)
   }
 
   handleChange = async ({ oldText, newText: rawNewText }) => {
@@ -112,7 +126,9 @@ class ManageTags extends Component {
       })
       this.setState(prevState => ({
         rawTags: [
-          ...prevState.rawTags.filter(item => item.text !== oldText),
+          ...prevState.rawTags.filter(
+            item => item.text.toLowerCase() !== oldText.toLowerCase()
+          ),
           {
             text
           }
@@ -120,7 +136,7 @@ class ManageTags extends Component {
       }))
     } catch (e) {
       if (e.status && e.status === 409) {
-        this.handleDuplicateTagCreate(text)
+        this.handleDuplicateTagCreate({ text })
       }
 
       return false
@@ -134,6 +150,15 @@ class ManageTags extends Component {
 
     if (!text || this.state.isSaving) {
       return
+    }
+
+    if (
+      defaultTags.map(tag => tag.toLowerCase()).includes(text.toLowerCase())
+    ) {
+      return this.handleDuplicateTagCreate({
+        text: text[0].toUpperCase() + text.substring(1).toLowerCase(),
+        type: 'default_tag'
+      })
     }
 
     try {
@@ -150,7 +175,7 @@ class ManageTags extends Component {
       this.highlightTag({ text }, false, HIGHLIGHT_SECONDS * 1000)
     } catch (e) {
       if (e.status && e.status === 409) {
-        this.handleDuplicateTagCreate(text)
+        this.handleDuplicateTagCreate({ text })
       }
     } finally {
       this.setState({ isSaving: false })
