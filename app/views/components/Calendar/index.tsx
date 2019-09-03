@@ -42,6 +42,7 @@ import List from './components/List'
 interface Props {
   viewAsUsers?: UUID[]
   filter?: object
+  associations?: string[]
   calendarRef?: RefObject<CalendarRef>
   user?: IUser
   onChangeActiveDate?: (activeDate: Date) => void
@@ -57,6 +58,7 @@ export function Calendar({
   calendarRef,
   viewAsUsers,
   filter = {},
+  associations = [],
   user,
   onLoadEvents = () => null,
   onChangeActiveDate = () => null
@@ -120,6 +122,7 @@ export function Calendar({
         const fetchedEvents = await getCalendar({
           users: viewAsUsers,
           filter,
+          associations,
           ...apiOptions
         })
 
@@ -145,7 +148,15 @@ export function Calendar({
         setIsLoading(false)
       }
     },
-    [activeDate, events, filter, isLoading, onLoadEvents, viewAsUsers]
+    [
+      activeDate,
+      associations,
+      events,
+      filter,
+      isLoading,
+      onLoadEvents,
+      viewAsUsers
+    ]
   )
 
   /**

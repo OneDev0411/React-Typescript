@@ -144,26 +144,31 @@ const CalendarList: React.FC<Props> = props => {
         )}
       </VirtualList>
 
-      {selectedEvent && selectedEvent.object_type === 'crm_task' && (
-        <CrmEvents
-          isEventDrawerOpen
-          event={selectedEvent}
-          user={props.user}
-          onEventChange={handleEventChange}
-          onCloseEventDrawer={() => setSelectedEvent(null)}
-        />
-      )}
+      {selectedEvent &&
+        ['crm_task', 'crm_association'].includes(selectedEvent.object_type) && (
+          <CrmEvents
+            isEventDrawerOpen
+            selectedDate={activeDate}
+            event={selectedEvent}
+            user={props.user}
+            onEventChange={handleEventChange}
+            onCloseEventDrawer={() => setSelectedEvent(null)}
+          />
+        )}
 
-      {selectedEvent && selectedEvent.object_type === 'email_campaign' && (
-        <EditEmailDrawer
-          isOpen
-          onClose={() => setSelectedEvent(null)}
-          onEdited={emailCampaign =>
-            handleScheduledEmailChange(selectedEvent, emailCampaign)
-          }
-          emailId={selectedEvent.campaign as UUID}
-        />
-      )}
+      {selectedEvent &&
+        ['email_campaign', 'email_campaign_recipient'].includes(
+          selectedEvent.object_type
+        ) && (
+          <EditEmailDrawer
+            isOpen
+            onClose={() => setSelectedEvent(null)}
+            onEdited={emailCampaign =>
+              handleScheduledEmailChange(selectedEvent, emailCampaign)
+            }
+            emailId={selectedEvent.campaign as UUID}
+          />
+        )}
     </Container>
   )
 }

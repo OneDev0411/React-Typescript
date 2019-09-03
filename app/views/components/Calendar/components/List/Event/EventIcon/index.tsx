@@ -14,7 +14,7 @@ interface Props {
 export function EventIcon(props: Props) {
   let Icon = eventTypesIcons['Task Critical']
 
-  if (props.event.object_type === 'crm_task') {
+  if (['crm_task', 'crm_association'].includes(props.event.object_type)) {
     Icon = getCrmTaskIcon(props.event)
   }
 
@@ -22,7 +22,11 @@ export function EventIcon(props: Props) {
     Icon = getImportantDateIcon(props.event)
   }
 
-  if (props.event.object_type === 'email_campaign') {
+  if (
+    ['email_campaign', 'email_campaign_recipient'].includes(
+      props.event.object_type
+    )
+  ) {
     Icon = eventTypesIcons.Email
   }
 

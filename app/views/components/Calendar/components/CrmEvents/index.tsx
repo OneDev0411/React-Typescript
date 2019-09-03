@@ -9,7 +9,7 @@ interface Props {
   isEventDrawerOpen: boolean
   event?: ICalendarEvent
   user: IUser
-  selectedDate: Date
+  selectedDate: Date | null
   onEventChange(event: IEvent, type: string): void
   onCloseEventDrawer(): void
 }
@@ -31,7 +31,7 @@ export function CrmEvents(props: Props) {
     const initialValues = {
       assignees: [props.user],
       associations: [],
-      dueDate: createDueDate(props.selectedDate),
+      dueDate: createDueDate(props.selectedDate || new Date()),
       reminder: {
         title: 'None',
         value: -1
@@ -42,9 +42,14 @@ export function CrmEvents(props: Props) {
     return <EventDrawer {...sharedProps} initialValues={initialValues} />
   }
 
+  const id =
+    props.event.object_type === 'crm_association'
+      ? props.event.crm_task
+      : props.event.id
+
   if (props.event.type === 'Open House') {
-    return <OpenHouseDrawer {...sharedProps} openHouseId={props.event.id} />
+    return <OpenHouseDrawer {...sharedProps} openHouseId={id} />
   }
 
-  return <EventDrawer {...sharedProps} eventId={props.event.id} />
+  return <EventDrawer {...sharedProps} eventId={id} />
 }
