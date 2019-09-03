@@ -7,7 +7,7 @@ import { FieldError } from 'components/final-form-fields/FieldError'
 function AttachmentsList(props) {
   const handleDelete = attachment => {
     const attachments = props.input.value.filter(
-      item => item.id === attachment.id && item.type !== attachment.type
+      item => item.id !== attachment.id
     )
 
     props.input.onChange(attachments)
