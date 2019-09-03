@@ -484,6 +484,18 @@ class ContactsList extends React.Component {
     )
   }
 
+  isDefaultSegmentSelected() {
+    return this.props.activeSegment.id === 'default'
+  }
+
+  isFilteredWithTagsOrFlows() {
+    return this.props.filters.length > 0 || this.props.flows.length > 0
+  }
+
+  shouldShowImportAndCreateActions() {
+    return this.isDefaultSegmentSelected() && !this.isFilteredWithTagsOrFlows()
+  }
+
   render() {
     const { props, state } = this
     const { isSideMenuOpen } = state
@@ -563,9 +575,11 @@ class ContactsList extends React.Component {
           <Header
             title={title}
             activeSegment={activeSegment}
+            showActions={!isZeroState}
+            showImportAction={this.shouldShowImportAndCreateActions()}
+            showCreateAction={this.shouldShowImportAndCreateActions()}
             isSideMenuOpen={state.isSideMenuOpen}
             user={user}
-            showActions={!isZeroState}
             onMenuTriggerChange={this.toggleSideMenu}
           />
           {isZeroState ? (
