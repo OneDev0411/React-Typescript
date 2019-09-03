@@ -8,6 +8,7 @@ import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { deleteContacts, getContacts, searchContacts } from 'actions/contacts'
 import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-text-filter'
+
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import {
   selectContacts,
@@ -65,6 +66,7 @@ class ContactsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      selectedSidebarFilter: null,
       firstLetter: this.props.location.query.letter || null,
       isSideMenuOpen: true,
       isFetchingMoreContacts: false,
@@ -130,7 +132,12 @@ class ContactsList extends React.Component {
   getHeaderTitle() {
     const { activeFilters, activeSegment, filters, flows } = this.props
 
-    if (activeSegment && activeSegment.name && activeSegment.id !== 'default') {
+    if (
+      activeSegment &&
+      activeSegment.name &&
+      activeSegment.id !== 'default' &&
+      this.state.selectedSidebarFilter === null
+    ) {
       return activeSegment.name
     }
 
@@ -251,6 +258,7 @@ class ContactsList extends React.Component {
    * @param {ISavedSegment} savedSegment
    */
   handleChangeSavedSegment = savedSegment => {
+    this.setState({ selectedSidebarFilter: null })
     this.handleFilterChange({}, true)
 
     if (savedSegment.id === SYNCED_CONTACTS_LIST_ID) {
@@ -496,6 +504,10 @@ class ContactsList extends React.Component {
     return this.isDefaultSegmentSelected() && !this.isFilteredWithTagsOrFlows()
   }
 
+  shouldShowFilters() {
+    return this.state.selectedSidebarFilter === null
+  }
+
   render() {
     const { props, state } = this
     const { isSideMenuOpen } = state
@@ -532,13 +544,22 @@ class ContactsList extends React.Component {
       <PageContainer isOpen={isSideMenuOpen}>
         <SideMenu isOpen={isSideMenuOpen} width="13rem">
           <AllContactsList
-            onFilterChange={filters => this.handleFilterChange(filters, true)}
+            onFilterChange={filters => {
+              this.setState({ selectedSidebarFilter: null })
+              this.handleFilterChange({ ...filters, flows: [] }, true)
+            }}
           />
           <TagsList
-            onFilterChange={filters => this.handleFilterChange(filters, true)}
+            onFilterChange={filters => {
+              this.setState({ selectedSidebarFilter: filters })
+              this.handleFilterChange({ ...filters, flows: [] }, true)
+            }}
           />
           <FlowsList
-            onChange={_.debounce(() => this.handleFilterChange({}, true), 300)}
+            onChange={_.debounce(() => {
+              this.setState({ selectedSidebarFilter: this.props.flows })
+              this.handleFilterChange({}, true)
+            }, 300)}
           />
           <SavedSegments
             name={CONTACTS_SEGMENT_NAME}
@@ -586,10 +607,12 @@ class ContactsList extends React.Component {
             <ZeroState />
           ) : (
             <Container>
-              <ContactFilters
-                onFilterChange={() => this.handleFilterChange({}, true)}
-                users={viewAsUsers}
-              />
+              {this.shouldShowFilters() && (
+                <ContactFilters
+                  onFilterChange={() => this.handleFilterChange({}, true)}
+                  users={viewAsUsers}
+                />
+              )}
               <SearchWrapper row alignCenter>
                 <FlexItem basis="100%">
                   <SearchContacts

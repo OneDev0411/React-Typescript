@@ -9,6 +9,7 @@ import {
   updateActiveFilter,
   resetActiveFilters
 } from 'actions/filter-segments/active-filters'
+import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
 
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import { selectContactsInfo } from 'reducers/contacts/list'
@@ -28,6 +29,7 @@ import { ShowMoreLess } from 'components/ShowMoreLess'
 import IconCog from 'components/SvgIcons/Cog/IconCog'
 
 import { normalizeAttributeFilters } from '../utils'
+import { CONTACTS_SEGMENT_NAME } from '../../constants'
 
 interface Props {
   attributeDefs: IAttributeDefsState
@@ -41,6 +43,7 @@ interface Props {
     filter: any
   ) => void
   resetActiveFilters: (segmentName: string) => void
+  changeActiveFilterSegment: typeof changeActiveFilterSegment
 }
 
 export class TagsList extends React.Component<Props> {
@@ -54,7 +57,8 @@ export class TagsList extends React.Component<Props> {
 
   private tagDefinitionId: string
 
-  onSelectList = item => {
+  onSelectList = async item => {
+    await this.props.changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, 'default')
     this.props.resetActiveFilters('contacts')
 
     const filter = {
@@ -169,6 +173,7 @@ export default connect(
   mapStateToProps,
   {
     updateActiveFilter,
-    resetActiveFilters
+    resetActiveFilters,
+    changeActiveFilterSegment
   }
 )(TagsList)

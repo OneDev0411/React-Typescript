@@ -8,6 +8,7 @@ import {
   updateActiveFilter,
   resetActiveFilters
 } from 'actions/filter-segments/active-filters'
+import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
 
 import { useGetBrandFlows } from 'hooks/use-get-brand-flows'
 
@@ -23,6 +24,8 @@ import { ShowMoreLess } from 'components/ShowMoreLess'
 import Loader from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import IconCog from 'components/SvgIcons/Cog/IconCog'
 
+import { CONTACTS_SEGMENT_NAME } from '../../constants'
+
 const FILTER_DEFINITION_ID = 'flow'
 
 interface Props {
@@ -35,11 +38,43 @@ interface Props {
     filter: any
   ) => void
   resetActiveFilters: (segmentName: string) => void
+  changeActiveFilterSegment: typeof changeActiveFilterSegment
 }
 
 function FlowsList(props: Props) {
   const brand = getActiveTeamId(props.user) || ''
   const { flows: brandFlows, isFetching } = useGetBrandFlows(brand)
+
+  function renderLoading() {
+    return (
+      <ListItem>
+        <Loader />
+      </ListItem>
+    )
+  }
+
+  function renderFlows() {
+    return (
+      <ShowMoreLess moreText="More Flows" lessText="Less Flows">
+        {brandFlows.map(flow => {
+          const { name, id } = flow
+
+          return (
+            <ToolTip key={id} caption={name} placement="right">
+              <ListItem
+                data-test="flow-item"
+                className="item"
+                isSelected={isSelected(flow)}
+                onClick={() => onSelect(flow)}
+              >
+                <ListItemName>{name}</ListItemName>
+              </ListItem>
+            </ToolTip>
+          )
+        })}
+      </ShowMoreLess>
+    )
+  }
 
   const isSelected = useCallback(
     (item: IBrandFlow) => {
@@ -56,10 +91,11 @@ function FlowsList(props: Props) {
     [props.activeFilters]
   )
 
-  const onSelect = (flow: IBrandFlow): void => {
-    props.resetActiveFilters('contacts')
+  const onSelect = async (flow: IBrandFlow): Promise<void> => {
+    await props.changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, 'default')
+    props.resetActiveFilters(CONTACTS_SEGMENT_NAME)
 
-    props.updateActiveFilter('contacts', `flow-${flow.id}`, {
+    props.updateActiveFilter(CONTACTS_SEGMENT_NAME, `flow-${flow.id}`, {
       id: 'flow',
       operator: {
         name: 'is'
@@ -79,31 +115,7 @@ function FlowsList(props: Props) {
           </ToolTip>
         </Link>
       </ListTitle>
-
-      {isFetching ? (
-        <ListItem>
-          <Loader />
-        </ListItem>
-      ) : (
-        <ShowMoreLess moreText="More Flows" lessText="Less Flows">
-          {brandFlows.map(flow => {
-            const { name, id } = flow
-
-            return (
-              <ToolTip key={id} caption={name} placement="right">
-                <ListItem
-                  data-test="flow-item"
-                  className="item"
-                  isSelected={isSelected(flow)}
-                  onClick={() => onSelect(flow)}
-                >
-                  <ListItemName>{name}</ListItemName>
-                </ListItem>
-              </ToolTip>
-            )
-          })}
-        </ShowMoreLess>
-      )}
+      {isFetching ? renderLoading() : renderFlows()}
     </div>
   )
 }
@@ -122,5 +134,9 @@ function mapStateToProps(state: {
 
 export default connect(
   mapStateToProps,
-  { resetActiveFilters, updateActiveFilter }
+  {
+    resetActiveFilters,
+    updateActiveFilter,
+    changeActiveFilterSegment
+  }
 )(FlowsList as FunctionComponent)
