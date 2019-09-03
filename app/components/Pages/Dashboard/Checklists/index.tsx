@@ -43,10 +43,10 @@ export function ChecklistsPage({ user, location }: Props) {
 
   const {
     checklists,
-    addGenericItem,
+    addGenericTask,
     updateTask,
     updateChecklist,
-    addGeneralCommentItem,
+    addGeneralCommentTask,
     deleteTask
   } = useChecklistsPage(rootBrand && rootBrand.id)
 
@@ -67,7 +67,7 @@ export function ChecklistsPage({ user, location }: Props) {
         <Content>
           <Box m={3}>
             {filteredChecklists.map(checklist => (
-              <div key={checklist.id}>
+              <Box mb={5} key={checklist.id}>
                 <ChecklistHeader
                   checklist={checklist}
                   setTerminable={value =>
@@ -82,8 +82,8 @@ export function ChecklistsPage({ user, location }: Props) {
                       is_deactivatable: value
                     })
                   }
-                  addGenericItem={addGenericItem}
-                  addGeneralCommentItem={addGeneralCommentItem}
+                  addGenericItem={addGenericTask}
+                  addGeneralCommentItem={addGeneralCommentTask}
                 />
                 <Box mt={1}>
                   <CheckListTable
@@ -92,7 +92,7 @@ export function ChecklistsPage({ user, location }: Props) {
                     checklist={checklist}
                   />
                 </Box>
-              </div>
+              </Box>
             ))}
           </Box>
         </Content>

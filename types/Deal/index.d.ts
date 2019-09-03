@@ -24,6 +24,9 @@ declare interface IDealTask {
   title: string
 }
 
+declare type IDealTaskInput = Partial<Omit<IDealTask, 'id' | 'checklist'>> &
+  Pick<IDealTask, 'task_type'>
+
 declare interface IDealRole {
   agent: IAgent
   agent_brokerwolf_id: string

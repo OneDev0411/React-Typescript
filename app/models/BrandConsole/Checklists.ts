@@ -1,9 +1,33 @@
 import Fetch from '../../services/fetch/index'
 
-export async function getBrandChecklists(brand: string): Promise<any[]> {
-  const response = await new Fetch().get(`/brands/${brand}/checklists`)
+export async function getBrandChecklists(
+  brandId: string
+): Promise<IBrandChecklist[]> {
+  const response = await new Fetch().get(`/brands/${brandId}/checklists`)
 
   return response.body.data
+}
+
+export async function addBrandCheckListTask(
+  brandId: string,
+  checklistId: string,
+  taskData: IDealTaskInput
+): Promise<IBrandChecklist> {
+  const response = await new Fetch()
+    .post(`/brands/${brandId}/checklists/${checklistId}/tasks`)
+    .send(taskData)
+
+  return response.body.data
+}
+
+export async function removeBrandCheckListTask(
+  brandId: string,
+  checklistId: string,
+  taskId: string
+): Promise<void> {
+  await new Fetch().delete(
+    `/brands/${brandId}/checklists/${checklistId}/tasks/${taskId}`
+  )
 }
 
 export async function addBrandChecklist(brand, checklist) {

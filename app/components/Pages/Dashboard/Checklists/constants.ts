@@ -29,3 +29,9 @@ export const SECTIONS: ComponentProps<typeof PageSideNav>['sections'] = [
     items: buyingPropertyTypes.map(propertyTypeToSideNavItem('Buying'))
   }
 ]
+
+export const dealTaskTypeToString: { [key in IDealTaskType]: string } = {
+  Form: 'Form',
+  GeneralComments: 'General Comments',
+  Generic: 'Generic'
+}

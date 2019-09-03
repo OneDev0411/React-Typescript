@@ -14,8 +14,8 @@ type Props = {
   checklist: IBrandChecklist
   setTerminable: (terminable: boolean) => void
   setDeactivatable: (terminable: boolean) => void
-  addGenericItem: () => void
-  addGeneralCommentItem: () => void
+  addGenericItem: (checklist: IBrandChecklist) => void
+  addGeneralCommentItem: (checklist: IBrandChecklist) => void
 }
 
 export function ChecklistHeader({
@@ -59,7 +59,7 @@ export function ChecklistHeader({
               button
               style={{ whiteSpace: 'nowrap' }}
               onClick={() => {
-                addGenericItem()
+                addGenericItem(checklist)
                 closeMenu()
               }}
             >
@@ -70,8 +70,9 @@ export function ChecklistHeader({
             ) && (
               <ListItem
                 button
+                style={{ whiteSpace: 'nowrap' }}
                 onClick={() => {
-                  addGeneralCommentItem()
+                  addGeneralCommentItem(checklist)
                   closeMenu()
                 }}
               >
