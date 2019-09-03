@@ -2,12 +2,9 @@ import styled from 'styled-components'
 
 import { H3 } from 'components/Typography/headings'
 
-export const Container = styled.div`
-  position: sticky;
-  top: 10px;
-`
+export const Container = styled.div``
 
 export const Title = styled(H3)`
-  margin-bottom: 0.75em;
+  margin: 0.75em 0;
   font-weight: 500;
 `
