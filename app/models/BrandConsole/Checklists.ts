@@ -20,7 +20,7 @@ export async function addBrandCheckListTask(
   return response.body.data
 }
 
-export async function removeBrandCheckListTask(
+export async function removeBrandChecklistTask(
   brandId: string,
   checklistId: string,
   taskId: string
@@ -30,19 +30,30 @@ export async function removeBrandCheckListTask(
   )
 }
 
+export async function updateBrandChecklistTask(
+  brandId: string,
+  task: IDealTask
+): Promise<IBrandChecklist> {
+  const response = await new Fetch()
+    .put(`/brands/${brandId}/checklists/${task.checklist}/tasks/${task.id}`)
+    .send(task)
+
+  return response.body.data
+}
+
+export async function updateBrandChecklist(
+  checklist: IBrandChecklist
+): Promise<IBrandChecklist> {
+  const response = await new Fetch()
+    .put(`/brands/${checklist.brand}/checklists/${checklist.id}`)
+    .send(checklist)
+
+  return response.body.data
+}
+
 export async function addBrandChecklist(brand, checklist) {
   try {
     return await new Fetch().post(`/brands/${brand}/checklists`).send(checklist)
-  } catch (error) {
-    return { error }
-  }
-}
-
-export async function editBrandChecklist(checklist) {
-  try {
-    return await new Fetch()
-      .put(`/brands/${checklist.brand}/checklists/${checklist.id}`)
-      .send(checklist)
   } catch (error) {
     return { error }
   }

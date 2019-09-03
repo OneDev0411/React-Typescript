@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react'
 
+import usePromise from 'react-use-promise'
+
 import {
   addBrandCheckListTask,
   getBrandChecklists,
-  removeBrandCheckListTask
+  removeBrandChecklistTask,
+  updateBrandChecklist,
+  updateBrandChecklistTask
 } from 'models/BrandConsole/Checklists'
+import { getBrandForms } from 'models/BrandConsole/Forms'
 
 /**
  * react hook encapsulating logic related to checklists page
@@ -13,6 +18,11 @@ export function useChecklistsPage(rootBrandId: string | null) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<any>(null)
   const [checklists, setChecklists] = useState<IBrandChecklist[]>([])
+
+  const [forms, formsError, formsState] = usePromise(
+    () => (rootBrandId ? getBrandForms(rootBrandId) : Promise.reject()),
+    [rootBrandId]
+  )
 
   const fetchChecklists = async brandId => {
     setLoading(true)
@@ -62,7 +72,9 @@ export function useChecklistsPage(rootBrandId: string | null) {
       )
     }
   }
-  const updateChecklist = (checklist: IBrandChecklist) => {}
+  const updateChecklist = async (checklist: IBrandChecklist) => {
+    _updateChecklist(checklist.id, await updateBrandChecklist(checklist))
+  }
   const addGenericTask = (checklist: IBrandChecklist) => {
     return addTask(checklist, {
       task_type: 'Generic'
@@ -73,11 +85,17 @@ export function useChecklistsPage(rootBrandId: string | null) {
       task_type: 'GeneralComments'
     })
   }
-  const updateTask = (task: IDealTask) => {}
+  const updateTask = async (task: IDealTask) => {
+    if (rootBrandId) {
+      const checklist = await updateBrandChecklistTask(rootBrandId, task)
+
+      _updateChecklist(task.checklist, checklist)
+    }
+  }
 
   const deleteTask = async (checklistId, taskId: UUID) => {
     if (rootBrandId) {
-      await removeBrandCheckListTask(rootBrandId, checklistId, taskId)
+      await removeBrandChecklistTask(rootBrandId, checklistId, taskId)
       _updateChecklist(checklistId, checklist => ({
         ...checklist,
         tasks: (checklist.tasks || []).filter(task => task.id !== taskId)
@@ -94,6 +112,9 @@ export function useChecklistsPage(rootBrandId: string | null) {
     updateTask,
     deleteTask,
     addGenericTask,
-    addGeneralCommentTask
+    addGeneralCommentTask,
+    forms,
+    formsError,
+    formsState
   }
 }

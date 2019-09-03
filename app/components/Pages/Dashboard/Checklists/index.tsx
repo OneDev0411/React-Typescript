@@ -43,6 +43,8 @@ export function ChecklistsPage({ user, location }: Props) {
 
   const {
     checklists,
+    forms,
+    formsState,
     addGenericTask,
     updateTask,
     updateChecklist,
@@ -70,6 +72,8 @@ export function ChecklistsPage({ user, location }: Props) {
               <Box mb={5} key={checklist.id}>
                 <ChecklistHeader
                   checklist={checklist}
+                  forms={forms}
+                  formsState={formsState}
                   setTerminable={value =>
                     updateChecklist({
                       ...checklist,

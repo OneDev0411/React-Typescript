@@ -26,7 +26,8 @@ interface Props {
 }
 
 export function CheckListTable({ checklist, updateTask, deleteTask }: Props) {
-  const [isTaskRemoving, setTaskRemoving] = useDictionary<boolean>()
+  const [isRemoving, setRemoving] = useDictionary<boolean>()
+  const [isRequiredChanging, setRequiredChanging] = useDictionary<boolean>()
 
   const tableClasses = useTableStyles()
 
@@ -54,19 +55,22 @@ export function CheckListTable({ checklist, updateTask, deleteTask }: Props) {
             </TableCell>
             <TableCell>
               <Checkbox
+                disabled={isRequiredChanging(task.id)}
                 color="primary"
                 checked={task.required}
-                onChange={event =>
-                  updateTask({
+                onChange={async event => {
+                  setRequiredChanging(task.id, true)
+                  await updateTask({
                     ...task,
                     required: event.target.checked
                   })
-                }
+                  setRequiredChanging(task.id, false)
+                }}
               />
             </TableCell>
             <TableCell>
               <IconButton
-                disabled={isTaskRemoving(task.id)}
+                disabled={isRemoving(task.id)}
                 onClick={() => {
                   confirmationModal.setConfirmationModal({
                     message: 'Remove Task?',
@@ -75,10 +79,9 @@ export function CheckListTable({ checklist, updateTask, deleteTask }: Props) {
                     }?`,
                     confirmLabel: 'Yes, Remove it',
                     onConfirm: async () => {
-                      setTaskRemoving(task.id, true)
-                      await new Promise(resolve => setTimeout(resolve, 2000))
+                      setRemoving(task.id, true)
                       await deleteTask(checklist.id, task.id)
-                      setTaskRemoving(task.id, false)
+                      setRemoving(task.id, false)
                     }
                   })
                 }}

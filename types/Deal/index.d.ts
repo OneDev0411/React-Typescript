@@ -10,7 +10,12 @@ declare interface IDeal extends IModel<'deal'> {
   listing: UUID
 }
 
-declare interface IDealForm {}
+declare interface IDealForm extends IModel<'form'> {
+  brand: UUID | null
+  name: string
+  fields: null | any // FIXME
+  formstack_id: null | string // ?
+}
 
 declare type IDealTaskType = 'Form' | 'GeneralComments' | 'Generic'
 
