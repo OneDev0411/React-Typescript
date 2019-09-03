@@ -1,9 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
-
-import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers'
-
-import { updateFilterSegment } from 'actions/filter-segments'
 
 import PageHeader from 'components/PageHeader'
 import { CreateContact } from 'components/CreateContact'
@@ -11,21 +6,18 @@ import { Trigger as MenuTrigger } from 'components/SlideMenu'
 
 import TouchReminder from '../TouchReminder'
 import ImportContactsButton from '../ImportContactsButton'
-import { CONTACTS_SEGMENT_NAME } from '../../constants'
 
-const DEFAULT_QUERY = {
-  associations: CRM_LIST_DEFAULT_ASSOCIATIONS
-}
-
-function Header({
+export default function Header({
   title,
   isSideMenuOpen,
   onMenuTriggerChange,
   activeSegment,
+  activeTag,
   showActions,
   showImportAction,
   showCreateAction,
-  updateSegment
+  onListTouchReminderUpdate,
+  onTagTouchReminderUpdate
 }) {
   return (
     <PageHeader style={{ height: '5.0625rem' }}>
@@ -42,18 +34,13 @@ function Header({
           {activeSegment && activeSegment.is_editable && (
             <TouchReminder
               value={activeSegment.touch_freq}
-              onChange={async value => {
-                const segment = {
-                  ...activeSegment,
-                  touch_freq: value
-                }
-
-                await updateSegment(
-                  CONTACTS_SEGMENT_NAME,
-                  segment,
-                  DEFAULT_QUERY
-                )
-              }}
+              onChange={onListTouchReminderUpdate}
+            />
+          )}
+          {activeTag && activeTag.id && (
+            <TouchReminder
+              value={activeTag.touch_freq}
+              onChange={onTagTouchReminderUpdate}
             />
           )}
           {showImportAction && <ImportContactsButton />}
@@ -63,10 +50,3 @@ function Header({
     </PageHeader>
   )
 }
-
-export default connect(
-  null,
-  {
-    updateSegment: updateFilterSegment
-  }
-)(Header)
