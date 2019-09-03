@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme: Theme) =>
         maxWidth: '100%'
       }
     },
+    learnMore: {
+      justifyContent: 'right'
+    },
     videoIcon: {
       marginRight: '0.5em',
       fill: `${theme.palette.primary.main}`
@@ -46,7 +49,7 @@ export default function EmptyState() {
     }.png`
 
   return (
-    <Box p={7} position="relative">
+    <Box display="flex" flexDirection="column" p={7} position="relative">
       <h1 className={classes.jumbo}>
         Impress your clients with stunning designs using ready-made social &
         email templates
@@ -54,6 +57,7 @@ export default function EmptyState() {
       <Button
         color="primary"
         target="blank"
+        className={classes.learnMore}
         href="https://help.rechat.com/en/articles/2562820-marketing-center-overview"
       >
         <IconVideo className={classes.videoIcon} />
