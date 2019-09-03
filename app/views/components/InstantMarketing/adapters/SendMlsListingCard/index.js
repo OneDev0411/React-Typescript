@@ -91,23 +91,30 @@ class SendMlsListingCard extends React.Component {
 
   /**
    *
-   * @return {Recipient[]}
+   * @return {IDenormalizedEmailRecipientInput[]}
    */
   get Recipients() {
+    /**
+     *
+     * @return {null|IDenormalizedEmailRecipientInput}
+     */
+    const mapToEmailRecipientInput = id => {
+      const contact = selectContact(this.props.contacts, id)
+
+      if (!contact || !contact.email) {
+        return null
+      }
+
+      return {
+        recipient_type: 'Email',
+        email: contact.email,
+        contact: normalizeContact(contact)
+      }
+    }
+
     return this.props.selectedRows
       ? this.props.selectedRows
-          .map(id => {
-            const contact = selectContact(this.props.contacts, id)
-
-            if (!contact || !contact.email) {
-              return null
-            }
-
-            return {
-              email: contact.email,
-              contact: normalizeContact(contact)
-            }
-          })
+          .map(mapToEmailRecipientInput)
           .filter(recipient => recipient !== null)
       : []
   }
