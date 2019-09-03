@@ -1,9 +1,10 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import Tooltip from 'components/tooltip'
 import QuestionCircleIcon from 'components/SvgIcons/QuestionCircle/QuestionCircleIcon'
 
 import { CheckBoxButton } from 'components/Button/CheckboxButton'
+
 import { Container, Label } from './styled'
 
 export function AutoNotify(props) {
