@@ -539,10 +539,17 @@ class ContactsList extends React.Component {
   }
 
   getActiveTag = () => {
+    // all or segmented list
     if (this.state.selectedSidebarFilter === null) {
       return undefined
     }
 
+    // flow
+    if (Array.isArray(this.state.selectedSidebarFilter)) {
+      return undefined
+    }
+
+    // tag
     return Object.values(this.props.tags).find(value => {
       return value.text === this.state.selectedSidebarFilter.filters[0].value
     })
@@ -579,8 +586,6 @@ class ContactsList extends React.Component {
         activeSegment.filters.length === 0)
 
     const title = this.getHeaderTitle()
-
-    console.log('YES', this.state.selectedSidebarFilter)
 
     return (
       <PageContainer isOpen={isSideMenuOpen}>
