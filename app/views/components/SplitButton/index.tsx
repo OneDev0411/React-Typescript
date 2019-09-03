@@ -3,16 +3,20 @@ import {
   Button,
   ButtonGroup,
   ClickAwayListener,
+  createStyles,
   Grow,
+  makeStyles,
   Paper,
-  Popper
+  Popper,
+  Theme,
+  useTheme
 } from '@material-ui/core'
 import { PopperPlacementType } from '@material-ui/core/Popper'
 
 import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
 interface RenderMenuProps {
-  closeMenu: (event: React.MouseEvent<HTMLButtonElement>) => void
+  closeMenu: (event?: React.MouseEvent<any>) => void
 }
 
 interface Props {
@@ -22,14 +26,30 @@ interface Props {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
   renderMenu: (props: RenderMenuProps) => ReactNode
   popperPlacement?: PopperPlacementType
+  className?: string
   size?: 'small' | 'medium' | 'large'
   style?: React.CSSProperties
   variant?: 'contained' | 'outlined' | undefined
 }
 
+const useSplitButtonStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      icon: {
+        fill: 'currentColor'
+      },
+      mainButton: {
+        flex: 1
+      }
+    }),
+  { name: 'SplitButton' }
+)
+
 export default function SplitButton(props: Props) {
   const [isOpen, setIsOpen] = React.useState(false)
   const anchorRef = React.useRef<HTMLDivElement>(null)
+  const theme = useTheme()
+  const classes = useSplitButtonStyles(props)
 
   function handleToggle() {
     setIsOpen(prevOpen => !prevOpen)
@@ -44,32 +64,33 @@ export default function SplitButton(props: Props) {
   }
 
   return (
-    <div style={props.style}>
+    <>
       <ButtonGroup
         aria-label="split button"
         color={props.color}
         disabled={props.disabled}
         size={props.size}
         ref={anchorRef}
+        style={props.style}
+        className={props.className}
         variant={props.variant}
       >
-        <Button onClick={props.onClick}>{props.children}</Button>
+        <Button onClick={props.onClick} className={classes.mainButton}>
+          {props.children}
+        </Button>
         <Button
           aria-owns={isOpen ? 'menu-list-grow' : undefined}
           aria-haspopup="true"
           onClick={handleToggle}
           size="small"
         >
-          <IconKeyboardArrowDown
-            style={{
-              fill: props.variant === 'contained' ? '#fff' : '#000'
-            }}
-          />
+          <IconKeyboardArrowDown className={classes.icon} />
         </Button>
       </ButtonGroup>
       <Popper
         anchorEl={anchorRef.current}
         open={isOpen}
+        style={{ zIndex: theme.zIndex.modal }}
         placement={props.popperPlacement}
         transition
       >
@@ -89,6 +110,6 @@ export default function SplitButton(props: Props) {
           </Grow>
         )}
       </Popper>
-    </div>
+    </>
   )
 }
