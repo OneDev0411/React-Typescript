@@ -93,6 +93,8 @@ class ContactsList extends React.Component {
     if (this.props.fetchTags) {
       this.props.getContactsTags()
     }
+
+    this.setSelectedSidebarFilter()
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -133,6 +135,23 @@ class ContactsList extends React.Component {
 
   componentWillUnmount() {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
+  }
+
+  setSelectedSidebarFilter() {
+    const { activeSegment, filters, flows } = this.props
+
+    if (
+      activeSegment &&
+      activeSegment.name &&
+      activeSegment.id !== 'default' &&
+      this.state.selectedSidebarFilter === null
+    ) {
+      this.setState({ selectedSidebarFilter: null })
+    } else if (filters && filters.length === 1) {
+      this.setState({ selectedSidebarFilter: filters })
+    } else if (flows && flows.length === 1) {
+      this.setState({ selectedSidebarFilter: flows })
+    }
   }
 
   getHeaderTitle() {
