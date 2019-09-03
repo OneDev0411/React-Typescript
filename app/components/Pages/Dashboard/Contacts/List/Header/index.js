@@ -12,7 +12,9 @@ function Header({
   isSideMenuOpen,
   onMenuTriggerChange,
   activeSegment,
-  showActions
+  showActions,
+  showImportAction,
+  showCreateAction
 }) {
   return (
     <PageHeader>
@@ -29,10 +31,8 @@ function Header({
           {activeSegment && activeSegment.is_editable && (
             <TouchReminder activeSegment={activeSegment} />
           )}
-
-          <ImportContactsButton />
-
-          <CreateContact />
+          {showImportAction && <ImportContactsButton />}
+          {showCreateAction && <CreateContact />}
         </PageHeader.Menu>
       )}
     </PageHeader>
