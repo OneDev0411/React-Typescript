@@ -1,4 +1,4 @@
-declare interface IDeal {
+declare interface IDeal extends IModel<'deal'> {
   id: UUID
   brand: {
     id: UUID
@@ -7,6 +7,7 @@ declare interface IDeal {
   checklists: any[]
   tasks: IDealTask[]
   roles: IDealRole[]
+  listing: UUID
 }
 
 declare interface IDealTask {

@@ -53,10 +53,12 @@ export function ImportContactsButton({ accounts, user }: Props) {
     <ConnectGoogleButton>
       {({ connecting, connect }) => (
         <SplitButton
-          appearance="primary"
+          color="primary"
+          variant="contained"
+          popperPlacement="bottom-end"
           disabled={connecting || syncing}
           onClick={connect}
-          style={{ marginRight: '1rem' }}
+          style={{ marginRight: '1rem', zIndex: 2 }}
           renderMenu={() => (
             <>
               <ConnectOutlookButton>
@@ -66,7 +68,15 @@ export function ImportContactsButton({ accounts, user }: Props) {
                   </MenuItem>
                 )}
               </ConnectOutlookButton>
-              <MenuItem as={ALink} noStyle to="/dashboard/contacts/import/csv">
+              <MenuItem
+                as={ALink}
+                noStyle
+                to="/dashboard/contacts/import/csv"
+                style={{
+                  height: '2.5rem',
+                  display: 'block'
+                }}
+              >
                 <CsvIcon /> Import from CSV Spreadsheet
               </MenuItem>
               {accounts.length > 0 && <Divider />}

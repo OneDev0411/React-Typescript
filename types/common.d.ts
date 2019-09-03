@@ -85,7 +85,8 @@ type IAsyncActionProp<
 declare type Association<
   Field,
   Value,
-  Associations
-> = Field extends Associations
+  Associations,
+  Association = Field
+> = Association extends Associations
   ? { [key in Field]: Value }
   : Record<never, never>

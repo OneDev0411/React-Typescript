@@ -88,7 +88,7 @@ class MlsConnect extends React.Component {
           isOpen={this.state.isDrawerOpen}
           allowedStatuses={['Pending', 'Leased', 'Active']}
           onClose={this.toggleDrawer}
-          onSelectListings={this.handleSelectListing}
+          onSelectListingsCallback={this.handleSelectListing}
         />
       </Fragment>
     )

@@ -20,12 +20,12 @@ export const updateContactQuery = {
 export const makeQueryAssociations = (list, associationName) =>
   list.map(item => `crm_${associationName}.${item}`)
 
-const CRM_TASK_ASSOCIATIONS = makeQueryAssociations(
+export const CRM_TASK_ASSOCIATIONS = makeQueryAssociations(
   ['reminders', 'assignees', 'created_by', 'updated_by', 'associations'],
   'task'
 )
 
-const CRM_ASSOCIATIONS_TYPES = makeQueryAssociations(
+export const CRM_ASSOCIATIONS_TYPES = makeQueryAssociations(
   ['deal', 'contact', 'listing', 'email'],
   'association'
 )

@@ -3,7 +3,12 @@
  * @param {object} values The form values
  * @returns {object} a formated object
  */
-export async function preSaveFormat(values, originalValues, deal, template) {
+export async function preSaveFormat(
+  values,
+  originalValues,
+  template,
+  dealAssociation
+) {
   const {
     assignees,
     description,
@@ -52,11 +57,8 @@ export async function preSaveFormat(values, originalValues, deal, template) {
 
   let associations = []
 
-  if (!originalValues && deal) {
-    associations.push({
-      association_type: 'deal',
-      deal: deal.id
-    })
+  if (!originalValues && dealAssociation) {
+    associations.push(dealAssociation)
   }
 
   const addAssociation = (association, type) => {

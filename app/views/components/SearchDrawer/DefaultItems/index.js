@@ -21,11 +21,11 @@ export function DefaultItems(props) {
       <ListTitle>{props.defaultListTitle}</ListTitle>
 
       <Body
-        showAddButton
         getItemProps={props.getItemProps}
         list={props.defaultItems}
         handleSelectItem={props.handleSelectItem}
         ItemRow={props.ItemRow}
+        showAddButton={props.multipleSelection}
       />
     </ListContainer>
   )

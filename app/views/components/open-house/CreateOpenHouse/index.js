@@ -6,9 +6,11 @@ import ActionButton from '../../Button/ActionButton'
 import { OpenHouseDrawer } from '../OpenHouseDrawer'
 
 const propTypes = {
-  deal: PropTypes.shape().isRequired,
+  associations: PropTypes.shape({
+    deal: PropTypes.shape(),
+    listing: PropTypes.shape()
+  }).isRequired,
   style: PropTypes.shape(),
-  user: PropTypes.shape().isRequired,
   children: PropTypes.object
 }
 
@@ -22,6 +24,7 @@ export class CreateOpenHouse extends React.Component {
   }
 
   handleOpen = () => this.setState({ isOpen: true })
+
   handleClose = () => this.setState({ isOpen: false })
 
   handleSubmitCallback = event => {
@@ -52,9 +55,8 @@ export class CreateOpenHouse extends React.Component {
         {this.state.isOpen && (
           <OpenHouseDrawer
             isOpen
-            user={this.props.user}
-            deal={this.props.deal}
             onClose={this.handleClose}
+            associations={this.props.associations}
             submitCallback={this.handleSubmitCallback}
           />
         )}
