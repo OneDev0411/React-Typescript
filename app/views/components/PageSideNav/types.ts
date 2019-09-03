@@ -12,23 +12,26 @@ interface SelectableListSection {
   }[]
 }
 
+export interface SideNavItemProps {
+  // Without this, it's really hard to detect whether user is on a url or not.
+  isIndex: boolean
+  icon?: React.FC<any>
+  title: string
+  link: string
+  badge?: number
+  isSelected?: boolean
+}
+
 export interface LinkListSection {
   type: SectionsEnum.LINK
   title?: string
-  items: {
-    // Without this, it's really hard to detect whether user is on a url or not.
-    isIndex: boolean
-    icon?: React.FC<any>
-    title: string
-    link: string
-    badge: number
-  }[]
+  items: SideNavItemProps[]
 }
 
 type SectionsType = SelectableListSection | LinkListSection
 
 export interface PageSideNavProps {
   isOpen: boolean
-  sections: SectionsType[]
+  sections?: SectionsType[]
   children?: React.ReactNode
 }

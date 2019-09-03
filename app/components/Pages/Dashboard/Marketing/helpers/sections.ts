@@ -18,6 +18,7 @@ export const SECTIONS = [
     ]
   },
   {
+    type: SectionsEnum.LINK,
     title: 'Celebrations',
     items: [
       {
@@ -41,6 +42,7 @@ export const SECTIONS = [
     ]
   },
   {
+    type: SectionsEnum.LINK,
     title: 'Listings',
     items: [
       {

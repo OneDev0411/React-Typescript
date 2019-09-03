@@ -1,6 +1,17 @@
 import { CSSProperties } from 'react'
 import styled from 'styled-components'
 
+export const BadgeContainer = styled.div`
+  color: #1d1f26;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12));
+  padding: 0.13rem ${props => props.theme.spacing(1.5)}px;
+  border-radius: 1rem;
+
+  & > span {
+    display: block;
+  }
+`
+
 interface SideNavContainer {
   isOpen?: boolean
   width?: CSSProperties['width']
@@ -58,10 +69,6 @@ export const SideNavContainer = styled.div<SideNavContainer>`
     .section-item__icon > svg {
       fill: ${props => props.theme.palette.primary.main};
     }
-  }
-
-  .SideNav-direct-child {
-    padding: 0 ${props => props.theme.spacing(2)}px;
   }
 `
 

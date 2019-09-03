@@ -12,17 +12,16 @@ PageSideNav.defaultProps = {
 function PageSideNav(props: PageSideNavProps) {
   return (
     <SideNavContainer isOpen={props.isOpen}>
-      {props.sections.map((section, secIndex) => {
-        switch (section.type) {
-          case SectionsEnum.LINK:
-            return <LinkList section={section} key={`sec-${secIndex}`} />
-          default:
-            return null
-        }
-      })}
-      {props.children && (
-        <div className="SideNav-direct-child">{props.children}</div>
-      )}
+      {props.sections &&
+        props.sections.map((section, secIndex) => {
+          switch (section.type) {
+            case SectionsEnum.LINK:
+              return <LinkList section={section} key={`sec-${secIndex}`} />
+            default:
+              return null
+          }
+        })}
+      {props.children}
     </SideNavContainer>
   )
 }
