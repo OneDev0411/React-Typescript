@@ -17,7 +17,7 @@ function Header({
   showCreateAction
 }) {
   return (
-    <PageHeader>
+    <PageHeader style={{ height: '5.0625rem' }}>
       <PageHeader.Title showBackButton={false}>
         <MenuTrigger
           isExpended={isSideMenuOpen}
