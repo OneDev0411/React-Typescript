@@ -1,5 +1,7 @@
 import { fireEvent, render } from '@testing-library/react'
+// @ts-ignore
 import attributeDefs from 'fixtures/contacts/attribute-defs' // eslint-disable-line
+// @ts-ignore
 import tags from 'fixtures/contacts/tags' // eslint-disable-line
 import * as React from 'react'
 
@@ -11,11 +13,13 @@ describe('tagsList', () => {
       <TagsList
         attributeDefs={attributeDefs}
         activeFilters={{}}
-        resetActiveFilters={() => {}}
-        onFilterChange={() => {}}
+        resetActiveFilters={() => null}
+        onFilterChange={() => null}
+        changeActiveFilterSegment={() => Promise.resolve()}
         existingTags={tags}
         isFetching={false}
-        updateActiveFilter={() => {}}
+        updateActiveFilter={() => null}
+        isActive
       />
     )
   })
@@ -56,11 +60,13 @@ describe('tagsList', () => {
       <TagsList
         attributeDefs={attributeDefs}
         activeFilters={activeFilters}
-        resetActiveFilters={() => {}}
+        resetActiveFilters={() => null}
+        changeActiveFilterSegment={() => Promise.resolve()}
         onFilterChange={onFilterChange}
         existingTags={tags}
         isFetching={false}
-        updateActiveFilter={() => {}}
+        updateActiveFilter={() => null}
+        isActive
       />
     )
 
