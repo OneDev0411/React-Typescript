@@ -31,6 +31,7 @@ const FILTER_DEFINITION_ID = 'flow'
 interface Props {
   user: any
   onChange: () => Promise<void>
+  isActive: boolean
   activeFilters: StringMap<IActiveFilter>
   updateActiveFilter: (
     segmentName: string,
@@ -79,6 +80,7 @@ function FlowsList(props: Props) {
   const isSelected = useCallback(
     (item: IBrandFlow) => {
       return (
+        props.isActive &&
         Object.keys(props.activeFilters).length === 1 &&
         Object.values(props.activeFilters).some(
           filter =>
@@ -88,7 +90,7 @@ function FlowsList(props: Props) {
         )
       )
     },
-    [props.activeFilters]
+    [props.activeFilters, props.isActive]
   )
 
   const onSelect = async (flow: IBrandFlow): Promise<void> => {

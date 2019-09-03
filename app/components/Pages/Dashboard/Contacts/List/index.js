@@ -8,6 +8,7 @@ import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { deleteContacts, getContacts, searchContacts } from 'actions/contacts'
 import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-text-filter'
+import { updateFilterSegment } from 'actions/filter-segments'
 
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import {
@@ -22,6 +23,7 @@ import {
 } from 'utils/user-teams'
 import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
 import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
+import { updateTagTouchReminder } from 'models/contacts/update-tag-touch-reminder'
 import {
   Container as PageContainer,
   Content as PageContent,
@@ -61,6 +63,10 @@ import {
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import { ZeroState } from './ZeroState'
 import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
+
+const DEFAULT_QUERY = {
+  associations: CRM_LIST_DEFAULT_ASSOCIATIONS
+}
 
 class ContactsList extends React.Component {
   constructor(props) {
@@ -508,6 +514,40 @@ class ContactsList extends React.Component {
     return this.state.selectedSidebarFilter === null
   }
 
+  handleListTouchReminderUpdate = async value => {
+    const segment = {
+      ...this.props.activeSegment,
+      touch_freq: value
+    }
+
+    await this.props.updateSegment(
+      CONTACTS_SEGMENT_NAME,
+      segment,
+      DEFAULT_QUERY
+    )
+  }
+
+  handleTagTouchReminderUpdate = async value => {
+    const activeTag = this.getActiveTag()
+
+    if (!activeTag) {
+      return
+    }
+
+    await updateTagTouchReminder(activeTag.text, value)
+    this.props.getContactsTags()
+  }
+
+  getActiveTag = () => {
+    if (this.state.selectedSidebarFilter === null) {
+      return undefined
+    }
+
+    return Object.values(this.props.tags).find(value => {
+      return value.text === this.state.selectedSidebarFilter.filters[0].value
+    })
+  }
+
   render() {
     const { props, state } = this
     const { isSideMenuOpen } = state
@@ -540,6 +580,8 @@ class ContactsList extends React.Component {
 
     const title = this.getHeaderTitle()
 
+    console.log('YES', this.state.selectedSidebarFilter)
+
     return (
       <PageContainer isOpen={isSideMenuOpen}>
         <SideMenu isOpen={isSideMenuOpen} width="13rem">
@@ -554,12 +596,14 @@ class ContactsList extends React.Component {
               this.setState({ selectedSidebarFilter: filters })
               this.handleFilterChange({ ...filters, flows: [] }, true)
             }}
+            isActive={this.state.selectedSidebarFilter !== null}
           />
           <FlowsList
             onChange={_.debounce(() => {
               this.setState({ selectedSidebarFilter: this.props.flows })
               this.handleFilterChange({}, true)
             }, 300)}
+            isActive={this.state.selectedSidebarFilter !== null}
           />
           <SavedSegments
             name={CONTACTS_SEGMENT_NAME}
@@ -596,6 +640,9 @@ class ContactsList extends React.Component {
           <Header
             title={title}
             activeSegment={activeSegment}
+            activeTag={this.getActiveTag()}
+            onListTouchReminderUpdate={this.handleListTouchReminderUpdate}
+            onTagTouchReminderUpdate={this.handleTagTouchReminderUpdate}
             showActions={!isZeroState}
             showImportAction={this.shouldShowImportAndCreateActions()}
             showCreateAction={this.shouldShowImportAndCreateActions()}
@@ -685,6 +732,7 @@ function mapStateToProps({ user, contacts, ...restOfState }) {
   )
 
   return {
+    tags: tags.byId,
     oAuthAccounts: contacts.oAuthAccounts.list,
     fetchTags,
     activeFilters,
@@ -717,7 +765,8 @@ export default withRouter(
       confirmation,
       setContactsListTextFilter,
       getContactsTags,
-      updateTeamSetting
+      updateTeamSetting,
+      updateSegment: updateFilterSegment
     }
   )(ContactsList)
 )

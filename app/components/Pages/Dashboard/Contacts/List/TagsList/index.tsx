@@ -36,6 +36,7 @@ interface Props {
   activeFilters: StringMap<IActiveFilter>
   onFilterChange: ({ filters: any }) => void // TODO
   existingTags: any // TODO
+  isActive: boolean
   isFetching: boolean
   updateActiveFilter: (
     segmentName: string,
@@ -83,6 +84,7 @@ export class TagsList extends React.Component<Props> {
 
   isSelected = text => {
     return (
+      this.props.isActive &&
       Object.keys(this.props.activeFilters).length === 1 &&
       Object.values(this.props.activeFilters).some(
         filter =>
