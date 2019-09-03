@@ -6,7 +6,10 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
   '@global': {
     // You should target [class*="MuiButton-root"] instead if you nest themes.
     '.MuiButtonBase-root': {
-      boxShadow: 'none',
+      boxShadow: 'none'
+    },
+
+    '.MuiIconButton-root': {
       // because of disabling ripple globally
       '&.Mui-focusVisible': {
         background: theme.palette.action.selected
@@ -27,7 +30,7 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
     '.MuiTab-root': {
       minWidth: '7rem'
     },
-    '.MuiInputBase-root label': {
+    '.MuiInputBase-root label, .MuiFormControlLabel-root': {
       // neutralize bootstrap styles!
       marginBottom: 'initial'
     },
