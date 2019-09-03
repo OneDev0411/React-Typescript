@@ -1,6 +1,8 @@
 import React from 'react'
-import { Box, useMediaQuery } from '@material-ui/core'
+import { Box, Button, useMediaQuery } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+
+import IconVideo from 'components/SvgIcons/VideoFilled/IconVideoFilled'
 
 interface StylesProps {
   isDesktop: boolean
@@ -27,6 +29,10 @@ const useStyles = makeStyles((theme: Theme) =>
       return {
         maxWidth: '100%'
       }
+    },
+    videoIcon: {
+      marginRight: '0.5em',
+      fill: `${theme.palette.primary.main}`
     }
   })
 )
@@ -45,6 +51,14 @@ export default function EmptyState() {
         Impress your clients with stunning designs using ready-made social &
         email templates
       </h1>
+      <Button
+        color="primary"
+        target="blank"
+        href="https://help.rechat.com/en/articles/2562820-marketing-center-overview"
+      >
+        <IconVideo className={classes.videoIcon} />
+        Learn More
+      </Button>
       <img
         alt="empty-state"
         className={classes.coverImage}
