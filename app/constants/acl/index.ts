@@ -1,4 +1,4 @@
-export const ACL = {
+export const ACL: Record<string, IPermission> = {
   CRM: 'CRM',
   ADMIN: 'Admin',
   DEALS: 'Deals',

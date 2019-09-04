@@ -9,6 +9,8 @@ import { IAppState } from 'reducers/index'
 import { getRootBrand } from 'utils/user-teams'
 import PageSideNav from 'components/PageSideNav'
 
+import Acl from 'components/Acl'
+
 import { CheckListTable } from './components/ChecklistTable'
 import { ChecklistHeader } from './components/ChecklistHeader'
 import {
@@ -62,7 +64,7 @@ export function ChecklistsPage({ user, location }: Props) {
   )
 
   return (
-    <React.Fragment>
+    <Acl.Admin fallbackUrl="/dashboard/mls" accessControlPolicy="Root">
       <Helmet>
         <title>Checklists</title>
       </Helmet>
@@ -115,7 +117,7 @@ export function ChecklistsPage({ user, location }: Props) {
           </Box>
         </Content>
       </Container>
-    </React.Fragment>
+    </Acl.Admin>
   )
 }
 

@@ -1,4 +1,6 @@
-import styled from 'styled-components'
+import styled, { ThemeProps } from 'styled-components'
+
+import { Theme } from '@material-ui/core'
 
 import { grey, primary } from '../../../../../../views/utils/colors'
 import VerticalDotsIcon from '../../../../../../views/components/SvgIcons/VeriticalDots/VerticalDotsIcon'
@@ -28,14 +30,12 @@ export const SideMenuList = styled.ul`
 `
 
 export const SubTitle = styled.li`
-  padding-left: 16px;
-  height: 30px;
-  line-height: 30px;
+  padding-left: ${({ theme }: ThemeProps<Theme>) => `${theme.spacing(2)}px`};
+  line-height: 2.5;
   vertical-align: middle;
-  background-color: ${grey.A100};
-  box-shadow: 0 1px 0 0 #e9e9e9;
-  font-size: 14px;
-  color: #000;
+  color: ${({ theme }: ThemeProps<Theme>) => theme.palette.text.secondary};
+  font-size: ${({ theme }: ThemeProps<Theme>) =>
+    theme.typography.caption.fontSize};
 `
 
 export const SideMenuContainer = styled.div`
