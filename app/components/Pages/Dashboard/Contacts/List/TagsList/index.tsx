@@ -4,7 +4,7 @@ import { Link } from 'react-router'
 import styled from 'styled-components'
 import { sortBy, uniqBy } from 'lodash'
 
-import { defaultTags } from 'utils/default-tags'
+import { formatedDefaultTags } from 'utils/default-tags'
 
 import {
   removeActiveFilter,
@@ -30,11 +30,6 @@ import { ShowMoreLess } from 'components/ShowMoreLess'
 import IconCog from 'components/SvgIcons/Cog/IconCog'
 
 import { normalizeAttributeFilters } from '../utils'
-
-const DEFAULT_TAGS = defaultTags.map(tag => ({
-  text: tag,
-  type: 'default_tag'
-}))
 
 const CustomListItem = styled(ListItem)`
   justify-content: flex-start;
@@ -183,7 +178,7 @@ function mapStateToProps(state: {
   const filter = selectContactsInfo(ContactListStore).filter || []
   const searchText = selectContactsInfo(ContactListStore).searchText || ''
   const existingTags = uniqBy(
-    sortBy([...DEFAULT_TAGS, ...selectTags(tags)], 'text'),
+    sortBy([...formatedDefaultTags, ...selectTags(tags)], 'text'),
     'text'
   )
 

@@ -4,7 +4,7 @@ import { addNotification as notify } from 'reapop'
 import { Helmet } from 'react-helmet'
 import { uniqBy } from 'lodash'
 
-import { defaultTags } from 'utils/default-tags'
+import { formatedDefaultTags, defaultTags } from 'utils/default-tags'
 
 import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'models/contacts/get-contacts-tags'
@@ -20,10 +20,7 @@ import Row from './Row'
 import { Input } from './Input'
 import { Container, Description } from './styled'
 
-const DEFAULT_TAGS = defaultTags.map(tag => ({
-  text: tag,
-  type: 'default_tag'
-}))
+const lowerCaseDefaultTags = defaultTags.map(tag => tag.toLowerCase())
 
 const HIGHLIGHT_SECONDS = 4
 
@@ -43,9 +40,10 @@ class ManageTags extends Component {
     try {
       const response = await await getContactsTags()
 
-      const rawTags = uniqBy([...DEFAULT_TAGS, ...response.data], 'text').map(
-        ({ text, type }) => ({ text, highlight: false, type })
-      )
+      const rawTags = uniqBy(
+        [...formatedDefaultTags, ...response.data],
+        'text'
+      ).map(({ text, type }) => ({ text, highlight: false, type }))
 
       this.setState({
         loading: false,
@@ -152,9 +150,7 @@ class ManageTags extends Component {
       return
     }
 
-    if (
-      defaultTags.map(tag => tag.toLowerCase()).includes(text.toLowerCase())
-    ) {
+    if (lowerCaseDefaultTags.includes(text.toLowerCase())) {
       return this.handleDuplicateTagCreate({
         text: text[0].toUpperCase() + text.substring(1).toLowerCase(),
         type: 'default_tag'

@@ -2,7 +2,11 @@ import styled, { css } from 'styled-components'
 
 import { grey, primary } from 'views/utils/colors'
 
-export const Container = styled.div`
+interface ContainerProps {
+  highlight?: boolean
+}
+
+export const Container = styled.div<ContainerProps>`
   display: flex;
   align-items: center;
   justify-content: space-between;

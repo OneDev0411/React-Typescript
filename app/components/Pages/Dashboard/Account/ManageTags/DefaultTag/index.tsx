@@ -3,7 +3,11 @@ import { Tooltip } from '@material-ui/core'
 
 import { Container, Title } from '../Item/ViewMode/styled'
 
-export default function DefaultTag({ tag }) {
+interface Props {
+  tag: ICRMDefaultTag
+}
+
+export default function DefaultTag({ tag }: Props) {
   return (
     <Tooltip title="You cannot edit a default tag.">
       <Container
