@@ -1,14 +1,14 @@
 import * as React from 'react'
+import { ComponentProps, ReactNode } from 'react'
 import { createStyles, Input, makeStyles, Theme } from '@material-ui/core'
 
-import { ReactNode } from 'react'
-
-import { InlineInputLabel } from '../../../InlineInputLabel'
 import { RecipientList } from './RecipientsList'
 
 interface Props {
-  recipients: IDenormalizedEmailRecipientInput[]
-  label: ReactNode
+  to: IDenormalizedEmailRecipientInput[]
+  cc?: IDenormalizedEmailRecipientInput[]
+  bcc?: IDenormalizedEmailRecipientInput[]
+  placeholder?: ReactNode
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -18,7 +18,12 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   })
 )
-export function CollapsedRecipients({ recipients, label }: Props) {
+export function CollapsedRecipients({
+  to = [],
+  cc = [],
+  bcc = [],
+  placeholder = 'Recipients'
+}: Props) {
   const classes = useStyles()
 
   return (
@@ -26,9 +31,10 @@ export function CollapsedRecipients({ recipients, label }: Props) {
       classes={{ root: classes.root }}
       fullWidth
       readOnly
-      startAdornment={<InlineInputLabel>{label}</InlineInputLabel>}
       inputComponent={RecipientList}
-      inputProps={{ recipients }}
+      inputProps={
+        { to, cc, bcc, placeholder } as ComponentProps<typeof RecipientList>
+      }
     />
   )
 }
