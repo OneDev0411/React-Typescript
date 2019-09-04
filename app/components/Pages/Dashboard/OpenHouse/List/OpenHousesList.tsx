@@ -62,7 +62,7 @@ function OpenHousesList(props: Props) {
         rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
       }) => (
         <Registrants
-          registerants={
+          registrants={
             props.rowData.associations
               ? props.rowData.associations.filter(
                   a => a.association_type === 'contact'
