@@ -3,6 +3,10 @@ import { useEffect, useState, useCallback } from 'react'
 import { getTasks } from 'models/tasks/get-tasks'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 
+interface InitialState {
+  isFetching?: boolean
+}
+
 interface GetOpenHouses {
   error: string
   isFetching: boolean
@@ -13,12 +17,16 @@ interface GetOpenHouses {
 /**
  * Fetch all open houses event
  */
-export function useGetOpenHouses(): GetOpenHouses {
+export function useGetOpenHouses(
+  initialState: InitialState = {
+    isFetching: false
+  }
+): GetOpenHouses {
   const [list, setList] = useState<
     ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>[]
   >([])
   const [error, setError] = useState('')
-  const [isFetching, setIsFetching] = useState(false)
+  const [isFetching, setIsFetching] = useState(initialState.isFetching)
 
   const fetch = useCallback(async function fetch() {
     try {
