@@ -14,6 +14,7 @@ import {
 import { PopperPlacementType } from '@material-ui/core/Popper'
 
 import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import { ClassesProps } from 'utils/ts-utils'
 
 interface RenderMenuProps {
   closeMenu: (event?: React.MouseEvent<any>) => void
@@ -32,24 +33,24 @@ interface Props {
   variant?: 'contained' | 'outlined' | undefined
 }
 
-const useSplitButtonStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      icon: {
-        fill: 'currentColor'
-      },
-      mainButton: {
-        flex: 1
-      }
-    }),
-  { name: 'SplitButton' }
-)
+const styles = (theme: Theme) =>
+  createStyles({
+    icon: {
+      fill: 'currentColor'
+    },
+    mainButton: {
+      flex: 1
+    }
+  })
+const useStyles = makeStyles(styles, { name: 'SplitButton' })
 
-export default function SplitButton(props: Props) {
+export default function SplitButton(
+  props: Props & ClassesProps<typeof styles>
+) {
   const [isOpen, setIsOpen] = React.useState(false)
   const anchorRef = React.useRef<HTMLDivElement>(null)
   const theme = useTheme()
-  const classes = useSplitButtonStyles(props)
+  const classes = useStyles(props)
 
   function handleToggle() {
     setIsOpen(prevOpen => !prevOpen)

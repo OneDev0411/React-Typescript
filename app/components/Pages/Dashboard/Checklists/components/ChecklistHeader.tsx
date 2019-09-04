@@ -18,6 +18,7 @@ import SplitButton from 'components/SplitButton'
 import { useDictionary } from 'hooks/use-dictionary'
 import SearchDrawer from 'components/SearchDrawer'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+import { InlineEditableString } from 'components/inline-editable-fields/InlineEditableString'
 
 type Props = {
   checklist: IBrandChecklist
@@ -26,6 +27,7 @@ type Props = {
   addGenericTask: (checklist: IBrandChecklist) => void
   addGeneralCommentTask: (checklist: IBrandChecklist) => void
   addFormTask: (checklist: IBrandChecklist, form: IDealForm) => void
+  renameChecklist: (name: string) => void
   forms: IDealForm[]
   formsState: ReturnType<typeof usePromise>[2]
 }
@@ -36,8 +38,8 @@ const useChecklistHeaderStyles = makeStyles(
       splitButton: {
         minWidth: '12rem'
       },
-      test: {
-        background: 'red!important'
+      splitMenuItem: {
+        whiteSpace: 'nowrap'
       }
     }),
   { name: 'ChecklistHeader' }
@@ -57,6 +59,7 @@ export function ChecklistHeader({
   addGeneralCommentTask,
   addGenericTask,
   addFormTask,
+  renameChecklist,
   checklist,
   forms,
   formsState,
@@ -82,7 +85,12 @@ export function ChecklistHeader({
 
   return (
     <Box display="flex" alignItems="center">
-      <Box flexGrow={1}>{checklist.title}</Box>
+      <Box flexGrow={1}>
+        <InlineEditableString
+          value={checklist.title}
+          onSave={renameChecklist}
+        />
+      </Box>
       <FormControlLabel
         control={
           <Checkbox
@@ -120,10 +128,10 @@ export function ChecklistHeader({
         onClick={openFormPickerDrawer}
         className={classes.splitButton}
         renderMenu={({ closeMenu }) => (
-          <List>
+          <List dense>
             <ListItem
+              className={classes.splitMenuItem}
               button
-              style={{ whiteSpace: 'nowrap' }}
               onClick={event => {
                 addGenericTask(checklist)
                 closeMenu(event)
@@ -135,8 +143,8 @@ export function ChecklistHeader({
               task => task.task_type !== 'GeneralComments'
             ) && (
               <ListItem
+                className={classes.splitMenuItem}
                 button
-                style={{ whiteSpace: 'nowrap' }}
                 onClick={() => {
                   addGeneralCommentTask(checklist)
                   closeMenu()

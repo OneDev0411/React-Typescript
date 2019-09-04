@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { RefObject, useContext } from 'react'
 import {
   Checkbox,
   IconButton,
@@ -6,7 +6,8 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TableRow
+  TableRow,
+  Typography
 } from '@material-ui/core'
 import classNames from 'classnames'
 
@@ -16,6 +17,8 @@ import IconDeleteOutline from 'components/SvgIcons/DeleteOutline/IconDeleteOutli
 
 import { useDictionary } from 'hooks/use-dictionary'
 
+import { InlineEditableString } from 'components/inline-editable-fields/InlineEditableString'
+
 import { useTableStyles } from '../../../../../styles/table.style'
 import { dealTaskTypeToString } from '../constants'
 
@@ -23,9 +26,15 @@ interface Props {
   checklist: IBrandChecklist
   updateTask: (task: IDealTask) => void
   deleteTask: (checklistId: string, taskId: string) => void
+  lastTaskNameEditorRef?: RefObject<any>
 }
 
-export function CheckListTable({ checklist, updateTask, deleteTask }: Props) {
+export function CheckListTable({
+  checklist,
+  updateTask,
+  deleteTask,
+  lastTaskNameEditorRef
+}: Props) {
   const [isRemoving, setRemoving] = useDictionary<boolean>()
   const [isRequiredChanging, setRequiredChanging] = useDictionary<boolean>()
 
@@ -47,9 +56,32 @@ export function CheckListTable({ checklist, updateTask, deleteTask }: Props) {
         </TableRow>
       </TableHead>
       <TableBody>
-        {(checklist.tasks || []).map(task => (
+        {(checklist.tasks || []).map((task, index) => (
           <TableRow key={task.id}>
-            <TableCell>{task.title}</TableCell>
+            <TableCell>
+              <InlineEditableString
+                {...(index === checklist.tasks.length - 1
+                  ? { ref: lastTaskNameEditorRef }
+                  : {})}
+                value={task.title}
+                TextFieldProps={{
+                  fullWidth: true,
+                  style: {
+                    maxWidth: '30rem'
+                  }
+                }}
+                onSave={title =>
+                  updateTask({
+                    ...task,
+                    title
+                  })
+                }
+              >
+                {task.title || (
+                  <Typography color="textSecondary">Unnamed Task</Typography>
+                )}
+              </InlineEditableString>
+            </TableCell>
             <TableCell>
               {dealTaskTypeToString[task.task_type] || 'Unknown'}
             </TableCell>

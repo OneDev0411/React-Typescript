@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import { browserHistory, RouteComponentProps } from 'react-router'
@@ -38,6 +38,8 @@ export function ChecklistsPage({ user, location }: Props) {
       browserHistory.replace(SECTIONS[0].items[0].link)
     }
   }, [dealType, propertyType])
+
+  const lastTaskNameEditorRef = useRef<any>(null)
 
   const rootBrand = getRootBrand(user)
 
@@ -87,15 +89,25 @@ export function ChecklistsPage({ user, location }: Props) {
                       is_deactivatable: value
                     })
                   }
-                  addGenericTask={addGenericTask}
+                  addGenericTask={async (...args) => {
+                    await addGenericTask(...args)
+                    lastTaskNameEditorRef.current!.edit()
+                  }}
                   addGeneralCommentTask={addGeneralCommentTask}
                   addFormTask={addFormTask}
+                  renameChecklist={title =>
+                    updateChecklist({
+                      ...checklist,
+                      title
+                    })
+                  }
                 />
                 <Box mt={1}>
                   <CheckListTable
                     updateTask={updateTask}
                     deleteTask={deleteTask}
                     checklist={checklist}
+                    lastTaskNameEditorRef={lastTaskNameEditorRef}
                   />
                 </Box>
               </Box>
