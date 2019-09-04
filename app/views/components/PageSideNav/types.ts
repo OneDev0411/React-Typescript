@@ -20,6 +20,7 @@ export interface SideNavItemProps {
   link: string
   badge?: number
   isSelected?: boolean
+  tooltip?: string
 }
 
 export interface LinkListSection {

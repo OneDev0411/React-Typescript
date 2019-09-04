@@ -4,7 +4,6 @@ import { browserHistory } from 'react-router'
 import _ from 'underscore'
 
 import Deal from 'models/Deal'
-import ToolTip from 'components/tooltip'
 import SideNavSection from 'components/PageSideNav/SideNavSection'
 import SideNavTitle from 'components/PageSideNav/SideNavTitle'
 import SideNavItem from 'components/PageSideNav/SideNavItem'
@@ -96,7 +95,7 @@ class AgentFilters extends React.Component {
         tooltip = ['All']
     }
 
-    return tooltip.join('<br />')
+    return tooltip
   }
 
   render() {
@@ -115,19 +114,14 @@ class AgentFilters extends React.Component {
             const isIndex = filterName.toLowerCase() === 'all'
 
             return (
-              <ToolTip
+              <SideNavItem
                 key={`FILTER_${filterName}`}
-                multiline
-                caption={this.getTooltipCaption(filterName)}
-                placement="right"
-              >
-                <SideNavItem
-                  isIndex={isIndex}
-                  link={linkUrl}
-                  title={filterName}
-                  badge={this.getBadgeCounter(filterName)}
-                />
-              </ToolTip>
+                isIndex={isIndex}
+                link={linkUrl}
+                title={filterName}
+                badge={this.getBadgeCounter(filterName)}
+                tooltip={this.getTooltipCaption(filterName)}
+              />
             )
           })
         )}

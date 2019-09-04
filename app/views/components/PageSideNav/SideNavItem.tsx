@@ -5,10 +5,11 @@ import { Typography, MenuItem, Box } from '@material-ui/core'
 
 import { isOnThisUrl } from './helpers'
 import SideNavBadge from './SideNavBadge'
+import SideNavTooltip from './SideNavTooltip'
 import { SideNavItemProps } from './types'
 
 function SideNavItem(props: SideNavItemProps) {
-  const { isIndex, link, icon: Icon, badge, title, isSelected } = props
+  const { isIndex, link, icon: Icon, badge, title, isSelected, tooltip } = props
 
   // We can control the selected state from outside by using isSelected,
   // If we doesn't pass anything, it will switch to try to detect by checking
@@ -17,27 +18,29 @@ function SideNavItem(props: SideNavItemProps) {
   const isItemSelected = isSelected || isOnThisUrl(link, isIndex)
 
   return (
-    <MenuItem
-      to={link}
-      component={Link}
-      activeClassName="is-selected"
-      onlyActiveOnIndex={isIndex}
-      className={cn('section-item', {
-        'is-selected': isItemSelected
-      })}
-    >
-      <Box display="flex" alignItems="center">
-        {Icon && (
-          <Box mr={1} lineHeight={1} className="section-item__icon">
-            <Icon style={{ width: '1em', height: '1em' }} />
-          </Box>
-        )}
-        <Typography variant="body2" component="span">
-          {title}
-        </Typography>
-      </Box>
-      {typeof badge !== 'undefined' ? <SideNavBadge count={badge} /> : null}
-    </MenuItem>
+    <SideNavTooltip text={tooltip}>
+      <MenuItem
+        to={link}
+        component={Link}
+        activeClassName="is-selected"
+        onlyActiveOnIndex={isIndex}
+        className={cn('section-item', {
+          'is-selected': isItemSelected
+        })}
+      >
+        <Box display="flex" alignItems="center">
+          {Icon && (
+            <Box mr={1} lineHeight={1} className="section-item__icon">
+              <Icon style={{ width: '1em', height: '1em' }} />
+            </Box>
+          )}
+          <Typography variant="body2" component="span">
+            {title}
+          </Typography>
+        </Box>
+        {typeof badge !== 'undefined' ? <SideNavBadge count={badge} /> : null}
+      </MenuItem>
+    </SideNavTooltip>
   )
 }
 
