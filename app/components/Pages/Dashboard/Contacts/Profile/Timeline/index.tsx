@@ -10,8 +10,12 @@ import { Button } from '@material-ui/core'
 
 import { getNotes } from 'models/contacts/helpers/get-notes'
 
-import List, { LoadingDirections } from 'components/Calendar'
-import { CalendarRef } from 'components/Calendar/types'
+import List from 'components/Calendar'
+import {
+  CalendarRef,
+  LoadingDirection,
+  Placeholder
+} from 'components/Calendar/types'
 
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 
@@ -89,7 +93,8 @@ function Timeline(props: Props) {
               filter={filter}
               associations={associations}
               initialRange={getUpcomingInitialRange()}
-              directions={[LoadingDirections.Bottom]}
+              directions={[LoadingDirection.Bottom]}
+              placeholders={[Placeholder.Month]}
               defaultEvents={notes} // TODO: convert notes to events
             />
           </Card>
@@ -108,7 +113,8 @@ function Timeline(props: Props) {
           filter={filter}
           initialRange={getTimelineInitialRange()}
           associations={associations}
-          directions={[LoadingDirections.Bottom]}
+          directions={[LoadingDirection.Bottom]}
+          placeholders={[Placeholder.Month]}
           defaultEvents={notes} // TODO: convert notes to events
         />
       </Card>

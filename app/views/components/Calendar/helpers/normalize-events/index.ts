@@ -40,6 +40,11 @@ function getEvents(
   )
 
   return uniqEvents.reduce((acc: string[], event: ICalendarEvent) => {
+    // TODO: remove this condition after converting notes to event
+    if (event.timestamp < range[0] || event.timestamp > range[1]) {
+      return acc
+    }
+
     const index = getEventIndex(event, range)
 
     const [year, month, day] = index.split('/')
