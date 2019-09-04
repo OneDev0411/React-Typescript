@@ -482,7 +482,7 @@ export default (
         component={AsyncNotificationsPage}
       />
 
-      <Route path="/dashboard/open-houses" component={AsyncOpenHousesList} />
+      <Route path="/dashboard/open-house" component={AsyncOpenHousesList} />
 
       <Route path="/dashboard/marketing" component={AsyncMarketing}>
         <IndexRoute component={AsyncMarketingHistory} />
