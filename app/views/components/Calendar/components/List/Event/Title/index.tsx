@@ -9,6 +9,7 @@ interface Props {
   event: ICalendarEvent
   onClickScheduledEmail(event: ICalendarEvent): void
   onClickCrmEventAssociations(event: ICalendarEvent): void
+  onEventChange(event: IEvent, type: 'updated'): void
 }
 
 export function EventTitle(props: Props) {
@@ -19,6 +20,7 @@ export function EventTitle(props: Props) {
       <CrmTitle
         event={event}
         onClickCrmEventAssociations={props.onClickCrmEventAssociations}
+        onEventChange={props.onEventChange}
       />
     )
   }
