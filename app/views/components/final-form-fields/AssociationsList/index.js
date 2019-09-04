@@ -81,7 +81,11 @@ class List extends React.Component {
 
       if (association.association_type === 'email') {
         emailAssociation = association
-      } else if (!isDefaultAssociation) {
+      } else if (isDefaultAssociation) {
+        if (this.props.showDefaultAssociation) {
+          otherAssociations.push(association)
+        }
+      } else {
         otherAssociations.push(association)
       }
     })
@@ -136,12 +140,14 @@ AssociationsList.propTypes = {
   associations: PropTypes.arrayOf(PropTypes.shape()),
   defaultAssociation: PropTypes.shape(),
   handleDelete: PropTypes.func.isRequired,
-  name: PropTypes.string
+  name: PropTypes.string,
+  showDefaultAssociation: PropTypes.bool
 }
 
 AssociationsList.defaultProps = {
   associations: [],
-  name: 'associations'
+  name: 'associations',
+  showDefaultAssociation: false
 }
 
 export function AssociationsList(props) {
