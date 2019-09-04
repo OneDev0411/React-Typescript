@@ -2,6 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import styled from 'styled-components'
+import { sortBy, uniqBy } from 'lodash'
+
+import { formatedDefaultTags } from 'utils/default-tags'
 
 import {
   removeActiveFilter,
@@ -172,9 +175,12 @@ function mapStateToProps(state: {
   const {
     contacts: { attributeDefs, list: ContactListStore, tags }
   } = state
-  const existingTags = selectTags(tags)
   const filter = selectContactsInfo(ContactListStore).filter || []
   const searchText = selectContactsInfo(ContactListStore).searchText || ''
+  const existingTags = uniqBy(
+    sortBy([...formatedDefaultTags, ...selectTags(tags)], 'text'),
+    'text'
+  )
 
   return {
     attributeDefs,
