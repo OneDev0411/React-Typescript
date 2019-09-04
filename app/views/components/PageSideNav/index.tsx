@@ -13,15 +13,14 @@ PageSideNav.defaultProps = {
 function PageSideNav(props: PageSideNavProps) {
   return (
     <SideNavContainer isOpen={props.isOpen} width={props.width}>
-      {props.sections &&
-        props.sections.map((section, secIndex) => {
-          switch (section.type) {
-            case SectionsEnum.LINK:
-              return <LinkList section={section} key={`sec-${secIndex}`} />
-            default:
-              return null
-          }
-        })}
+      {(props.sections || []).map((section, secIndex) => {
+        switch (section.type) {
+          case SectionsEnum.LINK:
+            return <LinkList section={section} key={secIndex} />
+          default:
+            return null
+        }
+      })}
       {props.children}
     </SideNavContainer>
   )
