@@ -1,8 +1,10 @@
 import React, { ReactElement } from 'react'
 import { Helmet } from 'react-helmet'
-
 import { connect } from 'react-redux'
 
+import PageSideNav from 'components/PageSideNav'
+import SideNavSection from 'components/PageSideNav/SideNavSection'
+import SideNavTitle from 'components/PageSideNav/SideNavTitle'
 import { IAppState } from 'reducers/index'
 
 import { ProfileTabs } from './components/Tabs'
@@ -18,12 +20,12 @@ const AccountLayout = ({ user, children }: Props) => (
       <title>Account | Rechat</title>
     </Helmet>
     <div className="l-account">
-      <aside className="l-account__sidenav">
-        <header className="l-account__sidenav__header">
-          <h1>Account Settings</h1>
-        </header>
-        <ProfileTabs user={user} />
-      </aside>
+      <PageSideNav width="15rem">
+        <SideNavSection>
+          <SideNavTitle>Account Settings</SideNavTitle>
+          <ProfileTabs user={user} />
+        </SideNavSection>
+      </PageSideNav>
       <main className="l-account__main">{children}</main>
     </div>
   </React.Fragment>

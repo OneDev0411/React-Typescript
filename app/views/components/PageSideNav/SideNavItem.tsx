@@ -25,7 +25,8 @@ function SideNavItem(props: SideNavItemProps) {
         activeClassName="is-selected"
         onlyActiveOnIndex={isIndex}
         className={cn('section-item', {
-          'is-selected': isItemSelected
+          'is-selected': isItemSelected,
+          'is-disabled': !link
         })}
       >
         <Box display="flex" alignItems="center">

@@ -12,16 +12,12 @@ export const BadgeContainer = styled.div`
   }
 `
 
-interface SideNavContainer {
+interface SideNavContainerProps {
   isOpen?: boolean
   width?: CSSProperties['width']
 }
 
-const defaultProps = {
-  width: '11rem'
-}
-
-export const SideNavContainer = styled.div<SideNavContainer>`
+export const SideNavContainer = styled.div<SideNavContainerProps>`
   width: ${props => (props.isOpen ? props.width : '0')};
   background-color: ${props => props.theme.palette.grey[100]};
   padding-left: ${props => props.theme.spacing(1)}px;
@@ -70,6 +66,14 @@ export const SideNavContainer = styled.div<SideNavContainer>`
       fill: ${props => props.theme.palette.primary.main};
     }
   }
-`
 
-SideNavContainer.defaultProps = defaultProps
+  .section-item.is-disabled {
+    background: transparent;
+    color: ${props => props.theme.palette.text.disabled};
+    cursor: default;
+
+    .section-item__icon > svg {
+      fill: ${props => props.theme.palette.text.disabled};
+    }
+  }
+`

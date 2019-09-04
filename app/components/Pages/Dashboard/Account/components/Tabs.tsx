@@ -1,47 +1,54 @@
-// import { ACL } from 'constants/acl'
-
 import { ACL } from 'constants/acl'
 
 import React from 'react'
 
 import Acl from 'components/Acl'
-
-import Tab from './Tab'
+import SideNavItem from 'components/PageSideNav/SideNavItem'
 
 interface Props {
   user: IUser
 }
 
 export const ProfileTabs = ({ user }: Props) => (
-  <ul className="c-tabs c-tabs--stack">
-    <Tab indexed text="Profile" to="/dashboard/account" />
-    <Tab text="Payment" to="/dashboard/account/payment" disabled />
-    <Tab
-      text="Upgrade to agent"
-      to="/dashboard/account/upgrade"
-      disabled={user.user_type === 'Agent'}
+  <>
+    <SideNavItem link="/dashboard/account" title="Profile" isIndex />
+    <SideNavItem title="Payment" />
+    <SideNavItem
+      link={
+        user.user_type !== 'Agent' ? '/dashboard/account/upgrade' : undefined
+      }
+      title="Upgrade to agent"
+    />
+
+    <Acl.Crm>
+      <SideNavItem link="/dashboard/account/manage-tags" title="Manage Tags" />
+    </Acl.Crm>
+    <SideNavItem
+      link="/dashboard/account/email-signature"
+      title="Email Signature"
+    />
+    <SideNavItem
+      link="/dashboard/account/connected-accounts"
+      title="Connected Accounts"
     />
     <Acl.Crm>
-      <Tab indexed text="Manage Tags" to="/dashboard/account/manage-tags" />
+      <SideNavItem link="/dashboard/account/flows" title="Flows" />
     </Acl.Crm>
-    <Tab text="Email Signature" to="/dashboard/account/email-signature" />
-    <Tab text="Connected Accounts" to="/dashboard/account/connected-accounts" />
-    <Acl.Crm>
-      <Tab text="Flows" to="/dashboard/account/flows" />
-    </Acl.Crm>
-    <Tab text="Email Templates" to="/dashboard/account/email-templates" />
+    <SideNavItem
+      link="/dashboard/account/email-templates"
+      title="Email Templates"
+    />
+
     <Acl access={[ACL.CRM, ACL.DEALS]}>
-      <Tab
-        indexed
-        text="Reminder Notifications"
-        to="/dashboard/account/reminder-notifications"
+      <SideNavItem
+        link="/dashboard/account/reminder-notifications"
+        title="Reminder Notifications"
       />
     </Acl>
     <Acl.Crm>
-      <Tab
-        indexed
-        text="Calendar Export"
-        to="/dashboard/account/exportCalendar"
+      <SideNavItem
+        link="/dashboard/account/exportCalendar"
+        title="Calendar Export"
       />
     </Acl.Crm>
     {/* TODO: Unhide CSS (Centralized Showing Service) from users */}
@@ -53,5 +60,5 @@ export const ProfileTabs = ({ user }: Props) => (
         to="/dashboard/account/css"
       />
     </Acl> */}
-  </ul>
+  </>
 )
