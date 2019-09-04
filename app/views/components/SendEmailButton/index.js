@@ -12,7 +12,7 @@ function SendEmailButton(props) {
   const [isMissingEmailModalOpen, setIsMissingEmailModalOpen] = useState(false)
 
   const onSendClick = () => {
-    if (props.recipients.length === 0) {
+    if (Array.isArray(props.recipients) && props.recipients.length === 0) {
       setIsMissingEmailModalOpen(true)
 
       return
@@ -96,7 +96,7 @@ SendEmailButton.propTypes = {
 SendEmailButton.defaultProps = {
   deal: null,
   defaultAttachments: [],
-  recipients: [],
+  recipients: null,
   appearance: 'outline',
   title: 'Email',
   onSent: () => {}
