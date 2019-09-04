@@ -63,14 +63,14 @@ export const SideNavContainer = styled.div<SideNavContainerProps>`
     height: 100%;
     opacity: 0;
     transition: all 0.5s;
-    background: ${props => fade(props.theme.palette.text.primary, 0.1)};
+    background: #dcdcdc;
 
     & svg {
       fill: ${props => props.theme.palette.text.primary};
     }
 
     &:hover {
-      background: ${props => fade(props.theme.palette.text.primary, 0.2)};
+      background: #afafaf;
     }
   }
 
@@ -91,14 +91,14 @@ export const SideNavContainer = styled.div<SideNavContainerProps>`
     }
 
     .section-item__delete {
-      background: ${props => fade(props.theme.palette.primary.main, 0.1)};
+      background: #c2cff3;
 
       & svg {
         fill: ${props => props.theme.palette.primary.main};
       }
 
       &:hover {
-        background: ${props => fade(props.theme.palette.primary.main, 0.2)};
+        background: #a9bbea;
       }
     }
   }
