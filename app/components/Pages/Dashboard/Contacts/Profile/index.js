@@ -14,15 +14,12 @@ import { updateContactQuery } from 'models/contacts/helpers/default-query'
 import { getContact } from 'models/contacts/get-contact'
 import { deleteContacts } from 'models/contacts/delete-contact'
 import { updateContactSelf } from 'models/contacts/update-contact-self'
-// import getCRMTimeline from 'models/get-crm-timeline'
-// import { getNotes } from 'models/contacts/helpers/get-notes'
 
-// import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
-// import { deleteAttribute } from 'models/contacts/delete-attribute'
+import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 
 import NewTask from 'components/NewEvent'
 import {
-  // selectDefinitionByName,
+  selectDefinitionByName,
   isLoadedContactAttrDefs
 } from 'reducers/contacts/attributeDefs'
 import { selectContact } from 'reducers/contacts/list'
@@ -56,8 +53,7 @@ import {
 } from './styled'
 
 import { Header } from './Header'
-import { Timeline } from './Timeline'
-// import { Timeline } from './Timeline'
+import Timeline from './Timeline'
 
 class ContactProfile extends React.Component {
   state = {
@@ -65,8 +61,6 @@ class ContactProfile extends React.Component {
     isDeleting: false,
     isUpdatingOwner: false,
     isDesktopScreen: true
-    // isFetchingTimeline: true,
-    // timeline: []
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -83,11 +77,13 @@ class ContactProfile extends React.Component {
 
   componentDidMount = () => {
     this.detectScreenSize()
-    window.addEventListener('resize', this.detectScreenSize)
     this.initializeContact()
+
+    window.addEventListener('resize', this.detectScreenSize)
+
     window.socket.on('contact:touch', this.updateContact)
-    // window.socket.on('crm_task:create', this.fetchTimeline)
-    // window.socket.on('email_campaign:create', this.fetchTimeline)
+    window.socket.on('crm_task:create', this.fetchTimeline)
+    window.socket.on('email_campaign:create', this.fetchTimeline)
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -106,9 +102,12 @@ class ContactProfile extends React.Component {
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.detectScreenSize)
     window.socket.on('contact:touch', this.updateContact)
-    // window.socket.off('crm_task:create', this.fetchTimeline)
-    // window.socket.off('email_campaign:create', this.fetchTimeline)
+    window.socket.off('crm_task:create', this.fetchTimeline)
+    window.socket.off('email_campaign:create', this.fetchTimeline)
   }
+
+  // creates a ref to the timeline
+  timelineRef = React.createRef()
 
   /**
    * Web page (document) title
@@ -174,25 +173,17 @@ class ContactProfile extends React.Component {
       if (this.props.fetchTags) {
         this.props.getContactsTags()
       }
-
-      // this.fetchTimeline()
     })
   }
 
-  fetchTimeline = async () => {
-    // try {
-    //   const timeline = await getCRMTimeline({
-    //     contact: this.props.params.id
-    //   })
-    //   this.setState(state => ({
-    //     isFetchingTimeline: false,
-    //     timeline: [...timeline, ...getNotes(state.contact)]
-    //   }))
-    // } catch (error) {
-    //   console.log(error)
-    //   this.setState({ isFetchingTimeline: false })
-    // }
-  }
+  /**
+   * refreshes timeline
+   * after a lot of investigations I finally figured out we need to
+   * wait for ~1.5 sconds to be able get the new changes from server.
+   * it seems a queue is working behind the scenes to store the data
+   */
+  fetchTimeline = () =>
+    setTimeout(() => this.timelineRef.current.refresh(), 1500)
 
   setContact = (newContact, fallback) =>
     this.setState(
@@ -200,45 +191,15 @@ class ContactProfile extends React.Component {
       fallback
     )
 
-  // filterTimelineById = (state, id) =>
-  //   state.timeline.filter(item => item.id !== id)
+  handleAddNote = async text => {
+    const contact = await upsertContactAttributes(this.state.contact.id, [
+      {
+        text,
+        attribute_def: selectDefinitionByName(this.props.attributeDefs, 'note')
+      }
+    ])
 
-  // editEvent = updatedEvent =>
-  //   this.setState(state => ({
-  //     timeline: [
-  //       ...this.filterTimelineById(state, updatedEvent.id),
-  //       updatedEvent
-  //     ]
-  //   }))
-
-  // deleteEvent = id =>
-  //   this.setState(state => ({
-  //     timeline: this.filterTimelineById(state, id)
-  //   }))
-
-  handleAddNote = async () => {
-    // const contact = await upsertContactAttributes(this.state.contact.id, [
-    //   {
-    //     text,
-    //     attribute_def: selectDefinitionByName(this.props.attributeDefs, 'note')
-    //   }
-    // ])
-    // this.setContact(contact, this.fetchTimeline)
-  }
-
-  editNote = async () => {
-    // const contact = await upsertContactAttributes(this.state.contact.id, [
-    //   {
-    //     id: note.id,
-    //     text: note.text
-    //   }
-    // ])
-    // this.setContact(contact, this.fetchTimeline)
-  }
-
-  deleteNote = async () => {
-    // const response = await deleteAttribute(this.state.contact.id, note.id)
-    // this.setContact(normalizeContact(response.data), this.fetchTimeline)
+    this.setContact(contact, this.fetchTimeline)
   }
 
   onChangeOwner = async item => {
@@ -275,7 +236,7 @@ class ContactProfile extends React.Component {
     try {
       await stopFlow(id)
       this.fetchContact()
-      // this.fetchTimeline()
+      this.fetchTimeline()
     } catch (error) {
       console.log(error)
     }
@@ -283,7 +244,7 @@ class ContactProfile extends React.Component {
 
   addToFlowCallback = () => {
     this.fetchContact()
-    // this.fetchTimeline()
+    this.fetchTimeline()
   }
 
   render() {
@@ -402,18 +363,7 @@ class ContactProfile extends React.Component {
                 </Tabs>
               </TabsContainer>
 
-              <Timeline contactId={this.props.params.id} />
-              {/* <Timeline
-                contact={contact}
-                defaultAssociation={defaultAssociation}
-                deleteEventHandler={this.deleteEvent}
-                deleteNoteHandler={this.deleteNote}
-                editEventHandler={this.editEvent}
-                editNoteHandler={this.editNote}
-                isFetching={this.state.isFetchingTimeline}
-                items={this.state.timeline}
-                user={user}
-              /> */}
+              <Timeline ref={this.timelineRef} contact={this.state.contact} />
             </SecondColumn>
 
             {this.state.isDesktopScreen && (
