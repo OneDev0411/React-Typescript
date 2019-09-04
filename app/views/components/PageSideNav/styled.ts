@@ -1,16 +1,24 @@
 import { CSSProperties } from 'react'
 import styled from 'styled-components'
+import { fade } from '@material-ui/core/styles'
 
-interface SideNavContainer {
+export const BadgeContainer = styled.div`
+  color: #1d1f26;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12));
+  padding: 0.13rem ${props => props.theme.spacing(1.5)}px;
+  border-radius: 1rem;
+
+  & > span {
+    display: block;
+  }
+`
+
+interface SideNavContainerProps {
   isOpen?: boolean
   width?: CSSProperties['width']
 }
 
-const defaultProps = {
-  width: '11rem'
-}
-
-export const SideNavContainer = styled.div<SideNavContainer>`
+export const SideNavContainer = styled.div<SideNavContainerProps>`
   width: ${props => (props.isOpen ? props.width : '0')};
   background-color: ${props => props.theme.palette.grey[100]};
   padding-left: ${props => props.theme.spacing(1)}px;
@@ -37,14 +45,37 @@ export const SideNavContainer = styled.div<SideNavContainer>`
     min-height: unset;
     height: ${props => props.theme.spacing(5)}px;
     text-decoration: none;
+    transition: all 0.5s;
 
     &:focus {
       outline: none;
     }
+    &:hover .section-item__delete {
+      opacity: 1;
+    }
+  }
+
+  .section-item__delete {
+    padding: 0.5rem 0.75rem;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    opacity: 0;
+    transition: all 0.5s;
+    background: #dcdcdc;
+
+    & svg {
+      fill: ${props => props.theme.palette.text.primary};
+    }
+
+    &:hover {
+      background: #afafaf;
+    }
   }
 
   .section-item.is-selected {
-    background: rgba(9, 69, 235, 0.12);
+    background: ${props => fade(props.theme.palette.primary.main, 0.12)};
     color: ${props => props.theme.palette.primary.main};
 
     & > span {
@@ -52,17 +83,33 @@ export const SideNavContainer = styled.div<SideNavContainer>`
     }
 
     &:hover {
-      background: rgba(9, 69, 235, 0.12);
+      background: ${props => fade(props.theme.palette.primary.main, 0.12)};
     }
 
     .section-item__icon > svg {
       fill: ${props => props.theme.palette.primary.main};
     }
+
+    .section-item__delete {
+      background: #c2cff3;
+
+      & svg {
+        fill: ${props => props.theme.palette.primary.main};
+      }
+
+      &:hover {
+        background: #a9bbea;
+      }
+    }
   }
 
-  .SideNav-direct-child {
-    padding: 0 ${props => props.theme.spacing(2)}px;
+  .section-item.is-disabled {
+    background: transparent;
+    color: ${props => props.theme.palette.text.disabled};
+    cursor: default;
+
+    .section-item__icon > svg {
+      fill: ${props => props.theme.palette.text.disabled};
+    }
   }
 `
-
-SideNavContainer.defaultProps = defaultProps

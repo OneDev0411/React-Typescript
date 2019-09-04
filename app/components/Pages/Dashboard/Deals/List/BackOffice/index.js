@@ -1,11 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Menu, Content } from 'components/SlideMenu'
-
-import { searchDeals, getDeals } from 'actions/deals'
-
+import PageSideNav from 'components/PageSideNav'
+import { Content } from 'components/SlideMenu'
 import Search from 'components/Grid/Search'
+import { searchDeals, getDeals } from 'actions/deals'
 
 import { PageContainer, GridContainer } from '../styles/page-container/styled'
 
@@ -51,12 +50,12 @@ class BackofficeTable extends React.Component {
 
     return (
       <PageContainer isOpen={isSideMenuOpen}>
-        <Menu width={180} isOpen={isSideMenuOpen}>
+        <PageSideNav isOpen={isSideMenuOpen}>
           <BackofficeFilters
             activeFilter={params.filter}
             searchCriteria={this.state.searchCriteria}
           />
-        </Menu>
+        </PageSideNav>
 
         <Content isSideMenuOpen={isSideMenuOpen}>
           <PageHeader

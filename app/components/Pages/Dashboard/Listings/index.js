@@ -10,12 +10,15 @@ import {
   Content as PageContent
 } from 'components/SlideMenu'
 
+import { SectionsEnum } from 'components/PageSideNav/types'
+
 import SavedSearchesList from './SavedSearchesList'
 
 const urlGenerator = url => `/dashboard/mls${url}`
 
 const sideNavSections = [
   {
+    type: SectionsEnum.LINK,
     title: 'Properties',
     items: [
       {

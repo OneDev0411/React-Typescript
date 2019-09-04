@@ -3,17 +3,9 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
 
-import {
-  Container,
-  ListTitle,
-  ListItem
-} from 'components/Grid/SavedSegments/List/styled'
-
-import ALink from 'components/ALink'
-
-import { ListItemName } from 'components/Grid/SavedSegments/List/styled'
-
-import { BadgeCounter } from '../../styles/filters/styled'
+import SideNavSection from 'components/PageSideNav/SideNavSection'
+import SideNavTitle from 'components/PageSideNav/SideNavTitle'
+import SideNavItem from 'components/PageSideNav/SideNavItem'
 
 import { getPathForFilter } from '../../utils'
 
@@ -80,43 +72,40 @@ class BackofficeFilters extends React.Component {
   }
 
   render() {
-    const { searchCriteria, activeFilter } = this.props
+    const { searchCriteria } = this.props
 
     return (
-      <Container>
-        <ListTitle>Lists</ListTitle>
+      <SideNavSection>
+        <SideNavTitle>Lists</SideNavTitle>
 
         {searchCriteria.length > 0 ? (
-          <ListItem isSelected>
-            <ListItemName>Search Results</ListItemName>
-
-            <BadgeCounter>{this.getBadgeCounter()}</BadgeCounter>
-          </ListItem>
+          <SideNavItem
+            isSelected
+            title="Search Results"
+            badge={this.getBadgeCounter()}
+          />
         ) : (
           <Fragment>
             {this.getTabs(this.props.deals).map(tabName => {
               const counter = this.getBadgeCounter(tabName)
+              const linkUrl = getPathForFilter(tabName)
 
               if (counter === 0) {
                 return false
               }
 
               return (
-                <ALink noStyle
+                <SideNavItem
                   key={`FILTER_${tabName}`}
-                  to={getPathForFilter(tabName)}
-                >
-                  <ListItem isSelected={tabName === activeFilter}>
-                    <ListItemName>{tabName}</ListItemName>
-
-                    <BadgeCounter>{counter}</BadgeCounter>
-                  </ListItem>
-                </ALink>
+                  link={linkUrl}
+                  title={tabName}
+                  badge={counter}
+                />
               )
             })}
           </Fragment>
         )}
-      </Container>
+      </SideNavSection>
     )
   }
 }
