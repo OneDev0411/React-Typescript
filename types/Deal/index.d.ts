@@ -23,7 +23,7 @@ declare interface IDealTask {
   id: UUID
   required: boolean
   checklist: UUID
-  form: null | IDealForm
+  form: null | UUID
   order: number
   task_type: IDealTaskType
   title: string

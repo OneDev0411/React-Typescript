@@ -85,6 +85,13 @@ export function useChecklistsPage(rootBrandId: string | null) {
       task_type: 'GeneralComments'
     })
   }
+  const addFormTask = (checklist: IBrandChecklist, form: IDealForm) => {
+    return addTask(checklist, {
+      task_type: 'Form',
+      title: form.name,
+      form: form.id
+    })
+  }
   const updateTask = async (task: IDealTask) => {
     if (rootBrandId) {
       const checklist = await updateBrandChecklistTask(rootBrandId, task)
@@ -113,6 +120,7 @@ export function useChecklistsPage(rootBrandId: string | null) {
     deleteTask,
     addGenericTask,
     addGeneralCommentTask,
+    addFormTask,
     forms,
     formsError,
     formsState

@@ -49,6 +49,7 @@ export function ChecklistsPage({ user, location }: Props) {
     updateTask,
     updateChecklist,
     addGeneralCommentTask,
+    addFormTask,
     deleteTask
   } = useChecklistsPage(rootBrand && rootBrand.id)
 
@@ -86,8 +87,9 @@ export function ChecklistsPage({ user, location }: Props) {
                       is_deactivatable: value
                     })
                   }
-                  addGenericItem={addGenericTask}
-                  addGeneralCommentItem={addGeneralCommentTask}
+                  addGenericTask={addGenericTask}
+                  addGeneralCommentTask={addGeneralCommentTask}
+                  addFormTask={addFormTask}
                 />
                 <Box mt={1}>
                   <CheckListTable

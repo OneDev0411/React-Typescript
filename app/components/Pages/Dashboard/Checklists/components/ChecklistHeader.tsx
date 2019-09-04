@@ -23,8 +23,9 @@ type Props = {
   checklist: IBrandChecklist
   setTerminable: (terminable: boolean) => void
   setDeactivatable: (terminable: boolean) => void
-  addGenericItem: (checklist: IBrandChecklist) => void
-  addGeneralCommentItem: (checklist: IBrandChecklist) => void
+  addGenericTask: (checklist: IBrandChecklist) => void
+  addGeneralCommentTask: (checklist: IBrandChecklist) => void
+  addFormTask: (checklist: IBrandChecklist, form: IDealForm) => void
   forms: IDealForm[]
   formsState: ReturnType<typeof usePromise>[2]
 }
@@ -53,8 +54,9 @@ const ItemRow = props => {
 }
 
 export function ChecklistHeader({
-  addGeneralCommentItem,
-  addGenericItem,
+  addGeneralCommentTask,
+  addGenericTask,
+  addFormTask,
   checklist,
   forms,
   formsState,
@@ -123,7 +125,7 @@ export function ChecklistHeader({
               button
               style={{ whiteSpace: 'nowrap' }}
               onClick={event => {
-                addGenericItem(checklist)
+                addGenericTask(checklist)
                 closeMenu(event)
               }}
             >
@@ -136,7 +138,7 @@ export function ChecklistHeader({
                 button
                 style={{ whiteSpace: 'nowrap' }}
                 onClick={() => {
-                  addGeneralCommentItem(checklist)
+                  addGeneralCommentTask(checklist)
                   closeMenu()
                 }}
               >
@@ -152,10 +154,14 @@ export function ChecklistHeader({
         <SearchDrawer
           title="Select a form"
           searchFunction={q => formSearchFuse.search(q)}
-          onSelectItems={items => {
-            // TODO
+          onSelectItems={async (items: Record<UUID, IDealForm>) => {
             setFormPickerOpen(false)
-            console.log(items)
+
+            // eslint-disable-next-line no-restricted-syntax
+            for (const form of Object.values(items)) {
+              // eslint-disable-next-line no-await-in-loop
+              await addFormTask(checklist, form)
+            }
           }}
           isOpen={formPickerOpen}
           ItemRow={ItemRow}
