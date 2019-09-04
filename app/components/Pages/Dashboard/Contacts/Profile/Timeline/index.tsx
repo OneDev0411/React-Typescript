@@ -1,40 +1,73 @@
-import React, { useState, useRef } from 'react'
+import React, {
+  useState,
+  useRef,
+  useImperativeHandle,
+  forwardRef,
+  RefObject
+} from 'react'
 
 import { Button } from '@material-ui/core'
 
-import List from 'components/Calendar'
+import { getNotes } from 'models/contacts/helpers/get-notes'
+
+import List, { LoadingDirections } from 'components/Calendar'
 import { CalendarRef } from 'components/Calendar/types'
 
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 
+import { getUpcomingInitialRange } from './helpers/get-upcoming-range'
+import { getTimelineInitialRange } from './helpers/get-timeline-range'
+import { convertNoteToCalendarEvent } from './helpers/convert-note-to-calendar-event'
+
 import { Card } from '../styled'
 import { Container, Title } from './styled'
 
-interface Props {
-  contactId: UUID
+export interface TimelineRef {
+  refresh(): void
 }
 
-export function Timeline(props: Props) {
-  const calendarRef = useRef<CalendarRef>(null)
+interface Props {
+  contact: IContact
+  timelineRef?: RefObject<TimelineRef>
+}
+
+const associations = [
+  ...CRM_TASKS_QUERY.associations,
+  'calendar_event.crm_task',
+  'calendar_event.full_campaign',
+  'calendar_event.full_crm_task'
+]
+
+function Timeline(props: Props) {
+  const timelineRef = useRef<CalendarRef>(null)
+  const upcomingRef = useRef<CalendarRef>(null)
+
   const [showUpcomingEvents, setShowUpcomingEvents] = useState<boolean>(false)
 
-  const handleOnLoadEvents = () => {}
+  const handleReload = () => {
+    timelineRef.current!.refresh(new Date(), getTimelineInitialRange())
 
-  const filter = {
-    contactId: props.contactId,
-    object_types: [
-      'crm_association',
-      'email_campaign_recipient',
-      'contact_notes'
-    ]
+    if (showUpcomingEvents) {
+      upcomingRef.current!.refresh(new Date(), getUpcomingInitialRange())
+    }
   }
 
-  const associations = [
-    ...CRM_TASKS_QUERY.associations,
-    'calendar_event.crm_task',
-    'calendar_event.full_campaign',
-    'calendar_event.full_crm_task'
-  ]
+  useImperativeHandle(props.timelineRef, () => ({
+    refresh: handleReload
+  }))
+
+  if (!props.contact) {
+    return null
+  }
+
+  const filter = {
+    contactId: props.contact.id,
+    object_types: ['crm_association', 'email_campaign_recipient']
+  }
+
+  const notes = getNotes(props.contact).map(note =>
+    convertNoteToCalendarEvent(note, props.contact)
+  )
 
   return (
     <Container>
@@ -46,34 +79,43 @@ export function Timeline(props: Props) {
         {showUpcomingEvents ? 'Hide' : 'Show'} Upcoming Events
       </Button>
 
-      <div
+      {showUpcomingEvents && (
+        <>
+          <Title>Upcoming Events</Title>
+
+          <Card>
+            <List
+              ref={upcomingRef}
+              filter={filter}
+              associations={associations}
+              initialRange={getUpcomingInitialRange()}
+              directions={[LoadingDirections.Bottom]}
+              defaultEvents={notes} // TODO: convert notes to events
+            />
+          </Card>
+        </>
+      )}
+
+      <Card
         style={{
-          display: showUpcomingEvents ? 'block' : 'none'
+          display: !showUpcomingEvents ? 'block' : 'none',
+          marginTop: '1rem'
         }}
       >
-        <Title>Upcoming Events</Title>
-
-        <Card>
-          <List
-            filter={filter}
-            associations={associations}
-            onChangeActiveDate={() => {}}
-            onLoadEvents={handleOnLoadEvents}
-          />
-        </Card>
-      </div>
-
-      <Title>Today Events</Title>
-
-      <Card>
         <List
-          ref={calendarRef}
+          contrariwise // display calendar events vice versa
+          ref={timelineRef}
           filter={filter}
+          initialRange={getTimelineInitialRange()}
           associations={associations}
-          onChangeActiveDate={() => {}}
-          onLoadEvents={handleOnLoadEvents}
+          directions={[LoadingDirections.Bottom]}
+          defaultEvents={notes} // TODO: convert notes to events
         />
       </Card>
     </Container>
   )
 }
+
+export default forwardRef((props: Props, ref: RefObject<TimelineRef>) => (
+  <Timeline {...props} timelineRef={ref} />
+))
