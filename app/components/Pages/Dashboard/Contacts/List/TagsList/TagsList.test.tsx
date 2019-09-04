@@ -24,7 +24,7 @@ describe('tagsList', () => {
     )
   })
 
-  it('should call onFilterChange with correct value (#2894)', () => {
+  it('should call onFilterChange with correct value (#2894)', done => {
     const onFilterChange = jest.fn()
 
     const activeFilters = {
@@ -71,14 +71,17 @@ describe('tagsList', () => {
     )
 
     fireEvent.click(getByText('100 Contacts'))
-    expect(onFilterChange).toBeCalledWith({
-      filters: [
-        {
-          value: '100 Contacts',
-          invert: false,
-          attribute_def: 'df5a82fb-b163-4193-880d-bb85bb14d5f2'
-        }
-      ]
+    setImmediate(() => {
+      expect(onFilterChange).toBeCalledWith({
+        filters: [
+          {
+            value: '100 Contacts',
+            invert: false,
+            attribute_def: 'df5a82fb-b163-4193-880d-bb85bb14d5f2'
+          }
+        ]
+      })
+      done()
     })
   })
 })
