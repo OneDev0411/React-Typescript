@@ -135,7 +135,11 @@ export function SingleEmailComposeDrawer({
     )
   }
   const renderCollapsedFields = (values: EmailFormValues) => (
-    <CollapsedRecipients recipients={values.to || []} label="To" />
+    <CollapsedRecipients
+      to={values.to || []}
+      cc={values.cc || []}
+      bcc={values.bcc || []}
+    />
   )
 
   return (

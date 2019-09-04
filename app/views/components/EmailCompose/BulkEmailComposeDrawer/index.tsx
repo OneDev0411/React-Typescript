@@ -93,7 +93,7 @@ export function BulkEmailComposeDrawer({
     </>
   )
   const renderCollapsedFields = (values: EmailFormValues) => (
-    <CollapsedRecipients recipients={values.to || []} label={label} />
+    <CollapsedRecipients to={values.to || []} />
   )
 
   return (

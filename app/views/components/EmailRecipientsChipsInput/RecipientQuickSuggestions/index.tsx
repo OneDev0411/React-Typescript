@@ -6,7 +6,7 @@ import { Box } from '@material-ui/core'
 import { curry, isEqual } from 'lodash'
 
 import { IAppState } from 'reducers/index'
-import { getActiveTeam } from 'utils/user-teams'
+import { getBrandByType } from 'utils/user-teams'
 
 import { RecipientQuickSuggestion } from '../RecipientQuickSuggestion'
 
@@ -23,7 +23,7 @@ export const RecipientQuickSuggestions = connect(({ user }: IAppState) => ({
   onSelect,
   currentRecipients = []
 }: Props) {
-  const activeTeam = getActiveTeam(user)
+  const firstValidBrand = getBrandByType(user, 'Brokerage')
 
   const suggestions: IDenormalizedEmailRecipientInput[] = [
     {
@@ -31,14 +31,10 @@ export const RecipientQuickSuggestions = connect(({ user }: IAppState) => ({
     }
   ]
 
-  if (
-    activeTeam &&
-    (activeTeam.brand.brand_type === 'Brokerage' ||
-      activeTeam.brand.brand_type === 'Office')
-  ) {
+  if (firstValidBrand) {
     suggestions.push({
       recipient_type: 'Brand',
-      brand: activeTeam.brand
+      brand: firstValidBrand
     })
   }
 
