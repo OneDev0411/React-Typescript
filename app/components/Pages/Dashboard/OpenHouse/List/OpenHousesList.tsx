@@ -29,7 +29,9 @@ interface Props {
 
 function OpenHousesList(props: Props) {
   const theme = useTheme<Theme>()
-  const { list, isFetching, error, reloadList } = useGetOpenHouses()
+  const { list, isFetching, error, reloadList } = useGetOpenHouses({
+    isFetching: true
+  })
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [selectedOH, setSelectedOH] = useState<ICRMTask<
     CRMTaskAssociation,
