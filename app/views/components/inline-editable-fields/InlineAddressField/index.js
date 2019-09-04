@@ -40,7 +40,7 @@ export class InlineAddressField extends React.Component {
   state = {
     address: '',
     isShowSuggestion: false,
-    isDrity: false,
+    isDirty: false,
     places: [],
     anchorEl: null,
     updateAddressFormPosition: false,
@@ -51,8 +51,8 @@ export class InlineAddressField extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (!state.address && !state.isDrity && props.address !== state.address) {
-      return { address: props.address, isDrity: true }
+    if (!state.address && !state.isDirty && props.address !== state.address) {
+      return { address: props.address, isDirty: true }
     }
 
     return null
@@ -142,7 +142,7 @@ export class InlineAddressField extends React.Component {
           }
         }
 
-        return { address: value, isDrity: true }
+        return { address: value, isDirty: true }
       },
       () => {
         this.props.handleInputChange(value)
