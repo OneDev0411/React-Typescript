@@ -1,5 +1,6 @@
 import { CSSProperties } from 'react'
 import styled from 'styled-components'
+import { fade } from '@material-ui/core/styles'
 
 export const BadgeContainer = styled.div`
   color: #1d1f26;
@@ -44,14 +45,37 @@ export const SideNavContainer = styled.div<SideNavContainerProps>`
     min-height: unset;
     height: ${props => props.theme.spacing(5)}px;
     text-decoration: none;
+    transition: all 0.5s;
 
     &:focus {
       outline: none;
     }
+    &:hover .section-item__delete {
+      opacity: 1;
+    }
+  }
+
+  .section-item__delete {
+    padding: 0.5rem 0.75rem;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    opacity: 0;
+    transition: all 0.5s;
+    background: ${props => fade(props.theme.palette.text.primary, 0.1)};
+
+    & svg {
+      fill: ${props => props.theme.palette.text.primary};
+    }
+
+    &:hover {
+      background: ${props => fade(props.theme.palette.text.primary, 0.2)};
+    }
   }
 
   .section-item.is-selected {
-    background: rgba(9, 69, 235, 0.12);
+    background: ${props => fade(props.theme.palette.primary.main, 0.12)};
     color: ${props => props.theme.palette.primary.main};
 
     & > span {
@@ -59,11 +83,23 @@ export const SideNavContainer = styled.div<SideNavContainerProps>`
     }
 
     &:hover {
-      background: rgba(9, 69, 235, 0.12);
+      background: ${props => fade(props.theme.palette.primary.main, 0.12)};
     }
 
     .section-item__icon > svg {
       fill: ${props => props.theme.palette.primary.main};
+    }
+
+    .section-item__delete {
+      background: ${props => fade(props.theme.palette.primary.main, 0.1)};
+
+      & svg {
+        fill: ${props => props.theme.palette.primary.main};
+      }
+
+      &:hover {
+        background: ${props => fade(props.theme.palette.primary.main, 0.2)};
+      }
     }
   }
 

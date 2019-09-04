@@ -3,13 +3,24 @@ import cn from 'classnames'
 import { Link } from 'react-router'
 import { Typography, MenuItem, Box } from '@material-ui/core'
 
+import TrashIcon from 'components/SvgIcons/TrashIcon'
+
 import { isOnThisUrl } from './helpers'
 import SideNavBadge from './SideNavBadge'
 import SideNavTooltip from './SideNavTooltip'
 import { SideNavItemProps } from './types'
 
 function SideNavItem(props: SideNavItemProps) {
-  const { isIndex, link, icon: Icon, badge, title, isSelected, tooltip } = props
+  const {
+    isIndex,
+    link,
+    icon: Icon,
+    badge,
+    title,
+    isSelected,
+    tooltip,
+    onDelete
+  } = props
 
   // We can control the selected state from outside by using isSelected,
   // If we doesn't pass anything, it will switch to try to detect by checking
@@ -38,6 +49,18 @@ function SideNavItem(props: SideNavItemProps) {
           <Typography variant="body2" component="span">
             {title}
           </Typography>
+          {onDelete && (
+            <div
+              className="section-item__delete"
+              onClick={e => {
+                e.stopPropagation()
+                e.preventDefault()
+                onDelete()
+              }}
+            >
+              <TrashIcon color="" size={16} />
+            </div>
+          )}
         </Box>
         {typeof badge !== 'undefined' ? <SideNavBadge count={badge} /> : null}
       </MenuItem>
