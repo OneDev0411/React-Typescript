@@ -5,13 +5,13 @@ import AssociationsDrawer from 'components/AssociationsDrawer'
 import { normalizeAssociations } from 'views/utils/association-normalizers'
 
 interface Props {
-  registerants: ICRMTaskAssociation<CRMTaskAssociationType>[]
+  registrants: ICRMTaskAssociation<CRMTaskAssociationType>[]
 }
 
-export default function Registrants({ registerants }: Props) {
+export default function Registrants({ registrants }: Props) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
-  const count = registerants.length
+  const count = registrants.length
 
   return (
     <>
@@ -25,10 +25,10 @@ export default function Registrants({ registerants }: Props) {
       </Button>
       {count > 0 && (
         <AssociationsDrawer
-          associations={normalizeAssociations(registerants)}
+          associations={normalizeAssociations(registrants)}
           isOpen={isDrawerOpen}
           onClose={() => setIsDrawerOpen(false)}
-          title="Registerants"
+          title="Registrants"
         />
       )}
     </>
