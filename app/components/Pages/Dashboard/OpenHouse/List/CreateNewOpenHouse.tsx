@@ -3,10 +3,11 @@ import { connect } from 'react-redux'
 import { Button } from '@material-ui/core'
 
 import SearchListingDrawer from 'components/SearchListingDrawer'
-import { getMlsDrawerInitialDeals } from 'components/InstantMarketing/helpers/get-mls-drawer-initial-deals'
+
+import { selectSellingDeals } from './open-house-list-helpers'
 
 interface Props {
-  deals: UuidMap<IDeal>
+  deals: IDeal[]
   onOpenDrawer: (item: IDeal | ICompactListing) => void
 }
 
@@ -26,7 +27,8 @@ function CreateNewOpenHouse(props: Props) {
       <SearchListingDrawer
         mockListings
         isOpen={isSearchDrawerOpen}
-        defaultList={getMlsDrawerInitialDeals(props.deals)}
+        defaultList={selectSellingDeals(props.deals)}
+        defaultListTitle="Select from your selling deals:"
         onClose={() => setIsSearchDrawerOpen(false)}
         onSelect={(items: ICompactListing[] | IDeal[]) => {
           setIsSearchDrawerOpen(false)
@@ -37,9 +39,9 @@ function CreateNewOpenHouse(props: Props) {
   )
 }
 
-function mapStateToProps({ deals }) {
+function mapStateToProps(state) {
   return {
-    deals: deals.list
+    deals: Object.values(state.deals.list)
   }
 }
 

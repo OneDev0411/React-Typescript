@@ -117,7 +117,7 @@ function OpenHousesList(props: Props) {
 
   const renderContent = () => {
     if (isFetching) {
-      return <LoadingContainer style={{ padding: '30% 0' }} />
+      return <LoadingContainer style={{ padding: '30vh 0 0' }} />
     }
 
     if (error) {
@@ -147,7 +147,7 @@ function OpenHousesList(props: Props) {
 
       <PageHeader>
         <PageHeader.Title showBackButton={false}>
-          <PageHeader.Heading>Open Houses</PageHeader.Heading>
+          <PageHeader.Heading>Open House</PageHeader.Heading>
         </PageHeader.Title>
 
         <PageHeader.Menu>

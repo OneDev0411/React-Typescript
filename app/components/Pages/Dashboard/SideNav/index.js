@@ -105,8 +105,8 @@ function AppSideNav(props) {
 
           <Acl access={[ACL.DEALS, ACL.CRM, ACL.MARKETING]}>
             <SideNavLinkItem
-              tooltip="Your Open Houses"
-              to="/dashboard/open-houses"
+              tooltip="Open House"
+              to="/dashboard/open-house"
               Icon={IconOpenHouseOutline}
               ActiveIcon={IconOpenHouseFilled}
             />
