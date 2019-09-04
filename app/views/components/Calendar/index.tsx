@@ -39,12 +39,21 @@ import { getRowIdByDate } from './helpers/get-row-by-date'
 
 import List from './components/List'
 
+export enum LoadingDirections {
+  Top = 1,
+  Bottom = 2
+}
+
 interface Props {
   viewAsUsers?: UUID[]
   filter?: object
   associations?: string[]
   calendarRef?: RefObject<CalendarRef>
   user?: IUser
+  initialRange?: NumberRange
+  contrariwise?: boolean
+  directions?: LoadingDirections[]
+  defaultEvents?: ICalendarEvent[] // TODO: this is temporary until we convert notes to events
   onChangeActiveDate?: (activeDate: Date) => void
   onLoadEvents?: (events: ICalendarEventsList, range: NumberRange) => void
 }
@@ -57,9 +66,13 @@ interface StateProps {
 export function Calendar({
   calendarRef,
   viewAsUsers,
-  filter = {},
-  associations = [],
+  initialRange,
   user,
+  directions = [LoadingDirections.Top, LoadingDirections.Bottom],
+  filter = {},
+  contrariwise = false,
+  associations = [],
+  defaultEvents = [], // TODO: remove when notes converted to events
   onLoadEvents = () => null,
   onChangeActiveDate = () => null
 }: Props) {
@@ -127,16 +140,20 @@ export function Calendar({
         })
 
         const nextEvents: ICalendarEvent[] = options.reset
-          ? fetchedEvents
+          ? [...fetchedEvents, ...defaultEvents]
           : fetchedEvents.concat(events)
 
         // get current range of fetched calendar
         const range = options.calendarRange || apiOptions.range
 
-        const normalizedEvents = normalizeEvents(nextEvents, range)
+        const normalizedEvents = normalizeEvents(
+          nextEvents,
+          range,
+          contrariwise
+        )
 
         // update events list
-        setEvents(nextEvents)
+        setEvents([...nextEvents, ...defaultEvents])
 
         // updates virtual list rows
         setListRows(createListRows(normalizedEvents, activeDate))
@@ -151,9 +168,11 @@ export function Calendar({
     [
       activeDate,
       associations,
+      contrariwise,
       events,
       filter,
       isLoading,
+      defaultEvents,
       onLoadEvents,
       viewAsUsers
     ]
@@ -190,7 +209,7 @@ export function Calendar({
      * should open the event dialog with the day set on it
      */
     if (rowId === -1) {
-      const nextEvents = normalizeEvents(events, calendarRange)
+      const nextEvents = normalizeEvents(events, calendarRange, contrariwise)
       const nextRows = createListRows(nextEvents, date)
 
       setActiveDate(date)
@@ -212,8 +231,12 @@ export function Calendar({
    * calendar range
    * @param date
    */
-  const handleLoadEvents = async (date: Date = activeDate) => {
-    const query: NumberRange = getDateRange(date.getTime(), Format.Middle)
+  const handleLoadEvents = async (
+    date: Date = activeDate,
+    range: NumberRange | null = null
+  ) => {
+    const query: NumberRange =
+      range || getDateRange(date.getTime(), Format.Middle)
 
     // set loading position to center again
     setLoadingPosition(LoadingPosition.Middle)
@@ -235,21 +258,52 @@ export function Calendar({
   }
 
   /**
+   * creates the ranges
+   */
+  const createRanges = useCallback(
+    (
+      direction: Format
+    ): {
+      query: NumberRange
+      calendar: NumberRange
+    } => {
+      let actualDirection = direction
+
+      if (contrariwise && direction === Format.Next) {
+        actualDirection = Format.Previous
+      }
+
+      if (contrariwise && direction === Format.Previous) {
+        actualDirection = Format.Next
+      }
+
+      const query: NumberRange =
+        actualDirection === Format.Next
+          ? getDateRange(calendarRange[1] * 1000, Format.Next)
+          : getDateRange(calendarRange[0] * 1000, Format.Previous)
+
+      const calendar: NumberRange =
+        actualDirection === Format.Next
+          ? [calendarRange[0], query[1]]
+          : [query[0], calendarRange[1]]
+
+      return {
+        query,
+        calendar
+      }
+    },
+    [calendarRange, contrariwise]
+  )
+
+  /**
    * handles updating ranges when user is trying to fetch future events
    */
   const handleLoadNextEvents = useCallback((): void => {
-    if (isLoading) {
+    if (isLoading || !directions.includes(LoadingDirections.Bottom)) {
       return
     }
 
-    // new range will be from end range of current calendar till next range
-    const query: NumberRange = getDateRange(
-      calendarRange[1] * 1000,
-      Format.Next
-    )
-
-    // new range will be from start of calendar until end of new query range
-    const nextCalendarRange: NumberRange = [calendarRange[0], query[1]]
+    const { query, calendar: nextCalendarRange } = createRanges(Format.Next)
 
     setCalendarRange(nextCalendarRange)
 
@@ -264,24 +318,17 @@ export function Calendar({
         calendarRange: nextCalendarRange
       }
     )
-  }, [calendarRange, fetchEvents, isLoading])
+  }, [createRanges, directions, fetchEvents, isLoading])
 
   /**
    * handles updating ranges when user is trying to fetch past events
    */
   const handleLoadPreviousEvents = useCallback((): void => {
-    if (isLoading) {
+    if (isLoading || !directions.includes(LoadingDirections.Top)) {
       return
     }
 
-    // new range will be from start range of current calendar
-    const query: NumberRange = getDateRange(
-      calendarRange[0] * 1000,
-      Format.Previous
-    )
-
-    // new range will be from start of new range until end of new calendar range
-    const nextCalendarRange: NumberRange = [query[0], calendarRange[1]]
+    const { query, calendar: nextCalendarRange } = createRanges(Format.Previous)
 
     setCalendarRange(nextCalendarRange)
 
@@ -296,7 +343,7 @@ export function Calendar({
         calendarRange: nextCalendarRange
       }
     )
-  }, [calendarRange, fetchEvents, isLoading])
+  }, [createRanges, directions, fetchEvents, isLoading])
 
   /**
    * creates the list of virtual list rows based on given events
@@ -304,12 +351,16 @@ export function Calendar({
    */
   const createListFromEvents = useCallback(
     (events: ICalendarEvent[]) => {
-      const normalizedEvents = normalizeEvents(events, calendarRange)
+      const normalizedEvents = normalizeEvents(
+        events,
+        calendarRange,
+        contrariwise
+      )
 
       setEvents(events)
       setListRows(createListRows(normalizedEvents, activeDate))
     },
-    [activeDate, calendarRange]
+    [activeDate, calendarRange, contrariwise]
   )
 
   /**
@@ -340,7 +391,7 @@ export function Calendar({
    * behaves as componentDidMount
    */
   useEffectOnce(() => {
-    handleLoadEvents(activeDate)
+    handleLoadEvents(activeDate, initialRange)
   })
 
   /**

@@ -3,7 +3,8 @@ import React from 'react'
 import { EventDrawer } from 'components/EventDrawer'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
-import { createDueDate } from './helpers'
+import { createDueDate } from './helpers/create-date'
+import { Note } from './Note'
 
 interface Props {
   isEventDrawerOpen: boolean
@@ -49,6 +50,16 @@ export function CrmEvents(props: Props) {
 
   if (props.event.type === 'Open House') {
     return <OpenHouseDrawer {...sharedProps} openHouseId={id} />
+  }
+
+  if (props.event.event_type === 'Note') {
+    return (
+      <Note
+        event={props.event}
+        onCloseEventDrawer={props.onCloseEventDrawer}
+        onChange={props.onEventChange}
+      />
+    )
   }
 
   return <EventDrawer {...sharedProps} eventId={id} />
