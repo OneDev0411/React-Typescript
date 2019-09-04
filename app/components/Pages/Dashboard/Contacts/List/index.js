@@ -137,7 +137,7 @@ class ContactsList extends React.Component {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
   }
 
-  setSelectedSidebarFilter() {
+  setSelectedSidebarFilter = () => {
     const { activeSegment, filters, flows } = this.props
 
     if (
@@ -154,7 +154,7 @@ class ContactsList extends React.Component {
     }
   }
 
-  getHeaderTitle() {
+  getHeaderTitle = () => {
     const { activeFilters, activeSegment, filters, flows } = this.props
 
     if (
@@ -517,19 +517,19 @@ class ContactsList extends React.Component {
     )
   }
 
-  isDefaultSegmentSelected() {
+  isDefaultSegmentSelected = () => {
     return this.props.activeSegment.id === 'default'
   }
 
-  isFilteredWithTagsOrFlows() {
+  isFilteredWithTagsOrFlows = () => {
     return this.props.filters.length > 0 || this.props.flows.length > 0
   }
 
-  shouldShowImportAndCreateActions() {
+  shouldShowImportAndCreateActions = () => {
     return this.isDefaultSegmentSelected() && !this.isFilteredWithTagsOrFlows()
   }
 
-  shouldShowFilters() {
+  shouldShowFilters = () => {
     return this.state.selectedSidebarFilter === null
   }
 

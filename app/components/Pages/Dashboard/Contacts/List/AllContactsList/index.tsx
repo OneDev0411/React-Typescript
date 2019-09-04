@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
 
 import { resetActiveFilters as resetActiveFiltersAction } from 'actions/filter-segments/active-filters'
@@ -8,7 +8,6 @@ import ToolTip from 'components/tooltip'
 import { ListTitle } from 'components/Grid/SavedSegments/List/styled'
 import { changeActiveFilterSegment as changeActiveFilterSegmentAction } from 'actions/filter-segments/change-active-segment'
 
-import { normalizeAttributeFilters } from '../utils'
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
 
 interface Props {
@@ -24,29 +23,27 @@ function AllContactsList({
   resetActiveFilters,
   changeActiveFilterSegment
 }: Props) {
-  async function clickHandler() {
-    if (isSelected()) {
+  const isSelected = useMemo(() => {
+    return Object.values(activeFilters).length === 0
+  }, [activeFilters])
+
+  const clickHandler = async () => {
+    if (isSelected) {
       return
     }
 
     await resetActiveFilters(CONTACTS_SEGMENT_NAME)
     await changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, 'default')
 
-    const nextFilters = {}
-
     onFilterChange({
-      filters: normalizeAttributeFilters(nextFilters)
+      filters: []
     })
   }
-
-  const isSelected = useCallback(() => {
-    return Object.values(activeFilters).length === 0
-  }, [activeFilters])
 
   return (
     <div style={{ margin: '0 0 2rem' }} data-test="tags-list">
       <ToolTip caption="All my contacts" placement="right">
-        <ListTitle isSelected={isSelected()} onClick={clickHandler}>
+        <ListTitle isSelected={isSelected} onClick={clickHandler}>
           <span>All Contacts</span>
         </ListTitle>
       </ToolTip>
