@@ -16,7 +16,6 @@ export async function preSaveFormat(
     location,
     registrants,
     reminder,
-    status,
     title
   } = values
 
@@ -24,6 +23,7 @@ export async function preSaveFormat(
 
   const dueDateTimestamp = dueDate.getTime()
   const task_type = 'Open House'
+  const isDueDatePast = dueDateTimestamp <= new Date().getTime()
 
   const task = {
     title: title.trim(),
@@ -31,15 +31,14 @@ export async function preSaveFormat(
     task_type,
     metadata: { template },
     assignees: assignees.map(a => a.id),
-    status:
-      dueDateTimestamp <= new Date().getTime() ? 'DONE' : status || 'PENDING'
+    status: isDueDatePast ? 'DONE' : 'PENDING'
   }
 
   if ((originalValues && originalValues.id) || description) {
     task.description = (description && description.trim()) || ''
   }
 
-  if (task.status === 'DONE') {
+  if (isDueDatePast) {
     task.reminders = []
   } else if (reminder.value >= 0) {
     task.reminders = [
