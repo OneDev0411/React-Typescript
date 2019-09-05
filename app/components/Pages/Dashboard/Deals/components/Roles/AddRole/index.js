@@ -58,10 +58,14 @@ class AddRoleForm extends React.Component {
       }))
   }
 
-  get isDoubleEnded() {
-    const enderType = Deal.get.field(this.props.deal, 'ender_type')
+  get dealEnderType() {
+    return Deal.get.field(this.props.deal, 'ender_type')
+  }
 
-    return ['AgentDoubleEnder', 'OfficeDoubleEnder'].includes(enderType)
+  get isDoubleEnded() {
+    return ['AgentDoubleEnder', 'OfficeDoubleEnder'].includes(
+      this.dealEnderType
+    )
   }
 
   itemToString = item => item.label
@@ -98,7 +102,7 @@ class AddRoleForm extends React.Component {
             deal={this.props.deal}
             allowedRoles={this.AllowedRoles}
             isEmailRequired={this.props.isEmailRequired}
-            isDoubleEnded={this.isDoubleEnded}
+            dealEnderType={this.dealEnderType}
             showBrokerageFields={this.props.showBrokerageFields}
             isPrimaryAgent={['BuyerAgent', 'SellerAgent'].includes(
               this.state.selectedRole
