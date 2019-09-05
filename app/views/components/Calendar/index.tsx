@@ -212,7 +212,7 @@ export function Calendar({
      * and make, make one to be in our blue link color and tapping on it
      * should open the event dialog with the day set on it
      */
-    if (rowId === -1) {
+    if (rowId === -1 && placeholders.includes(Placeholder.Day)) {
       const nextEvents = normalizeEvents(events, calendarRange, contrariwise)
       const nextRows = createListRows(nextEvents, date, placeholders)
 
