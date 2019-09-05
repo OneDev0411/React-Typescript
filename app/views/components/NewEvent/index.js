@@ -172,6 +172,7 @@ export default class Task extends Component {
                 {this.state.formValues && (
                   <EventDrawer
                     isOpen
+                    showDefaultAssociation
                     defaultAssociation={defaultAssociation}
                     initialValues={this.state.formValues}
                     onClose={this.handleDrawerClose}
