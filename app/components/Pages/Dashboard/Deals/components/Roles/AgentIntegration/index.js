@@ -46,13 +46,17 @@ export class RoleAgentIntegration extends React.Component {
   }
 
   getShouldSelectRoleFromAgentsList() {
-    const { deal, role, allowedRoles, isDoubleEnded } = this.props
+    const { deal, role, allowedRoles } = this.props
     const dealSide = deal ? deal.deal_type : this.props.dealSide
     const selectedRole = allowedRoles && allowedRoles[0]
 
     if (role || !selectedRole || !AGENT_ROLES.includes(selectedRole)) {
       return false
     }
+
+    const isDoubleEnded = ['AgentDoubleEnder', 'OfficeDoubleEnder'].includes(
+      this.props.dealEnderType
+    )
 
     if (
       isDoubleEnded ||

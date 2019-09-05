@@ -73,11 +73,13 @@ export default function TaskStatus(props) {
     <Flex>
       {isRequired && <Label className="Required">Required</Label>}
 
-      <ToolTip caption={props.noTip !== true && tooltip} placement="bottom">
-        <Label className={status}>
-          {getIcon(status)} {status}
-        </Label>
-      </ToolTip>
+      {status && (
+        <ToolTip caption={props.noTip !== true && tooltip} placement="bottom">
+          <Label className={status}>
+            {getIcon(status)} {status}
+          </Label>
+        </ToolTip>
+      )}
     </Flex>
   )
 }

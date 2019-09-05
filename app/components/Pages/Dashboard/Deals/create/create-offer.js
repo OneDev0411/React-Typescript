@@ -524,7 +524,6 @@ class CreateOffer extends React.Component {
                 showDealSideAs="Buying"
                 dealSide={deal.deal_type}
                 dealEnderType={enderType}
-                isDoubleEnded={this.IsDoubleEnded}
                 isCommissionRequired={this.IsDoubleEnded}
                 agents={agents}
                 onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
