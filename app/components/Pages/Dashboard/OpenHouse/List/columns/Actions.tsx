@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Button } from '@material-ui/core'
+import { Button, Box } from '@material-ui/core'
 
 import { deleteTask } from 'models/tasks/delete-task'
 
@@ -46,24 +46,25 @@ export default function Actions({
   }
 
   return (
-    <SplitButton
-      color="secondary"
-      variant="outlined"
-      popperPlacement="bottom-end"
-      style={{ display: 'flex', justifyContent: 'flex-end' }}
-      onClick={() => window.open(registerPageURL)}
-      renderMenu={() => (
-        <>
-          <Button fullWidth onClick={onEdit}>
-            Edit
-          </Button>
-          <Button disabled={isDeleting} fullWidth onClick={onDelete}>
-            Delete
-          </Button>
-        </>
-      )}
-    >
-      Guest Registration Page
-    </SplitButton>
+    <Box display="flex" justifyContent="flex-end">
+      <SplitButton
+        color="secondary"
+        variant="outlined"
+        popperPlacement="bottom-end"
+        onClick={() => window.open(registerPageURL)}
+        renderMenu={() => (
+          <>
+            <Button fullWidth onClick={onEdit}>
+              Edit
+            </Button>
+            <Button disabled={isDeleting} fullWidth onClick={onDelete}>
+              Delete
+            </Button>
+          </>
+        )}
+      >
+        Guest Registration Page
+      </SplitButton>
+    </Box>
   )
 }
