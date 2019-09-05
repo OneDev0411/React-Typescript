@@ -13,11 +13,11 @@ export default function EmptyState(props: {
       flexDirection="column"
       justifyContent="center"
       margin="20vh auto 0"
-      maxWidth="38rem"
+      maxWidth="33rem"
       textAlign="center"
     >
       <img src="/static/images/contacts/zero-state.svg" alt="Houston" />
-      <h2>Oops! No open houses are scheduled… Yet.</h2>
+      <h2>No open houses are scheduled… Yet!</h2>
       <p>
         Impress sellers with additional marketing exposure while attracting new
         buyers and adding contacts. Holding an open house has never been easier!
