@@ -137,7 +137,7 @@ export function ChecklistHeader({
                 closeMenu(event)
               }}
             >
-              Add Generic Item
+              Add Generic Task
             </ListItem>
             {checklist.tasks.every(
               task => task.task_type !== 'GeneralComments'
