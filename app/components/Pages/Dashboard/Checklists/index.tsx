@@ -7,18 +7,15 @@ import { Box } from '@material-ui/core'
 import { Container, Content } from 'components/SlideMenu'
 import { IAppState } from 'reducers/index'
 import { getRootBrand } from 'utils/user-teams'
-import PageSideNav from 'components/PageSideNav'
 
 import Acl from 'components/Acl'
 
 import { CheckListTable } from './components/ChecklistTable'
 import { ChecklistHeader } from './components/ChecklistHeader'
-import {
-  buyingPropertyTypes,
-  SECTIONS,
-  sellingPropertyTypes
-} from './constants'
+import { buyingPropertyTypes, sellingPropertyTypes } from './constants'
 import { useChecklistsPage } from './use-checklist-page'
+import { ChecklistsSidenav } from './components/ChecklistsSidenav'
+import { getChecklistPageLink } from './helpers/get-checklist-page-link'
 
 interface Props extends RouteComponentProps<any, {}> {
   user: IUser
@@ -37,7 +34,9 @@ export function ChecklistsPage({ user, location }: Props) {
       dealType === 'Buying' && buyingPropertyTypes.includes(propertyType)
 
     if (!(isValidSellingType || isValidBuyingType)) {
-      browserHistory.replace(SECTIONS[0].items[0].link)
+      browserHistory.replace(
+        getChecklistPageLink(sellingPropertyTypes[0], 'Selling')
+      )
     }
   }, [dealType, propertyType])
 
@@ -69,8 +68,7 @@ export function ChecklistsPage({ user, location }: Props) {
         <title>Checklists</title>
       </Helmet>
       <Container isOpen>
-        <PageSideNav isOpen sections={SECTIONS} />
-
+        <ChecklistsSidenav />
         <Content>
           <Box m={3}>
             {filteredChecklists.map(checklist => (

@@ -23,7 +23,7 @@ export interface SideNavItemProps {
   badge?: number
   isSelected?: boolean
   tooltip?: string
-  onDelete: () => void
+  onDelete?: () => void
 }
 
 export interface LinkListSection {
