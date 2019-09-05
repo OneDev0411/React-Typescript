@@ -5,15 +5,18 @@ import { browserHistory } from 'react-router'
 
 import PropTypes from 'prop-types'
 
-import { getActiveTeamACL } from '../../../utils/user-teams'
+import { hasUserAccess } from '../../../utils/user-teams'
 
 import { ACL } from '../../../constants/acl'
 
+type Access = IPermission | ((user: IUser) => boolean) | { oneOf: Access }
+
 interface Props {
-  access: string | string[]
-  fallback: React.ReactNode
+  access: Access | Access[]
+  fallback?: React.ReactNode
   children: React.ReactNode
-  fallbackUrl: string | null
+  fallbackUrl?: string | null
+  accessControlPolicy?: IAccessControlPolicy
   user: IUser
 }
 
@@ -44,11 +47,11 @@ function Acl({
   access,
   fallback = null,
   fallbackUrl = null,
+  accessControlPolicy,
   children,
   user
 }: Props) {
-  const acl = user ? getActiveTeamACL(user) : []
-  const userHasAccess = ([] as string[]).concat(access).every(hasAccess)
+  const userHasAccess = ([] as Access[]).concat(access).every(hasAccess)
 
   useEffect(() => {
     if (!userHasAccess && fallbackUrl) {
@@ -59,16 +62,18 @@ function Acl({
 
   return userHasAccess ? children : fallback
 
-  function hasAccess(requiredAccess) {
+  function hasAccess(requiredAccess: Access) {
     if (typeof requiredAccess === 'function') {
-      return requiredAccess(user, acl)
+      return requiredAccess(user)
+    }
+
+    if (typeof requiredAccess === 'string') {
+      return hasUserAccess(user, requiredAccess, accessControlPolicy)
     }
 
     if (requiredAccess.oneOf) {
-      return [].concat(requiredAccess.oneOf).some(hasAccess)
+      return ([] as Access[]).concat(requiredAccess.oneOf).some(hasAccess)
     }
-
-    return acl.includes(requiredAccess)
   }
 }
 

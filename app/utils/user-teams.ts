@@ -53,8 +53,35 @@ export function isSoloActiveTeam(user): boolean {
   return !!(team && team.brand && team.brand.member_count === 1)
 }
 
-export function hasUserAccess(user: IUser, access: string) {
-  return getActiveTeamACL(user).includes(access)
+export function hasUserAccess(
+  user: IUser,
+  access: IPermission,
+  accessControlPolicy: IAccessControlPolicy = 'ActiveTeam'
+): boolean {
+  const team = getActiveTeam(user)
+
+  let brand: IBrand | null = team && team.brand
+
+  while (brand) {
+    const brandId = brand.id
+    const userTeam = user.teams.find(team => team.brand.id === brandId)
+
+    if (
+      // If policy is Root, we only accept access if we have reached the root brand
+      (accessControlPolicy !== 'Root' || !brand.parent) &&
+      userTeam &&
+      (userTeam.acl || []).includes(access)
+    ) {
+      return true
+    }
+    // If policy is ActiveTeam, don't need to traverse the tree up
+    if (accessControlPolicy === 'ActiveTeam') {
+      break
+    }
+    brand = brand.parent
+  }
+
+  return false
 }
 
 export function hasUserAccessToDeals(user: IUser): boolean {
@@ -105,18 +132,23 @@ export function viewAs(user, activeTeam = getActiveTeam(user)) {
   return []
 }
 
-
 type GetSettings = (team: IUserTeam) => StringMap<any> | null
 
-const getSettingsFromActiveTeam = (getSettings: GetSettings) => (user: IUser, key: string) => {
+const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
+  user: IUser,
+  key: string
+) => {
   const team = getActiveTeam(user)
   const settings = (team && getSettings(team)) || {}
   return key ? settings[key] : settings
 }
 
-export const getActiveTeamSettings = getSettingsFromActiveTeam(team => team.brand_settings)
-export const getUserSettingsInActiveTeam = getSettingsFromActiveTeam(team => team.settings)
-
+export const getActiveTeamSettings = getSettingsFromActiveTeam(
+  team => team.brand_settings
+)
+export const getUserSettingsInActiveTeam = getSettingsFromActiveTeam(
+  team => team.settings
+)
 
 export function viewAsEveryoneOnTeam(user: IUser): boolean {
   const users = viewAs(user)
@@ -177,4 +209,18 @@ export function getBrandByType(user: IUser, type: IBrandType): IBrand | null {
   } while (brand)
 
   return null
+}
+
+export function getRootBrand(user: IUser) {
+  const team = getActiveTeam(user)
+  if (team === null) {
+    return null
+  }
+
+  let brand: IBrand | null = team.brand
+
+  while (brand && brand.parent) {
+    brand = brand.parent
+  }
+  return brand
 }

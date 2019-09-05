@@ -328,6 +328,11 @@ const AsyncTeams = Load({
     import('../components/Pages/Dashboard/Teams' /* webpackChunkName: "teams" */)
 })
 
+const AsyncChecklists = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Checklists' /* webpackChunkName: "Checklists" */)
+})
+
 const AsyncWebsite = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Website' /* webpackChunkName: "website" */)
@@ -516,6 +521,10 @@ export default (
 
       <Route path="/dashboard/teams(/:id)">
         <IndexRoute component={AsyncTeams} />
+      </Route>
+
+      <Route path="/dashboard/checklists">
+        <IndexRoute component={AsyncChecklists} />
       </Route>
 
       <Route path="/dashboard/website" component={AsyncWebsite} />

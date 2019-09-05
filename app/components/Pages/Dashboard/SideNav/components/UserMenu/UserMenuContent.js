@@ -26,23 +26,22 @@ export function UserMenuContent({ user, onClose = () => {} }) {
       </ScrollableArea>
 
       <SideMenuList>
-        {user.teams && user.teams.length > 1 && <SubTitle>Account</SubTitle>}
-
-        <li>
-          <Link noStyle to="/dashboard/account" onClick={onClose}>
-            Settings
-          </Link>
-        </li>
-
+        {user.teams && user.teams.length > 1 && (
+          <SubTitle>Team Settings</SubTitle>
+        )}
         <Acl.Admin>
-          <React.Fragment>
-            <ListItemDivider role="separator" />
-            <li>
-              <Link noStyle to="/dashboard/teams" onClick={onClose}>
-                Teams
-              </Link>
-            </li>
-          </React.Fragment>
+          <li>
+            <Link noStyle to="/dashboard/teams" onClick={onClose}>
+              Members
+            </Link>
+          </li>
+        </Acl.Admin>
+        <Acl.Admin accessControlPolicy="Root">
+          <li>
+            <Link noStyle to="/dashboard/checklists" onClick={onClose}>
+              Checklists
+            </Link>
+          </li>
         </Acl.Admin>
         <ListItemDivider role="separator" />
         <li>

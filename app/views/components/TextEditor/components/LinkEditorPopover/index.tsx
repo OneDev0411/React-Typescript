@@ -5,7 +5,7 @@ import { RefObject, useState } from 'react'
 import { getSelectionText } from 'draftjs-utils'
 
 import { useEditorSelectionAnchor } from './hooks/use-editor-selection-anchor'
-import { useOnOpen } from './hooks/use-on-open'
+import { useOnToggledOn } from './hooks/use-on-toggled'
 import { createLink } from '../../utils/create-link'
 import { getCurrentLinkUrl, stopPropagation } from './utils'
 import { LinkEditorForm } from './components/LinkEditorForm'
@@ -57,7 +57,7 @@ export function LinkEditorPopover({
     editorRef
   )
 
-  useOnOpen(open, () => {
+  useOnToggledOn(open, () => {
     const linkSelection = getExpandedSelectionByEntityType(editorState, 'LINK')
 
     let newEditorState = editorState

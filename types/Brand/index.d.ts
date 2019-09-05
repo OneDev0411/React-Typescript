@@ -1,4 +1,8 @@
 declare type IBrandType = 'Team' | 'Brokerage' | 'Office' | 'Personal' | 'Other'
+declare type IAccessControlPolicy =
+  | 'ActiveTeam'
+  | 'ActiveTeamAndParents'
+  | 'Root'
 declare type IPermission =
   | 'Deals'
   | 'BackOffice'
