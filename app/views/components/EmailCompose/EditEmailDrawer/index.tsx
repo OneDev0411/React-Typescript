@@ -130,6 +130,7 @@ function getRecipientsFromRecipientsEntity(
  * @param item
  */
 const normalizeAttachment = item => ({
+  file_id: item.id,
   title: decodeURI(item.name),
   url: item.url,
   date: new Date(item.created_at * 1000)
