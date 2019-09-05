@@ -413,9 +413,7 @@ class OpenHouseDrawerInternal extends React.Component {
                               name="dueDate"
                               selectedDate={values.dueDate}
                             />
-                            {values.status !== 'DONE' && (
-                              <ReminderField dueDate={values.dueDate} />
-                            )}
+                            <ReminderField dueDate={values.dueDate} />
                           </FieldContainer>
                         </Section>
 
