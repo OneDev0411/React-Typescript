@@ -330,7 +330,7 @@ const AsyncTeams = Load({
 
 const AsyncChecklists = Load({
   loader: () =>
-    import('../components/Pages/Dashboard/Checklists' /* webpackChunkName: "Checklists" */)
+    import('../components/Pages/Dashboard/Checklists' /* webpackChunkName: "console_checklists" */)
 })
 
 const AsyncWebsite = Load({
