@@ -101,9 +101,10 @@ function Timeline(props: Props) {
         </>
       )}
 
+      <Title>Current Events</Title>
+
       <Card
         style={{
-          display: !showUpcomingEvents ? 'block' : 'none',
           marginTop: '1rem'
         }}
       >
