@@ -42,7 +42,7 @@ export function useChecklistsPage(rootBrandId: string | null) {
     }
   }, [rootBrandId])
 
-  const _updateChecklist = (
+  const applyChecklistUpdate = (
     checklistId: string,
     update: IBrandChecklist | ((checklist: IBrandChecklist) => IBrandChecklist)
   ) => {
@@ -62,7 +62,7 @@ export function useChecklistsPage(rootBrandId: string | null) {
     taskData: IDealTaskInput
   ) => {
     if (rootBrandId) {
-      _updateChecklist(
+      applyChecklistUpdate(
         checklist.id,
         await addBrandCheckListTask(rootBrandId, checklist.id, {
           title: '',
@@ -73,7 +73,7 @@ export function useChecklistsPage(rootBrandId: string | null) {
     }
   }
   const updateChecklist = async (checklist: IBrandChecklist) => {
-    _updateChecklist(checklist.id, await updateBrandChecklist(checklist))
+    applyChecklistUpdate(checklist.id, await updateBrandChecklist(checklist))
   }
   const addGenericTask = (checklist: IBrandChecklist) => {
     return addTask(checklist, {
@@ -96,14 +96,14 @@ export function useChecklistsPage(rootBrandId: string | null) {
     if (rootBrandId) {
       const checklist = await updateBrandChecklistTask(rootBrandId, task)
 
-      _updateChecklist(task.checklist, checklist)
+      applyChecklistUpdate(task.checklist, checklist)
     }
   }
 
   const deleteTask = async (checklistId, taskId: UUID) => {
     if (rootBrandId) {
       await removeBrandChecklistTask(rootBrandId, checklistId, taskId)
-      _updateChecklist(checklistId, checklist => ({
+      applyChecklistUpdate(checklistId, checklist => ({
         ...checklist,
         tasks: (checklist.tasks || []).filter(task => task.id !== taskId)
       }))

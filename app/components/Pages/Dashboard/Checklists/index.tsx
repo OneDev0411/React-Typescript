@@ -93,7 +93,10 @@ export function ChecklistsPage({ user, location }: Props) {
                     await addGenericTask(...args)
                     lastTaskNameEditorRef.current!.edit()
                   }}
-                  addGeneralCommentTask={addGeneralCommentTask}
+                  addGeneralCommentTask={async (...args) => {
+                    await addGeneralCommentTask(...args)
+                    lastTaskNameEditorRef.current!.edit()
+                  }}
                   addFormTask={addFormTask}
                   renameChecklist={title =>
                     updateChecklist({
