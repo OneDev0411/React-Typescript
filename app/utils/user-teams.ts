@@ -9,12 +9,12 @@ function getActiveTeamFromCookieOrUser(user) {
   return user.active_brand || user.brand || cookie.get('rechat-active-team')
 }
 
-export function getActiveTeam(user: Partial<IUser> = {}): IUserTeam | null {
-  const { teams } = user
-
-  if (!teams) {
+export function getActiveTeam(user: Partial<IUser> | null): IUserTeam | null {
+  if (user == null || user.teams == null) {
     return null
   }
+
+  const { teams } = user
 
   let activeTeam = teams.find(
     team => team.brand.id === getActiveTeamFromCookieOrUser(user)
@@ -27,7 +27,11 @@ export function getActiveTeam(user: Partial<IUser> = {}): IUserTeam | null {
   return activeTeam || null
 }
 
-export function getActiveTeamId(user: IUser): UUID | null {
+export function getActiveTeamId(user: IUser | null): UUID | null {
+  if (user == null) {
+    return null
+  }
+
   if (user.active_brand) {
     return user.active_brand
   }
@@ -41,23 +45,27 @@ export function getActiveTeamId(user: IUser): UUID | null {
   return activeTeam.brand.id
 }
 
-export function getActiveTeamACL(user: IUser): string[] {
+export function getActiveTeamACL(user: IUser | null): string[] {
   const team = getActiveTeam(user)
 
   return team && team.acl ? team.acl : []
 }
 
-export function isSoloActiveTeam(user): boolean {
+export function isSoloActiveTeam(user: IUser | null): boolean {
   const team = getActiveTeam(user)
 
   return !!(team && team.brand && team.brand.member_count === 1)
 }
 
 export function hasUserAccess(
-  user: IUser,
+  user: IUser | null,
   access: IPermission,
   accessControlPolicy: IAccessControlPolicy = 'ActiveTeam'
 ): boolean {
+  if (user == null) {
+    return false
+  }
+
   const team = getActiveTeam(user)
 
   let brand: IBrand | null = team && team.brand
@@ -84,23 +92,23 @@ export function hasUserAccess(
   return false
 }
 
-export function hasUserAccessToDeals(user: IUser): boolean {
+export function hasUserAccessToDeals(user: IUser | null): boolean {
   return hasUserAccess(user, ACL.DEALS) || isBackOffice(user)
 }
 
-export function hasUserAccessToCrm(user: IUser): boolean {
+export function hasUserAccessToCrm(user: IUser | null): boolean {
   return hasUserAccess(user, ACL.CRM)
 }
 
-export function hasUserAccessToMarketingCenter(user: IUser): boolean {
+export function hasUserAccessToMarketingCenter(user: IUser | null): boolean {
   return hasUserAccess(user, ACL.MARKETING)
 }
 
-export function isBackOffice(user): boolean {
+export function isBackOffice(user: IUser | null): boolean {
   return hasUserAccess(user, ACL.BACK_OFFICE)
 }
 
-export function isActiveTeamTraining(user): boolean {
+export function isActiveTeamTraining(user: IUser | null): boolean {
   const activeTeam: IUserTeam | null = getActiveTeam(user)
 
   if (!activeTeam) {
@@ -120,7 +128,10 @@ export function isActiveTeamTraining(user): boolean {
   return false
 }
 
-export function viewAs(user, activeTeam = getActiveTeam(user)) {
+export function viewAs(
+  user: IUser | null,
+  activeTeam: IUserTeam | null = getActiveTeam(user)
+) {
   if (
     activeTeam &&
     !idx(activeTeam, t => t.acl.includes('BackOffice')) &&
@@ -135,7 +146,7 @@ export function viewAs(user, activeTeam = getActiveTeam(user)) {
 type GetSettings = (team: IUserTeam) => StringMap<any> | null
 
 const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
-  user: IUser,
+  user: IUser | null,
   key: string
 ) => {
   const team = getActiveTeam(user)
@@ -146,12 +157,18 @@ const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
 export const getActiveTeamSettings = getSettingsFromActiveTeam(
   team => team.brand_settings
 )
+
 export const getUserSettingsInActiveTeam = getSettingsFromActiveTeam(
   team => team.settings
 )
 
-export function viewAsEveryoneOnTeam(user: IUser): boolean {
+export function viewAsEveryoneOnTeam(user: IUser | null): boolean {
+  if (user == null) {
+    return false
+  }
+
   const users = viewAs(user)
+
   return (
     users.length === 0 ||
     getTeamAvailableMembers(getActiveTeam(user)).length === users.length
@@ -192,8 +209,12 @@ export function getUserRoles(team: IBrand, userId: string) {
   )
 }
 
-export function getBrandByType(user: IUser, type: IBrandType): IBrand | null {
+export function getBrandByType(
+  user: IUser | null,
+  type: IBrandType
+): IBrand | null {
   const team = getActiveTeam(user)
+
   if (team === null) {
     return null
   }
@@ -211,8 +232,9 @@ export function getBrandByType(user: IUser, type: IBrandType): IBrand | null {
   return null
 }
 
-export function getRootBrand(user: IUser) {
+export function getRootBrand(user: IUser | null): IBrand | null {
   const team = getActiveTeam(user)
+
   if (team === null) {
     return null
   }
