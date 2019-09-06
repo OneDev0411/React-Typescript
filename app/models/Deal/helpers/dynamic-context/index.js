@@ -7,22 +7,32 @@ import { getContext, getField, getFormattedPrice } from '../context'
 /**
  * returns list of all contexts
  */
-export function getList(brand_id) {
+export function getList(list_id) {
   const state = store.getState()
   const { deals } = state
 
-  return (deals && deals.contexts[brand_id]) || []
+  const contexts = deals && deals.contexts
+
+  if (contexts.byBrand[list_id]) {
+    return contexts.byBrand[list_id]
+  }
+
+  if (contexts.byDeal[list_id]) {
+    return contexts.byDeal[list_id]
+  }
+
+  return []
 }
 
 /**
  * search context by key
  */
-export function searchContext(brand_id, key) {
+export function searchContext(list_id, key) {
   if (!key) {
     return false
   }
 
-  const context = _.find(getList(brand_id), { key })
+  const context = _.find(getList(list_id), { key })
 
   if (!context) {
     return null
@@ -50,14 +60,8 @@ export function getChecklists() {
  * return list of section
  */
 export function getFactsheetSection(deal, name) {
-  if (!deal.brand) {
-    console.warn('deal brand is null in getFactsheetSection')
-
-    return []
-  }
-
   const items = getItems(
-    deal.brand.id,
+    deal.id,
     deal.deal_type,
     deal.property_type,
     getHasActiveOffer(deal)
@@ -70,20 +74,20 @@ export function getFactsheetSection(deal, name) {
  * return context items
  */
 export function getItems(
-  brand_id,
+  list_id,
   deal_type,
   property_type,
   hasActiveOffer = false
 ) {
   const requiredFields = getRequiredItems(
-    brand_id,
+    list_id,
     deal_type,
     property_type,
     hasActiveOffer
   )
 
   const optionalFields = getOptionalItems(
-    brand_id,
+    list_id,
     deal_type,
     property_type,
     hasActiveOffer
@@ -98,12 +102,12 @@ export function getItems(
  * return required context
  */
 export function getRequiredItems(
-  brand_id,
+  list_id,
   deal_type,
   property_type,
   hasActiveOffer = false
 ) {
-  return getList(brand_id)
+  return getList(list_id)
     .filter(ctx =>
       filterByStatus(ctx, deal_type, property_type, hasActiveOffer, 'required')
     )
@@ -120,12 +124,12 @@ export function getRequiredItems(
  * return optional context
  */
 export function getOptionalItems(
-  brand_id,
+  list_id,
   deal_type,
   property_type,
   hasActiveOffer = false
 ) {
-  return getList(brand_id)
+  return getList(list_id)
     .filter(ctx =>
       filterByStatus(ctx, deal_type, property_type, hasActiveOffer, 'optional')
     )
@@ -142,7 +146,7 @@ export function getOptionalItems(
  * return list of filtered contexts based on given criteria
  */
 export function query(deal, criteria) {
-  const contexts = getList(deal.brand.id)
+  const contexts = getList(deal.id)
 
   return _.chain(contexts)
     .filter(ctx => criteria(ctx))
@@ -232,8 +236,8 @@ export function getValue(deal, field) {
  * key is field key
  * origin is context origin (mls or deal)
  */
-export function getValueByContext(brand_id, key, context) {
-  const contextInfo = getList(brand_id).find(ctx => ctx.key === key)
+export function getValueByContext(list_id, key, context) {
+  const contextInfo = getList(list_id).find(ctx => ctx.key === key)
 
   if (contextInfo.data_type === 'Date') {
     return moment.unix(context.value).format('MMM DD, YYYY')
@@ -343,14 +347,14 @@ export function validateDate(value) {
  * validate given contexts
  */
 export function validateList(
-  brand_id,
+  list_id,
   list,
   deal_type,
   property_type,
   hasActiveOffer
 ) {
   const dealContexts = getItems(
-    brand_id,
+    list_id,
     deal_type,
     property_type,
     hasActiveOffer
@@ -376,8 +380,8 @@ export function isAddressField(key) {
   ].includes(key)
 }
 
-export function getDefinitionId(brand_id, key) {
-  const definition = _.find(getList(brand_id), { key })
+export function getDefinitionId(list_id, key) {
+  const definition = _.find(getList(list_id), { key })
 
   return definition && definition.id
 }
@@ -422,7 +426,7 @@ export function getChecklist(deal, fieldKey) {
 }
 
 export function createUpsertObject(deal, field, value, approved = false) {
-  const definition = getDefinitionId(deal.brand.id, field)
+  const definition = getDefinitionId(deal.id, field)
 
   if (!definition) {
     return null

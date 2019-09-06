@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
+import Spinner from 'components/Spinner'
+
 import FactsheetSection from '../Factsheet'
 import Roles from '../../components/Roles'
 import DeleteDeal from '../DeleteDeal'
@@ -12,54 +14,60 @@ function FactsheetsSideNav(props) {
 
   return (
     <Card style={props.style}>
-      <FactsheetSection
-        showDivider={props.showCriticalDatesDivider}
-        display={props.showCriticalDates}
-        deal={deal}
-        isFetchingContexts={props.isFetchingContexts}
-        isBackOffice={isBackOffice}
-        section="Dates"
-        title="Critical Dates"
-      />
+      {props.isFetchingContexts ? (
+        <Spinner />
+      ) : (
+        <>
+          <FactsheetSection
+            showDivider={props.showCriticalDatesDivider}
+            display={props.showCriticalDates}
+            deal={deal}
+            isFetchingContexts={props.isFetchingContexts}
+            isBackOffice={isBackOffice}
+            section="Dates"
+            title="Critical Dates"
+          />
 
-      {props.showContacts && (
-        <Fragment>
-          <Roles deal={deal} allowDeleteRole />
-          <FactsheetDivider />
-        </Fragment>
-      )}
+          {props.showContacts && (
+            <Fragment>
+              <Roles deal={deal} allowDeleteRole />
+              <FactsheetDivider />
+            </Fragment>
+          )}
 
-      <FactsheetSection
-        showDivider
-        display={props.showCDAInformation}
-        deal={deal}
-        isFetchingContexts={props.isFetchingContexts}
-        isBackOffice={isBackOffice}
-        section="CDA"
-        title="CDA Information"
-      />
+          <FactsheetSection
+            showDivider
+            display={props.showCDAInformation}
+            deal={deal}
+            isFetchingContexts={props.isFetchingContexts}
+            isBackOffice={isBackOffice}
+            section="CDA"
+            title="CDA Information"
+          />
 
-      <FactsheetSection
-        display={props.showListingInformation}
-        deal={deal}
-        isFetchingContexts={props.isFetchingContexts}
-        isBackOffice={isBackOffice}
-        section="Listing"
-        title="Listing Information"
-      />
+          <FactsheetSection
+            display={props.showListingInformation}
+            deal={deal}
+            isFetchingContexts={props.isFetchingContexts}
+            isBackOffice={isBackOffice}
+            section="Listing"
+            title="Listing Information"
+          />
 
-      {props.showDeleteDeal && (
-        <Fragment>
-          <FactsheetDivider />
+          {props.showDeleteDeal && (
+            <Fragment>
+              <FactsheetDivider />
 
-          <div
-            style={{
-              margin: '0.5rem 1.5rem'
-            }}
-          >
-            <DeleteDeal deal={deal} isBackOffice={isBackOffice} />
-          </div>
-        </Fragment>
+              <div
+                style={{
+                  margin: '0.5rem 1.5rem'
+                }}
+              >
+                <DeleteDeal deal={deal} isBackOffice={isBackOffice} />
+              </div>
+            </Fragment>
+          )}
+        </>
       )}
     </Card>
   )
