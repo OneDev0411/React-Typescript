@@ -75,7 +75,7 @@ function getFormValue(group, fields) {
 }
 
 function normalizeContextValue(deal, annotation, formValue = '') {
-  const context = searchContext(deal.brand.id, annotation.context)
+  const context = searchContext(deal.id, annotation.context)
 
   if (!context || annotation.disableAutopopulate) {
     return formValue
@@ -92,7 +92,9 @@ function normalizeContextValue(deal, annotation, formValue = '') {
   }
 
   if (context.data_type === 'Date') {
-    return formatDate(isNaN(contextValue) ? contextValue : contextValue * 1000)
+    return formatDate(
+      Number.isNaN(contextValue) ? contextValue : contextValue * 1000
+    )
   }
 
   return contextValue
