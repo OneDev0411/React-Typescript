@@ -47,11 +47,9 @@ const useChecklistHeaderStyles = makeStyles(
 
 const ItemRow = props => {
   return (
-    <>
-      <FormListItem onClick={props.onClick}>
-        <TextMiddleTruncate text={props.item.name} maxLength={70} />
-      </FormListItem>
-    </>
+    <FormListItem onClick={props.onClick}>
+      <TextMiddleTruncate text={props.item.name} maxLength={70} />
+    </FormListItem>
   )
 }
 
@@ -145,9 +143,9 @@ export function ChecklistHeader({
               <ListItem
                 className={classes.splitMenuItem}
                 button
-                onClick={() => {
+                onClick={event => {
                   addGeneralCommentTask(checklist)
-                  closeMenu()
+                  closeMenu(event)
                 }}
               >
                 Add General Comments

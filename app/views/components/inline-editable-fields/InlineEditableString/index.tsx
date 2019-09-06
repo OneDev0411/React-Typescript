@@ -4,6 +4,7 @@ import {
   ReactNode,
   useCallback,
   useImperativeHandle,
+  useRef,
   useState
 } from 'react'
 import { useControllableState } from 'react-use-controllable-state/dist'
@@ -95,7 +96,10 @@ export const InlineEditableString = forwardRef(function InlineEditableString(
     edit
   }))
 
+  const isClickingSaveRef = useRef<boolean>(false)
+
   const save = async () => {
+    isClickingSaveRef.current = false
     setSaving(true)
     await props.onSave(editingValue)
     setSaving(false)
@@ -119,6 +123,10 @@ export const InlineEditableString = forwardRef(function InlineEditableString(
     }
   }
   const onBlur = async () => {
+    if (isClickingSaveRef.current) {
+      return
+    }
+
     if (blurBehaviour === 'Save') {
       await save()
     }
@@ -126,6 +134,20 @@ export const InlineEditableString = forwardRef(function InlineEditableString(
     if (blurBehaviour !== 'None') {
       setEditing(false)
     }
+  }
+
+  const onSaveMouseDown = () => {
+    isClickingSaveRef.current = true
+    document.addEventListener(
+      'mouseup',
+      () => {
+        if (isClickingSaveRef.current) {
+          isClickingSaveRef.current = false
+          onBlur()
+        }
+      },
+      { once: true, capture: false }
+    )
   }
 
   if (editing) {
@@ -141,7 +163,11 @@ export const InlineEditableString = forwardRef(function InlineEditableString(
         InputProps={{
           classes: { input: classes.input },
           endAdornment: showSaveButton ? (
-            <IconButton size="small" onClick={save}>
+            <IconButton
+              size="small"
+              onMouseUp={save}
+              onMouseDown={onSaveMouseDown}
+            >
               <IconCheckmark />
             </IconButton>
           ) : (
