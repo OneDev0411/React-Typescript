@@ -10,8 +10,8 @@ type CalendarObjectType =
   | 'email_campaign'
 
 export interface FilterQuery {
-  dealId?: UUID
-  contactId?: UUID
+  deal?: UUID
+  contact?: UUID
   event_types?: string[]
   object_types?: CalendarObjectType
 }
