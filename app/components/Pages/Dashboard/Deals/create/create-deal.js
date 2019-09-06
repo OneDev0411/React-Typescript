@@ -319,9 +319,9 @@ class CreateDeal extends React.Component {
     return _.keys(this.Validators)
   }
 
-  get BrandId() {
+  get ContextsListId() {
     if (this.props.deal) {
-      return this.props.deal.brand.id
+      return this.props.deal.id
     }
 
     return getActiveTeamId(this.props.user)
@@ -409,7 +409,7 @@ class CreateDeal extends React.Component {
       contexts: {
         validator: () =>
           DealContext.validateList(
-            this.BrandId,
+            this.ContextsListId,
             contexts,
             dealSide,
             dealPropertyType
@@ -759,7 +759,7 @@ class CreateDeal extends React.Component {
         key,
         approved,
         value,
-        definition: DealContext.getDefinitionId(this.BrandId, key)
+        definition: DealContext.getDefinitionId(this.ContextsListId, key)
       })
     })
 
@@ -774,7 +774,7 @@ class CreateDeal extends React.Component {
       return []
     }
 
-    return DealContext.getItems(this.BrandId, dealSide, dealPropertyType)
+    return DealContext.getItems(this.ContextsListId, dealSide, dealPropertyType)
   }
 
   /**

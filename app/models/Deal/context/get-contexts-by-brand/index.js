@@ -1,9 +1,9 @@
 import Fetch from '../../../../services/fetch'
 
 /**
- * get contexts info
+ * get contexts list by brand id
  */
-export async function getContexts(brandId) {
+export async function getContextsByBrandId(brandId) {
   try {
     const response = await new Fetch().get(`/brands/${brandId}/contexts`)
 

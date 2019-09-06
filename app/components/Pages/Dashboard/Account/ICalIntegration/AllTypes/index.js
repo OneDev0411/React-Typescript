@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import _ from 'underscore'
 
-import { getContexts } from 'actions/deals'
+import { selectContextsByBrand } from 'reducers/deals/contexts'
+import { getContextsByBrand } from 'actions/deals/context'
 import { getActiveTeamId } from 'utils/user-teams'
 import { Checkbox } from 'components/Checkbox'
 
@@ -32,7 +32,7 @@ const taskTypes = getItems(defaultTaskTypes)
 class ICalAllTypes extends React.Component {
   componentDidMount() {
     if (!this.props.contexts) {
-      this.props.getContexts(getActiveTeamId(this.props.user))
+      this.props.getContextsByBrand(getActiveTeamId(this.props.user))
     }
   }
 
@@ -125,12 +125,12 @@ function mapToProps({ deals, contacts, user }) {
 
   return {
     user,
-    contexts: deals.contexts[brandId],
+    contexts: selectContextsByBrand(deals.contexts, brandId),
     contactsAttributesDefs: contacts.attributeDefs.byId
   }
 }
 
 export default connect(
   mapToProps,
-  { getContexts }
+  { getContextsByBrand }
 )(ICalAllTypes)
