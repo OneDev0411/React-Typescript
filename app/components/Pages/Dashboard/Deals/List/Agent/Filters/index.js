@@ -4,16 +4,10 @@ import { browserHistory } from 'react-router'
 import _ from 'underscore'
 
 import Deal from 'models/Deal'
-import ToolTip from 'components/tooltip'
-import ALink from 'components/ALink'
+import SideNavSection from 'components/PageSideNav/SideNavSection'
+import SideNavTitle from 'components/PageSideNav/SideNavTitle'
+import SideNavItem from 'components/PageSideNav/SideNavItem'
 
-import {
-  ListItem,
-  ListItemName,
-  ListTitle
-} from 'components/Grid/SavedSegments/List/styled'
-
-import { BadgeCounter } from '../../styles/filters/styled'
 import { getPathForFilter } from '../../utils'
 
 const FilterNames = {
@@ -101,42 +95,37 @@ class AgentFilters extends React.Component {
         tooltip = ['All']
     }
 
-    return tooltip.join('<br />')
+    return tooltip
   }
 
   render() {
-    const activeFilter = this.props.activeFilter || 'All'
-
     return (
-      <React.Fragment>
-        <ListTitle>Lists</ListTitle>
+      <SideNavSection>
+        <SideNavTitle>Lists</SideNavTitle>
         {this.props.searchCriteria.length > 0 ? (
-          <ListItem isSelected>
-            <ListItemName>Search Results</ListItemName>
-
-            <BadgeCounter>{this.getBadgeCounter()}</BadgeCounter>
-          </ListItem>
+          <SideNavItem
+            title="Search Results"
+            badge={this.getBadgeCounter()}
+            isSelected
+          />
         ) : (
-          _.map(Filters, (fn, filterName) => (
-            <ToolTip
-              key={`FILTER_${filterName}`}
-              multiline
-              caption={this.getTooltipCaption(filterName)}
-              placement="right"
-            >
-              <ALink noStyle to={getPathForFilter(filterName)}>
-                <ListItem isSelected={filterName === activeFilter}>
-                  <ListItemName>{filterName}</ListItemName>
+          _.map(Filters, (fn, filterName) => {
+            const linkUrl = getPathForFilter(filterName)
+            const isIndex = filterName.toLowerCase() === 'all'
 
-                  <BadgeCounter>
-                    {this.getBadgeCounter(filterName)}
-                  </BadgeCounter>
-                </ListItem>
-              </ALink>
-            </ToolTip>
-          ))
+            return (
+              <SideNavItem
+                key={`FILTER_${filterName}`}
+                isIndex={isIndex}
+                link={linkUrl}
+                title={filterName}
+                badge={this.getBadgeCounter(filterName)}
+                tooltip={this.getTooltipCaption(filterName)}
+              />
+            )
+          })
         )}
-      </React.Fragment>
+      </SideNavSection>
     )
   }
 }

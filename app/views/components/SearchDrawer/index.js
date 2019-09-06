@@ -20,6 +20,15 @@ const initialState = {
   error: null
 }
 
+/**
+ * Motes and known issues:
+ * - Doesn't clean up on drawer close and re-open, needs conditional rendering
+ * which kills animation and is misleading also as we have an isOpen prop
+ * - search filter is not sticky
+ * - item renderer component in autocompletion is the same as in the list
+ * - multiple selection is only supported with autocompletion, not filtering
+ * - whether item is selected or not is not passed to renderer as prop
+ */
 class SearchDrawer extends React.Component {
   state = {
     ...initialState,

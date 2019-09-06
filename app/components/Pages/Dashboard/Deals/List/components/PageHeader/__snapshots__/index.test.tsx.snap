@@ -35,6 +35,7 @@ exports[`Deal list page header renders the page header 1`] = `
           "marginLeft": "1rem",
         }
       }
+      type="button"
     >
       Create New Deal
     </ActionButton__Button>

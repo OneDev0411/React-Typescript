@@ -47,6 +47,9 @@ const theme = createMuiTheme({
     button: {
       textTransform: 'none'
     },
+    h1: {
+      fontFamily: 'Merriweather'
+    },
     h5: {
       fontFamily: 'Merriweather'
     }
@@ -55,6 +58,9 @@ const theme = createMuiTheme({
     MuiButtonBase: {
       // Disable ink ripple for more consistency with our current UI components
       // at least until full adoption
+      disableRipple: true
+    },
+    MuiButtonGroup: {
       disableRipple: true
     }
   },

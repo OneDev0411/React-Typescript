@@ -6,6 +6,7 @@ import {
   Content as PageContent
 } from 'components/SlideMenu'
 import PageSideNav from 'components/PageSideNav'
+import { SectionsEnum } from 'components/PageSideNav/types'
 
 const urlGenerator = url => `/dashboard/insights${url}`
 
@@ -13,6 +14,7 @@ function InsightsLayout(props) {
   const { isSideMenuOpen } = props
   const sections = [
     {
+      type: SectionsEnum.LINK,
       title: 'Email Insight',
       items: [
         {

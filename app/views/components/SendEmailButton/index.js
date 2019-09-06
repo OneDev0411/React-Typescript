@@ -4,11 +4,22 @@ import { connect } from 'react-redux'
 
 import ActionButton from 'components/Button/ActionButton'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
+import MissingEmailModal from 'components/MissingEmailModal'
 
 function SendEmailButton(props) {
   const { deal } = props
   const [isOpen, setIsOpen] = useState(false)
-  const toggleOpenDrawer = () => setIsOpen(!isOpen)
+  const [isMissingEmailModalOpen, setIsMissingEmailModalOpen] = useState(false)
+
+  const onSendClick = () => {
+    if (Array.isArray(props.recipients) && props.recipients.length === 0) {
+      setIsMissingEmailModalOpen(true)
+
+      return
+    }
+
+    setIsOpen(true)
+  }
 
   const getEmail = email => {
     if (deal != null && deal.id) {
@@ -26,7 +37,7 @@ function SendEmailButton(props) {
       <ActionButton
         appearance={props.appearance}
         style={props.style}
-        onClick={toggleOpenDrawer}
+        onClick={onSendClick}
         data-test="send-email"
       >
         {props.title}
@@ -38,7 +49,14 @@ function SendEmailButton(props) {
        limitation, or set drawerIsOpen asynchronously in order to
        enable animation
       */}
-      {isOpen && (
+      {isMissingEmailModalOpen && (
+        <MissingEmailModal
+          isOpen
+          onClose={() => setIsMissingEmailModalOpen(false)}
+          action="send an email"
+        />
+      )}
+      {isOpen && !isMissingEmailModalOpen && (
         <SingleEmailComposeDrawer
           isOpen={isOpen}
           initialValues={{
@@ -47,9 +65,9 @@ function SendEmailButton(props) {
             from: props.user
           }}
           deal={deal}
-          onClose={toggleOpenDrawer}
+          onClose={() => setIsOpen(false)}
           onSent={() => {
-            toggleOpenDrawer()
+            setIsOpen(false)
             props.onSent()
           }}
           hasDealsAttachments
@@ -78,7 +96,7 @@ SendEmailButton.propTypes = {
 SendEmailButton.defaultProps = {
   deal: null,
   defaultAttachments: [],
-  recipients: [],
+  recipients: null,
   appearance: 'outline',
   title: 'Email',
   onSent: () => {}

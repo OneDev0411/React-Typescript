@@ -12,6 +12,7 @@ exports[`MC SocialActions component renders 1`] = `
     key="Instagram"
     onClick={[Function]}
     size="medium"
+    type="button"
   >
     <styled__Icon
       className="fa fa-instagram"
@@ -29,6 +30,7 @@ exports[`MC SocialActions component renders 1`] = `
     key="Facebook"
     onClick={[Function]}
     size="medium"
+    type="button"
   >
     <styled__Icon
       className="fa fa-facebook-square"
@@ -46,6 +48,7 @@ exports[`MC SocialActions component renders 1`] = `
     key="LinkedIn"
     onClick={[Function]}
     size="medium"
+    type="button"
   >
     <styled__Icon
       className="fa fa-linkedin"

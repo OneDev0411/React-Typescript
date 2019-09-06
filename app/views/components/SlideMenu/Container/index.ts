@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 interface Props {
-  isOpen
+  isOpen: boolean
 }
 
 export const Container = styled.div<Props>`

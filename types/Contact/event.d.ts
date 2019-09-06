@@ -15,12 +15,11 @@ interface TaskAssociations {
   updated_at: number
 }
 
-declare interface IEvent {
-  id: UUID
+declare interface IEvent extends IModel<'crm_task'> {
   associations: TaskAssociations
   due_date: number
-  created_at: number
   task_type: string
-  type: string
   contact: IContact
+  title: string
+  description: string
 }

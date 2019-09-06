@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Link, withRouter, browserHistory } from 'react-router'
+import { withRouter, browserHistory } from 'react-router'
+
+import SideNavSection from 'components/PageSideNav/SideNavSection'
+import SideNavItem from 'components/PageSideNav/SideNavItem'
+import SideNavTitle from 'components/PageSideNav/SideNavTitle'
 
 import { uppercaseFirstLetter } from '../../../../../utils/helpers'
 import { confirmation } from '../../../../../store_actions/confirmation'
@@ -11,13 +15,6 @@ import Loading from '../../../../../views/components/Spinner'
 import getAlerts from '../../../../../store_actions/listings/alerts/get-alerts'
 import deleteAlert from '../../../../../store_actions/listings/alerts/delete-alert'
 import { selectListings as selectAlerts } from '../../../../../reducers/listings'
-import {
-  ListItem,
-  ListItemName,
-  DeleteButton
-} from '../../../../../views/components/SlideMenu/Menu/styled'
-import { Tooltip } from './Tooltip'
-import IconClose from '../../../../../views/components/SvgIcons/Close/CloseIcon'
 
 class SavedSearchesList extends Component {
   state = {
@@ -69,11 +66,8 @@ class SavedSearchesList extends Component {
     const { isDeleting } = this.state
 
     return (
-      <div>
-        <div style={{ fontWeight: 500, marginBottom: '1em' }}>
-          Saved Searches
-        </div>
-
+      <SideNavSection>
+        <SideNavTitle>Saved Searches</SideNavTitle>
         {this.props.isFetching || isDeleting ? (
           <Loading size="small" />
         ) : (
@@ -81,28 +75,16 @@ class SavedSearchesList extends Component {
             const id = item.id
 
             return (
-              <Tooltip key={index} item={item}>
-                <Link to={`/dashboard/mls/saved-searches/${id}`}>
-                  <ListItem
-                    isDeleting={isDeleting}
-                    isSelected={this.props.params.id === id}
-                  >
-                    <ListItemName>
-                      {uppercaseFirstLetter(item.title || '')}
-                    </ListItemName>
-                    <DeleteButton
-                      isFit
-                      onClick={() => this.onRequestDelete(item)}
-                    >
-                      <IconClose />
-                    </DeleteButton>
-                  </ListItem>
-                </Link>
-              </Tooltip>
+              <SideNavItem
+                key={`SSL-${index}`}
+                link={`/dashboard/mls/saved-searches/${id}`}
+                title={uppercaseFirstLetter(item.title || '')}
+                onDelete={() => this.onRequestDelete(item)}
+              />
             )
           })
         )}
-      </div>
+      </SideNavSection>
     )
   }
 }

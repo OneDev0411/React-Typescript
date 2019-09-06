@@ -3,7 +3,12 @@
  * @param {object} values The form values
  * @returns {object} a formated object
  */
-export async function preSaveFormat(values, originalValues, deal, template) {
+export async function preSaveFormat(
+  values,
+  originalValues,
+  template,
+  dealAssociation
+) {
   const {
     assignees,
     description,
@@ -11,7 +16,6 @@ export async function preSaveFormat(values, originalValues, deal, template) {
     location,
     registrants,
     reminder,
-    status,
     title
   } = values
 
@@ -19,6 +23,7 @@ export async function preSaveFormat(values, originalValues, deal, template) {
 
   const dueDateTimestamp = dueDate.getTime()
   const task_type = 'Open House'
+  const isDueDatePast = dueDateTimestamp <= new Date().getTime()
 
   const task = {
     title: title.trim(),
@@ -26,15 +31,14 @@ export async function preSaveFormat(values, originalValues, deal, template) {
     task_type,
     metadata: { template },
     assignees: assignees.map(a => a.id),
-    status:
-      dueDateTimestamp <= new Date().getTime() ? 'DONE' : status || 'PENDING'
+    status: isDueDatePast ? 'DONE' : 'PENDING'
   }
 
   if ((originalValues && originalValues.id) || description) {
     task.description = (description && description.trim()) || ''
   }
 
-  if (task.status === 'DONE') {
+  if (isDueDatePast) {
     task.reminders = []
   } else if (reminder.value >= 0) {
     task.reminders = [
@@ -52,11 +56,8 @@ export async function preSaveFormat(values, originalValues, deal, template) {
 
   let associations = []
 
-  if (!originalValues && deal) {
-    associations.push({
-      association_type: 'deal',
-      deal: deal.id
-    })
+  if (!originalValues && dealAssociation) {
+    associations.push(dealAssociation)
   }
 
   const addAssociation = (association, type) => {

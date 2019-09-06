@@ -1,9 +1,11 @@
 import styled, { css } from 'styled-components'
 
-import { isOutline } from '../helpers'
+import { HTMLProps } from 'react'
+
 import { ButtonAppearances } from '../styles/ButtonAppearances'
 
-export interface ActionButtonProps {
+export interface ActionButtonProps
+  extends Omit<HTMLProps<HTMLButtonElement>, 'size' | 'ref'> {
   /**
    * The appearance of the button.  {primary, outline, icon, link}
    */
@@ -46,7 +48,8 @@ export interface ActionButtonProps {
   rightRounded?: boolean // !
 }
 
-export const defaultProps: ActionButtonProps = {
+export const defaultProps: Partial<ActionButtonProps> = {
+  type: 'button',
   appearance: 'primary',
   disabled: false,
   isActive: false,
@@ -58,26 +61,35 @@ export const defaultProps: ActionButtonProps = {
 
 const getStylesDependedSize = props => {
   switch (props.size) {
-    case 'small':
+    case 'small': {
+      const size = 2.33
+
       return {
-        height: '2.2857142857142856em',
+        height: `${size}em`,
         fontSize: '0.875rem',
-        lineHeight: isOutline(props) ? 2.142857142857143 : 2.2857142857142856
+        lineHeight: size
       }
+    }
 
-    case 'large':
+    case 'large': {
+      const size = 2.39
+
       return {
-        height: '2.6666666666666665em',
+        height: `${size}em`,
         fontSize: '1.125rem',
-        lineHeight: isOutline(props) ? 2.5555555555555554 : 2.6666666666666665
+        lineHeight: size
       }
+    }
 
-    default:
+    default: {
+      const size = 2.375 // MUI button height / 1rem
+
       return {
-        height: '2.5em',
+        height: `${size}em`,
         fontSize: '1rem',
-        lineHeight: isOutline(props) ? 2.375 : 2.5
+        lineHeight: size
       }
+    }
   }
 }
 

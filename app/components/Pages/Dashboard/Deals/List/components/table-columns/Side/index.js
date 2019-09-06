@@ -14,7 +14,7 @@ const Side = ({ deal, roles, rowId, rowsCount }) => {
     deal.roles && deal.roles.find(id => roles[id].role === sideName)
 
   if (!deal.roles) {
-    return <div>{Deal.get.side(deal)}</div>
+    return <span>{Deal.get.side(deal)}</span>
   }
 
   let relatedRoleUser

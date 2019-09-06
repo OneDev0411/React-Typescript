@@ -1,15 +1,10 @@
 import * as React from 'react'
 import { ComponentProps, useEffect, useState } from 'react'
 
-import { getEmail } from 'models/email/get-email'
-
-import { notUndefined } from 'utils/ts-utils'
-
-import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
+import { getEmailCampaign } from 'models/email/get-email-campaign'
 
 import { BulkEmailComposeDrawer } from '../BulkEmailComposeDrawer'
 import { SingleEmailComposeDrawer } from '../SingleEmailComposeDrawer'
-import { EmailRecipient, Recipient } from '../../ContactsChipsInput/types'
 import { EmailFormValues } from '../types'
 
 interface Props {
@@ -21,8 +16,8 @@ interface Props {
 
 export function EditEmailDrawer({ emailId, isOpen, onClose, onEdited }: Props) {
   const [data, setData] = useState<IEmailCampaign<
-    'from' | 'recipients' | 'template' | 'emails',
-    'contact' | 'list'
+    IEmailCampaignAssociation,
+    IEmailCampaignRecipientAssociation
   > | null>(null)
 
   useEffect(() => {
@@ -30,7 +25,7 @@ export function EditEmailDrawer({ emailId, isOpen, onClose, onEdited }: Props) {
 
     if (isOpen) {
       setData(null)
-      getEmail(emailId).then(fullEmailObject => {
+      getEmailCampaign(emailId).then(fullEmailObject => {
         if (!canceled) {
           setData(fullEmailObject)
         }
@@ -44,6 +39,9 @@ export function EditEmailDrawer({ emailId, isOpen, onClose, onEdited }: Props) {
 
   if (data) {
     const initialValues: Partial<EmailFormValues> = {
+      attachments: (data.attachments || []).map(normalizeAttachment),
+      // TODO: we can update attachment item to remove the need for unnecessary
+      //  normalization of attachments.
       from: data.from,
       subject: data.subject,
       body: data.html,
@@ -86,29 +84,54 @@ export function EditEmailDrawer({ emailId, isOpen, onClose, onEdited }: Props) {
 }
 
 function getRecipientsFromRecipientsEntity(
-  recipientType: IEmailRecipient['recipient_type'],
-  recipients: IEmailRecipient<'list' | 'contact'>[]
-): Recipient[] {
+  sendType: IEmailRecipient['send_type'],
+  recipients: IEmailRecipient<IEmailCampaignRecipientAssociation>[]
+): IDenormalizedEmailRecipientInput[] {
   return recipients
-    .filter(recipient => recipient.recipient_type === recipientType)
-    .map(recipient => {
-      if (recipient.tag) {
-        return {
-          type: 'crm_tag',
-          text: recipient.tag
-        } as IContactTag
-      }
-
-      if (recipient.list) {
-        return recipient.list
-      }
-
-      if (recipient.email) {
-        return {
-          email: recipient.email,
-          contact: normalizeContact(recipient.contact)
-        } as EmailRecipient
+    .filter(recipient => recipient.send_type === sendType)
+    .map<IDenormalizedEmailRecipientInput>(recipient => {
+      // With this switch case, if new type of recipients are added ever,
+      // we get a ts error here and we need to fix it.
+      switch (recipient.recipient_type) {
+        case 'Tag':
+          return {
+            recipient_type: 'Tag',
+            tag: {
+              type: 'crm_tag',
+              text: recipient.tag
+            } as IContactTag
+          }
+        case 'List':
+          return {
+            recipient_type: 'List',
+            list: recipient.list
+          }
+        case 'Email':
+          return {
+            recipient_type: 'Email',
+            email: recipient.email!,
+            contact: recipient.contact
+          }
+        case 'AllContacts':
+          return {
+            recipient_type: 'AllContacts'
+          }
+        case 'Brand':
+          return {
+            recipient_type: 'Brand',
+            brand: recipient.brand
+          }
       }
     })
-    .filter(notUndefined)
 }
+
+/**
+ * We have another normalizeAttachment which seems to be different!
+ * @param item
+ */
+const normalizeAttachment = item => ({
+  file_id: item.id,
+  title: decodeURI(item.name),
+  url: item.url,
+  date: new Date(item.created_at * 1000)
+})

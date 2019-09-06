@@ -114,12 +114,6 @@ class TeamAgents extends React.Component {
   render() {
     const { props } = this
 
-    const sharedProps = {
-      user: this.props.user,
-      teams: this.teamAgents,
-      onSelectAgent: this.handleSelectAgent
-    }
-
     return (
       <Drawer open onClose={props.onClose}>
         <Drawer.Header title={props.title || 'Team Agents'} />
@@ -132,7 +126,12 @@ class TeamAgents extends React.Component {
           {this.isLoading ? (
             <Loading style={{ padding: '35% 0' }} />
           ) : (
-            <AgentsList {...sharedProps} />
+            <AgentsList
+              user={this.props.user}
+              teams={this.teamAgents}
+              isOfficeDoubleEnded={props.isOfficeDoubleEnded}
+              onSelectAgent={this.handleSelectAgent}
+            />
           )}
         </Drawer.Body>
       </Drawer>

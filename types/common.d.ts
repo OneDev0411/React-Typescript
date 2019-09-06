@@ -17,10 +17,6 @@ declare interface UuidMap<T> {
 
 declare type EnumMap<K, T> = { [key in K]: T }
 
-declare type Omit<T, K extends keyof any> = T extends any
-  ? Pick<T, Exclude<keyof T, K>>
-  : never
-
 declare type Overwrite<T, U> = Omit<T, keyof U> & U
 
 declare interface PaginationOptions {
@@ -87,7 +83,10 @@ type IAsyncActionProp<
 > = (...args: Parameters<T>) => ReturnType<ReturnType<T>>
 
 declare type Association<
-  Association,
+  Field,
   Value,
-  Associations
-> = Association extends Associations ? { [key in Association]: Value } : {}
+  Associations,
+  Association = Field
+> = Association extends Associations
+  ? { [key in Field]: Value }
+  : Record<never, never>

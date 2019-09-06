@@ -965,7 +965,6 @@ class CreateDeal extends React.Component {
                   dealSide={dealSide}
                   agents={agents}
                   dealEnderType={enderType}
-                  isDoubleEnded={this.IsDoubleEnded}
                   onUpsertAgent={form => this.onUpsertRole(form, 'agents')}
                   onRemoveAgent={id => this.onRemoveRole(id, 'agents')}
                 />
@@ -988,7 +987,6 @@ class CreateDeal extends React.Component {
                       showDealSideAs="Selling"
                       agents={sellingAgents}
                       isCommissionRequired={this.IsDoubleEnded}
-                      isDoubleEnded={this.IsDoubleEnded}
                       dealEnderType={enderType}
                       onUpsertAgent={form =>
                         this.onUpsertRole(form, 'sellingAgents')

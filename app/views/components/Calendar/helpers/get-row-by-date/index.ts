@@ -21,9 +21,9 @@ export function getRowIdByDate(
     return null
   }
 
-  return rows.findIndex(
-    row => row.hasOwnProperty('is_day_header') && row.date === dayId
-  )
+  return rows.findIndex(row => {
+    return row.hasOwnProperty('isEventHeader') && row.date === dayId
+  })
 }
 
 /**

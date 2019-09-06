@@ -2,8 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
-import { Menu, Content } from 'components/SlideMenu'
-
+import PageSideNav from 'components/PageSideNav'
+import { Content } from 'components/SlideMenu'
 import Search from 'components/Grid/Search'
 
 import { searchDeals, getDeals } from 'actions/deals'
@@ -69,12 +69,12 @@ class AgentTable extends React.Component {
 
     return (
       <PageContainer isOpen={isSideMenuOpen}>
-        <Menu isOpen={isSideMenuOpen}>
+        <PageSideNav isOpen={isSideMenuOpen}>
           <AgentFilters
             activeFilter={params.filter}
             searchCriteria={this.state.searchCriteria}
           />
-        </Menu>
+        </PageSideNav>
 
         <Content isSideMenuOpen={isSideMenuOpen}>
           <PageHeader

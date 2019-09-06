@@ -4,7 +4,7 @@ import Text from 'components/SvgIcons/Text/IconText'
 import Chat from 'components/SvgIcons/Chat/IconChat'
 import Email from 'components/SvgIcons/EmailOutline/IconEmailOutline'
 import IconMessage from 'components/SvgIcons/Mail/IconMail'
-import OpenHouse from 'components/SvgIcons/OpenHouse/IconOpenHouse'
+import IconOpenHouseOutline from 'components/SvgIcons/OpenHouseOutline/IconOpenHouseOutline'
 import Tour from 'components/SvgIcons/Tour/IconTour'
 import Other from 'components/SvgIcons/MenuRounded/IconMenuRounded'
 import Closing from 'components/SvgIcons/Closing/IconClosing'
@@ -53,7 +53,7 @@ export const eventTypesIcons = [
   },
   {
     name: 'Open House',
-    icon: OpenHouse,
+    icon: IconOpenHouseOutline,
     color: '#50e3c2'
   },
   {

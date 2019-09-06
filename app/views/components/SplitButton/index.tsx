@@ -1,80 +1,116 @@
-import React, { CSSProperties, ReactNode } from 'react'
-import Downshift from 'downshift'
+import React, { ReactNode } from 'react'
+import {
+  Button,
+  ButtonGroup,
+  ClickAwayListener,
+  createStyles,
+  Grow,
+  makeStyles,
+  Paper,
+  Popper,
+  Theme,
+  useTheme
+} from '@material-ui/core'
+import { PopperPlacementType } from '@material-ui/core/Popper'
 
 import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
-import IconKeyboardArrowUp from 'components/SvgIcons/KeyboardArrowUp/IconKeyboardArrowUp'
-
-import {
-  ButtonsContainer,
-  PrimaryActionButton,
-  SplitButtonMenu,
-  ToggleActionsMenuButton
-} from './styled'
-
-const ARROW_ICON_STYLE = {
-  display: 'block',
-  height: '1.8rem'
-}
+import { ClassesProps } from 'utils/ts-utils'
 
 interface RenderMenuProps {
-  closeMenu: () => void
+  closeMenu: (event?: React.MouseEvent<any>) => void
 }
 
 interface Props {
-  renderMenu: (props: RenderMenuProps) => ReactNode
+  color?: 'inherit' | 'primary' | 'secondary' | 'default'
   children: ReactNode
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
-  style: CSSProperties
-  appearance?: 'primary' | 'default'
   disabled?: boolean
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
+  renderMenu: (props: RenderMenuProps) => ReactNode
+  popperPlacement?: PopperPlacementType
+  className?: string
+  size?: 'small' | 'medium' | 'large'
+  style?: React.CSSProperties
+  variant?: 'contained' | 'outlined' | undefined
 }
 
-/**
- * NOTE: this component should be rewritten with material ui components
- * there is also a third-party library that we might want to use instead:
- * https://www.npmjs.com/package/material-ui-split-button
- */
-export default function SplitButton({
-  children,
-  renderMenu,
-  onClick,
-  disabled,
-  appearance = 'default',
-  style = {}
-}: Props) {
+const styles = (theme: Theme) =>
+  createStyles({
+    icon: {
+      fill: 'currentColor'
+    },
+    mainButton: {
+      flex: 1
+    }
+  })
+const useStyles = makeStyles(styles, { name: 'SplitButton' })
+
+export default function SplitButton(
+  props: Props & ClassesProps<typeof styles>
+) {
+  const [isOpen, setIsOpen] = React.useState(false)
+  const anchorRef = React.useRef<HTMLDivElement>(null)
+  const theme = useTheme()
+  const classes = useStyles(props)
+
+  function handleToggle() {
+    setIsOpen(prevOpen => !prevOpen)
+  }
+
+  function handleClose(event) {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return
+    }
+
+    setIsOpen(false)
+  }
+
   return (
-    <Downshift>
-      {({ isOpen, getToggleButtonProps, closeMenu }) => (
-        <div style={{ ...style, position: 'relative' }}>
-          <ButtonsContainer>
-            <PrimaryActionButton
-              appearance={appearance}
-              disabled={disabled}
-              onClick={onClick}
-            >
-              {children}
-            </PrimaryActionButton>
-            <ToggleActionsMenuButton
-              appearance={appearance}
-              disabled={disabled}
-              type="button"
-              isActive={isOpen}
-              {...getToggleButtonProps()}
-            >
-              {isOpen ? (
-                <IconKeyboardArrowUp style={ARROW_ICON_STYLE} />
-              ) : (
-                <IconKeyboardArrowDown style={ARROW_ICON_STYLE} />
-              )}
-            </ToggleActionsMenuButton>
-          </ButtonsContainer>
-          <>
-            {isOpen && (
-              <SplitButtonMenu>{renderMenu({ closeMenu })}</SplitButtonMenu>
-            )}
-          </>
-        </div>
-      )}
-    </Downshift>
+    <>
+      <ButtonGroup
+        aria-label="split button"
+        color={props.color}
+        disabled={props.disabled}
+        size={props.size}
+        ref={anchorRef}
+        style={props.style}
+        className={props.className}
+        variant={props.variant}
+      >
+        <Button onClick={props.onClick} className={classes.mainButton}>
+          {props.children}
+        </Button>
+        <Button
+          aria-owns={isOpen ? 'menu-list-grow' : undefined}
+          aria-haspopup="true"
+          onClick={handleToggle}
+          size="small"
+        >
+          <IconKeyboardArrowDown className={classes.icon} />
+        </Button>
+      </ButtonGroup>
+      <Popper
+        anchorEl={anchorRef.current}
+        open={isOpen}
+        style={{ zIndex: theme.zIndex.modal }}
+        placement={props.popperPlacement}
+        transition
+      >
+        {({ TransitionProps, placement }) => (
+          <Grow
+            {...TransitionProps}
+            style={{
+              transformOrigin:
+                placement === 'bottom' ? 'center top' : 'center bottom'
+            }}
+          >
+            <ClickAwayListener onClickAway={handleClose}>
+              <Paper id="menu-list-grow">
+                {props.renderMenu({ closeMenu: handleClose })}
+              </Paper>
+            </ClickAwayListener>
+          </Grow>
+        )}
+      </Popper>
+    </>
   )
 }

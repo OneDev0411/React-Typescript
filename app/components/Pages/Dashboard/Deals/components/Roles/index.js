@@ -69,8 +69,8 @@ class Roles extends React.Component {
       this.props.onTriggerRequiredEmail()
 
       return this.props.confirmation({
-        message: `${role.legal_first_name} has no email!`,
-        description: `Add ${role.legal_first_name}'s email to continue.`,
+        message: `${getLegalFullName(role)} has no email!`,
+        description: `Add ${getLegalFullName(role)}'s email to continue.`,
         confirmLabel: 'Add Email',
         onConfirm: () => this.setSelectedRole(role)
       })

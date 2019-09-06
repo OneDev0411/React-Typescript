@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
-import { selectFormsByBrand } from 'reducers/deals/forms'
+import { selectForms } from 'reducers/deals/forms'
 import { createFormTask } from 'actions/deals'
 
 import LoadingContainer from 'components/LoadingContainer'
@@ -83,7 +83,7 @@ class TaskCreate extends React.Component {
           onClose={this.handleClose}
         >
           <OverlayDrawer.Header
-            title="Add a folder"
+            title="Add New Checklist Item"
             menu={this.renderDrawerHeaderMenu()}
           />
           <OverlayDrawer.Body>
@@ -139,7 +139,7 @@ class TaskCreate extends React.Component {
 
 function mapStateToProps({ deals }, ownProps) {
   return {
-    forms: selectFormsByBrand(deals.forms, ownProps.deal.brand.id)
+    forms: selectForms(deals.forms, ownProps.deal.id)
   }
 }
 

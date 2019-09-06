@@ -14,7 +14,7 @@ import { FinalFormDrawer } from '../../FinalFormDrawer'
 import { AttachmentsList } from '../fields/Attachments'
 import { Footer } from '../Footer'
 import { EmailComposeDrawerProps, EmailFormValues } from '../types'
-import { validateRecipient } from '../../ContactsChipsInput/helpers/validate-recipient'
+import { validateRecipient } from '../../EmailRecipientsChipsInput/helpers/validate-recipient'
 
 interface State {
   topFieldsCollapsed: boolean

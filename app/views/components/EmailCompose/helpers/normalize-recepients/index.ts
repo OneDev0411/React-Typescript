@@ -1,34 +1,44 @@
-import { Recipient } from '../../../ContactsChipsInput/types'
-import { isContactList } from '../../../ContactsChipsInput/helpers/is-contact-list'
-import { isContactTag } from '../../../ContactsChipsInput/helpers/is-contact-tag'
-
 export function normalizeRecipients(
-  recipients: Recipient[] | undefined
+  recipients: IDenormalizedEmailRecipientInput[] | undefined
 ): IEmailRecipientInput[] {
   return (
     (recipients &&
       recipients.map(recipient => {
-        if (isContactTag(recipient)) {
+        if (recipient.recipient_type === 'Tag') {
           return {
-            tag: recipient.text
+            recipient_type: 'Tag',
+            tag: recipient.tag.text
           }
         }
 
-        if (isContactList(recipient)) {
+        if (recipient.recipient_type === 'List') {
           return {
-            list: recipient.id
+            recipient_type: 'List',
+            list: recipient.list.id
           }
         }
 
-        const result: IEmailRecipientEmailInput = {
-          email: recipient.email
+        if (recipient.recipient_type === 'Email') {
+          const result: IEmailRecipientEmailInput = {
+            recipient_type: 'Email',
+            email: recipient.email
+          }
+
+          if (recipient.contact) {
+            result.contact = recipient.contact.id
+          }
+
+          return result
         }
 
-        if (recipient.contact) {
-          result.contact = recipient.contact.id
+        if (recipient.recipient_type === 'Brand') {
+          return {
+            recipient_type: 'Brand',
+            brand: recipient.brand.id
+          }
         }
 
-        return result
+        return recipient
       })) ||
     []
   )

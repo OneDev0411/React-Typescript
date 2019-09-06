@@ -1,9 +1,7 @@
-declare interface IModel {
-  type: string
+declare interface IModel<T extends string> {
+  type: T
   id: UUID
   created_at: number
   updated_at: number
-  deleted_at?: number
-  created_by: UUID
-  updated_by: UUID
+  deleted_at: number | null
 }

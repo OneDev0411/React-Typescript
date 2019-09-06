@@ -91,7 +91,7 @@ export default class Item extends Component {
         renderViewMode={this.renderViewMode}
         showEdit={false}
         showDelete={false}
-        style={{ margin: '0.5rem 0.3rem' }}
+        style={{ margin: '0 0.3rem' }}
         toggleMode={this.toggleEditing}
       />
     )

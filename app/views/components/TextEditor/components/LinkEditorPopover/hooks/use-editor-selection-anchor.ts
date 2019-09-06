@@ -1,7 +1,7 @@
 import { RefObject, useState } from 'react'
 import Draft, { Editor, EditorState } from 'draft-js'
 
-import { useOnOpen } from './use-on-open'
+import { useOnToggledOn } from './use-on-toggled'
 import { ReferenceObject } from '../../../types'
 
 export function useEditorSelectionAnchor(
@@ -14,7 +14,7 @@ export function useEditorSelectionAnchor(
     getEditorStartAnchor(editorRef.current && editorRef.current.editor)
   )
 
-  useOnOpen(open, () => {
+  useOnToggledOn(open, () => {
     const selection = editorState.getSelection()
     const newEditorState = EditorState.forceSelection(editorState, selection)
 

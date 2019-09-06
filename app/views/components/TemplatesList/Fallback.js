@@ -6,12 +6,19 @@ import { FallbackContainer } from './styled'
 import EmptyState from './EmptyState'
 
 function Fallback(props) {
-  return (
-    <FallbackContainer>
-      {props.isLoading && <Loading style={{ padding: '5rem 0' }} />}
-      {!props.isLoading && props.isEmpty ? <EmptyState /> : null}
-    </FallbackContainer>
-  )
+  function renderContent() {
+    if (props.isLoading) {
+      return <Loading style={{ padding: '5rem 0' }} />
+    }
+
+    if (props.isEmpty) {
+      return props.component || <EmptyState />
+    }
+
+    return null
+  }
+
+  return <FallbackContainer>{renderContent()}</FallbackContainer>
 }
 
 export default Fallback

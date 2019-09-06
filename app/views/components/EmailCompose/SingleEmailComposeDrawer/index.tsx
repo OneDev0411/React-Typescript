@@ -12,7 +12,7 @@ import { getSendEmailResultMessages } from 'components/EmailCompose/helpers/emai
 
 import { createEmailCampaign } from 'models/email/create-email-campaign'
 
-import ContactsChipsInput from 'components/ContactsChipsInput'
+import EmailRecipientsChipsInput from 'components/EmailRecipientsChipsInput'
 
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
 
@@ -89,29 +89,57 @@ export function SingleEmailComposeDrawer({
         />
 
         <Field
-          label="To"
-          name="to"
-          component={ContactsChipsInput as any}
-          readOnly={disableAddNewRecipient}
-          TextFieldProps={
-            {
-              inputProps: {
-                autoFocus: true
-              } as HTMLProps<HTMLInputElement>
-            } as TextFieldProps
-          }
+          name="bcc"
+          render={bccInputProps => (
+            <Field
+              label="To"
+              name="to"
+              component={EmailRecipientsChipsInput as any}
+              readOnly={disableAddNewRecipient}
+              includeQuickSuggestions
+              // we need to do this weird stuff because of the weird UX
+              // which is to show suggestions under too but add them to bcc!
+              // Hopefully we revise it and remove such weirdness
+              currentlyUsedQuickSuggestions={bccInputProps.input.value}
+              onQuickSuggestionSelected={recipient =>
+                bccInputProps.input.onChange([
+                  ...(bccInputProps.input.value || []),
+                  recipient
+                ] as any)
+              }
+              TextFieldProps={
+                {
+                  inputProps: {
+                    autoFocus: true
+                  } as HTMLProps<HTMLInputElement>
+                } as TextFieldProps
+              }
+            />
+          )}
         />
         {isCcShown && (
-          <Field label="Cc" name="cc" component={ContactsChipsInput as any} />
+          <Field
+            label="Cc"
+            name="cc"
+            component={EmailRecipientsChipsInput as any}
+          />
         )}
         {isBccShown && (
-          <Field label="Bcc" name="bcc" component={ContactsChipsInput as any} />
+          <Field
+            label="Bcc"
+            name="bcc"
+            component={EmailRecipientsChipsInput as any}
+          />
         )}
       </>
     )
   }
   const renderCollapsedFields = (values: EmailFormValues) => (
-    <CollapsedRecipients recipients={values.to || []} label="To" />
+    <CollapsedRecipients
+      to={values.to || []}
+      cc={values.cc || []}
+      bcc={values.bcc || []}
+    />
   )
 
   return (

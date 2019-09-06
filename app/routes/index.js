@@ -181,6 +181,15 @@ const AsyncFlowEdit = Load({
 })
 
 /* ==================================== */
+//  CRM Open Houses
+/* ==================================== */
+
+const AsyncOpenHousesList = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/OpenHouse/List/OpenHousesList' /* webpackChunkName: "oh_list" */)
+})
+
+/* ==================================== */
 //  Marketing Center
 /* ==================================== */
 
@@ -317,6 +326,11 @@ const AsyncShare = Load({
 const AsyncTeams = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Teams' /* webpackChunkName: "teams" */)
+})
+
+const AsyncChecklists = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Checklists' /* webpackChunkName: "Checklists" */)
 })
 
 const AsyncWebsite = Load({
@@ -473,6 +487,8 @@ export default (
         component={AsyncNotificationsPage}
       />
 
+      <Route path="/dashboard/open-house" component={AsyncOpenHousesList} />
+
       <Route path="/dashboard/marketing" component={AsyncMarketing}>
         <IndexRoute component={AsyncMarketingHistory} />
         <Route component={AsyncMarketingTemplates} path=":types(/:medium)" />
@@ -505,6 +521,10 @@ export default (
 
       <Route path="/dashboard/teams(/:id)">
         <IndexRoute component={AsyncTeams} />
+      </Route>
+
+      <Route path="/dashboard/checklists">
+        <IndexRoute component={AsyncChecklists} />
       </Route>
 
       <Route path="/dashboard/website" component={AsyncWebsite} />

@@ -2,7 +2,6 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
 import { selectContact } from 'reducers/contacts/list'
 import SearchListingDrawer from 'components/SearchListingDrawer'
@@ -92,23 +91,30 @@ class SendMlsListingCard extends React.Component {
 
   /**
    *
-   * @return {Recipient[]}
+   * @return {IDenormalizedEmailRecipientInput[]}
    */
   get Recipients() {
+    /**
+     *
+     * @return {null|IDenormalizedEmailRecipientInput}
+     */
+    const mapToEmailRecipientInput = id => {
+      const contact = selectContact(this.props.contacts, id)
+
+      if (!contact || !contact.email) {
+        return null
+      }
+
+      return {
+        recipient_type: 'Email',
+        email: contact.email,
+        contact: normalizeContact(contact)
+      }
+    }
+
     return this.props.selectedRows
       ? this.props.selectedRows
-          .map(id => {
-            const contact = selectContact(this.props.contacts, id)
-
-            if (!contact || !contact.email) {
-              return null
-            }
-
-            return {
-              email: contact.email,
-              contact: normalizeContact(contact)
-            }
-          })
+          .map(mapToEmailRecipientInput)
           .filter(recipient => recipient !== null)
       : []
   }
@@ -309,7 +315,7 @@ class SendMlsListingCard extends React.Component {
           defaultList={this.DefaultList}
           defaultListTitle="Add from your deals"
           onClose={this.closeListingModal}
-          onSelectListings={this.handleSelectListings}
+          onSelectListingsCallback={this.handleSelectListings}
           multipleSelection={this.IsMultiListing}
           renderAction={props => (
             <ActionButton {...props.buttonProps}>

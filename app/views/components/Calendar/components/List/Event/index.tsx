@@ -8,7 +8,7 @@ import { EventTitle } from './Title'
 import { EventSubTitle } from './Subtitle'
 import { EventActions } from './Actions'
 
-import { TodayEmptyState } from './TodayEmptyState'
+import { EventEmptyState } from './EventEmptyState'
 
 import emptyStateEvent from '../../../helpers/get-event-empty-state'
 
@@ -59,14 +59,14 @@ export function Event({ event, user, nextItem, style, onSelectEvent }: Props) {
       ? fecha.format(new Date(event.timestamp * 1000), 'hh:mm A')
       : 'All day'
 
-  const hasBorderBottom = nextItem && !nextItem.hasOwnProperty('is_day_header')
+  const hasBorderBottom = nextItem && !nextItem.hasOwnProperty('isEventHeader')
 
   const classes = useStyles({
     hasBorderBottom
   })
 
   if (event.event_type === emptyStateEvent.event_type) {
-    return <TodayEmptyState style={style} />
+    return <EventEmptyState event={event} style={style} />
   }
 
   return (

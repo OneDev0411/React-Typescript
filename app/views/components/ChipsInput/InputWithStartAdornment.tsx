@@ -10,12 +10,16 @@ import * as React from 'react'
 export const InputWithStartAdornment = ({
   adornment,
   inputRef,
+  inputWrapperClassName,
   ...props
-}: HTMLProps<HTMLInputElement> & { adornment: ReactNode } & {
+}: HTMLProps<HTMLInputElement> & {
+  adornment: ReactNode
+  inputWrapperClassName: string
+} & {
   inputRef: Ref<HTMLInputElement>
 }) => {
   return (
-    <Flex wrap alignEnd>
+    <Flex wrap alignEnd className={inputWrapperClassName}>
       {adornment} <input ref={inputRef} {...props} />
     </Flex>
   )

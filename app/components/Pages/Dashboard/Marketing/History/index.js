@@ -6,6 +6,7 @@ import TemplatesList from 'components/TemplatesList'
 
 import { Header } from '../components/PageHeader'
 import useTemplatesHistory from './useTemplatesHistory'
+import EmptyState from './EmptyState'
 
 function History(props) {
   const [templates, isLoading] = useTemplatesHistory()
@@ -37,6 +38,7 @@ function History(props) {
         items={finalTemplates}
         isLoading={isLoading}
         onDelete={handleDelete}
+        emptyState={<EmptyState />}
       />
     </React.Fragment>
   )

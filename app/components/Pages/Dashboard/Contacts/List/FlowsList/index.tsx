@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router'
 
 import { selectActiveFilters } from 'reducers/filter-segments'
 
@@ -21,6 +22,7 @@ import {
 } from 'components/Grid/SavedSegments/List/styled'
 import { ShowMoreLess } from 'components/ShowMoreLess'
 import Loader from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+import IconCog from 'components/SvgIcons/Cog/IconCog'
 
 import { getFilteredFlows } from './get-filtered-flows'
 
@@ -60,7 +62,14 @@ function FlowsList(props: Props) {
 
   return (
     <div style={{ marginBottom: '2rem' }}>
-      <ListTitle>Flows</ListTitle>
+      <ListTitle>
+        <span>Flows</span>
+        <Link to="/dashboard/account/flows">
+          <ToolTip caption="Manage Flows">
+            <IconCog />
+          </ToolTip>
+        </Link>
+      </ListTitle>
 
       {isFetching ? (
         <ListItem>

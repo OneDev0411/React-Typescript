@@ -57,8 +57,7 @@ const propTypes = {
   initialValues: PropTypes.shape(),
   submitCallback: PropTypes.func,
   deleteCallback: PropTypes.func,
-  user: PropTypes.shape().isRequired,
-  listings: PropTypes.arrayOf(PropTypes.shape())
+  user: PropTypes.shape().isRequired
 }
 
 const defaultProps = {
@@ -66,7 +65,6 @@ const defaultProps = {
   openHouse: null,
   openHouseId: undefined,
   initialValues: {},
-  listings: [],
   submitCallback: () => {},
   deleteCallback: () => {}
 }
@@ -100,11 +98,25 @@ class OpenHouseDrawerInternal extends React.Component {
       Object(this.props.initialValues).length > 0
   }
 
+  get dealAassociation() {
+    const { associations } = this.props
+
+    if (associations && associations.deal) {
+      return {
+        association_type: 'deal',
+        deal: associations.deal.id
+      }
+    }
+
+    return null
+  }
+
   load = async () => {
     try {
       this.setState({ isDisabled: true })
 
       if (this.isNew) {
+        let fullListing = null
         const activeTeamId = getActiveTeamId(this.props.user)
         const list = await getTemplates(activeTeamId, ['CrmOpenHouse'])
         const templateItem = list[0]
@@ -113,19 +125,43 @@ class OpenHouseDrawerInternal extends React.Component {
           `${templateItem.url}/index.html`
         )
 
-        this.setState({ rawTemplate })
-      }
+        const { associations } = this.props
 
-      const { deal } = this.props
+        if (associations) {
+          let listingId = ''
+          const { deal, listing } = associations
 
-      if (deal && deal.listing) {
-        const listing = await getListing(deal.listing)
+          if (listing) {
+            listingId = listing.id
+          } else if (deal && deal.listing) {
+            listingId = deal.listing
+          }
 
-        this.setState({ listing })
+          if (listingId) {
+            fullListing = await getListing(listingId)
+          }
+        }
+
+        this.setState(
+          { listing: fullListing, rawTemplate, isDisabled: false },
+          this.loadRegistrationTemplate
+        )
+
+        return null
       }
 
       if (this.props.openHouse) {
         this.setState({ isDisabled: false })
+
+        const template = this.props.openHouse.metadata
+          ? this.props.openHouse.metadata.template
+          : null
+
+        this.setState({
+          isDisabled: false,
+          openHouse: this.props.openHouse,
+          template
+        })
 
         return this.props.openHouse
       }
@@ -140,27 +176,17 @@ class OpenHouseDrawerInternal extends React.Component {
 
         // Get listing from OH listing associations if the deal object is not provided
         // It's done to cover some flows like calendar OH event edit flow
-        if (!deal || !deal.listing) {
-          newState.listing = openHouse.associations.find(
-            ({ association_type }) => association_type === 'listing'
-          ).listing
-        }
+        newState.listing = openHouse.associations.find(
+          ({ association_type }) => association_type === 'listing'
+        ).listing
 
         this.setState(newState)
 
         return openHouse
       }
-
-      if (this.state.error == null) {
-        this.setState({ isDisabled: false })
-
-        this.loadRegistrationTemplate()
-      }
-
-      return null
     } catch (error) {
       console.log(error)
-      this.setState({ error })
+      this.setState({ error, isDisabled: false })
     }
   }
 
@@ -341,8 +367,8 @@ class OpenHouseDrawerInternal extends React.Component {
           preSaveFormat(
             values,
             originalValues,
-            this.props.deal,
-            this.state.template
+            this.state.template,
+            this.dealAassociation
           )
         }
         save={this.save}
@@ -387,9 +413,7 @@ class OpenHouseDrawerInternal extends React.Component {
                               name="dueDate"
                               selectedDate={values.dueDate}
                             />
-                            {values.status !== 'DONE' && (
-                              <ReminderField dueDate={values.dueDate} />
-                            )}
+                            <ReminderField dueDate={values.dueDate} />
                           </FieldContainer>
                         </Section>
 
@@ -514,4 +538,6 @@ class OpenHouseDrawerInternal extends React.Component {
 OpenHouseDrawerInternal.propTypes = propTypes
 OpenHouseDrawerInternal.defaultProps = defaultProps
 
-export const OpenHouseDrawer = connect()(OpenHouseDrawerInternal)
+export const OpenHouseDrawer = connect(state => ({ user: state.user }))(
+  OpenHouseDrawerInternal
+)
