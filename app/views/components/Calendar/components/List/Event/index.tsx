@@ -62,10 +62,9 @@ export function Event({
   onSelectEvent,
   onEventChange
 }: Props) {
-  const date =
-    event.object_type === 'crm_task'
-      ? fecha.format(new Date(event.timestamp * 1000), 'hh:mm A')
-      : 'All day'
+  const date = ['crm_task', 'crm_association'].includes(event.object_type)
+    ? fecha.format(new Date(event.timestamp * 1000), 'hh:mm A')
+    : 'All day'
 
   const hasBorderBottom = nextItem && !nextItem.hasOwnProperty('isEventHeader')
 
