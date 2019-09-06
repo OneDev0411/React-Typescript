@@ -67,6 +67,7 @@ export default class EventsPane extends React.Component {
           <FactsheetsNav
             deal={this.props.deal}
             isBackOffice={this.props.isBackOffice}
+            isFetchingContexts={this.props.isFetchingContexts}
             showCriticalDatesDivider={false}
             showCDAInformation={false}
             showListingInformation={false}

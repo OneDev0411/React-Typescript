@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
-import { getDeal, getContexts, getForms } from 'actions/deals'
+import { getDeal, getContextsByDeal, getForms } from 'actions/deals'
+import { selectContextsByDeal } from 'reducers/deals/contexts'
 
 import store from '../stores'
 
@@ -11,20 +12,27 @@ import store from '../stores'
  * @param deal - the minimal version of the deal
  */
 export function useLoadFullDeal(id: string, deal: IDeal) {
-  const [dealWithChecklists, setDeal] = useState<IDeal>(deal)
-  const [isFetchingDeal, setIsFetchingDeal] = useState<boolean>(false)
-  const [isFetchingContexts, setIsFetchingContexts] = useState<boolean>(false)
-  const [isFetchingForms, setIsFetchingForms] = useState<boolean>(false)
-  const [isFetchingCompleted, setIsFetchingCompleted] = useState<boolean>(false)
-
   const { contexts, forms } = useMemo(() => {
     const deals = store.getState().deals
 
     return {
-      contexts: deals.contexts,
+      contexts: selectContextsByDeal(deals.contexts, id),
       forms: deals.forms
     }
-  }, [])
+  }, [id])
+
+  const [dealWithChecklists, setDeal] = useState<IDeal>(deal)
+  const [isFetchingCompleted, setIsFetchingCompleted] = useState<boolean>(false)
+
+  const [isFetchingDeal, setIsFetchingDeal] = useState<boolean>(
+    !deal || !deal.checklists
+  )
+  const [isFetchingContexts, setIsFetchingContexts] = useState<boolean>(
+    !contexts
+  )
+  const [isFetchingForms, setIsFetchingForms] = useState<boolean>(
+    !forms[deal.id]
+  )
 
   useEffectOnce(() => {
     if (!id) {
@@ -53,16 +61,14 @@ export function useLoadFullDeal(id: string, deal: IDeal) {
      * fetches contexts of a deal
      */
     async function fetchContexts(deal: IDeal): Promise<void> {
-      const brandId: UUID = deal.brand.id
-
-      if (contexts[brandId]) {
+      if (contexts) {
         return
       }
 
       setIsFetchingContexts(true)
 
       try {
-        await store.dispatch<any>(getContexts(brandId))
+        await store.dispatch<any>(getContextsByDeal(deal.id))
       } catch (e) {
         console.log(e)
       }
