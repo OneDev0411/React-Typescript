@@ -30,9 +30,7 @@ export function useLoadFullDeal(id: string, deal: IDeal) {
   const [isFetchingContexts, setIsFetchingContexts] = useState<boolean>(
     !contexts
   )
-  const [isFetchingForms, setIsFetchingForms] = useState<boolean>(
-    !forms[deal.id]
-  )
+  const [isFetchingForms, setIsFetchingForms] = useState<boolean>(!forms[id])
 
   useEffectOnce(() => {
     if (!id) {

@@ -28,7 +28,7 @@ export function ContextField(props) {
   const isValueSet = fieldValue || fieldValue === 0
 
   const getDate = () => {
-    const date = new Date(fieldValue)
+    const date = new Date(fieldValue || new Date())
 
     return date instanceof Date && !Number.isNaN(date) ? date : new Date()
   }
