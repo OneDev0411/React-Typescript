@@ -304,7 +304,7 @@ class CreateOffer extends React.Component {
 
       list.push({
         value,
-        definition: DealContext.getDefinitionId(this.props.deal.brand.id, key),
+        definition: DealContext.getDefinitionId(this.props.deal.id, key),
         checklist: checklist.id,
         approved: field ? field.needs_approval : false
       })
@@ -347,7 +347,7 @@ class CreateOffer extends React.Component {
     const { deal } = this.props
 
     return DealContext.getItems(
-      this.props.deal.brand.id,
+      this.props.deal.id,
       'Buying',
       deal.property_type,
       true
@@ -432,7 +432,7 @@ class CreateOffer extends React.Component {
       deal_status: () => dealStatus.length > 0,
       contexts: () =>
         DealContext.validateList(
-          deal.brand.id,
+          deal.id,
           contexts,
           'Buying',
           deal.property_type,
