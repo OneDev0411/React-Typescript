@@ -9,7 +9,7 @@ interface Props {
   isEventDrawerOpen: boolean
   event?: ICalendarEvent
   user: IUser
-  selectedDate: Date
+  selectedDate: Date | null
   onEventChange(event: IEvent, type: string): void
   onCloseEventDrawer(): void
 }
