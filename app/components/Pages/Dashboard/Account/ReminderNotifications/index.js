@@ -4,13 +4,14 @@ import Flex from 'styled-flex-component'
 import { Helmet } from 'react-helmet'
 
 import Fetch from 'services/fetch'
-import { getContexts } from 'actions/deals'
+import { getContextsByBrand } from 'actions/deals'
 import { getAttributeDefs } from 'store_actions/contacts'
 import { getActiveTeamId } from 'utils/user-teams'
 import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 import PageHeader from 'components/PageHeader'
 import ActionButton from 'components/Button/ActionButton'
 import { hasUserAccessToDeals, hasUserAccessToCrm } from 'utils/user-teams'
+import { selectContextsByBrand } from 'reducers/deals/contexts'
 
 import Loading from '../../../../Partials/Loading'
 
@@ -103,8 +104,8 @@ class ReminderNotifications extends Component {
   async getDealsColumnData() {
     const brandId = getActiveTeamId(this.props.user)
 
-    if (!this.props.dealsContexts[brandId]) {
-      await this.props.getContexts(brandId)
+    if (!this.props.dealsContexts) {
+      await this.props.getContextsByBrand(brandId)
     }
 
     const dealsContexts = this.props.dealsContexts[brandId]
@@ -298,11 +299,11 @@ class ReminderNotifications extends Component {
 export default connect(
   ({ user, deals, contacts }) => ({
     user,
-    dealsContexts: deals.contexts,
+    dealsContexts: selectContextsByBrand(deals.contexts, getActiveTeamId(user)),
     contactsAttributeDefs: contacts.attributeDefs
   }),
   {
-    getContexts,
+    getContextsByBrand,
     getAttributeDefs
   }
 )(ReminderNotifications)

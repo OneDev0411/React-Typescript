@@ -15,7 +15,7 @@ import { Body, Footer } from './styled'
 
 export function ContextField(props) {
   const context = useRef(
-    DealContext.searchContext(props.deal.brand.id, props.annotation.context)
+    DealContext.searchContext(props.deal.id, props.annotation.context)
   )
 
   const contextValue = getField(props.deal, props.annotation.context)
@@ -30,7 +30,7 @@ export function ContextField(props) {
   const getDate = () => {
     const date = new Date(fieldValue)
 
-    return date instanceof Date && !isNaN(date) ? date : new Date()
+    return date instanceof Date && !Number.isNaN(date) ? date : new Date()
   }
 
   const handleSaveValue = (value, updateContext) => {

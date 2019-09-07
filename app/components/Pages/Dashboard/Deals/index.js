@@ -4,17 +4,17 @@ import { browserHistory } from 'react-router'
 
 import LoadingContainer from 'components/LoadingContainer'
 
-import { getDeals, searchDeals, getContexts } from 'actions/deals'
+import { getDeals, searchDeals, getContextsByBrand } from 'actions/deals'
 import {
   getActiveTeamId,
   hasUserAccess,
   viewAsEveryoneOnTeam
 } from 'utils/user-teams'
+import { selectContextsByBrand } from 'reducers/deals/contexts'
 
 function DealsContainer(props) {
   useEffect(() => {
     const { dispatch, user } = props
-    const brandId = getActiveTeamId(user)
 
     const isBackOffice = hasUserAccess(user, 'BackOffice')
 
@@ -22,8 +22,8 @@ function DealsContainer(props) {
       browserHistory.push('/dashboard/mls')
     }
 
-    if (!props.contexts[brandId]) {
-      dispatch(getContexts(brandId))
+    if (!props.brandContexts) {
+      dispatch(getContextsByBrand(props.brandId))
     }
 
     if (Object.keys(props.deals).length === 0 && !props.isFetchingDeals) {
@@ -52,10 +52,17 @@ function DealsContainer(props) {
   return props.children
 }
 
-export default connect(({ deals, user }) => ({
-  error: deals.properties.error,
-  deals: deals.list,
-  contexts: deals.contexts,
-  isFetchingDeals: deals.properties.isFetchingDeals,
-  user
-}))(DealsContainer)
+function mapStateToProps({ deals, user }) {
+  const brandId = getActiveTeamId(user)
+
+  return {
+    error: deals.properties.error,
+    deals: deals.list,
+    brandContexts: selectContextsByBrand(deals.contexts, brandId),
+    isFetchingDeals: deals.properties.isFetchingDeals,
+    brandId,
+    user
+  }
+}
+
+export default connect(mapStateToProps)(DealsContainer)
