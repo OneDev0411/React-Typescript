@@ -229,14 +229,14 @@ class SendContactCard extends React.Component {
         />
 
         {this.props.contact || this.props.contactId ? (
-          <SendButton
-            buttonRenderer={this.props.buttonRenderer}
+          <Button
+            appearance="outline"
             onClick={this.showBuilder}
             disabled={this.state.isFetchingContact}
             {...this.props.buttonStyle} // TODO: buttonStyle -> buttonProps
           >
             {this.props.children}
-          </SendButton>
+          </Button>
         ) : (
           <SearchContactDrawer
             title="Select a Contact"
