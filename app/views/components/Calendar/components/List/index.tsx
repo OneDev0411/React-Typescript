@@ -8,6 +8,8 @@ import VirtualList, {
   VirtualListRef
 } from 'components/VirtualList'
 
+import { ListContext } from './context'
+
 import { EventHeader } from './EventHeader'
 import { Event } from './Event'
 import { EmptyState } from './EmptyState'
@@ -96,53 +98,57 @@ const CalendarList: React.FC<Props> = props => {
   }
 
   return (
-    <Container ref={containerRef}>
-      {props.rows.length === 0 && !props.isLoading && <EmptyState />}
+    <ListContext.Provider
+      value={{
+        selectedEvent,
+        setSelectedEvent
+      }}
+    >
+      <Container ref={containerRef}>
+        {props.rows.length === 0 && !props.isLoading && <EmptyState />}
 
-      <VirtualList
-        width={listWidth}
-        height={listHeight}
-        itemCount={props.rows.length}
-        onReachEnd={props.onReachEnd}
-        onReachStart={props.onReachStart}
-        threshold={2}
-        isLoading={props.isLoading}
-        loadingPosition={props.loadingPosition}
-        onVisibleRowChange={debounce(getInViewDate, 50)}
-        itemSize={index => getRowHeight(props.rows[index])}
-        overscanCount={3}
-        ref={props.listRef}
-      >
-        {({ index, style }) => (
-          <>
-            {props.rows[index].hasOwnProperty('isEventHeader') ? (
-              <EventHeader
-                item={props.rows[index] as ICalendarEventHeader}
-                style={style}
-                activeDate={activeDate}
-              />
-            ) : (
-              <Event
-                event={props.rows[index] as ICalendarEvent}
-                user={props.user}
-                nextItem={props.rows[index + 1]}
-                style={style}
-                onSelectEvent={setSelectedEvent}
-              />
-            )}
-          </>
-        )}
-      </VirtualList>
+        <VirtualList
+          width={listWidth}
+          height={listHeight}
+          itemCount={props.rows.length}
+          onReachEnd={props.onReachEnd}
+          onReachStart={props.onReachStart}
+          threshold={2}
+          isLoading={props.isLoading}
+          loadingPosition={props.loadingPosition}
+          onVisibleRowChange={debounce(getInViewDate, 50)}
+          itemSize={index => getRowHeight(props.rows[index])}
+          overscanCount={3}
+          ref={props.listRef}
+        >
+          {({ index, style }) => (
+            <>
+              {props.rows[index].hasOwnProperty('isEventHeader') ? (
+                <EventHeader
+                  item={props.rows[index] as ICalendarEventHeader}
+                  style={style}
+                  activeDate={activeDate}
+                />
+              ) : (
+                <Event
+                  event={props.rows[index] as ICalendarEvent}
+                  user={props.user}
+                  nextItem={props.rows[index + 1]}
+                  style={style}
+                />
+              )}
+            </>
+          )}
+        </VirtualList>
 
-      <EventController
-        event={selectedEvent}
-        activeDate={activeDate}
-        user={props.user}
-        onEventChange={handleEventChange}
-        onScheduledEmailChange={handleScheduledEmailChange}
-        onClose={() => setSelectedEvent(null)}
-      />
-    </Container>
+        <EventController
+          activeDate={activeDate}
+          user={props.user}
+          onEventChange={handleEventChange}
+          onScheduledEmailChange={handleScheduledEmailChange}
+        />
+      </Container>
+    </ListContext.Provider>
   )
 }
 

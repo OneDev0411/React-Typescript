@@ -1,14 +1,16 @@
-import React, { MouseEvent } from 'react'
+import React, { useContext } from 'react'
+
+import { ListContext } from '../../../../context'
 
 import styles from './styles'
 
 interface Props {
   event: ICalendarEvent
-  onClickAssociation(e: MouseEvent<HTMLElement>): void
 }
 
-export function Associations(props: Props) {
-  const associations = props.event.full_crm_task!.associations
+export function Associations({ event }: Props) {
+  const { setSelectedEvent } = useContext(ListContext)
+  const associations = event.full_crm_task!.associations
 
   const contacts = (associations || []).filter(
     association => association.association_type === 'contact'
@@ -18,7 +20,7 @@ export function Associations(props: Props) {
     return null
   }
 
-  const preposition = getCrmEventTypePreposition(props.event.event_type)
+  const preposition = getCrmEventTypePreposition(event.event_type)
 
   const users = new Array(Math.min(2, contacts.length))
     .fill(null)
@@ -40,7 +42,10 @@ export function Associations(props: Props) {
       {contacts.length > 2 && (
         <>
           {' and '}
-          <span style={styles.association} onClick={props.onClickAssociation}>
+          <span
+            style={styles.association}
+            onClick={() => setSelectedEvent(event)}
+          >
             {contacts.length - 2} other{contacts.length - 2 > 1 ? 's' : ''}
           </span>
         </>

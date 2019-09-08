@@ -1,26 +1,26 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import { EditEmailDrawer } from 'components/EmailCompose/EditEmailDrawer'
+
+import { ListContext } from '../context'
 
 import { CrmEvents } from '../../CrmEvents'
 
 interface Props {
-  event: ICalendarEvent | null
   user: IUser
   activeDate: Date | null
   onEventChange(event: IEvent, type: string): void
   onScheduledEmailChange(emailCampaign: IEmailCampaign): void
-  onClose(): void
 }
 
 export function EventController({
-  event,
   user,
   activeDate,
   onEventChange,
-  onScheduledEmailChange,
-  onClose
+  onScheduledEmailChange
 }: Props) {
+  const { selectedEvent: event, setSelectedEvent } = useContext(ListContext)
+
   if (!event) {
     return null
   }
@@ -33,7 +33,7 @@ export function EventController({
         event={event}
         user={user}
         onEventChange={onEventChange}
-        onCloseEventDrawer={onClose}
+        onCloseEventDrawer={() => setSelectedEvent(null)}
       />
     )
   }
@@ -42,9 +42,9 @@ export function EventController({
     return (
       <EditEmailDrawer
         isOpen
-        onClose={onClose}
-        onEdited={emailCampaign => onScheduledEmailChange(emailCampaign)}
         emailId={event.campaign as UUID}
+        onEdited={emailCampaign => onScheduledEmailChange(emailCampaign)}
+        onClose={() => setSelectedEvent(null)}
       />
     )
   }

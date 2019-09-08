@@ -1,18 +1,21 @@
-import React, { MouseEvent, memo } from 'react'
+import React, { MouseEvent, memo, useContext } from 'react'
+
+import { ListContext } from '../../../context'
 
 import styles from '../../styles'
 import { Associations } from './Associations'
 
 interface Props {
   event: ICalendarEvent
-  onClickCrmEventAssociations(event: ICalendarEvent): void
+  // onClickCrmEventAssociations(event: ICalendarEvent): void
 }
 
-const CrmEvent = memo(({ event, onClickCrmEventAssociations }: Props) => {
+const CrmEvent = memo(({ event }: Props) => {
+  const { setSelectedEvent } = useContext(ListContext)
+
   const handleSelectEvent = (e: MouseEvent<HTMLElement>) => {
     e.preventDefault()
-
-    onClickCrmEventAssociations(event)
+    setSelectedEvent(event)
   }
 
   return (
@@ -25,7 +28,7 @@ const CrmEvent = memo(({ event, onClickCrmEventAssociations }: Props) => {
       >
         {event.event_type}
       </a>{' '}
-      <Associations event={event} onClickAssociation={handleSelectEvent} />
+      <Associations event={event} />
     </div>
   )
 })
