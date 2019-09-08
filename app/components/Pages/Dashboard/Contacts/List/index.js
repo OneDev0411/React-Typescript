@@ -8,6 +8,8 @@ import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { deleteContacts, getContacts, searchContacts } from 'actions/contacts'
 import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-text-filter'
+import { updateFilterSegment } from 'actions/filter-segments'
+
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import {
   selectContacts,
@@ -21,6 +23,7 @@ import {
 } from 'utils/user-teams'
 import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
 import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
+import { updateTagTouchReminder } from 'models/contacts/update-tag-touch-reminder'
 import {
   Container as PageContainer,
   Content as PageContent,
@@ -41,6 +44,7 @@ import { SearchContacts } from './Search'
 import Header from './Header'
 import ContactFilters from './Filters'
 import TagsList from './TagsList'
+import AllContactsList from './AllContactsList'
 import FlowsList from './FlowsList'
 
 import {
@@ -60,10 +64,15 @@ import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import { ZeroState } from './ZeroState'
 import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
 
+const DEFAULT_QUERY = {
+  associations: CRM_LIST_DEFAULT_ASSOCIATIONS
+}
+
 class ContactsList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      selectedSidebarFilter: null,
       firstLetter: this.props.location.query.letter || null,
       isSideMenuOpen: true,
       isFetchingMoreContacts: false,
@@ -84,6 +93,8 @@ class ContactsList extends React.Component {
     if (this.props.fetchTags) {
       this.props.getContactsTags()
     }
+
+    this.setSelectedSidebarFilter()
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -124,6 +135,46 @@ class ContactsList extends React.Component {
 
   componentWillUnmount() {
     this.props.setContactsListTextFilter(this.state.searchInputValue)
+  }
+
+  setSelectedSidebarFilter = () => {
+    const { activeSegment, filters, flows } = this.props
+
+    if (
+      activeSegment &&
+      activeSegment.name &&
+      activeSegment.id !== 'default' &&
+      this.state.selectedSidebarFilter === null
+    ) {
+      this.setState({ selectedSidebarFilter: null })
+    } else if (filters && filters.length === 1) {
+      this.setState({ selectedSidebarFilter: filters })
+    } else if (flows && flows.length === 1) {
+      this.setState({ selectedSidebarFilter: flows })
+    }
+  }
+
+  getHeaderTitle = () => {
+    const { activeFilters, activeSegment, filters, flows } = this.props
+
+    if (
+      activeSegment &&
+      activeSegment.name &&
+      activeSegment.id !== 'default' &&
+      this.state.selectedSidebarFilter === null
+    ) {
+      return activeSegment.name
+    }
+
+    if (filters && filters.length === 1) {
+      return `Tag: ${filters[0].value}`
+    }
+
+    if (flows && flows.length === 1) {
+      return `Flow: ${activeFilters[0].values[0].label}`
+    }
+
+    return 'All Contacts'
   }
 
   updateSyncState(provider, oAuthAccounts = this.props.oAuthAccounts) {
@@ -232,6 +283,7 @@ class ContactsList extends React.Component {
    * @param {ISavedSegment} savedSegment
    */
   handleChangeSavedSegment = savedSegment => {
+    this.setState({ selectedSidebarFilter: null })
     this.handleFilterChange({}, true)
 
     if (savedSegment.id === SYNCED_CONTACTS_LIST_ID) {
@@ -465,6 +517,63 @@ class ContactsList extends React.Component {
     )
   }
 
+  isDefaultSegmentSelected = () => {
+    return this.props.activeSegment.id === 'default'
+  }
+
+  isFilteredWithTagsOrFlows = () => {
+    return this.props.filters.length > 0 || this.props.flows.length > 0
+  }
+
+  shouldShowImportAndCreateActions = () => {
+    return this.isDefaultSegmentSelected() && !this.isFilteredWithTagsOrFlows()
+  }
+
+  shouldShowFilters = () => {
+    return this.state.selectedSidebarFilter === null
+  }
+
+  handleListTouchReminderUpdate = async value => {
+    const segment = {
+      ...this.props.activeSegment,
+      touch_freq: value
+    }
+
+    await this.props.updateSegment(
+      CONTACTS_SEGMENT_NAME,
+      segment,
+      DEFAULT_QUERY
+    )
+  }
+
+  handleTagTouchReminderUpdate = async value => {
+    const activeTag = this.getActiveTag()
+
+    if (!activeTag) {
+      return
+    }
+
+    await updateTagTouchReminder(activeTag.text, value)
+    this.props.getContactsTags()
+  }
+
+  getActiveTag = () => {
+    // all or segmented list
+    if (this.state.selectedSidebarFilter === null) {
+      return undefined
+    }
+
+    // flow
+    if (Array.isArray(this.state.selectedSidebarFilter)) {
+      return undefined
+    }
+
+    // tag
+    return Object.values(this.props.tags).find(value => {
+      return value.text === this.state.selectedSidebarFilter.filters[0].value
+    })
+  }
+
   render() {
     const { props, state } = this
     const { isSideMenuOpen } = state
@@ -495,20 +604,36 @@ class ContactsList extends React.Component {
         !activeSegment.filters ||
         activeSegment.filters.length === 0)
 
+    const title = this.getHeaderTitle()
+
     return (
       <PageContainer isOpen={isSideMenuOpen}>
         <SideMenu isOpen={isSideMenuOpen} width="13rem">
+          <AllContactsList
+            onFilterChange={filters => {
+              this.setState({ selectedSidebarFilter: null })
+              this.handleFilterChange({ ...filters, flows: [] }, true)
+            }}
+          />
+          <TagsList
+            onFilterChange={filters => {
+              this.setState({ selectedSidebarFilter: filters })
+              this.handleFilterChange({ ...filters, flows: [] }, true)
+            }}
+            isActive={this.state.selectedSidebarFilter !== null}
+          />
+          <FlowsList
+            onChange={_.debounce(() => {
+              this.setState({ selectedSidebarFilter: this.props.flows })
+              this.handleFilterChange({}, true)
+            }, 300)}
+            isActive={this.state.selectedSidebarFilter !== null}
+          />
           <SavedSegments
             name={CONTACTS_SEGMENT_NAME}
             associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
             getPredefinedLists={getPredefinedContactLists}
             onChange={this.handleChangeSavedSegment}
-          />
-          <FlowsList
-            onChange={_.debounce(() => this.handleFilterChange({}, true), 300)}
-          />
-          <TagsList
-            onFilterChange={filters => this.handleFilterChange(filters, true)}
           />
         </SideMenu>
 
@@ -537,21 +662,28 @@ class ContactsList extends React.Component {
             />
           )}
           <Header
-            title={(activeSegment && activeSegment.name) || 'All Contacts'}
+            title={title}
             activeSegment={activeSegment}
+            activeTag={this.getActiveTag()}
+            onListTouchReminderUpdate={this.handleListTouchReminderUpdate}
+            onTagTouchReminderUpdate={this.handleTagTouchReminderUpdate}
+            showActions={!isZeroState}
+            showImportAction={this.shouldShowImportAndCreateActions()}
+            showCreateAction={this.shouldShowImportAndCreateActions()}
             isSideMenuOpen={state.isSideMenuOpen}
             user={user}
-            showActions={!isZeroState}
             onMenuTriggerChange={this.toggleSideMenu}
           />
           {isZeroState ? (
             <ZeroState />
           ) : (
             <Container>
-              <ContactFilters
-                onFilterChange={() => this.handleFilterChange({}, true)}
-                users={viewAsUsers}
-              />
+              {this.shouldShowFilters() && (
+                <ContactFilters
+                  onFilterChange={() => this.handleFilterChange({}, true)}
+                  users={viewAsUsers}
+                />
+              )}
               <SearchWrapper row alignCenter>
                 <FlexItem basis="100%">
                   <SearchContacts
@@ -624,8 +756,10 @@ function mapStateToProps({ user, contacts, ...restOfState }) {
   )
 
   return {
+    tags: tags.byId,
     oAuthAccounts: contacts.oAuthAccounts.list,
     fetchTags,
+    activeFilters,
     filters: normalizeAttributeFilters(attributeFilters),
     filterSegments,
     conditionOperator: filterSegments.conditionOperator,
@@ -655,7 +789,8 @@ export default withRouter(
       confirmation,
       setContactsListTextFilter,
       getContactsTags,
-      updateTeamSetting
+      updateTeamSetting,
+      updateSegment: updateFilterSegment
     }
   )(ContactsList)
 )

@@ -7,15 +7,20 @@ import { Trigger as MenuTrigger } from 'components/SlideMenu'
 import TouchReminder from '../TouchReminder'
 import ImportContactsButton from '../ImportContactsButton'
 
-function Header({
+export default function Header({
   title,
   isSideMenuOpen,
   onMenuTriggerChange,
   activeSegment,
-  showActions
+  activeTag,
+  showActions,
+  showImportAction,
+  showCreateAction,
+  onListTouchReminderUpdate,
+  onTagTouchReminderUpdate
 }) {
   return (
-    <PageHeader>
+    <PageHeader style={{ height: '5.0625rem' }}>
       <PageHeader.Title showBackButton={false}>
         <MenuTrigger
           isExpended={isSideMenuOpen}
@@ -27,16 +32,21 @@ function Header({
       {showActions && (
         <PageHeader.Menu>
           {activeSegment && activeSegment.is_editable && (
-            <TouchReminder activeSegment={activeSegment} />
+            <TouchReminder
+              value={activeSegment.touch_freq}
+              onChange={onListTouchReminderUpdate}
+            />
           )}
-
-          <ImportContactsButton />
-
-          <CreateContact />
+          {activeTag && activeTag.id && (
+            <TouchReminder
+              value={activeTag.touch_freq}
+              onChange={onTagTouchReminderUpdate}
+            />
+          )}
+          {showImportAction && <ImportContactsButton />}
+          {showCreateAction && <CreateContact />}
         </PageHeader.Menu>
       )}
     </PageHeader>
   )
 }
-
-export default Header

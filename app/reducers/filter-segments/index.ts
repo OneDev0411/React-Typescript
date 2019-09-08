@@ -130,6 +130,12 @@ const filterSegments = <T>(state: IReduxFilterSegmentState<T>, action) => {
         conditionOperator: action.conditionOperator
       }
 
+    case types.RESET_ACTIVE_FILTERS:
+      return {
+        ...state,
+        activeFilters: {}
+      }
+
     default:
       return state
   }

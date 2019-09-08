@@ -66,3 +66,11 @@ export function createActiveFiltersWithConditionOperator(
       dispatch(createActiveFilters(nameId, filters))
     ])
 }
+
+export function resetActiveFilters(nameId) {
+  return {
+    type: actionTypes.RESET_ACTIVE_FILTERS,
+    namespace: 'filter-segments',
+    id: nameId
+  }
+}

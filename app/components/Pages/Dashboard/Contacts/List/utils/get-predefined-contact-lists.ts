@@ -17,10 +17,13 @@ import { oAuthAccountTypeToProvider } from '../../../Account/ConnectedAccounts/c
 
 export const getPredefinedContactLists = (
   name,
-  state: IAppState
+  state: IAppState,
+  includeDefaultList = true
 ): StringMap<ISavedSegment> => {
-  const predefinedLists: StringMap<ISavedSegment<IContactAttributeFilter>> = {
-    default: getDefaultList(name)
+  const predefinedLists: StringMap<ISavedSegment<IContactAttributeFilter>> = {}
+
+  if (includeDefaultList) {
+    predefinedLists.default = getDefaultList(name)
   }
 
   const accounts = Object.values(state.contacts.oAuthAccounts.list)
@@ -32,7 +35,7 @@ export const getPredefinedContactLists = (
 
   const lastSeen = new Date(
     getActiveTeamSettings(state.user, SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY) ||
-      0
+    0 // eslint-disable-line
   )
 
   const badge = getNumOfSyncedContacts(lastSeen, accounts)
