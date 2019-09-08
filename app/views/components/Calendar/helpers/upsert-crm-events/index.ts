@@ -12,11 +12,21 @@ export function upsertCrmEvents(
   }
 
   if (type === 'deleted') {
-    return events.filter(item => item.id !== event.id)
+    return events.filter(item => {
+      const id =
+        item.object_type === 'crm_association' ? item.crm_task : item.id
+
+      return id !== event.id
+    })
   }
 
   if (type === 'updated') {
-    return events.map(item => (item.id === event.id ? calendarEvent : item))
+    return events.map(item => {
+      const id =
+        item.object_type === 'crm_association' ? item.crm_task : item.id
+
+      return id == event.id ? calendarEvent : item
+    })
   }
 
   return events

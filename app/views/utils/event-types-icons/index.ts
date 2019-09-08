@@ -8,6 +8,7 @@ import IconOpenHouseOutline from 'components/SvgIcons/OpenHouseOutline/IconOpenH
 import Tour from 'components/SvgIcons/Tour/IconTour'
 import Other from 'components/SvgIcons/MenuRounded/IconMenuRounded'
 import Closing from 'components/SvgIcons/Closing/IconClosing'
+import Note from 'components/SvgIcons/Note/IconNote'
 import IconInPerson from 'components/SvgIcons/InPerson/IconInPerson'
 import IconTodo from 'components/SvgIcons/Todo/IconTodo'
 import IconListingAppointment from 'components/SvgIcons/ListingAppointment/IconListingAppointment'
@@ -90,6 +91,11 @@ export const eventTypesIcons = [
     name: 'Task Critical',
     icon: IconTaskCritical,
     color: '#f5a623'
+  },
+  {
+    name: 'Note',
+    icon: Note,
+    color: '#e6bf00'
   },
   {
     name: 'Other',

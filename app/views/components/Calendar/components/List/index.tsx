@@ -138,32 +138,38 @@ const CalendarList: React.FC<Props> = props => {
                 nextItem={props.rows[index + 1]}
                 style={style}
                 onSelectEvent={setSelectedEvent}
+                onEventChange={handleEventChange}
               />
             )}
           </>
         )}
       </VirtualList>
 
-      {selectedEvent && selectedEvent.object_type === 'crm_task' && (
-        <CrmEvents
-          isEventDrawerOpen
-          event={selectedEvent}
-          user={props.user}
-          onEventChange={handleEventChange}
-          onCloseEventDrawer={() => setSelectedEvent(null)}
-        />
-      )}
+      {selectedEvent &&
+        ['crm_task', 'crm_association'].includes(selectedEvent.object_type) && (
+          <CrmEvents
+            isEventDrawerOpen
+            selectedDate={activeDate}
+            event={selectedEvent}
+            user={props.user}
+            onEventChange={handleEventChange}
+            onCloseEventDrawer={() => setSelectedEvent(null)}
+          />
+        )}
 
-      {selectedEvent && selectedEvent.object_type === 'email_campaign' && (
-        <EditEmailDrawer
-          isOpen
-          onClose={() => setSelectedEvent(null)}
-          onEdited={emailCampaign =>
-            handleScheduledEmailChange(selectedEvent, emailCampaign)
-          }
-          emailId={selectedEvent.campaign as UUID}
-        />
-      )}
+      {selectedEvent &&
+        ['email_campaign', 'email_campaign_recipient'].includes(
+          selectedEvent.object_type
+        ) && (
+          <EditEmailDrawer
+            isOpen
+            onClose={() => setSelectedEvent(null)}
+            onEdited={emailCampaign =>
+              handleScheduledEmailChange(selectedEvent, emailCampaign)
+            }
+            emailId={selectedEvent.campaign as UUID}
+          />
+        )}
     </Container>
   )
 }
@@ -175,7 +181,7 @@ function getRowHeight(row: ICalendarListRow): number {
 
   const event = row as ICalendarEvent
 
-  return event.object_type === 'crm_task' ||
+  return ['crm_task', 'crm_association'].includes(event.object_type) ||
     ['next_touch', 'day-empty-state'].includes(event.event_type)
     ? 72
     : 55

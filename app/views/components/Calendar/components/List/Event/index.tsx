@@ -19,7 +19,8 @@ interface Props {
   event: ICalendarEvent
   user: IUser
   nextItem: ICalendarListRow
-  onSelectEvent: (event: ICalendarEvent) => void
+  onSelectEvent(event: ICalendarEvent): void
+  onEventChange(event: IEvent, type: 'updated'): void
 }
 
 interface StyleProps {
@@ -53,11 +54,17 @@ const useStyles = makeStyles((theme: Theme) => ({
 /**
  * renders the given calendar event
  */
-export function Event({ event, user, nextItem, style, onSelectEvent }: Props) {
-  const date =
-    event.object_type === 'crm_task'
-      ? fecha.format(new Date(event.timestamp * 1000), 'hh:mm A')
-      : 'All day'
+export function Event({
+  event,
+  user,
+  nextItem,
+  style,
+  onSelectEvent,
+  onEventChange
+}: Props) {
+  const date = ['crm_task', 'crm_association'].includes(event.object_type)
+    ? fecha.format(new Date(event.timestamp * 1000), 'hh:mm A')
+    : 'All day'
 
   const hasBorderBottom = nextItem && !nextItem.hasOwnProperty('isEventHeader')
 
@@ -86,6 +93,7 @@ export function Event({ event, user, nextItem, style, onSelectEvent }: Props) {
                 event={event}
                 onClickCrmEventAssociations={onSelectEvent}
                 onClickScheduledEmail={onSelectEvent}
+                onEventChange={onEventChange}
               />
             </div>
           </div>

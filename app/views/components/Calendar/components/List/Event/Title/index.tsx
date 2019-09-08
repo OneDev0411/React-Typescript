@@ -9,16 +9,18 @@ interface Props {
   event: ICalendarEvent
   onClickScheduledEmail(event: ICalendarEvent): void
   onClickCrmEventAssociations(event: ICalendarEvent): void
+  onEventChange(event: IEvent, type: 'updated'): void
 }
 
 export function EventTitle(props: Props) {
   const { event } = props
 
-  if (event.object_type === 'crm_task') {
+  if (['crm_task', 'crm_association'].includes(event.object_type)) {
     return (
       <CrmTitle
         event={event}
         onClickCrmEventAssociations={props.onClickCrmEventAssociations}
+        onEventChange={props.onEventChange}
       />
     )
   }
@@ -69,7 +71,9 @@ export function EventTitle(props: Props) {
   }
 
   if (
-    event.object_type === 'email_campaign' &&
+    ['email_campaign', 'email_campaign_recipient'].includes(
+      event.object_type
+    ) &&
     event.event_type === 'scheduled_email'
   ) {
     return (
@@ -81,7 +85,7 @@ export function EventTitle(props: Props) {
             props.onClickScheduledEmail(event)
           }}
         >
-          {event.title}
+          {event.title || 'No Subject'}
         </a>
       </div>
     )
