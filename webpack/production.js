@@ -52,7 +52,7 @@ webpackConfig.optimization.minimizer = [
     cache: true,
     parallel: true,
     sourceMap: true,
-    exclude: /grapesjs-loader/
+    exclude: /grapesjs/
   })
 ]
 
