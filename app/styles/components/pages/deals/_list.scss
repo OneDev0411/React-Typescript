@@ -47,7 +47,7 @@
   padding: 2rem;
 
   .table {
-    $border-color: #CAD4DB;
+    $border-color: #cad4db;
     border-collapse: separate;
     border-spacing: 0 8px;
     font-size: 15px;
@@ -278,32 +278,31 @@
  * It's going to be cleaned in next release as Ramin said.
  */
 .pop-over {
-
   &.pop-over--light {
     background-color: #fff;
     &.top {
-      .arrow{
-        border-top-color:#fff;
-        &:after{
+      .arrow {
+        border-top-color: #fff;
+        &:after {
           border-top-color: #fff !important;
         }
       }
     }
 
-    .arrow{
+    .arrow {
       border-bottom-color: #fff !important;
-      &:after{
+      &:after {
         border-bottom-color: #fff !important;
       }
     }
   }
 
   &.pop-over--dark {
-    color: rgba(255,255,255, .8);
+    color: rgba(255, 255, 255, 0.8);
     fill: #fff;
   }
   border: none;
-  min-width: 280px;;
+  min-width: 280px;
   max-width: inherit;
   box-shadow: -1px 0 10px 0 rgba(0, 0, 0, 0.1), 0 0 10px 0 rgba(0, 0, 0, 0.1);
 
@@ -315,7 +314,7 @@
     padding: 1rem;
   }
 
-  &.no-padding .popover-content{
+  &.no-padding .popover-content {
     padding: 0;
   }
 

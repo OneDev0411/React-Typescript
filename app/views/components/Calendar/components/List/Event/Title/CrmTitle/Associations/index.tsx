@@ -1,6 +1,10 @@
 import React, { MouseEvent } from 'react'
 
+import MiniContactProfile from 'components/MiniContact'
+import { plural } from 'components/TemplatesList/helpers'
+
 import styles from './styles'
+import { isLastItem } from './helpers'
 
 interface Props {
   event: ICalendarEvent
@@ -19,29 +23,38 @@ export function Associations(props: Props) {
   }
 
   const preposition = getCrmEventTypePreposition(props.event.event_type)
-
-  const users = new Array(Math.min(2, contacts.length))
-    .fill(null)
-    .map((_, index) => [
-      <a
-        key={`assoc${index}`}
-        onClick={e => e.stopPropagation()}
-        target="_blank"
-        href={`/dashboard/contacts/${contacts[index].contact!.id}`}
-      >
-        {contacts[index].contact!.display_name}
-      </a>,
-      contacts.length > 1 && index === 0 && <span key={`sepr${index}`}>, </span>
-    ])
+  const visibleContacts = contacts.slice(0, 2)
+  const contactsCount = contacts.length
+  const contactsOtherCount = contactsCount - 2
+  const isPlural = contactsOtherCount > 1
+  const needsShowOtherLabel = contactsCount > 2
 
   return (
     <span>
-      {preposition} {users}{' '}
-      {contacts.length > 2 && (
+      {preposition}{' '}
+      {visibleContacts.map((contact, index) => (
+        <React.Fragment key={`assoc${index}`}>
+          <MiniContactProfile
+            as="span"
+            data={contact.contact as IContact}
+            type="event"
+          >
+            <a
+              onClick={e => e.stopPropagation()}
+              target="_blank"
+              href={`/dashboard/contacts/${contact.contact!.id}`}
+            >
+              {contact.contact!.display_name}
+            </a>
+          </MiniContactProfile>
+          {!isLastItem(contacts, index) && <span key={`sepr${index}`}>, </span>}
+        </React.Fragment>
+      ))}
+      {needsShowOtherLabel && (
         <>
           {' and '}
           <span style={styles.association} onClick={props.onClickAssociation}>
-            {contacts.length - 2} other{contacts.length - 2 > 1 ? 's' : ''}
+            {plural(`${contactsCount} other`, isPlural)}
           </span>
         </>
       )}

@@ -1,5 +1,7 @@
 import React from 'react'
 
+import MiniContactProfile from 'components/MiniContact'
+
 import CrmTitle from './CrmTitle'
 import styles from '../styles'
 
@@ -24,10 +26,16 @@ export function EventTitle(props: Props) {
   if (event.object_type === 'contact_attribute') {
     return (
       <div style={styles.title}>
-        <a href={`/dashboard/contacts/${event.contact}`} target="_blank">
-          {event.full_contact!.display_name}
-        </a>
-        's {event.type_label}
+        <MiniContactProfile
+          type="event"
+          data={event.full_contact as IContact}
+          as="span"
+        >
+          <a href={`/dashboard/contacts/${event.contact}`} target="_blank">
+            {event.full_contact!.display_name}
+          </a>
+        </MiniContactProfile>
+        's {event.event_type}
       </div>
     )
   }
@@ -47,9 +55,15 @@ export function EventTitle(props: Props) {
     return (
       <div style={styles.title}>
         Contact{' '}
-        <a href={`/dashboard/contacts/${event.contact}`} target="_blank">
-          {event.full_contact!.display_name}
-        </a>
+        <MiniContactProfile
+          type="event"
+          data={event.full_contact as IContact}
+          as="span"
+        >
+          <a href={`/dashboard/contacts/${event.contact}`} target="_blank">
+            {event.full_contact!.display_name}
+          </a>
+        </MiniContactProfile>
       </div>
     )
   }

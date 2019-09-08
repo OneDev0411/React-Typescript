@@ -1,6 +1,7 @@
 import React from 'react'
 
 import UserAvatar from 'components/UserAvatar'
+import MiniContact from 'components/MiniContact'
 
 import DateSplitter from '../components/date-splitter'
 import Message from '../message-types'
@@ -15,6 +16,12 @@ export default props => {
     previousMessage,
     deliveryReportPlacement
   } = props
+
+  const shouldShowMiniContact = props.author.type === 'user'
+  const ContentWrapper = shouldShowMiniContact ? MiniContact : React.Fragment
+  const contentProps = shouldShowMiniContact
+    ? { type: 'user', data: author }
+    : {}
 
   return (
     <div className="message-group">
@@ -31,22 +38,24 @@ export default props => {
           />
         </div>
 
-        <div className="content">
-          <div>
-            <span className="title">
-              {author && author.abbreviated_display_name}
-            </span>
+        <ContentWrapper {...contentProps}>
+          <div className="content">
+            <div>
+              <span className="title">
+                {author && author.abbreviated_display_name}
+              </span>
 
-            <MessageDate message={message} />
+              <MessageDate message={message} />
 
-            <DeliveryReport
-              author={author}
-              user={user}
-              message={message}
-              placement={deliveryReportPlacement}
-            />
+              <DeliveryReport
+                author={author}
+                user={user}
+                message={message}
+                placement={deliveryReportPlacement}
+              />
+            </div>
           </div>
-        </div>
+        </ContentWrapper>
 
         <Message {...props} />
       </div>

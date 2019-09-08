@@ -15,7 +15,7 @@ import { usePopoverResize } from 'hooks/use-popover-resize'
  * IMPORTANT: this doesn't work because calling latest updatePosition
  * function which is passed to `action` prop doesn't work for some reason
  */
-export function ContentSizeAwarePopover({
+function ContentSizeAwarePopover({
   children,
   open,
   action,
@@ -50,3 +50,5 @@ export function ContentSizeAwarePopover({
     </Popover>
   )
 }
+
+export default ContentSizeAwarePopover
