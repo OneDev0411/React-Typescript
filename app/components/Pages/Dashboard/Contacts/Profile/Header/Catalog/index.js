@@ -28,7 +28,7 @@ export function Catalog(props) {
       <Avatar contact={contact} />
       <Flex column style={{ padding: '0.5em 1.5em' }}>
         <Title>
-          {contact.display_name}
+          {contact.summary.display_name}
           <a href="#Details">Edit</a>
         </Title>
         <LastTouched contact={contact} />
