@@ -35,6 +35,7 @@ function SendEmailButton(props) {
   return (
     <Fragment>
       <ActionButton
+        disabled={props.disabled}
         appearance={props.appearance}
         style={props.style}
         onClick={onSendClick}
@@ -85,6 +86,7 @@ function mapStateToProps({ user }) {
 }
 
 SendEmailButton.propTypes = {
+  disabled: PropTypes.bool,
   deal: PropTypes.object,
   defaultAttachments: PropTypes.array,
   recipients: PropTypes.array,
@@ -94,6 +96,7 @@ SendEmailButton.propTypes = {
 }
 
 SendEmailButton.defaultProps = {
+  disabled: false,
   deal: null,
   defaultAttachments: [],
   recipients: null,
