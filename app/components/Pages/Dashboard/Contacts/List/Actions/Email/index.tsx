@@ -13,7 +13,7 @@ interface Props {
   disabled?: boolean
 }
 
-function Email({ contacts, disabled }: Props) {
+export function Email({ contacts, disabled }: Props) {
   return (
     // @ts-ignore
     // TODO: refactor SendEmailButton with TS

@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ContactItem should render 1`] = `
+<Connect(SendEmailButton)
+  recipients={
+    Array [
+      Object {
+        "contact": Object {
+          "avatar": null,
+          "contactId": "350b2dd0-c270-4a14-a257-87ab1e23a767",
+          "data_type": "contact",
+          "email": "alireza.mirian@gmail.com",
+          "emails": Array [
+            "alireza.mirian@gmail.com",
+            "snhasani@gmail.com",
+            "naser@rechat.com",
+            "naser@rechat.com",
+          ],
+          "name": "Nasser Hassani",
+          "users": Array [],
+        },
+        "email": "alireza.mirian@gmail.com",
+        "recipient_type": "Email",
+      },
+    ]
+  }
+  style={
+    Object {
+      "fontSize": "0.875rem",
+    }
+  }
+/>
+`;
