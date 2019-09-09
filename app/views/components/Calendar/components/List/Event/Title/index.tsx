@@ -15,7 +15,7 @@ interface Props {
 export function EventTitle({ event, onEventChange }: Props) {
   const { setSelectedEvent } = useContext(ListContext)
 
-  if (event.object_type === 'crm_task') {
+  if (['crm_task', 'crm_association'].includes(event.object_type)) {
     return <CrmTitle event={event} onEventChange={onEventChange} />
   }
 
