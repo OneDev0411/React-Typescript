@@ -31,7 +31,7 @@ export function EventTitle({ event, onEventChange }: Props) {
             {event.full_contact!.display_name}
           </a>
         </MiniContactProfile>
-        's {event.event_type}
+        's {event.type_label}
       </div>
     )
   }
