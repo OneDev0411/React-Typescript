@@ -163,7 +163,7 @@ class ContactsList extends React.Component {
       activeSegment.id !== 'default' &&
       this.state.selectedSidebarFilter === null
     ) {
-      return activeSegment.name
+      return `List: ${activeSegment.name}`
     }
 
     if (filters && filters.length === 1) {
