@@ -115,7 +115,7 @@
     "google-libphonenumber": "^3.2.2",
     "google-map-react": "^1.1.2",
     "google-maps": "^3.3.0",
-    "grapesjs": "^0.15.3",
+    "grapesjs": "^0.15.5",
     "grapesjs-mjml": "github:emilsedgh/grapesjs-mjml#45efbee8598d296223ed361817cdad67c4db77f1",
     "history": "^3.3.0",
     "hogan.js": "^3.0.2",
