@@ -10,9 +10,7 @@ interface BirthdayRef {
   showBuilder(contact: IContact, contactId?: UUID): void
 }
 
-interface Props {}
-
-export function ActionController(props: Props) {
+export function ActionController() {
   const { actions } = useContext(ListContext)
   const birthdayCardRef = useRef<BirthdayRef>(null)
 
