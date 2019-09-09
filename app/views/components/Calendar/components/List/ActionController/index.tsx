@@ -17,14 +17,16 @@ export function ActionController(props: Props) {
   const birthdayCardRef = useRef<BirthdayRef>(null)
 
   useEffectOnce(() => {
-    actions.on('event-action', ({ event }: { event: ICalendarEvent }) => {
+    const handler = ({ event }: { event: ICalendarEvent }) => {
       if (event.event_type === 'birthday') {
         birthdayCardRef.current!.showBuilder(event.full_contact as IContact)
       }
-    })
+    }
+
+    actions.on('event-action', handler)
 
     return () => {
-      actions.removeEventListener('event-action')
+      actions.removeListener('event-action', handler)
     }
   })
 

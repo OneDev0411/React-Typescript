@@ -7,13 +7,16 @@ export const Container = styled.div`
   padding: 1rem;
 `
 
-export const ListTitle = styled.div`
+export const ListTitle = styled.div<{ isSelected?: boolean }>`
   font-weight: 500;
   font-size: 1.3rem;
   margin-bottom: 0.5rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+  color: ${props => (props.isSelected ? blue.A100 : '#000')};
+  cursor: ${props => (props.isSelected ? 'initial' : 'pointer')};
 
   svg {
     width: 1rem;

@@ -20,7 +20,6 @@ export default {
   `,
   height: '100%',
   allowScripts: true,
-  domComponents: { draggableComponents: false },
   styleManager: {
     textNoElement: '',
 

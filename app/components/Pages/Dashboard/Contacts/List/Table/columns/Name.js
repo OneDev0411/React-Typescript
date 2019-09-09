@@ -2,8 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Avatar from 'react-avatar'
 import Flex from 'styled-flex-component'
-
 import styled from 'styled-components'
+
+import MiniContact from 'components/MiniContact'
 
 import { selectDefinitionByName } from '../../../../../../../reducers/contacts/attributeDefs'
 import { grey } from '../../../../../../../views/utils/colors'
@@ -88,23 +89,25 @@ const ContactsListName = ({ contact, attributeDefs }) => {
           overflow: 'hidden'
         }}
       >
-        <Link
-          data-test="contact-link"
-          to={{
-            pathname: `/dashboard/contacts/${contact.id}`,
-            state: {
-              id: contact.id,
-              s
-            }
-          }}
-          style={{
-            ...ellipsis,
-            fontWeight: 500,
-            padding: 0
-          }}
-        >
-          {name}
-        </Link>
+        <MiniContact type="contact" data={contact}>
+          <Link
+            data-test="contact-link"
+            to={{
+              pathname: `/dashboard/contacts/${contact.id}`,
+              state: {
+                id: contact.id,
+                s
+              }
+            }}
+            style={{
+              ...ellipsis,
+              fontWeight: 500,
+              padding: 0
+            }}
+          >
+            {name}
+          </Link>
+        </MiniContact>
         {typeof contact.partner_name === 'string' &&
           contact.partner_name.trim().length > 0 && (
             <Tooltip caption="Spouse/Partner">

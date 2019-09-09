@@ -110,7 +110,7 @@ class SegmentsList extends React.Component {
 function mapStateToProps(state, { name, getPredefinedLists }) {
   const { filterSegments } = state[name]
 
-  const predefinedLists = getPredefinedLists(name, state)
+  const predefinedLists = getPredefinedLists(name, state, false)
 
   return {
     isListFetched: isListFetched(filterSegments),

@@ -25,7 +25,7 @@ export function EventController({
     return null
   }
 
-  if (event.object_type === 'crm_task') {
+  if (['crm_task', 'crm_association'].includes(event.object_type)) {
     return (
       <CrmEvents
         isEventDrawerOpen
@@ -38,7 +38,9 @@ export function EventController({
     )
   }
 
-  if (event.object_type === 'email_campaign') {
+  if (
+    ['email_campaign', 'email_campaign_recipient'].includes(event.object_type)
+  ) {
     return (
       <EditEmailDrawer
         isOpen

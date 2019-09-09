@@ -36,6 +36,7 @@ class PopOver extends React.Component<Props, State> {
       overlayOptions = {
         trigger: ['hover']
       },
+      popoverClasses = [],
       popoverStyles = {},
       containerStyle = {},
       children
@@ -60,12 +61,9 @@ class PopOver extends React.Component<Props, State> {
           {...overlayOptions}
         >
           <Popover
-            className={classNames(
-              'pop-over',
-              this.props.dark ? 'pop-over--dark' : 'pop-over--light'
-            )}
+            className={['white--popover'].concat(popoverClasses).join(' ')}
             id={id}
-            style={{ ...popoverStyles }}
+            style={popoverStyles}
           >
             {caption}
           </Popover>

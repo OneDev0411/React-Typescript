@@ -3,14 +3,16 @@ import React, { MouseEvent, memo, useContext } from 'react'
 import { ListContext } from '../../../context'
 
 import styles from '../../styles'
+
+import { CrmStatus } from '../../../../CrmStatus'
 import { Associations } from './Associations'
 
 interface Props {
   event: ICalendarEvent
-  // onClickCrmEventAssociations(event: ICalendarEvent): void
+  onEventChange(event: IEvent, type: 'updated'): void
 }
 
-const CrmEvent = memo(({ event }: Props) => {
+const CrmEvent = memo(({ event, onEventChange }: Props) => {
   const { setSelectedEvent } = useContext(ListContext)
 
   const handleSelectEvent = (e: MouseEvent<HTMLElement>) => {
@@ -20,6 +22,9 @@ const CrmEvent = memo(({ event }: Props) => {
 
   return (
     <div style={styles.title}>
+      {event.status && new Date(event.timestamp * 1000) > new Date() && (
+        <CrmStatus event={event} onChange={onEventChange} />
+      )}
       <a
         onClick={handleSelectEvent}
         style={{

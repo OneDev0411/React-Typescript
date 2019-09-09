@@ -3,7 +3,8 @@ import React from 'react'
 import { EventDrawer } from 'components/EventDrawer'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
-import { createDueDate } from './helpers'
+import { createDueDate } from './helpers/create-date'
+import { Note } from './Note'
 
 interface Props {
   isEventDrawerOpen: boolean
@@ -31,7 +32,7 @@ export function CrmEvents(props: Props) {
     const initialValues = {
       assignees: [props.user],
       associations: [],
-      dueDate: createDueDate(props.selectedDate),
+      dueDate: createDueDate(props.selectedDate || new Date()),
       reminder: {
         title: 'None',
         value: -1
@@ -42,9 +43,24 @@ export function CrmEvents(props: Props) {
     return <EventDrawer {...sharedProps} initialValues={initialValues} />
   }
 
+  const id =
+    props.event.object_type === 'crm_association'
+      ? props.event.crm_task
+      : props.event.id
+
   if (props.event.type === 'Open House') {
-    return <OpenHouseDrawer {...sharedProps} openHouseId={props.event.id} />
+    return <OpenHouseDrawer {...sharedProps} openHouseId={id} />
   }
 
-  return <EventDrawer {...sharedProps} eventId={props.event.id} />
+  if (props.event.event_type === 'Note') {
+    return (
+      <Note
+        event={props.event}
+        onCloseEventDrawer={props.onCloseEventDrawer}
+        onChange={props.onEventChange}
+      />
+    )
+  }
+
+  return <EventDrawer {...sharedProps} eventId={id} />
 }

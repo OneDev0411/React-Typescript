@@ -19,6 +19,7 @@ interface Props {
   event: ICalendarEvent
   user: IUser
   nextItem: ICalendarListRow
+  onEventChange: (event: IEvent, type: string) => void
 }
 
 interface StyleProps {
@@ -52,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 /**
  * renders the given calendar event
  */
-export function Event({ event, user, nextItem, style }: Props) {
+export function Event({ event, user, nextItem, style, onEventChange }: Props) {
   const date =
     event.object_type === 'crm_task'
       ? fecha.format(new Date(event.timestamp * 1000), 'hh:mm A')
@@ -81,7 +82,7 @@ export function Event({ event, user, nextItem, style }: Props) {
               }}
             >
               <EventIcon event={event} />
-              <EventTitle event={event} />
+              <EventTitle event={event} onEventChange={onEventChange} />
             </div>
           </div>
 

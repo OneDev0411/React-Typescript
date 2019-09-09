@@ -4,8 +4,6 @@ import Button from '@material-ui/core/Button'
 
 import { getActiveTeamId } from 'utils/user-teams'
 
-// import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
-
 import { ListContext } from '../../context'
 
 interface Props {

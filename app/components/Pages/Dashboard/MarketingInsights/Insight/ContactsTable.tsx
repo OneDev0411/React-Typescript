@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Table from 'components/Grid/Table'
 import ContactInfo from 'components/ContactInfo'
+import MiniContact from 'components/MiniContact'
 
 import RowBadges from './RowBadges'
 import { ContactColumn } from './styled'
@@ -39,7 +40,9 @@ function ContactsTable(props: ContactsPropsType) {
       render: (props: TableColumnProps) => (
         <ContactColumn>
           <div>
-            <ContactInfo data={props.rowData} />
+            <MiniContact data={props.rowData.original_data} type="insight">
+              <ContactInfo data={props.rowData} />
+            </MiniContact>
           </div>
           <div className="labels-container">
             <RowBadges data={props.rowData} />
