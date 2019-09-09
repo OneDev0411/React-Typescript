@@ -166,11 +166,19 @@ class ContactsList extends React.Component {
       return `List: ${activeSegment.name}`
     }
 
-    if (filters && filters.length === 1) {
+    if (
+      filters &&
+      filters.length === 1 &&
+      this.state.selectedSidebarFilter !== null
+    ) {
       return `Tag: ${filters[0].value}`
     }
 
-    if (flows && flows.length === 1) {
+    if (
+      flows &&
+      flows.length === 1 &&
+      this.state.selectedSidebarFilter !== null
+    ) {
       return `Flow: ${activeFilters[0].values[0].label}`
     }
 
