@@ -14,7 +14,11 @@ interface Props {
 }
 
 export function EventActions({ event, user }: Props) {
-  const { selectedEvent } = useContext(ListContext)
+  const { actions } = useContext(ListContext)
+
+  const handleClickAction = () => {
+    actions.emit('event-action', { event })
+  }
 
   if (event.event_type === 'birthday' && !event.metadata.is_partner) {
     return (
@@ -22,22 +26,11 @@ export function EventActions({ event, user }: Props) {
         variant="outlined"
         color="secondary"
         size="small"
-        onClick={() => console.log(selectedEvent)}
+        onClick={handleClickAction}
       >
         Send Birthday Card
       </Button>
     )
-    // return (
-    //   <SendContactCard
-    //     contactId={event.contact}
-    //     mediums="Email"
-    //     buttonStyle={{
-    //       size: 'small'
-    //     }}
-    //   >
-    //     Send Birthday Card
-    //   </SendContactCard>
-    // )
   }
 
   if (event.event_type === 'Open House') {

@@ -1,6 +1,9 @@
+import { EventEmitter } from 'events'
+
 import React, { useState, forwardRef, RefObject } from 'react'
 import { ListOnItemsRenderedProps } from 'react-window'
 import useResizeObserver from 'use-resize-observer'
+
 import debounce from 'lodash/debounce'
 
 import VirtualList, {
@@ -14,8 +17,10 @@ import { EventHeader } from './EventHeader'
 import { Event } from './Event'
 import { EmptyState } from './EmptyState'
 
-import { Container } from './styled'
 import { EventController } from './EventController'
+import { ActionController } from './ActionController'
+
+import { Container } from './styled'
 
 interface Props {
   user: IUser
@@ -32,6 +37,9 @@ interface Props {
     emailCampaign: IEmailCampaign
   ) => void
 }
+
+// creates a new event-emitter instance
+const actions = new EventEmitter()
 
 const defaultProps = {
   onReachStart: () => {},
@@ -100,6 +108,7 @@ const CalendarList: React.FC<Props> = props => {
   return (
     <ListContext.Provider
       value={{
+        actions,
         selectedEvent,
         setSelectedEvent
       }}
@@ -147,6 +156,8 @@ const CalendarList: React.FC<Props> = props => {
           onEventChange={handleEventChange}
           onScheduledEmailChange={handleScheduledEmailChange}
         />
+
+        <ActionController />
       </Container>
     </ListContext.Provider>
   )

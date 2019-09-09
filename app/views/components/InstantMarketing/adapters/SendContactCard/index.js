@@ -72,7 +72,7 @@ class SendContactCard extends React.Component {
     }
   }
 
-  showBuilder = async () => {
+  showBuilder = async (contactId = this.props.contactId) => {
     if (this.state.contact) {
       return this.openBuilder()
     }
@@ -82,7 +82,7 @@ class SendContactCard extends React.Component {
     })
 
     try {
-      const response = await getContact(this.props.contactId)
+      const response = await getContact(contactId)
 
       this.setState(
         {
@@ -99,8 +99,7 @@ class SendContactCard extends React.Component {
   }
 
   openBuilder = () => {
-    // todo: removing c.summary
-    if (!idx(this.state, state => state.contact.summary.email)) {
+    if (!idx(this.state, state => state.contact.email)) {
       return this.setState({
         isMissingEmailModalOpen: true
       })
@@ -214,6 +213,20 @@ class SendContactCard extends React.Component {
       isSocialDrawerOpen: false
     })
 
+  getRef = () => {
+    const { actionRef } = this.props
+
+    if (!actionRef) {
+      return actionRef
+    }
+
+    actionRef.current = {
+      showBuilder: (contact = null, contactId = null) => {
+        this.setState({ contact }, () => this.showBuilder(contactId))
+      }
+    }
+  }
+
   render() {
     if (hasMarketingAccess(this.props.user) === false) {
       return null
@@ -290,6 +303,8 @@ class SendContactCard extends React.Component {
             onClose={this.closeSocialDrawer}
           />
         )}
+
+        <div ref={this.getRef} />
       </Fragment>
     )
   }
@@ -301,7 +316,12 @@ function mapStateToProps({ user }) {
   }
 }
 
-export default connect(
+const ConnectedAction = connect(
   mapStateToProps,
   { notify, confirmation }
 )(SendContactCard)
+
+// eslint-disable-next-line react/no-multi-comp
+export default React.forwardRef((props, ref) => (
+  <ConnectedAction {...props} actionRef={ref} />
+))
