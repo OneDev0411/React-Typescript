@@ -62,11 +62,13 @@ function getSubmission(data) {
   ).filter(envelope => envelope.status !== 'Voided')
 
   if (submissionEnvelopes.length > 0) {
-    return submissionEnvelopes.map(envelope => ({
-      ...normalizeSubmissionFile(getEnvelopeFile(envelope, data.task)),
-      name: `Docusign: ${envelope.title}`,
-      openInNewTab: true
-    }))
+    return submissionEnvelopes
+      .filter(envelope => getEnvelopeFile(envelope, data.task) !== null)
+      .map(envelope => ({
+        ...normalizeSubmissionFile(getEnvelopeFile(envelope, data.task)),
+        name: `Docusign: ${envelope.title}`,
+        openInNewTab: true
+      }))
   }
 
   if (!data.task.form) {
