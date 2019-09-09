@@ -108,10 +108,8 @@ class ReminderNotifications extends Component {
       await this.props.getContextsByBrand(brandId)
     }
 
-    const dealsContexts = this.props.dealsContexts[brandId]
-      ? this.props.dealsContexts[brandId].filter(
-          context => context.data_type === 'Date'
-        )
+    const dealsContexts = this.props.dealsContexts
+      ? this.props.dealsContexts.filter(context => context.data_type === 'Date')
       : []
 
     const data = dealsContexts.map(ctx => ({
