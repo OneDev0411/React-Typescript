@@ -567,18 +567,20 @@ class ContactsList extends React.Component {
 
   getActiveTag = () => {
     // all or segmented list
-    if (this.state.selectedSidebarFilter === null) {
+    if (!Array.isArray(this.state.selectedSidebarFilter)) {
       return undefined
     }
 
     // flow
-    if (Array.isArray(this.state.selectedSidebarFilter)) {
+    if (
+      this.state.selectedSidebarFilter.some(item => typeof item === 'string')
+    ) {
       return undefined
     }
 
     // tag
     return Object.values(this.props.tags).find(value => {
-      return value.text === this.state.selectedSidebarFilter.filters[0].value
+      return value.text === this.state.selectedSidebarFilter[0].value
     })
   }
 
@@ -625,7 +627,7 @@ class ContactsList extends React.Component {
           />
           <TagsList
             onFilterChange={filters => {
-              this.setState({ selectedSidebarFilter: filters })
+              this.setState({ selectedSidebarFilter: filters.filters })
               this.handleFilterChange({ ...filters, flows: [] }, true)
             }}
             isActive={this.state.selectedSidebarFilter !== null}
