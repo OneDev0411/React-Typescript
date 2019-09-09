@@ -1,18 +1,20 @@
-import React, { MouseEvent } from 'react'
+import React, { useContext } from 'react'
 
 import MiniContactProfile from 'components/MiniContact'
 import { plural } from 'components/TemplatesList/helpers'
+
+import { ListContext } from '../../../../context'
 
 import styles from './styles'
 import { isLastItem } from './helpers'
 
 interface Props {
   event: ICalendarEvent
-  onClickAssociation(e: MouseEvent<HTMLElement>): void
 }
 
-export function Associations(props: Props) {
-  const associations = props.event.full_crm_task!.associations
+export function Associations({ event }: Props) {
+  const { setSelectedEvent } = useContext(ListContext)
+  const associations = event.full_crm_task!.associations
 
   const contacts = (associations || []).filter(
     association => association.association_type === 'contact'
@@ -22,7 +24,7 @@ export function Associations(props: Props) {
     return null
   }
 
-  const preposition = getCrmEventTypePreposition(props.event.event_type)
+  const preposition = getCrmEventTypePreposition(event.event_type)
   const visibleContacts = contacts.slice(0, 2)
   const contactsCount = contacts.length
   const contactsOtherCount = contactsCount - 2
@@ -53,7 +55,10 @@ export function Associations(props: Props) {
       {needsShowOtherLabel && (
         <>
           {' and '}
-          <span style={styles.association} onClick={props.onClickAssociation}>
+          <span
+            style={styles.association}
+            onClick={() => setSelectedEvent(event)}
+          >
             {plural(`${contactsCount} other`, isPlural)}
           </span>
         </>

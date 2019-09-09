@@ -1,28 +1,22 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import MiniContactProfile from 'components/MiniContact'
+
+import { ListContext } from '../../context'
 
 import CrmTitle from './CrmTitle'
 import styles from '../styles'
 
 interface Props {
   event: ICalendarEvent
-  onClickScheduledEmail(event: ICalendarEvent): void
-  onClickCrmEventAssociations(event: ICalendarEvent): void
-  onEventChange(event: IEvent, type: 'updated'): void
+  onEventChange: (event: IEvent, type: string) => void
 }
 
-export function EventTitle(props: Props) {
-  const { event } = props
+export function EventTitle({ event, onEventChange }: Props) {
+  const { setSelectedEvent } = useContext(ListContext)
 
   if (['crm_task', 'crm_association'].includes(event.object_type)) {
-    return (
-      <CrmTitle
-        event={event}
-        onClickCrmEventAssociations={props.onClickCrmEventAssociations}
-        onEventChange={props.onEventChange}
-      />
-    )
+    return <CrmTitle event={event} onEventChange={onEventChange} />
   }
 
   if (event.object_type === 'contact_attribute') {
@@ -37,7 +31,7 @@ export function EventTitle(props: Props) {
             {event.full_contact!.display_name}
           </a>
         </MiniContactProfile>
-        's {event.event_type}
+        's {event.type_label}
       </div>
     )
   }
@@ -82,7 +76,7 @@ export function EventTitle(props: Props) {
           style={styles.link}
           onClick={e => {
             e.preventDefault()
-            props.onClickScheduledEmail(event)
+            setSelectedEvent(event)
           }}
         >
           {event.title || 'No Subject'}

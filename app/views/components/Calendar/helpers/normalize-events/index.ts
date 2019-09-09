@@ -41,7 +41,10 @@ function getEvents(
 
   return uniqEvents.reduce((acc: string[], event: ICalendarEvent) => {
     // TODO: remove this condition after converting notes to event
-    if (event.timestamp < range[0] || event.timestamp > range[1]) {
+    if (
+      !event.recurring &&
+      (event.timestamp < range[0] || event.timestamp > range[1])
+    ) {
       return acc
     }
 
