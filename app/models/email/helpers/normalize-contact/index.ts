@@ -1,15 +1,19 @@
-export function normalizeContactForEmailCompose(
-  contact: INormalizedContact
-): IDenormalizedEmailRecipientInput[] {
-  if (!contact || !contact.email) {
-    return []
-  }
+function hasEmail(contact: INormalizedContact): boolean {
+  return !!contact && !!contact.email
+}
 
-  return [
-    {
-      recipient_type: 'Email',
-      email: contact.email,
-      contact
-    }
-  ]
+function normalizeContact(
+  contact: INormalizedContact
+): IDenormalizedEmailRecipientInput {
+  return {
+    recipient_type: 'Email',
+    email: contact.email!,
+    contact
+  }
+}
+
+export function normalizeContactsForEmailCompose(
+  contacts: INormalizedContact[]
+): IDenormalizedEmailRecipientInput[] {
+  return contacts.filter(hasEmail).map(normalizeContact)
 }

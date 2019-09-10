@@ -17,6 +17,7 @@ import { getUserTeams } from 'actions/user/teams'
 import TagsOverlay from '../../components/TagsOverlay'
 import NoSearchResults from '../../../../../Partials/no-search-results'
 
+import Email from '../Actions/Email'
 import MergeContacts from '../Actions/MergeContacts'
 import ExportContacts from '../Actions/ExportContactsButton'
 import TagContacts from '../Actions/TagContacts'
@@ -142,6 +143,21 @@ class ContactsList extends React.Component {
             users={filters.users}
             disabled={this.props.isFetching}
           />
+        )
+      }
+    },
+    {
+      render: ({ entireMode, selectedRows }) => {
+        const disabled = entireMode ? true : selectedRows.length === 0
+
+        return (
+          <ActionWrapper
+            bulkMode={entireMode}
+            action="sending an email"
+            disabled={disabled}
+          >
+            <Email disabled={disabled} selectedRows={selectedRows} />
+          </ActionWrapper>
         )
       }
     },
