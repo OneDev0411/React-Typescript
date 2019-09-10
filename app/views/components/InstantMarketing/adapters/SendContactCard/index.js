@@ -6,7 +6,7 @@ import idx from 'idx'
 import { getContact } from 'models/contacts/get-contact'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
-import { normalizeContactForEmailCompose } from 'models/email/helpers/normalize-contact'
+import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
 
 import { confirmation } from 'actions/confirmation'
 
@@ -205,7 +205,7 @@ class SendContactCard extends React.Component {
   }
 
   get Recipients() {
-    return normalizeContactForEmailCompose(this.state.contact)
+    return normalizeContactsForEmailCompose([this.state.contact])
   }
 
   closeSocialDrawer = () =>

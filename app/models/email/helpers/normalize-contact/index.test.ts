@@ -2,32 +2,32 @@
 // eslint-disable-next-line
 import recipient from 'fixtures/contacts/contact-item'
 
-import {
-  normalizeContactForEmailCompose,
-  normalizeContactsForEmailCompose
-} from '.'
+import { normalizeContactsForEmailCompose } from '.'
 
 const contact = recipient as INormalizedContact
 
-describe('normalize-contact helpers', () => {
-  it('normalizeContactForEmailCompose', () => {
-    const denormalized = normalizeContactForEmailCompose(contact)
+describe('email normalize contacts helper', () => {
+  it('normalizeContactsForEmailCompose', () => {
+    const result = normalizeContactsForEmailCompose([contact, contact])
 
-    expect(denormalized).toHaveLength(1)
-    expect(denormalized).toEqual([
-      {
+    expect(result).toHaveLength(2)
+    expect(result).toEqual(
+      Array(2).fill({
         recipient_type: 'Email',
         email: contact.email,
         contact
-      }
+      })
+    )
+
+    const resultWithoutEmail = normalizeContactsForEmailCompose([
+      contact,
+      { ...contact, email: undefined },
+      { ...contact, email: '' },
+      contact
     ])
-  })
 
-  it('normalizeContactsForEmailCompose', () => {
-    const denormalized = normalizeContactsForEmailCompose([contact, contact])
-
-    expect(denormalized).toHaveLength(2)
-    expect(denormalized).toEqual(
+    expect(resultWithoutEmail).toHaveLength(2)
+    expect(resultWithoutEmail).toEqual(
       Array(2).fill({
         recipient_type: 'Email',
         email: contact.email,

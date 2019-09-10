@@ -7,19 +7,9 @@ function normalizeContact(
 ): IDenormalizedEmailRecipientInput {
   return {
     recipient_type: 'Email',
-    email: contact.email as string,
+    email: contact.email!,
     contact
   }
-}
-
-export function normalizeContactForEmailCompose(
-  contact: INormalizedContact
-): IDenormalizedEmailRecipientInput[] {
-  if (!hasEmail(contact)) {
-    return []
-  }
-
-  return [normalizeContact(contact)]
 }
 
 export function normalizeContactsForEmailCompose(
