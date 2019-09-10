@@ -1,4 +1,4 @@
-export function getContactTags(contact, attribute_def, defaultTags) {
+export function getContactTags(contact) {
   if (!contact) {
     throw new Error('Contact object is required!')
   }
@@ -23,16 +23,6 @@ export function getContactTags(contact, attribute_def, defaultTags) {
       )
     }
   })
-
-  // get default tags with current contact's tag
-  if (defaultTags) {
-    defaultTags.forEach(tag =>
-      add({
-        ...tag,
-        attribute_def
-      })
-    )
-  }
 
   return tags
 }
