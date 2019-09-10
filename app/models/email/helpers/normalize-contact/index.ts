@@ -1,5 +1,5 @@
 function hasEmail(contact: INormalizedContact): boolean {
-  return contact && !!contact.email
+  return !!contact && !!contact.email
 }
 
 function normalizeContact(
