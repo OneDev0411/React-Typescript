@@ -8,7 +8,7 @@ export function normalizeContextValue(context, value) {
   }
 
   if (context.data_type === 'Date') {
-    return new Date(value)
+    return new Date(value).toDateString()
   }
 
   return value
