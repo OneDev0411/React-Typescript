@@ -2,9 +2,6 @@ import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { Helmet } from 'react-helmet'
-import { uniqBy } from 'lodash'
-
-import { formatedDefaultTags, defaultTags } from 'utils/default-tags'
 
 import { confirmation } from 'actions/confirmation'
 import { getContactsTags } from 'models/contacts/get-contacts-tags'
@@ -19,8 +16,6 @@ import Loading from '../../../../Partials/Loading'
 import Row from './Row'
 import { Input } from './Input'
 import { Container, Description } from './styled'
-
-const lowerCaseDefaultTags = defaultTags.map(tag => tag.toLowerCase())
 
 const HIGHLIGHT_SECONDS = 4
 
@@ -40,10 +35,10 @@ class ManageTags extends Component {
     try {
       const response = await await getContactsTags()
 
-      const rawTags = uniqBy(
-        [...formatedDefaultTags, ...response.data],
-        'text'
-      ).map(({ text, type }) => ({ text, highlight: false, type }))
+      const rawTags = response.data.map(({ text }) => ({
+        text,
+        highlight: false
+      }))
 
       this.setState({
         loading: false,
@@ -148,13 +143,6 @@ class ManageTags extends Component {
 
     if (!text || this.state.isSaving) {
       return
-    }
-
-    if (lowerCaseDefaultTags.includes(text.toLowerCase())) {
-      return this.handleDuplicateTagCreate({
-        text: text[0].toUpperCase() + text.substring(1).toLowerCase(),
-        type: 'default_tag'
-      })
     }
 
     try {

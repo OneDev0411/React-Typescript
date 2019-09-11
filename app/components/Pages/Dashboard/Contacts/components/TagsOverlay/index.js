@@ -5,12 +5,11 @@ import _ from 'underscore'
 import unionBy from 'lodash/unionBy'
 import intersectionBy from 'lodash/intersectionBy'
 
-import { defaultTags } from 'utils/default-tags'
 import OverlayDrawer from 'components/OverlayDrawer'
 
 import {
   getAttributeFromSummary,
-  getContactAttribute
+  getContactAttribute // eslint-disable-line
 } from 'models/contacts/helpers'
 
 import {
@@ -281,13 +280,11 @@ class TagsOverlay extends React.Component {
     closeOverlay()
   }
 
-  // get all tags returns default tags and all the other tags
-  // It's used for bulk mode tagging experience
   getAllTags = () => {
     const attributeDef = selectDefinitionByName(this.props.attributeDefs, 'tag')
     const existingTags = this.props.existingTags
-    const allTags = defaultTags
-      .concat(existingTags.map(tag => tag[attributeDef.data_type]))
+    const allTags = existingTags
+      .map(tag => tag[attributeDef.data_type])
       .map(
         tagText => ({
           [attributeDef.data_type]: tagText,
@@ -302,6 +299,7 @@ class TagsOverlay extends React.Component {
   }
 
   // get common tags between selected contacts & default tags
+  // TODO: remove this function or simplify this as we don't have default tags
   getCommonTags = (selectedContactsIds, ContactListStore, existingTags) => {
     if (selectedContactsIds.length === 0) {
       return []
@@ -328,8 +326,8 @@ class TagsOverlay extends React.Component {
       ...tag,
       isSelected: true
     }))
-    const defaultsWithExisting = defaultTags
-      .concat(existingTags.map(tag => tag[attribute_def.data_type]))
+    const defaultsWithExisting = existingTags
+      .map(tag => tag[attribute_def.data_type])
       .map(
         tagText => ({
           [attribute_def.data_type]: tagText,

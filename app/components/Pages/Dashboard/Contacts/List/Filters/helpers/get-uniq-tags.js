@@ -1,4 +1,3 @@
-import { defaultTags } from 'utils/default-tags'
 import { sortAlphabetically } from 'utils/helpers'
 
 const getUniqTags = tags => {
@@ -6,7 +5,8 @@ const getUniqTags = tags => {
     return []
   }
 
-  return [...new Set([...defaultTags, ...tags.map(({ text }) => text)])]
+  return tags
+    .map(({ text }) => text)
     .sort(sortAlphabetically)
     .map(tag => ({ label: tag, value: tag }))
 }
