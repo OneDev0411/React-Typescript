@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Flex from 'styled-flex-component'
 
 import Menu from './Menu'
 import { Catalog } from './Catalog'
@@ -16,7 +15,7 @@ Header.defaultProps = {
 
 export function Header(props) {
   return (
-    <Flex justifyBetween style={{ padding: '1.5em 2.5em' }}>
+    <>
       <Catalog contact={props.contact} />
       <Menu
         contact={props.contact}
@@ -24,6 +23,6 @@ export function Header(props) {
         closeButtonQuery={props.closeButtonQuery}
         addToFlowCallback={props.addToFlowCallback}
       />
-    </Flex>
+    </>
   )
 }

@@ -3,7 +3,6 @@ import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 import { Helmet } from 'react-helmet'
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs'
 
 import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
@@ -17,7 +16,6 @@ import { updateContactSelf } from 'models/contacts/update-contact-self'
 
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 
-import NewTask from 'components/NewEvent'
 import {
   selectDefinitionByName,
   isLoadedContactAttrDefs
@@ -38,19 +36,9 @@ import { Partner } from './Partner'
 import Tags from './Tags'
 import { ContactInfo } from './ContactInfo'
 import AddressesSection from './Addresses'
-import { AddNote } from './AddNote'
 import { Owner } from './Owner'
 import Delete from './Delete'
-import {
-  PageContainer,
-  ColumnsContainer,
-  SideColumnWrapper,
-  SecondColumn,
-  ThirdColumn,
-  PageWrapper,
-  Card,
-  TabsContainer
-} from './styled'
+import { PageContainer, SideColumn, MainColumn, PageWrapper } from './styled'
 
 import { Header } from './Header'
 import Timeline from './Timeline'
@@ -264,11 +252,6 @@ class ContactProfile extends React.Component {
       contact: associationNormalizer(contact)
     }
 
-    const thirdColumnSections = [
-      <Dates contact={contact} key="s1" />,
-      <Deals contact={contact} key="s2" />
-    ]
-
     const _props = {
       contact,
       submitCallback: this.setContact
@@ -279,107 +262,56 @@ class ContactProfile extends React.Component {
         <Helmet>
           <title>{this.documentTitle}</title>
         </Helmet>
-        <PageContainer>
-          <Header
-            contact={contact}
-            backUrl={
-              this.props.location.state && this.props.location.state.id
-                ? '/dashboard/contacts'
-                : null
-            }
-            closeButtonQuery={this.props.location.state}
-            addToFlowCallback={this.addToFlowCallback}
-          />
+        <PageContainer className="u-scrollbar--thinner">
+          <SideColumn>
+            <Header
+              contact={contact}
+              backUrl={
+                this.props.location.state && this.props.location.state.id
+                  ? '/dashboard/contacts'
+                  : null
+              }
+              closeButtonQuery={this.props.location.state}
+              addToFlowCallback={this.addToFlowCallback}
+            />
+            <Flows
+              flows={contact.flows}
+              contactId={contact.id}
+              onStop={this.stopFlow}
+              addCallback={this.addToFlowCallback}
+            />
+            <Tags contact={contact} />
+            <Dates {..._props} />
 
-          <ColumnsContainer>
-            <SideColumnWrapper>
-              {!this.state.isDesktopScreen && (
-                <Card>
-                  <Flows
-                    flows={contact.flows}
-                    contactId={contact.id}
-                    onStop={this.stopFlow}
-                    addCallback={this.addToFlowCallback}
-                  />
-                </Card>
-              )}
-              <Card>
-                <Tags contact={contact} />
-              </Card>
-              <Card>
-                {!this.state.isDesktopScreen && <Dates {..._props} />}
+            <ContactInfo {..._props} />
 
-                <ContactInfo {..._props} />
+            <AddressesSection {..._props} />
 
-                <AddressesSection {..._props} />
+            <Details {..._props} />
 
-                <Details {..._props} />
+            <Partner {..._props} />
 
-                <Partner {..._props} />
+            <Deals contact={contact} />
 
-                {!this.state.isDesktopScreen && <Deals contact={contact} />}
-
-                <Owner
-                  onSelect={this.onChangeOwner}
-                  owner={contact.user}
-                  user={user}
-                  contact={contact}
-                  disabled={this.state.isUpdatingOwner}
-                />
-              </Card>
-              <Delete
-                handleDelete={this.delete}
-                isDeleting={this.state.isDeleting}
-              />
-            </SideColumnWrapper>
-
-            <SecondColumn>
-              <TabsContainer>
-                <Tabs>
-                  <TabList>
-                    <Tab>
-                      <span>Add Event</span>
-                    </Tab>
-                    <Tab>
-                      <span>Add Note</span>
-                    </Tab>
-                  </TabList>
-
-                  <TabPanels>
-                    <TabPanel>
-                      <NewTask
-                        user={user}
-                        submitCallback={this.addEvent}
-                        defaultAssociation={defaultAssociation}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <AddNote
-                        contact={contact}
-                        onSubmit={this.handleAddNote}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </TabsContainer>
-
-              <Timeline ref={this.timelineRef} contact={this.state.contact} />
-            </SecondColumn>
-
-            {this.state.isDesktopScreen && (
-              <ThirdColumn>
-                <Card>
-                  <Flows
-                    flows={contact.flows}
-                    contactId={contact.id}
-                    onStop={this.stopFlow}
-                    addCallback={this.addToFlowCallback}
-                  />
-                </Card>
-                <Card>{thirdColumnSections}</Card>
-              </ThirdColumn>
-            )}
-          </ColumnsContainer>
+            <Owner
+              onSelect={this.onChangeOwner}
+              owner={contact.user}
+              user={user}
+              contact={contact}
+              disabled={this.state.isUpdatingOwner}
+            />
+            <Delete
+              handleDelete={this.delete}
+              isDeleting={this.state.isDeleting}
+            />
+          </SideColumn>
+          <MainColumn>
+            <Timeline
+              ref={this.timelineRef}
+              contact={this.state.contact}
+              defaultAssociation={defaultAssociation}
+            />
+          </MainColumn>
         </PageContainer>
       </PageWrapper>
     )
@@ -413,7 +345,3 @@ export default withRouter(
     }
   )(ContactProfile)
 )
-
-// todo
-// infinit scroll + lazy loading
-// loading new event associationas after adding to timeline
