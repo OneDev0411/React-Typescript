@@ -30,9 +30,6 @@ const useStyles = makeStyles((theme: Theme) =>
         maxWidth: '100%'
       }
     },
-    learnMore: {
-      justifyContent: 'right'
-    },
     videoIcon: {
       marginRight: '0.5em',
       fill: `${theme.palette.primary.main}`
@@ -54,15 +51,16 @@ export default function EmptyState() {
         Impress your clients with stunning designs using ready-made social &
         email templates
       </h1>
-      <Button
-        color="primary"
-        target="blank"
-        className={classes.learnMore}
-        href="https://help.rechat.com/en/articles/2562820-marketing-center-overview"
-      >
-        <IconVideo className={classes.videoIcon} />
-        Learn More
-      </Button>
+      <div>
+        <Button
+          color="primary"
+          target="blank"
+          href="https://help.rechat.com/en/articles/2562820-marketing-center-overview"
+        >
+          <IconVideo className={classes.videoIcon} />
+          Learn More
+        </Button>
+      </div>
       <img
         alt="empty-state"
         className={classes.coverImage}
