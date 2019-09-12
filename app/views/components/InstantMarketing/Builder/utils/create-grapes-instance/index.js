@@ -25,7 +25,10 @@ const STYLE_MANAGER_TEXT_TAGS = [
   'mj-button'
 ]
 
-export function createGrapesInstance(Grapesjs, { assets, plugins }) {
+export function createGrapesInstance(
+  Grapesjs,
+  { assets, plugins, pluginsOpts }
+) {
   return Grapesjs.init({
     ...config,
     avoidInlineStyle: false,
@@ -45,6 +48,7 @@ export function createGrapesInstance(Grapesjs, { assets, plugins }) {
     showDevices: false,
     plugins: ['asset-blocks', 'style-manager', ...plugins],
     pluginsOpts: {
+      ...pluginsOpts,
       'style-manager': {
         fontSizePicker: {
           conditions: {
