@@ -88,7 +88,12 @@ class Builder extends React.Component {
 
     this.editor = createGrapesInstance(Grapesjs, {
       assets: [...this.props.assets, ...this.UserAssets],
-      plugins: [GrapesjsMjml]
+      plugins: [GrapesjsMjml],
+      pluginsOpts: {
+        [GrapesjsMjml]: {
+          columnsPadding: false
+        }
+      }
     })
 
     this.editor.on('load', this.setupGrapesJs)
