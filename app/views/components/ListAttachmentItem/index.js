@@ -2,16 +2,17 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import fecha from 'fecha'
 
-import IconAttacment from 'components/SvgIcons/Attachment/IconAttacment'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
-import { Icon, Item, Title, DateTime, DeleteIcon } from './styled'
+import IconAttachment from '../SvgIcons/Attachment/IconAttachment'
+
+import { DateTime, DeleteIcon, Icon, Item, Title } from './styled'
 
 export function ListAttachmentItem(props) {
   return (
     <Item>
       <Icon>
-        <IconAttacment />
+        <IconAttachment />
       </Icon>
 
       <div>

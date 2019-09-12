@@ -300,7 +300,7 @@ export const TextEditor = forwardRef(
     }
 
     return (
-      <Flex column className={className}>
+      <Flex column full className={className}>
         <EditorWrapper
           ref={editorElementRef}
           className={cn({
@@ -308,7 +308,8 @@ export const TextEditor = forwardRef(
           })}
           onClick={() => editorRef.current && editorRef.current.focus()}
           style={{
-            minHeight: '10rem'
+            minHeight: '10rem',
+            height: '100%'
           }}
           data-test="text-editor-wrapper"
         >

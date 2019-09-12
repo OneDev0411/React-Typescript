@@ -1,14 +1,13 @@
 import { ReactNode } from 'react'
+import { SuperAgentRequest } from 'superagent'
 
-// TODO: we can remove this and directly work with file objects.
-interface EmailComposeAttachment {
-  title: string
-  date: Date
-  url: string
+export interface IUploadingAttachment {
+  file: File
+  request: SuperAgentRequest
 }
 
 export interface EmailFormValues {
-  attachments: EmailComposeAttachment[]
+  attachments: IFile[]
   to: IDenormalizedEmailRecipientInput[] | undefined
   cc?: IDenormalizedEmailRecipientInput[] | undefined
   bcc?: IDenormalizedEmailRecipientInput[] | undefined

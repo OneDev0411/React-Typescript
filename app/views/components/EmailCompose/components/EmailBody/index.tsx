@@ -43,7 +43,8 @@ const EmailBody = ({
   const [signatureEditorVisible, setSignatureEditorVisible] = useState(false)
 
   const uploadImage = useCallback(async file => {
-    const uploadedFile = await uploadEmailAttachment(file)
+    const response = await uploadEmailAttachment(file)
+    const uploadedFile: IFile = response.body.data
 
     return uploadedFile.url
   }, [])

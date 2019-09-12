@@ -14,8 +14,6 @@ import { selectDealTasks } from 'reducers/deals/tasks'
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 import { getChecklistById } from 'reducers/deals/checklists'
 
-import { getDocumentLastState } from 'deals/utils/get-document-last-state'
-
 import { moveTaskFile } from 'actions/deals'
 
 import Tooltip from 'components/tooltip'
@@ -25,14 +23,15 @@ import TasksDrawer from 'components/SelectDealTasksDrawer'
 import { normalizeAttachment } from '../helpers/normalize-attachment'
 
 import {
+  ChecklistName,
   Container,
+  DateTime,
   DocumentItem,
   NameSection,
   Title,
-  DateTime,
-  ChecklistName,
   ViewDocument
 } from './styled'
+import { getAllDealDocuments } from '../helpers/get-all-deal-documents'
 
 export class DocumentRow extends React.Component {
   state = {
@@ -113,69 +112,19 @@ export class DocumentRow extends React.Component {
 
   getFormattedDate = date => fecha.format(new Date(date), 'MMM DD YYYY, h:mm A')
 
-  getStashFiles = () =>
-    (this.props.deal.files || [])
-      .filter(file => file.mime === 'application/pdf')
-      .map(file =>
-        normalizeAttachment({
-          type: 'file',
-          task: null,
-          file
-        })
-      )
-
   getDocuments = () => {
-    let attachments = []
-    let submissions = []
-
-    this.props.tasks.forEach(task => {
-      if (task.submission) {
-        const files = getDocumentLastState({
-          type: 'task',
-          deal: this.props.deal,
-          envelopes: this.props.envelopes,
-          task
-        }).map(({ originalFile: file }) =>
-          normalizeAttachment({
-            type: 'form',
-            file,
-            task
-          })
-        )
-
-        submissions = [...submissions, ...files]
-      }
-
-      // get attachments of task
-      if (Array.isArray(task.room.attachments)) {
-        task.room.attachments
-          .filter(file => file.mime === 'application/pdf')
-          .forEach(file => {
-            const files = getDocumentLastState({
-              type: 'document',
-              deal: this.props.deal,
-              document: file,
-              envelopes: this.props.envelopes,
-              task
-            }).map(({ originalFile: file }) =>
-              normalizeAttachment({
-                type: 'file',
-                task,
-                file
-              })
-            )
-
-            attachments = [...attachments, ...files]
-          })
-      }
-    })
+    const documents = getAllDealDocuments(
+      this.props.deal,
+      this.props.envelopes,
+      this.props.tasks,
+      this.props.showStashFiles
+    )
 
     // get stash files
-    const stashFiles = this.props.showStashFiles ? this.getStashFiles() : []
+    const stashFiles = documents.filter(document => !document.task)
 
-    const sortedList = []
-      .concat(attachments, submissions)
-      .filter(item => this.isInitialAttachment(item) === false)
+    const sortedList = documents
+      .filter(item => this.isInitialAttachment(item) === false && item.task)
       .sort((a, b) => b.date - a.date)
 
     return Object.values(this.props.initialAttachments)

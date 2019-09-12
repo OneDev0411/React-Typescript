@@ -10,6 +10,7 @@ import { Separator } from '../styled'
 import IconList from '../../SvgIcons/List/ListIcon'
 import IconNumberedList from '../../SvgIcons/NumberedList/IconNumberedList'
 import HeadingButtons from './HeadingButtons'
+import { iconSizes } from '../../SvgIcons/icon-sizes'
 
 export function RichTextButtons({ richButtonsPlugin }) {
   const {
@@ -51,7 +52,7 @@ export function RichTextButtons({ richButtonsPlugin }) {
 
       <ULButton>
         <ToolbarToggleButton tooltip="Bulleted List" isBlockButton>
-          <IconList color="inherit" size={{ width: 16, height: 16 }} />
+          <IconList color="inherit" size={iconSizes.small} />
         </ToolbarToggleButton>
       </ULButton>
 

@@ -3,7 +3,7 @@ import moment from 'moment'
 
 import Lightbox from 'react-images'
 
-import IconAttachment from 'components/SvgIcons/Attachment/IconAttacment'
+import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
 import { PdfViewerModal } from 'components/PdfViewer/Modal'
 
 import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
@@ -56,10 +56,10 @@ class ImageAttachments extends React.Component {
             this.setState({ showLightbox: false })
           }}
           onClickNext={() => {
-            this.setState({ currentImage: this.state.currentImage + 1 })
+            this.setState(state => ({ currentImage: state.currentImage + 1 }))
           }}
           onClickPrev={() => {
-            this.setState({ currentImage: this.state.currentImage - 1 })
+            this.setState(state => ({ currentImage: state.currentImage - 1 }))
           }}
         />
 
@@ -90,6 +90,7 @@ class ImageAttachments extends React.Component {
 /**
  * render pdf attachments
  */
+// eslint-disable-next-line react/no-multi-comp
 class PdfAttachments extends React.Component {
   state = {
     selectedFile: {},
@@ -112,7 +113,7 @@ class PdfAttachments extends React.Component {
     if (openFilesInNewTab) {
       return (
         <div className="inline">
-          {pdfs.map((file, key) => (
+          {pdfs.map(file => (
             <a href={file.src} key={`PDF_FILE_${file.id}`} target="_blank">
               <div className="item">
                 <div className="file-attach-icon">
@@ -139,7 +140,7 @@ class PdfAttachments extends React.Component {
           onClose={() => this.setState({ showViewer: false })}
         />
 
-        {pdfs.map((file, key) => (
+        {pdfs.map(file => (
           <div
             key={`PDF_FILE_${file.id}`}
             className="item"
@@ -182,7 +183,7 @@ const UnknownAttachments = ({ attachments }) => {
 
   return (
     <div className="inline">
-      {files.map((file, key) => (
+      {files.map(file => (
         <a href={file.url} key={`UNKNOWN_FILE_${file.id}`} target="_blank">
           <div className="item">
             <div className="file-attach-icon">

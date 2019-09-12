@@ -92,14 +92,30 @@ class EmailComposeDrawer extends React.Component<
   }
 
   handleSubmit = async form => {
-    if (
-      this.emailBodyRef.current &&
-      this.emailBodyRef.current.hasUploadingImage()
-    ) {
+    const uploadingAttachment = (form.uploadingAttachments || []).length > 0
+    const uploadingImage =
+      this.emailBodyRef.current && this.emailBodyRef.current.hasUploadingImage()
+
+    if (uploadingImage || uploadingAttachment) {
       return new Promise((resolve, reject) => {
         this.context.setConfirmationModal({
           message: 'Upload in progress',
-          description: 'Please wait while images are uploading, or remove them',
+          description: `Please wait while ${
+            uploadingImage ? 'images' : 'attachments'
+          } are uploading, or remove them`,
+          cancelLabel: 'Ok',
+          needsConfirm: false,
+          onCancel: reject
+        })
+      })
+    }
+
+    if ((form.uploadingAttachments || []).length > 0) {
+      return new Promise((resolve, reject) => {
+        this.context.setConfirmationModal({
+          message: 'Upload in progress',
+          description:
+            'Please wait while attachments are uploading, or remove them',
           cancelLabel: 'Ok',
           needsConfirm: false,
           onCancel: reject

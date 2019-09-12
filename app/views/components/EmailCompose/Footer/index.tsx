@@ -6,10 +6,10 @@ import ActionButton from 'components/Button/ActionButton'
 import DateTimePicker from 'components/DateTimePicker/next'
 import { formatDate } from 'components/DateTimePicker/helpers'
 
-import { AddDealFile } from '../components/AddDealFile'
 import { FooterContainer } from './styled'
 import { textForSubmitButton } from './helpers'
 import SchedulerButton from './SchedulerButton'
+import { EmailAttachmentsDropdown } from '../components/EmailAttachmentsDropdown'
 
 export function Footer(props) {
   const due_at = props.formProps.values.due_at
@@ -18,14 +18,10 @@ export function Footer(props) {
   return (
     <FooterContainer>
       <div className="features-list">
-        {props.hasDealsAttachments && (
-          <Field
-            name="attachments"
-            deal={props.deal}
-            initialAttachments={props.initialAttachments}
-            component={AddDealFile}
-          />
-        )}
+        <EmailAttachmentsDropdown
+          deal={props.deal}
+          initialAttachments={props.initialAttachments}
+        />
       </div>
 
       <div className="action-bar">
