@@ -14,12 +14,7 @@ import { getContact } from 'models/contacts/get-contact'
 import { deleteContacts } from 'models/contacts/delete-contact'
 import { updateContactSelf } from 'models/contacts/update-contact-self'
 
-import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
-
-import {
-  selectDefinitionByName,
-  isLoadedContactAttrDefs
-} from 'reducers/contacts/attributeDefs'
+import { isLoadedContactAttrDefs } from 'reducers/contacts/attributeDefs'
 import { selectContact } from 'reducers/contacts/list'
 
 import { getContactsTags } from 'store_actions/contacts/get-contacts-tags'
@@ -166,29 +161,14 @@ class ContactProfile extends React.Component {
 
   /**
    * refreshes timeline
-   * after a lot of investigations I finally figured out we need to
-   * wait for ~1.5 sconds to be able get the new changes from server.
-   * it seems a queue is working behind the scenes to store the data
    */
-  fetchTimeline = () =>
-    setTimeout(() => this.timelineRef.current.refresh(), 1500)
+  fetchTimeline = () => setTimeout(this.timelineRef.current.refresh, 500)
 
   setContact = (newContact, fallback) =>
     this.setState(
       state => ({ contact: { ...state.contact, ...newContact } }),
       fallback
     )
-
-  handleAddNote = async text => {
-    const contact = await upsertContactAttributes(this.state.contact.id, [
-      {
-        text,
-        attribute_def: selectDefinitionByName(this.props.attributeDefs, 'note')
-      }
-    ])
-
-    this.setContact(contact, this.fetchTimeline)
-  }
 
   onChangeOwner = async item => {
     this.setState({ isUpdatingOwner: true })
@@ -310,6 +290,7 @@ class ContactProfile extends React.Component {
               ref={this.timelineRef}
               contact={this.state.contact}
               defaultAssociation={defaultAssociation}
+              onCreateNote={this.setContact}
             />
           </MainColumn>
         </PageContainer>

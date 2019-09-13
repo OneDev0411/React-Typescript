@@ -1,10 +1,17 @@
 import styled from 'styled-components'
 
-import { H3 } from 'components/Typography/headings'
+export const Container = styled.div`
+  padding: ${props => props.theme.spacing(0, 2)};
+  overflow: hidden;
+`
 
-export const Container = styled.div``
+export const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: ${props => props.theme.spacing(1)}px;
 
-export const Title = styled(H3)`
-  margin: 0.75em 0;
-  font-weight: 500;
+  button {
+    margin-left: ${props => props.theme.spacing(1)}px;
+  }
 `

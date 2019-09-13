@@ -82,7 +82,7 @@ export function Event({ event, user, nextItem, style, onEventChange }: Props) {
               }}
             >
               <EventIcon event={event} />
-              <EventTitle event={event} onEventChange={onEventChange} />
+              <EventTitle event={event} />
             </div>
           </div>
 

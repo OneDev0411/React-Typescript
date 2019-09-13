@@ -399,6 +399,16 @@ export function Calendar({
   })
 
   /**
+   * calls when contrariwise prop changes
+   */
+  useEffect(() => {
+    if (previousProps && previousProps.contrariwise !== contrariwise) {
+      handleLoadEvents(activeDate, initialRange)
+    }
+    // eslint-disable-next-line
+  }, [contrariwise])
+
+  /**
    * calls when viewAsUsers prop changes
    */
   useEffect(() => {

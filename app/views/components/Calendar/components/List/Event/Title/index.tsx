@@ -9,14 +9,13 @@ import styles from '../styles'
 
 interface Props {
   event: ICalendarEvent
-  onEventChange: (event: IEvent, type: string) => void
 }
 
-export function EventTitle({ event, onEventChange }: Props) {
+export function EventTitle({ event }: Props) {
   const { setSelectedEvent } = useContext(ListContext)
 
   if (['crm_task', 'crm_association'].includes(event.object_type)) {
-    return <CrmTitle event={event} onEventChange={onEventChange} />
+    return <CrmTitle event={event} />
   }
 
   if (event.object_type === 'contact_attribute') {
