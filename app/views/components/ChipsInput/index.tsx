@@ -246,7 +246,7 @@ export function ChipsInput<T>({
                 inputProps: {
                   ...inputProps,
                   adornment: chips,
-                  autoComplete: 'disabled'
+                  autoComplete: 'off'
                 },
                 readOnly,
                 classes: {
