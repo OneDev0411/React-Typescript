@@ -17,16 +17,23 @@ import { InsightContainer } from './styled'
 import useListData from './useListData'
 import useFilterList from './useFilterList'
 import { InsightFiltersType } from './types'
+import { SortValues, doSort } from './helpers'
 
 function List(props) {
   const [isSideMenuOpen, setSideMenuOpen] = useState(true)
   const [queue, setQueue] = useState(0)
+  const [sort, setSort] = useState(SortValues.NEWEST)
   const { list, isLoading } = useListData(props.user, queue)
   const isScheduled = props.route && props.route.path === 'scheduled'
   const filterType = isScheduled
     ? InsightFiltersType.SCHEDULED
     : InsightFiltersType.SENT
   const { filteredList, stats } = useFilterList(list, filterType)
+  const resultList = React.useMemo(() => doSort(filteredList, sort), [
+    filteredList,
+    sort
+  ])
+
   const tableClassName = ['insight-table-container']
 
   if (isLoading === false) {
@@ -106,6 +113,11 @@ function List(props) {
     []
   )
 
+  const sortableColumns = [
+    { label: 'Newest', value: SortValues.NEWEST },
+    { label: 'Oldest', value: SortValues.OLDEST }
+  ]
+
   return (
     <Layout
       isSideMenuOpen={isSideMenuOpen}
@@ -123,15 +135,22 @@ function List(props) {
         {isLoading && <LoadingComponent />}
         <div className={tableClassName.join(' ')}>
           <Table
-            data={filteredList}
+            data={resultList}
             columns={doFilterOnColumns(columns, filterType)}
             EmptyState={() => (
               <NoSearchResults description='Try sending your first campaign using "Send New Email" button.' />
             )}
             isFetching={isLoading}
             LoadingState={LoadingComponent}
-            showToolbar={false}
             isHeaderSticky
+            isToolbarSticky={false}
+            plugins={{
+              sortable: {
+                columns: sortableColumns,
+                defaultIndex: sort,
+                onChange: ({ value }) => setSort(value)
+              }
+            }}
           />
         </div>
       </InsightContainer>

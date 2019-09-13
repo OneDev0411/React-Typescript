@@ -108,3 +108,26 @@ export function doFilterOnColumns(
 
   return columns
 }
+
+export enum SortValues {
+  NEWEST = 'NEWEST',
+  OLDEST = 'OLDEST'
+}
+
+export function doSort(list: any, sort_value: SortValues) {
+  const sort = SortValues[sort_value]
+
+  if (sort === SortValues.NEWEST) {
+    return list.sort(function newestSort(a, b) {
+      return b.due_at - a.due_at
+    })
+  }
+
+  if (sort === SortValues.OLDEST) {
+    return list.sort(function oldestSort(a, b) {
+      return a.due_at - b.due_at
+    })
+  }
+
+  return list
+}
