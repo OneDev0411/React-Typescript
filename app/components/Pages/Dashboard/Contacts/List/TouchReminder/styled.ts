@@ -7,18 +7,6 @@ import IconTime from 'components/SvgIcons/Time/IconTime'
 export const Container = styled.div`
   display: flex;
   align-items: center;
-  position: relative;
-  padding-right: 2.5rem;
-  margin-right: 2.5rem;
-
-  &:after {
-    content: '';
-    position: absolute;
-    width: 1px;
-    right: 0;
-    height: 60%;
-    background-color: ${borderColor};
-  }
 `
 
 interface LabelProps {
