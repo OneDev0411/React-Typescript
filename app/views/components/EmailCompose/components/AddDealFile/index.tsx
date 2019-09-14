@@ -46,6 +46,7 @@ interface Props extends FieldRenderProps<any> {
   deal?: IDeal
   onClick?: MouseEventHandler
   initialAttachments: IFile[]
+  onChanged?: () => void
 }
 
 interface State {
@@ -59,6 +60,7 @@ export function AddDealFile({
   tasks,
   checklists,
   envelopes,
+  onChanged = () => {},
   ...props
 }: Props) {
   const [isDealsListOpen, setDealsListOpen] = useState(false)
@@ -117,6 +119,7 @@ export function AddDealFile({
 
     if (deal) {
       props.input.onChange(dealDocuments.map(document => document.file))
+      onChanged()
     }
   }
 

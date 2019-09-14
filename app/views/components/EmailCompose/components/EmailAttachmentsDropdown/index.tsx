@@ -16,11 +16,21 @@ import { IUploadingAttachment } from '../../types'
 import { iconSizes } from '../../../SvgIcons/icon-sizes'
 
 interface Props {
-  deal: IDeal
+  deal?: IDeal
   initialAttachments: IFile[]
+  /**
+   * Called when attachments from deals are changed or a new attachment
+   * starts to upload. Note that it's not called when an upload is finished
+   * and a new attachment is added because of that.
+   */
+  onChanged?: () => void
 }
 
-export function EmailAttachmentsDropdown({ deal, initialAttachments }: Props) {
+export function EmailAttachmentsDropdown({
+  deal,
+  initialAttachments,
+  onChanged = () => {}
+}: Props) {
   const iconClasses = useIconStyles()
 
   return (
@@ -42,6 +52,7 @@ export function EmailAttachmentsDropdown({ deal, initialAttachments }: Props) {
             deal={deal}
             initialAttachments={initialAttachments}
             component={AddDealFile}
+            onChanged={onChanged}
             onClick={close}
           />
           <Field
@@ -58,6 +69,8 @@ export function EmailAttachmentsDropdown({ deal, initialAttachments }: Props) {
                       request: uploadEmailAttachment(file)
                     }
                   ] as IUploadingAttachment[]) as any)
+
+                  onChanged()
                 }
               }
 

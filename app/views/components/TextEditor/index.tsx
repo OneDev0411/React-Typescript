@@ -164,6 +164,7 @@ export const TextEditor = forwardRef(
     useImperativeHandle(
       ref,
       createEditorRef({
+        editorElementRef,
         editorRef,
         setEditorState,
         stateToHtmlOptions

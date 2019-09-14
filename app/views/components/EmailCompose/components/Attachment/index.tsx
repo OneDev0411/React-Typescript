@@ -41,7 +41,13 @@ export function Attachment({ children, onDelete }: Props) {
   const textClasses = useTextStyles()
 
   return (
-    <Box mb={1} display="flex" alignItems="center" className={classes.root}>
+    <Box
+      mb={1}
+      mr={1}
+      display="flex"
+      alignItems="center"
+      className={classes.root}
+    >
       <IconAttachment
         className={classNames(iconClasses.rightMargin, iconClasses.small)}
       />
