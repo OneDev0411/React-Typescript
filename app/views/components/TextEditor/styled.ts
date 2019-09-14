@@ -30,7 +30,15 @@ export const EditorWrapper = styled.div`
     }
   }
   padding-top: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(0.5)}px`};
-  overflow: hidden; // Allows float styles on images, without collapsing editor height
+  overflow: auto; // Allows float styles on images, without collapsing editor height
+
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  .DraftEditor-root {
+    flex: 1;
+  }
+
   img {
     z-index: 1; // This ensures images are selectable even when they are floated
   }

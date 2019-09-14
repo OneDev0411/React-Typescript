@@ -237,9 +237,10 @@ class EmailComposeDrawer extends React.Component<
               hasStaticBody={this.props.hasStaticBody}
               hasTemplateVariables={this.props.hasTemplateVariables}
               content={this.props.initialValues!.body || ''}
+              attachments={
+                <Field name="attachments" component={AttachmentsList} />
+              }
             />
-
-            <Field name="attachments" component={AttachmentsList} />
           </Fragment>
         )}
       />
