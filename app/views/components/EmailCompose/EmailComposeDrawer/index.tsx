@@ -50,8 +50,7 @@ class EmailComposeDrawer extends React.Component<
     isSubmitDisabled: false,
     onSent: () => {},
     onClose: () => {},
-    hasStaticBody: false,
-    hasDealsAttachments: false
+    hasStaticBody: false
   }
 
   state = {
@@ -220,7 +219,6 @@ class EmailComposeDrawer extends React.Component<
             initialAttachments={this.props.initialValues!.attachments || []}
             deal={this.props.deal}
             onChanged={this.scrollToEnd}
-            hasDealsAttachments={this.props.hasDealsAttachments}
           />
         )}
         render={({ values }) => (

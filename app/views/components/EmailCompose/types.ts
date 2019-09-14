@@ -33,7 +33,6 @@ export interface EmailComposeDrawerProps {
   deal?: IDeal
   isSubmitDisabled?: boolean
   hasStaticBody?: boolean
-  hasDealsAttachments?: boolean
   hasSignatureByDefault?: boolean
   hasTemplateVariables?: boolean
 
