@@ -31,9 +31,13 @@ class ManageTags extends Component {
     this.fetch()
   }
 
+  reloadStoreTags = () => {
+    this.props.getContactsTags()
+  }
+
   fetch = async () => {
     try {
-      const response = await await getContactsTags()
+      const response = await getContactsTags()
 
       const rawTags = response.data.map(({ text }) => ({
         text,
@@ -126,6 +130,7 @@ class ManageTags extends Component {
     }
 
     await updateContactsTags(oldText, text)
+    this.reloadStoreTags()
     this.props.notify({
       status: 'success',
       message: `"${text}" updated.`
@@ -161,6 +166,7 @@ class ManageTags extends Component {
 
     this.setState({ isSaving: true })
     await createContactsTags(text)
+    this.reloadStoreTags()
     this.props.notify({
       status: 'success',
       message: `"${text}" added.`
@@ -183,7 +189,7 @@ class ManageTags extends Component {
           'Deleting a tag will remove it from the system and remove it from any contacts with this tag.',
         onConfirm: async () => {
           await deleteContactsTags(text)
-          this.props.getContactsTags()
+          this.reloadStoreTags()
           this.props.notify({
             status: 'success',
             message: `"${text}" deleted.`
