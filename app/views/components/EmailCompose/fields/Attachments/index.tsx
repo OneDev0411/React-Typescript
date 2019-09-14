@@ -5,7 +5,7 @@ import { Field, FieldRenderProps } from 'react-final-form'
 import { Box } from '@material-ui/core'
 
 import { FileAttachment } from '../../components/Attachment/FileAttachment'
-import { UploadingAttachmentsList } from '../UploadingAttachments'
+import UploadingAttachmentsList from '../UploadingAttachments'
 
 export function AttachmentsList(props: FieldRenderProps<any>) {
   const handleRemove = (file: IFile) => {

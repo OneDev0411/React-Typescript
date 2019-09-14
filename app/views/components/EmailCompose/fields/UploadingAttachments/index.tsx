@@ -1,17 +1,18 @@
 import React from 'react'
-
 import { FieldRenderProps } from 'react-final-form'
-
 import { Box } from '@material-ui/core'
+import { addNotification } from 'reapop'
+import { connect } from 'react-redux'
 
-import { IUploadingAttachment } from '../../types'
 import { UploadingAttachment } from '../../components/Attachment/UploadingAttachment'
+import { IUploadingAttachment } from '../../types'
 
 interface Props extends FieldRenderProps<any> {
   onFinish: (file: IFile) => void
+  addNotification: typeof addNotification
 }
 
-export function UploadingAttachmentsList({ input, ...props }: Props) {
+function UploadingAttachmentsList({ input, addNotification, ...props }: Props) {
   const handleRemove = (uploadingAttachment: IUploadingAttachment) => {
     const files = (input.value as IUploadingAttachment[]).filter(
       item => item !== uploadingAttachment
@@ -27,6 +28,14 @@ export function UploadingAttachmentsList({ input, ...props }: Props) {
 
   const handleError = (e, attachment: IUploadingAttachment) => {
     handleRemove(attachment)
+
+    // Evlis!
+    const message = e ? (e.response ? e.response.body.message : null) : null
+
+    addNotification({
+      message: message || 'Could not upload file',
+      status: 'error'
+    })
     console.log('error in uploading attachment', e)
   }
 
@@ -45,3 +54,8 @@ export function UploadingAttachmentsList({ input, ...props }: Props) {
     </Box>
   )
 }
+
+export default connect(
+  null,
+  { addNotification }
+)(UploadingAttachmentsList)
