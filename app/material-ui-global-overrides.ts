@@ -72,7 +72,9 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
         content: '""',
         position: 'absolute'
       },
-      '&.MuiTooltip-tooltipPlacementBottom::before': {
+      // selector for top/bottom positioned tooltips is changed because of
+      // this issue: https://github.com/mui-org/material-ui/issues/17424
+      '[x-placement=bottom] > &::before': {
         top: -8,
         left: '50%',
         transform: 'translateX(-50%)',
@@ -85,7 +87,7 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
           direction: 'top'
         })
       },
-      '&.MuiTooltip-tooltipPlacementTop::before': {
+      '[x-placement=top] > &::before': {
         bottom: -8,
         left: '50%',
         transform: 'translateX(-50%)',
