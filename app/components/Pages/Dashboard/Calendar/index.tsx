@@ -136,10 +136,7 @@ const CalendarPage: React.FC = props => {
             onChange={handleChangeFilter}
             isLoadingFilters={isLoadingFilters}
           />
-          <CreateEvent
-            onEventChange={handleEventChange}
-            activeDate={activeDate}
-          />
+          <CreateEvent onEventChange={handleEventChange} />
         </Header>
 
         <ListContainer className="u-scrollbar--thinner">
