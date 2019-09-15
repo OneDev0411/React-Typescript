@@ -29,9 +29,6 @@ function ChatButton({ contact, dispatch, user }: Props) {
   const { email, phone_number, users } = contact
   const [isChattable, setIsChattable] = useState(false)
   const [isCreatingRoom, setIsCreatingRoom] = useState(false)
-  // const tooltipTitle = isChattable
-  //   ? ''
-  //   : 'For starting a chat, the contact should has an email or a phone number.'
 
   // User  can chat just with contacts which at least has
   // email or phone or user attribute.
@@ -72,19 +69,17 @@ function ChatButton({ contact, dispatch, user }: Props) {
   }, [dispatch, recipients])
 
   return (
-    <>
-      <Button
-        className={classes.button}
-        color="secondary"
-        disabled={!isChattable || isCreatingRoom}
-        onClick={onClick}
-        size="small"
-        variant="outlined"
-      >
-        <ChatIcon className={classes.leftIcon} />
-        Chat
-      </Button>
-    </>
+    <Button
+      className={classes.button}
+      color="secondary"
+      disabled={!isChattable || isCreatingRoom}
+      onClick={onClick}
+      size="small"
+      variant="outlined"
+    >
+      <ChatIcon className={classes.leftIcon} />
+      Chat
+    </Button>
   )
 }
 
