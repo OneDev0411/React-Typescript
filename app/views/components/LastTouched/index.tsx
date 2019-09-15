@@ -9,11 +9,7 @@ export function LastTouched(props: Props) {
   const { last_touch: lastTouch, next_touch: nextTouch } = props.contact
 
   if (!lastTouch) {
-    return (
-      <div>
-        <div>You have not added any touches for this contact.</div>
-      </div>
-    )
+    return <div>You have not added any touches for this contact.</div>
   }
 
   return (
