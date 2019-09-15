@@ -35,7 +35,8 @@ import { Owner } from './Owner'
 import Delete from './Delete'
 import { PageContainer, SideColumn, MainColumn, PageWrapper } from './styled'
 
-import { Header } from './Header'
+import Header from './Header/Header'
+import Divider from './Divider'
 import Timeline from './Timeline'
 
 class ContactProfile extends React.Component {
@@ -254,6 +255,7 @@ class ContactProfile extends React.Component {
               closeButtonQuery={this.props.location.state}
               addToFlowCallback={this.addToFlowCallback}
             />
+            <Divider variant="middle" />
             <Flows
               flows={contact.flows}
               contactId={contact.id}

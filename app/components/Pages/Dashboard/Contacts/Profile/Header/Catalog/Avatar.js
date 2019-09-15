@@ -20,6 +20,7 @@ const AvatarUploader = props => (
   <Uploader
     {...props}
     avatar={{
+      size: 48,
       src: props.avatar,
       initials: getContactNameInitials(props.contact, props.attributeDefs)
     }}
@@ -86,7 +87,6 @@ export default compose(
             attribute = [
               {
                 text,
-                index: 1,
                 attribute_def: attribute_def.id,
                 is_primary: true
               }
