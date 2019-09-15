@@ -15,7 +15,7 @@ import { styles } from './styles'
 const useStyles = makeStyles(styles, { name: 'HeaderMenu' })
 
 interface Props {
-  contact: IContact
+  contact: INormalizedContact
 }
 
 export default function Menu({ contact }: Props) {

@@ -5,7 +5,7 @@ import Menu from './Menu/Menu'
 import Catalog from './Catalog/Catalog'
 
 interface Props {
-  contact: IContact
+  contact: INormalizedContact
 }
 
 export default function Header({ contact }: Props) {
