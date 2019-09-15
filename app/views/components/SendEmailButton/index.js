@@ -34,15 +34,19 @@ function SendEmailButton(props) {
 
   return (
     <Fragment>
-      <ActionButton
-        disabled={props.disabled}
-        appearance={props.appearance}
-        style={props.style}
-        onClick={onSendClick}
-        data-test="send-email"
-      >
-        {props.title}
-      </ActionButton>
+      {props.render ? (
+        props.render({ onClick: onSendClick, testId: 'send-email' })
+      ) : (
+        <ActionButton
+          disabled={props.disabled}
+          appearance={props.appearance}
+          style={props.style}
+          onClick={onSendClick}
+          data-test="send-email"
+        >
+          {props.title}
+        </ActionButton>
+      )}
       {/*
        We conditionally render, beacause of this comment:
        https://gitlab.com/rechat/web/merge_requests/376#note_200055872
