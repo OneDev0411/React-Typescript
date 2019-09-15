@@ -86,6 +86,9 @@ declare interface IContact extends IContactBase {
   summary?: IContactSummary
   created_by?: IUser
   updated_by?: IUser
+
+  // This is temporary until we refactor contacts
+  sub_contacts: any
 }
 
 declare interface INormalizedContact extends IContact {
