@@ -84,7 +84,7 @@ const CalendarPage: React.FC = props => {
   const handleOnLoadEvents = (events: ICalendarEventsList) => {
     setFetchedDays(getDaysWithEvent(events))
 
-    setIsLoadingFilters(false)
+    setTimeout(() => setIsLoadingFilters(false), 500)
   }
 
   /**
