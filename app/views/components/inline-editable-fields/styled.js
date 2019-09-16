@@ -56,7 +56,7 @@ export const EditModeContainer = styled.div`
   background: ${props =>
     props.hasError
       ? fade(
-          props.theme.palette.error.primary,
+          props.theme.palette.error.main,
           props.theme.palette.action.hoverOpacity
         )
       : props.theme.palette.action.selected};
