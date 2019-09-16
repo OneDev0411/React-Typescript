@@ -16,9 +16,11 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-
       '&:hover $starIcon': {
         visibility: 'visible'
+      },
+      '&:hover $title': {
+        color: theme.palette.text.primary
       }
     },
     leftSide: {
