@@ -10,9 +10,6 @@ import List from './List/List'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    addButton: {
-      width: '100%'
-    },
     addButtonIcon: {
       marginRight: theme.spacing(1)
     }
@@ -46,9 +43,9 @@ function FlowsList({ flows, contactId, onStop, addCallback }: Props) {
           buttonRenderer={buttonProps => (
             <Button
               {...buttonProps}
-              variant="outlined"
               color="secondary"
-              className={classes.addButton}
+              fullWidth
+              variant="outlined"
             >
               <FlowIcon className={classes.addButtonIcon} />
               Add To Flow
