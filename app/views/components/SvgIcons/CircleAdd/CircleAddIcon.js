@@ -44,15 +44,27 @@ const Image = styled.svg`${propsToCss}`
 
 const children = (
   <Fragment>
-    <path
-      d='M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z'
+    <g
+      clipPath='url(#s-ecfc34eeae-a)'
       key='key-0'
-    />
-    <path
-      d='M0 0h24v24H0z'
-      fill="none"
+    >
+      <path
+        fillRule='evenodd'
+        d='M3.422 20.262C-1.266 15.574-1.366 8.079 3.2 3.515 7.765-1.05 15.26-.95 19.947 3.738c4.688 4.688 4.788 12.183.223 16.747-4.564 4.565-12.059 4.465-16.747-.223zm15.469-6.983l-.032-2.366-6.008-.08-.08-6.008-2.365-.032.08 6.008-6.008-.08.031 2.366 6.008.08.08 6.008 2.366.032-.08-6.009 6.008.08z'
+        clipRule='evenodd'
+      />
+    </g>
+    <defs
       key='key-1'
-    />
+    >
+      <clipPath
+        id='s-ecfc34eeae-a'
+      >
+        <path
+          d='M0 0h24v24H0z'
+        />
+      </clipPath>
+    </defs>
   </Fragment>
 )
 
@@ -88,5 +100,5 @@ export default Object.assign(Image, {
   getCss,
   defaultProps,
   propTypes,
-  displayName: 'AddIcon'
+  displayName: 'CircleAddIcon'
 })
