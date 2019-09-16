@@ -255,26 +255,28 @@ class ContactProfile extends React.Component {
               closeButtonQuery={this.props.location.state}
               addToFlowCallback={this.addToFlowCallback}
             />
-            <Divider variant="middle" />
+            <Divider />
             <Flows
               flows={contact.flows}
               contactId={contact.id}
               onStop={this.stopFlow}
               addCallback={this.addToFlowCallback}
             />
+            <Divider />
             <Tags contact={contact} />
+            <Divider />
             <Dates {..._props} />
-
+            <Divider />
             <ContactInfo {..._props} />
-
+            <Divider />
             <AddressesSection {..._props} />
-
+            <Divider />
             <Details {..._props} />
-
+            <Divider />
             <Partner {..._props} />
-
+            <Divider />
             <Deals contact={contact} />
-
+            <Divider />
             <Owner
               onSelect={this.onChangeOwner}
               owner={contact.user}
