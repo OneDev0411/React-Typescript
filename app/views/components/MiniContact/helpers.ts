@@ -121,7 +121,7 @@ export async function getContactData(
   }
 }
 
-export async function findContact(email: string, base_output) {
+export async function findContact(email: string, base_output, attributeDefs) {
   try {
     const res = await searchContacts(email)
 
@@ -132,7 +132,7 @@ export async function findContact(email: string, base_output) {
         ...base_output,
         contact_id: foundContact.id,
         contact_status: 'finished',
-        data: extractRequiredDataFromContact(foundContact)
+        data: extractRequiredDataFromContact(foundContact, attributeDefs)
       }
     }
 
