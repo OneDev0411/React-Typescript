@@ -10,12 +10,14 @@ export default function(accessToken) {
     Object.keys(allOpenHouseData).forEach(async key => {
       const openHouseData = allOpenHouseData[key]
 
-      await openHouseData
-        .map(openHouse => ({
-          ...openHouse,
-          agentAccessToken: accessToken
-        }))
-        .map(registerOpenHouse)
+      await Promise.all(
+        openHouseData
+          .map(openHouse => ({
+            ...openHouse,
+            agentAccessToken: accessToken
+          }))
+          .map(registerOpenHouse)
+      )
       dispatch(
         notify({
           message: `${openHouseData.length} offline register${
