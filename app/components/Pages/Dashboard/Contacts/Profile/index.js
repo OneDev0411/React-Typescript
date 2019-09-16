@@ -284,6 +284,7 @@ class ContactProfile extends React.Component {
               contact={contact}
               disabled={this.state.isUpdatingOwner}
             />
+            <Divider />
             <Delete
               handleDelete={this.delete}
               isDeleting={this.state.isDeleting}
