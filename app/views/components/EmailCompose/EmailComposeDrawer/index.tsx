@@ -214,7 +214,7 @@ class EmailComposeDrawer extends React.Component<
           <Footer
             formProps={{ values: formProps.values as EmailFormValues }}
             handleSubmit={handleSubmit}
-            submitting={submitting}
+            isSubmitting={submitting}
             isSubmitDisabled={isSubmitDisabled}
             initialAttachments={this.props.initialValues!.attachments || []}
             deal={this.props.deal}

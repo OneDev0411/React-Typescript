@@ -20,7 +20,7 @@ interface Props {
   deal?: IDeal
   onChanged: () => void
   initialAttachments: IFile[]
-  submitting: boolean
+  isSubmitting: boolean
   handleSubmit: () => void
 }
 
@@ -46,12 +46,12 @@ export function Footer(props: Props) {
         <ActionButton
           data-test="compose-send-email"
           type="submit"
-          disabled={props.submitting || props.isSubmitDisabled}
+          disabled={props.isSubmitting || props.isSubmitDisabled}
           onClick={props.handleSubmit}
           leftRounded
         >
           {textForSubmitButton({
-            isSubmitting: props.submitting,
+            isSubmitting: props.isSubmitting,
             isDateSet: isScheduled
           })}
         </ActionButton>

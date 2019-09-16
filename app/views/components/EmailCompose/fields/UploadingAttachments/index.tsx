@@ -29,7 +29,7 @@ function UploadingAttachmentsList({ input, addNotification, ...props }: Props) {
   const handleError = (e, attachment: IUploadingAttachment) => {
     handleRemove(attachment)
 
-    // Evlis!
+    // Elvis!
     const message = e ? (e.response ? e.response.body.message : null) : null
 
     addNotification({
