@@ -20,7 +20,7 @@ export const PageContainer = styled.div`
 
 export const SideColumn = styled.div`
   @media (min-width: 64em) {
-    width: 30%;
+    width: calc(100% / 3);
     overflow-x: hidden;
     overflow-y: auto;
     display: flex;
@@ -34,7 +34,7 @@ export const MainColumn = styled.div`
   @media (min-width: 64em) {
     overflow-x: hidden;
     overflow-y: auto;
-    width: 70%;
+    width: calc((100% / 3) * 2);
   }
 `
 
