@@ -16,7 +16,7 @@ function useProfile(type, initData, attributeDefs): FormatterOutputType {
       let res
 
       if (type === 'find') {
-        res = await findContact(searchFor, data)
+        res = await findContact(searchFor, data, attributeDefs)
       } else {
         res = await getContactData(searchFor, attributeDefs)
       }
