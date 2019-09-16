@@ -410,9 +410,7 @@ class SectionWithFields extends React.Component {
 
     return (
       <Section title={this.props.title || section}>
-        <div style={{ padding: '0 1rem', display: 'block' }}>
-          {this.renderFields()}
-        </div>
+        <div style={{ padding: '0 1.5rem' }}>{this.renderFields()}</div>
 
         <CustomAttributeDrawer
           isOpen={this.state.isOpenCustomAttributeDrawer}
