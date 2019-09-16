@@ -1,6 +1,6 @@
-import liveSeller from 'fixtures/deal/live-seller'
-import liveBuyer from 'fixtures/deal/live-buyer'
-import liveSellerWithActiveOffer from 'fixtures/deal/seller-with-offer'
+import liveSeller from 'fixtures/deal/live-seller.json'
+import liveBuyer from 'fixtures/deal/live-buyer.json'
+import liveSellerWithActiveOffer from 'fixtures/deal/seller-with-offer.json'
 
 import { getStatusList } from '.'
 

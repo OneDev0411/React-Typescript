@@ -3,8 +3,8 @@ import { shallow, mount, render } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
 import store from '../../../../../../stores'
-import draftDeal from 'fixtures/deal/draft-seller'
-import liveSellerDeal from 'fixtures/deal/live-seller'
+import draftDeal from 'fixtures/deal/draft-seller.json'
+import liveSellerDeal from 'fixtures/deal/live-seller.json'
 
 import { DealStatus } from '.'
 

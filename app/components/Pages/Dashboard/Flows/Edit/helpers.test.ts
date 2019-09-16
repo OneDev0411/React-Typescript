@@ -1,9 +1,6 @@
-// @ts-ignore
-import flowData from 'fixtures/flows/flow' // eslint-disable-line
-// @ts-ignore
-import flowData2 from 'fixtures/flows/flow2' // eslint-disable-line
-// @ts-ignore
-import flowData3 from 'fixtures/flows/flow3' // eslint-disable-line
+import flowData from 'fixtures/flows/flow.json'
+import flowData2 from 'fixtures/flows/flow2.json'
+import flowData3 from 'fixtures/flows/flow3.json'
 
 import {
   humanizeSeconds,

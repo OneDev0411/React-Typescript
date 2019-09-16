@@ -1,6 +1,6 @@
-import dealWithOffer from 'fixtures/deal/seller-with-offer'
-import liveSeller from 'fixtures/deal/live-seller'
-import liveBuyer from 'fixtures/deal/live-buyer'
+import dealWithOffer from 'fixtures/deal/seller-with-offer.json'
+import liveSeller from 'fixtures/deal/live-seller.json'
+import liveBuyer from 'fixtures/deal/live-buyer.json'
 
 import { normalizeRoleNames } from '.'
 

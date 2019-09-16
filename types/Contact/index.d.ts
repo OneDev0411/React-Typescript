@@ -13,7 +13,7 @@ declare interface IContactAttributeDefInput {
 
 declare interface IContactAttributeDef {
   id: UUID
-  name: string
+  name: string | null
   label: string
   data_type: 'number' | 'text' | 'date'
   section: string
@@ -24,9 +24,9 @@ declare interface IContactAttributeDef {
   searchable: boolean
   has_label: boolean
   labels: string[] | null
-  enum_values?: string[]
-  user?: UUID
-  brand?: UUID
+  enum_values: string[] | null
+  user: UUID | null
+  brand: UUID | null
 }
 
 type IContactAttributeWithDef = IContactAttribute & {
@@ -43,31 +43,31 @@ declare interface ISubContact {
 }
 
 declare interface IContactBase {
-  ios_address_book_id?: string
-  android_address_book_id?: string
+  ios_address_book_id: string | null
+  android_address_book_id: string | null
 }
 
 declare interface IContactInput extends IContactBase {
   id?: UUID
   user: UUID
   attributes: IContactAttributeInput[]
-  ios_address_book_id?: string
+  ios_address_book_id: string | null
 }
 
 declare interface IContact extends IContactBase {
   id: UUID
   created_at: number
   updated_at: number
-  deleted_at?: number | null
-  user: UUID
-  brand: UUID
+  deleted_at: number | null
+  user: UUID | IUser // Varies depending on the associations. we need to fix it.
+  // it doesn't exist when fetching a single contact. it exist on list
+  // probably it's coming with some association). We need to figure it out
+  brand?: UUID
 
   display_name: string
   profile_image_url: string | null
-  partner_name?: string
-  last_touch?: number
-  next_touch?: number
-  email?: string
+  last_touch: number | null
+  next_touch: number | null
   phone_number?: string
 
   email: string | null
@@ -79,7 +79,7 @@ declare interface IContact extends IContactBase {
   partner_name: string | null
 
   attributes?: IContactAttribute[]
-  users?: IUser[]
+  users: IUser[]
   deals?: IDeal[]
   lists?: UUID[]
   flows?: UUID[]

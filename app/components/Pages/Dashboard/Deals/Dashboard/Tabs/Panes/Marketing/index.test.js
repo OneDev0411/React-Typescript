@@ -2,8 +2,8 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
-import draftDeal from 'fixtures/deal/draft-seller'
-import liveDealWithListing from 'fixtures/deal/live-seller-with-listing'
+import draftDeal from 'fixtures/deal/draft-seller.json'
+import liveDealWithListing from 'fixtures/deal/live-seller-with-listing.json'
 
 import EmailMarketing from './EmailMarketing'
 import SocialMarketing from './SocialMarketing'

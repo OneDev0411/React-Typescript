@@ -17,9 +17,9 @@ declare interface IAgentOffice {
 declare interface IAgent {
   id: UUID
 
-  email: string
+  email: string | '' // seems sometime it's empty string! not null
   mlsid: string
-  fax: string
+  fax: string | null
   full_name: string
   first_name: string
   last_name: string
@@ -30,18 +30,17 @@ declare interface IAgent {
   status: string
   office_mlsid: string
   work_phone: string
-  generational_name: string
+  generational_name: string | null
   matrix_unique_id: number
-  matrix_modified_dt: number
   updated_at: number
-  deleted_at?: number
+  deleted_at: number | null
   created_at: number
 
   user_id?: UUID
   office_id?: UUID
-  profile_image_url?: string
-  cover_image_url?: string
-  phone_numbers?: string[]
+  profile_image_url: string | null
+  cover_image_url: string | null
+  phone_numbers: string[] | null
   emails?: string[]
   office?: IAgentOffice
 }

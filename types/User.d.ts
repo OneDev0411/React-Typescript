@@ -8,7 +8,6 @@ declare interface IUserBase {
   fake_email?: boolean
   profile_image_url: string | null
   cover_image_url: string | null
-  password: string
   email_signature: string | null
 }
 declare interface IUserInput extends Partial<IUserBase> {
@@ -32,10 +31,10 @@ declare interface IUser extends IUserBase {
 
   secondary_password?: string
 
-  active_brand?: string
-  teams: IUserTeam[]
+  active_brand: string | null
+  teams?: IUserTeam[] // seems it comes with association
 
-  agent?: IAgent
+  agent: IAgent | null // association?
 
   user_type: 'Agent' | 'Client' | 'Admin'
 }
