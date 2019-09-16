@@ -185,7 +185,8 @@ function getContactFields() {
       role: 'future_address',
       label: 'Home',
       type: 'address',
-      index: 1
+      index: 1,
+      is_primary: true
     }
   ]
 }
@@ -209,6 +210,7 @@ function getContactDefinitions(attributeDefs, form, item) {
     return {
       index: item.index,
       label: item.label,
+      is_primary: item.is_primary,
       attribute_def: definition.id,
       [definition.data_type]: value || ''
     }
