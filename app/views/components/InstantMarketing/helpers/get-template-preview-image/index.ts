@@ -1,4 +1,6 @@
-export default function getTemplateInstancePreviewImage(instance) {
+export default function getTemplateInstancePreviewImage(
+  instance: IMarketingTemplateInstance
+) {
   if (!instance) {
     console.error('Instance is undefined')
 
