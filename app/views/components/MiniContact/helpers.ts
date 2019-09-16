@@ -74,7 +74,8 @@ function extractRequiredDataFromContact(
     socials: socialMediasInContact(contact),
     dates: dates.map(item => ({
       title: item.attribute_def.label,
-      date: item.date
+      date: item.date,
+      is_partner: item.is_partner
     }))
   }
 }
@@ -171,5 +172,12 @@ export function activitiesFormatter(activities?: ProfileDateType[]) {
     return 0
   })
 
-  return output.slice(0, 5)
+  // TODO: the map part can be a separate function
+  return output
+    .slice(0, 5)
+    .map(item =>
+      item.is_partner && item.title.includes('Birthday')
+        ? { ...item, title: `Partner ${item.title}` }
+        : item
+    )
 }

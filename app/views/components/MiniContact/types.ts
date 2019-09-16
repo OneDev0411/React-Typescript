@@ -3,6 +3,7 @@ export type MiniContactType = 'contact' | 'user' | 'insight' | 'event'
 export type ProfileDateType = {
   title: string
   date: number
+  is_partner: boolean
 }
 
 export interface ProfileType {
