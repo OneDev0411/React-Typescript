@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import RecommendationMessage from './recommendation'
-import AlertMessage from './alert'
+import AlertMessage from './AlertMessage'
 import AttachementMessage from './attachment'
 import ActivityMessage from './activity'
 import UploadingFile from './uploading'

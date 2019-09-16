@@ -191,6 +191,15 @@ $left-w: 44px;
 
   .alert {
     @extend %message-item-alert;
+    
+    .alert-widget {
+      width: 100% !important;
+      align-items: center !important;
+
+      .heading {
+        width: calc(100% - 64px) !important;
+      }
+    }
   }
 
   .uploading {

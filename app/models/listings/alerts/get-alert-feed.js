@@ -18,11 +18,7 @@ const mappingStatus = status => {
   }
 }
 
-const getAlertFeed = async (alertId, roomId) => {
-  if (!roomId || !alertId) {
-    return
-  }
-
+export async function getAlertFeed(alertId, roomId) {
   try {
     const response = await new Fetch()
       .get(`/rooms/${roomId}/recs/feed`)
@@ -52,8 +48,5 @@ const getAlertFeed = async (alertId, roomId) => {
     }
   } catch (error) {
     console.log(error)
-    throw error
   }
 }
-
-export default getAlertFeed
