@@ -9,7 +9,7 @@ import Avatar from './Avatar'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     title: {
-      fontSize: '1rem',
+      fontSize: '1.125rem',
       lineHeight: 1.5,
       marginLeft: theme.spacing(1),
       width: 'calc(100% - 56px)'
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: theme.spacing(1)
     },
     touch: {
-      color: theme.palette.text.disabled
+      color: theme.palette.grey['900']
     }
   })
 )

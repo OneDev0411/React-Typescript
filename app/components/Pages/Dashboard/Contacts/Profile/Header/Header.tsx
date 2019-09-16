@@ -10,7 +10,7 @@ interface Props {
 
 export default function Header({ contact }: Props) {
   return (
-    <Box p={3}>
+    <Box px={3} pt={3}>
       <Catalog contact={contact} />
       <Menu contact={contact} />
     </Box>

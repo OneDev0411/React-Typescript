@@ -1,5 +1,6 @@
 import React from 'react'
 import { Box, Button } from '@material-ui/core'
+import { ButtonProps } from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 
 import SendEmailButton from 'components/SendEmailButton'
@@ -22,7 +23,7 @@ export default function Menu({ contact }: Props) {
   const classes = useStyles()
 
   return (
-    <Box display="flex" alignItems="center">
+    <Box display="flex" flexWrap="wrap" alignItems="center" mb={1}>
       <SendEmailButton
         recipients={normalizeContactsForEmailCompose([contact])}
         render={({ onClick, testId }) => (
@@ -45,9 +46,12 @@ export default function Menu({ contact }: Props) {
       <SendContactCard
         contact={contact}
         mediums="Email"
-        buttonProps={{
-          size: 'small'
-        }}
+        buttonProps={
+          {
+            size: 'small',
+            className: classes.button
+          } as ButtonProps
+        }
       >
         <BirthDayIcon className={classes.leftIcon} />
         Send Card
