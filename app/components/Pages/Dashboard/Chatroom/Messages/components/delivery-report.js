@@ -58,8 +58,8 @@ const RenderList = ({ list, title, className, avatarSize = 30 }) => {
               <UserAvatar
                 style={{ float: 'left' }}
                 size={avatarSize}
-                color="#ffffff"
-                fgColor="#000000"
+                color="#000"
+                fgColor="#fff"
                 name={user.display_name}
                 image={user.profile_image_url}
                 showStateIndicator={false}
@@ -126,6 +126,7 @@ const DeliveryReport = ({
   const MessageInfo = (
     <Popover
       id="popover-delivery-report"
+      className="pop-over pop-over--light"
       title=""
       style={{ maxWidth: '340px' }}
     >
