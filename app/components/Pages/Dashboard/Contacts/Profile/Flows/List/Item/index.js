@@ -6,7 +6,6 @@ import Tooltip from 'components/tooltip'
 import IconButton from 'components/Button/IconButton'
 import StopIcon from 'components/SvgIcons/CircleStop/IconCircleStop'
 
-import NextStep from './NextStep'
 import { ItemContainer } from './styled'
 
 Item.propTypes = {
@@ -28,7 +27,6 @@ function Item({ flow, onStop }) {
           </IconButton>
         </Tooltip>
       </Flex>
-      <NextStep flow={flow} />
     </ItemContainer>
   )
 }
