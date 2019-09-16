@@ -29,7 +29,6 @@ export function MultiField({
               display: 'flex'
             }}
           >
-            {console.log(fields)}
             <Flex style={{ width: '30%', borderRight: '1em' }}>
               <Select
                 label={title}
