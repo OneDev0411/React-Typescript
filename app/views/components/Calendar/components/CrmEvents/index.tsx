@@ -10,7 +10,6 @@ interface Props {
   isEventDrawerOpen: boolean
   event?: ICalendarEvent
   user: IUser
-  selectedDate: Date | null
   onEventChange(event: IEvent, type: string): void
   onCloseEventDrawer(): void
 }
@@ -32,7 +31,7 @@ export function CrmEvents(props: Props) {
     const initialValues = {
       assignees: [props.user],
       associations: [],
-      dueDate: createDueDate(props.selectedDate || new Date()),
+      dueDate: createDueDate(new Date()),
       reminder: {
         title: 'None',
         value: -1

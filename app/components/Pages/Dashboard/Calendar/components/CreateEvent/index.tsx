@@ -12,7 +12,6 @@ interface StateProps {
 }
 
 interface Props {
-  activeDate: Date
   onEventChange: (event: IEvent, type: string) => void
 }
 
@@ -39,7 +38,6 @@ export function CreateEvent(props: Props & StateProps) {
 
       <CrmEvents
         isEventDrawerOpen={showEventDrawer}
-        selectedDate={props.activeDate}
         user={props.user as IUser}
         onEventChange={handleEventChange}
         onCloseEventDrawer={() => setShowEventDrawer(false)}
