@@ -29,6 +29,7 @@ export function MultiField({
               display: 'flex'
             }}
           >
+            {console.log(fields)}
             <Flex style={{ width: '30%', borderRight: '1em' }}>
               <Select
                 label={title}
@@ -56,7 +57,11 @@ export function MultiField({
                 component={TextField}
                 placeholder={title}
                 validate={validate}
-                initialValue={fields.initial[index].initialValue}
+                initialValue={
+                  fields.initial && fields.initial[index]
+                    ? fields.initial[index].initialValue
+                    : undefined
+                }
               />
               <div
                 style={{
