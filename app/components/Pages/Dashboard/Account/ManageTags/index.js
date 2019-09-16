@@ -31,9 +31,13 @@ class ManageTags extends Component {
     this.fetch()
   }
 
+  reloadStoreTags = () => {
+    this.props.getContactsTags()
+  }
+
   fetch = async () => {
     try {
-      const response = await await getContactsTags()
+      const response = await getContactsTags()
 
       const rawTags = response.data.map(({ text }) => ({
         text,
@@ -47,6 +51,12 @@ class ManageTags extends Component {
     } catch (error) {
       this.setState({ loading: false })
     }
+  }
+
+  getTag = text => {
+    return this.state.rawTags.find(
+      item => item.text.toLowerCase() === text.toLowerCase()
+    )
   }
 
   sortTags = tags => {
@@ -95,7 +105,7 @@ class ManageTags extends Component {
     }, delay)
   }
 
-  handleDuplicateTagCreate = tag => {
+  handleDuplicateTag = tag => {
     this.props.notify({
       status: 'info',
       message: `"${tag.text}" already exists.`
@@ -111,29 +121,30 @@ class ManageTags extends Component {
       return
     }
 
-    try {
-      await updateContactsTags(oldText, text)
-      this.props.notify({
-        status: 'success',
-        message: `"${text}" updated.`
-      })
-      this.setState(prevState => ({
-        rawTags: [
-          ...prevState.rawTags.filter(
-            item => item.text.toLowerCase() !== oldText.toLowerCase()
-          ),
-          {
-            text
-          }
-        ]
-      }))
-    } catch (e) {
-      if (e.status && e.status === 409) {
-        this.handleDuplicateTagCreate({ text })
-      }
+    const foundTag = this.getTag(text)
+
+    if (foundTag) {
+      this.handleDuplicateTag(foundTag)
 
       return false
     }
+
+    await updateContactsTags(oldText, text)
+    this.reloadStoreTags()
+    this.props.notify({
+      status: 'success',
+      message: `"${text}" updated.`
+    })
+    this.setState(prevState => ({
+      rawTags: [
+        ...prevState.rawTags.filter(
+          item => item.text.toLowerCase() !== oldText.toLowerCase()
+        ),
+        {
+          text
+        }
+      ]
+    }))
 
     return true
   }
@@ -145,25 +156,27 @@ class ManageTags extends Component {
       return
     }
 
-    try {
-      this.setState({ isSaving: true })
-      await createContactsTags(text)
-      this.props.notify({
-        status: 'success',
-        message: `"${text}" added.`
-      })
-      this.setState(prevState => ({
-        createTagInputValue: '',
-        rawTags: [...prevState.rawTags, { text, highlight: true }]
-      }))
-      this.highlightTag({ text }, false, HIGHLIGHT_SECONDS * 1000)
-    } catch (e) {
-      if (e.status && e.status === 409) {
-        this.handleDuplicateTagCreate({ text })
-      }
-    } finally {
-      this.setState({ isSaving: false })
+    const foundTag = this.getTag(text)
+
+    if (foundTag) {
+      this.handleDuplicateTag(foundTag)
+
+      return
     }
+
+    this.setState({ isSaving: true })
+    await createContactsTags(text)
+    this.reloadStoreTags()
+    this.props.notify({
+      status: 'success',
+      message: `"${text}" added.`
+    })
+    this.setState(prevState => ({
+      createTagInputValue: '',
+      rawTags: [...prevState.rawTags, { text, highlight: true }],
+      isSaving: false
+    }))
+    this.highlightTag({ text }, false, HIGHLIGHT_SECONDS * 1000)
   }
 
   handleDelete = async ({ text }) =>
@@ -176,7 +189,7 @@ class ManageTags extends Component {
           'Deleting a tag will remove it from the system and remove it from any contacts with this tag.',
         onConfirm: async () => {
           await deleteContactsTags(text)
-          this.props.getContactsTags()
+          this.reloadStoreTags()
           this.props.notify({
             status: 'success',
             message: `"${text}" deleted.`
