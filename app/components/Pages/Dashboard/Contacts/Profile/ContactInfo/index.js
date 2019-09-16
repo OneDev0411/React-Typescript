@@ -17,7 +17,6 @@ const fieldsOrder = [
 export function ContactInfo(props) {
   return (
     <SectionWithFields
-      addCustomAttributeButtonText="information"
       contact={props.contact}
       fieldsOrder={fieldsOrder}
       section="Contact Info"

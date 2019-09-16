@@ -1,6 +1,5 @@
 import React from 'react'
 import cuid from 'cuid'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
@@ -10,26 +9,14 @@ import { updateAttribute } from 'models/contacts/update-attribute'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 
-import AddIcon from 'components/SvgIcons/Add/AddIcon'
-import TextIconButton from 'components/Button/TextIconButton'
-
 import { Section } from '../Section'
 import MasterField from '../ContactAttributeInlineEditableField'
-import CustomAttributeDrawer from '../../../components/CustomAttributeDrawer'
 
 import {
   fieldsNeedUpdateContact,
   orderFields,
   normalizeAttributes
 } from './helpers'
-
-const propTypes = {
-  addCustomAttributeButtonText: PropTypes.string
-}
-
-const defaultProps = {
-  addCustomAttributeButtonText: ''
-}
 
 function generateEmptyAttribute(attribute_def, is_partner, order) {
   return {
@@ -79,7 +66,6 @@ class SectionWithFields extends React.Component {
     const orderedAttributes = orderAttributes(allAttributes, props.fieldsOrder)
 
     this.state = {
-      isOpenCustomAttributeDrawer: false,
       orderedAttributes
     }
   }
@@ -88,12 +74,6 @@ class SectionWithFields extends React.Component {
     // a shalowCopy
     return this.state.orderedAttributes.slice()
   }
-
-  openCustomAttributeDrawer = () =>
-    this.setState({ isOpenCustomAttributeDrawer: true })
-
-  closeNewAttributeDrawer = () =>
-    this.setState({ isOpenCustomAttributeDrawer: false })
 
   toggleMode = ({ order }) =>
     this.setState(state => ({
@@ -363,68 +343,28 @@ class SectionWithFields extends React.Component {
     })
   }
 
-  AddCustomAttributeCallback = attribute_def => {
-    this.setState(({ orderedAttributes }) => {
-      const order = Math.max(...orderedAttributes.map(a => a.order)) + 1
-
-      return {
-        orderedAttributes: [
-          ...orderedAttributes,
-          generateEmptyAttribute(attribute_def, this.props.isPartner, order)
-        ]
-      }
-    })
-  }
-
-  renderFields = () => {
-    const { addCustomAttributeButtonText } = this.props
-    let items = this.state.orderedAttributes.map(attribute => (
-      <MasterField
-        attribute={attribute}
-        handleAddNewInstance={this.addShadowAttribute}
-        handleDelete={this.deleteHandler}
-        handleSave={this.save}
-        handleToggleMode={this.toggleMode}
-        isActive={attribute.isActive}
-        key={attribute.cuid || attribute.id}
-      />
-    ))
-
-    if (addCustomAttributeButtonText) {
-      items.push(
-        <TextIconButton
-          key={cuid()}
-          iconLeft={AddIcon}
-          onClick={this.openCustomAttributeDrawer}
-          style={{ margin: '1em 0' }}
-          text={`Add custom ${addCustomAttributeButtonText}`}
-        />
-      )
-    }
-
-    return items
-  }
-
   render() {
     const { section } = this.props
 
     return (
       <Section title={this.props.title || section}>
-        <div style={{ padding: '0 1.5rem' }}>{this.renderFields()}</div>
-
-        <CustomAttributeDrawer
-          isOpen={this.state.isOpenCustomAttributeDrawer}
-          onClose={this.closeNewAttributeDrawer}
-          section={Array.isArray(section) ? undefined : section}
-          submitCallback={this.AddCustomAttributeCallback}
-        />
+        <div style={{ padding: '0 1.5rem' }}>
+          {this.state.orderedAttributes.map(attribute => (
+            <MasterField
+              attribute={attribute}
+              handleAddNewInstance={this.addShadowAttribute}
+              handleDelete={this.deleteHandler}
+              handleSave={this.save}
+              handleToggleMode={this.toggleMode}
+              isActive={attribute.isActive}
+              key={attribute.cuid || attribute.id}
+            />
+          ))}
+        </div>
       </Section>
     )
   }
 }
-
-SectionWithFields.propTypes = propTypes
-SectionWithFields.defaultProps = defaultProps
 
 function mapStateToProps(state) {
   return {
