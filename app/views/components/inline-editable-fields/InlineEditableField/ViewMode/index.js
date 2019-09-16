@@ -1,26 +1,37 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Button, ButtonGroup } from '@material-ui/core'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
 
 import { noop } from 'utils/helpers'
 
-import IconButton from 'components/Button/IconButton'
-import AddIcon from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
+import EditIcon from 'components/SvgIcons/Edit/EditIcon'
+import DeleteIcon from 'components/SvgIcons/Delete/IconDelete'
+import AddIcon from 'components/SvgIcons/CircleAdd/CircleAddIcon'
 
 import {
-  EditButton,
   Label,
   Value,
   ViewModeContainer,
   ViewModeActionBar
 } from '../../styled'
 
+const useStyles = makeStyles(() =>
+  createStyles({
+    '.MuiButton-contained': {
+      backgroundColor: '#fff'
+    }
+  })
+)
+
 ViewMode.propTypes = {
   handleAddNew: PropTypes.func,
+  handleDelete: PropTypes.func,
   label: PropTypes.string,
-  renderMenu: PropTypes.func,
   renderBody: PropTypes.func,
   showAdd: PropTypes.bool,
   showEdit: PropTypes.bool,
+  showDelete: PropTypes.bool,
   style: PropTypes.shape(),
   toggleMode: PropTypes.func.isRequired,
   value: PropTypes.string
@@ -29,15 +40,16 @@ ViewMode.propTypes = {
 ViewMode.defaultProps = {
   handleAddNew: noop,
   label: 'Label',
-  renderMenu: noop,
   renderBody: noop,
   showAdd: false,
   showEdit: true,
+  showDelete: true,
   style: {},
   value: '-'
 }
 
 export function ViewMode(props) {
+  const classes = useStyles()
   const { label, value, toggleMode, renderBody } = props
 
   return (
@@ -51,21 +63,39 @@ export function ViewMode(props) {
         renderBody({ label, value, toggleMode })
       )}
       <ViewModeActionBar className="action-bar">
-        {props.renderMenu()}
-        {props.showAdd && (
-          <IconButton
-            isFit
-            onClick={props.handleAddNew}
-            style={{ marginRight: '0.5em' }}
-          >
-            <AddIcon />
-          </IconButton>
-        )}
-        {props.showEdit && (
-          <EditButton appearance="link" onClick={toggleMode}>
-            Edit
-          </EditButton>
-        )}
+        <ButtonGroup
+          aria-label="small contained button group"
+          size="small"
+          variant="contained"
+        >
+          {props.showDelete && (
+            <Button
+              onClick={props.handleDelete}
+              className={classes['.MuiButton-contained']}
+            >
+              <DeleteIcon />
+              Delete
+            </Button>
+          )}
+          {props.showEdit && (
+            <Button
+              onClick={toggleMode}
+              className={classes['.MuiButton-contained']}
+            >
+              <EditIcon />
+              Edit
+            </Button>
+          )}
+          {props.showAdd && (
+            <Button
+              onClick={props.handleAddNew}
+              className={classes['.MuiButton-contained']}
+            >
+              <AddIcon />
+              Add
+            </Button>
+          )}
+        </ButtonGroup>
       </ViewModeActionBar>
     </ViewModeContainer>
   )
