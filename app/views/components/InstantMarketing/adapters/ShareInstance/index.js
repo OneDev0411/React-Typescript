@@ -59,9 +59,15 @@ class ShareInstance extends React.Component {
   closeSocialDrawer = () =>
     this.setState({ isSocialDrawerOpen: false }, this.props.handleTrigger)
 
+  /**
+   *
+   * @param email {IEmailCampaignInput}
+   * @return IEmailCampaignInput
+   */
   getEmail = email => ({
     ...email,
-    html: this.props.instance.html
+    html: this.props.instance.html,
+    template: this.props.instance.id
   })
 
   onEmailSent = () => {

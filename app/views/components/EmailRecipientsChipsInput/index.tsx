@@ -249,6 +249,7 @@ function EmailRecipientsChipsInput({
         },
         inputProps: {
           ...inputProps,
+          'data-test': 'email-recipients-input',
           inputWrapperClassName: classes.inputWrapper
         },
         input,

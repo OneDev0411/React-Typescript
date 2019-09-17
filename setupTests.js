@@ -50,5 +50,14 @@ Enzyme.configure({
   adapter: new Adapter()
 })
 
+global.document.createRange = () => ({
+  setStart: () => {},
+  setEnd: () => {},
+  commonAncestorContainer: {
+    nodeName: 'BODY',
+    ownerDocument: document
+  }
+})
+
 // Using data-test instead of data-testId
 configure({ testIdAttribute: 'data-test' })
