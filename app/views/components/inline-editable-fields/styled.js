@@ -83,7 +83,6 @@ export const DropdownButton = styled(LinkButton)`
   padding: 0;
   height: auto;
   line-height: 1.5;
-  margin-bottom: 0.5em;
   color: ${({ isOpen }) => (isOpen ? primary : '#000')};
 
   > svg {

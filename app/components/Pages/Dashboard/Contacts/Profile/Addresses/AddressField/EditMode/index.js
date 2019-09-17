@@ -14,7 +14,7 @@ import {
 export function EditMode(props) {
   return (
     <React.Fragment>
-      <Flex alignCenter style={{ marginBottom: '0.25em' }}>
+      <Flex alignCenter style={{ marginBottom: '0.5rem' }}>
         <BasicDropdown
           buttonRenderer={buttonProps => (
             <DropdownButton {...buttonProps} isActive={buttonProps.isOpen}>
