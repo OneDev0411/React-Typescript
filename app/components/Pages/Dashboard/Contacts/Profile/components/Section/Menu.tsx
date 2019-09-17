@@ -1,7 +1,8 @@
 import React from 'react'
-import { Box, Button, IconButton, Tooltip } from '@material-ui/core'
+import { Box, IconButton, Tooltip } from '@material-ui/core'
 
 import IconCog from 'components/SvgIcons/Cog/IconCog'
+import IconEdit from 'components/SvgIcons/Edit/EditIcon'
 
 interface Props {
   onEdit?: () => void
@@ -15,9 +16,9 @@ export function Menu({ onEdit, setting }: Props) {
   return (
     <Box>
       {onEdit && (
-        <Button onClick={onEdit} color="secondary" size="small">
-          Update
-        </Button>
+        <IconButton onClick={onEdit}>
+          <IconEdit className="menu__icon" />
+        </IconButton>
       )}
       {setting && (
         <Tooltip title={setting.tooltip}>
