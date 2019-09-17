@@ -37,6 +37,18 @@ class SendContactCard extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
+    // For controling the contact state from parent component
+    if (
+      state.contact !== props.contact ||
+      (state.contact &&
+        props.contact &&
+        props.contact.update_at > state.contact.update_at)
+    ) {
+      return {
+        contact: props.contact
+      }
+    }
+
     // For Opening Search Drawer
     if (
       props.isTriggered &&
