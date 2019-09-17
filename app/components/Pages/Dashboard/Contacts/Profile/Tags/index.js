@@ -25,21 +25,25 @@ class Tags extends React.Component {
       <Section
         onEdit={hasTags ? this.openOverLay : undefined}
         title="Tags"
-        style={{ padding: '0 1em' }}
+        setting={{
+          tooltip: 'Manage Tags',
+          href: '/dashboard/account/manage-tags'
+        }}
       >
-        {hasTags ? (
-          <TagsList tags={this.props.tags} />
-        ) : (
-          <div>
+        <div style={{ padding: '0 1.5rem' }}>
+          {hasTags ? (
+            <TagsList tags={this.props.tags} />
+          ) : (
             <ActionButton
+              isBlock
               appearance="outline"
               onClick={this.openOverLay}
               size="small"
             >
-              Add tag
+              Add Tag
             </ActionButton>
-          </div>
-        )}
+          )}
+        </div>
 
         <TagsOverlay
           contact={this.props.contact}
