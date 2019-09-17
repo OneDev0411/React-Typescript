@@ -114,8 +114,8 @@ export enum SortValues {
   Oldest = 'Oldest'
 }
 
-export function doSort(list: any, sort_value: SortValues) {
-  const sort = SortValues[sort_value]
+export function doSort(list: any, sortValue: SortValues) {
+  const sort = SortValues[sortValue]
 
   if (sort === SortValues.Newest) {
     return list.sort(function newestSort(a, b) {
