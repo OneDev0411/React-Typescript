@@ -5,10 +5,12 @@ import { stateFromHTML } from 'draft-js-import-html'
 import { stateToHTML } from 'draft-js-export-html'
 
 export const createEditorRef = ({
+  editorElementRef,
   editorRef,
   setEditorState,
   stateToHtmlOptions
 }: {
+  editorElementRef: RefObject<HTMLElement>
   editorRef: RefObject<PluginsEditor>
   setEditorState: (editorState: EditorState) => void
   stateToHtmlOptions: any
@@ -27,6 +29,13 @@ export const createEditorRef = ({
     }
 
     return ''
+  },
+  scrollToEnd: () => {
+    const editorWrapper = editorElementRef.current
+
+    if (editorWrapper) {
+      editorWrapper.scrollTo(0, editorWrapper.scrollHeight)
+    }
   },
   // convenient method for getting html content of the editor
   getHtml: () => {
@@ -52,5 +61,6 @@ export const createEditorRef = ({
       )
     }
   },
+  editorElementRef,
   editorRef
 })

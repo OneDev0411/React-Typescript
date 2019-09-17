@@ -459,7 +459,6 @@ class ActionsButton extends React.Component {
           deal={this.props.deal}
           onClose={this.handleToggleComposeEmail}
           onSent={this.handleToggleComposeEmail}
-          hasDealsAttachments
         />
 
         {this.state.multipleItemsSelection && (

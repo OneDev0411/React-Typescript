@@ -71,7 +71,6 @@ function SendEmailButton(props) {
             setIsOpen(false)
             props.onSent()
           }}
-          hasDealsAttachments
           getEmail={getEmail}
         />
       )}

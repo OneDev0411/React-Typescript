@@ -2,6 +2,7 @@ import React, {
   ComponentProps,
   forwardRef,
   Fragment,
+  ReactNode,
   Ref,
   useCallback,
   useState
@@ -28,6 +29,11 @@ interface Props {
   signature: string
   DraftEditorProps?: TextEditorProps['DraftEditorProps']
   editorRef?: Ref<PluginsEditor>
+  /**
+   * we receive attachments as a prop, instead of rendering it after the email
+   * body, to include it in the scroll area of the email content
+   */
+  attachments?: ReactNode
 }
 
 const EmailBody = ({
@@ -36,6 +42,7 @@ const EmailBody = ({
   hasSignatureByDefault,
   hasTemplateVariables,
   hasStaticBody = false,
+  attachments = null,
   FieldProps,
   DraftEditorProps = {},
   editorRef
@@ -69,6 +76,7 @@ const EmailBody = ({
               }
               onEditSignature={() => setSignatureEditorVisible(true)}
               signature={signature}
+              appendix={attachments}
               input={input}
               ref={editorRef}
             />
@@ -78,15 +86,18 @@ const EmailBody = ({
       {hasStaticBody && (
         <Fragment>
           {content ? (
-            <iframe
-              title="email body"
-              width="100%"
-              srcDoc={content}
-              style={{
-                border: '0',
-                flex: '1'
-              }}
-            />
+            <>
+              <iframe
+                title="email body"
+                width="100%"
+                srcDoc={content}
+                style={{
+                  border: '0',
+                  flex: '1'
+                }}
+              />
+              {attachments}
+            </>
           ) : (
             <Loading />
           )}

@@ -48,8 +48,6 @@ export function useUploadRequest({
       setProgress(progressEvent.lengthComputable ? percentage : null)
     })
 
-    request.on('error', handleError)
-
     request
       .then(response => {
         callbacksRef.current.onFinish(response.body.data)

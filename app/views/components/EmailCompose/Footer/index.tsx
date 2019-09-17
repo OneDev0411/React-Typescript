@@ -10,8 +10,21 @@ import { FooterContainer } from './styled'
 import { textForSubmitButton } from './helpers'
 import SchedulerButton from './SchedulerButton'
 import { EmailAttachmentsDropdown } from '../components/EmailAttachmentsDropdown'
+import { EmailFormValues } from '../types'
 
-export function Footer(props) {
+interface Props {
+  isSubmitDisabled: boolean
+  formProps: {
+    values: EmailFormValues
+  }
+  deal?: IDeal
+  onChanged: () => void
+  initialAttachments: IFile[]
+  isSubmitting: boolean
+  handleSubmit: () => void
+}
+
+export function Footer(props: Props) {
   const due_at = props.formProps.values.due_at
   const isScheduled = !!due_at
 
@@ -20,6 +33,7 @@ export function Footer(props) {
       <div className="features-list">
         <EmailAttachmentsDropdown
           deal={props.deal}
+          onChanged={props.onChanged}
           initialAttachments={props.initialAttachments}
         />
       </div>
@@ -32,12 +46,12 @@ export function Footer(props) {
         <ActionButton
           data-test="compose-send-email"
           type="submit"
-          disabled={props.submitting || props.isSubmitDisabled}
+          disabled={props.isSubmitting || props.isSubmitDisabled}
           onClick={props.handleSubmit}
           leftRounded
         >
           {textForSubmitButton({
-            isSubmitting: props.submitting,
+            isSubmitting: props.isSubmitting,
             isDateSet: isScheduled
           })}
         </ActionButton>
