@@ -18,21 +18,6 @@ declare interface IDealForm extends IModel<'form'> {
   formstack_id: null | string // ?
 }
 
-declare type IDealTaskType = 'Form' | 'GeneralComments' | 'Generic'
-
-declare interface IDealTask {
-  id: UUID
-  required: boolean
-  checklist: UUID
-  form: null | UUID
-  order: number
-  task_type: IDealTaskType
-  title: string
-}
-
-declare type IDealTaskInput = Partial<Omit<IDealTask, 'id' | 'checklist'>> &
-  Pick<IDealTask, 'task_type'>
-
 declare interface IDealRole {
   agent: IAgent
   agent_brokerwolf_id: string
