@@ -18,7 +18,7 @@ import {
 
 const useStyles = makeStyles(() =>
   createStyles({
-    '.MuiButton-contained': {
+    button: {
       backgroundColor: '#fff'
     }
   })
@@ -69,28 +69,19 @@ export function ViewMode(props) {
           variant="contained"
         >
           {props.showDelete && (
-            <Button
-              onClick={props.handleDelete}
-              className={classes['.MuiButton-contained']}
-            >
+            <Button onClick={props.handleDelete} className={classes.button}>
               <DeleteIcon />
               Delete
             </Button>
           )}
           {props.showEdit && (
-            <Button
-              onClick={toggleMode}
-              className={classes['.MuiButton-contained']}
-            >
+            <Button onClick={toggleMode} className={classes.button}>
               <EditIcon />
               Edit
             </Button>
           )}
           {props.showAdd && (
-            <Button
-              onClick={props.handleAddNew}
-              className={classes['.MuiButton-contained']}
-            >
+            <Button onClick={props.handleAddNew} className={classes.button}>
               <AddIcon />
               Add
             </Button>

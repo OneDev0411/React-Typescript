@@ -11,13 +11,13 @@ const useStyles = makeStyles((theme: Theme) =>
     title: {
       fontSize: '1.125rem',
       lineHeight: 1.5,
-      marginLeft: theme.spacing(1),
+      marginLeft: `${theme.spacing(1)}px`,
       width: 'calc(100% - 56px)'
     },
     editButton: {
       fontFamily: theme.typography.fontFamily,
       fontSize: '0.875rem',
-      marginLeft: theme.spacing(1)
+      marginLeft: `${theme.spacing(1)}px`
     },
     touch: {
       color: theme.palette.grey['900']

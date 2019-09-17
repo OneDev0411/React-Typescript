@@ -16,9 +16,11 @@ export function Menu({ onEdit, setting }: Props) {
   return (
     <Box>
       {onEdit && (
-        <IconButton onClick={onEdit}>
-          <IconEdit className="menu__icon" />
-        </IconButton>
+        <Tooltip title="Edit">
+          <IconButton onClick={onEdit}>
+            <IconEdit className="menu__icon" />
+          </IconButton>
+        </Tooltip>
       )}
       {setting && (
         <Tooltip title={setting.tooltip}>

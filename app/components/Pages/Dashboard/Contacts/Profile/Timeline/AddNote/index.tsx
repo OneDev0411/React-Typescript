@@ -5,6 +5,7 @@ import { Button } from '@material-ui/core'
 
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 
+import { IAppState } from 'reducers/index'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
 import { EditNoteDrawer } from 'components/EditNoteDrawer'
@@ -58,7 +59,7 @@ function AddNote({
   )
 }
 
-const mapStateToProps = ({ contacts }) => {
+const mapStateToProps = ({ contacts }: IAppState) => {
   return {
     attributeDefs: contacts.attributeDefs
   }

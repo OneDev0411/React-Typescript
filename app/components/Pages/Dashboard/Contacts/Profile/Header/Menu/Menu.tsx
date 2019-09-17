@@ -10,6 +10,8 @@ import BirthDayIcon from 'components/SvgIcons/Birthday/IconBirthday'
 
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
 
+import { useIconStyles } from '../../../../../../../styles/use-icon-styles'
+
 import Chat from './ChatButton'
 import { styles } from './styles'
 
@@ -21,6 +23,7 @@ interface Props {
 
 export default function Menu({ contact }: Props) {
   const classes = useStyles()
+  const iconClasses = useIconStyles()
 
   return (
     <Box display="flex" flexWrap="wrap" alignItems="center" mb={1}>
@@ -35,7 +38,7 @@ export default function Menu({ contact }: Props) {
             color="secondary"
             className={classes.button}
           >
-            <EmailIcon className={classes.leftIcon} />
+            <EmailIcon className={iconClasses.rightMargin} />
             Email
           </Button>
         )}
@@ -53,7 +56,7 @@ export default function Menu({ contact }: Props) {
           } as ButtonProps
         }
       >
-        <BirthDayIcon className={classes.leftIcon} />
+        <BirthDayIcon className={iconClasses.rightMargin} />
         Send Card
       </SendContactCard>
     </Box>

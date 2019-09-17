@@ -9,8 +9,5 @@ export const styles = (theme: Theme) =>
       '&[disabled] svg': {
         fill: theme.palette.action.disabled
       }
-    },
-    leftIcon: {
-      marginRight: theme.spacing(1)
     }
   })

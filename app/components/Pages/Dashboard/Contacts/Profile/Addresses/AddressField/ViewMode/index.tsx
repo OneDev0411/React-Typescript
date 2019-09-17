@@ -1,8 +1,11 @@
 import React from 'react'
+import classNames from 'classnames'
 import { Box, Tooltip, Typography } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
 import StarIcon from 'components/SvgIcons/Star/StarIcon'
+
+import { useIconStyles } from '../../../../../../../../styles/use-icon-styles'
 
 interface Props {
   address: any
@@ -28,7 +31,6 @@ const useStyles = makeStyles((theme: Theme) =>
       color: address.id ? theme.palette.text.primary : theme.palette.text.hint
     }),
     starIcon: {
-      marginLeft: theme.spacing(1),
       fill: theme.palette.text.primary
     },
     value: ({ address }: Props) => ({
@@ -40,6 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function ViewMode(props: Props) {
   const classes = useStyles(props)
+  const iconClasses = useIconStyles()
   const { address } = props
 
   let label = address.label
@@ -57,11 +60,11 @@ export function ViewMode(props: Props) {
         {address.is_primary && address.id && (
           <Tooltip title="Primary Address">
             <StarIcon
-              className={classes.starIcon}
-              style={{
-                width: '1rem',
-                height: '1rem'
-              }}
+              className={classNames(
+                classes.starIcon,
+                iconClasses.small,
+                iconClasses.leftMargin
+              )}
             />
           </Tooltip>
         )}

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { Button } from '@material-ui/core'
 
-import { normalizeContact as associationNormalizer } from 'views/utils/association-normalizers'
+import { normalizeContact } from 'views/utils/association-normalizers'
 
 import { EventDrawer } from 'components/EventDrawer'
 
@@ -30,7 +30,7 @@ function AddEvent({ contact, user }: Props & StateProps) {
         isOpen={isDrawerOpen}
         defaultAssociation={{
           association_type: 'contact',
-          contact: associationNormalizer(contact)
+          contact: normalizeContact(contact)
         }}
         user={user}
         submitCallback={toggleDrawer}

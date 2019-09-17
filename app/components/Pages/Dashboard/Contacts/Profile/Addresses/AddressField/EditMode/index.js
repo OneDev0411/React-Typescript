@@ -1,5 +1,5 @@
 import React from 'react'
-import Flex from 'styled-flex-component'
+import { Box } from '@material-ui/core'
 
 import { Checkbox } from 'components/Checkbox'
 import { BasicDropdown } from 'components/BasicDropdown'
@@ -14,7 +14,7 @@ import {
 export function EditMode(props) {
   return (
     <React.Fragment>
-      <Flex alignCenter style={{ marginBottom: '0.5rem' }}>
+      <Box mb={1} display="flex" alignItems="center">
         <BasicDropdown
           buttonRenderer={buttonProps => (
             <DropdownButton {...buttonProps} isActive={buttonProps.isOpen}>
@@ -35,7 +35,7 @@ export function EditMode(props) {
         >
           Primary
         </Checkbox>
-      </Flex>
+      </Box>
       <InlineAddressField
         address={props.address}
         handleCancel={props.toggleMode}

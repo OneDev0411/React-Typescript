@@ -7,7 +7,7 @@ export const useIconStyles = makeStyles(
         marginRight: `${theme.spacing(1)}px`
       },
       leftMargin: {
-        marginRight: `${theme.spacing(1)}px`
+        marginLeft: `${theme.spacing(1)}px`
       },
       small: {
         'svg&': {

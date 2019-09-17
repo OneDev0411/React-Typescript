@@ -1,9 +1,22 @@
 import React, { useContext } from 'react'
-import { Box } from '@material-ui/core'
+import { Box, Backdrop } from '@material-ui/core'
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
 
-import { red } from 'views/utils/colors'
 import { DangerButton } from 'components/Button/DangerButton'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      zIndex: theme.zIndex.modal
+    },
+    text: {
+      color: '#fff',
+      fontSize: theme.typography.h2.fontSize,
+      fontWeight: theme.typography.fontWeightBold
+    }
+  })
+)
 
 interface Props {
   isDeleting: boolean
@@ -11,6 +24,7 @@ interface Props {
 }
 
 export default function Delete(props: Props) {
+  const classes = useStyles()
   const confirmation = useContext(ConfirmationModalContext)
 
   const onClick = () => {
@@ -25,26 +39,9 @@ export default function Delete(props: Props) {
 
   if (props.isDeleting) {
     return (
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          zIndex: 10000,
-          color: red.primary,
-          fontSize: '4rem',
-          fontWeight: 'bold',
-          opacity: 0.8,
-          background: '#ccc'
-        }}
-      >
-        Deleting...
-      </div>
+      <Backdrop open className={classes.root}>
+        <Box className={classes.text}>Deleting...</Box>
+      </Backdrop>
     )
   }
 

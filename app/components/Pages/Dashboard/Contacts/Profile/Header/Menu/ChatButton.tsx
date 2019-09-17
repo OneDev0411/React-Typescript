@@ -14,6 +14,8 @@ import ChatIcon from 'components/SvgIcons/Chat/IconChat'
 // Chatroom in Dashboard
 import Chatroom from '../../../../Chatroom/Util/chatroom'
 
+import { useIconStyles } from '../../../../../../../styles/use-icon-styles'
+
 import { styles } from './styles'
 
 const useStyles = makeStyles(styles, { name: 'ChatButton' })
@@ -26,6 +28,7 @@ interface Props {
 
 function ChatButton({ contact, dispatch, user }: Props) {
   const classes = useStyles()
+  const iconClasses = useIconStyles()
   const { email, phone_number, users } = contact
   const [isChattable, setIsChattable] = useState(false)
   const [isCreatingRoom, setIsCreatingRoom] = useState(false)
@@ -77,7 +80,7 @@ function ChatButton({ contact, dispatch, user }: Props) {
       size="small"
       variant="outlined"
     >
-      <ChatIcon className={classes.leftIcon} />
+      <ChatIcon className={iconClasses.rightMargin} />
       Chat
     </Button>
   )
