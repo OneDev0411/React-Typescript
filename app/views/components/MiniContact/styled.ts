@@ -23,6 +23,12 @@ export const ProfileContainer = styled.div`
       }
     }
 
+    & .person-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     & > div:first-child {
       font-size: 1.375rem;
       font-weight: bold;

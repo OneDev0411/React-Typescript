@@ -1,7 +1,7 @@
 import React from 'react'
-
-// import Fade from '@material-ui/core/Fade'
+import useDebouncedCallback from 'use-debounce/lib/callback'
 import Paper from '@material-ui/core/Paper'
+// import Fade from '@material-ui/core/Fade'
 
 import { EventDrawer } from 'components/EventDrawer'
 import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
@@ -30,19 +30,26 @@ function MiniContact(props: MiniContactPropsType) {
   >({})
   const [anchorEl, setAnchorEl] = React.useState(null)
 
+  function handleHovered(currentTarget) {
+    setAnchorEl(anchorEl ? null : currentTarget)
+  }
+
+  let [debouncedHandleHovered, cancel] = useDebouncedCallback(
+    handleHovered,
+    500
+  )
   const isHovered = Boolean(anchorEl)
   const id = isHovered ? 'mini-contact-popper' : undefined
-  const closeMiniContact = () => setAnchorEl(null)
-
-  function handleHovered(event) {
-    setAnchorEl(anchorEl ? null : event.currentTarget)
+  const closeMiniContact = () => {
+    setAnchorEl(null)
+    cancel()
   }
 
   return (
     <>
       <ComponentRenderer
         as={props.as}
-        onMouseEnter={handleHovered}
+        onMouseEnter={e => debouncedHandleHovered(e.currentTarget)}
         onMouseLeave={closeMiniContact}
       >
         {props.children}
