@@ -8,6 +8,8 @@ import { TextField } from 'final-form-material-ui'
 import createDecorator from 'final-form-focus'
 import { isEqual } from 'lodash'
 
+import styled from 'styled-components'
+
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import EmailBody from 'components/EmailCompose/components/EmailBody'
 
@@ -20,6 +22,11 @@ import { validateRecipient } from '../../EmailRecipientsChipsInput/helpers/valid
 interface State {
   topFieldsCollapsed: boolean
 }
+
+const TopFieldsContainer = styled.div`
+  overflow: auto;
+  max-height: 70%;
+`
 
 /**
  * Shared parts of the different email compose drawers.
@@ -223,14 +230,15 @@ class EmailComposeDrawer extends React.Component<
         )}
         render={({ values }) => (
           <Fragment>
-            {this.state.topFieldsCollapsed ? (
-              <div onClick={this.expandTopFields}>
-                {this.props.renderCollapsedFields(values)}
-              </div>
-            ) : (
-              this.props.renderFields(values)
-            )}
-
+            <TopFieldsContainer>
+              {this.state.topFieldsCollapsed ? (
+                <div onClick={this.expandTopFields}>
+                  {this.props.renderCollapsedFields(values)}
+                </div>
+              ) : (
+                this.props.renderFields(values)
+              )}
+            </TopFieldsContainer>
             <Field
               placeholder="Subject"
               name="subject"

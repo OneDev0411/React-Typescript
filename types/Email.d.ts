@@ -64,7 +64,7 @@ declare interface IEmailCampaignInputBase {
   html: string
   text?: string
   attachments?: UUID[]
-  template: UUID
+  template?: UUID
   /**
    * @deprecated, This is not used in practice and is added in initial
    * implementation by the API. It should be removed.
