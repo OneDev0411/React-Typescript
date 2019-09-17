@@ -21,6 +21,7 @@ import { Container, Description } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../../Contacts/constants'
 
 const HIGHLIGHT_SECONDS = 4
+const INVALID_TAG_PATTERN = /^\.+$/
 
 class ManageTags extends Component {
   state = {
@@ -41,6 +42,10 @@ class ManageTags extends Component {
   resetContactsFilters = async () => {
     await this.props.resetActiveFilters(CONTACTS_SEGMENT_NAME)
     await this.props.changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, 'default')
+  }
+
+  validateTag = text => {
+    return !INVALID_TAG_PATTERN.test(text)
   }
 
   fetch = async () => {
@@ -129,6 +134,15 @@ class ManageTags extends Component {
       return
     }
 
+    if (!this.validateTag(text)) {
+      this.props.notify({
+        status: 'error',
+        message: 'Invalid tag'
+      })
+
+      return false
+    }
+
     const foundTag = this.getTag(text)
 
     if (foundTag) {
@@ -163,6 +177,15 @@ class ManageTags extends Component {
 
     if (!text || this.state.isSaving) {
       return
+    }
+
+    if (!this.validateTag(text)) {
+      this.props.notify({
+        status: 'error',
+        message: 'Invalid tag'
+      })
+
+      return false
     }
 
     const foundTag = this.getTag(text)
