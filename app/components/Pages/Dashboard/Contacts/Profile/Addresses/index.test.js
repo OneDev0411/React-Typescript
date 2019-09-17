@@ -1,6 +1,8 @@
 import React from 'react'
 import { fireEvent } from '@testing-library/react'
 
+import {AppTheme} from '../../../../../../AppTheme'
+
 import { Addresses } from './index'
 import attributeDefs from 'fixtures/contacts/attribute-defs'
 import contact from 'fixtures/contacts/full-contact'
@@ -18,10 +20,12 @@ describe('Addresses tests', function() {
       getAllByText,
       queryByTestId
     } = renderWithConfirmationModal(
-      <Addresses
-        attributeDefs={attributeDefs}
-        contact={normalizeContact(contact)}
-      />
+      <AppTheme>
+        <Addresses
+          attributeDefs={attributeDefs}
+          contact={normalizeContact(contact)}
+        />
+      </AppTheme>
     )
 
     const editButtons = getAllByText('Edit')
