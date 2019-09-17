@@ -88,7 +88,7 @@ const useEmailRecipientsChipsInputStyles = makeStyles<
         flexWrap: 'wrap'
       },
       inputWrapper: props => ({
-        flexBasis: `calc(100% - ${props.labelWidth}px)`
+        flexBasis: `calc(100% - ${props.labelWidth + 1}px)`
       })
     }),
   { name: 'EmailRecipientsChipsInput' }
