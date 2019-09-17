@@ -4,6 +4,8 @@ import { addNotification as notify } from 'reapop'
 import { Helmet } from 'react-helmet'
 
 import { confirmation } from 'actions/confirmation'
+import { resetActiveFilters } from 'actions/filter-segments/active-filters'
+import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
 import { getContactsTags } from 'models/contacts/get-contacts-tags'
 import { getContactsTags as getContactTagsAction } from 'actions/contacts/get-contacts-tags'
 import { createContactsTags } from 'models/contacts/create-contacts-tags'
@@ -16,6 +18,7 @@ import Loading from '../../../../Partials/Loading'
 import Row from './Row'
 import { Input } from './Input'
 import { Container, Description } from './styled'
+import { CONTACTS_SEGMENT_NAME } from '../../Contacts/constants'
 
 const HIGHLIGHT_SECONDS = 4
 
@@ -33,6 +36,11 @@ class ManageTags extends Component {
 
   reloadStoreTags = () => {
     this.props.getContactsTags()
+  }
+
+  resetContactsFilters = async () => {
+    await this.props.resetActiveFilters(CONTACTS_SEGMENT_NAME)
+    await this.props.changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, 'default')
   }
 
   fetch = async () => {
@@ -130,7 +138,8 @@ class ManageTags extends Component {
     }
 
     await updateContactsTags(oldText, text)
-    this.reloadStoreTags()
+    await this.reloadStoreTags()
+    await this.resetContactsFilters()
     this.props.notify({
       status: 'success',
       message: `"${text}" updated.`
@@ -166,7 +175,8 @@ class ManageTags extends Component {
 
     this.setState({ isSaving: true })
     await createContactsTags(text)
-    this.reloadStoreTags()
+    await this.reloadStoreTags()
+    await this.resetContactsFilters()
     this.props.notify({
       status: 'success',
       message: `"${text}" added.`
@@ -189,7 +199,8 @@ class ManageTags extends Component {
           'Deleting a tag will remove it from the system and remove it from any contacts with this tag.',
         onConfirm: async () => {
           await deleteContactsTags(text)
-          this.reloadStoreTags()
+          await this.reloadStoreTags()
+          await this.resetContactsFilters()
           this.props.notify({
             status: 'success',
             message: `"${text}" deleted.`
@@ -266,6 +277,8 @@ export default connect(
   {
     notify,
     confirmation,
-    getContactsTags: getContactTagsAction
+    getContactsTags: getContactTagsAction,
+    resetActiveFilters,
+    changeActiveFilterSegment
   }
 )(ManageTags)
