@@ -22,7 +22,7 @@ import { SortValues, doSort } from './helpers'
 function List(props) {
   const [isSideMenuOpen, setSideMenuOpen] = useState(true)
   const [queue, setQueue] = useState(0)
-  const [sort, setSort] = useState(SortValues.NEWEST)
+  const [sort, setSort] = useState(SortValues.Newest)
   const { list, isLoading } = useListData(props.user, queue)
   const isScheduled = props.route && props.route.path === 'scheduled'
   const filterType = isScheduled
@@ -114,8 +114,8 @@ function List(props) {
   )
 
   const sortableColumns = [
-    { label: 'Newest', value: SortValues.NEWEST },
-    { label: 'Oldest', value: SortValues.OLDEST }
+    { label: 'Newest', value: SortValues.Newest },
+    { label: 'Oldest', value: SortValues.Oldest }
   ]
 
   return (

@@ -10,14 +10,14 @@ describe('Sort in Marketing Insights (List)', function() {
   })
 
   it('should sorting the list by newest date', function() {
-    const result = doSort(mockList, SortValues.NEWEST)
+    const result = doSort(mockList, SortValues.Newest)
     const expectedResult = [item1, item2, item3, item4]
 
     expect(result).toEqual(expectedResult)
   })
 
   it('should sorting the list by oldest date', function() {
-    const result = doSort(mockList, SortValues.OLDEST)
+    const result = doSort(mockList, SortValues.Oldest)
     const expectedResult = [item4, item3, item2, item1]
 
     expect(result).toEqual(expectedResult)
