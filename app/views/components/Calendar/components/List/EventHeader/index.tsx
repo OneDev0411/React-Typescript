@@ -50,7 +50,7 @@ export function EventHeader(props: IProps) {
 
           <span
             style={{
-              textTransform: 'uppercase'
+              textTransform: 'capitalize'
             }}
           >
             {getSecondaryText(props.item, date)}
@@ -69,8 +69,8 @@ export function EventHeader(props: IProps) {
 function getSecondaryText(item: ICalendarEventHeader, date: Date) {
   if (item.headerType === 'day-header') {
     return date.getFullYear() !== new Date().getFullYear()
-      ? fecha.format(date, 'MMM YYYY, ddd')
-      : fecha.format(date, 'MMM, ddd')
+      ? fecha.format(date, 'MMMM YYYY, dddd')
+      : fecha.format(date, 'MMMM, dddd')
   }
 
   return date.getFullYear() !== new Date().getFullYear()

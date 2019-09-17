@@ -3,7 +3,6 @@ import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 import { Helmet } from 'react-helmet'
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs'
 
 import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
@@ -15,13 +14,7 @@ import { getContact } from 'models/contacts/get-contact'
 import { deleteContacts } from 'models/contacts/delete-contact'
 import { updateContactSelf } from 'models/contacts/update-contact-self'
 
-import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
-
-import NewTask from 'components/NewEvent'
-import {
-  selectDefinitionByName,
-  isLoadedContactAttrDefs
-} from 'reducers/contacts/attributeDefs'
+import { isLoadedContactAttrDefs } from 'reducers/contacts/attributeDefs'
 import { selectContact } from 'reducers/contacts/list'
 
 import { getContactsTags } from 'store_actions/contacts/get-contacts-tags'
@@ -38,21 +31,12 @@ import { Partner } from './Partner'
 import Tags from './Tags'
 import { ContactInfo } from './ContactInfo'
 import AddressesSection from './Addresses'
-import { AddNote } from './AddNote'
 import { Owner } from './Owner'
 import Delete from './Delete'
-import {
-  PageContainer,
-  ColumnsContainer,
-  SideColumnWrapper,
-  SecondColumn,
-  ThirdColumn,
-  PageWrapper,
-  Card,
-  TabsContainer
-} from './styled'
+import { PageContainer, SideColumn, MainColumn, PageWrapper } from './styled'
 
-import { Header } from './Header'
+import Header from './Header/Header'
+import Divider from './Divider'
 import Timeline from './Timeline'
 
 class ContactProfile extends React.Component {
@@ -178,29 +162,14 @@ class ContactProfile extends React.Component {
 
   /**
    * refreshes timeline
-   * after a lot of investigations I finally figured out we need to
-   * wait for ~1.5 sconds to be able get the new changes from server.
-   * it seems a queue is working behind the scenes to store the data
    */
-  fetchTimeline = () =>
-    setTimeout(() => this.timelineRef.current.refresh(), 1500)
+  fetchTimeline = () => setTimeout(this.timelineRef.current.refresh, 500)
 
   setContact = (newContact, fallback) =>
     this.setState(
       state => ({ contact: { ...state.contact, ...newContact } }),
       fallback
     )
-
-  handleAddNote = async text => {
-    const contact = await upsertContactAttributes(this.state.contact.id, [
-      {
-        text,
-        attribute_def: selectDefinitionByName(this.props.attributeDefs, 'note')
-      }
-    ])
-
-    this.setContact(contact, this.fetchTimeline)
-  }
 
   onChangeOwner = async item => {
     this.setState({ isUpdatingOwner: true })
@@ -264,11 +233,6 @@ class ContactProfile extends React.Component {
       contact: associationNormalizer(contact)
     }
 
-    const thirdColumnSections = [
-      <Dates contact={contact} key="s1" />,
-      <Deals contact={contact} key="s2" />
-    ]
-
     const _props = {
       contact,
       submitCallback: this.setContact
@@ -279,107 +243,61 @@ class ContactProfile extends React.Component {
         <Helmet>
           <title>{this.documentTitle}</title>
         </Helmet>
-        <PageContainer>
-          <Header
-            contact={contact}
-            backUrl={
-              this.props.location.state && this.props.location.state.id
-                ? '/dashboard/contacts'
-                : null
-            }
-            closeButtonQuery={this.props.location.state}
-            addToFlowCallback={this.addToFlowCallback}
-          />
-
-          <ColumnsContainer>
-            <SideColumnWrapper>
-              {!this.state.isDesktopScreen && (
-                <Card>
-                  <Flows
-                    flows={contact.flows}
-                    contactId={contact.id}
-                    onStop={this.stopFlow}
-                    addCallback={this.addToFlowCallback}
-                  />
-                </Card>
-              )}
-              <Card>
-                <Tags contact={contact} />
-              </Card>
-              <Card>
-                {!this.state.isDesktopScreen && <Dates {..._props} />}
-
-                <ContactInfo {..._props} />
-
-                <AddressesSection {..._props} />
-
-                <Details {..._props} />
-
-                <Partner {..._props} />
-
-                {!this.state.isDesktopScreen && <Deals contact={contact} />}
-
-                <Owner
-                  onSelect={this.onChangeOwner}
-                  owner={contact.user}
-                  user={user}
-                  contact={contact}
-                  disabled={this.state.isUpdatingOwner}
-                />
-              </Card>
-              <Delete
-                handleDelete={this.delete}
-                isDeleting={this.state.isDeleting}
-              />
-            </SideColumnWrapper>
-
-            <SecondColumn>
-              <TabsContainer>
-                <Tabs>
-                  <TabList>
-                    <Tab>
-                      <span>Add Event</span>
-                    </Tab>
-                    <Tab>
-                      <span>Add Note</span>
-                    </Tab>
-                  </TabList>
-
-                  <TabPanels>
-                    <TabPanel>
-                      <NewTask
-                        user={user}
-                        submitCallback={this.addEvent}
-                        defaultAssociation={defaultAssociation}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <AddNote
-                        contact={contact}
-                        onSubmit={this.handleAddNote}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </TabsContainer>
-
-              <Timeline ref={this.timelineRef} contact={this.state.contact} />
-            </SecondColumn>
-
-            {this.state.isDesktopScreen && (
-              <ThirdColumn>
-                <Card>
-                  <Flows
-                    flows={contact.flows}
-                    contactId={contact.id}
-                    onStop={this.stopFlow}
-                    addCallback={this.addToFlowCallback}
-                  />
-                </Card>
-                <Card>{thirdColumnSections}</Card>
-              </ThirdColumn>
-            )}
-          </ColumnsContainer>
+        <PageContainer className="u-scrollbar--thinner">
+          <SideColumn>
+            <Header
+              contact={contact}
+              backUrl={
+                this.props.location.state && this.props.location.state.id
+                  ? '/dashboard/contacts'
+                  : null
+              }
+              closeButtonQuery={this.props.location.state}
+              addToFlowCallback={this.addToFlowCallback}
+            />
+            <Divider />
+            <Flows
+              flows={contact.flows}
+              contactId={contact.id}
+              onStop={this.stopFlow}
+              addCallback={this.addToFlowCallback}
+            />
+            <Divider />
+            <Tags contact={contact} />
+            <Divider />
+            <Dates {..._props} />
+            <Divider />
+            <ContactInfo {..._props} />
+            <Divider />
+            <AddressesSection {..._props} />
+            <Divider />
+            <Details {..._props} />
+            <Divider />
+            <Partner {..._props} />
+            <Divider />
+            <Deals contact={contact} />
+            <Divider />
+            <Owner
+              onSelect={this.onChangeOwner}
+              owner={contact.user}
+              user={user}
+              contact={contact}
+              disabled={this.state.isUpdatingOwner}
+            />
+            <Divider />
+            <Delete
+              handleDelete={this.delete}
+              isDeleting={this.state.isDeleting}
+            />
+          </SideColumn>
+          <MainColumn>
+            <Timeline
+              ref={this.timelineRef}
+              contact={this.state.contact}
+              defaultAssociation={defaultAssociation}
+              onCreateNote={this.setContact}
+            />
+          </MainColumn>
         </PageContainer>
       </PageWrapper>
     )
@@ -413,7 +331,3 @@ export default withRouter(
     }
   )(ContactProfile)
 )
-
-// todo
-// infinit scroll + lazy loading
-// loading new event associationas after adding to timeline

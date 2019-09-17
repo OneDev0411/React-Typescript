@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import idx from 'idx'
+import { Button } from '@material-ui/core'
 
 import { getContact } from 'models/contacts/get-contact'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
@@ -12,7 +13,6 @@ import { confirmation } from 'actions/confirmation'
 
 import MissingEmailModal from 'components/MissingEmailModal'
 import InstantMarketing from 'components/InstantMarketing'
-import Button from 'components/Button/ActionButton'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
@@ -243,10 +243,11 @@ class SendContactCard extends React.Component {
 
         {this.props.contact || this.props.contactId ? (
           <Button
-            appearance="outline"
+            color="secondary"
+            variant="outlined"
             onClick={this.showBuilder}
             disabled={this.state.isFetchingContact}
-            {...this.props.buttonStyle} // TODO: buttonStyle -> buttonProps
+            {...this.props.buttonProps}
           >
             {this.props.children}
           </Button>

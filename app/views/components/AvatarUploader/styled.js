@@ -45,11 +45,12 @@ export const Image = styled.img`
 `
 
 export const Initials = styled.div`
-  font-size: 2.25rem;
+  font-size: 1.5rem;
   color: #fff;
 `
 
 export const TriggerText = styled.div`
+  font-size: 0.75rem;
   color: #fff;
   visibility: hidden;
   font-weight: normal;
@@ -90,6 +91,7 @@ export const Loading = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 0.75rem;
   color: #fff;
   border-radius: 100%;
   background: rgb(54, 71, 85, 0.9);

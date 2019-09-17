@@ -1,54 +1,58 @@
 import React from 'react'
-import { Tooltip } from '@material-ui/core'
+import { Button, Box } from '@material-ui/core'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
-import { H3 } from 'components/Typography/headings'
-import IconCog from 'components/SvgIcons/Cog/IconCog'
-
-import { disabledColor } from 'views/utils/colors'
+import AddToFlowButton from 'components/AddToFlowButton'
+import FlowIcon from 'components/SvgIcons/ThunderboltOutline/IconThunderboltOutline'
 
 import { Section } from '../components/Section'
+import List from './List/List'
 
-import { List } from './List'
-import ZeroState from './ZeroState'
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    addButtonIcon: {
+      marginRight: theme.spacing(1)
+    }
+  })
+)
 
 interface Props {
-  flows?: IBrandFlow[]
-  contactId: UUID
-  onStop: (flowId: UUID) => Promise<void>
   addCallback: () => void
+  contactId: UUID
+  flows: TBrandFlow<'steps'>[] | null
+  onStop: (flowId: UUID) => Promise<void>
 }
 
-function FlowsList({ flows = [], contactId, onStop, addCallback }: Props) {
+function FlowsList({ flows, contactId, onStop, addCallback }: Props) {
+  const classes = useStyles()
+
   return (
     <Section
-      style={{ padding: '0 1rem' }}
-      titleRenderer={() => (
-        <>
-          <H3 style={{ margin: 0 }}>Flows</H3>
-          <Tooltip placement="left" title="Manage Flows">
-            <a
-              href="/dashboard/account/flows"
-              style={{
-                display: 'flex'
-              }}
-            >
-              <IconCog
-                style={{
-                  width: '1rem',
-                  height: '1rem'
-                }}
-                fill={disabledColor}
-              />
-            </a>
-          </Tooltip>
-        </>
-      )}
+      title="Flows"
+      setting={{
+        tooltip: 'Manage Flows',
+        href: '/dashboard/account/flows'
+      }}
     >
-      {flows && flows.length > 0 ? (
-        <List items={flows} onStop={onStop} />
-      ) : (
-        <ZeroState addCallback={addCallback} contactId={contactId} />
-      )}
+      <Box px={3}>
+        {Array.isArray(flows) && <List items={flows} onStop={onStop} />}
+        <AddToFlowButton
+          activeFlows={[]}
+          callback={addCallback}
+          contacts={{ ids: [contactId] }}
+          buttonRenderer={buttonProps => (
+            <Button
+              {...buttonProps}
+              color="secondary"
+              fullWidth
+              variant="outlined"
+            >
+              <FlowIcon className={classes.addButtonIcon} />
+              Add To Flow
+            </Button>
+          )}
+        />
+      </Box>
     </Section>
   )
 }

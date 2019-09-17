@@ -62,6 +62,12 @@ export class InlineEditableField extends React.Component {
     this.props.handleAddNew()
   }
 
+  handleDelete = event => {
+    event.stopPropagation()
+
+    this.props.handleDelete()
+  }
+
   handleCancel = () => {
     if (typeof this.props.handleCancel === 'function') {
       this.props.handleCancel()
@@ -110,6 +116,7 @@ export class InlineEditableField extends React.Component {
       label,
       showAdd,
       showEdit,
+      showDelete,
       style,
       renderViewMode: renderBody,
       value
@@ -117,10 +124,12 @@ export class InlineEditableField extends React.Component {
 
     return {
       label,
+      handleDelete: this.handleDelete,
       handleAddNew: this.handleAddNew,
       renderBody,
       showAdd,
       showEdit,
+      showDelete,
       style,
       toggleMode: this.toggleMode,
       value

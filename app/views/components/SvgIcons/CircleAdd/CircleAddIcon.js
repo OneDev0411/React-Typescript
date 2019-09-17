@@ -45,12 +45,12 @@ const Image = styled.svg`${propsToCss}`
 const children = (
   <Fragment>
     <path
-      d='M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z'
+      fill='none'
+      d='M0 0h24v24H0z'
       key='key-0'
     />
     <path
-      d='M0 0h24v24H0z'
-      fill="none"
+      d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z'
       key='key-1'
     />
   </Fragment>
@@ -88,5 +88,5 @@ export default Object.assign(Image, {
   getCss,
   defaultProps,
   propTypes,
-  displayName: 'AddIcon'
+  displayName: 'CircleAddIcon'
 })

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Flex from 'styled-flex-component'
-import _ from 'underscore'
+import { Box } from '@material-ui/core'
+import uniq from 'lodash/uniq'
 
 import { Tag } from './Tag'
 
@@ -11,10 +11,10 @@ TagsList.propTypes = {
 
 export function TagsList(props) {
   return (
-    <Flex wrap="true">
-      {_.uniq(props.tags, tag => tag.text).map(tag => (
-        <Tag key={`tag_${tag.id}`} text={tag.text} />
+    <Box display="flex" alignItems="center" flexWrap="wrap">
+      {uniq(props.tags, tag => tag.text).map(tag => (
+        <Tag key={tag.id} text={tag.text} />
       ))}
-    </Flex>
+    </Box>
   )
 }

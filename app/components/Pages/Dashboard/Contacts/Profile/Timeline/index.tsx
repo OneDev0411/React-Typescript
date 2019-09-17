@@ -2,11 +2,12 @@ import React, {
   useState,
   useRef,
   useImperativeHandle,
+  ChangeEvent,
   forwardRef,
   RefObject
 } from 'react'
 
-import { Button } from '@material-ui/core'
+import { Tabs, Tab } from '@material-ui/core'
 
 import { getNotes } from 'models/contacts/helpers/get-notes'
 
@@ -19,8 +20,15 @@ import { getUpcomingInitialRange } from './helpers/get-upcoming-range'
 import { getTimelineInitialRange } from './helpers/get-timeline-range'
 import { convertNoteToCalendarEvent } from './helpers/convert-note-to-calendar-event'
 
-import { Card } from '../styled'
-import { Container, Title } from './styled'
+import AddEvent from './AddEvent'
+import AddNote from './AddNote'
+
+import { Container, Header } from './styled'
+
+enum Filter {
+  All = 0,
+  Upcoming = 1
+}
 
 export interface TimelineRef {
   refresh(): void
@@ -29,6 +37,7 @@ export interface TimelineRef {
 interface Props {
   contact: IContact
   timelineRef?: RefObject<TimelineRef>
+  onCreateNote(contact: IContact): void
 }
 
 const associations = [
@@ -40,16 +49,33 @@ const associations = [
 
 function Timeline(props: Props) {
   const timelineRef = useRef<CalendarRef>(null)
-  const upcomingRef = useRef<CalendarRef>(null)
 
-  const [showUpcomingEvents, setShowUpcomingEvents] = useState<boolean>(false)
+  const [activeFilter, setActiveFilter] = useState<Filter>(Filter.All)
 
-  const handleReload = () => {
-    timelineRef.current!.refresh(new Date(), getTimelineInitialRange())
+  const filter = {
+    contact: props.contact.id,
+    object_types: ['crm_association', 'email_campaign_recipient']
+  }
 
-    if (showUpcomingEvents) {
-      upcomingRef.current!.refresh(new Date(), getUpcomingInitialRange())
-    }
+  const getCalendarRange = (filter: Filter) =>
+    filter === Filter.All
+      ? getTimelineInitialRange()
+      : getUpcomingInitialRange()
+
+  const handleReload = (filter = activeFilter) => {
+    timelineRef.current!.refresh(new Date(), getCalendarRange(filter))
+  }
+
+  const handleChangeFilter = (e: ChangeEvent<{}> | null, value: number) => {
+    // update filter
+    setActiveFilter(value)
+  }
+
+  const handleCreateNote = (contact: IContact) => {
+    props.onCreateNote(contact)
+
+    // reload timeline
+    handleReload()
   }
 
   useImperativeHandle(props.timelineRef, () => ({
@@ -60,61 +86,49 @@ function Timeline(props: Props) {
     return null
   }
 
-  const filter = {
-    contact: props.contact.id,
-    object_types: ['crm_association', 'email_campaign_recipient']
-  }
-
   const notes = getNotes(props.contact).map(note =>
     convertNoteToCalendarEvent(note, props.contact)
   )
 
   return (
     <Container>
-      <Button
-        variant="outlined"
-        color="secondary"
-        onClick={() => setShowUpcomingEvents(!showUpcomingEvents)}
-      >
-        {showUpcomingEvents ? 'Hide' : 'Show'} Upcoming Events
-      </Button>
+      <Header>
+        <div>
+          <Tabs
+            value={activeFilter}
+            onChange={handleChangeFilter}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="scrollable"
+            scrollButtons="auto"
+          >
+            <Tab value={Filter.All} label="All Events" />
+            <Tab value={Filter.Upcoming} label="Upcoming Events" />
+          </Tabs>
+        </div>
 
-      {showUpcomingEvents && (
-        <>
-          <Title>Upcoming Events</Title>
+        <div>
+          <AddNote
+            contactId={props.contact.id}
+            onCreateNote={handleCreateNote}
+          />
+          <AddEvent contact={props.contact} />
+        </div>
+      </Header>
 
-          <Card>
-            <List
-              ref={upcomingRef}
-              filter={filter}
-              associations={associations}
-              initialRange={getUpcomingInitialRange()}
-              directions={[LoadingDirection.Bottom]}
-              placeholders={[]}
-              defaultEvents={notes} // TODO: convert notes to events
-            />
-          </Card>
-        </>
-      )}
-
-      <Title>Current Events</Title>
-
-      <Card
-        style={{
-          marginTop: '1rem'
-        }}
-      >
+      <div>
         <List
-          contrariwise // display calendar events vice versa
+          // display calendar events vice versa
+          contrariwise={activeFilter === Filter.All}
           ref={timelineRef}
           filter={filter}
-          initialRange={getTimelineInitialRange()}
+          initialRange={getCalendarRange(activeFilter)}
           associations={associations}
           directions={[LoadingDirection.Bottom]}
           placeholders={[]}
           defaultEvents={notes} // TODO: convert notes to events
         />
-      </Card>
+      </div>
     </Container>
   )
 }
