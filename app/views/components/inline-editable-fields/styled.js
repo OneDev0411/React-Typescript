@@ -65,7 +65,6 @@ export const EditModeContainer = styled.div`
 export const Label = styled.div`
   display: flex;
   align-items: center;
-  color: ${grey.A900};
   margin-bottom: 0.25em;
 `
 
