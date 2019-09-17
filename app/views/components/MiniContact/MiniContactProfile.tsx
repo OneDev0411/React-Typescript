@@ -1,5 +1,5 @@
 import React from 'react'
-import debounce from 'lodash/debounce'
+import useDebouncedCallback from 'use-debounce/lib/callback'
 import Paper from '@material-ui/core/Paper'
 // import Fade from '@material-ui/core/Fade'
 
@@ -34,12 +34,15 @@ function MiniContact(props: MiniContactPropsType) {
     setAnchorEl(anchorEl ? null : currentTarget)
   }
 
-  let debouncedHandleHovered = debounce(handleHovered, 500)
+  let [debouncedHandleHovered, cancel] = useDebouncedCallback(
+    handleHovered,
+    500
+  )
   const isHovered = Boolean(anchorEl)
   const id = isHovered ? 'mini-contact-popper' : undefined
   const closeMiniContact = () => {
     setAnchorEl(null)
-    debouncedHandleHovered.cancel()
+    cancel()
   }
 
   return (
