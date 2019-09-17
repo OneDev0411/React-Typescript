@@ -42,7 +42,7 @@ class SendContactCard extends React.Component {
       state.contact !== props.contact ||
       (state.contact &&
         props.contact &&
-        props.contact.update_at > state.contact.update_at)
+        props.contact.updated_at > state.contact.updated_at)
     ) {
       return {
         contact: props.contact
