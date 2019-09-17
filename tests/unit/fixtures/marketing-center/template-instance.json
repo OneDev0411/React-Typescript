@@ -1,0 +1,31 @@
+{
+  "id": "f7304992-d8c9-11e9-af36-027d31a1f7a0",
+  "created_at": 1568669751.63658,
+  "template": {
+    "id": "86eaa400-b03a-11e9-bb3b-1663bb1b90f0",
+    "created_at": 1564210102.96269,
+    "name": "Event",
+    "template_type": "Birthday",
+    "deleted_at": null,
+    "medium": "Email",
+    "video": false,
+    "url": "https://s3-us-west-2.amazonaws.com/shortlisted-test/marketing/templates/66fff23e201f749eb87da80421ebf3db26ab545b/Event/Event1",
+    "variant": "Event1",
+    "inputs": [
+      "user"
+    ],
+    "mjml": false,
+    "type": "template",
+    "updated_at": 1564210102.96269
+  },
+  "html": "\n      <!doctype html>\n      <html style=\"box-sizing: border-box; background-image: initial; background-position-x: initial; background-position-y: initial; background-size: initial; background-repeat-x: initial; background-repeat-y: initial; background-attachment: initial; background-origin: initial; background-clip: initial; background-color: rgb(243, 243, 243);\">\n        <head>\n          <style>\na:hover {\n  color: rgb(20, 125, 194);\n}\na:active {\n  color: rgb(20, 125, 194);\n}\na:visited {\n  col...",
+  "file": "Object",
+  "created_by": "29f259b4-626a-11e9-a064-0a95998482ac",
+  "branch": "https://1sv7.app.link/4IYKuY0v2Z",
+  "updated_at": 1568669751.63658,
+  "deleted_at": null,
+  "type": "template_instance",
+  "deals": null,
+  "listings": null,
+  "contacts": "Array[1]"
+}
