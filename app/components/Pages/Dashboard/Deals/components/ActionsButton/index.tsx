@@ -107,7 +107,6 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
       upload: this.handleUpload,
       comments: this.handleShowComments,
       view: this.handleView,
-      download: this.handleDownload,
       rename: renameFile,
       'edit-form': editForm,
       'delete-task': deleteTask,
@@ -320,35 +319,6 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
   /**
    *
    */
-  handleDownload = () => {
-    const links = getLastStates({
-      type: this.props.type,
-      deal: this.props.deal,
-      task: this.props.task,
-      document: this.props.document,
-      envelopes: this.props.envelopes,
-      isBackOffice: this.props.isBackOffice
-    })
-
-    if (links.length === 1) {
-      window.open(links[0].url, '_blank')
-
-      return
-    }
-
-    this.setState({
-      multipleItemsSelection: {
-        items: links,
-        title: 'Select a file to download',
-        actionTitle: 'Download',
-        onSelect: item => window.open(item.url, '_blank')
-      }
-    })
-  }
-
-  /**
-   *
-   */
   handleView = () => {
     const links = getLastStates({
       type: this.props.type,
@@ -362,8 +332,8 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
     const openInNewTab = (link: string) => link.includes('/dashboard/deals/')
 
     if (links.length === 1) {
-      return this.props.isBackOffice && openInNewTab(links[0].url)
-        ? browserHistory.push(links[0].url)
+      return this.props.isBackOffice && openInNewTab(links[0].preview_url)
+        ? browserHistory.push(links[0].preview_url)
         : window.open(links[0].url, '_blank')
     }
 
@@ -373,8 +343,8 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
         title: 'Select a file to view/print',
         actionTitle: 'View/Print',
         onSelect: item =>
-          this.props.isBackOffice && openInNewTab(item.url)
-            ? browserHistory.push(item.url)
+          this.props.isBackOffice && openInNewTab(item.preview_url)
+            ? browserHistory.push(item.preview_url)
             : window.open(item.url, '_blank')
       }
     })
@@ -414,7 +384,7 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
     }
 
     return (
-      <>
+      <div>
         <Downshift
           isOpen={this.state.isMenuOpen}
           onOuterClick={this.handleCloseMenu}
@@ -502,16 +472,18 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
           />
         )}
 
-        <SingleEmailComposeDrawer
-          isOpen={this.state.isComposeEmailOpen}
-          initialValues={{
-            from: this.props.user,
-            attachments: this.getEmailComposeFiles()
-          }}
-          deal={this.props.deal}
-          onClose={this.handleToggleComposeEmail}
-          onSent={this.handleToggleComposeEmail}
-        />
+        {this.state.isComposeEmailOpen && (
+          <SingleEmailComposeDrawer
+            isOpen
+            initialValues={{
+              from: this.props.user,
+              attachments: this.getEmailComposeFiles()
+            }}
+            deal={this.props.deal}
+            onClose={this.handleToggleComposeEmail}
+            onSent={this.handleToggleComposeEmail}
+          />
+        )}
 
         {this.state.multipleItemsSelection && (
           <SelectItemDrawer
@@ -520,7 +492,7 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
             onClose={this.handleCloseMultipleItemsSelectionDrawer}
           />
         )}
-      </>
+      </div>
     )
   }
 }

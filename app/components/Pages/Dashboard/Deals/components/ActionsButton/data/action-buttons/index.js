@@ -11,7 +11,6 @@ export const UPLOAD_BUTTON = 9
 export const RENAME_BUTTON = 10
 export const DELETE_FILE_BUTTON = 11
 export const DELETE_TASK_BUTTON = 12
-export const DOWNLOAD_BUTTON = 13
 export const REVIEW_ENVELOPE_BUTTON = 14
 export const SPLIT_PDF_BUTTON = 15
 export const APPROVE_TASK_BUTTON = 16

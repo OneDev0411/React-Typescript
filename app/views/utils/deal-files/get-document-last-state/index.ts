@@ -39,7 +39,7 @@ export function getLastStates(data: Params): IFile[] {
 function getTaskFile(data: Params): IFile[] {
   const files: IFile[] = getTaskLatestFiles(data)
 
-  if (files.length > 0) {
+  if (files.length === 1) {
     return files
   }
 
@@ -93,7 +93,7 @@ function getTaskLatestFiles(data: Params): IFile[] {
     ? [
         {
           ...data.task.submission.file,
-          url: `/dashboard/deals/${data.deal.id}/view/${data.task.id}`
+          preview_url: `/dashboard/deals/${data.deal.id}/view/${data.task.id}`
         }
       ]
     : [data.task.submission.file]
@@ -121,7 +121,7 @@ function getDocumentLatestFile(data: Params): IFile {
   return data.isBackOffice
     ? {
         ...document,
-        url: `${baseUrl}/attachment/${document.id}`
+        preview_url: `${baseUrl}/attachment/${document.id}`
       }
     : document
 }

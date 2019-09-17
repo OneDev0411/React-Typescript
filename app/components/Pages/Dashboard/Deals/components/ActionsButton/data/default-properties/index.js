@@ -12,7 +12,6 @@ import {
   RENAME_BUTTON,
   DELETE_FILE_BUTTON,
   DELETE_TASK_BUTTON,
-  DOWNLOAD_BUTTON,
   REVIEW_ENVELOPE_BUTTON,
   SPLIT_PDF_BUTTON,
   APPROVE_TASK_BUTTON,
@@ -67,10 +66,6 @@ export const actionsDefaultProperties = {
   [DELETE_TASK_BUTTON]: {
     label: 'Delete',
     type: 'delete-task'
-  },
-  [DOWNLOAD_BUTTON]: {
-    label: 'Download',
-    type: 'download'
   },
   [MOVE_BUTTON]: {
     label: 'Move',
