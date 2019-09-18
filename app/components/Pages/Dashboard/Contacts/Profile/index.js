@@ -266,13 +266,9 @@ class ContactProfile extends React.Component {
             <Tags contact={contact} />
             <Divider />
             <Dates {..._props} />
-            <Divider />
             <ContactInfo {..._props} />
-            <Divider />
             <AddressesSection {..._props} />
-            <Divider />
             <Details {..._props} />
-            <Divider />
             <Partner {..._props} />
             <Divider />
             <Deals contact={contact} />

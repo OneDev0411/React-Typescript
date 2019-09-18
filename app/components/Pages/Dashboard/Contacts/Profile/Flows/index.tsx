@@ -41,12 +41,7 @@ function FlowsList({ flows, contactId, onStop, addCallback }: Props) {
           callback={addCallback}
           contacts={{ ids: [contactId] }}
           buttonRenderer={buttonProps => (
-            <Button
-              {...buttonProps}
-              color="secondary"
-              fullWidth
-              variant="outlined"
-            >
+            <Button {...buttonProps} color="secondary" variant="outlined">
               <FlowIcon className={classes.addButtonIcon} />
               Add To Flow
             </Button>
