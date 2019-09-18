@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
@@ -9,6 +9,8 @@ import createDecorator from 'final-form-focus'
 import { isEqual } from 'lodash'
 
 import styled from 'styled-components'
+
+import Flex from 'styled-flex-component'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import EmailBody from 'components/EmailCompose/components/EmailBody'
@@ -229,7 +231,7 @@ class EmailComposeDrawer extends React.Component<
           />
         )}
         render={({ values }) => (
-          <Fragment>
+          <Flex column style={{ height: '100%' }}>
             <TopFieldsContainer>
               {this.state.topFieldsCollapsed ? (
                 <div onClick={this.expandTopFields}>
@@ -266,7 +268,7 @@ class EmailComposeDrawer extends React.Component<
             />
             <OnChange name="attachments">{this.scrollToEnd}</OnChange>
             <OnChange name="uploadingAttachments">{this.scrollToEnd}</OnChange>
-          </Fragment>
+          </Flex>
         )}
       />
     )
