@@ -99,7 +99,7 @@ const EmailBody = ({
               {attachments}
             </>
           ) : (
-            <Loading />
+            <Loading style={{ margin: 'auto' }} />
           )}
         </Fragment>
       )}
