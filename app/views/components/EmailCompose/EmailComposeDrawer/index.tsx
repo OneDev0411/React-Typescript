@@ -3,7 +3,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { Field } from 'react-final-form'
-import { OnChange } from 'react-final-form-listeners'
 import { TextField } from 'final-form-material-ui'
 import createDecorator from 'final-form-focus'
 import { isEqual } from 'lodash'
@@ -266,8 +265,6 @@ class EmailComposeDrawer extends React.Component<
                 <Field name="attachments" component={AttachmentsList} />
               }
             />
-            <OnChange name="attachments">{this.scrollToEnd}</OnChange>
-            <OnChange name="uploadingAttachments">{this.scrollToEnd}</OnChange>
           </Flex>
         )}
       />
