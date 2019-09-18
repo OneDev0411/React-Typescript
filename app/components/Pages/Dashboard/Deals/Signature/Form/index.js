@@ -3,8 +3,6 @@ import { Field } from 'react-final-form'
 import _ from 'underscore'
 import Flex from 'styled-flex-component'
 
-import { normalizeAttachments } from 'components/SelectDealFileDrawer/helpers/normalize-attachment'
-
 import ActionButton from 'components/Button/ActionButton'
 
 import { FinalFormDrawer } from 'components/FinalFormDrawer'
@@ -30,7 +28,7 @@ export default class SignatureComposeDrawer extends React.Component {
       return this.formObject
     }
 
-    this.initialAttachments = normalizeAttachments(this.props.attachments)
+    this.initialAttachments = this.props.attachments
 
     this.formObject = {
       subject: 'Please DocuSign',

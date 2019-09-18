@@ -19,6 +19,8 @@ import { getTaskEnvelopes } from 'views/utils/deal-files/get-task-envelopes'
 
 import { getDocumentEnvelopes } from 'views/utils/deal-files/get-document-envelopes'
 
+import { getEsignAttachments } from 'views/utils/deal-files/get-esign-attachments'
+
 import { getLastStates } from 'views/utils/deal-files/get-document-last-state'
 
 import {
@@ -26,7 +28,6 @@ import {
   ActionItem,
   ActionConditions
 } from './helpers/select-actions'
-import { getEsignAttachments } from './helpers/get-esign-attachments'
 
 import { SelectItemDrawer } from './components/SelectItemDrawer'
 
@@ -269,7 +270,6 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
 
   getEsignAttachments = () => {
     return getEsignAttachments({
-      type: this.props.type,
       task: this.props.task,
       document: this.props.document
     })
@@ -444,14 +444,14 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
           <div />
         </UploadManager>
 
-        {/*
-        // @ts-ignore */}
-        <GetSignature
-          isOpen={this.state.isSignatureFormOpen}
-          deal={this.props.deal}
-          onClose={this.handleDeselectAction}
-          defaultAttachments={this.getEsignAttachments()}
-        />
+        {this.state.isSignatureFormOpen && (
+          <GetSignature
+            isOpen
+            deal={this.props.deal}
+            onClose={this.handleDeselectAction}
+            defaultAttachments={this.getEsignAttachments()}
+          />
+        )}
 
         {this.state.isPdfSplitterOpen && (
           <PdfSplitter

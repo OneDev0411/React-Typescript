@@ -16,5 +16,6 @@ declare interface IFile {
 declare interface IDealFile extends IFile {
   task: UUID | null
   checklist: UUID | null
+  source: 'submission' | 'attachment' | 'envelope' | 'stash'
   internal_url?: string
 }

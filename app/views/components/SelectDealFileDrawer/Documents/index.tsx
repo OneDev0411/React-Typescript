@@ -18,8 +18,6 @@ import Tooltip from 'components/tooltip'
 import LinkButton from 'components/Button/LinkButton'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
 
-// import { normalizeAttachment } from '../helpers/normalize-attachment'
-
 import {
   ChecklistName,
   Container,

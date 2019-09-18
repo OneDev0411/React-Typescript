@@ -24,6 +24,7 @@ export function getEnvelopeFile(
 
   return {
     ...document.pdf,
+    source: 'envelope',
     task: task.id,
     checklist: task.checklist
   }

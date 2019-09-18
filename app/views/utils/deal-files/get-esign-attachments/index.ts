@@ -1,35 +1,25 @@
 interface Params {
-  type: 'task' | 'document'
   task: IDealTask
   document: IDealTask | IFile
 }
 
-interface Attachments {
-  type: 'form' | 'file'
-  task: IDealTask
-  file: IFile
-}
-
-export function getEsignAttachments({ type, task, document }: Params) {
-  if (type === 'task') {
-    return getTaskAttachments(task)
-  }
-
-  if (type === 'document') {
+export function getEsignAttachments({ task, document }: Params) {
+  if (document && document.type === 'file') {
     return getDocumentAttachment(task, document)
   }
 
-  return []
+  return getTaskAttachments(task)
 }
 
-function getTaskAttachments(task: IDealTask): Attachments[] {
-  const attachments: Attachments[] = []
+function getTaskAttachments(task: IDealTask): IDealFile[] {
+  const attachments: IDealFile[] = []
 
   if (task.submission) {
     attachments.push({
-      type: 'form',
-      task,
-      file: task.submission.file
+      ...task.submission.file,
+      source: 'submission',
+      task: task.id,
+      checklist: task.checklist
     })
   }
 
@@ -38,9 +28,10 @@ function getTaskAttachments(task: IDealTask): Attachments[] {
       .filter(file => file.mime === 'application/pdf')
       .forEach(file => {
         attachments.push({
-          type: 'file',
-          task,
-          file
+          ...file,
+          source: 'attachment',
+          task: task.id,
+          checklist: task.checklist
         })
       })
   }
@@ -51,13 +42,14 @@ function getTaskAttachments(task: IDealTask): Attachments[] {
 function getDocumentAttachment(
   task: IDealTask,
   document: IDealTask | IFile
-): Attachments[] {
+): IDealFile[] {
   if (document.type === 'task' && document.submission) {
     return [
       {
-        type: 'form',
-        task: document,
-        file: document.submission.file
+        ...document.submission.file,
+        source: 'submission',
+        task: task.id,
+        checklist: task.checklist
       }
     ]
   }
@@ -65,9 +57,10 @@ function getDocumentAttachment(
   if (document.type === 'file' && document.mime === 'application/pdf') {
     return [
       {
-        type: 'file',
-        task,
-        file: document
+        ...document,
+        source: 'attachment',
+        task: task.id,
+        checklist: task.checklist
       }
     ]
   }
