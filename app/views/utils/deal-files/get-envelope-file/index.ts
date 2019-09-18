@@ -1,7 +1,7 @@
 export function getEnvelopeFile(
   envelope: IDealEnvelope,
   task: IDealTask
-): IFile | null {
+): IDealFile | null {
   // get document index
   let document: IDealEnvelopeDocument | undefined
 
@@ -22,5 +22,9 @@ export function getEnvelopeFile(
     return null
   }
 
-  return document.pdf
+  return {
+    ...document.pdf,
+    task: task.id,
+    checklist: task.checklist
+  }
 }

@@ -1,25 +1,21 @@
-import { getDocumentLastState } from 'deals/utils/get-document-last-state'
+import { getLastStates } from 'views/utils/deal-files/get-document-last-state'
 
-import { normalizeAttachment } from '../normalize-attachment'
-
-export function getAllDealDocuments(deal, envelopes, tasks, includeStashFiles) {
-  let attachments: any[] = []
-  let submissions: any[] = []
+export function getAllDealDocuments(
+  deal: IDeal,
+  envelopes: IDealEnvelope[],
+  tasks: IDealTask[],
+  includeStashFiles: boolean
+): IDealFile[] {
+  let attachments: IDealFile[] = []
+  let submissions: IDealFile[] = []
 
   tasks.forEach(task => {
     if (task.submission) {
-      const files = getDocumentLastState({
-        type: 'task',
+      const files = getLastStates({
         deal,
         envelopes,
         task
-      }).map(({ originalFile: file }) =>
-        normalizeAttachment({
-          type: 'form',
-          file,
-          task
-        })
-      )
+      })
 
       submissions = [...submissions, ...files]
     }
@@ -29,36 +25,27 @@ export function getAllDealDocuments(deal, envelopes, tasks, includeStashFiles) {
       task.room.attachments
         .filter(file => file.mime === 'application/pdf')
         .forEach(file => {
-          const files = getDocumentLastState({
-            type: 'document',
+          const files = getLastStates({
             deal,
             document: file,
             envelopes,
             task
-          }).map(({ originalFile: file }) =>
-            normalizeAttachment({
-              type: 'file',
-              task,
-              file
-            })
-          )
+          })
 
           attachments = [...attachments, ...files]
         })
     }
   })
 
-  return [...submissions, ...attachments].concat(
-    includeStashFiles
-      ? (deal.files || [])
-          .filter(file => file.mime === 'application/pdf')
-          .map(file =>
-            normalizeAttachment({
-              type: 'file',
-              task: null,
-              file
-            })
-          )
-      : []
-  )
+  const stashFiles: IDealFile[] = includeStashFiles
+    ? (deal.files || [])
+        .filter(file => file.mime === 'application/pdf')
+        .map(file => ({
+          ...file,
+          task: null,
+          checklist: null
+        }))
+    : []
+
+  return submissions.concat(attachments, stashFiles)
 }

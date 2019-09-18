@@ -12,3 +12,9 @@ declare interface IFile {
   updated_at: number
   url: string
 }
+
+declare interface IDealFile extends IFile {
+  task: UUID | null
+  checklist: UUID | null
+  internal_url?: string
+}

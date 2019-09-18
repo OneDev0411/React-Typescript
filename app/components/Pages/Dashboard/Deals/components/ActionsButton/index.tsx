@@ -71,10 +71,10 @@ interface State {
   isTasksDrawerOpen: boolean
   isComposeEmailOpen: boolean
   multipleItemsSelection: {
-    items: IFile[]
+    items: IDealFile[]
     title: string
     actionTitle: string
-    onSelect(file: IFile): void
+    onSelect(file: IDealFile): void
   } | null
 }
 
@@ -249,7 +249,6 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
 
   getSplitterFiles = () => {
     const files = getLastStates({
-      type: this.props.type,
       deal: this.props.deal,
       task: this.props.task,
       document: this.props.document,
@@ -261,7 +260,6 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
 
   getEmailComposeFiles = () => {
     return getLastStates({
-      type: this.props.type,
       deal: this.props.deal,
       task: this.props.task,
       document: this.props.document,
@@ -321,7 +319,6 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
    */
   handleView = () => {
     const links = getLastStates({
-      type: this.props.type,
       deal: this.props.deal,
       task: this.props.task,
       document: this.props.document,
@@ -329,11 +326,12 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
       isBackOffice: this.props.isBackOffice
     })
 
-    const openInNewTab = (link: string) => link.includes('/dashboard/deals/')
+    const openInNewTab = (link: string | undefined) =>
+      link && link.includes('/dashboard/deals/')
 
     if (links.length === 1) {
-      return this.props.isBackOffice && openInNewTab(links[0].preview_url)
-        ? browserHistory.push(links[0].preview_url)
+      return this.props.isBackOffice && openInNewTab(links[0].internal_url)
+        ? browserHistory.push(links[0].internal_url as string)
         : window.open(links[0].url, '_blank')
     }
 
@@ -343,8 +341,8 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
         title: 'Select a file to view/print',
         actionTitle: 'View/Print',
         onSelect: item =>
-          this.props.isBackOffice && openInNewTab(item.preview_url)
-            ? browserHistory.push(item.preview_url)
+          this.props.isBackOffice && openInNewTab(item.internal_url)
+            ? browserHistory.push(item.internal_url as string)
             : window.open(item.url, '_blank')
       }
     })
@@ -436,6 +434,8 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
           )}
         </Downshift>
 
+        {/*
+        // @ts-ignore */}
         <UploadManager
           onRef={(ref: any) => (this.dropzone = ref)}
           task={this.props.task}
@@ -444,6 +444,8 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
           <div />
         </UploadManager>
 
+        {/*
+        // @ts-ignore */}
         <GetSignature
           isOpen={this.state.isSignatureFormOpen}
           deal={this.props.deal}

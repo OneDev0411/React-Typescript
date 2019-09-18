@@ -5,10 +5,9 @@ import { getEnvelopeFile } from '../get-envelope-file'
  *
  */
 interface Params {
-  type: 'task' | 'document'
   deal: IDeal
   task: IDealTask
-  document: IFile | IDealTask
+  document?: IFile | IDealTask
   envelopes: IDealEnvelope[]
   isBackOffice?: boolean
 }
@@ -17,27 +16,20 @@ interface Params {
  *
  * @param data
  */
-export function getLastStates(data: Params): IFile[] {
-  if (
-    data.type === 'task' ||
-    (data.document.type === 'task' && data.document.submission)
-  ) {
-    return getTaskFile(data)
-  }
-
-  if (data.type === 'document') {
+export function getLastStates(data: Params): IDealFile[] {
+  if (data.document && data.document.type === 'file') {
     return getDocuments(data)
   }
 
-  return []
+  return getTaskFile(data)
 }
 
 /**
  *
  * @param data
  */
-function getTaskFile(data: Params): IFile[] {
-  const files: IFile[] = getTaskLatestFiles(data)
+function getTaskFile(data: Params): IDealFile[] {
+  const files: IDealFile[] = getTaskLatestFiles(data)
 
   if (files.length === 1) {
     return files
@@ -59,7 +51,7 @@ function getTaskFile(data: Params): IFile[] {
  *
  * @param data
  */
-function getDocuments(data: Params): IFile[] {
+function getDocuments(data: Params): IDealFile[] {
   return [getDocumentLatestFile(data)]
 }
 
@@ -69,7 +61,7 @@ function getDocuments(data: Params): IFile[] {
  * file has more priority to show since that file is more recent
  * @param data
  */
-function getTaskLatestFiles(data: Params): IFile[] {
+function getTaskLatestFiles(data: Params): IDealFile[] {
   const envelopes = getDocumentEnvelopes(data.envelopes, data.task).filter(
     envelope => envelope.status !== 'Voided'
   )
@@ -81,7 +73,7 @@ function getTaskLatestFiles(data: Params): IFile[] {
         return {
           ...getEnvelopeFile(envelope, data.task),
           name: `Docusign: ${envelope.title}`
-        } as IFile
+        } as IDealFile
       })
   }
 
@@ -89,22 +81,32 @@ function getTaskLatestFiles(data: Params): IFile[] {
     return []
   }
 
+  const submissionFile: IDealFile = {
+    ...data.task.submission.file,
+    task: data.task.id,
+    checklist: data.task.checklist
+  }
+
   return data.isBackOffice
     ? [
         {
-          ...data.task.submission.file,
-          preview_url: `/dashboard/deals/${data.deal.id}/view/${data.task.id}`
+          ...submissionFile,
+          internal_url: `/dashboard/deals/${data.deal.id}/view/${data.task.id}`
         }
       ]
-    : [data.task.submission.file]
+    : [submissionFile]
 }
 
 /**
  *
  * @param data
  */
-function getDocumentLatestFile(data: Params): IFile {
-  const document = data.document as IFile
+function getDocumentLatestFile(data: Params): IDealFile {
+  const document = {
+    ...data.document,
+    task: data.task.id,
+    checklist: data.task.checklist
+  } as IDealFile
 
   const envelopes: IDealEnvelope[] = getDocumentEnvelopes(
     data.envelopes,
@@ -112,7 +114,7 @@ function getDocumentLatestFile(data: Params): IFile {
   ).filter(envelope => envelope.status !== 'Voided')
 
   if (envelopes.length > 0) {
-    return getEnvelopeFile(envelopes[0], data.task) as IFile
+    return getEnvelopeFile(envelopes[0], data.task) as IDealFile
   }
 
   const taskId = data.task ? data.task.id : 'stash'
@@ -121,7 +123,7 @@ function getDocumentLatestFile(data: Params): IFile {
   return data.isBackOffice
     ? {
         ...document,
-        preview_url: `${baseUrl}/attachment/${document.id}`
+        internal_url: `${baseUrl}/attachment/${document.id}`
       }
     : document
 }
