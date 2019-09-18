@@ -7,6 +7,7 @@ import { BulkEmailComposeDrawer } from '../BulkEmailComposeDrawer'
 import { SingleEmailComposeDrawer } from '../SingleEmailComposeDrawer'
 import { EmailFormValues } from '../types'
 import { getRecipientsFromRecipientsEntity } from './helpers/get-recipients-from-recipients-entity'
+import getTemplateInstancePreviewImage from '../../InstantMarketing/helpers/get-template-preview-image'
 
 interface Props {
   emailId: string
@@ -43,7 +44,9 @@ export function EditEmailDrawer({ emailId, isOpen, onClose, onEdited }: Props) {
       attachments: data.attachments || [],
       from: data.from,
       subject: data.subject,
-      body: data.html,
+      body: data.template
+        ? getTemplateInstancePreviewImage(data.template)
+        : data.html,
       due_at: data.due_at ? new Date(data.due_at * 1000) : null,
       to: getRecipientsFromRecipientsEntity('To', data.recipients)
     }
