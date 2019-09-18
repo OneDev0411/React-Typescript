@@ -31,7 +31,6 @@ export const Container = styled.div`
   }
 
   .title {
-    font-weight: 600;
     width: calc(100% - 1rem);
   }
 

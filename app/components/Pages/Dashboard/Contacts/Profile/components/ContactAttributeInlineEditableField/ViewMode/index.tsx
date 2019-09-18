@@ -19,9 +19,6 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      '&:hover $starIcon': {
-        visibility: 'visible'
-      },
       '&:hover $title': {
         color: theme.palette.text.primary
       }
@@ -35,8 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: props.value ? theme.palette.text.primary : theme.palette.text.hint
     }),
     starIcon: {
-      fill: theme.palette.text.primary,
-      visibility: 'hidden'
+      fill: theme.palette.text.primary
     },
     value: (props: Props) => ({
       textAlign: 'right',

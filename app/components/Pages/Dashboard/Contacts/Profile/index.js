@@ -28,7 +28,7 @@ import { Dates } from './Dates'
 import Deals from './Deals'
 import { Details } from './Details'
 import { Partner } from './Partner'
-import Tags from './Tags'
+import Tags from './Tags/TagsSection'
 import { ContactInfo } from './ContactInfo'
 import AddressesSection from './Addresses'
 import { Owner } from './Owner'
@@ -266,13 +266,9 @@ class ContactProfile extends React.Component {
             <Tags contact={contact} />
             <Divider />
             <Dates {..._props} />
-            <Divider />
             <ContactInfo {..._props} />
-            <Divider />
             <AddressesSection {..._props} />
-            <Divider />
             <Details {..._props} />
-            <Divider />
             <Partner {..._props} />
             <Divider />
             <Deals contact={contact} />

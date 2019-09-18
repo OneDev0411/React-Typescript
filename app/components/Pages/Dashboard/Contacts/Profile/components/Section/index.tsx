@@ -47,7 +47,7 @@ export const Section: FunctionComponent<Props> = ({
     <Box className={classes.container} pb={3} pt={setting || onEdit ? 1.5 : 3}>
       <Box
         px={3}
-        mb={2}
+        mb={1}
         display="flex"
         alignItems="center"
         justifyContent="space-between"
@@ -57,7 +57,7 @@ export const Section: FunctionComponent<Props> = ({
         ) : (
           <Typography
             id={title}
-            variant="body2"
+            variant="body1"
             component="h3"
             className={classes.title}
           >
