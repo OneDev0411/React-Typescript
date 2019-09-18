@@ -31,9 +31,9 @@ export function getLastStates(data: Params): IDealFile[] {
 function getTaskFile(data: Params): IDealFile[] {
   const files: IDealFile[] = getTaskLatestFiles(data)
 
-  // if (files.length === 1) {
-  //   return files
-  // }
+  if (files.length === 1) {
+    return files
+  }
 
   const attachments = (data.task.room.attachments || [])
     .sort((a, b) => b.created_at - a.created_at)
@@ -72,8 +72,7 @@ function getTaskLatestFiles(data: Params): IDealFile[] {
       .map(envelope => {
         return {
           ...getEnvelopeFile(envelope, data.task),
-          name: `Docusign: ${envelope.title}`,
-          source: 'envelope'
+          name: `Docusign: ${envelope.title}`
         } as IDealFile
       })
   }

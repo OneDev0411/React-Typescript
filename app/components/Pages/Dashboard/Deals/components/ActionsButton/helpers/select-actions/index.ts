@@ -13,15 +13,7 @@ export interface ActionConditions {
 }
 
 export interface ActionItem {
-  label:
-    | string
-    | PropertyFunction<
-        {
-          task: IDealTask
-          isBackOffice: boolean
-        },
-        string
-      >
+  label: string | ((data: { task: IDealTask; isBackOffice: boolean }) => string)
   type: string
   tooltip?: string
   primary?: boolean

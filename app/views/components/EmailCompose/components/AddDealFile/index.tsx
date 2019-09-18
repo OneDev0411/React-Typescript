@@ -1,17 +1,36 @@
 import React, { Fragment, MouseEventHandler, useState } from 'react'
+import { connect } from 'react-redux'
 
 import { ListItem } from '@material-ui/core'
 
 import { FieldRenderProps } from 'react-final-form'
 
+import { selectDealById } from 'reducers/deals/list'
+
+import { useDeepMemo } from 'hooks/use-deep-memo'
+
+import { selectDealEnvelopes } from 'reducers/deals/envelopes'
+
+import { selectDealTasks } from 'reducers/deals/tasks'
+
+import { notUndefined } from 'utils/ts-utils'
+
+import { IAppState } from 'reducers/index'
+
 import SearchDealDrawer from 'components/SearchDealDrawer'
 import SelectDealFileDrawer from 'components/SelectDealFileDrawer'
+
+import { getAllDealDocuments } from '../../../SelectDealFileDrawer/helpers/get-all-deal-documents'
 
 import { DealRow } from './DealRow'
 import IconDealFilled from '../../../SvgIcons/Deals/IconDealFilled'
 import { iconSizes } from '../../../SvgIcons/icon-sizes'
 
 interface Props extends FieldRenderProps<any> {
+  checklists: IDealChecklist[]
+  tasks: IDealTask[]
+  envelopes: IDealEnvelope[]
+  getDeal: (id: UUID) => IDeal
   deal?: IDeal
   onClick?: MouseEventHandler
   initialAttachments: IFile[]
@@ -26,6 +45,9 @@ interface State {
 
 export function AddDealFile({
   initialAttachments,
+  tasks,
+  checklists,
+  envelopes,
   onChanged = () => {},
   ...props
 }: Props) {
@@ -41,6 +63,7 @@ export function AddDealFile({
       props.onClick(event)
     }
   }
+
   const closeDealDrawer = () => setDealsListOpen(false)
 
   const closeDealFilesDrawer = () => {
@@ -64,6 +87,32 @@ export function AddDealFile({
       onChanged()
     }
   }
+
+  const allDealDocuments: IDealFile[] =
+    useDeepMemo(() => {
+      return (
+        (deal &&
+          getAllDealDocuments(
+            deal,
+            selectDealEnvelopes(deal, envelopes),
+            selectDealTasks(deal, checklists, tasks),
+            true
+          )) ||
+        []
+      )
+    }, [initialAttachments, deal, envelopes, checklists, tasks]) || []
+
+  const fileToDocument = (file: IFile): IDealFile | undefined => {
+    return allDealDocuments.find(document => document.id === file.id)
+  }
+
+  const selectedDocuments: IDealFile[] | IFile[] = (
+    props.input.value || []
+  ).map((file: IFile) => fileToDocument(file) || file)
+
+  const initialDocuments = (initialAttachments || [])
+    .map(fileToDocument)
+    .filter(notUndefined)
 
   return (
     <Fragment>
@@ -95,8 +144,8 @@ export function AddDealFile({
             showBackdrop: false
           }}
           showStashFiles={false}
-          initialAttachments={initialAttachments}
-          defaultSelectedItems={props.input.value || []}
+          initialAttachments={initialDocuments}
+          defaultSelectedItems={selectedDocuments}
           deal={deal}
           onChangeSelectedDocuments={handleChangeSelectedDealFile}
           onClose={closeDealFilesDrawer}
@@ -106,4 +155,11 @@ export function AddDealFile({
   )
 }
 
-export default AddDealFile
+export default connect(
+  ({ deals: { checklists, list, tasks, envelopes } }: IAppState) => ({
+    checklists,
+    tasks,
+    envelopes,
+    getDeal: (id: UUID) => selectDealById(list, id)
+  })
+)(AddDealFile)

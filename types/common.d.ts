@@ -11,8 +11,6 @@ declare interface StringMap<T> {
   [key: string]: T
 }
 
-declare type PropertyFunction<P, R> = (P) => R
-
 declare interface UuidMap<T> {
   [key: UUID]: T
 }

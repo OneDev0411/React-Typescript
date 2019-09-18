@@ -1,3 +1,5 @@
+import uniqBy from 'lodash/uniqBy'
+
 import { getLastStates } from 'views/utils/deal-files/get-document-last-state'
 
 export function getAllDealDocuments(
@@ -42,10 +44,11 @@ export function getAllDealDocuments(
         .filter(file => file.mime === 'application/pdf')
         .map(file => ({
           ...file,
+          source: 'attachment',
           task: null,
           checklist: null
         }))
     : []
 
-  return submissions.concat(attachments, stashFiles)
+  return uniqBy(submissions.concat(attachments, stashFiles), file => file.id)
 }
