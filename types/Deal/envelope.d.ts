@@ -7,20 +7,15 @@ declare type EnvelopeStatus =
   | 'Voided'
   | 'Completed'
 
-declare interface IDealEnvelopeRecipients {
-  id: UUID
-  created_at: number
+declare interface IDealEnvelopeRecipients extends IModel<'envelope_recipient'> {
   envelope: UUID
   envelope_recipient_type: 'CarbonCopy' | 'Signer'
   order: number
   role: IDealRole
   signed_at: number | null
-  type: 'envelope_recipient'
-  updated_at: number
 }
 
-declare interface IDealEnvelopeDocument {
-  id: UUID
+declare interface IDealEnvelopeDocument extends IModel<'envelope_document'> {
   document_id: number
   envelope: UUID
   file: UUID
@@ -29,13 +24,10 @@ declare interface IDealEnvelopeDocument {
   submission_revision: UUID | null
   task: UUID
   title: string
-  type: 'envelope_document'
 }
 
-declare interface IDealEnvelope {
-  id: UUID
+declare interface IDealEnvelope extends IModel<'envelope'> {
   auto_notify: boolean
-  created_at: number
   created_by: UUID
   deal: UUID
   docusign_id: UUID
