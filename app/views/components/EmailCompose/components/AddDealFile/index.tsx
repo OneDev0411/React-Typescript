@@ -5,8 +5,6 @@ import { ListItem } from '@material-ui/core'
 
 import { FieldRenderProps } from 'react-final-form'
 
-import { selectDealById } from 'reducers/deals/list'
-
 import { useDeepMemo } from 'hooks/use-deep-memo'
 
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
@@ -30,7 +28,6 @@ interface Props extends FieldRenderProps<any> {
   checklists: IDealChecklist[]
   tasks: IDealTask[]
   envelopes: IDealEnvelope[]
-  getDeal: (id: UUID) => IDeal
   deal?: IDeal
   onClick?: MouseEventHandler
   initialAttachments: IFile[]
@@ -159,7 +156,6 @@ export default connect(
   ({ deals: { checklists, list, tasks, envelopes } }: IAppState) => ({
     checklists,
     tasks,
-    envelopes,
-    getDeal: (id: UUID) => selectDealById(list, id)
+    envelopes
   })
 )(AddDealFile)
