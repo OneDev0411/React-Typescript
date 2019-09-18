@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 import ToolTip from 'components/tooltip'
 import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
 
 export function TextMiddleTruncate(props) {
+  const text = useMemo(() => decodeURIComponent(props.text), [props.text])
+
   const getTooltipCaption = () => {
-    if (props.text.length > props.maxLength) {
-      return props.text
+    if (text.length > props.maxLength) {
+      return text
     }
 
     return null
@@ -16,7 +18,7 @@ export function TextMiddleTruncate(props) {
   return (
     <ToolTip caption={getTooltipCaption()} placement={props.tooltipPlacement}>
       <span style={props.style}>
-        {truncateTextFromMiddle(props.text, props.maxLength)}
+        {truncateTextFromMiddle(text, props.maxLength)}
       </span>
     </ToolTip>
   )
