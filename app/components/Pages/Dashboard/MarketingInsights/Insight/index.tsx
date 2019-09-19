@@ -6,12 +6,12 @@ import ContactInfo from 'components/ContactInfo'
 
 import Header from './Header'
 import { Container } from '../../Contacts/components/Container'
-import { PageContainer, PageWrapper } from '../../Contacts/Profile/styled'
+import { PageWrapper } from '../../Contacts/Profile/styled'
 import Loading from '../../../../Partials/Loading'
 
 import { percent } from '../List/helpers'
 
-import { InsightContainer, SummaryCard } from './styled'
+import { PageContainer, InsightContainer, SummaryCard } from './styled'
 import useItemData from './useItemData'
 import Summary from './Summary'
 import ContactsTable from './ContactsTable'
