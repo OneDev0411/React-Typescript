@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Button } from '@material-ui/core'
 
 import { normalizeContact } from 'views/utils/association-normalizers'
+import CalendarIcon from 'components/SvgIcons/Calendar2/IconCalendar'
 
 import { EventDrawer } from 'components/EventDrawer'
 
@@ -23,6 +24,7 @@ function AddEvent({ contact, user }: Props & StateProps) {
   return (
     <>
       <Button color="primary" variant="contained" onClick={toggleDrawer}>
+        <CalendarIcon fill="#fff" />
         Add Event
       </Button>
 

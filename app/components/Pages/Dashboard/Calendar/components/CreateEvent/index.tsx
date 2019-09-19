@@ -1,11 +1,18 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 
-import { Button, Typography } from '@material-ui/core'
+import {
+  Button,
+  Typography,
+  makeStyles,
+  createStyles,
+  Theme
+} from '@material-ui/core'
 
 import { IAppState } from 'reducers'
 
 import { CrmEvents } from 'components/Calendar/components/CrmEvents'
+import CalendarIcon from 'components/SvgIcons/Calendar2/IconCalendar'
 
 interface StateProps {
   user: IUser
@@ -15,8 +22,19 @@ interface Props {
   onEventChange: (event: IEvent, type: string) => void
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    buttonIcon: {
+      width: '16px !important',
+      height: '16px !important',
+      marginRight: theme.spacing(1)
+    }
+  })
+)
+
 export function CreateEvent(props: Props & StateProps) {
   const [showEventDrawer, setShowEventDrawer] = useState(false)
+  const classes = useStyles()
 
   const handleEventChange = (event: IEvent, type: string) => {
     setShowEventDrawer(false)
@@ -31,8 +49,10 @@ export function CreateEvent(props: Props & StateProps) {
         size="medium"
         onClick={() => setShowEventDrawer(true)}
       >
+        <CalendarIcon fill="#fff" className={classes.buttonIcon} />
+
         <Typography variant="button" noWrap>
-          Create Event
+          Add Event
         </Typography>
       </Button>
 

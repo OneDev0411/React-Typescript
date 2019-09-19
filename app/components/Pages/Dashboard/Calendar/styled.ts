@@ -40,7 +40,7 @@ export const Header = styled.div`
   justify-content: space-between;
   height: 3.5rem;
   padding: 0 1.5rem 0 0;
-  border-bottom: 1px solid #eff1f2;
+  border-bottom: 1px solid ${props => props.theme.palette.grey['300']};
   margin-bottom: 1rem;
 `
 
