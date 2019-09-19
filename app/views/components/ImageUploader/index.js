@@ -70,14 +70,6 @@ export class ImageUploader extends Component {
     }
   }
 
-  get croppedArea() {
-    if (!this.editor.current) {
-      return null
-    }
-
-    return this.editor.current.getCroppingRect()
-  }
-
   async getHandlersData() {
     const files = await this.getOriginalAndEditedFiles()
 
