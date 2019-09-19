@@ -24,10 +24,4 @@ export const Actions = styled.div`
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
-
-  button svg {
-    width: 16px;
-    height: 16px;
-    margin-right: ${props => props.theme.spacing(1)}px;
-  }
 `
