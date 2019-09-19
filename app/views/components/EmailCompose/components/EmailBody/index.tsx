@@ -17,7 +17,7 @@ import { IAppState } from 'reducers/index'
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
-import { defaultTemplateVariableSuggestions } from '../../EmailComposeDrawer/default-template-variable-suggestions'
+import { defaultTemplateVariableSuggestions } from '../../default-template-variable-suggestions'
 import { TextEditorProps } from '../../../TextEditor/types'
 
 interface Props {

@@ -17,16 +17,13 @@ export interface EmailFormValues {
   body: string | undefined
 }
 
-export interface EmailComposeDrawerProps {
+export interface EmailComposeFormProps {
   initialValues?: Partial<EmailFormValues>
   sendEmail: (values: EmailFormValues) => Promise<IEmailCampaign>
-  isOpen: boolean
   getSendEmailResultMessages: (
     values: EmailFormValues
   ) => { successMessage: string; errorMessage: string }
   onSent?: (result: IEmailCampaign) => void
-  onClose?: () => void
-  title?: string
   /**
    * A deal to suggest attachments from it
    */

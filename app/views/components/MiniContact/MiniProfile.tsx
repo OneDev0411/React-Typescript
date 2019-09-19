@@ -5,7 +5,7 @@ import { Link } from 'react-router'
 
 import Avatar from 'components/Avatar'
 import CopyButton from 'components/CopyButton'
-import { EmailComposeDrawerProps } from 'components/EmailCompose/types'
+import { EmailComposeFormProps } from 'components/EmailCompose'
 import { IAppState } from 'reducers/index'
 import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
 
@@ -47,7 +47,7 @@ function MiniProfile(props: MiniProfilePropsType) {
       },
       onClose: () => props.setActionSettings({}),
       onSent: () => props.setActionSettings({})
-    } as Partial<EmailComposeDrawerProps>
+    } as Partial<EmailComposeFormProps>
   }
 
   return (

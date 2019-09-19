@@ -1,26 +1,27 @@
-import React, { ComponentProps, HTMLProps } from 'react'
-
 import { Field } from 'react-final-form'
-import styled from 'styled-components'
+
+import React, { ComponentProps, HTMLProps } from 'react'
 
 import { TextFieldProps } from '@material-ui/core/TextField'
 
-import Tooltip from 'components/tooltip'
+import styled from 'styled-components'
 
-import EmailComposeDrawer from 'components/EmailCompose/EmailComposeDrawer'
-import { getSendEmailResultMessages } from 'components/EmailCompose/helpers/email-result-messages'
-
-import { createBulkEmailCampaign } from 'models/email/create-bulk-email-campaign'
-import IconLock from 'components/SvgIcons/Lock/IconLock'
-
-import EmailRecipientsChipsInput from 'components/EmailRecipientsChipsInput'
+import { Tooltip } from '@material-ui/core'
 
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
 
-import { normalizeRecipients } from '../helpers/normalize-recepients'
-import { From } from '../fields/From'
-import { EmailFormValues } from '../types'
-import { CollapsedRecipients } from '../components/CollapsedRecipients'
+import { createBulkEmailCampaign } from 'models/email/create-bulk-email-campaign'
+
+import { EmailFormValues } from './types'
+import { normalizeRecipients } from './helpers/normalize-recepients'
+
+import { From } from './fields/From'
+import EmailRecipientsChipsInput from '../EmailRecipientsChipsInput'
+
+import { CollapsedRecipients } from './components/CollapsedRecipients'
+import IconLock from '../SvgIcons/Lock/IconLock'
+import { getSendEmailResultMessages } from './helpers/email-result-messages'
+import EmailComposeForm from './EmailComposeForm'
 
 const LockIcon = styled(IconLock)`
   vertical-align: text-bottom;
@@ -29,7 +30,7 @@ const LockIcon = styled(IconLock)`
 
 interface Props
   extends Omit<
-    ComponentProps<typeof EmailComposeDrawer>,
+    ComponentProps<typeof EmailComposeForm>,
     | 'sendEmail'
     | 'getSendEmailResultMessages'
     | 'renderFields'
@@ -43,7 +44,7 @@ interface Props
   disableAddNewRecipient?: boolean
 }
 
-export function BulkEmailComposeDrawer({
+export function BulkEmailComposeForm({
   getEmail = email => email,
   disableAddNewRecipient = false,
   emailId,
@@ -67,7 +68,7 @@ export function BulkEmailComposeDrawer({
   const label = (
     <span style={{ whiteSpace: 'nowrap' }}>
       Recipients
-      <Tooltip caption="Emails will be sent individually">
+      <Tooltip title="Emails will be sent individually">
         <LockIcon />
       </Tooltip>
     </span>
@@ -97,13 +98,12 @@ export function BulkEmailComposeDrawer({
   )
 
   return (
-    <EmailComposeDrawer
+    <EmailComposeForm
       {...otherProps}
       sendEmail={sendEmail}
       getSendEmailResultMessages={form =>
         getSendEmailResultMessages(!!form.due_at)
       }
-      title={emailId ? 'Edit email' : 'New Email'}
       hasTemplateVariables
       renderCollapsedFields={renderCollapsedFields}
       renderFields={renderFields}

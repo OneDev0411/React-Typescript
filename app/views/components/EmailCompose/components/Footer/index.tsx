@@ -9,8 +9,8 @@ import { formatDate } from 'components/DateTimePicker/helpers'
 import { FooterContainer } from './styled'
 import { textForSubmitButton } from './helpers'
 import SchedulerButton from './SchedulerButton'
-import { EmailAttachmentsDropdown } from '../components/EmailAttachmentsDropdown'
-import { EmailFormValues } from '../types'
+import { EmailAttachmentsDropdown } from '../EmailAttachmentsDropdown'
+import { EmailFormValues } from '../../types'
 
 interface Props {
   isSubmitDisabled: boolean
@@ -21,7 +21,6 @@ interface Props {
   onChanged: () => void
   initialAttachments: IFile[]
   isSubmitting: boolean
-  handleSubmit: () => void
 }
 
 export function Footer(props: Props) {
@@ -47,7 +46,6 @@ export function Footer(props: Props) {
           data-test="compose-send-email"
           type="submit"
           disabled={props.isSubmitting || props.isSubmitDisabled}
-          onClick={props.handleSubmit}
           leftRounded
         >
           {textForSubmitButton({

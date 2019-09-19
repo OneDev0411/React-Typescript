@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 
-import { EditEmailDrawer } from 'components/EmailCompose/EditEmailDrawer'
+import { EditEmailDrawer } from 'components/EmailCompose'
 
 import { ListContext } from '../context'
 

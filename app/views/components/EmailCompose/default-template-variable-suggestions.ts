@@ -1,4 +1,4 @@
-import { ITemplateVariableSuggestionGroup } from '../../TemplateVariablesButton/types'
+import { ITemplateVariableSuggestionGroup } from '../TemplateVariablesButton/types'
 
 export const defaultTemplateVariableSuggestions: ITemplateVariableSuggestionGroup[] = [
   {

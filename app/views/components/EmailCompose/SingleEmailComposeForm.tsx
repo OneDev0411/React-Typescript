@@ -6,25 +6,24 @@ import { InputProps } from '@material-ui/core/Input'
 
 import { TextFieldProps } from '@material-ui/core/TextField'
 
-import EmailComposeDrawer from 'components/EmailCompose/EmailComposeDrawer'
-
-import { getSendEmailResultMessages } from 'components/EmailCompose/helpers/email-result-messages'
-
 import { createEmailCampaign } from 'models/email/create-email-campaign'
-
-import EmailRecipientsChipsInput from 'components/EmailRecipientsChipsInput'
 
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
 
-import { normalizeRecipients } from '../helpers/normalize-recepients'
-import { From } from '../fields/From'
-import { EmailFormValues } from '../types'
-import { CcBccButtons } from '../components/CcBccButtons'
-import { CollapsedRecipients } from '../components/CollapsedRecipients'
+import { getSendEmailResultMessages } from './helpers/email-result-messages/index'
+
+import EmailRecipientsChipsInput from '../EmailRecipientsChipsInput'
+
+import { normalizeRecipients } from './helpers/normalize-recepients'
+import { From } from './fields/From'
+import { EmailFormValues } from './types'
+import { CcBccButtons } from './components/CcBccButtons'
+import { CollapsedRecipients } from './components/CollapsedRecipients'
+import EmailComposeForm from './EmailComposeForm'
 
 interface Props
   extends Omit<
-    ComponentProps<typeof EmailComposeDrawer>,
+    ComponentProps<typeof EmailComposeForm>,
     | 'hasSignatureByDefault'
     | 'sendEmail'
     | 'getSendEmailResultMessages'
@@ -39,7 +38,7 @@ interface Props
   emailId?: string
 }
 
-export function SingleEmailComposeDrawer({
+export function SingleEmailComposeForm({
   getEmail = email => email,
   disableAddNewRecipient = false,
   emailId,
@@ -143,11 +142,10 @@ export function SingleEmailComposeDrawer({
   )
 
   return (
-    <EmailComposeDrawer
+    <EmailComposeForm
       {...otherProps}
       hasSignatureByDefault
       sendEmail={handleSendEmail}
-      title={emailId ? 'Edit email' : 'New Email'}
       getSendEmailResultMessages={form =>
         getSendEmailResultMessages(!!form.due_at)
       }
