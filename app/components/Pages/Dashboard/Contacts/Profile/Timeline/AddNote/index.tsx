@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 
 import { Button } from '@material-ui/core'
 
+import IconNote from 'components/SvgIcons/Note/IconNote'
+
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 
 import { IAppState } from 'reducers/index'
@@ -47,6 +49,13 @@ function AddNote({
   return (
     <>
       <Button color="primary" variant="contained" onClick={toggleDrawer}>
+        <IconNote
+          fill="#fff"
+          style={{
+            width: '1.2rem',
+            height: '1.2rem'
+          }}
+        />
         Add Note
       </Button>
 

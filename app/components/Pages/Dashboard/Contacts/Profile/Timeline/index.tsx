@@ -7,7 +7,7 @@ import React, {
   RefObject
 } from 'react'
 
-import { Tabs, Tab } from '@material-ui/core'
+import { Tabs, Tab, createStyles, makeStyles, Theme } from '@material-ui/core'
 
 import { getNotes } from 'models/contacts/helpers/get-notes'
 
@@ -23,7 +23,7 @@ import { convertNoteToCalendarEvent } from './helpers/convert-note-to-calendar-e
 import AddEvent from './AddEvent'
 import AddNote from './AddNote'
 
-import { Container, Header } from './styled'
+import { Container, Header, Actions } from './styled'
 
 enum Filter {
   All = 0,
@@ -47,8 +47,17 @@ const associations = [
   'calendar_event.full_crm_task'
 ]
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      fontSize: '1rem'
+    }
+  })
+)
+
 function Timeline(props: Props) {
   const timelineRef = useRef<CalendarRef>(null)
+  const classes = useStyles()
 
   const [activeFilter, setActiveFilter] = useState<Filter>(Filter.All)
 
@@ -102,18 +111,30 @@ function Timeline(props: Props) {
             variant="scrollable"
             scrollButtons="auto"
           >
-            <Tab value={Filter.All} label="All Events" />
-            <Tab value={Filter.Upcoming} label="Upcoming Events" />
+            <Tab
+              value={Filter.All}
+              label="All Events"
+              classes={{
+                root: classes.root
+              }}
+            />
+            <Tab
+              value={Filter.Upcoming}
+              label="Upcoming Events"
+              classes={{
+                root: classes.root
+              }}
+            />
           </Tabs>
         </div>
 
-        <div>
+        <Actions>
           <AddNote
             contactId={props.contact.id}
             onCreateNote={handleCreateNote}
           />
           <AddEvent contact={props.contact} />
-        </div>
+        </Actions>
       </Header>
 
       <div>

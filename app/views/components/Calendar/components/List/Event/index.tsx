@@ -46,6 +46,12 @@ const useStyles = makeStyles((theme: Theme) => ({
         borderColor: 'inherit',
         color: 'inherit'
       }
+    },
+    '& a': {
+      color: theme.palette.secondary.dark
+    },
+    '&:hover a': {
+      color: theme.palette.primary.main
     }
   }
 }))
