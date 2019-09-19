@@ -17,15 +17,19 @@ import { addNotification as notify } from 'reapop'
 
 import { connect } from 'react-redux'
 
-import { Box } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
+
+import { ClassesProps } from 'utils/ts-utils'
 
 import { EmailComposeFormProps, EmailFormValues } from '../types'
 import EmailBody from '../components/EmailBody'
 import { AttachmentsList } from '../fields/Attachments'
-import { useEmailFormStyles } from './styles'
+import { styles } from './styles'
 import { Footer } from '../components/Footer'
 import ConfirmationModalContext from '../../ConfirmationModal/context'
 import { validateRecipient } from '../../EmailRecipientsChipsInput/helpers/validate-recipient'
+
+export const useEmailFormStyles = makeStyles(styles, { name: 'EmailForm' })
 
 /**
  * Shared parts of the different email compose forms.
@@ -58,12 +62,12 @@ function EmailComposeForm({
   dispatch,
   onSent = () => {},
   ...props
-}: EmailComposeFormProps) {
+}: EmailComposeFormProps & ClassesProps<typeof styles>) {
   const [topFieldsCollapsed, setTopFieldsCollapsed] = useState(false)
   const emailBodyEditorRef = useRef<any>(null)
   const confirmationModal = useContext(ConfirmationModalContext)
 
-  const classes = useEmailFormStyles()
+  const classes = useEmailFormStyles(props)
 
   const handleSendEmail = useCallback(
     async form => {
@@ -212,7 +216,7 @@ function EmailComposeForm({
             id="email-compose-form"
             onSubmit={formProps.handleSubmit}
           >
-            <Box flex={1} overflow="auto">
+            <div className={classes.container}>
               <div className={classes.topFields}>
                 {topFieldsCollapsed ? (
                   <div onClick={() => setTopFieldsCollapsed(false)}>
@@ -249,7 +253,7 @@ function EmailComposeForm({
                   <Field name="attachments" component={AttachmentsList} />
                 }
               />
-            </Box>
+            </div>
             <Footer
               formProps={{ values: formProps.values as EmailFormValues }}
               isSubmitting={submitting}
