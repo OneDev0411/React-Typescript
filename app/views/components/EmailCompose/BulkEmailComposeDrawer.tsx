@@ -15,8 +15,6 @@ interface Props extends ComponentProps<typeof BulkEmailComposeForm> {
 }
 
 export function BulkEmailComposeDrawer({
-  getEmail = email => email,
-  disableAddNewRecipient = false,
   emailId,
   isOpen,
   onClose = () => {},
@@ -26,7 +24,7 @@ export function BulkEmailComposeDrawer({
     <OverlayDrawer open={isOpen} onClose={onClose}>
       <OverlayDrawer.Header title={emailId ? 'Edit Email' : 'New Email'} />
       <OverlayDrawer.Body>
-        <BulkEmailComposeForm {...otherProps} />
+        <BulkEmailComposeForm {...otherProps} emailId={emailId} />
       </OverlayDrawer.Body>
     </OverlayDrawer>
   )

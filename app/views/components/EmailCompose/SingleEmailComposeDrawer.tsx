@@ -16,8 +16,6 @@ interface Props extends ComponentProps<typeof SingleEmailComposeForm> {
 }
 
 export function SingleEmailComposeDrawer({
-  getEmail = email => email,
-  disableAddNewRecipient = false,
   emailId,
   isOpen,
   onClose = () => {},
@@ -27,7 +25,7 @@ export function SingleEmailComposeDrawer({
     <OverlayDrawer open={isOpen} onClose={onClose}>
       <OverlayDrawer.Header title={emailId ? 'Edit Email' : 'New Email'} />
       <OverlayDrawer.Body>
-        <SingleEmailComposeForm {...otherProps} />
+        <SingleEmailComposeForm {...otherProps} emailId={emailId} />
       </OverlayDrawer.Body>
     </OverlayDrawer>
   )
