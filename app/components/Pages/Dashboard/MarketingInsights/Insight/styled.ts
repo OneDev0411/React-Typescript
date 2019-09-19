@@ -3,6 +3,11 @@ import styled from 'styled-components'
 import Badge from 'components/Badge'
 import { grey } from 'views/utils/colors'
 
+export const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
 export const InsightContainer = styled.div`
   display: flex;
   padding: 0 1.5rem 3rem 1.5rem;
