@@ -25,18 +25,6 @@ export class AssetImage extends React.Component {
     const setBg = () => {
       const style = Object.assign({}, this.props.target.get('style'))
 
-      style['background-position'] = '0 0'
-      style['background-size'] = 'cover'
-
-      if (options.backgroundPosition) {
-        style['background-position'] = options.backgroundPosition
-        style['background-repeat'] = 'no-repeat'
-      }
-
-      if (options.backgroundSize) {
-        style['background-size'] = options.backgroundSize
-      }
-
       style['background-image'] = `url(${url})`
       this.props.target.set('style', style)
     }
@@ -73,41 +61,14 @@ export class AssetImage extends React.Component {
     })
   }
 
-  onCropNonImg = croppedArea => {
-    const target = this.getTargetElement()
+  onCrop = ({ files }) => {
+    const fileName = files.originalFile
+      .split('?')[0]
+      .split('/')
+      .pop()
+    const file = new File([files.file], fileName)
 
-    // this formula is patented by Ramin :))
-    const newWidth = (1 / croppedArea.width).toFixed(2)
-    const newHeight = (1 / croppedArea.height).toFixed(2)
-    const left =
-      (croppedArea.x * target.clientWidth).toFixed(0) * (-1 * newWidth)
-    const top =
-      (croppedArea.y * target.clientHeight).toFixed(0) * (-1 * newHeight)
-
-    this.onImageSelect({
-      backgroundPosition: `${left}px ${top}px`,
-      backgroundSize: `${newWidth * 100}% ${newHeight * 100}%`
-    })
-
-    this.setState({
-      isCropperOpen: false
-    })
-  }
-
-  onCrop = ({ croppedArea, files }) => {
-    const elementType = this.getTargetType()
-
-    if (elementType === 'image') {
-      const fileName = files.originalFile
-        .split('?')[0]
-        .split('/')
-        .pop()
-      const file = new File([files.file], fileName)
-
-      return this.onCropImg(file)
-    }
-
-    return this.onCropNonImg(croppedArea)
+    return this.onCropImg(file)
   }
 
   render() {
