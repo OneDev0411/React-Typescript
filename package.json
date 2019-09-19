@@ -116,7 +116,7 @@
     "google-map-react": "^1.1.2",
     "google-maps": "^3.3.0",
     "grapesjs": "^0.15.5",
-    "grapesjs-mjml": "github:emilsedgh/grapesjs-mjml#eea3ede83e0a1f016eb755bfb72c891e6cd6af54",
+    "grapesjs-mjml": "github:emilsedgh/grapesjs-mjml#cb320b5f72cde8dea0d98189846b28d4931751ee",
     "history": "^3.3.0",
     "hogan.js": "^3.0.2",
     "html-webpack-plugin": "^4.0.0-beta.5",
