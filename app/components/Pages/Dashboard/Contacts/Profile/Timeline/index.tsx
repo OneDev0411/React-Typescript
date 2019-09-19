@@ -63,7 +63,11 @@ function Timeline(props: Props) {
 
   const filter = {
     contact: props.contact.id,
-    object_types: ['crm_association', 'email_campaign_recipient']
+    object_types: [
+      'crm_association',
+      'email_campaign_recipient',
+      'contact_attribute'
+    ]
   }
 
   const getCalendarRange = (filter: Filter) =>
