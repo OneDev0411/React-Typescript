@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
+import cn from 'classnames'
 
 import { Button } from '@material-ui/core'
 
@@ -11,6 +12,8 @@ import { IAppState } from 'reducers/index'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
 import { EditNoteDrawer } from 'components/EditNoteDrawer'
+
+import { useIconStyles } from '../../../../../../../styles/use-icon-styles'
 
 interface StateProps {
   attributeDefs: any
@@ -26,6 +29,7 @@ function AddNote({
   attributeDefs,
   onCreateNote
 }: Props & StateProps) {
+  const iconClasses = useIconStyles()
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
 
   const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen)
@@ -51,10 +55,7 @@ function AddNote({
       <Button color="primary" variant="contained" onClick={toggleDrawer}>
         <IconNote
           fillColor="#fff"
-          style={{
-            width: '16px',
-            height: '16px'
-          }}
+          className={cn(iconClasses.small, iconClasses.rightMargin)}
         />
         Add Note
       </Button>

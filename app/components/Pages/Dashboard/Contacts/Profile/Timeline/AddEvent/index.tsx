@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
+import cn from 'classnames'
 
 import { Button } from '@material-ui/core'
 
@@ -7,6 +8,8 @@ import { normalizeContact } from 'views/utils/association-normalizers'
 import CalendarIcon from 'components/SvgIcons/Calendar2/IconCalendar'
 
 import { EventDrawer } from 'components/EventDrawer'
+
+import { useIconStyles } from '../../../../../../../styles/use-icon-styles'
 
 interface StateProps {
   user: IUser
@@ -17,6 +20,7 @@ interface Props {
 }
 
 function AddEvent({ contact, user }: Props & StateProps) {
+  const iconClasses = useIconStyles()
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
 
   const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen)
@@ -24,7 +28,10 @@ function AddEvent({ contact, user }: Props & StateProps) {
   return (
     <>
       <Button color="primary" variant="contained" onClick={toggleDrawer}>
-        <CalendarIcon fill="#fff" />
+        <CalendarIcon
+          fill="#fff"
+          className={cn(iconClasses.small, iconClasses.rightMargin)}
+        />
         Add Event
       </Button>
 
