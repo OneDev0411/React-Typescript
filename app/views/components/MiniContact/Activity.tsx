@@ -1,15 +1,15 @@
 import React from 'react'
 import fecha from 'fecha'
-import { Button } from '@material-ui/core'
+// import { Button } from '@material-ui/core'
 
-import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
+// import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 import IconCalendar from 'components/SvgIcons/Calendar2/IconCalendar'
 import IconTime from 'components/SvgIcons/Time/IconTime'
 import IconBirthday from 'components/SvgIcons/Birthday/IconBirthday'
 import { RelativeTime } from 'components/RelativeTime'
 
 import { ProfileDateType } from './types'
-import { activitiesFormatter, isNearDate } from './helpers'
+import { activitiesFormatter } from './helpers'
 
 interface ActivityPropsType {
   dates?: ProfileDateType[]
@@ -53,7 +53,8 @@ function Activity(props: ActivityPropsType) {
                   'mediumDate'
                 )}`}
 
-                {isNearDate(item.date) && (
+                {/* Disabled temporarily. Note: https://gitlab.com/rechat/web/issues/3352#note_219065917 */}
+                {/* {isNearDate(item.date) && (
                   <SendContactCard
                     contactId={props.contactId}
                     buttonRenderer={btnProps => (
@@ -62,7 +63,7 @@ function Activity(props: ActivityPropsType) {
                       </Button>
                     )}
                   />
-                )}
+                )} */}
               </div>
             </li>
           )
