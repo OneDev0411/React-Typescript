@@ -50,7 +50,7 @@ const associations = [
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      fontSize: '1rem'
+      fontSize: theme.typography.subtitle1.fontSize
     }
   })
 )

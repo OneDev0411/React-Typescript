@@ -52,10 +52,7 @@ const CalendarPage: React.FC = props => {
    * triggers when user clicks on a date in datepicker of left side
    * @param date
    */
-  const handleDatePickerChange = (
-    date: Date = new Date(),
-    changeType: 'day' | 'month' | 'year'
-  ) => {
+  const handleDatePickerChange = (date: Date = new Date()) => {
     if (calendarRef.current) {
       setActiveDate(date)
 

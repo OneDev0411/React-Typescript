@@ -50,10 +50,10 @@ function AddNote({
     <>
       <Button color="primary" variant="contained" onClick={toggleDrawer}>
         <IconNote
-          fill="#fff"
+          fillColor="#fff"
           style={{
-            width: '1.2rem',
-            height: '1.2rem'
+            width: '16px',
+            height: '16px'
           }}
         />
         Add Note
