@@ -2,10 +2,7 @@ import styled from 'styled-components'
 
 import { brandBackground } from '../../../../../views/utils/colors'
 
-const sidebarMaxWidth = {
-  tablet: '25rem', // 400
-  desktop: '30rem' // 480
-}
+const sidebarMaxWidth = '25rem' // 400
 
 export const PageWrapper = styled.div`
   background-color: ${brandBackground};
@@ -26,12 +23,7 @@ export const SideColumn = styled.div`
     flex-direction: column;
     overflow-x: hidden;
     overflow-y: auto;
-    width: ${sidebarMaxWidth.tablet};
-  }
-
-  /* 1200px */
-  @media (min-width: 75em) {
-    width: ${sidebarMaxWidth.desktop};
+    width: ${sidebarMaxWidth};
   }
 `
 
@@ -41,11 +33,7 @@ export const MainColumn = styled.div`
   @media (min-width: 64em) {
     overflow-x: hidden;
     overflow-y: auto;
-    width: ${`calc(100% - ${sidebarMaxWidth.tablet})`};
-  }
-
-  @media (min-width: 75em) {
-    width: ${`calc(100% - ${sidebarMaxWidth.desktop})`};
+    width: ${`calc(100% - ${sidebarMaxWidth})`};
   }
 `
 
