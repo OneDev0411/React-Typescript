@@ -34,6 +34,7 @@ export const Image = styled.img`
 interface InitialsProps {
   size: number
 }
+
 export const Initials = styled.div`
   font-size: ${(props: InitialsProps) => (props.size * 0.5) / 16}rem;
   color: #fff;
@@ -44,6 +45,7 @@ interface StatusProps {
   statusColor: string
   isOnline: boolean
 }
+
 export const Status = styled.div`
   position: absolute;
   bottom: 0;

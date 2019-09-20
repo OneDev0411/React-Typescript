@@ -4,20 +4,21 @@ import Avatar from 'react-avatar'
 import Flex from 'styled-flex-component'
 import styled from 'styled-components'
 
-import MiniContact from 'components/MiniContact'
-
-import { selectDefinitionByName } from '../../../../../../../reducers/contacts/attributeDefs'
-import { grey } from '../../../../../../../views/utils/colors'
-import Link from '../../../../../../../views/components/ALink'
-import Tooltip from '../../../../../../../views/components/tooltip'
-import PartnerIcon from '../../../../../../../views/components/SvgIcons/Partner/IconPartner'
 import {
   getContactAttribute,
   getAttributeFromSummary,
   getContactOnlineStatus
-} from '../../../../../../../models/contacts/helpers'
+} from 'models/contacts/helpers'
 
-import ImageStatus from '../../../../../../../views/components/ImageStatus'
+import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
+
+import { grey } from 'views/utils/colors'
+
+import Link from 'components/ALink'
+import Tooltip from 'components/tooltip'
+import ImageStatus from 'components/ImageStatus'
+import MiniContact from 'components/MiniContact'
+import PartnerIcon from 'components/SvgIcons/Partner/IconPartner'
 
 const ellipsis = {
   whiteSpace: 'nowrap',

@@ -1,9 +1,9 @@
 import React from 'react'
-
 import Button from '@material-ui/core/Button'
 import { addNotification as notify } from 'reapop'
 
 import copy from 'utils/copy-text-to-clipboard'
+
 import store from '../../../stores'
 
 interface CopyButtonProps {
@@ -19,7 +19,7 @@ function CopyButton(props: CopyButtonProps) {
       onClick={() => {
         copy(props.text)
         store.dispatch(notify({
-          message: `Copied!`,
+          message: 'Copied!',
           status: 'success'
         }) as any)
       }}

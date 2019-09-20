@@ -14,9 +14,10 @@ function SendButton(props: SendButtonType) {
   if (buttonRenderer) {
     return buttonRenderer(restProps)
   }
+
   return (
     <Button variant="outlined" color="secondary" {...restProps}>
-      {props.children}
+      {children}
     </Button>
   )
 }
