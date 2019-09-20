@@ -17,7 +17,10 @@ export default {
   .gjs-hovered[data-gjs-type=text] {
     outline-offset: 5px;
   }
-  `,
+
+  .gjs-dashed *[data-highlightable] {
+    outline: none;
+  }`,
   height: '100%',
   allowScripts: true,
   styleManager: {
