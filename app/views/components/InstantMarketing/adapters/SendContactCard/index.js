@@ -37,18 +37,6 @@ class SendContactCard extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    // For controling the contact state from parent component
-    if (
-      state.contact !== props.contact ||
-      (state.contact &&
-        props.contact &&
-        props.contact.updated_at > state.contact.updated_at)
-    ) {
-      return {
-        contact: props.contact
-      }
-    }
-
     // For Opening Search Drawer
     if (
       props.isTriggered &&
@@ -72,6 +60,18 @@ class SendContactCard extends React.Component {
     if (!props.isTriggered && state.isSearchDrawerOpen && state.isBuilderOpen) {
       return {
         isSearchDrawerOpen: false
+      }
+    }
+
+    // For controling the contact state from the parent component
+    if (
+      (!state.contact && props.contact) ||
+      (state.contact &&
+        props.contact &&
+        props.contact.updated_at > state.contact.updated_at)
+    ) {
+      return {
+        contact: props.contact
       }
     }
 
