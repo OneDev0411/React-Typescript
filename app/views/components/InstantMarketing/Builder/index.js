@@ -88,7 +88,12 @@ class Builder extends React.Component {
 
     this.editor = createGrapesInstance(Grapesjs, {
       assets: [...this.props.assets, ...this.UserAssets],
-      plugins: [GrapesjsMjml]
+      plugins: [GrapesjsMjml],
+      pluginsOpts: {
+        [GrapesjsMjml]: {
+          columnsPadding: false
+        }
+      }
     })
 
     this.editor.on('load', this.setupGrapesJs)
@@ -108,7 +113,6 @@ class Builder extends React.Component {
     this.setState({ isEditorLoaded: true })
 
     this.lockIn()
-    this.disableResize()
     this.singleClickTextEditing()
     this.disableAssetManager()
     this.disableDeviceManager()
@@ -187,25 +191,6 @@ class Builder extends React.Component {
     ev.target.ownerDocument.execCommand('insertText', false, text)
   }
 
-  disableResize = () => {
-    const components = this.editor.DomComponents
-
-    const image = components.getType('image')
-
-    const defaults = image.model.prototype.defaults
-
-    const updated = image.model.extend({
-      defaults: Object.assign({}, defaults, {
-        resizable: false
-      })
-    })
-
-    components.addType('image', {
-      model: updated,
-      view: image.view
-    })
-  }
-
   lockIn = () => {
     let shouldSelectImage = true
 
@@ -225,6 +210,7 @@ class Builder extends React.Component {
       }
 
       model.set({
+        resizable: false,
         draggable: false,
         droppable: false,
         traits: this.traits[model.get('type')] || []

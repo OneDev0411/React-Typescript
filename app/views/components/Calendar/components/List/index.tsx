@@ -1,6 +1,9 @@
+import { EventEmitter } from 'events'
+
 import React, { useState, forwardRef, RefObject } from 'react'
 import { ListOnItemsRenderedProps } from 'react-window'
 import useResizeObserver from 'use-resize-observer'
+
 import debounce from 'lodash/debounce'
 
 import VirtualList, {
@@ -8,13 +11,14 @@ import VirtualList, {
   VirtualListRef
 } from 'components/VirtualList'
 
-import { EditEmailDrawer } from 'components/EmailCompose/EditEmailDrawer'
-
-import { CrmEvents } from '../CrmEvents'
+import { ListContext } from './context'
 
 import { EventHeader } from './EventHeader'
 import { Event } from './Event'
 import { EmptyState } from './EmptyState'
+
+import { EventController } from './EventController'
+import { ActionController } from './ActionController'
 
 import { Container } from './styled'
 
@@ -33,6 +37,9 @@ interface Props {
     emailCampaign: IEmailCampaign
   ) => void
 }
+
+// creates a new event-emitter instance
+const actions = new EventEmitter()
 
 const defaultProps = {
   onReachStart: () => {},
@@ -53,9 +60,8 @@ const CalendarList: React.FC<Props> = props => {
    * @param type - type of action
    */
   const handleEventChange = (event: IEvent, type: string) => {
-    setSelectedEvent(null)
-
     props.onCrmEventChange(event, type)
+    setSelectedEvent(null)
   }
 
   /**
@@ -63,13 +69,9 @@ const CalendarList: React.FC<Props> = props => {
    * @param event - the event
    * @param emailCampaign - the updated email camapign
    */
-  const handleScheduledEmailChange = (
-    event: ICalendarEvent,
-    emailCampaign: IEmailCampaign
-  ) => {
+  const handleScheduledEmailChange = (emailCampaign: IEmailCampaign) => {
+    props.onScheduledEmailChange(selectedEvent as ICalendarEvent, emailCampaign)
     setSelectedEvent(null)
-
-    props.onScheduledEmailChange(event, emailCampaign)
   }
 
   /**
@@ -104,67 +106,61 @@ const CalendarList: React.FC<Props> = props => {
   }
 
   return (
-    <Container ref={containerRef}>
-      {props.rows.length === 0 && !props.isLoading && <EmptyState />}
+    <ListContext.Provider
+      value={{
+        actions,
+        selectedEvent,
+        setSelectedEvent
+      }}
+    >
+      <Container ref={containerRef}>
+        {props.rows.length === 0 && !props.isLoading && <EmptyState />}
 
-      <VirtualList
-        width={listWidth}
-        height={listHeight}
-        itemCount={props.rows.length}
-        onReachEnd={props.onReachEnd}
-        onReachStart={props.onReachStart}
-        threshold={2}
-        isLoading={props.isLoading}
-        loadingPosition={props.loadingPosition}
-        onVisibleRowChange={debounce(getInViewDate, 50)}
-        itemSize={index => getRowHeight(props.rows[index])}
-        overscanCount={3}
-        ref={props.listRef}
-      >
-        {({ index, style }) => (
-          <>
-            {props.rows[index].hasOwnProperty('isEventHeader') ? (
-              <EventHeader
-                key={props.rows[index].date}
-                item={props.rows[index] as ICalendarEventHeader}
-                style={style}
-                activeDate={activeDate}
-              />
-            ) : (
-              <Event
-                key={index}
-                event={props.rows[index] as ICalendarEvent}
-                user={props.user}
-                nextItem={props.rows[index + 1]}
-                style={style}
-                onSelectEvent={setSelectedEvent}
-              />
-            )}
-          </>
-        )}
-      </VirtualList>
+        <VirtualList
+          width={listWidth}
+          height={listHeight}
+          itemCount={props.rows.length}
+          onReachEnd={props.onReachEnd}
+          onReachStart={props.onReachStart}
+          threshold={2}
+          isLoading={props.isLoading}
+          loadingPosition={props.loadingPosition}
+          onVisibleRowChange={debounce(getInViewDate, 50)}
+          itemSize={index => getRowHeight(props.rows[index])}
+          overscanCount={3}
+          ref={props.listRef}
+        >
+          {({ index, style }) => (
+            <>
+              {props.rows[index].hasOwnProperty('isEventHeader') ? (
+                <EventHeader
+                  item={props.rows[index] as ICalendarEventHeader}
+                  style={style}
+                  activeDate={activeDate}
+                />
+              ) : (
+                <Event
+                  event={props.rows[index] as ICalendarEvent}
+                  onEventChange={handleEventChange}
+                  user={props.user}
+                  nextItem={props.rows[index + 1]}
+                  style={style}
+                />
+              )}
+            </>
+          )}
+        </VirtualList>
 
-      {selectedEvent && selectedEvent.object_type === 'crm_task' && (
-        <CrmEvents
-          isEventDrawerOpen
-          event={selectedEvent}
+        <EventController
+          activeDate={activeDate}
           user={props.user}
           onEventChange={handleEventChange}
-          onCloseEventDrawer={() => setSelectedEvent(null)}
+          onScheduledEmailChange={handleScheduledEmailChange}
         />
-      )}
 
-      {selectedEvent && selectedEvent.object_type === 'email_campaign' && (
-        <EditEmailDrawer
-          isOpen
-          onClose={() => setSelectedEvent(null)}
-          onEdited={emailCampaign =>
-            handleScheduledEmailChange(selectedEvent, emailCampaign)
-          }
-          emailId={selectedEvent.campaign as UUID}
-        />
-      )}
-    </Container>
+        <ActionController />
+      </Container>
+    </ListContext.Provider>
   )
 }
 
@@ -175,7 +171,7 @@ function getRowHeight(row: ICalendarListRow): number {
 
   const event = row as ICalendarEvent
 
-  return event.object_type === 'crm_task' ||
+  return ['crm_task', 'crm_association'].includes(event.object_type) ||
     ['next_touch', 'day-empty-state'].includes(event.event_type)
     ? 72
     : 55

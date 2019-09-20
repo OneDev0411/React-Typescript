@@ -1,10 +1,10 @@
-import React, { CSSProperties } from 'react'
+import React, { CSSProperties, ReactNode } from 'react'
 import classNames from 'classnames'
 import { Overlay, Popover } from 'react-bootstrap'
 
 interface Props {
   id?: string
-  caption?: string
+  caption?: ReactNode
   placement?: 'top' | 'bottom' // probably more
   overlayOptions?: {
     trigger?: ('hover')[]
@@ -65,7 +65,7 @@ class PopOver extends React.Component<Props, State> {
               this.props.dark ? 'pop-over--dark' : 'pop-over--light'
             )}
             id={id}
-            style={{ ...popoverStyles }}
+            style={popoverStyles}
           >
             {caption}
           </Popover>

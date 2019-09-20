@@ -6,7 +6,8 @@ const item1 = {
   opened: 2,
   profile_image_url: null,
   to: 'jamesnonat2@outlook.com',
-  unsubscribed: 2
+  unsubscribed: 2,
+  due_at: 1568329439.607
 }
 const item2 = {
   clicked: 2,
@@ -16,7 +17,8 @@ const item2 = {
   opened: 3,
   profile_image_url: null,
   to: 'shadi@outlook.com',
-  unsubscribed: 3
+  unsubscribed: 3,
+  due_at: 1568327336.122
 }
 const item3 = {
   clicked: 4,
@@ -26,7 +28,8 @@ const item3 = {
   opened: 0,
   profile_image_url: null,
   to: 'gentelman@outlook.com',
-  unsubscribed: 4
+  unsubscribed: 4,
+  due_at: 1568325878.553
 }
 const item4 = {
   clicked: 1,
@@ -36,7 +39,8 @@ const item4 = {
   opened: 4,
   profile_image_url: null,
   to: 'gentelman@outlook.com',
-  unsubscribed: 5
+  unsubscribed: 5,
+  due_at: 1568323156.073
 }
 
 export { item1, item2, item3, item4 }

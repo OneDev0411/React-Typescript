@@ -1,6 +1,8 @@
 import { FieldProps } from 'react-final-form'
 import { ContentBlock, ContentState, EditorProps } from 'draft-js'
 
+import { ReactNode } from 'react'
+
 import { ITemplateVariableSuggestionGroup } from '../TemplateVariablesButton/types'
 
 export interface ReferenceObject {
@@ -73,6 +75,8 @@ export interface TextEditorProps {
 
   enableTemplateVariables?: boolean
   templateVariableSuggestionGroups?: ITemplateVariableSuggestionGroup[]
+
+  appendix?: ReactNode
 }
 
 export interface AtomicBlockEntityData {

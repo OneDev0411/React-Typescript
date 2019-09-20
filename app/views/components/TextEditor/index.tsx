@@ -82,7 +82,8 @@ export const TextEditor = forwardRef(
       enableSignature = false,
       enableTemplateVariables = false,
       templateVariableSuggestionGroups,
-      onAttachmentDropped
+      onAttachmentDropped,
+      appendix = null
     }: TextEditorProps,
     ref
   ) => {
@@ -163,6 +164,7 @@ export const TextEditor = forwardRef(
     useImperativeHandle(
       ref,
       createEditorRef({
+        editorElementRef,
         editorRef,
         setEditorState,
         stateToHtmlOptions
@@ -300,16 +302,13 @@ export const TextEditor = forwardRef(
     }
 
     return (
-      <Flex column className={className}>
+      <Flex column style={{ overflow: 'auto', flex: 1 }} className={className}>
         <EditorWrapper
           ref={editorElementRef}
           className={cn({
             'hide-placeholder': shouldHidePlaceholder(editorState)
           })}
           onClick={() => editorRef.current && editorRef.current.focus()}
-          style={{
-            minHeight: '10rem'
-          }}
           data-test="text-editor-wrapper"
         >
           <PluginsEditor
@@ -347,6 +346,7 @@ export const TextEditor = forwardRef(
               )}
             </InlineEntityPopover>
           )}
+          {appendix}
         </EditorWrapper>
         <Toolbar>
           {enableRichText && (

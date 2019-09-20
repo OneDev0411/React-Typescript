@@ -25,12 +25,18 @@ const SORT_FIELD_SETTING_KEY = 'grid_deals_sort_field_bo'
 
 class Grid extends React.Component {
   order =
-    getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) || 'address'
+    getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) ||
+    'address'
 
   get Columns() {
     const { roles } = this.props
 
     return [
+      {
+        id: 'status',
+        header: 'Status',
+        accessor: deal => Deal.get.status(deal)
+      },
       {
         id: 'address',
         header: 'Address',
@@ -128,7 +134,8 @@ class Grid extends React.Component {
   }
 
   getDefaultIndex = () =>
-    getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) || 'address'
+    getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) ||
+    'address'
 
   getDefaultSort = () => {
     const sortSetting =

@@ -24,7 +24,7 @@ import { useDebounce } from 'use-debounce'
 import { ChipsInputProps } from './types'
 import Avatar from '../Avatar'
 import { InputWithStartAdornment } from './InputWithStartAdornment'
-import { useChipStyles } from '../../../styles/chip.style'
+import { useChipStyles } from '../../../styles/use-chips-styles'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

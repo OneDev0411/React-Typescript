@@ -4,16 +4,14 @@ import _ from 'underscore'
 import styled from 'styled-components'
 
 import { getContactTags } from '../../../../../../../models/contacts/helpers'
-import { selectDefinitionByName } from '../../../../../../../reducers/contacts/attributeDefs'
 import ALink from '../../../../../../../views/components/ALink'
 import { grey } from '../../../../../../../views/utils/colors'
 
 const AddTags = styled.span`
   color: ${grey.A550};
 `
-const TagsString = ({ contact, attributeDefs, onSelectTagContact }) => {
-  const attribute_def = selectDefinitionByName(attributeDefs, 'tag')
-  const tags = getContactTags(contact, attribute_def)
+const TagsString = ({ contact, onSelectTagContact }) => {
+  const tags = getContactTags(contact)
 
   const tagsCount = _.size(tags)
   const showingTags = []

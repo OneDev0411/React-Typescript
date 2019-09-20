@@ -1,3 +1,5 @@
+import uniqBy from 'lodash/uniqBy'
+
 import { createDayId } from '../create-day-id'
 import { sortEvents } from '../sort-events'
 
@@ -5,9 +7,14 @@ import { sortEvents } from '../sort-events'
  * returns list of days including their events
  * @param range
  * @param events
+ * @param contrariwise
  */
-export function normalizeEvents(events: ICalendarEvent[], range: NumberRange) {
-  const list = getEvents(range, events)
+export function normalizeEvents(
+  events: ICalendarEvent[],
+  range: NumberRange,
+  contrariwise: boolean
+) {
+  const list = getEvents(range, events, contrariwise)
 
   return Object.entries(list).reduce((acc, [month, daysOfMonth]) => {
     return {
@@ -21,12 +28,26 @@ export function normalizeEvents(events: ICalendarEvent[], range: NumberRange) {
  * returns all events including empty days
  * @param range
  * @param events
+ * @param contrariwise
  */
 function getEvents(
   range: NumberRange,
-  events: ICalendarEvent[]
+  events: ICalendarEvent[],
+  contrariwise: boolean
 ): ICalendarEventsList {
-  return events.reduce((acc: string[], event: ICalendarEvent) => {
+  const uniqEvents = uniqBy(events, event =>
+    event.object_type === 'crm_association' ? event.crm_task : event.id
+  )
+
+  return uniqEvents.reduce((acc: string[], event: ICalendarEvent) => {
+    // TODO: remove this condition after converting notes to event
+    if (
+      !event.recurring &&
+      (event.timestamp < range[0] || event.timestamp > range[1])
+    ) {
+      return acc
+    }
+
     const index = getEventIndex(event, range)
 
     const [year, month, day] = index.split('/')
@@ -43,7 +64,7 @@ function getEvents(
         [dayId]: [...dayEvents, event]
       }
     }
-  }, getDaysInRange(range))
+  }, getDaysInRange(range, contrariwise))
 }
 
 /**
@@ -62,25 +83,34 @@ function getSortedEvents(events: ICalendarMonthEvents) {
 /**
  * returns days ranges based on start and end dates
  * @param range
+ * @param contrariwise
  */
-function getDaysInRange(range: NumberRange) {
+function getDaysInRange(range: NumberRange, contrariwise: boolean) {
   const [start, end] = range
+
+  // finds the days cound between the start and end date
   const daysCount = Math.round(Math.abs(end - start) / 86400)
 
-  return new Array(daysCount).fill(null).reduce((acc, _, index) => {
+  // creates a array list of days: [0, 1, 2, 3, ...]
+  const listOfDays = new Array(daysCount).fill(null).map((_, index) => index)
+
+  // reverses the previous array list if contrariwise flag is enabled
+  const sortedListOfDays = contrariwise ? listOfDays.reverse() : listOfDays
+
+  return sortedListOfDays.reduce((acc, index) => {
     const date = new Date(start * 1000 + index * 86400000)
     const year = date.getUTCFullYear()
     const month = date.getUTCMonth() + 1
     const day = date.getUTCDate()
 
-    const byMonth = `${year}/${month}`
-    const byId = `${year}/${month}/${day}`
+    const monthId = `${year}/${month}`
+    const dayId = `${year}/${month}/${day}`
 
     return {
       ...acc,
-      [byMonth]: {
-        ...(acc[byMonth] || {}),
-        [byId]: []
+      [monthId]: {
+        ...(acc[monthId] || {}),
+        [dayId]: []
       }
     }
   }, {})
@@ -98,7 +128,12 @@ function getEventIndex(event: ICalendarEvent, range: NumberRange) {
   const to = new Date(end * 1000)
   const eventTime = new Date(event.timestamp * 1000)
   const convertToUTC =
-    event.object_type !== 'crm_task' && event.object_type !== 'email_campaign'
+    [
+      'crm_association',
+      'crm_task',
+      'email_campaign',
+      'email_campaign_recipient'
+    ].includes(event.object_type) === false
 
   if (!event.recurring) {
     return createDayId(eventTime, convertToUTC)

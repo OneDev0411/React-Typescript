@@ -34,14 +34,19 @@ function SendEmailButton(props) {
 
   return (
     <Fragment>
-      <ActionButton
-        appearance={props.appearance}
-        style={props.style}
-        onClick={onSendClick}
-        data-test="send-email"
-      >
-        {props.title}
-      </ActionButton>
+      {props.render ? (
+        props.render({ onClick: onSendClick, testId: 'send-email' })
+      ) : (
+        <ActionButton
+          disabled={props.disabled}
+          appearance={props.appearance}
+          style={props.style}
+          onClick={onSendClick}
+          data-test="send-email"
+        >
+          {props.title}
+        </ActionButton>
+      )}
       {/*
        We conditionally render, beacause of this comment:
        https://gitlab.com/rechat/web/merge_requests/376#note_200055872
@@ -70,7 +75,6 @@ function SendEmailButton(props) {
             setIsOpen(false)
             props.onSent()
           }}
-          hasDealsAttachments
           getEmail={getEmail}
         />
       )}
@@ -85,6 +89,7 @@ function mapStateToProps({ user }) {
 }
 
 SendEmailButton.propTypes = {
+  disabled: PropTypes.bool,
   deal: PropTypes.object,
   defaultAttachments: PropTypes.array,
   recipients: PropTypes.array,
@@ -94,6 +99,7 @@ SendEmailButton.propTypes = {
 }
 
 SendEmailButton.defaultProps = {
+  disabled: false,
   deal: null,
   defaultAttachments: [],
   recipients: null,

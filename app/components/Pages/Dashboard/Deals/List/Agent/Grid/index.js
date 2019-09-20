@@ -135,7 +135,8 @@ class Grid extends React.Component {
 
   getDefaultSort = () => {
     const sortSetting =
-      getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) || 'status'
+      getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) ||
+      'status'
     let id = sortSetting
     let ascending = true
 
@@ -153,7 +154,8 @@ class Grid extends React.Component {
   }
 
   getDefaultIndex = () =>
-    getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) || 'status'
+    getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) ||
+    'status'
 
   render() {
     const { isFetchingDeals } = this.props

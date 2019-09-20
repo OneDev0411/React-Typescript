@@ -6,7 +6,7 @@ declare interface IFilterOperator {
 
 declare interface IActiveFilter {
   id: UUID
-  isActive: boolean
+  isActive?: boolean
   values: ILabelValue[]
   operator: IFilterOperator
 }

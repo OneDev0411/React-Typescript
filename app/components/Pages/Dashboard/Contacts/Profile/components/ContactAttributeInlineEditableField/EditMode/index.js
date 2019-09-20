@@ -28,7 +28,7 @@ export function EditMode(props) {
   const { attribute } = props
 
   return (
-    <React.Fragment>
+    <>
       <Title attribute={attribute} onChangePrimary={props.onChangePrimary} />
       {attribute.attribute_def.has_label && (
         <Label
@@ -44,6 +44,6 @@ export function EditMode(props) {
         handleEnterKey={props.handleEnterKey}
       />
       {props.error && <Error>{props.error}</Error>}
-    </React.Fragment>
+    </>
   )
 }

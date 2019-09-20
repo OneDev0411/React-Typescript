@@ -52,10 +52,7 @@ const CalendarPage: React.FC = props => {
    * triggers when user clicks on a date in datepicker of left side
    * @param date
    */
-  const handleDatePickerChange = (
-    date: Date = new Date(),
-    changeType: 'day' | 'month' | 'year'
-  ) => {
+  const handleDatePickerChange = (date: Date = new Date()) => {
     if (calendarRef.current) {
       setActiveDate(date)
 
@@ -84,7 +81,7 @@ const CalendarPage: React.FC = props => {
   const handleOnLoadEvents = (events: ICalendarEventsList) => {
     setFetchedDays(getDaysWithEvent(events))
 
-    setIsLoadingFilters(false)
+    setTimeout(() => setIsLoadingFilters(false), 500)
   }
 
   /**
@@ -136,10 +133,7 @@ const CalendarPage: React.FC = props => {
             onChange={handleChangeFilter}
             isLoadingFilters={isLoadingFilters}
           />
-          <CreateEvent
-            onEventChange={handleEventChange}
-            activeDate={activeDate}
-          />
+          <CreateEvent onEventChange={handleEventChange} />
         </Header>
 
         <ListContainer className="u-scrollbar--thinner">

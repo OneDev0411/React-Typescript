@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
@@ -6,6 +6,10 @@ import { Field } from 'react-final-form'
 import { TextField } from 'final-form-material-ui'
 import createDecorator from 'final-form-focus'
 import { isEqual } from 'lodash'
+
+import styled from 'styled-components'
+
+import Flex from 'styled-flex-component'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import EmailBody from 'components/EmailCompose/components/EmailBody'
@@ -19,6 +23,11 @@ import { validateRecipient } from '../../EmailRecipientsChipsInput/helpers/valid
 interface State {
   topFieldsCollapsed: boolean
 }
+
+const TopFieldsContainer = styled.div`
+  overflow: auto;
+  max-height: 70%;
+`
 
 /**
  * Shared parts of the different email compose drawers.
@@ -49,8 +58,7 @@ class EmailComposeDrawer extends React.Component<
     isSubmitDisabled: false,
     onSent: () => {},
     onClose: () => {},
-    hasStaticBody: false,
-    hasDealsAttachments: false
+    hasStaticBody: false
   }
 
   state = {
@@ -70,7 +78,7 @@ class EmailComposeDrawer extends React.Component<
     ]
   })
 
-  emailBodyRef = React.createRef<any>()
+  emailBodyEditorRef = React.createRef<any>()
 
   static contextType = ConfirmationModalContext
 
@@ -92,14 +100,31 @@ class EmailComposeDrawer extends React.Component<
   }
 
   handleSubmit = async form => {
-    if (
-      this.emailBodyRef.current &&
-      this.emailBodyRef.current.hasUploadingImage()
-    ) {
+    const uploadingAttachment = (form.uploadingAttachments || []).length > 0
+    const uploadingImage =
+      this.emailBodyEditorRef.current &&
+      this.emailBodyEditorRef.current.hasUploadingImage()
+
+    if (uploadingImage || uploadingAttachment) {
       return new Promise((resolve, reject) => {
         this.context.setConfirmationModal({
           message: 'Upload in progress',
-          description: 'Please wait while images are uploading, or remove them',
+          description: `Please wait while ${
+            uploadingImage ? 'images' : 'attachments'
+          } are uploading, or remove them`,
+          cancelLabel: 'Ok',
+          needsConfirm: false,
+          onCancel: reject
+        })
+      })
+    }
+
+    if ((form.uploadingAttachments || []).length > 0) {
+      return new Promise((resolve, reject) => {
+        this.context.setConfirmationModal({
+          message: 'Upload in progress',
+          description:
+            'Please wait while attachments are uploading, or remove them',
           cancelLabel: 'Ok',
           needsConfirm: false,
           onCancel: reject
@@ -164,6 +189,12 @@ class EmailComposeDrawer extends React.Component<
 
   expandTopFields = () => this.setState({ topFieldsCollapsed: false })
 
+  scrollToEnd = () => {
+    if (this.emailBodyEditorRef.current) {
+      this.emailBodyEditorRef.current.scrollToEnd()
+    }
+  }
+
   render() {
     return (
       <FinalFormDrawer
@@ -182,24 +213,33 @@ class EmailComposeDrawer extends React.Component<
         submittingButtonLabel="Sending ..."
         title={this.props.title!}
         isSubmitDisabled={this.props.isSubmitDisabled}
-        footerRenderer={data => (
+        footerRenderer={({
+          submitting,
+          handleSubmit,
+          formProps,
+          isSubmitDisabled
+        }) => (
           <Footer
-            {...data}
+            formProps={{ values: formProps.values as EmailFormValues }}
+            handleSubmit={handleSubmit}
+            isSubmitting={submitting}
+            isSubmitDisabled={isSubmitDisabled}
             initialAttachments={this.props.initialValues!.attachments || []}
             deal={this.props.deal}
-            hasDealsAttachments={this.props.hasDealsAttachments}
+            onChanged={this.scrollToEnd}
           />
         )}
         render={({ values }) => (
-          <Fragment>
-            {this.state.topFieldsCollapsed ? (
-              <div onClick={this.expandTopFields}>
-                {this.props.renderCollapsedFields(values)}
-              </div>
-            ) : (
-              this.props.renderFields(values)
-            )}
-
+          <Flex column style={{ height: '100%' }}>
+            <TopFieldsContainer>
+              {this.state.topFieldsCollapsed ? (
+                <div onClick={this.expandTopFields}>
+                  {this.props.renderCollapsedFields(values)}
+                </div>
+              ) : (
+                this.props.renderFields(values)
+              )}
+            </TopFieldsContainer>
             <Field
               placeholder="Subject"
               name="subject"
@@ -215,16 +255,17 @@ class EmailComposeDrawer extends React.Component<
             />
 
             <EmailBody
-              ref={this.emailBodyRef}
+              ref={this.emailBodyEditorRef}
               DraftEditorProps={{ onFocus: this.collapseTopFields }}
               hasSignatureByDefault={this.props.hasSignatureByDefault}
               hasStaticBody={this.props.hasStaticBody}
               hasTemplateVariables={this.props.hasTemplateVariables}
               content={this.props.initialValues!.body || ''}
+              attachments={
+                <Field name="attachments" component={AttachmentsList} />
+              }
             />
-
-            <Field name="attachments" component={AttachmentsList} />
-          </Fragment>
+          </Flex>
         )}
       />
     )

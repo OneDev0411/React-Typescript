@@ -14,6 +14,8 @@ import { putUserSetting } from 'models/user/put-user-setting'
 
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
+import { iconSizes } from 'components/SvgIcons/icon-sizes'
+
 import {
   CsvIcon,
   GoogleIcon,
@@ -119,8 +121,8 @@ export function ImportContactsButton({ accounts, user }: Props) {
             }
           >
             <div>
-              <GoogleIconWithWhiteBg size={{ width: 16, height: 16 }} /> Import
-              Google Contacts
+              <GoogleIconWithWhiteBg size={iconSizes.small} /> Import Google
+              Contacts
             </div>
           </PopOver>
         </SplitButton>

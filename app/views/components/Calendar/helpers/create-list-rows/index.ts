@@ -4,20 +4,26 @@ import { createDayId } from '../create-day-id'
 
 import eventEmptyState from '../get-event-empty-state'
 
+import { Placeholder } from '../../types'
+
 export function createListRows(
   events: ICalendarEventsList,
-  activeDate: Date
+  activeDate: Date,
+  placeholders: Placeholder[]
 ): ICalendarListRow[] {
   const activeDayId = createDayId(activeDate, false)
 
   return Object.entries(events).flatMap(([month, daysOfMonth]) => {
-    if (isEmptyMonth(month, daysOfMonth, activeDate)) {
+    if (
+      placeholders.includes(Placeholder.Month) &&
+      isEmptyMonth(month, daysOfMonth, activeDate)
+    ) {
       return [
         {
           isEventHeader: true,
           headerType: 'month-header',
           isToday: false,
-          title: `01-${getLastDayOfMonth(daysOfMonth)}`,
+          title: `1-${getLastDayOfMonth(daysOfMonth)}`,
           date: month
         },
         {
@@ -27,7 +33,7 @@ export function createListRows(
       ]
     }
 
-    return getMonthEvents(daysOfMonth, activeDayId)
+    return getMonthEvents(daysOfMonth, activeDayId, placeholders)
   })
 }
 
@@ -37,7 +43,8 @@ export function createListRows(
  */
 function getMonthEvents(
   days: ICalendarMonthEvents,
-  activeDayId: string
+  activeDayId: string,
+  placeholders: Placeholder[]
 ): ICalendarListRow[] {
   const today = fecha.format(new Date(), 'YYYY-MM-DD')
 
@@ -47,7 +54,10 @@ function getMonthEvents(
         return true
       }
 
-      return isToday(day) || day === activeDayId
+      return (
+        placeholders.includes(Placeholder.Day) &&
+        (isToday(day) || day === activeDayId)
+      )
     })
     .flatMap(([day, events]) => {
       return [

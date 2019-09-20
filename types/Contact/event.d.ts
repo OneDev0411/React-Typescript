@@ -1,4 +1,4 @@
-interface TaskAssociations {
+interface TaskAssociation {
   id: string
   association_type: 'contact' | 'deal' | 'listing'
   brand: string
@@ -16,9 +16,10 @@ interface TaskAssociations {
 }
 
 declare interface IEvent extends IModel<'crm_task'> {
-  associations: TaskAssociations
+  associations: TaskAssociation[]
   due_date: number
   task_type: string
+  crm_task: UUID
   contact: IContact
   title: string
   description: string

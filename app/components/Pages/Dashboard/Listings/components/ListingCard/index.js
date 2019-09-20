@@ -52,8 +52,8 @@ const ListingCard = ({
             <span>{listing.sqft.toLocaleString()} Sqft</span>
             {listing.lotSizeArea && (
               <span>
-                &nbsp;&nbsp;&middot;&nbsp;&nbsp;{listing.lotSizeArea.toLocaleString()}{' '}
-                Acres
+                &nbsp;&nbsp;&middot;&nbsp;&nbsp;
+                {listing.lotSizeArea.toLocaleString()} Acres
               </span>
             )}
             &nbsp;&nbsp;&middot;&nbsp;&nbsp;

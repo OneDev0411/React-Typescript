@@ -24,6 +24,7 @@ export class AvatarUploader extends Component {
       display_name: PropTypes.string
     }),
     status: PropTypes.string,
+    showStatus: PropTypes.bool,
     isUploading: PropTypes.bool.isRequired,
     handleOnChange: PropTypes.func.isRequired
   }
@@ -35,7 +36,8 @@ export class AvatarUploader extends Component {
       src: '',
       display_name: ''
     },
-    status: ''
+    status: '',
+    showStatus: false
   }
 
   state = {
@@ -60,7 +62,7 @@ export class AvatarUploader extends Component {
   }
 
   renderUploading() {
-    return <Loading>Uploading</Loading>
+    return <Loading>Saving</Loading>
   }
 
   renderUploader() {
@@ -88,7 +90,7 @@ export class AvatarUploader extends Component {
             {avatar.initials || getNameInitials(avatar.display_name)}
           </Initials>
         )}
-        <Status isOnline={isOnline} />
+        {this.props.showStatus && <Status isOnline={isOnline} />}
         <Trigger htmlFor="avatarImage" hasImage={avatar.src}>
           <TriggerText>{avatar.src ? 'Change' : 'Upload'}</TriggerText>
         </Trigger>

@@ -46,6 +46,7 @@ export interface ActionButtonProps
   isOpen?: boolean
 
   rightRounded?: boolean // !
+  leftRounded?: boolean // !
 }
 
 export const defaultProps: Partial<ActionButtonProps> = {

@@ -79,6 +79,7 @@ class List extends React.Component {
     associations.forEach(association => {
       const isDefaultAssociation = this.isDefaultAssociation(association)
 
+      // Note: disableDefaultAssociationChecking is a workaround for mini contact profile
       if (association.association_type === 'email') {
         emailAssociation = association
       } else if (isDefaultAssociation) {

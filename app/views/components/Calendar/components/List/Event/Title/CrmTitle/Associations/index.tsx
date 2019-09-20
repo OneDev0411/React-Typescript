@@ -1,14 +1,20 @@
-import React, { MouseEvent } from 'react'
+import React, { useContext } from 'react'
+
+import MiniContactProfile from 'components/MiniContact'
+import { plural } from 'components/TemplatesList/helpers'
+
+import { ListContext } from '../../../../context'
 
 import styles from './styles'
+import { isLastItem } from './helpers'
 
 interface Props {
   event: ICalendarEvent
-  onClickAssociation(e: MouseEvent<HTMLElement>): void
 }
 
-export function Associations(props: Props) {
-  const associations = props.event.full_crm_task!.associations
+export function Associations({ event }: Props) {
+  const { setSelectedEvent } = useContext(ListContext)
+  const associations = event.full_crm_task!.associations
 
   const contacts = (associations || []).filter(
     association => association.association_type === 'contact'
@@ -18,30 +24,42 @@ export function Associations(props: Props) {
     return null
   }
 
-  const preposition = getCrmEventTypePreposition(props.event.event_type)
-
-  const users = new Array(Math.min(2, contacts.length))
-    .fill(null)
-    .map((_, index) => [
-      <a
-        key={`assoc${index}`}
-        onClick={e => e.stopPropagation()}
-        target="_blank"
-        href={`/dashboard/contacts/${contacts[index].contact!.id}`}
-      >
-        {contacts[index].contact!.display_name}
-      </a>,
-      contacts.length > 1 && index === 0 && <span key={`sepr${index}`}>, </span>
-    ])
+  const preposition = getCrmEventTypePreposition(event.event_type)
+  const visibleContacts = contacts.slice(0, 2)
+  const contactsCount = contacts.length
+  const contactsOtherCount = contactsCount - 2
+  const isPlural = contactsOtherCount > 1
+  const needsShowOtherLabel = contactsCount > 2
 
   return (
     <span>
-      {preposition} {users}{' '}
-      {contacts.length > 2 && (
+      {preposition}{' '}
+      {visibleContacts.map((contact, index) => (
+        <React.Fragment key={`assoc${index}`}>
+          <MiniContactProfile
+            as="span"
+            data={contact.contact as IContact}
+            type="event"
+          >
+            <a
+              onClick={e => e.stopPropagation()}
+              target="_blank"
+              href={`/dashboard/contacts/${contact.contact!.id}`}
+            >
+              {contact.contact!.display_name}
+            </a>
+          </MiniContactProfile>
+          {!isLastItem(contacts, index) && <span key={`sepr${index}`}>, </span>}
+        </React.Fragment>
+      ))}
+      {needsShowOtherLabel && (
         <>
           {' and '}
-          <span style={styles.association} onClick={props.onClickAssociation}>
-            {contacts.length - 2} other{contacts.length - 2 > 1 ? 's' : ''}
+          <span
+            style={styles.association}
+            onClick={() => setSelectedEvent(event)}
+          >
+            {plural(`${contactsCount} other`, isPlural)}
           </span>
         </>
       )}
@@ -63,6 +81,7 @@ function getCrmEventTypePreposition(eventType: string): string {
       return 'to'
 
     case 'Open House':
+    case 'Note':
       return 'for'
 
     default:

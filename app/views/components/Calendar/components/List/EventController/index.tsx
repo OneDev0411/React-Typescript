@@ -1,0 +1,55 @@
+import React, { useContext } from 'react'
+
+import { EditEmailDrawer } from 'components/EmailCompose/EditEmailDrawer'
+
+import { ListContext } from '../context'
+
+import { CrmEvents } from '../../CrmEvents'
+
+interface Props {
+  user: IUser
+  activeDate: Date | null
+  onEventChange(event: IEvent, type: string): void
+  onScheduledEmailChange(emailCampaign: IEmailCampaign): void
+}
+
+export function EventController({
+  user,
+  activeDate,
+  onEventChange,
+  onScheduledEmailChange
+}: Props) {
+  const { selectedEvent: event, setSelectedEvent } = useContext(ListContext)
+
+  if (!event) {
+    return null
+  }
+
+  if (['crm_task', 'crm_association'].includes(event.object_type)) {
+    return (
+      <CrmEvents
+        isEventDrawerOpen
+        selectedDate={activeDate}
+        event={event}
+        user={user}
+        onEventChange={onEventChange}
+        onCloseEventDrawer={() => setSelectedEvent(null)}
+      />
+    )
+  }
+
+  if (
+    ['email_campaign', 'email_campaign_recipient'].includes(event.object_type)
+  ) {
+    return (
+      <EditEmailDrawer
+        isOpen
+        emailId={event.campaign as UUID}
+        onEdited={emailCampaign => onScheduledEmailChange(emailCampaign)}
+        onClose={() => setSelectedEvent(null)}
+      />
+    )
+  }
+
+  return null
+}

@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components'
+import { fade } from '@material-ui/core/styles'
 
 import LinkButton from 'components/Button/LinkButton'
 import ActionButton from 'components/Button/ActionButton'
@@ -9,15 +10,13 @@ import { primary, grey, borderColor } from 'views/utils/colors'
 export const ViewModeContainer = styled.div`
   position: relative;
   padding: 0.5em;
-  border-radius: 3px;
-  border: 1px dashed transparent;
+  border-radius: ${props => props.theme.shape.borderRadius}px;
 
   &:hover {
     cursor: pointer;
-    background: ${grey.A150};
-    border-color: ${primary};
+    background-color: ${props => props.theme.palette.action.hover};
 
-    > .action-bar {
+    .action-bar {
       visibility: visible;
     }
   }
@@ -25,10 +24,18 @@ export const ViewModeContainer = styled.div`
 
 export const ViewModeActionBar = styled.div`
   position: absolute;
-  top: 0.5em;
-  right: 0.5em;
+  top: 90%;
+  padding-top: 0.5em;
+  right: 0;
   visibility: hidden;
-  display: inline-flex;
+  display: flex;
+  z-index: 1;
+
+  & svg {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.5rem;
+  }
 `
 
 export const EditButton = styled(ActionButton)`
@@ -40,16 +47,24 @@ export const EditButton = styled(ActionButton)`
 export const EditModeContainer = styled.div`
   position: relative;
   padding: 0.5em;
-  border: 1px dashed ${props => (props.hasError ? props.theme.palette.error.main : primary)};
-  border-radius: ${props => (props.isStatic ? '3px' : '3px 3px 0 0')};
+  border-radius: ${props =>
+    props.isStatic
+      ? `${props.theme.shape.borderRadius}px`
+      : `${props.theme.shape.borderRadius}px ${
+          props.theme.shape.borderRadius
+        }px 0 0`};
   background: ${props =>
-    props.hasError ? 'rgba(208, 2, 27, 0.05)' : grey.A150};
+    props.hasError
+      ? fade(
+          props.theme.palette.error.main,
+          props.theme.palette.action.hoverOpacity
+        )
+      : props.theme.palette.action.selected};
 `
 
 export const Label = styled.div`
   display: flex;
   align-items: center;
-  color: ${grey.A900};
   margin-bottom: 0.25em;
 `
 
@@ -68,7 +83,6 @@ export const DropdownButton = styled(LinkButton)`
   padding: 0;
   height: auto;
   line-height: 1.5;
-  margin-bottom: 0.5em;
   color: ${({ isOpen }) => (isOpen ? primary : '#000')};
 
   > svg {

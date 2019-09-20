@@ -2,11 +2,10 @@ import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import { Helmet } from 'react-helmet'
-import { uniqBy } from 'lodash'
-
-import { formatedDefaultTags, defaultTags } from 'utils/default-tags'
 
 import { confirmation } from 'actions/confirmation'
+import { resetActiveFilters } from 'actions/filter-segments/active-filters'
+import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
 import { getContactsTags } from 'models/contacts/get-contacts-tags'
 import { getContactsTags as getContactTagsAction } from 'actions/contacts/get-contacts-tags'
 import { createContactsTags } from 'models/contacts/create-contacts-tags'
@@ -19,10 +18,10 @@ import Loading from '../../../../Partials/Loading'
 import Row from './Row'
 import { Input } from './Input'
 import { Container, Description } from './styled'
-
-const lowerCaseDefaultTags = defaultTags.map(tag => tag.toLowerCase())
+import { CONTACTS_SEGMENT_NAME } from '../../Contacts/constants'
 
 const HIGHLIGHT_SECONDS = 4
+const INVALID_TAG_PATTERN = /^\.+$/
 
 class ManageTags extends Component {
   state = {
@@ -36,14 +35,27 @@ class ManageTags extends Component {
     this.fetch()
   }
 
+  reloadStoreTags = () => {
+    this.props.getContactsTags()
+  }
+
+  resetContactsFilters = async () => {
+    await this.props.resetActiveFilters(CONTACTS_SEGMENT_NAME)
+    await this.props.changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, 'default')
+  }
+
+  validateTag = text => {
+    return !INVALID_TAG_PATTERN.test(text)
+  }
+
   fetch = async () => {
     try {
-      const response = await await getContactsTags()
+      const response = await getContactsTags()
 
-      const rawTags = uniqBy(
-        [...formatedDefaultTags, ...response.data],
-        'text'
-      ).map(({ text, type }) => ({ text, highlight: false, type }))
+      const rawTags = response.data.map(({ text }) => ({
+        text,
+        highlight: false
+      }))
 
       this.setState({
         loading: false,
@@ -52,6 +64,12 @@ class ManageTags extends Component {
     } catch (error) {
       this.setState({ loading: false })
     }
+  }
+
+  getTag = text => {
+    return this.state.rawTags.find(
+      item => item.text.toLowerCase() === text.toLowerCase()
+    )
   }
 
   sortTags = tags => {
@@ -100,7 +118,7 @@ class ManageTags extends Component {
     }, delay)
   }
 
-  handleDuplicateTagCreate = tag => {
+  handleDuplicateTag = tag => {
     this.props.notify({
       status: 'info',
       message: `"${tag.text}" already exists.`
@@ -116,29 +134,40 @@ class ManageTags extends Component {
       return
     }
 
-    try {
-      await updateContactsTags(oldText, text)
+    if (!this.validateTag(text)) {
       this.props.notify({
-        status: 'success',
-        message: `"${text}" updated.`
+        status: 'error',
+        message: 'Invalid tag'
       })
-      this.setState(prevState => ({
-        rawTags: [
-          ...prevState.rawTags.filter(
-            item => item.text.toLowerCase() !== oldText.toLowerCase()
-          ),
-          {
-            text
-          }
-        ]
-      }))
-    } catch (e) {
-      if (e.status && e.status === 409) {
-        this.handleDuplicateTagCreate({ text })
-      }
 
       return false
     }
+
+    const foundTag = this.getTag(text)
+
+    if (foundTag) {
+      this.handleDuplicateTag(foundTag)
+
+      return false
+    }
+
+    await updateContactsTags(oldText, text)
+    await this.reloadStoreTags()
+    await this.resetContactsFilters()
+    this.props.notify({
+      status: 'success',
+      message: `"${text}" updated.`
+    })
+    this.setState(prevState => ({
+      rawTags: [
+        ...prevState.rawTags.filter(
+          item => item.text.toLowerCase() !== oldText.toLowerCase()
+        ),
+        {
+          text
+        }
+      ]
+    }))
 
     return true
   }
@@ -150,32 +179,37 @@ class ManageTags extends Component {
       return
     }
 
-    if (lowerCaseDefaultTags.includes(text.toLowerCase())) {
-      return this.handleDuplicateTagCreate({
-        text: text[0].toUpperCase() + text.substring(1).toLowerCase(),
-        type: 'default_tag'
+    if (!this.validateTag(text)) {
+      this.props.notify({
+        status: 'error',
+        message: 'Invalid tag'
       })
+
+      return false
     }
 
-    try {
-      this.setState({ isSaving: true })
-      await createContactsTags(text)
-      this.props.notify({
-        status: 'success',
-        message: `"${text}" added.`
-      })
-      this.setState(prevState => ({
-        createTagInputValue: '',
-        rawTags: [...prevState.rawTags, { text, highlight: true }]
-      }))
-      this.highlightTag({ text }, false, HIGHLIGHT_SECONDS * 1000)
-    } catch (e) {
-      if (e.status && e.status === 409) {
-        this.handleDuplicateTagCreate({ text })
-      }
-    } finally {
-      this.setState({ isSaving: false })
+    const foundTag = this.getTag(text)
+
+    if (foundTag) {
+      this.handleDuplicateTag(foundTag)
+
+      return
     }
+
+    this.setState({ isSaving: true })
+    await createContactsTags(text)
+    await this.reloadStoreTags()
+    await this.resetContactsFilters()
+    this.props.notify({
+      status: 'success',
+      message: `"${text}" added.`
+    })
+    this.setState(prevState => ({
+      createTagInputValue: '',
+      rawTags: [...prevState.rawTags, { text, highlight: true }],
+      isSaving: false
+    }))
+    this.highlightTag({ text }, false, HIGHLIGHT_SECONDS * 1000)
   }
 
   handleDelete = async ({ text }) =>
@@ -188,7 +222,8 @@ class ManageTags extends Component {
           'Deleting a tag will remove it from the system and remove it from any contacts with this tag.',
         onConfirm: async () => {
           await deleteContactsTags(text)
-          this.props.getContactsTags()
+          await this.reloadStoreTags()
+          await this.resetContactsFilters()
           this.props.notify({
             status: 'success',
             message: `"${text}" deleted.`
@@ -265,6 +300,8 @@ export default connect(
   {
     notify,
     confirmation,
-    getContactsTags: getContactTagsAction
+    getContactsTags: getContactTagsAction,
+    resetActiveFilters,
+    changeActiveFilterSegment
   }
 )(ManageTags)

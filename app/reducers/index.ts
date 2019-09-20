@@ -64,6 +64,7 @@ const appReducer = combineReducers({
 export type IAppState = {
   contacts: IContactReduxState
   user: IUser
+  deals: any // fixme(type)
   emailTemplates: IEmailTemplatesState
 }
 

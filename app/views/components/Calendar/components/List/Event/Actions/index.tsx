@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import Button from '@material-ui/core/Button'
 
 import { getActiveTeamId } from 'utils/user-teams'
 
-import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
+import { ListContext } from '../../context'
 
 interface Props {
   event: ICalendarEvent
@@ -12,17 +12,22 @@ interface Props {
 }
 
 export function EventActions({ event, user }: Props) {
+  const { actions } = useContext(ListContext)
+
+  const handleClickAction = () => {
+    actions.emit('event-action', { event })
+  }
+
   if (event.event_type === 'birthday' && !event.metadata.is_partner) {
     return (
-      <SendContactCard
-        contactId={event.contact}
-        mediums="Email"
-        buttonStyle={{
-          size: 'small'
-        }}
+      <Button
+        variant="outlined"
+        color="secondary"
+        size="small"
+        onClick={handleClickAction}
       >
         Send Birthday Card
-      </SendContactCard>
+      </Button>
     )
   }
 

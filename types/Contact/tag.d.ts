@@ -7,9 +7,3 @@ declare interface ICRMTag extends IModel<'crm_tag'> {
   // This is used only for the web on the client side
   highlight?: boolean
 }
-
-declare interface ICRMDefaultTag {
-  text: string
-  highlight?: boolean
-  type: 'default_Tag'
-}

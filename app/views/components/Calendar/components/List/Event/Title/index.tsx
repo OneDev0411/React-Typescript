@@ -1,32 +1,35 @@
-import React from 'react'
+import React, { useContext } from 'react'
+
+import MiniContactProfile from 'components/MiniContact'
+
+import { ListContext } from '../../context'
 
 import CrmTitle from './CrmTitle'
 import styles from '../styles'
 
 interface Props {
   event: ICalendarEvent
-  onClickScheduledEmail(event: ICalendarEvent): void
-  onClickCrmEventAssociations(event: ICalendarEvent): void
 }
 
-export function EventTitle(props: Props) {
-  const { event } = props
+export function EventTitle({ event }: Props) {
+  const { setSelectedEvent } = useContext(ListContext)
 
-  if (event.object_type === 'crm_task') {
-    return (
-      <CrmTitle
-        event={event}
-        onClickCrmEventAssociations={props.onClickCrmEventAssociations}
-      />
-    )
+  if (['crm_task', 'crm_association'].includes(event.object_type)) {
+    return <CrmTitle event={event} />
   }
 
   if (event.object_type === 'contact_attribute') {
     return (
       <div style={styles.title}>
-        <a href={`/dashboard/contacts/${event.contact}`} target="_blank">
-          {event.full_contact!.display_name}
-        </a>
+        <MiniContactProfile
+          type="event"
+          data={event.full_contact as IContact}
+          as="span"
+        >
+          <a href={`/dashboard/contacts/${event.contact}`} target="_blank">
+            {event.full_contact!.display_name}
+          </a>
+        </MiniContactProfile>
         's {event.type_label}
       </div>
     )
@@ -47,15 +50,23 @@ export function EventTitle(props: Props) {
     return (
       <div style={styles.title}>
         Contact{' '}
-        <a href={`/dashboard/contacts/${event.contact}`} target="_blank">
-          {event.full_contact!.display_name}
-        </a>
+        <MiniContactProfile
+          type="event"
+          data={event.full_contact as IContact}
+          as="span"
+        >
+          <a href={`/dashboard/contacts/${event.contact}`} target="_blank">
+            {event.full_contact!.display_name}
+          </a>
+        </MiniContactProfile>
       </div>
     )
   }
 
   if (
-    event.object_type === 'email_campaign' &&
+    ['email_campaign', 'email_campaign_recipient'].includes(
+      event.object_type
+    ) &&
     event.event_type === 'scheduled_email'
   ) {
     return (
@@ -64,10 +75,10 @@ export function EventTitle(props: Props) {
           style={styles.link}
           onClick={e => {
             e.preventDefault()
-            props.onClickScheduledEmail(event)
+            setSelectedEvent(event)
           }}
         >
-          {event.title}
+          {event.title || 'No Subject'}
         </a>
       </div>
     )

@@ -1,15 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
-import styled from 'styled-components'
-import { sortBy, uniqBy } from 'lodash'
-
-import { formatedDefaultTags } from 'utils/default-tags'
 
 import {
-  removeActiveFilter,
-  updateActiveFilter
+  updateActiveFilter,
+  resetActiveFilters
 } from 'actions/filter-segments/active-filters'
+import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
 
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import { selectContactsInfo } from 'reducers/contacts/list'
@@ -20,7 +17,6 @@ import {
 import { selectActiveFilters } from 'reducers/filter-segments'
 
 import ToolTip from 'components/tooltip'
-import { CheckBoxButton } from 'components/Button/CheckboxButton'
 import {
   ListTitle,
   ListItem,
@@ -30,31 +26,28 @@ import { ShowMoreLess } from 'components/ShowMoreLess'
 import IconCog from 'components/SvgIcons/Cog/IconCog'
 
 import { normalizeAttributeFilters } from '../utils'
-
-const CustomListItem = styled(ListItem)`
-  justify-content: flex-start;
-`
-const CustomListItemName = styled(ListItemName)`
-  margin-left: 0.5em;
-`
+import { CONTACTS_SEGMENT_NAME } from '../../constants'
 
 interface Props {
   attributeDefs: IAttributeDefsState
   activeFilters: StringMap<IActiveFilter>
-  removeActiveFilter: (segmentName: string, filterId: string) => void
   onFilterChange: ({ filters: any }) => void // TODO
   existingTags: any // TODO
+  isActive: boolean
   isFetching: boolean
   updateActiveFilter: (
     segmentName: string,
     filterId: string,
     filter: any
   ) => void
+  resetActiveFilters: (segmentName: string) => void
+  changeActiveFilterSegment: (
+    nameId: string,
+    segmentId: string
+  ) => Promise<void>
 }
 
 export class TagsList extends React.Component<Props> {
-  private tagDefinitionId: string
-
   constructor(props) {
     super(props)
     this.tagDefinitionId = selectDefinitionByName(
@@ -63,41 +56,25 @@ export class TagsList extends React.Component<Props> {
     )!.id
   }
 
-  onSelectList = item => {
-    const { activeFilters } = this.props
-    let nextFilters: StringMap<IActiveFilter> = {}
+  private tagDefinitionId: string
 
-    const filterId = Object.keys(activeFilters).find(id => {
-      const filter = activeFilters[id]
+  onSelectList = async item => {
+    await this.props.changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, 'default')
+    this.props.resetActiveFilters('contacts')
 
-      return (
-        filter.id === this.tagDefinitionId &&
-        filter.values.some(({ value }) => value === item.text)
-      )
-    })
-
-    if (filterId) {
-      this.props.removeActiveFilter('contacts', filterId)
-      Object.keys(activeFilters)
-        .filter(key => key !== filterId)
-        .forEach(key => {
-          nextFilters[key] = activeFilters[key]
-        })
-    } else if (!this.isSelected(item.text)) {
-      const filter = {
-        id: this.tagDefinitionId,
-        values: [{ value: item.text, label: item.text }],
-        operator: {
-          name: 'is',
-          invert: false
-        }
+    const filter = {
+      id: this.tagDefinitionId,
+      values: [{ value: item.text, label: item.text }],
+      operator: {
+        name: 'is',
+        invert: false
       }
+    }
 
-      this.props.updateActiveFilter('contacts', item.id, filter)
-      nextFilters = {
-        ...activeFilters,
-        [item.id]: filter
-      }
+    this.props.updateActiveFilter('contacts', item.id, filter)
+
+    const nextFilters: StringMap<IActiveFilter> = {
+      [item.id]: filter
     }
 
     this.props.onFilterChange({
@@ -105,14 +82,19 @@ export class TagsList extends React.Component<Props> {
     })
   }
 
-  isSelected = text =>
-    Object.values(this.props.activeFilters).some(
-      filter =>
-        filter.id === this.tagDefinitionId &&
-        filter.values &&
-        filter.values.some(({ value }) => value === text) &&
-        !filter.operator.invert
+  isSelected = text => {
+    return (
+      this.props.isActive &&
+      Object.keys(this.props.activeFilters).length === 1 &&
+      Object.values(this.props.activeFilters).some(
+        filter =>
+          filter.id === this.tagDefinitionId &&
+          filter.values &&
+          filter.values.some(({ value }) => value === text) &&
+          !filter.operator.invert
+      )
     )
+  }
 
   render() {
     const { existingTags, isFetching } = this.props
@@ -138,17 +120,13 @@ export class TagsList extends React.Component<Props> {
 
             return (
               <ToolTip key={index} caption={item.text} placement="right">
-                <CustomListItem
+                <ListItem
                   data-test={`tag-item-${item.text}`}
                   isSelected={isSelected}
                   onClick={() => this.onSelectList(item)}
                 >
-                  <CheckBoxButton
-                    isSelected={isSelected}
-                    onClick={() => this.onSelectList(item)}
-                  />
-                  <CustomListItemName>{item.text}</CustomListItemName>
-                </CustomListItem>
+                  <ListItemName>{item.text}</ListItemName>
+                </ListItem>
               </ToolTip>
             )
           })}
@@ -177,10 +155,7 @@ function mapStateToProps(state: {
   } = state
   const filter = selectContactsInfo(ContactListStore).filter || []
   const searchText = selectContactsInfo(ContactListStore).searchText || ''
-  const existingTags = uniqBy(
-    sortBy([...formatedDefaultTags, ...selectTags(tags)], 'text'),
-    'text'
-  )
+  const existingTags = selectTags(tags)
 
   return {
     attributeDefs,
@@ -196,7 +171,8 @@ function mapStateToProps(state: {
 export default connect(
   mapStateToProps,
   {
-    removeActiveFilter,
-    updateActiveFilter
+    updateActiveFilter,
+    resetActiveFilters,
+    changeActiveFilterSegment
   }
 )(TagsList)

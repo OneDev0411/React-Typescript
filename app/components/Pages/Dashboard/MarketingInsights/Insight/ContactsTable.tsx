@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
+
 import Table from 'components/Grid/Table'
 import ContactInfo from 'components/ContactInfo'
+import MiniContact from 'components/MiniContact'
 
 import RowBadges from './RowBadges'
 import { ContactColumn } from './styled'
@@ -22,13 +24,11 @@ function ContactsTable(props: ContactsPropsType) {
 
   // This is weird? For sure. Seems we have a bug on Grid plugins which
   // doesn't work properly on first mount, so this is a workaround :(
-  useEffect(
-    function() {
-      const list = doSort(contactsList(props.item), sort)
-      setItemData(list)
-    },
-    [sort]
-  )
+  useEffect(() => {
+    const list = doSort(contactsList(props.item), sort)
+
+    setItemData(list)
+  }, [sort, props.item])
 
   const columns = [
     {
@@ -39,7 +39,9 @@ function ContactsTable(props: ContactsPropsType) {
       render: (props: TableColumnProps) => (
         <ContactColumn>
           <div>
-            <ContactInfo data={props.rowData} />
+            <MiniContact data={props.rowData.original_data} type="insight">
+              <ContactInfo data={props.rowData} />
+            </MiniContact>
           </div>
           <div className="labels-container">
             <RowBadges data={props.rowData} />

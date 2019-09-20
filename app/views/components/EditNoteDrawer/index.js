@@ -22,7 +22,7 @@ export class EditNoteDrawer extends React.Component {
   state = {
     error: null,
     isSaving: false,
-    text: this.props.note.text
+    text: this.props.note ? this.props.note.text : ''
   }
 
   onChange = value => {
@@ -63,7 +63,7 @@ export class EditNoteDrawer extends React.Component {
 
     return (
       <Drawer open={this.props.isOpen} onClose={this.props.onClose}>
-        <Drawer.Header title="Edit Note" />
+        <Drawer.Header title={this.props.note ? 'Edit Note' : 'Create Note'} />
         <Drawer.Body style={{ overflow: 'hidden' }}>
           <Container>
             <TextEditor
@@ -77,18 +77,25 @@ export class EditNoteDrawer extends React.Component {
           </Container>
         </Drawer.Body>
         <Drawer.Footer>
-          {this.state.isDeleting ? (
-            'Deleting...'
-          ) : (
-            <IconButton
-              isFit
-              inverse
-              onClick={this.onDelete}
-              disabled={isSaving}
-            >
-              <IconDelete />
-            </IconButton>
-          )}
+          <div>
+            {this.props.note && (
+              <>
+                {this.state.isDeleting ? (
+                  'Deleting...'
+                ) : (
+                  <IconButton
+                    isFit
+                    inverse
+                    onClick={this.onDelete}
+                    disabled={isSaving}
+                  >
+                    <IconDelete />
+                  </IconButton>
+                )}
+              </>
+            )}
+          </div>
+
           <Button onClick={this.onSubmit} disabled={isSaving}>
             {isSaving ? 'Saving...' : 'Save'}
           </Button>

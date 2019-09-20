@@ -1,5 +1,6 @@
 declare interface IDeal extends IModel<'deal'> {
   id: UUID
+  title: string
   brand: {
     id: UUID
   }

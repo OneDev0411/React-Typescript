@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import { FieldRenderProps } from 'react-final-form'
 import { Observable } from 'rxjs'
@@ -20,6 +20,8 @@ import { getSavedSegments } from 'actions/filter-segments/get-saved-segment'
 import { IAppState } from 'reducers/index'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import { getSegments, isListFetched } from 'reducers/filter-segments'
+
+import { useElementWidth } from 'hooks/use-element-width'
 
 import { ChipsInput } from '../ChipsInput'
 import { InlineInputLabel } from '../InlineInputLabel'
@@ -68,15 +70,26 @@ interface Props extends BaseProps {
   getSavedSegments: IAsyncActionProp<typeof getSavedSegments>
 }
 
-const useEmailRecipientsChipsInputStyles = makeStyles(
-  (theme: Theme) =>
+const useEmailRecipientsChipsInputStyles = makeStyles<
+  Theme,
+  { labelWidth: number }
+>(
+  theme =>
     createStyles({
+      /**
+       * NOTE: In order to render suggestions behind the tags input, and
+       * aligned with inline label, we make chips input container wrap its
+       * children. When we do so, we need to provide a flex-basis (width)
+       * for the inner input (chips and html input) in order to fill the full
+       * available width and push the suggestions to next line.
+       * in order to do this we need inline label width
+       */
       Input: {
         flexWrap: 'wrap'
       },
-      inputWrapper: {
-        flexBasis: '92%'
-      }
+      inputWrapper: props => ({
+        flexBasis: `calc(100% - ${props.labelWidth + 1}px)`
+      })
     }),
   { name: 'EmailRecipientsChipsInput' }
 )
@@ -88,7 +101,7 @@ const useEmailRecipientsChipsInputStyles = makeStyles(
  * NOTE: we can pull this suggestions feature up into ChipsInput, but
  * right now, there is a styling issue which is not resolved generally,
  * and it's fixed by a workaround. This workaround is dependent on the
- * label width!
+ * label width! see the note in {@link useEmailRecipientsChipsInputStyles}
  */
 function EmailRecipientsChipsInput({
   getContactsTags,
@@ -107,6 +120,15 @@ function EmailRecipientsChipsInput({
   onChange,
   ...chipsInputProps
 }: Props) {
+  /**
+   The following lines of code are because we couldn't implement the UI
+   with pure css and we need labelWidth.
+   See the note in {@link useEmailRecipientsChipsInputStyles} for more
+   information. we can get rid of them if a css based solution is found.
+  */
+  const labelRef = useRef<HTMLElement>(null)
+  const labelWidth = useElementWidth(labelRef)
+
   const [recipients, setRecipients] = useControllableState<
     IDenormalizedEmailRecipientInput[]
   >(
@@ -115,7 +137,7 @@ function EmailRecipientsChipsInput({
     []
   )
 
-  const classes = useEmailRecipientsChipsInputStyles()
+  const classes = useEmailRecipientsChipsInputStyles({ labelWidth })
 
   useEffect(() => {
     if (!isLoadingTags) {
@@ -213,7 +235,9 @@ function EmailRecipientsChipsInput({
       TextFieldComponent={TextField}
       TextFieldProps={{
         InputProps: {
-          startAdornment: <InlineInputLabel>{label}</InlineInputLabel>,
+          startAdornment: (
+            <InlineInputLabel ref={labelRef}>{label}</InlineInputLabel>
+          ),
           endAdornment: includeQuickSuggestions ? (
             <RecipientQuickSuggestions
               currentRecipients={currentlyUsedQuickSuggestions || recipients}
@@ -225,6 +249,7 @@ function EmailRecipientsChipsInput({
         },
         inputProps: {
           ...inputProps,
+          'data-test': 'email-recipients-input',
           inputWrapperClassName: classes.inputWrapper
         },
         input,

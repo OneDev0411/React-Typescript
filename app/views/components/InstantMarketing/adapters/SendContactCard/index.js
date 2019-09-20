@@ -2,17 +2,17 @@ import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 import idx from 'idx'
+import { Button } from '@material-ui/core'
 
 import { getContact } from 'models/contacts/get-contact'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { getTemplateInstances } from 'models/instant-marketing/get-template-instances'
-import { normalizeContactForEmailCompose } from 'models/email/helpers/normalize-contact'
+import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
 
 import { confirmation } from 'actions/confirmation'
 
 import MissingEmailModal from 'components/MissingEmailModal'
 import InstantMarketing from 'components/InstantMarketing'
-import Button from 'components/Button/ActionButton'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { SearchContactDrawer } from 'components/SearchContactDrawer'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
@@ -37,6 +37,18 @@ class SendContactCard extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
+    // For controling the contact state from parent component
+    if (
+      state.contact !== props.contact ||
+      (state.contact &&
+        props.contact &&
+        props.contact.updated_at > state.contact.updated_at)
+    ) {
+      return {
+        contact: props.contact
+      }
+    }
+
     // For Opening Search Drawer
     if (
       props.isTriggered &&
@@ -72,7 +84,7 @@ class SendContactCard extends React.Component {
     }
   }
 
-  showBuilder = async () => {
+  showBuilder = async (contactId = this.props.contactId) => {
     if (this.state.contact) {
       return this.openBuilder()
     }
@@ -82,7 +94,7 @@ class SendContactCard extends React.Component {
     })
 
     try {
-      const response = await getContact(this.props.contactId)
+      const response = await getContact(contactId)
 
       this.setState(
         {
@@ -99,8 +111,7 @@ class SendContactCard extends React.Component {
   }
 
   openBuilder = () => {
-    // todo: removing c.summary
-    if (!idx(this.state, state => state.contact.summary.email)) {
+    if (!idx(this.state, state => state.contact.email)) {
       return this.setState({
         isMissingEmailModalOpen: true
       })
@@ -206,13 +217,27 @@ class SendContactCard extends React.Component {
   }
 
   get Recipients() {
-    return normalizeContactForEmailCompose(this.state.contact)
+    return normalizeContactsForEmailCompose([this.state.contact])
   }
 
   closeSocialDrawer = () =>
     this.setState({
       isSocialDrawerOpen: false
     })
+
+  getRef = () => {
+    const { actionRef } = this.props
+
+    if (!actionRef) {
+      return actionRef
+    }
+
+    actionRef.current = {
+      showBuilder: (contact = null, contactId = null) => {
+        this.setState({ contact }, () => this.showBuilder(contactId))
+      }
+    }
+  }
 
   render() {
     if (hasMarketingAccess(this.props.user) === false) {
@@ -230,10 +255,11 @@ class SendContactCard extends React.Component {
 
         {this.props.contact || this.props.contactId ? (
           <Button
-            appearance="outline"
+            color="secondary"
+            variant="outlined"
             onClick={this.showBuilder}
             disabled={this.state.isFetchingContact}
-            {...this.props.buttonStyle} // TODO: buttonStyle -> buttonProps
+            {...this.props.buttonProps}
           >
             {this.props.children}
           </Button>
@@ -290,6 +316,8 @@ class SendContactCard extends React.Component {
             onClose={this.closeSocialDrawer}
           />
         )}
+
+        <div ref={this.getRef} />
       </Fragment>
     )
   }
@@ -301,7 +329,12 @@ function mapStateToProps({ user }) {
   }
 }
 
-export default connect(
+const ConnectedAction = connect(
   mapStateToProps,
   { notify, confirmation }
 )(SendContactCard)
+
+// eslint-disable-next-line react/no-multi-comp
+export default React.forwardRef((props, ref) => (
+  <ConnectedAction {...props} actionRef={ref} />
+))

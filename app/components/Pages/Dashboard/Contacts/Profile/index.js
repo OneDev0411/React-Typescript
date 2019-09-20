@@ -3,7 +3,6 @@ import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 import { Helmet } from 'react-helmet'
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs'
 
 import { viewAs, viewAsEveryoneOnTeam } from 'utils/user-teams'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
@@ -14,17 +13,8 @@ import { updateContactQuery } from 'models/contacts/helpers/default-query'
 import { getContact } from 'models/contacts/get-contact'
 import { deleteContacts } from 'models/contacts/delete-contact'
 import { updateContactSelf } from 'models/contacts/update-contact-self'
-import getCRMTimeline from 'models/get-crm-timeline'
-import { getNotes } from 'models/contacts/helpers/get-notes'
 
-import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
-import { deleteAttribute } from 'models/contacts/delete-attribute'
-
-import NewTask from 'components/NewEvent'
-import {
-  selectDefinitionByName,
-  isLoadedContactAttrDefs
-} from 'reducers/contacts/attributeDefs'
+import { isLoadedContactAttrDefs } from 'reducers/contacts/attributeDefs'
 import { selectContact } from 'reducers/contacts/list'
 
 import { getContactsTags } from 'store_actions/contacts/get-contacts-tags'
@@ -38,34 +28,23 @@ import { Dates } from './Dates'
 import Deals from './Deals'
 import { Details } from './Details'
 import { Partner } from './Partner'
-import Tags from './Tags'
+import Tags from './Tags/TagsSection'
 import { ContactInfo } from './ContactInfo'
 import AddressesSection from './Addresses'
-import { AddNote } from './AddNote'
 import { Owner } from './Owner'
 import Delete from './Delete'
-import {
-  PageContainer,
-  ColumnsContainer,
-  SideColumnWrapper,
-  SecondColumn,
-  ThirdColumn,
-  PageWrapper,
-  Card,
-  TabsContainer
-} from './styled'
+import { PageContainer, SideColumn, MainColumn, PageWrapper } from './styled'
 
-import { Header } from './Header'
-import { Timeline } from './Timeline'
+import Header from './Header/Header'
+import Divider from './Divider'
+import Timeline from './Timeline'
 
 class ContactProfile extends React.Component {
   state = {
     contact: null,
     isDeleting: false,
     isUpdatingOwner: false,
-    isDesktopScreen: true,
-    isFetchingTimeline: true,
-    timeline: []
+    isDesktopScreen: true
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -82,8 +61,10 @@ class ContactProfile extends React.Component {
 
   componentDidMount = () => {
     this.detectScreenSize()
-    window.addEventListener('resize', this.detectScreenSize)
     this.initializeContact()
+
+    window.addEventListener('resize', this.detectScreenSize)
+
     window.socket.on('contact:touch', this.updateContact)
     window.socket.on('crm_task:create', this.fetchTimeline)
     window.socket.on('email_campaign:create', this.fetchTimeline)
@@ -108,6 +89,9 @@ class ContactProfile extends React.Component {
     window.socket.off('crm_task:create', this.fetchTimeline)
     window.socket.off('email_campaign:create', this.fetchTimeline)
   }
+
+  // creates a ref to the timeline
+  timelineRef = React.createRef()
 
   /**
    * Web page (document) title
@@ -173,76 +157,19 @@ class ContactProfile extends React.Component {
       if (this.props.fetchTags) {
         this.props.getContactsTags()
       }
-
-      this.fetchTimeline()
     })
   }
 
-  fetchTimeline = async () => {
-    try {
-      const timeline = await getCRMTimeline({
-        contact: this.props.params.id
-      })
-
-      this.setState(state => ({
-        isFetchingTimeline: false,
-        timeline: [...timeline, ...getNotes(state.contact)]
-      }))
-    } catch (error) {
-      console.log(error)
-      this.setState({ isFetchingTimeline: false })
-    }
-  }
+  /**
+   * refreshes timeline
+   */
+  fetchTimeline = () => setTimeout(this.timelineRef.current.refresh, 500)
 
   setContact = (newContact, fallback) =>
     this.setState(
       state => ({ contact: { ...state.contact, ...newContact } }),
       fallback
     )
-
-  filterTimelineById = (state, id) =>
-    state.timeline.filter(item => item.id !== id)
-
-  editEvent = updatedEvent =>
-    this.setState(state => ({
-      timeline: [
-        ...this.filterTimelineById(state, updatedEvent.id),
-        updatedEvent
-      ]
-    }))
-
-  deleteEvent = id =>
-    this.setState(state => ({
-      timeline: this.filterTimelineById(state, id)
-    }))
-
-  handleAddNote = async text => {
-    const contact = await upsertContactAttributes(this.state.contact.id, [
-      {
-        text,
-        attribute_def: selectDefinitionByName(this.props.attributeDefs, 'note')
-      }
-    ])
-
-    this.setContact(contact, this.fetchTimeline)
-  }
-
-  editNote = async note => {
-    const contact = await upsertContactAttributes(this.state.contact.id, [
-      {
-        id: note.id,
-        text: note.text
-      }
-    ])
-
-    this.setContact(contact, this.fetchTimeline)
-  }
-
-  deleteNote = async note => {
-    const response = await deleteAttribute(this.state.contact.id, note.id)
-
-    this.setContact(normalizeContact(response.data), this.fetchTimeline)
-  }
 
   onChangeOwner = async item => {
     this.setState({ isUpdatingOwner: true })
@@ -306,11 +233,6 @@ class ContactProfile extends React.Component {
       contact: associationNormalizer(contact)
     }
 
-    const thirdColumnSections = [
-      <Dates contact={contact} key="s1" />,
-      <Deals contact={contact} key="s2" />
-    ]
-
     const _props = {
       contact,
       submitCallback: this.setContact
@@ -321,117 +243,57 @@ class ContactProfile extends React.Component {
         <Helmet>
           <title>{this.documentTitle}</title>
         </Helmet>
-        <PageContainer>
-          <Header
-            contact={contact}
-            backUrl={
-              this.props.location.state && this.props.location.state.id
-                ? '/dashboard/contacts'
-                : null
-            }
-            closeButtonQuery={this.props.location.state}
-            addToFlowCallback={this.addToFlowCallback}
-          />
-
-          <ColumnsContainer>
-            <SideColumnWrapper>
-              {!this.state.isDesktopScreen && (
-                <Card>
-                  <Flows
-                    flows={contact.flows}
-                    contactId={contact.id}
-                    onStop={this.stopFlow}
-                    addCallback={this.addToFlowCallback}
-                  />
-                </Card>
-              )}
-              <Card>
-                <Tags contact={contact} />
-              </Card>
-              <Card>
-                {!this.state.isDesktopScreen && <Dates {..._props} />}
-
-                <ContactInfo {..._props} />
-
-                <AddressesSection {..._props} />
-
-                <Details {..._props} />
-
-                <Partner {..._props} />
-
-                {!this.state.isDesktopScreen && <Deals contact={contact} />}
-
-                <Owner
-                  onSelect={this.onChangeOwner}
-                  owner={contact.user}
-                  user={user}
-                  contact={contact}
-                  disabled={this.state.isUpdatingOwner}
-                />
-              </Card>
-              <Delete
-                handleDelete={this.delete}
-                isDeleting={this.state.isDeleting}
-              />
-            </SideColumnWrapper>
-
-            <SecondColumn>
-              <TabsContainer>
-                <Tabs>
-                  <TabList>
-                    <Tab>
-                      <span>Add Event</span>
-                    </Tab>
-                    <Tab>
-                      <span>Add Note</span>
-                    </Tab>
-                  </TabList>
-
-                  <TabPanels>
-                    <TabPanel>
-                      <NewTask
-                        user={user}
-                        submitCallback={this.addEvent}
-                        defaultAssociation={defaultAssociation}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <AddNote
-                        contact={contact}
-                        onSubmit={this.handleAddNote}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </TabsContainer>
-
-              <Timeline
-                contact={contact}
-                defaultAssociation={defaultAssociation}
-                deleteEventHandler={this.deleteEvent}
-                deleteNoteHandler={this.deleteNote}
-                editEventHandler={this.editEvent}
-                editNoteHandler={this.editNote}
-                isFetching={this.state.isFetchingTimeline}
-                items={this.state.timeline}
-                user={user}
-              />
-            </SecondColumn>
-
-            {this.state.isDesktopScreen && (
-              <ThirdColumn>
-                <Card>
-                  <Flows
-                    flows={contact.flows}
-                    contactId={contact.id}
-                    onStop={this.stopFlow}
-                    addCallback={this.addToFlowCallback}
-                  />
-                </Card>
-                <Card>{thirdColumnSections}</Card>
-              </ThirdColumn>
-            )}
-          </ColumnsContainer>
+        <PageContainer className="u-scrollbar--thinner">
+          <SideColumn>
+            <Header
+              contact={contact}
+              backUrl={
+                this.props.location.state && this.props.location.state.id
+                  ? '/dashboard/contacts'
+                  : null
+              }
+              closeButtonQuery={this.props.location.state}
+              addToFlowCallback={this.addToFlowCallback}
+            />
+            <Divider />
+            <Flows
+              flows={contact.flows}
+              contactId={contact.id}
+              onStop={this.stopFlow}
+              addCallback={this.addToFlowCallback}
+            />
+            <Divider />
+            <Tags contact={contact} />
+            <Divider />
+            <Dates {..._props} />
+            <ContactInfo {..._props} />
+            <AddressesSection {..._props} />
+            <Details {..._props} />
+            <Partner {..._props} />
+            <Divider />
+            <Deals contact={contact} />
+            <Divider />
+            <Owner
+              onSelect={this.onChangeOwner}
+              owner={contact.user}
+              user={user}
+              contact={contact}
+              disabled={this.state.isUpdatingOwner}
+            />
+            <Divider />
+            <Delete
+              handleDelete={this.delete}
+              isDeleting={this.state.isDeleting}
+            />
+          </SideColumn>
+          <MainColumn>
+            <Timeline
+              ref={this.timelineRef}
+              contact={this.state.contact}
+              defaultAssociation={defaultAssociation}
+              onCreateNote={this.setContact}
+            />
+          </MainColumn>
         </PageContainer>
       </PageWrapper>
     )
@@ -465,7 +327,3 @@ export default withRouter(
     }
   )(ContactProfile)
 )
-
-// todo
-// infinit scroll + lazy loading
-// loading new event associationas after adding to timeline

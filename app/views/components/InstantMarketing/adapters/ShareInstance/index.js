@@ -8,6 +8,7 @@ import SocialDrawer from '../../components/SocialDrawer'
 import hasMarketingAccess from '../../helpers/has-marketing-access'
 
 import { getMedium } from './helpers'
+import getTemplateInstancePreviewImage from '../../helpers/get-template-preview-image'
 
 class ShareInstance extends React.Component {
   state = {
@@ -58,9 +59,15 @@ class ShareInstance extends React.Component {
   closeSocialDrawer = () =>
     this.setState({ isSocialDrawerOpen: false }, this.props.handleTrigger)
 
+  /**
+   *
+   * @param email {IEmailCampaignInput}
+   * @return IEmailCampaignInput
+   */
   getEmail = email => ({
     ...email,
-    html: this.props.instance.html
+    html: this.props.instance.html,
+    template: this.props.instance.id
   })
 
   onEmailSent = () => {
@@ -107,7 +114,7 @@ class ShareInstance extends React.Component {
             hasStaticBody
             initialValues={{
               from: props.user,
-              body: props.instance.html
+              body: getTemplateInstancePreviewImage(props.instance)
             }}
             getEmail={this.getEmail}
             onSent={this.onEmailSent}

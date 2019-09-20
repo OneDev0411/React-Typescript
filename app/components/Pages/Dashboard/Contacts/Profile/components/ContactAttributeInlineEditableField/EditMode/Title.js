@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Flex from 'styled-flex-component'
+import { Box } from '@material-ui/core'
 
 import { Checkbox } from 'components/Checkbox'
 import { Label } from 'components/inline-editable-fields/styled'
@@ -14,8 +14,8 @@ export function Title(props) {
   const { attribute } = props
 
   return (
-    <Flex alignCenter style={{ marginBottom: '0.25em' }}>
-      <Label style={{ marginRight: '0.5em' }}>
+    <Box mb={1} display="flex" alignItems="center">
+      <Label style={{ marginRight: '1rem' }}>
         {attribute.attribute_def.label}
       </Label>
       {!attribute.attribute_def.singular && (
@@ -27,6 +27,6 @@ export function Title(props) {
           Primary
         </Checkbox>
       )}
-    </Flex>
+    </Box>
   )
 }
