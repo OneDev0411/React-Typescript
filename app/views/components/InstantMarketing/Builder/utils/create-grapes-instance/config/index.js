@@ -35,14 +35,5 @@ export default {
   },
   traitManager: {
     appendTo: '.gjs-pn-views-container'
-  },
-  panels: {
-    stylePrefix: 'pn-',
-    defaults: [
-      {
-        id: 'commands',
-        buttons: [{}]
-      }
-    ]
   }
 }
