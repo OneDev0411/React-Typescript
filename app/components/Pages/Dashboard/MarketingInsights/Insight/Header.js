@@ -13,9 +13,10 @@ Header.propsType = {
 Header.defaultProps = {
   title: ''
 }
+
 function Header(props) {
   return (
-    <PageHeader isFlat>
+    <PageHeader isFlat style={{ marginBottom: 0 }}>
       <PageHeader.Title showBackButton={false}>
         <PageHeader.Heading>{show_title(props.title)}</PageHeader.Heading>
       </PageHeader.Title>
