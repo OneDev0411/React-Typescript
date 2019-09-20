@@ -51,7 +51,7 @@ function getEvents(
     const index = getEventIndex(event, range)
 
     const [year, month, day] = index.split('/')
-    const monthId = `${year}/${month}`
+    const monthId = `${year}/${month}/1`
     const dayId = `${year}/${month}/${day}`
 
     const dayEvents =
@@ -103,7 +103,7 @@ function getDaysInRange(range: NumberRange, contrariwise: boolean) {
     const month = date.getUTCMonth() + 1
     const day = date.getUTCDate()
 
-    const monthId = `${year}/${month}`
+    const monthId = `${year}/${month}/1`
     const dayId = `${year}/${month}/${day}`
 
     return {
