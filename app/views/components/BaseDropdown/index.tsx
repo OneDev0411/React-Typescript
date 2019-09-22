@@ -35,7 +35,7 @@ interface Props {
    * menu content.
    */
   renderMenu: (renderProps: { close: () => void }) => ReactNode
-  buttonLabel: ReactNode
+  buttonLabel?: ReactNode
   /**
    * props to be passed to DropdownToggleButton if no renderDropdownButton
    * is provided.

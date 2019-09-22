@@ -28,6 +28,7 @@ declare interface ICalendarEvent {
   title: string
   type: string
   type_label: string
+  thread: string | null
   users: UUID[]
   full_contact?: IContact
   full_deal?: IDeal
