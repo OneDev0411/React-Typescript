@@ -64,10 +64,11 @@ export function EventTitle({ event }: Props) {
   }
 
   if (
-    ['email_campaign', 'email_campaign_recipient'].includes(
+    event.object_type === 'email_thread_recipient' ||
+    (['email_campaign', 'email_campaign_recipient'].includes(
       event.object_type
     ) &&
-    event.event_type === 'scheduled_email'
+      event.event_type === 'scheduled_email')
   ) {
     return (
       <div style={styles.title}>
