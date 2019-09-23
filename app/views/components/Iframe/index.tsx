@@ -56,7 +56,7 @@ export function Iframe({
   // Updating height only on load, causes a flicker. with this effect,
   // we prevent it
   useEffect(() => {
-    setImmediate(updateHeight)
+    setTimeout(updateHeight)
   }, [props.srcDoc])
 
   const onLoad: EventHandler<any> = (...args) => {

@@ -1,6 +1,12 @@
 import * as React from 'react'
 
-import { Box, Typography } from '@material-ui/core'
+import {
+  Box,
+  createStyles,
+  makeStyles,
+  Theme,
+  Typography
+} from '@material-ui/core'
 import fecha from 'fecha'
 import classNames from 'classnames'
 
@@ -21,12 +27,27 @@ interface Props {
   onToggleCollapsed: undefined | ((collapsed: boolean) => void)
 }
 
+const styles = (theme: Theme) =>
+  createStyles({
+    header: {
+      position: 'sticky',
+      backgroundColor: theme.palette.background.paper,
+      top: 0,
+      display: 'flex',
+      alignItems: 'center',
+      padding: theme.spacing(2)
+    }
+  })
+const useStyles = makeStyles(styles, { name: 'EmailThreadItem' })
+
 export function EmailThreadItem({
   collapsed,
   email,
-  onToggleCollapsed
+  onToggleCollapsed,
+  ...props
 }: Props) {
   const iconClasses = useIconStyles()
+  const classes = useStyles(props)
 
   const onReply = () => {}
   const onForward = () => {}
@@ -34,12 +55,10 @@ export function EmailThreadItem({
   return (
     <>
       {/* header */}
-      <Box
-        display="flex"
-        alignItems="center"
+      <div
+        className={classes.header}
         role={onToggleCollapsed && 'button'}
         onClick={onToggleCollapsed && (() => onToggleCollapsed(!collapsed))}
-        p={2}
       >
         <Box mr={2}>
           <Avatar title={email.from} />
@@ -74,7 +93,7 @@ export function EmailThreadItem({
             )}
           </Box>
         </Box>
-      </Box>
+      </div>
       {/* content */}
       {!collapsed && (
         <Box p={2} pl={8}>
