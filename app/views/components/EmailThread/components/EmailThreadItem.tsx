@@ -4,6 +4,8 @@ import { Box, Typography } from '@material-ui/core'
 import fecha from 'fecha'
 import classNames from 'classnames'
 
+import { Iframe } from 'components/Iframe'
+
 import Avatar from '../../Avatar'
 import IconAttachment from '../../SvgIcons/Attachment/IconAttachment'
 import { useIconStyles } from '../../../../styles/use-icon-styles'
@@ -60,15 +62,7 @@ export function EmailThreadItem({ collapsed, email }: Props) {
       </Box>
       {!collapsed && (
         <Box p={2} pl={8}>
-          <iframe
-            title="Email body"
-            width="100%"
-            srcDoc={email.html_body}
-            style={{
-              border: '0',
-              flex: '1'
-            }}
-          />
+          <Iframe title="Email body" srcDoc={email.html_body} />
         </Box>
       )}
     </>

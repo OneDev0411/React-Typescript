@@ -8,16 +8,14 @@ interface Props {
 }
 
 export function EmailThread({ thread, style = {} }: Props) {
-  const emails = thread
-
   return (
     <div style={style}>
-      {emails.map((email, index) => {
+      {thread.map((email, index) => {
         return (
           <EmailThreadItem
             key={email.id}
             email={email}
-            collapsed={index < emails.length - 1}
+            collapsed={index < thread.length - 1}
           />
         )
       })}
