@@ -29,6 +29,7 @@ export function EmailThread({ thread, style = {} }: Props) {
             <EmailThreadItem
               email={email}
               onToggleCollapsed={onToggleCollapsed}
+              showBottomButtons={last}
               collapsed={collapsed}
             />
             {!last ? <Divider /> : null}

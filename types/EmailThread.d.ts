@@ -1,5 +1,13 @@
+declare interface IEmailAttachment {
+  contentType: string
+  id: string
+  isInline: boolean
+  name: string
+  size: number
+}
+
 declare interface IEmailThreadEmail {
-  attachments: unknown[]
+  attachments: IEmailAttachment[]
   bcc: string[]
   cc: string[]
   from: string
