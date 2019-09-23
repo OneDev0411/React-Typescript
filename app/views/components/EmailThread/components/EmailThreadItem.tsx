@@ -15,9 +15,17 @@ import { EmailItemRecipientsMenu } from './EmailItemRecipientsMenu'
 interface Props {
   email: IEmailThreadEmail
   collapsed: boolean
+  /**
+   * if not undefined, makes the item header clickable which toggles collapsed
+   * */
+  onToggleCollapsed: undefined | ((collapsed: boolean) => void)
 }
 
-export function EmailThreadItem({ collapsed, email }: Props) {
+export function EmailThreadItem({
+  collapsed,
+  email,
+  onToggleCollapsed
+}: Props) {
   const iconClasses = useIconStyles()
 
   const onReply = () => {}
@@ -25,11 +33,18 @@ export function EmailThreadItem({ collapsed, email }: Props) {
 
   return (
     <>
-      <Box display="flex" alignItems="center" p={2}>
+      {/* header */}
+      <Box
+        display="flex"
+        alignItems="center"
+        role={onToggleCollapsed && 'button'}
+        onClick={onToggleCollapsed && (() => onToggleCollapsed(!collapsed))}
+        p={2}
+      >
         <Box mr={2}>
           <Avatar title={email.from} />
         </Box>
-        <Box flex={1} mt={1} mr={2} overflow="hidden">
+        <Box flex={1} mr={2} overflow="hidden">
           <Typography style={{ lineHeight: 1.3 }}>{email.from}</Typography>
           <Typography color="textSecondary" noWrap>
             {collapsed ? (
@@ -40,7 +55,7 @@ export function EmailThreadItem({ collapsed, email }: Props) {
           </Typography>
         </Box>
         <Box alignSelf="start">
-          <Box display="flex" alignItems="center">
+          <Box display="flex" alignItems="center" height="1.25rem">
             {email.has_attachments && (
               <IconAttachment
                 style={{ transform: 'rotate(90deg)' }}
@@ -60,6 +75,7 @@ export function EmailThreadItem({ collapsed, email }: Props) {
           </Box>
         </Box>
       </Box>
+      {/* content */}
       {!collapsed && (
         <Box p={2} pl={8}>
           <Iframe title="Email body" srcDoc={email.html_body} />
