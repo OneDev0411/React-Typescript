@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect } from 'react'
 
-import { Dialog } from '@material-ui/core'
+import { Box, Dialog } from '@material-ui/core'
 
 import { DialogProps } from '@material-ui/core/Dialog'
 
@@ -9,6 +9,7 @@ import { useAsyncValue } from 'hooks/use-async-value'
 
 import LoadingContainer from '../LoadingContainer'
 import { EmailThread } from '../EmailThread'
+import { DialogTitle } from '../DialogTitle'
 
 interface Props extends DialogProps {
   /**
@@ -39,10 +40,23 @@ export function EmailThreadModal({ open, threadKey, ...otherProps }: Props) {
   if (loading) {
     content = <LoadingContainer style={{ minHeight: '15rem' }} />
   } else if (thread) {
-    content = <EmailThread thread={thread} />
+    content = (
+      <>
+        <DialogTitle
+          onClose={event => {
+            otherProps.onClose && otherProps.onClose(event, 'escapeKeyDown')
+          }}
+        >
+          {thread[0] && thread[0].subject}
+        </DialogTitle>
+        <Box overflow="auto">
+          <EmailThread thread={thread} />
+        </Box>
+      </>
+    )
   } else if (error) {
     // TODO: error view
-    content = ''
+    content = 'Could not load emails'
   }
 
   return (

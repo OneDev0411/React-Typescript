@@ -48,7 +48,7 @@ const styles = (theme: Theme) =>
       top: 0,
       display: 'flex',
       alignItems: 'center',
-      padding: theme.spacing(2)
+      padding: theme.spacing(2, 2.5)
     },
     actionButton: {
       marginRight: `${theme.spacing(1)}px`
@@ -124,7 +124,7 @@ export function EmailThreadItem({
       {/* content */}
       {!collapsed && (
         <>
-          <Box p={2} pl={8}>
+          <Box p={2} pl={9}>
             <Iframe title="Email body" srcDoc={email.html_body} />
 
             {email.attachments.map(attachment => (
@@ -140,7 +140,7 @@ export function EmailThreadItem({
             ))}
 
             {showBottomButtons && (
-              <div>
+              <Box mt={1}>
                 <Button
                   className={classes.actionButton}
                   onClick={openReply}
@@ -165,7 +165,7 @@ export function EmailThreadItem({
                   <IconForward className={iconClassName} />
                   Forward
                 </Button>
-              </div>
+              </Box>
             )}
           </Box>
         </>

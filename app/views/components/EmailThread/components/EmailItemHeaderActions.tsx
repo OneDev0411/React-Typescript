@@ -8,7 +8,8 @@ import {
   makeStyles,
   Menu,
   MenuItem,
-  Theme
+  Theme,
+  Tooltip
 } from '@material-ui/core'
 
 import { useMenu } from 'hooks/use-menu'
@@ -28,7 +29,7 @@ interface Props {
 const styles = (theme: Theme) =>
   createStyles({
     menu: {
-      minWidth: '20rem'
+      minWidth: '15rem'
     }
   })
 
@@ -50,28 +51,32 @@ export function EmailItemHeaderActions(
 
   return (
     <Box ml={1} onClick={e => e.stopPropagation()}>
-      <IconButton onClick={props.onReply}>
-        <IconReply size={iconSizes.small} />
-      </IconButton>
-      <IconButton {...triggerProps}>
-        <IconVerticalDocs
-          size={iconSizes.small}
-          style={{ fill: 'currentColor' }}
-        />
-      </IconButton>
+      <Tooltip title="Reply">
+        <IconButton onClick={props.onReply}>
+          <IconReply size={iconSizes.small} />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="More">
+        <IconButton {...triggerProps}>
+          <IconVerticalDocs
+            size={iconSizes.small}
+            style={{ fill: 'currentColor' }}
+          />
+        </IconButton>
+      </Tooltip>
       <Menu
         {...menuProps}
         classes={{ paper: classes.menu }}
         anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
       >
-        <MenuItem onClick={select(props.onReply)}>
+        <MenuItem dense onClick={select(props.onReply)}>
           <ListItemIcon>
             <IconReply size={iconSizes.small} />
           </ListItemIcon>
           <ListItemText>Reply</ListItemText>
         </MenuItem>
-        <MenuItem onClick={select(props.onForward)}>
+        <MenuItem dense onClick={select(props.onForward)}>
           <ListItemIcon>
             <IconForward size={iconSizes.small} />
           </ListItemIcon>
