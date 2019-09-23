@@ -49,7 +49,7 @@ export function EmailItemHeaderActions(
   }
 
   return (
-    <Box ml={1}>
+    <Box ml={1} onClick={e => e.stopPropagation()}>
       <IconButton onClick={props.onReply}>
         <IconReply size={iconSizes.small} />
       </IconButton>

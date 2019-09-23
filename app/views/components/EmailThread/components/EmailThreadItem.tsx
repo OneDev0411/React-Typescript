@@ -19,7 +19,7 @@ import Avatar from '../../Avatar'
 import IconAttachment from '../../SvgIcons/Attachment/IconAttachment'
 import { useIconStyles } from '../../../../styles/use-icon-styles'
 import { EmailItemHeaderActions } from './EmailItemHeaderActions'
-import { EmailItemRecipientsMenu } from './EmailItemRecipientsMenu'
+import { EmailItemRecipients } from './EmailItemRecipients'
 import IconReply from '../../SvgIcons/Reply/IconReply'
 import IconForward from '../../SvgIcons/Forward/IconForward'
 import { Attachment } from '../../EmailCompose/components/Attachment'
@@ -94,11 +94,7 @@ export function EmailThreadItem({
         <Box flex={1} mr={2} overflow="hidden">
           <Typography style={{ lineHeight: 1.3 }}>{email.from}</Typography>
           <Typography color="textSecondary" noWrap>
-            {collapsed ? (
-              email.snippet
-            ) : (
-              <EmailItemRecipientsMenu email={email} />
-            )}
+            {collapsed ? email.snippet : <EmailItemRecipients email={email} />}
           </Typography>
         </Box>
         <Box alignSelf="start">
