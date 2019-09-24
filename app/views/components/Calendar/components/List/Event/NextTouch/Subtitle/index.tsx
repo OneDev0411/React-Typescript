@@ -5,7 +5,7 @@ interface Props {
   event: ICalendarEvent
 }
 
-export function TouchDate({ event }: Props) {
+export function TouchDateSubtitle({ event }: Props) {
   if (!event.full_contact) {
     return null
   }

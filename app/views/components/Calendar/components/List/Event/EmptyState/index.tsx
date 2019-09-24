@@ -13,7 +13,7 @@ const emptyRowStyles = {
   color: '#536280'
 }
 
-export function EventEmptyState({ event, style }: Props) {
+export function EmptyState({ event, style }: Props) {
   return (
     <>
       <div style={style}>
