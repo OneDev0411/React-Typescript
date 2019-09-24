@@ -4,7 +4,7 @@ import Flex, { FlexItem } from 'styled-flex-component'
 
 import * as React from 'react'
 
-import { Modal, ModalHeader } from 'components/Modal/index'
+import { Modal, ModalHeader } from 'components/Modal'
 import { TextInput } from 'components/Forms/TextInput'
 import { SelectInput } from 'components/Forms/SelectInput'
 

@@ -12,7 +12,7 @@ import { AnyAction } from 'redux'
 
 import { ThunkDispatch } from 'redux-thunk'
 
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 import PageHeader from 'components/PageHeader'
 
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'

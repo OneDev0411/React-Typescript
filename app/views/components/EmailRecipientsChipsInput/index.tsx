@@ -17,7 +17,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core'
 import { searchContacts } from 'models/contacts/search-contacts'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { getSavedSegments } from 'actions/filter-segments/get-saved-segment'
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import { getSegments, isListFetched } from 'reducers/filter-segments'
 

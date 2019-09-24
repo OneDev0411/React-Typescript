@@ -1,7 +1,7 @@
 import { uniq } from 'lodash'
 
 import { getDefaultList } from 'reducers/filter-segments'
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 
 import { getActiveTeamSettings } from 'utils/user-teams'
 

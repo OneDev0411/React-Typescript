@@ -5,7 +5,7 @@ import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
 import { createStyles, makeStyles, Theme, Typography } from '@material-ui/core'
 
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 import {
   selectEmailTemplates,
   selectEmailTemplatesIsFetching

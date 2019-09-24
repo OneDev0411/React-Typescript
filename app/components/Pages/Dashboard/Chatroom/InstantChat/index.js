@@ -1,8 +1,10 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
+
 import ChatPopups from '../Popups'
 import Chatbar from '../Chatbar'
-import Chatroom from '../index'
+
+import Chatroom from '..'
 
 const InstantChat = ({ user, chatroom }) => (
   <Fragment>

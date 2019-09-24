@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import PageSideNav from 'components/PageSideNav'
 import SideNavSection from 'components/PageSideNav/SideNavSection'
 import SideNavTitle from 'components/PageSideNav/SideNavTitle'
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 
 import { ProfileTabs } from './components/Tabs'
 

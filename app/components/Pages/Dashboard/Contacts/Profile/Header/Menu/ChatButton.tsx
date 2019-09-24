@@ -5,7 +5,7 @@ import { ThunkDispatch } from 'redux-thunk'
 import { Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 
 import { createRoom } from 'actions/chatroom/room'
 

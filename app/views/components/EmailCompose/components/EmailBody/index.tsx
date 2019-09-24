@@ -13,7 +13,7 @@ import { connect } from 'react-redux'
 
 import { TextEditor } from 'components/TextEditor'
 import Loading from 'components/LoadingContainer'
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'

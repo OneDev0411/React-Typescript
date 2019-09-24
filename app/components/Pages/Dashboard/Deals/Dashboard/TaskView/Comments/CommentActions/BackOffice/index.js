@@ -3,7 +3,7 @@ import React, { Fragment } from 'react'
 import Flex from 'styled-flex-component'
 
 import ActionButton from 'components/Button/ActionButton'
-import ToolTip from 'views/components/tooltip/index'
+import ToolTip from 'views/components/tooltip'
 
 import CheckmarkIcon from 'components/SvgIcons/Checkmark/IconCheckmark'
 import DeleteIcon from 'components/SvgIcons/Close/CloseIcon'

@@ -3,7 +3,7 @@ import { updateDeal } from '../../../store_actions/deals'
 import { viewAs, viewAsEveryoneOnTeam } from '../../../utils/user-teams'
 import store from '../../../stores'
 
-import Socket from '../index'
+import Socket from '..'
 
 export default class DealSocket extends Socket {
   constructor(user) {

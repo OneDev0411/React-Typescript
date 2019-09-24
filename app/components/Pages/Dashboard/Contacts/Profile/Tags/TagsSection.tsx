@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Button } from '@material-ui/core'
 
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
 

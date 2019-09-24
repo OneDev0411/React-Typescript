@@ -5,7 +5,7 @@ import attributeDefs from 'fixtures/contacts/attribute-defs.json'
 import tags from 'fixtures/contacts/tags.json'
 import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
 
-import { TagsList } from './index'
+import { TagsList } from '.'
 
 describe('tagsList', () => {
   it('should render', () => {
