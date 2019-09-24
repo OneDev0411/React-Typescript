@@ -17,7 +17,7 @@ interface Props {
 }
 
 const events: {
-  component: any
+  component({ event, style, nextItem }: Props): JSX.Element
   condition(event: ICalendarEvent): boolean
 }[] = [
   {
@@ -57,16 +57,10 @@ const events: {
  * renders the given calendar event
  */
 export function Event({ event, nextItem, style }: Props) {
-  const sharedProps = {
-    style,
-    event,
-    nextItem
-  }
-
   const item = events.find(item => item.condition(event) === true)
 
   if (item) {
-    return <item.component {...sharedProps} />
+    return <item.component style={style} event={event} nextItem={nextItem} />
   }
 
   return null
