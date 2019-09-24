@@ -85,7 +85,7 @@ export function AddDealFile({
     }
   }
 
-  const allDealDocuments: IDealFile[] =
+  const allDealFiles: IDealFile[] =
     useDeepMemo(() => {
       return (
         (deal &&
@@ -99,16 +99,16 @@ export function AddDealFile({
       )
     }, [initialAttachments, deal, envelopes, checklists, tasks]) || []
 
-  const fileToDocument = (file: IFile): IDealFile | undefined => {
-    return allDealDocuments.find(document => document.id === file.id)
+  const fileToDealFile = (file: IFile): IDealFile | undefined => {
+    return allDealFiles.find(document => document.id === file.id)
   }
 
-  const selectedDocuments: IDealFile[] | IFile[] = (
-    props.input.value || []
-  ).map((file: IFile) => fileToDocument(file) || file)
+  const selectedDealFiles: IDealFile[] = (props.input.value || [])
+    .map((file: IFile) => fileToDealFile(file))
+    .filter(notUndefined)
 
-  const initialDocuments = (initialAttachments || [])
-    .map(fileToDocument)
+  const initialDealFiles = (initialAttachments || [])
+    .map(fileToDealFile)
     .filter(notUndefined)
 
   return (
@@ -141,8 +141,8 @@ export function AddDealFile({
             showBackdrop: false
           }}
           showStashFiles={false}
-          initialAttachments={initialDocuments}
-          defaultSelectedItems={selectedDocuments}
+          initialAttachments={initialDealFiles}
+          defaultSelectedItems={selectedDealFiles}
           deal={deal}
           onChangeSelectedDocuments={handleChangeSelectedDealFile}
           onClose={closeDealFilesDrawer}
