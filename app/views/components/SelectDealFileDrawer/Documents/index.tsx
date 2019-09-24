@@ -1,6 +1,6 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { addNotification as notify } from 'reapop'
+import { connect, Dispatch } from 'react-redux'
+import { addNotification as notify, Notification } from 'reapop'
 
 import fecha from 'fecha'
 
@@ -14,13 +14,9 @@ import { selectDealTasks } from 'reducers/deals/tasks'
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 import { getChecklistById } from 'reducers/deals/checklists'
 
-import { moveTaskFile } from 'actions/deals'
-
 import Tooltip from 'components/tooltip'
 import LinkButton from 'components/Button/LinkButton'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
-
-import { normalizeAttachment } from '../helpers/normalize-attachment'
 
 import {
   ChecklistName,
@@ -33,19 +29,40 @@ import {
 } from './styled'
 import { getAllDealDocuments } from '../helpers/get-all-deal-documents'
 
-export class DocumentRow extends React.Component {
+interface Props {
+  deal: IDeal
+  showStashFiles: boolean
+  initialAttachments: IDealFile[]
+  selectedItems: IDealFile
+  onToggleItem(file: IDealFile): void
+}
+
+interface State {
+  searchFilter: string
+  selectedStashFile: IDealFile | null | undefined
+}
+
+interface StateProps {
+  user: IUser
+  checklists: IDealChecklist[]
+  tasks: IDealTask[]
+  envelopes: IDealEnvelope[]
+  notify(notification: Notification): (dispatch: Dispatch<any>) => Notification
+}
+
+export class DocumentRow extends React.Component<Props & StateProps, State> {
   state = {
     searchFilter: '',
     selectedStashFile: null
   }
 
-  handleOpenMoveFileDrawer = document => {
-    const file = this.props.deal.files.find(
-      file => file.id === document.file_id
+  handleOpenMoveFileDrawer = (document: IDealFile) => {
+    const file = (this.props.deal.files || []).find(
+      file => file.id === document.id
     )
 
     this.setState({
-      selectedStashFile: file
+      selectedStashFile: file as IDealFile
     })
   }
 
@@ -55,26 +72,21 @@ export class DocumentRow extends React.Component {
     })
   }
 
-  handleSearch = searchFilter =>
+  handleSearch = (searchFilter: string) => {
     this.setState({
       searchFilter
     })
+  }
 
-  handleMoveComplete = (task, file) => {
-    const item = normalizeAttachment({
-      type: 'file',
-      task,
-      file
-    })
-
-    this.props.onToggleItem(item)
+  handleMoveComplete = (task: IDealTask, file: IDealFile) => {
+    this.props.onToggleItem(file)
 
     this.props.notify({
       message: 'The file is moved and selected',
       status: 'success'
     })
 
-    const element = document.getElementById(item.id)
+    const element = document.getElementById(file.id)
 
     if (element) {
       element.scrollIntoView({
@@ -83,37 +95,20 @@ export class DocumentRow extends React.Component {
     }
   }
 
-  onSelectTask = async (taskId = null, notifyOffice = false) => {
-    const task = this.props.tasks.find(task => task.id === taskId)
-
-    try {
-      return this.props.moveTaskFile(
-        this.props.user,
-        this.props.deal,
-        task,
-        this.props.stashFile,
-        notifyOffice
-      )
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  isInitialAttachment = document => {
+  isInitialAttachment = (document: IDealFile) => {
     return (
       this.props.initialAttachments &&
       Object.values(this.props.initialAttachments).some(item => {
-        const key = document.type === 'form' ? 'task_id' : 'file_id'
-
-        return item[key] === document[key]
+        return item.id === document.id
       })
     )
   }
 
-  getFormattedDate = date => fecha.format(new Date(date), 'MMM DD YYYY, h:mm A')
+  getFormattedDate = (date: number) =>
+    fecha.format(new Date(date * 1000), 'MMM DD YYYY, h:mm A')
 
   getDocuments = () => {
-    const documents = getAllDealDocuments(
+    const files = getAllDealDocuments(
       this.props.deal,
       this.props.envelopes,
       this.props.tasks,
@@ -121,18 +116,16 @@ export class DocumentRow extends React.Component {
     )
 
     // get stash files
-    const stashFiles = documents.filter(document => !document.task)
+    const stashFiles = files.filter(files => !files.task)
 
-    const sortedList = documents
+    const sortedList = files
       .filter(item => this.isInitialAttachment(item) === false && item.task)
-      .sort((a, b) => b.date - a.date)
+      .sort((a, b) => b.created_at - a.created_at)
 
     return Object.values(this.props.initialAttachments)
       .concat(sortedList, stashFiles)
-      .filter(document =>
-        document.title
-          .toLowerCase()
-          .includes(this.state.searchFilter.toLowerCase())
+      .filter(file =>
+        file.name.toLowerCase().includes(this.state.searchFilter.toLowerCase())
       )
   }
 
@@ -176,8 +169,8 @@ export class DocumentRow extends React.Component {
                 </Tooltip>
 
                 <NameSection onClick={() => this.props.onToggleItem(document)}>
-                  <Title isSelectable={!!checklist}>
-                    <TextMiddleTruncate text={document.title} maxLength={45} />
+                  <Title selectable={!!checklist}>
+                    <TextMiddleTruncate text={document.name} maxLength={45} />
                   </Title>
 
                   <ChecklistName error={!checklist}>
@@ -185,7 +178,7 @@ export class DocumentRow extends React.Component {
                   </ChecklistName>
 
                   <DateTime>
-                    Uploaded at {this.getFormattedDate(document.date)}
+                    Uploaded at {this.getFormattedDate(document.created_at)}
                   </DateTime>
                 </NameSection>
               </Flex>
@@ -227,7 +220,7 @@ export class DocumentRow extends React.Component {
   }
 }
 
-function mapStateToProps({ deals, user }, props) {
+function mapStateToProps({ deals, user }, props: Props) {
   return {
     user,
     checklists: deals.checklists,
@@ -238,5 +231,5 @@ function mapStateToProps({ deals, user }, props) {
 
 export default connect(
   mapStateToProps,
-  { moveTaskFile, notify }
+  { notify }
 )(DocumentRow)

@@ -2,6 +2,14 @@ import styled from 'styled-components'
 
 import { primary } from 'views/utils/colors'
 
+interface PrimaryActionProps {
+  hasSecondaryActions: boolean
+}
+
+interface MenuItemProps {
+  disabled: boolean
+}
+
 export const PrimaryAction = styled.div`
   display: flex;
   align-items: center;
@@ -9,7 +17,8 @@ export const PrimaryAction = styled.div`
   font-size: 1rem;
   font-weight: 500;
   height: 100%;
-  width: ${props => (props.hasSecondaryActions ? '10rem' : '12.3rem')};
+  width: ${(props: PrimaryActionProps) =>
+    props.hasSecondaryActions ? '10rem' : '12.3rem'};
 
   :hover {
     color: ${primary};
@@ -75,10 +84,10 @@ export const MenuContainer = styled.div`
 export const MenuItem = styled.div`
   font-size: 1rem;
   font-weight: 500;
-  color: ${props => (props.disabled ? 'gray' : '#000')};
+  color: ${(props: MenuItemProps) => (props.disabled ? 'gray' : '#000')};
   padding: 0.5rem 1rem;
 
-  ${props =>
+  ${(props: MenuItemProps) =>
     props.disabled === false &&
     `
     :hover {

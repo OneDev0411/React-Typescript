@@ -1,18 +1,9 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import Downshift from 'downshift'
 
-import _ from 'underscore'
-
-import {
-  changeNeedsAttention,
-  changeTaskStatus,
-  renameTaskFile,
-  setSelectedTask
-} from 'actions/deals'
-import { confirmation } from 'actions/confirmation'
+import { setSelectedTask } from 'actions/deals'
 import { isBackOffice } from 'utils/user-teams'
 
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
@@ -21,14 +12,22 @@ import Tooltip from 'components/tooltip'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 
+import { IAppState } from 'reducers'
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 
-import { selectActions } from './helpers/select-actions'
-import { getEsignAttachments } from './helpers/get-esign-attachments'
+import { getTaskEnvelopes } from 'views/utils/deal-files/get-task-envelopes'
 
-import { getTaskEnvelopes } from '../../utils/get-task-envelopes'
-import { getDocumentEnvelopes } from '../../utils/get-document-envelopes'
-import { getDocumentLastState } from '../../utils/get-document-last-state'
+import { getDocumentEnvelopes } from 'views/utils/deal-files/get-document-envelopes'
+
+import { getEsignAttachments } from 'views/utils/deal-files/get-esign-attachments'
+
+import { getLastStates } from 'views/utils/deal-files/get-document-last-state'
+
+import {
+  selectActions,
+  ActionItem,
+  ActionConditions
+} from './helpers/select-actions'
 
 import { SelectItemDrawer } from './components/SelectItemDrawer'
 
@@ -59,8 +58,41 @@ import {
   PrimaryAction
 } from './styled'
 
-class ActionsButton extends React.Component {
-  constructor(props) {
+interface Props {
+  type: 'task' | 'document'
+  deal: IDeal
+  task: IDealTask
+  document: IDealTask | IFile
+}
+
+interface State {
+  isMenuOpen: boolean
+  isSignatureFormOpen: boolean
+  isPdfSplitterOpen: boolean
+  isTasksDrawerOpen: boolean
+  isComposeEmailOpen: boolean
+  multipleItemsSelection: {
+    items: IDealFile[]
+    title: string
+    actionTitle: string
+    onSelect(file: IDealFile): void
+  } | null
+}
+
+interface StateProps {
+  user: IUser
+  envelopes: IDealEnvelope[]
+  isBackOffice: boolean
+  setSelectedTask(
+    task: any
+  ): {
+    type: string
+    task: any
+  }
+}
+
+class ActionsButton extends React.Component<Props & StateProps, State> {
+  constructor(props: Props & StateProps) {
     super(props)
 
     this.state = {
@@ -76,7 +108,6 @@ class ActionsButton extends React.Component {
       upload: this.handleUpload,
       comments: this.handleShowComments,
       view: this.handleView,
-      download: this.handleDownload,
       rename: renameFile,
       'edit-form': editForm,
       'delete-task': deleteTask,
@@ -97,6 +128,10 @@ class ActionsButton extends React.Component {
 
     this.handleSelectAction = this.handleSelectAction.bind(this)
   }
+
+  private actions: object
+
+  private dropzone: any
 
   handleSelectAction = button => {
     if (button.disabled === true) {
@@ -132,22 +167,20 @@ class ActionsButton extends React.Component {
       multipleItemsSelection: null
     })
 
-  getActions = () => {
-    let conditions = {}
-
+  getActions = (): ActionItem[] | null => {
     if (this.props.type === 'document') {
-      conditions = this.createDocumentsConditions()
+      return selectActions(this.props.type, this.createDocumentsConditions())
     }
 
     if (this.props.type === 'task') {
-      conditions = this.createTaskConditions()
+      return selectActions(this.props.type, this.createTaskConditions())
     }
 
-    return selectActions(this.props.type, conditions)
+    return null
   }
 
-  createDocumentsConditions = () => {
-    let documentType
+  createDocumentsConditions = (): ActionConditions => {
+    let documentType: 'Form' | 'Pdf' | 'Generic'
 
     const isTask = this.props.document.type === 'task'
     const isFile = this.props.document.type === 'file'
@@ -162,19 +195,22 @@ class ActionsButton extends React.Component {
       documentType = 'Form'
     } else {
       documentType =
-        this.props.document.mime === 'application/pdf' ? 'Pdf' : 'Generic'
+        (this.props.document as IFile).mime === 'application/pdf'
+          ? 'Pdf'
+          : 'Generic'
     }
 
     return {
       has_task: this.props.task !== null, // is stash file or not
       document_type: documentType,
       file_uploaded: isFile,
-      form_saved: isTask && this.props.document.submission !== null,
+      form_saved:
+        isTask && (this.props.document as IDealTask).submission !== null,
       envelope_status: this.getLastEnvelopeStatus(envelopes)
     }
   }
 
-  createTaskConditions = () => {
+  createTaskConditions = (): ActionConditions => {
     const envelopes = getTaskEnvelopes(this.props.envelopes, this.props.task)
 
     return {
@@ -190,12 +226,15 @@ class ActionsButton extends React.Component {
     }
   }
 
-  hasTaskAttachments = task =>
-    Array.isArray(task.room.attachments) &&
-    task.room.attachments.filter(file => file.mime === 'application/pdf')
-      .length > 0
+  hasTaskAttachments = (task: IDealTask) => {
+    return (
+      (task.room.attachments || []).filter(
+        file => file.mime === 'application/pdf'
+      ).length > 0
+    )
+  }
 
-  getLastEnvelopeStatus = envelopes => {
+  getLastEnvelopeStatus = (envelopes: IDealEnvelope[]) => {
     if (envelopes.length === 0) {
       return 'None'
     }
@@ -203,14 +242,14 @@ class ActionsButton extends React.Component {
     return envelopes[0].status
   }
 
-  getActiveEnvelopes = envelopes =>
-    envelopes.filter(
+  getActiveEnvelopes = (envelopes: IDealEnvelope[]) => {
+    return envelopes.filter(
       envelope => ['Voided', 'Declined'].includes(envelope.status) === false
     )
+  }
 
   getSplitterFiles = () => {
-    const files = getDocumentLastState({
-      type: this.props.type,
+    const files = getLastStates({
       deal: this.props.deal,
       task: this.props.task,
       document: this.props.document,
@@ -221,8 +260,7 @@ class ActionsButton extends React.Component {
   }
 
   getEmailComposeFiles = () => {
-    return getDocumentLastState({
-      type: this.props.type,
+    return getLastStates({
       deal: this.props.deal,
       task: this.props.task,
       document: this.props.document,
@@ -230,16 +268,29 @@ class ActionsButton extends React.Component {
     })
   }
 
-  getPrimaryAction = actions =>
-    _.find(actions, properties => properties.primary === true)
+  getEsignAttachments = () => {
+    return getEsignAttachments({
+      task: this.props.task,
+      document: this.props.document
+    })
+  }
 
-  getSecondaryActions = actions =>
-    _.filter(actions, properties => properties.primary !== true)
+  getPrimaryAction = (actions: ActionItem[] | null): ActionItem | undefined => {
+    return (actions || []).find(item => item.primary && item.primary === true)
+  }
+
+  getSecondaryActions = (actions: ActionItem[] | null): ActionItem[] => {
+    return (actions || []).filter(item => !item.primary)
+  }
 
   /**
    *
    */
-  handleUpload = () => this.dropzone.open()
+  handleUpload = () => {
+    if (this.dropzone.current) {
+      this.dropzone.current.open()
+    }
+  }
 
   /**
    *
@@ -266,38 +317,8 @@ class ActionsButton extends React.Component {
   /**
    *
    */
-  handleDownload = () => {
-    const links = getDocumentLastState({
-      type: this.props.type,
-      deal: this.props.deal,
-      task: this.props.task,
-      document: this.props.document,
-      envelopes: this.props.envelopes,
-      isBackOffice: this.props.isBackOffice
-    })
-
-    if (links.length === 1) {
-      window.open(links[0].url, '_blank')
-
-      return
-    }
-
-    this.setState({
-      multipleItemsSelection: {
-        items: links,
-        title: 'Select a file to download',
-        actionTitle: 'Download',
-        onSelect: item => window.open(item.url, '_blank')
-      }
-    })
-  }
-
-  /**
-   *
-   */
   handleView = () => {
-    const links = getDocumentLastState({
-      type: this.props.type,
+    const links = getLastStates({
       deal: this.props.deal,
       task: this.props.task,
       document: this.props.document,
@@ -305,9 +326,12 @@ class ActionsButton extends React.Component {
       isBackOffice: this.props.isBackOffice
     })
 
+    const openInNewTab = (link: string | undefined) =>
+      link && link.includes('/dashboard/deals/')
+
     if (links.length === 1) {
-      return this.props.isBackOffice && links[0].openInNewTab !== true
-        ? browserHistory.push(links[0].url)
+      return this.props.isBackOffice && openInNewTab(links[0].internal_url)
+        ? browserHistory.push(links[0].internal_url as string)
         : window.open(links[0].url, '_blank')
     }
 
@@ -317,8 +341,8 @@ class ActionsButton extends React.Component {
         title: 'Select a file to view/print',
         actionTitle: 'View/Print',
         onSelect: item =>
-          this.props.isBackOffice && item.openInNewTab !== true
-            ? browserHistory.push(item.url)
+          this.props.isBackOffice && openInNewTab(item.internal_url)
+            ? browserHistory.push(item.internal_url as string)
             : window.open(item.url, '_blank')
       }
     })
@@ -337,7 +361,7 @@ class ActionsButton extends React.Component {
       isTasksDrawerOpen: !state.isTasksDrawerOpen
     }))
 
-  getButtonLabel = button => {
+  getButtonLabel = (button: ActionItem) => {
     if (typeof button.label === 'function') {
       return button.label({
         task: this.props.task,
@@ -410,24 +434,24 @@ class ActionsButton extends React.Component {
           )}
         </Downshift>
 
+        {/*
+        // @ts-ignore */}
         <UploadManager
-          onRef={ref => (this.dropzone = ref)}
+          onRef={(ref: any) => (this.dropzone = ref)}
           task={this.props.task}
           disableClick
         >
           <div />
         </UploadManager>
 
-        <GetSignature
-          isOpen={this.state.isSignatureFormOpen}
-          deal={this.props.deal}
-          onClose={this.handleDeselectAction}
-          defaultAttachments={getEsignAttachments({
-            type: this.props.type,
-            task: this.props.task,
-            document: this.props.document
-          })}
-        />
+        {this.state.isSignatureFormOpen && (
+          <GetSignature
+            isOpen
+            deal={this.props.deal}
+            onClose={this.handleDeselectAction}
+            defaultAttachments={this.getEsignAttachments()}
+          />
+        )}
 
         {this.state.isPdfSplitterOpen && (
           <PdfSplitter
@@ -450,16 +474,18 @@ class ActionsButton extends React.Component {
           />
         )}
 
-        <SingleEmailComposeDrawer
-          isOpen={this.state.isComposeEmailOpen}
-          initialValues={{
-            from: this.props.user,
-            attachments: this.getEmailComposeFiles()
-          }}
-          deal={this.props.deal}
-          onClose={this.handleToggleComposeEmail}
-          onSent={this.handleToggleComposeEmail}
-        />
+        {this.state.isComposeEmailOpen && (
+          <SingleEmailComposeDrawer
+            isOpen
+            initialValues={{
+              from: this.props.user,
+              attachments: this.getEmailComposeFiles()
+            }}
+            deal={this.props.deal}
+            onClose={this.handleToggleComposeEmail}
+            onSent={this.handleToggleComposeEmail}
+          />
+        )}
 
         {this.state.multipleItemsSelection && (
           <SelectItemDrawer
@@ -473,18 +499,7 @@ class ActionsButton extends React.Component {
   }
 }
 
-ActionsButton.propTypes = {
-  type: PropTypes.oneOf(['task', 'document']).isRequired,
-  deal: PropTypes.object.isRequired,
-  task: PropTypes.object.isRequired,
-  document: PropTypes.object
-}
-
-ActionsButton.defaultProps = {
-  document: null
-}
-
-function mapStateToProps({ deals, user }, props) {
+function mapStateToProps({ deals, user }: IAppState, props: Props) {
   return {
     user,
     envelopes: selectDealEnvelopes(props.deal, deals.envelopes),
@@ -495,10 +510,6 @@ function mapStateToProps({ deals, user }, props) {
 export default connect(
   mapStateToProps,
   {
-    changeNeedsAttention,
-    changeTaskStatus,
-    setSelectedTask,
-    renameTaskFile,
-    confirmation
+    setSelectedTask
   }
 )(ActionsButton)

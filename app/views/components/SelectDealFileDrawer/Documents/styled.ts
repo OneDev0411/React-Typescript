@@ -2,6 +2,14 @@ import styled from 'styled-components'
 
 import { red, primary } from 'views/utils/colors'
 
+interface TitleProps {
+  selectable: boolean
+}
+
+interface ChecklistNameProps {
+  error: boolean
+}
+
 export const Container = styled.div``
 
 export const ViewDocument = styled.div`
@@ -27,10 +35,10 @@ export const NameSection = styled.div`
 export const Title = styled.div`
   font-size: 1rem;
   font-weight: 500;
-  color: ${props => (props.isSelectable ? '#000' : red.A100)};
+  color: ${(props: TitleProps) => (props.selectable ? '#000' : red.A100)};
 
-  ${props =>
-    props.isSelectable &&
+  ${(props: TitleProps) =>
+    props.selectable &&
     `
     :hover {
       cursor: pointer;
@@ -47,5 +55,5 @@ export const DateTime = styled.div`
 
 export const ChecklistName = styled.div`
   font-size: 0.875rem;
-  color: ${props => (props.error ? red.A100 : '#000')};
+  color: ${(props: ChecklistNameProps) => (props.error ? red.A100 : '#000')};
 `
