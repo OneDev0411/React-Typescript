@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 
-import { EditEmailDrawer } from 'components/EmailCompose/EditEmailDrawer'
+import { EditEmailDrawer } from 'components/EmailCompose'
+import { EmailThreadModal } from 'components/EmailThreadModal'
 
 import { ListContext } from '../context'
 
@@ -47,6 +48,16 @@ export function EventController({
         emailId={event.campaign as UUID}
         onEdited={emailCampaign => onScheduledEmailChange(emailCampaign)}
         onClose={() => setSelectedEvent(null)}
+      />
+    )
+  }
+
+  if (event.object_type === 'email_thread_recipient') {
+    return (
+      <EmailThreadModal
+        open={!!event.thread}
+        onClose={() => setSelectedEvent(null)}
+        threadKey={event.thread}
       />
     )
   }

@@ -302,7 +302,11 @@ export const TextEditor = forwardRef(
     }
 
     return (
-      <Flex column style={{ overflow: 'auto', flex: 1 }} className={className}>
+      <Flex
+        column
+        style={{ overflow: 'auto', flex: '1 1 200px' }}
+        className={className}
+      >
         <EditorWrapper
           ref={editorElementRef}
           className={cn({

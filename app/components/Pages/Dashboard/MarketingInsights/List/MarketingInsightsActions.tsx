@@ -2,7 +2,7 @@ import React from 'react'
 
 import VerticalDotsIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
 import { BasicDropdown } from 'components/BasicDropdown'
-import { EditEmailDrawer } from 'components/EmailCompose/EditEmailDrawer'
+import { EditEmailDrawer } from 'components/EmailCompose'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { deleteEmailCampaign } from 'models/email/delete-email-campaign'
 

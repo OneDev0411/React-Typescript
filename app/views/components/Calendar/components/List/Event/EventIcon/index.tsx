@@ -23,9 +23,11 @@ export function EventIcon(props: Props) {
   }
 
   if (
-    ['email_campaign', 'email_campaign_recipient'].includes(
-      props.event.object_type
-    )
+    [
+      'email_campaign',
+      'email_campaign_recipient',
+      'email_thread_recipient'
+    ].includes(props.event.object_type)
   ) {
     Icon = eventTypesIcons.Email
   }

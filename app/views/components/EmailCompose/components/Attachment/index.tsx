@@ -20,6 +20,10 @@ import { useTextStyles } from '../../../../../styles/use-text-styles'
 
 interface Props {
   children: ReactNode
+  /**
+   * Defaults to true
+   */
+  fullWidth?: boolean
   onDelete?: () => void
 }
 
@@ -35,7 +39,7 @@ const useAttachmentStyles = makeStyles(
   { name: 'Attachment' }
 )
 
-export function Attachment({ children, onDelete }: Props) {
+export function Attachment({ children, onDelete, fullWidth = true }: Props) {
   const classes = useAttachmentStyles()
   const iconClasses = useIconStyles()
   const textClasses = useTextStyles()
@@ -44,11 +48,12 @@ export function Attachment({ children, onDelete }: Props) {
     <Box
       mb={1}
       mr={1}
-      display="flex"
+      display={fullWidth ? 'flex' : 'inline-flex'}
       alignItems="center"
       className={classes.root}
     >
       <IconAttachment
+        style={{ fill: 'currentColor' }}
         className={classNames(iconClasses.rightMargin, iconClasses.small)}
       />
       <Box flexGrow={1} className={textClasses.noWrap}>
