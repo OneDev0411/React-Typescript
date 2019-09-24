@@ -28,6 +28,7 @@ import { styles } from './styles'
 import { Footer } from '../components/Footer'
 import ConfirmationModalContext from '../../ConfirmationModal/context'
 import { validateRecipient } from '../../EmailRecipientsChipsInput/helpers/validate-recipient'
+import { getSendEmailResultMessages } from '../helpers/email-result-messages'
 
 export const useEmailFormStyles = makeStyles(styles, { name: 'EmailForm' })
 
@@ -71,8 +72,8 @@ function EmailComposeForm({
 
   const handleSendEmail = useCallback(
     async form => {
-      const { successMessage, errorMessage } = props.getSendEmailResultMessages(
-        form
+      const { successMessage, errorMessage } = getSendEmailResultMessages(
+        !!form.due_at
       )
 
       let result: IEmailCampaign

@@ -18,9 +18,8 @@ import { normalizeRecipients } from './helpers/normalize-recepients'
 import { From } from './fields/From'
 import EmailRecipientsChipsInput from '../EmailRecipientsChipsInput'
 
-import { CollapsedRecipients } from './components/CollapsedRecipients'
+import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import IconLock from '../SvgIcons/Lock/IconLock'
-import { getSendEmailResultMessages } from './helpers/email-result-messages'
 import EmailComposeForm from './EmailComposeForm'
 
 const LockIcon = styled(IconLock)`
@@ -32,7 +31,6 @@ interface Props
   extends Omit<
     ComponentProps<typeof EmailComposeForm>,
     | 'sendEmail'
-    | 'getSendEmailResultMessages'
     | 'renderFields'
     | 'renderCollapsedFields'
     | 'hasTemplateVariables'
@@ -94,16 +92,13 @@ export function BulkEmailComposeForm({
     </>
   )
   const renderCollapsedFields = (values: EmailFormValues) => (
-    <CollapsedRecipients to={values.to || []} />
+    <CollapsedEmailRecipients to={values.to || []} />
   )
 
   return (
     <EmailComposeForm
       {...otherProps}
       sendEmail={sendEmail}
-      getSendEmailResultMessages={form =>
-        getSendEmailResultMessages(!!form.due_at)
-      }
       hasTemplateVariables
       renderCollapsedFields={renderCollapsedFields}
       renderFields={renderFields}

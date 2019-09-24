@@ -20,9 +20,6 @@ export interface EmailFormValues {
 export interface EmailComposeFormProps {
   initialValues?: Partial<EmailFormValues>
   sendEmail: (values: EmailFormValues) => Promise<IEmailCampaign>
-  getSendEmailResultMessages: (
-    values: EmailFormValues
-  ) => { successMessage: string; errorMessage: string }
   onSent?: (result: IEmailCampaign) => void
   /**
    * A deal to suggest attachments from it
