@@ -17,8 +17,17 @@ const buttonStyle = {
   width: '100%'
 }
 
-export class Grid extends React.Component {
-  state = {
+interface State {
+  selectedAgent: null | any
+}
+interface Props {
+  data: IAgent[]
+  deal: IDeal
+  isFetching: boolean
+}
+
+export class Grid extends React.Component<Props, State> {
+  state: State = {
     selectedAgent: null
   }
 
@@ -34,7 +43,7 @@ export class Grid extends React.Component {
       }
     })
 
-  getRecipients = selectedRows => {
+  getRecipients = (selectedRows: string[]) => {
     const { data } = this.props
 
     if (
@@ -135,6 +144,8 @@ export class Grid extends React.Component {
     {
       display: props => props.selectedRows.length > 0,
       render: props => (
+        /*
+        // @ts-ignore because SendDealPromotionCard is not yet migrated to ts */
         <SendDealPromotionCard
           deal={this.props.deal}
           recipients={this.getRecipients(props.selectedRows)}

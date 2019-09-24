@@ -1,4 +1,4 @@
-import baseDeal from 'fixtures/deal/seller-with-offer'
+import baseDeal from 'fixtures/deal/seller-with-offer.json'
 
 import { isDoubleEnded } from '.'
 

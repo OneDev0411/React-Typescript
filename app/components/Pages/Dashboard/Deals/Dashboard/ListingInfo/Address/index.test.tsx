@@ -2,8 +2,8 @@ import React from 'react'
 import { render } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
-import withAddress from 'fixtures/deal/live-seller'
-import withoutAddress from 'fixtures/deal/live-seller-without-address'
+import withAddress from 'fixtures/deal/live-seller.json'
+import withoutAddress from 'fixtures/deal/live-seller-without-address.json'
 
 import { Address } from '.'
 

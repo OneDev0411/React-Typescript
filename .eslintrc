@@ -34,7 +34,15 @@
           ".json"
         ]
       },
-      "webpack": {}
+      "webpack": {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx",
+          ".json"
+        ]
+      }
     }
   },
   "rules": {
