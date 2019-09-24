@@ -68,6 +68,10 @@ export function EditEmailDrawer({ emailId, isOpen, onClose, onEdited }: Props) {
       emailId: data.id,
       hasStaticBody: !!data.template,
       isOpen,
+      getEmail: values => ({
+        ...values,
+        html: data.template ? data.html : values.html
+      }),
       onClose,
       onSent: email => {
         onClose()
