@@ -5,6 +5,8 @@ import { ReactNode } from 'react'
 
 import { merge } from 'lodash'
 
+import user from 'fixtures/users/agent.json'
+
 import { IAppState } from '../../app/reducers'
 import store from '../../app/stores'
 import { AppTheme } from '../../app/AppTheme'
@@ -23,7 +25,7 @@ interface Props {
  * ContactsTestBed, DealsTestBed etc.
  */
 export function TestBed({ reduxState, children }: Props) {
-  merge(store.getState(), reduxState)
+  merge(store.getState(), { user }, reduxState)
 
   return (
     <Provider store={store}>
