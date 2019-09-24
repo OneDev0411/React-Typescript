@@ -2,7 +2,7 @@ import React from 'react'
 
 import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 
-import { EventContainer } from '../EventContainer'
+import { EventContainer } from '../components/EventContainer'
 
 interface Props {
   style: React.CSSProperties

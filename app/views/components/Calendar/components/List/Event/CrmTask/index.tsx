@@ -4,7 +4,7 @@ import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 
 import { ListContext } from '../../context'
 
-import { EventContainer } from '../EventContainer'
+import { EventContainer } from '../components/EventContainer'
 import { Associations } from './Associations'
 import OpenHouseRegistration from './actions/OpenHouseRegistration'
 

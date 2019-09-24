@@ -4,7 +4,7 @@ import MiniContactProfile from 'components/MiniContact'
 import { importantDatesIcons as contactIcons } from 'views/utils/important-dates-icons'
 import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 
-import { EventContainer } from '../EventContainer'
+import { EventContainer } from '../components/EventContainer'
 import { SendBirthdayCard } from './actions/SendBirthdayCard'
 
 interface Props {

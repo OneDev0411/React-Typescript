@@ -4,7 +4,7 @@ import fecha from 'fecha'
 import { makeStyles } from '@material-ui/styles'
 import { Theme, fade } from '@material-ui/core/styles'
 
-import styles from '../styles'
+import styles from '../../styles'
 
 interface StyleProps {
   hasBorderBottom: boolean | null
@@ -48,9 +48,9 @@ interface Props {
     color: string
     element: any
   }
-  title: JSX.Element
-  subtitle?: JSX.Element
-  actions?: JSX.Element
+  title: React.ReactNode
+  subtitle?: React.ReactNode
+  actions?: React.ReactNode
 }
 
 export function EventContainer({

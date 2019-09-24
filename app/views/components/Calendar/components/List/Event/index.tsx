@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { EmptyState } from './EmptyState'
+import { EmptyState } from './components/EmptyState'
 
 import { CrmTask } from './CrmTask'
 import { ContactAttribute } from './ContactAttribute'
@@ -17,7 +17,7 @@ interface Props {
 }
 
 const events: {
-  component({ event, style, nextItem }: Props): JSX.Element
+  component({ event, style, nextItem }: Props): React.ReactNode
   condition(event: ICalendarEvent): boolean
 }[] = [
   {

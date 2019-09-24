@@ -4,7 +4,7 @@ import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 
 import MiniContactProfile from 'components/MiniContact'
 
-import { EventContainer } from '../EventContainer'
+import { EventContainer } from '../components/EventContainer'
 import { TouchDateSubtitle } from './Subtitle'
 
 interface Props {
