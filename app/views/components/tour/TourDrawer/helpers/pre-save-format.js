@@ -6,7 +6,6 @@
 export async function preSaveFormat(values, originalValues) {
   const {
     title,
-    status,
     dueDate,
     reminder,
     description,
@@ -19,21 +18,21 @@ export async function preSaveFormat(values, originalValues) {
 
   const task_type = 'Tour'
   const dueDateTimestamp = dueDate.getTime()
+  const isDueDatePast = dueDateTimestamp <= new Date().getTime()
 
   const task = {
     title: title.trim(),
     due_date: dueDateTimestamp / 1000,
     task_type,
     assignees: assignees.map(a => a.id),
-    status:
-      dueDateTimestamp <= new Date().getTime() ? 'DONE' : status || 'PENDING'
+    status: isDueDatePast ? 'DONE' : 'PENDING'
   }
 
   if ((originalValues && originalValues.id) || description) {
     task.description = (description && description.trim()) || ''
   }
 
-  if (task.status === 'DONE') {
+  if (isDueDatePast) {
     task.reminders = []
   } else if (reminder.value >= 0) {
     task.reminders = [
