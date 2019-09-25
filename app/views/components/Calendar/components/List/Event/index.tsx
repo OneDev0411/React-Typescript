@@ -17,7 +17,7 @@ interface Props {
 }
 
 const events: {
-  component({ event, style, nextItem }: Props): React.ReactNode
+  component({ event, style, nextItem }: Props): React.ReactElement<any>
   condition(event: ICalendarEvent): boolean
 }[] = [
   {
