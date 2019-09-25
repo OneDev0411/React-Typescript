@@ -59,5 +59,21 @@ global.document.createRange = () => ({
   }
 })
 
+global.getSelection = () => {
+  return {
+    addRange: () => {},
+    getRangeAt: () => ({
+      setStart: () => {},
+      setEnd: () => {},
+      commonAncestorContainer: {
+        nodeName: 'BODY',
+        ownerDocument: document
+      },
+      cloneRange: () => {}
+    }),
+    removeAllRanges: () => {}
+  }
+}
+
 // Using data-test instead of data-testId
 configure({ testIdAttribute: 'data-test' })
