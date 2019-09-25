@@ -23,6 +23,8 @@ export interface TextEditorProps {
   placeholder?: string
   plugins?: any[]
   DraftEditorProps?: Omit<EditorProps, 'editorState' | 'onChange'>
+
+  autofocus?: boolean
   /**
    * an optional function to be used when enableImage is true and an image is
    * added to the editor. It should upload the image and return the promise

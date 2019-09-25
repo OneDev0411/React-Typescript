@@ -25,6 +25,7 @@ interface Props {
   hasStaticBody?: boolean
   hasSignatureByDefault?: boolean
   hasTemplateVariables?: boolean
+  autofocus?: boolean
   FieldProps?: Partial<FieldProps<any>>
   signature: string
   DraftEditorProps?: TextEditorProps['DraftEditorProps']
@@ -44,6 +45,7 @@ const EmailBody = ({
   hasStaticBody = false,
   attachments = null,
   FieldProps,
+  autofocus = false,
   DraftEditorProps = {},
   editorRef
 }: Props) => {
@@ -66,6 +68,7 @@ const EmailBody = ({
           render={({ input, meta }) => (
             <TextEditor
               enableImage
+              autofocus={autofocus}
               uploadImage={uploadImage}
               enableSignature
               DraftEditorProps={DraftEditorProps}

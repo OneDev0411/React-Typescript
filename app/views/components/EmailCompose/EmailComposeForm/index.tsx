@@ -64,7 +64,13 @@ function EmailComposeForm({
   onSent = () => {},
   ...props
 }: EmailComposeFormProps & ClassesProps<typeof styles>) {
-  const [topFieldsCollapsed, setTopFieldsCollapsed] = useState(false)
+  const hasRecipients = (initialValues.to || []).length > 0
+  const hasSubject = !!initialValues.subject
+  const autofocusBody = hasRecipients && hasSubject
+
+  const [topFieldsCollapsed, setTopFieldsCollapsed] = useState<boolean>(
+    hasRecipients
+  )
   const emailBodyEditorRef = useRef<any>(null)
   const confirmationModal = useContext(ConfirmationModalContext)
 
@@ -233,7 +239,7 @@ function EmailComposeForm({
                 InputProps={{
                   onFocus: () => setTopFieldsCollapsed(true),
                   inputProps: {
-                    autoFocus: (values.to || []).length > 0,
+                    autoFocus: hasRecipients && !hasSubject,
                     'data-test': 'email-subject'
                   }
                 }}
@@ -246,6 +252,7 @@ function EmailComposeForm({
                 DraftEditorProps={{
                   onFocus: () => setTopFieldsCollapsed(true)
                 }}
+                autofocus={autofocusBody}
                 hasSignatureByDefault={props.hasSignatureByDefault}
                 hasStaticBody={props.hasStaticBody}
                 hasTemplateVariables={props.hasTemplateVariables}

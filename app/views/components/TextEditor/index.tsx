@@ -1,6 +1,7 @@
 import React, {
   forwardRef,
   useContext,
+  useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
@@ -68,6 +69,7 @@ export const TextEditor = forwardRef(
       className = '',
       defaultValue = '',
       disabled = false,
+      autofocus = false,
       input = null,
       onChange = () => {},
       placeholder = 'Type something…',
@@ -171,6 +173,15 @@ export const TextEditor = forwardRef(
       }),
       [stateToHtmlOptions]
     )
+
+    useEffect(() => {
+      const editor = editorRef.current
+
+      if (autofocus && editor) {
+        editor.focus()
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const handleChange = (newState: EditorState) => {
       if (!newState) {
