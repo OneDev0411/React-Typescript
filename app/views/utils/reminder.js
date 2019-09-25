@@ -16,7 +16,7 @@ const getReminderDropdownItems = () => {
   Object.keys(REMINDER_ITEMS).forEach(value => {
     items.push({
       title: REMINDER_ITEMS[value],
-      value
+      value: Number(value)
     })
   })
 
