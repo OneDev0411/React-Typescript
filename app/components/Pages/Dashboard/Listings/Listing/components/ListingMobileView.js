@@ -28,8 +28,6 @@ import Loading from '../../../../../Partials/Loading'
 import ListingMarker from '../../../Partials/ListingMarker'
 import ListingMapMarker from '../../../Partials/ListingMapMarker'
 
-// import { fadeIn } from './ListingDesktopView'
-
 // import ShareModal from '../../components/modals/ShareListingModal'
 
 const ListingMobileView = ({
@@ -807,11 +805,6 @@ const ListingMobileView = ({
 //     },
 //     showShareModal: ({ setShareModalIsActive }) => () => {
 //       setShareModalIsActive(true)
-//     }
-//   }),
-//   lifecycle({
-//     componentDidMount() {
-//       fadeIn(this)
 //     }
 //   })
 // )(ListingMobileView)

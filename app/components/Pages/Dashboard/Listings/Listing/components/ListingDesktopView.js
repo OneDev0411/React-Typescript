@@ -1,16 +1,22 @@
 import _ from 'lodash'
 import S from 'shorti'
-import ReactDOM from 'react-dom'
 import Map from 'google-map-react'
 import React from 'react'
 import { browserHistory, Link } from 'react-router'
 import Flex from 'styled-flex-component'
 import styled from 'styled-components'
-
 import compose from 'recompose/compose'
 import lifecycle from 'recompose/lifecycle'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import {
+  Col,
+  Modal,
+  Tooltip,
+  Carousel,
+  CarouselItem,
+  OverlayTrigger
+} from 'react-bootstrap'
 
 import { formatPhoneNumber } from '../../../../../../utils/format'
 import { friendlyDate, numberWithCommas } from '../../../../../../utils/helpers'
@@ -20,8 +26,9 @@ import listing_util from '../../../../../../utils/listing'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import TextIconButton from '../../../../../../views/components/Button/TextIconButton'
 import LinkButton from '../../../../../../views/components/Button/LinkButton'
-import { H2 } from '../../../../../../views/components/Typography/headings'
 import IconClose from '../../../../../../views/components/SvgIcons/Close/CloseIcon'
+import ArrowLeftIcon from '../../../../../../views/components/SvgIcons/ArrowLeft/ArrowLeftIcon'
+import ArrowRightIcon from '../../../../../../views/components/SvgIcons/ArrowRight/ArrowRightIcon'
 
 import FetchError from './FetchError'
 import MLSNote from './MLSNote'
@@ -51,21 +58,7 @@ export const renderFeatures = (title, value) => {
   )
 }
 
-import {
-  Col,
-  Modal,
-  Tooltip,
-  Carousel,
-  CarouselItem,
-  OverlayTrigger
-} from 'react-bootstrap'
-
-import Follow from '../../../../../../views/components/Follow'
-import { listingStatuses } from '../../../../../../constants/listings/listing'
 import { primary } from '../../../../../../views/utils/colors'
-
-import ArrowLeftIcon from 'components/SvgIcons/ArrowLeft/ArrowLeftIcon'
-import ArrowRightIcon from 'components/SvgIcons/ArrowRight/ArrowRightIcon'
 
 const ArrowContainer = styled(Flex)`
   width: 48px;
@@ -76,20 +69,6 @@ const ArrowContainer = styled(Flex)`
   margin-left: ${({ left }) => (left ? '1.5rem' : 'auto')};
   margin-right: ${({ left }) => (left ? 'auto' : '1.5rem')};
 `
-
-export const fadeIn = node => {
-  const elem = ReactDOM.findDOMNode(node)
-
-  if (!elem) {
-    return
-  }
-
-  elem.style.opacity = 0
-  window.requestAnimationFrame(() => {
-    elem.style.transition = 'opacity 150ms'
-    elem.style.opacity = 1
-  })
-}
 
 const ListingDesktopView = ({
   data,
@@ -763,7 +742,7 @@ const ListingDesktopView = ({
                 </div>
               </div>
               {agent_area_client}
-              <MLSNote />
+              <MLSNote listing={listing} />
             </Col>
             <div className="clearfix" />
           </div>
@@ -814,37 +793,6 @@ const ListingDesktopView = ({
           </CarouselItem>
         ))}
       </Carousel>
-    )
-  }
-
-  let brand_logo = (
-    <a
-      href="/"
-      style={{
-        textDecoration: 'none'
-      }}
-    >
-      <H2
-        style={{
-          color: brandColor
-        }}
-      >
-        Rechat
-      </H2>
-    </a>
-  )
-
-  if (Brand.asset('site_logo_wide')) {
-    const host = `https://${window.location.host}`
-
-    brand_logo = (
-      <a href={host}>
-        <img
-          alt="brand"
-          style={S('maxw-200 maxh-35')}
-          src={Brand.asset('site_logo_wide')}
-        />
-      </a>
     )
   }
 
@@ -1133,8 +1081,6 @@ export default compose(
 
         new clipboard('.copy-mls')
       }
-
-      fadeIn(this)
     },
     componentWillUnmount() {
       document.removeEventListener('keydown', this.props.windowKeyDownHandler)
