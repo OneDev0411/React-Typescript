@@ -61,6 +61,8 @@ function EmailComposeForm({
     attachments: []
   },
   dispatch,
+  enableSchedule = true,
+  onCancel,
   onSent = () => {},
   ...props
 }: EmailComposeFormProps & ClassesProps<typeof styles>) {
@@ -268,6 +270,8 @@ function EmailComposeForm({
               isSubmitDisabled={isSubmitDisabled}
               initialAttachments={initialValues.attachments || []}
               deal={props.deal}
+              enableSchedule={enableSchedule}
+              onCancel={onCancel}
               onChanged={scrollToEnd}
             />
           </form>
