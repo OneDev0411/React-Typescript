@@ -1,6 +1,6 @@
 import React from 'react'
 
-import styles from '../styles'
+import styles from '../../styles'
 
 interface Props {
   event: ICalendarEvent
@@ -13,7 +13,7 @@ const emptyRowStyles = {
   color: '#536280'
 }
 
-export function EventEmptyState({ event, style }: Props) {
+export function EmptyState({ event, style }: Props) {
   return (
     <>
       <div style={style}>

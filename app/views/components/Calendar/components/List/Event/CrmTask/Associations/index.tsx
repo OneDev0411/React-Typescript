@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import MiniContactProfile from 'components/MiniContact'
 import { plural } from 'components/TemplatesList/helpers'
 
-import { ListContext } from '../../../../context'
+import { ListContext } from '../../../context'
 
 import styles from './styles'
 import { isLastItem } from './helpers'
@@ -34,19 +34,19 @@ export function Associations({ event }: Props) {
   return (
     <span>
       {preposition}{' '}
-      {visibleContacts.map((contact, index) => (
+      {visibleContacts.map((item, index) => (
         <React.Fragment key={`assoc${index}`}>
           <MiniContactProfile
             as="span"
-            data={contact.contact as IContact}
+            data={item.contact as IContact}
             type="event"
           >
             <a
               onClick={e => e.stopPropagation()}
               target="_blank"
-              href={`/dashboard/contacts/${contact.contact!.id}`}
+              href={`/dashboard/contacts/${item.contact!.id}`}
             >
-              {contact.contact!.display_name}
+              {item.contact!.display_name}
             </a>
           </MiniContactProfile>
           {!isLastItem(contacts, index) && <span key={`sepr${index}`}>, </span>}
