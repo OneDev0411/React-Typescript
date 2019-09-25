@@ -21,6 +21,7 @@ import EmailRecipientsChipsInput from '../EmailRecipientsChipsInput'
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import IconLock from '../SvgIcons/Lock/IconLock'
 import EmailComposeForm from './EmailComposeForm'
+import { emailFromToValue } from './helpers/email-from-to-value'
 
 const LockIcon = styled(IconLock)`
   vertical-align: text-bottom;
@@ -50,7 +51,7 @@ export function BulkEmailComposeForm({
 }: Props) {
   const sendEmail = (formValue: EmailFormValues) => {
     const emailData = getEmail({
-      from: (formValue.from && formValue.from.id) || '',
+      from: emailFromToValue(formValue.from),
       to: normalizeRecipients(formValue.to || []),
       subject: (formValue.subject || '').trim(),
       html: formValue.body || '',

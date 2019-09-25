@@ -6,6 +6,7 @@ import { TextFieldProps } from '@material-ui/core/TextField'
 import { useTheme } from '@material-ui/core'
 
 import { InlineInputLabel } from '../../../InlineInputLabel'
+import { emailFromToDisplayValue } from '../../helpers/email-from-to-display-value'
 
 export function From({
   InputProps,
@@ -13,10 +14,6 @@ export function From({
   ...props
 }: FieldRenderProps<any> & TextFieldProps) {
   const theme = useTheme()
-
-  const value = input.value
-    ? `${input.value.display_name} <${input.value.email}>`
-    : ' - '
 
   return (
     <TextField
@@ -34,7 +31,7 @@ export function From({
       margin="dense"
       input={{
         ...input,
-        value
+        value: emailFromToDisplayValue(input.value)
       }}
       {...props}
     />

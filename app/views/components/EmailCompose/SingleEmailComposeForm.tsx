@@ -9,6 +9,7 @@ import { EmailFormValues } from './types'
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import EmailComposeForm from './EmailComposeForm'
 import { EmailRecipientsFields } from './fields/EmailRecipientsFields'
+import { emailFromToValue } from './helpers/email-from-to-value'
 
 interface Props
   extends Omit<
@@ -34,7 +35,7 @@ export function SingleEmailComposeForm({
 }: Props) {
   const handleSendEmail = (formValue: EmailFormValues) => {
     const emailData = getEmail({
-      from: (formValue.from && formValue.from.id) || '',
+      from: emailFromToValue(formValue.from),
       to: normalizeRecipients(formValue.to),
       cc: normalizeRecipients(formValue.cc),
       bcc: normalizeRecipients(formValue.bcc),

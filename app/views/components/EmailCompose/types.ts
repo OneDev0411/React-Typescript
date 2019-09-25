@@ -12,7 +12,7 @@ export interface EmailFormValues {
   cc?: IDenormalizedEmailRecipientInput[] | undefined
   bcc?: IDenormalizedEmailRecipientInput[] | undefined
   subject: string
-  from: IUser
+  from: IUser | string
   due_at: Date | null
   body: string | undefined
 }
