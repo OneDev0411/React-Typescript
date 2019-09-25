@@ -19,10 +19,10 @@ export const SECTIONS = [
   },
   {
     type: SectionsEnum.LINK,
-    title: 'Celebrations',
+    title: 'Life',
     items: [
       {
-        title: 'Birthday',
+        title: 'Occasions',
         link: urlGenerator('/Birthday')
       },
       {
@@ -43,7 +43,7 @@ export const SECTIONS = [
   },
   {
     type: SectionsEnum.LINK,
-    title: 'Listings',
+    title: 'Properties',
     items: [
       {
         title: 'As Seen In',
@@ -74,7 +74,7 @@ export const SECTIONS = [
         link: urlGenerator('/JustSold')
       },
       {
-        title: 'Multi Listings',
+        title: 'Multi Properties',
         link: urlGenerator('/Listings')
       }
     ]
