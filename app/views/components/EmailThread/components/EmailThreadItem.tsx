@@ -15,6 +15,7 @@ import classNames from 'classnames'
 
 import { Iframe } from 'components/Iframe'
 
+import config from '../../../../../config/public'
 import Avatar from '../../Avatar'
 import IconAttachment from '../../SvgIcons/Attachment/IconAttachment'
 import { useIconStyles } from '../../../../styles/use-icon-styles'
@@ -132,7 +133,7 @@ export function EmailThreadItem({
                 {/* FIXME: url */}
                 <Link
                   target="_blank"
-                  href={getAttachmentUrl(email, attachment)}
+                  href={`${config.api_url}/${attachment.url}`}
                 >
                   {attachment.name}
                 </Link>
