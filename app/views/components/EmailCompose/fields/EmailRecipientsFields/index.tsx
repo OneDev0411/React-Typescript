@@ -1,4 +1,4 @@
-import React, { HTMLProps, useState } from 'react'
+import React, { ComponentProps, HTMLProps, useState } from 'react'
 
 import { Field } from 'react-final-form'
 
@@ -16,11 +16,17 @@ import EmailRecipientsChipsInput from '../../../EmailRecipientsChipsInput'
 interface Props {
   values: EmailFormValues
   disableAddNewRecipient?: boolean
+  includeQuickSuggestions?: boolean
+  EmailRecipientsChipsInputProps?: Partial<
+    ComponentProps<typeof EmailRecipientsChipsInput>
+  >
 }
 
 export function EmailRecipientsFields({
   values,
-  disableAddNewRecipient = false
+  disableAddNewRecipient = false,
+  includeQuickSuggestions = true,
+  EmailRecipientsChipsInputProps = {}
 }: Props) {
   const [hasCc, setCc] = useState(false)
   const [hasBcc, setBcc] = useState(false)
@@ -55,7 +61,7 @@ export function EmailRecipientsFields({
             name="to"
             component={EmailRecipientsChipsInput as any}
             readOnly={disableAddNewRecipient}
-            includeQuickSuggestions
+            includeQuickSuggestions={includeQuickSuggestions}
             // we need to do this weird stuff because of the weird UX
             // which is to show suggestions under too but add them to bcc!
             // Hopefully we revise it and remove such weirdness
@@ -73,6 +79,7 @@ export function EmailRecipientsFields({
                 } as HTMLProps<HTMLInputElement>
               } as TextFieldProps
             }
+            {...EmailRecipientsChipsInputProps}
           />
         )}
       />
@@ -81,6 +88,7 @@ export function EmailRecipientsFields({
           label="Cc"
           name="cc"
           component={EmailRecipientsChipsInput as any}
+          {...EmailRecipientsChipsInputProps}
         />
       )}
       {isBccShown && (
@@ -88,6 +96,7 @@ export function EmailRecipientsFields({
           label="Bcc"
           name="bcc"
           component={EmailRecipientsChipsInput as any}
+          {...EmailRecipientsChipsInputProps}
         />
       )}
     </>
