@@ -55,9 +55,9 @@ export function EventController({
   if (event.object_type === 'email_thread_recipient') {
     return (
       <EmailThreadModal
-        open={!!event.thread}
+        open={!!event.thread_key}
         onClose={() => setSelectedEvent(null)}
-        threadKey={event.thread}
+        threadKey={event.thread_key}
       />
     )
   }

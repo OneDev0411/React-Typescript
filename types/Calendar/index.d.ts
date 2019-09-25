@@ -28,13 +28,18 @@ declare interface ICalendarEvent {
   title: string
   type: string
   type_label: string
-  thread: string | null
+  thread_key: string | null
   users: UUID[]
   full_contact?: IContact
   full_deal?: IDeal
   full_crm_task: {
     assignees: IUser[] | null
     associations: TaskAssociation[]
+  }
+  full_thread: {
+    type: 'thread'
+    id: UUID
+    email_count: number
   }
 }
 

@@ -39,7 +39,8 @@ const associations = [
   ...CRM_TASKS_QUERY.associations,
   'calendar_event.crm_task',
   'calendar_event.full_campaign',
-  'calendar_event.full_crm_task'
+  'calendar_event.full_crm_task',
+  'calendar_event.full_thread'
 ]
 
 function Timeline(props: Props) {

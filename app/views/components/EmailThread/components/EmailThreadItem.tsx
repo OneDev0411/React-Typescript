@@ -7,6 +7,7 @@ import {
   createStyles,
   Link,
   makeStyles,
+  Paper,
   Theme,
   Typography
 } from '@material-ui/core'
@@ -24,9 +25,8 @@ import { EmailItemRecipients } from './EmailItemRecipients'
 import IconReply from '../../SvgIcons/Reply/IconReply'
 import IconForward from '../../SvgIcons/Forward/IconForward'
 import { Attachment } from '../../EmailCompose/components/Attachment'
-import { getAttachmentUrl } from '../helpers/get-attachment-url'
-
-type ResponseType = 'reply' | 'forward'
+import { EmailResponseType } from '../types'
+import { EmailThreadComposeForm } from '../../EmailCompose/EmailThreadComposeForm'
 
 interface Props {
   email: IEmailThreadEmail
@@ -45,14 +45,18 @@ const styles = (theme: Theme) =>
   createStyles({
     header: {
       position: 'sticky',
-      backgroundColor: theme.palette.background.paper,
       top: 0,
+      zIndex: 2,
+      backgroundColor: theme.palette.background.paper,
       display: 'flex',
       alignItems: 'center',
       padding: theme.spacing(2, 2.5)
     },
     actionButton: {
       marginRight: `${theme.spacing(1)}px`
+    },
+    composeWrapper: {
+      padding: theme.spacing(0, 3)
     }
   })
 const useStyles = makeStyles(styles, { name: 'EmailThreadItem' })
@@ -68,7 +72,7 @@ export function EmailThreadItem({
   const classes = useStyles(props)
 
   const [isResponseOpen, setResponseOpen] = useState(false)
-  const [responseType, setResponseType] = useState<ResponseType>('reply')
+  const [responseType, setResponseType] = useState<EmailResponseType>('reply')
 
   const openReply = () => {
     setResponseOpen(true)
@@ -141,7 +145,7 @@ export function EmailThreadItem({
             ))}
 
             {showBottomButtons && (
-              <Box mt={1}>
+              <Box my={1}>
                 <Button
                   className={classes.actionButton}
                   onClick={openReply}
@@ -167,6 +171,17 @@ export function EmailThreadItem({
                   Forward
                 </Button>
               </Box>
+            )}
+            {isResponseOpen && (
+              <Paper elevation={10} className={classes.composeWrapper}>
+                <EmailThreadComposeForm
+                  email={email}
+                  responseType={responseType}
+                  onCancel={() => {
+                    setResponseOpen(false)
+                  }}
+                />
+              </Paper>
             )}
           </Box>
         </>

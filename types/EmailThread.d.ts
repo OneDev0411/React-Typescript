@@ -4,6 +4,7 @@ declare interface IEmailAttachment {
   isInline: boolean
   name: string
   size: number
+  url: string
 }
 
 declare interface IEmailThreadEmail {
@@ -18,7 +19,9 @@ declare interface IEmailThreadEmail {
   message_date: string
   message_id: string
   origin: 'outlook' // FIXME
-  owner: UUID
+  owner: UUID // // seems can be null. Check it
+  owner_name: string // // seems can be null. Check it
+  owner_email: string // seems can be null. Check it
   snippet: string
   subject: string
   text_body: null | string

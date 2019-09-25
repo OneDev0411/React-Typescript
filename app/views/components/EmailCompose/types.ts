@@ -33,5 +33,16 @@ export interface EmailComposeFormProps {
   renderCollapsedFields: (values: EmailFormValues) => ReactNode
   renderFields: (values: EmailFormValues) => ReactNode
 
+  /**
+   * If false, schedule button will not be shown in footer.
+   * Defaults to true
+   */
+  enableSchedule?: boolean
+  /**
+   * If passed, a cancel button will be shown and onCancel will be called upon
+   * clicking it.
+   */
+  onCancel?: () => void
+
   dispatch: any // Extending DispatchProps seems to have problems
 }
