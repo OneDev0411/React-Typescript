@@ -13,7 +13,8 @@ const routes = {
     'envelope-edit',
     'export-all-deals',
     'export-custom-report'
-  ]
+  ],
+  'my-marketing-matters': ['punchout']
 }
 
 _.each(routes, (group, name) => {

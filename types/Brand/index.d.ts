@@ -32,6 +32,7 @@ declare interface IBrandMessage {
   office_title: string
   site_title: string
   type: string
+  mmm_cost_center?: string
 }
 
 declare interface IBrandUser {
