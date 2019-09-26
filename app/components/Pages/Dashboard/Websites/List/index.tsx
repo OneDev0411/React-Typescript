@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
+<<<<<<< HEAD
 import { Helmet } from 'react-helmet'
+=======
+>>>>>>> #3374 feat(website): finalize ui of websites manager
 
 import PageSideNav from 'components/PageSideNav'
 import { Container, Content } from 'components/SlideMenu'
@@ -16,6 +19,7 @@ export default function WebsitesPage() {
   const toggleSideNav = () => setIsSideNavOpen(!isSideNavOpen)
 
   return (
+<<<<<<< HEAD
     <>
       <Helmet>
         <title>Websites | Rechat</title>
@@ -41,5 +45,26 @@ export default function WebsitesPage() {
         </Content>
       </Container>
     </>
+=======
+    <Container isOpen={isSideNavOpen}>
+      <PageSideNav isOpen={isSideNavOpen}>
+        <Sidenav />
+      </PageSideNav>
+      <Content isSideMenuOpen={isSideNavOpen}>
+        <Header onToggleSidenav={toggleSideNav} />
+
+        <ListContainer>
+          <SiteCardItem />
+          <SiteCardItem />
+          <SiteCardItem />
+          <SiteCardItem />
+          <SiteCardItem />
+          <SiteCardItem />
+          <SiteCardItem />
+          <SiteCardItem />
+        </ListContainer>
+      </Content>
+    </Container>
+>>>>>>> #3374 feat(website): finalize ui of websites manager
   )
 }

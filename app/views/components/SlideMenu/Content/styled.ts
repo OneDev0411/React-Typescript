@@ -1,11 +1,20 @@
 import styled from 'styled-components'
 
+<<<<<<< HEAD:app/views/components/SlideMenu/Content/styled.ts
 interface ContainerProps {
   isSideMenuOpen: boolean
   menuWidth: React.CSSProperties['width']
 }
 
 export const Container = styled.div<ContainerProps>`
+=======
+interface Props {
+  isSideMenuOpen: boolean
+  menuWidth: string
+}
+
+export const Container = styled.div<Props>`
+>>>>>>> #3374 feat(website): finalize ui of websites manager:app/views/components/SlideMenu/Content/styled.ts
   width: ${props =>
     !props.isSideMenuOpen ? '100%' : `calc(100% - ${props.menuWidth})`};
   max-height: 100vh;

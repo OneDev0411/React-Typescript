@@ -9,9 +9,15 @@ import React, {
 } from 'react'
 
 import { TextField, Typography } from '@material-ui/core'
+<<<<<<< HEAD
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(() =>
+=======
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+
+const useStyles = makeStyles((theme: Theme) =>
+>>>>>>> #3374 feat(website): finalize ui of websites manager
   createStyles({
     input: {
       padding: 0
