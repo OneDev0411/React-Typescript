@@ -39,9 +39,14 @@ export function Checkbox(props: Props) {
         {checked && <CheckMark />}
       </CheckMarkBox>
 
-      <div style={{
-        width: `calc(100% - ${size / 16}rem - ${checkboxStyle && checkboxStyle.marginRight})`
-      }}>{props.children}</div>
+      <div
+        style={{
+          width: `calc(100% - ${size / 16}rem - ${checkboxStyle &&
+            checkboxStyle.marginRight})`
+        }}
+      >
+        {props.children}
+      </div>
     </Label>
   )
 }

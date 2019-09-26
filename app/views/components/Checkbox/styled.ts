@@ -13,6 +13,7 @@ export const Input = styled.input`
   padding: 0;
   position: absolute;
   width: 1px;
+  top: 0;
 `
 
 export const Label = styled.label`

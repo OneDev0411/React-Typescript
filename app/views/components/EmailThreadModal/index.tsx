@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect } from 'react'
 
-import { Box, createStyles, Dialog, makeStyles, Theme } from '@material-ui/core'
+import { Box, Dialog } from '@material-ui/core'
 
 import { DialogProps } from '@material-ui/core/Dialog'
 
@@ -18,16 +18,6 @@ interface Props extends DialogProps {
   threadKey: string | null
 }
 
-const useStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      dialogPaper: {
-        // without this,  weird scroll behavior is observed when reply is open
-        overflow: 'hidden'
-      }
-    }),
-  { name: 'EmailThreadModal' }
-)
 /**
  * A modal for showing emails of an email threa. I't now assumed
  * that we always have the thread key so we moved the thread fetching to
@@ -38,8 +28,6 @@ export function EmailThreadModal({ open, threadKey, ...otherProps }: Props) {
   const [setThreadsPromise, thread, loading, error] = useAsyncValue<
     IEmailThread
   >()
-
-  const classes = useStyles()
 
   useEffect(() => {
     if (open && threadKey) {
@@ -72,13 +60,7 @@ export function EmailThreadModal({ open, threadKey, ...otherProps }: Props) {
   }
 
   return (
-    <Dialog
-      open={open}
-      fullWidth
-      classes={{ paper: classes.dialogPaper }}
-      maxWidth="md"
-      {...otherProps}
-    >
+    <Dialog open={open} fullWidth maxWidth="md" {...otherProps}>
       {content}
     </Dialog>
   )
