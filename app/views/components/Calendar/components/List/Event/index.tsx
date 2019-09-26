@@ -9,6 +9,7 @@ import { NextTouch } from './NextTouch'
 import { EmailCampaign } from './EmailCampaign'
 
 import emptyStateEvent from '../../../helpers/get-event-empty-state'
+import { EmailThread } from './EmailThread'
 
 interface Props {
   style: React.CSSProperties
@@ -56,6 +57,11 @@ const events: {
       ['email_campaign', 'email_campaign_recipient'].includes(
         event.object_type
       ) && event.event_type === 'scheduled_email'
+  },
+  {
+    component: EmailThread,
+    condition: (event: ICalendarEvent) =>
+      event.object_type === 'email_thread_recipient'
   }
 ]
 
