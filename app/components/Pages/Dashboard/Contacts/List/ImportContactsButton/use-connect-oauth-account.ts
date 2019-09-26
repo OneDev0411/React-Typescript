@@ -2,7 +2,7 @@ import { OAuthProvider } from 'constants/contacts'
 
 import { useState } from 'react'
 
-import { connectOAuthAccount } from 'models/contacts/connect-o-auth-account'
+import { connectOAuthAccount } from 'models/o-auth-accounts/connect-o-auth-account'
 
 import { startImportingOAuthContacts } from './helpers'
 
