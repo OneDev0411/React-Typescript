@@ -319,6 +319,15 @@ const AsyncSearchWidget = Load({
 })
 
 /* ==================================== */
+//  Websites
+/* ==================================== */
+
+const AsyncWebsitesList = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Websites/List' /* webpackChunkName: "websites_list" */)
+})
+
+/* ==================================== */
 //  Other Pages
 /* ==================================== */
 
@@ -528,6 +537,10 @@ export default (
 
       <Route path="/dashboard/checklists">
         <IndexRoute component={AsyncChecklists} />
+      </Route>
+
+      <Route path="/dashboard/websites">
+        <IndexRoute component={AsyncWebsitesList} />
       </Route>
 
       <Route path="/dashboard/website" component={AsyncWebsite} />

@@ -19,7 +19,8 @@ interface SideNavContainerProps {
 }
 
 export const SideNavContainer = styled.div<SideNavContainerProps>`
-  width: ${props => (props.isOpen ? props.width : '0')};
+  width: ${props => props.width};
+  display: ${props => (props.isOpen ? 'block' : 'none')};
   background-color: ${props => props.theme.palette.grey[100]};
   padding-left: ${props => props.theme.spacing(1)}px;
   padding-top: ${props => props.theme.spacing(2)}px;
