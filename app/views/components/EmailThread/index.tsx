@@ -1,9 +1,10 @@
-import React, { CSSProperties } from 'react'
+import React, { CSSProperties, useState } from 'react'
 import { Divider } from '@material-ui/core'
 
 import useMap from 'react-use/lib/useMap'
 
 import { EmailThreadItem } from './components/EmailThreadItem'
+import { ShowAllToggle } from './components/ShowAllToggle'
 
 interface Props {
   thread: IEmailThread
@@ -11,11 +12,17 @@ interface Props {
 }
 
 export function EmailThread({ thread, style = {} }: Props) {
+  const [showAll, setShowAll] = useState(false)
+
   const [openedThreads, { set: setOpen }] = useMap()
+
+  const visibleItems = thread.filter(
+    (item, index) => showAll || index === 0 || index >= thread.length - 2
+  )
 
   return (
     <div style={style}>
-      {thread.map((email, index) => {
+      {visibleItems.map((email, index) => {
         const last = index === thread.length - 1
 
         const onToggleCollapsed = last
@@ -23,6 +30,15 @@ export function EmailThread({ thread, style = {} }: Props) {
           : collapsed => setOpen(email.id, !collapsed)
 
         const collapsed = last ? false : !openedThreads[email.id]
+
+        const numHidden = thread.length - visibleItems.length
+        const showAllToggle =
+          index === 0 && !showAll && numHidden > 0 ? (
+            <ShowAllToggle
+              onClick={() => setShowAll(true)}
+              numHidden={numHidden}
+            />
+          ) : null
 
         return (
           <React.Fragment key={email.id}>
@@ -32,7 +48,8 @@ export function EmailThread({ thread, style = {} }: Props) {
               showBottomButtons={last}
               collapsed={collapsed}
             />
-            {!last ? <Divider /> : null}
+            {!last && !showAllToggle ? <Divider /> : null}
+            {showAllToggle}
           </React.Fragment>
         )
       })}
