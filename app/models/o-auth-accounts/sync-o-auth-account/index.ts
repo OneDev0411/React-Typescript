@@ -1,6 +1,6 @@
 import { OAuthProvider } from 'constants/contacts'
 
-import Fetch from '../../../services/fetch'
+import Fetch from 'services/fetch'
 
 export async function syncOAuthAccount(
   provider: OAuthProvider,

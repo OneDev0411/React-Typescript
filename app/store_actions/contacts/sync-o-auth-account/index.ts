@@ -10,7 +10,7 @@ import { Dispatch } from 'redux'
 
 import { batchActions } from 'redux-batched-actions'
 
-import { syncOAuthAccount as sync } from 'models/contacts/sync-o-auth-account'
+import { syncOAuthAccount as sync } from 'models/o-auth-accounts/sync-o-auth-account'
 import { IOAuthAccountAction } from 'reducers/contacts/oAuthAccounts'
 
 export function syncOAuthAccount(provider: OAuthProvider, accountId: string) {

@@ -3,15 +3,17 @@ import { useEffect, useMemo, useState } from 'react'
 
 import usePrevious from 'react-use/lib/usePrevious'
 
+import { sendEmailViaOauthAccount } from 'models/o-auth-accounts/send-email-via-o-auth-account'
+
 import { EmailResponseType } from '../EmailThread/types'
 import EmailComposeForm from './EmailComposeForm'
-
-import { normalizeRecipients } from './helpers/normalize-recepients'
 
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import { EmailRecipientsFields } from './fields/EmailRecipientsFields'
 
 import { getReplyRecipients } from './helpers/get-reply-recipients'
+
+import { getEmailProvider } from './helpers/get-email-provider'
 
 import { EmailFormValues } from './index'
 
@@ -29,16 +31,37 @@ export function EmailThreadComposeForm({
   onSent
 }: Props) {
   const handleSendEmail = async (formValue: EmailFormValues) => {
-    const emailData = {
-      to: normalizeRecipients((formValue.to || []).filter(isEmailRecipient)),
-      cc: normalizeRecipients((formValue.cc || []).filter(isEmailRecipient)),
-      bcc: normalizeRecipients((formValue.bcc || []).filter(isEmailRecipient)),
-      subject: (formValue.subject || '').trim(),
-      html: formValue.body || '',
-      attachments: (formValue.attachments || []).map(item => item.id)
-    }
+    const owner = email.owner
+    const provider = getEmailProvider(email)
 
-    console.log(emailData)
+    if (owner && provider) {
+      const emailData: IEmailThreadEmailInput = {
+        subject: (formValue.subject || '').trim(),
+        to: (formValue.to || [])
+          .filter(isEmailRecipient)
+          .map(recipient => recipient.email),
+        cc: (formValue.cc || [])
+          .filter(isEmailRecipient)
+          .map(recipient => recipient.email),
+        bcc: (formValue.bcc || [])
+          .filter(isEmailRecipient)
+          .map(recipient => recipient.email),
+        html: formValue.body || '',
+        attachments: (formValue.attachments || []).map<IEmailAttachmentInput>(
+          item => ({
+            contentId: item.name,
+            filename: item.name,
+            isInline: false,
+            link: item.url,
+            type: item.mime
+          })
+        )
+      }
+
+      console.log(emailData)
+
+      return sendEmailViaOauthAccount(provider, owner, emailData)
+    }
   }
 
   const initialValue = useMemo<EmailFormValues>(() => {
@@ -99,7 +122,9 @@ function getEmailRecipient(email: string, displayName: string): string {
   return displayName ? `${displayName} <${email}>` : email
 }
 
-function isEmailRecipient(recipient: IDenormalizedEmailRecipientInput) {
+function isEmailRecipient(
+  recipient: IDenormalizedEmailRecipientInput
+): recipient is IDenormalizedEmailRecipientEmailInput {
   return recipient.recipient_type === 'Email'
 }
 

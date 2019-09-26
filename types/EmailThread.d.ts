@@ -7,6 +7,14 @@ declare interface IEmailAttachment {
   url: string
 }
 
+declare interface IEmailAttachmentInput {
+  type: string
+  isInline: boolean
+  filename: string
+  contentId: string
+  link: string
+}
+
 declare interface IEmailThreadEmail {
   attachments: IEmailAttachment[]
   bcc: string[]
@@ -18,8 +26,8 @@ declare interface IEmailThreadEmail {
   in_bound: boolean
   message_date: string
   message_id: string
-  origin: 'outlook' // FIXME
-  owner: UUID // // seems can be null. Check it
+  origin: 'outlook' | 'gmail' | 'rechat_email'
+  owner: 'rechat_email' extends this['origin'] ? null : UUID // // seems can be null. Check it
   owner_name: string // // seems can be null. Check it
   owner_email: string // seems can be null. Check it
   snippet: string
@@ -29,6 +37,16 @@ declare interface IEmailThreadEmail {
   thread_key: string
   to: string[]
   unique_body: string
+}
+
+declare type IEmailThreadEmailInput = Pick<
+  IEmailThreadEmail,
+  'to' | 'cc' | 'bcc' | 'subject'
+> & {
+  html: string
+  text?: string
+  attachments: IEmailAttachmentInput[]
+  threadId?: string
 }
 
 declare type IEmailThread = IEmailThreadEmail[]
