@@ -244,7 +244,8 @@
     "validator": "^9.2.0",
     "webpack": "^4.28.4",
     "webpack-bundle-analyzer": "^2.13.1",
-    "webpack-s3-plugin": "^1.0.3"
+    "webpack-s3-plugin": "^1.0.3",
+    "xml2js": "^0.4.22"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.4.4",
