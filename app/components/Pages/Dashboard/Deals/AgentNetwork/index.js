@@ -28,9 +28,7 @@ class AgentNetwork extends React.Component {
     super(props)
 
     this.state = {
-      query: {},
       isFetching: true,
-      // isFetchingMore: false,
       list: [],
       listInfo: {
         total: 0,
@@ -106,8 +104,7 @@ class AgentNetwork extends React.Component {
           count: response.info.count,
           total: response.info.total
         },
-        list,
-        query
+        list
       })
     } catch (error) {
       console.log(error)
@@ -115,37 +112,6 @@ class AgentNetwork extends React.Component {
       throw error
     }
   }
-
-  // handleLoadMore = async () => {
-  //   const offset = this.state.listInfo.count + 1
-
-  //   if (this.state.isFetchingMore || offset >= this.state.listInfo.total) {
-  //     return false
-  //   }
-
-  //   this.setState({ isFetchingMore: true })
-
-  //   try {
-  //     const response = await byValert(this.state.query, { offset }, false)
-
-  //     const list = normalizeList(response.data)
-
-  //     this.setState(state => ({
-  //       isFetchingMore: false,
-  //       listInfo: {
-  //         total: state.listInfo.total,
-  //         count: state.listInfo.count + response.info.count
-  //       },
-  //       list: [...state.list, ...list].sort(
-  //         (a, b) => b.listingsCount - a.listingsCount
-  //       )
-  //     }))
-  //   } catch (error) {
-  //     console.log(error)
-  //     this.setState({ isFetchingMore: false })
-  //     throw error
-  //   }
-  // }
 
   onClose = () => {
     browserHistory.push(`/dashboard/deals/${this.props.deal.id}/marketing`)
@@ -166,8 +132,6 @@ class AgentNetwork extends React.Component {
           data={this.state.list.filter(filterNonMLSAgents)}
           deal={this.props.deal}
           isFetching={this.state.isFetching}
-          // isFetchingMore={this.state.isFetchingMore}
-          // onRequestLoadMore={this.handleLoadMore}
           onChangeSelectedRows={this.onChangeSelectedRows}
           listInfo={this.state.listInfo}
         />
