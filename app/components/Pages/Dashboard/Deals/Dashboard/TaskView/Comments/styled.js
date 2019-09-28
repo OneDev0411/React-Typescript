@@ -11,7 +11,7 @@ export const Container = styled.div`
 
     .messages-list {
       margin-top: 10px !important;
-      margin-bottom: 2rem !important;
+      margin-bottom: 4rem !important;
       min-height: auto !important;
       max-height: none !important;
       width: 100%;
@@ -74,12 +74,13 @@ export const Container = styled.div`
       min-height: 2.5rem;
       margin-left: 0 !important;
       margin-right: 0 !important;
+      line-height: 1.5rem;
 
       .content {
         display: flex;
         align-items: center;
         width: auto !important;
-        line-height: 1 !important;
+        line-height: 1.5rem !important;
         display: block !important;
       }
 
