@@ -19,7 +19,7 @@ import { loadJS } from '../../../../../utils/load-js'
 import config from '../../../../../../config/public'
 
 import { Grid } from './Grid'
-import SearchAreaFilter from './SearchAreaFilter'
+import AreaFilter from './Filters/AreaFilter'
 import { normalizeList } from './helpers/normalize-list'
 import { valertOptions } from './helpers/valert-options'
 import { filterNonMLSAgents } from './helpers/filter-non-mls-agents'
@@ -96,7 +96,10 @@ class AgentNetwork extends React.Component {
       }
 
       if (filter.type === 'custom') {
-        return {}
+        return {
+          points: null,
+          mls_areas: filter.areas
+        }
       }
     }
 
@@ -125,8 +128,6 @@ class AgentNetwork extends React.Component {
   }
 
   fetchAgents = async query => {
-    console.log(query, this.state)
-
     if (!query) {
       return
     }
@@ -178,7 +179,7 @@ class AgentNetwork extends React.Component {
           onClickCloseButton={this.onClose}
         />
 
-        <SearchAreaFilter
+        <AreaFilter
           disabled={this.state.isFetching}
           handleSearch={this.onSetFilter}
         />
