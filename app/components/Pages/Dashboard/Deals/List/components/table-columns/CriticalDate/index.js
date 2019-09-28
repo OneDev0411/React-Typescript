@@ -12,20 +12,25 @@ export const getCriticalDateNextValue = deal => getNextDateValue(deal)
 
 export default function CriticalDate(props) {
   const { deal, rowId, rowsCount } = props
-  const table = DealContext.getFactsheetSection(deal, 'Dates')
+
+  const table = DealContext.getFactsheetSection(deal.brand.id, deal, 'Dates')
 
   if (table.length === 0) {
     return 'No closing date'
   }
 
   // get next critical date
-  const nextDate = getNextDate(deal)
+  const nextDate = getNextDate(deal, deal.brand.id)
 
   if (!nextDate) {
     return 'No closing date'
   }
 
-  const criticalDates = DealContext.getFactsheetSection(deal, 'Dates')
+  const criticalDates = DealContext.getFactsheetSection(
+    deal.brand.id,
+    deal,
+    'Dates'
+  )
 
   return (
     <PopOver
