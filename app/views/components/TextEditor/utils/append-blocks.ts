@@ -8,11 +8,15 @@ export function appendBlocks(
   blocks: ContentBlock[]
 ): EditorState {
   const selection = EditorState.moveSelectionToEnd(editorState).getSelection()
+  const lastBlock = editorState.getCurrentContent().getLastBlock()
 
   const newContent = Modifier.replaceWithFragment(
     editorState.getCurrentContent(),
     selection,
-    ContentState.createFromBlockArray(blocks).getBlockMap()
+    ContentState.createFromBlockArray([
+      ...(lastBlock.getType() === 'atomic' ? [lastBlock] : []),
+      ...blocks
+    ]).getBlockMap()
   )
 
   // It would be better to call `EditorState.set()` instead of
