@@ -74,9 +74,15 @@ export default compose(
     getSubareas: ({ setSubareas, setLoadingSubareas }) => async areas => {
       setLoadingSubareas(true)
 
-      const subareas = await api.getMlsSubareas(areas)
+      const subareas = await api.getMlsSubAreas(areas.map(({ value }) => value))
 
-      setSubareas(subareas)
+      setSubareas(
+        subareas.map(({ title, number, parent }) => ({
+          parent,
+          value: number,
+          label: `${title}: #${number}`
+        }))
+      )
       setLoadingSubareas(false)
     }
   }),
@@ -85,9 +91,7 @@ export default compose(
       getSubareas,
       updateField,
       selectedAreas,
-      setSelectedAreas,
-      selectedSubareas,
-      setSelectedSubareas
+      selectedSubareas
     }) => areas => {
       if (areas.length === 0) {
         updateField(formName, 'mlsAreas', [])
@@ -103,7 +107,7 @@ export default compose(
 
       // delete subareas when theirs parent deleted.
       if (areas.length < selectedAreas.length) {
-        const subareas = selectedSubareas.map((subarea, index) => {
+        const subareas = selectedSubareas.map(subarea => {
           const hasParent = areas.some(area => subarea.parent === area.value)
 
           if (hasParent) {
@@ -123,7 +127,11 @@ export default compose(
     componentDidMount() {
       api.getMlsAreas().then(areas => {
         this.setState({
-          areas
+          areas: areas.map(({ title, number, parent }) => ({
+            parent,
+            label: title,
+            value: number
+          }))
         })
       })
 
