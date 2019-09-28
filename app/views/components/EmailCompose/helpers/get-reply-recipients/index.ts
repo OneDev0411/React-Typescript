@@ -1,4 +1,4 @@
-import { getEmailAddressFromEmailRecipient } from '../../../EmailRecipientsChipsInput/helpers/get-email-address-from-email-recipient'
+import { parseEmailRecipient } from '../../../EmailRecipientsChipsInput/helpers/parse-email-recipient'
 
 /**
  * Given an email thread, returns to and cc recipient arrays. The logic is
@@ -27,7 +27,7 @@ export function getReplyRecipients(
         ? [...email.to, ...email.cc]
             .filter(
               recipient =>
-                getEmailAddressFromEmailRecipient(recipient) !==
+                parseEmailRecipient(recipient).emailAddress !==
                 email.owner_email
             )
             .map(emailAddressToRecipient)

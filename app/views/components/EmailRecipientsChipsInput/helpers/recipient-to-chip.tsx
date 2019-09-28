@@ -1,7 +1,7 @@
 import { ChipInputItem } from '../../ChipsInput/types'
 import { validateRecipient } from './validate-recipient'
 import { recipientToString } from './recipient-to-string'
-import { getEmailAddressFromEmailRecipient } from './get-email-address-from-email-recipient'
+import { parseEmailRecipient } from './parse-email-recipient'
 
 export function recipientToChip(
   recipient: IDenormalizedEmailRecipientInput
@@ -10,7 +10,7 @@ export function recipientToChip(
   const label = recipientToString(recipient)
 
   if (recipient.recipient_type === 'Email') {
-    const emailAddress = getEmailAddressFromEmailRecipient(recipient.email)
+    const { emailAddress } = parseEmailRecipient(recipient.email)
 
     return {
       label,

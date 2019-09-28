@@ -2,6 +2,11 @@ import { ContentBlock, EditorState } from 'draft-js'
 import { Options as ExportOptions } from 'draft-js-export-html'
 import { Options as ImportOptions } from 'draft-js-import-html'
 
+import {
+  INLINE_ELEMENTS,
+  SPECIAL_ELEMENTS
+} from 'draft-js-import-element/lib/lib/Constants'
+
 import { renderAtomicBlockStyles } from './render-atomic-block'
 import { getAtomicBlockEntityData } from './get-atomic-block-entity-data'
 import {
@@ -9,11 +14,16 @@ import {
   signatureCustomBlockFn
 } from '../plugins/draft-js-signature-plugin'
 import { stylesToString } from './styles-to-string'
+import { iFrameCustomBlockFn } from '../plugins/draft-js-iframe-plugin'
+import { composeFunctions } from './compose-functions'
 
 interface HtmlConversionOptions {
   stateToHtmlOptions: ExportOptions
   stateFromHtmlOptions: ImportOptions
 }
+
+delete INLINE_ELEMENTS.iframe
+delete SPECIAL_ELEMENTS.iframe
 
 const blockStyleFn = signatureBlockStyleFn('rechat-signature')
 
@@ -57,7 +67,10 @@ export function getHtmlConversionOptions(
       defaultBlockTag: 'div'
     },
     stateFromHtmlOptions: {
-      customBlockFn: signatureCustomBlockFn('rechat-signature'),
+      customBlockFn: composeFunctions(
+        iFrameCustomBlockFn('rechat-quote'),
+        signatureCustomBlockFn('rechat-signature')
+      ),
       customInlineFn: (element, inlineCreators) => {
         if (element instanceof HTMLImageElement) {
           const data = getAtomicBlockEntityData(element)
