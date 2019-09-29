@@ -191,6 +191,24 @@ export function ChipsInput<T>({
     }
   }
 
+  const renderAvatar = suggestion => {
+    const { avatar, AvatarComponent } = suggestion
+
+    if (AvatarComponent) {
+      return <ListItemAvatar>{AvatarComponent}</ListItemAvatar>
+    }
+
+    if (avatar) {
+      return (
+        <ListItemAvatar>
+          <Avatar {...suggestion.avatar} />
+        </ListItemAvatar>
+      )
+    }
+
+    return null
+  }
+
   return (
     <Downshift
       inputValue={inputValue}
@@ -260,20 +278,7 @@ export function ChipsInput<T>({
                       selected={highlightedIndex === index}
                       button
                     >
-                      {typeof suggestion.avatar === 'string' ? (
-                        <ListItemAvatar>
-                          <Avatar
-                            title={suggestion.subtitle}
-                            image={suggestion.avatar}
-                          />
-                        </ListItemAvatar>
-                      ) : (
-                        <ListItemAvatar>
-                          {suggestion.avatar || (
-                            <Avatar title={suggestion.title} />
-                          )}
-                        </ListItemAvatar>
-                      )}
+                      {renderAvatar(suggestion)}
                       <ListItemText
                         primary={suggestion.title}
                         secondary={suggestion.subtitle}

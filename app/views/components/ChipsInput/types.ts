@@ -4,6 +4,8 @@ import { TextFieldProps } from '@material-ui/core/TextField'
 import { Observable } from 'rxjs'
 import { TextField } from '@material-ui/core'
 
+import { AvatarProps } from 'components/Avatar'
+
 /**
  * Used in {@link ChipsInputProps#itemToChip}. See description there.
  */
@@ -17,7 +19,16 @@ export interface ChipInputItem {
 export interface Suggestion {
   title: ReactNode
   subtitle?: ReactNode
-  avatar?: ReactNode
+
+  /**
+   * The rechat avatar component
+   */
+  avatar?: AvatarProps
+
+  /**
+   * A custom avatar
+   */
+  AvatarComponent?: ReactNode
 }
 
 export interface ChipsInputProps<T> {
