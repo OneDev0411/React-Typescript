@@ -13,6 +13,8 @@ import { of } from 'rxjs/observable/of'
 
 import { ChipsInput } from 'components/ChipsInput'
 
+import { DEFAULT_RADIUS_FILTER } from '../constants'
+
 import { useGetMlsArea } from './use-get-mls-areas'
 import { useGetMlsSubArea } from './use-get-mls-sub-areas'
 
@@ -32,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-interface Filter {
+export interface Filter {
   type: string
   radius?: number
   areas?: Array<Array<number>>
@@ -47,10 +49,12 @@ export default function AreaFilter(props: Props) {
   const classes = useStyles()
   const { disabled } = props
   const parentAreas = useGetMlsArea()
-  const [radius, setRadius] = useState<number>(3)
+  const [radius, setRadius] = useState<number>(DEFAULT_RADIUS_FILTER.radius)
   const [selectedParentAreas, setSelectedParentAreas] = useState<IMLSArea[]>([])
   const [selectedSubAreas, setSelectedSubAreas] = useState<IMLSArea[]>([])
-  const [filterType, setFilterType] = useState<string>('radius')
+  const [filterType, setFilterType] = useState<string>(
+    DEFAULT_RADIUS_FILTER.type
+  )
   const { subAreas, isLoadingSubAreas } = useGetMlsSubArea(
     selectedParentAreas.map(({ number }) => number)
   )

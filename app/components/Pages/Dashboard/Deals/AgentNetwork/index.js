@@ -2,41 +2,37 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 
-import { getAddress } from 'models/Deal/helpers/context'
-
 import getPlace from 'models/listings/search/get-place'
-
-import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
-import { byValert } from 'models/listings/search/get-listings'
-import { selectDealById } from 'reducers/deals/list'
+import { getAddress } from 'models/Deal/helpers/context'
 import getListing from 'models/listings/listing/get-listing'
+import { byValert } from 'models/listings/search/get-listings'
+
+import { selectDealById } from 'reducers/deals/list'
+
+import { loadJS } from 'utils/load-js'
+import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 
 import Header from 'components/PageHeader'
 import { resetGridSelectedItems } from 'components/Grid/Table/Plugins/Selectable'
-
-import { loadJS } from '../../../../../utils/load-js'
 
 import config from '../../../../../../config/public'
 
 import { Grid } from './Grid'
 import AreaFilter from './Filters/AreaFilter'
+import { DEFAULT_RADIUS_FILTER } from './constants'
 import { normalizeList } from './helpers/normalize-list'
 import { valertOptions } from './helpers/valert-options'
 import { filterNonMLSAgents } from './helpers/filter-non-mls-agents'
 
 class AgentNetwork extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      isFetching: true,
-      location: null,
-      listing: null,
-      list: [],
-      listInfo: {
-        total: 0,
-        count: 0
-      }
+  state = {
+    isFetching: true,
+    location: null,
+    listing: null,
+    list: [],
+    listInfo: {
+      total: 0,
+      count: 0
     }
   }
 
@@ -51,10 +47,7 @@ class AgentNetwork extends React.Component {
 
   initialize = async () => {
     const { deal } = this.props
-    const filter = {
-      type: 'radius',
-      radius: 1
-    }
+    const filter = DEFAULT_RADIUS_FILTER
 
     let query = null
     let location = null
