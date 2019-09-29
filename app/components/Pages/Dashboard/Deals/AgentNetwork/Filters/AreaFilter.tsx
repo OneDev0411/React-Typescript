@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import cn from 'classnames'
 import { TextFieldProps } from '@material-ui/core/TextField'
 import {
   Box,
@@ -12,6 +13,8 @@ import { Observable } from 'rxjs'
 import { of } from 'rxjs/observable/of'
 
 import { ChipsInput } from 'components/ChipsInput'
+
+import { useChipStyles } from '../../../../../../styles/use-chips-styles'
 
 import { DEFAULT_RADIUS_FILTER } from '../constants'
 
@@ -47,6 +50,7 @@ interface Props {
 
 export default function AreaFilter(props: Props) {
   const classes = useStyles()
+  const chipsClasses = useChipStyles()
   const { disabled } = props
   const parentAreas = useGetMlsArea()
   const [radius, setRadius] = useState<number>(DEFAULT_RADIUS_FILTER.radius)
@@ -196,10 +200,13 @@ export default function AreaFilter(props: Props) {
                   disabled,
                   hiddenLabel: true,
                   margin: 'dense',
-                  placeholder: 'Enter Area',
+                  placeholder: 'Enter MLS Area',
                   variant: 'filled'
                 } as TextFieldProps
               }
+              ChipProps={{
+                className: cn(chipsClasses.dark, chipsClasses['margin--small'])
+              }}
             />
             <ChipsInput
               allowAddOnBlur={false}
@@ -221,10 +228,13 @@ export default function AreaFilter(props: Props) {
                     selectedParentAreas.length === 0,
                   hiddenLabel: true,
                   margin: 'dense',
-                  placeholder: 'Enter Sub-area',
+                  placeholder: 'Enter MLS Sub-area',
                   variant: 'filled'
                 } as TextFieldProps
               }
+              ChipProps={{
+                className: cn(chipsClasses.dark, chipsClasses['margin--small'])
+              }}
             />
             <Button
               disabled={
