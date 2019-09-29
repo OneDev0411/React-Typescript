@@ -6,6 +6,7 @@ import { ListContext } from '../../context'
 
 import { EventContainer } from '../components/EventContainer'
 import { Associations } from './Associations'
+import { CrmStatus } from './Status'
 import OpenHouseRegistration from './actions/OpenHouseRegistration'
 
 import styles from '../styles'
@@ -15,9 +16,10 @@ interface Props {
   event: ICalendarEvent
   nextItem: ICalendarListRow
   user: IUser
+  onEventChange(event: IEvent, type: string): void
 }
 
-export function CrmTask({ style, event, nextItem }: Props) {
+export function CrmTask({ style, event, nextItem, onEventChange }: Props) {
   const { setSelectedEvent } = useContext(ListContext)
 
   const handleSelectEvent = (e: MouseEvent<HTMLElement>) => {
@@ -48,6 +50,7 @@ export function CrmTask({ style, event, nextItem }: Props) {
       }}
       title={
         <div style={styles.title}>
+          <CrmStatus event={event} onChange={onEventChange} />
           <a
             onClick={handleSelectEvent}
             style={{

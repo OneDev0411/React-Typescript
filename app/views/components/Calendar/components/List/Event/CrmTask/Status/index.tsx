@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react'
 import Checkbox from '@material-ui/core/Checkbox'
 
 import { updateTask } from 'models/tasks/update-task'
+
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 interface Props {
@@ -67,9 +68,16 @@ export function CrmStatus({ event, onChange }: Props) {
     }
 
     try {
-      const task = await updateTask(newTask)
+      const task: IEvent = await updateTask(newTask)
 
-      onChange(task, 'updated')
+      const taskWithAssociations = {
+        ...task,
+        associations: event.full_crm_task
+          ? event.full_crm_task.associations
+          : []
+      }
+
+      onChange(taskWithAssociations, 'updated')
     } catch (e) {
       console.log(e)
     }

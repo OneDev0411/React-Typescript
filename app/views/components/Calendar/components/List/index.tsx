@@ -143,6 +143,7 @@ const CalendarList: React.FC<Props> = props => {
                   event={props.rows[index] as ICalendarEvent}
                   nextItem={props.rows[index + 1]}
                   style={style}
+                  onEventChange={handleEventChange}
                 />
               )}
             </>

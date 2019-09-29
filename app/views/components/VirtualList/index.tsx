@@ -125,7 +125,8 @@ function isReachedEnd(
   itemCount: number,
   threshold: number
 ): boolean {
-  if (!data) {
+  // when data is not provided or when the list is short (isn't scrolling)
+  if (!data || data.visibleStartIndex === data.overscanStartIndex) {
     return false
   }
 

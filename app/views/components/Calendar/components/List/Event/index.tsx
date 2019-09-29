@@ -14,10 +14,16 @@ interface Props {
   style: React.CSSProperties
   event: ICalendarEvent
   nextItem: ICalendarListRow
+  onEventChange(event: IEvent, type: string): void
 }
 
 const events: {
-  component({ event, style, nextItem }: Props): React.ReactElement<any>
+  component({
+    event,
+    style,
+    nextItem,
+    onEventChange
+  }: Props): React.ReactElement<any>
   condition(event: ICalendarEvent): boolean
 }[] = [
   {
@@ -56,11 +62,18 @@ const events: {
 /**
  * renders the given calendar event
  */
-export function Event({ event, nextItem, style }: Props) {
+export function Event({ event, nextItem, style, onEventChange }: Props) {
   const item = events.find(item => item.condition(event) === true)
 
   if (item) {
-    return <item.component style={style} event={event} nextItem={nextItem} />
+    return (
+      <item.component
+        style={style}
+        event={event}
+        nextItem={nextItem}
+        onEventChange={onEventChange}
+      />
+    )
   }
 
   return null
