@@ -7,8 +7,6 @@ import React, {
   RefObject
 } from 'react'
 
-import { Tabs, Tab, createStyles, makeStyles, Theme } from '@material-ui/core'
-
 import { getNotes } from 'models/contacts/helpers/get-notes'
 
 import List from 'components/Calendar'
@@ -23,12 +21,9 @@ import { convertNoteToCalendarEvent } from './helpers/convert-note-to-calendar-e
 import AddEvent from './AddEvent'
 import AddNote from './AddNote'
 
-import { Container, Header, Actions } from './styled'
+import { TabsFilter, Filters } from './Tabs'
 
-enum Filter {
-  All = 0,
-  Upcoming = 1
-}
+import { Container, Header, Actions } from './styled'
 
 export interface TimelineRef {
   refresh(): void
@@ -47,19 +42,10 @@ const associations = [
   'calendar_event.full_crm_task'
 ]
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      fontSize: theme.typography.subtitle1.fontSize
-    }
-  })
-)
-
 function Timeline(props: Props) {
   const timelineRef = useRef<CalendarRef>(null)
-  const classes = useStyles()
 
-  const [activeFilter, setActiveFilter] = useState<Filter>(Filter.All)
+  const [activeFilter, setActiveFilter] = useState<Filters>(Filters.All)
 
   const filter = {
     contact: props.contact.id,
@@ -72,8 +58,8 @@ function Timeline(props: Props) {
     ]
   }
 
-  const getCalendarRange = (filter: Filter) =>
-    filter === Filter.All
+  const getCalendarRange = (filter: Filters) =>
+    filter === Filters.All
       ? getTimelineInitialRange()
       : getUpcomingInitialRange()
 
@@ -108,31 +94,10 @@ function Timeline(props: Props) {
   return (
     <Container>
       <Header>
-        <div>
-          <Tabs
-            value={activeFilter}
-            onChange={handleChangeFilter}
-            indicatorColor="primary"
-            textColor="primary"
-            variant="scrollable"
-            scrollButtons="auto"
-          >
-            <Tab
-              value={Filter.All}
-              label="All Events"
-              classes={{
-                root: classes.root
-              }}
-            />
-            <Tab
-              value={Filter.Upcoming}
-              label="Upcoming Events"
-              classes={{
-                root: classes.root
-              }}
-            />
-          </Tabs>
-        </div>
+        <TabsFilter
+          activeFilter={activeFilter}
+          onChangeFilter={handleChangeFilter}
+        />
 
         <Actions>
           <AddNote
@@ -146,7 +111,7 @@ function Timeline(props: Props) {
       <div>
         <List
           // display calendar events vice versa
-          contrariwise={activeFilter === Filter.All}
+          contrariwise={activeFilter === Filters.All}
           ref={timelineRef}
           filter={filter}
           initialRange={getCalendarRange(activeFilter)}
