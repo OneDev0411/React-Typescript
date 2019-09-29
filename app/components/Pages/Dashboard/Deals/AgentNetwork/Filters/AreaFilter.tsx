@@ -46,13 +46,13 @@ interface Props {
 export default function AreaFilter(props: Props) {
   const classes = useStyles()
   const { disabled } = props
-  const areas = useGetMlsArea()
+  const parentAreas = useGetMlsArea()
   const [radius, setRadius] = useState<number>(3)
-  const [selectedAreas, setSelectedAreas] = useState<IMLSArea[]>([])
+  const [selectedParentAreas, setSelectedParentAreas] = useState<IMLSArea[]>([])
   const [selectedSubAreas, setSelectedSubAreas] = useState<IMLSArea[]>([])
   const [filterType, setFilterType] = useState<string>('radius')
   const { subAreas, isLoadingSubAreas } = useGetMlsSubArea(
-    selectedAreas.map(({ number }) => number)
+    selectedParentAreas.map(({ number }) => number)
   )
 
   const isFilterTypeRadius = filterType === 'radius'
@@ -87,12 +87,16 @@ export default function AreaFilter(props: Props) {
     return handler
   }
 
-  const getFilteredAreas = () => {
-    return [...selectedAreas, ...selectedSubAreas].map(area => [
-      area.number,
-      area.parent
-    ])
-  }
+  const getFilteredAreas = () =>
+    [
+      ...selectedSubAreas,
+      ...selectedParentAreas.filter(
+        parentArea =>
+          !selectedSubAreas.some(
+            subArea => subArea.parent === parentArea.number
+          )
+      )
+    ].map(area => [area.number, area.parent])
 
   const onSearch = () => {
     const filter: Filter = { type: filterType }
@@ -177,11 +181,11 @@ export default function AreaFilter(props: Props) {
               allowAddOnBlur={false}
               allowAddOnComma={false}
               allowAddOnEnter={false}
-              items={selectedAreas}
+              items={selectedParentAreas}
               itemToChip={item => ({ label: item.title })}
               itemToSuggestion={({ title }) => ({ title })}
-              onChange={setSelectedAreas}
-              getSuggestions={getSuggestions(areas)}
+              onChange={setSelectedParentAreas}
+              getSuggestions={getSuggestions(parentAreas)}
               classes={{ container: classes.chipsInputContainer }}
               TextFieldProps={
                 {
@@ -208,7 +212,9 @@ export default function AreaFilter(props: Props) {
               TextFieldProps={
                 {
                   disabled:
-                    disabled || isLoadingSubAreas || selectedAreas.length === 0,
+                    disabled ||
+                    isLoadingSubAreas ||
+                    selectedParentAreas.length === 0,
                   hiddenLabel: true,
                   margin: 'dense',
                   placeholder: 'Enter Sub-area',
@@ -219,7 +225,8 @@ export default function AreaFilter(props: Props) {
             <Button
               disabled={
                 disabled ||
-                (selectedAreas.length === 0 && selectedSubAreas.length === 0)
+                (selectedParentAreas.length === 0 &&
+                  selectedSubAreas.length === 0)
               }
               color="primary"
               className={classes.searchButton}
