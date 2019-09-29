@@ -10,7 +10,7 @@ export function tagToSuggestion(
   return {
     title: recipient.tag.text,
     subtitle: 'Tag',
-    avatar: (
+    AvatarComponent: (
       <Avatar>
         <TagIcon />
       </Avatar>

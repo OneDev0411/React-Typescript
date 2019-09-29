@@ -11,7 +11,7 @@ export function listToSuggestion(
   return {
     title: recipient.list.name,
     subtitle: 'List',
-    avatar: (
+    AvatarComponent: (
       <Avatar>
         <ListIcon color="currentColor" />
       </Avatar>
