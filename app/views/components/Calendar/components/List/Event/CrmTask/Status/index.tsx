@@ -12,14 +12,21 @@ interface Props {
 
 export function CrmStatus({ event, onChange }: Props) {
   const context = useContext(ConfirmationModalContext)
-
   const [isChecked, setIsChecked] = useState<boolean>(event.status === 'DONE')
+
+  const dueDate = new Date(event.timestamp * 1000)
+
+  // const dueDate = new Date(event.timestamp * 1000)
+  const now = new Date()
+
+  if (now > dueDate) {
+    return null
+  }
 
   const handleChange = async () => {
     const [shouldUpdate, newTask] = await new Promise(resolve => {
       // Change task due date to now if user is marking it as done
       // const dueDate = new Date(event.timestamp * 1000)
-      const now = new Date()
 
       // if (dueDate <= now || event.status === 'DONE') {
       //   return resolve([
