@@ -9,7 +9,7 @@ import { CalendarRef } from 'components/Calendar/types'
 import DatePicker from 'components/DatePicker'
 
 import { TodayButton } from './components/TodayButton'
-import Filters, { FiltersRef } from './components/Filters'
+import Filters, { defaultFilter, FiltersRef } from './components/Filters'
 import { Export } from './components/Export'
 import CreateEvent from './components/CreateEvent'
 
@@ -41,7 +41,7 @@ const CalendarPage: React.FC = props => {
   /**
    * current filters
    */
-  const [filter, setFilter] = useState<object>({})
+  const [filter, setFilter] = useState<object>(defaultFilter)
 
   /**
    * triggers when user clicks on a date in datepicker of left side

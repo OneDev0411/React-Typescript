@@ -13,6 +13,16 @@ import { importantDatesIcons } from 'views/utils/important-dates-icons'
 
 import { Container, TabTitle, TabItem } from './styled'
 
+export const defaultFilter = {
+  'object_types[]': [
+    'contact',
+    'contact_attribute',
+    'crm_association',
+    'email_campaign',
+    'deal_context'
+  ]
+}
+
 interface TabItem {
   label: string
   value: number
@@ -34,7 +44,7 @@ const TAB_ITEMS: TabItem[] = [
     label: 'All Events',
     value: 0,
     Icon: null,
-    filter: {}
+    filter: defaultFilter
   },
   {
     label: 'Touches',

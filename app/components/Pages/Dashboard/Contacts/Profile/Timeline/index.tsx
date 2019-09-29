@@ -51,9 +51,9 @@ function Timeline(props: Props) {
     contact: props.contact.id,
     object_types: [
       'email_thread_recipient',
-      'email_thread',
       'crm_association',
       'email_campaign_recipient',
+      'contact',
       'contact_attribute'
     ]
   }
