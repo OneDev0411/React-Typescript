@@ -7,7 +7,7 @@ import nunjucks from 'nunjucks'
 import xml2js from 'xml2js'
 
 import getListing from '../../../app/models/listings/listing/get-listing'
-import { getField } from '../../../app/models/Deal/helpers/context/get-field'
+import { getPrice } from '../../../app/models/Deal/helpers/context/get-price'
 
 import {
   API_URL,
@@ -20,10 +20,7 @@ const router = require('koa-router')()
 const app = new Koa()
 
 function getRequestBody(user, deal, listing, costCenter, callbackUrl) {
-  const price =
-    getField(deal, 'sales_price') ||
-    getField(deal, 'list_price') ||
-    getField(deal, 'lease_price')
+  const price = getPrice(deal)
 
   return nunjucks.renderString(REQUEST_BODY_TEMPLATE, {
     duns: DUNS,
@@ -87,24 +84,33 @@ router.post('/my-marketing-matters/punchout', bodyParser(), async ctx => {
     return
   }
 
-  const { user, deal, costCenter, redirectUrl } = ctx.request.body
-  const punchoutResponse = await sendPunchoutRequest(
-    user,
-    deal,
-    costCenter,
-    redirectUrl
-  )
-  const parsedResponse = await xml2js.parseStringPromise(punchoutResponse.text)
+  try {
+    const { user, deal, costCenter, redirectUrl } = ctx.request.body
+    const punchoutResponse = await sendPunchoutRequest(
+      user,
+      deal,
+      costCenter,
+      redirectUrl
+    )
+    const parsedResponse = await xml2js.parseStringPromise(
+      punchoutResponse.text
+    )
 
-  const response = {
-    url:
-      parsedResponse.cXML.Response[0].PunchOutSetupResponse[0].StartPage[0]
-        .URL[0]
-  }
+    const response = {
+      url:
+        parsedResponse.cXML.Response[0].PunchOutSetupResponse[0].StartPage[0]
+          .URL[0]
+    }
 
-  ctx.body = {
-    status: 'done',
-    response
+    ctx.status = 200
+    ctx.body = {
+      response
+    }
+  } catch (err) {
+    ctx.status = 500
+    ctx.body = {
+      error: err
+    }
   }
 })
 
