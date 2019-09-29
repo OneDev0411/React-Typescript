@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { withRouter, WithRouterProps } from 'react-router'
+import { connect } from 'react-redux'
+import { addNotification, Notification } from 'reapop'
 
 import { isSelling } from 'models/Deal/helpers/context/get-side'
 import { getActiveTeam } from 'utils/user-teams'
@@ -16,15 +18,10 @@ import {
 } from '../styled'
 import { sendPunchOutRequest } from './helpers'
 
-interface Props {
-  deal: IDeal
-  user: IUser
-}
-
 function getUserCostCenter(user: IUser): string | null {
   const team = getActiveTeam(user)
 
-  let costCenter: null | string = null
+  let costCenter: string | null = null
   let brand: IBrand | null = team && team.brand
 
   while (brand) {
@@ -39,11 +36,17 @@ function getUserCostCenter(user: IUser): string | null {
   return costCenter
 }
 
+interface Props {
+  deal: IDeal
+  user: IUser
+  notify: (notification: Notification) => any
+}
+
 function MyMarketingMatters({
   deal,
   user,
-  location,
-  router
+  notify,
+  location
 }: Props & WithRouterProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [costCenter, setCostCenter] = useState<null | string>(null)
@@ -59,25 +62,29 @@ function MyMarketingMatters({
 
     setIsLoading(true)
 
-    const result = await sendPunchOutRequest(
-      user,
-      deal,
-      costCenter,
-      location.pathname
-    )
+    try {
+      const result = await sendPunchOutRequest(
+        user,
+        deal,
+        costCenter,
+        location.pathname
+      )
+
+      result.response && window.location.replace(result.response.url)
+    } catch (err) {
+      notify({
+        status: 'error',
+        message:
+          'Something went wrong. Please try again or contact Rechat support.'
+      })
+      console.error(err)
+    }
 
     setIsLoading(false)
-
-    window.location.replace(result.response.url)
   }
 
-  // Only selling deal types are supported
-  if (!isSelling(deal)) {
-    return null
-  }
-
-  // Only the brands with mmm cost center are allowed
-  if (!costCenter) {
+  // Only selling deal types for brands with mmm cost centers are supported
+  if (!isSelling(deal) || !costCenter) {
     return null
   }
 
@@ -106,4 +113,9 @@ function MyMarketingMatters({
   )
 }
 
-export default withRouter(MyMarketingMatters)
+export default withRouter(
+  connect(
+    null,
+    { notify: addNotification }
+  )(MyMarketingMatters)
+)

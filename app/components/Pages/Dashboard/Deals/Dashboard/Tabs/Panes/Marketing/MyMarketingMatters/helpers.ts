@@ -3,10 +3,10 @@ import superagent from 'superagent'
 const API_URL = '/api/my-marketing-matters/punchout'
 
 interface PunchoutResponse {
-  status: 'done'
-  response: {
+  response?: {
     url: 'string'
   }
+  error?: string
 }
 
 export async function sendPunchOutRequest(
