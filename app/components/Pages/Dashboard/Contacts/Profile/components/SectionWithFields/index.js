@@ -143,6 +143,9 @@ class SectionWithFields extends React.Component {
         message: `${attribute_def.label || attribute_def.name} added.`
       })
 
+      this.props.onChangeAttribute &&
+        this.props.onChangeAttribute(attribute_def, data, 'insert')
+
       this.setState(state => ({
         orderedAttributes: state.orderedAttributes.map(a =>
           a.cuid !== cuid
@@ -195,6 +198,9 @@ class SectionWithFields extends React.Component {
         dismissAfter: 4000,
         message: `${attribute_def.label || attribute_def.name} updated.`
       })
+
+      this.props.onChangeAttribute &&
+        this.props.onChangeAttribute(attribute_def, data, 'update')
 
       this.setState(state => {
         state.orderedAttributes.map(a =>
@@ -303,6 +309,13 @@ class SectionWithFields extends React.Component {
           })
 
           this.updateContact(attribute.attribute_def)
+
+          this.props.onChangeAttribute &&
+            this.props.onChangeAttribute(
+              attribute.attribute_def,
+              null,
+              'delete'
+            )
         } catch (error) {
           console.log(error)
           this.setState({ orderedAttributes: backupList })
