@@ -25,14 +25,19 @@ import { valertOptions } from './helpers/valert-options'
 import { filterNonMLSAgents } from './helpers/filter-non-mls-agents'
 
 class AgentNetwork extends React.Component {
-  state = {
-    isFetching: true,
-    location: null,
-    listing: null,
-    list: [],
-    listInfo: {
-      total: 0,
-      count: 0
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      address: props.location.query.address || '',
+      isFetching: true,
+      location: null,
+      listing: null,
+      list: [],
+      listInfo: {
+        total: 0,
+        count: 0
+      }
     }
   }
 
@@ -55,18 +60,20 @@ class AgentNetwork extends React.Component {
 
     try {
       if (deal) {
-        location = await getPlace(getAddress(deal))
+        const address = getAddress(deal)
+
+        location = await getPlace(address)
 
         if (location) {
           if (deal.listing) {
             listing = await getListing(deal.listing)
           }
 
-          this.setState({ listing, location })
+          this.setState({ address, listing, location })
           query = this.getQuery(listing, location, filter)
         }
-      } else if (this.props.location.query.address) {
-        location = await getPlace(this.props.location.query.address)
+      } else if (this.address) {
+        location = await getPlace(this.address)
         this.setState({ location })
         query = this.getQuery(listing, location, filter)
       }
@@ -166,10 +173,10 @@ class AgentNetwork extends React.Component {
     return (
       <React.Fragment>
         <Header
-          title="Agent Network"
-          subtitle={this.address}
-          showBackButton={false}
           onClickCloseButton={this.onClose}
+          showBackButton={false}
+          subtitle={this.state.address}
+          title="Agent Network"
         />
 
         <AreaFilter
@@ -181,8 +188,8 @@ class AgentNetwork extends React.Component {
           data={this.state.list.filter(filterNonMLSAgents)}
           deal={this.props.deal}
           isFetching={this.state.isFetching}
-          onChangeSelectedRows={this.onChangeSelectedRows}
           listInfo={this.state.listInfo}
+          onChangeSelectedRows={this.onChangeSelectedRows}
         />
       </React.Fragment>
     )
