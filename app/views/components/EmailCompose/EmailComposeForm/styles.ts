@@ -19,5 +19,6 @@ export const styles = (theme: Theme) =>
       overflow: 'auto',
       paddingBottom: '1px', // For Safari!
       maxHeight: '70%'
-    }
+    },
+    footer: {}
   })

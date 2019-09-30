@@ -23,6 +23,7 @@ interface Props {
   isSubmitting: boolean
   enableSchedule: boolean
   onCancel?: () => void
+  className?: string
 }
 
 export function Footer(props: Props) {
@@ -30,7 +31,7 @@ export function Footer(props: Props) {
   const isScheduled = !!due_at
 
   return (
-    <FooterContainer>
+    <FooterContainer className={props.className}>
       <div className="features-list">
         <EmailAttachmentsDropdown
           deal={props.deal}

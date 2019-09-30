@@ -2,6 +2,8 @@ import * as React from 'react'
 import { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 
+import { createStyles, makeStyles, Theme } from '@material-ui/core'
+
 import { sendEmailViaOauthAccount } from 'models/o-auth-accounts/send-email-via-o-auth-account'
 import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
 import { IAppState } from 'reducers'
@@ -31,6 +33,19 @@ interface Props {
   fetchOAuthAccounts: () => Promise<any>
 }
 
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      footer: {
+        position: 'sticky',
+        bottom: 0,
+        zIndex: 2,
+        background: theme.palette.background.paper
+      }
+    }),
+  { name: 'EmailThreadComposeForm' }
+)
+
 export function EmailThreadComposeForm({
   responseType,
   email,
@@ -39,6 +54,8 @@ export function EmailThreadComposeForm({
   fetchOAuthAccounts,
   oAuthAccounts
 }: Props) {
+  const classes = useStyles()
+
   const handleSendEmail = async (formValue: EmailFormValues) => {
     const from = formValue.from!
 
@@ -152,6 +169,7 @@ export function EmailThreadComposeForm({
   return (
     shouldRender && (
       <EmailComposeForm
+        classes={{ footer: classes.footer }}
         hasSignatureByDefault
         sendEmail={handleSendEmail}
         enableSchedule={false}

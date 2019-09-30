@@ -278,6 +278,7 @@ function EmailComposeForm<T>({
               enableSchedule={enableSchedule}
               onCancel={onCancel}
               onChanged={scrollToEnd}
+              className={classes.footer}
             />
           </form>
         )
