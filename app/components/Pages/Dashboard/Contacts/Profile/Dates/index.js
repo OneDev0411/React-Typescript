@@ -18,7 +18,6 @@ export function Dates(props) {
       section="Dates"
       title="Touch Dates"
       submitCallback={props.submitCallback}
-      onChangeAttribute={props.onChangeAttribute}
     />
   )
 }

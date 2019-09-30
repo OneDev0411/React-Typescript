@@ -165,11 +165,14 @@ class ContactProfile extends React.Component {
    */
   fetchTimeline = () => setTimeout(this.timelineRef.current.refresh, 500)
 
-  setContact = (newContact, fallback) =>
+  setContact = (newContact, fallback) => {
     this.setState(
       state => ({ contact: { ...state.contact, ...newContact } }),
       fallback
     )
+
+    this.fetchTimeline()
+  }
 
   onChangeOwner = async item => {
     this.setState({ isUpdatingOwner: true })
@@ -271,11 +274,8 @@ class ContactProfile extends React.Component {
             <Divider />
             <Tags contact={contact} />
             <Divider />
-            <Dates {..._props} onChangeAttribute={this.fetchTimeline} />
-            <ContactInfo
-              {..._props}
-              onChangeAttribute={this.handleUpdateContactInfo}
-            />
+            <Dates {..._props} />
+            <ContactInfo {..._props} />
             <AddressesSection {..._props} />
             <Details {..._props} />
             <Partner {..._props} />
