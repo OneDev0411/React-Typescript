@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react'
 import Checkbox from '@material-ui/core/Checkbox'
 
 import { updateTask } from 'models/tasks/update-task'
+
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 interface Props {
@@ -11,27 +12,17 @@ interface Props {
 
 export function CrmStatus({ event, onChange }: Props) {
   const context = useContext(ConfirmationModalContext)
-
   const [isChecked, setIsChecked] = useState<boolean>(event.status === 'DONE')
+
+  const dueDate = new Date(event.timestamp * 1000)
+  const now = new Date()
+
+  if (now > dueDate) {
+    return null
+  }
 
   const handleChange = async () => {
     const [shouldUpdate, newTask] = await new Promise(resolve => {
-      // Change task due date to now if user is marking it as done
-      // const dueDate = new Date(event.timestamp * 1000)
-      const now = new Date()
-
-      // if (dueDate <= now || event.status === 'DONE') {
-      //   return resolve([
-      //     true,
-      //     {
-      //       task_type: event.event_type,
-      //       title: event.title,
-      //       due_date: event.timestamp,
-      //       status: event.status === 'DONE' ? 'PENDING' : 'DONE'
-      //     }
-      //   ])
-      // }
-
       context.setConfirmationModal({
         message: 'Heads up!',
         description:
@@ -67,9 +58,16 @@ export function CrmStatus({ event, onChange }: Props) {
     }
 
     try {
-      const task = await updateTask(newTask)
+      const task: IEvent = await updateTask(newTask)
 
-      onChange(task, 'updated')
+      const taskWithAssociations = {
+        ...task,
+        associations: event.full_crm_task
+          ? event.full_crm_task.associations
+          : []
+      }
+
+      onChange(taskWithAssociations, 'updated')
     } catch (e) {
       console.log(e)
     }

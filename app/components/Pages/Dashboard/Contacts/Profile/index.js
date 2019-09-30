@@ -216,6 +216,12 @@ class ContactProfile extends React.Component {
     this.fetchTimeline()
   }
 
+  handleUpdateContactInfo = attribute => {
+    if (attribute.name === 'email') {
+      this.fetchTimeline()
+    }
+  }
+
   render() {
     const { contact } = this.state
     const { user } = this.props
@@ -265,8 +271,11 @@ class ContactProfile extends React.Component {
             <Divider />
             <Tags contact={contact} />
             <Divider />
-            <Dates {..._props} />
-            <ContactInfo {..._props} />
+            <Dates {..._props} onChangeAttribute={this.fetchTimeline} />
+            <ContactInfo
+              {..._props}
+              onChangeAttribute={this.handleUpdateContactInfo}
+            />
             <AddressesSection {..._props} />
             <Details {..._props} />
             <Partner {..._props} />
