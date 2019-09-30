@@ -9,7 +9,7 @@ export default function MLSNote({ listing }) {
       <div>
         {`Listing information provided in part by the ${
           listing.mls_name
-        }, Inc, for personal, non-commercial use by viewers of
+        }, for personal, non-commercial use by viewers of
         this site and may not be reproduced or redistributed. All information is
         deemed reliable but not guaranteed.`}
       </div>
