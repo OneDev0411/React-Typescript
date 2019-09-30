@@ -10,6 +10,7 @@ import { useAsyncValue } from 'hooks/use-async-value'
 import LoadingContainer from '../LoadingContainer'
 import { EmailThread } from '../EmailThread'
 import { DialogTitle } from '../DialogTitle'
+import { ServerError } from '../ServerError'
 
 interface Props extends DialogProps {
   /**
@@ -55,8 +56,14 @@ export function EmailThreadModal({ open, threadKey, ...otherProps }: Props) {
       </>
     )
   } else if (error) {
-    // TODO: error view
-    content = 'Could not load emails'
+    content = (
+      <ServerError
+        error={error}
+        onRetry={() =>
+          threadKey && setThreadsPromise(getEmailThread(threadKey))
+        }
+      />
+    )
   }
 
   return (
