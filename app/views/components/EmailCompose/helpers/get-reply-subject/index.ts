@@ -6,7 +6,7 @@ export function getReplySubject(
 ) {
   const prefix = responseType === 'reply' ? 'Re' : 'Fwd'
 
-  return !email.subject.startsWith(prefix)
-    ? `${prefix}: ${email.subject}`
+  return email.subject && !email.subject.startsWith(prefix)
+    ? `${prefix}: ${email.subject || ''}`
     : email.subject
 }

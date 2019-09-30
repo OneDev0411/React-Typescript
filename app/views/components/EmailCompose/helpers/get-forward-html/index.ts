@@ -22,7 +22,7 @@ export function getForwardHtml(email: IEmailThreadEmail) {
   <br />
   Date: ${fecha.format(new Date(email.message_date), 'default')}
   <br />
-  Subject: ${email.subject}
+  Subject: ${email.subject || ''}
   <br />
   To: ${email.to.join(', ')}
   <br />

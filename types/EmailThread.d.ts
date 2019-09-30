@@ -21,7 +21,7 @@ declare interface IEmailThreadEmail {
   cc: string[]
   from: string
   has_attachments: boolean
-  html_body: string
+  html_body: string | null
   id: UUID
   in_bound: boolean
   message_date: string
@@ -32,7 +32,7 @@ declare interface IEmailThreadEmail {
   owner_name: string | null
   owner_email: string | null
   snippet: string
-  subject: string
+  subject: string | null
   text_body: null | string
   thread_id: string
   thread_key: string

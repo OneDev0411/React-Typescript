@@ -31,7 +31,7 @@ export function EmailThreadModal({ open, threadKey, ...otherProps }: Props) {
                 otherProps.onClose && otherProps.onClose(event, 'escapeKeyDown')
               }}
             >
-              {thread[0] && thread[0].subject}
+              {(thread[0] && thread[0].subject) || 'No Subject'}
             </DialogTitle>
             <Box overflow="auto">
               <EmailThread thread={thread} onEmailSent={onEmailSent} />
