@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Helmet } from 'react-helmet'
 
 import PageSideNav from 'components/PageSideNav'
 import { Container, Content } from 'components/SlideMenu'
@@ -15,24 +16,30 @@ export default function WebsitesPage() {
   const toggleSideNav = () => setIsSideNavOpen(!isSideNavOpen)
 
   return (
-    <Container isOpen={isSideNavOpen}>
-      <PageSideNav isOpen={isSideNavOpen}>
-        <Sidenav />
-      </PageSideNav>
-      <Content isSideMenuOpen={isSideNavOpen}>
-        <Header onToggleSidenav={toggleSideNav} />
+    <>
+      <Helmet>
+        <title>Websites | Rechat</title>
+      </Helmet>
 
-        <ListContainer>
-          <SiteCardItem />
-          <SiteCardItem />
-          <SiteCardItem />
-          <SiteCardItem />
-          <SiteCardItem />
-          <SiteCardItem />
-          <SiteCardItem />
-          <SiteCardItem />
-        </ListContainer>
-      </Content>
-    </Container>
+      <Container isOpen={isSideNavOpen}>
+        <PageSideNav isOpen={isSideNavOpen}>
+          <Sidenav />
+        </PageSideNav>
+        <Content isSideMenuOpen={isSideNavOpen}>
+          <Header onToggleSidenav={toggleSideNav} />
+
+          <ListContainer>
+            <SiteCardItem />
+            <SiteCardItem />
+            <SiteCardItem />
+            <SiteCardItem />
+            <SiteCardItem />
+            <SiteCardItem />
+            <SiteCardItem />
+            <SiteCardItem />
+          </ListContainer>
+        </Content>
+      </Container>
+    </>
   )
 }
