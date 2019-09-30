@@ -14,6 +14,8 @@ import { getReplyHtml } from './helpers/get-reply-html'
 import { getForwardHtml } from './helpers/get-forward-html'
 import { parseEmailRecipient } from '../EmailRecipientsChipsInput/helpers/parse-email-recipient'
 
+import { getReplySubject } from './helpers/get-reply-subject'
+
 import { EmailFormValues } from '.'
 
 interface Props {
@@ -83,7 +85,7 @@ export function EmailThreadComposeForm({
         responseType === 'reply' ? getReplyHtml(email) : getForwardHtml(email),
       due_at: null,
       attachments: [],
-      subject: `${responseType === 'reply' ? 'Re' : 'Fwd'}: ${email.subject}`
+      subject: getReplySubject(responseType, email)
     }
   }, [email, responseType])
 
