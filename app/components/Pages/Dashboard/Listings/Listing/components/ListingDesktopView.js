@@ -174,8 +174,7 @@ const ListingDesktopView = ({
     listing_title = address
     mls_number = listing.mls_number
     bedroom_count = property.bedroom_count
-    bathroom_count =
-      property.full_bathroom_count + property.half_bathroom_count || '-'
+    bathroom_count = property.bathroom_count || '-'
     bathroomBaloonText =
       property.full_bathroom_count != null
         ? `${property.full_bathroom_count} Full Bath`
