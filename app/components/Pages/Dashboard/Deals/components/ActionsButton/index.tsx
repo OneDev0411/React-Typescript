@@ -287,8 +287,8 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
    *
    */
   handleUpload = () => {
-    if (this.dropzone.current) {
-      this.dropzone.current.open()
+    if (this.dropzone) {
+      this.dropzone.open()
     }
   }
 
@@ -318,7 +318,10 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
    *
    */
   handleView = () => {
-    const links = getLastStates({
+    const openInNewTab = (link: string | undefined) =>
+      link && link.includes('/dashboard/deals/')
+
+    let links = getLastStates({
       deal: this.props.deal,
       task: this.props.task,
       document: this.props.document,
@@ -326,13 +329,15 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
       isBackOffice: this.props.isBackOffice
     })
 
-    const openInNewTab = (link: string | undefined) =>
-      link && link.includes('/dashboard/deals/')
-
-    if (links.length === 1) {
-      return this.props.isBackOffice && openInNewTab(links[0].internal_url)
+    if (links.length <= 1) {
+      return links.length === 1 &&
+        this.props.isBackOffice &&
+        openInNewTab(links[0].internal_url)
         ? browserHistory.push(links[0].internal_url as string)
-        : window.open(links[0].url, '_blank')
+        : window.open(
+            links[0] ? links[0].url : this.props.task.pdf_url,
+            '_blank'
+          )
     }
 
     this.setState({
