@@ -26,7 +26,7 @@ import IconReply from '../../SvgIcons/Reply/IconReply'
 import IconForward from '../../SvgIcons/Forward/IconForward'
 import { Attachment } from '../../EmailCompose/components/Attachment'
 import { EmailResponseType } from '../types'
-import { EmailThreadComposeForm } from '../../EmailCompose/EmailThreadComposeForm'
+import EmailThreadComposeForm from '../../EmailCompose/EmailThreadComposeForm'
 
 interface Props {
   email: IEmailThreadEmail

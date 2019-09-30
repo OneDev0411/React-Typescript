@@ -11,7 +11,7 @@ export function From({
   children,
   ...props
 }: FieldRenderProps<any> & {
-  options: EmailFormValues['from'][]
+  options: Exclude<EmailFormValues['from'], undefined>[]
   children: ReactNode
 }) {
   const inputValue: EmailFormValues['from'] = input.value
@@ -34,7 +34,7 @@ export function From({
       <Box flex="1" px={2}>
         {hasOptions ? (
           <Select
-            value={inputValue.value}
+            value={inputValue && inputValue.value}
             onChange={handleChange}
             disableUnderline
             inputProps={{
@@ -50,7 +50,7 @@ export function From({
               ))}
           </Select>
         ) : (
-          inputValue.label
+          inputValue && inputValue.label
         )}
       </Box>
       {children}

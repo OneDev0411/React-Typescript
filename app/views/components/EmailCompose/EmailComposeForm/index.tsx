@@ -66,7 +66,8 @@ function EmailComposeForm<T>({
   onSent = () => {},
   ...props
 }: EmailComposeFormProps<T> & ClassesProps<typeof styles>) {
-  const hasRecipients = (initialValues.to || []).length > 0
+  const hasRecipients =
+    (initialValues.to || []).length > 0 && !!initialValues.from
   const hasSubject = !!initialValues.subject
   const autofocusBody = hasRecipients && hasSubject
 
@@ -267,7 +268,11 @@ function EmailComposeForm<T>({
             <Footer
               formProps={{ values: formProps.values as EmailFormValues }}
               isSubmitting={submitting}
-              isSubmitDisabled={isSubmitDisabled}
+              isSubmitDisabled={
+                typeof isSubmitDisabled === 'function'
+                  ? isSubmitDisabled(values)
+                  : isSubmitDisabled
+              }
               initialAttachments={initialValues.attachments || []}
               deal={props.deal}
               enableSchedule={enableSchedule}

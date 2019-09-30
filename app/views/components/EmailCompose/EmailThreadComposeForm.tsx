@@ -1,20 +1,24 @@
 import * as React from 'react'
-import { useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
+import { connect } from 'react-redux'
 
 import { sendEmailViaOauthAccount } from 'models/o-auth-accounts/send-email-via-o-auth-account'
 import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
+import { IAppState } from 'reducers'
+import { IOauthAccountsState } from 'reducers/contacts/oAuthAccounts'
+import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
 import { EmailResponseType } from '../EmailThread/types'
 import EmailComposeForm from './EmailComposeForm'
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import { EmailRecipientsFields } from './fields/EmailRecipientsFields'
 import { getReplyRecipients } from './helpers/get-reply-recipients'
-import { getEmailProvider } from './helpers/get-email-provider'
 import { getReplyHtml } from './helpers/get-reply-html'
 import { getForwardHtml } from './helpers/get-forward-html'
 import { parseEmailRecipient } from '../EmailRecipientsChipsInput/helpers/parse-email-recipient'
-
 import { getReplySubject } from './helpers/get-reply-subject'
+
+import { oAuthAccountTypeToProvider } from '../../../components/Pages/Dashboard/Account/ConnectedAccounts/consants'
 
 import { EmailFormValues } from '.'
 
@@ -23,66 +27,82 @@ interface Props {
   email: IEmailThreadEmail
   onCancel: () => void
   onSent?: (email: IEmailThreadEmail) => void
+  oAuthAccounts: IOauthAccountsState
+  fetchOAuthAccounts: () => Promise<any>
 }
 
 export function EmailThreadComposeForm({
   responseType,
   email,
   onCancel,
-  onSent
+  onSent,
+  fetchOAuthAccounts,
+  oAuthAccounts
 }: Props) {
   const handleSendEmail = async (formValue: EmailFormValues) => {
-    const owner = email.owner
-    const provider = getEmailProvider(email)
+    const from = formValue.from!
 
-    if (owner && provider) {
-      const emailData: IEmailThreadEmailInput = {
-        subject: (formValue.subject || '').trim(),
-        to: (formValue.to || [])
-          .filter(isEmailRecipient)
-          .map(toEmailThreadRecipient),
-        cc: (formValue.cc || [])
-          .filter(isEmailRecipient)
-          .map(toEmailThreadRecipient),
-        bcc: (formValue.bcc || [])
-          .filter(isEmailRecipient)
-          .map(toEmailThreadRecipient),
-        html: formValue.body || '',
-        threadId: email.thread_id,
-        inReplyTo: email.internet_message_id,
-        attachments: (formValue.attachments || []).map<IEmailAttachmentInput>(
-          item => ({
-            contentId: item.name,
-            filename: item.name,
-            isInline: false,
-            link: item.url,
-            type: item.mime
-          })
-        )
-      }
+    const account = getFromAccount(from.value)!
 
-      console.log(emailData)
-
-      const newEmail = await sendEmailViaOauthAccount(
-        provider,
-        owner,
-        emailData
+    const emailData: IEmailThreadEmailInput = {
+      subject: (formValue.subject || '').trim(),
+      to: (formValue.to || [])
+        .filter(isEmailRecipient)
+        .map(toEmailThreadRecipient),
+      cc: (formValue.cc || [])
+        .filter(isEmailRecipient)
+        .map(toEmailThreadRecipient),
+      bcc: (formValue.bcc || [])
+        .filter(isEmailRecipient)
+        .map(toEmailThreadRecipient),
+      html: formValue.body || '',
+      threadId: email.thread_id,
+      inReplyTo: email.internet_message_id,
+      attachments: (formValue.attachments || []).map<IEmailAttachmentInput>(
+        item => ({
+          contentId: item.name,
+          filename: item.name,
+          isInline: false,
+          link: item.url,
+          type: item.mime
+        })
       )
-
-      onSent && onSent(newEmail)
-
-      return newEmail
     }
+    const newEmail = await sendEmailViaOauthAccount(
+      oAuthAccountTypeToProvider[account.type],
+      account.id,
+      emailData
+    )
+
+    onSent && onSent(newEmail)
+
+    return newEmail
   }
+
+  useEffect(() => {
+    if (
+      getAllAccounts().length === 0 &&
+      Object.values(oAuthAccounts.loading).some(loading => !loading)
+    ) {
+      fetchOAuthAccounts()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const initialValue = useMemo<EmailFormValues>(() => {
     const { to, cc } =
       responseType === 'reply' ? getReplyRecipients(email) : { to: [], cc: [] }
 
-    const from = {
-      label: getEmailRecipient(email.owner_email || '', email.owner_name || ''),
-      value: email.owner || ''
-    }
+    const owner = email.owner
+    const from = owner
+      ? {
+          label: getEmailRecipient(
+            email.owner_email || '',
+            email.owner_name || ''
+          ),
+          value: owner
+        }
+      : undefined
 
     return {
       from,
@@ -99,6 +119,36 @@ export function EmailThreadComposeForm({
 
   const shouldRender = useRerenderOnChange(responseType)
 
+  const getAllAccounts = useCallback(() => {
+    return Object.values(oAuthAccounts.list)
+      .flat()
+      .filter(account => !account.revoked)
+  }, [oAuthAccounts.list])
+
+  const getFromAccount = useCallback(
+    (accountId: string) =>
+      getAllAccounts().find(account => account.id === accountId),
+    [getAllAccounts]
+  )
+
+  const fromOptions: EmailFormValues['from'][] = useMemo(
+    () =>
+      getAllAccounts().map(account => ({
+        label: `${account.display_name} <${account.email}>`,
+        value: account.id
+      })),
+    [getAllAccounts]
+  )
+
+  const isSubmitDisabled = useCallback(
+    values => {
+      const accountId = values.from && values.from.value
+
+      return !accountId || !getFromAccount(accountId)
+    },
+    [getFromAccount]
+  )
+
   return (
     shouldRender && (
       <EmailComposeForm
@@ -107,6 +157,7 @@ export function EmailThreadComposeForm({
         enableSchedule={false}
         onCancel={onCancel}
         initialValues={initialValue}
+        isSubmitDisabled={isSubmitDisabled}
         renderCollapsedFields={(values: EmailFormValues) => (
           <CollapsedEmailRecipients
             to={values.to || []}
@@ -116,6 +167,7 @@ export function EmailThreadComposeForm({
         )}
         renderFields={values => (
           <EmailRecipientsFields
+            fromOptions={fromOptions}
             EmailRecipientsChipsInputProps={{
               suggestTags: false,
               suggestLists: false
@@ -128,6 +180,13 @@ export function EmailThreadComposeForm({
     )
   )
 }
+
+export default connect(
+  ({ contacts: { oAuthAccounts } }: IAppState) => ({
+    oAuthAccounts
+  }),
+  { fetchOAuthAccounts }
+)(EmailThreadComposeForm)
 
 function toEmailThreadRecipient(
   recipient: IDenormalizedEmailRecipientEmailInput

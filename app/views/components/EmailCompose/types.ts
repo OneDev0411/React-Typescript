@@ -12,7 +12,7 @@ export interface EmailFormValues {
   cc?: IDenormalizedEmailRecipientInput[] | undefined
   bcc?: IDenormalizedEmailRecipientInput[] | undefined
   subject: string
-  from: { value: string; label: string }
+  from: { value: string; label: string } | undefined
   due_at: Date | null
   body: string | undefined
 }
@@ -25,7 +25,7 @@ export interface EmailComposeFormProps<EmailType> {
    * A deal to suggest attachments from it
    */
   deal?: IDeal
-  isSubmitDisabled?: boolean
+  isSubmitDisabled?: boolean | ((values: EmailFormValues) => boolean)
   hasStaticBody?: boolean
   hasSignatureByDefault?: boolean
   hasTemplateVariables?: boolean
