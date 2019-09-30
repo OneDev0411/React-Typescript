@@ -15,8 +15,6 @@ export function CrmStatus({ event, onChange }: Props) {
   const [isChecked, setIsChecked] = useState<boolean>(event.status === 'DONE')
 
   const dueDate = new Date(event.timestamp * 1000)
-
-  // const dueDate = new Date(event.timestamp * 1000)
   const now = new Date()
 
   if (now > dueDate) {
@@ -25,21 +23,6 @@ export function CrmStatus({ event, onChange }: Props) {
 
   const handleChange = async () => {
     const [shouldUpdate, newTask] = await new Promise(resolve => {
-      // Change task due date to now if user is marking it as done
-      // const dueDate = new Date(event.timestamp * 1000)
-
-      // if (dueDate <= now || event.status === 'DONE') {
-      //   return resolve([
-      //     true,
-      //     {
-      //       task_type: event.event_type,
-      //       title: event.title,
-      //       due_date: event.timestamp,
-      //       status: event.status === 'DONE' ? 'PENDING' : 'DONE'
-      //     }
-      //   ])
-      // }
-
       context.setConfirmationModal({
         message: 'Heads up!',
         description:
