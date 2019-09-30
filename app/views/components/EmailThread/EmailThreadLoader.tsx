@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect } from 'react'
+import React, { ReactNode, useCallback, useEffect } from 'react'
 
 import { useAsyncValue } from 'hooks/use-async-value'
 import { getEmailThread } from 'models/email/get-email-thread'
@@ -6,12 +6,17 @@ import { getEmailThread } from 'models/email/get-email-thread'
 import LoadingContainer from '../LoadingContainer'
 import { ServerError } from '../ServerError'
 
+interface RenderThreadProps {
+  thread: IEmailThread
+  onEmailSent: (email: IEmailThreadEmail) => void
+}
+
 interface Props {
   /**
    * thread key is credential_id + thread_id
    */
   threadKey: string | null
-  children: (thread: IEmailThread) => ReactNode
+  children: ({ thread, onEmailSent }: RenderThreadProps) => ReactNode
 }
 
 /**
@@ -29,12 +34,19 @@ export function EmailThreadLoader({ threadKey, children }: Props) {
     }
   }, [setThreadsPromise, threadKey])
 
+  const onEmailSent = useCallback(
+    (newEmail: IEmailThreadEmail) => {
+      setThreadsPromise(Promise.resolve([...(thread || []), newEmail]))
+    },
+    [setThreadsPromise, thread]
+  )
+
   if (loading) {
     return <LoadingContainer style={{ minHeight: '15rem' }} />
   }
 
   if (thread) {
-    return <>{children(thread)}</>
+    return <>{children({ thread, onEmailSent })}</>
   }
 
   if (error) {

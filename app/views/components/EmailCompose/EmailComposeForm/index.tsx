@@ -50,7 +50,7 @@ export const useEmailFormStyles = makeStyles(styles, { name: 'EmailForm' })
  * Right now there are some duplicate code in them, and the added abstraction
  * is not necessarily worth it.
  */
-function EmailComposeForm({
+function EmailComposeForm<T>({
   isSubmitDisabled = false,
   initialValues = {
     to: [],
@@ -65,7 +65,7 @@ function EmailComposeForm({
   onCancel,
   onSent = () => {},
   ...props
-}: EmailComposeFormProps & ClassesProps<typeof styles>) {
+}: EmailComposeFormProps<T> & ClassesProps<typeof styles>) {
   const hasRecipients = (initialValues.to || []).length > 0
   const hasSubject = !!initialValues.subject
   const autofocusBody = hasRecipients && hasSubject
@@ -84,7 +84,7 @@ function EmailComposeForm({
         !!form.due_at
       )
 
-      let result: IEmailCampaign
+      let result: T
 
       try {
         result = await props.sendEmail(form)

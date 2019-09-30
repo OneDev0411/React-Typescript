@@ -24,7 +24,7 @@ export function EmailThreadModal({ open, threadKey, ...otherProps }: Props) {
   return (
     <Dialog open={open} fullWidth maxWidth="md" {...otherProps}>
       <EmailThreadLoader threadKey={threadKey}>
-        {thread => (
+        {({ thread, onEmailSent }) => (
           <>
             <DialogTitle
               onClose={event => {
@@ -34,7 +34,7 @@ export function EmailThreadModal({ open, threadKey, ...otherProps }: Props) {
               {thread[0] && thread[0].subject}
             </DialogTitle>
             <Box overflow="auto">
-              <EmailThread thread={thread} />
+              <EmailThread thread={thread} onEmailSent={onEmailSent} />
             </Box>
           </>
         )}

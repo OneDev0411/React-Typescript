@@ -17,10 +17,10 @@ export interface EmailFormValues {
   body: string | undefined
 }
 
-export interface EmailComposeFormProps {
+export interface EmailComposeFormProps<EmailType> {
   initialValues?: Partial<EmailFormValues>
-  sendEmail: (values: EmailFormValues) => Promise<IEmailCampaign>
-  onSent?: (result: IEmailCampaign) => void
+  sendEmail: (values: EmailFormValues) => Promise<EmailType>
+  onSent?: (result: EmailType) => void
   /**
    * A deal to suggest attachments from it
    */

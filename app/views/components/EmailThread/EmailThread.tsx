@@ -9,9 +9,14 @@ import { ShowAllToggle } from './components/ShowAllToggle'
 interface Props {
   thread: IEmailThread
   style?: CSSProperties
+
+  /**
+   * Callback to be called when an email in the thread is replied/forwarded
+   */
+  onEmailSent?: (email: IEmailThreadEmail) => void
 }
 
-export function EmailThread({ thread, style = {} }: Props) {
+export function EmailThread({ thread, style = {}, onEmailSent }: Props) {
   const [showAll, setShowAll] = useState(false)
 
   const [openedThreads, { set: setOpen }] = useMap()
@@ -47,6 +52,7 @@ export function EmailThread({ thread, style = {} }: Props) {
               onToggleCollapsed={onToggleCollapsed}
               showBottomButtons={last}
               collapsed={collapsed}
+              onEmailSent={onEmailSent}
             />
             {!last && !showAllToggle ? <Divider /> : null}
             {showAllToggle}

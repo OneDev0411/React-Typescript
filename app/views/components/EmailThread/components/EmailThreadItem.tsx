@@ -31,10 +31,17 @@ import { EmailThreadComposeForm } from '../../EmailCompose/EmailThreadComposeFor
 interface Props {
   email: IEmailThreadEmail
   collapsed: boolean
+
   /**
    * if not undefined, makes the item header clickable which toggles collapsed
    */
   onToggleCollapsed: undefined | ((collapsed: boolean) => void)
+
+  /**
+   * callback to be called when replied or forwarded
+   */
+  onEmailSent?: (email: IEmailThreadEmail) => void
+
   /**
    * If true, will show 'reply' and 'forward' buttons under email content
    */
@@ -66,6 +73,7 @@ export function EmailThreadItem({
   email,
   onToggleCollapsed,
   showBottomButtons = false,
+  onEmailSent = () => {},
   ...props
 }: Props) {
   const iconClasses = useIconStyles()
@@ -179,6 +187,10 @@ export function EmailThreadItem({
                   responseType={responseType}
                   onCancel={() => {
                     setResponseOpen(false)
+                  }}
+                  onSent={email => {
+                    setResponseOpen(false)
+                    onEmailSent(email)
                   }}
                 />
               </Paper>

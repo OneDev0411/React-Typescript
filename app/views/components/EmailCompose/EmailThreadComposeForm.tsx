@@ -22,7 +22,7 @@ interface Props {
   responseType: EmailResponseType
   email: IEmailThreadEmail
   onCancel: () => void
-  onSent?: () => void
+  onSent?: (email: IEmailThreadEmail) => void
 }
 
 export function EmailThreadComposeForm({
@@ -63,7 +63,15 @@ export function EmailThreadComposeForm({
 
       console.log(emailData)
 
-      return sendEmailViaOauthAccount(provider, owner, emailData)
+      const newEmail = await sendEmailViaOauthAccount(
+        provider,
+        owner,
+        emailData
+      )
+
+      onSent && onSent(newEmail)
+
+      return newEmail
     }
   }
 
@@ -106,7 +114,6 @@ export function EmailThreadComposeForm({
             bcc={values.bcc || []}
           />
         )}
-        onSent={onSent}
         renderFields={values => (
           <EmailRecipientsFields
             EmailRecipientsChipsInputProps={{
