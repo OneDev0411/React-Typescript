@@ -80,6 +80,7 @@ export function EmailThreadComposeForm({
         .map(toEmailThreadRecipient),
       html: formValue.body || '',
       threadId: email.thread_id,
+      messageId: email.message_id,
       inReplyTo: email.internet_message_id,
       attachments: (formValue.attachments || []).map<IEmailAttachmentInput>(
         item => ({

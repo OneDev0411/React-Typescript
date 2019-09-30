@@ -54,6 +54,7 @@ declare interface IEmailThreadEmailInput {
   text?: string
   attachments: IEmailAttachmentInput[]
   threadId?: string
+  messageId?: string
   inReplyTo?: string
 }
 
