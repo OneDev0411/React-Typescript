@@ -22,14 +22,14 @@ export function getNextDateField(deal) {
   return null
 }
 
-export function getNextDate(deal) {
+export function getNextDate(deal, listId) {
   const date = getNextDateField(deal)
 
   if (!date) {
     return false
   }
 
-  const field = Context.getFactsheetSection(deal, 'Dates').find(
+  const field = Context.getFactsheetSection(listId, deal, 'Dates').find(
     item => item.key === date.key
   )
 

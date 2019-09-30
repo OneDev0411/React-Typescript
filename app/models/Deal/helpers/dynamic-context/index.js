@@ -59,9 +59,9 @@ export function getChecklists() {
 /**
  * return list of section
  */
-export function getFactsheetSection(deal, name) {
+export function getFactsheetSection(listId, deal, name) {
   const items = getItems(
-    deal.id,
+    listId,
     deal.deal_type,
     deal.property_type,
     getHasActiveOffer(deal)
