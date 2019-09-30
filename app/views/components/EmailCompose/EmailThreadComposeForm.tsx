@@ -18,6 +18,8 @@ import { getEmailProvider } from './helpers/get-email-provider'
 import { getReplyHtml } from './helpers/get-reply-html'
 import { getForwardHtml } from './helpers/get-forward-html'
 
+import { parseEmailRecipient } from '../EmailRecipientsChipsInput/helpers/parse-email-recipient'
+
 import { EmailFormValues } from './index'
 
 interface Props {
@@ -42,14 +44,16 @@ export function EmailThreadComposeForm({
         subject: (formValue.subject || '').trim(),
         to: (formValue.to || [])
           .filter(isEmailRecipient)
-          .map(recipient => recipient.email),
+          .map(toEmailThreadRecipient),
         cc: (formValue.cc || [])
           .filter(isEmailRecipient)
-          .map(recipient => recipient.email),
+          .map(toEmailThreadRecipient),
         bcc: (formValue.bcc || [])
           .filter(isEmailRecipient)
-          .map(recipient => recipient.email),
+          .map(toEmailThreadRecipient),
         html: formValue.body || '',
+        threadId: email.thread_id,
+        inReplyTo: email.internet_message_id,
         attachments: (formValue.attachments || []).map<IEmailAttachmentInput>(
           item => ({
             contentId: item.name,
@@ -120,6 +124,16 @@ export function EmailThreadComposeForm({
       />
     )
   )
+}
+
+function toEmailThreadRecipient(
+  recipient: IDenormalizedEmailRecipientEmailInput
+): IEmailThreadRecipient {
+  const { displayName: name, emailAddress: address } = parseEmailRecipient(
+    recipient.email
+  )
+
+  return { address, name }
 }
 
 function getEmailRecipient(email: string, displayName: string): string {
