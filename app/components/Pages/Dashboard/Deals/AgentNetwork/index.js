@@ -21,6 +21,7 @@ import config from '../../../../../../config/public'
 import { Grid } from './Grid'
 import { normalizeList } from './helpers/normalize-list'
 import { valertOptions } from './helpers/valert-options'
+import { filterNonMLSAgents } from './helpers/filter-non-mls-agents'
 
 class AgentNetwork extends React.Component {
   constructor(props) {
@@ -162,7 +163,7 @@ class AgentNetwork extends React.Component {
         />
 
         <Grid
-          data={this.state.list}
+          data={this.state.list.filter(filterNonMLSAgents)}
           deal={this.props.deal}
           isFetching={this.state.isFetching}
           // isFetchingMore={this.state.isFetchingMore}
