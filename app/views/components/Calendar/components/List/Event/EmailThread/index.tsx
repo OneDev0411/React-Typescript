@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { Box } from '@material-ui/core'
 
 import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 import { getTrimmedArrayAndOthersText } from 'utils/get-trimmed-array-and-others-text'
@@ -36,7 +37,7 @@ export function EmailThread({ style, event, nextItem }: Props) {
         element: eventIcons.Email.icon
       }}
       title={
-        <div>
+        <Box display="flex" alignItems="center">
           <a
             style={styles.link}
             onClick={e => {
@@ -80,7 +81,7 @@ export function EmailThread({ style, event, nextItem }: Props) {
               <IconAttachment size={iconSizes.small} />
             </EventBadge>
           )}
-        </div>
+        </Box>
       }
       subtitle={<div>{event.title || 'No Subject'}</div>}
     />

@@ -26,6 +26,7 @@ declare interface IEmailThreadEmail {
   in_bound: boolean
   message_date: string
   message_id: string
+  internet_message_id: string
   origin: 'outlook' | 'gmail' | 'rechat_email'
   owner: 'rechat_email' extends this['origin'] ? null : UUID // // seems can be null. Check it
   owner_name: string // // seems can be null. Check it
@@ -39,14 +40,21 @@ declare interface IEmailThreadEmail {
   unique_body: string
 }
 
-declare type IEmailThreadEmailInput = Pick<
-  IEmailThreadEmail,
-  'to' | 'cc' | 'bcc' | 'subject'
-> & {
+declare interface IEmailThreadRecipient {
+  name: string
+  address: string
+}
+
+declare interface IEmailThreadEmailInput {
+  subject: string
+  to: IEmailThreadRecipient[]
+  cc: IEmailThreadRecipient[]
+  bcc: IEmailThreadRecipient[]
   html: string
   text?: string
   attachments: IEmailAttachmentInput[]
   threadId?: string
+  inReplyTo?: string
 }
 
 declare type IEmailThread = IEmailThreadEmail[]

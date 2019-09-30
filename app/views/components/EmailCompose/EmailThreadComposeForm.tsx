@@ -1,32 +1,26 @@
 import * as React from 'react'
-import { useEffect, useMemo, useState } from 'react'
-
-import usePrevious from 'react-use/lib/usePrevious'
+import { useMemo } from 'react'
 
 import { sendEmailViaOauthAccount } from 'models/o-auth-accounts/send-email-via-o-auth-account'
+import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
 
 import { EmailResponseType } from '../EmailThread/types'
 import EmailComposeForm from './EmailComposeForm'
-
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import { EmailRecipientsFields } from './fields/EmailRecipientsFields'
-
 import { getReplyRecipients } from './helpers/get-reply-recipients'
-
 import { getEmailProvider } from './helpers/get-email-provider'
-
 import { getReplyHtml } from './helpers/get-reply-html'
 import { getForwardHtml } from './helpers/get-forward-html'
-
 import { parseEmailRecipient } from '../EmailRecipientsChipsInput/helpers/parse-email-recipient'
 
-import { EmailFormValues } from './index'
+import { EmailFormValues } from '.'
 
 interface Props {
   responseType: EmailResponseType
   email: IEmailThreadEmail
   onCancel: () => void
-  onSent: () => void
+  onSent?: () => void
 }
 
 export function EmailThreadComposeForm({
@@ -144,21 +138,4 @@ function isEmailRecipient(
   recipient: IDenormalizedEmailRecipientInput
 ): recipient is IDenormalizedEmailRecipientEmailInput {
   return recipient.recipient_type === 'Email'
-}
-
-function useRerenderOnChange(value: any): true | null {
-  const [shouldRender, setShouldRender] = useState(true)
-  const previousValue = usePrevious(value)
-
-  useEffect(() => {
-    if (value !== previousValue && previousValue !== undefined) {
-      setShouldRender(false)
-
-      setTimeout(() => {
-        setShouldRender(true)
-      })
-    }
-  }, [value, previousValue])
-
-  return shouldRender || null
 }

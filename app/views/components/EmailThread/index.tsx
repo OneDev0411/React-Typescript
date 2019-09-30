@@ -23,7 +23,7 @@ export function EmailThread({ thread, style = {} }: Props) {
   return (
     <div style={style}>
       {visibleItems.map((email, index) => {
-        const last = index === thread.length - 1
+        const last = index === visibleItems.length - 1
 
         const onToggleCollapsed = last
           ? undefined

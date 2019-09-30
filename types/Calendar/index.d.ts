@@ -39,7 +39,9 @@ declare interface ICalendarEvent {
   full_thread: {
     type: 'thread'
     id: UUID
+    to: string[]
     email_count: number
+    has_attachments: boolean
   }
 }
 

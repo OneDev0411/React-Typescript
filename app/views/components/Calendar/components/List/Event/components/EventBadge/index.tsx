@@ -14,7 +14,7 @@ const styles = (theme: Theme) =>
     root: ({ padding }: Props) => ({
       borderRadius: '2.5rem',
       background: theme.palette.grey['200'],
-      margin: theme.spacing(0, 1),
+      margin: theme.spacing(0, 0, 0, 1),
       padding:
         padding === 'dense' ? theme.spacing(0.5, 0.5) : theme.spacing(1, 1),
       lineHeight: 0.6,

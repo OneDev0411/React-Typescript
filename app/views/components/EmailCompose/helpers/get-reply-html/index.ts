@@ -18,6 +18,5 @@ export function getReplyHtml(email: IEmailThreadEmail) {
       ${email.html_body || ''}
     </blockquote>
   </div>
-  <br />
   `
 }

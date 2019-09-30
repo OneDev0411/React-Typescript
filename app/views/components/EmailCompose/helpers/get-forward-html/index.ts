@@ -29,6 +29,5 @@ export function getForwardHtml(email: IEmailThreadEmail) {
   <br />
   <div>${email.html_body || ''}</div>
 </div>
-<br />
 `
 }

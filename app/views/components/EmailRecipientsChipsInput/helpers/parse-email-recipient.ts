@@ -1,5 +1,6 @@
 /**
- * Extracts email address from an email recipient in one of the following forms:
+ * Extracts email address and display name from an email recipient in one of
+ * the following forms:
  *  - "Display Name <email address>"
  *  - "email address"
  */
