@@ -11,5 +11,5 @@ export async function sendEmailViaOauthAccount(
     .post(`/users/self/${provider}/${accountId}/send`)
     .send(email)
 
-  return response.body && response.body.data[0] // FIXME
+  return response.body && response.body.data
 }

@@ -8,5 +8,5 @@ export function getReplySubject(
 
   return email.subject && !email.subject.startsWith(prefix)
     ? `${prefix}: ${email.subject || ''}`
-    : email.subject
+    : email.subject || ''
 }

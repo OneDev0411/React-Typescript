@@ -34,7 +34,20 @@ export function EmailThreadModal({ open, threadKey, ...otherProps }: Props) {
               {(thread[0] && thread[0].subject) || 'No Subject'}
             </DialogTitle>
             <Box overflow="auto">
-              <EmailThread thread={thread} onEmailSent={onEmailSent} />
+              <EmailThread
+                thread={thread}
+                onEmailSent={email => {
+                  // Right now, outlook doesn't return the sent email. So
+                  // we check if the email is undefined, we just close the
+                  // thread dialog as it seems the most reasonable thing
+                  // to do.
+                  if (email) {
+                    onEmailSent(email)
+                  } else if (otherProps.onClose) {
+                    otherProps.onClose({}, 'escapeKeyDown')
+                  }
+                }}
+              />
             </Box>
           </>
         )}

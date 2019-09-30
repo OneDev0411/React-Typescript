@@ -106,12 +106,7 @@ export function EmailThreadComposeForm({
   }
 
   useEffect(() => {
-    if (
-      getAllAccounts().length === 0 &&
-      Object.values(oAuthAccounts.loading).some(loading => !loading)
-    ) {
-      fetchOAuthAccounts()
-    }
+    fetchOAuthAccounts() // always update accounts
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
