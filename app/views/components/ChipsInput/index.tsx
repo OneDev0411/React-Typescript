@@ -192,16 +192,16 @@ export function ChipsInput<T>({
   }
 
   const renderAvatar = suggestion => {
-    const { avatar, AvatarComponent } = suggestion
-
-    if (AvatarComponent) {
-      return <ListItemAvatar>{AvatarComponent}</ListItemAvatar>
-    }
+    const { defaultAvatarProps, avatar } = suggestion
 
     if (avatar) {
+      return <ListItemAvatar>{avatar}</ListItemAvatar>
+    }
+
+    if (defaultAvatarProps) {
       return (
         <ListItemAvatar>
-          <Avatar {...suggestion.avatar} />
+          <Avatar {...defaultAvatarProps} />
         </ListItemAvatar>
       )
     }

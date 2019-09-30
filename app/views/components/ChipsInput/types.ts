@@ -21,14 +21,14 @@ export interface Suggestion {
   subtitle?: ReactNode
 
   /**
-   * The rechat avatar component
+   * The rechat avatar component props
    */
-  avatar?: AvatarProps
+  defaultAvatarProps?: AvatarProps
 
   /**
-   * A custom avatar
+   * A custom avatar component
    */
-  AvatarComponent?: ReactNode
+  avatar?: ReactNode
 }
 
 export interface ChipsInputProps<T> {
