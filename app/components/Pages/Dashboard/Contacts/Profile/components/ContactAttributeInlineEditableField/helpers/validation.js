@@ -1,8 +1,8 @@
 import {
   isEmail,
-  isValidDate,
   isPhoneNumber,
-  isNumber
+  isNumber,
+  validateDateField
 } from 'utils/validations'
 import { getDateValues } from 'components/inline-editable-fields/InlineDateField/helpers'
 
@@ -35,7 +35,7 @@ export function validation(attribute_def, value) {
       return validateYear(year)
     }
 
-    return isValidDate(value, true, validator)
+    return validateDateField(value, true, validator)
   }
 
   if (attribute_def.data_type === 'number') {
