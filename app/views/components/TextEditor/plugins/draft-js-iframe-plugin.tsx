@@ -50,6 +50,16 @@ export const iFrameCustomBlockFn = (className: string) => (
   }
 }
 
+export const renderIFrame = (block: ContentBlock) => {
+  const data = block.getData()
+
+  if (block.getType() === 'atomic' && data.get('srcDoc')) {
+    return data.get('srcDoc')
+  }
+
+  return undefined
+}
+
 const IFrameBlock = ({ block }) => {
   const data = block.getData()
 
