@@ -5,32 +5,24 @@ import Downshift from 'downshift'
 
 import { setSelectedTask } from 'actions/deals'
 import { isBackOffice } from 'utils/user-teams'
-
 import ArrowDownIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
-
 import Tooltip from 'components/tooltip'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
-
 import { IAppState } from 'reducers'
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
-
 import { getTaskEnvelopes } from 'views/utils/deal-files/get-task-envelopes'
-
 import { getDocumentEnvelopes } from 'views/utils/deal-files/get-document-envelopes'
-
 import { getEsignAttachments } from 'views/utils/deal-files/get-esign-attachments'
-
 import { getLastStates } from 'views/utils/deal-files/get-document-last-state'
+import { normalizeUserForEmailFrom } from 'models/email/helpers/normalize-user-for-email-from'
 
 import {
   selectActions,
   ActionItem,
   ActionConditions
 } from './helpers/select-actions'
-
 import { SelectItemDrawer } from './components/SelectItemDrawer'
-
 import {
   approveTask,
   changeTaskRequired,
@@ -450,6 +442,7 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
         </UploadManager>
 
         {this.state.isSignatureFormOpen && (
+          // @ts-ignore
           <GetSignature
             isOpen
             deal={this.props.deal}
@@ -483,7 +476,7 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
           <SingleEmailComposeDrawer
             isOpen
             initialValues={{
-              from: this.props.user,
+              from: normalizeUserForEmailFrom(this.props.user),
               attachments: this.getEmailComposeFiles()
             }}
             deal={this.props.deal}

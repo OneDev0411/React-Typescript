@@ -9,7 +9,6 @@ import { EmailFormValues } from './types'
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import EmailComposeForm from './EmailComposeForm'
 import { EmailRecipientsFields } from './fields/EmailRecipientsFields'
-import { emailFromToValue } from './helpers/email-from-to-value'
 
 interface Props
   extends Omit<
@@ -31,11 +30,12 @@ export function SingleEmailComposeForm({
   getEmail = email => email,
   disableAddNewRecipient = false,
   emailId,
+  fromOptions,
   ...otherProps
 }: Props) {
   const handleSendEmail = (formValue: EmailFormValues) => {
     const emailData = getEmail({
-      from: emailFromToValue(formValue.from),
+      from: formValue.from && formValue.from.value,
       to: normalizeRecipients(formValue.to),
       cc: normalizeRecipients(formValue.cc),
       bcc: normalizeRecipients(formValue.bcc),
@@ -64,6 +64,7 @@ export function SingleEmailComposeForm({
       )}
       renderFields={values => (
         <EmailRecipientsFields
+          fromOptions={fromOptions}
           disableAddNewRecipient={disableAddNewRecipient}
           values={values}
         />

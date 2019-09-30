@@ -79,10 +79,10 @@ export function EmailThreadComposeForm({
     const { to, cc } =
       responseType === 'reply' ? getReplyRecipients(email) : { to: [], cc: [] }
 
-    const from = getEmailRecipient(
-      email.owner_email || '',
-      email.owner_name || ''
-    )
+    const from = {
+      label: getEmailRecipient(email.owner_email || '', email.owner_name || ''),
+      value: email.owner || ''
+    }
 
     return {
       from,

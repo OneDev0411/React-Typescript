@@ -12,7 +12,7 @@ export interface EmailFormValues {
   cc?: IDenormalizedEmailRecipientInput[] | undefined
   bcc?: IDenormalizedEmailRecipientInput[] | undefined
   subject: string
-  from: IUser | string
+  from: { value: string; label: string }
   due_at: Date | null
   body: string | undefined
 }
@@ -33,6 +33,11 @@ export interface EmailComposeFormProps<EmailType> {
   renderCollapsedFields: (values: EmailFormValues) => ReactNode
   renderFields: (values: EmailFormValues) => ReactNode
 
+  /**
+   * If passed, a dropdown will be shown in from, which allows user to select
+   * `from`, from this predefined set of options
+   */
+  fromOptions?: EmailFormValues['from'][]
   /**
    * If false, schedule button will not be shown in footer.
    * Defaults to true

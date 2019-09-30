@@ -2,8 +2,6 @@ import React, { ComponentProps, HTMLProps, useState } from 'react'
 
 import { Field } from 'react-final-form'
 
-import { InputProps } from '@material-ui/core/Input'
-
 import { TextFieldProps } from '@material-ui/core/TextField'
 
 import { EmailFormValues } from '../../types'
@@ -17,6 +15,7 @@ interface Props {
   values: EmailFormValues
   disableAddNewRecipient?: boolean
   includeQuickSuggestions?: boolean
+  fromOptions?: EmailFormValues['from'][]
   EmailRecipientsChipsInputProps?: Partial<
     ComponentProps<typeof EmailRecipientsChipsInput>
   >
@@ -26,6 +25,7 @@ export function EmailRecipientsFields({
   values,
   disableAddNewRecipient = false,
   includeQuickSuggestions = true,
+  fromOptions,
   EmailRecipientsChipsInputProps = {}
 }: Props) {
   const [hasCc, setCc] = useState(false)
@@ -36,22 +36,14 @@ export function EmailRecipientsFields({
 
   return (
     <>
-      <Field
-        component={From}
-        name="from"
-        InputProps={
-          {
-            endAdornment: disableAddNewRecipient ? null : (
-              <CcBccButtons
-                showCc={!isCcShown}
-                showBcc={!isBccShown}
-                onCcAdded={() => setCc(true)}
-                onBccAdded={() => setBcc(true)}
-              />
-            )
-          } as InputProps
-        }
-      />
+      <Field component={From} name="from" options={fromOptions}>
+        <CcBccButtons
+          showCc={!isCcShown}
+          showBcc={!isBccShown}
+          onCcAdded={() => setCc(true)}
+          onBccAdded={() => setBcc(true)}
+        />
+      </Field>
 
       <Field
         name="bcc"

@@ -1,39 +1,59 @@
-import { TextField } from 'final-form-material-ui'
 import { FieldRenderProps } from 'react-final-form'
 import * as React from 'react'
-import { TextFieldProps } from '@material-ui/core/TextField'
+import { ReactNode } from 'react'
+import { Box, FormLabel, MenuItem, Select } from '@material-ui/core'
 
-import { useTheme } from '@material-ui/core'
-
-import { InlineInputLabel } from '../../../InlineInputLabel'
-import { emailFromToDisplayValue } from '../../helpers/email-from-to-display-value'
+import { EmailFormValues } from '../../types'
 
 export function From({
-  InputProps,
   input,
+  options,
+  children,
   ...props
-}: FieldRenderProps<any> & TextFieldProps) {
-  const theme = useTheme()
+}: FieldRenderProps<any> & {
+  options: EmailFormValues['from'][]
+  children: ReactNode
+}) {
+  const inputValue: EmailFormValues['from'] = input.value
+
+  const hasOptions = options && options.length > 0
+
+  const handleChange = (event: React.ChangeEvent<{ value: string }>) => {
+    const selectedOption = (options || []).find(
+      option => option.value === event.target.value
+    )
+
+    if (selectedOption) {
+      input.onChange(selectedOption as any)
+    }
+  }
 
   return (
-    <TextField
-      InputProps={{
-        startAdornment: (
-          <InlineInputLabel style={{ marginBottom: `${theme.spacing(1)}px` }}>
-            From
-          </InlineInputLabel>
-        ),
-        disableUnderline: true,
-        readOnly: true,
-        ...(InputProps || {})
-      }}
-      fullWidth
-      margin="dense"
-      input={{
-        ...input,
-        value: emailFromToDisplayValue(input.value)
-      }}
-      {...props}
-    />
+    <Box display="flex" alignItems="center" my={1}>
+      <FormLabel style={{ marginBottom: 0 }}>From</FormLabel>
+      <Box flex="1" px={2}>
+        {hasOptions ? (
+          <Select
+            value={inputValue.value}
+            onChange={handleChange}
+            disableUnderline
+            inputProps={{
+              name: input.name,
+              id: 'email-compose-from'
+            }}
+          >
+            {options &&
+              options.map(option => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+          </Select>
+        ) : (
+          inputValue.label
+        )}
+      </Box>
+      {children}
+    </Box>
   )
 }
