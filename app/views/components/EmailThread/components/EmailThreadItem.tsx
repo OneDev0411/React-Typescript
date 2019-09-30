@@ -146,7 +146,7 @@ export function EmailThreadItem({
       {!collapsed && (
         <>
           <Box p={2} pl={9}>
-            <Iframe title="Email body" srcDoc={email.html_body} />
+            <Iframe title="Email body" srcDoc={email.html_body || ''} />
 
             {email.attachments.map(attachment => (
               <Attachment key={attachment.id} fullWidth={false}>
