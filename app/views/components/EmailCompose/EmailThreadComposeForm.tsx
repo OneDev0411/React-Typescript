@@ -10,6 +10,12 @@ import { IAppState } from 'reducers'
 import { IOauthAccountsState } from 'reducers/contacts/oAuthAccounts'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
+import {
+  uploadEmailAttachment,
+  uploadGoogleAttachment,
+  uploadMicrosoftAttachment
+} from 'models/email/upload-email-attachment'
+
 import { EmailResponseType } from '../EmailThread/types'
 import EmailComposeForm from './EmailComposeForm'
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
@@ -166,6 +172,20 @@ export function EmailThreadComposeForm({
     [getFromAccount]
   )
 
+  const uploadAttachment = useCallback(
+    (file: File | IFile) => {
+      switch (email.origin) {
+        case 'gmail':
+          return uploadGoogleAttachment(email.owner!, file)
+        case 'outlook':
+          return uploadMicrosoftAttachment(email.owner!, file)
+        default:
+          return uploadEmailAttachment(file)
+      }
+    },
+    [email.origin, email.owner]
+  )
+
   return (
     shouldRender && (
       <EmailComposeForm
@@ -176,6 +196,7 @@ export function EmailThreadComposeForm({
         onCancel={onCancel}
         initialValues={initialValue}
         isSubmitDisabled={isSubmitDisabled}
+        uploadAttachment={uploadAttachment}
         renderCollapsedFields={(values: EmailFormValues) => (
           <CollapsedEmailRecipients
             to={values.to || []}

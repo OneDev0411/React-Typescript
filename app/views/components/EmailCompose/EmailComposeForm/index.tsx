@@ -21,6 +21,8 @@ import { makeStyles } from '@material-ui/core'
 
 import { ClassesProps } from 'utils/ts-utils'
 
+import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
+
 import { EmailComposeFormProps, EmailFormValues } from '../types'
 import EmailBody from '../components/EmailBody'
 import { AttachmentsList } from '../fields/Attachments'
@@ -63,6 +65,7 @@ function EmailComposeForm<T>({
   dispatch,
   enableSchedule = true,
   onCancel,
+  uploadAttachment = uploadEmailAttachment,
   onSent = () => {},
   ...props
 }: EmailComposeFormProps<T> & ClassesProps<typeof styles>) {
@@ -260,6 +263,7 @@ function EmailComposeForm<T>({
                 hasStaticBody={props.hasStaticBody}
                 hasTemplateVariables={props.hasTemplateVariables}
                 content={initialValues.body || ''}
+                uploadAttachment={uploadAttachment}
                 attachments={
                   <Field name="attachments" component={AttachmentsList} />
                 }
@@ -273,6 +277,7 @@ function EmailComposeForm<T>({
                   ? isSubmitDisabled(values)
                   : isSubmitDisabled
               }
+              uploadAttachment={uploadAttachment}
               initialAttachments={initialValues.attachments || []}
               deal={props.deal}
               enableSchedule={enableSchedule}

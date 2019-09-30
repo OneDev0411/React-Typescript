@@ -6,6 +6,8 @@ import ActionButton from 'components/Button/ActionButton'
 import DateTimePicker from 'components/DateTimePicker/next'
 import { formatDate } from 'components/DateTimePicker/helpers'
 
+import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
+
 import { FooterContainer } from './styled'
 import { textForSubmitButton } from './helpers'
 import SchedulerButton from './SchedulerButton'
@@ -24,6 +26,7 @@ interface Props {
   enableSchedule: boolean
   onCancel?: () => void
   className?: string
+  uploadAttachment?: typeof uploadEmailAttachment
 }
 
 export function Footer(props: Props) {
@@ -36,6 +39,7 @@ export function Footer(props: Props) {
         <EmailAttachmentsDropdown
           deal={props.deal}
           onChanged={props.onChanged}
+          uploadAttachment={props.uploadAttachment}
           initialAttachments={props.initialAttachments}
         />
       </div>

@@ -24,11 +24,13 @@ interface Props {
    * and a new attachment is added because of that.
    */
   onChanged?: () => void
+  uploadAttachment?: typeof uploadEmailAttachment
 }
 
 export function EmailAttachmentsDropdown({
   deal,
   initialAttachments,
+  uploadAttachment,
   onChanged = () => {}
 }: Props) {
   const iconClasses = useIconStyles()
@@ -66,7 +68,7 @@ export function EmailAttachmentsDropdown({
                     ...(input.value || []),
                     {
                       file,
-                      request: uploadEmailAttachment(file)
+                      request: uploadAttachment(file)
                     }
                   ] as IUploadingAttachment[]) as any)
 

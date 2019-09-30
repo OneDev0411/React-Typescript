@@ -1,6 +1,8 @@
 import { ReactNode } from 'react'
 import { SuperAgentRequest } from 'superagent'
 
+import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
+
 export interface IUploadingAttachment {
   file: File
   request: SuperAgentRequest
@@ -32,6 +34,11 @@ export interface EmailComposeFormProps<EmailType> {
 
   renderCollapsedFields: (values: EmailFormValues) => ReactNode
   renderFields: (values: EmailFormValues) => ReactNode
+
+  /**
+   * function for customizing attachment upload
+   */
+  uploadAttachment?: typeof uploadEmailAttachment
 
   /**
    * If passed, a dropdown will be shown in from, which allows user to select
