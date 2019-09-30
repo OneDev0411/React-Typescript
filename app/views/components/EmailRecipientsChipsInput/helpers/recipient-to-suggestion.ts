@@ -27,7 +27,7 @@ export function recipientToSuggestion(
     return {
       title,
       subtitle: displayName !== recipient.email ? recipient.email : '',
-      avatar: {
+      defaultAvatarProps: {
         title,
         image: (recipient.contact && recipient.contact.profile_image_url) || ''
       }
