@@ -27,7 +27,15 @@ export function validation(attribute_def, value) {
       value = getDateValues(value)
     }
 
-    return isValidDate(value, true, validateYear)
+    const validator = year => {
+      if (attribute_def.name.includes('anniversary')) {
+        return true
+      }
+
+      return validateYear(year)
+    }
+
+    return isValidDate(value, true, validator)
   }
 
   if (attribute_def.data_type === 'number') {

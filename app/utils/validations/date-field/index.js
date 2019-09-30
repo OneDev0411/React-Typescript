@@ -1,7 +1,9 @@
+export const validateYear = year => /(?:(?:18|19|20)[0-9]{2})/.test(year)
+
 export function isValidDate(
   values,
   isYearOptional = true,
-  validateYear = year => /(?:(?:18|19|20)[0-9]{2})/.test(year)
+  validateYear = validateYear
 ) {
   const { day, month, year } = values
 
