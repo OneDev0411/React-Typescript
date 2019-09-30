@@ -40,7 +40,7 @@ const theme = createMuiTheme({
     }
   },
   shape: {
-    borderRadius: 4
+    borderRadius: 3
   },
   typography: {
     fontFamily: ['Barlow'].join(','),
