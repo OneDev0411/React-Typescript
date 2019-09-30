@@ -25,6 +25,9 @@ export function EmailThread({ thread, style = {}, onEmailSent }: Props) {
     (item, index) => showAll || index === 0 || index >= thread.length - 2
   )
 
+  const firstNonRechatEmail = thread.find(email => email.owner)
+  const fallbackOwner = firstNonRechatEmail ? firstNonRechatEmail.owner : null
+
   return (
     <div style={style}>
       {visibleItems.map((email, index) => {
@@ -52,6 +55,7 @@ export function EmailThread({ thread, style = {}, onEmailSent }: Props) {
               onToggleCollapsed={onToggleCollapsed}
               showBottomButtons={last}
               collapsed={collapsed}
+              defaultFrom={fallbackOwner || undefined}
               onEmailSent={onEmailSent}
             />
             {!last && !showAllToggle ? <Divider /> : null}

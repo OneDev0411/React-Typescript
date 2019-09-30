@@ -36,6 +36,7 @@ interface Props {
   onCancel: () => void
   onSent?: (email: IEmailThreadEmail) => void
   oAuthAccounts: IOauthAccountsState
+  defaultFrom: string
   fetchOAuthAccounts: () => Promise<any>
 }
 
@@ -58,6 +59,7 @@ export function EmailThreadComposeForm({
   onCancel,
   onSent,
   fetchOAuthAccounts,
+  defaultFrom,
   oAuthAccounts
 }: Props) {
   const classes = useStyles()
@@ -117,13 +119,10 @@ export function EmailThreadComposeForm({
     const { to, cc } =
       responseType === 'reply' ? getReplyRecipients(email) : { to: [], cc: [] }
 
-    const owner = email.owner
+    const owner = email.owner || defaultFrom
     const from = owner
       ? {
-          label: getEmailRecipient(
-            email.owner_email || '',
-            email.owner_name || ''
-          ),
+          label: '',
           value: owner
         }
       : undefined
@@ -139,7 +138,7 @@ export function EmailThreadComposeForm({
       attachments: [],
       subject: getReplySubject(responseType, email)
     }
-  }, [email, responseType])
+  }, [defaultFrom, email, responseType])
 
   const shouldRender = useRerenderOnChange(responseType)
 
@@ -236,10 +235,6 @@ function toEmailThreadRecipient(
   )
 
   return { address, name }
-}
-
-function getEmailRecipient(email: string, displayName: string): string {
-  return displayName ? `${displayName} <${email}>` : email
 }
 
 function isEmailRecipient(

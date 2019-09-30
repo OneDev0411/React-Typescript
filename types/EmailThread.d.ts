@@ -28,9 +28,9 @@ declare interface IEmailThreadEmail {
   message_id: string
   internet_message_id: string
   origin: 'outlook' | 'gmail' | 'rechat_email'
-  owner: 'rechat_email' extends this['origin'] ? null : UUID // // seems can be null. Check it
-  owner_name: string // // seems can be null. Check it
-  owner_email: string // seems can be null. Check it
+  owner: UUID | null
+  owner_name: string | null
+  owner_email: string | null
   snippet: string
   subject: string
   text_body: null | string

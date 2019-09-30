@@ -53,7 +53,7 @@ export function Footer(props: Props) {
           <ActionButton
             appearance="flat"
             onClick={props.onCancel}
-            disabled={props.isSubmitting || props.isSubmitDisabled}
+            disabled={props.isSubmitting}
           >
             Cancel
           </ActionButton>

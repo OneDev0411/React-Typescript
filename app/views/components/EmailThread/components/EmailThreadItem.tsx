@@ -46,6 +46,13 @@ interface Props {
    * If true, will show 'reply' and 'forward' buttons under email content
    */
   showBottomButtons?: boolean
+
+  /**
+   * Default value of the email `from`. owner is null in rechat emails (send
+   * via mailgun), and therefore default `from` may not be extracted based
+   * on email in these cases. So it's passed from the thread.
+   */
+  defaultFrom?: string
 }
 
 const styles = (theme: Theme) =>
@@ -73,6 +80,7 @@ export function EmailThreadItem({
   email,
   onToggleCollapsed,
   showBottomButtons = false,
+  defaultFrom,
   onEmailSent = () => {},
   ...props
 }: Props) {
@@ -188,6 +196,7 @@ export function EmailThreadItem({
                   onCancel={() => {
                     setResponseOpen(false)
                   }}
+                  defaultFrom={defaultFrom}
                   onSent={email => {
                     setResponseOpen(false)
                     onEmailSent(email)

@@ -18,10 +18,12 @@ export function From({
 
   const hasOptions = options && options.length > 0
 
+  function getSelectedOption(value) {
+    return (options || []).find(option => option.value === value)
+  }
+
   const handleChange = (event: React.ChangeEvent<{ value: string }>) => {
-    const selectedOption = (options || []).find(
-      option => option.value === event.target.value
-    )
+    const selectedOption = getSelectedOption(event.target.value)
 
     if (selectedOption) {
       input.onChange(selectedOption as any)
@@ -34,8 +36,19 @@ export function From({
       <Box flex="1" px={2}>
         {hasOptions ? (
           <Select
+            required
             value={inputValue && inputValue.value}
             onChange={handleChange}
+            displayEmpty
+            renderValue={(value: string) => {
+              if (!value) {
+                return '-- select --'
+              }
+
+              const selectedOption = getSelectedOption(value)
+
+              return selectedOption && selectedOption.label
+            }}
             disableUnderline
             inputProps={{
               name: input.name,
@@ -50,7 +63,7 @@ export function From({
               ))}
           </Select>
         ) : (
-          inputValue && inputValue.label
+          (inputValue && inputValue.label) || ' - '
         )}
       </Box>
       {children}
