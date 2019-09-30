@@ -1,4 +1,5 @@
 import fecha from 'fecha'
+import escape from 'lodash/escape'
 
 import { parseEmailRecipient } from '../../../EmailRecipientsChipsInput/helpers/parse-email-recipient'
 
@@ -24,7 +25,7 @@ export function getForwardHtml(email: IEmailThreadEmail) {
   <br />
   Subject: ${email.subject || ''}
   <br />
-  To: ${email.to.join(', ')}
+  To: ${escape(email.to.join(', '))}
   <br />
   <br />
   <div>${email.html_body || ''}</div>

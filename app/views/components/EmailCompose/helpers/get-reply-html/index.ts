@@ -1,4 +1,5 @@
 import fecha from 'fecha'
+import escape from 'lodash/escape'
 
 /**
  * Creates content of a reply email
@@ -12,7 +13,7 @@ export function getReplyHtml(email: IEmailThreadEmail) {
     On ${fecha.format(
       new Date(email.message_date),
       'ddd, MMM D, YYYY at h:mm A'
-    )} ${email.from} wrote:
+    )} ${escape(email.from)} wrote:
     </div>
     <blockquote style="margin: 0 0 0 0.8ex; border-left: 1px solid rgb(204, 204, 204); padding-left: 1ex">
       ${email.html_body || ''}
