@@ -21,12 +21,14 @@ import useObservable from 'react-use/lib/useObservable'
 import { of } from 'rxjs/observable/of'
 import { useDebounce } from 'use-debounce'
 
+import { ClassesProps } from 'utils/ts-utils'
+
 import { ChipsInputProps } from './types'
 import Avatar from '../Avatar'
 import { InputWithStartAdornment } from './InputWithStartAdornment'
 import { useChipStyles } from '../../../styles/use-chips-styles'
 
-const useStyles = makeStyles((theme: Theme) =>
+const styles = (theme: Theme) =>
   createStyles({
     chip: {
       margin: theme.spacing(0.75, 0.25)
@@ -49,7 +51,7 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'flex-start'
     }
   })
-)
+const useStyles = makeStyles(styles)
 const emptySuggestion$ = of([])
 
 /**
@@ -72,9 +74,10 @@ export function ChipsInput<T>({
   itemToChip,
   itemToSuggestion,
   searchDebounce = 500,
-  getSuggestions = () => emptySuggestion$
-}: ChipsInputProps<T>) {
-  const classes = useStyles()
+  getSuggestions = () => emptySuggestion$,
+  ...props
+}: ChipsInputProps<T> & ClassesProps<typeof styles>) {
+  const classes = useStyles(props)
   const chipClasses = useChipStyles()
 
   const theme = useTheme()
@@ -188,6 +191,24 @@ export function ChipsInput<T>({
     }
   }
 
+  const renderAvatar = suggestion => {
+    const { defaultAvatarProps, avatar } = suggestion
+
+    if (avatar) {
+      return <ListItemAvatar>{avatar}</ListItemAvatar>
+    }
+
+    if (defaultAvatarProps) {
+      return (
+        <ListItemAvatar>
+          <Avatar {...defaultAvatarProps} />
+        </ListItemAvatar>
+      )
+    }
+
+    return null
+  }
+
   return (
     <Downshift
       inputValue={inputValue}
@@ -225,7 +246,7 @@ export function ChipsInput<T>({
                 inputProps: {
                   ...inputProps,
                   adornment: chips,
-                  autoComplete: 'disabled'
+                  autoComplete: 'off'
                 },
                 readOnly,
                 classes: {
@@ -257,20 +278,7 @@ export function ChipsInput<T>({
                       selected={highlightedIndex === index}
                       button
                     >
-                      {typeof suggestion.avatar === 'string' ? (
-                        <ListItemAvatar>
-                          <Avatar
-                            title={suggestion.subtitle}
-                            image={suggestion.avatar}
-                          />
-                        </ListItemAvatar>
-                      ) : (
-                        <ListItemAvatar>
-                          {suggestion.avatar || (
-                            <Avatar title={suggestion.title} />
-                          )}
-                        </ListItemAvatar>
-                      )}
+                      {renderAvatar(suggestion)}
                       <ListItemText
                         primary={suggestion.title}
                         secondary={suggestion.subtitle}

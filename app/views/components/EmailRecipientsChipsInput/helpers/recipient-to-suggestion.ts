@@ -22,12 +22,15 @@ export function recipientToSuggestion(
       recipient.contact &&
       getDisplayNameForContactEmail(recipient.email, recipient.contact)
 
+    const title = displayName || recipient.email
+
     return {
-      title: displayName || recipient.email,
+      title,
       subtitle: displayName !== recipient.email ? recipient.email : '',
-      avatar: recipient.contact
-        ? recipient.contact!.profile_image_url
-        : undefined
+      defaultAvatarProps: {
+        title,
+        image: (recipient.contact && recipient.contact.profile_image_url) || ''
+      }
     }
   }
 }
