@@ -57,6 +57,10 @@ interface Props {
 
 const styles = (theme: Theme) =>
   createStyles({
+    root: {
+      // limit the stickiness of the header within the email thread item
+      position: 'relative'
+    },
     header: {
       position: 'sticky',
       top: 0,
@@ -102,7 +106,7 @@ export function EmailThreadItem({
   const iconClassName = classNames(iconClasses.rightMargin, iconClasses.small)
 
   return (
-    <>
+    <div className={classes.root}>
       {/* header */}
       <div
         className={classes.header}
@@ -207,6 +211,6 @@ export function EmailThreadItem({
           </Box>
         </>
       )}
-    </>
+    </div>
   )
 }
