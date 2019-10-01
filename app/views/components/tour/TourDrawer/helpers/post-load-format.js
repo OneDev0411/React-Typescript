@@ -48,6 +48,10 @@ export async function postLoadFormat(task, owner, listings) {
     }
   }
 
+  if (task.assignees == null) {
+    task.assignees = []
+  }
+
   let allAssociations = []
 
   if (Array.isArray(task.associations)) {

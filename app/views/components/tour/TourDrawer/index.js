@@ -182,7 +182,7 @@ export class TourDrawer extends React.Component {
 
     return (
       <Drawer open={this.props.isOpen} onClose={this.props.onClose}>
-        <Drawer.Header title={`${this.isNew ? 'New' : 'Edit'} Tour`} />
+        <Drawer.Header title={`${this.isNew ? 'New' : 'Edit'} Toursheet`} />
         <Drawer.Body>
           <LoadSaveReinitializeForm
             initialValues={this.props.initialValues}
@@ -197,8 +197,6 @@ export class TourDrawer extends React.Component {
             validate={validate}
             render={formProps => {
               const { values } = formProps
-
-              console.log(REMINDER_DROPDOWN_OPTIONS[5])
 
               return (
                 <div>
