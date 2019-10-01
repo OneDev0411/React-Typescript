@@ -57,10 +57,6 @@ export async function preSaveFormat(values, originalValues) {
       association.id = item.id
     }
 
-    if (item.index) {
-      association.index = item.index
-    }
-
     return association
   })
 
