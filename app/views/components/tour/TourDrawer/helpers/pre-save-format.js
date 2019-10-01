@@ -45,7 +45,12 @@ export async function preSaveFormat(values, originalValues) {
     task.reminders = []
   }
 
-  task.associations = [...clients, ...locations].map(item => {
+  const l = locations.map((location, index) => ({
+    ...location,
+    index: index + 1
+  }))
+
+  task.associations = [...clients, ...l].map(item => {
     const { association_type } = item
     const association = {
       association_type,

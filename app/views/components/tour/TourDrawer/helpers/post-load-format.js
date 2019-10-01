@@ -77,7 +77,19 @@ export async function postLoadFormat(task, owner, listings) {
     ...task,
     reminder,
     clients,
-    locations,
+    locations: locations.sort(sortLocationsByIndex),
     dueDate: new Date(dueDate)
   }
+}
+
+function sortLocationsByIndex(a, b) {
+  if (a < b) {
+    return -1
+  }
+
+  if (a > b) {
+    return 1
+  }
+
+  return 0
 }
