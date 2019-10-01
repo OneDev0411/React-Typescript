@@ -22,7 +22,7 @@ function OpenHouseRegistration({ event, user }: Props & StateProps) {
         variant="outlined"
         color="secondary"
         size="small"
-        href={`/openhouse/${event.id}/${getActiveTeamId(user)}/register`}
+        href={`/openhouse/${event.crm_task}/${getActiveTeamId(user)}/register`}
         target="_blank"
       >
         Guest Registration Page
