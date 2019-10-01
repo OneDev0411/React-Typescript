@@ -49,7 +49,7 @@ export const SideNavContainer = styled.div<SideNavContainerProps>`
     font-size: ${props => props.theme.typography.fontSize}px;
     padding-top: ${props => props.theme.spacing(1)}px;
     padding-bottom: ${props => props.theme.spacing(1)}px;
-    margin-bottom: ${props => props.theme.spacing(1) / 2}px;
+    margin-bottom: ${props => props.theme.spacing(0.5)}px;
 
     &:focus {
       outline: none;
