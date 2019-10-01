@@ -45,8 +45,11 @@ export function EmailItemHeaderActions(
   const classes = useStyles(props)
 
   const select = action => () => {
-    action()
     onClose()
+    // to ensure action is run when menu is closed. This ensures autofocus
+    // behavior isn't broken in any content that is toggled into view as a
+    // result of running this action
+    setTimeout(action)
   }
 
   return (

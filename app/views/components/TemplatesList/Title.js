@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { plural } from './helpers'
+import { plural } from 'utils/plural'
 
 function Title(props) {
   const isPlural = props.count > 1

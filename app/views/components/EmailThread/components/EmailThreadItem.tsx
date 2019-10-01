@@ -7,6 +7,7 @@ import {
   createStyles,
   Link,
   makeStyles,
+  Paper,
   Theme,
   Typography
 } from '@material-ui/core'
@@ -15,6 +16,7 @@ import classNames from 'classnames'
 
 import { Iframe } from 'components/Iframe'
 
+import config from '../../../../../config/public'
 import Avatar from '../../Avatar'
 import IconAttachment from '../../SvgIcons/Attachment/IconAttachment'
 import { useIconStyles } from '../../../../styles/use-icon-styles'
@@ -23,35 +25,56 @@ import { EmailItemRecipients } from './EmailItemRecipients'
 import IconReply from '../../SvgIcons/Reply/IconReply'
 import IconForward from '../../SvgIcons/Forward/IconForward'
 import { Attachment } from '../../EmailCompose/components/Attachment'
-import { getAttachmentUrl } from '../helpers/get-attachment-url'
-
-type ResponseType = 'reply' | 'forward'
+import { EmailResponseType } from '../types'
+import EmailThreadComposeForm from '../../EmailCompose/EmailThreadComposeForm'
 
 interface Props {
   email: IEmailThreadEmail
   collapsed: boolean
+
   /**
    * if not undefined, makes the item header clickable which toggles collapsed
    */
   onToggleCollapsed: undefined | ((collapsed: boolean) => void)
+
+  /**
+   * callback to be called when replied or forwarded
+   */
+  onEmailSent?: (email: IEmailThreadEmail) => void
+
   /**
    * If true, will show 'reply' and 'forward' buttons under email content
    */
   showBottomButtons?: boolean
+
+  /**
+   * Default value of the email `from`. owner is null in rechat emails (send
+   * via mailgun), and therefore default `from` may not be extracted based
+   * on email in these cases. So it's passed from the thread.
+   */
+  defaultFrom?: string
 }
 
 const styles = (theme: Theme) =>
   createStyles({
+    root: {
+      // limit the stickiness of the header within the email thread item
+      position: 'relative'
+    },
     header: {
       position: 'sticky',
-      backgroundColor: theme.palette.background.paper,
       top: 0,
+      zIndex: 2,
+      backgroundColor: theme.palette.background.paper,
       display: 'flex',
       alignItems: 'center',
       padding: theme.spacing(2, 2.5)
     },
     actionButton: {
       marginRight: `${theme.spacing(1)}px`
+    },
+    composeWrapper: {
+      padding: theme.spacing(0, 3)
     }
   })
 const useStyles = makeStyles(styles, { name: 'EmailThreadItem' })
@@ -61,27 +84,29 @@ export function EmailThreadItem({
   email,
   onToggleCollapsed,
   showBottomButtons = false,
+  defaultFrom,
+  onEmailSent = () => {},
   ...props
 }: Props) {
   const iconClasses = useIconStyles()
   const classes = useStyles(props)
 
-  const [isResponseOpen, setResponseOpen] = useState(false)
-  const [responseType, setResponseType] = useState<ResponseType>('reply')
+  const [isResponseOpen, setIsResponseOpen] = useState(false)
+  const [responseType, setResponseType] = useState<EmailResponseType>('reply')
 
   const openReply = () => {
-    setResponseOpen(true)
+    setIsResponseOpen(true)
     setResponseType('reply')
   }
   const openForward = () => {
-    setResponseOpen(true)
+    setIsResponseOpen(true)
     setResponseType('forward')
   }
 
   const iconClassName = classNames(iconClasses.rightMargin, iconClasses.small)
 
   return (
-    <>
+    <div className={classes.root}>
       {/* header */}
       <div
         className={classes.header}
@@ -125,14 +150,14 @@ export function EmailThreadItem({
       {!collapsed && (
         <>
           <Box p={2} pl={9}>
-            <Iframe title="Email body" srcDoc={email.html_body} />
+            <Iframe title="Email body" srcDoc={email.html_body || ''} />
 
             {email.attachments.map(attachment => (
               <Attachment key={attachment.id} fullWidth={false}>
                 {/* FIXME: url */}
                 <Link
                   target="_blank"
-                  href={getAttachmentUrl(email, attachment)}
+                  href={`${config.api_url}/${attachment.url}`}
                 >
                   {attachment.name}
                 </Link>
@@ -140,7 +165,7 @@ export function EmailThreadItem({
             ))}
 
             {showBottomButtons && (
-              <Box mt={1}>
+              <Box my={1}>
                 <Button
                   className={classes.actionButton}
                   onClick={openReply}
@@ -167,9 +192,25 @@ export function EmailThreadItem({
                 </Button>
               </Box>
             )}
+            {isResponseOpen && (
+              <Paper elevation={10} className={classes.composeWrapper}>
+                <EmailThreadComposeForm
+                  email={email}
+                  responseType={responseType}
+                  onCancel={() => {
+                    setIsResponseOpen(false)
+                  }}
+                  defaultFrom={defaultFrom}
+                  onSent={email => {
+                    setIsResponseOpen(false)
+                    onEmailSent(email)
+                  }}
+                />
+              </Paper>
+            )}
           </Box>
         </>
       )}
-    </>
+    </div>
   )
 }

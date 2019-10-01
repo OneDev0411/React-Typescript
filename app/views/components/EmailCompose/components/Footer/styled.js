@@ -11,7 +11,6 @@ const FooterContainer = styled.div`
   & .features-list {
     dispay: flex;
     flex-wrap: nowrap;
-    align-content: strech;
   }
 
   & .action-bar {

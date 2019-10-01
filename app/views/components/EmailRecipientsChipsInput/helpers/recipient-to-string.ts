@@ -13,7 +13,9 @@ export function recipientToString(
 
   if (recipient.recipient_type === 'Email' && recipient.email) {
     if (!recipient.contact || !recipient.contact.display_name) {
-      return recipient.email
+      // If email is in form of "Display Name <email address>", we replace
+      // angle brackets with parenthesis
+      return recipient.email.replace('<', '(').replace('>', ')')
     }
 
     // We have a contact here which has a display name.

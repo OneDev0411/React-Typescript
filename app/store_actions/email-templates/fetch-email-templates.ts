@@ -2,7 +2,7 @@ import * as actionTypes from 'constants/email-templates'
 
 import { ThunkDispatch } from 'redux-thunk'
 
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 import { EmailTemplateAction } from 'reducers/email-templates/types'
 import { getEmailTemplates } from 'models/email-templates/get-email-templates'
 

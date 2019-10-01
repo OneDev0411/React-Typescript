@@ -5,7 +5,7 @@ import { browserHistory, RouteComponentProps } from 'react-router'
 import { Box } from '@material-ui/core'
 
 import { Container, Content } from 'components/SlideMenu'
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 import { getRootBrand } from 'utils/user-teams'
 
 import Acl from 'components/Acl'

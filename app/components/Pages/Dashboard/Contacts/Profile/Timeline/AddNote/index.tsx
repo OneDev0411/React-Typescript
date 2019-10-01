@@ -8,7 +8,7 @@ import IconNote from 'components/SvgIcons/Note/IconNote'
 
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
 import { EditNoteDrawer } from 'components/EditNoteDrawer'

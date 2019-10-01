@@ -19,20 +19,6 @@ describe('TextEditor', () => {
   // js-dom seems to have problem with selection API. These mocks are still not
   // enough
   beforeAll(() => {
-    ;(window as any).getSelection = () => {
-      return {
-        addRange: () => {},
-        getRangeAt: () => ({
-          setStart: () => {},
-          setEnd: () => {},
-          commonAncestorContainer: {
-            nodeName: 'BODY',
-            ownerDocument: document
-          }
-        }),
-        removeAllRanges: () => {}
-      }
-    }
     ;(window as any).document.createRange = () => ({
       setStart: () => {},
       setEnd: () => {},

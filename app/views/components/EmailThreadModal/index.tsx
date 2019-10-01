@@ -1,14 +1,10 @@
-import React, { ReactNode, useEffect } from 'react'
+import React from 'react'
 
 import { Box, Dialog } from '@material-ui/core'
 
 import { DialogProps } from '@material-ui/core/Dialog'
 
-import { getEmailThread } from 'models/email/get-email-thread'
-import { useAsyncValue } from 'hooks/use-async-value'
-
-import LoadingContainer from '../LoadingContainer'
-import { EmailThread } from '../EmailThread'
+import { EmailThread, EmailThreadLoader } from '../EmailThread'
 import { DialogTitle } from '../DialogTitle'
 
 interface Props extends DialogProps {
@@ -25,43 +21,43 @@ interface Props extends DialogProps {
  * with a few lines of code though.
  */
 export function EmailThreadModal({ open, threadKey, ...otherProps }: Props) {
-  const [setThreadsPromise, thread, loading, error] = useAsyncValue<
-    IEmailThread
-  >()
-
-  useEffect(() => {
-    if (open && threadKey) {
-      setThreadsPromise(getEmailThread(threadKey))
-    }
-  }, [setThreadsPromise, open, threadKey])
-
-  let content: ReactNode = null
-
-  if (loading) {
-    content = <LoadingContainer style={{ minHeight: '15rem' }} />
-  } else if (thread) {
-    content = (
-      <>
-        <DialogTitle
-          onClose={event => {
-            otherProps.onClose && otherProps.onClose(event, 'escapeKeyDown')
-          }}
-        >
-          {thread[0] && thread[0].subject}
-        </DialogTitle>
-        <Box overflow="auto">
-          <EmailThread thread={thread} />
-        </Box>
-      </>
-    )
-  } else if (error) {
-    // TODO: error view
-    content = 'Could not load emails'
-  }
-
   return (
-    <Dialog open={open} fullWidth maxWidth="md" {...otherProps}>
-      {content}
+    <Dialog
+      disableEnforceFocus
+      open={open}
+      fullWidth
+      maxWidth="md"
+      {...otherProps}
+    >
+      <EmailThreadLoader threadKey={threadKey}>
+        {({ thread, onEmailSent }) => (
+          <>
+            <DialogTitle
+              onClose={event => {
+                otherProps.onClose && otherProps.onClose(event, 'escapeKeyDown')
+              }}
+            >
+              {(thread[0] && thread[0].subject) || 'No Subject'}
+            </DialogTitle>
+            <Box overflow="auto">
+              <EmailThread
+                thread={thread}
+                onEmailSent={email => {
+                  // Right now, outlook doesn't return the sent email. So
+                  // we check if the email is undefined, we just close the
+                  // thread dialog as it seems the most reasonable thing
+                  // to do.
+                  if (email) {
+                    onEmailSent(email)
+                  } else if (otherProps.onClose) {
+                    otherProps.onClose({}, 'escapeKeyDown')
+                  }
+                }}
+              />
+            </Box>
+          </>
+        )}
+      </EmailThreadLoader>
     </Dialog>
   )
 }

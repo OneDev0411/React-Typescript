@@ -6,7 +6,7 @@ import { Link } from 'react-router'
 import Avatar from 'components/Avatar'
 import CopyButton from 'components/CopyButton'
 import { EmailComposeFormProps } from 'components/EmailCompose'
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
 
 import Activity from './Activity'

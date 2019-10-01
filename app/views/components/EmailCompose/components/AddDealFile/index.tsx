@@ -13,7 +13,7 @@ import { selectDealTasks } from 'reducers/deals/tasks'
 
 import { notUndefined } from 'utils/ts-utils'
 
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 
 import SearchDealDrawer from 'components/SearchDealDrawer'
 import SelectDealFileDrawer from 'components/SelectDealFileDrawer'

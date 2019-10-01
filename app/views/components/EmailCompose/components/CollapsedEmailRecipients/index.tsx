@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   })
 )
-export function CollapsedRecipients({
+export function CollapsedEmailRecipients({
   to = [],
   cc = [],
   bcc = [],

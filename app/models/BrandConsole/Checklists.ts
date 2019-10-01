@@ -1,4 +1,4 @@
-import Fetch from '../../services/fetch/index'
+import Fetch from '../../services/fetch'
 
 export async function getBrandChecklists(
   brandId: string

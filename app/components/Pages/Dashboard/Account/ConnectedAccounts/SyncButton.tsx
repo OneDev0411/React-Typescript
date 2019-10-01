@@ -4,7 +4,7 @@ import { Link } from '@material-ui/core'
 
 import * as React from 'react'
 
-import { oAuthAccountTypeToProvider } from './consants'
+import { oAuthAccountTypeToProvider } from './constants'
 
 interface Props {
   account: IOAuthAccount

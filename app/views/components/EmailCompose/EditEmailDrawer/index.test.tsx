@@ -25,7 +25,7 @@ describe('EditEmailDrawer', () => {
   })
 
   // https://gitlab.com/rechat/web/issues/3382
-  test("it don't modify email content when email is created based on an mc template", async () => {
+  test("it doesn't modify email content when email is created based on an mc template", async () => {
     const { getByTestId } = render(
       <TestBed>
         <EditEmailDrawer emailId="mc" isOpen onClose={noop} onEdited={noop} />

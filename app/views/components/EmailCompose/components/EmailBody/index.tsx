@@ -13,7 +13,7 @@ import { connect } from 'react-redux'
 
 import { TextEditor } from 'components/TextEditor'
 import Loading from 'components/LoadingContainer'
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
@@ -25,6 +25,7 @@ interface Props {
   hasStaticBody?: boolean
   hasSignatureByDefault?: boolean
   hasTemplateVariables?: boolean
+  autofocus?: boolean
   FieldProps?: Partial<FieldProps<any>>
   signature: string
   DraftEditorProps?: TextEditorProps['DraftEditorProps']
@@ -34,6 +35,7 @@ interface Props {
    * body, to include it in the scroll area of the email content
    */
   attachments?: ReactNode
+  uploadAttachment?: typeof uploadEmailAttachment
 }
 
 const EmailBody = ({
@@ -44,17 +46,22 @@ const EmailBody = ({
   hasStaticBody = false,
   attachments = null,
   FieldProps,
+  autofocus = false,
   DraftEditorProps = {},
+  uploadAttachment = uploadEmailAttachment,
   editorRef
 }: Props) => {
   const [signatureEditorVisible, setSignatureEditorVisible] = useState(false)
 
-  const uploadImage = useCallback(async file => {
-    const response = await uploadEmailAttachment(file)
-    const uploadedFile: IFile = response.body.data
+  const uploadImage = useCallback(
+    async file => {
+      const response = await uploadAttachment(file)
+      const uploadedFile: IFile = response.body.data
 
-    return uploadedFile.url
-  }, [])
+      return uploadedFile.url
+    },
+    [uploadAttachment]
+  )
 
   return (
     <>
@@ -66,6 +73,7 @@ const EmailBody = ({
           render={({ input, meta }) => (
             <TextEditor
               enableImage
+              autofocus={autofocus}
               uploadImage={uploadImage}
               enableSignature
               DraftEditorProps={DraftEditorProps}

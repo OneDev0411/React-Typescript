@@ -1,32 +1,20 @@
-import { Field } from 'react-final-form'
-
-import React, { ComponentProps, HTMLProps, useState } from 'react'
-
-import { InputProps } from '@material-ui/core/Input'
-
-import { TextFieldProps } from '@material-ui/core/TextField'
+import React, { ComponentProps } from 'react'
 
 import { createEmailCampaign } from 'models/email/create-email-campaign'
 
 import { updateEmailCampaign } from 'models/email/update-email-campaign'
 
-import { getSendEmailResultMessages } from './helpers/email-result-messages/index'
-
-import EmailRecipientsChipsInput from '../EmailRecipientsChipsInput'
-
 import { normalizeRecipients } from './helpers/normalize-recepients'
-import { From } from './fields/From'
 import { EmailFormValues } from './types'
-import { CcBccButtons } from './components/CcBccButtons'
-import { CollapsedRecipients } from './components/CollapsedRecipients'
+import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import EmailComposeForm from './EmailComposeForm'
+import { EmailRecipientsFields } from './fields/EmailRecipientsFields'
 
 interface Props
   extends Omit<
     ComponentProps<typeof EmailComposeForm>,
     | 'hasSignatureByDefault'
     | 'sendEmail'
-    | 'getSendEmailResultMessages'
     | 'renderCollapsedFields'
     | 'renderFields'
   > {
@@ -42,14 +30,12 @@ export function SingleEmailComposeForm({
   getEmail = email => email,
   disableAddNewRecipient = false,
   emailId,
+  fromOptions,
   ...otherProps
 }: Props) {
-  const [hasCc, setCc] = useState(false)
-  const [hasBcc, setBcc] = useState(false)
-
   const handleSendEmail = (formValue: EmailFormValues) => {
     const emailData = getEmail({
-      from: (formValue.from && formValue.from.id) || '',
+      from: formValue.from && formValue.from.value,
       to: normalizeRecipients(formValue.to),
       cc: normalizeRecipients(formValue.cc),
       bcc: normalizeRecipients(formValue.bcc),
@@ -64,93 +50,25 @@ export function SingleEmailComposeForm({
       : createEmailCampaign(emailData)
   }
 
-  const renderFields = (values: EmailFormValues) => {
-    const isCcShown = hasCc || (values.cc || []).length > 0
-    const isBccShown = hasBcc || (values.bcc || []).length > 0
-
-    return (
-      <>
-        <Field
-          component={From}
-          name="from"
-          InputProps={
-            {
-              endAdornment: disableAddNewRecipient ? null : (
-                <CcBccButtons
-                  showCc={!isCcShown}
-                  showBcc={!isBccShown}
-                  onCcAdded={() => setCc(true)}
-                  onBccAdded={() => setBcc(true)}
-                />
-              )
-            } as InputProps
-          }
-        />
-
-        <Field
-          name="bcc"
-          render={bccInputProps => (
-            <Field
-              label="To"
-              name="to"
-              component={EmailRecipientsChipsInput as any}
-              readOnly={disableAddNewRecipient}
-              includeQuickSuggestions
-              // we need to do this weird stuff because of the weird UX
-              // which is to show suggestions under too but add them to bcc!
-              // Hopefully we revise it and remove such weirdness
-              currentlyUsedQuickSuggestions={bccInputProps.input.value}
-              onQuickSuggestionSelected={recipient =>
-                bccInputProps.input.onChange([
-                  ...(bccInputProps.input.value || []),
-                  recipient
-                ] as any)
-              }
-              TextFieldProps={
-                {
-                  inputProps: {
-                    autoFocus: true
-                  } as HTMLProps<HTMLInputElement>
-                } as TextFieldProps
-              }
-            />
-          )}
-        />
-        {isCcShown && (
-          <Field
-            label="Cc"
-            name="cc"
-            component={EmailRecipientsChipsInput as any}
-          />
-        )}
-        {isBccShown && (
-          <Field
-            label="Bcc"
-            name="bcc"
-            component={EmailRecipientsChipsInput as any}
-          />
-        )}
-      </>
-    )
-  }
-  const renderCollapsedFields = (values: EmailFormValues) => (
-    <CollapsedRecipients
-      to={values.to || []}
-      cc={values.cc || []}
-      bcc={values.bcc || []}
-    />
-  )
-
   return (
     <EmailComposeForm
       {...otherProps}
       hasSignatureByDefault
       sendEmail={handleSendEmail}
-      getSendEmailResultMessages={form =>
-        getSendEmailResultMessages(!!form.due_at)
-      }
-      renderCollapsedFields={renderCollapsedFields}
-      renderFields={renderFields}
+      renderCollapsedFields={(values: EmailFormValues) => (
+        <CollapsedEmailRecipients
+          to={values.to || []}
+          cc={values.cc || []}
+          bcc={values.bcc || []}
+        />
+      )}
+      renderFields={values => (
+        <EmailRecipientsFields
+          fromOptions={fromOptions}
+          disableAddNewRecipient={disableAddNewRecipient}
+          values={values}
+        />
+      )}
     />
   )
 }

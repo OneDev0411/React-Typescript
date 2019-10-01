@@ -3,7 +3,7 @@ import { fireEvent } from '@testing-library/react'
 
 import {AppTheme} from '../../../../../../AppTheme'
 
-import { Addresses } from './index'
+import { Addresses } from '.'
 import attributeDefs from 'fixtures/contacts/attribute-defs'
 import contact from 'fixtures/contacts/full-contact'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
@@ -34,7 +34,6 @@ describe('Addresses tests', function() {
     fireEvent.click(button)
     const inlineEditContainer = queryByTestId('inline-editable-field-container')
     const deleteButton = getByTestId('inline-editable-field-delete')
-    const saveButton = getByTestId('inline-editable-field-save')
     fireEvent.click(deleteButton)
     const confirmButton = getByTestId('confirmation-modal-confirm-button')
     fireEvent.click(confirmButton)

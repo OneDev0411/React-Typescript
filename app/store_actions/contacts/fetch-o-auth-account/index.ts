@@ -1,6 +1,6 @@
 import { ThunkDispatch } from 'redux-thunk'
 
-import { getOAuthAccount } from 'models/contacts/get-o-auth-account'
+import { getOAuthAccount } from 'models/o-auth-accounts/get-o-auth-account'
 
 import { IOAuthAccountAction } from 'reducers/contacts/oAuthAccounts'
 

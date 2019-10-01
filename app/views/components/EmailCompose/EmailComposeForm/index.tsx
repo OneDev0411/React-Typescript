@@ -21,6 +21,8 @@ import { makeStyles } from '@material-ui/core'
 
 import { ClassesProps } from 'utils/ts-utils'
 
+import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
+
 import { EmailComposeFormProps, EmailFormValues } from '../types'
 import EmailBody from '../components/EmailBody'
 import { AttachmentsList } from '../fields/Attachments'
@@ -28,6 +30,7 @@ import { styles } from './styles'
 import { Footer } from '../components/Footer'
 import ConfirmationModalContext from '../../ConfirmationModal/context'
 import { validateRecipient } from '../../EmailRecipientsChipsInput/helpers/validate-recipient'
+import { getSendEmailResultMessages } from '../helpers/email-result-messages'
 
 export const useEmailFormStyles = makeStyles(styles, { name: 'EmailForm' })
 
@@ -49,7 +52,7 @@ export const useEmailFormStyles = makeStyles(styles, { name: 'EmailForm' })
  * Right now there are some duplicate code in them, and the added abstraction
  * is not necessarily worth it.
  */
-function EmailComposeForm({
+function EmailComposeForm<T>({
   isSubmitDisabled = false,
   initialValues = {
     to: [],
@@ -60,10 +63,20 @@ function EmailComposeForm({
     attachments: []
   },
   dispatch,
+  enableSchedule = true,
+  onCancel,
+  uploadAttachment = uploadEmailAttachment,
   onSent = () => {},
   ...props
-}: EmailComposeFormProps & ClassesProps<typeof styles>) {
-  const [topFieldsCollapsed, setTopFieldsCollapsed] = useState(false)
+}: EmailComposeFormProps<T> & ClassesProps<typeof styles>) {
+  const hasRecipients =
+    (initialValues.to || []).length > 0 && !!initialValues.from
+  const hasSubject = !!initialValues.subject
+  const autofocusBody = hasRecipients && hasSubject
+
+  const [topFieldsCollapsed, setTopFieldsCollapsed] = useState<boolean>(
+    hasRecipients
+  )
   const emailBodyEditorRef = useRef<any>(null)
   const confirmationModal = useContext(ConfirmationModalContext)
 
@@ -71,11 +84,11 @@ function EmailComposeForm({
 
   const handleSendEmail = useCallback(
     async form => {
-      const { successMessage, errorMessage } = props.getSendEmailResultMessages(
-        form
+      const { successMessage, errorMessage } = getSendEmailResultMessages(
+        !!form.due_at
       )
 
-      let result: IEmailCampaign
+      let result: T
 
       try {
         result = await props.sendEmail(form)
@@ -232,7 +245,7 @@ function EmailComposeForm({
                 InputProps={{
                   onFocus: () => setTopFieldsCollapsed(true),
                   inputProps: {
-                    autoFocus: (values.to || []).length > 0,
+                    autoFocus: hasRecipients && !hasSubject,
                     'data-test': 'email-subject'
                   }
                 }}
@@ -245,10 +258,12 @@ function EmailComposeForm({
                 DraftEditorProps={{
                   onFocus: () => setTopFieldsCollapsed(true)
                 }}
+                autofocus={autofocusBody}
                 hasSignatureByDefault={props.hasSignatureByDefault}
                 hasStaticBody={props.hasStaticBody}
                 hasTemplateVariables={props.hasTemplateVariables}
                 content={initialValues.body || ''}
+                uploadAttachment={uploadAttachment}
                 attachments={
                   <Field name="attachments" component={AttachmentsList} />
                 }
@@ -257,10 +272,18 @@ function EmailComposeForm({
             <Footer
               formProps={{ values: formProps.values as EmailFormValues }}
               isSubmitting={submitting}
-              isSubmitDisabled={isSubmitDisabled}
+              isSubmitDisabled={
+                typeof isSubmitDisabled === 'function'
+                  ? isSubmitDisabled(values)
+                  : isSubmitDisabled
+              }
+              uploadAttachment={uploadAttachment}
               initialAttachments={initialValues.attachments || []}
               deal={props.deal}
+              enableSchedule={enableSchedule}
+              onCancel={onCancel}
               onChanged={scrollToEnd}
+              className={classes.footer}
             />
           </form>
         )

@@ -9,15 +9,16 @@ import {
   ListItemText,
   Theme
 } from '@material-ui/core'
-
 import styled, { ThemeProps } from 'styled-components'
 
 import Avatar from 'components/Avatar'
 import { ConnectedAccountSyncStatus } from 'components/ConnectedAccountSyncStatus'
-
 import { DangerButton } from 'components/Button/DangerButton'
 
-import { oAuthAccountTypeToProvider, oAuthAccountTypeToTitle } from './consants'
+import {
+  oAuthAccountTypeToProvider,
+  oAuthAccountTypeToTitle
+} from './constants'
 import { SyncButton } from './SyncButton'
 
 interface Props {

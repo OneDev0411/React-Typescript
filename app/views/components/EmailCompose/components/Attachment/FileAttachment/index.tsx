@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ComponentProps } from 'react'
 
-import { Attachment } from '../index'
+import { Attachment } from '..'
 
 interface Props extends Omit<ComponentProps<typeof Attachment>, 'children'> {
   file: IFile
