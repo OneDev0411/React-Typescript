@@ -46,9 +46,16 @@ export const SideNavContainer = styled.div<SideNavContainerProps>`
     height: ${props => props.theme.spacing(5)}px;
     text-decoration: none;
     transition: all 0.5s;
+    font-size: ${props => props.theme.typography.fontSize}px;
+    padding-top: ${props => props.theme.spacing(1)}px;
+    padding-bottom: ${props => props.theme.spacing(1)}px;
+    margin-bottom: ${props => props.theme.spacing(1) / 2}px;
 
     &:focus {
       outline: none;
+    }
+    &:hover {
+      color: ${props => props.theme.palette.text.primary};
     }
     &:hover .section-item__delete {
       opacity: 1;
