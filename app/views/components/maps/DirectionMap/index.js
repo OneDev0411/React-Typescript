@@ -46,6 +46,9 @@ export class DirectionMap extends React.Component {
   }
 
   initMap = () => {
+    const { listings } = this.props
+    const listingsLength = listings.length
+
     this.map = new window.google.maps.Map(
       document.getElementById(this.props.id),
       {
@@ -54,9 +57,15 @@ export class DirectionMap extends React.Component {
       }
     )
 
-    if (this.props.locations.length === 1) {
+    if (listingsLength === 0) {
+      return
+    }
+
+    if (listingsLength === 1) {
       this.setMarker(this.props.locations[0])
-    } else {
+    }
+
+    if (listingsLength > 1) {
       this.directionsService = new window.google.maps.DirectionsService()
       this.directionsDisplay = new window.google.maps.DirectionsRenderer()
       this.directionsDisplay.setMap(this.map)
