@@ -72,7 +72,7 @@ function MiniProfile(props: MiniProfilePropsType) {
       <div className="details">
         {!!data.name && (
           <div className="person-name">
-            {data.name}{' '}
+            <span>{data.name}</span>
             <Link to={`/dashboard/contacts/${output.contact_id}`}>
               <Button color="primary">View Profile</Button>
             </Link>
@@ -85,7 +85,7 @@ function MiniProfile(props: MiniProfilePropsType) {
         )}
         {!!data.email && (
           <div className="person-email">
-            {data.email}{' '}
+            <span>{data.email}</span>
             <Button
               color="primary"
               onClick={() => props.setActionSettings(emailProps)}
