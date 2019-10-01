@@ -4,7 +4,7 @@ import Fetch from 'services/fetch'
 
 export async function sendEmailViaOauthAccount(
   provider: OAuthProvider,
-  accountId: string,
+  accountId: UUID,
   email: IEmailThreadEmailInput
 ): Promise<IEmailThreadEmail> {
   const response = await new Fetch()

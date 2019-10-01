@@ -1,9 +1,16 @@
-export function normalizeUserForEmailFrom(user: IUser | undefined) {
-  return user
-    ? (user.id && {
+export function normalizeUserForEmailFrom(
+  user: IUser | undefined
+): { label: string; value: string } | undefined {
+  if (user) {
+    if (user.id) {
+      return {
         label: `${user.display_name} <${user.email}>`,
         value: user.id
-      }) ||
-        undefined
-    : user
+      }
+    }
+
+    return undefined
+  }
+
+  return user
 }

@@ -12,7 +12,7 @@ interface Props {
 const styles = (theme: Theme) =>
   createStyles({
     root: ({ padding }: Props) => ({
-      borderRadius: '2.5rem',
+      borderRadius: '40px',
       background: theme.palette.grey['200'],
       margin: theme.spacing(0, 0, 0, 1),
       padding:

@@ -2,16 +2,16 @@ import { SuperAgentRequest } from 'superagent'
 
 import { upload } from '../upload'
 
-export const uploadEmailAttachment: (
-  file: File | IFile
-) => SuperAgentRequest = upload('/emails/attachments')
+type UploadFile = (file: File | IFile) => SuperAgentRequest
+
+export const uploadEmailAttachment: UploadFile = upload('/emails/attachments')
 
 export const uploadGoogleAttachment = (
   credentialId: string,
-  attachment: File | IFile
-) => upload(`/users/self/google/${credentialId}/attachments`, attachment)
+  file: File | IFile
+) => upload(`/users/self/google/${credentialId}/attachments`, file)
 
 export const uploadMicrosoftAttachment = (
   credentialId: string,
-  attachment: File | IFile
-) => upload(`/users/self/microsoft/${credentialId}/attachments`, attachment)
+  file: File | IFile
+) => upload(`/users/self/microsoft/${credentialId}/attachments`, file)

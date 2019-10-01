@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 
 import MiniContactProfile from 'components/MiniContact'
-import { plural } from 'components/TemplatesList/helpers'
+import { plural } from 'utils/plural'
 
 import { ListContext } from '../../../context'
 

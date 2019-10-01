@@ -2,10 +2,10 @@ import Fetch from '../../services/fetch'
 
 const Tasks = {}
 
-Tasks.addTask = async function addTask(brand_id, checklist_id, task) {
+Tasks.addTask = async function addTask(brandId, checklistId, task) {
   try {
     return await new Fetch()
-      .post(`/brands/${brand_id}/checklists/${checklist_id}/tasks`)
+      .post(`/brands/${brandId}/checklists/${checklistId}/tasks`)
       .send(task)
   } catch (error) {
     return { error }

@@ -26,7 +26,7 @@ import { getForwardHtml } from './helpers/get-forward-html'
 import { parseEmailRecipient } from '../EmailRecipientsChipsInput/helpers/parse-email-recipient'
 import { getReplySubject } from './helpers/get-reply-subject'
 
-import { oAuthAccountTypeToProvider } from '../../../components/Pages/Dashboard/Account/ConnectedAccounts/consants'
+import { oAuthAccountTypeToProvider } from '../../../components/Pages/Dashboard/Account/ConnectedAccounts/constants'
 
 import { EmailFormValues } from '.'
 
@@ -36,7 +36,7 @@ interface Props {
   onCancel: () => void
   onSent?: (email: IEmailThreadEmail) => void
   oAuthAccounts: IOauthAccountsState
-  defaultFrom: string
+  defaultFrom?: string
   fetchOAuthAccounts: () => Promise<any>
 }
 
@@ -144,7 +144,7 @@ export function EmailThreadComposeForm({
   }, [oAuthAccounts.list])
 
   const getFromAccount = useCallback(
-    (accountId: string) =>
+    (accountId: UUID) =>
       getAllAccounts().find(account => account.id === accountId),
     [getAllAccounts]
   )

@@ -1,4 +1,4 @@
-import { plural } from 'components/TemplatesList/helpers'
+import { plural } from './plural'
 
 interface Options {
   threshold: number

@@ -18,7 +18,7 @@ export function From({
 
   const hasOptions = options && options.length > 0
 
-  function getSelectedOption(value) {
+  function getSelectedOption(value: string) {
     return (options || []).find(option => option.value === value)
   }
 

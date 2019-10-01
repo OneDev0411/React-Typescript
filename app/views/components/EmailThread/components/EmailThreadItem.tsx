@@ -91,15 +91,15 @@ export function EmailThreadItem({
   const iconClasses = useIconStyles()
   const classes = useStyles(props)
 
-  const [isResponseOpen, setResponseOpen] = useState(false)
+  const [isResponseOpen, setIsResponseOpen] = useState(false)
   const [responseType, setResponseType] = useState<EmailResponseType>('reply')
 
   const openReply = () => {
-    setResponseOpen(true)
+    setIsResponseOpen(true)
     setResponseType('reply')
   }
   const openForward = () => {
-    setResponseOpen(true)
+    setIsResponseOpen(true)
     setResponseType('forward')
   }
 
@@ -198,11 +198,11 @@ export function EmailThreadItem({
                   email={email}
                   responseType={responseType}
                   onCancel={() => {
-                    setResponseOpen(false)
+                    setIsResponseOpen(false)
                   }}
                   defaultFrom={defaultFrom}
                   onSent={email => {
-                    setResponseOpen(false)
+                    setIsResponseOpen(false)
                     onEmailSent(email)
                   }}
                 />

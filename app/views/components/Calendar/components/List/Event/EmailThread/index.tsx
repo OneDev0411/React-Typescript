@@ -5,13 +5,13 @@ import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 import { getTrimmedArrayAndOthersText } from 'utils/get-trimmed-array-and-others-text'
 import { parseEmailRecipient } from 'components/EmailRecipientsChipsInput/helpers/parse-email-recipient'
 import MiniContactProfile from 'components/MiniContact/MiniContactProfile'
+import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
+import { iconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { ListContext } from '../../context'
 import { EventContainer } from '../components/EventContainer'
 import styles from '../styles'
 import { EventBadge } from '../components/EventBadge'
-import IconAttachment from '../../../../../SvgIcons/Attachment/IconAttachment'
-import { iconSizes } from '../../../../../SvgIcons/icon-sizes'
 
 interface Props {
   style: React.CSSProperties

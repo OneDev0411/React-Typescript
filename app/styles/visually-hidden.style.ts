@@ -22,7 +22,7 @@ export const useVisuallyHiddenStyles = makeStyles(
               clip: 'rect(0 0 0 0)',
               height: 1,
               width: 1,
-              margin: '-1px!important',
+              margin: '-1px !important',
               overflow: 'hidden',
               padding: 0,
               position: 'absolute'

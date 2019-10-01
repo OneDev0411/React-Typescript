@@ -5,7 +5,7 @@ import { filterEntities } from './filter-entities'
 
 export function getTagSuggestions(
   tags: IContactTag[],
-  searchTerm
+  searchTerm: string
 ): Observable<IDenormalizedEmailRecipientTagInput[]> {
   return of(
     filterEntities(tags, searchTerm, ['text']).map(tag => ({

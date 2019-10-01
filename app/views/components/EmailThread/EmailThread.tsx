@@ -21,9 +21,9 @@ export function EmailThread({ thread, style = {}, onEmailSent }: Props) {
 
   const [openedThreads, { set: setOpen }] = useMap()
 
-  const visibleItems = thread.filter(
-    (item, index) => showAll || index === 0 || index >= thread.length - 2
-  )
+  const visibleItems = showAll
+    ? thread
+    : thread.filter((item, index) => index === 0 || index >= thread.length - 2)
 
   const firstNonRechatEmail = thread.find(email => email.owner)
   const fallbackOwner = firstNonRechatEmail ? firstNonRechatEmail.owner : null

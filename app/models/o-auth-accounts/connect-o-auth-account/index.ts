@@ -5,7 +5,6 @@ export async function connectOAuthAccount(
   redirect: string = window.location.href
 ): Promise<IOAuthAccountImport> {
   const response = await new Fetch().post(`/users/self/${provider}`).send({
-    // scopes: ['contacts.readonly', 'gmail.readonly', 'gmail.send'],
     redirect
   })
 

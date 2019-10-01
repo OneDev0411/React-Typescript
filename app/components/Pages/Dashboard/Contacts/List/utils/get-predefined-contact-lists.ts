@@ -13,7 +13,7 @@ import {
   SYNCED_CONTACTS_LIST_ID
 } from '../constants'
 import { getNumOfSyncedContacts } from '../ImportContactsButton/helpers'
-import { oAuthAccountTypeToProvider } from '../../../Account/ConnectedAccounts/consants'
+import { oAuthAccountTypeToProvider } from '../../../Account/ConnectedAccounts/constants'
 
 export const getPredefinedContactLists = (
   name,
