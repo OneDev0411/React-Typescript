@@ -48,12 +48,11 @@ export function CrmEvents(props: Props) {
       ? props.event.crm_task
       : props.event.id
 
-  if (props.event.type === 'Open House') {
-    // @ts-ignore
+  if (props.event.event_type === 'Open House') {
     return <OpenHouseDrawer {...sharedProps} openHouseId={id} />
   }
 
-  if (props.event.type === 'Tour') {
+  if (props.event.event_type === 'Tour') {
     return <TourDrawer {...sharedProps} tourId={id} />
   }
 
