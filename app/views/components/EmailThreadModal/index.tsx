@@ -22,7 +22,13 @@ interface Props extends DialogProps {
  */
 export function EmailThreadModal({ open, threadKey, ...otherProps }: Props) {
   return (
-    <Dialog open={open} fullWidth maxWidth="md" {...otherProps}>
+    <Dialog
+      disableEnforceFocus
+      open={open}
+      fullWidth
+      maxWidth="md"
+      {...otherProps}
+    >
       <EmailThreadLoader threadKey={threadKey}>
         {({ thread, onEmailSent }) => (
           <>
