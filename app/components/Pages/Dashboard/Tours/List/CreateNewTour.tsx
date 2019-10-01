@@ -9,7 +9,7 @@ export default function CreateNewTour(props: Props) {
   return (
     <>
       <Button color="primary" variant="contained" onClick={props.onOpenDrawer}>
-        Create a tour
+        Create a toursheet
       </Button>
     </>
   )
