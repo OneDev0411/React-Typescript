@@ -66,11 +66,15 @@ export class DirectionMap extends React.Component {
     }
 
     if (listingsLength > 1) {
-      this.directionsService = new window.google.maps.DirectionsService()
-      this.directionsDisplay = new window.google.maps.DirectionsRenderer()
-      this.directionsDisplay.setMap(this.map)
+      this.setDirectionService()
       this.calculateAndDisplayRoute()
     }
+  }
+
+  setDirectionService = () => {
+    this.directionsService = new window.google.maps.DirectionsService()
+    this.directionsDisplay = new window.google.maps.DirectionsRenderer()
+    this.directionsDisplay.setMap(this.map)
   }
 
   getLatLng = location =>
@@ -81,6 +85,10 @@ export class DirectionMap extends React.Component {
 
     if (locations.length === 0) {
       return this.marker.setMap(null)
+    }
+
+    if (!this.directionsService) {
+      this.setDirectionService()
     }
 
     if (locations.length === 1) {
