@@ -15,7 +15,7 @@ export default function EmptyState(props: { onOpenDrawer: () => void }) {
       textAlign="center"
     >
       <img src="/static/images/contacts/zero-state.svg" alt="Houston" />
-      <h2>No tours are scheduled… Yet!</h2>
+      <h2>No toursheets are scheduled… Yet!</h2>
       <p>
         Impress sellers with additional marketing exposure while attracting new
         buyers and adding contacts. Holding a tour has never been easier!
