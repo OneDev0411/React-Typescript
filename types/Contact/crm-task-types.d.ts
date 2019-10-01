@@ -4,5 +4,7 @@ declare type CRMTaskTypes =
   | 'Email'
   | 'In-Person Meeting'
   | 'Mail'
+  | 'Open House'
   | 'Other'
   | 'Text'
+  | 'Tour'

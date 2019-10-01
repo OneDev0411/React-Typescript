@@ -5,7 +5,7 @@ import { Theme } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/styles'
 
 import { IAppState } from 'reducers/index'
-import { useGetTours } from 'hooks/use-get-tours'
+import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 
 import Table from 'components/Grid/Table'
 import PageHeader from 'components/PageHeader'
@@ -20,9 +20,15 @@ import Registrants from './columns/Registrants'
 
 function ToursList(props: { user: IUser }) {
   const theme = useTheme<Theme>()
-  const { list, isFetching, error, reloadList } = useGetTours({
-    isFetching: true
-  })
+  const { list, isFetching, error, reloadList } = useFilterCRMTasks(
+    {
+      order: 'due_date',
+      task_type: 'Tour'
+    },
+    {
+      isFetching: true
+    }
+  )
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [selectedTour, setSelectedTour] = useState<ICRMTask<
     CRMTaskAssociation,

@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet'
 import { Theme } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/styles'
 
-import { useGetOpenHouses } from 'hooks/use-get-open-houses'
+import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 import { getActiveTeamId } from 'utils/user-teams'
 
 import Table from 'components/Grid/Table'
@@ -29,9 +29,15 @@ interface Props {
 
 function OpenHousesList(props: Props) {
   const theme = useTheme<Theme>()
-  const { list, isFetching, error, reloadList } = useGetOpenHouses({
-    isFetching: true
-  })
+  const { list, isFetching, error, reloadList } = useFilterCRMTasks(
+    {
+      order: 'due_date',
+      task_type: 'Open House'
+    },
+    {
+      isFetching: true
+    }
+  )
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [selectedOH, setSelectedOH] = useState<ICRMTask<
     CRMTaskAssociation,
