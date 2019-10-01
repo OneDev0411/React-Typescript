@@ -7,7 +7,7 @@ import nunjucks from 'nunjucks'
 import xml2js from 'xml2js'
 
 import getListing from '../../../app/models/listings/listing/get-listing'
-import { getPrice } from '../../../app/models/Deal/helpers/context/get-price'
+import { getPrice, getField } from '../../../app/models/Deal/helpers/context'
 
 import {
   API_URL,
@@ -19,8 +19,26 @@ import {
 const router = require('koa-router')()
 const app = new Koa()
 
-function getRequestBody(user, deal, listing, costCenter, callbackUrl) {
+function getFormattedListingPictures(listing) {
+  return listing.gallery_image_urls.map((url, index) => {
+    const filename = path.basename(url, path.extname(url))
+
+    return {
+      id: filename,
+      caption: `${listing.id} - ${index}`,
+      filename,
+      url
+    }
+  })
+}
+
+async function getRequestBody(user, deal, costCenter, callbackUrl) {
+  const listing = deal.listing ? await getListing(deal.listing) : null
   const price = getPrice(deal)
+
+  const address = getField(deal, 'street_address') || ''
+  const description = listing ? listing.property.description : ''
+  const pictures = listing ? getFormattedListingPictures(listing) : []
 
   return nunjucks.renderString(REQUEST_BODY_TEMPLATE, {
     duns: DUNS,
@@ -36,35 +54,18 @@ function getRequestBody(user, deal, listing, costCenter, callbackUrl) {
     },
     properties: [
       {
-        id: listing.id,
+        id: deal.id,
         price,
-        address: listing.property.address.full_address,
-        description: listing.property.description,
-        pictures: listing.gallery_image_urls.map((url, index) => {
-          const filename = path.basename(url, path.extname(url))
-
-          return {
-            id: filename,
-            caption: `${listing.id} - ${index}`,
-            filename,
-            url
-          }
-        })
+        address,
+        description,
+        pictures
       }
     ]
   })
 }
 
 async function sendPunchoutRequest(user, deal, costCenter, callbackUrl) {
-  const listing = await getListing(deal.listing)
-
-  const requestBody = getRequestBody(
-    user,
-    deal,
-    listing,
-    costCenter,
-    callbackUrl
-  )
+  const requestBody = await getRequestBody(user, deal, costCenter, callbackUrl)
 
   const response = await superagent
     .post(API_URL)
@@ -86,6 +87,7 @@ router.post('/my-marketing-matters/punchout', bodyParser(), async ctx => {
 
   try {
     const { user, deal, costCenter, redirectUrl } = ctx.request.body
+
     const punchoutResponse = await sendPunchoutRequest(
       user,
       deal,
