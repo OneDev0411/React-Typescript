@@ -12,13 +12,7 @@ import { formatDate } from 'components/InstantMarketing/helpers/nunjucks-filters
 
 import { getTemplates } from 'models/instant-marketing'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
-import {
-  getTask,
-  updateTask,
-  createTask,
-  deleteTask,
-  deleteTaskAssociation
-} from 'models/tasks'
+import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 import getListing from 'models/listings/listing/get-listing'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { isSoloActiveTeam, getActiveTeamId } from 'utils/user-teams'
@@ -99,13 +93,23 @@ class OpenHouseDrawerInternal extends React.Component {
   }
 
   get dealAassociation() {
+    const { openHouse } = this.state
     const { associations } = this.props
 
     if (associations && associations.deal) {
       return {
         association_type: 'deal',
-        deal: associations.deal.id
+        deal: { id: associations.deal.id },
+        index: 2
       }
+    }
+
+    if (openHouse && Array.isArray(openHouse.associations)) {
+      const dealAassociation = openHouse.associations.find(
+        a => a.association_type === 'deal'
+      )
+
+      return dealAassociation
     }
 
     return null
@@ -290,24 +294,6 @@ class OpenHouseDrawerInternal extends React.Component {
     }
   }
 
-  handleDeleteAssociation = async association => {
-    if (association.id) {
-      try {
-        const response = await deleteTaskAssociation(
-          association.crm_task,
-          association.id
-        )
-
-        return response
-      } catch (error) {
-        console.log(error)
-        throw error
-      }
-    }
-
-    return Promise.resolve()
-  }
-
   handleSubmit = () => {
     document
       .getElementById('open-house-drawer-form')
@@ -438,7 +424,6 @@ class OpenHouseDrawerInternal extends React.Component {
                           <AssociationsList
                             name="registrants"
                             associations={values.registrants}
-                            handleDelete={this.handleDeleteAssociation}
                           />
                         </Section>
 

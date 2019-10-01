@@ -7,31 +7,28 @@ export async function preSaveFormat(
   values,
   originalValues,
   template,
-  dealAssociation
+  dealAssociation = {}
 ) {
   const {
     assignees,
     description,
     dueDate,
-    location,
-    registrants,
+    location = {},
+    registrants = [],
     reminder,
     title
   } = values
 
-  // console.log('pre save', values.dueDate, values.reminder.value)
-
   const dueDateTimestamp = dueDate.getTime()
-  const task_type = 'Open House'
   const isDueDatePast = dueDateTimestamp <= new Date().getTime()
 
   const task = {
-    title: title.trim(),
-    due_date: dueDateTimestamp / 1000,
-    task_type,
-    metadata: { template },
     assignees: assignees.map(a => a.id),
-    status: isDueDatePast ? 'DONE' : 'PENDING'
+    due_date: dueDateTimestamp / 1000,
+    metadata: { template },
+    status: isDueDatePast ? 'DONE' : 'PENDING',
+    title: title.trim(),
+    task_type: 'Open House'
   }
 
   if ((originalValues && originalValues.id) || description) {
@@ -54,40 +51,28 @@ export async function preSaveFormat(
     task.reminders = []
   }
 
-  let associations = []
-
-  if (!originalValues && dealAssociation) {
-    associations.push(dealAssociation)
-  }
-
-  const addAssociation = (association, type) => {
-    const { association_type } = association
-
-    if (association_type && association_type === type) {
-      associations.push({
-        association_type,
-        [association_type]: association[association_type].id
-      })
+  task.associations = [...registrants, location, dealAssociation].map(item => {
+    const { association_type } = item
+    const association = {
+      association_type,
+      [association_type]: item[association_type].id
     }
-  }
 
-  if (location) {
-    addAssociation(location, 'listing')
-  }
+    if (item.id) {
+      association.id = item.id
+    }
 
-  if (!originalValues && Array.isArray(registrants) && registrants.length > 0) {
-    registrants.forEach(c => addAssociation(c, 'contact'))
-  }
+    if (item.index) {
+      association.index = item.index
+    }
 
-  if (associations.length > 0) {
-    task.associations = associations
-  }
+    return association
+  })
 
   if (originalValues) {
     return {
       ...originalValues,
-      ...task,
-      task_type // todo: removing this and line 23
+      ...task
     }
   }
 
