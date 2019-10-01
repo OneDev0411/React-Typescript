@@ -23,10 +23,14 @@ export const ProfileContainer = styled.div`
       }
     }
 
-    & .person-name {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    & .person-name,
+    & .person-email {
+      & > span {
+        width: calc(100% - 100px);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
 
     & > div:first-child {
