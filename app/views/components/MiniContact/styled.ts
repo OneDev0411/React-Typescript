@@ -26,7 +26,8 @@ export const ProfileContainer = styled.div`
     & .person-name,
     & .person-email {
       & > span {
-        width: calc(100% - 100px);
+        display: inline-block;
+        max-width: calc(100% - 100px);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
