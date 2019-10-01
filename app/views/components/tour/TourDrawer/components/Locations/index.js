@@ -1,58 +1,66 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 
 import { Map } from '../../../Map'
 import { Location } from './Location'
 
-class LocationsComponent extends React.Component {
-  removeHandler = async location => {
+function LocationsComponent({ locations, handleDelete, input: { onChange } }) {
+  const removeHandler = async location => {
     if (location.id) {
-      await this.props.handleDelete(location)
+      await handleDelete(location)
 
-      this.props.input.onChange(
-        this.props.locations.filter(a => a.id !== location.id)
-      )
+      onChange(locations.filter(a => a.id !== location.id))
     } else {
-      this.props.input.onChange(
-        this.props.locations.filter(l => l.listing.id !== location.listing.id)
-      )
+      onChange(locations.filter(l => l.listing.id !== location.listing.id))
     }
   }
 
-  render() {
-    const { locations } = this.props
+  const onDragEnd = result => {
+    const moveArrayItem = (array, source, destination) => {
+      const newArray = array.slice()
 
-    return (
-      <React.Fragment>
-        <div style={{ height: '15rem', marginBottom: '1rem' }}>
-          <Map
-            id="tour-direction-map"
-            listings={locations.map(l => l.listing)}
-          />
-        </div>
+      newArray.splice(destination, 0, newArray.splice(source, 1)[0])
 
-        {locations.map((location, index) => {
-          if (!location || !location.association_type) {
-            return null
-          }
+      return newArray
+    }
 
-          return (
-            <Location
-              index={index}
-              location={location}
-              key={`location_${index}`}
-              handleRemove={this.removeHandler}
-            />
-          )
-        })}
-      </React.Fragment>
+    onChange(
+      moveArrayItem(locations, result.source.index, result.destination.index)
     )
   }
-}
 
-export function Locations(props) {
-  return <Field {...props} name="locations" component={LocationsComponent} />
+  return (
+    <>
+      <div style={{ height: '15rem', marginBottom: '1rem' }}>
+        <Map id="tour-direction-map" listings={locations.map(l => l.listing)} />
+      </div>
+
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="locations-droppable">
+          {droppableProvided => (
+            <div style={{ width: '100%' }} ref={droppableProvided.innerRef}>
+              {locations.map((location, index) => {
+                if (!location || !location.association_type) {
+                  return null
+                }
+
+                return (
+                  <Location
+                    index={index}
+                    location={location}
+                    key={`location_${index}`}
+                    handleRemove={removeHandler}
+                  />
+                )
+              })}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </>
+  )
 }
 
 Locations.propTypes = {
@@ -62,4 +70,8 @@ Locations.propTypes = {
 
 Locations.defaultProps = {
   locations: []
+}
+
+export function Locations(props) {
+  return <Field {...props} name="locations" component={LocationsComponent} />
 }

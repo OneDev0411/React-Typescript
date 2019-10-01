@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import isEqual from 'lodash/isEqual'
 
 import config from '../../../../../config/public'
 import { loadJS } from '../../../../utils/load-js'
@@ -49,7 +50,11 @@ export class Map extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.listings.length !== prevProps.listings.length) {
+    const getId = ({ id }) => id
+    const prevListings = prevProps.listings.map(getId)
+    const currentListings = this.props.listings.map(getId)
+
+    if (!isEqual(prevListings, currentListings)) {
       this.calculateAndDisplayRoute()
     }
   }
