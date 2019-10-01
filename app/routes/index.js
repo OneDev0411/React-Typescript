@@ -190,6 +190,15 @@ const AsyncOpenHousesList = Load({
 })
 
 /* ==================================== */
+//  CRM Tours List
+/* ==================================== */
+
+const AsyncToursList = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Tours/List/ToursList' /* webpackChunkName: "tours_list" */)
+})
+
+/* ==================================== */
 //  Marketing Center
 /* ==================================== */
 
@@ -487,6 +496,7 @@ export default (
         component={AsyncNotificationsPage}
       />
 
+      <Route path="/dashboard/tours" component={AsyncToursList} />
       <Route path="/dashboard/open-house" component={AsyncOpenHousesList} />
 
       <Route path="/dashboard/marketing" component={AsyncMarketing}>
