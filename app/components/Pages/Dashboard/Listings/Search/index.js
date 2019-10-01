@@ -316,16 +316,18 @@ class Search extends React.Component {
         return (
           <GridView
             {..._props}
-            plugins={{
-              selectable: {
-                persistent: true,
-                storageKey: 'listings',
-                entityName: 'listings'
-              },
-              actionable: {
-                actions: this.gridViewActions()
+            plugins={
+              _props.user && {
+                selectable: {
+                  persistent: true,
+                  storageKey: 'listings',
+                  entityName: 'listings'
+                },
+                actionable: {
+                  actions: this.gridViewActions()
+                }
               }
-            }}
+            }
           />
         )
     }
