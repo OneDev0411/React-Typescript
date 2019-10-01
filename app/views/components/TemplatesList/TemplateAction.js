@@ -24,9 +24,10 @@ const GENERAL_FLOW_TYPES = [
 
 function TemplateAction(props) {
   const { isEdit } = props
+  const medium = getMedium(props)
 
   const sharedProps = {
-    mediums: getMedium(props),
+    mediums: medium,
     selectedTemplate: props.selectedTemplate,
     isTriggered: props.isTriggered,
     isEdit,
@@ -51,14 +52,15 @@ function TemplateAction(props) {
   }
 
   const templateType = getTemplateType(props.type, props.selectedTemplate)
+  const isBirthdaySocial = templateType === 'Birthday' && medium === 'Social'
 
   sharedProps.selectedTemplate = convertToTemplate(props.selectedTemplate)
 
-  if (templateType === 'Birthday') {
+  if (templateType === 'Birthday' && !isBirthdaySocial) {
     return <ContactFlow {...sharedProps} />
   }
 
-  if (GENERAL_FLOW_TYPES.includes(templateType)) {
+  if (GENERAL_FLOW_TYPES.includes(templateType) || isBirthdaySocial) {
     return (
       <GeneralFlow
         {...sharedProps}
