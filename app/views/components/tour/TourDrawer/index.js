@@ -2,13 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
-import {
-  getTask,
-  updateTask,
-  createTask,
-  deleteTask,
-  deleteTaskAssociation
-} from 'models/tasks'
+import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { isSoloActiveTeam } from 'utils/user-teams'
 import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
@@ -153,23 +147,6 @@ export class TourDrawer extends React.Component {
     }
   }
 
-  handleDeleteAssociation = async association => {
-    if (association.id) {
-      try {
-        const response = await deleteTaskAssociation(
-          association.crm_task,
-          association.id
-        )
-
-        return response
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    return Promise.resolve()
-  }
-
   handleSubmit = () => {
     document
       .getElementById('tour-drawer-form')
@@ -252,7 +229,6 @@ export class TourDrawer extends React.Component {
                       <AssociationsList
                         name="clients"
                         associations={values.clients}
-                        handleDelete={this.handleDeleteAssociation}
                       />
                     </Section>
 
