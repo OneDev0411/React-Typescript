@@ -298,6 +298,7 @@ class ContactProfile extends React.Component {
           <MainColumn>
             <Timeline
               ref={this.timelineRef}
+              user={user}
               contact={this.state.contact}
               defaultAssociation={defaultAssociation}
               onCreateNote={this.setContact}

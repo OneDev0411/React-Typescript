@@ -30,7 +30,7 @@ interface Props {
 const ConnectedAccountListItem = styled(ListItem)`
   border-bottom: 1px solid
     ${({ theme }: ThemeProps<Theme>) => theme.palette.divider};
-`
+` as typeof ListItem
 
 export function ConnectedAccount({ account, onSync, onDelete }: Props) {
   return (

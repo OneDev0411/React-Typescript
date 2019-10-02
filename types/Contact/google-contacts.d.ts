@@ -35,6 +35,11 @@ declare interface IOAuthAccount {
 declare interface IGoogleAccount extends IOAuthAccount {}
 declare interface IMicrosoftAccount extends IOAuthAccount {}
 
+declare type IGoogleScope =
+  | 'contacts.readonly'
+  | 'gmail.readonly'
+  | 'gmail.send'
+
 declare interface IGoogleSyncHistory {
   brand: string
   contacts_total: number
