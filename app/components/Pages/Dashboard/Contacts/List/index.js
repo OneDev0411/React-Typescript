@@ -526,7 +526,7 @@ class ContactsList extends React.Component {
   }
 
   isDefaultSegmentSelected = () => {
-    return this.props.activeSegment.id === 'default'
+    return this.props.activeSegment && this.props.activeSegment.id === 'default'
   }
 
   isFilteredWithTagsOrFlows = () => {
