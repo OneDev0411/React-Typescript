@@ -155,7 +155,6 @@ class SendContactCard extends React.Component {
     )
 
   handleSaveMarketingCard = async (template, owner) => {
-    this.closeBuilder()
     this.generatePreviewImage(template)
 
     this.setState({
@@ -289,7 +288,9 @@ class SendContactCard extends React.Component {
         <SingleEmailComposeDrawer
           isOpen={this.state.isComposeEmailOpen}
           hasStaticBody
-          disableAddNewRecipient
+          // I removed it because we need to be able to adding
+          // contact to email compose when it's on editmode.
+          // disableAddNewRecipient
           initialValues={{
             from: normalizeUserForEmailFrom(this.state.owner),
             to: this.Recipients,
