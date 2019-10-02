@@ -21,7 +21,7 @@ interface Props {
 
 export function EmailThread({ style, event, nextItem }: Props) {
   const { setSelectedEvent } = useContext(ListContext)
-  const thread = event.full_thread
+  const thread = event.full_thread! // FIXME(NOW)
 
   const { visibleItems: recipients, othersText } = getTrimmedArrayAndOthersText(
     thread.to

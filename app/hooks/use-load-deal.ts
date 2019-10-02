@@ -3,6 +3,7 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { getDeal, getContextsByDeal, getForms } from 'actions/deals'
 import { selectContextsByDeal } from 'reducers/deals/contexts'
+import { IAppState } from 'reducers'
 
 import store from '../stores'
 
@@ -13,7 +14,7 @@ import store from '../stores'
  */
 export function useLoadFullDeal(id: string, deal: IDeal) {
   const { contexts, forms } = useMemo(() => {
-    const deals = store.getState().deals
+    const deals = (store.getState() as IAppState).deals
 
     return {
       contexts: selectContextsByDeal(deals.contexts, id),

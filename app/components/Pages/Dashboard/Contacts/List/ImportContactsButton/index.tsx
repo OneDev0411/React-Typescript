@@ -65,11 +65,13 @@ export function ImportContactsButton({ accounts, user }: Props) {
             <>
               <ConnectOutlookButton>
                 {({ connect, connecting }) => (
-                  <MenuItem noStyle onClick={connect}>
+                  <MenuItem onClick={connect}>
                     <OutlookIcon /> Import Outlook contacts
                   </MenuItem>
                 )}
               </ConnectOutlookButton>
+              {/*
+              // @ts-ignore styled component `as` */}
               <MenuItem
                 as={ALink}
                 noStyle

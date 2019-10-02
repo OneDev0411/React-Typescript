@@ -35,14 +35,14 @@ declare interface ICalendarEvent {
   full_crm_task: {
     assignees: IUser[] | null
     associations: TaskAssociation[]
-  }
+  } | null // TODO: fix association type
   full_thread: {
     type: 'thread'
     id: UUID
     to: string[]
     email_count: number
     has_attachments: boolean
-  }
+  } | null // // TODO: fix association type
 }
 
 declare interface ICalendarEventHeader {

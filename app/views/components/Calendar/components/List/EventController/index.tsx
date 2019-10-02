@@ -30,7 +30,6 @@ export function EventController({
     return (
       <CrmEvents
         isEventDrawerOpen
-        selectedDate={activeDate}
         event={event}
         user={user}
         onEventChange={onEventChange}

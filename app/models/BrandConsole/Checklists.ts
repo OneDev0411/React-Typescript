@@ -11,7 +11,7 @@ export async function getBrandChecklists(
 export async function addBrandCheckListTask(
   brandId: string,
   checklistId: string,
-  taskData: IDealTaskInput
+  taskData: IBrandChecklistTaskInput
 ): Promise<IBrandChecklist> {
   const response = await new Fetch()
     .post(`/brands/${brandId}/checklists/${checklistId}/tasks`)
@@ -32,7 +32,7 @@ export async function removeBrandChecklistTask(
 
 export async function updateBrandChecklistTask(
   brandId: string,
-  task: IDealTask
+  task: IBrandChecklistTask
 ): Promise<IBrandChecklist> {
   const response = await new Fetch()
     .put(`/brands/${brandId}/checklists/${task.checklist}/tasks/${task.id}`)

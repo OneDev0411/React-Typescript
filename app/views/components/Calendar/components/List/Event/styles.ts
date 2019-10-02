@@ -1,7 +1,7 @@
 import { grey } from 'views/utils/colors'
 
 // we don't have an alias for the app, so I just tried to use one of the aliases and don't introduce a new alias until we fix the aliases
-import { theme } from 'theme'
+import { theme } from 'utils/../theme'
 
 export default {
   row: {

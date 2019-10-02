@@ -24,7 +24,7 @@ interface Props {
    * and a new attachment is added because of that.
    */
   onChanged?: () => void
-  uploadAttachment?: typeof uploadEmailAttachment
+  uploadAttachment: typeof uploadEmailAttachment
 }
 
 export function EmailAttachmentsDropdown({

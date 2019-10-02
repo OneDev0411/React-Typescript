@@ -11,7 +11,7 @@ const propTypes = {
   color: PropTypes.string
 }
 
-function TrashIcon({ size, color, props }) {
+function TrashIcon({ size, color, ...props }) {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} {...props}>
       <path

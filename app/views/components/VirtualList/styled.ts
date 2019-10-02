@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { IProps, LoadingPosition } from '.'
+import { Props, LoadingPosition } from '.'
 
 const LOADING_HEIGHT = '4rem'
 
@@ -33,7 +33,7 @@ export const Container = styled.div`
   position: relative;
 `
 
-export const Loading = styled.div<Partial<IProps>>`
+export const Loading = styled.div<Partial<Props>>`
   position: absolute;
   z-index: 2;
   display: flex;

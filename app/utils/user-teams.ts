@@ -72,7 +72,7 @@ export function hasUserAccess(
 
   while (brand) {
     const brandId = brand.id
-    const userTeam = user.teams.find(team => team.brand.id === brandId)
+    const userTeam = (user.teams || []).find(team => team.brand.id === brandId)
 
     if (
       // If policy is Root, we only accept access if we have reached the root brand

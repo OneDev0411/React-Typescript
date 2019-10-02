@@ -30,6 +30,8 @@ function SideNavItem(props: SideNavItemProps) {
 
   return (
     <SideNavTooltip text={tooltip}>
+      {/*
+        // @ts-ignore component is not accepted for some reason */}
       <MenuItem
         to={link}
         component={Link}

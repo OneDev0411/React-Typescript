@@ -7,7 +7,7 @@
   "type": "brand_flow",
   "brand": "7245fe86-f25e-11e8-bfe0-0a95998482ac",
   "name": "Flow steps bugs",
-  "description": null,
+  "description": "flow description",
   "steps": [
     {
       "id": "1acd0e44-414c-4234-93ea-21a8eac60ddf",

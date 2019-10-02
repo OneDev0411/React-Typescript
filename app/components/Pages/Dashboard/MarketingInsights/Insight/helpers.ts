@@ -1,6 +1,6 @@
 import { EmailStatType, ContactsListType } from './types'
 
-export function getContactStat(email: IInsightEmail): EmailStatType {
+export function getContactStat(email: IEmailCampaignEmail): EmailStatType {
   return {
     unsubscribed: email.unsubscribed,
     failed: email.failed,

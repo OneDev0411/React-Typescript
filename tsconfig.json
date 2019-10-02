@@ -28,8 +28,10 @@
     // but it seems it doesn't work
     "baseUrl": ".",
     "paths": {
+      "store": ["app/stores"],
       "actions/*": ["app/store_actions/*"],
       "assets/*": ["app/static/*"],
+      "animations/*": ["app/animations/*"],
       "components/*": ["app/views/components/*"],
       "constants/*": ["app/constants/*"],
       "dashboard/*": ["app/components/Dashboard/*"],

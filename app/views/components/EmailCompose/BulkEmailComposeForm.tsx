@@ -51,7 +51,7 @@ export function BulkEmailComposeForm({
 }: Props) {
   const sendEmail = (formValue: EmailFormValues) => {
     const emailData = getEmail({
-      from: formValue.from && formValue.from.value,
+      from: (formValue.from && formValue.from.value) || '',
       to: normalizeRecipients(formValue.to || []),
       subject: (formValue.subject || '').trim(),
       html: formValue.body || '',

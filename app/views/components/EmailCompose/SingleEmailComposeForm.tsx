@@ -35,7 +35,7 @@ export function SingleEmailComposeForm({
 }: Props) {
   const handleSendEmail = (formValue: EmailFormValues) => {
     const emailData = getEmail({
-      from: formValue.from && formValue.from.value,
+      from: (formValue.from && formValue.from.value) || '',
       to: normalizeRecipients(formValue.to),
       cc: normalizeRecipients(formValue.cc),
       bcc: normalizeRecipients(formValue.bcc),

@@ -69,7 +69,7 @@ function extractRequiredDataFromContact(
     email: getAttributeFromSummary(contact, 'email'),
     phone: getAttributeFromSummary(contact, 'phone_number'),
     profile_image_url: getAttributeFromSummary(contact, 'profile_image_url'),
-    last_touch: contact.last_touch,
+    last_touch: contact.last_touch || undefined,
     address: selectAddress(address),
     socials: socialMediasInContact(contact),
     dates: dates.map(item => ({

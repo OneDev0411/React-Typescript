@@ -44,6 +44,7 @@ function MiniContactActionButton(props: MiniContactActionButtonType) {
     return (
       <TextIconButton
         appearance="outline"
+        // @ts-ignore
         iconLeft={IconCalendar}
         onClick={() => props.setActionSettings(actionSettings)}
         size="small"

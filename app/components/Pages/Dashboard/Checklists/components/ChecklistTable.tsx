@@ -24,7 +24,7 @@ import { dealTaskTypeToString } from '../constants'
 
 interface Props {
   checklist: IBrandChecklist
-  updateTask: (task: IDealTask) => void
+  updateTask: (task: IBrandChecklistTask) => void
   deleteTask: (checklistId: string, taskId: string) => void
   lastTaskNameEditorRef?: RefObject<any>
 }

@@ -19,7 +19,7 @@ export interface EmailFormValues {
   body: string | undefined
 }
 
-export interface EmailComposeFormProps<EmailType> {
+export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
   initialValues?: Partial<EmailFormValues>
   sendEmail: (values: EmailFormValues) => Promise<EmailType>
   onSent?: (result: EmailType) => void

@@ -160,6 +160,7 @@ function OpenHousesList(props: Props) {
       <div style={{ padding: theme.spacing(0, 3, 9) }}>{renderContent()}</div>
 
       {isDrawerOpen && (
+        // @ts-ignore js component
         <OpenHouseDrawer
           deleteCallback={drawerCallback}
           isOpen

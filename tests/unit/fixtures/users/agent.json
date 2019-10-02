@@ -112,6 +112,7 @@
             "acl": [
               "Admin"
             ],
+            "brand_settings": null,
             "type": "brand_role",
             "users": [
               {
@@ -338,6 +339,7 @@
               "BackOffice",
               "CRM"
             ],
+            "brand_settings": null,
             "type": "brand_role",
             "users": [
               {
@@ -803,6 +805,7 @@
         "BackOffice"
       ],
       "type": "user_role",
+      "brand_settings": null,
       "settings": {
         "view_as": [
           "8b2c4758-9dea-11e7-a787-0242ac110003",
@@ -851,6 +854,7 @@
             "updated_at": 1537385569.58805,
             "deleted_at": null,
             "role": "Agent",
+            "brand_settings": null,
             "acl": [
               "CRM"
             ],
@@ -941,6 +945,7 @@
         "CRM"
       ],
       "type": "user_role",
+      "brand_settings": null,
       "settings": {
         "view_as": null,
         "user_filter": null
@@ -2842,6 +2847,7 @@
         "CRM"
       ],
       "type": "user_role",
+      "brand_settings": null,
       "settings": {
         "view_as": [
           "c5d7d53e-5cb0-11e5-a1b3-f23c91c841bd"
