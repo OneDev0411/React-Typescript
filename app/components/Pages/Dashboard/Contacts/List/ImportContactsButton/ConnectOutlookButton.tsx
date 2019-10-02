@@ -26,10 +26,7 @@ interface Props {
  * @constructor
  */
 function ConnectOutlookButton(props: Props) {
-  const { connect, connecting } = useConnectOAuthAccount(
-    OAuthProvider.Outlook,
-    props.oAuthAccounts
-  )
+  const { connect, connecting } = useConnectOAuthAccount(OAuthProvider.Outlook)
 
   return props.children({ connecting, connect })
 }

@@ -11,8 +11,8 @@ import { getNotes } from 'models/contacts/helpers/get-notes'
 
 import List from 'components/Calendar'
 import { CalendarRef, LoadingDirection } from 'components/Calendar/types'
-
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
+import { hasUserAccess } from 'utils/user-teams'
 
 import { getUpcomingInitialRange } from './helpers/get-upcoming-range'
 import { getTimelineInitialRange } from './helpers/get-timeline-range'
@@ -31,6 +31,7 @@ export interface TimelineRef {
 
 interface Props {
   contact: IContact
+  user: IUser
   timelineRef?: RefObject<TimelineRef>
   onCreateNote(contact: IContact): void
 }
@@ -51,7 +52,9 @@ function Timeline(props: Props) {
   const filter = {
     contact: props.contact.id,
     object_types: [
-      'email_thread_recipient',
+      ...(hasUserAccess(props.user, 'BetaFeatures')
+        ? ['email_thread_recipient']
+        : []),
       'crm_association',
       'email_campaign_recipient',
       'contact',
