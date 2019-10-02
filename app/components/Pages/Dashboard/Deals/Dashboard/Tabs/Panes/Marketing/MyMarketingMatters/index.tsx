@@ -91,12 +91,15 @@ function MyMarketingMatters({
   return (
     <Container style={{ marginBottom: '1.5rem' }}>
       <LeftColumn>
-        <Title>Design, Print and Mail</Title>
+        <Title>Direct Mail Marketing made Easier</Title>
         <Description>
-          Mail your property with our integration with My Marketing Matters®
+          Increase your marketing reach with direct mail postcards, newsletters,
+          brochures, and more when you integrate with
+          <br />
+          My Marketing Matters.
         </Description>
         <ActionButton onClick={onClick} disabled={isLoading}>
-          Open in My Marketing Matters®
+          Connect to My Marketing Matters
         </ActionButton>
       </LeftColumn>
       <RightColumn>
