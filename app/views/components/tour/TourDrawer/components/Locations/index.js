@@ -6,15 +6,9 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { Map } from '../../../Map'
 import { Location } from './Location'
 
-function LocationsComponent({ locations, handleDelete, input: { onChange } }) {
-  const removeHandler = async location => {
-    if (location.id) {
-      await handleDelete(location)
-
-      onChange(locations.filter(a => a.id !== location.id))
-    } else {
-      onChange(locations.filter(l => l.listing.id !== location.listing.id))
-    }
+function LocationsComponent({ locations, input: { onChange } }) {
+  const removeHandler = location => {
+    onChange(locations.filter(l => l.listing.id !== location.listing.id))
   }
 
   const onDragEnd = result => {
