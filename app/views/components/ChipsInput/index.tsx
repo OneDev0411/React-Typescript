@@ -34,7 +34,12 @@ const styles = (theme: Theme) =>
       margin: theme.spacing(0.75, 0.25)
     },
     inputRoot: {
-      alignItems: 'baseline'
+      // `alignItems: baseline` works fine in Chrome but not in safari. When
+      // the input is empty, label is not aligned well. See #3436
+      alignItems: 'start',
+      '& .MuiFormLabel-root': {
+        marginTop: `${theme.spacing(1)}px`
+      }
     },
     inputInput: {
       width: 'auto',
