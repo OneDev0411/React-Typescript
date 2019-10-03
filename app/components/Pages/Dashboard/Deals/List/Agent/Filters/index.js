@@ -8,7 +8,7 @@ import SideNavSection from 'components/PageSideNav/SideNavSection'
 import SideNavTitle from 'components/PageSideNav/SideNavTitle'
 import SideNavItem from 'components/PageSideNav/SideNavItem'
 
-import { getPathForFilter } from '../../utils'
+import { getFilterUrl } from '../../utils'
 
 const FilterNames = {
   Active: ['Active', 'Lease', 'Coming Soon'],
@@ -110,7 +110,7 @@ class AgentFilters extends React.Component {
           />
         ) : (
           _.map(Filters, (fn, filterName) => {
-            const linkUrl = getPathForFilter(filterName)
+            const linkUrl = getFilterUrl(filterName)
             const isIndex = filterName.toLowerCase() === 'all'
 
             return (

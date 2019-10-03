@@ -1,14 +1,26 @@
 declare interface IDeal extends IModel<'deal'> {
   title: string
-  brand: {
-    id: UUID
-  }
   deal_type: 'Selling' | 'Buying'
   checklists: IDealChecklist[]
   tasks: IDealTask[]
   roles: IDealRole[]
   listing: UUID
   files: IFile[] | null
+  inboxes: string[] | null
+  attention_requests: number
+  attention_requested_at: number
+  has_active_offer: boolean
+  is_draft: boolean
+  email: string
+  created_by: IUsed
+  brand: IBrand
+  property_type: string
+  faired_at: number
+  context: object
+}
+
+declare interface IDealList {
+  [key: UUID]: IDeal
 }
 
 declare interface IDealForm extends IModel<'form'> {
