@@ -1,5 +1,4 @@
-// eslint-disable-next-line
-import deal from 'fixtures/deal/live-seller'
+import deal from 'fixtures/deal/live-seller.json'
 
 import { getDocumentLastState } from '.'
 

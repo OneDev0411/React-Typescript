@@ -5,7 +5,7 @@ import { Field, Form } from 'react-final-form'
 import * as React from 'react'
 import styled, { ThemeProps } from 'styled-components'
 
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 import editUser from 'actions/user/edit'
 import { uploadEmailSignatureAttachment } from 'models/user/upload-email-signature-attachment'
 

@@ -1,6 +1,7 @@
 import React, {
   forwardRef,
   useContext,
+  useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
@@ -68,6 +69,7 @@ export const TextEditor = forwardRef(
       className = '',
       defaultValue = '',
       disabled = false,
+      autofocus = false,
       input = null,
       onChange = () => {},
       placeholder = 'Type something…',
@@ -130,7 +132,8 @@ export const TextEditor = forwardRef(
       resizeablePlugin,
       linkPlugins,
       signaturePlugin,
-      richButtonsPlugin
+      richButtonsPlugin,
+      ...otherPlugins
     } = useMemo(
       () =>
         createPlugins(
@@ -171,6 +174,15 @@ export const TextEditor = forwardRef(
       }),
       [stateToHtmlOptions]
     )
+
+    useEffect(() => {
+      const editor = editorRef.current
+
+      if (autofocus && editor) {
+        editor.focus()
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const handleChange = (newState: EditorState) => {
       if (!newState) {
@@ -268,6 +280,7 @@ export const TextEditor = forwardRef(
     }
 
     const defaultPlugins = [
+      ...Object.values(otherPlugins),
       ...(enableRichText ? [richButtonsPlugin, ...linkPlugins] : []),
       ...(enableImage
         ? [
@@ -302,7 +315,11 @@ export const TextEditor = forwardRef(
     }
 
     return (
-      <Flex column style={{ overflow: 'auto', flex: 1 }} className={className}>
+      <Flex
+        column
+        style={{ overflow: 'auto', flex: '1 1 0%' }}
+        className={className}
+      >
         <EditorWrapper
           ref={editorElementRef}
           className={cn({

@@ -8,7 +8,7 @@ import {
   getContactNameInitials
 } from 'models/contacts/helpers'
 
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 

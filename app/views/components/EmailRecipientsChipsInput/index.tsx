@@ -2,22 +2,18 @@ import React, { useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import { FieldRenderProps } from 'react-final-form'
 import { Observable } from 'rxjs'
-import { of } from 'rxjs/observable/of'
 import { combineLatest } from 'rxjs/observable/combineLatest'
-import { fromPromise } from 'rxjs/observable/fromPromise'
-import { map, startWith } from 'rxjs/operators'
+import { startWith } from 'rxjs/operators'
 import { useControllableState } from 'react-use-controllable-state/dist'
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
-import Fuse from 'fuse.js'
 import { TextField } from 'final-form-material-ui'
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
-import { searchContacts } from 'models/contacts/search-contacts'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { getSavedSegments } from 'actions/filter-segments/get-saved-segment'
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import { getSegments, isListFetched } from 'reducers/filter-segments'
 
@@ -28,8 +24,10 @@ import { InlineInputLabel } from '../InlineInputLabel'
 import { ChipsInputProps } from '../ChipsInput/types'
 import { recipientToChip } from './helpers/recipient-to-chip'
 import { recipientToSuggestion } from './helpers/recipient-to-suggestion'
-import { filterEntities } from './helpers/filter-entities'
 import { RecipientQuickSuggestions } from './RecipientQuickSuggestions'
+import { getTagSuggestions } from './helpers/get-tag-suggestions'
+import { getListSuggestions } from './helpers/get-list-suggestions'
+import { getContactSuggestions } from './helpers/get-contact-suggestions'
 
 type BaseProps = Partial<FieldRenderProps<HTMLInputElement>> &
   Omit<
@@ -52,6 +50,10 @@ interface Props extends BaseProps {
   areListsFetched?: boolean
 
   includeQuickSuggestions?: boolean
+
+  suggestTags?: boolean
+  suggestLists?: boolean
+  suggestContacts?: boolean
   /**
    * Optional callback for handling suggestion selection. If not provided
    * it will add to current list of recipients by default
@@ -111,6 +113,9 @@ function EmailRecipientsChipsInput({
   includeQuickSuggestions,
   onQuickSuggestionSelected,
   currentlyUsedQuickSuggestions,
+  suggestTags = true,
+  suggestLists = true,
+  suggestContacts = true,
   tags,
   lists,
   label,
@@ -156,49 +161,9 @@ function EmailRecipientsChipsInput({
     searchTerm: string
   ) => {
     const suggestionList$: Observable<IDenormalizedEmailRecipientInput[]>[] = [
-      of(
-        filterEntities(tags, searchTerm, ['text']).map(tag => ({
-          recipient_type: 'Tag',
-          tag
-        }))
-      ),
-      of(
-        filterEntities(lists, searchTerm, ['name']).map(list => ({
-          recipient_type: 'List',
-          list
-        }))
-      ),
-      searchTerm
-        ? fromPromise(
-            searchContacts(searchTerm, undefined, {
-              associations: [],
-              order: '-created_at'
-            })
-          ).pipe(
-            map(result => {
-              return new Fuse(
-                result.data
-                  .map(contact => {
-                    const emails: string[] = (contact.emails || []).concat(
-                      contact.partner_email || []
-                    )
-
-                    return emails.map<IDenormalizedEmailRecipientEmailInput>(
-                      email => ({
-                        recipient_type: 'Email',
-                        contact,
-                        email
-                      })
-                    )
-                  })
-                  .flat(),
-                {
-                  keys: ['email', 'contact.display_name']
-                }
-              ).search(searchTerm)
-            })
-          )
-        : of([])
+      ...(suggestTags ? [getTagSuggestions(tags, searchTerm)] : []),
+      ...(suggestLists ? [getListSuggestions(lists, searchTerm)] : []),
+      ...(suggestContacts ? [getContactSuggestions(searchTerm)] : [])
     ]
 
     return combineLatest(

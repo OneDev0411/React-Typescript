@@ -1,6 +1,7 @@
 import { ChipInputItem } from '../../ChipsInput/types'
 import { validateRecipient } from './validate-recipient'
 import { recipientToString } from './recipient-to-string'
+import { parseEmailRecipient } from './parse-email-recipient'
 
 export function recipientToChip(
   recipient: IDenormalizedEmailRecipientInput
@@ -9,6 +10,8 @@ export function recipientToChip(
   const label = recipientToString(recipient)
 
   if (recipient.recipient_type === 'Email') {
+    const { emailAddress } = parseEmailRecipient(recipient.email)
+
     return {
       label,
       hasError,
@@ -16,7 +19,7 @@ export function recipientToChip(
        * If for whatever logic, we are not showing the full email address,
        * show it as a tooltip.
        */
-      tooltip: label.includes(recipient.email) ? undefined : recipient.email
+      tooltip: label.includes(emailAddress) ? undefined : emailAddress
     }
   }
 

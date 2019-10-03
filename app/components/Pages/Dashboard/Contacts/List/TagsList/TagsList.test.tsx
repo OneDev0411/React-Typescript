@@ -1,17 +1,17 @@
-import { fireEvent, render } from '@testing-library/react'
-// @ts-ignore
-import attributeDefs from 'fixtures/contacts/attribute-defs' // eslint-disable-line
-// @ts-ignore
-import tags from 'fixtures/contacts/tags' // eslint-disable-line
 import * as React from 'react'
+import { fireEvent, render } from '@testing-library/react'
 
-import { TagsList } from './index'
+import attributeDefs from 'fixtures/contacts/attribute-defs.json'
+import tags from 'fixtures/contacts/tags.json'
+import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
+
+import { TagsList } from '.'
 
 describe('tagsList', () => {
   it('should render', () => {
     render(
       <TagsList
-        attributeDefs={attributeDefs}
+        attributeDefs={attributeDefs as IAttributeDefsState}
         activeFilters={{}}
         resetActiveFilters={() => null}
         onFilterChange={() => null}
@@ -58,7 +58,7 @@ describe('tagsList', () => {
     }
     const { getByText } = render(
       <TagsList
-        attributeDefs={attributeDefs}
+        attributeDefs={attributeDefs as IAttributeDefsState}
         activeFilters={activeFilters}
         resetActiveFilters={() => null}
         changeActiveFilterSegment={() => Promise.resolve()}

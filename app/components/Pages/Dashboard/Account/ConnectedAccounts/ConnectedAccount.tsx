@@ -9,15 +9,16 @@ import {
   ListItemText,
   Theme
 } from '@material-ui/core'
-
 import styled, { ThemeProps } from 'styled-components'
 
 import Avatar from 'components/Avatar'
 import { ConnectedAccountSyncStatus } from 'components/ConnectedAccountSyncStatus'
-
 import { DangerButton } from 'components/Button/DangerButton'
 
-import { oAuthAccountTypeToProvider, oAuthAccountTypeToTitle } from './consants'
+import {
+  oAuthAccountTypeToProvider,
+  oAuthAccountTypeToTitle
+} from './constants'
 import { SyncButton } from './SyncButton'
 
 interface Props {
@@ -29,7 +30,7 @@ interface Props {
 const ConnectedAccountListItem = styled(ListItem)`
   border-bottom: 1px solid
     ${({ theme }: ThemeProps<Theme>) => theme.palette.divider};
-`
+` as typeof ListItem
 
 export function ConnectedAccount({ account, onSync, onDelete }: Props) {
   return (

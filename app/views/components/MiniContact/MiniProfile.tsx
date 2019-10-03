@@ -5,9 +5,10 @@ import { Link } from 'react-router'
 
 import Avatar from 'components/Avatar'
 import CopyButton from 'components/CopyButton'
-import { EmailComposeDrawerProps } from 'components/EmailCompose/types'
-import { IAppState } from 'reducers/index'
+import { EmailComposeFormProps } from 'components/EmailCompose'
+import { IAppState } from 'reducers'
 import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
+import { normalizeUserForEmailFrom } from 'models/email/helpers/normalize-user-for-email-from'
 
 import Activity from './Activity'
 import {
@@ -37,7 +38,7 @@ function MiniProfile(props: MiniProfilePropsType) {
     type: ActionSettingsNamesType.EMAIL,
     data: {
       initialValues: {
-        from: props.user,
+        from: normalizeUserForEmailFrom(props.user),
         to: [
           {
             recipient_type: 'Email',
@@ -47,7 +48,7 @@ function MiniProfile(props: MiniProfilePropsType) {
       },
       onClose: () => props.setActionSettings({}),
       onSent: () => props.setActionSettings({})
-    } as Partial<EmailComposeDrawerProps>
+    } as Partial<EmailComposeFormProps>
   }
 
   return (
@@ -72,7 +73,7 @@ function MiniProfile(props: MiniProfilePropsType) {
       <div className="details">
         {!!data.name && (
           <div className="person-name">
-            {data.name}{' '}
+            <span>{data.name}</span>
             <Link to={`/dashboard/contacts/${output.contact_id}`}>
               <Button color="primary">View Profile</Button>
             </Link>
@@ -85,7 +86,7 @@ function MiniProfile(props: MiniProfilePropsType) {
         )}
         {!!data.email && (
           <div className="person-email">
-            {data.email}{' '}
+            <span>{data.email}</span>
             <Button
               color="primary"
               onClick={() => props.setActionSettings(emailProps)}

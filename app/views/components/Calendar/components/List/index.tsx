@@ -141,10 +141,9 @@ const CalendarList: React.FC<Props> = props => {
               ) : (
                 <Event
                   event={props.rows[index] as ICalendarEvent}
-                  onEventChange={handleEventChange}
-                  user={props.user}
                   nextItem={props.rows[index + 1]}
                   style={style}
+                  onEventChange={handleEventChange}
                 />
               )}
             </>
@@ -171,8 +170,9 @@ function getRowHeight(row: ICalendarListRow): number {
 
   const event = row as ICalendarEvent
 
-  return ['crm_task', 'crm_association'].includes(event.object_type) ||
-    ['next_touch', 'day-empty-state'].includes(event.event_type)
+  return ['crm_task', 'crm_association', 'email_thread_recipient'].includes(
+    event.object_type
+  ) || ['next_touch', 'day-empty-state'].includes(event.event_type)
     ? 72
     : 55
 }

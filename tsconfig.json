@@ -35,6 +35,7 @@
       "dashboard/*": ["app/components/Dashboard/*"],
       "hooks/*": ["app/hooks/*"],
       "models/*": ["app/models/*"],
+      "reducers": ["app/reducers"],
       "reducers/*": ["app/reducers/*"],
       "routes/*": ["app/routes/*"],
       "partials/*": ["app/components/Partials/*"],
@@ -43,6 +44,7 @@
       "views/*": ["app/views/*"],
       "deals/*": ["app/components/Pages/Dashboard/Deals/*"],
       "crm/*": ["app/components/Pages/Dashboard/Contacts/*"],
+      "fixtures/*": ["tests/unit/fixtures/*"],
       "types/*": ["types/*"]
     }
   },

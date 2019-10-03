@@ -1,6 +1,6 @@
 export const TYPES_TITLE = {
   AsSeenIn: 'As Seen In',
-  Birthday: 'Birthday',
+  Birthday: 'Occasions',
   Brand: 'Brand Campaigns',
   ComingSoon: 'Coming Soon',
   'Christmas,NewYear,Valentines,StPatrick,Easter,OtherHoliday': 'Holiday',

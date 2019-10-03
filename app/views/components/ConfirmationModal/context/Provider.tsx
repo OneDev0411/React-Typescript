@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { initialConfirmationModal } from './initial-confirmation-modal'
 
-import ConfirmationModalContext from './index'
+import ConfirmationModalContext from '.'
 
 function ContextProvider(props) {
   const [confimationState, setConfirmationModal] = useState(

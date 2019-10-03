@@ -2,7 +2,7 @@ import React from 'react'
 import Flex from 'styled-flex-component'
 
 import ALink from 'components/ALink'
-import Avatar from 'components/Avatar/index'
+import Avatar from 'components/Avatar'
 
 import { ConnectedAccountSyncStatus } from 'components/ConnectedAccountSyncStatus'
 

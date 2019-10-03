@@ -2,47 +2,47 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 
-import { getAddress } from 'models/Deal/helpers/context'
-
 import getPlace from 'models/listings/search/get-place'
-
-import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
-import { byValert } from 'models/listings/search/get-listings'
-import { selectDealById } from 'reducers/deals/list'
+import { getAddress } from 'models/Deal/helpers/context'
 import getListing from 'models/listings/listing/get-listing'
+import { byValert } from 'models/listings/search/get-listings'
+
+import { selectDealById } from 'reducers/deals/list'
+
+import { loadJS } from 'utils/load-js'
+import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 
 import Header from 'components/PageHeader'
 import { resetGridSelectedItems } from 'components/Grid/Table/Plugins/Selectable'
 
-import { loadJS } from '../../../../../utils/load-js'
-
 import config from '../../../../../../config/public'
 
 import { Grid } from './Grid'
+import AreaFilter from './Filters/AreaFilter'
+import { DEFAULT_RADIUS_FILTER } from './constants'
 import { normalizeList } from './helpers/normalize-list'
 import { valertOptions } from './helpers/valert-options'
+import { filterNonMLSAgents } from './helpers/filter-non-mls-agents'
 
 class AgentNetwork extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      query: {},
+      address: props.location.query.address || '',
       isFetching: true,
-      // isFetchingMore: false,
+      location: null,
+      listing: null,
       list: [],
       listInfo: {
         total: 0,
         count: 0
       }
     }
-
-    this.address = props.location.query.address || ''
   }
 
   componentDidMount() {
     window.initializeAgentNetworkList = this.initialize
-
     loadJS(
       `https://maps.googleapis.com/maps/api/js?key=${
         config.google.api_key
@@ -51,47 +51,91 @@ class AgentNetwork extends React.Component {
   }
 
   initialize = async () => {
-    let points
-    let query
     const { deal } = this.props
+    const filter = DEFAULT_RADIUS_FILTER
+
+    let query = null
+    let location = null
+    let listing = null
 
     try {
       if (deal) {
-        this.address = getAddress(deal)
+        const address = getAddress(deal)
 
-        const location = await getPlace(this.address)
+        location = await getPlace(address)
 
         if (location) {
           if (deal.listing) {
-            const listing = await getListing(deal.listing)
-
-            const { property } = listing
-
-            query = {
-              ...valertOptions,
-              architectural_style: property.architectural_style,
-              minimum_bedrooms: property.bedroom_count,
-              maximum_bedrooms: property.bedroom_count,
-              minimum_bathrooms: property.full_bathroom_count,
-              maximum_bathrooms: property.full_bathroom_count,
-              property_subtype: [property.property_subtype],
-              property_type: [property.property_type],
-              points: getMapBoundsInCircle(location.center, 1)
-            }
+            listing = await getListing(deal.listing)
           }
+
+          this.setState({ address, listing, location })
+          query = this.getQuery(listing, location, filter)
         }
       } else if (this.address) {
-        const location = await getPlace(this.address)
+        location = await getPlace(this.address)
+        this.setState({ location })
+        query = this.getQuery(listing, location, filter)
+      }
 
-        if (location) {
-          points = getMapBoundsInCircle(location.center, 1)
+      this.fetchAgents(query)
+    } catch (error) {
+      console.log(error)
+      this.setState({ isFetching: false })
+    }
+  }
 
-          query = {
-            ...valertOptions,
-            points
-          }
+  getQuery = (listing, location, filter) => {
+    let query
+
+    const getSearchArea = () => {
+      if (filter.type === 'radius') {
+        return {
+          points: getMapBoundsInCircle(location.center, filter.radius)
         }
       }
+
+      if (filter.type === 'custom') {
+        return {
+          points: null,
+          mls_areas: filter.areas
+        }
+      }
+    }
+
+    if (listing) {
+      const { property } = listing
+
+      query = {
+        ...valertOptions,
+        ...getSearchArea(),
+        architectural_style: property.architectural_style,
+        minimum_bedrooms: property.bedroom_count,
+        maximum_bedrooms: property.bedroom_count,
+        minimum_bathrooms: property.full_bathroom_count,
+        maximum_bathrooms: property.full_bathroom_count,
+        property_subtype: [property.property_subtype],
+        property_type: [property.property_type]
+      }
+    } else if (location) {
+      query = {
+        ...valertOptions,
+        ...getSearchArea()
+      }
+    }
+
+    return query
+  }
+
+  fetchAgents = async query => {
+    if (!query) {
+      return
+    }
+
+    try {
+      this.setState({
+        isFetching: true
+      })
 
       const response = await byValert(query, null, false)
 
@@ -105,70 +149,47 @@ class AgentNetwork extends React.Component {
           count: response.info.count,
           total: response.info.total
         },
-        list,
-        query
+        list
       })
     } catch (error) {
       console.log(error)
       this.setState({ isFetching: false })
-      throw error
     }
   }
-
-  // handleLoadMore = async () => {
-  //   const offset = this.state.listInfo.count + 1
-
-  //   if (this.state.isFetchingMore || offset >= this.state.listInfo.total) {
-  //     return false
-  //   }
-
-  //   this.setState({ isFetchingMore: true })
-
-  //   try {
-  //     const response = await byValert(this.state.query, { offset }, false)
-
-  //     const list = normalizeList(response.data)
-
-  //     this.setState(state => ({
-  //       isFetchingMore: false,
-  //       listInfo: {
-  //         total: state.listInfo.total,
-  //         count: state.listInfo.count + response.info.count
-  //       },
-  //       list: [...state.list, ...list].sort(
-  //         (a, b) => b.listingsCount - a.listingsCount
-  //       )
-  //     }))
-  //   } catch (error) {
-  //     console.log(error)
-  //     this.setState({ isFetchingMore: false })
-  //     throw error
-  //   }
-  // }
 
   onClose = () => {
     browserHistory.push(`/dashboard/deals/${this.props.deal.id}/marketing`)
     resetGridSelectedItems('agent_network')
   }
 
+  onSetFilter = filter => {
+    const { listing, location } = this.state
+    const query = this.getQuery(listing, location, filter)
+
+    this.fetchAgents(query)
+  }
+
   render() {
     return (
       <React.Fragment>
         <Header
-          title="Agent Network"
-          subtitle={this.address}
-          showBackButton={false}
           onClickCloseButton={this.onClose}
+          showBackButton={false}
+          subtitle={this.state.address}
+          title="Agent Network"
+        />
+
+        <AreaFilter
+          disabled={this.state.isFetching}
+          handleSearch={this.onSetFilter}
         />
 
         <Grid
-          data={this.state.list}
+          data={this.state.list.filter(filterNonMLSAgents)}
           deal={this.props.deal}
           isFetching={this.state.isFetching}
-          // isFetchingMore={this.state.isFetchingMore}
-          // onRequestLoadMore={this.handleLoadMore}
-          onChangeSelectedRows={this.onChangeSelectedRows}
           listInfo={this.state.listInfo}
+          onChangeSelectedRows={this.onChangeSelectedRows}
         />
       </React.Fragment>
     )

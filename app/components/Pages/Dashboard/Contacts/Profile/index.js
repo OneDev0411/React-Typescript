@@ -165,11 +165,14 @@ class ContactProfile extends React.Component {
    */
   fetchTimeline = () => setTimeout(this.timelineRef.current.refresh, 500)
 
-  setContact = (newContact, fallback) =>
+  setContact = (newContact, fallback) => {
     this.setState(
       state => ({ contact: { ...state.contact, ...newContact } }),
       fallback
     )
+
+    this.fetchTimeline()
+  }
 
   onChangeOwner = async item => {
     this.setState({ isUpdatingOwner: true })
@@ -214,6 +217,12 @@ class ContactProfile extends React.Component {
   addToFlowCallback = () => {
     this.fetchContact()
     this.fetchTimeline()
+  }
+
+  handleUpdateContactInfo = attribute => {
+    if (attribute.name === 'email') {
+      this.fetchTimeline()
+    }
   }
 
   render() {
@@ -289,6 +298,7 @@ class ContactProfile extends React.Component {
           <MainColumn>
             <Timeline
               ref={this.timelineRef}
+              user={user}
               contact={this.state.contact}
               defaultAssociation={defaultAssociation}
               onCreateNote={this.setContact}

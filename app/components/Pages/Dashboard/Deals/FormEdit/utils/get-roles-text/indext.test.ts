@@ -1,4 +1,4 @@
-import deal from 'fixtures/deal/seller-with-offer'
+import deal from 'fixtures/deal/seller-with-offer.json'
 
 import { getRoleText } from '.'
 

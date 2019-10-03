@@ -5,7 +5,7 @@ import { CSSProperties } from '@material-ui/styles'
 import { getNameInitials } from '../../../utils/helpers'
 import { Container, Image, Status, Initials } from './styled'
 
-interface AvatarProps {
+export interface AvatarProps {
   statusColor?: string
   showStatus?: boolean
   isOnline?: boolean

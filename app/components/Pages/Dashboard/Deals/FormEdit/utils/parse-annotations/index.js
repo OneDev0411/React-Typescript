@@ -139,7 +139,9 @@ function getAnnotationInfo(annotation) {
 
   try {
     calculated = JSON.parse(jsCode)
-  } catch (e) {}
+  } catch (e) {
+    console.log(`Form annotation JS code parse error - ${e}`)
+  }
 
   if (!calculated) {
     return normalInput

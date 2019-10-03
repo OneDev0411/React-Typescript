@@ -16,7 +16,7 @@ import useDebouncedCallback from 'use-debounce/lib/callback'
 import usePrevious from 'react-use/lib/usePrevious'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
-import { IAppState } from 'reducers'
+import { IAppState } from 'reducers/index'
 
 import {
   viewAs,
@@ -117,10 +117,6 @@ export function Calendar({
   const fetchEvents = useCallback(
     async (apiOptions: ApiOptions, options: FetchOptions = {}) => {
       try {
-        if (isLoading) {
-          return
-        }
-
         // enable loading flag
         setIsLoading(true)
 
@@ -169,7 +165,6 @@ export function Calendar({
       }
     },
     [
-      isLoading,
       viewAsUsers,
       filter,
       associations,

@@ -1,8 +1,8 @@
 import React from 'react'
 import { render } from 'enzyme'
 
-import user from 'fixtures/users/agent'
-import deal from 'fixtures/deal/seller-with-offer'
+import user from 'fixtures/users/agent.json'
+import deal from 'fixtures/deal/seller-with-offer.json'
 
 import { DealRole } from '.'
 

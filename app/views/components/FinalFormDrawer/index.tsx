@@ -103,12 +103,6 @@ export class FinalFormDrawer<T> extends React.Component<Props<T>> {
   render() {
     const { isSubmitDisabled = false } = this.props
 
-    // TODO: we can render form inside drawer in order to enable drawer animations
-    // We can also render form only if this.props.isOpen is true to
-    // enforce form rerender and ensure form is reinitialized
-    // when the drawer is opened (even if keepDirtyOnReinitialize is passed)
-    // this eliminates the necessity for conditional rendering of
-    // FinalFormDrawer.
     return (
       <Drawer
         open={this.props.isOpen}

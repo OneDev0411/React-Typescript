@@ -4,6 +4,8 @@ import { TextFieldProps } from '@material-ui/core/TextField'
 import { Observable } from 'rxjs'
 import { TextField } from '@material-ui/core'
 
+import { AvatarProps } from 'components/Avatar'
+
 /**
  * Used in {@link ChipsInputProps#itemToChip}. See description there.
  */
@@ -17,6 +19,15 @@ export interface ChipInputItem {
 export interface Suggestion {
   title: ReactNode
   subtitle?: ReactNode
+
+  /**
+   * The rechat avatar component props
+   */
+  defaultAvatarProps?: AvatarProps
+
+  /**
+   * A custom avatar component
+   */
   avatar?: ReactNode
 }
 
@@ -75,7 +86,7 @@ export interface ChipsInputProps<T> {
    * - {@link ChipProps#label label}
    * - {@link ChipProps#color color}
    */
-  ChipProps?: Omit<ChipProps, 'label' | 'color' | 'onDelete'>
+  ChipProps?: Omit<ChipProps, 'label' | 'onDelete'>
   /**
    * Props to be passed to the underlying TextField component. The following
    * props are passed to the TextField if not individually overridden by

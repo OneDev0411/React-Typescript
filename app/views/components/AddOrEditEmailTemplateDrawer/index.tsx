@@ -10,7 +10,7 @@ import { addNotification } from 'reapop'
 
 import { updateEmailTemplate } from 'actions/email-templates/update-email-template'
 import { createEmailTemplate } from 'actions/email-templates/create-email-template'
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 import { getActiveTeamId } from 'utils/user-teams'
 
 import { InlineInputLabel } from '../InlineInputLabel'

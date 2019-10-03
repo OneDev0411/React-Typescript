@@ -3,6 +3,8 @@ import { useState } from 'react'
 /**
  * Maintains a dictionary of key values, and exposes get and put functions
  * to read/write from/to the dictionary.
+ *
+ * @deprecated in favor of {@link useMap}
  */
 export function useDictionary<T>() {
   const [dict, setDict] = useState<Record<string, T>>({})

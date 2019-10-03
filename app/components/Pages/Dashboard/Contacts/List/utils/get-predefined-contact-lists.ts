@@ -1,7 +1,7 @@
 import { uniq } from 'lodash'
 
 import { getDefaultList } from 'reducers/filter-segments'
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 
 import { getActiveTeamSettings } from 'utils/user-teams'
 
@@ -13,7 +13,7 @@ import {
   SYNCED_CONTACTS_LIST_ID
 } from '../constants'
 import { getNumOfSyncedContacts } from '../ImportContactsButton/helpers'
-import { oAuthAccountTypeToProvider } from '../../../Account/ConnectedAccounts/consants'
+import { oAuthAccountTypeToProvider } from '../../../Account/ConnectedAccounts/constants'
 
 export const getPredefinedContactLists = (
   name,

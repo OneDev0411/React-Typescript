@@ -1,4 +1,4 @@
-function hasEmail(contact: INormalizedContact): boolean {
+function hasEmail(contact: IContact): boolean {
   return !!contact && !!contact.email
 }
 
@@ -13,7 +13,7 @@ function normalizeContact(
 }
 
 export function normalizeContactsForEmailCompose(
-  contacts: INormalizedContact[]
+  contacts: IContact[]
 ): IDenormalizedEmailRecipientInput[] {
   return contacts.filter(hasEmail).map(normalizeContact)
 }

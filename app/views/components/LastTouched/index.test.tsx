@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
-import fullContact from 'fixtures/contacts/full-contact'
+import fullContact from 'fixtures/contacts/full-contact.json'
 
 import mockDate, { RealDate } from 'utils/test-utils/mock-date'
 

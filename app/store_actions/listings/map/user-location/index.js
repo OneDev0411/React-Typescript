@@ -1,8 +1,11 @@
 import _ from 'underscore'
-import * as types from '../../../../constants/listings/map'
-import { setMapProps } from '../index'
+
+import { setMapProps } from '..'
+
 import Cookies from 'universal-cookie'
 import { addNotification as notify } from 'reapop'
+
+import * as types from '../../../../constants/listings/map'
 
 const cookies = new Cookies()
 

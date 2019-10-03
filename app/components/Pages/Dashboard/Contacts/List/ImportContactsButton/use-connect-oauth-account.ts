@@ -2,18 +2,22 @@ import { OAuthProvider } from 'constants/contacts'
 
 import { useState } from 'react'
 
-import { connectOAuthAccount } from 'models/contacts/connect-o-auth-account'
+import { connectOAuthAccount } from 'models/o-auth-accounts/connect-o-auth-account'
 
 import { startImportingOAuthContacts } from './helpers'
 
 export function useConnectOAuthAccount(
   provider: OAuthProvider,
-  accountsMap: StringMap<IOAuthAccount[]>
+  scopes?: IGoogleScope[]
 ) {
   const [connecting, setConnecting] = useState(false)
 
   const connect = async () => {
-    const redirectionInfo = await connectOAuthAccount(provider)
+    const redirectionInfo = await connectOAuthAccount(
+      provider,
+      undefined,
+      scopes
+    )
     const url = redirectionInfo.url
 
     setConnecting(true)

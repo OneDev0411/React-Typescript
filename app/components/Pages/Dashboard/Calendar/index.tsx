@@ -9,7 +9,7 @@ import { CalendarRef } from 'components/Calendar/types'
 import DatePicker from 'components/DatePicker'
 
 import { TodayButton } from './components/TodayButton'
-import Filters, { FiltersRef } from './components/Filters'
+import Filters, { defaultFilter, FiltersRef } from './components/Filters'
 import { Export } from './components/Export'
 import CreateEvent from './components/CreateEvent'
 
@@ -36,17 +36,12 @@ const CalendarPage: React.FC = props => {
   /**
    * keeps list of fetched days
    */
-  const [fetchedDays, setFetchedDays] = useState<{ [key: string]: number }>([])
-
-  /**
-   * keeps list of fetched days
-   */
-  const [isLoadingFilters, setIsLoadingFilters] = useState<boolean>(true)
+  const [fetchedDays, setFetchedDays] = useState<{ [key: string]: number }>({})
 
   /**
    * current filters
    */
-  const [filter, setFilter] = useState<object>({})
+  const [filter, setFilter] = useState<object>(defaultFilter)
 
   /**
    * triggers when user clicks on a date in datepicker of left side
@@ -80,8 +75,6 @@ const CalendarPage: React.FC = props => {
    */
   const handleOnLoadEvents = (events: ICalendarEventsList) => {
     setFetchedDays(getDaysWithEvent(events))
-
-    setTimeout(() => setIsLoadingFilters(false), 500)
   }
 
   /**
@@ -94,8 +87,6 @@ const CalendarPage: React.FC = props => {
     }
 
     setFilter(selectedFilter)
-
-    setIsLoadingFilters(true)
   }
 
   /**
@@ -128,11 +119,7 @@ const CalendarPage: React.FC = props => {
 
       <Main>
         <Header>
-          <Filters
-            ref={filtersRef}
-            onChange={handleChangeFilter}
-            isLoadingFilters={isLoadingFilters}
-          />
+          <Filters ref={filtersRef} onChange={handleChangeFilter} />
           <CreateEvent onEventChange={handleEventChange} />
         </Header>
 

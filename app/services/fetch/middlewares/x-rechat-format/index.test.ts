@@ -1,5 +1,5 @@
-import withReference from 'fixtures/x-rechat-format/with-reference'
-import withoutReference from 'fixtures/x-rechat-format/without-reference'
+import withReference from 'fixtures/x-rechat-format/with-reference.json'
+import withoutReference from 'fixtures/x-rechat-format/without-reference.json'
 
 import { useReferencedFormat } from '.'
 

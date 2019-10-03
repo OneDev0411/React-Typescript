@@ -37,8 +37,7 @@ export const prepareListingProps = (user, listing) => {
   const builtYear = property.year_built
   const beds = property.bedroom_count || '-'
   const lotSizeArea = property.lot_size_area
-  const baths =
-    property.half_bathroom_count + property.full_bathroom_count || '-'
+  const baths = property.bathroom_count || '-'
 
   price = numberWithCommas(Math.floor(price))
 

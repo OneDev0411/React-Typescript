@@ -24,10 +24,6 @@ export function createdAt(date) {
   return fecha.format(new Date(date * 1000), 'MMM DD, YYYY - hh:mm A')
 }
 
-export function plural(word, isPlural) {
-  return isPlural ? `${word}s` : word
-}
-
 export function getSelectedMediumTemplates(templates, wantedMedium) {
   return templates.filter(t => t.medium === wantedMedium)
 }

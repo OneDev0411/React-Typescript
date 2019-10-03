@@ -18,7 +18,7 @@ export const formatListing = (listing, user) => {
   }
 
   const addressTitle = getAddressTitle(address)
-  const baths = property.half_bathroom_count + property.full_bathroom_count || 0
+  const baths = property.bathroom_count || 0
   const beds = property.bedroom_count || 0
   const builtYear = property.year_built
   const lotSizeArea = property.lot_size_area

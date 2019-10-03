@@ -24,5 +24,9 @@ export default {
   mailgun: {
     api_key: process.env.MAILGUN_API_KEY,
     domain_url: process.env.MAILGUN_DOMAIN_URL
+  },
+  my_marketing_matters: {
+    duns: process.env.MY_MARKETING_MATTERS_DUNS,
+    shared_secret: process.env.MY_MARKETING_MATTERS_SHARED_SECRET
   }
 }

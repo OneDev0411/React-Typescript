@@ -24,6 +24,8 @@ import { linkKeyBinding } from './utils/link-key-binding'
 
 import { withUploadingIndicator } from './block-decorators/with-uploading-indicator'
 import { resizablePluginOptions } from './config'
+import createIframePlugin from './plugins/draft-js-iframe-plugin'
+import { createCollapsibleDecorator } from './block-decorators/create-collapsible-decorator'
 
 export function createPlugins(
   setLinkEditorOpen: (open: boolean) => void,
@@ -53,6 +55,22 @@ export function createPlugins(
     stateFromHtmlOptions
   })
 
+  const iframePlugin = createIframePlugin({
+    decorator: composeDecorators(
+      createCollapsibleDecorator({ defaultCollapsed: true })
+    )
+  })
+
+  const imagePlugin = createImagePlugin({
+    decorator: composeDecorators(
+      withUploadingIndicator,
+      resizeablePlugin.decorator,
+      alignmentPlugin.decorator,
+      focusPlugin.decorator,
+      blockDndPlugin.decorator
+    )
+  })
+
   return {
     AlignmentTool,
     richButtonsPlugin,
@@ -61,15 +79,8 @@ export function createPlugins(
     blockDndPlugin,
     alignmentPlugin,
     linkPlugins: [anchorPlugin, createPasteLinkPlugin(), linkShortcutsPlugin],
-    imagePlugin: createImagePlugin({
-      decorator: composeDecorators(
-        withUploadingIndicator,
-        resizeablePlugin.decorator,
-        alignmentPlugin.decorator,
-        focusPlugin.decorator,
-        blockDndPlugin.decorator
-      )
-    }),
+    imagePlugin,
+    iframePlugin,
     signaturePlugin
   }
 }

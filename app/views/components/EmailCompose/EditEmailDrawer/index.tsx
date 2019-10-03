@@ -2,6 +2,7 @@ import * as React from 'react'
 import { ComponentProps, useEffect, useState } from 'react'
 
 import { getEmailCampaign } from 'models/email/get-email-campaign'
+import { normalizeUserForEmailFrom } from 'models/email/helpers/normalize-user-for-email-from'
 
 import { BulkEmailComposeDrawer } from '../BulkEmailComposeDrawer'
 import { SingleEmailComposeDrawer } from '../SingleEmailComposeDrawer'
@@ -42,7 +43,7 @@ export function EditEmailDrawer({ emailId, isOpen, onClose, onEdited }: Props) {
   if (data) {
     const initialValues: Partial<EmailFormValues> = {
       attachments: data.attachments || [],
-      from: data.from,
+      from: normalizeUserForEmailFrom(data.from),
       subject: data.subject,
       body: data.template
         ? getTemplateInstancePreviewImage(data.template)
@@ -68,10 +69,14 @@ export function EditEmailDrawer({ emailId, isOpen, onClose, onEdited }: Props) {
       emailId: data.id,
       hasStaticBody: !!data.template,
       isOpen,
+      getEmail: values => ({
+        ...values,
+        html: data.template ? data.html : values.html
+      }),
       onClose,
       onSent: email => {
         onClose()
-        onEdited(email)
+        onEdited(email as IEmailCampaign)
       }
     }
 

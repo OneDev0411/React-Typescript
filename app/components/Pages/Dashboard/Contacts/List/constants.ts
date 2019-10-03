@@ -23,7 +23,7 @@ export const ORIGINS = [
   },
   {
     label: 'iOS Contact',
-    description: 'From your address book',
+    description: 'From your iOS address book',
     value: 'IOSAddressBook'
   },
   {

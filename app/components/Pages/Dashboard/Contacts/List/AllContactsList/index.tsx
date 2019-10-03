@@ -5,7 +5,11 @@ import { resetActiveFilters as resetActiveFiltersAction } from 'actions/filter-s
 import { selectActiveFilters } from 'reducers/filter-segments'
 
 import ToolTip from 'components/tooltip'
-import { ListTitle } from 'components/Grid/SavedSegments/List/styled'
+import {
+  ListTitle,
+  ListItem,
+  ListItemName
+} from 'components/Grid/SavedSegments/List/styled'
 import { changeActiveFilterSegment as changeActiveFilterSegmentAction } from 'actions/filter-segments/change-active-segment'
 
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
@@ -42,10 +46,14 @@ function AllContactsList({
 
   return (
     <div style={{ margin: '0 0 2rem' }} data-test="tags-list">
+      <ListTitle>
+        <span>Contacts</span>
+      </ListTitle>
+
       <ToolTip caption="All my contacts" placement="right">
-        <ListTitle isSelected={isSelected} onClick={clickHandler}>
-          <span>All Contacts</span>
-        </ListTitle>
+        <ListItem isSelected={isSelected} onClick={clickHandler}>
+          <ListItemName>All Contacts</ListItemName>
+        </ListItem>
       </ToolTip>
     </div>
   )

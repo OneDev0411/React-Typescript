@@ -5,7 +5,7 @@ import { Box } from '@material-ui/core'
 
 import { curry, isEqual } from 'lodash'
 
-import { IAppState } from 'reducers/index'
+import { IAppState } from 'reducers'
 import { getBrandByType } from 'utils/user-teams'
 
 import { RecipientQuickSuggestion } from '../RecipientQuickSuggestion'

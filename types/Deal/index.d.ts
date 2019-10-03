@@ -1,14 +1,14 @@
 declare interface IDeal extends IModel<'deal'> {
-  id: UUID
   title: string
   brand: {
     id: UUID
   }
   deal_type: 'Selling' | 'Buying'
-  checklists: any[]
+  checklists: IDealChecklist[]
   tasks: IDealTask[]
   roles: IDealRole[]
   listing: UUID
+  files: IFile[] | null
 }
 
 declare interface IDealForm extends IModel<'form'> {
@@ -17,21 +17,6 @@ declare interface IDealForm extends IModel<'form'> {
   fields: null | any // FIXME
   formstack_id: null | string // ?
 }
-
-declare type IDealTaskType = 'Form' | 'GeneralComments' | 'Generic'
-
-declare interface IDealTask {
-  id: UUID
-  required: boolean
-  checklist: UUID
-  form: null | UUID
-  order: number
-  task_type: IDealTaskType
-  title: string
-}
-
-declare type IDealTaskInput = Partial<Omit<IDealTask, 'id' | 'checklist'>> &
-  Pick<IDealTask, 'task_type'>
 
 declare interface IDealRole {
   agent: IAgent

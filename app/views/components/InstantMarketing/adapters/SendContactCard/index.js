@@ -18,6 +18,8 @@ import { SearchContactDrawer } from 'components/SearchContactDrawer'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 
+import { normalizeUserForEmailFrom } from 'models/email/helpers/normalize-user-for-email-from'
+
 import SocialDrawer from '../../components/SocialDrawer'
 
 class SendContactCard extends React.Component {
@@ -153,7 +155,6 @@ class SendContactCard extends React.Component {
     )
 
   handleSaveMarketingCard = async (template, owner) => {
-    this.closeBuilder()
     this.generatePreviewImage(template)
 
     this.setState({
@@ -287,9 +288,11 @@ class SendContactCard extends React.Component {
         <SingleEmailComposeDrawer
           isOpen={this.state.isComposeEmailOpen}
           hasStaticBody
-          disableAddNewRecipient
+          // I removed it because we need to be able to adding
+          // contact to email compose when it's on editmode.
+          // disableAddNewRecipient
           initialValues={{
-            from: this.state.owner,
+            from: normalizeUserForEmailFrom(this.state.owner),
             to: this.Recipients,
             body: this.state.emailBody
           }}

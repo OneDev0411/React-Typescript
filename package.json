@@ -116,7 +116,7 @@
     "google-map-react": "^1.1.2",
     "google-maps": "^3.3.0",
     "grapesjs": "^0.15.5",
-    "grapesjs-mjml": "github:emilsedgh/grapesjs-mjml#cb320b5f72cde8dea0d98189846b28d4931751ee",
+    "grapesjs-mjml": "github:emilsedgh/grapesjs-mjml#abd53139f1afc0acebd001506b407ce3b769a069",
     "history": "^3.3.0",
     "hogan.js": "^3.0.2",
     "html-webpack-plugin": "^4.0.0-beta.5",
@@ -244,7 +244,8 @@
     "validator": "^9.2.0",
     "webpack": "^4.28.4",
     "webpack-bundle-analyzer": "^2.13.1",
-    "webpack-s3-plugin": "^1.0.3"
+    "webpack-s3-plugin": "^1.0.3",
+    "xml2js": "^0.4.22"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.4.4",

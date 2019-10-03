@@ -18,13 +18,16 @@ export function ListAttachmentItem(props) {
       <div>
         <Title>
           <a target="_blank" href={props.attachment.url}>
-            <TextMiddleTruncate text={props.attachment.title} maxLength={25} />
+            <TextMiddleTruncate text={props.attachment.name} maxLength={25} />
           </a>
         </Title>
 
         <DateTime>
           Uploaded in&nbsp;
-          {fecha.format(new Date(props.attachment.date), 'MMM DD, h:mm A')}
+          {fecha.format(
+            new Date(props.attachment.created_at),
+            'MMM DD, h:mm A'
+          )}
         </DateTime>
       </div>
 

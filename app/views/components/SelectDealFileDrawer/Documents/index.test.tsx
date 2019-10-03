@@ -1,8 +1,7 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 
-// eslint-disable-next-line import/no-unresolved
-import deal from 'fixtures/deal/live-seller'
+import deal from 'fixtures/deal/live-seller.json'
 
 import { DocumentRow } from '.'
 

@@ -154,6 +154,7 @@ class Factsheet extends React.Component {
     }
 
     const table = DealContext.getFactsheetSection(
+      this.props.deal.id,
       this.props.deal,
       this.props.section
     )

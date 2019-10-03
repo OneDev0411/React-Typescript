@@ -1,13 +1,13 @@
 import React from 'react'
 import { render, cleanup } from '@testing-library/react'
 
-import ContactInfo from './index'
+import ContactInfo from '.'
 
-describe('ContactInfo tests', function() {
+describe('ContactInfo tests', () => {
   afterEach(cleanup)
 
   // Related issue: 2846
-  it('should renders a contact with link', function() {
+  it('should renders a contact with link', () => {
     const item = {
       id: '295c3d1e-83a6-11e9-a74e-0a95998482ac',
       display_name: 'Mojtaba Espari Pour',
@@ -23,13 +23,14 @@ describe('ContactInfo tests', function() {
 
     const { queryByText } = render(<ContactInfo data={item} />)
     const name_el = queryByText(item.display_name)
+
     expect(name_el).not.toBeNull()
     // @ts-ignore
     expect(name_el.nodeName).toBe('A')
   })
 
   // Related issue: 2846
-  it('should renders a user without link', function() {
+  it('should renders a user without link', () => {
     const item = {
       id: '295c3d1e-13a6-13e9-a74a-0a99998382ac',
       display_name: 'Bahram Nouraei',
@@ -43,15 +44,16 @@ describe('ContactInfo tests', function() {
       clicked: 0
     }
 
-    const { container, queryByText } = render(<ContactInfo data={item} />)
+    const { queryByText } = render(<ContactInfo data={item} />)
     const name_el = queryByText(item.display_name)
+
     expect(name_el).not.toBeNull()
     // @ts-ignore
     expect(name_el.nodeName).not.toBe('A')
   })
 
   // Related issue: 2846
-  it('should renders just an email', function() {
+  it('should renders just an email', () => {
     const item = {
       id: '295c3b16-83a6-11e9-a74d-0a95998482ac',
       display_name: null,
@@ -66,6 +68,7 @@ describe('ContactInfo tests', function() {
 
     const { container } = render(<ContactInfo data={item} />)
     const profile_info_el = container.querySelector('.profile-info')
+
     expect(profile_info_el).not.toBeNull()
     // @ts-ignore
     expect(profile_info_el.childElementCount).toBe(1)

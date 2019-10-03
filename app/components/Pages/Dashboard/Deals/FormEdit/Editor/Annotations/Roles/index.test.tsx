@@ -2,11 +2,9 @@ import React from 'react'
 import { render } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
-// eslint-disable-next-line import/no-unresolved
-import deal from 'fixtures/deal/live-seller'
+import deal from 'fixtures/deal/live-seller.json'
 
-// eslint-disable-next-line import/no-unresolved
-import form from 'fixtures/deal/forms/listing-agreement'
+import form from 'fixtures/deal/forms/listing-agreement.json'
 
 import { Roles } from '.'
 
