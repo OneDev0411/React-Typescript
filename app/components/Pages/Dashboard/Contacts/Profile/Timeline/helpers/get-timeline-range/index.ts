@@ -5,8 +5,8 @@ export function getTimelineInitialRange(): NumberRange {
   const today = new Date()
 
   const start = Date.UTC(
-    today.getUTCFullYear(),
-    today.getUTCMonth() - 3,
+    today.getUTCFullYear() - 1,
+    today.getUTCMonth(),
     today.getUTCDate(),
     0,
     0,
