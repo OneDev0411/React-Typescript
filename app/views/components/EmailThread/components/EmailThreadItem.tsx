@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { useState } from 'react'
-
+import { useMemo, useState } from 'react'
 import {
   Box,
   Button,
@@ -16,7 +15,6 @@ import classNames from 'classnames'
 
 import { Iframe } from 'components/Iframe'
 
-import config from '../../../../../config/public'
 import Avatar from '../../Avatar'
 import IconAttachment from '../../SvgIcons/Attachment/IconAttachment'
 import { useIconStyles } from '../../../../styles/use-icon-styles'
@@ -27,6 +25,8 @@ import IconForward from '../../SvgIcons/Forward/IconForward'
 import { Attachment } from '../../EmailCompose/components/Attachment'
 import { EmailResponseType } from '../types'
 import EmailThreadComposeForm from '../../EmailCompose/EmailThreadComposeForm'
+import { getProcessedEmailBody } from '../helpers/get-processed-email-body'
+import { getAttachmentUrl } from '../helpers/get-attachment-url'
 
 interface Props {
   email: IEmailThreadEmail
@@ -105,6 +105,8 @@ export function EmailThreadItem({
 
   const iconClassName = classNames(iconClasses.rightMargin, iconClasses.small)
 
+  const emailBody = useMemo(getProcessedEmailBody(email), [email])
+
   return (
     <div className={classes.root}>
       {/* header */}
@@ -150,15 +152,12 @@ export function EmailThreadItem({
       {!collapsed && (
         <>
           <Box p={2} pl={9}>
-            <Iframe title="Email body" srcDoc={email.html_body || ''} />
+            <Iframe title="Email body" srcDoc={emailBody} />
 
             {email.attachments.map(attachment => (
               <Attachment key={attachment.id} fullWidth={false}>
                 {/* FIXME: url */}
-                <Link
-                  target="_blank"
-                  href={`${config.api_url}/${attachment.url}`}
-                >
+                <Link target="_blank" href={getAttachmentUrl(attachment)}>
                   {attachment.name}
                 </Link>
               </Attachment>

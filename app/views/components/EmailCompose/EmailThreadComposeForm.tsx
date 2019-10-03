@@ -86,7 +86,6 @@ export function EmailThreadComposeForm({
       inReplyTo: email.internet_message_id,
       attachments: (formValue.attachments || []).map<IEmailAttachmentInput>(
         item => ({
-          contentId: item.name,
           filename: item.name,
           isInline: false,
           link: item.url,

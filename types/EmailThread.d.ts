@@ -1,6 +1,7 @@
 declare interface IEmailAttachment {
   contentType: string
   id: string
+  cid: string
   isInline: boolean
   name: string
   size: number
@@ -11,7 +12,6 @@ declare interface IEmailAttachmentInput {
   type: string
   isInline: boolean
   filename: string
-  contentId: string
   link: string
 }
 

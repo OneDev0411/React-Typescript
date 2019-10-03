@@ -24,6 +24,7 @@ export function EmailThreadModal({ open, threadKey, ...otherProps }: Props) {
   return (
     <Dialog
       disableEnforceFocus
+      disableBackdropClick
       open={open}
       fullWidth
       maxWidth="md"
