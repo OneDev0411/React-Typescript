@@ -5,7 +5,7 @@ import idx from 'idx'
 import { Popover, Popper } from '@material-ui/core'
 
 import { loadJS } from '../../../../utils/load-js'
-import { isLocationInTX } from '../../../../utils/map'
+import { TEXAS_LOCATION } from '../../../../constants/listings/defaults'
 
 import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/Listings/mapOptions'
 
@@ -49,8 +49,7 @@ export class InlineAddressField extends React.Component {
     // Because the blur default action should be canceled when the mouse is over
     // the suggestion area, and there is a possibility of selecting suggestion
     // items.
-    isBlurDisabled: false,
-    location: null
+    isBlurDisabled: false
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -64,12 +63,11 @@ export class InlineAddressField extends React.Component {
   componentDidMount() {
     if (!window.isLoadingGoogleApi && !idx(window, w => w.google.maps.places)) {
       window.isLoadingGoogleApi = true
-      window.getLocation = this.getLocation
 
       loadJS(
         `https://maps.googleapis.com/maps/api/js?key=${
           bootstrapURLKeys.key
-        }&libraries=places&callback=getLocation`
+        }&libraries=places`
       )
     }
   }
@@ -78,38 +76,10 @@ export class InlineAddressField extends React.Component {
     delete window.isLoadingGoogleApi
   }
 
-  getLocation = () => {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        ({ coords: { latitude, longitude } }) => {
-          if (isLocationInTX(latitude, longitude)) {
-            this.setLocation(latitude, longitude)
-          } else {
-            this.setDallasLocation()
-          }
-        },
-        () => this.setDallasLocation()
-      )
-    } else {
-      this.setDallasLocation()
-    }
-  }
-
-  setDallasLocation = () => this.setLocation(32.7767, -96.797)
-
-  setLocation = (lat, lng) =>
-    this.setState({
-      location: new window.google.maps.LatLng({
-        lat,
-        lng
-      })
-    })
-
   autocompleteAddress = input => {
     const { google } = window
-    const { location } = this.state
 
-    if (!location || !google) {
+    if (!google) {
       return Promise.resolve([])
     }
 
@@ -118,8 +88,8 @@ export class InlineAddressField extends React.Component {
     let request = {
       input,
       componentRestrictions: { country: 'us' },
-      location,
-      radius: 100000 // in meters
+      location: new window.google.maps.LatLng(TEXAS_LOCATION),
+      radius: 800000000 // in meters
     }
 
     return new Promise(resolve => {
