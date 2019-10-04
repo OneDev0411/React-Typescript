@@ -21,6 +21,24 @@ function getTaskAttachments(task: IDealTask): IDealFile[] {
       task: task.id,
       checklist: task.checklist
     })
+  } else {
+    attachments.push({
+      id: task.id,
+      url: task.pdf_url,
+      name: task.title,
+      path: '',
+      preview_url: '',
+      public: false,
+      updated_at: new Date(task.updated_at).getTime(),
+      created_at: new Date(task.created_at).getTime(),
+      created_by: '',
+      deleted_at: null,
+      mime: 'application/pdf',
+      type: 'file',
+      source: 'submission',
+      task: task.id,
+      checklist: task.checklist
+    })
   }
 
   if (Array.isArray(task.room.attachments)) {
