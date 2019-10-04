@@ -548,9 +548,11 @@ const ListingMobileView = ({
             </div>
           </div>
           <div className="clearfix" />
-          <div style={{ padding: '0 1rem 2rem', marginTop: '-1em' }}>
-            <MLSNote />
-          </div>
+          {listing && (
+            <div style={{ padding: '0 1rem 2rem', marginTop: '-1em' }}>
+              <MLSNote mls={listing.mls} mls_name={listing.mls_name} />
+            </div>
+          )}
         </div>
       </div>
     )
