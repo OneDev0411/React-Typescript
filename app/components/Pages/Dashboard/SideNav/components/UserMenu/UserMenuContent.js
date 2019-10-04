@@ -36,7 +36,7 @@ export function UserMenuContent({ user, onClose = () => {} }) {
             </Link>
           </li>
         </Acl.Admin>
-        <Acl.Admin accessControlPolicy="Root">
+        <Acl.Admin>
           <li>
             <Link noStyle to="/dashboard/checklists" onClick={onClose}>
               Checklists
