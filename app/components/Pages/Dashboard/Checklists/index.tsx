@@ -6,7 +6,7 @@ import { Box } from '@material-ui/core'
 
 import { Container, Content } from 'components/SlideMenu'
 import { IAppState } from 'reducers'
-import { getRootBrand } from 'utils/user-teams'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import Acl from 'components/Acl'
 
@@ -42,7 +42,7 @@ export function ChecklistsPage({ user, location }: Props) {
 
   const lastTaskNameEditorRef = useRef<any>(null)
 
-  const rootBrand = getRootBrand(user)
+  const activeTeamId = getActiveTeamId(user)
 
   const {
     checklists,
@@ -54,7 +54,7 @@ export function ChecklistsPage({ user, location }: Props) {
     addGeneralCommentTask,
     addFormTask,
     deleteTask
-  } = useChecklistsPage(rootBrand && rootBrand.id)
+  } = useChecklistsPage(activeTeamId)
 
   const filteredChecklists = (checklists || []).filter(
     checklist =>
@@ -63,7 +63,7 @@ export function ChecklistsPage({ user, location }: Props) {
   )
 
   return (
-    <Acl.Admin fallbackUrl="/dashboard/mls" accessControlPolicy="Root">
+    <Acl.Admin fallbackUrl="/dashboard/mls">
       <Helmet>
         <title>Checklists</title>
       </Helmet>
