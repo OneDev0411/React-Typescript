@@ -89,7 +89,8 @@ export default function AreaFilter(props: Props) {
       searchTerm
         ? of(
             new Fuse(items, {
-              keys: ['title', 'number']
+              keys: ['title', 'number'],
+              threshold: 0.3
             }).search(searchTerm.trim())
           )
         : of([])
