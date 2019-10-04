@@ -4,7 +4,10 @@ import { addNotification as notify } from 'reapop'
 import { isLocationInTX } from '../../../../utils/map'
 
 import * as types from '../../../../constants/listings/map'
-import { mapInitialState } from '../../../../constants/listings/options'
+import {
+  DEFAULT_ZOOM,
+  DALLAS_LOCATION
+} from '../../../../constants/listings/defaults'
 
 import { setMapProps } from '..'
 
@@ -12,7 +15,7 @@ function setPosition(location) {
   const {
     coords: { latitude: lat, longitude: lng }
   } = location
-  const zoom = mapInitialState.zoom
+  const zoom = DEFAULT_ZOOM
 
   // If the user is outside of Dallas, we move it to Dallas.
   // The below area is locating the Dallas.
@@ -35,7 +38,7 @@ function setPosition(location) {
       status: 'error'
     }),
     setMapProps('search', {
-      center: mapInitialState.center,
+      center: DALLAS_LOCATION,
       zoom
     })
   ]

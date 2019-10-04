@@ -34,7 +34,7 @@ class Listing extends React.Component {
 
       this.setState({ listing, isFetching: false })
 
-      if (listing.id) {
+      if (this.props.user && listing.id) {
         this.logActivity(listingId)
       }
     } catch ({ response }) {
@@ -62,7 +62,7 @@ class Listing extends React.Component {
     return title
   }
 
-  logActivity(object) {
+  logActivity = object => {
     logUserActivity({
       object,
       object_class: 'listing',
