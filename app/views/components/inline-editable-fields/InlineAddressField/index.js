@@ -4,7 +4,9 @@ import debounce from 'lodash/debounce'
 import idx from 'idx'
 import { Popover, Popper } from '@material-ui/core'
 
-import { loadJS } from '../../../../utils/load-js'
+import { loadJS } from 'utils/load-js'
+import { isLocationInTX } from 'utils/map'
+
 import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/Listings/mapOptions'
 
 import { Suggestions } from './Suggestions'
@@ -79,8 +81,13 @@ export class InlineAddressField extends React.Component {
   getLocation = () => {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
-        ({ coords: { latitude, longitude } }) =>
-          this.setLocation(latitude, longitude),
+        ({ coords: { latitude, longitude } }) => {
+          if (isLocationInTX(latitude, longitude)) {
+            this.setLocation(latitude, longitude)
+          } else {
+            this.setDallasLocation()
+          }
+        },
         () => this.setDallasLocation()
       )
     } else {
