@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import cn from 'classnames'
+import Fuse from 'fuse.js'
 import { TextFieldProps } from '@material-ui/core/TextField'
 import {
   Box,
@@ -19,6 +20,7 @@ import { useChipStyles } from '../../../../../../styles/use-chips-styles'
 import { DEFAULT_RADIUS_FILTER } from '../constants'
 
 import { useGetMlsArea } from './use-get-mls-areas'
+import { itemToChip, itemToSuggestion } from './helpers'
 import { useGetMlsSubArea } from './use-get-mls-sub-areas'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -86,9 +88,9 @@ export default function AreaFilter(props: Props) {
     ) =>
       searchTerm
         ? of(
-            items.filter(item =>
-              item.title.toLowerCase().includes(searchTerm.trim().toLowerCase())
-            )
+            new Fuse(items, {
+              keys: ['title', 'number']
+            }).search(searchTerm.trim())
           )
         : of([])
 
@@ -190,8 +192,8 @@ export default function AreaFilter(props: Props) {
               allowAddOnComma={false}
               allowAddOnEnter={false}
               items={selectedParentAreas}
-              itemToChip={item => ({ label: item.title })}
-              itemToSuggestion={({ title }) => ({ title })}
+              itemToChip={itemToChip}
+              itemToSuggestion={itemToSuggestion}
               onChange={setSelectedParentAreas}
               getSuggestions={getSuggestions(parentAreas)}
               classes={{ container: classes.chipsInputContainer }}
@@ -213,10 +215,8 @@ export default function AreaFilter(props: Props) {
               allowAddOnComma={false}
               allowAddOnEnter={false}
               items={selectedSubAreas}
-              itemToChip={item => ({ label: `${item.title} #${item.number}` })}
-              itemToSuggestion={item => ({
-                title: `${item.title} #${item.number}`
-              })}
+              itemToChip={itemToChip}
+              itemToSuggestion={itemToSuggestion}
               onChange={setSelectedSubAreas}
               getSuggestions={getSuggestions(subAreas)}
               classes={{ container: classes.chipsInputContainer }}
