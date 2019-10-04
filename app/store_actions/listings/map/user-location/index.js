@@ -1,7 +1,7 @@
 import { batchActions } from 'redux-batched-actions'
 import { addNotification as notify } from 'reapop'
 
-import { isLocationInTX } from 'utils/map'
+import { isLocationInTX } from '../../../../utils/map'
 
 import * as types from '../../../../constants/listings/map'
 import { mapInitialState } from '../../../../constants/listings/options'

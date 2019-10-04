@@ -1,6 +1,5 @@
-import { DALLAS_POINTS } from 'constants/listings/dallas-points'
-
 import config from '../../../../../config/public'
+import { DALLAS_POINTS } from '../../../../constants/listings/dallas-points'
 
 export const DECLUSTER_ZOOM_LEVEL = 16
 
