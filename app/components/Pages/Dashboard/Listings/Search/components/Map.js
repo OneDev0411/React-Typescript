@@ -10,7 +10,6 @@ import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
 
 import { reset as resetSearchType } from '../../../../../../store_actions/listings/search/set-type'
-import { getLocationFromCookies } from '../../../../../../store_actions/listings/map/user-location'
 import {
   setCssPositionToListingsWithSameBuilding,
   normalizeListingsForMarkers,
@@ -38,8 +37,7 @@ const actions = {
   ...mapActions,
   ...drawingActions,
   resetSearchType,
-  getListingsByMapBounds,
-  getLocationFromCookies
+  getListingsByMapBounds
 }
 
 let mapOnChangeDebounce = 0
@@ -229,8 +227,7 @@ const mapHOC = compose(
       map,
       onChange,
       getMapProps,
-      fitBoundsByPoints,
-      getLocationFromCookies
+      fitBoundsByPoints
     }) => ({ map: googleMap }) => {
       googleMap.id = 'SEARCH_MAP'
       window.currentMap = googleMap
@@ -261,10 +258,6 @@ const mapHOC = compose(
       } else {
         setIsInit(true)
         onChange(getMapProps(googleMap))
-
-        if (!map.autoMove) {
-          getLocationFromCookies()
-        }
       }
     },
     onMarkerMouseLeave: ({ setMapHoveredMarkerId }) => () => {

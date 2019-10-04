@@ -159,11 +159,7 @@ class MlsAutocompleteSearch extends Component {
     let request = {
       input,
       componentRestrictions: { country: 'us' },
-      // Dallas
-      location: new google.maps.LatLng({
-        lat: 32.7767,
-        lng: -96.797
-      }),
+      location: new google.maps.LatLng(this.props.mapCenter),
       radius: 100000 // in meters
     }
 

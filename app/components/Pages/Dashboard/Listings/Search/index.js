@@ -1,18 +1,23 @@
+import { DALLAS_POINTS } from 'constants/listings/dallas-points'
+
 import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
 
-import { loadJS } from '../../../../../utils/load-js'
-import { getBounds } from '../../../../../utils/map'
-import getPlace from '../../../../../models/listings/search/get-place'
-import { getMapBoundsInCircle } from '../../../../../utils/get-coordinates-points'
-import { selectListings } from '../../../../../reducers/listings'
-import searchActions from '../../../../../store_actions/listings/search'
-import { setMapProps } from '../../../../../store_actions/listings/map'
-import getListingsByValert from '../../../../../store_actions/listings/search/get-listings/by-valert'
-import { toggleFilterArea } from '../../../../../store_actions/listings/search/filters/toggle-filters-area'
-import { confirmation } from '../../../../../store_actions/confirmation'
+import { loadJS } from 'utils/load-js'
+import { getBounds, isLocationInTX } from 'utils/map'
+import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
+
+import { selectListings } from 'reducers/listings'
+
+import getPlace from 'models/listings/search/get-place'
+
+import { setMapProps } from 'store_actions/listings/map'
+import { confirmation } from 'store_actions/confirmation'
+import searchActions from 'store_actions/listings/search'
+import getListingsByValert from 'store_actions/listings/search/get-listings/by-valert'
+import { toggleFilterArea } from 'store_actions/listings/search/filters/toggle-filters-area'
 
 import Map from './components/Map'
 import { MapView } from '../components/MapView'
@@ -21,6 +26,8 @@ import { GridView } from '../components/GridView'
 import { GalleryView } from '../components/GalleryView'
 import CreateAlertModal from '../components/modals/CreateAlertModal'
 import { Header } from './Header'
+
+const RADIUS = 1.61803398875 / 2
 
 class Search extends React.Component {
   constructor(props) {
@@ -38,19 +45,21 @@ class Search extends React.Component {
 
     this.state = {
       activeView,
-      shareModalIsActive: false,
-      mapWithQueryIsInitialized: !this.searchQuery
+      isCalculatingLocation: false,
+      isMapInitialized: false,
+      shareModalIsActive: false
     }
   }
 
   componentDidMount() {
     window.initialize = this.initialize
 
-    if (!window.google && this.state.activeView !== 'map') {
+    if (!window.google) {
       loadJS(
         `https://maps.googleapis.com/maps/api/js?key=${
           bootstrapURLKeys.key
-        }&libraries=${bootstrapURLKeys.libraries}&callback=initialize`
+        }&libraries=${bootstrapURLKeys.libraries}&callback=initialize`,
+        'loadJS-mls-search-map'
       )
     } else {
       this.initialize()
@@ -58,27 +67,95 @@ class Search extends React.Component {
   }
 
   initialize = () => {
-    const isMapView = this.state.activeView === 'map'
-
     if (this.props.listings.data.length > 0) {
-      return isMapView ? this.initMap() : true
+      return this.state.activeView === 'map' ? this.initMap() : true
     }
 
     if (this.searchQuery) {
       this._findPlace(this.searchQuery)
-    } else if (!isMapView) {
-      this.fetchDallasListings()
+    } else {
+      this.fetchDefaultLocationListings()
     }
   }
 
-  initMap = () => this.setState({ mapWithQueryIsInitialized: true })
+  initMap = () => {
+    const $loadJs = document.getElementById('loadJS-mls-search-map')
 
-  fetchDallasListings = async () => {
+    if ($loadJs) {
+      $loadJs.parentElement.removeChild($loadJs)
+    }
+
+    this.setState({ isMapInitialized: true })
+  }
+
+  fetchDefaultLocationListings = () => {
+    const isMapView = this.state.activeView === 'map'
+    const fetchDallas = () => {
+      if (isMapView) {
+        this.initMap()
+      } else {
+        this.fetchDallasListings()
+      }
+    }
+
+    if (!window.navigator.geolocation) {
+      return fetchDallas()
+    }
+
+    this.setState({ isCalculatingLocation: true })
+
+    const setOffIsCalculatingLocation = cb =>
+      this.setState({ isCalculatingLocation: false }, cb)
+
+    navigator.geolocation.getCurrentPosition(
+      ({ coords: { latitude: lat, longitude: lng } }) => {
+        setOffIsCalculatingLocation()
+
+        const center = { lat, lng }
+
+        if (!isLocationInTX(lat, lng)) {
+          return fetchDallas()
+        }
+
+        const { dispatch } = this.props
+        const { bounds, points } = getMapBoundsInCircle(center, RADIUS, true)
+        const mapProps = {
+          bounds: getBounds(bounds),
+          center,
+          zoom: mapInitialState.zoom
+        }
+
+        if (isMapView) {
+          dispatch(setMapProps('search', mapProps))
+          this.initMap()
+        } else {
+          batchActions([
+            dispatch(
+              searchActions.getListings.byValert({
+                ...this.props.filterOptions,
+                limit: 200,
+                points
+              })
+            ),
+            dispatch(setMapProps('search', mapProps))
+          ])
+        }
+
+        setOffIsCalculatingLocation()
+      },
+      () => {
+        setOffIsCalculatingLocation(fetchDallas)
+      }
+    )
+  }
+
+  fetchDallasListings = () => {
     const { dispatch, filterOptions } = this.props
 
     dispatch(
       getListingsByValert({
         ...filterOptions,
+        points: DALLAS_POINTS,
         limit: 200
       })
     )
@@ -96,7 +173,7 @@ class Search extends React.Component {
         setMapProps('search', {
           bounds: getBounds(bounds),
           center: mapInitialState.center,
-          zoom: 16
+          zoom: mapInitialState.zoom
         })
       )
     ])
@@ -126,13 +203,8 @@ class Search extends React.Component {
 
       const place = await getPlace(address, false)
 
-      const zoom = 16
       let center = place.geometry.location
-      const { points, bounds } = getMapBoundsInCircle(
-        center,
-        1.61803398875 / 2,
-        true
-      )
+      const { points, bounds } = getMapBoundsInCircle(center, RADIUS, true)
 
       batchActions([
         dispatch(
@@ -144,7 +216,11 @@ class Search extends React.Component {
         ),
         dispatch(searchActions.setSearchLocation(center)),
         dispatch(
-          setMapProps('search', { center, zoom, bounds: getBounds(bounds) })
+          setMapProps('search', {
+            bounds: getBounds(bounds),
+            center,
+            zoom: mapInitialState.zoom
+          })
         )
       ])
     } catch (error) {
@@ -157,9 +233,21 @@ class Search extends React.Component {
   onChangeView = e => {
     const activeView = e.currentTarget.dataset.view
 
-    this.setState({ activeView }, () => {
-      browserHistory.push(`/dashboard/mls?view=${activeView}`)
-    })
+    this.setState(
+      state => {
+        if (activeView === 'map' && !state.isMapInitialized) {
+          return {
+            activeView,
+            isMapInitialized: true
+          }
+        }
+
+        return { activeView }
+      },
+      () => {
+        browserHistory.push(`/dashboard/mls?view=${activeView}`)
+      }
+    )
   }
 
   shareModalCloseHandler = () => this.setState({ shareModalIsActive: false })
@@ -181,10 +269,11 @@ class Search extends React.Component {
   }
 
   renderMain() {
+    const { isCalculatingLocation } = this.state
     const _props = {
       user: this.props.user,
       listings: this.props.listings,
-      isFetching: this.props.isFetching
+      isFetching: this.props.isFetching || isCalculatingLocation
     }
 
     switch (this.state.activeView) {
@@ -195,7 +284,7 @@ class Search extends React.Component {
             tabName="search"
             mapCenter={this.props.mapCenter}
             Map={
-              this.state.mapWithQueryIsInitialized ? (
+              this.state.isMapInitialized && !isCalculatingLocation ? (
                 <Map {..._props} isWidget={this.props.isWidget} />
               ) : null
             }

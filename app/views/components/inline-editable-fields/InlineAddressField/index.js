@@ -4,7 +4,9 @@ import debounce from 'lodash/debounce'
 import idx from 'idx'
 import { Popover, Popper } from '@material-ui/core'
 
-import { loadJS } from '../../../../utils/load-js'
+import { loadJS } from 'utils/load-js'
+import { isLocationInTX } from 'utils/map'
+
 import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/Listings/mapOptions'
 
 import { Suggestions } from './Suggestions'
@@ -47,7 +49,8 @@ export class InlineAddressField extends React.Component {
     // Because the blur default action should be canceled when the mouse is over
     // the suggestion area, and there is a possibility of selecting suggestion
     // items.
-    isBlurDisabled: false
+    isBlurDisabled: false,
+    location: null
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -61,11 +64,12 @@ export class InlineAddressField extends React.Component {
   componentDidMount() {
     if (!window.isLoadingGoogleApi && !idx(window, w => w.google.maps.places)) {
       window.isLoadingGoogleApi = true
+      window.getLocation = this.getLocation
 
       loadJS(
         `https://maps.googleapis.com/maps/api/js?key=${
           bootstrapURLKeys.key
-        }&libraries=places`
+        }&libraries=places&callback=getLocation`
       )
     }
   }
@@ -74,19 +78,47 @@ export class InlineAddressField extends React.Component {
     delete window.isLoadingGoogleApi
   }
 
-  autocompleteAddress(input) {
+  getLocation = () => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        ({ coords: { latitude, longitude } }) => {
+          if (isLocationInTX(latitude, longitude)) {
+            this.setLocation(latitude, longitude)
+          } else {
+            this.setDallasLocation()
+          }
+        },
+        () => this.setDallasLocation()
+      )
+    } else {
+      this.setDallasLocation()
+    }
+  }
+
+  setDallasLocation = () => this.setLocation(32.7767, -96.797)
+
+  setLocation = (lat, lng) =>
+    this.setState({
+      location: new window.google.maps.LatLng({
+        lat,
+        lng
+      })
+    })
+
+  autocompleteAddress = input => {
     const { google } = window
+    const { location } = this.state
+
+    if (!location || !google) {
+      return Promise.resolve([])
+    }
 
     const service = new google.maps.places.AutocompleteService()
 
     let request = {
       input,
       componentRestrictions: { country: 'us' },
-      // Dallas
-      location: new google.maps.LatLng({
-        lat: 32.7767,
-        lng: -96.797
-      }),
+      location,
       radius: 100000 // in meters
     }
 

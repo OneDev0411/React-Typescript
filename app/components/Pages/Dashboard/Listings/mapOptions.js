@@ -1,3 +1,5 @@
+import { DALLAS_POINTS } from 'constants/listings/dallas-points'
+
 import config from '../../../../../config/public'
 
 export const DECLUSTER_ZOOM_LEVEL = 16
@@ -36,7 +38,7 @@ export const bootstrapURLKeys = {
 }
 
 export const mapInitialState = {
-  zoom: 15,
+  zoom: 14,
   center: {
     lat: 32.7767,
     lng: -96.797
@@ -50,28 +52,7 @@ export const queryOptions = {
   open_house: false,
   property_types: ['Residential'],
   listing_statuses: ['Active'],
-  points: [
-    {
-      latitude: 32.83938955111425,
-      longitude: -96.89115626525879
-    },
-    {
-      latitude: 32.83938955111425,
-      longitude: -96.70284373474121
-    },
-    {
-      latitude: 32.71396625328302,
-      longitude: -96.70284373474121
-    },
-    {
-      latitude: 32.71396625328302,
-      longitude: -96.89115626525879
-    },
-    {
-      latitude: 32.83938955111425,
-      longitude: -96.89115626525879
-    }
-  ],
+  points: DALLAS_POINTS,
   property_subtypes: Object.values(property_subtypes)
 }
 
