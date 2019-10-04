@@ -102,3 +102,17 @@ export const getBounds = (bounds) => {
 
   return { nw, sw, se, ne }
 }
+
+export function isLocationInTX(latitude, longitude) {
+  return latitude < 36.5007041 &&
+    latitude > 25.8371638 &&
+    longitude < -93.5080389 &&
+    longitude > -106.6456461
+}
+
+export function isLocationInDallas(latitude, longitude) {
+  return latitude < 33.0237921 &&
+    latitude > 32.617537 &&
+    longitude < -96.4637379 &&
+    longitude > -96.999347
+}
