@@ -6,8 +6,6 @@ import {
 } from 'utils/validations'
 import { getDateValues } from 'components/inline-editable-fields/InlineDateField/helpers'
 
-import { validateYear } from './validate-year'
-
 const validators = {
   email: isEmail,
   phone_number: isPhoneNumber
@@ -27,15 +25,7 @@ export function validation(attribute_def, value) {
       value = getDateValues(value)
     }
 
-    const validator = year => {
-      if (attribute_def.name.includes('anniversary')) {
-        return true
-      }
-
-      return validateYear(year)
-    }
-
-    return validateDateField(value, true, validator)
+    return validateDateField(value, true)
   }
 
   if (attribute_def.data_type === 'number') {

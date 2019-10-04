@@ -1,41 +1,44 @@
-import _ from 'underscore'
+import { batchActions } from 'redux-batched-actions'
+import { addNotification as notify } from 'reapop'
+
+import { isLocationInTX } from 'utils/map'
+
+import * as types from '../../../../constants/listings/map'
+import { mapInitialState } from '../../../../constants/listings/options'
 
 import { setMapProps } from '..'
 
-import Cookies from 'universal-cookie'
-import { addNotification as notify } from 'reapop'
-
-import * as types from '../../../../constants/listings/map'
-
-const cookies = new Cookies()
-
 function setPosition(location) {
-  const { coords } = location
-  const { latitude, longitude } = coords
-  let center
+  const {
+    coords: { latitude: lat, longitude: lng }
+  } = location
+  const zoom = mapInitialState.zoom
 
   // If the user is outside of Dallas, we move it to Dallas.
   // The below area is locating the Dallas.
   // These points are consistent with the iOS app:
   // https://gitlab.com/rechat/web/issues/1022#note_67523348
 
-  if (
-    latitude < 33.230351508956 &&
-    latitude > 30.3929423199334 &&
-    longitude < -96.7 &&
-    longitude > -98.5446725385128
-  ) {
-    center = { lat: latitude, lng: longitude }
-  } else {
-    center = {
-      lat: 32.7767,
-      lng: -96.797
-    }
+  if (isLocationInTX(lat, lng)) {
+    return [
+      setMapProps('search', {
+        center: { lat, lng },
+        zoom
+      }),
+      { type: types.GET_USER_LOCATION_DONE, tabName: 'search' }
+    ]
   }
 
-  cookies.set('userLocation', center)
-
-  return setMapProps('search', { center, zoom: 15 })
+  return [
+    notify({
+      message: "We aren't support your location. You are out of Texas state!",
+      status: 'error'
+    }),
+    setMapProps('search', {
+      center: mapInitialState.center,
+      zoom
+    })
+  ]
 }
 
 const showError = error => dispatch => {
@@ -53,6 +56,8 @@ const showError = error => dispatch => {
     case error.UNKNOWN_ERROR:
       message = 'An unknown error occurred.'
       break
+    default:
+      message = error.message
   }
 
   message &&
@@ -65,14 +70,14 @@ const showError = error => dispatch => {
 }
 
 export const getLocation = () => dispatch => {
-  if (navigator.geolocation) {
+  if (window && 'geolocation' in window.navigator) {
     dispatch({ type: types.START_GET_USER_LOCATION, tabName: 'search' })
     navigator.geolocation.getCurrentPosition(
       location => {
-        dispatch(setPosition(location))
-        dispatch({ type: types.GET_USER_LOCATION_DONE, tabName: 'search' })
+        batchActions([...setPosition(location).map(action => dispatch(action))])
       },
       error => {
+        console.log(error)
         dispatch(showError(error))
       }
     )
@@ -83,15 +88,5 @@ export const getLocation = () => dispatch => {
         status: 'error'
       })
     )
-  }
-}
-
-export const getLocationFromCookies = () => dispatch => {
-  const userLocation = cookies.get('userLocation')
-
-  if (!_.isEmpty(userLocation)) {
-    dispatch(setMapProps('search', { center: userLocation }))
-  } else {
-    dispatch(getLocation())
   }
 }

@@ -8,7 +8,7 @@ export const useChipStyles = makeStyles(
         background: fade(theme.palette.error.light, 0.2)
       },
       'margin--small': {
-        margin: theme.spacing(0.75, 0.25)
+        margin: theme.spacing(0.75, 0.5)
       },
       dark: {
         '&.MuiChip-root': {
