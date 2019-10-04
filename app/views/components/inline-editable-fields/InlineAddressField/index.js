@@ -4,8 +4,8 @@ import debounce from 'lodash/debounce'
 import idx from 'idx'
 import { Popover, Popper } from '@material-ui/core'
 
-import { loadJS } from 'utils/load-js'
-import { isLocationInTX } from 'utils/map'
+import { loadJS } from '../../../../utils/load-js'
+import { isLocationInTX } from '../../../../utils/map'
 
 import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/Listings/mapOptions'
 
