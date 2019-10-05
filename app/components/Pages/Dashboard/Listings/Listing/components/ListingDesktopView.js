@@ -742,7 +742,7 @@ const ListingDesktopView = ({
               </div>
               {agent_area_client}
               {listing && (
-                <MLSNote mls={listing.mls} mls_name={listing.mls_name} />
+                <MLSNote mls={listing.mls} mlsName={listing.mls_name} />
               )}
             </Col>
             <div className="clearfix" />
