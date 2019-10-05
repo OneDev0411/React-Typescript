@@ -56,7 +56,7 @@ export function BulkEmailComposeForm({
       subject: (formValue.subject || '').trim(),
       html: formValue.body || '',
       attachments: (formValue.attachments || []).map(item => item.id),
-      due_at: formValue.due_at
+      due_at: formValue.due_at || new Date()
     })
 
     return emailId
