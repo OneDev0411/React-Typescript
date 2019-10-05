@@ -118,7 +118,9 @@ export function AddOrEditEmailTemplateDrawer({
             name="name"
             component={TextField}
             margin="dense"
-            validate={value => !value && 'Template name is required'}
+            validate={value =>
+              !(value || '').trim() && 'Template name is required'
+            }
             required
             fullWidth
             disabled={!editable}
