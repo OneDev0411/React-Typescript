@@ -31,7 +31,7 @@ interface Props {
   addNotification: typeof addNotification
 }
 
-function AddOrEditEmailTemplateDrawer({
+export function AddOrEditEmailTemplateDrawer({
   isOpen,
   onClose,
   submitCallback,
@@ -118,13 +118,17 @@ function AddOrEditEmailTemplateDrawer({
             name="name"
             component={TextField}
             margin="dense"
-            validate={value => !value && 'Template name is required'}
+            validate={value =>
+              !(value || '').trim() && 'Template name is required'
+            }
             required
             fullWidth
             disabled={!editable}
             InputProps={{
               startAdornment: <InlineInputLabel>Name</InlineInputLabel>,
-              inputProps: {}
+              inputProps: {
+                'data-test': 'template-name-input'
+              }
             }}
           />
           <Field
