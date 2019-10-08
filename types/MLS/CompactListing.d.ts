@@ -38,7 +38,7 @@ declare interface ICompactListing extends IModel<'compact_listing'> {
   close_date: number | null
   price: number
   close_price: number | null
-  status: TListingStatus
+  status: IListingStatus
   mls_number: string
   buyers_agency_commission: string
   sub_agency_commission: string
