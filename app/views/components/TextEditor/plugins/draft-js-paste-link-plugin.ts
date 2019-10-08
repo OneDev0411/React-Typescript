@@ -11,13 +11,13 @@ export default function createPasteLinkPlugin() {
   return {
     handlePastedText: (
       text,
-      styles,
+      html,
       editorState: EditorState,
       { setEditorState }: PluginFunctions
     ): DraftHandleValue => {
       text = text.trim()
 
-      if (isURL(text) || isEmail(text)) {
+      if ((!html && isURL(text)) || isEmail(text)) {
         const url = normalizeUrl(text)
 
         setEditorState(

@@ -26,6 +26,8 @@ import { withUploadingIndicator } from './block-decorators/with-uploading-indica
 import { resizablePluginOptions } from './config'
 import createIframePlugin from './plugins/draft-js-iframe-plugin'
 import { createCollapsibleDecorator } from './block-decorators/create-collapsible-decorator'
+import createPasteHtmlPlugin from './plugins/draft-js-paste-html'
+import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 
 export function createPlugins(
   setLinkEditorOpen: (open: boolean) => void,
@@ -70,6 +72,10 @@ export function createPlugins(
       blockDndPlugin.decorator
     )
   })
+  const pasteHtmlPlugin = createPasteHtmlPlugin({
+    stateFromHtmlOptions: editorState =>
+      getHtmlConversionOptions(editorState).stateFromHtmlOptions
+  })
 
   return {
     AlignmentTool,
@@ -81,6 +87,7 @@ export function createPlugins(
     linkPlugins: [anchorPlugin, createPasteLinkPlugin(), linkShortcutsPlugin],
     imagePlugin,
     iframePlugin,
+    pasteHtmlPlugin,
     signaturePlugin
   }
 }
