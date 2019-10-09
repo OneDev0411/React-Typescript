@@ -25,9 +25,9 @@ import IconDealFilled from '../../../SvgIcons/Deals/IconDealFilled'
 import { iconSizes } from '../../../SvgIcons/icon-sizes'
 
 interface Props extends FieldRenderProps<any> {
-  checklists: IDealChecklist[]
-  tasks: IDealTask[]
-  envelopes: IDealEnvelope[]
+  checklists: Record<UUID, IDealChecklist>
+  tasks: Record<UUID, IDealTask>
+  envelopes: Record<UUID, IDealEnvelope>
   deal?: IDeal
   onClick?: MouseEventHandler
   initialAttachments: IFile[]
@@ -153,7 +153,7 @@ export function AddDealFile({
 }
 
 export default connect(
-  ({ deals: { checklists, list, tasks, envelopes } }: IAppState) => ({
+  ({ deals: { checklists, tasks, envelopes } }: IAppState) => ({
     checklists,
     tasks,
     envelopes

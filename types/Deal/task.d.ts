@@ -1,7 +1,7 @@
 declare type IDealTaskType = 'Form' | 'GeneralComments' | 'Generic'
 
 declare interface IDealTaskRoom extends IModel<'room'> {
-  attachments: IFile[]
+  attachments: IFile[] | null
   latest_message: IChatMessage
   latest_activity: IChatActivity
   new_notifications: number
