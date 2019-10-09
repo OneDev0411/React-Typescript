@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button } from '@material-ui/core'
 
-import { TourDrawer } from 'components/tour/TourDrawer'
+import CreateTourDrawer from 'components/tour/CreateTourDrawer/CreateTourDrawer'
 
 interface Props {
   disabled: boolean
@@ -23,15 +23,13 @@ export default function CreateTourAction(props: Props) {
       >
         Create Tour
       </Button>
-      {isOpen && (
-        <TourDrawer
-          isOpen
-          listings={props.listings}
-          onClose={() => setIsOpen(false)}
-          user={props.user}
-          submitCallback={props.submitCallback}
-        />
-      )}
+      <CreateTourDrawer
+        isOpen={isOpen}
+        listings={props.listings}
+        onClose={() => setIsOpen(false)}
+        submitCallback={props.submitCallback}
+        user={props.user}
+      />
     </>
   )
 }
