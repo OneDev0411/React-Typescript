@@ -107,7 +107,7 @@ const VirtualList: React.FC<Props> = ({
         onItemsRendered={debounce(onItemsRendered, 100)}
         onScroll={setScroll}
       >
-        {listProps => children(listProps)}
+        {children}
       </List>
     </Container>
   )
