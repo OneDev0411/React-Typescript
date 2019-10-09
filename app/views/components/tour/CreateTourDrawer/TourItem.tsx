@@ -6,18 +6,16 @@ import { Theme, createStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    tourItem: {
-      marginBottom: theme.spacing(2),
-
-      '& .MuiButton-label': {
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start'
-      }
+    root: {
+      marginBottom: theme.spacing(2)
+    },
+    buttonLabel: {
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      justifyContent: 'flex-start'
     },
     title: {
-      width: '100%',
-      textAlign: 'left'
+      width: '100%'
     }
   })
 )
@@ -36,7 +34,12 @@ export default function TourItem({ dueDate, onClick, title }: Props) {
   )
 
   return (
-    <Button onClick={onClick} fullWidth className={classes.tourItem}>
+    <Button
+      onClick={onClick}
+      fullWidth
+      className={classes.root}
+      classes={{ label: classes.buttonLabel }}
+    >
       <Typography variant="button" noWrap>
         {date}
       </Typography>
@@ -45,6 +48,7 @@ export default function TourItem({ dueDate, onClick, title }: Props) {
         variant="body2"
         color="textSecondary"
         noWrap
+        align="left"
         className={classes.title}
       >
         {title}
