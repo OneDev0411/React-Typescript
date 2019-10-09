@@ -65,7 +65,7 @@ export async function postLoadFormat(task, owner, listings) {
           clients.push(a)
           break
         case 'listing':
-          locations.push(a)
+          locations = [a, ...locations]
           break
         default:
           break
