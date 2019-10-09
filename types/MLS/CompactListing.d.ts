@@ -61,5 +61,5 @@ declare interface ICompactListing extends IModel<'compact_listing'> {
   open_houses: boolean | null
   compact_property: ICompactProperty
   user_listing_notification_setting: null
-  dom: null
+  dom: number | null
 }
