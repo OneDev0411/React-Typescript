@@ -35,7 +35,7 @@ type IContactAttributeWithDef = IContactAttribute & {
 
 declare interface ISubContact {
   id: UUID
-  brand: UUID
+  brand?: UUID
   created_at: number
   type: 'sub_contact'
   sections: Record<UUID, (IContactAttributeWithDef)[]>

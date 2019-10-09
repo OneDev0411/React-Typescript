@@ -25,15 +25,14 @@ declare interface IInsight {
   type: string
   sent: number
   attachments: null
-  emails: IInsightEmail[]
+  emails: IEmailCampaignEmail[]
 }
 
-declare interface IInsightEmail {
+declare interface IEmailCampaignEmail {
   id: string
   campaign: string
   email: string
   contact: UUID | null
-  recipient_type: string
   accepted: number
   rejected: number
   delivered: number
@@ -44,7 +43,7 @@ declare interface IInsightEmail {
   complained: number
   stored: number
   email_address: string
-  type: string
+  type: 'email_campaign_email'
   display_name: string
   profile_image_url: string | null
 }

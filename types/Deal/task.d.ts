@@ -45,6 +45,3 @@ declare interface IDealTask extends IModel<'task'> {
     updated_at: number
   }
 }
-
-declare type IDealTaskInput = Partial<Omit<IDealTask, 'id' | 'checklist'>> &
-  Pick<IDealTask, 'task_type'>

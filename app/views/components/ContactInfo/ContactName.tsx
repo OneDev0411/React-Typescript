@@ -2,7 +2,7 @@ import React from 'react'
 
 import Alink from 'components/ALink'
 
-import { ContactsListType } from 'dashboard/MarketingInsights/Insight/types'
+import { ContactsListType } from '../../../components/Pages/Dashboard/MarketingInsights/Insight/types'
 
 interface ContactNamePropsType {
   data: ContactsListType

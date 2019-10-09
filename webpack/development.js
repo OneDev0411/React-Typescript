@@ -1,10 +1,10 @@
-import WebpackNotifierPlugin from 'webpack-notifier'
-
+import ForkTsCheckerNotifierWebpackPlugin from 'fork-ts-checker-notifier-webpack-plugin'
 import Webpackbar from 'webpackbar'
 
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
 import UnusedFilesWebpackPlugin from 'unused-files-webpack-plugin'
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 
 import appConfig from '../config/webpack'
 import webpackConfig from './base'
@@ -77,7 +77,25 @@ webpackConfig.plugins.push(
   new Webpackbar()
 )
 
-webpackConfig.plugins.push(new WebpackNotifierPlugin({ alwaysNotify: false }))
+webpackConfig.plugins.push(
+  new ForkTsCheckerNotifierWebpackPlugin({ alwaysNotify: false })
+)
+
+webpackConfig.plugins.push(
+  new ForkTsCheckerWebpackPlugin({
+    /**
+     * This is crucial in development, as it doesn't block webpack compilation
+     * while typechecking is in progress.
+     */
+    async: true,
+    /**
+     * Syntactic errors are checked by babel too, so we turn it off for a small
+     * performance gain.
+     */
+    checkSyntacticErrors: false,
+    useTypescriptIncrementalApi: true
+  })
+)
 
 webpackConfig.module.rules.push(
   {

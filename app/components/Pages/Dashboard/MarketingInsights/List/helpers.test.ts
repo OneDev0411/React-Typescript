@@ -1,9 +1,4 @@
-import {
-  item1,
-  item2,
-  item3,
-  item4
-} from '../../../../../../tests/unit/fixtures/insights/insight'
+import { item1, item2, item3, item4 } from 'fixtures/insights/insight'
 
 import { doSort, SortValues } from './helpers'
 

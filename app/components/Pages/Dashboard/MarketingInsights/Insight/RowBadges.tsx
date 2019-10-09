@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import { StyledBadge } from './styled'
 import { ContactsListType } from './types'
@@ -8,7 +8,7 @@ interface BadgePropsType {
 }
 
 function RowBadges({ data }: BadgePropsType) {
-  const output: React.Node[] = []
+  const output: ReactNode[] = []
 
   if (data.unsubscribed > 0) {
     const count = data.unsubscribed >= 2 ? `(${data.unsubscribed})` : null

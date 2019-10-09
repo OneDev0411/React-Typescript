@@ -7,13 +7,13 @@ import { selectDeals } from 'reducers/deals/list'
 
 import Body from './Body'
 
-interface Props
-  extends Pick<ComponentProps<OverlayDrawer>, 'isOpen' | 'onClose'> {
+interface Props extends Pick<ComponentProps<typeof OverlayDrawer>, 'onClose'> {
   defaultSearchFilter?: string
   onSelect: (deal: IDeal) => void
   user: IUser
   deals: IDeal[]
   itemRenderer: any
+  isOpen: boolean
   title: string
 }
 

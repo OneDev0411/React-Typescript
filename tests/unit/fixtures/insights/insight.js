@@ -43,4 +43,26 @@ const item4 = {
   due_at: 1568323156.073
 }
 
-export { item1, item2, item3, item4 }
+const emailCampaignEmail = {
+  accepted: 0,
+  campaign: '9f6392c4-e51b-11e9-b5a6-027d31a1f7a0',
+  clicked: 0,
+  complained: 0,
+  contact: '337cb802-9254-489e-8ee9-806ca4bf6513',
+  delivered: 1,
+  display_name: 'Alireza Mirian',
+  email: 'a14b1832-e51b-11e9-b090-027d31a1f7a0',
+  email_address: 'alireza.mirian@gmail.com',
+  failed: 0,
+  id: 'a1517740-e51b-11e9-b091-027d31a1f7a0',
+  opened: 1,
+  profile_image_url:
+    'https://d2dzyv4cb7po1i.cloudfront.net/28810bfc-8565-11e9-b821-0a95998482ac/avatars/10c51070-dfac-11e9-af87-6166dea35e7f.jpg',
+  rejected: 0,
+  send_type: 'To',
+  stored: 0,
+  type: 'email_campaign_email',
+  unsubscribed: 0
+}
+
+export { item1, item2, item3, item4, emailCampaignEmail }

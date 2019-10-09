@@ -7,7 +7,7 @@ const MemberRow = ({ title, selected, onChange, style = {} }) => (
     checked={selected}
     onChange={onChange}
     containerStyle={{
-      margin‌Bottom: '1rem',
+      marginBottom: '1rem',
       ...style
     }}
   >

@@ -26,7 +26,7 @@ export function useGetOpenHouses(
     ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>[]
   >([])
   const [error, setError] = useState('')
-  const [isFetching, setIsFetching] = useState(initialState.isFetching)
+  const [isFetching, setIsFetching] = useState(!!initialState.isFetching)
 
   const fetch = useCallback(async function fetch() {
     try {

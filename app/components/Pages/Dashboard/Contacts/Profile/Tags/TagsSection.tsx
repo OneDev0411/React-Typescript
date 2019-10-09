@@ -13,7 +13,7 @@ import TagsList from './TagsList'
 
 interface Props {
   contact: INormalizedContact
-  tags: ICRMTag[]
+  tags: IContactAttributeWithDef[]
 }
 
 function Tags(props: Props) {
@@ -43,6 +43,8 @@ function Tags(props: Props) {
         )}
       </div>
 
+      {/*
+      // @ts-ignore js component */}
       <TagsOverlay
         contact={props.contact}
         closeOverlay={() => setIsDrawerOpen(false)}

@@ -52,7 +52,7 @@ function eventFormatter(data: IContact): FormatterOutputType {
     contact_id: data.id,
     data: {
       name: data.display_name,
-      email: data.email,
+      email: data.email || undefined,
       phone: data.phone_number
     },
     meta: {}

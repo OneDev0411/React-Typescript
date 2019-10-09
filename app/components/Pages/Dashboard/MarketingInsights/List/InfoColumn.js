@@ -8,7 +8,7 @@ import Recipients from './Recipients'
 import { isEmailInProgress, isEmailScheduled, show_title } from './helpers'
 import { Info, StyledBadge, StyledLink } from './styled'
 
-function InfoColumn({ data, reloadList }) {
+function InfoColumn({ data, reloadList = undefined }) {
   const isScheduled = isEmailScheduled(data)
   const isInProgress = isEmailInProgress(data)
 

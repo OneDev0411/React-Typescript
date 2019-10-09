@@ -15,6 +15,7 @@ import { PageContainer, InsightContainer, SummaryCard } from './styled'
 import useItemData from './useItemData'
 import Summary from './Summary'
 import ContactsTable from './ContactsTable'
+import { ContactsListType } from './types'
 
 interface InsightPropsType {
   params: {
@@ -61,11 +62,13 @@ function Insight(props: InsightPropsType) {
       value: `${percent(item.clicked, totalSent)}% (${item.clicked})`
     }
   ]
-  const sentFrom = {
+  const sentFrom: ContactsListType = {
     display_name: '',
     to: '',
     profile_image_url: ''
-  }
+    // TODO(mojtaba): fix missing fields either make them optional in type
+    //  definition, or provide them here
+  } as ContactsListType
 
   if (item.from) {
     sentFrom.profile_image_url = item.from.profile_image_url

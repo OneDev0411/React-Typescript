@@ -48,6 +48,7 @@ export function CrmEvents(props: Props) {
       : props.event.id
 
   if (props.event.type === 'Open House') {
+    // @ts-ignore
     return <OpenHouseDrawer {...sharedProps} openHouseId={id} />
   }
 

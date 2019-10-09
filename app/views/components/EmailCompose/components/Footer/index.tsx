@@ -26,7 +26,7 @@ interface Props {
   enableSchedule: boolean
   onCancel?: () => void
   className?: string
-  uploadAttachment?: typeof uploadEmailAttachment
+  uploadAttachment: typeof uploadEmailAttachment
 }
 
 export function Footer(props: Props) {

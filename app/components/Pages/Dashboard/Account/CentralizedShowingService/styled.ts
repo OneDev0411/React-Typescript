@@ -14,7 +14,7 @@ export const IconCheck = styled(IconCircleCheck)`
   fill: ${primary};
   width: 3rem;
   height: 3rem;
-`
+` as typeof IconCircleCheck
 
 export const LoadingContainer = styled.div`
   min-height: 21.3125rem;
