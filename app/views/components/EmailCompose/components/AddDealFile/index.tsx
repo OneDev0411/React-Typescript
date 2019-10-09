@@ -34,12 +34,6 @@ interface Props extends FieldRenderProps<any> {
   onChanged?: () => void
 }
 
-interface State {
-  deal?: IDeal | null
-  isDealsListOpen: boolean
-  isDealFilesOpen: boolean
-}
-
 export function AddDealFile({
   initialAttachments,
   tasks,
@@ -75,12 +69,29 @@ export function AddDealFile({
     setDealFilesOpen(true)
   }
 
+  const fileExists = (files: IFile[], file: IFile) =>
+    files.some(aFile => aFile.id === file.id)
+
   const handleChangeSelectedDealFile = (files: IFile[]) => {
     setDeal(props.deal || null)
     setDealFilesOpen(false)
 
     if (deal) {
-      props.input.onChange(files as any)
+      const currentFiles: IFile[] = props.input.value
+
+      // Previously selected files which are either non-deal files or
+      // deal files that are still selected
+      const preservedFiles = currentFiles.filter(
+        file => !fileExists(allDealFiles, file) || fileExists(files, file)
+      )
+
+      // New deal files that are selected from the drawer, but were not
+      // previously selected
+      const newDealFiles = files.filter(file =>
+        preservedFiles.every(aFile => aFile.id !== file.id)
+      )
+
+      props.input.onChange([...preservedFiles, ...newDealFiles] as any)
       onChanged()
     }
   }
