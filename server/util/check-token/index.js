@@ -2,6 +2,8 @@ import signin from '../../../app/models/auth/signin/index.js'
 import config from '../../../config/private'
 
 export default async function checkToken(ctx, next) {
+  console.log('Check Token:::Start')
+
   if (
     !ctx.session.user ||
     new Date().getTime() <= ctx.session.user.expire_date
@@ -27,6 +29,8 @@ export default async function checkToken(ctx, next) {
   } catch (e) {
     console.log(e)
   }
+
+  console.log('Check Token:::End')
 
   return next()
 }
