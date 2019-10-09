@@ -29,6 +29,8 @@ function sanitize(state) {
 }
 
 async function display(file, renderProps) {
+  console.log('Render:::Start')
+
   const user = await getUserProfile(this.session)
 
   let initialState = {
@@ -67,6 +69,8 @@ async function display(file, renderProps) {
     try {
       await store.dispatch(getUserTeams(initialState.user))
     } catch (e) {
+      console.log(e)
+
       if (e.response && e.response.status === 401) {
         console.log('Can not get user teams. signing out...')
 
@@ -83,7 +87,7 @@ async function display(file, renderProps) {
   try {
     await Promise.all(fetch(store, renderProps))
   } catch (e) {
-    /* do nothing */
+    console.log(e)
   }
 
   // get store initial data
@@ -105,6 +109,8 @@ async function display(file, renderProps) {
       }`
     })
   }
+
+  console.log('Render:::End')
 }
 
 export default () =>
