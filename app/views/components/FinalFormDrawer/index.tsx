@@ -100,6 +100,14 @@ export class FinalFormDrawer<T> extends React.Component<Props<T>> {
 
   private formProps: FormRenderProps
 
+  renderWithTooltip = children => {
+    if (!this.props.submitButtonTooltip) {
+      return children
+    }
+
+    return <Tooltip title={this.props.submitButtonTooltip}>{children}</Tooltip>
+  }
+
   render() {
     const { isSubmitDisabled = false } = this.props
 
@@ -145,30 +153,28 @@ export class FinalFormDrawer<T> extends React.Component<Props<T>> {
 
                   {this.props.showFooter && (
                     <Drawer.Footer rowReverse>
-                      {this.props.footerRenderer ? (
-                        this.props.footerRenderer({
-                          isSubmitDisabled,
-                          formProps,
-                          submitting,
-                          handleSubmit: this.handleSubmit
-                        })
-                      ) : (
-                        <Tooltip title={this.props.submitButtonTooltip}>
-                          <ActionButton
-                            type="submit"
-                            disabled={
-                              isSubmitDisabled ||
-                              submitting ||
-                              formProps.validating
-                            }
-                            onClick={this.handleSubmit}
-                          >
-                            {submitting
-                              ? this.props.submittingButtonLabel
-                              : this.props.submitButtonLabel}
-                          </ActionButton>
-                        </Tooltip>
-                      )}
+                      {this.props.footerRenderer
+                        ? this.props.footerRenderer({
+                            isSubmitDisabled,
+                            formProps,
+                            submitting,
+                            handleSubmit: this.handleSubmit
+                          })
+                        : this.renderWithTooltip(
+                            <ActionButton
+                              type="submit"
+                              disabled={
+                                isSubmitDisabled ||
+                                submitting ||
+                                formProps.validating
+                              }
+                              onClick={this.handleSubmit}
+                            >
+                              {submitting
+                                ? this.props.submittingButtonLabel
+                                : this.props.submitButtonLabel}
+                            </ActionButton>
+                          )}
                     </Drawer.Footer>
                   )}
                 </form>
