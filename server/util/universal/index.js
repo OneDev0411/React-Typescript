@@ -11,8 +11,6 @@ function matcher(location) {
 }
 
 export default async function(ctx) {
-  console.log('UniversalMiddleware:::Start')
-
   const { error, redirectLocation, renderProps } = await matcher(
     ctx.request.url
   )
@@ -31,6 +29,4 @@ export default async function(ctx) {
     ctx.status = 404
     ctx.body = 'Not found!'
   }
-
-  console.log('UniversalMiddleware:::End')
 }
