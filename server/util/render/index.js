@@ -54,6 +54,7 @@ async function display(file, renderProps) {
       }
     }
   } catch (error) {
+    console.log('Render - getBrandByHostname')
     console.log(error)
   }
 
@@ -69,6 +70,7 @@ async function display(file, renderProps) {
     try {
       await store.dispatch(getUserTeams(initialState.user))
     } catch (e) {
+      console.log('Render - getUserTeams')
       console.log(e)
 
       if (e.response && e.response.status === 401) {
@@ -87,27 +89,33 @@ async function display(file, renderProps) {
   try {
     await Promise.all(fetch(store, renderProps))
   } catch (e) {
+    console.log('Render - fetch')
     console.log(e)
   }
 
   // get store initial data
-  const store_data = await sanitize(store.getState())
+  try {
+    const store_data = await sanitize(store.getState())
 
-  if (['production', 'stage'].indexOf(process.env.NODE_ENV) > -1) {
-    await this.render(file || 'app', {
-      openGraph: this.state.openGraph,
-      variables: this.state.variables,
-      store_data
-    })
-  } else {
-    await this.render('development', {
-      store_data,
-      variables: this.state.variables,
-      jsBundle: `${config.compile.publicPath}/${config.compile.jsBundle}`,
-      jsVendorBundle: `${config.compile.publicPath}/${
-        config.compile.jsVendorBundle
-      }`
-    })
+    if (['production', 'stage'].indexOf(process.env.NODE_ENV) > -1) {
+      await this.render(file || 'app', {
+        openGraph: this.state.openGraph,
+        variables: this.state.variables,
+        store_data
+      })
+    } else {
+      await this.render('development', {
+        store_data,
+        variables: this.state.variables,
+        jsBundle: `${config.compile.publicPath}/${config.compile.jsBundle}`,
+        jsVendorBundle: `${config.compile.publicPath}/${
+          config.compile.jsVendorBundle
+        }`
+      })
+    }
+  } catch (error) {
+    console.log('Render - sanitize')
+    console.log(error)
   }
 
   console.log('Render:::End')
