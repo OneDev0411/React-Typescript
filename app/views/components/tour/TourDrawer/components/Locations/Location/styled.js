@@ -13,7 +13,6 @@ export const CloseIcon = styled(IconClose)`
 `
 
 export const Container = styled.div`
-  margin-bottom: 1em;
   background-color: ${grey.A100};
 
   &:hover {

@@ -10,7 +10,7 @@ interface Select {
 interface Values {
   day: Select
   month: Select
-  year?: string
+  year: number | string | null
 }
 
 export function validateDateField(

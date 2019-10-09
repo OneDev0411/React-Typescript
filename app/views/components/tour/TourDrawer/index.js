@@ -2,16 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
-import {
-  getTask,
-  updateTask,
-  createTask,
-  deleteTask,
-  createTaskAssociation,
-  deleteTaskAssociation
-} from 'models/tasks'
+import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { isSoloActiveTeam } from 'utils/user-teams'
+import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 
 import { Divider } from '../../Divider'
 import Drawer from '../../OverlayDrawer'
@@ -21,14 +15,19 @@ import { ItemChangelog } from '../../TeamContact/ItemChangelog'
 import IconDelete from '../../SvgIcons/DeleteOutline/IconDeleteOutline'
 import { Title } from '../../EventDrawer/components/Title'
 import { Description } from '../../EventDrawer/components/Description'
+import { UpdateReminder } from '../../EventDrawer/components/UpdateReminder'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
-import { validate } from '../../EventDrawer/helpers/validate'
 import { DateTimeField, AssigneesField } from '../../final-form-fields'
 import { AddAssociationButton } from '../../AddAssociationButton'
-import { AssociationsList, ReminderField } from '../../final-form-fields'
+import {
+  AssociationsList,
+  FieldError,
+  ReminderField
+} from '../../final-form-fields'
 import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
 
+import { validate } from './helpers/validate'
 import { preSaveFormat } from './helpers/pre-save-format'
 import { prePreviewFormat } from './helpers/pre-preview-format'
 import { postLoadFormat } from './helpers/post-load-format'
@@ -121,12 +120,16 @@ export class TourDrawer extends React.Component {
         newTour = await createTask(tour, CRM_TASKS_QUERY)
       }
 
-      this.setState({ isDisabled: false, isSaving: false, tour: newTour })
-      await this.props.submitCallback(newTour, action)
+      this.setState(
+        { isDisabled: false, isSaving: false, tour: newTour },
+        () => {
+          this.props.onClose()
+          this.props.submitCallback(newTour, action)
+        }
+      )
     } catch (error) {
       console.log(error)
       this.setState({ isDisabled: false, isSaving: false })
-      throw error
     }
   }
 
@@ -134,68 +137,20 @@ export class TourDrawer extends React.Component {
     try {
       this.setState({ isDisabled: true })
       await deleteTask(this.state.tour.id)
-      this.setState({ isDisabled: false }, () =>
+      this.setState({ isDisabled: false }, () => {
+        this.props.onClose()
         this.props.deleteCallback(this.state.tour)
-      )
+      })
     } catch (error) {
       console.log(error)
       this.setState({ isDisabled: false })
-      throw error
     }
-  }
-
-  handleCreateAssociation = async association => {
-    const crm_task =
-      this.props.tourId || (this.props.tour && this.props.tour.id)
-
-    if (crm_task) {
-      try {
-        const newAssociation = {
-          ...association,
-          crm_task
-        }
-        const response = await createTaskAssociation(crm_task, newAssociation)
-
-        return response
-      } catch (error) {
-        console.log(error)
-        throw error
-      }
-    }
-
-    return Promise.resolve()
-  }
-
-  handleDeleteAssociation = async association => {
-    if (association.id) {
-      try {
-        const response = await deleteTaskAssociation(
-          association.crm_task,
-          association.id
-        )
-
-        return response
-      } catch (error) {
-        console.log(error)
-        throw error
-      }
-    }
-
-    return Promise.resolve()
   }
 
   handleSubmit = () => {
-    let event
-
-    if (typeof Event === 'function') {
-      event = new Event('submit', { cancelable: true })
-    } else {
-      event = document.createEvent('Event')
-
-      event.initEvent('submit', true, true)
-    }
-
-    document.getElementById('tour-drawer-form').dispatchEvent(event)
+    document
+      .getElementById('tour-drawer-form')
+      .dispatchEvent(new Event('submit', { cancelable: true }))
   }
 
   render() {
@@ -204,7 +159,7 @@ export class TourDrawer extends React.Component {
 
     return (
       <Drawer open={this.props.isOpen} onClose={this.props.onClose}>
-        <Drawer.Header title={`${this.isNew ? 'New' : 'Edit'} Tour`} />
+        <Drawer.Header title={`${this.isNew ? 'New' : 'Edit'} Toursheet`} />
         <Drawer.Body>
           <LoadSaveReinitializeForm
             initialValues={this.props.initialValues}
@@ -219,8 +174,6 @@ export class TourDrawer extends React.Component {
             validate={validate}
             render={formProps => {
               const { values } = formProps
-
-              // console.log(values)
 
               return (
                 <div>
@@ -241,9 +194,12 @@ export class TourDrawer extends React.Component {
                           name="dueDate"
                           selectedDate={values.dueDate}
                         />
-                        {values.status !== 'DONE' && (
-                          <ReminderField dueDate={values.dueDate} />
-                        )}
+                        <UpdateReminder
+                          dueDate={values.dueDate}
+                          // 1 hour before
+                          defaultOption={REMINDER_DROPDOWN_OPTIONS[5]}
+                        />
+                        <ReminderField dueDate={values.dueDate} />
                       </FieldContainer>
                     </Section>
 
@@ -251,6 +207,11 @@ export class TourDrawer extends React.Component {
                       <Locations
                         locations={values.locations}
                         handleDelete={this.handleDeleteAssociation}
+                      />
+
+                      <FieldError
+                        name="locations"
+                        style={{ fontSize: '1rem' }}
                       />
                     </Section>
 
@@ -268,7 +229,6 @@ export class TourDrawer extends React.Component {
                       <AssociationsList
                         name="clients"
                         associations={values.clients}
-                        handleDelete={this.handleDeleteAssociation}
                       />
                     </Section>
 

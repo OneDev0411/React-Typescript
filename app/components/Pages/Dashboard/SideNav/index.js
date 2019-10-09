@@ -24,6 +24,8 @@ import CalendarIcon from '../../../../views/components/SvgIcons/Calendar2/IconCa
 import CalendarIconActive from '../../../../views/components/SvgIcons/Calendar2/IconCalendarActive'
 import IconCog from '../../../../views/components/SvgIcons/CogOutline/IconCogOutline'
 import IconCogActive from '../../../../views/components/SvgIcons/Cog/IconCog'
+import IconTour from '../../../../views/components/SvgIcons/TourOutline/IconTourOutline'
+import IconTourActive from '../../../../views/components/SvgIcons/Tour/IconTour'
 import IconOpenHouseOutline from '../../../../views/components/SvgIcons/OpenHouseOutline/IconOpenHouseOutline'
 import IconOpenHouseFilled from '../../../../views/components/SvgIcons/OpenHouseFilled/IconOpenHouseFilled'
 import DealsNotifications from '../Deals/components/SideNavBadge'
@@ -111,6 +113,15 @@ function AppSideNav(props) {
               ActiveIcon={IconOpenHouseFilled}
             />
           </Acl>
+
+          <Acl.Crm>
+            <SideNavLinkItem
+              tooltip="Toursheets"
+              to="/dashboard/tours"
+              Icon={IconTour}
+              ActiveIcon={IconTourActive}
+            />
+          </Acl.Crm>
 
           <Acl.Marketing>
             <SideNavLinkItem

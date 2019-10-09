@@ -16,22 +16,20 @@ const useStyles = makeStyles(() =>
   })
 )
 
-import CreateNewOpenHouse from './CreateNewOpenHouse'
+import CreateNewTour from './CreateNewTour'
 
-export default function EmptyState(props: {
-  onOpenDrawer: (item: IDeal | ICompactListing) => void
-}) {
+export default function EmptyState(props: { onOpenDrawer: () => void }) {
   const classes = useStyles()
 
   return (
     <Box className={classes.box}>
       <img src="/static/images/contacts/zero-state.svg" alt="Houston" />
-      <h2>No open houses are scheduled… Yet!</h2>
+      <h2>No toursheets are scheduled… Yet!</h2>
       <p>
         Impress sellers with additional marketing exposure while attracting new
-        buyers and adding contacts. Holding an open house has never been easier!
+        buyers and adding contacts. Holding a tour has never been easier!
       </p>
-      <CreateNewOpenHouse onOpenDrawer={props.onOpenDrawer} />
+      <CreateNewTour onOpenDrawer={props.onOpenDrawer} />
     </Box>
   )
 }

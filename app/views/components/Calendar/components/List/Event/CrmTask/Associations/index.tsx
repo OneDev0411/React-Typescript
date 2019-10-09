@@ -71,6 +71,7 @@ function getCrmEventTypePreposition(eventType: string): string {
   switch (eventType) {
     case 'Chat':
     case 'Call':
+    case 'Tour':
     case 'In-Person Meeting':
     case 'Other':
       return 'with'

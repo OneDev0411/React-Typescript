@@ -48,6 +48,10 @@ export async function postLoadFormat(task, owner, listings) {
     }
   }
 
+  if (task.assignees == null) {
+    task.assignees = []
+  }
+
   let allAssociations = []
 
   if (Array.isArray(task.associations)) {
@@ -61,7 +65,7 @@ export async function postLoadFormat(task, owner, listings) {
           clients.push(a)
           break
         case 'listing':
-          locations.push(a)
+          locations = [a, ...locations]
           break
         default:
           break
@@ -73,7 +77,19 @@ export async function postLoadFormat(task, owner, listings) {
     ...task,
     reminder,
     clients,
-    locations,
+    locations: locations.sort(sortLocationsByIndex),
     dueDate: new Date(dueDate)
   }
+}
+
+function sortLocationsByIndex(a, b) {
+  if (a < b) {
+    return -1
+  }
+
+  if (a > b) {
+    return 1
+  }
+
+  return 0
 }

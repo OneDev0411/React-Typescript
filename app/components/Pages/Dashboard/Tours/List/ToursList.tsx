@@ -4,46 +4,36 @@ import { Helmet } from 'react-helmet'
 import { Theme } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/styles'
 
+import { IAppState } from 'reducers/index'
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import Table from 'components/Grid/Table'
 import PageHeader from 'components/PageHeader'
 import LoadingContainer from 'components/LoadingContainer'
-import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
+import { TourDrawer } from 'components/tour/TourDrawer'
 
 import EmptyState from './EmptyState'
-import CreateNewOpenHouse from './CreateNewOpenHouse'
+import CreateNewTour from './CreateNewTour'
 import Info from './columns/Info'
 import Actions from './columns/Actions'
 import Registrants from './columns/Registrants'
 
-interface Associations {
-  deal?: IDeal
-  listing?: ICompactListing
-}
-
-interface Props {
-  activeBrandId: UUID
-}
-
-function OpenHousesList(props: Props) {
+function ToursList(props: { user: IUser }) {
   const theme = useTheme<Theme>()
   const { list, isFetching, error, reloadList } = useFilterCRMTasks(
     {
       order: 'due_date',
-      task_type: 'Open House'
+      task_type: 'Tour'
     },
     {
       isFetching: true
     }
   )
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  const [selectedOH, setSelectedOH] = useState<ICRMTask<
+  const [selectedTour, setSelectedTour] = useState<ICRMTask<
     CRMTaskAssociation,
     CRMTaskAssociationType
   > | null>(null)
-  const [associations, setAssociations] = useState<Associations | null>(null)
 
   const columns = [
     {
@@ -62,8 +52,8 @@ function OpenHousesList(props: Props) {
       )
     },
     {
-      header: 'Registrants',
-      id: 'registrants',
+      header: 'Participants',
+      id: 'participants',
       width: '10%',
       verticalAlign: 'center',
       render: (props: {
@@ -88,10 +78,9 @@ function OpenHousesList(props: Props) {
         rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
       }) => (
         <Actions
-          activeBrandId={props.activeBrandId}
-          openHouse={rowProps.rowData}
+          tour={rowProps.rowData}
           onEdit={() => {
-            setSelectedOH(rowProps.rowData)
+            setSelectedTour(rowProps.rowData)
             setIsDrawerOpen(true)
           }}
           reloadList={reloadList}
@@ -100,26 +89,17 @@ function OpenHousesList(props: Props) {
     }
   ]
 
-  const onOpenOHDrawer = async (item: ICompactListing | IDeal) => {
-    const associations: Associations = {}
-
-    if (item.type === 'compact_listing') {
-      associations.listing = item
-    } else if (item.type === 'deal') {
-      associations.deal = item
-    }
-
-    setAssociations(associations)
+  const onOpenTourDrawer = () => {
     setIsDrawerOpen(true)
   }
 
-  const onCloseOHDrawer = () => {
-    setSelectedOH(null)
+  const onCloseTourDrawer = () => {
+    setSelectedTour(null)
     setIsDrawerOpen(false)
   }
 
   const drawerCallback = () => {
-    onCloseOHDrawer()
+    onCloseTourDrawer()
     reloadList()
   }
 
@@ -133,7 +113,7 @@ function OpenHousesList(props: Props) {
     }
 
     if (list.length === 0) {
-      return <EmptyState onOpenDrawer={onOpenOHDrawer} />
+      return <EmptyState onOpenDrawer={onOpenTourDrawer} />
     }
 
     return (
@@ -150,36 +130,33 @@ function OpenHousesList(props: Props) {
   return (
     <>
       <Helmet>
-        <title>Open Houses | Rechat</title>
+        <title>Toursheets | Rechat</title>
       </Helmet>
 
       <PageHeader>
         <PageHeader.Title showBackButton={false}>
-          <PageHeader.Heading>Open House</PageHeader.Heading>
+          <PageHeader.Heading>Toursheets</PageHeader.Heading>
         </PageHeader.Title>
 
         <PageHeader.Menu>
-          <CreateNewOpenHouse onOpenDrawer={onOpenOHDrawer} />
+          <CreateNewTour onOpenDrawer={onOpenTourDrawer} />
         </PageHeader.Menu>
       </PageHeader>
 
       <div style={{ padding: theme.spacing(0, 3, 9) }}>{renderContent()}</div>
 
       {isDrawerOpen && (
-        // @ts-ignore js component
-        <OpenHouseDrawer
+        <TourDrawer
           deleteCallback={drawerCallback}
           isOpen
-          onClose={onCloseOHDrawer}
-          openHouse={selectedOH}
+          onClose={onCloseTourDrawer}
+          tour={selectedTour}
           submitCallback={drawerCallback}
-          associations={associations}
+          user={props.user}
         />
       )}
     </>
   )
 }
 
-export default connect((state: { user: IUser }) => ({
-  activeBrandId: getActiveTeamId(state.user)
-}))(OpenHousesList)
+export default connect((state: IAppState) => ({ user: state.user }))(ToursList)

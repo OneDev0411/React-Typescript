@@ -17,22 +17,19 @@ class List extends React.Component {
 
   closeMoreDrawer = () => this.setState({ isOpenMoreDrawer: false })
 
-  removeHandler = async association => {
-    if (association.id) {
-      await this.props.handleDelete(association)
+  removeHandler = association => {
+    this.props.input.onChange(
+      this.props.associations.filter(a => {
+        if (association.id) {
+          return a.id !== association.id
+        }
 
-      this.props.input.onChange(
-        this.props.associations.filter(a => a.id !== association.id)
-      )
-    } else {
-      this.props.input.onChange(
-        this.props.associations.filter(
-          a =>
-            a[a.association_type].id !==
-            association[association.association_type].id
+        return (
+          a[a.association_type].id !==
+          association[association.association_type].id
         )
-      )
-    }
+      })
+    )
   }
 
   isDefaultAssociation = association => {
@@ -140,7 +137,6 @@ class List extends React.Component {
 AssociationsList.propTypes = {
   associations: PropTypes.arrayOf(PropTypes.shape()),
   defaultAssociation: PropTypes.shape(),
-  handleDelete: PropTypes.func.isRequired,
   name: PropTypes.string,
   showDefaultAssociation: PropTypes.bool
 }

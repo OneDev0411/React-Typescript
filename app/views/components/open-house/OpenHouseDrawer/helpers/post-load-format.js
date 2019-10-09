@@ -20,6 +20,7 @@ export async function postLoadFormat(task, owner, listing) {
 
   let location = {
     association_type: 'listing',
+    index: 1,
     listing: normalizeListing(listing)
   }
 
