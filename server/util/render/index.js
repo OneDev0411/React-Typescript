@@ -29,7 +29,7 @@ function sanitize(state) {
 }
 
 async function display(file, renderProps) {
-  console.log('Render:::Start')
+  this.log('Render:::Start')
 
   let user
   let initialState = {
@@ -40,6 +40,7 @@ async function display(file, renderProps) {
   }
 
   try {
+    this.log('Render:::getUserProfile:::Start')
     user = await getUserProfile(this.session)
     initialState = {
       user,
@@ -48,10 +49,15 @@ async function display(file, renderProps) {
       }
     }
   } catch (error) {
-    console.log('Render - getUserProfile', error)
+    this.log('Render:::getUserProfile:::Error')
+    console.log(error)
+  } finally {
+    this.log('Render:::getUserProfile:::End')
   }
 
   try {
+    this.log('Render:::getBrandByHostname:::Start')
+
     const { hostname } = urlParser.parse(this.request.origin)
     const brand = await getBrandByHostname(hostname)
 
@@ -65,8 +71,10 @@ async function display(file, renderProps) {
       }
     }
   } catch (error) {
-    console.log('Render - getBrandByHostname')
+    this.log('Render:::getBrandByHostname:::Error')
     console.log(error)
+  } finally {
+    this.log('Render:::getBrandByHostname:::End')
   }
 
   // create store
@@ -79,9 +87,10 @@ async function display(file, renderProps) {
   // append user data to render props params
   if (initialState.user) {
     try {
+      this.log('Render:::getUserTeams:::Start')
       await store.dispatch(getUserTeams(initialState.user))
     } catch (e) {
-      console.log('Render - getUserTeams')
+      this.log('Render:::getUserTeams:::Error')
       console.log(e)
 
       if (e.response && e.response.status === 401) {
@@ -89,6 +98,8 @@ async function display(file, renderProps) {
 
         return this.redirect('/signout')
       }
+    } finally {
+      this.log('Render:::getUserTeams:::End')
     }
 
     renderProps.params.user = {
@@ -98,14 +109,19 @@ async function display(file, renderProps) {
   }
 
   try {
+    this.log('Render:::fetch:::Start')
     await Promise.all(fetch(store, renderProps))
   } catch (e) {
-    console.log('Render - fetch')
+    this.log('Render:::fetch:::Error')
     console.log(e)
+  } finally {
+    this.log('Render:::fetch:::End')
   }
 
   // get store initial data
   try {
+    this.log('Render:::sanitize:::Start')
+
     const store_data = await sanitize(store.getState())
 
     if (['production', 'stage'].indexOf(process.env.NODE_ENV) > -1) {
@@ -125,11 +141,13 @@ async function display(file, renderProps) {
       })
     }
   } catch (error) {
-    console.log('Render - sanitize')
+    this.log('Render:::sanitize:::Error')
     console.log(error)
+  } finally {
+    this.log('Render:::sanitize:::End')
   }
 
-  console.log('Render:::End')
+  this.log('Render:::End')
 }
 
 export default () =>

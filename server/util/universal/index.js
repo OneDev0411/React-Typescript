@@ -11,25 +11,31 @@ function matcher(location) {
 }
 
 export default async function(ctx) {
-  const { error, redirectLocation, renderProps } = await matcher(
-    ctx.request.url
-  )
+  ctx.log('Univeral-Middleware:::Start')
 
-  if (error) {
-    ctx.status = 500
-    ctx.body = error.message
-  } else if (redirectLocation) {
-    ctx.status = 302
-    ctx.redirect(redirectLocation.pathname + redirectLocation.search)
-  } else if (renderProps) {
-    console.log('Univeral-Middleware:::Start')
+  try {
+    const { error, redirectLocation, renderProps } = await matcher(
+      ctx.request.url
+    )
 
-    const file = ctx.render_file || 'app'
+    if (error) {
+      ctx.status = 500
+      ctx.body = error.message
+    } else if (redirectLocation) {
+      ctx.status = 302
+      ctx.redirect(redirectLocation.pathname + redirectLocation.search)
+    } else if (renderProps) {
+      const file = ctx.render_file || 'app'
 
-    await ctx.display(file, renderProps)
-    console.log('Univeral-Middleware:::End')
-  } else {
-    ctx.status = 404
-    ctx.body = 'Not found!'
+      await ctx.display(file, renderProps)
+    } else {
+      ctx.status = 404
+      ctx.body = 'Not found!'
+    }
+  } catch (error) {
+    ctx.log('Univeral-Middleware:::Error')
+    console.log(error)
   }
+
+  ctx.log('Univeral-Middleware:::End')
 }
