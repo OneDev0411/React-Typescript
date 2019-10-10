@@ -69,7 +69,7 @@ export function ChecklistsPage({ user, location }: Props) {
       </Helmet>
       <Container isOpen>
         <ChecklistsSidenav />
-        <Content>
+        <Content isSideMenuOpen>
           <Box m={3}>
             {filteredChecklists.map(checklist => (
               <Box mb={5} key={checklist.id}>
