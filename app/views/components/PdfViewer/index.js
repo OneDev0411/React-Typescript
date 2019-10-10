@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { Button } from '@material-ui/core'
 
 require('intersection-observer')
 
@@ -7,8 +8,6 @@ import ProgressBar from 'components/ProgressBar'
 
 import importPdfJs from 'utils/import-pdf-js'
 import { getPdfSize } from 'models/Deal/form'
-
-import WentWrong from '../../../components/Pages/Dashboard/Partials/UserMessages/WentWrong'
 
 import { Container, LoadingDealContainer } from './styled'
 import { Page } from './Page'
@@ -57,15 +56,17 @@ export class PdfViewer extends React.Component {
   }
 
   handleZoomIn = () => {
-    const zoomScale = this.state.zoomScale || 0
+    this.setState(state => {
+      const zoomScale = state.zoomScale || 0
 
-    if (zoomScale >= 5) {
-      return false
-    }
+      if (zoomScale >= 5) {
+        return state
+      }
 
-    this.setState({
-      isFitWindow: false,
-      zoomScale: parseFloat((zoomScale + 1).toFixed(1))
+      return {
+        isFitWindow: false,
+        zoomScale: parseFloat((zoomScale + 1).toFixed(1))
+      }
     })
   }
 
@@ -77,15 +78,17 @@ export class PdfViewer extends React.Component {
   }
 
   handleZoomOut = () => {
-    const zoomScale = this.state.zoomScale || 0
+    this.setState(state => {
+      const zoomScale = state.zoomScale || 0
 
-    if (zoomScale <= -5) {
-      return false
-    }
+      if (zoomScale <= -5) {
+        return state
+      }
 
-    this.setState({
-      isFitWindow: false,
-      zoomScale: parseFloat((zoomScale - 1).toFixed(1))
+      return {
+        isFitWindow: false,
+        zoomScale: parseFloat((zoomScale - 1).toFixed(1))
+      }
     })
   }
 
@@ -216,11 +219,25 @@ export class PdfViewer extends React.Component {
     }
   }
 
+  /**
+   *  this error happening when browser can't download pdf.js bundle
+   *  due to network issues and a reload will resolve it
+   */
+  handleReloadPage = () => window.location.reload()
+
   render() {
     if (this.state.isFailed) {
       return (
         <LoadingDealContainer>
-          <WentWrong />
+          It seems you have encountered an unknown system issue and your browser
+          couldn't run the pdf viewer.
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={this.handleReloadPage}
+          >
+            Try Again
+          </Button>
         </LoadingDealContainer>
       )
     }
