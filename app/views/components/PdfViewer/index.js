@@ -230,7 +230,7 @@ export class PdfViewer extends React.Component {
       return (
         <LoadingDealContainer>
           It seems you have encountered an unknown system issue and your browser
-          couldn't run the pdf viewer.
+          couldn't run the PDF viewer.
           <Button
             variant="contained"
             color="primary"
