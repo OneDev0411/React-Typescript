@@ -22,9 +22,12 @@ export default async function(ctx) {
     ctx.status = 302
     ctx.redirect(redirectLocation.pathname + redirectLocation.search)
   } else if (renderProps) {
+    console.log('Univeral-Middleware:::Start')
+
     const file = ctx.render_file || 'app'
 
     await ctx.display(file, renderProps)
+    console.log('Univeral-Middleware:::End')
   } else {
     ctx.status = 404
     ctx.body = 'Not found!'
