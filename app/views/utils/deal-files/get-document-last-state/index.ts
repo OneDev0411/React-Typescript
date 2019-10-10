@@ -72,7 +72,7 @@ function getTaskLatestFiles(data: Params): IDealFile[] {
       .map(envelope => {
         return {
           ...getEnvelopeFile(envelope, data.task),
-          name: `Docusign: ${envelope.title}`
+          name: `${data.task.title} - Signed`
         } as IDealFile
       })
   }
