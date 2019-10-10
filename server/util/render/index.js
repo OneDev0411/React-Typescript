@@ -31,13 +31,24 @@ function sanitize(state) {
 async function display(file, renderProps) {
   console.log('Render:::Start')
 
-  const user = await getUserProfile(this.session)
-
+  let user
   let initialState = {
     user,
     data: {
       user
     }
+  }
+
+  try {
+    user = await getUserProfile(this.session)
+    initialState = {
+      user,
+      data: {
+        user
+      }
+    }
+  } catch (error) {
+    console.log('Render - getUserProfile', error)
   }
 
   try {
