@@ -29,7 +29,7 @@ app.proxy = true
 
 async function development() {
   const koaWebpackMiddleware = await require('koa-webpack')({
-    config: require('../webpack.config.babel')
+    config: require('../webpack.config.babel').default
   })
 
   app.use(koaWebpackMiddleware)
