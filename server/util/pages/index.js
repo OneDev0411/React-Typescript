@@ -21,8 +21,6 @@ app.use(async (ctx, next) => {
 })
 
 app.use(async (ctx, next) => {
-  console.log('pagesMiddleware:::Start')
-
   const isMobile = new MobileDetect(ctx.req.headers['user-agent'])
 
   const isDashboard = url => url.toLowerCase().indexOf('dashboard') !== -1
@@ -36,7 +34,6 @@ app.use(async (ctx, next) => {
     !isDashboard(ctx.url) ||
     (isDashboard(ctx.url) && isListingPage(ctx.url))
   ) {
-    console.log('pagesMiddleware:::End')
     // eslint-disable-next-line
     return next()
   }
@@ -48,12 +45,8 @@ app.use(async (ctx, next) => {
       url = '/mobile?type=iphone'
     }
 
-    console.log('pagesMiddleware:::End')
-
     return ctx.redirect(url)
   }
-
-  console.log('pagesMiddleware:::End')
 
   // eslint-disable-next-line
   return next()

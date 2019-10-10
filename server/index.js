@@ -18,6 +18,7 @@ import checkToken from './util/check-token'
 import appConfig from '../config/webpack'
 import webpackConfig from '../webpack.config.babel'
 import websiteRoutes from './_website'
+import { logger } from './util/logger'
 
 const app = new Koa()
 const __DEV__ = process.env.NODE_ENV === 'development'
@@ -62,6 +63,8 @@ async function production() {
   // universal rendering middleware
   app.use(mount(universalMiddleware))
 }
+
+app.use(logger)
 
 // handle application errors
 app.use(async (ctx, next) => {
