@@ -1,6 +1,11 @@
 import styled from 'styled-components'
 
-export const Container = styled.div`
+interface ContainerProps {
+  isSideMenuOpen: boolean
+  menuWidth: React.CSSProperties['width']
+}
+
+export const Container = styled.div<ContainerProps>`
   width: ${props =>
     !props.isSideMenuOpen ? '100%' : `calc(100% - ${props.menuWidth})`};
   max-height: 100vh;

@@ -11,7 +11,7 @@ import {
  */
 export async function searchDeals(
   user,
-  query,
+  criteria,
   order = ['deals.updated_at', 'DESC']
 ) {
   try {
@@ -20,12 +20,22 @@ export async function searchDeals(
     let url = '/deals/filter'
     let associations = ''
 
-    const payload = {
+    let payload = {
       brand: getActiveTeamId(user)
     }
 
-    if (query && typeof query === 'string') {
-      payload.query = query.trim()
+    if (criteria && typeof criteria === 'object') {
+      payload = {
+        ...payload,
+        ...criteria
+      }
+    }
+
+    if (typeof criteria === 'string') {
+      payload = {
+        ...payload,
+        query: criteria.trim()
+      }
     }
 
     if (isBackOffice) {

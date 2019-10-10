@@ -80,7 +80,7 @@ class Grid extends React.Component {
   }
 
   get Data() {
-    const { deals, activeFilter, searchCriteria } = this.props
+    const { deals, searchQuery } = this.props
 
     if (!deals) {
       return []
@@ -88,17 +88,21 @@ class Grid extends React.Component {
 
     // when user searching something in backoffice, we should show all
     // deals except draft items
-    if (searchCriteria.length > 0) {
+    if (searchQuery.term.length > 0) {
       return Object.values(deals).filter(deal => deal.is_draft === false)
     }
 
-    return Object.values(deals).filter(
-      deal =>
-        deal.attention_requests > 0 &&
-        deal.is_draft === false &&
-        deal.inboxes &&
-        deal.inboxes.includes(activeFilter)
-    )
+    if (searchQuery.type === 'inbox') {
+      return Object.values(deals).filter(
+        deal =>
+          deal.attention_requests > 0 &&
+          deal.is_draft === false &&
+          deal.inboxes &&
+          deal.inboxes.includes(searchQuery.filter)
+      )
+    }
+
+    return Object.values(deals)
   }
 
   getOffice = deal => {
@@ -121,7 +125,7 @@ class Grid extends React.Component {
     return ''
   }
 
-  getTdProps = (index, { column }) => {
+  getTdProps = (_, { column }) => {
     if (column.id === 'notification') {
       return {
         style: {
