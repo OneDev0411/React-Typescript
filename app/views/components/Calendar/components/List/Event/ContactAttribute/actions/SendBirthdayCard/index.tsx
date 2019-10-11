@@ -1,29 +1,18 @@
-import React, { useContext } from 'react'
-import Button from '@material-ui/core/Button'
+import React from 'react'
 
-import { ListContext } from '../../../../context'
+import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 
 interface Props {
   event: ICalendarEvent
 }
 
 export function SendBirthdayCard({ event }: Props) {
-  const { actions } = useContext(ListContext)
-
-  const handleClick = () => {
-    actions.emit('event-action', { event })
-  }
-
   if (event.event_type === 'birthday' && !event.metadata.is_partner) {
     return (
-      <Button
-        variant="outlined"
-        color="secondary"
-        size="small"
-        onClick={handleClick}
-      >
+      // @ts-ignore js component
+      <SendContactCard contact={event.full_contact}>
         Send Birthday Card
-      </Button>
+      </SendContactCard>
     )
   }
 
