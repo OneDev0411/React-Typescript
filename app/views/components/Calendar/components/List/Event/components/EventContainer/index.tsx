@@ -8,6 +8,7 @@ import styles from '../../styles'
 
 interface StyleProps {
   hasBorderBottom: boolean | null
+  clickable: boolean
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -17,6 +18,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'flex-start',
     justifyContent: 'center',
     height: '100%',
+    cursor: (props: StyleProps) => (props.clickable ? 'pointer' : 'auto'),
     borderBottom: (props: StyleProps) =>
       props.hasBorderBottom ? '1px solid rgba(219, 230, 253, 0.5)' : 'none',
     '& button, a.MuiButtonBase-root': {
@@ -62,7 +64,7 @@ export function EventContainer({
   title,
   subtitle,
   actions,
-  onClick = () => {}
+  onClick
 }: Props) {
   const date =
     event.object_type === 'crm_task'
@@ -72,7 +74,8 @@ export function EventContainer({
   const hasBorderBottom = nextItem && !nextItem.hasOwnProperty('isEventHeader')
 
   const classes = useStyles({
-    hasBorderBottom
+    hasBorderBottom,
+    clickable: typeof onClick === 'function'
   })
 
   return (
