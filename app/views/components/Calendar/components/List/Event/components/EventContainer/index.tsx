@@ -51,6 +51,7 @@ interface Props {
   title: React.ReactNode
   subtitle?: React.ReactNode
   actions?: React.ReactNode
+  onClick?(): void
 }
 
 export function EventContainer({
@@ -60,7 +61,8 @@ export function EventContainer({
   icon,
   title,
   subtitle,
-  actions
+  actions,
+  onClick = () => {}
 }: Props) {
   const date =
     event.object_type === 'crm_task'
@@ -74,7 +76,7 @@ export function EventContainer({
   })
 
   return (
-    <div style={style}>
+    <div style={style} onClick={onClick}>
       <div className={classes.root}>
         <div style={styles.row}>
           <div style={styles.container}>
