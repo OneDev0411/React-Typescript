@@ -49,63 +49,58 @@ const requestMiddleware = async (ctx, next) => {
     // log
     logger(url, method, headers, ctx)
 
-    try {
-      return superagent[method.toLowerCase()](`${api_url}${url}`)
-        .set(headers)
-        .on('error', err => {
-          let responseText = err.response ? err.response.text : err.message
+    return superagent[method.toLowerCase()](`${api_url}${url}`)
+      .set(headers)
+      .on('error', err => {
+        let responseText = err.response ? err.response.text : err.message
 
-          console.log(`[ Fetch Error: ${url} ] `, responseText)
+        console.log(`[ Fetch Error: ${url} ] `, responseText)
 
-          // try to parse encoded json
+        // try to parse encoded json
+        try {
+          responseText = JSON.parse(responseText)
+        } catch (error) {
+          console.log(error)
+        }
+
+        const status = err.response ? err.response.status : 500
+
+        if (status === 490) {
+          return false
+        }
+
+        ctx.status = status
+        ctx.body = {
+          status: 'error',
+          response: {
+            status: err.response
+              ? err.response.status
+              : 'Internal server error',
+            text: responseText
+          }
+        }
+      })
+      .on('response', response => {
+        if (~~response.status >= 200 && ~~response.status <= 207) {
           try {
-            responseText = JSON.parse(responseText)
-          } catch (error) {
-            console.log(error)
-          }
-
-          const status = err.response ? err.response.status : 500
-
-          if (status === 490) {
-            return false
-          }
-
-          ctx.status = status
-          ctx.body = {
-            status: 'error',
-            response: {
-              status: err.response
-                ? err.response.status
-                : 'Internal server error',
-              text: responseText
+            // because server use streaming technique for uploading endpoints
+            // and it happens because of 30s issue on heroku servers
+            // btw I will kill @emilsedgh before 2020
+            if (_.isEmpty(response.body)) {
+              response.body = JSON.parse(response.text)
             }
-          }
-        })
-        .on('response', response => {
-          if (~~response.status >= 200 && ~~response.status <= 207) {
-            try {
-              // because server use streaming technique for uploading endpoints
-              // and it happens because of 30s issue on heroku servers
-              // btw I will kill @emilsedgh before 2020
-              if (_.isEmpty(response.body)) {
-                response.body = JSON.parse(response.text)
-              }
 
-              response.body = {
-                ...response.body,
-                status: 'success'
-              }
-            } catch (e) {
-              /* nothing */
+            response.body = {
+              ...response.body,
+              status: 'success'
             }
+          } catch (e) {
+            /* nothing */
           }
+        }
 
-          return response
-        })
-    } catch (error) {
-      console.log(error)
-      throw error
-    }
+        return response
+      })
   }
 
   return next()
