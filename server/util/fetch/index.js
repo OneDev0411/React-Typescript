@@ -19,7 +19,7 @@ function logger(url, method, headers, ctx) {
   text += `\n${JSON.stringify(headers).cyan}`
   text += '\n'
 
-  console.log(text)
+  ctx.log(text)
 }
 
 const requestMiddleware = async (ctx, next) => {
@@ -32,6 +32,8 @@ const requestMiddleware = async (ctx, next) => {
   const host_name = ctx.request.query.hostname
 
   ctx.fetch = (url, method = 'get', contentType = 'application/json') => {
+    ctx.log('Fetch Start')
+
     const headers = {
       'User-Agent': app_name,
       'x-real-agent': user_agent,
@@ -54,29 +56,30 @@ const requestMiddleware = async (ctx, next) => {
       .on('error', err => {
         let responseText = err.response ? err.response.text : err.message
 
-        console.log(`[ Fetch Error: ${url} ] `, responseText)
+        ctx.log(`[ Fetch Error: ${url} ] `, responseText)
 
         // try to parse encoded json
         try {
           responseText = JSON.parse(responseText)
         } catch (error) {
-          console.log(error)
+          ctx.log('Fetch -> Error -> JSON PARSE')
+          ctx.log(error)
         }
 
         const status = err.response ? err.response.status : 500
 
         if (status === 490) {
-          return false
-        }
-
-        ctx.status = status
-        ctx.body = {
-          status: 'error',
-          response: {
-            status: err.response
-              ? err.response.status
-              : 'Internal server error',
-            text: responseText
+          ctx.log('Fetch - 490 Error')
+        } else {
+          ctx.status = status
+          ctx.body = {
+            status: 'error',
+            response: {
+              status: err.response
+                ? err.response.status
+                : 'Internal server error',
+              text: responseText
+            }
           }
         }
       })
@@ -94,8 +97,9 @@ const requestMiddleware = async (ctx, next) => {
               ...response.body,
               status: 'success'
             }
-          } catch (e) {
-            /* nothing */
+          } catch (error) {
+            ctx.log('Fetch -> Response -> Error', error)
+            ctx.log(error)
           }
         }
 
