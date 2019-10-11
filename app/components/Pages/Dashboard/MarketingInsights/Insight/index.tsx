@@ -1,8 +1,11 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
+import Dialog from '@material-ui/core/Dialog'
+import DialogTitle from '@material-ui/core/DialogTitle'
 
 import { formatDate } from 'components/DateTimePicker/helpers'
 import ContactInfo from 'components/ContactInfo'
+import { Iframe } from 'components/Iframe'
 
 import Header from './Header'
 import { Container } from '../../Contacts/components/Container'
@@ -11,7 +14,12 @@ import Loading from '../../../../Partials/Loading'
 
 import { percent } from '../List/helpers'
 
-import { PageContainer, InsightContainer, SummaryCard } from './styled'
+import {
+  PageContainer,
+  InsightContainer,
+  SummaryCard,
+  NoContent
+} from './styled'
 import useItemData from './useItemData'
 import Summary from './Summary'
 import ContactsTable from './ContactsTable'
@@ -26,6 +34,7 @@ interface InsightPropsType {
 function Insight(props: InsightPropsType) {
   const { id } = props.params
 
+  const [isOpenViewEmail, setOpenViewEmail] = React.useState(false)
   const { item, isLoading } = useItemData(id)
 
   if (isLoading) {
@@ -86,8 +95,24 @@ function Insight(props: InsightPropsType) {
         }Marketing Insights | Rechat`}</title>
       </Helmet>
       <PageContainer>
-        <Header backUrl="/dashboard/insights" title={subject} />
-
+        <Header
+          backUrl="/dashboard/insights"
+          title={subject}
+          onCloseEmail={() => setOpenViewEmail(true)}
+        />
+        <Dialog
+          maxWidth="lg"
+          fullWidth
+          onClose={() => setOpenViewEmail(false)}
+          open={isOpenViewEmail}
+        >
+          <DialogTitle>{subject || 'No Title'}</DialogTitle>
+          {item.html ? (
+            <Iframe title="email preview" srcDoc={item.html} />
+          ) : (
+            <NoContent>The email doesn’t have any content</NoContent>
+          )}
+        </Dialog>
         <InsightContainer>
           <aside className="sidebar">
             <SummaryCard>
