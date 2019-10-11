@@ -7,7 +7,7 @@ export const TYPES_TITLE = {
   JustListed: 'Just Listed',
   UnderContract: 'Under Contract',
   JustSold: 'Just Sold',
-  Listings: 'Multi Listings',
+  Listings: 'Multi Properties',
   NewAgent: 'New Agent',
   OpenHouse: 'Open House',
   PriceImprovement: 'New Price'
