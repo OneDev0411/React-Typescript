@@ -29,13 +29,17 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
       assignees: [owner],
       associations,
       dueDate: new Date(),
+      endDate: null,
       reminder,
       task_type: { title: 'Call', value: 'Call' }
     }
   }
 
-  const { reminders, due_date } = task
-  const dueDate = due_date * 1000
+  const { reminders, end_date } = task
+
+  const normalizeServerDate = date => date * 1000
+  const dueDate = normalizeServerDate(task.due_date)
+  const endDate = end_date ? new Date(normalizeServerDate(end_date)) : null
 
   if (Array.isArray(reminders) && reminders.length > 0) {
     const { timestamp } = reminders[reminders.length - 1]
@@ -57,11 +61,12 @@ export async function postLoadFormat(task, owner, defaultAssociation) {
 
   return {
     ...task,
+    reminder,
+    dueDate: new Date(dueDate),
+    endDate,
     task_type: {
       title: task.task_type,
       value: task.task_type
-    },
-    reminder,
-    dueDate: new Date(dueDate)
+    }
   }
 }
