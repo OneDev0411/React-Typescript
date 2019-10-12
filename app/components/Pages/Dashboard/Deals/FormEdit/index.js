@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { addNotification as notify } from 'reapop'
 
+import { Button } from '@material-ui/core'
+
 import config from 'config'
 
 import { saveSubmission, upsertContexts } from 'actions/deals'
@@ -27,7 +29,7 @@ import LoadDeal from '../components/LoadDeal'
 import PDFEdit from './Editor'
 import { Header } from './Header'
 
-import { Container, LoadingDealContainer } from './styled'
+import { Container, LoadingDealContainer, ErrorContainer } from './styled'
 
 class EditDigitalForm extends React.Component {
   state = {
@@ -38,7 +40,8 @@ class EditDigitalForm extends React.Component {
     values: {},
     annotations: {},
     downloadPercents: 1,
-    promptOnQuit: false
+    promptOnQuit: false,
+    error: null
   }
 
   componentDidMount() {
@@ -108,7 +111,11 @@ class EditDigitalForm extends React.Component {
       })
     }
 
-    pdfDocument.then(this.onDocumentLoad.bind(null, pdfUrl))
+    pdfDocument.promise
+      .then(this.onDocumentLoad.bind(null, pdfUrl))
+      .catch(error => {
+        this.setState({ isFormLoaded: false, error })
+      })
   }
 
   onDocumentLoad = async (pdfUrl, document) => {
@@ -196,6 +203,8 @@ class EditDigitalForm extends React.Component {
     }
   }
 
+  handleReloadPage = () => window.location.reload()
+
   render() {
     const { state, props } = this
 
@@ -212,6 +221,22 @@ class EditDigitalForm extends React.Component {
                 <Spinner />
                 Loading Deal
               </LoadingDealContainer>
+            )
+          }
+
+          if (state.error) {
+            return (
+              <ErrorContainer>
+                {state.error.message}
+
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={this.handleReloadPage}
+                >
+                  Try Again
+                </Button>
+              </ErrorContainer>
             )
           }
 
