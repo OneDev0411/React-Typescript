@@ -33,6 +33,7 @@ declare interface ICalendarEvent {
   full_contact?: IContact
   full_deal?: IDeal
   full_crm_task: {
+    end_date: number | null
     assignees: IUser[] | null
     associations: TaskAssociation[]
   } | null // TODO: fix association type
