@@ -51,10 +51,15 @@ export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
    */
   enableSchedule?: boolean
   /**
-   * If passed, a cancel button will be shown and onCancel will be called upon
+   * If passed, cancel button will be shown and onCancel will be called upon
    * clicking it.
    */
   onCancel?: () => void
+  /**
+   * If passed, delete button will be shown and onDelete will be called upon
+   * clicking it.
+   */
+  onDelete?: (values: EmailFormValues) => void | Promise<any>
 
   dispatch: any // Extending DispatchProps seems to have problems
 }

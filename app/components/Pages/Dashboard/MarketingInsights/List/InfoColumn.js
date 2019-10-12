@@ -30,7 +30,11 @@ function InfoColumn({ data, reloadList = undefined }) {
 
     subTitle = isScheduled ? `Scheduled for ${date}` : date
     titleRenderer = (
-      <EditEmailButton emailId={data.id} onEmailUpdated={reloadList}>
+      <EditEmailButton
+        emailId={data.id}
+        onEmailUpdated={reloadList}
+        onDeleted={reloadList}
+      >
         {({ onClick }) => <StyledLink onClick={onClick}>{title}</StyledLink>}
       </EditEmailButton>
     )

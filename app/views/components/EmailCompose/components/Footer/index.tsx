@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Field } from 'react-final-form'
+
+import { IconButton } from '@material-ui/core'
 
 import ActionButton from 'components/Button/ActionButton'
 
@@ -8,11 +10,14 @@ import { formatDate } from 'components/DateTimePicker/helpers'
 
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
+import IconDelete from 'components/SvgIcons/Delete/IconDelete'
+
 import { FooterContainer } from './styled'
 import { textForSubmitButton } from './helpers'
 import SchedulerButton from './SchedulerButton'
 import { EmailAttachmentsDropdown } from '../EmailAttachmentsDropdown'
 import { EmailFormValues } from '../../types'
+import { useButtonStyles } from '../../../../../styles/use-button-styles'
 
 interface Props {
   isSubmitDisabled: boolean
@@ -25,13 +30,20 @@ interface Props {
   isSubmitting: boolean
   enableSchedule: boolean
   onCancel?: () => void
+  onDelete?: (values: EmailFormValues) => void | Promise<any>
   className?: string
   uploadAttachment: typeof uploadEmailAttachment
 }
 
-export function Footer(props: Props) {
+export function Footer({ onDelete, ...props }: Props) {
   const due_at = props.formProps.values.due_at
   const isScheduled = !!due_at
+
+  const buttonClasses = useButtonStyles()
+
+  const [isDeleting, setDeleting] = useState(false)
+
+  const busy = isDeleting || props.isSubmitting
 
   return (
     <FooterContainer className={props.className}>
@@ -48,12 +60,12 @@ export function Footer(props: Props) {
         {isScheduled && (
           <span className="scheduled-on">Send on {formatDate(due_at)}</span>
         )}
-
         {props.onCancel && (
           <ActionButton
-            appearance="flat"
+            appearance="outline"
+            className="danger"
             onClick={props.onCancel}
-            disabled={props.isSubmitting}
+            disabled={busy}
           >
             Cancel
           </ActionButton>
@@ -61,7 +73,7 @@ export function Footer(props: Props) {
         <ActionButton
           data-test="compose-send-email"
           type="submit"
-          disabled={props.isSubmitting || props.isSubmitDisabled}
+          disabled={busy || props.isSubmitDisabled}
           leftRounded={props.enableSchedule}
         >
           {textForSubmitButton({
@@ -91,6 +103,24 @@ export function Footer(props: Props) {
             )}
           />
         ) : null}
+
+        {onDelete && (
+          <IconButton
+            onClick={async () => {
+              setDeleting(true)
+
+              try {
+                await onDelete(props.formProps.values)
+              } finally {
+                setDeleting(false)
+              }
+            }}
+            disabled={busy}
+            className={buttonClasses.danger}
+          >
+            <IconDelete />
+          </IconButton>
+        )}
       </div>
     </FooterContainer>
   )
