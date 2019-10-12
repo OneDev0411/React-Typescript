@@ -286,11 +286,27 @@ class Builder extends React.Component {
     }
   }
 
-  handleSave = () =>
-    this.props.onSave(this.getSavedTemplate(), this.state.owner)
+  // We should always make sure the markup is rendered before doing any save
+  // We are doing this hack as GrapesJS load event is not useful to make sure the template markup is loaded
+  isTemplateMarkupRendered = () => {
+    return this.editor.getHtml().trim() !== ''
+  }
 
-  handleSocialSharing = socialNetworkName =>
+  handleSave = () => {
+    if (!this.isTemplateMarkupRendered()) {
+      return
+    }
+
+    this.props.onSave(this.getSavedTemplate(), this.state.owner)
+  }
+
+  handleSocialSharing = socialNetworkName => {
+    if (!this.isTemplateMarkupRendered()) {
+      return
+    }
+
     this.props.onSocialSharing(this.getSavedTemplate(), socialNetworkName)
+  }
 
   generateBrandedTemplate = (template, data) => {
     const { brand } = getActiveTeam(this.props.user)
