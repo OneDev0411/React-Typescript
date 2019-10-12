@@ -49,14 +49,16 @@ function getStyles(
   if (item.isToday) {
     return {
       color: '#fff',
-      backgroundColor: primary
+      backgroundColor: primary,
+      fontWeight: 500
     }
   }
 
   if (isActiveDay) {
     return {
       color: primary,
-      backgroundColor: fade(primary, 0.14)
+      backgroundColor: fade(primary, 0.14),
+      fontWeight: 500
     }
   }
 
