@@ -79,11 +79,19 @@ export function EventContainer({
   })
 
   return (
-    <div style={style} onClick={onClick}>
+    <div style={style}>
       <div className={classes.root}>
+        <button
+          type="button"
+          style={styles.buttonContainer}
+          onClick={onClick}
+        />
+
         <div style={styles.row}>
           <div style={styles.container}>
-            <div style={styles.time}>{date}</div>
+            <div onClick={onClick} style={styles.time}>
+              {date}
+            </div>
             <div
               style={{
                 ...styles.container,
@@ -96,6 +104,7 @@ export function EventContainer({
                     ...styles.icon,
                     backgroundColor: fade(icon.color, 0.2)
                   }}
+                  onClick={onClick}
                 >
                   <icon.element
                     fill={icon.color}
@@ -111,7 +120,7 @@ export function EventContainer({
           <div>{actions}</div>
         </div>
 
-        <div style={styles.row}>
+        <div style={styles.row} onClick={onClick}>
           <div style={styles.subtitle}>{subtitle}</div>
         </div>
       </div>

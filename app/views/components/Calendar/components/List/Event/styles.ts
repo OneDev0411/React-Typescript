@@ -18,7 +18,8 @@ export default {
   },
   title: {
     fontSize: '1rem',
-    fontWeight: 500
+    fontWeight: 500,
+    zIndex: 1
   },
   subtitle: {
     fontSize: '1rem',
@@ -28,16 +29,19 @@ export default {
     color: grey.A900,
     overflow: 'hidden',
     whiteSpace: 'nowrap' as 'nowrap',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
+    zIndex: 1
   },
   time: {
     width: '6.5rem',
     fontSize: '1rem',
     letterSpacing: '0.25px',
-    color: grey.A900
+    color: grey.A900,
+    zIndex: 1
   },
   link: {
-    cursor: 'pointer'
+    cursor: 'pointer',
+    zIndex: 1
   },
   icon: {
     display: 'flex',
@@ -46,6 +50,17 @@ export default {
     width: '2rem',
     height: '2rem',
     borderRadius: '100%',
-    marginRight: '1rem'
+    marginRight: '1rem',
+    zIndex: 1
+  },
+  buttonContainer: {
+    position: 'absolute' as React.CSSProperties['position'],
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    width: '100%',
+    height: '100%',
+    opacity: 0
   }
 }
