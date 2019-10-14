@@ -1,4 +1,4 @@
-import { getCalendar } from 'components/Calendar/models/get-calendar'
+import { getCalendar } from 'models/calendar/get-calendar'
 
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 

@@ -1,4 +1,4 @@
-import { FilterQuery } from './models/get-calendar'
+import { FilterQuery } from 'models/calendar/get-calendar'
 
 export interface CalendarRef {
   jumpToDate(date: Date): void
