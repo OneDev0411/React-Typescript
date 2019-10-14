@@ -17,8 +17,6 @@ import cn from 'classnames'
 
 import { Box, Tooltip } from '@material-ui/core'
 
-import Flex from 'styled-flex-component'
-
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 import { isImageFile } from 'utils/file-utils/is-image-file'
 import IconLink from 'components/SvgIcons/Link/IconLink'
@@ -28,7 +26,7 @@ import { getShortcutTooltip } from 'utils/get-shortcut-tooltip'
 
 import { LinkEditorPopover } from './components/LinkEditorPopover'
 
-import { EditorWrapper, Separator, Toolbar } from './styled'
+import { EditorContainer, EditorWrapper, Separator, Toolbar } from './styled'
 import { FieldError } from '../final-form-fields/FieldError'
 import { AddImageButton } from './buttons/AddImageButton'
 import { RichTextButtons } from './buttons/RichTextButtons'
@@ -315,11 +313,7 @@ export const TextEditor = forwardRef(
     }
 
     return (
-      <Flex
-        column
-        style={{ overflow: 'auto', flex: '1 1 0%' }}
-        className={className}
-      >
+      <EditorContainer className={className}>
         <EditorWrapper
           ref={editorElementRef}
           className={cn({
@@ -419,7 +413,7 @@ export const TextEditor = forwardRef(
         </Toolbar>
         <alignmentPlugin.AlignmentTool />
         {input && <FieldError name={input.name} />}
-      </Flex>
+      </EditorContainer>
     )
   }
 )
