@@ -1,8 +1,10 @@
-import React, { Fragment, useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
 
-import Tooltip from 'components/tooltip'
+import { getAnnotationsByType } from 'deals/FormEdit/utils/get-annotations-by-type'
+
+import { NotEditable } from './NotEditable'
 
 const sharedStyles = {
   top: 'calc(100% + 1rem)'
@@ -19,6 +21,8 @@ export function AddressField({
   deal,
   upsertContexts,
   onAddressUpdate,
+  annotations,
+  formValues,
   ...inputProps
 }) {
   const formRef = useRef(null)
@@ -28,6 +32,10 @@ export function AddressField({
     setInputValue(inputProps.value)
   }, [inputProps.value])
 
+  if (deal.listing) {
+    return <NotEditable style={inputProps.style} value={inputProps.value} />
+  }
+
   const handleSaveAddress = async address => {
     // update form values
     onAddressUpdate(address)
@@ -36,33 +44,28 @@ export function AddressField({
     formRef.current.handleClose()
   }
 
-  if (deal.listing) {
-    return (
-      <div
-        style={{
-          ...inputProps.style,
-          cursor: 'not-allowed'
-        }}
-      >
-        <Tooltip
-          captionIsHTML
-          isCustom={false}
-          placement="bottom"
-          multiline
-          caption={
-            <Fragment>
-              <img src="/static/images/deals/lock.svg" alt="locked" />
-              <div>
-                Listing information can only be changed on MLS. Once changed,
-                the update will be reflected here.
-              </div>
-            </Fragment>
-          }
-        >
-          <span>{inputProps.value}</span>
-        </Tooltip>
-      </div>
+  const handleClickInput = () => {
+    const { context } = inputProps.annotation
+
+    if (['full_address', 'street_address'].includes(context)) {
+      return
+    }
+
+    const addressFields = getAnnotationsByType(annotations, 'addresses').reduce(
+      (acc, group) => {
+        const value = group
+          .map(item => formValues[item.annotation.fieldName])
+          .join(' ')
+
+        return {
+          ...acc,
+          [group[0].context]: value
+        }
+      },
+      {}
     )
+
+    formRef.current.handleOpenForm(addressFields.full_address || addressFields)
   }
 
   return (
@@ -89,6 +92,7 @@ export function AddressField({
             addressProps.onChange(e)
             setInputValue(e.target.value)
           }}
+          onClick={handleClickInput}
           style={{
             ...inputProps.style,
             ...inputStyles

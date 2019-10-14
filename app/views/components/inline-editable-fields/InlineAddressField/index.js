@@ -218,8 +218,17 @@ export class InlineAddressField extends React.Component {
   handleAddressFormPosition = () =>
     this.setState({ updateAddressFormPosition: true })
 
+  handleOpenForm = address => {
+    this.setState({
+      address,
+      anchorEl: this.inputRef,
+      isShowForm: true
+    })
+  }
+
   render() {
-    const { address, anchorEl } = this.state
+    const { anchorEl } = this.state
+    const address = this.state.address
 
     const isOpen = Boolean(anchorEl)
     const isOpenSuggestion = isOpen && this.state.isShowSuggestion
@@ -235,7 +244,8 @@ export class InlineAddressField extends React.Component {
           onChange: this.handleChangeInput,
           value: address,
           onBlur: this.handleInputBlur,
-          autoComplete: 'disabled'
+          autoComplete: 'disabled',
+          ref: ref => (this.inputRef = ref)
         })}
         <Popper
           anchorEl={anchorEl}

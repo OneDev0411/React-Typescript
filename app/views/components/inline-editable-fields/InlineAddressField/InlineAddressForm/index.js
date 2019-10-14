@@ -50,13 +50,17 @@ export class InlineAddressForm extends React.Component {
   }
 
   load = async () => {
-    if (this.props.address) {
+    const { address } = this.props
+
+    if (address && typeof address === 'object') {
+      return address
+    }
+
+    if (address) {
       try {
         this.setState({ isDisabled: true })
 
-        const parsedAddress = await addressParser.parseLocation(
-          this.props.address
-        )
+        const parsedAddress = await addressParser.parseLocation(address)
 
         this.setState({ isDisabled: false })
         this.props.updatePosition()
