@@ -153,7 +153,7 @@ const CalendarList: React.FC<Props> = props => {
 
 function getRowHeight(row: ICalendarListRow): number {
   if (row.hasOwnProperty('isEventHeader')) {
-    return 30
+    return 26
   }
 
   const event = row as ICalendarEvent
