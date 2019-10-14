@@ -84,6 +84,9 @@ export function EditEmailDrawer({
         })
       }
 
+      // We only show confirmation dialog in case it has multiple recipients!
+      // here is the related discussion:
+      // https://gitlab.com/rechat/web/issues/3460#note_230027044
       await deleteAndClose()
     },
     [confirmationModal, emailId, onClose, onDeleted]
