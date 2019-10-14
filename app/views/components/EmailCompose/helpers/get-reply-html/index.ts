@@ -1,6 +1,8 @@
 import fecha from 'fecha'
 import escape from 'lodash/escape'
 
+import { decodeContentIds } from '../../../EmailThread/helpers/decode-content-ids'
+
 /**
  * Creates content of a reply email
  * @param email
@@ -16,7 +18,7 @@ export function getReplyHtml(email: IEmailThreadEmail) {
     )} ${escape(email.from)} wrote:
     </div>
     <blockquote style="margin: 0 0 0 0.8ex; border-left: 1px solid rgb(204, 204, 204); padding-left: 1ex">
-      ${email.html_body || ''}
+      ${decodeContentIds(email.attachments, email.html_body || '')}
     </blockquote>
   </div>
   `
