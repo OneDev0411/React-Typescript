@@ -29,15 +29,13 @@ export default {
     color: grey.A900,
     overflow: 'hidden',
     whiteSpace: 'nowrap' as 'nowrap',
-    textOverflow: 'ellipsis',
-    zIndex: 1
+    textOverflow: 'ellipsis'
   },
   time: {
     width: '6.5rem',
     fontSize: '1rem',
     letterSpacing: '0.25px',
-    color: grey.A900,
-    zIndex: 1
+    color: grey.A900
   },
   link: {
     cursor: 'pointer',
@@ -50,8 +48,7 @@ export default {
     width: '2rem',
     height: '2rem',
     borderRadius: '100%',
-    marginRight: '1rem',
-    zIndex: 1
+    marginRight: '1rem'
   },
   buttonContainer: {
     position: 'absolute' as React.CSSProperties['position'],
