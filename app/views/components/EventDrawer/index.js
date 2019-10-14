@@ -277,7 +277,7 @@ export class EventDrawer extends Component {
                             selectedDate={values.dueDate}
                           />
 
-                          <EndTimeField endDate={values.endDate} />
+                          <EndTimeField dueDate={values.dueDate} />
                         </FieldContainer>
 
                         <FieldError
