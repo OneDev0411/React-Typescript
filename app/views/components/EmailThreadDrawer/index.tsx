@@ -37,7 +37,7 @@ export function EmailThreadDrawer({ open, threadKey, ...otherProps }: Props) {
     >
       {open && threadKey && (
         <EmailThreadLoader threadKey={threadKey}>
-          {({ thread, onEmailSent }) => (
+          {({ thread, appendEmail }) => (
             <>
               <DialogTitle
                 onClose={event => {
@@ -55,8 +55,11 @@ export function EmailThreadDrawer({ open, threadKey, ...otherProps }: Props) {
                     // we check if the email is undefined, we just close the
                     // thread dialog as it seems the most reasonable thing
                     // to do.
-                    if (email) {
-                      onEmailSent(email)
+                    if (
+                      email &&
+                      email.thread_key === thread[thread.length - 1].thread_key
+                    ) {
+                      appendEmail(email)
                     } else if (otherProps.onClose) {
                       otherProps.onClose({}, 'escapeKeyDown')
                     }
