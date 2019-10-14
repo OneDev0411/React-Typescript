@@ -17,7 +17,9 @@ interface TaskAssociation {
 
 declare interface IEvent extends IModel<'crm_task'> {
   associations: TaskAssociation[]
+  assignees: IUser[]
   due_date: number
+  end_date: number | null
   task_type: string
   crm_task: UUID
   contact: IContact

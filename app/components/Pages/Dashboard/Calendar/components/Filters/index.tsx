@@ -93,6 +93,10 @@ function Filters({ filterRef, onChange }: Props) {
 
   const handleFilterChange = useCallback(
     (e: ChangeEvent<{}> | null, value: number) => {
+      if (selectedTab === value) {
+        return
+      }
+
       setSelectedTab(value)
 
       const tab = TAB_ITEMS.find(tab => tab.value === value)
@@ -101,7 +105,7 @@ function Filters({ filterRef, onChange }: Props) {
         onChange(tab.filter)
       }
     },
-    [onChange]
+    [onChange, selectedTab]
   )
 
   useImperativeHandle(filterRef, () => ({
