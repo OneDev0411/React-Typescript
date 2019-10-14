@@ -36,7 +36,7 @@ import { encodeContentIds } from '../EmailThread/helpers/encode-content-ids'
 
 import { convertToAbsoluteAttachmentUrl } from '../EmailThread/helpers/convert-to-absolute-attachment-url'
 
-import { EmailFormValues } from '.'
+import { EmailFormValues, EmailThreadFormValues } from '.'
 
 interface Props {
   responseType: EmailResponseType
@@ -141,7 +141,7 @@ export function EmailThreadComposeForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const initialValue = useMemo<EmailFormValues>(() => {
+  const initialValue = useMemo<EmailThreadFormValues>(() => {
     const { to, cc } =
       responseType === 'reply' ? getReplyRecipients(email) : { to: [], cc: [] }
 

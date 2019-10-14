@@ -19,6 +19,10 @@ export interface EmailFormValues {
   body: string | undefined
 }
 
+export type EmailThreadFormValues = Omit<EmailFormValues, 'attachments'> & {
+  attachments: Pick<IFile, 'url' | 'name' | 'preview_url' | 'mime' | 'type'>[]
+}
+
 export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
   initialValues?: Partial<EmailFormValues>
   sendEmail: (values: EmailFormValues) => Promise<EmailType>

@@ -9,7 +9,7 @@ import { convertToAbsoluteAttachmentUrl } from './convert-to-absolute-attachment
 export function encodeContentIds(
   attachments: IEmailAttachment[],
   content: string
-) {
+): string {
   return attachments
     .filter(attachment => attachment.cid)
     .reduce(
