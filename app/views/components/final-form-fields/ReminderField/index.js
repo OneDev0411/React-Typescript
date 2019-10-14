@@ -9,7 +9,7 @@ import { DropButton, IconDrop } from './styled'
 
 export function ReminderField(props) {
   const dueDateTimestamp = new Date(props.dueDate).getTime()
-  const now = new Date().getTime()
+  const now = Date.now()
 
   if (dueDateTimestamp < now - 1) {
     return null

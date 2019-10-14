@@ -151,7 +151,7 @@ export function EmailThreadItem({
       {/* content */}
       {!collapsed && (
         <>
-          <Box p={2} pl={9}>
+          <Box p={2} pl={9} overflow="hidden">
             <Iframe title="Email body" srcDoc={emailBody} />
 
             {email.attachments.map(attachment => (

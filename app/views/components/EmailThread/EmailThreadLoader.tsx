@@ -8,7 +8,7 @@ import { ServerError } from '../ServerError'
 
 interface RenderThreadProps {
   thread: IEmailThread
-  onEmailSent: (email: IEmailThreadEmail) => void
+  appendEmail: (email: IEmailThreadEmail) => void
 }
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
    * thread key is credential_id + thread_id
    */
   threadKey: string | null
-  children: ({ thread, onEmailSent }: RenderThreadProps) => ReactNode
+  children: ({ thread, appendEmail }: RenderThreadProps) => ReactNode
 }
 
 /**
@@ -34,7 +34,7 @@ export function EmailThreadLoader({ threadKey, children }: Props) {
     }
   }, [setThreadsPromise, threadKey])
 
-  const onEmailSent = useCallback(
+  const appendEmail = useCallback(
     (newEmail: IEmailThreadEmail) => {
       setThreadsPromise(Promise.resolve([...(thread || []), newEmail]))
     },
@@ -46,7 +46,7 @@ export function EmailThreadLoader({ threadKey, children }: Props) {
   }
 
   if (thread) {
-    return <>{children({ thread, onEmailSent })}</>
+    return <>{children({ thread, appendEmail })}</>
   }
 
   if (error) {

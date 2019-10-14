@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import idx from 'idx'
 
 import MiniContactProfile from 'components/MiniContact'
 import { plural } from 'utils/plural'
@@ -14,9 +15,10 @@ interface Props {
 
 export function Associations({ event }: Props) {
   const { setSelectedEvent } = useContext(ListContext)
-  const associations = event.full_crm_task!.associations
+  const associations =
+    idx(event, event => event.full_crm_task.associations) || []
 
-  const contacts = (associations || []).filter(
+  const contacts = associations.filter(
     association => association.association_type === 'contact'
   )
 

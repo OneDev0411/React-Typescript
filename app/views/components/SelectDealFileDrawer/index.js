@@ -39,7 +39,7 @@ class SelectDealFileDrawer extends React.Component {
   }
 
   toggleSelectRow = document => {
-    if (!document.checklist) {
+    if (!document.checklist && !this.props.allowNoChecklist) {
       return false
     }
 
@@ -73,6 +73,7 @@ class SelectDealFileDrawer extends React.Component {
           <Documents
             deal={this.state.deal}
             showStashFiles={this.props.showStashFiles}
+            allowNoChecklist={this.props.allowNoChecklist}
             initialAttachments={this.props.initialAttachments}
             selectedItems={this.state.selectedItems}
             onToggleItem={this.toggleSelectRow}
@@ -99,6 +100,7 @@ SelectDealFileDrawer.propTypes = {
   isOpen: PropTypes.bool,
   title: PropTypes.string,
   showStashFiles: PropTypes.bool,
+  allowNoChecklist: PropTypes.bool,
   drawerOptions: PropTypes.object
 }
 

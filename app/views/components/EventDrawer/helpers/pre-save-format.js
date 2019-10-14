@@ -8,6 +8,7 @@ export async function preSaveFormat(values, originalValues) {
     title,
     status,
     dueDate,
+    endDate,
     reminder,
     task_type,
     description,
@@ -28,6 +29,12 @@ export async function preSaveFormat(values, originalValues) {
 
   if ((originalValues && originalValues.id) || description) {
     task.description = (description && description.trim()) || ''
+  }
+
+  if (endDate) {
+    task.end_date = endDate.getTime() / 1000
+  } else if (originalValues && originalValues.end_date) {
+    task.end_date = null
   }
 
   if (task.status === 'DONE') {

@@ -44,6 +44,10 @@ export function FieldError({ name, className = '', visible, style }: Props) {
         const hasError =
           (visible !== undefined ? visible : meta.touched) && meta.error
 
+        if (!hasError) {
+          return null
+        }
+
         const classNames = cn(className, {
           'has-error': hasError
         })

@@ -69,17 +69,27 @@ export function EventContainer({
   actions,
   onClick
 }: Props) {
-  const date =
-    event.object_type === 'crm_task'
-      ? fecha.format(new Date(event.timestamp * 1000), 'hh:mm A')
-      : 'All day'
-
   const hasBorderBottom = nextItem && !nextItem.hasOwnProperty('isEventHeader')
-
   const classes = useStyles({
     hasBorderBottom,
     clickable: typeof onClick === 'function'
   })
+
+  const getDate = () => {
+    if (event.object_type !== 'crm_task') {
+      return 'All day'
+    }
+
+    const formatDate = date => fecha.format(new Date(date * 1000), 'hh:mm A')
+
+    const dueDate = formatDate(event.timestamp)
+
+    if (event.full_crm_task && event.full_crm_task.end_date) {
+      return `${dueDate} - ${formatDate(event.full_crm_task.end_date)}`
+    }
+
+    return dueDate
+  }
 
   return (
     <div style={style}>
@@ -92,7 +102,7 @@ export function EventContainer({
 
         <div style={styles.row}>
           <div style={styles.container}>
-            <div style={styles.time}>{date}</div>
+            <div style={styles.time}>{getDate()}</div>
             <div
               style={{
                 ...styles.container,

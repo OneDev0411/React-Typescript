@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
+import { Box } from '@material-ui/core'
 
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
@@ -19,7 +20,7 @@ import {
   CheckboxField,
   AssigneesField,
   AssociationsList,
-  ReminderField,
+  EndTimeField,
   WhenFieldChanges,
   FieldError
 } from '../final-form-fields'
@@ -31,8 +32,10 @@ import { validate } from './helpers/validate'
 import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
 
+import Reminder from './components/Reminder/Reminder'
 import { Title } from './components/Title'
 import { UpdateReminder } from './components/UpdateReminder'
+import UpdateEndDate from './components/UpdateEndDate/UpdateEndDate'
 import { Description } from './components/Description'
 import { EventType } from './components/EventType'
 import { FormContainer, FieldContainer, Footer } from './styled'
@@ -250,23 +253,40 @@ export class EventDrawer extends Component {
                           </Fragment>
                         )}
                       </Flex>
+
                       <Description
                         style={{ padding: this.isNew ? 0 : '0 0 0 2.5rem' }}
                         placeholder="Add a description about this event"
                       />
+
                       <EventType />
-                      <FieldContainer
-                        alignCenter
-                        justifyBetween
-                        style={{ marginBottom: '2em' }}
-                      >
-                        <DateTimeField
-                          name="dueDate"
-                          selectedDate={values.dueDate}
+
+                      <UpdateEndDate
+                        dueDate={values.dueDate}
+                        endDate={values.endDate}
+                      />
+
+                      <Box mb={4}>
+                        <FieldContainer
+                          alignCenter
+                          justifyBetween
+                          style={{ marginBottom: '0.5em' }}
+                        >
+                          <DateTimeField
+                            name="dueDate"
+                            selectedDate={values.dueDate}
+                          />
+
+                          <EndTimeField dueDate={values.dueDate} />
+                        </FieldContainer>
+
+                        <FieldError
+                          name="endDate"
+                          style={{ fontSize: '1rem', marginBottom: '0.5em' }}
                         />
 
-                        <ReminderField dueDate={values.dueDate} />
-                      </FieldContainer>
+                        <Reminder dueDate={values.dueDate} />
+                      </Box>
 
                       <AssigneesField name="assignees" owner={user} />
 
