@@ -10,8 +10,8 @@ type CalendarObjectType =
 export interface FilterQuery {
   deal?: UUID
   contact?: UUID
-  event_types?: string[]
-  object_types?: CalendarObjectType
+  'event_types[]'?: string[]
+  'object_types[]'?: CalendarObjectType[]
 }
 
 interface ApiOptions {
