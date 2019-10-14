@@ -15,7 +15,7 @@ import { selectContextsByBrand } from 'reducers/deals/contexts'
 
 import Loading from '../../../../Partials/Loading'
 
-import Column from './column'
+import Column from './Column'
 
 import {
   API_URL,
