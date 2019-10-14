@@ -31,7 +31,7 @@ function OpenHousesList(props: Props) {
   const theme = useTheme<Theme>()
   const { list, isFetching, error, reloadList } = useFilterCRMTasks(
     {
-      order: 'due_date',
+      order: '-due_date',
       task_type: 'Open House'
     },
     {
