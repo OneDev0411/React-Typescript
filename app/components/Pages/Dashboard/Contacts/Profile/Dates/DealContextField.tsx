@@ -15,7 +15,10 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      marginBottom: theme.spacing(1)
+      marginBottom: theme.spacing(1),
+      '&:last-child': {
+        marginBottom: 0
+      }
     },
     title: {
       color: theme.palette.text.primary
