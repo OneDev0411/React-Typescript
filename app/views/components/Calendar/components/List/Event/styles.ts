@@ -18,8 +18,7 @@ export default {
   },
   title: {
     fontSize: '1rem',
-    fontWeight: 500,
-    zIndex: 1
+    fontWeight: 500
   },
   subtitle: {
     fontSize: '1rem',
@@ -38,8 +37,7 @@ export default {
     color: grey.A900
   },
   link: {
-    cursor: 'pointer',
-    zIndex: 1
+    cursor: 'pointer'
   },
   icon: {
     display: 'flex',

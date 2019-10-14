@@ -33,6 +33,9 @@ const useStyles = makeStyles((theme: Theme) => ({
         color: 'inherit'
       }
     },
+    '& a, & button': {
+      zIndex: 1
+    },
     '& a': {
       color: theme.palette.secondary.dark
     },
