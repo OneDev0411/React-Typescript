@@ -62,8 +62,7 @@ export function Footer({ onDelete, ...props }: Props) {
         )}
         {props.onCancel && (
           <ActionButton
-            appearance="outline"
-            className="danger"
+            appearance="flat"
             onClick={props.onCancel}
             disabled={busy}
           >
