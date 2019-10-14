@@ -47,6 +47,30 @@
     "tab_name": "Listing Inbox",
     "checklist_type": "Selling",
     "is_active_offer": false
+  },
+  {
+    "id": "9645b6f2-e531-11e9-9910-027d31a1f7a0",
+    "created_at": 1570033674.82198,
+    "updated_at": 1570033674.82198,
+    "deleted_at": null,
+    "deactivated_at": null,
+    "title": "Contract",
+    "deal": "959cd5fa-e531-11e9-9228-027d31a1f7a0",
+    "order": 1,
+    "origin": "be817b3e-9258-11e7-9d6e-0242ac110003",
+    "terminated_at": null,
+    "faired_at": null,
+    "type": "deal_checklist",
+    "is_deactivated": false,
+    "is_terminated": false,
+    "tasks": [
+      "966f1cae-e531-11e9-9805-027d31a1f7a0"
+    ],
+    "is_deactivatable": false,
+    "is_terminatable": false,
+    "tab_name": "Contract Inbox",
+    "checklist_type": "Buying",
+    "is_active_offer": true
   }
 
 ]

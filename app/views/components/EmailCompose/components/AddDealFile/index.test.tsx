@@ -4,6 +4,7 @@ import { ReactNode } from 'react'
 import { FieldRenderProps } from 'react-final-form'
 import { keyBy } from 'lodash'
 
+import dealWithDraft from 'fixtures/deal/deal-with-draft-files.json'
 import checklistsArray from 'fixtures/deal/checklists.json'
 import file1 from 'fixtures/files/file1.json'
 import deal1 from 'fixtures/deal/164ca424-6732-11e9-82bf-0a95998482ac.json'
@@ -16,7 +17,7 @@ import AddDealFile, { AddDealFile as AddDealFileBase } from '.'
 
 const checklists = keyBy(checklistsArray as IDealChecklist[], 'id')
 const tasks = keyBy<IDealTask>(tasksArray as IDealTask[], 'id')
-const deals = [deal1, deal2] as any[]
+const deals = [deal1, deal2, dealWithDraft] as any[]
 
 const input: FieldRenderProps<any>['input'] = {
   name: 'test',
@@ -99,6 +100,28 @@ describe('AddDealFile component', () => {
       })
     ])
   })
+
+  /**
+   * https://gitlab.com/rechat/web/issues/3387
+   */
+  test('Unorganized (draft) files are suggested and selectable', () => {
+    const onChange = jest.fn()
+    const $ = render(
+      <AddDealFileTestBed>
+        <AddDealFile
+          meta={{}}
+          input={{ ...input, onChange, value: [] }}
+          initialAttachments={[]}
+        />
+      </AddDealFileTestBed>
+    )
+
+    toggleDealFiles($, '3508  Springbrook Street', ['Codal_p_588921_0.pdf'])
+
+    expect(onChange).toBeCalledWith([
+      expect.objectContaining({ id: dealWithDraft.files[0].id })
+    ])
+  })
 })
 
 function toggleDealFiles(
@@ -116,7 +139,6 @@ function toggleDealFiles(
     })
   )
   dealFileNames.forEach(dealFileName => {
-    console.log('dealFileName', dealFileName)
     fireEvent.click($.getByText(dealFileName, { exact: false }))
   })
   fireEvent.click($.getByText('Next'))

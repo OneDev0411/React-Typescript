@@ -151,7 +151,7 @@ export function AddDealFile({
           drawerOptions={{
             showBackdrop: false
           }}
-          showStashFiles={false}
+          allowNoChecklist
           initialAttachments={initialDealFiles}
           defaultSelectedItems={selectedDealFiles}
           deal={deal}

@@ -33,6 +33,7 @@ interface Props {
   deal: IDeal
   showStashFiles: boolean
   initialAttachments: IDealFile[]
+  allowNoChecklist: boolean
   selectedItems: IDealFile
   onToggleItem(file: IDealFile): void
 }
@@ -146,18 +147,19 @@ export class DocumentRow extends React.Component<Props & StateProps, State> {
             this.props.checklists,
             document.checklist
           )
+          const noChecklistError = !checklist && !this.props.allowNoChecklist
 
           return (
             <DocumentItem key={index} id={document.id}>
               <Flex alignCenter>
                 <Tooltip
                   caption={
-                    !checklist &&
+                    noChecklistError &&
                     'You have to move this document to a checklist first'
                   }
                 >
                   <CheckBoxButton
-                    isDisabled={!checklist}
+                    isDisabled={noChecklistError}
                     onClick={() => this.props.onToggleItem(document)}
                     isSelected={
                       Array.isArray(this.props.selectedItems) &&
@@ -169,11 +171,11 @@ export class DocumentRow extends React.Component<Props & StateProps, State> {
                 </Tooltip>
 
                 <NameSection onClick={() => this.props.onToggleItem(document)}>
-                  <Title selectable={!!checklist}>
+                  <Title selectable={!noChecklistError}>
                     <TextMiddleTruncate text={document.name} maxLength={45} />
                   </Title>
 
-                  <ChecklistName error={!checklist}>
+                  <ChecklistName error={noChecklistError}>
                     {checklist ? checklist.title : 'No Checklist'}
                   </ChecklistName>
 
