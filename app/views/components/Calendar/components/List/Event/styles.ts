@@ -47,5 +47,15 @@ export default {
     height: '2rem',
     borderRadius: '100%',
     marginRight: '1rem'
+  },
+  buttonContainer: {
+    position: 'absolute' as React.CSSProperties['position'],
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    width: '100%',
+    height: '100%',
+    opacity: 0
   }
 }
