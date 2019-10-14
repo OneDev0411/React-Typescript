@@ -160,9 +160,31 @@ class ReminderNotifications extends Component {
   }
 
   async setSettings(settings) {
-    return new Fetch()
-      .put(API_URL)
-      .send({ settings: settings.filter(setting => !!setting.event_type) })
+    console.log('SETTINGS', settings)
+
+    const formattedSettings = settings
+      .filter(setting => !!setting.event_type)
+      .map(setting => {
+        // I hate this part but it's forced from API side :/
+        // We mostly do their dirty jobs.
+        if (
+          setting.object_type === 'contact_attribute' &&
+          setting.event_type === 'home_anniversary'
+        ) {
+          return {
+            ...setting,
+            object_type: null
+          }
+        }
+
+        return setting
+      })
+
+    console.log('FORMATTED SETTINGS', formattedSettings)
+
+    return new Fetch().put(API_URL).send({
+      settings: formattedSettings
+    })
   }
 
   filterSetting = (currentSetting, setting) =>
