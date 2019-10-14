@@ -21,6 +21,10 @@ export function convertTaskToCalendarEvent(event: IEvent): ICalendarEvent {
     timestamp: event.due_date,
     object_type: event.type,
     full_contact: event.contact,
-    full_crm_task: null
+    full_crm_task: {
+      end_date: event.end_date,
+      assignees: event.assignees,
+      associations: event.associations
+    }
   }
 }
