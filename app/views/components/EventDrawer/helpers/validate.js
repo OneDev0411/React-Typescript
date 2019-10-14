@@ -6,7 +6,7 @@ export function validate(values) {
   }
 
   if (values.endDate && values.endDate.getTime() < values.dueDate.getTime()) {
-    errors.endDate = 'The End time should always be after start time!'
+    errors.endDate = 'End time must be after the start time!'
   }
 
   if (values.assignees.length === 0) {
