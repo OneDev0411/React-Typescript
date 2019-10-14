@@ -68,7 +68,7 @@ export default function Item(props: Props) {
   }
 
   const dropdownChangeHandler = ({ value }) => {
-    if (value === 'CUSTOM') {
+    if (value === CUSTOM_VALUE.value) {
       setShowCustomValueInput(true)
 
       return

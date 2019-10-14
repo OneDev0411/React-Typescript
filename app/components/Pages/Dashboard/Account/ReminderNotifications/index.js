@@ -160,8 +160,6 @@ class ReminderNotifications extends Component {
   }
 
   async setSettings(settings) {
-    console.log('SETTINGS', settings)
-
     const formattedSettings = settings
       .filter(setting => !!setting.event_type)
       .map(setting => {
@@ -179,8 +177,6 @@ class ReminderNotifications extends Component {
 
         return setting
       })
-
-    console.log('FORMATTED SETTINGS', formattedSettings)
 
     return new Fetch().put(API_URL).send({
       settings: formattedSettings
