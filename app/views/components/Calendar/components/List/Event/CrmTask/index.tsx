@@ -27,7 +27,7 @@ export function CrmTask({ style, event, nextItem, onEventChange }: Props) {
     setSelectedEvent(event)
   }
 
-  const handleClickContainer = () => setSelectedEvent(event)
+  const handleContainerClick = () => setSelectedEvent(event)
 
   const icon = useMemo(() => {
     if (eventIcons[event.event_type]) {
@@ -70,7 +70,7 @@ export function CrmTask({ style, event, nextItem, onEventChange }: Props) {
           <OpenHouseRegistration event={event} />
         </>
       }
-      onClick={handleClickContainer}
+      onClick={handleContainerClick}
     />
   )
 }

@@ -23,7 +23,7 @@ export function EmailThread({ style, event, nextItem }: Props) {
   const { setSelectedEvent } = useContext(ListContext)
   const thread = event.full_thread! // FIXME(NOW)
 
-  const handleClickContainer = () => setSelectedEvent(event)
+  const handleContainerClick = () => setSelectedEvent(event)
 
   const { visibleItems: recipients, othersText } = getTrimmedArrayAndOthersText(
     thread.to
@@ -86,7 +86,7 @@ export function EmailThread({ style, event, nextItem }: Props) {
         </Box>
       }
       subtitle={<div>{event.title || 'No Subject'}</div>}
-      onClick={handleClickContainer}
+      onClick={handleContainerClick}
     />
   )
 }
