@@ -51,23 +51,25 @@ export async function preSaveFormat(
     task.reminders = []
   }
 
-  task.associations = [...registrants, location, dealAssociation].map(item => {
-    const { association_type } = item
-    const association = {
-      association_type,
-      [association_type]: item[association_type].id
-    }
+  task.associations = [...registrants, location, dealAssociation]
+    .filter(a => a && a.association_type)
+    .map(item => {
+      const { association_type } = item
+      const association = {
+        association_type,
+        [association_type]: item[association_type].id
+      }
 
-    if (item.id) {
-      association.id = item.id
-    }
+      if (item.id) {
+        association.id = item.id
+      }
 
-    if (item.index) {
-      association.index = item.index
-    }
+      if (item.index) {
+        association.index = item.index
+      }
 
-    return association
-  })
+      return association
+    })
 
   if (originalValues) {
     return {
