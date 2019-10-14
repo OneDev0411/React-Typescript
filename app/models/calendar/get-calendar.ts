@@ -1,5 +1,3 @@
-import uniq from 'lodash/uniq'
-
 import Fetch from 'services/fetch'
 
 type CalendarObjectType =
@@ -32,13 +30,7 @@ export async function getCalendar(options: ApiOptions) {
       .query({
         low: range[0],
         high: range[1],
-        'associations[]': uniq([
-          'crm_task.associations',
-          'calendar_event.full_crm_task',
-          'crm_association.contact',
-          'calendar_event.full_contact',
-          ...associations
-        ]),
+        'associations[]': associations,
         'users[]': users
       })
       .query(filter)

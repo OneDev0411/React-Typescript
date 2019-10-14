@@ -8,15 +8,14 @@ import React, {
   useImperativeHandle,
   useCallback
 } from 'react'
-
 import { connect } from 'react-redux'
-
 import useDebouncedCallback from 'use-debounce/lib/callback'
-
 import usePrevious from 'react-use/lib/usePrevious'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { IAppState } from 'reducers/index'
+
+import { getCalendar } from 'models/calendar/get-calendar'
 
 import {
   viewAs,
@@ -26,6 +25,8 @@ import {
 
 import { LoadingPosition, VirtualListRef } from 'components/VirtualList'
 
+import { CALENDAR_DEFAULT_ASSOCIATIONS } from './constants/calendar-default-associations'
+
 import {
   CalendarRef,
   ApiOptions,
@@ -33,8 +34,6 @@ import {
   Placeholder,
   LoadingDirection
 } from './types'
-
-import { getCalendar } from './models/get-calendar'
 
 import { getDateRange, Format } from './helpers/get-date-range'
 import { createListRows } from './helpers/create-list-rows'
@@ -134,7 +133,7 @@ export function Calendar({
         const fetchedEvents = await getCalendar({
           users: viewAsUsers,
           filter,
-          associations,
+          associations: [...CALENDAR_DEFAULT_ASSOCIATIONS, ...associations],
           ...apiOptions
         })
 
