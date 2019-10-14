@@ -28,6 +28,8 @@ import { getReplySubject } from './helpers/get-reply-subject'
 
 import { oAuthAccountTypeToProvider } from '../../../components/Pages/Dashboard/Account/ConnectedAccounts/constants'
 
+import { getAccountTypeFromOrigin } from './helpers/get-account-type-from-origin'
+
 import { EmailFormValues } from '.'
 
 interface Props {
@@ -68,7 +70,9 @@ export function EmailThreadComposeForm({
     const from = formValue.from!
 
     const account = getFromAccount(from.value)!
-
+    const provider = oAuthAccountTypeToProvider[account.type]
+    const originType = getAccountTypeFromOrigin(email.origin)
+    const originMatchesFrom = !originType || originType === provider
     const emailData: IEmailThreadEmailInput = {
       subject: (formValue.subject || '').trim(),
       to: (formValue.to || [])
@@ -81,8 +85,8 @@ export function EmailThreadComposeForm({
         .filter(isEmailRecipient)
         .map(toEmailThreadRecipient),
       html: formValue.body || '',
-      threadId: email.thread_id,
-      messageId: email.message_id,
+      threadId: originMatchesFrom ? email.thread_id : undefined,
+      messageId: originMatchesFrom ? email.message_id : undefined,
       inReplyTo: email.internet_message_id,
       attachments: (formValue.attachments || []).map<IEmailAttachmentInput>(
         item => ({
@@ -94,7 +98,7 @@ export function EmailThreadComposeForm({
       )
     }
     const newEmail = await sendEmailViaOauthAccount(
-      oAuthAccountTypeToProvider[account.type],
+      provider,
       account.id,
       emailData
     )
