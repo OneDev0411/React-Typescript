@@ -16,7 +16,7 @@ import EmptyState from './EmptyState'
 import CreateNewTour from './CreateNewTour'
 import Info from './columns/Info'
 import Actions from './columns/Actions'
-import Registrants from './columns/Registrants'
+import Participants from './columns/Participants'
 
 function ToursList(props: { user: IUser }) {
   const theme = useTheme<Theme>()
@@ -59,8 +59,8 @@ function ToursList(props: { user: IUser }) {
       render: (props: {
         rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
       }) => (
-        <Registrants
-          registrants={
+        <Participants
+          participants={
             props.rowData.associations
               ? props.rowData.associations.filter(
                   a => a.association_type === 'contact'
