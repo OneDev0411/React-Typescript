@@ -83,6 +83,12 @@ class ContactProfile extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.params.id !== prevProps.params.id) {
+      this.initializeContact()
+    }
+  }
+
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.detectScreenSize)
     window.socket.on('contact:touch', this.updateContact)
