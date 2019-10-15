@@ -35,19 +35,29 @@ function ToursList(props: { user: IUser }) {
     CRMTaskAssociationType
   > | null>(null)
 
+  const handleEdit = (
+    rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => {
+    setSelectedTour(rowData)
+    setIsDrawerOpen(true)
+  }
+
   const columns = [
     {
       header: 'Info',
       id: 'info',
       width: '50%',
       verticalAlign: 'center',
-      render: (props: {
+      render: ({
+        rowData
+      }: {
         rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
       }) => (
         <Info
-          title={props.rowData.title}
-          dueDate={props.rowData.due_date}
-          description={props.rowData.description}
+          dueDate={rowData.due_date}
+          description={rowData.description}
+          onClick={() => handleEdit(rowData)}
+          title={rowData.title}
         />
       )
     },
@@ -56,13 +66,15 @@ function ToursList(props: { user: IUser }) {
       id: 'participants',
       width: '10%',
       verticalAlign: 'center',
-      render: (props: {
+      render: ({
+        rowData
+      }: {
         rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
       }) => (
         <Participants
           participants={
-            props.rowData.associations
-              ? props.rowData.associations.filter(
+            rowData.associations
+              ? rowData.associations.filter(
                   a => a.association_type === 'contact'
                 )
               : []
@@ -74,16 +86,15 @@ function ToursList(props: { user: IUser }) {
       id: 'actions',
       width: '40%',
       verticalAlign: 'center',
-      render: (rowProps: {
+      render: ({
+        rowData
+      }: {
         rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
       }) => (
         <Actions
-          tour={rowProps.rowData}
-          onEdit={() => {
-            setSelectedTour(rowProps.rowData)
-            setIsDrawerOpen(true)
-          }}
+          onEdit={() => handleEdit(rowData)}
           reloadList={reloadList}
+          tour={rowData}
         />
       )
     }
