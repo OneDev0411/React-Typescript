@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import cn from 'classnames'
-import { Box, Button } from '@material-ui/core'
+import { Box, Button, Typography } from '@material-ui/core'
 import { Theme, useTheme } from '@material-ui/core/styles'
 
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks.ts'
@@ -59,6 +59,12 @@ export default function CreateTourDrawer(props: Props) {
         </Box>
       )
     }
+
+    return (
+      <Box py={3}>
+        <Typography variant="h6">No tours are scheduled!</Typography>
+      </Box>
+    )
   }
 
   return (
