@@ -25,7 +25,7 @@ export function ReminderField(props) {
             ({ value }) => value == null || value <= dueDateTimestamp - now
           )}
           fullHeight
-          pullRight
+          pullLeft
           buttonRenderer={props => (
             <DropButton {...props} inverse style={{ paddingLeft: 0 }}>
               <IconBell />
