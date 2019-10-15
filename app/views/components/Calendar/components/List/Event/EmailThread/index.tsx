@@ -65,7 +65,9 @@ export function EmailThread({ style, event, nextItem }: Props) {
                   }}
                   type="insight"
                 >
-                  <span>{displayName || emailAddress}</span>
+                  <span style={{ position: 'relative', zIndex: 1 }}>
+                    {displayName || emailAddress}
+                  </span>
                 </MiniContactProfile>
               </React.Fragment>
             )
