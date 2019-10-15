@@ -34,6 +34,10 @@ function List(props) {
     sort
   ])
 
+  React.useEffect(() => {
+    window.socket.on('email_campaign:send', () => setQueue(queue => queue + 1))
+  }, [])
+
   const tableClassName = ['insight-table-container']
 
   if (isLoading === false) {
