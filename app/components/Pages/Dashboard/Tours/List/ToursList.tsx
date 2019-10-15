@@ -22,7 +22,7 @@ function ToursList(props: { user: IUser }) {
   const theme = useTheme<Theme>()
   const { list, isFetching, error, reloadList } = useFilterCRMTasks(
     {
-      order: 'due_date',
+      order: '-due_date',
       task_type: 'Tour'
     },
     {
