@@ -620,6 +620,7 @@ class ContactsList extends React.Component {
       <PageContainer isOpen={isSideMenuOpen}>
         <SideMenu isOpen={isSideMenuOpen} width="13rem">
           <AllContactsList
+            activeSegment={activeSegment}
             onFilterChange={filters => {
               this.setState({ selectedSidebarFilter: null })
               this.handleFilterChange({ ...filters, flows: [] }, true)
