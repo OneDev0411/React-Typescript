@@ -4,7 +4,12 @@ import LinkButton from 'components/Button/LinkButton'
 import ArrowDropDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 import { grey, primary } from 'views/utils/colors'
 
-export const DropButton = styled(LinkButton)`
+interface DropButtonProps {
+  isOpen?: boolean
+  disabled?: boolean
+}
+
+export const DropButton = styled(LinkButton)<DropButtonProps>`
   font-weight: 500;
   justify-content: space-between;
   background-color: ${grey.A150};
@@ -21,7 +26,11 @@ export const DropButton = styled(LinkButton)`
     `}
 `
 
-export const IconDrop = styled(ArrowDropDown)`
+interface IconDropProps {
+  isOpen?: boolean
+}
+
+export const IconDrop = styled(ArrowDropDown)<IconDropProps>`
   position: relative;
   margin-left: 1em;
   transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};

@@ -1,7 +1,7 @@
 import React from 'react'
 import Flex, { FlexItem } from 'styled-flex-component'
 
-import Item from './item'
+import Item from './Item'
 
 export default function({ title, items, settings, options, onChange }) {
   return (
@@ -13,8 +13,8 @@ export default function({ title, items, settings, options, onChange }) {
       }}
     >
       <h2 style={{ marginBottom: '3rem' }}>{title}</h2>
-      {items.map((item, index) => (
-        <FlexItem key={index}>
+      {items.map(item => (
+        <FlexItem key={item.name}>
           <Item
             {...item}
             value={
