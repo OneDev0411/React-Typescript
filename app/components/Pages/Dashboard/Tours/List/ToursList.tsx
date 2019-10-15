@@ -11,6 +11,7 @@ import Table from 'components/Grid/Table'
 import PageHeader from 'components/PageHeader'
 import LoadingContainer from 'components/LoadingContainer'
 import { TourDrawer } from 'components/tour/TourDrawer'
+import { TourSheets } from 'components/tour/TourSheets'
 
 import EmptyState from './EmptyState'
 import CreateNewTour from './CreateNewTour'
@@ -29,7 +30,10 @@ function ToursList(props: { user: IUser }) {
       isFetching: true
     }
   )
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
+  const [isOpenToursheetViewer, setIsOpenToursheetViewer] = useState<boolean>(
+    false
+  )
   const [selectedTour, setSelectedTour] = useState<ICRMTask<
     CRMTaskAssociation,
     CRMTaskAssociationType
@@ -93,6 +97,10 @@ function ToursList(props: { user: IUser }) {
       }) => (
         <Actions
           onEdit={() => handleEdit(rowData)}
+          onViewToursheet={() => {
+            setSelectedTour(rowData)
+            setIsOpenToursheetViewer(true)
+          }}
           reloadList={reloadList}
           tour={rowData}
         />
@@ -164,6 +172,25 @@ function ToursList(props: { user: IUser }) {
           tour={selectedTour}
           submitCallback={drawerCallback}
           user={props.user}
+        />
+      )}
+
+      {isOpenToursheetViewer && (
+        <TourSheets
+          agent={props.user}
+          isOpen
+          handleClose={() => {
+            setSelectedTour(null)
+            setIsOpenToursheetViewer(false)
+          }}
+          tour={selectedTour}
+          listings={
+            selectedTour && selectedTour.associations
+              ? selectedTour.associations
+                  .filter(a => a.association_type === 'listing')
+                  .map(a => a.listing)
+              : []
+          }
         />
       )}
     </>

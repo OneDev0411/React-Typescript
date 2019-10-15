@@ -8,11 +8,17 @@ import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 interface Props {
   onEdit: () => void
+  onViewToursheet: () => void
   reloadList: () => void
   tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
 }
 
-export default function Actions({ onEdit, reloadList, tour }: Props) {
+export default function Actions({
+  onEdit,
+  onViewToursheet,
+  reloadList,
+  tour
+}: Props) {
   const [isDeleting, setIsDeleting] = useState(false)
   const confirmation = useContext(ConfirmationModalContext)
 
@@ -40,14 +46,19 @@ export default function Actions({ onEdit, reloadList, tour }: Props) {
         color="secondary"
         variant="outlined"
         popperPlacement="bottom-end"
-        onClick={onEdit}
+        onClick={onViewToursheet}
         renderMenu={() => (
-          <Button disabled={isDeleting} fullWidth onClick={onDelete}>
-            Delete
-          </Button>
+          <>
+            <Button fullWidth onClick={onEdit}>
+              Edit
+            </Button>
+            <Button disabled={isDeleting} fullWidth onClick={onDelete}>
+              Delete
+            </Button>
+          </>
         )}
       >
-        Edit
+        View Toursheet
       </SplitButton>
     </Box>
   )
