@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
+import { Box } from '@material-ui/core'
 
 import { confirmation } from 'actions/confirmation'
 
@@ -29,9 +30,15 @@ import { Title } from '../../EventDrawer/components/Title'
 import { UpdateReminder } from '../../EventDrawer/components/UpdateReminder'
 import { Description } from '../../EventDrawer/components/Description'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
-import { DateTimeField, AssigneesField } from '../../final-form-fields'
+import UpdateEndDate from '../../EventDrawer/components/UpdateEndDate/UpdateEndDate'
+import Reminder from '../../EventDrawer/components/Reminder/Reminder'
+import {
+  AssigneesField,
+  DateTimeField,
+  FieldError
+} from '../../final-form-fields'
 import { AddAssociationButton } from '../../AddAssociationButton'
-import { AssociationsList, ReminderField } from '../../final-form-fields'
+import { AssociationsList, EndTimeField } from '../../final-form-fields'
 import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
 import { Section } from '../../tour/TourDrawer/components/Section'
@@ -393,15 +400,32 @@ class OpenHouseDrawerInternal extends React.Component {
                           defaultOption={REMINDER_DROPDOWN_OPTIONS[5]}
                         />
 
-                        <Section label="Event Date">
-                          <FieldContainer alignCenter justifyBetween>
+                        <UpdateEndDate
+                          dueDate={values.dueDate}
+                          endDate={values.endDate}
+                        />
+
+                        <Box mb={4}>
+                          <FieldContainer
+                            alignCenter
+                            justifyBetween
+                            style={{ marginBottom: '0.5em' }}
+                          >
                             <DateTimeField
                               name="dueDate"
                               selectedDate={values.dueDate}
                             />
-                            <ReminderField dueDate={values.dueDate} />
+
+                            <EndTimeField dueDate={values.dueDate} />
                           </FieldContainer>
-                        </Section>
+
+                          <FieldError
+                            name="endDate"
+                            style={{ fontSize: '1rem', marginBottom: '0.5em' }}
+                          />
+
+                          <Reminder dueDate={values.dueDate} />
+                        </Box>
 
                         <Section label="Event Location">
                           <Location

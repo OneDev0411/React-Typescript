@@ -12,6 +12,7 @@ export async function preSaveFormat(
   const {
     assignees,
     description,
+    endDate,
     dueDate,
     location = {},
     registrants = [],
@@ -33,6 +34,12 @@ export async function preSaveFormat(
 
   if ((originalValues && originalValues.id) || description) {
     task.description = (description && description.trim()) || ''
+  }
+
+  if (endDate) {
+    task.end_date = endDate.getTime() / 1000
+  } else if (originalValues && originalValues.end_date) {
+    task.end_date = null
   }
 
   if (isDueDatePast) {
