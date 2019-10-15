@@ -375,7 +375,7 @@ class ActionsButton extends React.Component<Props & StateProps, State> {
     const secondaryActions = this.getSecondaryActions(actionButtons)
 
     if (!primaryAction) {
-      return false
+      return null
     }
 
     return (
