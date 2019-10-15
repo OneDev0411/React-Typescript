@@ -2,6 +2,7 @@ import fecha from 'fecha'
 import escape from 'lodash/escape'
 
 import { parseEmailRecipient } from '../../../EmailRecipientsChipsInput/helpers/parse-email-recipient'
+import { decodeContentIds } from '../../../EmailThread/helpers/decode-content-ids'
 
 /**
  * Creates content of a forward email.
@@ -28,7 +29,7 @@ export function getForwardHtml(email: IEmailThreadEmail) {
   To: ${escape(email.to.join(', '))}
   <br />
   <br />
-  <div>${email.html_body || ''}</div>
+  <div>${decodeContentIds(email.attachments, email.html_body || '')}</div>
 </div>
 `
 }
