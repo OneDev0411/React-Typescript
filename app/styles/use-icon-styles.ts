@@ -16,6 +16,14 @@ export const useIconStyles = makeStyles(
           height: 16,
           minWidth: 16
         }
+      },
+      medium: {
+        'svg&': {
+          // More specificity to beat styled-svg styles
+          width: 24,
+          height: 24,
+          minWidth: 24
+        }
       }
     }),
   { name: 'Icon' }
