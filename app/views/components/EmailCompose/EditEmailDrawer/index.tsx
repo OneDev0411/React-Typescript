@@ -1,27 +1,41 @@
 import * as React from 'react'
-import { ComponentProps, useEffect, useState } from 'react'
+import { ComponentProps, useCallback, useEffect, useState } from 'react'
+
+import { useContext } from 'react'
 
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 import { normalizeUserForEmailFrom } from 'models/email/helpers/normalize-user-for-email-from'
+
+import { deleteEmailCampaign } from 'models/email/delete-email-campaign'
 
 import { BulkEmailComposeDrawer } from '../BulkEmailComposeDrawer'
 import { SingleEmailComposeDrawer } from '../SingleEmailComposeDrawer'
 import { EmailFormValues } from '../types'
 import { getRecipientsFromRecipientsEntity } from './helpers/get-recipients-from-recipients-entity'
 import getTemplateInstancePreviewImage from '../../InstantMarketing/helpers/get-template-preview-image'
+import ConfirmationModalContext from '../../ConfirmationModal/context'
+import { hasMultipleRecipients } from '../helpers/has-multiple-recipients'
 
 interface Props {
   emailId: string
   isOpen: boolean
   onClose: () => void
+  onDeleted?: () => void
   onEdited: (email: IEmailCampaign) => void
 }
 
-export function EditEmailDrawer({ emailId, isOpen, onClose, onEdited }: Props) {
+export function EditEmailDrawer({
+  emailId,
+  isOpen,
+  onClose,
+  onDeleted = () => {},
+  onEdited
+}: Props) {
   const [data, setData] = useState<IEmailCampaign<
     IEmailCampaignAssociation,
     IEmailCampaignRecipientAssociation
   > | null>(null)
+  const confirmationModal = useContext(ConfirmationModalContext)
 
   useEffect(() => {
     let canceled = false
@@ -39,6 +53,44 @@ export function EditEmailDrawer({ emailId, isOpen, onClose, onEdited }: Props) {
       canceled = true
     }
   }, [emailId, isOpen])
+
+  const deleteEmail = useCallback(
+    async (values: EmailFormValues) => {
+      const deleteAndClose = async () => {
+        await deleteEmailCampaign(emailId)
+        onDeleted()
+        onClose()
+      }
+
+      if (hasMultipleRecipients(values.to, values.cc, values.bcc)) {
+        return new Promise((resolve, reject) => {
+          confirmationModal.setConfirmationModal({
+            message: 'Warning!',
+            description:
+              'This change will affect all contacts on this email.  Proceed?',
+            confirmLabel: 'Yes, remove it',
+            appearance: 'danger',
+            onConfirm: async () => {
+              try {
+                await deleteAndClose()
+                resolve()
+              } catch (e) {
+                console.error(e)
+                reject(e)
+              }
+            },
+            onCancel: reject
+          })
+        })
+      }
+
+      // We only show confirmation dialog in case it has multiple recipients!
+      // here is the related discussion:
+      // https://gitlab.com/rechat/web/issues/3460#note_230027044
+      await deleteAndClose()
+    },
+    [confirmationModal, emailId, onClose, onDeleted]
+  )
 
   if (data) {
     const initialValues: Partial<EmailFormValues> = {
@@ -74,6 +126,7 @@ export function EditEmailDrawer({ emailId, isOpen, onClose, onEdited }: Props) {
         html: data.template ? data.html : values.html
       }),
       onClose,
+      onDelete: deleteEmail,
       onSent: email => {
         onClose()
         onEdited(email as IEmailCampaign)
