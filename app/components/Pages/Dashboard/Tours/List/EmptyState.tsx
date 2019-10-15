@@ -24,11 +24,12 @@ export default function EmptyState(props: { onOpenDrawer: () => void }) {
   return (
     <Box className={classes.box}>
       <img src="/static/images/contacts/zero-state.svg" alt="Houston" />
-      <h2>No toursheets are scheduled… Yet!</h2>
+      <h2>No tours are scheduled… yet!</h2>
       <p>
-        Impress sellers with additional marketing exposure while attracting new
-        buyers and adding contacts. Holding a tour has never been easier!
+        Make touring homes easier on buyers and yourself with Toursheets. Pick
+        the right properties for your client, and we do the rest of the work.
       </p>
+      <p>Get started now!</p>
       <CreateNewTour onOpenDrawer={props.onOpenDrawer} />
     </Box>
   )
