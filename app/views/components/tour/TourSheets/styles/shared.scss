@@ -9,6 +9,11 @@
   background-color:#fff;
   box-shadow: 0 0 30px #d4d4d4;
   
+  // For fixing Safari
+  @supports (-webkit-backdrop-filter: blur(1px)) {
+    break-before: always;
+  }
+  
   @media print {
     padding: 0;
     border: none;
