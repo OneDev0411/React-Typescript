@@ -1,7 +1,6 @@
 import {
-  getField as getDealfield,
-  getStatus as getDealStatus,
-  getAddress as getDealAddress
+  getField as getDealField,
+  getStatus as getDealStatus
 } from 'models/Deal/helpers/context'
 import { getListingAddress, getStatusColor } from 'utils/listing'
 
@@ -103,11 +102,11 @@ export const normalizeListing = (listing, showStatus = true) => {
       statusColor: `#${getStatusColor(listing.status)}`,
       placeHolderImage: '/static/icons/listing-place-holder.svg'
     },
-    details: getListingAddress(listing),
+    details: `${listing.status}, $${listing.price.toLocaleString()}`,
     id: listing.id,
     location: listing.location || listing.property.address.location,
     original: listing,
-    title: `Listing - ${listing.status}, $${listing.price.toLocaleString()}`,
+    title: getListingAddress(listing),
     type: 'listing',
     url: `/dashboard/mls/${listing.id}`
   }
@@ -126,16 +125,16 @@ export const normalizeDeal = (deal, showStatus = true) => {
 
   return {
     avatar: {
-      image: getDealfield(deal, 'photo'),
+      image: getDealField(deal, 'photo'),
       isOnline: showStatus,
       size: 32,
       showStatus,
       statusColor: `#${getStatusColor(getDealStatus(deal))}`,
       placeHolderImage: '/static/icons/associated-deals-place-holder.svg'
     },
-    details: getDealAddress(deal),
+    details: `${deal.deal_type}, ${deal.property_type}`,
     id: deal.id,
-    title: `Deal - ${deal.deal_type}, ${deal.property_type}`,
+    title: getDealField(deal, 'street_address'),
     type: deal.type,
     url: `/dashboard/deals/${deal.id}`
   }
