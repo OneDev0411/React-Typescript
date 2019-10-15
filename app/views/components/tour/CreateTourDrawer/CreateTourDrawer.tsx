@@ -37,6 +37,11 @@ export default function CreateTourDrawer(props: Props) {
     }
   )
 
+  const handleClose = () => {
+    setSelectedTour(null)
+    setIsOpenTourDrawer(false)
+  }
+
   const renderBody = () => {
     if (isFetching) {
       return <Loading />
@@ -90,10 +95,10 @@ export default function CreateTourDrawer(props: Props) {
         <TourDrawer
           isOpen
           listings={props.listings}
-          onClose={() => setIsOpenTourDrawer(false)}
+          onClose={handleClose}
           submitCallback={(tour: ICRMTask) => {
             reloadList()
-            setIsOpenTourDrawer(false)
+            handleClose()
             props.onClose()
 
             if (props.submitCallback) {
