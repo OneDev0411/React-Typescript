@@ -17,7 +17,11 @@ export const DropButton = styled(LinkButton)`
   }
 `
 
-export const IconDrop = styled(ArrowDropDown)`
+interface IconDropProps {
+  isOpen?: boolean
+}
+
+export const IconDrop = styled(ArrowDropDown)<IconDropProps>`
   position: relative;
   margin-left: 1em;
   transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};

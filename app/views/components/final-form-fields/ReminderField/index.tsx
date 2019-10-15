@@ -22,7 +22,7 @@ export function ReminderField({ dropDownProps = {}, dueDate }: Props) {
       render={({ input }) => (
         <>
           {/*
-          // @ts-ignore */}
+          // @ts-ignore js component */}
           <Dropdown
             {...dropDownProps}
             input={input}
@@ -34,8 +34,6 @@ export function ReminderField({ dropDownProps = {}, dueDate }: Props) {
               <DropButton {...buttonProps} inverse style={{ paddingLeft: 0 }}>
                 <IconBell />
                 {buttonProps.value}
-                {/*
-                // @ts-ignore */}
                 <IconDrop
                   isOpen={buttonProps.isOpen}
                   style={{ margin: '0.25rem 0 0 0.25rem' }}
