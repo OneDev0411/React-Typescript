@@ -36,9 +36,9 @@ function ToursList(props: { user: IUser }) {
   > | null>(null)
 
   const handleEdit = (
-    rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+    tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
   ) => {
-    setSelectedTour(rowData)
+    setSelectedTour(tour)
     setIsDrawerOpen(true)
   }
 
