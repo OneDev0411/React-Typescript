@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
+import { Box } from '@material-ui/core'
 
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
@@ -16,13 +17,16 @@ import IconDelete from '../../SvgIcons/DeleteOutline/IconDeleteOutline'
 import { Title } from '../../EventDrawer/components/Title'
 import { Description } from '../../EventDrawer/components/Description'
 import { UpdateReminder } from '../../EventDrawer/components/UpdateReminder'
+import Reminder from '../../EventDrawer/components/Reminder/Reminder'
+import UpdateEndDate from '../../EventDrawer/components/UpdateEndDate/UpdateEndDate'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
-import { DateTimeField, AssigneesField } from '../../final-form-fields'
 import { AddAssociationButton } from '../../AddAssociationButton'
 import {
+  AssigneesField,
   AssociationsList,
-  FieldError,
-  ReminderField
+  DateTimeField,
+  EndTimeField,
+  FieldError
 } from '../../final-form-fields'
 import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
@@ -189,18 +193,37 @@ export class TourDrawer extends React.Component {
                     <Description placeholder="Enter any general notes for your clients" />
 
                     <Section label="Itinerary Date">
-                      <FieldContainer alignCenter justifyBetween>
-                        <DateTimeField
-                          name="dueDate"
-                          selectedDate={values.dueDate}
+                      <UpdateEndDate
+                        dueDate={values.dueDate}
+                        endDate={values.endDate}
+                      />
+                      <UpdateReminder
+                        dueDate={values.dueDate}
+                        // 1 hour before
+                        defaultOption={REMINDER_DROPDOWN_OPTIONS[5]}
+                      />
+
+                      <Box mb={4}>
+                        <FieldContainer
+                          alignCenter
+                          justifyBetween
+                          style={{ marginBottom: '0.5em' }}
+                        >
+                          <DateTimeField
+                            name="dueDate"
+                            selectedDate={values.dueDate}
+                          />
+
+                          <EndTimeField dueDate={values.dueDate} />
+                        </FieldContainer>
+
+                        <FieldError
+                          name="endDate"
+                          style={{ fontSize: '1rem', marginBottom: '0.5em' }}
                         />
-                        <UpdateReminder
-                          dueDate={values.dueDate}
-                          // 1 hour before
-                          defaultOption={REMINDER_DROPDOWN_OPTIONS[5]}
-                        />
-                        <ReminderField dueDate={values.dueDate} />
-                      </FieldContainer>
+
+                        <Reminder dueDate={values.dueDate} />
+                      </Box>
                     </Section>
 
                     <Section label="Properties">
