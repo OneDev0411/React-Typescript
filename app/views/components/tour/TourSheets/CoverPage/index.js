@@ -23,9 +23,8 @@ const COVER_PAGE_CSS_NAME = 'c-tour-sheets-cover'
 export function CoverPage(props) {
   const { agent, tour } = props
   const { description } = tour
-
-  let officeLogoSrc
   const activeTeam = getActiveTeam(agent)
+  let officeLogoSrc = ''
 
   if (activeTeam && activeTeam.brand) {
     officeLogoSrc = Brand.asset('office_logo', null, activeTeam.brand)
@@ -33,7 +32,25 @@ export function CoverPage(props) {
 
   return (
     <div className={`${TOUR_SHEETS_CSS_NAME}__page ${COVER_PAGE_CSS_NAME}`}>
-      <div className={`${TOUR_SHEETS_CSS_NAME}__brand-line`} />
+      <div
+        style={{
+          marginTop: '3rem',
+          textAlign: 'center',
+          marginBottom: officeLogoSrc ? '2rem' : 0
+        }}
+      >
+        {officeLogoSrc && (
+          <img
+            alt="office"
+            src={officeLogoSrc}
+            style={{
+              maxWidth: '13.5rem',
+              maxHeight: '4em',
+              margin: '0 auto'
+            }}
+          />
+        )}
+      </div>
       <H1 style={{ marginBottom: '0.5rem' }}>
         {tour.title || '[Untitle Tour]'}
       </H1>
@@ -71,7 +88,7 @@ export function CoverPage(props) {
         style={{
           width: '31.25rem',
           height: '17.4375rem',
-          margin: '0 auto 2rem',
+          margin: '0 auto',
           background: '#f7f7f7'
         }}
       >
@@ -81,17 +98,6 @@ export function CoverPage(props) {
           defaultOptions={{ zoomControl: false, draggable: false }}
         />
       </div>
-      {officeLogoSrc && (
-        <img
-          alt="office"
-          src={officeLogoSrc}
-          style={{
-            maxWidth: '13.5rem',
-            maxHeight: '4em',
-            margin: '0 auto'
-          }}
-        />
-      )}
     </div>
   )
 }

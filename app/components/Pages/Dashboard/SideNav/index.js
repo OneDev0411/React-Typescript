@@ -114,15 +114,6 @@ function AppSideNav(props) {
             />
           </Acl>
 
-          <Acl.Crm>
-            <SideNavLinkItem
-              tooltip="Toursheets"
-              to="/dashboard/tours"
-              Icon={IconTour}
-              ActiveIcon={IconTourActive}
-            />
-          </Acl.Crm>
-
           <Acl.Marketing>
             <SideNavLinkItem
               tooltip="Marketing Center"
@@ -147,6 +138,15 @@ function AppSideNav(props) {
             Icon={PropertiesIcon}
             ActiveIcon={PropertiesIconActive}
           />
+
+          <Acl.Crm>
+            <SideNavLinkItem
+              tooltip="Toursheets"
+              to="/dashboard/tours"
+              Icon={IconTour}
+              ActiveIcon={IconTourActive}
+            />
+          </Acl.Crm>
 
           {user && (
             <SideNavItem>

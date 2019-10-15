@@ -30,6 +30,7 @@ export async function postLoadFormat(task, owner, listing) {
     return {
       assignees: [owner],
       registrants,
+      endDate: null,
       dueDate: new Date(),
       location,
       reminder,
@@ -38,8 +39,10 @@ export async function postLoadFormat(task, owner, listing) {
     }
   }
 
-  const { reminders, due_date } = task
-  const dueDate = due_date * 1000
+  const { reminders, end_date } = task
+  const normalizeServerDate = date => date * 1000
+  const dueDate = normalizeServerDate(task.due_date)
+  const endDate = end_date ? new Date(normalizeServerDate(end_date)) : null
 
   if (Array.isArray(reminders) && reminders.length > 0) {
     const { timestamp } = reminders[reminders.length - 1]
@@ -76,6 +79,7 @@ export async function postLoadFormat(task, owner, listing) {
 
   return {
     ...task,
+    endDate,
     dueDate: new Date(dueDate),
     location,
     registrants,

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import cn from 'classnames'
-import { Box, Button } from '@material-ui/core'
+import { Box, Button, Typography } from '@material-ui/core'
 import { Theme, useTheme } from '@material-ui/core/styles'
 
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks.ts'
@@ -37,6 +37,11 @@ export default function CreateTourDrawer(props: Props) {
     }
   )
 
+  const handleClose = () => {
+    setSelectedTour(null)
+    setIsOpenTourDrawer(false)
+  }
+
   const renderBody = () => {
     if (isFetching) {
       return <Loading />
@@ -59,6 +64,12 @@ export default function CreateTourDrawer(props: Props) {
         </Box>
       )
     }
+
+    return (
+      <Box py={3}>
+        <Typography variant="h6">No tours are scheduled!</Typography>
+      </Box>
+    )
   }
 
   return (
@@ -84,10 +95,10 @@ export default function CreateTourDrawer(props: Props) {
         <TourDrawer
           isOpen
           listings={props.listings}
-          onClose={() => setIsOpenTourDrawer(false)}
+          onClose={handleClose}
           submitCallback={(tour: ICRMTask) => {
             reloadList()
-            setIsOpenTourDrawer(false)
+            handleClose()
             props.onClose()
 
             if (props.submitCallback) {

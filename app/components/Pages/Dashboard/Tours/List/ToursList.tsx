@@ -11,29 +11,40 @@ import Table from 'components/Grid/Table'
 import PageHeader from 'components/PageHeader'
 import LoadingContainer from 'components/LoadingContainer'
 import { TourDrawer } from 'components/tour/TourDrawer'
+import { TourSheets } from 'components/tour/TourSheets'
 
 import EmptyState from './EmptyState'
 import CreateNewTour from './CreateNewTour'
 import Info from './columns/Info'
 import Actions from './columns/Actions'
-import Registrants from './columns/Registrants'
+import Participants from './columns/Participants'
 
 function ToursList(props: { user: IUser }) {
   const theme = useTheme<Theme>()
   const { list, isFetching, error, reloadList } = useFilterCRMTasks(
     {
-      order: 'due_date',
+      order: '-due_date',
       task_type: 'Tour'
     },
     {
       isFetching: true
     }
   )
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
+  const [isOpenToursheetViewer, setIsOpenToursheetViewer] = useState<boolean>(
+    false
+  )
   const [selectedTour, setSelectedTour] = useState<ICRMTask<
     CRMTaskAssociation,
     CRMTaskAssociationType
   > | null>(null)
+
+  const handleEdit = (
+    tour: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
+  ) => {
+    setSelectedTour(tour)
+    setIsDrawerOpen(true)
+  }
 
   const columns = [
     {
@@ -41,13 +52,16 @@ function ToursList(props: { user: IUser }) {
       id: 'info',
       width: '50%',
       verticalAlign: 'center',
-      render: (props: {
+      render: ({
+        rowData
+      }: {
         rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
       }) => (
         <Info
-          title={props.rowData.title}
-          dueDate={props.rowData.due_date}
-          description={props.rowData.description}
+          dueDate={rowData.due_date}
+          description={rowData.description}
+          onClick={() => handleEdit(rowData)}
+          title={rowData.title}
         />
       )
     },
@@ -56,13 +70,15 @@ function ToursList(props: { user: IUser }) {
       id: 'participants',
       width: '10%',
       verticalAlign: 'center',
-      render: (props: {
+      render: ({
+        rowData
+      }: {
         rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
       }) => (
-        <Registrants
-          registrants={
-            props.rowData.associations
-              ? props.rowData.associations.filter(
+        <Participants
+          participants={
+            rowData.associations
+              ? rowData.associations.filter(
                   a => a.association_type === 'contact'
                 )
               : []
@@ -74,16 +90,19 @@ function ToursList(props: { user: IUser }) {
       id: 'actions',
       width: '40%',
       verticalAlign: 'center',
-      render: (rowProps: {
+      render: ({
+        rowData
+      }: {
         rowData: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
       }) => (
         <Actions
-          tour={rowProps.rowData}
-          onEdit={() => {
-            setSelectedTour(rowProps.rowData)
-            setIsDrawerOpen(true)
+          onEdit={() => handleEdit(rowData)}
+          onViewToursheet={() => {
+            setSelectedTour(rowData)
+            setIsOpenToursheetViewer(true)
           }}
           reloadList={reloadList}
+          tour={rowData}
         />
       )
     }
@@ -153,6 +172,25 @@ function ToursList(props: { user: IUser }) {
           tour={selectedTour}
           submitCallback={drawerCallback}
           user={props.user}
+        />
+      )}
+
+      {isOpenToursheetViewer && (
+        <TourSheets
+          agent={props.user}
+          isOpen
+          handleClose={() => {
+            setSelectedTour(null)
+            setIsOpenToursheetViewer(false)
+          }}
+          tour={selectedTour}
+          listings={
+            selectedTour && selectedTour.associations
+              ? selectedTour.associations
+                  .filter(a => a.association_type === 'listing')
+                  .map(a => a.listing)
+              : []
+          }
         />
       )}
     </>
