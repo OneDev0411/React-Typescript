@@ -620,6 +620,7 @@ class ContactsList extends React.Component {
       <PageContainer isOpen={isSideMenuOpen}>
         <SideMenu isOpen={isSideMenuOpen} width="13rem">
           <AllContactsList
+            activeSegment={activeSegment}
             onFilterChange={filters => {
               this.setState({ selectedSidebarFilter: null })
               this.handleFilterChange({ ...filters, flows: [] }, true)
@@ -642,7 +643,7 @@ class ContactsList extends React.Component {
           <SavedSegments
             name={CONTACTS_SEGMENT_NAME}
             associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
-            getPredefinedLists={getPredefinedContactLists}
+            getPredefinedLists={() => ({})}
             onChange={this.handleChangeSavedSegment}
           />
         </SideMenu>

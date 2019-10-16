@@ -1,9 +1,11 @@
 import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
 
+import { IAppState } from 'reducers'
 import { resetActiveFilters as resetActiveFiltersAction } from 'actions/filter-segments/active-filters'
 import { selectActiveFilters } from 'reducers/filter-segments'
 
+import Badge from 'components/Badge'
 import ToolTip from 'components/tooltip'
 import {
   ListTitle,
@@ -13,31 +15,34 @@ import {
 import { changeActiveFilterSegment as changeActiveFilterSegmentAction } from 'actions/filter-segments/change-active-segment'
 
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
+import { SYNCED_CONTACTS_LIST_ID } from '../constants'
+import { getSyncedContacts, SyncedContacts } from '../utils/get-synced-contacts'
 
 interface Props {
   onFilterChange: ({ filters: any }) => void // TODO
   resetActiveFilters: (segmentName: string) => void
   activeFilters: StringMap<IActiveFilter>
   changeActiveFilterSegment: typeof changeActiveFilterSegmentAction
+  activeSegment: any
+  syncedContacts: SyncedContacts
 }
 
 function AllContactsList({
   onFilterChange,
   activeFilters,
   resetActiveFilters,
-  changeActiveFilterSegment
+  changeActiveFilterSegment,
+  activeSegment,
+  syncedContacts
 }: Props) {
-  const isSelected = useMemo(() => {
+  const isAllContactsSelected = useMemo(() => {
     return Object.values(activeFilters).length === 0
   }, [activeFilters])
+  const isSyncedListSelected = activeSegment.id === SYNCED_CONTACTS_LIST_ID
 
-  const clickHandler = async () => {
-    if (isSelected) {
-      return
-    }
-
+  const clickHandler = async (type: string) => {
     await resetActiveFilters(CONTACTS_SEGMENT_NAME)
-    await changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, 'default')
+    await changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, type)
 
     onFilterChange({
       filters: []
@@ -51,23 +56,36 @@ function AllContactsList({
       </ListTitle>
 
       <ToolTip caption="All my contacts" placement="right">
-        <ListItem isSelected={isSelected} onClick={clickHandler}>
+        <ListItem
+          isSelected={isAllContactsSelected}
+          onClick={() => clickHandler('default')}
+        >
           <ListItemName>All Contacts</ListItemName>
         </ListItem>
       </ToolTip>
+      {syncedContacts.accounts > 0 && (
+        <ListItem
+          isSelected={isSyncedListSelected}
+          onClick={() => clickHandler(SYNCED_CONTACTS_LIST_ID)}
+        >
+          <ListItemName>
+            Synced Contacts
+            {syncedContacts.contactsCount > 0 && (
+              <Badge large style={{ marginLeft: '0.5rem' }}>
+                {syncedContacts.contactsCount}
+              </Badge>
+            )}
+          </ListItemName>
+        </ListItem>
+      )}
     </div>
   )
 }
 
-function mapStateToProps(state: {
-  contacts: {
-    list: any
-    tags: any
-    filterSegments: IContactReduxFilterSegmentState
-  }
-}) {
+function mapStateToProps(state: IAppState) {
   return {
-    activeFilters: selectActiveFilters(state.contacts.filterSegments)
+    activeFilters: selectActiveFilters(state.contacts.filterSegments),
+    syncedContacts: getSyncedContacts(state)
   }
 }
 
