@@ -7,7 +7,12 @@ import { isDeletedOrRevoked } from 'reducers/contacts/oAuthAccounts'
 import { SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY } from '../constants'
 import { getNumOfSyncedContacts } from '../ImportContactsButton/helpers'
 
-export const getSyncedContacts = (state: IAppState): number => {
+export interface SyncedContacts {
+  accounts: number
+  contacts: number
+}
+
+export const getSyncedContacts = (state: IAppState): SyncedContacts => {
   const accounts = Object.values(state.contacts.oAuthAccounts.list)
     .flat()
     .filter(
@@ -20,5 +25,8 @@ export const getSyncedContacts = (state: IAppState): number => {
       0 // eslint-disable-line
   )
 
-  return getNumOfSyncedContacts(lastSeen, accounts)
+  return {
+    accounts: accounts.length,
+    contacts: getNumOfSyncedContacts(lastSeen, accounts)
+  }
 }

@@ -16,7 +16,7 @@ import { changeActiveFilterSegment as changeActiveFilterSegmentAction } from 'ac
 
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
 import { SYNCED_CONTACTS_LIST_ID } from '../constants'
-import { getSyncedContacts } from '../utils/get-synced-contacts'
+import { getSyncedContacts, SyncedContacts } from '../utils/get-synced-contacts'
 
 interface Props {
   onFilterChange: ({ filters: any }) => void // TODO
@@ -24,7 +24,7 @@ interface Props {
   activeFilters: StringMap<IActiveFilter>
   changeActiveFilterSegment: typeof changeActiveFilterSegmentAction
   activeSegment: any
-  syncedContactsBadge: number
+  syncedContacts: SyncedContacts
 }
 
 function AllContactsList({
@@ -33,12 +33,12 @@ function AllContactsList({
   resetActiveFilters,
   changeActiveFilterSegment,
   activeSegment,
-  syncedContactsBadge
+  syncedContacts
 }: Props) {
   const isAllContactsSelected = useMemo(() => {
     return Object.values(activeFilters).length === 0
   }, [activeFilters])
-  const isSyncedListSelect = activeSegment.id === SYNCED_CONTACTS_LIST_ID
+  const isSyncedListSelected = activeSegment.id === SYNCED_CONTACTS_LIST_ID
 
   const clickHandler = async (type: string) => {
     await resetActiveFilters(CONTACTS_SEGMENT_NAME)
@@ -63,19 +63,21 @@ function AllContactsList({
           <ListItemName>All Contacts</ListItemName>
         </ListItem>
       </ToolTip>
-      <ListItem
-        isSelected={isSyncedListSelect}
-        onClick={() => clickHandler('synced')}
-      >
-        <ListItemName>
-          Synced Contacts
-          {syncedContactsBadge > 0 && (
-            <Badge large style={{ marginLeft: '0.5rem' }}>
-              {syncedContactsBadge}
-            </Badge>
-          )}
-        </ListItemName>
-      </ListItem>
+      {syncedContacts.accounts > 0 && (
+        <ListItem
+          isSelected={isSyncedListSelected}
+          onClick={() => clickHandler(SYNCED_CONTACTS_LIST_ID)}
+        >
+          <ListItemName>
+            Synced Contacts
+            {syncedContacts.contacts > 0 && (
+              <Badge large style={{ marginLeft: '0.5rem' }}>
+                {syncedContacts.contacts}
+              </Badge>
+            )}
+          </ListItemName>
+        </ListItem>
+      )}
     </div>
   )
 }
@@ -83,7 +85,7 @@ function AllContactsList({
 function mapStateToProps(state: IAppState) {
   return {
     activeFilters: selectActiveFilters(state.contacts.filterSegments),
-    syncedContactsBadge: getSyncedContacts(state)
+    syncedContacts: getSyncedContacts(state)
   }
 }
 

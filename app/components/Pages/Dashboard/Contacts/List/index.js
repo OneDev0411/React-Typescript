@@ -643,7 +643,7 @@ class ContactsList extends React.Component {
           <SavedSegments
             name={CONTACTS_SEGMENT_NAME}
             associations={CRM_LIST_DEFAULT_ASSOCIATIONS}
-            getPredefinedLists={getPredefinedContactLists}
+            getPredefinedLists={() => ({})}
             onChange={this.handleChangeSavedSegment}
           />
         </SideMenu>
