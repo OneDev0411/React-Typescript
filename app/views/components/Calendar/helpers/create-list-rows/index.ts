@@ -129,8 +129,8 @@ function isEmptyMonth(
  */
 function getDayTitle(date: Date) {
   return date.getFullYear() !== new Date().getFullYear()
-    ? fecha.format(date, 'DD MMMM, YYYY')
-    : fecha.format(date, 'DD MMMM')
+    ? fecha.format(date, 'dddd, MMMM D, YYYY')
+    : fecha.format(date, 'dddd, MMMM D')
 }
 
 /**
@@ -139,7 +139,7 @@ function getDayTitle(date: Date) {
  * @param daysOfMonth
  */
 function getMonthTitle(date: Date, daysOfMonth: ICalendarMonthEvents) {
-  const daysRange = `1-${getLastDayOfMonth(daysOfMonth)}`
+  const daysRange = `1 - ${getLastDayOfMonth(daysOfMonth)}`
 
   return date.getFullYear() !== new Date().getFullYear()
     ? fecha.format(date, `MMMM ${daysRange}, YYYY`)
