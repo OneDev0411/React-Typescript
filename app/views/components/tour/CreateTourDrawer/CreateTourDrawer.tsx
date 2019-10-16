@@ -19,6 +19,7 @@ interface Props {
   listings: ICompactListing[]
   onClose: () => void
   submitCallback?: (tour: ICRMTask) => void
+  deleteCallback?: (tour: ICRMTask) => void
   user: IUser
 }
 
@@ -40,6 +41,12 @@ export default function CreateTourDrawer(props: Props) {
   const handleClose = () => {
     setSelectedTour(null)
     setIsOpenTourDrawer(false)
+  }
+
+  const handleCallback = () => {
+    reloadList()
+    handleClose()
+    props.onClose()
   }
 
   const renderBody = () => {
@@ -97,12 +104,17 @@ export default function CreateTourDrawer(props: Props) {
           listings={props.listings}
           onClose={handleClose}
           submitCallback={(tour: ICRMTask) => {
-            reloadList()
-            handleClose()
-            props.onClose()
+            handleCallback()
 
             if (props.submitCallback) {
               props.submitCallback(tour)
+            }
+          }}
+          deleteCallback={(tour: ICRMTask) => {
+            handleCallback()
+
+            if (props.deleteCallback) {
+              props.deleteCallback(tour)
             }
           }}
           tour={selectedTour}

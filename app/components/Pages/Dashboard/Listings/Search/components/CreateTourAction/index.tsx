@@ -28,6 +28,7 @@ export default function CreateTourAction(props: Props) {
         listings={props.listings}
         onClose={() => setIsOpen(false)}
         submitCallback={props.submitCallback}
+        deleteCallback={props.submitCallback}
         user={props.user}
       />
     </>
