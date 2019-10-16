@@ -19,7 +19,7 @@ interface Props {
   // by removing this we don't need to connect to redux store and
   // therefore this component can be removed altogether.
   // I'm not doing this refactoring because we are near release!
-  oAuthAccounts: StringMap<IGoogleAccount[]>
+  oAuthAccounts: Record<OAuthProvider, IGoogleAccount[]>
   children: (renderProps: RenderProps) => ReactElement<any>
   user: IUser
 }

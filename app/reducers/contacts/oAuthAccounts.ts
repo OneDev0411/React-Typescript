@@ -3,7 +3,6 @@ import { negate } from 'lodash'
 import { notDeleted } from '../../utils/not-deleted'
 
 import * as actionTypes from '../../constants/contacts'
-
 import { OAuthProvider } from '../../constants/contacts'
 
 export function oAuthAccounts(
@@ -18,8 +17,8 @@ export function oAuthAccounts(
       microsoft: []
     },
     loading: {
-      google: false,
-      microsoft: false
+      google: null,
+      microsoft: null
     }
   },
   action: IOAuthAccountAction
@@ -67,8 +66,11 @@ export function selectAllConnectedAccounts(state: IOauthAccountsState) {
 }
 
 export interface IOauthAccountsState {
-  list: StringMap<IOAuthAccount[]>
-  loading: StringMap<boolean>
+  list: Record<OAuthProvider, IOAuthAccount[]>
+  /**
+   * A mapping from providers to loading state. null means it's not loaded yet
+   */
+  loading: Record<OAuthProvider, boolean | null>
 }
 
 export type IOAuthAccountAction =
