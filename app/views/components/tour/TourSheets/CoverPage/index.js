@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import fecha from 'fecha'
 
 import Brand from '../../../../../controllers/Brand'
 import { getActiveTeam } from '../../../../../utils/user-teams'
@@ -8,6 +7,8 @@ import { getUserTitle } from '../../../../../models/user/helpers/get-user-title'
 import { H1 } from '../../../Typography/headings'
 
 import { Map } from '../../Map'
+
+import { getFormatedDueDate } from '../helpers/get-formated-due-date'
 
 import '../styles/shared.scss'
 import './style.scss'
@@ -24,6 +25,7 @@ export function CoverPage(props) {
   const { agent, tour } = props
   const { description } = tour
   const activeTeam = getActiveTeam(agent)
+
   let officeLogoSrc = ''
 
   if (activeTeam && activeTeam.brand) {
@@ -54,12 +56,7 @@ export function CoverPage(props) {
       <H1 style={{ marginBottom: '0.5rem' }}>
         {tour.title || '[Untitle Tour]'}
       </H1>
-      <p style={{ marginBottom: '1rem' }}>
-        {fecha.format(
-          new Date(tour.due_date * 1000),
-          'dddd, MMMM DD, YYYY hh:mm A'
-        )}
-      </p>
+      <p style={{ marginBottom: '1rem' }}>{getFormatedDueDate(tour)}</p>
       <div
         style={{
           fontSize: '0.75rem',

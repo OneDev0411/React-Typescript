@@ -5,17 +5,16 @@
  * @returns {object} a formated tour object
  */
 export function prePreviewFormat(values, originalValues = {}) {
-  const { title, dueDate, description } = values
-
-  const due_date = dueDate.getTime() / 1000
+  const normalizeDate = date => date.getTime() / 1000
 
   const tour = {
-    title,
-    due_date
+    title: values.title,
+    due_date: normalizeDate(values.dueDate),
+    end_date: values.endDate ? normalizeDate(values.endDate) : null
   }
 
-  if ((originalValues && originalValues.id) || description) {
-    tour.description = description || ''
+  if ((originalValues && originalValues.id) || values.description) {
+    tour.description = values.description || ''
   }
 
   return {
