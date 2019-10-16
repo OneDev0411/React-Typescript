@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import fecha from 'fecha'
 
 import { getUserTitle } from '../../../../../models/user/helpers/get-user-title'
 import { getListingAddressObj } from '../../../../../utils/listing'
@@ -11,6 +10,9 @@ import {
 import { H1 } from '../../../Typography/headings'
 import IconPin from '../../../SvgIcons/MapPinOn/IconMapPinOn'
 import { prepareListingsProperties } from '../../../../../components/Pages/Dashboard/Listings/helpers/prepare-listings-properties'
+
+import { getFormatedDueDate } from '../helpers/get-formated-due-date'
+
 import '../styles/shared.scss'
 import './style.scss'
 
@@ -36,10 +38,7 @@ export function LocationPage(props) {
       getUserTitle(agent),
       agent.email,
       agent.phone_number,
-      fecha.format(
-        new Date(tour.due_date * 1000),
-        'dddd, MMMM DD, YYYY hh:mm A'
-      )
+      getFormatedDueDate(tour)
     ],
     ' | '
   )
