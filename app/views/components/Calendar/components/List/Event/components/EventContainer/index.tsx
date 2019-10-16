@@ -2,7 +2,7 @@ import React from 'react'
 import fecha from 'fecha'
 
 import { makeStyles } from '@material-ui/styles'
-import { Theme, fade } from '@material-ui/core/styles'
+import { fade, Theme } from '@material-ui/core/styles'
 
 import styles from '../../styles'
 
@@ -34,7 +34,8 @@ const useStyles = makeStyles((theme: Theme) => ({
       }
     },
     '& a, & button': {
-      zIndex: 1
+      zIndex: 1,
+      position: 'relative'
     },
     '& a': {
       color: theme.palette.secondary.dark
