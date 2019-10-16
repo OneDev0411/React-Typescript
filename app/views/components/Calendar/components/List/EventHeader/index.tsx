@@ -30,7 +30,7 @@ export function EventHeader(props: IProps) {
         }}
       >
         <div style={FlexStyle}>
-          {props.item.isToday && 'Today '} {props.item.title}
+          {props.item.isToday && 'Today - '} {props.item.title}
         </div>
       </div>
     </div>
