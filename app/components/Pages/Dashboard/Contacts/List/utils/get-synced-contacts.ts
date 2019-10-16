@@ -9,7 +9,7 @@ import { getNumOfSyncedContacts } from '../ImportContactsButton/helpers'
 
 export interface SyncedContacts {
   accounts: number
-  contacts: number
+  contactsCount: number
 }
 
 export const getSyncedContacts = (state: IAppState): SyncedContacts => {
@@ -22,11 +22,11 @@ export const getSyncedContacts = (state: IAppState): SyncedContacts => {
 
   const lastSeen = new Date(
     getActiveTeamSettings(state.user, SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY) ||
-      0 // eslint-disable-line
+      0
   )
 
   return {
     accounts: accounts.length,
-    contacts: getNumOfSyncedContacts(lastSeen, accounts)
+    contactsCount: getNumOfSyncedContacts(lastSeen, accounts)
   }
 }

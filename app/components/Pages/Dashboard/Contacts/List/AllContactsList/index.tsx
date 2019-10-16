@@ -70,9 +70,9 @@ function AllContactsList({
         >
           <ListItemName>
             Synced Contacts
-            {syncedContacts.contacts > 0 && (
+            {syncedContacts.contactsCount > 0 && (
               <Badge large style={{ marginLeft: '0.5rem' }}>
-                {syncedContacts.contacts}
+                {syncedContacts.contactsCount}
               </Badge>
             )}
           </ListItemName>
