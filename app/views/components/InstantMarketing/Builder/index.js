@@ -21,6 +21,7 @@ import {
   getListingUrl,
   getColor
 } from '../helpers/nunjucks-functions'
+import { getBrandColors } from '../helpers/get-brand-colors'
 
 import { loadGrapesjs } from './utils/load-grapes'
 import { createGrapesInstance } from './utils/create-grapes-instance'
@@ -80,7 +81,13 @@ class Builder extends React.Component {
     const { load: loadAssetManagerPlugin } = await import('./AssetManager')
     const { load: loadStyleManagerPlugin } = await import('./StyleManager')
 
-    await Promise.all([loadAssetManagerPlugin(), loadStyleManagerPlugin()])
+    const { brand } = getActiveTeam(this.props.user)
+    const brandColors = getBrandColors(brand)
+
+    await Promise.all([
+      loadAssetManagerPlugin(),
+      loadStyleManagerPlugin(brandColors)
+    ])
 
     this.setState({
       isLoading: false
