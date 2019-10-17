@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { TextField } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
@@ -51,6 +51,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
+const VALID_INPUT_PATTERN = /^[0-9]{0,3}$/
+
 interface Props {
   value: number
   onChange: (value: number) => unknown
@@ -59,8 +61,8 @@ interface Props {
 export default function CustomValue(props: Props) {
   const classes = useStyles()
 
-  const weeks = getWeeks(props.value)
-  const days = getDays(props.value)
+  const [weeks, setWeeks] = useState(getWeeks(props.value))
+  const [days, setDays] = useState(getDays(props.value))
 
   const [value, setValue] = useState(weeks || days)
 
@@ -68,13 +70,31 @@ export default function CustomValue(props: Props) {
     weeks ? DROPDOWN_OPTIONS[1] : DROPDOWN_OPTIONS[0]
   )
 
-  const handleChange = useCallback(() => {
-    props.onChange(value * selectedItem.value)
-  }, [props, selectedItem, value])
+  useEffect(() => {
+    setWeeks(getWeeks(props.value))
+    setDays(getDays(props.value))
+    setValue(weeks || days)
+    setSelectedItem(weeks ? DROPDOWN_OPTIONS[1] : DROPDOWN_OPTIONS[0])
+  }, [days, props.value, weeks])
+
+  const handleChange = useCallback(
+    (item?: DropdownItem) => {
+      props.onChange(value * (item || selectedItem).value)
+    },
+    [props, selectedItem, value]
+  )
 
   const handleSelect = (item: DropdownItem) => {
     setSelectedItem(item)
-    handleChange()
+    handleChange(item)
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value
+
+    if (VALID_INPUT_PATTERN.test(inputValue)) {
+      setValue(Number(inputValue))
+    }
   }
 
   return (
@@ -83,8 +103,8 @@ export default function CustomValue(props: Props) {
         <TextField
           value={value}
           variant="outlined"
-          onChange={e => setValue(Number(e.target.value))}
-          onBlur={handleChange}
+          onChange={handleInputChange}
+          onBlur={() => handleChange()}
         />
       </div>
       <div className={classes.customValueDropdownContainer}>
