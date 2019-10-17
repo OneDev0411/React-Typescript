@@ -19,7 +19,7 @@ import { SYNCED_CONTACTS_LIST_ID } from '../constants'
 import { getSyncedContacts, SyncedContacts } from '../utils/get-synced-contacts'
 
 interface Props {
-  onFilterChange: ({ filters: any }) => void // TODO
+  onFilterChange: (selectedSegment?: unknown) => void
   resetActiveFilters: (segmentName: string) => void
   activeFilters: StringMap<IActiveFilter>
   changeActiveFilterSegment: typeof changeActiveFilterSegmentAction
@@ -44,9 +44,10 @@ function AllContactsList({
     await resetActiveFilters(CONTACTS_SEGMENT_NAME)
     await changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, type)
 
-    onFilterChange({
-      filters: []
-    })
+    const selectedSegment =
+      type === SYNCED_CONTACTS_LIST_ID ? activeSegment : null
+
+    onFilterChange(selectedSegment)
   }
 
   return (
