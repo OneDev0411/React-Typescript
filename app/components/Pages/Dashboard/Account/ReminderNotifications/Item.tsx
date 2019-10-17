@@ -88,14 +88,14 @@ export default function Item(props: Props) {
       <CheckBoxContainer onClick={checkboxChangeHandler}>
         <CheckBoxButton
           onClick={checkboxChangeHandler}
-          isSelected={props.value >= 0}
+          isSelected={props.value != null}
           square
         />
         &nbsp;&nbsp;<span>{label}</span>
       </CheckBoxContainer>
 
       <BasicDropdown
-        disabled={!(props.value >= 0)}
+        disabled={props.value == null}
         fullHeight
         items={[...options, CUSTOM_VALUE]}
         selectedItem={selectedItem}

@@ -39,7 +39,7 @@ export const ProfileTabs = ({ user }: Props) => (
       title="Email Templates"
     />
 
-    <Acl access={[ACL.CRM, ACL.DEALS]}>
+    <Acl access={{ oneOf: [ACL.CRM, ACL.DEALS] }}>
       <SideNavItem
         link="/dashboard/account/reminder-notifications"
         title="Reminder Notifications"
