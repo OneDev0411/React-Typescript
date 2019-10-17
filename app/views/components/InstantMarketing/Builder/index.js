@@ -504,7 +504,7 @@ class Builder extends React.Component {
             <h1>{this.props.headerTitle}</h1>
 
             <Actions>
-              {this.state.selectedTemplate && !this.props.isEdit && (
+              {this.state.selectedTemplate && (
                 <TeamContactSelect
                   fullHeight
                   pullTo="right"
