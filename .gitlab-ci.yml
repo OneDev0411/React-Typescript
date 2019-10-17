@@ -1,5 +1,11 @@
 image: node:10
 
+variables:
+  LABELS_TO_REMOVE: 'Merge Requested'
+  LABELS_TO_ADD_FOR_IRISH: 'Deployed to Boer'
+  LABELS_TO_ADD_FOR_CHAPPAR: 'Deployed to Alpine'
+  LABELS_TO_ADD_FOR_PRODUCTION: 'Deployed to Production'
+
 stages:
   - build
   - test
@@ -34,7 +40,7 @@ deploy_alpha:
     - gem install dpl
   script:
     - dpl --provider=heroku --app=rechat-web-alpha --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
-    - node ./scripts/update-gl-issue-labels.js "Merge Requested" "Deployed to Alpine"
+    - node ./scripts/update-gl-issue-labels.js "$LABELS_TO_REMOVE" "$LABELS_TO_ADD_FOR_CHAPPAR"
   environment:
     name: alpha
     url: https://alpha.rechat.com
@@ -50,7 +56,7 @@ deploy_irish:
     - gem install dpl
   script:
     - dpl --provider=heroku --app=rechat-irish --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
-    - node ./scripts/update-gl-issue-labels.js "Merge Requested" "Deployed to Boer"
+    - node ./scripts/update-gl-issue-labels.js "$LABELS_TO_REMOVE" "$LABELS_TO_ADD_FOR_IRISH"
   environment:
     name: irish
     url: https://irish.rechat.com
@@ -66,7 +72,7 @@ deploy_production:
     - gem install dpl
   script:
     - dpl --provider=heroku --app=rechat-web --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
-    - node ./scripts/update-gl-issue-labels.js "Merge Requested" "Deployed to Production"
+    - node ./scripts/update-gl-issue-labels.js "$LABELS_TO_REMOVE" "$LABELS_TO_ADD_FOR_PRODUCTION"
   environment:
     name: production
     url: https://rechat.com
