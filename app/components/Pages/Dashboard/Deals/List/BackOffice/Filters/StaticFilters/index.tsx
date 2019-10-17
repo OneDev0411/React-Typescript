@@ -24,6 +24,7 @@ export default function StaticFilters(props: Props) {
           type: 'query'
         })}
         title="Listing"
+        tooltip="Active Listings"
         badge={
           isStaticFilter && counter && props.searchQuery.filter === 'listing'
             ? counter
@@ -36,6 +37,13 @@ export default function StaticFilters(props: Props) {
           type: 'query'
         })}
         title="Contract"
+        tooltip={[
+          'Active Contingent',
+          'Active Kickout',
+          'Active Option Contract',
+          'Lease Contract',
+          'Pending'
+        ]}
         badge={
           isStaticFilter && counter && props.searchQuery.filter === 'contract'
             ? counter
