@@ -26,6 +26,8 @@ import {
   SHOULD_RENDER_FORCEPUSH_BUTTON
 } from './constants'
 
+const HOME_ANNIVERSARY_EVENT_TYPE = 'home_anniversary'
+
 class ReminderNotifications extends Component {
   state = {
     columns: [],
@@ -152,11 +154,18 @@ class ReminderNotifications extends Component {
   async getSettings() {
     const response = await new Fetch().get(API_URL)
 
-    return response.body.data.map(({ object_type, event_type, reminder }) => ({
-      object_type,
-      event_type,
-      reminder
-    }))
+    return response.body.data.map(({ object_type, event_type, reminder }) => {
+      const setting = { object_type, event_type, reminder }
+
+      if (setting.event_type === HOME_ANNIVERSARY_EVENT_TYPE) {
+        return {
+          ...setting,
+          object_type: CONTACT_DATE_OBJECT_TYPE
+        }
+      }
+
+      return setting
+    })
   }
 
   async setSettings(settings) {
@@ -166,8 +175,8 @@ class ReminderNotifications extends Component {
         // I hate this part but it's forced from API side :/
         // We mostly do their dirty jobs.
         if (
-          setting.object_type === 'contact_attribute' &&
-          setting.event_type === 'home_anniversary'
+          setting.object_type === CONTACT_DATE_OBJECT_TYPE &&
+          setting.event_type === HOME_ANNIVERSARY_EVENT_TYPE
         ) {
           return {
             ...setting,
