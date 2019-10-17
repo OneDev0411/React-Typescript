@@ -7,7 +7,7 @@ import { hasUserAccess } from '../../../utils/user-teams'
 
 import { ACL } from '../../../constants/acl'
 
-type Access = IPermission | ((user: IUser) => boolean) | { oneOf: Access }
+type Access = IPermission | ((user: IUser) => boolean) | { oneOf: Access[] }
 
 interface Props {
   access: Access | Access[]
