@@ -34,6 +34,7 @@ deploy_alpha:
     - gem install dpl
   script:
     - dpl --provider=heroku --app=rechat-web-alpha --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
+    - node ./scripts/update-gl-issue-labels.js "Merge Requested" "Deployed to Alpine"
   environment:
     name: alpha
     url: https://alpha.rechat.com
@@ -49,6 +50,7 @@ deploy_irish:
     - gem install dpl
   script:
     - dpl --provider=heroku --app=rechat-irish --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
+    - node ./scripts/update-gl-issue-labels.js "Merge Requested" "Deployed to Boer"
   environment:
     name: irish
     url: https://irish.rechat.com
@@ -64,6 +66,7 @@ deploy_production:
     - gem install dpl
   script:
     - dpl --provider=heroku --app=rechat-web --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
+    - node ./scripts/update-gl-issue-labels.js "Merge Requested" "Deployed to Production"
   environment:
     name: production
     url: https://rechat.com
