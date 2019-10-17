@@ -621,9 +621,18 @@ class ContactsList extends React.Component {
         <SideMenu isOpen={isSideMenuOpen} width="13rem">
           <AllContactsList
             activeSegment={activeSegment}
-            onFilterChange={filters => {
+            onFilterChange={selectedSegment => {
               this.setState({ selectedSidebarFilter: null })
-              this.handleFilterChange({ ...filters, flows: [] }, true)
+
+              // Synced contacts selected
+              if (selectedSegment) {
+                this.handleChangeSavedSegment(selectedSegment)
+
+                return
+              }
+
+              // All contacts selected
+              this.handleFilterChange({ filters: [], flows: [] }, true)
             }}
           />
           <TagsList
