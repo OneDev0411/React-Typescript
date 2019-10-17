@@ -43,7 +43,7 @@ function BackofficeTable(props: RouterProps & StateProps) {
 
   const searchQuery: SearchQuery = {
     filter: props.params.filter,
-    type: props.location.query.type,
+    type: props.location.query.type || 'inbox',
     term: searchCriteria
   }
 

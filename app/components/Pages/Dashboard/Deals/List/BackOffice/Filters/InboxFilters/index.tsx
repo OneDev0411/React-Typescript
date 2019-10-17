@@ -22,6 +22,10 @@ interface Props {
 export default function InboxFilters(props: Props) {
   const findActiveTab = useCallback(
     (deals: IDealList, activeFilter: string): void => {
+      if (props.searchQuery.type !== 'inbox') {
+        return
+      }
+
       const tabs = getTabs(deals)
 
       // get active tab
@@ -31,7 +35,7 @@ export default function InboxFilters(props: Props) {
         setFilter(activeTab)
       }
     },
-    []
+    [props.searchQuery.type]
   )
 
   const setFilter = (filter: string): void => {
