@@ -1,21 +1,42 @@
 import { addNotification as notify } from 'reapop'
 
-import { createGenericTask, changeNeedsAttention } from 'actions/deals'
+import { createTask, changeNeedsAttention } from 'actions/deals'
 
 import store from '../../../../../../stores'
 import Message from '../../../Chatroom/Util/message'
 
-export async function createAdminRequestTask({
+export async function createRequestTask({
   checklist,
   userId,
   dealId,
   taskTitle,
   taskComment,
-  notifyMessage
+  notifyMessage,
+  taskType
 }) {
-  const task = await store.dispatch(
-    createGenericTask(dealId, taskTitle, checklist.id)
-  )
+  let task
+
+  try {
+    task = await store.dispatch(
+      createTask({
+        dealId,
+        taskTitle,
+        checklistId: checklist.id,
+        taskType
+      })
+    )
+  } catch (e) {
+    store.dispatch(
+      notify({
+        message: 'Could not finish the request. please try again.',
+        status: 'error',
+        dismissible: true,
+        dismissAfter: 3000
+      })
+    )
+
+    return null
+  }
 
   const message = {
     comment: taskComment,
@@ -36,4 +57,6 @@ export async function createAdminRequestTask({
       dismissAfter: 4000
     })
   )
+
+  return task
 }

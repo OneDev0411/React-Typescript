@@ -14,7 +14,7 @@ import Spinner from 'components/Spinner'
 import { Icon as ArrowIcon } from 'components/Dropdown'
 
 import { getStatusList } from './helpers/get-status-list'
-import { createAdminRequestTask } from '../../utils/create-request-task'
+import { createRequestTask } from '../../utils/create-request-task'
 
 import { DropDownButton, StatusBullet, StatusOption } from './styled'
 
@@ -72,10 +72,11 @@ export class DealStatus extends React.Component {
   notifyAdmin = async status => {
     const checklist = getActiveChecklist(this.props.deal, this.props.checklists)
 
-    createAdminRequestTask({
+    createRequestTask({
       checklist,
       userId: this.props.user.id,
       dealId: this.props.deal.id,
+      taskType: 'Generic',
       taskTitle: `Change listing status to ${status}`,
       taskComment: `Hello, Please change listing status to ${status}`,
       notifyMessage: 'Back office has been notified to change listing status'

@@ -10,7 +10,7 @@ import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
 
 import ActionButton from 'components/Button/ActionButton'
 
-import { createAdminRequestTask } from '../../utils/create-request-task'
+import { createRequestTask } from '../../utils/create-request-task'
 
 class DeleteDeal extends React.Component {
   state = {
@@ -42,15 +42,16 @@ class DeleteDeal extends React.Component {
     })
   }
 
-  handleSendRequest = () => {
+  handleSendRequest = text => {
     const checklist = getActiveChecklist(this.props.deal, this.props.checklists)
 
-    createAdminRequestTask({
+    createRequestTask({
       checklist,
       userId: this.props.user.id,
       dealId: this.props.deal.id,
+      taskType: 'Generic',
       taskTitle: 'Remove deal',
-      taskComment: 'Hello, Please remove this deal',
+      taskComment: text,
       notifyMessage: 'Back office has been notified to remove the deal'
     })
   }
