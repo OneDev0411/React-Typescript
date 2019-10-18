@@ -144,7 +144,7 @@ const mapHOC = compose(
         }))
       )
 
-      if (savedSearch && savedSearch.id !== loggedAlert) {
+      if (savedSearch && savedSearch.id && savedSearch.id !== loggedAlert) {
         logUserActivity({
           object: savedSearch.id,
           object_class: 'alert',
