@@ -5,7 +5,7 @@ import LinkButton from 'components/Button/LinkButton'
 import { CloseButton } from 'components/Button/CloseButton'
 import SendEmail from 'components/SendEmailButton'
 
-import { YardSign } from 'deals/components/YardSign'
+import YardSign from 'deals/components/YardSign'
 
 import { RemoveDraft } from './RemoveDraft'
 
@@ -21,7 +21,7 @@ export function Menu(props) {
       {deal.is_draft === true && <RemoveDraft deal={deal} />}
 
       {deal.deal_type === 'Selling' && (
-        <YardSign style={{ marginLeft: '0.5rem' }} />
+        <YardSign deal={deal} style={{ marginLeft: '0.5rem' }} />
       )}
 
       <SendEmail deal={deal} style={{ marginLeft: '0.5rem' }} />
