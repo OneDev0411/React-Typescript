@@ -1,4 +1,5 @@
 import React, {
+  ComponentProps,
   forwardRef,
   useContext,
   useEffect,
@@ -7,7 +8,7 @@ import React, {
   useRef,
   useState
 } from 'react'
-import { Editor as DraftEditor, EditorState } from 'draft-js'
+import { ContentBlock, Editor as DraftEditor, EditorState } from 'draft-js'
 import PluginsEditor from 'draft-js-plugins-editor'
 import 'draft-js-image-plugin/lib/plugin.css'
 import 'draft-js-alignment-plugin/lib/plugin.css'
@@ -33,7 +34,7 @@ import { RichTextButtons } from './buttons/RichTextButtons'
 import { createFilePlugin } from './plugins/draft-js-handle-files-plugin'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
 import { updateEntityData } from './modifiers/update-entity-data'
-import { InlineEntityPopover } from './components/InlineEntityPopover'
+import { DraftJsSelectionPopover } from './components/DraftJsSelectionPopover'
 import { LinkPreview } from './components/LinkPreview/LinkPreview'
 import { Checkbox } from '../Checkbox'
 import { TextEditorProps } from './types'
@@ -345,17 +346,31 @@ export const TextEditor = forwardRef(
             }}
           />
           {!linkEditorOpen && (
-            <InlineEntityPopover editorState={editorState} entityFilter="LINK">
-              {({ entity, close }) => (
+            <DraftJsSelectionPopover
+              editorState={editorState}
+              inlineEntityFilter="LINK"
+              blockFilter={isBlockLinked}
+            >
+              {({
+                entity,
+                close,
+                block
+              }: Parameters<
+                ComponentProps<typeof DraftJsSelectionPopover>['children']
+              >[0]) => (
                 <LinkPreview
                   editorState={editorState}
                   setEditorState={handleChange}
                   onClose={close}
-                  url={entity.getData().url}
+                  url={
+                    (entity && entity.getData().url) ||
+                    (block && block.getData().get('href')) ||
+                    ''
+                  }
                   onEdit={() => setLinkEditorOpen(true)}
                 />
               )}
-            </InlineEntityPopover>
+            </DraftJsSelectionPopover>
           )}
           {appendix}
         </EditorWrapper>
@@ -417,3 +432,5 @@ export const TextEditor = forwardRef(
     )
   }
 )
+
+const isBlockLinked = (block: ContentBlock) => !!block.getData().get('href')
