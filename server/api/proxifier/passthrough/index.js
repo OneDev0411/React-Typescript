@@ -1,16 +1,20 @@
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
-// import { PassThrough } from 'stream'
+
+import config from '../../../../config/private'
+import { logger } from '../../../util/logger'
 
 const router = require('koa-router')()
 
-import config from '../../../../config/private'
-
 const app = new Koa()
+
+app.use(logger)
 
 router.post('/proxifier', bodyParser(), async ctx => {
   const headers = ctx.headers
   const { querystring } = ctx.request
+
+  ctx.log('Proxifier:::Start')
 
   try {
     const brand = headers['x-rechat-brand']
@@ -68,6 +72,8 @@ router.post('/proxifier', bodyParser(), async ctx => {
     ctx.status = status
     ctx.body = text
   }
+
+  ctx.log('Proxifier:::End')
 })
 
 module.exports = app.use(router.routes())

@@ -29,8 +29,9 @@ function sanitize(state) {
 }
 
 async function display(file, renderProps) {
-  const user = await getUserProfile(this.session)
+  this.log('Render:::Start')
 
+  let user
   let initialState = {
     user,
     data: {
@@ -39,6 +40,24 @@ async function display(file, renderProps) {
   }
 
   try {
+    this.log('Render:::getUserProfile:::Start')
+    user = await getUserProfile(this.session)
+    initialState = {
+      user,
+      data: {
+        user
+      }
+    }
+  } catch (error) {
+    this.log('Render:::getUserProfile:::Error')
+    console.log(error)
+  } finally {
+    this.log('Render:::getUserProfile:::End')
+  }
+
+  try {
+    this.log('Render:::getBrandByHostname:::Start')
+
     const { hostname } = urlParser.parse(this.request.origin)
     const brand = await getBrandByHostname(hostname)
 
@@ -52,7 +71,10 @@ async function display(file, renderProps) {
       }
     }
   } catch (error) {
+    this.log('Render:::getBrandByHostname:::Error')
     console.log(error)
+  } finally {
+    this.log('Render:::getBrandByHostname:::End')
   }
 
   // create store
@@ -65,13 +87,19 @@ async function display(file, renderProps) {
   // append user data to render props params
   if (initialState.user) {
     try {
+      this.log('Render:::getUserTeams:::Start')
       await store.dispatch(getUserTeams(initialState.user))
     } catch (e) {
+      this.log('Render:::getUserTeams:::Error')
+      console.log(e)
+
       if (e.response && e.response.status === 401) {
         console.log('Can not get user teams. signing out...')
 
         return this.redirect('/signout')
       }
+    } finally {
+      this.log('Render:::getUserTeams:::End')
     }
 
     renderProps.params.user = {
@@ -81,30 +109,45 @@ async function display(file, renderProps) {
   }
 
   try {
+    this.log('Render:::fetch:::Start')
     await Promise.all(fetch(store, renderProps))
   } catch (e) {
-    /* do nothing */
+    this.log('Render:::fetch:::Error')
+    console.log(e)
+  } finally {
+    this.log('Render:::fetch:::End')
   }
 
   // get store initial data
-  const store_data = await sanitize(store.getState())
+  try {
+    this.log('Render:::sanitize:::Start')
 
-  if (['production', 'stage'].indexOf(process.env.NODE_ENV) > -1) {
-    await this.render(file || 'app', {
-      openGraph: this.state.openGraph,
-      variables: this.state.variables,
-      store_data
-    })
-  } else {
-    await this.render('development', {
-      store_data,
-      variables: this.state.variables,
-      jsBundle: `${config.compile.publicPath}/${config.compile.jsBundle}`,
-      jsVendorBundle: `${config.compile.publicPath}/${
-        config.compile.jsVendorBundle
-      }`
-    })
+    const store_data = await sanitize(store.getState())
+
+    if (['production', 'stage'].indexOf(process.env.NODE_ENV) > -1) {
+      await this.render(file || 'app', {
+        openGraph: this.state.openGraph,
+        variables: this.state.variables,
+        store_data
+      })
+    } else {
+      await this.render('development', {
+        store_data,
+        variables: this.state.variables,
+        jsBundle: `${config.compile.publicPath}/${config.compile.jsBundle}`,
+        jsVendorBundle: `${config.compile.publicPath}/${
+          config.compile.jsVendorBundle
+        }`
+      })
+    }
+  } catch (error) {
+    this.log('Render:::sanitize:::Error')
+    console.log(error)
+  } finally {
+    this.log('Render:::sanitize:::End')
   }
+
+  this.log('Render:::End')
 }
 
 export default () =>

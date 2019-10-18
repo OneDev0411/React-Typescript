@@ -47,6 +47,7 @@ app.use(async (ctx, next) => {
 
     return ctx.redirect(url)
   }
+
   // eslint-disable-next-line
   return next()
 })

@@ -14,26 +14,37 @@ let mailgun = require('mailgun-js')({
 const router = require('koa-router')()
 
 router.get('/', async ctx => {
+  ctx.log('Website-Routes:::Start')
+
   // TODO: This is quickfix for claystapp,
   // because we need to define a middleware and redirect the users automaticly
   // for all the website routes, not only home page
   const { hostname } = urlParser.parse(ctx.request.origin)
 
   try {
+    ctx.log('Website-Routes:::getBrandByHostname:::Start')
+
     const brand = await getBrandByHostname(hostname)
 
     if (brand) {
       return ctx.redirect('/dashboard/mls')
     }
   } catch (e) {
+    ctx.log('Website-Routes:::getBrandByHostname:::Error')
+    console.log(e)
     // Ignore error it's ok not to find a brand here.
+  } finally {
+    ctx.log('Website-Routes:::getBrandByHostname:::End')
   }
 
   // After discussing we decided to revert back the previous experience
   // and redirect users to dashboard automatically for now.
   if (isLoggedIn(ctx)) {
+    ctx.log('Website-Routes:::End')
     ctx.redirect('/dashboard')
   }
+
+  ctx.log('Website-Routes:::End')
 
   return ctx.render(template_path('index.ejs'), {
     title: 'Rechat',

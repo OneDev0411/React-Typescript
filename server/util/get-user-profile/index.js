@@ -13,7 +13,9 @@ export default async function getProfile(session) {
         ...session.user
       }
     }
-  } catch (e) {}
+  } catch (e) {
+    console.log('getProfile', e)
+  }
 
   return user
 }
