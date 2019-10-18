@@ -20,7 +20,7 @@ const WarningIcon = styled(IconWarning).attrs({
 })`
   vertical-align: text-top;
   margin: ${({ theme }: ThemeProps<Theme>) => theme.spacing(0, 1)};
-`
+` as typeof IconWarning
 
 export function ConnectedAccountSyncStatus(props: Props) {
   const lastSync = getLastSync(props.account, props.syncType)

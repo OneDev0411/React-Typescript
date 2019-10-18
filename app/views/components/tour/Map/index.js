@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import isEqual from 'lodash/isEqual'
 
 import config from '../../../../../config/public'
 import { loadJS } from '../../../../utils/load-js'
@@ -49,12 +50,19 @@ export class Map extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.listings.length !== prevProps.listings.length) {
+    const getId = ({ id }) => id
+    const prevListings = prevProps.listings.map(getId)
+    const currentListings = this.props.listings.map(getId)
+
+    if (!isEqual(prevListings, currentListings)) {
       this.calculateAndDisplayRoute()
     }
   }
 
   initMap = () => {
+    const { listings } = this.props
+    const listingsLength = listings.length
+
     this.map = new window.google.maps.Map(
       document.getElementById(this.props.id),
       {
@@ -63,12 +71,16 @@ export class Map extends React.Component {
       }
     )
 
-    if (this.props.listings.length === 1) {
+    if (listingsLength === 0) {
+      return
+    }
+
+    if (listingsLength === 1) {
       this.setMarker(this.getLocations()[0].location)
-    } else {
-      this.directionsService = new window.google.maps.DirectionsService()
-      this.directionsDisplay = new window.google.maps.DirectionsRenderer()
-      this.directionsDisplay.setMap(this.map)
+    }
+
+    if (listingsLength > 1) {
+      this.setDirectionService()
       this.calculateAndDisplayRoute()
     }
   }
@@ -90,11 +102,21 @@ export class Map extends React.Component {
     return locations
   }
 
+  setDirectionService = () => {
+    this.directionsService = new window.google.maps.DirectionsService()
+    this.directionsDisplay = new window.google.maps.DirectionsRenderer()
+    this.directionsDisplay.setMap(this.map)
+  }
+
   calculateAndDisplayRoute = () => {
     const locations = this.getLocations()
 
     if (locations.length === 0) {
       return this.marker.setMap(null)
+    }
+
+    if (!this.directionsService) {
+      this.setDirectionService()
     }
 
     if (locations.length === 1) {

@@ -82,7 +82,7 @@ export function AddTeamMembersModal(props: Props) {
                             </Checkbox>
                           ))}
                         </div>
-                        <FieldError name={input.name}>{meta.error}</FieldError>
+                        <FieldError name={input.name} />
                       </>
                     )
                   )

@@ -86,7 +86,13 @@ export const ContactColumn = styled.div`
     }
   }
 `
-
+export const NoContent = styled.div`
+  display: flex;
+  height: 20vh;
+  color: ${({ theme }) => theme.palette.text.hint};
+  justify-content: center;
+  align-items: center;
+`
 export const StyledBadge = styled(Badge)`
   padding: 0.25rem 0.75rem;
-`
+` as typeof Badge

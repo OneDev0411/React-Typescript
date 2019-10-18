@@ -10,6 +10,7 @@ describe('Select Deal File Drawer', () => {
     const tasks = deal.checklists.flatMap(checklist => checklist.tasks)
 
     render(
+      // @ts-ignore
       <DocumentRow
         deal={deal}
         checklists={deal.checklists}

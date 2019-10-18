@@ -2,6 +2,7 @@ import React from 'react'
 
 import { EventDrawer } from 'components/EventDrawer'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
+import { TourDrawer } from 'components/tour/TourDrawer'
 
 import { createDueDate } from './helpers/create-date'
 import { Note } from './Note'
@@ -47,8 +48,13 @@ export function CrmEvents(props: Props) {
       ? props.event.crm_task
       : props.event.id
 
-  if (props.event.type === 'Open House') {
+  if (props.event.event_type === 'Open House') {
+    // @ts-ignore js component
     return <OpenHouseDrawer {...sharedProps} openHouseId={id} />
+  }
+
+  if (props.event.event_type === 'Tour') {
+    return <TourDrawer {...sharedProps} tourId={id} />
   }
 
   if (props.event.event_type === 'Note') {

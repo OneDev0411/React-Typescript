@@ -25,19 +25,13 @@ import IconDealFilled from '../../../SvgIcons/Deals/IconDealFilled'
 import { iconSizes } from '../../../SvgIcons/icon-sizes'
 
 interface Props extends FieldRenderProps<any> {
-  checklists: IDealChecklist[]
-  tasks: IDealTask[]
-  envelopes: IDealEnvelope[]
+  checklists: Record<UUID, IDealChecklist>
+  tasks: Record<UUID, IDealTask>
+  envelopes: Record<UUID, IDealEnvelope>
   deal?: IDeal
   onClick?: MouseEventHandler
   initialAttachments: IFile[]
   onChanged?: () => void
-}
-
-interface State {
-  deal?: IDeal | null
-  isDealsListOpen: boolean
-  isDealFilesOpen: boolean
 }
 
 export function AddDealFile({
@@ -75,12 +69,29 @@ export function AddDealFile({
     setDealFilesOpen(true)
   }
 
+  const fileExists = (files: IFile[], file: IFile) =>
+    files.some(aFile => aFile.id === file.id)
+
   const handleChangeSelectedDealFile = (files: IFile[]) => {
     setDeal(props.deal || null)
     setDealFilesOpen(false)
 
     if (deal) {
-      props.input.onChange(files as any)
+      const currentFiles: IFile[] = props.input.value
+
+      // Previously selected files which are either non-deal files or
+      // deal files that are still selected
+      const preservedFiles = currentFiles.filter(
+        file => !fileExists(allDealFiles, file) || fileExists(files, file)
+      )
+
+      // New deal files that are selected from the drawer, but were not
+      // previously selected
+      const newDealFiles = files.filter(file =>
+        preservedFiles.every(aFile => aFile.id !== file.id)
+      )
+
+      props.input.onChange([...preservedFiles, ...newDealFiles] as any)
       onChanged()
     }
   }
@@ -140,7 +151,7 @@ export function AddDealFile({
           drawerOptions={{
             showBackdrop: false
           }}
-          showStashFiles={false}
+          allowNoChecklist
           initialAttachments={initialDealFiles}
           defaultSelectedItems={selectedDealFiles}
           deal={deal}
@@ -153,7 +164,7 @@ export function AddDealFile({
 }
 
 export default connect(
-  ({ deals: { checklists, list, tasks, envelopes } }: IAppState) => ({
+  ({ deals: { checklists, tasks, envelopes } }: IAppState) => ({
     checklists,
     tasks,
     envelopes

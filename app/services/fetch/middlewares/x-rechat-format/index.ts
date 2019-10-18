@@ -1,8 +1,15 @@
+export interface ReferencedObject {
+  object_type: string
+  id: string
+  type: 'reference'
+}
+
 /**
  * returns normalized data
  * @param data - the response data
  * @param references - the reference list
  */
+
 function deepReplace(data: object, references: StringMap<StringMap<object>>) {
   if (Array.isArray(data)) {
     return data.map(item => deepReplace(item, references))
@@ -29,7 +36,7 @@ function deepReplace(data: object, references: StringMap<StringMap<object>>) {
  * checks whether object has reference type or not
  * @param object - the object
  */
-function hasReferenceProperty(object: any): boolean {
+function hasReferenceProperty(object: any): object is ReferencedObject {
   return object && typeof object === 'object' && object.type === 'reference'
 }
 

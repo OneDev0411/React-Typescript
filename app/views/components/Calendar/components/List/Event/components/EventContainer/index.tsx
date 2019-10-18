@@ -2,12 +2,13 @@ import React from 'react'
 import fecha from 'fecha'
 
 import { makeStyles } from '@material-ui/styles'
-import { Theme, fade } from '@material-ui/core/styles'
+import { fade, Theme } from '@material-ui/core/styles'
 
 import styles from '../../styles'
 
 interface StyleProps {
   hasBorderBottom: boolean | null
+  clickable: boolean
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -17,6 +18,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'flex-start',
     justifyContent: 'center',
     height: '100%',
+    cursor: (props: StyleProps) => (props.clickable ? 'pointer' : 'auto'),
     borderBottom: (props: StyleProps) =>
       props.hasBorderBottom ? '1px solid rgba(219, 230, 253, 0.5)' : 'none',
     '& button, a.MuiButtonBase-root': {
@@ -30,6 +32,10 @@ const useStyles = makeStyles((theme: Theme) => ({
         borderColor: 'inherit',
         color: 'inherit'
       }
+    },
+    '& a, & button': {
+      zIndex: 1,
+      position: 'relative'
     },
     '& a': {
       color: theme.palette.secondary.dark
@@ -51,6 +57,7 @@ interface Props {
   title: React.ReactNode
   subtitle?: React.ReactNode
   actions?: React.ReactNode
+  onClick?(): void
 }
 
 export function EventContainer({
@@ -60,25 +67,43 @@ export function EventContainer({
   icon,
   title,
   subtitle,
-  actions
+  actions,
+  onClick
 }: Props) {
-  const date =
-    event.object_type === 'crm_task'
-      ? fecha.format(new Date(event.timestamp * 1000), 'hh:mm A')
-      : 'All day'
-
   const hasBorderBottom = nextItem && !nextItem.hasOwnProperty('isEventHeader')
-
   const classes = useStyles({
-    hasBorderBottom
+    hasBorderBottom,
+    clickable: typeof onClick === 'function'
   })
+
+  const getDate = () => {
+    if (event.object_type !== 'crm_task') {
+      return 'All day'
+    }
+
+    const formatDate = date => fecha.format(new Date(date * 1000), 'hh:mm A')
+
+    const dueDate = formatDate(event.timestamp)
+
+    if (event.full_crm_task && event.full_crm_task.end_date) {
+      return `${dueDate} - ${formatDate(event.full_crm_task.end_date)}`
+    }
+
+    return dueDate
+  }
 
   return (
     <div style={style}>
       <div className={classes.root}>
+        <button
+          type="button"
+          style={styles.buttonContainer}
+          onClick={onClick}
+        />
+
         <div style={styles.row}>
           <div style={styles.container}>
-            <div style={styles.time}>{date}</div>
+            <div style={styles.time}>{getDate()}</div>
             <div
               style={{
                 ...styles.container,

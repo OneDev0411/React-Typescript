@@ -1,15 +1,13 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { withProps } from 'recompose'
 import { browserHistory } from 'react-router'
-
-import PropTypes from 'prop-types'
 
 import { hasUserAccess } from '../../../utils/user-teams'
 
 import { ACL } from '../../../constants/acl'
 
-type Access = IPermission | ((user: IUser) => boolean) | { oneOf: Access }
+type Access = IPermission | ((user: IUser) => boolean) | { oneOf: Access[] }
 
 interface Props {
   access: Access | Access[]
@@ -60,7 +58,7 @@ function Acl({
     // eslint-disable-next-line
   }, [])
 
-  return userHasAccess ? children : fallback
+  return <>{userHasAccess ? children : fallback}</>
 
   function hasAccess(requiredAccess: Access) {
     if (typeof requiredAccess === 'function') {
@@ -77,31 +75,24 @@ function Acl({
   }
 }
 
-const ConnectedAcl = connect<StateProps, null, Props>(
-  ({ user }: StateProps) => ({
-    user
-  })
-)(Acl)
-
-const AccessType = PropTypes.oneOfType([
-  PropTypes.string,
-  PropTypes.shape({
-    oneOf: PropTypes.arrayOf(PropTypes.string)
-  }),
-  PropTypes.func
-])
-
-ConnectedAcl.propTypes = {
-  fallback: PropTypes.node,
-  children: PropTypes.node.isRequired,
-  access: PropTypes.oneOfType([PropTypes.arrayOf(AccessType), AccessType])
-    .isRequired
-}
+const ConnectedAcl = connect(({ user }: StateProps) => ({
+  user
+}))(Acl)
 
 export default Object.assign(ConnectedAcl, {
-  Crm: withProps({ access: [ACL.CRM] })(ConnectedAcl),
-  Admin: withProps({ access: [ACL.ADMIN] })(ConnectedAcl),
-  BackOffice: withProps({ access: [ACL.BACK_OFFICE] })(ConnectedAcl),
-  Deals: withProps({ access: [ACL.DEALS] })(ConnectedAcl),
-  Marketing: withProps({ access: [ACL.MARKETING] })(ConnectedAcl)
+  Crm: withProps<Pick<Props, 'access'>, {}>({ access: [ACL.CRM] })(
+    ConnectedAcl
+  ),
+  Admin: withProps<Pick<Props, 'access'>, {}>({ access: [ACL.ADMIN] })(
+    ConnectedAcl
+  ),
+  BackOffice: withProps<Pick<Props, 'access'>, {}>({
+    access: [ACL.BACK_OFFICE]
+  })(ConnectedAcl),
+  Deals: withProps<Pick<Props, 'access'>, {}>({ access: [ACL.DEALS] })(
+    ConnectedAcl
+  ),
+  Marketing: withProps<Pick<Props, 'access'>, {}>({ access: [ACL.MARKETING] })(
+    ConnectedAcl
+  )
 })

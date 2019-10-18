@@ -8,14 +8,13 @@ export async function preSaveFormat(values, originalValues) {
     title,
     status,
     dueDate,
+    endDate,
     reminder,
     task_type,
     description,
     assignees,
-    associations
+    associations = []
   } = values
-
-  // console.log('pre save', values.dueDate, values.reminder.value)
 
   const dueDateTimestamp = dueDate.getTime()
 
@@ -30,6 +29,12 @@ export async function preSaveFormat(values, originalValues) {
 
   if ((originalValues && originalValues.id) || description) {
     task.description = (description && description.trim()) || ''
+  }
+
+  if (endDate) {
+    task.end_date = endDate.getTime() / 1000
+  } else if (originalValues && originalValues.end_date) {
+    task.end_date = null
   }
 
   if (task.status === 'DONE') {
@@ -48,23 +53,19 @@ export async function preSaveFormat(values, originalValues) {
     task.reminders = []
   }
 
-  if (
-    !originalValues &&
-    Array.isArray(associations) &&
-    associations.length > 0
-  ) {
-    task.associations = []
-    associations.forEach(item => {
-      const { association_type } = item
+  task.associations = associations.map(item => {
+    const { association_type } = item
+    const association = {
+      association_type,
+      [association_type]: item[association_type].id
+    }
 
-      if (association_type) {
-        task.associations.push({
-          association_type,
-          [association_type]: item[association_type].id
-        })
-      }
-    })
-  }
+    if (item.id) {
+      association.id = item.id
+    }
+
+    return association
+  })
 
   if (originalValues) {
     return {

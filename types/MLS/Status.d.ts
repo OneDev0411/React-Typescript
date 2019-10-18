@@ -1,4 +1,4 @@
-declare type TListingStatus =
+declare type IListingStatus =
   | 'Active'
   | 'Lease'
   | 'Coming Soon'

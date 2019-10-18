@@ -9,10 +9,10 @@ export function percent(num, allNum) {
 }
 
 export function recipientsList(recipients) {
-  const list = []
-  const tags = []
-  const contacts = []
-  const emails = []
+  const list: string[] = []
+  const tags: string[] = []
+  const contacts: string[] = []
+  const emails: string[] = []
 
   recipients.forEach(recipient => {
     if (recipient.tag) {

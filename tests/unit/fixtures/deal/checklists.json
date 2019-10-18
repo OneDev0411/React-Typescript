@@ -1,0 +1,76 @@
+[
+  {
+    "id": "fab88e94-6740-11e9-88e7-0a95998482ac",
+    "created_at": 1556186439.29085,
+    "updated_at": 1556186439.29085,
+    "deleted_at": null,
+    "deactivated_at": null,
+    "title": "Listing",
+    "deal": "fa2126f8-6740-11e9-90e4-0a95998482ac",
+    "order": 1,
+    "origin": "4a16ed04-9895-11e7-9dd2-0242ac110003",
+    "terminated_at": null,
+    "faired_at": null,
+    "type": "deal_checklist",
+    "is_deactivated": false,
+    "is_terminated": false,
+    "tasks": [
+      "facb0b96-6740-11e9-97c8-0a95998482ac"
+    ],
+    "is_deactivatable": false,
+    "is_terminatable": false,
+    "tab_name": "Listing Inbox",
+    "checklist_type": "Selling",
+    "is_active_offer": false
+  },
+  {
+    "id": "16fd4978-6732-11e9-82c0-0a95998482ac",
+    "created_at": 1556180044.21708,
+    "updated_at": 1556180044.21708,
+    "deleted_at": null,
+    "deactivated_at": null,
+    "title": "Listing",
+    "deal": "164ca424-6732-11e9-82bf-0a95998482ac",
+    "order": 1,
+    "origin": "8aaf8938-9896-11e7-b0a3-0242ac110003",
+    "terminated_at": null,
+    "faired_at": null,
+    "type": "deal_checklist",
+    "is_deactivated": false,
+    "is_terminated": false,
+    "tasks": [
+      "17290d10-6732-11e9-b7be-0a95998482ac",
+      "17422e4e-6732-11e9-83cf-0a95998482ac"
+    ],
+    "is_deactivatable": false,
+    "is_terminatable": false,
+    "tab_name": "Listing Inbox",
+    "checklist_type": "Selling",
+    "is_active_offer": false
+  },
+  {
+    "id": "9645b6f2-e531-11e9-9910-027d31a1f7a0",
+    "created_at": 1570033674.82198,
+    "updated_at": 1570033674.82198,
+    "deleted_at": null,
+    "deactivated_at": null,
+    "title": "Contract",
+    "deal": "959cd5fa-e531-11e9-9228-027d31a1f7a0",
+    "order": 1,
+    "origin": "be817b3e-9258-11e7-9d6e-0242ac110003",
+    "terminated_at": null,
+    "faired_at": null,
+    "type": "deal_checklist",
+    "is_deactivated": false,
+    "is_terminated": false,
+    "tasks": [
+      "966f1cae-e531-11e9-9805-027d31a1f7a0"
+    ],
+    "is_deactivatable": false,
+    "is_terminatable": false,
+    "tab_name": "Contract Inbox",
+    "checklist_type": "Buying",
+    "is_active_offer": true
+  }
+
+]

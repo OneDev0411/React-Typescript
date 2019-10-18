@@ -4,7 +4,7 @@ import Avatar from 'react-avatar'
 import { ContactInfoContainer } from './styled'
 import ContactName from './ContactName'
 
-import { ContactsListType } from 'dashboard/MarketingInsights/Insight/types'
+import { ContactsListType } from '../../../components/Pages/Dashboard/MarketingInsights/Insight/types'
 
 interface ContactInfoPropsType {
   data: ContactsListType

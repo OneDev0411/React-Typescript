@@ -17,7 +17,7 @@ interface RenderProps {
 interface Props {
   provider: OAuthProvider
   createFilters: (filters) => any
-  getOrganizedContactsList: () => IContactList
+  getOrganizedContactsList: () => Partial<IContactList>
   children: (renderProps: RenderProps) => ReactNode
 }
 
@@ -40,7 +40,10 @@ function mapStateToProps({ contacts }: IAppState, props: Props) {
   }
 }
 
-export default connect(
+export default connect<
+  Pick<Props, 'getOrganizedContactsList'>,
+  Pick<Props, 'createFilters'>
+>(
   mapStateToProps,
   dispatch => ({
     createFilters: filters => dispatch(createActiveFilters('contacts', filters))

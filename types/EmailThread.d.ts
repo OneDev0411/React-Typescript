@@ -12,6 +12,7 @@ declare interface IEmailAttachmentInput {
   type: string
   isInline: boolean
   filename: string
+  cid?: string
   link: string
 }
 

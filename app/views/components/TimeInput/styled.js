@@ -27,8 +27,9 @@ export const TimeInputContainer = styled.div`
     }
 
     & > input {
-      opacity: 0;
       height: 1em;
+      opacity: 0;
+      width: 0;
     }
   }
 

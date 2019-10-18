@@ -8,7 +8,7 @@ import Recipients from './Recipients'
 import { isEmailInProgress, isEmailScheduled, show_title } from './helpers'
 import { Info, StyledBadge, StyledLink } from './styled'
 
-function InfoColumn({ data, reloadList }) {
+function InfoColumn({ data, reloadList = undefined }) {
   const isScheduled = isEmailScheduled(data)
   const isInProgress = isEmailInProgress(data)
 
@@ -30,7 +30,11 @@ function InfoColumn({ data, reloadList }) {
 
     subTitle = isScheduled ? `Scheduled for ${date}` : date
     titleRenderer = (
-      <EditEmailButton emailId={data.id} onEmailUpdated={reloadList}>
+      <EditEmailButton
+        emailId={data.id}
+        onEmailUpdated={reloadList}
+        onDeleted={reloadList}
+      >
         {({ onClick }) => <StyledLink onClick={onClick}>{title}</StyledLink>}
       </EditEmailButton>
     )

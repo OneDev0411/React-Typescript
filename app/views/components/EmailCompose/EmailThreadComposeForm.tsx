@@ -28,7 +28,15 @@ import { getReplySubject } from './helpers/get-reply-subject'
 
 import { oAuthAccountTypeToProvider } from '../../../components/Pages/Dashboard/Account/ConnectedAccounts/constants'
 
-import { EmailFormValues } from '.'
+import { getAccountTypeFromOrigin } from './helpers/get-account-type-from-origin'
+
+import { attachmentToFile } from '../EmailThread/helpers/attachment-to-file'
+
+import { encodeContentIds } from '../EmailThread/helpers/encode-content-ids'
+
+import { convertToAbsoluteAttachmentUrl } from '../EmailThread/helpers/convert-to-absolute-attachment-url'
+
+import { EmailFormValues, EmailThreadFormValues } from '.'
 
 interface Props {
   responseType: EmailResponseType
@@ -46,7 +54,7 @@ const useStyles = makeStyles(
       footer: {
         position: 'sticky',
         bottom: 0,
-        zIndex: 2,
+        zIndex: 1,
         background: theme.palette.background.paper
       }
     }),
@@ -68,7 +76,38 @@ export function EmailThreadComposeForm({
     const from = formValue.from!
 
     const account = getFromAccount(from.value)!
+    const provider = oAuthAccountTypeToProvider[account.type]
+    const originType = getAccountTypeFromOrigin(email.origin)
+    const originMatchesFrom = !originType || originType === provider
 
+    const html = encodeContentIds(email.attachments, formValue.body || '')
+
+    const inlineAttachments: IEmailAttachmentInput[] = email.attachments
+      .filter(
+        attachment => attachment.cid && html.includes(`cid:${attachment.cid}`)
+      )
+      .map(({ cid, contentType: type, isInline, name: filename, url }) => ({
+        filename,
+        isInline,
+        link: convertToAbsoluteAttachmentUrl(url),
+        cid,
+        type
+      }))
+
+    const attachments = (formValue.attachments || [])
+      // filter out inline attachments
+      .filter(
+        attachment =>
+          !inlineAttachments.some(item => item.link === attachment.url)
+      )
+      .map<IEmailAttachmentInput>(
+        ({ mime: type, name: filename, url: link }) => ({
+          filename,
+          isInline: false,
+          link,
+          type
+        })
+      )
     const emailData: IEmailThreadEmailInput = {
       subject: (formValue.subject || '').trim(),
       to: (formValue.to || [])
@@ -80,21 +119,14 @@ export function EmailThreadComposeForm({
       bcc: (formValue.bcc || [])
         .filter(isEmailRecipient)
         .map(toEmailThreadRecipient),
-      html: formValue.body || '',
-      threadId: email.thread_id,
-      messageId: email.message_id,
+      html,
+      threadId: originMatchesFrom ? email.thread_id : undefined,
+      messageId: originMatchesFrom ? email.message_id : undefined,
       inReplyTo: email.internet_message_id,
-      attachments: (formValue.attachments || []).map<IEmailAttachmentInput>(
-        item => ({
-          filename: item.name,
-          isInline: false,
-          link: item.url,
-          type: item.mime
-        })
-      )
+      attachments: attachments.concat(inlineAttachments)
     }
     const newEmail = await sendEmailViaOauthAccount(
-      oAuthAccountTypeToProvider[account.type],
+      provider,
       account.id,
       emailData
     )
@@ -109,7 +141,7 @@ export function EmailThreadComposeForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const initialValue = useMemo<EmailFormValues>(() => {
+  const initialValue = useMemo<EmailThreadFormValues>(() => {
     const { to, cc } =
       responseType === 'reply' ? getReplyRecipients(email) : { to: [], cc: [] }
 
@@ -129,7 +161,10 @@ export function EmailThreadComposeForm({
       body:
         responseType === 'reply' ? getReplyHtml(email) : getForwardHtml(email),
       due_at: null,
-      attachments: [],
+      attachments:
+        responseType === 'forward'
+          ? email.attachments.map(attachmentToFile)
+          : [],
       subject: getReplySubject(responseType, email)
     }
   }, [defaultFrom, email, responseType])
@@ -166,8 +201,14 @@ export function EmailThreadComposeForm({
     [getFromAccount]
   )
 
+  /**
+   * There are different endpoints for uploading attachment based on email
+   * provider. Though we don't necessarily need to use those.
+   */
   const uploadAttachment = useCallback(
     (file: File | IFile) => {
+      // Technically, it should be deduced from `from` account,
+      // not email.origin! But that can be changed by the user!
       switch (email.origin) {
         case 'gmail':
           return uploadGoogleAttachment(email.owner!, file)

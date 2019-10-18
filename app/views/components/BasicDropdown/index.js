@@ -10,7 +10,11 @@ export class BasicDropdown extends React.Component {
     isOpen: false
   }
 
-  toggleOpenMenu = () =>
+  toggleOpenMenu = () => {
+    if (this.props.disabled) {
+      return
+    }
+
     this.setState(
       state => ({
         isOpen: !state.isOpen
@@ -23,6 +27,7 @@ export class BasicDropdown extends React.Component {
         }
       }
     )
+  }
 
   render() {
     const {

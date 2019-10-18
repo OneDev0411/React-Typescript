@@ -1,8 +1,8 @@
 import * as React from 'react'
-
 import { fireEvent, render } from '@testing-library/react'
+
 // eslint-disable-next-line import/no-unresolved
-import user from 'fixtures/users/agent.json'
+import userJson from 'fixtures/users/agent.json'
 
 // eslint-disable-next-line import/no-unresolved
 import templateInstance from 'fixtures/marketing-center/template-instance.json'
@@ -10,6 +10,8 @@ import templateInstance from 'fixtures/marketing-center/template-instance.json'
 import { createBulkEmailCampaign } from 'models/email/create-bulk-email-campaign'
 
 import { TestBed } from '../../../../../../tests/unit/TestBed'
+
+const user = userJson as IUser
 
 // we use the connected component because we need to provide redux store
 // for inner components anyways
@@ -32,6 +34,8 @@ describe('ShareInstance', () => {
   test('It passes template id when sending email', () => {
     const { getByTestId } = render(
       <TestBed reduxState={{ user }}>
+        {/*
+        // @ts-ignore js component */}
         <ShareInstance
           instance={templateInstance}
           // hasExternalTrigger
@@ -62,19 +66,18 @@ describe('ShareInstance', () => {
 
     // Send email
     fireEvent.click(getByTestId('compose-send-email'))
-    expect(createBulkEmailCampaign).toHaveBeenCalledWith({
-      from: user.id,
-      html: templateInstance.html,
-      attachments: [],
-      due_at: undefined,
-      subject,
-      template: templateInstance.id,
-      to: [
-        {
-          recipient_type: 'Email',
-          email
-        }
-      ]
-    })
+    expect(createBulkEmailCampaign).toHaveBeenCalledWith(
+      expect.objectContaining({
+        from: user.id,
+        html: templateInstance.html,
+        template: templateInstance.id,
+        to: [
+          {
+            recipient_type: 'Email',
+            email
+          }
+        ]
+      })
+    )
   })
 })

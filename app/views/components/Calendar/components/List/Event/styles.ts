@@ -1,7 +1,7 @@
 import { grey } from 'views/utils/colors'
 
 // we don't have an alias for the app, so I just tried to use one of the aliases and don't introduce a new alias until we fix the aliases
-import { theme } from 'theme'
+import { theme } from 'utils/../theme'
 
 export default {
   row: {
@@ -47,5 +47,15 @@ export default {
     height: '2rem',
     borderRadius: '100%',
     marginRight: '1rem'
+  },
+  buttonContainer: {
+    position: 'absolute' as React.CSSProperties['position'],
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    width: '100%',
+    height: '100%',
+    opacity: 0
   }
 }

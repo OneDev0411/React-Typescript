@@ -226,20 +226,6 @@ class SendContactCard extends React.Component {
       isSocialDrawerOpen: false
     })
 
-  getRef = () => {
-    const { actionRef } = this.props
-
-    if (!actionRef) {
-      return actionRef
-    }
-
-    actionRef.current = {
-      showBuilder: (contact = null, contactId = null) => {
-        this.setState({ contact }, () => this.showBuilder(contactId))
-      }
-    }
-  }
-
   render() {
     if (hasMarketingAccess(this.props.user) === false) {
       return null
@@ -319,8 +305,6 @@ class SendContactCard extends React.Component {
             onClose={this.closeSocialDrawer}
           />
         )}
-
-        <div ref={this.getRef} />
       </Fragment>
     )
   }
@@ -332,12 +316,7 @@ function mapStateToProps({ user }) {
   }
 }
 
-const ConnectedAction = connect(
+export default connect(
   mapStateToProps,
   { notify, confirmation }
 )(SendContactCard)
-
-// eslint-disable-next-line react/no-multi-comp
-export default React.forwardRef((props, ref) => (
-  <ConnectedAction {...props} actionRef={ref} />
-))

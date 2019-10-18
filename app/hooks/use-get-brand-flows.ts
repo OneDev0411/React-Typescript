@@ -43,9 +43,5 @@ export function useGetBrandFlows(brand: UUID | null): GetBrandFlows {
     loadData()
   }, [brand, loadData])
 
-  function reloadFlows() {
-    return loadData()
-  }
-
-  return { flows, reloadFlows, isFetching, error }
+  return { flows, reloadFlows: loadData, isFetching, error }
 }

@@ -23,7 +23,7 @@ export function createListRows(
           isEventHeader: true,
           headerType: 'month-header',
           isToday: false,
-          title: `1-${getLastDayOfMonth(daysOfMonth)}`,
+          title: getMonthTitle(new Date(month), daysOfMonth),
           date: month
         },
         {
@@ -65,7 +65,7 @@ function getMonthEvents(
           isEventHeader: true,
           headerType: 'day-header',
           isToday: fecha.format(new Date(day), 'YYYY-MM-DD') === today,
-          title: fecha.format(new Date(day), 'DD'),
+          title: getDayTitle(new Date(day)),
           date: day
         },
         ...(events.length > 0
@@ -121,4 +121,27 @@ function isEmptyMonth(
   }
 
   return Object.values(days).every(events => events.length === 0)
+}
+
+/**
+ * returns day title
+ * @param date
+ */
+function getDayTitle(date: Date) {
+  return date.getFullYear() !== new Date().getFullYear()
+    ? fecha.format(date, 'dddd, MMMM D, YYYY')
+    : fecha.format(date, 'dddd, MMMM D')
+}
+
+/**
+ * returns month title
+ * @param date
+ * @param daysOfMonth
+ */
+function getMonthTitle(date: Date, daysOfMonth: ICalendarMonthEvents) {
+  const daysRange = `1 - ${getLastDayOfMonth(daysOfMonth)}`
+
+  return date.getFullYear() !== new Date().getFullYear()
+    ? fecha.format(date, `MMMM ${daysRange}, YYYY`)
+    : fecha.format(date, `MMMM ${daysRange}`)
 }

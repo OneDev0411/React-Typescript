@@ -17,14 +17,17 @@ export async function updateTask(task, query = {}) {
     const fields = [
       'id',
       'type',
+      'index',
       'title',
       'status',
       'due_date',
+      'end_date',
       'task_type',
       'reminders',
       'assignees',
       'description',
-      'metadata'
+      'metadata',
+      'associations'
     ]
 
     task = _.omit(_.pick(task, fields), value => value == null)

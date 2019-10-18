@@ -5,7 +5,7 @@ import uniqBy from 'lodash/uniqBy'
 import { Tag } from './Tag'
 
 interface Props {
-  tags: ICRMTag[]
+  tags: IContactAttributeWithDef[]
 }
 
 export default function TagsList(props: Props) {

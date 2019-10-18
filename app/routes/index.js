@@ -84,11 +84,6 @@ const AsyncListingsFavorites = Load({
     import('../components/Pages/Dashboard/Listings/Favorites' /* webpackChunkName: "fav" */)
 })
 
-const AsyncTours = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Listings/Tours' /* webpackChunkName: "fav" */)
-})
-
 const AsyncListingSinglePage = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Listings/Listing' /* webpackChunkName: "list_single" */)
@@ -187,6 +182,15 @@ const AsyncFlowEdit = Load({
 const AsyncOpenHousesList = Load({
   loader: () =>
     import('../components/Pages/Dashboard/OpenHouse/List/OpenHousesList' /* webpackChunkName: "oh_list" */)
+})
+
+/* ==================================== */
+//  CRM Tours List
+/* ==================================== */
+
+const AsyncToursList = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Tours/List/ToursList' /* webpackChunkName: "tours_list" */)
 })
 
 /* ==================================== */
@@ -315,6 +319,15 @@ const AsyncSearchWidget = Load({
 })
 
 /* ==================================== */
+//  Websites
+/* ==================================== */
+
+const AsyncWebsitesList = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/Websites/List' /* webpackChunkName: "websites_list" */)
+})
+
+/* ==================================== */
 //  Other Pages
 /* ==================================== */
 
@@ -432,8 +445,6 @@ export default (
 
       <Route path="dashboard/mls" component={AsyncListingsLayout}>
         <IndexRoute component={AsyncListingsSearch} />
-
-        <Route path="tours" component={AsyncTours} />
         <Route path="following" component={AsyncListingsFavorites} />
         <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
       </Route>
@@ -487,6 +498,7 @@ export default (
         component={AsyncNotificationsPage}
       />
 
+      <Route path="/dashboard/tours" component={AsyncToursList} />
       <Route path="/dashboard/open-house" component={AsyncOpenHousesList} />
 
       <Route path="/dashboard/marketing" component={AsyncMarketing}>
@@ -525,6 +537,10 @@ export default (
 
       <Route path="/dashboard/checklists">
         <IndexRoute component={AsyncChecklists} />
+      </Route>
+
+      <Route path="/dashboard/websites">
+        <IndexRoute component={AsyncWebsitesList} />
       </Route>
 
       <Route path="/dashboard/website" component={AsyncWebsite} />

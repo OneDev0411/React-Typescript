@@ -33,16 +33,17 @@ declare interface ICalendarEvent {
   full_contact?: IContact
   full_deal?: IDeal
   full_crm_task: {
+    end_date: number | null
     assignees: IUser[] | null
     associations: TaskAssociation[]
-  }
+  } | null // TODO: fix association type
   full_thread: {
     type: 'thread'
     id: UUID
     to: string[]
     email_count: number
     has_attachments: boolean
-  }
+  } | null // // TODO: fix association type
 }
 
 declare interface ICalendarEventHeader {

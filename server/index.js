@@ -16,7 +16,6 @@ import fetch from './util/fetch'
 import universalMiddleware from './util/universal'
 import checkToken from './util/check-token'
 import appConfig from '../config/webpack'
-import webpackConfig from '../webpack.config.babel'
 import websiteRoutes from './_website'
 import { logger } from './util/logger'
 
@@ -31,7 +30,7 @@ app.proxy = true
 
 async function development() {
   const koaWebpackMiddleware = await require('koa-webpack')({
-    config: webpackConfig
+    config: require('../webpack.config.babel').default
   })
 
   app.use(koaWebpackMiddleware)

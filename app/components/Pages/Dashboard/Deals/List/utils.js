@@ -2,8 +2,10 @@
  * @param {string} filterName
  * @returns {string} path for filter name
  */
-export function getPathForFilter(filterName) {
+export function getFilterUrl(filterName, queryParams) {
+  const queryString = new URLSearchParams(queryParams).toString()
+
   return `/dashboard/deals${
-    filterName === 'All' ? '' : `/filter/${filterName}`
+    filterName === 'All' ? '' : `/filter/${filterName}?${queryString}`
   }`
 }

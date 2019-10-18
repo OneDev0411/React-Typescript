@@ -169,19 +169,17 @@ export default function ScheduledEmailForm({
                   </>
                 )}
 
-                <Tooltip title="Create a new email template">
-                  <Button
-                    variant="text"
-                    color="primary"
-                    disabled={submitting}
-                    onClick={event => {
-                      event.stopPropagation()
-                      onNewTemplateClick()
-                    }}
-                  >
-                    New
-                  </Button>
-                </Tooltip>
+                <Button
+                  variant="text"
+                  color="primary"
+                  disabled={submitting}
+                  onClick={event => {
+                    event.stopPropagation()
+                    onNewTemplateClick()
+                  }}
+                >
+                  Create a New Email Template
+                </Button>
               </Grid>
             </Grid>
 

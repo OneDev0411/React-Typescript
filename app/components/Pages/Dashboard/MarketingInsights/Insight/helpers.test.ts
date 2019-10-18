@@ -1,5 +1,6 @@
-import { doSort, SortValues } from './helpers'
 import { item1, item2, item3, item4 } from 'fixtures/insights/insight'
+
+import { doSort, SortValues } from './helpers'
 
 describe('Sort in Marketing Insights', function() {
   let mockList
@@ -44,7 +45,7 @@ describe('Sort in Marketing Insights', function() {
   })
 
   it('should return itself when we are passing a undefined sort ', function() {
-    const result = doSort(mockList, 'blahblah')
+    const result = doSort(mockList, 'blahblah' as SortValues)
     const expectedResult = [item1, item2, item3, item4]
 
     expect(result).toEqual(expectedResult)

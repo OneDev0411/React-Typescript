@@ -26,8 +26,8 @@ export const ZeroStateContainer = styled(Flex)`
 
 export const GoogleIcon = styled(IconGoogle)`
   ${iconWhiteBgStyle}
-`
+` as typeof IconGoogle
 
 export const OutlookIcon = styled(IconOutlook)`
   ${iconWhiteBgStyle}
-`
+` as typeof IconOutlook

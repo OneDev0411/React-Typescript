@@ -1,37 +1,102 @@
-import React from 'react'
+import React, { Fragment } from 'react'
+import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
 const width = '24'
 const height = '24'
 const viewBox = '0 0 24 24'
 
-const getDimensions = () => ({
-  height,
-  width
-})
+const sizes = {}
 
-const getDimensionsCss = () => css`
-  width: ${width}px;
-  height: ${height}px;
-`
+// somehow sizes is ending up in markup, even if it is not a valid svg attribute
+// until we have a better solution, just render it empty, instead to '[Object object]'
+Object.defineProperty(sizes, 'toString', { value: () => '', enumerable: false })
 
-const Image = styled.svg`
-  ${({ noStyles }) => (!noStyles ? getDimensionsCss() : null)};
-`
+const getDimensions = (size, sizes) => {
+  if (size && typeof size.width === 'number' && typeof size.height === 'number') {
+    return size
+  }
+  return size && sizes[size]
+    ? sizes[size]
+    : { width, height }
+}
+
+const getCss = (size, sizes, fillColor, fillColorRule, noStyles) => {
+  if (noStyles) { return '' }
+  const dimensions = getDimensions(size, sizes)
+  const fillRule = fillColor && fillColorRule ? `${fillColorRule}{ fill: ${fillColor}; }` : ''
+  return css`
+    width: ${dimensions.width}px;
+    height: ${dimensions.height}px;
+    ${fillRule}
+  `
+}
+
+const propsToCss = ({
+  size,
+  sizes,
+  fillColor,
+  fillColorRule,
+  noStyles
+}) => getCss(size, sizes, fillColor, fillColorRule, noStyles)
+
+const Image = styled.svg`${propsToCss}`
+
+const children = (
+  <Fragment>
+    <g
+      clipPath='url(#s-af0a7d7500-a)'
+      key='key-0'
+    >
+      <path
+        d='M7.355 0C6.49 0 5.712.315 5.132.783c-.58.47-.989 1.072-1.297 1.717C3.219 3.79 3 5.262 3 6.4c0 1.604.878 3.88 2.05 5.816.039 1.36.412 2.525 1.09 3.384.71.9 1.78 1.46 2.939 1.467h.018c.675.008 1.354-.177 1.85-.609.5-.434.76-1.085.763-1.783v-.009c.005-.698-.267-1.221-.472-1.8-.207-.58-.4-1.234-.4-2.2 0-.8.581-2.595.581-4.266 0-1.301-.148-2.77-.698-4.025-.275-.627-.655-1.215-1.216-1.658C8.944.273 8.188 0 7.355 0zm9.29 6.933c-.833 0-1.589.273-2.15.717-.561.444-.941 1.031-1.216 1.658-.55 1.254-.698 2.724-.698 4.025 0 1.671.58 3.467.58 4.267 0 .965-.192 1.62-.399 2.2-.205.578-.477 1.1-.472 1.8v.008c.003.698.263 1.35.762 1.784.497.432 1.177.616 1.851.608h.018c1.158-.006 2.229-.567 2.94-1.467.677-.858 1.05-2.023 1.089-3.383 1.172-1.937 2.05-4.213 2.05-5.817 0-1.137-.219-2.61-.835-3.9-.308-.644-.718-1.248-1.297-1.716a3.544 3.544 0 00-2.223-.784z'
+      />
+    </g>
+    <defs
+      key='key-1'
+    >
+      <clipPath
+        id='s-af0a7d7500-a'
+      >
+        <path
+          d='M0 0h24v24H0z'
+        />
+      </clipPath>
+    </defs>
+  </Fragment>
+)
 
 const defaultProps = {
-  children: [
-    <path
-      d="M9.145 3c-.625 0-1.187.236-1.605.588-.419.351-.714.803-.937 1.287C6.158 5.842 6 6.947 6 7.8c0 1.203.634 2.91 1.48 4.362.029 1.02.298 1.894.787 2.538.514.675 1.287 1.095 2.123 1.1h.013c.488.006.978-.132 1.337-.456.36-.326.549-.814.55-1.338V14c.004-.524-.192-.916-.34-1.35A4.733 4.733 0 0 1 11.66 11c0-.6.42-1.947.42-3.2 0-.976-.108-2.078-.505-3.019-.198-.47-.473-.91-.878-1.243S9.747 3 9.145 3zm0 1.2c.324 0 .533.085.734.25.2.165.384.427.53.775.294.695.414 1.693.414 2.575 0 .965-.42 2.2-.42 3.2v.056l-1.952.313c-.695-1.278-1.193-2.87-1.193-3.57 0-.696.155-1.691.498-2.437.171-.372.386-.68.616-.875.23-.193.458-.287.773-.287zm6.71 4c-.602 0-1.148.205-1.553.537-.405.333-.68.774-.878 1.244-.397.94-.505 2.043-.505 3.019 0 1.253.42 2.6.42 3.2a4.73 4.73 0 0 1-.289 1.65c-.148.433-.344.826-.34 1.35v.006c.001.523.19 1.012.55 1.338.359.324.85.462 1.337.456h.013c.836-.005 1.61-.425 2.123-1.1.489-.644.758-1.517.786-2.538C18.366 15.91 19 14.202 19 13c0-.853-.158-1.958-.603-2.925-.223-.484-.518-.936-.937-1.287a2.501 2.501 0 0 0-1.605-.588zm0 1.2c.315 0 .543.094.773.287.23.194.445.503.616.875.343.746.498 1.741.498 2.438 0 .698-.498 2.29-1.193 3.569l-1.952-.313V16.2c0-1-.42-2.235-.42-3.2 0-.882.12-1.88.413-2.575.147-.348.33-.61.531-.775.2-.165.41-.25.734-.25zm-5.314 2.856c.062.288.135.545.21.763.167.488.284.795.281.975V14c0 .274-.073.392-.157.469-.084.076-.221.135-.459.13h-.013c-.417 0-.791-.18-1.114-.605-.254-.336-.456-.826-.53-1.457l1.782-.28zm3.918 5.2l1.783.281c-.075.63-.276 1.121-.531 1.456-.323.425-.697.607-1.114.607h-.013c-.238.004-.375-.055-.459-.132-.084-.076-.157-.194-.157-.468v-.007c-.003-.18.115-.486.282-.975a6.77 6.77 0 0 0 .21-.762z"
-      key="key-0"
-    />
-  ],
-  viewBox
+  children,
+  viewBox,
+  fillColor: null,
+  fillColorRule: '&&& path, &&& use, &&& g',
+  sizes,
+  size: null
+}
+
+const propTypes = {
+  fillColor: PropTypes.string,
+  fillColorRule: PropTypes.string,
+  viewBox: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+  size: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({
+      height: PropTypes.number.isRequired,
+      width: PropTypes.number.isRequired
+    })
+  ]),
+  sizes: PropTypes.shape({
+    height: PropTypes.number,
+    width: PropTypes.number
+  })
 }
 
 export default Object.assign(Image, {
   getDimensions,
-  getDimensionsCss,
+  getCss,
   defaultProps,
+  propTypes,
   displayName: 'IconTour'
 })

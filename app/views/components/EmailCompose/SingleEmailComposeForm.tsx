@@ -35,14 +35,14 @@ export function SingleEmailComposeForm({
 }: Props) {
   const handleSendEmail = (formValue: EmailFormValues) => {
     const emailData = getEmail({
-      from: formValue.from && formValue.from.value,
+      from: (formValue.from && formValue.from.value) || '',
       to: normalizeRecipients(formValue.to),
       cc: normalizeRecipients(formValue.cc),
       bcc: normalizeRecipients(formValue.bcc),
       subject: (formValue.subject || '').trim(),
       html: formValue.body || '',
       attachments: (formValue.attachments || []).map(item => item.id),
-      due_at: formValue.due_at
+      due_at: formValue.due_at || new Date()
     })
 
     return emailId

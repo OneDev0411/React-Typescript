@@ -22,7 +22,9 @@ import { bootstrapURLKeys, mapInitialState } from '../mapOptions'
 import { GridView } from '../components/GridView'
 import { GalleryView } from '../components/GalleryView'
 import CreateAlertModal from '../components/modals/CreateAlertModal'
+
 import { Header } from './Header'
+import CreateTourAction from './components/CreateTourAction'
 
 const RADIUS = 1.61803398875 / 2
 
@@ -265,6 +267,25 @@ class Search extends React.Component {
     )
   }
 
+  gridViewActions = () => [
+    {
+      render: ({ selectedRows, resetSelectedRows }) => {
+        const listings = this.props.listings.data.filter(({ id }) =>
+          selectedRows.includes(id)
+        )
+
+        return (
+          <CreateTourAction
+            disabled={selectedRows.length === 0}
+            listings={listings}
+            submitCallback={resetSelectedRows}
+            user={this.props.user}
+          />
+        )
+      }
+    }
+  ]
+
   renderMain() {
     const { isCalculatingLocation } = this.state
     const _props = {
@@ -292,7 +313,23 @@ class Search extends React.Component {
         return <GalleryView {..._props} />
 
       default:
-        return <GridView {..._props} />
+        return (
+          <GridView
+            {..._props}
+            plugins={
+              _props.user && {
+                selectable: {
+                  persistent: true,
+                  storageKey: 'listings',
+                  entityName: 'listings'
+                },
+                actionable: {
+                  actions: this.gridViewActions()
+                }
+              }
+            }
+          />
+        )
     }
   }
 

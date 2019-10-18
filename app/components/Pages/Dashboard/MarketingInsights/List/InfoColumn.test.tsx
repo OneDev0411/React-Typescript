@@ -5,7 +5,7 @@ import mockDate, { RealDate } from 'utils/test-utils/mock-date'
 
 import InfoColumn from './InfoColumn'
 
-describe('Marketing Insights: InfoColumn tests', function() {
+describe('Marketing Insights: InfoColumn tests', () => {
   let baseItem = {
     id: '83ad43e4-6be6-11e9-a623-0a95998482ac',
     created_at: 1556697340.69654,

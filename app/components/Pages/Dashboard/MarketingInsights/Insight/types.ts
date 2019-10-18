@@ -10,5 +10,6 @@ export interface ContactsListType extends EmailStatType {
   display_name: string | null
   profile_image_url: string | null
   to: string
-  original_data: IInsightEmail
+  original_data: IEmailCampaignEmail
+  contact: UUID | null
 }

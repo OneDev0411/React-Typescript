@@ -2,7 +2,7 @@ import { normalize } from 'normalizr'
 import { batchActions } from 'redux-batched-actions'
 
 import Deal from '../../../../models/Deal'
-import { appendChecklist } from '../../deal'
+import { appendChecklist } from '../../deal/append-checklist'
 import { setTasks } from '../../task'
 
 import { setChecklists } from '../set-checklist'

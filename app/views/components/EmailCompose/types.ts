@@ -19,7 +19,11 @@ export interface EmailFormValues {
   body: string | undefined
 }
 
-export interface EmailComposeFormProps<EmailType> {
+export type EmailThreadFormValues = Omit<EmailFormValues, 'attachments'> & {
+  attachments: Pick<IFile, 'url' | 'name' | 'preview_url' | 'mime' | 'type'>[]
+}
+
+export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
   initialValues?: Partial<EmailFormValues>
   sendEmail: (values: EmailFormValues) => Promise<EmailType>
   onSent?: (result: EmailType) => void
@@ -51,10 +55,15 @@ export interface EmailComposeFormProps<EmailType> {
    */
   enableSchedule?: boolean
   /**
-   * If passed, a cancel button will be shown and onCancel will be called upon
+   * If passed, cancel button will be shown and onCancel will be called upon
    * clicking it.
    */
   onCancel?: () => void
+  /**
+   * If passed, delete button will be shown and onDelete will be called upon
+   * clicking it.
+   */
+  onDelete?: (values: EmailFormValues) => void | Promise<any>
 
   dispatch: any // Extending DispatchProps seems to have problems
 }

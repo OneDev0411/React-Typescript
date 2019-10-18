@@ -1,7 +1,8 @@
 import React, { useContext } from 'react'
 
 import { EditEmailDrawer } from 'components/EmailCompose'
-import { EmailThreadModal } from 'components/EmailThreadModal'
+
+import { EmailThreadDrawer } from 'components/EmailThreadDrawer'
 
 import { ListContext } from '../context'
 
@@ -22,45 +23,43 @@ export function EventController({
 }: Props) {
   const { selectedEvent: event, setSelectedEvent } = useContext(ListContext)
 
-  if (!event) {
-    return null
-  }
-
-  if (['crm_task', 'crm_association'].includes(event.object_type)) {
-    return (
+  const eventDrawer =
+    event && ['crm_task', 'crm_association'].includes(event.object_type) ? (
       <CrmEvents
         isEventDrawerOpen
-        selectedDate={activeDate}
         event={event}
         user={user}
         onEventChange={onEventChange}
         onCloseEventDrawer={() => setSelectedEvent(null)}
       />
-    )
-  }
+    ) : null
 
-  if (
-    ['email_campaign', 'email_campaign_recipient'].includes(event.object_type)
-  ) {
-    return (
+  const editEmailDrawer =
+    event &&
+    ['email_campaign', 'email_campaign_recipient'].includes(
+      event.object_type
+    ) ? (
       <EditEmailDrawer
         isOpen
         emailId={event.campaign as UUID}
         onEdited={emailCampaign => onScheduledEmailChange(emailCampaign)}
         onClose={() => setSelectedEvent(null)}
       />
-    )
-  }
+    ) : null
 
-  if (event.object_type === 'email_thread_recipient') {
-    return (
-      <EmailThreadModal
-        open={!!event.thread_key}
-        onClose={() => setSelectedEvent(null)}
-        threadKey={event.thread_key}
-      />
-    )
-  }
+  const emailThreadDrawer = (
+    <EmailThreadDrawer
+      open={!!(event && event.object_type === 'email_thread_recipient')}
+      onClose={() => setSelectedEvent(null)}
+      threadKey={event && event.thread_key}
+    />
+  )
 
-  return null
+  return (
+    <>
+      {editEmailDrawer}
+      {eventDrawer}
+      {emailThreadDrawer}
+    </>
+  )
 }

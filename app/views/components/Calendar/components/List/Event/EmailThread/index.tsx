@@ -21,7 +21,9 @@ interface Props {
 
 export function EmailThread({ style, event, nextItem }: Props) {
   const { setSelectedEvent } = useContext(ListContext)
-  const thread = event.full_thread
+  const thread = event.full_thread! // FIXME(NOW)
+
+  const handleContainerClick = () => setSelectedEvent(event)
 
   const { visibleItems: recipients, othersText } = getTrimmedArrayAndOthersText(
     thread.to
@@ -63,7 +65,9 @@ export function EmailThread({ style, event, nextItem }: Props) {
                   }}
                   type="insight"
                 >
-                  <span>{displayName || emailAddress}</span>
+                  <span style={{ position: 'relative', zIndex: 1 }}>
+                    {displayName || emailAddress}
+                  </span>
                 </MiniContactProfile>
               </React.Fragment>
             )
@@ -84,6 +88,7 @@ export function EmailThread({ style, event, nextItem }: Props) {
         </Box>
       }
       subtitle={<div>{event.title || 'No Subject'}</div>}
+      onClick={handleContainerClick}
     />
   )
 }

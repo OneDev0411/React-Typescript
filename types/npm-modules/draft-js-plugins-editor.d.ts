@@ -22,7 +22,7 @@ declare module 'draft-js-plugins-editor' {
     getEditorState(): EditorState
     getReadOnly(): boolean
     setReadOnly(readonly: Readonly): void
-    getEditorRef(): RefObject<DraftEditor>
+    getEditorRef(): DraftEditor
   }
   export function composeDecorators(...decorators: any[]): any
 }

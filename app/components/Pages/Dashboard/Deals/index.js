@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import LoadingContainer from 'components/LoadingContainer'
 
@@ -13,7 +14,7 @@ import {
 import { selectContextsByBrand } from 'reducers/deals/contexts'
 
 function DealsContainer(props) {
-  useEffect(() => {
+  useEffectOnce(() => {
     const { dispatch, user } = props
 
     const isBackOffice = hasUserAccess(user, 'BackOffice')
@@ -33,9 +34,7 @@ function DealsContainer(props) {
         dispatch(searchDeals(user))
       }
     }
-
-    // eslint-disable-next-line
-  }, [])
+  })
 
   const isLoading = props.isFetchingDeals && props.params.id
 

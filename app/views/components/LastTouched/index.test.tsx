@@ -2,11 +2,13 @@ import React from 'react'
 import { render } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
-import fullContact from 'fixtures/contacts/full-contact.json'
+import fullContactJson from 'fixtures/contacts/full-contact.json'
 
 import mockDate, { RealDate } from 'utils/test-utils/mock-date'
 
 import { LastTouched } from '.'
+
+const fullContact = fullContactJson as IContact
 
 describe('Contact profile last touched component', () => {
   beforeEach(() => {
@@ -27,9 +29,9 @@ describe('Contact profile last touched component', () => {
     const wrapper = render(<LastTouched contact={fullContact} />)
 
     const decimalPointedPeriod =
-      (fullContact.next_touch - fullContact.last_touch) / 86400
+      (fullContact.next_touch! - fullContact.last_touch!) / 86400
     const rounedPeriod = Math.round(
-      (fullContact.next_touch - fullContact.last_touch) / 86400
+      (fullContact.next_touch! - fullContact.last_touch!) / 86400
     )
 
     expect(wrapper.text().includes(decimalPointedPeriod.toString())).toBeFalsy()

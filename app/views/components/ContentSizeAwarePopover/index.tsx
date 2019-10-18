@@ -40,7 +40,7 @@ function ContentSizeAwarePopover({
       open={open}
       action={actions => {
         actionsRef.current = actions
-        action && action(actions)
+        typeof action === 'function' && action(actions)
       }}
       {...props}
     >

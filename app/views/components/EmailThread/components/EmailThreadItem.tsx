@@ -25,8 +25,8 @@ import IconForward from '../../SvgIcons/Forward/IconForward'
 import { Attachment } from '../../EmailCompose/components/Attachment'
 import { EmailResponseType } from '../types'
 import EmailThreadComposeForm from '../../EmailCompose/EmailThreadComposeForm'
-import { getProcessedEmailBody } from '../helpers/get-processed-email-body'
-import { getAttachmentUrl } from '../helpers/get-attachment-url'
+import { decodeContentIds } from '../helpers/decode-content-ids'
+import { convertToAbsoluteAttachmentUrl } from '../helpers/convert-to-absolute-attachment-url'
 
 interface Props {
   email: IEmailThreadEmail
@@ -105,7 +105,10 @@ export function EmailThreadItem({
 
   const iconClassName = classNames(iconClasses.rightMargin, iconClasses.small)
 
-  const emailBody = useMemo(getProcessedEmailBody(email), [email])
+  const emailBody = useMemo(
+    () => decodeContentIds(email.attachments, email.html_body || ''),
+    [email]
+  )
 
   return (
     <div className={classes.root}>
@@ -151,13 +154,16 @@ export function EmailThreadItem({
       {/* content */}
       {!collapsed && (
         <>
-          <Box p={2} pl={9}>
+          <Box p={2} pl={9} overflow="hidden">
             <Iframe title="Email body" srcDoc={emailBody} />
 
             {email.attachments.map(attachment => (
               <Attachment key={attachment.id} fullWidth={false}>
                 {/* FIXME: url */}
-                <Link target="_blank" href={getAttachmentUrl(attachment)}>
+                <Link
+                  target="_blank"
+                  href={convertToAbsoluteAttachmentUrl(attachment.url)}
+                >
                   {attachment.name}
                 </Link>
               </Attachment>

@@ -67,6 +67,7 @@ function Actions(props: ActionsPropsType) {
           isOpen
           onClose={() => setIsEditComposeOpen(false)}
           onEdited={() => props.reloadList()}
+          onDeleted={() => props.reloadList()}
           emailId={props.data.id}
         />
       )}

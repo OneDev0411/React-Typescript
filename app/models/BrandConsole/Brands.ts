@@ -15,7 +15,7 @@ export async function deprecatedGetBrands(brandId) {
 export async function getBrands(
   brandId: string,
   fetchChildren = true
-): Promise<ApiResponse<IBrand>> {
+): Promise<ApiResponseBody<IBrand>> {
   const associations = [...defaultAssociations]
 
   if (fetchChildren) {
@@ -40,7 +40,7 @@ export async function getChildrenBrands(brandId) {
 export async function addBrand(
   team: Pick<IBrand, 'name' | 'brand_type'>,
   parentId: string
-): Promise<ApiResponse<IBrand>> {
+): Promise<ApiResponseBody<IBrand>> {
   const payload: IBrandInput = {
     name: team.name,
     brand_type: team.brand_type,
@@ -55,7 +55,7 @@ export async function addBrand(
 
 export async function editBrand(
   brand: Partial<IBrand>
-): Promise<ApiResponse<IBrand>> {
+): Promise<ApiResponseBody<IBrand>> {
   if (!brand.id) {
     throw new Error('team id is empty')
   }

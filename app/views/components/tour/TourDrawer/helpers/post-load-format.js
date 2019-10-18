@@ -31,14 +31,17 @@ export async function postLoadFormat(task, owner, listings) {
       assignees: [owner],
       clients,
       dueDate: new Date(),
+      endDate: null,
       locations,
       reminder,
       task_type: 'Tour'
     }
   }
 
-  const { reminders, due_date } = task
-  const dueDate = due_date * 1000
+  const { reminders, end_date } = task
+  const normalizeServerDate = date => date * 1000
+  const dueDate = normalizeServerDate(task.due_date)
+  const endDate = end_date ? new Date(normalizeServerDate(end_date)) : null
 
   if (Array.isArray(reminders) && reminders.length > 0) {
     const { timestamp } = reminders[reminders.length - 1]
@@ -46,6 +49,10 @@ export async function postLoadFormat(task, owner, listings) {
     if (timestamp && timestamp * 1000 > new Date().getTime()) {
       reminder = getReminderItem(dueDate, timestamp * 1000)
     }
+  }
+
+  if (task.assignees == null) {
+    task.assignees = []
   }
 
   let allAssociations = []
@@ -61,7 +68,7 @@ export async function postLoadFormat(task, owner, listings) {
           clients.push(a)
           break
         case 'listing':
-          locations.push(a)
+          locations = [a, ...locations]
           break
         default:
           break
@@ -71,9 +78,22 @@ export async function postLoadFormat(task, owner, listings) {
 
   return {
     ...task,
-    reminder,
     clients,
-    locations,
-    dueDate: new Date(dueDate)
+    dueDate: new Date(dueDate),
+    endDate,
+    locations: locations.sort(sortLocationsByIndex),
+    reminder
   }
+}
+
+function sortLocationsByIndex(a, b) {
+  if (a < b) {
+    return -1
+  }
+
+  if (a > b) {
+    return 1
+  }
+
+  return 0
 }

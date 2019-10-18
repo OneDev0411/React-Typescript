@@ -360,6 +360,7 @@ class SectionWithFields extends React.Component {
               key={attribute.cuid || attribute.id}
             />
           ))}
+          {this.props.children}
         </div>
       </Section>
     )

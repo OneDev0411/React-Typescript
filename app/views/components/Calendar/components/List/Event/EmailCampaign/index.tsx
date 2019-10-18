@@ -16,6 +16,7 @@ interface Props {
 
 export function EmailCampaign({ style, event, nextItem }: Props) {
   const { setSelectedEvent } = useContext(ListContext)
+  const handleContainerClick = () => setSelectedEvent(event)
 
   return (
     <EventContainer
@@ -39,6 +40,7 @@ export function EmailCampaign({ style, event, nextItem }: Props) {
           </a>
         </div>
       }
+      onClick={handleContainerClick}
     />
   )
 }

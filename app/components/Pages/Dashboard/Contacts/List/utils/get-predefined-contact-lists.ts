@@ -35,7 +35,7 @@ export const getPredefinedContactLists = (
 
   const lastSeen = new Date(
     getActiveTeamSettings(state.user, SYNCED_CONTACTS_LAST_SEEN_SETTINGS_KEY) ||
-    0 // eslint-disable-line
+      0
   )
 
   const badge = getNumOfSyncedContacts(lastSeen, accounts)

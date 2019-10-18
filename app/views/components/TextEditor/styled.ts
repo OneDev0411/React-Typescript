@@ -3,6 +3,8 @@ import styled, { ThemeProps } from 'styled-components'
 import 'draft-js/dist/Draft.css'
 import { Theme } from '@material-ui/core'
 
+import Flex from 'styled-flex-component'
+
 import { primary, primaryDark } from '../../utils/colors'
 
 export const Toolbar = styled.div`
@@ -21,6 +23,11 @@ export const Separator = styled.span`
   width: 2px;
   background-color: ${({ theme }: ThemeProps<Theme>) => theme.palette.divider};
   margin: ${({ theme }: ThemeProps<Theme>) => theme.spacing(0, 0.5)};
+`
+export const EditorContainer = styled(Flex).attrs({ column: true })`
+  overflow: auto;
+  flex: 1 1 0%;
+  min-height: 12.5rem;
 `
 
 export const EditorWrapper = styled.div`

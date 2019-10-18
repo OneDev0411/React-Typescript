@@ -1,7 +1,7 @@
 declare type IDealTaskType = 'Form' | 'GeneralComments' | 'Generic'
 
 declare interface IDealTaskRoom extends IModel<'room'> {
-  attachments: IFile[]
+  attachments: IFile[] | null
   latest_message: IChatMessage
   latest_activity: IChatActivity
   new_notifications: number
@@ -45,6 +45,3 @@ declare interface IDealTask extends IModel<'task'> {
     updated_at: number
   }
 }
-
-declare type IDealTaskInput = Partial<Omit<IDealTask, 'id' | 'checklist'>> &
-  Pick<IDealTask, 'task_type'>

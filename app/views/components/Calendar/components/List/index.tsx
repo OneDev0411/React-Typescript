@@ -1,6 +1,4 @@
-import { EventEmitter } from 'events'
-
-import React, { useState, forwardRef, RefObject } from 'react'
+import React, { ComponentProps, forwardRef, RefObject, useState } from 'react'
 import { ListOnItemsRenderedProps } from 'react-window'
 import useResizeObserver from 'use-resize-observer'
 
@@ -12,15 +10,12 @@ import VirtualList, {
 } from 'components/VirtualList'
 
 import { ListContext } from './context'
-
-import { EventHeader } from './EventHeader'
-import { Event } from './Event'
 import { EmptyState } from './EmptyState'
 
 import { EventController } from './EventController'
-import { ActionController } from './ActionController'
 
 import { Container } from './styled'
+import { Row } from './Row'
 
 interface Props {
   user: IUser
@@ -37,9 +32,6 @@ interface Props {
     emailCampaign: IEmailCampaign
   ) => void
 }
-
-// creates a new event-emitter instance
-const actions = new EventEmitter()
 
 const defaultProps = {
   onReachStart: () => {},
@@ -108,7 +100,6 @@ const CalendarList: React.FC<Props> = props => {
   return (
     <ListContext.Provider
       value={{
-        actions,
         selectedEvent,
         setSelectedEvent
       }}
@@ -120,6 +111,13 @@ const CalendarList: React.FC<Props> = props => {
           width={listWidth}
           height={listHeight}
           itemCount={props.rows.length}
+          itemData={
+            {
+              rows: props.rows,
+              activeDate,
+              onEventChange: handleEventChange
+            } as ComponentProps<typeof Row>['data']
+          }
           onReachEnd={props.onReachEnd}
           onReachStart={props.onReachStart}
           threshold={2}
@@ -130,24 +128,7 @@ const CalendarList: React.FC<Props> = props => {
           overscanCount={3}
           ref={props.listRef}
         >
-          {({ index, style }) => (
-            <>
-              {props.rows[index].hasOwnProperty('isEventHeader') ? (
-                <EventHeader
-                  item={props.rows[index] as ICalendarEventHeader}
-                  style={style}
-                  activeDate={activeDate}
-                />
-              ) : (
-                <Event
-                  event={props.rows[index] as ICalendarEvent}
-                  nextItem={props.rows[index + 1]}
-                  style={style}
-                  onEventChange={handleEventChange}
-                />
-              )}
-            </>
-          )}
+          {Row}
         </VirtualList>
 
         <EventController
@@ -156,8 +137,6 @@ const CalendarList: React.FC<Props> = props => {
           onEventChange={handleEventChange}
           onScheduledEmailChange={handleScheduledEmailChange}
         />
-
-        <ActionController />
       </Container>
     </ListContext.Provider>
   )
@@ -165,7 +144,7 @@ const CalendarList: React.FC<Props> = props => {
 
 function getRowHeight(row: ICalendarListRow): number {
   if (row.hasOwnProperty('isEventHeader')) {
-    return 30
+    return 26
   }
 
   const event = row as ICalendarEvent

@@ -122,7 +122,7 @@ function TeamsPage(props: Props) {
             />
           </Menu>
 
-          <Content>
+          <Content isSideMenuOpen>
             {selectedTeam && (
               <TeamView
                 team={selectedTeam}

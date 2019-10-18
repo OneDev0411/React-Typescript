@@ -2,7 +2,9 @@ import React from 'react'
 import { render } from 'enzyme'
 
 import user from 'fixtures/users/agent.json'
-import deal from 'fixtures/deal/seller-with-offer.json'
+import dealJson from 'fixtures/deal/seller-with-offer.json'
+
+const deal = dealJson as { roles: IDealRole[] }
 
 import { DealRole } from '.'
 
@@ -95,7 +97,7 @@ describe('Test Deal Roles component', () => {
   it('Should pre-populate office fields', () => {
     const sellerAgentRole: IDealRole = deal.roles.find(
       role => role.id === '7e104e10-89f3-11e9-8b7c-0a95998482ac'
-    )
+    )!
 
     const office: IAgentOffice | undefined = sellerAgentRole.agent!.office
 

@@ -59,7 +59,7 @@ export function useChecklistsPage(rootBrandId: string | null) {
 
   const addTask = async (
     checklist: IBrandChecklist,
-    taskData: IDealTaskInput
+    taskData: IBrandChecklistTaskInput
   ) => {
     if (rootBrandId) {
       applyChecklistUpdate(
@@ -92,7 +92,7 @@ export function useChecklistsPage(rootBrandId: string | null) {
       form: form.id
     })
   }
-  const updateTask = async (task: IDealTask) => {
+  const updateTask = async (task: IBrandChecklistTask) => {
     if (rootBrandId) {
       const checklist = await updateBrandChecklistTask(rootBrandId, task)
 

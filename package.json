@@ -11,7 +11,7 @@
     "icons": "babel-node ./icon-manager",
     "build": "rimraf dist && NODE_ENV=production babel-node ./build.js",
     "build:stage": "rimraf dist && NODE_ENV=stage babel-node ./build.js",
-    "build:ci": "rimraf dist && NODE_ENV=ci babel-node ./build.js",
+    "build:ci": "NODE_ENV=ci babel-node ./build.js",
     "serve": "NODE_ENV=production forever node_modules/@babel/node/bin/babel-node.js --extensions \".js,.ts,.tsx\" ./bin/server ",
     "serve:ci": "NODE_ENV=ci PORT=8081 babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
     "serve:stage": "NODE_ENV=stage babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
@@ -329,6 +329,8 @@
     "eslint-plugin-react": "^7.12.3",
     "eslint-plugin-react-hooks": "^1.6.0",
     "find": "^0.3.0",
+    "fork-ts-checker-notifier-webpack-plugin": "^1.0.2",
+    "fork-ts-checker-webpack-plugin": "^1.5.0",
     "husky": "^2.4.1",
     "jest": "^24.8.0",
     "ndb": "^1.0.41",
@@ -349,9 +351,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint:staged && ./githooks/pre-commit.sh",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && ./githooks/commit-msg.js $HUSKY_GIT_PARAMS `git rev-parse --abbrev-ref HEAD`",
-      "pre-push": "npm run test:unit"
+      "pre-commit": "npm run lint:staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && ./githooks/commit-msg.js $HUSKY_GIT_PARAMS `git rev-parse --abbrev-ref HEAD`"
     }
   }
 }

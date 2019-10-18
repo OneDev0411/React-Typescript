@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
+import { Box } from '@material-ui/core'
 
 import { confirmation } from 'actions/confirmation'
 
@@ -12,13 +13,7 @@ import { formatDate } from 'components/InstantMarketing/helpers/nunjucks-filters
 
 import { getTemplates } from 'models/instant-marketing'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
-import {
-  getTask,
-  updateTask,
-  createTask,
-  deleteTask,
-  deleteTaskAssociation
-} from 'models/tasks'
+import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 import getListing from 'models/listings/listing/get-listing'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { isSoloActiveTeam, getActiveTeamId } from 'utils/user-teams'
@@ -35,9 +30,15 @@ import { Title } from '../../EventDrawer/components/Title'
 import { UpdateReminder } from '../../EventDrawer/components/UpdateReminder'
 import { Description } from '../../EventDrawer/components/Description'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
-import { DateTimeField, AssigneesField } from '../../final-form-fields'
+import UpdateEndDate from '../../EventDrawer/components/UpdateEndDate/UpdateEndDate'
+import Reminder from '../../EventDrawer/components/Reminder/Reminder'
+import {
+  AssigneesField,
+  DateTimeField,
+  FieldError
+} from '../../final-form-fields'
 import { AddAssociationButton } from '../../AddAssociationButton'
-import { AssociationsList, ReminderField } from '../../final-form-fields'
+import { AssociationsList, EndTimeField } from '../../final-form-fields'
 import Tooltip from '../../tooltip'
 import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
 import { Section } from '../../tour/TourDrawer/components/Section'
@@ -99,13 +100,23 @@ class OpenHouseDrawerInternal extends React.Component {
   }
 
   get dealAassociation() {
+    const { openHouse } = this.state
     const { associations } = this.props
 
     if (associations && associations.deal) {
       return {
         association_type: 'deal',
-        deal: associations.deal.id
+        deal: { id: associations.deal.id },
+        index: 2
       }
+    }
+
+    if (openHouse && Array.isArray(openHouse.associations)) {
+      const dealAassociation = openHouse.associations.find(
+        a => a.association_type === 'deal'
+      )
+
+      return dealAassociation
     }
 
     return null
@@ -290,24 +301,6 @@ class OpenHouseDrawerInternal extends React.Component {
     }
   }
 
-  handleDeleteAssociation = async association => {
-    if (association.id) {
-      try {
-        const response = await deleteTaskAssociation(
-          association.crm_task,
-          association.id
-        )
-
-        return response
-      } catch (error) {
-        console.log(error)
-        throw error
-      }
-    }
-
-    return Promise.resolve()
-  }
-
   handleSubmit = () => {
     document
       .getElementById('open-house-drawer-form')
@@ -407,15 +400,32 @@ class OpenHouseDrawerInternal extends React.Component {
                           defaultOption={REMINDER_DROPDOWN_OPTIONS[5]}
                         />
 
-                        <Section label="Event Date">
-                          <FieldContainer alignCenter justifyBetween>
+                        <UpdateEndDate
+                          dueDate={values.dueDate}
+                          endDate={values.endDate}
+                        />
+
+                        <Box mb={4}>
+                          <FieldContainer
+                            alignCenter
+                            justifyBetween
+                            style={{ marginBottom: '0.5em' }}
+                          >
                             <DateTimeField
                               name="dueDate"
                               selectedDate={values.dueDate}
                             />
-                            <ReminderField dueDate={values.dueDate} />
+
+                            <EndTimeField dueDate={values.dueDate} />
                           </FieldContainer>
-                        </Section>
+
+                          <FieldError
+                            name="endDate"
+                            style={{ fontSize: '1rem', marginBottom: '0.5em' }}
+                          />
+
+                          <Reminder dueDate={values.dueDate} />
+                        </Box>
 
                         <Section label="Event Location">
                           <Location
@@ -438,7 +448,6 @@ class OpenHouseDrawerInternal extends React.Component {
                           <AssociationsList
                             name="registrants"
                             associations={values.registrants}
-                            handleDelete={this.handleDeleteAssociation}
                           />
                         </Section>
 

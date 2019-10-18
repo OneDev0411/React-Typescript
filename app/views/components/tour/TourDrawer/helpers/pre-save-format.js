@@ -6,34 +6,37 @@
 export async function preSaveFormat(values, originalValues) {
   const {
     title,
-    status,
     dueDate,
+    endDate,
     reminder,
     description,
     assignees,
-    clients,
-    locations
+    clients = [],
+    locations = []
   } = values
 
-  // console.log('pre save', values.dueDate, values.reminder.value)
-
-  const task_type = 'Tour'
   const dueDateTimestamp = dueDate.getTime()
+  const isDueDatePast = dueDateTimestamp <= new Date().getTime()
 
   const task = {
-    title: title.trim(),
-    due_date: dueDateTimestamp / 1000,
-    task_type,
     assignees: assignees.map(a => a.id),
-    status:
-      dueDateTimestamp <= new Date().getTime() ? 'DONE' : status || 'PENDING'
+    due_date: dueDateTimestamp / 1000,
+    status: isDueDatePast ? 'DONE' : 'PENDING',
+    task_type: 'Tour',
+    title: title.trim()
   }
 
   if ((originalValues && originalValues.id) || description) {
     task.description = (description && description.trim()) || ''
   }
 
-  if (task.status === 'DONE') {
+  if (endDate) {
+    task.end_date = endDate.getTime() / 1000
+  } else if (originalValues && originalValues.end_date) {
+    task.end_date = null
+  }
+
+  if (isDueDatePast) {
     task.reminders = []
   } else if (reminder.value >= 0) {
     task.reminders = [
@@ -49,36 +52,33 @@ export async function preSaveFormat(values, originalValues) {
     task.reminders = []
   }
 
-  let associations = []
+  const l = locations.map((location, index) => ({
+    ...location,
+    index: index + 1
+  }))
 
-  const addAssociation = (association, type) => {
-    const { association_type } = association
-
-    if (association_type && association_type === type) {
-      associations.push({
-        association_type,
-        [association_type]: association[association_type].id
-      })
+  task.associations = [...clients, ...l].map(item => {
+    const { association_type } = item
+    const association = {
+      association_type,
+      [association_type]: item[association_type].id
     }
-  }
 
-  if (!originalValues && Array.isArray(locations) && locations.length > 0) {
-    locations.forEach(l => addAssociation(l, 'listing'))
-  }
+    if (item.id) {
+      association.id = item.id
+    }
 
-  if (!originalValues && Array.isArray(clients) && clients.length > 0) {
-    clients.forEach(c => addAssociation(c, 'contact'))
-  }
+    if (item.index) {
+      association.index = item.index
+    }
 
-  if (associations.length > 0) {
-    task.associations = associations
-  }
+    return association
+  })
 
   if (originalValues) {
     return {
       ...originalValues,
-      ...task,
-      task_type // todo: removing this and line 23
+      ...task
     }
   }
 

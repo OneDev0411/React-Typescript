@@ -65,6 +65,7 @@ function EmailComposeForm<T>({
   dispatch,
   enableSchedule = true,
   onCancel,
+  onDelete,
   uploadAttachment = uploadEmailAttachment,
   onSent = () => {},
   ...props
@@ -282,6 +283,7 @@ function EmailComposeForm<T>({
               deal={props.deal}
               enableSchedule={enableSchedule}
               onCancel={onCancel}
+              onDelete={onDelete}
               onChanged={scrollToEnd}
               className={classes.footer}
             />

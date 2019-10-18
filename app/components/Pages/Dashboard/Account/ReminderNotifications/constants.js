@@ -22,18 +22,6 @@ export const DROPDOWN_OPTIONS = [
     value: 259200
   },
   {
-    label: '4 days before',
-    value: 345600
-  },
-  {
-    label: '5 days before',
-    value: 432000
-  },
-  {
-    label: '6 days before',
-    value: 518400
-  },
-  {
     label: '1 week before',
     value: 604800
   },

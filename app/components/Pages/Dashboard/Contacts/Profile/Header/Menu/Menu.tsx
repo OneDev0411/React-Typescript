@@ -27,6 +27,8 @@ export default function Menu({ contact }: Props) {
 
   return (
     <Box display="flex" flexWrap="wrap" alignItems="center" mb={1}>
+      {/*
+       // @ts-ignore js component */}
       <SendEmailButton
         recipients={normalizeContactsForEmailCompose([contact])}
         render={({ onClick, testId }) => (
@@ -46,6 +48,8 @@ export default function Menu({ contact }: Props) {
 
       <Chat contact={contact} />
 
+      {/*
+       // @ts-ignore js component */}
       <SendContactCard
         contact={contact}
         mediums="Email"

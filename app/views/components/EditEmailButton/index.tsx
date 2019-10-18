@@ -6,6 +6,7 @@ import { EditEmailDrawer } from '../EmailCompose/EditEmailDrawer'
 interface Props {
   emailId: string
   children: (renderProps: RenderProps) => ReactNode
+  onDeleted?: () => void
   onEmailUpdated?: (email: IEmailCampaign & { due_date: number }) => void
 }
 interface RenderProps {
@@ -15,6 +16,7 @@ interface RenderProps {
 export function EditEmailButton({
   children,
   emailId,
+  onDeleted,
   onEmailUpdated = () => {}
 }: Props) {
   const [isEmailOpen, setEmailOpen] = useState(false)
@@ -30,6 +32,7 @@ export function EditEmailButton({
         <EditEmailDrawer
           isOpen
           onClose={() => setEmailOpen(false)}
+          onDeleted={onDeleted}
           onEdited={emailCampaign =>
             onEmailUpdated({
               ...emailCampaign,

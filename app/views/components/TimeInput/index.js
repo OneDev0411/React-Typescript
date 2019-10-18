@@ -24,6 +24,9 @@ function TimeInput(props) {
 
   return (
     <TimeInputContainer>
+      <span className="icon">
+        <IconTime />
+      </span>
       <div className="time">
         <input
           id="TimeInput-hours"
@@ -57,9 +60,6 @@ function TimeInput(props) {
         />
         <label htmlFor="TimeInput-meridian">{time.meridian}</label>
       </div>
-      <span className="icon">
-        <IconTime />
-      </span>
     </TimeInputContainer>
   )
 }

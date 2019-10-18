@@ -2,8 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
 
-import { createTaskAssociation } from '../../../models/tasks'
-
 import { AddContactAssociation } from '../AddContactAssociations'
 import { AddListingAssociation } from '../AddListingAssociations'
 import { AddDealAssociation } from '../AddDealAssociation'
@@ -19,20 +17,7 @@ class ButtonComponent extends React.Component {
     listing: IconListing
   }
 
-  create = async (crm_task, object) => {
-    try {
-      return await createTaskAssociation(crm_task, {
-        crm_task,
-        [object.type]: object.id,
-        association_type: object.type
-      })
-    } catch (error) {
-      console.log(error)
-      throw error
-    }
-  }
-
-  onAdd = async (object = {}, handleClose) => {
+  onAdd = (object, handleClose) => {
     const { type } = object
     const { associations } = this.props
 
@@ -45,31 +30,13 @@ class ButtonComponent extends React.Component {
     )
 
     if (!isDuplicate) {
-      let nextAssociations
-
-      const { crm_task } = this.props
-
-      if (crm_task) {
-        const newAssociation = await this.create(crm_task, object)
-
-        nextAssociations = [
-          ...associations,
-          {
-            ...newAssociation,
-            [type]: object
-          }
-        ]
-      } else {
-        nextAssociations = [
-          ...associations,
-          {
-            [type]: object,
-            association_type: type
-          }
-        ]
-      }
-
-      this.props.input.onChange(nextAssociations)
+      this.props.input.onChange([
+        ...associations,
+        {
+          [type]: object,
+          association_type: type
+        }
+      ])
       handleClose()
     }
   }
@@ -125,7 +92,6 @@ export function AddAssociationButton(props) {
 }
 
 AddAssociationButton.propTypes = {
-  crm_task: PropTypes.string,
   name: PropTypes.string.isRequired,
   associations: PropTypes.arrayOf(PropTypes.shape()),
   disabled: PropTypes.bool,
