@@ -1,8 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { createRequestTask } from 'actions/deals/helpers/create-request-task'
+
 import { getStatusColorClass } from 'utils/listing'
 import { upsertContexts } from 'actions/deals'
+
 import { getDealChecklists } from 'reducers/deals/checklists'
 import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
 
@@ -14,7 +17,6 @@ import Spinner from 'components/Spinner'
 import { Icon as ArrowIcon } from 'components/Dropdown'
 
 import { getStatusList } from './helpers/get-status-list'
-import { createRequestTask } from '../../utils/create-request-task'
 
 import { DropDownButton, StatusBullet, StatusOption } from './styled'
 
@@ -72,7 +74,7 @@ export class DealStatus extends React.Component {
   notifyAdmin = async status => {
     const checklist = getActiveChecklist(this.props.deal, this.props.checklists)
 
-    createRequestTask({
+    this.props.createRequestTask({
       checklist,
       userId: this.props.user.id,
       dealId: this.props.deal.id,
@@ -150,6 +152,7 @@ function mapStateToProps({ deals, user }, props) {
 export default connect(
   mapStateToProps,
   {
-    upsertContexts
+    upsertContexts,
+    createRequestTask
   }
 )(DealStatus)

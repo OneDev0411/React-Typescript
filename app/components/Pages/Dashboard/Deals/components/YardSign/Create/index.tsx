@@ -9,9 +9,10 @@ import {
   Theme
 } from '@material-ui/core'
 
-import { IAppState } from 'reducers/index'
+import { createRequestTask } from 'actions/deals/helpers/create-request-task'
+
+import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
-import { createRequestTask } from 'deals/utils/create-request-task'
 
 const ITEMS = [
   'Coming soon',
@@ -24,6 +25,26 @@ const ITEMS = [
 interface StateProps {
   user: IUser
   checklists: IDealChecklist[]
+}
+
+interface DispatchProps {
+  createRequestTask({
+    checklist,
+    userId,
+    dealId,
+    taskType,
+    taskTitle,
+    taskComment,
+    notifyMessage
+  }: {
+    checklist: IDealChecklist
+    userId: UUID
+    dealId: UUID
+    taskType: string
+    taskTitle: string
+    taskComment: string
+    notifyMessage: string
+  }): (dispatch: any) => Promise<IDealTask | null>
 }
 
 interface Props {
@@ -42,7 +63,7 @@ const useStyles = makeStyles((theme: Theme) => {
   })
 })
 
-function Form(props: Props & StateProps) {
+function Form(props: Props & StateProps & DispatchProps) {
   const classes = useStyles()
 
   const [selectedItems, setSelectedItems] = useState<number[]>([])
@@ -58,16 +79,16 @@ function Form(props: Props & StateProps) {
     setSelectedItems([...selectedItems, index])
   }
 
-  const handleCreateYardSign = async () => {
+  const handleCreateYardSign = async (): Promise<void> => {
     const checklist = props.checklists.find(
       checklist => checklist.checklist_type === 'Selling'
-    )
+    ) as IDealChecklist
 
     setIsCreatingTask(true)
 
     const list = selectedItems.map(index => ITEMS[index])
 
-    const task = await createRequestTask({
+    const task = await props.createRequestTask({
       checklist,
       userId: props.user.id,
       dealId: props.deal.id,
@@ -82,7 +103,7 @@ function Form(props: Props & StateProps) {
     setIsCreatingTask(false)
 
     if (task) {
-      props.onCreateTask(task)
+      props.onCreateTask(task as any)
     }
   }
 
@@ -128,4 +149,7 @@ function mapStateToProps(
   }
 }
 
-export default connect(mapStateToProps)(Form)
+export default connect<StateProps, DispatchProps, Props>(
+  mapStateToProps,
+  { createRequestTask }
+)(Form)

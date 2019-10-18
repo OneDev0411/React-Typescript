@@ -16,8 +16,6 @@ import { selectDealTasks } from 'reducers/deals/tasks'
 
 import { Divider } from 'components/Divider'
 
-import { Container } from './styled'
-
 interface StateProps {
   user: IUser
   tasks: IDealTask[]
@@ -49,7 +47,7 @@ function List(props: Props & StateProps) {
   }, [props.tasks])
 
   return (
-    <Container>
+    <>
       <Button
         fullWidth
         color="primary"
@@ -84,7 +82,7 @@ function List(props: Props & StateProps) {
           </Button>
         </div>
       ))}
-    </Container>
+    </>
   )
 }
 

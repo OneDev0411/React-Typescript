@@ -6,11 +6,11 @@ import { addNotification as notify } from 'reapop'
 import { getDealChecklists } from 'reducers/deals/checklists'
 import { deleteDeal } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
+import { createRequestTask } from 'actions/deals/helpers/create-request-task'
+
 import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
 
 import ActionButton from 'components/Button/ActionButton'
-
-import { createRequestTask } from '../../utils/create-request-task'
 
 class DeleteDeal extends React.Component {
   state = {
@@ -45,7 +45,7 @@ class DeleteDeal extends React.Component {
   handleSendRequest = text => {
     const checklist = getActiveChecklist(this.props.deal, this.props.checklists)
 
-    createRequestTask({
+    this.props.createRequestTask({
       checklist,
       userId: this.props.user.id,
       dealId: this.props.deal.id,
@@ -118,5 +118,5 @@ function mapStateToProps({ deals, user }, props) {
 
 export default connect(
   mapStateToProps,
-  { confirmation, deleteDeal, notify }
+  { createRequestTask, confirmation, deleteDeal, notify }
 )(DeleteDeal)

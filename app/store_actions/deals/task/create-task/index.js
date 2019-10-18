@@ -6,13 +6,13 @@ export function createTask({
   taskTitle,
   checklistId,
   taskType,
-  taskStatus
+  taskStatus = 'Incomplete'
 }) {
   return async dispatch => {
     try {
       const task = await create(dealId, {
         title: taskTitle,
-        status: taskStatus || 'Incomplete',
+        status: taskStatus,
         checklist: checklistId,
         task_type: taskType
       })
