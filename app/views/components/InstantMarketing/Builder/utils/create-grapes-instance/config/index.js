@@ -38,5 +38,8 @@ export default {
   },
   traitManager: {
     appendTo: '.gjs-pn-views-container'
+  },
+  blockManager: {
+    appendTo: '.gjs-pn-views-container'
   }
 }
