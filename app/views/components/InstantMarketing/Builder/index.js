@@ -11,6 +11,7 @@ import ActionButton from 'components/Button/ActionButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import SearchListingDrawer from 'components/SearchListingDrawer'
 
 import { getActiveTeam } from 'utils/user-teams'
 import { getBrandStyles } from 'utils/marketing-center/templates'
@@ -125,6 +126,7 @@ class Builder extends React.Component {
     this.disableDeviceManager()
     this.makeTemplateCentered()
     this.removeTextStylesOnPaste()
+    this.addCustomBlocks()
 
     if (this.IsVideoTemplate) {
       this.grapes.appendChild(this.videoToolbar)
@@ -132,6 +134,46 @@ class Builder extends React.Component {
 
     this.props.onBuilderLoad({
       regenerateTemplate: this.regenerateTemplate
+    })
+  }
+
+  addCustomBlocks = () => {
+    this.editor.BlockManager.add('rechat-listing', {
+      label: 'Rechat Listing',
+      content: `<mj-section data-block="rechat-listing" background-color="#fff" padding="56px 40px">
+      <mj-group data-gjs-removable="false">
+        <mj-wrapper data-gjs-removable="false" background-color="#ffffff" border="1px solid #000000" padding="50px 30px">
+   <mj-column padding="0px">
+     <mj-image padding="0px" align="center" src="https://d1rchfjmtfqq3r.cloudfront.net/3bce952a-0e75-11e8-a40e-0ae785638eb4/c40690d0-8649-11e9-b355-db05e67d68c8.png" width="135px" height="135px"></mj-image>
+   </mj-column>
+
+     <mj-column vertical-align="middle" padding-top="20px" padding="0px">
+     <mj-text padding="0px" rechat-editable="true" align="left" color="#000" font-size="11px" font-family="Barlow" font-weight="bold">
+       <p id="text1">Test Listing</p>
+     </mj-text>
+     <mj-text padding="0px" rechat-editable="true" align="left" color="#000" font-size="11px" font-family="Barlow">
+       <p id="text2" ><a href="mailto:{{user.email}}" color="#000">Test Text</a></p> 
+     </mj-text>
+     <mj-text padding="0px" rechat-editable="true" align="left" color="#000" font-size="11px" font-family="Barlow" color="#000">
+       <p id="text3" ><a href="tel:{{ user.phone_number | phone }}" color="#000"  >Test Text 2</a></p>
+     </mj-text>
+   </mj-column>
+   </mj-wrapper>
+       </mj-group>
+ </mj-section>`,
+      category: 'Rechat'
+      // render: ({ model, className }) => `<div class="${className}__my-wrap">
+      //   ${model.get('label')}
+      // </div>`
+    })
+
+    this.editor.on('block:drag:stop', model => {
+      if (model.attributes.attributes['data-block'] === 'rechat-listing') {
+        this.setState({ isListingDrawerOpen: true })
+      }
+
+      this.editor.select(model)
+      console.log(model)
     })
   }
 
@@ -204,22 +246,22 @@ class Builder extends React.Component {
     const updateAll = model => {
       const attributes = model.get('attributes')
 
-      const editable = attributes.hasOwnProperty('rechat-editable')
+      // const editable = attributes.hasOwnProperty('rechat-editable')
 
-      const isRechatAsset = attributes.hasOwnProperty('rechat-assets')
+      // const isRechatAsset = attributes.hasOwnProperty('rechat-assets')
 
-      if (!editable) {
-        model.set({
-          editable: false,
-          selectable: isRechatAsset,
-          hoverable: isRechatAsset
-        })
-      }
+      // if (!editable) {
+      //   model.set({
+      //     editable: false,
+      //     selectable: isRechatAsset,
+      //     hoverable: isRechatAsset
+      //   })
+      // }
 
       model.set({
-        resizable: false,
-        draggable: false,
-        droppable: false,
+        // resizable: false,
+        // draggable: false,
+        // droppable: false,
         traits: this.traits[model.get('type')] || []
       })
 
@@ -507,6 +549,16 @@ class Builder extends React.Component {
     return (
       <Portal root="marketing-center">
         <Container className="template-builder">
+          <SearchListingDrawer
+            mockListings
+            isOpen={this.state.isListingDrawerOpen}
+            title="Select a Listing"
+            onClose={() => this.setState({ isListingDrawerOpen: false })}
+            onSelectListingsCallback={listing => {
+              console.log('SELECTED LISTING', listing)
+              this.setState({ isListingDrawerOpen: false })
+            }}
+          />
           <Header>
             <h1>{this.props.headerTitle}</h1>
 
