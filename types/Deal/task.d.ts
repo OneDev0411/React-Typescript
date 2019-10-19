@@ -1,4 +1,4 @@
-declare type IDealTaskType = 'Form' | 'GeneralComments' | 'Generic'
+declare type IDealTaskType = 'Form' | 'GeneralComments' | 'Generic' | 'YardSign'
 
 declare interface IDealTaskRoom extends IModel<'room'> {
   attachments: IFile[] | null

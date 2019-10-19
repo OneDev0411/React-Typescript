@@ -6,11 +6,11 @@ import { addNotification as notify } from 'reapop'
 import { getDealChecklists } from 'reducers/deals/checklists'
 import { deleteDeal } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
+import { createRequestTask } from 'actions/deals/helpers/create-request-task'
+
 import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
 
 import ActionButton from 'components/Button/ActionButton'
-
-import { createAdminRequestTask } from '../../utils/create-request-task'
 
 class DeleteDeal extends React.Component {
   state = {
@@ -42,15 +42,16 @@ class DeleteDeal extends React.Component {
     })
   }
 
-  handleSendRequest = () => {
+  handleSendRequest = text => {
     const checklist = getActiveChecklist(this.props.deal, this.props.checklists)
 
-    createAdminRequestTask({
+    this.props.createRequestTask({
       checklist,
       userId: this.props.user.id,
       dealId: this.props.deal.id,
+      taskType: 'Generic',
       taskTitle: 'Remove deal',
-      taskComment: 'Hello, Please remove this deal',
+      taskComment: text,
       notifyMessage: 'Back office has been notified to remove the deal'
     })
   }
@@ -117,5 +118,5 @@ function mapStateToProps({ deals, user }, props) {
 
 export default connect(
   mapStateToProps,
-  { confirmation, deleteDeal, notify }
+  { createRequestTask, confirmation, deleteDeal, notify }
 )(DeleteDeal)
