@@ -7,10 +7,9 @@ import { getBrandByType } from 'utils/user-teams'
 import IconButton from 'components/Button/IconButton'
 import ActionButton from 'components/Button/ActionButton'
 import DeleteIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
-import EditIcon from 'components/SvgIcons/Edit/EditIcon'
 import Tooltip from 'components/tooltip'
 
-import { getTemplateImage, itemButtonText, itemDateText } from './helpers'
+import { getTemplateImage, itemDateText } from './helpers'
 
 function Item(props) {
   const { template } = props
@@ -49,31 +48,23 @@ function Item(props) {
               onClick={e => {
                 e.stopPropagation()
 
-                props.handleCustomize(template)
+                if (isInstance) {
+                  if (props.handleEdit) {
+                    props.handleEdit(template)
+                  }
+                } else {
+                  props.handleCustomize(template)
+                }
               }}
               isBlock
               data-test="marketing-customize-button"
             >
-              {itemButtonText(template)}
+              {isInstance ? 'Continue' : 'Customize'}
             </ActionButton>
           </div>
 
           {isInstance && (
             <div className="action-bar__right">
-              {props.handleEdit && (
-                <Tooltip caption="Edit">
-                  <IconButton
-                    iconSize="large"
-                    className="action-bar__icon-button"
-                    onClick={e => {
-                      e.stopPropagation()
-                      props.handleEdit(template)
-                    }}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
-              )}
               {props.handleDelete && (
                 <Tooltip caption="Delete">
                   <IconButton
