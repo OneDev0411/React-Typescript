@@ -102,21 +102,8 @@ export function navigateBetweenTemplatesUsingKeyboard(
   }
 }
 
-export function itemButtonText(item) {
-  let isInstance = false
-  let isEmail = false
-  let text = 'Customize'
-
-  if (item && item.template) {
-    isInstance = item.type === 'template_instance'
-    isEmail = item.template.medium === 'Email'
-  }
-
-  if (isInstance) {
-    text = isEmail ? 'Send to' : 'Share'
-  }
-
-  return text
+export function isTemplateInstance(template) {
+  return template.type === 'template_instance'
 }
 
 export function itemDateText(time) {

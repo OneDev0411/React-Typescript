@@ -9,6 +9,7 @@ import Title from './Title'
 import Fallback from './Fallback'
 import TemplateAction from './TemplateAction'
 import PreviewModal from './PreviewModal'
+import { isTemplateInstance } from './helpers'
 
 function TemplatesList(props) {
   const [isPreviewModalOpen, setPreviewModalOpen] = useState(false)
@@ -95,7 +96,14 @@ function TemplatesList(props) {
         isPreviewModalOpen={isPreviewModalOpen}
         selectedTemplate={selectedTemplate}
         templates={props.items}
-        setActionTriggered={setActionTriggered}
+        handleAction={() => {
+          setPreviewModalOpen(false)
+          setActionTriggered(true)
+
+          if (isTemplateInstance(selectedTemplate)) {
+            setEditActionTriggered(true)
+          }
+        }}
         setPreviewModalOpen={setPreviewModalOpen}
         setSelectedTemplate={setSelectedTemplate}
       />
