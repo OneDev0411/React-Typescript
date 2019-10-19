@@ -41,7 +41,7 @@ export function AddressEdit({
       {}
     )
 
-    setAddress(addressFields)
+    setAddress(addressFields.full_address || addressFields)
   }
 
   return (
