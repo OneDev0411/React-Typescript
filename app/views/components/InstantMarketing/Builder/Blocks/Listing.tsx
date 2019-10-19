@@ -8,7 +8,7 @@ const TEMPLATE = `
 <mj-group data-gjs-removable="false">
   <mj-wrapper data-gjs-removable="false" background-color="#ffffff" border="1px solid #000000" padding="50px 30px">
     <mj-column padding="0px">
-      <mj-image padding="0px" align="center" src="{{ image }}" width="135px" height="135px"></mj-image>
+      <mj-image padding="0px" align="center" rechat-assets="listing-image" rechat-listing="{{ listing_id }}" src="{{ image }}" width="135px" height="135px"></mj-image>
     </mj-column>
 
     <mj-column vertical-align="middle" padding-top="20px" padding="0px">
@@ -59,14 +59,16 @@ export default function registerListingBlock(
     console.log('SELECTED!', listing)
     console.log('MODEL HANDLE!', modelHandle)
 
-    const html = nunjucks.renderString(TEMPLATE, {
+    const mjml = nunjucks.renderString(TEMPLATE, {
       image: listing.cover_image_url,
-      address: listing.property.address.full_address
+      address: listing.property.address.full_address,
+      listing_id: listing.id
     })
 
-    console.log('HTML', html)
+    console.log('mjml', mjml)
 
-    modelHandle.view.$el.html(html)
+    modelHandle.parent().append(mjml, { at: modelHandle.opt.at })
+    modelHandle.remove()
   }
 
   editor.on('block:drag:stop', (model: Model) => {
