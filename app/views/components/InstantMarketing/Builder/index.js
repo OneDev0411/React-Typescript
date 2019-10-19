@@ -127,7 +127,10 @@ class Builder extends React.Component {
     this.disableDeviceManager()
     this.makeTemplateCentered()
     this.removeTextStylesOnPaste()
-    this.addCustomBlocks()
+
+    if (this.isEmailTemplate && this.isMjmlTemplate) {
+      this.registerCustomBlocks()
+    }
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
       this.registerCustomBlocks()
