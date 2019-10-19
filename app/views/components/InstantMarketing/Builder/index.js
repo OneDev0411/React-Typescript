@@ -121,7 +121,7 @@ class Builder extends React.Component {
     this.removeTextStylesOnPaste()
     this.addCustomBlocks()
 
-    if (this.IsVideoTemplate) {
+    if (this.isVideoTemplate) {
       this.grapes.appendChild(this.videoToolbar)
     }
 
@@ -318,7 +318,7 @@ class Builder extends React.Component {
      * There's no reason to go through that fragile process on social templates
      */
 
-    const shouldInline = this.state.selectedTemplate.medium === 'Email'
+    const shouldInline = this.isEmailTemplate
 
     const result = shouldInline ? juice(assembled) : assembled
 
@@ -448,15 +448,19 @@ class Builder extends React.Component {
     })
   }
 
-  get IsVideoTemplate() {
+  get isVideoTemplate() {
     return this.state.selectedTemplate && this.state.selectedTemplate.video
   }
 
-  get IsTemplateLoaded() {
+  get isEmailTemplate() {
+    return this.state.selectedTemplate.medium === 'Email'
+  }
+
+  get isTemplateLoaded() {
     return this.state.selectedTemplate && this.state.selectedTemplate.template
   }
 
-  get ShowEditListingsButton() {
+  get showEditListingsButton() {
     return (
       this.state.originalTemplate &&
       this.props.templateTypes.includes('Listings') &&
@@ -464,7 +468,7 @@ class Builder extends React.Component {
     )
   }
 
-  get IsSocialMedium() {
+  get isSocialMedium() {
     if (this.props.templateTypes.includes('CrmOpenHouse')) {
       return false
     }
@@ -536,7 +540,7 @@ class Builder extends React.Component {
       return null
     }
 
-    const isSocialMedium = this.IsSocialMedium
+    const isSocialMedium = this.isSocialMedium
     const socialNetworks = this.socialNetworks
 
     return (
@@ -570,7 +574,7 @@ class Builder extends React.Component {
                 />
               )}
 
-              {this.ShowEditListingsButton && !this.props.isEdit && (
+              {this.showEditListingsButton && !this.props.isEdit && (
                 <ActionButton
                   style={{ marginLeft: '0.5rem' }}
                   appearance="outline"
@@ -628,7 +632,7 @@ class Builder extends React.Component {
               ref={ref => (this.grapes = ref)}
               style={{ position: 'relative' }}
             >
-              {this.IsVideoTemplate && this.IsTemplateLoaded && (
+              {this.isVideoTemplate && this.isTemplateLoaded && (
                 <VideoToolbar
                   onRef={ref => (this.videoToolbar = ref)}
                   editor={this.editor}
