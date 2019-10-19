@@ -32,7 +32,9 @@ export function AddressPopover({
   const popoverAction = useRef<PopoverActions | null>(null)
 
   useEffect(() => {
-    popoverAction.current && popoverAction.current.updatePosition()
+    if (isOpen) {
+      popoverAction.current && popoverAction.current.updatePosition()
+    }
   }, [isOpen])
 
   return (
@@ -41,7 +43,7 @@ export function AddressPopover({
         action={popoverAction}
         id={isOpen ? 'inline-address-popover' : undefined}
         open={isOpen}
-        anchorEl={containerRef && containerRef.current}
+        anchorEl={isOpen ? containerRef && containerRef.current : null}
         onClose={onClose}
         anchorOrigin={{
           vertical: 'bottom',
@@ -51,11 +53,13 @@ export function AddressPopover({
           vertical: 'top',
           horizontal: 'left'
         }}
-        style={{ zIndex: 1002 }}
+        style={{
+          zIndex: 1002,
+          ...formStyle
+        }}
       >
         <InlineAddressForm
           address={address}
-          style={formStyle}
           preSaveFormat={preSaveFormat}
           postLoadFormat={postLoadFormat}
           showDeleteButton={showDeleteButton}

@@ -29,7 +29,7 @@ export function SuggestionsPopover({
       <Popper
         id={isOpen ? 'address-suggestion-popper' : undefined}
         open={isOpen}
-        anchorEl={containerRef && containerRef.current}
+        anchorEl={isOpen ? containerRef && containerRef.current : null}
         placement="bottom-start"
         style={{ zIndex: 1002 }}
       >
