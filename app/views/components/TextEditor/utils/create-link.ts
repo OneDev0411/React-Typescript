@@ -8,7 +8,9 @@ import { getSelectedBlock } from './get-selected-block'
 
 /**
  * Replaces the selection with the given text (or inserts the text into the
- * cursor position) and links it.
+ * cursor position) and links it. If the selection is an atomic block, instead
+ * its data is updated to include `href`.
+ *
  * @param editorState
  * @param text
  * @param url

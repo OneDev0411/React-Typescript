@@ -4,7 +4,7 @@
  * functions in turn until it receives a value from them which is not null or
  * undefined and it returns that value
  */
-export function composeFunctions<Args extends Array<any>, R>(
+export function combine<Args extends Array<any>, R>(
   ...fns: ((...args: Args) => R | null | undefined)[]
 ) {
   return (...args: Args) => {
