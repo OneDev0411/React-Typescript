@@ -231,11 +231,6 @@ export class TourDrawer extends React.Component {
                         locations={values.locations}
                         handleDelete={this.handleDeleteAssociation}
                       />
-
-                      <FieldError
-                        name="locations"
-                        style={{ fontSize: '1rem' }}
-                      />
                     </Section>
 
                     {!isSoloActiveTeam(user) && (

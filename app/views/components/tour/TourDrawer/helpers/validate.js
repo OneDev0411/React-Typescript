@@ -13,9 +13,5 @@ export function validate(values) {
     errors.assignees = 'Each event must have at least one assignee.'
   }
 
-  if (values.locations.length === 0) {
-    errors.locations = 'Each event must have at least one location.'
-  }
-
   return errors
 }
