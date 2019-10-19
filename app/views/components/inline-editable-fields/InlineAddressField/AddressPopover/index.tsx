@@ -1,6 +1,7 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 
 import { Popover } from '@material-ui/core'
+import { PopoverActions } from '@material-ui/core/Popover'
 
 import { InlineAddressForm } from '../InlineAddressForm'
 
@@ -28,10 +29,16 @@ export function AddressPopover({
   onClose
 }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null)
+  const popoverAction = useRef<PopoverActions | null>(null)
+
+  useEffect(() => {
+    popoverAction.current && popoverAction.current.updatePosition()
+  }, [isOpen])
 
   return (
     <div ref={containerRef}>
       <Popover
+        action={popoverAction}
         id={isOpen ? 'inline-address-popover' : undefined}
         open={isOpen}
         anchorEl={containerRef && containerRef.current}
