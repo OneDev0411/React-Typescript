@@ -40,6 +40,7 @@ import {
 
 import SocialActions from './SocialActions'
 import { SOCIAL_NETWORKS } from './constants'
+import registerBlocks from './Blocks'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -119,7 +120,10 @@ class Builder extends React.Component {
     this.disableDeviceManager()
     this.makeTemplateCentered()
     this.removeTextStylesOnPaste()
-    this.addCustomBlocks()
+
+    if (this.isEmailTemplate && this.isMjmlTemplate) {
+      this.registerCustomBlocks()
+    }
 
     if (this.isVideoTemplate) {
       this.grapes.appendChild(this.videoToolbar)
@@ -130,43 +134,13 @@ class Builder extends React.Component {
     })
   }
 
-  addCustomBlocks = () => {
-    this.editor.BlockManager.add('rechat-listing', {
-      label: 'Rechat Listing',
-      content: `<mj-section data-block="rechat-listing" background-color="#fff" padding="56px 40px">
-      <mj-group data-gjs-removable="false">
-        <mj-wrapper data-gjs-removable="false" background-color="#ffffff" border="1px solid #000000" padding="50px 30px">
-   <mj-column padding="0px">
-     <mj-image padding="0px" align="center" src="https://d1rchfjmtfqq3r.cloudfront.net/3bce952a-0e75-11e8-a40e-0ae785638eb4/c40690d0-8649-11e9-b355-db05e67d68c8.png" width="135px" height="135px"></mj-image>
-   </mj-column>
-
-     <mj-column vertical-align="middle" padding-top="20px" padding="0px">
-     <mj-text padding="0px" rechat-editable="true" align="left" color="#000" font-size="11px" font-family="Barlow" font-weight="bold">
-       <p id="text1">Test Listing</p>
-     </mj-text>
-     <mj-text padding="0px" rechat-editable="true" align="left" color="#000" font-size="11px" font-family="Barlow">
-       <p id="text2" ><a href="mailto:{{user.email}}" color="#000">Test Text</a></p> 
-     </mj-text>
-     <mj-text padding="0px" rechat-editable="true" align="left" color="#000" font-size="11px" font-family="Barlow" color="#000">
-       <p id="text3" ><a href="tel:{{ user.phone_number | phone }}" color="#000"  >Test Text 2</a></p>
-     </mj-text>
-   </mj-column>
-   </mj-wrapper>
-       </mj-group>
- </mj-section>`,
-      category: 'Rechat'
-      // render: ({ model, className }) => `<div class="${className}__my-wrap">
-      //   ${model.get('label')}
-      // </div>`
-    })
-
-    this.editor.on('block:drag:stop', model => {
-      if (model.attributes.attributes['data-block'] === 'rechat-listing') {
-        this.setState({ isListingDrawerOpen: true })
+  registerCustomBlocks = () => {
+    this.blocks = registerBlocks(this.editor, {
+      listing: {
+        onDrop: () => {
+          this.setState({ isListingDrawerOpen: true })
+        }
       }
-
-      this.editor.select(model)
-      console.log(model)
     })
   }
 
@@ -456,6 +430,10 @@ class Builder extends React.Component {
     return this.state.selectedTemplate.medium === 'Email'
   }
 
+  get isMjmlTemplate() {
+    return this.state.selectedTemplate.mjml
+  }
+
   get isTemplateLoaded() {
     return this.state.selectedTemplate && this.state.selectedTemplate.template
   }
@@ -551,8 +529,8 @@ class Builder extends React.Component {
             isOpen={this.state.isListingDrawerOpen}
             title="Select a Listing"
             onClose={() => this.setState({ isListingDrawerOpen: false })}
-            onSelectListingsCallback={listing => {
-              console.log('SELECTED LISTING', listing)
+            onSelectListingsCallback={listings => {
+              this.blocks.listing.selectHandler(listings[0])
               this.setState({ isListingDrawerOpen: false })
             }}
           />
