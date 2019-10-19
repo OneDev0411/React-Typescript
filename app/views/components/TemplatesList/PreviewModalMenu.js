@@ -2,12 +2,12 @@ import React from 'react'
 
 import Button from 'components/Button/ActionButton'
 
-import { itemButtonText } from './helpers'
+import { isTemplateInstance } from './helpers'
 
 function PreviewModalMenu(props) {
   return (
-    <Button onClick={props.handlePreviewShare}>
-      {itemButtonText(props.selectedTemplate)}
+    <Button onClick={props.handleAction}>
+      {isTemplateInstance(props.selectedTemplate) ? 'Continue' : 'Customize'}
     </Button>
   )
 }

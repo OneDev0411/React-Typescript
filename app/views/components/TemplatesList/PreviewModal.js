@@ -31,10 +31,7 @@ function PreviewModal(props) {
     menuRenderer: () => (
       <PreviewModalMenu
         selectedTemplate={selectedTemplate}
-        handlePreviewShare={() => {
-          props.setPreviewModalOpen(false)
-          props.setActionTriggered(true)
-        }}
+        handleAction={props.handleAction}
       />
     )
   }
