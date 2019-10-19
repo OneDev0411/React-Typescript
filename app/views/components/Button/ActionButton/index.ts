@@ -60,7 +60,7 @@ export const defaultProps: Partial<ActionButtonProps> = {
   brandColor: ''
 }
 
-const getStylesDependedSize = props => {
+export const getStylesDependedSize = props => {
   switch (props.size) {
     case 'small': {
       const size = 2.33
