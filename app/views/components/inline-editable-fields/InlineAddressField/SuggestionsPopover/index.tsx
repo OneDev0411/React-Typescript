@@ -9,7 +9,7 @@ interface Props {
   places: any
   style: React.CSSProperties
   onClickDefaultItem(): void
-  onClickSuggestionItem(): void
+  onClickSuggestionItem(item: any): void
   onMouseOverSuggestion(isBlurDisabled: boolean): void
 }
 

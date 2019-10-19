@@ -9,8 +9,8 @@ interface Props {
   address: string | object
   formStyle: React.CSSProperties
   showDeleteButton: boolean
-  preSaveFormat(): void
-  postLoadFormat(): void
+  preSaveFormat(values: object, originalValues: object): void
+  postLoadFormat(values: object): void
   onDelete(): void
   onSubmit(): void
   onClose(): void

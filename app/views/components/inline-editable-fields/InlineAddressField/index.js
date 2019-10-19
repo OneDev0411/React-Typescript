@@ -42,7 +42,6 @@ export class InlineAddressField extends React.Component {
     isAddressFormOpen: false,
     isDirty: false,
     places: [],
-    // updateAddressFormPosition: false,
     // Because the blur default action should be canceled when the mouse is over
     // the suggestion area, and there is a possibility of selecting suggestion
     // items.
