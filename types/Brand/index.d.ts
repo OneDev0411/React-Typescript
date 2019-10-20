@@ -25,9 +25,9 @@ declare interface IBrand extends IModel<'brand'> {
   messages: IBrandMessage
   name: string
   offices: string[]
-  palette: {
-    primary?: string
+  palette?: {
     type: 'brand_palette'
+    primary?: string
     marketing?: {
       alpha?: ColorSet
       beta?: ColorSet
