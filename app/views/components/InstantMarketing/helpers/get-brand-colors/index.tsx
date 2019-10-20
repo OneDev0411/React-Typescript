@@ -1,6 +1,10 @@
-const GENERIC_COLORS = ['#fff', '#ccc', '#999', '#666', '#333', '#000']
+const SHARED_COLORS = ['#fff', '#ccc', '#999', '#666', '#333', '#000']
 
 export function getBrandColors(brand: IBrand): string[] {
+  if (!brand.palette) {
+    return SHARED_COLORS
+  }
+
   const colors: string[] = []
 
   if (brand.palette.primary) {
@@ -21,8 +25,7 @@ export function getBrandColors(brand: IBrand): string[] {
     }
   }
 
-  colors.push(...GENERIC_COLORS)
+  colors.push(...SHARED_COLORS)
 
-  // unique list of colors
   return [...new Set(colors.map(color => color.toLowerCase()))]
 }
