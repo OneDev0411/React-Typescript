@@ -50,6 +50,7 @@ export class InlineAddressForm extends React.Component {
   load = async () => {
     const { address } = this.props
 
+    // don't parse address if it's already provided as an object
     if (address && typeof address === 'object') {
       return address
     }
