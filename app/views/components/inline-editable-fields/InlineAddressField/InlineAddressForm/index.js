@@ -31,8 +31,7 @@ const propTypes = {
   handleCancel: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   preSaveFormat: PropTypes.func,
-  postLoadFormat: PropTypes.func,
-  updatePosition: PropTypes.func
+  postLoadFormat: PropTypes.func
 }
 
 const defaultProps = {
@@ -40,8 +39,7 @@ const defaultProps = {
   validate() {},
   handleDelete() {},
   showDeleteButton: false,
-  postLoadFormat,
-  updatePosition() {}
+  postLoadFormat
 }
 
 export class InlineAddressForm extends React.Component {
@@ -50,16 +48,20 @@ export class InlineAddressForm extends React.Component {
   }
 
   load = async () => {
-    if (this.props.address) {
+    const { address } = this.props
+
+    // don't parse address if it's already provided as an object
+    if (address && typeof address === 'object') {
+      return address
+    }
+
+    if (address) {
       try {
         this.setState({ isDisabled: true })
 
-        const parsedAddress = await addressParser.parseLocation(
-          this.props.address
-        )
+        const parsedAddress = await addressParser.parseLocation(address)
 
         this.setState({ isDisabled: false })
-        this.props.updatePosition()
 
         return parsedAddress
       } catch (error) {

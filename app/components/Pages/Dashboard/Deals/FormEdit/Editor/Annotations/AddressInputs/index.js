@@ -37,6 +37,8 @@ export function AddressInputs(props) {
       render={inputProps => (
         <AddressField
           {...inputProps}
+          formValues={props.values}
+          annotations={props.annotations}
           deal={props.deal}
           onAddressUpdate={handleAddressUpdate}
         />
