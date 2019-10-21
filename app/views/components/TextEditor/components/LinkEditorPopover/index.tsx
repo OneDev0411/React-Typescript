@@ -2,14 +2,14 @@ import { Editor, EditorState } from 'draft-js'
 import { ClickAwayListener, Popper, useTheme } from '@material-ui/core'
 import * as React from 'react'
 import { RefObject, useState } from 'react'
-import { getSelectionText } from 'draftjs-utils'
 
 import { useEditorSelectionAnchor } from './hooks/use-editor-selection-anchor'
 import { useOnToggledOn } from './hooks/use-on-toggled'
 import { createLink } from '../../utils/create-link'
-import { getCurrentLinkUrl, stopPropagation } from './utils'
+import { getCurrentLinkText, getCurrentLinkUrl, stopPropagation } from './utils'
 import { LinkEditorForm } from './components/LinkEditorForm'
 import { getExpandedSelectionByEntityType } from '../../utils/get-expanded-selection-by-entity-type'
+import { getSelectedBlock } from '../../utils/get-selected-block'
 
 interface Props {
   open: boolean
@@ -62,7 +62,12 @@ export function LinkEditorPopover({
 
     let newEditorState = editorState
 
-    if (linkSelection !== editorState.getSelection()) {
+    // expand the selection to the whole link text, if link is not for an
+    // atomic block
+    if (
+      !getSelectedBlock(editorState) &&
+      linkSelection !== editorState.getSelection()
+    ) {
       newEditorState = EditorState.forceSelection(editorState, linkSelection)
 
       // without timeout, editorState will be overridden due to losing focus
@@ -74,7 +79,7 @@ export function LinkEditorPopover({
       })
     }
 
-    setText(getSelectionText(newEditorState))
+    setText(getCurrentLinkText(editorState) || '')
     setUrl(getCurrentLinkUrl(editorState) || '')
   })
 

@@ -32,7 +32,7 @@ export function createLink(
      */
     return setBlockData(editorState, {
       href: url,
-      tooltip: text
+      title: text
     })
   }
 
