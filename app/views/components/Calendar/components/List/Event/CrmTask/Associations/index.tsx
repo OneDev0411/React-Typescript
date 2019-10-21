@@ -1,13 +1,12 @@
 import React, { useContext } from 'react'
-import idx from 'idx'
 
 import MiniContactProfile from 'components/MiniContact'
-import { plural } from 'utils/plural'
+
+import { getTrimmedArrayAndOthersText } from 'utils/get-trimmed-array-and-others-text'
 
 import { ListContext } from '../../../context'
 
 import styles from './styles'
-import { isLastItem } from './helpers'
 
 interface Props {
   event: ICalendarEvent
@@ -15,53 +14,42 @@ interface Props {
 
 export function Associations({ event }: Props) {
   const { setSelectedEvent } = useContext(ListContext)
-  const associations =
-    idx(event, event => event.full_crm_task.associations) || []
 
-  const contacts = associations.filter(
-    association => association.association_type === 'contact'
-  )
-
-  if (contacts.length === 0) {
+  if (!event.people) {
     return null
   }
 
   const preposition = getCrmEventTypePreposition(event.event_type)
-  const visibleContacts = contacts.slice(0, 2)
-  const contactsCount = contacts.length
-  const contactsOtherCount = contactsCount - 2
-  const isPlural = contactsOtherCount > 1
-  const needsShowOtherLabel = contactsCount > 2
+
+  const { visibleItems: contacts, othersText } = getTrimmedArrayAndOthersText(
+    event.people
+  )
 
   return (
     <span>
       {preposition}{' '}
-      {visibleContacts.map((item, index) => (
-        <React.Fragment key={`assoc${index}`}>
-          <MiniContactProfile
-            as="span"
-            data={item.contact as IContact}
-            type="event"
-          >
+      {contacts.map((item, index) => (
+        <React.Fragment key={index}>
+          {index !== 0 && <>,&nbsp;</>}
+          <MiniContactProfile as="span" data={item} type="event">
             <a
               onClick={e => e.stopPropagation()}
               target="_blank"
-              href={`/dashboard/contacts/${item.contact!.id}`}
+              href={`/dashboard/contacts/${item.id}`}
             >
-              {item.contact!.display_name}
+              {item.display_name}
             </a>
           </MiniContactProfile>
-          {!isLastItem(contacts, index) && <span key={`sepr${index}`}>, </span>}
         </React.Fragment>
       ))}
-      {needsShowOtherLabel && (
+      {othersText && (
         <>
           {' and '}
           <span
             style={styles.association}
             onClick={() => setSelectedEvent(event)}
           >
-            {plural(`${contactsCount} other`, isPlural)}
+            {othersText}
           </span>
         </>
       )}

@@ -11,7 +11,6 @@ import { getNotes } from 'models/contacts/helpers/get-notes'
 
 import List from 'components/Calendar'
 import { CalendarRef, LoadingDirection } from 'components/Calendar/types'
-import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { hasUserAccess } from 'utils/user-teams'
 
 import { getUpcomingInitialRange } from './helpers/get-upcoming-range'
@@ -36,13 +35,7 @@ interface Props {
   onCreateNote(contact: IContact): void
 }
 
-const associations = [
-  ...CRM_TASKS_QUERY.associations,
-  'calendar_event.crm_task',
-  'calendar_event.full_campaign',
-  'calendar_event.full_crm_task',
-  'calendar_event.full_thread'
-]
+const associations = ['calendar_event.full_thread']
 
 function Timeline(props: Props) {
   const timelineRef = useRef<CalendarRef>(null)

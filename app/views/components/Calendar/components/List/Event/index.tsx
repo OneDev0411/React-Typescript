@@ -24,7 +24,7 @@ const events: {
     style,
     nextItem,
     onEventChange
-  }: Props): React.ReactElement<any>
+  }: Props): React.ReactElement<any> | null
   condition(event: ICalendarEvent): boolean
 }[] = [
   {
@@ -71,16 +71,16 @@ const events: {
 export function Event({ event, nextItem, style, onEventChange }: Props) {
   const item = events.find(item => item.condition(event) === true)
 
-  if (item) {
-    return (
-      <item.component
-        style={style}
-        event={event}
-        nextItem={nextItem}
-        onEventChange={onEventChange}
-      />
-    )
+  if (!item) {
+    return null
   }
 
-  return null
+  return (
+    <item.component
+      style={style}
+      event={event}
+      nextItem={nextItem}
+      onEventChange={onEventChange}
+    />
+  )
 }

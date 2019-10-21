@@ -27,10 +27,11 @@ declare interface ICalendarEvent {
   timestamp_readable: string
   title: string
   type: string
+  touch_freq?: number | null
   type_label: string
   thread_key: string | null
   users: UUID[]
-  full_contact?: IContact
+  people: IContact[] | null
   full_deal?: IDeal
   full_crm_task: {
     end_date: number | null

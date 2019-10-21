@@ -37,7 +37,13 @@ function getEvents(
 ): ICalendarEventsList {
   const uniqEvents = uniqBy(events, event =>
     event.object_type === 'crm_association' ? event.crm_task : event.id
-  )
+  ).filter(event => {
+    if (event.event_type === 'executed_email') {
+      return false
+    }
+
+    return true
+  })
 
   return uniqEvents.reduce((acc: string[], event: ICalendarEvent) => {
     // TODO: remove this condition after converting notes to event
