@@ -7,7 +7,7 @@ import IconCircleSpinner from '../../../SvgIcons/CircleSpinner/IconCircleSpinner
 import { LoadingWrapper } from './styled'
 import { getAlignmentStyles } from '../../utils/get-alignment-styles'
 
-type Props = {
+interface Props {
   block: ContentBlock
   blockProps: StringMap<any>
   contentState: ContentState
