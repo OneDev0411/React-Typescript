@@ -64,26 +64,26 @@ export function DraftJsSelectionPopover({
 
   const previousEditorState = usePrevious(editorState)
 
+  const selectionChanged =
+    previousEditorState &&
+    !isEqual(
+      previousEditorState.getSelection().toJS(),
+      editorState.getSelection().toJS()
+    )
+
   useEffect(() => {
-    if (
-      closed &&
-      editorState !== previousEditorState &&
-      previousEditorState &&
-      !isEqual(
-        previousEditorState.getSelection().toJS(),
-        editorState.getSelection().toJS()
-      )
-    ) {
+    if (closed && editorState !== previousEditorState && selectionChanged) {
       setClosed(false)
     }
-  }, [previousEditorState, editorState, closed])
+  }, [previousEditorState, editorState, closed, selectionChanged])
 
   const inlineEntityFilterFn = normalizeFilter(inlineEntityFilter)
   const blockFilterFn = normalizeFilter(blockFilter)
 
   const shouldRender =
-    (entity && inlineEntityFilterFn(entity)) ||
-    (selectedBlock && blockFilterFn(selectedBlock))
+    selectionChanged &&
+    ((entity && inlineEntityFilterFn(entity)) ||
+      (selectedBlock && blockFilterFn(selectedBlock)))
 
   if (shouldRender) {
     const anchorEl = getSelectionAnchorElement()
