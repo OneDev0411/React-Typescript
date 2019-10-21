@@ -1,5 +1,6 @@
 export const sellingPropertyTypes = [
   'Commercial Sale',
+  'Commercial Lease',
   'New Home',
   'Lot / Land',
   'Resale',
