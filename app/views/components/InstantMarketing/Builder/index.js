@@ -96,7 +96,7 @@ class Builder extends React.Component {
     })
 
     this.editor = createGrapesInstance(Grapesjs, {
-      assets: [...this.props.assets, ...this.UserAssets],
+      assets: [...this.props.assets, ...this.userAssets],
       plugins: [GrapesjsMjml],
       pluginsOpts: {
         [GrapesjsMjml]: {
@@ -473,7 +473,7 @@ class Builder extends React.Component {
     return false
   }
 
-  get UserAssets() {
+  get userAssets() {
     return ['profile_image_url', 'cover_image_url']
       .filter(attr => this.props.user[attr])
       .map(attr => ({
@@ -539,7 +539,10 @@ class Builder extends React.Component {
             mockListings
             isOpen={this.state.isListingDrawerOpen}
             title="Select a Listing"
-            onClose={() => this.setState({ isListingDrawerOpen: false })}
+            onClose={() => {
+              this.blocks.listing.selectHandler()
+              this.setState({ isListingDrawerOpen: false })
+            }}
             onSelectListingsCallback={listings => {
               this.blocks.listing.selectHandler(listings[0])
               this.setState({ isListingDrawerOpen: false })

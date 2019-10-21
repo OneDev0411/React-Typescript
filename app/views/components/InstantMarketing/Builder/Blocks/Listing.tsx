@@ -55,19 +55,22 @@ export default function registerListingBlock(
 
   let modelHandle: any
 
-  const selectHandler = (listing: IListing) => {
+  const selectHandler = (listing?: IListing) => {
     console.log('SELECTED!', listing)
     console.log('MODEL HANDLE!', modelHandle)
 
-    const mjml = nunjucks.renderString(TEMPLATE, {
-      image: listing.cover_image_url,
-      address: listing.property.address.full_address,
-      listing_id: listing.id
-    })
+    if (listing) {
+      const mjml = nunjucks.renderString(TEMPLATE, {
+        image: listing.cover_image_url,
+        address: listing.property.address.full_address,
+        listing_id: listing.id
+      })
 
-    console.log('mjml', mjml)
+      console.log('mjml', mjml)
 
-    modelHandle.parent().append(mjml, { at: modelHandle.opt.at })
+      modelHandle.parent().append(mjml, { at: modelHandle.opt.at })
+    }
+
     modelHandle.remove()
   }
 
