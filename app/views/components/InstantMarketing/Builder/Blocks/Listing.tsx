@@ -38,6 +38,10 @@ export interface Options {
   onDrop: (model: Model) => void
 }
 
+interface ListingBlock {
+  selectHandler: (selectedListing?: IListing) => void
+}
+
 export default function registerListingBlock(
   editor: Editor,
   renderData: TemplateRenderData,
@@ -47,7 +51,7 @@ export default function registerListingBlock(
     blockName = 'rechat-listing',
     onDrop
   }: BlockOptions & Options
-) {
+): ListingBlock {
   console.log('RENDER DATA', renderData)
   editor.BlockManager.add(blockName, {
     category,
