@@ -1,3 +1,5 @@
+import { Editor } from 'grapesjs'
+
 import config from './config'
 
 const STYLE_MANAGER_TEXT_TAGS = [
@@ -26,9 +28,9 @@ const STYLE_MANAGER_TEXT_TAGS = [
 ]
 
 export function createGrapesInstance(
-  Grapesjs,
+  Grapesjs: any,
   { assets, plugins, pluginsOpts }
-) {
+): Editor {
   return Grapesjs.init({
     ...config,
     avoidInlineStyle: false,

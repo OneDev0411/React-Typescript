@@ -53,7 +53,8 @@ class Builder extends React.Component {
       owner: props.templateData.user,
       isLoading: true,
       isEditorLoaded: false,
-      templateHtmlCss: ''
+      templateHtmlCss: '',
+      loadedListingsAssets: []
     }
 
     this.keyframe = 0
@@ -105,6 +106,8 @@ class Builder extends React.Component {
       }
     })
 
+    this.initLoadedListingsAssets()
+
     this.editor.on('load', this.setupGrapesJs)
   }
 
@@ -117,6 +120,39 @@ class Builder extends React.Component {
   }
 
   static contextType = ConfirmationModalContext
+
+  initLoadedListingsAssets = () => {
+    const loadedListingsAssets = []
+
+    if (this.props.templateData.listings) {
+      loadedListingsAssets.push(
+        ...this.props.templateData.listings.map(item => item.id)
+      )
+    }
+
+    if (this.props.templateData.listing) {
+      loadedListingsAssets.push(this.props.templateData.listing.id)
+    }
+
+    this.setState({ loadedListingsAssets })
+  }
+
+  addListingAssets = listing => {
+    if (!this.state.loadedListingsAssets.includes(listing.id)) {
+      this.editor.AssetManager.add(
+        listing.gallery_image_urls.map(image => ({
+          listing: listing.id,
+          image
+        }))
+      )
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          loadedListingsAssets: [...prevState.loadedListingsAssets, listing.id]
+        }
+      })
+    }
+  }
 
   setupGrapesJs = () => {
     this.setState({ isEditorLoaded: true })
@@ -544,7 +580,11 @@ class Builder extends React.Component {
               this.setState({ isListingDrawerOpen: false })
             }}
             onSelectListingsCallback={listings => {
-              this.blocks.listing.selectHandler(listings[0])
+              const listing = listings[0]
+
+              this.addListingAssets(listing)
+
+              this.blocks.listing.selectHandler(listing)
               this.setState({ isListingDrawerOpen: false })
             }}
           />
