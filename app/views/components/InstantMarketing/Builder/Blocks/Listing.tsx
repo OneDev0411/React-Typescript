@@ -7,31 +7,46 @@ import { TemplateRenderData } from '../utils/get-template-render-data/index'
 import { BlockOptions } from './types'
 
 const TEMPLATE = `
-<mj-section data-block="rechat-listing" background-color="#fff" padding="56px 40px">
-<mj-group data-gjs-removable="false">
-  <mj-wrapper data-gjs-removable="false" background-color="#ffffff" border="1px solid #000000" padding="50px 30px">
-    <mj-column padding="0px">
-      <mj-image padding="0px" align="center" rechat-assets="listing-image" rechat-listing="{{ listing_id }}" src="{{ image }}" width="135px" height="135px"></mj-image>
-    </mj-column>
+<mj-wrapper data-block="rechat-listing" background-color="{{getColor('alpha.bg')}}">
+  <mj-section background-color="#ffffff" padding-left="40px" padding-right="40px" padding-bottom="0px">
+      <mj-column width="100%" padding="0px">
+          <mj-image rechat-assets="listing-image" css-class="img-fit responsiveimg" padding="0px" src="{{listing.gallery_image_urls[0]}}"></mj-image>
+      </mj-column>
+  </mj-section>
 
-    <mj-column vertical-align="middle" padding-top="20px" padding="0px">
-      <mj-text padding="0px" rechat-editable="true" align="left" color="#000" font-size="11px" font-family="Barlow" font-weight="bold">
-        <p>{{ address }}</p>
-      </mj-text>
-      <mj-text padding="0px" rechat-editable="true" align="left" color="#000" font-size="11px" font-family="Barlow">
-        <p>
-          <a href="" color="#000">Test Text</a>
-        </p>
-      </mj-text>
-      <mj-text padding="0px" rechat-editable="true" align="left" color="#000" font-size="11px" font-family="Barlow" color="#000">
-        <p>
-          <a href="" color="#000">Test Text 2</a>
-        </p>
-      </mj-text>
-    </mj-column>
-  </mj-wrapper>
-</mj-group>
-</mj-section>
+  <mj-section background-color="#fff" padding="0px">
+      <mj-group>
+          <mj-column>
+              <mj-text rechat-editable="true" padding="0 10px" css-class="text3" align="left" font-family="Barlow" font-size="34px" color="#002344" font-weight="bold">
+                  <p color="#002344"> {{listing.property.address.street_address}} </p>
+              </mj-text>
+
+              <mj-text rechat-editable="true" padding="0 10px" css-class="text3" align="left" font-family="Barlow" font-size="23px" color="#002344" font-weight="bold">
+                  <p color="#002344" style="margin:8px 0"> {{ listing.price | currency }}
+                  </p>
+              </mj-text>
+              <mj-text rechat-editable="true" padding="0 10px" css-class="text3" align="left" font-family="Barlow" font-size="20px" color="#808080">
+                  <p color="#808080" style="margin:8px 0">
+                      {{listing.property.address.city}},{{listing.property.address.state}},{{listing.property.address.postal_code}}</p>
+              </mj-text>
+
+              <mj-text rechat-editable="true" css-class="text4" align="left" font-family="Barlow" font-size="18px" padding="0 10px" color="#002344">
+                  <p color="#002344" id="text4" style="margin:8px 0"> {{listing.property.bedroom_count}} Beds, {{listing.property.full_bathroom_count + listing.property.half_bathroom_count}} Baths, {{ listing.property.square_meters | area }} Sqft</p>
+              </mj-text>
+          </mj-column>
+
+      </mj-group>
+
+  </mj-section>
+
+  <mj-section background-color="#ffffff" padding="0px">
+      <mj-column padding="0px">
+          <mj-button rechat-editable="true" href="{{getListingUrl(listing)}}" background-color="{{getColor('beta.bg')}}" color="{{getColor('beta.ta')}}" padding="0px 0 10px" border-radius="none" font-family="Barlow" font-size="18px">
+              VIEW PROPERTY
+          </mj-button>
+      </mj-column>
+  </mj-section>
+</mj-wrapper>
 `
 
 export interface Options {
@@ -67,9 +82,8 @@ export default function registerListingBlock(
 
     if (listing) {
       const mjml = nunjucks.renderString(TEMPLATE, {
-        image: listing.cover_image_url,
-        address: listing.property.address.full_address,
-        listing_id: listing.id
+        ...renderData,
+        listing
       })
 
       console.log('mjml', mjml)
