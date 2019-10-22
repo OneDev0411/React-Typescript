@@ -56,13 +56,13 @@ declare interface IDealRole {
   role: string
   role_type: string
   type: string
-  office_phone?: string
-  office_email?: string
-  office_fax?: string
-  office_license_number?: string
-  office_mls_id?: string
-  office_name?: string
-  office_address?: string
+  office_phone?: string | null
+  office_email?: string | null
+  office_fax?: string | null
+  office_license_number?: string | null
+  office_mls_id?: string | null
+  office_name?: string | null
+  office_address?: string | null
   updated_at: number
   user: IUser
 }

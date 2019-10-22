@@ -90,9 +90,7 @@
   "type": "deal",
   "is_draft": false,
   "roles": [
-    "18284e38-6732-11e9-91b6-0a95998482ac",
-    "3ac0b010-67fb-11e9-aa1f-0a95998482ac",
-    "bc13a0f0-67fb-11e9-94e0-0a95998482ac"
+    "18284e38-6732-11e9-91b6-0a95998482ac"
   ],
   "context": {
     "year_built": {
