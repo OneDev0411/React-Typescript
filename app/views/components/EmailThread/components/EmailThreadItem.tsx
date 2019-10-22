@@ -24,9 +24,9 @@ import IconReply from '../../SvgIcons/Reply/IconReply'
 import IconForward from '../../SvgIcons/Forward/IconForward'
 import { Attachment } from '../../EmailCompose/components/Attachment'
 import { EmailResponseType } from '../types'
-import EmailThreadComposeForm from '../../EmailCompose/EmailThreadComposeForm'
 import { decodeContentIds } from '../helpers/decode-content-ids'
 import { convertToAbsoluteAttachmentUrl } from '../helpers/convert-to-absolute-attachment-url'
+import { EmailResponseComposeForm } from '../../EmailCompose/EmailResponseComposeForm'
 
 interface Props {
   email: IEmailThreadEmail
@@ -199,7 +199,7 @@ export function EmailThreadItem({
             )}
             {isResponseOpen && (
               <Paper elevation={10} className={classes.composeWrapper}>
-                <EmailThreadComposeForm
+                <EmailResponseComposeForm
                   email={email}
                   responseType={responseType}
                   onCancel={() => {

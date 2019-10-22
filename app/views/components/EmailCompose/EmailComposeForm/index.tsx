@@ -68,6 +68,7 @@ function EmailComposeForm<T>({
   onDelete,
   uploadAttachment = uploadEmailAttachment,
   onSent = () => {},
+  children,
   ...props
 }: EmailComposeFormProps<T> & ClassesProps<typeof styles>) {
   const hasRecipients =
@@ -270,6 +271,7 @@ function EmailComposeForm<T>({
                 }
               />
             </div>
+            {children}
             <Footer
               formProps={{ values: formProps.values as EmailFormValues }}
               isSubmitting={submitting}
