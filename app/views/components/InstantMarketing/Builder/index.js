@@ -35,7 +35,7 @@ import {
 
 import SocialActions from './SocialActions'
 import { SOCIAL_NETWORKS } from './constants'
-import registerBlocks from './Blocks'
+import { removeUnusedBlocks, registerCustomBlocks } from './Blocks'
 import getTemplateRenderData from './utils/get-template-render-data'
 
 class Builder extends React.Component {
@@ -100,7 +100,8 @@ class Builder extends React.Component {
       plugins: [GrapesjsMjml],
       pluginsOpts: {
         [GrapesjsMjml]: {
-          columnsPadding: false
+          columnsPadding: false,
+          categoryLabel: 'UI Elements'
         }
       }
     })
@@ -164,7 +165,7 @@ class Builder extends React.Component {
     this.removeTextStylesOnPaste()
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
-      this.registerCustomBlocks()
+      this.registerBlocks()
     }
 
     if (this.isVideoTemplate) {
@@ -176,11 +177,12 @@ class Builder extends React.Component {
     })
   }
 
-  registerCustomBlocks = () => {
+  registerBlocks = () => {
     const { brand } = getActiveTeam(this.props.user)
     const renderData = getTemplateRenderData(brand)
 
-    this.blocks = registerBlocks(this.editor, renderData, {
+    removeUnusedBlocks(this.editor)
+    this.blocks = registerCustomBlocks(this.editor, renderData, {
       listing: {
         onDrop: () => {
           this.setState({ isListingDrawerOpen: true })
