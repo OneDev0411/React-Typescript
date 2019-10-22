@@ -1,8 +1,8 @@
 import isEmail from 'validator/lib/isEmail'
-import { EditorState } from 'draft-js'
+import { EditorState, ContentBlock } from 'draft-js'
 import { getSelectionEntity, getSelectionText } from 'draftjs-utils'
 
-import { getSelectedBlock } from '../../utils/get-selected-block'
+import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
 
 export function getCurrentLinkUrl(
   editorState: EditorState
@@ -16,7 +16,7 @@ export function getCurrentLinkUrl(
     return entity.getData().url
   }
 
-  const selectedBlock = getSelectedBlock(editorState)
+  const selectedBlock = getSelectedAtomicBlock(editorState)
 
   if (selectedBlock) {
     return selectedBlock.getData().get('href')
@@ -26,7 +26,7 @@ export function getCurrentLinkUrl(
 export function getCurrentLinkText(
   editorState: EditorState
 ): string | undefined {
-  const selectedBlock = getSelectedBlock(editorState)
+  const selectedBlock = getSelectedAtomicBlock(editorState)
 
   if (selectedBlock) {
     return selectedBlock.getData().get('title')
@@ -35,6 +35,20 @@ export function getCurrentLinkText(
   return getSelectionText(editorState)
 }
 
+export function getBlockElement(contentBlock: ContentBlock) {
+  const blockElement = document.querySelector(
+    `[data-offset-key="${contentBlock.getKey()}-0-0"]`
+  )
+
+  if (
+    blockElement &&
+    blockElement.firstElementChild === blockElement.lastElementChild
+  ) {
+    return blockElement.firstElementChild
+  }
+
+  return blockElement
+}
 export const getSelectionAnchorElement = () => {
   const selection = window.getSelection()
 

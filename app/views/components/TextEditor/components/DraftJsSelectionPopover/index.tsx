@@ -9,9 +9,14 @@ import { isEqual } from 'lodash'
 
 import usePrevious from 'react-use/lib/usePrevious'
 
-import { getSelectionAnchorElement } from '../LinkEditorPopover/utils'
+import { PopperPlacementType } from '@material-ui/core/Popper'
+
+import {
+  getBlockElement,
+  getSelectionAnchorElement
+} from '../LinkEditorPopover/utils'
 import { Entity } from '../../types'
-import { getSelectedBlock } from '../../utils/get-selected-block'
+import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
 
 interface RenderProps {
   entity: Entity | null
@@ -50,7 +55,7 @@ export function DraftJsSelectionPopover({
   children
 }: Props) {
   const selectedEntityKey: string = getSelectionEntity(editorState)
-  const selectedBlock = getSelectedBlock(editorState)
+  const selectedBlock = getSelectedAtomicBlock(editorState)
 
   const entity = selectedEntityKey
     ? editorState.getCurrentContent().getEntity(selectedEntityKey)
@@ -80,20 +85,30 @@ export function DraftJsSelectionPopover({
   const inlineEntityFilterFn = normalizeFilter(inlineEntityFilter)
   const blockFilterFn = normalizeFilter(blockFilter)
 
-  const shouldRender =
-    selectionChanged &&
-    ((entity && inlineEntityFilterFn(entity)) ||
-      (selectedBlock && blockFilterFn(selectedBlock)))
+  const conditionIsMet =
+    (entity && inlineEntityFilterFn(entity)) ||
+    (selectedBlock && blockFilterFn(selectedBlock))
 
-  if (shouldRender) {
-    const anchorEl = getSelectionAnchorElement()
+  /**
+   * We show the popup only if selection is changed ever
+   */
+  if (selectionChanged && conditionIsMet) {
+    const selectedBlock = getSelectedAtomicBlock(editorState)
+
+    const anchorEl = selectedBlock
+      ? getBlockElement(selectedBlock)
+      : getSelectionAnchorElement()
+
+    const placement: PopperPlacementType = selectedBlock
+      ? 'bottom'
+      : 'bottom-start'
 
     return (
       anchorEl && (
         <Popper
           open={!closed}
           anchorEl={anchorEl}
-          placement="bottom-start"
+          placement={placement}
           style={{ zIndex: theme.zIndex.modal }}
         >
           {children({ entity, block: selectedBlock || null, close })}

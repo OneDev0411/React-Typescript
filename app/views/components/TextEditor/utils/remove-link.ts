@@ -6,7 +6,7 @@ import {
   setBlockData
 } from 'draftjs-utils'
 
-import { getSelectedBlock } from './get-selected-block'
+import { getSelectedAtomicBlock } from './get-selected-atomic-block'
 
 export function removeLink(editorState: EditorState): EditorState {
   const entityKey = getSelectionEntity(editorState)
@@ -14,7 +14,7 @@ export function removeLink(editorState: EditorState): EditorState {
   const entity =
     entityKey && editorState.getCurrentContent().getEntity(entityKey)
 
-  const selectedBlock = getSelectedBlock(editorState)
+  const selectedBlock = getSelectedAtomicBlock(editorState)
 
   if (entity && entity.getType() === 'LINK') {
     const entityRange = getEntityRange(editorState, entityKey)

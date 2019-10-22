@@ -9,7 +9,7 @@ import { createLink } from '../../utils/create-link'
 import { getCurrentLinkText, getCurrentLinkUrl, stopPropagation } from './utils'
 import { LinkEditorForm } from './components/LinkEditorForm'
 import { getExpandedSelectionByEntityType } from '../../utils/get-expanded-selection-by-entity-type'
-import { getSelectedBlock } from '../../utils/get-selected-block'
+import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
 
 interface Props {
   open: boolean
@@ -65,7 +65,7 @@ export function LinkEditorPopover({
     // expand the selection to the whole link text, if link is not for an
     // atomic block
     if (
-      !getSelectedBlock(editorState) &&
+      !getSelectedAtomicBlock(editorState) &&
       linkSelection !== editorState.getSelection()
     ) {
       newEditorState = EditorState.forceSelection(editorState, linkSelection)

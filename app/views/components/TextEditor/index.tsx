@@ -46,6 +46,7 @@ import { ITemplateVariableSuggestion } from '../TemplateVariablesButton/types'
 import { insertTemplateVariable } from './modifiers/insert-template-expression'
 import { removeUnwantedEmptyLineBeforeAtomic } from './modifiers/remove-unwanted-empty-block-before-atomic'
 import { ToolbarIconButton } from './buttons/ToolbarIconButton'
+import { getSelectedAtomicBlock } from './utils/get-selected-atomic-block'
 
 /**
  * Html wysiwyg editor.
@@ -344,9 +345,16 @@ export const TextEditor = forwardRef(
             open={linkEditorOpen}
             onClose={() => {
               setLinkEditorOpen(false)
-              setTimeout(() => {
-                editorRef.current!.focus()
-              })
+
+              const selectedBlock = getSelectedAtomicBlock(editorState)
+
+              if (!selectedBlock || selectedBlock.getType() !== 'atomic') {
+                // atomic block selection is not preserved after focus
+                // so we don't focus if an atomic block is selected
+                setTimeout(() => {
+                  editorRef.current!.focus()
+                })
+              }
             }}
           />
           {!linkEditorOpen && (

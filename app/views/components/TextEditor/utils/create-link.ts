@@ -4,7 +4,7 @@ import PluginsUtils from 'draft-js-plugins-utils'
 import { getSelectionText, setBlockData } from 'draftjs-utils'
 
 import { collapseSelection } from './collapse-selection'
-import { getSelectedBlock } from './get-selected-block'
+import { getSelectedAtomicBlock } from './get-selected-atomic-block'
 
 /**
  * Replaces the selection with the given text (or inserts the text into the
@@ -23,9 +23,9 @@ export function createLink(
   text: string = getSelectionText(editorState),
   underline = true
 ): EditorState {
-  const selectedBlock = getSelectedBlock(editorState)
+  const selectedBlock = getSelectedAtomicBlock(editorState)
 
-  if (selectedBlock && selectedBlock.getType() === 'atomic') {
+  if (selectedBlock) {
     /**
      * If an atomic block is selected (via selectable plugin), we add link
      * metadata into it's data instead of replacing it with a link
