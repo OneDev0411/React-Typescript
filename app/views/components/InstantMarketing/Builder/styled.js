@@ -11,6 +11,14 @@ export const Container = styled.div`
   bottom: 0;
   z-index: 100;
   background-color: #fff;
+
+  ${props =>
+    props.hideToolbar &&
+    `
+  .gjs-toolbar {
+    display: none;
+  }
+  `}
 `
 export const TemplatesContainer = styled.div`
   width: 340px;

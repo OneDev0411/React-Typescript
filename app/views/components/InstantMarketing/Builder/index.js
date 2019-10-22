@@ -14,14 +14,8 @@ import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 
 import { getActiveTeam } from 'utils/user-teams'
-import { getBrandStyles } from 'utils/marketing-center/templates'
 
 import nunjucks from '../helpers/nunjucks'
-import {
-  getAsset as getBrandAsset,
-  getListingUrl,
-  getColor
-} from '../helpers/nunjucks-functions'
 import { getBrandColors } from '../helpers/get-brand-colors'
 
 import { loadGrapesjs } from './utils/load-grapes'
@@ -42,6 +36,7 @@ import {
 import SocialActions from './SocialActions'
 import { SOCIAL_NETWORKS } from './constants'
 import registerBlocks from './Blocks'
+import getTemplateRenderData from './utils/get-template-render-data'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -74,7 +69,11 @@ class Builder extends React.Component {
           label: 'Link',
           name: 'href'
         }
-      ]
+      ],
+
+      'mj-image': [],
+
+      'mj-wrapper': []
     }
   }
 
@@ -168,10 +167,6 @@ class Builder extends React.Component {
       this.registerCustomBlocks()
     }
 
-    if (this.isEmailTemplate && this.isMjmlTemplate) {
-      this.registerCustomBlocks()
-    }
-
     if (this.isVideoTemplate) {
       this.grapes.appendChild(this.videoToolbar)
     }
@@ -182,7 +177,10 @@ class Builder extends React.Component {
   }
 
   registerCustomBlocks = () => {
-    this.blocks = registerBlocks(this.editor, {
+    const { brand } = getActiveTeam(this.props.user)
+    const renderData = getTemplateRenderData(brand)
+
+    this.blocks = registerBlocks(this.editor, renderData, {
       listing: {
         onDrop: () => {
           this.setState({ isListingDrawerOpen: true })
@@ -260,22 +258,26 @@ class Builder extends React.Component {
     const updateAll = model => {
       const attributes = model.get('attributes')
 
-      // const editable = attributes.hasOwnProperty('rechat-editable')
+      const editable = attributes.hasOwnProperty('rechat-editable')
+      // const draggable = attributes.hasOwnProperty('rechat-draggable')
+      const draggable = true
+      // const droppable = attributes.hasOwnProperty('rechat-dropable')
+      const droppable = true
 
-      // const isRechatAsset = attributes.hasOwnProperty('rechat-assets')
+      const isRechatAsset = attributes.hasOwnProperty('rechat-assets')
 
-      // if (!editable) {
-      //   model.set({
-      //     editable: false,
-      //     selectable: isRechatAsset,
-      //     hoverable: isRechatAsset
-      //   })
-      // }
+      if (!editable) {
+        model.set({
+          editable: false,
+          selectable: isRechatAsset,
+          hoverable: isRechatAsset
+        })
+      }
 
       model.set({
-        // resizable: false,
-        // draggable: false,
-        // droppable: false,
+        resizable: false,
+        draggable,
+        droppable,
         traits: this.traits[model.get('type')] || []
       })
 
@@ -373,14 +375,11 @@ class Builder extends React.Component {
 
   generateBrandedTemplate = (template, data) => {
     const { brand } = getActiveTeam(this.props.user)
-    const palette = getBrandStyles(brand)
+    const renderData = getTemplateRenderData(brand)
 
     return nunjucks.renderString(template, {
       ...data,
-      palette,
-      getAsset: getBrandAsset.bind(null, brand),
-      getListingUrl: getListingUrl.bind(null, brand),
-      getColor: getColor.bind(null, brand)
+      ...renderData
     })
   }
 
@@ -570,7 +569,10 @@ class Builder extends React.Component {
 
     return (
       <Portal root="marketing-center">
-        <Container className="template-builder">
+        <Container
+          className="template-builder"
+          hideToolbar={!this.isEmailTemplate || !this.isMjmlTemplate}
+        >
           <SearchListingDrawer
             mockListings
             isOpen={this.state.isListingDrawerOpen}

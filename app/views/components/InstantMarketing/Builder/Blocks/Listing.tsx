@@ -3,6 +3,9 @@ import { Model } from 'backbone'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
+import { TemplateRenderData } from '../utils/get-template-render-data/index'
+import { BlockOptions } from './types'
+
 const TEMPLATE = `
 <mj-section data-block="rechat-listing" background-color="#fff" padding="56px 40px">
 <mj-group data-gjs-removable="false">
@@ -13,15 +16,15 @@ const TEMPLATE = `
 
     <mj-column vertical-align="middle" padding-top="20px" padding="0px">
       <mj-text padding="0px" rechat-editable="true" align="left" color="#000" font-size="11px" font-family="Barlow" font-weight="bold">
-        <p id="text1">{{ address }}</p>
+        <p>{{ address }}</p>
       </mj-text>
       <mj-text padding="0px" rechat-editable="true" align="left" color="#000" font-size="11px" font-family="Barlow">
-        <p id="text2">
+        <p>
           <a href="" color="#000">Test Text</a>
         </p>
       </mj-text>
       <mj-text padding="0px" rechat-editable="true" align="left" color="#000" font-size="11px" font-family="Barlow" color="#000">
-        <p id="text3">
+        <p>
           <a href="" color="#000">Test Text 2</a>
         </p>
       </mj-text>
@@ -32,21 +35,20 @@ const TEMPLATE = `
 `
 
 export interface Options {
-  label?: string
-  category?: string
-  blockName?: string
   onDrop: (model: Model) => void
 }
 
 export default function registerListingBlock(
   editor: Editor,
+  renderData: TemplateRenderData,
   {
-    label = 'Listing',
-    category = 'Rechat',
+    label = 'Image Top',
+    category = 'Listing',
     blockName = 'rechat-listing',
     onDrop
-  }: Options
+  }: BlockOptions & Options
 ) {
+  console.log('RENDER DATA', renderData)
   editor.BlockManager.add(blockName, {
     category,
     label,
