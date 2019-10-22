@@ -31,6 +31,7 @@ export function SingleEmailComposeForm({
   disableAddNewRecipient = false,
   emailId,
   fromOptions,
+  deal,
   ...otherProps
 }: Props) {
   const handleSendEmail = (formValue: EmailFormValues) => {
@@ -53,6 +54,7 @@ export function SingleEmailComposeForm({
   return (
     <EmailComposeForm
       {...otherProps}
+      deal={deal}
       hasSignatureByDefault
       sendEmail={handleSendEmail}
       renderCollapsedFields={(values: EmailFormValues) => (
@@ -64,6 +66,7 @@ export function SingleEmailComposeForm({
       )}
       renderFields={values => (
         <EmailRecipientsFields
+          deal={deal}
           fromOptions={fromOptions}
           disableAddNewRecipient={disableAddNewRecipient}
           values={values}

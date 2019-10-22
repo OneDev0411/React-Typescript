@@ -19,6 +19,8 @@ import { getSegments, isListFetched } from 'reducers/filter-segments'
 
 import { useElementWidth } from 'hooks/use-element-width'
 
+import { selectDealRoles } from 'reducers/deals/roles'
+
 import { ChipsInput } from '../ChipsInput'
 import { InlineInputLabel } from '../InlineInputLabel'
 import { ChipsInputProps } from '../ChipsInput/types'
@@ -28,6 +30,7 @@ import { RecipientQuickSuggestions } from './RecipientQuickSuggestions'
 import { getTagSuggestions } from './helpers/get-tag-suggestions'
 import { getListSuggestions } from './helpers/get-list-suggestions'
 import { getContactSuggestions } from './helpers/get-contact-suggestions'
+import { getDealRoleSuggestions } from './helpers/get-deal-role-suggestions'
 
 type BaseProps = Partial<FieldRenderProps<HTMLInputElement>> &
   Omit<
@@ -54,6 +57,9 @@ interface Props extends BaseProps {
   suggestTags?: boolean
   suggestLists?: boolean
   suggestContacts?: boolean
+
+  deal?: IDeal
+  dealRoles: IDealRole[]
   /**
    * Optional callback for handling suggestion selection. If not provided
    * it will add to current list of recipients by default
@@ -100,7 +106,22 @@ const useEmailRecipientsChipsInputStyles = makeStyles<
  * A component for getting a list of tags, lists, contacts&email or contact&phone
  * can be controlled via `value` and `onChange` or Final Form input
  *
- * NOTE: we can pull this suggestions feature up into ChipsInput, but
+ * NOTE: The code in this component can be refactored into several components
+ * each of which adds a source of suggestion for email recipients. This can be
+ * done with react context. There will be different components (e.g.
+ * EmailRecipientTagSuggestion, EmailRecipientListSuggestion, ...) each
+ * providing a source of recipient suggestion via an specified context provider.
+ * inside this component the context is used and all suggestion sources will
+ * be utilized in suggesting recipients.
+ * pros:
+ * - Better encapsulation and SRP.
+ * - More scalable
+ *
+ * cons:
+ * - More overhead and more abstraction
+ * - Cost of refactoring!
+ *
+ * NOTE: we can pull this *quick suggestions* feature up into ChipsInput, but
  * right now, there is a styling issue which is not resolved generally,
  * and it's fixed by a workaround. This workaround is dependent on the
  * label width! see the note in {@link useEmailRecipientsChipsInputStyles}
@@ -116,8 +137,10 @@ function EmailRecipientsChipsInput({
   suggestTags = true,
   suggestLists = true,
   suggestContacts = true,
-  tags,
-  lists,
+  tags, // provided from redux store
+  lists, // provided from redux store
+  deal,
+  dealRoles, // provided from redux store
   label,
   input,
   meta,
@@ -161,6 +184,7 @@ function EmailRecipientsChipsInput({
     searchTerm: string
   ) => {
     const suggestionList$: Observable<IDenormalizedEmailRecipientInput[]>[] = [
+      getDealRoleSuggestions(dealRoles, searchTerm),
       ...(suggestTags ? [getTagSuggestions(tags, searchTerm)] : []),
       ...(suggestLists ? [getListSuggestions(lists, searchTerm)] : []),
       ...(suggestContacts ? [getContactSuggestions(searchTerm)] : [])
@@ -233,7 +257,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   }
 }
 
-const mapStateToProps = ({ contacts }: IAppState) => {
+const mapStateToProps = ({ contacts, deals }: IAppState, props: Props) => {
   const tags = selectTags(contacts.tags)
   const lists = getSegments<IContactList>(contacts.filterSegments, 'contacts')
   const isLoadingTags = isFetchingTags(contacts.tags)
@@ -241,6 +265,7 @@ const mapStateToProps = ({ contacts }: IAppState) => {
   return {
     tags,
     lists,
+    dealRoles: selectDealRoles(deals.roles, props.deal),
     isLoadingTags,
     areListsFetched: isListFetched(contacts.filterSegments)
   }

@@ -15,6 +15,7 @@ interface Props {
   values: EmailFormValues
   disableAddNewRecipient?: boolean
   includeQuickSuggestions?: boolean
+  deal?: IDeal
   fromOptions?: EmailFormValues['from'][]
   EmailRecipientsChipsInputProps?: Partial<
     ComponentProps<typeof EmailRecipientsChipsInput>
@@ -26,6 +27,7 @@ export function EmailRecipientsFields({
   disableAddNewRecipient = false,
   includeQuickSuggestions = true,
   fromOptions,
+  deal,
   EmailRecipientsChipsInputProps = {}
 }: Props) {
   const [hasCc, setCc] = useState(false)
@@ -33,6 +35,11 @@ export function EmailRecipientsFields({
 
   const isCcShown = hasCc || (values.cc || []).length > 0
   const isBccShown = hasBcc || (values.bcc || []).length > 0
+
+  const commonProps: typeof EmailRecipientsChipsInputProps = {
+    deal,
+    ...EmailRecipientsChipsInputProps
+  }
 
   return (
     <>
@@ -53,7 +60,10 @@ export function EmailRecipientsFields({
             name="to"
             component={EmailRecipientsChipsInput as any}
             readOnly={disableAddNewRecipient}
-            includeQuickSuggestions={includeQuickSuggestions}
+            deal={deal}
+            // See issue description here for the logic behind adding
+            // `!deal &&` part: https://gitlab.com/rechat/web/issues/3467
+            includeQuickSuggestions={!deal && includeQuickSuggestions}
             // we need to do this weird stuff because of the weird UX
             // which is to show suggestions under too but add them to bcc!
             // Hopefully we revise it and remove such weirdness
@@ -71,7 +81,7 @@ export function EmailRecipientsFields({
                 } as HTMLProps<HTMLInputElement>
               } as TextFieldProps
             }
-            {...EmailRecipientsChipsInputProps}
+            {...commonProps}
           />
         )}
       />
@@ -80,7 +90,7 @@ export function EmailRecipientsFields({
           label="Cc"
           name="cc"
           component={EmailRecipientsChipsInput as any}
-          {...EmailRecipientsChipsInputProps}
+          {...commonProps}
         />
       )}
       {isBccShown && (
@@ -88,7 +98,7 @@ export function EmailRecipientsFields({
           label="Bcc"
           name="bcc"
           component={EmailRecipientsChipsInput as any}
-          {...EmailRecipientsChipsInputProps}
+          {...commonProps}
         />
       )}
     </>
