@@ -37,7 +37,7 @@ export function AgentsList(props) {
   let teams = normalizeTeams(props.user, props.teams, searchTerm)
 
   // merge all teams into one and show them flattened
-  if (props.isOfficeDoubleEnded) {
+  if (props.shouldMergeTeams) {
     teams = [
       {
         users: uniqBy(teams.flatMap(team => team.users), user => user.id)
