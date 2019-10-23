@@ -7,9 +7,9 @@ import { TemplateRenderData } from '../utils/get-template-render-data'
 import { BlockOptions } from './types'
 
 const TEMPLATE = `
-<mj-wrapper data-block="rechat-avatar" background-color="{{ getColor('alpha.bg') }}" border="1px solid #000000">
+<mj-wrapper data-block="rechat-agent" background-color="{{ getColor('alpha.bg') }}" border="1px solid #000000">
   <mj-column padding="0px">
-    <mj-image padding="0px" align="center" src="{{ user.profile_image_url }}" width="135px" height="135px"></mj-image>
+    <mj-image padding="0px" rechat-assets="avatar" align="center" src="{{ user.profile_image_url }}" width="135px" height="135px"></mj-image>
   </mj-column>
 
   <mj-column vertical-align="middle" padding-top="20px" padding="0px">
@@ -34,7 +34,7 @@ export interface Options {
   onDrop: (model: Model) => void
 }
 
-interface ListingBlock {
+interface AgentBlock {
   selectHandler: (selectedAgent?: IAgent) => void
 }
 
@@ -42,12 +42,12 @@ export default function registerAgentBlock(
   editor: Editor,
   renderData: TemplateRenderData,
   {
-    label = 'Image Top',
+    label = 'Image Left',
     category = 'Agent',
-    blockName = 'rechat-avatar',
+    blockName = 'rechat-agent',
     onDrop
   }: BlockOptions & Options
-): ListingBlock {
+): AgentBlock {
   editor.BlockManager.add(blockName, {
     category,
     label,
@@ -76,7 +76,11 @@ export default function registerAgentBlock(
     modelHandle.remove()
   }
 
-  editor.on('block:drag:stop', (model: Model) => {
+  editor.on('block:drag:stop', (model?: Model) => {
+    if (!model) {
+      return
+    }
+
     if (model.attributes.attributes['data-block'] !== blockName) {
       return
     }

@@ -167,6 +167,10 @@ let modelHandle: any
 let renderData: TemplateRenderData
 
 const selectHandler = (listing?: IListing) => {
+  if (!modelHandle) {
+    return
+  }
+
   const template = templates[modelHandle.attributes.attributes['data-block']]
 
   if (listing) {
@@ -212,6 +216,10 @@ export default function registerListingBlocks(
   })
 
   editor.on('block:drag:stop', (model: Model, block) => {
+    if (!model) {
+      return
+    }
+
     if (templates[block.id]) {
       modelHandle = model
       onDrop(model)
