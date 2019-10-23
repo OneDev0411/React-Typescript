@@ -16,7 +16,7 @@ import { selectDealRoles } from 'reducers/deals/roles'
 
 import DealRole from 'components/DealRole'
 
-import TeamAgents from './AgentIntegration/TeamAgents'
+import TeamAgents from 'components/TeamAgents'
 
 import { roleName, getLegalFullName, isPrimaryAgent } from '../../utils/roles'
 import { getAvatarTitle } from '../../utils/get-avatar-title'
@@ -236,6 +236,7 @@ class Roles extends React.Component {
         {this.state.isReplaceAgentDrawerOpen && (
           <TeamAgents
             isPrimaryAgent
+            user={this.props.user}
             title="Select New Primary Agent"
             onSelectAgent={this.handleReplaceAgent}
             onClose={this.toggleReplaceAgentDrawer}
@@ -249,8 +250,9 @@ class Roles extends React.Component {
 Roles.propTypes = propTypes
 Roles.defaultProps = defaultProps
 
-function mapStateToProps({ deals }, props) {
+function mapStateToProps({ user, deals }, props) {
   return {
+    user,
     roles: selectDealRoles(deals.roles, props.deal)
   }
 }

@@ -12,6 +12,7 @@ import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import SearchListingDrawer from 'components/SearchListingDrawer'
+import TeamAgents from 'components/TeamAgents'
 
 import { getActiveTeam } from 'utils/user-teams'
 
@@ -49,7 +50,10 @@ class Builder extends React.Component {
       isLoading: true,
       isEditorLoaded: false,
       templateHtmlCss: '',
-      loadedListingsAssets: []
+      loadedListingsAssets: [],
+      isListingDrawerOpen: false,
+      loadedAgentsAssets: [],
+      isAgentDrawerOpen: false
     }
 
     this.keyframe = 0
@@ -137,21 +141,51 @@ class Builder extends React.Component {
     this.setState({ loadedListingsAssets })
   }
 
-  addListingAssets = listing => {
-    if (!this.state.loadedListingsAssets.includes(listing.id)) {
-      this.editor.AssetManager.add(
-        listing.gallery_image_urls.map(image => ({
-          listing: listing.id,
-          image
-        }))
-      )
-      this.setState(prevState => {
-        return {
-          ...prevState,
-          loadedListingsAssets: [...prevState.loadedListingsAssets, listing.id]
-        }
-      })
+  initLoadedAgentsAssets = () => {
+    if (this.props.user) {
+      this.setState({ loadedAgentsAssets: [this.props.user.id] })
     }
+  }
+
+  addListingAssets = listing => {
+    if (this.state.loadedListingsAssets.includes(listing.id)) {
+      return
+    }
+
+    this.editor.AssetManager.add(
+      listing.gallery_image_urls.map(image => ({
+        listing: listing.id,
+        image
+      }))
+    )
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        loadedListingsAssets: [...prevState.loadedListingsAssets, listing.id]
+      }
+    })
+  }
+
+  addAgentAssets = agent => {
+    if (this.state.loadedAgentsAssets.includes(agent.id)) {
+      return
+    }
+
+    this.editor.AssetManager.add(
+      ['profile_image_url', 'cover_image_url']
+        .filter(attr => agent[attr])
+        .map(attr => ({
+          image: agent[attr],
+          avatar: true
+        }))
+    )
+
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        loadedAgentsAssets: [...prevState.loadedAgentsAssets, agent.id]
+      }
+    })
   }
 
   setupGrapesJs = () => {
@@ -186,6 +220,11 @@ class Builder extends React.Component {
       listing: {
         onDrop: () => {
           this.setState({ isListingDrawerOpen: true })
+        }
+      },
+      agent: {
+        onDrop: () => {
+          this.setState({ isAgentDrawerOpen: true })
         }
       }
     })
@@ -592,6 +631,23 @@ class Builder extends React.Component {
               this.setState({ isListingDrawerOpen: false })
             }}
           />
+          {this.state.isAgentDrawerOpen && (
+            <TeamAgents
+              isPrimaryAgent
+              user={this.props.user}
+              title="Select An Agent"
+              onClose={() => {
+                this.blocks.agent.selectHandler()
+                this.setState({ isAgentDrawerOpen: false })
+              }}
+              onSelectAgent={agent => {
+                console.log('onSelectAgent', agent)
+                this.addAgentAssets(agent)
+                this.blocks.agent.selectHandler(agent)
+                this.setState({ isAgentDrawerOpen: false })
+              }}
+            />
+          )}
           <Header>
             <h1>{this.props.headerTitle}</h1>
 

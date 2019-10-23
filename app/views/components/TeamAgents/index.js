@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 
 import { searchContacts } from 'models/contacts/search-contacts'
 import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
@@ -18,9 +17,11 @@ import { EmptyState } from './styled'
 
 const propTypes = {
   filter: PropTypes.func,
+  user: PropTypes.object.isRequired,
   onSelectAgent: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
-  isPrimaryAgent: PropTypes.bool
+  isPrimaryAgent: PropTypes.bool,
+  shouldMergeTeams: PropTypes.bool
 }
 
 const defaultProps = {
@@ -28,7 +29,7 @@ const defaultProps = {
   isPrimaryAgent: false
 }
 
-class TeamAgents extends React.Component {
+export default class TeamAgents extends React.Component {
   state = {
     isLoading: true,
     isSearchingContacts: false,
@@ -129,7 +130,7 @@ class TeamAgents extends React.Component {
             <AgentsList
               user={this.props.user}
               teams={this.teamAgents}
-              isOfficeDoubleEnded={props.isOfficeDoubleEnded}
+              shouldMergeTeams={props.shouldMergeTeams}
               onSelectAgent={this.handleSelectAgent}
             />
           )}
@@ -141,5 +142,3 @@ class TeamAgents extends React.Component {
 
 TeamAgents.defaultProps = defaultProps
 TeamAgents.propTypes = propTypes
-
-export default connect(({ user }) => ({ user }))(TeamAgents)
