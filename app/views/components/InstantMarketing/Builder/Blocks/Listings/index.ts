@@ -154,8 +154,8 @@ interface ListingBlock {
 function registerListingBlock(
   editor: Editor,
   renderData: TemplateRenderData,
-  { template, label, category, blockName }: BlockOptions & Options
-): ListingBlock {
+  { label, category, blockName }: BlockOptions
+): void {
   editor.BlockManager.add(blockName, {
     category,
     label,
@@ -184,8 +184,8 @@ const selectHandler = (listing?: IListing) => {
 export default function registerListingBlocks(
   editor: Editor,
   _renderData: TemplateRenderData,
-  { onDrop }: BlockOptions & Options
-): ListingBlock[] {
+  { onDrop }: Options
+): ListingBlock {
   renderData = _renderData
   registerListingBlock(editor, renderData, {
     label: 'Image Bottom',
