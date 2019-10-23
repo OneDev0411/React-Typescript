@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 
 import { getField } from 'models/Deal/helpers/context/get-field'
@@ -9,7 +9,7 @@ import { upsertContexts } from 'actions/deals'
 import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
 import { normalizeAddress } from 'models/Deal/helpers/normalize-address'
 
-import { H1 } from 'components/Typography/headings'
+import { H2 } from 'components/Typography/headings'
 import Tooltip from 'components/tooltip'
 import LinkButton from 'components/Button/LinkButton'
 
@@ -50,9 +50,9 @@ export function Address(props) {
   const address = getDealAddress(props.deal)
 
   return (
-    <Fragment>
+    <>
       {isEditingAddress ? (
-        <Fragment>
+        <>
           <InlineAddressField
             address={getField(props.deal, 'full_address')}
             handleCancel={cancleEdit}
@@ -71,7 +71,7 @@ export function Address(props) {
           />
 
           <LinkButton onClick={cancleEdit}>Cancel</LinkButton>
-        </Fragment>
+        </>
       ) : (
         <Tooltip
           captionIsHTML
@@ -91,13 +91,15 @@ export function Address(props) {
           multiline
         >
           <TitleContainer onClick={editAddress} editable={!props.deal.listing}>
-            <H1 style={{ lineHeight: 1.5 }}>{title}</H1>
+            <H2 style={{ lineHeight: 1.5 }}>{title}</H2>
 
-            <span>{address.length ? 'Edit Address' : '+ Add Address'}</span>
+            {!props.deal.listing && (
+              <span>{address.length ? 'Edit Address' : '+ Add Address'}</span>
+            )}
           </TitleContainer>
         </Tooltip>
       )}
-    </Fragment>
+    </>
   )
 }
 

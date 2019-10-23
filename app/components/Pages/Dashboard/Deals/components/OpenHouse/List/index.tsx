@@ -135,11 +135,13 @@ function List(props: Props & StateProps) {
           <div key={oh.id}>
             <div className={classes.itemContainer}>
               <Typography variant="body1">
-                <Flex>
-                  {fecha.format(
-                    new Date(oh.created_at * 1000),
-                    'dddd, MMMM D, YYYY - hh:mmA'
-                  )}
+                <Flex justifyBetween>
+                  <Flex>
+                    {fecha.format(
+                      new Date(oh.created_at * 1000),
+                      'dddd, MMMM D, YYYY - hh:mmA'
+                    )}
+                  </Flex>
 
                   <Flex className={classes.actions}>
                     <Tooltip title="Open Client Registration Page">
