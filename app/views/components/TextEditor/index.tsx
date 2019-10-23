@@ -8,6 +8,7 @@ import React, {
   useRef,
   useState
 } from 'react'
+import Dropzone from 'react-dropzone'
 import { ContentBlock, Editor as DraftEditor, EditorState } from 'draft-js'
 import PluginsEditor from 'draft-js-plugins-editor'
 import 'draft-js-image-plugin/lib/plugin.css'
@@ -15,8 +16,7 @@ import 'draft-js-alignment-plugin/lib/plugin.css'
 import { stateToHTML } from 'draft-js-export-html'
 import { stateFromHTML } from 'draft-js-import-html'
 import cn from 'classnames'
-
-import { Box, Tooltip } from '@material-ui/core'
+import { Box, makeStyles, Tooltip } from '@material-ui/core'
 
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 import { isImageFile } from 'utils/file-utils/is-image-file'
@@ -31,7 +31,6 @@ import { EditorContainer, EditorWrapper, Separator, Toolbar } from './styled'
 import { FieldError } from '../final-form-fields/FieldError'
 import { AddImageButton } from './buttons/AddImageButton'
 import { RichTextButtons } from './buttons/RichTextButtons'
-import { createFilePlugin } from './plugins/draft-js-handle-files-plugin'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
 import { updateEntityData } from './modifiers/update-entity-data'
 import { DraftJsSelectionPopover } from './components/DraftJsSelectionPopover'
@@ -47,6 +46,9 @@ import { insertTemplateVariable } from './modifiers/insert-template-expression'
 import { removeUnwantedEmptyLineBeforeAtomic } from './modifiers/remove-unwanted-empty-block-before-atomic'
 import { ToolbarIconButton } from './buttons/ToolbarIconButton'
 import { getSelectedAtomicBlock } from './utils/get-selected-atomic-block'
+import { styles } from './styles'
+
+const useStyles = makeStyles(styles, { name: 'TextEditor' })
 
 /**
  * Html wysiwyg editor.
@@ -96,6 +98,8 @@ export const TextEditor = forwardRef(
     const originalEditorRef = useRef<DraftEditor | null>(null)
     const [linkEditorOpen, setLinkEditorOpen] = useState(false)
     const confirmation = useContext(ConfirmationModalContext)
+
+    const classes = useStyles()
 
     /**
      * Images are not rendered appropriately without this option.
@@ -295,14 +299,6 @@ export const TextEditor = forwardRef(
             imagePlugin
           ]
         : []),
-      ...(enableImage || onAttachmentDropped
-        ? [
-            createFilePlugin({
-              handleImage: addImage,
-              handleOtherFiles: onAttachmentDropped
-            })
-          ]
-        : []),
       ...(enableSignature ? [signaturePlugin] : [])
     ]
 
@@ -318,6 +314,22 @@ export const TextEditor = forwardRef(
       )
     }
 
+    const isFileDropEnabled = enableImage || onAttachmentDropped
+    const fileAccept =
+      !onAttachmentDropped && enableImage ? 'image/*' : undefined
+
+    const onDrop = (files: File[]) => {
+      if (!files || !files[0]) {
+        return
+      }
+
+      if (isImageFile(files[0])) {
+        addImage(files[0])
+      } else if (onAttachmentDropped) {
+        onAttachmentDropped(files)
+      }
+    }
+
     return (
       <EditorContainer className={className}>
         <EditorWrapper
@@ -328,63 +340,74 @@ export const TextEditor = forwardRef(
           onClick={() => editorRef.current && editorRef.current.focus()}
           data-test="text-editor-wrapper"
         >
-          <PluginsEditor
-            spellCheck
-            readOnly={disabled}
-            editorState={editorState}
-            onChange={handleChange}
-            plugins={allPlugins}
-            placeholder={placeholder}
-            ref={editorRef}
-            {...DraftEditorProps}
-          />
-          <LinkEditorPopover
-            editorRef={originalEditorRef}
-            editorState={editorState}
-            setEditorState={handleChange}
-            open={linkEditorOpen}
-            onClose={() => {
-              setLinkEditorOpen(false)
-
-              const selectedBlock = getSelectedAtomicBlock(editorState)
-
-              if (!selectedBlock || selectedBlock.getType() !== 'atomic') {
-                // atomic block selection is not preserved after focus
-                // so we don't focus if an atomic block is selected
-                setTimeout(() => {
-                  editorRef.current!.focus()
-                })
-              }
-            }}
-          />
-          {!linkEditorOpen && (
-            <DraftJsSelectionPopover
+          {/* I wish we had upgraded Dropzone to use the hook version :( */}
+          <Dropzone
+            disabled={!isFileDropEnabled}
+            className={classes.dropzone}
+            activeClassName={classes.dropzoneActive}
+            rejectClassName={classes.dropzoneReject}
+            onDrop={onDrop}
+            accept={fileAccept}
+            disableClick
+          >
+            <PluginsEditor
+              spellCheck
+              readOnly={disabled}
               editorState={editorState}
-              inlineEntityFilter="LINK"
-              blockFilter={isBlockLinked}
-            >
-              {({
-                entity,
-                close,
-                block
-              }: Parameters<
-                ComponentProps<typeof DraftJsSelectionPopover>['children']
-              >[0]) => (
-                <LinkPreview
-                  editorState={editorState}
-                  setEditorState={handleChange}
-                  onClose={close}
-                  url={
-                    (entity && entity.getData().url) ||
-                    (block && block.getData().get('href')) ||
-                    ''
-                  }
-                  onEdit={() => setLinkEditorOpen(true)}
-                />
-              )}
-            </DraftJsSelectionPopover>
-          )}
-          {appendix}
+              onChange={handleChange}
+              plugins={allPlugins}
+              placeholder={placeholder}
+              ref={editorRef}
+              {...DraftEditorProps}
+            />
+            <LinkEditorPopover
+              editorRef={originalEditorRef}
+              editorState={editorState}
+              setEditorState={handleChange}
+              open={linkEditorOpen}
+              onClose={() => {
+                setLinkEditorOpen(false)
+
+                const selectedBlock = getSelectedAtomicBlock(editorState)
+
+                if (!selectedBlock || selectedBlock.getType() !== 'atomic') {
+                  // atomic block selection is not preserved after focus
+                  // so we don't focus if an atomic block is selected
+                  setTimeout(() => {
+                    editorRef.current!.focus()
+                  })
+                }
+              }}
+            />
+            {!linkEditorOpen && (
+              <DraftJsSelectionPopover
+                editorState={editorState}
+                inlineEntityFilter="LINK"
+                blockFilter={isBlockLinked}
+              >
+                {({
+                    entity,
+                    close,
+                    block
+                  }: Parameters<
+                  ComponentProps<typeof DraftJsSelectionPopover>['children']
+                  >[0]) => (
+                  <LinkPreview
+                    editorState={editorState}
+                    setEditorState={handleChange}
+                    onClose={close}
+                    url={
+                      (entity && entity.getData().url) ||
+                      (block && block.getData().get('href')) ||
+                      ''
+                    }
+                    onEdit={() => setLinkEditorOpen(true)}
+                  />
+                )}
+              </DraftJsSelectionPopover>
+            )}
+            {appendix}
+          </Dropzone>
         </EditorWrapper>
         <Toolbar>
           {enableRichText && (
