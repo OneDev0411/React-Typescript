@@ -23,7 +23,7 @@ export function Associations({ event }: Props) {
 
   const { visibleItems: contacts, othersText } = getTrimmedArrayAndOthersText(
     event.people,
-    { threshold: 2, totalCount: event.people_len }
+    { threshold: 2, totalCount: event.people_len! }
   )
 
   return (

@@ -1,4 +1,6 @@
 export function convertTaskToCalendarEvent(event: IEvent): ICalendarEvent {
+  const people = getPeople(event.associations)
+
   return {
     ...event,
     campaign: null,
@@ -20,7 +22,8 @@ export function convertTaskToCalendarEvent(event: IEvent): ICalendarEvent {
     event_type: event.task_type,
     timestamp: event.due_date,
     object_type: event.type,
-    people: getPeople(event.associations),
+    people,
+    people_len: people.length,
     full_crm_task: {
       end_date: event.end_date,
       assignees: event.assignees,
