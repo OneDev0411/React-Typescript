@@ -52,7 +52,6 @@ class Builder extends React.Component {
       templateHtmlCss: '',
       loadedListingsAssets: [],
       isListingDrawerOpen: false,
-      loadedAgentsAssets: [],
       isAgentDrawerOpen: false
     }
 
@@ -141,12 +140,6 @@ class Builder extends React.Component {
     this.setState({ loadedListingsAssets })
   }
 
-  initLoadedAgentsAssets = () => {
-    if (this.props.user) {
-      this.setState({ loadedAgentsAssets: [this.props.user.id] })
-    }
-  }
-
   addListingAssets = listing => {
     if (this.state.loadedListingsAssets.includes(listing.id)) {
       return
@@ -167,10 +160,6 @@ class Builder extends React.Component {
   }
 
   addAgentAssets = agent => {
-    if (this.state.loadedAgentsAssets.includes(agent.id)) {
-      return
-    }
-
     this.editor.AssetManager.add(
       ['profile_image_url', 'cover_image_url']
         .filter(attr => agent[attr])
@@ -179,13 +168,6 @@ class Builder extends React.Component {
           avatar: true
         }))
     )
-
-    this.setState(prevState => {
-      return {
-        ...prevState,
-        loadedAgentsAssets: [...prevState.loadedAgentsAssets, agent.id]
-      }
-    })
   }
 
   setupGrapesJs = () => {
@@ -293,17 +275,17 @@ class Builder extends React.Component {
     ev.target.ownerDocument.execCommand('insertText', false, text)
   }
 
-  lockIn = () => {
-    let shouldSelectImage = true
+  lockIn = (selectFirstImage = true) => {
+    let shouldSelectImage = selectFirstImage
 
     const updateAll = model => {
       const attributes = model.get('attributes')
 
       const editable = attributes.hasOwnProperty('rechat-editable')
       // const draggable = attributes.hasOwnProperty('rechat-draggable')
-      const draggable = true
+      const draggable = this.isMjmlTemplate && this.isEmailTemplate
       // const droppable = attributes.hasOwnProperty('rechat-dropable')
-      const droppable = true
+      const droppable = this.isMjmlTemplate && this.isEmailTemplate
 
       const isRechatAsset = attributes.hasOwnProperty('rechat-assets')
 
@@ -638,12 +620,14 @@ class Builder extends React.Component {
               title="Select An Agent"
               onClose={() => {
                 this.blocks.agent.selectHandler()
+                this.lockIn(false) // in order to set traits on new elements
                 this.setState({ isAgentDrawerOpen: false })
               }}
               onSelectAgent={agent => {
                 console.log('onSelectAgent', agent)
                 this.addAgentAssets(agent)
                 this.blocks.agent.selectHandler(agent)
+                this.lockIn(false) // in order to set traits on new elements
                 this.setState({ isAgentDrawerOpen: false })
               }}
             />
