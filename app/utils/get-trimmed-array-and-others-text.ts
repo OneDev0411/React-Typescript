@@ -2,13 +2,13 @@ import { plural } from './plural'
 
 interface Options {
   threshold: number
+  totalCount: number
 }
 
 export function getTrimmedArrayAndOthersText<T>(
   items: T[],
-  { threshold = 2 }: Options = {} as Options
+  { threshold = 2, totalCount = items.length }: Options = {} as Options
 ) {
-  const totalCount = items.length
   const otherCount = totalCount - threshold
   const isPlural = otherCount > 1
 

@@ -22,7 +22,8 @@ export function Associations({ event }: Props) {
   const preposition = getCrmEventTypePreposition(event.event_type)
 
   const { visibleItems: contacts, othersText } = getTrimmedArrayAndOthersText(
-    event.people
+    event.people,
+    { threshold: 2, totalCount: event.people_len }
   )
 
   return (
