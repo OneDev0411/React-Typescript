@@ -47,6 +47,8 @@ import { removeUnwantedEmptyLineBeforeAtomic } from './modifiers/remove-unwanted
 import { ToolbarIconButton } from './buttons/ToolbarIconButton'
 import { getSelectedAtomicBlock } from './utils/get-selected-atomic-block'
 import { styles } from './styles'
+import { getImageDimensions } from './utils/get-image-dimensions'
+import { getImageSizeOptions } from './utils/get-image-size-options'
 
 const useStyles = makeStyles(styles, { name: 'TextEditor' })
 
@@ -242,12 +244,14 @@ export const TextEditor = forwardRef(
       // We first convert image to data url and show it.
       const dataUrl = await readFileAsDataUrl(file)
 
+      const { bestFit } = getImageSizeOptions(await getImageDimensions(dataUrl))
+
       handleChange(
         removeUnwantedEmptyLineBeforeAtomic(
           imagePlugin.addImage(
             editorState,
             dataUrl,
-            uploadImage ? { uploading: true } : {}
+            uploadImage ? { uploading: true, ...bestFit } : bestFit
           )
         )
       )
