@@ -176,14 +176,14 @@ export const TextEditor = forwardRef(
     )
 
     useEffect(() => {
-      const editor = editorRef.current
+      const pluginsEditor = editorRef.current
 
-      if (autofocus && editor) {
+      if (autofocus && pluginsEditor) {
         // draft-js-plugins-editor uses UNSAFE_componentWillMount to create
         // the editor state with proper decorator. If we don't delay running
         // this, it causes decorator to not being set correctly which has
         // serious consequences. e.g. links don't render properly.
-        setImmediate(() => editor.focus())
+        setImmediate(() => pluginsEditor.editor && pluginsEditor.focus())
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
