@@ -27,7 +27,6 @@ declare interface ICalendarEvent {
   timestamp_readable: string
   title: string
   type: string
-  touch_freq?: number | null
   type_label: string
   thread_key: string | null
   users: UUID[]

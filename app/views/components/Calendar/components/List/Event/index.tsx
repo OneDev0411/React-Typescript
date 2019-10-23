@@ -56,7 +56,7 @@ const events: {
     condition: (event: ICalendarEvent) =>
       ['email_campaign', 'email_campaign_recipient'].includes(
         event.object_type
-      ) && event.event_type === 'scheduled_email'
+      ) && ['scheduled_email', 'executed_email'].includes(event.event_type)
   },
   {
     component: EmailThread,

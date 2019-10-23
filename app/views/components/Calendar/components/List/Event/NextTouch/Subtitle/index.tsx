@@ -11,7 +11,8 @@ export function TouchDateSubtitle({ event, contact }: Props) {
 
   const {
     next_touch: nextTouch,
-    last_touch: lastTouch
+    last_touch: lastTouch,
+    touch_freq
   } = contact as IContact & { next_touch: number }
 
   if (!lastTouch) {
@@ -27,7 +28,7 @@ export function TouchDateSubtitle({ event, contact }: Props) {
   return (
     <span>
       Your last touch was {lastTouchTime}, you wanted to be in touch every{' '}
-      {event.touch_freq} days.
+      {touch_freq} days.
     </span>
   )
 }
