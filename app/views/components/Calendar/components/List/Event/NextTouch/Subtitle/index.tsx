@@ -3,19 +3,17 @@ import timeago from 'timeago.js'
 
 interface Props {
   event: ICalendarEvent
+  contact: IContact
 }
 
-export function TouchDateSubtitle({ event }: Props) {
-  if (!event.full_contact) {
-    return null
-  }
-
+export function TouchDateSubtitle({ event, contact }: Props) {
   const now = Date.now()
 
   const {
     next_touch: nextTouch,
-    last_touch: lastTouch
-  } = event.full_contact as IContact & { next_touch: number }
+    last_touch: lastTouch,
+    touch_freq
+  } = contact as IContact & { next_touch: number }
 
   if (!lastTouch) {
     return null
@@ -30,7 +28,7 @@ export function TouchDateSubtitle({ event }: Props) {
   return (
     <span>
       Your last touch was {lastTouchTime}, you wanted to be in touch every{' '}
-      {Math.round((nextTouch - lastTouch) / 86400)} days.
+      {touch_freq} days.
     </span>
   )
 }

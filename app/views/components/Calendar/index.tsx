@@ -25,8 +25,6 @@ import {
 
 import { LoadingPosition, VirtualListRef } from 'components/VirtualList'
 
-import { CALENDAR_DEFAULT_ASSOCIATIONS } from './constants/calendar-default-associations'
-
 import {
   CalendarRef,
   ApiOptions,
@@ -133,7 +131,7 @@ export function Calendar({
         const fetchedEvents = await getCalendar({
           users: viewAsUsers,
           filter,
-          associations: [...CALENDAR_DEFAULT_ASSOCIATIONS, ...associations],
+          associations: ['calendar_event.people', ...associations],
           ...apiOptions
         })
 

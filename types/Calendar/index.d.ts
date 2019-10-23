@@ -30,7 +30,8 @@ declare interface ICalendarEvent {
   type_label: string
   thread_key: string | null
   users: UUID[]
-  full_contact?: IContact
+  people: IContact[] | null
+  people_len: number | null
   full_deal?: IDeal
   full_crm_task: {
     end_date: number | null

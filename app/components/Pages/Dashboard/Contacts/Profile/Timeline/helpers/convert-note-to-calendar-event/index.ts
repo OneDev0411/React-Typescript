@@ -10,7 +10,7 @@ export function convertNoteToCalendarEvent(
     object_type: 'crm_association',
     type: 'Note',
     event_type: 'Note',
-    full_contact: contact,
+    people: [contact],
     full_crm_task: {
       assignees: null,
       associations: [
