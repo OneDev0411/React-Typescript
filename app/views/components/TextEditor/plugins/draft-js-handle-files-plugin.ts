@@ -4,7 +4,7 @@ import { isImageFile } from 'utils/file-utils/is-image-file'
 
 interface CreateFilePluginOptions {
   handleImage: (file: File) => any
-  handleOtherFiles?: (file: File) => any
+  handleOtherFiles?: (file: File[]) => any
 }
 
 export function createFilePlugin({
@@ -13,16 +13,16 @@ export function createFilePlugin({
 }: CreateFilePluginOptions) {
   // NOTE: draft-js-drag-n-drop-upload-plugin is crap! I know it exists!
 
-  function handleFile(file: File): DraftHandleValue {
-    if (file) {
-      if (isImageFile(file)) {
-        handleImage(file)
+  function handleFiles(files: File[]): DraftHandleValue {
+    if (files) {
+      if (isImageFile(files[0] && files[0])) {
+        handleImage(files[0])
 
         return 'handled'
       }
 
       if (handleOtherFiles) {
-        handleOtherFiles(file)
+        handleOtherFiles(files)
 
         return 'handled'
       }
@@ -36,10 +36,10 @@ export function createFilePlugin({
       selection: Draft.SelectionState,
       files: Array<File>
     ): DraftHandleValue => {
-      return handleFile(files[0])
+      return handleFiles(files)
     },
     handlePastedFiles: (files: Array<File>): DraftHandleValue => {
-      return handleFile(files[0])
+      return handleFiles(files)
     }
   }
 }

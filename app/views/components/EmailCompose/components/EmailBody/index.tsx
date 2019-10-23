@@ -16,6 +16,8 @@ import Loading from 'components/LoadingContainer'
 import { IAppState } from 'reducers'
 import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 
+import { UploadAttachment } from 'components/EmailCompose/fields/UploadAttachment'
+
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
 import { defaultTemplateVariableSuggestions } from '../../default-template-variable-suggestions'
 import { TextEditorProps } from '../../../TextEditor/types'
@@ -64,58 +66,63 @@ const EmailBody = ({
   )
 
   return (
-    <>
-      {!hasStaticBody && (
-        <Field
-          name="body"
-          defaultValue={content}
-          {...FieldProps || {}}
-          render={({ input, meta }) => (
-            <TextEditor
-              enableImage
-              autofocus={autofocus}
-              uploadImage={uploadImage}
-              enableSignature
-              DraftEditorProps={DraftEditorProps}
-              hasSignatureByDefault={hasSignatureByDefault}
-              enableTemplateVariables={hasTemplateVariables}
-              templateVariableSuggestionGroups={
-                defaultTemplateVariableSuggestions
-              }
-              onEditSignature={() => setSignatureEditorVisible(true)}
-              signature={signature}
-              appendix={attachments}
-              input={input}
-              ref={editorRef}
+    <UploadAttachment uploadAttachment={uploadAttachment}>
+      {({ upload }) => (
+        <>
+          {!hasStaticBody && (
+            <Field
+              name="body"
+              defaultValue={content}
+              {...FieldProps || {}}
+              render={({ input, meta }) => (
+                <TextEditor
+                  enableImage
+                  autofocus={autofocus}
+                  uploadImage={uploadImage}
+                  enableSignature
+                  onAttachmentDropped={upload}
+                  DraftEditorProps={DraftEditorProps}
+                  hasSignatureByDefault={hasSignatureByDefault}
+                  enableTemplateVariables={hasTemplateVariables}
+                  templateVariableSuggestionGroups={
+                    defaultTemplateVariableSuggestions
+                  }
+                  onEditSignature={() => setSignatureEditorVisible(true)}
+                  signature={signature}
+                  appendix={attachments}
+                  input={input}
+                  ref={editorRef}
+                />
+              )}
             />
           )}
-        />
-      )}
-      {hasStaticBody && (
-        <Fragment>
-          {content ? (
-            <>
-              <iframe
-                title="email body"
-                width="100%"
-                srcDoc={content}
-                style={{
-                  border: '0',
-                  flex: '1'
-                }}
-              />
-              {attachments}
-            </>
-          ) : (
-            <Loading style={{ margin: 'auto' }} />
+          {hasStaticBody && (
+            <Fragment>
+              {content ? (
+                <>
+                  <iframe
+                    title="email body"
+                    width="100%"
+                    srcDoc={content}
+                    style={{
+                      border: '0',
+                      flex: '1'
+                    }}
+                  />
+                  {attachments}
+                </>
+              ) : (
+                <Loading style={{ margin: 'auto' }} />
+              )}
+            </Fragment>
           )}
-        </Fragment>
+          <EditEmailSignatureDrawer
+            isOpen={signatureEditorVisible}
+            onClose={() => setSignatureEditorVisible(false)}
+          />{' '}
+        </>
       )}
-      <EditEmailSignatureDrawer
-        isOpen={signatureEditorVisible}
-        onClose={() => setSignatureEditorVisible(false)}
-      />{' '}
-    </>
+    </UploadAttachment>
   )
 }
 
