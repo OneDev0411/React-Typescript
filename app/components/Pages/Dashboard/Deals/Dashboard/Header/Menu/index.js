@@ -6,6 +6,7 @@ import { CloseButton } from 'components/Button/CloseButton'
 import SendEmail from 'components/SendEmailButton'
 
 import YardSign from 'deals/components/YardSign'
+import OpenHouse from 'deals/components/OpenHouse'
 
 import { RemoveDraft } from './RemoveDraft'
 
@@ -19,6 +20,10 @@ export function Menu(props) {
   return (
     <Flex style={{ padding: '1.5em 0' }}>
       {deal.is_draft === true && <RemoveDraft deal={deal} />}
+
+      {deal.deal_type === 'Selling' && deal.listing && (
+        <OpenHouse deal={deal} style={{ marginLeft: '0.5rem' }} />
+      )}
 
       {deal.deal_type === 'Selling' && (
         <YardSign deal={deal} style={{ marginLeft: '0.5rem' }} />
