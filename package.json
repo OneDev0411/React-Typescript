@@ -338,6 +338,7 @@
     "nodemon": "^1.18.9",
     "opn": "^6.0.0",
     "prettier": "^1.15.3",
+    "raw-loader": "^3.1.0",
     "styled-svg": "^2.3.4",
     "ts-jest": "^24.0.2",
     "typescript": "^3.6.2",
