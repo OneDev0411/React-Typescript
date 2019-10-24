@@ -125,9 +125,9 @@ interface Typed {
 }
 
 function normalizeFilter(
-  filter: string | ((input: Typed) => boolean) | undefined
+  filter: string | ((input: Typed) => boolean) | undefined = () => false
 ): (input: Typed) => boolean {
   return typeof filter === 'string'
     ? (input: Typed) => input.getType() === filter
-    : filter || (() => false)
+    : filter
 }
