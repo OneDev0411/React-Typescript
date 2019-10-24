@@ -390,12 +390,12 @@ export const TextEditor = forwardRef(
                 blockFilter={isBlockLinked}
               >
                 {({
-                    entity,
-                    close,
-                    block
-                  }: Parameters<
+                  entity,
+                  close,
+                  block
+                }: Parameters<
                   ComponentProps<typeof DraftJsSelectionPopover>['children']
-                  >[0]) => (
+                >[0]) => (
                   <LinkPreview
                     editorState={editorState}
                     setEditorState={handleChange}
