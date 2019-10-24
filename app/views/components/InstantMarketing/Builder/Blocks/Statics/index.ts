@@ -1,5 +1,4 @@
 import { Editor } from 'grapesjs'
-import { Model } from 'backbone'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
@@ -64,7 +63,7 @@ export default function registerStaticBlocks(
     blockName: right
   })
 
-  editor.on('block:drag:stop', (model: Model, block) => {
+  editor.on('block:drag:stop', (model: any, block: any) => {
     if (!model) {
       return
     }
