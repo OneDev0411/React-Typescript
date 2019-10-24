@@ -15,7 +15,7 @@ const right = 'rechat-article-image-right'
 const templates = {}
 
 templates[top] = `
-<mj-section padding-left="32px" padding-right="32px">
+<mj-section>
   <mj-column width="100%">
 
     <mj-image src="https://picsum.photos/id/283/3823/2538"></mj-image>
@@ -70,7 +70,7 @@ templates[dual] = `
 templates[left] = `
 <mj-section>
   <mj-column width="33%">
-    <mj-image padding=0 align="left" src="https://picsum.photos/id/1015/180/180" />
+    <mj-image align="left" src="https://picsum.photos/id/1015/180/180" />
   </mj-column>
   <mj-column width="66%">
     <mj-text font-family="Roboto" font-weight="Bold" font-size="20px" line-height="27px" color="#242F3C" padding-top=0>
@@ -89,18 +89,18 @@ templates[left] = `
 templates[right] = `
 <mj-section>
   <mj-column width="66%">
-    <mj-text font-family="Roboto" font-weight="Bold" font-size="20px" line-height="27px" color="#242F3C" padding-top=0 padding-left=0>
+    <mj-text font-family="Roboto" font-weight="Bold" font-size="20px" line-height="27px" color="#242F3C" padding-top=0>
       When the Dream of Owning a Home Became a Nightmare
     </mj-text>
-    <mj-text font-family="Roboto" font-size="14px" line-height="16px" color="#242F3C" padding-left=0>
+    <mj-text font-family="Roboto" font-size="14px" line-height="16px" color="#242F3C">
       A federal program to encourage black homeownership in the 1970s ended in a flood of foreclosures.
     </mj-text>
-    <mj-button padding-left=0 border-radius="12px" font-family="Roboto" font-size="12px" font-weight="Bold" line-height="14px" width="100%" height="40px" color="{{getColor('beta.tb')}}" background-color="{{getColor('beta.bg')}}">
+    <mj-button border-radius="12px" font-family="Roboto" font-size="12px" font-weight="Bold" line-height="14px" width="100%" height="40px" color="{{getColor('beta.tb')}}" background-color="{{getColor('beta.bg')}}">
       READ MORE
     </mj-button>
   </mj-column>
   <mj-column width="33%">
-    <mj-image padding=0 align="left" src="https://picsum.photos/id/1015/180/180" />
+    <mj-image align="left" src="https://picsum.photos/id/1015/180/180" />
   </mj-column>
 </mj-section>
 `
@@ -125,6 +125,12 @@ export default function registerStaticBlocks(
     label: 'Image Top',
     category: 'Article',
     blockName: top
+  })
+
+  registerListingBlock(editor, renderData, {
+    label: 'Image Dual',
+    category: 'Article',
+    blockName: dual
   })
 
   registerListingBlock(editor, renderData, {
