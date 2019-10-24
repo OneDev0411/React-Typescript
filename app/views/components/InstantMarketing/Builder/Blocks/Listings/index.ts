@@ -7,140 +7,126 @@ import { TemplateRenderData } from '../../utils/get-template-render-data/index'
 import { BlockOptions } from '../types'
 
 const top = 'rechat-listing-image-top'
-const bottom = 'rechat-listing-image-bottom'
 const left = 'rechat-listing-image-left'
 const right = 'rechat-listing-image-right'
 
 const templates = {}
 
 templates[top] = `
-<mj-wrapper background-color="{{getColor('alpha.bg')}}">
-  <mj-section background-color="#ffffff" padding-left="40px" padding-right="40px" padding-bottom="0px">
-      <mj-column width="100%" padding="0px">
-          <mj-image rechat-assets="listing-image" padding="0px" src="{{listing.gallery_image_urls[0]}}"></mj-image>
+<mj-section>
+      <mj-column width="100%">
+      <mj-image
+        height="220px"
+        rechat-assets="listing-image"
+        rechat-listing="{{ listing.id }}"
+        src="{{listing.gallery_image_urls[0]}}"
+        align="center"
+        padding=0 />
       </mj-column>
-  </mj-section>
 
-  <mj-section background-color="#fff" padding="0px">
-      <mj-group>
-          <mj-column>
-              <mj-text rechat-editable="true" padding="0 10px" align="left" font-family="Barlow" font-size="34px" color="#002344" font-weight="bold">
-                  <p color="#002344"> {{listing.property.address.street_address}} </p>
-              </mj-text>
+      <mj-column width="100%">
+        <mj-text font-family="Roboto" font-weight="Bold" font-size="16px" line-height="19px" color="#242F3C" padding-left=0 align="center">
+          {{listing.property.address.street_address}}
+          <br /><span style="font-weight: normal;">{{ listing.price | currency }}</span>
+        </mj-text>
 
-              <mj-text rechat-editable="true" padding="0 10px" align="left" font-family="Barlow" font-size="23px" color="#002344" font-weight="bold">
-                  <p color="#002344" style="margin:8px 0"> {{ listing.price | currency }}
-                  </p>
-              </mj-text>
-              <mj-text rechat-editable="true" align="left" font-family="Barlow" font-size="18px" padding="0 10px" color="#002344">
-                  <p color="#002344" id="text4" style="margin:8px 0"> {{listing.property.bedroom_count}} Beds, {{listing.property.full_bathroom_count + listing.property.half_bathroom_count}} Baths, {{ listing.property.square_meters | area }} Sqft</p>
-              </mj-text>
-          </mj-column>
+        <mj-divider border-color="rgba(0,0,0,0.3)" border-width="1px" width="60%" />
 
-      </mj-group>
+        <mj-text font-family="Roboto" font-size="14px" line-height="16px" color="#242F3C" padding-left=0 align="center">
+          OPEN SUNDAY, JUNE 30, 2019
+          <br /><span style="font-weight: lighter;">FROM 1:00 TO 3:00 PM</span>
+        </mj-text>
 
-  </mj-section>
-
-  <mj-section background-color="#ffffff" padding="0px">
-      <mj-column padding="0px">
-          <mj-button rechat-editable="true" href="{{getListingUrl(listing)}}" background-color="{{getColor('beta.bg')}}" color="{{getColor('beta.tb')}}" padding="0px 0 10px" border-radius="none" font-family="Barlow" font-size="18px">
-              VIEW PROPERTY
-          </mj-button>
+        <mj-button
+          padding-left=0
+          border-radius="12px"
+          font-family="Roboto"
+          font-size="12px"
+          font-weight="Bold"
+          line-height="14px"
+          height="40px"
+          href="{{getListingUrl(listing)}}"
+          color="{{getColor('beta.tb')}}"
+          background-color="{{getColor('beta.bg')}}"
+          width="258px">
+          VIEW PROPERTY
+        </mj-button>
       </mj-column>
-  </mj-section>
-</mj-wrapper>
-`
-
-templates[bottom] = `
-<mj-wrapper background-color="{{getColor('alpha.bg')}}">
-  <mj-section background-color="#fff" padding="0px">
-      <mj-group>
-          <mj-column>
-              <mj-text rechat-editable="true" padding="0 10px" align="left" font-family="Barlow" font-size="34px" color="#002344" font-weight="bold">
-                  <p color="#002344"> {{listing.property.address.street_address}} </p>
-              </mj-text>
-
-              <mj-text rechat-editable="true" padding="0 10px" align="left" font-family="Barlow" font-size="23px" color="#002344" font-weight="bold">
-                  <p color="#002344" style="margin:8px 0"> {{ listing.price | currency }}
-                  </p>
-              </mj-text>
-              <mj-text rechat-editable="true" align="left" font-family="Barlow" font-size="18px" padding="0 10px" color="#002344">
-                  <p color="#002344" id="text4" style="margin:8px 0"> {{listing.property.bedroom_count}} Beds, {{listing.property.full_bathroom_count + listing.property.half_bathroom_count}} Baths, {{ listing.property.square_meters | area }} Sqft</p>
-              </mj-text>
-          </mj-column>
-
-      </mj-group>
-
-  </mj-section>
-
-  <mj-section background-color="#ffffff" padding="0px">
-      <mj-column padding="0px">
-          <mj-button rechat-editable="true" href="{{getListingUrl(listing)}}" background-color="{{getColor('beta.bg')}}" color="{{getColor('beta.tb')}}" padding="0px 0 10px" border-radius="none" font-family="Barlow" font-size="18px">
-              VIEW PROPERTY
-          </mj-button>
-      </mj-column>
-  </mj-section>
-
-  <mj-section background-color="#ffffff" padding-left="40px" padding-right="40px" padding-bottom="0px">
-      <mj-column width="100%" padding="0px">
-          <mj-image rechat-assets="listing-image" padding="0px" src="{{listing.gallery_image_urls[0]}}"></mj-image>
-      </mj-column>
-  </mj-section>
-</mj-wrapper>
+    </mj-section>
 `
 
 templates[right] = `
-<mj-wrapper background-color="{{getColor('alpha.bg')}}">
-    <mj-section background-color="#fff" padding="0px">
-        <mj-column>
-            <mj-text rechat-editable="true" padding="0 10px" align="left" font-family="Barlow" font-size="22px" color="#002344" font-weight="bold">
-                <p color="#002344"> {{listing.property.address.street_address}} </p>
-            </mj-text>
-
-            <mj-text rechat-editable="true" padding="0 10px" align="left" font-family="Barlow" font-size="15px" color="#002344" font-weight="bold">
-                <p color="#002344" style="margin:8px 0"> {{ listing.price | currency }}
-                </p>
-            </mj-text>
-            <mj-text rechat-editable="true" align="left" font-family="Barlow" font-size="15px" padding="0 10px" color="#002344">
-                <p color="#002344" id="text4" style="margin:8px 0"> {{listing.property.bedroom_count}} Beds, {{listing.property.full_bathroom_count + listing.property.half_bathroom_count}} Baths, {{ listing.property.square_meters | area }} Sqft</p>
-            </mj-text>
-
-            <mj-button align="left" rechat-editable="true" href="{{getListingUrl(listing)}}" background-color="{{getColor('beta.bg')}}" color="{{getColor('beta.tb')}}" padding="0px 0 10px" border-radius="none" font-family="Barlow" font-size="18px">
-                VIEW PROPERTY
-            </mj-button>
-        </mj-column>
-        <mj-column width="50%" padding="0px">
-            <mj-image rechat-assets="listing-image" padding="0px" src="{{listing.gallery_image_urls[0]}}"></mj-image>
-        </mj-column>
-    </mj-section>
-</mj-wrapper>
+<mj-section>
+  <mj-column>
+    <mj-text font-family="Roboto" font-weight="Bold" font-size="16px" line-height="19px" color="#242F3C">
+      {{listing.property.address.street_address}}
+      <br />
+      <span style="font-weight: normal;">{{ listing.price | currency }}</span>
+    </mj-text>
+    <mj-divider border-color="rgba(0,0,0,0.3)" border-width="1px" padding-left="25px" padding-right="25px" padding-top="0" padding-bottom="0"></mj-divider>
+    <mj-text font-family="Roboto" font-size="14px" line-height="16px" color="#242F3C">
+      OPEN SUNDAY, JUNE 30
+      <br />
+      <span style="color: ##919191;">FROM 1:00 TO 3:00 PM</span>
+    </mj-text>
+    <mj-button
+      border-radius="12px"
+      font-family="Roboto"
+      font-size="12px"
+      font-weight="Bold"
+      line-height="14px"
+      width="100%"
+      height="40px"
+      href="{{getListingUrl(listing)}}"
+      color="{{getColor('beta.tb')}}"
+      background-color="{{getColor('beta.bg')}}">
+      VIEW PROPERTY
+    </mj-button>
+  </mj-column>
+  <mj-column width="50%">
+    <mj-image
+      rechat-assets="listing-image"
+      rechat-listing="{{ listing.id }}"
+      src="{{listing.gallery_image_urls[0]}}"></mj-image>
+  </mj-column>
+</mj-section>
 `
 
 templates[left] = `
-<mj-wrapper background-color="{{getColor('alpha.bg')}}">
-    <mj-section background-color="#fff" padding="0px">
-        <mj-column width="50%" padding="0px">
-            <mj-image rechat-assets="listing-image" padding="0px" src="{{listing.gallery_image_urls[0]}}"></mj-image>
-        </mj-column>
-        <mj-column>
-            <mj-text rechat-editable="true" padding="0 10px" align="right" font-family="Barlow" font-size="22px" color="#002344" font-weight="bold">
-                <p color="#002344"> {{listing.property.address.street_address}} </p>
-            </mj-text>
-
-            <mj-text rechat-editable="true" padding="0 10px" align="right" font-family="Barlow" font-size="15px" color="#002344" font-weight="bold">
-                <p color="#002344" style="margin:8px 0"> {{ listing.price | currency }}
-                </p>
-            </mj-text>
-            <mj-text rechat-editable="true" align="right" font-family="Barlow" font-size="15px" padding="0 10px" color="#002344">
-                <p color="#002344" id="text4" style="margin:8px 0"> {{listing.property.bedroom_count}} Beds, {{listing.property.full_bathroom_count + listing.property.half_bathroom_count}} Baths, {{ listing.property.square_meters | area }} Sqft</p>
-            </mj-text>
-
-            <mj-button align="right" rechat-editable="true" href="{{getListingUrl(listing)}}" background-color="{{getColor('beta.bg')}}" color="{{getColor('beta.tb')}}" padding="0px 0 10px" border-radius="none" font-family="Barlow" font-size="18px">
-                VIEW PROPERTY
-            </mj-button>
-        </mj-column>
-    </mj-section>
-</mj-wrapper>
+<mj-section>
+  <mj-column width="50%">
+    <mj-image
+      rechat-assets="listing-image"
+      rechat-listing="{{ listing.id }}"
+      src="{{listing.gallery_image_urls[0]}}"></mj-image>
+  </mj-column>
+  <mj-column>
+    <mj-text font-family="Roboto" font-weight="Bold" font-size="16px" line-height="19px" color="#242F3C">
+      {{listing.property.address.street_address}}
+      <br />
+      <span style="font-weight: normal;">{{ listing.price | currency }}</span>
+    </mj-text>
+    <mj-divider border-color="rgba(0,0,0,0.3)" border-width="1px" padding-left="25px" padding-right="25px" padding-top="0" padding-bottom="0"></mj-divider>
+    <mj-text font-family="Roboto" font-size="14px" line-height="16px" color="#242F3C">
+      OPEN SUNDAY, JUNE 30
+      <br />
+      <span style="color: ##919191;">FROM 1:00 TO 3:00 PM</span>
+    </mj-text>
+    <mj-button
+      href="{{getListingUrl(listing)}}"
+      border-radius="12px"
+      font-family="Roboto"
+      font-size="12px"
+      font-weight="Bold"
+      line-height="14px"
+      width="100%"
+      height="40px"
+      color="{{getColor('beta.tb')}}"
+      background-color="{{getColor('beta.bg')}}">
+      VIEW PROPERTY
+    </mj-button>
+  </mj-column>
+</mj-section>
 `
 
 export interface Options {
@@ -191,12 +177,6 @@ export default function registerListingBlocks(
   { onDrop }: Options
 ): ListingBlock {
   renderData = _renderData
-  registerListingBlock(editor, renderData, {
-    label: 'Image Bottom',
-    category: 'Listing',
-    blockName: bottom
-  })
-
   registerListingBlock(editor, renderData, {
     label: 'Image Top',
     category: 'Listing',
