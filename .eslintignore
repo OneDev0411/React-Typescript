@@ -5,6 +5,7 @@ app/utils/
 app/styles/vendor
 
 **/*.test.js
+**/*.mjml
 
 app/views/components/SvgIcons/**/*.*
 *.json

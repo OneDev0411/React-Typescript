@@ -104,7 +104,7 @@ class Builder extends React.Component {
       pluginsOpts: {
         [GrapesjsMjml]: {
           columnsPadding: false,
-          categoryLabel: 'UI Elements'
+          categoryLabel: 'Basics'
         }
       }
     })

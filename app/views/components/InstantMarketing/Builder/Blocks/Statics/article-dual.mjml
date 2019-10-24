@@ -1,0 +1,27 @@
+<mj-section>
+  <mj-column>
+    <mj-image src="https://picsum.photos/id/1040/4496/3000">
+    </mj-image>
+    <mj-text font-family="Abril Fatface" font-size="20px" line-height="27px" color="#242F3C">
+      When the Dream of Owning a Home...
+    </mj-text>
+    <mj-text height="48px" font-family="Roboto" font-weight="300" font-size="14px" line-height="16px" align="justify" color="#242F3C">
+      A federal program to encourage black homeownership in the 1970s ended in a flood of foreclosures.
+    </mj-text>
+    <mj-button border-radius="12px" font-family="Roboto" font-size="12px" font-weight="Bold" line-height="14px" width="100%" height="40px" color="{{getColor('beta.tb')}}" background-color="{{getColor('beta.bg')}}">
+      READ MORE
+    </mj-button>
+  </mj-column>
+  <mj-column>
+    <mj-image src="https://picsum.photos/id/1026/4621/3070">
+    </mj-image>
+    <mj-text font-family="Abril Fatface" font-size="20px" line-height="27px" color="#242F3C">
+      How Much Public Transit Adds to Home Values
+    </mj-text>
+    <mj-text height="48px" font-family="Roboto" font-weight="300" font-size="14px" line-height="16px" align="justify" color="#242F3C">
+      Neighborhoods located within a half-mile of public transit services outperformed those farther from public transit. </mj-text>
+    <mj-button border-radius="12px" font-family="Roboto" font-size="12px" font-weight="Bold" line-height="14px" width="100%" height="40px" color="{{getColor('beta.tb')}}" background-color="{{getColor('beta.bg')}}">
+      READ MORE
+    </mj-button>
+  </mj-column>
+</mj-section>
