@@ -610,6 +610,7 @@ class Builder extends React.Component {
               this.addListingAssets(listing)
 
               this.blocks.listing.selectHandler(listing)
+              this.lockIn(false) // in order to set traits on new elements
               this.setState({ isListingDrawerOpen: false })
             }}
           />
@@ -620,7 +621,6 @@ class Builder extends React.Component {
               title="Select An Agent"
               onClose={() => {
                 this.blocks.agent.selectHandler()
-                this.lockIn(false) // in order to set traits on new elements
                 this.setState({ isAgentDrawerOpen: false })
               }}
               onSelectAgent={agent => {
