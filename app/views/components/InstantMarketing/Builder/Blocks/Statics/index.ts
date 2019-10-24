@@ -8,9 +8,9 @@ import { TemplateRenderData } from '../../utils/get-template-render-data/index'
 import { BlockOptions } from '../types'
 
 import ArticleTop from './article-top.mjml'
-import ArticleDual from './article-top.mjml'
-import ArticleLeft from './article-top.mjml'
-import ArticleRight from './article-top.mjml'
+import ArticleDual from './article-dual.mjml'
+import ArticleLeft from './article-left.mjml'
+import ArticleRight from './article-right.mjml'
 
 const top = 'rechat-article-image-top'
 const dual = 'rechat-article-image-dual'
