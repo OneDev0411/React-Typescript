@@ -2,6 +2,10 @@ import React, { useCallback, useMemo } from 'react'
 import { Drawer, makeStyles } from '@material-ui/core'
 import { DrawerProps as OriginalDrawerProps } from '@material-ui/core/Drawer'
 
+import { mergeClasses } from '@material-ui/styles'
+
+import { Classes } from '@material-ui/styles/mergeClasses/mergeClasses'
+
 import Body from './Body'
 import Header from './Header'
 import Footer from './Footer'
@@ -10,18 +14,20 @@ import { DrawerContextType, DrawerProps } from './types'
 
 export { useDrawerContext } from './drawer-context'
 
-const useStyles = makeStyles({
-  root: {
-    width: '100%', // fullwidth on small devices
-    '@media (min-width: 48em)': {
-      width: '38rem'
+const useStyles = makeStyles(
+  {
+    root: {
+      width: '100%', // fullwidth on small devices
+      '@media (min-width: 48em)': {
+        width: '38rem'
+      }
     }
-  }
-})
+  },
+  { name: 'OverlayDrawer' }
+)
 
 const OverlayDrawer = ({
   children,
-  showBackdrop = true,
   open = false,
   onClose = () => {},
   closeOnBackdropClick = false,
@@ -30,7 +36,6 @@ const OverlayDrawer = ({
   // drawer being closed by escape while the modal on top is kept open
   closeOnEscape = false,
   anchor = 'right',
-  ModalProps = {},
   ...rest
 }: DrawerProps) => {
   const classes = useStyles()
@@ -67,8 +72,11 @@ const OverlayDrawer = ({
       open={open}
       onClose={handleOnClose}
       anchor={anchor}
-      classes={{ paper: classes.root }}
-      ModalProps={{ hideBackdrop: !showBackdrop, ...ModalProps }}
+      classes={mergeClasses({
+        baseClasses: { paper: classes.root },
+        newClasses: rest.classes as Classes,
+        Component: Drawer
+      })}
       data-test={`drawer-${level}`}
     >
       <DrawerContext.Provider value={context}>
