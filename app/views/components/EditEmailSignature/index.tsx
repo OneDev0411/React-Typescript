@@ -68,6 +68,7 @@ function EditEmailSignature({
               name="signature"
               render={({ input }) => (
                 <StyledTextEditor
+                  autofocus
                   input={input}
                   enableImage
                   uploadImage={uploadImage}
