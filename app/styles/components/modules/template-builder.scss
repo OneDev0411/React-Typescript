@@ -8,6 +8,16 @@
   height: 100%;
   z-index: 100;
 
+  .gjs-blocks-cs {
+    .gjs-title {
+      color: #333;
+      background: #fff;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1;
+    }
+  }
+
   .gjs-pn-commands {
     display: none;
   }
