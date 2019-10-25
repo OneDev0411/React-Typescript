@@ -18,14 +18,8 @@ import { selectDealTasks } from 'reducers/deals/tasks'
 
 import { Divider } from 'components/Divider'
 
-import LoadingContainer from 'components/LoadingContainer'
-
 import IconWebLink from 'components/SvgIcons/Weblink/IconWebLink'
 import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
-
-import config from '../../../../../../../../config/public'
-
-type OpenHouse = ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
 
 interface StateProps {
   user: IUser
@@ -34,11 +28,9 @@ interface StateProps {
 
 interface Props {
   deal: IDeal
-  list: OpenHouse[]
-  isFetching: boolean
   activeTeamId: UUID | null
   onClickNewItem(): void
-  onSelectItem(task: OpenHouse): void
+  onSelectItem(task: IDealTask): void
 }
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -87,31 +79,11 @@ const useStyles = makeStyles((theme: Theme) => {
 function List(props: Props & StateProps) {
   const classes = useStyles()
 
-  const dealOpenHousesList = useMemo(() => {
-    return props.list.filter(item =>
-      (item.associations || []).some(
-        association =>
-          association.association_type === 'deal' &&
-          association.deal!.id === props.deal.id
-      )
-    )
-  }, [props.deal.id, props.list])
+  const tasks = useMemo(() => {
+    return props.tasks.filter(task => task.task_type === 'OpenHouse')
+  }, [props.tasks])
 
-  /**
-   * opens the open house registration link
-   * @param oh - the open house object
-   */
-  const handleOpenRegistrationPage = (oh: OpenHouse): void => {
-    const registerPageURL = `${config.app.url}/openhouse/${oh.id}/${
-      props.activeTeamId
-    }/register`
-
-    window.open(registerPageURL)
-  }
-
-  const handleDelete = (oh: OpenHouse): void => {
-    alert('')
-  }
+  const handleDelete = (task: IDealTask): void => {}
 
   return (
     <div className={classes.root}>
@@ -128,57 +100,48 @@ function List(props: Props & StateProps) {
       </Button>
       <Divider />
 
-      {props.isFetching ? (
-        <LoadingContainer size="3rem" style={{ padding: 0 }} />
-      ) : (
-        dealOpenHousesList.map(oh => (
-          <div key={oh.id}>
-            <div className={classes.itemContainer}>
-              <Typography variant="body1">
-                <Flex justifyBetween>
-                  <Flex>
-                    {fecha.format(
-                      new Date(oh.created_at * 1000),
-                      'dddd, MMMM D, YYYY - hh:mmA'
-                    )}
-                  </Flex>
-
-                  <Flex className={classes.actions}>
-                    <Tooltip title="Open Client Registration Page">
-                      <IconButton
-                        size="small"
-                        className={classes.iconButton}
-                        onClick={() => handleOpenRegistrationPage(oh)}
-                      >
-                        <IconWebLink />
-                      </IconButton>
-                    </Tooltip>
-
-                    <Tooltip title="Delete">
-                      <IconButton
-                        size="small"
-                        className={classes.iconButton}
-                        onClick={() => handleDelete(oh)}
-                      >
-                        <IconDelete />
-                      </IconButton>
-                    </Tooltip>
-                  </Flex>
+      {tasks.map(task => (
+        <div key={task.id}>
+          <div className={classes.itemContainer}>
+            <Typography variant="body1">
+              <Flex justifyBetween>
+                <Flex>
+                  {fecha.format(
+                    new Date(task.created_at * 1000),
+                    'dddd, MMMM D, YYYY - hh:mmA'
+                  )}
                 </Flex>
-              </Typography>
-              <Typography variant="body1" className={classes.date}>
-                {oh.title}
-              </Typography>
 
-              <div
-                type="button"
-                onClick={() => props.onSelectItem(oh)}
-                className={classes.clickableArea}
-              />
-            </div>
+                <Flex className={classes.actions}>
+                  <Tooltip title="Open Client Registration Page">
+                    <IconButton size="small" className={classes.iconButton}>
+                      <IconWebLink />
+                    </IconButton>
+                  </Tooltip>
+
+                  <Tooltip title="Delete">
+                    <IconButton
+                      size="small"
+                      className={classes.iconButton}
+                      onClick={() => handleDelete(task)}
+                    >
+                      <IconDelete />
+                    </IconButton>
+                  </Tooltip>
+                </Flex>
+              </Flex>
+            </Typography>
+            <Typography variant="body1" className={classes.date}>
+              {task.title}
+            </Typography>
+
+            <div
+              onClick={() => props.onSelectItem(task)}
+              className={classes.clickableArea}
+            />
           </div>
-        ))
-      )}
+        </div>
+      ))}
     </div>
   )
 }

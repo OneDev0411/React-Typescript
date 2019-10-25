@@ -8,11 +8,13 @@ import { twelveFormat, formatNumber } from './helpers'
 import { TimeInputContainer } from './styled'
 
 TimeInput.propTypes = {
+  id: PropTypes.string,
   defaultDate: PropTypes.instanceOf(Date),
   initialDate: PropTypes.instanceOf(Date),
   onChange: PropTypes.func.isRequired
 }
 TimeInput.defaultProps = {
+  id: 'default',
   defaultDate: new Date()
 }
 function TimeInput(props) {
@@ -29,36 +31,40 @@ function TimeInput(props) {
       </span>
       <div className="time">
         <input
-          id="TimeInput-hours"
+          id={`TimeInput-hours--${props.id}`}
           type="number"
           onKeyDown={time.onChangeHours}
           value={time.hours}
           readOnly
         />
-        <label htmlFor="TimeInput-hours">
+        <label htmlFor={`TimeInput-hours--${props.id}`}>
           {formatNumber(twelveFormat(time.hours))}
         </label>
       </div>
       <span>:</span>
       <div className="time">
         <input
-          id="TimeInput-minutes"
+          id={`TimeInput-minutes--${props.id}`}
           type="number"
           onKeyDown={time.onChangeMinutes}
           value={time.minutes}
           readOnly
         />
-        <label htmlFor="TimeInput-minutes">{formatNumber(time.minutes)}</label>
+        <label htmlFor={`TimeInput-minutes--${props.id}`}>
+          {formatNumber(time.minutes)}
+        </label>
       </div>
       <div className="meridian">
         <input
-          id="TimeInput-meridian"
+          id={`TimeInput-meridian--${props.id}`}
           type="text"
           onKeyDown={time.onChangeMeridian}
           value={time.meridian}
           readOnly
         />
-        <label htmlFor="TimeInput-meridian">{time.meridian}</label>
+        <label htmlFor={`TimeInput-meridian--${props.id}`}>
+          {time.meridian}
+        </label>
       </div>
     </TimeInputContainer>
   )
