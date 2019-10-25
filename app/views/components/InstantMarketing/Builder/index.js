@@ -275,8 +275,8 @@ class Builder extends React.Component {
     ev.target.ownerDocument.execCommand('insertText', false, text)
   }
 
-  lockIn = (selectFirstImage = true) => {
-    let shouldSelectImage = selectFirstImage
+  lockIn = () => {
+    let shouldSelectImage = false
 
     const updateAll = model => {
       const attributes = model.get('attributes')
@@ -610,7 +610,6 @@ class Builder extends React.Component {
               this.addListingAssets(listing)
 
               this.blocks.listing.selectHandler(listing)
-              this.lockIn(false) // in order to set traits on new elements
               this.setState({ isListingDrawerOpen: false })
             }}
           />
@@ -627,7 +626,6 @@ class Builder extends React.Component {
                 console.log('onSelectAgent', agent)
                 this.addAgentAssets(agent)
                 this.blocks.agent.selectHandler(agent)
-                this.lockIn(false) // in order to set traits on new elements
                 this.setState({ isAgentDrawerOpen: false })
               }}
             />
