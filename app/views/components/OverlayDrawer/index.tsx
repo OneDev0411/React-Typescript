@@ -13,6 +13,7 @@ import { DrawerContext, useDrawerContext } from './drawer-context'
 import { DrawerContextType, DrawerProps } from './types'
 
 export { useDrawerContext } from './drawer-context'
+export * from './types'
 
 const useStyles = makeStyles(
   {

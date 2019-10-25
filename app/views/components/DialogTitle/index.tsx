@@ -17,9 +17,11 @@ export function DialogTitle({ children, onClose }: Props) {
             {children}
           </Typography>
         </Box>
-        <IconButton size="small" onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
+        {onClose && (
+          <IconButton size="small" onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        )}
       </Box>
       <Divider />
     </>
