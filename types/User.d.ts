@@ -36,6 +36,7 @@ declare interface IUser extends IUserBase {
 
   agent: IAgent | null // association?
 
+  type: 'user'
   user_type: 'Agent' | 'Client' | 'Admin'
 }
 

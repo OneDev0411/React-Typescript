@@ -1,7 +1,8 @@
 declare interface IChatMessage extends IModel<'message'> {
   acked_by: UUID | null
   attachments: IFile[]
-  author: IUser
+  author: IUser | null
+  activity: UUID
   comment: string | null
   deliveries: IChatMessageDelivery[] | null
   document_url: string | null
