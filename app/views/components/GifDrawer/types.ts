@@ -17,12 +17,12 @@ export interface GifObject {
 }
 
 interface Media {
-  tinygif: Item
-  gif: Item
-  mp4: Item
+  tinygif: GifItem
+  gif: GifItem
+  mp4: GifItem
 }
 
-interface Item {
+export interface GifItem {
   url: string
   dims: number[]
   preview: string
