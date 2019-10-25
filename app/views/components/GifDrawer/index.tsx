@@ -14,7 +14,7 @@ import { GifItem } from './types'
 interface Props {
   isOpen: boolean
   onClose?: () => void
-  onSelect: (value: GifItem) => void
+  onSelect: (value: GifItem | null) => void
 }
 
 function GifDrawer({ isOpen, onClose = () => {}, onSelect = () => {} }: Props) {
