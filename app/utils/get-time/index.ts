@@ -1,6 +1,11 @@
-export const getTime = (date, returnType = 'number') => {
-  let hours = date.getHours()
-  let minutes = date.getMinutes()
+type ReturnType = 'string' | 'number'
+
+export function getTime(
+  date: Date, 
+  returnType: ReturnType = 'number'
+): string | number {
+  let hours: number = date.getHours()
+  let minutes: number | string = date.getMinutes()
 
   if (returnType === 'string') {
     if (hours > 12) {
