@@ -84,7 +84,7 @@ function List(props: Props & StateProps) {
   const iconClasses = useIconStyles()
 
   const tasks = useMemo(() => {
-    return props.tasks.filter(task => task.task_type === 'YardSign')
+    return props.tasks.filter(task => task.task_type === 'OpenHouse')
   }, [props.tasks])
 
   return (

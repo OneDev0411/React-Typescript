@@ -117,7 +117,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
       checklist,
       userId: props.user.id,
       dealId: props.deal.id,
-      taskType: 'YardSign',
+      taskType: 'OpenHouse',
       taskTitle: `Open House: ${taskTitle}`,
       taskComment: `Please create an open house for this date:\n${taskTitle}`,
       notifyMessage: 'Back office has been notified'
