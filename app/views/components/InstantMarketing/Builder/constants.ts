@@ -14,3 +14,5 @@ export const SOCIAL_NETWORKS: SocialNetworkShare[] = [
     className: 'fa fa-linkedin'
   }
 ]
+
+export const BASIC_BLOCKS_CATEGORY = 'Basics'

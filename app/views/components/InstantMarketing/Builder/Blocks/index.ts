@@ -1,12 +1,19 @@
 import { Editor } from 'grapesjs'
 
+import { TemplateRenderData } from '../utils/get-template-render-data/index'
+
 import registerListingBlocks, { Options as ListingOptions } from './Listings'
 import registerAgentBlock, { Options as AgentOptions } from './Agent'
 import registerStaticBlocks from './Statics'
-import { TemplateRenderData } from '../utils/get-template-render-data/index'
+import registerBasicBlocks from './Basics'
 import { BlockOptions } from './types'
 
-const BLOCK_IDS_TO_REMOVE = ['mj-social-element', 'mj-navbar', 'mj-navbar-link']
+const BLOCK_IDS_TO_REMOVE = [
+  'mj-social-group',
+  'mj-social-element',
+  'mj-navbar',
+  'mj-navbar-link'
+]
 
 interface Options {
   listing: ListingOptions
@@ -22,6 +29,7 @@ export function registerCustomBlocks(
   renderData: TemplateRenderData,
   { listing, agent }: Options
 ) {
+  registerBasicBlocks(editor)
   registerStaticBlocks(editor, renderData)
 
   return {

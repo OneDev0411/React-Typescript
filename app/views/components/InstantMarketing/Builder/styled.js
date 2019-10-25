@@ -18,6 +18,10 @@ export const Container = styled.div`
   .gjs-toolbar {
     display: none;
   }
+  
+  .gjs-blocks-cs {
+    display: none;
+  }
   `}
 `
 export const TemplatesContainer = styled.div`
