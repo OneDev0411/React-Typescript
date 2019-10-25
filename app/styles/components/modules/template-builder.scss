@@ -117,6 +117,18 @@
     }
   }
 
+  .gjs-field-select {
+    > div {
+      width: 95%;
+
+      > select {
+        appearance: menulist;
+        -webkit-appearance: menulist;
+        -moz-appearance: menulist;
+      }
+    }
+  }
+
   .wrapper {
     width: 80%;
     float: left;
