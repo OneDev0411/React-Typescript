@@ -23,6 +23,7 @@ export function useEditorSelectionAnchor(
     setTimeout(() => {
       setEditorState(newEditorState)
 
+      // TODO: handle atomic block selection too
       const visibleSelectionRect = Draft.getVisibleSelectionRect(window)
       const selectionContainerElement = editorRef.current!.editor.querySelector(
         `[data-offset-key="${selection.getAnchorKey()}-0-0"]`

@@ -51,7 +51,7 @@ export interface TextEditorProps {
    */
   hasSignatureByDefault?: boolean
 
-  onAttachmentDropped?: (file: File) => void
+  onAttachmentDropped?: (file: File[]) => void
 
   /** ********
    * The following props are feature enabler flags.
