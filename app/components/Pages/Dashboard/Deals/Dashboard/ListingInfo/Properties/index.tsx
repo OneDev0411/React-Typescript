@@ -33,8 +33,8 @@ export function ListingProperties(props: Props) {
 
       {/* 
       // @ts-ignore js component */}
-
       <PropertyType deal={props.deal} isBackOffice={props.isBackOffice} />
+
       <Divider small />
 
       {/* 
