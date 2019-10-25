@@ -54,34 +54,50 @@ export function EmailRecipientsFields({
 
       <Field
         name="bcc"
-        render={bccInputProps => (
+        render={bccFieldProps => (
           <Field
             label="To"
             name="to"
-            component={EmailRecipientsChipsInput as any}
-            readOnly={disableAddNewRecipient}
-            deal={deal}
-            // See issue description here for the logic behind adding
-            // `!deal &&` part: https://gitlab.com/rechat/web/issues/3467
-            includeQuickSuggestions={!deal && includeQuickSuggestions}
-            // we need to do this weird stuff because of the weird UX
-            // which is to show suggestions under too but add them to bcc!
-            // Hopefully we revise it and remove such weirdness
-            currentlyUsedQuickSuggestions={bccInputProps.input.value}
-            onQuickSuggestionSelected={recipient =>
-              bccInputProps.input.onChange([
-                ...(bccInputProps.input.value || []),
-                recipient
-              ] as any)
-            }
-            TextFieldProps={
-              {
-                inputProps: {
-                  autoFocus: true
-                } as HTMLProps<HTMLInputElement>
-              } as TextFieldProps
-            }
-            {...commonProps}
+            render={toFieldProps => (
+              <EmailRecipientsChipsInput
+                {...toFieldProps}
+                deal={deal}
+                includeQuickSuggestions={includeQuickSuggestions}
+                readOnly={disableAddNewRecipient}
+                currentlyUsedQuickSuggestions={[
+                  ...(toFieldProps.input.value || []),
+                  ...(bccFieldProps.input.value || [])
+                ]}
+                // we need to do this weird stuff because of the weird UX
+                // which is to show suggestions under `To` field but for some
+                // of them we want to add them to bcc!
+                // So The logic for handling quick suggestion selection
+                // cannot be handled in the EmailRecipientsChipsInput itself
+                // and the event needs to bubble up to be handled at upper levels
+                // in this case.
+                // Hopefully we revise it and remove such weirdness
+                onQuickSuggestionSelected={(
+                  recipient,
+                  sendType: IEmailRecipientSendType
+                ) => {
+                  const fieldProps =
+                    sendType === 'BCC' ? bccFieldProps : toFieldProps
+
+                  fieldProps.input.onChange([
+                    ...(fieldProps.input.value || []),
+                    recipient
+                  ] as any)
+                }}
+                TextFieldProps={
+                  {
+                    inputProps: {
+                      autoFocus: true
+                    } as HTMLProps<HTMLInputElement>
+                  } as TextFieldProps
+                }
+                {...commonProps}
+              />
+            )}
           />
         )}
       />
