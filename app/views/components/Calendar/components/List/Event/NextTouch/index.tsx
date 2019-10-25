@@ -14,6 +14,12 @@ interface Props {
 }
 
 export function NextTouch({ style, event, nextItem }: Props) {
+  if (!event.people) {
+    return null
+  }
+
+  const contact = event.people[0]
+
   return (
     <EventContainer
       style={style}
@@ -26,18 +32,14 @@ export function NextTouch({ style, event, nextItem }: Props) {
       title={
         <div>
           Contact{' '}
-          <MiniContactProfile
-            type="event"
-            data={event.full_contact as IContact}
-            as="span"
-          >
+          <MiniContactProfile type="event" data={contact} as="span">
             <a href={`/dashboard/contacts/${event.contact}`} target="_blank">
-              {event.full_contact!.display_name}
+              {contact.display_name}
             </a>
           </MiniContactProfile>
         </div>
       }
-      subtitle={<TouchDateSubtitle event={event} />}
+      subtitle={<TouchDateSubtitle event={event} contact={contact} />}
     />
   )
 }

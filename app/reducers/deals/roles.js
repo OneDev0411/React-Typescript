@@ -34,5 +34,11 @@ export default (state = null, action) => {
   }
 }
 
+/**
+ *
+ * @param {unknown} state
+ * @param {IDeal | undefined} deal
+ * @return {*}
+ */
 export const selectDealRoles = (state, deal) =>
   deal && Array.isArray(deal.roles) ? deal.roles.map(id => state[id]) : []

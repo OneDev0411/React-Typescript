@@ -1,11 +1,13 @@
-import * as React from 'react'
-import { useCallback, useEffect, useMemo } from 'react'
-import { connect } from 'react-redux'
+import { OAuthProvider } from 'constants/contacts'
 
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import * as React from 'react'
+import { ComponentProps, useCallback, useMemo, useState } from 'react'
+import { connect } from 'react-redux'
+import { OnChange } from 'react-final-form-listeners'
+
+import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { sendEmailViaOauthAccount } from 'models/o-auth-accounts/send-email-via-o-auth-account'
-import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
 import { IAppState } from 'reducers'
 import { IOauthAccountsState } from 'reducers/contacts/oAuthAccounts'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
@@ -16,115 +18,74 @@ import {
   uploadMicrosoftAttachment
 } from 'models/email/upload-email-attachment'
 
-import { EmailResponseType } from '../EmailThread/types'
 import EmailComposeForm from './EmailComposeForm'
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import { EmailRecipientsFields } from './fields/EmailRecipientsFields'
-import { getReplyRecipients } from './helpers/get-reply-recipients'
-import { getReplyHtml } from './helpers/get-reply-html'
-import { getForwardHtml } from './helpers/get-forward-html'
 import { parseEmailRecipient } from '../EmailRecipientsChipsInput/helpers/parse-email-recipient'
-import { getReplySubject } from './helpers/get-reply-subject'
 
 import { oAuthAccountTypeToProvider } from '../../../components/Pages/Dashboard/Account/ConnectedAccounts/constants'
 
-import { getAccountTypeFromOrigin } from './helpers/get-account-type-from-origin'
+import { EmailFormValues } from '.'
 
-import { attachmentToFile } from '../EmailThread/helpers/attachment-to-file'
+interface Props
+  extends Omit<
+    ComponentProps<typeof EmailComposeForm>,
+    | 'sendEmail'
+    | 'isSubmitDisabled'
+    | 'renderCollapsedFields'
+    | 'renderFields'
+    | 'enableSchedule'
+    | 'uploadAttachment'
+  > {
+  getEmail?: (
+    email: IEmailThreadEmailInput,
+    fromAccount: IOAuthAccount
+  ) => IEmailThreadEmailInput
 
-import { encodeContentIds } from '../EmailThread/helpers/encode-content-ids'
-
-import { convertToAbsoluteAttachmentUrl } from '../EmailThread/helpers/convert-to-absolute-attachment-url'
-
-import { EmailFormValues, EmailThreadFormValues } from '.'
-
-interface Props {
-  responseType: EmailResponseType
-  email: IEmailThreadEmail
-  onCancel: () => void
-  onSent?: (email: IEmailThreadEmail) => void
   oAuthAccounts: IOauthAccountsState
-  defaultFrom?: string
-  fetchOAuthAccounts: () => Promise<any>
+  fetchOAuthAccounts: typeof fetchOAuthAccounts
 }
 
-const useStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      footer: {
-        position: 'sticky',
-        bottom: 0,
-        zIndex: 1,
-        background: theme.palette.background.paper
-      }
-    }),
-  { name: 'EmailThreadComposeForm' }
-)
-
-export function EmailThreadComposeForm({
-  responseType,
-  email,
-  onCancel,
+function EmailThreadComposeForm({
   onSent,
   fetchOAuthAccounts,
-  defaultFrom,
-  oAuthAccounts
+  oAuthAccounts,
+  getEmail = i => i,
+  ...props
 }: Props) {
-  const classes = useStyles()
+  const [from, setFrom] = useState(
+    (props.initialValues && props.initialValues.from) || null
+  )
 
   const handleSendEmail = async (formValue: EmailFormValues) => {
     const from = formValue.from!
-
     const account = getFromAccount(from.value)!
     const provider = oAuthAccountTypeToProvider[account.type]
-    const originType = getAccountTypeFromOrigin(email.origin)
-    const originMatchesFrom = !originType || originType === provider
 
-    const html = encodeContentIds(email.attachments, formValue.body || '')
-
-    const inlineAttachments: IEmailAttachmentInput[] = email.attachments
-      .filter(
-        attachment => attachment.cid && html.includes(`cid:${attachment.cid}`)
-      )
-      .map(({ cid, contentType: type, isInline, name: filename, url }) => ({
-        filename,
-        isInline,
-        link: convertToAbsoluteAttachmentUrl(url),
-        cid,
-        type
-      }))
-
-    const attachments = (formValue.attachments || [])
-      // filter out inline attachments
-      .filter(
-        attachment =>
-          !inlineAttachments.some(item => item.link === attachment.url)
-      )
-      .map<IEmailAttachmentInput>(
-        ({ mime: type, name: filename, url: link }) => ({
-          filename,
-          isInline: false,
-          link,
-          type
-        })
-      )
-    const emailData: IEmailThreadEmailInput = {
-      subject: (formValue.subject || '').trim(),
-      to: (formValue.to || [])
-        .filter(isEmailRecipient)
-        .map(toEmailThreadRecipient),
-      cc: (formValue.cc || [])
-        .filter(isEmailRecipient)
-        .map(toEmailThreadRecipient),
-      bcc: (formValue.bcc || [])
-        .filter(isEmailRecipient)
-        .map(toEmailThreadRecipient),
-      html,
-      threadId: originMatchesFrom ? email.thread_id : undefined,
-      messageId: originMatchesFrom ? email.message_id : undefined,
-      inReplyTo: email.internet_message_id,
-      attachments: attachments.concat(inlineAttachments)
-    }
+    const emailData: IEmailThreadEmailInput = getEmail(
+      {
+        subject: (formValue.subject || '').trim(),
+        to: (formValue.to || [])
+          .filter(isEmailRecipient)
+          .map(toEmailThreadRecipient),
+        cc: (formValue.cc || [])
+          .filter(isEmailRecipient)
+          .map(toEmailThreadRecipient),
+        bcc: (formValue.bcc || [])
+          .filter(isEmailRecipient)
+          .map(toEmailThreadRecipient),
+        html: formValue.body || '',
+        attachments: (formValue.attachments || []).map<IEmailAttachmentInput>(
+          ({ mime: type, name: filename, url: link }) => ({
+            filename,
+            isInline: false,
+            link,
+            type
+          })
+        )
+      },
+      account
+    )
     const newEmail = await sendEmailViaOauthAccount(
       provider,
       account.id,
@@ -136,40 +97,15 @@ export function EmailThreadComposeForm({
     return newEmail
   }
 
-  useEffect(() => {
-    fetchOAuthAccounts() // always update accounts
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const initialValue = useMemo<EmailThreadFormValues>(() => {
-    const { to, cc } =
-      responseType === 'reply' ? getReplyRecipients(email) : { to: [], cc: [] }
-
-    const owner = email.owner || defaultFrom
-    const from = owner
-      ? {
-          label: '',
-          value: owner
+  useEffectOnce(() => {
+    Object.entries(oAuthAccounts.loading).forEach(
+      ([provider, loading]: [OAuthProvider, boolean | null]) => {
+        if (loading === null) {
+          fetchOAuthAccounts(provider)
         }
-      : undefined
-
-    return {
-      from,
-      to,
-      cc,
-      bcc: [],
-      body:
-        responseType === 'reply' ? getReplyHtml(email) : getForwardHtml(email),
-      due_at: null,
-      attachments:
-        responseType === 'forward'
-          ? email.attachments.map(attachmentToFile)
-          : [],
-      subject: getReplySubject(responseType, email)
-    }
-  }, [defaultFrom, email, responseType])
-
-  const shouldRender = useRerenderOnChange(responseType)
+      }
+    )
+  })
 
   const getAllAccounts = useCallback(() => {
     return Object.values(oAuthAccounts.list)
@@ -207,51 +143,48 @@ export function EmailThreadComposeForm({
    */
   const uploadAttachment = useCallback(
     (file: File | IFile) => {
-      // Technically, it should be deduced from `from` account,
-      // not email.origin! But that can be changed by the user!
-      switch (email.origin) {
-        case 'gmail':
-          return uploadGoogleAttachment(email.owner!, file)
-        case 'outlook':
-          return uploadMicrosoftAttachment(email.owner!, file)
+      const account = from && getFromAccount(from.value)
+
+      switch (account && oAuthAccountTypeToProvider[account.type]) {
+        case OAuthProvider.Google:
+          return uploadGoogleAttachment(account!.id, file)
+        case OAuthProvider.Outlook:
+          return uploadMicrosoftAttachment(account!.id, file)
         default:
           return uploadEmailAttachment(file)
       }
     },
-    [email.origin, email.owner]
+    [from, getFromAccount]
   )
 
   return (
-    shouldRender && (
-      <EmailComposeForm
-        classes={{ footer: classes.footer }}
-        hasSignatureByDefault
-        sendEmail={handleSendEmail}
-        enableSchedule={false}
-        onCancel={onCancel}
-        initialValues={initialValue}
-        isSubmitDisabled={isSubmitDisabled}
-        uploadAttachment={uploadAttachment}
-        renderCollapsedFields={(values: EmailFormValues) => (
-          <CollapsedEmailRecipients
-            to={values.to || []}
-            cc={values.cc || []}
-            bcc={values.bcc || []}
-          />
-        )}
-        renderFields={values => (
-          <EmailRecipientsFields
-            fromOptions={fromOptions}
-            EmailRecipientsChipsInputProps={{
-              suggestTags: false,
-              suggestLists: false
-            }}
-            includeQuickSuggestions={false}
-            values={values}
-          />
-        )}
-      />
-    )
+    <EmailComposeForm
+      {...props}
+      sendEmail={handleSendEmail}
+      enableSchedule={false}
+      isSubmitDisabled={isSubmitDisabled}
+      uploadAttachment={uploadAttachment}
+      renderCollapsedFields={(values: EmailFormValues) => (
+        <CollapsedEmailRecipients
+          to={values.to || []}
+          cc={values.cc || []}
+          bcc={values.bcc || []}
+        />
+      )}
+      renderFields={values => (
+        <EmailRecipientsFields
+          fromOptions={fromOptions}
+          EmailRecipientsChipsInputProps={{
+            suggestTags: false,
+            suggestLists: false
+          }}
+          includeQuickSuggestions={false}
+          values={values}
+        />
+      )}
+    >
+      <OnChange name="from">{setFrom}</OnChange>
+    </EmailComposeForm>
   )
 }
 

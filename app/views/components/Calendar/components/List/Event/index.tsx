@@ -24,7 +24,7 @@ const events: {
     style,
     nextItem,
     onEventChange
-  }: Props): React.ReactElement<any>
+  }: Props): React.ReactElement<any> | null
   condition(event: ICalendarEvent): boolean
 }[] = [
   {
@@ -56,7 +56,7 @@ const events: {
     condition: (event: ICalendarEvent) =>
       ['email_campaign', 'email_campaign_recipient'].includes(
         event.object_type
-      ) && event.event_type === 'scheduled_email'
+      ) && ['scheduled_email', 'executed_email'].includes(event.event_type)
   },
   {
     component: EmailThread,
@@ -71,16 +71,16 @@ const events: {
 export function Event({ event, nextItem, style, onEventChange }: Props) {
   const item = events.find(item => item.condition(event) === true)
 
-  if (item) {
-    return (
-      <item.component
-        style={style}
-        event={event}
-        nextItem={nextItem}
-        onEventChange={onEventChange}
-      />
-    )
+  if (!item) {
+    return null
   }
 
-  return null
+  return (
+    <item.component
+      style={style}
+      event={event}
+      nextItem={nextItem}
+      onEventChange={onEventChange}
+    />
+  )
 }

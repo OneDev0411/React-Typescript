@@ -1,4 +1,5 @@
 import React, {
+  ComponentProps,
   forwardRef,
   useContext,
   useEffect,
@@ -7,7 +8,7 @@ import React, {
   useRef,
   useState
 } from 'react'
-import { Editor as DraftEditor, EditorState } from 'draft-js'
+import { ContentBlock, Editor as DraftEditor, EditorState } from 'draft-js'
 import PluginsEditor from 'draft-js-plugins-editor'
 import 'draft-js-image-plugin/lib/plugin.css'
 import 'draft-js-alignment-plugin/lib/plugin.css'
@@ -33,7 +34,7 @@ import { RichTextButtons } from './buttons/RichTextButtons'
 import { createFilePlugin } from './plugins/draft-js-handle-files-plugin'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
 import { updateEntityData } from './modifiers/update-entity-data'
-import { InlineEntityPopover } from './components/InlineEntityPopover'
+import { DraftJsSelectionPopover } from './components/DraftJsSelectionPopover'
 import { LinkPreview } from './components/LinkPreview/LinkPreview'
 import { Checkbox } from '../Checkbox'
 import { TextEditorProps } from './types'
@@ -45,6 +46,7 @@ import { ITemplateVariableSuggestion } from '../TemplateVariablesButton/types'
 import { insertTemplateVariable } from './modifiers/insert-template-expression'
 import { removeUnwantedEmptyLineBeforeAtomic } from './modifiers/remove-unwanted-empty-block-before-atomic'
 import { ToolbarIconButton } from './buttons/ToolbarIconButton'
+import { getSelectedAtomicBlock } from './utils/get-selected-atomic-block'
 
 /**
  * Html wysiwyg editor.
@@ -174,10 +176,14 @@ export const TextEditor = forwardRef(
     )
 
     useEffect(() => {
-      const editor = editorRef.current
+      const pluginsEditor = editorRef.current
 
-      if (autofocus && editor) {
-        editor.focus()
+      if (autofocus && pluginsEditor) {
+        // draft-js-plugins-editor uses UNSAFE_componentWillMount to create
+        // the editor state with proper decorator. If we don't delay running
+        // this, it causes decorator to not being set correctly which has
+        // serious consequences. e.g. links don't render properly.
+        setImmediate(() => pluginsEditor.editor && pluginsEditor.focus())
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -339,23 +345,44 @@ export const TextEditor = forwardRef(
             open={linkEditorOpen}
             onClose={() => {
               setLinkEditorOpen(false)
-              setTimeout(() => {
-                editorRef.current!.focus()
-              })
+
+              const selectedBlock = getSelectedAtomicBlock(editorState)
+
+              if (!selectedBlock || selectedBlock.getType() !== 'atomic') {
+                // atomic block selection is not preserved after focus
+                // so we don't focus if an atomic block is selected
+                setTimeout(() => {
+                  editorRef.current!.focus()
+                })
+              }
             }}
           />
           {!linkEditorOpen && (
-            <InlineEntityPopover editorState={editorState} entityFilter="LINK">
-              {({ entity, close }) => (
+            <DraftJsSelectionPopover
+              editorState={editorState}
+              inlineEntityFilter="LINK"
+              blockFilter={isBlockLinked}
+            >
+              {({
+                entity,
+                close,
+                block
+              }: Parameters<
+                ComponentProps<typeof DraftJsSelectionPopover>['children']
+              >[0]) => (
                 <LinkPreview
                   editorState={editorState}
                   setEditorState={handleChange}
                   onClose={close}
-                  url={entity.getData().url}
+                  url={
+                    (entity && entity.getData().url) ||
+                    (block && block.getData().get('href')) ||
+                    ''
+                  }
                   onEdit={() => setLinkEditorOpen(true)}
                 />
               )}
-            </InlineEntityPopover>
+            </DraftJsSelectionPopover>
           )}
           {appendix}
         </EditorWrapper>
@@ -417,3 +444,5 @@ export const TextEditor = forwardRef(
     )
   }
 )
+
+const isBlockLinked = (block: ContentBlock) => !!block.getData().get('href')

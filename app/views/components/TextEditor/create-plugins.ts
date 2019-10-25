@@ -28,6 +28,7 @@ import createIframePlugin from './plugins/draft-js-iframe-plugin'
 import { createCollapsibleDecorator } from './block-decorators/create-collapsible-decorator'
 import createPasteHtmlPlugin from './plugins/draft-js-paste-html'
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
+import { atomicBlockLinkDecorator } from './block-decorators/atomic-block-link-decorator'
 
 export function createPlugins(
   setLinkEditorOpen: (open: boolean) => void,
@@ -67,6 +68,7 @@ export function createPlugins(
     decorator: composeDecorators(
       withUploadingIndicator,
       resizeablePlugin.decorator,
+      atomicBlockLinkDecorator,
       alignmentPlugin.decorator,
       focusPlugin.decorator,
       blockDndPlugin.decorator
