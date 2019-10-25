@@ -2,8 +2,8 @@ import React from 'react'
 import Masonry from 'react-masonry-css'
 import { CircularProgress } from '@material-ui/core'
 
-import OverlayDrawer from '../OverlayDrawer'
-import Search from '../Grid/Search'
+import OverlayDrawer from 'components/OverlayDrawer'
+import Search from 'components/Grid/Search'
 
 import { GifLayout, Gif } from './styles'
 import useTrendsGifs from './useTrendsGifs'
@@ -47,7 +47,7 @@ function GifDrawer({ isOpen, onClose = () => {}, onSelect = () => {} }: Props) {
               }}
               className="gifs"
             >
-              {items.map((item, i) => (
+              {items.map(item => (
                 <Gif key={item.id} onClick={() => onSelect(gifOutput(item))}>
                   <img src={getGifUrl(item)} alt={item.title} />
                 </Gif>

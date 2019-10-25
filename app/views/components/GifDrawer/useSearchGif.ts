@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { tenorApi } from './helpers'
 import { GifObject, TenorResponse } from './types'
 
 function useSearchGif() {
@@ -13,9 +14,7 @@ function useSearchGif() {
     async function search() {
       setIsSearching(true)
 
-      const response = await fetch(
-        `https://api.tenor.com/v1/search/?q=${searchFor}&key=614KSDZNOPWC&media_filter=minimal`
-      )
+      const response = await fetch(tenorApi('search', [`q=${searchFor}`]))
       const responseData = (await response.json()) as TenorResponse
 
       if (!cancled) {
