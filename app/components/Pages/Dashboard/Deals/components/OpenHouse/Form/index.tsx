@@ -7,6 +7,7 @@ import Flex from 'styled-flex-component'
 
 import fecha from 'fecha'
 
+import { createTaskComment } from 'deals/utils/create-task-comment'
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
 
 import { InputLabel } from 'components/Forms/styled'
@@ -93,20 +94,32 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
       checklist => checklist.checklist_type === 'Selling'
     ) as IDealChecklist
 
-    setIsSaving(true)
-
     const taskTitle = [
-      fecha.format(startTime, 'dddd, MMMM D, YYYY - hh:mmA'),
+      fecha.format(startTime, 'dddd, MMMM D, YYYY  hh:mmA'),
       endTime ? `- ${fecha.format(endTime, 'hh:mmA')}` : ''
     ].join(' ')
+
+    if (props.task) {
+      createTaskComment(
+        props.task,
+        props.user.id,
+        `Please change open house time to:\n ${taskTitle}`
+      )
+
+      props.onUpsertTask(props.task)
+
+      return
+    }
+
+    setIsSaving(true)
 
     const task = await props.createRequestTask({
       checklist,
       userId: props.user.id,
       dealId: props.deal.id,
-      taskType: 'OpenHouse',
+      taskType: 'YardSign',
       taskTitle: `Open House: ${taskTitle}`,
-      taskComment: `Please create a open house for this date:\n${taskTitle}`,
+      taskComment: `Please create an open house for this date:\n${taskTitle}`,
       notifyMessage: 'Back office has been notified'
     })
 
@@ -183,11 +196,11 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
           disabled={isSaving}
           onClick={handleSave}
         >
-          {isSaving
-            ? 'Saving...'
-            : props.task
-            ? 'Request Open House'
-            : 'Update Date and Time'}
+          {isSaving ? (
+            'Creating Request...'
+          ) : (
+            <>{props.task ? 'Request New Time' : 'Request Open House'}</>
+          )}
         </Button>
       </div>
     </div>

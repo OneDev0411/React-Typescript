@@ -11,15 +11,16 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-import fecha from 'fecha'
 
 import { IAppState } from 'reducers/index'
 import { selectDealTasks } from 'reducers/deals/tasks'
 
 import { Divider } from 'components/Divider'
 
-import IconWebLink from 'components/SvgIcons/Weblink/IconWebLink'
+import IconTime from 'components/SvgIcons/Time/IconTime'
 import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
+
+import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 interface StateProps {
   user: IUser
@@ -31,6 +32,8 @@ interface Props {
   activeTeamId: UUID | null
   onClickNewItem(): void
   onSelectItem(task: IDealTask): void
+  onClickEdit(task: IDealTask): void
+  onClickDelete(task: IDealTask): void
 }
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -78,12 +81,11 @@ const useStyles = makeStyles((theme: Theme) => {
 
 function List(props: Props & StateProps) {
   const classes = useStyles()
+  const iconClasses = useIconStyles()
 
   const tasks = useMemo(() => {
-    return props.tasks.filter(task => task.task_type === 'OpenHouse')
+    return props.tasks.filter(task => task.task_type === 'YardSign')
   }, [props.tasks])
-
-  const handleDelete = (task: IDealTask): void => {}
 
   return (
     <div className={classes.root}>
@@ -105,34 +107,30 @@ function List(props: Props & StateProps) {
           <div className={classes.itemContainer}>
             <Typography variant="body1">
               <Flex justifyBetween>
-                <Flex>
-                  {fecha.format(
-                    new Date(task.created_at * 1000),
-                    'dddd, MMMM D, YYYY - hh:mmA'
-                  )}
-                </Flex>
+                <Flex>{task.title}</Flex>
 
                 <Flex className={classes.actions}>
-                  <Tooltip title="Open Client Registration Page">
-                    <IconButton size="small" className={classes.iconButton}>
-                      <IconWebLink />
-                    </IconButton>
-                  </Tooltip>
-
-                  <Tooltip title="Delete">
+                  <Tooltip title="Adjust new date and time">
                     <IconButton
                       size="small"
                       className={classes.iconButton}
-                      onClick={() => handleDelete(task)}
+                      onClick={() => props.onClickEdit(task)}
                     >
-                      <IconDelete />
+                      <IconTime className={iconClasses.small} />
+                    </IconButton>
+                  </Tooltip>
+
+                  <Tooltip title="Cancel Request">
+                    <IconButton
+                      size="small"
+                      className={classes.iconButton}
+                      onClick={() => props.onClickDelete(task)}
+                    >
+                      <IconDelete className={iconClasses.small} />
                     </IconButton>
                   </Tooltip>
                 </Flex>
               </Flex>
-            </Typography>
-            <Typography variant="body1" className={classes.date}>
-              {task.title}
             </Typography>
 
             <div
