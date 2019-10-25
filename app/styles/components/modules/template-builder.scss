@@ -8,13 +8,20 @@
   height: 100%;
   z-index: 100;
 
+  .gjs-sm-header {
+    padding: 0;
+  }
+
+  .gjs-block-categories {
+    color: #333;
+  }
+
   .gjs-blocks-cs {
     .gjs-title {
-      color: #333;
       background: #fff;
       font-size: 1rem;
       font-weight: 400;
-      line-height: 1;
+      line-height: 1.5;
     }
   }
 
@@ -128,6 +135,10 @@
   }
 
   .gjs-two-color, .gjs-color-warn, .gjs-four-color, .gjs-color-main, .gjs-color-contrast {
+    color: #0945eb;
+  }
+
+  .gjs-four-color-h:hover {
     color: #0945eb;
   }
 
