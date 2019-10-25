@@ -1,6 +1,6 @@
 <mj-section>
   <mj-column width="33%">
-    <mj-image align="left" src="https://picsum.photos/id/1015/180/180" />
+    <mj-image rechat-assets="article" align="left" src="https://picsum.photos/id/1015/180/180" />
   </mj-column>
   <mj-column width="66%">
     <mj-text font-family="Roboto" font-weight="Bold" font-size="20px" line-height="27px" color="#242F3C" padding-top=0>

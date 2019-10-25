@@ -3,7 +3,7 @@ import { Editor } from 'grapesjs'
 import { TemplateRenderData } from '../utils/get-template-render-data/index'
 
 import registerListingBlocks, { Options as ListingOptions } from './Listings'
-import registerAgentBlock, { Options as AgentOptions } from './Agent'
+import registerAgentBlocks, { Options as AgentOptions } from './Agents'
 import registerStaticBlocks from './Statics'
 import registerBasicBlocks from './Basics'
 import { BlockOptions } from './types'
@@ -34,6 +34,6 @@ export function registerCustomBlocks(
 
   return {
     listing: registerListingBlocks(editor, renderData, listing),
-    agent: registerAgentBlock(editor, renderData, agent)
+    agent: registerAgentBlocks(editor, renderData, agent)
   }
 }

@@ -1,6 +1,6 @@
 <mj-section>
   <mj-column>
-    <mj-image src="https://picsum.photos/id/1040/4496/3000">
+    <mj-image rechat-assets="article" src="https://picsum.photos/id/1040/4496/3000">
     </mj-image>
     <mj-text font-family="Abril Fatface" font-size="20px" line-height="27px" color="#242F3C">
       When the Dream of Owning a Home...
