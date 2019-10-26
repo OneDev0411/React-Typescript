@@ -12,8 +12,12 @@
     padding: 0;
   }
 
-  .gjs-block-categories {
+  .gjs-block-category, .gjs-blocks-c {
     color: #868686;
+  }
+
+  .gjs-block-category.gjs-open {
+    color: #003CDF;
   }
 
   .gjs-blocks-cs {
