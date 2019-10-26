@@ -6,6 +6,10 @@ module.exports = {
   testURL: 'http://localhost:8080',
   setupFilesAfterEnv: ['./setupTests.js'],
   verbose: true,
+  transform: {
+    '^.+\\.[t|j]sx?$': 'babel-jest',
+    '\\.mjml$': 'jest-raw-loader'
+  },
   moduleNameMapper: {
     '^actions/(.*)': '<rootDir>/app/store_actions/$1',
     '^assets/(.*)': '<rootDir>/app/static/$1',
