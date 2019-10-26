@@ -11,6 +11,6 @@
     </mj-button>
   </mj-column>
   <mj-column width="33%">
-    <mj-image rechat-assets="article" align="left" src="https://picsum.photos/id/1015/180/180" />
+    <mj-image rechat-assets="static" align="left" src="https://picsum.photos/id/1015/180/180" />
   </mj-column>
 </mj-section>

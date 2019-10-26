@@ -1,7 +1,7 @@
 <mj-section>
   <mj-column width="100%">
 
-    <mj-image rechat-assets="article" src="https://picsum.photos/id/283/3823/2538"></mj-image>
+    <mj-image rechat-assets="static" src="https://picsum.photos/id/283/3823/2538"></mj-image>
 
     <mj-text font-family="Abril Fatface" font-size="32px" line-height="43px" color="#242F3C">
       How Much Public Transit Adds to Home Values
