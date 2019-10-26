@@ -43,14 +43,10 @@ describe('BulkEmailComposeForm', () => {
       </TestBed>
     )
 
-    fireEvent.change($.getByTestId('email-recipients-input'), {
-      target: { value: 'd' }
-    })
-
-    const roleSuggestion = await $.findAllByText('deal@role.com')
+    const roleSuggestion = await $.findByText('Mr. Deal Role! (Buyer)')
 
     //  click deal role suggestion
-    fireEvent.click(roleSuggestion[0])
+    fireEvent.click(roleSuggestion)
 
     // submit compose form
     fireEvent.click($.getByTestId('compose-send-email'))
