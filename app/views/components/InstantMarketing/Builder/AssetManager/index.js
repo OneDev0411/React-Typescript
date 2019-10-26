@@ -57,13 +57,13 @@ export const load = async () => {
 
                 const listing =
                   target.attributes.attributes['rechat-listing'] || null
-                const static =
+                const isStatic =
                   target.attributes.attributes['rechat-assets'] != null
 
                 const uploadedAssetsCollection = uploadedAssets.map(asset => ({
                   image: asset.url,
                   listing,
-                  static,
+                  static: isStatic,
                   userFile: true
                 }))
 
