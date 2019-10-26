@@ -23,6 +23,8 @@ templates[dual] = ArticleDual
 templates[left] = ArticleLeft
 templates[right] = ArticleRight
 
+const CATEGORY = 'Articles'
+
 function registerListingBlock(
   editor: Editor,
   renderData: TemplateRenderData,
@@ -41,25 +43,25 @@ export default function registerStaticBlocks(
 ): void {
   registerListingBlock(editor, renderData, {
     label: 'Image Top',
-    category: 'Article',
+    category: CATEGORY,
     blockName: top
   })
 
   registerListingBlock(editor, renderData, {
     label: 'Image Dual',
-    category: 'Article',
+    category: CATEGORY,
     blockName: dual
   })
 
   registerListingBlock(editor, renderData, {
     label: 'Image Left',
-    category: 'Article',
+    category: CATEGORY,
     blockName: left
   })
 
   registerListingBlock(editor, renderData, {
     label: 'Image Right',
-    category: 'Article',
+    category: CATEGORY,
     blockName: right
   })
 

@@ -20,6 +20,8 @@ templates[top] = Top
 templates[right] = Right
 templates[left] = Left
 
+const CATEGORY = 'Listings'
+
 export interface Options {
   onDrop: (model: Model) => void
 }
@@ -70,19 +72,19 @@ export default function registerListingBlocks(
   renderData = _renderData
   registerListingBlock(editor, renderData, {
     label: 'Image Top',
-    category: 'Listing',
+    category: CATEGORY,
     blockName: top
   })
 
   registerListingBlock(editor, renderData, {
     label: 'Image Left',
-    category: 'Listing',
+    category: CATEGORY,
     blockName: left
   })
 
   registerListingBlock(editor, renderData, {
     label: 'Image Right',
-    category: 'Listing',
+    category: CATEGORY,
     blockName: right
   })
 

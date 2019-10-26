@@ -14,6 +14,8 @@ const templates = {}
 
 templates[single] = Single
 
+const CATEGORY = 'Agents'
+
 export interface Options {
   onDrop: (model: Model) => void
 }
@@ -64,7 +66,7 @@ export default function registerAgentBlocks(
   renderData = _renderData
   registerAgentBlock(editor, renderData, {
     label: 'Single Agent',
-    category: 'Agent',
+    category: CATEGORY,
     blockName: single
   })
 
