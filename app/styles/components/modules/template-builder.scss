@@ -13,15 +13,23 @@
   }
 
   .gjs-block-categories {
-    color: #333;
+    color: #868686;
   }
 
   .gjs-blocks-cs {
     .gjs-title {
       background: #fff;
       font-size: 1rem;
-      font-weight: 400;
-      line-height: 1.5;
+      line-height: 1.1875;
+      min-height: 4.5rem;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      .gjs-caret-icon {
+        order: 1;
+      }
     }
   }
 
@@ -143,7 +151,7 @@
   }
 
   .gjs-one-bg, .gjs-three-bg {
-    background: white;
+    background: #f2f2f2;
   }
 
   .gjs-two-color, .gjs-color-warn, .gjs-four-color, .gjs-color-main, .gjs-color-contrast {
@@ -179,5 +187,15 @@
 
   .gjs-highlighter {
     outline: none;
+  }
+
+  .gjs-block {
+    background: #fff;
+    border: none;
+    box-shadow: none;
+
+    &:hover {
+      box-shadow: none;
+    }
   }
 }
