@@ -11,13 +11,15 @@ import ArticleTop from './article-top.mjml'
 import ArticleDual from './article-dual.mjml'
 import ArticleLeft from './article-left.mjml'
 import ArticleRight from './article-right.mjml'
-import SingleImage from './image-single.mjml'
+import Image from './image.mjml'
+import Button from './button.mjml'
 
 const article_top = 'article-image-top'
 const article_dual = 'article-image-dual'
 const article_left = 'article-image-left'
 const article_right = 'article-image-right'
-const image_single = 'image-single'
+const image = 'image'
+const button = 'button'
 
 const templates = {}
 
@@ -26,7 +28,8 @@ templates[article_dual] = ArticleDual
 templates[article_left] = ArticleLeft
 templates[article_right] = ArticleRight
 
-templates[image_single] = SingleImage
+templates[image] = Image
+templates[button] = Button
 
 function registerListingBlock(
   editor: Editor,
@@ -72,8 +75,14 @@ export default function registerStaticBlocks(
   registerListingBlock(editor, renderData, {
     label: 'Image',
     category: BASICS_BLOCK_CATEGORY,
-    blockName: image_single,
+    blockName: image,
     attributes: { class: 'fa fa-image' }
+  })
+
+  registerListingBlock(editor, renderData, {
+    label: 'Button',
+    category: BASICS_BLOCK_CATEGORY,
+    blockName: button
   })
 
   editor.on('block:drag:stop', (model: any, block: any) => {
