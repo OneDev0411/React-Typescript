@@ -1,7 +1,6 @@
 <mj-section>
   <mj-column>
-    <mj-image rechat-assets="static" src="https://picsum.photos/id/1040/4496/3000">
-    </mj-image>
+    <mj-image rechat-assets="static" src="https://picsum.photos/id/1040/4496/3000" />
     <mj-text font-family="Abril Fatface" font-size="20px" line-height="27px" color="#242F3C">
       When the Dream of Owning a Home...
     </mj-text>
@@ -13,8 +12,7 @@
     </mj-button>
   </mj-column>
   <mj-column>
-    <mj-image src="https://picsum.photos/id/1026/4621/3070">
-    </mj-image>
+    <mj-image src="https://picsum.photos/id/1026/4621/3070" />
     <mj-text font-family="Abril Fatface" font-size="20px" line-height="27px" color="#242F3C">
       How Much Public Transit Adds to Home Values
     </mj-text>

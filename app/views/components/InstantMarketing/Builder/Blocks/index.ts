@@ -5,7 +5,6 @@ import { TemplateRenderData } from '../utils/get-template-render-data/index'
 import registerListingBlocks, { Options as ListingOptions } from './Listings'
 import registerAgentBlocks, { Options as AgentOptions } from './Agents'
 import registerStaticBlocks from './Statics'
-import registerBasicBlocks from './Basics'
 import registerGifBlock, { Options as GifOptions } from './Gif'
 import { BlockOptions } from './types'
 
@@ -31,7 +30,6 @@ export function registerCustomBlocks(
   renderData: TemplateRenderData,
   { listing, agent, gif }: Options
 ) {
-  registerBasicBlocks(editor)
   registerStaticBlocks(editor, renderData)
 
   return {

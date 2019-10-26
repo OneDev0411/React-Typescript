@@ -13,6 +13,8 @@ import ArticleLeft from './article-left.mjml'
 import ArticleRight from './article-right.mjml'
 import Image from './image.mjml'
 import Button from './button.mjml'
+import GroupSocial from './group-social.mjml'
+import GroupSocialElement from './group-social-element.mjml'
 
 const articleTopBlockName = 'article-image-top'
 const articleDualBlockName = 'article-image-dual'
@@ -20,6 +22,8 @@ const articleLeftBlockName = 'article-image-left'
 const articleRightBlockName = 'article-image-right'
 const imageBlockName = 'image'
 const buttonBlockName = 'button'
+const groupSocialBlockName = 'group-social'
+const groupSocialElementBlockName = 'group-social-element'
 
 const templates = {}
 
@@ -30,6 +34,8 @@ templates[articleRightBlockName] = ArticleRight
 
 templates[imageBlockName] = Image
 templates[buttonBlockName] = Button
+templates[groupSocialBlockName] = GroupSocial
+templates[groupSocialElementBlockName] = GroupSocialElement
 
 function registerStaticBlock(
   editor: Editor,
@@ -82,6 +88,20 @@ export default function registerStaticBlocks(
     label: 'Button',
     category: BASICS_BLOCK_CATEGORY,
     blockName: buttonBlockName
+  })
+
+  registerStaticBlock(editor, {
+    label: 'Group Social',
+    category: BASICS_BLOCK_CATEGORY,
+    blockName: groupSocialBlockName,
+    attributes: { class: 'fa fa-share-alt' }
+  })
+
+  registerStaticBlock(editor, {
+    label: 'Group Social Element',
+    category: BASICS_BLOCK_CATEGORY,
+    blockName: groupSocialElementBlockName,
+    attributes: { class: 'fa fa-share-alt-square' }
   })
 
   editor.on('block:drag:stop', (model: any, block: any) => {

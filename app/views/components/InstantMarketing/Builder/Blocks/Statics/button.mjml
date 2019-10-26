@@ -1,3 +1,1 @@
-<mj-button
-  color="{{getColor('beta.tb')}}"
-  background-color="{{getColor('beta.bg')}}">Click Here</mj-button>
+<mj-button color="{{getColor('beta.tb')}}" background-color="{{getColor('beta.bg')}}">Click Here</mj-button>
