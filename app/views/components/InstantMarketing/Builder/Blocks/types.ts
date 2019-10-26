@@ -3,4 +3,7 @@ export interface BlockOptions {
   label: string
   category: string
   blockName: string
+  attributes?: {
+    class: string
+  }
 }
