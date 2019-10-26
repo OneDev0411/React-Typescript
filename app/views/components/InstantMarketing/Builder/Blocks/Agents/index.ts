@@ -68,7 +68,7 @@ export default function registerAgentBlocks(
     blockName: single
   })
 
-  editor.on('block:drag:stop', (model?: Model, block) => {
+  editor.on('block:drag:stop', (model: Model, block) => {
     if (!model) {
       return
     }
