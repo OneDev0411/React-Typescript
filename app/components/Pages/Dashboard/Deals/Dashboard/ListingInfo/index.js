@@ -1,5 +1,6 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
+import { Box } from '@material-ui/core'
 
 import { ListingImage } from './Image'
 import Address from './Address'
@@ -9,9 +10,9 @@ export function ListingInfo(props) {
     <Flex alignCenter>
       <ListingImage deal={props.deal} />
 
-      <div style={{ padding: '0 1rem' }}>
+      <Box px={2}>
         <Address deal={props.deal} />
-      </div>
+      </Box>
     </Flex>
   )
 }

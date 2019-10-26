@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 
+import { ThunkDispatch } from 'redux-thunk'
+import { AnyAction } from 'redux'
+
 import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
 import DayPicker from 'react-day-picker'
 import Flex from 'styled-flex-component'
@@ -25,23 +28,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  createRequestTask({
-    checklist,
-    userId,
-    dealId,
-    taskType,
-    taskTitle,
-    taskComment,
-    notifyMessage
-  }: {
-    checklist: IDealChecklist
-    userId: UUID
-    dealId: UUID
-    taskType: string
-    taskTitle: string
-    taskComment: string
-    notifyMessage: string
-  }): (dispatch: any) => Promise<IDealTask | null>
+  createRequestTask: IAsyncActionProp<typeof createRequestTask>
 }
 
 interface Props {
@@ -92,7 +79,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
   const handleSave = async (): Promise<void> => {
     const checklist = props.checklists.find(
       checklist => checklist.checklist_type === 'Selling'
-    ) as IDealChecklist
+    )!
 
     const taskTitle = [
       fecha.format(startTime, 'dddd, MMMM D, YYYY  hh:mmA'),
@@ -150,7 +137,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
           <TimeInput
             id="start-time"
             initialDate={startTime}
-            onChange={datetime => setStartTime(datetime)}
+            onChange={setStartTime}
           />
         </div>
       </div>
@@ -207,6 +194,13 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
   )
 }
 
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+  return {
+    createRequestTask: (...args: Parameters<typeof createRequestTask>) =>
+      dispatch(createRequestTask(...args))
+  }
+}
+
 function mapStateToProps(
   { user, deals }: IAppState,
   ownProps: Props
@@ -219,5 +213,5 @@ function mapStateToProps(
 
 export default connect<StateProps, DispatchProps, Props>(
   mapStateToProps,
-  { createRequestTask }
+  mapDispatchToProps
 )(OpenHouseForm)

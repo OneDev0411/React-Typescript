@@ -19,7 +19,7 @@ import OpenHouseIcon from 'components/SvgIcons/OpenHouseOutline/IconOpenHouseOut
 
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
-import { getStylesDependedSize } from 'components/Button/ActionButton'
+import { getSizeDependentStyles } from 'components/Button/ActionButton'
 
 import List from './List'
 import Form from './Form'
@@ -41,7 +41,7 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) => {
   return createStyles({
     button: {
-      ...getStylesDependedSize({}),
+      ...getSizeDependentStyles({}),
       lineHeight: 'inherit',
       borderColor: theme.palette.common.black
     }
@@ -109,7 +109,7 @@ function OpenHouses({
   return (
     <>
       <DropdownToggleButton
-        isActive={false}
+        isActive={Boolean(anchorEl)}
         variant="outlined"
         color="secondary"
         size="small"

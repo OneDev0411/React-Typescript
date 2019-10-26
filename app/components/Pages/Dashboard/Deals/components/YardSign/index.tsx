@@ -11,7 +11,7 @@ import { setSelectedTask } from 'actions/deals'
 import YardSignIcon from 'components/SvgIcons/YardSign/YardSignIcon'
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
-import { getStylesDependedSize } from 'components/Button/ActionButton'
+import { getSizeDependentStyles } from 'components/Button/ActionButton'
 
 import Form from './Create'
 import List from './List'
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) => {
   return createStyles({
     button: {
       // same as action-button in components/button to make it consistent with other buttons
-      ...getStylesDependedSize({}),
+      ...getSizeDependentStyles({}),
       lineHeight: 'inherit',
       borderColor: theme.palette.common.black
     }
@@ -77,7 +77,7 @@ function YardSign({ deal, style, setSelectedTask }: Props & DispatchProps) {
   return (
     <>
       <DropdownToggleButton
-        isActive={false}
+        isActive={Boolean(anchorEl)}
         variant="outlined"
         color="secondary"
         size="small"
