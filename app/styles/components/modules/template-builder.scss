@@ -18,17 +18,20 @@
 
   .gjs-block-category.gjs-open {
     color: #003CDF;
+    border: none;
   }
 
   .gjs-blocks-cs {
     .gjs-title {
       background: #fff;
+      border: none;
       font-size: 1rem;
       line-height: 1.1875;
-      min-height: 4.5rem;
+      min-height: 3.5rem;
       display: flex;
       flex-direction: row;
       align-items: center;
+      margin: 4px 0;
       justify-content: space-between;
 
       .gjs-caret-icon {
