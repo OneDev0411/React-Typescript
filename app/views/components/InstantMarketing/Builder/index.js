@@ -16,6 +16,8 @@ import TeamAgents from 'components/TeamAgents'
 
 import { getActiveTeam } from 'utils/user-teams'
 
+import GifDrawer from 'components/GifDrawer'
+
 import nunjucks from '../helpers/nunjucks'
 import { getBrandColors } from '../helpers/get-brand-colors'
 
@@ -52,7 +54,8 @@ class Builder extends React.Component {
       templateHtmlCss: '',
       loadedListingsAssets: [],
       isListingDrawerOpen: false,
-      isAgentDrawerOpen: false
+      isAgentDrawerOpen: false,
+      isGifDrawerOpen: false
     }
 
     this.keyframe = 0
@@ -207,6 +210,11 @@ class Builder extends React.Component {
       agent: {
         onDrop: () => {
           this.setState({ isAgentDrawerOpen: true })
+        }
+      },
+      gif: {
+        onDrop: () => {
+          this.setState({ isGifDrawerOpen: true })
         }
       }
     })
@@ -630,6 +638,17 @@ class Builder extends React.Component {
               }}
             />
           )}
+          <GifDrawer
+            isOpen={this.state.isGifDrawerOpen}
+            onClose={() => {
+              this.blocks.gif.selectHandler()
+              this.setState({ isGifDrawerOpen: false })
+            }}
+            onSelect={gifItem => {
+              this.blocks.gif.selectHandler(gifItem)
+              this.setState({ isGifDrawerOpen: false })
+            }}
+          />
           <Header>
             <h1>{this.props.headerTitle}</h1>
 

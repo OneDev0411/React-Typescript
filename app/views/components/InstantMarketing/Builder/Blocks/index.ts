@@ -6,6 +6,7 @@ import registerListingBlocks, { Options as ListingOptions } from './Listings'
 import registerAgentBlocks, { Options as AgentOptions } from './Agents'
 import registerStaticBlocks from './Statics'
 import registerBasicBlocks from './Basics'
+import registerGifBlock, { Options as GifOptions } from './Gif'
 import { BlockOptions } from './types'
 
 const BLOCK_IDS_TO_REMOVE = [
@@ -18,6 +19,7 @@ const BLOCK_IDS_TO_REMOVE = [
 interface Options {
   listing: ListingOptions
   agent: AgentOptions & BlockOptions
+  gif: GifOptions
 }
 
 export function removeUnusedBlocks(editor: Editor) {
@@ -27,13 +29,14 @@ export function removeUnusedBlocks(editor: Editor) {
 export function registerCustomBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
-  { listing, agent }: Options
+  { listing, agent, gif }: Options
 ) {
   registerBasicBlocks(editor)
   registerStaticBlocks(editor, renderData)
 
   return {
     listing: registerListingBlocks(editor, renderData, listing),
-    agent: registerAgentBlocks(editor, renderData, agent)
+    agent: registerAgentBlocks(editor, renderData, agent),
+    gif: registerGifBlock(editor, gif)
   }
 }
