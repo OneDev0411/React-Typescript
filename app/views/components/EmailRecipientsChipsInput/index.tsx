@@ -15,7 +15,7 @@ import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { getSavedSegments } from 'actions/filter-segments/get-saved-segment'
 import { IAppState } from 'reducers'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
-import { getSegments, isListFetched } from 'reducers/filter-segments'
+import { getSegments, areListsFetched } from 'reducers/filter-segments'
 import { useElementWidth } from 'hooks/use-element-width'
 
 import { ChipsInput } from '../ChipsInput'
@@ -265,7 +265,7 @@ const mapStateToProps = ({ contacts }: IAppState) => {
     tags,
     lists,
     isLoadingTags,
-    areListsFetched: isListFetched(contacts.filterSegments)
+    areListsFetched: areListsFetched(contacts.filterSegments)
   }
 }
 
