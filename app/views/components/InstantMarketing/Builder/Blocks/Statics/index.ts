@@ -14,26 +14,25 @@ import ArticleRight from './article-right.mjml'
 import Image from './image.mjml'
 import Button from './button.mjml'
 
-const article_top = 'article-image-top'
-const article_dual = 'article-image-dual'
-const article_left = 'article-image-left'
-const article_right = 'article-image-right'
-const image = 'image'
-const button = 'button'
+const articleTopBlockName = 'article-image-top'
+const articleDualBlockName = 'article-image-dual'
+const articleLeftBlockName = 'article-image-left'
+const articleRightBlockName = 'article-image-right'
+const imageBlockName = 'image'
+const buttonBlockName = 'button'
 
 const templates = {}
 
-templates[article_top] = ArticleTop
-templates[article_dual] = ArticleDual
-templates[article_left] = ArticleLeft
-templates[article_right] = ArticleRight
+templates[articleTopBlockName] = ArticleTop
+templates[articleDualBlockName] = ArticleDual
+templates[articleLeftBlockName] = ArticleLeft
+templates[articleRightBlockName] = ArticleRight
 
-templates[image] = Image
-templates[button] = Button
+templates[imageBlockName] = Image
+templates[buttonBlockName] = Button
 
-function registerListingBlock(
+function registerStaticBlock(
   editor: Editor,
-  renderData: TemplateRenderData,
   { label, category, blockName, attributes }: BlockOptions
 ): void {
   editor.BlockManager.add(blockName, {
@@ -48,41 +47,41 @@ export default function registerStaticBlocks(
   editor: Editor,
   renderData: TemplateRenderData
 ): void {
-  registerListingBlock(editor, renderData, {
+  registerStaticBlock(editor, {
     label: 'Image Top',
     category: ARTICLES_BLOCK_CATEGORY,
-    blockName: article_top
+    blockName: articleTopBlockName
   })
 
-  registerListingBlock(editor, renderData, {
+  registerStaticBlock(editor, {
     label: 'Image Dual',
     category: ARTICLES_BLOCK_CATEGORY,
-    blockName: article_dual
+    blockName: articleDualBlockName
   })
 
-  registerListingBlock(editor, renderData, {
+  registerStaticBlock(editor, {
     label: 'Image Left',
     category: ARTICLES_BLOCK_CATEGORY,
-    blockName: article_left
+    blockName: articleLeftBlockName
   })
 
-  registerListingBlock(editor, renderData, {
+  registerStaticBlock(editor, {
     label: 'Image Right',
     category: ARTICLES_BLOCK_CATEGORY,
-    blockName: article_right
+    blockName: articleRightBlockName
   })
 
-  registerListingBlock(editor, renderData, {
+  registerStaticBlock(editor, {
     label: 'Image',
     category: BASICS_BLOCK_CATEGORY,
-    blockName: image,
+    blockName: imageBlockName,
     attributes: { class: 'fa fa-image' }
   })
 
-  registerListingBlock(editor, renderData, {
+  registerStaticBlock(editor, {
     label: 'Button',
     category: BASICS_BLOCK_CATEGORY,
-    blockName: button
+    blockName: buttonBlockName
   })
 
   editor.on('block:drag:stop', (model: any, block: any) => {
