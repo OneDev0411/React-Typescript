@@ -37,6 +37,8 @@ declare type IEmailRecipientInput =
 
 declare type IEmailCampaignRecipientAssociation = 'contact' | 'list' | 'brand'
 
+type IEmailRecipientSendType = 'CC' | 'BCC' | 'To'
+
 declare type IEmailRecipient<
   Associations extends IEmailCampaignRecipientAssociation = ''
 > = {
@@ -47,7 +49,7 @@ declare type IEmailRecipient<
   email: null | string
   id: UUID
   ord: string
-  send_type: 'CC' | 'BCC' | 'To'
+  send_type: IEmailRecipientSendType
   recipient_type: IEmailRecipientType
   tag: string
   type: 'email_campaign_recipient'
