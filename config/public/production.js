@@ -32,5 +32,8 @@ export default {
   },
   fb: {
     app_id: process.env.FB_APP_ID
+  },
+  tenor: {
+    api_key: process.env.TENOR_API_KEY
   }
 }

@@ -105,8 +105,8 @@ function getTaskLatestFiles(data: Params): IDealFile[] {
 function getDocumentLatestFile(data: Params): IDealFile {
   const document = {
     ...data.document,
-    task: data.task.id,
-    checklist: data.task.checklist,
+    task: data.task ? data.task.id : null,
+    checklist: data.task ? data.task.checklist : null,
     source: 'attachment'
   } as IDealFile
 

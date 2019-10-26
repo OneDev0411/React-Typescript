@@ -30,14 +30,13 @@ describe('TextEditor', () => {
   })
 
   it('should show image picker button if enableImage is true, and it should open image picker dialog', done => {
-    const { getByTestId, queryByText, container } = render(
+    const { getByTestId, container } = render(
       <TestBed>
         <TextEditor enableImage />
       </TestBed>
     )
 
     fireEvent.click(getByTestId('add-image-button'))
-    expect(queryByText('Add an image')).not.toBeNull()
 
     const file = new File(
       [

@@ -7,6 +7,7 @@ export const LoadingWrapper = styled.span<{ uploading?: boolean }>`
     opacity: ${({ uploading }) => (uploading ? '.3' : '1')};
   }
   position: relative;
+  display: inline-block;
   ${IconCircleSpinner} {
     position: absolute;
     left: 50%;
