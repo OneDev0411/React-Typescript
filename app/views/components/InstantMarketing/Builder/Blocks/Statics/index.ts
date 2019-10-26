@@ -4,6 +4,7 @@ import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
 import { TemplateRenderData } from '../../utils/get-template-render-data/index'
 
+import { ARTICLES_BLOCK_CATEGORY } from '../../constants'
 import { BlockOptions } from '../types'
 
 import ArticleTop from './article-top.mjml'
@@ -23,8 +24,6 @@ templates[dual] = ArticleDual
 templates[left] = ArticleLeft
 templates[right] = ArticleRight
 
-const CATEGORY = 'Articles'
-
 function registerListingBlock(
   editor: Editor,
   renderData: TemplateRenderData,
@@ -43,25 +42,25 @@ export default function registerStaticBlocks(
 ): void {
   registerListingBlock(editor, renderData, {
     label: 'Image Top',
-    category: CATEGORY,
+    category: ARTICLES_BLOCK_CATEGORY,
     blockName: top
   })
 
   registerListingBlock(editor, renderData, {
     label: 'Image Dual',
-    category: CATEGORY,
+    category: ARTICLES_BLOCK_CATEGORY,
     blockName: dual
   })
 
   registerListingBlock(editor, renderData, {
     label: 'Image Left',
-    category: CATEGORY,
+    category: ARTICLES_BLOCK_CATEGORY,
     blockName: left
   })
 
   registerListingBlock(editor, renderData, {
     label: 'Image Right',
-    category: CATEGORY,
+    category: ARTICLES_BLOCK_CATEGORY,
     blockName: right
   })
 

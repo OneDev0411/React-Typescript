@@ -3,6 +3,7 @@ import { Model } from 'backbone'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
+import { LISTINGS_BLOCK_CATEGORY } from '../../constants'
 import { TemplateRenderData } from '../../utils/get-template-render-data/index'
 import { BlockOptions } from '../types'
 
@@ -19,8 +20,6 @@ const templates = {}
 templates[top] = Top
 templates[right] = Right
 templates[left] = Left
-
-const CATEGORY = 'Listings'
 
 export interface Options {
   onDrop: (model: Model) => void
@@ -72,19 +71,19 @@ export default function registerListingBlocks(
   renderData = _renderData
   registerListingBlock(editor, renderData, {
     label: 'Image Top',
-    category: CATEGORY,
+    category: LISTINGS_BLOCK_CATEGORY,
     blockName: top
   })
 
   registerListingBlock(editor, renderData, {
     label: 'Image Left',
-    category: CATEGORY,
+    category: LISTINGS_BLOCK_CATEGORY,
     blockName: left
   })
 
   registerListingBlock(editor, renderData, {
     label: 'Image Right',
-    category: CATEGORY,
+    category: LISTINGS_BLOCK_CATEGORY,
     blockName: right
   })
 

@@ -1,6 +1,6 @@
 import { Editor } from 'grapesjs'
 
-import { BASIC_BLOCKS_CATEGORY } from '../../constants'
+import { BASICS_BLOCK_CATEGORY } from '../../constants'
 
 export default function registerBasicBlocks(editor: Editor, opts: object = {}) {
   editor.BlockManager.add('mj-social-group', {
@@ -11,7 +11,7 @@ export default function registerBasicBlocks(editor: Editor, opts: object = {}) {
         <mj-social-element name="twitter"></mj-social-element>
       </mj-social>`,
     attributes: { class: 'fa fa-share-alt' },
-    category: BASIC_BLOCKS_CATEGORY,
+    category: BASICS_BLOCK_CATEGORY,
     ...opts
   })
 
@@ -19,7 +19,7 @@ export default function registerBasicBlocks(editor: Editor, opts: object = {}) {
     label: 'Group Social Element',
     content: '<mj-social-element name="facebook" />',
     attributes: { class: 'fa fa-share-alt-square' },
-    category: BASIC_BLOCKS_CATEGORY,
+    category: BASICS_BLOCK_CATEGORY,
     ...opts
   })
 }

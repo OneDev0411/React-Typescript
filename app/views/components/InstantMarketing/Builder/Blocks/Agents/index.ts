@@ -4,6 +4,7 @@ import { Model } from 'backbone'
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
 import { TemplateRenderData } from '../../utils/get-template-render-data/index'
+import { AGENTS_BLOCK_CATEGORY } from '../../constants'
 import { BlockOptions } from '../types'
 
 import Single from './single.mjml'
@@ -13,8 +14,6 @@ const single = 'rechat-agent-single'
 const templates = {}
 
 templates[single] = Single
-
-const CATEGORY = 'Agents'
 
 export interface Options {
   onDrop: (model: Model) => void
@@ -66,7 +65,7 @@ export default function registerAgentBlocks(
   renderData = _renderData
   registerAgentBlock(editor, renderData, {
     label: 'Single Agent',
-    category: CATEGORY,
+    category: AGENTS_BLOCK_CATEGORY,
     blockName: single
   })
 

@@ -35,7 +35,7 @@ import {
 } from './styled'
 
 import SocialActions from './SocialActions'
-import { SOCIAL_NETWORKS, BASIC_BLOCKS_CATEGORY } from './constants'
+import { SOCIAL_NETWORKS, BASICS_BLOCK_CATEGORY } from './constants'
 import { removeUnusedBlocks, registerCustomBlocks } from './Blocks'
 import getTemplateRenderData from './utils/get-template-render-data'
 
@@ -104,7 +104,7 @@ class Builder extends React.Component {
       pluginsOpts: {
         [GrapesjsMjml]: {
           columnsPadding: false,
-          categoryLabel: BASIC_BLOCKS_CATEGORY
+          categoryLabel: BASICS_BLOCK_CATEGORY
         }
       }
     })
