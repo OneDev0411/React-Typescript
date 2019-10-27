@@ -8,7 +8,8 @@ module.exports = {
   verbose: true,
   transform: {
     '^.+\\.[t|j]sx?$': 'babel-jest',
-    '\\.mjml$': 'jest-raw-loader'
+    '\\.mjml$': 'jest-raw-loader',
+    '\\.svg$': 'jest-raw-loader'
   },
   moduleNameMapper: {
     '^actions/(.*)': '<rootDir>/app/store_actions/$1',
