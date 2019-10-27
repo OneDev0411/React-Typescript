@@ -38,7 +38,8 @@ import {
 
 import SocialActions from './SocialActions'
 import { SOCIAL_NETWORKS, BASICS_BLOCK_CATEGORY } from './constants'
-import { removeUnusedBlocks, registerCustomBlocks } from './Blocks'
+import { registerCustomBlocks } from './Blocks'
+import { removeUnusedBlocks } from './Blocks/utils'
 import getTemplateRenderData from './utils/get-template-render-data'
 
 class Builder extends React.Component {

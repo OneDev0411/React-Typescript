@@ -20,8 +20,8 @@ interface GifBlock {
 
 export default function registerGifBlock(editor: Editor, { onDrop }: Options) {
   editor.BlockManager.add(blockName, {
-    category: BASICS_BLOCK_CATEGORY,
     label: 'GIF Animation',
+    category: BASICS_BLOCK_CATEGORY,
     content: `<div data-block="${blockName}"></div>`
   })
 

@@ -3,17 +3,17 @@ import { Model } from 'backbone'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
-import { TemplateRenderData } from '../../utils/get-template-render-data/index'
+import { TemplateRenderData } from '../../utils/get-template-render-data'
 import { AGENTS_BLOCK_CATEGORY } from '../../constants'
 import { BlockOptions } from '../types'
 
 import Single from './single.mjml'
 
-const single = 'rechat-agent-single'
+export const agentSingleBlockName = 'rechat-agent-single'
 
 const templates = {}
 
-templates[single] = Single
+templates[agentSingleBlockName] = Single
 
 export interface Options {
   onDrop: (model: Model) => void
@@ -25,7 +25,6 @@ interface AgentBlock {
 
 function registerAgentBlock(
   editor: Editor,
-  renderData: TemplateRenderData,
   { label, category, blockName }: BlockOptions
 ): void {
   editor.BlockManager.add(blockName, {
@@ -63,10 +62,10 @@ export default function registerAgentBlocks(
   { onDrop }: Options
 ): AgentBlock {
   renderData = _renderData
-  registerAgentBlock(editor, renderData, {
+  registerAgentBlock(editor, {
     label: 'Single Agent',
     category: AGENTS_BLOCK_CATEGORY,
-    blockName: single
+    blockName: agentSingleBlockName
   })
 
   editor.on('block:drag:stop', (model: Model, block) => {

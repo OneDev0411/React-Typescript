@@ -11,15 +11,15 @@ import Top from './top.mjml'
 import Right from './right.mjml'
 import Left from './left.mjml'
 
-const top = 'rechat-listing-image-top'
-const left = 'rechat-listing-image-left'
-const right = 'rechat-listing-image-right'
+export const listingTopBlockName = 'rechat-listing-image-top'
+export const listingLeftBlockName = 'rechat-listing-image-left'
+export const listingRightBlockName = 'rechat-listing-image-right'
 
 const templates = {}
 
-templates[top] = Top
-templates[right] = Right
-templates[left] = Left
+templates[listingTopBlockName] = Top
+templates[listingLeftBlockName] = Left
+templates[listingRightBlockName] = Right
 
 export interface Options {
   onDrop: (model: Model) => void
@@ -31,7 +31,6 @@ interface ListingBlock {
 
 function registerListingBlock(
   editor: Editor,
-  renderData: TemplateRenderData,
   { label, category, blockName }: BlockOptions
 ): void {
   editor.BlockManager.add(blockName, {
@@ -69,22 +68,22 @@ export default function registerListingBlocks(
   { onDrop }: Options
 ): ListingBlock {
   renderData = _renderData
-  registerListingBlock(editor, renderData, {
+  registerListingBlock(editor, {
     label: 'Image Top',
     category: LISTINGS_BLOCK_CATEGORY,
-    blockName: top
+    blockName: listingTopBlockName
   })
 
-  registerListingBlock(editor, renderData, {
+  registerListingBlock(editor, {
     label: 'Image Left',
     category: LISTINGS_BLOCK_CATEGORY,
-    blockName: left
+    blockName: listingLeftBlockName
   })
 
-  registerListingBlock(editor, renderData, {
+  registerListingBlock(editor, {
     label: 'Image Right',
     category: LISTINGS_BLOCK_CATEGORY,
-    blockName: right
+    blockName: listingRightBlockName
   })
 
   editor.on('block:drag:stop', (model: Model, block) => {

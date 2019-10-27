@@ -13,17 +13,17 @@ import ArticleLeft from './article-left.mjml'
 import ArticleRight from './article-right.mjml'
 import Image from './image.mjml'
 import Button from './button.mjml'
-import GroupSocial from './group-social.mjml'
-import GroupSocialElement from './group-social-element.mjml'
+import SocialGroup from './social-group.mjml'
+import SocialGroupElement from './social-group-element.mjml'
 
-const articleTopBlockName = 'article-image-top'
-const articleDualBlockName = 'article-image-dual'
-const articleLeftBlockName = 'article-image-left'
-const articleRightBlockName = 'article-image-right'
-const imageBlockName = 'image'
-const buttonBlockName = 'button'
-const groupSocialBlockName = 'group-social'
-const groupSocialElementBlockName = 'group-social-element'
+export const articleTopBlockName = 'rechat-article-image-top'
+export const articleDualBlockName = 'rechat-article-image-dual'
+export const articleLeftBlockName = 'rechat-article-image-left'
+export const articleRightBlockName = 'rechat-article-image-right'
+export const imageBlockName = 'mj-image'
+export const buttonBlockName = 'mj-button'
+export const socialGroupBlockName = 'mj-social-group'
+export const socialGroupElementBlockName = 'mj-social-element'
 
 const templates = {}
 
@@ -34,17 +34,16 @@ templates[articleRightBlockName] = ArticleRight
 
 templates[imageBlockName] = Image
 templates[buttonBlockName] = Button
-templates[groupSocialBlockName] = GroupSocial
-templates[groupSocialElementBlockName] = GroupSocialElement
+templates[socialGroupBlockName] = SocialGroup
+templates[socialGroupElementBlockName] = SocialGroupElement
 
 function registerStaticBlock(
   editor: Editor,
-  { label, category, blockName, attributes }: BlockOptions
+  { label, category, blockName }: BlockOptions
 ): void {
   editor.BlockManager.add(blockName, {
-    category,
     label,
-    attributes,
+    category,
     content: `<div data-block="${blockName}"></div>`
   })
 }
@@ -80,29 +79,25 @@ export default function registerStaticBlocks(
   registerStaticBlock(editor, {
     label: 'Image',
     category: BASICS_BLOCK_CATEGORY,
-    blockName: imageBlockName,
-    attributes: { class: 'fa fa-image' }
+    blockName: imageBlockName
   })
 
   registerStaticBlock(editor, {
     label: 'Button',
     category: BASICS_BLOCK_CATEGORY,
-    blockName: buttonBlockName,
-    attributes: { class: 'block-button block-basic-button' }
+    blockName: buttonBlockName
   })
 
   registerStaticBlock(editor, {
-    label: 'Group Social',
+    label: 'Social Group',
     category: BASICS_BLOCK_CATEGORY,
-    blockName: groupSocialBlockName,
-    attributes: { class: 'fa fa-share-alt' }
+    blockName: socialGroupBlockName
   })
 
   registerStaticBlock(editor, {
-    label: 'Group Social Element',
+    label: 'Social Group Element',
     category: BASICS_BLOCK_CATEGORY,
-    blockName: groupSocialElementBlockName,
-    attributes: { class: 'fa fa-share-alt-square' }
+    blockName: socialGroupElementBlockName
   })
 
   editor.on('block:drag:stop', (model: any, block: any) => {

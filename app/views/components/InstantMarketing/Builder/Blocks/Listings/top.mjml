@@ -1,6 +1,6 @@
 <mj-section>
   <mj-column width="100%">
-    <mj-image height="220px" rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}" align="center" padding=0>
+    <mj-image rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}" align="center" padding=0>
     </mj-image>
   </mj-column>
 

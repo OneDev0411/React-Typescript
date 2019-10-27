@@ -227,7 +227,7 @@ declare module 'grapesjs' {
     remove(id: string): object
     getCategories(): Array<object>
     getContainer(): HTMLElement
-    render(): HTMLElement
+    render(blocks?: Array<any>): HTMLElement
   }
 
   export interface BlockOptions {
