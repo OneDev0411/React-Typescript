@@ -13,7 +13,7 @@ export const Container = styled.div`
   background-color: #fff;
 
   ${props =>
-    props.hideToolbar &&
+    props.disableDesignerMode &&
     `
   .gjs-toolbar {
     display: none;
@@ -21,6 +21,14 @@ export const Container = styled.div`
   
   .gjs-blocks-cs {
     display: none;
+  }
+
+  .gjs-badge {
+    /* They change display: block by code,
+     * but we want to hide it.
+     * We do it by setting visibility
+     */
+    // visibility: hidden;
   }
   `}
 `

@@ -25,7 +25,7 @@
   }
 
   .gjs-block-category.gjs-open {
-    color: #003CDF;
+    color: #0945eb;
     border: none;
   }
 
@@ -68,6 +68,18 @@
 
   .gjs-pn-options {
     display: none;
+  }
+
+  .gjs-pn-devices-c {
+    font-size: 1rem;
+    background: #e6e6e6;
+    border-radius: 0px 0 4px 4px;
+
+    .gjs-pn-buttons {
+      display: flex;
+      flex-direction: column;
+      height: 7rem;
+    }
   }
 
   .gjs-pn-panel {
@@ -191,8 +203,12 @@
     color: #0945eb;
   }
 
+  .gjs-badge, .gjs-toolbar {
+    background-color: #0945eb;
+  }
+
   .gjs-rte-toolbar {
-    display: none
+    display: none;
   }
 
   .gjs-pn-views, .gjs-pn-views-container {
@@ -204,14 +220,6 @@
     width: 75%;
     height: 100%;
     top: 0;
-  }
-
-  .gjs-badge {
-    /* They change display: block by code,
-     * but we want to hide it.
-     * We do it by setting visibility
-     */
-    visibility: hidden;
   }
 
   .gjs-highlighter {

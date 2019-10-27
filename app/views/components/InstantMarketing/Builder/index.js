@@ -603,7 +603,7 @@ class Builder extends React.Component {
       <Portal root="marketing-center">
         <Container
           className="template-builder"
-          hideToolbar={!this.isEmailTemplate || !this.isMjmlTemplate}
+          disableDesignerMode={!this.isEmailTemplate || !this.isMjmlTemplate}
         >
           <SearchListingDrawer
             mockListings
