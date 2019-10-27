@@ -9,7 +9,7 @@ import registerGifBlock, { Options as GifOptions } from './Gif'
 import { BlockOptions } from './types'
 
 const BLOCK_IDS_TO_REMOVE = [
-  'button',
+  'mj-button',
   'mj-social-group',
   'mj-social-element',
   'mj-navbar',
