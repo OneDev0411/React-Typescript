@@ -10,6 +10,7 @@ import { BlockOptions } from './types'
 
 const BLOCK_IDS_TO_REMOVE = [
   'mj-button',
+  'mj-image',
   'mj-social-group',
   'mj-social-element',
   'mj-navbar',
