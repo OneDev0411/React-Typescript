@@ -1,5 +1,1 @@
-<mj-section>
-  <mj-column width="100%">
-    <mj-image src="{{url}}"></mj-image>
-  </mj-column>
-</mj-section>
+<mj-image src="{{url}}"></mj-image>
