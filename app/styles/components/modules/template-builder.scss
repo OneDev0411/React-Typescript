@@ -1,5 +1,13 @@
 @import '../../../../node_modules/grapesjs/dist/css/grapes.min.css';
 
+@mixin block-button-background($image-name) {
+  background-image: url('/static/images/marketing/editor/blocks/#{$image-name}.svg');
+
+  &:hover {
+    background-image: url('/static/images/marketing/editor/blocks/#{$image-name}-active.svg');
+  }
+}
+
 .template-builder {
   position: fixed;
   top: 0;
@@ -19,6 +27,20 @@
   .gjs-block-category.gjs-open {
     color: #003CDF;
     border: none;
+  }
+
+  .gjs-block-category {
+    .block-button {
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+      padding-top: 4rem;
+      transition: background-image 0.1s ease-in;
+    }
+
+    .block-basic-button {
+      @include block-button-background('basic-button');
+    }
   }
 
   .gjs-blocks-cs {

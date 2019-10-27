@@ -87,7 +87,8 @@ export default function registerStaticBlocks(
   registerStaticBlock(editor, {
     label: 'Button',
     category: BASICS_BLOCK_CATEGORY,
-    blockName: buttonBlockName
+    blockName: buttonBlockName,
+    attributes: { class: 'block-button block-basic-button' }
   })
 
   registerStaticBlock(editor, {
