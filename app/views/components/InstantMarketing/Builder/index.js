@@ -179,12 +179,13 @@ class Builder extends React.Component {
     this.lockIn()
     this.singleClickTextEditing()
     this.disableAssetManager()
-    this.disableDeviceManager()
     this.makeTemplateCentered()
     this.removeTextStylesOnPaste()
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
       this.registerBlocks()
+    } else {
+      this.disableDeviceManager()
     }
 
     if (this.isVideoTemplate) {
