@@ -118,6 +118,10 @@ webpackConfig.plugins.push(
           return 'text/css'
         }
 
+        if (/\.svg/.test(fileName)) {
+          return 'image/svg+xml'
+        }
+
         return 'text/plain'
       }
     },
