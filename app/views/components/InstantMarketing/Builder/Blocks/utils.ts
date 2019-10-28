@@ -1,25 +1,25 @@
 import { Editor } from 'grapesjs'
 
 // Basic
-import GifIcon from 'assets/images/marketing/editor/blocks/gif.svg'
-import OneColIcon from 'assets/images/marketing/editor/blocks/col-1.svg'
-import TwoColIcon from 'assets/images/marketing/editor/blocks/col-2.svg'
-import ThreeColIcon from 'assets/images/marketing/editor/blocks/col-3.svg'
-import TextIcon from 'assets/images/marketing/editor/blocks/text.svg'
-import DividerIcon from 'assets/images/marketing/editor/blocks/divider.svg'
-import SpacerIcon from 'assets/images/marketing/editor/blocks/spacer.svg'
-import ImageIcon from 'assets/images/marketing/editor/blocks/image.svg'
-import ButtonIcon from 'assets/images/marketing/editor/blocks/button.svg'
-import ShareIcon from 'assets/images/marketing/editor/blocks/share.svg'
+import GifIcon from 'assets/images/marketing/editor/blocks/gif.png'
+import OneColIcon from 'assets/images/marketing/editor/blocks/col-1.png'
+import TwoColIcon from 'assets/images/marketing/editor/blocks/col-2.png'
+import ThreeColIcon from 'assets/images/marketing/editor/blocks/col-3.png'
+import TextIcon from 'assets/images/marketing/editor/blocks/text.png'
+import DividerIcon from 'assets/images/marketing/editor/blocks/divider.png'
+import SpacerIcon from 'assets/images/marketing/editor/blocks/spacer.png'
+import ImageIcon from 'assets/images/marketing/editor/blocks/image.png'
+import ButtonIcon from 'assets/images/marketing/editor/blocks/button.png'
+import ShareIcon from 'assets/images/marketing/editor/blocks/share.png'
 
 // Article & Listing
-import ArticleImageTopIcon from 'assets/images/marketing/editor/blocks/image-top.svg'
-import ArticleImageDualIcon from 'assets/images/marketing/editor/blocks/dual.svg'
-import ArticleImageLeftIcon from 'assets/images/marketing/editor/blocks/image-left.svg'
-import ArticleImageRightIcon from 'assets/images/marketing/editor/blocks/image-right.svg'
+import ArticleImageTopIcon from 'assets/images/marketing/editor/blocks/image-top.png'
+import ArticleImageDualIcon from 'assets/images/marketing/editor/blocks/dual.png'
+import ArticleImageLeftIcon from 'assets/images/marketing/editor/blocks/image-left.png'
+import ArticleImageRightIcon from 'assets/images/marketing/editor/blocks/image-right.png'
 
 // Agent
-import AgentSingleIcon from 'assets/images/marketing/editor/blocks/agent-single.svg'
+import AgentSingleIcon from 'assets/images/marketing/editor/blocks/agent-single.png'
 
 import {
   articleTopBlockName,
