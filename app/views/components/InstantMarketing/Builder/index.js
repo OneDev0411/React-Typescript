@@ -13,10 +13,10 @@ import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import TeamAgents from 'components/TeamAgents'
+import GifDrawer from 'components/GifDrawer'
+import VideoDrawer from 'components/VideoDrawer'
 
 import { getActiveTeam } from 'utils/user-teams'
-
-import GifDrawer from 'components/GifDrawer'
 
 import nunjucks from '../helpers/nunjucks'
 import { getBrandColors } from '../helpers/get-brand-colors'
@@ -56,7 +56,8 @@ class Builder extends React.Component {
       loadedListingsAssets: [],
       isListingDrawerOpen: false,
       isAgentDrawerOpen: false,
-      isGifDrawerOpen: false
+      isGifDrawerOpen: false,
+      isVideoDrawerOpen: false
     }
 
     this.keyframe = 0
@@ -217,6 +218,11 @@ class Builder extends React.Component {
       gif: {
         onDrop: () => {
           this.setState({ isGifDrawerOpen: true })
+        }
+      },
+      video: {
+        onDrop: () => {
+          this.setState({ isVideoDrawerOpen: true })
         }
       }
     })
@@ -649,6 +655,17 @@ class Builder extends React.Component {
             onSelect={gifItem => {
               this.blocks.gif.selectHandler(gifItem)
               this.setState({ isGifDrawerOpen: false })
+            }}
+          />
+          <VideoDrawer
+            isOpen={this.state.isVideoDrawerOpen}
+            onClose={() => {
+              this.blocks.video.selectHandler()
+              this.setState({ isVideoDrawerOpen: false })
+            }}
+            onSelect={video => {
+              this.blocks.video.selectHandler(video)
+              this.setState({ isVideoDrawerOpen: false })
             }}
           />
           <Header>

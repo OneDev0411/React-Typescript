@@ -2,6 +2,7 @@ import { Editor } from 'grapesjs'
 
 // Basic
 import GifIcon from 'assets/images/marketing/editor/blocks/gif.png'
+import VideoIcon from 'assets/images/marketing/editor/blocks/video.png'
 import OneColIcon from 'assets/images/marketing/editor/blocks/col-1.png'
 import TwoColIcon from 'assets/images/marketing/editor/blocks/col-2.png'
 import ThreeColIcon from 'assets/images/marketing/editor/blocks/col-3.png'
@@ -45,6 +46,7 @@ const BLOCK_IDS_TO_REMOVE = [
 
 const BLOCK_BUTTON_ICONS = {
   'rechat-gif': GifIcon,
+  'rechat-video': VideoIcon,
   'mj-1-column': OneColIcon,
   'mj-2-columns': TwoColIcon,
   'mj-3-columns': ThreeColIcon,
@@ -70,6 +72,7 @@ const BLOCK_BUTTON_ICONS = {
 
 const BLOCK_BUTTONS_ORDER = [
   'rechat-gif',
+  'rechat-video',
   'mj-1-column',
   'mj-2-columns',
   'mj-3-columns',
