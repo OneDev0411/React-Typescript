@@ -48,10 +48,13 @@ export function removeLink(editorState: EditorState): EditorState {
     const href = data.get('href')
 
     if (href) {
-      return setBlockData(editorState, {
-        href: undefined,
-        tooltip: undefined
-      })
+      return setBlockData(
+        editorState,
+        data.merge({
+          href: undefined,
+          title: undefined
+        })
+      )
     }
   }
 
