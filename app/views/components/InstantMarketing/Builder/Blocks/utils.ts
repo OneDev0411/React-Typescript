@@ -124,3 +124,16 @@ export function reorderBlocksWithCustomLabels(editor: Editor) {
     editor.BlockManager.add(blockName, newBlock)
   })
 }
+
+export function collapseBlockCategories(editor: Editor) {
+  const categories = editor.BlockManager.getCategories() as any
+
+  categories.each((category: any) => {
+    category.set('open', false).on('change:open', (opened: any) => {
+      opened.get('open') &&
+        categories.each((category: any) => {
+          category !== opened && category.set('open', false)
+        })
+    })
+  })
+}

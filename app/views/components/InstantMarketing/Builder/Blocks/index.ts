@@ -6,7 +6,7 @@ import registerListingBlocks, { Options as ListingOptions } from './Listings'
 import registerAgentBlocks, { Options as AgentOptions } from './Agents'
 import registerStaticBlocks from './Statics'
 import registerGifBlock, { Options as GifOptions } from './Gif'
-import { reorderBlocksWithCustomLabels } from './utils'
+import { reorderBlocksWithCustomLabels, collapseBlockCategories } from './utils'
 import { BlockOptions } from './types'
 
 interface Options {
@@ -29,6 +29,7 @@ export function registerCustomBlocks(
   }
 
   reorderBlocksWithCustomLabels(editor)
+  collapseBlockCategories(editor)
 
   return dynamicBlocks
 }
