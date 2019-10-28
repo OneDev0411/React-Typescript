@@ -18,6 +18,8 @@ import getListing from 'models/listings/listing/get-listing'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { isSoloActiveTeam, getActiveTeamId } from 'utils/user-teams'
 
+import LoadingContainer from 'components/LoadingContainer'
+
 import Alert from '../../../../components/Pages/Dashboard/Partials/Alert'
 
 import { Divider } from '../../Divider'
@@ -51,7 +53,6 @@ import { Location } from './Location'
 import { Footer } from './styled'
 
 const propTypes = {
-  ...Drawer.propTypes,
   deal: PropTypes.shape(),
   openHouse: PropTypes.any,
   openHouseId: PropTypes.any,
@@ -62,7 +63,6 @@ const propTypes = {
 }
 
 const defaultProps = {
-  ...Drawer.defaultProps,
   openHouse: null,
   openHouseId: undefined,
   initialValues: {},
@@ -96,7 +96,7 @@ class OpenHouseDrawerInternal extends React.Component {
 
     this.isNew =
       (!props.openHouse && !props.openHouseId) ||
-      Object(this.props.initialValues).length > 0
+      Object(props.initialValues).length > 0
   }
 
   get dealAassociation() {
@@ -349,36 +349,39 @@ class OpenHouseDrawerInternal extends React.Component {
     const { isDisabled, openHouse, error } = this.state
 
     return (
-      <LoadSaveReinitializeForm
-        loading={null}
-        initialValues={this.props.initialValues}
-        load={this.load}
-        postLoadFormat={openHouse =>
-          postLoadFormat(openHouse, user, this.state.listing)
-        }
-        preSaveFormat={(values, originalValues) =>
-          preSaveFormat(
-            values,
-            originalValues,
-            this.state.template,
-            this.dealAassociation
-          )
-        }
-        save={this.save}
-        validate={validate}
-        render={formProps => {
-          const { values } = formProps
+      <Drawer
+        open={this.props.isOpen && !this.state.isTemplateBuilderOpen}
+        onClose={this.props.onClose}
+      >
+        <Drawer.Header title={`${this.isNew ? 'New' : 'Edit'} Open House`} />
 
-          return (
-            <>
-              <Drawer
-                open={this.props.isOpen && !this.state.isTemplateBuilderOpen}
-                onClose={this.props.onClose}
-              >
-                <Drawer.Header
-                  title={`${this.isNew ? 'New' : 'Edit'} Open House`}
-                />
-                <Drawer.Body>
+        <Drawer.Body>
+          <LoadSaveReinitializeForm
+            loading={
+              <div>
+                <LoadingContainer />
+              </div>
+            }
+            initialValues={this.props.initialValues}
+            load={this.load}
+            postLoadFormat={openHouse =>
+              postLoadFormat(openHouse, user, this.state.listing)
+            }
+            preSaveFormat={(values, originalValues) =>
+              preSaveFormat(
+                values,
+                originalValues,
+                this.state.template,
+                this.dealAassociation
+              )
+            }
+            save={this.save}
+            validate={validate}
+            render={formProps => {
+              const { values } = formProps
+
+              return (
+                <>
                   {error && error.status === 404 ? (
                     <Alert message={error.response.body.message} type="error" />
                   ) : (
@@ -459,7 +462,7 @@ class OpenHouseDrawerInternal extends React.Component {
                       <Footer justifyBetween>
                         <Flex alignCenter>
                           {!this.isNew && (
-                            <React.Fragment>
+                            <>
                               <Tooltip placement="top" caption="Delete">
                                 <IconButton
                                   isFit
@@ -476,7 +479,7 @@ class OpenHouseDrawerInternal extends React.Component {
                                 width="1px"
                                 height="2rem"
                               />
-                            </React.Fragment>
+                            </>
                           )}
                           <AddAssociationButton
                             associations={values.registrants}
@@ -512,34 +515,34 @@ class OpenHouseDrawerInternal extends React.Component {
                       </Footer>
                     </div>
                   )}
-                </Drawer.Body>
-              </Drawer>
 
-              {this.state.isTemplateBuilderOpen && (
-                <InstantMarketing
-                  isOpen
-                  headerTitle="Edit Guest Registration Page"
-                  closeConfirmation={false}
-                  showTemplatesColumn={false}
-                  saveButtonLabel="Save"
-                  onClose={this.toggleTemplateBuilder}
-                  handleSave={this.handleSaveTemplate}
-                  assets={this.getTemplateAssets()}
-                  templateData={{
-                    user: this.props.user,
-                    listing: this.state.listing,
-                    crmopenhouse: {
-                      title: values.title,
-                      due_date: values.dueDate
-                    }
-                  }}
-                  templateTypes={['CrmOpenHouse']}
-                />
-              )}
-            </>
-          )
-        }}
-      />
+                  {this.state.isTemplateBuilderOpen && (
+                    <InstantMarketing
+                      isOpen
+                      headerTitle="Edit Guest Registration Page"
+                      closeConfirmation={false}
+                      showTemplatesColumn={false}
+                      saveButtonLabel="Save"
+                      onClose={this.toggleTemplateBuilder}
+                      handleSave={this.handleSaveTemplate}
+                      assets={this.getTemplateAssets()}
+                      templateData={{
+                        user: this.props.user,
+                        listing: this.state.listing,
+                        crmopenhouse: {
+                          title: values.title,
+                          due_date: values.dueDate
+                        }
+                      }}
+                      templateTypes={['CrmOpenHouse']}
+                    />
+                  )}
+                </>
+              )
+            }}
+          />
+        </Drawer.Body>
+      </Drawer>
     )
   }
 }

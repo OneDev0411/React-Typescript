@@ -1,23 +1,36 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useContext, useState, useRef, useEffect } from 'react'
 import { connect } from 'react-redux'
 
 import { Popover, createStyles, makeStyles, Theme } from '@material-ui/core'
 import { PopoverActions } from '@material-ui/core/Popover'
 
-import { DropdownToggleButton } from 'components/DropdownToggleButton'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
+import { createTaskComment } from 'deals/utils/create-task-comment'
 import { setSelectedTask } from 'actions/deals'
 
-import YardSignIcon from 'components/SvgIcons/YardSign/YardSignIcon'
+import { DropdownToggleButton } from 'components/DropdownToggleButton'
+
+import { IAppState } from 'reducers'
+
+import { getActiveTeamId } from 'utils/user-teams'
+
+import OpenHouseIcon from 'components/SvgIcons/OpenHouseOutline/IconOpenHouseOutline'
+
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import { getSizeDependentStyles } from 'components/Button/ActionButton'
 
-import Form from './Create'
 import List from './List'
+import Form from './Form'
 
 interface DispatchProps {
   setSelectedTask(task: IDealTask): void
+}
+
+interface StateProps {
+  user: IUser
+  activeTeamId: UUID | null
 }
 
 interface Props {
@@ -28,7 +41,6 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) => {
   return createStyles({
     button: {
-      // same as action-button in components/button to make it consistent with other buttons
       ...getSizeDependentStyles({}),
       lineHeight: 'inherit',
       borderColor: theme.palette.common.black
@@ -36,13 +48,21 @@ const useStyles = makeStyles((theme: Theme) => {
   })
 })
 
-function YardSign({ deal, style, setSelectedTask }: Props & DispatchProps) {
+function OpenHouses({
+  user,
+  activeTeamId,
+  deal,
+  style,
+  setSelectedTask
+}: Props & StateProps & DispatchProps) {
+  const confirmation = useContext(ConfirmationModalContext)
+  const classes = useStyles()
+  const iconClasses = useIconStyles()
+
   const popoverActions = useRef<PopoverActions | null>(null)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const [showForm, setShowForm] = useState<boolean>(false)
-
-  const classes = useStyles()
-  const iconClasses = useIconStyles()
+  const [selectedItem, setSelectedItem] = useState<IDealTask | null>(null)
 
   useEffect(() => {
     if (popoverActions.current) {
@@ -55,6 +75,7 @@ function YardSign({ deal, style, setSelectedTask }: Props & DispatchProps) {
   ) => {
     if (anchorEl) {
       setAnchorEl(null)
+      setSelectedItem(null)
       setShowForm(false)
 
       return
@@ -65,13 +86,24 @@ function YardSign({ deal, style, setSelectedTask }: Props & DispatchProps) {
     }
   }
 
-  const onCreateTask = (task: IDealTask): void => {
-    toggleMenu()
+  const handleUpsertTask = (task: IDealTask): void => {
+    setShowForm(false)
     setSelectedTask(task)
   }
 
-  const handleSelectItem = (task: IDealTask): void => {
-    setSelectedTask(task)
+  const handleClickEdit = (task: IDealTask): void => {
+    setShowForm(true)
+    setSelectedItem(task)
+  }
+
+  const handleDelete = (task: IDealTask): void => {
+    confirmation.setConfirmationModal({
+      message: 'Cancel Open House Request',
+      onConfirm: () => {
+        createTaskComment(task, user.id, 'Please cancel this request')
+        setSelectedTask(task)
+      }
+    })
   }
 
   return (
@@ -85,11 +117,10 @@ function YardSign({ deal, style, setSelectedTask }: Props & DispatchProps) {
         style={style}
         onClick={toggleMenu}
       >
-        <YardSignIcon className={iconClasses.rightMargin} /> Yard Sign
+        <OpenHouseIcon className={iconClasses.rightMargin} /> Open House
       </DropdownToggleButton>
-
       <Popover
-        id={anchorEl ? 'yardsign-popover' : undefined}
+        id={anchorEl ? 'openhouse-popover' : undefined}
         action={popoverActions}
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
@@ -105,12 +136,19 @@ function YardSign({ deal, style, setSelectedTask }: Props & DispatchProps) {
         style={{ zIndex: 10 }}
       >
         {showForm ? (
-          <Form deal={deal} onCreateTask={onCreateTask} />
+          <Form
+            deal={deal}
+            task={selectedItem}
+            onUpsertTask={handleUpsertTask}
+          />
         ) : (
           <List
             deal={deal}
-            onSelectItem={handleSelectItem}
+            activeTeamId={activeTeamId}
             onClickNewItem={() => setShowForm(true)}
+            onSelectItem={setSelectedTask}
+            onClickEdit={handleClickEdit}
+            onClickDelete={handleDelete}
           />
         )}
       </Popover>
@@ -118,7 +156,14 @@ function YardSign({ deal, style, setSelectedTask }: Props & DispatchProps) {
   )
 }
 
-export default connect<null, DispatchProps, Props>(
-  null,
+function mapStateToProps({ user }: IAppState): StateProps {
+  return {
+    user,
+    activeTeamId: getActiveTeamId(user)
+  }
+}
+
+export default connect<StateProps, DispatchProps, Props>(
+  mapStateToProps,
   { setSelectedTask }
-)(YardSign)
+)(OpenHouses)

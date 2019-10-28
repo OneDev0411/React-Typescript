@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import { borderColor } from 'views/utils/colors'
 
-export const Divider = styled.div`
+export const Divider = styled.div<{ small: boolean }>`
   display: inline-flex;
   width: 1px;
   height: 1.5rem;
