@@ -149,7 +149,7 @@ export function AddDealFile({
           isOpen
           title={deal ? `Select files from "${deal.title}"` : 'Select files'}
           drawerOptions={{
-            showBackdrop: false
+            hideBackdrop: true
           }}
           allowNoChecklist
           initialAttachments={initialDealFiles}

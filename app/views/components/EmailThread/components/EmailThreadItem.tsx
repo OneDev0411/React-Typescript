@@ -142,7 +142,7 @@ export function EmailThreadItem({
               {/* I think we should conditionally show year, if it's not current year. fecha doesn't support such formatting I guess */}
               {fecha.format(new Date(email.message_date), 'MMM DD, hh:mm A')}
             </Typography>
-            {collapsed ? null : (
+            {collapsed || !email.thread_id ? null : (
               <EmailItemHeaderActions
                 onReply={openReply}
                 onForward={openForward}
@@ -169,7 +169,7 @@ export function EmailThreadItem({
               </Attachment>
             ))}
 
-            {showBottomButtons && (
+            {showBottomButtons && email.thread_id && (
               <Box my={1}>
                 <Button
                   className={classes.actionButton}

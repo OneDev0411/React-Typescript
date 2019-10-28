@@ -6,7 +6,6 @@ type DrawerCloseReason =
   | 'closeButtonClick'
 
 export interface DrawerProps extends OriginalDrawerProps {
-  showBackdrop?: boolean
   closeOnBackdropClick?: boolean
   closeOnEscape?: boolean
   onClose: (event: {}, reason: DrawerCloseReason) => void

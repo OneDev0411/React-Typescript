@@ -31,6 +31,7 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
+      flex: 1, // in case it's rendered in flex parent
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
