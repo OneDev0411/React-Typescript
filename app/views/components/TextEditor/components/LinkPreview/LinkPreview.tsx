@@ -3,6 +3,8 @@ import * as React from 'react'
 
 import { EditorState } from 'draft-js'
 
+import classNames from 'classnames'
+
 import copyTextToClipboard from 'utils/copy-text-to-clipboard'
 
 import IconLinkOpen from 'components/SvgIcons/LinkOpen/IconLink'
@@ -13,6 +15,7 @@ import IconEmail from 'components/SvgIcons/Email/IconEmail'
 
 import { removeLink } from '../../utils/remove-link'
 import { LinkPreviewContainer, LinkText } from './styled'
+import { useIconStyles } from '../../../../../styles/use-icon-styles'
 
 interface Props {
   url: string
@@ -22,12 +25,9 @@ interface Props {
   onClose: () => void
 }
 
-const iconSizeProps = {
-  noStyles: true,
-  style: { width: 18, minWidth: 18, height: 18, margin: 4 }
-}
-
 export function LinkPreview(props: Props) {
+  const iconClasses = useIconStyles()
+
   const copyLink = () => {
     copyTextToClipboard(props.url)
     props.onClose()
@@ -45,6 +45,8 @@ export function LinkPreview(props: Props) {
 
   const LinkIcon = props.url.match(/^mailto:.+/) ? IconEmail : IconLinkOpen
 
+  const iconClassNames = classNames(iconClasses.small, iconClasses.smallMargins)
+
   return (
     <LinkPreviewContainer
       elevation={10}
@@ -54,7 +56,7 @@ export function LinkPreview(props: Props) {
       }}
     >
       <Grid container alignItems="center" wrap="nowrap">
-        <LinkIcon {...iconSizeProps} />
+        <LinkIcon className={iconClassNames} />
         <LinkText flexGrow={1} pl={1}>
           <a href={props.url} target="_blank">
             {props.url}
@@ -62,17 +64,17 @@ export function LinkPreview(props: Props) {
         </LinkText>
         <Tooltip title="Copy Link">
           <IconButton size="small" onClick={copyLink}>
-            <IconCopy {...iconSizeProps} />
+            <IconCopy className={iconClassNames} />
           </IconButton>
         </Tooltip>
         <Tooltip title="Edit Link">
           <IconButton size="small" onClick={props.onEdit}>
-            <EditIcon {...iconSizeProps} />
+            <EditIcon className={iconClassNames} />
           </IconButton>
         </Tooltip>
         <Tooltip title="Remove Link">
           <IconButton size="small" onClick={unlink} edge="end">
-            <IconUnlink {...iconSizeProps} />
+            <IconUnlink className={iconClassNames} />
           </IconButton>
         </Tooltip>
       </Grid>
