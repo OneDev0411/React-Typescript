@@ -1,5 +1,4 @@
 import React, {
-  ComponentProps,
   forwardRef,
   useContext,
   useEffect,
@@ -33,7 +32,10 @@ import { AddImageButton } from './buttons/AddImageButton'
 import { RichTextButtons } from './buttons/RichTextButtons'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
 import { updateEntityData } from './modifiers/update-entity-data'
-import { DraftJsSelectionPopover } from './components/DraftJsSelectionPopover'
+import {
+  DraftJsSelectionPopover,
+  SelectionPopoverRenderProps
+} from './components/DraftJsSelectionPopover'
 import { LinkPreview } from './components/LinkPreview/LinkPreview'
 import { Checkbox } from '../Checkbox'
 import { TextEditorProps } from './types'
@@ -49,6 +51,7 @@ import { getSelectedAtomicBlock } from './utils/get-selected-atomic-block'
 import { styles } from './styles'
 import { getImageDimensions } from './utils/get-image-dimensions'
 import { getImageSizeOptions } from './utils/get-image-size-options'
+import { InlineImageToolbar } from './components/ImageInlineToolbar'
 
 const useStyles = makeStyles(styles, { name: 'TextEditor' })
 
@@ -389,13 +392,7 @@ export const TextEditor = forwardRef(
                 inlineEntityFilter="LINK"
                 blockFilter={isBlockLinked}
               >
-                {({
-                  entity,
-                  close,
-                  block
-                }: Parameters<
-                  ComponentProps<typeof DraftJsSelectionPopover>['children']
-                >[0]) => (
+                {({ entity, close, block }: SelectionPopoverRenderProps) => (
                   <LinkPreview
                     editorState={editorState}
                     setEditorState={handleChange}
@@ -409,6 +406,12 @@ export const TextEditor = forwardRef(
                   />
                 )}
               </DraftJsSelectionPopover>
+            )}
+            {imagePlugin && (
+              <InlineImageToolbar
+                editorState={editorState}
+                setEditorState={handleChange}
+              />
             )}
             {appendix}
           </Dropzone>
@@ -465,7 +468,6 @@ export const TextEditor = forwardRef(
             </Box>
           )}
         </Toolbar>
-        <alignmentPlugin.AlignmentTool />
         {input && <FieldError name={input.name} />}
       </EditorContainer>
     )

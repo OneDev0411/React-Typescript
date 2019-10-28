@@ -3,8 +3,6 @@ import * as React from 'react'
 
 import { EditorState } from 'draft-js'
 
-import classNames from 'classnames'
-
 import copyTextToClipboard from 'utils/copy-text-to-clipboard'
 
 import IconLinkOpen from 'components/SvgIcons/LinkOpen/IconLink'
@@ -15,7 +13,7 @@ import IconEmail from 'components/SvgIcons/Email/IconEmail'
 
 import { removeLink } from '../../utils/remove-link'
 import { LinkPreviewContainer, LinkText } from './styled'
-import { useIconStyles } from '../../../../../styles/use-icon-styles'
+import { useToolbarIconClass } from '../../hooks/use-toolbar-icon-class'
 
 interface Props {
   url: string
@@ -26,8 +24,6 @@ interface Props {
 }
 
 export function LinkPreview(props: Props) {
-  const iconClasses = useIconStyles()
-
   const copyLink = () => {
     copyTextToClipboard(props.url)
     props.onClose()
@@ -45,7 +41,7 @@ export function LinkPreview(props: Props) {
 
   const LinkIcon = props.url.match(/^mailto:.+/) ? IconEmail : IconLinkOpen
 
-  const iconClassNames = classNames(iconClasses.small, iconClasses.smallMargins)
+  const iconClassNames = useToolbarIconClass()
 
   return (
     <LinkPreviewContainer

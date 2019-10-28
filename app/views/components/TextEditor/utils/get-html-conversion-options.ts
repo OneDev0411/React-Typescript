@@ -7,7 +7,7 @@ import {
 } from 'draft-js-import-element/lib/lib/Constants'
 import { wrap } from 'lodash'
 
-import { getAtomicBlockEntityData } from './get-atomic-block-entity-data'
+import { createAtomicBlockEntityData } from './create-atomic-block-entity-data'
 import { signatureCustomBlockFn } from '../plugins/draft-js-signature-plugin'
 import {
   iFrameCustomBlockFn,
@@ -53,7 +53,7 @@ export function getHtmlConversionOptions(
       ),
       customInlineFn: (element, inlineCreators) => {
         if (element instanceof HTMLImageElement) {
-          const data = getAtomicBlockEntityData(element)
+          const data = createAtomicBlockEntityData(element)
 
           return inlineCreators.Entity('IMAGE', data)
         }
