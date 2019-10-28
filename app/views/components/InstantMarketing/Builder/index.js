@@ -238,6 +238,8 @@ class Builder extends React.Component {
 
   singleClickTextEditing = () => {
     this.editor.on('component:selected', selected => {
+      this.setTraits(selected)
+
       const isImageAsset =
         selected.get('type') === 'image' || selected.get('type') === 'mj-image'
 
@@ -291,6 +293,12 @@ class Builder extends React.Component {
     ev.target.ownerDocument.execCommand('insertText', false, text)
   }
 
+  setTraits = model => {
+    model.set({
+      traits: this.traits[model.get('type')] || []
+    })
+  }
+
   lockIn = () => {
     let shouldSelectImage = false
 
@@ -316,8 +324,7 @@ class Builder extends React.Component {
       model.set({
         resizable: false,
         draggable,
-        droppable,
-        traits: this.traits[model.get('type')] || []
+        droppable
       })
 
       if (
