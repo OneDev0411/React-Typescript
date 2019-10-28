@@ -92,7 +92,7 @@ export function DraftJsSelectionPopover({
   /**
    * We show the popup only if selection is changed ever
    */
-  if (selectionChanged && conditionIsMet) {
+  if (conditionIsMet) {
     const selectedBlock = getSelectedAtomicBlock(editorState)
 
     const anchorEl = selectedBlock
