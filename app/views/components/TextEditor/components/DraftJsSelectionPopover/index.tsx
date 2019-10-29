@@ -4,7 +4,7 @@ import { getSelectionEntity } from 'draftjs-utils'
 import * as React from 'react'
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
-import { Popper, useTheme } from '@material-ui/core'
+import { Grow, Popper, useTheme } from '@material-ui/core'
 import { isEqual } from 'lodash'
 
 import usePrevious from 'react-use/lib/usePrevious'
@@ -108,7 +108,7 @@ export function DraftJsSelectionPopover({
     {}
 
   useDeepCompareEffect(() => {
-    if (popperRef.current) {
+    if (popperRef.current && blockData) {
       popperRef.current.update()
     }
   }, [blockData, selectedBlock])
@@ -133,11 +133,18 @@ export function DraftJsSelectionPopover({
           anchorEl={anchorEl}
           placement={placement}
           popperRef={popperRef}
+          transition
           style={{ zIndex: theme.zIndex.modal }}
         >
-          {typeof children === 'function'
-            ? children({ entity, block: selectedBlock || null, close })
-            : children}
+          {({ TransitionProps }) => (
+            <Grow {...TransitionProps} timeout={150}>
+              <div>
+                {typeof children === 'function'
+                  ? children({ entity, block: selectedBlock || null, close })
+                  : children}
+              </div>
+            </Grow>
+          )}
         </Popper>
       )
     )
