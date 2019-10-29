@@ -12,7 +12,7 @@
       <span style="color: ##919191;">FROM 1:00 TO 3:00 PM</span>
     </mj-text>
     <mj-button
-      border-radius="12px"
+      border-radius="6px"
       font-family="Roboto"
       font-size="12px"
       font-weight="Bold"

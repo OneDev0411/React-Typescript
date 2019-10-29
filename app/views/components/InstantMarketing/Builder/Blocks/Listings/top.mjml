@@ -17,7 +17,7 @@
       <br /><span style="font-weight: lighter;">FROM 1:00 TO 3:00 PM</span>
     </mj-text>
 
-    <mj-button padding-left=0 border-radius="12px" font-family="Roboto" font-size="12px" font-weight="Bold" line-height="14px" height="40px" href="{{getListingUrl(listing)}}" color="{{getColor('beta.tb')}}" background-color="{{getColor('beta.bg')}}" width="258px">
+    <mj-button padding-left=0 border-radius="6px" font-family="Roboto" font-size="12px" font-weight="Bold" line-height="14px" height="40px" href="{{getListingUrl(listing)}}" color="{{getColor('beta.tb')}}" background-color="{{getColor('beta.bg')}}" width="258px">
       VIEW PROPERTY
     </mj-button>
   </mj-column>

@@ -13,7 +13,7 @@
       Association.
     </mj-text>
 
-    <mj-button border-radius="12px" font-family="Roboto" font-size="12px" font-weight="Bold" line-height="14px" width="258px" height="48px" color="{{getColor('beta.tb')}}" background-color="{{getColor('beta.bg')}}">
+    <mj-button border-radius="6px" font-family="Roboto" font-size="12px" font-weight="Bold" line-height="14px" width="258px" height="48px" color="{{getColor('beta.tb')}}" background-color="{{getColor('beta.bg')}}">
       READ MORE
     </mj-button>
   </mj-column>

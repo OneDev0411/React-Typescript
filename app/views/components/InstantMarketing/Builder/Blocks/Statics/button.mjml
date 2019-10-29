@@ -1,1 +1,5 @@
-<mj-button color="{{getColor('beta.tb')}}" background-color="{{getColor('beta.bg')}}">Click Here</mj-button>
+<mj-button
+  color="{{getColor('beta.tb')}}"
+  background-color="{{getColor('beta.bg')}}"
+  border-radius="6px"
+>Click Here</mj-button>

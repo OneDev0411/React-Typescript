@@ -19,7 +19,7 @@
     </mj-text>
     <mj-button
       href="{{getListingUrl(listing)}}"
-      border-radius="12px"
+      border-radius="6px"
       font-family="Roboto"
       font-size="12px"
       font-weight="Bold"
