@@ -1,4 +1,4 @@
-import { Grid, IconButton, Tooltip } from '@material-ui/core'
+import { Box, Grid, IconButton, Tooltip, Typography } from '@material-ui/core'
 import * as React from 'react'
 
 import { EditorState } from 'draft-js'
@@ -12,8 +12,8 @@ import IconCopy from 'components/SvgIcons/Copy/IconCopy'
 import IconEmail from 'components/SvgIcons/Email/IconEmail'
 
 import { removeLink } from '../../utils/remove-link'
-import { LinkPreviewContainer, LinkText } from './styled'
 import { useToolbarIconClass } from '../../hooks/use-toolbar-icon-class'
+import { SelectionPopoverPaper } from '../SelectionPopoverPaper'
 
 interface Props {
   url: string
@@ -44,20 +44,16 @@ export function LinkPreview(props: Props) {
   const iconClassNames = useToolbarIconClass()
 
   return (
-    <LinkPreviewContainer
-      elevation={10}
-      onMouseDown={e => {
-        e.preventDefault()
-        e.stopPropagation()
-      }}
-    >
+    <SelectionPopoverPaper style={{ width: '18rem' }}>
       <Grid container alignItems="center" wrap="nowrap">
         <LinkIcon className={iconClassNames} />
-        <LinkText flexGrow={1} pl={1}>
+        {/*
+        // @ts-ignore typing doesn't work for Box props */}
+        <Typography noWrap component={Box} flexGrow={1} pl={1}>
           <a href={props.url} target="_blank">
             {props.url}
           </a>
-        </LinkText>
+        </Typography>
         <Tooltip title="Copy Link">
           <IconButton size="small" onClick={copyLink}>
             <IconCopy className={iconClassNames} />
@@ -69,11 +65,11 @@ export function LinkPreview(props: Props) {
           </IconButton>
         </Tooltip>
         <Tooltip title="Remove Link">
-          <IconButton size="small" onClick={unlink} edge="end">
+          <IconButton size="small" onClick={unlink}>
             <IconUnlink className={iconClassNames} />
           </IconButton>
         </Tooltip>
       </Grid>
-    </LinkPreviewContainer>
+    </SelectionPopoverPaper>
   )
 }

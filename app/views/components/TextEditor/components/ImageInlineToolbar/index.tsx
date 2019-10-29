@@ -1,22 +1,12 @@
 import React from 'react'
-import { createStyles, makeStyles, Paper, Theme } from '@material-ui/core'
 import { EditorState } from 'draft-js'
-
-import { ClassesProps } from 'utils/ts-utils'
 
 import {
   DraftJsSelectionPopover,
   SelectionPopoverRenderProps
 } from '../DraftJsSelectionPopover'
 import { ImageToolbar } from '../ImageToolbar'
-
-const styles = (theme: Theme) =>
-  createStyles({
-    paper: {
-      padding: theme.spacing(0.5)
-    }
-  })
-const useStyles = makeStyles(styles, { name: 'AlignmentTool' })
+import { SelectionPopoverPaper } from '../SelectionPopoverPaper'
 
 interface Props {
   editorState: EditorState
@@ -29,9 +19,7 @@ interface Props {
  * @param props
  * @constructor
  */
-export function InlineImageToolbar(props: Props & ClassesProps<typeof styles>) {
-  const classes = useStyles(props)
-
+export function InlineImageToolbar(props: Props) {
   return (
     <DraftJsSelectionPopover
       editorState={props.editorState}
@@ -40,20 +28,13 @@ export function InlineImageToolbar(props: Props & ClassesProps<typeof styles>) {
     >
       {({ block, close, entity }: SelectionPopoverRenderProps) => {
         return (
-          <Paper
-            elevation={10}
-            className={classes.paper}
-            onMouseDown={e => {
-              e.preventDefault()
-              e.stopPropagation()
-            }}
-          >
+          <SelectionPopoverPaper>
             <ImageToolbar
               editorState={props.editorState}
               onChange={props.setEditorState}
               block={block}
             />
-          </Paper>
+          </SelectionPopoverPaper>
         )
       }}
     </DraftJsSelectionPopover>
