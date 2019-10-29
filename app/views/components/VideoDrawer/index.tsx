@@ -89,7 +89,10 @@ export default function VideoDrawer({
           disabled={isLoading || !video}
           color="primary"
           variant="contained"
-          onClick={() => onSelect(video)}
+          onClick={() => {
+            onSelect(video)
+            setVideo(undefined)
+          }}
         >
           Insert Video
         </Button>
