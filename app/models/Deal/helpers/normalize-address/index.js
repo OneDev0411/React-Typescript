@@ -4,7 +4,14 @@ import { STATES } from 'utils/address'
 
 export function normalizeAddress(address) {
   const list = {
-    ...address,
+    city: address.city,
+    county: address.county,
+    postal_code: address.postal_code,
+    state: address.state,
+    street_name: address.street_name,
+    street_number: address.street_number,
+    street_suffix: address.street_suffix,
+    unit_number: address.unit_number,
     street_dir_prefix: address.street_prefix,
     state_code: stateToAbbreviated(address.state),
     full_address: [
