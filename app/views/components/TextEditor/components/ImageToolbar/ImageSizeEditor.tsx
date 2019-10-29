@@ -49,9 +49,13 @@ export function ImageSizeEditor({ block, editorState, onChange }: Props) {
     })
 
   const value =
-    currentSize &&
-    imageSizes &&
-    findKey(imageSizes, size => Math.abs(size.width - currentSize.width) < 3)
+    (currentSize &&
+      imageSizes &&
+      findKey(
+        imageSizes,
+        size => Math.abs(size.width - currentSize.width) < 3
+      )) ||
+    ''
 
   const resize = (size: keyof ImageSizeOptions) => {
     if (imageSizes) {
