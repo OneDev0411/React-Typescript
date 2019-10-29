@@ -22,6 +22,10 @@ export const SECTIONS = [
     title: 'Life',
     items: [
       {
+        title: 'Blank Layouts',
+        link: urlGenerator('/Blank')
+      },
+      {
         title: 'Occasions',
         link: urlGenerator('/Birthday')
       },

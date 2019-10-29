@@ -11,6 +11,7 @@ import ActionButton from 'components/Button/ActionButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import SaveTemplateDropdown from 'components/SaveTemplateDropdown'
 
 import { getActiveTeam } from 'utils/user-teams'
 import { getBrandStyles } from 'utils/marketing-center/templates'
@@ -514,6 +515,8 @@ class Builder extends React.Component {
             <h1>{this.props.headerTitle}</h1>
 
             <Actions>
+              <SaveTemplateDropdown />
+
               {this.state.selectedTemplate && (
                 <TeamContactSelect
                   fullHeight
