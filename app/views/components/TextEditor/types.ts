@@ -87,3 +87,10 @@ export interface AtomicBlockEntityData {
   height?: string // comes from block resizable plugin
   src?: string // comes from image plugin
 }
+
+export interface DraftPluginEditorDecoratorProps {
+  block: ContentBlock
+  blockProps: StringMap<any>
+  contentState: ContentState
+  className?: string
+}
