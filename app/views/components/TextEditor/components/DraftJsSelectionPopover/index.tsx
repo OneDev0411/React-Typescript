@@ -20,6 +20,7 @@ import { Entity } from '../../types'
 import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
 import { getAtomicBlockEntityData } from '../../utils/get-atomic-block-entity-data'
 import { getBlockElement } from '../../utils/get-block-element'
+import { useAtomicBlockFocusBugDetector } from './use-atomic-block-focus-bug-detector'
 
 export interface SelectionPopoverRenderProps {
   entity: Entity | null
@@ -63,7 +64,7 @@ export function DraftJsSelectionPopover({
   ...props
 }: Props) {
   const selectedEntityKey: string = getSelectionEntity(editorState)
-  const selectedBlock = getSelectedAtomicBlock(editorState)
+  const selectedBlock = getSelectedAtomicBlock(editorState, true)
 
   const entity = selectedEntityKey
     ? editorState.getCurrentContent().getEntity(selectedEntityKey)
@@ -107,6 +108,11 @@ export function DraftJsSelectionPopover({
       )) ||
     {}
 
+  const isReallyFocused = useAtomicBlockFocusBugDetector(
+    selectedBlock,
+    editorState
+  )
+
   useDeepCompareEffect(() => {
     if (popperRef.current && blockData) {
       popperRef.current.update()
@@ -129,7 +135,7 @@ export function DraftJsSelectionPopover({
     return (
       anchorEl && (
         <Popper
-          open={!closed}
+          open={!closed && isReallyFocused}
           anchorEl={anchorEl}
           placement={placement}
           popperRef={popperRef}
