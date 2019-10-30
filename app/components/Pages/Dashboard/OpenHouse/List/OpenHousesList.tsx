@@ -12,6 +12,8 @@ import PageHeader from 'components/PageHeader'
 import LoadingContainer from 'components/LoadingContainer'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
+import { Callout } from 'components/Callout'
+
 import EmptyState from './EmptyState'
 import CreateNewOpenHouse from './CreateNewOpenHouse'
 import Info from './columns/Info'
@@ -161,12 +163,12 @@ function OpenHousesList(props: Props) {
   return (
     <>
       <Helmet>
-        <title>Open Houses | Rechat</title>
+        <title>Open House Registration Pages | Rechat</title>
       </Helmet>
 
       <PageHeader>
         <PageHeader.Title showBackButton={false}>
-          <PageHeader.Heading>Open House</PageHeader.Heading>
+          <PageHeader.Heading>Open House Registration Pages</PageHeader.Heading>
         </PageHeader.Title>
 
         <PageHeader.Menu>
@@ -174,7 +176,20 @@ function OpenHousesList(props: Props) {
         </PageHeader.Menu>
       </PageHeader>
 
-      <div style={{ padding: theme.spacing(0, 3, 9) }}>{renderContent()}</div>
+      <div style={{ padding: theme.spacing(0, 3, 9) }}>
+        <Callout type="info" style={{ margin: theme.spacing(1.5, 0) }}>
+          To Notify your Office to Book an Open House on the MLS please find the
+          button inside of your{' '}
+          <a href="/dashboard/deals" target="_blank">
+            deals
+          </a>
+          . This page is only for creating Open House Registration pages and
+          events for your listings or other agents listings that you are holding
+          an open house for.
+        </Callout>
+
+        {renderContent()}
+      </div>
 
       {isDrawerOpen && (
         // @ts-ignore js component
