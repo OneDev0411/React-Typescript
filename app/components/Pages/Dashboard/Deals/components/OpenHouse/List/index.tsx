@@ -17,7 +17,7 @@ import { selectDealTasks } from 'reducers/deals/tasks'
 
 import { Divider } from 'components/Divider'
 
-import IconTime from 'components/SvgIcons/Time/IconTime'
+import IconEdit from 'components/SvgIcons/Edit/EditIcon'
 import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
 
 import { useIconStyles } from 'views/../styles/use-icon-styles'
@@ -98,7 +98,7 @@ function List(props: Props & StateProps) {
         }}
         onClick={props.onClickNewItem}
       >
-        Create New Open House
+        Request New Open House from Office
       </Button>
       <Divider />
 
@@ -116,7 +116,7 @@ function List(props: Props & StateProps) {
                       className={classes.iconButton}
                       onClick={() => props.onClickEdit(task)}
                     >
-                      <IconTime className={iconClasses.small} />
+                      <IconEdit className={iconClasses.small} />
                     </IconButton>
                   </Tooltip>
 

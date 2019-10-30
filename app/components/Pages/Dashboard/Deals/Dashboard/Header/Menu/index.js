@@ -21,7 +21,7 @@ export function Menu(props) {
     <Flex style={{ padding: '1.5em 0' }}>
       {deal.is_draft === true && <RemoveDraft deal={deal} />}
 
-      {deal.deal_type === 'Selling' && deal.listing && (
+      {deal.deal_type === 'Selling' && (
         <OpenHouse deal={deal} style={{ marginLeft: '0.5rem' }} />
       )}
 

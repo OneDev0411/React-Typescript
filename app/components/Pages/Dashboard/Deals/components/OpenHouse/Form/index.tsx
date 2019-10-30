@@ -12,6 +12,7 @@ import fecha from 'fecha'
 
 import { createTaskComment } from 'deals/utils/create-task-comment'
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
+import { updateTask } from 'actions/deals'
 
 import { InputLabel } from 'components/Forms/styled'
 
@@ -28,6 +29,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
+  updateTask: IAsyncActionProp<typeof updateTask>
   createRequestTask: IAsyncActionProp<typeof createRequestTask>
 }
 
@@ -58,25 +60,44 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
   const classes = useStyles()
 
   const [isSaving, setIsSaving] = useState<boolean>(false)
-  const [startTime, setStartTime] = useState<Date>(new Date())
+  const [startTime, setStartTime] = useState<Date | null>(null)
   const [endTime, setEndTime] = useState<Date | null>(null)
 
   const handleSetStartDate = (date: Date) => {
     const datetime = new Date(date)
 
-    datetime.setHours(startTime.getHours())
-    datetime.setMinutes(startTime.getMinutes())
+    datetime.setHours(startTime ? startTime.getHours() : 0)
+    datetime.setMinutes(startTime ? startTime.getMinutes() : 0)
 
     setStartTime(datetime)
   }
 
+  const handleChangeStartTime = (date: Date) => {
+    setStartTime(date)
+
+    if (endTime && date > endTime) {
+      setEndTime(date)
+    }
+  }
+
   const handleSetEndTime = (date: Date) => {
-    if (new Date(date) > new Date(startTime)) {
+    const endTime = new Date(startTime!).setHours(
+      date.getHours(),
+      date.getMinutes()
+    )
+
+    if (endTime > new Date(startTime!).getTime()) {
       setEndTime(date)
     }
   }
 
   const handleSave = async (): Promise<void> => {
+    if (!startTime) {
+      return
+    }
+
+    setIsSaving(true)
+
     const checklist = props.checklists.find(
       checklist => checklist.checklist_type === 'Selling'
     )!
@@ -93,12 +114,16 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
         `Please change open house time to:\n ${taskTitle}`
       )
 
+      await props.updateTask(props.task.id, {
+        title: `Update Open House to ${taskTitle}`
+      })
+
       props.onUpsertTask(props.task)
+
+      setIsSaving(false)
 
       return
     }
-
-    setIsSaving(true)
 
     const task = await props.createRequestTask({
       checklist,
@@ -121,7 +146,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
     <div className={classes.root}>
       <DatePickerContainer>
         <DayPicker
-          initialMonth={startTime}
+          initialMonth={startTime || new Date()}
           selectedDays={startTime}
           disabledDays={{
             before: new Date()
@@ -136,51 +161,55 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
         <div>
           <TimeInput
             id="start-time"
+            defaultDate={getDefaultTime()}
             initialDate={startTime}
-            onChange={setStartTime}
+            onChange={handleChangeStartTime}
           />
         </div>
       </div>
 
-      <div className={classes.fieldContainer}>
-        {!endTime ? (
-          <Button
-            variant="text"
-            color="primary"
-            onClick={() => setEndTime(new Date())}
-          >
-            Add End Time
-          </Button>
-        ) : (
-          <>
-            <InputLabel>To</InputLabel>
+      {startTime && (
+        <div className={classes.fieldContainer}>
+          {!endTime ? (
+            <Button
+              variant="text"
+              color="primary"
+              onClick={() => setEndTime(new Date(startTime))}
+            >
+              Add End Time
+            </Button>
+          ) : (
+            <>
+              <InputLabel>To</InputLabel>
 
-            <Flex alignCenter justifyBetween>
-              <TimeInput
-                id="end-time"
-                initialDate={endTime}
-                onChange={handleSetEndTime}
-              />
+              <Flex alignCenter justifyBetween>
+                <TimeInput
+                  id="end-time"
+                  defaultDate={getDefaultTime()}
+                  initialDate={endTime}
+                  onChange={handleSetEndTime}
+                />
 
-              <Button
-                variant="text"
-                color="primary"
-                size="small"
-                onClick={() => setEndTime(null)}
-              >
-                Remove End Time
-              </Button>
-            </Flex>
-          </>
-        )}
-      </div>
+                <Button
+                  variant="text"
+                  color="primary"
+                  size="small"
+                  onClick={() => setEndTime(null)}
+                >
+                  Remove End Time
+                </Button>
+              </Flex>
+            </>
+          )}
+        </div>
+      )}
 
       <div className={classes.buttonContainer}>
         <Button
           fullWidth
           variant="contained"
           color="primary"
-          disabled={isSaving}
+          disabled={!startTime || isSaving}
           onClick={handleSave}
         >
           {isSaving ? (
@@ -194,8 +223,14 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
   )
 }
 
+function getDefaultTime(): Date {
+  return new Date(new Date().setHours(0, 0, 0, 0))
+}
+
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   return {
+    updateTask: (...args: Parameters<typeof updateTask>) =>
+      dispatch(updateTask(...args)),
     createRequestTask: (...args: Parameters<typeof createRequestTask>) =>
       dispatch(createRequestTask(...args))
   }

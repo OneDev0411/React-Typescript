@@ -1,13 +1,16 @@
 import React, { useContext, useState, useRef, useEffect } from 'react'
 import { connect } from 'react-redux'
 
+import { ThunkDispatch } from 'redux-thunk'
+import { AnyAction } from 'redux'
+
 import { Popover, createStyles, makeStyles, Theme } from '@material-ui/core'
 import { PopoverActions } from '@material-ui/core/Popover'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import { createTaskComment } from 'deals/utils/create-task-comment'
-import { setSelectedTask } from 'actions/deals'
+import { setSelectedTask, updateTask } from 'actions/deals'
 
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
@@ -26,6 +29,7 @@ import Form from './Form'
 
 interface DispatchProps {
   setSelectedTask(task: IDealTask): void
+  updateTask: IAsyncActionProp<typeof updateTask>
 }
 
 interface StateProps {
@@ -53,6 +57,7 @@ function OpenHouses({
   activeTeamId,
   deal,
   style,
+  updateTask,
   setSelectedTask
 }: Props & StateProps & DispatchProps) {
   const confirmation = useContext(ConfirmationModalContext)
@@ -97,10 +102,16 @@ function OpenHouses({
   }
 
   const handleDelete = (task: IDealTask): void => {
+    setAnchorEl(null)
+
     confirmation.setConfirmationModal({
       message: 'Cancel Open House Request',
-      onConfirm: () => {
-        createTaskComment(task, user.id, 'Please cancel this request')
+      needsUserEntry: true,
+      inputDefaultValue: "I'd like to cancel this open house, please.",
+      onConfirm: (text: string) => {
+        updateTask(task.id, { title: 'Delete Open House' })
+
+        createTaskComment(task, user.id, text)
         setSelectedTask(task)
       }
     })
@@ -156,6 +167,15 @@ function OpenHouses({
   )
 }
 
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+  return {
+    updateTask: (...args: Parameters<typeof updateTask>) =>
+      dispatch(updateTask(...args)),
+    setSelectedTask: (...args: Parameters<typeof setSelectedTask>) =>
+      dispatch(setSelectedTask(...args))
+  }
+}
+
 function mapStateToProps({ user }: IAppState): StateProps {
   return {
     user,
@@ -165,5 +185,5 @@ function mapStateToProps({ user }: IAppState): StateProps {
 
 export default connect<StateProps, DispatchProps, Props>(
   mapStateToProps,
-  { setSelectedTask }
+  mapDispatchToProps
 )(OpenHouses)
