@@ -18,6 +18,7 @@ import { blockStyleFn } from './block-style-fn'
 import { renderImage } from './render-image'
 import { blockLevelLinkRendererWrapper } from './block-level-link-renderer-wrapper'
 import { blockLevelLinkCustomBlockFn } from './block-level-link-custom-block-fn'
+import { mergeFunctions } from './merge-functions'
 
 interface HtmlConversionOptions {
   stateToHtmlOptions: ExportOptions
@@ -45,7 +46,7 @@ export function getHtmlConversionOptions(
       defaultBlockTag: 'div'
     },
     stateFromHtmlOptions: {
-      customBlockFn: combine(
+      customBlockFn: mergeFunctions(
         iFrameCustomBlockFn('rechat-quote'),
         signatureCustomBlockFn('rechat-signature'),
         blockLevelLinkCustomBlockFn
