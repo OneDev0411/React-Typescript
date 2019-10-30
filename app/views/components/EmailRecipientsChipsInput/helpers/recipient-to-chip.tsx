@@ -23,6 +23,13 @@ export function recipientToChip(
     }
   }
 
+  if (recipient.recipient_type === 'Agent') {
+    return {
+      label: recipient.agent.email,
+      hasError
+    }
+  }
+  
   return {
     label,
     hasError
