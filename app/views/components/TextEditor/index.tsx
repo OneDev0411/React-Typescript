@@ -36,7 +36,7 @@ import {
   DraftJsSelectionPopover,
   SelectionPopoverRenderProps
 } from './components/DraftJsSelectionPopover'
-import { LinkPreview } from './components/LinkPreview/LinkPreview'
+import { LinkPreview } from './components/LinkPreview'
 import { Checkbox } from '../Checkbox'
 import { TextEditorProps } from './types'
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
@@ -337,6 +337,20 @@ export const TextEditor = forwardRef(
       }
     }
 
+    const handlerWrapperClick = e => {
+      // It's important to check if it's the wrapper which is clicked
+      // and don't call focus when an inner element is clicked, as it
+      // leads to very buggy behavior. For example if atomic block is focused
+      // and something (like resizing image with resize dropdown) causes
+      // this code to run the editor's focus, it goes to a buggy state
+      // in which nothing will unselect the atomic block. The only way
+      // to escape this buggy condition in this case is to blur and
+      // focus again the editor
+      if (e.target === editorElementRef.current) {
+        editorRef.current && editorRef.current.focus()
+      }
+    }
+
     return (
       <EditorContainer className={className}>
         <EditorWrapper
@@ -344,7 +358,7 @@ export const TextEditor = forwardRef(
           className={cn({
             'hide-placeholder': shouldHidePlaceholder(editorState)
           })}
-          onClick={() => editorRef.current && editorRef.current.focus()}
+          onClick={handlerWrapperClick}
           data-test="text-editor-wrapper"
         >
           {/* I wish we had upgraded Dropzone to use the hook version :( */}
