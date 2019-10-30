@@ -21,6 +21,8 @@ templates[listingTopBlockName] = Top
 templates[listingLeftBlockName] = Left
 templates[listingRightBlockName] = Right
 
+const domParser = new DOMParser()
+
 export interface Options {
   onDrop: (model: Model) => void
 }
@@ -33,10 +35,13 @@ function registerListingBlock(
   editor: Editor,
   { label, category, blockName }: BlockOptions
 ): void {
+  const root = domParser.parseFromString(templates[blockName], 'text/xml')
+  const tagName = root.children[0].tagName
+
   editor.BlockManager.add(blockName, {
     category,
     label,
-    content: `<div data-block="${blockName}"></div>`
+    content: `<${tagName} data-block="${blockName}"></${tagName}>`
   })
 }
 

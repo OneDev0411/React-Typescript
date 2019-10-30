@@ -44,7 +44,7 @@ function registerStaticBlock(
   editor.BlockManager.add(blockName, {
     label,
     category,
-    content: `<div data-block="${blockName}"></div>`
+    content: templates[blockName]
   })
 }
 
