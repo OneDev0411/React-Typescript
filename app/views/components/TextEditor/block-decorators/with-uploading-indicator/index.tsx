@@ -1,7 +1,7 @@
 import React from 'react'
 import { ContentBlock, ContentState } from 'draft-js'
-
 import { wrapDisplayName } from 'recompose'
+import classNames from 'classnames'
 
 import IconCircleSpinner from '../../../SvgIcons/CircleSpinner/IconCircleSpinner'
 import { LoadingWrapper } from './styled'
@@ -30,7 +30,11 @@ export const withUploadingIndicator = WrappedComponent => {
         .getData()
 
       return (
-        <LoadingWrapper uploading={data.uploading} style={style}>
+        <LoadingWrapper
+          uploading={data.uploading}
+          style={style}
+          className={classNames({ focused: this.props.blockProps.isFocused })}
+        >
           {data.uploading && <IconCircleSpinner />}
           <WrappedComponent {...this.props} />
         </LoadingWrapper>

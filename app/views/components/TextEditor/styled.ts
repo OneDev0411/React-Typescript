@@ -62,6 +62,31 @@ export const EditorWrapper = styled.div`
   .focused {
     box-shadow: 0 0 0 3px ${primaryDark};
   }
+
+  ////////////////////////////////////////////////
+  // showing resize handles with css pseudo elements
+  // we can do better if we replaced resizable plugin with a better one
+  // that shows them itslef and also adds corner resize handles
+  .focused::before,
+  .focused::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: ${primaryDark};
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  .focused::before {
+    left: -5px;
+  }
+  .focused::after {
+    right: -5px;
+  }
+  /////////////////////////////////////////////////
+
   .unfocused:hover {
     box-shadow: 0 0 0 3px ${primary};
   }
