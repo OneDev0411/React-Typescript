@@ -52,7 +52,10 @@ export const Editable = styled.div`
   }
 `
 
-export const Item = styled.div`
+export const Item = styled.div<{
+  showBorder?: boolean
+  isSaving?: boolean
+}>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -75,15 +78,6 @@ export const Item = styled.div`
   :hover ${ItemActions} {
     display: inherit;
   }
-
-  ${props =>
-    props.isDateContext &&
-    `
-    border-color: transparent;
-    :hover {
-      border-color: transparent;
-    }
-  `};
 
   ${props =>
     props.isSaving &&
