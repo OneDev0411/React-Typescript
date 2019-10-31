@@ -30,6 +30,7 @@ import {
 } from './Statics'
 import {
   listingTopBlockName,
+  listingGridBlockName,
   listingLeftBlockName,
   listingRightBlockName
 } from './Listings'
@@ -64,6 +65,7 @@ const BLOCK_BUTTON_ICONS = {
   [articleRightBlockName]: ArticleImageRightIcon,
 
   [listingTopBlockName]: ArticleImageTopIcon,
+  [listingGridBlockName]: ArticleImageDualIcon,
   [listingLeftBlockName]: ArticleImageLeftIcon,
   [listingRightBlockName]: ArticleImageRightIcon,
 
@@ -90,6 +92,7 @@ const BLOCK_BUTTONS_ORDER = [
   articleRightBlockName,
 
   listingTopBlockName,
+  listingGridBlockName,
   listingLeftBlockName,
   listingRightBlockName,
 
