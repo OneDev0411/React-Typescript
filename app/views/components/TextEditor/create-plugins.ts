@@ -29,6 +29,7 @@ import { createCollapsibleDecorator } from './block-decorators/create-collapsibl
 import createPasteHtmlPlugin from './plugins/draft-js-paste-html'
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 import { atomicBlockLinkDecorator } from './block-decorators/atomic-block-link-decorator'
+import { resizableBugFixDecorator } from './block-decorators/resizable-bug-fix-decorator'
 
 export function createPlugins(
   setLinkEditorOpen: (open: boolean) => void,
@@ -67,6 +68,7 @@ export function createPlugins(
   const imagePlugin = createImagePlugin({
     decorator: composeDecorators(
       withUploadingIndicator,
+      resizableBugFixDecorator,
       resizeablePlugin.decorator,
       atomicBlockLinkDecorator,
       alignmentPlugin.decorator,

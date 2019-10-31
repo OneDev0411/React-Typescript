@@ -1,5 +1,5 @@
 import isEmail from 'validator/lib/isEmail'
-import { EditorState, ContentBlock } from 'draft-js'
+import { EditorState } from 'draft-js'
 import { getSelectionEntity, getSelectionText } from 'draftjs-utils'
 
 import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
@@ -35,20 +35,6 @@ export function getCurrentLinkText(
   return getSelectionText(editorState)
 }
 
-export function getBlockElement(contentBlock: ContentBlock) {
-  const blockElement = document.querySelector(
-    `[data-offset-key="${contentBlock.getKey()}-0-0"]`
-  )
-
-  if (
-    blockElement &&
-    blockElement.firstElementChild === blockElement.lastElementChild
-  ) {
-    return blockElement.firstElementChild
-  }
-
-  return blockElement
-}
 export const getSelectionAnchorElement = () => {
   const selection = window.getSelection()
 

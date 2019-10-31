@@ -11,7 +11,7 @@ export interface ImageSizeOptions {
  * and is a function of device resolution. but this seems like a reliable
  * average.
  */
-const BEST_FIT_WIDTH = 472
+const BEST_FIT_LENGTH = 472
 
 /**
  * Given the original size of an image, returns three different sizes
@@ -20,7 +20,9 @@ const BEST_FIT_WIDTH = 472
  */
 export function getImageSizeOptions(original: ImageSize): ImageSizeOptions {
   const bestFitRatio =
-    original.width > BEST_FIT_WIDTH ? BEST_FIT_WIDTH / original.width : 1
+    original.width > original.height
+      ? boundByBestFit(original.width)
+      : boundByBestFit(original.height)
 
   const bestFit: ImageSize = resize(original, bestFitRatio)
 
@@ -35,3 +37,7 @@ const resize = (size: ImageSize, factor: number) => ({
   width: size.width * factor,
   height: size.height * factor
 })
+
+function boundByBestFit(length: number) {
+  return length > BEST_FIT_LENGTH ? BEST_FIT_LENGTH / length : 1
+}

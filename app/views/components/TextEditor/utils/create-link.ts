@@ -30,10 +30,13 @@ export function createLink(
      * If an atomic block is selected (via selectable plugin), we add link
      * metadata into it's data instead of replacing it with a link
      */
-    return setBlockData(editorState, {
-      href: url,
-      title: text
-    })
+    return setBlockData(
+      editorState,
+      selectedBlock.getData().merge({
+        href: url,
+        title: text
+      })
+    )
   }
 
   // If something is selected, replace it with the provided `text`

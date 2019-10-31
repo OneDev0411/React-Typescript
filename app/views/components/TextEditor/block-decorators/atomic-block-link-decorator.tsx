@@ -1,16 +1,10 @@
 import React from 'react'
 import { wrapDisplayName } from 'recompose'
-import { ContentBlock, ContentState } from 'draft-js'
 
-interface Props {
-  block: ContentBlock
-  blockProps: StringMap<any>
-  contentState: ContentState
-  className?: string
-}
+import { DraftPluginEditorDecoratorProps } from '../types'
 
 export const atomicBlockLinkDecorator = WrappedComponent => {
-  function WithUploadingIndicator(props: Props) {
+  function AtomicBlockLink(props: DraftPluginEditorDecoratorProps) {
     const data = props.block.getData()
 
     const href = data.get('href')
@@ -25,10 +19,10 @@ export const atomicBlockLinkDecorator = WrappedComponent => {
     return <WrappedComponent {...passedProps} />
   }
 
-  WithUploadingIndicator.displayName = wrapDisplayName(
+  AtomicBlockLink.displayName = wrapDisplayName(
     WrappedComponent,
     'atomicBlockLink'
   )
 
-  return WithUploadingIndicator
+  return AtomicBlockLink
 }

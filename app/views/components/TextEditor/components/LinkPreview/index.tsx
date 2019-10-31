@@ -1,4 +1,4 @@
-import { Grid, IconButton, Tooltip } from '@material-ui/core'
+import { Box, Grid, IconButton, Tooltip, Typography } from '@material-ui/core'
 import * as React from 'react'
 
 import { EditorState } from 'draft-js'
@@ -12,7 +12,8 @@ import IconCopy from 'components/SvgIcons/Copy/IconCopy'
 import IconEmail from 'components/SvgIcons/Email/IconEmail'
 
 import { removeLink } from '../../utils/remove-link'
-import { LinkPreviewContainer, LinkText } from './styled'
+import { useToolbarIconClass } from '../../hooks/use-toolbar-icon-class'
+import { SelectionPopoverPaper } from '../SelectionPopoverPaper'
 
 interface Props {
   url: string
@@ -20,11 +21,6 @@ interface Props {
   editorState: EditorState
   setEditorState: (editorState: EditorState) => void
   onClose: () => void
-}
-
-const iconSizeProps = {
-  noStyles: true,
-  style: { width: 18, minWidth: 18, height: 18, margin: 4 }
 }
 
 export function LinkPreview(props: Props) {
@@ -45,37 +41,35 @@ export function LinkPreview(props: Props) {
 
   const LinkIcon = props.url.match(/^mailto:.+/) ? IconEmail : IconLinkOpen
 
+  const iconClassNames = useToolbarIconClass()
+
   return (
-    <LinkPreviewContainer
-      elevation={10}
-      onMouseDown={e => {
-        e.preventDefault()
-        e.stopPropagation()
-      }}
-    >
+    <SelectionPopoverPaper style={{ width: '18rem' }}>
       <Grid container alignItems="center" wrap="nowrap">
-        <LinkIcon {...iconSizeProps} />
-        <LinkText flexGrow={1} pl={1}>
+        <LinkIcon className={iconClassNames} />
+        {/*
+        // @ts-ignore typing doesn't work for Box props */}
+        <Typography noWrap component={Box} flexGrow={1} pl={1}>
           <a href={props.url} target="_blank">
             {props.url}
           </a>
-        </LinkText>
+        </Typography>
         <Tooltip title="Copy Link">
           <IconButton size="small" onClick={copyLink}>
-            <IconCopy {...iconSizeProps} />
+            <IconCopy className={iconClassNames} />
           </IconButton>
         </Tooltip>
         <Tooltip title="Edit Link">
           <IconButton size="small" onClick={props.onEdit}>
-            <EditIcon {...iconSizeProps} />
+            <EditIcon className={iconClassNames} />
           </IconButton>
         </Tooltip>
         <Tooltip title="Remove Link">
-          <IconButton size="small" onClick={unlink} edge="end">
-            <IconUnlink {...iconSizeProps} />
+          <IconButton size="small" onClick={unlink}>
+            <IconUnlink className={iconClassNames} />
           </IconButton>
         </Tooltip>
       </Grid>
-    </LinkPreviewContainer>
+    </SelectionPopoverPaper>
   )
 }

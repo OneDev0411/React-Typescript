@@ -9,6 +9,12 @@ export const useIconStyles = makeStyles(
       leftMargin: {
         marginLeft: `${theme.spacing(1)}px`
       },
+      /**
+       * useful for small icons inside small IconButtons
+       */
+      smallMargins: {
+        margin: theme.spacing(0.5)
+      },
       small: {
         'svg&': {
           // More specificity to beat styled-svg styles
@@ -16,6 +22,9 @@ export const useIconStyles = makeStyles(
           height: 16,
           minWidth: 16
         }
+      },
+      currentColor: {
+        fill: 'currentColor'
       },
       medium: {
         'svg&': {
