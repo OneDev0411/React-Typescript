@@ -19,7 +19,10 @@ interface GifBlock {
   selectHandler: (selectedGif?: any) => void
 }
 
-export default function registerGifBlock(editor: Editor, { onDrop }: Options) {
+export default function registerGifBlock(
+  editor: Editor,
+  { onDrop }: Options
+): GifBlock {
   registerBlock(editor, {
     label: 'GIF Animation',
     category: BASICS_BLOCK_CATEGORY,

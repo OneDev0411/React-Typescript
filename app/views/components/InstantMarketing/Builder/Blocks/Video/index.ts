@@ -24,7 +24,7 @@ export default function registerVideoBlock(
   editor: Editor,
   renderData: TemplateRenderData,
   { onDrop }: Options
-) {
+): VideoBlock {
   registerBlock(editor, {
     label: 'Video',
     category: BASICS_BLOCK_CATEGORY,
