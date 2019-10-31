@@ -16,7 +16,7 @@ interface Props {
   onSelect: (photo?: Image) => void
 }
 
-export default function VideoDrawer({
+export default function ImageDrawer({
   isOpen,
   onClose = () => {},
   onSelect
@@ -35,6 +35,12 @@ export default function VideoDrawer({
       <OverlayDrawer.Body>
         <Search
           onChange={async (value: string) => {
+            if (!value) {
+              setImages(null)
+
+              return
+            }
+
             setIsLoading(true)
 
             const result = await searchImages(value)
