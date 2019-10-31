@@ -621,6 +621,7 @@ class Builder extends React.Component {
         >
           <SearchListingDrawer
             mockListings
+            multipleSelection
             isOpen={this.state.isListingDrawerOpen}
             title="Select a Listing"
             onClose={() => {
@@ -628,11 +629,9 @@ class Builder extends React.Component {
               this.setState({ isListingDrawerOpen: false })
             }}
             onSelectListingsCallback={listings => {
-              const listing = listings[0]
+              listings.forEach(this.addListingAssets)
 
-              this.addListingAssets(listing)
-
-              this.blocks.listing.selectHandler(listing)
+              this.blocks.listing.selectHandler(listings)
               this.setState({ isListingDrawerOpen: false })
             }}
           />

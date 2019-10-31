@@ -26,23 +26,23 @@ export interface Options {
 }
 
 interface ListingBlock {
-  selectHandler: (selectedListing?: IListing) => void
+  selectHandler: (selectedListings?: IListing[]) => void
 }
 
 let modelHandle: any
 let renderData: TemplateRenderData
 
-const selectHandler = (listing?: IListing) => {
+const selectHandler = (listings?: IListing[]) => {
   if (!modelHandle) {
     return
   }
 
   const template = templates[modelHandle.attributes.attributes['data-block']]
 
-  if (listing) {
+  if (listings && listings.length) {
     const mjml = nunjucks.renderString(template, {
       ...renderData,
-      listing
+      listings
     })
 
     modelHandle.parent().append(mjml, { at: modelHandle.opt.at })
