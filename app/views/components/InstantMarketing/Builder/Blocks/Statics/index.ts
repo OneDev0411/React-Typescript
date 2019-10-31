@@ -6,6 +6,7 @@ import { TemplateRenderData } from '../../utils/get-template-render-data/index'
 
 import { ARTICLES_BLOCK_CATEGORY, BASICS_BLOCK_CATEGORY } from '../../constants'
 import { BlockOptions } from '../types'
+import registerBlock from '../registerBlock'
 
 import ArticleTop from './article-top.mjml'
 import ArticleDual from './article-dual.mjml'
@@ -37,71 +38,60 @@ templates[buttonBlockName] = Button
 templates[socialGroupBlockName] = SocialGroup
 templates[socialGroupElementBlockName] = SocialGroupElement
 
-function registerStaticBlock(
-  editor: Editor,
-  { label, category, blockName }: BlockOptions
-): void {
-  editor.BlockManager.add(blockName, {
-    label,
-    category,
-    content: templates[blockName]
-  })
-}
-
 export default function registerStaticBlocks(
   editor: Editor,
   renderData: TemplateRenderData
 ): void {
-  registerStaticBlock(editor, {
+  registerBlock(editor, {
     label: 'Image Top',
     category: ARTICLES_BLOCK_CATEGORY,
     blockName: articleTopBlockName,
     template: templates[articleTopBlockName]
   })
 
-  registerStaticBlock(editor, {
+  registerBlock(editor, {
     label: 'Image Dual',
     category: ARTICLES_BLOCK_CATEGORY,
     blockName: articleDualBlockName,
     template: templates[articleDualBlockName]
   })
 
-  registerStaticBlock(editor, {
+  registerBlock(editor, {
     label: 'Image Left',
     category: ARTICLES_BLOCK_CATEGORY,
     blockName: articleLeftBlockName,
     template: templates[articleLeftBlockName]
   })
 
-  registerStaticBlock(editor, {
+  registerBlock(editor, {
     label: 'Image Right',
     category: ARTICLES_BLOCK_CATEGORY,
     blockName: articleRightBlockName,
     template: templates[articleRightBlockName]
   })
 
-  registerStaticBlock(editor, {
+  registerBlock(editor, {
     label: 'Image',
     category: BASICS_BLOCK_CATEGORY,
     blockName: imageBlockName,
     template: templates[imageBlockName]
   })
 
-  registerStaticBlock(editor, {
+  registerBlock(editor, {
     label: 'Button',
     category: BASICS_BLOCK_CATEGORY,
     blockName: buttonBlockName,
     template: templates[buttonBlockName]
   })
 
-  registerStaticBlock(editor, {
+  registerBlock(editor, {
     label: 'Social Group',
     category: BASICS_BLOCK_CATEGORY,
     blockName: socialGroupBlockName,
     template: templates[socialGroupBlockName]
   })
 
-  registerStaticBlock(editor, {
+  registerBlock(editor, {
     label: 'Social Group Element',
     category: BASICS_BLOCK_CATEGORY,
     blockName: socialGroupElementBlockName,
