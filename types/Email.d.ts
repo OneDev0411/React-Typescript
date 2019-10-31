@@ -5,10 +5,6 @@ declare type IEmailRecipientType =
   | 'Brand'
   | 'AllContacts'
   | 'Agent'
-  /*
-    using for those agents which selected from Deals -> Agent Network to promote a deal
-  */
-  | 'DealAgent'
 
 declare interface IEmailRecipientInputBase<T extends IEmailRecipientType> {
   recipient_type: T
@@ -72,7 +68,7 @@ declare type IEmailRecipient<
 } & Association<'contact', IContact, Associations> &
   Association<'list', IContactList, Associations> &
   Association<'brand', IBrand, Associations> &
-  Association<'agent', IAgent, Associations>
+  Association<'agent', IDealAgent, Associations>
 
 declare interface IEmailCampaignInputBase {
   due_at: Date | null
