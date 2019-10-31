@@ -22,8 +22,8 @@ export default function ColorPicker({
     <ColorPickerContainer>
       <ItemTitle>{title}</ItemTitle>
       <CirclePicker
-        circleSize={38}
-        circleSpacing={24}
+        circleSize={32}
+        circleSpacing={16}
         colors={colors}
         color={color}
         onChangeComplete={onChange}
