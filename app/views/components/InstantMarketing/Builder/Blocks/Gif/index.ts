@@ -4,6 +4,7 @@ import { Model } from 'backbone'
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { GifItem } from 'components/GifDrawer/types'
 
+import registerBlock from '../registerBlock'
 import { BASICS_BLOCK_CATEGORY } from '../../constants'
 
 import template from './template.mjml'
@@ -19,10 +20,11 @@ interface GifBlock {
 }
 
 export default function registerGifBlock(editor: Editor, { onDrop }: Options) {
-  editor.BlockManager.add(blockName, {
+  registerBlock(editor, {
     label: 'GIF Animation',
     category: BASICS_BLOCK_CATEGORY,
-    content: `<div data-block="${blockName}"></div>`
+    blockName,
+    template
   })
 
   let modelHandle: any

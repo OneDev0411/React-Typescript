@@ -4,6 +4,7 @@ import { Model } from 'backbone'
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { Video } from 'components/VideoDrawer/types'
 
+import registerBlock from '../registerBlock'
 import { BASICS_BLOCK_CATEGORY } from '../../constants'
 import { TemplateRenderData } from '../../utils/get-template-render-data'
 
@@ -24,10 +25,11 @@ export default function registerVideoBlock(
   renderData: TemplateRenderData,
   { onDrop }: Options
 ) {
-  editor.BlockManager.add(blockName, {
+  registerBlock(editor, {
     label: 'Video',
     category: BASICS_BLOCK_CATEGORY,
-    content: `<div data-block="${blockName}"></div>`
+    blockName,
+    template
   })
 
   let modelHandle: any

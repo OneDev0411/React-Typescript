@@ -5,7 +5,7 @@ import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
 import { TemplateRenderData } from '../../utils/get-template-render-data'
 import { AGENTS_BLOCK_CATEGORY } from '../../constants'
-import { BlockOptions } from '../types'
+import registerBlock from '../registerBlock'
 
 import Single from './single.mjml'
 
@@ -21,17 +21,6 @@ export interface Options {
 
 interface AgentBlock {
   selectHandler: (selectedAgent?: IAgent) => void
-}
-
-function registerAgentBlock(
-  editor: Editor,
-  { label, category, blockName }: BlockOptions
-): void {
-  editor.BlockManager.add(blockName, {
-    category,
-    label,
-    content: `<div data-block="${blockName}"></div>`
-  })
 }
 
 let modelHandle: any
@@ -62,10 +51,11 @@ export default function registerAgentBlocks(
   { onDrop }: Options
 ): AgentBlock {
   renderData = _renderData
-  registerAgentBlock(editor, {
+  registerBlock(editor, {
     label: 'Single Agent',
     category: AGENTS_BLOCK_CATEGORY,
-    blockName: agentSingleBlockName
+    blockName: agentSingleBlockName,
+    template: templates[agentSingleBlockName]
   })
 
   editor.on('block:drag:stop', (model: Model, block) => {

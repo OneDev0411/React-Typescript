@@ -5,7 +5,7 @@ import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
 import { LISTINGS_BLOCK_CATEGORY } from '../../constants'
 import { TemplateRenderData } from '../../utils/get-template-render-data/index'
-import { BlockOptions } from '../types'
+import registerBlock from '../registerBlock'
 
 import Top from './top.mjml'
 import Right from './right.mjml'
@@ -21,28 +21,12 @@ templates[listingTopBlockName] = Top
 templates[listingLeftBlockName] = Left
 templates[listingRightBlockName] = Right
 
-const domParser = new DOMParser()
-
 export interface Options {
   onDrop: (model: Model) => void
 }
 
 interface ListingBlock {
   selectHandler: (selectedListing?: IListing) => void
-}
-
-function registerListingBlock(
-  editor: Editor,
-  { label, category, blockName }: BlockOptions
-): void {
-  const root = domParser.parseFromString(templates[blockName], 'text/xml')
-  const tagName = root.children[0].tagName
-
-  editor.BlockManager.add(blockName, {
-    category,
-    label,
-    content: `<${tagName} data-block="${blockName}"></${tagName}>`
-  })
 }
 
 let modelHandle: any
@@ -67,28 +51,31 @@ const selectHandler = (listing?: IListing) => {
   modelHandle.remove()
 }
 
-export default function registerListingBlocks(
+export default function registerBlocks(
   editor: Editor,
   _renderData: TemplateRenderData,
   { onDrop }: Options
 ): ListingBlock {
   renderData = _renderData
-  registerListingBlock(editor, {
+  registerBlock(editor, {
     label: 'Image Top',
     category: LISTINGS_BLOCK_CATEGORY,
-    blockName: listingTopBlockName
+    blockName: listingTopBlockName,
+    template: templates[listingTopBlockName]
   })
 
-  registerListingBlock(editor, {
+  registerBlock(editor, {
     label: 'Image Left',
     category: LISTINGS_BLOCK_CATEGORY,
-    blockName: listingLeftBlockName
+    blockName: listingLeftBlockName,
+    template: templates[listingLeftBlockName]
   })
 
-  registerListingBlock(editor, {
+  registerBlock(editor, {
     label: 'Image Right',
     category: LISTINGS_BLOCK_CATEGORY,
-    blockName: listingRightBlockName
+    blockName: listingRightBlockName,
+    template: templates[listingRightBlockName]
   })
 
   editor.on('block:drag:stop', (model: Model, block) => {

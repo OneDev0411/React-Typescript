@@ -55,49 +55,57 @@ export default function registerStaticBlocks(
   registerStaticBlock(editor, {
     label: 'Image Top',
     category: ARTICLES_BLOCK_CATEGORY,
-    blockName: articleTopBlockName
+    blockName: articleTopBlockName,
+    template: templates[articleTopBlockName]
   })
 
   registerStaticBlock(editor, {
     label: 'Image Dual',
     category: ARTICLES_BLOCK_CATEGORY,
-    blockName: articleDualBlockName
+    blockName: articleDualBlockName,
+    template: templates[articleDualBlockName]
   })
 
   registerStaticBlock(editor, {
     label: 'Image Left',
     category: ARTICLES_BLOCK_CATEGORY,
-    blockName: articleLeftBlockName
+    blockName: articleLeftBlockName,
+    template: templates[articleLeftBlockName]
   })
 
   registerStaticBlock(editor, {
     label: 'Image Right',
     category: ARTICLES_BLOCK_CATEGORY,
-    blockName: articleRightBlockName
+    blockName: articleRightBlockName,
+    template: templates[articleRightBlockName]
   })
 
   registerStaticBlock(editor, {
     label: 'Image',
     category: BASICS_BLOCK_CATEGORY,
-    blockName: imageBlockName
+    blockName: imageBlockName,
+    template: templates[imageBlockName]
   })
 
   registerStaticBlock(editor, {
     label: 'Button',
     category: BASICS_BLOCK_CATEGORY,
-    blockName: buttonBlockName
+    blockName: buttonBlockName,
+    template: templates[buttonBlockName]
   })
 
   registerStaticBlock(editor, {
     label: 'Social Group',
     category: BASICS_BLOCK_CATEGORY,
-    blockName: socialGroupBlockName
+    blockName: socialGroupBlockName,
+    template: templates[socialGroupBlockName]
   })
 
   registerStaticBlock(editor, {
     label: 'Social Group Element',
     category: BASICS_BLOCK_CATEGORY,
-    blockName: socialGroupElementBlockName
+    blockName: socialGroupElementBlockName,
+    template: templates[socialGroupElementBlockName]
   })
 
   editor.on('block:drag:stop', (model: any, block: any) => {
