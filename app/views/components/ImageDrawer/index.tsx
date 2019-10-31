@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Masonry from 'react-masonry-css'
 import { CircularProgress } from '@material-ui/core'
 
@@ -6,7 +6,7 @@ import OverlayDrawer from 'components/OverlayDrawer'
 import Search from 'components/Grid/Search'
 
 import { Image } from './types'
-import { searchImages } from './helpers'
+import { searchImages, listImages } from './helpers'
 import Thumbnail from './Thumbnail'
 import NoResults from './NoResults'
 
@@ -24,6 +24,19 @@ export default function ImageDrawer({
   const [isLoading, setIsLoading] = useState(false)
   const [images, setImages] = useState<Image[] | null>(null)
 
+  async function fetchDefaultImages() {
+    setIsLoading(true)
+
+    const defaultImagesList = await listImages()
+
+    setImages(defaultImagesList)
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+    fetchDefaultImages()
+  }, [])
+
   return (
     <OverlayDrawer
       open={isOpen}
@@ -36,7 +49,7 @@ export default function ImageDrawer({
         <Search
           onChange={async (value: string) => {
             if (!value) {
-              setImages(null)
+              await fetchDefaultImages()
 
               return
             }
@@ -48,7 +61,7 @@ export default function ImageDrawer({
             setImages(result)
             setIsLoading(false)
           }}
-          onClearSearch={() => setImages(null)}
+          onClearSearch={async () => fetchDefaultImages()}
           placeholder="Search for an image"
           isSearching={isLoading}
           debounceTime={500}
