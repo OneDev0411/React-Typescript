@@ -24,12 +24,15 @@ export function recipientToChip(
   }
 
   if (recipient.recipient_type === 'Agent') {
+    const emailAddress = recipient.agent.email
+
     return {
-      label: recipient.agent.email,
+      label,
+      tooltip: label.includes(emailAddress) ? undefined : emailAddress,
       hasError
     }
   }
-  
+
   return {
     label,
     hasError

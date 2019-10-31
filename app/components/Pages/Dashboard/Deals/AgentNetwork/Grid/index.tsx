@@ -43,7 +43,9 @@ export class Grid extends React.Component<Props, State> {
       }
     })
 
-  getRecipients = (selectedRows: UUID[]) => {
+  getRecipients = (
+    selectedRows: UUID[]
+  ): IDenormalizedEmailRecipientDealAgentInput[] => {
     const { data } = this.props
 
     if (

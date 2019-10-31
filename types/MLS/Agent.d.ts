@@ -50,6 +50,7 @@ declare interface IAgent extends IModel<'agent'> {
 /* using for those agents which selected from Deals -> Agent Network to promote a deal */
 declare interface IDealAgent {
   id: UUID
+  agentId: UUID
   name: string
   email: string
   phone: string

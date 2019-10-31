@@ -163,7 +163,6 @@ declare type IDenormalizedEmailRecipientInput =
   | IDenormalizedEmailRecipientTagInput
   | IEmailRecipientAllContactsInput
   | IDenormalizedEmailRecipientBrandInput
-  // | IDenormalizedEmailRecipientAgentInput
   | IDenormalizedEmailRecipientDealAgentInput
 
 declare interface IDenormalizedEmailRecipientEmailInput
@@ -185,11 +184,6 @@ declare interface IDenormalizedEmailRecipientBrandInput
   extends Omit<IEmailRecipientBrandInput, 'brand'> {
   brand: IBrand
 }
-
-// declare interface IDenormalizedEmailRecipientAgentInput
-//   extends Omit<IEmailRecipientAgentInput, 'agent'> {
-//   agent: IAgent
-// }
 
 declare interface IDenormalizedEmailRecipientDealAgentInput
   extends Omit<IEmailRecipientAgentInput, 'agent'> {
