@@ -22,6 +22,7 @@ declare interface ICalendarEvent {
   object_type: string
   recurring: boolean
   status: string
+  end_date: string | null // TODO: communicated with Abbas
   timestamp: number
   timestamp_midday: string
   timestamp_readable: string
