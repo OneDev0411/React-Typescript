@@ -6,6 +6,8 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
 import TerserPlugin from 'terser-webpack-plugin'
 
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
+
 import webpackConfig from './base'
 import appConfig from '../config/webpack'
 
@@ -68,6 +70,18 @@ webpackConfig.plugins.push(
     algorithm: 'gzip',
     test: /\.js$|\.css$/,
     filename: '[path]'
+  }),
+  new ForkTsCheckerWebpackPlugin({
+    /**
+     * We want build to fail if there is a ts error
+     */
+    async: false,
+    /**
+     * react-scripts also sets this to true and the overhead is negligible
+     * with respect to production build time
+     */
+    checkSyntacticErrors: true,
+    useTypescriptIncrementalApi: true
   })
 )
 
