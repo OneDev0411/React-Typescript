@@ -9,7 +9,7 @@ export interface Pagination {
   perPage?: number
 }
 
-export interface MinimalSearchResultItem {
+export interface MinimalApiImageItem {
   id: string
   urls: {
     full: string
