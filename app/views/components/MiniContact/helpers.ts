@@ -184,8 +184,8 @@ export function activitiesFormatter(activities?: ProfileDateType[]) {
     )
 }
 
-export function formatDate(dateParam) {
-  const date = new Date(dateParam * 1000)
+export function formatDate(timestamp: number): string {
+  const date = new Date(timestamp * 1000)
 
   if (date.getFullYear() === 1800) {
     return fecha.format(date, 'MMM DD')
