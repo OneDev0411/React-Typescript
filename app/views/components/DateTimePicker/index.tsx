@@ -15,40 +15,76 @@ import TimeInput from '../TimeInput'
 import { PickerContainer } from './styled'
 import { isToday, formatDate } from './helpers'
 
+interface RenderProps {
+  handleOpen: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+}
+
 interface Props {
   style?: React.CSSProperties
   datePickerModifiers?: object
   selectedDate?: Date
-  onChange(date: Date): void
+  showTimePicker?: boolean
+  saveCaption?: string
+  defaultAnchorElement?: HTMLElement | null
+  children?({ handleOpen }: RenderProps): React.ReactNode
+  onChange?(date: Date): void
+  onClose?(date: Date | null): void
 }
 
 export function DateTimePicker({
   style,
+  showTimePicker = true,
   datePickerModifiers = {},
   selectedDate = new Date(),
-  onChange
+  children,
+  defaultAnchorElement = null,
+  saveCaption = 'Done',
+  onChange = () => {},
+  onClose = () => {}
 }: Props) {
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
+  const [date, setDate] = useState<Date>(selectedDate)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(
+    defaultAnchorElement
+  )
 
-  const handleClose = () => setAnchorEl(null)
+  const handleClose = () => {
+    setAnchorEl(null)
 
-  const handleOpen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+    onClose(date)
+  }
+
+  const handleOpen = (e: React.MouseEvent<HTMLElement, MouseEvent>) =>
     setAnchorEl(e.currentTarget)
 
-  const handleDate = (date: Date) =>
-    onChange(setTime(date, getTime(selectedDate) as number))
+  const handleChangeTime = (date: Date) => {
+    setDate(date)
+    onChange(date)
+  }
+
+  const handleDate = (date: Date) => {
+    const nextDate = setTime(date, getTime(selectedDate) as number)
+
+    setDate(nextDate)
+    onChange(nextDate)
+  }
 
   return (
     <div style={style}>
-      <Button
-        variant="text"
-        color="primary"
-        data-test="date-time-picker-button"
-        onClick={handleOpen}
-      >
-        {isToday(selectedDate) && <span>Today,&nbsp;</span>}
-        <span>{formatDate(selectedDate)}</span>
-      </Button>
+      {children ? (
+        children({
+          handleOpen
+        })
+      ) : (
+        <Button
+          variant="text"
+          color="primary"
+          data-test="date-time-picker-button"
+          onClick={handleOpen}
+        >
+          {isToday(date) && <span>Today,&nbsp;</span>}
+          <span>{formatDate(date)}</span>
+        </Button>
+      )}
 
       <Popover
         id={anchorEl ? 'datepicker-popover' : undefined}
@@ -66,8 +102,8 @@ export function DateTimePicker({
       >
         <PickerContainer>
           <DayPicker
-            initialMonth={selectedDate}
-            selectedDays={selectedDate}
+            initialMonth={date}
+            selectedDays={date}
             onDayClick={handleDate}
             modifiers={datePickerModifiers}
           />
@@ -75,7 +111,11 @@ export function DateTimePicker({
           <Divider margin="0.5em 0" />
 
           <Flex alignCenter justifyBetween>
-            <TimeInput initialDate={selectedDate} onChange={onChange} />
+            <div>
+              {showTimePicker && (
+                <TimeInput initialDate={date} onChange={handleChangeTime} />
+              )}
+            </div>
 
             <Button
               variant="text"
@@ -83,7 +123,7 @@ export function DateTimePicker({
               data-test="date-picker-done"
               onClick={handleClose}
             >
-              Done
+              {saveCaption}
             </Button>
           </Flex>
         </PickerContainer>
