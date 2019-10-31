@@ -4,10 +4,11 @@ import React from 'react'
 
 import { ContentBlock, EditorState } from 'draft-js'
 
-import IconAlignDefault from '../../../SvgIcons/AlignDefault/IconAlignDefault'
-import IconAlignLeft from '../../../SvgIcons/AlignLeft/IconAlignLeft'
-import IconAlignCenter from '../../../SvgIcons/AlignCenter/IconAlignCenter'
-import IconAlignRight from '../../../SvgIcons/AlignRight/IconAlignRight'
+import IconAlignDefault from 'components/SvgIcons/AlignDefault/IconAlignDefault'
+import IconAlignLeft from 'components/SvgIcons/AlignLeft/IconAlignLeft'
+import IconAlignCenter from 'components/SvgIcons/AlignCenter/IconAlignCenter'
+import IconAlignRight from 'components/SvgIcons/AlignRight/IconAlignRight'
+
 import { AtomicBlockEntityData } from '../../types'
 import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
 import { updateAtomicBlockEntityData } from '../../modifiers/update-atomic-block-entity-data'

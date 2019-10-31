@@ -13,7 +13,7 @@ import { getContentBlockSelector } from '../../utils/get-content-block-selector'
 export function useAtomicBlockFocusBugDetector(
   focusedBlock: ContentBlock | undefined,
   editorState: EditorState
-) {
+): boolean {
   const [isReallyFocused, setIsReallyFocused] = useState(false)
 
   useEffect(() => {

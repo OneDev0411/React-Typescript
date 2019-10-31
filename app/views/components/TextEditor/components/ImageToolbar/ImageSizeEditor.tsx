@@ -48,6 +48,8 @@ export function ImageSizeEditor({ block, editorState, onChange }: Props) {
       height: imageElement.naturalHeight
     })
 
+  // If size matches one of the size options, we set value to it. otherwise
+  // an empty string
   const value =
     (currentSize &&
       imageSizes &&
