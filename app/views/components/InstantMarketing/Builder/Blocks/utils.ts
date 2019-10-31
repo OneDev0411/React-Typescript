@@ -35,6 +35,7 @@ import {
   listingRightBlockName
 } from './Listings'
 import { agentSingleBlockName } from './Agents'
+import { blockName as rechatImageBlockName } from './Image'
 
 const BLOCK_IDS_TO_REMOVE = [
   'mj-button',
@@ -48,6 +49,7 @@ const BLOCK_IDS_TO_REMOVE = [
 const BLOCK_BUTTON_ICONS = {
   'rechat-gif': GifIcon,
   'rechat-video': VideoIcon,
+  [rechatImageBlockName]: ImageIcon,
   'mj-1-column': OneColIcon,
   'mj-2-columns': TwoColIcon,
   'mj-3-columns': ThreeColIcon,
@@ -75,6 +77,7 @@ const BLOCK_BUTTON_ICONS = {
 const BLOCK_BUTTONS_ORDER = [
   'rechat-gif',
   'rechat-video',
+  rechatImageBlockName,
   'mj-1-column',
   'mj-2-columns',
   'mj-3-columns',

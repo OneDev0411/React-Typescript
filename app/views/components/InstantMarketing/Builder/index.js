@@ -13,6 +13,7 @@ import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import TeamAgents from 'components/TeamAgents'
+import ImageDrawer from 'components/ImageDrawer'
 import GifDrawer from 'components/GifDrawer'
 import VideoDrawer from 'components/VideoDrawer'
 
@@ -56,6 +57,7 @@ class Builder extends React.Component {
       loadedListingsAssets: [],
       isListingDrawerOpen: false,
       isAgentDrawerOpen: false,
+      isImageDrawerOpen: false,
       isGifDrawerOpen: false,
       isVideoDrawerOpen: false
     }
@@ -213,6 +215,11 @@ class Builder extends React.Component {
       agent: {
         onDrop: () => {
           this.setState({ isAgentDrawerOpen: true })
+        }
+      },
+      image: {
+        onDrop: () => {
+          this.setState({ isImageDrawerOpen: true })
         }
       },
       gif: {
@@ -652,6 +659,17 @@ class Builder extends React.Component {
               }}
             />
           )}
+          <ImageDrawer
+            isOpen={this.state.isImageDrawerOpen}
+            onClose={() => {
+              this.blocks.image.selectHandler()
+              this.setState({ isImageDrawerOpen: false })
+            }}
+            onSelect={imageItem => {
+              this.blocks.image.selectHandler(imageItem)
+              this.setState({ isImageDrawerOpen: false })
+            }}
+          />
           <GifDrawer
             isOpen={this.state.isGifDrawerOpen}
             onClose={() => {

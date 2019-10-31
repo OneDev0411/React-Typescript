@@ -35,5 +35,8 @@ export default {
   },
   tenor: {
     api_key: process.env.TENOR_API_KEY
+  },
+  unsplash: {
+    api_key: process.env.UNSPLASH_API_KEY
   }
 }

@@ -237,6 +237,7 @@
     "underscore": "^1.9.1",
     "underscore.get": "^0.2.9",
     "universal-cookie": "^2.2.0",
+    "unsplash-js": "^6.0.0",
     "unused-files-webpack-plugin": "^3.4.0",
     "use-debounce": "^2.0.1",
     "use-deep-compare-effect": "^1.2.0",
