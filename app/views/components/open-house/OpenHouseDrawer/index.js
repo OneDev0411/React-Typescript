@@ -349,12 +349,9 @@ class OpenHouseDrawerInternal extends React.Component {
     const { isDisabled, openHouse, error } = this.state
 
     return (
-      <Drawer
-        open={this.props.isOpen && !this.state.isTemplateBuilderOpen}
-        onClose={this.props.onClose}
-      >
+      <Drawer open={this.props.isOpen} onClose={this.props.onClose}>
         <Drawer.Header
-          title={`${this.isNew ? 'New' : 'Edit'} Open House Registration Pages`}
+          title={`${this.isNew ? 'New' : 'Edit'} Open House Registration Page`}
         />
 
         <Drawer.Body>
@@ -521,6 +518,9 @@ class OpenHouseDrawerInternal extends React.Component {
                   {this.state.isTemplateBuilderOpen && (
                     <InstantMarketing
                       isOpen
+                      containerStyle={{
+                        zIndex: 1003
+                      }}
                       headerTitle="Edit Guest Registration Page"
                       closeConfirmation={false}
                       showTemplatesColumn={false}
