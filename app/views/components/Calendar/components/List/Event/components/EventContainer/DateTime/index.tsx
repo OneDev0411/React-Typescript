@@ -1,3 +1,4 @@
+import React from 'react'
 import fecha from 'fecha'
 
 interface Props {
@@ -6,16 +7,20 @@ interface Props {
 
 export function DateTime({ event }: Props) {
   if (['crm_association', 'crm_task'].includes(event.object_type) === false) {
-    return 'All day'
+    return <span>All day</span>
   }
 
   const dueDate = formatDate(event.timestamp)
 
   if (event.end_date) {
-    return `${dueDate} - ${formatDate(event.end_date)}`
+    return (
+      <span>
+        {dueDate} - {formatDate(event.end_date)}
+      </span>
+    )
   }
 
-  return dueDate
+  return <span>${dueDate}</span>
 }
 
 function formatDate(date: Date | string | number): string {
