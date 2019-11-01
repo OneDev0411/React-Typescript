@@ -506,7 +506,10 @@ class Builder extends React.Component {
 
     return (
       <Portal root="marketing-center">
-        <Container className="template-builder">
+        <Container
+          className="template-builder"
+          style={this.props.containerStyle}
+        >
           <Header>
             <h1>{this.props.headerTitle}</h1>
 

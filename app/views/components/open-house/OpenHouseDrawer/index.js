@@ -518,6 +518,9 @@ class OpenHouseDrawerInternal extends React.Component {
                   {this.state.isTemplateBuilderOpen && (
                     <InstantMarketing
                       isOpen
+                      containerStyle={{
+                        zIndex: 1003
+                      }}
                       headerTitle="Edit Guest Registration Page"
                       closeConfirmation={false}
                       showTemplatesColumn={false}
