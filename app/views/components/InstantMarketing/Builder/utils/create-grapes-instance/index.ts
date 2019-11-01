@@ -27,6 +27,13 @@ const STYLE_MANAGER_TEXT_TAGS = [
   'mj-button'
 ]
 
+const STYLE_MANAGER_BG_COLORABLE_TAGS = [
+  'mj-button',
+  'mj-column',
+  'mj-section',
+  'mj-wrapper'
+]
+
 export function createGrapesInstance(
   Grapesjs: any,
   { assets, plugins, pluginsOpts }
@@ -72,7 +79,7 @@ export function createGrapesInstance(
         },
         backgroundColorPicker: {
           conditions: {
-            allowedTags: STYLE_MANAGER_TEXT_TAGS,
+            allowedTags: STYLE_MANAGER_BG_COLORABLE_TAGS,
             forbiddenStyles: ['background-image']
           }
         }
