@@ -16,11 +16,13 @@ export const load = async colors => {
     let fontSizePickerContainer
     let fontWeightPickerContainer
     let colorPickerContainer
+    let backgroundColorPickerContainer
 
     const {
       fontSizePicker: fontSizePickerOptions = {},
       fontWeightPicker: fontWeightPickerOptions = {},
-      colorPicker: colorPickerOptions = {}
+      colorPicker: colorPickerOptions = {},
+      backgroundColorPicker: backgroundColorPickerOptions = {}
     } = options
 
     const isElementAllowed = (target, conditions) => {
@@ -84,6 +86,12 @@ export const load = async colors => {
         colorPickerContainer.id = 'mc-editor-color-picker'
         styleManagerContainer.appendChild(colorPickerContainer)
       }
+
+      if (!backgroundColorPickerOptions.disabled) {
+        backgroundColorPickerContainer = document.createElement('div')
+        backgroundColorPickerContainer.id = 'mc-editor-background-color-picker'
+        styleManagerContainer.appendChild(backgroundColorPickerContainer)
+      }
     })
 
     editor.on('component:selected', selected => {
@@ -138,6 +146,26 @@ export const load = async colors => {
               }}
             />,
             colorPickerContainer
+          )
+        }
+      }
+
+      if (!backgroundColorPickerOptions.disabled) {
+        ReactDOM.unmountComponentAtNode(backgroundColorPickerContainer)
+
+        if (
+          isElementAllowed(selected, backgroundColorPickerOptions.conditions)
+        ) {
+          ReactDOM.render(
+            <ColorPicker
+              title="Background Color"
+              colors={colors}
+              color={getStyle(selected).backgroundColor}
+              onChange={color => {
+                setStyle(selected, 'background-color', color.hex)
+              }}
+            />,
+            backgroundColorPickerContainer
           )
         }
       }

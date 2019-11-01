@@ -69,6 +69,12 @@ export function createGrapesInstance(
             allowedTags: STYLE_MANAGER_TEXT_TAGS,
             forbiddenStyles: ['background-image']
           }
+        },
+        backgroundColorPicker: {
+          conditions: {
+            allowedTags: STYLE_MANAGER_TEXT_TAGS,
+            forbiddenStyles: ['background-image']
+          }
         }
       }
     }
