@@ -21,7 +21,7 @@ function CreateNewOpenHouse(props: Props) {
         variant="contained"
         onClick={() => setIsSearchDrawerOpen(true)}
       >
-        Create an Open House
+        Create Registration Page
       </Button>
 
       <SearchListingDrawer

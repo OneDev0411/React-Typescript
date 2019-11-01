@@ -353,7 +353,9 @@ class OpenHouseDrawerInternal extends React.Component {
         open={this.props.isOpen && !this.state.isTemplateBuilderOpen}
         onClose={this.props.onClose}
       >
-        <Drawer.Header title={`${this.isNew ? 'New' : 'Edit'} Open House`} />
+        <Drawer.Header
+          title={`${this.isNew ? 'New' : 'Edit'} Open House Registration Pages`}
+        />
 
         <Drawer.Body>
           <LoadSaveReinitializeForm
