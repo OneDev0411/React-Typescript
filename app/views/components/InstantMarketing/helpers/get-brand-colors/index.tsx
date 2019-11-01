@@ -1,12 +1,13 @@
 import flattenBrand from 'utils/flatten-brand'
 
-const SHARED_COLORS = ['#fff', '#ccc', '#999', '#666', '#333', '#000']
+const SHARED_COLORS = ['#fff', '#000']
+const DEFAULT_COLORS = ['#fff', '#ccc', '#999', '#666', '#333', '#000']
 
 export function getBrandColors(brand: IBrand): string[] {
   const flattedBrand = flattenBrand(brand) as IBrand
 
   if (!flattedBrand.palette) {
-    return SHARED_COLORS
+    return DEFAULT_COLORS
   }
 
   const colors: string[] = []
