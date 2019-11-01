@@ -31,6 +31,7 @@ import { Footer } from '../components/Footer'
 import ConfirmationModalContext from '../../ConfirmationModal/context'
 import { validateRecipient } from '../../EmailRecipientsChipsInput/helpers/validate-recipient'
 import { getSendEmailResultMessages } from '../helpers/email-result-messages'
+import { TextEditorRef } from '../../TextEditor/types'
 
 export const useEmailFormStyles = makeStyles(styles, { name: 'EmailForm' })
 
@@ -79,7 +80,7 @@ function EmailComposeForm<T>({
   const [topFieldsCollapsed, setTopFieldsCollapsed] = useState<boolean>(
     hasRecipients
   )
-  const emailBodyEditorRef = useRef<any>(null)
+  const emailBodyEditorRef = useRef<TextEditorRef>(null)
   const confirmationModal = useContext(ConfirmationModalContext)
 
   const classes = useEmailFormStyles(props)
@@ -272,22 +273,39 @@ function EmailComposeForm<T>({
               />
             </div>
             {children}
-            <Footer
-              formProps={{ values: formProps.values as EmailFormValues }}
-              isSubmitting={submitting}
-              isSubmitDisabled={
-                typeof isSubmitDisabled === 'function'
-                  ? isSubmitDisabled(values)
-                  : isSubmitDisabled
-              }
-              uploadAttachment={uploadAttachment}
-              initialAttachments={initialValues.attachments || []}
-              deal={props.deal}
-              enableSchedule={enableSchedule}
-              onCancel={onCancel}
-              onDelete={onDelete}
-              onChanged={scrollToEnd}
-              className={classes.footer}
+
+            {/*
+            If react-final-form was up to date, we could use useField instead
+            of nesting footer inside a Field just to be able to update subject.
+            */}
+            <Field
+              name="subject"
+              render={({ input: subjectInput }) => (
+                <Footer
+                  formProps={{ values: formProps.values as EmailFormValues }}
+                  isSubmitting={submitting}
+                  isSubmitDisabled={
+                    typeof isSubmitDisabled === 'function'
+                      ? isSubmitDisabled(values)
+                      : isSubmitDisabled
+                  }
+                  uploadAttachment={uploadAttachment}
+                  initialAttachments={initialValues.attachments || []}
+                  deal={props.deal}
+                  enableSchedule={enableSchedule}
+                  onCancel={onCancel}
+                  onDelete={onDelete}
+                  onChanged={scrollToEnd}
+                  onTemplateSelected={template => {
+                    subjectInput.onChange(template.subject as any)
+
+                    if (emailBodyEditorRef.current) {
+                      emailBodyEditorRef.current.update(template.body)
+                    }
+                  }}
+                  className={classes.footer}
+                />
+              )}
             />
           </form>
         )
