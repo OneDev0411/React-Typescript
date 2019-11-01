@@ -1,3 +1,5 @@
+import { merge } from 'lodash'
+
 /**
  * Given a list functions which return an object or undefined,
  * returns a new function that applies all of them and merges all
@@ -14,7 +16,7 @@ export function mergeFunctions<
       const result = fn(...args)
 
       return result != null
-        ? { ...(resultSoFar || {}), ...result }
+        ? merge({ ...(resultSoFar || {}) }, result)
         : resultSoFar
     }, undefined)
   }
