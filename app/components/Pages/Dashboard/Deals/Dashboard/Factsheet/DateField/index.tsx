@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-
 import { Tooltip } from '@material-ui/core'
+import fecha from 'fecha'
 
 import { getField } from 'models/Deal/helpers/context/get-field'
 
@@ -42,7 +42,7 @@ export function DateField({
   const handleSave = async (date: Date): Promise<void> => {
     setIsSaving(true)
 
-    await onChange(field, date)
+    await onChange(field, fecha.format(date, 'YYYY-MM-DD'))
 
     setIsSaving(false)
   }
