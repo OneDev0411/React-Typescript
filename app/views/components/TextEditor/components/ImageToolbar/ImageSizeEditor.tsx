@@ -11,6 +11,7 @@ import {
 import { getBlockElement } from '../../utils/get-block-element'
 import { updateAtomicBlockEntityData } from '../../modifiers/update-atomic-block-entity-data'
 import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
+import { getAtomicBlockEntityData } from '../../utils/get-atomic-block-entity-data'
 
 interface Props {
   editorState: EditorState
@@ -48,16 +49,32 @@ export function ImageSizeEditor({ block, editorState, onChange }: Props) {
       height: imageElement.naturalHeight
     })
 
-  // If size matches one of the size options, we set value to it. otherwise
-  // an empty string
-  const value =
-    (currentSize &&
-      imageSizes &&
-      findKey(
-        imageSizes,
-        size => Math.abs(size.width - currentSize.width) < 3
-      )) ||
-    ''
+  const blockData =
+    targetBlock &&
+    getAtomicBlockEntityData(editorState.getCurrentContent(), targetBlock)
+
+  const isSizeSelected = size =>
+    currentSize && Math.abs(size.width - currentSize.width) < 3
+  let value
+
+  // There are cases that original size and best fit are equal.
+  // In these cases we save the lastSelectedSize and use it here,
+  // to ensure always the selected option is shown to the user.
+  // Note that the user may resize the image manually after selecting
+  // one of the sizing options and therefore we need to always check
+  // if the lastSelectedSize is actually selected based on the current size.
+  if (
+    blockData &&
+    blockData.lastSelectedSize &&
+    imageSizes &&
+    isSizeSelected(imageSizes[blockData.lastSelectedSize])
+  ) {
+    value = blockData.lastSelectedSize
+  } else {
+    // If size matches one of the size options, we set value to it. otherwise
+    // an empty string
+    value = (imageSizes && findKey(imageSizes, isSizeSelected)) || ''
+  }
 
   const resize = (size: keyof ImageSizeOptions) => {
     if (imageSizes) {
@@ -65,7 +82,7 @@ export function ImageSizeEditor({ block, editorState, onChange }: Props) {
         updateAtomicBlockEntityData(
           editorState,
           block!, // when imageElement is found, block is not null for sure
-          imageSizes[size]
+          { ...imageSizes[size], lastSelectedSize: size }
         )
       )
     }
