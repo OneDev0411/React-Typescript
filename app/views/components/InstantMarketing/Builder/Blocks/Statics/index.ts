@@ -5,7 +5,6 @@ import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { TemplateRenderData } from '../../utils/get-template-render-data/index'
 
 import { ARTICLES_BLOCK_CATEGORY, BASICS_BLOCK_CATEGORY } from '../../constants'
-import { BlockOptions } from '../types'
 import registerBlock from '../registerBlock'
 
 import ArticleTop from './article-top.mjml'
