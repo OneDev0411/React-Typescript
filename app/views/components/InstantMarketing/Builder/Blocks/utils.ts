@@ -6,6 +6,8 @@ import VideoIcon from 'assets/images/marketing/editor/blocks/video.png'
 import OneColIcon from 'assets/images/marketing/editor/blocks/col-1.png'
 import TwoColIcon from 'assets/images/marketing/editor/blocks/col-2.png'
 import ThreeColIcon from 'assets/images/marketing/editor/blocks/col-3.png'
+import Headline1Icon from 'assets/images/marketing/editor/blocks/h1.png'
+import Headline2Icon from 'assets/images/marketing/editor/blocks/h2.png'
 import TextIcon from 'assets/images/marketing/editor/blocks/text.png'
 import DividerIcon from 'assets/images/marketing/editor/blocks/divider.png'
 import SpacerIcon from 'assets/images/marketing/editor/blocks/spacer.png'
@@ -34,6 +36,9 @@ import {
   listingLeftBlockName,
   listingRightBlockName
 } from './Listings'
+
+import { headline1BlockName } from './Statics'
+import { headline2BlockName } from './Statics'
 import { agentSingleBlockName } from './Agents'
 import { blockName as rechatImageBlockName } from './Image'
 
@@ -53,6 +58,8 @@ const BLOCK_BUTTON_ICONS = {
   'mj-1-column': OneColIcon,
   'mj-2-columns': TwoColIcon,
   'mj-3-columns': ThreeColIcon,
+  [headline1BlockName]: Headline1Icon,
+  [headline2BlockName]: Headline2Icon,
   'mj-text': TextIcon,
   'mj-divider': DividerIcon,
   'mj-spacer': SpacerIcon,
@@ -81,6 +88,8 @@ const BLOCK_BUTTONS_ORDER = [
   'mj-1-column',
   'mj-2-columns',
   'mj-3-columns',
+  headline1BlockName,
+  headline2BlockName,
   'mj-text',
   'mj-divider',
   'mj-spacer',

@@ -5,9 +5,10 @@ import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { TemplateRenderData } from '../../utils/get-template-render-data/index'
 
 import { ARTICLES_BLOCK_CATEGORY, BASICS_BLOCK_CATEGORY } from '../../constants'
-import { BlockOptions } from '../types'
 import registerBlock from '../registerBlock'
 
+import Headline1 from './headline-1.mjml'
+import Headline2 from './headline-2.mjml'
 import ArticleTop from './article-top.mjml'
 import ArticleDual from './article-dual.mjml'
 import ArticleLeft from './article-left.mjml'
@@ -17,6 +18,8 @@ import Button from './button.mjml'
 import SocialGroup from './social-group.mjml'
 import SocialGroupElement from './social-group-element.mjml'
 
+export const headline1BlockName = 'headline-1'
+export const headline2BlockName = 'headline-2'
 export const articleTopBlockName = 'rechat-article-image-top'
 export const articleDualBlockName = 'rechat-article-image-dual'
 export const articleLeftBlockName = 'rechat-article-image-left'
@@ -28,6 +31,8 @@ export const socialGroupElementBlockName = 'mj-social-element'
 
 const templates = {}
 
+templates[headline1BlockName] = Headline1
+templates[headline2BlockName] = Headline2
 templates[articleTopBlockName] = ArticleTop
 templates[articleDualBlockName] = ArticleDual
 templates[articleLeftBlockName] = ArticleLeft
@@ -42,6 +47,20 @@ export default function registerStaticBlocks(
   editor: Editor,
   renderData: TemplateRenderData
 ): void {
+  registerBlock(editor, {
+    label: 'Headline 1',
+    category: BASICS_BLOCK_CATEGORY,
+    blockName: headline1BlockName,
+    template: templates[headline1BlockName]
+  })
+
+  registerBlock(editor, {
+    label: 'Headline 2',
+    category: BASICS_BLOCK_CATEGORY,
+    blockName: headline2BlockName,
+    template: templates[headline2BlockName]
+  })
+
   registerBlock(editor, {
     label: 'Image Top',
     category: ARTICLES_BLOCK_CATEGORY,
