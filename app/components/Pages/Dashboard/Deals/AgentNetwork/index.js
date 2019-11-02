@@ -137,7 +137,12 @@ class AgentNetwork extends React.Component {
         isFetching: true
       })
 
-      const response = await byValert(query, null, false)
+      const response = await byValert(
+        query,
+        null,
+        false,
+        '?associations[]=compact_listing.selling_agent&associations[]=compact_listing.list_agent'
+      )
 
       const list = normalizeList(response.data).sort(
         (a, b) => b.listingsCount - a.listingsCount
