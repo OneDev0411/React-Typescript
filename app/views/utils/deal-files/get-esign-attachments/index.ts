@@ -22,7 +22,7 @@ function getTaskAttachments(task: IDealTask): IDealFile[] {
       task: task.id,
       checklist: task.checklist
     })
-  } else {
+  } else if (task.form) {
     attachments.push({
       id: task.id,
       url: task.pdf_url,
