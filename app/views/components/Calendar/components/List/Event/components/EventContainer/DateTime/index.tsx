@@ -20,7 +20,7 @@ export function DateTime({ event }: Props) {
     )
   }
 
-  return <span>${dueDate}</span>
+  return <span>{dueDate}</span>
 }
 
 function formatDate(date: Date | string | number): string {
