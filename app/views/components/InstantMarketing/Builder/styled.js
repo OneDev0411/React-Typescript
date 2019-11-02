@@ -56,7 +56,7 @@ export const Header = styled.div`
   justify-content: flex-start;
   height: 3rem;
   border-bottom: 1px solid #d4d4d4;
-  padding: 0 1.5rem;
+  padding: 0 0.5rem;
 
   h1 {
     font-size: 2rem;

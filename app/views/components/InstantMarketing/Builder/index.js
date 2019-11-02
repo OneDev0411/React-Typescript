@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import juice from 'juice'
+import { Button } from '@material-ui/core'
 
 import { Portal } from 'components/Portal'
 import IconButton from 'components/Button/IconButton'
@@ -10,6 +11,7 @@ import ActionButton from 'components/Button/ActionButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import IconNav from 'components/SvgIcons/NavMenu/IconNav'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import TeamAgents from 'components/TeamAgents'
 import ImageDrawer from 'components/ImageDrawer'
@@ -54,6 +56,7 @@ class Builder extends React.Component {
       isLoading: true,
       isEditorLoaded: false,
       templateHtmlCss: '',
+      isTemplatesColumnHidden: false,
       loadedListingsAssets: [],
       isListingDrawerOpen: false,
       isAgentDrawerOpen: false,
@@ -641,6 +644,13 @@ class Builder extends React.Component {
     )
   }
 
+  toggeleTemplatesColumnVisibility = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      isTemplatesColumnHidden: !prevState.isTemplatesColumnHidden
+    }))
+  }
+
   render() {
     const { isLoading } = this.state
 
@@ -724,7 +734,18 @@ class Builder extends React.Component {
             }}
           />
           <Header>
-            <h1>{this.props.headerTitle}</h1>
+            <Button
+              size="small"
+              variant="outlined"
+              style={{ width: '8.75rem' }}
+              onClick={this.toggeleTemplatesColumnVisibility}
+            >
+              <IconNav />
+              &nbsp;&nbsp;
+              {this.state.isTemplatesColumnHidden
+                ? 'Show Templates'
+                : 'Hide Templates'}
+            </Button>
             {this.editor && <UndoRedoManager editor={this.editor} />}
             {this.editor && this.isEmailTemplate && (
               <DeviceManager editor={this.editor} />
@@ -776,7 +797,7 @@ class Builder extends React.Component {
                 iconSize="large"
                 inverse
                 onClick={this.props.onClose}
-                style={{ marginLeft: '1rem' }}
+                style={{ marginLeft: '0.5rem' }}
               >
                 <CloseIcon />
               </IconButton>
@@ -785,7 +806,10 @@ class Builder extends React.Component {
 
           <BuilderContainer>
             <TemplatesContainer
-              isInvisible={this.props.showTemplatesColumn === false}
+              isInvisible={
+                this.props.showTemplatesColumn === false ||
+                this.state.isTemplatesColumnHidden
+              }
             >
               {this.state.isEditorLoaded && (
                 <Templates
