@@ -11,7 +11,7 @@ const item1 = {
 }
 const item2 = {
   clicked: 2,
-  display_name: 'Shadmehr Aghili',
+  full_name: 'Shadmehr Aghili',
   failed: 5,
   id: '1d441b50-96cb-14e1-a9bd-0z95h98s82ac',
   opened: 3,
@@ -22,7 +22,7 @@ const item2 = {
 }
 const item3 = {
   clicked: 4,
-  display_name: '',
+  full_name: '',
   failed: 0,
   id: '3d444230-96mb-11e9-a9bd-0an599q482ac',
   opened: 0,
@@ -33,7 +33,7 @@ const item3 = {
 }
 const item4 = {
   clicked: 1,
-  display_name: 'Abbas Ghaderi',
+  full_name: 'Abbas Ghaderi',
   failed: 4,
   id: '3d444230-96mb-11e9-a9bd-0an599q482ac',
   opened: 4,
@@ -50,7 +50,7 @@ const emailCampaignEmail = {
   complained: 0,
   contact: '337cb802-9254-489e-8ee9-806ca4bf6513',
   delivered: 1,
-  display_name: 'Alireza Mirian',
+  full_name: 'Alireza Mirian',
   email: 'a14b1832-e51b-11e9-b090-027d31a1f7a0',
   email_address: 'alireza.mirian@gmail.com',
   failed: 0,
