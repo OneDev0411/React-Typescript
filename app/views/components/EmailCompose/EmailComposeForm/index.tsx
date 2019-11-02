@@ -65,6 +65,7 @@ function EmailComposeForm<T>({
   },
   dispatch,
   enableSchedule = true,
+  evaluateTemplateExpressions = false,
   onCancel,
   onDelete,
   uploadAttachment = uploadEmailAttachment,
@@ -85,93 +86,89 @@ function EmailComposeForm<T>({
 
   const classes = useEmailFormStyles(props)
 
-  const handleSendEmail = useCallback(
-    async form => {
-      const { successMessage, errorMessage } = getSendEmailResultMessages(
-        !!form.due_at
-      )
+  const handleSendEmail = async (formData: EmailFormValues) => {
+    const { successMessage, errorMessage } = getSendEmailResultMessages(
+      !!formData.due_at
+    )
 
-      let result: T
+    let result: T
 
-      try {
-        result = await props.sendEmail(form)
-      } catch (e) {
-        console.error('error in sending email', e)
+    try {
+      result = await props.sendEmail(formData)
+    } catch (e) {
+      console.error('error in sending email', e)
 
-        return dispatch(
-          notify({
-            status: 'error',
-            message: errorMessage
-          })
-        )
-      }
-
-      dispatch(
+      return dispatch(
         notify({
-          status: 'success',
-          message: successMessage
+          status: 'error',
+          message: errorMessage
         })
       )
+    }
 
-      onSent(result)
-    },
-    [dispatch, onSent, props]
-  )
-  const onSubmit = useCallback(
-    form => {
-      const uploadingAttachment = (form.uploadingAttachments || []).length > 0
-      const uploadingImage =
-        emailBodyEditorRef.current &&
-        emailBodyEditorRef.current.hasUploadingImage()
+    dispatch(
+      notify({
+        status: 'success',
+        message: successMessage
+      })
+    )
 
-      if (uploadingImage || uploadingAttachment) {
-        return new Promise((resolve, reject) => {
-          confirmationModal.setConfirmationModal({
-            message: 'Upload in progress',
-            description: `Please wait while ${
-              uploadingImage ? 'images' : 'attachments'
-            } are uploading, or remove them`,
-            cancelLabel: 'Ok',
-            needsConfirm: false,
-            onCancel: reject
-          })
+    onSent(result)
+  }
+
+  const onSubmit = form => {
+    const uploadingAttachment = (form.uploadingAttachments || []).length > 0
+    const uploadingImage =
+      emailBodyEditorRef.current &&
+      emailBodyEditorRef.current.hasUploadingImage()
+
+    if (uploadingImage || uploadingAttachment) {
+      return new Promise((resolve, reject) => {
+        confirmationModal.setConfirmationModal({
+          message: 'Upload in progress',
+          description: `Please wait while ${
+            uploadingImage ? 'images' : 'attachments'
+          } are uploading, or remove them`,
+          cancelLabel: 'Ok',
+          needsConfirm: false,
+          onCancel: reject
         })
-      }
+      })
+    }
 
-      if ((form.uploadingAttachments || []).length > 0) {
-        return new Promise((resolve, reject) => {
-          confirmationModal.setConfirmationModal({
-            message: 'Upload in progress',
-            description:
-              'Please wait while attachments are uploading, or remove them',
-            cancelLabel: 'Ok',
-            needsConfirm: false,
-            onCancel: reject
-          })
+    if ((form.uploadingAttachments || []).length > 0) {
+      return new Promise((resolve, reject) => {
+        confirmationModal.setConfirmationModal({
+          message: 'Upload in progress',
+          description:
+            'Please wait while attachments are uploading, or remove them',
+          cancelLabel: 'Ok',
+          needsConfirm: false,
+          onCancel: reject
         })
-      }
+      })
+    }
 
-      if ((form.subject || '').trim() === '') {
-        return new Promise((resolve, reject) => {
-          confirmationModal.setConfirmationModal({
-            message: 'Send without subject?',
-            description:
-              'This email has no subject. Are you sure you want to send it?',
-            confirmLabel: 'Send anyway',
-            onCancel: reject,
-            onConfirm: () => {
-              handleSendEmail(form)
-                .then(resolve)
-                .catch(reject)
-            }
-          })
+    if ((form.subject || '').trim() === '') {
+      return new Promise((resolve, reject) => {
+        confirmationModal.setConfirmationModal({
+          message: 'Send without subject?',
+          description:
+            'This email has no subject. Are you sure you want to send it?',
+          confirmLabel: 'Send anyway',
+          onCancel: reject,
+          onConfirm: () => {
+            handleSendEmail(form)
+              .then(resolve)
+              .catch(reject)
+          }
         })
-      }
+      })
+    }
 
-      return handleSendEmail(form)
-    },
-    [confirmationModal, handleSendEmail]
-  )
+    return handleSendEmail(form)
+  }
+
   const validate = useCallback(values => {
     const errors: { [key in keyof EmailFormValues]?: string } = {}
     const { to } = values
