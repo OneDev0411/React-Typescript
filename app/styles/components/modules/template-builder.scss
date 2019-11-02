@@ -246,6 +246,8 @@
 
   .gjs-cv-canvas {
     height: 100%;
+    width: calc(100% - 16.625rem);
+    max-width: 75%;
     top: 0;
   }
 
