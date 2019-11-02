@@ -47,7 +47,7 @@ function popUpPositionStyle(props) {
     case 'bottom-right':
       return bottomRightMode
     default:
-      return bottomLeftMode
+      return ''
   }
 }
 
