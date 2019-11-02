@@ -212,13 +212,14 @@ class Builder extends React.Component {
     }
 
     const icon = `<select>
-      <option>Insert Variable</option>
+      <option value="">Insert Placeholder</option>
       <option value="{{recipient.first_name or 'there'}}">Recipient First Name</option>
       <option value="{{recipient.last_name or 'there'}}">Recipient Last Name</option>
     </select>`
 
     rte.add('first_name', {
       icon,
+      event: 'change',
       result: (rte, action) => {
         const { value } = action.btn.firstChild
 
