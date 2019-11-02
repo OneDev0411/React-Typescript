@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-
 import juice from 'juice'
 
 import { Portal } from 'components/Portal'
@@ -27,14 +26,15 @@ import { createGrapesInstance } from './utils/create-grapes-instance'
 
 import Templates from '../Templates'
 import { VideoToolbar } from './VideoToolbar'
+import UndoRedoManager from './UndoRedoManager'
+import DeviceManager from './DeviceManager'
 
 import {
   Container,
   Actions,
   TemplatesContainer,
   BuilderContainer,
-  Header,
-  Divider
+  Header
 } from './styled'
 
 import SocialActions from './SocialActions'
@@ -185,11 +185,10 @@ class Builder extends React.Component {
     this.disableAssetManager()
     this.makeTemplateCentered()
     this.removeTextStylesOnPaste()
+    this.disableDefaultDeviceManager()
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
       this.registerBlocks()
-    } else {
-      this.disableDeviceManager()
     }
 
     if (this.isVideoTemplate) {
@@ -212,7 +211,7 @@ class Builder extends React.Component {
     }
 
     const icon = `<select>
-      <option value="">Insert Placeholder</option>
+      <option>Insert Placeholder</option>
       <option value="{{recipient.first_name or 'there'}}">Recipient First Name</option>
       <option value="{{recipient.last_name or 'there'}}">Recipient Last Name</option>
     </select>`
@@ -270,7 +269,7 @@ class Builder extends React.Component {
     this.editor.on('run:open-assets', () => this.editor.Modal.close())
   }
 
-  disableDeviceManager = () => {
+  disableDefaultDeviceManager = () => {
     this.editor.Panels.removePanel('devices-c')
   }
 
@@ -726,6 +725,10 @@ class Builder extends React.Component {
           />
           <Header>
             <h1>{this.props.headerTitle}</h1>
+            {this.editor && <UndoRedoManager editor={this.editor} />}
+            {this.editor && this.isEmailTemplate && (
+              <DeviceManager editor={this.editor} />
+            )}
 
             <Actions>
               {this.state.selectedTemplate && (
@@ -768,12 +771,12 @@ class Builder extends React.Component {
                 </ActionButton>
               )}
 
-              <Divider />
               <IconButton
                 isFit
                 iconSize="large"
                 inverse
                 onClick={this.props.onClose}
+                style={{ marginLeft: '1rem' }}
               >
                 <CloseIcon />
               </IconButton>

@@ -33,7 +33,7 @@ declare module 'grapesjs' {
     Panels: Collection<Model>
     StyleManager: object
     Canvas: Canvas
-    UndoManager: object
+    UndoManager: UndoManager
     DeviceManager: object
     RichTextEditor: object
     Parser: object
@@ -65,7 +65,7 @@ declare module 'grapesjs' {
     ): Editor
     setDevice(name: string): Editor
     getDevice(): object
-    runCommand(id: string, options: object): any
+    runCommand(id: string, options?: object): any
     stopCommand(id: string, options: object): any
     store(clb: Function): object
     load(clb: Function): object
@@ -235,6 +235,15 @@ declare module 'grapesjs' {
     content: string
     category: string | object
     attributes?: object
+  }
+
+  export interface UndoManager {
+    hasUndo(): boolean
+    hasRedo(): boolean
+    undo(): UndoManager
+    redo(): UndoManager
+    start(): UndoManager
+    stop(): UndoManager
   }
 
   export interface SelectorManager {

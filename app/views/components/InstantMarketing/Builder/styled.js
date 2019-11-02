@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-import { borderColor } from 'views/utils/colors'
-
 export const Container = styled.div`
   position: fixed;
   display: block;
@@ -55,27 +53,21 @@ export const BuilderContainer = styled.div`
 export const Header = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: 10vh;
+  justify-content: flex-start;
+  height: 3rem;
   border-bottom: 1px solid #d4d4d4;
-  padding: 0 20px;
+  padding: 0 1.5rem;
 
   h1 {
-    font-size: 32px;
+    font-size: 2rem;
     font-weight: bold;
-    margin: 0 !important;
+    margin: 0 1rem !important;
   }
 `
 
 export const Actions = styled.div`
   display: flex;
   align-items: center;
-`
-
-export const Divider = styled.div`
-  display: inline-block;
-  width: 1px;
-  height: 1.5rem;
-  margin: 0 1em;
-  background-color: ${borderColor};
+  flex-grow: 1;
+  justify-content: flex-end;
 `
