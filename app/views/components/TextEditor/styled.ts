@@ -80,10 +80,10 @@ export const EditorWrapper = styled.div`
     pointer-events: none;
   }
   .focused::before {
-    left: -5px;
+    left: -4px;
   }
   .focused::after {
-    right: -5px;
+    right: -4px;
   }
   /////////////////////////////////////////////////
 
