@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { Editor } from 'grapesjs'
 
 interface UseUndoRedo {
@@ -9,40 +9,32 @@ interface UseUndoRedo {
 }
 
 export default function useUndoRedo(editor: Editor): UseUndoRedo {
-  const editorRef = useRef(editor)
-
   const [hasUndo, setHasUndo] = useState<boolean>(editor.UndoManager.hasUndo())
   const [hasRedo, setHasRedo] = useState<boolean>(editor.UndoManager.hasRedo())
 
   useEffect(() => {
-    const currentEditor = editorRef.current
+    editor.UndoManager.start()
+    editor.UndoManager.clear()
 
-    currentEditor.UndoManager.start()
-    setHasUndo(currentEditor.UndoManager.hasUndo())
-    setHasRedo(currentEditor.UndoManager.hasRedo())
+    editor.on('update', () => {
+      setHasUndo(editor.UndoManager.hasUndo())
+      setHasRedo(editor.UndoManager.hasRedo())
+    })
 
     return () => {
-      currentEditor.UndoManager.stop()
+      editor.UndoManager.stop()
     }
   }, [editor])
 
-  const undo = useCallback(() => {
-    if (!hasUndo) {
-      return
-    }
+  function undo() {
+    editor.UndoManager.undo()
+    setHasUndo(editor.UndoManager.hasUndo())
+  }
 
-    editorRef.current.UndoManager.undo()
-    setHasUndo(editorRef.current.UndoManager.hasUndo())
-  }, [hasUndo])
-
-  const redo = useCallback(() => {
-    if (!hasRedo) {
-      return
-    }
-
+  function redo() {
     editor.UndoManager.redo()
-    setHasRedo(editorRef.current.UndoManager.hasRedo())
-  }, [editor.UndoManager, hasRedo])
+    setHasRedo(editor.UndoManager.hasRedo())
+  }
 
   return {
     hasUndo,

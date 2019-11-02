@@ -244,6 +244,7 @@ declare module 'grapesjs' {
     redo(): UndoManager
     start(): UndoManager
     stop(): UndoManager
+    clear(): UndoManager
   }
 
   export interface SelectorManager {
