@@ -38,12 +38,13 @@ export const TemplatesContainer = styled.div`
   ${props =>
     props.isInvisible &&
     `
-    display: none;
+    visibility: hidden;
   `};
 `
 
 export const BuilderContainer = styled.div`
   display: flex;
+  background: #f2f2f2;
 
   #grapesjs-canvas {
     height: 90vh !important;
