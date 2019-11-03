@@ -741,7 +741,10 @@ class Builder extends React.Component {
               onClick={this.toggeleTemplatesColumnVisibility}
             >
               <IconNav />
-              &nbsp;&nbsp; Change template
+              &nbsp;&nbsp;
+              {this.state.isTemplatesColumnHidden
+                ? 'Change Template'
+                : 'Hide Templates'}
             </Button>
             {this.editor && <UndoRedoManager editor={this.editor} />}
             {this.editor && this.isEmailTemplate && (
