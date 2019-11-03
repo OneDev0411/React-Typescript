@@ -9,25 +9,25 @@ export function useAsyncValue<T, E = any>() {
   const [error, setError] = useState<E | null>(null)
   const lastPromiseRef = useRef<Promise<any> | null>(null)
 
-  const setValueAsync = useCallback((promise: Promise<T>) => {
+  const setValueAsync = useCallback(async (promise: Promise<T>) => {
     lastPromiseRef.current = promise
     setLoading(true)
-    promise
-      .then(value => {
-        if (lastPromiseRef.current === promise) {
-          setValue(value)
-        }
-      })
-      .catch(error => {
-        if (lastPromiseRef.current === promise) {
-          setError(error)
-        }
-      })
-      .finally(() => {
-        if (lastPromiseRef.current === promise) {
-          setLoading(false)
-        }
-      })
+
+    try {
+      const value = await promise
+
+      if (lastPromiseRef.current === promise) {
+        setValue(value)
+      }
+    } catch (e) {
+      if (lastPromiseRef.current === promise) {
+        setError(e)
+      }
+    } finally {
+      if (lastPromiseRef.current === promise) {
+        setLoading(false)
+      }
+    }
   }, [])
 
   const result = [setValueAsync, value, loading, error]

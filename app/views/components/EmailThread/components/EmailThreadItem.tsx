@@ -24,9 +24,9 @@ import IconReply from '../../SvgIcons/Reply/IconReply'
 import IconForward from '../../SvgIcons/Forward/IconForward'
 import { Attachment } from '../../EmailCompose/components/Attachment'
 import { EmailResponseType } from '../types'
-import EmailThreadComposeForm from '../../EmailCompose/EmailThreadComposeForm'
 import { decodeContentIds } from '../helpers/decode-content-ids'
 import { convertToAbsoluteAttachmentUrl } from '../helpers/convert-to-absolute-attachment-url'
+import { EmailResponseComposeForm } from '../../EmailCompose/EmailResponseComposeForm'
 
 interface Props {
   email: IEmailThreadEmail
@@ -142,7 +142,7 @@ export function EmailThreadItem({
               {/* I think we should conditionally show year, if it's not current year. fecha doesn't support such formatting I guess */}
               {fecha.format(new Date(email.message_date), 'MMM DD, hh:mm A')}
             </Typography>
-            {collapsed ? null : (
+            {collapsed || !email.thread_id ? null : (
               <EmailItemHeaderActions
                 onReply={openReply}
                 onForward={openForward}
@@ -169,7 +169,7 @@ export function EmailThreadItem({
               </Attachment>
             ))}
 
-            {showBottomButtons && (
+            {showBottomButtons && email.thread_id && (
               <Box my={1}>
                 <Button
                   className={classes.actionButton}
@@ -199,7 +199,7 @@ export function EmailThreadItem({
             )}
             {isResponseOpen && (
               <Paper elevation={10} className={classes.composeWrapper}>
-                <EmailThreadComposeForm
+                <EmailResponseComposeForm
                   email={email}
                   responseType={responseType}
                   onCancel={() => {

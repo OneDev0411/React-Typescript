@@ -1,13 +1,16 @@
 import { EditorState, Modifier, RichUtils, SelectionState } from 'draft-js'
 import PluginsUtils from 'draft-js-plugins-utils'
 
-import { getSelectionText } from 'draftjs-utils'
+import { getSelectionText, setBlockData } from 'draftjs-utils'
 
 import { collapseSelection } from './collapse-selection'
+import { getSelectedAtomicBlock } from './get-selected-atomic-block'
 
 /**
  * Replaces the selection with the given text (or inserts the text into the
- * cursor position) and links it.
+ * cursor position) and links it. If the selection is an atomic block, instead
+ * its data is updated to include `href`.
+ *
  * @param editorState
  * @param text
  * @param url
@@ -15,11 +18,27 @@ import { collapseSelection } from './collapse-selection'
  * @returns new editor state
  */
 export function createLink(
-  editorState,
-  url,
-  text = getSelectionText(editorState),
+  editorState: EditorState,
+  url: string,
+  text: string = getSelectionText(editorState),
   underline = true
-) {
+): EditorState {
+  const selectedBlock = getSelectedAtomicBlock(editorState)
+
+  if (selectedBlock) {
+    /**
+     * If an atomic block is selected (via selectable plugin), we add link
+     * metadata into it's data instead of replacing it with a link
+     */
+    return setBlockData(
+      editorState,
+      selectedBlock.getData().merge({
+        href: url,
+        title: text
+      })
+    )
+  }
+
   // If something is selected, replace it with the provided `text`
   const newContentState = Modifier.replaceText(
     editorState.getCurrentContent(),

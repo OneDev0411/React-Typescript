@@ -1,13 +1,12 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import moment from 'moment'
 import cn from 'classnames'
 import _ from 'underscore'
 
 import { H2 } from 'components/Typography/headings'
 
-import ActionButton from 'components/Button/ActionButton'
+import { DateTimePicker } from 'components/DateTimePicker'
 
-import DatePicker from '../components/DatePicker'
 import Input from '../../../../../views/components/Input'
 import RequiredIcon from '../../../../../views/components/SvgIcons/Required/IconRequired'
 
@@ -25,25 +24,8 @@ const ContextValue = ({ name, date, onRemove, onEdit }) => (
 )
 
 export default class extends React.Component {
-  state = {
-    selectedField: null
-  }
-
-  setSelectedField(field) {
-    this.setState({
-      selectedField: field
-    })
-  }
-
-  cancelEditing() {
-    this.setSelectedField(null)
-  }
-
-  onChangeDateContext(date) {
-    const { selectedField } = this.state
-
-    this.props.onChangeContext(selectedField, date)
-    this.cancelEditing()
+  onChangeDateContext(field, date) {
+    this.props.onChangeContext(field, date)
   }
 
   onChangeStringContext(field, value) {
@@ -64,7 +46,6 @@ export default class extends React.Component {
       fields,
       onChangeContext
     } = this.props
-    const { selectedField } = this.state
 
     return (
       <div className="form-section contexts">
@@ -121,44 +102,50 @@ export default class extends React.Component {
             )}
 
             {field.data_type === 'Date' && (
-              <Fragment>
-                {contexts[field.key] ? (
-                  <ContextValue
-                    name={field.label}
-                    date={contexts[field.key]}
-                    onRemove={() => onChangeContext(field.key, null)}
-                    onEdit={() => this.setSelectedField(field.key)}
-                  />
-                ) : (
+              <DateTimePicker
+                saveCaption="Save Date"
+                showTimePicker={false}
+                selectedDate={
+                  contexts[field.key]
+                    ? new Date(contexts[field.key])
+                    : new Date()
+                }
+                onClose={date => this.onChangeDateContext(field.key, date)}
+              >
+                {({ handleOpen }) => (
                   <div
                     className="entity-item date new"
-                    onClick={() => this.setSelectedField(field.key)}
+                    style={{
+                      marginLeft: '1rem'
+                    }}
                   >
-                    <ActionButton appearance="link" className="add-item">
-                      <span className="icon">+</span>
-                      <span
-                        className={cn('text', {
-                          hasError: hasError && field.mandatory
-                        })}
-                      >
-                        {field.label}{' '}
-                        {areContextsRequired && field.mandatory && (
-                          <span className="required">*</span>
-                        )}
-                      </span>
-                    </ActionButton>
+                    <>
+                      {contexts[field.key] ? (
+                        <ContextValue
+                          name={field.label}
+                          date={contexts[field.key]}
+                          onRemove={() => onChangeContext(field.key, null)}
+                          onEdit={handleOpen}
+                        />
+                      ) : (
+                        <div className="add-item" onClick={handleOpen}>
+                          <span className="icon">+</span>
+                          <span
+                            className={cn('text', {
+                              hasError: hasError && field.mandatory
+                            })}
+                          >
+                            {field.label}{' '}
+                            {areContextsRequired && field.mandatory && (
+                              <span className="required">*</span>
+                            )}
+                          </span>
+                        </div>
+                      )}
+                    </>
                   </div>
                 )}
-                <DatePicker
-                  show={selectedField === field.key}
-                  saveText={
-                    contexts[selectedField] ? 'Update Date' : 'Add Date'
-                  }
-                  initialDate={contexts[selectedField]}
-                  onClose={() => this.cancelEditing()}
-                  onSelectDate={date => this.onChangeDateContext(date)}
-                />
-              </Fragment>
+              </DateTimePicker>
             )}
           </div>
         ))}

@@ -69,6 +69,7 @@ declare interface IContact extends IContactBase {
   last_touch: number | null
   next_touch: number | null
   phone_number?: string
+  touch_freq?: number | null
 
   email: string | null
   emails: string[] | null

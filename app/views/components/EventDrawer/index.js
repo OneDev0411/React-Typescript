@@ -299,11 +299,6 @@ export class EventDrawer extends Component {
                         defaultAssociation={defaultAssociation}
                       />
 
-                      <FieldError
-                        name="associations"
-                        style={{ fontSize: '1rem' }}
-                      />
-
                       <ItemChangelog
                         item={values}
                         style={{ marginTop: '2em' }}

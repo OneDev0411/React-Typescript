@@ -22,6 +22,7 @@ declare interface ICalendarEvent {
   object_type: string
   recurring: boolean
   status: string
+  end_date: string | null // TODO: communicated with Abbas
   timestamp: number
   timestamp_midday: string
   timestamp_readable: string
@@ -30,13 +31,9 @@ declare interface ICalendarEvent {
   type_label: string
   thread_key: string | null
   users: UUID[]
-  full_contact?: IContact
+  people: IContact[] | null
+  people_len: number | null
   full_deal?: IDeal
-  full_crm_task: {
-    end_date: number | null
-    assignees: IUser[] | null
-    associations: TaskAssociation[]
-  } | null // TODO: fix association type
   full_thread: {
     type: 'thread'
     id: UUID

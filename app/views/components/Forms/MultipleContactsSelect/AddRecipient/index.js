@@ -6,7 +6,7 @@ import Downshift from 'downshift'
 import _ from 'underscore'
 
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
-import { getSegments, isListFetched } from 'reducers/filter-segments'
+import { getSegments, areListsFetched } from 'reducers/filter-segments'
 
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { getSavedSegments } from 'actions/filter-segments/get-saved-segment'
@@ -65,7 +65,7 @@ class AddRecipient extends React.Component {
       this.props.getContactsTags()
     }
 
-    if (!this.props.isListFetched) {
+    if (!this.props.areListsFetched) {
       this.props.getSavedSegments('contacts')
     }
   }
@@ -377,7 +377,7 @@ function mapStateToProps({ contacts }) {
     tags,
     isLoadingTags,
     segmentsList,
-    isSegmentsList: isListFetched(contacts.filterSegments)
+    isSegmentsList: areListsFetched(contacts.filterSegments)
   }
 }
 

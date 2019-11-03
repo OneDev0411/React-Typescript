@@ -2,11 +2,13 @@ import React, { useContext } from 'react'
 
 import { EditEmailDrawer } from 'components/EmailCompose'
 
-import { EmailThreadDrawer } from 'components/EmailThreadDrawer'
-
 import { ListContext } from '../context'
 
 import { CrmEvents } from '../../CrmEvents'
+import {
+  EmailThreadDrawerByThreadKey,
+  EmailCampaignThreadByCampaignId
+} from '../../../../EmailThreadDrawer'
 
 interface Props {
   user: IUser
@@ -34,24 +36,34 @@ export function EventController({
       />
     ) : null
 
-  const editEmailDrawer =
+  const isEmail =
     event &&
-    ['email_campaign', 'email_campaign_recipient'].includes(
-      event.object_type
-    ) ? (
-      <EditEmailDrawer
-        isOpen
-        emailId={event.campaign as UUID}
-        onEdited={emailCampaign => onScheduledEmailChange(emailCampaign)}
-        onClose={() => setSelectedEvent(null)}
-      />
-    ) : null
+    ['email_campaign', 'email_campaign_recipient'].includes(event.object_type)
+
+  const isScheduledEmail = isEmail && event!.event_type === 'scheduled_email'
+  const isExecutedEmail = isEmail && event!.event_type === 'executed_email'
+
+  const editEmailDrawer = isScheduledEmail ? (
+    <EditEmailDrawer
+      isOpen
+      emailId={event!.campaign as UUID}
+      onEdited={emailCampaign => onScheduledEmailChange(emailCampaign)}
+      onClose={() => setSelectedEvent(null)}
+    />
+  ) : null
 
   const emailThreadDrawer = (
-    <EmailThreadDrawer
+    <EmailThreadDrawerByThreadKey
       open={!!(event && event.object_type === 'email_thread_recipient')}
       onClose={() => setSelectedEvent(null)}
-      threadKey={event && event.thread_key}
+      threadKey={(event && event.thread_key) || undefined}
+    />
+  )
+  const emailCampaignThreadDrawer = (
+    <EmailCampaignThreadByCampaignId
+      open={!!isExecutedEmail}
+      onClose={() => setSelectedEvent(null)}
+      campaignId={(event && event.campaign) || undefined}
     />
   )
 
@@ -60,6 +72,7 @@ export function EventController({
       {editEmailDrawer}
       {eventDrawer}
       {emailThreadDrawer}
+      {emailCampaignThreadDrawer}
     </>
   )
 }

@@ -114,6 +114,7 @@ class FileViewer extends React.Component {
     }
 
     return {
+      id: file.id,
       name: envelope.title,
       type: 'pdf',
       url: file.url
@@ -123,6 +124,7 @@ class FileViewer extends React.Component {
   get DigitalForm() {
     return {
       type: 'pdf',
+      id: this.props.task.id,
       name: this.props.task.title,
       url: this.props.task.pdf_url
     }

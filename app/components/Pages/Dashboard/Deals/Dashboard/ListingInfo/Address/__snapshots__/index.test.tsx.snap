@@ -4,12 +4,12 @@ exports[`Deal address component renders with address 1`] = `
 <div
   class="styled__TitleContainer-xmjc75-0 cuhPTb"
 >
-  <h1
-    class="headings__H1-sc-15tq5ag-1 Kubky"
+  <h2
+    class="headings__H2-sc-15tq5ag-2 jNRgRN"
     style="line-height:1.5"
   >
     1200 Main St
-  </h1>
+  </h2>
   <span>
     Edit Address
   </span>
@@ -20,12 +20,12 @@ exports[`Deal address component renders without address 1`] = `
 <div
   class="styled__TitleContainer-xmjc75-0 cuhPTb"
 >
-  <h1
-    class="headings__H1-sc-15tq5ag-1 Kubky"
+  <h2
+    class="headings__H2-sc-15tq5ag-2 jNRgRN"
     style="line-height:1.5"
   >
     Some title for a deal without address
-  </h1>
+  </h2>
   <span>
     + Add Address
   </span>

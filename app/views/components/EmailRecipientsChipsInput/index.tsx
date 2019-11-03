@@ -15,8 +15,7 @@ import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { getSavedSegments } from 'actions/filter-segments/get-saved-segment'
 import { IAppState } from 'reducers'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
-import { getSegments, isListFetched } from 'reducers/filter-segments'
-
+import { getSegments, areListsFetched } from 'reducers/filter-segments'
 import { useElementWidth } from 'hooks/use-element-width'
 
 import { ChipsInput } from '../ChipsInput'
@@ -40,27 +39,33 @@ type BaseProps = Partial<FieldRenderProps<HTMLInputElement>> &
     | 'createFromString'
   >
 
-interface Props extends BaseProps {
+interface StateProps {
   tags: IContactTag[]
   lists: IContactList[]
-
-  label?: string
-
   isLoadingTags?: boolean
   areListsFetched?: boolean
-
+}
+interface DispatchProps {
+  getContactsTags: IAsyncActionProp<typeof getContactsTags>
+  getSavedSegments: IAsyncActionProp<typeof getSavedSegments>
+}
+interface Props extends BaseProps {
+  label?: string
   includeQuickSuggestions?: boolean
 
   suggestTags?: boolean
   suggestLists?: boolean
   suggestContacts?: boolean
+
+  deal?: IDeal
   /**
    * Optional callback for handling suggestion selection. If not provided
    * it will add to current list of recipients by default
    * @param suggestion
    */
   onQuickSuggestionSelected?: (
-    suggestion: IDenormalizedEmailRecipientInput
+    suggestion: IDenormalizedEmailRecipientInput,
+    sendType?: IEmailRecipientSendType
   ) => void
   currentlyUsedQuickSuggestions?: IDenormalizedEmailRecipientInput[] | undefined
   /**
@@ -68,8 +73,6 @@ interface Props extends BaseProps {
    */
   onChange?: (value: IDenormalizedEmailRecipientInput[]) => void
   value?: IDenormalizedEmailRecipientInput[]
-  getContactsTags: IAsyncActionProp<typeof getContactsTags>
-  getSavedSegments: IAsyncActionProp<typeof getSavedSegments>
 }
 
 const useEmailRecipientsChipsInputStyles = makeStyles<
@@ -100,7 +103,22 @@ const useEmailRecipientsChipsInputStyles = makeStyles<
  * A component for getting a list of tags, lists, contacts&email or contact&phone
  * can be controlled via `value` and `onChange` or Final Form input
  *
- * NOTE: we can pull this suggestions feature up into ChipsInput, but
+ * NOTE: The code in this component can be refactored into several components
+ * each of which adds a source of suggestion for email recipients. This can be
+ * done with react context. There will be different components (e.g.
+ * EmailRecipientTagSuggestion, EmailRecipientListSuggestion, ...) each
+ * providing a source of recipient suggestion via an specified context provider.
+ * inside this component the context is used and all suggestion sources will
+ * be utilized in suggesting recipients.
+ * pros:
+ * - Better encapsulation and SRP.
+ * - More scalable
+ *
+ * cons:
+ * - More overhead and more abstraction
+ * - Cost of refactoring!
+ *
+ * NOTE: we can pull this *quick suggestions* feature up into ChipsInput, but
  * right now, there is a styling issue which is not resolved generally,
  * and it's fixed by a workaround. This workaround is dependent on the
  * label width! see the note in {@link useEmailRecipientsChipsInputStyles}
@@ -116,15 +134,16 @@ function EmailRecipientsChipsInput({
   suggestTags = true,
   suggestLists = true,
   suggestContacts = true,
-  tags,
-  lists,
+  tags, // provided from redux store
+  lists, // provided from redux store
+  deal,
   label,
   input,
   meta,
   value,
   onChange,
   ...chipsInputProps
-}: Props) {
+}: Props & StateProps & DispatchProps) {
   /**
    The following lines of code are because we couldn't implement the UI
    with pure css and we need labelWidth.
@@ -182,9 +201,12 @@ function EmailRecipientsChipsInput({
     email: value
   })
 
-  const acceptSuggestion = recipient => {
+  const acceptSuggestion = (
+    recipient: IDenormalizedEmailRecipientInput,
+    sendType?: IEmailRecipientSendType
+  ) => {
     return onQuickSuggestionSelected
-      ? onQuickSuggestionSelected(recipient)
+      ? onQuickSuggestionSelected(recipient, sendType)
       : setRecipients([...recipients, recipient])
   }
 
@@ -205,6 +227,7 @@ function EmailRecipientsChipsInput({
           ),
           endAdornment: includeQuickSuggestions ? (
             <RecipientQuickSuggestions
+              deal={deal}
               currentRecipients={currentlyUsedQuickSuggestions || recipients}
               onSelect={acceptSuggestion}
             />
@@ -242,11 +265,11 @@ const mapStateToProps = ({ contacts }: IAppState) => {
     tags,
     lists,
     isLoadingTags,
-    areListsFetched: isListFetched(contacts.filterSegments)
+    areListsFetched: areListsFetched(contacts.filterSegments)
   }
 }
 
-export default connect(
+export default connect<StateProps, DispatchProps>(
   mapStateToProps,
   mapDispatchToProps
 )(EmailRecipientsChipsInput)

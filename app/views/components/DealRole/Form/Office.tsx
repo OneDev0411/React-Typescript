@@ -97,7 +97,6 @@ export function OfficeForm(props: Props) {
                 full: office.address
               }
             }
-            needsAddressForm
             component={Address}
             style={{ flex: 1 }}
           />

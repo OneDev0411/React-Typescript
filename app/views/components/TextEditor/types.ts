@@ -51,7 +51,7 @@ export interface TextEditorProps {
    */
   hasSignatureByDefault?: boolean
 
-  onAttachmentDropped?: (file: File) => void
+  onAttachmentDropped?: (file: File[]) => void
 
   /** ********
    * The following props are feature enabler flags.
@@ -86,4 +86,11 @@ export interface AtomicBlockEntityData {
   width?: string // comes from block resizable plugin
   height?: string // comes from block resizable plugin
   src?: string // comes from image plugin
+}
+
+export interface DraftPluginEditorDecoratorProps {
+  block: ContentBlock
+  blockProps: StringMap<any>
+  contentState: ContentState
+  className?: string
 }

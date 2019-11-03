@@ -7,15 +7,15 @@ import React, {
   useRef,
   useState
 } from 'react'
-import { Editor as DraftEditor, EditorState } from 'draft-js'
+import Dropzone from 'react-dropzone'
+import { ContentBlock, Editor as DraftEditor, EditorState } from 'draft-js'
 import PluginsEditor from 'draft-js-plugins-editor'
 import 'draft-js-image-plugin/lib/plugin.css'
 import 'draft-js-alignment-plugin/lib/plugin.css'
 import { stateToHTML } from 'draft-js-export-html'
 import { stateFromHTML } from 'draft-js-import-html'
 import cn from 'classnames'
-
-import { Box, Tooltip } from '@material-ui/core'
+import { Box, makeStyles, Tooltip } from '@material-ui/core'
 
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 import { isImageFile } from 'utils/file-utils/is-image-file'
@@ -30,11 +30,13 @@ import { EditorContainer, EditorWrapper, Separator, Toolbar } from './styled'
 import { FieldError } from '../final-form-fields/FieldError'
 import { AddImageButton } from './buttons/AddImageButton'
 import { RichTextButtons } from './buttons/RichTextButtons'
-import { createFilePlugin } from './plugins/draft-js-handle-files-plugin'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
 import { updateEntityData } from './modifiers/update-entity-data'
-import { InlineEntityPopover } from './components/InlineEntityPopover'
-import { LinkPreview } from './components/LinkPreview/LinkPreview'
+import {
+  DraftJsSelectionPopover,
+  SelectionPopoverRenderProps
+} from './components/DraftJsSelectionPopover'
+import { LinkPreview } from './components/LinkPreview'
 import { Checkbox } from '../Checkbox'
 import { TextEditorProps } from './types'
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
@@ -45,6 +47,13 @@ import { ITemplateVariableSuggestion } from '../TemplateVariablesButton/types'
 import { insertTemplateVariable } from './modifiers/insert-template-expression'
 import { removeUnwantedEmptyLineBeforeAtomic } from './modifiers/remove-unwanted-empty-block-before-atomic'
 import { ToolbarIconButton } from './buttons/ToolbarIconButton'
+import { getSelectedAtomicBlock } from './utils/get-selected-atomic-block'
+import { styles } from './styles'
+import { getImageDimensions } from './utils/get-image-dimensions'
+import { getImageSizeOptions } from './utils/get-image-size-options'
+import { InlineImageToolbar } from './components/ImageInlineToolbar'
+
+const useStyles = makeStyles(styles, { name: 'TextEditor' })
 
 /**
  * Html wysiwyg editor.
@@ -94,6 +103,8 @@ export const TextEditor = forwardRef(
     const originalEditorRef = useRef<DraftEditor | null>(null)
     const [linkEditorOpen, setLinkEditorOpen] = useState(false)
     const confirmation = useContext(ConfirmationModalContext)
+
+    const classes = useStyles()
 
     /**
      * Images are not rendered appropriately without this option.
@@ -174,10 +185,14 @@ export const TextEditor = forwardRef(
     )
 
     useEffect(() => {
-      const editor = editorRef.current
+      const pluginsEditor = editorRef.current
 
-      if (autofocus && editor) {
-        editor.focus()
+      if (autofocus && pluginsEditor) {
+        // draft-js-plugins-editor uses UNSAFE_componentWillMount to create
+        // the editor state with proper decorator. If we don't delay running
+        // this, it causes decorator to not being set correctly which has
+        // serious consequences. e.g. links don't render properly.
+        setImmediate(() => pluginsEditor.editor && pluginsEditor.focus())
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -232,12 +247,14 @@ export const TextEditor = forwardRef(
       // We first convert image to data url and show it.
       const dataUrl = await readFileAsDataUrl(file)
 
+      const { bestFit } = getImageSizeOptions(await getImageDimensions(dataUrl))
+
       handleChange(
         removeUnwantedEmptyLineBeforeAtomic(
           imagePlugin.addImage(
             editorState,
             dataUrl,
-            uploadImage ? { uploading: true } : {}
+            uploadImage ? { uploading: true, ...bestFit } : bestFit
           )
         )
       )
@@ -289,14 +306,6 @@ export const TextEditor = forwardRef(
             imagePlugin
           ]
         : []),
-      ...(enableImage || onAttachmentDropped
-        ? [
-            createFilePlugin({
-              handleImage: addImage,
-              handleOtherFiles: onAttachmentDropped
-            })
-          ]
-        : []),
       ...(enableSignature ? [signaturePlugin] : [])
     ]
 
@@ -312,6 +321,36 @@ export const TextEditor = forwardRef(
       )
     }
 
+    const isFileDropEnabled = enableImage || onAttachmentDropped
+    const fileAccept =
+      !onAttachmentDropped && enableImage ? 'image/*' : undefined
+
+    const onDrop = (files: File[]) => {
+      if (!files || !files[0]) {
+        return
+      }
+
+      if (isImageFile(files[0])) {
+        addImage(files[0])
+      } else if (onAttachmentDropped) {
+        onAttachmentDropped(files)
+      }
+    }
+
+    const handlerWrapperClick = e => {
+      // It's important to check if it's the wrapper which is clicked
+      // and don't call focus when an inner element is clicked, as it
+      // leads to very buggy behavior. For example if atomic block is focused
+      // and something (like resizing image with resize dropdown) causes
+      // this code to run the editor's focus, it goes to a buggy state
+      // in which nothing will unselect the atomic block. The only way
+      // to escape this buggy condition in this case is to blur and
+      // focus again the editor
+      if (e.target === editorElementRef.current) {
+        editorRef.current && editorRef.current.focus()
+      }
+    }
+
     return (
       <EditorContainer className={className}>
         <EditorWrapper
@@ -319,45 +358,77 @@ export const TextEditor = forwardRef(
           className={cn({
             'hide-placeholder': shouldHidePlaceholder(editorState)
           })}
-          onClick={() => editorRef.current && editorRef.current.focus()}
+          onClick={handlerWrapperClick}
           data-test="text-editor-wrapper"
         >
-          <PluginsEditor
-            spellCheck
-            readOnly={disabled}
-            editorState={editorState}
-            onChange={handleChange}
-            plugins={allPlugins}
-            placeholder={placeholder}
-            ref={editorRef}
-            {...DraftEditorProps}
-          />
-          <LinkEditorPopover
-            editorRef={originalEditorRef}
-            editorState={editorState}
-            setEditorState={handleChange}
-            open={linkEditorOpen}
-            onClose={() => {
-              setLinkEditorOpen(false)
-              setTimeout(() => {
-                editorRef.current!.focus()
-              })
-            }}
-          />
-          {!linkEditorOpen && (
-            <InlineEntityPopover editorState={editorState} entityFilter="LINK">
-              {({ entity, close }) => (
-                <LinkPreview
-                  editorState={editorState}
-                  setEditorState={handleChange}
-                  onClose={close}
-                  url={entity.getData().url}
-                  onEdit={() => setLinkEditorOpen(true)}
-                />
-              )}
-            </InlineEntityPopover>
-          )}
-          {appendix}
+          {/* I wish we had upgraded Dropzone to use the hook version :( */}
+          <Dropzone
+            disabled={!isFileDropEnabled}
+            className={classes.dropzone}
+            activeClassName={classes.dropzoneActive}
+            rejectClassName={classes.dropzoneReject}
+            onDrop={onDrop}
+            accept={fileAccept}
+            disableClick
+          >
+            <PluginsEditor
+              spellCheck
+              readOnly={disabled}
+              editorState={editorState}
+              onChange={handleChange}
+              plugins={allPlugins}
+              placeholder={placeholder}
+              ref={editorRef}
+              {...DraftEditorProps}
+            />
+            <LinkEditorPopover
+              editorRef={originalEditorRef}
+              editorState={editorState}
+              setEditorState={handleChange}
+              open={linkEditorOpen}
+              onClose={() => {
+                setLinkEditorOpen(false)
+
+                const selectedBlock = getSelectedAtomicBlock(editorState)
+
+                if (!selectedBlock || selectedBlock.getType() !== 'atomic') {
+                  // atomic block selection is not preserved after focus
+                  // so we don't focus if an atomic block is selected
+                  setTimeout(() => {
+                    editorRef.current!.focus()
+                  })
+                }
+              }}
+            />
+            {!linkEditorOpen && (
+              <DraftJsSelectionPopover
+                editorState={editorState}
+                inlineEntityFilter="LINK"
+                blockFilter={isBlockLinked}
+              >
+                {({ entity, close, block }: SelectionPopoverRenderProps) => (
+                  <LinkPreview
+                    editorState={editorState}
+                    setEditorState={handleChange}
+                    onClose={close}
+                    url={
+                      (entity && entity.getData().url) ||
+                      (block && block.getData().get('href')) ||
+                      ''
+                    }
+                    onEdit={() => setLinkEditorOpen(true)}
+                  />
+                )}
+              </DraftJsSelectionPopover>
+            )}
+            {imagePlugin && (
+              <InlineImageToolbar
+                editorState={editorState}
+                setEditorState={handleChange}
+              />
+            )}
+            {appendix}
+          </Dropzone>
         </EditorWrapper>
         <Toolbar>
           {enableRichText && (
@@ -411,9 +482,10 @@ export const TextEditor = forwardRef(
             </Box>
           )}
         </Toolbar>
-        <alignmentPlugin.AlignmentTool />
         {input && <FieldError name={input.name} />}
       </EditorContainer>
     )
   }
 )
+
+const isBlockLinked = (block: ContentBlock) => !!block.getData().get('href')

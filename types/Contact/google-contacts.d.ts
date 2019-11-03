@@ -26,6 +26,7 @@ declare interface IOAuthAccount {
   histories?: IGoogleSyncHistory[]
   sync_status: 'success' | 'pending' | null
   scope: string[]
+  scope_summary: OAuthAccountScope[] | null
   threads_total: null | number
   type: string
   updated_at: string
@@ -61,3 +62,16 @@ declare interface IGoogleSyncHistory {
   updated_at: string
   user: UUID
 }
+
+/**
+ * Enum is not used because if its declared here, it doesn't find it's way
+ * into the emitted js file (probably because these are declaration files)
+ * and if it's defined outside, it can't be imported here because it's
+ * not a module file.
+ */
+declare type OAuthAccountScope =
+  | 'profile'
+  | 'contacts.read'
+  | 'mail.read'
+  | 'mail.send'
+  | 'calendar'

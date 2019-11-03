@@ -127,7 +127,7 @@ export class DealRole extends React.Component {
     }
 
     const availableRoles = ROLE_NAMES.filter(name => this.isAllowedRole(name))
-    const preselectedRole = availableRoles.length === 1 && availableRoles[0]
+    const preselectedRole = availableRoles.length > 0 && availableRoles[0]
 
     return {
       role: preselectedRole || null

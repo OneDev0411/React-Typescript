@@ -163,7 +163,7 @@ export const mlsFilterSegments = createReducer('mls')
 export const isFetchingSavedSegments = state => state.isFetching
 export const savedSegmentId = state => state.activeSegmentId
 
-export const isListFetched = state => state.list !== null
+export const areListsFetched = state => state.list !== null
 
 export const selectActiveSavedSegment = <T = any>(
   state: IReduxFilterSegmentState,

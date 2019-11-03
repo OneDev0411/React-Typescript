@@ -18,8 +18,10 @@ const noteEventType = {
 
 export function Note(props: Props) {
   const handleUpdateNote = async note => {
+    const contact = props.event!.people![0]
+
     try {
-      await upsertContactAttributes(props.event.full_contact!.id, [
+      await upsertContactAttributes(contact.id, [
         {
           id: note.id,
           text: note.text
@@ -30,11 +32,11 @@ export function Note(props: Props) {
         {
           ...props.event,
           ...noteEventType,
-          contact: props.event.full_contact as IContact,
+          contact,
           associations: [
             {
               association_type: 'contact',
-              contact: props.event.full_contact
+              contact
             }
           ] as TaskAssociation[],
           due_date: props.event.timestamp,
@@ -46,8 +48,10 @@ export function Note(props: Props) {
   }
 
   const handleDeleteNote = async note => {
+    const contact = props.event!.people![0]
+
     try {
-      await deleteAttribute(props.event.full_contact!.id, note.id)
+      await deleteAttribute(contact.id, note.id)
 
       props.onChange(
         {

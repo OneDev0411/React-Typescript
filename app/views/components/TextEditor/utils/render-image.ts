@@ -3,12 +3,8 @@ import { ContentBlock, EditorState } from 'draft-js'
 import { renderAtomicBlockStyles } from './render-atomic-block'
 import { blockStyleFn } from './block-style-fn'
 import { stylesToString } from './styles-to-string'
+import { renderAttributes } from './render-attributes'
 
-const renderAttributes = (attrs: StringMap<string>) =>
-  Object.entries(attrs)
-    .map(([name, value]) => renderAttribute(name, value))
-    .join(' ')
-const renderAttribute = (name: string, value: string) => `${name}="${value}"`
 export const renderImage = (getEditorState: () => EditorState | null) => (
   block: ContentBlock
 ) => {

@@ -1,14 +1,18 @@
 import * as React from 'react'
+import { ReactNode } from 'react'
 import { Link } from '@material-ui/core'
-
-import { recipientToString } from '../helpers/recipient-to-string'
 
 interface Props {
   recipient: IDenormalizedEmailRecipientInput
+  children: ReactNode
   onSelect: (suggestion: IDenormalizedEmailRecipientInput) => void
 }
 
-export function RecipientQuickSuggestion({ recipient, onSelect }: Props) {
+export function RecipientQuickSuggestion({
+  recipient,
+  children,
+  onSelect
+}: Props) {
   const onClick = (event: React.MouseEvent) => {
     event.preventDefault()
 
@@ -17,7 +21,7 @@ export function RecipientQuickSuggestion({ recipient, onSelect }: Props) {
 
   return (
     <Link href="" underline="always" color="textPrimary" onClick={onClick}>
-      {recipientToString(recipient)}
+      {children}
     </Link>
   )
 }

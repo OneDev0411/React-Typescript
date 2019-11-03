@@ -272,6 +272,7 @@ $margin: 20px;
 
   .add-item {
     .icon {
+      cursor: pointer;
       display: inline-block;
       width: 20px !important;
       height: 20px !important;
@@ -285,6 +286,7 @@ $margin: 20px;
     }
 
     .text {
+      cursor: pointer;
       &.hasError {
         color: #ec4b35;
         font-weight: 500;

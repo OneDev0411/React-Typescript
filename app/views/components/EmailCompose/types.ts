@@ -65,5 +65,11 @@ export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
    */
   onDelete?: (values: EmailFormValues) => void | Promise<any>
 
+  /**
+   * Rendered above the footer. Specially useful for rendering
+   * non-visual things that read form values like OnChange.
+   */
+  children?: ReactNode
+
   dispatch: any // Extending DispatchProps seems to have problems
 }

@@ -1,5 +1,4 @@
 import React from 'react'
-import fecha from 'fecha'
 // import { Button } from '@material-ui/core'
 
 // import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
@@ -9,7 +8,7 @@ import IconBirthday from 'components/SvgIcons/Birthday/IconBirthday'
 import { RelativeTime } from 'components/RelativeTime'
 
 import { ProfileDateType } from './types'
-import { activitiesFormatter } from './helpers'
+import { activitiesFormatter, formatDate } from './helpers'
 
 interface ActivityPropsType {
   dates?: ProfileDateType[]
@@ -48,10 +47,7 @@ function Activity(props: ActivityPropsType) {
                 )}
               </div>
               <div className="text">
-                {`${item.title}: ${fecha.format(
-                  new Date(item.date * 1000),
-                  'mediumDate'
-                )}`}
+                {`${item.title}: ${formatDate(item.date)}`}
 
                 {/* Disabled temporarily. Note: https://gitlab.com/rechat/web/issues/3352#note_219065917 */}
                 {/* {isNearDate(item.date) && (

@@ -1,15 +1,22 @@
 import { EditorState, RichUtils, SelectionState } from 'draft-js'
-
 import {
   getEntityRange,
   getSelectionEntity,
-  getSelectionInlineStyle
+  getSelectionInlineStyle,
+  setBlockData
 } from 'draftjs-utils'
 
-export function removeLink(editorState: EditorState) {
+import { getSelectedAtomicBlock } from './get-selected-atomic-block'
+
+export function removeLink(editorState: EditorState): EditorState {
   const entityKey = getSelectionEntity(editorState)
 
-  if (entityKey) {
+  const entity =
+    entityKey && editorState.getCurrentContent().getEntity(entityKey)
+
+  const selectedBlock = getSelectedAtomicBlock(editorState)
+
+  if (entity && entity.getType() === 'LINK') {
     const entityRange = getEntityRange(editorState, entityKey)
 
     const selection = editorState.getSelection()
@@ -34,4 +41,22 @@ export function removeLink(editorState: EditorState) {
 
     return newEditorState
   }
+
+  if (selectedBlock) {
+    const data = selectedBlock.getData()
+
+    const href = data.get('href')
+
+    if (href) {
+      return setBlockData(
+        editorState,
+        data.merge({
+          href: undefined,
+          title: undefined
+        })
+      )
+    }
+  }
+
+  return editorState
 }

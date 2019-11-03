@@ -33,4 +33,14 @@ export function recipientToSuggestion(
       }
     }
   }
+
+  if (recipient.recipient_type === 'Agent') {
+    const title = recipient.agent.name || recipient.agent.email
+    const subtitle = recipient.agent.name
+
+    return {
+      title,
+      subtitle
+    }
+  }
 }
