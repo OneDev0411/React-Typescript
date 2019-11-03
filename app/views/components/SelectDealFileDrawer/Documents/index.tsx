@@ -208,7 +208,7 @@ export class DocumentRow extends React.Component<Props & StateProps, State> {
           <TasksDrawer
             isOpen
             drawerOptions={{
-              showBackdrop: false
+              hideBackdrop: true
             }}
             deal={this.props.deal}
             file={this.state.selectedStashFile}

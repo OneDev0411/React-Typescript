@@ -11,6 +11,11 @@ declare type IPermission =
   | 'CRM'
   | 'BetaFeatures'
 
+declare interface ColorSet {
+  bg?: string
+  ta?: string
+  tb?: string
+}
 declare interface IBrand extends IModel<'brand'> {
   assets: any | null
   base_url: string
@@ -20,10 +25,14 @@ declare interface IBrand extends IModel<'brand'> {
   messages: IBrandMessage
   name: string
   offices: string[]
-  palette: {
-    primary?: string
+  palette?: {
     type: 'brand_palette'
-    marketing?: unknown
+    primary?: string
+    marketing?: {
+      alpha?: ColorSet
+      beta?: ColorSet
+      theta?: ColorSet
+    }
   }
   parent: IBrand | null
   children?: IBrand[]

@@ -1,19 +1,38 @@
 import isEmail from 'validator/lib/isEmail'
 import { EditorState } from 'draft-js'
-import { getSelectionEntity } from 'draftjs-utils'
+import { getSelectionEntity, getSelectionText } from 'draftjs-utils'
+
+import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
 
 export function getCurrentLinkUrl(
   editorState: EditorState
 ): string | undefined {
   const entityKey = getSelectionEntity(editorState)
 
-  if (entityKey) {
-    const entity = editorState.getCurrentContent().getEntity(entityKey)
+  const entity =
+    entityKey && editorState.getCurrentContent().getEntity(entityKey)
 
-    if (entity && entity.getType() === 'LINK') {
-      return entity.getData().url
-    }
+  if (entity && entity.getType() === 'LINK') {
+    return entity.getData().url
   }
+
+  const selectedBlock = getSelectedAtomicBlock(editorState)
+
+  if (selectedBlock) {
+    return selectedBlock.getData().get('href')
+  }
+}
+
+export function getCurrentLinkText(
+  editorState: EditorState
+): string | undefined {
+  const selectedBlock = getSelectedAtomicBlock(editorState)
+
+  if (selectedBlock) {
+    return selectedBlock.getData().get('title')
+  }
+
+  return getSelectionText(editorState)
 }
 
 export const getSelectionAnchorElement = () => {

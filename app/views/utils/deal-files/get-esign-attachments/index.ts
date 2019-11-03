@@ -18,10 +18,11 @@ function getTaskAttachments(task: IDealTask): IDealFile[] {
     attachments.push({
       ...task.submission.file,
       source: 'submission',
+      url: task.pdf_url,
       task: task.id,
       checklist: task.checklist
     })
-  } else {
+  } else if (task.form) {
     attachments.push({
       id: task.id,
       url: task.pdf_url,
@@ -66,6 +67,7 @@ function getDocumentAttachment(
       {
         ...document.submission.file,
         source: 'submission',
+        url: document.pdf_url,
         task: task.id,
         checklist: task.checklist
       }

@@ -26,6 +26,12 @@ export function ContactAttribute({ style, event, nextItem }: Props) {
     return eventIcons.Other
   }, [event.type, event.type_label])
 
+  if (!event.people) {
+    return null
+  }
+
+  const contact = event.people[0] as IContact
+
   return (
     <EventContainer
       style={style}
@@ -37,13 +43,9 @@ export function ContactAttribute({ style, event, nextItem }: Props) {
       }}
       title={
         <div>
-          <MiniContactProfile
-            type="event"
-            data={event.full_contact as IContact}
-            as="span"
-          >
+          <MiniContactProfile type="event" data={contact} as="span">
             <a href={`/dashboard/contacts/${event.contact}`} target="_blank">
-              {event.full_contact!.display_name}
+              {contact.display_name}
             </a>
           </MiniContactProfile>
           's {event.type_label}

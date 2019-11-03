@@ -192,6 +192,7 @@ function mapStateToProps({ user, deals }) {
   const { properties, list, roles } = deals
 
   return {
+    contexts: deals.contexts,
     isFetchingDeals: properties.isFetchingDeals,
     deals: list,
     roles,

@@ -12,8 +12,8 @@ import { useIconStyles } from '../../../../../styles/use-icon-styles'
 import { BaseDropdown } from '../../../BaseDropdown'
 import { FilePicker } from '../../../FilePicker'
 import AddDealFile from '../AddDealFile'
-import { IUploadingAttachment } from '../../types'
 import { iconSizes } from '../../../SvgIcons/icon-sizes'
+import { UploadAttachment } from '../../fields/UploadAttachment'
 
 interface Props {
   deal?: IDeal
@@ -57,27 +57,15 @@ export function EmailAttachmentsDropdown({
             onChanged={onChanged}
             onClick={close}
           />
-          <Field
-            name="uploadingAttachments"
-            render={({ input }) => {
-              const uploadFromYourComputer = (files: FileList) => {
-                const file = files[0]
-
-                if (file) {
-                  input.onChange(([
-                    ...(input.value || []),
-                    {
-                      file,
-                      request: uploadAttachment(file)
-                    }
-                  ] as IUploadingAttachment[]) as any)
-
-                  onChanged()
-                }
+          <UploadAttachment uploadAttachment={uploadAttachment}>
+            {({ upload }) => {
+              const uploadFromComputer = (files: FileList) => {
+                upload(files)
+                onChanged()
               }
 
               return (
-                <FilePicker onFilePicked={uploadFromYourComputer}>
+                <FilePicker onFilePicked={uploadFromComputer}>
                   {({ pickFiles }) => (
                     <ListItem
                       button
@@ -96,7 +84,7 @@ export function EmailAttachmentsDropdown({
                 </FilePicker>
               )
             }}
-          />
+          </UploadAttachment>
         </List>
       )}
     />

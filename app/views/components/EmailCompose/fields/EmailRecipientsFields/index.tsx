@@ -15,6 +15,7 @@ interface Props {
   values: EmailFormValues
   disableAddNewRecipient?: boolean
   includeQuickSuggestions?: boolean
+  deal?: IDeal
   fromOptions?: EmailFormValues['from'][]
   EmailRecipientsChipsInputProps?: Partial<
     ComponentProps<typeof EmailRecipientsChipsInput>
@@ -26,6 +27,7 @@ export function EmailRecipientsFields({
   disableAddNewRecipient = false,
   includeQuickSuggestions = true,
   fromOptions,
+  deal,
   EmailRecipientsChipsInputProps = {}
 }: Props) {
   const [hasCc, setCc] = useState(false)
@@ -33,6 +35,11 @@ export function EmailRecipientsFields({
 
   const isCcShown = hasCc || (values.cc || []).length > 0
   const isBccShown = hasBcc || (values.bcc || []).length > 0
+
+  const commonProps: typeof EmailRecipientsChipsInputProps = {
+    deal,
+    ...EmailRecipientsChipsInputProps
+  }
 
   return (
     <>
@@ -47,31 +54,50 @@ export function EmailRecipientsFields({
 
       <Field
         name="bcc"
-        render={bccInputProps => (
+        render={bccFieldProps => (
           <Field
             label="To"
             name="to"
-            component={EmailRecipientsChipsInput as any}
-            readOnly={disableAddNewRecipient}
-            includeQuickSuggestions={includeQuickSuggestions}
-            // we need to do this weird stuff because of the weird UX
-            // which is to show suggestions under too but add them to bcc!
-            // Hopefully we revise it and remove such weirdness
-            currentlyUsedQuickSuggestions={bccInputProps.input.value}
-            onQuickSuggestionSelected={recipient =>
-              bccInputProps.input.onChange([
-                ...(bccInputProps.input.value || []),
-                recipient
-              ] as any)
-            }
-            TextFieldProps={
-              {
-                inputProps: {
-                  autoFocus: true
-                } as HTMLProps<HTMLInputElement>
-              } as TextFieldProps
-            }
-            {...EmailRecipientsChipsInputProps}
+            render={toFieldProps => (
+              <EmailRecipientsChipsInput
+                {...toFieldProps}
+                deal={deal}
+                includeQuickSuggestions={includeQuickSuggestions}
+                readOnly={disableAddNewRecipient}
+                currentlyUsedQuickSuggestions={[
+                  ...(toFieldProps.input.value || []),
+                  ...(bccFieldProps.input.value || [])
+                ]}
+                // we need to do this weird stuff because of the weird UX
+                // which is to show suggestions under `To` field but for some
+                // of them we want to add them to bcc!
+                // So The logic for handling quick suggestion selection
+                // cannot be handled in the EmailRecipientsChipsInput itself
+                // and the event needs to bubble up to be handled at upper levels
+                // in this case.
+                // Hopefully we revise it and remove such weirdness
+                onQuickSuggestionSelected={(
+                  recipient,
+                  sendType: IEmailRecipientSendType
+                ) => {
+                  const fieldProps =
+                    sendType === 'BCC' ? bccFieldProps : toFieldProps
+
+                  fieldProps.input.onChange([
+                    ...(fieldProps.input.value || []),
+                    recipient
+                  ] as any)
+                }}
+                TextFieldProps={
+                  {
+                    inputProps: {
+                      autoFocus: true
+                    } as HTMLProps<HTMLInputElement>
+                  } as TextFieldProps
+                }
+                {...commonProps}
+              />
+            )}
           />
         )}
       />
@@ -80,7 +106,7 @@ export function EmailRecipientsFields({
           label="Cc"
           name="cc"
           component={EmailRecipientsChipsInput as any}
-          {...EmailRecipientsChipsInputProps}
+          {...commonProps}
         />
       )}
       {isBccShown && (
@@ -88,7 +114,7 @@ export function EmailRecipientsFields({
           label="Bcc"
           name="bcc"
           component={EmailRecipientsChipsInput as any}
-          {...EmailRecipientsChipsInputProps}
+          {...commonProps}
         />
       )}
     </>

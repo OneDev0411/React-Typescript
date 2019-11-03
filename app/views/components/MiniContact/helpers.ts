@@ -1,3 +1,5 @@
+import fecha from 'fecha'
+
 import { getContact } from 'models/contacts/get-contact'
 import { searchContacts } from 'models/contacts/search-contacts'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
@@ -180,4 +182,14 @@ export function activitiesFormatter(activities?: ProfileDateType[]) {
         ? { ...item, title: `Partner ${item.title}` }
         : item
     )
+}
+
+export function formatDate(timestamp: number): string {
+  const date = new Date(timestamp * 1000)
+
+  if (date.getFullYear() === 1800) {
+    return fecha.format(date, 'MMM DD')
+  }
+
+  return fecha.format(date, 'MMM DD, YYYY')
 }

@@ -11,7 +11,7 @@ import {
 import {
   getDefaultList,
   getSegments,
-  isListFetched,
+  areListsFetched,
   selectActiveSavedSegment
 } from 'reducers/filter-segments'
 
@@ -33,7 +33,7 @@ class SegmentsList extends React.Component {
   init = () => {
     const { props } = this
 
-    if (!props.isListFetched) {
+    if (!props.areListsFetched) {
       props.getSavedSegments(props.name, { associations: props.associations })
     }
   }
@@ -113,7 +113,7 @@ function mapStateToProps(state, { name, getPredefinedLists }) {
   const predefinedLists = getPredefinedLists(name, state, false)
 
   return {
-    isListFetched: isListFetched(filterSegments),
+    areListsFetched: areListsFetched(filterSegments),
     isFetching: filterSegments.isFetching,
     list: getSegments(filterSegments, name, predefinedLists),
     activeItem: selectActiveSavedSegment(filterSegments, name, predefinedLists)

@@ -12,7 +12,7 @@ export function ListingImage({ deal }) {
 
   return (
     <Avatar
-      size={72}
+      size={62}
       image={imageUrl || placeholderImageUrl}
       title={deal.title}
       placeHolderImage=""

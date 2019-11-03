@@ -1,8 +1,9 @@
 import React from 'react'
-import fecha from 'fecha'
 
 import { makeStyles } from '@material-ui/styles'
 import { fade, Theme } from '@material-ui/core/styles'
+
+import { DateTime } from './DateTime'
 
 import styles from '../../styles'
 
@@ -76,22 +77,6 @@ export function EventContainer({
     clickable: typeof onClick === 'function'
   })
 
-  const getDate = () => {
-    if (event.object_type !== 'crm_task') {
-      return 'All day'
-    }
-
-    const formatDate = date => fecha.format(new Date(date * 1000), 'hh:mm A')
-
-    const dueDate = formatDate(event.timestamp)
-
-    if (event.full_crm_task && event.full_crm_task.end_date) {
-      return `${dueDate} - ${formatDate(event.full_crm_task.end_date)}`
-    }
-
-    return dueDate
-  }
-
   return (
     <div style={style}>
       <div className={classes.root}>
@@ -103,7 +88,9 @@ export function EventContainer({
 
         <div style={styles.row}>
           <div style={styles.container}>
-            <div style={styles.time}>{getDate()}</div>
+            <div style={styles.time}>
+              <DateTime event={event} />
+            </div>
             <div
               style={{
                 ...styles.container,

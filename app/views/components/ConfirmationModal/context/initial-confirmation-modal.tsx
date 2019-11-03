@@ -18,7 +18,7 @@ export interface ConfirmationModalConfig {
   needsCancel?: boolean
 
   // Confirm Button
-  onConfirm?: null | (() => any)
+  onConfirm?: null | ((userInput?: string) => void)
   confirmLabel?: string
   needsConfirm?: boolean
 }

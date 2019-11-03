@@ -18,5 +18,7 @@ export const buyingPropertyTypes = [
 export const dealTaskTypeToString: { [key in IDealTaskType]: string } = {
   Form: 'Form',
   GeneralComments: 'General Comments',
-  Generic: 'Generic'
+  Generic: 'Generic',
+  YardSign: 'Yard Sign',
+  OpenHouse: 'Open House'
 }

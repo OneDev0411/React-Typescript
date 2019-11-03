@@ -22,7 +22,7 @@ export class Recipients extends React.Component {
       ...this.props.input.value,
       [recipient.id]: {
         ...recipient,
-        order: this.MaxOrder + 1,
+        order: 1,
         envelope_recipient_type: 'Signer'
       }
     })
@@ -51,16 +51,6 @@ export class Recipients extends React.Component {
     this.props.input.onChange(
       _.omit(this.props.input.value, recp => recp.id === role.id)
     )
-  }
-
-  get MaxOrder() {
-    let max = 0
-
-    _.each(this.props.input.value, role => {
-      max = role.order ? Math.max(max, role.order) : max
-    })
-
-    return max
   }
 
   render() {

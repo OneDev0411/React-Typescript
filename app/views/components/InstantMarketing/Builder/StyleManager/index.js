@@ -8,7 +8,7 @@ import FontWeightPicker from './FontWeightPicker'
 import ColorPicker from './ColorPicker'
 import { loadGrapesjs } from '../utils/load-grapes'
 
-export const load = async () => {
+export const load = async colors => {
   const { Grapesjs } = await loadGrapesjs()
 
   Grapesjs.plugins.add('style-manager', (editor, options) => {
@@ -131,6 +131,7 @@ export const load = async () => {
         if (isElementAllowed(selected, colorPickerOptions.conditions)) {
           ReactDOM.render(
             <ColorPicker
+              colors={colors}
               color={getStyle(selected).color}
               onChange={color => {
                 setStyle(selected, 'color', color.hex)

@@ -14,7 +14,7 @@ declare interface IAgentOffice {
   email: string
 }
 
-declare interface IAgent {
+declare interface IAgent extends IModel<'agent'> {
   id: UUID
 
   email: string | '' // seems sometime it's empty string! not null
@@ -36,11 +36,30 @@ declare interface IAgent {
   deleted_at: number | null
   created_at: number
 
+  mls?: string
   user_id?: UUID
   office_id?: UUID
   profile_image_url: string | null
   cover_image_url: string | null
-  phone_numbers: string[] | null
+  phone_numbers?: string[] | null
   emails?: string[]
-  office?: IAgentOffice
+  office?: IAgentOffice | null
+  secret_questions: string[]
+}
+
+/* using for those agents which selected from Deals -> Agent Network to promote a deal */
+declare interface IDealAgent {
+  id: UUID
+  agentId: UUID
+  name: string
+  email: string
+  phone: string
+  company: string
+  asBuyers: any[]
+  asListing: any[]
+  listings: any[]
+  listingsAveragePrice: number
+  listingsCount: number
+  listingsTotalVolume: number
+  soldListings: any[]
 }

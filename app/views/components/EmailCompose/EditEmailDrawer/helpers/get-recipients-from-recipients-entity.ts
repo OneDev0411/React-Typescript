@@ -1,6 +1,6 @@
 export function getRecipientsFromRecipientsEntity(
   sendType: IEmailRecipient['send_type'],
-  recipients: IEmailRecipient<'list' | 'contact' | 'brand'>[]
+  recipients: IEmailRecipient<'list' | 'contact' | 'brand' | 'agent'>[]
 ): IDenormalizedEmailRecipientInput[] {
   return recipients
     .filter(recipient => recipient.send_type === sendType)
@@ -35,6 +35,11 @@ export function getRecipientsFromRecipientsEntity(
           return {
             recipient_type: 'Brand',
             brand: recipient.brand
+          }
+        case 'Agent':
+          return {
+            recipient_type: 'Agent',
+            agent: recipient.agent
           }
       }
     })
