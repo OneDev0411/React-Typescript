@@ -25,6 +25,11 @@
       "plugins": [
         "react-hot-loader/babel"
       ]
+    },
+    "ci": {
+      "plugins": [
+        "dynamic-import-node"
+      ]
     }
   }
 }
