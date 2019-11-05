@@ -1,6 +1,21 @@
 import React, { useState } from 'react'
-import { Button, ButtonGroup, Box } from '@material-ui/core'
+import { Button, ButtonGroup, Box, makeStyles } from '@material-ui/core'
 import { Editor } from 'grapesjs'
+
+import MobileIcon from 'components/SvgIcons/Mobile/IconMobile'
+import TabletIcon from 'components/SvgIcons/Tablet/IconTablet'
+import DesktopIcon from 'components/SvgIcons/Desktop/IconDesktop'
+
+const useStyles = makeStyles(theme => ({
+  selected: {
+    backgroundColor: theme.palette.action.disabled,
+    color: `${theme.palette.common.black} !important`,
+    borderColor: theme.palette.common.black
+  },
+  btnGroup: {
+    height: 32
+  }
+}))
 
 interface Props {
   editor: Editor
@@ -10,6 +25,10 @@ type Device = 'Desktop' | 'Tablet' | 'Mobile portrait'
 
 export default function DeviceManager({ editor }: Props) {
   const [selectedDevice, setSelectedDevice] = useState<Device>('Desktop')
+  const classes = useStyles()
+  const isDesktop = selectedDevice === 'Desktop'
+  const isTablet = selectedDevice === 'Tablet'
+  const isMobile = selectedDevice === 'Mobile portrait'
 
   function setDevice(name: Device) {
     editor.setDevice(name)
@@ -18,30 +37,33 @@ export default function DeviceManager({ editor }: Props) {
 
   return (
     <Box ml={2}>
-      <ButtonGroup size="small">
+      <ButtonGroup className={classes.btnGroup}>
         <Button
-          disabled={selectedDevice === 'Desktop'}
+          disabled={isDesktop}
           variant="outlined"
-          color={selectedDevice === 'Desktop' ? 'primary' : 'default'}
+          color={isDesktop ? 'primary' : 'default'}
           onClick={() => setDevice('Desktop')}
+          className={isDesktop ? classes.selected : ''}
         >
-          Desktop
+          <DesktopIcon />
         </Button>
         <Button
-          disabled={selectedDevice === 'Tablet'}
+          disabled={isTablet}
           variant="outlined"
-          color={selectedDevice === 'Tablet' ? 'primary' : 'default'}
+          color={isTablet ? 'primary' : 'default'}
           onClick={() => setDevice('Tablet')}
+          className={isTablet ? classes.selected : ''}
         >
-          Tablet
+          <TabletIcon />
         </Button>
         <Button
-          disabled={selectedDevice === 'Mobile portrait'}
+          disabled={isMobile}
           variant="outlined"
-          color={selectedDevice === 'Mobile portrait' ? 'primary' : 'default'}
+          color={isMobile ? 'primary' : 'default'}
           onClick={() => setDevice('Mobile portrait')}
+          className={isMobile ? classes.selected : ''}
         >
-          Mobile
+          <MobileIcon />
         </Button>
       </ButtonGroup>
     </Box>

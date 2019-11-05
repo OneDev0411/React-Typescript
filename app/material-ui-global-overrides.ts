@@ -126,6 +126,9 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
           direction: 'left'
         })
       }
+    },
+    '.MuiButton-outlined': {
+      borderColor: theme.palette.common.black
     }
   }
 }))(() => null)
