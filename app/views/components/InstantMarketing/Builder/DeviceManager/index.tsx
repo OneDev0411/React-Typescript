@@ -1,5 +1,11 @@
 import React, { useState } from 'react'
-import { Button, ButtonGroup, Box, makeStyles } from '@material-ui/core'
+import {
+  Button,
+  ButtonGroup,
+  Box,
+  Tooltip,
+  makeStyles
+} from '@material-ui/core'
 import { Editor } from 'grapesjs'
 
 import MobileIcon from 'components/SvgIcons/Mobile/IconMobile'
@@ -38,33 +44,41 @@ export default function DeviceManager({ editor }: Props) {
   return (
     <Box ml={2}>
       <ButtonGroup className={classes.btnGroup}>
-        <Button
-          disabled={isDesktop}
-          variant="outlined"
-          color={isDesktop ? 'primary' : 'default'}
-          onClick={() => setDevice('Desktop')}
-          className={isDesktop ? classes.selected : ''}
-        >
-          <DesktopIcon />
-        </Button>
-        <Button
-          disabled={isTablet}
-          variant="outlined"
-          color={isTablet ? 'primary' : 'default'}
-          onClick={() => setDevice('Tablet')}
-          className={isTablet ? classes.selected : ''}
-        >
-          <TabletIcon />
-        </Button>
-        <Button
-          disabled={isMobile}
-          variant="outlined"
-          color={isMobile ? 'primary' : 'default'}
-          onClick={() => setDevice('Mobile portrait')}
-          className={isMobile ? classes.selected : ''}
-        >
-          <MobileIcon />
-        </Button>
+        <Tooltip title="Preview in Desktop">
+          <Button
+            disabled={isDesktop}
+            variant="outlined"
+            color={isDesktop ? 'primary' : 'default'}
+            onClick={() => setDevice('Desktop')}
+            className={isDesktop ? classes.selected : ''}
+          >
+            <DesktopIcon />
+          </Button>
+        </Tooltip>
+
+        <Tooltip title="Preview in Tablet">
+          <Button
+            disabled={isTablet}
+            variant="outlined"
+            color={isTablet ? 'primary' : 'default'}
+            onClick={() => setDevice('Tablet')}
+            className={isTablet ? classes.selected : ''}
+          >
+            <TabletIcon />
+          </Button>
+        </Tooltip>
+
+        <Tooltip title="Preview in Phone">
+          <Button
+            disabled={isMobile}
+            variant="outlined"
+            color={isMobile ? 'primary' : 'default'}
+            onClick={() => setDevice('Mobile portrait')}
+            className={isMobile ? classes.selected : ''}
+          >
+            <MobileIcon />
+          </Button>
+        </Tooltip>
       </ButtonGroup>
     </Box>
   )
