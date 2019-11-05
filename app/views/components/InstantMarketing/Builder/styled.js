@@ -9,27 +9,8 @@ export const Container = styled.div`
   bottom: 0;
   z-index: 100;
   background-color: #fff;
-
-  ${props =>
-    props.disableDesignerMode &&
-    `
-  .gjs-toolbar {
-    display: none;
-  }
-  
-  .gjs-blocks-cs {
-    display: none;
-  }
-
-  .gjs-badge {
-    /* They change display: block by code,
-     * but we want to hide it.
-     * We do it by setting visibility
-     */
-    // visibility: hidden;
-  }
-  `}
 `
+
 export const TemplatesContainer = styled.div`
   width: 340px;
   border-right: 1px solid #d4d4d4;

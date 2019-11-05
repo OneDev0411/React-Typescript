@@ -2,29 +2,29 @@ import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
-import { Image } from 'components/ImageDrawer/types'
+import { GifItem } from 'components/GifDrawer/types'
 
-import registerBlock from '../registerBlock'
-import { BASICS_BLOCK_CATEGORY } from '../../constants'
+import registerBlock from '../../registerBlock'
+import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 
 import template from './template.mjml'
 
-export const blockName = 'rechat-image'
+const blockName = 'rechat-gif'
 
 export interface Options {
   onDrop: (model: Model) => void
 }
 
-interface ImageBlock {
-  selectHandler: (selectedImage?: Image) => void
+interface GifBlock {
+  selectHandler: (selectedGif?: any) => void
 }
 
-export default function registerImageBlock(
+export default function registerGifBlock(
   editor: Editor,
   { onDrop }: Options
-): ImageBlock {
+): GifBlock {
   registerBlock(editor, {
-    label: 'Image',
+    label: 'GIF Animation',
     category: BASICS_BLOCK_CATEGORY,
     blockName,
     template
@@ -32,14 +32,14 @@ export default function registerImageBlock(
 
   let modelHandle: any
 
-  const selectHandler = (selectedImage?: Image) => {
+  const selectHandler = (selectedGif?: GifItem) => {
     if (!modelHandle) {
       return
     }
 
-    if (selectedImage) {
+    if (selectedGif) {
       const mjml = nunjucks.renderString(template, {
-        image: selectedImage.url
+        url: selectedGif.url
       })
 
       modelHandle.parent().append(mjml, { at: modelHandle.opt.at })

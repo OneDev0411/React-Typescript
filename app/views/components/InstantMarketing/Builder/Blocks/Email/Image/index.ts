@@ -2,31 +2,29 @@ import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
-import { Video } from 'components/VideoDrawer/types'
+import { Image } from 'components/ImageDrawer/types'
 
-import registerBlock from '../registerBlock'
-import { BASICS_BLOCK_CATEGORY } from '../../constants'
-import { TemplateRenderData } from '../../utils/get-template-render-data'
+import registerBlock from '../../registerBlock'
+import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 
 import template from './template.mjml'
 
-const blockName = 'rechat-video'
+export const blockName = 'rechat-image'
 
 export interface Options {
   onDrop: (model: Model) => void
 }
 
-interface VideoBlock {
-  selectHandler: (selectedVideo?: Video) => void
+interface ImageBlock {
+  selectHandler: (selectedImage?: Image) => void
 }
 
-export default function registerVideoBlock(
+export default function registerImageBlock(
   editor: Editor,
-  renderData: TemplateRenderData,
   { onDrop }: Options
-): VideoBlock {
+): ImageBlock {
   registerBlock(editor, {
-    label: 'Video',
+    label: 'Image',
     category: BASICS_BLOCK_CATEGORY,
     blockName,
     template
@@ -34,16 +32,14 @@ export default function registerVideoBlock(
 
   let modelHandle: any
 
-  const selectHandler = (selectedVideo?: Video) => {
+  const selectHandler = (selectedImage?: Image) => {
     if (!modelHandle) {
       return
     }
 
-    if (selectedVideo) {
+    if (selectedImage) {
       const mjml = nunjucks.renderString(template, {
-        ...renderData,
-        url: selectedVideo.url,
-        image: selectedVideo.thumbnail
+        image: selectedImage.url
       })
 
       modelHandle.parent().append(mjml, { at: modelHandle.opt.at })

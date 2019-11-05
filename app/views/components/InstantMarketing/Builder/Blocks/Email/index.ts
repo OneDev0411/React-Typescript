@@ -1,6 +1,6 @@
 import { Editor } from 'grapesjs'
 
-import { TemplateRenderData } from '../utils/get-template-render-data/index'
+import { TemplateRenderData } from '../../utils/get-template-render-data/index'
 
 import registerListingBlocks, { Options as ListingOptions } from './Listings'
 import registerAgentBlocks, { Options as AgentOptions } from './Agents'
@@ -9,7 +9,7 @@ import registerImageBlock, { Options as ImageOptions } from './Image'
 import registerGifBlock, { Options as GifOptions } from './Gif'
 import registerVideoBlock, { Options as VideoOptions } from './Video'
 import { reorderBlocksWithCustomLabels, collapseBlockCategories } from './utils'
-import { BlockOptions } from './types'
+import { BlockOptions } from '../types'
 
 interface Options {
   listing: ListingOptions
@@ -19,7 +19,7 @@ interface Options {
   video: VideoOptions
 }
 
-export function registerCustomBlocks(
+export function registerEmailBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
   { listing, agent, image, gif, video }: Options

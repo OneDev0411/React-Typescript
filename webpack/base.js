@@ -124,6 +124,14 @@ module.exports = {
             loader: 'raw-loader'
           }
         ]
+      },
+      {
+        test: /\.(html)$/,
+        use: [
+          {
+            loader: 'raw-loader'
+          }
+        ]
       }
     ]
   }

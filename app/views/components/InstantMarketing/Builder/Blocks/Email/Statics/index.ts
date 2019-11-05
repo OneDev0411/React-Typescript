@@ -2,10 +2,13 @@ import { Editor } from 'grapesjs'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
-import { TemplateRenderData } from '../../utils/get-template-render-data/index'
+import { TemplateRenderData } from '../../../utils/get-template-render-data/index'
 
-import { ARTICLES_BLOCK_CATEGORY, BASICS_BLOCK_CATEGORY } from '../../constants'
-import registerBlock from '../registerBlock'
+import {
+  ARTICLES_BLOCK_CATEGORY,
+  BASICS_BLOCK_CATEGORY
+} from '../../../constants'
+import registerBlock from '../../registerBlock'
 
 import Headline1 from './headline-1.mjml'
 import Headline2 from './headline-2.mjml'

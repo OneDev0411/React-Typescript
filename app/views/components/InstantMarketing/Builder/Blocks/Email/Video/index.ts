@@ -2,29 +2,31 @@ import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
-import { GifItem } from 'components/GifDrawer/types'
+import { Video } from 'components/VideoDrawer/types'
 
-import registerBlock from '../registerBlock'
-import { BASICS_BLOCK_CATEGORY } from '../../constants'
+import registerBlock from '../../registerBlock'
+import { BASICS_BLOCK_CATEGORY } from '../../../constants'
+import { TemplateRenderData } from '../../../utils/get-template-render-data'
 
 import template from './template.mjml'
 
-const blockName = 'rechat-gif'
+const blockName = 'rechat-video'
 
 export interface Options {
   onDrop: (model: Model) => void
 }
 
-interface GifBlock {
-  selectHandler: (selectedGif?: any) => void
+interface VideoBlock {
+  selectHandler: (selectedVideo?: Video) => void
 }
 
-export default function registerGifBlock(
+export default function registerVideoBlock(
   editor: Editor,
+  renderData: TemplateRenderData,
   { onDrop }: Options
-): GifBlock {
+): VideoBlock {
   registerBlock(editor, {
-    label: 'GIF Animation',
+    label: 'Video',
     category: BASICS_BLOCK_CATEGORY,
     blockName,
     template
@@ -32,14 +34,16 @@ export default function registerGifBlock(
 
   let modelHandle: any
 
-  const selectHandler = (selectedGif?: GifItem) => {
+  const selectHandler = (selectedVideo?: Video) => {
     if (!modelHandle) {
       return
     }
 
-    if (selectedGif) {
+    if (selectedVideo) {
       const mjml = nunjucks.renderString(template, {
-        url: selectedGif.url
+        ...renderData,
+        url: selectedVideo.url,
+        image: selectedVideo.thumbnail
       })
 
       modelHandle.parent().append(mjml, { at: modelHandle.opt.at })

@@ -3,9 +3,9 @@ import { Model } from 'backbone'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
-import { LISTINGS_BLOCK_CATEGORY } from '../../constants'
-import { TemplateRenderData } from '../../utils/get-template-render-data/index'
-import registerBlock from '../registerBlock'
+import { LISTINGS_BLOCK_CATEGORY } from '../../../constants'
+import { TemplateRenderData } from '../../../utils/get-template-render-data/index'
+import registerBlock from '../../registerBlock'
 
 import Top from './top.mjml'
 import Right from './right.mjml'

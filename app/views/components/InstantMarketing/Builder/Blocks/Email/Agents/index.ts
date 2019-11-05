@@ -3,9 +3,9 @@ import { Model } from 'backbone'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
-import { TemplateRenderData } from '../../utils/get-template-render-data'
-import { AGENTS_BLOCK_CATEGORY } from '../../constants'
-import registerBlock from '../registerBlock'
+import { TemplateRenderData } from '../../../utils/get-template-render-data'
+import { AGENTS_BLOCK_CATEGORY } from '../../../constants'
+import registerBlock from '../../registerBlock'
 
 import Single from './single.mjml'
 

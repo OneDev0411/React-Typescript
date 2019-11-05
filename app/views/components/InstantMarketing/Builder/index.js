@@ -41,8 +41,9 @@ import {
 
 import SocialActions from './SocialActions'
 import { SOCIAL_NETWORKS, BASICS_BLOCK_CATEGORY } from './constants'
-import { registerCustomBlocks } from './Blocks'
-import { removeUnusedBlocks } from './Blocks/utils'
+import { registerEmailBlocks } from './Blocks/Email'
+import { registerSocialBlocks } from './Blocks/Social'
+import { removeUnusedBlocks } from './Blocks/Email/utils'
 import getTemplateRenderData from './utils/get-template-render-data'
 
 class Builder extends React.Component {
@@ -191,7 +192,11 @@ class Builder extends React.Component {
     this.disableDefaultDeviceManager()
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
-      this.registerBlocks()
+      this.registerEmailBlocks()
+    }
+
+    if (!this.isEmailTemplate) {
+      this.registerSocialBlocks()
     }
 
     if (this.isVideoTemplate) {
@@ -234,12 +239,12 @@ class Builder extends React.Component {
     })
   }
 
-  registerBlocks = () => {
+  registerEmailBlocks = () => {
     const { brand } = getActiveTeam(this.props.user)
     const renderData = getTemplateRenderData(brand)
 
     removeUnusedBlocks(this.editor)
-    this.blocks = registerCustomBlocks(this.editor, renderData, {
+    this.blocks = registerEmailBlocks(this.editor, renderData, {
       listing: {
         onDrop: () => {
           this.setState({ isListingDrawerOpen: true })
@@ -266,6 +271,14 @@ class Builder extends React.Component {
         }
       }
     })
+  }
+
+  registerSocialBlocks = () => {
+    const { brand } = getActiveTeam(this.props.user)
+    const renderData = getTemplateRenderData(brand)
+
+    removeUnusedBlocks(this.editor)
+    this.blocks = registerSocialBlocks(this.editor, renderData)
   }
 
   disableAssetManager = () => {
@@ -663,10 +676,7 @@ class Builder extends React.Component {
 
     return (
       <Portal root="marketing-center">
-        <Container
-          className="template-builder"
-          disableDesignerMode={!this.isEmailTemplate || !this.isMjmlTemplate}
-        >
+        <Container className="template-builder">
           <SearchListingDrawer
             mockListings
             multipleSelection
