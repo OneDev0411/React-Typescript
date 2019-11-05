@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import juice from 'juice'
-import { Button } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 
 import { Portal } from 'components/Portal'
 import IconButton from 'components/Button/IconButton'
@@ -744,18 +744,19 @@ class Builder extends React.Component {
             }}
           />
           <Header>
-            <Button
+            <ActionButton
               size="small"
-              variant="outlined"
-              style={{ width: '8.75rem' }}
+              appearance="outline"
+              style={{ width: '10.1875rem' }}
               onClick={this.toggeleTemplatesColumnVisibility}
             >
               <IconNav />
-              &nbsp;&nbsp;
-              {this.state.isTemplatesColumnHidden
-                ? 'Change Template'
-                : 'Hide Templates'}
-            </Button>
+              <Box ml={0.75}>
+                {this.state.isTemplatesColumnHidden
+                  ? 'Show Templates'
+                  : 'Hide Templates'}
+              </Box>
+            </ActionButton>
             {this.editor && <UndoRedoManager editor={this.editor} />}
             {this.editor && this.isEmailTemplate && (
               <DeviceManager editor={this.editor} />
