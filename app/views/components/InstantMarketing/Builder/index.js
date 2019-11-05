@@ -753,7 +753,7 @@ class Builder extends React.Component {
               <IconNav />
               <Box ml={0.75}>
                 {this.state.isTemplatesColumnHidden
-                  ? 'Show Templates'
+                  ? 'Change Template'
                   : 'Hide Templates'}
               </Box>
             </ActionButton>
