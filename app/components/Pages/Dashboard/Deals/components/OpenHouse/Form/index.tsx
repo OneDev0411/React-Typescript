@@ -91,6 +91,14 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
     }
   }
 
+  const setInitialEndDate = () => {
+    const date = new Date(
+      new Date(startTime!).setHours(startTime!.getHours() + 1)
+    )
+
+    setEndTime(date)
+  }
+
   const handleSave = async (): Promise<void> => {
     if (!startTime) {
       return
@@ -171,11 +179,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
       {startTime && (
         <div className={classes.fieldContainer}>
           {!endTime ? (
-            <Button
-              variant="text"
-              color="primary"
-              onClick={() => setEndTime(new Date(startTime))}
-            >
+            <Button variant="text" color="primary" onClick={setInitialEndDate}>
               Add End Time
             </Button>
           ) : (
