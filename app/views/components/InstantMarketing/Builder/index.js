@@ -30,6 +30,7 @@ import Templates from '../Templates'
 import { VideoToolbar } from './VideoToolbar'
 import UndoRedoManager from './UndoRedoManager'
 import DeviceManager from './DeviceManager'
+import RTE from './RTE'
 
 import {
   Container,
@@ -181,6 +182,15 @@ class Builder extends React.Component {
     )
   }
 
+  setRte = () => {
+    const { enable, disable } = RTE(this.editor)
+
+    this.editor.setCustomRte({
+      enable,
+      disable
+    })
+  }
+
   setupGrapesJs = () => {
     this.setState({ isEditorLoaded: true })
 
@@ -190,6 +200,7 @@ class Builder extends React.Component {
     this.makeTemplateCentered()
     this.removeTextStylesOnPaste()
     this.disableDefaultDeviceManager()
+    this.setRte()
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
       this.registerEmailBlocks()
