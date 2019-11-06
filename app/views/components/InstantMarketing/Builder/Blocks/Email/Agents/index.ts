@@ -7,13 +7,13 @@ import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import { AGENTS_BLOCK_CATEGORY } from '../../../constants'
 import registerBlock from '../../registerBlock'
 
-import Single from './single.mjml'
+import Left from './left.mjml'
 
-export const agentSingleBlockName = 'rechat-agent-single'
+export const agentLeftBlockName = 'rechat-agent-left'
 
 const templates = {}
 
-templates[agentSingleBlockName] = Single
+templates[agentLeftBlockName] = Left
 
 export interface Options {
   onDrop: (model: Model) => void
@@ -52,10 +52,10 @@ export default function registerAgentBlocks(
 ): AgentBlock {
   renderData = _renderData
   registerBlock(editor, {
-    label: 'Single Agent',
+    label: 'Image Left',
     category: AGENTS_BLOCK_CATEGORY,
-    blockName: agentSingleBlockName,
-    template: templates[agentSingleBlockName]
+    blockName: agentLeftBlockName,
+    template: templates[agentLeftBlockName]
   })
 
   editor.on('block:drag:stop', (model: Model, block) => {

@@ -156,7 +156,7 @@ export class RoleAgentIntegration extends React.Component {
             user={this.props.user}
             title={this.props.modalTitle}
             isPrimaryAgent={this.getIsPrimaryAgent()}
-            shouldMergeTeams={this.isOfficeDoubleEnded}
+            flattened={this.isOfficeDoubleEnded}
             onClose={this.props.onClose}
             onSelectAgent={this.onSelectAgent}
           />

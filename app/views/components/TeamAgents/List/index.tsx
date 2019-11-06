@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import memoize from 'lodash/memoize'
-import PropTypes from 'prop-types'
 import Fuse from 'fuse.js'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 import uniqBy from 'lodash/uniqBy'
@@ -24,31 +23,38 @@ import {
   Title
 } from './styled'
 
-AgentsList.propTypes = {
-  agents: PropTypes.array.isRequired,
-  onSearch: PropTypes.func.isRequired,
-  onSelectAgent: PropTypes.func.isRequired
+interface NormalizedBrand {
+  id?: UUID
+  name?: string
+  subtitle?: string
+  users: IUser[]
 }
 
-export function AgentsList(props) {
-  const [searchTerm, setSearchTerm] = useState('')
+interface Props {
+  user: IUser
+  teams: IBrand[]
+  isLoading: boolean
+  flattened: boolean
+  onSelectAgent(agent: IDealAgent): void
+}
+
+export function AgentsList(props: Props) {
+  const [searchTerm, setSearchTerm] = useState<string>('')
   const [debouncedSetSearchTerm] = useDebouncedCallback(setSearchTerm, 500)
 
-  let teams = normalizeTeams(props.user, props.teams, searchTerm)
-
-  // merge all teams into one and show them flattened
-  if (props.shouldMergeTeams) {
-    teams = [
-      {
-        users: uniqBy(teams.flatMap(team => team.users), user => user.id)
-      }
-    ]
-  }
+  const teams = normalizeTeams(
+    props.user,
+    props.teams,
+    props.flattened,
+    searchTerm
+  )
 
   return (
     <div>
+      {/*
+      // @ts-ignore js component */}
       <Search
-        value={props.searchTerm}
+        value={searchTerm}
         onChange={debouncedSetSearchTerm}
         style={{ marginBottom: '1rem' }}
         placeholder="Search for teams or agents"
@@ -58,9 +64,9 @@ export function AgentsList(props) {
         <EmptyState>No search result</EmptyState>
       )}
 
-      {teams.map((office, officeIndex) => {
+      {teams.map((office: NormalizedBrand, officeIndex: number) => {
         if (office.users.length === 0) {
-          return false
+          return null
         }
 
         return (
@@ -76,7 +82,7 @@ export function AgentsList(props) {
               </Header>
             )}
 
-            {office.users.map((user, userIndex) => (
+            {office.users.map((user: IUser, userIndex: number) => (
               <RowItem
                 key={`${officeIndex}${userIndex}`}
                 onClick={() =>
@@ -89,14 +95,14 @@ export function AgentsList(props) {
                 <Avatar
                   size={40}
                   title={user.display_name}
-                  image={user.profile_image_url}
+                  image={user.profile_image_url || undefined}
                   style={{
                     marginRight: '1rem'
                   }}
                 />
 
                 <div>
-                  <AgentTitle>
+                  <AgentTitle to="">
                     <TextWithHighlights search={searchTerm}>
                       {user.display_name}
                     </TextWithHighlights>
@@ -117,12 +123,17 @@ export function AgentsList(props) {
   )
 }
 
-function normalizeTeams(user, teams, searchTerm) {
+function normalizeTeams(
+  user: IUser,
+  teams: IBrand[],
+  flattened: boolean,
+  searchTerm: string
+): NormalizedBrand[] {
   const isTraining = isActiveTeamTraining(user)
 
   const list = teams
-    .filter(office => isTrainingOffice(office) === isTraining)
-    .map(office => {
+    .filter((office: IBrand) => isTrainingOffice(office) === isTraining)
+    .map((office: IBrand) => {
       const agents = getBrandUsers(office).map(user => ({
         ...user,
         office: office.name
@@ -141,7 +152,21 @@ function normalizeTeams(user, teams, searchTerm) {
       }
     })
 
-  return list.every(office => !office.users.length) ? [] : list
+  const filteredList = list.every(office => !office.users.length) ? [] : list
+
+  // merge all teams into one and show them flattened
+  if (flattened) {
+    return [
+      {
+        users: uniqBy(
+          filteredList.flatMap(team => team.users),
+          (user: IUser) => user.id
+        )
+      }
+    ]
+  }
+
+  return filteredList
 }
 
 const isTrainingOffice = memoize(
@@ -163,7 +188,7 @@ const isTrainingOffice = memoize(
 
 const getSubtitle = memoize(
   office => {
-    const names = []
+    const names: string[] = []
     let currentOffice = office
 
     while (currentOffice.parent !== null) {

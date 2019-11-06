@@ -22,7 +22,7 @@ import ArticleImageLeftIcon from 'assets/images/marketing/editor/blocks/image-le
 import ArticleImageRightIcon from 'assets/images/marketing/editor/blocks/image-right.png'
 
 // Agent
-import AgentSingleIcon from 'assets/images/marketing/editor/blocks/agent-single.png'
+import AgentLeftIcon from 'assets/images/marketing/editor/blocks/agent-left.png'
 
 import {
   articleTopBlockName,
@@ -39,7 +39,7 @@ import {
 
 import { headline1BlockName } from './Statics'
 import { headline2BlockName } from './Statics'
-import { agentSingleBlockName } from './Agents'
+import { agentLeftBlockName } from './Agents'
 import { blockName as rechatImageBlockName } from './Image'
 
 const BLOCK_IDS_TO_REMOVE = [
@@ -78,7 +78,7 @@ const BLOCK_BUTTON_ICONS = {
   [listingLeftBlockName]: ArticleImageLeftIcon,
   [listingRightBlockName]: ArticleImageRightIcon,
 
-  [agentSingleBlockName]: AgentSingleIcon
+  [agentLeftBlockName]: AgentLeftIcon
 }
 
 const BLOCK_BUTTONS_ORDER = [
@@ -108,7 +108,7 @@ const BLOCK_BUTTONS_ORDER = [
   listingLeftBlockName,
   listingRightBlockName,
 
-  agentSingleBlockName
+  agentLeftBlockName
 ]
 
 export function removeUnusedBlocks(editor: Editor) {
