@@ -1,19 +1,34 @@
 <mj-section>
   {% for listing in listings %}
-    <mj-column width="50%">
-      <mj-image
-          rechat-assets="listing-image"
-          rechat-listing="{{ listing.id }}"
-          src="{{listing.gallery_image_urls[0]}}"></mj-image>
-      <mj-text font-family="Abril Fatface" font-size="20px" line-height="27px" color="#242F3C">
-        {{listing.property.address.street_address}}
-      </mj-text>
-      <mj-text height="48px" font-family="Roboto" font-weight="300" font-size="14px" line-height="16px" align="justify" color="#242F3C">
-        OPEN SUNDAY, JUNE 30, 2019
-      </mj-text>
-      <mj-button border-radius="6px" font-family="Roboto" font-size="12px" font-weight="Bold" line-height="14px" width="100%" height="40px" color="{{getColor('beta.tb')}}" background-color="{{getColor('beta.bg')}}" href="{{getListingUrl(listing)}}">
-        VIEW PROPERTY
-      </mj-button>
-    </mj-column>
+  <mj-column width="50%" padding="0 20px">
+    <mj-image padding="0" rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>
+    <mj-text padding-top="16px" padding-top="8px" font-family="system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Arial,sans-serif" font-weight="Bold" font-size="28px" line-height="32px" color="#000" padding-left=0 align="left">
+      Must See
+    </mj-text>
+    <mj-text padding="0" font-family="system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Arial,sans-serif" font-size="24px" line-height="32px" color="#000">
+      {{listing.property.address.street_address}}
+    </mj-text>
+    <mj-text padding="0" font-family="system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Arial,sans-serif" font-size="18px" line-height="24px" color="#666" font-weight="500" padding-left=0 align="left">
+      {{ listing.price | currency }}
+    </mj-text>
+    <mj-text padding-top="16px" padding-bottom="24px" font-family="system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Arial,sans-serif" font-size="16px" line-height="24px" color="#1A1A1A" padding-left=0 align="left">
+      {% if listing.property.bedroom_count %}
+      <span>{{listing.property.bedroom_count}} Beds,</span>
+      {% endif %}
+      {% if listing.property.bathroom_count %}
+      <span>{{listing.property.bathroom_count}} Baths,</span>
+      {% endif %}
+      {% if listing.property.lot_square_meters %}
+      <span>{{listing.property.lot_square_meters}} Sqft,</span>
+      {% endif %}
+      {% if listing.property.year_built %}
+      <span>Built in {{listing.property.year_built}}</span>
+      {% endif %}
+    </mj-text>
+    <mj-button inner-padding="4px 16px" padding="0px 0px" border-radius="4px" font-family="system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Arial,sans-serif" font-size="16px" font-weight="500" line-height="24px" height="32px" color="#0945EB" border="1px solid #0945EB" background-color="#fff" align="left">
+      View Property
+    </mj-button>
+    <mj-spacer height="16px" />
+  </mj-column>
   {% endfor %}
 </mj-section>

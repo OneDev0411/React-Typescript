@@ -8,7 +8,7 @@
       A federal program to encourage black homeownership in the 1970s ended in a flood of foreclosures.
     </mj-text>
     <mj-button padding="4px 16px" inner-padding="0px 0px" border-radius="4px" font-family="system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Arial,sans-serif" font-size="16px" font-weight="500" line-height="24px" width="134px" height="32px" color="#0945EB" border="1px solid #0945EB" background-color="#fff" align="left">
-      READ MORE
+      Read More
     </mj-button>
   </mj-column>
   <mj-column>
@@ -19,7 +19,7 @@
     <mj-text padding-bottom="8px" height="124px" font-family="system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Arial,sans-serif" font-weight="300" font-size="16px" line-height="24px" align="justify" color="#333">
       Neighborhoods located within a half-mile of public transit services outperformed those farther from public transit. </mj-text>
     <mj-button padding="4px 16px" inner-padding="0px 0px" border-radius="4px" font-family="system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Arial,sans-serif" font-size="16px" font-weight="500" line-height="24px" width="134px" height="32px" color="#0945EB" border="1px solid #0945EB" background-color="#fff" align="left">
-      READ MORE
+      Read More
     </mj-button>
   </mj-column>
 </mj-section>
