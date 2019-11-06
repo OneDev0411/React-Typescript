@@ -17,6 +17,7 @@ import TeamAgents from 'components/TeamAgents'
 import ImageDrawer from 'components/ImageDrawer'
 import GifDrawer from 'components/GifDrawer'
 import VideoDrawer from 'components/VideoDrawer'
+import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
 
 import { getActiveTeam } from 'utils/user-teams'
 
@@ -63,7 +64,8 @@ class Builder extends React.Component {
       isAgentDrawerOpen: false,
       isImageDrawerOpen: false,
       isGifDrawerOpen: false,
-      isVideoDrawerOpen: false
+      isVideoDrawerOpen: false,
+      isArticleDrawerOpen: false
     }
 
     this.keyframe = 0
@@ -270,6 +272,11 @@ class Builder extends React.Component {
       video: {
         onDrop: () => {
           this.setState({ isVideoDrawerOpen: true })
+        }
+      },
+      article: {
+        onDrop: () => {
+          this.setState({ isArticleDrawerOpen: true })
         }
       }
     })
@@ -747,6 +754,17 @@ class Builder extends React.Component {
             onSelect={video => {
               this.blocks.video.selectHandler(video)
               this.setState({ isVideoDrawerOpen: false })
+            }}
+          />
+          <ArticleDrawer
+            isOpen={this.state.isArticleDrawerOpen}
+            onClose={() => {
+              this.blocks.article.selectHandler()
+              this.setState({ isArticleDrawerOpen: false })
+            }}
+            onSelect={article => {
+              this.blocks.article.selectHandler(article)
+              this.setState({ isArticleDrawerOpen: false })
             }}
           />
           <Header>
