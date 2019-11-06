@@ -1,15 +1,15 @@
 <mj-section>
-  <mj-column width="33%">
-    <mj-image rechat-assets="static" align="left" src="https://picsum.photos/id/1015/180/180"></mj-image>
+  <mj-column width="50%">
+    <mj-image rechat-assets="static" align="left" src="https://picsum.photos/id/1015/512/512"></mj-image>
   </mj-column>
-  <mj-column width="66%">
-    <mj-text font-family="Roboto" font-weight="Bold" font-size="20px" line-height="27px" color="#242F3C" padding-top=0>
+  <mj-column width="50%">
+    <mj-text font-family="system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Arial,sans-serif" font-weight="500" font-size="28px" line-height="32px" color="#000" padding-top=0>
       When the Dream of Owning a Home Became a Nightmare
     </mj-text>
-    <mj-text font-family="Roboto" font-size="14px" line-height="16px" color="#242F3C">
+    <mj-text padding-bottom="8px" font-family="system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Arial,sans-serif" font-size="16px" line-height="24px" color="#333">
       A federal program to encourage black homeownership in the 1970s ended in a flood of foreclosures.
     </mj-text>
-    <mj-button border-radius="6px" font-family="Roboto" font-size="12px" font-weight="Bold" line-height="14px" width="100%" height="40px" color="{{getColor('beta.tb')}}" background-color="{{getColor('beta.bg')}}">
+    <mj-button padding="4px 16px" inner-padding="0px 0px" border-radius="4px" font-family="system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Arial,sans-serif" font-size="16px" font-weight="500" line-height="24px" width="134px" height="32px" color="#0945EB" border="1px solid #0945EB" background-color="#fff" align="left">
       READ MORE
     </mj-button>
   </mj-column>
