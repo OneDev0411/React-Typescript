@@ -634,6 +634,9 @@ class Builder extends React.Component {
       {...buttonProps}
       iconSize="large"
       text={`Sends as: ${buttonProps.selectedItem.label}`}
+      style={{
+        height: '2rem'
+      }}
     />
   )
 
@@ -779,7 +782,7 @@ class Builder extends React.Component {
 
               {this.showEditListingsButton && !this.props.isEdit && (
                 <ActionButton
-                  style={{ marginLeft: '0.5rem' }}
+                  style={{ marginLeft: '0.5rem', height: '2rem' }}
                   appearance="outline"
                   onClick={this.props.onShowEditListings}
                 >
@@ -796,7 +799,7 @@ class Builder extends React.Component {
 
               {this.state.selectedTemplate && !isSocialMedium && (
                 <ActionButton
-                  style={{ marginLeft: '0.5rem' }}
+                  style={{ marginLeft: '0.5rem', height: '2rem' }}
                   onClick={this.handleSave}
                 >
                   Next
