@@ -16,7 +16,7 @@ export default function SocialActions({ networks, onClick }: Props) {
         <Button
           key={network.name}
           onClick={() => onClick(network.name)}
-          style={{ height: '2rem' }}
+          style={{ height: '2rem', lineHeight: 0 }}
         >
           <Icon className={network.className} />
           Post to {network.name}
