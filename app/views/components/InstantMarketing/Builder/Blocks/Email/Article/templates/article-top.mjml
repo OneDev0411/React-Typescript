@@ -17,6 +17,6 @@
     UI,Arial,sans-serif" font-size="16px" font-weight="500" line-height="24px" width="148px" height="32px" color="#0945EB" border="1px solid #0945EB" background-color="#fff" align="left" href="{{url}}">
       Read More
     </mj-button>
-    <mj-spacer height="24px" />
+    <mj-spacer height="24px"></mj-spacer>
   </mj-column>
 </mj-section>
