@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { Checkbox } from '@material-ui/core'
+
 import memoize from 'lodash/memoize'
 import Fuse from 'fuse.js'
 import useDebouncedCallback from 'use-debounce/lib/callback'
@@ -10,6 +12,8 @@ import { TextWithHighlights } from 'components/TextWithHighlights'
 import Search from 'components/Grid/Search'
 
 import { getBrandUsers, isActiveTeamTraining } from 'utils/user-teams'
+
+import { IUserWithBrand } from '../types'
 
 import { EmptyState } from '../styled'
 
@@ -35,7 +39,9 @@ interface Props {
   teams: IBrand[]
   isLoading: boolean
   flattened: boolean
-  onSelectAgent(agent: IDealAgent): void
+  multiSelection: boolean
+  selectedAgents: IUserWithBrand[]
+  onSelectAgent(agent: IUserWithBrand): void
 }
 
 export function AgentsList(props: Props) {
@@ -82,40 +88,57 @@ export function AgentsList(props: Props) {
               </Header>
             )}
 
-            {office.users.map((user: IUser, userIndex: number) => (
-              <RowItem
-                key={`${officeIndex}${userIndex}`}
-                onClick={() =>
-                  props.onSelectAgent({
-                    ...user,
-                    brand_id: office.id
-                  })
-                }
-              >
-                <Avatar
-                  size={40}
-                  title={user.display_name}
-                  image={user.profile_image_url || undefined}
-                  style={{
-                    marginRight: '1rem'
-                  }}
-                />
+            {office.users.map((user: IUser, userIndex: number) => {
+              const isSelected =
+                props.multiSelection &&
+                props.selectedAgents.some(agent => agent.id === user.id)
 
-                <div>
-                  <AgentTitle to="">
-                    <TextWithHighlights search={searchTerm}>
-                      {user.display_name}
-                    </TextWithHighlights>
-                  </AgentTitle>
+              return (
+                <RowItem
+                  key={`${officeIndex}${userIndex}`}
+                  onClick={() =>
+                    props.onSelectAgent({
+                      ...user,
+                      brand_id: office.id
+                    })
+                  }
+                >
+                  {props.multiSelection && (
+                    <Checkbox
+                      color="primary"
+                      style={{
+                        padding: 0,
+                        marginRight: '1rem'
+                      }}
+                      checked={isSelected}
+                    />
+                  )}
 
-                  <AgentEmail>
-                    <TextWithHighlights search={searchTerm}>
-                      {user.email}
-                    </TextWithHighlights>
-                  </AgentEmail>
-                </div>
-              </RowItem>
-            ))}
+                  <Avatar
+                    size={40}
+                    title={user.display_name}
+                    image={user.profile_image_url || undefined}
+                    style={{
+                      marginRight: '1rem'
+                    }}
+                  />
+
+                  <div>
+                    <AgentTitle to="">
+                      <TextWithHighlights search={searchTerm}>
+                        {user.display_name}
+                      </TextWithHighlights>
+                    </AgentTitle>
+
+                    <AgentEmail>
+                      <TextWithHighlights search={searchTerm}>
+                        {user.email}
+                      </TextWithHighlights>
+                    </AgentEmail>
+                  </div>
+                </RowItem>
+              )
+            })}
           </Card>
         )
       })}

@@ -170,14 +170,16 @@ class Builder extends React.Component {
     })
   }
 
-  addAgentAssets = agent => {
+  addAgentAssets = agents => {
     this.editor.AssetManager.add(
-      ['profile_image_url', 'cover_image_url']
-        .filter(attr => agent[attr])
-        .map(attr => ({
-          image: agent[attr],
-          avatar: true
-        }))
+      agents.map(({ agent }) => {
+        return ['profile_image_url', 'cover_image_url']
+          .filter(attr => agent[attr])
+          .map(attr => ({
+            image: agent[attr],
+            avatar: true
+          }))
+      })
     )
   }
 
@@ -700,16 +702,16 @@ class Builder extends React.Component {
           {this.state.isAgentDrawerOpen && (
             <TeamAgents
               isPrimaryAgent
+              multiSelection
               user={this.props.user}
-              title="Select An Agent"
+              title="Select Agents"
               onClose={() => {
                 this.blocks.agent.selectHandler()
                 this.setState({ isAgentDrawerOpen: false })
               }}
-              onSelectAgent={agent => {
-                console.log('onSelectAgent', agent)
-                this.addAgentAssets(agent)
-                this.blocks.agent.selectHandler(agent)
+              onSelectAgents={agents => {
+                this.addAgentAssets(agents)
+                this.blocks.agent.selectHandler(agents)
                 this.setState({ isAgentDrawerOpen: false })
               }}
             />
