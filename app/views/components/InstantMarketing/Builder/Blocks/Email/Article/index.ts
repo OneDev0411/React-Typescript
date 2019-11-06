@@ -87,7 +87,7 @@ export default function registerArticleBlock(
     if (selectedArticle) {
       const mjml = nunjucks.renderString(template, {
         ...renderData,
-        description: selectedArticle.image,
+        description: selectedArticle.description,
         image: selectedArticle.image,
         title: selectedArticle.title,
         url: selectedArticle.url
