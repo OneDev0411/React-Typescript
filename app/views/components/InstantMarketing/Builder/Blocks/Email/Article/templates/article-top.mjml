@@ -1,0 +1,19 @@
+<mj-section>
+  <mj-column width="100%">
+
+    <mj-image rechat-assets="static" src="{{image}}"></mj-image>
+
+    <mj-text font-family="Abril Fatface" font-size="32px" line-height="43px" color="#242F3C">
+      {{title}}
+    </mj-text>
+
+
+    <mj-text font-family="Roboto" font-weight="300" font-size="14px" line-height="16px" align="justify" color="#242F3C">
+      {{description}}
+    </mj-text>
+
+    <mj-button href="{{url}}" border-radius="6px" font-family="Roboto" font-size="12px" font-weight="Bold" line-height="14px" width="258px" height="48px" color="{{getColor('beta.tb')}}" background-color="{{getColor('beta.bg')}}">
+      READ MORE
+    </mj-button>
+  </mj-column>
+</mj-section>

@@ -16,7 +16,7 @@ interface Props {
 
 export default function VideoDrawer({
   isOpen,
-  onClose = () => {},
+  onClose = () => { },
   onSelect
 }: Props) {
   const [isLoading, setIsLoading] = useState(false)
@@ -41,7 +41,7 @@ export default function VideoDrawer({
     }
 
     setVideo(newVideo)
-  }, [onSelect, video])
+  }, [video])
 
   return (
     <OverlayDrawer
