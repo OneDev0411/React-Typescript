@@ -29,7 +29,7 @@ import {
   articleDualBlockName,
   articleLeftBlockName,
   articleRightBlockName
-} from './Statics'
+} from './Article/constants'
 import {
   listingTopBlockName,
   listingGridBlockName,

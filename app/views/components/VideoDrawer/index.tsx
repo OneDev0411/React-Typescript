@@ -16,7 +16,7 @@ interface Props {
 
 export default function VideoDrawer({
   isOpen,
-  onClose = () => { },
+  onClose = () => {},
   onSelect
 }: Props) {
   const [isLoading, setIsLoading] = useState(false)
