@@ -51,6 +51,11 @@ describe('BulkEmailComposeForm', () => {
     // submit compose form
     fireEvent.click($.getByTestId('compose-send-email'))
 
+    // It's added for template expression evaluation which delays the execution
+    // of the props.sendEmail one tick. Not sure if there is a better way
+    // to fix this issue but it's working.
+    await new Promise(setTimeout)
+
     expect(createEmailCampaign).toBeCalledWith(
       expect.objectContaining({
         to: [

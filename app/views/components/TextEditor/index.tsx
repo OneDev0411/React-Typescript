@@ -173,17 +173,6 @@ export const TextEditor = forwardRef(
 
     editorStateRef.current = editorState
 
-    useImperativeHandle(
-      ref,
-      createEditorRef({
-        editorElementRef,
-        editorRef,
-        setEditorState,
-        stateToHtmlOptions
-      }),
-      [stateToHtmlOptions]
-    )
-
     useEffect(() => {
       const pluginsEditor = editorRef.current
 
@@ -222,6 +211,18 @@ export const TextEditor = forwardRef(
 
       setTimeout(() => (input ? input.onChange(html) : onChange(html)))
     }
+
+    useImperativeHandle(
+      ref,
+      createEditorRef({
+        editorElementRef,
+        editorRef,
+        handleChange,
+        stateToHtmlOptions,
+        stateFromHtmlOptions
+      }),
+      [stateToHtmlOptions]
+    )
 
     /**
      * Adds an image to the editor from a URL or dataURL. if it's a dataUrl

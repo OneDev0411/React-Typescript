@@ -35,6 +35,7 @@ export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
   hasStaticBody?: boolean
   hasSignatureByDefault?: boolean
   hasTemplateVariables?: boolean
+  evaluateTemplateExpressions?: boolean
 
   renderCollapsedFields: (values: EmailFormValues) => ReactNode
   renderFields: (values: EmailFormValues) => ReactNode

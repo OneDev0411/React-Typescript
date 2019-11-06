@@ -56,6 +56,7 @@ export function SingleEmailComposeForm({
       {...otherProps}
       deal={deal}
       hasSignatureByDefault
+      evaluateTemplateExpressions
       sendEmail={handleSendEmail}
       renderCollapsedFields={(values: EmailFormValues) => (
         <CollapsedEmailRecipients

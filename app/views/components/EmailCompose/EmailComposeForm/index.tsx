@@ -31,6 +31,8 @@ import { Footer } from '../components/Footer'
 import ConfirmationModalContext from '../../ConfirmationModal/context'
 import { validateRecipient } from '../../EmailRecipientsChipsInput/helpers/validate-recipient'
 import { getSendEmailResultMessages } from '../helpers/email-result-messages'
+import { TextEditorRef } from '../../TextEditor/types'
+import { useExpressionEvaluator } from './use-expression-evaluator'
 
 export const useEmailFormStyles = makeStyles(styles, { name: 'EmailForm' })
 
@@ -64,6 +66,7 @@ function EmailComposeForm<T>({
   },
   dispatch,
   enableSchedule = true,
+  evaluateTemplateExpressions = false,
   onCancel,
   onDelete,
   uploadAttachment = uploadEmailAttachment,
@@ -79,98 +82,100 @@ function EmailComposeForm<T>({
   const [topFieldsCollapsed, setTopFieldsCollapsed] = useState<boolean>(
     hasRecipients
   )
-  const emailBodyEditorRef = useRef<any>(null)
+  const emailBodyEditorRef = useRef<TextEditorRef>(null)
   const confirmationModal = useContext(ConfirmationModalContext)
+
+  const { evaluate } = useExpressionEvaluator()
 
   const classes = useEmailFormStyles(props)
 
-  const handleSendEmail = useCallback(
-    async form => {
-      const { successMessage, errorMessage } = getSendEmailResultMessages(
-        !!form.due_at
-      )
+  const handleSendEmail = async (formData: EmailFormValues) => {
+    const { successMessage, errorMessage } = getSendEmailResultMessages(
+      !!formData.due_at
+    )
 
-      let result: T
+    let result: T
 
-      try {
-        result = await props.sendEmail(form)
-      } catch (e) {
-        console.error('error in sending email', e)
-
-        return dispatch(
-          notify({
-            status: 'error',
-            message: errorMessage
-          })
-        )
+    try {
+      if (evaluateTemplateExpressions) {
+        formData.body = await evaluate(formData.body || '', formData)
       }
 
-      dispatch(
+      result = await props.sendEmail(formData)
+    } catch (e) {
+      console.error('error in sending email', e)
+
+      return dispatch(
         notify({
-          status: 'success',
-          message: successMessage
+          status: 'error',
+          message: errorMessage
         })
       )
+    }
 
-      onSent(result)
-    },
-    [dispatch, onSent, props]
-  )
-  const onSubmit = useCallback(
-    form => {
-      const uploadingAttachment = (form.uploadingAttachments || []).length > 0
-      const uploadingImage =
-        emailBodyEditorRef.current &&
-        emailBodyEditorRef.current.hasUploadingImage()
+    dispatch(
+      notify({
+        status: 'success',
+        message: successMessage
+      })
+    )
 
-      if (uploadingImage || uploadingAttachment) {
-        return new Promise((resolve, reject) => {
-          confirmationModal.setConfirmationModal({
-            message: 'Upload in progress',
-            description: `Please wait while ${
-              uploadingImage ? 'images' : 'attachments'
-            } are uploading, or remove them`,
-            cancelLabel: 'Ok',
-            needsConfirm: false,
-            onCancel: reject
-          })
+    onSent(result)
+  }
+
+  const onSubmit = form => {
+    const uploadingAttachment = (form.uploadingAttachments || []).length > 0
+    const uploadingImage =
+      emailBodyEditorRef.current &&
+      emailBodyEditorRef.current.hasUploadingImage()
+
+    if (uploadingImage || uploadingAttachment) {
+      return new Promise((resolve, reject) => {
+        confirmationModal.setConfirmationModal({
+          message: 'Upload in progress',
+          description: `Please wait while ${
+            uploadingImage ? 'images' : 'attachments'
+          } are uploading, or remove them`,
+          cancelLabel: 'Ok',
+          needsConfirm: false,
+          onCancel: reject
         })
-      }
+      })
+    }
 
-      if ((form.uploadingAttachments || []).length > 0) {
-        return new Promise((resolve, reject) => {
-          confirmationModal.setConfirmationModal({
-            message: 'Upload in progress',
-            description:
-              'Please wait while attachments are uploading, or remove them',
-            cancelLabel: 'Ok',
-            needsConfirm: false,
-            onCancel: reject
-          })
+    if ((form.uploadingAttachments || []).length > 0) {
+      return new Promise((resolve, reject) => {
+        confirmationModal.setConfirmationModal({
+          message: 'Upload in progress',
+          description:
+            'Please wait while attachments are uploading, or remove them',
+          cancelLabel: 'Ok',
+          needsConfirm: false,
+          onCancel: reject
         })
-      }
+      })
+    }
 
-      if ((form.subject || '').trim() === '') {
-        return new Promise((resolve, reject) => {
-          confirmationModal.setConfirmationModal({
-            message: 'Send without subject?',
-            description:
-              'This email has no subject. Are you sure you want to send it?',
-            confirmLabel: 'Send anyway',
-            onCancel: reject,
-            onConfirm: () => {
-              handleSendEmail(form)
-                .then(resolve)
-                .catch(reject)
-            }
-          })
+    if ((form.subject || '').trim() === '') {
+      return new Promise((resolve, reject) => {
+        confirmationModal.setConfirmationModal({
+          message: 'Send without subject?',
+          description:
+            'This email has no subject. Are you sure you want to send it?',
+          confirmLabel: 'Send anyway',
+          onCancel: reject,
+          onConfirm: () => {
+            handleSendEmail(form)
+              .then(resolve)
+              .catch(reject)
+          }
         })
-      }
+      })
+    }
 
-      return handleSendEmail(form)
-    },
-    [confirmationModal, handleSendEmail]
-  )
+    return handleSendEmail(form)
+  }
+
   const validate = useCallback(values => {
     const errors: { [key in keyof EmailFormValues]?: string } = {}
     const { to } = values
@@ -272,22 +277,39 @@ function EmailComposeForm<T>({
               />
             </div>
             {children}
-            <Footer
-              formProps={{ values: formProps.values as EmailFormValues }}
-              isSubmitting={submitting}
-              isSubmitDisabled={
-                typeof isSubmitDisabled === 'function'
-                  ? isSubmitDisabled(values)
-                  : isSubmitDisabled
-              }
-              uploadAttachment={uploadAttachment}
-              initialAttachments={initialValues.attachments || []}
-              deal={props.deal}
-              enableSchedule={enableSchedule}
-              onCancel={onCancel}
-              onDelete={onDelete}
-              onChanged={scrollToEnd}
-              className={classes.footer}
+
+            {/*
+            If react-final-form was up to date, we could use useField instead
+            of nesting footer inside a Field just to be able to update subject.
+            */}
+            <Field
+              name="subject"
+              render={({ input: subjectInput }) => (
+                <Footer
+                  formProps={{ values: formProps.values as EmailFormValues }}
+                  isSubmitting={submitting}
+                  isSubmitDisabled={
+                    typeof isSubmitDisabled === 'function'
+                      ? isSubmitDisabled(values)
+                      : isSubmitDisabled
+                  }
+                  uploadAttachment={uploadAttachment}
+                  initialAttachments={initialValues.attachments || []}
+                  deal={props.deal}
+                  enableSchedule={enableSchedule}
+                  onCancel={onCancel}
+                  onDelete={onDelete}
+                  onChanged={scrollToEnd}
+                  onTemplateSelected={template => {
+                    subjectInput.onChange(template.subject as any)
+
+                    if (emailBodyEditorRef.current) {
+                      emailBodyEditorRef.current.update(template.body)
+                    }
+                  }}
+                  className={classes.footer}
+                />
+              )}
             />
           </form>
         )

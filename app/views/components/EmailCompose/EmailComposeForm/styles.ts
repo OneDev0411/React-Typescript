@@ -7,13 +7,15 @@ export const styles = (theme: Theme) =>
       flexDirection: 'column',
       flexBasis: '100%',
       maxHeight: '100%',
-      height: '100%'
+      height: '100%',
+      overflow: 'hidden'
     },
     container: {
       display: 'flex',
       flex: 1,
       overflow: 'hidden',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      padding: theme.spacing(0, 3)
     },
     topFields: {
       overflow: 'auto',

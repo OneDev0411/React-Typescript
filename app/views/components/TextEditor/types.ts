@@ -4,6 +4,7 @@ import { ContentBlock, ContentState, EditorProps } from 'draft-js'
 import { ReactNode } from 'react'
 
 import { ITemplateVariableSuggestionGroup } from '../TemplateVariablesButton/types'
+import { createEditorRef } from './create-editor-ref'
 
 export interface ReferenceObject {
   clientHeight: number
@@ -13,6 +14,8 @@ export interface ReferenceObject {
 }
 
 export type Entity = ReturnType<ContentState['getEntity']>
+
+export type TextEditorRef = ReturnType<ReturnType<typeof createEditorRef>>
 
 export interface TextEditorProps {
   className?: string

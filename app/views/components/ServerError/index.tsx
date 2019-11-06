@@ -15,7 +15,7 @@ import IconWarning from 'components/SvgIcons/Warning/IconWarning'
 type ErrorResponse = ResponseError & { response?: request.Response }
 
 interface Props {
-  error?: ErrorResponse
+  error?: ErrorResponse | string
   /**
    * Whether to show retry button or not. By default the retry button is
    * shown only when {@link Props#onRetry} is passed AND server error status
@@ -59,17 +59,22 @@ export function ServerError({
 
   let errorMessage = 'Something went wrong'
 
-  if (error) {
+  if (typeof error === 'object' && error) {
     if (error.response && error.response.body && error.response.body.message) {
       errorMessage = error.response.body.message
     } else {
       errorMessage = error.message
     }
+  } else if (typeof error === 'string') {
+    errorMessage = 'error'
   }
 
   const retryButtonVisible =
     showRetry === 'default'
-      ? error && error.response && `${error.response.status}`[0] === '5'
+      ? error &&
+        typeof error === 'object' &&
+        error.response &&
+        `${error.response.status}`[0] === '5'
       : showRetry
 
   return (
