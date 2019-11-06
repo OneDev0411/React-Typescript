@@ -73,7 +73,7 @@ const children = (
     <path
       fill="#000"
       fillRule="evenodd"
-      d="M13.6 20.75a.75.75 0 000-1.5H8.667c-1.424 0-2.797-.596-3.817-1.67-1.02-1.076-1.6-2.543-1.6-4.08s.58-3.004 1.6-4.08c1.02-1.074 2.393-1.67 3.817-1.67h10.772l-2.72 2.72a.75.75 0 101.061 1.06l4-4a.75.75 0 000-1.06l-4-4a.75.75 0 10-1.06 1.06l2.72 2.72H8.666c-1.848 0-3.611.774-4.905 2.138C2.47 9.75 1.75 11.589 1.75 13.5c0 1.91.72 3.75 2.012 5.112 1.294 1.364 3.057 2.138 4.905 2.138H13.6z"
+      d="M3 8V6h18v2H3zm0 5h18v-2H3v2zm0 5h18v-2H3v2z"
       clipRule="evenodd"
       key="key-0"
     />
@@ -111,5 +111,5 @@ export default Object.assign(Image, {
   getDimensions,
   getCss,
   defaultProps,
-  displayName: "Redo"
+  displayName: "Menu"
 });
