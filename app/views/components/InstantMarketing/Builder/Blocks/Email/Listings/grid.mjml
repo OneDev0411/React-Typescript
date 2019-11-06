@@ -19,7 +19,7 @@
       <span>{{listing.property.bathroom_count}} Baths,</span>
       {% endif %}
       {% if listing.property.lot_square_meters %}
-      <span>{{listing.property.lot_square_meters}} Sqft,</span>
+      <span>{{listing.property.lot_square_meters | area}} Sqft,</span>
       {% endif %}
       {% if listing.property.year_built %}
       <span>Built in {{listing.property.year_built}}</span>
@@ -28,7 +28,7 @@
     <mj-button inner-padding="4px 16px" padding="0 12px" border-radius="4px" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="16px" font-weight="500" line-height="24px" height="32px" color="#0945EB" border="1px solid #0945EB" background-color="#fff" align="left">
       View Property
     </mj-button>
-    <mj-spacer height="16px" />
+    <mj-spacer height="16px"></mj-spacer>
   </mj-column>
   {% endfor %}
 </mj-section>
