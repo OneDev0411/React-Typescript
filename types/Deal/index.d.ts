@@ -66,7 +66,3 @@ declare interface IDealRole {
   updated_at: number
   user: IUser
 }
-
-declare interface IDealAgent extends IUser {
-  brand_id?: UUID
-}
