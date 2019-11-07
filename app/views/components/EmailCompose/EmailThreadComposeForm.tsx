@@ -25,6 +25,8 @@ import { parseEmailRecipient } from '../EmailRecipientsChipsInput/helpers/parse-
 
 import { oAuthAccountTypeToProvider } from '../../../components/Pages/Dashboard/Account/ConnectedAccounts/constants'
 
+import { useExpressionEvaluator } from './EmailComposeForm/use-expression-evaluator'
+
 import { EmailFormValues } from '.'
 
 interface Props
@@ -56,12 +58,14 @@ function EmailThreadComposeForm({
   const [from, setFrom] = useState(
     (props.initialValues && props.initialValues.from) || null
   )
+  const { evaluate } = useExpressionEvaluator()
 
   const handleSendEmail = async (formValue: EmailFormValues) => {
     const from = formValue.from!
     const account = getFromAccount(from.value)!
     const provider = oAuthAccountTypeToProvider[account.type]
 
+    const html = await evaluate(formValue.body || '', formValue)
     const emailData: IEmailThreadEmailInput = getEmail(
       {
         subject: (formValue.subject || '').trim(),
@@ -74,7 +78,7 @@ function EmailThreadComposeForm({
         bcc: (formValue.bcc || [])
           .filter(isEmailRecipient)
           .map(toEmailThreadRecipient),
-        html: formValue.body || '',
+        html,
         attachments: (formValue.attachments || []).map<IEmailAttachmentInput>(
           ({ mime: type, name: filename, url: link }) => ({
             filename,

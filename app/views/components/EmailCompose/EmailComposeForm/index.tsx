@@ -32,7 +32,6 @@ import ConfirmationModalContext from '../../ConfirmationModal/context'
 import { validateRecipient } from '../../EmailRecipientsChipsInput/helpers/validate-recipient'
 import { getSendEmailResultMessages } from '../helpers/email-result-messages'
 import { TextEditorRef } from '../../TextEditor/types'
-import { useExpressionEvaluator } from './use-expression-evaluator'
 
 export const useEmailFormStyles = makeStyles(styles, { name: 'EmailForm' })
 
@@ -85,8 +84,6 @@ function EmailComposeForm<T>({
   const emailBodyEditorRef = useRef<TextEditorRef>(null)
   const confirmationModal = useContext(ConfirmationModalContext)
 
-  const { evaluate } = useExpressionEvaluator()
-
   const classes = useEmailFormStyles(props)
 
   const handleSendEmail = async (formData: EmailFormValues) => {
@@ -97,10 +94,6 @@ function EmailComposeForm<T>({
     let result: T
 
     try {
-      if (evaluateTemplateExpressions) {
-        formData.body = await evaluate(formData.body || '', formData)
-      }
-
       result = await props.sendEmail(formData)
     } catch (e) {
       console.error('error in sending email', e)
