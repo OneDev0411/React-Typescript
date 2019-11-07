@@ -239,15 +239,13 @@
   }
 
   .gjs-pn-views, .gjs-pn-views-container {
-    width: 16.625rem;
-    max-width: 25%;
+    width: 21rem;
     border-left: 1px solid #e0e8ed;
   }
 
   .gjs-cv-canvas {
     height: 100%;
-    width: calc(100% - 16.625rem);
-    max-width: 75%;
+    width: calc(100% - 21rem);
     top: 0;
   }
 

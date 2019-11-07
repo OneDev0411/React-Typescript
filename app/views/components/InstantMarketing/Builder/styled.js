@@ -15,7 +15,7 @@ export const Container = styled.div`
 `
 
 export const TemplatesContainer = styled.div`
-  width: 340px;
+  width: 21rem;
   border-right: 1px solid #d4d4d4;
   background-color: #f2f2f2;
 
