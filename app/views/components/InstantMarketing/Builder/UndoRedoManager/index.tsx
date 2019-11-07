@@ -18,23 +18,22 @@ export default function UndoRedoManager({ editor }: Props) {
 
   return (
     <>
-      <Tooltip title="Redo">
-        <IconButton disabled={!hasRedo} onClick={redo}>
-          <RedoIcon
+      <Tooltip title="Undo">
+        <IconButton disabled={!hasUndo} onClick={undo}>
+          <UndoIcon
             fillColor={
-              hasRedo
+              hasUndo
                 ? theme.palette.common.black
                 : theme.palette.action.disabled
             }
           />
         </IconButton>
       </Tooltip>
-
-      <Tooltip title="Undo">
-        <IconButton disabled={!hasUndo} onClick={undo}>
-          <UndoIcon
+      <Tooltip title="Redo">
+        <IconButton disabled={!hasRedo} onClick={redo}>
+          <RedoIcon
             fillColor={
-              hasUndo
+              hasRedo
                 ? theme.palette.common.black
                 : theme.palette.action.disabled
             }

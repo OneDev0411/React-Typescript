@@ -6,9 +6,7 @@ import { Button, IconButton, Tooltip } from '@material-ui/core'
 
 import { Portal } from 'components/Portal'
 
-import DropButton from 'components/Button/DropButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
-import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import IconMenu from 'components/SvgIcons/Menu/IconMenu'
 import SearchListingDrawer from 'components/SearchListingDrawer'
@@ -30,6 +28,7 @@ import Templates from '../Templates'
 import { VideoToolbar } from './VideoToolbar'
 import UndoRedoManager from './UndoRedoManager'
 import DeviceManager from './DeviceManager'
+import { TeamSelector } from './TeamSelector'
 
 import {
   Container,
@@ -547,7 +546,7 @@ class Builder extends React.Component {
     )
   }
 
-  handleOwnerChange = ({ value: owner }) => {
+  handleOwnerChange = owner => {
     if (!this.isTemplateChanged()) {
       this.setState({
         owner
@@ -637,18 +636,6 @@ class Builder extends React.Component {
 
     return SOCIAL_NETWORKS.filter(({ name }) => name !== 'LinkedIn')
   }
-
-  renderAgentPickerButton = buttonProps => (
-    <DropButton
-      {...buttonProps}
-      iconSize="large"
-      text={`Sends as: ${buttonProps.selectedItem.label}`}
-      style={{
-        height: '2rem',
-        lineHeight: 0
-      }}
-    />
-  )
 
   regenerateTemplate = newData => {
     this.setState(
@@ -797,16 +784,10 @@ class Builder extends React.Component {
             )}
 
             {this.state.selectedTemplate && (
-              <TeamContactSelect
-                fullHeight
-                pullTo="right"
-                user={this.props.templateData.user}
+              <TeamSelector
+                templateData={this.props.templateData}
                 owner={this.state.owner}
                 onSelect={this.handleOwnerChange}
-                buttonRenderer={this.renderAgentPickerButton}
-                style={{
-                  marginRight: '0.5rem'
-                }}
               />
             )}
 
