@@ -29,7 +29,9 @@ export function CoverPage(props) {
   let officeLogoSrc = ''
 
   if (activeTeam && activeTeam.brand) {
-    officeLogoSrc = Brand.asset('office_logo', null, activeTeam.brand)
+    const marketingLogos = Brand.asset('marketing', null, activeTeam.brand)
+
+    officeLogoSrc = marketingLogos && marketingLogos['logo-wide-alpha']
   }
 
   return (
@@ -38,7 +40,7 @@ export function CoverPage(props) {
         style={{
           marginTop: '3rem',
           textAlign: 'center',
-          marginBottom: officeLogoSrc ? '2rem' : 0
+          marginBottom: officeLogoSrc ? '4rem' : 0
         }}
       >
         {officeLogoSrc && (
@@ -60,7 +62,7 @@ export function CoverPage(props) {
       <div
         style={{
           fontSize: '0.75rem',
-          marginBottom: '6rem'
+          marginBottom: '4rem'
         }}
       >
         {description || '[TOUR DESCRIPTION]'}
