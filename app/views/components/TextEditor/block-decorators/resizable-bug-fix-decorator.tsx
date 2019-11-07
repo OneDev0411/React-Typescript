@@ -3,7 +3,7 @@ import { wrapDisplayName } from 'recompose'
 
 import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
 
-import { DraftPluginEditorDecoratorProps } from '../types'
+import { DraftPluginEditorBlockDecoratorProps } from '../types'
 
 /**
  *
@@ -23,7 +23,7 @@ import { DraftPluginEditorDecoratorProps } from '../types'
  * @param WrappedComponent
  */
 export const resizableBugFixDecorator = WrappedComponent => {
-  function ResizableBugFix(props: DraftPluginEditorDecoratorProps) {
+  function ResizableBugFix(props: DraftPluginEditorBlockDecoratorProps) {
     const resizeData = props.blockProps.resizeData
 
     const rerender = useRerenderOnChange(resizeData)

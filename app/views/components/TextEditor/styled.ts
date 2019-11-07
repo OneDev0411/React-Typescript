@@ -24,11 +24,11 @@ export const Separator = styled.span`
   background-color: ${({ theme }: ThemeProps<Theme>) => theme.palette.divider};
   margin: ${({ theme }: ThemeProps<Theme>) => theme.spacing(0, 0.5)};
 `
-export const EditorContainer = styled(Flex).attrs({ column: true })`
+export const EditorContainer = (styled(Flex).attrs({ column: true })`
   overflow: auto;
   flex: 1 1 0%;
   min-height: 12.5rem;
-`
+` as unknown) as typeof Flex
 
 export const EditorWrapper = styled.div`
   &.hide-placeholder {

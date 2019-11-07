@@ -40,7 +40,7 @@ const useStyles = makeStyles(styles, {
 export function EmailItemHeaderActions(
   props: Props & ClassesProps<typeof styles>
 ) {
-  const { menuProps, triggerProps, onClose } = useMenu()
+  const { menuProps, buttonTriggerProps, onClose } = useMenu()
 
   const classes = useStyles(props)
 
@@ -60,7 +60,7 @@ export function EmailItemHeaderActions(
         </IconButton>
       </Tooltip>
       <Tooltip title="More">
-        <IconButton {...triggerProps}>
+        <IconButton {...buttonTriggerProps}>
           <IconVerticalDocs
             size={iconSizes.small}
             style={{ fill: 'currentColor' }}
