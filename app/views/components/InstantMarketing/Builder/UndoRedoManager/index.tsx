@@ -1,5 +1,5 @@
 import React from 'react'
-import { Divider, Tooltip, IconButton } from '@material-ui/core'
+import { Tooltip, IconButton } from '@material-ui/core'
 import { Editor } from 'grapesjs'
 import { useTheme } from '@material-ui/core/styles'
 
