@@ -1,4 +1,4 @@
-<mj-section>
+<mj-section background-color="#fff">
   <mj-column>
     <mj-image rechat-assets="static" src="https://picsum.photos/id/1040/1475/1075"></mj-image>
     <mj-text font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="20px" line-height="32px" color="#000" font-weight="500">

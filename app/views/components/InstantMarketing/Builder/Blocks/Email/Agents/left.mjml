@@ -1,6 +1,6 @@
 <mj-wrapper>
   {% for user in users %}
-  <mj-section padding-top="0" padding-bottom="5px">
+  <mj-section background-color="#fff" padding-top="0" padding-bottom="5px">
     <mj-column width="150px">
       <mj-image border-radius="6px" width="80px" height="80px" rechat-assets="avatar" align="center" src="{{ user.profile_image_url }}" />
     </mj-column>

@@ -1,4 +1,4 @@
-<mj-section>
+<mj-section background-color="#fff">
   <mj-column width="48%">
     <mj-image padding-top="24px" padding-right="12px" padding-bottom="24px" padding-left="24px" rechat-assets="static" align="left" src={{image}}></mj-image>
   </mj-column>

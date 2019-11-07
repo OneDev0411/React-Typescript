@@ -1,4 +1,4 @@
-<mj-section>
+<mj-section background-color="#fff">
   <mj-column width="52%">
     <mj-text padding-top="16px" padding-right="0" padding-bottom="12px" padding-left="24px" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-weight="500" font-size="28px" line-height="32px" color="#000" padding-top=0>
       {{title}}
