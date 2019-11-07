@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, ButtonGroup } from '@material-ui/core'
+import { Divider, Tooltip, IconButton } from '@material-ui/core'
 import { Editor } from 'grapesjs'
 import { useTheme } from '@material-ui/core/styles'
 
@@ -17,33 +17,30 @@ export default function UndoRedoManager({ editor }: Props) {
   const theme = useTheme()
 
   return (
-    <Box ml={2}>
-      <ButtonGroup size="small">
-        <Button disabled={!hasRedo} variant="outlined" onClick={redo}>
+    <>
+      <Tooltip title="Redo">
+        <IconButton disabled={!hasRedo} onClick={redo}>
           <RedoIcon
-            color={
+            fillColor={
               hasRedo
                 ? theme.palette.common.black
                 : theme.palette.action.disabled
             }
           />
-          <Box ml={0.75} component="span">
-            Redo
-          </Box>
-        </Button>
-        <Button disabled={!hasUndo} variant="outlined" onClick={undo}>
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title="Undo">
+        <IconButton disabled={!hasUndo} onClick={undo}>
           <UndoIcon
-            color={
+            fillColor={
               hasUndo
                 ? theme.palette.common.black
                 : theme.palette.action.disabled
             }
           />
-          <Box ml={0.75} component="span">
-            Undo
-          </Box>
-        </Button>
-      </ButtonGroup>
-    </Box>
+        </IconButton>
+      </Tooltip>
+    </>
   )
 }

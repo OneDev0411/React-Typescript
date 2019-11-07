@@ -1,5 +1,8 @@
 import styled from 'styled-components'
 
+import { styled as muiStyled } from '@material-ui/styles'
+import BaseDivider from '@material-ui/core/Divider'
+
 export const Container = styled.div`
   position: fixed;
   display: block;
@@ -19,7 +22,7 @@ export const TemplatesContainer = styled.div`
   ${props =>
     props.isInvisible &&
     `
-    visibility: hidden;
+    display: none;
   `};
 `
 
@@ -36,15 +39,9 @@ export const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  height: 3rem;
+  height: 4rem;
   border-bottom: 1px solid #d4d4d4;
   padding: 0 0.5rem;
-
-  h1 {
-    font-size: 2rem;
-    font-weight: bold;
-    margin: 0 1rem !important;
-  }
 `
 
 export const Actions = styled.div`
@@ -53,3 +50,8 @@ export const Actions = styled.div`
   flex-grow: 1;
   justify-content: flex-end;
 `
+
+export const Divider = muiStyled(BaseDivider)({
+  height: '60%',
+  margin: '0 1rem'
+})

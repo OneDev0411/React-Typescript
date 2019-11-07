@@ -2,16 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import juice from 'juice'
-import { Box } from '@material-ui/core'
+import { Button, IconButton, Tooltip } from '@material-ui/core'
 
 import { Portal } from 'components/Portal'
-import IconButton from 'components/Button/IconButton'
+
 import DropButton from 'components/Button/DropButton'
-import ActionButton from 'components/Button/ActionButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import IconNav from 'components/SvgIcons/NavMenu/IconNav'
+import IconMenu from 'components/SvgIcons/Menu/IconMenu'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import TeamAgents from 'components/TeamAgents'
 import ImageDrawer from 'components/ImageDrawer'
@@ -37,7 +36,8 @@ import {
   Actions,
   TemplatesContainer,
   BuilderContainer,
-  Header
+  Header,
+  Divider
 } from './styled'
 
 import SocialActions from './SocialActions'
@@ -768,51 +768,60 @@ class Builder extends React.Component {
             }}
           />
           <Header>
-            <ActionButton
-              size="small"
-              appearance="outline"
-              style={{ width: '10.1875rem' }}
-              onClick={this.toggeleTemplatesColumnVisibility}
-            >
-              <IconNav />
-              <Box ml={0.75}>
-                {this.state.isTemplatesColumnHidden
+            <Tooltip
+              title={
+                this.state.isTemplatesColumnHidden
                   ? 'Change Template'
-                  : 'Hide Templates'}
-              </Box>
-            </ActionButton>
-            {this.editor && <UndoRedoManager editor={this.editor} />}
+                  : 'Hide Templates'
+              }
+            >
+              <IconButton onClick={this.toggeleTemplatesColumnVisibility}>
+                <IconMenu />
+              </IconButton>
+            </Tooltip>
+
+            <Divider orientation="vertical" />
+
+            {this.editor && (
+              <>
+                <UndoRedoManager editor={this.editor} />
+                <Divider orientation="vertical" />
+              </>
+            )}
+
             {this.editor && this.isEmailTemplate && (
-              <DeviceManager editor={this.editor} />
+              <>
+                <DeviceManager editor={this.editor} />
+                <Divider orientation="vertical" />
+              </>
+            )}
+
+            {this.state.selectedTemplate && (
+              <TeamContactSelect
+                fullHeight
+                pullTo="right"
+                user={this.props.templateData.user}
+                owner={this.state.owner}
+                onSelect={this.handleOwnerChange}
+                buttonRenderer={this.renderAgentPickerButton}
+                style={{
+                  marginRight: '0.5rem'
+                }}
+              />
             )}
 
             <Actions>
-              {this.state.selectedTemplate && (
-                <TeamContactSelect
-                  fullHeight
-                  pullTo="right"
-                  user={this.props.templateData.user}
-                  owner={this.state.owner}
-                  onSelect={this.handleOwnerChange}
-                  buttonRenderer={this.renderAgentPickerButton}
-                  style={{
-                    marginRight: '0.5rem'
-                  }}
-                />
-              )}
-
               {this.showEditListingsButton && !this.props.isEdit && (
-                <ActionButton
+                <Button
                   style={{
-                    marginLeft: '0.5rem',
-                    height: '2rem',
-                    lineHeight: 0
+                    marginLeft: '0.5rem'
                   }}
-                  appearance="outline"
+                  variant="outlined"
+                  color="secondary"
                   onClick={this.props.onShowEditListings}
                 >
                   Edit Listings ({this.props.templateData.listings.length})
-                </ActionButton>
+                </Button>
               )}
 
               {this.state.selectedTemplate && isSocialMedium && (
@@ -823,22 +832,19 @@ class Builder extends React.Component {
               )}
 
               {this.state.selectedTemplate && !isSocialMedium && (
-                <ActionButton
+                <Button
                   style={{
-                    marginLeft: '0.5rem',
-                    height: '2rem',
-                    lineHeight: 0
+                    marginLeft: '0.5rem'
                   }}
+                  variant="contained"
+                  color="primary"
                   onClick={this.handleSave}
                 >
-                  Next
-                </ActionButton>
+                  Continue
+                </Button>
               )}
 
               <IconButton
-                isFit
-                iconSize="large"
-                inverse
                 onClick={this.props.onClose}
                 style={{ marginLeft: '0.5rem' }}
               >
