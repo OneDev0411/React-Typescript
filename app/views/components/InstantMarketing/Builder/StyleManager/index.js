@@ -6,6 +6,7 @@ import { Container } from './styled'
 import FontSizePicker from './FontSizePicker'
 import FontWeightPicker from './FontWeightPicker'
 import ColorPicker from './ColorPicker'
+import TextAlignPicker from './TextAlignPicker'
 import { loadGrapesjs } from '../utils/load-grapes'
 
 export const load = async colors => {
@@ -15,12 +16,14 @@ export const load = async colors => {
     let styleManagerContainer
     let fontSizePickerContainer
     let fontWeightPickerContainer
+    let textAlignPickerContainer
     let colorPickerContainer
     let backgroundColorPickerContainer
 
     const {
       fontSizePicker: fontSizePickerOptions = {},
       fontWeightPicker: fontWeightPickerOptions = {},
+      textAlignPicker: textAlignPickerOptions = {},
       colorPicker: colorPickerOptions = {},
       backgroundColorPicker: backgroundColorPickerOptions = {}
     } = options
@@ -49,6 +52,7 @@ export const load = async colors => {
     const setStyle = (target, prop, value) => {
       const selectedTargetStyles = Object.assign({}, target.get('style'))
 
+      console.log({ selectedTargetStyles, prop, value })
       selectedTargetStyles[prop] = value
       target.set('style', selectedTargetStyles)
     }
@@ -79,6 +83,12 @@ export const load = async colors => {
         fontWeightPickerContainer = document.createElement('div')
         fontWeightPickerContainer.id = 'mc-editor-font-weight-picker'
         styleManagerContainer.appendChild(fontWeightPickerContainer)
+      }
+
+      if (!textAlignPickerOptions.disabled) {
+        textAlignPickerContainer = document.createElement('div')
+        textAlignPickerContainer.id = 'mc-editor-text-align-picker'
+        styleManagerContainer.appendChild(textAlignPickerContainer)
       }
 
       if (!colorPickerOptions.disabled) {
@@ -129,6 +139,22 @@ export const load = async colors => {
               }}
             />,
             fontWeightPickerContainer
+          )
+        }
+      }
+
+      if (!fontWeightPickerOptions.disabled) {
+        ReactDOM.unmountComponentAtNode(textAlignPickerContainer)
+
+        if (isElementAllowed(selected, textAlignPickerOptions.conditions)) {
+          ReactDOM.render(
+            <TextAlignPicker
+              value={getStyle(selected).textAlign}
+              onChange={textAlign => {
+                setStyle(selected, 'align', textAlign)
+              }}
+            />,
+            textAlignPickerContainer
           )
         }
       }

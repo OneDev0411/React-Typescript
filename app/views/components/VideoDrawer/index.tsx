@@ -41,7 +41,7 @@ export default function VideoDrawer({
     }
 
     setVideo(newVideo)
-  }, [onSelect, video])
+  }, [video])
 
   return (
     <OverlayDrawer

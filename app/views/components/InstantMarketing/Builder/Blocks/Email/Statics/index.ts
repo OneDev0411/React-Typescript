@@ -4,18 +4,11 @@ import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
 import { TemplateRenderData } from '../../../utils/get-template-render-data/index'
 
-import {
-  ARTICLES_BLOCK_CATEGORY,
-  BASICS_BLOCK_CATEGORY
-} from '../../../constants'
+import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import registerBlock from '../../registerBlock'
 
 import Headline1 from './headline-1.mjml'
 import Headline2 from './headline-2.mjml'
-import ArticleTop from './article-top.mjml'
-import ArticleDual from './article-dual.mjml'
-import ArticleLeft from './article-left.mjml'
-import ArticleRight from './article-right.mjml'
 import Image from './image.mjml'
 import Button from './button.mjml'
 import SocialGroup from './social-group.mjml'
@@ -23,10 +16,6 @@ import SocialGroupElement from './social-group-element.mjml'
 
 export const headline1BlockName = 'headline-1'
 export const headline2BlockName = 'headline-2'
-export const articleTopBlockName = 'rechat-article-image-top'
-export const articleDualBlockName = 'rechat-article-image-dual'
-export const articleLeftBlockName = 'rechat-article-image-left'
-export const articleRightBlockName = 'rechat-article-image-right'
 export const imageBlockName = 'mj-image'
 export const buttonBlockName = 'mj-button'
 export const socialGroupBlockName = 'mj-social-group'
@@ -36,10 +25,6 @@ const templates = {}
 
 templates[headline1BlockName] = Headline1
 templates[headline2BlockName] = Headline2
-templates[articleTopBlockName] = ArticleTop
-templates[articleDualBlockName] = ArticleDual
-templates[articleLeftBlockName] = ArticleLeft
-templates[articleRightBlockName] = ArticleRight
 
 templates[imageBlockName] = Image
 templates[buttonBlockName] = Button
@@ -62,34 +47,6 @@ export default function registerStaticBlocks(
     category: BASICS_BLOCK_CATEGORY,
     blockName: headline2BlockName,
     template: templates[headline2BlockName]
-  })
-
-  registerBlock(editor, {
-    label: 'Image Top',
-    category: ARTICLES_BLOCK_CATEGORY,
-    blockName: articleTopBlockName,
-    template: templates[articleTopBlockName]
-  })
-
-  registerBlock(editor, {
-    label: 'Image Dual',
-    category: ARTICLES_BLOCK_CATEGORY,
-    blockName: articleDualBlockName,
-    template: templates[articleDualBlockName]
-  })
-
-  registerBlock(editor, {
-    label: 'Image Left',
-    category: ARTICLES_BLOCK_CATEGORY,
-    blockName: articleLeftBlockName,
-    template: templates[articleLeftBlockName]
-  })
-
-  registerBlock(editor, {
-    label: 'Image Right',
-    category: ARTICLES_BLOCK_CATEGORY,
-    blockName: articleRightBlockName,
-    template: templates[articleRightBlockName]
   })
 
   registerBlock(editor, {

@@ -1,13 +1,115 @@
-import React from 'react'
+import React, { Fragment } from "react";
+import PropTypes from "prop-types";
+import styled, { css } from "styled-components";
 
-function UndoIcon(props) {
-  const { width = 16, height = 16 } = props
+const createHelpers = (width, height, css) => {
+  // somehow sizes is ending up in markup, even if it is not a valid svg attribute
+  // until we have a better solution, just render it empty, instead to '[Object object]'
+  const sanitizeSizes = sizes =>
+    Object.defineProperty(sizes, "toString", {
+      value: () => "",
+      enumerable: false
+    });
 
-  return (
-    <svg width={width} height={height} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M10.9865 5.54604H6.15652C6.12628 5.54616 6.09632 5.54048 6.06836 5.52934C6.0404 5.5182 6.015 5.50182 5.99362 5.48113C5.97224 5.46044 5.9553 5.43587 5.94378 5.40881C5.93227 5.38176 5.9264 5.35278 5.92652 5.32352V4.21092C5.92399 4.03671 5.86867 3.86705 5.76742 3.72297C5.66616 3.57889 5.52343 3.46672 5.3569 3.40039C5.19038 3.33405 5.0074 3.31645 4.83064 3.34978C4.65388 3.3831 4.49112 3.46589 4.36253 3.58787L1.60253 6.2581C1.43006 6.42502 1.33317 6.65137 1.33317 6.88739C1.33317 7.12341 1.43006 7.34976 1.60253 7.51668L4.36253 10.1869C4.4919 10.3096 4.65584 10.3926 4.83378 10.4255C5.01172 10.4584 5.19575 10.4398 5.36278 10.3719C5.52981 10.304 5.67241 10.19 5.7727 10.044C5.87298 9.89804 5.9265 9.72667 5.92652 9.5514V8.4388C5.9264 8.40954 5.93227 8.38056 5.94378 8.35351C5.9553 8.32646 5.97224 8.30188 5.99362 8.28119C6.015 8.26051 6.0404 8.24412 6.06836 8.23298C6.09632 8.22184 6.12628 8.21616 6.15652 8.21628H10.9865C11.2305 8.21628 11.4645 8.31006 11.637 8.47698C11.8096 8.6439 11.9065 8.8703 11.9065 9.10636C11.9065 9.34242 11.8096 9.56882 11.637 9.73574C11.4645 9.90266 11.2305 9.99644 10.9865 9.99644C10.6205 9.99644 10.2695 10.1371 10.0107 10.3875C9.75191 10.6379 9.60651 10.9775 9.60651 11.3316C9.60651 11.6857 9.75191 12.0252 10.0107 12.2756C10.2695 12.526 10.6205 12.6667 10.9865 12.6667C11.9625 12.6667 12.8985 12.2916 13.5887 11.6239C14.2788 10.9562 14.6665 10.0506 14.6665 9.10636C14.6665 8.1621 14.2788 7.25652 13.5887 6.58883C12.8985 5.92114 11.9625 5.54604 10.9865 5.54604Z" fill="black"/>
-    </svg>
-  )
-}
+  const getDimensions = (size, sizes) => {
+    if (
+      size &&
+      typeof size.width === "number" &&
+      typeof size.height === "number"
+    ) {
+      return size;
+    }
 
-export default UndoIcon
+    return size && sizes[size] ? sizes[size] : { width, height };
+  };
+
+  const getCss = (size, sizes, fillColor, fillColorRule, noStyles) => {
+    if (noStyles) {
+      return "";
+    }
+
+    const dimensions = getDimensions(size, sizes);
+    const fillRule =
+      fillColor && fillColorRule
+        ? `${fillColorRule}{ fill: ${fillColor}; }`
+        : "";
+
+    return css`
+      width: ${dimensions.width}px;
+      height: ${dimensions.height}px;
+      ${fillRule}
+    `;
+  };
+
+  const propsToCss = ({ size, sizes, fillColor, fillColorRule, noStyles }) =>
+    getCss(size, sizes, fillColor, fillColorRule, noStyles);
+
+  return {
+    getCss,
+    getDimensions,
+    propsToCss,
+    sanitizeSizes
+  };
+};
+
+const width = "24";
+const height = "24";
+const viewBox = "0 0 24 24";
+
+const { getDimensions, getCss, propsToCss, sanitizeSizes } = createHelpers(
+  width,
+  height,
+  css
+);
+
+const sizes = sanitizeSizes({});
+
+const Image = styled.svg`
+  ${propsToCss}
+`;
+
+const children = (
+  <Fragment>
+    <path
+      fill="#000"
+      fillRule="evenodd"
+      d="M10.4 3.25a.75.75 0 000 1.5h4.933c1.424 0 2.798.596 3.817 1.67 1.02 1.076 1.6 2.543 1.6 4.08s-.58 3.004-1.6 4.08c-1.02 1.074-2.393 1.67-3.817 1.67H4.561l2.72-2.72a.75.75 0 10-1.061-1.06l-4 4a.75.75 0 000 1.06l4 4a.75.75 0 001.06-1.06l-2.72-2.72h10.773c1.848 0 3.611-.774 4.905-2.138 1.292-1.362 2.012-3.201 2.012-5.112 0-1.91-.72-3.75-2.012-5.112-1.294-1.364-3.057-2.138-4.905-2.138H10.4z"
+      clipRule="evenodd"
+      key="key-0"
+    />
+  </Fragment>
+);
+
+const defaultProps = {
+  children,
+  viewBox,
+  fillColor: null,
+  fillColorRule: "&&& path, &&& use, &&& g",
+  sizes,
+  size: null
+};
+
+Image.propTypes /* remove-proptypes */ = {
+  fillColor: PropTypes.string,
+  fillColorRule: PropTypes.string,
+  viewBox: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+  size: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({
+      height: PropTypes.number.isRequired,
+      width: PropTypes.number.isRequired
+    })
+  ]),
+  sizes: PropTypes.shape({
+    height: PropTypes.number,
+    width: PropTypes.number
+  })
+};
+
+export default Object.assign(Image, {
+  getDimensions,
+  getCss,
+  defaultProps,
+  displayName: "Undo"
+});

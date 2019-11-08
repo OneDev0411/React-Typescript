@@ -97,7 +97,11 @@ class Roles extends React.Component {
       isReplaceAgentDrawerOpen: !state.isReplaceAgentDrawerOpen
     }))
 
-  handleReplaceAgent = async user => {
+  handleReplaceAgent = async agents => {
+    const { agent: user } = agents[0]
+
+    this.toggleReplaceAgentDrawer()
+
     const { office, work_phone } = user.agent || {}
     const currentRole = this.state.user
 
@@ -116,8 +120,6 @@ class Roles extends React.Component {
     try {
       await this.props.deleteRole(this.props.deal.id, this.state.user.id)
       await this.props.createRoles(this.props.deal.id, [role])
-
-      this.toggleReplaceAgentDrawer()
 
       this.props.notify({
         message: 'Primary Agent replaced',
@@ -236,9 +238,10 @@ class Roles extends React.Component {
         {this.state.isReplaceAgentDrawerOpen && (
           <TeamAgents
             isPrimaryAgent
+            withRelatedContacts={false}
             user={this.props.user}
             title="Select New Primary Agent"
-            onSelectAgent={this.handleReplaceAgent}
+            onSelectAgents={this.handleReplaceAgent}
             onClose={this.toggleReplaceAgentDrawer}
           />
         )}

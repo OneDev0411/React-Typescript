@@ -1,42 +1,44 @@
 import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
+import { AgentItem } from 'components/TeamAgents/types'
+
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import { AGENTS_BLOCK_CATEGORY } from '../../../constants'
 import registerBlock from '../../registerBlock'
 
-import Single from './single.mjml'
+import Left from './left.mjml'
 
-export const agentSingleBlockName = 'rechat-agent-single'
+export const agentLeftBlockName = 'rechat-agent-left'
 
 const templates = {}
 
-templates[agentSingleBlockName] = Single
+templates[agentLeftBlockName] = Left
 
 export interface Options {
   onDrop: (model: Model) => void
 }
 
 interface AgentBlock {
-  selectHandler: (selectedAgent?: IAgent) => void
+  selectHandler: (selectedAgents?: AgentItem[]) => void
 }
 
 let modelHandle: any
 let renderData: TemplateRenderData
 
-const selectHandler = (agent?: IAgent) => {
+const selectHandler = (agents?: AgentItem[]) => {
   if (!modelHandle) {
     return
   }
 
   const template = templates[modelHandle.attributes.attributes['data-block']]
 
-  if (agent) {
+  if (agents) {
     const mjml = nunjucks.renderString(template, {
       ...renderData,
-      user: agent
+      users: agents.map(item => item.agent)
     })
 
     modelHandle.parent().append(mjml, { at: modelHandle.opt.at })
@@ -52,10 +54,10 @@ export default function registerAgentBlocks(
 ): AgentBlock {
   renderData = _renderData
   registerBlock(editor, {
-    label: 'Single Agent',
+    label: 'Image Left',
     category: AGENTS_BLOCK_CATEGORY,
-    blockName: agentSingleBlockName,
-    template: templates[agentSingleBlockName]
+    blockName: agentLeftBlockName,
+    template: templates[agentLeftBlockName]
   })
 
   editor.on('block:drag:stop', (model: Model, block) => {

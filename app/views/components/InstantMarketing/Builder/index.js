@@ -2,21 +2,19 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import juice from 'juice'
-import { Box } from '@material-ui/core'
+import { Button, IconButton, Tooltip } from '@material-ui/core'
 
 import { Portal } from 'components/Portal'
-import IconButton from 'components/Button/IconButton'
-import DropButton from 'components/Button/DropButton'
-import ActionButton from 'components/Button/ActionButton'
+
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
-import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import IconNav from 'components/SvgIcons/NavMenu/IconNav'
+import IconMenu from 'components/SvgIcons/Menu/IconMenu'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import TeamAgents from 'components/TeamAgents'
 import ImageDrawer from 'components/ImageDrawer'
 import GifDrawer from 'components/GifDrawer'
 import VideoDrawer from 'components/VideoDrawer'
+import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
 
 import { getActiveTeam } from 'utils/user-teams'
 
@@ -30,6 +28,7 @@ import Templates from '../Templates'
 import { VideoToolbar } from './VideoToolbar'
 import UndoRedoManager from './UndoRedoManager'
 import DeviceManager from './DeviceManager'
+import { TeamSelector } from './TeamSelector'
 import { createRichTextEditor } from './RichTextEditor'
 
 import {
@@ -37,7 +36,8 @@ import {
   Actions,
   TemplatesContainer,
   BuilderContainer,
-  Header
+  Header,
+  Divider
 } from './styled'
 
 import SocialActions from './SocialActions'
@@ -64,7 +64,8 @@ class Builder extends React.Component {
       isAgentDrawerOpen: false,
       isImageDrawerOpen: false,
       isGifDrawerOpen: false,
-      isVideoDrawerOpen: false
+      isVideoDrawerOpen: false,
+      isArticleDrawerOpen: false
     }
 
     this.keyframe = 0
@@ -171,14 +172,16 @@ class Builder extends React.Component {
     })
   }
 
-  addAgentAssets = agent => {
+  addAgentAssets = agents => {
     this.editor.AssetManager.add(
-      ['profile_image_url', 'cover_image_url']
-        .filter(attr => agent[attr])
-        .map(attr => ({
-          image: agent[attr],
-          avatar: true
-        }))
+      agents.map(({ agent }) => {
+        return ['profile_image_url', 'cover_image_url']
+          .filter(attr => agent[attr])
+          .map(attr => ({
+            image: agent[attr],
+            avatar: true
+          }))
+      })
     )
   }
 
@@ -279,6 +282,11 @@ class Builder extends React.Component {
       video: {
         onDrop: () => {
           this.setState({ isVideoDrawerOpen: true })
+        }
+      },
+      article: {
+        onDrop: () => {
+          this.setState({ isArticleDrawerOpen: true })
         }
       }
     })
@@ -549,7 +557,7 @@ class Builder extends React.Component {
     )
   }
 
-  handleOwnerChange = ({ value: owner }) => {
+  handleOwnerChange = owner => {
     if (!this.isTemplateChanged()) {
       this.setState({
         owner
@@ -640,14 +648,6 @@ class Builder extends React.Component {
     return SOCIAL_NETWORKS.filter(({ name }) => name !== 'LinkedIn')
   }
 
-  renderAgentPickerButton = buttonProps => (
-    <DropButton
-      {...buttonProps}
-      iconSize="large"
-      text={`Sends as: ${buttonProps.selectedItem.label}`}
-    />
-  )
-
   regenerateTemplate = newData => {
     this.setState(
       state => ({
@@ -707,16 +707,16 @@ class Builder extends React.Component {
           {this.state.isAgentDrawerOpen && (
             <TeamAgents
               isPrimaryAgent
+              multiSelection
               user={this.props.user}
-              title="Select An Agent"
+              title="Select Agents"
               onClose={() => {
                 this.blocks.agent.selectHandler()
                 this.setState({ isAgentDrawerOpen: false })
               }}
-              onSelectAgent={agent => {
-                console.log('onSelectAgent', agent)
-                this.addAgentAssets(agent)
-                this.blocks.agent.selectHandler(agent)
+              onSelectAgents={agents => {
+                this.addAgentAssets(agents)
+                this.blocks.agent.selectHandler(agents)
                 this.setState({ isAgentDrawerOpen: false })
               }}
             />
@@ -754,48 +754,66 @@ class Builder extends React.Component {
               this.setState({ isVideoDrawerOpen: false })
             }}
           />
+          <ArticleDrawer
+            isOpen={this.state.isArticleDrawerOpen}
+            onClose={() => {
+              this.blocks.article.selectHandler()
+              this.setState({ isArticleDrawerOpen: false })
+            }}
+            onSelect={article => {
+              this.blocks.article.selectHandler(article)
+              this.setState({ isArticleDrawerOpen: false })
+            }}
+          />
           <Header>
-            <ActionButton
-              size="small"
-              appearance="outline"
-              style={{ width: '10.1875rem' }}
-              onClick={this.toggeleTemplatesColumnVisibility}
-            >
-              <IconNav />
-              <Box ml={0.75}>
-                {this.state.isTemplatesColumnHidden
+            <Tooltip
+              title={
+                this.state.isTemplatesColumnHidden
                   ? 'Change Template'
-                  : 'Hide Templates'}
-              </Box>
-            </ActionButton>
-            {this.editor && <UndoRedoManager editor={this.editor} />}
+                  : 'Hide Templates'
+              }
+            >
+              <IconButton onClick={this.toggeleTemplatesColumnVisibility}>
+                <IconMenu />
+              </IconButton>
+            </Tooltip>
+
+            <Divider orientation="vertical" />
+
+            {this.editor && (
+              <>
+                <UndoRedoManager editor={this.editor} />
+                <Divider orientation="vertical" />
+              </>
+            )}
+
             {this.editor && this.isEmailTemplate && (
-              <DeviceManager editor={this.editor} />
+              <>
+                <DeviceManager editor={this.editor} />
+                <Divider orientation="vertical" />
+              </>
+            )}
+
+            {this.state.selectedTemplate && (
+              <TeamSelector
+                templateData={this.props.templateData}
+                owner={this.state.owner}
+                onSelect={this.handleOwnerChange}
+              />
             )}
 
             <Actions>
-              {this.state.selectedTemplate && (
-                <TeamContactSelect
-                  fullHeight
-                  pullTo="right"
-                  user={this.props.templateData.user}
-                  owner={this.state.owner}
-                  onSelect={this.handleOwnerChange}
-                  buttonRenderer={this.renderAgentPickerButton}
-                  style={{
-                    marginRight: '0.5rem'
-                  }}
-                />
-              )}
-
               {this.showEditListingsButton && !this.props.isEdit && (
-                <ActionButton
-                  style={{ marginLeft: '0.5rem' }}
-                  appearance="outline"
+                <Button
+                  style={{
+                    marginLeft: '0.5rem'
+                  }}
+                  variant="outlined"
+                  color="secondary"
                   onClick={this.props.onShowEditListings}
                 >
                   Edit Listings ({this.props.templateData.listings.length})
-                </ActionButton>
+                </Button>
               )}
 
               {this.state.selectedTemplate && isSocialMedium && (
@@ -806,18 +824,19 @@ class Builder extends React.Component {
               )}
 
               {this.state.selectedTemplate && !isSocialMedium && (
-                <ActionButton
-                  style={{ marginLeft: '0.5rem' }}
+                <Button
+                  style={{
+                    marginLeft: '0.5rem'
+                  }}
+                  variant="contained"
+                  color="primary"
                   onClick={this.handleSave}
                 >
-                  Next
-                </ActionButton>
+                  Continue
+                </Button>
               )}
 
               <IconButton
-                isFit
-                iconSize="large"
-                inverse
                 onClick={this.props.onClose}
                 style={{ marginLeft: '0.5rem' }}
               >

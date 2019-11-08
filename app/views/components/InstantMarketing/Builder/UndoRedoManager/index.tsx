@@ -1,6 +1,7 @@
 import React from 'react'
-import { Box, Button, ButtonGroup } from '@material-ui/core'
+import { Tooltip, IconButton } from '@material-ui/core'
 import { Editor } from 'grapesjs'
+import { useTheme } from '@material-ui/core/styles'
 
 import UndoIcon from 'components/SvgIcons/Undo/IconUndo'
 import RedoIcon from 'components/SvgIcons/Redo/IconRedo'
@@ -13,23 +14,32 @@ interface Props {
 
 export default function UndoRedoManager({ editor }: Props) {
   const { hasUndo, hasRedo, undo, redo } = useUndoRedo(editor)
+  const theme = useTheme()
 
   return (
-    <Box ml={2}>
-      <ButtonGroup size="small">
-        <Button disabled={!hasRedo} variant="outlined" onClick={redo}>
-          <RedoIcon />
-          <Box ml={0.75} component="span">
-            Redo
-          </Box>
-        </Button>
-        <Button disabled={!hasUndo} variant="outlined" onClick={undo}>
-          <UndoIcon />
-          <Box ml={0.75} component="span">
-            Undo
-          </Box>
-        </Button>
-      </ButtonGroup>
-    </Box>
+    <>
+      <Tooltip title="Undo">
+        <IconButton disabled={!hasUndo} onClick={undo}>
+          <UndoIcon
+            fillColor={
+              hasUndo
+                ? theme.palette.common.black
+                : theme.palette.action.disabled
+            }
+          />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Redo">
+        <IconButton disabled={!hasRedo} onClick={redo}>
+          <RedoIcon
+            fillColor={
+              hasRedo
+                ? theme.palette.common.black
+                : theme.palette.action.disabled
+            }
+          />
+        </IconButton>
+      </Tooltip>
+    </>
   )
 }

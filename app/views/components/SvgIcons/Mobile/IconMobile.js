@@ -1,13 +1,115 @@
-import React from 'react'
+import React, { Fragment } from "react";
+import PropTypes from "prop-types";
+import styled, { css } from "styled-components";
 
-function MobileIcon(props) {
-  const { width = 16, height = 16 } = props
+const createHelpers = (width, height, css) => {
+  // somehow sizes is ending up in markup, even if it is not a valid svg attribute
+  // until we have a better solution, just render it empty, instead to '[Object object]'
+  const sanitizeSizes = sizes =>
+    Object.defineProperty(sizes, "toString", {
+      value: () => "",
+      enumerable: false
+    });
 
-  return (
-    <svg width={width} height={height} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M13 2C13 1.46957 12.7893 0.960859 12.4142 0.585786C12.0391 0.210714 11.5304 0 11 0L5 0C4.46957 0 3.96086 0.210714 3.58579 0.585786C3.21071 0.960859 3 1.46957 3 2V14C3 14.5304 3.21071 15.0391 3.58579 15.4142C3.96086 15.7893 4.46957 16 5 16H11C11.5304 16 12.0391 15.7893 12.4142 15.4142C12.7893 15.0391 13 14.5304 13 14V2ZM7.33333 14C7.33333 13.8681 7.37243 13.7393 7.44569 13.6296C7.51894 13.52 7.62306 13.4345 7.74488 13.3841C7.86669 13.3336 8.00074 13.3204 8.13006 13.3461C8.25938 13.3719 8.37817 13.4354 8.4714 13.5286C8.56464 13.6218 8.62813 13.7406 8.65386 13.8699C8.67958 13.9993 8.66638 14.1333 8.61592 14.2551C8.56546 14.3769 8.48001 14.4811 8.37038 14.5543C8.26075 14.6276 8.13185 14.6667 8 14.6667C7.82319 14.6667 7.65362 14.5964 7.5286 14.4714C7.40357 14.3464 7.33333 14.1768 7.33333 14ZM4.33333 2C4.33333 1.82319 4.40357 1.65362 4.5286 1.5286C4.65362 1.40357 4.82319 1.33333 5 1.33333H11C11.1768 1.33333 11.3464 1.40357 11.4714 1.5286C11.5964 1.65362 11.6667 1.82319 11.6667 2V11.6667C11.6667 11.8435 11.5964 12.013 11.4714 12.1381C11.3464 12.2631 11.1768 12.3333 11 12.3333H5C4.82319 12.3333 4.65362 12.2631 4.5286 12.1381C4.40357 12.013 4.33333 11.8435 4.33333 11.6667V2Z" fill="black"/>
-    </svg>
-  )
-}
+  const getDimensions = (size, sizes) => {
+    if (
+      size &&
+      typeof size.width === "number" &&
+      typeof size.height === "number"
+    ) {
+      return size;
+    }
 
-export default MobileIcon
+    return size && sizes[size] ? sizes[size] : { width, height };
+  };
+
+  const getCss = (size, sizes, fillColor, fillColorRule, noStyles) => {
+    if (noStyles) {
+      return "";
+    }
+
+    const dimensions = getDimensions(size, sizes);
+    const fillRule =
+      fillColor && fillColorRule
+        ? `${fillColorRule}{ fill: ${fillColor}; }`
+        : "";
+
+    return css`
+      width: ${dimensions.width}px;
+      height: ${dimensions.height}px;
+      ${fillRule}
+    `;
+  };
+
+  const propsToCss = ({ size, sizes, fillColor, fillColorRule, noStyles }) =>
+    getCss(size, sizes, fillColor, fillColorRule, noStyles);
+
+  return {
+    getCss,
+    getDimensions,
+    propsToCss,
+    sanitizeSizes
+  };
+};
+
+const width = "24";
+const height = "24";
+const viewBox = "0 0 24 24";
+
+const { getDimensions, getCss, propsToCss, sanitizeSizes } = createHelpers(
+  width,
+  height,
+  css
+);
+
+const sizes = sanitizeSizes({});
+
+const Image = styled.svg`
+  ${propsToCss}
+`;
+
+const children = (
+  <Fragment>
+    <path
+      fill="#000"
+      fillRule="evenodd"
+      d="M8.667 2.75A1.917 1.917 0 006.75 4.667V17h10.5V4.667a1.917 1.917 0 00-1.917-1.917H8.667zM6.75 19.333V18.5h10.5v.833a1.917 1.917 0 01-1.917 1.917H8.667a1.917 1.917 0 01-1.917-1.917zM5.25 4.667A3.417 3.417 0 018.667 1.25h6.666a3.417 3.417 0 013.417 3.417v14.666a3.417 3.417 0 01-3.417 3.417H8.667a3.417 3.417 0 01-3.417-3.417V4.667zM11.5 19.05a.75.75 0 000 1.5h1a.75.75 0 000-1.5h-1z"
+      clipRule="evenodd"
+      key="key-0"
+    />
+  </Fragment>
+);
+
+const defaultProps = {
+  children,
+  viewBox,
+  fillColor: null,
+  fillColorRule: "&&& path, &&& use, &&& g",
+  sizes,
+  size: null
+};
+
+Image.propTypes /* remove-proptypes */ = {
+  fillColor: PropTypes.string,
+  fillColorRule: PropTypes.string,
+  viewBox: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+  size: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({
+      height: PropTypes.number.isRequired,
+      width: PropTypes.number.isRequired
+    })
+  ]),
+  sizes: PropTypes.shape({
+    height: PropTypes.number,
+    width: PropTypes.number
+  })
+};
+
+export default Object.assign(Image, {
+  getDimensions,
+  getCss,
+  defaultProps,
+  displayName: "Mobile"
+});

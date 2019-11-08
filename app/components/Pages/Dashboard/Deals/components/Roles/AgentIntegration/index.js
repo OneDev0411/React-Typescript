@@ -89,7 +89,9 @@ export class RoleAgentIntegration extends React.Component {
     )
   }
 
-  onSelectAgent = (user, relatedContacts = []) => {
+  onSelectAgent = agents => {
+    const { agent: user, contacts: relatedContacts = [] } = agents[0]
+
     let newState
 
     const { agent, first_name, last_name, email, phone_number } = user
@@ -156,9 +158,9 @@ export class RoleAgentIntegration extends React.Component {
             user={this.props.user}
             title={this.props.modalTitle}
             isPrimaryAgent={this.getIsPrimaryAgent()}
-            shouldMergeTeams={this.isOfficeDoubleEnded}
+            flattened={this.isOfficeDoubleEnded}
             onClose={this.props.onClose}
-            onSelectAgent={this.onSelectAgent}
+            onSelectAgents={this.onSelectAgent}
           />
         )}
 

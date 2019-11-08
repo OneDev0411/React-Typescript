@@ -7,7 +7,8 @@ import registerAgentBlocks, { Options as AgentOptions } from './Agents'
 import registerStaticBlocks from './Statics'
 import registerImageBlock, { Options as ImageOptions } from './Image'
 import registerGifBlock, { Options as GifOptions } from './Gif'
-import registerVideoBlock, { Options as VideoOptions } from './Video'
+import registerVideoBlock, { Options as ArticleOptions } from './Video'
+import registerArticleBlock, { Options as VideoOptions } from './Article'
 import { reorderBlocksWithCustomLabels, collapseBlockCategories } from './utils'
 import { BlockOptions } from '../types'
 
@@ -17,12 +18,13 @@ interface Options {
   image: ImageOptions
   gif: GifOptions
   video: VideoOptions
+  article: ArticleOptions
 }
 
 export function registerEmailBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
-  { listing, agent, image, gif, video }: Options
+  { listing, agent, image, gif, video, article }: Options
 ) {
   registerStaticBlocks(editor, renderData)
 
@@ -31,7 +33,8 @@ export function registerEmailBlocks(
     agent: registerAgentBlocks(editor, renderData, agent),
     image: registerImageBlock(editor, image),
     gif: registerGifBlock(editor, gif),
-    video: registerVideoBlock(editor, renderData, video)
+    video: registerVideoBlock(editor, renderData, video),
+    article: registerArticleBlock(editor, renderData, article)
   }
 
   reorderBlocksWithCustomLabels(editor)

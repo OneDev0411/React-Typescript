@@ -8,8 +8,8 @@ function registerBlock(
   editor: Editor,
   { label, category, blockName, template }: BlockOptions
 ): void {
-  const root = domParser.parseFromString(template, 'text/xml')
-  const tagName = root.children[0].tagName
+  const document = domParser.parseFromString(template, 'text/html')
+  const { tagName } = document.body.children[0]
 
   editor.BlockManager.add(blockName, {
     category,

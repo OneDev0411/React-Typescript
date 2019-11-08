@@ -12,6 +12,12 @@ exports[`MC SocialActions component renders 1`] = `
     key="Instagram"
     onClick={[Function]}
     size="medium"
+    style={
+      Object {
+        "height": "2rem",
+        "lineHeight": 0,
+      }
+    }
     type="button"
   >
     <styled__Icon
@@ -30,6 +36,12 @@ exports[`MC SocialActions component renders 1`] = `
     key="Facebook"
     onClick={[Function]}
     size="medium"
+    style={
+      Object {
+        "height": "2rem",
+        "lineHeight": 0,
+      }
+    }
     type="button"
   >
     <styled__Icon
@@ -48,6 +60,12 @@ exports[`MC SocialActions component renders 1`] = `
     key="LinkedIn"
     onClick={[Function]}
     size="medium"
+    style={
+      Object {
+        "height": "2rem",
+        "lineHeight": 0,
+      }
+    }
     type="button"
   >
     <styled__Icon
