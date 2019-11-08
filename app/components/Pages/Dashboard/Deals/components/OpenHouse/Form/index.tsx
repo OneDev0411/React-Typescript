@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { connect } from 'react-redux'
 
 import { ThunkDispatch } from 'redux-thunk'
@@ -9,6 +9,10 @@ import DayPicker from 'react-day-picker'
 import Flex from 'styled-flex-component'
 
 import fecha from 'fecha'
+
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+
+import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
 import { createTaskComment } from 'deals/utils/create-task-comment'
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
@@ -61,7 +65,14 @@ const useStyles = makeStyles((theme: Theme) => {
 function OpenHouseForm(props: Props & StateProps & DispatchProps) {
   const classes = useStyles()
 
+  const confirmation = useContext(ConfirmationModalContext)
+
+  const [createdTask, setCreatedTask] = useState<IDealTask | null>(null)
   const [isSaving, setIsSaving] = useState<boolean>(false)
+  const [showOHRegistrationDrawer, setShowOHRegistrationDrawer] = useState<
+    boolean
+  >(false)
+
   const [startTime, setStartTime] = useState<Date | null>(
     props.defaultStartTime ? new Date(props.defaultStartTime * 1000) : null
   )
@@ -151,9 +162,23 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
 
     setIsSaving(false)
 
-    if (task) {
-      props.onUpsertTask(task as any)
+    setCreatedTask(task)
+
+    if (props.deal.listing) {
+      confirmation.setConfirmationModal({
+        message:
+          'Would you also like an Open House Registration Page for this event?',
+        confirmLabel: 'Yes',
+        cancelLabel: 'No',
+        onConfirm: () => setShowOHRegistrationDrawer(true),
+        onCancel: () => props.onUpsertTask(task as any)
+      })
     }
+  }
+
+  const handleCloseOHRegistrationDrawer = () => {
+    setShowOHRegistrationDrawer(false)
+    props.onUpsertTask(createdTask as any)
   }
 
   return (
@@ -229,6 +254,18 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
           )}
         </Button>
       </div>
+
+      {showOHRegistrationDrawer && (
+        // @ts-ignore js component
+        <OpenHouseDrawer
+          isOpen
+          dealNotifyOffice={false}
+          user={props.user}
+          associations={{ deal: props.deal }}
+          submitCallback={handleCloseOHRegistrationDrawer}
+          onClose={handleCloseOHRegistrationDrawer}
+        />
+      )}
     </div>
   )
 }
