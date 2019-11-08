@@ -36,6 +36,8 @@ interface DispatchProps {
 interface Props {
   deal: IDeal
   task: IDealTask | null
+  defaultStartTime: number | null
+  defaultEndTime: number | null
   onUpsertTask(task: IDealTask): void
 }
 
@@ -60,8 +62,12 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
   const classes = useStyles()
 
   const [isSaving, setIsSaving] = useState<boolean>(false)
-  const [startTime, setStartTime] = useState<Date | null>(null)
-  const [endTime, setEndTime] = useState<Date | null>(null)
+  const [startTime, setStartTime] = useState<Date | null>(
+    props.defaultStartTime ? new Date(props.defaultStartTime * 1000) : null
+  )
+  const [endTime, setEndTime] = useState<Date | null>(
+    props.defaultEndTime ? new Date(props.defaultEndTime * 1000) : null
+  )
 
   const handleSetStartDate = (date: Date) => {
     const datetime = new Date(date)

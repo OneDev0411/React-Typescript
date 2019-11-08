@@ -7,6 +7,7 @@ import { useTheme } from '@material-ui/styles'
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 import { getActiveTeamId } from 'utils/user-teams'
 
+import Acl from 'components/Acl'
 import Table from 'components/Grid/Table'
 import PageHeader from 'components/PageHeader'
 import LoadingContainer from 'components/LoadingContainer'
@@ -176,20 +177,22 @@ function OpenHousesList(props: Props) {
         </PageHeader.Menu>
       </PageHeader>
 
-      <div style={{ padding: theme.spacing(0, 3, 9) }}>
-        <Callout type="info" style={{ margin: theme.spacing(1.5, 0) }}>
-          To Notify your Office to Book an Open House on the MLS please find the
-          button inside of your{' '}
-          <a href="/dashboard/deals" target="_blank">
-            deals
-          </a>
-          . This page is only for creating Open House Registration pages and
-          events for your listings or other agents listings that you are holding
-          an open house for.
-        </Callout>
+      <Acl.Deals>
+        <div style={{ padding: theme.spacing(0, 3, 9) }}>
+          <Callout type="info" style={{ margin: theme.spacing(1.5, 0) }}>
+            To Notify your Office to Book an Open House on the MLS please find
+            the button inside of your{' '}
+            <a href="/dashboard/deals" target="_blank">
+              deals
+            </a>
+            . This page is only for creating Open House Registration pages and
+            events for your listings or other agents listings that you are
+            holding an open house for.
+          </Callout>
 
-        {renderContent()}
-      </div>
+          {renderContent()}
+        </div>
+      </Acl.Deals>
 
       {isDrawerOpen && (
         // @ts-ignore js component

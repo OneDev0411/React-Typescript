@@ -1,5 +1,6 @@
 import React, { useContext, useState, useRef, useEffect } from 'react'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
@@ -39,6 +40,7 @@ interface StateProps {
 
 interface Props {
   deal: IDeal
+  defaultOpen: boolean
   style: React.CSSProperties
 }
 
@@ -57,14 +59,17 @@ function OpenHouses({
   activeTeamId,
   deal,
   style,
+  defaultOpen = false,
   updateTask,
   setSelectedTask
 }: Props & StateProps & DispatchProps) {
-  const confirmation = useContext(ConfirmationModalContext)
   const classes = useStyles()
   const iconClasses = useIconStyles()
 
+  const confirmation = useContext(ConfirmationModalContext)
+
   const popoverActions = useRef<PopoverActions | null>(null)
+  const actionButtonRef = useRef<HTMLButtonElement | null>(null)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const [showForm, setShowForm] = useState<boolean>(false)
   const [selectedItem, setSelectedItem] = useState<IDealTask | null>(null)
@@ -74,6 +79,13 @@ function OpenHouses({
       popoverActions.current.updatePosition()
     }
   }, [showForm])
+
+  useEffect(() => {
+    if (defaultOpen) {
+      setAnchorEl(actionButtonRef.current)
+      setShowForm(true)
+    }
+  }, [defaultOpen])
 
   const toggleMenu = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null = null
@@ -120,6 +132,7 @@ function OpenHouses({
   return (
     <>
       <DropdownToggleButton
+        ref={actionButtonRef}
         isActive={Boolean(anchorEl)}
         variant="outlined"
         color="secondary"
@@ -150,6 +163,8 @@ function OpenHouses({
           <Form
             deal={deal}
             task={selectedItem}
+            defaultStartTime={getQueryParams().startTime}
+            defaultEndTime={getQueryParams().endTime}
             onUpsertTask={handleUpsertTask}
           />
         ) : (
@@ -165,6 +180,10 @@ function OpenHouses({
       </Popover>
     </>
   )
+}
+
+function getQueryParams() {
+  return browserHistory.getCurrentLocation().query
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
