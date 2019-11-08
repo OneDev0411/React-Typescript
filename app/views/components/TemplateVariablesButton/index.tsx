@@ -58,6 +58,7 @@ export function TemplateVariablesButton({
         <Paper>
           <ClickAwayListener onClickAway={close}>
             <List
+              innerRef={preventNativeMouseDownEventPropagation}
               style={{
                 minWidth: '15rem',
                 maxHeight: '25rem',
@@ -85,4 +86,16 @@ export function TemplateVariablesButton({
       </Popper>
     </>
   )
+}
+
+/**
+ * This is done for when the editor is embedded inside Grape.js in MC
+ * Preventing mousedown via react doesn't work as the handler in grape.js
+ * is set up with pure DOM API.
+ */
+function preventNativeMouseDownEventPropagation(el: HTMLElement | null) {
+  el &&
+    el.addEventListener('mousedown', e => {
+      e.stopPropagation()
+    })
 }

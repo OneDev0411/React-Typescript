@@ -30,7 +30,7 @@ import Templates from '../Templates'
 import { VideoToolbar } from './VideoToolbar'
 import UndoRedoManager from './UndoRedoManager'
 import DeviceManager from './DeviceManager'
-import RTE from './RTE'
+import { createRichTextEditor } from './RichTextEditor'
 
 import {
   Container,
@@ -183,7 +183,7 @@ class Builder extends React.Component {
   }
 
   setRte = () => {
-    const { enable, disable } = RTE(this.editor)
+    const { enable, disable } = createRichTextEditor(this.editor)
 
     this.editor.setCustomRte({
       enable,

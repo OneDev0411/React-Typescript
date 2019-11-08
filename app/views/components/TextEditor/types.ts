@@ -1,9 +1,12 @@
 import { FieldProps } from 'react-final-form'
 import { ContentBlock, ContentState, EditorProps } from 'draft-js'
 
-import { ReactNode } from 'react'
+import { CSSProperties, ReactNode } from 'react'
+
+import { ClassesProps } from 'utils/ts-utils'
 
 import { ITemplateVariableSuggestionGroup } from '../TemplateVariablesButton/types'
+import { styles } from './styles'
 
 export interface ReferenceObject {
   clientHeight: number
@@ -14,13 +17,21 @@ export interface ReferenceObject {
 
 export type Entity = ReturnType<ContentState['getEntity']>
 
-export interface TextEditorProps {
+export interface TextEditorProps extends ClassesProps<typeof styles> {
   className?: string
   defaultValue?: string
   input?: FieldProps<any>['input']
   onChange?: (value: string) => void
   disabled?: boolean
   placeholder?: string
+  /**
+   * minimum height of the editor area:
+   * true: a reasonable min height will be applied
+   * false: no minimum height
+   * string | number: exact minimum height
+   */
+  minHeight?: boolean | CSSProperties['minHeight']
+  style?: CSSProperties
   plugins?: any[]
   DraftEditorProps?: Omit<EditorProps, 'editorState' | 'onChange'>
 

@@ -8,6 +8,7 @@ export const ToolbarIconButton = styled(IconButton).attrs({
   color: ${({ theme, color }: ThemeProps<Theme> & IconButtonProps) =>
     !color && theme.palette.grey['800']};
   padding: ${({ theme }: ThemeProps<Theme>) => `${theme.spacing(1)}px`};
+  margin: 0;
   svg {
     width: 16px;
     height: 16px;

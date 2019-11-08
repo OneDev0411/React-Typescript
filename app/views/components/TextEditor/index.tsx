@@ -74,6 +74,7 @@ export const TextEditor = forwardRef(
       defaultValue = '',
       disabled = false,
       autofocus = false,
+      minHeight = true,
       input = null,
       onChange = () => {},
       placeholder = 'Type something…',
@@ -89,7 +90,9 @@ export const TextEditor = forwardRef(
       enableTemplateVariables = false,
       templateVariableSuggestionGroups,
       onAttachmentDropped,
-      appendix = null
+      appendix = null,
+      style,
+      ...props
     }: TextEditorProps,
     ref
   ) => {
@@ -101,7 +104,7 @@ export const TextEditor = forwardRef(
     const [linkEditorOpen, setLinkEditorOpen] = useState(false)
     const confirmation = useContext(ConfirmationModalContext)
 
-    const classes = useStyles()
+    const classes = useStyles(props)
 
     /**
      * Images are not rendered appropriately without this option.
@@ -335,12 +338,19 @@ export const TextEditor = forwardRef(
     }
 
     return (
-      <EditorContainer className={className}>
+      <EditorContainer
+        className={cn(className, classes.root)}
+        style={style}
+        minHeight={minHeight}
+      >
         <EditorWrapper
           ref={editorElementRef}
-          className={cn({
-            'hide-placeholder': shouldHidePlaceholder(editorState)
-          })}
+          className={cn(
+            {
+              'hide-placeholder': shouldHidePlaceholder(editorState)
+            },
+            classes.content
+          )}
           onClick={() => editorRef.current && editorRef.current.focus()}
           data-test="text-editor-wrapper"
         >
@@ -413,7 +423,7 @@ export const TextEditor = forwardRef(
             {appendix}
           </Dropzone>
         </EditorWrapper>
-        <Toolbar>
+        <Toolbar className={classes.toolbar}>
           {enableRichText && (
             <>
               <RichTextButtons richButtonsPlugin={richButtonsPlugin} />
