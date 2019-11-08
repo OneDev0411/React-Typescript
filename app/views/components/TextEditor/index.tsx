@@ -10,8 +10,6 @@ import React, {
 import Dropzone from 'react-dropzone'
 import { ContentBlock, Editor as DraftEditor, EditorState } from 'draft-js'
 import PluginsEditor from 'draft-js-plugins-editor'
-import 'draft-js-image-plugin/lib/plugin.css'
-import 'draft-js-alignment-plugin/lib/plugin.css'
 import { stateToHTML } from 'draft-js-export-html'
 import { stateFromHTML } from 'draft-js-import-html'
 import cn from 'classnames'
@@ -141,6 +139,7 @@ export const TextEditor = forwardRef(
       resizeablePlugin,
       linkPlugins,
       signaturePlugin,
+      templateExpressionPlugin,
       richButtonsPlugin,
       ...otherPlugins
     } = useMemo(
@@ -307,6 +306,7 @@ export const TextEditor = forwardRef(
             imagePlugin
           ]
         : []),
+      templateExpressionPlugin,
       ...(enableSignature ? [signaturePlugin] : [])
     ]
 

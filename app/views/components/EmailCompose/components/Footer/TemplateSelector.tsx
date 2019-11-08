@@ -100,10 +100,6 @@ function TemplateSelector({
     }
   }
 
-  if (error) {
-    return <ServerError error={error} />
-  }
-
   if (templates.length > 0) {
     return (
       <>
@@ -191,6 +187,10 @@ function TemplateSelector({
 
   if (isFetching) {
     return <ListSkeleton dense twoLines divider numItems={4} />
+  }
+
+  if (error) {
+    return <ServerError error={error} />
   }
 
   return (

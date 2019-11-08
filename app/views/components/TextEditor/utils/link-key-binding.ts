@@ -1,10 +1,13 @@
 import React from 'react'
-import { getDefaultKeyBinding, KeyBindingUtil } from 'draft-js'
+import { KeyBindingUtil } from 'draft-js'
+import { DraftJsPlugin } from 'draft-js-plugins-editor'
 
-export function linkKeyBinding(e: React.KeyboardEvent<{}>): string {
+export const linkKeyBinding: DraftJsPlugin['keyBindingFn'] = (
+  e: React.KeyboardEvent<{}>
+) => {
   if (e.keyCode === 75 /* `K` key */ && KeyBindingUtil.hasCommandModifier(e)) {
     return 'link'
   }
 
-  return getDefaultKeyBinding(e)!
+  return undefined
 }

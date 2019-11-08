@@ -1,7 +1,7 @@
 import { FieldProps } from 'react-final-form'
-import { ContentBlock, ContentState, EditorProps } from 'draft-js'
+import { ContentBlock, ContentState, EditorProps, EditorState } from 'draft-js'
 
-import { ReactNode } from 'react'
+import { ReactElement, ReactNode } from 'react'
 
 import { ITemplateVariableSuggestionGroup } from '../TemplateVariablesButton/types'
 import { createEditorRef } from './create-editor-ref'
@@ -91,9 +91,22 @@ export interface AtomicBlockEntityData {
   src?: string // comes from image plugin
 }
 
-export interface DraftPluginEditorDecoratorProps {
+export interface DraftPluginEditorBlockDecoratorProps {
   block: ContentBlock
   blockProps: StringMap<any>
   contentState: ContentState
   className?: string
+}
+
+export interface DraftPluginEditorInlineDecoratorProps {
+  contentState: ContentState
+  dir: string | null
+  entityKey: string | null
+  getEditorState: () => EditorState
+  offsetKey: string
+  setEditorState: (editorState: EditorState) => void
+  children: ReactElement<{
+    start: number
+    block: ContentBlock
+  }>[]
 }

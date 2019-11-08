@@ -1,10 +1,10 @@
 import React from 'react'
 import { wrapDisplayName } from 'recompose'
 
-import { DraftPluginEditorDecoratorProps } from '../types'
+import { DraftPluginEditorBlockDecoratorProps } from '../types'
 
 export const atomicBlockLinkDecorator = WrappedComponent => {
-  function AtomicBlockLink(props: DraftPluginEditorDecoratorProps) {
+  function AtomicBlockLink(props: DraftPluginEditorBlockDecoratorProps) {
     const data = props.block.getData()
 
     const href = data.get('href')
