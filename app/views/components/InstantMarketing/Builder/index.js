@@ -202,10 +202,6 @@ class Builder extends React.Component {
       this.registerSocialBlocks()
     }
 
-    if (this.isVideoTemplate) {
-      this.grapes.appendChild(this.videoToolbar)
-    }
-
     this.props.onBuilderLoad({
       regenerateTemplate: this.regenerateTemplate
     })
@@ -522,6 +518,40 @@ class Builder extends React.Component {
     this.setState({
       templateHtmlCss: this.getTemplateHtmlCss()
     })
+    this.resize()
+  }
+
+  resize = () => {
+    const canvas = this.editor.Canvas.getBody()
+    const viewport = document.querySelector('.gjs-cv-canvas')
+
+    const {
+      width: canvasWidth,
+      height: canvasHeight
+    } = canvas.getBoundingClientRect()
+
+    const {
+      width: viewportWidth,
+      height: viewportHeight
+    } = viewport.getBoundingClientRect()
+
+    let scale = 1
+
+    if (canvasWidth >= canvasHeight) {
+      if (canvasWidth > viewportWidth) {
+        scale = viewportWidth / canvasWidth
+      }
+    } else if (canvasHeight > viewportHeight) {
+      scale = viewportHeight > canvasHeight
+    }
+
+    if (scale === 1) {
+      canvas.style.transform = ''
+      canvas.style.transformOrigin = ''
+    } else {
+      canvas.style.transform = `scale(${scale})`
+      canvas.style.transformOrigin = 'left top'
+    }
   }
 
   getTemplateHtmlCss = () => {
