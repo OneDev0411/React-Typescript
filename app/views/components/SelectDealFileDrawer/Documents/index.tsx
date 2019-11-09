@@ -34,7 +34,7 @@ interface Props {
   showStashFiles: boolean
   initialAttachments: IDealFile[]
   allowNoChecklist: boolean
-  selectedItems: IDealFile
+  selectedItems: IDealFile[]
   onToggleItem(file: IDealFile): void
 }
 
