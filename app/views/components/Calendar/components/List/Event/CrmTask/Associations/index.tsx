@@ -29,7 +29,7 @@ export function Associations({ event }: Props) {
   return (
     <span>
       {preposition}{' '}
-      {contacts.map((item, index) => (
+      {contacts.map((item: IContact, index: number) => (
         <React.Fragment key={index}>
           {index !== 0 && <>,&nbsp;</>}
           <MiniContactProfile as="span" data={item} type="event">

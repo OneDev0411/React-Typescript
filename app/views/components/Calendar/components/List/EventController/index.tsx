@@ -59,6 +59,7 @@ export function EventController({
       threadKey={(event && event.thread_key) || undefined}
     />
   )
+
   const emailCampaignThreadDrawer = (
     <EmailCampaignThreadByCampaignId
       open={!!isExecutedEmail}

@@ -31,7 +31,7 @@ declare interface ICalendarEvent {
   type_label: string
   thread_key: string | null
   users: UUID[]
-  people: IContact[] | null
+  people: (IContact | IAgent)[] | null
   people_len: number | null
   full_deal?: IDeal
   full_thread: {
