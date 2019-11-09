@@ -68,7 +68,7 @@ declare type IEmailRecipient<
 } & Association<'contact', IContact, Associations> &
   Association<'list', IContactList, Associations> &
   Association<'brand', IBrand, Associations> &
-  Association<'agent', IDealAgent, Associations>
+  Association<'agent', IAgent, Associations>
 
 declare interface IEmailCampaignInputBase {
   due_at: Date | null
@@ -183,5 +183,5 @@ declare interface IDenormalizedEmailRecipientBrandInput
 
 declare interface IDenormalizedEmailRecipientDealAgentInput
   extends Omit<IEmailRecipientAgentInput, 'agent'> {
-  agent: IDealAgent
+  agent: IAgent
 }

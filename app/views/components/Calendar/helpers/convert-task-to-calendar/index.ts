@@ -39,6 +39,8 @@ function getPeople(associations: IEvent['associations']): IContact[] {
   }
 
   return associations
-    .filter(association => association.association_type === 'contact')
+    .filter(association =>
+      ['contact', 'agent'].includes(association.association_type)
+    )
     .map(association => association.contact as IContact)
 }
