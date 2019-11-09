@@ -15,8 +15,10 @@ import { ActionablePlugin } from './Plugins/Actionable'
 import { TableSummary } from './TableSummary'
 
 class Grid extends React.Component {
-  componentDidMount() {
-    const { plugins } = this.props
+  constructor(props) {
+    super(props)
+
+    const { plugins } = props
 
     if (plugins.sortable) {
       this.sortablePlugin = new SortablePlugin({
@@ -30,6 +32,10 @@ class Grid extends React.Component {
         options: plugins.loadable
       })
     }
+  }
+
+  componentDidMount() {
+    const { plugins } = this.props
 
     if (plugins.selectable) {
       this.selectablePlugin = new SelectablePlugin({
