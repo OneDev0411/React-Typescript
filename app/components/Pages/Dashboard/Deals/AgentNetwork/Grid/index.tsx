@@ -58,7 +58,9 @@ export class Grid extends React.Component<Props, State> {
     }
 
     return data
-      .filter(agent => selectedRows.includes(agent.id) && agent.email)
+      .filter(
+        agent => agent.agentId && selectedRows.includes(agent.id) && agent.email
+      )
       .map(agent => ({
         recipient_type: 'Agent',
         agent
