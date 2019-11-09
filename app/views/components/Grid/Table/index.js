@@ -26,16 +26,16 @@ class Grid extends React.Component {
         onRequestForceUpdate: () => this.forceUpdate()
       })
     }
+  }
+
+  componentDidMount() {
+    const { plugins } = this.props
 
     if (plugins.loadable) {
       this.loadablePlugin = new LoadablePlugin({
         options: plugins.loadable
       })
     }
-  }
-
-  componentDidMount() {
-    const { plugins } = this.props
 
     if (plugins.selectable) {
       this.selectablePlugin = new SelectablePlugin({
