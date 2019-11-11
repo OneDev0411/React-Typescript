@@ -162,6 +162,10 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
 
     setIsSaving(false)
 
+    if (!task) {
+      return
+    }
+
     setCreatedTask(task)
 
     if (props.deal.listing) {
@@ -171,7 +175,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
         confirmLabel: 'Yes',
         cancelLabel: 'No',
         onConfirm: () => setShowOHRegistrationDrawer(true),
-        onCancel: () => props.onUpsertTask(task as any)
+        onCancel: () => props.onUpsertTask(task)
       })
     }
   }

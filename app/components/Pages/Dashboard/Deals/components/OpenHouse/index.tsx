@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
+import { withRouter, RouteComponentProps } from 'react-router'
 
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
@@ -59,10 +59,11 @@ function OpenHouses({
   activeTeamId,
   deal,
   style,
+  location,
   defaultOpen = false,
   updateTask,
   setSelectedTask
-}: Props & StateProps & DispatchProps) {
+}: Props & StateProps & DispatchProps & RouteComponentProps<any, {}>) {
   const classes = useStyles()
   const iconClasses = useIconStyles()
 
@@ -163,8 +164,8 @@ function OpenHouses({
           <Form
             deal={deal}
             task={selectedItem}
-            defaultStartTime={getQueryParams().startTime}
-            defaultEndTime={getQueryParams().endTime}
+            defaultStartTime={location.query.startTime}
+            defaultEndTime={location.query.endTime}
             onUpsertTask={handleUpsertTask}
           />
         ) : (
@@ -180,10 +181,6 @@ function OpenHouses({
       </Popover>
     </>
   )
-}
-
-function getQueryParams() {
-  return browserHistory.getCurrentLocation().query
 }
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
@@ -205,4 +202,4 @@ function mapStateToProps({ user }: IAppState): StateProps {
 export default connect<StateProps, DispatchProps, Props>(
   mapStateToProps,
   mapDispatchToProps
-)(OpenHouses)
+)(withRouter(OpenHouses))
