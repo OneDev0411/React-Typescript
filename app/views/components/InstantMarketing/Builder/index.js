@@ -707,22 +707,24 @@ class Builder extends React.Component {
     return (
       <Portal root="marketing-center">
         <Container className="template-builder">
-          <SearchListingDrawer
-            mockListings
-            multipleSelection
-            isOpen={this.state.isListingDrawerOpen}
-            title="Select a Listing"
-            onClose={() => {
-              this.blocks.listing.selectHandler()
-              this.setState({ isListingDrawerOpen: false })
-            }}
-            onSelectListingsCallback={listings => {
-              listings.forEach(this.addListingAssets)
+          {this.state.isListingDrawerOpen && (
+            <SearchListingDrawer
+              mockListings
+              multipleSelection
+              isOpen
+              title="Select a Listing"
+              onClose={() => {
+                this.blocks.listing.selectHandler()
+                this.setState({ isListingDrawerOpen: false })
+              }}
+              onSelectListingsCallback={listings => {
+                listings.forEach(this.addListingAssets)
 
-              this.blocks.listing.selectHandler(listings)
-              this.setState({ isListingDrawerOpen: false })
-            }}
-          />
+                this.blocks.listing.selectHandler(listings)
+                this.setState({ isListingDrawerOpen: false })
+              }}
+            />
+          )}
           {this.state.isAgentDrawerOpen && (
             <TeamAgents
               isPrimaryAgent
