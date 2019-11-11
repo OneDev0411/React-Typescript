@@ -12,6 +12,10 @@
     padding: 0;
   }
 
+  .gjs-trt-trait__wrp {
+    padding-top: 0.5rem;
+  }
+
   .gjs-block-category, .gjs-blocks-c {
     color: #000;
     margin: 2px 0;
@@ -159,7 +163,7 @@
       align-items: center;
       background: #f6f6f6;
       height: 48px;
-      border: 1px solid #d4d4d4;
+      border: 1px solid #000;
       border-radius: 3px;
       color: black;
       font-size: 14px;
