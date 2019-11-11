@@ -88,7 +88,7 @@ let PersonalInfoForm = ({
 
 const validate = values => {
   const errors = {}
-  const { email, phone_number, first_name, last_name } = values
+  const { email, first_name, last_name } = values
 
   const NAME_CHARACHTER_LIMIT = 1
 
@@ -107,14 +107,6 @@ const validate = values => {
     return !email || new RegExp(regular).exec(email)
   }
 
-  const isNotValidPhoneNumber = phoneNumber => {
-    if (phoneNumber.length === 12 || phoneNumber.length === 0) {
-      return false
-    }
-
-    return true
-  }
-
   if (!isValidName(first_name)) {
     errors.first_name = invalidCharactersError
   } else if (first_name && first_name.length < NAME_CHARACHTER_LIMIT) {
@@ -129,10 +121,6 @@ const validate = values => {
 
   if (!isValidEmail(email)) {
     errors.email = 'Invalid email address.'
-  }
-
-  if (phone_number && isNotValidPhoneNumber(phone_number)) {
-    errors.phone_number = 'Invalid Number!'
   }
 
   return errors
