@@ -20,6 +20,8 @@ import { isSoloActiveTeam, getActiveTeamId } from 'utils/user-teams'
 
 import LoadingContainer from 'components/LoadingContainer'
 
+import { goTo } from 'utils/go-to'
+
 import Alert from '../../../../components/Pages/Dashboard/Partials/Alert'
 
 import { Divider } from '../../Divider'
@@ -57,6 +59,7 @@ const propTypes = {
   openHouse: PropTypes.any,
   openHouseId: PropTypes.any,
   initialValues: PropTypes.shape(),
+  dealNotifyOffice: PropTypes.bool,
   submitCallback: PropTypes.func,
   deleteCallback: PropTypes.func,
   user: PropTypes.shape().isRequired
@@ -66,6 +69,7 @@ const defaultProps = {
   openHouse: null,
   openHouseId: undefined,
   initialValues: {},
+  dealNotifyOffice: true,
   submitCallback: () => {},
   deleteCallback: () => {}
 }
@@ -280,6 +284,10 @@ class OpenHouseDrawerInternal extends React.Component {
 
       this.setState({ isDisabled: false, isSaving: false, openHouse: newTour })
       await this.props.submitCallback(newTour, action)
+
+      if (this.props.dealNotifyOffice && action === 'created') {
+        this.createDealOpenHouse(openHouse)
+      }
     } catch (error) {
       console.log(error)
       this.setState({ isDisabled: false, isSaving: false })
@@ -342,6 +350,31 @@ class OpenHouseDrawerInternal extends React.Component {
     })
 
     return assets
+  }
+
+  createDealOpenHouse = openHouse => {
+    const dealAssociation = (openHouse.associations || []).find(
+      association => association.association_type === 'deal'
+    )
+
+    if (!dealAssociation) {
+      return
+    }
+
+    this.props.dispatch(
+      confirmation({
+        message:
+          'Would you also like to notify your office so they book this on the MLS for you?',
+        confirmLabel: 'Notify',
+        onConfirm: () => {
+          goTo(`/dashboard/deals/${dealAssociation.deal}`, '', {
+            createOpenHouse: true,
+            startTime: openHouse.due_date,
+            endTime: openHouse.end_date
+          })
+        }
+      })
+    )
   }
 
   render() {

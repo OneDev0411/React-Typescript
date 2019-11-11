@@ -1,5 +1,6 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
+import { browserHistory } from 'react-router'
 
 import LinkButton from 'components/Button/LinkButton'
 import { CloseButton } from 'components/Button/CloseButton'
@@ -22,7 +23,13 @@ export function Menu(props) {
       {deal.is_draft === true && <RemoveDraft deal={deal} />}
 
       {deal.deal_type === 'Selling' && (
-        <OpenHouse deal={deal} style={{ marginLeft: '0.5rem' }} />
+        <OpenHouse
+          deal={deal}
+          style={{ marginLeft: '0.5rem' }}
+          defaultOpen={
+            browserHistory.getCurrentLocation().query.createOpenHouse
+          }
+        />
       )}
 
       {deal.deal_type === 'Selling' && (
