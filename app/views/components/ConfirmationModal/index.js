@@ -79,7 +79,9 @@ function ConfirmationModal() {
           />
 
           <ActionBar
-            submitDisabled={confirmation.needsUserEntry && !userEntry}
+            submitDisabled={
+              confirmation.needsUserEntry && userEntry.trim().length === 0
+            }
             confirmation={confirmation}
             onCancel={handleCancel}
             onConfirm={handleConfirm}
