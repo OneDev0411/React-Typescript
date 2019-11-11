@@ -8,9 +8,6 @@ import { renderAttributes } from './render-attributes'
  * atomic blocks like image. Their internal blockRendererFn is not useful
  * because they don't render to string, and also the signature is different than
  * blockRendererFn in stateToHTML options.
- * @param alignment
- * @param width
- * @param height
  */
 export function renderAtomicBlockAttrs({
   src,
