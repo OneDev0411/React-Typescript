@@ -1,9 +1,10 @@
 import { ContentBlock, EditorState } from 'draft-js'
 
-import { renderAtomicBlockStyles } from './render-atomic-block'
+import { renderAtomicBlockStyles } from './render-atomic-block-styles'
 import { blockStyleFn } from './block-style-fn'
 import { stylesToString } from './styles-to-string'
 import { renderAttributes } from './render-attributes'
+import { renderAtomicBlockAttrs } from './render-atomic-block-attributes'
 
 export const renderImage = (getEditorState: () => EditorState | null) => (
   block: ContentBlock
@@ -18,8 +19,9 @@ export const renderImage = (getEditorState: () => EditorState | null) => (
     if (entity.getType().toLocaleLowerCase() === 'image') {
       const data = entity.getData()
       const atomicStyles = renderAtomicBlockStyles(data)
+      const imgAttrsStr = renderAtomicBlockAttrs(data)
 
-      const img = `<img src="${data.src}" style="${atomicStyles}" />`
+      const img = `<img style="${atomicStyles}" ${imgAttrsStr} />`
 
       const { attributes = {}, style = {} } = blockStyleFn(block) || {}
 

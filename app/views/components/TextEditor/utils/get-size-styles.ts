@@ -8,9 +8,6 @@ export function getSizeStyles(
 ): CSSProperties {
   const styles: CSSProperties = {}
 
-  // NOTE: we currently are using 'relative' positioning which is the default
-  // mode in resizable draftjs plugin. If we change that, we need to change
-  // here too
   const horizontalUnit = resizeTypeToUnit(resizablePluginOptions.horizontal)
   const verticalUnit = resizeTypeToUnit(resizablePluginOptions.vertical)
 
