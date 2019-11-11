@@ -712,7 +712,7 @@ class Builder extends React.Component {
               mockListings
               multipleSelection
               isOpen
-              title="Select a Listing"
+              title="Select Listing"
               onClose={() => {
                 this.blocks.listing.selectHandler()
                 this.setState({ isListingDrawerOpen: false })
