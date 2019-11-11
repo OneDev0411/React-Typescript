@@ -1,12 +1,12 @@
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 
-import { getUrlMetadata } from './get-url-metadata'
+import { getUrlMetadata } from './helpers'
 
 const router = require('koa-router')()
 const app = new Koa()
 
-router.post('/get-url-metadata/getUrlMetadata', bodyParser(), async ctx => {
+router.post('/utils/get-url-metadata', bodyParser(), async ctx => {
   const { url } = ctx.request.body
 
   try {

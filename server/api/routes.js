@@ -15,7 +15,7 @@ const routes = {
     'export-custom-report'
   ],
   'my-marketing-matters': ['punchout'],
-  'get-url-metadata': ['getUrlMetadata']
+  utils: ['get-url-metadata']
 }
 
 _.each(routes, (group, name) => {

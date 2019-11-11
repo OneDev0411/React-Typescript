@@ -2,7 +2,7 @@ import superagent from 'superagent'
 
 import { Metadata } from './types'
 
-const API_URL = '/api/get-url-metadata/getUrlMetadata'
+const API_URL = '/api/utils/get-url-metadata'
 
 interface Response {
   response?: Metadata
