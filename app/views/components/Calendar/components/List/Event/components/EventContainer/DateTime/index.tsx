@@ -25,7 +25,7 @@ export function DateTime({ event }: Props) {
 
 function formatDate(date: Date | string | number): string {
   return fecha.format(
-    new Date(typeof date === 'number' ? date * 1000 : date),
-    'hh:mma'
+    new Date(date instanceof Date ? date : parseFloat(date as string) * 1000),
+    'hh:mm A'
   )
 }
