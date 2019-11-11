@@ -80,7 +80,7 @@ export class TeamContactSelect extends React.Component {
         items={items}
         onSelect={this.props.onSelect}
         isFetching={this.state.isFetching}
-        defaultSelectedItem={{ label: getUserTitle(owner), value: owner }}
+        selectedItem={{ label: getUserTitle(owner), value: owner }}
         buttonRenderer={buttonProps => {
           const renderedButton = this.props.buttonRenderer(buttonProps)
 
