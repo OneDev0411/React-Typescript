@@ -176,7 +176,7 @@ class AgentNetwork extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <>
         <Header
           onClickCloseButton={this.onClose}
           showBackButton={false}
@@ -196,7 +196,7 @@ class AgentNetwork extends React.Component {
           listInfo={this.state.listInfo}
           onChangeSelectedRows={this.onChangeSelectedRows}
         />
-      </React.Fragment>
+      </>
     )
   }
 }

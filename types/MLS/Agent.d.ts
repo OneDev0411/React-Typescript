@@ -46,20 +46,3 @@ declare interface IAgent extends IModel<'agent'> {
   office?: IAgentOffice | null
   secret_questions: string[]
 }
-
-/* using for those agents which selected from Deals -> Agent Network to promote a deal */
-declare interface IDealAgent {
-  id: UUID
-  agentId: UUID
-  name: string
-  email: string
-  phone: string
-  company: string
-  asBuyers: any[]
-  asListing: any[]
-  listings: any[]
-  listingsAveragePrice: number
-  listingsCount: number
-  listingsTotalVolume: number
-  soldListings: any[]
-}

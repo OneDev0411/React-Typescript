@@ -12,7 +12,7 @@ export function recipientToString(
   }
 
   if (recipient.recipient_type === 'Agent') {
-    return recipient.agent.name || recipient.agent.email
+    return recipient.agent.full_name || recipient.agent.email
   }
 
   if (recipient.recipient_type === 'Email' && recipient.email) {
