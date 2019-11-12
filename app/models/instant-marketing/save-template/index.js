@@ -11,7 +11,7 @@ export async function saveTemplate({
     const response = await new Fetch().post('/templates').send({
       name,
       medium,
-      type,
+      template_type: type,
       brands: [brandId],
       inputs
     })

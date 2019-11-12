@@ -207,11 +207,6 @@ const AsyncMarketingTemplates = Load({
     import('../components/Pages/Dashboard/Marketing/Templates' /* webpackChunkName: "marketing_templates" */)
 })
 
-const AsyncMarketingBlankTemplates = Load({
-  loader: () =>
-    import('../components/Pages/Dashboard/Marketing/BlankLayouts' /* webpackChunkName: "marketing_templates" */)
-})
-
 const AsyncMarketingHistory = Load({
   loader: () =>
     import('../components/Pages/Dashboard/Marketing/History' /* webpackChunkName: "marketing_history" */)
@@ -508,7 +503,6 @@ export default (
 
       <Route path="/dashboard/marketing" component={AsyncMarketing}>
         <IndexRoute component={AsyncMarketingHistory} />
-        <Route component={AsyncMarketingBlankTemplates} path="Blank" />
         <Route component={AsyncMarketingTemplates} path=":types(/:medium)" />
       </Route>
 

@@ -16,13 +16,7 @@ function Item(props) {
   const [isDeleting, setDeleting] = useState(false)
   const brokerageBrand = getBrandByType(props.user, 'Brokerage')
 
-  let thumbnail
-
-  if (template.tempUrl) {
-    thumbnail = template.url
-  } else {
-    ;({ thumbnail } = getTemplateImage(template, brokerageBrand))
-  }
+  const { thumbnail } = getTemplateImage(template, brokerageBrand)
 
   const isInstance = template.type === 'template_instance'
   const gridClassNames = ['grid-item']

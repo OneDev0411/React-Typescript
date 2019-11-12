@@ -21,10 +21,6 @@ export const SECTIONS = [
     type: SectionsEnum.LINK,
     title: 'Life',
     items: [
-      // {
-      //   title: 'Blank Layouts',
-      //   link: urlGenerator('/Blank')
-      // },
       {
         title: 'Layouts',
         link: urlGenerator('/Layout')

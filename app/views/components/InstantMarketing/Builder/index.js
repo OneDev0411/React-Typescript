@@ -11,7 +11,7 @@ import ActionButton from 'components/Button/ActionButton'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
 import { TeamContactSelect } from 'components/TeamContact/TeamContactSelect'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import SaveTemplateDropdown from 'components/SaveTemplateDropdown'
+// import SaveTemplateDropdown from 'components/SaveTemplateDropdown'
 
 import { getActiveTeam } from 'utils/user-teams'
 import { getBrandStyles } from 'utils/marketing-center/templates'
@@ -528,11 +528,12 @@ class Builder extends React.Component {
                   }}
                 />
               )}
-              <SaveTemplateDropdown
+              {/* This is disabled due some server issues */}
+              {/* <SaveTemplateDropdown
                 medium={this.state.selectedTemplate.medium}
                 inputs={this.state.selectedTemplate.inputs}
                 user={this.props.user}
-              />
+              /> */}
 
               {this.ShowEditListingsButton && !this.props.isEdit && (
                 <ActionButton
