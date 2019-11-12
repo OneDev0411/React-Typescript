@@ -515,8 +515,6 @@ class Builder extends React.Component {
             <h1>{this.props.headerTitle}</h1>
 
             <Actions>
-              <SaveTemplateDropdown />
-
               {this.state.selectedTemplate && (
                 <TeamContactSelect
                   fullHeight
@@ -530,6 +528,11 @@ class Builder extends React.Component {
                   }}
                 />
               )}
+              <SaveTemplateDropdown
+                medium={this.state.selectedTemplate.medium}
+                inputs={this.state.selectedTemplate.inputs}
+                user={this.props.user}
+              />
 
               {this.ShowEditListingsButton && !this.props.isEdit && (
                 <ActionButton
