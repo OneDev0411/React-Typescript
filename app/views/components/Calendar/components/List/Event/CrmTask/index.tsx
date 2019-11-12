@@ -61,7 +61,7 @@ export function CrmTask({ style, event, nextItem, onEventChange }: Props) {
           >
             {event.event_type}
           </a>{' '}
-          <Associations event={event} />
+          <Associations event={event} onEventChange={onEventChange} />
         </div>
       }
       subtitle={<>{event.title.replace(/<\/?[^>]+(>|$)/g, '')}</>}
