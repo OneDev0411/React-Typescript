@@ -45,6 +45,10 @@ export const EditorWrapper = styled.div`
   .DraftEditor-root {
     flex: 1;
   }
+  .DraftEditor-editorContainer {
+    height: 100%;
+    min-height: 100%;
+  }
 
   img {
     z-index: 1; // This ensures images are selectable even when they are floated
