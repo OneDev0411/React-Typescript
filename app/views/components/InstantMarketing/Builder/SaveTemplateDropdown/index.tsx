@@ -88,13 +88,15 @@ function SaveTemplateDropdown(props: Props) {
                 onChange={e => {
                   setSelectedCategory(e.target.value as string)
                 }}
+                onClick={e => {
+                  e.preventDefault()
+                }}
               >
                 {CATEGORIES.map((cat, index) => (
                   <MenuItem
                     key={cat.value}
                     value={cat.value}
                     id={`cat-${index}`}
-                    onClick={e => e.stopPropagation()}
                   >
                     {cat.name}
                   </MenuItem>
