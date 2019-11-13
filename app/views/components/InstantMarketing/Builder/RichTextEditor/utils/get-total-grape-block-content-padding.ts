@@ -1,8 +1,11 @@
-export function getTotalGrapeBlockContentPadding(el: HTMLElement): string {
-  let paddingLeft = 0
-  let paddingRight = 0
-  let paddingTop = 0
-  let paddingBottom = 0
+export function getTotalGrapeBlockContentPadding(
+  el: HTMLElement,
+  extraPadding = 0
+): string {
+  let paddingLeft = extraPadding
+  let paddingRight = extraPadding
+  let paddingTop = extraPadding
+  let paddingBottom = extraPadding
 
   let currentEl: HTMLElement | null = el
 
@@ -16,5 +19,8 @@ export function getTotalGrapeBlockContentPadding(el: HTMLElement): string {
     currentEl = currentEl.parentElement
   } while (currentEl && !currentEl.matches('[data-gjs-type]'))
 
-  return `${paddingTop}px ${paddingRight}px ${paddingBottom}px ${paddingLeft}px`
+  return `${Math.max(0, paddingTop)}px ${Math.max(
+    0,
+    paddingRight
+  )}px ${Math.max(0, paddingBottom)}px ${Math.max(0, paddingLeft)}px`
 }

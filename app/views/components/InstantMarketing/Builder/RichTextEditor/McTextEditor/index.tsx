@@ -2,8 +2,9 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
 import React, { CSSProperties, forwardRef } from 'react'
 
-import { TextEditor } from '../../../../TextEditor'
-import { defaultTemplateVariableSuggestions } from '../../../../EmailCompose/default-template-variable-suggestions'
+import { TextEditor } from 'components/TextEditor'
+import { TextEditorProps } from 'components/TextEditor/types'
+import { defaultTemplateVariableSuggestions } from 'components/EmailCompose/default-template-variable-suggestions'
 
 const useStyles = makeStyles(
   (theme: Theme) =>
@@ -31,13 +32,12 @@ const useStyles = makeStyles(
   { name: 'McTextEditor' }
 )
 
-interface Props {
-  defaultValue: string
+interface Props extends Pick<TextEditorProps, 'onChange' | 'defaultValue'> {
   targetStyle: CSSProperties
 }
 
 export const McTextEditor = forwardRef(function McTextEditor(
-  { defaultValue, targetStyle }: Props,
+  { targetStyle, ...textEditorProps }: Props,
   ref
 ) {
   const classes = useStyles({ targetStyle })
@@ -50,7 +50,7 @@ export const McTextEditor = forwardRef(function McTextEditor(
       minHeight={false}
       autofocus
       classes={classes}
-      defaultValue={defaultValue}
+      {...textEditorProps}
     />
   )
 })
