@@ -449,6 +449,11 @@ class OpenHouseDrawerInternal extends React.Component {
                             <DateTimeField
                               name="dueDate"
                               selectedDate={values.dueDate}
+                              datePickerModifiers={{
+                                disabled: {
+                                  before: new Date()
+                                }
+                              }}
                             />
 
                             <EndTimeField dueDate={values.dueDate} />
