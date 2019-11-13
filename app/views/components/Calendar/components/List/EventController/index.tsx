@@ -40,7 +40,10 @@ export function EventController({
     event &&
     ['email_campaign', 'email_campaign_recipient'].includes(event.object_type)
 
-  const isScheduledEmail = isEmail && event!.event_type === 'scheduled_email'
+  const isScheduledEmail =
+    isEmail &&
+    event!.event_type === 'scheduled_email' &&
+    event!.timestamp * 1000 > Date.now()
   const isExecutedEmail = isEmail && event!.event_type === 'executed_email'
 
   const editEmailDrawer = isScheduledEmail ? (
