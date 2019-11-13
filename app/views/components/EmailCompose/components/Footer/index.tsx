@@ -35,6 +35,7 @@ interface Props {
   initialAttachments: IFile[]
   isSubmitting: boolean
   enableSchedule: boolean
+  hasStaticBody?: boolean
   onTemplateSelected: (template: IBrandEmailTemplate) => void
   onCancel?: () => void
   onDelete?: (values: EmailFormValues) => void | Promise<any>
@@ -42,7 +43,12 @@ interface Props {
   uploadAttachment: typeof uploadEmailAttachment
 }
 
-export function Footer({ onDelete, onTemplateSelected, ...props }: Props) {
+export function Footer({
+  onDelete,
+  onTemplateSelected,
+  hasStaticBody,
+  ...props
+}: Props) {
   const due_at = props.formProps.values.due_at
   const isScheduled = !!due_at
 
@@ -72,16 +78,18 @@ export function Footer({ onDelete, onTemplateSelected, ...props }: Props) {
             uploadAttachment={props.uploadAttachment}
             initialAttachments={props.initialAttachments}
           />
-          <DropdownToggleButton
-            isActive={isTemplateDrawerOpen}
-            onClick={() => setTemplateDrawerOpen(open => !open)}
-          >
-            <IconTemplate
-              className={iconClasses.rightMargin}
-              size={iconSizes.small}
-            />{' '}
-            Templates
-          </DropdownToggleButton>
+          {!hasStaticBody && (
+            <DropdownToggleButton
+              isActive={isTemplateDrawerOpen}
+              onClick={() => setTemplateDrawerOpen(open => !open)}
+            >
+              <IconTemplate
+                className={iconClasses.rightMargin}
+                size={iconSizes.small}
+              />{' '}
+              Templates
+            </DropdownToggleButton>
+          )}
         </div>
 
         <div className="action-bar">

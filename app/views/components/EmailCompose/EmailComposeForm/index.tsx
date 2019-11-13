@@ -293,6 +293,7 @@ function EmailComposeForm<T>({
                   onCancel={onCancel}
                   onDelete={onDelete}
                   onChanged={scrollToEnd}
+                  hasStaticBody={props.hasStaticBody}
                   onTemplateSelected={template => {
                     subjectInput.onChange(template.subject as any)
 
