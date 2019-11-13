@@ -4,7 +4,6 @@ import { Link as RouterLink } from 'react-router'
 import { Link, MenuItem } from '@material-ui/core'
 
 import SplitButton from 'components/SplitButton'
-import ALink from 'components/ALink'
 import { IAppState } from 'reducers'
 import { Divider } from 'components/Divider'
 import PopOver from 'components/Popover'
@@ -70,11 +69,9 @@ export function ImportContactsButton({ accounts, user }: Props) {
                   >
                     <OutlookIcon /> Import Outlook contacts
                   </MenuItem>
-                  {/*
-              // @ts-ignore styled component `as` */}
                   <MenuItem
-                    as={ALink}
-                    noStyle
+                    component={RouterLink}
+                    style={{ color: 'currentColor' }}
                     to="/dashboard/contacts/import/csv"
                   >
                     <CsvIcon /> Import from CSV Spreadsheet
