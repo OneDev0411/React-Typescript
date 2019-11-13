@@ -94,15 +94,12 @@ export function createRichTextEditor(editor: Editor) {
             }}
           />
           <style>
-            {
-              '@font-face{font-family:Gotham-Light;src:url("https://s3-us-west-2.amazonaws.com/shortlisted-test/marketing/templates/1446ae996fb919d73d2ac732f08194bbfb3987e2/1Agent-social/FallTour_InstagramPost/fonts/Gotham Light.otf") format("otf"), url("https://s3-us-west-2.amazonaws.com/shortlisted-test/marketing/templates/1446ae996fb919d73d2ac732f08194bbfb3987e2/1Agent-social/FallTour_InstagramPost/fonts/Gotham Light.otf") format("truetype");font-weight:350;font-style:normal;}'
-            }
-            {
-              '@font-face{font-family:Gotham-Medium;src:url("https://s3-us-west-2.amazonaws.com/shortlisted-test/marketing/templates/1446ae996fb919d73d2ac732f08194bbfb3987e2/1Agent-social/FallTour_InstagramPost/fonts/Gotham Medium.otf") format("otf"), url("https://s3-us-west-2.amazonaws.com/shortlisted-test/marketing/templates/1446ae996fb919d73d2ac732f08194bbfb3987e2/1Agent-social/FallTour_InstagramPost/fonts/Gotham Medium.otf") format("truetype");font-weight:350;font-style:normal;}'
-            }
-            {
-              '@font-face{font-family:Gotham-Book;src:url("https://s3-us-west-2.amazonaws.com/shortlisted-test/marketing/templates/1446ae996fb919d73d2ac732f08194bbfb3987e2/1Agent-social/FallTour_InstagramPost/fonts/Gotham Book.otf") format("otf"), url("https://s3-us-west-2.amazonaws.com/shortlisted-test/marketing/templates/1446ae996fb919d73d2ac732f08194bbfb3987e2/1Agent-social/FallTour_InstagramPost/fonts/Gotham Book.otf") format("truetype");font-weight:350;font-style:normal;}'
-            }
+            {[...el.closest('body')!.querySelectorAll('.gjs-css-rules style')]
+              .filter(item =>
+                (item as HTMLStyleElement).innerText.startsWith('@font')
+              )
+              .map(item => item.innerHTML)
+              .join('\n')}
           </style>
         </div>
       </AppTheme>,
