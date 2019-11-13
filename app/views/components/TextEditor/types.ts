@@ -24,6 +24,12 @@ export interface TextEditorProps extends ClassesProps<typeof styles> {
   onChange?: (value: string) => void
   disabled?: boolean
   placeholder?: string
+
+  /**
+   * DraftJS [textAlignment](https://draftjs.org/docs/advanced-topics-text-direction#text-alignment)
+   * prop
+   */
+  textAlignment?: 'left' | 'right' | 'center'
   /**
    * minimum height of the editor area:
    * true: a reasonable min height will be applied

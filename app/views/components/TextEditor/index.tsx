@@ -90,6 +90,7 @@ export const TextEditor = forwardRef(
       enableTemplateVariables = false,
       templateVariableSuggestionGroups,
       onAttachmentDropped,
+      textAlignment,
       appendix = null,
       style,
       ...props
@@ -371,6 +372,7 @@ export const TextEditor = forwardRef(
               onChange={handleChange}
               plugins={allPlugins}
               placeholder={placeholder}
+              textAlignment={textAlignment}
               ref={editorRef}
               {...DraftEditorProps}
             />

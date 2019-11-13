@@ -6,6 +6,7 @@ import { Editor } from 'grapesjs'
 import { AppTheme } from '../../../../../AppTheme'
 import { McTextEditor } from './McTextEditor'
 import { getTotalGrapeBlockContentPadding } from './utils/get-total-grape-block-content-padding'
+import { TextEditorProps } from '../../../TextEditor/types'
 
 const RTE_BLOCK_TYPE_BLACKLIST = ['mj-button', 'link']
 
@@ -80,6 +81,12 @@ export function createRichTextEditor(editor: Editor) {
 
     const padding = getTotalGrapeBlockContentPadding(el, outlineOffset)
 
+    const alignments: TextEditorProps['textAlignment'][] = [
+      'left',
+      'right',
+      'center'
+    ]
+
     ReactDom.render(
       <AppTheme>
         <div>
@@ -87,6 +94,9 @@ export function createRichTextEditor(editor: Editor) {
             ref={editorRef}
             defaultValue={defaultValue}
             onChange={updateHeight}
+            textAlignment={alignments.find(
+              alignment => alignment === computedStyle.textAlign
+            )}
             targetStyle={{
               width: Math.ceil(el.getBoundingClientRect().width),
               padding,

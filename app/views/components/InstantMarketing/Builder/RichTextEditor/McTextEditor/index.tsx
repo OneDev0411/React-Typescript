@@ -32,7 +32,8 @@ const useStyles = makeStyles(
   { name: 'McTextEditor' }
 )
 
-interface Props extends Pick<TextEditorProps, 'onChange' | 'defaultValue'> {
+interface Props
+  extends Pick<TextEditorProps, 'onChange' | 'defaultValue' | 'textAlignment'> {
   targetStyle: CSSProperties
 }
 
