@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Link as RouterLink } from 'react-router'
-import { Link } from '@material-ui/core'
+import { Link, MenuItem } from '@material-ui/core'
 
 import SplitButton from 'components/SplitButton'
-import { MenuItem } from 'components/Menu/MenuItem'
 import ALink from 'components/ALink'
 import { IAppState } from 'reducers'
 import { Divider } from 'components/Divider'
@@ -52,84 +51,83 @@ export function ImportContactsButton({ accounts, user }: Props) {
   }, [isTooltipOpen])
 
   return (
-    <ConnectGoogleButton>
-      {({ connecting, connect }) => (
-        <SplitButton
-          color="primary"
-          variant="contained"
-          popperPlacement="bottom-end"
-          disabled={connecting || syncing}
-          onClick={connect}
-          style={{ marginRight: '1rem', zIndex: 2 }}
-          renderMenu={() => (
-            <>
-              <ConnectOutlookButton>
-                {({ connect, connecting }) => (
-                  <MenuItem onClick={connect}>
+    <ConnectOutlookButton>
+      {outlook => (
+        <ConnectGoogleButton>
+          {google => (
+            <SplitButton
+              color="primary"
+              variant="contained"
+              popperPlacement="bottom-end"
+              disabled={google.connecting || syncing}
+              onClick={google.connect}
+              style={{ marginRight: '1rem', zIndex: 2 }}
+              renderMenu={() => (
+                <>
+                  <MenuItem
+                    onClick={outlook.connect}
+                    disabled={outlook.connecting}
+                  >
                     <OutlookIcon /> Import Outlook contacts
                   </MenuItem>
-                )}
-              </ConnectOutlookButton>
-              {/*
+                  {/*
               // @ts-ignore styled component `as` */}
-              <MenuItem
-                as={ALink}
-                noStyle
-                to="/dashboard/contacts/import/csv"
-                style={{
-                  height: '2.5rem',
-                  display: 'block'
-                }}
-              >
-                <CsvIcon /> Import from CSV Spreadsheet
-              </MenuItem>
-              {accounts.length > 0 && <Divider />}
-              {accounts.map(account => (
-                <MenuItem key={account.id}>
-                  <Link
-                    component={RouterLink}
-                    to="/dashboard/account/connected-accounts"
-                    color="inherit"
-                    underline="none"
+                  <MenuItem
+                    as={ALink}
+                    noStyle
+                    to="/dashboard/contacts/import/csv"
                   >
-                    <ConnectedAccount account={account} />
-                  </Link>
-                </MenuItem>
-              ))}
-            </>
-          )}
-        >
-          {/* PopOver is used here instead of tooltip, because control over showing it initially is required */}
-          <PopOver
-            placement="bottom"
-            show={isTooltipOpen}
-            popoverStyles={{ width: '350px', marginTop: '1.5rem' }}
-            caption={
-              <div>
-                <div style={{ marginTop: '0.5rem' }}>
-                  <GoogleIcon style={{ margin: '0 1rem 0 0' }} />
-                  <OutlookIcon style={{ margin: '0 1rem 0 0' }} />
-                  <CsvIcon />
-                </div>
-                <div>
+                    <CsvIcon /> Import from CSV Spreadsheet
+                  </MenuItem>
+                  {accounts.length > 0 && <Divider />}
+                  {accounts.map(account => (
+                    <MenuItem key={account.id}>
+                      <Link
+                        component={RouterLink}
+                        to="/dashboard/account/connected-accounts"
+                        color="inherit"
+                        underline="none"
+                      >
+                        <ConnectedAccount account={account} />
+                      </Link>
+                    </MenuItem>
+                  ))}
+                </>
+              )}
+            >
+              {/* PopOver is used here instead of tooltip, because control over showing it initially is required */}
+              <PopOver
+                placement="bottom"
+                show={isTooltipOpen}
+                popoverStyles={{ width: '350px', marginTop: '1.5rem' }}
+                caption={
                   <div>
-                    <h4 style={{ marginBottom: 0 }}>
-                      Sync your contacts with a simple click.
-                    </h4>
+                    <div style={{ marginTop: '0.5rem' }}>
+                      <GoogleIcon style={{ margin: '0 1rem 0 0' }} />
+                      <OutlookIcon style={{ margin: '0 1rem 0 0' }} />
+                      <CsvIcon />
+                    </div>
+                    <div>
+                      <div>
+                        <h4 style={{ marginBottom: 0 }}>
+                          Sync your contacts with a simple click.
+                        </h4>
+                      </div>
+                      Never worry, your data is always yours
+                    </div>
                   </div>
-                  Never worry, your data is always yours
+                }
+              >
+                <div>
+                  <GoogleIconWithWhiteBg size={iconSizes.small} /> Import Google
+                  Contacts
                 </div>
-              </div>
-            }
-          >
-            <div>
-              <GoogleIconWithWhiteBg size={iconSizes.small} /> Import Google
-              Contacts
-            </div>
-          </PopOver>
-        </SplitButton>
+              </PopOver>
+            </SplitButton>
+          )}
+        </ConnectGoogleButton>
       )}
-    </ConnectGoogleButton>
+    </ConnectOutlookButton>
   )
 }
 
