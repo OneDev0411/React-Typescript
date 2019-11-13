@@ -29,7 +29,7 @@ interface StateProps {
   checklists: Record<UUID, IDealChecklist>
   tasks: Record<UUID, IDealTask>
   envelopes: Record<UUID, IDealEnvelope>
-  getDealById(id: UUID | null): IDeal
+  deals: Record<UUID, IDeal>
 }
 
 interface Props extends FieldRenderProps<any> {
@@ -44,7 +44,7 @@ export function AddDealFile({
   tasks,
   checklists,
   envelopes,
-  getDealById,
+  deals,
   onChanged = () => {},
   ...props
 }: Props & StateProps) {
@@ -54,7 +54,7 @@ export function AddDealFile({
     props.deal ? props.deal.id : null
   )
 
-  const deal = getDealById(selectedDealId)
+  const deal = selectDealById(deals, selectedDealId)
 
   const handleClick = event => {
     setDealsListOpen(!selectedDealId)
@@ -173,9 +173,9 @@ export function AddDealFile({
 
 export default connect(
   ({ deals: { list, checklists, tasks, envelopes } }: IAppState) => ({
+    deals: list,
     checklists,
     tasks,
-    envelopes,
-    getDealById: selectDealById.bind(null, list)
+    envelopes
   })
 )(AddDealFile)

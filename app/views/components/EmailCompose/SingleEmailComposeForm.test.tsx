@@ -33,7 +33,12 @@ describe('BulkEmailComposeForm', () => {
     const $ = render(
       <TestBed
         reduxState={{
-          deals: { roles: keyBy([role], 'id'), checklists, tasks }
+          deals: {
+            list: { [deal.id]: deal },
+            roles: keyBy([role], 'id'),
+            checklists,
+            tasks
+          }
         }}
       >
         <SingleEmailComposeForm
