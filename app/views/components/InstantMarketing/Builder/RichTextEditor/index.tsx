@@ -19,12 +19,13 @@ export function createRichTextEditor(editor: Editor) {
   const richTextEditor: any = editor.RichTextEditor
   const $toolbar = richTextEditor.getToolbarEl()
 
+  const toolbarOffset = 41
+
   $toolbar.innerHTML = ''
   $toolbar.style.backgroundColor = 'transparent'
   $toolbar.style.border = 'none'
   $toolbar.style.pointerEvents = 'none'
   // 67 is the editor toolbar height. we want it to be on top of the element
-  $toolbar.style.marginTop = '-41px'
 
   const editorRef = createRef<any>()
   let elementColor: string | null = null
@@ -33,6 +34,12 @@ export function createRichTextEditor(editor: Editor) {
 
   editor.on('rteToolbarPosUpdate', pos => {
     pos.left = pos.elementLeft - pos.canvasLeft - borderWidth - outlineOffset
+
+    // This is for when element exits from the top. Note that it seems it's not
+    // possible to handle it with `pos.top`
+    const topOffsetFix = pos.canvasTop >= pos.elementTop ? pos.elementHeight : 0
+
+    $toolbar.style.marginTop = `${-(toolbarOffset + topOffsetFix)}px`
     pos.top = pos.elementTop - borderWidth - outlineOffset
   })
 
@@ -75,14 +82,15 @@ export function createRichTextEditor(editor: Editor) {
 
     ReactDom.render(
       <AppTheme>
-        <div style={inheritedStyles}>
+        <div>
           <McTextEditor
             ref={editorRef}
             defaultValue={defaultValue}
             onChange={updateHeight}
             targetStyle={{
               width: Math.ceil(el.getBoundingClientRect().width),
-              padding
+              padding,
+              ...inheritedStyles
             }}
           />
           <style>
