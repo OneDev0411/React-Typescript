@@ -7,7 +7,7 @@ import { AppTheme } from '../../../../../AppTheme'
 import { McTextEditor } from './McTextEditor'
 import { getTotalGrapeBlockContentPadding } from './utils/get-total-grape-block-content-padding'
 
-const RTE_BLOCK_TYPE_BLACKLIST = ['mj-button']
+const RTE_BLOCK_TYPE_BLACKLIST = ['mj-button', 'link']
 
 function shouldOfferRTE(grapeBlockEl: HTMLElement) {
   return !RTE_BLOCK_TYPE_BLACKLIST.includes(
