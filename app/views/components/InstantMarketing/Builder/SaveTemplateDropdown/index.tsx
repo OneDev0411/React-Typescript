@@ -17,28 +17,7 @@ import { Icon } from 'components/Dropdown'
 import { saveTemplate } from 'models/instant-marketing/save-template'
 import { getActiveTeamId } from 'utils/user-teams'
 
-const CATEGORIES = [
-  {
-    name: 'Select Category',
-    value: 'none'
-  },
-  {
-    name: 'Occasions',
-    value: 'Birthday'
-  },
-  {
-    name: 'Brand Campaigns',
-    value: 'Brand'
-  },
-  {
-    name: 'Holiday',
-    value: 'OtherHoliday'
-  },
-  {
-    name: 'New Agent',
-    value: 'NewAgent'
-  }
-]
+import { CATEGORIES } from './constants'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -49,7 +28,6 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.grey[100]
   },
   saveAsContainer: {
-    // zIndex: 1111,
     marginRight: theme.spacing(1),
     marginLeft: theme.spacing(1)
   },
@@ -58,13 +36,13 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-interface SaveTemplateProps {
+interface Props {
   medium: string
   inputs: string[]
-  user: any
+  user: IUser
 }
 
-function SaveTemplateDropdown(props: SaveTemplateProps) {
+function SaveTemplateDropdown(props: Props) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null)
   const [selectedCategory, setSelectedCategory] = React.useState('none')
   const [templateName, setTemplateName] = React.useState('')
