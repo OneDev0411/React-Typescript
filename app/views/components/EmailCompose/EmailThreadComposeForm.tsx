@@ -9,7 +9,10 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { sendEmailViaOauthAccount } from 'models/o-auth-accounts/send-email-via-o-auth-account'
 import { IAppState } from 'reducers'
-import { IOauthAccountsState } from 'reducers/contacts/oAuthAccounts'
+import {
+  IOauthAccountsState,
+  selectAllConnectedAccounts
+} from 'reducers/contacts/oAuthAccounts'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
 import {
@@ -111,25 +114,20 @@ function EmailThreadComposeForm({
     )
   })
 
-  const getAllAccounts = useCallback(() => {
-    return Object.values(oAuthAccounts.list)
-      .flat()
-      .filter(account => !account.revoked)
-  }, [oAuthAccounts.list])
+  const allAccounts = selectAllConnectedAccounts(oAuthAccounts)
 
   const getFromAccount = useCallback(
-    (accountId: UUID) =>
-      getAllAccounts().find(account => account.id === accountId),
-    [getAllAccounts]
+    (accountId: UUID) => allAccounts.find(account => account.id === accountId),
+    [allAccounts]
   )
 
   const fromOptions: EmailFormValues['from'][] = useMemo(
     () =>
-      getAllAccounts().map(account => ({
+      allAccounts.map(account => ({
         label: `${account.display_name} <${account.email}>`,
         value: account.id
       })),
-    [getAllAccounts]
+    [allAccounts]
   )
 
   const isSubmitDisabled = useCallback(
