@@ -1,3 +1,4 @@
+import { compare } from 'utils/helpers'
 import { getReminderItem } from 'views/utils/reminder'
 import {
   normalizeListing,
@@ -81,19 +82,7 @@ export async function postLoadFormat(task, owner, listings) {
     clients,
     dueDate: new Date(dueDate),
     endDate,
-    locations: locations.sort(sortLocationsByIndex),
+    locations: locations.sort((a, b) => compare(a.index, b.index)),
     reminder
   }
-}
-
-function sortLocationsByIndex(a, b) {
-  if (a < b) {
-    return -1
-  }
-
-  if (a > b) {
-    return 1
-  }
-
-  return 0
 }
