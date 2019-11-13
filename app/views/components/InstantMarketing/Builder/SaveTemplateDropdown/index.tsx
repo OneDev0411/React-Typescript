@@ -1,9 +1,6 @@
 import React from 'react'
 import {
-  ClickAwayListener,
-  Paper,
   Box,
-  Popper,
   InputBase,
   FormControl,
   Select,
@@ -13,6 +10,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import ActionButton from 'components/Button/ActionButton'
 import { Icon } from 'components/Dropdown'
+import { BaseDropdown } from 'components/BaseDropdown'
 
 import { saveTemplate } from 'models/instant-marketing/save-template'
 import { getActiveTeamId } from 'utils/user-teams'
@@ -43,12 +41,10 @@ interface Props {
 }
 
 function SaveTemplateDropdown(props: Props) {
-  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null)
   const [selectedCategory, setSelectedCategory] = React.useState('none')
   const [templateName, setTemplateName] = React.useState('')
   const classes = useStyles()
   const activeTeamId = getActiveTeamId(props.user)
-  const isOpen = Boolean(anchorEl)
   const save = () => {
     saveTemplate({
       name: templateName,
@@ -61,75 +57,62 @@ function SaveTemplateDropdown(props: Props) {
 
   return (
     <div className={classes.saveAsContainer}>
-      <ActionButton
-        appearance="outline"
-        size="medium"
-        inverse
-        onClick={event => setAnchorEl(anchorEl ? null : event.currentTarget)}
-      >
-        <span>Save As</span>
-        <Icon isOpen={isOpen} />
-      </ActionButton>
-      <Popper
-        open={isOpen}
-        anchorEl={anchorEl}
-        placement="bottom-end"
-        className={classes.modalContainer}
-      >
-        <ClickAwayListener
-          onClickAway={e => {
-            const target = e.target as HTMLElement
-
-            if (target && target.id && target.id.startsWith('cat-')) {
-              return
-            }
-
-            setAnchorEl(null)
-          }}
-        >
-          <Paper>
-            <Box p={2}>
-              <InputBase
-                placeholder="Template Name"
-                classes={{ root: classes.root, input: classes.input }}
-                fullWidth
-                value={templateName}
+      <BaseDropdown
+        PopperProps={{ keepMounted: true }}
+        renderDropdownButton={buttonProps => (
+          <ActionButton
+            appearance="outline"
+            size="medium"
+            inverse
+            {...buttonProps}
+          >
+            <span>Save As</span>
+            <Icon isOpen={buttonProps.isActive} />
+          </ActionButton>
+        )}
+        renderMenu={() => (
+          <Box p={2}>
+            <InputBase
+              placeholder="Template Name"
+              classes={{ root: classes.root, input: classes.input }}
+              fullWidth
+              value={templateName}
+              onChange={e => {
+                setTemplateName(e.target.value)
+              }}
+            />
+            <FormControl classes={{ root: classes.root }} fullWidth>
+              <Select
+                classes={{ select: classes.input }}
+                value={selectedCategory}
                 onChange={e => {
-                  setTemplateName(e.target.value)
+                  setSelectedCategory(e.target.value as string)
                 }}
-              />
-              <FormControl classes={{ root: classes.root }} fullWidth>
-                <Select
-                  classes={{ select: classes.input }}
-                  value={selectedCategory}
-                  onChange={e => {
-                    setSelectedCategory(e.target.value as string)
-                  }}
-                >
-                  {CATEGORIES.map((cat, index) => (
-                    <MenuItem
-                      key={cat.value}
-                      value={cat.value}
-                      id={`cat-${index}`}
-                    >
-                      {cat.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <div>
-                <ActionButton
-                  appearance="primary"
-                  onClick={save}
-                  disabled={selectedCategory === 'none' || !templateName}
-                >
-                  Save
-                </ActionButton>
-              </div>
-            </Box>
-          </Paper>
-        </ClickAwayListener>
-      </Popper>
+              >
+                {CATEGORIES.map((cat, index) => (
+                  <MenuItem
+                    key={cat.value}
+                    value={cat.value}
+                    id={`cat-${index}`}
+                    onClick={e => e.stopPropagation()}
+                  >
+                    {cat.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <div>
+              <ActionButton
+                appearance="primary"
+                onClick={save}
+                disabled={selectedCategory === 'none' || !templateName}
+              >
+                Save
+              </ActionButton>
+            </div>
+          </Box>
+        )}
+      />
     </div>
   )
 }
