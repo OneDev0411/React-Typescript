@@ -22,6 +22,14 @@ export const SECTIONS = [
     title: 'Life',
     items: [
       {
+        title: 'Layouts',
+        link: urlGenerator('/Layout')
+      },
+      {
+        title: 'Listings Layouts',
+        link: urlGenerator('/ListingLayout')
+      },
+      {
         title: 'Occasions',
         link: urlGenerator('/Birthday')
       },

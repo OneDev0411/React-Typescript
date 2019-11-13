@@ -15,7 +15,9 @@ function Item(props) {
   const { template } = props
   const [isDeleting, setDeleting] = useState(false)
   const brokerageBrand = getBrandByType(props.user, 'Brokerage')
+
   const { thumbnail } = getTemplateImage(template, brokerageBrand)
+
   const isInstance = template.type === 'template_instance'
   const gridClassNames = ['grid-item']
   let handleOnPreview = () => props.handlePreview(template)
