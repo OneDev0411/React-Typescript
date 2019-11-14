@@ -3,9 +3,8 @@ import { Slider } from '@material-ui/core'
 
 import { ItemTitle, ItemContainer } from '../styled'
 
-// const MAX_VALUE = 100
-// const MIN_VALUE = 2
-// const STEP = 2
+const MAX_VALUE = 100
+const MIN_VALUE = 2
 
 interface Props {
   title?: string
@@ -34,8 +33,8 @@ export default function FontSizePicker({
     <ItemContainer>
       <ItemTitle>{title}</ItemTitle>
       <Slider
-        min={2}
-        max={72}
+        min={MIN_VALUE}
+        max={MAX_VALUE}
         valueLabelDisplay="auto"
         value={fontSizeValue}
         onChange={handleSliderChange}
