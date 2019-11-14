@@ -3,5 +3,6 @@ export const ACL: Record<string, IPermission> = {
   ADMIN: 'Admin',
   DEALS: 'Deals',
   BACK_OFFICE: 'BackOffice',
-  MARKETING: 'Marketing'
+  MARKETING: 'Marketing',
+  BETA: 'BetaFeatures'
 }
