@@ -123,11 +123,22 @@ function EmailThreadComposeForm({
 
   const fromOptions: EmailFormValues['from'][] = useMemo(
     () =>
-      allAccounts.map(account => ({
-        label: `${account.display_name} <${account.email}>`,
-        value: account.id
-      })),
-    [allAccounts]
+      allAccounts
+        .map(account => ({
+          label: `${account.display_name} <${account.email}>`,
+          value: account.id
+        }))
+        // This filter is added in response to Saeed's request. Right now
+        // we have some issues in replying with an account other than
+        // the one by which the thread is started. We should remove
+        // this filtering when this issue is resolved.
+        .filter(
+          account =>
+            !props.initialValues ||
+            !props.initialValues.from ||
+            props.initialValues.from.value === account.value
+        ),
+    [allAccounts, props.initialValues]
   )
 
   const isSubmitDisabled = useCallback(
