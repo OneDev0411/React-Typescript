@@ -15,6 +15,7 @@ import ImageDrawer from 'components/ImageDrawer'
 import GifDrawer from 'components/GifDrawer'
 import VideoDrawer from 'components/VideoDrawer'
 import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
+// import SaveTemplateDropdown from './SaveTemplateDropdown'
 
 import { getActiveTeam } from 'utils/user-teams'
 
@@ -706,7 +707,10 @@ class Builder extends React.Component {
 
     return (
       <Portal root="marketing-center">
-        <Container className="template-builder">
+        <Container
+          className="template-builder"
+          style={this.props.containerStyle}
+        >
           {this.state.isListingDrawerOpen && (
             <SearchListingDrawer
               mockListings
@@ -831,6 +835,19 @@ class Builder extends React.Component {
                   }}
                   variant="outlined"
                   color="secondary"
+                />
+              )}
+              {/* This is disabled due some server issues */}
+              {/* <SaveTemplateDropdown
+                medium={this.state.selectedTemplate.medium}
+                inputs={this.state.selectedTemplate.inputs}
+                user={this.props.user}
+              /> */}
+
+              {this.ShowEditListingsButton && !this.props.isEdit && (
+                <Button
+                  style={{ marginLeft: '0.5rem' }}
+                  appearance="outline"
                   onClick={this.props.onShowEditListings}
                 >
                   Edit Listings ({this.props.templateData.listings.length})

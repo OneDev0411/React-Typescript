@@ -45,7 +45,8 @@ InstantMarketing.propTypes = {
   templateTypes: PropTypes.array,
   mediums: PropTypes.string,
   assets: PropTypes.array,
-  defaultTemplate: PropTypes.any
+  defaultTemplate: PropTypes.any,
+  containerStyle: PropTypes.object
 }
 
 InstantMarketing.defaultProps = {
@@ -55,7 +56,8 @@ InstantMarketing.defaultProps = {
   templateTypes: [],
   mediums: '',
   assets: [],
-  defaultTemplate: null
+  defaultTemplate: null,
+  containerStyle: {}
 }
 
 export default connect(

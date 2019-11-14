@@ -1,9 +1,9 @@
-import React, { useContext, useRef } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 
 import Modal from '../BareModal'
 
 import ActionBar from './ActionBar'
-import UserEntry from './UserEntry'
+import { UserEntry } from './UserEntry'
 import ConfirmationModalContext from './context'
 import { initialConfirmationModal } from './context/initial-confirmation-modal'
 /*
@@ -16,8 +16,13 @@ import { initialConfirmationModal } from './context/initial-confirmation-modal'
 function ConfirmationModal() {
   const confirmation = useContext(ConfirmationModalContext)
 
-  // Refs
-  const entryInputRef = useRef(null)
+  const [userEntry, setUserEntry] = useState('')
+
+  useEffect(() => {
+    if (confirmation.isShow) {
+      setUserEntry(confirmation.inputDefaultValue)
+    }
+  }, [confirmation.inputDefaultValue, confirmation.isShow])
 
   // Callbacks
   const handleCancel = () => {
@@ -30,10 +35,8 @@ function ConfirmationModal() {
   }
 
   const handleConfirm = () => {
-    const userValue = entryInputRef.current ? entryInputRef.current.value : ''
-
     if (confirmation.onConfirm) {
-      confirmation.onConfirm(userValue)
+      confirmation.onConfirm(userEntry.trim())
     }
 
     // reset context values
@@ -68,14 +71,17 @@ function ConfirmationModal() {
           )}
 
           <UserEntry
-            isShow={confirmation.needsUserEntry}
-            inputDefaultValue={confirmation.inputDefaultValue}
+            value={userEntry}
+            show={confirmation.needsUserEntry}
             inputPlaceholder={confirmation.inputPlaceholder}
-            multilineEntry={confirmation.multilineEntry}
-            ref={entryInputRef}
+            multiline={confirmation.multilineEntry}
+            onChange={setUserEntry}
           />
 
           <ActionBar
+            submitDisabled={
+              confirmation.needsUserEntry && userEntry.trim().length === 0
+            }
             confirmation={confirmation}
             onCancel={handleCancel}
             onConfirm={handleConfirm}

@@ -19,7 +19,13 @@ TourSheets.propTypes = {
 export function TourSheets(props) {
   const { tour, listings, handleClose } = props
   const pageTitle = 'Tour Sheets Preview'
-  const agent = (tour && tour.created_by) || props.agent
+  let agent = tour && tour.created_by
+
+  if (!agent || agent.id === props.agent.id) {
+    agent = props.agent
+  } else if (agent && agent.active_brand === props.agent.active_brand) {
+    agent.teams = props.agent.teams
+  }
 
   return (
     <BareModal

@@ -1,5 +1,7 @@
 export const TYPES_TITLE = {
   AsSeenIn: 'As Seen In',
+  Layout: 'Layout',
+  ListingLayout: 'Listing Layout',
   Birthday: 'Occasions',
   Brand: 'Brand Campaigns',
   ComingSoon: 'Coming Soon',

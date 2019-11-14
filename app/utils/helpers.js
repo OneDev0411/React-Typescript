@@ -1,17 +1,20 @@
 export function sortAlphabetically(a, b) {
-  const _a = a.toLowerCase()
-  const _b = b.toLowerCase()
+  return compare(a.toLowerCase(), b.toLowerCase())
+}
 
-  if (_a < _b) {
-    return -1
+export function compare(a, b) {
+  if (a < b) {
+    return -1;
   }
-
-  if (_a > _b) {
-    return 1
+  if (a > b) {
+    return 1;
   }
-
   // a must be equal to b
-  return 0
+  return 0;
+}
+
+export function compareNumbers(a, b) {
+  return a - b;
 }
 
 export function joinItemsWithString(items = [], string = ', ') { 

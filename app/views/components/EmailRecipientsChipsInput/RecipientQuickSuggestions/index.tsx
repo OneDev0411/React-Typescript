@@ -5,11 +5,12 @@ import { Box } from '@material-ui/core'
 import { IAppState } from 'reducers'
 import { getBrandByType } from 'utils/user-teams'
 import { selectDealRoles } from 'reducers/deals/roles'
-import { getLegalFullName } from 'deals/utils/roles'
 
 import { RecipientQuickSuggestion } from '../RecipientQuickSuggestion'
 import { recipientToString } from '../helpers/recipient-to-string'
 import { areRecipientsEqual } from '../helpers/are-recipients-equal'
+import { dealRoleToSuggestion } from '../helpers/deal-role-to-suggestion'
+import { QuickSuggestion } from '../types'
 
 interface StateProps {
   user: IUser
@@ -24,12 +25,6 @@ interface OwnProps extends StateProps {
   ) => void
 }
 type Props = OwnProps & StateProps
-
-interface QuickSuggestion {
-  recipient: IDenormalizedEmailRecipientInput
-  text?: string
-  sendType?: IEmailRecipientSendType
-}
 
 export const RecipientQuickSuggestions = connect<StateProps, OwnProps>(
   ({ user, deals }: IAppState, props: OwnProps) => ({
@@ -91,14 +86,4 @@ export const RecipientQuickSuggestions = connect<StateProps, OwnProps>(
 
 function hasEmail(dealRole: IDealRole): boolean {
   return !!dealRole.email
-}
-
-function dealRoleToSuggestion(dealRole: IDealRole): QuickSuggestion {
-  return {
-    recipient: {
-      recipient_type: 'Email',
-      email: dealRole.email
-    },
-    text: `${getLegalFullName(dealRole)} (${dealRole.role})`
-  }
 }

@@ -1,23 +1,49 @@
 import { RefObject } from 'react'
 import PluginsEditor from 'draft-js-plugins-editor'
 import { convertToRaw, EditorState } from 'draft-js'
-import { stateFromHTML } from 'draft-js-import-html'
-import { stateToHTML } from 'draft-js-export-html'
+import {
+  Options as StateFromHtmlOptions,
+  stateFromHTML
+} from 'draft-js-import-html'
+import {
+  Options as StateToHtmlOptions,
+  stateToHTML
+} from 'draft-js-export-html'
 
 export const createEditorRef = ({
   editorElementRef,
   editorRef,
-  setEditorState,
-  stateToHtmlOptions
+  handleChange,
+  stateToHtmlOptions,
+  stateFromHtmlOptions
 }: {
   editorElementRef: RefObject<HTMLElement>
   editorRef: RefObject<PluginsEditor>
-  setEditorState: (editorState: EditorState) => void
-  stateToHtmlOptions: any
+  handleChange: (editorState: EditorState) => void
+  stateToHtmlOptions: StateToHtmlOptions
+  stateFromHtmlOptions: StateFromHtmlOptions
 }) => () => ({
   // convenient method for resetting editor html content
   reset: (html = '') => {
-    setEditorState(EditorState.createWithContent(stateFromHTML(html)))
+    handleChange(
+      EditorState.createWithContent(stateFromHTML(html, stateFromHtmlOptions))
+    )
+  },
+  /**
+   * update is different from reset, in that it keeps states other than
+   * current content, like the undo/redo stack
+   * @param html
+   */
+  update: (html = '') => {
+    if (editorRef.current) {
+      handleChange(
+        EditorState.push(
+          editorRef.current.getEditorState(),
+          stateFromHTML(html, stateFromHtmlOptions),
+          'insert-fragment'
+        )
+      )
+    }
   },
   // convenient method for getting plain text of the editor content
   getPlainText: () => {

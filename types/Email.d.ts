@@ -4,6 +4,7 @@ declare type IEmailRecipientType =
   | 'Email'
   | 'Brand'
   | 'AllContacts'
+  | 'Agent'
 
 declare interface IEmailRecipientInputBase<T extends IEmailRecipientType> {
   recipient_type: T
@@ -25,6 +26,11 @@ declare interface IEmailRecipientBrandInput
   extends IEmailRecipientInputBase<'Brand'> {
   brand: UUID
 }
+
+declare interface IEmailRecipientAgentInput
+  extends IEmailRecipientInputBase<'Agent'> {
+  agent: UUID
+}
 declare interface IEmailRecipientAllContactsInput
   extends IEmailRecipientInputBase<'AllContacts'> {}
 
@@ -34,8 +40,13 @@ declare type IEmailRecipientInput =
   | IEmailRecipientTagInput
   | IEmailRecipientAllContactsInput
   | IEmailRecipientBrandInput
+  | IEmailRecipientAgentInput
 
-declare type IEmailCampaignRecipientAssociation = 'contact' | 'list' | 'brand'
+declare type IEmailCampaignRecipientAssociation =
+  | 'contact'
+  | 'list'
+  | 'brand'
+  | 'agent'
 
 type IEmailRecipientSendType = 'CC' | 'BCC' | 'To'
 
@@ -56,7 +67,8 @@ declare type IEmailRecipient<
   updated_at: null | string
 } & Association<'contact', IContact, Associations> &
   Association<'list', IContactList, Associations> &
-  Association<'brand', IBrand, Associations>
+  Association<'brand', IBrand, Associations> &
+  Association<'agent', IAgent, Associations>
 
 declare interface IEmailCampaignInputBase {
   due_at: Date | null
@@ -147,6 +159,7 @@ declare type IDenormalizedEmailRecipientInput =
   | IDenormalizedEmailRecipientTagInput
   | IEmailRecipientAllContactsInput
   | IDenormalizedEmailRecipientBrandInput
+  | IDenormalizedEmailRecipientDealAgentInput
 
 declare interface IDenormalizedEmailRecipientEmailInput
   extends Omit<IEmailRecipientEmailInput, 'contact'> {
@@ -166,4 +179,9 @@ declare interface IDenormalizedEmailRecipientTagInput
 declare interface IDenormalizedEmailRecipientBrandInput
   extends Omit<IEmailRecipientBrandInput, 'brand'> {
   brand: IBrand
+}
+
+declare interface IDenormalizedEmailRecipientDealAgentInput
+  extends Omit<IEmailRecipientAgentInput, 'agent'> {
+  agent: IAgent
 }

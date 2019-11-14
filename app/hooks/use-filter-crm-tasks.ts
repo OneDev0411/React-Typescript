@@ -18,7 +18,7 @@ interface Query {
 interface FilterCRMTasks {
   error: string
   isFetching: boolean
-  list: ICRMTask[]
+  list: ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>[]
   reloadList: () => Promise<void>
 }
 

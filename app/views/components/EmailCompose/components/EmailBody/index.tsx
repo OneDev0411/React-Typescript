@@ -3,12 +3,11 @@ import React, {
   forwardRef,
   Fragment,
   ReactNode,
-  Ref,
+  RefObject,
   useCallback,
   useState
 } from 'react'
 import { Field, FieldProps } from 'react-final-form'
-import PluginsEditor from 'draft-js-plugins-editor'
 import { connect } from 'react-redux'
 
 import { TextEditor } from 'components/TextEditor'
@@ -20,7 +19,7 @@ import { UploadAttachment } from 'components/EmailCompose/fields/UploadAttachmen
 
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
 import { defaultTemplateVariableSuggestions } from '../../default-template-variable-suggestions'
-import { TextEditorProps } from '../../../TextEditor/types'
+import { TextEditorProps, TextEditorRef } from '../../../TextEditor/types'
 
 interface Props {
   content?: string
@@ -31,7 +30,7 @@ interface Props {
   FieldProps?: Partial<FieldProps<any>>
   signature: string
   DraftEditorProps?: TextEditorProps['DraftEditorProps']
-  editorRef?: Ref<PluginsEditor>
+  editorRef?: RefObject<TextEditorRef>
   /**
    * we receive attachments as a prop, instead of rendering it after the email
    * body, to include it in the scroll area of the email content
@@ -133,7 +132,10 @@ const ConnectedBody = connect(({ user }: IAppState) => ({
 }))(EmailBody)
 
 export default forwardRef(
-  (props: ComponentProps<typeof ConnectedBody>, ref: Ref<PluginsEditor>) => {
+  (
+    props: ComponentProps<typeof ConnectedBody>,
+    ref: RefObject<TextEditorRef>
+  ) => {
     return <ConnectedBody {...props} editorRef={ref} />
   }
 )

@@ -4,24 +4,33 @@ import Card from '../Card'
 import { grey, primary } from '../../utils/colors'
 
 // modes
+const sharedModeStyles = css`
+  position: absolute;
+  z-index: 1;
+  overflow: hidden;
+`
 const topRightMode = css`
+  ${sharedModeStyles}
   top: -8px;
   right: 0;
   transform: translateY(-100%);
 `
 
 const topLeftMode = css`
+  ${sharedModeStyles}
   top: -8px;
   left: 0;
   transform: translateY(-100%);
 `
 
 const bottomLeftMode = css`
+  ${sharedModeStyles}
   left: 0;
   top: 3px;
 `
 
 const bottomRightMode = css`
+  ${sharedModeStyles}
   right: 0;
   top: 3px;
 `
@@ -38,7 +47,7 @@ function popUpPositionStyle(props) {
     case 'bottom-right':
       return bottomRightMode
     default:
-      return bottomLeftMode
+      return ''
   }
 }
 
@@ -53,9 +62,6 @@ export const PickerContent = styled.div`
 `
 
 export const PickerContainer = styled(Card)`
-  position: absolute;
-  z-index: 1;
-  overflow: hidden;
   padding: 0.5em;
   ${popUpPositionStyle}
 

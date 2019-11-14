@@ -10,9 +10,10 @@ import styles from './styles'
 
 interface Props {
   event: ICalendarEvent
+  onEventChange(event: IEvent, type: string): void
 }
 
-export function Associations({ event }: Props) {
+export function Associations({ event, onEventChange }: Props) {
   const { setSelectedEvent } = useContext(ListContext)
 
   if (!event.people) {
@@ -29,10 +30,15 @@ export function Associations({ event }: Props) {
   return (
     <span>
       {preposition}{' '}
-      {contacts.map((item, index) => (
+      {contacts.map((item: IContact, index: number) => (
         <React.Fragment key={index}>
           {index !== 0 && <>,&nbsp;</>}
-          <MiniContactProfile as="span" data={item} type="event">
+          <MiniContactProfile
+            as="span"
+            data={item}
+            type="event"
+            onEventChange={onEventChange}
+          >
             <a
               onClick={e => e.stopPropagation()}
               target="_blank"

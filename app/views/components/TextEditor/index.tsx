@@ -1,5 +1,4 @@
 import React, {
-  ComponentProps,
   forwardRef,
   useContext,
   useEffect,
@@ -11,8 +10,6 @@ import React, {
 import Dropzone from 'react-dropzone'
 import { ContentBlock, Editor as DraftEditor, EditorState } from 'draft-js'
 import PluginsEditor from 'draft-js-plugins-editor'
-import 'draft-js-image-plugin/lib/plugin.css'
-import 'draft-js-alignment-plugin/lib/plugin.css'
 import { stateToHTML } from 'draft-js-export-html'
 import { stateFromHTML } from 'draft-js-import-html'
 import cn from 'classnames'
@@ -33,8 +30,11 @@ import { AddImageButton } from './buttons/AddImageButton'
 import { RichTextButtons } from './buttons/RichTextButtons'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
 import { updateEntityData } from './modifiers/update-entity-data'
-import { DraftJsSelectionPopover } from './components/DraftJsSelectionPopover'
-import { LinkPreview } from './components/LinkPreview/LinkPreview'
+import {
+  DraftJsSelectionPopover,
+  SelectionPopoverRenderProps
+} from './components/DraftJsSelectionPopover'
+import { LinkPreview } from './components/LinkPreview'
 import { Checkbox } from '../Checkbox'
 import { TextEditorProps } from './types'
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
@@ -49,6 +49,7 @@ import { getSelectedAtomicBlock } from './utils/get-selected-atomic-block'
 import { styles } from './styles'
 import { getImageDimensions } from './utils/get-image-dimensions'
 import { getImageSizeOptions } from './utils/get-image-size-options'
+import { InlineImageToolbar } from './components/ImageInlineToolbar'
 
 const useStyles = makeStyles(styles, { name: 'TextEditor' })
 
@@ -138,6 +139,7 @@ export const TextEditor = forwardRef(
       resizeablePlugin,
       linkPlugins,
       signaturePlugin,
+      templateExpressionPlugin,
       richButtonsPlugin,
       ...otherPlugins
     } = useMemo(
@@ -169,17 +171,6 @@ export const TextEditor = forwardRef(
     const [editorState, setEditorState] = useState(getInitialState)
 
     editorStateRef.current = editorState
-
-    useImperativeHandle(
-      ref,
-      createEditorRef({
-        editorElementRef,
-        editorRef,
-        setEditorState,
-        stateToHtmlOptions
-      }),
-      [stateToHtmlOptions]
-    )
 
     useEffect(() => {
       const pluginsEditor = editorRef.current
@@ -219,6 +210,18 @@ export const TextEditor = forwardRef(
 
       setTimeout(() => (input ? input.onChange(html) : onChange(html)))
     }
+
+    useImperativeHandle(
+      ref,
+      createEditorRef({
+        editorElementRef,
+        editorRef,
+        handleChange,
+        stateToHtmlOptions,
+        stateFromHtmlOptions
+      }),
+      [stateToHtmlOptions]
+    )
 
     /**
      * Adds an image to the editor from a URL or dataURL. if it's a dataUrl
@@ -303,6 +306,7 @@ export const TextEditor = forwardRef(
             imagePlugin
           ]
         : []),
+      templateExpressionPlugin,
       ...(enableSignature ? [signaturePlugin] : [])
     ]
 
@@ -334,6 +338,20 @@ export const TextEditor = forwardRef(
       }
     }
 
+    const handlerWrapperClick = e => {
+      // It's important to check if it's the wrapper which is clicked
+      // and don't call focus when an inner element is clicked, as it
+      // leads to very buggy behavior. For example if atomic block is focused
+      // and something (like resizing image with resize dropdown) causes
+      // this code to run the editor's focus, it goes to a buggy state
+      // in which nothing will unselect the atomic block. The only way
+      // to escape this buggy condition in this case is to blur and
+      // focus again the editor
+      if (e.target === editorElementRef.current) {
+        editorRef.current && editorRef.current.focus()
+      }
+    }
+
     return (
       <EditorContainer className={className}>
         <EditorWrapper
@@ -341,7 +359,7 @@ export const TextEditor = forwardRef(
           className={cn({
             'hide-placeholder': shouldHidePlaceholder(editorState)
           })}
-          onClick={() => editorRef.current && editorRef.current.focus()}
+          onClick={handlerWrapperClick}
           data-test="text-editor-wrapper"
         >
           {/* I wish we had upgraded Dropzone to use the hook version :( */}
@@ -389,13 +407,7 @@ export const TextEditor = forwardRef(
                 inlineEntityFilter="LINK"
                 blockFilter={isBlockLinked}
               >
-                {({
-                  entity,
-                  close,
-                  block
-                }: Parameters<
-                  ComponentProps<typeof DraftJsSelectionPopover>['children']
-                >[0]) => (
+                {({ entity, close, block }: SelectionPopoverRenderProps) => (
                   <LinkPreview
                     editorState={editorState}
                     setEditorState={handleChange}
@@ -409,6 +421,12 @@ export const TextEditor = forwardRef(
                   />
                 )}
               </DraftJsSelectionPopover>
+            )}
+            {imagePlugin && (
+              <InlineImageToolbar
+                editorState={editorState}
+                setEditorState={handleChange}
+              />
             )}
             {appendix}
           </Dropzone>
@@ -465,7 +483,6 @@ export const TextEditor = forwardRef(
             </Box>
           )}
         </Toolbar>
-        <alignmentPlugin.AlignmentTool />
         {input && <FieldError name={input.name} />}
       </EditorContainer>
     )

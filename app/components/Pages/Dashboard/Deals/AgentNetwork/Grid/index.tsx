@@ -10,6 +10,8 @@ import { Company } from './columns/Company'
 import { ContactInfo } from './columns/ContactInfo'
 import { ListingsListViewDrawer } from './ListingsListViewDrawer'
 
+import { IDealAgent } from '../types'
+
 const buttonStyle = {
   padding: '0.25rem 0 1rem',
   height: 'auto',
@@ -21,7 +23,7 @@ interface State {
   selectedAgent: null | any
 }
 interface Props {
-  data: IAgent[]
+  data: IDealAgent[]
   deal: IDeal
   isFetching: boolean
 }
@@ -43,7 +45,9 @@ export class Grid extends React.Component<Props, State> {
       }
     })
 
-  getRecipients = (selectedRows: string[]) => {
+  getRecipients = (
+    selectedRows: UUID[]
+  ): IDenormalizedEmailRecipientDealAgentInput[] => {
     const { data } = this.props
 
     if (
@@ -56,10 +60,12 @@ export class Grid extends React.Component<Props, State> {
     }
 
     return data
-      .filter(agent => selectedRows.includes(agent.id) && agent.email)
-      .map(agent => ({
-        recipient_type: 'Email',
-        email: agent.email
+      .filter(
+        item => item.agent && selectedRows.includes(item.id) && item.email
+      )
+      .map(item => ({
+        recipient_type: 'Agent',
+        agent: item.agent
       }))
   }
 

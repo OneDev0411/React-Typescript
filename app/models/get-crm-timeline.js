@@ -18,7 +18,7 @@ async function getCRMTimeline(query = {}, associations = []) {
       range: [low, high],
       filter: {
         ...query,
-        object_types: ['crm_association', 'email_campaign_recipient']
+        object_types: ['crm_association', 'email_campaign']
       },
       associations: [
         ...CRM_TASKS_QUERY.associations,

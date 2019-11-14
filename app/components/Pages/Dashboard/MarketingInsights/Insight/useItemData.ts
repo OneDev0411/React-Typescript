@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import getCampaing from '../../../../../models/insights/emails/get-campaign-by-id'
+import getCampaign from '../../../../../models/insights/emails/get-campaign-by-id'
 
 function useItemData(id) {
   const [isLoading, setLoading] = useState<boolean>(true)
@@ -8,7 +8,7 @@ function useItemData(id) {
   const [item, setItem] = useState<IInsight | null>(null)
 
   useEffect(() => {
-    getCampaing(id)
+    getCampaign(id)
       .then(data => {
         setError(false)
         setLoading(false)
