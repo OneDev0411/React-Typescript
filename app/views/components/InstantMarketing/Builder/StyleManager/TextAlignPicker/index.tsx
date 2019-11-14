@@ -1,61 +1,77 @@
 import React, { useState } from 'react'
+import { Tooltip, IconButton } from '@material-ui/core'
 
-import { BasicDropdown } from 'components/BasicDropdown'
+import TextAlignCenterIcon from 'components/SvgIcons/TextAlignCenter/IconTextAlignCenter'
+import TextAlignRightIcon from 'components/SvgIcons/TextAlignRight/IconTextAlignRight'
+import TextAlignLeftIcon from 'components/SvgIcons/TextAlignLeft/IconTextAlignLeft'
 
 import { ItemTitle, ItemContainer } from '../styled'
+import { Row, Column } from './styled'
 
-interface DropDownOption {
-  label: string
-  value: string
-}
-
-const OPTIONS: DropDownOption[] = [
-  {
-    label: 'Left',
-    value: 'left'
-  },
-  {
-    label: 'Center',
-    value: 'center'
-  },
-  {
-    label: 'Right',
-    value: 'right'
-  }
-]
-
-const findSelectedItemByValue = value =>
-  OPTIONS.find(item => item.value === value) || OPTIONS[0]
+type Alignment = 'center' | 'left' | 'right'
 
 interface Props {
   title?: string
-  value?: string
-  onChange: (value: string) => void
+  value?: Alignment
+  onChange: (value: Alignment) => void
 }
 
-export default function FontSizePicker({
-  title = 'Text Align',
-  value = 'right',
+export default function TextFormatting({
+  title = 'Alignment',
+  value = 'left',
   onChange
 }: Props) {
-  const [innerValue, setInnerValue] = useState<string | undefined>(value)
+  const [innerValue, setInnerValue] = useState<Alignment>(value)
 
-  function handleChange({ value: itemValue }) {
-    setInnerValue(itemValue)
-    onChange(itemValue)
+  function handleChange(value: Alignment) {
+    setInnerValue(value)
+    onChange(value)
   }
 
   return (
     <ItemContainer>
       <ItemTitle>{title}</ItemTitle>
-      <BasicDropdown
-        menuStyle={{ width: '100%', fontSize: '1rem' }}
-        style={{ width: '100%' }}
-        selectedItem={findSelectedItemByValue(innerValue)}
-        items={OPTIONS}
-        onSelect={handleChange}
-        centerSelected
-      />
+      <Row>
+        <Column>
+          <Tooltip title="Left">
+            <IconButton
+              aria-label="text-align-left"
+              color={innerValue.includes('left') ? 'primary' : undefined}
+              onClick={() => {
+                handleChange('left')
+              }}
+            >
+              <TextAlignLeftIcon fill="#000" size="16" />
+            </IconButton>
+          </Tooltip>
+        </Column>
+        <Column>
+          <Tooltip title="Center">
+            <IconButton
+              aria-label="text-align-center"
+              color={innerValue.includes('center') ? 'primary' : undefined}
+              onClick={() => {
+                handleChange('center')
+              }}
+            >
+              <TextAlignCenterIcon fill="#000" size="16" />
+            </IconButton>
+          </Tooltip>
+        </Column>
+        <Column>
+          <Tooltip title="Right">
+            <IconButton
+              aria-label="text-align-right"
+              color={innerValue.includes('right') ? 'primary' : undefined}
+              onClick={() => {
+                handleChange('right')
+              }}
+            >
+              <TextAlignRightIcon fill="#000" size="16" />
+            </IconButton>
+          </Tooltip>
+        </Column>
+      </Row>
     </ItemContainer>
   )
 }

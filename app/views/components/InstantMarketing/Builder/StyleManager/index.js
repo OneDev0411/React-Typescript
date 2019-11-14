@@ -29,6 +29,8 @@ export const load = async colors => {
     } = options
 
     const isElementAllowed = (target, conditions) => {
+      console.log('TARGET', target)
+
       if (!conditions.allowedTags.includes(target.attributes.tagName)) {
         return false
       }
@@ -45,6 +47,10 @@ export const load = async colors => {
       }
 
       return true
+    }
+
+    const isMjmlElement = target => {
+      return target && target.tagName && target.tagName.startsWith('mj-')
     }
 
     const getStyle = target => getComputedStyle(target.view.el)
@@ -109,24 +115,6 @@ export const load = async colors => {
         return
       }
 
-      if (!fontSizePickerOptions.disabled) {
-        if (fontSizePickerContainer) {
-          ReactDOM.unmountComponentAtNode(fontSizePickerContainer)
-        }
-
-        if (isElementAllowed(selected, fontSizePickerOptions.conditions)) {
-          ReactDOM.render(
-            <FontSizePicker
-              value={getStyle(selected).fontSize}
-              onChange={fontSize => {
-                setStyle(selected, 'font-size', fontSize)
-              }}
-            />,
-            fontSizePickerContainer
-          )
-        }
-      }
-
       if (!fontWeightPickerOptions.disabled) {
         ReactDOM.unmountComponentAtNode(fontWeightPickerContainer)
 
@@ -143,18 +131,44 @@ export const load = async colors => {
         }
       }
 
-      if (!fontWeightPickerOptions.disabled) {
+      if (!textAlignPickerOptions.disabled) {
         ReactDOM.unmountComponentAtNode(textAlignPickerContainer)
 
         if (isElementAllowed(selected, textAlignPickerOptions.conditions)) {
           ReactDOM.render(
             <TextAlignPicker
-              value={getStyle(selected).textAlign}
+              value={
+                isMjmlElement(selected)
+                  ? selected.attributes.attributes.align
+                  : getStyle(selected).textAlign
+              }
               onChange={textAlign => {
                 setStyle(selected, 'align', textAlign)
               }}
             />,
             textAlignPickerContainer
+          )
+        }
+      }
+
+      if (!fontSizePickerOptions.disabled) {
+        if (fontSizePickerContainer) {
+          ReactDOM.unmountComponentAtNode(fontSizePickerContainer)
+        }
+
+        if (isElementAllowed(selected, fontSizePickerOptions.conditions)) {
+          ReactDOM.render(
+            <FontSizePicker
+              value={
+                isMjmlElement(selected)
+                  ? selected.attributes.attributes['font-size']
+                  : getStyle(selected).fontSize
+              }
+              onChange={fontSize => {
+                setStyle(selected, 'font-size', fontSize)
+              }}
+            />,
+            fontSizePickerContainer
           )
         }
       }

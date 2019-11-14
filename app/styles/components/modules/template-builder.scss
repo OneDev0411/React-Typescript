@@ -12,10 +12,6 @@
     padding: 0;
   }
 
-  .gjs-trt-trait__wrp {
-    padding-top: 0.5rem;
-  }
-
   .gjs-block-category, .gjs-blocks-c {
     color: #000;
     margin: 2px 0;
@@ -147,24 +143,44 @@
     }
   }
 
+  .gjs-trt-traits {
+    padding: 0 1rem;
+    background: #fff !important;
+  }
+
+  .gjs-trt-trait__wrp {
+    position: relative;
+    padding: 0.5rem 0 2.5rem;
+
+    &::after {
+      content: '';
+      width: 100%;
+      height: 1px;
+      border: 1px solid #eaeaea;
+      position: absolute;
+      bottom: 1rem;
+      left: 0;
+    }
+  }
+
   .gjs-trt-trait {
     display: block;
+    padding: 0;
 
     .gjs-label {
       display: block;
       margin-bottom: 10px;
       color: black;
-      font-size: 16px;
-      font-weight: 500;
+      font-size: 1rem;
+      font-weight: normal;
     }
 
     .gjs-field {
       display: flex;
       align-items: center;
-      background: #f6f6f6;
-      height: 48px;
-      border: 1px solid #000;
+      background: #f2f2f2;
       border-radius: 3px;
+      height: 2rem;
       color: black;
       font-size: 14px;
       font-weight: 500;

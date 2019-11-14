@@ -69,7 +69,8 @@ export function createGrapesInstance(
           conditions: {
             allowedTags: STYLE_MANAGER_TEXT_TAGS,
             forbiddenStyles: ['background-image']
-          }
+          },
+          disabled: true
         },
         textAlignPicker: {
           conditions: {
