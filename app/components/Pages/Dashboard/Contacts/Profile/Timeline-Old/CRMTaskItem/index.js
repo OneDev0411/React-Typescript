@@ -63,7 +63,10 @@ export class CRMTaskItem extends React.Component {
         newTask.reminders = []
       }
 
-      await updateTask(newTask)
+      await updateTask({
+        ...newTask,
+        associations: undefined
+      })
 
       this.props.editCallback(newTask)
 
