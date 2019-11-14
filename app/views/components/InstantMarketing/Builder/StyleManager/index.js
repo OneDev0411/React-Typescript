@@ -2,12 +2,18 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import ReactDOMServer from 'react-dom/server'
 
+import { AppTheme } from '../../../../../AppTheme'
+
 import { Container } from './styled'
 import FontSizePicker from './FontSizePicker'
 import FontWeightPicker from './FontWeightPicker'
 import ColorPicker from './ColorPicker'
 import TextAlignPicker from './TextAlignPicker'
 import { loadGrapesjs } from '../utils/load-grapes'
+
+function renderWithTheme(node, container) {
+  ReactDOM.render(<AppTheme>{node}</AppTheme>, container)
+}
 
 export const load = async colors => {
   const { Grapesjs } = await loadGrapesjs()
@@ -124,7 +130,7 @@ export const load = async colors => {
         ReactDOM.unmountComponentAtNode(fontWeightPickerContainer)
 
         if (isElementAllowed(selected, fontWeightPickerOptions.conditions)) {
-          ReactDOM.render(
+          renderWithTheme(
             <FontWeightPicker
               value={getStyle(selected).fontWeight}
               onChange={fontWeight => {
@@ -140,7 +146,7 @@ export const load = async colors => {
         ReactDOM.unmountComponentAtNode(textAlignPickerContainer)
 
         if (isElementAllowed(selected, textAlignPickerOptions.conditions)) {
-          ReactDOM.render(
+          renderWithTheme(
             <TextAlignPicker
               value={
                 isMjmlElement(selected)
@@ -162,7 +168,7 @@ export const load = async colors => {
         }
 
         if (isElementAllowed(selected, fontSizePickerOptions.conditions)) {
-          ReactDOM.render(
+          renderWithTheme(
             <FontSizePicker
               value={
                 isMjmlElement(selected)
@@ -182,7 +188,7 @@ export const load = async colors => {
         ReactDOM.unmountComponentAtNode(colorPickerContainer)
 
         if (isElementAllowed(selected, colorPickerOptions.conditions)) {
-          ReactDOM.render(
+          renderWithTheme(
             <ColorPicker
               colors={colors}
               color={getStyle(selected).color}
@@ -201,7 +207,7 @@ export const load = async colors => {
         if (
           isElementAllowed(selected, backgroundColorPickerOptions.conditions)
         ) {
-          ReactDOM.render(
+          renderWithTheme(
             <ColorPicker
               title="Background Color"
               colors={colors}
