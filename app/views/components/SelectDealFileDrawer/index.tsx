@@ -57,10 +57,10 @@ function SelectDealFileDrawer({
   const fullDeal = getDealById(dealId)
 
   useEffect(() => {
-    if (!fullDeal.checklists) {
+    if (!fullDeal || !fullDeal.checklists) {
       getDeal(dealId)
     }
-  }, [dealId, fullDeal.checklists, getDeal])
+  }, [dealId, fullDeal, getDeal])
 
   const toggleSelectRow = (document: IDealFile): void => {
     if (!document.checklist && !allowNoChecklist) {
@@ -82,7 +82,7 @@ function SelectDealFileDrawer({
     <Drawer open={isOpen} onClose={onClose} {...drawerOptions}>
       <Drawer.Header title={title} />
       <Drawer.Body>
-        {fullDeal.checklists ? (
+        {fullDeal && fullDeal.checklists ? (
           <Documents
             deal={fullDeal}
             showStashFiles={showStashFiles}
