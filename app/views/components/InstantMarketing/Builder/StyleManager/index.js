@@ -50,7 +50,12 @@ export const load = async colors => {
     }
 
     const isMjmlElement = target => {
-      return target && target.tagName && target.tagName.startsWith('mj-')
+      return (
+        target &&
+        target.attributes &&
+        target.attributes.tagName &&
+        target.attributes.tagName.startsWith('mj-')
+      )
     }
 
     const getStyle = target => getComputedStyle(target.view.el)
