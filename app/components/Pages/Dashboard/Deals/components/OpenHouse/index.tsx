@@ -164,6 +164,7 @@ function OpenHouses({
           <Form
             deal={deal}
             task={selectedItem}
+            hasOpenHouse={location.query.createOpenHouse}
             defaultStartTime={location.query.startTime}
             defaultEndTime={location.query.endTime}
             onUpsertTask={handleUpsertTask}

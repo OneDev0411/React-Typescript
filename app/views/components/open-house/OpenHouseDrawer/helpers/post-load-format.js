@@ -34,7 +34,6 @@ export async function postLoadFormat(task, owner, listing) {
       dueDate: new Date(),
       location,
       reminder,
-      task_type: 'Open House',
       title: (listing && addressTitle(listing.property.address)) || ''
     }
   }
