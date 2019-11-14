@@ -9,6 +9,8 @@ import {
 
 import request, { ResponseError } from 'superagent'
 
+import { ReactNode } from 'react'
+
 import { ClassesProps } from 'utils/ts-utils'
 import IconWarning from 'components/SvgIcons/Warning/IconWarning'
 
@@ -25,6 +27,10 @@ interface Props {
    */
   showRetry?: boolean | 'default'
   onRetry?: () => void
+  /**
+   * Will be rendered bellow the message
+   */
+  children?: ReactNode
 }
 
 const styles = (theme: Theme) =>
@@ -53,6 +59,7 @@ const useStyles = makeStyles(styles, { name: 'ServerError' })
 export function ServerError({
   showRetry = 'default',
   error,
+  children = null,
   ...props
 }: Props & ClassesProps<typeof styles>) {
   const classes = useStyles(props)
@@ -88,6 +95,7 @@ export function ServerError({
           Retry
         </Button>
       )}
+      {children}
     </div>
   )
 }

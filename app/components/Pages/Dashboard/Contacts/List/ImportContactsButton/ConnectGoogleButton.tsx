@@ -6,8 +6,6 @@ import { connect } from 'react-redux'
 
 import { IAppState } from 'reducers'
 
-import { hasUserAccess } from 'utils/user-teams'
-
 import { useConnectOAuthAccount } from './use-connect-oauth-account'
 
 interface RenderProps {
@@ -33,12 +31,11 @@ interface Props {
  * @constructor
  */
 function ConnectGoogleButton(props: Props) {
-  const { connect, connecting } = useConnectOAuthAccount(
-    OAuthProvider.Google,
-    hasUserAccess(props.user, 'BetaFeatures')
-      ? ['contacts.readonly', 'gmail.readonly', 'gmail.send']
-      : undefined
-  )
+  const { connect, connecting } = useConnectOAuthAccount(OAuthProvider.Google, [
+    'contacts.readonly',
+    'gmail.readonly',
+    'gmail.send'
+  ])
 
   return props.children({ connecting, connect })
 }
