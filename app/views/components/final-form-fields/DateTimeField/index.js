@@ -6,11 +6,13 @@ import { DateTimePicker } from '../../DateTimePicker'
 
 DateTimeField.propTypes = {
   name: PropTypes.string.isRequired,
-  selectedDate: PropTypes.instanceOf(Date)
+  selectedDate: PropTypes.instanceOf(Date),
+  datePickerModifiers: PropTypes.shape()
 }
 
 DateTimeField.defaultProps = {
-  selectedDate: new Date()
+  selectedDate: new Date(),
+  datePickerModifiers: {}
 }
 
 export function DateTimeField(props) {
@@ -21,6 +23,7 @@ export function DateTimeField(props) {
         <DateTimePicker
           onChange={fieldProps.input.onChange}
           selectedDate={props.selectedDate}
+          datePickerModifiers={props.datePickerModifiers}
         />
       )}
     />

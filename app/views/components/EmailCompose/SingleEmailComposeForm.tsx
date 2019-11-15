@@ -9,6 +9,7 @@ import { EmailFormValues } from './types'
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import EmailComposeForm from './EmailComposeForm'
 import { EmailRecipientsFields } from './fields/EmailRecipientsFields'
+import { useExpressionEvaluator } from './EmailComposeForm/use-expression-evaluator'
 
 interface Props
   extends Omit<
@@ -34,7 +35,13 @@ export function SingleEmailComposeForm({
   deal,
   ...otherProps
 }: Props) {
-  const handleSendEmail = (formValue: EmailFormValues) => {
+  const { evaluate } = useExpressionEvaluator()
+
+  const handleSendEmail = async (formValue: EmailFormValues) => {
+    if (!formValue.due_at || formValue.due_at.getTime() <= Date.now()) {
+      formValue.body = await evaluate(formValue.body || '', formValue)
+    }
+
     const emailData = getEmail({
       from: (formValue.from && formValue.from.value) || '',
       to: normalizeRecipients(formValue.to),

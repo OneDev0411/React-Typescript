@@ -12,7 +12,7 @@ function isDanger(props) {
   }
 }
 
-export const ActionBarContainer = styled.div`
+export const ActionBarContainer = styled.div<{ appearance: string }>`
   & .modal-confirm {
     ${isDanger}
   }

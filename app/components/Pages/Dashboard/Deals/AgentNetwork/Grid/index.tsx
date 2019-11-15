@@ -10,6 +10,8 @@ import { Company } from './columns/Company'
 import { ContactInfo } from './columns/ContactInfo'
 import { ListingsListViewDrawer } from './ListingsListViewDrawer'
 
+import { IDealAgent } from '../types'
+
 const buttonStyle = {
   padding: '0.25rem 0 1rem',
   height: 'auto',
@@ -59,11 +61,15 @@ export class Grid extends React.Component<Props, State> {
 
     return data
       .filter(
-        agent => agent.agentId && selectedRows.includes(agent.id) && agent.email
+        item =>
+          item.agent &&
+          item.agent.id &&
+          selectedRows.includes(item.id) &&
+          item.email
       )
-      .map(agent => ({
+      .map(item => ({
         recipient_type: 'Agent',
-        agent
+        agent: item.agent
       }))
   }
 

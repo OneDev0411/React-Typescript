@@ -1,8 +1,29 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-export const Wrapper = styled.div`
+export interface ScrollableWrapperProps {
+  /**
+   * defaults to 5
+   * */
+  shadowHeight?: number
+  /**
+   * defaults to grey
+   * */
+  shadowColor?: 'white' | 'grey'
+}
+
+const colorToRbg: {
+  [key in Required<ScrollableWrapperProps>['shadowColor']]: string
+} = {
+  grey: 'rgba(210, 210, 210, 1)',
+  white: 'rgb(255,255,255)'
+}
+
+export const Wrapper = styled.div<ScrollableWrapperProps>`
   position: relative;
   min-height: 0; /*for usages inside flex items*/
+
+  display: flex;
+  flex-direction: column;
 
   &.has-bottom-shadow,
   &.has-top-shadow {
@@ -10,37 +31,37 @@ export const Wrapper = styled.div`
     &::after {
       pointer-events: none;
       position: absolute;
-      height: 5px;
+      height: ${({ shadowHeight = 5 }) => `${shadowHeight}px`};
       width: 100%;
       z-index: 1;
     }
   }
-  &.has-bottom-shadow {
-    &::after {
-      content: '';
-      background: linear-gradient(
-        0deg,
-        rgba(210, 210, 210, 1) 0%,
-        rgba(0, 0, 0, 0) 100%
-      );
-      bottom: 0;
-    }
-  }
-  &.has-top-shadow {
-    &::before {
-      content: '';
-      background: linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(210, 210, 210, 1) 100%
-      );
-      top: 0;
-    }
-  }
+  ${({ shadowColor = 'grey' }) => {
+    const color = colorToRbg[shadowColor]
+
+    return css`
+      &.has-bottom-shadow {
+        &::after {
+          content: '';
+          background: linear-gradient(0deg, ${color} 0%, rgba(0, 0, 0, 0) 100%);
+          bottom: 0;
+        }
+      }
+      &.has-top-shadow {
+        &::before {
+          content: '';
+          background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, ${color} 100%);
+          top: 0;
+        }
+      }
+    `
+  }}
 `
 export const Content = styled.div`
   overflow: auto;
   overflow: overlay;
   overflow-x: hidden;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 `

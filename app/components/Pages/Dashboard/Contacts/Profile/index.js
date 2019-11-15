@@ -68,6 +68,7 @@ class ContactProfile extends React.Component {
     window.socket.on('contact:touch', this.updateContact)
     window.socket.on('crm_task:create', this.fetchTimeline)
     window.socket.on('email_campaign:create', this.fetchTimeline)
+    window.socket.on('email_campaign:send', this.fetchTimeline)
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -91,9 +92,10 @@ class ContactProfile extends React.Component {
 
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.detectScreenSize)
-    window.socket.on('contact:touch', this.updateContact)
+    window.socket.off('contact:touch', this.updateContact)
     window.socket.off('crm_task:create', this.fetchTimeline)
     window.socket.off('email_campaign:create', this.fetchTimeline)
+    window.socket.off('email_campaign:send', this.fetchTimeline)
   }
 
   // creates a ref to the timeline
@@ -304,7 +306,6 @@ class ContactProfile extends React.Component {
           <MainColumn>
             <Timeline
               ref={this.timelineRef}
-              user={user}
               contact={this.state.contact}
               defaultAssociation={defaultAssociation}
               onCreateNote={this.setContact}

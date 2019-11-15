@@ -41,7 +41,7 @@ export function normalizeRecipients(
         if (recipient.recipient_type === 'Agent') {
           return {
             recipient_type: 'Agent',
-            agent: recipient.agent.agentId
+            agent: recipient.agent.id
           }
         }
 

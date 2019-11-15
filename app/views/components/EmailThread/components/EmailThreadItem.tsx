@@ -72,9 +72,6 @@ const styles = (theme: Theme) =>
     },
     actionButton: {
       marginRight: `${theme.spacing(1)}px`
-    },
-    composeWrapper: {
-      padding: theme.spacing(0, 3)
     }
   })
 const useStyles = makeStyles(styles, { name: 'EmailThreadItem' })
@@ -198,7 +195,7 @@ export function EmailThreadItem({
               </Box>
             )}
             {isResponseOpen && (
-              <Paper elevation={10} className={classes.composeWrapper}>
+              <Paper elevation={10}>
                 <EmailResponseComposeForm
                   email={email}
                   responseType={responseType}

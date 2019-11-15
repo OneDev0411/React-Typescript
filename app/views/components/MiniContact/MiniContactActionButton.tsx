@@ -17,6 +17,7 @@ interface MiniContactActionButtonType {
   user: any
   actionSettings: ActionSettingsType
   setActionSettings: (items: ActionSettingsType) => void
+  onSubmit?(event: IEvent, type: string): void
 }
 
 function MiniContactActionButton(props: MiniContactActionButtonType) {
@@ -28,7 +29,10 @@ function MiniContactActionButton(props: MiniContactActionButtonType) {
   const sharedProps = {
     user: props.user,
     onClose: () => props.setActionSettings({}),
-    submitCallback: () => props.setActionSettings({})
+    submitCallback: (event: IEvent, type: string) => {
+      props.setActionSettings({})
+      props.onSubmit && props.onSubmit(event, type)
+    }
   }
 
   // Contact
@@ -38,6 +42,11 @@ function MiniContactActionButton(props: MiniContactActionButtonType) {
       data: {
         ...sharedProps,
         defaultAssociation: props.data.meta.association
+          ? {
+              ...props.data.meta.association,
+              id: undefined
+            }
+          : null
       }
     }
 

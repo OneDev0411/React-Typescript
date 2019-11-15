@@ -35,8 +35,8 @@ export function recipientToSuggestion(
   }
 
   if (recipient.recipient_type === 'Agent') {
-    const title = recipient.agent.name || recipient.agent.email
-    const subtitle = recipient.agent.name
+    const title = recipient.agent.full_name || recipient.agent.email
+    const subtitle = recipient.agent.full_name
 
     return {
       title,

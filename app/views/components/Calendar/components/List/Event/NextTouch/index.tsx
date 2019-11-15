@@ -18,7 +18,7 @@ export function NextTouch({ style, event, nextItem }: Props) {
     return null
   }
 
-  const contact = event.people[0]
+  const contact = event.people[0] as IContact
 
   return (
     <EventContainer

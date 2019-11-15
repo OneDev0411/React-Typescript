@@ -1,9 +1,6 @@
 import React from 'react'
 
-import * as PropTypes from 'prop-types'
-
 import { ScrollableArea } from '../../../../../../views/components/ScrollableArea'
-
 import Link from '../../../../../../views/components/ALink'
 
 import { SideMenuContainer, SideMenuList, SubTitle } from './styled'
@@ -11,12 +8,17 @@ import TeamSwitcher from './TeamSwitcher'
 import { ListItemDivider } from '../../styled'
 import Acl from '../../../../../../views/components/Acl'
 
-UserMenuContent.propTypes = {
-  user: PropTypes.shape().isRequired,
-  onClose: PropTypes.func
+interface Props {
+  user: IUser
+  onClose?: () => void
+  showChecklists: boolean
 }
 
-export function UserMenuContent({ user, onClose = () => {} }) {
+export function UserMenuContent({
+  user,
+  showChecklists,
+  onClose = () => {}
+}: Props) {
   return (
     <SideMenuContainer>
       <ScrollableArea hasThinnerScrollbar>
@@ -36,13 +38,15 @@ export function UserMenuContent({ user, onClose = () => {} }) {
             </Link>
           </li>
         </Acl.Admin>
-        <Acl.Admin>
-          <li>
-            <Link noStyle to="/dashboard/checklists" onClick={onClose}>
-              Checklists
-            </Link>
-          </li>
-        </Acl.Admin>
+        {showChecklists && (
+          <Acl.Admin>
+            <li>
+              <Link noStyle to="/dashboard/checklists" onClick={onClose}>
+                Checklists
+              </Link>
+            </li>
+          </Acl.Admin>
+        )}
         <ListItemDivider role="separator" />
         <li>
           <a
