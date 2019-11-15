@@ -28,7 +28,7 @@ export function AddAttachment(props) {
           isOpen
           initialAttachments={props.initialAttachments}
           defaultSelectedItems={props.input.value}
-          deal={props.deal}
+          dealId={props.deal.id}
           onChangeSelectedDocuments={handleChangeSelectedDocuments}
           onClose={props.handleCloseAttachments}
         />
