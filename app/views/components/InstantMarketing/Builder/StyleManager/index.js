@@ -176,6 +176,7 @@ export const load = async colors => {
                   : getStyle(selected).fontSize
               }
               onChange={fontSize => {
+                editor.getSelected().trigger('sync:content') // in order to sync changed text and keep the changes
                 setStyle(selected, 'font-size', fontSize)
               }}
             />,
