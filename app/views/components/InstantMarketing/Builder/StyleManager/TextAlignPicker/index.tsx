@@ -1,61 +1,98 @@
 import React, { useState } from 'react'
+import { Tooltip, IconButton } from '@material-ui/core'
 
-import { BasicDropdown } from 'components/BasicDropdown'
+import IconAlignLeft from 'components/SvgIcons/AlignLeft/IconAlignLeft'
+import IconAlignCenter from 'components/SvgIcons/AlignCenter/IconAlignCenter'
+import IconAlignRight from 'components/SvgIcons/AlignRight/IconAlignRight'
+
+import { useIconStyles } from '../../../../../../styles/use-icon-styles'
 
 import { ItemTitle, ItemContainer } from '../styled'
+import { Row, Column } from './styled'
 
-interface DropDownOption {
-  label: string
-  value: string
-}
-
-const OPTIONS: DropDownOption[] = [
-  {
-    label: 'Left',
-    value: 'left'
-  },
-  {
-    label: 'Center',
-    value: 'center'
-  },
-  {
-    label: 'Right',
-    value: 'right'
-  }
-]
-
-const findSelectedItemByValue = value =>
-  OPTIONS.find(item => item.value === value) || OPTIONS[0]
+type Alignment = 'center' | 'left' | 'right'
 
 interface Props {
   title?: string
-  value?: string
-  onChange: (value: string) => void
+  value?: Alignment
+  onChange: (value: Alignment) => void
 }
 
-export default function FontSizePicker({
-  title = 'Text Align',
-  value = 'right',
+export default function TextFormatting({
+  title = 'Alignment',
+  value = 'left',
   onChange
 }: Props) {
-  const [innerValue, setInnerValue] = useState<string | undefined>(value)
+  const iconClasses = useIconStyles()
+  const [innerValue, setInnerValue] = useState<Alignment>(value)
 
-  function handleChange({ value: itemValue }) {
-    setInnerValue(itemValue)
-    onChange(itemValue)
+  function handleChange(value: Alignment) {
+    setInnerValue(value)
+    onChange(value)
   }
 
   return (
     <ItemContainer>
       <ItemTitle>{title}</ItemTitle>
-      <BasicDropdown
-        menuStyle={{ width: '100%', fontSize: '1rem' }}
-        style={{ width: '100%' }}
-        selectedItem={findSelectedItemByValue(innerValue)}
-        items={OPTIONS}
-        onSelect={handleChange}
-        centerSelected
-      />
+      <Row>
+        <Column>
+          <Tooltip title="Left">
+            <IconButton
+              size="small"
+              aria-label="text-align-left"
+              onClick={() => {
+                handleChange('left')
+              }}
+            >
+              <IconAlignLeft
+                className={
+                  innerValue.includes('left')
+                    ? iconClasses.activeOnlyRootSvg
+                    : ''
+                }
+              />
+            </IconButton>
+          </Tooltip>
+        </Column>
+        <Column>
+          <Tooltip title="Center">
+            <IconButton
+              size="small"
+              aria-label="text-align-center"
+              onClick={() => {
+                handleChange('center')
+              }}
+            >
+              <IconAlignCenter
+                className={
+                  innerValue.includes('center')
+                    ? iconClasses.activeOnlyRootSvg
+                    : ''
+                }
+              />
+            </IconButton>
+          </Tooltip>
+        </Column>
+        <Column>
+          <Tooltip title="Right">
+            <IconButton
+              size="small"
+              aria-label="text-align-right"
+              onClick={() => {
+                handleChange('right')
+              }}
+            >
+              <IconAlignRight
+                className={
+                  innerValue.includes('right')
+                    ? iconClasses.activeOnlyRootSvg
+                    : ''
+                }
+              />
+            </IconButton>
+          </Tooltip>
+        </Column>
+      </Row>
     </ItemContainer>
   )
 }

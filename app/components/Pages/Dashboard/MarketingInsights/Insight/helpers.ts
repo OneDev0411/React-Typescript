@@ -20,7 +20,7 @@ export function contactsList(item: IInsight): ContactsListType[] {
     // This is using for mini contact
     original_data: email,
     id: email.id,
-    display_name: email.display_name,
+    display_name: email.full_name,
     profile_image_url: email.profile_image_url,
     to: email.email_address,
     contact: email.contact,

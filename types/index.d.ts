@@ -12,6 +12,7 @@
 // / <reference path="Deal/checklist.d.ts" />
 // / <reference path="Deal/task.d.ts" />
 // / <reference path="Deal/envelope.d.ts" />
+// / <reference path="Deal/context.d.ts" />
 
 // / <reference path="Chat/index.d.ts" />
 

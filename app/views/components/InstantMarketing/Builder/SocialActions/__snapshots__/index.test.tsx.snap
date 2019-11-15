@@ -2,77 +2,74 @@
 
 exports[`MC SocialActions component renders 1`] = `
 <Fragment>
-  <styled__Button
-    appearance="primary"
-    brandColor=""
-    disabled={false}
-    inverse={false}
-    isActive={false}
-    isBlock={false}
+  <WithStyles(ForwardRef(Button))
+    color="primary"
     key="Instagram"
     onClick={[Function]}
-    size="medium"
     style={
       Object {
-        "height": "2rem",
-        "lineHeight": 0,
+        "marginLeft": "0.5rem",
       }
     }
-    type="button"
+    variant="contained"
   >
-    <styled__Icon
+    <i
       className="fa fa-instagram"
+      style={
+        Object {
+          "fontSize": "1.5rem",
+          "marginRight": "0.5rem",
+        }
+      }
     />
     Post to 
     Instagram
-  </styled__Button>
-  <styled__Button
-    appearance="primary"
-    brandColor=""
-    disabled={false}
-    inverse={false}
-    isActive={false}
-    isBlock={false}
+  </WithStyles(ForwardRef(Button))>
+  <WithStyles(ForwardRef(Button))
+    color="primary"
     key="Facebook"
     onClick={[Function]}
-    size="medium"
     style={
       Object {
-        "height": "2rem",
-        "lineHeight": 0,
+        "marginLeft": "0.5rem",
       }
     }
-    type="button"
+    variant="contained"
   >
-    <styled__Icon
+    <i
       className="fa fa-facebook-square"
+      style={
+        Object {
+          "fontSize": "1.5rem",
+          "marginRight": "0.5rem",
+        }
+      }
     />
     Post to 
     Facebook
-  </styled__Button>
-  <styled__Button
-    appearance="primary"
-    brandColor=""
-    disabled={false}
-    inverse={false}
-    isActive={false}
-    isBlock={false}
+  </WithStyles(ForwardRef(Button))>
+  <WithStyles(ForwardRef(Button))
+    color="primary"
     key="LinkedIn"
     onClick={[Function]}
-    size="medium"
     style={
       Object {
-        "height": "2rem",
-        "lineHeight": 0,
+        "marginLeft": "0.5rem",
       }
     }
-    type="button"
+    variant="contained"
   >
-    <styled__Icon
+    <i
       className="fa fa-linkedin"
+      style={
+        Object {
+          "fontSize": "1.5rem",
+          "marginRight": "0.5rem",
+        }
+      }
     />
     Post to 
     LinkedIn
-  </styled__Button>
+  </WithStyles(ForwardRef(Button))>
 </Fragment>
 `;

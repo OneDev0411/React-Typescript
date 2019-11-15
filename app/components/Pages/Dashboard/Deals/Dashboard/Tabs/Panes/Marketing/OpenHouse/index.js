@@ -109,7 +109,7 @@ class OpenHouse extends React.Component {
       <OpenHouseContainer>
         <Flex style={{ padding: '1.5rem 3.5rem' }}>
           <LeftColumn>
-            <Title>Open House</Title>
+            <Title>Open House Registration Pages</Title>
             <Description>Customize your open house registration.</Description>
 
             <CreateOpenHouse
@@ -117,7 +117,7 @@ class OpenHouse extends React.Component {
               submitCallback={this.onCreateEvent}
               associations={{ deal: this.props.deal }}
             >
-              <ActionButton>Create Open House</ActionButton>
+              <ActionButton>Create Registration Page</ActionButton>
             </CreateOpenHouse>
           </LeftColumn>
 

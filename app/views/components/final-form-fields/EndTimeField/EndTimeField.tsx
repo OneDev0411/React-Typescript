@@ -12,6 +12,8 @@ import {
   Typography,
   useTheme
 } from '@material-ui/core'
+import { PopperPlacementType } from '@material-ui/core/Popper'
+
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
 import TimeInput from 'components/TimeInput'
@@ -32,9 +34,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   dueDate: Date
+  placement?: PopperPlacementType
 }
 
-export function EndTimeField({ dueDate }: Props) {
+export function EndTimeField({ dueDate, placement = 'bottom-end' }: Props) {
   const theme = useTheme()
   const classes = useStyles()
   const iconClasses = useIconStyles()
@@ -81,7 +84,7 @@ export function EndTimeField({ dueDate }: Props) {
               {value ? fecha.format(value, 'hh:mm A') : 'Add End Time'}
             </Button>
             {value && (
-              <Tooltip placement="bottom-end" title="Remove Time">
+              <Tooltip placement={placement} title="Remove Time">
                 <Button
                   size="small"
                   // @ts-ignore FinalForm bug
@@ -95,7 +98,7 @@ export function EndTimeField({ dueDate }: Props) {
             <Popper
               anchorEl={anchorRef.current}
               open={isOpen}
-              placement="bottom-end"
+              placement={placement}
               style={{ zIndex: theme.zIndex.modal }}
               transition
             >

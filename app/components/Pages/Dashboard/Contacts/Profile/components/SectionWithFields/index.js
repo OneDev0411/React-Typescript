@@ -83,10 +83,7 @@ class SectionWithFields extends React.Component {
     }))
 
   shouldUpdateContact = attribute_def => {
-    if (
-      !this.props.isPartner &&
-      fieldsNeedUpdateContact.includes(attribute_def.name)
-    ) {
+    if (fieldsNeedUpdateContact.includes(attribute_def.name)) {
       return true
     }
 

@@ -17,18 +17,15 @@ export function convertTaskToCalendarEvent(event: IEvent): ICalendarEvent {
     timestamp_midday: '',
     timestamp_readable: '',
     type: '',
+    // TODO: server must provide end_date as number for calendar events
+    end_date: event.end_date ? event.end_date.toString() : null,
     type_label: '',
     users: [],
     event_type: event.task_type,
     timestamp: event.due_date,
     object_type: event.type,
     people,
-    people_len: people.length,
-    full_crm_task: {
-      end_date: event.end_date,
-      assignees: event.assignees,
-      associations: event.associations
-    }
+    people_len: people.length
   }
 }
 
@@ -42,6 +39,8 @@ function getPeople(associations: IEvent['associations']): IContact[] {
   }
 
   return associations
-    .filter(association => association.association_type === 'contact')
+    .filter(association =>
+      ['contact', 'agent'].includes(association.association_type)
+    )
     .map(association => association.contact as IContact)
 }

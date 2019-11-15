@@ -9,8 +9,8 @@ import {
 } from 'react'
 import { useControllableState } from 'react-use-controllable-state/dist'
 import {
+  Button,
   createStyles,
-  IconButton,
   makeStyles,
   TextField,
   Theme
@@ -21,7 +21,6 @@ import classNames from 'classnames'
 
 import { useOnToggledOn } from '../../TextEditor/components/LinkEditorPopover/hooks/use-on-toggled'
 import EditIcon from '../../SvgIcons/Edit/EditIcon'
-import IconCheckmark from '../../SvgIcons/Checkmark/IconCheckmark'
 
 interface Props {
   children?: ReactNode
@@ -49,9 +48,10 @@ const useInlineEditableStringStyles = makeStyles(
           opacity: 1
         }
       },
+      inputRoot: {
+        paddingRight: theme.spacing(0.5)
+      },
       input: {
-        // FIXME: vertical padding should be removed in favor of hiddenLabel
-        //   which is added in v4.3.0.
         padding: '0.625rem .5rem'
       },
       textField: {
@@ -161,15 +161,17 @@ export const InlineEditableString = forwardRef(function InlineEditableString(
         }}
         // eslint-disable-next-line react/jsx-no-duplicate-props
         InputProps={{
-          classes: { input: classes.input },
+          classes: { input: classes.input, root: classes.inputRoot },
           endAdornment: showSaveButton ? (
-            <IconButton
+            <Button
               size="small"
+              variant="text"
+              color="primary"
               onMouseUp={save}
               onMouseDown={onSaveMouseDown}
             >
-              <IconCheckmark />
-            </IconButton>
+              Save
+            </Button>
           ) : (
             undefined
           )

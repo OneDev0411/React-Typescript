@@ -8,4 +8,10 @@ export const ColorPickerContainer = styled(ItemContainer)`
   div > span > div > span > div {
     border: 1px solid ${borderColor};
   }
+
+  .circle-picker {
+    margin: 0 !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+  }
 `

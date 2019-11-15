@@ -12,7 +12,8 @@ const DEFAULT_EMAIL_ASSOCIATIONS: IEmailCampaignAssociation[] = [
 const DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS: IEmailCampaignRecipientAssociation[] = [
   'contact',
   'list',
-  'brand'
+  'brand',
+  'agent'
 ]
 
 export async function getEmailCampaign<

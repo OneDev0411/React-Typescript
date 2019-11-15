@@ -2,12 +2,12 @@ import isURL from 'validator/lib/isURL'
 import isEmail from 'validator/lib/isEmail'
 
 import { DraftHandleValue, EditorState } from 'draft-js'
-import { PluginFunctions } from 'draft-js-plugins-editor'
+import { DraftJsPlugin, PluginFunctions } from 'draft-js-plugins-editor'
 
 import { createLink } from '../utils/create-link'
 import { normalizeUrl } from '../components/LinkEditorPopover/utils'
 
-export default function createPasteLinkPlugin() {
+export default function createPasteLinkPlugin(): DraftJsPlugin {
   return {
     handlePastedText: (
       text,

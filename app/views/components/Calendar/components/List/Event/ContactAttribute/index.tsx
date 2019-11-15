@@ -53,7 +53,7 @@ export function ContactAttribute({ style, event, nextItem }: Props) {
       }
       actions={
         <>
-          <SendBirthdayCard event={event} />
+          <SendBirthdayCard event={event} contact={contact} />
         </>
       }
     />

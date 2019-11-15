@@ -17,7 +17,7 @@ export const defaultFilter = {
   'object_types[]': [
     'contact',
     'contact_attribute',
-    'crm_association',
+    'crm_task',
     'email_campaign',
     'deal_context'
   ]

@@ -7,7 +7,7 @@ import {
 } from 'draft-js-import-element/lib/lib/Constants'
 import { wrap } from 'lodash'
 
-import { getAtomicBlockEntityData } from './get-atomic-block-entity-data'
+import { createAtomicBlockEntityData } from './create-atomic-block-entity-data'
 import { signatureCustomBlockFn } from '../plugins/draft-js-signature-plugin'
 import {
   iFrameCustomBlockFn,
@@ -18,6 +18,7 @@ import { blockStyleFn } from './block-style-fn'
 import { renderImage } from './render-image'
 import { blockLevelLinkRendererWrapper } from './block-level-link-renderer-wrapper'
 import { blockLevelLinkCustomBlockFn } from './block-level-link-custom-block-fn'
+import { mergeFunctions } from './merge-functions'
 
 interface HtmlConversionOptions {
   stateToHtmlOptions: ExportOptions
@@ -45,14 +46,14 @@ export function getHtmlConversionOptions(
       defaultBlockTag: 'div'
     },
     stateFromHtmlOptions: {
-      customBlockFn: combine(
+      customBlockFn: mergeFunctions(
         iFrameCustomBlockFn('rechat-quote'),
         signatureCustomBlockFn('rechat-signature'),
         blockLevelLinkCustomBlockFn
       ),
       customInlineFn: (element, inlineCreators) => {
         if (element instanceof HTMLImageElement) {
-          const data = getAtomicBlockEntityData(element)
+          const data = createAtomicBlockEntityData(element)
 
           return inlineCreators.Entity('IMAGE', data)
         }

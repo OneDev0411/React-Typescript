@@ -29,6 +29,8 @@ import { createCollapsibleDecorator } from './block-decorators/create-collapsibl
 import createPasteHtmlPlugin from './plugins/draft-js-paste-html'
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 import { atomicBlockLinkDecorator } from './block-decorators/atomic-block-link-decorator'
+import { resizableBugFixDecorator } from './block-decorators/resizable-bug-fix-decorator'
+import createTemplateExpressionsPlugin from './plugins/template-expressions-plugin'
 
 export function createPlugins(
   setLinkEditorOpen: (open: boolean) => void,
@@ -44,6 +46,7 @@ export function createPlugins(
   const { AlignmentTool } = alignmentPlugin
   const richButtonsPlugin = createRichButtonsPlugin()
   const anchorPlugin = createAnchorPlugin()
+  const templateExpressionPlugin = createTemplateExpressionsPlugin()
 
   // Can be extracted into a separate plugin file
   const linkShortcutsPlugin = {
@@ -67,6 +70,7 @@ export function createPlugins(
   const imagePlugin = createImagePlugin({
     decorator: composeDecorators(
       withUploadingIndicator,
+      resizableBugFixDecorator,
       resizeablePlugin.decorator,
       atomicBlockLinkDecorator,
       alignmentPlugin.decorator,
@@ -86,6 +90,7 @@ export function createPlugins(
     resizeablePlugin,
     blockDndPlugin,
     alignmentPlugin,
+    templateExpressionPlugin,
     linkPlugins: [anchorPlugin, createPasteLinkPlugin(), linkShortcutsPlugin],
     imagePlugin,
     iframePlugin,

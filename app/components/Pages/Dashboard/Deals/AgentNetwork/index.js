@@ -137,7 +137,12 @@ class AgentNetwork extends React.Component {
         isFetching: true
       })
 
-      const response = await byValert(query, null, false)
+      const response = await byValert(
+        query,
+        null,
+        false,
+        '?associations[]=compact_listing.selling_agent&associations[]=compact_listing.list_agent'
+      )
 
       const list = normalizeList(response.data).sort(
         (a, b) => b.listingsCount - a.listingsCount
@@ -171,7 +176,7 @@ class AgentNetwork extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <>
         <Header
           onClickCloseButton={this.onClose}
           showBackButton={false}
@@ -191,7 +196,7 @@ class AgentNetwork extends React.Component {
           listInfo={this.state.listInfo}
           onChangeSelectedRows={this.onChangeSelectedRows}
         />
-      </React.Fragment>
+      </>
     )
   }
 }

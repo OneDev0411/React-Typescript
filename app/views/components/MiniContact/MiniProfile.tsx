@@ -26,9 +26,10 @@ interface MiniProfilePropsType {
   type: MiniContactType
   initData: {}
   actionSettings: ActionSettingsType
-  setActionSettings: (items: ActionSettingsType) => void
   user: IUser
   attributeDefs: IAttributeDefsState
+  setActionSettings: (items: ActionSettingsType) => void
+  onSubmit?(event: IEvent, type: string): void
 }
 
 function MiniProfile(props: MiniProfilePropsType) {
@@ -66,6 +67,7 @@ function MiniProfile(props: MiniProfilePropsType) {
             data={output}
             actionSettings={props.actionSettings}
             setActionSettings={props.setActionSettings}
+            onSubmit={props.onSubmit}
             user={props.user}
           />
         </div>

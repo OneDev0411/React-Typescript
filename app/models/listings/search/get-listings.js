@@ -8,14 +8,19 @@ function filterListingsWithoutLocation(listings) {
   return listings.filter(l => l.location != null)
 }
 
-export const byValert = async (options, query, hasNeedNormalized = true) => {
+export const byValert = async (
+  options,
+  query,
+  hasNeedNormalized = true,
+  queryParam = ''
+) => {
   if (!options) {
     return
   }
 
   try {
     const response = await new Fetch()
-      .post('/valerts')
+      .post(`/valerts${queryParam}`)
       .send(options)
       .query(query)
 

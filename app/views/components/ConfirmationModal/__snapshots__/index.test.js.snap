@@ -20,22 +20,38 @@ exports[`ConfirmationModal component should render modal properly 1`] = `
     You are missing something important. Are you sure?
   </div>
   <div
-    class="cta styled__ActionBarContainer-sc-1gtjo7x-0 VcSfg"
+    class="cta styled__ActionBarContainer-sc-1w2c0cs-0 cSTkgI"
   >
     <button
-      class="ActionButton__Button-sc-14we8cp-0 iAihzi"
+      class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary"
       data-test="confirmation-modal-cancel-button"
+      tabindex="0"
       type="button"
     >
-      Cancel
+      <span
+        class="MuiButton-label"
+      >
+        Cancel
+      </span>
+      <span
+        class="MuiTouchRipple-root"
+      />
     </button>
     <button
-      class="modal-confirm ActionButton__Button-sc-14we8cp-0 Bfmg"
+      class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary"
       data-test="confirmation-modal-confirm-button"
       style="margin-left: 1em;"
+      tabindex="0"
       type="button"
     >
-      Confirm
+      <span
+        class="MuiButton-label"
+      >
+        Confirm
+      </span>
+      <span
+        class="MuiTouchRipple-root"
+      />
     </button>
   </div>
 </div>

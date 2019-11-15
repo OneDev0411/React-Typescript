@@ -11,6 +11,10 @@ export function recipientToString(
     return `${recipient.tag.text} (Tag)`
   }
 
+  if (recipient.recipient_type === 'Agent') {
+    return recipient.agent.full_name || recipient.agent.email
+  }
+
   if (recipient.recipient_type === 'Email' && recipient.email) {
     if (!recipient.contact || !recipient.contact.display_name) {
       // If email is in form of "Display Name <email address>", we replace

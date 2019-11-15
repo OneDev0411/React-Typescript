@@ -44,7 +44,7 @@ declare interface IEmailCampaignEmail {
   stored: number
   email_address: string
   type: 'email_campaign_email'
-  display_name: string
+  full_name: string
   profile_image_url: string | null
 }
 

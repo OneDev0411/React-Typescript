@@ -1,11 +1,13 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
+import { browserHistory } from 'react-router'
 
 import LinkButton from 'components/Button/LinkButton'
 import { CloseButton } from 'components/Button/CloseButton'
 import SendEmail from 'components/SendEmailButton'
 
 import YardSign from 'deals/components/YardSign'
+import OpenHouse from 'deals/components/OpenHouse'
 
 import { RemoveDraft } from './RemoveDraft'
 
@@ -19,6 +21,16 @@ export function Menu(props) {
   return (
     <Flex style={{ padding: '1.5em 0' }}>
       {deal.is_draft === true && <RemoveDraft deal={deal} />}
+
+      {deal.deal_type === 'Selling' && (
+        <OpenHouse
+          deal={deal}
+          style={{ marginLeft: '0.5rem' }}
+          defaultOpen={
+            browserHistory.getCurrentLocation().query.createOpenHouse
+          }
+        />
+      )}
 
       {deal.deal_type === 'Selling' && (
         <YardSign deal={deal} style={{ marginLeft: '0.5rem' }} />

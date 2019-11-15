@@ -2,7 +2,7 @@ import { addNotification as notify } from 'reapop'
 
 import { createTask, changeNeedsAttention } from 'actions/deals'
 
-import Message from '../../../../components/Pages/Dashboard/Chatroom/Util/message'
+import { createTaskComment } from 'deals/utils/create-task-comment'
 
 export function createRequestTask({
   checklist,
@@ -38,14 +38,7 @@ export function createRequestTask({
       return null
     }
 
-    const message = {
-      comment: taskComment,
-      author: userId,
-      room: task!.room.id
-    }
-
-    // send comment message
-    Message.postTaskComment(task, message)
+    createTaskComment(task as IDealTask, userId, taskComment)
 
     dispatch(changeNeedsAttention(dealId, task!.id, true))
 

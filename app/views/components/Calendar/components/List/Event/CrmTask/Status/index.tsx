@@ -58,16 +58,11 @@ export function CrmStatus({ event, onChange }: Props) {
     }
 
     try {
-      const task: IEvent = await updateTask(newTask)
+      const task: IEvent = await updateTask(newTask, {
+        'associations[]': ['crm_task.associations', 'crm_association.contact']
+      })
 
-      const taskWithAssociations = {
-        ...task,
-        associations: event.full_crm_task
-          ? event.full_crm_task.associations
-          : []
-      }
-
-      onChange(taskWithAssociations, 'updated')
+      onChange(task, 'updated')
     } catch (e) {
       console.log(e)
     }

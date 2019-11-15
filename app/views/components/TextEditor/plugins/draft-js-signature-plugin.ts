@@ -1,5 +1,5 @@
 import { ContentBlock, ContentState, EditorState } from 'draft-js'
-import { PluginFunctions } from 'draft-js-plugins-editor'
+import { DraftJsPlugin, PluginFunctions } from 'draft-js-plugins-editor'
 
 import {
   CustomBlockFn,
@@ -50,7 +50,7 @@ export default function createSignaturePlugin({
   prependSignatureWithSeparator = true,
   numOfEmptyLinesBeforeSignature = 2,
   stateFromHtmlOptions
-}: CreateSignaturePluginOptions) {
+}: CreateSignaturePluginOptions): DraftJsPlugin {
   let pluginFns: PluginFunctions
 
   /**

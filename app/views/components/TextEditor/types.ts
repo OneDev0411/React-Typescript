@@ -1,12 +1,13 @@
 import { FieldProps } from 'react-final-form'
-import { ContentBlock, ContentState, EditorProps } from 'draft-js'
+import { CSSProperties, ReactElement, ReactNode, Ref } from 'react'
 
-import { CSSProperties, ReactNode, Ref } from 'react'
+import { ContentBlock, ContentState, EditorProps, EditorState } from 'draft-js'
 
 import { ClassesProps } from 'utils/ts-utils'
 
 import { ITemplateVariableSuggestionGroup } from '../TemplateVariablesButton/types'
 import { styles } from './styles'
+import { createEditorRef } from './create-editor-ref'
 
 export interface ReferenceObject {
   clientHeight: number
@@ -16,6 +17,8 @@ export interface ReferenceObject {
 }
 
 export type Entity = ReturnType<ContentState['getEntity']>
+
+export type TextEditorRef = ReturnType<ReturnType<typeof createEditorRef>>
 
 export interface TextEditorProps extends ClassesProps<typeof styles> {
   className?: string
@@ -105,4 +108,24 @@ export interface AtomicBlockEntityData {
   width?: string // comes from block resizable plugin
   height?: string // comes from block resizable plugin
   src?: string // comes from image plugin
+}
+
+export interface DraftPluginEditorBlockDecoratorProps {
+  block: ContentBlock
+  blockProps: StringMap<any>
+  contentState: ContentState
+  className?: string
+}
+
+export interface DraftPluginEditorInlineDecoratorProps {
+  contentState: ContentState
+  dir: string | null
+  entityKey: string | null
+  getEditorState: () => EditorState
+  offsetKey: string
+  setEditorState: (editorState: EditorState) => void
+  children: ReactElement<{
+    start: number
+    block: ContentBlock
+  }>[]
 }

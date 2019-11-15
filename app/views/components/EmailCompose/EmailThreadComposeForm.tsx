@@ -9,7 +9,10 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { sendEmailViaOauthAccount } from 'models/o-auth-accounts/send-email-via-o-auth-account'
 import { IAppState } from 'reducers'
-import { IOauthAccountsState } from 'reducers/contacts/oAuthAccounts'
+import {
+  IOauthAccountsState,
+  selectAllConnectedAccounts
+} from 'reducers/contacts/oAuthAccounts'
 import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
 import {
@@ -24,6 +27,8 @@ import { EmailRecipientsFields } from './fields/EmailRecipientsFields'
 import { parseEmailRecipient } from '../EmailRecipientsChipsInput/helpers/parse-email-recipient'
 
 import { oAuthAccountTypeToProvider } from '../../../components/Pages/Dashboard/Account/ConnectedAccounts/constants'
+
+import { useExpressionEvaluator } from './EmailComposeForm/use-expression-evaluator'
 
 import { EmailFormValues } from '.'
 
@@ -56,12 +61,14 @@ function EmailThreadComposeForm({
   const [from, setFrom] = useState(
     (props.initialValues && props.initialValues.from) || null
   )
+  const { evaluate } = useExpressionEvaluator()
 
   const handleSendEmail = async (formValue: EmailFormValues) => {
     const from = formValue.from!
     const account = getFromAccount(from.value)!
     const provider = oAuthAccountTypeToProvider[account.type]
 
+    const html = await evaluate(formValue.body || '', formValue)
     const emailData: IEmailThreadEmailInput = getEmail(
       {
         subject: (formValue.subject || '').trim(),
@@ -74,7 +81,7 @@ function EmailThreadComposeForm({
         bcc: (formValue.bcc || [])
           .filter(isEmailRecipient)
           .map(toEmailThreadRecipient),
-        html: formValue.body || '',
+        html,
         attachments: (formValue.attachments || []).map<IEmailAttachmentInput>(
           ({ mime: type, name: filename, url: link }) => ({
             filename,
@@ -107,25 +114,31 @@ function EmailThreadComposeForm({
     )
   })
 
-  const getAllAccounts = useCallback(() => {
-    return Object.values(oAuthAccounts.list)
-      .flat()
-      .filter(account => !account.revoked)
-  }, [oAuthAccounts.list])
+  const allAccounts = selectAllConnectedAccounts(oAuthAccounts)
 
   const getFromAccount = useCallback(
-    (accountId: UUID) =>
-      getAllAccounts().find(account => account.id === accountId),
-    [getAllAccounts]
+    (accountId: UUID) => allAccounts.find(account => account.id === accountId),
+    [allAccounts]
   )
 
   const fromOptions: EmailFormValues['from'][] = useMemo(
     () =>
-      getAllAccounts().map(account => ({
-        label: `${account.display_name} <${account.email}>`,
-        value: account.id
-      })),
-    [getAllAccounts]
+      allAccounts
+        .map(account => ({
+          label: `${account.display_name} <${account.email}>`,
+          value: account.id
+        }))
+        // This filter is added in response to Saeed's request. Right now
+        // we have some issues in replying with an account other than
+        // the one by which the thread is started. We should remove
+        // this filtering when this issue is resolved.
+        .filter(
+          account =>
+            !props.initialValues ||
+            !props.initialValues.from ||
+            props.initialValues.from.value === account.value
+        ),
+    [allAccounts, props.initialValues]
   )
 
   const isSubmitDisabled = useCallback(

@@ -10,9 +10,7 @@ export const styles = (theme: Theme) =>
       border: '4px dashed transparent',
       width: 'auto',
       position: 'relative',
-      '& > div': {
-        height: '100%'
-      },
+      height: '100%',
       '&, & > div': {
         display: 'flex',
         flexDirection: 'column',

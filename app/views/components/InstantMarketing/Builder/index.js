@@ -15,6 +15,7 @@ import ImageDrawer from 'components/ImageDrawer'
 import GifDrawer from 'components/GifDrawer'
 import VideoDrawer from 'components/VideoDrawer'
 import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
+// import SaveTemplateDropdown from './SaveTemplateDropdown'
 
 import { getActiveTeam } from 'utils/user-teams'
 
@@ -211,10 +212,6 @@ class Builder extends React.Component {
 
     if (!this.isEmailTemplate) {
       this.registerSocialBlocks()
-    }
-
-    if (this.isVideoTemplate) {
-      this.grapes.appendChild(this.videoToolbar)
     }
 
     this.props.onBuilderLoad({
@@ -533,6 +530,40 @@ class Builder extends React.Component {
     this.setState({
       templateHtmlCss: this.getTemplateHtmlCss()
     })
+    this.resize()
+  }
+
+  resize = () => {
+    const canvas = this.editor.Canvas.getBody()
+    const viewport = document.querySelector('.gjs-cv-canvas')
+
+    const {
+      width: canvasWidth,
+      height: canvasHeight
+    } = canvas.getBoundingClientRect()
+
+    const {
+      width: viewportWidth,
+      height: viewportHeight
+    } = viewport.getBoundingClientRect()
+
+    let scale = 1
+
+    if (canvasWidth >= canvasHeight) {
+      if (canvasWidth > viewportWidth) {
+        scale = viewportWidth / canvasWidth
+      }
+    } else if (canvasHeight > viewportHeight) {
+      scale = viewportHeight > canvasHeight
+    }
+
+    if (scale === 1) {
+      canvas.style.transform = ''
+      canvas.style.transformOrigin = ''
+    } else {
+      canvas.style.transform = `scale(${scale})`
+      canvas.style.transformOrigin = 'left top'
+    }
   }
 
   getTemplateHtmlCss = () => {
@@ -687,23 +718,28 @@ class Builder extends React.Component {
 
     return (
       <Portal root="marketing-center">
-        <Container className="template-builder">
-          <SearchListingDrawer
-            mockListings
-            multipleSelection
-            isOpen={this.state.isListingDrawerOpen}
-            title="Select a Listing"
-            onClose={() => {
-              this.blocks.listing.selectHandler()
-              this.setState({ isListingDrawerOpen: false })
-            }}
-            onSelectListingsCallback={listings => {
-              listings.forEach(this.addListingAssets)
+        <Container
+          className="template-builder"
+          style={this.props.containerStyle}
+        >
+          {this.state.isListingDrawerOpen && (
+            <SearchListingDrawer
+              mockListings
+              multipleSelection
+              isOpen
+              title="Select Listing"
+              onClose={() => {
+                this.blocks.listing.selectHandler()
+                this.setState({ isListingDrawerOpen: false })
+              }}
+              onSelectListingsCallback={listings => {
+                listings.forEach(this.addListingAssets)
 
-              this.blocks.listing.selectHandler(listings)
-              this.setState({ isListingDrawerOpen: false })
-            }}
-          />
+                this.blocks.listing.selectHandler(listings)
+                this.setState({ isListingDrawerOpen: false })
+              }}
+            />
+          )}
           {this.state.isAgentDrawerOpen && (
             <TeamAgents
               isPrimaryAgent
@@ -810,6 +846,19 @@ class Builder extends React.Component {
                   }}
                   variant="outlined"
                   color="secondary"
+                />
+              )}
+              {/* This is disabled due some server issues */}
+              {/* <SaveTemplateDropdown
+                medium={this.state.selectedTemplate.medium}
+                inputs={this.state.selectedTemplate.inputs}
+                user={this.props.user}
+              /> */}
+
+              {this.ShowEditListingsButton && !this.props.isEdit && (
+                <Button
+                  style={{ marginLeft: '0.5rem' }}
+                  appearance="outline"
                   onClick={this.props.onShowEditListings}
                 >
                   Edit Listings ({this.props.templateData.listings.length})

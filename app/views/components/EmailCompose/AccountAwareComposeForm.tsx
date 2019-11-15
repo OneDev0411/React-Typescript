@@ -45,7 +45,10 @@ function AccountAwareComposeForm<T>({
 
   const allAccounts = Object.values(oAuthAccounts.list)
     .flat()
-    .filter(account => !account.revoked)
+    .filter(
+      account =>
+        !account.revoked && (account.scope_summary || []).includes('mail.send')
+    )
 
   const initialValues: Partial<EmailFormValues> | undefined =
     allAccounts.length > 0

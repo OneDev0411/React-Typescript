@@ -51,7 +51,8 @@ function Timeline(props: Props) {
       'crm_association',
       'email_campaign_recipient',
       'contact',
-      'contact_attribute'
+      'contact_attribute',
+      'deal_context'
     ]
   }
 

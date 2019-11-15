@@ -10,10 +10,29 @@ describe('Sort in Marketing Insights', function() {
   })
 
   it('should sorting the list alphabetically', function() {
-    const result = doSort(mockList, SortValues.ALPHABETICAL)
+    /*
+      The incoming object from server has a full_name object
+      instead of display_name, it seems server renamed the field
+      recently so the old codes are depends on display_name and
+      it can not be changed easily, for this test we are testing the output of 
+      `contactsList` which is returning display_name.
+    */
+    function normalizeInsightItem(item) {
+      const { full_name, ...rest } = item
+
+      return {
+        display_name: full_name,
+        ...rest
+      }
+    }
+
+    const result = doSort(
+      mockList.map(normalizeInsightItem),
+      SortValues.ALPHABETICAL
+    )
     const expectedResult = [item4, item1, item2, item3]
 
-    expect(result).toEqual(expectedResult)
+    expect(result).toEqual(expectedResult.map(normalizeInsightItem))
   })
 
   it('should sorting the list by bounced numbers', function() {

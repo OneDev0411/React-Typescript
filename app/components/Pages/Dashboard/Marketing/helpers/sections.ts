@@ -22,6 +22,10 @@ export const SECTIONS = [
     title: 'Life',
     items: [
       {
+        title: 'Life Layouts',
+        link: urlGenerator('/Layout')
+      },
+      {
         title: 'Occasions',
         link: urlGenerator('/Birthday')
       },
@@ -45,6 +49,10 @@ export const SECTIONS = [
     type: SectionsEnum.LINK,
     title: 'Properties',
     items: [
+      {
+        title: 'Properties Layout',
+        link: urlGenerator('/ListingLayout')
+      },
       {
         title: 'As Seen In',
         link: urlGenerator('/AsSeenIn')
