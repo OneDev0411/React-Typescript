@@ -32,6 +32,14 @@ function getFormattedListingPictures(listing) {
   })
 }
 
+function getListingAddressField(listing, field, defaultValue = '') {
+  if (listing && listing.property && listing.property.address) {
+    return listing.property.address[field] || defaultValue
+  }
+
+  return defaultValue
+}
+
 async function getRequestBody(user, deal, costCenter, callbackUrl) {
   const listing = deal.listing ? await getListing(deal.listing) : null
   const price = getPrice(deal)
@@ -39,6 +47,9 @@ async function getRequestBody(user, deal, costCenter, callbackUrl) {
   const address = getField(deal, 'street_address') || ''
   const description = listing ? listing.property.description : ''
   const pictures = listing ? getFormattedListingPictures(listing) : []
+  const city = getListingAddressField(listing, 'city')
+  const state = getListingAddressField(listing, 'state')
+  const zip = getListingAddressField(listing, 'postal_code')
 
   return nunjucks.renderString(REQUEST_BODY_TEMPLATE, {
     duns: DUNS,
@@ -58,7 +69,10 @@ async function getRequestBody(user, deal, costCenter, callbackUrl) {
         price,
         address,
         description,
-        pictures
+        pictures,
+        city,
+        state,
+        zip
       }
     ]
   })
