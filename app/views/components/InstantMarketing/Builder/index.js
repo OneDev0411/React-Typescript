@@ -190,10 +190,12 @@ class Builder extends React.Component {
 
     this.lockIn()
     this.singleClickTextEditing()
+    this.loadTraitsOnSelect()
     this.disableAssetManager()
     this.makeTemplateCentered()
     this.removeTextStylesOnPaste()
     this.disableDefaultDeviceManager()
+    this.scrollSidebarToTopOnComponentSelect()
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
       this.registerEmailBlocks()
@@ -296,8 +298,6 @@ class Builder extends React.Component {
 
   singleClickTextEditing = () => {
     this.editor.on('component:selected', selected => {
-      this.setTraits(selected)
-
       const isImageAsset =
         selected.get('type') === 'image' || selected.get('type') === 'mj-image'
 
@@ -305,7 +305,26 @@ class Builder extends React.Component {
         return
       }
 
-      selected.view.onActive(selected.view.el)
+      try {
+        selected.view.onActive(selected.view.el)
+      } catch (err) {
+        // pass for now :(
+        // Uncaught TypeError: Cannot read property 'tagName' of null
+      }
+    })
+  }
+
+  loadTraitsOnSelect = () => {
+    this.editor.on('component:selected', selected => {
+      this.setTraits(selected)
+    })
+  }
+
+  scrollSidebarToTopOnComponentSelect = () => {
+    const rightPanelElem = document.querySelector('.gjs-pn-views-container')
+
+    this.editor.on('component:selected', () => {
+      rightPanelElem.scrollTop = 0
     })
   }
 
