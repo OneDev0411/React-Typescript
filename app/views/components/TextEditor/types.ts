@@ -20,6 +20,12 @@ export type Entity = ReturnType<ContentState['getEntity']>
 
 export type TextEditorRef = ReturnType<ReturnType<typeof createEditorRef>>
 
+export enum RichTextFeature {
+  LINK = 'LINK',
+  LIST = 'LIST',
+  SIZE = 'SIZE',
+  INLINE_FORMATTING = 'INLINE_FORMATTING'
+}
 export interface TextEditorProps extends ClassesProps<typeof styles> {
   className?: string
   defaultValue?: string
@@ -87,7 +93,7 @@ export interface TextEditorProps extends ClassesProps<typeof styles> {
   /**
    * Enable/disable rich text editing features like bold, italic, lists, etc.
    */
-  enableRichText?: boolean
+  richText?: boolean | RichTextFeature[]
   /**
    * Enable/disable image insertion.
    */

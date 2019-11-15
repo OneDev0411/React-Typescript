@@ -36,7 +36,7 @@ import {
 } from './components/DraftJsSelectionPopover'
 import { LinkPreview } from './components/LinkPreview'
 import { Checkbox } from '../Checkbox'
-import { TextEditorProps } from './types'
+import { RichTextFeature, TextEditorProps } from './types'
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 import { createEditorRef } from './create-editor-ref'
 import { createPlugins } from './create-plugins'
@@ -86,7 +86,7 @@ export const TextEditor = forwardRef(
       hasSignatureByDefault = false,
       onEditSignature = () => {},
       enableImage = false,
-      enableRichText = true,
+      richText = true,
       enableSignature = false,
       enableTemplateVariables = false,
       templateVariableSuggestionGroups,
@@ -106,6 +106,9 @@ export const TextEditor = forwardRef(
     const originalEditorRef = useRef<DraftEditor | null>(null)
     const [linkEditorOpen, setLinkEditorOpen] = useState(false)
     const confirmation = useContext(ConfirmationModalContext)
+
+    const richTextFeatures: RichTextFeature[] =
+      richText === true ? Object.values(RichTextFeature) : richText || []
 
     const classes = useStyles(props)
 
@@ -301,7 +304,8 @@ export const TextEditor = forwardRef(
 
     const defaultPlugins = [
       ...Object.values(otherPlugins),
-      ...(enableRichText ? [richButtonsPlugin, ...linkPlugins] : []),
+      ...(richText ? [richButtonsPlugin] : []),
+      ...(richTextFeatures.includes(RichTextFeature.LINK) ? linkPlugins : []),
       ...(enableImage
         ? [
             blockDndPlugin,
@@ -445,9 +449,12 @@ export const TextEditor = forwardRef(
           </Dropzone>
         </EditorWrapper>
         <Toolbar ref={toolbarRef} className={classes.toolbar}>
-          {enableRichText && (
+          <RichTextButtons
+            features={richTextFeatures}
+            richButtonsPlugin={richButtonsPlugin}
+          />
+          {richTextFeatures.includes(RichTextFeature.LINK) && (
             <>
-              <RichTextButtons richButtonsPlugin={richButtonsPlugin} />
               <Tooltip title={getShortcutTooltip('Insert Link', 'K')}>
                 <ToolbarIconButton
                   onClick={event => {
