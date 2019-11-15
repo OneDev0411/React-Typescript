@@ -92,6 +92,7 @@ export const TextEditor = forwardRef(
       onAttachmentDropped,
       textAlignment,
       appendix = null,
+      toolbarRef,
       style,
       ...props
     }: TextEditorProps,
@@ -425,7 +426,7 @@ export const TextEditor = forwardRef(
             {appendix}
           </Dropzone>
         </EditorWrapper>
-        <Toolbar className={classes.toolbar}>
+        <Toolbar ref={toolbarRef} className={classes.toolbar}>
           {enableRichText && (
             <>
               <RichTextButtons richButtonsPlugin={richButtonsPlugin} />

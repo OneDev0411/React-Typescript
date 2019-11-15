@@ -16,6 +16,18 @@ function shouldOfferRTE(grapeBlockEl: HTMLElement) {
   )
 }
 
+const styles = `
+.selected-editable-block {
+  outline: none!important;
+}
+.selected-editable-block *::selection {
+  background: transparent;
+}
+.selected-editable-block  * {
+  color: transparent;
+}
+`
+
 export function createRichTextEditor(editor: Editor) {
   const richTextEditor: any = editor.RichTextEditor
   const $toolbar = richTextEditor.getToolbarEl()
@@ -29,9 +41,14 @@ export function createRichTextEditor(editor: Editor) {
   // 67 is the editor toolbar height. we want it to be on top of the element
 
   const editorRef = createRef<any>()
-  let elementColor: string | null = null
   let outlineOffset = 0
   const borderWidth = 3
+
+  const doc = editor.Canvas.getFrameEl().contentDocument!
+  const styleEl = doc.createElement('style')
+
+  styleEl.innerHTML = styles
+  doc.querySelector('body')!.appendChild(styleEl)
 
   editor.on('rteToolbarPosUpdate', pos => {
     pos.left = pos.elementLeft - pos.canvasLeft - borderWidth - outlineOffset
@@ -55,9 +72,9 @@ export function createRichTextEditor(editor: Editor) {
       return
     }
 
-    outlineOffset = parseInt(getComputedStyle(grapeBlockEl).outlineOffset, 10)
+    grapeBlockEl.classList.add('selected-editable-block')
 
-    grapeBlockEl.style.setProperty('outline', 'none', 'important')
+    outlineOffset = parseInt(getComputedStyle(grapeBlockEl).outlineOffset, 10)
 
     const computedStyle = getComputedStyle(el)
     const inheritedStyles: CSSProperties = {
@@ -68,9 +85,6 @@ export function createRichTextEditor(editor: Editor) {
       lineHeight: computedStyle.lineHeight || undefined,
       color: computedStyle.color || undefined
     }
-
-    elementColor = el.style.color
-    el.style.color = 'transparent'
 
     const defaultValue = el.innerHTML
 
@@ -86,6 +100,17 @@ export function createRichTextEditor(editor: Editor) {
       'right',
       'center'
     ]
+
+    const canvasStyleStr = [...el.closest('body')!.querySelectorAll('style')]
+      .map(item => item.innerHTML)
+      .join('\n')
+
+    // Pure hack! we extract the font size css rules by a regexp,
+    // we don't wanna inject other rules which may mess up the dom outside
+    // the canvas's iframe
+    const fontFaceRulesStr = (
+      canvasStyleStr.match(/@font-face(.|\s)*?}/gm) || []
+    ).join('\n')
 
     ReactDom.render(
       <AppTheme>
@@ -103,14 +128,7 @@ export function createRichTextEditor(editor: Editor) {
               ...inheritedStyles
             }}
           />
-          <style>
-            {[...el.closest('body')!.querySelectorAll('.gjs-css-rules style')]
-              .filter(item =>
-                (item as HTMLStyleElement).innerText.startsWith('@font')
-              )
-              .map(item => item.innerHTML)
-              .join('\n')}
-          </style>
+          <style>{fontFaceRulesStr}</style>
         </div>
       </AppTheme>,
       $toolbar
@@ -120,14 +138,13 @@ export function createRichTextEditor(editor: Editor) {
   const disable = (el: HTMLElement) => {
     const grapeBlockEl = getGrapeBlock(el)
 
+    grapeBlockEl.classList.remove('selected-editable-block')
+
     if (!shouldOfferRTE(grapeBlockEl)) {
       el.contentEditable = 'false'
 
       return
     }
-
-    el.style.color = elementColor
-    grapeBlockEl.style.outline = ''
 
     if (editorRef && editorRef.current) {
       el.innerHTML = editorRef.current.getHtml()

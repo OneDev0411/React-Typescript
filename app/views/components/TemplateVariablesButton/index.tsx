@@ -2,14 +2,16 @@ import * as React from 'react'
 
 import {
   ClickAwayListener,
+  Divider,
   List,
   ListItem,
   ListSubheader,
   Paper,
   Popper,
-  useTheme,
-  Divider
+  useTheme
 } from '@material-ui/core'
+
+import { nativelyStopEventPropagationOfEventViaRef } from 'utils/natively-stop-event-propagation-of-event-via-ref'
 
 import {
   ITemplateVariableSuggestion,
@@ -55,10 +57,11 @@ export function TemplateVariablesButton({
         style={{ zIndex: theme.zIndex.modal }}
         placement="bottom-start"
       >
-        <Paper>
+        <Paper
+          innerRef={nativelyStopEventPropagationOfEventViaRef('mousedown')}
+        >
           <ClickAwayListener onClickAway={close}>
             <List
-              innerRef={preventNativeMouseDownEventPropagation}
               style={{
                 minWidth: '15rem',
                 maxHeight: '25rem',
@@ -86,16 +89,4 @@ export function TemplateVariablesButton({
       </Popper>
     </>
   )
-}
-
-/**
- * This is done for when the editor is embedded inside Grape.js in MC
- * Preventing mousedown via react doesn't work as the handler in grape.js
- * is set up with pure DOM API.
- */
-function preventNativeMouseDownEventPropagation(el: HTMLElement | null) {
-  el &&
-    el.addEventListener('mousedown', e => {
-      e.stopPropagation()
-    })
 }

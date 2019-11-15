@@ -11,6 +11,8 @@ import usePrevious from 'react-use/lib/usePrevious'
 
 import { PopperPlacementType } from '@material-ui/core/Popper'
 
+import { nativelyStopEventPropagationOfEventViaRef } from 'utils/natively-stop-event-propagation-of-event-via-ref'
+
 import {
   getBlockElement,
   getSelectionAnchorElement
@@ -111,7 +113,11 @@ export function DraftJsSelectionPopover({
           placement={placement}
           style={{ zIndex: theme.zIndex.modal }}
         >
-          {children({ entity, block: selectedBlock || null, close })}
+          <div
+            ref={nativelyStopEventPropagationOfEventViaRef('mousedown', true)}
+          >
+            {children({ entity, block: selectedBlock || null, close })}
+          </div>
         </Popper>
       )
     )

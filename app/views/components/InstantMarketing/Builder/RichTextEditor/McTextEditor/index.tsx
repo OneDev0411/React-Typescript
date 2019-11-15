@@ -5,6 +5,7 @@ import React, { CSSProperties, forwardRef } from 'react'
 import { TextEditor } from 'components/TextEditor'
 import { TextEditorProps } from 'components/TextEditor/types'
 import { defaultTemplateVariableSuggestions } from 'components/EmailCompose/default-template-variable-suggestions'
+import { nativelyStopEventPropagationOfEventViaRef } from 'utils/natively-stop-event-propagation-of-event-via-ref'
 
 const useStyles = makeStyles(
   (theme: Theme) =>
@@ -46,6 +47,7 @@ export const McTextEditor = forwardRef(function McTextEditor(
   return (
     <TextEditor
       ref={ref}
+      toolbarRef={nativelyStopEventPropagationOfEventViaRef('mousedown', true)}
       enableTemplateVariables
       templateVariableSuggestionGroups={defaultTemplateVariableSuggestions}
       minHeight={false}

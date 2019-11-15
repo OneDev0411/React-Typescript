@@ -1,7 +1,7 @@
 import { FieldProps } from 'react-final-form'
 import { ContentBlock, ContentState, EditorProps } from 'draft-js'
 
-import { CSSProperties, ReactNode } from 'react'
+import { CSSProperties, ReactNode, Ref } from 'react'
 
 import { ClassesProps } from 'utils/ts-utils'
 
@@ -30,6 +30,8 @@ export interface TextEditorProps extends ClassesProps<typeof styles> {
    * prop
    */
   textAlignment?: 'left' | 'right' | 'center'
+
+  toolbarRef?: Ref<HTMLDivElement>
   /**
    * minimum height of the editor area:
    * true: a reasonable min height will be applied
