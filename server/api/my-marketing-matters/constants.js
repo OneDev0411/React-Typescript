@@ -34,7 +34,7 @@ export const REQUEST_BODY_TEMPLATE = `<?xml version="1.0" encoding="UTF-8" ?>
       <Extrinsic name="UniqueName">{{ user.uniqueName }}</Extrinsic>
       <Extrinsic name="FirstName">{{ user.firstName }}</Extrinsic>
       <Extrinsic name="LastName">{{ user.lastName }}</Extrinsic>
-      <Extrinsic name="StartPoint">Category</Extrinsic>
+      <Extrinsic name="StartPoint"></Extrinsic>
       <BrowserFormPost>
         <URL>{{ callbackUrl }}</URL>
       </BrowserFormPost>
@@ -44,6 +44,9 @@ export const REQUEST_BODY_TEMPLATE = `<?xml version="1.0" encoding="UTF-8" ?>
             <ID>{{ property.id }}</ID>
             <Price>{{ property.price }}</Price>
             <Address>{{ property.address }}</Address>
+            <City>{{ property.city }}</City>
+            <State>{{ property.state }}</State>
+            <Zip>{{ property.zip }}</Zip>
             <Description>{{ property.description }}</Description>
             <Pictures>
               {% for picture in property.pictures %}
