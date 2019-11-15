@@ -23,9 +23,7 @@ export function BulkEmailComposeDrawer({
   return (
     <OverlayDrawer open={isOpen} onClose={onClose}>
       <OverlayDrawer.Header title={emailId ? 'Edit Email' : 'New Email'} />
-      <OverlayDrawer.Body>
-        <BulkEmailComposeForm {...otherProps} emailId={emailId} />
-      </OverlayDrawer.Body>
+      <BulkEmailComposeForm {...otherProps} emailId={emailId} />
     </OverlayDrawer>
   )
 }

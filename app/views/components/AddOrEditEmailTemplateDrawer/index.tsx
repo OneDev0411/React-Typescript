@@ -23,7 +23,7 @@ interface Props {
   submitCallback?: (emailTemplate: IBrandEmailTemplate) => void
   activeTeamId: string
   /**
-   * If not provided, It is in "Add" mode.
+   * If null or not provided, It is in "Add" mode.
    */
   emailTemplate?: IBrandEmailTemplate | null
   updateEmailTemplate: IAsyncActionProp<typeof updateEmailTemplate>

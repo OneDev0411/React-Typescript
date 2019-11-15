@@ -21,6 +21,7 @@ interface MiniContactPropsType {
   data: object
   children: React.ReactNode
   as: string
+  onEventChange?(event: IEvent, type: string): void
 }
 
 function MiniContact(props: MiniContactPropsType) {
@@ -71,6 +72,7 @@ function MiniContact(props: MiniContactPropsType) {
                 type={props.type}
                 actionSettings={actionSettings}
                 setActionSettings={setActionSettings}
+                onSubmit={props.onEventChange}
               />
             </Paper>
             {/* </Fade>

@@ -1,51 +1,16 @@
 import React from 'react'
 
 import { makeStyles } from '@material-ui/styles'
-import { fade, Theme } from '@material-ui/core/styles'
+import { fade } from '@material-ui/core/styles'
+
+import { ClassesProps } from 'utils/ts-utils'
 
 import { DateTime } from './DateTime'
 
-import styles from '../../styles'
+import inlineStyles from '../../styles'
+import { styles } from './styles'
 
-interface StyleProps {
-  hasBorderBottom: boolean | null
-  clickable: boolean
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    height: '100%',
-    cursor: (props: StyleProps) => (props.clickable ? 'pointer' : 'auto'),
-    borderBottom: (props: StyleProps) =>
-      props.hasBorderBottom ? '1px solid rgba(219, 230, 253, 0.5)' : 'none',
-    '& button, a.MuiButtonBase-root': {
-      borderColor: '#eee',
-      color: '#eee'
-    },
-    '&:hover': {
-      transition: '0.2s ease-in background-color',
-      backgroundColor: theme.palette.action.hover,
-      '& button, a.MuiButtonBase-root': {
-        borderColor: 'inherit',
-        color: 'inherit'
-      }
-    },
-    '& a, & button': {
-      zIndex: 1,
-      position: 'relative'
-    },
-    '& a': {
-      color: theme.palette.secondary.dark
-    },
-    '&:hover a': {
-      color: theme.palette.primary.main
-    }
-  }
-}))
+const useStyles = makeStyles(styles)
 
 interface Props {
   style: React.CSSProperties
@@ -69,10 +34,12 @@ export function EventContainer({
   title,
   subtitle,
   actions,
-  onClick
-}: Props) {
+  onClick,
+  classes: inputClasses
+}: Props & ClassesProps<typeof styles>) {
   const hasBorderBottom = nextItem && !nextItem.hasOwnProperty('isEventHeader')
   const classes = useStyles({
+    classes: inputClasses,
     hasBorderBottom,
     clickable: typeof onClick === 'function'
   })
@@ -82,25 +49,25 @@ export function EventContainer({
       <div className={classes.root}>
         <button
           type="button"
-          style={styles.buttonContainer}
+          style={inlineStyles.buttonContainer}
           onClick={onClick}
         />
 
-        <div style={styles.row}>
-          <div style={styles.container}>
-            <div style={styles.time}>
+        <div style={inlineStyles.row}>
+          <div style={inlineStyles.container}>
+            <div style={inlineStyles.time}>
               <DateTime event={event} />
             </div>
             <div
               style={{
-                ...styles.container,
-                ...styles.title
+                ...inlineStyles.container,
+                ...inlineStyles.title
               }}
             >
               {icon && (
                 <div
                   style={{
-                    ...styles.icon,
+                    ...inlineStyles.icon,
                     backgroundColor: fade(icon.color, 0.2)
                   }}
                 >
@@ -118,8 +85,8 @@ export function EventContainer({
           <div>{actions}</div>
         </div>
 
-        <div style={styles.row}>
-          <div style={styles.subtitle}>{subtitle}</div>
+        <div style={inlineStyles.row}>
+          <div style={inlineStyles.subtitle}>{subtitle}</div>
         </div>
       </div>
     </div>

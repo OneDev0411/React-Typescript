@@ -1,4 +1,3 @@
-import styled from 'styled-components'
 import React from 'react'
 import Downshift from 'downshift'
 import matchSorter from 'match-sorter'
@@ -6,22 +5,7 @@ import matchSorter from 'match-sorter'
 import Card from '../Card'
 import { Item } from './Item'
 import { SearchInput } from './SearchInput'
-import ArrowDropDown from '../SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
-import ActionButton from '../Button/ActionButton'
-
-export const Button = styled(ActionButton)`
-  position: relative;
-  width: ${props => (props.fullWidth ? '100%' : 'auto')};
-  display: flex;
-  align-items: center;
-  justify-content: ${props => (props.fullWidth ? 'space-between' : 'initial')};
-  font-weight: normal;
-`
-
-export const Icon = styled(ArrowDropDown)`
-  fill: #000;
-  transform: ${({ isOpen }) => (isOpen ? 'rotateX(180deg)' : 'none')};
-`
+import { Icon, Button } from './styles'
 
 export const Dropdown = ({
   items,
@@ -191,3 +175,5 @@ export const Dropdown = ({
     }}
   />
 )
+
+export { Icon, Button } from './styles'

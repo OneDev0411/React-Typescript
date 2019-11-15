@@ -8,17 +8,17 @@ import { getSizeStyles } from './get-size-styles'
  * atomic blocks like image. Their internal blockRendererFn is not useful
  * because they don't render to string, and also the signature is different than
  * blockRendererFn in stateToHTML options.
- * @param alignment
- * @param width
- * @param height
  */
-export function renderAtomicBlockStyles({
-  alignment,
-  width,
-  height
-}: AtomicBlockEntityData) {
+export function renderAtomicBlockStyles(
+  { alignment, width, height }: AtomicBlockEntityData,
+  /**
+   * if true, it will only set width while leaving height undefined to be
+   * set based image's own aspect ration on.
+   */
+  preserveAspectRatio = true
+) {
   return stylesToString({
     ...getAlignmentStyles(alignment),
-    ...getSizeStyles(width, height)
+    ...getSizeStyles(width, preserveAspectRatio ? undefined : height)
   })
 }

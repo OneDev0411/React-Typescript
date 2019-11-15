@@ -4,15 +4,14 @@ import SendContactCard from 'components/InstantMarketing/adapters/SendContactCar
 
 interface Props {
   event: ICalendarEvent
+  contact: IContact
 }
 
-export function SendBirthdayCard({ event }: Props) {
+export function SendBirthdayCard({ event, contact }: Props) {
   if (event.event_type === 'birthday' && !event.metadata.is_partner) {
     return (
       // @ts-ignore js component
-      <SendContactCard contact={event.full_contact}>
-        Send Birthday Card
-      </SendContactCard>
+      <SendContactCard contact={contact}>Send Birthday Card</SendContactCard>
     )
   }
 

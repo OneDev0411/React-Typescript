@@ -28,7 +28,10 @@ function LocationsComponent({ locations, input: { onChange } }) {
   return (
     <>
       <div style={{ height: '15rem', marginBottom: '1rem' }}>
-        <Map id="tour-direction-map" listings={locations.map(l => l.listing)} />
+        <Map
+          id="tour-direction-map"
+          listings={locations.map(l => l.listing.original)}
+        />
       </div>
 
       <DragDropContext onDragEnd={onDragEnd}>

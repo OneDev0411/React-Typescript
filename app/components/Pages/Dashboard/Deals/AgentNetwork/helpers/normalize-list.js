@@ -1,10 +1,10 @@
 // We have 2 types of agent for a listing,
 // one is sell agenet and the other is list agent
-function agentId(type, listing) {
+function getAgent(type, listing) {
   const typeName = `${type}_agent`
 
-  if (listing && listing[typeName] && listing[typeName].id) {
-    return listing[typeName].id
+  if (listing && listing[typeName]) {
+    return listing[typeName]
   }
 
   return null
@@ -28,9 +28,12 @@ export function normalizeList(listings) {
         [`${type}_agent_direct_work_phone`]: phone
       } = listing
 
+      const agent = getAgent(type, listing)
+
       initialList[id] = {
         id,
-        agentId: agentId(type, listing),
+        agent,
+        agentId: agent ? agent.id : null,
         name,
         company,
         email,

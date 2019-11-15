@@ -8,6 +8,7 @@ interface Props {
   error: any
   onRetry: () => void
   children: ReactNode
+  errorChildren?: ReactNode
 }
 
 /**
@@ -18,6 +19,7 @@ export function AsyncValueContainer({
   loading,
   error,
   onRetry,
+  errorChildren,
   children
 }: Props) {
   if (loading) {
@@ -25,7 +27,11 @@ export function AsyncValueContainer({
   }
 
   if (error) {
-    return <ServerError error={error} onRetry={onRetry} />
+    return (
+      <ServerError error={error} onRetry={onRetry}>
+        {errorChildren}
+      </ServerError>
+    )
   }
 
   if (typeof children === 'function') {

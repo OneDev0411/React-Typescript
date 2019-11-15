@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { Button } from '@material-ui/core'
+
 import { useEmailThreadLoader } from '../../../EmailThread/use-email-thread-loader'
 import { Drawer } from '../Drawer'
 import { AsyncValueContainer } from '../../../AsyncValueContainer'
@@ -31,6 +33,14 @@ export function EmailThreadDrawerByThreadKey({
           loading={loading}
           error={error}
           onRetry={fetchThread}
+          errorChildren={
+            <Button
+              variant="outlined"
+              onClick={e => drawerProps.onClose(e, 'closeButtonClick')}
+            >
+              Close
+            </Button>
+          }
         >
           {thread && (
             <EmailThread thread={thread} onClose={drawerProps.onClose} />
