@@ -156,6 +156,23 @@
     position: relative;
     padding: 0.5rem 0 2.5rem;
 
+    // Settings/Traits title
+    &::before {
+      color: #000;
+      content: 'Settings';
+      width: 100%;
+      height: 3.5rem;
+      display: block;
+      font-size: 1rem;
+      text-align: left;
+      padding: 0.5rem 1.5rem;
+      margin-bottom: 1.5rem;
+      background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAEJSURBVHgB7ZfNEYIwFIR3rIAS6Ew6ECsgVoIdWULoQDvQZNDRyeSHJAjvsN/Mnt6BhWxCFiCEEELKaIwGI230fOtmNBq1EM7R6I6vcVd21kMoJ4SNuzpCGC3iX963Eg0EYfPtmlSYTVr1gflupLLuy7nC8hVKSaMyhjrxAF88GpSZjcUwyAFxJOT3ERumXuBsNEXmvghVLbmDNX/Biij498FnEw+e+QhBWJO5x2gLYXRY/gJi/8bWWOoq0UE4rdEV8wXu99xWEPb3JYTUw/a2F2xve2Lz7ZpU2Li9pfKbo5L2pvHnRpaj0vbGRjZhHUra2+qNLAcF/z5ge9uSDnWnlAjY3gghhJAQL+7AMfKsYHMNAAAAAElFTkSuQmCC');
+      background-repeat: no-repeat;
+      background-position: 0 0.75rem;
+      background-size: 1rem;
+    }
+
     &::after {
       content: '';
       width: 100%;
