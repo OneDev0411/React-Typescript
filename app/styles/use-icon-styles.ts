@@ -3,6 +3,11 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core'
 export const useIconStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
+      activeOnlyRootSvg: {
+        'svg&': {
+          fill: theme.palette.primary.main
+        }
+      },
       active: {
         'svg& path': {
           fill: theme.palette.primary.main

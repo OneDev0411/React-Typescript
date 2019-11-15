@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { Tooltip, IconButton } from '@material-ui/core'
 
-import TextAlignCenterIcon from 'components/SvgIcons/TextAlignCenter/IconTextAlignCenter'
-import TextAlignRightIcon from 'components/SvgIcons/TextAlignRight/IconTextAlignRight'
-import TextAlignLeftIcon from 'components/SvgIcons/TextAlignLeft/IconTextAlignLeft'
+import IconAlignLeft from 'components/SvgIcons/AlignLeft/IconAlignLeft'
+import IconAlignCenter from 'components/SvgIcons/AlignCenter/IconAlignCenter'
+import IconAlignRight from 'components/SvgIcons/AlignRight/IconAlignRight'
+
+import { useIconStyles } from '../../../../../../styles/use-icon-styles'
 
 import { ItemTitle, ItemContainer } from '../styled'
 import { Row, Column } from './styled'
@@ -21,6 +23,7 @@ export default function TextFormatting({
   value = 'left',
   onChange
 }: Props) {
+  const iconClasses = useIconStyles()
   const [innerValue, setInnerValue] = useState<Alignment>(value)
 
   function handleChange(value: Alignment) {
@@ -35,39 +38,57 @@ export default function TextFormatting({
         <Column>
           <Tooltip title="Left">
             <IconButton
+              size="small"
               aria-label="text-align-left"
-              color={innerValue.includes('left') ? 'primary' : undefined}
               onClick={() => {
                 handleChange('left')
               }}
             >
-              <TextAlignLeftIcon fill="#000" size="16" />
+              <IconAlignLeft
+                className={
+                  innerValue.includes('left')
+                    ? iconClasses.activeOnlyRootSvg
+                    : ''
+                }
+              />
             </IconButton>
           </Tooltip>
         </Column>
         <Column>
           <Tooltip title="Center">
             <IconButton
+              size="small"
               aria-label="text-align-center"
-              color={innerValue.includes('center') ? 'primary' : undefined}
               onClick={() => {
                 handleChange('center')
               }}
             >
-              <TextAlignCenterIcon fill="#000" size="16" />
+              <IconAlignCenter
+                className={
+                  innerValue.includes('center')
+                    ? iconClasses.activeOnlyRootSvg
+                    : ''
+                }
+              />
             </IconButton>
           </Tooltip>
         </Column>
         <Column>
           <Tooltip title="Right">
             <IconButton
+              size="small"
               aria-label="text-align-right"
-              color={innerValue.includes('right') ? 'primary' : undefined}
               onClick={() => {
                 handleChange('right')
               }}
             >
-              <TextAlignRightIcon fill="#000" size="16" />
+              <IconAlignRight
+                className={
+                  innerValue.includes('right')
+                    ? iconClasses.activeOnlyRootSvg
+                    : ''
+                }
+              />
             </IconButton>
           </Tooltip>
         </Column>
