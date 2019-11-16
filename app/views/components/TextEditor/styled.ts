@@ -5,6 +5,8 @@ import { Theme } from '@material-ui/core'
 
 import Flex from 'styled-flex-component'
 
+import { ComponentProps, ComponentType, CSSProperties } from 'react'
+
 import { primary, primaryDark } from '../../utils/colors'
 
 export const Toolbar = styled.div`
@@ -24,11 +26,17 @@ export const Separator = styled.span`
   background-color: ${({ theme }: ThemeProps<Theme>) => theme.palette.divider};
   margin: ${({ theme }: ThemeProps<Theme>) => theme.spacing(0, 0.5)};
 `
-export const EditorContainer = (styled(Flex).attrs({ column: true })`
-  overflow: auto;
+export const EditorContainer = (styled(Flex).attrs({ column: true })<{
+  minHeight: boolean | CSSProperties['minHeight']
+}>`
   flex: 1 1 0%;
-  min-height: 12.5rem;
-` as unknown) as typeof Flex
+  min-height: ${({ minHeight }) =>
+    minHeight === true ? '12.5rem' : minHeight || undefined};
+` as unknown) as (ComponentType<
+  ComponentProps<typeof Flex> & {
+    minHeight: boolean | CSSProperties['minHeight']
+  }
+>)
 
 export const EditorWrapper = styled.div`
   &.hide-placeholder {
@@ -36,7 +44,6 @@ export const EditorWrapper = styled.div`
       display: none;
     }
   }
-  padding-top: ${(props: ThemeProps<Theme>) => `${props.theme.spacing(0.5)}px`};
   overflow: auto; // Allows float styles on images, without collapsing editor height
 
   display: flex;

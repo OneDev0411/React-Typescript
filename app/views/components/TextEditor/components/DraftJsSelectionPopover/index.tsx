@@ -15,6 +15,8 @@ import PopperJs from 'popper.js'
 
 import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
 
+import { nativelyStopEventPropagationOfEventViaRef } from 'utils/natively-stop-event-propagation-of-event-via-ref'
+
 import { getSelectionAnchorElement } from '../LinkEditorPopover/utils'
 import { Entity } from '../../types'
 import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
@@ -144,7 +146,12 @@ export function DraftJsSelectionPopover({
         >
           {({ TransitionProps }) => (
             <Grow {...TransitionProps} timeout={150}>
-              <div>
+              <div
+                ref={nativelyStopEventPropagationOfEventViaRef(
+                  'mousedown',
+                  true
+                )}
+              >
                 {typeof children === 'function'
                   ? children({ entity, block: selectedBlock || null, close })
                   : children}

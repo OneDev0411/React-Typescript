@@ -1,6 +1,6 @@
 import { makeStyles, Paper, TextField, Typography } from '@material-ui/core'
 import * as React from 'react'
-import { MouseEventHandler } from 'react'
+import { MouseEventHandler, Ref } from 'react'
 import classNames from 'classnames'
 
 import { useIconStyles } from 'utils/../styles/use-icon-styles'
@@ -16,6 +16,7 @@ type Props = {
   fallback: string
   suggestion: ITemplateVariableSuggestion | undefined
   onFallbackChange: (fallback: string) => void
+  innerRef?: Ref<HTMLElement>
   onSubmit?: () => void
 }
 
@@ -37,7 +38,12 @@ export function TemplateExpressionPopover(
   )
 
   return (
-    <Paper onClick={props.onClick} className={classes.root} elevation={10}>
+    <Paper
+      innerRef={props.innerRef}
+      onClick={props.onClick}
+      className={classes.root}
+      elevation={10}
+    >
       {description && (
         <div className={classes.description}>
           <IconInfoOutline className={iconClass} />

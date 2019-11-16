@@ -1,9 +1,12 @@
 import { FieldProps } from 'react-final-form'
+import { CSSProperties, ReactElement, ReactNode, Ref } from 'react'
+
 import { ContentBlock, ContentState, EditorProps, EditorState } from 'draft-js'
 
-import { ReactElement, ReactNode } from 'react'
+import { ClassesProps } from 'utils/ts-utils'
 
 import { ITemplateVariableSuggestionGroup } from '../TemplateVariablesButton/types'
+import { styles } from './styles'
 import { createEditorRef } from './create-editor-ref'
 
 export interface ReferenceObject {
@@ -17,13 +20,35 @@ export type Entity = ReturnType<ContentState['getEntity']>
 
 export type TextEditorRef = ReturnType<ReturnType<typeof createEditorRef>>
 
-export interface TextEditorProps {
+export enum RichTextFeature {
+  LINK = 'LINK',
+  LIST = 'LIST',
+  SIZE = 'SIZE',
+  INLINE_FORMATTING = 'INLINE_FORMATTING'
+}
+export interface TextEditorProps extends ClassesProps<typeof styles> {
   className?: string
   defaultValue?: string
   input?: FieldProps<any>['input']
   onChange?: (value: string) => void
   disabled?: boolean
   placeholder?: string
+
+  /**
+   * DraftJS [textAlignment](https://draftjs.org/docs/advanced-topics-text-direction#text-alignment)
+   * prop
+   */
+  textAlignment?: 'left' | 'right' | 'center'
+
+  toolbarRef?: Ref<HTMLDivElement>
+  /**
+   * minimum height of the editor area:
+   * true: a reasonable min height will be applied
+   * false: no minimum height
+   * string | number: exact minimum height
+   */
+  minHeight?: boolean | CSSProperties['minHeight']
+  style?: CSSProperties
   plugins?: any[]
   DraftEditorProps?: Omit<EditorProps, 'editorState' | 'onChange'>
 
@@ -68,7 +93,7 @@ export interface TextEditorProps {
   /**
    * Enable/disable rich text editing features like bold, italic, lists, etc.
    */
-  enableRichText?: boolean
+  richText?: boolean | RichTextFeature[]
   /**
    * Enable/disable image insertion.
    */

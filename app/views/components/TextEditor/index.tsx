@@ -36,7 +36,7 @@ import {
 } from './components/DraftJsSelectionPopover'
 import { LinkPreview } from './components/LinkPreview'
 import { Checkbox } from '../Checkbox'
-import { TextEditorProps } from './types'
+import { RichTextFeature, TextEditorProps } from './types'
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 import { createEditorRef } from './create-editor-ref'
 import { createPlugins } from './create-plugins'
@@ -75,6 +75,7 @@ export const TextEditor = forwardRef(
       defaultValue = '',
       disabled = false,
       autofocus = false,
+      minHeight = true,
       input = null,
       onChange = () => {},
       placeholder = 'Type something…',
@@ -85,12 +86,16 @@ export const TextEditor = forwardRef(
       hasSignatureByDefault = false,
       onEditSignature = () => {},
       enableImage = false,
-      enableRichText = true,
+      richText = true,
       enableSignature = false,
       enableTemplateVariables = false,
       templateVariableSuggestionGroups,
       onAttachmentDropped,
-      appendix = null
+      textAlignment,
+      appendix = null,
+      toolbarRef,
+      style,
+      ...props
     }: TextEditorProps,
     ref
   ) => {
@@ -102,7 +107,10 @@ export const TextEditor = forwardRef(
     const [linkEditorOpen, setLinkEditorOpen] = useState(false)
     const confirmation = useContext(ConfirmationModalContext)
 
-    const classes = useStyles()
+    const richTextFeatures: RichTextFeature[] =
+      richText === true ? Object.values(RichTextFeature) : richText || []
+
+    const classes = useStyles(props)
 
     /**
      * Images are not rendered appropriately without this option.
@@ -296,7 +304,8 @@ export const TextEditor = forwardRef(
 
     const defaultPlugins = [
       ...Object.values(otherPlugins),
-      ...(enableRichText ? [richButtonsPlugin, ...linkPlugins] : []),
+      ...(richText ? [richButtonsPlugin] : []),
+      ...(richTextFeatures.includes(RichTextFeature.LINK) ? linkPlugins : []),
       ...(enableImage
         ? [
             blockDndPlugin,
@@ -353,12 +362,19 @@ export const TextEditor = forwardRef(
     }
 
     return (
-      <EditorContainer className={className}>
+      <EditorContainer
+        className={cn(className, classes.root)}
+        style={style}
+        minHeight={minHeight}
+      >
         <EditorWrapper
           ref={editorElementRef}
-          className={cn({
-            'hide-placeholder': shouldHidePlaceholder(editorState)
-          })}
+          className={cn(
+            {
+              'hide-placeholder': shouldHidePlaceholder(editorState)
+            },
+            classes.content
+          )}
           onClick={handlerWrapperClick}
           data-test="text-editor-wrapper"
         >
@@ -379,6 +395,7 @@ export const TextEditor = forwardRef(
               onChange={handleChange}
               plugins={allPlugins}
               placeholder={placeholder}
+              textAlignment={textAlignment}
               ref={editorRef}
               {...DraftEditorProps}
             />
@@ -431,10 +448,13 @@ export const TextEditor = forwardRef(
             {appendix}
           </Dropzone>
         </EditorWrapper>
-        <Toolbar>
-          {enableRichText && (
+        <Toolbar ref={toolbarRef} className={classes.toolbar}>
+          <RichTextButtons
+            features={richTextFeatures}
+            richButtonsPlugin={richButtonsPlugin}
+          />
+          {richTextFeatures.includes(RichTextFeature.LINK) && (
             <>
-              <RichTextButtons richButtonsPlugin={richButtonsPlugin} />
               <Tooltip title={getShortcutTooltip('Insert Link', 'K')}>
                 <ToolbarIconButton
                   onClick={event => {
