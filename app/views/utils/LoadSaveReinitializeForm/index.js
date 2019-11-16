@@ -33,12 +33,14 @@ class LoadSaveReinitializeForm extends React.Component {
   }
 
   componentDidMount() {
-    if (Object.keys(this.props.initialValues).length === 0) {
-      this.load()
-    }
+    this.load()
   }
 
   load = async () => {
+    if (Object.keys(this.props.initialValues).length > 0) {
+      return this.props.load()
+    }
+
     const { postLoadFormat } = this.props
 
     this.setState({ isLoading: true })
