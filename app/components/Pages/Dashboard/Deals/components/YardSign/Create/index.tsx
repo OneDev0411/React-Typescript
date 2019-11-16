@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
+import { ThunkDispatch } from 'redux-thunk'
+import { AnyAction } from 'redux'
 
 import {
   Button,
@@ -27,29 +29,10 @@ interface StateProps {
   checklists: IDealChecklist[]
 }
 
-interface DispatchProps {
-  createRequestTask({
-    checklist,
-    userId,
-    dealId,
-    taskType,
-    taskTitle,
-    taskComment,
-    notifyMessage
-  }: {
-    checklist: IDealChecklist
-    userId: UUID
-    dealId: UUID
-    taskType: string
-    taskTitle: string
-    taskComment: string
-    notifyMessage: string
-  }): (dispatch: any) => Promise<IDealTask | null>
-}
-
 interface Props {
   deal: IDeal
   onCreateTask(task: IDealTask): void
+  createRequestTask: IAsyncActionProp<typeof createRequestTask>
 }
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -63,7 +46,7 @@ const useStyles = makeStyles((theme: Theme) => {
   })
 })
 
-function Form(props: Props & StateProps & DispatchProps) {
+function Form(props: Props & StateProps) {
   const classes = useStyles()
 
   const [selectedItems, setSelectedItems] = useState<number[]>([])
@@ -149,7 +132,14 @@ function mapStateToProps(
   }
 }
 
-export default connect<StateProps, DispatchProps, Props>(
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+  return {
+    createRequestTask: (...args: Parameters<typeof createRequestTask>) =>
+      dispatch(createRequestTask(...args))
+  }
+}
+
+export default connect(
   mapStateToProps,
-  { createRequestTask }
+  mapDispatchToProps
 )(Form)
