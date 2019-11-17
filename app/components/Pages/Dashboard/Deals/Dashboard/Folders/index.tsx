@@ -109,8 +109,6 @@ function FoldersTab({ deal, checklists, tasks, isBackOffice }: Props) {
 
   return (
     <Container>
-      <MarketingChecklist deal={deal} isBackOffice={isBackOffice} />
-
       {filteredChecklists.map((checklist: IDealChecklist) => (
         <ChecklistFolder
           key={checklist.id}
@@ -127,6 +125,7 @@ function FoldersTab({ deal, checklists, tasks, isBackOffice }: Props) {
         />
       ))}
 
+      <MarketingChecklist deal={deal} isBackOffice={isBackOffice} />
       <UploadFolder deal={deal} isBackOffice={isBackOffice} />
 
       <Flex>
