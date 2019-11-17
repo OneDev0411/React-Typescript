@@ -14,7 +14,7 @@ export const Container = styled.div`
   padding: 0 1rem;
 `
 
-export const ItemLink = styled.div`
+export const ItemLink = styled.span`
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.43;

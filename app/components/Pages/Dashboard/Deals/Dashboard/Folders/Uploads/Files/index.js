@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import Flex from 'styled-flex-component'
 import moment from 'moment'
@@ -102,4 +101,4 @@ class Files extends React.Component {
   }
 }
 
-export default connect(null)(Files)
+export default Files
