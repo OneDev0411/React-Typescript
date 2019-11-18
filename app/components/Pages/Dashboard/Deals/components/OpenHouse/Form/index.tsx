@@ -38,7 +38,7 @@ interface DispatchProps {
 
 interface Props {
   deal: IDeal
-  hasOpenHouse: boolean
+  createRegistrationPage: boolean
   task: IDealTask | null
   defaultStartTime: number | null
   defaultEndTime: number | null
@@ -186,7 +186,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
 
     setCreatedTask(task)
 
-    if (props.hasOpenHouse) {
+    if (!props.createRegistrationPage) {
       props.onUpsertTask(task)
 
       return
@@ -201,12 +201,14 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
         onConfirm: () => setShowOHRegistrationDrawer(true),
         onCancel: () => props.onUpsertTask(task)
       })
+    } else {
+      props.onUpsertTask(task)
     }
   }
 
   const handleCloseOHRegistrationDrawer = () => {
     setShowOHRegistrationDrawer(false)
-    props.onUpsertTask(createdTask as any)
+    props.onUpsertTask(createdTask!)
   }
 
   const getOpenHouseIntialValues = () => {

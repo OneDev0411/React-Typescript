@@ -107,6 +107,7 @@ function OpenHouses({
   const handleUpsertTask = (task: IDealTask): void => {
     setShowForm(false)
     setSelectedTask(task)
+    toggleMenu()
   }
 
   const handleClickEdit = (task: IDealTask): void => {
@@ -164,7 +165,7 @@ function OpenHouses({
           <Form
             deal={deal}
             task={selectedItem}
-            hasOpenHouse={location.query.createOpenHouse}
+            createRegistrationPage={!location.query.createOpenHouse}
             defaultStartTime={location.query.startTime}
             defaultEndTime={location.query.endTime}
             onUpsertTask={handleUpsertTask}
