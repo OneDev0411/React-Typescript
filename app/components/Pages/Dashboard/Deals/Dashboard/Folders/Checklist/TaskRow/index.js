@@ -147,7 +147,7 @@ class Task extends React.Component {
         <Row>
           <RowArrowIcon
             isOpen={state.isTaskExpanded}
-            display={this.isRowExpandable()}
+            show={this.isRowExpandable()}
             onClick={this.toggleTaskOpen}
           />
 

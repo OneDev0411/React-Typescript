@@ -144,13 +144,10 @@ function List(props: Props & StateProps) {
   )
 }
 
-function mapStateToProps(
-  { user, deals }: IAppState,
-  ownProps: Props
-): StateProps {
+function mapStateToProps({ user, deals }: IAppState, props: Props): StateProps {
   return {
     user,
-    tasks: selectDealTasks(ownProps.deal, deals.checklists, deals.tasks)
+    tasks: selectDealTasks(props.deal, deals.checklists, deals.tasks)
   }
 }
 

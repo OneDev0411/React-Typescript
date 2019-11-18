@@ -37,7 +37,9 @@ export const HeaderTitle = styled(H4)`
   margin-right: 0.5rem;
 `
 
-export const ItemsContainer = styled.div`
+export const ItemsContainer = styled.div<{
+  isOpen: boolean
+}>`
   transition: all ease-in 1s;
   height: auto;
 
@@ -49,18 +51,23 @@ export const ItemsContainer = styled.div`
     `};
 `
 
-export const ArrowIcon = styled(ArrowDownIcon)`
+export const ArrowIcon = styled(ArrowDownIcon)<{
+  isOpen: boolean
+  show?: boolean
+}>`
   width: 1.5em;
   height: 1.5em;
   margin-right: 0.5rem;
   cursor: pointer;
   fill: #000 !important;
-  transform: ${({ isOpen }) => (isOpen ? 'inherit' : 'rotateZ(-90deg)')};
-  opacity: ${props => (props.display === false ? 0 : 1)};
+  transform: ${props => (props.isOpen ? 'inherit' : 'rotateZ(-90deg)')};
+  opacity: ${props => (props.show ? 1 : 0)};
 `
 
 /* item rows */
-export const RowContainer = styled.div`
+export const RowContainer = styled.div<{
+  isTaskExpanded: boolean
+}>`
   border-bottom: solid 1px #f2f2f2;
   border-left: 3px solid transparent;
 
@@ -120,7 +127,9 @@ export const RowArrowIcon = styled(ArrowIcon)`
   margin-top: 1px;
 `
 
-export const RowTitle = styled(H4)`
+export const RowTitle = styled(H4)<{
+  clickable: boolean
+}>`
   font-weight: 600px;
   margin-bottom: 0.75rem;
 

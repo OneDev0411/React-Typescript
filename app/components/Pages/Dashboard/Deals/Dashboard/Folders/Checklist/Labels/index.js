@@ -19,8 +19,13 @@ const Container = styled(H4)`
 `
 
 export function ChecklistLabels(props) {
-  const labels = []
   const { checklist } = props
+
+  if (!checklist) {
+    return null
+  }
+
+  const labels = []
 
   if (checklist.is_deactivated === true) {
     labels.push('Backup')
