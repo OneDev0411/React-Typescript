@@ -2563,7 +2563,7 @@ exports[`Deal MarketingPane component renders with listing 1`] = `
       }
     }
   />
-  <withRouter(Connect(MyMarketingMatters))
+  <Component
     deal={
       Object {
         "attention_requested_at": null,
@@ -5124,7 +5124,7 @@ exports[`Deal MarketingPane component renders with listing 1`] = `
       }
     }
   />
-  <Connect(OpenHouse)
+  <ConnectFunction
     deal={
       Object {
         "attention_requested_at": null,
@@ -12812,7 +12812,7 @@ exports[`Deal MarketingPane component renders with listing 1`] = `
 
 exports[`Deal MarketingPane component renders without listing 1`] = `
 <styled__MarketingContainer>
-  <withRouter(Connect(MyMarketingMatters))
+  <Component
     deal={
       Object {
         "attention_requested_at": null,
