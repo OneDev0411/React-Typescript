@@ -12,7 +12,9 @@ import store from '../../app/stores'
 import { AppTheme } from '../../app/AppTheme'
 
 interface Props {
-  reduxState?: Partial<IAppState>
+  reduxState?: Partial<Omit<IAppState, 'deals'>> & {
+    deals?: Partial<IAppState['deals']>
+  }
   children: ReactNode
 }
 

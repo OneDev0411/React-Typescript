@@ -5,6 +5,10 @@ import { Field, Form } from 'react-final-form'
 import * as React from 'react'
 import styled, { ThemeProps } from 'styled-components'
 
+import { ThunkDispatch } from 'redux-thunk'
+
+import { AnyAction } from 'redux'
+
 import { IAppState } from 'reducers'
 import editUser from 'actions/user/edit'
 import { uploadEmailSignatureAttachment } from 'models/user/upload-email-signature-attachment'
@@ -13,7 +17,7 @@ import { TextEditor } from '../TextEditor'
 
 interface Props {
   user: IUser
-  editUser: (updates: IUserInput) => (dispatch) => Promise<any>
+  editUser: IAsyncActionProp<typeof editUser>
   addNotification: typeof addNotification
   onSaved?: () => void
   showActions?: boolean
@@ -95,7 +99,15 @@ function EditEmailSignature({
   )
 }
 
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+  return {
+    editUser: (...args: Parameters<typeof editUser>) =>
+      dispatch(editUser(...args)),
+    addNotification
+  }
+}
+
 export default connect(
   ({ user }: IAppState) => ({ user }),
-  { editUser, addNotification }
+  mapDispatchToProps
 )(EditEmailSignature)

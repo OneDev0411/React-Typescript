@@ -32,6 +32,9 @@ interface StateProps {
 interface Props {
   deal: IDeal
   onCreateTask(task: IDealTask): void
+}
+
+interface DispatchProps {
   createRequestTask: IAsyncActionProp<typeof createRequestTask>
 }
 
@@ -46,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) => {
   })
 })
 
-function Form(props: Props & StateProps) {
+function Form(props: Props & StateProps & DispatchProps) {
   const classes = useStyles()
 
   const [selectedItems, setSelectedItems] = useState<number[]>([])

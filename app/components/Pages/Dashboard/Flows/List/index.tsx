@@ -195,5 +195,5 @@ const mapStateToProps = ({ user }) => ({ user })
 
 export default connect(
   mapStateToProps,
-  { notify }
+  () => ({ notify })
 )(List)

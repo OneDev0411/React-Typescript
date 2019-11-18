@@ -57,5 +57,7 @@ function UploadingAttachmentsList({ input, addNotification, ...props }: Props) {
 
 export default connect(
   null,
-  { addNotification }
+  () => ({
+    addNotification
+  })
 )(UploadingAttachmentsList)
