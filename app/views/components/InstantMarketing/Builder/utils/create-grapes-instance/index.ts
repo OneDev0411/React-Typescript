@@ -1,3 +1,5 @@
+import { Editor } from 'grapesjs'
+
 import config from './config'
 
 const STYLE_MANAGER_TEXT_TAGS = [
@@ -25,10 +27,17 @@ const STYLE_MANAGER_TEXT_TAGS = [
   'mj-button'
 ]
 
+const STYLE_MANAGER_BG_COLORABLE_TAGS = [
+  'mj-button',
+  'mj-column',
+  'mj-section',
+  'mj-wrapper'
+]
+
 export function createGrapesInstance(
-  Grapesjs,
+  Grapesjs: any,
   { assets, plugins, pluginsOpts }
-) {
+): Editor {
   return Grapesjs.init({
     ...config,
     avoidInlineStyle: false,
@@ -60,11 +69,24 @@ export function createGrapesInstance(
           conditions: {
             allowedTags: STYLE_MANAGER_TEXT_TAGS,
             forbiddenStyles: ['background-image']
+          },
+          disabled: true
+        },
+        textAlignPicker: {
+          conditions: {
+            allowedTags: STYLE_MANAGER_TEXT_TAGS,
+            forbiddenStyles: ['background-image']
           }
         },
         colorPicker: {
           conditions: {
             allowedTags: STYLE_MANAGER_TEXT_TAGS,
+            forbiddenStyles: ['background-image']
+          }
+        },
+        backgroundColorPicker: {
+          conditions: {
+            allowedTags: STYLE_MANAGER_BG_COLORABLE_TAGS,
             forbiddenStyles: ['background-image']
           }
         }

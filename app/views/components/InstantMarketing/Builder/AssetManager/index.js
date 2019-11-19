@@ -55,10 +55,15 @@ export const load = async () => {
                   url: response.body.data.file.url
                 }))
 
+                const listing =
+                  target.attributes.attributes['rechat-listing'] || null
+                const isStatic =
+                  target.attributes.attributes['rechat-assets'] != null
+
                 const uploadedAssetsCollection = uploadedAssets.map(asset => ({
                   image: asset.url,
-                  listing:
-                    target.attributes.attributes['rechat-listing'] || null,
+                  listing,
+                  static: isStatic,
                   userFile: true
                 }))
 
@@ -111,12 +116,12 @@ export const load = async () => {
 
             return !listing || asset.attributes.listing === listing
           })
-        }
-
-        if (type === 'avatar') {
+        } else if (type === 'avatar') {
           collection = this.collection.filter(
             asset => asset.attributes.userFile || asset.attributes.avatar
           )
+        } else if (type === 'static') {
+          collection = this.collection.filter(asset => asset.attributes.static)
         }
 
         collection.forEach(asset => {

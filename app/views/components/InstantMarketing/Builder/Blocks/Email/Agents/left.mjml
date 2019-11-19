@@ -1,0 +1,18 @@
+{% for user in users %}
+<mj-section background-color="#fff" padding-top="0" padding-bottom="5px">
+  <mj-column width="150px">
+    <mj-image border-radius="6px" width="80px" height="80px" rechat-assets="avatar" align="center" src="{{ user.profile_image_url }}" />
+  </mj-column>
+  <mj-column width="248px">
+    <mj-text padding-left="0" font-family="Roboto" font-size="14px" line-height="16px" font-weight="bold">
+      {{user.display_name}}
+    </mj-text>
+    <mj-text padding-left="0" font-family="Roboto" font-size="14px" line-height="16px" font-weight="lighter">
+      {{user.email}}
+    </mj-text>
+    <mj-text padding-left="0" font-family="Roboto" font-size="14px" line-height="16px" font-weight="normal">
+      {{user.phone_number}}
+    </mj-text>
+  </mj-column>
+</mj-section>
+{% endfor %}

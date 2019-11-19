@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
-import { borderColor } from 'views/utils/colors'
+import { styled as muiStyled } from '@material-ui/styles'
+import BaseDivider from '@material-ui/core/Divider'
 
 export const Container = styled.div`
   position: fixed;
@@ -12,8 +13,9 @@ export const Container = styled.div`
   z-index: 100;
   background-color: #fff;
 `
+
 export const TemplatesContainer = styled.div`
-  width: 340px;
+  width: 21rem;
   border-right: 1px solid #d4d4d4;
   background-color: #f2f2f2;
 
@@ -26,6 +28,7 @@ export const TemplatesContainer = styled.div`
 
 export const BuilderContainer = styled.div`
   display: flex;
+  background: #f2f2f2;
 
   #grapesjs-canvas {
     height: 90vh !important;
@@ -35,27 +38,20 @@ export const BuilderContainer = styled.div`
 export const Header = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: 10vh;
+  justify-content: flex-start;
+  height: 4rem;
   border-bottom: 1px solid #d4d4d4;
-  padding: 0 20px;
-
-  h1 {
-    font-size: 32px;
-    font-weight: bold;
-    margin: 0 !important;
-  }
+  padding: 0 0.5rem;
 `
 
 export const Actions = styled.div`
   display: flex;
   align-items: center;
+  flex-grow: 1;
+  justify-content: flex-end;
 `
 
-export const Divider = styled.div`
-  display: inline-block;
-  width: 1px;
-  height: 1.5rem;
-  margin: 0 1em;
-  background-color: ${borderColor};
-`
+export const Divider = muiStyled(BaseDivider)({
+  height: '60%',
+  margin: '0 1rem'
+})

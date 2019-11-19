@@ -5,7 +5,7 @@ import DealRole from 'components/DealRole'
 
 import { convertContactToRole, AGENT_ROLES } from 'deals/utils/roles'
 
-import TeamAgents from './TeamAgents'
+import TeamAgents from 'components/TeamAgents'
 
 const initialState = {
   isAgentDrawerOpen: false,
@@ -89,7 +89,9 @@ export class RoleAgentIntegration extends React.Component {
     )
   }
 
-  onSelectAgent = (user, relatedContacts = []) => {
+  onSelectAgent = agents => {
+    const { agent: user, contacts: relatedContacts = [] } = agents[0]
+
     let newState
 
     const { agent, first_name, last_name, email, phone_number } = user
@@ -153,11 +155,12 @@ export class RoleAgentIntegration extends React.Component {
       <>
         {this.state.isAgentDrawerOpen && (
           <TeamAgents
+            user={this.props.user}
             title={this.props.modalTitle}
             isPrimaryAgent={this.getIsPrimaryAgent()}
-            isOfficeDoubleEnded={this.isOfficeDoubleEnded}
+            flattened={this.isOfficeDoubleEnded}
             onClose={this.props.onClose}
-            onSelectAgent={this.onSelectAgent}
+            onSelectAgents={this.onSelectAgent}
           />
         )}
 

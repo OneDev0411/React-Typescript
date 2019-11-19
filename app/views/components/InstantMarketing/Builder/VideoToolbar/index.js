@@ -14,10 +14,20 @@ export class VideoToolbar extends React.Component {
       isLoaded: false
     }
 
-    const view = this.props.editor.DomComponents.getWrapper().view.el
-      .ownerDocument.defaultView
+    const { editor } = this.props
 
-    view.document.addEventListener('load', this.handleLoadTemplate, true)
+    const wrapper = editor.DomComponents.getWrapper()
+
+    this.view = wrapper.view.el.ownerDocument.defaultView
+    this.view.document.addEventListener('load', this.handleLoadTemplate, true)
+
+    editor.on('component:update', () => {
+      if (!this.Timeline) {
+        return
+      }
+
+      this.Timeline.seek(this.Timeline.currentTime)
+    })
   }
 
   handleLoadTemplate = () => {
@@ -29,12 +39,11 @@ export class VideoToolbar extends React.Component {
       isLoaded: true
     })
 
-    this.seekTo(1)
+    this.seekTo(0)
   }
 
   get Timeline() {
-    return this.props.editor.DomComponents.getWrapper().view.el.ownerDocument
-      .defaultView.Timeline
+    return this.view.Timeline
   }
 
   get KeyFrames() {
@@ -50,7 +59,7 @@ export class VideoToolbar extends React.Component {
       activeFrame: frameId
     })
 
-    this.Timeline.seekTo(keyframe.at)
+    this.Timeline.seek(keyframe.at)
   }
 
   handlePlay = () => {

@@ -2,14 +2,16 @@ import * as React from 'react'
 
 import {
   ClickAwayListener,
+  Divider,
   List,
   ListItem,
   ListSubheader,
   Paper,
   Popper,
-  useTheme,
-  Divider
+  useTheme
 } from '@material-ui/core'
+
+import { nativelyStopEventPropagationOfEventViaRef } from 'utils/natively-stop-event-propagation-of-event-via-ref'
 
 import {
   ITemplateVariableSuggestion,
@@ -55,7 +57,9 @@ export function TemplateVariablesButton({
         style={{ zIndex: theme.zIndex.modal }}
         placement="bottom-start"
       >
-        <Paper>
+        <Paper
+          innerRef={nativelyStopEventPropagationOfEventViaRef('mousedown')}
+        >
           <ClickAwayListener onClickAway={close}>
             <List
               style={{

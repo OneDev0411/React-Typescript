@@ -23,5 +23,11 @@ export default {
   },
   google: {
     api_key: process.env.GOOGLE_API_KEY
+  },
+  tenor: {
+    api_key: process.env.TENOR_API_KEY
+  },
+  unsplash: {
+    api_key: process.env.UNSPLASH_API_KEY
   }
 }

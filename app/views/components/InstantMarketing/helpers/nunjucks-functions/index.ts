@@ -14,7 +14,7 @@ export const getAsset = (activeBrand: IBrand, name: string) => {
   return ''
 }
 
-export function getListingUrl(activeBrand: IBrand, listing: any) {
+export function getListingUrl(activeBrand: IBrand, listing: IListing) {
   const brand = flattenBrand(activeBrand)
   const listing_url = brand && brand.messages ? brand.messages.listing_url : ''
 
