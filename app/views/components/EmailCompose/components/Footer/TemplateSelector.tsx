@@ -35,6 +35,7 @@ import EditOutlineIcon from 'components/SvgIcons/EditOutline/EditOutlineIcon'
 import { useIconStyles } from '../../../../../styles/use-icon-styles'
 
 import { FooterBottomDrawerZeroState } from './FooterBottomDrawerZeroState'
+import { ScrollableArea } from '../../../ScrollableArea'
 
 interface Props {
   onTemplateSelected: (emailTemplate: IBrandEmailTemplate) => void
@@ -109,78 +110,84 @@ function TemplateSelector({
           emailTemplate={editingTemplate}
           submitCallback={handleTemplateSaved}
         />
-        <List disablePadding>
-          <ListItem dense button divider onClick={openNewTemplateDrawer}>
-            <ListItemText
-              primary={
-                <Box display="flex" alignItems="center" color="primary.main">
-                  <IconAddCircleOutline
-                    className={classNames(
-                      iconClasses.currentColor,
-                      iconClasses.rightMargin
-                    )}
-                  />
-                  <Typography>Add a new Email Template</Typography>
-                </Box>
-              }
-            />
-          </ListItem>
-          {templates.map(template => {
-            const editButton = (
-              <ListItemSecondaryAction
-                className={classes.secondaryAction}
-                onClick={event => event.stopPropagation()}
-              >
-                <IconButton
-                  disabled={!template.editable}
-                  edge="end"
-                  aria-label="edit"
-                  onClick={() => handleEditTemplate(template)}
+        <ScrollableArea
+          hasThinnerScrollbar
+          shadowHeight={20}
+          shadowColor="white"
+        >
+          <List disablePadding>
+            <ListItem dense button divider onClick={openNewTemplateDrawer}>
+              <ListItemText
+                primary={
+                  <Box display="flex" alignItems="center" color="primary.main">
+                    <IconAddCircleOutline
+                      className={classNames(
+                        iconClasses.currentColor,
+                        iconClasses.rightMargin
+                      )}
+                    />
+                    <Typography>Add a new Email Template</Typography>
+                  </Box>
+                }
+              />
+            </ListItem>
+            {templates.map(template => {
+              const editButton = (
+                <ListItemSecondaryAction
+                  className={classes.secondaryAction}
+                  onClick={event => event.stopPropagation()}
                 >
-                  <EditOutlineIcon
-                    className={classNames(
-                      iconClasses.small,
-                      iconClasses.currentColor
-                    )}
-                  />
-                </IconButton>
-              </ListItemSecondaryAction>
-            )
-
-            return (
-              <ListItem
-                key={template.id}
-                classes={{
-                  // it seems a buggy behavior from MUI, but when the actions
-                  // are disabled, the list item layout is changed and
-                  // container class becomes required
-                  container: classes.listItem,
-                  root: classes.listItem
-                }}
-                onClick={() => onTemplateSelected(template)}
-                ContainerComponent="div"
-                dense
-                button
-                divider
-              >
-                <ListItemText
-                  primary={template.name}
-                  secondary={template.subject || 'No Subject'}
-                />
-                {template.editable ? (
-                  editButton
-                ) : (
-                  <Tooltip
-                    placement="left"
-                    title={"You can't edit this template"}
+                  <IconButton
+                    disabled={!template.editable}
+                    edge="end"
+                    aria-label="edit"
+                    onClick={() => handleEditTemplate(template)}
                   >
-                    {editButton}
-                  </Tooltip>
-                )}
-              </ListItem>
-            )
-          })}
-        </List>
+                    <EditOutlineIcon
+                      className={classNames(
+                        iconClasses.small,
+                        iconClasses.currentColor
+                      )}
+                    />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              )
+
+              return (
+                <ListItem
+                  key={template.id}
+                  classes={{
+                    // it seems a buggy behavior from MUI, but when the actions
+                    // are disabled, the list item layout is changed and
+                    // container class becomes required
+                    container: classes.listItem,
+                    root: classes.listItem
+                  }}
+                  onClick={() => onTemplateSelected(template)}
+                  ContainerComponent="div"
+                  dense
+                  button
+                  divider
+                >
+                  <ListItemText
+                    primary={template.name}
+                    secondary={template.subject || 'No Subject'}
+                  />
+                  {template.editable ? (
+                    editButton
+                  ) : (
+                    <Tooltip
+                      placement="left"
+                      title={"You can't edit this template"}
+                    >
+                      {editButton}
+                    </Tooltip>
+                  )}
+                </ListItem>
+              )
+            })}
+          </List>
+        </ScrollableArea>
       </>
     )
   }

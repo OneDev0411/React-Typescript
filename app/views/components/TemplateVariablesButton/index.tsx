@@ -48,7 +48,7 @@ export function TemplateVariablesButton({
         aria-haspopup="true"
         onClick={toggle}
       >
-        Variable Text
+        Placeholder Text
       </DropdownToggleButton>
       <Popper
         open={open}

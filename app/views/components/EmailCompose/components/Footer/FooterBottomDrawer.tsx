@@ -25,8 +25,10 @@ const styles = (theme: Theme) =>
       zIndex: 1,
       background: theme.palette.background.paper,
       borderTop: `1px solid ${theme.palette.divider}`,
-      maxHeight: '15rem',
-      overflow: 'auto'
+      maxHeight: '14.2rem',
+      overflow: 'auto',
+      display: 'flex',
+      flexDirection: 'column'
     }
   })
 const ueStyles = makeStyles(styles, {

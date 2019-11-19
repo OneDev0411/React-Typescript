@@ -928,7 +928,6 @@ footer{
   padding: 1.5rem;
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin-bottom: 1rem;
   transition: all 0.35s;
 }

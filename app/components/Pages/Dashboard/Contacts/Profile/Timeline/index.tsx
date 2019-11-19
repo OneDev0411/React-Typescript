@@ -1,17 +1,16 @@
 import React, {
-  useState,
-  useRef,
-  useImperativeHandle,
   ChangeEvent,
   forwardRef,
-  RefObject
+  RefObject,
+  useImperativeHandle,
+  useRef,
+  useState
 } from 'react'
 
 import { getNotes } from 'models/contacts/helpers/get-notes'
 
 import List from 'components/Calendar'
 import { CalendarRef, LoadingDirection } from 'components/Calendar/types'
-import { hasUserAccess } from 'utils/user-teams'
 
 import { getUpcomingInitialRange } from './helpers/get-upcoming-range'
 import { getTimelineInitialRange } from './helpers/get-timeline-range'
@@ -20,9 +19,9 @@ import { convertNoteToCalendarEvent } from './helpers/convert-note-to-calendar-e
 import AddEvent from './AddEvent'
 import AddNote from './AddNote'
 
-import { TabsFilter, Filters } from './Tabs'
+import { Filters, TabsFilter } from './Tabs'
 
-import { Container, Header, Actions } from './styled'
+import { Actions, Container, Header } from './styled'
 
 export interface TimelineRef {
   refresh(): void
@@ -30,7 +29,6 @@ export interface TimelineRef {
 
 interface Props {
   contact: IContact
-  user: IUser
   timelineRef?: RefObject<TimelineRef>
   onCreateNote(contact: IContact): void
 }
@@ -45,9 +43,7 @@ function Timeline(props: Props) {
   const filter = {
     contact: props.contact.id,
     object_types: [
-      ...(hasUserAccess(props.user, 'BetaFeatures')
-        ? ['email_thread_recipient']
-        : []),
+      'email_thread_recipient',
       'crm_association',
       'email_campaign_recipient',
       'contact',

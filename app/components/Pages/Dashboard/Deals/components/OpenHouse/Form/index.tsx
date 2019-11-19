@@ -1,29 +1,28 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { connect } from 'react-redux'
-
 import { ThunkDispatch } from 'redux-thunk'
 import { AnyAction } from 'redux'
-
 import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
 import DayPicker from 'react-day-picker'
 import Flex from 'styled-flex-component'
-
 import fecha from 'fecha'
-
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
-import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 
 import { createTaskComment } from 'deals/utils/create-task-comment'
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
 import { updateTask } from 'actions/deals'
 
-import { InputLabel } from 'components/Forms/styled'
-
-import TimeInput from 'components/TimeInput'
-
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
+
+import TimeInput from 'components/TimeInput'
+import { InputLabel } from 'components/Forms/styled'
+import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+
+import getListing from 'models/listings/listing/get-listing'
+
+import { addressTitle } from 'utils/listing'
+import { normalizeListing } from 'views/utils/association-normalizers'
 
 import { DatePickerContainer } from './styled'
 
@@ -39,6 +38,7 @@ interface DispatchProps {
 
 interface Props {
   deal: IDeal
+  createRegistrationPage: boolean
   task: IDealTask | null
   defaultStartTime: number | null
   defaultEndTime: number | null
@@ -63,10 +63,12 @@ const useStyles = makeStyles((theme: Theme) => {
 })
 
 function OpenHouseForm(props: Props & StateProps & DispatchProps) {
+  const { listing: listingId } = props.deal
   const classes = useStyles()
 
   const confirmation = useContext(ConfirmationModalContext)
 
+  const [listing, setListing] = useState<IListing | null>(null)
   const [createdTask, setCreatedTask] = useState<IDealTask | null>(null)
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [showOHRegistrationDrawer, setShowOHRegistrationDrawer] = useState<
@@ -79,6 +81,22 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
   const [endTime, setEndTime] = useState<Date | null>(
     props.defaultEndTime ? new Date(props.defaultEndTime * 1000) : null
   )
+
+  useEffect(() => {
+    async function fetchLisitng() {
+      try {
+        if (listingId && listing == null) {
+          const response = await getListing(listingId)
+
+          setListing(response)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    fetchLisitng()
+  }, [listing, listingId])
 
   const handleSetStartDate = (date: Date) => {
     const datetime = new Date(date)
@@ -168,6 +186,12 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
 
     setCreatedTask(task)
 
+    if (!props.createRegistrationPage) {
+      props.onUpsertTask(task)
+
+      return
+    }
+
     if (props.deal.listing) {
       confirmation.setConfirmationModal({
         message:
@@ -177,12 +201,36 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
         onConfirm: () => setShowOHRegistrationDrawer(true),
         onCancel: () => props.onUpsertTask(task)
       })
+    } else {
+      props.onUpsertTask(task)
     }
   }
 
   const handleCloseOHRegistrationDrawer = () => {
     setShowOHRegistrationDrawer(false)
-    props.onUpsertTask(createdTask as any)
+    props.onUpsertTask(createdTask!)
+  }
+
+  const getOpenHouseIntialValues = () => {
+    // MLS listting is mandatory for creating an open house from its drawer
+    if (listing) {
+      return {
+        assignees: [props.user],
+        registrants: [],
+        endDate: endTime,
+        dueDate: startTime,
+        location: {
+          association_type: 'listing',
+          index: 1,
+          listing: normalizeListing(listing)
+        },
+        reminder: {
+          title: 'None',
+          value: -1
+        },
+        title: (listing && addressTitle(listing.property.address)) || ''
+      }
+    }
   }
 
   return (
@@ -268,6 +316,7 @@ function OpenHouseForm(props: Props & StateProps & DispatchProps) {
           associations={{ deal: props.deal }}
           submitCallback={handleCloseOHRegistrationDrawer}
           onClose={handleCloseOHRegistrationDrawer}
+          initialValues={getOpenHouseIntialValues()}
         />
       )}
     </div>

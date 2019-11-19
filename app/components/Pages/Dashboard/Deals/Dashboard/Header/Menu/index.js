@@ -1,6 +1,10 @@
+import { ACL } from 'constants/acl'
+
 import React from 'react'
 import Flex from 'styled-flex-component'
 import { browserHistory } from 'react-router'
+
+import Acl from 'components/Acl'
 
 import LinkButton from 'components/Button/LinkButton'
 import { CloseButton } from 'components/Button/CloseButton'
@@ -22,19 +26,23 @@ export function Menu(props) {
     <Flex style={{ padding: '1.5em 0' }}>
       {deal.is_draft === true && <RemoveDraft deal={deal} />}
 
-      {deal.deal_type === 'Selling' && (
-        <OpenHouse
-          deal={deal}
-          style={{ marginLeft: '0.5rem' }}
-          defaultOpen={
-            browserHistory.getCurrentLocation().query.createOpenHouse
-          }
-        />
-      )}
+      <Acl access={ACL.BETA}>
+        <>
+          {deal.deal_type === 'Selling' && (
+            <OpenHouse
+              deal={deal}
+              style={{ marginLeft: '0.5rem' }}
+              defaultOpen={
+                browserHistory.getCurrentLocation().query.createOpenHouse
+              }
+            />
+          )}
 
-      {deal.deal_type === 'Selling' && (
-        <YardSign deal={deal} style={{ marginLeft: '0.5rem' }} />
-      )}
+          {deal.deal_type === 'Selling' && (
+            <YardSign deal={deal} style={{ marginLeft: '0.5rem' }} />
+          )}
+        </>
+      </Acl>
 
       <SendEmail deal={deal} style={{ marginLeft: '0.5rem' }} />
 
