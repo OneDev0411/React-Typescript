@@ -1,4 +1,7 @@
-<mj-section background-color="#fff">
+<mj-section direction="rtl" background-color="#fff">
+  <mj-column width="48%">
+    <mj-image padding-top="24px" padding-right="24px" padding-bottom="24px" padding-left="24px" rechat-assets="static" align="left" src="{{image}}"></mj-image>
+  </mj-column>
   <mj-column width="52%">
     <mj-text padding-top="16px" padding-right="0" padding-bottom="12px" padding-left="24px" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-weight="500" font-size="28px" line-height="32px" color="#000" padding-top=0>
       {{title}}
@@ -12,8 +15,5 @@
     UI,Arial,sans-serif" font-size="16px" font-weight="500" line-height="24px" width="148px" height="32px" color="#0945EB" border="1px solid #0945EB" background-color="#fff" align="left" href={{url}}>
       Read More
     </mj-button>
-  </mj-column>
-  <mj-column width="48%">
-    <mj-image padding-top="24px" padding-right="24px" padding-bottom="24px" padding-left="24px" rechat-assets="static" align="left" src="{{image}}"></mj-image>
   </mj-column>
 </mj-section>
