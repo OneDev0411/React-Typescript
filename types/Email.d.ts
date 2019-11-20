@@ -136,7 +136,7 @@ declare type IEmailCampaign<
 > &
   Association<'from', IUser, Associations> &
   Association<'template', IMarketingTemplateInstance | null, Associations> &
-  Association<'emails', any[] | null, Associations> &
+  Association<'emails', IEmailCampaignEmail[] | null, Associations> &
   Association<'attachments', IFile[] | null, Associations>
 
 declare interface IEmail {
@@ -147,6 +147,26 @@ declare interface IEmail {
   html: string
   text?: string
   headers?: any
+}
+
+declare interface IEmailCampaignEmail {
+  id: string
+  campaign: string
+  email: string
+  contact: UUID | null
+  accepted: number
+  rejected: number
+  delivered: number
+  failed: number
+  opened: number
+  clicked: number
+  unsubscribed: number
+  complained: number
+  stored: number
+  email_address: string
+  type: 'email_campaign_email'
+  full_name: string
+  profile_image_url: string | null
 }
 
 /**

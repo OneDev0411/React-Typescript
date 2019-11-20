@@ -127,7 +127,7 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
         })
       }
     },
-    '.MuiButton-outlined': {
+    '.MuiButton-outlined:not(.MuiButton-outlinedPrimary, .MuiButton-outlinedSecondary)': {
       borderColor: theme.palette.common.black
     }
   }

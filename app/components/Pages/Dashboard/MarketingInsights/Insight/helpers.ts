@@ -9,7 +9,9 @@ export function getContactStat(email: IEmailCampaignEmail): EmailStatType {
   }
 }
 
-export function contactsList(item: IInsight): ContactsListType[] {
+export function contactsList(
+  item: IEmailCampaign<IEmailCampaignAssociation>
+): ContactsListType[] {
   const emails = item.emails
 
   if (!Array.isArray(emails)) {
