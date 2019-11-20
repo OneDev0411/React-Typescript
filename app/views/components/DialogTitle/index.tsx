@@ -1,5 +1,15 @@
 import React, { EventHandler, ReactNode } from 'react'
-import { Box, Divider, IconButton, Typography } from '@material-ui/core'
+import {
+  Box,
+  createStyles,
+  Divider,
+  IconButton,
+  makeStyles,
+  Theme,
+  Typography
+} from '@material-ui/core'
+
+import { ClassesProps } from 'utils/ts-utils'
 
 import CloseIcon from '../SvgIcons/Close/CloseIcon'
 
@@ -8,11 +18,32 @@ interface Props {
   onClose: EventHandler<React.MouseEvent>
 }
 
-export function DialogTitle({ children, onClose }: Props) {
+const styles = (theme: Theme) =>
+  createStyles({
+    container: {
+      display: 'flex',
+      alignItems: 'center',
+      padding: theme.spacing(1, 3)
+    },
+    title: {
+      overflow: 'hidden',
+      flex: 1
+    }
+  })
+
+const useStyles = makeStyles(styles, { name: 'DialogTitle' })
+
+export function DialogTitle({
+  children,
+  onClose,
+  ...props
+}: Props & ClassesProps<typeof styles>) {
+  const classes = useStyles(props)
+
   return (
     <>
-      <Box display="flex" alignItems="center" px={3} py={1}>
-        <Box flex={1}>
+      <div className={classes.container}>
+        <Box className={classes.title}>
           <Typography variant="h6" noWrap>
             {children}
           </Typography>
@@ -22,7 +53,7 @@ export function DialogTitle({ children, onClose }: Props) {
             <CloseIcon />
           </IconButton>
         )}
-      </Box>
+      </div>
       <Divider />
     </>
   )
