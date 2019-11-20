@@ -90,7 +90,34 @@ class Builder extends React.Component {
 
       'mj-image': [],
 
-      'mj-wrapper': []
+      'mj-wrapper': [],
+
+      'mj-social-element': [
+        {
+          type: 'select',
+          label: 'Icon',
+          name: 'name',
+          options: [
+            { value: 'facebook', name: 'Facebook' },
+            { value: 'instagram', name: 'Instagram' },
+            { value: 'twitter', name: 'Twitter' },
+            { value: 'web', name: 'Web' },
+            { value: 'youtube', name: 'Youtube' },
+            { value: 'pinterest', name: 'Pinterest' },
+            { value: 'linkedin', name: 'Linkedin' },
+            { value: 'snapchat', name: 'Snapchat' },
+            { value: 'vimeo', name: 'Vimeo' },
+            { value: 'tumblr', name: 'Tumblr' },
+            { value: 'soundcloud', name: 'SoundCloud' },
+            { value: 'medium', name: 'Medium' }
+          ]
+        },
+        {
+          type: 'text',
+          label: 'Link',
+          name: 'href'
+        }
+      ]
     }
   }
 
