@@ -11,12 +11,19 @@ interface UseUndoRedo {
 export default function useUndoRedo(editor: Editor): UseUndoRedo {
   const [hasUndo, setHasUndo] = useState<boolean>(editor.UndoManager.hasUndo())
   const [hasRedo, setHasRedo] = useState<boolean>(editor.UndoManager.hasRedo())
+  const [isInitialized, setIsInitialized] = useState<boolean>(false) // In order to ignore first update (whole template render)
 
   useEffect(() => {
     editor.UndoManager.start()
     editor.UndoManager.clear()
 
     editor.on('update', () => {
+      if (!isInitialized) {
+        setIsInitialized(true)
+
+        return
+      }
+
       setHasUndo(editor.UndoManager.hasUndo())
       setHasRedo(editor.UndoManager.hasRedo())
     })
@@ -24,7 +31,7 @@ export default function useUndoRedo(editor: Editor): UseUndoRedo {
     return () => {
       editor.UndoManager.stop()
     }
-  }, [editor])
+  }, [editor, isInitialized])
 
   function undo() {
     editor.UndoManager.undo()
