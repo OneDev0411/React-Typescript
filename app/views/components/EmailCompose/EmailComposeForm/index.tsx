@@ -101,7 +101,9 @@ function EmailComposeForm<T>({
       return dispatch(
         notify({
           status: 'error',
-          message: errorMessage
+          message:
+            (e.response && e.response.body && e.response.body.message) ||
+            errorMessage
         })
       )
     }
