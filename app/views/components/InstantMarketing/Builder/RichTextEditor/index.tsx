@@ -83,6 +83,7 @@ export function createRichTextEditor(editor: Editor) {
       fontWeight:
         (computedStyle.fontWeight as CSSProperties['fontWeight']) || undefined,
       lineHeight: computedStyle.lineHeight || undefined,
+      hyphens: (computedStyle as any).hyphens || undefined,
       color: computedStyle.color || undefined
     }
 

@@ -14,6 +14,8 @@ export const useEmojiStyles = makeStyles(
       height: '2rem',
       width: '2rem',
       border: 'none',
+      fontSize: '1.5rem',
+      fontFamily: 'initial',
       color: theme.palette.grey['800']
     }
 
