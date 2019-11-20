@@ -51,6 +51,7 @@ import { getImageDimensions } from './utils/get-image-dimensions'
 import { getImageSizeOptions } from './utils/get-image-size-options'
 import { InlineImageToolbar } from './components/ImageInlineToolbar'
 import { useEmojiStyles } from './hooks/use-emoji-styles'
+import { AddGifButton } from './buttons/AddGifButton'
 
 const useStyles = makeStyles(styles, { name: 'TextEditor' })
 
@@ -369,6 +370,9 @@ export const TextEditor = forwardRef(
       }
     }
 
+    const addImageByUrl = (url: string, width?: number) =>
+      handleChange(imagePlugin.addImage(editorState, url, { width }))
+
     return (
       <EditorContainer
         className={cn(className, classes.root)}
@@ -482,6 +486,7 @@ export const TextEditor = forwardRef(
           {enableImage && (
             <>
               <AddImageButton onImageSelected={addImage} />
+              <AddGifButton onImageSelected={addImageByUrl} />
               <Separator />
             </>
           )}
