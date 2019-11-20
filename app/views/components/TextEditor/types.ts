@@ -98,6 +98,7 @@ export interface TextEditorProps extends ClassesProps<typeof styles> {
    * Enable/disable image insertion.
    */
   enableImage?: boolean
+  enableEmoji?: boolean
   /**
    * Enable/disable signature insertion.
    */

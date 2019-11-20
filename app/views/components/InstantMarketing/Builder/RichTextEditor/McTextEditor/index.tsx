@@ -19,6 +19,10 @@ const useStyles = makeStyles(
         border: '3px solid #0945eb',
         pointerEvents: 'initial',
         boxSizing: 'content-box!important', // for including padding in size
+        overflow: 'visible!important', // main reason: emoji popovers. Note that we don't
+        // need overflow: auto here because this editor is an overlay and
+        // is supposed to grow with content, there is no height restriction
+        // from ascendants
         ...targetStyle
       }),
       dropzone: {
@@ -27,7 +31,11 @@ const useStyles = makeStyles(
       toolbar: {
         pointerEvents: 'initial',
         background: '#fff',
-        boxShadow: theme.shadows[5]
+        boxShadow: theme.shadows[5],
+        // This is a super hacky fragile temporary solution until #3660 is fixed
+        '& span[title="Emoji (:)"], & span[title="Emoji (:)"] + span': {
+          display: 'none'
+        }
       }
     }),
   { name: 'McTextEditor' }

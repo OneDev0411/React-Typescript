@@ -50,6 +50,7 @@ import { styles } from './styles'
 import { getImageDimensions } from './utils/get-image-dimensions'
 import { getImageSizeOptions } from './utils/get-image-size-options'
 import { InlineImageToolbar } from './components/ImageInlineToolbar'
+import { useEmojiStyles } from './hooks/use-emoji-styles'
 
 const useStyles = makeStyles(styles, { name: 'TextEditor' })
 
@@ -87,6 +88,7 @@ export const TextEditor = forwardRef(
       onEditSignature = () => {},
       enableImage = false,
       richText = true,
+      enableEmoji = true,
       enableSignature = false,
       enableTemplateVariables = false,
       templateVariableSuggestionGroups,
@@ -127,6 +129,7 @@ export const TextEditor = forwardRef(
 
     signatureRef.current = signature
 
+    const emojiTheme = useEmojiStyles()
     /**
      * NOTE 1: We don't use top level plugin definition to prevent bugs when
      * more than one instance of Editor is rendered simultaneously
@@ -149,15 +152,19 @@ export const TextEditor = forwardRef(
       signaturePlugin,
       templateExpressionPlugin,
       richButtonsPlugin,
+      emojiPlugin,
+      EmojiSelect,
+      EmojiSuggestions,
       ...otherPlugins
     } = useMemo(
       () =>
         createPlugins(
           setLinkEditorOpen,
           () => signatureRef.current || '',
-          stateFromHtmlOptions
+          stateFromHtmlOptions,
+          emojiTheme
         ),
-      [stateFromHtmlOptions]
+      [emojiTheme, stateFromHtmlOptions]
     )
 
     if (editorRef.current) {
@@ -306,6 +313,7 @@ export const TextEditor = forwardRef(
       ...Object.values(otherPlugins),
       ...(richText ? [richButtonsPlugin] : []),
       ...(richTextFeatures.includes(RichTextFeature.LINK) ? linkPlugins : []),
+      ...(enableEmoji ? [emojiPlugin] : []),
       ...(enableImage
         ? [
             blockDndPlugin,
@@ -445,6 +453,7 @@ export const TextEditor = forwardRef(
                 setEditorState={handleChange}
               />
             )}
+            {emojiPlugin && <EmojiSuggestions />}
             {appendix}
           </Dropzone>
         </EditorWrapper>
@@ -473,6 +482,16 @@ export const TextEditor = forwardRef(
           {enableImage && (
             <>
               <AddImageButton onImageSelected={addImage} />
+              <Separator />
+            </>
+          )}
+          {enableEmoji && (
+            <>
+              <Tooltip title="Emoji (:)">
+                <span>
+                  <EmojiSelect />
+                </span>
+              </Tooltip>
               <Separator />
             </>
           )}

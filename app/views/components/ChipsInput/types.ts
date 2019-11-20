@@ -19,6 +19,7 @@ export interface ChipInputItem {
 export interface Suggestion {
   title: ReactNode
   subtitle?: ReactNode
+  group?: string
 
   /**
    * The rechat avatar component props
