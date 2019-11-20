@@ -51,7 +51,7 @@ export function createRichTextEditor(editor: Editor) {
   doc.querySelector('body')!.appendChild(styleEl)
 
   editor.on('rteToolbarPosUpdate', pos => {
-    pos.left = pos.elementLeft - pos.canvasLeft - borderWidth - outlineOffset
+    pos.left = pos.elementLeft - borderWidth - outlineOffset
 
     // This is for when element exits from the top. Note that it seems it's not
     // possible to handle it with `pos.top`
