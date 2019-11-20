@@ -3,15 +3,11 @@ import styled from 'styled-components'
 export const Container = styled.div`
   padding: 0 1rem;
   font-family: Barlow;
-  display: flex;
-  flex-direction: column;
   background: #fff;
 
   > div:not(:empty) {
     margin-bottom: 1rem;
     padding: 0;
-    flex-grow: 1;
-    flex-basis: 0;
   }
 `
 
