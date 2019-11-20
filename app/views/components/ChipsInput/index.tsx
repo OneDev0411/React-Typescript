@@ -21,6 +21,10 @@ import useObservable from 'react-use/lib/useObservable'
 import { of } from 'rxjs/observable/of'
 import { useDebounce } from 'use-debounce'
 
+import { isPromise } from 'rxjs/util/isPromise'
+
+import { fromPromise } from 'rxjs/observable/fromPromise'
+
 import { ClassesProps } from 'utils/ts-utils'
 
 import { ChipsInputProps } from './types'
@@ -183,7 +187,11 @@ export function ChipsInput<T>({
   const suggestedItems =
     useObservable(
       useMemo(() => {
-        return getSuggestions(debouncedInputValue)
+        const suggestions = getSuggestions(debouncedInputValue)
+
+        return isPromise<T[]>(suggestions)
+          ? fromPromise(suggestions)
+          : suggestions
       }, [getSuggestions, debouncedInputValue])
     ) || []
 
