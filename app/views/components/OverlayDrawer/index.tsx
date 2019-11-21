@@ -2,9 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import { Drawer, makeStyles } from '@material-ui/core'
 import { DrawerProps as OriginalDrawerProps } from '@material-ui/core/Drawer'
 
-import { mergeClasses } from '@material-ui/styles'
-
-import { Classes } from '@material-ui/styles/mergeClasses/mergeClasses'
+import { mergeWith } from 'lodash'
 
 import Body from './Body'
 import Header from './Header'
@@ -65,6 +63,15 @@ const OverlayDrawer = ({
     [level, onClose]
   )
 
+  const mergedClasses = mergeWith<
+    DrawerProps['classes'],
+    DrawerProps['classes']
+  >(
+    { paper: classes.root },
+    rest.classes,
+    (value1, value2) => `${value1 || ''} ${value2 || ''}`
+  )
+
   return (
     <Drawer
       /* It causes problems in focusing poppers (and possibly other kind of modals). We can check this after fully migrating to MUI  */
@@ -73,11 +80,7 @@ const OverlayDrawer = ({
       open={open}
       onClose={handleOnClose}
       anchor={anchor}
-      classes={mergeClasses({
-        baseClasses: { paper: classes.root },
-        newClasses: rest.classes as Classes,
-        Component: Drawer
-      })}
+      classes={mergedClasses}
       data-test={`drawer-${level}`}
     >
       <DrawerContext.Provider value={context}>
