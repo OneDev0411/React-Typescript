@@ -10,12 +10,15 @@ import { AGENTS_BLOCK_CATEGORY } from '../../../constants'
 import registerBlock from '../../registerBlock'
 
 import Left from './left.mjml'
+import Grid from './grid.mjml'
 
 export const agentLeftBlockName = 'rechat-agent-left'
+export const agentGridBlockName = 'rechat-agent-grid'
 
 const templates = {}
 
 templates[agentLeftBlockName] = Left
+templates[agentGridBlockName] = Grid
 
 export interface Options {
   onDrop: (model: Model) => void
@@ -58,6 +61,13 @@ export default function registerAgentBlocks(
     category: AGENTS_BLOCK_CATEGORY,
     blockName: agentLeftBlockName,
     template: templates[agentLeftBlockName]
+  })
+
+  registerBlock(editor, {
+    label: 'Grid',
+    category: AGENTS_BLOCK_CATEGORY,
+    blockName: agentGridBlockName,
+    template: templates[agentGridBlockName]
   })
 
   editor.on('block:drag:stop', (model: Model, block) => {
