@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Avatars from '../../../../../../../../views/components/Avatars'
+import Avatars from 'components/Avatars'
 
 export function Assignees(props) {
   return (

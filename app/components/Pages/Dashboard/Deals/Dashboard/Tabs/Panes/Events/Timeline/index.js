@@ -7,10 +7,9 @@ import { EditNoteDrawer } from 'components/EditNoteDrawer'
 import { EventDrawer } from 'components/EventDrawer'
 import { TourDrawer } from 'components/tour/TourDrawer'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
+import Loading from 'components/LoadingContainer'
 
-import Loading from '../../../../../Partials/Loading'
-
-import { Card } from '../styled'
+import { Card } from './styled'
 import { NoteItem } from './NoteItem'
 import { TourItem } from './TourItem'
 import { EventItem } from './EventItem'
