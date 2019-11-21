@@ -29,7 +29,7 @@ test_unit:
   stage: test
   script:
     - npm i
-    - npm run test:unit -- --coverage
+    - npm run test:ci -- --coverage
 
 deploy_alpha:
   stage: deploy
