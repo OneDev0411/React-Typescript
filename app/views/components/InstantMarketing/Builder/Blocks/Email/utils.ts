@@ -34,6 +34,7 @@ import {
 import {
   listingTopBlockName,
   listingGridBlockName,
+  listingGridTwoBlockName,
   listingLeftBlockName,
   listingRightBlockName
 } from './Listings'
@@ -76,6 +77,7 @@ const BLOCK_BUTTON_ICONS = {
 
   [listingTopBlockName]: ArticleImageTopIcon,
   [listingGridBlockName]: ArticleImageDualIcon,
+  [listingGridTwoBlockName]: ArticleImageDualIcon,
   [listingLeftBlockName]: ArticleImageLeftIcon,
   [listingRightBlockName]: ArticleImageRightIcon,
 
@@ -107,6 +109,7 @@ const BLOCK_BUTTONS_ORDER = [
 
   listingTopBlockName,
   listingGridBlockName,
+  listingGridTwoBlockName,
   listingLeftBlockName,
   listingRightBlockName,
 
