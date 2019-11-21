@@ -1,8 +1,8 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
 
-import getListing from '../../../../../../../models/listings/listing/get-listing'
-import { SingleMarkerMap } from '../../../../../../../views/components/maps/SingleMarkerMap'
+import getListing from 'models/listings/listing/get-listing'
+import { SingleMarkerMap } from 'components/maps/SingleMarkerMap'
 
 import { MetaInfo } from '../components/MetaInfo'
 import { Assignees } from '../components/Assignees'

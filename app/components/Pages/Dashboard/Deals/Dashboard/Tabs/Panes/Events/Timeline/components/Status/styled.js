@@ -1,11 +1,8 @@
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
-import {
-  primary,
-  borderColor
-} from '../../../../../../../../views/utils/colors'
-import IconButton from '../../../../../../../../views/components/Button/IconButton'
+import { primary, borderColor } from 'views/utils/colors'
+import IconButton from 'components/Button/IconButton'
 
 export const Container = styled(Flex)`
   width: 2.5rem;

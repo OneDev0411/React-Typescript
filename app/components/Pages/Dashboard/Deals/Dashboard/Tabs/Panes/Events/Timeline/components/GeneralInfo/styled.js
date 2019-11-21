@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { grey, primary } from '../../../../../../../../views/utils/colors'
+import { grey, primary } from 'views/utils/colors'
 
 export const Title = styled.h3`
   font-size: 1.5rem;

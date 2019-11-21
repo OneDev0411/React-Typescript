@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { borderColor, grey } from '../../../../../../../views/utils/colors'
+import { borderColor, grey } from 'views/utils/colors'
 
 export const Container = styled.div`
   position: relative;
@@ -9,6 +9,10 @@ export const Container = styled.div`
 
   &:hover {
     background-color: ${grey.A000};
+  }
+
+  &:last-child {
+    border-bottom: none;
   }
 
   .u-cursor--pointer:hover {

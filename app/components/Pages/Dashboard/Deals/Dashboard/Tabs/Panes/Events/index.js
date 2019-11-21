@@ -4,7 +4,7 @@ import getCRMTimeline from 'models/get-crm-timeline'
 import NewTask from 'components/NewEvent'
 import { normalizeDeal } from 'views/utils/association-normalizers'
 
-import { Timeline } from '../../../../../Contacts/Profile/Timeline-Old'
+import { Timeline } from './Timeline'
 import FactsheetsNav from '../../../FactsheetsNav'
 import { FactsheetContainer, MainContainer, Card } from '../../styled'
 

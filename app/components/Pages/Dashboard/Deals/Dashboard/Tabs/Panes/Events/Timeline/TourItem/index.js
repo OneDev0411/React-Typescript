@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { DirectionMap } from '../../../../../../../views/components/maps/DirectionMap'
+import { DirectionMap } from 'components/maps/DirectionMap'
 
 import { MetaInfo } from '../components/MetaInfo'
 import { Assignees } from '../components/Assignees'

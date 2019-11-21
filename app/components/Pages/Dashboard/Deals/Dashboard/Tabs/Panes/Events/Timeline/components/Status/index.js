@@ -1,6 +1,6 @@
 import React from 'react'
 
-import IconCheck from '../../../../../../../../views/components/SvgIcons/Checkmark/IconCheckmark'
+import IconCheck from 'components/SvgIcons/Checkmark/IconCheckmark'
 
 import { Container, Button } from './styled'
 
