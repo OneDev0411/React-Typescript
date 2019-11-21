@@ -81,7 +81,7 @@ export function LinkEditorPopover({
       })
     }
 
-    setText(getCurrentLinkText(editorState) || '')
+    setText(getCurrentLinkText(newEditorState) || '')
     setUrl(getCurrentLinkUrl(editorState) || '')
   })
 
