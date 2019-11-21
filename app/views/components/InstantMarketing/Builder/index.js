@@ -669,11 +669,14 @@ class Builder extends React.Component {
   }
 
   get isEmailTemplate() {
-    return this.state.selectedTemplate.medium === 'Email'
+    return (
+      this.state.selectedTemplate &&
+      this.state.selectedTemplate.medium === 'Email'
+    )
   }
 
   get isMjmlTemplate() {
-    return this.state.selectedTemplate.mjml
+    return this.state.selectedTemplate && this.state.selectedTemplate.mjml
   }
 
   get isTemplateLoaded() {
