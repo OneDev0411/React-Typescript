@@ -205,7 +205,9 @@ function TemplateSelector({
       description="There is no email templates. Save your time by creating Email Template with variables for common emails"
       actions={
         <>
-          <Button variant="outlined">Create an email template</Button>
+          <Button variant="outlined" onClick={openNewTemplateDrawer}>
+            Create an email template
+          </Button>
         </>
       }
     />
