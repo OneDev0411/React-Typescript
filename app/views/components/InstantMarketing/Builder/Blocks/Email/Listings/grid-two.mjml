@@ -12,12 +12,10 @@ align="right"
   <mj-column width="50%" padding="24px">
     <mj-image rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>
 
-    <mj-text font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="14px" color="#000" {{ alignment(loop.index0) }}>
+    <mj-text font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="13px" color="#000" {{ alignment(loop.index0) }}>
       {{listing.property.address.street_address}}
-    </mj-text>
-
-    <mj-text font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" font-size="18px" color="#000" {{ alignment(loop.index0) }}>
-      {{ listing.price | currency }}
+      <span> | </span>
+      <strong>{{ listing.price | currency }}</strong>
     </mj-text>
 
     <mj-button inner-padding="0" text-decoration="underline" background-color="#fff" color="#000" font-size="18px" font-weight="500" font-family="Helvetica Neue,Helvetica,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif" href="{{getListingUrl(listing)}}" {{ alignment(loop.index0) }}>
