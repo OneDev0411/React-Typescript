@@ -2,9 +2,14 @@ import { useState, useEffect } from 'react'
 
 import { getHistory } from 'models/instant-marketing/get-history'
 
-function useTemplatesHistory() {
-  const [templates, setTemplates] = useState([])
+function useTemplatesHistory(): [
+  null | IMarketingTemplateInstance[],
+  boolean,
+  null | any
+] {
+  const [templates, setTemplates] = useState<IMarketingTemplateInstance[]>([])
   const [isLoading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     let didCancel = false
@@ -31,6 +36,8 @@ function useTemplatesHistory() {
       } catch (error) {
         console.log(error)
 
+        setError(error)
+
         if (!didCancel) {
           setLoading(false)
         }
@@ -44,7 +51,7 @@ function useTemplatesHistory() {
     }
   }, [])
 
-  return [templates, isLoading]
+  return [templates, isLoading, error]
 }
 
 export default useTemplatesHistory

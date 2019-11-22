@@ -28,6 +28,9 @@ const theme = createMuiTheme({
       disabled: 'rgba(0, 0, 0, 0.26)',
       disabledBackground: 'rgba(0, 0, 0, 0.12)'
     },
+    grey: {
+      '100': '#F2F2F2'
+    },
     divider: borderColor,
     error: {
       light: '#ff7363',

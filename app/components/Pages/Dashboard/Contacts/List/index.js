@@ -659,7 +659,10 @@ class ContactsList extends React.Component {
 
         <PageContent id={this.tableContainerId} isSideMenuOpen={isSideMenuOpen}>
           {this.state.syncStatus === 'pending' && (
-            <Callout onClose={() => this.setState({ syncStatus: null })}>
+            <Callout
+              type="info"
+              onClose={() => this.setState({ syncStatus: null })}
+            >
               <CalloutSpinner viewBox="20 20 60 60" />
               Doing Science! Just a moment for Rechat to complete establishing
               connections and importing your contacts.

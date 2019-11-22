@@ -27,9 +27,19 @@ export const MaterialUiGlobalOverrides = withStyles((theme: Theme) => ({
     '.MuiListSubheader-root': {
       textTransform: 'uppercase'
     },
+
+    '@media(min-width: 960px)': {
+      '.MuiTab-root': {
+        fontSize: '0.875rem'
+      }
+    },
     '.MuiTab-root': {
       minWidth: '7rem'
     },
+    '.MuiTabs-indicator': {
+      height: 3
+    },
+
     '.MuiInputBase-root label, .MuiFormControlLabel-root': {
       // neutralize bootstrap styles!
       marginBottom: 'initial'
