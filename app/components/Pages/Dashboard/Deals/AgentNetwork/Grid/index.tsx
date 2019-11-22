@@ -59,9 +59,16 @@ export class Grid extends React.Component<Props, State> {
       return []
     }
 
+    // Sometimes an agent can have a null id and email
+    // in this cases we need to make sure filtering them out
     return data
       .filter(
-        item => item.agent && selectedRows.includes(item.id) && item.email
+        item =>
+          item.agentId &&
+          item.agent &&
+          item.agent.email &&
+          selectedRows.includes(item.id) &&
+          item.email
       )
       .map(item => ({
         recipient_type: 'Agent',
