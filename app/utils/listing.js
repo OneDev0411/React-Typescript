@@ -1,3 +1,6 @@
+import { LEASE_PROPERTY_TYPES } from '../constants/listings/property-types'
+import { LEASE_PROPERTY_SUBTYPES } from '../constants/listings/property-subtypes'
+
 import { round } from './helpers'
 
 const ONE_ACRE_TO_SQUARE_METERS = 4046.86
@@ -195,6 +198,25 @@ export const getResizeUrl = full_size_url => full_size_url || ''
 
 export const squareMetersToAcres = value => value * 0.000247105
 
+export const isLeaseProperty = listing => {
+  const isLease = property => {
+    const {property_type, property_subtype} = property
+
+    return [property_type, property_subtype]
+      .filter(t => typeof(t) === 'string')
+      .some(t => [
+        ...LEASE_PROPERTY_TYPES,
+        ...LEASE_PROPERTY_SUBTYPES
+      ].includes(t))
+  }
+
+  if (listing.type === 'compact_listing') {
+    return isLease(listing.compact_property)
+  }
+
+  return isLease(listing.property)
+}
+
 export default {
   getStatusColor,
   getStatusColorClass,
@@ -205,5 +227,6 @@ export default {
   getDOM,
   shortPrice,
   getResizeUrl,
-  squareMetersToAcres
+  squareMetersToAcres,
+  isLeaseProperty
 }
