@@ -24,8 +24,18 @@ export default function ArticleDrawer({
   const [isFetching, setIsFetching] = useState<boolean>(false)
   const [article, setArticle] = useState<Metadata | undefined>(undefined)
 
+  const setInitialState = () => {
+    setUrl('')
+    setError('')
+    setArticle(undefined)
+  }
+
   useEffect(() => {
-    if (!url) {
+    if (url === '') {
+      if (article || error) {
+        setInitialState()
+      }
+
       return
     }
 
@@ -43,7 +53,7 @@ export default function ArticleDrawer({
         setArticle(undefined)
         setError('Not Found!')
       })
-  }, [url])
+  }, [article, error, url])
 
   const handleInputOnChange = (value = '') => {
     setUrl(value)
@@ -56,9 +66,7 @@ export default function ArticleDrawer({
   }
 
   const handleOnClose = () => {
-    setUrl('')
-    setError('')
-    setArticle(undefined)
+    setInitialState()
     onClose()
   }
 
@@ -67,10 +75,11 @@ export default function ArticleDrawer({
       <OverlayDrawer.Header title="Insert a web page URL" />
       <OverlayDrawer.Body>
         <Search
-          onChange={handleInputOnChange}
-          placeholder="https://rechat.com"
-          isSearching={isFetching}
           debounceTime={500}
+          isSearching={isFetching}
+          onChange={handleInputOnChange}
+          onClearSearch={setInitialState}
+          placeholder="https://rechat.com"
           style={{
             margin: '1.5rem 0'
           }}
