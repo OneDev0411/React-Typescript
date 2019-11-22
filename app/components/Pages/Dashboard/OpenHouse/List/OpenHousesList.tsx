@@ -1,3 +1,5 @@
+import { ACL } from 'constants/acl'
+
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
@@ -177,7 +179,7 @@ function OpenHousesList(props: Props) {
         </PageHeader.Menu>
       </PageHeader>
 
-      <Acl.Deals>
+      <Acl access={[ACL.DEALS, ACL.BETA]}>
         <div style={{ padding: theme.spacing(0, 3, 9) }}>
           <Callout type="info" style={{ margin: theme.spacing(1.5, 0) }}>
             To Notify your Office to Book an Open House on the MLS please find
@@ -192,7 +194,7 @@ function OpenHousesList(props: Props) {
 
           {renderContent()}
         </div>
-      </Acl.Deals>
+      </Acl>
 
       {isDrawerOpen && (
         // @ts-ignore js component
