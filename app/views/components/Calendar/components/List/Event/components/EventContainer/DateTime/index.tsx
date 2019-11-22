@@ -6,7 +6,11 @@ interface Props {
 }
 
 export function DateTime({ event }: Props) {
-  if (['crm_association', 'crm_task'].includes(event.object_type) === false) {
+  if (
+    ['crm_association', 'crm_task', 'email_campaign'].includes(
+      event.object_type
+    ) === false
+  ) {
     return <span>All day</span>
   }
 
