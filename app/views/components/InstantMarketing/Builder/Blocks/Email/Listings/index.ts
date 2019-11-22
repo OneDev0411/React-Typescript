@@ -11,11 +11,13 @@ import Top from './top.mjml'
 import Right from './right.mjml'
 import Left from './left.mjml'
 import Grid from './grid.mjml'
+import GridTwo from './grid-two.mjml'
 
 export const listingTopBlockName = 'rechat-listing-image-top'
 export const listingLeftBlockName = 'rechat-listing-image-left'
 export const listingRightBlockName = 'rechat-listing-image-right'
 export const listingGridBlockName = 'rechat-listing-grid'
+export const listingGridTwoBlockName = 'rechat-listing-grid-two'
 
 const templates = {}
 
@@ -23,6 +25,7 @@ templates[listingTopBlockName] = Top
 templates[listingLeftBlockName] = Left
 templates[listingRightBlockName] = Right
 templates[listingGridBlockName] = Grid
+templates[listingGridTwoBlockName] = GridTwo
 
 export interface Options {
   onDrop: (model: Model) => void
@@ -79,6 +82,13 @@ export default function registerBlocks(
     category: LISTINGS_BLOCK_CATEGORY,
     blockName: listingLeftBlockName,
     template: templates[listingLeftBlockName]
+  })
+
+  registerBlock(editor, {
+    label: 'GridTwo',
+    category: LISTINGS_BLOCK_CATEGORY,
+    blockName: listingGridTwoBlockName,
+    template: templates[listingGridTwoBlockName]
   })
 
   registerBlock(editor, {
