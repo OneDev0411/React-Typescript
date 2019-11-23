@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import usePrevious from 'react-use/lib/usePrevious'
 import { CircularProgress, Button } from '@material-ui/core'
 
 import OverlayDrawer from 'components/OverlayDrawer'
@@ -20,6 +21,7 @@ export default function ArticleDrawer({
   onSelect
 }: Props) {
   const [url, setUrl] = useState<string>('')
+  const prevURL = usePrevious(url)
   const [error, setError] = useState<string>('')
   const [isFetching, setIsFetching] = useState<boolean>(false)
   const [article, setArticle] = useState<Metadata | undefined>(undefined)
@@ -39,6 +41,10 @@ export default function ArticleDrawer({
       return
     }
 
+    if (url === prevURL) {
+      return
+    }
+
     setError('')
     setArticle(undefined)
     setIsFetching(true)
@@ -53,7 +59,7 @@ export default function ArticleDrawer({
         setArticle(undefined)
         setError('Not Found!')
       })
-  }, [article, error, url])
+  }, [article, error, prevURL, url])
 
   const handleInputOnChange = (value = '') => {
     setUrl(value)
