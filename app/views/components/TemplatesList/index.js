@@ -1,15 +1,16 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import Masonry from 'react-masonry-css'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
-import { TemplatesListContainer, TemplatesContainer } from './styled'
-import Item from './Item'
+import { isTemplateInstance } from 'utils/marketing-center/helpers'
+
+import { TemplatesContainer, TemplatesListContainer } from './styled'
+import MarketingTemplateCard from '../MarketingTemplateCard'
 import Title from './Title'
 import Fallback from './Fallback'
 import TemplateAction from './TemplateAction'
 import PreviewModal from './PreviewModal'
-import { isTemplateInstance } from './helpers'
 
 function TemplatesList(props) {
   const [isPreviewModalOpen, setPreviewModalOpen] = useState(false)
@@ -67,7 +68,7 @@ function TemplatesList(props) {
           }`}
         >
           {props.items.map(template => (
-            <Item
+            <MarketingTemplateCard
               key={template.id}
               template={template}
               handlePreview={selectedTemplate => {

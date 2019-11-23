@@ -2,7 +2,7 @@ import React from 'react'
 
 import Button from 'components/Button/ActionButton'
 
-import { isTemplateInstance } from './helpers'
+import { isTemplateInstance } from 'utils/marketing-center/helpers'
 
 function PreviewModalMenu(props) {
   return (

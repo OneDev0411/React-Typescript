@@ -5,7 +5,11 @@ import GeneralFlow from 'components/InstantMarketing/adapters/General'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
-import { getTemplateType, getMedium, convertToTemplate } from './helpers'
+import {
+  convertToTemplate,
+  getMedium,
+  getTemplateType
+} from 'utils/marketing-center/helpers'
 
 const HOLIDAY_TYPES = [
   'Christmas',

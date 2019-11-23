@@ -4,12 +4,12 @@ import { addNotification as notify } from 'reapop'
 
 import { getBrandByType } from 'utils/user-teams'
 
-import IconButton from 'components/Button/IconButton'
-import ActionButton from 'components/Button/ActionButton'
-import DeleteIcon from 'components/SvgIcons/DeleteOutline/IconDeleteOutline'
-import Tooltip from 'components/tooltip'
+import { getTemplateImage, itemDateText } from 'utils/marketing-center/helpers'
 
-import { getTemplateImage, itemDateText } from './helpers'
+import IconButton from '../Button/IconButton'
+import ActionButton from '../Button/ActionButton'
+import DeleteIcon from '../SvgIcons/DeleteOutline/IconDeleteOutline'
+import Tooltip from '../tooltip'
 
 function Item(props) {
   const { template } = props

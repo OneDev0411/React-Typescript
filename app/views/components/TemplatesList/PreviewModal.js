@@ -1,16 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { getBrandByType } from 'utils/user-teams'
 import { ImagePreviewModal } from 'components/ImagePreviewModal'
-
-import PreviewModalMenu from './PreviewModalMenu'
+import { getBrandByType } from 'utils/user-teams'
 import {
   getTemplateImage,
-  selectPreviousTemplate,
+  navigateBetweenTemplatesUsingKeyboard,
   selectNextTemplate,
-  navigateBetweenTemplatesUsingKeyboard
-} from './helpers'
+  selectPreviousTemplate
+} from 'utils/marketing-center/helpers'
+
+import PreviewModalMenu from './PreviewModalMenu'
 
 function PreviewModal(props) {
   const { selectedTemplate, templates, medium } = props
