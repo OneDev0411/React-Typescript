@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react'
-import Masonry from 'react-masonry-css'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
@@ -11,6 +10,7 @@ import Title from './Title'
 import Fallback from './Fallback'
 import TemplateAction from './TemplateAction'
 import PreviewModal from './PreviewModal'
+import { MarketingTemplateMasonry } from '../MarketingTemplateMasonry'
 
 function TemplatesList(props) {
   const [isPreviewModalOpen, setPreviewModalOpen] = useState(false)
@@ -54,7 +54,7 @@ function TemplatesList(props) {
       )}
 
       <TemplatesListContainer>
-        <Masonry
+        <MarketingTemplateMasonry
           breakpointCols={{
             default: 5,
             1600: 4,
@@ -62,10 +62,6 @@ function TemplatesList(props) {
             960: 2,
             568: 1
           }}
-          className="templates-masonry-grid"
-          columnClassName={`templates-masonry-grid_column ${
-            props.type === 'history' ? 'is-instance' : ''
-          }`}
         >
           {props.items.map(template => (
             <MarketingTemplateCard
@@ -88,7 +84,7 @@ function TemplatesList(props) {
               }}
             />
           ))}
-        </Masonry>
+        </MarketingTemplateMasonry>
       </TemplatesListContainer>
 
       <PreviewModal

@@ -6,12 +6,37 @@ import { getBrandByType } from 'utils/user-teams'
 
 import { getTemplateImage, itemDateText } from 'utils/marketing-center/helpers'
 
+import { IAppState } from 'reducers/index'
+
 import IconButton from '../Button/IconButton'
 import ActionButton from '../Button/ActionButton'
 import DeleteIcon from '../SvgIcons/DeleteOutline/IconDeleteOutline'
 import Tooltip from '../tooltip'
+import {
+  MarketingTemplateCardContainer,
+  MarketingTemplateCardRoot,
+  TemplateDate
+} from './styled'
 
-function Item(props) {
+interface Props {
+  template: IMarketingTemplateInstance | IMarketingTemplate
+  notify: typeof notify
+  user: IUser
+  handlePreview: (
+    template: IMarketingTemplateInstance | IMarketingTemplate
+  ) => void
+  handleEdit?: (
+    template: IMarketingTemplateInstance | IMarketingTemplate
+  ) => void
+  handleCustomize: (
+    template: IMarketingTemplateInstance | IMarketingTemplate
+  ) => void
+  handleDelete?: (
+    template: IMarketingTemplateInstance | IMarketingTemplate
+  ) => void
+}
+
+function MarketingTemplateCard(props: Props) {
   const { template } = props
   const [isDeleting, setDeleting] = useState(false)
   const brokerageBrand = getBrandByType(props.user, 'Brokerage')
@@ -32,8 +57,8 @@ function Item(props) {
   }
 
   return (
-    <div key={template.id}>
-      <div
+    <MarketingTemplateCardContainer key={template.id} isInstance={isInstance}>
+      <MarketingTemplateCardRoot
         className={gridClassNames.join(' ')}
         onClick={handleOnPreview}
         data-test="marketing-template"
@@ -75,7 +100,7 @@ function Item(props) {
                     onClick={e => {
                       e.stopPropagation()
                       setDeleting(true)
-                      props.handleDelete({
+                      props.handleDelete!({
                         template,
                         onCancel: () => {
                           setDeleting(false)
@@ -99,9 +124,9 @@ function Item(props) {
             </div>
           )}
         </div>
-      </div>
+      </MarketingTemplateCardRoot>
       {isInstance && (
-        <div className="template-date">
+        <TemplateDate>
           {isDeleting ? (
             'Deleting...'
           ) : (
@@ -110,13 +135,13 @@ function Item(props) {
               {itemDateText(template.created_at)}
             </>
           )}
-        </div>
+        </TemplateDate>
       )}
-    </div>
+    </MarketingTemplateCardContainer>
   )
 }
 
 export default connect(
-  ({ user }) => ({ user }),
+  ({ user }: IAppState) => ({ user }),
   { notify }
-)(Item)
+)(MarketingTemplateCard)
