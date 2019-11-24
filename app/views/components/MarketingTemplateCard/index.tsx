@@ -152,6 +152,8 @@ function MarketingTemplateCard(
   )
 }
 
+export { MarketingTemplateCardSkeleton } from './MarketingTemplateCardSkeleton'
+
 export default connect(
   ({ user }: IAppState) => ({ user }),
   { notify }

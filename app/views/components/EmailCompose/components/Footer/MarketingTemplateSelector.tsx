@@ -10,11 +10,13 @@ import {
   Theme
 } from '@material-ui/core'
 import { Link } from 'react-router'
+import { range } from 'lodash'
 
-import MarketingTemplateCard from 'components/MarketingTemplateCard'
+import MarketingTemplateCard, {
+  MarketingTemplateCardSkeleton
+} from 'components/MarketingTemplateCard'
 import { ScrollableArea } from 'components/ScrollableArea'
 import { ServerError } from 'components/ServerError'
-import { ListSkeleton } from 'components/Skeletons/List'
 
 import useTemplatesHistory from '../../../../../components/Pages/Dashboard/Marketing/History/useTemplatesHistory'
 import { FooterBottomDrawerZeroState } from './FooterBottomDrawerZeroState'
@@ -46,61 +48,62 @@ export function MarketingTemplateSelector(props: Props) {
     return <ServerError error={error} />
   }
 
-  if (loading) {
-    return <ListSkeleton dense twoLines divider numItems={4} />
-  }
-
-  if (templates && templates.length > 0) {
+  if (templates && templates.length === 0 && !loading) {
     return (
-      <ScrollableArea hasThinnerScrollbar shadowHeight={20} shadowColor="white">
-        <ListItem
-          dense
-          button
-          divider
-          component={Link}
-          target="_blank"
-          to="/dashboard/marketing"
-        >
-          <ListItemText
-            primary={<Box color="primary.main">Open My Designs</Box>}
-          />
-        </ListItem>
-        <MarketingTemplateMasonry
-          breakpointCols={3}
-          className={classes.masonry}
-        >
-          {templates.map(template => (
-            <MarketingTemplateCard
-              key={template.id}
-              classes={{ card: classes.card }}
-              template={template}
-              handleCustomize={() => props.onTemplateSelected(template)}
-              handleEdit={() => props.onTemplateSelected(template)}
-              handlePreview={() => {}}
+      <FooterBottomDrawerZeroState
+        description="There is no saved templates. Your previously used marketing email templates will appear here."
+        actions={
+          <>
+            <Button
+              variant="outlined"
+              component={Link}
+              target="_blank"
+              to="/dashboard/marketing"
             >
-              template {template.name}
-            </MarketingTemplateCard>
-          ))}
-        </MarketingTemplateMasonry>
-      </ScrollableArea>
+              Open Marketing Center
+            </Button>
+          </>
+        }
+      />
     )
   }
 
+  const COLUMN_COUNT = 3
+  const items = loading
+    ? range(0, 2 * COLUMN_COUNT).map(i => (
+        <MarketingTemplateCardSkeleton height="12.5rem" key={i} />
+      ))
+    : (templates || []).map(template => (
+        <MarketingTemplateCard
+          key={template.id}
+          classes={{ card: classes.card }}
+          template={template}
+          handleCustomize={() => props.onTemplateSelected(template)}
+          handleEdit={() => props.onTemplateSelected(template)}
+          handlePreview={() => {}}
+        />
+      ))
+
   return (
-    <FooterBottomDrawerZeroState
-      description="There is no saved templates. Your previously used marketing email templates will appear here."
-      actions={
-        <>
-          <Button
-            variant="outlined"
-            component={Link}
-            target="_blank"
-            to="/dashboard/marketing"
-          >
-            Open Marketing Center
-          </Button>
-        </>
-      }
-    />
+    <ScrollableArea hasThinnerScrollbar shadowHeight={20} shadowColor="white">
+      <ListItem
+        dense
+        button
+        divider
+        component={Link}
+        target="_blank"
+        to="/dashboard/marketing"
+      >
+        <ListItemText
+          primary={<Box color="primary.main">Open My Designs</Box>}
+        />
+      </ListItem>
+      <MarketingTemplateMasonry
+        breakpointCols={COLUMN_COUNT}
+        className={classes.masonry}
+      >
+        {items}
+      </MarketingTemplateMasonry>
+    </ScrollableArea>
   )
 }
