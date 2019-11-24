@@ -117,7 +117,8 @@ function OpenHousesList(props: Props) {
   const onOpenOHDrawer = async (item: ICompactListing | IDeal) => {
     const associations: Associations = {}
 
-    if (item.type === 'compact_listing') {
+    if (['compact_listing', 'property'].includes(item.type)) {
+      // @ts-ignore TODO: This is temporary https://rechathq.slack.com/archives/CMXKY2L31/p1574616881213400
       associations.listing = item
     } else if (item.type === 'deal') {
       associations.deal = item
