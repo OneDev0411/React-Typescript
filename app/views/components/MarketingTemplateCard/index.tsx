@@ -2,21 +2,23 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'reapop'
 
+import { makeStyles } from '@material-ui/core'
+
+import classNames from 'classnames'
+
 import { getBrandByType } from 'utils/user-teams'
 
 import { getTemplateImage, itemDateText } from 'utils/marketing-center/helpers'
 
 import { IAppState } from 'reducers/index'
 
+import { ClassesProps } from 'utils/ts-utils'
+
 import IconButton from '../Button/IconButton'
 import ActionButton from '../Button/ActionButton'
 import DeleteIcon from '../SvgIcons/DeleteOutline/IconDeleteOutline'
 import Tooltip from '../tooltip'
-import {
-  MarketingTemplateCardContainer,
-  MarketingTemplateCardRoot,
-  TemplateDate
-} from './styled'
+import { marketingTemplateCardStyles } from './styles'
 
 interface Props {
   template: IMarketingTemplateInstance | IMarketingTemplate
@@ -36,40 +38,49 @@ interface Props {
   ) => void
 }
 
-function MarketingTemplateCard(props: Props) {
+const useStyles = makeStyles(marketingTemplateCardStyles, {
+  name: 'MarketingTemplateCard'
+})
+
+function MarketingTemplateCard(
+  props: Props & ClassesProps<typeof marketingTemplateCardStyles>
+) {
   const { template } = props
   const [isDeleting, setDeleting] = useState(false)
   const brokerageBrand = getBrandByType(props.user, 'Brokerage')
+  const classes = useStyles({ classes: props.classes })
 
   const { thumbnail } = getTemplateImage(template, brokerageBrand)
 
   const isInstance = template.type === 'template_instance'
-  const gridClassNames = ['grid-item']
   let handleOnPreview = () => props.handlePreview(template)
 
-  if (isDeleting) {
-    gridClassNames.push('loading')
-  }
-
   if (template.video) {
-    gridClassNames.push('is-video')
     handleOnPreview = () => false
   }
 
   return (
-    <MarketingTemplateCardContainer key={template.id} isInstance={isInstance}>
-      <MarketingTemplateCardRoot
-        className={gridClassNames.join(' ')}
+    <div
+      key={template.id}
+      className={classNames(classes.root, {
+        [classes.rootHasSuffix]: isInstance
+      })}
+    >
+      <div
+        className={classNames(classes.card, {
+          [classes.cardIsImage]: !template.isVideo,
+          [classes.cardLoading]: isDeleting
+        })}
         onClick={handleOnPreview}
         data-test="marketing-template"
       >
         {template.video ? (
           <video src={thumbnail} muted autoPlay />
         ) : (
-          <img alt={template.name} src={thumbnail} />
+          <img alt={template.name} src={thumbnail} className={classes.image} />
         )}
 
-        <div className="action-bar">
+        <div className={classes.actions}>
           <div style={{ width: isInstance ? 'auto' : '100%' }}>
             <ActionButton
               onClick={e => {
@@ -91,12 +102,12 @@ function MarketingTemplateCard(props: Props) {
           </div>
 
           {isInstance && (
-            <div className="action-bar__right">
+            <div className={classes.actionsRight}>
               {props.handleDelete && (
                 <Tooltip caption="Delete">
                   <IconButton
                     iconSize="large"
-                    className="action-bar__icon-button"
+                    className={classes.actionsIconButton}
                     onClick={e => {
                       e.stopPropagation()
                       setDeleting(true)
@@ -124,20 +135,20 @@ function MarketingTemplateCard(props: Props) {
             </div>
           )}
         </div>
-      </MarketingTemplateCardRoot>
+      </div>
       {isInstance && (
-        <TemplateDate>
+        <div className={classes.suffix}>
           {isDeleting ? (
             'Deleting...'
           ) : (
             <>
-              <div className="caption">CREATED AT</div>
+              <div className={classes.suffixCaption}>CREATED AT</div>
               {itemDateText(template.created_at)}
             </>
           )}
-        </TemplateDate>
+        </div>
       )}
-    </MarketingTemplateCardContainer>
+    </div>
   )
 }
 
