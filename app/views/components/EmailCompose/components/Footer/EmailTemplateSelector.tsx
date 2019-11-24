@@ -93,7 +93,70 @@ function EmailTemplateSelector({
     setDrawerOpen(true)
   }
 
-  if (templates.length > 0) {
+  if (templates.length > 0 || isFetching) {
+    const items =
+      // Show previously loaded items even while loading new items
+      templates.length > 0 ? (
+        (templates || []).map(template => {
+          const editButton = (
+            <ListItemSecondaryAction
+              className={classes.secondaryAction}
+              onClick={event => event.stopPropagation()}
+            >
+              <IconButton
+                disabled={!template.editable}
+                edge="end"
+                aria-label="edit"
+                onClick={() => handleEditTemplate(template)}
+              >
+                <EditOutlineIcon
+                  className={classNames(
+                    iconClasses.small,
+                    iconClasses.currentColor
+                  )}
+                />
+              </IconButton>
+            </ListItemSecondaryAction>
+          )
+
+          return (
+            <ListItem
+              key={template.id}
+              classes={{
+                // it seems a buggy behavior from MUI, but when the actions
+                // are disabled, the list item layout is changed and
+                // container class becomes required
+                container: classes.listItem,
+                root: classes.listItem
+              }}
+              onClick={() => onTemplateSelected(template)}
+              ContainerComponent="div"
+              dense
+              button
+              divider
+            >
+              <ListItemText
+                primary={template.name}
+                secondary={template.subject || 'No Subject'}
+              />
+              {template.editable ? (
+                editButton
+              ) : (
+                <Tooltip
+                  placement="left"
+                  title={"You can't edit this template"}
+                >
+                  {editButton}
+                </Tooltip>
+              )}
+            </ListItem>
+          )
+        })
+      ) : (
+        /* isFetching === true */
+        <ListSkeleton dense twoLines divider numItems={4} />
+      )
+
     return (
       <>
         <AddOrEditEmailTemplateDrawer
@@ -123,71 +186,15 @@ function EmailTemplateSelector({
                 }
               />
             </ListItem>
-            {templates.map(template => {
-              const editButton = (
-                <ListItemSecondaryAction
-                  className={classes.secondaryAction}
-                  onClick={event => event.stopPropagation()}
-                >
-                  <IconButton
-                    disabled={!template.editable}
-                    edge="end"
-                    aria-label="edit"
-                    onClick={() => handleEditTemplate(template)}
-                  >
-                    <EditOutlineIcon
-                      className={classNames(
-                        iconClasses.small,
-                        iconClasses.currentColor
-                      )}
-                    />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              )
-
-              return (
-                <ListItem
-                  key={template.id}
-                  classes={{
-                    // it seems a buggy behavior from MUI, but when the actions
-                    // are disabled, the list item layout is changed and
-                    // container class becomes required
-                    container: classes.listItem,
-                    root: classes.listItem
-                  }}
-                  onClick={() => onTemplateSelected(template)}
-                  ContainerComponent="div"
-                  dense
-                  button
-                  divider
-                >
-                  <ListItemText
-                    primary={template.name}
-                    secondary={template.subject || 'No Subject'}
-                  />
-                  {template.editable ? (
-                    editButton
-                  ) : (
-                    <Tooltip
-                      placement="left"
-                      title={"You can't edit this template"}
-                    >
-                      {editButton}
-                    </Tooltip>
-                  )}
-                </ListItem>
-              )
-            })}
+            {items}
           </List>
         </ScrollableArea>
       </>
     )
   }
 
-  if (isFetching) {
-    return <ListSkeleton dense twoLines divider numItems={4} />
-  }
-
+  // We intentionally handle error last to prioritize previously fetched
+  // items over error in last try for fetching templates, just in case.
   if (error) {
     return <ServerError error={error} />
   }
