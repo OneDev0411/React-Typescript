@@ -20,14 +20,17 @@ export default function VideoDrawer({
   onSelect
 }: Props) {
   const [isLoading, setIsLoading] = useState(false)
+  const [input, setInput] = useState<string>('')
   const [video, setVideo] = useState<Video | undefined>(undefined)
 
   useEffect(() => {
-    if (!video || !video.url) {
+    if (!input) {
+      setVideo(undefined)
+
       return
     }
 
-    const thumbnail = getYoutubeThumbnailUrl(video.url)
+    const thumbnail = getYoutubeThumbnailUrl(input)
 
     if (!thumbnail) {
       setVideo(undefined)
@@ -36,17 +39,18 @@ export default function VideoDrawer({
     }
 
     const newVideo: Video = {
-      url: video.url,
-      thumbnail: getYoutubeThumbnailUrl(video.url)
+      url: input,
+      thumbnail
     }
 
     setVideo(newVideo)
-  }, [video])
+  }, [input])
 
   return (
     <OverlayDrawer
       open={isOpen}
       onClose={() => {
+        setInput('')
         setVideo(undefined)
         onClose()
       }}
@@ -55,13 +59,13 @@ export default function VideoDrawer({
       <OverlayDrawer.Body>
         <Search
           onChange={value => {
-            if (!value) {
-              setVideo(undefined)
+            if (!value.trim()) {
+              setInput('')
 
               return
             }
 
-            setVideo({ url: value })
+            setInput(value)
           }}
           placeholder="https://www.youtube.com/watch?v=0mm57rH1sTE"
           isSearching={isLoading}
@@ -91,6 +95,7 @@ export default function VideoDrawer({
           variant="contained"
           onClick={() => {
             onSelect(video)
+            setInput('')
             setVideo(undefined)
           }}
         >
