@@ -347,7 +347,8 @@
     "typescript": "^3.6.2",
     "webpack-cli": "^3.2.1",
     "webpack-notifier": "^1.7.0",
-    "webpackbar": "^3.1.5"
+    "webpackbar": "^3.1.5",
+    "whatwg-fetch": "^3.0.0"
   },
   "prettier": {
     "semi": false,
