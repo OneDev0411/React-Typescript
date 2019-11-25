@@ -15,7 +15,7 @@ interface TableColumnProps {
   rowData: ContactsListType
 }
 interface ContactsPropsType {
-  item: IInsight
+  item: IEmailCampaign<IEmailCampaignAssociation>
 }
 
 function ContactsTable(props: ContactsPropsType) {
