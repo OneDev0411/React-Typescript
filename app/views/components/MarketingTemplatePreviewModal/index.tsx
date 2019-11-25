@@ -12,19 +12,17 @@ import {
 
 import { IAppState } from 'reducers/index'
 
-import PreviewModalMenu from './PreviewModalMenu'
-
 interface Props {
-  type: string // can be improved
-  medium: string // can be improved
-  templates: (IMarketingTemplate | IMarketingTemplateInstance)[]
+  isOpen: boolean
   selectedTemplate: IMarketingTemplate | IMarketingTemplateInstance
   setSelectedTemplate: (
     template: IMarketingTemplate | IMarketingTemplateInstance
   ) => void
-  isOpen: boolean
-  onClose: () => void
-  handleAction: () => void
+  type: string // can be improved
+  medium?: string // can be improved
+  templates?: (IMarketingTemplate | IMarketingTemplateInstance)[]
+  actions?: React.ReactNode
+  onClose?: () => void
 }
 
 interface StateProps {
@@ -46,13 +44,8 @@ function PreviewModal(props: Props & StateProps) {
 
   let modalProps: ComponentProps<typeof ImagePreviewModal> = {
     isOpen: props.isOpen,
-    handleClose: () => props.onClose(),
-    menuRenderer: () => (
-      <PreviewModalMenu
-        selectedTemplate={selectedTemplate}
-        handleAction={props.handleAction}
-      />
-    )
+    handleClose: () => props.onClose && props.onClose(),
+    menuRenderer: () => props.actions
   }
 
   if (props.type === 'history') {

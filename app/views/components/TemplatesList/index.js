@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import { addNotification as notify } from 'reapop'
 import useMap from 'react-use/lib/useMap'
 import { connect } from 'react-redux'
+import { Button } from '@material-ui/core'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { isTemplateInstance } from 'utils/marketing-center/helpers'
@@ -90,7 +91,7 @@ function TemplatesList(props) {
                 setSelectedTemplate(template)
               }}
               actions={
-                template.type === 'template_instance' ? (
+                isTemplateInstance(template) ? (
                   <TemplateInstanceCardActions
                     handleDelete={() => handleDelete(template)}
                     handleEdit={() => {
@@ -120,14 +121,24 @@ function TemplatesList(props) {
         isOpen={isPreviewModalOpen}
         selectedTemplate={selectedTemplate}
         templates={props.items}
-        handleAction={() => {
-          setPreviewModalOpen(false)
-          setActionTriggered(true)
+        actions={
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              setPreviewModalOpen(false)
+              setActionTriggered(true)
 
-          if (isTemplateInstance(selectedTemplate)) {
-            setEditActionTriggered(true)
-          }
-        }}
+              if (isTemplateInstance(selectedTemplate)) {
+                setEditActionTriggered(true)
+              }
+            }}
+          >
+            {selectedTemplate && isTemplateInstance(selectedTemplate)
+              ? 'Continue'
+              : 'Customize'}
+          </Button>
+        }
         onClose={() => setPreviewModalOpen(false)}
         setSelectedTemplate={setSelectedTemplate}
       />
