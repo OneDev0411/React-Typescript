@@ -16,7 +16,7 @@ interface StateProps {
 
 interface Props {
   template: IMarketingTemplateInstance | IMarketingTemplate
-  handlePreview: () => void
+  handlePreview?: () => void
   isLoading?: boolean
   suffix?: React.ReactNode // overrides default suffix
   actions?: React.ReactNode
@@ -46,7 +46,7 @@ function MarketingTemplateCard(
     >
       <div
         className={classNames(classes.card, {
-          [classes.cardIsImage]: !template.isVideo,
+          [classes.cardHasPreview]: !template.isVideo && props.handlePreview,
           [classes.cardLoading]: props.isLoading
         })}
         onClick={!template.video ? props.handlePreview : undefined}

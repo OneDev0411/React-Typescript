@@ -78,7 +78,6 @@ export function MarketingTemplateSelector(props: Props) {
           key={template.id}
           classes={{ card: classes.card }}
           template={template}
-          handlePreview={() => {}}
         />
       ))
 

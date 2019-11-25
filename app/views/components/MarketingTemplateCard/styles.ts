@@ -51,7 +51,7 @@ export const marketingTemplateCardStyles = (theme: Theme) =>
         transform: 'translateY(0)'
       }
     },
-    cardIsImage: {
+    cardHasPreview: {
       cursor: 'zoom-in'
     },
     cardLoading: {
