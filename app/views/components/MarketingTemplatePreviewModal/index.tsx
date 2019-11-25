@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ComponentProps } from 'react'
 import { connect } from 'react-redux'
 
 import { ImagePreviewModal } from 'components/ImagePreviewModal'
@@ -10,9 +10,28 @@ import {
   selectPreviousTemplate
 } from 'utils/marketing-center/helpers'
 
+import { IAppState } from 'reducers/index'
+
 import PreviewModalMenu from './PreviewModalMenu'
 
-function PreviewModal(props) {
+interface Props {
+  type: string // can be improved
+  medium: string // can be improved
+  templates: (IMarketingTemplate | IMarketingTemplateInstance)[]
+  selectedTemplate: IMarketingTemplate | IMarketingTemplateInstance
+  setSelectedTemplate: (
+    template: IMarketingTemplate | IMarketingTemplateInstance
+  ) => void
+  isPreviewModalOpen: boolean
+  setPreviewModalOpen: (boolean) => void
+  handleAction: () => void
+}
+
+interface StateProps {
+  user: IUser
+}
+
+function PreviewModal(props: Props & StateProps) {
   const { selectedTemplate, templates, medium } = props
 
   if (!selectedTemplate) {
@@ -25,7 +44,7 @@ function PreviewModal(props) {
     brokerageBrand
   )
 
-  let modalProps = {
+  let modalProps: ComponentProps<typeof ImagePreviewModal> = {
     isOpen: props.isPreviewModalOpen,
     handleClose: () => props.setPreviewModalOpen(false),
     menuRenderer: () => (
@@ -85,7 +104,11 @@ function PreviewModal(props) {
     }
   }
 
-  return props.isPreviewModalOpen && <ImagePreviewModal {...modalProps} />
+  return (
+    <>{props.isPreviewModalOpen && <ImagePreviewModal {...modalProps} />}</>
+  )
 }
 
-export default connect(({ user }) => ({ user }))(PreviewModal)
+export default connect<StateProps>(({ user }: IAppState) => ({ user }))(
+  PreviewModal
+)
