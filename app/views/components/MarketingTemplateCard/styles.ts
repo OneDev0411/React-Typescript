@@ -99,21 +99,5 @@ export const marketingTemplateCardStyles = (theme: Theme) =>
       '& button:last-child': {
         marginRight: 0
       }
-    },
-    actionsRight: {
-      display: 'flex',
-      justifyContent: 'flex-end'
-    },
-    actionsIconButton: {
-      padding: '0 0.5rem',
-      backgroundColor: 'rgba(0, 0, 0, 0.55)!important',
-
-      '& svg': {
-        fill: '#fff!important'
-      },
-
-      '&:hover': {
-        background: '#000'
-      }
     }
   })

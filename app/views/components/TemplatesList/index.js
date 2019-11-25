@@ -1,7 +1,9 @@
 import React, { useContext, useState } from 'react'
+import { addNotification as notify } from 'reapop'
+import useMap from 'react-use/lib/useMap'
+import { connect } from 'react-redux'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
 import { isTemplateInstance } from 'utils/marketing-center/helpers'
 
 import { TemplatesContainer, TemplatesListContainer } from './styled'
@@ -11,24 +13,38 @@ import Fallback from './Fallback'
 import TemplateAction from './TemplateAction'
 import PreviewModal from './PreviewModal'
 import { MarketingTemplateMasonry } from '../MarketingTemplateMasonry'
+import { TemplateCardActions } from './TemplateCardActions'
+import { TemplateInstanceCardActions } from './TemplateInstanceCardActions'
 
 function TemplatesList(props) {
   const [isPreviewModalOpen, setPreviewModalOpen] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState(null)
   const [isActionTriggered, setActionTriggered] = useState(false)
   const [isEditActionTriggered, setEditActionTriggered] = useState(false)
+  const [deletingTemplates, { set: setDeleting }] = useMap()
   const modal = useContext(ConfirmationModalContext)
   const handleDelete = props.onDelete
-    ? ({ template, onFailed, onCancel }) => {
+    ? template => {
+        setDeleting(template.id, true)
         modal.setConfirmationModal({
           message: 'Delete your design?',
           description: 'Once deleted you would not be able to recover it.',
           confirmLabel: 'Delete',
           appearance: 'danger',
           onConfirm: () => {
-            props.onDelete(template.id).catch(onFailed)
+            props.onDelete(template.id).catch(() => {
+              setDeleting(template.id, false)
+              props.notify({
+                title:
+                  'There is a problem for deleting the template. Please try again.',
+                status: 'error',
+                dismissible: true
+              })
+            })
           },
-          onCancel
+          onCancel: () => {
+            setDeleting(template.id, false)
+          }
         })
       }
     : undefined
@@ -67,21 +83,32 @@ function TemplatesList(props) {
             <MarketingTemplateCard
               key={template.id}
               template={template}
-              handlePreview={selectedTemplate => {
+              isLoading={deletingTemplates[template.id]}
+              suffix={deletingTemplates[template.id] && 'Deleting ...'}
+              handlePreview={() => {
                 setPreviewModalOpen(true)
-                setSelectedTemplate(selectedTemplate)
+                setSelectedTemplate(template)
               }}
-              handleCustomize={selectedTemplate => {
-                setActionTriggered(true)
-                setEditActionTriggered(false)
-                setSelectedTemplate(selectedTemplate)
-              }}
-              handleDelete={handleDelete}
-              handleEdit={selectedTemplate => {
-                setActionTriggered(true)
-                setEditActionTriggered(true)
-                setSelectedTemplate(selectedTemplate)
-              }}
+              actions={
+                template.type === 'template_instance' ? (
+                  <TemplateInstanceCardActions
+                    handleDelete={() => handleDelete(template)}
+                    handleEdit={() => {
+                      setActionTriggered(true)
+                      setEditActionTriggered(true)
+                      setSelectedTemplate(template)
+                    }}
+                  />
+                ) : (
+                  <TemplateCardActions
+                    handleCustomize={() => {
+                      setActionTriggered(true)
+                      setEditActionTriggered(false)
+                      setSelectedTemplate(template)
+                    }}
+                  />
+                )
+              }
             />
           ))}
         </MarketingTemplateMasonry>
@@ -118,4 +145,7 @@ function TemplatesList(props) {
   )
 }
 
-export default TemplatesList
+export default connect(
+  null,
+  { notify }
+)(TemplatesList)
