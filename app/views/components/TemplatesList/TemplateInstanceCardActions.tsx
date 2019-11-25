@@ -16,7 +16,7 @@ const useStyles = makeStyles(
   () =>
     createStyles({
       iconButton: {
-        padding: '0 0.5rem',
+        padding: '0 0.5rem!important',
         backgroundColor: 'rgba(0, 0, 0, 0.55)!important',
 
         '& svg': {
