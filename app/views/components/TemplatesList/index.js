@@ -11,7 +11,7 @@ import MarketingTemplateCard from '../MarketingTemplateCard'
 import Title from './Title'
 import Fallback from './Fallback'
 import TemplateAction from './TemplateAction'
-import PreviewModal from './PreviewModal'
+import MarketingTemplatePreviewModal from '../MarketingTemplatePreviewModal'
 import { MarketingTemplateMasonry } from '../MarketingTemplateMasonry'
 import { TemplateCardActions } from './TemplateCardActions'
 import { TemplateInstanceCardActions } from './TemplateInstanceCardActions'
@@ -114,7 +114,7 @@ function TemplatesList(props) {
         </MarketingTemplateMasonry>
       </TemplatesListContainer>
 
-      <PreviewModal
+      <MarketingTemplatePreviewModal
         type={props.type}
         medium={props.medium}
         isPreviewModalOpen={isPreviewModalOpen}
