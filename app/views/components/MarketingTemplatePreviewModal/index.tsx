@@ -22,8 +22,8 @@ interface Props {
   setSelectedTemplate: (
     template: IMarketingTemplate | IMarketingTemplateInstance
   ) => void
-  isPreviewModalOpen: boolean
-  setPreviewModalOpen: (boolean) => void
+  isOpen: boolean
+  onClose: () => void
   handleAction: () => void
 }
 
@@ -45,8 +45,8 @@ function PreviewModal(props: Props & StateProps) {
   )
 
   let modalProps: ComponentProps<typeof ImagePreviewModal> = {
-    isOpen: props.isPreviewModalOpen,
-    handleClose: () => props.setPreviewModalOpen(false),
+    isOpen: props.isOpen,
+    handleClose: () => props.onClose(),
     menuRenderer: () => (
       <PreviewModalMenu
         selectedTemplate={selectedTemplate}
@@ -104,9 +104,7 @@ function PreviewModal(props: Props & StateProps) {
     }
   }
 
-  return (
-    <>{props.isPreviewModalOpen && <ImagePreviewModal {...modalProps} />}</>
-  )
+  return <>{props.isOpen && <ImagePreviewModal {...modalProps} />}</>
 }
 
 export default connect<StateProps>(({ user }: IAppState) => ({ user }))(

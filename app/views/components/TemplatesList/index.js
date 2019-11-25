@@ -117,7 +117,7 @@ function TemplatesList(props) {
       <MarketingTemplatePreviewModal
         type={props.type}
         medium={props.medium}
-        isPreviewModalOpen={isPreviewModalOpen}
+        isOpen={isPreviewModalOpen}
         selectedTemplate={selectedTemplate}
         templates={props.items}
         handleAction={() => {
@@ -128,7 +128,7 @@ function TemplatesList(props) {
             setEditActionTriggered(true)
           }
         }}
-        setPreviewModalOpen={setPreviewModalOpen}
+        onClose={() => setPreviewModalOpen(false)}
         setSelectedTemplate={setSelectedTemplate}
       />
 
