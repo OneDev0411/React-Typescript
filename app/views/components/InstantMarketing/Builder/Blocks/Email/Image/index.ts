@@ -24,7 +24,7 @@ export default function registerImageBlock(
   { onDrop }: Options
 ): ImageBlock {
   registerBlock(editor, {
-    label: 'Image',
+    label: 'Image Library',
     category: BASICS_BLOCK_CATEGORY,
     blockName,
     template

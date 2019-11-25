@@ -50,7 +50,7 @@ export default function registerStaticBlocks(
   })
 
   registerBlock(editor, {
-    label: 'Image',
+    label: 'Upload Image',
     category: BASICS_BLOCK_CATEGORY,
     blockName: imageBlockName,
     template: templates[imageBlockName]
