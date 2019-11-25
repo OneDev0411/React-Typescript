@@ -11,9 +11,7 @@ export function TemplateCardActions(props: Props) {
     <>
       <div style={{ width: '100%' }}>
         <ActionButton
-          onClick={e => {
-            e.stopPropagation()
-
+          onClick={() => {
             props.handleCustomize()
           }}
           isBlock

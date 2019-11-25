@@ -38,9 +38,7 @@ export function TemplateInstanceCardActions(props: Props) {
     <>
       <div>
         <ActionButton
-          onClick={e => {
-            e.stopPropagation()
-
+          onClick={() => {
             if (props.handleEdit) {
               props.handleEdit()
             }
@@ -56,8 +54,7 @@ export function TemplateInstanceCardActions(props: Props) {
           <IconButton
             iconSize="large"
             className={classes.iconButton}
-            onClick={e => {
-              e.stopPropagation()
+            onClick={() => {
               props.handleDelete()
             }}
           >

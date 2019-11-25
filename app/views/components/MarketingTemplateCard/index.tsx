@@ -37,6 +37,16 @@ function MarketingTemplateCard(
 
   const isInstance = template.type === 'template_instance'
 
+  const handlePreview = e => {
+    if (
+      !template.video &&
+      props.handlePreview &&
+      e.target.dataset.card === 'true'
+    ) {
+      props.handlePreview()
+    }
+  }
+
   return (
     <div
       key={template.id}
@@ -49,7 +59,8 @@ function MarketingTemplateCard(
           [classes.cardHasPreview]: !template.isVideo && props.handlePreview,
           [classes.cardLoading]: props.isLoading
         })}
-        onClick={!template.video ? props.handlePreview : undefined}
+        onClick={handlePreview}
+        data-card="true"
         data-test="marketing-template"
       >
         {template.video ? (
