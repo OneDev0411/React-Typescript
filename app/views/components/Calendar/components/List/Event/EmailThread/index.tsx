@@ -74,7 +74,7 @@ export function EmailThread({ style, event, nextItem }: Props) {
           })}
           {othersText && (
             <>
-              &nbsp;and <span>{othersText}</span>
+              &nbsp;and&nbsp;<span>{othersText}</span>
             </>
           )}
           {thread.email_count > 1 && (
