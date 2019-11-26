@@ -156,7 +156,6 @@ export function EmailThreadItem({
 
             {email.attachments.map(attachment => (
               <Attachment key={attachment.id} fullWidth={false}>
-                {/* FIXME: url */}
                 <Link
                   target="_blank"
                   href={convertToAbsoluteAttachmentUrl(attachment.url)}
@@ -166,7 +165,7 @@ export function EmailThreadItem({
               </Attachment>
             ))}
 
-            {showBottomButtons && email.thread_id && (
+            {(showBottomButtons || isResponseOpen) && email.thread_id && (
               <Box my={1}>
                 <Button
                   className={classes.actionButton}
