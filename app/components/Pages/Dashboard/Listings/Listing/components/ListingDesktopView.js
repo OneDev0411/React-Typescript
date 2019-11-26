@@ -22,7 +22,7 @@ import { formatPhoneNumber } from '../../../../../../utils/format'
 import { friendlyDate, numberWithCommas } from '../../../../../../utils/helpers'
 import config from '../../../../../../../config/public'
 import Brand from '../../../../../../controllers/Brand'
-import listing_util from '../../../../../../utils/listing'
+import listingUtils from '../../../../../../utils/listing'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import TextIconButton from '../../../../../../views/components/Button/TextIconButton'
 import LinkButton from '../../../../../../views/components/Button/LinkButton'
@@ -170,7 +170,7 @@ const ListingDesktopView = ({
 
     price = numberWithCommas(price)
     year_built = property.year_built
-    address = listing_util.addressTitle(property.address)
+    address = listingUtils.addressTitle(property.address)
     listing_title = address
     mls_number = listing.mls_number
     bedroom_count = property.bedroom_count
@@ -185,7 +185,7 @@ const ListingDesktopView = ({
         : ''
     bathroomBaloonText = bathroomBaloonText || 'Unknown'
     square_feet = numberWithCommas(
-      Math.floor(listing_util.metersToFeet(property.square_meters))
+      Math.floor(listingUtils.metersToFeet(property.square_meters))
     )
 
     if (property.square_meters) {
@@ -271,7 +271,7 @@ const ListingDesktopView = ({
       listing.property.address.state
     } ${listing.property.address.postal_code}`
 
-    const status_color = listing_util.getStatusColor(listing.status)
+    const status_color = listingUtils.getStatusColor(listing.status)
 
     let sold_date
 
@@ -300,7 +300,7 @@ const ListingDesktopView = ({
 
     // let number_days_indicator
     // if (listing.list_date) {
-    //   const days_on_market = listing_util.getDOM(listing.dom)
+    //   const days_on_market = listingUtils.getDOM(listing.dom)
     //   number_days_indicator = (
     //     <div
     //       className="pull-left"
@@ -569,10 +569,7 @@ const ListingDesktopView = ({
                 <Col sm={8} style={S('p-0 pull-right')}>
                   <div style={S('fw-700 font-60')}>
                     ${price}
-                    {listing.property &&
-                    listing.property.property_type === 'Residential Lease'
-                      ? '/mo'
-                      : ''}{' '}
+                    {listingUtils.isLeaseProperty(listing) ? '/mo' : ''}{' '}
                     {asking_price_area}
                   </div>
                   <div className="lato" style={S('font-24 color-8696a4 mb-10')}>
@@ -655,11 +652,11 @@ const ListingDesktopView = ({
                   {renderFeatures('Possession', listing.possession)}
                   {renderFeatures(
                     'Days On Market',
-                    listing_util.getDOM(listing.dom)
+                    listingUtils.getDOM(listing.dom)
                   )}
                   {renderFeatures(
                     'Current Days On Market',
-                    listing_util.getDOM(listing.cdom)
+                    listingUtils.getDOM(listing.cdom)
                   )}
                 </div>
                 <div style={{ width: 'calc(33% - 1rem)' }}>

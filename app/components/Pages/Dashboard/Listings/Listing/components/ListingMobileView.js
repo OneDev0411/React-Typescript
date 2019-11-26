@@ -18,7 +18,7 @@ import { formatPhoneNumber } from '../../../../../../utils/format'
 import { friendlyDate, numberWithCommas } from '../../../../../../utils/helpers'
 import config from '../../../../../../../config/public'
 import Brand from '../../../../../../controllers/Brand'
-import listing_util from '../../../../../../utils/listing'
+import listingUtils from '../../../../../../utils/listing'
 
 import FetchError from './FetchError'
 import MLSNote from './MLSNote'
@@ -93,13 +93,13 @@ const ListingMobileView = ({
 
     price = numberWithCommas(price)
     year_built = property.year_built
-    address = listing_util.addressTitle(property.address)
+    address = listingUtils.addressTitle(property.address)
     listing_title = address
     mls_number = listing.mls_number
     bedroom_count = property.bedroom_count
     bathroom_count = property.bathroom_count
     square_feet = numberWithCommas(
-      Math.floor(listing_util.metersToFeet(property.square_meters))
+      Math.floor(listingUtils.metersToFeet(property.square_meters))
     )
 
     if (property.square_meters) {
@@ -122,7 +122,7 @@ const ListingMobileView = ({
           <div key={`gallery-image-${gallery_image_url}${i}`}>
             <div
               style={S(
-                `w-100p h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(${listing_util.getResizeUrl(
+                `w-100p h-300 pull-left text-center bg-efefef bg-cover bg-center bg-url(${listingUtils.getResizeUrl(
                   gallery_image_url
                 )}?w=500)`
               )}
@@ -137,7 +137,7 @@ const ListingMobileView = ({
       <img
         alt="gallery"
         key={`image-${i}`}
-        src={`${listing_util.getResizeUrl(image_url)}?w=500`}
+        src={`${listingUtils.getResizeUrl(image_url)}?w=500`}
         style={S('w-0 h-0')}
       />
     ))
@@ -146,7 +146,7 @@ const ListingMobileView = ({
       listing.property.address.state
     } ${listing.property.address.postal_code}`
 
-    const status_color = listing_util.getStatusColor(listing.status)
+    const status_color = listingUtils.getStatusColor(listing.status)
 
     let sold_date
 
@@ -178,7 +178,7 @@ const ListingMobileView = ({
 
     // let number_days_indicator
     // if (listing.list_date) {
-    //   const days_on_market = listing_util.getDOM(listing.dom)
+    //   const days_on_market = listingUtils.getDOM(listing.dom)
     //   number_days_indicator = (
     //     <div
     //       className="pull-left"
@@ -391,10 +391,7 @@ const ListingMobileView = ({
           <div style={{ padding: '0 1rem' }}>
             <div style={S('fw-700 font-30')}>
               ${price}
-              {listing.property &&
-              listing.property.property_type === 'Residential Lease'
-                ? '/mo'
-                : ''}{' '}
+              {listingUtils.isLeaseProperty(listing) ? '/mo' : ''}{' '}
               {asking_price_area}
             </div>
             <div>
@@ -477,11 +474,11 @@ const ListingMobileView = ({
                 {renderFeatures('Possession', listing.possession)}
                 {renderFeatures(
                   'Days On Market',
-                  listing_util.getDOM(listing.dom)
+                  listingUtils.getDOM(listing.dom)
                 )}
                 {renderFeatures(
                   'Current Days On Market',
-                  listing_util.getDOM(listing.cdom)
+                  listingUtils.getDOM(listing.cdom)
                 )}
               </div>
               <div style={S('pr-20')}>
