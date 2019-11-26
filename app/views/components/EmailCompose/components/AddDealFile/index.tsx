@@ -87,7 +87,7 @@ export function AddDealFile({
     setDealFilesOpen(false)
 
     if (selectedDealId) {
-      const currentFiles: IFile[] = props.input.value
+      const currentFiles: IFile[] = props.input.value || []
 
       // Previously selected files which are either non-deal files or
       // deal files that are still selected
