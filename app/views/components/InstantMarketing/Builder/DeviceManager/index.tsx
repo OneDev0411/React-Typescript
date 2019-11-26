@@ -31,8 +31,17 @@ export default function DeviceManager({ editor }: Props) {
   const isMobile = selectedDevice === 'Mobile portrait'
 
   function setDevice(name: Device) {
+    toggleBodyVisibility()
     editor.setDevice(name)
     setSelectedDevice(name)
+  }
+
+  // A hack! to fix this issue: https://gitlab.com/rechat/web/issues/3653
+  function toggleBodyVisibility() {
+    document.body.style.display = 'none'
+    setTimeout(() => {
+      document.body.style.display = 'block'
+    }, 0)
   }
 
   return (
