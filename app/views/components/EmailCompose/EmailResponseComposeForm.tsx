@@ -49,7 +49,9 @@ export function EmailResponseComposeForm({
 
   const initialValue = useMemo<EmailThreadFormValues>(() => {
     const { to, cc } =
-      responseType === 'reply' ? getReplyRecipients(email) : { to: [], cc: [] }
+      responseType === 'forward'
+        ? { to: [], cc: [] }
+        : getReplyRecipients(email, responseType === 'replyAll')
 
     const owner = email.owner || defaultFrom
     const from = owner
@@ -65,7 +67,9 @@ export function EmailResponseComposeForm({
       cc,
       bcc: [],
       body:
-        responseType === 'reply' ? getReplyHtml(email) : getForwardHtml(email),
+        responseType === 'forward'
+          ? getForwardHtml(email)
+          : getReplyHtml(email),
       due_at: null,
       attachments:
         responseType === 'forward'

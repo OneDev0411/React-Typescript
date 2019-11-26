@@ -1,1 +1,1 @@
-export type EmailResponseType = 'reply' | 'forward'
+export type EmailResponseType = 'reply' | 'replyAll' | 'forward'
