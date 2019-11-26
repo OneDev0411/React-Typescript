@@ -4,7 +4,7 @@ export function getReplySubject(
   responseType: EmailResponseType,
   email: IEmailThreadEmail
 ) {
-  const prefix = responseType === 'reply' ? 'Re' : 'Fwd'
+  const prefix = responseType === 'forward' ? 'Fwd' : 'Re'
 
   return email.subject && !email.subject.startsWith(prefix)
     ? `${prefix}: ${email.subject || ''}`

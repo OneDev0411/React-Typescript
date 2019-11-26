@@ -4,11 +4,11 @@ import { parseEmailRecipient } from '../../../EmailRecipientsChipsInput/helpers/
  * Given an email thread, returns to and cc recipient arrays. The logic is
  * captured from Gmail
  * @param email
- * @param replayAll
+ * @param replyAll
  */
 export function getReplyRecipients(
   email: IEmailThreadEmail,
-  replayAll = false
+  replyAll = false
 ): {
   to: IDenormalizedEmailRecipientEmailInput[]
   cc: IDenormalizedEmailRecipientEmailInput[]
@@ -23,7 +23,7 @@ export function getReplyRecipients(
   if (email.in_bound) {
     return {
       to: [emailAddressToRecipient(email.from)],
-      cc: replayAll
+      cc: replyAll
         ? [...email.to, ...email.cc]
             .filter(
               recipient =>
@@ -37,6 +37,6 @@ export function getReplyRecipients(
 
   return {
     to: email.to.map(emailAddressToRecipient),
-    cc: replayAll ? email.cc.map(emailAddressToRecipient) : []
+    cc: replyAll ? email.cc.map(emailAddressToRecipient) : []
   }
 }

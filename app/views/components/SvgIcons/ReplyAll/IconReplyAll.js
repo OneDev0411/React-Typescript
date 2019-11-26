@@ -45,19 +45,22 @@ const Image = styled.svg`${propsToCss}`
 const children = (
   <Fragment>
     <g
-      clipPath='url(#s-a954ad7886-a)'
+      fill='currentColor'
+      clipPath='url(#s-0655e57c09-a)'
       key='key-0'
     >
       <path
-        fill='currentColor'
-        d='M19.618 10.612c-3.011-2.67-7.125-2.853-8.859-2.793a.25.25 0 0 1-.259-.25V4.997a1 1 0 0 0-1.642-.764L1.364 10.6a1 1 0 0 0-.013 1.532l7.513 6.637a1 1 0 0 0 1.636-.773V14.96a.25.25 0 0 1 .2-.244c1.908-.4 8.135-1.158 11.36 4.89a.5.5 0 0 0 .94-.235c0-3.82-1.138-6.767-3.382-8.759z'
+        d='M20.821 10.737a10.586 10.586 0 0 0-6.584-2.722.25.25 0 0 1-.237-.249v-2.2a.988.988 0 0 0-1.63-.75l-6.932 5.926a1 1 0 0 0 0 1.52l6.952 5.946a.975.975 0 0 0 1.61-.742v-2.419a.249.249 0 0 1 .186-.241c1.473-.392 5.847-.954 8.866 4.925A.5.5 0 0 0 24 19.5c0-3.809-1.07-6.757-3.179-8.763z'
+      />
+      <path
+        d='M2.289 11.5l6.96-5.73a1 1 0 0 0-1.271-1.544L.549 10.344a1.5 1.5 0 0 0 0 2.316L7.8 18.633a1 1 0 0 0 1.271-1.544L2.289 11.5z'
       />
     </g>
     <defs
       key='key-1'
     >
       <clipPath
-        id='s-a954ad7886-a'
+        id='s-0655e57c09-a'
       >
         <path
           fill='transparent'
@@ -100,5 +103,5 @@ export default Object.assign(Image, {
   getCss,
   defaultProps,
   propTypes,
-  displayName: 'IconReply'
+  displayName: 'IconReplyAll'
 })

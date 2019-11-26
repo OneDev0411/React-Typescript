@@ -21,12 +21,14 @@ import { useIconStyles } from '../../../../styles/use-icon-styles'
 import { EmailItemHeaderActions } from './EmailItemHeaderActions'
 import { EmailItemRecipients } from './EmailItemRecipients'
 import IconReply from '../../SvgIcons/Reply/IconReply'
+import IconReplyAll from '../../SvgIcons/ReplyAll/IconReplyAll'
 import IconForward from '../../SvgIcons/Forward/IconForward'
 import { Attachment } from '../../EmailCompose/components/Attachment'
 import { EmailResponseType } from '../types'
 import { decodeContentIds } from '../helpers/decode-content-ids'
 import { convertToAbsoluteAttachmentUrl } from '../helpers/convert-to-absolute-attachment-url'
 import { EmailResponseComposeForm } from '../../EmailCompose/EmailResponseComposeForm'
+import { hasReplyAll } from '../../EmailCompose/helpers/has-reply-all'
 
 interface Props {
   email: IEmailThreadEmail
@@ -91,13 +93,9 @@ export function EmailThreadItem({
   const [isResponseOpen, setIsResponseOpen] = useState(false)
   const [responseType, setResponseType] = useState<EmailResponseType>('reply')
 
-  const openReply = () => {
+  const openResponse = (type: EmailResponseType) => {
     setIsResponseOpen(true)
-    setResponseType('reply')
-  }
-  const openForward = () => {
-    setIsResponseOpen(true)
-    setResponseType('forward')
+    setResponseType(type)
   }
 
   const iconClassName = classNames(iconClasses.rightMargin, iconClasses.small)
@@ -141,8 +139,10 @@ export function EmailThreadItem({
             </Typography>
             {collapsed || !email.thread_id ? null : (
               <EmailItemHeaderActions
-                onReply={openReply}
-                onForward={openForward}
+                email={email}
+                onReply={() => openResponse('reply')}
+                onReplyAll={() => () => openResponse('replyAll')}
+                onForward={() => openResponse('forward')}
               />
             )}
           </Box>
@@ -156,7 +156,6 @@ export function EmailThreadItem({
 
             {email.attachments.map(attachment => (
               <Attachment key={attachment.id} fullWidth={false}>
-                {/* FIXME: url */}
                 <Link
                   target="_blank"
                   href={convertToAbsoluteAttachmentUrl(attachment.url)}
@@ -166,11 +165,11 @@ export function EmailThreadItem({
               </Attachment>
             ))}
 
-            {showBottomButtons && email.thread_id && (
+            {(showBottomButtons || isResponseOpen) && email.thread_id && (
               <Box my={1}>
                 <Button
                   className={classes.actionButton}
-                  onClick={openReply}
+                  onClick={() => openResponse('reply')}
                   color={
                     isResponseOpen && responseType === 'reply'
                       ? 'primary'
@@ -180,9 +179,24 @@ export function EmailThreadItem({
                   <IconReply className={iconClassName} />
                   Reply
                 </Button>
+                {hasReplyAll(email) && (
+                  <Button
+                    className={classes.actionButton}
+                    onClick={() => openResponse('replyAll')}
+                    color={
+                      isResponseOpen && responseType === 'replyAll'
+                        ? 'primary'
+                        : undefined
+                    }
+                  >
+                    <IconReplyAll className={iconClassName} />
+                    Reply All
+                  </Button>
+                )}
+
                 <Button
                   className={classes.actionButton}
-                  onClick={openForward}
+                  onClick={() => openResponse('forward')}
                   color={
                     isResponseOpen && responseType === 'forward'
                       ? 'primary'
