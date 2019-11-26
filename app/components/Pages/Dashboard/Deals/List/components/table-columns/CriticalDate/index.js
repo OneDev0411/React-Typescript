@@ -5,6 +5,7 @@ import Flex from 'styled-flex-component'
 import PopOver from 'components/Popover'
 
 import DealContext from 'models/Deal/helpers/dynamic-context'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import { getNextDate, getNextDateValue } from '../../../../utils/critical-dates'
 
@@ -12,19 +13,16 @@ export const getCriticalDateNextValue = deal => getNextDateValue(deal)
 
 export default function CriticalDate(props) {
   const { deal, rowId, rowsCount } = props
+  const activeTeamId = getActiveTeamId(props.user)
 
-  const criticalDates = DealContext.getFactsheetSection(
-    deal.brand.id,
+  const definitions = DealContext.getFactsheetSection(
+    activeTeamId,
     deal,
     'Dates'
   )
 
-  if (criticalDates.length === 0) {
-    return 'No closing date'
-  }
-
   // get next critical date
-  const nextDate = getNextDate(deal, deal.brand.id)
+  const nextDate = getNextDate(deal, activeTeamId)
 
   if (!nextDate) {
     return 'No closing date'
@@ -37,7 +35,7 @@ export default function CriticalDate(props) {
       id={`popover-trigger-factsheet-${deal.id}`}
       caption={
         <div className="roles">
-          {criticalDates.map(field => (
+          {definitions.map(field => (
             <Flex
               key={field.key}
               justifyBetween

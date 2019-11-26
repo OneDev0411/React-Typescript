@@ -66,6 +66,7 @@ class Grid extends React.Component {
         render: ({ rowData: deal, totalRows, rowIndex }) => (
           <CriticalDate
             deal={deal}
+            user={this.props.user}
             rowId={rowIndex + 1}
             rowsCount={totalRows}
           />
