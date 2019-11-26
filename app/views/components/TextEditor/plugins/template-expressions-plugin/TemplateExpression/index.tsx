@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { useEffect } from 'react'
 import { ClickAwayListener, makeStyles, Popper } from '@material-ui/core'
 
 import classNames from 'classnames'
@@ -68,15 +67,6 @@ export const TemplateExpression = ({
   const fallbackPopover = useMenu({
     id: 'template-expression-fallback'
   })
-
-  useEffect(() => {
-    if (!fallback && !fallbackPopover.open) {
-      fallbackPopover.toggle()
-    }
-    // We want the auto opening behavior as a one-off thing so we don't include
-    // dependencies
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const suggestion = getSuggestion(expression)
   const expressionText = suggestion ? suggestion.title : expression
