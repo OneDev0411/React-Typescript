@@ -4,13 +4,13 @@
     <mj-image border-radius="6px" width="80px" height="80px" rechat-assets="avatar" align="center" src="{{ user.profile_image_url }}" />
   </mj-column>
   <mj-column width="25%">
-    <mj-text padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="bold">
+    <mj-text rechat-editable="true" padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="bold">
       {{user.display_name}}
     </mj-text>
-    <mj-text padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="lighter">
+    <mj-text rechat-editable="true" padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="lighter">
       {{user.email}}
     </mj-text>
-    <mj-text padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="normal">
+    <mj-text rechat-editable="true" padding-left="12px" font-family="Roboto" font-size="14px" line-height="1.15" font-weight="normal">
       {{user.phone_number}}
     </mj-text>
     <mj-spacer height="16px"></mj-spacer>
