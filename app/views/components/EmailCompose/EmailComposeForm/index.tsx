@@ -17,7 +17,7 @@ import { addNotification as notify } from 'reapop'
 
 import { connect } from 'react-redux'
 
-import { makeStyles } from '@material-ui/core'
+import { Box, makeStyles } from '@material-ui/core'
 
 import { ClassesProps } from 'utils/ts-utils'
 
@@ -32,6 +32,8 @@ import ConfirmationModalContext from '../../ConfirmationModal/context'
 import { validateRecipient } from '../../EmailRecipientsChipsInput/helpers/validate-recipient'
 import { getSendEmailResultMessages } from '../helpers/email-result-messages'
 import { TextEditorRef } from '../../TextEditor/types'
+import { Callout } from '../../Callout'
+import { DangerButton } from '../../Button/DangerButton'
 
 export const useEmailFormStyles = makeStyles(styles, { name: 'EmailForm' })
 
@@ -82,6 +84,10 @@ function EmailComposeForm<T>({
     hasRecipients
   )
   const emailBodyEditorRef = useRef<TextEditorRef>(null)
+  const [
+    marketingTemplate,
+    setMarketingTemplate
+  ] = useState<IMarketingTemplateInstance | null>(null)
   const confirmationModal = useContext(ConfirmationModalContext)
 
   const classes = useEmailFormStyles(props)
@@ -94,7 +100,11 @@ function EmailComposeForm<T>({
     let result: T
 
     try {
-      result = await props.sendEmail(formData)
+      result = await props.sendEmail(
+        marketingTemplate
+          ? { ...formData, body: marketingTemplate.html }
+          : formData
+      )
     } catch (e) {
       console.error('error in sending email', e)
 
@@ -262,14 +272,34 @@ function EmailComposeForm<T>({
                 }}
                 autofocus={autofocusBody}
                 hasSignatureByDefault={props.hasSignatureByDefault}
-                hasStaticBody={props.hasStaticBody}
+                hasStaticBody={marketingTemplate || props.hasStaticBody}
                 hasTemplateVariables={props.hasTemplateVariables}
-                content={initialValues.body || ''}
+                content={
+                  marketingTemplate
+                    ? marketingTemplate.html
+                    : initialValues.body || ''
+                }
                 uploadAttachment={uploadAttachment}
                 attachments={
                   <Field name="attachments" component={AttachmentsList} />
                 }
               />
+              {marketingTemplate && (
+                <Callout dense>
+                  <Box display="flex" alignItems="center">
+                    <Box flex={1}>
+                      You are using a Marketing Center Template
+                    </Box>
+                    <DangerButton
+                      onClick={() => {
+                        setMarketingTemplate(null)
+                      }}
+                    >
+                      Remove
+                    </DangerButton>
+                  </Box>
+                </Callout>
+              )}
             </div>
             {children}
 
@@ -296,12 +326,16 @@ function EmailComposeForm<T>({
                   onDelete={onDelete}
                   onChanged={scrollToEnd}
                   hasStaticBody={props.hasStaticBody}
-                  onTemplateSelected={template => {
+                  onEmailTemplateSelected={template => {
                     subjectInput.onChange(template.subject as any)
+                    setMarketingTemplate(null)
 
                     if (emailBodyEditorRef.current) {
                       emailBodyEditorRef.current.update(template.body)
                     }
+                  }}
+                  onMarketingTemplateSelected={template => {
+                    setMarketingTemplate(template)
                   }}
                   className={classes.footer}
                 />

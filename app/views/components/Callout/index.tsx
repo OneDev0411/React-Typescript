@@ -6,14 +6,21 @@ import { CalloutCloseButton, CalloutContainer, CalloutContent } from './styled'
 
 interface Props {
   onClose?: (event: React.MouseEvent) => void
-  type?: 'info' | 'warn' | 'success' | 'error'
+  type?: 'info' | 'warn' | 'success' | 'error' | 'default'
   children: ReactNode
   style?: CSSProperties
+  dense?: boolean
 }
 
-export function Callout({ type = 'info', style, children, onClose }: Props) {
+export function Callout({
+  type = 'default',
+  style,
+  dense = false,
+  children,
+  onClose
+}: Props) {
   return (
-    <CalloutContainer style={style} type={type}>
+    <CalloutContainer style={style} type={type} dense={dense}>
       <CalloutContent>{children}</CalloutContent>
       {onClose && (
         <CalloutCloseButton iconSize="small" onClick={onClose}>

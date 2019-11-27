@@ -28,6 +28,9 @@ interface Props {
 const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
+      root: {
+        minHeight: '24.5rem'
+      },
       footer: {
         position: 'sticky',
         bottom: 0,
@@ -132,7 +135,7 @@ export function EmailResponseComposeForm({
       <EmailThreadComposeForm
         onCancel={onCancel}
         onSent={onSent}
-        classes={{ footer: classes.footer }}
+        classes={{ footer: classes.footer, root: classes.root }}
         initialValues={initialValue}
         getEmail={getEmail}
         hasSignatureByDefault={false}

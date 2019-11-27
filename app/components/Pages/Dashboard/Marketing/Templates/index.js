@@ -5,7 +5,7 @@ import { browserHistory } from 'react-router'
 
 import { getActiveTeamId } from 'utils/user-teams'
 import TemplatesList from 'components/TemplatesList'
-import { getSelectedMediumTemplates } from 'components/TemplatesList/helpers'
+import { getSelectedMediumTemplates } from 'utils/marketing-center/helpers'
 
 import { Header } from '../components/PageHeader'
 

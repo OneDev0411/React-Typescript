@@ -50,7 +50,7 @@ function navigateBetweenTemplates(
 
   let nextIndex
 
-  if (direction == 'previous') {
+  if (direction === 'previous') {
     nextIndex =
       selectedTemplateIndex === 0
         ? availableTemplates.length - 1

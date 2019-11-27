@@ -71,7 +71,6 @@ const EmailBody = ({
           {!hasStaticBody && (
             <Field
               name="body"
-              defaultValue={content}
               {...FieldProps || {}}
               render={({ input, meta }) => (
                 <TextEditor

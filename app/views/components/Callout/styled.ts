@@ -1,29 +1,39 @@
-import styled from 'styled-components'
+import styled, { ThemeProps } from 'styled-components'
 
 import { ComponentProps } from 'react'
 
-import { green, red } from 'views/utils/colors'
+import { Theme } from '@material-ui/core'
+
+import { green } from 'views/utils/colors'
 
 import IconButton from '../Button/IconButton'
 
 import { Callout } from '.'
 
-export const BG_MAPPING: {
-  [key in Required<ComponentProps<typeof Callout>>['type']]: string
-} = {
-  info: '#d8e6ff',
-  warn: '#f8eab3',
-  success: green.primary,
-  error: red.A100
-}
+type Props = Required<Pick<ComponentProps<typeof Callout>, 'type' | 'dense'>> &
+  ThemeProps<Theme>
 
-export const CalloutContainer = styled.div<
-  Required<Pick<ComponentProps<typeof Callout>, 'type'>>
->`
+const bgColor = ({ theme, type }: Props) => {
+  switch (type) {
+    case 'info':
+      return '#d8e6ff'
+    case 'warn':
+      return '#f8eab3'
+    case 'success':
+      return green.primary
+    default:
+      return theme.palette.grey['100']
+  }
+}
+const padding = ({ theme, dense }: Props) =>
+  dense ? theme.spacing(0.5, 1) : theme.spacing(1.5, 2)
+const margin = ({ theme, dense }: Props) =>
+  dense ? theme.spacing(2, 0) : theme.spacing(3, 2)
+export const CalloutContainer = styled.div<Props>`
   border-radius: 6px;
-  padding: 0.75rem 1rem;
-  margin: 1.5rem 1rem;
-  background-color: ${({ type }) => BG_MAPPING[type]};
+  padding: ${padding};
+  margin: ${margin};
+  background-color: ${bgColor};
   display: flex;
   align-items: center;
 `

@@ -23,7 +23,7 @@ import { iconSizes } from '../../../SvgIcons/icon-sizes'
 import { DropdownToggleButton } from '../../../DropdownToggleButton'
 import { useIconStyles } from '../../../../../styles/use-icon-styles'
 import { FooterBottomDrawer } from './FooterBottomDrawer'
-import TemplateSelector from './TemplateSelector'
+import { TemplateSelector } from './TemplateSelector'
 
 interface Props {
   isSubmitDisabled: boolean
@@ -36,7 +36,8 @@ interface Props {
   isSubmitting: boolean
   enableSchedule: boolean
   hasStaticBody?: boolean
-  onTemplateSelected: (template: IBrandEmailTemplate) => void
+  onEmailTemplateSelected: (template: IBrandEmailTemplate) => void
+  onMarketingTemplateSelected: (template: IMarketingTemplateInstance) => void
   onCancel?: () => void
   onDelete?: (values: EmailFormValues) => void | Promise<any>
   className?: string
@@ -45,7 +46,8 @@ interface Props {
 
 export function Footer({
   onDelete,
-  onTemplateSelected,
+  onEmailTemplateSelected,
+  onMarketingTemplateSelected,
   hasStaticBody,
   ...props
 }: Props) {
@@ -60,15 +62,22 @@ export function Footer({
 
   const busy = isDeleting || props.isSubmitting
 
-  const handleSelectedTemplate = template => {
+  const selectEmailTemplate = (template: IBrandEmailTemplate) => {
     setTemplateDrawerOpen(false)
-    onTemplateSelected(template)
+    onEmailTemplateSelected(template)
+  }
+  const selectMarketingTemplate = (template: IMarketingTemplateInstance) => {
+    setTemplateDrawerOpen(false)
+    onMarketingTemplateSelected(template)
   }
 
   return (
     <FooterContainer>
       <FooterBottomDrawer isOpen={isTemplateDrawerOpen}>
-        <TemplateSelector onTemplateSelected={handleSelectedTemplate} />
+        <TemplateSelector
+          onEmailTemplateSelected={selectEmailTemplate}
+          onMarketingTemplateSelected={selectMarketingTemplate}
+        />
       </FooterBottomDrawer>
       <FooterInnerContainer className={props.className}>
         <div className="features-list">
