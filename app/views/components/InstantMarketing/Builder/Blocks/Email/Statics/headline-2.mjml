@@ -1,1 +1,1 @@
-<mj-text font-size="48px">Headline 2</mj-text>
+<mj-text rechat-editable="true" font-size="48px">Headline 2</mj-text>
