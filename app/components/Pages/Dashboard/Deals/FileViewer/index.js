@@ -12,8 +12,9 @@ import { isBackOffice } from 'utils/user-teams'
 
 import LoadingContainer from 'components/LoadingContainer'
 
+import { getEnvelopeFile } from 'views/utils/deal-files/get-envelope-file'
+
 import { getFileById } from '../utils/files/get-file-by-id'
-import { getEnvelopeFile } from '../utils/get-envelope-file'
 
 import TaskView from '../Dashboard/TaskView'
 
