@@ -3,6 +3,7 @@ import { Box } from '@material-ui/core'
 
 import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 import { getTrimmedArrayAndOthersText } from 'utils/get-trimmed-array-and-others-text'
+import { getRecipientNameByEmail } from 'utils/get-recipient-name-by-email'
 import { parseEmailRecipient } from 'components/EmailRecipientsChipsInput/helpers/parse-email-recipient'
 import MiniContactProfile from 'components/MiniContact/MiniContactProfile'
 import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
@@ -49,9 +50,14 @@ export function EmailThread({ style, event, nextItem }: Props) {
           >
             Email
           </a>
-          &nbsp;to&nbsp;
+          &nbsp;
           {recipients.map((recipient, index) => {
-            const { displayName, emailAddress } = parseEmailRecipient(recipient)
+            let { displayName, emailAddress } = parseEmailRecipient(recipient)
+
+            if (!displayName) {
+              displayName =
+                getRecipientNameByEmail(event.people, emailAddress) || ''
+            }
 
             return (
               <React.Fragment key={index}>
