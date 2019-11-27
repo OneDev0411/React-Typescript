@@ -29,13 +29,11 @@
     "e2e:api:update-image": "cd tests/services && docker-compose pull api",
     "e2e:api:fetch-config": "heroku config -s --app rechat-boer | sed -E \"s/(.*)='(.*)'/\\1=\\2/\" > tests/services/api/.env",
     "e2e:update-db": "docker exec e2e_postgres pg_dump --clean --if-exists -U rechat rechat > tests/services/db/data/test-data.sql",
-    "test:e2e": "cypress run --browser chrome",
     "test:unit": "NODE_ENV=test jest",
     "test:update-snapshots": "npm run test:unit -- -u",
-    "test:ci": "npm run test:unit && npm run test:e2e",
+    "test:ci": "npm run test:unit",
     "test": "jest --watch",
-    "jest": "jest",
-    "cypress": "cypress open"
+    "jest": "jest"
   },
   "engines": {
     "node": "10.x"
@@ -256,7 +254,6 @@
     "@commitlint/cli": "^8.0.0",
     "@commitlint/config-conventional": "^8.0.0",
     "@commitlint/prompt-cli": "^8.0.0",
-    "@cypress/webpack-preprocessor": "^4.1.0",
     "@testing-library/react": "^8.0.1",
     "@types/backbone": "^1.4.1",
     "@types/classnames": "^2.2.7",
@@ -320,8 +317,6 @@
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-dynamic-import-node": "^2.3.0",
     "babel-plugin-transform-runtime": "^6.23.0",
-    "cypress": "^3.4.0",
-    "cypress-file-upload": "^3.3.1",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
     "enzyme-to-json": "^3.3.5",
