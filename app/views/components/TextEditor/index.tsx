@@ -1,4 +1,5 @@
 import React, {
+  createContext,
   forwardRef,
   useContext,
   useEffect,
@@ -14,6 +15,7 @@ import { stateToHTML } from 'draft-js-export-html'
 import { stateFromHTML } from 'draft-js-import-html'
 import cn from 'classnames'
 import { Box, makeStyles, Tooltip } from '@material-ui/core'
+import { shallowEqual } from 'recompose'
 
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 import { isImageFile } from 'utils/file-utils/is-image-file'
@@ -21,6 +23,7 @@ import IconLink from 'components/SvgIcons/Link/IconLink'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import { getShortcutTooltip } from 'utils/get-shortcut-tooltip'
+import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
 
 import { LinkEditorPopover } from './components/LinkEditorPopover'
 
@@ -36,12 +39,19 @@ import {
 } from './components/DraftJsSelectionPopover'
 import { LinkPreview } from './components/LinkPreview'
 import { Checkbox } from '../Checkbox'
-import { RichTextFeature, TextEditorProps } from './types'
+import {
+  EditorContextApi,
+  EditorToolbarContextApi,
+  RichTextFeature,
+  TextEditorProps
+} from './types'
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 import { createEditorRef } from './create-editor-ref'
 import { createPlugins } from './create-plugins'
-import { TemplateVariablesButton } from '../TemplateVariablesButton'
-import { ITemplateVariableSuggestion } from '../TemplateVariablesButton/types'
+import {
+  ITemplateVariableSuggestion,
+  TemplateVariablesButton
+} from '../TemplateVariablesButton'
 import { insertTemplateVariable } from './modifiers/insert-template-expression'
 import { removeUnwantedEmptyLineBeforeAtomic } from './modifiers/remove-unwanted-empty-block-before-atomic'
 import { ToolbarIconButton } from './buttons/ToolbarIconButton'
@@ -52,8 +62,30 @@ import { getImageSizeOptions } from './utils/get-image-size-options'
 import { InlineImageToolbar } from './components/ImageInlineToolbar'
 import { useEmojiStyles } from './hooks/use-emoji-styles'
 import { AddGifButton } from './buttons/AddGifButton'
+import { useCreateToolbarContext } from './hooks/use-create-toolbar-context'
+import { ToolbarFragments } from './components/ToolbarFragments'
+import { useCreateEditorContext } from './hooks/use-create-editor-context'
 
 const useStyles = makeStyles(styles, { name: 'TextEditor' })
+
+const editorContextMethodStub = () => {
+  throw new Error(
+    'Editor context is meant to be used within the editor. You are probably using a Feature Component outside the editor'
+  )
+}
+const editorToolbarContextMethodStub = () => {
+  throw new Error(
+    'Editor Toolbar context is meant to be used within the editor. You are probably using ToolbarFragment outside the editor'
+  )
+}
+export const EditorContext = createContext<EditorContextApi>({
+  addPlugin: editorContextMethodStub,
+  getEditorState: editorContextMethodStub,
+  setEditorState: editorContextMethodStub
+})
+export const EditorToolbarContext = createContext<EditorToolbarContextApi>({
+  createToolbarSegment: editorToolbarContextMethodStub
+})
 
 /**
  * Html wysiwyg editor.
@@ -73,6 +105,7 @@ const useStyles = makeStyles(styles, { name: 'TextEditor' })
 export const TextEditor = forwardRef(
   (
     {
+      children,
       className = '',
       defaultValue = '',
       disabled = false,
@@ -310,7 +343,15 @@ export const TextEditor = forwardRef(
       })
     }
 
+    const { editorContext, plugins: contextPlugins } = useCreateEditorContext({
+      editorState,
+      onChange: handleChange
+    })
+
+    const { toolbarContext, toolbarSegments } = useCreateToolbarContext()
+
     const defaultPlugins = [
+      ...contextPlugins,
       ...Object.values(otherPlugins),
       ...(richText ? [richButtonsPlugin] : []),
       ...(richTextFeatures.includes(RichTextFeature.LINK) ? linkPlugins : []),
@@ -329,6 +370,8 @@ export const TextEditor = forwardRef(
     ]
 
     const allPlugins = [...defaultPlugins, ...plugins]
+
+    const rerenderEditor = useRerenderOnChange(allPlugins, shallowEqual)
 
     const insertVariable = (suggestion: ITemplateVariableSuggestion) => {
       setEditorState(
@@ -400,17 +443,24 @@ export const TextEditor = forwardRef(
             accept={fileAccept}
             disableClick
           >
-            <PluginsEditor
-              spellCheck
-              readOnly={disabled}
-              editorState={editorState}
-              onChange={handleChange}
-              plugins={allPlugins}
-              placeholder={placeholder}
-              textAlignment={textAlignment}
-              ref={editorRef}
-              {...DraftEditorProps}
-            />
+            {rerenderEditor && (
+              <PluginsEditor
+                spellCheck
+                readOnly={disabled}
+                editorState={editorState}
+                onChange={handleChange}
+                plugins={allPlugins}
+                placeholder={placeholder}
+                textAlignment={textAlignment}
+                ref={editorRef}
+                {...DraftEditorProps}
+              />
+            )}
+            <EditorContext.Provider value={editorContext}>
+              <EditorToolbarContext.Provider value={toolbarContext}>
+                {children}
+              </EditorToolbarContext.Provider>
+            </EditorContext.Provider>
             <LinkEditorPopover
               editorRef={originalEditorRef}
               editorState={editorState}
@@ -462,6 +512,7 @@ export const TextEditor = forwardRef(
           </Dropzone>
         </EditorWrapper>
         <Toolbar ref={toolbarRef} className={classes.toolbar}>
+          <ToolbarFragments segments={toolbarSegments} />
           <RichTextButtons
             features={richTextFeatures}
             richButtonsPlugin={richButtonsPlugin}

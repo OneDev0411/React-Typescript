@@ -3,6 +3,8 @@ import { CSSProperties, ReactElement, ReactNode, Ref } from 'react'
 
 import { ContentBlock, ContentState, EditorProps, EditorState } from 'draft-js'
 
+import { DraftJsPlugin } from 'draft-js-plugins-editor'
+
 import { ClassesProps } from 'utils/ts-utils'
 
 import { ITemplateVariableSuggestionGroup } from '../TemplateVariablesButton/types'
@@ -27,6 +29,7 @@ export enum RichTextFeature {
   INLINE_FORMATTING = 'INLINE_FORMATTING'
 }
 export interface TextEditorProps extends ClassesProps<typeof styles> {
+  children?: ReactNode
   className?: string
   defaultValue?: string
   input?: FieldProps<any>['input']
@@ -135,4 +138,27 @@ export interface DraftPluginEditorInlineDecoratorProps {
     start: number
     block: ContentBlock
   }>[]
+}
+
+export interface EditorContextApi {
+  getEditorState: () => EditorState | null
+  setEditorState: (newState: EditorState) => void
+  /**
+   * Adds a plugin and return a function which will remove this plugin.
+   */
+  addPlugin: (plugin: DraftJsPlugin) => () => void
+}
+
+export interface ToolbarFragment {
+  group: string
+  node: ReactNode
+}
+
+interface ToolbarSegmentApi {
+  update: (node: ReactNode, group?: string) => void
+  remove: () => void
+}
+
+export interface EditorToolbarContextApi {
+  createToolbarSegment: () => ToolbarSegmentApi
 }
