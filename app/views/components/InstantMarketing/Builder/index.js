@@ -420,7 +420,7 @@ class Builder extends React.Component {
     const updateAll = model => {
       const attributes = model.get('attributes')
 
-      const editable = attributes.hasOwnProperty('rechat-editable')
+      const editable = attributes['rechat-editable']
       // const draggable = attributes.hasOwnProperty('rechat-draggable')
       const draggable = this.isMjmlTemplate && this.isEmailTemplate
       // const droppable = attributes.hasOwnProperty('rechat-dropable')
@@ -448,6 +448,10 @@ class Builder extends React.Component {
       ) {
         shouldSelectImage = false
         this.editor.select(model)
+      }
+
+      if (editable && editable.toLowerCase() === 'tree') {
+        return
       }
 
       model.get('components').each(model => {
