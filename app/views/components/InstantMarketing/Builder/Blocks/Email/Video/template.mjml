@@ -1,4 +1,4 @@
-<mj-section background-color="#fff">
+<mj-section rechat-editable="tree" background-color="#fff">
   <mj-column width="100%">
     <mj-image src="{{image}}"></mj-image>
     <mj-button href="{{url}}" border-radius="12px" font-family="Roboto" font-size="12px" font-weight="Bold" line-height="1.17" width="258px" height="48px" color="{{getColor('beta.tb')}}" background-color="{{getColor('beta.bg')}}">

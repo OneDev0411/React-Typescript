@@ -9,13 +9,21 @@ import registerBlock from '../../registerBlock'
 
 import Headline1 from './headline-1.mjml'
 import Headline2 from './headline-2.mjml'
+import Column1 from './column-1.mjml'
+import Column2 from './column-2.mjml'
+import Column3 from './column-3.mjml'
 import Image from './image.mjml'
 import Button from './button.mjml'
+import Text from './text.mjml'
 import SocialGroup from './social-group.mjml'
 import SocialGroupElement from './social-group-element.mjml'
 
 export const headline1BlockName = 'headline-1'
 export const headline2BlockName = 'headline-2'
+export const column1ElementBlockName = 'column-1'
+export const column2ElementBlockName = 'column-2'
+export const column3ElementBlockName = 'column-3'
+export const textElementBlockName = 'text'
 export const imageBlockName = 'mj-image'
 export const buttonBlockName = 'mj-button'
 export const socialGroupBlockName = 'mj-social-group'
@@ -25,6 +33,12 @@ const templates = {}
 
 templates[headline1BlockName] = Headline1
 templates[headline2BlockName] = Headline2
+
+templates[column1ElementBlockName] = Column1
+templates[column2ElementBlockName] = Column2
+templates[column3ElementBlockName] = Column3
+
+templates[textElementBlockName] = Text
 
 templates[imageBlockName] = Image
 templates[buttonBlockName] = Button
@@ -75,6 +89,34 @@ export default function registerStaticBlocks(
     category: BASICS_BLOCK_CATEGORY,
     blockName: socialGroupElementBlockName,
     template: templates[socialGroupElementBlockName]
+  })
+
+  registerBlock(editor, {
+    label: '1 Column',
+    category: BASICS_BLOCK_CATEGORY,
+    blockName: column1ElementBlockName,
+    template: templates[column1ElementBlockName]
+  })
+
+  registerBlock(editor, {
+    label: '2 Columns',
+    category: BASICS_BLOCK_CATEGORY,
+    blockName: column2ElementBlockName,
+    template: templates[column2ElementBlockName]
+  })
+
+  registerBlock(editor, {
+    label: '3 Columns',
+    category: BASICS_BLOCK_CATEGORY,
+    blockName: column3ElementBlockName,
+    template: templates[column3ElementBlockName]
+  })
+
+  registerBlock(editor, {
+    label: 'Text',
+    category: BASICS_BLOCK_CATEGORY,
+    blockName: textElementBlockName,
+    template: templates[textElementBlockName]
   })
 
   editor.on('block:drag:stop', (model: any, block: any) => {
