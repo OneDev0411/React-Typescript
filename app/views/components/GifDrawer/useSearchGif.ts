@@ -9,7 +9,7 @@ function useSearchGif() {
   const [isSearching, setIsSearching] = React.useState(false)
 
   React.useEffect(() => {
-    let cancled = false
+    let canceled = false
 
     async function search() {
       setIsSearching(true)
@@ -17,16 +17,18 @@ function useSearchGif() {
       const response = await fetch(tenorApi('search', [`q=${searchFor}`]))
       const responseData = (await response.json()) as TenorResponse
 
-      if (!cancled) {
-        setResults(responseData.results)
+      if (!canceled) {
+        setResults(responseData.results || [])
         setIsSearching(false)
       }
     }
 
-    search()
+    if (searchFor) {
+      search()
+    }
 
     return () => {
-      cancled = true
+      canceled = true
     }
   }, [searchFor])
 

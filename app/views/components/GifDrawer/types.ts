@@ -24,7 +24,7 @@ interface Media {
 
 export interface GifItem {
   url: string
-  dims: number[]
+  dims: [number, number]
   preview: string
   size: number
   duration?: number
