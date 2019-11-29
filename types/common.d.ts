@@ -79,7 +79,7 @@ declare type MapFieldsToUuid<T, K extends keyof T> = PartiallyMappedFields<
 >
 
 type IAsyncActionProp<
-  T extends (...args: any[]) => (dispatch, getState) => Promise<any>
+  T extends (...args: any[]) => (dispatch, getState) => any
 > = (...args: Parameters<T>) => ReturnType<ReturnType<T>>
 
 declare type Association<

@@ -1,7 +1,6 @@
 import React, { useRef } from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify, Notification } from 'reapop'
-import { Dispatch } from 'redux'
+import { addNotification as notify } from 'reapop'
 
 import copy from 'utils/copy-text-to-clipboard'
 
@@ -9,7 +8,7 @@ import UploadManager from '../../../../UploadManager'
 import { Container, ItemLink } from './styled'
 
 interface DispatchProps {
-  notify(notification: Notification): (dispatch: Dispatch<any>) => Notification
+  notify: typeof notify
 }
 
 interface Props {
@@ -51,5 +50,5 @@ function UploadPlaceholder(props: Props & DispatchProps) {
 
 export default connect(
   null,
-  { notify }
+  () => ({ notify })
 )(UploadPlaceholder)

@@ -10,7 +10,7 @@ const defaultProps: ComponentProps<typeof AddOrEditEmailTemplateDrawer> = {
   onClose: () => {},
   isOpen: true,
   activeTeamId: '111',
-  addNotification: () => () => ({}),
+  addNotification: () => ({}),
   createEmailTemplate: () => Promise.resolve({} as any),
   emailTemplate: null,
   submitCallback: () => {},
