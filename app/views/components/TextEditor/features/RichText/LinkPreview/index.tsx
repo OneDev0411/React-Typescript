@@ -11,9 +11,9 @@ import IconUnlink from 'components/SvgIcons/Unlink/IconUnlink'
 import IconCopy from 'components/SvgIcons/Copy/IconCopy'
 import IconEmail from 'components/SvgIcons/Email/IconEmail'
 
-import { removeLink } from '../../utils/remove-link'
-import { useToolbarIconClass } from '../../hooks/use-toolbar-icon-class'
-import { SelectionPopoverPaper } from '../SelectionPopoverPaper'
+import { removeLink } from '../../../utils/remove-link'
+import { useToolbarIconClass } from '../../../hooks/use-toolbar-icon-class'
+import { SelectionPopoverPaper } from '../../../components/SelectionPopoverPaper'
 
 interface Props {
   url: string

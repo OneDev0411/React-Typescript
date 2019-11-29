@@ -1,10 +1,6 @@
 import { composeDecorators } from 'draft-js-plugins-editor'
 
-import createAnchorPlugin from 'draft-js-anchor-plugin'
-
 import 'draft-js-image-plugin/lib/plugin.css'
-
-import createRichButtonsPlugin from 'draft-js-richbuttons-plugin'
 
 import 'draft-js-alignment-plugin/lib/plugin.css'
 /**
@@ -16,9 +12,6 @@ import 'draft-js-emoji-plugin/lib/plugin.css'
 
 import { mergeClasses } from '@material-ui/styles'
 
-import createPasteLinkPlugin from './plugins/draft-js-paste-link-plugin'
-import { linkKeyBinding } from './utils/link-key-binding'
-
 import createIframePlugin from './plugins/draft-js-iframe-plugin'
 import { createCollapsibleDecorator } from './block-decorators/create-collapsible-decorator'
 import createPasteHtmlPlugin from './plugins/draft-js-paste-html'
@@ -26,22 +19,7 @@ import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 import { defaultTheme } from './default-emoji-theme'
 import { getEmojiSuggestionsPosition } from './utils/get-emoji-suggestions-position'
 
-export function createPlugins(
-  setLinkEditorOpen: (open: boolean) => void,
-  stateFromHtmlOptions,
-  emojiTheme
-) {
-  const richButtonsPlugin = createRichButtonsPlugin()
-  const anchorPlugin = createAnchorPlugin()
-
-  // Can be extracted into a separate plugin file
-  const linkShortcutsPlugin = {
-    handleKeyCommand: command => {
-      command === 'link' && setLinkEditorOpen(true)
-    },
-    keyBindingFn: linkKeyBinding
-  }
-
+export function createPlugins(stateFromHtmlOptions, emojiTheme) {
   const iframePlugin = createIframePlugin({
     decorator: composeDecorators(
       createCollapsibleDecorator({ defaultCollapsed: true })
@@ -66,8 +44,6 @@ export function createPlugins(
   const { EmojiSuggestions, EmojiSelect } = emojiPlugin
 
   return {
-    richButtonsPlugin,
-    linkPlugins: [anchorPlugin, createPasteLinkPlugin(), linkShortcutsPlugin],
     iframePlugin,
     pasteHtmlPlugin,
     emojiPlugin,

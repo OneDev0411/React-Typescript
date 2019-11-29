@@ -31,12 +31,6 @@ export type Entity = ReturnType<ContentState['getEntity']>
 
 export type TextEditorRef = ReturnType<ReturnType<typeof createEditorRef>>
 
-export enum RichTextFeature {
-  LINK = 'LINK',
-  LIST = 'LIST',
-  SIZE = 'SIZE',
-  INLINE_FORMATTING = 'INLINE_FORMATTING'
-}
 export interface TextEditorProps extends ClassesProps<typeof styles> {
   children?: ReactNode
   className?: string
@@ -76,11 +70,6 @@ export interface TextEditorProps extends ClassesProps<typeof styles> {
    *
    * NOTE 2: default value varies from one flag to another.
    ********* */
-
-  /**
-   * Enable/disable rich text editing features like bold, italic, lists, etc.
-   */
-  richText?: boolean | RichTextFeature[]
 
   enableEmoji?: boolean
 

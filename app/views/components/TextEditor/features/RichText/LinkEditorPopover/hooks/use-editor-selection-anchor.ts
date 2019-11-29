@@ -2,7 +2,7 @@ import { RefObject, useState } from 'react'
 import Draft, { Editor, EditorState } from 'draft-js'
 
 import { useOnToggledOn } from './use-on-toggled'
-import { ReferenceObject } from '../../../types'
+import { ReferenceObject } from '../../../../types'
 
 export function useEditorSelectionAnchor(
   open: boolean,

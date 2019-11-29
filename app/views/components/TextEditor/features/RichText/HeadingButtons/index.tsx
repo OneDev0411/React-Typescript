@@ -2,11 +2,11 @@ import React from 'react'
 
 import { Tooltip } from '@material-ui/core'
 
-import { BasicDropdown } from 'components/BasicDropdown'
-import IconTextSize from 'components/SvgIcons/TextSize/IconTextSize'
+import { BasicDropdown } from '../../../../BasicDropdown/index'
+import IconTextSize from '../../../../SvgIcons/TextSize/IconTextSize'
 
 import { TextButton } from './TextButton'
-import { ToolbarIconButton } from '../ToolbarIconButton'
+import { ToolbarIconButton } from '../../../buttons/ToolbarIconButton'
 
 interface HeadingButtonOption {
   title: string

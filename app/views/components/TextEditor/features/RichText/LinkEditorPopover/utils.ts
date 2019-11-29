@@ -2,7 +2,7 @@ import isEmail from 'validator/lib/isEmail'
 import { EditorState } from 'draft-js'
 import { getSelectionEntity, getSelectionText } from 'draftjs-utils'
 
-import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
+import { getSelectedAtomicBlock } from '../../../utils/get-selected-atomic-block'
 
 export function getCurrentLinkUrl(
   editorState: EditorState

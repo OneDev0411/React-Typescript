@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { primary } from 'views/utils/colors'
+import { primary } from '../../../../../../utils/colors'
 
 export const Button = styled.div<{ isActive?: boolean }>`
   padding: 0.25rem 0.875rem;

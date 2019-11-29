@@ -15,6 +15,7 @@ import { uploadEmailSignatureAttachment } from 'models/user/upload-email-signatu
 
 import { TextEditor } from '../TextEditor'
 import { ImageFeature } from '../TextEditor/features/Image'
+import { RichTextFeature } from '../TextEditor/features/RichText'
 
 interface Props {
   user: IUser
@@ -73,6 +74,7 @@ function EditEmailSignature({
               name="signature"
               render={({ input }) => (
                 <StyledTextEditor autofocus input={input}>
+                  <RichTextFeature />
                   <ImageFeature uploadImage={uploadImage} />
                 </StyledTextEditor>
               )}

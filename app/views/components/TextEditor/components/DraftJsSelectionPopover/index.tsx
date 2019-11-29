@@ -17,7 +17,7 @@ import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
 
 import { nativelyStopEventPropagationOfEventViaRef } from 'utils/natively-stop-event-propagation-of-event-via-ref'
 
-import { getSelectionAnchorElement } from '../LinkEditorPopover/utils'
+import { getSelectionAnchorElement } from '../../features/RichText/LinkEditorPopover/utils'
 import { Entity } from '../../types'
 import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
 import { getAtomicBlockEntityData } from '../../utils/get-atomic-block-entity-data'

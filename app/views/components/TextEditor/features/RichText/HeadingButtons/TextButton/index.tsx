@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { primary } from 'views/utils/colors'
+import { primary } from '../../../../../../utils/colors'
 
 import { Button } from './styled'
 

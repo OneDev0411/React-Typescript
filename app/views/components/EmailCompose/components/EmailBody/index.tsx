@@ -23,6 +23,7 @@ import { TextEditorProps, TextEditorRef } from '../../../TextEditor/types'
 import { TemplateExpressionsFeature } from '../../../TextEditor/features/TemplateExpressions'
 import { ImageFeature } from '../../../TextEditor/features/Image'
 import { SignatureFeature } from '../../../TextEditor/features/Signature'
+import { RichTextFeature } from '../../../TextEditor/features/RichText'
 
 interface Props {
   content?: string
@@ -84,6 +85,7 @@ const EmailBody = ({
                   input={input}
                   ref={editorRef}
                 >
+                  <RichTextFeature />
                   <ImageFeature uploadImage={uploadImage} />
                   {hasTemplateVariables && (
                     <TemplateExpressionsFeature

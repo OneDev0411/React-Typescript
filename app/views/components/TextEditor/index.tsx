@@ -10,7 +10,7 @@ import React, {
   useState
 } from 'react'
 import Dropzone from 'react-dropzone'
-import { ContentBlock, Editor as DraftEditor, EditorState } from 'draft-js'
+import { EditorState } from 'draft-js'
 import PluginsEditor from 'draft-js-plugins-editor'
 import { stateToHTML } from 'draft-js-export-html'
 import { stateFromHTML } from 'draft-js-import-html'
@@ -18,38 +18,25 @@ import cn from 'classnames'
 import { makeStyles, Tooltip } from '@material-ui/core'
 import { shallowEqual } from 'recompose'
 
-import IconLink from 'components/SvgIcons/Link/IconLink'
-
-import { getShortcutTooltip } from 'utils/get-shortcut-tooltip'
 import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
-
-import { LinkEditorPopover } from './components/LinkEditorPopover'
 
 import { EditorContainer, EditorWrapper, Separator, Toolbar } from './styled'
 import { FieldError } from '../final-form-fields/FieldError'
-import { RichTextButtons } from './buttons/RichTextButtons'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
-import {
-  DraftJsSelectionPopover,
-  SelectionPopoverRenderProps
-} from './components/DraftJsSelectionPopover'
-import { LinkPreview } from './components/LinkPreview'
 import {
   EditorContextApi,
   EditorToolbarContextApi,
-  RichTextFeature,
   TextEditorProps
 } from './types'
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 import { createEditorRef } from './create-editor-ref'
 import { createPlugins } from './create-plugins'
-import { ToolbarIconButton } from './buttons/ToolbarIconButton'
-import { getSelectedAtomicBlock } from './utils/get-selected-atomic-block'
 import { styles } from './styles'
 import { useEmojiStyles } from './hooks/use-emoji-styles'
 import { useCreateToolbarContext } from './hooks/use-create-toolbar-context'
 import { ToolbarFragments } from './components/ToolbarFragments'
 import { useCreateEditorContext } from './hooks/use-create-editor-context'
+import { RichTextFeature } from './features/RichText'
 
 const useStyles = makeStyles(styles, { name: 'TextEditor' })
 
@@ -93,7 +80,7 @@ export const EditorToolbarContext = createContext<EditorToolbarContextApi>({
 export const TextEditor = forwardRef(
   (
     {
-      children,
+      children = <RichTextFeature />,
       className = '',
       defaultValue = '',
       disabled = false,
@@ -104,7 +91,6 @@ export const TextEditor = forwardRef(
       placeholder = 'Type something…',
       plugins = [],
       DraftEditorProps = {},
-      richText = true,
       enableEmoji = true,
       onAttachmentDropped,
       textAlignment,
@@ -118,11 +104,6 @@ export const TextEditor = forwardRef(
     const editorElementRef = useRef<HTMLDivElement>(null)
     const editorRef = useRef<PluginsEditor>(null)
     const editorStateRef = useRef<EditorState | null>(null)
-    const originalEditorRef = useRef<DraftEditor | null>(null)
-    const [linkEditorOpen, setLinkEditorOpen] = useState(false)
-
-    const richTextFeatures: RichTextFeature[] =
-      richText === true ? Object.values(RichTextFeature) : richText || []
 
     const classes = useStyles(props)
 
@@ -153,28 +134,21 @@ export const TextEditor = forwardRef(
      * later in code which is not worth it.
      */
     const {
-      linkPlugins,
-      richButtonsPlugin,
       emojiPlugin,
       EmojiSelect,
       EmojiSuggestions,
       ...otherPlugins
-    } = useMemo(
-      () => createPlugins(setLinkEditorOpen, stateFromHtmlOptions, emojiTheme),
-      [emojiTheme, stateFromHtmlOptions]
-    )
-
-    if (editorRef.current) {
-      originalEditorRef.current = editorRef.current.editor
-    }
+    } = useMemo(() => createPlugins(stateFromHtmlOptions, emojiTheme), [
+      emojiTheme,
+      stateFromHtmlOptions
+    ])
 
     const getInitialState = () => {
       const initialValue = (input && input.value) || defaultValue
-      const initialState = EditorState.createWithContent(
+
+      return EditorState.createWithContent(
         stateFromHTML(initialValue, stateFromHtmlOptions)
       )
-
-      return initialState
     }
     const [editorState, setEditorState] = useState(getInitialState)
 
@@ -247,8 +221,6 @@ export const TextEditor = forwardRef(
     const defaultPlugins = [
       ...Object.values(contextPlugins),
       ...Object.values(otherPlugins),
-      ...(richText ? [richButtonsPlugin] : []),
-      ...(richTextFeatures.includes(RichTextFeature.LINK) ? linkPlugins : []),
       ...(enableEmoji ? [emojiPlugin] : [])
     ]
 
@@ -325,81 +297,22 @@ export const TextEditor = forwardRef(
                 {children}
               </EditorToolbarContext.Provider>
             </EditorContext.Provider>
-            <LinkEditorPopover
-              editorRef={originalEditorRef}
-              editorState={editorState}
-              setEditorState={handleChange}
-              open={linkEditorOpen}
-              onClose={() => {
-                setLinkEditorOpen(false)
 
-                const selectedBlock = getSelectedAtomicBlock(editorState)
-
-                if (!selectedBlock || selectedBlock.getType() !== 'atomic') {
-                  // atomic block selection is not preserved after focus
-                  // so we don't focus if an atomic block is selected
-                  setTimeout(() => {
-                    editorRef.current!.focus()
-                  })
-                }
-              }}
-            />
-            {!linkEditorOpen && (
-              <DraftJsSelectionPopover
-                editorState={editorState}
-                inlineEntityFilter="LINK"
-                blockFilter={isBlockLinked}
-              >
-                {({ entity, close, block }: SelectionPopoverRenderProps) => (
-                  <LinkPreview
-                    editorState={editorState}
-                    setEditorState={handleChange}
-                    onClose={close}
-                    url={
-                      (entity && entity.getData().url) ||
-                      (block && block.getData().get('href')) ||
-                      ''
-                    }
-                    onEdit={() => setLinkEditorOpen(true)}
-                  />
-                )}
-              </DraftJsSelectionPopover>
-            )}
             {emojiPlugin && <EmojiSuggestions />}
             {appendix}
           </Dropzone>
         </EditorWrapper>
         <Toolbar ref={toolbarRef} className={classes.toolbar}>
           <ToolbarFragments segments={toolbarSegments} />
-          <RichTextButtons
-            features={richTextFeatures}
-            richButtonsPlugin={richButtonsPlugin}
-          />
-          {richTextFeatures.includes(RichTextFeature.LINK) && (
-            <>
-              <Tooltip title={getShortcutTooltip('Insert Link', 'K')}>
-                <ToolbarIconButton
-                  onClick={event => {
-                    setLinkEditorOpen(true)
-                    event.preventDefault()
-                    event.stopPropagation()
-                  }}
-                >
-                  <IconLink />
-                </ToolbarIconButton>
-              </Tooltip>
-              <Separator />
-            </>
-          )}
 
           {enableEmoji && (
             <>
+              <Separator />
               <Tooltip title="Emoji (:)">
                 <span>
                   <EmojiSelect />
                 </span>
               </Tooltip>
-              <Separator />
             </>
           )}
         </Toolbar>
@@ -408,5 +321,3 @@ export const TextEditor = forwardRef(
     )
   }
 )
-
-const isBlockLinked = (block: ContentBlock) => !!block.getData().get('href')

@@ -5,7 +5,7 @@ import { DraftHandleValue, EditorState } from 'draft-js'
 import { DraftJsPlugin, PluginFunctions } from 'draft-js-plugins-editor'
 
 import { createLink } from '../utils/create-link'
-import { normalizeUrl } from '../components/LinkEditorPopover/utils'
+import { normalizeUrl } from '../features/RichText/LinkEditorPopover/utils'
 
 export default function createPasteLinkPlugin(): DraftJsPlugin {
   return {

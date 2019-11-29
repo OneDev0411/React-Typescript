@@ -7,11 +7,11 @@ import { nativelyStopEventPropagationOfEventViaRef } from 'utils/natively-stop-e
 
 import { useEditorSelectionAnchor } from './hooks/use-editor-selection-anchor'
 import { useOnToggledOn } from './hooks/use-on-toggled'
-import { createLink } from '../../utils/create-link'
+import { createLink } from '../../../utils/create-link'
 import { getCurrentLinkText, getCurrentLinkUrl, stopPropagation } from './utils'
 import { LinkEditorForm } from './components/LinkEditorForm'
-import { getExpandedSelectionByEntityType } from '../../utils/get-expanded-selection-by-entity-type'
-import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
+import { getExpandedSelectionByEntityType } from '../../../utils/get-expanded-selection-by-entity-type'
+import { getSelectedAtomicBlock } from '../../../utils/get-selected-atomic-block'
 
 interface Props {
   open: boolean
