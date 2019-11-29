@@ -7,7 +7,6 @@ import { DraftJsPlugin } from 'draft-js-plugins-editor'
 
 import { ClassesProps } from 'utils/ts-utils'
 
-import { ITemplateVariableSuggestionGroup } from '../TemplateVariablesButton/types'
 import { styles } from './styles'
 import { createEditorRef } from './create-editor-ref'
 
@@ -106,9 +105,6 @@ export interface TextEditorProps extends ClassesProps<typeof styles> {
    * Enable/disable signature insertion.
    */
   enableSignature?: boolean
-
-  enableTemplateVariables?: boolean
-  templateVariableSuggestionGroups?: ITemplateVariableSuggestionGroup[]
 
   appendix?: ReactNode
 }

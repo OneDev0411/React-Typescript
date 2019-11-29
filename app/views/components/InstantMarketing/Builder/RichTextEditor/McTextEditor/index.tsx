@@ -7,6 +7,8 @@ import { RichTextFeature, TextEditorProps } from 'components/TextEditor/types'
 import { defaultTemplateVariableSuggestions } from 'components/EmailCompose/default-template-variable-suggestions'
 import { nativelyStopEventPropagationOfEventViaRef } from 'utils/natively-stop-event-propagation-of-event-via-ref'
 
+import { TemplateExpressionsFeature } from '../../../../TextEditor/features/TemplateExpressions'
+
 const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
@@ -56,13 +58,15 @@ export const McTextEditor = forwardRef(function McTextEditor(
     <TextEditor
       ref={ref}
       toolbarRef={nativelyStopEventPropagationOfEventViaRef('mousedown', true)}
-      enableTemplateVariables
       richText={[RichTextFeature.INLINE_FORMATTING, RichTextFeature.LINK]}
-      templateVariableSuggestionGroups={defaultTemplateVariableSuggestions}
       minHeight={false}
       autofocus
       classes={classes}
       {...textEditorProps}
-    />
+    >
+      <TemplateExpressionsFeature
+        templateVariableSuggestionGroups={defaultTemplateVariableSuggestions}
+      />
+    </TextEditor>
   )
 })

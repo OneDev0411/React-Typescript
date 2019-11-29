@@ -20,6 +20,7 @@ import { UploadAttachment } from 'components/EmailCompose/fields/UploadAttachmen
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
 import { defaultTemplateVariableSuggestions } from '../../default-template-variable-suggestions'
 import { TextEditorProps, TextEditorRef } from '../../../TextEditor/types'
+import { TemplateExpressionsFeature } from '../../../TextEditor/features/TemplateExpressions'
 
 interface Props {
   content?: string
@@ -81,16 +82,20 @@ const EmailBody = ({
                   onAttachmentDropped={upload}
                   DraftEditorProps={DraftEditorProps}
                   hasSignatureByDefault={hasSignatureByDefault}
-                  enableTemplateVariables={hasTemplateVariables}
-                  templateVariableSuggestionGroups={
-                    defaultTemplateVariableSuggestions
-                  }
                   onEditSignature={() => setSignatureEditorVisible(true)}
                   signature={signature}
                   appendix={attachments}
                   input={input}
                   ref={editorRef}
-                />
+                >
+                  {hasTemplateVariables && (
+                    <TemplateExpressionsFeature
+                      templateVariableSuggestionGroups={
+                        defaultTemplateVariableSuggestions
+                      }
+                    />
+                  )}
+                </TextEditor>
               )}
             />
           )}

@@ -41,7 +41,11 @@ export function useCreateEditorContext({
         }
       }
     }
-  }, [getEditorStateRef, setEditorStateRef])
+    // eslint-disable-next-line
+  }, [])
+
+  editorContext.getEditorState = getEditorStateRef.current
+  editorContext.setEditorState = setEditorStateRef.current
 
   return { editorContext, plugins }
 }

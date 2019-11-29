@@ -48,11 +48,6 @@ import {
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 import { createEditorRef } from './create-editor-ref'
 import { createPlugins } from './create-plugins'
-import {
-  ITemplateVariableSuggestion,
-  TemplateVariablesButton
-} from '../TemplateVariablesButton'
-import { insertTemplateVariable } from './modifiers/insert-template-expression'
 import { removeUnwantedEmptyLineBeforeAtomic } from './modifiers/remove-unwanted-empty-block-before-atomic'
 import { ToolbarIconButton } from './buttons/ToolbarIconButton'
 import { getSelectedAtomicBlock } from './utils/get-selected-atomic-block'
@@ -124,8 +119,6 @@ export const TextEditor = forwardRef(
       richText = true,
       enableEmoji = true,
       enableSignature = false,
-      enableTemplateVariables = false,
-      templateVariableSuggestionGroups,
       onAttachmentDropped,
       textAlignment,
       appendix = null,
@@ -184,7 +177,6 @@ export const TextEditor = forwardRef(
       resizeablePlugin,
       linkPlugins,
       signaturePlugin,
-      templateExpressionPlugin,
       richButtonsPlugin,
       emojiPlugin,
       EmojiSelect,
@@ -365,23 +357,12 @@ export const TextEditor = forwardRef(
             imagePlugin
           ]
         : []),
-      templateExpressionPlugin,
       ...(enableSignature ? [signaturePlugin] : [])
     ]
 
     const allPlugins = [...defaultPlugins, ...plugins]
 
     const rerenderEditor = useRerenderOnChange(allPlugins, shallowEqual)
-
-    const insertVariable = (suggestion: ITemplateVariableSuggestion) => {
-      setEditorState(
-        insertTemplateVariable(
-          editorState,
-          suggestion.expression,
-          suggestion.defaultFallback
-        )
-      )
-    }
 
     const isFileDropEnabled = enableImage || onAttachmentDropped
     const fileAccept =
@@ -548,16 +529,6 @@ export const TextEditor = forwardRef(
                   <EmojiSelect />
                 </span>
               </Tooltip>
-              <Separator />
-            </>
-          )}
-
-          {enableTemplateVariables && (
-            <>
-              <TemplateVariablesButton
-                suggestions={templateVariableSuggestionGroups || []}
-                onSuggestionSelected={suggestion => insertVariable(suggestion)}
-              />
               <Separator />
             </>
           )}

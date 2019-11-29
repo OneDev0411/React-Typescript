@@ -38,7 +38,6 @@ import createPasteHtmlPlugin from './plugins/draft-js-paste-html'
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 import { atomicBlockLinkDecorator } from './block-decorators/atomic-block-link-decorator'
 import { resizableBugFixDecorator } from './block-decorators/resizable-bug-fix-decorator'
-import createTemplateExpressionsPlugin from './plugins/template-expressions-plugin'
 import { defaultTheme } from './default-emoji-theme'
 import { getEmojiSuggestionsPosition } from './utils/get-emoji-suggestions-position'
 
@@ -57,7 +56,6 @@ export function createPlugins(
   const { AlignmentTool } = alignmentPlugin
   const richButtonsPlugin = createRichButtonsPlugin()
   const anchorPlugin = createAnchorPlugin()
-  const templateExpressionPlugin = createTemplateExpressionsPlugin()
 
   // Can be extracted into a separate plugin file
   const linkShortcutsPlugin = {
@@ -113,7 +111,6 @@ export function createPlugins(
     resizeablePlugin,
     blockDndPlugin,
     alignmentPlugin,
-    templateExpressionPlugin,
     linkPlugins: [anchorPlugin, createPasteLinkPlugin(), linkShortcutsPlugin],
     imagePlugin,
     iframePlugin,
