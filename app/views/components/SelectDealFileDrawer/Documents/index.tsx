@@ -1,6 +1,6 @@
 import React from 'react'
-import { connect, Dispatch } from 'react-redux'
-import { addNotification as notify, Notification } from 'reapop'
+import { connect } from 'react-redux'
+import { addNotification } from 'reapop'
 
 import fecha from 'fecha'
 
@@ -48,11 +48,11 @@ interface StateProps {
   checklists: IDealChecklist[]
   tasks: IDealTask[]
   envelopes: IDealEnvelope[]
-  notify(notification: Notification): (dispatch: Dispatch<any>) => Notification
+  addNotification: typeof addNotification
 }
 
 export class DocumentRow extends React.Component<Props & StateProps, State> {
-  state = {
+  state: State = {
     searchFilter: '',
     selectedStashFile: null
   }
@@ -82,7 +82,7 @@ export class DocumentRow extends React.Component<Props & StateProps, State> {
   handleMoveComplete = (task: IDealTask, file: IDealFile) => {
     this.props.onToggleItem(file)
 
-    this.props.notify({
+    this.props.addNotification({
       message: 'The file is moved and selected',
       status: 'success'
     })
@@ -233,5 +233,5 @@ function mapStateToProps({ deals, user }, props: Props) {
 
 export default connect(
   mapStateToProps,
-  { notify }
+  () => ({ addNotification })
 )(DocumentRow)

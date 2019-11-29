@@ -2,7 +2,7 @@
 
 exports[`Deal Agent integration with roles renders the component 1`] = `
 <Fragment>
-  <Connect(DealRole)
+  <ConnectFunction
     form={null}
     isOpen={true}
     onClose={[Function]}

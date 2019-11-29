@@ -28,7 +28,7 @@ interface Props {
   emailTemplate?: IBrandEmailTemplate | null
   updateEmailTemplate: IAsyncActionProp<typeof updateEmailTemplate>
   createEmailTemplate: IAsyncActionProp<typeof createEmailTemplate>
-  addNotification: typeof addNotification
+  addNotification: IAsyncActionProp<typeof addNotification>
 }
 
 export function AddOrEditEmailTemplateDrawer({
@@ -163,7 +163,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
       dispatch(updateEmailTemplate(...args)),
     createEmailTemplate: (...args: Parameters<typeof createEmailTemplate>) =>
       dispatch(createEmailTemplate(...args)),
-    addNotification
+    addNotification: (...args: Parameters<typeof addNotification>) =>
+      dispatch(addNotification(...args))
   }
 }
 

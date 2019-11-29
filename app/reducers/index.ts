@@ -8,7 +8,7 @@ import auth from './auth'
 import user from './user'
 import brand from './brand'
 import socket from './socket'
-import contacts, { IContactReduxState } from './contacts'
+import contacts from './contacts'
 import chatroom from './chatroom'
 import deals from './deals'
 import search from './listings/search'
@@ -20,7 +20,6 @@ import { intercom } from './intercom'
 import { tasks } from './tasks'
 import { notifications as globalNotifications } from './notifications'
 import { emailTemplates } from './email-templates'
-import { IEmailTemplatesState } from './email-templates/types'
 
 const appReducer = combineReducers({
   socket,
@@ -61,11 +60,5 @@ const appReducer = combineReducers({
 // So we can uncomment this line wen migrated to V4.x.x or higher.
 // export type IAppState = ReturnType<typeof appReducer>
 
-export type IAppState = {
-  contacts: IContactReduxState
-  user: IUser
-  deals: any // fixme(type)
-  emailTemplates: IEmailTemplatesState
-}
-
+export type IAppState = ReturnType<typeof appReducer>
 export default (state, action) => appReducer(state, action)

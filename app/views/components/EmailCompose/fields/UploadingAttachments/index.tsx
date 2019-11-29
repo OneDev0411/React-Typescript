@@ -3,13 +3,15 @@ import { FieldRenderProps } from 'react-final-form'
 import { Box } from '@material-ui/core'
 import { addNotification } from 'reapop'
 import { connect } from 'react-redux'
+import { ThunkDispatch } from 'redux-thunk'
+import { AnyAction } from 'redux'
 
 import { UploadingAttachment } from '../../components/Attachment/UploadingAttachment'
 import { IUploadingAttachment } from '../../types'
 
 interface Props extends FieldRenderProps<any> {
   onFinish: (file: IFile) => void
-  addNotification: typeof addNotification
+  addNotification: IAsyncActionProp<typeof addNotification>
 }
 
 function UploadingAttachmentsList({ input, addNotification, ...props }: Props) {
@@ -55,7 +57,14 @@ function UploadingAttachmentsList({ input, addNotification, ...props }: Props) {
   )
 }
 
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+  return {
+    addNotification: (...args: Parameters<typeof addNotification>) =>
+      dispatch(addNotification(...args))
+  }
+}
+
 export default connect(
   null,
-  { addNotification }
+  mapDispatchToProps
 )(UploadingAttachmentsList)

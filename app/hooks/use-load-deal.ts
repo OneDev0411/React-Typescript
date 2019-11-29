@@ -49,7 +49,7 @@ export function useLoadFullDeal(id: string, deal: IDeal) {
       setIsFetchingDeal(true)
 
       // fetch deal by id
-      const result: IDeal = await store.dispatch<any>(getDeal(id))
+      const result: IDeal = await store.dispatch(getDeal(id))
 
       setIsFetchingDeal(false)
 
@@ -67,7 +67,7 @@ export function useLoadFullDeal(id: string, deal: IDeal) {
       setIsFetchingContexts(true)
 
       try {
-        await store.dispatch<any>(getContextsByDeal(deal.id))
+        await store.dispatch(getContextsByDeal(deal.id))
       } catch (e) {
         console.log(e)
       }
@@ -86,7 +86,7 @@ export function useLoadFullDeal(id: string, deal: IDeal) {
       setIsFetchingForms(true)
 
       try {
-        await store.dispatch<any>(getForms(deal.id))
+        await store.dispatch(getForms(deal.id))
       } catch (e) {
         console.log(e)
       }

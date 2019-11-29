@@ -1,8 +1,12 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { addNotification as notify } from 'reapop'
 import { Button } from '@material-ui/core'
+
+import { ThunkDispatch } from 'redux-thunk'
+
+import { AnyAction } from 'redux'
 
 import Table from 'components/Grid/Table'
 import PageHeader from 'components/PageHeader'
@@ -29,7 +33,7 @@ import { PageContainer } from './styled'
 
 interface Props {
   user: IUser
-  notify: typeof notify
+  notify: IAsyncActionProp<typeof notify>
 }
 
 function List(props: Props) {
@@ -193,7 +197,12 @@ function List(props: Props) {
 
 const mapStateToProps = ({ user }) => ({ user })
 
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+  return {
+    notify: (...args: Parameters<typeof notify>) => dispatch(notify(...args))
+  }
+}
 export default connect(
   mapStateToProps,
-  { notify }
+  mapDispatchToProps
 )(List)
