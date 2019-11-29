@@ -22,6 +22,7 @@ import { defaultTemplateVariableSuggestions } from '../../default-template-varia
 import { TextEditorProps, TextEditorRef } from '../../../TextEditor/types'
 import { TemplateExpressionsFeature } from '../../../TextEditor/features/TemplateExpressions'
 import { ImageFeature } from '../../../TextEditor/features/Image'
+import { SignatureFeature } from '../../../TextEditor/features/Signature'
 
 interface Props {
   content?: string
@@ -77,16 +78,13 @@ const EmailBody = ({
               render={({ input, meta }) => (
                 <TextEditor
                   autofocus={autofocus}
-                  enableSignature
                   onAttachmentDropped={upload}
                   DraftEditorProps={DraftEditorProps}
-                  hasSignatureByDefault={hasSignatureByDefault}
-                  onEditSignature={() => setSignatureEditorVisible(true)}
-                  signature={signature}
                   appendix={attachments}
                   input={input}
                   ref={editorRef}
                 >
+                  <ImageFeature uploadImage={uploadImage} />
                   {hasTemplateVariables && (
                     <TemplateExpressionsFeature
                       templateVariableSuggestionGroups={
@@ -94,7 +92,11 @@ const EmailBody = ({
                       }
                     />
                   )}
-                  <ImageFeature uploadImage={uploadImage} />
+                  <SignatureFeature
+                    signature={signature}
+                    hasSignatureByDefault={hasSignatureByDefault}
+                    onEditSignature={() => setSignatureEditorVisible(true)}
+                  />
                 </TextEditor>
               )}
             />

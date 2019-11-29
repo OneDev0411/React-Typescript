@@ -3,7 +3,6 @@ import React, {
   createContext,
   createRef,
   forwardRef,
-  useContext,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -16,11 +15,10 @@ import PluginsEditor from 'draft-js-plugins-editor'
 import { stateToHTML } from 'draft-js-export-html'
 import { stateFromHTML } from 'draft-js-import-html'
 import cn from 'classnames'
-import { Box, makeStyles, Tooltip } from '@material-ui/core'
+import { makeStyles, Tooltip } from '@material-ui/core'
 import { shallowEqual } from 'recompose'
 
 import IconLink from 'components/SvgIcons/Link/IconLink'
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import { getShortcutTooltip } from 'utils/get-shortcut-tooltip'
 import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
@@ -36,7 +34,6 @@ import {
   SelectionPopoverRenderProps
 } from './components/DraftJsSelectionPopover'
 import { LinkPreview } from './components/LinkPreview'
-import { Checkbox } from '../Checkbox'
 import {
   EditorContextApi,
   EditorToolbarContextApi,
@@ -69,7 +66,8 @@ const editorToolbarContextMethodStub = () => {
 export const EditorContext = createContext<EditorContextApi>({
   addPlugins: editorContextMethodStub,
   editorRef: createRef(),
-  editorState: (null as unknown) as EditorState,
+  editorState: null as any,
+  stateFromHtmlOptions: null as any,
   addDropzonePropsInterceptor: editorContextMethodStub,
   setEditorState: editorContextMethodStub
 })
@@ -106,12 +104,8 @@ export const TextEditor = forwardRef(
       placeholder = 'Type something…',
       plugins = [],
       DraftEditorProps = {},
-      signature,
-      hasSignatureByDefault = false,
-      onEditSignature = () => {},
       richText = true,
       enableEmoji = true,
-      enableSignature = false,
       onAttachmentDropped,
       textAlignment,
       appendix = null,
@@ -121,13 +115,11 @@ export const TextEditor = forwardRef(
     }: TextEditorProps,
     ref
   ) => {
-    const signatureRef = useRef<TextEditorProps['signature']>(undefined)
     const editorElementRef = useRef<HTMLDivElement>(null)
     const editorRef = useRef<PluginsEditor>(null)
     const editorStateRef = useRef<EditorState | null>(null)
     const originalEditorRef = useRef<DraftEditor | null>(null)
     const [linkEditorOpen, setLinkEditorOpen] = useState(false)
-    const confirmation = useContext(ConfirmationModalContext)
 
     const richTextFeatures: RichTextFeature[] =
       richText === true ? Object.values(RichTextFeature) : richText || []
@@ -147,8 +139,6 @@ export const TextEditor = forwardRef(
       []
     )
 
-    signatureRef.current = signature
-
     const emojiTheme = useEmojiStyles()
     /**
      * NOTE 1: We don't use top level plugin definition to prevent bugs when
@@ -164,20 +154,13 @@ export const TextEditor = forwardRef(
      */
     const {
       linkPlugins,
-      signaturePlugin,
       richButtonsPlugin,
       emojiPlugin,
       EmojiSelect,
       EmojiSuggestions,
       ...otherPlugins
     } = useMemo(
-      () =>
-        createPlugins(
-          setLinkEditorOpen,
-          () => signatureRef.current || '',
-          stateFromHtmlOptions,
-          emojiTheme
-        ),
+      () => createPlugins(setLinkEditorOpen, stateFromHtmlOptions, emojiTheme),
       [emojiTheme, stateFromHtmlOptions]
     )
 
@@ -191,11 +174,7 @@ export const TextEditor = forwardRef(
         stateFromHTML(initialValue, stateFromHtmlOptions)
       )
 
-      return hasSignatureByDefault &&
-      !initialValue /* If there is some initial value, we don't want to mess with it */ &&
-        signature
-        ? signaturePlugin.modifiers.appendSignature(initialState)
-        : initialState
+      return initialState
     }
     const [editorState, setEditorState] = useState(getInitialState)
 
@@ -252,21 +231,13 @@ export const TextEditor = forwardRef(
       [stateToHtmlOptions]
     )
 
-    const showNoSignatureModal = () => {
-      confirmation!.setConfirmationModal({
-        message:
-          'You don’t have an email signature yet. Would you like to create one?',
-        confirmLabel: 'Set signature',
-        onConfirm: onEditSignature
-      })
-    }
-
     const {
       editorContext,
       plugins: contextPlugins,
       getDropzoneProps
     } = useCreateEditorContext({
       editorState,
+      stateFromHtmlOptions,
       onChange: handleChange,
       editorRef
     })
@@ -278,8 +249,7 @@ export const TextEditor = forwardRef(
       ...Object.values(otherPlugins),
       ...(richText ? [richButtonsPlugin] : []),
       ...(richTextFeatures.includes(RichTextFeature.LINK) ? linkPlugins : []),
-      ...(enableEmoji ? [emojiPlugin] : []),
-      ...(enableSignature ? [signaturePlugin] : [])
+      ...(enableEmoji ? [emojiPlugin] : [])
     ]
 
     const allPlugins = [...defaultPlugins, ...plugins]
@@ -431,22 +401,6 @@ export const TextEditor = forwardRef(
               </Tooltip>
               <Separator />
             </>
-          )}
-
-          {enableSignature && (
-            <Box pl={0.5}>
-              <Checkbox
-                inputProps={{ tabIndex: 1 }}
-                checked={signaturePlugin.hasSignature()}
-                onChange={() =>
-                  signature
-                    ? signaturePlugin.toggleSignature()
-                    : showNoSignatureModal()
-                }
-              >
-                Signature
-              </Checkbox>
-            </Box>
           )}
         </Toolbar>
         {input && <FieldError name={input.name} />}

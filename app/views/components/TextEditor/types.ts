@@ -13,6 +13,8 @@ import { ContentBlock, ContentState, EditorProps, EditorState } from 'draft-js'
 
 import { DraftJsPlugin } from 'draft-js-plugins-editor'
 
+import { Options } from 'draft-js-import-html'
+
 import { ClassesProps } from 'utils/ts-utils'
 
 import { styles } from './styles'
@@ -64,23 +66,6 @@ export interface TextEditorProps extends ClassesProps<typeof styles> {
 
   autofocus?: boolean
 
-  /**
-   * Signature content, used when enableSignature is true.
-   * If string is passed, it's converted to ContentBlocks via stateFromHTML
-   */
-  signature?: ContentBlock[] | string
-
-  /**
-   * Callback to be called when signature doesn't exist and the user tries to
-   * use it.
-   */
-  onEditSignature?: () => void
-
-  /**
-   * Whether to include signature by default or not
-   */
-  hasSignatureByDefault?: boolean
-
   onAttachmentDropped?: (file: File[]) => void
 
   /** ********
@@ -98,10 +83,6 @@ export interface TextEditorProps extends ClassesProps<typeof styles> {
   richText?: boolean | RichTextFeature[]
 
   enableEmoji?: boolean
-  /**
-   * Enable/disable signature insertion.
-   */
-  enableSignature?: boolean
 
   appendix?: ReactNode
 }
@@ -136,6 +117,7 @@ export interface DraftPluginEditorInlineDecoratorProps {
 export interface EditorContextApi {
   editorState: EditorState
   setEditorState: (newState: EditorState) => void
+  stateFromHtmlOptions: Options
   editorRef: RefObject<DraftJsPlugin>
   /**
    * Adds a plugin and return a function which will remove this plugin.

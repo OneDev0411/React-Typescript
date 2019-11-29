@@ -16,9 +16,6 @@ import 'draft-js-emoji-plugin/lib/plugin.css'
 
 import { mergeClasses } from '@material-ui/styles'
 
-import createSignaturePlugin, {
-  SignatureContentOption
-} from './plugins/draft-js-signature-plugin'
 import createPasteLinkPlugin from './plugins/draft-js-paste-link-plugin'
 import { linkKeyBinding } from './utils/link-key-binding'
 
@@ -31,7 +28,6 @@ import { getEmojiSuggestionsPosition } from './utils/get-emoji-suggestions-posit
 
 export function createPlugins(
   setLinkEditorOpen: (open: boolean) => void,
-  signature: SignatureContentOption,
   stateFromHtmlOptions,
   emojiTheme
 ) {
@@ -45,11 +41,6 @@ export function createPlugins(
     },
     keyBindingFn: linkKeyBinding
   }
-
-  const signaturePlugin = createSignaturePlugin({
-    signatureContent: signature || '',
-    stateFromHtmlOptions
-  })
 
   const iframePlugin = createIframePlugin({
     decorator: composeDecorators(
@@ -79,7 +70,6 @@ export function createPlugins(
     linkPlugins: [anchorPlugin, createPasteLinkPlugin(), linkShortcutsPlugin],
     iframePlugin,
     pasteHtmlPlugin,
-    signaturePlugin,
     emojiPlugin,
     EmojiSuggestions,
     EmojiSelect

@@ -1,5 +1,5 @@
 import { ContentBlock, ContentState, EditorState } from 'draft-js'
-import { DraftJsPlugin, PluginFunctions } from 'draft-js-plugins-editor'
+import { PluginFunctions } from 'draft-js-plugins-editor'
 
 import {
   CustomBlockFn,
@@ -9,8 +9,8 @@ import {
 
 import { BlockStyleFn } from 'draft-js-export-html'
 
-import { appendBlocks } from '../utils/append-blocks'
-import { isValidSelection } from '../utils/is-valid-selection'
+import { appendBlocks } from '../../utils/append-blocks'
+import { isValidSelection } from '../../utils/is-valid-selection'
 
 type SignatureContentType = ContentBlock[] | string
 
@@ -50,7 +50,7 @@ export default function createSignaturePlugin({
   prependSignatureWithSeparator = true,
   numOfEmptyLinesBeforeSignature = 2,
   stateFromHtmlOptions
-}: CreateSignaturePluginOptions): DraftJsPlugin {
+}: CreateSignaturePluginOptions) {
   let pluginFns: PluginFunctions
 
   /**

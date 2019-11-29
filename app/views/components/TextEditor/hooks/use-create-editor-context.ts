@@ -2,12 +2,15 @@ import { RefObject, useMemo, useState } from 'react'
 import PluginsEditor, { DraftJsPlugin } from 'draft-js-plugins-editor'
 import { EditorState } from 'draft-js'
 
+import { Options } from 'draft-js-import-html'
+
 import { useLatestValueRef } from 'hooks/use-latest-value-ref'
 
 import { DropzonePropsInterceptor, EditorContextApi } from '../types'
 
 interface EditorContextParams {
   editorState: EditorState
+  stateFromHtmlOptions: Options
   onChange: (editorState: EditorState) => void
   editorRef: RefObject<PluginsEditor>
 }
@@ -18,6 +21,7 @@ interface PluginsMap {
 
 export function useCreateEditorContext({
   editorState,
+  stateFromHtmlOptions,
   onChange,
   editorRef
 }: EditorContextParams): {
@@ -35,6 +39,7 @@ export function useCreateEditorContext({
   const editorContext: EditorContextApi = useMemo(() => {
     return {
       editorState,
+      stateFromHtmlOptions,
       setEditorState: setEditorStateRef.current,
       editorRef,
       addDropzonePropsInterceptor: interceptor => {
