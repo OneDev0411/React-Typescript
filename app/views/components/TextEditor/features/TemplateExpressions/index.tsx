@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { useEditorPlugins } from '../../hooks/use-editor-plugins'
-import createTemplateExpressionsPlugin from '../../plugins/template-expressions-plugin'
+import createTemplateExpressionsPlugin from './template-expressions-plugin'
 import {
   ITemplateVariableSuggestion,
   ITemplateVariableSuggestionGroup,

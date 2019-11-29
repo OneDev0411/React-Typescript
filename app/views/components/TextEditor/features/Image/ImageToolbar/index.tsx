@@ -12,12 +12,12 @@ import {
 } from '@material-ui/core'
 
 import { ClassesProps } from 'utils/ts-utils'
+import IconDelete from 'components/SvgIcons/Delete/IconDelete'
 
-import IconDelete from '../../../SvgIcons/Delete/IconDelete'
 import { BlockAlignmentButtons } from './AlignmentButtons'
 import { ImageSizeEditor } from './ImageSizeEditor'
-import { removeBlock } from '../../modifiers/remove-block'
-import { useToolbarIconClass } from '../../hooks/use-toolbar-icon-class'
+import { removeBlock } from '../../../modifiers/remove-block'
+import { useToolbarIconClass } from '../../../hooks/use-toolbar-icon-class'
 
 const styles = (theme: Theme) =>
   createStyles({

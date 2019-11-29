@@ -9,11 +9,11 @@ import IconAlignLeft from 'components/SvgIcons/AlignLeft/IconAlignLeft'
 import IconAlignCenter from 'components/SvgIcons/AlignCenter/IconAlignCenter'
 import IconAlignRight from 'components/SvgIcons/AlignRight/IconAlignRight'
 
-import { AtomicBlockEntityData } from '../../types'
-import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
-import { updateAtomicBlockEntityData } from '../../modifiers/update-atomic-block-entity-data'
-import { getAtomicBlockEntityData } from '../../utils/get-atomic-block-entity-data'
-import { useToolbarIconClass } from '../../hooks/use-toolbar-icon-class'
+import { AtomicBlockEntityData } from '../../../types'
+import { getSelectedAtomicBlock } from '../../../utils/get-selected-atomic-block'
+import { updateAtomicBlockEntityData } from '../../../modifiers/update-atomic-block-entity-data'
+import { getAtomicBlockEntityData } from '../../../utils/get-atomic-block-entity-data'
+import { useToolbarIconClass } from '../../../hooks/use-toolbar-icon-class'
 
 type Alignment = AtomicBlockEntityData['alignment']
 

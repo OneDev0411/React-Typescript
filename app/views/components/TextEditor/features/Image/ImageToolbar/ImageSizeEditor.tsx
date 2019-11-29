@@ -7,11 +7,11 @@ import { findKey } from 'lodash'
 import {
   getImageSizeOptions,
   ImageSizeOptions
-} from '../../utils/get-image-size-options'
-import { getBlockElement } from '../../utils/get-block-element'
-import { updateAtomicBlockEntityData } from '../../modifiers/update-atomic-block-entity-data'
-import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
-import { getAtomicBlockEntityData } from '../../utils/get-atomic-block-entity-data'
+} from '../utils/get-image-size-options'
+import { getBlockElement } from '../../../utils/get-block-element'
+import { updateAtomicBlockEntityData } from '../../../modifiers/update-atomic-block-entity-data'
+import { getSelectedAtomicBlock } from '../../../utils/get-selected-atomic-block'
+import { getAtomicBlockEntityData } from '../../../utils/get-atomic-block-entity-data'
 
 interface Props {
   editorState: EditorState

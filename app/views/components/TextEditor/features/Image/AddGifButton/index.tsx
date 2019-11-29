@@ -7,8 +7,8 @@ import useToggle from 'react-use/lib/useToggle'
 import GifIcon from 'components/SvgIcons/Gif/GIfIcon'
 import GifDrawer from 'components/GifDrawer'
 
-import { ToolbarIconButton } from '../ToolbarIconButton'
-import { GifItem } from '../../../GifDrawer/types'
+import { ToolbarIconButton } from '../../../buttons/ToolbarIconButton'
+import { GifItem } from '../../../../GifDrawer/types'
 
 interface Props {
   onImageSelected: (url: string, width: number) => void

@@ -3,9 +3,9 @@ import * as React from 'react'
 import { Tooltip } from '@material-ui/core'
 
 import ImageFileIcon from 'components/SvgIcons/ImageFile/ImageFileIcon'
+import { FilePicker } from 'components/FilePicker'
 
-import { ToolbarIconButton } from '../ToolbarIconButton'
-import { FilePicker } from '../../../FilePicker'
+import { ToolbarIconButton } from '../../../buttons/ToolbarIconButton'
 
 interface Props {
   onImageSelected: (file: File) => void

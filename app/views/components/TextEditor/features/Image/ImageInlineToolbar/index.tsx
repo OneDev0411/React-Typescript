@@ -4,9 +4,9 @@ import { EditorState } from 'draft-js'
 import {
   DraftJsSelectionPopover,
   SelectionPopoverRenderProps
-} from '../DraftJsSelectionPopover'
+} from '../../../components/DraftJsSelectionPopover'
 import { ImageToolbar } from '../ImageToolbar'
-import { SelectionPopoverPaper } from '../SelectionPopoverPaper'
+import { SelectionPopoverPaper } from '../../../components/SelectionPopoverPaper'
 
 interface Props {
   editorState: EditorState

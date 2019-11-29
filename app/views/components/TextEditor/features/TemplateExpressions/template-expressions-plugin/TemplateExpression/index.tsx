@@ -9,13 +9,14 @@ import { useMenu } from 'hooks/use-menu'
 
 import { nativelyStopEventPropagationOfEventViaRef } from 'utils/natively-stop-event-propagation-of-event-via-ref'
 
-import { defaultTemplateVariableSuggestions } from '../../../../EmailCompose/default-template-variable-suggestions'
+import { defaultTemplateVariableSuggestions } from 'components/EmailCompose/default-template-variable-suggestions'
+import IconWarning from 'components/SvgIcons/Warning/IconWarning'
+import { ITemplateVariableSuggestion } from 'components/TemplateVariablesButton'
 
 import { expressionRegExp } from '../expression-regexp'
-import IconWarning from '../../../../SvgIcons/Warning/IconWarning'
 import { TemplateExpressionPopover } from '../TemplateExpressionPopover'
-import { DraftPluginEditorInlineDecoratorProps } from '../../../types'
-import { ITemplateVariableSuggestion } from '../../../../TemplateVariablesButton'
+import { DraftPluginEditorInlineDecoratorProps } from '../../../../types'
+
 import { styles } from './styles'
 
 const useTemplateExpressionStyles = makeStyles(styles)
