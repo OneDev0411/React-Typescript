@@ -232,7 +232,7 @@ export const TextEditor = forwardRef(
       ComponentType<typeof Dropzone>
     > = getDropzoneProps({
       disabled: !onAttachmentDropped,
-      fileAccept: onAttachmentDropped ? '*/*' : undefined,
+      accept: onAttachmentDropped ? '*/*' : undefined,
       onDrop: (files: File[]) => {
         if (files && files[0] && onAttachmentDropped) {
           onAttachmentDropped(files)

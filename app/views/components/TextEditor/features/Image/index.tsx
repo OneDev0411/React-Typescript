@@ -137,7 +137,7 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
 
   useDropzonePropsInterceptor(props => ({
     disabled: false,
-    fileAccept: props.fileAccept || 'image/*',
+    accept: props.fileAccept || 'image/*',
     onDrop: (files: File[]) => {
       if (files && files[0] && isImageFile(files[0])) {
         return addImageRef.current(files[0])
