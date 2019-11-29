@@ -14,7 +14,7 @@ export const Toolbar = styled.div`
   align-items: center;
   margin: 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.42);
-  padding: ${({ theme }: ThemeProps<Theme>) => theme.spacing(0.25, 0.5)};
+  padding: ${({ theme }: ThemeProps<Theme>) => theme.spacing(0.25, 0)};
   display: flex;
   align-items: center;
   order: -1;
