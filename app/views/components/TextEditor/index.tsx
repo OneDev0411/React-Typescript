@@ -1,5 +1,7 @@
 import React, {
+  ComponentType,
   createContext,
+  createRef,
   forwardRef,
   useContext,
   useEffect,
@@ -17,8 +19,6 @@ import cn from 'classnames'
 import { Box, makeStyles, Tooltip } from '@material-ui/core'
 import { shallowEqual } from 'recompose'
 
-import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
-import { isImageFile } from 'utils/file-utils/is-image-file'
 import IconLink from 'components/SvgIcons/Link/IconLink'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
@@ -29,10 +29,8 @@ import { LinkEditorPopover } from './components/LinkEditorPopover'
 
 import { EditorContainer, EditorWrapper, Separator, Toolbar } from './styled'
 import { FieldError } from '../final-form-fields/FieldError'
-import { AddImageButton } from './buttons/AddImageButton'
 import { RichTextButtons } from './buttons/RichTextButtons'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
-import { updateEntityData } from './modifiers/update-entity-data'
 import {
   DraftJsSelectionPopover,
   SelectionPopoverRenderProps
@@ -48,15 +46,10 @@ import {
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 import { createEditorRef } from './create-editor-ref'
 import { createPlugins } from './create-plugins'
-import { removeUnwantedEmptyLineBeforeAtomic } from './modifiers/remove-unwanted-empty-block-before-atomic'
 import { ToolbarIconButton } from './buttons/ToolbarIconButton'
 import { getSelectedAtomicBlock } from './utils/get-selected-atomic-block'
 import { styles } from './styles'
-import { getImageDimensions } from './utils/get-image-dimensions'
-import { getImageSizeOptions } from './utils/get-image-size-options'
-import { InlineImageToolbar } from './components/ImageInlineToolbar'
 import { useEmojiStyles } from './hooks/use-emoji-styles'
-import { AddGifButton } from './buttons/AddGifButton'
 import { useCreateToolbarContext } from './hooks/use-create-toolbar-context'
 import { ToolbarFragments } from './components/ToolbarFragments'
 import { useCreateEditorContext } from './hooks/use-create-editor-context'
@@ -74,8 +67,10 @@ const editorToolbarContextMethodStub = () => {
   )
 }
 export const EditorContext = createContext<EditorContextApi>({
-  addPlugin: editorContextMethodStub,
-  getEditorState: editorContextMethodStub,
+  addPlugins: editorContextMethodStub,
+  editorRef: createRef(),
+  editorState: (null as unknown) as EditorState,
+  addDropzonePropsInterceptor: editorContextMethodStub,
   setEditorState: editorContextMethodStub
 })
 export const EditorToolbarContext = createContext<EditorToolbarContextApi>({
@@ -111,11 +106,9 @@ export const TextEditor = forwardRef(
       placeholder = 'Type something…',
       plugins = [],
       DraftEditorProps = {},
-      uploadImage,
       signature,
       hasSignatureByDefault = false,
       onEditSignature = () => {},
-      enableImage = false,
       richText = true,
       enableEmoji = true,
       enableSignature = false,
@@ -170,11 +163,6 @@ export const TextEditor = forwardRef(
      * later in code which is not worth it.
      */
     const {
-      imagePlugin,
-      focusPlugin,
-      alignmentPlugin,
-      blockDndPlugin,
-      resizeablePlugin,
       linkPlugins,
       signaturePlugin,
       richButtonsPlugin,
@@ -264,68 +252,6 @@ export const TextEditor = forwardRef(
       [stateToHtmlOptions]
     )
 
-    /**
-     * Adds an image to the editor from a URL or dataURL. if it's a dataUrl
-     * and `uploadImage` prop is provided, it will be called with a Blob
-     * object to upload the image. `uploadImage` should return a promise
-     * which is resolved to the url of the uploaded image. when it's resolved
-     * the url of the image will be replaced with that.
-     *
-     * Note that it's not necessarily required to pass `uploadImage`, if
-     * data urls in the output are accepted. It's not the case for emails
-     * for example as data urls are not well supported in emails.
-     *
-     * This function can be called either when an image is dropped into the
-     * editor or it's selected via an image picker UI (created by
-     * AddImageButton)
-     * @param file
-     */
-    const addImage = async (file: File) => {
-      if (!isImageFile(file)) {
-        return
-      }
-
-      // We first convert image to data url and show it.
-      const dataUrl = await readFileAsDataUrl(file)
-
-      const { bestFit } = getImageSizeOptions(await getImageDimensions(dataUrl))
-
-      handleChange(
-        removeUnwantedEmptyLineBeforeAtomic(
-          imagePlugin.addImage(
-            editorState,
-            dataUrl,
-            uploadImage ? { uploading: true, ...bestFit } : bestFit
-          )
-        )
-      )
-
-      // Then we try to upload it if the uploadImage function is provided.
-      // When the upload is finished, we replace the image src with the uploaded
-      // file's url.
-      if (uploadImage) {
-        // TODO: handle errors and remove the image in this case.
-        const uploadedImageUrl = await uploadImage(file)
-
-        if (editorRef.current) {
-          const latestState = editorRef.current.getEditorState()
-
-          handleChange(
-            updateEntityData(
-              imagePlugin,
-              latestState,
-              data => data.src === dataUrl,
-              { src: uploadedImageUrl, uploading: false }
-            )
-          )
-        }
-      } else {
-        console.warn(
-          '[Editor]: dataURL image is inserted by no uploadImage passed. data urls will be preserved in the output'
-        )
-      }
-    }
-
     const showNoSignatureModal = () => {
       confirmation!.setConfirmationModal({
         message:
@@ -335,28 +261,24 @@ export const TextEditor = forwardRef(
       })
     }
 
-    const { editorContext, plugins: contextPlugins } = useCreateEditorContext({
+    const {
+      editorContext,
+      plugins: contextPlugins,
+      getDropzoneProps
+    } = useCreateEditorContext({
       editorState,
-      onChange: handleChange
+      onChange: handleChange,
+      editorRef
     })
 
     const { toolbarContext, toolbarSegments } = useCreateToolbarContext()
 
     const defaultPlugins = [
-      ...contextPlugins,
+      ...Object.values(contextPlugins),
       ...Object.values(otherPlugins),
       ...(richText ? [richButtonsPlugin] : []),
       ...(richTextFeatures.includes(RichTextFeature.LINK) ? linkPlugins : []),
       ...(enableEmoji ? [emojiPlugin] : []),
-      ...(enableImage
-        ? [
-            blockDndPlugin,
-            focusPlugin,
-            alignmentPlugin,
-            resizeablePlugin,
-            imagePlugin
-          ]
-        : []),
       ...(enableSignature ? [signaturePlugin] : [])
     ]
 
@@ -364,21 +286,17 @@ export const TextEditor = forwardRef(
 
     const rerenderEditor = useRerenderOnChange(allPlugins, shallowEqual)
 
-    const isFileDropEnabled = enableImage || onAttachmentDropped
-    const fileAccept =
-      !onAttachmentDropped && enableImage ? 'image/*' : undefined
-
-    const onDrop = (files: File[]) => {
-      if (!files || !files[0]) {
-        return
+    const dropzoneProps: Partial<
+      ComponentType<typeof Dropzone>
+    > = getDropzoneProps({
+      disabled: !onAttachmentDropped,
+      fileAccept: onAttachmentDropped ? '*/*' : undefined,
+      onDrop: (files: File[]) => {
+        if (files && files[0] && onAttachmentDropped) {
+          onAttachmentDropped(files)
+        }
       }
-
-      if (isImageFile(files[0])) {
-        addImage(files[0])
-      } else if (onAttachmentDropped) {
-        onAttachmentDropped(files)
-      }
-    }
+    })
 
     const handlerWrapperClick = e => {
       // It's important to check if it's the wrapper which is clicked
@@ -393,9 +311,6 @@ export const TextEditor = forwardRef(
         editorRef.current && editorRef.current.focus()
       }
     }
-
-    const addImageByUrl = (url: string, width?: number) =>
-      handleChange(imagePlugin.addImage(editorState, url, { width }))
 
     return (
       <EditorContainer
@@ -416,12 +331,10 @@ export const TextEditor = forwardRef(
         >
           {/* I wish we had upgraded Dropzone to use the hook version :( */}
           <Dropzone
-            disabled={!isFileDropEnabled}
+            {...dropzoneProps}
             className={classes.dropzone}
             activeClassName={classes.dropzoneActive}
             rejectClassName={classes.dropzoneReject}
-            onDrop={onDrop}
-            accept={fileAccept}
             disableClick
           >
             {rerenderEditor && (
@@ -482,12 +395,6 @@ export const TextEditor = forwardRef(
                 )}
               </DraftJsSelectionPopover>
             )}
-            {imagePlugin && (
-              <InlineImageToolbar
-                editorState={editorState}
-                setEditorState={handleChange}
-              />
-            )}
             {emojiPlugin && <EmojiSuggestions />}
             {appendix}
           </Dropzone>
@@ -515,13 +422,6 @@ export const TextEditor = forwardRef(
             </>
           )}
 
-          {enableImage && (
-            <>
-              <AddImageButton onImageSelected={addImage} />
-              <AddGifButton onImageSelected={addImageByUrl} />
-              <Separator />
-            </>
-          )}
           {enableEmoji && (
             <>
               <Tooltip title="Emoji (:)">

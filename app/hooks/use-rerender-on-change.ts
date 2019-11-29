@@ -5,18 +5,17 @@ export function useRerenderOnChange<T>(
   value: T,
   isEqualFn: (a: T, b: T) => boolean = (a, b) => a === b
 ): true | null {
-  const [shouldRender, setShouldRender] = useState(true)
+  const [, setRerendererState] = useState(true)
   const previousValue = usePrevious(value)
 
-  useEffect(() => {
-    if (previousValue !== undefined && !isEqualFn(value, previousValue)) {
-      setShouldRender(false)
+  const shouldRender =
+    previousValue === undefined || isEqualFn(value, previousValue)
 
-      setTimeout(() => {
-        setShouldRender(true)
-      })
+  useEffect(() => {
+    if (!shouldRender) {
+      setRerendererState(a => !a)
     }
-  }, [value, previousValue, isEqualFn])
+  }, [shouldRender])
 
   return shouldRender || null
 }

@@ -1,5 +1,13 @@
 import { FieldProps } from 'react-final-form'
-import { CSSProperties, ReactElement, ReactNode, Ref } from 'react'
+import {
+  ComponentProps,
+  CSSProperties,
+  ReactElement,
+  ReactNode,
+  Ref,
+  RefObject
+} from 'react'
+import Dropzone from 'react-dropzone'
 
 import { ContentBlock, ContentState, EditorProps, EditorState } from 'draft-js'
 
@@ -55,14 +63,6 @@ export interface TextEditorProps extends ClassesProps<typeof styles> {
   DraftEditorProps?: Omit<EditorProps, 'editorState' | 'onChange'>
 
   autofocus?: boolean
-  /**
-   * an optional function to be used when enableImage is true and an image is
-   * added to the editor. It should upload the image and return the promise
-   * of the uploaded image url. The src of the image in the editor will be
-   * uploaded to that uploaded image url.
-   * @param file
-   */
-  uploadImage?: (file: File) => Promise<string>
 
   /**
    * Signature content, used when enableSignature is true.
@@ -96,10 +96,7 @@ export interface TextEditorProps extends ClassesProps<typeof styles> {
    * Enable/disable rich text editing features like bold, italic, lists, etc.
    */
   richText?: boolean | RichTextFeature[]
-  /**
-   * Enable/disable image insertion.
-   */
-  enableImage?: boolean
+
   enableEmoji?: boolean
   /**
    * Enable/disable signature insertion.
@@ -137,12 +134,16 @@ export interface DraftPluginEditorInlineDecoratorProps {
 }
 
 export interface EditorContextApi {
-  getEditorState: () => EditorState | null
+  editorState: EditorState
   setEditorState: (newState: EditorState) => void
+  editorRef: RefObject<DraftJsPlugin>
   /**
    * Adds a plugin and return a function which will remove this plugin.
    */
-  addPlugin: (plugin: DraftJsPlugin) => () => void
+  addPlugins: (plugins: {
+    [nameDraftJsPlugin: string]: DraftJsPlugin
+  }) => () => void
+  addDropzonePropsInterceptor: (interceptor) => () => void
 }
 
 export interface ToolbarFragment {
@@ -158,3 +159,7 @@ interface ToolbarSegmentApi {
 export interface EditorToolbarContextApi {
   createToolbarSegment: () => ToolbarSegmentApi
 }
+
+export type DropzonePropsInterceptor = (
+  props: ComponentProps<typeof Dropzone>
+) => ComponentProps<typeof Dropzone>

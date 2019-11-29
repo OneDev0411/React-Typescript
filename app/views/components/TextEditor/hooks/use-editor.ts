@@ -2,6 +2,8 @@ import { useContext } from 'react'
 
 import { EditorContext } from '..'
 
-export function useEditor() {
+import { EditorContextApi } from '../types'
+
+export function useEditor(): EditorContextApi {
   return useContext(EditorContext)
 }

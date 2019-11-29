@@ -21,6 +21,7 @@ import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
 import { defaultTemplateVariableSuggestions } from '../../default-template-variable-suggestions'
 import { TextEditorProps, TextEditorRef } from '../../../TextEditor/types'
 import { TemplateExpressionsFeature } from '../../../TextEditor/features/TemplateExpressions'
+import { ImageFeature } from '../../../TextEditor/features/Image'
 
 interface Props {
   content?: string
@@ -75,9 +76,7 @@ const EmailBody = ({
               {...FieldProps || {}}
               render={({ input, meta }) => (
                 <TextEditor
-                  enableImage
                   autofocus={autofocus}
-                  uploadImage={uploadImage}
                   enableSignature
                   onAttachmentDropped={upload}
                   DraftEditorProps={DraftEditorProps}
@@ -95,6 +94,7 @@ const EmailBody = ({
                       }
                     />
                   )}
+                  <ImageFeature uploadImage={uploadImage} />
                 </TextEditor>
               )}
             />

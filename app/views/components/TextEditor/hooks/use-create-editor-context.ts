@@ -1,51 +1,104 @@
-import { useMemo, useState } from 'react'
-import { DraftJsPlugin } from 'draft-js-plugins-editor'
-
+import { RefObject, useMemo, useState } from 'react'
+import PluginsEditor, { DraftJsPlugin } from 'draft-js-plugins-editor'
 import { EditorState } from 'draft-js'
 
 import { useLatestValueRef } from 'hooks/use-latest-value-ref'
 
-import { EditorContextApi } from '../types'
+import { DropzonePropsInterceptor, EditorContextApi } from '../types'
 
 interface EditorContextParams {
   editorState: EditorState
   onChange: (editorState: EditorState) => void
+  editorRef: RefObject<PluginsEditor>
+}
+
+interface PluginsMap {
+  [name: string]: DraftJsPlugin
 }
 
 export function useCreateEditorContext({
   editorState,
-  onChange
-}: EditorContextParams) {
-  const [plugins, setPlugins] = useState<DraftJsPlugin[]>([])
+  onChange,
+  editorRef
+}: EditorContextParams): {
+  editorContext: EditorContextApi
+  plugins: PluginsMap
+  getDropzoneProps: DropzonePropsInterceptor
+} {
+  const [plugins, setPlugins] = useState<PluginsMap>({})
+  const [dropzonePropsInterceptors, setDropzonePropsInterceptors] = useState<
+    DropzonePropsInterceptor[]
+  >([])
 
-  const getEditorStateRef = useLatestValueRef(() => editorState)
   const setEditorStateRef = useLatestValueRef(onChange)
 
   const editorContext: EditorContextApi = useMemo(() => {
-    console.log('context changed')
-
     return {
-      getEditorState: getEditorStateRef.current,
+      editorState,
       setEditorState: setEditorStateRef.current,
-      addPlugin: plugin => {
-        setPlugins(plugins => {
-          if (!plugins.includes(plugin)) {
-            return [...plugins, plugin]
+      editorRef,
+      addDropzonePropsInterceptor: interceptor => {
+        setDropzonePropsInterceptors(interceptors => {
+          if (!interceptors.includes(interceptor)) {
+            return [...interceptors, interceptor]
           }
 
-          return plugins
+          return interceptors
         })
 
         return () => {
-          setPlugins(plugins => plugins.filter(aPlugin => aPlugin !== plugin))
+          setDropzonePropsInterceptors(interceptors =>
+            interceptors.filter(anInterceptor => anInterceptor !== interceptor)
+          )
+        }
+      },
+      addPlugins: newPlugins => {
+        setPlugins(plugins => {
+          return Object.entries(newPlugins).reduce(
+            (pluginsSoFar, [name, plugin]) => {
+              if (plugins[name] !== plugin) {
+                if (plugins[name]) {
+                  console.error(
+                    new Error(`Attempting to override editor plugin "${name}"`),
+                    'Old plugin:',
+                    plugins[name],
+                    'New plugin',
+                    plugin
+                  )
+                }
+
+                return { ...pluginsSoFar, [name]: plugin }
+              }
+
+              return pluginsSoFar
+            },
+            plugins
+          )
+        })
+
+        return () => {
+          setPlugins(plugins => {
+            const newPlugins = { ...plugins }
+
+            Object.keys(newPlugins).forEach(name => {
+              delete newPlugins[name]
+            })
+
+            return newPlugins
+          })
         }
       }
     }
     // eslint-disable-next-line
-  }, [])
+  }, [editorState])
 
-  editorContext.getEditorState = getEditorStateRef.current
   editorContext.setEditorState = setEditorStateRef.current
 
-  return { editorContext, plugins }
+  const getDropzoneProps = props =>
+    dropzonePropsInterceptors.reduce(
+      (soFar, interceptor) => interceptor(soFar),
+      props
+    )
+
+  return { editorContext, plugins, getDropzoneProps }
 }
