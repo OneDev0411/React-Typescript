@@ -35,9 +35,10 @@ interface Props {
    * @param file
    */
   uploadImage?: (file: File) => Promise<string>
+  allowGif?: boolean
 }
 
-export function ImageFeature({ uploadImage }: Props) {
+export function ImageFeature({ uploadImage, allowGif = true }: Props) {
   /**
    * Adds an image to the editor from a URL or dataURL. if it's a dataUrl
    * and `uploadImage` prop is provided, it will be called with a Blob
@@ -155,7 +156,7 @@ export function ImageFeature({ uploadImage }: Props) {
     <>
       <ToolbarFragment group="image">
         <AddImageButton onImageSelected={addImage} />
-        <AddGifButton onImageSelected={addImageByUrl} />
+        {allowGif && <AddGifButton onImageSelected={addImageByUrl} />}
       </ToolbarFragment>
       <InlineImageToolbar
         editorState={editorState}
