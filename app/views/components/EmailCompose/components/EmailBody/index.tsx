@@ -115,7 +115,7 @@ const EmailBody = ({
           <EditEmailSignatureDrawer
             isOpen={signatureEditorVisible}
             onClose={() => setSignatureEditorVisible(false)}
-          />{' '}
+          />
         </>
       )}
     </UploadAttachment>

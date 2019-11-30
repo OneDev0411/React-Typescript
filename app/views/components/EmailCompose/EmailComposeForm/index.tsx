@@ -266,7 +266,7 @@ function EmailComposeForm<T>({
               />
 
               <EmailBody
-                ref={emailBodyEditorRef}
+                editorRef={emailBodyEditorRef}
                 DraftEditorProps={{
                   onFocus: () => setTopFieldsCollapsed(true)
                 }}
