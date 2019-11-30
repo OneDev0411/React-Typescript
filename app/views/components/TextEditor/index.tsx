@@ -15,12 +15,12 @@ import PluginsEditor from 'draft-js-plugins-editor'
 import { stateToHTML } from 'draft-js-export-html'
 import { stateFromHTML } from 'draft-js-import-html'
 import cn from 'classnames'
-import { makeStyles, Tooltip } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import { shallowEqual } from 'recompose'
 
 import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
 
-import { EditorContainer, EditorWrapper, Separator, Toolbar } from './styled'
+import { EditorContainer, EditorWrapper, Toolbar } from './styled'
 import { FieldError } from '../final-form-fields/FieldError'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
 import {
@@ -32,11 +32,11 @@ import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 import { createEditorRef } from './create-editor-ref'
 import { createPlugins } from './create-plugins'
 import { styles } from './styles'
-import { useEmojiStyles } from './hooks/use-emoji-styles'
 import { useCreateToolbarContext } from './hooks/use-create-toolbar-context'
 import { ToolbarFragments } from './components/ToolbarFragments'
 import { useCreateEditorContext } from './hooks/use-create-editor-context'
 import { RichTextFeature } from './features/RichText'
+import { EmojiFeature } from './features/Emoji'
 
 const useStyles = makeStyles(styles, { name: 'TextEditor' })
 
@@ -62,6 +62,12 @@ export const EditorToolbarContext = createContext<EditorToolbarContextApi>({
   createToolbarSegment: editorToolbarContextMethodStub
 })
 
+const DEFAULT_FEATURES = (
+  <>
+    <RichTextFeature />
+    <EmojiFeature />
+  </>
+)
 /**
  * Html wysiwyg editor.
  *
@@ -80,7 +86,7 @@ export const EditorToolbarContext = createContext<EditorToolbarContextApi>({
 export const TextEditor = forwardRef(
   (
     {
-      children = <RichTextFeature />,
+      children = DEFAULT_FEATURES,
       className = '',
       defaultValue = '',
       disabled = false,
@@ -91,7 +97,6 @@ export const TextEditor = forwardRef(
       placeholder = 'Type something…',
       plugins = [],
       DraftEditorProps = {},
-      enableEmoji = true,
       onAttachmentDropped,
       textAlignment,
       appendix = null,
@@ -120,7 +125,6 @@ export const TextEditor = forwardRef(
       []
     )
 
-    const emojiTheme = useEmojiStyles()
     /**
      * NOTE 1: We don't use top level plugin definition to prevent bugs when
      * more than one instance of Editor is rendered simultaneously
@@ -133,15 +137,7 @@ export const TextEditor = forwardRef(
      * undefined, based on enableXXX props but it adds lots of undefined checks
      * later in code which is not worth it.
      */
-    const {
-      emojiPlugin,
-      EmojiSelect,
-      EmojiSuggestions,
-      ...otherPlugins
-    } = useMemo(() => createPlugins(stateFromHtmlOptions, emojiTheme), [
-      emojiTheme,
-      stateFromHtmlOptions
-    ])
+    const { ...otherPlugins } = useMemo(() => createPlugins(), [])
 
     const getInitialState = () => {
       const initialValue = (input && input.value) || defaultValue
@@ -220,8 +216,7 @@ export const TextEditor = forwardRef(
 
     const defaultPlugins = [
       ...Object.values(contextPlugins),
-      ...Object.values(otherPlugins),
-      ...(enableEmoji ? [emojiPlugin] : [])
+      ...Object.values(otherPlugins)
     ]
 
     const allPlugins = [...defaultPlugins, ...plugins]
@@ -297,24 +292,11 @@ export const TextEditor = forwardRef(
                 {children}
               </EditorToolbarContext.Provider>
             </EditorContext.Provider>
-
-            {emojiPlugin && <EmojiSuggestions />}
             {appendix}
           </Dropzone>
         </EditorWrapper>
         <Toolbar ref={toolbarRef} className={classes.toolbar}>
           <ToolbarFragments segments={toolbarSegments} />
-
-          {enableEmoji && (
-            <>
-              <Separator />
-              <Tooltip title="Emoji (:)">
-                <span>
-                  <EmojiSelect />
-                </span>
-              </Tooltip>
-            </>
-          )}
         </Toolbar>
         {input && <FieldError name={input.name} />}
       </EditorContainer>

@@ -62,17 +62,6 @@ export interface TextEditorProps extends ClassesProps<typeof styles> {
 
   onAttachmentDropped?: (file: File[]) => void
 
-  /** ********
-   * The following props are feature enabler flags.
-   *
-   * NOTE 1: They are meant to be constant props. You can't count on
-   * changing them. and toggle features dynamically, on a mounted component
-   *
-   * NOTE 2: default value varies from one flag to another.
-   ********* */
-
-  enableEmoji?: boolean
-
   appendix?: ReactNode
 }
 

@@ -24,6 +24,7 @@ import { TemplateExpressionsFeature } from '../../../TextEditor/features/Templat
 import { ImageFeature } from '../../../TextEditor/features/Image'
 import { SignatureFeature } from '../../../TextEditor/features/Signature'
 import { RichTextFeature } from '../../../TextEditor/features/RichText'
+import { EmojiFeature } from '../../../TextEditor/features/Emoji'
 
 interface Props {
   content?: string
@@ -41,6 +42,32 @@ interface Props {
    */
   attachments?: ReactNode
   uploadAttachment?: typeof uploadEmailAttachment
+}
+
+function EmailEditorFeatures(props: {
+  uploadImage: (file) => Promise<string>
+  hasTemplateVariables: boolean | undefined
+  signature: string
+  hasSignatureByDefault: boolean | undefined
+  onEditSignature: () => void
+}) {
+  return (
+    <>
+      <RichTextFeature />
+      <ImageFeature uploadImage={props.uploadImage} />
+      {props.hasTemplateVariables && (
+        <TemplateExpressionsFeature
+          templateVariableSuggestionGroups={defaultTemplateVariableSuggestions}
+        />
+      )}
+      <EmojiFeature />
+      <SignatureFeature
+        signature={props.signature}
+        hasSignatureByDefault={props.hasSignatureByDefault}
+        onEditSignature={props.onEditSignature}
+      />
+    </>
+  )
 }
 
 const EmailBody = ({
@@ -85,16 +112,9 @@ const EmailBody = ({
                   input={input}
                   ref={editorRef}
                 >
-                  <RichTextFeature />
-                  <ImageFeature uploadImage={uploadImage} />
-                  {hasTemplateVariables && (
-                    <TemplateExpressionsFeature
-                      templateVariableSuggestionGroups={
-                        defaultTemplateVariableSuggestions
-                      }
-                    />
-                  )}
-                  <SignatureFeature
+                  <EmailEditorFeatures
+                    uploadImage={uploadImage}
+                    hasTemplateVariables={hasTemplateVariables}
                     signature={signature}
                     hasSignatureByDefault={hasSignatureByDefault}
                     onEditSignature={() => setSignatureEditorVisible(true)}
