@@ -41,13 +41,6 @@ const useStyles = makeStyles(styles, { name: 'TextEditor' })
  * prop is only for being notified of changes. However it's possible
  * to reset html content imperatively via ref.
  *
- * NOTE: this component is growing and needs some structural refactorings
- * for better encapsulation of different features like image, link,
- * signature, etc.
- *
- * This refactoring is intentionally delayed to get more insight about
- * how it should be done, as these features are added.
- * So please don't panic if you see this large component!
  */
 export const TextEditor = forwardRef(
   (
@@ -173,7 +166,7 @@ export const TextEditor = forwardRef(
       editorRef
     })
 
-    const { toolbarContext, toolbarSegments } = useCreateToolbarContext()
+    const { toolbarContext, toolbarFragments } = useCreateToolbarContext()
 
     const defaultPlugins = [
       ...Object.values(contextPlugins),
@@ -257,7 +250,7 @@ export const TextEditor = forwardRef(
           </Dropzone>
         </EditorWrapper>
         <Toolbar ref={toolbarRef} className={classes.toolbar}>
-          <ToolbarFragments segments={toolbarSegments} />
+          <ToolbarFragments segments={toolbarFragments} />
         </Toolbar>
         {input && <FieldError name={input.name} />}
       </EditorContainer>

@@ -21,5 +21,5 @@ const editorToolbarContextMethodStub = () => {
   )
 }
 export const EditorToolbarContext = createContext<EditorToolbarContextApi>({
-  createToolbarSegment: editorToolbarContextMethodStub
+  createToolbarFragment: editorToolbarContextMethodStub
 })

@@ -5,25 +5,25 @@ import cuid from 'cuid'
 import { EditorToolbarContextApi, ToolbarFragment } from '../types'
 
 export function useCreateToolbarContext() {
-  const [toolbarSegments, setToolbarSegments] = useState<
+  const [toolbarFragments, setToolbarFragments] = useState<
     Record<string, ToolbarFragment>
   >({})
 
   const toolbarContext: EditorToolbarContextApi = {
-    createToolbarSegment: () => {
+    createToolbarFragment: () => {
       const key = cuid()
 
       return {
         update: (node: ReactNode, group = 'default') => {
-          if (toolbarSegments[key] !== node) {
-            setToolbarSegments(toolbarSegments => ({
+          if (toolbarFragments[key] !== node) {
+            setToolbarFragments(toolbarSegments => ({
               ...toolbarSegments,
               [key]: { group, node }
             }))
           }
         },
         remove: () => {
-          setToolbarSegments(toolbarSegments => {
+          setToolbarFragments(toolbarSegments => {
             const newToolbarSegments = { ...toolbarSegments }
 
             delete newToolbarSegments[key]
@@ -35,5 +35,5 @@ export function useCreateToolbarContext() {
     }
   }
 
-  return { toolbarContext, toolbarSegments }
+  return { toolbarContext, toolbarFragments }
 }

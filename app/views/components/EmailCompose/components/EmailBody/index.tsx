@@ -1,6 +1,4 @@
 import React, {
-  ComponentProps,
-  forwardRef,
   Fragment,
   ReactNode,
   RefObject,
@@ -8,7 +6,7 @@ import React, {
   useState
 } from 'react'
 import { Field, FieldProps } from 'react-final-form'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { TextEditor } from 'components/TextEditor'
 import Loading from 'components/LoadingContainer'
@@ -18,13 +16,8 @@ import { uploadEmailAttachment } from 'models/email/upload-email-attachment'
 import { UploadAttachment } from 'components/EmailCompose/fields/UploadAttachment'
 
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
-import { defaultTemplateVariableSuggestions } from '../../default-template-variable-suggestions'
 import { TextEditorProps, TextEditorRef } from '../../../TextEditor/types'
-import { TemplateExpressionsFeature } from '../../../TextEditor/features/TemplateExpressions'
-import { ImageFeature } from '../../../TextEditor/features/Image'
-import { SignatureFeature } from '../../../TextEditor/features/Signature'
-import { RichTextFeature } from '../../../TextEditor/features/RichText'
-import { EmojiFeature } from '../../../TextEditor/features/Emoji'
+import { EmailEditorFeatures } from './EmailEditorFeatures'
 
 interface Props {
   content?: string
@@ -33,7 +26,6 @@ interface Props {
   hasTemplateVariables?: boolean
   autofocus?: boolean
   FieldProps?: Partial<FieldProps<any>>
-  signature: string
   DraftEditorProps?: TextEditorProps['DraftEditorProps']
   editorRef?: RefObject<TextEditorRef>
   /**
@@ -44,35 +36,8 @@ interface Props {
   uploadAttachment?: typeof uploadEmailAttachment
 }
 
-function EmailEditorFeatures(props: {
-  uploadImage: (file) => Promise<string>
-  hasTemplateVariables: boolean | undefined
-  signature: string
-  hasSignatureByDefault: boolean | undefined
-  onEditSignature: () => void
-}) {
-  return (
-    <>
-      <RichTextFeature />
-      <ImageFeature uploadImage={props.uploadImage} />
-      <EmojiFeature />
-      {props.hasTemplateVariables && (
-        <TemplateExpressionsFeature
-          templateVariableSuggestionGroups={defaultTemplateVariableSuggestions}
-        />
-      )}
-      <SignatureFeature
-        signature={props.signature}
-        hasSignatureByDefault={props.hasSignatureByDefault}
-        onEditSignature={props.onEditSignature}
-      />
-    </>
-  )
-}
-
 const EmailBody = ({
   content,
-  signature,
   hasSignatureByDefault,
   hasTemplateVariables,
   hasStaticBody = false,
@@ -84,6 +49,10 @@ const EmailBody = ({
   editorRef
 }: Props) => {
   const [signatureEditorVisible, setSignatureEditorVisible] = useState(false)
+
+  const signature = useSelector<IAppState, string>(
+    state => state.user.email_signature
+  )
 
   const uploadImage = useCallback(
     async file => {
@@ -153,17 +122,4 @@ const EmailBody = ({
   )
 }
 
-// TODO(after-redux-update): replace this workaround for forwarding ref
-// with { forwardRef: true } option in new react-redux
-const ConnectedBody = connect(({ user }: IAppState) => ({
-  signature: user.email_signature
-}))(EmailBody)
-
-export default forwardRef(
-  (
-    props: ComponentProps<typeof ConnectedBody>,
-    ref: RefObject<TextEditorRef>
-  ) => {
-    return <ConnectedBody {...props} editorRef={ref} />
-  }
-)
+export default EmailBody

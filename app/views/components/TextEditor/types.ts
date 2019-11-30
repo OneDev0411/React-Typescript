@@ -117,7 +117,7 @@ interface ToolbarSegmentApi {
 }
 
 export interface EditorToolbarContextApi {
-  createToolbarSegment: () => ToolbarSegmentApi
+  createToolbarFragment: () => ToolbarSegmentApi
 }
 
 export type DropzonePropsInterceptor = (

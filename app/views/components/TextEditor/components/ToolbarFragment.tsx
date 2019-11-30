@@ -8,8 +8,8 @@ interface Props {
 }
 
 export function ToolbarFragment({ children, group }: Props) {
-  const { createToolbarSegment } = useContext(EditorToolbarContext)
-  const { update, remove } = useMemo(createToolbarSegment, [])
+  const { createToolbarFragment } = useContext(EditorToolbarContext)
+  const { update, remove } = useMemo(createToolbarFragment, [])
 
   useEffect(() => {
     update(children, group)
