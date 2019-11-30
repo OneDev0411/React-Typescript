@@ -2,6 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import cn from 'classnames'
 import _ from 'underscore'
+import fecha from 'fecha'
 
 import { H2 } from 'components/Typography/headings'
 
@@ -25,7 +26,7 @@ const ContextValue = ({ name, date, onRemove, onEdit }) => (
 
 export default class extends React.Component {
   onChangeDateContext(field, date) {
-    this.props.onChangeContext(field, date)
+    this.props.onChangeContext(field, fecha.format(date, 'YYYY-MM-DD'))
   }
 
   onChangeStringContext(field, value) {
