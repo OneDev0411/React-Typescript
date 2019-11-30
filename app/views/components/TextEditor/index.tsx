@@ -1,7 +1,5 @@
 import React, {
   ComponentType,
-  createContext,
-  createRef,
   forwardRef,
   useEffect,
   useImperativeHandle,
@@ -23,11 +21,7 @@ import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
 import { EditorContainer, EditorWrapper, Toolbar } from './styled'
 import { FieldError } from '../final-form-fields/FieldError'
 import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
-import {
-  EditorContextApi,
-  EditorToolbarContextApi,
-  TextEditorProps
-} from './types'
+import { TextEditorProps } from './types'
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 import { createEditorRef } from './create-editor-ref'
 import { createPlugins } from './create-plugins'
@@ -35,39 +29,11 @@ import { styles } from './styles'
 import { useCreateToolbarContext } from './hooks/use-create-toolbar-context'
 import { ToolbarFragments } from './components/ToolbarFragments'
 import { useCreateEditorContext } from './hooks/use-create-editor-context'
-import { RichTextFeature } from './features/RichText'
-import { EmojiFeature } from './features/Emoji'
+import { DEFAULT_EDITOR_FEATURES } from './default-editor-features'
+import { EditorContext, EditorToolbarContext } from './editor-context'
 
 const useStyles = makeStyles(styles, { name: 'TextEditor' })
 
-const editorContextMethodStub = () => {
-  throw new Error(
-    'Editor context is meant to be used within the editor. You are probably using a Feature Component outside the editor'
-  )
-}
-const editorToolbarContextMethodStub = () => {
-  throw new Error(
-    'Editor Toolbar context is meant to be used within the editor. You are probably using ToolbarFragment outside the editor'
-  )
-}
-export const EditorContext = createContext<EditorContextApi>({
-  addPlugins: editorContextMethodStub,
-  editorRef: createRef(),
-  editorState: null as any,
-  stateFromHtmlOptions: null as any,
-  addDropzonePropsInterceptor: editorContextMethodStub,
-  setEditorState: editorContextMethodStub
-})
-export const EditorToolbarContext = createContext<EditorToolbarContextApi>({
-  createToolbarSegment: editorToolbarContextMethodStub
-})
-
-const DEFAULT_FEATURES = (
-  <>
-    <RichTextFeature />
-    <EmojiFeature />
-  </>
-)
 /**
  * Html wysiwyg editor.
  *
@@ -86,7 +52,7 @@ const DEFAULT_FEATURES = (
 export const TextEditor = forwardRef(
   (
     {
-      children = DEFAULT_FEATURES,
+      children = DEFAULT_EDITOR_FEATURES,
       className = '',
       defaultValue = '',
       disabled = false,
@@ -131,11 +97,6 @@ export const TextEditor = forwardRef(
      * (which is used in contacts profile page right now).
      * See this for more info:
      * https://github.com/draft-js-plugins/draft-js-plugins/blob/master/FAQ.md#can-i-use-the-same-plugin-for-multiple-plugin-editors
-     *
-     * NOTE 2: We always create all plugins because hooks can't be called
-     * conditionally. We could have conditionally create real plugins or
-     * undefined, based on enableXXX props but it adds lots of undefined checks
-     * later in code which is not worth it.
      */
     const { ...otherPlugins } = useMemo(() => createPlugins(), [])
 

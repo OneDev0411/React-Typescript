@@ -72,7 +72,7 @@ export function SignatureFeature({
   }
 
   return (
-    <ToolbarFragment>
+    <ToolbarFragment group="signature">
       <Box pl={0.5}>
         <Checkbox
           inputProps={{ tabIndex: 1 }}

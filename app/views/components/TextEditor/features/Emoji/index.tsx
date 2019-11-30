@@ -36,7 +36,7 @@ export function EmojiFeature() {
 
   return (
     <>
-      <ToolbarFragment>
+      <ToolbarFragment group="emoji">
         <Tooltip title="Emoji (:)">
           <span>
             <EmojiSelect />

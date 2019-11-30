@@ -6,7 +6,7 @@ import { BasicDropdown } from '../../../../BasicDropdown/index'
 import IconTextSize from '../../../../SvgIcons/TextSize/IconTextSize'
 
 import { TextButton } from './TextButton'
-import { ToolbarIconButton } from '../../../buttons/ToolbarIconButton'
+import { ToolbarIconButton } from '../../../components/ToolbarIconButton'
 
 interface HeadingButtonOption {
   title: string

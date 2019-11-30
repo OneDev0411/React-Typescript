@@ -1,6 +1,6 @@
 import { ReactNode, useContext, useEffect, useMemo } from 'react'
 
-import { EditorToolbarContext } from '../index'
+import { EditorToolbarContext } from '../editor-context'
 
 interface Props {
   children: ReactNode

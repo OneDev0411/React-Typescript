@@ -55,12 +55,12 @@ function EmailEditorFeatures(props: {
     <>
       <RichTextFeature />
       <ImageFeature uploadImage={props.uploadImage} />
+      <EmojiFeature />
       {props.hasTemplateVariables && (
         <TemplateExpressionsFeature
           templateVariableSuggestionGroups={defaultTemplateVariableSuggestions}
         />
       )}
-      <EmojiFeature />
       <SignatureFeature
         signature={props.signature}
         hasSignatureByDefault={props.hasSignatureByDefault}

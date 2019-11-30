@@ -4,9 +4,8 @@ import useUnmount from 'react-use/lib/useUnmount'
 import { useInitializer } from 'hooks/use-initializer'
 import { useLatestValueRef } from 'hooks/use-latest-value-ref'
 
-import { EditorContext } from '..'
-
 import { DropzonePropsInterceptor } from '../types'
+import { EditorContext } from '../editor-context'
 
 export function useDropzonePropsInterceptor(
   interceptor: DropzonePropsInterceptor

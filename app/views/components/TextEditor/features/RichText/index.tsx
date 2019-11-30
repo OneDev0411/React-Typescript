@@ -13,7 +13,7 @@ import { getShortcutTooltip } from 'utils/get-shortcut-tooltip'
 import { ToolbarFragment } from '../../components/ToolbarFragment'
 import { useEditor } from '../../hooks/use-editor'
 import { useEditorPlugins } from '../../hooks/use-editor-plugins'
-import { ToolbarToggleButton } from '../../buttons/ToolbarToggleButton'
+import { ToolbarToggleButton } from '../../components/ToolbarToggleButton'
 import IconBold from '../../../SvgIcons/Bold/IconBold'
 import IconItalic from '../../../SvgIcons/Italic/IconItalic'
 import IconUnderline from '../../../SvgIcons/Underline/IconUnderline'
@@ -21,9 +21,8 @@ import IconList from '../../../SvgIcons/List/ListIcon'
 import { iconSizes } from '../../../SvgIcons/icon-sizes'
 import IconNumberedList from '../../../SvgIcons/NumberedList/IconNumberedList'
 import HeadingButtons from './HeadingButtons'
-import { ToolbarIconButton } from '../../buttons/ToolbarIconButton'
+import { ToolbarIconButton } from '../../components/ToolbarIconButton'
 import IconLink from '../../../SvgIcons/Link/IconLink'
-import { Separator } from '../../styled'
 import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
 import { LinkEditorPopover } from './LinkEditorPopover'
 import {
@@ -32,7 +31,7 @@ import {
 } from '../../components/DraftJsSelectionPopover'
 import { LinkPreview } from './LinkPreview'
 import { linkKeyBinding } from '../../utils/link-key-binding'
-import createPasteLinkPlugin from '../../plugins/draft-js-paste-link-plugin'
+import createPasteLinkPlugin from './draft-js-paste-link-plugin'
 
 interface Props {
   /**
@@ -111,7 +110,7 @@ export function RichTextFeature({
   return (
     <>
       {inlineFormatting && (
-        <ToolbarFragment>
+        <ToolbarFragment group="inlineFormatting">
           <>
             <BoldButton>
               <ToolbarToggleButton
@@ -138,7 +137,7 @@ export function RichTextFeature({
         </ToolbarFragment>
       )}
       {lists && (
-        <ToolbarFragment>
+        <ToolbarFragment group="lists">
           <ULButton>
             <ToolbarToggleButton tooltip="Bulleted List" isBlockButton>
               <IconList color="inherit" size={iconSizes.small} />
@@ -153,7 +152,7 @@ export function RichTextFeature({
         </ToolbarFragment>
       )}
       {textSize && (
-        <ToolbarFragment>
+        <ToolbarFragment group="textSize">
           <HeadingButtons
             options={[
               {
@@ -177,7 +176,7 @@ export function RichTextFeature({
         </ToolbarFragment>
       )}
       {link && (
-        <ToolbarFragment>
+        <ToolbarFragment group="link">
           <Tooltip title={getShortcutTooltip('Insert Link', 'K')}>
             <ToolbarIconButton
               onClick={event => {
@@ -189,7 +188,6 @@ export function RichTextFeature({
               <IconLink />
             </ToolbarIconButton>
           </Tooltip>
-          <Separator />
         </ToolbarFragment>
       )}
       <LinkEditorPopover

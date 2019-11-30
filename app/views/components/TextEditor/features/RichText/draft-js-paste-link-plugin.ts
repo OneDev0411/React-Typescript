@@ -4,8 +4,8 @@ import isEmail from 'validator/lib/isEmail'
 import { DraftHandleValue, EditorState } from 'draft-js'
 import { DraftJsPlugin, PluginFunctions } from 'draft-js-plugins-editor'
 
-import { createLink } from '../utils/create-link'
-import { normalizeUrl } from '../features/RichText/LinkEditorPopover/utils'
+import { createLink } from '../../utils/create-link'
+import { normalizeUrl } from './LinkEditorPopover/utils'
 
 export default function createPasteLinkPlugin(): DraftJsPlugin {
   return {

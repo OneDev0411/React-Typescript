@@ -7,7 +7,7 @@ import useToggle from 'react-use/lib/useToggle'
 import GifIcon from 'components/SvgIcons/Gif/GIfIcon'
 import GifDrawer from 'components/GifDrawer'
 
-import { ToolbarIconButton } from '../../../buttons/ToolbarIconButton'
+import { ToolbarIconButton } from '../../../components/ToolbarIconButton'
 import { GifItem } from '../../../../GifDrawer/types'
 
 interface Props {

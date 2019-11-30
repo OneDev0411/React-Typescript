@@ -7,7 +7,7 @@ import {
   ITemplateVariableSuggestionGroup,
   TemplateVariablesButton
 } from '../../../TemplateVariablesButton'
-import { insertTemplateVariable } from '../../modifiers/insert-template-expression'
+import { insertTemplateVariable } from './modifiers/insert-template-expression'
 import { ToolbarFragment } from '../../components/ToolbarFragment'
 import { useEditor } from '../../hooks/use-editor'
 

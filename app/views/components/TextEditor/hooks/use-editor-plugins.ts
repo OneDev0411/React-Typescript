@@ -4,7 +4,7 @@ import useUnmount from 'react-use/lib/useUnmount'
 
 import { useInitializer } from 'hooks/use-initializer'
 
-import { EditorContext } from '../index'
+import { EditorContext } from '../editor-context'
 
 export function useEditorPlugins<T extends { [name: string]: DraftJsPlugin }>(
   factory: () => T,

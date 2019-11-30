@@ -5,7 +5,7 @@ import { Tooltip } from '@material-ui/core'
 import ImageFileIcon from 'components/SvgIcons/ImageFile/ImageFileIcon'
 import { FilePicker } from 'components/FilePicker'
 
-import { ToolbarIconButton } from '../../../buttons/ToolbarIconButton'
+import { ToolbarIconButton } from '../../../components/ToolbarIconButton'
 
 interface Props {
   onImageSelected: (file: File) => void
