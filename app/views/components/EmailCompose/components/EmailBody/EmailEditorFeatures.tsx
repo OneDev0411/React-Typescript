@@ -22,11 +22,10 @@ export function EmailEditorFeatures(props: Props) {
       <RichTextFeature />
       <ImageFeature uploadImage={props.uploadImage} />
       <EmojiFeature />
-      {props.hasTemplateVariables && (
-        <TemplateExpressionsFeature
-          templateVariableSuggestionGroups={defaultTemplateVariableSuggestions}
-        />
-      )}
+      <TemplateExpressionsFeature
+        showInToolbar={!!props.hasTemplateVariables}
+        templateVariableSuggestionGroups={defaultTemplateVariableSuggestions}
+      />
       <SignatureFeature
         signature={props.signature}
         hasSignatureByDefault={props.hasSignatureByDefault}

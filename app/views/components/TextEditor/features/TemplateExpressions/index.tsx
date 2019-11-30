@@ -12,11 +12,22 @@ import { ToolbarFragment } from '../../components/ToolbarFragment'
 import { useEditor } from '../../hooks/use-editor'
 
 interface Props {
+  /**
+   * Suggestions for template expressions
+   */
   templateVariableSuggestionGroups: ITemplateVariableSuggestionGroup[]
+  /**
+   * Weather to show variable insertion dropdown in the toolbar or not.
+   * If set to false, expressions will bw shown as atomic pieces but there
+   * is no UI in toolbar for adding more expressions.
+   * Defaults to true
+   */
+  showInToolbar?: boolean
 }
 
 export function TemplateExpressionsFeature({
-  templateVariableSuggestionGroups
+  templateVariableSuggestionGroups,
+  showInToolbar = true
 }: Props) {
   useEditorPlugins(
     () => ({
@@ -37,11 +48,15 @@ export function TemplateExpressionsFeature({
   }
 
   return (
-    <ToolbarFragment group="templateExpressions">
-      <TemplateVariablesButton
-        suggestions={templateVariableSuggestionGroups || []}
-        onSuggestionSelected={suggestion => insertVariable(suggestion)}
-      />
-    </ToolbarFragment>
+    <>
+      {showInToolbar && (
+        <ToolbarFragment group="templateExpressions">
+          <TemplateVariablesButton
+            suggestions={templateVariableSuggestionGroups || []}
+            onSuggestionSelected={suggestion => insertVariable(suggestion)}
+          />
+        </ToolbarFragment>
+      )}
+    </>
   )
 }
