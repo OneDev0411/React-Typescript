@@ -3,7 +3,7 @@ import { addNotification as notify } from 'reapop'
 import { confirmation } from 'actions/confirmation'
 import { resendEnvelope as resendEnvelopeDocument } from 'models/Deal/envelope'
 
-import { getTaskEnvelopes } from '../../../../../utils/get-task-envelopes'
+import { getTaskEnvelopes } from 'views/utils/deal-files/get-task-envelopes'
 
 import store from '../../../../../../../../../stores'
 

@@ -4,8 +4,8 @@ import { Link } from 'react-router'
 
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 
-import { getTaskEnvelopes } from '../../../../utils/get-task-envelopes'
-import { getDocumentEnvelopes } from '../../../../utils/get-document-envelopes'
+import { getTaskEnvelopes } from 'views/utils/deal-files/get-task-envelopes'
+import { getDocumentEnvelopes } from 'views/utils/deal-files/get-document-envelopes'
 
 import { Container } from './styled'
 

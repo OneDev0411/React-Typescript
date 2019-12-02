@@ -11,10 +11,11 @@ import {
 
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 
+import { getTaskEnvelopes } from 'views/utils/deal-files/get-task-envelopes'
+
 import TaskStatus from './Status'
 
 import ActionsButton from '../../../../components/ActionsButton'
-import { getTaskEnvelopes } from '../../../../utils/get-task-envelopes'
 
 import TaskFiles from '../TaskFiles'
 import TaskNotifications from '../Notification'
