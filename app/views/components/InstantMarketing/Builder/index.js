@@ -892,15 +892,6 @@ class Builder extends React.Component {
             )}
 
             <Actions>
-              {this.showEditListingsButton && !this.props.isEdit && (
-                <Button
-                  style={{
-                    marginLeft: '0.5rem'
-                  }}
-                  variant="outlined"
-                  color="secondary"
-                />
-              )}
               {/* This is disabled due some server issues */}
               {/* <SaveTemplateDropdown
                 medium={this.state.selectedTemplate.medium}
@@ -911,7 +902,8 @@ class Builder extends React.Component {
               {this.ShowEditListingsButton && !this.props.isEdit && (
                 <Button
                   style={{ marginLeft: '0.5rem' }}
-                  appearance="outline"
+                  variant="outlined"
+                  color="secondary"
                   onClick={this.props.onShowEditListings}
                 >
                   Edit Listings ({this.props.templateData.listings.length})
