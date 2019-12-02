@@ -1,7 +1,7 @@
 import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
 
-import { getDocumentEnvelopes } from '../../../../../utils/get-document-envelopes'
-import { getTaskEnvelopes } from '../../../../../utils/get-task-envelopes'
+import { getDocumentEnvelopes } from 'views/utils/deal-files/get-document-envelopes'
+import { getTaskEnvelopes } from 'views/utils/deal-files/get-task-envelopes'
 
 export function reviewEnvelope(props) {
   let envelopes = []

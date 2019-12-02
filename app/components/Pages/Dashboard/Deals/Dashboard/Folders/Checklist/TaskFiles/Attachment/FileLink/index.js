@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 
-import { getDocumentEnvelopes } from '../../../../../../utils/get-document-envelopes'
+import { getDocumentEnvelopes } from 'views/utils/deal-files/get-document-envelopes'
 
 import { FileLink as Link } from '../../styled'
 

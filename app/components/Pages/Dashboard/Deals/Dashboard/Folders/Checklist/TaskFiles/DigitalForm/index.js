@@ -5,8 +5,9 @@ import Flex from 'styled-flex-component'
 
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 
+import { getDocumentEnvelopes } from 'views/utils/deal-files/get-document-envelopes'
+
 import ActionsButton from '../../../../../components/ActionsButton'
-import { getDocumentEnvelopes } from '../../../../../utils/get-document-envelopes'
 
 import { LabelItem } from '../../../styled'
 import { FileContainer, FileRow, FileTitle, FileLink } from '../styled'
