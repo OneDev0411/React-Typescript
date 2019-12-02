@@ -28,7 +28,7 @@ router.get('/deals/envelope/:id/edit', async ctx => {
     ctx.body = ''
   } catch (e) {
     if (e.status === 302) {
-      const link = e.response.text.match(urlPattern)
+      const link = e.response.text.match(urlPattern).map(url => url.trim())
 
       ctx.redirect(link)
     }
