@@ -49,12 +49,13 @@ export function BulkEmailComposeForm({
   fromOptions,
   ...otherProps
 }: Props) {
-  const sendEmail = (formValue: EmailFormValues) => {
+  const sendEmail = (formValue: EmailFormValues & { template: string }) => {
     const emailData = getEmail({
       from: (formValue.from && formValue.from.value) || '',
       to: normalizeRecipients(formValue.to || []),
       subject: (formValue.subject || '').trim(),
       html: formValue.body || '',
+      template: formValue.template,
       attachments: (formValue.attachments || []).map(item => item.id),
       due_at: formValue.due_at || new Date()
     })

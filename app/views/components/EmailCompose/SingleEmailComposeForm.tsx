@@ -37,7 +37,9 @@ export function SingleEmailComposeForm({
 }: Props) {
   const { evaluate } = useExpressionEvaluator()
 
-  const handleSendEmail = async (formValue: EmailFormValues) => {
+  const handleSendEmail = async (
+    formValue: EmailFormValues & { template: string }
+  ) => {
     if (!formValue.due_at || formValue.due_at.getTime() <= Date.now()) {
       formValue.body = await evaluate(formValue.body || '', formValue)
     }
@@ -48,6 +50,7 @@ export function SingleEmailComposeForm({
       cc: normalizeRecipients(formValue.cc),
       bcc: normalizeRecipients(formValue.bcc),
       subject: (formValue.subject || '').trim(),
+      template: formValue.template,
       html: formValue.body || '',
       attachments: (formValue.attachments || []).map(item => item.id),
       due_at: formValue.due_at || new Date()
