@@ -34,6 +34,7 @@ import { getSendEmailResultMessages } from '../helpers/email-result-messages'
 import { TextEditorRef } from '../../TextEditor/types'
 import { Callout } from '../../Callout'
 import { DangerButton } from '../../Button/DangerButton'
+import getTemplateInstancePreviewImage from '../../InstantMarketing/helpers/get-template-preview-image'
 
 export const useEmailFormStyles = makeStyles(styles, { name: 'EmailForm' })
 
@@ -88,6 +89,14 @@ function EmailComposeForm<T>({
     marketingTemplate,
     setMarketingTemplate
   ] = useState<IMarketingTemplateInstance | null>(null)
+
+  const marketingTemplatePreviewHtml = useMemo(
+    () =>
+      marketingTemplate
+        ? getTemplateInstancePreviewImage(marketingTemplate)
+        : undefined,
+    [marketingTemplate]
+  )
   const confirmationModal = useContext(ConfirmationModalContext)
 
   const classes = useEmailFormStyles(props)
@@ -102,7 +111,11 @@ function EmailComposeForm<T>({
     try {
       result = await props.sendEmail(
         marketingTemplate
-          ? { ...formData, body: marketingTemplate.html }
+          ? {
+              ...formData,
+              body: marketingTemplate.html,
+              template: marketingTemplate.id
+            }
           : formData
       )
     } catch (e) {
@@ -276,7 +289,7 @@ function EmailComposeForm<T>({
                 hasTemplateVariables={props.hasTemplateVariables}
                 content={
                   marketingTemplate
-                    ? marketingTemplate.html
+                    ? marketingTemplatePreviewHtml
                     : initialValues.body || ''
                 }
                 uploadAttachment={uploadAttachment}

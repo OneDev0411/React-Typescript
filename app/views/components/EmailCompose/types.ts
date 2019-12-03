@@ -25,7 +25,14 @@ export type EmailThreadFormValues = Omit<EmailFormValues, 'attachments'> & {
 
 export interface EmailComposeFormProps<EmailType = IEmailCampaign> {
   initialValues?: Partial<EmailFormValues>
-  sendEmail: (values: EmailFormValues) => Promise<EmailType>
+  /**
+   * TODO: refactor values type to {@link IEmailCampaignInput}, when #3435
+   * (mering API for sending email) is done
+   * @param values
+   */
+  sendEmail: (
+    values: EmailFormValues & { template?: UUID }
+  ) => Promise<EmailType>
   onSent?: (result: EmailType) => void
   /**
    * A deal to suggest attachments from it
