@@ -30,7 +30,8 @@ import {
   ApiOptions,
   FetchOptions,
   Placeholder,
-  LoadingDirection
+  LoadingDirection,
+  CrmEventType
 } from './types'
 
 import { getDateRange, Format } from './helpers/get-date-range'
@@ -365,7 +366,7 @@ export function Calendar({
    * triggers when a crm events update or delete
    */
   const handleCrmEventChange = useCallback(
-    (event: IEvent, type: string) => {
+    (event: IEvent, type: CrmEventType) => {
       const nextEvents = upsertCrmEvents(events, event, type, contact)
 
       createListFromEvents(nextEvents)

@@ -1,9 +1,11 @@
+import { CrmEventType } from 'components/Calendar/types'
+
 import { convertTaskToCalendarEvent } from '../convert-task-to-calendar'
 
 export function upsertCrmEvents(
   events: ICalendarEvent[],
   event: IEvent,
-  type: 'created' | 'deleted' | 'updated',
+  type: CrmEventType,
   contact?: IContact
 ): ICalendarEvent[] {
   const calendarEvent: ICalendarEvent = convertTaskToCalendarEvent(event)

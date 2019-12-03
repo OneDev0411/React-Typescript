@@ -27,3 +27,5 @@ export enum LoadingDirection {
   Top = 1,
   Bottom = 2
 }
+
+export type CrmEventType = 'created' | 'deleted' | 'updated'
