@@ -3,7 +3,7 @@ import { convertTaskToCalendarEvent } from '../convert-task-to-calendar'
 export function upsertCrmEvents(
   events: ICalendarEvent[],
   event: IEvent,
-  type: string,
+  type: 'created' | 'deleted' | 'updated',
   contact?: IContact
 ): ICalendarEvent[] {
   const calendarEvent: ICalendarEvent = convertTaskToCalendarEvent(event)
