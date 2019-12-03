@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
-import { Drawer, makeStyles } from '@material-ui/core'
+import { createStyles, Drawer, makeStyles } from '@material-ui/core'
 import { DrawerProps as OriginalDrawerProps } from '@material-ui/core/Drawer'
 
 import { mergeWith } from 'lodash'
@@ -13,17 +13,16 @@ import { DrawerContextType, DrawerProps } from './types'
 export { useDrawerContext } from './drawer-context'
 export * from './types'
 
-const useStyles = makeStyles(
-  {
-    root: {
-      width: '100%', // fullwidth on small devices
-      '@media (min-width: 48em)': {
-        width: '38rem'
-      }
+const styles = createStyles({
+  root: ({ width }: { width: number | string }) => ({
+    width: '100%', // fullwidth on small devices
+    '@media (min-width: 48em)': {
+      width
     }
-  },
-  { name: 'OverlayDrawer' }
-)
+  })
+})
+
+const useStyles = makeStyles(styles, { name: 'OverlayDrawer' })
 
 const OverlayDrawer = ({
   children,
@@ -35,9 +34,10 @@ const OverlayDrawer = ({
   // drawer being closed by escape while the modal on top is kept open
   closeOnEscape = false,
   anchor = 'right',
+  width = '38rem',
   ...rest
 }: DrawerProps) => {
-  const classes = useStyles()
+  const classes = useStyles({ width })
   const parentDrawerContext = useDrawerContext()
 
   const handleOnClose: OriginalDrawerProps['onClose'] = useCallback(
