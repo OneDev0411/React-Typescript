@@ -29,9 +29,7 @@ export function Suggestions({ items, handleMouseOver, ...props }) {
       onMouseLeave={handleMouseLeave}
     >
       <DefaultItem onClick={props.onClickDefaultItem}>
-        {'Use "'}
         <span className="search-text">{props.searchText}</span>
-        {'"'}
       </DefaultItem>
       {items.length > 0 &&
         items.map((item, index) => (

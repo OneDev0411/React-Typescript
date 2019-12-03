@@ -99,8 +99,8 @@ export class InlineAddressField extends React.Component {
     })
   }
 
-  search = debounce(async (e, value) => {
-    if (value.length <= 3) {
+  search = debounce(async value => {
+    if (value.length <= 3 || this.state.isAddressFormOpen) {
       return
     }
 
@@ -124,11 +124,9 @@ export class InlineAddressField extends React.Component {
     }
   }, 300)
 
-  handleChangeInput = ({ target }) => {
-    const { value } = target
-
+  handleInputOnChange = ({ target: { value } }) => {
     this.setState(
-      () => {
+      state => {
         if (value.length === 0) {
           return {
             address: value,
@@ -137,11 +135,31 @@ export class InlineAddressField extends React.Component {
           }
         }
 
+        if (value === state.address) {
+          return
+        }
+
         return { address: value, isDirty: true }
       },
       () => {
         this.props.handleInputChange(value)
-        this.search(target, value)
+        this.search(value)
+      }
+    )
+  }
+
+  handleInputOnKeyDown = ({ key }) => {
+    this.setState(
+      state => {
+        if (key === 'Enter' && state.address.length > 0) {
+          return {
+            isAddressFormOpen: true,
+            isSuggestionsOpen: false
+          }
+        }
+      },
+      () => {
+        this.props.handleInputChange(this.state.address)
       }
     )
   }
@@ -209,7 +227,8 @@ export class InlineAddressField extends React.Component {
       <div style={this.props.style}>
         {this.props.renderSearchField({
           isLoading: this.state.isLoading,
-          onChange: this.handleChangeInput,
+          onChange: this.handleInputOnChange,
+          onKeyDown: this.handleInputOnKeyDown,
           value: address,
           onBlur: this.handleInputBlur,
           autoComplete: 'disabled'
